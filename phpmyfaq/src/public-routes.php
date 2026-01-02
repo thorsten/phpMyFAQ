@@ -99,6 +99,11 @@ $routesConfig = [
         'controller' => [UserController::class, 'bookmarks'],
         'methods' => 'GET',
     ],
+    'public.user.ucp' => [
+        'path' => '/user/ucp',
+        'controller' => [UserController::class, 'ucp'],
+        'methods' => 'GET',
+    ],
     'public.sitemap' => [
         'path' => '/sitemap/{letter}/{language}.html',
         'controller' => [FrontendSitemapController::class, 'index'],

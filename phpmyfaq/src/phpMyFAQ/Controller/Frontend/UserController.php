@@ -24,6 +24,8 @@ use phpMyFAQ\Bookmark;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\TwoFactor;
+use RobThree\Auth\TwoFactorAuthException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -122,6 +124,97 @@ final class UserController extends AbstractFrontController
                 Translation::get(key: 'msgCaptcha'),
                 $this->currentUser->isLoggedIn(),
             ),
+        ]);
+    }
+
+    /**
+     * Displays the User Control Panel.
+     *
+     * @throws Exception
+     * @throws \Exception
+     */
+    #[Route(path: '/user/ucp', name: 'public.user.ucp')]
+    public function ucp(Request $request): Response
+    {
+        if (!$this->currentUser->isLoggedIn()) {
+            return new RedirectResponse($this->configuration->getDefaultUrl());
+        }
+
+        $faqSession = $this->container->get('phpmyfaq.user.session');
+        $faqSession->setCurrentUser($this->currentUser);
+        $faqSession->userTracking('user_control_panel', $this->currentUser->getUserId());
+
+        if ($this->configuration->get('main.enableGravatarSupport')) {
+            $gravatar = $this->container->get('phpmyfaq.services.gravatar');
+            $gravatarImg = sprintf('<a target="_blank" href="https://www.gravatar.com">%s</a>', $gravatar->getImage(
+                $this->currentUser->getUserData('email'),
+                ['class' => 'img-responsive rounded-circle', 'size' => 125],
+            ));
+        } else {
+            $gravatarImg = '';
+        }
+
+        $qrCode = '';
+        $secret = '';
+        try {
+            $twoFactor = new TwoFactor($this->configuration, $this->currentUser);
+            $secret = $twoFactor->getSecret($this->currentUser);
+            if ('' === $secret || is_null($secret)) {
+                try {
+                    $secret = $twoFactor->generateSecret();
+                } catch (TwoFactorAuthException $exception) {
+                    $this->configuration->getLogger()->error('Cannot generate 2FA secret: ' . $exception->getMessage());
+                }
+
+                $twoFactor->saveSecret($secret);
+            }
+
+            $qrCode = $twoFactor->getQrCode($secret);
+        } catch (TwoFactorAuthException|\Exception $exception) {
+            $this->configuration->getLogger()->error('2FA error: ' . $exception->getMessage());
+        }
+
+        $session = $this->container->get('session');
+
+        return $this->render('ucp.twig', [
+            ...$this->getHeader($request),
+            'headerUserControlPanel' => Translation::get(key: 'headerUserControlPanel'),
+            'ucpGravatarImage' => $gravatarImg,
+            'msgHeaderUserData' => Translation::get(key: 'headerUserControlPanel'),
+            'userid' => $this->currentUser->getUserId(),
+            'csrf' => Token::getInstance($session)->getTokenInput('ucp'),
+            'lang' => $this->configuration->getLanguage()->getLanguage(),
+            'readonly' => $this->currentUser->isLocalUser() ? '' : 'readonly disabled',
+            'msgRealName' => Translation::get(key: 'ad_user_name'),
+            'realname' => $this->currentUser->getUserData('display_name'),
+            'msgEmail' => Translation::get(key: 'msgNewContentMail'),
+            'email' => $this->currentUser->getUserData('email'),
+            'msgIsVisible' => Translation::get(key: 'msgUserDataVisible'),
+            'checked' => (int) $this->currentUser->getUserData('is_visible') === 1 ? 'checked' : '',
+            'msgPassword' => Translation::get(key: 'ad_auth_passwd'),
+            'msgConfirm' => Translation::get(key: 'ad_user_confirm'),
+            'msgSave' => Translation::get(key: 'msgSave'),
+            'msgCancel' => Translation::get(key: 'msgCancel'),
+            'twofactor_enabled' => (bool) $this->currentUser->getUserData('twofactor_enabled'),
+            'msgTwofactorEnabled' => Translation::get(key: 'msgTwofactorEnabled'),
+            'msgTwofactorConfig' => Translation::get(key: 'msgTwofactorConfig'),
+            'msgTwofactorConfigModelTitle' => Translation::get(key: 'msgTwofactorConfigModelTitle'),
+            'twofactor_secret' => $secret,
+            'qr_code_secret' => $qrCode,
+            'qr_code_secret_alt' => Translation::get(key: 'qr_code_secret_alt'),
+            'msgTwofactorNewSecret' => Translation::get(key: 'msgTwofactorNewSecret'),
+            'msgWarning' => Translation::get(key: 'msgWarning'),
+            'ad_gen_yes' => Translation::get(key: 'ad_gen_yes'),
+            'ad_gen_no' => Translation::get(key: 'ad_gen_no'),
+            'msgConfirmTwofactorConfig' => Translation::get(key: 'msgConfirmTwofactorConfig'),
+            'csrfTokenRemoveTwofactor' => Token::getInstance($session)->getTokenString('remove-twofactor'),
+            'msgGravatarNotConnected' => Translation::get(key: 'msgGravatarNotConnected'),
+            'webauthnSupportEnabled' => $this->configuration->get('security.enableWebAuthnSupport'),
+            'csrfExportUserData' => Token::getInstance($session)->getTokenInput('export-userdata'),
+            'exportUserDataUrl' => 'api/user/data/export',
+            'msgDownloadYourData' => Translation::get(key: 'msgDownloadYourData'),
+            'msgDataExportDescription' => Translation::get(key: 'msgDataExportDescription'),
+            'msgDownload' => Translation::get(key: 'msgDownload'),
         ]);
     }
 }
