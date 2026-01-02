@@ -27,6 +27,7 @@ use phpMyFAQ\Controller\Frontend\PageNotFoundController;
 use phpMyFAQ\Controller\Frontend\PdfController;
 use phpMyFAQ\Controller\Frontend\PrivacyController;
 use phpMyFAQ\Controller\Frontend\SitemapController as FrontendSitemapController;
+use phpMyFAQ\Controller\Frontend\UserController;
 use phpMyFAQ\Controller\Frontend\WebAuthnController;
 use phpMyFAQ\Controller\LlmsController;
 use phpMyFAQ\Controller\RobotsController;
@@ -75,6 +76,11 @@ $routesConfig = [
     'public.privacy' => [
         'path' => '/privacy.html',
         'controller' => [PrivacyController::class, 'index'],
+        'methods' => 'GET',
+    ],
+    'public.user.request-removal' => [
+        'path' => '/user/request-removal',
+        'controller' => [UserController::class, 'requestRemoval'],
         'methods' => 'GET',
     ],
     'public.sitemap' => [

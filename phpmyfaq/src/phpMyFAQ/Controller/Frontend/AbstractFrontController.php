@@ -24,6 +24,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Environment;
 use phpMyFAQ\Helper\LanguageHelper;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\TwigWrapper;
@@ -48,6 +49,7 @@ abstract class AbstractFrontController extends AbstractController
         );
 
         return [
+            ...$this->getUserDropdown(),
             'isMaintenanceMode' => $this->configuration->get('main.maintenanceMode'),
             'isCompletelySecured' => $this->configuration->get('security.enableLoginOnly'),
             'isDebugEnabled' => Environment::isDebugMode(),
@@ -133,6 +135,38 @@ abstract class AbstractFrontController extends AbstractController
                 'active' => 'open-questions' == $action ? 'active' : '',
             ],
         ];
+    }
+
+    private function getUserDropdown(): array
+    {
+        $templateVars = [];
+        if ($this->currentUser->isLoggedIn() && $this->currentUser->getUserId() > 0) {
+            $csrfLogoutToken = Token::getInstance($this->container->get('session'))->getTokenString('logout');
+
+            if (
+                $this->currentUser->perm->hasPermission(
+                    $this->currentUser->getUserId(),
+                    PermissionType::VIEW_ADMIN_LINK->value,
+                )
+                || $this->currentUser->isSuperAdmin()
+            ) {
+                $templateVars = [
+                    ...$templateVars,
+                    'msgAdmin' => Translation::get(key: 'adminSection'),
+                ];
+            }
+
+            $templateVars = [
+                ...$templateVars,
+                'msgUserControlDropDown' => Translation::get(key: 'headerUserControlPanel'),
+                'msgBookmarks' => Translation::get(key: 'msgBookmarks'),
+                'msgUserRemoval' => Translation::get(key: 'ad_menu_RequestRemove'),
+                'msgLogoutUser' => Translation::get(key: 'ad_menu_logout'),
+                'csrfLogout' => $csrfLogoutToken,
+            ];
+        }
+
+        return $templateVars;
     }
 
     private function getFooterNavigation(Request $request): array
