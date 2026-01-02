@@ -29,6 +29,7 @@ use phpMyFAQ\Controller\Frontend\PageNotFoundController;
 use phpMyFAQ\Controller\Frontend\PdfController;
 use phpMyFAQ\Controller\Frontend\PrivacyController;
 use phpMyFAQ\Controller\Frontend\SitemapController as FrontendSitemapController;
+use phpMyFAQ\Controller\Frontend\StartpageController;
 use phpMyFAQ\Controller\Frontend\UserController;
 use phpMyFAQ\Controller\Frontend\WebAuthnController;
 use phpMyFAQ\Controller\LlmsController;
@@ -88,6 +89,11 @@ $routesConfig = [
     'public.privacy' => [
         'path' => '/privacy.html',
         'controller' => [PrivacyController::class, 'index'],
+        'methods' => 'GET',
+    ],
+    'public.index' => [
+        'path' => '/',
+        'controller' => [StartpageController::class, 'index'],
         'methods' => 'GET',
     ],
     'public.user.register' => [
