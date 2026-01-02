@@ -10,10 +10,10 @@
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Jan Harms <model_railroader@gmx-topmail.de>
- * @copyright 2012-2026 phpMyFAQ Team
+ * @copyright 2008-2026 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2012-01-12
+ * @since     2008-01-25
  */
 
 declare(strict_types=1);
@@ -88,6 +88,40 @@ final class UserController extends AbstractFrontController
             'bookmarksList' => $bookmark->getBookmarkList(),
             'csrfTokenDeleteBookmark' => Token::getInstance($session)->getTokenString('delete-bookmark'),
             'csrfTokenDeleteAllBookmarks' => Token::getInstance($session)->getTokenString('delete-all-bookmarks'),
+        ]);
+    }
+
+    /**
+     * Displays the user registration page.
+     *
+     * @throws Exception
+     * @throws \Exception
+     */
+    #[Route(path: '/user/register', name: 'public.user.register')]
+    public function register(Request $request): Response
+    {
+        if (!$this->configuration->get('security.enableRegistration')) {
+            return new RedirectResponse($this->configuration->getDefaultUrl());
+        }
+
+        $faqSession = $this->container->get('phpmyfaq.user.session');
+        $faqSession->setCurrentUser($this->currentUser);
+        $faqSession->userTracking('registration', 0);
+
+        $captcha = $this->container->get('phpmyfaq.captcha');
+        $captchaHelper = $this->container->get('phpmyfaq.captcha.helper.captcha_helper');
+
+        return $this->render('register.twig', [
+            ...$this->getHeader($request),
+            'title' => sprintf('%s - %s', Translation::get(key: 'msgRegistration'), $this->configuration->getTitle()),
+            'lang' => $this->configuration->getLanguage()->getLanguage(),
+            'isWebAuthnEnabled' => $this->configuration->get('security.enableWebAuthnSupport'),
+            'captchaFieldset' => $captchaHelper->renderCaptcha(
+                $captcha,
+                'register',
+                Translation::get(key: 'msgCaptcha'),
+                $this->currentUser->isLoggedIn(),
+            ),
         ]);
     }
 }

@@ -78,6 +78,11 @@ $routesConfig = [
         'controller' => [PrivacyController::class, 'index'],
         'methods' => 'GET',
     ],
+    'public.user.register' => [
+        'path' => '/user/register',
+        'controller' => [UserController::class, 'register'],
+        'methods' => 'GET',
+    ],
     'public.user.request-removal' => [
         'path' => '/user/request-removal',
         'controller' => [UserController::class, 'requestRemoval'],
