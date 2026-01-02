@@ -21,7 +21,7 @@ use phpMyFAQ\Controller\Frontend\Api\SetupController;
 use phpMyFAQ\Controller\Frontend\AttachmentController;use phpMyFAQ\Controller\Frontend\ContactController;
 use phpMyFAQ\Controller\Frontend\GlossaryController;use phpMyFAQ\Controller\Frontend\LoginController;use phpMyFAQ\Controller\Frontend\OverviewController;
 use phpMyFAQ\Controller\Frontend\PageNotFoundController;
-use phpMyFAQ\Controller\Frontend\SitemapController as FrontendSitemapController;
+use phpMyFAQ\Controller\Frontend\PdfController;use phpMyFAQ\Controller\Frontend\SitemapController as FrontendSitemapController;
 use phpMyFAQ\Controller\Frontend\WebAuthnController;
 use phpMyFAQ\Controller\LlmsController;
 use phpMyFAQ\Controller\RobotsController;
@@ -60,6 +60,11 @@ $routesConfig = [
     'public.overview' => [
         'path' => '/overview.html',
         'controller' => [OverviewController::class, 'index'],
+        'methods' => 'GET',
+    ],
+    'public.pdf.faq' => [
+        'path' => '/pdf/{categoryId}/{faqId}/{faqLanguage}',
+        'controller' => [PdfController::class, 'index'],
         'methods' => 'GET',
     ],
     'public.sitemap' => [

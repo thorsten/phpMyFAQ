@@ -100,7 +100,7 @@ class Services
     public function getPdfLink(): string
     {
         return sprintf(
-            '%spdf.php?cat=%d&id=%d&artlang=%s',
+            '%spdf/%d/%d/%s',
             $this->configuration->getDefaultUrl(),
             $this->getCategoryId(),
             $this->getFaqId(),
@@ -114,7 +114,7 @@ class Services
     public function getPdfApiLink(): string
     {
         return sprintf(
-            '%spdf.php?cat=%d&id=%d&artlang=%s',
+            '%spdf/%d/%d/%s',
             $this->configuration->getDefaultUrl(),
             $this->getCategoryId(),
             $this->getFaqId(),

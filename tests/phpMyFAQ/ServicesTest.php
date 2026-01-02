@@ -34,7 +34,7 @@ class ServicesTest extends TestCase
         $services->setLanguage('en');
 
         // Test getPdfLink method
-        $expected = 'http://example.com/pdf.php?cat=1&id=123&artlang=en';
+        $expected = 'http://example.com/pdf/1/123/en';
         $this->assertEquals($expected, $services->getPdfLink());
     }
 
@@ -51,7 +51,7 @@ class ServicesTest extends TestCase
         $services->setLanguage('en');
 
         // Test getPdfApiLink method
-        $expected = 'http://example.com/pdf.php?cat=1&id=123&artlang=en';
+        $expected = 'http://example.com/pdf/1/123/en';
         $this->assertEquals($expected, $services->getPdfApiLink());
     }
 }
