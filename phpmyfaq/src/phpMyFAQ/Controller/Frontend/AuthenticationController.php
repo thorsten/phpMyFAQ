@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Login Controller
+ * Authentication Controller to handle login, logout, and password reset
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -18,20 +18,24 @@
 namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 
-final class LoginController extends AbstractFrontController
+final class AuthenticationController extends AbstractFrontController
 {
     /**
      * @throws Exception
      * @throws LoaderError
      * @throws \Exception
      */ #[Route(path: '/login', name: 'public.login')]
-    public function index(Request $request): Response
+    public function login(Request $request): Response
     {
         $faqSession = $this->container->get('phpmyfaq.user.session');
         $faqSession->setCurrentUser($this->currentUser);
@@ -82,5 +86,42 @@ final class LoginController extends AbstractFrontController
             'username' => Translation::get(key: 'ad_auth_user'),
             'password' => Translation::get(key: 'ad_auth_passwd'),
         ]);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[Route(path: '/logout', name: 'public.logout')]
+    public function logout(Request $request): Response
+    {
+        $user = CurrentUser::getCurrentUser($this->configuration);
+        $csrfToken = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
+
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('logout', $csrfToken)) {
+            return new RedirectResponse($this->configuration->getDefaultUrl());
+        }
+
+        if (!$user->isLoggedIn()) {
+            return new RedirectResponse($this->configuration->getDefaultUrl());
+        }
+
+        $user->deleteFromSession(true);
+
+        // Add a success message
+        $session = $this->container->get('session');
+        $session->getFlashBag()->add('success', Translation::get('ad_logout'));
+
+        // SSO Logout
+        $ssoLogout = $this->configuration->get('security.ssoLogoutRedirect');
+        if ($this->configuration->get('security.ssoSupport') && !empty($ssoLogout)) {
+            return new RedirectResponse($ssoLogout);
+        }
+
+        // Microsoft Azure Logout
+        if ($this->configuration->isSignInWithMicrosoftActive() && $user->getUserAuthSource() === 'azure') {
+            return new RedirectResponse($this->configuration->getDefaultUrl() . 'services/azure/logout.php');
+        }
+
+        return new RedirectResponse($this->configuration->getDefaultUrl());
     }
 }

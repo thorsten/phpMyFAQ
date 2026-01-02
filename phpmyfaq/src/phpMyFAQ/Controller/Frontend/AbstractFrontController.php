@@ -48,8 +48,15 @@ abstract class AbstractFrontController extends AbstractController
             PermissionType::VIEW_ADMIN_LINK->value,
         );
 
+        // Get flash messages
+        $session = $this->container->get('session');
+        $successMessages = $session->getFlashBag()->get('success');
+        $errorMessages = $session->getFlashBag()->get('error');
+
         return [
             ...$this->getUserDropdown(),
+            'successMessage' => !empty($successMessages) ? $successMessages[0] : null,
+            'errorMessage' => !empty($errorMessages) ? $errorMessages[0] : null,
             'isMaintenanceMode' => $this->configuration->get('main.maintenanceMode'),
             'isCompletelySecured' => $this->configuration->get('security.enableLoginOnly'),
             'isDebugEnabled' => Environment::isDebugMode(),

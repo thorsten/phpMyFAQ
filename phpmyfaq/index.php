@@ -211,27 +211,6 @@ if (isset($userAuth) && $userAuth instanceof UserAuthentication && $userAuth->ha
     $action = 'twofactor';
 }
 
-//
-// Logout
-//
-if ($csrfChecked && 'logout' === $action && $user->isLoggedIn()) {
-    $user->deleteFromSession(true);
-    $action = 'main';
-    $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
-
-    if ($faqConfig->get('security.ssoSupport') && !empty($ssoLogout)) {
-        $redirect = new RedirectResponse($ssoLogout);
-        $redirect->send();
-    }
-
-    if ($faqConfig->isSignInWithMicrosoftActive() && $user->getUserAuthSource() === 'azure') {
-        $redirect = new RedirectResponse($faqConfig->getDefaultUrl() . 'services/azure/logout.php');
-        $redirect->send();
-    }
-
-    $redirect = new RedirectResponse($faqConfig->getDefaultUrl());
-    $redirect->send();
-}
 
 //
 // Get current user and group id - default: -1
@@ -701,10 +680,6 @@ if ($response->getStatusCode() === Response::HTTP_NOT_FOUND) {
 
 $response->setContent($twigTemplate->render($templateVars));
 
-if ('logout' === $action) {
-    $response->headers->set('Cache-Control', 'no-cache, no-store, private');
-    $response->headers->set('Vary', 'Accept-Language, Accept-Encoding, Cookie');
-}
 
 $response->setCache([
     'must_revalidate' => false,

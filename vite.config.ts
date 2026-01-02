@@ -12,6 +12,7 @@ export default defineConfig({
       input: {
         backend: path.resolve(__dirname, 'phpmyfaq/admin/assets/src/index.ts'),
         frontend: path.resolve(__dirname, 'phpmyfaq/assets/src/frontend.ts'),
+        notifications: path.resolve(__dirname, 'phpmyfaq/assets/src/notifications-export.ts'),
         cookieConsent: path.resolve(__dirname, 'phpmyfaq/assets/src/cookie-consent.ts'),
         setup: path.resolve(__dirname, 'phpmyfaq/assets/src/setup.ts'),
         update: path.resolve(__dirname, 'phpmyfaq/assets/src/update.ts'),
@@ -24,12 +25,15 @@ export default defineConfig({
         format: 'es',
         entryFileNames: '[name].js',
         assetFileNames: '[name].[ext]',
+        preserveModules: false,
+        exports: 'named',
         manualChunks: {
           bootstrap: ['bootstrap'],
           chart: ['chart.js'],
           jodit: ['jodit'],
         },
       },
+      preserveEntrySignatures: 'exports-only',
     },
     sourcemap: true,
     minify: 'terser',

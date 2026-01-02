@@ -23,7 +23,7 @@ use phpMyFAQ\Controller\Frontend\CategoryController;
 use phpMyFAQ\Controller\Frontend\ContactController;
 use phpMyFAQ\Controller\Frontend\FaqController;
 use phpMyFAQ\Controller\Frontend\GlossaryController;
-use phpMyFAQ\Controller\Frontend\LoginController;
+use phpMyFAQ\Controller\Frontend\AuthenticationController;
 use phpMyFAQ\Controller\Frontend\NewsController;
 use phpMyFAQ\Controller\Frontend\QuestionsController;
 use phpMyFAQ\Controller\Frontend\OverviewController;
@@ -81,7 +81,7 @@ $routesConfig = [
     ],
     'public.forgot-password' => [
         'path' => '/forgot-password',
-        'controller' => [LoginController::class, 'forgotPassword'],
+        'controller' => [AuthenticationController::class, 'forgotPassword'],
         'methods' => 'GET|POST',
     ],
     'public.glossary' => [
@@ -91,8 +91,13 @@ $routesConfig = [
     ],
     'public.login' => [
         'path' => '/login',
-        'controller' => [LoginController::class, 'index'],
+        'controller' => [AuthenticationController::class, 'login'],
         'methods' => 'GET|POST',
+    ],
+    'public.logout' => [
+        'path' => '/user/logout',
+        'controller' => [AuthenticationController::class, 'logout'],
+        'methods' => 'GET',
     ],
     'public.news' => [
         'path' => '/news/{newsId}/{newsLang}/{slug}.html',

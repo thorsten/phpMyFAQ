@@ -231,5 +231,16 @@
   {% endfor %}
 {% endif %}
 <script type="module" src="./assets/public/frontend.js"></script>
+{% if successMessage or errorMessage %}
+<script type="module">
+  import { pushNotification, pushErrorNotification } from './assets/public/notifications.js';
+  {% if successMessage %}
+  pushNotification('{{ successMessage|e('js') }}');
+  {% endif %}
+  {% if errorMessage %}
+  pushErrorNotification('{{ errorMessage|e('js') }}');
+  {% endif %}
+</script>
+{% endif %}
 </body>
 </html>
