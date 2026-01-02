@@ -20,6 +20,7 @@ declare(strict_types=1);
 use phpMyFAQ\Controller\Frontend\Api\SetupController;
 use phpMyFAQ\Controller\Frontend\AttachmentController;
 use phpMyFAQ\Controller\Frontend\ContactController;
+use phpMyFAQ\Controller\Frontend\FaqController;
 use phpMyFAQ\Controller\Frontend\GlossaryController;
 use phpMyFAQ\Controller\Frontend\LoginController;
 use phpMyFAQ\Controller\Frontend\NewsController;
@@ -51,6 +52,11 @@ $routesConfig = [
         'path' => '/contact.html',
         'controller' => [ContactController::class, 'index'],
         'methods' => 'GET|POST',
+    ],
+    'public.faq.add' => [
+        'path' => '/add-faq.html',
+        'controller' => [FaqController::class, 'add'],
+        'methods' => 'GET',
     ],
     'public.forgot-password' => [
         'path' => '/forgot-password',
