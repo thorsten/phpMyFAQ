@@ -33,6 +33,9 @@ class SearchTest extends TestCase
         $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $this->configuration = new Configuration($this->dbHandle);
         $this->search = new Search($this->configuration);
+
+        // Clean up any existing search terms to ensure test isolation
+        $this->search->deleteAllSearchTerms();
     }
 
     protected function tearDown(): void
