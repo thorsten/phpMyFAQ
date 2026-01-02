@@ -118,50 +118,6 @@ try {
 Strings::init($faqLangCode);
 
 //
-// Try Symfony Router first
-//
-try {
-    $routes = require __DIR__ . '/src/public-routes.php';
-
-    $context = new RequestContext();
-    $context->fromRequest($request);
-    $matcher = new UrlMatcher($routes, $context);
-
-    $parameters = $matcher->match($request->getPathInfo());
-
-    $controllerCallable = $parameters['_controller'];
-    unset($parameters['_controller'], $parameters['_route'], $parameters['_methods']);
-
-    $request->attributes->add($matcher->match($request->getPathInfo()));
-
-    if (is_array($controllerCallable)) {
-        [$controllerClass, $method] = $controllerCallable;
-        $controller = new $controllerClass();
-        $routeResponse = $controller->$method($request);
-    } else {
-        $routeResponse = $controllerCallable($request);
-    }
-
-    $routeResponse->send();
-    exit();
-} catch (ResourceNotFoundException $e) {
-    // No route matched - continue with legacy logic below
-}
-
-//
-// Set actual template set name
-//
-TwigWrapper::setTemplateSetName($faqConfig->getTemplateSet());
-
-/*
- * Initialize attachment factory
- */
-AttachmentFactory::init(
-    $faqConfig->get('records.defaultAttachmentEncKey'),
-    $faqConfig->get('records.enableAttachmentEncryption'),
-);
-
-//
 // Get user action
 //
 $action = Filter::filterVar($request->query->get('action'), FILTER_SANITIZE_SPECIAL_CHARS);
@@ -307,6 +263,50 @@ if (!$internal) {
         $faqSession->checkSessionId($sidGet, $request->getClientIp());
     }
 }
+
+//
+// Try Symfony Router first
+//
+try {
+    $routes = require __DIR__ . '/src/public-routes.php';
+
+    $context = new RequestContext();
+    $context->fromRequest($request);
+    $matcher = new UrlMatcher($routes, $context);
+
+    $parameters = $matcher->match($request->getPathInfo());
+
+    $controllerCallable = $parameters['_controller'];
+    unset($parameters['_controller'], $parameters['_route'], $parameters['_methods']);
+
+    $request->attributes->add($matcher->match($request->getPathInfo()));
+
+    if (is_array($controllerCallable)) {
+        [$controllerClass, $method] = $controllerCallable;
+        $controller = new $controllerClass();
+        $routeResponse = $controller->$method($request);
+    } else {
+        $routeResponse = $controllerCallable($request);
+    }
+
+    $routeResponse->send();
+    exit();
+} catch (ResourceNotFoundException $e) {
+    // No route matched - continue with legacy logic below
+}
+
+//
+// Set actual template set name
+//
+TwigWrapper::setTemplateSetName($faqConfig->getTemplateSet());
+
+/*
+ * Initialize attachment factory
+ */
+AttachmentFactory::init(
+    $faqConfig->get('records.defaultAttachmentEncKey'),
+    $faqConfig->get('records.enableAttachmentEncryption'),
+);
 
 //
 // Is user tracking activated?
