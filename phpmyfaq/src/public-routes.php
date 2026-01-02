@@ -83,6 +83,11 @@ $routesConfig = [
         'controller' => [UserController::class, 'requestRemoval'],
         'methods' => 'GET',
     ],
+    'public.user.bookmarks' => [
+        'path' => '/user/bookmarks',
+        'controller' => [UserController::class, 'bookmarks'],
+        'methods' => 'GET',
+    ],
     'public.sitemap' => [
         'path' => '/sitemap/{letter}/{language}.html',
         'controller' => [FrontendSitemapController::class, 'index'],

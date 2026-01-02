@@ -20,8 +20,11 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
+use phpMyFAQ\Bookmark;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -37,6 +40,10 @@ final class UserController extends AbstractFrontController
     #[Route(path: '/user/request-removal', name: 'public.user.request-removal')]
     public function requestRemoval(Request $request): Response
     {
+        if (!$this->currentUser->isLoggedIn()) {
+            return new RedirectResponse($this->configuration->getDefaultUrl());
+        }
+
         $faqSession = $this->container->get('phpmyfaq.user.session');
         $faqSession->setCurrentUser($this->currentUser);
         $faqSession->userTracking('request_removal', 0);
@@ -52,6 +59,35 @@ final class UserController extends AbstractFrontController
                 ? $this->currentUser->getUserData('display_name')
                 : '',
             'defaultLoginName' => $this->currentUser->getUserId() > 0 ? $this->currentUser->getLogin() : '',
+        ]);
+    }
+
+    /**
+     * Displays the user's bookmarks page.
+     *
+     * @throws Exception
+     * @throws \Exception
+     */
+    #[Route(path: '/user/bookmarks', name: 'public.user.bookmarks')]
+    public function bookmarks(Request $request): Response
+    {
+        if (!$this->currentUser->isLoggedIn()) {
+            return new RedirectResponse($this->configuration->getDefaultUrl());
+        }
+
+        $faqSession = $this->container->get('phpmyfaq.user.session');
+        $faqSession->setCurrentUser($this->currentUser);
+        $faqSession->userTracking('bookmarks', 0);
+
+        $bookmark = new Bookmark($this->configuration, $this->currentUser);
+        $session = $this->container->get('session');
+
+        return $this->render('bookmarks.twig', [
+            ...$this->getHeader($request),
+            'title' => sprintf('%s - %s', Translation::get(key: 'msgBookmarks'), $this->configuration->getTitle()),
+            'bookmarksList' => $bookmark->getBookmarkList(),
+            'csrfTokenDeleteBookmark' => Token::getInstance($session)->getTokenString('delete-bookmark'),
+            'csrfTokenDeleteAllBookmarks' => Token::getInstance($session)->getTokenString('delete-all-bookmarks'),
         ]);
     }
 }
