@@ -30,7 +30,7 @@ export const handleUpdateNextStepButton = (): void => {
 };
 
 export const handleUpdateInformation = async (): Promise<void> => {
-  if (window.location.href.endsWith('/update/') || window.location.href.endsWith('/update/index.php')) {
+  if (window.location.href.endsWith('/update') || window.location.href.endsWith('/update/')) {
     const installedVersion = document.getElementById('phpmyfaq-update-installed-version') as HTMLInputElement | null;
 
     if (!installedVersion) return;
@@ -87,7 +87,7 @@ export const handleUpdateInformation = async (): Promise<void> => {
 };
 
 export const handleConfigBackup = async (): Promise<void> => {
-  if (window.location.href.endsWith('/update/?step=2') || window.location.href.endsWith('/update/index.php?step=2')) {
+  if (window.location.href.endsWith('/update/?step=2') || window.location.href.endsWith('/update/?step=2')) {
     const installedVersion = document.getElementById('phpmyfaq-update-installed-version') as HTMLInputElement | null;
 
     if (!installedVersion) return;
@@ -115,7 +115,7 @@ export const handleConfigBackup = async (): Promise<void> => {
 };
 
 export const handleDatabaseUpdate = async (): Promise<void> => {
-  if (window.location.href.endsWith('/update/?step=3') || window.location.href.endsWith('/update/index.php?step=3')) {
+  if (window.location.href.endsWith('/update/?step=3') || window.location.href.endsWith('/update/?step=3')) {
     const installedVersion = document.getElementById('phpmyfaq-update-installed-version') as HTMLInputElement | null;
 
     if (!installedVersion) return;

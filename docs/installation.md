@@ -653,7 +653,6 @@ your-domain.com {
     
     # Rewrite rules for phpMyFAQ
     rewrite /setup /setup/index.php
-    rewrite /update /update/index.php
     rewrite /admin /admin/index.php
     rewrite /api/* /api/index.php
     

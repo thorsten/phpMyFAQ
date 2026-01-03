@@ -230,9 +230,9 @@ $routesConfig = [
         'methods' => 'GET',
     ],
     'public.update.index' => [
-        'path' => '/update/',
+        'path' => '/update',
         'controller' => [SetupController::class, 'update'],
-        'methods' => 'POST',
+        'methods' => 'GET',
     ],
 ];
 
