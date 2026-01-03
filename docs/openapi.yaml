@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: 'REST API for phpMyFAQ 4.1'
+  title: 'REST API for phpMyFAQ 4.2'
   description: 'phpMyFAQ includes a REST API and offers APIs for various services like fetching the phpMyFAQ version or doing a search against the phpMyFAQ installation.'
   contact:
     name: 'phpMyFAQ Team'
@@ -8,7 +8,7 @@ info:
   license:
     name: 'Mozilla Public Licence 2.0'
     url: 'https://www.mozilla.org/MPL/2.0/'
-  version: '3.1'
+  version: '3.2'
 servers:
   - url: 'https://localhost'
     description: 'Local dockerized server'
@@ -49,7 +49,7 @@ paths:
             application/json:
               schema: {}
               example: []
-  '/api/v3.1/backup/{type}':
+  '/api/v3.2/backup/{type}':
     get:
       tags:
         - 'Endpoints with Authentication'
@@ -266,7 +266,7 @@ paths:
             application/json:
               schema: {}
               example: []
-  '/api/v3.1/faqs/{categoryId}':
+  '/api/v3.2/faqs/{categoryId}':
     get:
       tags:
         - 'Public Endpoints'
@@ -302,7 +302,7 @@ paths:
             application/json:
               schema: {}
               example: []
-  '/api/v3.1/faq/{categoryId}/{faqId}':
+  '/api/v3.2/faq/{categoryId}/{faqId}':
     get:
       tags:
         - 'Public Endpoints'
@@ -344,7 +344,7 @@ paths:
             application/json:
               schema: {}
               example: []
-  '/api/v3.1/faqs/tags/{tagId}':
+  '/api/v3.2/faqs/tags/{tagId}':
     get:
       tags:
         - 'Public Endpoints'
@@ -380,7 +380,7 @@ paths:
             application/json:
               schema: {}
               example: []
-  /api/v3.1/faqs/popular:
+  /api/v3.2/faqs/popular:
     get:
       tags:
         - 'Public Endpoints'
@@ -409,7 +409,7 @@ paths:
             application/json:
               schema: {}
               example: []
-  /api/v3.1/faqs/latest:
+  /api/v3.2/faqs/latest:
     get:
       tags:
         - 'Public Endpoints'
@@ -438,7 +438,7 @@ paths:
             application/json:
               schema: {}
               example: []
-  /api/v3.1/faqs/trending:
+  /api/v3.2/faqs/trending:
     get:
       tags:
         - 'Public Endpoints'
@@ -467,7 +467,7 @@ paths:
             application/json:
               schema: {}
               example: []
-  /api/v3.1/faqs/sticky:
+  /api/v3.2/faqs/sticky:
     get:
       tags:
         - 'Public Endpoints'
@@ -496,7 +496,7 @@ paths:
             application/json:
               schema: {}
               example: []
-  /api/v3.1/faqs:
+  /api/v3.2/faqs:
     get:
       tags:
         - 'Public Endpoints'
@@ -525,7 +525,7 @@ paths:
             application/json:
               schema: {}
               example: []
-  /api/v3.1/faq/create:
+  /api/v3.2/faq/create:
     post:
       tags:
         - 'Endpoints with Authentication'
@@ -627,7 +627,7 @@ paths:
               description: 'phpMyFAQ client API Token, generated in admin backend'
               schema:
                 type: string
-  /api/v3.1/faq/update:
+  /api/v3.2/faq/update:
     put:
       tags:
         - 'Endpoints with Authentication'
@@ -742,7 +742,7 @@ paths:
             application/json:
               schema: {}
               example: []
-  /api/v3.1/groups:
+  /api/v3.2/groups:
     get:
       tags:
         - 'Endpoints with Authentication'
@@ -779,7 +779,7 @@ paths:
             application/json:
               schema: {}
               example: '"en"'
-  /api/v3.1/login:
+  /api/v3.2/login:
     post:
       tags:
         - 'Public Endpoints'
@@ -850,7 +850,7 @@ paths:
             application/json:
               schema: {}
               example: []
-  /api/v3.1/open-questions:
+  /api/v3.2/open-questions:
     get:
       tags:
         - 'Public Endpoints'
@@ -878,7 +878,7 @@ paths:
             application/json:
               schema: {}
               example: []
-  '/api/v3.1/pdf/{categoryId}/{faqId}':
+  '/api/v3.2/pdf/{categoryId}/{faqId}':
     get:
       tags:
         - 'Public Endpoints'
@@ -1060,7 +1060,7 @@ paths:
             application/json:
               schema: {}
               example: '{ "registered": false }'
-  /api/v3.1/search:
+  /api/v3.2/search:
     get:
       tags:
         - 'Public Endpoints'
@@ -1085,7 +1085,7 @@ paths:
             application/json:
               schema: {}
               example: []
-  /api/v3.1/searches/popular:
+  /api/v3.2/searches/popular:
     get:
       tags:
         - 'Public Endpoints'
@@ -1113,7 +1113,7 @@ paths:
             application/json:
               schema: {}
               example: []
-  /api/v3.1/tags:
+  /api/v3.2/tags:
     get:
       tags:
         - 'Public Endpoints'
@@ -1131,7 +1131,7 @@ paths:
             application/json:
               schema: {}
               example: []
-  /api/v3.1/title:
+  /api/v3.2/title:
     get:
       tags:
         - 'Public Endpoints'
@@ -1143,7 +1143,7 @@ paths:
             application/json:
               schema: {}
               example: 'phpMyFAQ Codename Porus'
-  /api/v3.1/version:
+  /api/v3.2/version:
     get:
       tags:
         - 'Public Endpoints'
