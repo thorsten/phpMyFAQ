@@ -3,20 +3,29 @@
 namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Language;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
 class GlossaryControllerTest extends TestCase
 {
     private Configuration $configuration;
 
-    public function testListReturnsGlossaryItems(): void
+    protected function setUp(): void
     {
         $this->configuration = Configuration::getConfigurationInstance();
+        $language = new Language($this->configuration, $this->createStub(Session::class));
+        $language->setLanguageWithDetection('language_en.php');
+        $this->configuration->setLanguage($language);
+    }
+
+    public function testListReturnsGlossaryItems(): void
+    {
 
         $glossaryController = new GlossaryController();
 
@@ -37,8 +46,6 @@ class GlossaryControllerTest extends TestCase
 
     public function testListHandlesAcceptLanguageHeader(): void
     {
-        $this->configuration = Configuration::getConfigurationInstance();
-
         $glossaryController = new GlossaryController();
 
         // Test with complex Accept-Language header
@@ -54,8 +61,6 @@ class GlossaryControllerTest extends TestCase
 
     public function testListWithoutAcceptLanguageHeader(): void
     {
-        $this->configuration = Configuration::getConfigurationInstance();
-
         $glossaryController = new GlossaryController();
 
         $request = Request::create('/api/v3.2/glossary', 'GET');
