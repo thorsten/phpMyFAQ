@@ -28,7 +28,7 @@ use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class ImageController extends AbstractController
 {
@@ -40,13 +40,11 @@ final class ImageController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $session = $this->container->get(id: 'session');
-
         $uploadDir = PMF_CONTENT_DIR . '/user/images/';
         $validFileExtensions = ['gif', 'jpg', 'jpeg', 'png', 'webp', 'svg', 'mov', 'mp4', 'webm'];
         $timestamp = time();
 
-        if (!Token::getInstance($session)->verifyToken('pmf-csrf-token', $request->query->get('csrf'))) {
+        if (!Token::getInstance($this->session)->verifyToken('pmf-csrf-token', $request->query->get('csrf'))) {
             return $this->json([
                 'success' => false,
                 'data' => ['code' => Response::HTTP_UNAUTHORIZED],
@@ -93,7 +91,7 @@ final class ImageController extends AbstractController
                     );
                 }
 
-                // Accept upload if there was no origin, or if it is an accepted origin
+                // Accept upload if there was no origin or if it is an accepted origin
                 $fileName = $timestamp . '_' . $file->getClientOriginalName();
                 $fileName = str_replace(' ', '_', $fileName);
                 $file->move($uploadDir, $fileName);

@@ -42,7 +42,6 @@ final class OpenQuestionsController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::QUESTION_DELETE);
 
-        $session = $this->container->get(id: 'session');
         $question = $this->container->get(id: 'phpmyfaq.question');
 
         $this->addExtension(new IntlExtension());
@@ -51,7 +50,7 @@ final class OpenQuestionsController extends AbstractAdministrationController
             ...$this->getHeader($request),
             ...$this->getFooter(),
             'msgOpenQuestions' => Translation::get(key: 'msgOpenQuestions'),
-            'csrfTokenDeleteQuestion' => Token::getInstance($session)->getTokenString('delete-questions'),
+            'csrfTokenDeleteQuestion' => Token::getInstance($this->session)->getTokenString('delete-questions'),
             'currentLocale' => $this->configuration->getLanguage()->getLanguage(),
             'msgQuestion' => Translation::get(key: 'msgQuestion'),
             'msgVisibility' => Translation::get(key: 'ad_entry_visibility'),
@@ -61,7 +60,9 @@ final class OpenQuestionsController extends AbstractAdministrationController
             'enableCloseQuestion' => $this->configuration->get(item: 'records.enableCloseQuestion'),
             'msg2answerFAQ' => Translation::get(key: 'msg2answerFAQ'),
             'msgTakeQuestion' => Translation::get(key: 'ad_ques_take'),
-            'csrfTokenToggleVisibility' => Token::getInstance($session)->getTokenString('toggle-question-visibility'),
+            'csrfTokenToggleVisibility' => Token::getInstance($this->session)->getTokenString(
+                'toggle-question-visibility',
+            ),
             'msgDeleteAllOpenQuestions' => Translation::get(key: 'msgDelete'),
         ]);
     }

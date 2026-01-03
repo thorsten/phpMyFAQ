@@ -45,15 +45,14 @@ final class FormsController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::FORMS_EDIT);
 
         $forms = $this->container->get(id: 'phpmyfaq.forms');
-        $session = $this->container->get(id: 'session');
 
         return $this->render('@admin/configuration/forms.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
             'formDataAskQuestion' => $forms->getFormData(FormIds::ASK_QUESTION->value),
             'formDataAddContent' => $forms->getFormData(FormIds::ADD_NEW_FAQ->value),
-            'csrfActivate' => Token::getInstance($session)->getTokenString('activate-input'),
-            'csrfRequired' => Token::getInstance($session)->getTokenString('require-input'),
+            'csrfActivate' => Token::getInstance($this->session)->getTokenString('activate-input'),
+            'csrfRequired' => Token::getInstance($this->session)->getTokenString('require-input'),
             'ad_entry_id' => Translation::get(key: 'ad_entry_id'),
             'ad_entry_active' => Translation::get(key: 'ad_entry_active'),
             'ad_categ_translate' => Translation::get(key: 'ad_categ_translate'),
@@ -75,7 +74,6 @@ final class FormsController extends AbstractAdministrationController
         $inputId = (int) Filter::filterVar($request->attributes->get('inputId'), FILTER_VALIDATE_INT);
 
         $forms = $this->container->get(id: 'phpmyfaq.forms');
-        $session = $this->container->get(id: 'session');
 
         // Get supported languages for adding new translations
         $languages = [];
@@ -88,7 +86,7 @@ final class FormsController extends AbstractAdministrationController
         }
 
         // Twig filter for language codes
-        // Not seperated as TwigExtension because of a special function and handling of 'default'
+        // Isn't separated as TwigExtension because of a special function and handling of 'default'
         // value in this context
         $twigFilter = new TwigFilter('languageCode', static function ($string): ?string {
             if ($string === 'default') {
@@ -104,9 +102,9 @@ final class FormsController extends AbstractAdministrationController
             ...$this->getFooter(),
             'translations' => $forms->getTranslations($formId, $inputId),
             'ad_sess_pageviews' => Translation::get(key: 'ad_sess_pageviews'),
-            'csrfTokenEditTranslation' => Token::getInstance($session)->getTokenString('edit-translation'),
-            'csrfTokenDeleteTranslation' => Token::getInstance($session)->getTokenString('delete-translation'),
-            'csrfTokenAddTranslation' => Token::getInstance($session)->getTokenString('add-translation'),
+            'csrfTokenEditTranslation' => Token::getInstance($this->session)->getTokenString('edit-translation'),
+            'csrfTokenDeleteTranslation' => Token::getInstance($this->session)->getTokenString('delete-translation'),
+            'csrfTokenAddTranslation' => Token::getInstance($this->session)->getTokenString('add-translation'),
             'languages' => $languages,
             'formId' => $formId,
             'inputId' => $inputId,

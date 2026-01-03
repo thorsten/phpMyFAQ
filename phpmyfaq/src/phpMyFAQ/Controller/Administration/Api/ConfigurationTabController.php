@@ -94,10 +94,7 @@ final class ConfigurationTabController extends AbstractController
 
         $oldConfigurationData = $this->configuration->getAll();
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            page: 'configuration',
-            requestToken: $csrfToken,
-        )) {
+        if (!Token::getInstance($this->session)->verifyToken(page: 'configuration', requestToken: $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 

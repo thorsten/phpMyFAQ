@@ -82,7 +82,7 @@ final class FaqController extends AbstractController
 
         $data = json_decode($request->getContent())->data;
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+        if (!Token::getInstance($this->session)->verifyToken(
             page: 'pmf-csrf-token',
             requestToken: $data->{'pmf-csrf-token'},
         )) {
@@ -289,7 +289,7 @@ final class FaqController extends AbstractController
 
         $data = json_decode($request->getContent())->data;
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+        if (!Token::getInstance($this->session)->verifyToken(
             page: 'pmf-csrf-token',
             requestToken: $data->{'pmf-csrf-token'},
         )) {
@@ -538,10 +538,7 @@ final class FaqController extends AbstractController
         $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
         $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            page: 'pmf-csrf-token',
-            requestToken: $data->csrf,
-        )) {
+        if (!Token::getInstance($this->session)->verifyToken(page: 'pmf-csrf-token', requestToken: $data->csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -581,10 +578,7 @@ final class FaqController extends AbstractController
         $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
         $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            page: 'pmf-csrf-token',
-            requestToken: $data->csrf,
-        )) {
+        if (!Token::getInstance($this->session)->verifyToken(page: 'pmf-csrf-token', requestToken: $data->csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -625,10 +619,7 @@ final class FaqController extends AbstractController
         $faqId = Filter::filterVar($data->faqId, FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            page: 'pmf-csrf-token',
-            requestToken: $data->csrf,
-        )) {
+        if (!Token::getInstance($this->session)->verifyToken(page: 'pmf-csrf-token', requestToken: $data->csrf)) {
             return $this->json([
                 'error' => 'CSRF Token - ' . Translation::get(key: 'msgNoPermission'),
             ], Response::HTTP_UNAUTHORIZED);
@@ -656,10 +647,7 @@ final class FaqController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            page: 'pmf-csrf-token',
-            requestToken: $data->csrf,
-        )) {
+        if (!Token::getInstance($this->session)->verifyToken(page: 'pmf-csrf-token', requestToken: $data->csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -695,10 +683,7 @@ final class FaqController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            page: 'order-stickyfaqs',
-            requestToken: $data->csrf,
-        )) {
+        if (!Token::getInstance($this->session)->verifyToken(page: 'order-stickyfaqs', requestToken: $data->csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -716,14 +701,12 @@ final class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);
 
-        $session = $this->container->get(id: 'session');
-
         $file = $request->files->get(key: 'file');
         if (!isset($file)) {
             return $this->json(['error' => 'Bad request: There is no file submitted.'], Response::HTTP_BAD_REQUEST);
         }
 
-        if (!Token::getInstance($session)->verifyToken(
+        if (!Token::getInstance($this->session)->verifyToken(
             page: 'importfaqs',
             requestToken: $request->attributes->get(key: 'csrf'),
         )) {

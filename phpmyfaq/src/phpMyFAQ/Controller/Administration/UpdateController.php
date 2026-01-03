@@ -40,14 +40,14 @@ final class UpdateController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $session = $this->container->get(id: 'session');
-
         $isOnNightlies = $this->configuration->get(item: 'upgrade.releaseEnvironment') === ReleaseType::NIGHTLY->value;
 
         return $this->render('@admin/configuration/upgrade.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'csrfActivateMaintenanceMode' => Token::getInstance($session)->getTokenString('activate-maintenance-mode'),
+            'csrfActivateMaintenanceMode' => Token::getInstance($this->session)->getTokenString(
+                'activate-maintenance-mode',
+            ),
             'isOnNightlies' => $isOnNightlies,
             'releaseEnvironment' => ucfirst((string) $this->configuration->get(item: 'upgrade.releaseEnvironment')),
             'dateLastChecked' => $this->configuration->get(item: 'upgrade.dateLastChecked'),

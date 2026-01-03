@@ -134,10 +134,7 @@ final class AuthenticationController extends AbstractAdministrationController
 
         $csrfToken = Filter::filterVar($request->query->get(key: 'csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            page: 'admin-logout',
-            requestToken: $csrfToken,
-        )) {
+        if (!Token::getInstance($this->session)->verifyToken(page: 'admin-logout', requestToken: $csrfToken)) {
             // @todo add an error message
             return $redirectResponse->send();
         }

@@ -199,10 +199,7 @@ final class UserController extends AbstractController
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
         $data = json_decode($request->getContent());
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            page: 'activate-user',
-            requestToken: $data->csrfToken,
-        )) {
+        if (!Token::getInstance($this->session)->verifyToken(page: 'activate-user', requestToken: $data->csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -238,10 +235,7 @@ final class UserController extends AbstractController
         $newPassword = Filter::filterVar($data->newPassword, FILTER_SANITIZE_SPECIAL_CHARS);
         $retypedPassword = Filter::filterVar($data->passwordRepeat, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            page: 'overwrite-password',
-            requestToken: $csrfToken,
-        )) {
+        if (!Token::getInstance($this->session)->verifyToken(page: 'overwrite-password', requestToken: $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -280,10 +274,7 @@ final class UserController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            page: 'delete-user',
-            requestToken: $data->csrfToken,
-        )) {
+        if (!Token::getInstance($this->session)->verifyToken(page: 'delete-user', requestToken: $data->csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -323,10 +314,7 @@ final class UserController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            page: 'add-user',
-            requestToken: $data->csrf,
-        )) {
+        if (!Token::getInstance($this->session)->verifyToken(page: 'add-user', requestToken: $data->csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -402,7 +390,7 @@ final class UserController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+        if (!Token::getInstance($this->session)->verifyToken(
             page: 'update-user-data',
             requestToken: $data->csrfToken,
         )) {
@@ -465,7 +453,7 @@ final class UserController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+        if (!Token::getInstance($this->session)->verifyToken(
             page: 'update-user-rights',
             requestToken: $data->csrfToken,
         )) {

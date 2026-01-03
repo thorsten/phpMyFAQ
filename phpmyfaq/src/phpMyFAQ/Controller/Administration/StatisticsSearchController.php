@@ -46,7 +46,6 @@ final class StatisticsSearchController extends AbstractAdministrationController
         $perPage = 10;
 
         $search = $this->container->get(id: 'phpmyfaq.search');
-        $session = $this->container->get(id: 'session');
 
         $searchesCount = $search->getSearchesCount();
         $searchesList = $search->getMostPopularSearches($searchesCount + 1, true);
@@ -65,7 +64,7 @@ final class StatisticsSearchController extends AbstractAdministrationController
             ...$this->getHeader($request),
             ...$this->getFooter(),
             'msgAdminElasticsearchStats' => Translation::get(key: 'msgAdminElasticsearchStats'),
-            'csrfToken' => Token::getInstance($session)->getTokenString('truncate-search-terms'),
+            'csrfToken' => Token::getInstance($this->session)->getTokenString('truncate-search-terms'),
             'ad_searchterm_del' => Translation::get(key: 'ad_searchterm_del'),
             'ad_searchstats_search_term' => Translation::get(key: 'ad_searchstats_search_term'),
             'ad_searchstats_search_term_count' => Translation::get(key: 'ad_searchstats_search_term_count'),
@@ -74,7 +73,7 @@ final class StatisticsSearchController extends AbstractAdministrationController
             'pagination' => $pagination->render(),
             'searchesCount' => $searchesCount,
             'searchesList' => $searchesList,
-            'csrfTokenDelete' => Token::getInstance($session)->getTokenString('delete-searchterm'),
+            'csrfTokenDelete' => Token::getInstance($this->session)->getTokenString('delete-searchterm'),
             'ad_news_delete' => Translation::get(key: 'ad_news_delete'),
         ]);
     }

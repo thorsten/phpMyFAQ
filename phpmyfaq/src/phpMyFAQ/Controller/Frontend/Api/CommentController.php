@@ -62,7 +62,7 @@ final class CommentController extends AbstractController
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+        if (!Token::getInstance($this->session)->verifyToken(
             page: 'add-comment',
             requestToken: $data->{'pmf-csrf-token'},
         )) {

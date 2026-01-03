@@ -46,7 +46,6 @@ final class AdminLogController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::STATISTICS_ADMINLOG);
 
         $adminLog = $this->container->get(id: 'phpmyfaq.admin.admin-log');
-        $session = $this->container->get(id: 'session');
 
         $itemsPerPage = 15;
         $page = Filter::filterVar($request->attributes->get('page'), FILTER_VALIDATE_INT, 1);
@@ -72,7 +71,7 @@ final class AdminLogController extends AbstractAdministrationController
             ...$this->getFooter(),
             'headerAdminLog' => Translation::get(key: 'ad_menu_adminlog'),
             'buttonDeleteAdminLog' => Translation::get(key: 'ad_adminlog_del_older_30d'),
-            'csrfDeleteAdminLogToken' => Token::getInstance($session)->getTokenString('delete-adminlog'),
+            'csrfDeleteAdminLogToken' => Token::getInstance($this->session)->getTokenString('delete-adminlog'),
             'currentLocale' => $this->configuration->getLanguage()->getLanguage(),
             'pagination' => $pagination->render(),
             'msgId' => Translation::get(key: 'ad_categ_id'),

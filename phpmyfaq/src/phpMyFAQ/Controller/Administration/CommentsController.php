@@ -81,9 +81,7 @@ final class CommentsController extends AbstractAdministrationController
             'newsComments' => $newsComments,
             'faqCommentsPagination' => $faqCommentsPagination->render(),
             'newsCommentsPagination' => $newsCommentsPagination->render(),
-            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString(
-                page: 'delete-comment',
-            ),
+            'csrfToken' => Token::getInstance($this->session)->getTokenString(page: 'delete-comment'),
         ]);
     }
 }

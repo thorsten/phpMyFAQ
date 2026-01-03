@@ -60,7 +60,7 @@ final class PasswordChangeController extends AbstractAdministrationController
 
         $csrfToken = Filter::filterVar($request->request->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('password', $csrfToken)) {
+        if (!Token::getInstance($this->session)->verifyToken('password', $csrfToken)) {
             throw new Exception('Invalid CSRF token');
         }
 
@@ -114,7 +114,7 @@ final class PasswordChangeController extends AbstractAdministrationController
     {
         return [
             'adminHeaderPasswordChange' => Translation::get(key: 'ad_passwd_cop'),
-            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('password'),
+            'csrfToken' => Token::getInstance($this->session)->getTokenString('password'),
             'adminMsgOldPassword' => Translation::get(key: 'ad_passwd_old'),
             'adminMsgNewPassword' => Translation::get(key: 'ad_passwd_new'),
             'adminMsgNewPasswordConfirm' => Translation::get(key: 'ad_passwd_con'),

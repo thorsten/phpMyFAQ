@@ -118,13 +118,10 @@ final class NewsController extends AbstractAdministrationController
     /**
      * @return array<string, string>
      * @throws \Exception
-     * @throws LoaderError
-     * @throws Exception
      * @todo move to Twig translation filter
      */
     private function getBaseTemplateVars(): array
     {
-        $session = $this->container->get(id: 'session');
         $user = $this->currentUser;
         $language = $this->configuration->getLanguage()->getLanguage();
 
@@ -135,7 +132,7 @@ final class NewsController extends AbstractAdministrationController
             'defaultUrl' => $this->configuration->getDefaultUrl(),
             'enableWysiwyg' => $this->configuration->get(item: 'main.enableWysiwygEditor'),
             'ad_news_add' => Translation::get(key: 'ad_news_add'),
-            'csrfToken_saveNews' => Token::getInstance($session)->getTokenString('save-news'),
+            'csrfToken_saveNews' => Token::getInstance($this->session)->getTokenString('save-news'),
             'ad_news_author_name' => Translation::get(key: 'ad_news_author_name'),
             'ad_news_set_active' => Translation::get(key: 'ad_news_set_active'),
             'ad_news_link_url' => Translation::get(key: 'ad_news_link_url'),
@@ -172,10 +169,10 @@ final class NewsController extends AbstractAdministrationController
             'ad_news_delsuc' => Translation::get(key: 'ad_news_delsuc'),
             'ad_news_updatesuc' => Translation::get(key: 'ad_news_updatesuc'),
             'msgDeleteNews' => Translation::get(key: 'msgDeleteNews'),
-            'csrfToken_deleteNews' => Token::getInstance($session)->getTokenString('delete-news'),
-            'csrfToken_updateNews' => Token::getInstance($session)->getTokenString('update-news'),
+            'csrfToken_deleteNews' => Token::getInstance($this->session)->getTokenString('delete-news'),
+            'csrfToken_updateNews' => Token::getInstance($this->session)->getTokenString('update-news'),
             'ad_entry_active' => Translation::get(key: 'ad_entry_active'),
-            'csrfToken_activateNews' => Token::getInstance($session)->getTokenString('activate-news'),
+            'csrfToken_activateNews' => Token::getInstance($this->session)->getTokenString('activate-news'),
         ];
     }
 }

@@ -42,7 +42,6 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
-        $session = $this->container->get(id: 'session');
         $adminSession = $this->container->get(id: 'phpmyfaq.admin.session');
         $date = $this->container->get(id: 'phpmyfaq.date');
         $visits = $this->container->get(id: 'phpmyfaq.visits');
@@ -55,7 +54,7 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
             ...$this->getHeader($request),
             ...$this->getFooter(),
             'adminHeaderSessions' => Translation::get(key: 'ad_stat_sess'),
-            'csrfTokenClearVisits' => Token::getInstance($session)->getTokenString(page: 'clear-visits'),
+            'csrfTokenClearVisits' => Token::getInstance($this->session)->getTokenString(page: 'clear-visits'),
             'msgClearVisits' => Translation::get(key: 'ad_clear_all_visits'),
             'msgDays' => Translation::get(key: 'ad_stat_days'),
             'numberOfDays' => $stats->numberOfDays,
@@ -73,11 +72,11 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
             'renderedDaySelector' => $statisticsHelper->renderDaySelector(),
             'buttonOkay' => Translation::get(key: 'ad_stat_ok'),
             'msgSessionManagement' => Translation::get(key: 'ad_stat_management'),
-            'csrfTokenSessions' => Token::getInstance($session)->getTokenInput(page: 'sessions'),
+            'csrfTokenSessions' => Token::getInstance($this->session)->getTokenInput(page: 'sessions'),
             'msgChooseMonth' => Translation::get(key: 'ad_stat_choose'),
             'renderedMonthSelector' => $statisticsHelper->renderMonthSelector(),
             'buttonDeleteMonth' => Translation::get(key: 'ad_stat_delete'),
-            'csrfTokenExport' => Token::getInstance($session)->getTokenString(page: 'export-sessions'),
+            'csrfTokenExport' => Token::getInstance($this->session)->getTokenString(page: 'export-sessions'),
             'dateToday' => date(format: 'Y-m-d'),
             'datePickerMinDate' => date(format: 'Y-m-d', timestamp: $stats->firstDate),
         ]);

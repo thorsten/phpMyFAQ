@@ -47,7 +47,7 @@ final class CategoryController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('category', $data->csrfToken)) {
+        if (!Token::getInstance($this->session)->verifyToken('category', $data->csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -140,7 +140,7 @@ final class CategoryController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('category', $data->csrfToken)) {
+        if (!Token::getInstance($this->session)->verifyToken('category', $data->csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 

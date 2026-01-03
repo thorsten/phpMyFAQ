@@ -45,8 +45,6 @@ abstract class AbstractAdministrationController extends AbstractController
         $adminHelper = $this->container->get(id: 'phpmyfaq.admin.helper');
         $adminHelper->setUser($this->currentUser);
 
-        $session = $this->container->get(id: 'session');
-
         $secLevelEntries = $this->getSecondLevelEntries($adminHelper);
         $pageFlags = $this->getPageFlags($request);
         $gravatarImage = $this->getGravatarImage();
@@ -71,7 +69,7 @@ abstract class AbstractAdministrationController extends AbstractController
             'hasGravatarSupport' => $this->configuration->get(item: 'main.enableGravatarSupport'),
             'gravatarImage' => $gravatarImage,
             'msgChangePassword' => Translation::get(key: 'ad_menu_passwd'),
-            'csrfTokenLogout' => Token::getInstance($session)->getTokenString('admin-logout'),
+            'csrfTokenLogout' => Token::getInstance($this->session)->getTokenString('admin-logout'),
             'msgLogout' => Translation::get(key: 'admin_mainmenu_logout'),
             'secondLevelEntries' => $secLevelEntries,
             'menuUsers' => Translation::get(key: 'admin_mainmenu_users'),

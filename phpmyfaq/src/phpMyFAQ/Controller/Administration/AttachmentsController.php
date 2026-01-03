@@ -47,7 +47,6 @@ final class AttachmentsController extends AbstractAdministrationController
         $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT);
         $page = max(1, $page);
 
-        $session = $this->container->get(id: 'session');
         $collection = $this->container->get(id: 'phpmyfaq.attachment-collection');
 
         $itemsPerPage = 24;
@@ -72,8 +71,8 @@ final class AttachmentsController extends AbstractAdministrationController
             'adminMsgTransToolLanguage' => Translation::get(key: 'msgTransToolLanguage'),
             'adminMsgAttachmentsFilesize' => Translation::get(key: 'msgAttachmentsFilesize'),
             'adminMsgAttachmentsMimeType' => Translation::get(key: 'msgAttachmentsMimeType'),
-            'csrfTokenDeletion' => Token::getInstance($session)->getTokenString('delete-attachment'),
-            'csrfTokenRefresh' => Token::getInstance($session)->getTokenString('refresh-attachment'),
+            'csrfTokenDeletion' => Token::getInstance($this->session)->getTokenString('delete-attachment'),
+            'csrfTokenRefresh' => Token::getInstance($this->session)->getTokenString('refresh-attachment'),
             'attachments' => $crumbs,
             'adminMsgButtonDelete' => Translation::get(key: 'ad_gen_delete'),
             'adminMsgFaqTitle' => Translation::get(key: 'ad_entry_faq_record'),

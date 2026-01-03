@@ -61,7 +61,7 @@ final class StopWordController extends AbstractController
         $stopWordsLang = Filter::filterVar($data->stopWordsLang, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $stopWords = new StopWords($this->configuration);
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('stopwords', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('stopwords', $data->csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -88,7 +88,7 @@ final class StopWordController extends AbstractController
         $stopWord = Filter::filterVar($data->stopWord, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $stopWords = new StopWords($this->configuration);
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('stopwords', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('stopwords', $data->csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 

@@ -71,7 +71,7 @@ final class FaqController extends AbstractAdministrationController
         $categoryRelation->setGroups($currentAdminGroups);
 
         $comments = $this->container->get(id: 'phpmyfaq.comments');
-        $sessions = $this->container->get(id: 'session');
+        $sessions = $this->session;
 
         return $this->render('@admin/content/faq.overview.twig', [
             ...$this->getHeader($request),
@@ -602,8 +602,7 @@ final class FaqController extends AbstractAdministrationController
      */
     private function getBaseTemplateVars(): array
     {
-        $session = $this->container->get(id: 'session');
-        $token = Token::getInstance($session);
+        $token = Token::getInstance($this->session);
 
         $canAddAttachments = $this->currentUser->perm->hasPermission(
             $this->currentUser->getUserId(),

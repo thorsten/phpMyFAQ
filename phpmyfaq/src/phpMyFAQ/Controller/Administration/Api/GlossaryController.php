@@ -65,7 +65,7 @@ final class GlossaryController extends AbstractController
         $glossaryId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
         $glossaryLanguage = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('delete-glossary', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('delete-glossary', $data->csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -93,7 +93,7 @@ final class GlossaryController extends AbstractController
         $glossaryItem = Filter::filterVar($data->item, FILTER_SANITIZE_SPECIAL_CHARS);
         $glossaryDefinition = Filter::filterVar($data->definition, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('add-glossary', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('add-glossary', $data->csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -122,7 +122,7 @@ final class GlossaryController extends AbstractController
         $glossaryItem = Filter::filterVar($data->item, FILTER_SANITIZE_SPECIAL_CHARS);
         $glossaryDefinition = Filter::filterVar($data->definition, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('update-glossary', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('update-glossary', $data->csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 

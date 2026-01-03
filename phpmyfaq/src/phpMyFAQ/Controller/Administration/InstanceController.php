@@ -156,7 +156,7 @@ final class InstanceController extends AbstractAdministrationController
         );
 
         $instance = $this->container->get(id: 'phpmyfaq.instance');
-        $session = $this->container->get(id: 'session');
+
         $mainConfig = [];
         foreach ($instance->getAll() as $site) {
             $mainConfig[$site->id] = $instance->getInstanceConfig((int) $site->id)['isMaster'];
@@ -167,8 +167,8 @@ final class InstanceController extends AbstractAdministrationController
             'multisiteFolderIsWritable' => is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite'),
             'ad_instance_add' => Translation::get(key: 'ad_instance_add'),
             'allInstances' => $instance->getAll(),
-            'csrfTokenDeleteInstance' => Token::getInstance($session)->getTokenString('delete-instance'),
-            'csrfTokenAddInstance' => Token::getInstance($session)->getTokenString('add-instance'),
+            'csrfTokenDeleteInstance' => Token::getInstance($this->session)->getTokenString('delete-instance'),
+            'csrfTokenAddInstance' => Token::getInstance($this->session)->getTokenString('add-instance'),
             'mainConfig' => $mainConfig,
             'requestHost' => Request::createFromGlobals()->getHost(),
             'ad_instance_button' => Translation::get(key: 'ad_instance_button'),

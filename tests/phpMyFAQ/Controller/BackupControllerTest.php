@@ -58,6 +58,7 @@ class BackupControllerTest extends TestCase
             ) {
                 $this->configuration = $configuration;
                 $this->currentUser = $currentUser;
+                $this->session = $session;
                 $this->container = new ContainerBuilder();
                 $this->container->set('phpmyfaq.backup', $backupService);
                 $this->container->set('session', $session);

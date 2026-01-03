@@ -40,10 +40,7 @@ final class CommentController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            'delete-comment',
-            $data->data->{'pmf-csrf-token'},
-        )) {
+        if (!Token::getInstance($this->session)->verifyToken('delete-comment', $data->data->{'pmf-csrf-token'})) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 

@@ -35,6 +35,7 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Twig\Error\LoaderError;
 use Twig\Extension\ExtensionInterface;
@@ -57,6 +58,8 @@ abstract class AbstractController
 
     protected ?CurrentUser $currentUser = null;
 
+    protected ?SessionInterface $session = null;
+
     /** @var ExtensionInterface[] */
     private array $twigExtensions = [];
 
@@ -66,7 +69,6 @@ abstract class AbstractController
     /**
      * Check if the FAQ should be secured.
      *
-     * @throws Exception
      * @throws \Exception
      */
     public function __construct()
@@ -74,6 +76,8 @@ abstract class AbstractController
         $this->container = $this->createContainer();
         $this->configuration = $this->container->get(id: 'phpmyfaq.configuration');
         $this->currentUser = $this->container->get(id: 'phpmyfaq.user.current_user');
+        $this->session = $this->container->get(id: 'session');
+
         TwigWrapper::setTemplateSetName($this->configuration->getTemplateSet());
         $this->isSecured();
     }

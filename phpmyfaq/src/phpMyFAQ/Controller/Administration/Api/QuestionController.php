@@ -42,10 +42,7 @@ final class QuestionController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            'delete-questions',
-            $data->data->{'pmf-csrf-token'},
-        )) {
+        if (!Token::getInstance($this->session)->verifyToken('delete-questions', $data->data->{'pmf-csrf-token'})) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -72,12 +69,11 @@ final class QuestionController extends AbstractController
     {
         $this->userHasPermission(PermissionType::QUESTION_ADD);
 
-        $session = $this->container->get(id: 'session');
         $question = $this->container->get(id: 'phpmyfaq.question');
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($session)->verifyToken('toggle-question-visibility', $data->csrfToken)) {
+        if (!Token::getInstance($this->session)->verifyToken('toggle-question-visibility', $data->csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 

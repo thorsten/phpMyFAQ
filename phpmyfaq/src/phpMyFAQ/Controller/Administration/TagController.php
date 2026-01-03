@@ -45,7 +45,7 @@ final class TagController extends AbstractAdministrationController
             ...$this->getHeader($request),
             ...$this->getFooter(),
             'adminHeaderTags' => Translation::get(key: 'msgTags'),
-            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenInput('tags'),
+            'csrfToken' => Token::getInstance($this->session)->getTokenInput('tags'),
             'tags' => $tagData,
             'noTags' => Translation::get(key: 'ad_news_nodata'),
             'buttonEdit' => Translation::get(key: 'ad_user_edit'),

@@ -69,7 +69,7 @@ final class GroupController extends AbstractAdministrationController
             ...$this->getHeader($request),
             ...$this->getFooter(),
             ...$this->getBaseTemplateVars(),
-            'csrfAddGroup' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('add-group'),
+            'csrfAddGroup' => Token::getInstance($this->session)->getTokenString('add-group'),
         ]);
     }
 
@@ -83,10 +83,7 @@ final class GroupController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::GROUP_ADD);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            'add-group',
-            $request->attributes->get('csrf'),
-        )) {
+        if (!Token::getInstance($this->session)->verifyToken('add-group', $request->attributes->get('csrf'))) {
             throw new UnauthorizedHttpException('Invalid CSRF token');
         }
 
@@ -135,8 +132,6 @@ final class GroupController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::GROUP_DELETE);
 
-        $session = $this->container->get(id: 'session');
-
         $groupId = (int) Filter::filterVar($request->request->get('group_list_select'), FILTER_VALIDATE_INT);
         $groupData = $this->currentUser->perm->getGroupData($groupId);
 
@@ -146,7 +141,7 @@ final class GroupController extends AbstractAdministrationController
             ...$this->getFooter(),
             'groupName' => $groupData['name'],
             'groupId' => $groupId,
-            'csrfDeleteGroup' => Token::getInstance($session)->getTokenString('delete-group'),
+            'csrfDeleteGroup' => Token::getInstance($this->session)->getTokenString('delete-group'),
         ]);
     }
 
@@ -162,7 +157,7 @@ final class GroupController extends AbstractAdministrationController
         $groupId = (int) Filter::filterVar($request->request->get('group_id'), FILTER_VALIDATE_INT);
         $csrfToken = Filter::filterVar($request->request->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('delete-group', $csrfToken)) {
+        if (!Token::getInstance($this->session)->verifyToken('delete-group', $csrfToken)) {
             throw new UnauthorizedHttpException('Invalid CSRF token');
         }
 

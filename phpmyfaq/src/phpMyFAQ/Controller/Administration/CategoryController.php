@@ -60,7 +60,6 @@ final class CategoryController extends AbstractAdministrationController
 
         $categoryInfo = $category->getAllCategories();
 
-        $session = $this->container->get(id: 'session');
         $categoryOrder = $this->container->get(id: 'phpmyfaq.category.order');
         $orderedCategories = $categoryOrder->getAllCategories();
         $categoryTree = $categoryOrder->getCategoryTree($orderedCategories);
@@ -73,7 +72,7 @@ final class CategoryController extends AbstractAdministrationController
         return $this->render(file: '@admin/content/category.overview.twig', context: [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'csrfTokenInput' => Token::getInstance($session)->getTokenInput(page: 'category'),
+            'csrfTokenInput' => Token::getInstance($this->session)->getTokenInput(page: 'category'),
             'categoryTree' => $categoryTree,
             'categoryInfo' => $categoryInfo,
         ]);
@@ -97,13 +96,11 @@ final class CategoryController extends AbstractAdministrationController
         $category->setLanguage($this->configuration->getLanguage()->getLanguage());
         $category->loadCategories();
 
-        $session = $this->container->get(id: 'session');
-
         return $this->render(file: '@admin/content/category.add.twig', context: [
             ...$this->getHeader($request),
             ...$this->getFooter(),
             ...$this->getBaseTemplateVars(),
-            'csrfTokenInput' => Token::getInstance($session)->getTokenInput(page: 'save-category'),
+            'csrfTokenInput' => Token::getInstance($this->session)->getTokenInput(page: 'save-category'),
             'faqLangCode' => $this->configuration->getLanguage()->getLanguage(),
             'parentId' => 0,
         ]);
@@ -164,10 +161,7 @@ final class CategoryController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::CATEGORY_ADD);
 
         $csrfToken = Filter::filterVar($request->request->get(key: 'pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            page: 'save-category',
-            requestToken: $csrfToken,
-        )) {
+        if (!Token::getInstance($this->session)->verifyToken(page: 'save-category', requestToken: $csrfToken)) {
             throw new Exception('Invalid CSRF token');
         }
 
@@ -325,7 +319,6 @@ final class CategoryController extends AbstractAdministrationController
             default: 0,
         );
 
-        $session = $this->container->get(id: 'session');
         $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
         $categoryPermission = $this->container->get(id: 'phpmyfaq.category.permission');
 
@@ -390,7 +383,7 @@ final class CategoryController extends AbstractAdministrationController
             'categoryId' => $categoryId,
             'categoryLanguage' => $categoryEntity->getLang(),
             'parentId' => $categoryEntity->getParentId(),
-            'csrfInputToken' => Token::getInstance($session)->getTokenInput(page: 'update-category'),
+            'csrfInputToken' => Token::getInstance($this->session)->getTokenInput(page: 'update-category'),
             'categoryImage' => $categoryEntity->getImage(),
             'categoryName' => $categoryEntity->getName(),
             'categoryDescription' => $categoryEntity->getDescription(),
@@ -490,8 +483,6 @@ final class CategoryController extends AbstractAdministrationController
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $session = $this->container->get(id: 'session');
-
         $categoryPermission = new CategoryPermission($this->configuration);
         $userHelper = new UserHelper($this->currentUser);
 
@@ -508,7 +499,7 @@ final class CategoryController extends AbstractAdministrationController
 
         // Prepare language selection options via service (keeps HTML output for BC)
         $languageService = new CategoryLanguageService();
-        $toTranslate = $languageService->getLanguagesToTranslate($this->configuration, (int) $categoryId); // [code=>name]
+        $toTranslate = $languageService->getLanguagesToTranslate($this->configuration, $categoryId);
         $langOptions = '';
         foreach ($toTranslate as $code => $name) {
             $langOptions .= '<option value="' . $code . '"';
@@ -529,7 +520,7 @@ final class CategoryController extends AbstractAdministrationController
             'permLevel' => $this->configuration->get(item: 'security.permLevel'),
             'groupPermission' => $groupPermission[0] ?? -1,
             'userPermission' => $userPermission[0] ?? -1,
-            'csrfInputToken' => Token::getInstance($session)->getTokenInput(page: 'update-category'),
+            'csrfInputToken' => Token::getInstance($this->session)->getTokenInput(page: 'update-category'),
             'categoryNameLabel' => Translation::get(key: 'categoryNameLabel'),
             'ad_categ_lang' => Translation::get(key: 'ad_categ_lang'),
             'langToTranslate' => $langOptions, // deprecated in the future; generated from data service now
@@ -553,10 +544,7 @@ final class CategoryController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::CATEGORY_EDIT);
 
         $csrfToken = Filter::filterVar($request->request->get(key: 'pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            page: 'update-category',
-            requestToken: $csrfToken,
-        )) {
+        if (!Token::getInstance($this->session)->verifyToken(page: 'update-category', requestToken: $csrfToken)) {
             throw new Exception(message: 'Invalid CSRF token');
         }
 
@@ -766,11 +754,10 @@ final class CategoryController extends AbstractAdministrationController
      */
     private function getBaseTemplateVars(): array
     {
-        $session = $this->container->get(id: 'session');
         $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
 
         return [
-            'csrfTokenInput' => Token::getInstance($session)->getTokenInput(page: 'save-category'),
+            'csrfTokenInput' => Token::getInstance($this->session)->getTokenInput(page: 'save-category'),
             'userSelection' => $userHelper->getAllUsersForTemplate(),
             'permLevel' => $this->configuration->get(item: 'security.permLevel'),
             'msgAccessAllUsers' => Translation::get(key: 'msgAccessAllUsers'),

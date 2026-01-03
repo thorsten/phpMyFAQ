@@ -246,7 +246,6 @@ final class AuthenticationController extends AbstractFrontController
         $token = Filter::filterVar($request->request->get(key: 'token'), FILTER_SANITIZE_SPECIAL_CHARS);
         $userId = (int) Filter::filterVar($request->request->get(key: 'user-id'), FILTER_VALIDATE_INT);
 
-        $session = $this->container->get(id: 'session');
         $user = $this->container->get(id: 'phpmyfaq.user.current_user');
         $user->getUserById($userId);
 
@@ -260,7 +259,7 @@ final class AuthenticationController extends AbstractFrontController
             }
         }
 
-        $session->getFlashBag()->add('error', Translation::get('msgTwofactorErrorToken'));
+        $this->session->getFlashBag()->add('error', Translation::get('msgTwofactorErrorToken'));
         return new RedirectResponse('./token?user-id=' . $userId);
     }
 }

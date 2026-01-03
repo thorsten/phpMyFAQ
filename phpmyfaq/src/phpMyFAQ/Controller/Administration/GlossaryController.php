@@ -42,7 +42,6 @@ final class GlossaryController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::GLOSSARY_EDIT);
         $this->userHasPermission(PermissionType::GLOSSARY_DELETE);
 
-        $session = $this->container->get(id: 'session');
         $glossary = $this->container->get(id: 'phpmyfaq.glossary');
         $glossary->setLanguage($this->configuration->getLanguage()->getLanguage());
 
@@ -55,14 +54,14 @@ final class GlossaryController extends AbstractAdministrationController
             'msgGlossaryDefinition' => Translation::get(key: 'ad_glossary_definition'),
             'glossaryItems' => $glossary->fetchAll(),
             'buttonDelete' => Translation::get(key: 'msgDelete'),
-            'csrfTokenDelete' => Token::getInstance($session)->getTokenString('delete-glossary'),
+            'csrfTokenDelete' => Token::getInstance($this->session)->getTokenString('delete-glossary'),
             'currentLanguage' => $this->configuration->getLanguage()->getLanguage(),
             'addGlossaryTitle' => Translation::get(key: 'ad_glossary_add'),
-            'addGlossaryCsrfTokenInput' => Token::getInstance($session)->getTokenInput('add-glossary'),
+            'addGlossaryCsrfTokenInput' => Token::getInstance($this->session)->getTokenInput('add-glossary'),
             'closeModal' => Translation::get(key: 'ad_att_close'),
             'saveModal' => Translation::get(key: 'ad_gen_save'),
             'updateGlossaryTitle' => Translation::get(key: 'ad_glossary_edit'),
-            'updateGlossaryCsrfToken' => Token::getInstance($session)->getTokenString('update-glossary'),
+            'updateGlossaryCsrfToken' => Token::getInstance($this->session)->getTokenString('update-glossary'),
         ]);
     }
 }

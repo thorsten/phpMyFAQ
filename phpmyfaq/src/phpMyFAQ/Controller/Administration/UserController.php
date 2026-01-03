@@ -151,8 +151,8 @@ final class UserController extends AbstractAdministrationController
     private function getBaseTemplateVars(): array
     {
         $currentUserId = $this->currentUser->getUserId();
-        $session = $this->container->get(id: 'session');
         $user = $this->container->get(id: 'phpmyfaq.user');
+
         return [
             'permissionAddUser' => $this->currentUser->perm->hasPermission(
                 $currentUserId,
@@ -166,12 +166,12 @@ final class UserController extends AbstractAdministrationController
                 $currentUserId,
                 PermissionType::USER_EDIT->value,
             ),
-            'csrfToken_updateUserData' => Token::getInstance($session)->getTokenString('update-user-data'),
-            'csrfToken_updateUserRights' => Token::getInstance($session)->getTokenString('update-user-rights'),
-            'csrfToken_activateUser' => Token::getInstance($session)->getTokenString('activate-user'),
-            'csrfToken_deleteUser' => Token::getInstance($session)->getTokenString('delete-user'),
-            'csrfToken_addUser' => Token::getInstance($session)->getTokenString('add-user'),
-            'csrfToken_overwritePassword' => Token::getInstance($session)->getTokenString('overwrite-password'),
+            'csrfToken_updateUserData' => Token::getInstance($this->session)->getTokenString('update-user-data'),
+            'csrfToken_updateUserRights' => Token::getInstance($this->session)->getTokenString('update-user-rights'),
+            'csrfToken_activateUser' => Token::getInstance($this->session)->getTokenString('activate-user'),
+            'csrfToken_deleteUser' => Token::getInstance($this->session)->getTokenString('delete-user'),
+            'csrfToken_addUser' => Token::getInstance($this->session)->getTokenString('add-user'),
+            'csrfToken_overwritePassword' => Token::getInstance($this->session)->getTokenString('overwrite-password'),
             'userRights' => $user->perm->getAllRightsData(),
             'userIsSuperAdmin' => $this->currentUser->isSuperAdmin(),
         ];

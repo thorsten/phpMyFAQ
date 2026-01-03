@@ -46,10 +46,7 @@ final class NewsController extends AbstractController
 
         $news = new News($this->configuration);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            page: 'save-news',
-            requestToken: $data->csrfToken,
-        )) {
+        if (!Token::getInstance($this->session)->verifyToken(page: 'save-news', requestToken: $data->csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -97,10 +94,7 @@ final class NewsController extends AbstractController
 
         $news = new News($this->configuration);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            page: 'delete-news',
-            requestToken: $data->csrfToken,
-        )) {
+        if (!Token::getInstance($this->session)->verifyToken(page: 'delete-news', requestToken: $data->csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -125,10 +119,7 @@ final class NewsController extends AbstractController
 
         $news = new News($this->configuration);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            page: 'update-news',
-            requestToken: $data->csrfToken,
-        )) {
+        if (!Token::getInstance($this->session)->verifyToken(page: 'update-news', requestToken: $data->csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -177,10 +168,7 @@ final class NewsController extends AbstractController
 
         $news = new News($this->configuration);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            page: 'activate-news',
-            requestToken: $data->csrfToken,
-        )) {
+        if (!Token::getInstance($this->session)->verifyToken(page: 'activate-news', requestToken: $data->csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 

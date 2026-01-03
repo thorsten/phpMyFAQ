@@ -44,7 +44,7 @@ final class ConfigurationController extends AbstractAdministrationController
             ...$this->getHeader($request),
             ...$this->getFooter(),
             'adminHeaderConfiguration' => Translation::get(key: 'ad_config_edit'),
-            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('configuration'),
+            'csrfToken' => Token::getInstance($this->session)->getTokenString('configuration'),
             'language' => $this->configuration->getLanguage()->getLanguage(),
             'adminConfigurationButtonReset' => Translation::get(key: 'ad_config_reset'),
             'adminConfigurationButtonSave' => Translation::get(key: 'ad_config_save'),

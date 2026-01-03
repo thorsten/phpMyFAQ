@@ -46,7 +46,7 @@ final class ConfigurationController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('configuration', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('configuration', $data->csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -76,11 +76,9 @@ final class ConfigurationController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $session = $this->container->get(id: 'session');
-
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($session)->verifyToken('activate-maintenance-mode', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('activate-maintenance-mode', $data->csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 

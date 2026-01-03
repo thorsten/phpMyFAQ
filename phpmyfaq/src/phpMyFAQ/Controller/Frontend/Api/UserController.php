@@ -49,7 +49,7 @@ final class UserController extends AbstractController
 
         $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'}, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('ucp', $csrfToken)) {
+        if (!Token::getInstance($this->session)->verifyToken('ucp', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -139,7 +139,7 @@ final class UserController extends AbstractController
         $csrfToken = Filter::filterVar($data->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
         $userIdInput = Filter::filterVar($data->get('userid') ?? null, FILTER_VALIDATE_INT);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('export-userdata', $csrfToken)) {
+        if (!Token::getInstance($this->session)->verifyToken('export-userdata', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -199,7 +199,7 @@ final class UserController extends AbstractController
         $data = json_decode($request->getContent());
 
         $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'}, FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('request-removal', $csrfToken)) {
+        if (!Token::getInstance($this->session)->verifyToken('request-removal', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -271,7 +271,7 @@ final class UserController extends AbstractController
         $twoFactor = new TwoFactor($this->configuration, $this->currentUser);
 
         $csrfToken = Filter::filterVar($data->csrfToken, FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('remove-twofactor', $csrfToken)) {
+        if (!Token::getInstance($this->session)->verifyToken('remove-twofactor', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 

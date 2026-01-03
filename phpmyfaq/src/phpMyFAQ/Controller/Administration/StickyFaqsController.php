@@ -51,7 +51,7 @@ final class StickyFaqsController extends AbstractAdministrationController
             'orderingStickyFaqsActivated' => $this->configuration->get(item: 'records.orderStickyFaqsCustom'),
             'alertMessageStickyFaqsDeactivated' => Translation::get(key: 'msgOrderStickyFaqsCustomDeactivated'),
             'alertMessageNoStickyRecords' => Translation::get(key: 'msgNoStickyFaqs'),
-            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('order-stickyfaqs'),
+            'csrfToken' => Token::getInstance($this->session)->getTokenString('order-stickyfaqs'),
         ]);
     }
 }

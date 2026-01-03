@@ -57,7 +57,7 @@ final class RatingController extends AbstractAdministrationController
         return $this->render('@admin/statistics/ratings.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('clear-statistics'),
+            'csrfToken' => Token::getInstance($this->session)->getTokenString('clear-statistics'),
             'currentCategory' => $currentCategory,
             'ratingData' => $data,
             'numberOfRatings' => $numberOfRatings,

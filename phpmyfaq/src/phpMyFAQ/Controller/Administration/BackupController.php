@@ -56,7 +56,7 @@ class BackupController extends AbstractAdministrationController
             'adminBackupCardBody' => Translation::get(key: 'ad_csv_make'),
             'adminBackupLinkData' => Translation::get(key: 'ad_csv_linkdat'),
             'adminBackupLinkLogs' => Translation::get(key: 'ad_csv_linklog'),
-            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString(page: 'restore'),
+            'csrfToken' => Token::getInstance($this->session)->getTokenString(page: 'restore'),
             'adminRestoreCardHeader' => Translation::get(key: 'ad_csv_head2'),
             'adminRestoreCardBody' => Translation::get(key: 'ad_csv_restore'),
             'adminRestoreLabel' => Translation::get(key: 'ad_csv_file'),
@@ -103,10 +103,7 @@ class BackupController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::RESTORE);
 
         $csrfToken = $request->query->get(key: 'csrf');
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            page: 'restore',
-            requestToken: $csrfToken,
-        )) {
+        if (!Token::getInstance($this->session)->verifyToken(page: 'restore', requestToken: $csrfToken)) {
             throw new UnauthorizedHttpException(challenge: 'Invalid CSRF token');
         }
 

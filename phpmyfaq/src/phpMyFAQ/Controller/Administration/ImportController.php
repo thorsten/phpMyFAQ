@@ -53,7 +53,7 @@ final class ImportController extends AbstractAdministrationController
             'question' => Translation::get(key: 'ad_entry_topic'),
             'languageCode' => Translation::get(key: 'msgLanguageCode'),
             'msgImportRecordsColumnStructure' => Translation::get(key: 'msgImportRecordsColumnStructure'),
-            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('importfaqs'),
+            'csrfToken' => Token::getInstance($this->session)->getTokenString('importfaqs'),
             'is_active' => Translation::get(key: 'ad_entry_active'),
             'trueFalse' => Translation::get(key: 'msgCSVImportTrueOrFalse'),
         ]);

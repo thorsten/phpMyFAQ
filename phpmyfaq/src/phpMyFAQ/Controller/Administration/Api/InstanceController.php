@@ -52,7 +52,7 @@ final class InstanceController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('add-instance', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('add-instance', $data->csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -155,7 +155,7 @@ final class InstanceController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('delete-instance', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('delete-instance', $data->csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 

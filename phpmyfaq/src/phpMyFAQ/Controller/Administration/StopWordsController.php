@@ -52,7 +52,7 @@ final class StopWordsController extends AbstractAdministrationController
             'adminHeaderStopWords' => Translation::get(key: 'ad_menu_stopwordsconfig'),
             'hasPermission' => $hasPermission,
             'msgDescription' => Translation::get(key: 'ad_stopwords_desc'),
-            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenInput('stopwords'),
+            'csrfToken' => Token::getInstance($this->session)->getTokenInput('stopwords'),
             'msgStopWordsLabel' => Translation::get(key: 'ad_stopwords_desc'),
             'sortedLanguageCodes' => LanguageCodes::getAllSorted(),
             'buttonAdd' => Translation::get(key: 'ad_config_stopword_input'),
