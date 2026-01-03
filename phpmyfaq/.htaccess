@@ -104,48 +104,19 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteRule ^(admin/assets)($|/) - [L]
     # Error pages
     ErrorDocument 404 /404.html
-    # General pages
-    RewriteRule ^add-faq.html$ index.php?action=add [L,QSA]
-    RewriteRule ^add-question.html$ index.php?action=ask [L,QSA]
-    RewriteRule ^show-categories.html$ index.php?action=show [L,QSA]
-    RewriteRule ^forgot-password$ index.php?action=password [L,QSA]
-    RewriteRule ^(search|open-questions|glossary|overview|login|privacy|contact)\.html$ index.php?action=$1 [L,QSA]
-    RewriteRule ^404\.html$ index.php [L,QSA]
-    RewriteRule ^(login) index.php?action=login [L,QSA]
-    RewriteRule ^(authenticate|check|logout|token) index.php [L,QSA]
-    # start page
-    RewriteRule ^index.html$ index.php [L,QSA]
     # a solution ID page
     RewriteCond %{REQUEST_URI} solution_id_([0-9]+)\.html$ [NC]
     RewriteRule ^solution_id_(.*)\.html$ index.php?solution_id=$1 [L,QSA]
-    # the bookmarks page
-    RewriteRule ^bookmarks\.html$ index.php?action=bookmarks [L,QSA]
-    # phpMyFAQ faq record page
-    RewriteRule ^content/([0-9]+)/([0-9]+)/([a-z\-_]+)/(.+)\.htm(l?)$ index.php?action=faq&cat=$1&id=$2&artlang=$3 [L,QSA]
-    # phpMyFAQ category page with page count
-    RewriteRule ^category/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$ index.php?action=show&cat=$1&seite=$2 [L,QSA]
-    # phpMyFAQ category page
-    RewriteRule ^category/([0-9]+)/(.+)\.htm(l?)$ index.php?action=show&cat=$1 [L,QSA]
     # phpMyFAQ news page
     RewriteRule ^news/([0-9]+)/([a-z\-_]+)/(.+)\.htm(l?)$ index.php?action=news&newsid=$1&newslang=$2 [L,QSA]
-    # phpMyFAQ sitemap
-    RewriteRule ^sitemap/([^/]+)/([a-z\-_]+)\.htm(l?)$ index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
     # phpMyFAQ Google sitemap
     RewriteRule ^sitemap.xml$ index.php [L,QSA]
     RewriteRule ^sitemap.gz$ index.php [L,QSA]
     RewriteRule ^sitemap.xml.gz$ index.php [L,QSA]
-    # robots.txt
-    RewriteRule ^robots.txt$ index.php [L,QSA]
-    # llms.txt
-    RewriteRule ^llms.txt$ index.php [L,QSA]
     # phpMyFAQ tags page with page count
     RewriteRule ^tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$ index.php?action=search&tagging_id=$1&seite=$2 [L,QSA]
     # phpMyFAQ tags page
     RewriteRule ^tags/([0-9]+)/([^/]+)\.htm(l?)$ index.php?action=search&tagging_id=$1 [L,QSA]
-    # Authentication services
-    RewriteRule ^services/webauthn(.*) index.php [L,QSA]
-    # User pages
-    RewriteRule ^user/(ucp|bookmarks|request-removal|register)/?$ index.php?action=$1 [L,QSA]
     # Administration API
     RewriteRule ^admin/api/(.*) admin/api/index.php [L,QSA]
     # Administration pages
@@ -165,5 +136,10 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteCond %{REQUEST_URI} !index\.php$
     RewriteRule ^(.*/)?setup/(.*) $1setup/index.php [L,QSA]
     RewriteRule ^update$ update/ [R=301,L]
-    RewriteRule ^update/(.*) index.php [L,QSA]
+
+    # Front controller: route all requests to index.php (Symfony Router)
+    # Skip if the file or directory exists
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [L]
 </IfModule>
