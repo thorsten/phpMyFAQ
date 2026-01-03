@@ -37,6 +37,7 @@ try {
 $routes = include PMF_SRC_DIR  . '/admin-api-routes.php';
 
 $app = new Application($container);
+$app->setApiContext(true);
 try {
     $app->run($routes);
 } catch (Exception $exception) {

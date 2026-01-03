@@ -32,6 +32,7 @@ You can use phpMyFAQ with the following web servers:
 - [Apache](http://www.apache.org) 2.4 or later (with mod_rewrite) and mod_ssl (if you wish to run phpMyFAQ under SSL)
 - [Nginx](http://www.nginx.org) 1.0 or later (with URL rewriting) and SSL support
 - [FrankenPHP](https://frankenphp.dev) 1.0 or later (modern PHP application server built on Caddy)
+- [IIS](http://www.iis.net) 7.0 or later (with URL rewriting) and SSL support
 
 #### Apache requirements
 

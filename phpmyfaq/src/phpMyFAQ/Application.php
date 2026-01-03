@@ -41,6 +41,8 @@ class Application
 
     private ControllerResolver $controllerResolver;
 
+    private bool $isApiContext = false;
+
     public function __construct(
         private readonly ?ContainerInterface $container = null,
     ) {
@@ -68,6 +70,11 @@ class Application
     public function setControllerResolver(ControllerResolver $controllerResolver): void
     {
         $this->controllerResolver = $controllerResolver;
+    }
+
+    public function setApiContext(bool $isApiContext): void
+    {
+        $this->isApiContext = $isApiContext;
     }
 
     private function setLanguage(): string
@@ -132,14 +139,37 @@ class Application
             $response->setStatusCode(Response::HTTP_OK);
             $response = call_user_func_array($controller, $arguments);
         } catch (ResourceNotFoundException $exception) {
-            $message = Environment::isDebugMode()
-                ? $this->formatExceptionMessage(
-                    template: 'Not Found: :message at line :line at :file',
-                    exception: $exception,
-                )
-                : 'Not Found';
-
-            $response = new Response(content: $message, status: Response::HTTP_NOT_FOUND);
+            // For API requests, return simple text/JSON response
+            if ($this->isApiContext) {
+                $message = Environment::isDebugMode()
+                    ? $this->formatExceptionMessage(
+                        template: 'Not Found: :message at line :line at :file',
+                        exception: $exception,
+                    )
+                    : 'Not Found';
+                $response = new Response(content: $message, status: Response::HTTP_NOT_FOUND);
+            } else {
+                // For web requests, forward to the PageNotFoundController
+                try {
+                    $request->attributes->set('_route', 'public.404');
+                    $request->attributes->set(
+                        '_controller',
+                        'phpMyFAQ\Controller\Frontend\PageNotFoundController::index',
+                    );
+                    $controller = $this->controllerResolver->getController($request);
+                    $arguments = $argumentResolver->getArguments($request, $controller);
+                    $response = call_user_func_array($controller, $arguments);
+                } catch (Throwable $e) {
+                    // Fallback if the controller fails
+                    $message = Environment::isDebugMode()
+                        ? $this->formatExceptionMessage(
+                            template: 'Not Found: :message at line :line at :file',
+                            exception: $exception,
+                        )
+                        : 'Not Found';
+                    $response = new Response(content: $message, status: Response::HTTP_NOT_FOUND);
+                }
+            }
         } catch (UnauthorizedHttpException) {
             $response = new RedirectResponse(url: './login');
             if (str_contains(haystack: $urlMatcher->getContext()->getBaseUrl(), needle: '/api')) {
@@ -211,7 +241,7 @@ class Application
      */
     private function formatExceptionMessage(string $template, Throwable $exception): string
     {
-        return strtr(string: $template, from: [
+        return strtr($template, [
             ':message' => $exception->getMessage(),
             ':line' => (string) $exception->getLine(),
             ':file' => $exception->getFile(),
