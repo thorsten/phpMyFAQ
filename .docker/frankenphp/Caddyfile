@@ -15,9 +15,6 @@
     # Enable compression
     encode gzip
 
-    # PHP Handler für FrankenPHP
-    php_server
-
     # Exclude assets from being handled by router
     @assets path /admin/assets*
     file_server @assets
@@ -33,24 +30,31 @@
     rewrite @setup /setup/index.php
 
     # Administration API
-    @admin_api path /admin/api*
-    rewrite @admin_api /admin/api/index.php
+    route /admin/api/* {
+        rewrite * /admin/api/index.php
+        php_server
+    }
 
-    # Administration pages
-    @admin path /admin*
-    rewrite @admin /admin/index.php
+    # Administration pages - handle /admin and /admin/ and subpaths
+    route /admin/* {
+        uri strip_prefix /admin
+        rewrite * /admin/index.php
+        php_server
+    }
 
-    # Private APIs
-    @api path_regexp api ^/api/(autocomplete|bookmark/delete|bookmark/create|user/data/update|user/password/update|user/request-removal|user/remove-twofactor|contact|voting|register|captcha|share|comment/create|faq/create|question/create|webauthn/prepare|webauthn/register|webauthn/prepare-login|webauthn/login)$
+    # Exact match for /admin -> treat as /admin/
+    route /admin {
+        uri strip_suffix /admin
+        rewrite * /admin/index.php
+        php_server
+    }
+
+    # All API routes (catch-all, including v3.0, v3.1, translations, etc.)
+    @api path /api*
     rewrite @api /api/index.php
 
-    # Setup APIs
-    @api_setup path_regexp api_setup ^/api/setup/(check|backup|update-database)$
-    rewrite @api_setup /api/index.php
-
-    # REST API v3.0 and v3.1
-    @api_v3 path_regexp api_v3 ^/api/v3\.[01]/(.*)$
-    rewrite @api_v3 /api/index.php
+    # PHP Handler für FrankenPHP
+    php_server
 
     file_server
 
@@ -78,8 +82,6 @@
     # TLS configuration with your certificate files
     tls /etc/ssl/cert.pem /etc/ssl/cert-key.pem
 
-    php_server
-
     # Gleiche Rewrite-Regeln wie für Port 80
     @assets path /admin/assets*
     file_server @assets
@@ -95,20 +97,32 @@
     @update path /update*
     rewrite @update /update/index.php
 
-    @admin_api path /admin/api*
-    rewrite @admin_api /admin/api/index.php
+    # Administration API
+    route /admin/api/* {
+        rewrite * /admin/api/index.php
+        php_server
+    }
 
-    @admin path /admin*
-    rewrite @admin /admin/index.php
+    # Administration pages - handle /admin and /admin/ and subpaths
+    route /admin/* {
+        uri strip_prefix /admin
+        rewrite * /admin/index.php
+        php_server
+    }
 
-    @api path_regexp api ^/api/(autocomplete|bookmark/delete|bookmark/create|user/data/update|user/password/update|user/request-removal|user/remove-twofactor|contact|voting|register|captcha|share|comment/create|faq/create|question/create|webauthn/prepare|webauthn/register|webauthn/prepare-login|webauthn/login)$
+    # Exact match for /admin -> treat as /admin/
+    route /admin {
+        uri strip_suffix /admin
+        rewrite * /admin/index.php
+        php_server
+    }
+
+    # All API routes (catch-all, including v3.0, v3.1, translations, etc.)
+    @api path /api*
     rewrite @api /api/index.php
 
-    @api_setup path_regexp api_setup ^/api/setup/(check|backup|update-database)$
-    rewrite @api_setup /api/index.php
-
-    @api_v3 path_regexp api_v3 ^/api/v3\.[01]/(.*)$
-    rewrite @api_v3 /api/index.php
+    # PHP Handler für FrankenPHP
+    php_server
 
     file_server
 
