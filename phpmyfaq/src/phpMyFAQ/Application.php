@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Api\ProblemDetails;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -139,15 +140,14 @@ class Application
             $response->setStatusCode(Response::HTTP_OK);
             $response = call_user_func_array($controller, $arguments);
         } catch (ResourceNotFoundException $exception) {
-            // For API requests, return simple text/JSON response
+            // For API requests, return RFC 7807 JSON response
             if ($this->isApiContext) {
-                $message = Environment::isDebugMode()
-                    ? $this->formatExceptionMessage(
-                        template: 'Not Found: :message at line :line at :file',
-                        exception: $exception,
-                    )
-                    : 'Not Found';
-                $response = new Response(content: $message, status: Response::HTTP_NOT_FOUND);
+                $response = $this->createProblemDetailsResponse(
+                    request: $request,
+                    status: Response::HTTP_NOT_FOUND,
+                    exception: $exception,
+                    defaultDetail: 'The requested resource was not found.',
+                );
             } else {
                 // For web requests, forward to the PageNotFoundController
                 try {
@@ -170,31 +170,51 @@ class Application
                     $response = new Response(content: $message, status: Response::HTTP_NOT_FOUND);
                 }
             }
-        } catch (UnauthorizedHttpException) {
-            $response = new RedirectResponse(url: './login');
-            if (str_contains(haystack: $urlMatcher->getContext()->getBaseUrl(), needle: '/api')) {
-                $response = new Response(
-                    content: json_encode(value: ['error' => 'Unauthorized access']),
+        } catch (UnauthorizedHttpException $exception) {
+            if ($this->isApiContext) {
+                $response = $this->createProblemDetailsResponse(
+                    request: $request,
                     status: Response::HTTP_UNAUTHORIZED,
-                    headers: ['Content-Type' => 'application/json'],
+                    exception: $exception,
+                    defaultDetail: 'Unauthorized access.',
                 );
+            } else {
+                $response = new RedirectResponse(url: './login');
             }
         } catch (ForbiddenException $exception) {
-            $message = Environment::isDebugMode()
-                ? $this->formatExceptionMessage(
-                    template: 'An error occurred: :message at line :line at :file',
+            if ($this->isApiContext) {
+                $response = $this->createProblemDetailsResponse(
+                    request: $request,
+                    status: Response::HTTP_FORBIDDEN,
                     exception: $exception,
-                )
-                : 'Bad Request';
-            $response = new Response(content: $message, status: Response::HTTP_FORBIDDEN);
+                    defaultDetail: 'Access to this resource is forbidden.',
+                );
+            } else {
+                $message = Environment::isDebugMode()
+                    ? $this->formatExceptionMessage(
+                        template: 'An error occurred: :message at line :line at :file',
+                        exception: $exception,
+                    )
+                    : 'Forbidden';
+                $response = new Response(content: $message, status: Response::HTTP_FORBIDDEN);
+            }
         } catch (BadRequestException $exception) {
-            $message = Environment::isDebugMode()
-                ? $this->formatExceptionMessage(
-                    template: 'An error occurred: :message at line :line at :file',
+            if ($this->isApiContext) {
+                $response = $this->createProblemDetailsResponse(
+                    request: $request,
+                    status: Response::HTTP_BAD_REQUEST,
                     exception: $exception,
-                )
-                : 'Bad Request';
-            $response = new Response(content: $message, status: Response::HTTP_BAD_REQUEST);
+                    defaultDetail: 'The request could not be understood or was missing required parameters.',
+                );
+            } else {
+                $message = Environment::isDebugMode()
+                    ? $this->formatExceptionMessage(
+                        template: 'An error occurred: :message at line :line at :file',
+                        exception: $exception,
+                    )
+                    : 'Bad Request';
+                $response = new Response(content: $message, status: Response::HTTP_BAD_REQUEST);
+            }
         } catch (Throwable $exception) {
             // Log the error for debugging
             error_log(sprintf(
@@ -204,33 +224,22 @@ class Application
                 $exception->getLine(),
             ));
 
-            $message = Environment::isDebugMode()
-                ? $this->formatExceptionMessage(
-                    template: 'Internal Server Error: :message at line :line at :file',
+            if ($this->isApiContext) {
+                $response = $this->createProblemDetailsResponse(
+                    request: $request,
+                    status: Response::HTTP_INTERNAL_SERVER_ERROR,
                     exception: $exception,
-                )
-                : 'Internal Server Error';
-
-            // Return JSON response for API requests
-            if (str_contains(haystack: $urlMatcher->getContext()->getBaseUrl(), needle: '/api')) {
-                $content = Environment::isDebugMode()
-                    ? json_encode(value: [
-                        'error' => 'Internal Server Error',
-                        'message' => $exception->getMessage(),
-                        'file' => $exception->getFile(),
-                        'line' => $exception->getLine(),
-                    ])
-                    : json_encode(value: ['error' => 'Internal Server Error']);
-
-                $response = new Response(content: $content, status: Response::HTTP_INTERNAL_SERVER_ERROR, headers: [
-                    'Content-Type' => 'application/json',
-                ]);
-
-                $response->send();
-                return;
+                    defaultDetail: 'An unexpected error occurred while processing your request.',
+                );
+            } else {
+                $message = Environment::isDebugMode()
+                    ? $this->formatExceptionMessage(
+                        template: 'Internal Server Error: :message at line :line at :file',
+                        exception: $exception,
+                    )
+                    : 'Internal Server Error';
+                $response = new Response(content: $message, status: Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-
-            $response = new Response(content: $message, status: Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         $response->send();
@@ -246,5 +255,62 @@ class Application
             ':line' => (string) $exception->getLine(),
             ':file' => $exception->getFile(),
         ]);
+    }
+
+    /**
+     * Creates a ProblemDetails response for API errors.
+     */
+    private function createProblemDetailsResponse(
+        Request $request,
+        int $status,
+        Throwable $exception,
+        string $defaultDetail,
+    ): Response {
+        $configuration = $this->container->get(id: 'phpmyfaq.configuration');
+        $baseUrl = rtrim($configuration->getDefaultUrl(), '/');
+
+        $type = match ($status) {
+            Response::HTTP_BAD_REQUEST => $baseUrl . '/problems/bad-request',
+            Response::HTTP_UNAUTHORIZED => $baseUrl . '/problems/unauthorized',
+            Response::HTTP_FORBIDDEN => $baseUrl . '/problems/forbidden',
+            Response::HTTP_NOT_FOUND => $baseUrl . '/problems/not-found',
+            Response::HTTP_CONFLICT => $baseUrl . '/problems/conflict',
+            Response::HTTP_UNPROCESSABLE_ENTITY => $baseUrl . '/problems/validation-error',
+            Response::HTTP_TOO_MANY_REQUESTS => $baseUrl . '/problems/rate-limited',
+            Response::HTTP_INTERNAL_SERVER_ERROR => $baseUrl . '/problems/internal-server-error',
+            default => $baseUrl . '/problems/http-error',
+        };
+
+        $title = match ($status) {
+            Response::HTTP_BAD_REQUEST => 'Bad Request',
+            Response::HTTP_UNAUTHORIZED => 'Unauthorized',
+            Response::HTTP_FORBIDDEN => 'Forbidden',
+            Response::HTTP_NOT_FOUND => 'Resource not found',
+            Response::HTTP_CONFLICT => 'Conflict',
+            Response::HTTP_UNPROCESSABLE_ENTITY => 'Validation failed',
+            Response::HTTP_TOO_MANY_REQUESTS => 'Too many requests',
+            Response::HTTP_INTERNAL_SERVER_ERROR => 'Internal Server Error',
+            default => 'HTTP error',
+        };
+
+        $detail = Environment::isDebugMode()
+            ? $exception->getMessage() . ' at line ' . $exception->getLine() . ' in ' . $exception->getFile()
+            : $defaultDetail;
+
+        $problemDetails = new ProblemDetails(
+            type: $type,
+            title: $title,
+            status: $status,
+            detail: $detail,
+            instance: $request->getPathInfo(),
+        );
+
+        $response = new Response(
+            content: json_encode($problemDetails->toArray(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
+            status: $status,
+        );
+        $response->headers->set('Content-Type', 'application/problem+json');
+
+        return $response;
     }
 }

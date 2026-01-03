@@ -9,13 +9,15 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 ### phpMyFAQ v4.2.0-dev - unreleased
 
 - changed PHP requirement to PHP 8.4 or later (Thorsten)
+- added Symfony Router for frontend (Thorsten)
+- improved API errors with formatted RFC 7807 Problem Details JSON responses (Thorsten)
 
 ### phpMyFAQ v4.1.0-RC.2 - unreleased
 
 - changed PHP requirement to PHP 8.3 or later (Thorsten)
 - added configuration to edit robots.txt (Thorsten)
 - added configuration to edit llms.txt (Thorsten)
-- added Symfony Routing for administration backend (Thorsten)
+- added Symfony Router for administration backend (Thorsten)
 - added code snippets plugin with syntax highlighting in WYSIWYG editor (Thorsten)
 - added an administration view for orphaned FAQs (Thorsten)
 - added plugin administration backend (Thorsten)

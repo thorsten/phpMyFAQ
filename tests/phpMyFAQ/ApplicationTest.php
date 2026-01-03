@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception as PMFException;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
@@ -15,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
@@ -182,6 +184,19 @@ class ApplicationTest extends TestCase
      */
     public function testHandleRequestUnauthorizedHttpExceptionForApi(): void
     {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration
+            ->method('getDefaultUrl')
+            ->willReturn('https://localhost');
+
+        $this->container
+            ->method('get')
+            ->with('phpmyfaq.configuration')
+            ->willReturn($configuration);
+
+        // Set API context
+        $this->application->setApiContext(true);
+
         $routeCollection = new RouteCollection();
         $routeCollection->add('api_route', new Route('/api/test', [
             '_controller' => function () {
@@ -192,7 +207,6 @@ class ApplicationTest extends TestCase
         $request = Request::create('/api/test');
         $requestContext = new RequestContext();
         $requestContext->fromRequest($request);
-        $requestContext->setBaseUrl('/api');
 
         $reflection = new ReflectionClass(Application::class);
         $method = $reflection->getMethod('handleRequest');
@@ -201,7 +215,12 @@ class ApplicationTest extends TestCase
         $method->invoke($this->application, $routeCollection, $request, $requestContext);
         $output = ob_get_clean();
 
-        $this->assertStringContainsString('Unauthorized access', $output);
+        $this->assertStringContainsString('Unauthorized', $output);
+        $this->assertStringContainsString('/problems/unauthorized', $output);
+
+        $data = json_decode($output, true);
+        $this->assertIsArray($data);
+        $this->assertEquals(401, $data['status']);
     }
 
     /**
@@ -329,5 +348,340 @@ class ApplicationTest extends TestCase
         $output = ob_get_clean();
 
         $this->assertTrue(true);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testCreateProblemDetailsResponseFor404(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('getDefaultUrl')->willReturn('https://localhost');
+
+        $this->container
+            ->method('get')
+            ->with('phpmyfaq.configuration')
+            ->willReturn($configuration);
+
+        $request = Request::create('/api/nonexistent');
+        $exception = new ResourceNotFoundException('Route not found');
+
+        $reflection = new ReflectionClass(Application::class);
+        $method = $reflection->getMethod('createProblemDetailsResponse');
+
+        $response = $method->invoke(
+            $this->application,
+            $request,
+            Response::HTTP_NOT_FOUND,
+            $exception,
+            'The requested resource was not found.'
+        );
+
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        $this->assertEquals('application/problem+json', $response->headers->get('Content-Type'));
+
+        $content = json_decode($response->getContent(), true);
+        $this->assertEquals('https://localhost/problems/not-found', $content['type']);
+        $this->assertEquals('Resource not found', $content['title']);
+        $this->assertEquals(404, $content['status']);
+        $this->assertEquals('/api/nonexistent', $content['instance']);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testCreateProblemDetailsResponseFor400(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('getDefaultUrl')->willReturn('https://example.com');
+
+        $this->container
+            ->method('get')
+            ->with('phpmyfaq.configuration')
+            ->willReturn($configuration);
+
+        $request = Request::create('/api/test');
+        $exception = new BadRequestException('Invalid parameter');
+
+        $reflection = new ReflectionClass(Application::class);
+        $method = $reflection->getMethod('createProblemDetailsResponse');
+
+        $response = $method->invoke(
+            $this->application,
+            $request,
+            Response::HTTP_BAD_REQUEST,
+            $exception,
+            'Bad request.'
+        );
+
+        $content = json_decode($response->getContent(), true);
+        $this->assertEquals('https://example.com/problems/bad-request', $content['type']);
+        $this->assertEquals('Bad Request', $content['title']);
+        $this->assertEquals(400, $content['status']);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testCreateProblemDetailsResponseFor401(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('getDefaultUrl')->willReturn('https://localhost/');
+
+        $this->container
+            ->method('get')
+            ->with('phpmyfaq.configuration')
+            ->willReturn($configuration);
+
+        $request = Request::create('/api/secure');
+        $exception = new UnauthorizedHttpException('Bearer', 'Missing token');
+
+        $reflection = new ReflectionClass(Application::class);
+        $method = $reflection->getMethod('createProblemDetailsResponse');
+
+        $response = $method->invoke(
+            $this->application,
+            $request,
+            Response::HTTP_UNAUTHORIZED,
+            $exception,
+            'Unauthorized.'
+        );
+
+        $content = json_decode($response->getContent(), true);
+        $this->assertEquals('https://localhost/problems/unauthorized', $content['type']);
+        $this->assertEquals('Unauthorized', $content['title']);
+        $this->assertEquals(401, $content['status']);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testCreateProblemDetailsResponseFor403(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('getDefaultUrl')->willReturn('https://localhost');
+
+        $this->container
+            ->method('get')
+            ->with('phpmyfaq.configuration')
+            ->willReturn($configuration);
+
+        $request = Request::create('/api/admin');
+        $exception = new ForbiddenException('Insufficient permissions');
+
+        $reflection = new ReflectionClass(Application::class);
+        $method = $reflection->getMethod('createProblemDetailsResponse');
+
+        $response = $method->invoke(
+            $this->application,
+            $request,
+            Response::HTTP_FORBIDDEN,
+            $exception,
+            'Forbidden.'
+        );
+
+        $content = json_decode($response->getContent(), true);
+        $this->assertEquals('https://localhost/problems/forbidden', $content['type']);
+        $this->assertEquals('Forbidden', $content['title']);
+        $this->assertEquals(403, $content['status']);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testCreateProblemDetailsResponseFor500(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('getDefaultUrl')->willReturn('https://localhost');
+
+        $this->container
+            ->method('get')
+            ->with('phpmyfaq.configuration')
+            ->willReturn($configuration);
+
+        $request = Request::create('/api/error');
+        $exception = new \RuntimeException('Database connection failed');
+
+        $reflection = new ReflectionClass(Application::class);
+        $method = $reflection->getMethod('createProblemDetailsResponse');
+
+        $response = $method->invoke(
+            $this->application,
+            $request,
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            $exception,
+            'Internal server error.'
+        );
+
+        $content = json_decode($response->getContent(), true);
+        $this->assertEquals('https://localhost/problems/internal-server-error', $content['type']);
+        $this->assertEquals('Internal Server Error', $content['title']);
+        $this->assertEquals(500, $content['status']);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testHandleRequestResourceNotFoundExceptionForApi(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('getDefaultUrl')->willReturn('https://localhost');
+
+        $this->container
+            ->method('get')
+            ->with('phpmyfaq.configuration')
+            ->willReturn($configuration);
+
+        $this->application->setApiContext(true);
+
+        $routeCollection = new RouteCollection();
+        $request = Request::create('/api/nonexistent');
+        $requestContext = new RequestContext();
+        $requestContext->fromRequest($request);
+
+        $reflection = new ReflectionClass(Application::class);
+        $method = $reflection->getMethod('handleRequest');
+
+        ob_start();
+        $method->invoke($this->application, $routeCollection, $request, $requestContext);
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('Resource not found', $output);
+        $this->assertStringContainsString('/problems/not-found', $output);
+
+        $data = json_decode($output, true);
+        $this->assertIsArray($data);
+        $this->assertEquals(404, $data['status']);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testHandleRequestBadRequestExceptionForApi(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('getDefaultUrl')->willReturn('https://localhost');
+
+        $this->container
+            ->method('get')
+            ->with('phpmyfaq.configuration')
+            ->willReturn($configuration);
+
+        $this->application->setApiContext(true);
+
+        $routeCollection = new RouteCollection();
+        $routeCollection->add('bad_route', new Route('/api/bad', [
+            '_controller' => function () {
+                throw new BadRequestException('Invalid input');
+            },
+        ]));
+
+        $request = Request::create('/api/bad');
+        $requestContext = new RequestContext();
+        $requestContext->fromRequest($request);
+
+        $reflection = new ReflectionClass(Application::class);
+        $method = $reflection->getMethod('handleRequest');
+
+        ob_start();
+        $method->invoke($this->application, $routeCollection, $request, $requestContext);
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('Bad Request', $output);
+        $this->assertStringContainsString('/problems/bad-request', $output);
+
+        $data = json_decode($output, true);
+        $this->assertIsArray($data);
+        $this->assertEquals(400, $data['status']);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testHandleRequestForbiddenExceptionForApi(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('getDefaultUrl')->willReturn('https://localhost');
+
+        $this->container
+            ->method('get')
+            ->with('phpmyfaq.configuration')
+            ->willReturn($configuration);
+
+        $this->application->setApiContext(true);
+
+        $routeCollection = new RouteCollection();
+        $routeCollection->add('forbidden_route', new Route('/api/forbidden', [
+            '_controller' => function () {
+                throw new ForbiddenException('Access denied');
+            },
+        ]));
+
+        $request = Request::create('/api/forbidden');
+        $requestContext = new RequestContext();
+        $requestContext->fromRequest($request);
+
+        $reflection = new ReflectionClass(Application::class);
+        $method = $reflection->getMethod('handleRequest');
+
+        ob_start();
+        $method->invoke($this->application, $routeCollection, $request, $requestContext);
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('Forbidden', $output);
+        $this->assertStringContainsString('/problems/forbidden', $output);
+
+        $data = json_decode($output, true);
+        $this->assertIsArray($data);
+        $this->assertEquals(403, $data['status']);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testHandleRequestInternalServerErrorForApi(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('getDefaultUrl')->willReturn('https://localhost');
+
+        $this->container
+            ->method('get')
+            ->with('phpmyfaq.configuration')
+            ->willReturn($configuration);
+
+        $this->application->setApiContext(true);
+
+        $routeCollection = new RouteCollection();
+        $routeCollection->add('error_route', new Route('/api/error', [
+            '_controller' => function () {
+                throw new \RuntimeException('Something went wrong');
+            },
+        ]));
+
+        $request = Request::create('/api/error');
+        $requestContext = new RequestContext();
+        $requestContext->fromRequest($request);
+
+        $reflection = new ReflectionClass(Application::class);
+        $method = $reflection->getMethod('handleRequest');
+
+        // Suppress error_log output
+        $originalErrorLog = ini_get('error_log');
+        ini_set('error_log', '/dev/null');
+
+        ob_start();
+        $method->invoke($this->application, $routeCollection, $request, $requestContext);
+        $output = ob_get_clean();
+
+        // Restore error_log
+        ini_set('error_log', $originalErrorLog);
+
+        $this->assertStringContainsString('Internal Server Error', $output);
+        $this->assertStringContainsString('/problems/internal-server-error', $output);
+
+        $data = json_decode($output, true);
+        $this->assertIsArray($data);
+        $this->assertEquals(500, $data['status']);
     }
 }

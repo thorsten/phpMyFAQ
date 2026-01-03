@@ -100,27 +100,20 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteBase /
     # Block zip files in content directory
     RewriteRule ^content/.*\.zip$ - [F,L]
-
     # Exclude assets from being handled by Symfony Router
     RewriteRule ^admin/assets($|/) - [L]
-
     # Error pages
     ErrorDocument 404 /404.html
-
     # Administration API
     RewriteRule ^admin/api/ admin/api/index.php [L,QSA]
-
     # Administration pages (redirect /admin to /admin/)
     RewriteRule ^admin$ admin/ [R=301,L]
     RewriteRule ^admin/ admin/index.php [L,QSA]
-
     # API routes (all API endpoints)
     RewriteRule ^api/ api/index.php [L,QSA]
-
     # Setup pages
     RewriteRule ^setup/ setup/index.php [L,QSA]
     RewriteRule ^update$ update/ [R=301,L]
-
     # Front controller: route all other requests to index.php (Symfony Router)
     # Skip if the file or directory exists
     RewriteCond %{REQUEST_FILENAME} !-f
