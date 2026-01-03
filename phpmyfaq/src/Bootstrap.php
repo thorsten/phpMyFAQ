@@ -26,6 +26,7 @@ use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Configuration\LdapConfiguration;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Core\Exception\DatabaseConnectionException;
 use phpMyFAQ\Database;
 use phpMyFAQ\Environment;
 use Symfony\Component\HttpClient\HttpClient;
@@ -155,8 +156,11 @@ try {
         $dbConfig->getPort(),
     );
 } catch (Exception $exception) {
-    Database::errorPage($exception->getMessage());
-    exit(-1);
+    throw new DatabaseConnectionException(
+        message: 'Database connection failed: ' . $exception->getMessage(),
+        code: 500,
+        previous: $exception
+    );
 }
 
 //

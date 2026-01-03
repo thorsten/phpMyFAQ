@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Service Unavailable - phpMyFAQ</title>
+    <style>
+        :root {
+            --bs-primary: #083c83;
+            --bs-danger: #f01704;
+            --bs-body-bg: #ffffff;
+            --bs-body-color: #212529;
+            --bs-gray-600: #6c757d;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bs-body-bg);
+            color: var(--bs-body-color);
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 80px auto;
+            padding: 40px 20px;
+        }
+        .text-center { text-align: center; }
+        .display-1 {
+            font-size: 6rem;
+            font-weight: 700;
+            color: var(--bs-danger);
+            margin-bottom: 1.5rem;
+        }
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        .lead {
+            font-size: 1.25rem;
+            color: var(--bs-gray-600);
+            margin-bottom: 2rem;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 1.125rem;
+            font-weight: 400;
+            text-align: center;
+            text-decoration: none;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+        }
+        .btn-primary {
+            color: #fff;
+            background-color: var(--bs-primary);
+            border-color: var(--bs-primary);
+        }
+        .btn-primary:hover {
+            background-color: #062e63;
+            border-color: #062e63;
+        }
+        .btn-outline-secondary {
+            color: var(--bs-gray-600);
+            background-color: transparent;
+            border-color: var(--bs-gray-600);
+        }
+        .btn-outline-secondary:hover {
+            color: #fff;
+            background-color: var(--bs-gray-600);
+            border-color: var(--bs-gray-600);
+        }
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .alert {
+            position: relative;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            text-align: left;
+        }
+        .alert-danger {
+            color: #842029;
+            background-color: #f8d7da;
+            border-color: #f5c2c7;
+        }
+        .alert strong {
+            font-weight: 600;
+        }
+        .font-monospace {
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+        .small {
+            font-size: 0.875rem;
+        }
+        .mt-2 { margin-top: 0.5rem; }
+        .mb-4 { margin-bottom: 1.5rem; }
+        @media (max-width: 768px) {
+            .display-1 { font-size: 4rem; }
+            h1 { font-size: 1.5rem; }
+            .lead { font-size: 1.125rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="text-center">
+            <div class="display-1">500</div>
+            <h1>Service Unavailable</h1>
+            <p class="lead">The server encountered an internal error and was unable to complete your request. Please try again later.</p>
+        </div>
+
+        {% if errorMessage %}
+        <div class="alert alert-danger mb-4" role="alert">
+            <strong>Error Details:</strong>
+            <div class="mt-2 font-monospace small">{{ errorMessage }}</div>
+        </div>
+        {% endif %}
+
+        <div class="btn-group">
+            <a href="./" class="btn btn-primary">Return to Home</a>
+            <button class="btn btn-outline-secondary" onclick="window.location.reload()">Try Again</button>
+        </div>
+    </div>
+</body>
+</html>

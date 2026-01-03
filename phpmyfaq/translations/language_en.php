@@ -1533,4 +1533,10 @@ $PMF_LANG['msgError403Hint'] = 'If you believe this is an error, please contact 
 $PMF_LANG['msgCreateDate'] = 'Created on';
 $PMF_LANG['msgUpdateDate'] = 'Last updated on';
 
+// added v4.2.0-alpha - 2026-01-03 by Thorsten
+$PMF_LANG['msgError500'] = 'Internal Server Error';
+$PMF_LANG['msgError500Description'] = 'The server encountered an internal error and was unable to complete your request. Please try again later.';
+$PMF_LANG['msgErrorDetails'] = 'Error Details';
+$PMF_LANG['msgTryAgain'] = 'Try Again';
+
 return $PMF_LANG;

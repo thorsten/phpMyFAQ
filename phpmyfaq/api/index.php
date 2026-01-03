@@ -1,7 +1,7 @@
 <?php
 
 /**
- * phpMyFAQ REST API: api/v3.2/version
+ * phpMyFAQ REST API: api/v3.2
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -15,12 +15,40 @@
  * @since     2023-07-28
  */
 
+declare(strict_types=1);
+
 use phpMyFAQ\Application;
+use phpMyFAQ\Core\Exception\DatabaseConnectionException;
+use phpMyFAQ\Environment;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
-require '../src/Bootstrap.php';
+try {
+    require '../src/Bootstrap.php';
+} catch (DatabaseConnectionException $exception) {
+    $errorMessage = Environment::isDebugMode()
+        ? $exception->getMessage()
+        : 'The database server is currently unavailable. Please try again later.';
+
+    $problemDetails = [
+        'type' => '/problems/database-unavailable',
+        'title' => 'Database Connection Error',
+        'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+        'detail' => $errorMessage,
+        'instance' => $_SERVER['REQUEST_URI'] ?? '/api',
+    ];
+
+    $response = new JsonResponse(
+        data: $problemDetails,
+        status: Response::HTTP_INTERNAL_SERVER_ERROR,
+        headers: ['Content-Type' => 'application/problem+json']
+    );
+    $response->send();
+    exit(1);
+}
 
 //
 // Service Containers

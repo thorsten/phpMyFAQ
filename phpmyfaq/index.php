@@ -20,23 +20,29 @@
  * @since     2001-02-12
  */
 
+declare(strict_types=1);
+
 
 use phpMyFAQ\Application;
+use phpMyFAQ\Controller\Frontend\ErrorController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Core\Exception\DatabaseConnectionException;
+use phpMyFAQ\Environment;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 //
-// Define the named constant used as a check by any included PHP file
-//
-const IS_VALID_PHPMYFAQ = null;
-
-//
 // Bootstrapping
 //
-require __DIR__ . '/src/Bootstrap.php';
-
+try {
+    require __DIR__ . '/src/Bootstrap.php';
+} catch (DatabaseConnectionException $exception) {
+    $errorMessage = Environment::isDebugMode() ? $exception->getMessage() : null;
+    $response = ErrorController::renderBootstrapError($errorMessage);
+    $response->send();
+    exit(1);
+}
 
 //
 // Service Containers
@@ -47,8 +53,6 @@ try {
     $loader->load('./src/services.php');
 } catch (Exception $exception) {
     echo sprintf('Error: %s at line %d at %s', $exception->getMessage(), $exception->getLine(), $exception->getFile());
-} catch(\Exception $e) {
-
 }
 
 $routes = include PMF_SRC_DIR  . '/public-routes.php';

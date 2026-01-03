@@ -1,0 +1,34 @@
+{% extends 'index.twig' %}
+
+{% block content %}
+  <div class="container my-5">
+    <div class="row align-items-center justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="text-center mb-4">
+          <div class="display-1 fw-bold text-danger mb-3">500</div>
+          <h1 class="h2 mb-3">{{ 'msgError500' | translate }}</h1>
+          <p class="lead text-muted mb-4">{{ 'msgError500Description' | translate }}</p>
+        </div>
+
+        {% if errorMessage %}
+          <div class="alert alert-danger mb-4" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <strong>{{ 'msgErrorDetails' | translate }}:</strong>
+            <div class="mt-2 font-monospace small">{{ errorMessage }}</div>
+          </div>
+        {% endif %}
+
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+          <a href="./" class="btn btn-primary btn-lg px-4 gap-3">
+            <i class="bi bi-house me-2"></i>
+            {{ 'msgBack2Home' | translate }}
+          </a>
+          <button class="btn btn-outline-secondary btn-lg px-4" onclick="window.location.reload()">
+            <i class="bi bi-arrow-clockwise me-2"></i>
+            {{ 'msgTryAgain' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
