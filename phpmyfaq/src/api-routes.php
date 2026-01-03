@@ -22,6 +22,7 @@ use phpMyFAQ\Controller\Api\BackupController;
 use phpMyFAQ\Controller\Api\CategoryController;
 use phpMyFAQ\Controller\Api\CommentController;
 use phpMyFAQ\Controller\Api\FaqController;
+use phpMyFAQ\Controller\Api\GlossaryController;
 use phpMyFAQ\Controller\Api\GroupController;
 use phpMyFAQ\Controller\Api\LanguageController;
 use phpMyFAQ\Controller\Api\LoginController;
@@ -131,6 +132,11 @@ $routesConfig = [
     'api.faqs' => [
         'path' => "v{$apiVersion}/faqs",
         'controller' => [FaqController::class, 'list'],
+        'methods' => 'GET',
+    ],
+    'api.glossary' => [
+        'path' => "v{$apiVersion}/glossary",
+        'controller' => [GlossaryController::class, 'list'],
         'methods' => 'GET',
     ],
     'api.groups' => [

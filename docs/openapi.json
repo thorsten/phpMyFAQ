@@ -1063,6 +1063,48 @@
         }
       }
     },
+    "/api/v3.2/glossary": {
+      "get": {
+        "tags": ["Public Endpoints"],
+        "operationId": "getGlossary",
+        "responses": {
+          "200": {
+            "description": "Returns the glossary items for the given language provided by \"Accept-Language\".",
+            "headers": {
+              "Accept-Language": {
+                "description": "The language code for the glossary items.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": "[\n            {\"id\": 1, \"language\": \"en\", \"item\": \"API\", \"definition\": \"Application Programming Interface\" },\n            {\"id\": 2, \"language\": \"en\", \"item\": \"FAQ\", \"definition\": \"Frequently Asked Questions\" }\n        ]"
+              }
+            }
+          },
+          "404": {
+            "description": "If no glossary items are stored.",
+            "headers": {
+              "Accept-Language": {
+                "description": "The language code for the glossary items.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": []
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v3.1/groups": {
       "get": {
         "tags": ["Endpoints with Authentication"],

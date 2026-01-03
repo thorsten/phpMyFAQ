@@ -59,7 +59,7 @@ class System
     /**
      * API version.
      */
-    private const string VERSION_API = '3.1';
+    private const string VERSION_API = '3.2';
 
     /**
      * Plugin version.
