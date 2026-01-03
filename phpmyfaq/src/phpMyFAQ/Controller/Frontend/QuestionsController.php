@@ -80,7 +80,7 @@ final class QuestionsController extends AbstractFrontController
      *
      * @throws \Exception
      */
-    #[Route(path: '/ask.html', name: 'public.question.ask', methods: ['GET'])]
+    #[Route(path: '/add-question.html', name: 'public.question.ask', methods: ['GET'])]
     public function ask(Request $request): Response
     {
         $faqSession = $this->container->get('phpmyfaq.user.session');

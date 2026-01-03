@@ -125,7 +125,7 @@ $routesConfig = [
         'methods' => 'GET',
     ],
     'public.question.ask' => [
-        'path' => '/ask.html',
+        'path' => '/add-question.html',
         'controller' => [QuestionsController::class, 'ask'],
         'methods' => 'GET',
     ],

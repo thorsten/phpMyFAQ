@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\PermissionType;
@@ -38,6 +39,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Twig\Error\LoaderError;
 use Twig\TwigFilter;
 
 final class FaqController extends AbstractFrontController
@@ -45,7 +47,7 @@ final class FaqController extends AbstractFrontController
     /**
      * Displays the form to add a new FAQ
      *
-     * @throws Exception
+     * @throws Exception|LoaderError
      */
     #[Route(path: '/add-faq.html', name: 'public.faq.add', methods: ['GET'])]
     public function add(Request $request): Response
