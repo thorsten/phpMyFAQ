@@ -159,6 +159,16 @@ $routesConfig = [
         'controller' => [SearchController::class, 'index'],
         'methods' => 'GET',
     ],
+    'public.tags.paginated' => [
+        'path' => '/tags/{tagId}/{page}/{slug}.html',
+        'controller' => [SearchController::class, 'tagsPaginated'],
+        'methods' => 'GET',
+    ],
+    'public.tags' => [
+        'path' => '/tags/{tagId}/{slug}.html',
+        'controller' => [SearchController::class, 'tags'],
+        'methods' => 'GET',
+    ],
     'public.user.register' => [
         'path' => '/user/register',
         'controller' => [UserController::class, 'register'],

@@ -33,14 +33,6 @@
     rewrite /sitemap.gz /index.php
     rewrite /sitemap.xml.gz /index.php
 
-    # Tags pages with page count
-    @tags_page path_regexp tags_page ^/tags/([0-9]+)/([0-9]+)/(.+)\.html?$
-    rewrite @tags_page /index.php?action=search&tagging_id={re.tags_page.1}&seite={re.tags_page.2}
-
-    # Tags pages
-    @tags path_regexp tags ^/tags/([0-9]+)/([^/]+)\.html?$
-    rewrite @tags /index.php?action=search&tagging_id={re.tags.1}
-
     # Setup and update pages
     @setup path /setup*
     rewrite @setup /setup/index.php
@@ -106,14 +98,6 @@
     rewrite /sitemap.xml /index.php
     rewrite /sitemap.gz /index.php
     rewrite /sitemap.xml.gz /index.php
-
-    # Tags pages with page count
-    @tags_page path_regexp tags_page ^/tags/([0-9]+)/([0-9]+)/(.+)\.html?$
-    rewrite @tags_page /index.php?action=search&tagging_id={re.tags_page.1}&seite={re.tags_page.2}
-
-    # Tags pages
-    @tags path_regexp tags ^/tags/([0-9]+)/([^/]+)\.html?$
-    rewrite @tags /index.php?action=search&tagging_id={re.tags.1}
 
     @setup path /setup*
     rewrite @setup /setup/index.php

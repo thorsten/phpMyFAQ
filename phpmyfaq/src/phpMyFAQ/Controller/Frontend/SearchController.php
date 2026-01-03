@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Frontend;
 
 use Exception;
+use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Search\SearchService;
@@ -36,9 +37,36 @@ use Twig\TwigFilter;
 final class SearchController extends AbstractFrontController
 {
     /**
-     * Displays search results for fulltext or tag-based search.
+     * Redirects tag URLs with pagination to search
      *
      * @throws Exception
+     */
+    #[Route(path: '/tags/{tagId}/{page}/{slug}.html', name: 'public.tags.paginated', methods: ['GET'])]
+    public function tagsPaginated(Request $request): Response
+    {
+        $tagId = Filter::filterVar($request->attributes->get('tagId'), FILTER_VALIDATE_INT, 0);
+        $page = Filter::filterVar($request->attributes->get('page'), FILTER_VALIDATE_INT, 1);
+
+        return new RedirectResponse(sprintf('/search.html?tagging_id=%d&seite=%d', $tagId, $page));
+    }
+
+    /**
+     * Redirects tag URLs to search
+     *
+     * @throws Exception
+     */
+    #[Route(path: '/tags/{tagId}/{slug}.html', name: 'public.tags', methods: ['GET'])]
+    public function tags(Request $request): Response
+    {
+        $tagId = Filter::filterVar($request->attributes->get('tagId'), FILTER_VALIDATE_INT, 0);
+
+        return new RedirectResponse(sprintf('/search.html?tagging_id=%d', $tagId));
+    }
+
+    /**
+     * Displays search results for fulltext or tag-based search.
+     *
+     * @throws Exception|CommonMarkException
      */
     #[Route(path: '/search.html', name: 'public.search', methods: ['GET'])]
     public function index(Request $request): Response
