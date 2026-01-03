@@ -1331,4 +1331,9 @@ $PMF_LANG['msgError403Hint'] = 'หากคุณเชื่อว่านี
 $PMF_LANG['msgCreateDate'] = 'สร้างเมื่อ';
 $PMF_LANG['msgUpdateDate'] = 'อัปเดตล่าสุดเมื่อ';
 
+$PMF_LANG['msgError500'] = 'ข้อผิดพลาดภายในเซิร์ฟเวอร์';
+$PMF_LANG['msgError500Description'] = 'เซิร์ฟเวอร์พบข้อผิดพลาดภายในและไม่สามารถดำเนินการตามคำขอของคุณได้ กรุณาลองใหม่อีกครั้งในภายหลัง';
+$PMF_LANG['msgErrorDetails'] = 'รายละเอียดข้อผิดพลาด';
+$PMF_LANG['msgTryAgain'] = 'ลองอีกครั้ง';
+
 return $PMF_LANG;

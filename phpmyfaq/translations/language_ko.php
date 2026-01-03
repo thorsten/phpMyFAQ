@@ -1539,4 +1539,9 @@ $PMF_LANG['msgError403Hint'] = '오류라고 생각되면 관리자에게 문의
 $PMF_LANG['msgCreateDate'] = '생성일';
 $PMF_LANG['msgUpdateDate'] = '마지막 업데이트';
 
+$PMF_LANG['msgError500'] = '내부 서버 오류';
+$PMF_LANG['msgError500Description'] = '서버에서 내부 오류가 발생하여 요청을 완료할 수 없습니다. 나중에 다시 시도하십시오.';
+$PMF_LANG['msgErrorDetails'] = '오류 세부정보';
+$PMF_LANG['msgTryAgain'] = '다시 시도';
+
 return $PMF_LANG;

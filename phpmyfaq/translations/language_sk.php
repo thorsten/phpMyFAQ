@@ -1543,4 +1543,9 @@ $PMF_LANG['msgError403Hint'] = 'Ak si myslíte, že ide o chybu, kontaktujte pro
 $PMF_LANG['msgCreateDate'] = 'Vytvorené dňa';
 $PMF_LANG['msgUpdateDate'] = 'Naposledy aktualizované dňa';
 
+$PMF_LANG['msgError500'] = 'Vnútorná chyba servera';
+$PMF_LANG['msgError500Description'] = 'Server narazil na vnútornú chybu a nemohol dokončiť vašu požiadavku. Skúste to prosím neskôr.';
+$PMF_LANG['msgErrorDetails'] = 'Podrobnosti chyby';
+$PMF_LANG['msgTryAgain'] = 'Skúsiť znova';
+
 return $PMF_LANG;

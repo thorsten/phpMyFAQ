@@ -1535,4 +1535,9 @@ $PMF_LANG['msgError403Hint'] = 'اگر فکر می‌کنید این یک خطا
 $PMF_LANG['msgCreateDate'] = 'ایجاد شده در';
 $PMF_LANG['msgUpdateDate'] = 'آخرین به‌روزرسانی در';
 
+$PMF_LANG['msgError500'] = 'خطای داخلی سرور';
+$PMF_LANG['msgError500Description'] = 'سرور با خطای داخلی مواجه شد و نتوانست درخواست شما را تکمیل کند. لطفاً بعداً دوباره امتحان کنید.';
+$PMF_LANG['msgErrorDetails'] = 'جزئیات خطا';
+$PMF_LANG['msgTryAgain'] = 'دوباره امتحان کنید';
+
 return $PMF_LANG;

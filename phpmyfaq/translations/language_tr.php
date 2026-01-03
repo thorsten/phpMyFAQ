@@ -1536,4 +1536,9 @@ $PMF_LANG['msgError403Hint'] = 'Bunun bir hata olduğunu düşünüyorsanız, l�
 $PMF_LANG['msgCreateDate'] = 'Oluşturulma tarihi';
 $PMF_LANG['msgUpdateDate'] = 'Son güncellenme tarihi';
 
+$PMF_LANG['msgError500'] = 'Sunucu İç Hatası';
+$PMF_LANG['msgError500Description'] = 'Sunucu bir iç hatayla karşılaştı ve isteğinizi tamamlayamadı. Lütfen daha sonra tekrar deneyin.';
+$PMF_LANG['msgErrorDetails'] = 'Hata Detayları';
+$PMF_LANG['msgTryAgain'] = 'Tekrar Dene';
+
 return $PMF_LANG;

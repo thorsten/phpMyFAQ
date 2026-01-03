@@ -1518,4 +1518,9 @@ $PMF_LANG['msgError403Hint'] = 'Jeśli uważasz, że to błąd, skontaktuj się 
 $PMF_LANG['msgCreateDate'] = 'Utworzono dnia';
 $PMF_LANG['msgUpdateDate'] = 'Ostatnia aktualizacja dnia';
 
+$PMF_LANG['msgError500'] = 'Wewnętrzny błąd serwera';
+$PMF_LANG['msgError500Description'] = 'Serwer napotkał błąd wewnętrzny i nie mógł ukończyć żądania. Spróbuj ponownie później.';
+$PMF_LANG['msgErrorDetails'] = 'Szczegóły błędu';
+$PMF_LANG['msgTryAgain'] = 'Spróbuj ponownie';
+
 return $PMF_LANG;

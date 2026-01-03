@@ -1543,4 +1543,9 @@ $PMF_LANG['msgError403Hint'] = 'Jika Anda yakin ini adalah kesalahan, silakan hu
 $PMF_LANG['msgCreateDate'] = 'Dibuat pada';
 $PMF_LANG['msgUpdateDate'] = 'Terakhir diperbarui pada';
 
+$PMF_LANG['msgError500'] = 'Kesalahan Server Internal';
+$PMF_LANG['msgError500Description'] = 'Server mengalami kesalahan internal dan tidak dapat menyelesaikan permintaan Anda. Silakan coba lagi nanti.';
+$PMF_LANG['msgErrorDetails'] = 'Detail Kesalahan';
+$PMF_LANG['msgTryAgain'] = 'Coba Lagi';
+
 return $PMF_LANG;

@@ -1540,4 +1540,9 @@ $PMF_LANG['msgError403Hint'] = 'Če menite, da je to napaka, se prosimo obrnite 
 $PMF_LANG['msgCreateDate'] = 'Ustvarjeno dne';
 $PMF_LANG['msgUpdateDate'] = 'Zadnjič posodobljeno dne';
 
+$PMF_LANG['msgError500'] = 'Notranja napaka strežnika';
+$PMF_LANG['msgError500Description'] = 'Strežnik je naletel na notranjo napako in ni mogel dokončati vaše zahteve. Poskusite znova kasneje.';
+$PMF_LANG['msgErrorDetails'] = 'Podrobnosti o napaki';
+$PMF_LANG['msgTryAgain'] = 'Poskusite znova';
+
 return $PMF_LANG;

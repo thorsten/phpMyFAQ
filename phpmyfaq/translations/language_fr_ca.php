@@ -1323,4 +1323,9 @@ $PMF_LANG['msgError403Hint'] = 'Si vous pensez qu\'il s\'agit d\'une erreur, veu
 $PMF_LANG['msgCreateDate'] = 'Créé le';
 $PMF_LANG['msgUpdateDate'] = 'Dernière mise à jour le';
 
+$PMF_LANG['msgError500'] = 'Erreur interne du serveur';
+$PMF_LANG['msgError500Description'] = 'Le serveur a rencontré une erreur interne et n\'a pas pu terminer votre requête. Veuillez réessayer plus tard.';
+$PMF_LANG['msgErrorDetails'] = 'Détails de l\'erreur';
+$PMF_LANG['msgTryAgain'] = 'Réessayer';
+
 return $PMF_LANG;

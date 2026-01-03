@@ -1511,4 +1511,9 @@ $PMF_LANG['msgSessionExpired'] = 'آپ کا سیشن ختم ہو گیا۔ برا
 $PMF_LANG['msgUpdateDate'] = 'آخری اپ ڈیٹ';
 $PMF_LANG['recordsControlCenter'] = 'FAQs';
 
+$PMF_LANG['msgError500'] = 'اندرونی سرور کی خرابی';
+$PMF_LANG['msgError500Description'] = 'سرور کو ایک اندرونی خرابی کا سامنا ہوا اور یہ آپ کی درخواست مکمل نہیں کر سکا۔ براہ کرم بعد میں دوبارہ کوشش کریں۔';
+$PMF_LANG['msgErrorDetails'] = 'خرابی کی تفصیلات';
+$PMF_LANG['msgTryAgain'] = 'دوبارہ کوشش کریں';
+
 return $PMF_LANG;

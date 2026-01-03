@@ -1534,4 +1534,10 @@ $PMF_LANG['msgError403Hint'] = 'Wenn Sie denken, dass dies ein Fehler ist, konta
 $PMF_LANG['msgCreateDate'] = 'Erstellt am';
 $PMF_LANG['msgUpdateDate'] = 'Aktualisiert am';
 
+// added v4.2.0-alpha - 2026-01-03 by Thorsten
+$PMF_LANG['msgError500'] = 'Interner Serverfehler';
+$PMF_LANG['msgError500Description'] = 'Der Server hat einen internen Fehler festgestellt und konnte Ihre Anfrage nicht abschließen. Bitte versuchen Sie es später erneut.';
+$PMF_LANG['msgErrorDetails'] = 'Fehlerdetails';
+$PMF_LANG['msgTryAgain'] = 'Erneut versuchen';
+
 return $PMF_LANG;

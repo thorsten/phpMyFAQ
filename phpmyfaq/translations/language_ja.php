@@ -1291,4 +1291,9 @@ $PMF_LANG['msgError403Hint'] = 'これがエラーだと思われる場合は、
 $PMF_LANG['msgCreateDate'] = '作成日';
 $PMF_LANG['msgUpdateDate'] = '最終更新日';
 
+$PMF_LANG['msgError500'] = '内部サーバーエラー';
+$PMF_LANG['msgError500Description'] = 'サーバーで内部エラーが発生し、リクエストを完了できませんでした。後でもう一度お試しください。';
+$PMF_LANG['msgErrorDetails'] = 'エラー詳細';
+$PMF_LANG['msgTryAgain'] = '再試行';
+
 return $PMF_LANG;

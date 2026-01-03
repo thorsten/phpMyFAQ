@@ -1533,4 +1533,9 @@ $PMF_LANG['msgError403Hint'] = 'Ha úgy gondolja, hogy ez hiba, kérjük, lépje
 $PMF_LANG['msgCreateDate'] = 'Létrehozva';
 $PMF_LANG['msgUpdateDate'] = 'Utoljára frissítve';
 
+$PMF_LANG['msgError500'] = 'Belső szerverhiba';
+$PMF_LANG['msgError500Description'] = 'A szerver belső hibát észlelt, és nem tudta teljesíteni a kérést. Kérjük, próbálja újra később.';
+$PMF_LANG['msgErrorDetails'] = 'Hiba részletei';
+$PMF_LANG['msgTryAgain'] = 'Próbálja újra';
+
 return $PMF_LANG;

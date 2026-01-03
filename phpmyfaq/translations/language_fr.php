@@ -7,16 +7,15 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Sylvain Corvaisier <cocky@cocky.fr>
- * @author Thomas Bassetto <tbassetto@gmail.com>
- * @author Laurent J.V. Dubois <laurent.dubois@ljvd.com>
- * @author Cédric Frayssinet
+ * @package   phpMyFAQ
+ * @author    Sylvain Corvaisier <cocky@cocky.fr>
+ * @author    Thomas Bassetto <tbassetto@gmail.com>
+ * @author    Laurent J.V. Dubois <laurent.dubois@ljvd.com>
+ * @author    Cédric Frayssinet
  * @copyright 2004-2026 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2004-02-19
- * @codingStandardsIgnoreFile
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2004-02-19
  */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
@@ -1537,5 +1536,9 @@ $PMF_LANG['msgError403Description'] = 'Vous êtes authentifié, mais vous n\'ave
 $PMF_LANG['msgError403Hint'] = 'Si vous pensez qu\'il s\'agit d\'une erreur, veuillez contacter un administrateur.';
 $PMF_LANG['msgCreateDate'] = 'Créé le';
 $PMF_LANG['msgUpdateDate'] = 'Dernière mise à jour le';
+$PMF_LANG['msgError500'] = 'Erreur interne du serveur';
+$PMF_LANG['msgError500Description'] = 'Le serveur a rencontré une erreur interne et n\'a pas pu terminer votre requête. Veuillez réessayer plus tard.';
+$PMF_LANG['msgErrorDetails'] = 'Détails de l\'erreur';
+$PMF_LANG['msgTryAgain'] = 'Réessayer';
 
 return $PMF_LANG;

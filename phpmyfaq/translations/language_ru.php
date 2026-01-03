@@ -1532,4 +1532,9 @@ $PMF_LANG['msgError403Hint'] = 'Если вы считаете, что это о
 $PMF_LANG['msgCreateDate'] = 'Создано';
 $PMF_LANG['msgUpdateDate'] = 'Последнее обновление';
 
+$PMF_LANG['msgError500'] = 'Внутренняя ошибка сервера';
+$PMF_LANG['msgError500Description'] = 'Сервер обнаружил внутреннюю ошибку и не смог выполнить ваш запрос. Пожалуйста, попробуйте позже.';
+$PMF_LANG['msgErrorDetails'] = 'Детали ошибки';
+$PMF_LANG['msgTryAgain'] = 'Попробовать снова';
+
 return $PMF_LANG;

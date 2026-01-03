@@ -1540,4 +1540,9 @@ $PMF_LANG['msgError403Hint'] = 'Os credwch mai gwall yw hwn, cysylltwch â gwein
 $PMF_LANG['msgCreateDate'] = 'Crëwyd ar';
 $PMF_LANG['msgUpdateDate'] = 'Diweddarwyd ddiwethaf ar';
 
+$PMF_LANG['msgError500'] = 'Gwall Gweinydd Mewnol';
+$PMF_LANG['msgError500Description'] = 'Mae\'r gweinydd wedi dod ar draws gwall mewnol ac ni allai gwblhau eich cais. Rhowch gynnig arall arni yn nes ymlaen.';
+$PMF_LANG['msgErrorDetails'] = 'Manylion Gwall';
+$PMF_LANG['msgTryAgain'] = 'Rhowch gynnig arall arni';
+
 return $PMF_LANG;

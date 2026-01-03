@@ -1551,4 +1551,9 @@ $PMF_LANG['msgError403Hint'] = 'Jei manote, kad tai klaida, susisiekite su admin
 $PMF_LANG['msgCreateDate'] = 'Sukurta';
 $PMF_LANG['msgUpdateDate'] = 'Paskutinį kartą atnaujinta';
 
+$PMF_LANG['msgError500'] = 'Vidinė serverio klaida';
+$PMF_LANG['msgError500Description'] = 'Serveris susidūrė su vidine klaida ir negalėjo įvykdyti jūsų užklausos. Bandykite dar kartą vėliau.';
+$PMF_LANG['msgErrorDetails'] = 'Klaidos detalės';
+$PMF_LANG['msgTryAgain'] = 'Bandyti dar kartą';
+
 return $PMF_LANG;

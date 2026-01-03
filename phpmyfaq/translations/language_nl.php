@@ -1292,4 +1292,9 @@ $PMF_LANG['msgError403Hint'] = 'Als u denkt dat dit een fout is, neem dan contac
 $PMF_LANG['msgCreateDate'] = 'Aangemaakt op';
 $PMF_LANG['msgUpdateDate'] = 'Laatst bijgewerkt op';
 
+$PMF_LANG['msgError500'] = 'Interne serverfout';
+$PMF_LANG['msgError500Description'] = 'De server heeft een interne fout aangetroffen en kon uw verzoek niet voltooien. Probeer het later opnieuw.';
+$PMF_LANG['msgErrorDetails'] = 'Foutdetails';
+$PMF_LANG['msgTryAgain'] = 'Opnieuw proberen';
+
 return $PMF_LANG;

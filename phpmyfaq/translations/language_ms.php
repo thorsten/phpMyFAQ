@@ -1531,4 +1531,9 @@ $PMF_LANG['msgError403Hint'] = 'Jika anda percaya ini adalah ralat, sila hubungi
 $PMF_LANG['msgCreateDate'] = 'Dicipta pada';
 $PMF_LANG['msgUpdateDate'] = 'Terakhir dikemas kini pada';
 
+$PMF_LANG['msgError500'] = 'Ralat Pelayan Dalaman';
+$PMF_LANG['msgError500Description'] = 'Pelayan mengalami ralat dalaman dan tidak dapat melengkapkan permintaan anda. Sila cuba lagi kemudian.';
+$PMF_LANG['msgErrorDetails'] = 'Butiran Ralat';
+$PMF_LANG['msgTryAgain'] = 'Cuba Lagi';
+
 return $PMF_LANG;

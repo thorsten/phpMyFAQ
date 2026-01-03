@@ -1539,4 +1539,9 @@ $PMF_LANG['msgError403Hint'] = 'Errore bat dela uste baduzu, mesedez jarri harre
 $PMF_LANG['msgCreateDate'] = 'Sortuta';
 $PMF_LANG['msgUpdateDate'] = 'Azkenekoz eguneratuta';
 
+$PMF_LANG['msgError500'] = 'Barneko zerbitzari-errorea';
+$PMF_LANG['msgError500Description'] = 'Zerbitzariak barne-errore bat aurkitu du eta ezin izan du zure eskaera osatu. Mesedez, saiatu berriro geroago.';
+$PMF_LANG['msgErrorDetails'] = 'Errorearen xehetasunak';
+$PMF_LANG['msgTryAgain'] = 'Saiatu berriro';
+
 return $PMF_LANG;

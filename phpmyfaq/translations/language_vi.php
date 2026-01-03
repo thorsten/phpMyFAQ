@@ -1534,4 +1534,9 @@ $PMF_LANG['msgError403Hint'] = 'Nếu bạn tin rằng đây là lỗi, vui lòn
 $PMF_LANG['msgCreateDate'] = 'Được tạo vào';
 $PMF_LANG['msgUpdateDate'] = 'Cập nhật lần cuối vào';
 
+$PMF_LANG['msgError500'] = 'Lỗi máy chủ nội bộ';
+$PMF_LANG['msgError500Description'] = 'Máy chủ gặp lỗi nội bộ và không thể hoàn thành yêu cầu của bạn. Vui lòng thử lại sau.';
+$PMF_LANG['msgErrorDetails'] = 'Chi tiết lỗi';
+$PMF_LANG['msgTryAgain'] = 'Thử lại';
+
 return $PMF_LANG;

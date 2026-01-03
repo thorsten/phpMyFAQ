@@ -1542,4 +1542,9 @@ $PMF_LANG['msgError403Hint'] = 'আপনি যদি বিশ্বাস ক
 $PMF_LANG['msgCreateDate'] = 'তৈরি হয়েছে';
 $PMF_LANG['msgUpdateDate'] = 'সর্বশেষ আপডেট হয়েছে';
 
+$PMF_LANG['msgError500'] = 'অভ্যন্তরীণ সার্ভার ত্রুটি';
+$PMF_LANG['msgError500Description'] = 'সার্ভার একটি অভ্যন্তরীণ ত্রুটির সম্মুখীন হয়েছে এবং আপনার অনুরোধ সম্পূর্ণ করতে পারেনি। অনুগ্রহ করে পরে আবার চেষ্টা করুন।';
+$PMF_LANG['msgErrorDetails'] = 'ত্রুটির বিবরণ';
+$PMF_LANG['msgTryAgain'] = 'আবার চেষ্টা করুন';
+
 return $PMF_LANG;

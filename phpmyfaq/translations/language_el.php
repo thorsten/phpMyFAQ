@@ -1353,4 +1353,9 @@ $PMF_LANG['msgError403Hint'] = 'Εάν πιστεύετε ότι αυτό είν
 $PMF_LANG['msgCreateDate'] = 'Δημιουργήθηκε στις';
 $PMF_LANG['msgUpdateDate'] = 'Τελευταία ενημέρωση στις';
 
+$PMF_LANG['msgError500'] = 'Εσωτερικό σφάλμα διακομιστή';
+$PMF_LANG['msgError500Description'] = 'Ο διακομιστής αντιμετώπισε ένα εσωτερικό σφάλμα και δεν μπόρεσε να ολοκληρώσει το αίτημά σας. Παρακαλούμε δοκιμάστε ξανά αργότερα.';
+$PMF_LANG['msgErrorDetails'] = 'Λεπτομέρειες σφάλματος';
+$PMF_LANG['msgTryAgain'] = 'Δοκιμάστε ξανά';
+
 return $PMF_LANG;

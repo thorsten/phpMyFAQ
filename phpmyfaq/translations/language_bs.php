@@ -1539,4 +1539,9 @@ $PMF_LANG['msgError403Hint'] = 'Ako vjerujete da je ovo greška, molimo kontakti
 $PMF_LANG['msgCreateDate'] = 'Kreirano';
 $PMF_LANG['msgUpdateDate'] = 'Posljednji put ažurirano';
 
+$PMF_LANG['msgError500'] = 'Interna greška servera';
+$PMF_LANG['msgError500Description'] = 'Server je naišao na internu grešku i nije mogao izvršiti vaš zahtjev. Molimo pokušajte ponovo kasnije.';
+$PMF_LANG['msgErrorDetails'] = 'Detalji greške';
+$PMF_LANG['msgTryAgain'] = 'Pokušajte ponovo';
+
 return $PMF_LANG;

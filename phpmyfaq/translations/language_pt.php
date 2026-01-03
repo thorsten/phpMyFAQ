@@ -1298,4 +1298,9 @@ $PMF_LANG['msgError403Hint'] = 'Se acredita que isto é um erro, por favor conta
 $PMF_LANG['msgCreateDate'] = 'Criado em';
 $PMF_LANG['msgUpdateDate'] = 'Última atualização em';
 
+$PMF_LANG['msgError500'] = 'Erro interno do servidor';
+$PMF_LANG['msgError500Description'] = 'O servidor encontrou um erro interno e não conseguiu concluir o seu pedido. Por favor, tente novamente mais tarde.';
+$PMF_LANG['msgErrorDetails'] = 'Detalhes do erro';
+$PMF_LANG['msgTryAgain'] = 'Tentar novamente';
+
 return $PMF_LANG;

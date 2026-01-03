@@ -1544,4 +1544,9 @@ $PMF_LANG['msgError403Hint'] = 'Якщо ви вважаєте, що це пом
 $PMF_LANG['msgCreateDate'] = 'Створено';
 $PMF_LANG['msgUpdateDate'] = 'Востаннє оновлено';
 
+$PMF_LANG['msgError500'] = 'Внутрішня помилка сервера';
+$PMF_LANG['msgError500Description'] = 'Сервер зіткнувся з внутрішньою помилкою і не зміг виконати ваш запит. Будь ласка, спробуйте пізніше.';
+$PMF_LANG['msgErrorDetails'] = 'Деталі помилки';
+$PMF_LANG['msgTryAgain'] = 'Спробуйте ще раз';
+
 return $PMF_LANG;

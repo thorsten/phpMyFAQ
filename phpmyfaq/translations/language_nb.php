@@ -1383,4 +1383,9 @@ $PMF_LANG['msgError403Hint'] = 'Hvis du tror dette er en feil, vennligst kontakt
 $PMF_LANG['msgCreateDate'] = 'Opprettet den';
 $PMF_LANG['msgUpdateDate'] = 'Sist oppdatert den';
 
+$PMF_LANG['msgError500'] = 'Intern serverfeil';
+$PMF_LANG['msgError500Description'] = 'Serveren støtte på en intern feil og kunne ikke fullføre forespørselen din. Vennligst prøv igjen senere.';
+$PMF_LANG['msgErrorDetails'] = 'Feildetaljer';
+$PMF_LANG['msgTryAgain'] = 'Prøv igjen';
+
 return $PMF_LANG;

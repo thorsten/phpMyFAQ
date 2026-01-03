@@ -1752,4 +1752,9 @@ $PMF_LANG['msgError403Hint'] = 'Om du tror att detta är ett fel, vänligen kont
 $PMF_LANG['msgCreateDate'] = 'Skapad den';
 $PMF_LANG['msgUpdateDate'] = 'Senast uppdaterad den';
 
+$PMF_LANG['msgError500'] = 'Internt serverfel';
+$PMF_LANG['msgError500Description'] = 'Servern påträffade ett internt fel och kunde inte slutföra din begäran. Försök igen senare.';
+$PMF_LANG['msgErrorDetails'] = 'Feldetaljer';
+$PMF_LANG['msgTryAgain'] = 'Försök igen';
+
 return $PMF_LANG;

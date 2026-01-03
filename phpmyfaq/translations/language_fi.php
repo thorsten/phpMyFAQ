@@ -1323,4 +1323,9 @@ $PMF_LANG['msgError403Hint'] = 'Jos uskot tämän olevan virhe, ota yhteyttä yl
 $PMF_LANG['msgCreateDate'] = 'Luotu';
 $PMF_LANG['msgUpdateDate'] = 'Viimeksi päivitetty';
 
+$PMF_LANG['msgError500'] = 'Sisäinen palvelinvirhe';
+$PMF_LANG['msgError500Description'] = 'Palvelin kohtasi sisäisen virheen eikä voinut suorittaa pyyntöäsi loppuun. Yritä myöhemmin uudelleen.';
+$PMF_LANG['msgErrorDetails'] = 'Virheen tiedot';
+$PMF_LANG['msgTryAgain'] = 'Yritä uudelleen';
+
 return $PMF_LANG;

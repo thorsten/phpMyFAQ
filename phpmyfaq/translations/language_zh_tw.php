@@ -1541,4 +1541,9 @@ $PMF_LANG['msgError403Hint'] = '如果您認為這是錯誤,請聯絡管理員�
 $PMF_LANG['msgCreateDate'] = '建立於';
 $PMF_LANG['msgUpdateDate'] = '最後更新於';
 
+$PMF_LANG['msgError500'] = '內部伺服器錯誤';
+$PMF_LANG['msgError500Description'] = '伺服器遇到內部錯誤，無法完成您的請求。請稍後再試。';
+$PMF_LANG['msgErrorDetails'] = '錯誤詳情';
+$PMF_LANG['msgTryAgain'] = '重試';
+
 return $PMF_LANG;

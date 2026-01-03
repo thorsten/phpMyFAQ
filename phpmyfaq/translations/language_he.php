@@ -1357,4 +1357,9 @@ $PMF_LANG['msgError403Hint'] = 'אם אתה מאמין שזו שגיאה, אנא
 $PMF_LANG['msgCreateDate'] = 'נוצר בתאריך';
 $PMF_LANG['msgUpdateDate'] = 'עודכן לאחרונה בתאריך';
 
+$PMF_LANG['msgError500'] = 'שגיאת שרת פנימית';
+$PMF_LANG['msgError500Description'] = 'השרת נתקל בשגיאה פנימית ולא הצליח להשלים את הבקשה שלך. אנא נסה שוב מאוחר יותר.';
+$PMF_LANG['msgErrorDetails'] = 'פרטי שגיאה';
+$PMF_LANG['msgTryAgain'] = 'נסה שוב';
+
 return $PMF_LANG;

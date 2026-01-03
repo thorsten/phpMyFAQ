@@ -1538,4 +1538,9 @@ $PMF_LANG['msgError403Hint'] = 'إذا كنت تعتقد أن هذا خطأ، ي
 $PMF_LANG['msgCreateDate'] = 'تم الإنشاء في';
 $PMF_LANG['msgUpdateDate'] = 'آخر تحديث في';
 
+$PMF_LANG['msgError500'] = 'خطأ داخلي في الخادم';
+$PMF_LANG['msgError500Description'] = 'واجه الخادم خطأ داخليًا ولم يتمكن من إكمال طلبك. يرجى المحاولة مرة أخرى لاحقًا.';
+$PMF_LANG['msgErrorDetails'] = 'تفاصيل الخطأ';
+$PMF_LANG['msgTryAgain'] = 'حاول مرة أخرى';
+
 return $PMF_LANG;

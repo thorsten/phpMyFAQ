@@ -1534,4 +1534,9 @@ $PMF_LANG['msgError403Hint'] = 'Hvis du mener dette er en fejl, skal du kontakte
 $PMF_LANG['msgCreateDate'] = 'Oprettet den';
 $PMF_LANG['msgUpdateDate'] = 'Sidst opdateret den';
 
+$PMF_LANG['msgError500'] = 'Intern serverfejl';
+$PMF_LANG['msgError500Description'] = 'Serveren stødte på en intern fejl og kunne ikke fuldføre din anmodning. Prøv venligst igen senere.';
+$PMF_LANG['msgErrorDetails'] = 'Fejldetaljer';
+$PMF_LANG['msgTryAgain'] = 'Prøv igen';
+
 return $PMF_LANG;

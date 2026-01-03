@@ -1535,4 +1535,9 @@ $PMF_LANG['msgError403Hint'] = 'Ja uzskatāt, ka tā ir kļūda, lūdzu, sazinie
 $PMF_LANG['msgCreateDate'] = 'Izveidots';
 $PMF_LANG['msgUpdateDate'] = 'Pēdējo reizi atjaunināts';
 
+$PMF_LANG['msgError500'] = 'Iekšējā servera kļūda';
+$PMF_LANG['msgError500Description'] = 'Serveris saskārās ar iekšēju kļūdu un nevarēja pabeigt jūsu pieprasījumu. Lūdzu, mēģiniet vēlreiz vēlāk.';
+$PMF_LANG['msgErrorDetails'] = 'Kļūdas detaļas';
+$PMF_LANG['msgTryAgain'] = 'Mēģināt vēlreiz';
+
 return $PMF_LANG;

@@ -1184,4 +1184,9 @@ $PMF_LANG['upgradeControlCenter'] = 'Atualização';
 $PMF_LANG['verificationFailure'] = 'Falha na verificação';
 $PMF_LANG['versionIsUpToDate'] = 'A versão está atualizada';
 
+$PMF_LANG['msgError500'] = 'Erro Interno do Servidor';
+$PMF_LANG['msgError500Description'] = 'O servidor encontrou um erro interno e não conseguiu concluir sua solicitação. Por favor, tente novamente mais tarde.';
+$PMF_LANG['msgErrorDetails'] = 'Detalhes do Erro';
+$PMF_LANG['msgTryAgain'] = 'Tentar Novamente';
+
 return $PMF_LANG;

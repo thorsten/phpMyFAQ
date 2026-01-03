@@ -1532,4 +1532,9 @@ $PMF_LANG['msgError403Hint'] = 'Dacă credeți că aceasta este o eroare, vă ru
 $PMF_LANG['msgCreateDate'] = 'Creat la';
 $PMF_LANG['msgUpdateDate'] = 'Ultima actualizare la';
 
+$PMF_LANG['msgError500'] = 'Eroare internă a serverului';
+$PMF_LANG['msgError500Description'] = 'Serverul a întâmpinat o eroare internă și nu a putut finaliza cererea dumneavoastră. Vă rugăm să încercați din nou mai târziu.';
+$PMF_LANG['msgErrorDetails'] = 'Detalii eroare';
+$PMF_LANG['msgTryAgain'] = 'Încercați din nou';
+
 return $PMF_LANG;
