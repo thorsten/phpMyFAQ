@@ -20,6 +20,11 @@ To install it, you will need a web server that meets the following requirements:
 - Sodium support
 - intl support
 
+Suggested PHP extensions:
+
+- mbstring
+- zlib
+
 ### Web server requirements
 
 You can use phpMyFAQ with the following web servers:

@@ -28,11 +28,6 @@
         php_server
     }
 
-    # Google sitemap
-    rewrite /sitemap.xml /index.php
-    rewrite /sitemap.gz /index.php
-    rewrite /sitemap.xml.gz /index.php
-
     # Setup and update pages
     @setup path /setup*
     rewrite @setup /setup/index.php
@@ -93,11 +88,6 @@
         rewrite * /404.html
         php_server
     }
-
-    # Google sitemap
-    rewrite /sitemap.xml /index.php
-    rewrite /sitemap.gz /index.php
-    rewrite /sitemap.xml.gz /index.php
 
     @setup path /setup*
     rewrite @setup /setup/index.php

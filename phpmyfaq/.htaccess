@@ -104,10 +104,6 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteRule ^(admin/assets)($|/) - [L]
     # Error pages
     ErrorDocument 404 /404.html
-    # phpMyFAQ Google sitemap
-    RewriteRule ^sitemap.xml$ index.php [L,QSA]
-    RewriteRule ^sitemap.gz$ index.php [L,QSA]
-    RewriteRule ^sitemap.xml.gz$ index.php [L,QSA]
     # Administration API
     RewriteRule ^admin/api/(.*) admin/api/index.php [L,QSA]
     # Administration pages

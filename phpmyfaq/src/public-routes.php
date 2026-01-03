@@ -214,6 +214,16 @@ $routesConfig = [
         'controller' => [SitemapController::class, 'index'],
         'methods' => 'GET',
     ],
+    'public.sitemap.gz' => [
+        'path' => '/sitemap.gz',
+        'controller' => [SitemapController::class, 'sitemapGz'],
+        'methods' => 'GET',
+    ],
+    'public.sitemap.xml.gz' => [
+        'path' => '/sitemap.xml.gz',
+        'controller' => [SitemapController::class, 'sitemapXmlGz'],
+        'methods' => 'GET',
+    ],
     'public.webauthn.index' => [
         'path' => '/services/webauthn/',
         'controller' => [WebAuthnController::class, 'index'],
