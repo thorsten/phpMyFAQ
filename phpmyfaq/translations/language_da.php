@@ -514,7 +514,6 @@ $LANG_CONF["main.metaDescription"] = ["input", "Beskrivelse"];
 $LANG_CONF["main.metaPublisher"] = ["input", "Navn på udgiveren"];
 $LANG_CONF['main.administrationMail'] = ["input", "E-mail-adresse på administratoren", 'Obligatorisk felt'];
 $LANG_CONF["main.contactInformation"] = ["area", "Kontaktinformation"];
-$LANG_CONF["main.send2friendText"] = ["area", "Tekst til send til ven siden"];
 $LANG_CONF['records.maxAttachmentSize'] = ["input", "Maksimal størrelse for vedhæftninger i bytes (maks. %s bytes)"];
 $LANG_CONF["records.disableAttachments"] = ["checkbox", "Aktiver synlighed af vedhæftninger"];
 $LANG_CONF["main.enableUserTracking"] = ["checkbox", "Aktiver brugersporing"];

@@ -514,7 +514,6 @@ $LANG_CONF["main.metaDescription"] = ["input", "تفصیل"];
 $LANG_CONF["main.metaPublisher"] = ["input", "ناشر کا نام"];
 $LANG_CONF['main.administrationMail'] = ["input", "ایڈمن کا ای میل پتہ", 'لازمی فیلڈ'];
 $LANG_CONF["main.contactInformation"] = ["area", "رابطہ کی معلومات"];
-$LANG_CONF["main.send2friendText"] = ["area", "دوست کو بھیجنے کے صفحے کے لیے متن"];
 $LANG_CONF['records.maxAttachmentSize'] = ["input", "منسلکات کے لیے زیادہ سے زیادہ سائز بائٹس میں (زیادہ سے زیادہ %s بائٹس)"];
 $LANG_CONF["records.disableAttachments"] = ["checkbox", "منسلکات کی مرئیت کو فعال کریں"];
 $LANG_CONF["main.enableUserTracking"] = ["checkbox", "صارف کی ٹریکنگ کو فعال کریں"];

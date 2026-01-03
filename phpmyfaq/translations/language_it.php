@@ -429,7 +429,6 @@ $LANG_CONF['main.metaDescription'] = array("input", "Descrizione della pagina");
 $LANG_CONF['main.metaPublisher'] = array("input", "Nome dell'Editore");
 $LANG_CONF['main.administrationMail'] = array("input", "Indirizzo email dell'Amministratore");
 $LANG_CONF['main.contactInformation'] = array("area", "Testo per la pagina dei Contatti");
-$LANG_CONF['main.send2friendText'] = array("area", "Testo per la pagina Invia ad un amico");
 $LANG_CONF['records.maxAttachmentSize'] = array("input", "Massima dimensione per gli allegati, in Bytes (max. %sByte)");
 $LANG_CONF['records.disableAttachments'] = array("checkbox", "Mostra il link agli allegati");
 $LANG_CONF['main.enableUserTracking'] = array("checkbox", "Abilito il tracciamento per le attivit&agrave; dell'Utente?");

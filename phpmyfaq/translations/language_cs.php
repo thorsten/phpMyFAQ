@@ -426,7 +426,6 @@ $LANG_CONF['main.metaDescription'] = array('input', 'Popis stránky');
 $LANG_CONF['main.metaPublisher'] = array('input', 'Jméno autora');
 $LANG_CONF['main.administrationMail'] = array('input', 'E-mail administrátora');
 $LANG_CONF['main.contactInformation'] = array('area', 'Kontaktní informace');
-$LANG_CONF['main.send2friendText'] = array('area', 'Text pro stránku odeslat příteli');
 $LANG_CONF['records.maxAttachmentSize'] = array('input', 'Maximální velikost příloh v Bytech (max. %sByte)');
 $LANG_CONF['records.disableAttachments'] = array('checkbox', 'Přidat odkaz pod jednotlivé záznamy?');
 $LANG_CONF['main.enableUserTracking'] = array('checkbox', 'použít Trackování?');

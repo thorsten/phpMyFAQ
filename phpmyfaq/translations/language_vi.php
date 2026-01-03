@@ -517,7 +517,6 @@ $LANG_CONF["main.metaDescription"] = array("input", "Mô tả trang");
 $LANG_CONF["main.metaPublisher"] = array("input", "Tên của Publisher");
 $LANG_CONF['main.administrationMail'] = array("input", "Địa chỉ email của Quản trị viên");
 $LANG_CONF["main.contactInformation"] = array("area", "Thông tin liên lạc");
-$LANG_CONF["main.send2friendText"] = array("area", "Nội dung của trang send2friend");
 $LANG_CONF['records.maxAttachmentSize'] = array("input", "maximum cỡ tối đa cho tập tin đính kèm (max. %sByte)");
 $LANG_CONF["records.disableAttachments"] = array("checkbox", "Hiện đường dẫn đến tài liệu đính kèm ở cuối trang?");
 $LANG_CONF["main.enableUserTracking"] = array("checkbox", "sử dụng Tracking?");

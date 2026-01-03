@@ -425,7 +425,6 @@ $LANG_CONF['main.metaDescription'] = array('input', 'ページの説明');
 $LANG_CONF['main.metaPublisher'] = array('input', '管理者名');
 $LANG_CONF['main.administrationMail'] = array('input', '管理者の電子メールアドレス');
 $LANG_CONF['main.contactInformation'] = array('area', '問い合わせ情報');
-$LANG_CONF['main.send2friendText'] = array('area', '友達に送信ページのテキスト');
 $LANG_CONF['records.maxAttachmentSize'] = array('input', '添付ファイルの最大サイズ (最大 %s バイト)');
 $LANG_CONF['records.disableAttachments'] = array('checkbox', 'エントリーの下に添付のリンクを表示する');
 $LANG_CONF['main.enableUserTracking'] = array('checkbox', '追跡機能を使用する');

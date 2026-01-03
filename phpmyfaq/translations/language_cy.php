@@ -282,7 +282,7 @@ $PMF_LANG["ad_categ_deletesure"] = "Ydych chi'n siwr eich bod am ddileu'r catego
 $PMF_LANG["ad_categ_deleted"] = "Dilëwyd y categori.";
 
 // Cookies
-$PMF_LANG["ad_cookie_cookiesuc 	"] = "Gosodwyd y cwci'n llwyddiannus.";
+$PMF_LANG["ad_cookie_cookiesuc"] = "Gosodwyd y cwci'n llwyddiannus.";
 $PMF_LANG["ad_cookie_already"] = "osodwyd cwci eisoes. Mae gennych y dewisiadau canlynol";
 $PMF_LANG["ad_cookie_again"] = "Gosod cwci eto";
 $PMF_LANG["ad_cookie_delete"] = "dileu cwci";
@@ -523,7 +523,6 @@ $LANG_CONF["main.metaDescription"] = ["input", " Disgrifiad or Dudalen"];
 $LANG_CONF["main.metaPublisher"] = ["input", " Enwr Cyhoeddwr"];
 $LANG_CONF['main.administrationMail'] = ["input", " Cyfeiriad e-bost Gweinyddol"];
 $LANG_CONF["main.contactInformation"] = ["area", " Gwybodaeth gyswllt"];
-$LANG_CONF["main.send2friendText"] = ["area", " Testun ar gyfer y dudalen anfonatffrind"];
 $LANG_CONF['records.maxAttachmentSize'] = ["input", " Uchafswm maint ar gyfer atodiadau mewn Beitiau(max. %sByte)"];
 $LANG_CONF["records.disableAttachments"] = ["checkbox", " Cysylltur atodiadau islawr cofnodion?"];
 $LANG_CONF["main.enableUserTracking"] = ["checkbox", " Defnyddio tracio?"];

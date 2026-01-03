@@ -523,7 +523,6 @@ $LANG_CONF["main.metaDescription"] = array("input", "Tinklalapio aprašas");
 $LANG_CONF["main.metaPublisher"] = array("input", "Leidėjo pavadinimas");
 $LANG_CONF['main.administrationMail'] = array("input", "Administratoriaus el. pašto adresas");
 $LANG_CONF["main.contactInformation"] = array("area", "Kontaktinė informacija");
-$LANG_CONF["main.send2friendText"] = array("area", "Tekstas tinklalapiui „siųsti draugui“");
 $LANG_CONF['records.maxAttachmentSize'] = array("input", "Maksimalus priedo dydis baitais (maks. %sB)");
 $LANG_CONF["records.disableAttachments"] = array("checkbox", "Rodyti priedų nuorodas po įrašais?");
 $LANG_CONF["main.enableUserTracking"] = array("checkbox", "Naudoti sekimą?");

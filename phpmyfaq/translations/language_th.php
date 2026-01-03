@@ -427,7 +427,6 @@ $LANG_CONF['main.metaDescription'] = array("input", "รายละเอีย
 $LANG_CONF['main.metaPublisher'] = array("input", "ขื่อผู้เขียน");
 $LANG_CONF['main.administrationMail'] = array("input", "อีเมล์ของผู้ดูแลระบบ");
 $LANG_CONF['main.contactInformation'] = array("area", "รายละเอียดติดต่อ");
-$LANG_CONF['main.send2friendText'] = array("area", "ข้อความสำหรับหน้า send2friend");
 $LANG_CONF['records.maxAttachmentSize'] = array("input", "ขนาดสูงสุดสำหรับไฟล์แนบ หน่วยเป็นไบต์ (สุงสุด %sไบต์)");
 $LANG_CONF['records.disableAttachments'] = array("checkbox", "เปิดใช้ลิงค์สำหรับไฟล์แนบ");
 $LANG_CONF['main.enableUserTracking'] = array("checkbox", "เปิดใช้ระบบติดตามผู้ใช้");

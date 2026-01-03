@@ -674,7 +674,6 @@ $LANG_CONF['main.metaDescription'] = ['input', "页面描述"];
 $LANG_CONF['main.metaPublisher'] = ['input', "管理员姓名"];
 $LANG_CONF['main.administrationMail'] = ['input', "管理员Email"];
 $LANG_CONF['main.contactInformation'] = ['area', "联系我们"];
-$LANG_CONF['main.send2friendText'] = ['area', "发送到朋友页面的文字"];
 $LANG_CONF['records.maxAttachmentSize'] = ['input', "附件最大限制是 (. %s字节)"];
 $LANG_CONF['records.disableAttachments'] = ['checkbox', "显示内容附件？"];
 $LANG_CONF['main.enableUserTracking'] = ['checkbox', "启用跟踪？"];

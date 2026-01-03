@@ -513,7 +513,6 @@ $LANG_CONF["main.metaDescription"] = ["input", "Leírás"];
 $LANG_CONF["main.metaPublisher"] = ["input", "A Kiadó neve"];
 $LANG_CONF['main.administrationMail'] = ["input", "Az Adminisztrátor e-mail címe", 'Kötelező mező'];
 $LANG_CONF["main.contactInformation"] = ["area", "Kapcsolattartási információ"];
-$LANG_CONF["main.send2friendText"] = ["area", "Szöveg a barátnak küldés oldalhoz"];
 $LANG_CONF['records.maxAttachmentSize'] = ["input", "Mellékletek maximális mérete bájtban (max. %s bájt)"];
 $LANG_CONF["records.disableAttachments"] = ["checkbox", "Mellékletek láthatóságának engedélyezése"];
 $LANG_CONF["main.enableUserTracking"] = ["checkbox", "Felhasználói követés engedélyezése"];

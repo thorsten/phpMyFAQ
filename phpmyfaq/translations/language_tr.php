@@ -521,7 +521,6 @@ $LANG_CONF["main.metaDescription"] = array("input", "Description");
 $LANG_CONF["main.metaPublisher"] = array("input", "Name of the Publisher");
 $LANG_CONF['main.administrationMail'] = array("input", "Email address of the Admin");
 $LANG_CONF["main.contactInformation"] = array("area", "Contact information");
-$LANG_CONF["main.send2friendText"] = array("area", "Text for the send to friend page");
 $LANG_CONF['records.maxAttachmentSize'] = array("input", "Maximum size for attachments in Bytes (max. %sByte)");
 $LANG_CONF["records.disableAttachments"] = array("checkbox", "Enable visibilty of attachments");
 $LANG_CONF["main.enableUserTracking"] = array("checkbox", "Enable user tracking");

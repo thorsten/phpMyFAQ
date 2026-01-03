@@ -426,7 +426,6 @@ $LANG_CONF['main.metaDescription'] = ["input", "وصف الصفحة"];
 $LANG_CONF['main.metaPublisher'] = ["input", "إسم الناشر"];
 $LANG_CONF['main.administrationMail'] = ["input", "البريد الإلكتروني للمشرف"];
 $LANG_CONF['main.contactInformation'] = ["area", "معلومات الإتصال"];
-$LANG_CONF['main.send2friendText'] = ["area", "نص لصفحة أرسل إلي صديق"];
 $LANG_CONF['records.maxAttachmentSize'] = ["input", "أقصى حجم للمرفقات بالبايت (max. %sبايت)"];
 $LANG_CONF['records.disableAttachments'] = ["checkbox", "ضع روابط المرفقات أسفل المداخلات ؟"];
 $LANG_CONF['main.enableUserTracking'] = ["checkbox", "استخدم خاصية التتبع ؟"];

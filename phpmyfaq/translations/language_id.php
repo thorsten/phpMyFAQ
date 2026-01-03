@@ -522,7 +522,6 @@ $LANG_CONF["main.metaDescription"] = array("input", "Keterangan Halaman");
 $LANG_CONF["main.metaPublisher"] = array("input", "Nama Penerbit");
 $LANG_CONF['main.administrationMail'] = array("input", "Alamat Email Admin");
 $LANG_CONF["main.contactInformation"] = array("area", "Informasi Kontak");
-$LANG_CONF["main.send2friendText"] = array("area", "Teks untuk halaman send2friend");
 $LANG_CONF['records.maxAttachmentSize'] = array("input", "ukuran maksimal untuk lampiran dalam Bytes (maks. %sByte)");
 $LANG_CONF["records.disableAttachments"] = array("checkbox", "Buat Link ke lampiran di bawah entri?");
 $LANG_CONF["main.enableUserTracking"] = array("checkbox", "gunakan Penelusuran?");

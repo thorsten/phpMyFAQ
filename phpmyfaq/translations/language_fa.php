@@ -515,7 +515,6 @@ $LANG_CONF["main.metaDescription"] = ["input", "توضیحات"];
 $LANG_CONF["main.metaPublisher"] = ["input", "نام ناشر"];
 $LANG_CONF['main.administrationMail'] = ["input", "آدرس ایمیل مدیر", 'فیلد الزامی'];
 $LANG_CONF["main.contactInformation"] = ["area", "اطلاعات تماس"];
-$LANG_CONF["main.send2friendText"] = ["area", "متن برای صفحه ارسال به دوست"];
 $LANG_CONF['records.maxAttachmentSize'] = ["input", "حداکثر اندازه برای پیوست‌ها به بایت (حداکثر %s بایت)"];
 $LANG_CONF["records.disableAttachments"] = ["checkbox", "فعال‌سازی نمایش پیوست‌ها"];
 $LANG_CONF["main.enableUserTracking"] = ["checkbox", "فعال‌سازی ردیابی کاربر"];

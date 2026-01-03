@@ -405,7 +405,6 @@ $LANG_CONF['main.metaDescription'] = array('input', 'Kuvaus');
 $LANG_CONF['main.metaPublisher'] = array('input', 'Julkaisijan nimi');
 $LANG_CONF['main.administrationMail'] = array('input', 'Ylläpitäjän sähköpostiosoite');
 $LANG_CONF['main.contactInformation'] = array('area', 'Yhteystiedot');
-$LANG_CONF['main.send2friendText'] = array('area', 'Teksti lähetä tuttavalle sivulle');
 $LANG_CONF['records.maxAttachmentSize'] = array('input', 'suurin sallittu koko liitetiedostoille tavuina on  (max. %stavua)');
 $LANG_CONF['records.disableAttachments'] = array('checkbox', 'Linkitä liitteet tietueiden alpuolelle?');
 $LANG_CONF['main.enableUserTracking'] = array('checkbox', 'Käytä lokia?');

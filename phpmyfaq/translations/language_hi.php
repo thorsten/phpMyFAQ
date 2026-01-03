@@ -7,13 +7,12 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Sumeet Raj Aggarwal <sumeetrajaggarwal@shubhkriti.co.in>
+ * @package   phpMyFAQ
+ * @author    Sumeet Raj Aggarwal <sumeetrajaggarwal@shubhkriti.co.in>
  * @copyright 2009-2026 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-07-01
- * @codingStandardsIgnoreFile
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-07-01
  */
 
 $PMF_LANG["metaCharset"] = "utf-8";
@@ -524,7 +523,6 @@ $LANG_CONF["main.metaDescription"] = array("input", "पृष्ठ का व�
 $LANG_CONF["main.metaPublisher"] = array("input", "प्रकाशक का नाम");
 $LANG_CONF['main.administrationMail'] = array("input", "प्रबंधक का ईमेल पता");
 $LANG_CONF["main.contactInformation"] = array("area", "संपर्क करने की जानकारी");
-$LANG_CONF["main.send2friendText"] = array("area", "दोस्त को भेजने के लिए वाले पेज के लिए शब्द");
 $LANG_CONF['records.maxAttachmentSize'] = array("input", "फाइल जोड़ने के लिए अधिकतम साइज़ (अधिकतम. " . ini_get("upload_max_filesize") . "बाइट्स)");
 $LANG_CONF["records.disableAttachments"] = array("checkbox", "फाइलों को एंट्री के निचे जोडें?");
 $LANG_CONF["main.enableUserTracking"] = array("checkbox", "लेखा जोखा रखें?");

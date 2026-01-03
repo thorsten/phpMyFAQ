@@ -475,7 +475,6 @@ $LANG_CONF['main.metaDescription'] = array("input", "Description de la page");
 $LANG_CONF['main.metaPublisher'] = array("input", "Nom de l\'éditeur");
 $LANG_CONF['main.administrationMail'] = array("input", "Adresse courriel de l'administrateur");
 $LANG_CONF['main.contactInformation'] = array('area', "Informations de contact");
-$LANG_CONF['main.send2friendText'] = array('area', "Texte pour la page Envoyer à un ami");
 $LANG_CONF['records.maxAttachmentSize'] = array("input", "Taille maximum des pièces jointes en octets (max. %sByte)");
 $LANG_CONF['records.disableAttachments'] = array("checkbox", "Lier les pièces jointes et les articles");
 $LANG_CONF['main.enableUserTracking'] = array("checkbox", "Utiliser la localisation ?");

@@ -523,7 +523,6 @@ $LANG_CONF["main.metaDescription"] = array("input", "Orriaren deskribapena");
 $LANG_CONF["main.metaPublisher"] = array("input", "Administratzailearen izena");
 $LANG_CONF['main.administrationMail'] = array("input", "Administratzailearen posta elektronikoa");
 $LANG_CONF["main.contactInformation"] = array("area", "Harremanetarako informazioa");
-$LANG_CONF["main.send2friendText"] = array("area", "Lagun bati bidali orrirako testua");
 $LANG_CONF['records.maxAttachmentSize'] = array("input", "Eranskinetako gehieneko tamaina byte-etan (max. %sByte)");
 $LANG_CONF["records.disableAttachments"] = array("checkbox", "Sarrera azpian eranskinei estekaren bat ipini?");
 $LANG_CONF["main.enableUserTracking"] = array("checkbox", "Monitorizazioa erabili?");

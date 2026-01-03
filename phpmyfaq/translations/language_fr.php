@@ -517,7 +517,6 @@ $LANG_CONF["main.metaDescription"] = ["input", "Description"];
 $LANG_CONF["main.metaPublisher"] = ["input", "Nom du publicateur"];
 $LANG_CONF["main.administrationMail"] = ["input", "Adresse Email de l'administrateur"];
 $LANG_CONF["main.contactInformation"] = ["area", "Informations de contact"];
-$LANG_CONF["main.send2friendText"] = ["area", "Texte pour la page d’envoi à un ami"];
 $LANG_CONF["records.maxAttachmentSize"] = ["input", "Taille maximum des pièces-jointes en Octets (max. %s Octets)"];
 $LANG_CONF["records.disableAttachments"] = ["checkbox", "Activer la visibilité des pièces-jointes"];
 $LANG_CONF["main.enableUserTracking"] = ["checkbox", "Activer le tracking utilisateur"];

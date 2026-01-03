@@ -522,7 +522,6 @@ $LANG_CONF["main.metaDescription"] = array("input", "Popis stránky");
 $LANG_CONF["main.metaPublisher"] = array("input", "Meno vydavateľa");
 $LANG_CONF['main.administrationMail'] = array("input", "E-mailová adresa administrátora");
 $LANG_CONF["main.contactInformation"] = array("area", "Kontaktné informácie");
-$LANG_CONF["main.send2friendText"] = array("area", "Text pre odkaz poslať známemu");
 $LANG_CONF['records.maxAttachmentSize'] = array("input", "maximumálna veľkosť prílohy v Bytoch (max. %sByte)");
 $LANG_CONF["records.disableAttachments"] = array("checkbox", "Pripojiť prílohu k položkám?");
 $LANG_CONF["main.enableUserTracking"] = array("checkbox", "použiť stopovač?");

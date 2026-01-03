@@ -514,7 +514,6 @@ $LANG_CONF['main.metaDescription'] = ["input", "Descripción de la página"];
 $LANG_CONF['main.metaPublisher'] = ["input", "Nombre del editor"];
 $LANG_CONF['main.administrationMail'] = ["input", "e-mail del administrador"];
 $LANG_CONF['main.contactInformation'] = ["area", "Informaciones de contacto"];
-$LANG_CONF['main.send2friendText'] = ["area", "Texto para la página de enviar a un amigo"];
 $LANG_CONF['records.maxAttachmentSize'] = ["input", "Tamaño máximo de los adjuntos en Bytes (máx. %sByte)"];
 $LANG_CONF['records.disableAttachments'] = ["checkbox", "Mostrar adjuntos bajo las entradas"];
 $LANG_CONF['main.enableUserTracking'] = ["checkbox", "¿Rastreo de usuario habilitado?"];

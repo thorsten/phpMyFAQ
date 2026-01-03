@@ -427,7 +427,6 @@ $LANG_CONF['main.metaDescription'] = array('input', 'Descrição da página');
 $LANG_CONF['main.metaPublisher'] = array('input', 'Nome do Editor');
 $LANG_CONF['main.administrationMail'] = array('input', 'E-mail do Administrador');
 $LANG_CONF['main.contactInformation'] = array('area', 'Informação de contacto');
-$LANG_CONF['main.send2friendText'] = array('area', 'Texto para a página send2friend');
 $LANG_CONF['records.maxAttachmentSize'] = array('input', 'Tamanho máximo do anexo em Bytes (máx.: %sByte)');
 $LANG_CONF['records.disableAttachments'] = array('checkbox', 'Colocar links para anexos por baixo das entradas?');
 $LANG_CONF['main.enableUserTracking'] = array('checkbox', 'Usar Tracking?');

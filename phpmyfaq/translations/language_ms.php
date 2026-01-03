@@ -511,7 +511,6 @@ $LANG_CONF["main.metaDescription"] = ["input", "Penerangan"];
 $LANG_CONF["main.metaPublisher"] = ["input", "Nama Penerbit"];
 $LANG_CONF['main.administrationMail'] = ["input", "Alamat e-mel Pentadbir", 'Medan wajib'];
 $LANG_CONF["main.contactInformation"] = ["area", "Maklumat hubungan"];
-$LANG_CONF["main.send2friendText"] = ["area", "Teks untuk halaman hantar kepada rakan"];
 $LANG_CONF['records.maxAttachmentSize'] = ["input", "Saiz maksimum untuk lampiran dalam bait (maks. %s bait)"];
 $LANG_CONF["records.disableAttachments"] = ["checkbox", "Dayakan keterlihatan lampiran"];
 $LANG_CONF["main.enableUserTracking"] = ["checkbox", "Dayakan penjejakan pengguna"];

@@ -518,7 +518,6 @@ $LANG_CONF["main.metaDescription"] = ["input", "Тодорхойлолт"];
 $LANG_CONF["main.metaPublisher"] = ["input", "Хэвлэн нийтлэгчийн нэр"];
 $LANG_CONF['main.administrationMail'] = ["input", "Админы e-mail хаяг"];
 $LANG_CONF["main.contactInformation"] = ["area", "Холбоо барих мэдээлэл"];
-$LANG_CONF["main.send2friendText"] = ["area", "Найз хуудас руу илгээх зурвас"];
 $LANG_CONF['records.maxAttachmentSize'] = ["input", "Хавсаргах файлын дээд хэмжээ (max. %sByte)"];
 $LANG_CONF["records.disableAttachments"] = ["checkbox", "Enable visibilty of attachments"];
 $LANG_CONF["main.enableUserTracking"] = ["checkbox", "Enable user tracking"];

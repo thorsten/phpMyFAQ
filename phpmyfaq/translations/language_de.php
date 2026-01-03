@@ -516,7 +516,6 @@ $LANG_CONF['main.metaDescription'] = ["input", "Beschreibung der Seite"];
 $LANG_CONF['main.metaPublisher'] = ["input", "Name des Herausgebers", 'Pflichtfeld'];
 $LANG_CONF['main.administrationMail'] = ['input', 'E-Mailadresse des Administrators', 'Pflichtfeld'];
 $LANG_CONF['main.contactInformation'] = ["area", "Kontaktdaten / Impressum"];
-$LANG_CONF['main.send2friendText'] = ["area", "Text für die Weiterempfehlung"];
 $LANG_CONF['records.maxAttachmentSize'] = ["input", "Maximalgröße von Anhängen in Bytes (max. %sByte)"];
 $LANG_CONF['records.disableAttachments'] = ['checkbox', "Anhänge unter den Beiträgen anzeigen"];
 $LANG_CONF['main.enableUserTracking'] = ['checkbox', "Aktiviere das User-Tracking"];

@@ -512,7 +512,6 @@ $LANG_CONF["main.metaDescription"] = ["input", "Descriere"];
 $LANG_CONF["main.metaPublisher"] = ["input", "Numele editorului"];
 $LANG_CONF['main.administrationMail'] = ["input", "Adresa de email a administratorului", 'Câmp obligatoriu'];
 $LANG_CONF["main.contactInformation"] = ["area", "Informații de contact"];
-$LANG_CONF["main.send2friendText"] = ["area", "Text pentru pagina trimite către prieten"];
 $LANG_CONF['records.maxAttachmentSize'] = ["input", "Dimensiune maximă pentru atașamente în bytes (max. %s bytes)"];
 $LANG_CONF["records.disableAttachments"] = ["checkbox", "Activează vizibilitatea atașamentelor"];
 $LANG_CONF["main.enableUserTracking"] = ["checkbox", "Activează urmărirea utilizatorilor"];

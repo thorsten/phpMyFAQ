@@ -524,7 +524,6 @@ $LANG_CONF["main.metaDescription"] = array("input", "Opis Stranice");
 $LANG_CONF["main.metaPublisher"] = array("input", "Ime izdava&#269;a");
 $LANG_CONF['main.administrationMail'] = array("input", "Admin email adresa");
 $LANG_CONF["main.contactInformation"] = array("area", "Kontakt info");
-$LANG_CONF["main.send2friendText"] = array("area", "Tekst za send2friend stranicu");
 $LANG_CONF['records.maxAttachmentSize'] = array("input", "maximalna veli&#269;ina priloga u bajtovima (max. %sByte)");
 $LANG_CONF["records.disableAttachments"] = array("checkbox", "Linkuj priloge ispod unosa?");
 $LANG_CONF["main.enableUserTracking"] = array("checkbox", "Koristi pra&#263;enje?");

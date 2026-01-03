@@ -519,7 +519,6 @@ $LANG_CONF["main.metaDescription"] = ['input', "描述"];
 $LANG_CONF["main.metaPublisher"] = ['input', "發佈者姓名"];
 $LANG_CONF['main.administrationMail'] = ['input', "管理員的 Email 地址"];
 $LANG_CONF["main.contactInformation"] = ["area", "聯絡資訊"];
-$LANG_CONF["main.send2friendText"] = ["area", "寄送給朋友的文字訊息頁面"];
 $LANG_CONF['records.maxAttachmentSize'] = ['input', "上傳檔案最大容量(最大 %sByte)"];
 $LANG_CONF["records.disableAttachments"] = ['checkbox', "啟用附加檔案預覽"];
 $LANG_CONF["main.enableUserTracking"] = ['checkbox', "啟用使用者追蹤"];

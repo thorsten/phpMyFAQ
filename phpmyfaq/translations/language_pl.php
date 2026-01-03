@@ -484,7 +484,6 @@ $LANG_CONF["main.metaDescription"] = ["input", "Opis"];
 $LANG_CONF["main.metaPublisher"] = ["input", "Wydawca"];
 $LANG_CONF['main.administrationMail'] = ["input", "Adres e-mail Administratora"];
 $LANG_CONF["main.contactInformation"] = ["area", "Informacje kontaktowe"];
-$LANG_CONF["main.send2friendText"] = ["area", "Tekst strony wysyłania do znajomego"];
 $LANG_CONF['records.maxAttachmentSize'] = ["input", "Maksymalny rozmiar załączników w bajtach (max. %s bajtów)"];
 $LANG_CONF["records.disableAttachments"] = ["checkbox", "Włącz widoczność załączników"];
 $LANG_CONF["main.enableUserTracking"] = ["checkbox", "Włącz śledzenie użytkowników"];

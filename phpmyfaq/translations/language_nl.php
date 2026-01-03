@@ -676,7 +676,6 @@ $LANG_CONF['main.metaDescription'] = array('input', 'Beschrijving van de pagina'
 $LANG_CONF['main.metaPublisher'] = array('input', 'Naam van de uitgever');
 $LANG_CONF['main.administrationMail'] = array('input', 'Emailadres van de beheerder');
 $LANG_CONF['main.contactInformation'] = array('area', 'Contact informatie');
-$LANG_CONF['main.send2friendText'] = array('area', 'Tekst voor de send2friend pagina');
 $LANG_CONF['records.maxAttachmentSize'] = array('input', 'maximum grootte van bijlagen in Bytes (max. %sByte)');
 $LANG_CONF['records.disableAttachments'] = array('checkbox', 'De bijlagen onder de vragen weergeven?');
 $LANG_CONF['main.enableUserTracking'] = array('checkbox', 'Tracking activeren?');

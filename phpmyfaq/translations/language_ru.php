@@ -512,7 +512,6 @@ $LANG_CONF["main.metaDescription"] = ["input", "Описание"];
 $LANG_CONF["main.metaPublisher"] = ["input", "Имя издателя"];
 $LANG_CONF['main.administrationMail'] = ["input", "Адрес электронной почты администратора", 'Обязательное поле'];
 $LANG_CONF["main.contactInformation"] = ["area", "Контактная информация"];
-$LANG_CONF["main.send2friendText"] = ["area", "Текст для страницы отправки другу"];
 $LANG_CONF['records.maxAttachmentSize'] = ["input", "Максимальный размер вложений в байтах (макс. %s байт)"];
 $LANG_CONF["records.disableAttachments"] = ["checkbox", "Включить видимость вложений"];
 $LANG_CONF["main.enableUserTracking"] = ["checkbox", "Включить отслеживание пользователей"];
