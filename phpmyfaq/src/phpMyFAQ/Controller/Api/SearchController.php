@@ -47,7 +47,7 @@ final class SearchController extends AbstractController
     /**
      * @throws Exception
      */
-    #[OA\Get(path: '/api/v3.1/search', operationId: 'getSearch', tags: ['Public Endpoints'])]
+    #[OA\Get(path: '/api/v3.2/search', operationId: 'getSearch', tags: ['Public Endpoints'])]
     #[OA\Parameter(
         name: 'q',
         description: 'The search term',
@@ -106,7 +106,7 @@ final class SearchController extends AbstractController
         return $this->json([], Response::HTTP_NOT_FOUND);
     }
 
-    #[OA\Get(path: '/api/v3.1/searches/popular', operationId: 'getPopularSearch', tags: ['Public Endpoints'])]
+    #[OA\Get(path: '/api/v3.2/searches/popular', operationId: 'getPopularSearch', tags: ['Public Endpoints'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the login.',

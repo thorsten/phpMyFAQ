@@ -39,7 +39,7 @@ final class OpenQuestionController extends AbstractController
 
     /**
      * @throws \Exception
-     */ #[OA\Get(path: '/api/v3.1/open-questions', operationId: 'getOpenQuestions', tags: ['Public Endpoints'])]
+     */ #[OA\Get(path: '/api/v3.2/open-questions', operationId: 'getOpenQuestions', tags: ['Public Endpoints'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the open questions.',

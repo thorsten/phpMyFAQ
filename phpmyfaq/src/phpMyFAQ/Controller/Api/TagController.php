@@ -40,7 +40,7 @@ final class TagController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[OA\Get(path: '/api/v3.1/tags', operationId: 'getTags', tags: ['Public Endpoints'])]
+    #[OA\Get(path: '/api/v3.2/tags', operationId: 'getTags', tags: ['Public Endpoints'])]
     #[OA\Response(
         response: 200,
         description: 'Returns the tags for the given language provided by "Accept-Language".',

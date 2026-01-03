@@ -46,7 +46,7 @@ final class LoginController extends AbstractController
     /**
      * @throws JsonException|Exception
      */
-    #[OA\Post(path: '/api/v3.1/login', operationId: 'login', tags: ['Public Endpoints'])]
+    #[OA\Post(path: '/api/v3.2/login', operationId: 'login', tags: ['Public Endpoints'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the login.',

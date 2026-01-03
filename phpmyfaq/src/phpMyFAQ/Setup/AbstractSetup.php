@@ -40,7 +40,7 @@ abstract class AbstractSetup
     }
 
     /**
-     * We only support updates from 3.1.0 and later.
+     * We only support updates from 3.2.0 and later.
      */
     public function checkMinimumUpdateVersion(string $version): bool
     {

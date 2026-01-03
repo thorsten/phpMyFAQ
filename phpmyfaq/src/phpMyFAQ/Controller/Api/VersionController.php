@@ -35,7 +35,7 @@ final class VersionController extends AbstractController
         }
     }
 
-    #[OA\Get(path: '/api/v3.1/version', operationId: 'getVersion', tags: ['Public Endpoints'])]
+    #[OA\Get(path: '/api/v3.2/version', operationId: 'getVersion', tags: ['Public Endpoints'])]
     #[OA\Response(
         response: 200,
         description: 'Returns the phpMyFAQ version number as string.',

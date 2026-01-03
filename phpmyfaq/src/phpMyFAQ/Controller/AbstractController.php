@@ -41,10 +41,10 @@ use Twig\Extension\ExtensionInterface;
 use Twig\TwigFilter;
 
 #[OA\Info(
-    version: '3.1',
+    version: '3.2',
     description: 'phpMyFAQ includes a REST API and offers APIs for various services like fetching the phpMyFAQ '
     . 'version or doing a search against the phpMyFAQ installation.',
-    title: 'REST API for phpMyFAQ 4.1',
+    title: 'REST API for phpMyFAQ 4.2',
     contact: new OA\Contact(name: 'phpMyFAQ Team', email: 'support@phpmyfaq.de'),
 )]
 #[OA\Server(url: 'https://localhost', description: 'Local dockerized server')]

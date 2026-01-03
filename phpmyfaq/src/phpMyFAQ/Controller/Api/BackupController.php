@@ -47,7 +47,7 @@ final class BackupController extends AbstractController
     /**
      * @throws Exception
      */
-    #[OA\Get(path: '/api/v3.1/backup/{type}', operationId: 'createBackup', tags: ['Endpoints with Authentication'])]
+    #[OA\Get(path: '/api/v3.2/backup/{type}', operationId: 'createBackup', tags: ['Endpoints with Authentication'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the login.',

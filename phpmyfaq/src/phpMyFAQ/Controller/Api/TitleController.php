@@ -35,7 +35,7 @@ final class TitleController extends AbstractController
         }
     }
 
-    #[OA\Get(path: '/api/v3.1/title', operationId: 'getTitle', tags: ['Public Endpoints'])]
+    #[OA\Get(path: '/api/v3.2/title', operationId: 'getTitle', tags: ['Public Endpoints'])]
     #[OA\Response(
         response: 200,
         description: 'Returns the title of the phpMyFAQ instance as a string.',
