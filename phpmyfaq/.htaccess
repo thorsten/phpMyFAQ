@@ -100,30 +100,28 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteBase /
     # Block zip files in content directory
     RewriteRule ^content/.*\.zip$ - [F,L]
+
     # Exclude assets from being handled by Symfony Router
-    RewriteRule ^(admin/assets)($|/) - [L]
+    RewriteRule ^admin/assets($|/) - [L]
+
     # Error pages
     ErrorDocument 404 /404.html
+
     # Administration API
-    RewriteRule ^admin/api/(.*) admin/api/index.php [L,QSA]
-    # Administration pages
-    RewriteRule ^admin/(.*) admin/index.php [L,QSA]
-    # Private APIs
-    RewriteCond %{REQUEST_URI} !index\.php$
-    RewriteRule ^api/(autocomplete|bookmark/delete|bookmark/create|user/data/update|user/password/update|user/request-removal|user/remove-twofactor|contact|voting|register|captcha|share|comment/create|faq/create|question/create|webauthn/prepare|webauthn/register|webauthn/prepare-login|webauthn/login|translations) api/index.php [L,QSA]
-    # Setup APIs
-    RewriteCond %{REQUEST_URI} !index\.php$
-    RewriteRule ^api/setup/(check|backup|update-database) api/index.php [L,QSA]
-    # REST API v3.0 and v3.1
-    # * http://[...]/api/v3.x/<ACTION>
-    RewriteCond %{REQUEST_URI} !index\.php$
-    RewriteRule ^api/v3\.[01]/(.*) api/index.php [L,QSA]
-    # Setup and update pages
-    RewriteCond %{REQUEST_URI} ^(.*/)setup/
-    RewriteCond %{REQUEST_URI} !index\.php$
-    RewriteRule ^(.*/)?setup/(.*) $1setup/index.php [L,QSA]
+    RewriteRule ^admin/api/ admin/api/index.php [L,QSA]
+
+    # Administration pages (redirect /admin to /admin/)
+    RewriteRule ^admin$ admin/ [R=301,L]
+    RewriteRule ^admin/ admin/index.php [L,QSA]
+
+    # API routes (all API endpoints)
+    RewriteRule ^api/ api/index.php [L,QSA]
+
+    # Setup pages
+    RewriteRule ^setup/ setup/index.php [L,QSA]
     RewriteRule ^update$ update/ [R=301,L]
-    # Front controller: route all requests to index.php (Symfony Router)
+
+    # Front controller: route all other requests to index.php (Symfony Router)
     # Skip if the file or directory exists
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d

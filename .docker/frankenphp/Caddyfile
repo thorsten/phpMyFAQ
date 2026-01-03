@@ -15,6 +15,9 @@
     # Enable compression
     encode gzip
 
+    # PHP Handler for FrankenPHP
+    php_server
+
     # Exclude assets from being handled by router
     @assets path /admin/assets*
     file_server @assets
@@ -30,31 +33,21 @@
     rewrite @setup /setup/index.php
 
     # Administration API
-    route /admin/api/* {
-        rewrite * /admin/api/index.php
-        php_server
-    }
+    @admin_api path /admin/api/*
+    rewrite @admin_api /admin/api/index.php
 
-    # Administration pages - handle /admin and /admin/ and subpaths
-    route /admin/* {
-        uri strip_prefix /admin
+    # Redirect /admin to /admin/
+    @admin_exact path_regexp ^/admin$
+    redir @admin_exact /admin/ 301
+
+    # Administration pages
+    handle_path /admin/* {
         rewrite * /admin/index.php
-        php_server
     }
 
-    # Exact match for /admin -> treat as /admin/
-    route /admin {
-        uri strip_suffix /admin
-        rewrite * /admin/index.php
-        php_server
-    }
-
-    # All API routes (catch-all, including v3.0, v3.1, translations, etc.)
-    @api path /api*
+    # API routes (all API endpoints)
+    @api path /api/*
     rewrite @api /api/index.php
-
-    # PHP Handler für FrankenPHP
-    php_server
 
     file_server
 
@@ -82,15 +75,20 @@
     # TLS configuration with your certificate files
     tls /etc/ssl/cert.pem /etc/ssl/cert-key.pem
 
-    # Gleiche Rewrite-Regeln wie für Port 80
+    # PHP Handler for FrankenPHP
+    php_server
+
+    # Exclude assets from being handled by router
     @assets path /admin/assets*
     file_server @assets
 
+    # Error pages
     handle_errors 404 {
         rewrite * /404.html
         php_server
     }
 
+    # Setup and update pages
     @setup path /setup*
     rewrite @setup /setup/index.php
 
@@ -98,31 +96,21 @@
     rewrite @update /update/index.php
 
     # Administration API
-    route /admin/api/* {
-        rewrite * /admin/api/index.php
-        php_server
-    }
+    @admin_api path /admin/api/*
+    rewrite @admin_api /admin/api/index.php
 
-    # Administration pages - handle /admin and /admin/ and subpaths
-    route /admin/* {
-        uri strip_prefix /admin
+    # Redirect /admin to /admin/
+    @admin_exact path_regexp ^/admin$
+    redir @admin_exact /admin/ 301
+
+    # Administration pages
+    handle_path /admin/* {
         rewrite * /admin/index.php
-        php_server
     }
 
-    # Exact match for /admin -> treat as /admin/
-    route /admin {
-        uri strip_suffix /admin
-        rewrite * /admin/index.php
-        php_server
-    }
-
-    # All API routes (catch-all, including v3.0, v3.1, translations, etc.)
-    @api path /api*
+    # API routes (all API endpoints)
+    @api path /api/*
     rewrite @api /api/index.php
-
-    # PHP Handler für FrankenPHP
-    php_server
 
     file_server
 
