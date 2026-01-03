@@ -104,11 +104,6 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteRule ^(admin/assets)($|/) - [L]
     # Error pages
     ErrorDocument 404 /404.html
-    # a solution ID page
-    RewriteCond %{REQUEST_URI} solution_id_([0-9]+)\.html$ [NC]
-    RewriteRule ^solution_id_(.*)\.html$ index.php?solution_id=$1 [L,QSA]
-    # phpMyFAQ news page
-    RewriteRule ^news/([0-9]+)/([a-z\-_]+)/(.+)\.htm(l?)$ index.php?action=news&newsid=$1&newslang=$2 [L,QSA]
     # phpMyFAQ Google sitemap
     RewriteRule ^sitemap.xml$ index.php [L,QSA]
     RewriteRule ^sitemap.gz$ index.php [L,QSA]
@@ -136,7 +131,6 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteCond %{REQUEST_URI} !index\.php$
     RewriteRule ^(.*/)?setup/(.*) $1setup/index.php [L,QSA]
     RewriteRule ^update$ update/ [R=301,L]
-
     # Front controller: route all requests to index.php (Symfony Router)
     # Skip if the file or directory exists
     RewriteCond %{REQUEST_FILENAME} !-f

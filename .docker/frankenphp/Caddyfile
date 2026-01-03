@@ -28,10 +28,6 @@
         php_server
     }
 
-    # Solution ID pages
-    @solution_id path_regexp solution ^/solution_id_([0-9]+)\.html$
-    rewrite @solution_id /index.php?solution_id={re.solution.1}
-
     # Google sitemap
     rewrite /sitemap.xml /index.php
     rewrite /sitemap.gz /index.php
@@ -105,10 +101,6 @@
         rewrite * /404.html
         php_server
     }
-
-    # Solution ID pages
-    @solution_id path_regexp solution ^/solution_id_([0-9]+)\.html$
-    rewrite @solution_id /index.php?solution_id={re.solution.1}
 
     # Google sitemap
     rewrite /sitemap.xml /index.php

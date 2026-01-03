@@ -138,9 +138,41 @@ final class FaqController extends AbstractFrontController
     }
 
     /**
+     * Redirects solution_id URLs to the actual FAQ page
+     *
+     * @throws Exception|\Exception
+     */
+    #[Route(path: '/solution_id_{solutionId}.html', name: 'public.faq.solution', methods: ['GET'])]
+    public function solution(Request $request): Response
+    {
+        $solutionId = Filter::filterVar($request->attributes->get('solutionId'), FILTER_VALIDATE_INT, 0);
+
+        if ($solutionId === 0) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
+
+        $faq = $this->container->get('phpmyfaq.faq');
+        $faqData = $faq->getIdFromSolutionId($solutionId);
+
+        if (empty($faqData)) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
+
+        // Generate a simple slug from the question title
+        $slug = preg_replace('/[^a-z0-9]+/i', '-', strtolower($faqData['question'] ?? 'faq'));
+        $slug = trim($slug, '-') ?: 'faq';
+
+        // Redirect to the canonical FAQ URL
+        $url = sprintf('/faq/%d/%d/%s.html', $faqData['category_id'], $faqData['id'], $slug);
+
+        return new RedirectResponse($url, Response::HTTP_MOVED_PERMANENTLY);
+    }
+
+    /**
      * Displays a single FAQ article with comments, ratings, and related content
      *
-     * @throws Exception
+     * @throws Exception|LoaderError*@throws \Exception
+     *
      */
     #[Route(path: '/faq/{categoryId}/{faqId}/{slug}.html', name: 'public.faq.show', methods: ['GET'])]
     public function show(Request $request): Response
@@ -265,7 +297,7 @@ final class FaqController extends AbstractFrontController
             'title' => sprintf('%s - %s', $seoData->getTitle() ?? $question, $this->configuration->getTitle()),
             'metaDescription' => $seoData->getDescription(),
             'solutionId' => $faq->faqRecord['solution_id'],
-            'solutionIdLink' => Link::getSystemRelativeUri() . '?solution_id=' . $faq->faqRecord['solution_id'],
+            'solutionIdLink' => './solution_id_' . $faq->faqRecord['solution_id'] . '.html',
             'breadcrumb' => $category->getPathWithStartpage($cat, '/', true),
             'question' => $question,
             'answer' => $answer,

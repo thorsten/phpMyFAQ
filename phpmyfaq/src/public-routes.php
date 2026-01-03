@@ -69,6 +69,11 @@ $routesConfig = [
         'controller' => [FaqController::class, 'add'],
         'methods' => 'GET',
     ],
+    'public.faq.solution' => [
+        'path' => '/solution_id_{solutionId}.html',
+        'controller' => [FaqController::class, 'solution'],
+        'methods' => 'GET',
+    ],
     'public.faq.show' => [
         'path' => '/faq/{categoryId}/{faqId}/{slug}.html',
         'controller' => [FaqController::class, 'show'],
