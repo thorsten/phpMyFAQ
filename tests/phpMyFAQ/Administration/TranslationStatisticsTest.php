@@ -84,34 +84,43 @@ class TranslationStatisticsTest extends TestCase
 
     public function testGetMissingKeysForPartialTranslation(): void
     {
-        // Test with a language that likely has some missing translations
-        // Most non-English languages will have some missing keys
+        // Test with all languages to ensure getMissingKeys() works correctly
         $statistics = $this->translation->getStatistics();
 
-        // Find a language with missing translations
-        $languageWithMissing = null;
+        // Test at least one non-English language
+        $testedLanguages = 0;
         foreach ($statistics as $lang => $stats) {
+            if ($lang === 'en') {
+                continue; // Skip English as it's already tested in testGetMissingKeys
+            }
+
+            $missingKeys = $this->translation->getMissingKeys($lang);
+
+            $this->assertIsArray($missingKeys);
+
+            // The count of missing keys should match what statistics reports
+            $this->assertCount($stats['missing_keys'], $missingKeys);
+
+            // If there are missing keys, verify they are all strings
             if ($stats['missing_keys'] > 0) {
-                $languageWithMissing = $lang;
+                $this->assertNotEmpty($missingKeys);
+                foreach ($missingKeys as $key) {
+                    $this->assertIsString($key);
+                }
+            } else {
+                // If no missing keys, the array should be empty
+                $this->assertEmpty($missingKeys);
+            }
+
+            $testedLanguages++;
+            // Test first 5 languages to keep test fast
+            if ($testedLanguages >= 5) {
                 break;
             }
         }
 
-        // Only run this test if we found a language with missing translations
-        if ($languageWithMissing !== null) {
-            $missingKeys = $this->translation->getMissingKeys($languageWithMissing);
-
-            $this->assertIsArray($missingKeys);
-            $this->assertNotEmpty($missingKeys);
-            $this->assertCount($statistics[$languageWithMissing]['missing_keys'], $missingKeys);
-
-            // Verify all missing keys are strings
-            foreach ($missingKeys as $key) {
-                $this->assertIsString($key);
-            }
-        } else {
-            $this->markTestSkipped('All translations are complete, cannot test missing keys functionality');
-        }
+        // Ensure we tested at least one non-English language
+        $this->assertGreaterThan(0, $testedLanguages, 'No non-English languages available to test');
     }
 
     public function testStatisticsAreSortedByCompletionPercentage(): void

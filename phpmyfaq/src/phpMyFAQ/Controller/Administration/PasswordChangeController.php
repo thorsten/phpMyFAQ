@@ -84,16 +84,29 @@ final class PasswordChangeController extends AbstractAdministrationController
         $errorMessage = '';
         if (strlen((string) $newPassword) <= 7 || strlen((string) $retypedPassword) <= 7) {
             $errorMessage = Translation::get(key: 'ad_passwd_fail');
-        } elseif (
-            $authSource->checkCredentials($this->currentUser->getLogin(), $oldPassword)
-            && $newPassword == $retypedPassword
+        }
+
+        if (
+            strlen((string) $newPassword) > 7
+            && strlen((string) $retypedPassword) > 7
+            && $authSource->checkCredentials($this->currentUser->getLogin(), $oldPassword)
+            && hash_equals((string) $newPassword, (string) $retypedPassword)
         ) {
             if (!$this->currentUser->changePassword($newPassword)) {
                 $errorMessage = Translation::get(key: 'ad_passwd_fail');
             }
 
             $successMessage = Translation::get(key: 'ad_passwdsuc');
-        } else {
+        }
+
+        if (
+            strlen((string) $newPassword) > 7
+            && strlen((string) $retypedPassword) > 7
+            && (
+                !$authSource->checkCredentials($this->currentUser->getLogin(), $oldPassword)
+                || !hash_equals((string) $newPassword, (string) $retypedPassword)
+            )
+        ) {
             $errorMessage = Translation::get(key: 'ad_passwd_fail');
         }
 

@@ -62,7 +62,7 @@ class Smtp implements MailUserAgentInterface
             unset($headers['Return-Path']);
         }
 
-        $email = (new Email())
+        $email = new Email()
             ->from(empty($sender) ? $this->user : $sender)
             ->to($recipients)
             ->subject($headers['Subject'])

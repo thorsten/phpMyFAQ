@@ -30,7 +30,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class SessionController extends AbstractController
 {
@@ -53,11 +53,11 @@ final class SessionController extends AbstractController
             strtotime((string) $requestData->firstHour),
             strtotime((string) $requestData->lastHour),
         );
-        $filePath = tempnam(sys_get_temp_dir(), 'csv_');
-        $file = fopen($filePath, 'w');
+        $filePath = tempnam(sys_get_temp_dir(), prefix: 'csv_');
+        $file = fopen($filePath, mode: 'w');
         if ($file) {
             foreach ($data as $row) {
-                fputcsv($file, [$row['ip'], $row['time']], ',', '"', '\\', PHP_EOL);
+                fputcsv($file, [$row['ip'], $row['time']], separator: ',', enclosure: '"', escape: '\\', eol: PHP_EOL);
             }
 
             fclose($file);

@@ -305,7 +305,7 @@ final class FaqController extends AbstractAdministrationController
 
         // Group permissions
         $groupPermission = $this->container->get(id: 'phpmyfaq.faq.permission')->get(Permission::GROUP, $faqId);
-        if (count($groupPermission) == 0 || $groupPermission[0] == -1) {
+        if (count($groupPermission) === 0 || $groupPermission[0] === -1) {
             $allGroups = true;
             $restrictedGroups = false;
             $groupPermission[0] = -1;

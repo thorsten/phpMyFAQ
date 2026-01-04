@@ -47,7 +47,7 @@ readonly class Forms
     public function getFormData(int $formId): array
     {
         $formData = $this->repository->fetchFormDataByFormId($formId);
-        return (new FormsHelper())->filterAndSortFormData($formData, $this->translation);
+        return new FormsHelper()->filterAndSortFormData($formData, $this->translation);
     }
 
     /**

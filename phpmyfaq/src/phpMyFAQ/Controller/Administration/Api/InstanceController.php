@@ -35,7 +35,7 @@ use phpMyFAQ\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class InstanceController extends AbstractController
 {
@@ -63,7 +63,21 @@ final class InstanceController extends AbstractController
         $admin = Filter::filterVar($data->admin, FILTER_SANITIZE_SPECIAL_CHARS);
         $password = Filter::filterVar($data->password, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (empty($url) || empty($instance) || empty($comment) || empty($email) || empty($admin) || empty($password)) {
+        if (
+            $url === ''
+            || $url === null
+            || $instance === ''
+            || $instance === null
+            || $comment === ''
+            || $comment === null
+            || $email === ''
+            || $email === null
+            || $email === false
+            || $admin === ''
+            || $admin === null
+            || $password === ''
+            || $password === null
+        ) {
             return $this->json(['error' => 'Cannot create instance.'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -103,7 +117,7 @@ final class InstanceController extends AbstractController
                 'dbUser' => $databaseConfiguration->getUser(),
                 'dbPassword' => $databaseConfiguration->getPassword(),
                 'dbDatabaseName' => $databaseConfiguration->getDatabase(),
-                'dbPrefix' => substr($hostname, 0, strpos($hostname, '.')),
+                'dbPrefix' => substr($hostname, offset: 0, length: strpos($hostname, needle: '.')),
                 'dbType' => $databaseConfiguration->getType(),
             ];
             $clientSetup->createDatabaseFile($dbSetup, '');
@@ -131,7 +145,9 @@ final class InstanceController extends AbstractController
             }
 
             Database::setTablePrefix($databaseConfiguration->getPrefix());
-        } else {
+        }
+
+        if (!$faqInstanceClient->createClientFolder($hostname)) {
             $faqInstance->delete($instanceId);
             return $this->json(['error' => 'Cannot create instance.'], Response::HTTP_BAD_REQUEST);
         }

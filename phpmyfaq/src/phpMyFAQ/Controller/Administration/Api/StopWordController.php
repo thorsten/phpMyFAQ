@@ -30,7 +30,7 @@ use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class StopWordController extends AbstractController
 {
@@ -65,7 +65,7 @@ final class StopWordController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if (null != $stopWordId && Language::isASupportedLanguage($stopWordsLang)) {
+        if (null !== $stopWordId && Language::isASupportedLanguage($stopWordsLang)) {
             $stopWords->setLanguage($stopWordsLang)->remove((int) $stopWordId);
             return $this->json(['deleted' => $stopWordId], Response::HTTP_OK);
         }
@@ -92,7 +92,7 @@ final class StopWordController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if (null != $stopWord && Language::isASupportedLanguage($stopWordsLang)) {
+        if (null !== $stopWord && Language::isASupportedLanguage($stopWordsLang)) {
             $stopWords->setLanguage($stopWordsLang);
 
             if (null !== $stopWordId && -1 < $stopWordId) {

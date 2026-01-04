@@ -77,7 +77,7 @@ class UpdateCommand extends Command
 
             $io->success(message: strtr(string: 'phpMyFAQ was successfully updated to version version: on date:.', replace_pairs: [
                 'version:' => System::getVersion(),
-                'date:' => (new DateTime())->format(format: 'Y-m-d H:i:s'),
+                'date:' => new DateTime()->format(format: 'Y-m-d H:i:s'),
             ]));
 
             return Command::SUCCESS;

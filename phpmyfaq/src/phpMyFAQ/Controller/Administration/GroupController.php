@@ -107,9 +107,13 @@ final class GroupController extends AbstractAdministrationController
             'auto_join' => $groupAutoJoin,
         ];
 
-        if ($user->perm->addGroup($groupData) === 0) {
+        $groupId = $user->perm->addGroup($groupData);
+        $message = '';
+        if ($groupId === 0) {
             $message = sprintf('<div class="alert alert-danger">%s</div>', Translation::get(key: 'ad_adus_dberr'));
-        } else {
+        }
+
+        if ($groupId !== 0) {
             $message = sprintf('<div class="alert alert-success">%s</div>', Translation::get(key: 'ad_group_suc'));
         }
 
@@ -161,12 +165,16 @@ final class GroupController extends AbstractAdministrationController
             throw new UnauthorizedHttpException('Invalid CSRF token');
         }
 
-        if (!$this->currentUser->perm->deleteGroup($groupId)) {
+        $deleteResult = $this->currentUser->perm->deleteGroup($groupId);
+        $message = '';
+        if (!$deleteResult) {
             $message = sprintf(
                 '<div class="alert alert-danger">%s</div>',
                 Translation::get(key: 'ad_group_error_delete'),
             );
-        } else {
+        }
+
+        if ($deleteResult) {
             $message = sprintf('<div class="alert alert-success">%s</div>', Translation::get(key: 'ad_group_deleted'));
         }
 
@@ -203,13 +211,17 @@ final class GroupController extends AbstractAdministrationController
 
         $user = $this->container->get(id: 'phpmyfaq.user');
 
-        if (!$user->perm->changeGroup($groupId, $groupData)) {
+        $changeResult = $user->perm->changeGroup($groupId, $groupData);
+        $message = '';
+        if (!$changeResult) {
             $message = sprintf(
                 '<div class="alert alert-danger">%s %s</div>',
                 Translation::get(key: 'ad_msg_mysqlerr'),
                 $this->configuration->getDb()->error(),
             );
-        } else {
+        }
+
+        if ($changeResult) {
             $message = sprintf(
                 '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
                 Translation::get(key: 'ad_msg_savedsuc_1'),
@@ -241,9 +253,13 @@ final class GroupController extends AbstractAdministrationController
         $groupMembers = $request->request->all()['group_members'];
 
         $user = $this->container->get(id: 'phpmyfaq.user');
-        if (!$user->perm->removeAllUsersFromGroup($groupId)) {
+        $removeResult = $user->perm->removeAllUsersFromGroup($groupId);
+        $message = '';
+        if (!$removeResult) {
             $message = sprintf('<div class="alert alert-danger">%s</div>', Translation::get(key: 'ad_msg_mysqlerr'));
-        } else {
+        }
+
+        if ($removeResult) {
             foreach ($groupMembers as $groupMember) {
                 $user->perm->addToGroup((int) $groupMember, $groupId);
             }
@@ -279,9 +295,13 @@ final class GroupController extends AbstractAdministrationController
         $groupPermissions = $request->request->all()['group_rights'];
 
         $user = $this->container->get(id: 'phpmyfaq.user');
-        if (!$user->perm->refuseAllGroupRights($groupId)) {
+        $refuseResult = $user->perm->refuseAllGroupRights($groupId);
+        $message = '';
+        if (!$refuseResult) {
             $message = sprintf('<div class="alert alert-danger">%s</div>', Translation::get(key: 'ad_msg_mysqlerr'));
-        } else {
+        }
+
+        if ($refuseResult) {
             foreach ($groupPermissions as $groupPermission) {
                 $user->perm->grantGroupRight($groupId, (int) $groupPermission);
             }

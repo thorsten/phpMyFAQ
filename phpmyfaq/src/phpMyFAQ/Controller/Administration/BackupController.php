@@ -37,7 +37,7 @@ use Twig\Error\LoaderError;
 
 use function in_array;
 
-class BackupController extends AbstractAdministrationController
+final class BackupController extends AbstractAdministrationController
 {
     /**
      * @throws Exception
@@ -71,7 +71,7 @@ class BackupController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::BACKUP);
 
         $type = $request->attributes->get(key: 'type');
-        if (!in_array($type, ['content', 'logs'], true)) {
+        if (!in_array($type, ['content', 'logs'], strict: true)) {
             return new Response(status: Response::HTTP_BAD_REQUEST);
         }
 

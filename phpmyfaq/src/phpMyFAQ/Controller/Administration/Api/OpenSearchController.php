@@ -22,12 +22,11 @@ namespace phpMyFAQ\Controller\Administration\Api;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
-use phpMyFAQ\Faq;
 use phpMyFAQ\Instance\Search\OpenSearch;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class OpenSearchController extends AbstractController
 {
@@ -84,7 +83,6 @@ final class OpenSearchController extends AbstractController
         /* @var OpenSearch $openSearch */
         $openSearch = $this->container->get(id: 'phpmyfaq.instance.opensearch');
 
-        /* @var Faq $faq */
         $faq = $this->container->get(id: 'phpmyfaq.faq');
         $faq->getAllFaqs();
 

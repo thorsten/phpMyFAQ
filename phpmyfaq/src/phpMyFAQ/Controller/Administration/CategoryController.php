@@ -64,7 +64,7 @@ final class CategoryController extends AbstractAdministrationController
         $orderedCategories = $categoryOrder->getAllCategories();
         $categoryTree = $categoryOrder->getCategoryTree($orderedCategories);
 
-        if (empty($categoryTree)) {
+        if ($categoryTree === [] || $categoryTree === null || $categoryTree === false) {
             // Fallback if no category order is available
             $categoryTree = $category->buildAdminCategoryTree($categoryInfo);
         }

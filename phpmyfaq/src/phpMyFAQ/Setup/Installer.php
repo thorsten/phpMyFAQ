@@ -950,7 +950,7 @@ class Installer extends Setup
 
             // check OpenSearch connection
             $osHosts = array_values($osHosts['opensearch_server']);
-            $osClient = (new SymfonyClientFactory())->create([
+            $osClient = new SymfonyClientFactory()->create([
                 'base_uri' => $osHosts[0],
                 'verify_peer' => false,
             ]);
@@ -1191,7 +1191,7 @@ class Installer extends Setup
 
             $configuration->setOpenSearchConfig($openSearchConfiguration);
 
-            $osClient = (new SymfonyClientFactory())->create([
+            $osClient = new SymfonyClientFactory()->create([
                 'base_uri' => $openSearchConfiguration->getHosts()[0],
                 'verify_peer' => false,
             ]);

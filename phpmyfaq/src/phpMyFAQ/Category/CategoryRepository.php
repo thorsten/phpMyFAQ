@@ -178,7 +178,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         $result = $this->configuration->getDb()->query($query);
 
         if ($row = $this->configuration->getDb()->fetchObject($result)) {
-            $categoryEntity = (new CategoryEntity())
+            $categoryEntity = new CategoryEntity()
                 ->setId((int) $row->id)
                 ->setLang($row->lang)
                 ->setParentId((int) $row->parent_id)

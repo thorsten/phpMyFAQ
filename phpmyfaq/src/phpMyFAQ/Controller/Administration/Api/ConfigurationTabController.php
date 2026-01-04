@@ -34,7 +34,7 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 
 final class ConfigurationTabController extends AbstractController
@@ -101,7 +101,7 @@ final class ConfigurationTabController extends AbstractController
         // Parse the list of available fields from the form
         $availableFields = [];
         if ($availableFieldsJson) {
-            $availableFields = json_decode($availableFieldsJson, true);
+            $availableFields = json_decode($availableFieldsJson, associative: true);
             if (!is_array($availableFields)) {
                 $availableFields = [];
             }
@@ -159,7 +159,7 @@ final class ConfigurationTabController extends AbstractController
         // Only process fields that were available in the current form
         // For checkboxes: if field is available but not in configurationData, set to false
         // For other fields: keep original value if not in configurationData
-        if (!empty($availableFields)) {
+        if ($availableFields !== [] && $availableFields !== null) {
             foreach ($availableFields as $fieldKey) {
                 if (array_key_exists($fieldKey, $newConfigValues)) {
                     continue;

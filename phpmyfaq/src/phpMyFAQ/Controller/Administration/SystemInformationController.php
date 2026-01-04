@@ -53,14 +53,19 @@ final class SystemInformationController extends AbstractAdministrationController
                 $this->configuration->getLogger()->error('Error while fetching Elasticsearch information', [$e->getMessage()]);
                 $esInformation = 'n/a';
             }
-        } else {
+        }
+
+        if (!$this->configuration->get(item: 'search.enableElasticsearch')) {
             $esInformation = 'n/a';
         }
 
+        $openSearchInformation = '';
         if ($this->configuration->get(item: 'search.enableOpenSearch')) {
             $openSearchFullInformation = $this->configuration->getOpenSearch()->info();
             $openSearchInformation = $openSearchFullInformation['version']['number'];
-        } else {
+        }
+
+        if (!$this->configuration->get(item: 'search.enableOpenSearch')) {
             $openSearchInformation = 'n/a';
         }
 
@@ -76,7 +81,7 @@ final class SystemInformationController extends AbstractAdministrationController
                 'phpMyFAQ Version' => $faqSystem->getVersion(),
                 'phpMyFAQ API Version' => $faqSystem->getApiVersion(),
                 'phpMyFAQ Plugin API Version' => $faqSystem->getPluginVersion(),
-                'phpMyFAQ Installation Path' => dirname((string) $request->server->get('SCRIPT_FILENAME'), 2),
+                'phpMyFAQ Installation Path' => dirname((string) $request->server->get('SCRIPT_FILENAME'), levels: 2),
                 'Web server software' => $request->server->get('SERVER_SOFTWARE'),
                 'Web server document root' => $request->server->get('DOCUMENT_ROOT'),
                 'Web server Interface' => strtoupper(PHP_SAPI),

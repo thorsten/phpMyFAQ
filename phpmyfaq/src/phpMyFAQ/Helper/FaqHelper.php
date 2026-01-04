@@ -156,7 +156,7 @@ class FaqHelper extends AbstractHelper
         $contentLength = strlen($content);
         $allowedHosts = $this->configuration->getAllowedMediaHosts();
         $allowedHosts[] = Request::createFromGlobals()->getHost();
-        $htmlSanitizer = new HtmlSanitizer((new HtmlSanitizerConfig())
+        $htmlSanitizer = new HtmlSanitizer(new HtmlSanitizerConfig()
             ->withMaxInputLength($contentLength + 1)
             ->allowSafeElements()
             ->allowRelativeLinks()

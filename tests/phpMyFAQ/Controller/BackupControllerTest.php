@@ -47,30 +47,29 @@ class BackupControllerTest extends TestCase
 
     private function createController(): BackupController
     {
-        $controller = new class(
-            $this->configurationMock,
-            $this->currentUserMock,
-            $this->backupServiceMock,
-            $this->adminLogMock,
-            $this->session,
-        ) extends BackupController {
-            public function __construct(
-                Configuration $configuration,
-                CurrentUser $currentUser,
-                Backup $backupService,
-                AdminLog $adminLog,
-                Session $session,
-            ) {
-                $this->configuration = $configuration;
-                $this->currentUser = $currentUser;
-                $this->session = $session;
-                $this->adminLog = $adminLog;
-                $this->container = new ContainerBuilder();
-                $this->container->set('phpmyfaq.backup', $backupService);
-                $this->container->set('phpmyfaq.admin.admin-log', $adminLog);
-                $this->container->set('session', $session);
-            }
-        };
+        $controller = new BackupController();
+
+        // Use reflection to inject dependencies
+        $reflectionClass = new \ReflectionClass($controller);
+
+        $configProperty = $reflectionClass->getProperty('configuration');
+        $configProperty->setValue($controller, $this->configurationMock);
+
+        $userProperty = $reflectionClass->getProperty('currentUser');
+        $userProperty->setValue($controller, $this->currentUserMock);
+
+        $sessionProperty = $reflectionClass->getProperty('session');
+        $sessionProperty->setValue($controller, $this->session);
+
+        $adminLogProperty = $reflectionClass->getProperty('adminLog');
+        $adminLogProperty->setValue($controller, $this->adminLogMock);
+
+        $containerProperty = $reflectionClass->getProperty('container');
+        $container = new ContainerBuilder();
+        $container->set('phpmyfaq.backup', $this->backupServiceMock);
+        $container->set('phpmyfaq.admin.admin-log', $this->adminLogMock);
+        $container->set('session', $this->session);
+        $containerProperty->setValue($controller, $container);
 
         // Berechtigung immer erlauben
         $this->permissionMock->method('hasPermission')->willReturn(true);

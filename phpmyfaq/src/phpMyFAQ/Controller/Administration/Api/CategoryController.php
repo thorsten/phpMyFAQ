@@ -32,7 +32,7 @@ use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class CategoryController extends AbstractController
 {
@@ -100,13 +100,15 @@ final class CategoryController extends AbstractController
 
         $categoryData = $request->attributes->get('categories');
 
-        if (empty($categoryData)) {
+        if ($categoryData === null || $categoryData === '' || $categoryData === false) {
             $categories = [-1]; // Access for all users and groups
-        } else {
+        }
+
+        if ($categoryData !== null && $categoryData !== '' && $categoryData !== false) {
             $categories = explode(',', (string) $categoryData);
         }
 
-        if (!in_array(true, filter_var_array($categories, FILTER_VALIDATE_INT))) {
+        if (!in_array(true, filter_var_array($categories, FILTER_VALIDATE_INT), strict: true)) {
             return $this->json(['error' => 'Only integer values are valid.'], Response::HTTP_BAD_REQUEST);
         }
 

@@ -55,57 +55,61 @@ final class ImageController extends AbstractController
         $files = $request->files->get('files');
 
         $uploadedFiles = [];
+        $headers = [];
         foreach ($files as $file) {
-            $headers = [];
-            if ($file && $file->isValid()) {
-                if (
-                    $request->server->get('HTTP_ORIGIN') !== null
-                    && $request->server->get('HTTP_ORIGIN') . '/' === $this->configuration->getDefaultUrl()
-                ) {
-                    $headers = ['Access-Control-Allow-Origin', $request->server->get('HTTP_ORIGIN')];
-                }
-
-                // Sanitize input
-                if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", (string) $file->getClientOriginalName())) {
-                    return $this->json(
-                        [
-                            'success' => false,
-                            'data' => ['code' => Response::HTTP_BAD_REQUEST],
-                            'messages' => ['Data contains invalid characters'],
-                        ],
-                        Response::HTTP_BAD_REQUEST,
-                        $headers,
-                    );
-                }
-
-                // Verify extension
-                if (!in_array(strtolower((string) $file->getClientOriginalExtension()), $validFileExtensions)) {
-                    return $this->json(
-                        [
-                            'success' => false,
-                            'data' => ['code' => Response::HTTP_BAD_REQUEST],
-                            'messages' => ['File extension not allowed'],
-                        ],
-                        Response::HTTP_BAD_REQUEST,
-                        $headers,
-                    );
-                }
-
-                // Accept upload if there was no origin or if it is an accepted origin
-                $fileName = $timestamp . '_' . $file->getClientOriginalName();
-                $fileName = str_replace(' ', '_', $fileName);
-                $file->move($uploadDir, $fileName);
-
-                // Add to the list of uploaded files
-                $uploadedFiles[] = $fileName;
+            if (!$file || !$file->isValid()) {
+                continue;
             }
 
-            return $this->json(['success' => false], Response::HTTP_BAD_REQUEST, $headers);
+            if (
+                $request->server->get('HTTP_ORIGIN') !== null
+                && $request->server->get('HTTP_ORIGIN') . '/' === $this->configuration->getDefaultUrl()
+            ) {
+                $headers = ['Access-Control-Allow-Origin', $request->server->get('HTTP_ORIGIN')];
+            }
+
+            // Sanitize input
+            if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", (string) $file->getClientOriginalName())) {
+                return $this->json(
+                    [
+                        'success' => false,
+                        'data' => ['code' => Response::HTTP_BAD_REQUEST],
+                        'messages' => ['Data contains invalid characters'],
+                    ],
+                    Response::HTTP_BAD_REQUEST,
+                    $headers,
+                );
+            }
+
+            // Verify extension
+            if (!in_array(
+                strtolower((string) $file->getClientOriginalExtension()),
+                $validFileExtensions,
+                strict: true,
+            )) {
+                return $this->json(
+                    [
+                        'success' => false,
+                        'data' => ['code' => Response::HTTP_BAD_REQUEST],
+                        'messages' => ['File extension not allowed'],
+                    ],
+                    Response::HTTP_BAD_REQUEST,
+                    $headers,
+                );
+            }
+
+            // Accept upload if there was no origin or if it is an accepted origin
+            $fileName = $timestamp . '_' . $file->getClientOriginalName();
+            $fileName = str_replace(' ', replace: '_', subject: $fileName);
+            $file->move($uploadDir, $fileName);
+
+            // Add to the list of uploaded files
+            $uploadedFiles[] = $fileName;
         }
 
         $response = [
             'success' => true,
-            'time' => (new DateTime())->format('Y-m-d H:i:s'),
+            'time' => new DateTime()->format('Y-m-d H:i:s'),
             'data' => [
                 'sources' => [
                     [

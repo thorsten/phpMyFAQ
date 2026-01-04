@@ -30,7 +30,7 @@ use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class TagController extends AbstractController
 {
@@ -75,18 +75,21 @@ final class TagController extends AbstractController
 
         $autoCompleteValue = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
 
+        $tags = [];
         if (!is_null($autoCompleteValue)) {
-            if (strpos((string) $autoCompleteValue, ',')) {
-                $arrayOfValues = explode(',', (string) $autoCompleteValue);
+            if (strpos((string) $autoCompleteValue, needle: ',')) {
+                $arrayOfValues = explode(separator: ',', string: (string) $autoCompleteValue);
                 $autoCompleteValue = end($arrayOfValues);
             }
 
             $tags = $tag->getAllTags(
                 strtolower(trim((string) $autoCompleteValue)),
                 PMF_TAGS_CLOUD_RESULT_SET_SIZE,
-                true,
+                strict: true,
             );
-        } else {
+        }
+
+        if (is_null($autoCompleteValue)) {
             $tags = $tag->getAllTags();
         }
 

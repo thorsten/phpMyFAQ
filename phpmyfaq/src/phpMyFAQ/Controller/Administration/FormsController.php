@@ -78,7 +78,7 @@ final class FormsController extends AbstractAdministrationController
         // Get supported languages for adding new translations
         $languages = [];
         foreach (LanguageCodes::getAllSupported() as $code => $language) {
-            if (in_array($code, $forms->getTranslatedLanguages($formId, $inputId))) {
+            if (in_array($code, $forms->getTranslatedLanguages($formId, $inputId), strict: true)) {
                 continue;
             }
 

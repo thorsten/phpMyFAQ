@@ -32,7 +32,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -188,11 +188,10 @@ final class UpdateController extends AbstractController
                 ob_flush();
                 flush();
             };
-            if ($upgrade->extractPackage($pathToPackage, $progressCallback)) {
-                echo json_encode(['message' => Translation::get(key: 'extractSuccessful')]);
-            } else {
-                echo json_encode(['message' => Translation::get(key: 'extractFailure')]);
-            }
+            $message = $upgrade->extractPackage($pathToPackage, $progressCallback)
+                ? Translation::get(key: 'extractSuccessful')
+                : Translation::get(key: 'extractFailure');
+            echo json_encode(['message' => $message]);
         });
     }
 
@@ -210,11 +209,10 @@ final class UpdateController extends AbstractController
                 ob_flush();
                 flush();
             };
-            if ($upgrade->createTemporaryBackup($backupHash . '.zip', $progressCallback)) {
-                echo json_encode(['message' => 'Backup successful']);
-            } else {
-                echo json_encode(['message' => 'Backup failed']);
-            }
+            $message = $upgrade->createTemporaryBackup($backupHash . '.zip', $progressCallback)
+                ? 'Backup successful'
+                : 'Backup failed';
+            echo json_encode(['message' => $message]);
         });
     }
 
@@ -231,11 +229,10 @@ final class UpdateController extends AbstractController
                 ob_flush();
                 flush();
             };
-            if ($upgrade->installPackage($progressCallback) && $configurator->adjustRewriteBaseHtaccess()) {
-                echo json_encode(['message' => 'Package successfully installed.']);
-            } else {
-                echo json_encode(['message' => 'Install package failed']);
-            }
+            $message = $upgrade->installPackage($progressCallback) && $configurator->adjustRewriteBaseHtaccess()
+                ? 'Package successfully installed.'
+                : 'Install package failed';
+            echo json_encode(['message' => $message]);
         });
     }
 

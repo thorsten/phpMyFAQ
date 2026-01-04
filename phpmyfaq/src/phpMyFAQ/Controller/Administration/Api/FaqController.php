@@ -51,7 +51,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class FaqController extends AbstractController
 {
@@ -92,11 +92,9 @@ final class FaqController extends AbstractController
         // Collect FAQ data
         $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (is_array($data->{'categories[]'})) {
-            $categories = Filter::filterArray($data->{'categories[]'});
-        } else {
-            $categories = [Filter::filterVar($data->{'categories[]'}, FILTER_VALIDATE_INT)];
-        }
+        $categories = is_array($data->{'categories[]'})
+            ? Filter::filterArray($data->{'categories[]'})
+            : [Filter::filterVar($data->{'categories[]'}, FILTER_VALIDATE_INT)];
 
         $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
         $tags = Filter::filterVar($data->tags, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -190,9 +188,13 @@ final class FaqController extends AbstractController
             $questionObject = $this->container->get(id: 'phpmyfaq.question');
             $openQuestionId = Filter::filterVar($data->openQuestionId, FILTER_VALIDATE_INT);
             if (0 !== $openQuestionId) {
-                if ($this->configuration->get(item: 'records.enableDeleteQuestion')) { // deletes question
+                if ($this->configuration->get(item: 'records.enableDeleteQuestion')) {
+                    // deletes question
                     $questionObject->delete($openQuestionId);
-                } else { // adds this faq record id to the related open question
+                }
+
+                if (!$this->configuration->get(item: 'records.enableDeleteQuestion')) {
+                    // adds this faq record id to the related open question
                     $questionObject->updateQuestionAnswer($openQuestionId, $faqData->getId(), $categories[0]);
                 }
 
@@ -301,11 +303,9 @@ final class FaqController extends AbstractController
         $solutionId = Filter::filterVar($data->solutionId, FILTER_VALIDATE_INT);
         $revisionId = Filter::filterVar($data->revisionId, FILTER_VALIDATE_INT);
         $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
-        if (is_array($data->{'categories[]'})) {
-            $categories = Filter::filterArray($data->{'categories[]'});
-        } else {
-            $categories = [Filter::filterVar($data->{'categories[]'}, FILTER_VALIDATE_INT)];
-        }
+        $categories = is_array($data->{'categories[]'})
+            ? Filter::filterArray($data->{'categories[]'})
+            : [Filter::filterVar($data->{'categories[]'}, FILTER_VALIDATE_INT)];
 
         $faqLang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
         $tags = Filter::filterVar($data->tags, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -393,7 +393,9 @@ final class FaqController extends AbstractController
         // save or update the FAQ record
         if ($faq->hasTranslation($faqData->getId(), $faqData->getLanguage())) {
             $faqData = $faq->update($faqData);
-        } else {
+        }
+
+        if (!$faq->hasTranslation($faqData->getId(), $faqData->getLanguage())) {
             $faqData = $faq->create($faqData);
         }
 
@@ -408,7 +410,9 @@ final class FaqController extends AbstractController
         // Insert the tags
         if ($tags !== '') {
             $tagging->create($faqData->getId(), explode(separator: ',', string: trim((string) $tags)));
-        } else {
+        }
+
+        if ($tags === '') {
             $tagging->deleteByRecordId($faqData->getId());
         }
 
@@ -424,7 +428,9 @@ final class FaqController extends AbstractController
         if ($seo->get($seoEntity)->getId() === null) {
             $seoEntity->setTitle($serpTitle)->setDescription($serpDescription);
             $seo->create($seoEntity);
-        } else {
+        }
+
+        if ($seo->get($seoEntity)->getId() !== null) {
             $seoEntity->setTitle($serpTitle)->setDescription($serpDescription);
             $seo->update($seoEntity);
         }

@@ -42,7 +42,7 @@ final class StatisticsController extends AbstractController
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
-        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
         if (!Token::getInstance($this->session)->verifyToken('delete-adminlog', $data->csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
@@ -70,7 +70,8 @@ final class StatisticsController extends AbstractController
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
-        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+
         if (!Token::getInstance($this->session)->verifyToken('sessions', $data->csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
@@ -93,7 +94,7 @@ final class StatisticsController extends AbstractController
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
-        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
         if (!Token::getInstance($this->session)->verifyToken('truncate-search-terms', $data->csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
@@ -118,7 +119,7 @@ final class StatisticsController extends AbstractController
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
-        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
         if (!Token::getInstance($this->session)->verifyToken('clear-statistics', $data->csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
@@ -143,7 +144,7 @@ final class StatisticsController extends AbstractController
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
-        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
         if (!Token::getInstance($this->session)->verifyToken('clear-visits', $data->csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);

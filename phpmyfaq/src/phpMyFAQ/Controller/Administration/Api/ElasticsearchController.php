@@ -29,7 +29,7 @@ use phpMyFAQ\Instance\Search\Elasticsearch;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class ElasticsearchController extends AbstractController
 {

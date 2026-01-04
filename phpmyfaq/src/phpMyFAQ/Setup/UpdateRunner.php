@@ -84,7 +84,7 @@ final class UpdateRunner
 
     private function taskUpdateCheck(SymfonyStyle $io): int
     {
-        $dateLastChecked = (new DateTime())->format(DateTimeInterface::ATOM);
+        $dateLastChecked = new DateTime()->format(DateTimeInterface::ATOM);
         $branch = $this->configuration->get(item: 'upgrade.releaseEnvironment');
 
         try {

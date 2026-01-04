@@ -82,7 +82,7 @@ final class MediaBrowserController extends AbstractController
                 continue;
             }
 
-            if (!in_array(strtolower((string) $file->getExtension()), $allowedExtensions)) {
+            if (!in_array(strtolower((string) $file->getExtension()), $allowedExtensions, strict: true)) {
                 continue;
             }
 
@@ -97,7 +97,7 @@ final class MediaBrowserController extends AbstractController
 
         $response = [
             'success' => true,
-            'time' => (new DateTime())->format('Y-m-d H:i:s'),
+            'time' => new DateTime()->format('Y-m-d H:i:s'),
             'data' => [
                 'sources' => [
                     [
