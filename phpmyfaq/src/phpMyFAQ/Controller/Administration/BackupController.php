@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\BackupType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
@@ -70,9 +71,11 @@ class BackupController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::BACKUP);
 
         $type = $request->attributes->get(key: 'type');
-        if (!\in_array($type, ['content', 'logs'], true)) {
+        if (!in_array($type, ['content', 'logs'], true)) {
             return new Response(status: Response::HTTP_BAD_REQUEST);
         }
+
+        $this->adminLog->log($this->currentUser, AdminLogType::BACKUP_EXPORT->value);
 
         $backup = $this->container->get(id: 'phpmyfaq.backup');
 
@@ -106,6 +109,8 @@ class BackupController extends AbstractAdministrationController
         if (!Token::getInstance($this->session)->verifyToken(page: 'restore', requestToken: $csrfToken)) {
             throw new UnauthorizedHttpException(challenge: 'Invalid CSRF token');
         }
+
+        $this->adminLog->log($this->currentUser, AdminLogType::BACKUP_RESTORE->value);
 
         $file = $request->files->get(key: 'userfile');
 

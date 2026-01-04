@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller;
 
+use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Administration\Backup\BackupExportResult;
 use phpMyFAQ\Configuration;
@@ -28,6 +29,7 @@ class BackupControllerTest extends TestCase
     private CurrentUser $currentUserMock;
     private BasicPermission $permissionMock;
     private Backup $backupServiceMock;
+    private AdminLog $adminLogMock;
 
     private Session $session;
 
@@ -37,6 +39,7 @@ class BackupControllerTest extends TestCase
         $this->currentUserMock = $this->createStub(CurrentUser::class);
         $this->permissionMock = $this->createStub(BasicPermission::class);
         $this->backupServiceMock = $this->createMock(Backup::class);
+        $this->adminLogMock = $this->createStub(AdminLog::class);
         $this->session = new Session(new MockArraySessionStorage());
 
         $this->currentUserMock->perm = $this->permissionMock;
@@ -48,19 +51,23 @@ class BackupControllerTest extends TestCase
             $this->configurationMock,
             $this->currentUserMock,
             $this->backupServiceMock,
+            $this->adminLogMock,
             $this->session,
         ) extends BackupController {
             public function __construct(
                 Configuration $configuration,
                 CurrentUser $currentUser,
                 Backup $backupService,
+                AdminLog $adminLog,
                 Session $session,
             ) {
                 $this->configuration = $configuration;
                 $this->currentUser = $currentUser;
                 $this->session = $session;
+                $this->adminLog = $adminLog;
                 $this->container = new ContainerBuilder();
                 $this->container->set('phpmyfaq.backup', $backupService);
+                $this->container->set('phpmyfaq.admin.admin-log', $adminLog);
                 $this->container->set('session', $session);
             }
         };

@@ -45,21 +45,19 @@ final class AdminLogController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::STATISTICS_ADMINLOG);
 
-        $adminLog = $this->container->get(id: 'phpmyfaq.admin.admin-log');
-
         $itemsPerPage = 15;
         $page = Filter::filterVar($request->attributes->get('page'), FILTER_VALIDATE_INT, 1);
 
         // Pagination options
         $options = [
             'baseUrl' => $request->getUri(),
-            'total' => $adminLog->getNumberOfEntries(),
+            'total' => $this->adminLog->getNumberOfEntries(),
             'perPage' => $itemsPerPage,
             'pageParamName' => 'page',
         ];
         $pagination = new Pagination($options);
 
-        $loggingData = $adminLog->getAll();
+        $loggingData = $this->adminLog->getAll();
 
         $offset = ($page - 1) * $itemsPerPage;
         $currentItems = array_slice($loggingData, $offset, $itemsPerPage);

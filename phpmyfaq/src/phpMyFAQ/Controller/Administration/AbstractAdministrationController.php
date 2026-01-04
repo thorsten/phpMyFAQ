@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use Exception;
+use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Administration\Helper;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
@@ -36,6 +37,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractAdministrationController extends AbstractController
 {
+    protected ?AdminLog $adminLog = null;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->adminLog = $this->container->get(id: 'phpmyfaq.admin.admin-log');
+    }
+
     /**
      * @return string[]
      * @throws Exception

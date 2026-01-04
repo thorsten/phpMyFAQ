@@ -39,8 +39,6 @@ final class AuthenticationController extends AbstractAdministrationController
             return new RedirectResponse(url: './');
         }
 
-        $logging = $this->container->get(id: 'phpmyfaq.admin.admin-log');
-
         $username = Filter::filterVar($request->request->get(key: 'faqusername'), FILTER_SANITIZE_SPECIAL_CHARS);
         $password = Filter::filterVar(
             $request->request->get(key: 'faqpassword'),
@@ -68,7 +66,7 @@ final class AuthenticationController extends AbstractAdministrationController
                     return new RedirectResponse(url: './token?user-id=' . $this->currentUser->getUserId());
                 }
             } catch (Exception) {
-                $logging->log(
+                $this->adminLog->log(
                     $this->currentUser,
                     'Login-error\nLogin: ' . $username . '\nErrors: '
                         . implode(separator: ', ', array: $this->currentUser->errors),

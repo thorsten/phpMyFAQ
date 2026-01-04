@@ -26,6 +26,7 @@ use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\SeoEntity;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Faq\Permission;
@@ -108,7 +109,7 @@ final class FaqController extends AbstractAdministrationController
         $faq = $this->container->get(id: 'phpmyfaq.faq');
         $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
 
-        $this->container->get(id: 'phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-add-faq');
+        $this->adminLog->log($this->currentUser, AdminLogType::FAQ_ADD->value);
         $categories = [];
 
         $faqData = [
@@ -181,7 +182,7 @@ final class FaqController extends AbstractAdministrationController
         $faq = $this->container->get(id: 'phpmyfaq.faq');
         $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
 
-        $this->container->get(id: 'phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-add-faq');
+        $this->adminLog->log($this->currentUser, AdminLogType::FAQ_ADD->value);
 
         $faqData = [
             'id' => 0,
@@ -258,7 +259,7 @@ final class FaqController extends AbstractAdministrationController
         $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
         $selectedRevisionId = Filter::filterVar($request->attributes->get('selectedRevisionId'), FILTER_VALIDATE_INT);
 
-        $this->container->get(id: 'phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-edit-faq ' . $faqId);
+        $this->adminLog->log($this->currentUser, AdminLogType::FAQ_EDIT->value . ':' . $faqId);
 
         $categories = $categoryRelation->getCategories($faqId, $faqLanguage);
 
@@ -293,7 +294,7 @@ final class FaqController extends AbstractAdministrationController
 
         // User permissions
         $userPermission = $this->container->get(id: 'phpmyfaq.faq.permission')->get(Permission::USER, $faqId);
-        if (count($userPermission) == 0 || $userPermission[0] == -1) {
+        if (count($userPermission) === 0 || $userPermission[0] === -1) {
             $allUsers = true;
             $restrictedUsers = false;
             $userPermission[0] = -1;
@@ -385,7 +386,7 @@ final class FaqController extends AbstractAdministrationController
         $faqId = (int) Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $this->container->get(id: 'phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-copy-faq ' . $faqId);
+        $this->adminLog->log($this->currentUser, AdminLogType::FAQ_COPY->value . ':' . $faqId);
 
         $categories = [];
 
@@ -459,7 +460,7 @@ final class FaqController extends AbstractAdministrationController
         $faqId = (int) Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $this->container->get(id: 'phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-translate-faq ' . $faqId);
+        $this->adminLog->log($this->currentUser, AdminLogType::FAQ_TRANSLATE->value . ':' . $faqId);
 
         $categories = [];
 
@@ -533,10 +534,7 @@ final class FaqController extends AbstractAdministrationController
         $questionId = (int) Filter::filterVar($request->attributes->get('questionId'), FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $this->container->get(id: 'phpmyfaq.admin.admin-log')->log(
-            $this->currentUser,
-            'admin-answer-question ' . $questionId,
-        );
+        $this->adminLog->log($this->currentUser, AdminLogType::FAQ_ANSWER_ADD->value . ':' . $questionId);
 
         /** @var Question $question */
         $question = $this->container->get(id: 'phpmyfaq.question');
