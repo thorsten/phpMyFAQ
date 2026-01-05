@@ -34,7 +34,7 @@ class SeoRepositoryTest extends TestCase
 
     public function testCreateCallsInsertOnDatabase(): void
     {
-        $entity = (new SeoEntity())
+        $entity = new SeoEntity()
             ->setSeoType(SeoType::FAQ)
             ->setReferenceId(42)
             ->setReferenceLanguage('en')
@@ -63,7 +63,7 @@ class SeoRepositoryTest extends TestCase
 
     public function testUpdateCallsUpdateOnDatabase(): void
     {
-        $entity = (new SeoEntity())
+        $entity = new SeoEntity()
             ->setSeoType(SeoType::FAQ)
             ->setReferenceId(42)
             ->setReferenceLanguage('en')
@@ -86,7 +86,7 @@ class SeoRepositoryTest extends TestCase
 
     public function testDeleteCallsDeleteOnDatabase(): void
     {
-        $entity = (new SeoEntity())
+        $entity = new SeoEntity()
             ->setSeoType(SeoType::FAQ)
             ->setReferenceId(42)
             ->setReferenceLanguage('en')
@@ -109,7 +109,7 @@ class SeoRepositoryTest extends TestCase
 
     public function testGetPopulatesEntityWhenRowExists(): void
     {
-        $entity = (new SeoEntity())
+        $entity = new SeoEntity()
             ->setSeoType(SeoType::FAQ)
             ->setReferenceId(42)
             ->setReferenceLanguage('en');
@@ -142,7 +142,7 @@ class SeoRepositoryTest extends TestCase
                     'id' => 1,
                     'title' => 'Fetched Title',
                     'description' => 'Fetched Description',
-                    'created' => (new DateTime())->format('Y-m-d H:i:s'),
+                    'created' => new DateTime()->format('Y-m-d H:i:s'),
                 ],
                 null,
             );

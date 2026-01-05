@@ -30,7 +30,7 @@ class NewsRepositoryTest extends TestCase
     {
         $repo = new NewsRepository($this->configuration);
 
-        $news = (new NewsMessage())
+        $news = new NewsMessage()
             ->setId(0)
             ->setLanguage('en')
             ->setHeader('Unit Test Header')

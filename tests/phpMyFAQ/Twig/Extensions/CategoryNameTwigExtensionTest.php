@@ -104,7 +104,7 @@ class CategoryNameTwigExtensionTest extends TestCase
 
     public function testClassHasCorrectImports(): void
     {
-        $filename = (new ReflectionClass(CategoryNameTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(CategoryNameTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $expectedImports = [
@@ -122,7 +122,7 @@ class CategoryNameTwigExtensionTest extends TestCase
 
     public function testMethodUsesConfigurationInstance(): void
     {
-        $filename = (new ReflectionClass(CategoryNameTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(CategoryNameTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('Configuration::getConfigurationInstance()', $source);
@@ -131,7 +131,7 @@ class CategoryNameTwigExtensionTest extends TestCase
 
     public function testMethodImplementsCategoryDataRetrieval(): void
     {
-        $filename = (new ReflectionClass(CategoryNameTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(CategoryNameTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('$category->getCategoryData($categoryId)', $source);
@@ -213,7 +213,7 @@ class CategoryNameTwigExtensionTest extends TestCase
 
     public function testDocumentationExists(): void
     {
-        $filename = (new ReflectionClass(CategoryNameTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(CategoryNameTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('/**', $source);

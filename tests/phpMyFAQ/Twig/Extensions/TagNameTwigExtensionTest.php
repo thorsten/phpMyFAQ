@@ -84,7 +84,7 @@ class TagNameTwigExtensionTest extends TestCase
 
     public function testClassHasCorrectImports(): void
     {
-        $filename = (new ReflectionClass(TagNameTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(TagNameTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $expectedImports = [
@@ -101,7 +101,7 @@ class TagNameTwigExtensionTest extends TestCase
 
     public function testMethodUsesConfigurationInstance(): void
     {
-        $filename = (new ReflectionClass(TagNameTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(TagNameTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('Configuration::getConfigurationInstance()', $source);
@@ -110,7 +110,7 @@ class TagNameTwigExtensionTest extends TestCase
 
     public function testMethodImplementsTagDataRetrieval(): void
     {
-        $filename = (new ReflectionClass(TagNameTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(TagNameTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('$tags->getTagNameById($tagId)', $source);
@@ -173,7 +173,7 @@ class TagNameTwigExtensionTest extends TestCase
 
     public function testDeclareStrictTypes(): void
     {
-        $filename = (new ReflectionClass(TagNameTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(TagNameTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('declare(strict_types=1);', $source);
@@ -181,7 +181,7 @@ class TagNameTwigExtensionTest extends TestCase
 
     public function testMethodCreatesTags(): void
     {
-        $filename = (new ReflectionClass(TagNameTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(TagNameTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('$tags = new Tags(Configuration::getConfigurationInstance())', $source);

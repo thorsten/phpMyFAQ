@@ -84,7 +84,7 @@ class FormatDateTwigExtensionTest extends TestCase
 
     public function testClassHasCorrectImports(): void
     {
-        $filename = (new ReflectionClass(FormatDateTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(FormatDateTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $expectedImports = [
@@ -101,7 +101,7 @@ class FormatDateTwigExtensionTest extends TestCase
 
     public function testMethodUsesConfigurationInstance(): void
     {
-        $filename = (new ReflectionClass(FormatDateTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(FormatDateTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('Configuration::getConfigurationInstance()', $source);
@@ -110,7 +110,7 @@ class FormatDateTwigExtensionTest extends TestCase
 
     public function testMethodImplementsDateFormatting(): void
     {
-        $filename = (new ReflectionClass(FormatDateTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(FormatDateTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('$date->format($string)', $source);
@@ -173,7 +173,7 @@ class FormatDateTwigExtensionTest extends TestCase
 
     public function testMethodCreatesDateInstance(): void
     {
-        $filename = (new ReflectionClass(FormatDateTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(FormatDateTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('$date = new Date($configuration)', $source);
@@ -181,7 +181,7 @@ class FormatDateTwigExtensionTest extends TestCase
 
     public function testDocumentationExists(): void
     {
-        $filename = (new ReflectionClass(FormatDateTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(FormatDateTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('/**', $source);

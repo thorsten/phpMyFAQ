@@ -90,7 +90,7 @@ class PluginTwigExtensionTest extends TestCase
 
     public function testClassHasCorrectImports(): void
     {
-        $filename = (new ReflectionClass(PluginTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(PluginTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $expectedImports = [
@@ -106,7 +106,7 @@ class PluginTwigExtensionTest extends TestCase
 
     public function testMethodUsesConfigurationInstance(): void
     {
-        $filename = (new ReflectionClass(PluginTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(PluginTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('Configuration::getConfigurationInstance()', $source);
@@ -114,7 +114,7 @@ class PluginTwigExtensionTest extends TestCase
 
     public function testMethodImplementsPluginManagerCall(): void
     {
-        $filename = (new ReflectionClass(PluginTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(PluginTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('->getPluginManager()->triggerEvent($eventName, $data)', $source);
@@ -184,7 +184,7 @@ class PluginTwigExtensionTest extends TestCase
 
     public function testDeclareStrictTypes(): void
     {
-        $filename = (new ReflectionClass(PluginTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(PluginTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('declare(strict_types=1);', $source);
@@ -192,7 +192,7 @@ class PluginTwigExtensionTest extends TestCase
 
     public function testMethodChaining(): void
     {
-        $filename = (new ReflectionClass(PluginTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(PluginTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         // Should chain getConfigurationInstance -> getPluginManager -> triggerEvent
@@ -202,7 +202,7 @@ class PluginTwigExtensionTest extends TestCase
 
     public function testDocumentationExists(): void
     {
-        $filename = (new ReflectionClass(PluginTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(PluginTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('/**', $source);

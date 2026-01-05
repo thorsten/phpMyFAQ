@@ -53,9 +53,7 @@ class FaqCreationServiceTest extends TestCase
 
         // Create mock current user
         $this->currentUser = $this->createMock(CurrentUser::class);
-        $this->currentUser
-            ->method('getUserId')
-            ->willReturn(1);
+        $this->currentUser->method('getUserId')->willReturn(1);
 
         $this->currentGroups = [1];
 
@@ -142,9 +140,7 @@ class FaqCreationServiceTest extends TestCase
     {
         // Mock guest user (user ID = -1)
         $guestUser = $this->createMock(CurrentUser::class);
-        $guestUser
-            ->method('getUserId')
-            ->willReturn(-1);
+        $guestUser->method('getUserId')->willReturn(-1);
 
         $service = new FaqCreationService($this->configuration, $guestUser, $this->currentGroups);
 
@@ -161,9 +157,7 @@ class FaqCreationServiceTest extends TestCase
 
         // Mock guest user (user ID = -1)
         $guestUser = $this->createMock(CurrentUser::class);
-        $guestUser
-            ->method('getUserId')
-            ->willReturn(-1);
+        $guestUser->method('getUserId')->willReturn(-1);
 
         $service = new FaqCreationService($this->configuration, $guestUser, $this->currentGroups);
 
@@ -177,9 +171,7 @@ class FaqCreationServiceTest extends TestCase
     {
         // Create a user mock with permission
         $userWithPerm = $this->createMock(CurrentUser::class);
-        $userWithPerm
-            ->method('getUserId')
-            ->willReturn(1);
+        $userWithPerm->method('getUserId')->willReturn(1);
 
         $permMock = $this->createMock(\phpMyFAQ\Permission\PermissionInterface::class);
         $permMock
@@ -202,9 +194,7 @@ class FaqCreationServiceTest extends TestCase
     {
         // Create a user mock without permission
         $userWithoutPerm = $this->createMock(CurrentUser::class);
-        $userWithoutPerm
-            ->method('getUserId')
-            ->willReturn(1);
+        $userWithoutPerm->method('getUserId')->willReturn(1);
 
         $permMock = $this->createMock(\phpMyFAQ\Permission\PermissionInterface::class);
         $permMock
@@ -241,9 +231,7 @@ class FaqCreationServiceTest extends TestCase
     public function testGetDefaultUserEmailForGuest(): void
     {
         $guestUser = $this->createMock(CurrentUser::class);
-        $guestUser
-            ->method('getUserId')
-            ->willReturn(-1);
+        $guestUser->method('getUserId')->willReturn(-1);
 
         $service = new FaqCreationService($this->configuration, $guestUser, $this->currentGroups);
 
@@ -273,9 +261,7 @@ class FaqCreationServiceTest extends TestCase
     public function testGetDefaultUserNameForGuest(): void
     {
         $guestUser = $this->createMock(CurrentUser::class);
-        $guestUser
-            ->method('getUserId')
-            ->willReturn(-1);
+        $guestUser->method('getUserId')->willReturn(-1);
 
         $service = new FaqCreationService($this->configuration, $guestUser, $this->currentGroups);
 
@@ -335,14 +321,10 @@ class FaqCreationServiceTest extends TestCase
     {
         // Create a user mock with permission
         $userWithPerm = $this->createMock(CurrentUser::class);
-        $userWithPerm
-            ->method('getUserId')
-            ->willReturn(1);
+        $userWithPerm->method('getUserId')->willReturn(1);
 
         $permMock = $this->createMock(\phpMyFAQ\Permission\PermissionInterface::class);
-        $permMock
-            ->method('hasPermission')
-            ->willReturn(true);
+        $permMock->method('hasPermission')->willReturn(true);
 
         $userWithPerm->perm = $permMock;
 
@@ -359,13 +341,8 @@ class FaqCreationServiceTest extends TestCase
     public function testGetDefaultUserEmailReturnsString(): void
     {
         $userMock = $this->createMock(CurrentUser::class);
-        $userMock
-            ->method('getUserId')
-            ->willReturn(1);
-        $userMock
-            ->method('getUserData')
-            ->with('email')
-            ->willReturn('test@example.com');
+        $userMock->method('getUserId')->willReturn(1);
+        $userMock->method('getUserData')->with('email')->willReturn('test@example.com');
 
         $service = new FaqCreationService($this->configuration, $userMock, $this->currentGroups);
 
@@ -380,13 +357,8 @@ class FaqCreationServiceTest extends TestCase
     public function testGetDefaultUserNameReturnsString(): void
     {
         $userMock = $this->createMock(CurrentUser::class);
-        $userMock
-            ->method('getUserId')
-            ->willReturn(1);
-        $userMock
-            ->method('getUserData')
-            ->with('display_name')
-            ->willReturn('John Doe');
+        $userMock->method('getUserId')->willReturn(1);
+        $userMock->method('getUserData')->with('display_name')->willReturn('John Doe');
 
         $service = new FaqCreationService($this->configuration, $userMock, $this->currentGroups);
 

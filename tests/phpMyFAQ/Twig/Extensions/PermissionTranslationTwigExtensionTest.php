@@ -84,7 +84,7 @@ class PermissionTranslationTwigExtensionTest extends TestCase
 
     public function testClassHasCorrectImports(): void
     {
-        $filename = (new ReflectionClass(PermissionTranslationTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(PermissionTranslationTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $expectedImports = [
@@ -100,7 +100,7 @@ class PermissionTranslationTwigExtensionTest extends TestCase
 
     public function testMethodImplementsPermissionKeyGeneration(): void
     {
-        $filename = (new ReflectionClass(PermissionTranslationTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(PermissionTranslationTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString("'permission::%s'", $source);
@@ -109,7 +109,7 @@ class PermissionTranslationTwigExtensionTest extends TestCase
 
     public function testMethodImplementsTranslationLogic(): void
     {
-        $filename = (new ReflectionClass(PermissionTranslationTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(PermissionTranslationTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('Translation::has($key)', $source);
@@ -118,7 +118,7 @@ class PermissionTranslationTwigExtensionTest extends TestCase
 
     public function testMethodImplementsFallbackBehavior(): void
     {
-        $filename = (new ReflectionClass(PermissionTranslationTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(PermissionTranslationTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         // Should return empty string if translation doesn't exist
@@ -182,7 +182,7 @@ class PermissionTranslationTwigExtensionTest extends TestCase
 
     public function testMethodUsesTranslationClass(): void
     {
-        $filename = (new ReflectionClass(PermissionTranslationTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(PermissionTranslationTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         // Should use both Translation::has and Translation::get
@@ -192,7 +192,7 @@ class PermissionTranslationTwigExtensionTest extends TestCase
 
     public function testDocumentationExists(): void
     {
-        $filename = (new ReflectionClass(PermissionTranslationTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(PermissionTranslationTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('/**', $source);
@@ -203,7 +203,7 @@ class PermissionTranslationTwigExtensionTest extends TestCase
     public function testPermissionKeyFormatIsCorrect(): void
     {
         // Test the permission key format structure
-        $filename = (new ReflectionClass(PermissionTranslationTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(PermissionTranslationTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         // Should format permission keys with 'permission::' prefix
@@ -213,7 +213,7 @@ class PermissionTranslationTwigExtensionTest extends TestCase
     public function testTernaryOperatorUsage(): void
     {
         // Test that the method uses ternary operator for conditional translation
-        $filename = (new ReflectionClass(PermissionTranslationTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(PermissionTranslationTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('?', $source);

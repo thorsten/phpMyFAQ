@@ -144,7 +144,7 @@ class CreateLinkTwigExtensionTest extends TestCase
 
     public function testClassHasCorrectImports(): void
     {
-        $filename = (new ReflectionClass(CreateLinkTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(CreateLinkTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $expectedImports = [
@@ -164,7 +164,7 @@ class CreateLinkTwigExtensionTest extends TestCase
 
     public function testMethodUsesConfigurationInstance(): void
     {
-        $filename = (new ReflectionClass(CreateLinkTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(CreateLinkTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('Configuration::getConfigurationInstance()', $source);
@@ -174,7 +174,7 @@ class CreateLinkTwigExtensionTest extends TestCase
 
     public function testMethodCreatesCorrectUrlFormat(): void
     {
-        $filename = (new ReflectionClass(CreateLinkTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(CreateLinkTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         // Should create URL with proper format
@@ -243,7 +243,7 @@ class CreateLinkTwigExtensionTest extends TestCase
 
     public function testDeclareStrictTypes(): void
     {
-        $filename = (new ReflectionClass(CreateLinkTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(CreateLinkTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('declare(strict_types=1);', $source);
@@ -251,7 +251,7 @@ class CreateLinkTwigExtensionTest extends TestCase
 
     public function testMethodImplementsLinkCreation(): void
     {
-        $filename = (new ReflectionClass(CreateLinkTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(CreateLinkTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         // Should properly create Link object and set properties
@@ -262,7 +262,7 @@ class CreateLinkTwigExtensionTest extends TestCase
 
     public function testMethodCreatesCategoryInstance(): void
     {
-        $filename = (new ReflectionClass(CreateLinkTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(CreateLinkTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         // Should create Category instance and get category data
@@ -287,7 +287,7 @@ class CreateLinkTwigExtensionTest extends TestCase
     public function testUrlGenerationPattern(): void
     {
         // Test that URL generation follows expected pattern
-        $filename = (new ReflectionClass(CreateLinkTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(CreateLinkTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         // Should use Configuration to get default URL
@@ -300,7 +300,7 @@ class CreateLinkTwigExtensionTest extends TestCase
     public function testMethodHandlesConfigurationProperly(): void
     {
         // Verify method properly injects Configuration into dependencies
-        $filename = (new ReflectionClass(CreateLinkTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(CreateLinkTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         // Should pass configuration to Category and Link constructors

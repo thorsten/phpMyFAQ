@@ -185,9 +185,7 @@ class ApplicationTest extends TestCase
     public function testHandleRequestUnauthorizedHttpExceptionForApi(): void
     {
         $configuration = $this->createMock(Configuration::class);
-        $configuration
-            ->method('getDefaultUrl')
-            ->willReturn('https://localhost');
+        $configuration->method('getDefaultUrl')->willReturn('https://localhost');
 
         $this->container
             ->method('get')
@@ -374,7 +372,7 @@ class ApplicationTest extends TestCase
             $request,
             Response::HTTP_NOT_FOUND,
             $exception,
-            'The requested resource was not found.'
+            'The requested resource was not found.',
         );
 
         $this->assertInstanceOf(Response::class, $response);
@@ -412,7 +410,7 @@ class ApplicationTest extends TestCase
             $request,
             Response::HTTP_BAD_REQUEST,
             $exception,
-            'Bad request.'
+            'Bad request.',
         );
 
         $content = json_decode($response->getContent(), true);
@@ -445,7 +443,7 @@ class ApplicationTest extends TestCase
             $request,
             Response::HTTP_UNAUTHORIZED,
             $exception,
-            'Unauthorized.'
+            'Unauthorized.',
         );
 
         $content = json_decode($response->getContent(), true);
@@ -473,13 +471,7 @@ class ApplicationTest extends TestCase
         $reflection = new ReflectionClass(Application::class);
         $method = $reflection->getMethod('createProblemDetailsResponse');
 
-        $response = $method->invoke(
-            $this->application,
-            $request,
-            Response::HTTP_FORBIDDEN,
-            $exception,
-            'Forbidden.'
-        );
+        $response = $method->invoke($this->application, $request, Response::HTTP_FORBIDDEN, $exception, 'Forbidden.');
 
         $content = json_decode($response->getContent(), true);
         $this->assertEquals('https://localhost/problems/forbidden', $content['type']);
@@ -511,7 +503,7 @@ class ApplicationTest extends TestCase
             $request,
             Response::HTTP_INTERNAL_SERVER_ERROR,
             $exception,
-            'Internal server error.'
+            'Internal server error.',
         );
 
         $content = json_decode($response->getContent(), true);

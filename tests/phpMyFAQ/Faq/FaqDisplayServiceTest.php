@@ -58,9 +58,7 @@ class FaqDisplayServiceTest extends TestCase
 
         // Create mock current user
         $this->currentUser = $this->createMock(CurrentUser::class);
-        $this->currentUser
-            ->method('getUserId')
-            ->willReturn(1);
+        $this->currentUser->method('getUserId')->willReturn(1);
 
         $this->currentGroups = [1];
 
@@ -163,9 +161,7 @@ class FaqDisplayServiceTest extends TestCase
     {
         $this->configuration->set('main.enableMarkdownEditor', false);
 
-        $this->faq
-            ->method('getQuestion')
-            ->willReturn('Test Question');
+        $this->faq->method('getQuestion')->willReturn('Test Question');
 
         $result = $this->service->processAnswer('http://example.com/faq.html', null);
 
@@ -181,9 +177,7 @@ class FaqDisplayServiceTest extends TestCase
         $this->configuration->set('main.enableMarkdownEditor', true);
         $this->faq->faqRecord['content'] = '**Bold text**';
 
-        $this->faq
-            ->method('getQuestion')
-            ->willReturn('Test Question');
+        $this->faq->method('getQuestion')->willReturn('Test Question');
 
         $result = $this->service->processAnswer('http://example.com/faq.html', null);
 
@@ -196,9 +190,7 @@ class FaqDisplayServiceTest extends TestCase
      */
     public function testProcessAnswerWithHighlighting(): void
     {
-        $this->faq
-            ->method('getQuestion')
-            ->willReturn('Test Question');
+        $this->faq->method('getQuestion')->willReturn('Test Question');
 
         $result = $this->service->processAnswer('http://example.com/faq.html', 'content');
 
@@ -210,9 +202,7 @@ class FaqDisplayServiceTest extends TestCase
      */
     public function testProcessAnswerIgnoresShortHighlight(): void
     {
-        $this->faq
-            ->method('getQuestion')
-            ->willReturn('Test Question');
+        $this->faq->method('getQuestion')->willReturn('Test Question');
 
         $result = $this->service->processAnswer('http://example.com/faq.html', 'ab');
 
@@ -224,9 +214,7 @@ class FaqDisplayServiceTest extends TestCase
      */
     public function testProcessAnswerIgnoresSpecialCharacterHighlight(): void
     {
-        $this->faq
-            ->method('getQuestion')
-            ->willReturn('Test Question');
+        $this->faq->method('getQuestion')->willReturn('Test Question');
 
         $result = $this->service->processAnswer('http://example.com/faq.html', '/');
 
@@ -238,9 +226,7 @@ class FaqDisplayServiceTest extends TestCase
      */
     public function testProcessQuestion(): void
     {
-        $this->faq
-            ->method('getQuestion')
-            ->willReturn('Test Question');
+        $this->faq->method('getQuestion')->willReturn('Test Question');
 
         $result = $this->service->processQuestion(null);
 
@@ -252,9 +238,7 @@ class FaqDisplayServiceTest extends TestCase
      */
     public function testProcessQuestionWithHighlighting(): void
     {
-        $this->faq
-            ->method('getQuestion')
-            ->willReturn('Test Question');
+        $this->faq->method('getQuestion')->willReturn('Test Question');
 
         $result = $this->service->processQuestion('test');
 
@@ -293,9 +277,7 @@ class FaqDisplayServiceTest extends TestCase
      */
     public function testGetRenderedCategoryPathSingleCategory(): void
     {
-        $this->category
-            ->method('getCategoriesFromFaq')
-            ->willReturn([['id' => 1]]);
+        $this->category->method('getCategoriesFromFaq')->willReturn([['id' => 1]]);
 
         $result = $this->service->getRenderedCategoryPath(1);
 
@@ -307,13 +289,9 @@ class FaqDisplayServiceTest extends TestCase
      */
     public function testGetRenderedCategoryPathMultipleCategories(): void
     {
-        $this->category
-            ->method('getCategoriesFromFaq')
-            ->willReturn([['id' => 1], ['id' => 2]]);
+        $this->category->method('getCategoriesFromFaq')->willReturn([['id' => 1], ['id' => 2]]);
 
-        $this->category
-            ->method('getPath')
-            ->willReturn('<ul><li>Category</li></ul>');
+        $this->category->method('getPath')->willReturn('<ul><li>Category</li></ul>');
 
         $result = $this->service->getRenderedCategoryPath(1);
 
@@ -326,9 +304,7 @@ class FaqDisplayServiceTest extends TestCase
      */
     public function testGetRenderedCategoryPathNoCategories(): void
     {
-        $this->category
-            ->method('getCategoriesFromFaq')
-            ->willReturn([]);
+        $this->category->method('getCategoriesFromFaq')->willReturn([]);
 
         $result = $this->service->getRenderedCategoryPath(1);
 
@@ -434,9 +410,7 @@ class FaqDisplayServiceTest extends TestCase
      */
     public function testProcessAnswerReturnsString(): void
     {
-        $this->faq
-            ->method('getQuestion')
-            ->willReturn('Test Question');
+        $this->faq->method('getQuestion')->willReturn('Test Question');
 
         $result = $this->service->processAnswer('http://example.com/faq.html', null);
 
@@ -448,9 +422,7 @@ class FaqDisplayServiceTest extends TestCase
      */
     public function testProcessQuestionReturnsString(): void
     {
-        $this->faq
-            ->method('getQuestion')
-            ->willReturn('Test Question');
+        $this->faq->method('getQuestion')->willReturn('Test Question');
 
         $result = $this->service->processQuestion(null);
 
@@ -487,9 +459,7 @@ class FaqDisplayServiceTest extends TestCase
      */
     public function testGetRenderedCategoryPathReturnsString(): void
     {
-        $this->category
-            ->method('getCategoriesFromFaq')
-            ->willReturn([]);
+        $this->category->method('getCategoriesFromFaq')->willReturn([]);
 
         $result = $this->service->getRenderedCategoryPath(1);
 

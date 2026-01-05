@@ -68,13 +68,10 @@ class SearchServiceTest extends TestCase
 
         // Create mock current user
         $this->currentUser = $this->createMock(CurrentUser::class);
-        $this->currentUser
-            ->method('getUserId')
-            ->willReturn(1);
+        $this->currentUser->method('getUserId')->willReturn(1);
 
         $this->currentGroups = [1];
     }
-
 
     /**
      * @throws Exception

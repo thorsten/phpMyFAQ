@@ -139,7 +139,7 @@ class TranslateTwigExtensionTest extends TestCase
 
     public function testClassHasCorrectImports(): void
     {
-        $filename = (new ReflectionClass(TranslateTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(TranslateTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $expectedImports = [
@@ -155,7 +155,7 @@ class TranslateTwigExtensionTest extends TestCase
 
     public function testMethodUsesTranslationClass(): void
     {
-        $filename = (new ReflectionClass(TranslateTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(TranslateTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('Translation::get($translationKey)', $source);
@@ -181,7 +181,7 @@ class TranslateTwigExtensionTest extends TestCase
     public function testFallbackBehavior(): void
     {
         // Test that method implements fallback behavior
-        $filename = (new ReflectionClass(TranslateTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(TranslateTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         // Should use null coalescing operator for fallback
@@ -227,7 +227,7 @@ class TranslateTwigExtensionTest extends TestCase
     public function testDeclareStrictTypes(): void
     {
         // Verify the file uses strict types
-        $filename = (new ReflectionClass(TranslateTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(TranslateTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('declare(strict_types=1);', $source);
@@ -247,7 +247,7 @@ class TranslateTwigExtensionTest extends TestCase
     public function testMethodImplementsProperErrorHandling(): void
     {
         // Test that method has proper fallback mechanism in code
-        $filename = (new ReflectionClass(TranslateTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(TranslateTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         // Should use null coalescing operator for error handling

@@ -139,7 +139,7 @@ class FaqTwigExtensionTest extends TestCase
     public function testMethodCreatesFaqInstance(): void
     {
         // Verify the method creates a Faq instance correctly
-        $filename = (new ReflectionClass(FaqTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(FaqTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('$faq = new Faq', $source);
@@ -164,7 +164,7 @@ class FaqTwigExtensionTest extends TestCase
 
     public function testClassHasCorrectImports(): void
     {
-        $filename = (new ReflectionClass(FaqTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(FaqTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $expectedImports = [

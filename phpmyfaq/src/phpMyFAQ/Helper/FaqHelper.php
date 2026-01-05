@@ -30,6 +30,7 @@ use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Link;
+use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Utils;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
@@ -105,11 +106,12 @@ class FaqHelper extends AbstractHelper
     public function createFaqUrl(FaqEntity $faqEntity, int $categoryId): string
     {
         return sprintf(
-            '%s?action=faq&cat=%d&id=%d&artlang=%s',
-            $this->configuration->getDefaultUrl() . 'index.php',
+            '%scontent/%d/%d/%s/%s.html',
+            $this->configuration->getDefaultUrl(),
             $categoryId,
             $faqEntity->getId(),
             $faqEntity->getLanguage(),
+            TitleSlugifier::slug($faqEntity->getQuestion()),
         );
     }
 

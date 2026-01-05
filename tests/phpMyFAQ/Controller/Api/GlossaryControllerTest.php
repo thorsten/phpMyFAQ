@@ -26,12 +26,18 @@ class GlossaryControllerTest extends TestCase
 
     public function testListReturnsGlossaryItems(): void
     {
-
         $glossaryController = new GlossaryController();
 
-        $request = Request::create('/api/v3.2/glossary', 'GET', [], [], [], [
-            'HTTP_ACCEPT_LANGUAGE' => 'en',
-        ]);
+        $request = Request::create(
+            '/api/v3.2/glossary',
+            'GET',
+            [],
+            [],
+            [],
+            [
+                'HTTP_ACCEPT_LANGUAGE' => 'en',
+            ],
+        );
 
         $response = $glossaryController->list($request);
 
@@ -49,9 +55,16 @@ class GlossaryControllerTest extends TestCase
         $glossaryController = new GlossaryController();
 
         // Test with complex Accept-Language header
-        $request = Request::create('/api/v3.2/glossary', 'GET', [], [], [], [
-            'HTTP_ACCEPT_LANGUAGE' => 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7',
-        ]);
+        $request = Request::create(
+            '/api/v3.2/glossary',
+            'GET',
+            [],
+            [],
+            [],
+            [
+                'HTTP_ACCEPT_LANGUAGE' => 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7',
+            ],
+        );
 
         $response = $glossaryController->list($request);
 

@@ -61,9 +61,9 @@ class FaqHelperTest extends TestCase
     public function testCreateFaqUrl(): void
     {
         $faqEntity = new FaqEntity();
-        $faqEntity->setId(42)->setLanguage('de');
+        $faqEntity->setId(42)->setLanguage('de')->setQuestion('Foobar');
 
-        $this->assertEquals('https://localhost:443/index.php?action=faq&cat=1&id=42&artlang=de', $this->faqHelper->createFaqUrl(
+        $this->assertEquals('https://localhost:443/content/1/42/de/foobar.html', $this->faqHelper->createFaqUrl(
             $faqEntity,
             1,
         ));

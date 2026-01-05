@@ -53,9 +53,7 @@ class QuestionServiceTest extends TestCase
 
         // Create mock current user
         $this->currentUser = $this->createMock(CurrentUser::class);
-        $this->currentUser
-            ->method('getUserId')
-            ->willReturn(1);
+        $this->currentUser->method('getUserId')->willReturn(1);
 
         $this->currentGroups = [1];
 
@@ -134,9 +132,7 @@ class QuestionServiceTest extends TestCase
     {
         // Mock guest user (user ID = -1)
         $guestUser = $this->createMock(CurrentUser::class);
-        $guestUser
-            ->method('getUserId')
-            ->willReturn(-1);
+        $guestUser->method('getUserId')->willReturn(-1);
 
         $service = new QuestionService($this->configuration, $guestUser, $this->currentGroups);
 
@@ -153,9 +149,7 @@ class QuestionServiceTest extends TestCase
 
         // Mock guest user (user ID = -1)
         $guestUser = $this->createMock(CurrentUser::class);
-        $guestUser
-            ->method('getUserId')
-            ->willReturn(-1);
+        $guestUser->method('getUserId')->willReturn(-1);
 
         $service = new QuestionService($this->configuration, $guestUser, $this->currentGroups);
 
@@ -169,9 +163,7 @@ class QuestionServiceTest extends TestCase
     {
         // Create a logged-in user mock
         $loggedInUser = $this->createMock(CurrentUser::class);
-        $loggedInUser
-            ->method('getUserId')
-            ->willReturn(42);
+        $loggedInUser->method('getUserId')->willReturn(42);
 
         $service = new QuestionService($this->configuration, $loggedInUser, $this->currentGroups);
 
@@ -199,9 +191,7 @@ class QuestionServiceTest extends TestCase
     public function testGetDefaultUserEmailForGuest(): void
     {
         $guestUser = $this->createMock(CurrentUser::class);
-        $guestUser
-            ->method('getUserId')
-            ->willReturn(-1);
+        $guestUser->method('getUserId')->willReturn(-1);
 
         $service = new QuestionService($this->configuration, $guestUser, $this->currentGroups);
 
@@ -231,9 +221,7 @@ class QuestionServiceTest extends TestCase
     public function testGetDefaultUserNameForGuest(): void
     {
         $guestUser = $this->createMock(CurrentUser::class);
-        $guestUser
-            ->method('getUserId')
-            ->willReturn(-1);
+        $guestUser->method('getUserId')->willReturn(-1);
 
         $service = new QuestionService($this->configuration, $guestUser, $this->currentGroups);
 
@@ -288,13 +276,8 @@ class QuestionServiceTest extends TestCase
     public function testGetDefaultUserEmailReturnsString(): void
     {
         $userMock = $this->createMock(CurrentUser::class);
-        $userMock
-            ->method('getUserId')
-            ->willReturn(1);
-        $userMock
-            ->method('getUserData')
-            ->with('email')
-            ->willReturn('test@example.com');
+        $userMock->method('getUserId')->willReturn(1);
+        $userMock->method('getUserData')->with('email')->willReturn('test@example.com');
 
         $service = new QuestionService($this->configuration, $userMock, $this->currentGroups);
 
@@ -309,13 +292,8 @@ class QuestionServiceTest extends TestCase
     public function testGetDefaultUserNameReturnsString(): void
     {
         $userMock = $this->createMock(CurrentUser::class);
-        $userMock
-            ->method('getUserId')
-            ->willReturn(1);
-        $userMock
-            ->method('getUserData')
-            ->with('display_name')
-            ->willReturn('John Doe');
+        $userMock->method('getUserId')->willReturn(1);
+        $userMock->method('getUserData')->with('display_name')->willReturn('John Doe');
 
         $service = new QuestionService($this->configuration, $userMock, $this->currentGroups);
 

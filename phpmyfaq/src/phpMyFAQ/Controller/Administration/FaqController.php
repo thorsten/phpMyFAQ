@@ -33,6 +33,7 @@ use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Link;
+use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Question;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
@@ -284,15 +285,13 @@ final class FaqController extends AbstractAdministrationController
         $revisions = $faqRevision->get($faqId, $faqLanguage, $faqData['author']);
 
         $faqUrl = sprintf(
-            '%sindex.php?action=faq&cat=%s&id=%d&artlang=%s',
+            '%scontent/%d/%d/%s/%s.html',
             $this->configuration->getDefaultUrl(),
             $category->getCategoryIdFromFaq($faqId),
             $faqId,
             $faqLanguage,
+            TitleSlugifier::slug($faqData['title']),
         );
-
-        $link = new Link($faqUrl, $this->configuration);
-        $link->setTitle($faqData['title']);
 
         // User permissions
         $userPermission = $this->container->get(id: 'phpmyfaq.faq.permission')->get(Permission::USER, $faqId);
@@ -334,7 +333,7 @@ final class FaqController extends AbstractAdministrationController
             'selectedRevisionId' => $selectedRevisionId ?? $faqData['revision_id'],
             'faqRevisionId' => $faqData['revision_id'],
             'faqData' => $faqData,
-            'faqUrl' => $link->toString(),
+            'faqUrl' => $faqUrl,
             'openQuestionId' => 0,
             'notifyUser' => '',
             'notifyEmail' => '',

@@ -21,13 +21,13 @@
           </td>
           {% if isCloseQuestionEnabled and question.answerId > 0 %}
             <td class="text-end">
-              <a class="btn btn-primary"  href="?action=faq&cat={{ question.categoryId }}&id={{ question.answerId }}">
+              <a class="btn btn-primary"  href="./content/{{ question.categoryId }}/{{ question.answerId }}/{{ question.lang }}/{{ question.slug }}.html">
                 {{ msg2answerFAQ }}
               </a>
             </td>
           {% elseif userHasPermissionToAnswer %}
             <td class="text-end">
-              <a class="btn btn-primary" href="?action=add&question={{ question.id }}&cat={{ question.categoryId }}">
+              <a class="btn btn-primary" href="./add-faq.html?question={{ question.id }}&cat={{ question.categoryId }}">
                 {{ msg2answer }}
               </a>
             </td>

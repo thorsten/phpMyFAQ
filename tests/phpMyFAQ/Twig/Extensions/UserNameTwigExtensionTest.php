@@ -193,7 +193,7 @@ class UserNameTwigExtensionTest extends TestCase
 
     public function testClassHasCorrectImports(): void
     {
-        $filename = (new ReflectionClass(UserNameTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(UserNameTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $expectedImports = [
@@ -211,7 +211,7 @@ class UserNameTwigExtensionTest extends TestCase
 
     public function testMethodsUseConfigurationInstance(): void
     {
-        $filename = (new ReflectionClass(UserNameTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(UserNameTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         $this->assertStringContainsString('Configuration::getConfigurationInstance()', $source);
@@ -220,7 +220,7 @@ class UserNameTwigExtensionTest extends TestCase
 
     public function testGetUserNameImplementation(): void
     {
-        $filename = (new ReflectionClass(UserNameTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(UserNameTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         // Should create a User instance and call getUserById
@@ -230,7 +230,7 @@ class UserNameTwigExtensionTest extends TestCase
 
     public function testGetRealNameImplementation(): void
     {
-        $filename = (new ReflectionClass(UserNameTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(UserNameTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         // Should create User instance and call getUserById
@@ -327,7 +327,7 @@ class UserNameTwigExtensionTest extends TestCase
 
     public function testClassNamespaceDeclaration(): void
     {
-        $filename = (new ReflectionClass(UserNameTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(UserNameTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         // Should not have declare(strict_types=1) since it's missing in the actual file
@@ -337,7 +337,7 @@ class UserNameTwigExtensionTest extends TestCase
 
     public function testUserInstanceCreation(): void
     {
-        $filename = (new ReflectionClass(UserNameTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(UserNameTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         // Should create User instance with Configuration
@@ -346,7 +346,7 @@ class UserNameTwigExtensionTest extends TestCase
 
     public function testBothMethodsFollowSamePattern(): void
     {
-        $filename = (new ReflectionClass(UserNameTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(UserNameTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         // Both methods should follow the same pattern of:
@@ -363,7 +363,7 @@ class UserNameTwigExtensionTest extends TestCase
 
     public function testMethodsHandleDifferentUserData(): void
     {
-        $filename = (new ReflectionClass(UserNameTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(UserNameTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         // getUserName should call getLogin()
@@ -375,7 +375,7 @@ class UserNameTwigExtensionTest extends TestCase
 
     public function testDocumentationExists(): void
     {
-        $filename = (new ReflectionClass(UserNameTwigExtension::class))->getFileName();
+        $filename = new ReflectionClass(UserNameTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
         // Should have proper documentation

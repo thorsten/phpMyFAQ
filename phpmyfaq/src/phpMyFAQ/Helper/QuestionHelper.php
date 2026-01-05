@@ -24,6 +24,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Date;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
+use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Utils;
@@ -100,6 +101,7 @@ class QuestionHelper extends AbstractHelper
             while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $question = new stdClass();
                 $question->id = $row->id;
+                $question->lang = $row->lang;
                 $question->date = $date->format(Date::createIsoDate($row->created));
                 $question->email = $mail->safeEmail($row->email);
                 $question->userName = $row->username;
@@ -107,6 +109,7 @@ class QuestionHelper extends AbstractHelper
                 $question->categoryName = $this->getCategory()->getCategoryName((int) $row->category_id);
                 $question->question = $row->question;
                 $question->answerId = $row->answer_id;
+                $question->slug = TitleSlugifier::slug($question->question);
 
                 $openQuestions->questions[] = $question;
             }
