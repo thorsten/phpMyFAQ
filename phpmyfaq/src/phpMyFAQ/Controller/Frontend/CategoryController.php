@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
+use Exception;
 use phpMyFAQ\Category;
 use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Faq;
@@ -26,6 +27,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
+use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\UserSession;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,7 +41,7 @@ final class CategoryController extends AbstractFrontController
     /**
      * Displays a specific category with its FAQs
      *
-     * @throws \Exception
+     * @throws Exception
      */
     #[Route(path: '/category/{categoryId}/{slug}.html', name: 'public.category.show', methods: ['GET'])]
     public function show(Request $request): Response
@@ -62,7 +64,7 @@ final class CategoryController extends AbstractFrontController
     /**
      * Displays all categories
      *
-     * @throws \Exception
+     * @throws Exception
      */
     #[Route(path: '/show-categories.html', name: 'public.category.showAll', methods: ['GET'])]
     public function index(Request $request): Response
@@ -84,6 +86,7 @@ final class CategoryController extends AbstractFrontController
      * Initializes and configures the Category object
      *
      * @param array<int> $currentGroups
+     * @throws Exception
      */
     private function initializeCategory(array $currentGroups): Category
     {
@@ -99,6 +102,7 @@ final class CategoryController extends AbstractFrontController
      * Initializes and configures the FAQ object
      *
      * @param array<int> $currentGroups
+     * @throws Exception
      */
     private function initializeFaq(array $currentGroups): Faq
     {
@@ -124,7 +128,7 @@ final class CategoryController extends AbstractFrontController
      * Renders a specific category with its FAQs and subcategories
      *
      * @return array<string, mixed>
-     * @throws \Exception
+     * @throws Exception
      */
     private function renderSpecificCategory(
         Request $request,
@@ -165,7 +169,7 @@ final class CategoryController extends AbstractFrontController
      * Renders all categories
      *
      * @return array<string, mixed>
-     * @throws \Exception
+     * @throws Exception
      */
     private function renderAllCategories(Request $request, UserSession $userSession, Category $category): array
     {
@@ -248,7 +252,7 @@ final class CategoryController extends AbstractFrontController
         if ($parentId === 0) {
             $url = $this->configuration->getDefaultUrl() . 'show-categories.html';
         } else {
-            $slug = $this->createSlug($parentName);
+            $slug = TitleSlugifier::slug($parentName);
             $url = sprintf('%scategory/%d/%s.html', $this->configuration->getDefaultUrl(), $parentId, $slug);
         }
 
@@ -260,17 +264,6 @@ final class CategoryController extends AbstractFrontController
         $link->tooltip = Translation::get(key: 'msgCategoryUp');
 
         return sprintf('<i class="bi bi-arrow-90deg-up"></i> %s', $link->toHtmlAnchor());
-    }
-
-    /**
-     * Creates a URL-friendly slug from a category name
-     */
-    private function createSlug(string $text): string
-    {
-        $text = strtolower($text);
-        $text = preg_replace('/[^a-z0-9-]/', '-', $text);
-        $text = preg_replace('/-+/', '-', (string) $text);
-        return trim((string) $text, '-');
     }
 
     /**

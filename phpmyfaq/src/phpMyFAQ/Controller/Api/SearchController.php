@@ -25,7 +25,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Link;
+use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -66,7 +66,7 @@ final class SearchController extends AbstractController
                 "category_id": "15",
                 "question": "Why are you using phpMyFAQ?",
                 "answer": "Because it is cool!",
-                "link": "https://www.example.org/index.php?action=faq&cat=15&id=1&artlang=en"
+                "link": "https://www.example.org/content/15/1/en/why-are-you-using-phpmyfaq.html"
             }
         ]'),
     )]
@@ -83,20 +83,23 @@ final class SearchController extends AbstractController
         $faqPermission = new Permission($this->configuration);
         $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
 
-        $searchString = Filter::filterVar($request->attributes->get(key: 'q'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $searchString = Filter::filterVar($request->query->get(key: 'q'), FILTER_SANITIZE_SPECIAL_CHARS);
         $searchResults = $search->search(searchTerm: $searchString, allLanguages: false);
         $searchResultSet->reviewResultSet($searchResults);
 
         if ($searchResultSet->getNumberOfResults() > 0) {
-            $url = $this->configuration->getDefaultUrl() . 'index.php?action=faq&cat=%d&id=%d&artlang=%s';
             $result = [];
             foreach ($searchResultSet->getResultSet() as $data) {
                 $data->answer = html_entity_decode(strip_tags((string) $data->answer), ENT_COMPAT, encoding: 'utf-8');
                 $data->answer = Utils::makeShorterText(string: $data->answer, characters: 12);
-                $url = sprintf($url, $data->category_id, $data->id, $data->lang);
-                $link = new Link($url, $this->configuration);
-                $link->setTitle($data->question);
-                $data->link = $link->toString();
+                $data->link = sprintf(
+                    '%sfaq/%d/%d/%s/%s.html',
+                    $this->configuration->getDefaultUrl(),
+                    $data->category_id,
+                    $data->id,
+                    $data->lang,
+                    TitleSlugifier::slug($data->question),
+                );
                 $result[] = $data;
             }
 
@@ -106,6 +109,9 @@ final class SearchController extends AbstractController
         return $this->json([], Response::HTTP_NOT_FOUND);
     }
 
+    /**
+     * @throws Exception
+     */
     #[OA\Get(path: '/api/v3.2/searches/popular', operationId: 'getPopularSearch', tags: ['Public Endpoints'])]
     #[OA\Header(
         header: 'Accept-Language',

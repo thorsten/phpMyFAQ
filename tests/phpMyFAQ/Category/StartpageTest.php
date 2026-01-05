@@ -176,11 +176,6 @@ class StartpageTest extends TestCase
             ->setGroups([5])
             ->setLanguage('en');
 
-        $this->configurationMock
-            ->expects($this->once())
-            ->method('getDefaultUrl')
-            ->willReturn('https://example.com/');
-
         $this->databaseMock
             ->expects($this->once())
             ->method('escape')
@@ -217,7 +212,7 @@ class StartpageTest extends TestCase
         $this->assertEquals('Test Category', $result[0]['name']);
         $this->assertEquals('Test Description', $result[0]['description']);
         $this->assertEquals('content/user/images/test-image.jpg', $result[0]['image']);
-        $this->assertStringContainsString('action=show&cat=1', $result[0]['url']);
+        $this->assertStringContainsString('./category/1/test-category.html', $result[0]['url']);
     }
 
     public function testGetCategoriesWithEmptyImage(): void
@@ -228,11 +223,6 @@ class StartpageTest extends TestCase
             ->setUser(1)
             ->setGroups([1])
             ->setLanguage('fr');
-
-        $this->configurationMock
-            ->expects($this->once())
-            ->method('getDefaultUrl')
-            ->willReturn('https://test.com/');
 
         $this->databaseMock
             ->expects($this->once())

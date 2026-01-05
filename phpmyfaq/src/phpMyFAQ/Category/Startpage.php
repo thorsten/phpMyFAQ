@@ -22,6 +22,7 @@ namespace phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Link;
+use phpMyFAQ\Link\Util\TitleSlugifier;
 
 readonly class Startpage
 {
@@ -125,13 +126,11 @@ readonly class Startpage
         $result = $this->configuration->getDb()->query($query);
 
         while ($row = $this->configuration->getDb()->fetchArray($result)) {
-            $url = sprintf('%sindex.php?action=show&cat=%d', $this->configuration->getDefaultUrl(), $row['id']);
-            $link = new Link($url, $this->configuration);
-            $link->setTitle($row['name']);
+            $link = sprintf('./category/%d/%s.html', $row['id'], TitleSlugifier::slug($row['name']));
             $image = '' === $row['image'] ? '' : 'content/user/images/' . $row['image'];
 
             $category = [
-                'url' => $link->toString(),
+                'url' => $link,
                 'name' => $row['name'],
                 'description' => $row['description'],
                 'image' => $image,

@@ -214,7 +214,7 @@
                     <ul class="list adminAttachments" data-pmf-csrf-token="{{ csrfTokenDeleteAttachment }}">
                       {% for attachment in attachments %}
                         <li id="attachment-id-{{ attachment.id }}">
-                          <a href="../index.php?action=attachment&id={{ attachment.id }}">{{ attachment.filename }}</a>
+                          <a href="../attachment/{{ attachment.id }}">{{ attachment.filename }}</a>
                           {% if hasPermissionForDeleteAttachments %}
                             <button type="button" class="btn btn-sm btn-danger pmf-delete-attachment-button"
                                     data-pmf-attachment-id="{{ attachment.id }}"

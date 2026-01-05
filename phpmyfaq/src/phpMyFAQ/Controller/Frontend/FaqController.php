@@ -30,6 +30,7 @@ use phpMyFAQ\Faq\FaqDisplayService;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
+use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Services;
 use phpMyFAQ\Session\Token;
@@ -163,9 +164,7 @@ final class FaqController extends AbstractFrontController
             return new Response('', Response::HTTP_NOT_FOUND);
         }
 
-        // Generate a simple slug from the question title
-        $slug = preg_replace('/[^a-z0-9]+/i', '-', strtolower($faqData['question'] ?? 'faq'));
-        $slug = trim((string) $slug, '-') ?: 'faq';
+        $slug = TitleSlugifier::slug($faqData['question']);
 
         // Redirect to the canonical FAQ URL
         $url = sprintf('/faq/%d/%d/%s.html', $faqData['category_id'], $faqData['id'], $slug);
