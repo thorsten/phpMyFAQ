@@ -1,0 +1,37 @@
+{#
+ # Twig macros for FAQ rendering
+ #
+ # This Source Code Form is subject to the terms of the Mozilla Public License,
+ # v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ # obtain one at https://mozilla.org/MPL/2.0/.
+ #
+ # @package   phpMyFAQ
+ # @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ # @copyright 2026 phpMyFAQ Team
+ # @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ # @link      https://www.phpmyfaq.de
+ # @since     2026-01-05
+ #}
+
+{#
+ # Renders a select box with all translations of a FAQ
+ #
+ # @param languageUrls object Object with language codes as keys and URLs as values
+ # @param currentLang string The current FAQ language
+ #}
+{% macro renderChangeLanguageSelector(languageUrls, currentLang) %}
+    {% if languageUrls|length > 1 %}
+        <form method="post">
+            <select class="form-select" name="language" onchange="top.location.href = this.options[this.selectedIndex].value;">
+                {% for language, url in languageUrls %}
+                    <option value="{{ url }}"{% if currentLang == language %} selected{% endif %}>
+                        {{ language|getFromLanguageCode }}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
+    {% endif %}
+{% endmacro %}
+
+
+

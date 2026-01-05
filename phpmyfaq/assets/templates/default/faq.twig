@@ -1,5 +1,6 @@
 {% extends 'index.twig' %}
 {% import 'core/comment.macros.twig' as commentMacros %}
+{% import 'core/faq.macros.twig' as faqMacros %}
 
 {% block richSnippets %}
   <script type="application/ld+json">
@@ -106,7 +107,9 @@
               </li>
             {% endif %}
             {% if msgChangeLanguage is defined %}
-              <li class="list-group-item bg-transparent">{{ switchLanguage|raw }}</li>
+              <li class="list-group-item bg-transparent">
+                {{ faqMacros.renderChangeLanguageSelector(languageUrls, currentLanguage) }}
+              </li>
             {% endif %}
             {% if permissionEditFaq == true %}
               <li class="list-group-item bg-transparent">
@@ -183,7 +186,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="commentModalLabel">{{ msgCommentHeader }}</h1>
+          <h1 class="modal-title fs-5" id="commentModalLabel">{{ 'msgCommentHeader' | translate }}</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ msgCancel }}"></button>
         </div>
         <div class="modal-body">

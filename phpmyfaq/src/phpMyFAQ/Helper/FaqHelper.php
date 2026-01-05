@@ -59,39 +59,6 @@ class FaqHelper extends AbstractHelper
     }
 
     /**
-     * Renders a select box with all translations of a FAQ.
-     *
-     * @todo This method should be moved to a Twig macro.
-     */
-    #[\Deprecated(message: 'Rewrite this method to use Twig, will be removed in v4.2')]
-    public function renderChangeLanguageSelector(Faq $faq, int $categoryId): string
-    {
-        $html = '';
-        $faqUrl = sprintf('?action=faq&cat=%d&id=%d&artlang=%%s', $categoryId, $faq->faqRecord['id']);
-
-        $oLink = new Link($this->configuration->getDefaultUrl() . $faqUrl, $this->configuration);
-        $oLink->setTitle($faq->faqRecord['title']);
-
-        $availableLanguages = $this->configuration->getLanguage()->isLanguageAvailable((int) $faq->faqRecord['id']);
-
-        if ((is_countable($availableLanguages) ? count($availableLanguages) : 0) > 1) {
-            $html = '<form method="post">';
-            $html .= '<select class="form-select" name="language" ';
-            $html .= 'onchange="top.location.href = this.options[this.selectedIndex].value;">';
-
-            foreach ($availableLanguages as $availableLanguage) {
-                $html .= sprintf('<option value="%s"', sprintf($oLink->toString(), $availableLanguage));
-                $html .= $faq->faqRecord['lang'] === $availableLanguage ? ' selected' : '';
-                $html .= sprintf('>%s</option>', LanguageCodes::get($availableLanguage));
-            }
-
-            $html .= '</select></form>';
-        }
-
-        return $html;
-    }
-
-    /**
      * Renders a preview of the answer
      *
      * @param string $answer The answer to be previewed
@@ -125,10 +92,8 @@ class FaqHelper extends AbstractHelper
      */
     public function createOverview(Category $category, Faq $faq, string $language = ''): array
     {
-        // Initialize categories
         $category->transform(0);
 
-        // Get all FAQs
         $faq->getAllFaqs(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $language, 'active' => 'yes']);
 
         return $faq->faqRecords;

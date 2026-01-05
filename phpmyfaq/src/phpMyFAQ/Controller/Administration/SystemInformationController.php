@@ -69,7 +69,7 @@ final class SystemInformationController extends AbstractAdministrationController
             $openSearchInformation = 'n/a';
         }
 
-        $translationInformation = new TranslationStatistics($this->configuration);
+        $translationInformation = new TranslationStatistics();
         $translationStatistics = $translationInformation->getStatistics();
 
         $this->addExtension(new AttributeExtension(LanguageCodeTwigExtension::class));

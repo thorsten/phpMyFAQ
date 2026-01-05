@@ -28,11 +28,14 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\FaqCreationService;
 use phpMyFAQ\Faq\FaqDisplayService;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Language;
+use phpMyFAQ\Link;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Services;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\Extensions\LanguageCodeTwigExtension;
 use phpMyFAQ\Utils;
 use phpMyFAQ\Visits;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -40,6 +43,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
+use Twig\Extension\AttributeExtension;
 use Twig\TwigFilter;
 
 final class FaqController extends AbstractFrontController
@@ -134,6 +138,7 @@ final class FaqController extends AbstractFrontController
             $templateVars[$required] = (int) $input->input_required !== 0 ? 'required' : '';
         }
 
+        $this->addExtension(new AttributeExtension(LanguageCodeTwigExtension::class));
         return $this->render('add.twig', $templateVars);
     }
 
@@ -171,7 +176,8 @@ final class FaqController extends AbstractFrontController
     /**
      * Displays a single FAQ article with comments, ratings, and related content
      *
-     * @throws Exception|LoaderError*@throws \Exception
+     * @throws Exception|LoaderError|\Exception
+     *
      *
      */
     #[Route(path: '/faq/{categoryId}/{faqId}/{slug}.html', name: 'public.faq.show', methods: ['GET'])]
@@ -187,6 +193,21 @@ final class FaqController extends AbstractFrontController
         $faqId = Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
         if (!$faqId) {
             $faqId = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT, 0);
+        }
+
+        // Get language from route parameter (for /content/ URLs) or query parameter (for legacy URLs)
+        $requestedLanguage =
+            $request->attributes->get('language') ?? $request->query->get('artlang') ?? $this->configuration
+                ->getLanguage()
+                ->getLanguage();
+
+        // Temporarily set the language in session for this request
+        $session = $this->container->get('session');
+        $originalLanguage = $session->get('lang');
+        if ($requestedLanguage !== $originalLanguage) {
+            $session->set('lang', $requestedLanguage);
+            // Update the static language variable
+            Language::$language = $requestedLanguage;
         }
 
         $solutionId = Filter::filterVar($request->query->get('solution_id'), FILTER_VALIDATE_INT);
@@ -243,6 +264,21 @@ final class FaqController extends AbstractFrontController
         $comments = $faqDisplayService->getCommentsData($faqId);
         $availableLanguages = $faqDisplayService->getAvailableLanguages($faq->faqRecord['id']);
         $tagsHtml = $faqDisplayService->getTagsHtml($faqId);
+
+        // Generate language URLs with SEO slugs
+        $languageUrls = [];
+        foreach ($availableLanguages as $language) {
+            $url = sprintf(
+                '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
+                $this->configuration->getDefaultUrl(),
+                $cat,
+                $faqId,
+                $language,
+            );
+            $link = new Link($url, $this->configuration);
+            $link->setTitle($question);
+            $languageUrls[$language] = $link->toString();
+        }
 
         // Comment permissions
         $expired = $faqDisplayService->isExpired();
@@ -313,14 +349,14 @@ final class FaqController extends AbstractFrontController
             'linkToPdf' => $faqServices->getPdfLink(),
             'msgAverageVote' => Translation::get(key: 'msgAverageVote'),
             'renderVotingResult' => $faqDisplayService->getRating($faqId),
-            'switchLanguage' => $faqDisplayService->getFaqHelper()->renderChangeLanguageSelector($faq, $cat),
+            'languageUrls' => $languageUrls,
+            'currentLanguage' => $faq->faqRecord['lang'],
             'msgVoteBad' => Translation::get(key: 'msgVoteBad'),
             'msgVoteGood' => Translation::get(key: 'msgVoteGood'),
             'msgVoteSubmit' => Translation::get(key: 'msgVoteSubmit'),
             'msgWriteComment' => Translation::get(key: 'msgWriteComment'),
             'id' => $faqId,
             'lang' => $this->configuration->getLanguage()->getLanguage(),
-            'msgCommentHeader' => Translation::get(key: 'msgCommentHeader'),
             'msgNewContentName' => Translation::get(key: 'msgNewContentName'),
             'msgNewContentMail' => Translation::get(key: 'msgNewContentMail'),
             'defaultContentMail' => $this->currentUser->getUserId() > 0
@@ -401,6 +437,7 @@ final class FaqController extends AbstractFrontController
             $templateVars['renderRelatedArticles'] = $relatedFaqs;
         }
 
+        $this->addExtension(new AttributeExtension(LanguageCodeTwigExtension::class));
         return $this->render('faq.twig', $templateVars);
     }
 
