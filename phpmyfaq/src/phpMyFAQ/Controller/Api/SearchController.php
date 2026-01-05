@@ -83,7 +83,7 @@ final class SearchController extends AbstractController
         $faqPermission = new Permission($this->configuration);
         $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
 
-        $searchString = Filter::filterVar($request->attributes->get(key: 'q'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $searchString = Filter::filterVar($request->query->get(key: 'q'), FILTER_SANITIZE_SPECIAL_CHARS);
         $searchResults = $search->search(searchTerm: $searchString, allLanguages: false);
         $searchResultSet->reviewResultSet($searchResults);
 
@@ -106,6 +106,9 @@ final class SearchController extends AbstractController
         return $this->json([], Response::HTTP_NOT_FOUND);
     }
 
+    /**
+     * @throws Exception
+     */
     #[OA\Get(path: '/api/v3.1/searches/popular', operationId: 'getPopularSearch', tags: ['Public Endpoints'])]
     #[OA\Header(
         header: 'Accept-Language',
