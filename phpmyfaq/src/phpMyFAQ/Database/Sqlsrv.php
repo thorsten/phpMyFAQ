@@ -22,6 +22,7 @@ namespace phpMyFAQ\Database;
 
 use Exception;
 use phpMyFAQ\Database;
+use SensitiveParameter;
 
 /**
  * Class Sqlsrv
@@ -58,8 +59,8 @@ class Sqlsrv implements DatabaseDriver
      */
     public function connect(
         string $host,
-        #[\SensitiveParameter] string $user,
-        #[\SensitiveParameter] string $password,
+        #[SensitiveParameter] string $user,
+        #[SensitiveParameter] string $password,
         string $database = '',
         ?int $port = null,
     ): ?bool {
@@ -332,7 +333,7 @@ class Sqlsrv implements DatabaseDriver
      *                         SQL Server Authentication
      * @param string $database Specifies the name of the database in use for the connection being established
      */
-    private function setConnectionOptions(string $user, #[\SensitiveParameter] string $password, string $database): void
+    private function setConnectionOptions(string $user, #[SensitiveParameter] string $password, string $database): void
     {
         $this->connectionOptions = [
             'UID' => $user,

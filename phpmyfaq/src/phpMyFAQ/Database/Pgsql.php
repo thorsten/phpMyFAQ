@@ -25,6 +25,7 @@ use Exception;
 use PgSql\Connection;
 use PgSql\Result;
 use phpMyFAQ\Database;
+use SensitiveParameter;
 
 /**
  * Class Pgsql
@@ -62,8 +63,8 @@ class Pgsql implements DatabaseDriver
      */
     public function connect(
         string $host,
-        #[\SensitiveParameter] string $user,
-        #[\SensitiveParameter] string $password,
+        #[SensitiveParameter] string $user,
+        #[SensitiveParameter] string $password,
         string $database = '',
         ?int $port = null,
     ): ?bool {

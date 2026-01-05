@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Search\Database;
 
 use Exception;
+use Override;
 use phpMyFAQ\Search\SearchDatabase;
 
 /**
@@ -36,7 +37,7 @@ class Sqlsrv extends SearchDatabase implements DatabaseInterface
      * @param  string $searchTerm Search term
      * @throws Exception
      */
-    #[\Override]
+    #[Override]
     public function search(string $searchTerm): mixed
     {
         if (is_numeric($searchTerm) && $this->configuration->get(item: 'search.searchForSolutionId')) {

@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Database;
 
 use phpMyFAQ\Core\Exception;
+use SensitiveParameter;
 
 /**
  * Class Sqlite3
@@ -56,7 +57,7 @@ class Sqlite3 implements DatabaseDriver
     public function connect(
         string $host,
         string $user,
-        #[\SensitiveParameter] string $password,
+        #[SensitiveParameter] string $password,
         string $database = '',
         ?int $port = null,
     ): ?bool {
