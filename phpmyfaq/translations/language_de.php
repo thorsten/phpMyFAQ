@@ -979,7 +979,7 @@ $PMF_LANG['ad_stat_report_make_csv'] = "CSV-Export";
 // added v2.7.0-alpha2 - 2011-02-05 by Thorsten Rinne
 $PMF_LANG['msgRegistration'] = "Registrierung neuer Benutzer";
 $PMF_LANG['msgRegistrationCredentials'] = "Um sich anzumelden, muss dein Name, dein Loginname und eine korrekte E-Mailadresse eingegeben werden.";
-$PMF_LANG['msgRegistrationNote'] = "Nach der erfolgreichen Anmeldung erhälst du eine Antwort über Freischaltung deiner Anmeldung.";
+$PMF_LANG['msgRegistrationNote'] = "Nach der erfolgreichen Anmeldung erhältst du eine Antwort über Freischaltung deiner Anmeldung.";
 
 // added v2.7.0-beta - 2011-06-13 by Thorsten
 $PMF_LANG['ad_entry_changelog_history'] = "Änderungshistorie";
