@@ -143,7 +143,6 @@ readonly class FaqSearchToolExecutor implements ToolExecutorInterface, Identifie
 
     private function buildFaqUrl(int $faqId, string $language): string
     {
-        $baseUrl = $this->configuration->getDefaultUrl();
-        return rtrim($baseUrl, '/') . '/index.php?action=faq&cat=0&id=' . $faqId . '&artlang=' . $language;
+        return $this->configuration->getDefaultUrl() . 'content/' . $faqId . '/' . $language;
     }
 }

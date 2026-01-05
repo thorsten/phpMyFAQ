@@ -60,7 +60,7 @@ class BookmarkFormatterTest extends TestCase
         $this->assertArrayHasKey('id', $result);
         $this->assertArrayHasKey('answer', $result);
         $this->assertSame(1, $result['id']);
-        $this->assertStringContainsString('index.php?action=faq', $result['url']);
+        $this->assertStringContainsString('/content/', $result['url']);
     }
 
     public function testFormatReturnsNullWhenFaqIdMissingOrInvalid(): void

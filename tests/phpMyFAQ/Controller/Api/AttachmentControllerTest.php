@@ -134,11 +134,11 @@ class AttachmentControllerTest extends TestCase
 
         $file1 = $this->createStub(File::class);
         $file1->method('getFilename')->willReturn('attachment-1.pdf');
-        $file1->method('buildUrl')->willReturn('index.php?action=attachment&id=1');
+        $file1->method('buildUrl')->willReturn('attachment/1');
 
         $file2 = $this->createStub(File::class);
         $file2->method('getFilename')->willReturn('attachment-2.pdf');
-        $file2->method('buildUrl')->willReturn('index.php?action=attachment&id=2');
+        $file2->method('buildUrl')->willReturn('attachment/2');
 
         $attachmentController = $this->createAttachmentControllerTestDouble([$file1, $file2]);
 
@@ -149,11 +149,11 @@ class AttachmentControllerTest extends TestCase
         $expectedData = [
             [
                 'filename' => 'attachment-1.pdf',
-                'url' => 'https://www.example.org/index.php?action=attachment&id=1',
+                'url' => 'https://www.example.org/attachment/1',
             ],
             [
                 'filename' => 'attachment-2.pdf',
-                'url' => 'https://www.example.org/index.php?action=attachment&id=2',
+                'url' => 'https://www.example.org/attachment/2',
             ],
         ];
 

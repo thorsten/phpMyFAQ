@@ -92,7 +92,7 @@ class FaqSearchToolExecutorTest extends TestCase
         $this->assertSame(42, $jsonData['results'][0]['id']);
         $this->assertSame('What is phpMyFAQ?', $jsonData['results'][0]['question']);
         $this->assertStringContainsString(
-            'https://example.com/index.php?action=faq&cat=0&id=42&artlang=en',
+            'https://example.com/content/42/en',
             $jsonData['results'][0]['url'],
         );
     }

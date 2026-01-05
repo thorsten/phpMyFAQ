@@ -75,13 +75,13 @@ $routesConfig = [
         'methods' => 'GET',
     ],
     'public.faq.show' => [
-        'path' => '/faq/{categoryId}/{faqId}/{slug}.html',
+        'path' => '/content/{categoryId}/{faqId}/{language}/{slug}.html',
         'controller' => [FaqController::class, 'show'],
         'methods' => 'GET',
     ],
-    'public.content.show' => [
-        'path' => '/content/{categoryId}/{faqId}/{language}/{slug}.html',
-        'controller' => [FaqController::class, 'show'],
+    'public.faq.redirect' => [
+        'path' => '/content/{faqId}/{faqLang}',
+        'controller' => [FaqController::class, 'contentRedirect'],
         'methods' => 'GET',
     ],
     'public.forgot-password' => [

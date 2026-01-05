@@ -52,7 +52,7 @@ final class FaqController extends AbstractFrontController
     /**
      * Displays the form to add a new FAQ
      *
-     * @throws Exception|LoaderError
+     * @throws Exception|LoaderError|\Exception
      */
     #[Route(path: '/add-faq.html', name: 'public.faq.add', methods: ['GET'])]
     public function add(Request $request): Response
@@ -167,7 +167,51 @@ final class FaqController extends AbstractFrontController
         $slug = TitleSlugifier::slug($faqData['question']);
 
         // Redirect to the canonical FAQ URL
-        $url = sprintf('/faq/%d/%d/%s.html', $faqData['category_id'], $faqData['id'], $slug);
+        $url = sprintf('/content/%d/%d/%s/%s.html', $faqData['category_id'], $faqData['id'], $faqData['lang'], $slug);
+
+        return new RedirectResponse($url, Response::HTTP_MOVED_PERMANENTLY);
+    }
+
+    /**
+     * Redirects short content URLs to the full FAQ page
+     *
+     * @throws Exception|\Exception
+     */
+    #[Route(path: '/content/{faqId}/{faqLang}', name: 'public.faq.redirect', methods: ['GET'])]
+    public function contentRedirect(Request $request): Response
+    {
+        $faqId = Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT, 0);
+        $faqLang = Filter::filterVar($request->attributes->get('faqLang'), FILTER_SANITIZE_SPECIAL_CHARS);
+
+        if ($faqId === 0 || empty($faqLang)) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
+
+        $faq = $this->container->get('phpmyfaq.faq');
+
+        // Query the FAQ data directly for the specified language
+        $result = $faq->getFaqResult($faqId, $faqLang);
+
+        if ($this->configuration->getDb()->numRows($result) === 0) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
+
+        $row = $this->configuration->getDb()->fetchObject($result);
+        if (!$row) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
+
+        $category = $this->container->get('phpmyfaq.category');
+        $categoryId = $category->getCategoryIdFromFaq($faqId);
+
+        if ($categoryId === 0) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
+
+        $slug = TitleSlugifier::slug($row->thema);
+
+        // Redirect to the canonical FAQ URL
+        $url = sprintf('/content/%d/%d/%s/%s.html', $categoryId, $faqId, $faqLang, $slug);
 
         return new RedirectResponse($url, Response::HTTP_MOVED_PERMANENTLY);
     }
@@ -176,29 +220,28 @@ final class FaqController extends AbstractFrontController
      * Displays a single FAQ article with comments, ratings, and related content
      *
      * @throws Exception|LoaderError|\Exception
-     *
-     *
      */
-    #[Route(path: '/faq/{categoryId}/{faqId}/{slug}.html', name: 'public.faq.show', methods: ['GET'])]
+    #[Route(path: '/content/{categoryId}/{faqId}/{faqLang}/{slug}.html', name: 'public.faq.show', methods: ['GET'])]
     public function show(Request $request): Response
     {
         $faqSession = $this->container->get('phpmyfaq.user.session');
         $faqSession->setCurrentUser($this->currentUser);
 
         // Get parameters
-        $cat = Filter::filterVar($request->attributes->get('categoryId'), FILTER_VALIDATE_INT, 0);
+        $categoryId = Filter::filterVar($request->attributes->get('categoryId'), FILTER_VALIDATE_INT, 0);
 
         // Get faqId from route attributes (new routes) or query parameters (legacy/backward compatibility)
         $faqId = Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
-        if (!$faqId) {
-            $faqId = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT, 0);
-        }
 
-        // Get language from route parameter (for /content/ URLs) or query parameter (for legacy URLs)
+        // Get language from route parameter (for /content/ URLs)
         $requestedLanguage =
-            $request->attributes->get('language') ?? $request->query->get('artlang') ?? $this->configuration
-                ->getLanguage()
-                ->getLanguage();
+            Filter::filterVar(
+                $request->attributes->get('language'),
+                FILTER_SANITIZE_SPECIAL_CHARS,
+            ) ?? Filter::filterVar(
+                $request->attributes->get('faqLang'),
+                FILTER_SANITIZE_SPECIAL_CHARS,
+            ) ?? $this->configuration->getLanguage()->getLanguage();
 
         // Temporarily set the language in session for this request
         $session = $this->container->get('session');
@@ -246,7 +289,7 @@ final class FaqController extends AbstractFrontController
         $faqVisits->logViews($faqId);
 
         // Check if category and FAQ are linked
-        if (!$category->categoryHasLinkToFaq($faqId, $cat)) {
+        if (!$category->categoryHasLinkToFaq($faqId, $categoryId)) {
             return new Response('', Response::HTTP_NOT_FOUND);
         }
 
@@ -270,7 +313,7 @@ final class FaqController extends AbstractFrontController
             $url = sprintf(
                 '%scontent/%d/%d/%s/%s.html',
                 $this->configuration->getDefaultUrl(),
-                $cat,
+                $categoryId,
                 $faqId,
                 $language,
                 TitleSlugifier::slug($question),
@@ -300,7 +343,7 @@ final class FaqController extends AbstractFrontController
 
         // Services for social sharing
         $faqServices = new Services($this->configuration);
-        $faqServices->setCategoryId($cat);
+        $faqServices->setCategoryId($categoryId);
         $faqServices->setFaqId($faqId);
         $faqServices->setLanguage($this->configuration->getLanguage()->getLanguage());
         $faqServices->setQuestion($question);
@@ -333,7 +376,7 @@ final class FaqController extends AbstractFrontController
             'metaDescription' => $seoData->getDescription(),
             'solutionId' => $faq->faqRecord['solution_id'],
             'solutionIdLink' => './solution_id_' . $faq->faqRecord['solution_id'] . '.html',
-            'breadcrumb' => $category->getPathWithStartpage($cat, '/', true),
+            'breadcrumb' => $category->getPathWithStartpage($categoryId, '/', true),
             'question' => $question,
             'answer' => $answer,
             'attachmentList' => $attachmentList,
