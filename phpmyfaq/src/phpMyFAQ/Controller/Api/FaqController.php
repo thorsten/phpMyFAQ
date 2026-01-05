@@ -74,7 +74,7 @@ final class FaqController extends AbstractController
                 "category_id": 1,
                 "record_title": "Is there life after death?",
                 "record_preview": "Maybe!",
-                "record_link": "/phpmyfaq/phpmyfaq/index.php?action=faq&cat=1&id=1&artlang=en",
+                "record_link": "/phpmyfaq//content/1/1/en/is-there-life-after-death.html",
                 "record_updated": "20191010175452",
                 "visits": 3,
                 "record_created": "2018-09-03T21:30:17+02:00"
@@ -206,7 +206,7 @@ final class FaqController extends AbstractController
                 "category_id": 1,
                 "record_title": "Is there life after death?",
                 "record_preview": "Maybe!",
-                "record_link": "/phpmyfaq/phpmyfaq/index.php?action=faq&cat=1&id=1&artlang=en",
+                "record_link": "/phpmyfaq//content/1/1/en/is-there-life-after-death.html",
                 "record_updated": "20191010175452",
                 "visits": 3,
                 "record_created": "2018-09-03T21:30:17+02:00"
@@ -256,7 +256,7 @@ final class FaqController extends AbstractController
                 "question": "How can I survive without phpMyFAQ?",
                 "answer": "A good question!",
                 "visits": 10,
-                "url": "https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de"
+                "url": "https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html"
             }
         ]',
     ))]

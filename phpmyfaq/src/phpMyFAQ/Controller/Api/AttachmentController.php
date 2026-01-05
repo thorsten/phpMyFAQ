@@ -63,11 +63,11 @@ class AttachmentController extends AbstractController
         [
             {
                 "filename": "attachment-1.pdf",
-                "url": "https://www.example.org/index.php?action=attachment&id=1"
+                "url": "https://www.example.org/attachment/1"
             },
             {
                 "filename": "attachment-2.pdf",
-                "url": "https://www.example.org/index.php?action=attachment&id=2"
+                "url": "https://www.example.org/attachment/2"
             }
         ]',
     ))]

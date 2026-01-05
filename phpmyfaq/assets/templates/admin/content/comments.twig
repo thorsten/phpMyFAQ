@@ -102,8 +102,9 @@
                       {{ comment.date | format_datetime(locale=currentLocale) }}
                     </div>
                     <div class="d-flex align-items-center me-3">
-                      <a href="../news/{{ comment.recordId }}/{{ currentLocale }}/news.html">
-                        <i class="bi bi-newspaper"></i>
+                      <i class="bi bi-newspaper me-1"></i>
+                      <a href="../news/{{ comment.recordId }}/{{ currentLocale }}/{{ newsHeader[comment.recordId].header | slugify }}.html">
+                         {{ newsHeader[comment.recordId].header }}
                       </a>
                     </div>
                   </div>

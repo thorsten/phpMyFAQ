@@ -63,7 +63,7 @@ final class NewsController extends AbstractController
                 "link": "",
                 "linkTitle": "",
                 "target": "",
-                "url": "https://www.example.org/?action=news&newsid=1&newslang=de"
+                "url": "https://www.example.org/news/1/de/hallo-phpmyfaq.html"
               }
         ]'),
     )]

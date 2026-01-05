@@ -58,6 +58,9 @@ final class CommentsController extends AbstractAdministrationController
         $faqComments = array_slice($allFaqComments, ($page - 1) * $itemsPerPage, $itemsPerPage);
         $newsComments = array_slice($allNewsComments, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
+        $news = $this->container->get(id: 'phpmyfaq.news');
+        $newsHeader = $news->getHeader();
+
         $baseUrl = sprintf('%sadmin/comments?page=%d', $this->configuration->getDefaultUrl(), $page);
 
         $faqCommentsPagination = new Pagination([
@@ -83,6 +86,7 @@ final class CommentsController extends AbstractAdministrationController
             'newsComments' => $newsComments,
             'faqCommentsPagination' => $faqCommentsPagination->render(),
             'newsCommentsPagination' => $newsCommentsPagination->render(),
+            'newsHeader' => $newsHeader,
             'csrfToken' => Token::getInstance($this->session)->getTokenString(page: 'delete-comment'),
         ]);
     }

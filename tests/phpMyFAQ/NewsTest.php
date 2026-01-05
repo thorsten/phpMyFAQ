@@ -287,10 +287,10 @@ class NewsTest extends TestCase
         $result = $this->news->getHeader();
 
         $this->assertCount(1, $result);
-        $this->assertEquals(1, $result[0]['id']);
-        $this->assertEquals('en', $result[0]['lang']);
-        $this->assertEquals('News Header', $result[0]['header']);
-        $this->assertEquals('y', $result[0]['active']);
+        $this->assertEquals(1, $result[1]['id']);
+        $this->assertEquals('en', $result[1]['lang']);
+        $this->assertEquals('News Header', $result[1]['header']);
+        $this->assertEquals('y', $result[1]['active']);
     }
 
     public function testGetHeaderEmpty(): void

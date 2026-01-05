@@ -37,7 +37,7 @@ paths:
           content:
             application/json:
               schema: {}
-              example: "\n        [\n            {\n                \"filename\": \"attachment-1.pdf\",\n                \"url\": \"https://www.example.org/index.php?action=attachment&id=1\"\n            },\n            {\n                \"filename\": \"attachment-2.pdf\",\n                \"url\": \"https://www.example.org/index.php?action=attachment&id=2\"\n            }\n        ]"
+              example: "\n        [\n            {\n                \"filename\": \"attachment-1.pdf\",\n                \"url\": \"https://www.example.org/attachment/1\"\n            },\n            {\n                \"filename\": \"attachment-2.pdf\",\n                \"url\": \"https://www.example.org/attachment/2\"\n            }\n        ]"
         '404':
           description: 'If the FAQ has no attachments.'
           headers:
@@ -290,7 +290,7 @@ paths:
           content:
             application/json:
               schema: {}
-              example: "[\n            {\n                \"record_id\": 1,\n                \"record_lang\": \"en\",\n                \"category_id\": 1,\n                \"record_title\": \"Is there life after death?\",\n                \"record_preview\": \"Maybe!\",\n                \"record_link\": \"/phpmyfaq/phpmyfaq/index.php?action=faq&cat=1&id=1&artlang=en\",\n                \"record_updated\": \"20191010175452\",\n                \"visits\": 3,\n                \"record_created\": \"2018-09-03T21:30:17+02:00\"\n            }\n        ]"
+              example: "[\n            {\n                \"record_id\": 1,\n                \"record_lang\": \"en\",\n                \"category_id\": 1,\n                \"record_title\": \"Is there life after death?\",\n                \"record_preview\": \"Maybe!\",\n                \"record_link\": \"/phpmyfaq//content/1/1/en/is-there-life-after-death.html\",\n                \"record_updated\": \"20191010175452\",\n                \"visits\": 3,\n                \"record_created\": \"2018-09-03T21:30:17+02:00\"\n            }\n        ]"
         '404':
           description: 'If the category has no FAQs.'
           headers:
@@ -368,7 +368,7 @@ paths:
           content:
             application/json:
               schema: {}
-              example: "[\n            {\n                \"record_id\": 1,\n                \"record_lang\": \"en\",\n                \"category_id\": 1,\n                \"record_title\": \"Is there life after death?\",\n                \"record_preview\": \"Maybe!\",\n                \"record_link\": \"/phpmyfaq/phpmyfaq/index.php?action=faq&cat=1&id=1&artlang=en\",\n                \"record_updated\": \"20191010175452\",\n                \"visits\": 3,\n                \"record_created\": \"2018-09-03T21:30:17+02:00\"\n            }\n        ]"
+              example: "[\n            {\n                \"record_id\": 1,\n                \"record_lang\": \"en\",\n                \"category_id\": 1,\n                \"record_title\": \"Is there life after death?\",\n                \"record_preview\": \"Maybe!\",\n                \"record_link\": \"/phpmyfaq//content/1/1/en/is-there-life-after-death.html\",\n                \"record_updated\": \"20191010175452\",\n                \"visits\": 3,\n                \"record_created\": \"2018-09-03T21:30:17+02:00\"\n            }\n        ]"
         '404':
           description: 'If the tag ID has no FAQs.'
           headers:
@@ -397,7 +397,7 @@ paths:
           content:
             application/json:
               schema: {}
-              example: "[\n            {\n                \"date\": \"2019-07-13T11:28:00+0200\",\n                \"question\": \"How can I survive without phpMyFAQ?\",\n                \"answer\": \"A good question!\",\n                \"visits\": 10,\n                \"url\": \"https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de\"\n            }\n        ]"
+              example: "[\n            {\n                \"date\": \"2019-07-13T11:28:00+0200\",\n                \"question\": \"How can I survive without phpMyFAQ?\",\n                \"answer\": \"A good question!\",\n                \"visits\": 10,\n                \"url\": \"https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html\"\n            }\n        ]"
         '404':
           description: "If there's not a single popular FAQ."
           headers:
@@ -838,7 +838,7 @@ paths:
           content:
             application/json:
               schema: {}
-              example: "\n        [\n            {\n                \"id\": 1,\n                \"lang\": \"en\",\n                \"date\": \"2019-08-23T20:43:00+0200\",\n                \"header\": \"Hallo, World!\",\n                \"content\": \"Hello, phpMyFAQ!\",\n                \"authorName\": \"phpMyFAQ User\",\n                \"authorEmail\": \"user@example.org\",\n                \"dateStart\": \"0\",\n                \"dateEnd\": \"99991231235959\",\n                \"active\": true,\n                \"allowComments\": true,\n                \"link\": \"\",\n                \"linkTitle\": \"\",\n                \"target\": \"\",\n                \"url\": \"https://www.example.org/?action=news&newsid=1&newslang=de\"\n              }\n        ]"
+              example: "\n        [\n            {\n                \"id\": 1,\n                \"lang\": \"en\",\n                \"date\": \"2019-08-23T20:43:00+0200\",\n                \"header\": \"Hallo, World!\",\n                \"content\": \"Hello, phpMyFAQ!\",\n                \"authorName\": \"phpMyFAQ User\",\n                \"authorEmail\": \"user@example.org\",\n                \"dateStart\": \"0\",\n                \"dateEnd\": \"99991231235959\",\n                \"active\": true,\n                \"allowComments\": true,\n                \"link\": \"\",\n                \"linkTitle\": \"\",\n                \"target\": \"\",\n                \"url\": \"https://www.example.org/news/1/de/hallo-phpmyfaq.html\"\n              }\n        ]"
         '404':
           description: 'If no news are stored.'
           headers:
@@ -1078,7 +1078,7 @@ paths:
           content:
             application/json:
               schema: {}
-              example: "\n        [\n            {\n                \"id\": \"1\",\n                \"lang\": \"en\",\n                \"category_id\": \"15\",\n                \"question\": \"Why are you using phpMyFAQ?\",\n                \"answer\": \"Because it is cool!\",\n                \"link\": \"https://www.example.org/index.php?action=faq&cat=15&id=1&artlang=en\"\n            }\n        ]"
+              example: "\n        [\n            {\n                \"id\": \"1\",\n                \"lang\": \"en\",\n                \"category_id\": \"15\",\n                \"question\": \"Why are you using phpMyFAQ?\",\n                \"answer\": \"Because it is cool!\",\n                \"link\": \"https://www.example.org/content/15/1/en/why-are-you-using-phpmyfaq.html\"\n            }\n        ]"
         '404':
           description: 'If the search returns no results'
           content:
