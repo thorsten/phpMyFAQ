@@ -23,6 +23,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Link;
+use phpMyFAQ\Link\Util\TitleSlugifier;
 use Twig\Attribute\AsTwigFilter;
 use Twig\Attribute\AsTwigFunction;
 use Twig\Extension\AbstractExtension;
@@ -34,11 +35,17 @@ class CreateLinkTwigExtension extends AbstractExtension
     public static function categoryLink(int $categoryId): string
     {
         $configuration = Configuration::getConfigurationInstance();
-        $urlString = '%sindex.php?action=show&cat=%d';
-        $url = sprintf($urlString, $configuration->getDefaultUrl(), $categoryId);
 
         $category = new Category($configuration);
         $categoryEntity = $category->getCategoryData($categoryId);
+
+        $urlString = '%scategory/%d/%s.html';
+        $url = sprintf(
+            $urlString,
+            $configuration->getDefaultUrl(),
+            $categoryId,
+            TitleSlugifier::slug($categoryEntity->getName()),
+        );
 
         $link = new Link($url, $configuration);
         $link->setTitle($categoryEntity->getName());
@@ -51,12 +58,22 @@ class CreateLinkTwigExtension extends AbstractExtension
     public static function faqLink(int $categoryId, int $faqId, string $faqLanguage): string
     {
         $configuration = Configuration::getConfigurationInstance();
-        $urlString = '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s';
-        $url = sprintf($urlString, $configuration->getDefaultUrl(), $categoryId, $faqId, $faqLanguage);
 
         $faq = new Faq($configuration);
+        $question = $faq->getQuestion($faqId);
+
+        $urlString = '%scontent/%d/%d/%s/%s.html';
+        $url = sprintf(
+            $urlString,
+            $configuration->getDefaultUrl(),
+            $categoryId,
+            $faqId,
+            $faqLanguage,
+            TitleSlugifier::slug($question),
+        );
+
         $link = new Link($url, $configuration);
-        $link->setTitle($faq->getQuestion($faqId));
+        $link->setTitle($question);
 
         return $link->toString();
     }

@@ -152,6 +152,7 @@ class CreateLinkTwigExtensionTest extends TestCase
             'use phpMyFAQ\Configuration;',
             'use phpMyFAQ\Faq;',
             'use phpMyFAQ\Link;',
+            'use phpMyFAQ\Link\Util\TitleSlugifier;',
             'use Twig\Attribute\AsTwigFilter;',
             'use Twig\Attribute\AsTwigFunction;',
             'use Twig\Extension\AbstractExtension;',
@@ -177,10 +178,11 @@ class CreateLinkTwigExtensionTest extends TestCase
         $filename = new ReflectionClass(CreateLinkTwigExtension::class)->getFileName();
         $source = file_get_contents($filename);
 
-        // Should create URL with proper format
-        $this->assertStringContainsString('index.php?action=show&cat=', $source);
+        // Should create URL with proper format using TitleSlugifier
+        $this->assertStringContainsString('category/%d/%s.html', $source);
         $this->assertStringContainsString('sprintf', $source);
         $this->assertStringContainsString('$categoryId', $source);
+        $this->assertStringContainsString('TitleSlugifier::slug', $source);
     }
 
     public function testMethodIsStaticForTwigCompatibility(): void
@@ -293,8 +295,8 @@ class CreateLinkTwigExtensionTest extends TestCase
         // Should use Configuration to get default URL
         $this->assertStringContainsString('$configuration->getDefaultUrl()', $source);
 
-        // Should format URL with category ID
-        $this->assertStringContainsString('%sindex.php?action=show&cat=%d', $source);
+        // Should format URL with category ID and slug
+        $this->assertStringContainsString('%scategory/%d/%s.html', $source);
     }
 
     public function testMethodHandlesConfigurationProperly(): void

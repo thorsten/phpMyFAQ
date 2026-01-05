@@ -428,6 +428,14 @@ Example:
 
     {{ 'string' | translate }}
 
+### Title slugify Twig Extensions
+
+The title slugify extension is used to create a slug from a string.
+
+Example:
+
+     {{ "Hello World"|slugify }}  {# outputs: hello-world #}
+
 ### User name Twig Extensions
 
 The username extension is used to get the name of a user by its ID.

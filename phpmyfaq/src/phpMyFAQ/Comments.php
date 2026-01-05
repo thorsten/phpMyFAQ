@@ -154,7 +154,7 @@ class Comments
     }
 
     /**
-     * Checks, if comments are disabled for the FAQ record.
+     * Checks if comments are disabled for the FAQ record.
      *
      * @param int    $recordId ID of FAQ or news entry
      * @param string $recordLang  Language

@@ -26,6 +26,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Twig\Extensions\FaqTwigExtension;
+use phpMyFAQ\Twig\Extensions\TitleSlugifierTwigExtension;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -73,6 +74,7 @@ final class CommentsController extends AbstractAdministrationController
 
         $this->addExtension(new IntlExtension());
         $this->addExtension(new AttributeExtension(FaqTwigExtension::class));
+        $this->addExtension(new AttributeExtension(TitleSlugifierTwigExtension::class));
         return $this->render(file: '@admin/content/comments.twig', context: [
             ...$this->getHeader($request),
             ...$this->getFooter(),
