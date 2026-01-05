@@ -23,6 +23,7 @@ use Exception;
 use League\CommonMark\CommonMarkConverter;
 use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Link\Util\TitleSlugifier;
 use stdClass;
 
 /**
@@ -130,14 +131,12 @@ class Sitemap
             $letter->letter = Strings::strtoupper($row->letters);
 
             if (Strings::preg_match("/^\w+/iu", $letter->letter) !== 0) {
-                $url = sprintf(
-                    '%sindex.php?action=sitemap&letter=%s&lang=%s',
+                $letter->url = sprintf(
+                    '%ssitemap/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
                     $letter->letter,
                     $this->configuration->getLanguage()->getLanguage(),
                 );
-                $link = new Link($url, $this->configuration);
-                $letter->url = $link->toString();
             }
 
             $letters[] = $letter;
@@ -222,17 +221,14 @@ class Sitemap
             if ($oldId !== $row->id) {
                 $faq = new stdClass();
                 $faq->question = $row->thema;
-                $url = sprintf(
-                    '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
+                $faq->url = sprintf(
+                    '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
                     $row->category_id,
                     $row->id,
                     $row->lang,
+                    TitleSlugifier::slug($row->thema),
                 );
-
-                $link = new Link($url, $this->configuration);
-                $link->setTitle($row->thema);
-                $faq->url = $link->toString();
 
                 if ($this->configuration->get(item: 'main.enableMarkdownEditor')) {
                     $answer = strip_tags($commonMarkConverter->convert($row->snap)->getContent());

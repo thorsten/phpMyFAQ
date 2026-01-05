@@ -21,7 +21,7 @@ namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
-use phpMyFAQ\Link;
+use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Strings;
 
 readonly class RatingData
@@ -116,22 +116,20 @@ readonly class RatingData
     {
         $question = Strings::htmlspecialchars(trim((string) $row->question));
         $url = sprintf(
-            '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
+            '%scontent/%d/%d/%s/%s.html',
             $this->configuration->getDefaultUrl(),
             $row->category_id,
             $row->id,
             $row->lang,
+            TitleSlugifier::slug($question),
         );
-
-        $link = new Link($url, $this->configuration);
-        $link->setTitle($question);
 
         return [
             'id' => $row->id,
             'lang' => $row->lang,
             'category_id' => $row->category_id,
             'question' => $question,
-            'url' => $link->toString(),
+            'url' => $url,
             'number' => $row->num,
             'user' => $row->usr,
         ];

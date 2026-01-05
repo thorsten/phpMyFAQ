@@ -24,7 +24,7 @@ namespace phpMyFAQ\Export\Pdf;
 use Exception;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
-use phpMyFAQ\Link;
+use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use TCPDF;
@@ -421,30 +421,26 @@ class Wrapper extends TCPDF
         if (!$this->enableBookmarks) {
             $this->SetY(-15);
             $this->SetFont($this->currentFont, style: '', size: 8);
-            $baseUrl = 'index.php';
+            $baseUrl = $this->config->getDefaultUrl() . 'content';
             if ($this->faq !== []) {
-                $baseUrl .= '?action=faq&';
-                $baseUrl .= 'cat=0';
                 if (array_key_exists($this->category, $this->categories)) {
-                    $baseUrl .= 'cat=' . $this->categories[$this->category]['id'];
+                    $baseUrl .= '/' . $this->categories[$this->category]['id'];
                 }
 
-                $baseUrl .= '&id=' . $this->faq['id'];
-                $baseUrl .= '&artlang=' . $this->faq['lang'];
+                $baseUrl .= '/' . $this->faq['id'];
+                $baseUrl .= '/' . $this->faq['lang'];
+                $baseUrl .= '/' . TitleSlugifier::slug($this->question) . '.html';
             }
 
-            $url = $this->config->getDefaultUrl() . $baseUrl;
-            $link = new Link($url, $this->config);
-            $link->setTitle($this->question);
             $this->Cell(
                 w: 0,
                 h: 10,
-                txt: 'URL: ' . $link->toString(),
+                txt: 'URL: ' . $baseUrl,
                 border: 0,
                 ln: 1,
                 align: 'C',
                 fill: false,
-                link: $link->toString(),
+                link: $baseUrl,
             );
         }
 

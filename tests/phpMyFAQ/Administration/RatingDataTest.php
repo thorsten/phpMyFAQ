@@ -68,7 +68,7 @@ class RatingDataTest extends TestCase
         $this->assertEquals('Test Question', $result[0]['question']);
         $this->assertEquals(4.5, $result[0]['number']);
         $this->assertEquals(10, $result[0]['user']);
-        $this->assertStringContainsString('index.php?action=faq&cat=2&id=1&artlang=en', $result[0]['url']);
+        $this->assertStringContainsString('http://example.com/content/2/1/en/test-question.html', $result[0]['url']);
     }
 
     public function testGetAllReturnsMultipleRatings(): void
@@ -176,7 +176,7 @@ class RatingDataTest extends TestCase
         $result = $this->ratingData->getAll();
 
         $this->assertCount(1, $result);
-        $expectedUrl = 'https://faq.example.com/index.php?action=faq&cat=15&id=42&artlang=de';
+        $expectedUrl = 'https://faq.example.com/content/15/42/de/german-question.html';
         $this->assertStringContainsString($expectedUrl, $result[0]['url']);
     }
 
@@ -185,7 +185,7 @@ class RatingDataTest extends TestCase
         // Mock configuration default URL
         $this->mockConfiguration->method('getDefaultUrl')->willReturn('http://example.com/');
 
-        // Verify that query method is called with a SQL string containing expected elements
+        // Verify that a query method is called with a SQL string containing expected elements
         $this->mockDb
             ->expects($this->once())
             ->method('query')
@@ -217,8 +217,8 @@ class RatingDataTest extends TestCase
         $mockResult->lang = 'en';
         $mockResult->category_id = 8;
         $mockResult->question = 'Numeric Test Question';
-        $mockResult->num = 2.75; // float rating
-        $mockResult->usr = 12; // integer user count
+        $mockResult->num = 2.75;
+        $mockResult->usr = 12;
 
         $this->mockDb->method('query')->willReturn(true);
         $this->mockDb->method('fetchObject')->willReturn($mockResult, false);

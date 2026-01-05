@@ -22,6 +22,7 @@ namespace phpMyFAQ;
 
 use Exception;
 use phpMyFAQ\Entity\NewsMessage;
+use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\News\NewsRepository;
 use phpMyFAQ\News\NewsRepositoryInterface;
 use stdClass;
@@ -64,11 +65,13 @@ readonly class News
 
         foreach ($this->newsRepository->getLatest($language, $active, $limit) as $row) {
             $entry = new stdClass();
-            $link = '%sindex.php?action=news&newsid=%d&newslang=%s';
-            $url = sprintf($link, $this->configuration->getDefaultUrl(), $row->id, $row->lang);
-            $link = new Link($url, $this->configuration);
-            $link->setTitle($row->header);
-            $entry->url = $link->toString();
+            $entry->url = sprintf(
+                '%snews/%d/%s/%s.html',
+                $this->configuration->getDefaultUrl(),
+                $row->id,
+                $row->lang,
+                TitleSlugifier::slug($row->header),
+            );
             $entry->header = $row->header;
             $entry->content = strip_tags((string) $row->artikel);
             $entry->date = $date->format($row->datum);
@@ -104,11 +107,13 @@ readonly class News
         }
 
         foreach ($this->newsRepository->getLatest($language, $active, $limit) as $row) {
-            // original conditional logic preserved implicitly by limit handling
-            $link = '%sindex.php?action=news&newsid=%d&newslang=%s';
-            $url = sprintf($link, $this->configuration->getDefaultUrl(), $row->id, $row->lang);
-            $oLink = new Link($url, $this->configuration);
-            $oLink->setTitle($row->header);
+            $url = sprintf(
+                '%snews/%d/%s/%s.html',
+                $this->configuration->getDefaultUrl(),
+                $row->id,
+                $row->lang,
+                TitleSlugifier::slug($row->header),
+            );
             $item = [
                 'id' => (int) $row->id,
                 'lang' => $row->lang,
@@ -122,7 +127,7 @@ readonly class News
                 'link' => $row->link,
                 'linkTitle' => $row->linktitel,
                 'target' => $row->target,
-                'url' => $oLink->toString(),
+                'url' => $url,
             ];
             $news[] = $item;
         }
