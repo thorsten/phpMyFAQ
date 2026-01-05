@@ -1,4 +1,5 @@
 {% extends 'index.twig' %}
+{% import 'core/comment.macros.twig' as commentMacros %}
 
 {% block richSnippets %}
   <script type="application/ld+json">
@@ -44,7 +45,9 @@
       {% endif %}
 
       <p class="d-print-none">{{ writeCommentMsg|raw }}</p>
-      <div class="d-print-none" id="comments">{{ renderComments|raw }}</div>
+      <div class="d-print-none" id="comments">
+        {{ commentMacros.renderComments(comments.comments, comments.gravatarImages, comments.safeEmails, comments.formattedDates, msgShowMore) }}
+      </div>
     </div>
 
     <div class="col-md-4">

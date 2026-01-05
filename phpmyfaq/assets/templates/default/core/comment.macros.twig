@@ -1,0 +1,44 @@
+{#
+ # Twig macros for comment rendering
+ #
+ # This Source Code Form is subject to the terms of the Mozilla Public License,
+ # v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ # obtain one at https://mozilla.org/MPL/2.0/.
+ #
+ # @package   phpMyFAQ
+ # @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ # @copyright 2026 phpMyFAQ Team
+ # @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ # @link      https://www.phpmyfaq.de
+ #}
+
+{#
+ # Renders comments for a FAQ or news item
+ #
+ # @param comments array Array of comment objects with properties: id, email, username, date, comment
+ # @param gravatarImages array Array of gravatar image HTML strings keyed by comment ID
+ # @param safeEmails array Array of safe email addresses keyed by comment ID
+ # @param formattedDates array Array of formatted dates keyed by comment ID
+ # @param msgShowMore string Translation for "show more" text
+ #}
+{% macro renderComments(comments, gravatarImages, safeEmails, formattedDates, msgShowMore) %}
+    {% for comment in comments %}
+        <div class="row mt-2 mb-2">
+            <div class="col-sm-1">
+                <div class="thumbnail">
+                    {{ gravatarImages[comment.id]|raw }}
+                </div>
+            </div>
+
+            <div class="col-sm-11">
+                <div class="card">
+                    <div class="card-header card-header-comments">
+                        <strong><a href="mailto:{{ safeEmails[comment.id] }}">{{ comment.username }}</a></strong>
+                        <span class="text-muted">({{ formattedDates[comment.id] }})</span>
+                    </div>
+                    <div class="card-body">{{ comment.comment|raw }}</div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endmacro %}

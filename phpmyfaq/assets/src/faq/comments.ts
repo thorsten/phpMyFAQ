@@ -83,7 +83,6 @@ const addCommentToDOM = (commentData: CommentData): void => {
   const escapedUsername = escapeHtml(commentData.username);
   const escapedEmail = escapeHtml(commentData.email);
 
-  // Create the comment HTML matching the structure from CommentHelper::getComments()
   const commentHtml = `
     <div class="row mt-2 mb-2">
       <div class="col-sm-1">

@@ -25,10 +25,11 @@ use phpMyFAQ\Comments;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\CommentHelper;
 use phpMyFAQ\News\NewsService;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -65,9 +66,6 @@ final class NewsController extends AbstractFrontController
         $captcha = $this->container->get('phpmyfaq.captcha');
         $captchaHelper = CaptchaHelper::getInstance($this->configuration);
 
-        $commentHelper = new CommentHelper();
-        $commentHelper->setConfiguration($this->configuration);
-
         $comment = new Comments($this->configuration);
         $comments = $comment->getCommentsData($newsId, CommentType::NEWS);
 
@@ -103,7 +101,49 @@ final class NewsController extends AbstractFrontController
                 Translation::get(key: 'msgCaptcha'),
                 $this->currentUser->isLoggedIn(),
             ),
-            'renderComments' => $commentHelper->getComments($comments),
+            'comments' => $this->prepareCommentsData($comments),
+            'msgShowMore' => Translation::get(key: 'msgShowMore'),
         ]);
+    }
+
+    /**
+     * Prepares comment data for the Twig macro
+     *
+     * @param array $comments Array of Comment objects
+     * @throws \Exception
+     * @return array
+     */
+    private function prepareCommentsData(array $comments): array
+    {
+        $date = $this->container->get('phpmyfaq.date');
+        $mail = $this->container->get('phpmyfaq.mail');
+        $gravatar = $this->container->get('phpmyfaq.services.gravatar');
+
+        $preparedComments = [];
+        $gravatarImages = [];
+        $safeEmails = [];
+        $formattedDates = [];
+
+        foreach ($comments as $comment) {
+            $commentId = $comment->getId();
+            $preparedComments[] = [
+                'id' => $commentId,
+                'email' => $comment->getEmail(),
+                'username' => Strings::htmlentities($comment->getUsername()),
+                'date' => $comment->getDate(),
+                'comment' => Utils::parseUrl($comment->getComment()),
+            ];
+
+            $gravatarImages[$commentId] = $gravatar->getImage($comment->getEmail(), ['class' => 'img-thumbnail']);
+            $safeEmails[$commentId] = $mail->safeEmail($comment->getEmail());
+            $formattedDates[$commentId] = $date->format($comment->getDate());
+        }
+
+        return [
+            'comments' => $preparedComments,
+            'gravatarImages' => $gravatarImages,
+            'safeEmails' => $safeEmails,
+            'formattedDates' => $formattedDates,
+        ];
     }
 }
