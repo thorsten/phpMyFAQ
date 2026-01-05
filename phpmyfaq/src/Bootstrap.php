@@ -159,7 +159,7 @@ try {
     throw new DatabaseConnectionException(
         message: 'Database connection failed: ' . $exception->getMessage(),
         code: 500,
-        previous: $exception
+        previous: $exception,
     );
 }
 
@@ -173,22 +173,16 @@ $faqConfig->getAll();
 // We always need a valid, secure session!
 //
 if (session_status() !== PHP_SESSION_ACTIVE) {
-    $sessionOptions = [
-        'use_only_cookies' => 1,
-        'use_trans_sid' => 0,
-        'cookie_samesite' => 'Strict',
-        'cookie_httponly' => true,
-        'cookie_secure' => $request->isSecure(),
-    ];
+    ini_set('session.use_only_cookies', '1');
+    ini_set('session.use_trans_sid', '0');
+    ini_set('session.cookie_samesite', 'Strict');
+    ini_set('session.cookie_httponly', '1');
+    ini_set('session.cookie_secure', '1');
 
     // Start the PHP session
     if (defined('PMF_SESSION_SAVE_PATH') && !empty(PMF_SESSION_SAVE_PATH)) {
-        $sessionOptions['save_path'] = PMF_SESSION_SAVE_PATH;
+        ini_set('session.save_path', PMF_SESSION_SAVE_PATH);
     }
-
-    session_start($sessionOptions);
-    $session = new Session(new PhpBridgeSessionStorage());
-    $session->start();
 }
 
 //
@@ -268,7 +262,7 @@ if ($faqConfig->get('search.enableOpenSearch') && file_exists(PMF_CONFIG_DIR . '
         // do not block bootstrap if a health check fails
     }
 
-    $client = (new SymfonyClientFactory())->create([
+    $client = new SymfonyClientFactory()->create([
         'base_uri' => $baseUri,
         'verify_peer' => false,
     ]);

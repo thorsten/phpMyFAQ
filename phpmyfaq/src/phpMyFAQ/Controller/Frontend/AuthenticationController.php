@@ -21,8 +21,6 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
-use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\User\UserAuthentication;
 use phpMyFAQ\User\UserException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -103,7 +101,7 @@ final class AuthenticationController extends AbstractFrontController
      * @throws \Exception
      */
     #[Route(path: '/logout', name: 'public.auth.logout')]
-    public function logout(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function logout(Request $request): RedirectResponse
     {
         $session = $this->container->get('session');
         $csrfToken = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
@@ -112,11 +110,11 @@ final class AuthenticationController extends AbstractFrontController
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('logout', $csrfToken)) {
             $session->getFlashBag()->add('error', 'CSRF Problem detected: ' . $csrfToken);
-            return $redirectResponse->send();
+            return $redirectResponse;
         }
 
         if (!$this->currentUser->isLoggedIn()) {
-            return $redirectResponse->send();
+            return $redirectResponse;
         }
 
         $this->currentUser->deleteFromSession(true);
@@ -128,7 +126,7 @@ final class AuthenticationController extends AbstractFrontController
         $ssoLogout = $this->configuration->get('security.ssoLogoutRedirect');
         if ($this->configuration->get('security.ssoSupport') && (string) $ssoLogout !== '') {
             $redirectResponse->isRedirect($ssoLogout);
-            $redirectResponse->send();
+            return $redirectResponse;
         }
 
         // Microsoft Azure Logout
@@ -139,7 +137,7 @@ final class AuthenticationController extends AbstractFrontController
             return new RedirectResponse($this->configuration->getDefaultUrl() . 'services/azure/logout.php');
         }
 
-        return $redirectResponse->send();
+        return $redirectResponse;
     }
 
     /**
@@ -148,7 +146,7 @@ final class AuthenticationController extends AbstractFrontController
      * @throws \Exception
      */
     #[Route(path: '/authenticate', name: 'public.auth.authenticate', methods: ['POST'])]
-    public function authenticate(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function authenticate(Request $request): RedirectResponse
     {
         if ($this->currentUser->isLoggedIn()) {
             return new RedirectResponse(url: './');
@@ -183,8 +181,6 @@ final class AuthenticationController extends AbstractFrontController
                     return new RedirectResponse(url: './token?user-id=' . $this->currentUser->getUserId());
                 }
 
-                // Successful login without 2FA
-                $this->container->get('session')->getFlashBag()->add('success', Translation::get('ad_auth_sess'));
                 return new RedirectResponse('./');
             } catch (UserException $e) {
                 $this->configuration->getLogger()->error('Login-error: ' . $e->getMessage());
@@ -237,7 +233,7 @@ final class AuthenticationController extends AbstractFrontController
      * @throws \Exception
      */
     #[Route(path: '/check', name: 'public.twofactor.check', methods: ['POST'])]
-    public function check(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function check(Request $request): RedirectResponse
     {
         if ($this->currentUser->isLoggedIn()) {
             return new RedirectResponse(url: './');

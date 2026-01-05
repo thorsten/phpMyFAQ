@@ -450,8 +450,8 @@ class CurrentUser extends User
             $this->userSession->setCookie(UserSession::COOKIE_NAME_REMEMBER_ME, '');
         }
 
-        session_destroy();
-        session_start();
+        // @todo Check if session_destroy() is really needed here
+        //session_destroy();
 
         return true;
     }
