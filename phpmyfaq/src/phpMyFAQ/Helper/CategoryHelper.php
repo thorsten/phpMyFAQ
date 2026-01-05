@@ -25,6 +25,7 @@ use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Link;
+use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
@@ -143,11 +144,7 @@ class CategoryHelper extends AbstractHelper
         $html = '';
 
         foreach ($availableCategoryTranslations as $language => $category) {
-            $url = sprintf(
-                '%sindex.php?action=show&lang=%s',
-                $this->configuration->getDefaultUrl(),
-                LanguageCodes::getKey($language),
-            );
+            $url = sprintf('%sshow-categories.html?lang=%s', $this->configuration->getDefaultUrl(), $language);
             $link = new Link($url, $this->configuration);
             $link->setTitle(Strings::htmlentities($category));
             $link->text = Strings::htmlentities($category);

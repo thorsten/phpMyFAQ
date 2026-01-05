@@ -168,7 +168,7 @@ class SearchHelperTest extends TestCase
         $this->assertArrayHasKey('question', $firstResult);
         $this->assertArrayHasKey('adminUrl', $firstResult);
         $this->assertEquals('Test question', $firstResult['question']);
-        $this->assertStringContainsString('solution_id=456', $firstResult['url']);
+        $this->assertStringContainsString('solution_id_456.html', $firstResult['url']);
         $this->assertStringContainsString('admin/faq/edit/123/en', $firstResult['adminUrl']);
     }
 

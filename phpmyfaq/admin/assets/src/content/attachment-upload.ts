@@ -86,7 +86,7 @@ export const handleAttachmentUploads = (): void => {
               addElement('li', {}, [
                 addElement('a', {
                   className: 'me-2',
-                  href: `../index.php?action=attachment&id=${attachment.attachmentId}`,
+                  href: `../attachment/${attachment.attachmentId}`,
                   innerText: attachment.fileName,
                 }),
                 addElement(

@@ -50,11 +50,12 @@ class QuestionHelper extends AbstractHelper
         $smartAnswer .= '<ul>';
         foreach ($searchResultSet->getResultSet() as $result) {
             $url = sprintf(
-                '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
+                '%scontent/%d/%d/%s/%s.html',
                 $this->configuration->getDefaultUrl(),
                 $result->category_id,
                 $result->id,
                 $result->lang,
+                TitleSlugifier::slug($result->question),
             );
             $link = new Link($url, $this->configuration);
             $link->text = Utils::chopString($result->question, 15);

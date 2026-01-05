@@ -507,7 +507,7 @@ describe('handleAttachmentUploads', () => {
         'a',
         expect.objectContaining({
           className: 'me-2',
-          href: '../index.php?action=attachment&id=789',
+          href: '../attachment/789',
           innerText: 'document.pdf',
         })
       );

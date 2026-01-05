@@ -24,6 +24,7 @@ use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Link;
+use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Utils;
@@ -79,11 +80,12 @@ class SearchHelper extends AbstractHelper
 
                 // Build the link to the faq record
                 $currentUrl = sprintf(
-                    '%s?action=faq&cat=%d&id=%d&artlang=%s&highlight=%s',
-                    $this->configuration->getDefaultUrl() . 'index.php',
+                    '%scontent/%d/%d/%s/%s.html?highlight=%s',
+                    $this->configuration->getDefaultUrl(),
                     $result->category_id,
                     $result->id,
                     $result->lang,
+                    TitleSlugifier::slug($result->question),
                     urlencode($this->searchTerm),
                 );
 
@@ -128,7 +130,7 @@ class SearchHelper extends AbstractHelper
                 }
 
                 // Build the link to the faq record
-                $currentUrl = $this->configuration->getDefaultUrl() . sprintf('index.php?solution_id=%d', $solutionId);
+                $currentUrl = $this->configuration->getDefaultUrl() . sprintf('solution_id_%d.html', $solutionId);
                 $adminUrl =
                     $this->configuration->getDefaultUrl() . sprintf('admin/faq/edit/%d/%s', $result->id, $result->lang);
 
@@ -206,11 +208,12 @@ class SearchHelper extends AbstractHelper
 
                 // Build the link to the faq record
                 $currentUrl = sprintf(
-                    '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s&highlight=%s',
+                    '%scontent/%d/%d/%s/%s.html?highlight=%s',
                     $this->configuration->getDefaultUrl(),
                     $resultSet->category_id,
                     $resultSet->id,
                     $resultSet->lang,
+                    TitleSlugifier::slug($resultSet->question),
                     urlencode($searchTerm),
                 );
 
@@ -274,11 +277,12 @@ class SearchHelper extends AbstractHelper
                 ++$counter;
 
                 $url = sprintf(
-                    '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
+                    '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
                     $result->category_id,
                     $result->id,
                     $result->lang,
+                    TitleSlugifier::slug($result->question),
                 );
                 $link = new Link($url, $this->configuration);
                 $link->setTitle(Strings::htmlentities($result->question));

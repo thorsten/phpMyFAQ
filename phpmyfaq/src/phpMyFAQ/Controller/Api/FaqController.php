@@ -304,7 +304,7 @@ final class FaqController extends AbstractController
                 "question": "How can I survive without phpMyFAQ?",
                 "answer": "A good question!",
                 "visits": 10,
-                "url": "https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de"
+                "url": "https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html"
             }
         ]',
     ))]
@@ -351,7 +351,7 @@ final class FaqController extends AbstractController
                 "question": "How can I survive without phpMyFAQ?",
                 "answer": "A good question!",
                 "visits": 10,
-                "url": "https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de"
+                "url": "https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html"
             }
         ]',
     ))]
@@ -395,13 +395,13 @@ final class FaqController extends AbstractController
         example: '[
             {
                 "question": "How can I survive without phpMyFAQ?",
-                "url": "https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de",
+                "url": "https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html",
                 "id": 8,
                 "order": 1
             },
             {
                 "question": "Is there life after death?",
-                "url": "https://www.example.org/index.php?action=faq&cat=1&id=1&artlang=en",
+                "url": "https://www.example.org/content/1/1/de/is-there-life-after-death.html",
                 "id": 10,
                 "order": 2
             }

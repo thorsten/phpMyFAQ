@@ -33,6 +33,7 @@ use phpMyFAQ\Faq\QueryHelper;
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Instance\Search\Elasticsearch;
 use phpMyFAQ\Language\Plurals;
+use phpMyFAQ\Link\Util\TitleSlugifier;
 use stdClass;
 
 /*
@@ -566,11 +567,12 @@ class Faq
 
                 $title = $row->question;
                 $url = sprintf(
-                    '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
+                    '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
                     $row->category_id,
                     $row->id,
                     $row->lang,
+                    TitleSlugifier::slug($row->question),
                 );
 
                 $oLink = new Link($url, $this->configuration);
@@ -777,12 +779,14 @@ class Faq
             $visits = empty($row->visits) ? 0 : $row->visits;
 
             $url = sprintf(
-                '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
+                '%scontent/%d/%d/%s/%s.html',
                 $this->configuration->getDefaultUrl(),
                 $row->category_id,
                 $row->id,
                 $row->lang,
+                TitleSlugifier::slug($row->question),
             );
+
             $oLink = new Link($url, $this->configuration);
             $oLink->setTitle($row->question);
             $oLink->text = $row->question;
@@ -871,15 +875,16 @@ class Faq
         $result = $this->configuration->getDb()->query($query);
 
         if ($row = $this->configuration->getDb()->fetchObject($result)) {
-            $faqUrl = sprintf(
-                '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
+            $url = sprintf(
+                '%scontent/%d/%d/%s/%s.html',
                 $this->configuration->getDefaultUrl(),
                 $row->category_id,
                 $row->id,
                 $row->lang,
+                TitleSlugifier::slug($row->question),
             );
 
-            $link = new Link($faqUrl, $this->configuration);
+            $link = new Link($url, $this->configuration);
             $link->setTitle($row->question);
 
             return [

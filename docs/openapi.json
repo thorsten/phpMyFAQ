@@ -633,7 +633,7 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "[\n            {\n                \"date\": \"2019-07-13T11:28:00+0200\",\n                \"question\": \"How can I survive without phpMyFAQ?\",\n                \"answer\": \"A good question!\",\n                \"visits\": 10,\n                \"url\": \"https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de\"\n            }\n        ]"
+                "example": "[\n            {\n                \"date\": \"2019-07-13T11:28:00+0200\",\n                \"question\": \"How can I survive without phpMyFAQ?\",\n                \"answer\": \"A good question!\",\n                \"visits\": 10,\n                \"url\": \"https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html\"\n            }\n        ]"
               }
             }
           },
@@ -676,7 +676,7 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "[\n            {\n                \"date\": \"2019-07-13T11:28:00+0200\",\n                \"question\": \"How can I survive without phpMyFAQ?\",\n                \"answer\": \"A good question!\",\n                \"visits\": 10,\n                \"url\": \"https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de\"\n            }\n        ]"
+                "example": "[\n            {\n                \"date\": \"2019-07-13T11:28:00+0200\",\n                \"question\": \"How can I survive without phpMyFAQ?\",\n                \"answer\": \"A good question!\",\n                \"visits\": 10,\n                \"url\": \"https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html\"\n            }\n        ]"
               }
             }
           },
@@ -719,7 +719,7 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "[\n            {\n                \"question\": \"How can I survive without phpMyFAQ?\",\n                \"url\": \"https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de\",\n                \"id\": 8,\n                \"order\": 1\n            },\n            {\n                \"question\": \"Is there life after death?\",\n                \"url\": \"https://www.example.org/index.php?action=faq&cat=1&id=1&artlang=en\",\n                \"id\": 10,\n                \"order\": 2\n            }\n        ]"
+                "example": "[\n            {\n                \"question\": \"How can I survive without phpMyFAQ?\",\n                \"url\": \"https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html\",\n                \"id\": 8,\n                \"order\": 1\n            },\n            {\n                \"question\": \"Is there life after death?\",\n                \"url\": \"https://www.example.org/content/1/1/de/is-there-life-after-death.html\",\n                \"id\": 10,\n                \"order\": 2\n            }\n        ]"
               }
             }
           },

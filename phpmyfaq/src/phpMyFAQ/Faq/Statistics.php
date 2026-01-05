@@ -26,6 +26,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
+use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;
 use stdClass;
@@ -399,11 +400,12 @@ class Statistics
 
                 $title = $row->question;
                 $url = sprintf(
-                    '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
+                    '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
                     $row->category_id,
                     $row->id,
                     $row->language,
+                    TitleSlugifier::slug($row->question),
                 );
                 $oLink = new Link($url, $this->configuration);
                 $oLink->setTitle($title);
