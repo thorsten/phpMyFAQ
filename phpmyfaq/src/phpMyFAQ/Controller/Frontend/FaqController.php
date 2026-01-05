@@ -268,11 +268,12 @@ final class FaqController extends AbstractFrontController
         $languageUrls = [];
         foreach ($availableLanguages as $language) {
             $url = sprintf(
-                '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
+                '%scontent/%d/%d/%s/%s.html',
                 $this->configuration->getDefaultUrl(),
                 $cat,
                 $faqId,
                 $language,
+                TitleSlugifier::slug($question),
             );
             $link = new Link($url, $this->configuration);
             $link->setTitle($question);

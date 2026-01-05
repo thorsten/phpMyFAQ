@@ -42,6 +42,7 @@ use phpMyFAQ\Instance\Search\Elasticsearch;
 use phpMyFAQ\Instance\Search\OpenSearch;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
+use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Session\Token;
@@ -199,11 +200,12 @@ final class FaqController extends AbstractController
                 }
 
                 $url = sprintf(
-                    '%s?action=faq&cat=%d&id=%d&artlang=%s',
+                    '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
                     $categories[0],
                     $faqData->getId(),
                     $faqData->getLanguage(),
+                    TitleSlugifier::slug($faqData->getQuestion()),
                 );
                 $oLink = new Link($url, $this->configuration);
 

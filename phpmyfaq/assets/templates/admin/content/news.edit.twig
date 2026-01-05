@@ -138,22 +138,5 @@
       </div>
     </div>
   </form>
-  {% if comments|length > 0 %}
-    <div class="row"><strong>{{ ad_entry_comment }}</strong></div>
-  {% endif %}
-  {% for item in comments %}
-    <div class="row">
-      {{ ad_entry_commentby }}
-      <a href="mailto:{{ item.email }}">
-        {{ item.user }}
-      </a>:<br>
-      {{ item.content }}<br>
-      {{ newsCommentDate }}{{ item.date|createIsoDate }}
-      <a href="?action=delcomment&artid={{ newsId }}&cmtid={{ item.id }}&type={{ commentTypeNews }}">
-        <i aria-hidden="true" class="bi bi-trash"></i>
-      </a>
-    </div>
-    </div>
-    </div>
-  {% endfor %}
+
 {% endblock %}

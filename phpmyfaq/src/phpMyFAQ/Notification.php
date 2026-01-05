@@ -22,6 +22,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Entity\QuestionEntity;
+use phpMyFAQ\Link\Util\TitleSlugifier;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 /**
@@ -148,13 +149,13 @@ readonly class Notification
 
         $title = $faq->faqRecord['title'];
 
-        $url = '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s';
         $faqUrl = sprintf(
-            $url,
+            '%scontent/%d/%d/%s/%s.html',
             $this->configuration->getDefaultUrl(),
             $category->getCategoryIdFromFaq((int) $faq->faqRecord['id']),
             $faq->faqRecord['id'],
             $faq->faqRecord['lang'],
+            TitleSlugifier::slug($title),
         );
         $link = new Link($faqUrl, $this->configuration);
         $link->setTitle($title);
@@ -217,8 +218,13 @@ readonly class Notification
 
         $title = $newsData['header'];
 
-        $url = '%sindex.php?action=news&newsid=%d&newslang=%s';
-        $newsUrl = sprintf($url, $this->configuration->getDefaultUrl(), $newsData['id'], $newsData['lang']);
+        $newsUrl = sprintf(
+            '%news/%d/%s/%s.html',
+            $this->configuration->getDefaultUrl(),
+            $newsData['id'],
+            $newsData['lang'],
+            TitleSlugifier::slug($title),
+        );
         $link = new Link($newsUrl, $this->configuration);
         $link->setTitle($newsData['header']);
 

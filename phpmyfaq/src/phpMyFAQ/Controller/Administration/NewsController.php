@@ -91,13 +91,11 @@ final class NewsController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::NEWS_ADD);
 
-        $newsId = (int) Filter::filterVar($request->request->get('newsId'), FILTER_VALIDATE_INT);
+        $newsId = (int) Filter::filterVar($request->attributes->get('newsId'), FILTER_VALIDATE_INT);
 
         $news = $this->container->get(id: 'phpmyfaq.news');
         $comment = $this->container->get(id: 'phpmyfaq.comments');
         $newsData = $news->get($newsId, true);
-
-        $comments = $comment->getCommentsData($newsId, CommentType::NEWS);
 
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatDateTwigExtension::class));
@@ -109,7 +107,6 @@ final class NewsController extends AbstractAdministrationController
             'newsDataContent' => isset($newsData['content'])
                 ? htmlspecialchars((string) $newsData['content'], ENT_QUOTES)
                 : '',
-            'comments' => $comments,
             'newsId' => $newsId,
             'commentTypeNews' => CommentType::NEWS,
         ]);

@@ -30,6 +30,7 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Export;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language\LanguageCodes;
+use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\HeaderUtils;
@@ -186,11 +187,12 @@ final class ExportController extends AbstractController
 
             if (isset($data->url)) {
                 $text[$i][] = Report::sanitize($report->convertEncoding(sprintf(
-                    '%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
                     $reportData['category_id'],
                     $reportData['faq_id'],
                     $reportData['faq_language'],
+                    TitleSlugifier::slug($reportData['faq_question']),
                 )));
             }
 
