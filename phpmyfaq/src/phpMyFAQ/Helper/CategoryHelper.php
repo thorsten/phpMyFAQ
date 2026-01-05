@@ -37,52 +37,6 @@ use phpMyFAQ\User;
 class CategoryHelper extends AbstractHelper
 {
     /**
-     * Get all categories in <option> tags.
-     *
-     * @param int[]|int $categoryId CategoryHelper ID or array of category IDs
-     */
-    #[\Deprecated(message: 'will be moved into a Twig macro')]
-    public function renderOptions(array|int $categoryId): string
-    {
-        $categories = '';
-
-        if (!is_array($categoryId)) {
-            $categoryId = [
-                [
-                    'category_id' => $categoryId,
-                    'category_lang' => '',
-                ],
-            ];
-        } elseif (isset($categoryId['category_id'])) {
-            $categoryId = [$categoryId];
-        }
-
-        $i = 0;
-        foreach ($this->getCategory()->getCategoryTree() as $cat) {
-            $indent = str_repeat('....', $cat['indent']);
-
-            $categories .= sprintf('<option value="%s"', $cat['id']);
-
-            if (0 === $i && $categoryId === []) {
-                $categories .= ' selected';
-            } else {
-                foreach ($categoryId as $categorised) {
-                    if ($cat['id'] != $categorised['category_id']) {
-                        continue;
-                    }
-
-                    $categories .= ' selected';
-                }
-            }
-
-            $categories .= sprintf('>%s %s </option>', $indent, $cat['name']);
-            ++$i;
-        }
-
-        return $categories;
-    }
-
-    /**
      * Renders the static tree with the number of records.
      */
     public function renderCategoryTree(int $parentId = 0): string

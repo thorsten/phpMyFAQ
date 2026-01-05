@@ -90,7 +90,7 @@ class ErrorTest extends TestCase
 
     public function testErrorHandlerWithDifferentErrorLevels(): void
     {
-        $errorLevels = [
+        $errorLevelsThatThrow = [
             E_ERROR,
             E_WARNING,
             E_NOTICE,
@@ -98,11 +98,9 @@ class ErrorTest extends TestCase
             E_USER_WARNING,
             E_USER_NOTICE,
             E_RECOVERABLE_ERROR,
-            E_DEPRECATED,
-            E_USER_DEPRECATED,
         ];
 
-        foreach ($errorLevels as $level) {
+        foreach ($errorLevelsThatThrow as $level) {
             try {
                 Error::errorHandler($level, 'Test message', 'test.php', 1);
                 $this->fail("Expected ErrorException was not thrown for level: $level");
@@ -110,6 +108,11 @@ class ErrorTest extends TestCase
                 $this->assertSame($level, $exception->getSeverity());
             }
         }
+
+        // Deprecation warnings should not throw exceptions
+        Error::errorHandler(E_DEPRECATED, 'Test deprecated', 'test.php', 1);
+        Error::errorHandler(E_USER_DEPRECATED, 'Test user deprecated', 'test.php', 1);
+        $this->assertTrue(true); // If we reach here, no exception was thrown
     }
 
     #[PreserveGlobalState(false)]

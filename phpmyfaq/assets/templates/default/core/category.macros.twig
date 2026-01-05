@@ -1,0 +1,54 @@
+{#
+ # Twig macros for category rendering
+ #
+ # This Source Code Form is subject to the terms of the Mozilla Public License,
+ # v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ # obtain one at https://mozilla.org/MPL/2.0/.
+ #
+ # @package   phpMyFAQ
+ # @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ # @copyright 2026 phpMyFAQ Team
+ # @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ # @link      https://www.phpmyfaq.de
+ #}
+
+{#
+ # Renders category options for select dropdowns
+ #
+ # @param categoryTree array The category tree from Category::getCategoryTree()
+ # @param selectedCategoryIds int|array Single category ID or array of category data
+ #}
+{% macro renderOptions(categoryTree, selectedCategoryIds) %}
+    {% set selectedIds = [] %}
+
+    {# Normalize selectedCategoryIds to an array of IDs #}
+    {% if selectedCategoryIds is iterable %}
+        {% if selectedCategoryIds.category_id is defined %}
+            {# Single category object #}
+            {% set selectedIds = [selectedCategoryIds.category_id] %}
+        {% else %}
+            {# Array of category objects or empty array #}
+            {% for cat in selectedCategoryIds %}
+                {% if cat.category_id is defined %}
+                    {% set selectedIds = selectedIds|merge([cat.category_id]) %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% else %}
+        {# Single category ID as integer #}
+        {% set selectedIds = [selectedCategoryIds] %}
+    {% endif %}
+
+    {# Render options #}
+    {% for cat in categoryTree %}
+        {% set indent = '' %}
+        {% for i in 1..cat.indent %}
+            {% set indent = indent ~ '....' %}
+        {% endfor %}
+        {% set isSelected = cat.id in selectedIds %}
+        {% if loop.index == 1 and selectedIds is empty %}
+            {% set isSelected = true %}
+        {% endif %}
+        <option value="{{ cat.id }}"{% if isSelected %} selected{% endif %}>{{ indent }} {{ cat.name }}</option>
+    {% endfor %}
+{% endmacro %}

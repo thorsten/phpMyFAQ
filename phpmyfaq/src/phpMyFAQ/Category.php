@@ -504,14 +504,14 @@ class Category
     }
 
     /**
-     * Returns the breadcrumb path with the startpage as the first segment.
+     * Returns the breadcrumb path with the start page as the first segment.
      *
      * @param int $catId Category ID
      * @param string $separator Separator for text mode
      * @param bool $renderAsHtml Render as HTML or plain text
      * @param string $useCssClass CSS class for HTML mode
-     * @param string|null $startpageName Optional startpage name (defaults to Translation msgHome)
-     * @param string $startpageDescription Optional startpage description
+     * @param string|null $startpageName Optional start page name (defaults to Translation msgHome)
+     * @param string $startpageDescription Optional start page description
      */
     public function getPathWithStartpage(
         int $catId,

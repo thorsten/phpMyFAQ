@@ -90,7 +90,7 @@ final class CategoryLanguageService
     /**
      * Renders languages available to translate as HTML options.
      */
-    #[\Deprecated(message: 'Use getLanguagesToTranslate() instead and render in template')]
+    #[\Deprecated(message: 'Use getLanguagesToTranslate() instead and render in template, will be removed in v4.2')]
     public function renderLanguagesToTranslateAsHtml(
         Configuration $configuration,
         int $categoryId,

@@ -1,4 +1,5 @@
 {% extends '@admin/index.twig' %}
+{% import 'core/category.macros.twig' as categoryMacros %}
 
 {% block content %}
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mb-3 border-bottom">
@@ -184,7 +185,7 @@
                 </label>
                 <div class="col-6">
                   <select class="form-control" name="categories[]" id="phpmyfaq-categories" size="5" multiple>
-                    {{ categoryOptions | raw }}
+                    {{ categoryMacros.renderOptions(categoryTree, selectedCategories) | raw }}
                   </select>
                 </div>
               </div>

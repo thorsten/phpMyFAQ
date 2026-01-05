@@ -38,6 +38,11 @@ class Error
      */
     public static function errorHandler(int $level, string $message, string $filename, int $line): void
     {
+        // Don't throw exceptions for deprecation warnings
+        if ($level === E_DEPRECATED || $level === E_USER_DEPRECATED) {
+            return;
+        }
+
         if (error_reporting() !== 0) {
             $filename = Environment::isDebugMode() ? $filename : basename($filename);
             throw new ErrorException($message, 0, $level, $filename, $line);

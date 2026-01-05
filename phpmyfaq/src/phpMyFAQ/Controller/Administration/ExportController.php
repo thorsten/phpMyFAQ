@@ -35,7 +35,8 @@ final class ExportController extends AbstractAdministrationController
 {
     /**
      * @throws Exception
-     * @throws LoaderError
+     * @throws LoaderError*@throws \Exception
+     *
      */
     #[Route(path: '/export', name: 'admin.export', methods: ['GET'])]
     public function index(Request $request): Response
@@ -62,7 +63,8 @@ final class ExportController extends AbstractAdministrationController
             'headerCategories' => Translation::get(key: 'ad_export_which_cat'),
             'msgCategory' => Translation::get(key: 'msgCategory'),
             'msgAllCategories' => Translation::get(key: 'msgShowAllCategories'),
-            'categoryOptions' => $categoryHelper->renderOptions(0),
+            'categoryTree' => $category->getCategoryTree(),
+            'selectedCategories' => 0,
             'msgWithSubCategories' => Translation::get(key: 'ad_export_cat_downwards'),
             'headerExportType' => Translation::get(key: 'ad_export_type'),
             'msgChooseExportType' => Translation::get(key: 'ad_export_type_choose'),

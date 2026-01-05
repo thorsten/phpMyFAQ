@@ -63,7 +63,7 @@ class FaqHelper extends AbstractHelper
      *
      * @todo This method should be moved to a Twig macro.
      */
-    #[\Deprecated(message: 'Rewrite this method to use Twig, will be removed in v4.1')]
+    #[\Deprecated(message: 'Rewrite this method to use Twig, will be removed in v4.2')]
     public function renderChangeLanguageSelector(Faq $faq, int $categoryId): string
     {
         $html = '';
