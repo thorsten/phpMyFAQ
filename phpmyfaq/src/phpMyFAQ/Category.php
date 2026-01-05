@@ -626,19 +626,6 @@ class Category
         return $this->getCategoryRepository()->getCategoryLanguagesTranslated($categoryId);
     }
 
-    /**
-     * Returns languages available to translate for a given category as HTML options.
-     */
-    #[\Deprecated(message: 'Use CategoryLanguageService::renderLanguagesToTranslateAsHtml() instead')]
-    public function getCategoryLanguagesToTranslate(int $categoryId, string $selectedLanguage): string
-    {
-        return $this->getCategoryLanguageService()->renderLanguagesToTranslateAsHtml(
-            $this->configuration,
-            $categoryId,
-            $selectedLanguage,
-        );
-    }
-
     public function getMissingCategories(): void
     {
         $rows = $this->getCategoryService()->getMissingCategories($this->language);

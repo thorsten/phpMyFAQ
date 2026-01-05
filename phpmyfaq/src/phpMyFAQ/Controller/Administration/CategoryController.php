@@ -498,18 +498,9 @@ final class CategoryController extends AbstractAdministrationController
         $userPermission = $categoryPermission->get(CategoryPermission::USER, [$categoryId]);
         $groupPermission = $categoryPermission->get(CategoryPermission::GROUP, [$categoryId]);
 
-        // Prepare language selection options via service (keeps HTML output for BC)
+        // Prepare language selection data via service
         $categoryLanguageService = new CategoryLanguageService();
         $toTranslate = $categoryLanguageService->getLanguagesToTranslate($this->configuration, $categoryId);
-        $langOptions = '';
-        foreach ($toTranslate as $code => $name) {
-            $langOptions .= '<option value="' . $code . '"';
-            if ($code === $translateTo) {
-                $langOptions .= ' selected="selected"';
-            }
-
-            $langOptions .= '>' . $name . '</option>';
-        }
 
         return $this->render(file: '@admin/content/category.translate.twig', context: [
             ...$this->getHeader($request),
@@ -525,7 +516,8 @@ final class CategoryController extends AbstractAdministrationController
             'csrfInputToken' => Token::getInstance($this->session)->getTokenInput(page: 'update-category'),
             'categoryNameLabel' => Translation::get(key: 'categoryNameLabel'),
             'ad_categ_lang' => Translation::get(key: 'ad_categ_lang'),
-            'langToTranslate' => $langOptions, // deprecated in the future; generated from data service now
+            'languagesToTranslate' => $toTranslate,
+            'selectedLanguage' => $translateTo ?? '',
             'categoryDescriptionLabel' => Translation::get(key: 'categoryDescriptionLabel'),
             'categoryOwnerLabel' => Translation::get(key: 'categoryOwnerLabel'),
             'userSelection' => $userHelper->getAllUsersForTemplate($category->getOwner($categoryId)),

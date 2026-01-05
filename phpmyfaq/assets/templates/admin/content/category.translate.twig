@@ -1,4 +1,5 @@
 {% extends '@admin/index.twig' %}
+{% import 'core/language.macros.twig' as languageMacros %}
 
 {% block content %}
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mb-3 border-bottom">
@@ -33,7 +34,7 @@
           <label class="col-lg-2 col-form-label" for="catlang">{{ ad_categ_lang }}:</label>
           <div class="col-lg-4">
             <select name="catlang" id="catlang" class="form-select">
-              {{ langToTranslate|raw }}
+              {{ languageMacros.renderLanguageOptions(languagesToTranslate, selectedLanguage) }}
             </select>
           </div>
         </div>
