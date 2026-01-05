@@ -25,7 +25,7 @@ use phpMyFAQ\Database;
 readonly class ConfigurationRepository
 {
     public function __construct(
-        private CoreConfiguration $configuration,
+        private CoreConfiguration $coreConfiguration,
         private string $tableName = 'faqconfig',
     ) {
     }
@@ -39,11 +39,11 @@ readonly class ConfigurationRepository
             $sql,
             Database::getTablePrefix(),
             $this->tableName,
-            $this->configuration->getDb()->escape(trim($value)),
-            $this->configuration->getDb()->escape(trim($key)),
+            $this->coreConfiguration->getDb()->escape(trim($value)),
+            $this->coreConfiguration->getDb()->escape(trim($key)),
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool) $this->coreConfiguration->getDb()->query($query);
     }
 
     /**
@@ -56,8 +56,8 @@ readonly class ConfigurationRepository
         SQL;
         $query = sprintf($sql, Database::getTablePrefix(), $this->tableName);
 
-        $result = $this->configuration->getDb()->query($query);
-        $rows = $this->configuration->getDb()->fetchAll($result);
+        $result = $this->coreConfiguration->getDb()->query($query);
+        $rows = $this->coreConfiguration->getDb()->fetchAll($result);
         return is_array($rows) ? $rows : [];
     }
 
@@ -70,11 +70,11 @@ readonly class ConfigurationRepository
             $sql,
             Database::getTablePrefix(),
             $this->tableName,
-            $this->configuration->getDb()->escape(trim($name)),
-            $this->configuration->getDb()->escape(trim($value)),
+            $this->coreConfiguration->getDb()->escape(trim($name)),
+            $this->coreConfiguration->getDb()->escape(trim($value)),
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool) $this->coreConfiguration->getDb()->query($query);
     }
 
     public function delete(string $name): bool
@@ -86,10 +86,10 @@ readonly class ConfigurationRepository
             $sql,
             Database::getTablePrefix(),
             $this->tableName,
-            $this->configuration->getDb()->escape(trim($name)),
+            $this->coreConfiguration->getDb()->escape(trim($name)),
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool) $this->coreConfiguration->getDb()->query($query);
     }
 
     public function renameKey(string $currentKey, string $newKey): bool
@@ -101,11 +101,11 @@ readonly class ConfigurationRepository
             $sql,
             Database::getTablePrefix(),
             $this->tableName,
-            $this->configuration->getDb()->escape(trim($newKey)),
-            $this->configuration->getDb()->escape(trim($currentKey)),
+            $this->coreConfiguration->getDb()->escape(trim($newKey)),
+            $this->coreConfiguration->getDb()->escape(trim($currentKey)),
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool) $this->coreConfiguration->getDb()->query($query);
     }
 
     /**
@@ -117,8 +117,8 @@ readonly class ConfigurationRepository
             SELECT content FROM %sfaqdata
         SQL;
         $query = sprintf($sql, Database::getTablePrefix());
-        $response = $this->configuration->getDb()->query($query);
-        $rows = $this->configuration->getDb()->fetchAll($response);
+        $response = $this->coreConfiguration->getDb()->query($query);
+        $rows = $this->coreConfiguration->getDb()->fetchAll($response);
         return is_array($rows) ? $rows : [];
     }
 
@@ -130,9 +130,9 @@ readonly class ConfigurationRepository
         $query = sprintf(
             $sql,
             Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($newContent),
-            $this->configuration->getDb()->escape($oldContent),
+            $this->coreConfiguration->getDb()->escape($newContent),
+            $this->coreConfiguration->getDb()->escape($oldContent),
         );
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool) $this->coreConfiguration->getDb()->query($query);
     }
 }

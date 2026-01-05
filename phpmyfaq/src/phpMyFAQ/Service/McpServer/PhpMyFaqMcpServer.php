@@ -63,6 +63,7 @@ class PhpMyFaqMcpServer
             $this->initializeServer();
             return;
         }
+
         $language->setLanguageFromConfiguration($configLang);
         $this->configuration->setLanguage($language);
 

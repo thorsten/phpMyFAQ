@@ -40,7 +40,7 @@ class Language
     /**
      * Detector helper.
      */
-    private LanguageDetector $detector;
+    private LanguageDetector $languageDetector;
 
     /**
      * Constructor.
@@ -49,7 +49,7 @@ class Language
         private readonly Configuration $configuration,
         private readonly SessionInterface $session,
     ) {
-        $this->detector = new LanguageDetector($this->configuration, $this->session);
+        $this->languageDetector = new LanguageDetector($this->session);
     }
 
     /**
@@ -82,6 +82,7 @@ class Language
                 if (!$row) {
                     break;
                 }
+
                 $output[] = $row->lang;
             }
         }
@@ -94,8 +95,8 @@ class Language
      */
     public function setLanguageWithDetection(string $configLanguage): string
     {
-        $detected = $this->detector->detectAllWithBrowser($configLanguage);
-        self::$language = $this->detector->selectLanguage($detected);
+        $detected = $this->languageDetector->detectAllWithBrowser($configLanguage);
+        self::$language = $this->languageDetector->selectLanguage($detected);
         $this->session->set(name: 'lang', value: self::$language);
         return strtolower(self::$language);
     }
@@ -105,16 +106,16 @@ class Language
      */
     public function setLanguageFromConfiguration(string $configLanguage): string
     {
-        $detected = $this->detector->detectAllFromConfig($configLanguage);
-        self::$language = $this->detector->selectLanguage($detected);
+        $detected = $this->languageDetector->detectAllFromConfig($configLanguage);
+        self::$language = $this->languageDetector->selectLanguage($detected);
         $this->session->set(name: 'lang', value: self::$language);
         return strtolower(self::$language);
     }
 
     public function setLanguageByAcceptLanguage(): string
     {
-        $this->detector->detectAllWithBrowser(configLanguage: '');
-        return self::$language = $this->detector->getAcceptLanguage();
+        $this->languageDetector->detectAllWithBrowser(configLanguage: '');
+        return self::$language = $this->languageDetector->getAcceptLanguage();
     }
 
     /**

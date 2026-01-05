@@ -134,10 +134,10 @@ final class UserController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $data = $request->getPayload();
+        $inputBag = $request->getPayload();
 
-        $csrfToken = Filter::filterVar($data->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
-        $userIdInput = Filter::filterVar($data->get('userid') ?? null, FILTER_VALIDATE_INT);
+        $csrfToken = Filter::filterVar($inputBag->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $userIdInput = Filter::filterVar($inputBag->get('userid') ?? null, FILTER_VALIDATE_INT);
 
         if (!Token::getInstance($this->session)->verifyToken('export-userdata', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
@@ -172,22 +172,22 @@ final class UserController extends AbstractController
             return $this->json(['error' => 'Failed to create temp file.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $zip = new ZipArchive();
-        if ($zip->open($tmpFile, ZipArchive::OVERWRITE) !== true) {
+        $zipArchive = new ZipArchive();
+        if ($zipArchive->open($tmpFile, ZipArchive::OVERWRITE) !== true) {
             return $this->json(['error' => 'Failed to create ZIP archive.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $zip->addFromString('userdata.json', $json);
-        $zip->close();
+        $zipArchive->addFromString('userdata.json', $json);
+        $zipArchive->close();
 
         $fileName = sprintf('phpmyfaq-userdata-%d-%s.zip', $this->currentUser->getUserId(), date(format: 'YmdHis'));
 
-        $response = new BinaryFileResponse($tmpFile);
-        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $fileName);
-        $response->headers->set('Content-Type', 'application/zip');
-        $response->deleteFileAfterSend();
+        $binaryFileResponse = new BinaryFileResponse($tmpFile);
+        $binaryFileResponse->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $fileName);
+        $binaryFileResponse->headers->set('Content-Type', 'application/zip');
+        $binaryFileResponse->deleteFileAfterSend();
 
-        return $response;
+        return $binaryFileResponse;
     }
 
     /**

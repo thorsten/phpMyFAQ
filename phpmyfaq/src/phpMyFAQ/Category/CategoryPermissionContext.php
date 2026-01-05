@@ -80,6 +80,7 @@ final class CategoryPermissionContext
         if ($groups === []) {
             $groups = [-1];
         }
+
         $this->groups = $groups;
     }
 

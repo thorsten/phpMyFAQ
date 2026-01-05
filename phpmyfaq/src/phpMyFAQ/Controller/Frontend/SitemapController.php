@@ -42,7 +42,7 @@ final class SitemapController extends AbstractFrontController
         $faqSession->userTracking('sitemap', 0);
 
         $letter = Filter::filterVar($request->attributes->get('letter'), FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!is_null($letter) && 1 == Strings::strlen($letter)) {
+        if (!is_null($letter) && 1 === Strings::strlen($letter)) {
             $currLetter = strtoupper(Strings::substr($letter, 0, 1));
         } else {
             $currLetter = '';

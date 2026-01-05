@@ -34,7 +34,7 @@ final class CategoryLanguageService
     public function getLanguagesToTranslate(Configuration $configuration, int $categoryId): array
     {
         $existing = $configuration->getLanguage()->isLanguageAvailable($categoryId, table: 'faqcategories');
-        $existingLower = array_map(static fn($l) => strtolower((string) $l), $existing);
+        $existingLower = array_map(strtolower(...), $existing);
 
         $result = [];
         foreach (LanguageHelper::getAvailableLanguages() as $lang => $name) {
@@ -82,15 +82,15 @@ final class CategoryLanguageService
             $codeLower = strtolower($code);
             $result[$codeLower] = LanguageCodes::get($codeLower) ?? $codeLower;
         }
+
         asort($result);
         return $result;
     }
 
     /**
      * Renders languages available to translate as HTML options.
-     *
-     * @deprecated Use getLanguagesToTranslate() instead and render in template
      */
+    #[\Deprecated(message: 'Use getLanguagesToTranslate() instead and render in template')]
     public function renderLanguagesToTranslateAsHtml(
         Configuration $configuration,
         int $categoryId,
@@ -104,6 +104,7 @@ final class CategoryLanguageService
             if ($lang === strtolower($selectedLanguage)) {
                 $output .= ' selected="selected"';
             }
+
             $output .= '>' . $name . "</option>\n";
         }
 

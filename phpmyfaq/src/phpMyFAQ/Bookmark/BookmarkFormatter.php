@@ -40,7 +40,6 @@ readonly class BookmarkFormatter
      *
      * Returns null if the bookmark cannot be resolved (missing FAQ, invalid id, ...).
      *
-     * @param object $bookmark
      * @return array{url:string,title:string,id:int,answer:string}|null
      */
     public function format(object $bookmark): ?array

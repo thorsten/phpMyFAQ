@@ -128,19 +128,19 @@ final class CategoryController extends AbstractFrontController
      */
     private function renderSpecificCategory(
         Request $request,
-        UserSession $faqSession,
+        UserSession $userSession,
         int $selectedCategoryId,
         Category $category,
         Faq $faq,
     ): array {
-        $faqSession->userTracking('show_category', $selectedCategoryId);
+        $userSession->userTracking('show_category', $selectedCategoryId);
 
-        $categoryData = $category->getCategoryData($selectedCategoryId);
+        $categoryEntity = $category->getCategoryData($selectedCategoryId);
         $records = $this->getFaqRecords($faq, $selectedCategoryId);
         $subCategoryContent = $this->getSubCategoryContent($category, $selectedCategoryId, $records);
-        $categoryLevelUp = $this->buildParentNavigationLink($category, $categoryData);
-        $categoryImage = $this->getCategoryImageUrl($categoryData);
-        $categoryHeader = Translation::get(key: 'msgEntriesIn') . $categoryData->getName();
+        $categoryLevelUp = $this->buildParentNavigationLink($category, $categoryEntity);
+        $categoryImage = $this->getCategoryImageUrl($categoryEntity);
+        $categoryHeader = Translation::get(key: 'msgEntriesIn') . $categoryEntity->getName();
 
         return [
             ...$this->getHeader($request),
@@ -151,8 +151,8 @@ final class CategoryController extends AbstractFrontController
             ),
             'categoryHeader' => $categoryHeader,
             'breadcrumb' => $category->getPathWithStartpage($selectedCategoryId, '/', true),
-            'categoryFaqsHeader' => $categoryData->getName(),
-            'categoryDescription' => $categoryData->getDescription() ?? '',
+            'categoryFaqsHeader' => $categoryEntity->getName(),
+            'categoryDescription' => $categoryEntity->getDescription() ?? '',
             'categorySubsHeader' => Translation::get(key: 'msgSubCategories'),
             'categoryImage' => $categoryImage,
             'categoryContent' => $records,
@@ -167,9 +167,9 @@ final class CategoryController extends AbstractFrontController
      * @return array<string, mixed>
      * @throws \Exception
      */
-    private function renderAllCategories(Request $request, UserSession $faqSession, Category $category): array
+    private function renderAllCategories(Request $request, UserSession $userSession, Category $category): array
     {
-        $faqSession->userTracking('show_all_categories', 0);
+        $userSession->userTracking('show_all_categories', 0);
 
         $this->categoryHelper->setConfiguration($this->configuration)->setCategory($category);
 
@@ -228,7 +228,7 @@ final class CategoryController extends AbstractFrontController
         }
 
         $childNodes = $category->getChildNodes($selectedCategoryId);
-        $hasChildren = is_countable($childNodes) && count($childNodes) > 0;
+        $hasChildren = is_countable($childNodes) && $childNodes !== [];
 
         return $hasChildren ? $this->categoryHelper->renderCategoryTree($selectedCategoryId) : null;
     }
@@ -236,13 +236,13 @@ final class CategoryController extends AbstractFrontController
     /**
      * Builds the parent category navigation link
      */
-    private function buildParentNavigationLink(Category $category, CategoryEntity $categoryData): string
+    private function buildParentNavigationLink(Category $category, CategoryEntity $categoryEntity): string
     {
-        if ($categoryData->getId() === 0) {
+        if ($categoryEntity->getId() === 0) {
             return '';
         }
 
-        $parentId = $categoryData->getParentId();
+        $parentId = $categoryEntity->getParentId();
         $parentName = $category->getCategoryName($parentId);
 
         if ($parentId === 0) {
@@ -269,16 +269,16 @@ final class CategoryController extends AbstractFrontController
     {
         $text = strtolower($text);
         $text = preg_replace('/[^a-z0-9-]/', '-', $text);
-        $text = preg_replace('/-+/', '-', $text);
-        return trim($text, '-');
+        $text = preg_replace('/-+/', '-', (string) $text);
+        return trim((string) $text, '-');
     }
 
     /**
      * Gets the category image URL if available
      */
-    private function getCategoryImageUrl(CategoryEntity $categoryData): ?string
+    private function getCategoryImageUrl(CategoryEntity $categoryEntity): ?string
     {
-        $image = $categoryData->getImage();
+        $image = $categoryEntity->getImage();
 
         if (is_null($image) || $image === '') {
             return null;

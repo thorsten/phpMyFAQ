@@ -63,6 +63,7 @@ class HtaccessUpdater
         // Normalize base path: ensure leading slash and a single trailing slash, '/' stays '/'
         $trimmed = trim($newBasePath);
         $trimmed = trim($trimmed, "/\t\n\r\0\x0B");
+
         $newBasePath = $trimmed === '' ? '/' : '/' . trim($trimmed, '/');
         if ($newBasePath !== '/') {
             $newBasePath .= '/';

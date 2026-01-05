@@ -35,7 +35,9 @@ use phpMyFAQ\User\CurrentUser;
 final class NewsService
 {
     private News $news;
+
     private Glossary $glossary;
+
     private FaqHelper $faqHelper;
 
     public function __construct(
@@ -61,7 +63,7 @@ final class NewsService
         $news['processedHeader'] = $this->processContent($news['header'] ?? '');
 
         // Add an information link if available
-        if (strlen((string) $news['link']) > 0) {
+        if ((string) $news['link'] !== '') {
             $news['processedContent'] .= $this->buildInformationLink(
                 $news['link'],
                 $news['target'],

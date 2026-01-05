@@ -106,11 +106,11 @@ class Filter
             $cleanKey = strip_tags((string) $key);
             if (is_array($urlPart)) {
                 // sanitize one level deep; http_build_query will handle arrays
-                $cleanUrlData[$cleanKey] = array_map(static fn($v) => strip_tags((string) $v), $urlPart);
+                $cleanUrlData[$cleanKey] = array_map(static fn($v): string => strip_tags((string) $v), $urlPart);
                 continue;
             }
 
-            $cleanUrlData[$cleanKey] = strip_tags((string) $urlPart);
+            $cleanUrlData[$cleanKey] = strip_tags($urlPart);
         }
 
         return http_build_query($cleanUrlData, arg_separator: '&', encoding_type: PHP_QUERY_RFC3986);

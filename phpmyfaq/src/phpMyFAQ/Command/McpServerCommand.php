@@ -39,7 +39,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class McpServerCommand extends Command
 {
     public function __construct(
-        private readonly PhpMyFaqMcpServer $mcpServer,
+        private readonly PhpMyFaqMcpServer $phpMyFaqMcpServer,
     ) {
         parent::__construct();
     }
@@ -61,47 +61,49 @@ class McpServerCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
+        $symfonyStyle = new SymfonyStyle($input, $output);
 
         if ($input->getOption(name: 'info')) {
-            $this->showServerInfo($io);
+            $this->showServerInfo($symfonyStyle);
             return Command::SUCCESS;
         }
 
-        $io->title(message: 'phpMyFAQ MCP Server');
-        $io->info(message: 'Starting MCP server for phpMyFAQ knowledge base...');
-        $io->info(message: 'The server will handle MCP protocol requests from LLM clients.');
-        $io->warning(message: 'Press Ctrl+C to stop the server.');
+        $symfonyStyle->title(message: 'phpMyFAQ MCP Server');
+        $symfonyStyle->info(message: 'Starting MCP server for phpMyFAQ knowledge base...');
+        $symfonyStyle->info(message: 'The server will handle MCP protocol requests from LLM clients.');
+        $symfonyStyle->warning(message: 'Press Ctrl+C to stop the server.');
 
         try {
-            $this->mcpServer->runConsole($input, $output);
+            $this->phpMyFaqMcpServer->runConsole($input, $output);
             return Command::SUCCESS;
-        } catch (Exception $e) {
-            $io->error('Failed to start MCP server: ' . $e->getMessage());
+        } catch (Exception $exception) {
+            $symfonyStyle->error('Failed to start MCP server: ' . $exception->getMessage());
             return Command::FAILURE;
         }
     }
 
-    private function showServerInfo(SymfonyStyle $io): void
+    private function showServerInfo(SymfonyStyle $symfonyStyle): void
     {
-        $serverInfo = $this->mcpServer->getServerInfo();
+        $serverInfo = $this->phpMyFaqMcpServer->getServerInfo();
 
-        $io->title($serverInfo['name']);
-        $io->definitionList(
+        $symfonyStyle->title($serverInfo['name']);
+        $symfonyStyle->definitionList(
             ['Version' => $serverInfo['version']],
             ['Description' => $serverInfo['description']],
             ['Capabilities' => implode(separator: ', ', array: array_keys(array_filter($serverInfo['capabilities'])))],
         );
 
-        $io->section(message: 'Available Tools');
+        $symfonyStyle->section(message: 'Available Tools');
+
         $toolsTable = [];
         foreach ($serverInfo['tools'] as $tool) {
             $toolsTable[] = [$tool['name'], $tool['description']];
         }
-        $io->table(['Name', 'Description'], $toolsTable);
 
-        $io->section(message: 'Usage Examples');
-        $io->text([
+        $symfonyStyle->table(['Name', 'Description'], $toolsTable);
+
+        $symfonyStyle->section(message: 'Usage Examples');
+        $symfonyStyle->text([
             'Start the server:',
             '  php bin/console phpmyfaq:mcp:server',
             '',

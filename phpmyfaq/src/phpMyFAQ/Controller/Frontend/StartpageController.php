@@ -45,18 +45,18 @@ final class StartpageController extends AbstractFrontController
     public function index(Request $request): Response
     {
         $news = new News($this->configuration);
-        $plr = new Plurals();
+        $plurals = new Plurals();
         $faqStatistics = new Statistics($this->configuration);
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $startPageCategory = new Startpage($this->configuration);
-        $startPageCategory
+        $startpage = new Startpage($this->configuration);
+        $startpage
             ->setLanguage($this->configuration->getLanguage()->getLanguage())
             ->setUser($currentUser)
             ->setGroups($currentGroups);
 
-        $startPageCategories = $startPageCategory->getCategories();
+        $startPageCategories = $startpage->getCategories();
 
         // Get top ten parameter
         $param = $this->configuration->get('records.orderingPopularFaqs') === 'visits' ? 'visits' : 'voted';
@@ -69,7 +69,7 @@ final class StartpageController extends AbstractFrontController
         $tags->setUser($currentUser)->setGroups($currentGroups);
 
         $faqSystem = $this->container->get('phpmyfaq.system');
-        $categoryId = Filter::filterVar($request->query->get('cat'), FILTER_VALIDATE_INT, 0);
+        Filter::filterVar($request->query->get('cat'), FILTER_VALIDATE_INT, 0);
 
         $this->addExtension(new AttributeExtension(TagNameTwigExtension::class));
         return $this->render('startpage.twig', [
@@ -92,7 +92,7 @@ final class StartpageController extends AbstractFrontController
             'errorMsgTrendingFaqs' => Translation::get(key: 'msgErrorNoRecords'),
             'msgNewsHeader' => Translation::get(key: 'newsArchive'),
             'newsList' => $news->getAll(),
-            'writeNumberOfArticles' => $plr->getMsg(
+            'writeNumberOfArticles' => $plurals->getMsg(
                 'plmsgHomeArticlesOnline',
                 $faqStatistics->totalFaqs($this->configuration->getLanguage()->getLanguage()),
             ),

@@ -34,7 +34,9 @@ use phpMyFAQ\User\CurrentUser;
 final class FaqCreationService
 {
     private Category $category;
-    private Question $questionObject;
+
+    private Question $question;
+
     private Forms $forms;
 
     public function __construct(
@@ -43,7 +45,7 @@ final class FaqCreationService
         private readonly array $currentGroups,
     ) {
         $this->category = new Category($this->configuration, $this->currentGroups);
-        $this->questionObject = new Question($this->configuration);
+        $this->question = new Question($this->configuration);
         $this->forms = new Forms($this->configuration);
     }
 
@@ -60,7 +62,7 @@ final class FaqCreationService
 
         // Load question data if a question ID is provided
         if ($selectedQuestion !== null) {
-            $questionData = $this->questionObject->get($selectedQuestion);
+            $questionData = $this->question->get($selectedQuestion);
             $question = $questionData['question'];
             if (Strings::strlen($question) !== 0) {
                 $readonly = ' readonly';

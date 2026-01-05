@@ -124,7 +124,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
     public function grantGroupRight(int $groupId, int $rightId): bool
     {
         $right_data = $this->getRightData($rightId);
-        if (count($right_data) === 0 || !($right_data['for_groups'] ?? false)) {
+        if ($right_data === [] || !($right_data['for_groups'] ?? false)) {
             return false;
         }
 
@@ -375,8 +375,8 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         $autoJoinGroups = $this->mediumRepository->getAutoJoinGroups();
 
         // add to groups
-        foreach ($autoJoinGroups as $groupId) {
-            $this->addToGroup($userId, $groupId);
+        foreach ($autoJoinGroups as $autoJoinGroup) {
+            $this->addToGroup($userId, $autoJoinGroup);
         }
 
         return true;

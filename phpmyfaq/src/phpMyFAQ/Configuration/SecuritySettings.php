@@ -24,12 +24,12 @@ use phpMyFAQ\Configuration as CoreConfiguration;
 readonly class SecuritySettings
 {
     public function __construct(
-        private CoreConfiguration $configuration,
+        private CoreConfiguration $coreConfiguration,
     ) {
     }
 
     public function isSignInWithMicrosoftActive(): bool
     {
-        return (bool) $this->configuration->get(item: 'security.enableSignInWithMicrosoft');
+        return (bool) $this->coreConfiguration->get(item: 'security.enableSignInWithMicrosoft');
     }
 }

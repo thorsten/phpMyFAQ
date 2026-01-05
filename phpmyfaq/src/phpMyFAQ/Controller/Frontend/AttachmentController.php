@@ -58,28 +58,32 @@ final class AttachmentController extends AbstractFrontController
             }
         }
 
-        if ($attachment && $attachment->getRecordId() > 0 && $attachmentService->canDownloadAttachment($attachment)) {
-            $response = new StreamedResponse(static function () use ($attachment) {
+        if (
+            $attachment instanceof \phpMyFAQ\Attachment\AbstractAttachment
+            && $attachment->getRecordId() > 0
+            && $attachmentService->canDownloadAttachment($attachment)
+        ) {
+            $streamedResponse = new StreamedResponse(static function () use ($attachment): void {
                 $attachment->rawOut();
             });
 
-            $response->headers->set('Content-Type', $attachment->getMimeType());
-            $response->headers->set('Content-Length', (string) $attachment->getFilesize());
+            $streamedResponse->headers->set('Content-Type', $attachment->getMimeType());
+            $streamedResponse->headers->set('Content-Length', (string) $attachment->getFilesize());
 
             if ($attachment->getMimeType() === 'application/pdf') {
-                $response->headers->set(
+                $streamedResponse->headers->set(
                     'Content-Disposition',
                     'inline; filename="' . rawurlencode($attachment->getFilename()) . '"',
                 );
             } else {
-                $response->headers->set(
+                $streamedResponse->headers->set(
                     'Content-Disposition',
                     'attachment; filename="' . rawurlencode($attachment->getFilename()) . '"',
                 );
             }
 
-            $response->headers->set('Content-MD5', $attachment->getRealHash());
-            $response->send();
+            $streamedResponse->headers->set('Content-MD5', $attachment->getRealHash());
+            $streamedResponse->send();
         } else {
             $attachmentErrors[] = $attachmentService->getGenericErrorMessage();
         }

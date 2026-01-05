@@ -217,11 +217,6 @@ class Link
     private string $itemTitle = '';
 
     /**
-     * href
-     */
-    private string $reference = '';
-
-    /**
      * id selector.
      */
     public string $id = '';
@@ -244,7 +239,7 @@ class Link
         private readonly Configuration $configuration,
         ?StrategyRegistry $strategyRegistry = null,
     ) {
-        if ($strategyRegistry === null) {
+        if (!$strategyRegistry instanceof StrategyRegistry) {
             // default registry population (previous behavior)
             $strategyRegistry = new StrategyRegistry([
                 self::LINK_GET_ACTION_FAQ => new FaqStrategy(),
@@ -268,6 +263,7 @@ class Link
             // Merge missing default strategies when a custom registry is injected (non-destructive)
             $this->ensureDefaultStrategies($strategyRegistry);
         }
+
         $this->strategyRegistry = $strategyRegistry;
     }
 
@@ -349,6 +345,7 @@ class Link
             $html .= sprintf(' href="%s"', $this->escapeUrl($url));
             $add(attribute: 'target', value: $this->target);
         }
+
         $add(attribute: 'rel', value: $this->rel);
 
         $html .= '>';
@@ -358,6 +355,7 @@ class Link
         if ($body === '' || $body === '0') {
             $body = $this->name !== '' && $this->name !== '0' ? $this->name : $url;
         }
+
         $html .= $body === $url ? $this->escapeUrl($body) : $this->escapeAttr($body);
 
         return $html . '</a>';
@@ -428,10 +426,11 @@ class Link
     private function buildActionUrl(string $action, array $p): ?string
     {
         $strategy = $this->strategyRegistry->get($action);
-        if ($strategy) {
+        if ($strategy instanceof StrategyInterface) {
             return $strategy->build($p, $this);
         }
-        return null; // unknown action returns null -> original URL retained
+
+        return null;
     }
 
     /**
@@ -570,6 +569,7 @@ class Link
         if ($title === '') {
             $title = $this->itemTitle;
         }
+
         return TitleSlugifier::slug($title);
     }
 
@@ -607,32 +607,42 @@ class Link
     /**
      * Ensures that all default strategies exist in the provided registry without overriding existing entries.
      */
-    private function ensureDefaultStrategies(StrategyRegistry $registry): void
+    private function ensureDefaultStrategies(StrategyRegistry $strategyRegistry): void
     {
         $defaults = [
-            self::LINK_GET_ACTION_FAQ => static fn() => new FaqStrategy(),
-            self::LINK_GET_ACTION_SEARCH => static fn() => new SearchStrategy(),
-            self::LINK_GET_ACTION_SITEMAP => static fn() => new SitemapStrategy(),
-            self::LINK_GET_ACTION_SHOW => static fn() => new ShowStrategy(),
-            self::LINK_GET_ACTION_NEWS => static fn() => new NewsStrategy(),
+            self::LINK_GET_ACTION_FAQ => static fn(): FaqStrategy => new FaqStrategy(),
+            self::LINK_GET_ACTION_SEARCH => static fn(): SearchStrategy => new SearchStrategy(),
+            self::LINK_GET_ACTION_SITEMAP => static fn(): SitemapStrategy => new SitemapStrategy(),
+            self::LINK_GET_ACTION_SHOW => static fn(): ShowStrategy => new ShowStrategy(),
+            self::LINK_GET_ACTION_NEWS => static fn(): NewsStrategy => new NewsStrategy(),
             // Simple path-based strategies
-            self::LINK_GET_ACTION_ADD => static fn() => new GenericPathStrategy(self::LINK_HTML_ADDCONTENT),
-            self::LINK_GET_ACTION_ASK => static fn() => new GenericPathStrategy(self::LINK_HTML_ASK),
-            self::LINK_GET_ACTION_CONTACT => static fn() => new GenericPathStrategy(self::LINK_HTML_CONTACT),
-            self::LINK_GET_ACTION_GLOSSARY => static fn() => new GenericPathStrategy(self::LINK_HTML_GLOSSARY),
-            self::LINK_GET_ACTION_HELP => static fn() => new GenericPathStrategy(self::LINK_HTML_HELP),
-            self::LINK_GET_ACTION_OPEN => static fn() => new GenericPathStrategy(self::LINK_HTML_OPEN),
-            self::LINK_GET_ACTION_LOGIN => static fn() => new GenericPathStrategy(self::LINK_HTML_LOGIN),
-            self::LINK_GET_ACTION_PASSWORD => static fn() => new GenericPathStrategy(self::LINK_HTML_FORGOT_PASSWORD),
-            self::LINK_GET_ACTION_BOOKMARKS => static fn() => new GenericPathStrategy(self::LINK_HTML_BOOKMARKS),
-            self::LINK_GET_ACTION_REGISTER => static fn() => new GenericPathStrategy(self::LINK_HTML_REGISTER),
+            self::LINK_GET_ACTION_ADD =>
+                static fn(): GenericPathStrategy => new GenericPathStrategy(self::LINK_HTML_ADDCONTENT),
+            self::LINK_GET_ACTION_ASK =>
+                static fn(): GenericPathStrategy => new GenericPathStrategy(self::LINK_HTML_ASK),
+            self::LINK_GET_ACTION_CONTACT =>
+                static fn(): GenericPathStrategy => new GenericPathStrategy(self::LINK_HTML_CONTACT),
+            self::LINK_GET_ACTION_GLOSSARY =>
+                static fn(): GenericPathStrategy => new GenericPathStrategy(self::LINK_HTML_GLOSSARY),
+            self::LINK_GET_ACTION_HELP =>
+                static fn(): GenericPathStrategy => new GenericPathStrategy(self::LINK_HTML_HELP),
+            self::LINK_GET_ACTION_OPEN =>
+                static fn(): GenericPathStrategy => new GenericPathStrategy(self::LINK_HTML_OPEN),
+            self::LINK_GET_ACTION_LOGIN =>
+                static fn(): GenericPathStrategy => new GenericPathStrategy(self::LINK_HTML_LOGIN),
+            self::LINK_GET_ACTION_PASSWORD =>
+                static fn(): GenericPathStrategy => new GenericPathStrategy(self::LINK_HTML_FORGOT_PASSWORD),
+            self::LINK_GET_ACTION_BOOKMARKS =>
+                static fn(): GenericPathStrategy => new GenericPathStrategy(self::LINK_HTML_BOOKMARKS),
+            self::LINK_GET_ACTION_REGISTER =>
+                static fn(): GenericPathStrategy => new GenericPathStrategy(self::LINK_HTML_REGISTER),
         ];
         foreach ($defaults as $action => $factory) {
-            if ($registry->has($action)) {
+            if ($strategyRegistry->has($action)) {
                 continue;
             }
 
-            $registry->register($action, $factory());
+            $strategyRegistry->register($action, $factory());
         }
     }
 }

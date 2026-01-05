@@ -26,10 +26,10 @@ use phpMyFAQ\Entity\CategoryEntity;
  * Service for category CRUD and repository operations.
  * Consolidates all repository delegation methods from the legacy Category class.
  */
-final class CategoryService
+final readonly class CategoryService
 {
     public function __construct(
-        private readonly CategoryRepositoryInterface $repository,
+        private CategoryRepositoryInterface $categoryRepository,
     ) {
     }
 
@@ -40,7 +40,7 @@ final class CategoryService
      */
     public function getAllCategories(?string $language = null): array
     {
-        return $this->repository->findAllCategories($language);
+        return $this->categoryRepository->findAllCategories($language);
     }
 
     /**
@@ -50,7 +50,7 @@ final class CategoryService
      */
     public function getAllCategoryIds(?string $language = null): array
     {
-        return $this->repository->findAllCategoryIds($language);
+        return $this->categoryRepository->findAllCategoryIds($language);
     }
 
     /**
@@ -60,7 +60,7 @@ final class CategoryService
      */
     public function getCategoriesFromFaq(int $faqId, string $language): array
     {
-        return $this->repository->findCategoriesFromFaq($faqId, $language);
+        return $this->categoryRepository->findCategoriesFromFaq($faqId, $language);
     }
 
     /**
@@ -89,7 +89,7 @@ final class CategoryService
      */
     public function getCategoryIdFromName(string $categoryName): int|bool
     {
-        $id = $this->repository->findCategoryIdByName($categoryName);
+        $id = $this->categoryRepository->findCategoryIdByName($categoryName);
         return $id ?? false;
     }
 
@@ -98,7 +98,7 @@ final class CategoryService
      */
     public function getCategoryData(int $categoryId, string $language): CategoryEntity
     {
-        $entity = $this->repository->findByIdAndLanguage($categoryId, $language);
+        $entity = $this->categoryRepository->findByIdAndLanguage($categoryId, $language);
         return $entity ?? new CategoryEntity();
     }
 
@@ -107,7 +107,7 @@ final class CategoryService
      */
     public function create(CategoryEntity $categoryEntity): ?int
     {
-        return $this->repository->create($categoryEntity);
+        return $this->categoryRepository->create($categoryEntity);
     }
 
     /**
@@ -115,7 +115,7 @@ final class CategoryService
      */
     public function update(CategoryEntity $categoryEntity): bool
     {
-        return $this->repository->update($categoryEntity);
+        return $this->categoryRepository->update($categoryEntity);
     }
 
     /**
@@ -123,7 +123,7 @@ final class CategoryService
      */
     public function delete(int $categoryId, string $categoryLang): bool
     {
-        return $this->repository->delete($categoryId, $categoryLang);
+        return $this->categoryRepository->delete($categoryId, $categoryLang);
     }
 
     /**
@@ -131,7 +131,7 @@ final class CategoryService
      */
     public function moveOwnership(int $currentOwner, int $newOwner): bool
     {
-        return $this->repository->moveOwnership($currentOwner, $newOwner);
+        return $this->categoryRepository->moveOwnership($currentOwner, $newOwner);
     }
 
     /**
@@ -139,7 +139,7 @@ final class CategoryService
      */
     public function hasLanguage(int $categoryId, string $categoryLanguage): bool
     {
-        return $this->repository->hasLanguage($categoryId, $categoryLanguage);
+        return $this->categoryRepository->hasLanguage($categoryId, $categoryLanguage);
     }
 
     /**
@@ -150,7 +150,8 @@ final class CategoryService
         if ($categoryId === $parentId) {
             return false;
         }
-        return $this->repository->updateParentCategory($categoryId, $parentId);
+
+        return $this->categoryRepository->updateParentCategory($categoryId, $parentId);
     }
 
     /**
@@ -158,7 +159,7 @@ final class CategoryService
      */
     public function checkIfCategoryExists(CategoryEntity $categoryEntity): int
     {
-        return $this->repository->countByNameLangParent(
+        return $this->categoryRepository->countByNameLangParent(
             $categoryEntity->getName(),
             $categoryEntity->getLang(),
             $categoryEntity->getParentId(),
@@ -172,7 +173,7 @@ final class CategoryService
      */
     public function getCategoryLanguagesTranslated(int $categoryId): array
     {
-        return $this->repository->getCategoryLanguagesTranslated($categoryId);
+        return $this->categoryRepository->getCategoryLanguagesTranslated($categoryId);
     }
 
     /**
@@ -182,6 +183,6 @@ final class CategoryService
      */
     public function getMissingCategories(?string $language = null): array
     {
-        return $this->repository->findMissingCategories($language);
+        return $this->categoryRepository->findMissingCategories($language);
     }
 }

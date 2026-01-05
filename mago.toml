@@ -19,8 +19,9 @@ integrations = ["symfony", "php-unit"]
 
 [linter.rules]
 cyclomatic-complexity = { threshold = 75 }
-halstead = { volume-threshold = 3000, effort-threshold = 25000 }
+halstead = { difficulty-threshold = 15, volume-threshold = 3000, effort-threshold = 25000 }
 kan-defect = { threshold = 4.0 }
+no-boolean-flag-parameter = { enabled = false }
 too-many-enum-cases = { threshold = 50 }
 too-many-methods = { threshold = 20 }
 too-many-properties = { threshold = 15 }

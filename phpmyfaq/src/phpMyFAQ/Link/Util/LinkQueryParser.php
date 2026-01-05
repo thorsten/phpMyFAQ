@@ -33,6 +33,7 @@ final class LinkQueryParser
         if ($url === '' || $url === '0') {
             return $parameters;
         }
+
         $parsed = parse_url($url);
         if (isset($parsed['query'])) {
             $rawQuery = str_replace(['&amp;', '#38;', 'amp;'], '&', $parsed['query']);
@@ -43,14 +44,16 @@ final class LinkQueryParser
                     continue;
                 }
 
-                $parameters[(string) $k] = (string) $v;
+                $parameters[(string) $k] = $v;
             }
         }
+
         if (isset($parsed['fragment'])) {
-            $fragment = (string) $parsed['fragment'];
+            $fragment = $parsed['fragment'];
             $parameters['#'] = $fragment; // historisch
             $parameters['fragment'] = $fragment;
         }
+
         return $parameters;
     }
 }

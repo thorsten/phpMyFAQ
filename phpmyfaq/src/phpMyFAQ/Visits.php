@@ -30,7 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 readonly class Visits
 {
-    private VisitsRepositoryInterface $repository;
+    private VisitsRepositoryInterface $visitsRepository;
 
     /**
      * Constructor.
@@ -38,7 +38,7 @@ readonly class Visits
     public function __construct(
         private Configuration $configuration,
     ) {
-        $this->repository = new VisitsRepository($configuration);
+        $this->visitsRepository = new VisitsRepository($configuration);
     }
 
     /**
@@ -49,7 +49,7 @@ readonly class Visits
     public function logViews(int $faqId): void
     {
         $language = $this->configuration->getLanguage()->getLanguage();
-        $visitCount = $this->repository->getVisitCount($faqId, $language);
+        $visitCount = $this->visitsRepository->getVisitCount($faqId, $language);
 
         if ($visitCount === 0) {
             $this->add($faqId);
@@ -70,12 +70,12 @@ readonly class Visits
         $timestamp = Request::createFromGlobals()->server->get(key: 'REQUEST_TIME');
 
         // If a row already exists for this (id, lang), update it instead of inserting to avoid unique constraint errors
-        if ($this->repository->exists($faqId, $language)) {
+        if ($this->visitsRepository->exists($faqId, $language)) {
             $this->update($faqId);
             return true;
         }
 
-        return $this->repository->insert($faqId, $language, $timestamp);
+        return $this->visitsRepository->insert($faqId, $language, $timestamp);
     }
 
     /**
@@ -88,7 +88,7 @@ readonly class Visits
         $language = $this->configuration->getLanguage()->getLanguage();
         $timestamp = Request::createFromGlobals()->server->get(key: 'REQUEST_TIME');
 
-        $this->repository->update($faqId, $language, $timestamp);
+        $this->visitsRepository->update($faqId, $language, $timestamp);
     }
 
     /**
@@ -98,7 +98,7 @@ readonly class Visits
      */
     public function getAllData(): array
     {
-        return $this->repository->getAll();
+        return $this->visitsRepository->getAll();
     }
 
     /**
@@ -107,6 +107,6 @@ readonly class Visits
     public function resetAll(): bool
     {
         $timestamp = Request::createFromGlobals()->server->get(key: 'REQUEST_TIME');
-        return $this->repository->resetAll($timestamp);
+        return $this->visitsRepository->resetAll($timestamp);
     }
 }

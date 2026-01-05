@@ -39,10 +39,14 @@ use phpMyFAQ\User\CurrentUser;
 final class SearchService
 {
     private Faq $faq;
+
     private Category $category;
-    private Tags $tagging;
+
+    private Tags $tags;
+
     private Search $faqSearch;
-    private SearchResultSet $faqSearchResult;
+
+    private SearchResultSet $searchResultSet;
 
     public function __construct(
         private readonly Configuration $configuration,
@@ -55,13 +59,13 @@ final class SearchService
 
         $this->category = new Category($this->configuration, $this->currentGroups);
 
-        $this->tagging = new Tags($this->configuration);
-        $this->tagging->setUser($this->currentUser->getUserId())->setGroups($this->currentGroups);
+        $this->tags = new Tags($this->configuration);
+        $this->tags->setUser($this->currentUser->getUserId())->setGroups($this->currentGroups);
 
         $this->faqSearch = new Search($this->configuration);
 
         $faqPermission = new Permission($this->configuration);
-        $this->faqSearchResult = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
+        $this->searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
     }
 
     /**
@@ -85,7 +89,7 @@ final class SearchService
 
         // Handle tag search
         if ($inputTag !== '') {
-            $tagSearchData = $this->handleTagSearch($inputTag, $page, (int) $inputCategory, $allLanguages);
+            $tagSearchData = $this->handleTagSearch($inputTag, $page, $allLanguages);
             $tagSearch = true;
             $numOfResults = $tagSearchData['numOfResults'];
             $searchResults = $tagSearchData['searchResults'];
@@ -117,13 +121,14 @@ final class SearchService
 
         // Number of results
         if ($numOfResults === 0) {
-            $numOfResults = $this->faqSearchResult->getNumberOfResults();
+            $numOfResults = $this->searchResultSet->getNumberOfResults();
         }
 
         // Build category tree
         if ($allLanguages) {
             $this->category->transform(0);
         }
+
         $this->category->buildCategoryTree();
 
         // Get most popular searches
@@ -164,7 +169,7 @@ final class SearchService
             'allLanguages' => $allLanguages,
             'mostPopularSearches' => $mostPopularSearchData,
             'relatedTags' => $relTags,
-            'tagList' => $this->tagging->getPopularTags(),
+            'tagList' => $this->tags->getPopularTags(),
             'pagination' => $faqPagination->render(),
         ];
     }
@@ -175,24 +180,28 @@ final class SearchService
      * @throws CommonMarkException
      * @return array<string, mixed>
      */
-    private function handleTagSearch(string $inputTag, int $page, int $inputCategory, bool $allLanguages): array
+    private function handleTagSearch(string $inputTag, int $page, bool $allLanguages): array
     {
         $tags = [];
         $tagIds = explode(',', $inputTag);
         $relTags = '';
         $searchResults = [];
 
-        $tagHelper = new TagsHelper();
-        $tagHelper->setTaggingIds($tagIds);
+        $tagsHelper = new TagsHelper();
+        $tagsHelper->setTaggingIds($tagIds);
 
         foreach ($tagIds as $tagId) {
-            if (isset($tags[$tagId]) || !is_numeric($tagId)) {
+            if (isset($tags[$tagId])) {
                 continue;
             }
-            $tags[$tagId] = $this->tagging->getTagNameById((int) $tagId);
+            if (!is_numeric($tagId)) {
+                continue;
+            }
+
+            $tags[$tagId] = $this->tags->getTagNameById((int) $tagId);
         }
 
-        $recordIds = $this->tagging->getFaqsByIntersectionTags($tags);
+        $recordIds = $this->tags->getFaqsByIntersectionTags($tags);
 
         if (count($recordIds) > 0) {
             $relatedTags = $this->calculateRelatedTags($recordIds, $tags);
@@ -201,7 +210,7 @@ final class SearchService
             $numTags = 0;
 
             foreach ($relatedTags as $tagId => $relevance) {
-                $relTags .= $tagHelper->renderRelatedTag($tagId, $this->tagging->getTagNameById($tagId), $relevance);
+                $relTags .= $tagsHelper->renderRelatedTag($tagId, $this->tags->getTagNameById($tagId), $relevance);
                 if ($numTags++ > 20) {
                     break;
                 }
@@ -249,7 +258,7 @@ final class SearchService
         $relatedTags = [];
 
         foreach ($recordIds as $recordId) {
-            $resultTags = $this->tagging->getAllTagsById($recordId);
+            $resultTags = $this->tags->getAllTagsById($recordId);
             foreach (array_keys($resultTags) as $resultTagId) {
                 if (isset($tags[$resultTagId])) {
                     continue;
@@ -297,10 +306,10 @@ final class SearchService
             }
         }
 
-        $this->faqSearchResult->reviewResultSet($searchResults);
+        $this->searchResultSet->reviewResultSet($searchResults);
 
         $inputSearchTerm = stripslashes($inputSearchTerm);
-        $numOfResults = $this->faqSearchResult->getNumberOfResults();
+        $numOfResults = $this->searchResultSet->getNumberOfResults();
 
         try {
             $this->faqSearch->logSearchTerm($inputSearchTerm);
@@ -338,7 +347,7 @@ final class SearchService
         $searchHelper->setPlurals(new Plurals());
 
         try {
-            return $searchHelper->getSearchResult($this->faqSearchResult, $page);
+            return $searchHelper->getSearchResult($this->searchResultSet, $page);
         } catch (Exception|CommonMarkException) {
             return [];
         }
@@ -351,9 +360,9 @@ final class SearchService
      */
     private function renderTagList(array $tags): string
     {
-        $tagHelper = new TagsHelper();
-        $tagHelper->setTaggingIds(array_keys($tags));
-        return $tagHelper->renderTagList($tags);
+        $tagsHelper = new TagsHelper();
+        $tagsHelper->setTaggingIds(array_keys($tags));
+        return $tagsHelper->renderTagList($tags);
     }
 
     /**

@@ -37,15 +37,16 @@ class Glossary
     private array $cachedItems = [];
 
     // Repository to access storage
-    private GlossaryRepositoryInterface $repository;
-    private GlossaryHelper $helper;
+    private GlossaryRepositoryInterface $glossaryRepository;
+
+    private GlossaryHelper $glossaryHelper;
 
     public function __construct(
         private readonly Configuration $configuration,
-        ?GlossaryRepositoryInterface $repository = null,
+        ?GlossaryRepositoryInterface $glossaryRepository = null,
     ) {
-        $this->repository = $repository ?? new GlossaryRepository($this->configuration);
-        $this->helper = new GlossaryHelper();
+        $this->glossaryRepository = $glossaryRepository ?? new GlossaryRepository($this->configuration);
+        $this->glossaryHelper = new GlossaryHelper();
     }
 
     /**
@@ -56,8 +57,8 @@ class Glossary
     public function insertItemsIntoContent(string $content = ''): string
     {
         // Lazy init in case a test created a mock without running the constructor
-        if (!isset($this->helper)) {
-            $this->helper = new GlossaryHelper();
+        if (!property_exists($this, 'glossaryHelper') || $this->glossaryHelper === null) {
+            $this->glossaryHelper = new GlossaryHelper();
         }
 
         if ($content === '') {
@@ -87,15 +88,16 @@ class Glossary
      */
     public function setTooltip(array $matches): string
     {
-        if (!isset($this->helper)) {
-            $this->helper = new GlossaryHelper();
+        if (!property_exists($this, 'glossaryHelper') || $this->glossaryHelper === null) {
+            $this->glossaryHelper = new GlossaryHelper();
         }
 
-        [$prefix, $item, $postfix] = $this->helper->extractMatchParts($matches);
+        [$prefix, $item, $postfix] = $this->glossaryHelper->extractMatchParts($matches);
         if ($item === '') {
             return $matches[0];
         }
-        return $this->helper->formatTooltip($this->definition, $item, $prefix, $postfix);
+
+        return $this->glossaryHelper->formatTooltip($this->definition, $item, $prefix, $postfix);
     }
 
     /**
@@ -105,7 +107,7 @@ class Glossary
      */
     public function fetch(int $id): array
     {
-        return $this->repository->fetch($id, $this->currentLanguage());
+        return $this->glossaryRepository->fetch($id, $this->currentLanguage());
     }
 
     /**
@@ -121,7 +123,7 @@ class Glossary
             return $this->cachedItems[$language];
         }
 
-        $items = $this->repository->fetchAll($language);
+        $items = $this->glossaryRepository->fetchAll($language);
 
         $this->cachedItems[$language] = $items;
 
@@ -136,10 +138,11 @@ class Glossary
      */
     public function create(string $item, string $definition): bool
     {
-        $ok = $this->repository->create($this->currentLanguage(), $item, $definition);
+        $ok = $this->glossaryRepository->create($this->currentLanguage(), $item, $definition);
         if ($ok) {
             unset($this->cachedItems[$this->currentLanguage()]);
         }
+
         return $ok;
     }
 
@@ -152,10 +155,11 @@ class Glossary
      */
     public function update(int $id, string $item, string $definition): bool
     {
-        $ok = $this->repository->update($id, $this->currentLanguage(), $item, $definition);
+        $ok = $this->glossaryRepository->update($id, $this->currentLanguage(), $item, $definition);
         if ($ok) {
             unset($this->cachedItems[$this->currentLanguage()]);
         }
+
         return $ok;
     }
 
@@ -166,10 +170,11 @@ class Glossary
      */
     public function delete(int $id): bool
     {
-        $ok = $this->repository->delete($id, $this->currentLanguage());
+        $ok = $this->glossaryRepository->delete($id, $this->currentLanguage());
         if ($ok) {
             unset($this->cachedItems[$this->currentLanguage()]);
         }
+
         return $ok;
     }
 
@@ -194,6 +199,7 @@ class Glossary
         if (isset($this->language) && $this->language !== '') {
             return $this->language;
         }
+
         return $this->configuration->getLanguage()->getLanguage();
     }
 }

@@ -24,13 +24,13 @@ use phpMyFAQ\Configuration as CoreConfiguration;
 readonly class UrlSettings
 {
     public function __construct(
-        private CoreConfiguration $configuration,
+        private CoreConfiguration $coreConfiguration,
     ) {
     }
 
     public function getDefaultUrl(): string
     {
-        $defaultUrl = (string) $this->configuration->get(item: 'main.referenceURL');
+        $defaultUrl = (string) $this->coreConfiguration->get(item: 'main.referenceURL');
         return str_ends_with($defaultUrl, '/') ? $defaultUrl : $defaultUrl . '/';
     }
 
@@ -40,7 +40,7 @@ readonly class UrlSettings
      */
     public function getAllowedMediaHosts(): array
     {
-        $val = (string) $this->configuration->get(item: 'records.allowedMediaHosts');
+        $val = (string) $this->coreConfiguration->get(item: 'records.allowedMediaHosts');
         return $val === '' ? [] : explode(',', $val);
     }
 }

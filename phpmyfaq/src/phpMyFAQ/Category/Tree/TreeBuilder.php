@@ -21,15 +21,17 @@ namespace phpMyFAQ\Category\Tree;
 
 class TreeBuilder implements TreeBuilderInterface
 {
-    private TreePathResolver $pathResolver;
-    private TreeVisualizer $visualizer;
-    private CategoryValidator $validator;
+    private TreePathResolver $treePathResolver;
+
+    private TreeVisualizer $treeVisualizer;
+
+    private CategoryValidator $categoryValidator;
 
     public function __construct()
     {
-        $this->pathResolver = new TreePathResolver();
-        $this->visualizer = new TreeVisualizer($this->pathResolver);
-        $this->validator = new CategoryValidator();
+        $this->treePathResolver = new TreePathResolver();
+        $this->treeVisualizer = new TreeVisualizer($this->treePathResolver);
+        $this->categoryValidator = new CategoryValidator();
     }
 
     /**
@@ -45,9 +47,10 @@ class TreeBuilder implements TreeBuilderInterface
         $result = [];
 
         foreach ($categories as $category) {
-            if (!$this->validator->isValidCategory($category)) {
+            if (!$this->categoryValidator->isValidCategory($category)) {
                 continue;
             }
+
             if ((int) $category['parent_id'] === $parentId) {
                 $categoryId = (int) $category['id'];
                 $result[$categoryId] = $this->buildAdminCategoryTree($categories, $categoryId);
@@ -62,13 +65,11 @@ class TreeBuilder implements TreeBuilderInterface
      * Matches legacy Category::buildCategoryTree output shape.
      *
      * @param array<int, array<string, mixed>> $categories
-     * @param int $parentId
-     * @param int $indent
      * @return array<int, array<string, mixed>>
      */
     public function buildLinearTree(array $categories, int $parentId = 0, int $indent = 0): array
     {
-        $childrenIds = $this->validator->collectDirectChildren($categories, $parentId);
+        $childrenIds = $this->categoryValidator->collectDirectChildren($categories, $parentId);
 
         if ($childrenIds === []) {
             return [];
@@ -79,11 +80,13 @@ class TreeBuilder implements TreeBuilderInterface
             if (!isset($categories[$childId])) {
                 continue;
             }
+
             $row = $categories[$childId];
             $row['indent'] = $indent;
             $catTree[] = $row;
             $catTree = array_merge($catTree, $this->buildLinearTree($categories, $row['id'], $indent + 1));
         }
+
         return $catTree;
     }
 
@@ -95,7 +98,7 @@ class TreeBuilder implements TreeBuilderInterface
      */
     public function getNodes(array $categoryName, int $categoryId): array
     {
-        return $this->pathResolver->getNodes($categoryName, $categoryId);
+        return $this->treePathResolver->getNodes($categoryName, $categoryId);
     }
 
     /**
@@ -106,7 +109,7 @@ class TreeBuilder implements TreeBuilderInterface
      */
     public function getChildren(array $childrenMap, int $categoryId): array
     {
-        return $this->pathResolver->getChildren($childrenMap, $categoryId);
+        return $this->treePathResolver->getChildren($childrenMap, $categoryId);
     }
 
     /**
@@ -117,7 +120,7 @@ class TreeBuilder implements TreeBuilderInterface
      */
     public function getChildNodes(array $childrenMap, int $categoryId): array
     {
-        return $this->pathResolver->getChildNodes($childrenMap, $categoryId);
+        return $this->treePathResolver->getChildNodes($childrenMap, $categoryId);
     }
 
     /**
@@ -129,7 +132,7 @@ class TreeBuilder implements TreeBuilderInterface
      */
     public function getBrothers(array $categoryName, array $childrenMap, int $categoryId): array
     {
-        return $this->pathResolver->getBrothers($categoryName, $childrenMap, $categoryId);
+        return $this->treePathResolver->getBrothers($categoryName, $childrenMap, $categoryId);
     }
 
     /**
@@ -141,7 +144,7 @@ class TreeBuilder implements TreeBuilderInterface
      */
     public function buildTree(array $categoryName, array $childrenMap, int $categoryId): array
     {
-        return $this->visualizer->buildTree($categoryName, $childrenMap, $categoryId);
+        return $this->treeVisualizer->buildTree($categoryName, $childrenMap, $categoryId);
     }
 
     /**
@@ -151,6 +154,6 @@ class TreeBuilder implements TreeBuilderInterface
      */
     public function computeLevel(array $categoryName, int $categoryId): int
     {
-        return $this->pathResolver->computeLevel($categoryName, $categoryId);
+        return $this->treePathResolver->computeLevel($categoryName, $categoryId);
     }
 }

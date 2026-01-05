@@ -31,8 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 readonly class AdminLog
 {
-    /** @var AdminLogRepository */
-    private AdminLogRepository $repository;
+    private AdminLogRepository $adminLogRepository;
 
     /**
      * Constructor.
@@ -40,7 +39,7 @@ readonly class AdminLog
     public function __construct(
         private Configuration $configuration,
     ) {
-        $this->repository = new AdminLogRepository($this->configuration);
+        $this->adminLogRepository = new AdminLogRepository($this->configuration);
     }
 
     /**
@@ -48,7 +47,7 @@ readonly class AdminLog
      */
     public function getNumberOfEntries(): int
     {
-        return $this->repository->getNumberOfEntries();
+        return $this->adminLogRepository->getNumberOfEntries();
     }
 
     /**
@@ -57,7 +56,7 @@ readonly class AdminLog
      */
     public function getAll(): array
     {
-        return $this->repository->getAll();
+        return $this->adminLogRepository->getAll();
     }
 
     /**
@@ -73,7 +72,7 @@ readonly class AdminLog
         }
 
         $request = Request::createFromGlobals();
-        return $this->repository->add($user, $logText, $request);
+        return $this->adminLogRepository->add($user, $logText, $request);
     }
 
     /**
@@ -82,6 +81,6 @@ readonly class AdminLog
     public function delete(): bool
     {
         $timestamp = (int) Request::createFromGlobals()->server->get(key: 'REQUEST_TIME') - (30 * 86400);
-        return $this->repository->deleteOlderThan($timestamp);
+        return $this->adminLogRepository->deleteOlderThan($timestamp);
     }
 }

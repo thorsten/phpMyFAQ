@@ -84,6 +84,7 @@ abstract class AbstractSetup
                 if ($database !== $databaseType) {
                     continue;
                 }
+
                 $databaseFound = true;
                 break;
             }

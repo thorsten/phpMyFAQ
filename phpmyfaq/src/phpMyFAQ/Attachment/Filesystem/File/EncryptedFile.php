@@ -70,7 +70,9 @@ class EncryptedFile extends File
 
         if (is_string($target)) {
             $target = new VanillaFile($target, AbstractFile::MODE_WRITE);
-        } else {
+        }
+
+        if (!is_string($target)) {
             $target->setMode(AbstractFile::MODE_WRITE);
         }
 
@@ -92,11 +94,11 @@ class EncryptedFile extends File
         $chunkDelimLen = strlen(self::CHUNK_DELIMITER);
 
         while (!$readEnd && !$this->eof()) {
-            $chunk .= fread($this->handle, 1);
+            $chunk .= fread($this->handle, length: 1);
             $readEnd = self::CHUNK_DELIMITER === substr($chunk, -$chunkDelimLen);
         }
 
-        $chunk = substr($chunk, 0, -$chunkDelimLen);
+        $chunk = substr($chunk, offset: 0, length: -$chunkDelimLen);
 
         return $chunk === '' || $chunk === '0' ? '' : $this->aes->decrypt($chunk);
     }

@@ -28,12 +28,12 @@ use phpMyFAQ\User\CurrentUser;
 /**
  * Service for attachment operations and permission checks.
  */
-final class AttachmentService
+final readonly class AttachmentService
 {
     public function __construct(
-        private readonly Configuration $configuration,
-        private readonly CurrentUser $currentUser,
-        private readonly Permission $faqPermission,
+        private Configuration $configuration,
+        private CurrentUser $currentUser,
+        private Permission $faqPermission,
     ) {
     }
 
@@ -42,7 +42,7 @@ final class AttachmentService
      *
      * @throws AttachmentException
      */
-    public function getAttachment(int $attachmentId): ?AbstractAttachment
+    public function getAttachment(int $attachmentId): \phpMyFAQ\Attachment\File
     {
         return AttachmentFactory::create($attachmentId);
     }
@@ -85,9 +85,11 @@ final class AttachmentService
         }
 
         foreach ($this->currentUser->perm->getUserGroups($this->currentUser->getUserId()) as $userGroup) {
-            if (in_array($userGroup, $groupPermission, true)) {
-                return true;
+            if (!in_array($userGroup, $groupPermission, strict: true)) {
+                continue;
             }
+
+            return true;
         }
 
         return false;
@@ -99,7 +101,7 @@ final class AttachmentService
     private function checkUserPermission(AbstractAttachment $attachment): bool
     {
         $userPermission = $this->faqPermission->get(Permission::USER, $attachment->getRecordId());
-        return in_array($this->currentUser->getUserId(), $userPermission, true);
+        return in_array($this->currentUser->getUserId(), $userPermission, strict: true);
     }
 
     /**
@@ -124,9 +126,11 @@ final class AttachmentService
         // Check user rights, set true
         $allUserRights = $this->currentUser->perm->getAllUserRights($this->currentUser->getUserId());
         foreach ($allRights as $allRight) {
-            if (in_array($allRight['right_id'], $allUserRights, true)) {
-                $permission[$allRight['name']] = true;
+            if (!in_array($allRight['right_id'], $allUserRights, strict: true)) {
+                continue;
             }
+
+            $permission[$allRight['name']] = true;
         }
 
         return $permission;
@@ -135,9 +139,9 @@ final class AttachmentService
     /**
      * Gets an error message for attachment exceptions.
      */
-    public function getAttachmentErrorMessage(AttachmentException $exception): string
+    public function getAttachmentErrorMessage(AttachmentException $attachmentException): string
     {
-        return Translation::get(key: 'msgAttachmentInvalid') . ' (' . $exception->getMessage() . ')';
+        return Translation::get(key: 'msgAttachmentInvalid') . ' (' . $attachmentException->getMessage() . ')';
     }
 
     /**

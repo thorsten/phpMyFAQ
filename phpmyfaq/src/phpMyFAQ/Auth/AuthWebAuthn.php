@@ -366,7 +366,7 @@ class AuthWebAuthn extends Auth
             throw new Exception('Cannot decode key response for RP ID hash');
         }
 
-        if (($authenticatorData->flags & 0x1) != 0x1) {
+        if (($authenticatorData->flags & 0x1) !== 0x1) {
             throw new Exception('Cannot decode key response (2c)');
         }
 
@@ -398,7 +398,7 @@ class AuthWebAuthn extends Auth
      */
     private function arrayToString(array $array): string
     {
-        return implode('', array_map('chr', $array));
+        return implode('', array_map(chr(...), $array));
     }
 
     /**
@@ -406,7 +406,7 @@ class AuthWebAuthn extends Auth
      */
     private function stringToArray(string $string): array
     {
-        return array_map('ord', str_split($string));
+        return array_map(ord(...), str_split($string));
     }
 
     /**
@@ -479,7 +479,7 @@ class AuthWebAuthn extends Auth
 
                 $x = $cosePubKey[-2]->get_byte_string();
                 $y = $cosePubKey[-3]->get_byte_string();
-                if (strlen((string) $x) != 32 || strlen((string) $y) != 32) {
+                if (strlen((string) $x) !== 32 || strlen((string) $y) !== 32) {
                     throw new Exception('Cannot decode key response for x or y coordinate');
                 }
 

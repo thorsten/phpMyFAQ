@@ -277,10 +277,8 @@ class Sqlite3 extends Database implements DriverInterface
             PRIMARY KEY (sid))',
         'faqsessions_idx' => 'CREATE INDEX idx_time ON %sfaqsessions (time)',
         'faqsearches_searchterm_idx' => 'CREATE INDEX idx_faqsearches_searchterm ON %sfaqsearches (searchterm)',
-        'faqsearches_date_term_idx' =>
-            'CREATE INDEX idx_faqsearches_date_term ON %sfaqsearches ' . '(searchdate, searchterm)',
-        'faqsearches_date_term_lang_idx' =>
-            'CREATE INDEX idx_faqsearches_date_term_lang ON %sfaqsearches ' . '(searchdate, searchterm, lang)',
+        'faqsearches_date_term_idx' => 'CREATE INDEX idx_faqsearches_date_term ON %sfaqsearches (searchdate, searchterm)',
+        'faqsearches_date_term_lang_idx' => 'CREATE INDEX idx_faqsearches_date_term_lang ON %sfaqsearches (searchdate, searchterm, lang)',
         'faqstopwords' => 'CREATE TABLE %sfaqstopwords (
             id INTEGER NOT NULL,
             lang VARCHAR(5) NOT NULL,

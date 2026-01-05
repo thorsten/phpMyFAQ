@@ -29,14 +29,15 @@ readonly class Forms
 {
     /* @mago-expect[too-many-methods]: Backward-compatible wrappers retained until the next major release. */
     private Translation $translation;
-    private FormsRepositoryInterface $repository;
+
+    private FormsRepositoryInterface $formsRepository;
 
     public function __construct(
         private Configuration $configuration,
-        ?FormsRepositoryInterface $repository = null,
+        ?FormsRepositoryInterface $formsRepository = null,
     ) {
         $this->translation = new Translation();
-        $this->repository = $repository ?? new FormsRepository($this->configuration);
+        $this->formsRepository = $formsRepository ?? new FormsRepository($this->configuration);
     }
 
     /**
@@ -46,7 +47,7 @@ readonly class Forms
      */
     public function getFormData(int $formId): array
     {
-        $formData = $this->repository->fetchFormDataByFormId($formId);
+        $formData = $this->formsRepository->fetchFormDataByFormId($formId);
         return new FormsHelper()->filterAndSortFormData($formData, $this->translation);
     }
 
@@ -75,11 +76,13 @@ readonly class Forms
     {
         $ok = true;
         if ($activated !== null) {
-            $ok = $ok && $this->repository->updateInputActive($formId, $inputId, $activated);
+            $ok = $ok && $this->formsRepository->updateInputActive($formId, $inputId, $activated);
         }
+
         if ($required !== null) {
-            $ok = $ok && $this->repository->updateInputRequired($formId, $inputId, $required);
+            $ok = $ok && $this->formsRepository->updateInputRequired($formId, $inputId, $required);
         }
+
         return $ok;
     }
 
@@ -88,7 +91,7 @@ readonly class Forms
      */
     public function getTranslations(int $formId, int $inputId): array
     {
-        $translations = $this->repository->fetchTranslationsByFormAndInput($formId, $inputId);
+        $translations = $this->formsRepository->fetchTranslationsByFormAndInput($formId, $inputId);
 
         foreach ($translations as $translation) {
             if ($translation->input_lang !== 'default') {
@@ -111,7 +114,7 @@ readonly class Forms
      */
     public function editTranslation(string $label, int $formId, int $inputId, string $lang): bool
     {
-        return $this->repository->updateTranslation($label, $formId, $inputId, $lang);
+        return $this->formsRepository->updateTranslation($label, $formId, $inputId, $lang);
     }
 
     /**
@@ -123,7 +126,7 @@ readonly class Forms
      */
     public function deleteTranslation(int $formId, int $inputId, string $lang): bool
     {
-        return $this->repository->deleteTranslation($formId, $inputId, $lang);
+        return $this->formsRepository->deleteTranslation($formId, $inputId, $lang);
     }
 
     /**
@@ -136,12 +139,12 @@ readonly class Forms
      */
     public function addTranslation(int $formId, int $inputId, string $lang, string $translation): bool
     {
-        $inputData = $this->repository->fetchDefaultInputData($formId, $inputId);
+        $inputData = $this->formsRepository->fetchDefaultInputData($formId, $inputId);
         if ($inputData === null) {
             return false;
         }
 
-        return $this->repository->insertTranslationRow(
+        return $this->formsRepository->insertTranslationRow(
             $formId,
             $inputId,
             $inputData->input_type,
@@ -159,12 +162,12 @@ readonly class Forms
      */
     public function insertInputIntoDatabase(array $input): bool
     {
-        return $this->repository->insertInput($input);
+        return $this->formsRepository->insertInput($input);
     }
 
     public function getInsertQueries(array $input): string
     {
-        return $this->repository->buildInsertQuery($input);
+        return $this->formsRepository->buildInsertQuery($input);
     }
 
     /**

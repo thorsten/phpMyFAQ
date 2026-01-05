@@ -95,7 +95,7 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
         $day = (int) Filter::filterVar($request->getPayload()->get(key: 'day'), FILTER_VALIDATE_INT);
 
         if ($day === 0) {
-            $day = strtotime($request->attributes->get(key: 'date'));
+            $day = strtotime((string) $request->attributes->get(key: 'date'));
         }
 
         $firstHour = strtotime(datetime: 'midnight', baseTimestamp: $day);

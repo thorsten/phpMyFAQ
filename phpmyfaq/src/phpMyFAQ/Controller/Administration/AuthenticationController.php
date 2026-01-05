@@ -33,7 +33,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class AuthenticationController extends AbstractAdministrationController
 {
     #[Route(path: '/authenticate', name: 'admin.auth.authenticate', methods: ['POST'])]
-    public function authenticate(Request $request): Response
+    public function authenticate(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         if ($this->currentUser->isLoggedIn()) {
             return new RedirectResponse(url: './');
@@ -98,7 +98,7 @@ final class AuthenticationController extends AbstractAdministrationController
             ...$this->getHeader($request),
             ...$this->getFooter(),
             'isSecure' => $request->isSecure() || !$this->configuration->get(item: 'security.useSslForLogins'),
-            'isError' => isset($error) && 0 < strlen((string) $error),
+            'isError' => isset($error) && (string) $error !== '',
             'errorMessage' => 'to be implemented',
             'loginMessage' => Translation::get(key: 'ad_auth_insert'),
             'isLogout' => $request->query->get(key: 'action') === 'logout',
@@ -124,7 +124,7 @@ final class AuthenticationController extends AbstractAdministrationController
      * @throws \Exception
      */
     #[Route(path: '/logout', name: 'admin.auth.logout', methods: ['GET'])]
-    public function logout(Request $request): Response
+    public function logout(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         $this->userIsAuthenticated();
 
@@ -139,7 +139,7 @@ final class AuthenticationController extends AbstractAdministrationController
 
         $this->currentUser->deleteFromSession(deleteCookie: true);
         $ssoLogout = $this->configuration->get(item: 'security.ssoLogoutRedirect');
-        if ($this->configuration->get(item: 'security.ssoSupport') && strlen($ssoLogout) > 0) {
+        if ($this->configuration->get(item: 'security.ssoSupport') && (string) $ssoLogout !== '') {
             $redirectResponse->isRedirect($ssoLogout);
             $redirectResponse->send();
         }
@@ -179,7 +179,7 @@ final class AuthenticationController extends AbstractAdministrationController
      * @throws \Exception
      */
     #[Route(path: '/check', name: 'admin.auth.check', methods: ['POST'])]
-    public function check(Request $request): Response
+    public function check(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         if ($this->currentUser->isLoggedIn()) {
             return new RedirectResponse(url: './');

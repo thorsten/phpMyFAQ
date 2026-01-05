@@ -487,7 +487,7 @@ class Statistics
                 AND fd.lang = fv.lang
                 AND fd.active = \'yes\'';
 
-        if ($categoryId != 0) {
+        if ($categoryId !== 0) {
             $query .= '
             AND
                 fcr.category_id = \'' . $categoryId . "'";

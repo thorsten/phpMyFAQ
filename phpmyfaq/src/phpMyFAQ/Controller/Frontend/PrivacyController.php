@@ -31,10 +31,10 @@ final class PrivacyController extends AbstractFrontController
      * @throws \Exception
      */
     #[Route(path: '/privacy.html', name: 'public.privacy')]
-    public function index(Request $request): Response
+    public function index(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         $privacyUrl = $this->configuration->get('main.privacyURL');
-        $redirectUrl = strlen((string) $privacyUrl) > 0 ? $privacyUrl : $this->configuration->get('main.referenceURL');
+        $redirectUrl = (string) $privacyUrl !== '' ? $privacyUrl : $this->configuration->get('main.referenceURL');
 
         return new RedirectResponse($redirectUrl);
     }

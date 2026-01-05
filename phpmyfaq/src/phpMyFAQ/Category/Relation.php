@@ -137,7 +137,7 @@ class Relation
             }
         }
 
-        if (strlen($this->configuration->getLanguage()->getLanguage()) > 0) {
+        if ($this->configuration->getLanguage()->getLanguage() !== '') {
             $query .= sprintf(" AND fd.lang = '%s'", $this->configuration->getLanguage()->getLanguage());
         }
 
@@ -218,7 +218,7 @@ class Relation
             );
         }
 
-        if (strlen($this->configuration->getLanguage()->getLanguage()) > 0) {
+        if ($this->configuration->getLanguage()->getLanguage() !== '') {
             $query .= sprintf(
                 " AND fd.lang = '%s' AND fc.lang = '%s'",
                 $this->configuration->getLanguage()->getLanguage(),
@@ -258,6 +258,7 @@ class Relation
                 if (!isset($childrenMap[$parentId])) {
                     $childrenMap[$parentId] = [];
                 }
+
                 $childrenMap[$parentId][] = $categoryId;
             }
         }
@@ -343,8 +344,8 @@ class Relation
      */
     public function add(array $categories, int $faqId, string $language): bool
     {
-        $db = $this->configuration->getDb();
-        $escapedLang = $db->escape($language);
+        $databaseDriver = $this->configuration->getDb();
+        $escapedLang = $databaseDriver->escape($language);
         $prefix = Database::getTablePrefix();
 
         foreach ($categories as $category) {
@@ -357,12 +358,12 @@ class Relation
                 $faqId,
                 $escapedLang,
             );
-            $existsResult = $db->query($existsQuery);
-            if ($db->numRows($existsResult) > 0) {
+            $existsResult = $databaseDriver->query($existsQuery);
+            if ($databaseDriver->numRows($existsResult) > 0) {
                 continue; // already present
             }
 
-            $db->query(sprintf(
+            $databaseDriver->query(sprintf(
                 "INSERT INTO %sfaqcategoryrelations VALUES (%d, '%s', %d, '%s')",
                 $prefix,
                 (int) $category,

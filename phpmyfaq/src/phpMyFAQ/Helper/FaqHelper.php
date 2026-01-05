@@ -62,8 +62,8 @@ class FaqHelper extends AbstractHelper
      * Renders a select box with all translations of a FAQ.
      *
      * @todo This method should be moved to a Twig macro.
-     * @deprecated Rewrite this method to use Twig, will be removed in v4.1
      */
+    #[\Deprecated(message: 'Rewrite this method to use Twig, will be removed in v4.1')]
     public function renderChangeLanguageSelector(Faq $faq, int $categoryId): string
     {
         $html = '';

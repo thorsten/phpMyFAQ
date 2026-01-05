@@ -105,7 +105,7 @@ services:
 
       # PHP Production Settings
       - PHP_LOG_ERRORS=On
-      - PHP_ERROR_REPORTING=E_ALL & ~E_DEPRECATED & ~E_STRICT
+      - PHP_ERROR_REPORTING=E_ALL & ~E_DEPRECATED
       - PHP_DISPLAY_ERRORS=Off
       - PHP_DISPLAY_STARTUP_ERRORS=Off
 
@@ -195,7 +195,7 @@ services:
   #     - PMF_ENABLE_UPLOADS=${PMF_ENABLE_UPLOADS:-On}
   #     - PMF_MEMORY_LIMIT=${PMF_MEMORY_LIMIT:-512M}
   #     - PHP_LOG_ERRORS=On
-  #     - PHP_ERROR_REPORTING=E_ALL & ~E_DEPRECATED & ~E_STRICT
+  #     - PHP_ERROR_REPORTING=E_ALL & ~E_DEPRECATED
   #     - PHP_DISPLAY_ERRORS=Off
   #   volumes:
   #     - phpmyfaq_data:/var/www/html
@@ -235,7 +235,7 @@ services:
   #     - PMF_ENABLE_UPLOADS=${PMF_ENABLE_UPLOADS:-On}
   #     - PMF_MEMORY_LIMIT=${PMF_MEMORY_LIMIT:-512M}
   #     - PHP_LOG_ERRORS=On
-  #     - PHP_ERROR_REPORTING=E_ALL & ~E_DEPRECATED & ~E_STRICT
+  #     - PHP_ERROR_REPORTING=E_ALL & ~E_DEPRECATED
   #     - PHP_DISPLAY_ERRORS=Off
   #     - SERVER_NAME=${SERVER_NAME:-:80}
   #   volumes:

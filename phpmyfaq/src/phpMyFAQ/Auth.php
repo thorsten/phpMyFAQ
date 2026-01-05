@@ -81,7 +81,7 @@ class Auth
     public function getErrors(): string
     {
         $message = $this->errors !== [] ? implode(separator: PHP_EOL, array: $this->errors) . PHP_EOL : '';
-        return $message . ($this->encContainer ? $this->encContainer->error() : '');
+        return $message . ($this->encContainer instanceof \phpMyFAQ\Encryption ? $this->encContainer->error() : '');
     }
 
     /**
@@ -147,7 +147,7 @@ class Auth
      */
     public function encrypt(#[SensitiveParameter] string $string): string
     {
-        if ($this->encContainer === null) {
+        if (!$this->encContainer instanceof \phpMyFAQ\Encryption) {
             throw new Exception(message: 'No encryption container configured. Call getEncryptionContainer() first.');
         }
 

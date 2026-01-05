@@ -89,7 +89,7 @@ class Helper
         } elseif (str_contains($restrictions, '*')) {
             $hasPermission = true;
             foreach (explode('*', $restrictions) as $restriction) {
-                if (!(!isset($this->permission[$restriction]) || !$this->permission[$restriction])) {
+                if (isset($this->permission[$restriction]) && $this->permission[$restriction]) {
                     continue;
                 }
 
@@ -98,9 +98,7 @@ class Helper
             }
         } else {
             $hasPermission =
-                strlen($restrictions) > 0
-                && isset($this->permission[$restrictions])
-                && $this->permission[$restrictions];
+                $restrictions !== '' && isset($this->permission[$restrictions]) && $this->permission[$restrictions];
         }
 
         return $hasPermission;

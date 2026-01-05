@@ -64,7 +64,7 @@ final class CategoryController extends AbstractAdministrationController
         $orderedCategories = $categoryOrder->getAllCategories();
         $categoryTree = $categoryOrder->getCategoryTree($orderedCategories);
 
-        if ($categoryTree === [] || $categoryTree === null || $categoryTree === false) {
+        if (in_array($categoryTree, [[], null, false], true)) {
             // Fallback if no category order is available
             $categoryTree = $category->buildAdminCategoryTree($categoryInfo);
         }
@@ -142,8 +142,8 @@ final class CategoryController extends AbstractAdministrationController
             'faqLangCode' => $this->configuration->getLanguage()->getLanguage(),
             'parentId' => $parentId,
             'categoryNameLangCode' => LanguageCodes::get($category->categoryName[$parentId]['lang'] ?? 'en'),
-            'userAllowed' => $categoryPermission->get(CategoryPermission::USER, [(int) $parentId])[0] ?? -1,
-            'groupsAllowed' => $categoryPermission->get(CategoryPermission::GROUP, [(int) $parentId]),
+            'userAllowed' => $categoryPermission->get(CategoryPermission::USER, [$parentId])[0] ?? -1,
+            'groupsAllowed' => $categoryPermission->get(CategoryPermission::GROUP, [$parentId]),
             'categoryName' => $category->categoryName[$parentId]['name'],
             'msgMainCategory' => Translation::get(key: 'msgMainCategory'),
             ...$templateVars,
@@ -183,6 +183,7 @@ final class CategoryController extends AbstractAdministrationController
         if ($uploadedFile instanceof UploadedFile) {
             $categoryImage->setUploadedFile($uploadedFile);
         }
+
         $hasUploadedImage = $uploadedFile instanceof UploadedFile;
 
         $categoryEntity = new CategoryEntity();
@@ -431,12 +432,12 @@ final class CategoryController extends AbstractAdministrationController
         $currentLanguage = LanguageCodes::get($currentLangCode);
 
         // get languages in use for all categories via service
-        $languageService = new CategoryLanguageService();
-        $languages = $languageService->getLanguagesInUse($this->configuration); // [code => name]
+        $categoryLanguageService = new CategoryLanguageService();
+        $languages = $categoryLanguageService->getLanguagesInUse($this->configuration); // [code => name]
 
         $translations = [];
         foreach ($category->getCategoryTree() as $cat) {
-            $existing = $languageService->getExistingTranslations($this->configuration, (int) $cat['id']); // [code => name]
+            $existing = $categoryLanguageService->getExistingTranslations($this->configuration, (int) $cat['id']); // [code => name]
             $translations[$cat['id']] = array_keys($existing);
         }
 
@@ -495,17 +496,18 @@ final class CategoryController extends AbstractAdministrationController
 
         // Re-add permission arrays used in the template
         $userPermission = $categoryPermission->get(CategoryPermission::USER, [$categoryId]);
-        $groupPermission = $categoryPermission->get(CategoryPermission::GROUP, [(int) $categoryId]);
+        $groupPermission = $categoryPermission->get(CategoryPermission::GROUP, [$categoryId]);
 
         // Prepare language selection options via service (keeps HTML output for BC)
-        $languageService = new CategoryLanguageService();
-        $toTranslate = $languageService->getLanguagesToTranslate($this->configuration, $categoryId);
+        $categoryLanguageService = new CategoryLanguageService();
+        $toTranslate = $categoryLanguageService->getLanguagesToTranslate($this->configuration, $categoryId);
         $langOptions = '';
         foreach ($toTranslate as $code => $name) {
             $langOptions .= '<option value="' . $code . '"';
             if ($code === $translateTo) {
                 $langOptions .= ' selected="selected"';
             }
+
             $langOptions .= '>' . $name . '</option>';
         }
 
@@ -551,7 +553,7 @@ final class CategoryController extends AbstractAdministrationController
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $categoryPermission = new CategoryPermission($this->configuration);
-        $seo = $this->container->get(id: 'phpmyfaq.seo');
+        $this->container->get(id: 'phpmyfaq.seo');
 
         $category = new Category($this->configuration, [], withPermission: false);
         $category->setUser($currentAdminUser);

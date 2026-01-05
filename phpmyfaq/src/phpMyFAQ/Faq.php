@@ -920,6 +920,7 @@ class Faq
         if (is_null($faqEntity->getSolutionId()) || $faqEntity->getSolutionId() <= 0) {
             $faqEntity->setSolutionId($this->getNextSolutionId());
         }
+
         $faqEntity->setRevisionId(0);
 
         $query = sprintf(

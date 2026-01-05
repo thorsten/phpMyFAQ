@@ -55,8 +55,8 @@ abstract class AbstractFrontController extends AbstractController
 
         return [
             ...$this->getUserDropdown(),
-            'successMessage' => !empty($successMessages) ? $successMessages[0] : null,
-            'errorMessage' => !empty($errorMessages) ? $errorMessages[0] : null,
+            'successMessage' => empty($successMessages) ? null : $successMessages[0],
+            'errorMessage' => empty($errorMessages) ? null : $errorMessages[0],
             'isMaintenanceMode' => $this->configuration->get('main.maintenanceMode'),
             'isCompletelySecured' => $this->configuration->get('security.enableLoginOnly'),
             'isDebugEnabled' => Environment::isDebugMode(),

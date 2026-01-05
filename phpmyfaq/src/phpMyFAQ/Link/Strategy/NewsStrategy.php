@@ -31,6 +31,7 @@ final class NewsStrategy implements StrategyInterface
         if (!isset($params[Link::LINK_GET_NEWS_ID])) {
             throw new \InvalidArgumentException('Missing required parameter: newsid');
         }
+
         if (!isset($params[Link::LINK_GET_NEWS_LANG])) {
             throw new \InvalidArgumentException('Missing required parameter: newslang');
         }

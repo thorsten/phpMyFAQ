@@ -54,7 +54,7 @@ final class AuthenticationController extends AbstractFrontController
 
         $session = $this->container->get('session');
         $errorMessages = $session->getFlashBag()->get('error');
-        $errorMessage = !empty($errorMessages) ? $errorMessages[0] : null;
+        $errorMessage = empty($errorMessages) ? null : $errorMessages[0];
 
         return $this->render('login.twig', [
             ...$this->getHeader($request),
@@ -103,7 +103,7 @@ final class AuthenticationController extends AbstractFrontController
      * @throws \Exception
      */
     #[Route(path: '/logout', name: 'public.auth.logout')]
-    public function logout(Request $request): Response
+    public function logout(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         $session = $this->container->get('session');
         $csrfToken = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
@@ -126,7 +126,7 @@ final class AuthenticationController extends AbstractFrontController
 
         // SSO Logout
         $ssoLogout = $this->configuration->get('security.ssoLogoutRedirect');
-        if ($this->configuration->get('security.ssoSupport') && strlen($ssoLogout) > 0) {
+        if ($this->configuration->get('security.ssoSupport') && (string) $ssoLogout !== '') {
             $redirectResponse->isRedirect($ssoLogout);
             $redirectResponse->send();
         }
@@ -148,7 +148,7 @@ final class AuthenticationController extends AbstractFrontController
      * @throws \Exception
      */
     #[Route(path: '/authenticate', name: 'public.auth.authenticate', methods: ['POST'])]
-    public function authenticate(Request $request): Response
+    public function authenticate(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         if ($this->currentUser->isLoggedIn()) {
             return new RedirectResponse(url: './');
@@ -173,13 +173,13 @@ final class AuthenticationController extends AbstractFrontController
 
         // Login via local DB or LDAP or SSO
         if ($username !== '' && ($password !== '' || $this->configuration->get('security.ssoSupport'))) {
-            $userAuth = new UserAuthentication($this->configuration, $this->currentUser);
-            $userAuth->setRememberMe($rememberMe ?? false);
+            $userAuthentication = new UserAuthentication($this->configuration, $this->currentUser);
+            $userAuthentication->setRememberMe($rememberMe ?? false);
             try {
-                $this->currentUser = $userAuth->authenticate($username, $password);
+                $this->currentUser = $userAuthentication->authenticate($username, $password);
 
                 // Check if two-factor authentication is enabled
-                if ($userAuth->hasTwoFactorAuthentication()) {
+                if ($userAuthentication->hasTwoFactorAuthentication()) {
                     return new RedirectResponse(url: './token?user-id=' . $this->currentUser->getUserId());
                 }
 
@@ -237,7 +237,7 @@ final class AuthenticationController extends AbstractFrontController
      * @throws \Exception
      */
     #[Route(path: '/check', name: 'public.twofactor.check', methods: ['POST'])]
-    public function check(Request $request): Response
+    public function check(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         if ($this->currentUser->isLoggedIn()) {
             return new RedirectResponse(url: './');

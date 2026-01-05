@@ -63,26 +63,26 @@ class UpdateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
+        $symfonyStyle = new SymfonyStyle($input, $output);
 
-        $io->title(message: 'Start automatic phpMyFAQ update ...');
+        $symfonyStyle->title(message: 'Start automatic phpMyFAQ update ...');
 
         try {
-            $runner = new UpdateRunner($this->configuration, $this->system);
-            $result = $runner->run($io);
+            $updateRunner = new UpdateRunner($this->configuration, $this->system);
+            $result = $updateRunner->run($symfonyStyle);
 
             if (Command::SUCCESS !== $result) {
                 return Command::FAILURE;
             }
 
-            $io->success(message: strtr(string: 'phpMyFAQ was successfully updated to version version: on date:.', replace_pairs: [
+            $symfonyStyle->success(message: strtr(string: 'phpMyFAQ was successfully updated to version version: on date:.', replace_pairs: [
                 'version:' => System::getVersion(),
                 'date:' => new DateTime()->format(format: 'Y-m-d H:i:s'),
             ]));
 
             return Command::SUCCESS;
         } catch (Throwable $throwable) {
-            $io->error(message: 'Error during update: ' . $throwable->getMessage());
+            $symfonyStyle->error(message: 'Error during update: ' . $throwable->getMessage());
             return Command::FAILURE;
         }
     }

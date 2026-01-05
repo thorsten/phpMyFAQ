@@ -323,7 +323,12 @@ abstract class AbstractAttachment
     {
         if ($this->encrypted) {
             if (
-                null === $this->id
+                !isset($this->id)
+                || !isset($this->recordId)
+                || !isset($this->realHash)
+                || !isset($this->filename)
+                || !isset($this->key)
+                || null === $this->id
                 || null === $this->recordId
                 || null === $this->realHash
                 || null === $this->filename
@@ -336,8 +341,12 @@ abstract class AbstractAttachment
 
             $src = $this->id . $this->recordId . $this->realHash . $this->filename . $this->key;
             $this->virtualHash = md5($src);
-        } else {
-            $this->virtualHash = $this->realHash;
+        }
+
+        if (!$this->encrypted) {
+            if (isset($this->realHash)) {
+                $this->virtualHash = $this->realHash;
+            }
         }
 
         return $this->virtualHash;

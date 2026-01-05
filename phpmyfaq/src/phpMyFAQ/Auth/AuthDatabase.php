@@ -68,7 +68,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
         $error = $this->databaseDriver->error();
 
-        if (strlen($error) > 0) {
+        if ($error !== '') {
             throw new AuthException(User::ERROR_USER_ADD . ': ' . $error);
         }
 
@@ -100,7 +100,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
         $error = $this->databaseDriver->error();
 
-        if (strlen($error) > 0) {
+        if ($error !== '') {
             throw new AuthException(User::ERROR_USER_CHANGE . ': ' . $error);
         }
 
@@ -131,7 +131,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
         $error = $this->databaseDriver->error();
 
-        if (strlen($error) > 0) {
+        if ($error !== '') {
             throw new AuthException(User::ERROR_USER_DELETE . ': ' . $error);
         }
 
@@ -161,7 +161,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
         $error = $this->databaseDriver->error();
 
-        if (strlen($error) > 0) {
+        if ($error !== '') {
             throw new AuthException(User::ERROR_USER_NOT_FOUND . ': ' . $error);
         }
 
@@ -203,7 +203,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
         $error = $this->databaseDriver->error();
 
-        if (strlen($error) > 0) {
+        if ($error !== '') {
             throw new AuthException($error);
         }
 

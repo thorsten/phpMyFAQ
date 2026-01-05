@@ -24,12 +24,12 @@ use phpMyFAQ\Configuration as CoreConfiguration;
 readonly class SearchSettings
 {
     public function __construct(
-        private CoreConfiguration $configuration,
+        private CoreConfiguration $coreConfiguration,
     ) {
     }
 
     public function isElasticsearchActive(): bool
     {
-        return (bool) $this->configuration->get(item: 'search.enableElasticsearch');
+        return (bool) $this->coreConfiguration->get(item: 'search.enableElasticsearch');
     }
 }

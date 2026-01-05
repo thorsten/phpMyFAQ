@@ -130,6 +130,7 @@ class Filesystem
                 $this->deleteDirectory($full);
                 continue;
             }
+
             unlink($full);
         }
 

@@ -258,7 +258,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
 
             $where .= ' (';
             for ($j = 0; $j < $numMatch; ++$j) {
-                if ($j != 0) {
+                if ($j !== 0) {
                     $where .= ' OR ';
                 }
 

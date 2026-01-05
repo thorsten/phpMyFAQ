@@ -70,7 +70,7 @@ readonly class BasicPermissionRepository
                 right_id = %d', Database::getTablePrefix(), $rightId);
 
         $res = $this->configuration->getDb()->query($select);
-        if ($this->configuration->getDb()->numRows($res) != 1) {
+        if ($this->configuration->getDb()->numRows($res) !== 1) {
             return [];
         }
 
@@ -102,7 +102,7 @@ readonly class BasicPermissionRepository
         );
 
         $res = $this->configuration->getDb()->query($select);
-        if ($this->configuration->getDb()->numRows($res) != 1) {
+        if ($this->configuration->getDb()->numRows($res) !== 1) {
             return 0;
         }
 

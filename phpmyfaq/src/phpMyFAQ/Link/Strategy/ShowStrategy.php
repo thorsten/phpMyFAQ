@@ -32,10 +32,12 @@ final class ShowStrategy implements StrategyInterface
         if ($cat === 0 || $cat === '0') {
             return Link::LINK_HTML_SHOW_CATEGORIES;
         }
+
         $url = Link::LINK_CATEGORY . $cat;
         if (isset($params[Link::LINK_GET_PAGE])) {
             $url .= Link::LINK_HTML_SLASH . $params[Link::LINK_GET_PAGE];
         }
+
         return $url . Link::LINK_HTML_SLASH . $link->getSEOTitle() . Link::LINK_HTML_EXTENSION;
     }
 }

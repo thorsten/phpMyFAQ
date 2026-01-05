@@ -89,7 +89,10 @@ final class BackupController extends AbstractAdministrationController
 
         $response = new Response($result->content);
 
-        $disposition = HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, urlencode($result->fileName));
+        $disposition = HeaderUtils::makeDisposition(
+            HeaderUtils::DISPOSITION_ATTACHMENT,
+            urlencode((string) $result->fileName),
+        );
 
         $response->headers->set(key: 'Content-Type', values: 'application/octet-stream; charset=UTF-8');
         $response->headers->set(key: 'Content-Disposition', values: $disposition);
@@ -177,10 +180,10 @@ final class BackupController extends AbstractAdministrationController
 
         try {
             $parseResult = $backup->parseBackupFile($file->getPathname(), $this->configuration->getVersion());
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $templateVars = [
                 ...$templateVars,
-                'errorMessageImportNotPossible' => $e->getMessage(),
+                'errorMessageImportNotPossible' => $exception->getMessage(),
             ];
 
             return $this->render(file: '@admin/backup/import.twig', context: [

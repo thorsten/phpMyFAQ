@@ -50,14 +50,22 @@ use phpMyFAQ\Utils;
 final class FaqDisplayService
 {
     private Glossary $glossary;
-    private Tags $tagging;
+
+    private Tags $tags;
+
     private Relation $relation;
+
     private Rating $rating;
-    private Comments $comment;
+
+    private Comments $comments;
+
     private FaqHelper $faqHelper;
+
     private Permission $faqPermission;
+
     private AttachmentHelper $attachmentHelper;
-    private MarkdownConverter $converter;
+
+    private MarkdownConverter $markdownConverter;
 
     public function __construct(
         private readonly Configuration $configuration,
@@ -67,11 +75,11 @@ final class FaqDisplayService
         private readonly Category $category,
     ) {
         $this->glossary = new Glossary($this->configuration);
-        $this->tagging = new Tags($this->configuration);
-        $this->tagging->setUser($this->currentUser->getUserId())->setGroups($this->currentGroups);
+        $this->tags = new Tags($this->configuration);
+        $this->tags->setUser($this->currentUser->getUserId())->setGroups($this->currentGroups);
         $this->relation = new Relation($this->configuration);
         $this->rating = new Rating($this->configuration);
-        $this->comment = new Comments($this->configuration);
+        $this->comments = new Comments($this->configuration);
         $this->faqHelper = new FaqHelper($this->configuration);
         $this->faqPermission = new Permission($this->configuration);
         $this->attachmentHelper = new AttachmentHelper();
@@ -84,7 +92,8 @@ final class FaqDisplayService
         $environment = new Environment($config);
         $environment->addExtension(new CommonMarkCoreExtension());
         $environment->addExtension(new GithubFlavoredMarkdownExtension());
-        $this->converter = new MarkdownConverter($environment);
+
+        $this->markdownConverter = new MarkdownConverter($environment);
     }
 
     /**
@@ -110,7 +119,7 @@ final class FaqDisplayService
 
         // Convert Markdown if enabled
         if ((bool) $this->configuration->get('main.enableMarkdownEditor')) {
-            $answer = $this->converter->convert($this->faq->faqRecord['content'])->getContent();
+            $answer = $this->markdownConverter->convert($this->faq->faqRecord['content'])->getContent();
         } else {
             $answer = $this->faq->faqRecord['content'];
         }
@@ -204,10 +213,10 @@ final class FaqDisplayService
      */
     public function getRelatedFaqs(int $faqId): string
     {
-        $faqSearchResult = new SearchResultSet($this->currentUser, $this->faqPermission, $this->configuration);
+        $searchResultSet = new SearchResultSet($this->currentUser, $this->faqPermission, $this->configuration);
 
         try {
-            $faqSearchResult->reviewResultSet($this->relation->getAllRelatedByQuestion(
+            $searchResultSet->reviewResultSet($this->relation->getAllRelatedByQuestion(
                 $this->faq->faqRecord['title'],
                 $this->faq->faqRecord['keywords'],
             ));
@@ -216,7 +225,7 @@ final class FaqDisplayService
         }
 
         $searchHelper = new SearchHelper($this->configuration);
-        return $searchHelper->renderRelatedFaqs($faqSearchResult, $faqId);
+        return $searchHelper->renderRelatedFaqs($searchResultSet, $faqId);
     }
 
     /**
@@ -234,7 +243,7 @@ final class FaqDisplayService
      */
     public function getNumberOfComments(): array
     {
-        return $this->comment->getNumberOfComments();
+        return $this->comments->getNumberOfComments();
     }
 
     /**
@@ -244,7 +253,7 @@ final class FaqDisplayService
      */
     public function getCommentsData(int $faqId): array
     {
-        return $this->comment->getCommentsData($faqId, CommentType::FAQ);
+        return $this->comments->getCommentsData($faqId, CommentType::FAQ);
     }
 
     /**
@@ -262,7 +271,7 @@ final class FaqDisplayService
      */
     public function getTagsHtml(int $faqId): string
     {
-        return $this->tagging->getAllLinkTagsById($faqId);
+        return $this->tags->getAllLinkTagsById($faqId);
     }
 
     /**
@@ -286,13 +295,7 @@ final class FaqDisplayService
      */
     private function shouldApplyHighlighting(?string $highlight): bool
     {
-        return (
-            $highlight !== null
-            && $highlight !== '/'
-            && $highlight !== '<'
-            && $highlight !== '>'
-            && Strings::strlen($highlight) > 3
-        );
+        return !in_array($highlight, [null, '/', '<', '>'], true) && Strings::strlen($highlight) > 3;
     }
 
     /**

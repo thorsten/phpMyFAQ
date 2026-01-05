@@ -30,7 +30,6 @@ class LanguageDetector
     private string $acceptLanguage = '';
 
     public function __construct(
-        private readonly Configuration $configuration,
         private readonly SessionInterface $session,
     ) {
     }
@@ -70,6 +69,7 @@ class LanguageDetector
                 return strtolower($lang);
             }
         }
+
         return 'en';
     }
 
@@ -135,6 +135,7 @@ class LanguageDetector
             $this->acceptLanguage = strtolower($language);
             break;
         }
+
         if ($this->acceptLanguage === '') {
             foreach ($languages as $language) {
                 $short = substr($language, offset: 0, length: 2);

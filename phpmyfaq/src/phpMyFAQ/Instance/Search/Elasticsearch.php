@@ -340,8 +340,6 @@ class Elasticsearch
 
     /**
      * Checks if Elasticsearch is available
-     *
-     * @return bool
      */
     public function isAvailable(): bool
     {

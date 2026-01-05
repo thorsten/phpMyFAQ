@@ -91,19 +91,24 @@ class Update extends AbstractSetup
             RecursiveIteratorIterator::SELF_FIRST,
         );
 
-        foreach ($files as $fileInfo) {
-            if ($fileInfo instanceof SplFileInfo) {
-                $filePath = $fileInfo->getRealPath() ?: $fileInfo->getPathname();
-                $isDir = $fileInfo->isDir();
-                $isFile = $fileInfo->isFile();
+        foreach ($files as $file) {
+            if ($file instanceof SplFileInfo) {
+                $filePath = $file->getRealPath() ?: $file->getPathname();
+                $isDir = $file->isDir();
+                $isFile = $file->isFile();
             } else {
-                $filePath = is_string($fileInfo) ? $fileInfo : (string) $fileInfo;
+                $filePath = is_string($file) ? $file : (string) $file;
                 $filePath = realpath($filePath) ?: $filePath;
                 $isDir = is_dir($filePath);
                 $isFile = is_file($filePath);
             }
-
-            if ($filePath === false || $filePath === null || $filePath === '') {
+            if ($filePath === false) {
+                continue;
+            }
+            if ($filePath === null) {
+                continue;
+            }
+            if ($filePath === '') {
                 continue;
             }
 
@@ -1132,6 +1137,7 @@ class Update extends AbstractSetup
             $randomHash = bin2hex(random_bytes(4)); // 8-character hex string
             $this->backupFilename = sprintf('phpmyfaq-config-backup.%s.%s.zip', date(format: 'Y-m-d'), $randomHash);
         }
+
         return $this->backupFilename;
     }
 }

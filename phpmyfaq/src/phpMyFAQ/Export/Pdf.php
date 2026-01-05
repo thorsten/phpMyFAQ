@@ -158,7 +158,7 @@ class Pdf extends Export
                 );
             }
 
-            if (isset($tags) && 0 !== (is_countable($tags) ? count($tags) : 0)) {
+            if (0 !== (is_countable($tags) ? count($tags) : 0)) {
                 $this->wrapper->Ln();
                 $this->wrapper->Write(
                     h: 5,

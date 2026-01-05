@@ -76,16 +76,11 @@ final class CommentController extends AbstractController
         $email = Filter::filterVar($data->mail, FILTER_VALIDATE_EMAIL);
         $commentText = Filter::filterVar($data->comment_text, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        switch ($type) {
-            case 'news':
-                $commentId = (int) $newsId;
-                break;
-            case 'faq':
-                $commentId = (int) $faqId;
-                break;
-            default:
-                $commentId = 0;
-        }
+        $commentId = match ($type) {
+            'news' => (int) $newsId,
+            'faq' => (int) $faqId,
+            default => 0,
+        };
 
         if ($commentId === 0) {
             return $this->json(['error' => Translation::get(key: 'errSaveComment')], Response::HTTP_BAD_REQUEST);

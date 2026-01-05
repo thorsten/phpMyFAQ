@@ -548,7 +548,7 @@ final class FaqController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if (!($faqIds === false || $faqIds === [] || $faqIds === null)) {
+        if (!in_array($faqIds, [false, [], null], true)) {
             $faq = new FaqAdministration($this->configuration);
             $success = false;
 
@@ -588,7 +588,7 @@ final class FaqController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if (!($faqIds === false || $faqIds === [] || $faqIds === null)) {
+        if (!in_array($faqIds, [false, [], null], true)) {
             $faq = new FaqAdministration($this->configuration);
             $success = false;
 

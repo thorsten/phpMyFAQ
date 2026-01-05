@@ -59,10 +59,11 @@ class RegistrationHelper extends AbstractHelper
         $user = new User($this->configuration);
 
         // Check if email already exists in the userdata table (even if the username is different)
-        if (!empty($email)) {
+        if ($email !== '' && $email !== '0') {
             if (!$user->userdata instanceof UserData) {
                 $user->userdata = new UserData($this->configuration);
             }
+
             if ($user->userdata->emailExists($email)) {
                 return [
                     'registered' => false,
@@ -140,6 +141,7 @@ class RegistrationHelper extends AbstractHelper
         if ($atPos === false) {
             return false; // should not happen after filter_var, but double-check
         }
+
         $hostnameToCheck = trim(substr($email, $atPos + 1));
 
         foreach ($whitelistedDomainList as $hostname) {

@@ -26,12 +26,12 @@ use Throwable;
 
 readonly class Session
 {
-    private SessionRepository $repository;
+    private SessionRepository $sessionRepository;
 
     public function __construct(
         private Configuration $configuration,
     ) {
-        $this->repository = new SessionRepository($configuration);
+        $this->sessionRepository = new SessionRepository($configuration);
     }
 
     /**
@@ -44,9 +44,10 @@ readonly class Session
         try {
             $minTimestamp = (int) Request::createFromGlobals()->server->get('REQUEST_TIME') - $windowSeconds;
             if ($this->configuration->get(item: 'main.enableUserTracking')) {
-                $count = $this->repository->countOnlineUsersFromSessions($minTimestamp - (PMF_AUTH_TIMEOUT * 60));
+                $count = $this->sessionRepository->countOnlineUsersFromSessions($minTimestamp
+                - (PMF_AUTH_TIMEOUT * 60));
             } else {
-                $count = $this->repository->countOnlineUsersFromFaqUser($minTimestamp);
+                $count = $this->sessionRepository->countOnlineUsersFromFaqUser($minTimestamp);
             }
         } catch (Throwable) {
             $count = 0;
@@ -57,7 +58,7 @@ readonly class Session
 
     public function getTimeFromSessionId(int $sessionId): int
     {
-        return $this->repository->getTimeBySessionId($sessionId);
+        return $this->sessionRepository->getTimeBySessionId($sessionId);
     }
 
     /**
@@ -71,7 +72,7 @@ readonly class Session
     public function getSessionsByDate(int $firstHour, int $lastHour): array
     {
         $sessions = [];
-        $rows = $this->repository->getSessionsByDateRange($firstHour, $lastHour);
+        $rows = $this->sessionRepository->getSessionsByDateRange($firstHour, $lastHour);
 
         foreach ($rows as $row) {
             $sessions[$row->sid] = [
@@ -88,7 +89,7 @@ readonly class Session
      */
     public function getNumberOfSessions(): int
     {
-        return $this->repository->countTotalSessions();
+        return $this->sessionRepository->countTotalSessions();
     }
 
     /**
@@ -99,7 +100,7 @@ readonly class Session
      */
     public function deleteSessions(int $first, int $last): bool
     {
-        return $this->repository->deleteSessionsByTimeRange($first, $last);
+        return $this->sessionRepository->deleteSessionsByTimeRange($first, $last);
     }
 
     /**
@@ -107,7 +108,7 @@ readonly class Session
      */
     public function deleteAllSessions(): bool
     {
-        return $this->repository->deleteAllSessions();
+        return $this->sessionRepository->deleteAllSessions();
     }
 
     /**
@@ -121,7 +122,7 @@ readonly class Session
         $completeData = [];
         $startDate = strtotime(datetime: '-1 month');
 
-        $visits = $this->repository->getSessionTimestamps($startDate, $endDate);
+        $visits = $this->sessionRepository->getSessionTimestamps($startDate, $endDate);
 
         for ($date = $startDate; $date <= $endDate; $date += 86400) {
             $stats[date(format: 'Y-m-d', timestamp: $date)] = 0;

@@ -57,14 +57,15 @@ class CreateHashesCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
+        $symfonyStyle = new SymfonyStyle($input, $output);
 
         $root = $input->getOption('root');
         if (is_string($root) && '' !== $root) {
             if (!is_dir($root)) {
-                $io->error(sprintf("The provided root directory '%s' does not exist.", $root));
+                $symfonyStyle->error(sprintf("The provided root directory '%s' does not exist.", $root));
                 return Command::FAILURE;
             }
+
             $rootDir = rtrim($root, '/');
         } else {
             $rootDir = defined('PMF_ROOT_DIR') ? PMF_ROOT_DIR : null;
@@ -75,14 +76,16 @@ class CreateHashesCommand extends Command
         }
 
         if (!defined('PMF_ROOT_DIR')) {
-            $io->error('PMF_ROOT_DIR is not defined. Provide --root option or run inside a configured installation.');
+            $symfonyStyle->error(
+                'PMF_ROOT_DIR is not defined. Provide --root option or run inside a configured installation.',
+            );
             return Command::FAILURE;
         }
 
         try {
             $hashes = $this->system->createHashes();
         } catch (Throwable $throwable) {
-            $io->error('Failed to create hashes: ' . $throwable->getMessage());
+            $symfonyStyle->error('Failed to create hashes: ' . $throwable->getMessage());
             return Command::FAILURE;
         }
 
@@ -96,11 +99,11 @@ class CreateHashesCommand extends Command
             try {
                 $this->filesystem->dumpFile($outputPath, $hashes);
             } catch (Throwable $throwable) {
-                $io->error('Unable to write hashes: ' . $throwable->getMessage());
+                $symfonyStyle->error('Unable to write hashes: ' . $throwable->getMessage());
                 return Command::FAILURE;
             }
 
-            $io->success(sprintf('Hashes written to %s', $outputPath));
+            $symfonyStyle->success(sprintf('Hashes written to %s', $outputPath));
             return Command::SUCCESS;
         }
 

@@ -88,7 +88,7 @@ class Environment
             return;
         }
 
-        $handler = ErrorHandler::register();
+        $errorHandler = ErrorHandler::register();
 
         $logger = new Logger(name: 'phpmyfaq');
         $logTarget = $_ENV['ERROR_LOG'] ?? 'php://stderr';
@@ -98,10 +98,10 @@ class Environment
             E_DEPRECATED => null,
             E_USER_DEPRECATED => null,
         ];
-        $handler->setDefaultLogger($logger, $levelsMap);
+        $errorHandler->setDefaultLogger($logger, $levelsMap);
 
-        $handler->screamAt(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
-        $handler->scopeAt(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+        $errorHandler->screamAt(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+        $errorHandler->scopeAt(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
     }
 
     public static function isDebugMode(): bool

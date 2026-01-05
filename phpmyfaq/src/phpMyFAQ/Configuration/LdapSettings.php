@@ -24,7 +24,7 @@ use phpMyFAQ\Configuration as CoreConfiguration;
 readonly class LdapSettings
 {
     public function __construct(
-        private CoreConfiguration $configuration,
+        private CoreConfiguration $coreConfiguration,
     ) {
     }
 
@@ -46,7 +46,7 @@ readonly class LdapSettings
         ];
 
         // Additional servers if enabled
-        if (true === $this->configuration->get(item: 'ldap.ldap_use_multiple_servers')) {
+        if (true === $this->coreConfiguration->get(item: 'ldap.ldap_use_multiple_servers')) {
             $key = 1;
             while (isset($ldapConfiguration->getServers()[$key])) {
                 $servers[$key] = $ldapConfiguration->getServers()[$key];
@@ -64,13 +64,13 @@ readonly class LdapSettings
     public function buildConfig(): array
     {
         return [
-            'ldap_use_multiple_servers' => $this->configuration->get(item: 'ldap.ldap_use_multiple_servers'),
+            'ldap_use_multiple_servers' => $this->coreConfiguration->get(item: 'ldap.ldap_use_multiple_servers'),
             'ldap_mapping' => $this->getLdapMapping(),
-            'ldap_use_domain_prefix' => $this->configuration->get(item: 'ldap.ldap_use_domain_prefix'),
+            'ldap_use_domain_prefix' => $this->coreConfiguration->get(item: 'ldap.ldap_use_domain_prefix'),
             'ldap_options' => $this->getLdapOptions(),
-            'ldap_use_memberOf' => $this->configuration->get(item: 'ldap.ldap_use_memberOf'),
-            'ldap_use_sasl' => $this->configuration->get(item: 'ldap.ldap_use_sasl'),
-            'ldap_use_anonymous_login' => $this->configuration->get(item: 'ldap.ldap_use_anonymous_login'),
+            'ldap_use_memberOf' => $this->coreConfiguration->get(item: 'ldap.ldap_use_memberOf'),
+            'ldap_use_sasl' => $this->coreConfiguration->get(item: 'ldap.ldap_use_sasl'),
+            'ldap_use_anonymous_login' => $this->coreConfiguration->get(item: 'ldap.ldap_use_anonymous_login'),
             'ldap_group_config' => $this->getLdapGroupConfig(),
         ];
     }
@@ -81,10 +81,10 @@ readonly class LdapSettings
     public function getLdapMapping(): array
     {
         return [
-            'name' => $this->configuration->get(item: 'ldap.ldap_mapping.name'),
-            'username' => $this->configuration->get(item: 'ldap.ldap_mapping.username'),
-            'mail' => $this->configuration->get(item: 'ldap.ldap_mapping.mail'),
-            'memberOf' => $this->configuration->get(item: 'ldap.ldap_mapping.memberOf'),
+            'name' => $this->coreConfiguration->get(item: 'ldap.ldap_mapping.name'),
+            'username' => $this->coreConfiguration->get(item: 'ldap.ldap_mapping.username'),
+            'mail' => $this->coreConfiguration->get(item: 'ldap.ldap_mapping.mail'),
+            'memberOf' => $this->coreConfiguration->get(item: 'ldap.ldap_mapping.memberOf'),
         ];
     }
 
@@ -94,10 +94,10 @@ readonly class LdapSettings
     public function getLdapOptions(): array
     {
         return [
-            'LDAP_OPT_PROTOCOL_VERSION' => $this->configuration->get(
+            'LDAP_OPT_PROTOCOL_VERSION' => $this->coreConfiguration->get(
                 item: 'ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION',
             ),
-            'LDAP_OPT_REFERRALS' => $this->configuration->get(item: 'ldap.ldap_options.LDAP_OPT_REFERRALS'),
+            'LDAP_OPT_REFERRALS' => $this->coreConfiguration->get(item: 'ldap.ldap_options.LDAP_OPT_REFERRALS'),
         ];
     }
 
@@ -106,19 +106,19 @@ readonly class LdapSettings
      */
     public function getLdapGroupConfig(): array
     {
-        $allowedGroups = $this->configuration->get(item: 'ldap.ldap_group_allowed_groups');
-        $groupMapping = $this->configuration->get(item: 'ldap.ldap_group_mapping');
+        $allowedGroups = $this->coreConfiguration->get(item: 'ldap.ldap_group_allowed_groups');
+        $groupMapping = $this->coreConfiguration->get(item: 'ldap.ldap_group_mapping');
 
         return [
-            'use_group_restriction' => $this->configuration->get(item: 'ldap.ldap_use_group_restriction'),
+            'use_group_restriction' => $this->coreConfiguration->get(item: 'ldap.ldap_use_group_restriction'),
             'allowed_groups' => $allowedGroups ? explode(separator: ',', string: (string) $allowedGroups) : [],
-            'auto_assign' => $this->configuration->get(item: 'ldap.ldap_group_auto_assign'),
+            'auto_assign' => $this->coreConfiguration->get(item: 'ldap.ldap_group_auto_assign'),
             'group_mapping' => $groupMapping ? json_decode((string) $groupMapping, associative: true) : [],
         ];
     }
 
     public function isActive(): bool
     {
-        return (bool) $this->configuration->get(item: 'ldap.ldapSupport');
+        return (bool) $this->coreConfiguration->get(item: 'ldap.ldapSupport');
     }
 }

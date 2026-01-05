@@ -88,6 +88,7 @@ final class BreadcrumbsBuilder
             if (!isset($categoryNameMap[$id])) {
                 continue;
             }
+
             $row = $categoryNameMap[$id];
             $segments[] = [
                 'id' => $id,
@@ -95,6 +96,7 @@ final class BreadcrumbsBuilder
                 'description' => (string) ($row['description'] ?? ''),
             ];
         }
+
         return $segments;
     }
 }

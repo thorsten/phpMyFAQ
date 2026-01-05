@@ -379,7 +379,7 @@ readonly class MediumPermissionRepository
                 group_id = %d', Database::getTablePrefix(), $groupId);
 
         $res = $this->configuration->getDb()->query($select);
-        if ($this->configuration->getDb()->numRows($res) != 1) {
+        if ($this->configuration->getDb()->numRows($res) !== 1) {
             return '-';
         }
 
@@ -497,7 +497,7 @@ readonly class MediumPermissionRepository
         );
 
         $res = $this->configuration->getDb()->query($select);
-        if ($this->configuration->getDb()->numRows($res) != 1) {
+        if ($this->configuration->getDb()->numRows($res) !== 1) {
             return [];
         }
 

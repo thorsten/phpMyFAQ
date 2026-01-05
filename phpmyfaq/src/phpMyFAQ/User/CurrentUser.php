@@ -335,7 +335,7 @@ class CurrentUser extends User
                 user_id = %d', Database::getTablePrefix(), $this->getUserId());
 
         $res = $this->configuration->getDb()->query($select);
-        if (!$res || $this->configuration->getDb()->numRows($res) != 1) {
+        if (!$res || $this->configuration->getDb()->numRows($res) !== 1) {
             return [];
         }
 

@@ -38,7 +38,7 @@ class Token
 
     private ?string $cookieToken = null;
 
-    private static ?Token $instance = null;
+    private static ?Token $token = null;
 
     /**
      * Constructor.
@@ -97,11 +97,11 @@ class Token
      */
     public static function getInstance(SessionInterface $session): Token
     {
-        if (!self::$instance instanceof Token) {
-            self::$instance = new self($session);
+        if (!self::$token instanceof Token) {
+            self::$token = new self($session);
         }
 
-        return self::$instance;
+        return self::$token;
     }
 
     /**
@@ -214,6 +214,6 @@ class Token
 
     public static function resetInstanceForTests(): void
     {
-        self::$instance = null;
+        self::$token = null;
     }
 }

@@ -27,7 +27,7 @@ use phpMyFAQ\Entity\CommentType;
 readonly class CommentsRepository implements CommentsRepositoryInterface
 {
     public function __construct(
-        private CoreConfiguration $configuration,
+        private CoreConfiguration $coreConfiguration,
     ) {
     }
 
@@ -47,10 +47,15 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
                 id = %d
         SQL;
 
-        $query = sprintf($sql, Database::getTablePrefix(), $this->configuration->getDb()->escape($type), $referenceId);
+        $query = sprintf(
+            $sql,
+            Database::getTablePrefix(),
+            $this->coreConfiguration->getDb()->escape($type),
+            $referenceId,
+        );
 
-        $result = $this->configuration->getDb()->query($query);
-        $rows = $this->configuration->getDb()->fetchAll($result);
+        $result = $this->coreConfiguration->getDb()->query($query);
+        $rows = $this->coreConfiguration->getDb()->fetchAll($result);
         return is_array($rows) ? $rows : [];
     }
 
@@ -69,17 +74,17 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
         $query = sprintf(
             $sql,
             Database::getTablePrefix(),
-            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcomments', 'id_comment'),
+            $this->coreConfiguration->getDb()->nextId(Database::getTablePrefix() . 'faqcomments', 'id_comment'),
             $comment->getRecordId(),
-            $this->configuration->getDb()->escape($comment->getType()),
-            $this->configuration->getDb()->escape($comment->getUsername()),
-            $this->configuration->getDb()->escape($comment->getEmail()),
-            $this->configuration->getDb()->escape($comment->getComment()),
-            $this->configuration->getDb()->escape($comment->getDate()),
+            $this->coreConfiguration->getDb()->escape($comment->getType()),
+            $this->coreConfiguration->getDb()->escape($comment->getUsername()),
+            $this->coreConfiguration->getDb()->escape($comment->getEmail()),
+            $this->coreConfiguration->getDb()->escape($comment->getComment()),
+            $this->coreConfiguration->getDb()->escape($comment->getDate()),
             $helpedSql,
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool) $this->coreConfiguration->getDb()->query($query);
     }
 
     public function deleteByTypeAndId(string $type, int $commentId): bool
@@ -93,9 +98,14 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
                 id_comment = %d
         SQL;
 
-        $query = sprintf($sql, Database::getTablePrefix(), $this->configuration->getDb()->escape($type), $commentId);
+        $query = sprintf(
+            $sql,
+            Database::getTablePrefix(),
+            $this->coreConfiguration->getDb()->escape($type),
+            $commentId,
+        );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool) $this->coreConfiguration->getDb()->query($query);
     }
 
     /**
@@ -115,10 +125,10 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
             ORDER BY id
         SQL;
 
-        $query = sprintf($sql, Database::getTablePrefix(), $this->configuration->getDb()->escape($type));
+        $query = sprintf($sql, Database::getTablePrefix(), $this->coreConfiguration->getDb()->escape($type));
 
-        $result = $this->configuration->getDb()->query($query);
-        $rows = $this->configuration->getDb()->fetchAll($result);
+        $result = $this->coreConfiguration->getDb()->query($query);
+        $rows = $this->coreConfiguration->getDb()->fetchAll($result);
         return is_array($rows) ? $rows : [];
     }
 
@@ -145,8 +155,8 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
 
         $query = sprintf($sql, Database::getTablePrefix(), Database::getTablePrefix(), CommentType::FAQ);
 
-        $result = $this->configuration->getDb()->query($query);
-        $rows = $this->configuration->getDb()->fetchAll($result);
+        $result = $this->coreConfiguration->getDb()->query($query);
+        $rows = $this->coreConfiguration->getDb()->fetchAll($result);
         return is_array($rows) ? $rows : [];
     }
 
@@ -156,7 +166,7 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
     public function fetchAllWithCategories(string $type = CommentType::FAQ): array
     {
         $prefix = Database::getTablePrefix();
-        $escapedType = $this->configuration->getDb()->escape($type);
+        $escapedType = $this->coreConfiguration->getDb()->escape($type);
 
         if ($type === CommentType::FAQ) {
             $query = sprintf(
@@ -176,8 +186,8 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
             );
         }
 
-        $result = $this->configuration->getDb()->query($query);
-        $rows = $this->configuration->getDb()->fetchAll($result);
+        $result = $this->coreConfiguration->getDb()->query($query);
+        $rows = $this->coreConfiguration->getDb()->fetchAll($result);
         return is_array($rows) ? $rows : [];
     }
 
@@ -201,11 +211,11 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
             Database::getTablePrefix(),
             $table,
             $recordId,
-            $this->configuration->getDb()->escape($recordLang),
+            $this->coreConfiguration->getDb()->escape($recordLang),
         );
 
-        $result = $this->configuration->getDb()->query($query);
-        if ($row = $this->configuration->getDb()->fetchObject($result)) {
+        $result = $this->coreConfiguration->getDb()->query($query);
+        if ($row = $this->coreConfiguration->getDb()->fetchObject($result)) {
             return $row->comment === 'y';
         }
 

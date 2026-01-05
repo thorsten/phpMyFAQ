@@ -62,7 +62,7 @@ class File extends AbstractAttachment implements AttachmentInterface
         clearstatcache();
         $attDir = dirname($filepath);
 
-        return file_exists($attDir) && is_dir($attDir) || mkdir($attDir, 0o777, true);
+        return file_exists($attDir) && is_dir($attDir) || mkdir($attDir, permissions: 0o777, recursive: true);
     }
 
     /**
@@ -113,13 +113,17 @@ class File extends AbstractAttachment implements AttachmentInterface
                     $target = $this->getFile(FilesystemFile::MODE_WRITE);
 
                     $success = $vanillaFile->moveTo($target);
-                } else {
+                }
+
+                if ($this->linkedRecords()) {
                     $success = true;
                 }
 
                 if ($success) {
                     $this->postUpdateMeta();
-                } else {
+                }
+
+                if (!$success) {
                     // File wasn't saved
                     $this->delete();
                     $success = false;

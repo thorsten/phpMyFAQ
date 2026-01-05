@@ -40,8 +40,8 @@ class CategoryHelper extends AbstractHelper
      * Get all categories in <option> tags.
      *
      * @param int[]|int $categoryId CategoryHelper ID or array of category IDs
-     * @deprecated will be moved into a Twig macro
      */
+    #[\Deprecated(message: 'will be moved into a Twig macro')]
     public function renderOptions(array|int $categoryId): string
     {
         $categories = '';
@@ -291,8 +291,8 @@ class CategoryHelper extends AbstractHelper
     {
         $options = '';
 
-        $languageService = new CategoryLanguageService();
-        $existingTranslations = $languageService->getExistingTranslations($this->configuration, $categoryId);
+        $categoryLanguageService = new CategoryLanguageService();
+        $existingTranslations = $categoryLanguageService->getExistingTranslations($this->configuration, $categoryId);
 
         foreach ($existingTranslations as $code => $displayName) {
             $options .= sprintf('<option value="%s">%s</option>', $code, $displayName);

@@ -46,10 +46,6 @@ final class StrategyRegistry
         return isset($this->strategies[$action]);
     }
 
-    /**
-     * @param string $action
-     * @return StrategyInterface|null
-     */
     public function get(string $action): ?StrategyInterface
     {
         return $this->strategies[$action] ?? null;

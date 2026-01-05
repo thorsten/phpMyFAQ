@@ -74,19 +74,24 @@ readonly class Plurals
                 if ($number === 0) {
                     return 0;
                 }
+
                 if ($number === 1) {
                     return 1;
                 }
+
                 if ($number === 2) {
                     return 2;
                 }
+
                 $n100 = $number % 100;
                 if ($n100 >= 3 && $n100 <= 10) {
                     return 3;
                 }
+
                 if ($n100 >= 11 && $n100 <= 99) {
                     return 4;
                 }
+
                 return 5;
 
             case 'bn':
@@ -106,21 +111,26 @@ readonly class Plurals
                 if ($number === 1) {
                     return 0;
                 }
+
                 if ($number === 2) {
                     return 1;
                 }
+
                 if ($number !== 8 && $number !== 11) {
                     return 2;
                 }
+
                 return 3;
 
             case 'cs':
                 if ($number === 1) {
                     return 0;
                 }
+
                 if ($number >= 2 && $number <= 4) {
                     return 1;
                 }
+
                 return 2;
 
             case 'da':
@@ -140,6 +150,7 @@ readonly class Plurals
                 if ($number !== 1) {
                     return 1;
                 }
+
                 return 0;
 
             case 'fr':
@@ -147,6 +158,7 @@ readonly class Plurals
                 if ($number > 1) {
                     return 1;
                 }
+
                 return 0;
 
             case 'lt':
@@ -155,9 +167,11 @@ readonly class Plurals
                 if ($n10 === 1 && $n100 !== 11) {
                     return 0;
                 }
+
                 if ($n10 >= 2 && ($n100 < 10 || $n100 >= 20)) {
                     return 1;
                 }
+
                 return 2;
 
             case 'lv':
@@ -166,9 +180,11 @@ readonly class Plurals
                 if ($n10 === 1 && $n100 !== 11) {
                     return 0;
                 }
+
                 if ($number !== 0) {
                     return 1;
                 }
+
                 return 2;
 
             case 'pl':
@@ -177,9 +193,11 @@ readonly class Plurals
                 if ($number === 1) {
                     return 0;
                 }
+
                 if ($n10 >= 2 && $n10 <= 4 && ($n100 < 10 || $n100 >= 20)) {
                     return 1;
                 }
+
                 return 2;
 
             case 'ro':
@@ -187,9 +205,11 @@ readonly class Plurals
                 if ($number === 1) {
                     return 0;
                 }
+
                 if ($number === 0 || $n100 > 0 && $n100 < 20) {
                     return 1;
                 }
+
                 return 2;
 
             case 'ru':
@@ -200,9 +220,11 @@ readonly class Plurals
                 if ($n10 === 1 && $n100 !== 11) {
                     return 0;
                 }
+
                 if ($n10 >= 2 && $n10 <= 4 && ($n100 < 10 || $n100 >= 20)) {
                     return 1;
                 }
+
                 return 2;
 
             case 'sl':
@@ -210,12 +232,15 @@ readonly class Plurals
                 if ($n100 === 1) {
                     return 0;
                 }
+
                 if ($n100 === 2) {
                     return 1;
                 }
+
                 if ($n100 === 3 || $n100 === 4) {
                     return 2;
                 }
+
                 return 3;
 
             default:

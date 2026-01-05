@@ -59,9 +59,9 @@ final class FaqController extends AbstractFrontController
         // Get current groups
         $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
 
-        $faqService = new FaqCreationService($this->configuration, $this->currentUser, $currentGroups);
+        $faqCreationService = new FaqCreationService($this->configuration, $this->currentUser, $currentGroups);
 
-        if (!$faqService->canUserAddFaq()) {
+        if (!$faqCreationService->canUserAddFaq()) {
             if ($this->currentUser->getUserId() === -1) {
                 return new RedirectResponse($this->configuration->getDefaultUrl() . 'login');
             }
@@ -72,7 +72,7 @@ final class FaqController extends AbstractFrontController
         $selectedQuestion = Filter::filterVar($request->query->get('question'), FILTER_VALIDATE_INT);
         $selectedCategory = Filter::filterVar($request->query->get('cat'), FILTER_VALIDATE_INT, -1);
 
-        $faqData = $faqService->prepareAddFaqData($selectedQuestion, $selectedCategory);
+        $faqData = $faqCreationService->prepareAddFaqData($selectedQuestion, $selectedCategory);
 
         $captcha = $this->container->get('phpmyfaq.captcha');
         $captchaHelper = $this->container->get('phpmyfaq.captcha.helper.captcha_helper');
@@ -96,8 +96,8 @@ final class FaqController extends AbstractFrontController
             'msgNewContentAddon' => Translation::get(key: 'msgNewContentAddon'),
             'lang' => $this->configuration->getLanguage()->getLanguage(),
             'openQuestionID' => $faqData['selectedQuestion'],
-            'defaultContentMail' => $faqService->getDefaultUserEmail(),
-            'defaultContentName' => $faqService->getDefaultUserName(),
+            'defaultContentMail' => $faqCreationService->getDefaultUserEmail(),
+            'defaultContentName' => $faqCreationService->getDefaultUserName(),
             'msgNewContentName' => Translation::get(key: 'msgNewContentName'),
             'msgNewContentMail' => Translation::get(key: 'msgNewContentMail'),
             'msgNewContentCategory' => Translation::get(key: 'msgNewContentCategory'),
@@ -160,7 +160,7 @@ final class FaqController extends AbstractFrontController
 
         // Generate a simple slug from the question title
         $slug = preg_replace('/[^a-z0-9]+/i', '-', strtolower($faqData['question'] ?? 'faq'));
-        $slug = trim($slug, '-') ?: 'faq';
+        $slug = trim((string) $slug, '-') ?: 'faq';
 
         // Redirect to the canonical FAQ URL
         $url = sprintf('/faq/%d/%d/%s.html', $faqData['category_id'], $faqData['id'], $slug);
@@ -203,12 +203,13 @@ final class FaqController extends AbstractFrontController
         if ($bookmarkAction === 'add' && $faqId > 0) {
             $bookmark->add($faqId);
         }
+
         if ($bookmarkAction === 'remove' && $faqId > 0) {
             $bookmark->remove($faqId);
         }
 
         // Create a detail service
-        $detailService = new FaqDisplayService(
+        $faqDisplayService = new FaqDisplayService(
             $this->configuration,
             $this->currentUser,
             $currentGroups,
@@ -217,7 +218,7 @@ final class FaqController extends AbstractFrontController
         );
 
         // Load FAQ data
-        $faqId = $detailService->loadFaq($faqId, $solutionId);
+        $faqId = $faqDisplayService->loadFaq($faqId, $solutionId);
 
         // Track visit
         $faqSession->userTracking('article_view', $faqId);
@@ -231,20 +232,20 @@ final class FaqController extends AbstractFrontController
 
         // Process content
         $currentUrl = sprintf('//%s%s', $request->getHost(), $request->getRequestUri());
-        $question = $detailService->processQuestion($highlight);
-        $answer = $detailService->processAnswer($currentUrl, $highlight);
+        $question = $faqDisplayService->processQuestion($highlight);
+        $answer = $faqDisplayService->processAnswer($currentUrl, $highlight);
 
         // Get related data
-        $attachmentList = $detailService->getAttachmentList($faqId);
-        $renderedCategoryPath = $detailService->getRenderedCategoryPath($faqId);
-        $relatedFaqs = $detailService->getRelatedFaqs($faqId);
-        $numComments = $detailService->getNumberOfComments();
-        $comments = $detailService->getCommentsData($faqId);
-        $availableLanguages = $detailService->getAvailableLanguages($faq->faqRecord['id']);
-        $tagsHtml = $detailService->getTagsHtml($faqId);
+        $attachmentList = $faqDisplayService->getAttachmentList($faqId);
+        $renderedCategoryPath = $faqDisplayService->getRenderedCategoryPath($faqId);
+        $relatedFaqs = $faqDisplayService->getRelatedFaqs($faqId);
+        $numComments = $faqDisplayService->getNumberOfComments();
+        $comments = $faqDisplayService->getCommentsData($faqId);
+        $availableLanguages = $faqDisplayService->getAvailableLanguages($faq->faqRecord['id']);
+        $tagsHtml = $faqDisplayService->getTagsHtml($faqId);
 
         // Comment permissions
-        $expired = $detailService->isExpired();
+        $expired = $faqDisplayService->isExpired();
         $commentHelper = new CommentHelper();
         $commentHelper->setConfiguration($this->configuration);
 
@@ -313,8 +314,8 @@ final class FaqController extends AbstractFrontController
             'msgShareFAQ' => Translation::get(key: 'msgShareFAQ'),
             'linkToPdf' => $faqServices->getPdfLink(),
             'msgAverageVote' => Translation::get(key: 'msgAverageVote'),
-            'renderVotingResult' => $detailService->getRating($faqId),
-            'switchLanguage' => $detailService->getFaqHelper()->renderChangeLanguageSelector($faq, $cat),
+            'renderVotingResult' => $faqDisplayService->getRating($faqId),
+            'switchLanguage' => $faqDisplayService->getFaqHelper()->renderChangeLanguageSelector($faq, $cat),
             'msgVoteBad' => Translation::get(key: 'msgVoteBad'),
             'msgVoteGood' => Translation::get(key: 'msgVoteGood'),
             'msgVoteSubmit' => Translation::get(key: 'msgVoteSubmit'),

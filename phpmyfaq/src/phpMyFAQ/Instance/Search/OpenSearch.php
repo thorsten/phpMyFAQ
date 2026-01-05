@@ -238,7 +238,7 @@ readonly class OpenSearch
                 'category_id' => $faq['category_id'],
             ];
 
-            if (($i % 1000) == 0) {
+            if (($i % 1000) === 0) {
                 $responses = $this->client->bulk($params);
 
                 $params = ['body' => []];
@@ -301,15 +301,13 @@ readonly class OpenSearch
 
     /**
      * Checks if OpenSearch is available
-     *
-     * @return bool
      */
     public function isAvailable(): bool
     {
         try {
             return $this->client->ping();
-        } catch (Exception $e) {
-            $this->configuration->getLogger()->error('OpenSearch ping failed.', [$e->getMessage()]);
+        } catch (Exception $exception) {
+            $this->configuration->getLogger()->error('OpenSearch ping failed.', [$exception->getMessage()]);
             return false;
         }
     }

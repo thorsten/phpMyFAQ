@@ -57,10 +57,12 @@ final class ImageController extends AbstractController
         $uploadedFiles = [];
         $headers = [];
         foreach ($files as $file) {
-            if (!$file || !$file->isValid()) {
+            if (!$file) {
                 continue;
             }
-
+            if (!$file->isValid()) {
+                continue;
+            }
             if (
                 $request->server->get('HTTP_ORIGIN') !== null
                 && $request->server->get('HTTP_ORIGIN') . '/' === $this->configuration->getDefaultUrl()

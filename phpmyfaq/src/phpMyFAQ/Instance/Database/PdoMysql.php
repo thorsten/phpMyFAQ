@@ -283,10 +283,8 @@ class PdoMysql extends Database implements DriverInterface
             PRIMARY KEY (sid)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
         'faqsessions_idx' => 'CREATE INDEX idx_time ON %sfaqsessions (time)',
         'faqsearches_searchterm_idx' => 'CREATE INDEX idx_faqsearches_searchterm ON %sfaqsearches (searchterm)',
-        'faqsearches_date_term_idx' =>
-            'CREATE INDEX idx_faqsearches_date_term ON %sfaqsearches ' . '(searchdate, searchterm)',
-        'faqsearches_date_term_lang_idx' =>
-            'CREATE INDEX idx_faqsearches_date_term_lang ON %sfaqsearches ' . '(searchdate, searchterm, lang)',
+        'faqsearches_date_term_idx' => 'CREATE INDEX idx_faqsearches_date_term ON %sfaqsearches (searchdate, searchterm)',
+        'faqsearches_date_term_lang_idx' => 'CREATE INDEX idx_faqsearches_date_term_lang ON %sfaqsearches (searchdate, searchterm, lang)',
         'faqstopwords' => 'CREATE TABLE %sfaqstopwords (
             id INT(11) NOT NULL,
             lang VARCHAR(5) NOT NULL,

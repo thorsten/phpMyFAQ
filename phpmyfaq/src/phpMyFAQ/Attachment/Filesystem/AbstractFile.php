@@ -130,7 +130,7 @@ abstract class AbstractFile extends AbstractEntry
     {
         $retval = false;
 
-        if (in_array($mode, [self::MODE_WRITE, self::MODE_READ, self::MODE_APPEND])) {
+        if (in_array($mode, [self::MODE_WRITE, self::MODE_READ, self::MODE_APPEND], strict: true)) {
             fclose($this->handle);
             $this->handle = fopen($this->path, $mode);
 
@@ -181,13 +181,15 @@ abstract class AbstractFile extends AbstractEntry
         );
 
         foreach ($it as $file) {
-            if (in_array($file->getBasename(), ['.', '..'])) {
+            if (in_array($file->getBasename(), ['.', '..'], strict: true)) {
                 continue;
             }
 
             if ($file->isDir()) {
                 rmdir($file->getPathname());
-            } elseif ($file->isFile() || $file->isLink()) {
+            }
+
+            if ($file->isFile() || $file->isLink()) {
                 if (!is_writable($file->getPathname())) {
                     throw new FileException("File can't be deleted.");
                 }

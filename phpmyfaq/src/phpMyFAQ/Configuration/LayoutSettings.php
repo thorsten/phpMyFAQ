@@ -24,17 +24,17 @@ use phpMyFAQ\Configuration as CoreConfiguration;
 readonly class LayoutSettings
 {
     public function __construct(
-        private CoreConfiguration $configuration,
+        private CoreConfiguration $coreConfiguration,
     ) {
     }
 
     public function getTemplateSet(): string
     {
-        return (string) ($this->configuration->get(item: 'layout.templateSet') ?? 'default');
+        return (string) ($this->coreConfiguration->get(item: 'layout.templateSet') ?? 'default');
     }
 
     public function getCustomCss(): string
     {
-        return (string) $this->configuration->get(item: 'layout.customCss');
+        return (string) $this->coreConfiguration->get(item: 'layout.customCss');
     }
 }

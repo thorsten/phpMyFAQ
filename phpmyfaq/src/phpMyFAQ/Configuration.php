@@ -56,7 +56,7 @@ class Configuration
 
     private PluginManager $pluginManager;
 
-    private ConfigurationRepository $repository;
+    private ConfigurationRepository $configurationRepository;
 
     private LdapSettings $ldapSettings;
 
@@ -80,7 +80,7 @@ class Configuration
             $this->getLogger()->error($pluginException->getMessage());
         }
 
-        $this->repository = new ConfigurationRepository($this);
+        $this->configurationRepository = new ConfigurationRepository($this);
         $this->ldapSettings = new LdapSettings($this);
         $this->mailSettings = new MailSettings($this);
         $this->searchSettings = new SearchSettings($this);
@@ -125,7 +125,7 @@ class Configuration
      */
     public function set(string $key, mixed $value): bool
     {
-        return $this->repository->updateConfigValue($key, (string) $value);
+        return $this->configurationRepository->updateConfigValue($key, (string) $value);
     }
 
     /**
@@ -255,9 +255,9 @@ class Configuration
      */
     public function getAll(): array
     {
-        $rows = $this->repository->fetchAll();
-        foreach ($rows as $items) {
-            $this->config[$items->config_name] = $items->config_value;
+        $rows = $this->configurationRepository->fetchAll();
+        foreach ($rows as $row) {
+            $this->config[$row->config_name] = $row->config_value;
         }
 
         return $this->config;
@@ -395,7 +395,7 @@ class Configuration
     public function add(string $name, mixed $value): bool
     {
         if (!isset($this->config[$name])) {
-            return $this->repository->insert($name, (string) $value);
+            return $this->configurationRepository->insert($name, (string) $value);
         }
 
         return true;
@@ -406,7 +406,7 @@ class Configuration
      */
     public function delete(string $name): bool
     {
-        return $this->repository->delete($name);
+        return $this->configurationRepository->delete($name);
     }
 
     /**
@@ -414,7 +414,7 @@ class Configuration
      */
     public function rename(string $currentKey, string $newKey): bool
     {
-        return $this->repository->renameKey($currentKey, $newKey);
+        return $this->configurationRepository->renameKey($currentKey, $newKey);
     }
 
     /**
@@ -447,7 +447,7 @@ class Configuration
                 continue;
             }
 
-            $this->repository->updateConfigValue((string) $name, $value ?? '');
+            $this->configurationRepository->updateConfigValue((string) $name, $value ?? '');
             if (isset($this->config[$name])) {
                 unset($this->config[$name]);
             }
@@ -465,7 +465,7 @@ class Configuration
      */
     public function replaceMainReferenceUrl(string $oldUrl, string $newUrl): bool
     {
-        $contentItems = $this->repository->getFaqDataContents();
+        $contentItems = $this->configurationRepository->getFaqDataContents();
         $newContentItems = [];
 
         foreach ($contentItems as $contentItem) {
@@ -473,12 +473,13 @@ class Configuration
                 $newContentItems[] = str_replace($oldUrl, $newUrl, $contentItem->content);
                 continue;
             }
+
             $newContentItems[] = $contentItem->content;
         }
 
         $count = 0;
         foreach ($newContentItems as $newContentItem) {
-            $this->repository->updateFaqDataContent($contentItems[$count]->content, $newContentItem);
+            $this->configurationRepository->updateFaqDataContent($contentItems[$count]->content, $newContentItem);
             $count++;
         }
 

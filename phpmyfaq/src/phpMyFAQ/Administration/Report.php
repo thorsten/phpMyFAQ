@@ -30,15 +30,14 @@ use phpMyFAQ\Date;
  */
 readonly class Report
 {
-    private ReportRepository $repository;
+    private ReportRepository $reportRepository;
 
     /**
      * Constructor.
      */
-    public function __construct(
-        private Configuration $configuration,
-    ) {
-        $this->repository = new ReportRepository($configuration);
+    public function __construct(Configuration $configuration)
+    {
+        $this->reportRepository = new ReportRepository($configuration);
     }
 
     /**
@@ -49,7 +48,7 @@ readonly class Report
     public function getReportingData(): array
     {
         $report = [];
-        $rows = $this->repository->fetchAllReportData();
+        $rows = $this->reportRepository->fetchAllReportData();
 
         $lastId = 0;
         foreach ($rows as $row) {
@@ -104,8 +103,6 @@ readonly class Report
 
     /**
      * Sanitizes input to avoid CSV injection.
-     * @param int|string $value
-     * @return string|int
      */
     public static function sanitize(int|string $value): string|int
     {

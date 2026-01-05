@@ -41,6 +41,7 @@ final class TreePathResolver
             if ($parentId === null) {
                 break;
             }
+
             array_unshift($nodes, $parentId);
             $currentCategoryId = $parentId;
         }
@@ -71,10 +72,12 @@ final class TreePathResolver
         if (!isset($childrenMap[$categoryId])) {
             return $result;
         }
+
         foreach (array_keys($childrenMap[$categoryId]) as $childId) {
             $result[] = (int) $childId;
             $result = array_merge($result, $this->getChildNodes($childrenMap, (int) $childId));
         }
+
         return $result;
     }
 
@@ -106,8 +109,10 @@ final class TreePathResolver
             if (in_array($categoryId, $alreadyListed, strict: true)) {
                 break;
             }
+
             $alreadyListed[] = $categoryId;
         }
+
         return $level;
     }
 

@@ -30,14 +30,14 @@ use phpMyFAQ\Entity\CommentType;
  */
 class Comments
 {
-    private CommentsRepository $repository;
+    private CommentsRepository $commentsRepository;
 
     /**
      * Constructor.
      */
-    public function __construct(Configuration $configuration, ?CommentsRepository $repository = null)
+    public function __construct(Configuration $configuration, ?CommentsRepository $commentsRepository = null)
     {
-        $this->repository = $repository ?? new CommentsRepository($configuration);
+        $this->commentsRepository = $commentsRepository ?? new CommentsRepository($configuration);
     }
 
     /**
@@ -52,7 +52,7 @@ class Comments
     {
         $comments = [];
 
-        $rows = $this->repository->fetchByReferenceIdAndType($referenceId, $type);
+        $rows = $this->commentsRepository->fetchByReferenceIdAndType($referenceId, $type);
         foreach ($rows as $row) {
             $comment = new Comment();
             $comment
@@ -74,7 +74,7 @@ class Comments
      */
     public function create(Comment $comment): bool
     {
-        return $this->repository->insert($comment);
+        return $this->commentsRepository->insert($comment);
     }
 
     /**
@@ -84,7 +84,7 @@ class Comments
      */
     public function delete(string $type, int $commentId): bool
     {
-        return $this->repository->deleteByTypeAndId($type, $commentId);
+        return $this->commentsRepository->deleteByTypeAndId($type, $commentId);
     }
 
     /**
@@ -97,7 +97,7 @@ class Comments
     {
         $num = [];
 
-        $rows = $this->repository->countByTypeGroupedByRecordId($type);
+        $rows = $this->commentsRepository->countByTypeGroupedByRecordId($type);
         foreach ($rows as $row) {
             $num[$row->id] = $row->anz;
         }
@@ -113,7 +113,7 @@ class Comments
     {
         $numbers = [];
 
-        $rows = $this->repository->countByCategoryForFaq();
+        $rows = $this->commentsRepository->countByCategoryForFaq();
         foreach ($rows as $row) {
             $numbers[$row->category_id] = (int) $row->number;
         }
@@ -131,7 +131,7 @@ class Comments
     {
         $comments = [];
 
-        $rows = $this->repository->fetchAllWithCategories($type);
+        $rows = $this->commentsRepository->fetchAllWithCategories($type);
         foreach ($rows as $row) {
             $comment = new Comment();
             $comment
@@ -163,6 +163,6 @@ class Comments
      */
     public function isCommentAllowed(int $recordId, string $recordLang, string $commentType = 'faq'): bool
     {
-        return $this->repository->isCommentAllowed($recordId, $recordLang, $commentType);
+        return $this->commentsRepository->isCommentAllowed($recordId, $recordLang, $commentType);
     }
 }

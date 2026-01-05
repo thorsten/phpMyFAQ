@@ -23,10 +23,6 @@ readonly class TranslationStatistics
 {
     private const string REFERENCE_LANGUAGE = 'en';
 
-    public function __construct()
-    {
-    }
-
     /**
      * Returns statistics about all available translations.
      *
@@ -45,8 +41,8 @@ readonly class TranslationStatistics
             return $statistics;
         }
 
-        foreach ($languageFiles as $file) {
-            $language = $this->extractLanguageCode($file);
+        foreach ($languageFiles as $languageFile) {
+            $language = $this->extractLanguageCode($languageFile);
 
             if ($language === null) {
                 continue;
@@ -73,7 +69,7 @@ readonly class TranslationStatistics
             ];
         }
 
-        uasort($statistics, static fn($a, $b) => $b['completion_percentage'] <=> $a['completion_percentage']);
+        uasort($statistics, static fn($a, $b): int => $b['completion_percentage'] <=> $a['completion_percentage']);
 
         return $statistics;
     }

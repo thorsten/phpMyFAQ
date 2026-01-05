@@ -88,16 +88,10 @@ class Translation
                         return self::$translation->pluginTranslations[$pluginName][self::$translation->currentLanguage][$messageKey];
                     }
 
-                    // Fallback to the default language
-                    if (
-                        isset(
-                            self::$translation->pluginTranslations[$pluginName][self::$translation->defaultLanguage][$messageKey],
-                        )
-                    ) {
-                        return self::$translation->pluginTranslations[$pluginName][self::$translation->defaultLanguage][$messageKey];
-                    }
-
-                    return null;
+                    return (
+                        self::$translation->pluginTranslations[$pluginName][self::$translation->defaultLanguage][$messageKey]
+                        ?? null
+                    );
                 }
             }
 
@@ -133,7 +127,6 @@ class Translation
 
                 if (count($parts) === 3) {
                     [$namespace, $pluginName, $messageKey] = $parts;
-
                     if (
                         isset(
                             self::$translation->pluginTranslations[$pluginName][self::$translation->currentLanguage][$messageKey],
@@ -141,16 +134,9 @@ class Translation
                     ) {
                         return true;
                     }
-
-                    if (
-                        isset(
-                            self::$translation->pluginTranslations[$pluginName][self::$translation->defaultLanguage][$messageKey],
-                        )
-                    ) {
-                        return true;
-                    }
-
-                    return false;
+                    return isset(
+                        self::$translation->pluginTranslations[$pluginName][self::$translation->defaultLanguage][$messageKey],
+                    );
                 }
             }
 
@@ -231,7 +217,7 @@ class Translation
      */
     public static function getInstance(): Translation
     {
-        if (null === self::$translation) {
+        if (!self::$translation instanceof \phpMyFAQ\Translation) {
             $className = self::class;
             self::$translation = new $className();
         }
@@ -316,14 +302,14 @@ class Translation
             return; // Silently skip if glob fails
         }
 
-        foreach ($languageFiles as $file) {
+        foreach ($languageFiles as $languageFile) {
             // Extract language code from filename: language_en.php -> en
-            if (preg_match('/language_([a-z]{2,3}(_[a-z]{2})?)\.php$/i', basename($file), $matches)) {
+            if (preg_match('/language_([a-z]{2,3}(_[a-z]{2})?)\.php$/i', basename($languageFile), $matches)) {
                 $langCode = strtolower($matches[1]);
 
                 // Include the file and extract the $PMF_LANG array
                 $PMF_LANG = [];
-                include $file;
+                include $languageFile;
 
                 // Store in namespaced structure
                 if (!isset($this->pluginTranslations[$pluginName])) {
@@ -399,7 +385,7 @@ class Translation
     protected function checkInit(): void
     {
         if (!self::$translation->isReady) {
-            self::performInit();
+            $this->performInit();
         }
     }
 
@@ -408,7 +394,7 @@ class Translation
      *
      * @throws Exception
      */
-    private static function performInit(): void
+    private function performInit(): void
     {
         self::$translation->checkTranslationsDirectory();
         self::$translation->checkDefaultLanguage();

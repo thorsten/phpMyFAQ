@@ -37,8 +37,8 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 //
 try {
     require __DIR__ . '/src/Bootstrap.php';
-} catch (DatabaseConnectionException $exception) {
-    $errorMessage = Environment::isDebugMode() ? $exception->getMessage() : null;
+} catch (DatabaseConnectionException $databaseConnectionException) {
+    $errorMessage = Environment::isDebugMode() ? $databaseConnectionException->getMessage() : null;
     $response = ErrorController::renderBootstrapError($errorMessage);
     $response->send();
     exit(1);

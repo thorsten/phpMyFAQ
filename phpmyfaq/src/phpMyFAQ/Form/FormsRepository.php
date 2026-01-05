@@ -26,7 +26,7 @@ use phpMyFAQ\Database;
 readonly class FormsRepository implements FormsRepositoryInterface
 {
     public function __construct(
-        private CoreConfiguration $configuration,
+        private CoreConfiguration $coreConfiguration,
     ) {
     }
 
@@ -46,8 +46,8 @@ readonly class FormsRepository implements FormsRepositoryInterface
 
         $query = sprintf($sql, Database::getTablePrefix(), $formId);
 
-        $result = $this->configuration->getDb()->query($query);
-        $rows = $this->configuration->getDb()->fetchAll($result);
+        $result = $this->coreConfiguration->getDb()->query($query);
+        $rows = $this->coreConfiguration->getDb()->fetchAll($result);
         return is_array($rows) ? $rows : [];
     }
 
@@ -61,7 +61,7 @@ readonly class FormsRepository implements FormsRepositoryInterface
             $inputId,
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool) $this->coreConfiguration->getDb()->query($query);
     }
 
     public function updateInputRequired(int $formId, int $inputId, int $required): bool
@@ -74,7 +74,7 @@ readonly class FormsRepository implements FormsRepositoryInterface
             $inputId,
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool) $this->coreConfiguration->getDb()->query($query);
     }
 
     /**
@@ -89,8 +89,8 @@ readonly class FormsRepository implements FormsRepositoryInterface
             $inputId,
         );
 
-        $result = $this->configuration->getDb()->query($query);
-        $rows = $this->configuration->getDb()->fetchAll($result);
+        $result = $this->coreConfiguration->getDb()->query($query);
+        $rows = $this->coreConfiguration->getDb()->fetchAll($result);
         return is_array($rows) ? $rows : [];
     }
 
@@ -99,13 +99,13 @@ readonly class FormsRepository implements FormsRepositoryInterface
         $query = sprintf(
             "UPDATE %sfaqforms SET input_label='%s' WHERE form_id=%d AND input_id=%d AND input_lang='%s'",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($label),
+            $this->coreConfiguration->getDb()->escape($label),
             $formId,
             $inputId,
-            $this->configuration->getDb()->escape($lang),
+            $this->coreConfiguration->getDb()->escape($lang),
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool) $this->coreConfiguration->getDb()->query($query);
     }
 
     public function deleteTranslation(int $formId, int $inputId, string $lang): bool
@@ -115,10 +115,10 @@ readonly class FormsRepository implements FormsRepositoryInterface
             Database::getTablePrefix(),
             $formId,
             $inputId,
-            $this->configuration->getDb()->escape($lang),
+            $this->coreConfiguration->getDb()->escape($lang),
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool) $this->coreConfiguration->getDb()->query($query);
     }
 
     public function fetchDefaultInputData(int $formId, int $inputId): ?object
@@ -131,8 +131,8 @@ readonly class FormsRepository implements FormsRepositoryInterface
             $formId,
         );
 
-        $response = $this->configuration->getDb()->query($query);
-        $obj = $this->configuration->getDb()->fetchObject($response);
+        $response = $this->coreConfiguration->getDb()->query($query);
+        $obj = $this->coreConfiguration->getDb()->fetchObject($response);
 
         return $obj ?: null;
     }
@@ -152,20 +152,20 @@ readonly class FormsRepository implements FormsRepositoryInterface
             Database::getTablePrefix(),
             $formId,
             $inputId,
-            $this->configuration->getDb()->escape($inputType),
-            $this->configuration->getDb()->escape($label),
+            $this->coreConfiguration->getDb()->escape($inputType),
+            $this->coreConfiguration->getDb()->escape($label),
             $inputActive,
             $inputRequired,
-            $this->configuration->getDb()->escape($langCode),
+            $this->coreConfiguration->getDb()->escape($langCode),
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool) $this->coreConfiguration->getDb()->query($query);
     }
 
     public function insertInput(array $input): bool
     {
         $query = $this->buildInsertQuery($input);
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool) $this->coreConfiguration->getDb()->query($query);
     }
 
     public function buildInsertQuery(array $input): string
@@ -176,9 +176,9 @@ readonly class FormsRepository implements FormsRepositoryInterface
             Database::getTablePrefix(),
             (int) $input['form_id'],
             (int) $input['input_id'],
-            $this->configuration->getDb()->escape($input['input_type']),
-            $this->configuration->getDb()->escape($input['input_label']),
-            $this->configuration->getDb()->escape($input['input_lang']),
+            $this->coreConfiguration->getDb()->escape($input['input_type']),
+            $this->coreConfiguration->getDb()->escape($input['input_label']),
+            $this->coreConfiguration->getDb()->escape($input['input_lang']),
             (int) $input['input_active'],
             (int) $input['input_required'],
         );

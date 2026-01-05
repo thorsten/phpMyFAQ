@@ -65,10 +65,10 @@ class CategoryRepository implements CategoryRepositoryInterface
         $where = '';
 
         if ($withPermission) {
-            $perm = new CategoryPermissionService();
+            $categoryPermissionService = new CategoryPermissionService();
             $where = $withInactive
-                ? $perm->buildWhereClauseWithInactive($groups, $userId)
-                : $perm->buildWhereClause($groups, $userId);
+                ? $categoryPermissionService->buildWhereClauseWithInactive($groups, $userId)
+                : $categoryPermissionService->buildWhereClause($groups, $userId);
         }
 
         if ($language !== null && preg_match(pattern: '/^[a-z\-]{2,}$/', subject: $language)) {
@@ -125,7 +125,10 @@ class CategoryRepository implements CategoryRepositoryInterface
     {
         $categories = [];
         $prefix = Database::getTablePrefix();
-        $query = "SELECT id, lang, parent_id, name, description, user_id, group_id, active, show_home, image FROM {$prefix}faqcategories";
+        $query = sprintf(
+            'SELECT id, lang, parent_id, name, description, user_id, group_id, active, show_home, image FROM %sfaqcategories',
+            $prefix,
+        );
         if ($language !== null && preg_match(pattern: '/^[a-z\-]{2,}$/', subject: $language)) {
             $query .= " WHERE lang = '" . $this->configuration->getDb()->escape($language) . "'";
         }
@@ -178,7 +181,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         $result = $this->configuration->getDb()->query($query);
 
         if ($row = $this->configuration->getDb()->fetchObject($result)) {
-            $categoryEntity = new CategoryEntity()
+            return new CategoryEntity()
                 ->setId((int) $row->id)
                 ->setLang($row->lang)
                 ->setParentId((int) $row->parent_id)
@@ -369,6 +372,7 @@ class CategoryRepository implements CategoryRepositoryInterface
             if ($categoryId !== 0) {
                 $whereParts[] = 'id = ' . (int) $categoryId;
             }
+
             $whereParts[] = "lang = '" . $this->configuration->getDb()->escape($existingLanguage) . "'";
             $query = sprintf(
                 'SELECT name, description FROM %sfaqcategories WHERE %s',
@@ -435,6 +439,7 @@ class CategoryRepository implements CategoryRepositoryInterface
                 return (int) $row['cnt'];
             }
         }
+
         return 0;
     }
 
@@ -457,6 +462,7 @@ class CategoryRepository implements CategoryRepositoryInterface
                 return (int) $row['cnt'] > 0;
             }
         }
+
         return false;
     }
 }

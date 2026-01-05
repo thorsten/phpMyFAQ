@@ -38,7 +38,7 @@ final class RegistrationController extends AbstractController
     {
         $registrationHelper = new RegistrationHelper($this->configuration);
 
-        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
         $fullName = trim(strip_tags((string) $data->realname));
         $userName = trim((string) Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS));

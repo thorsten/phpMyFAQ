@@ -38,7 +38,7 @@ final readonly class LatestUsers
     public function getList(int $limit = 5): array
     {
         $users = [];
-        $db = $this->configuration->getDb();
+        $databaseDriver = $this->configuration->getDb();
 
         $query = sprintf(
             'SELECT fu.user_id, fu.login, fu.member_since, fud.display_name FROM %sfaquser fu LEFT JOIN %sfaquserdata fud '
@@ -47,14 +47,14 @@ final readonly class LatestUsers
             Database::getTablePrefix(),
         );
 
-        $result = $db->query($query, 0, $limit);
+        $result = $databaseDriver->query($query, 0, $limit);
         if ($result) {
-            while ($row = $db->fetchArray($result)) {
+            while ($row = $databaseDriver->fetchArray($result)) {
                 $users[] = [
                     'id' => (int) ($row['user_id'] ?? 0),
                     'login' => (string) ($row['login'] ?? ''),
                     'display_name' => (string) ($row['display_name'] ?? ''),
-                    'member_since_iso' => !empty($row['member_since']) ? Date::createIsoDate($row['member_since']) : '',
+                    'member_since_iso' => empty($row['member_since']) ? '' : Date::createIsoDate($row['member_since']),
                 ];
             }
         }

@@ -39,7 +39,7 @@ final class UpdateRunner
     ) {
     }
 
-    public function run(SymfonyStyle $io): int
+    public function run(SymfonyStyle $symfonyStyle): int
     {
         $steps = [
             'taskHealthCheck',
@@ -53,7 +53,7 @@ final class UpdateRunner
         ];
 
         foreach ($steps as $step) {
-            $result = $this->{$step}($io);
+            $result = $this->{$step}($symfonyStyle);
             if (Command::SUCCESS !== $result) {
                 return Command::FAILURE;
             }
@@ -64,25 +64,25 @@ final class UpdateRunner
 
     private string $version = '';
 
-    private function taskHealthCheck(SymfonyStyle $io): int
+    private function taskHealthCheck(SymfonyStyle $symfonyStyle): int
     {
         $upgrade = new Upgrade($this->system, $this->configuration);
         if (!$upgrade->isMaintenanceEnabled()) {
-            $io->warning(Translation::get(key: 'msgNotInMaintenanceMode'));
+            $symfonyStyle->warning(Translation::get(key: 'msgNotInMaintenanceMode'));
         }
 
         try {
             $upgrade->checkFilesystem();
         } catch (\Throwable $throwable) {
-            $io->error(message: 'Error during health check: ' . $throwable->getMessage());
+            $symfonyStyle->error(message: 'Error during health check: ' . $throwable->getMessage());
             return Command::FAILURE;
         }
 
-        $io->success(message: 'Health-Check successful.');
+        $symfonyStyle->success(message: 'Health-Check successful.');
         return Command::SUCCESS;
     }
 
-    private function taskUpdateCheck(SymfonyStyle $io): int
+    private function taskUpdateCheck(SymfonyStyle $symfonyStyle): int
     {
         $dateLastChecked = new DateTime()->format(DateTimeInterface::ATOM);
         $branch = $this->configuration->get(item: 'upgrade.releaseEnvironment');
@@ -96,19 +96,21 @@ final class UpdateRunner
 
             if ($available) {
                 $this->version = $versions[$branch];
-                $io->success(message: Translation::get(key: 'msgCurrentVersion') . $versions[$branch]);
+                $symfonyStyle->success(message: Translation::get(key: 'msgCurrentVersion') . $versions[$branch]);
             } else {
                 $this->version = $versions['installed'];
-                $io->success(message: Translation::get(key: 'versionIsUpToDate') . ' (' . $this->version . ')');
+                $symfonyStyle->success(
+                    message: Translation::get(key: 'versionIsUpToDate') . ' (' . $this->version . ')',
+                );
             }
         } catch (Exception|TransportExceptionInterface|DecodingExceptionInterface $exception) {
-            $io->error(message: 'Error during update check: ' . $exception->getMessage());
+            $symfonyStyle->error(message: 'Error during update check: ' . $exception->getMessage());
         }
 
         return Command::SUCCESS;
     }
 
-    private function taskDownloadPackage(SymfonyStyle $io): int
+    private function taskDownloadPackage(SymfonyStyle $symfonyStyle): int
     {
         $upgrade = new Upgrade($this->system, $this->configuration);
         $pathToPackage = $upgrade->downloadPackage($this->version);
@@ -116,23 +118,23 @@ final class UpdateRunner
         if (!$upgrade->isNightly()) {
             $result = $upgrade->verifyPackage($pathToPackage, $this->version);
             if (!$result) {
-                $io->error(message: Translation::get(key: 'verificationFailure'));
+                $symfonyStyle->error(message: Translation::get(key: 'verificationFailure'));
                 return Command::FAILURE;
             }
         }
 
         $this->configuration->set(key: 'upgrade.lastDownloadedPackage', value: urlencode($pathToPackage));
 
-        $io->success(message: Translation::get(key: 'downloadSuccessful'));
+        $symfonyStyle->success(message: Translation::get(key: 'downloadSuccessful'));
         return Command::SUCCESS;
     }
 
-    private function taskExtractPackage(SymfonyStyle $io): int
+    private function taskExtractPackage(SymfonyStyle $symfonyStyle): int
     {
         $upgrade = new Upgrade($this->system, $this->configuration);
         $pathToPackage = urldecode((string) $this->configuration->get(item: 'upgrade.lastDownloadedPackage'));
 
-        $result = $this->withProgress($io, static function (callable $setProgress) use (
+        $result = $this->withProgress($symfonyStyle, static function (callable $setProgress) use (
             $upgrade,
             $pathToPackage,
         ): bool {
@@ -144,21 +146,24 @@ final class UpdateRunner
         });
 
         if ($result) {
-            $io->success(message: Translation::get(key: 'extractSuccessful'));
+            $symfonyStyle->success(message: Translation::get(key: 'extractSuccessful'));
             return Command::SUCCESS;
         }
 
-        $io->error(message: Translation::get(key: 'extractFailure'));
+        $symfonyStyle->error(message: Translation::get(key: 'extractFailure'));
         return Command::FAILURE;
     }
 
-    private function taskCreateTemporaryBackup(SymfonyStyle $io): int
+    private function taskCreateTemporaryBackup(SymfonyStyle $symfonyStyle): int
     {
         $upgrade = new Upgrade($this->system, $this->configuration);
         $backupHash = md5(uniqid());
         $backupFile = $backupHash . '.zip';
 
-        $result = $this->withProgress($io, static function (callable $setProgress) use ($upgrade, $backupFile): bool {
+        $result = $this->withProgress($symfonyStyle, static function (callable $setProgress) use (
+            $upgrade,
+            $backupFile,
+        ): bool {
             $progressCallback = static function (int $progress) use ($setProgress): void {
                 $setProgress($progress);
             };
@@ -167,20 +172,20 @@ final class UpdateRunner
         });
 
         if ($result) {
-            $io->success(message: 'Backup successful: ' . $backupFile);
+            $symfonyStyle->success(message: 'Backup successful: ' . $backupFile);
             return Command::SUCCESS;
         }
 
-        $io->error(message: 'Backup failed.');
+        $symfonyStyle->error(message: 'Backup failed.');
         return Command::FAILURE;
     }
 
-    private function taskInstallPackage(SymfonyStyle $io): int
+    private function taskInstallPackage(SymfonyStyle $symfonyStyle): int
     {
         $upgrade = new Upgrade($this->system, $this->configuration);
         $environmentConfigurator = new EnvironmentConfigurator($this->configuration);
 
-        $result = $this->withProgress($io, static function (callable $setProgress) use (
+        $result = $this->withProgress($symfonyStyle, static function (callable $setProgress) use (
             $upgrade,
             $environmentConfigurator,
         ): bool {
@@ -193,66 +198,66 @@ final class UpdateRunner
         });
 
         if ($result) {
-            $io->success(message: 'Package successfully installed.');
+            $symfonyStyle->success(message: 'Package successfully installed.');
             return Command::SUCCESS;
         }
 
-        $io->error(message: 'Package installation failed.');
+        $symfonyStyle->error(message: 'Package installation failed.');
         return Command::FAILURE;
     }
 
-    private function taskUpdateDatabase(SymfonyStyle $io): int
+    private function taskUpdateDatabase(SymfonyStyle $symfonyStyle): int
     {
         $update = new Update($this->system, $this->configuration);
         $update->setVersion(System::getVersion());
 
-        $progressBar = $io->createProgressBar(max: 100);
+        $progressBar = $symfonyStyle->createProgressBar(max: 100);
         $progressBar->start();
 
         try {
             $result = $update->applyUpdates();
             $progressBar->finish();
-            $io->newLine(count: 2);
+            $symfonyStyle->newLine(count: 2);
 
             if ($result) {
                 $this->configuration->set(key: 'main.maintenanceMode', value: 'false');
-                $io->success(message: 'Database successfully updated.');
+                $symfonyStyle->success(message: 'Database successfully updated.');
                 return Command::SUCCESS;
             }
 
-            $io->error(message: 'Update database failed.');
+            $symfonyStyle->error(message: 'Update database failed.');
             return Command::FAILURE;
         } catch (Exception $exception) {
             $progressBar->finish();
-            $io->newLine(count: 2);
-            $io->error(message: 'Update database failed: ' . $exception->getMessage());
+            $symfonyStyle->newLine(count: 2);
+            $symfonyStyle->error(message: 'Update database failed: ' . $exception->getMessage());
             return Command::FAILURE;
         }
     }
 
-    private function taskCleanup(SymfonyStyle $io): int
+    private function taskCleanup(SymfonyStyle $symfonyStyle): int
     {
         $upgrade = new Upgrade($this->system, $this->configuration);
         $upgrade->cleanUp();
 
-        $io->success(message: 'Cleanup successful.');
+        $symfonyStyle->success(message: 'Cleanup successful.');
         return Command::SUCCESS;
     }
 
-    private function withProgress(SymfonyStyle $io, callable $fn): bool
+    private function withProgress(SymfonyStyle $symfonyStyle, callable $fn): bool
     {
-        $progressBar = $io->createProgressBar(max: 100);
+        $progressBar = $symfonyStyle->createProgressBar(max: 100);
         $progressBar->start();
 
         $setProgress = static function (int $progress) use ($progressBar): void {
-            $progressBar->setProgress((int) $progress);
+            $progressBar->setProgress($progress);
         };
 
         try {
             $result = (bool) $fn($setProgress);
         } finally {
             $progressBar->finish();
-            $io->newLine(count: 2);
+            $symfonyStyle->newLine(count: 2);
         }
 
         return $result;

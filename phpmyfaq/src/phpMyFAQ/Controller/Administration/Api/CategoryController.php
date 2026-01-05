@@ -100,11 +100,11 @@ final class CategoryController extends AbstractController
 
         $categoryData = $request->attributes->get('categories');
 
-        if ($categoryData === null || $categoryData === '' || $categoryData === false) {
+        if (in_array($categoryData, [null, '', false], true)) {
             $categories = [-1]; // Access for all users and groups
         }
 
-        if ($categoryData !== null && $categoryData !== '' && $categoryData !== false) {
+        if (!in_array($categoryData, [null, '', false], true)) {
             $categories = explode(',', (string) $categoryData);
         }
 

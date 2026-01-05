@@ -49,6 +49,7 @@ final class BreadcrumbsHtmlRenderer
             if (0 === $index) {
                 $oLink->setRelation(rel: 'index');
             }
+
             $items[] = sprintf('<li class="breadcrumb-item">%s</li>', $oLink->toHtmlAnchor());
         }
 

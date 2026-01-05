@@ -60,7 +60,7 @@ class UpdateRunnerTest extends TestCase
             $parameters = $method->getParameters();
             $this->assertCount(1, $parameters, sprintf('Method %s should have exactly one parameter', $methodName));
             $this->assertEquals(
-                'io',
+                'symfonyStyle',
                 $parameters[0]->getName(),
                 sprintf('Parameter name of %s should be io', $methodName),
             );
@@ -83,7 +83,7 @@ class UpdateRunnerTest extends TestCase
 
         $parameters = $method->getParameters();
         $this->assertCount(1, $parameters);
-        $this->assertEquals('io', $parameters[0]->getName());
+        $this->assertEquals('symfonyStyle', $parameters[0]->getName());
 
         $returnType = $method->getReturnType();
         $this->assertNotNull($returnType);

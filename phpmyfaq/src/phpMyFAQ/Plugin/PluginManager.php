@@ -156,13 +156,10 @@ class PluginManager
 
     /**
      * Loads the configuration for a plugin
-     *
-     * @param string $pluginName
-     * @param PluginConfigurationInterface $config
      */
-    public function loadPluginConfig(string $pluginName, PluginConfigurationInterface $config): void
+    public function loadPluginConfig(string $pluginName, PluginConfigurationInterface $pluginConfiguration): void
     {
-        $this->config[$pluginName] = $config;
+        $this->config[$pluginName] = $pluginConfiguration;
     }
 
     /**
@@ -230,7 +227,6 @@ class PluginManager
     /**
      * Registers stylesheets for a plugin
      *
-     * @param string $pluginName
      * @param string[] $stylesheets Relative paths to CSS files
      */
     private function registerPluginStylesheets(string $pluginName, array $stylesheets): void
@@ -249,7 +245,7 @@ class PluginManager
             }
         }
 
-        if (!empty($validatedStylesheets)) {
+        if ($validatedStylesheets !== []) {
             $this->pluginStylesheets[$pluginName] = $validatedStylesheets;
         }
     }
@@ -263,8 +259,8 @@ class PluginManager
     {
         $allStylesheets = [];
 
-        foreach ($this->pluginStylesheets as $stylesheets) {
-            $allStylesheets = array_merge($allStylesheets, $stylesheets);
+        foreach ($this->pluginStylesheets as $pluginStylesheet) {
+            $allStylesheets = array_merge($allStylesheets, $pluginStylesheet);
         }
 
         return $allStylesheets;
@@ -273,7 +269,6 @@ class PluginManager
     /**
      * Returns stylesheets for a specific plugin
      *
-     * @param string $pluginName
      * @return string[]
      */
     public function getPluginStylesheets(string $pluginName): array
@@ -284,7 +279,6 @@ class PluginManager
     /**
      * Registers scripts for a plugin
      *
-     * @param string $pluginName
      * @param string[] $scripts Relative paths to JavaScript files
      */
     private function registerPluginScripts(string $pluginName, array $scripts): void
@@ -303,7 +297,7 @@ class PluginManager
             }
         }
 
-        if (!empty($validatedScripts)) {
+        if ($validatedScripts !== []) {
             $this->pluginScripts[$pluginName] = $validatedScripts;
         }
     }
@@ -317,8 +311,8 @@ class PluginManager
     {
         $allScripts = [];
 
-        foreach ($this->pluginScripts as $scripts) {
-            $allScripts = array_merge($allScripts, $scripts);
+        foreach ($this->pluginScripts as $pluginScript) {
+            $allScripts = array_merge($allScripts, $pluginScript);
         }
 
         return $allScripts;
@@ -327,7 +321,6 @@ class PluginManager
     /**
      * Returns scripts for a specific plugin
      *
-     * @param string $pluginName
      * @return string[]
      */
     public function getPluginScripts(string $pluginName): array

@@ -179,8 +179,6 @@ class Mail
      * Default constructor.
      * Note: any email will be sent from the PMF administrator, use unsetFrom
      * before using setFrom.
-     *
-     * @param Configuration $configuration
      */
     public function __construct(Configuration $configuration)
     {

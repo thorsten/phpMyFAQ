@@ -29,7 +29,7 @@ use phpMyFAQ\Question\QuestionRepository;
  */
 readonly class Question
 {
-    private QuestionRepository $repository;
+    private QuestionRepository $questionRepository;
 
     /**
      * Question constructor.
@@ -37,7 +37,7 @@ readonly class Question
     public function __construct(
         private Configuration $configuration,
     ) {
-        $this->repository = new QuestionRepository($configuration);
+        $this->questionRepository = new QuestionRepository($configuration);
     }
 
     /**
@@ -45,7 +45,7 @@ readonly class Question
      */
     public function add(QuestionEntity $questionEntity): bool
     {
-        return $this->repository->add($questionEntity);
+        return $this->questionRepository->add($questionEntity);
     }
 
     /**
@@ -53,7 +53,7 @@ readonly class Question
      */
     public function delete(int $questionId): bool
     {
-        return $this->repository->delete($questionId, $this->configuration->getLanguage()->getLanguage());
+        return $this->questionRepository->delete($questionId, $this->configuration->getLanguage()->getLanguage());
     }
 
     /**
@@ -63,7 +63,7 @@ readonly class Question
      */
     public function get(int $questionId): array
     {
-        return $this->repository->getById($questionId, $this->configuration->getLanguage()->getLanguage());
+        return $this->questionRepository->getById($questionId, $this->configuration->getLanguage()->getLanguage());
     }
 
     /**
@@ -74,7 +74,7 @@ readonly class Question
     public function getAll(bool $showAll = true): array
     {
         $questions = [];
-        $rows = $this->repository->getAll($this->configuration->getLanguage()->getLanguage(), $showAll);
+        $rows = $this->questionRepository->getAll($this->configuration->getLanguage()->getLanguage(), $showAll);
 
         foreach ($rows as $row) {
             $question = new QuestionEntity();
@@ -100,7 +100,10 @@ readonly class Question
      */
     public function getVisibility(int $questionId): string
     {
-        return $this->repository->getVisibility($questionId, $this->configuration->getLanguage()->getLanguage());
+        return $this->questionRepository->getVisibility(
+            $questionId,
+            $this->configuration->getLanguage()->getLanguage(),
+        );
     }
 
     /**
@@ -108,7 +111,7 @@ readonly class Question
      */
     public function setVisibility(int $questionId, string $isVisible): bool
     {
-        return $this->repository->setVisibility(
+        return $this->questionRepository->setVisibility(
             $questionId,
             $isVisible,
             $this->configuration->getLanguage()->getLanguage(),
@@ -120,6 +123,6 @@ readonly class Question
      */
     public function updateQuestionAnswer(int $openQuestionId, int $faqId, int $categoryId): bool
     {
-        return $this->repository->updateQuestionAnswer($openQuestionId, $faqId, $categoryId);
+        return $this->questionRepository->updateQuestionAnswer($openQuestionId, $faqId, $categoryId);
     }
 }

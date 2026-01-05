@@ -120,7 +120,7 @@ class LanguageHelper
         $output = '';
         foreach (LanguageHelper::getAvailableLanguages() as $key => $value) {
             if ($onlyThisLang) {
-                if (strtolower($key) === $lang) {
+                if (strtolower((string) $key) === $lang) {
                     if ($fileLanguageValue) {
                         $output .= "\t<option value=\"language_" . strtolower($lang) . '.php"';
                     } else {
@@ -133,12 +133,12 @@ class LanguageHelper
                 }
             } else {
                 if ($fileLanguageValue) {
-                    $output .= "\t<option value=\"language_" . strtolower($key) . '.php"';
+                    $output .= "\t<option value=\"language_" . strtolower((string) $key) . '.php"';
                 } else {
-                    $output .= "\t<option value=\"" . strtolower($key) . '"';
+                    $output .= "\t<option value=\"" . strtolower((string) $key) . '"';
                 }
 
-                if (strtolower($key) === $lang) {
+                if (strtolower((string) $key) === $lang) {
                     $output .= ' selected="selected"';
                 }
 

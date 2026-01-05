@@ -373,6 +373,7 @@ class User
             if (!$this->userdata instanceof UserData) {
                 $this->userdata = new UserData($this->configuration);
             }
+
             if ($this->userdata->emailExists($login)) {
                 throw new Exception(self::ERROR_USER_EMAIL_NOT_UNIQUE);
             }
@@ -544,13 +545,13 @@ class User
      */
     public function deleteUser(): bool
     {
-        if (!isset($this->userId) || $this->userId == 0) {
+        if (!isset($this->userId) || $this->userId === 0) {
             $this->errors[] = self::ERROR_USER_NO_USERID;
 
             return false;
         }
 
-        if (!isset($this->login) || strlen($this->login) == 0) {
+        if (!isset($this->login) || $this->login === '') {
             $this->errors[] = self::ERROR_USER_LOGIN_INVALID;
 
             return false;
@@ -693,7 +694,7 @@ class User
         );
 
         $result = $this->configuration->getDb()->query($select);
-        if ($this->configuration->getDb()->numRows($result) != 1) {
+        if ($this->configuration->getDb()->numRows($result) !== 1) {
             $this->errors[] = self::ERROR_USER_NO_USERID . 'error(): ' . $this->configuration->getDb()->error();
 
             return false;
@@ -711,7 +712,7 @@ class User
             );
 
             $res = $this->configuration->getDb()->query($select);
-            if ($this->configuration->getDb()->numRows($res) != 1) {
+            if ($this->configuration->getDb()->numRows($res) !== 1) {
                 $this->errors[] =
                     self::ERROR_USER_NO_USERLOGINDATA . 'error: ' . $this->configuration->getDb()->error();
 

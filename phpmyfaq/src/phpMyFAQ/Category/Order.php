@@ -119,7 +119,6 @@ readonly class Order
      * Returns the category tree.
      *
      * @param array<array{category_id: string, parent_id: string}> $categories
-     * @param int $parentId
      * @param array<int, bool> $visited Array to track visited category IDs to prevent infinite recursion
      */
     public function getCategoryTree(array $categories, int $parentId = 0, array &$visited = []): array

@@ -237,6 +237,7 @@ abstract class AbstractAdministrationController extends AbstractController
                 'update',
             );
         }
+
         $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
             PermissionType::CONFIGURATION_EDIT->value,
             'msgPlugins',
@@ -374,6 +375,7 @@ abstract class AbstractAdministrationController extends AbstractController
         return '';
     }
 
+    #[\Override]
     protected function userHasPermission(PermissionType $permissionType): void
     {
         try {

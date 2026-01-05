@@ -95,8 +95,8 @@ class UserAuthentication
             } else {
                 throw new UserException(Translation::get(key: 'ad_auth_fail') ?? 'Authentication failed');
             }
-        } catch (AuthException $e) {
-            throw new UserException($e->getMessage());
+        } catch (AuthException $authException) {
+            throw new UserException($authException->getMessage());
         }
 
         return $this->currentUser;

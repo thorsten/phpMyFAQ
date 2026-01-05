@@ -31,6 +31,7 @@ use phpMyFAQ\User\CurrentUser;
 final class QuestionService
 {
     private Category $category;
+
     private Forms $forms;
 
     public function __construct(

@@ -37,9 +37,9 @@ final class ErrorController extends AbstractFrontController
      */
     public static function renderBootstrapError(?string $errorMessage = null): Response
     {
-        $loader = new FilesystemLoader(PMF_ROOT_DIR . '/assets/templates/error');
-        $twig = new Environment($loader);
-        $html = $twig->render('500.twig', [
+        $filesystemLoader = new FilesystemLoader(PMF_ROOT_DIR . '/assets/templates/error');
+        $twigEnvironment = new Environment($filesystemLoader);
+        $html = $twigEnvironment->render('500.twig', [
             'errorMessage' => $errorMessage,
         ]);
 
@@ -80,9 +80,9 @@ final class ErrorController extends AbstractFrontController
      */
     private function renderMinimalError(?string $errorMessage = null): Response
     {
-        $loader = new FilesystemLoader(PMF_ROOT_DIR . '/assets/templates/error');
-        $twig = new Environment($loader);
-        $html = $twig->render('500.twig', [
+        $filesystemLoader = new FilesystemLoader(PMF_ROOT_DIR . '/assets/templates/error');
+        $twigEnvironment = new Environment($filesystemLoader);
+        $html = $twigEnvironment->render('500.twig', [
             'errorMessage' => $errorMessage,
         ]);
 

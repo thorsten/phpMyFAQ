@@ -21,6 +21,7 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Api\ProblemDetails;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
+use phpMyFAQ\Controller\Frontend\PageNotFoundController;
 use phpMyFAQ\Core\Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -57,7 +58,7 @@ class Application
         $currentLanguage = $this->setLanguage();
         $this->initializeTranslation($currentLanguage);
         Strings::init($currentLanguage);
-        $request = $request ?? Request::createFromGlobals();
+        $request ??= Request::createFromGlobals();
         $requestContext = new RequestContext();
         $requestContext->fromRequest($request);
         $this->handleRequest($routeCollection, $request, $requestContext);
@@ -145,26 +146,23 @@ class Application
                 $response = $this->createProblemDetailsResponse(
                     request: $request,
                     status: Response::HTTP_NOT_FOUND,
-                    exception: $exception,
+                    throwable: $exception,
                     defaultDetail: 'The requested resource was not found.',
                 );
             } else {
                 // For web requests, forward to the PageNotFoundController
                 try {
                     $request->attributes->set('_route', 'public.404');
-                    $request->attributes->set(
-                        '_controller',
-                        'phpMyFAQ\Controller\Frontend\PageNotFoundController::index',
-                    );
+                    $request->attributes->set('_controller', PageNotFoundController::class . '::index');
                     $controller = $this->controllerResolver->getController($request);
                     $arguments = $argumentResolver->getArguments($request, $controller);
                     $response = call_user_func_array($controller, $arguments);
-                } catch (Throwable $e) {
+                } catch (Throwable) {
                     // Fallback if the controller fails
                     $message = Environment::isDebugMode()
                         ? $this->formatExceptionMessage(
                             template: 'Not Found: :message at line :line at :file',
-                            exception: $exception,
+                            throwable: $exception,
                         )
                         : 'Not Found';
                     $response = new Response(content: $message, status: Response::HTTP_NOT_FOUND);
@@ -175,7 +173,7 @@ class Application
                 $response = $this->createProblemDetailsResponse(
                     request: $request,
                     status: Response::HTTP_UNAUTHORIZED,
-                    exception: $exception,
+                    throwable: $exception,
                     defaultDetail: 'Unauthorized access.',
                 );
             } else {
@@ -186,14 +184,14 @@ class Application
                 $response = $this->createProblemDetailsResponse(
                     request: $request,
                     status: Response::HTTP_FORBIDDEN,
-                    exception: $exception,
+                    throwable: $exception,
                     defaultDetail: 'Access to this resource is forbidden.',
                 );
             } else {
                 $message = Environment::isDebugMode()
                     ? $this->formatExceptionMessage(
                         template: 'An error occurred: :message at line :line at :file',
-                        exception: $exception,
+                        throwable: $exception,
                     )
                     : 'Forbidden';
                 $response = new Response(content: $message, status: Response::HTTP_FORBIDDEN);
@@ -203,14 +201,14 @@ class Application
                 $response = $this->createProblemDetailsResponse(
                     request: $request,
                     status: Response::HTTP_BAD_REQUEST,
-                    exception: $exception,
+                    throwable: $exception,
                     defaultDetail: 'The request could not be understood or was missing required parameters.',
                 );
             } else {
                 $message = Environment::isDebugMode()
                     ? $this->formatExceptionMessage(
                         template: 'An error occurred: :message at line :line at :file',
-                        exception: $exception,
+                        throwable: $exception,
                     )
                     : 'Bad Request';
                 $response = new Response(content: $message, status: Response::HTTP_BAD_REQUEST);
@@ -228,14 +226,14 @@ class Application
                 $response = $this->createProblemDetailsResponse(
                     request: $request,
                     status: Response::HTTP_INTERNAL_SERVER_ERROR,
-                    exception: $exception,
+                    throwable: $exception,
                     defaultDetail: 'An unexpected error occurred while processing your request.',
                 );
             } else {
                 $message = Environment::isDebugMode()
                     ? $this->formatExceptionMessage(
                         template: 'Internal Server Error: :message at line :line at :file',
-                        exception: $exception,
+                        throwable: $exception,
                     )
                     : 'Internal Server Error';
                 $response = new Response(content: $message, status: Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -248,12 +246,12 @@ class Application
     /**
      * Formats an exception message from a template with named placeholders.
      */
-    private function formatExceptionMessage(string $template, Throwable $exception): string
+    private function formatExceptionMessage(string $template, Throwable $throwable): string
     {
         return strtr($template, [
-            ':message' => $exception->getMessage(),
-            ':line' => (string) $exception->getLine(),
-            ':file' => $exception->getFile(),
+            ':message' => $throwable->getMessage(),
+            ':line' => (string) $throwable->getLine(),
+            ':file' => $throwable->getFile(),
         ]);
     }
 
@@ -263,7 +261,7 @@ class Application
     private function createProblemDetailsResponse(
         Request $request,
         int $status,
-        Throwable $exception,
+        Throwable $throwable,
         string $defaultDetail,
     ): Response {
         $configuration = $this->container->get(id: 'phpmyfaq.configuration');
@@ -294,7 +292,7 @@ class Application
         };
 
         $detail = Environment::isDebugMode()
-            ? $exception->getMessage() . ' at line ' . $exception->getLine() . ' in ' . $exception->getFile()
+            ? $throwable->getMessage() . ' at line ' . $throwable->getLine() . ' in ' . $throwable->getFile()
             : $defaultDetail;
 
         $problemDetails = new ProblemDetails(

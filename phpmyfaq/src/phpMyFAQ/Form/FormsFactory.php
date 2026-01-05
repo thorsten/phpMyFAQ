@@ -25,8 +25,10 @@ use phpMyFAQ\Forms;
 
 final class FormsFactory
 {
-    public static function create(Configuration $configuration, ?FormsRepositoryInterface $repository = null): Forms
-    {
-        return new Forms($configuration, $repository);
+    public static function create(
+        Configuration $configuration,
+        ?FormsRepositoryInterface $formsRepository = null,
+    ): Forms {
+        return new Forms($configuration, $formsRepository);
     }
 }

@@ -33,17 +33,16 @@ use stdClass;
  */
 readonly class News
 {
-    /** @var NewsRepositoryInterface */
-    private NewsRepositoryInterface $repository;
+    private NewsRepositoryInterface $newsRepository;
 
     /**
      * Constructor.
      */
     public function __construct(
         private Configuration $configuration,
-        ?NewsRepositoryInterface $repository = null,
+        ?NewsRepositoryInterface $newsRepository = null,
     ) {
-        $this->repository = $repository ?? new NewsRepository($this->configuration);
+        $this->newsRepository = $newsRepository ?? new NewsRepository($this->configuration);
     }
 
     /**
@@ -63,7 +62,7 @@ readonly class News
             ? null
             : ($active ? (int) $this->configuration->get(item: 'records.numberOfShownNewsEntries') : null);
 
-        foreach ($this->repository->getLatest($language, $active, $limit) as $row) {
+        foreach ($this->newsRepository->getLatest($language, $active, $limit) as $row) {
             $entry = new stdClass();
             $link = '%sindex.php?action=news&newsid=%d&newslang=%s';
             $url = sprintf($link, $this->configuration->getDefaultUrl(), $row->id, $row->lang);
@@ -75,6 +74,7 @@ readonly class News
             $entry->date = $date->format($row->datum);
             $output[] = $entry;
         }
+
         return $output;
     }
 
@@ -102,7 +102,8 @@ readonly class News
                 $limit = $configuredLimit;
             }
         }
-        foreach ($this->repository->getLatest($language, $active, $limit) as $row) {
+
+        foreach ($this->newsRepository->getLatest($language, $active, $limit) as $row) {
             // original conditional logic preserved implicitly by limit handling
             $link = '%sindex.php?action=news&newsid=%d&newslang=%s';
             $url = sprintf($link, $this->configuration->getDefaultUrl(), $row->id, $row->lang);
@@ -125,6 +126,7 @@ readonly class News
             ];
             $news[] = $item;
         }
+
         return $news;
     }
 
@@ -135,15 +137,16 @@ readonly class News
     {
         $headers = [];
         $language = $this->configuration->getLanguage()->getLanguage();
-        foreach ($this->repository->getHeaders($language) as $row) {
+        foreach ($this->newsRepository->getHeaders($language) as $header) {
             $headers[] = [
-                'id' => $row->id,
-                'lang' => $row->lang,
-                'header' => $row->header,
-                'date' => Date::createIsoDate($row->datum),
-                'active' => $row->active,
+                'id' => $header->id,
+                'lang' => $header->lang,
+                'header' => $header->header,
+                'date' => Date::createIsoDate($header->datum),
+                'active' => $header->active,
             ];
         }
+
         return $headers;
     }
 
@@ -152,20 +155,21 @@ readonly class News
      *
      * @param int  $newsId ID of news
      * @param bool $admin Is admin
-     * @return array
      */
     public function get(int $newsId, bool $admin = false): array
     {
-        $row = $this->repository->getById($newsId, $this->configuration->getLanguage()->getLanguage());
+        $row = $this->newsRepository->getById($newsId, $this->configuration->getLanguage()->getLanguage());
         if (!$row) {
             return [];
         }
+
         $content = $row->artikel;
         $active = 'y' === $row->active;
         $allowComments = 'y' === $row->comment;
         if (!$admin && !$active) {
             $content = Translation::get(key: 'err_inactiveNews');
         }
+
         return [
             'id' => $row->id,
             'lang' => $row->lang,
@@ -189,7 +193,7 @@ readonly class News
      */
     public function create(NewsMessage $newsMessage): bool
     {
-        return $this->repository->insert($newsMessage);
+        return $this->newsRepository->insert($newsMessage);
     }
 
     /**
@@ -199,7 +203,7 @@ readonly class News
      */
     public function update(NewsMessage $newsMessage): bool
     {
-        return $this->repository->update($newsMessage);
+        return $this->newsRepository->update($newsMessage);
     }
 
     /**
@@ -210,7 +214,7 @@ readonly class News
      */
     public function delete(int $newsId): bool
     {
-        return $this->repository->delete($newsId, $this->configuration->getLanguage()->getLanguage());
+        return $this->newsRepository->delete($newsId, $this->configuration->getLanguage()->getLanguage());
     }
 
     /**
@@ -220,11 +224,11 @@ readonly class News
      */
     public function activate(int $newsId): bool
     {
-        return $this->repository->activate($newsId, status: true);
+        return $this->newsRepository->activate($newsId, status: true);
     }
 
     public function deactivate(int $newsId): bool
     {
-        return $this->repository->activate($newsId, status: false);
+        return $this->newsRepository->activate($newsId, status: false);
     }
 }

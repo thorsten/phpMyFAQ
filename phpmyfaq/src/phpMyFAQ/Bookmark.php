@@ -31,11 +31,11 @@ class Bookmark
     /**
      * @var array<int, object>|null
      */
-    private ?array $bookmarkCache;
+    private ?array $bookmarkCache = null;
 
-    private readonly BookmarkRepository $repository;
+    private readonly BookmarkRepository $bookmarkRepository;
 
-    private readonly BookmarkFormatter $formatter;
+    private readonly BookmarkFormatter $bookmarkFormatter;
 
     /**
      * Constructor.
@@ -47,9 +47,8 @@ class Bookmark
         private readonly Configuration $configuration,
         private readonly CurrentUser $currentUser,
     ) {
-        $this->bookmarkCache = null;
-        $this->repository = new BookmarkRepository($this->configuration, $this->currentUser);
-        $this->formatter = new BookmarkFormatter($this->configuration, $this->currentUser);
+        $this->bookmarkRepository = new BookmarkRepository($this->configuration, $this->currentUser);
+        $this->bookmarkFormatter = new BookmarkFormatter($this->configuration, $this->currentUser);
     }
 
     /**
@@ -87,7 +86,7 @@ class Bookmark
      */
     public function add(int $faqId): bool
     {
-        $result = $this->repository->add($faqId);
+        $result = $this->bookmarkRepository->add($faqId);
 
         if ($result) {
             $this->bookmarkCache = null;
@@ -107,7 +106,7 @@ class Bookmark
             return $this->bookmarkCache;
         }
 
-        $this->bookmarkCache = $this->repository->getAll();
+        $this->bookmarkCache = $this->bookmarkRepository->getAll();
 
         return $this->bookmarkCache;
     }
@@ -119,7 +118,7 @@ class Bookmark
      */
     public function remove(int $faqId): bool
     {
-        $result = $this->repository->remove($faqId);
+        $result = $this->bookmarkRepository->remove($faqId);
 
         if ($result) {
             $this->bookmarkCache = null;
@@ -133,7 +132,7 @@ class Bookmark
      */
     public function removeAll(): bool
     {
-        $result = $this->repository->removeAll();
+        $result = $this->bookmarkRepository->removeAll();
 
         if ($result) {
             $this->bookmarkCache = null;
@@ -151,7 +150,7 @@ class Bookmark
         $list = [];
 
         foreach ($bookmarks as $bookmark) {
-            $item = $this->formatter->format($bookmark);
+            $item = $this->bookmarkFormatter->format($bookmark);
             if ($item !== null) {
                 $list[] = $item;
             }

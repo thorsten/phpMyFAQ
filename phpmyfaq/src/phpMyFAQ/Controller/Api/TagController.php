@@ -56,6 +56,7 @@ final class TagController extends AbstractController
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
         $tags->setUser($currentUser);
         $tags->setGroups($currentGroups);
+
         $result = $tags->getPopularTagsAsArray(limit: 16);
         if ((is_countable($result) ? count($result) : 0) === 0) {
             return $this->json([], Response::HTTP_NOT_FOUND);

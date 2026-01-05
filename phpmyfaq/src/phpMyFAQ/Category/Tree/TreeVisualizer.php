@@ -22,7 +22,7 @@ namespace phpMyFAQ\Category\Tree;
 final readonly class TreeVisualizer
 {
     public function __construct(
-        private TreePathResolver $pathResolver,
+        private TreePathResolver $treePathResolver,
     ) {
     }
 
@@ -35,16 +35,18 @@ final readonly class TreeVisualizer
      */
     public function buildTree(array $categoryName, array $childrenMap, int $categoryId): array
     {
-        $ascendants = $this->pathResolver->getNodes($categoryName, $categoryId);
+        $ascendants = $this->treePathResolver->getNodes($categoryName, $categoryId);
         $tree = [];
         foreach ($ascendants as $i => $ascendantId) {
             if ($ascendantId === 0) {
                 break;
             }
-            $brothers = $this->pathResolver->getBrothers($categoryName, $childrenMap, (int) $ascendantId);
+
+            $brothers = $this->treePathResolver->getBrothers($categoryName, $childrenMap, (int) $ascendantId);
             $last = end($brothers);
             $tree[$i] = $ascendantId === $last ? 'space' : 'vertical';
         }
+
         return $tree;
     }
 }

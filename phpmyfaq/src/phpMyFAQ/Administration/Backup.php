@@ -42,8 +42,7 @@ use ZipArchive;
  */
 readonly class Backup
 {
-    /** @var BackupRepository */
-    private BackupRepository $repository;
+    private BackupRepository $backupRepository;
 
     /**
      * Constructor.
@@ -52,7 +51,7 @@ readonly class Backup
         private Configuration $configuration,
         private DatabaseHelper $databaseHelper,
     ) {
-        $this->repository = new BackupRepository($this->configuration);
+        $this->backupRepository = new BackupRepository($this->configuration);
     }
 
     /**
@@ -170,10 +169,8 @@ readonly class Backup
             case BackupType::BACKUP_TYPE_LOGS:
                 foreach ($tables as $table) {
                     if (
-                        !(
-                            Database::getTablePrefix() . 'faqadminlog' === trim((string) $table)
-                            || Database::getTablePrefix() . 'faqsessions' === trim((string) $table)
-                        )
+                        Database::getTablePrefix() . 'faqadminlog' !== trim((string) $table)
+                        && Database::getTablePrefix() . 'faqsessions' !== trim((string) $table)
                     ) {
                         continue;
                     }
@@ -249,13 +246,13 @@ readonly class Backup
      * @throws \Exception
      *
      */
-    public function export(BackupType $type): BackupExportResult
+    public function export(BackupType $backupType): BackupExportResult
     {
-        $tableNames = $this->getBackupTableNames($type);
+        $tableNames = $this->getBackupTableNames($backupType);
 
         $backupContent = $this->generateBackupQueries($tableNames);
 
-        $fileName = $this->createBackup($type->value, $backupContent);
+        $fileName = $this->createBackup($backupType->value, $backupContent);
 
         return new BackupExportResult($fileName, $backupContent);
     }
@@ -287,12 +284,12 @@ readonly class Backup
         $tables = explode(separator: ' ', string: $tablesLine);
 
         $queries = [];
-        foreach ($tables as $tableName) {
-            if ('' === $tableName) {
+        foreach ($tables as $table) {
+            if ('' === $table) {
                 continue;
             }
 
-            $queries[] = sprintf('DELETE FROM %s', $tableName);
+            $queries[] = sprintf('DELETE FROM %s', $table);
         }
 
         $tablePrefix = '';
@@ -331,7 +328,7 @@ readonly class Backup
      */
     public function executeBackupQueries(array $queries, string $tablePrefix): BackupExecuteResult
     {
-        $db = $this->configuration->getDb();
+        $databaseDriver = $this->configuration->getDb();
 
         $ok = 0;
         $failed = 0;
@@ -341,11 +338,11 @@ readonly class Backup
         foreach ($queries as $query) {
             $alignedQuery = $this->databaseHelper::alignTablePrefix($query, $tablePrefix, Database::getTablePrefix());
 
-            $result = $db->query($alignedQuery);
+            $result = $databaseDriver->query($alignedQuery);
             if (!$result) {
                 ++$failed;
                 $lastErrorQuery = $alignedQuery;
-                $lastErrorReason = $db->error();
+                $lastErrorReason = $databaseDriver->error();
 
                 continue;
             }
@@ -363,6 +360,6 @@ readonly class Backup
 
     private function getRepository(): BackupRepository
     {
-        return $this->repository;
+        return $this->backupRepository;
     }
 }

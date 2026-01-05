@@ -152,13 +152,6 @@ class Strings
 
     /**
      * Search and replace by a regexp using a callback.
-     *
-     * @param string $pattern
-     * @param callable $callback
-     * @param string|array $subject
-     * @param int $limit
-     * @param int $count
-     * @return string|array|null
      */
     public static function preg_replace_callback(
         string $pattern,

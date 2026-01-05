@@ -225,7 +225,7 @@ class System
 
     public static function isDevelopmentVersion(): bool
     {
-        return strlen(self::VERSION_PRE_RELEASE) > 0;
+        return self::VERSION_PRE_RELEASE !== '';
     }
 
     public function getDatabase(): ?DatabaseDriver

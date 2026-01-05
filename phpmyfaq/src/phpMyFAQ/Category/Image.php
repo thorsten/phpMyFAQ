@@ -134,11 +134,8 @@ class Image
             }
 
             // Ensure destination directory exists
-            if (!is_dir(self::UPLOAD_DIR)) {
-                if (!@mkdir(self::UPLOAD_DIR, 0o775, true) && !is_dir(self::UPLOAD_DIR)) {
-                    throw new Exception('Upload directory does not exist and could not be created: '
-                    . self::UPLOAD_DIR);
-                }
+            if (!is_dir(self::UPLOAD_DIR) && (!@mkdir(self::UPLOAD_DIR, 0o775, true) && !is_dir(self::UPLOAD_DIR))) {
+                throw new Exception('Upload directory does not exist and could not be created: ' . self::UPLOAD_DIR);
             }
 
             $this->uploadedFile->move(self::UPLOAD_DIR, $this->fileName);

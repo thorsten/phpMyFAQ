@@ -46,9 +46,11 @@ final readonly class ProblemDetails
         if ($this->code !== null) {
             $data['code'] = $this->code;
         }
+
         if ($this->errors !== null) {
             $data['errors'] = $this->errors;
         }
+
         if ($this->traceId !== null) {
             $data['traceId'] = $this->traceId;
         }

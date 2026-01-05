@@ -32,13 +32,13 @@ use phpMyFAQ\Seo\SeoRepositoryInterface;
  */
 readonly class Seo
 {
-    private SeoRepositoryInterface $repository;
+    private SeoRepositoryInterface $seoRepository;
 
     public function __construct(
         private Configuration $configuration,
-        ?SeoRepositoryInterface $repository = null,
+        ?SeoRepositoryInterface $seoRepository = null,
     ) {
-        $this->repository = $repository ?? new SeoRepository($this->configuration);
+        $this->seoRepository = $seoRepository ?? new SeoRepository($this->configuration);
     }
 
     /**
@@ -46,7 +46,7 @@ readonly class Seo
      */
     public function create(SeoEntity $seoEntity): bool
     {
-        return $this->repository->create($seoEntity);
+        return $this->seoRepository->create($seoEntity);
     }
 
     /**
@@ -54,7 +54,7 @@ readonly class Seo
      */
     public function get(SeoEntity $seoEntity): SeoEntity
     {
-        return $this->repository->get($seoEntity);
+        return $this->seoRepository->get($seoEntity);
     }
 
     /**
@@ -62,7 +62,7 @@ readonly class Seo
      */
     public function update(SeoEntity $seoEntity): bool
     {
-        return $this->repository->update($seoEntity);
+        return $this->seoRepository->update($seoEntity);
     }
 
     /**
@@ -70,7 +70,7 @@ readonly class Seo
      */
     public function delete(SeoEntity $seoEntity): bool
     {
-        return $this->repository->delete($seoEntity);
+        return $this->seoRepository->delete($seoEntity);
     }
 
     public function getMetaRobots(string $action): string

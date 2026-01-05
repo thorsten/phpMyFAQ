@@ -479,6 +479,7 @@ final class FaqController extends AbstractController
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
         $faq->getAllFaqs(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $this->configuration->getLanguage()->getLanguage()]);
+
         $result = $faq->faqRecords;
 
         if ((is_countable($result) ? count($result) : 0) === 0) {

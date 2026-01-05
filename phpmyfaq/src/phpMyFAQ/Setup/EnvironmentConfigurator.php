@@ -106,9 +106,10 @@ readonly class EnvironmentConfigurator
         if ($errorDocument404) {
             // Get current arguments and clear them
             $currentArgs = $errorDocument404->getArguments();
-            foreach ($currentArgs as $arg) {
-                $errorDocument404->removeArgument($arg);
+            foreach ($currentArgs as $currentArg) {
+                $errorDocument404->removeArgument($currentArg);
             }
+
             // Set new arguments: error code and path
             $new404Path = rtrim($this->getServerPath(), '/') . '/404.html';
             $errorDocument404->setArguments(['404', $new404Path]);

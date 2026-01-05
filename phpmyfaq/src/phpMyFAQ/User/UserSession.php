@@ -96,7 +96,7 @@ class UserSession
         );
         $result = $this->configuration->getDb()->query($query);
 
-        if ($this->configuration->getDb()->numRows($result) == 0) {
+        if ($this->configuration->getDb()->numRows($result) === 0) {
             $this->userTracking(SessionActionType::OLD_SESSION->value, $sessionIdToCheck);
         } else {
             // Update global session id

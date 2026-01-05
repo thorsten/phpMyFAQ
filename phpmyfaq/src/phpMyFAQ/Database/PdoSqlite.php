@@ -150,6 +150,7 @@ class PdoSqlite implements DatabaseDriver
                 if ($stmt === false) {
                     return 0;
                 }
+
                 $row = $stmt->fetch(PDO::FETCH_NUM);
                 return isset($row[0]) ? (int) $row[0] : 0;
             }

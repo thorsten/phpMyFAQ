@@ -160,13 +160,16 @@ final class ConfigurationTabController extends AbstractController
         // For checkboxes: if field is available but not in configurationData, set to false
         // For other fields: keep original value if not in configurationData
         if ($availableFields !== [] && $availableFields !== null) {
-            foreach ($availableFields as $fieldKey) {
-                if (array_key_exists($fieldKey, $newConfigValues)) {
+            foreach ($availableFields as $availableField) {
+                if (array_key_exists($availableField, $newConfigValues)) {
                     continue;
                 }
 
-                if (isset($oldConfigurationData[$fieldKey]) && $oldConfigurationData[$fieldKey] === 'true') {
-                    $newConfigValues[$fieldKey] = 'false';
+                if (
+                    isset($oldConfigurationData[$availableField])
+                    && $oldConfigurationData[$availableField] === 'true'
+                ) {
+                    $newConfigValues[$availableField] = 'false';
                 }
             }
         }
@@ -238,7 +241,7 @@ final class ConfigurationTabController extends AbstractController
 
         foreach ($templates as $template => $selected) {
             $selectedAttribute = $selected === true ? ' selected' : '';
-            $htmlString .= "<option{$selectedAttribute}>{$template}</option>";
+            $htmlString .= sprintf('<option%s>%s</option>', $selectedAttribute, $template);
         }
 
         return $response->setContent($htmlString);

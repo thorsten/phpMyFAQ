@@ -64,7 +64,7 @@ class Tags
     public function setGroups(array $groups): Tags
     {
         // Ensure all values are integers for security
-        $this->groups = array_map('intval', $groups);
+        $this->groups = array_map(intval(...), $groups);
         return $this;
     }
 

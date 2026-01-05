@@ -74,7 +74,7 @@ class UserData
         );
 
         $res = $this->configuration->getDb()->query($select);
-        if ($this->configuration->getDb()->numRows($res) != 1) {
+        if ($this->configuration->getDb()->numRows($res) !== 1) {
             return false;
         }
 
@@ -134,7 +134,7 @@ class UserData
         );
 
         $res = $this->configuration->getDb()->query($select);
-        if ($this->configuration->getDb()->numRows($res) != 1) {
+        if ($this->configuration->getDb()->numRows($res) !== 1) {
             return ['user_id' => -1];
         }
 
@@ -181,7 +181,7 @@ class UserData
      */
     public function load(int $userId): bool
     {
-        if ($userId <= 0 && $userId != -1) {
+        if ($userId <= 0 && $userId !== -1) {
             return false;
         }
 
@@ -250,7 +250,7 @@ class UserData
      */
     public function add(int $userId): bool
     {
-        if ($userId <= 0 && $userId != -1) {
+        if ($userId <= 0 && $userId !== -1) {
             return false;
         }
 
@@ -279,7 +279,7 @@ class UserData
      */
     public function delete(int $userId): bool
     {
-        if ($userId <= 0 && $userId != -1) {
+        if ($userId <= 0 && $userId !== -1) {
             return false;
         }
 
@@ -304,7 +304,7 @@ class UserData
      */
     public function emailExists(string $email): bool
     {
-        if (empty($email)) {
+        if ($email === '' || $email === '0') {
             return false;
         }
 

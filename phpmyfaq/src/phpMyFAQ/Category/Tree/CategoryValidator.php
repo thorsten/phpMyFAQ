@@ -23,15 +23,13 @@ final class CategoryValidator
 {
     /**
      * Validates if a category array has required fields.
-     *
-     * @param mixed $category
-     * @return bool
      */
     public function isValidCategory(mixed $category): bool
     {
         if (!is_array($category)) {
             return false;
         }
+
         return array_key_exists(key: 'parent_id', array: $category) && array_key_exists(key: 'id', array: $category);
     }
 
@@ -45,9 +43,11 @@ final class CategoryValidator
         if (!isset($category['parent_id'])) {
             return false;
         }
+
         if ((int) $category['parent_id'] !== $parentId) {
             return false;
         }
+
         return is_int($categoryId) && $categoryId > 0;
     }
 
@@ -67,6 +67,7 @@ final class CategoryValidator
 
             $children[] = $categoryId;
         }
+
         return $children;
     }
 }

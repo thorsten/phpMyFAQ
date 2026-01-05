@@ -24,15 +24,15 @@ use phpMyFAQ\Configuration as CoreConfiguration;
 readonly class MailSettings
 {
     public function __construct(
-        private CoreConfiguration $configuration,
+        private CoreConfiguration $coreConfiguration,
     ) {
     }
 
     public function getNoReplyEmail(): string
     {
-        $sender = $this->configuration->get(item: 'mail.noReplySenderAddress');
+        $sender = $this->coreConfiguration->get(item: 'mail.noReplySenderAddress');
         if ($sender === '' || $sender === null) {
-            return $this->configuration->get(item: 'main.administrationMail');
+            return $this->coreConfiguration->get(item: 'main.administrationMail');
         }
 
         return (string) $sender;

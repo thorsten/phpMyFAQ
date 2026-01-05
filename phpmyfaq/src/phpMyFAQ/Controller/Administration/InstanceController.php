@@ -126,7 +126,7 @@ final class InstanceController extends AbstractAdministrationController
             $result = ['updateError' => $this->configuration->getDb()->error()];
         }
 
-        if (!is_null($instanceEntity->getUrl()) && $updatedClient->update($instanceId, $instanceEntity)) {
+        if ($updatedClient->update($instanceId, $instanceEntity)) {
             if ($moveInstance) {
                 $updatedClient->moveClientFolder($originalData->url, $instanceEntity->getUrl());
                 $updatedClient->deleteClientFolder($originalData->url);
@@ -135,7 +135,7 @@ final class InstanceController extends AbstractAdministrationController
             $result = ['updateSuccess' => Translation::get(key: 'ad_config_saved')];
         }
 
-        if (!is_null($instanceEntity->getUrl()) && !$updatedClient->update($instanceId, $instanceEntity)) {
+        if (!$updatedClient->update($instanceId, $instanceEntity)) {
             $result = ['updateError' => $this->configuration->getDb()->error()];
         }
 

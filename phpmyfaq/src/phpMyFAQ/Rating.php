@@ -38,16 +38,15 @@ readonly class Rating
     /**
      * Rating repository.
      */
-    private RatingRepository $repository;
+    private RatingRepository $ratingRepository;
 
     /**
      * Constructor.
      */
-    public function __construct(
-        private Configuration $configuration,
-    ) {
+    public function __construct(Configuration $configuration)
+    {
         $this->plurals = new Plurals();
-        $this->repository = new RatingRepository($configuration);
+        $this->ratingRepository = new RatingRepository($configuration);
     }
 
     /**
@@ -55,7 +54,7 @@ readonly class Rating
      */
     public function get(int $id): string
     {
-        $row = $this->repository->fetchByRecordId($id);
+        $row = $this->ratingRepository->fetchByRecordId($id);
 
         if ($row !== null) {
             return sprintf(
@@ -76,7 +75,7 @@ readonly class Rating
      */
     public function check(int $id, string $ip): bool
     {
-        return $this->repository->isVoteAllowed($id, $ip);
+        return $this->ratingRepository->isVoteAllowed($id, $ip);
     }
 
     /**
@@ -84,7 +83,7 @@ readonly class Rating
      */
     public function getNumberOfVotings(int $recordId): int
     {
-        return $this->repository->getNumberOfVotings($recordId);
+        return $this->ratingRepository->getNumberOfVotings($recordId);
     }
 
     /**
@@ -92,7 +91,7 @@ readonly class Rating
      */
     public function create(Vote $vote): bool
     {
-        return $this->repository->create($vote);
+        return $this->ratingRepository->create($vote);
     }
 
     /**
@@ -100,7 +99,7 @@ readonly class Rating
      */
     public function update(Vote $vote): bool
     {
-        return $this->repository->update($vote);
+        return $this->ratingRepository->update($vote);
     }
 
     /**
@@ -108,6 +107,6 @@ readonly class Rating
      */
     public function deleteAll(): bool
     {
-        return $this->repository->deleteAll();
+        return $this->ratingRepository->deleteAll();
     }
 }

@@ -24,8 +24,11 @@ use phpMyFAQ\Strings;
 final class TitleSlugifier
 {
     private const string REGEX_MULTI_DASH = '/-{2,}/m';
+
     private const string REGEX_INNER_DASH = '/(?<=\w)-(?=\w)/m';
+
     private const string REGEX_WHITESPACE = '/\s+/m';
+
     private const array PUNCTUATION = [
         '+',
         ',',
@@ -45,6 +48,7 @@ final class TitleSlugifier
         '>',
         '%',
     ];
+
     private const array UMLAUTS = [
         'à',
         'è',
@@ -68,6 +72,7 @@ final class TitleSlugifier
         'ū',
         'ž',
     ];
+
     private const array UMLAUTS_REPLACEMENTS = [
         'a',
         'e',

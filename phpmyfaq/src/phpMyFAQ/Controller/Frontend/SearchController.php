@@ -42,7 +42,7 @@ final class SearchController extends AbstractFrontController
      * @throws Exception
      */
     #[Route(path: '/tags/{tagId}/{page}/{slug}.html', name: 'public.tags.paginated', methods: ['GET'])]
-    public function tagsPaginated(Request $request): Response
+    public function tagsPaginated(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         $tagId = Filter::filterVar($request->attributes->get('tagId'), FILTER_VALIDATE_INT, 0);
         $page = Filter::filterVar($request->attributes->get('page'), FILTER_VALIDATE_INT, 1);
@@ -56,7 +56,7 @@ final class SearchController extends AbstractFrontController
      * @throws Exception
      */
     #[Route(path: '/tags/{tagId}/{slug}.html', name: 'public.tags', methods: ['GET'])]
-    public function tags(Request $request): Response
+    public function tags(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         $tagId = Filter::filterVar($request->attributes->get('tagId'), FILTER_VALIDATE_INT, 0);
 
@@ -76,6 +76,7 @@ final class SearchController extends AbstractFrontController
         $inputCategory = Filter::filterVar($request->query->get('pmf-search-category'), FILTER_VALIDATE_INT, '%');
         $inputSearchTerm = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
         $inputSearchTerm = Strings::substr($inputSearchTerm, 0, 255);
+
         $inputTag = Filter::filterVar($request->query->get('tagging_id'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!is_null($inputTag)) {
@@ -85,11 +86,11 @@ final class SearchController extends AbstractFrontController
 
         $searchTerm = Filter::filterVar($request->attributes->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
         $searchTerm = Strings::substr($searchTerm, 0, 255);
+
         $page = Filter::filterVar($request->query->get('seite'), FILTER_VALIDATE_INT, 1);
 
         // Determine search language scope
         $allLanguages = $inputLanguage !== '';
-        $languages = $allLanguages ? '&langs=all' : '';
 
         // Merge search terms
         if ($searchTerm !== '') {
@@ -119,8 +120,8 @@ final class SearchController extends AbstractFrontController
 
         // Check for solution ID redirect
         if ($searchService->shouldRedirectToSolutionId($inputSearchTerm, $searchData['numberOfSearchResults'])) {
-            $response = new RedirectResponse($searchService->getSolutionIdRedirectUrl($inputSearchTerm));
-            $response->send();
+            $redirectResponse = new RedirectResponse($searchService->getSolutionIdRedirectUrl($inputSearchTerm));
+            $redirectResponse->send();
             exit();
         }
 

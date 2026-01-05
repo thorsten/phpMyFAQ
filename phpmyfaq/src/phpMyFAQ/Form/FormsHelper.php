@@ -44,18 +44,24 @@ final class FormsHelper
                 $seenIds[] = $entry->input_id;
                 continue;
             }
+
             $fallbackCandidates[] = $entry;
         }
 
-        foreach ($fallbackCandidates as $candidate) {
-            if (!($candidate->input_lang === 'default' && !in_array($candidate->input_id, $seenIds, strict: true))) {
+        foreach ($fallbackCandidates as $fallbackCandidate) {
+            if (
+                !(
+                    $fallbackCandidate->input_lang === 'default'
+                    && !in_array($fallbackCandidate->input_id, $seenIds, strict: true)
+                )
+            ) {
                 continue;
             }
 
-            $filteredEntries[] = $candidate;
+            $filteredEntries[] = $fallbackCandidate;
         }
 
-        usort($filteredEntries, static fn(object $a, object $b) => $a->input_id <=> $b->input_id);
+        usort($filteredEntries, static fn(object $a, object $b): int => $a->input_id <=> $b->input_id);
         return $filteredEntries;
     }
 }

@@ -27,28 +27,28 @@ use Symfony\Component\DependencyInjection\Reference;
 
 final class FormsServiceProvider
 {
-    public static function register(ContainerBuilder $container): void
+    public static function register(ContainerBuilder $containerBuilder): void
     {
         // Repository Definition (concrete)
-        if (!$container->has(FormsRepository::class)) {
+        if (!$containerBuilder->has(FormsRepository::class)) {
             $repoDef = new Definition(FormsRepository::class);
             $repoDef->setArgument(0, new Reference('phpmyfaq.configuration'));
             $repoDef->setPublic(true);
-            $container->setDefinition(FormsRepository::class, $repoDef);
+            $containerBuilder->setDefinition(FormsRepository::class, $repoDef);
         }
 
         // Interface Alias -> concrete Repository
-        if (!$container->has(FormsRepositoryInterface::class)) {
-            $container->setAlias(FormsRepositoryInterface::class, new Alias(FormsRepository::class, true));
+        if (!$containerBuilder->has(FormsRepositoryInterface::class)) {
+            $containerBuilder->setAlias(FormsRepositoryInterface::class, new Alias(FormsRepository::class, true));
         }
 
         // Forms service
-        if (!$container->has(Forms::class)) {
+        if (!$containerBuilder->has(Forms::class)) {
             $formsDef = new Definition(Forms::class);
             $formsDef->setArgument(0, new Reference('phpmyfaq.configuration'));
             $formsDef->setArgument(1, new Reference(FormsRepositoryInterface::class));
             $formsDef->setPublic(true);
-            $container->setDefinition(Forms::class, $formsDef);
+            $containerBuilder->setDefinition(Forms::class, $formsDef);
         }
     }
 }
