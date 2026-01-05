@@ -61,7 +61,7 @@ final class RatingController extends AbstractAdministrationController
             'currentCategory' => $currentCategory,
             'ratingData' => $data,
             'numberOfRatings' => $numberOfRatings,
-            'categoryNames' => $category->categoryNames,
+            'categoryNames' => $category->getCategoryNames(),
             'adminHeaderRatings' => Translation::get(key: 'ad_rs'),
             'buttonDeleteAllVotings' => Translation::get(key: 'ad_delete_all_votings'),
             'green' => Translation::get(key: 'ad_rs_green'),

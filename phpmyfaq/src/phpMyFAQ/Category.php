@@ -28,7 +28,6 @@ use phpMyFAQ\Category\CategoryRepository;
 use phpMyFAQ\Category\CategoryRepositoryInterface;
 use phpMyFAQ\Category\CategoryService;
 use phpMyFAQ\Category\CategoryTreeFacade;
-use phpMyFAQ\Category\Language\CategoryLanguageService;
 use phpMyFAQ\Category\Navigation\BreadcrumbsBuilder;
 use phpMyFAQ\Category\Navigation\BreadcrumbsHtmlRenderer;
 use phpMyFAQ\Category\Presentation\AdminCategoryTreePresenter;
@@ -37,18 +36,6 @@ use phpMyFAQ\Entity\CategoryEntity;
 
 class Category
 {
-    /**
-     * @deprecated Will be removed in a future version. Use CategoryCache instead.
-     * @var array<int, array<string, mixed>>
-     */
-    public array $categoryNames = [];
-
-    /**
-     * @deprecated Will be removed in a future version. Use CategoryCache instead.
-     * @var array<int, array<string, mixed>>
-     */
-    public array $treeTab = [];
-
     /**
      * The current language.
      */
@@ -65,44 +52,39 @@ class Category
     private CategoryPermissionContext $categoryPermissionContext;
 
     /**
-     * Internal repository for persistence access (Phase 1 extraction).
+     * Internal repository for persistence access
      */
     private ?CategoryRepositoryInterface $categoryRepository = null;
 
     /**
-     * Internal service for CRUD operations (Phase 2 extraction).
+     * Internal service for CRUD operations
      */
     private ?CategoryService $categoryService = null;
 
     /**
-     * Internal tree facade for tree operations (Phase 2 extraction).
+     * Internal tree facade for tree operations
      */
     private ?CategoryTreeFacade $categoryTreeFacade = null;
 
     /**
-     * Internal tree builder (Phase 2 extraction).
+     * Internal tree builder
      */
     private ?TreeBuilder $treeBuilder = null;
 
     /**
-     * Internal breadcrumbs builder (Phase 3 extraction).
+     * Internal breadcrumbs builder
      */
     private ?BreadcrumbsBuilder $breadcrumbsBuilder = null;
 
     /**
-     * Internal breadcrumbs HTML renderer (Phase 3 extraction).
+     * Internal breadcrumbs HTML renderer
      */
     private ?BreadcrumbsHtmlRenderer $breadcrumbsHtmlRenderer = null;
 
     /**
-     * Internal admin category tree presenter (Phase 3 extraction).
+     * Internal admin category tree presenter
      */
     private ?AdminCategoryTreePresenter $adminCategoryTreePresenter = null;
-
-    /**
-     * Internal category language service (Phase 3 extraction).
-     */
-    private ?CategoryLanguageService $categoryLanguageService = null;
 
     public function __construct(
         private readonly Configuration $configuration,
@@ -115,9 +97,6 @@ class Category
 
         $this->getOrderedCategories($withPermission);
 
-        // Sync deprecated properties for backward compatibility
-        $this->syncDeprecatedProperties();
-
         foreach ($this->categoryCache->getCategoryNames() as $categoryName) {
             if (!(is_array($categoryName) && isset($categoryName['id']))) {
                 continue;
@@ -127,19 +106,6 @@ class Category
             $level = $this->getLevelOf($id);
             $this->categoryCache->addCategoryName($id, array_merge($categoryName, ['level' => $level]));
         }
-
-        // Sync again after updates
-        $this->syncDeprecatedProperties();
-    }
-
-    /**
-     * Syncs data to deprecated public properties for backward compatibility.
-     */
-    #[\Deprecated(message: 'Will be removed when deprecated properties are removed.')]
-    private function syncDeprecatedProperties(): void
-    {
-        $this->categoryNames = $this->categoryCache->getCategoryNames();
-        $this->treeTab = $this->categoryCache->getTreeTab();
     }
 
     /**
@@ -224,18 +190,6 @@ class Category
         }
 
         return $this->categoryTreeFacade;
-    }
-
-    /**
-     * Lazy category language service factory.
-     */
-    private function getCategoryLanguageService(): CategoryLanguageService
-    {
-        if (!$this->categoryLanguageService instanceof CategoryLanguageService) {
-            $this->categoryLanguageService = new CategoryLanguageService();
-        }
-
-        return $this->categoryLanguageService;
     }
 
     /**
@@ -374,9 +328,6 @@ class Category
         foreach ($entries as $entry) {
             $this->categoryCache->addTreeTabEntry($entry);
         }
-
-        // Sync deprecated properties
-        $this->syncDeprecatedProperties();
     }
 
     /**
@@ -425,9 +376,6 @@ class Category
                 break;
             }
         }
-
-        // Sync deprecated properties
-        $this->syncDeprecatedProperties();
     }
 
     /**
@@ -442,9 +390,6 @@ class Category
                 $this->categoryCache->updateTreeTabEntry($i, ['symbol' => 'plus']);
             }
         }
-
-        // Sync deprecated properties
-        $this->syncDeprecatedProperties();
     }
 
     /**
@@ -470,9 +415,6 @@ class Category
     {
         $lineIndex = $this->getLineCategory($categoryId);
         $this->categoryCache->updateTreeTabEntry($lineIndex, ['symbol' => 'minus']);
-
-        // Sync deprecated properties
-        $this->syncDeprecatedProperties();
     }
 
     public function getCategoryData(int $categoryId): CategoryEntity
@@ -510,23 +452,23 @@ class Category
      * @param string $separator Separator for text mode
      * @param bool $renderAsHtml Render as HTML or plain text
      * @param string $useCssClass CSS class for HTML mode
-     * @param string|null $startpageName Optional start page name (defaults to Translation msgHome)
-     * @param string $startpageDescription Optional start page description
+     * @param string|null $startPageName Optional start page name (defaults to Translation msgHome)
+     * @param string $startPageDescription Optional start page description
      */
-    public function getPathWithStartpage(
+    public function getPathWithStartPage(
         int $catId,
         string $separator = ' / ',
         bool $renderAsHtml = false,
         string $useCssClass = 'breadcrumb',
-        ?string $startpageName = null,
-        string $startpageDescription = '',
+        ?string $startPageName = null,
+        string $startPageDescription = '',
     ): string {
         $ids = $this->getNodes($catId);
         $segments = $this->getBreadcrumbsBuilder()->buildFromIdsWithStartPage(
             $this->categoryCache->getCategoryNames(),
             $ids,
-            $startpageName,
-            $startpageDescription,
+            $startPageName,
+            $startPageDescription,
         );
 
         if ($segments === []) {
@@ -642,9 +584,6 @@ class Category
                 $this->categoryCache->addChild($parentId, $id, $categoryNameRef);
             }
         }
-
-        // Sync deprecated properties
-        $this->syncDeprecatedProperties();
     }
 
     /**
@@ -689,5 +628,17 @@ class Category
     public function categoryHasLinkToFaq(int $faqId, int $categoryId): bool
     {
         return $this->getCategoryRepository()->hasLinkToFaq($faqId, $categoryId);
+    }
+
+    /**
+     * Returns all category names from the internal cache.
+     * This method replaces the deprecated public property $categoryNames.
+     *
+     * @return array<int, array<string, mixed>>
+     * @since 4.2.0
+     */
+    public function getCategoryNames(): array
+    {
+        return $this->categoryCache->getCategoryNames();
     }
 }
