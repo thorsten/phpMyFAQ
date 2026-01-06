@@ -54,4 +54,17 @@ enum AdminLogType: string
 
     // Configuration
     case CONFIG_CHANGE = 'config-change';
+
+    // User management
+    case USER_ADD = 'user-add';
+    case USER_EDIT = 'user-edit';
+    case USER_DELETE = 'user-delete';
+    case USER_CHANGE_PASSWORD = 'user-change-password';
+    case USER_CHANGE_PERMISSIONS = 'user-change-permissions';
+
+    // Group management
+    case GROUP_ADD = 'group-add';
+    case GROUP_EDIT = 'group-edit';
+    case GROUP_DELETE = 'group-delete';
+    case GROUP_CHANGE_PERMISSIONS = 'group-change-permissions';
 }
