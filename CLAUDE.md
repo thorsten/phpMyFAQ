@@ -72,7 +72,7 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 
 ## Routing System
 
-The application uses Symfony Router for modern, controller-based routing while maintaining backward compatibility with legacy code.
+The application uses Symfony Router for modern, controller-based routing.
 
 ### Architecture
 
@@ -107,12 +107,6 @@ final class MyController extends AbstractController
     'methods' => 'GET'
 ]
 ```
-
-### Migration Strategy
-
-- New features should use Controllers
-- Legacy code continues to work via a fallback mechanism
-- Gradual migration from `?action=xyz` to route-based URLs
 
 ## UI guidelines
 
