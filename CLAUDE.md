@@ -30,12 +30,12 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 ## Tech stack, libraries, and frameworks
 
 - HTML 5, SCSS, TypeScript, Bootstrap, and Bootstrap Icons for the frontend. TypeScript in strict mode.
-- PHP 8.3 and later with Symfony components for the backend.
+- PHP 8.4 and later with Symfony components for the backend.
 - MySQL, PostgreSQL, SQLite3, and MS SQL for data storage. This option is configurable.
 - Elasticsearch and OpenSearch for search functionality. This option is configurable.
 - Apache, Nginx, and IIS as supported web servers. This option is configurable.
 - It uses PNPM as the package manager for JavaScript/TypeScript dependencies.
-- It used Composer as the package manager for PHP dependencies.
+- It uses Composer as the package manager for PHP dependencies.
 - Twig as the templating engine.
 - PHPUnit v12 for PHP-based unit testing, vitest for TypeScript-based unit testing.
 - Docker for containerization.
@@ -77,8 +77,12 @@ The application uses Symfony Router for modern, controller-based routing.
 ### Architecture
 
 1. **index.php**: Entry point that tries Symfony Router first, falls back to legacy logic
-2. **public-routes.php**: Route definitions using Symfony RouteCollection
-3. **Controllers**: Modern Controller classes extending AbstractController
+2. **public-routes.php**: Route definitions using Symfony RouteCollection for public routes
+3. **api-routes.php**: Route definitions using Symfony RouteCollection for API routes
+4. **admin-routes.php**: Route definitions using Symfony RouteCollection for admin routes
+5. **admin-api-routes.php**: Route definitions using Symfony RouteCollection for admin API routes
+6. **Controllers**: Modern Controller classes extending AbstractController
+7. **services.php**: Dependency injection configuration for services and classes
 
 ### Adding New Routes
 
