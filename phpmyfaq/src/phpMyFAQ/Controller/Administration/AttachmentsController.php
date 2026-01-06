@@ -23,6 +23,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
+use phpMyFAQ\Pagination\UrlConfig;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\FormatBytesTwigExtension;
@@ -54,12 +55,11 @@ final class AttachmentsController extends AbstractAdministrationController
 
         $crumbs = array_slice($allCrumbs, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
-        $baseUrl = sprintf('%sadmin/attachments?page=%d', $this->configuration->getDefaultUrl(), $page);
-
         $pagination = new Pagination(
-            baseUrl: $baseUrl,
+            baseUrl: $request->getUri(),
             total: is_countable($allCrumbs) ? count($allCrumbs) : 0,
             perPage: $itemsPerPage,
+            urlConfig: new UrlConfig(pageParamName: 'page'),
         );
 
         $this->addExtension(new AttributeExtension(FormatBytesTwigExtension::class));
