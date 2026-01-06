@@ -122,7 +122,7 @@
         <h4 class="fst-italic">{{ msgMostPopularSearches }}</h4>
         <div class="clearfix">
           {% for popular in mostPopularSearches %}
-            <a class="btn btn-outline-primary m-1" href="?search={{ popular['searchterm'] }}">
+            <a class="btn btn-outline-primary m-1" href="./search.html?search={{ popular['searchterm'] }}">
               {{ popular['searchterm'] }} <span class="badge bg-info">{{ popular['number'] }}x</span>
             </a>
           {% endfor %}
