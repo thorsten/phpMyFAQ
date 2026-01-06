@@ -131,6 +131,8 @@ final class UserController extends AbstractAdministrationApiController
 
         fclose($handle);
 
+        $this->adminLog->log($this->currentUser, AdminLogType::DATA_EXPORT_USERS->value);
+
         $response = new Response($content);
         $response->headers->set(key: 'Content-Type', values: 'text/csv');
         $response->headers->set(key: 'Content-Disposition', values: 'attachment; filename="users.csv"');
@@ -420,10 +422,12 @@ final class UserController extends AbstractAdministrationApiController
         $user->getUserById($userId, allowBlockedUsers: true);
 
         $stats = $user->getStatus();
+        $wasSuperAdmin = $user->isSuperAdmin();
 
         // reset two-factor authentication if required
         if ($deleteTwoFactor) {
             $user->setUserData(['secret' => '', 'twofactor_enabled' => 0]);
+            $this->adminLog->log($this->currentUser, AdminLogType::AUTH_2FA_RESET->value . ':' . $userId);
         }
 
         // set a new password and sent email if a user is switched to active
@@ -431,8 +435,21 @@ final class UserController extends AbstractAdministrationApiController
             $userStatus = 'invalid_status';
         }
 
-        // Set the super-admin flag
+        // Log status change
+        if ($stats !== $userStatus) {
+            $this->adminLog->log(
+                $this->currentUser,
+                AdminLogType::USER_STATUS_CHANGED->value . ':' . $userId . ' (' . $stats . ' -> ' . $userStatus . ')',
+            );
+        }
+
+        // Set the super-admin flag and log changes
         $user->setSuperAdmin((bool) $isSuperAdmin);
+        if (!$wasSuperAdmin && (bool) $isSuperAdmin) {
+            $this->adminLog->log($this->currentUser, AdminLogType::USER_SUPERADMIN_GRANTED->value . ':' . $userId);
+        } elseif ($wasSuperAdmin && !(bool) $isSuperAdmin) {
+            $this->adminLog->log($this->currentUser, AdminLogType::USER_SUPERADMIN_REVOKED->value . ':' . $userId);
+        }
 
         if (!$user->userdata->set(array_keys($userData), array_values($userData)) || !$user->setStatus($userStatus)) {
             return $this->json(['error' => 'ad_msg_mysqlerr'], Response::HTTP_BAD_REQUEST);

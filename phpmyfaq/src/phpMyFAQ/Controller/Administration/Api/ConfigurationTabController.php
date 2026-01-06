@@ -194,9 +194,100 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         $this->configuration->update($newConfigValues);
 
         $changedKeys = array_keys(array_diff_assoc($newConfigValues, $oldConfigurationData));
+
+        // General configuration change log
         $this->adminLog->log($this->currentUser, AdminLogType::CONFIG_CHANGE->value . ':' . implode(',', $changedKeys));
 
+        // Specific security-related configuration change logs
+        $this->logSecurityConfigChanges($changedKeys, $oldConfigurationData, $newConfigValues);
+
         return $this->json(['success' => Translation::get(key: 'ad_config_saved')], Response::HTTP_OK);
+    }
+
+    /**
+     * Log specific security-related configuration changes
+     */
+    private function logSecurityConfigChanges(array $changedKeys, array $oldConfig, array $newConfig): void
+    {
+        // Maintenance mode changes
+        if (in_array('main.maintenanceMode', $changedKeys)) {
+            if ($newConfig['main.maintenanceMode'] === 'false' && $oldConfig['main.maintenanceMode'] === 'true') {
+                $this->adminLog->log($this->currentUser, AdminLogType::SYSTEM_MAINTENANCE_MODE_DISABLED->value);
+            } elseif ($newConfig['main.maintenanceMode'] === 'true' && $oldConfig['main.maintenanceMode'] === 'false') {
+                $this->adminLog->log($this->currentUser, AdminLogType::SYSTEM_MAINTENANCE_MODE_ENABLED->value);
+            }
+        }
+
+        // Security configuration keys
+        $securityKeys = [
+            'security.permLevel',
+            'security.enableLoginOnly',
+            'security.enableRegistration',
+            'security.useSslForLogins',
+            'security.useSslOnly',
+            'security.forcePasswordUpdate',
+            'security.enableWebAuthnSupport',
+            'security.bannedIPs',
+            'security.loginWithEmailAddress',
+            'security.enableSignInWithMicrosoft',
+            'security.domainWhiteListForRegistrations',
+        ];
+
+        $securityChanges = array_intersect($changedKeys, $securityKeys);
+        if ($securityChanges !== []) {
+            $details = [];
+            foreach ($securityChanges as $key) {
+                $details[] = $key . ':' . ($oldConfig[$key] ?? 'null') . '->' . ($newConfig[$key] ?? 'null');
+            }
+            $this->adminLog->log(
+                $this->currentUser,
+                AdminLogType::CONFIG_SECURITY_CHANGED->value . ':' . implode(';', $details),
+            );
+        }
+
+        // LDAP configuration keys
+        $ldapKeys = [
+            'ldap.ldapSupport',
+            'ldap.ldap_server',
+            'ldap.ldap_port',
+            'ldap.ldap_base',
+            'ldap.ldap_groupSupport',
+        ];
+
+        $ldapChanges = array_intersect($changedKeys, $ldapKeys);
+        if ($ldapChanges !== []) {
+            $this->adminLog->log(
+                $this->currentUser,
+                AdminLogType::CONFIG_LDAP_CHANGED->value . ':' . implode(',', $ldapChanges),
+            );
+        }
+
+        // SSO configuration keys
+        $ssoKeys = [
+            'security.ssoSupport',
+            'security.ssoLogoutRedirect',
+        ];
+
+        $ssoChanges = array_intersect($changedKeys, $ssoKeys);
+        if ($ssoChanges !== []) {
+            $this->adminLog->log(
+                $this->currentUser,
+                AdminLogType::CONFIG_SSO_CHANGED->value . ':' . implode(',', $ssoChanges),
+            );
+        }
+
+        // Encryption configuration keys
+        $encryptionKeys = [
+            'security.encryptionType',
+        ];
+
+        $encryptionChanges = array_intersect($changedKeys, $encryptionKeys);
+        if ($encryptionChanges !== []) {
+            $this->adminLog->log(
+                $this->currentUser,
+                AdminLogType::CONFIG_ENCRYPTION_CHANGED->value . ':' . implode(',', $encryptionChanges),
+            );
+        }
     }
 
     /**

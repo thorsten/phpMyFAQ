@@ -54,6 +54,10 @@ enum AdminLogType: string
 
     // Configuration
     case CONFIG_CHANGE = 'config-change';
+    case CONFIG_SECURITY_CHANGED = 'config-security-changed';
+    case CONFIG_LDAP_CHANGED = 'config-ldap-changed';
+    case CONFIG_SSO_CHANGED = 'config-sso-changed';
+    case CONFIG_ENCRYPTION_CHANGED = 'config-encryption-changed';
 
     // User management
     case USER_ADD = 'user-add';
@@ -61,10 +65,60 @@ enum AdminLogType: string
     case USER_DELETE = 'user-delete';
     case USER_CHANGE_PASSWORD = 'user-change-password';
     case USER_CHANGE_PERMISSIONS = 'user-change-permissions';
+    case USER_PASSWORD_RESET_REQUESTED = 'user-password-reset-requested';
+    case USER_PASSWORD_RESET_COMPLETED = 'user-password-reset-completed';
+    case USER_STATUS_CHANGED = 'user-status-changed';
+    case USER_SUPERADMIN_GRANTED = 'user-superadmin-granted';
+    case USER_SUPERADMIN_REVOKED = 'user-superadmin-revoked';
 
     // Group management
     case GROUP_ADD = 'group-add';
     case GROUP_EDIT = 'group-edit';
     case GROUP_DELETE = 'group-delete';
     case GROUP_CHANGE_PERMISSIONS = 'group-change-permissions';
+
+    // Authentication & Authorization
+    case AUTH_LOGIN_SUCCESS = 'auth-login-success';
+    case AUTH_LOGIN_FAILED = 'auth-login-failed';
+    case AUTH_LOGOUT = 'auth-logout';
+    case AUTH_SESSION_TIMEOUT = 'auth-session-timeout';
+    case AUTH_SESSION_TERMINATED = 'auth-session-terminated';
+
+    // Two-Factor Authentication
+    case AUTH_2FA_ENABLED = 'auth-2fa-enabled';
+    case AUTH_2FA_DISABLED = 'auth-2fa-disabled';
+    case AUTH_2FA_SUCCESS = 'auth-2fa-success';
+    case AUTH_2FA_FAILED = 'auth-2fa-failed';
+    case AUTH_2FA_RESET = 'auth-2fa-reset';
+
+    // WebAuthn
+    case AUTH_WEBAUTHN_REGISTER = 'auth-webauthn-register';
+    case AUTH_WEBAUTHN_LOGIN_SUCCESS = 'auth-webauthn-login-success';
+    case AUTH_WEBAUTHN_LOGIN_FAILED = 'auth-webauthn-login-failed';
+    case AUTH_WEBAUTHN_REMOVED = 'auth-webauthn-removed';
+
+    // Security Events
+    case SECURITY_UNAUTHORIZED_ACCESS = 'security-unauthorized-access';
+    case SECURITY_CSRF_VIOLATION = 'security-csrf-violation';
+    case SECURITY_PERMISSION_VIOLATION = 'security-permission-violation';
+    case SECURITY_SUSPICIOUS_ACTIVITY = 'security-suspicious-activity';
+    case SECURITY_RATE_LIMIT_EXCEEDED = 'security-rate-limit-exceeded';
+
+    // Data Exports
+    case DATA_EXPORT_USERS = 'data-export-users';
+    case DATA_EXPORT_SESSIONS = 'data-export-sessions';
+    case DATA_EXPORT_FAQS = 'data-export-faqs';
+    case DATA_EXPORT_LOGS = 'data-export-logs';
+
+    // API Security
+    case API_KEY_CREATED = 'api-key-created';
+    case API_KEY_REVOKED = 'api-key-revoked';
+    case API_UNAUTHORIZED_ACCESS = 'api-unauthorized-access';
+
+    // System Security
+    case SYSTEM_MAINTENANCE_MODE_ENABLED = 'system-maintenance-mode-enabled';
+    case SYSTEM_MAINTENANCE_MODE_DISABLED = 'system-maintenance-mode-disabled';
+    case SYSTEM_UPDATE_STARTED = 'system-update-started';
+    case SYSTEM_UPDATE_COMPLETED = 'system-update-completed';
+    case SYSTEM_UPDATE_FAILED = 'system-update-failed';
 }
