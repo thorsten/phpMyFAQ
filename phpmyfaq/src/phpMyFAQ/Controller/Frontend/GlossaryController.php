@@ -20,6 +20,7 @@ namespace phpMyFAQ\Controller\Frontend;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
+use phpMyFAQ\Pagination\UrlConfig;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,17 +46,14 @@ final class GlossaryController extends AbstractFrontController
         $glossaryItems = $glossary->fetchAll();
 
         $itemsPerPage = 8;
-
         $baseUrl = sprintf('%sglossary.html?page=%d', $this->configuration->getDefaultUrl(), $page);
 
-        // Pagination options
-        $options = [
-            'baseUrl' => $baseUrl,
-            'total' => is_countable($glossaryItems) ? count($glossaryItems) : 0,
-            'perPage' => $itemsPerPage,
-            'pageParamName' => 'page',
-        ];
-        $pagination = new Pagination($options);
+        $pagination = new Pagination(
+            baseUrl: $baseUrl,
+            total: is_countable($glossaryItems) ? count($glossaryItems) : 0,
+            perPage: $itemsPerPage,
+            urlConfig: new UrlConfig(pageParamName: 'page'),
+        );
 
         return $this->render('glossary.twig', [
             ...$this->getHeader($request),

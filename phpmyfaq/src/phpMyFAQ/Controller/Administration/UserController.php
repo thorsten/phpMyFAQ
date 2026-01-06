@@ -23,6 +23,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
+use phpMyFAQ\Pagination\UrlConfig;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Twig\Extensions\PermissionTranslationTwigExtension;
 use Symfony\Component\HttpFoundation\Request;
@@ -93,14 +94,12 @@ final class UserController extends AbstractAdministrationController
         $lastPage = $page * $perPage;
         $firstPage = $lastPage - $perPage;
 
-        // Pagination options
-        $options = [
-            'baseUrl' => sprintf('%sadmin/user/list?page=%d', $this->configuration->getDefaultUrl(), $page),
-            'total' => $numUsers,
-            'perPage' => $perPage,
-            'pageParamName' => 'page',
-        ];
-        $pagination = new Pagination($options);
+        $pagination = new Pagination(
+            baseUrl: sprintf('%sadmin/user/list?page=%d', $this->configuration->getDefaultUrl(), $page),
+            total: $numUsers,
+            perPage: $perPage,
+            urlConfig: new UrlConfig(pageParamName: 'page'),
+        );
 
         $counter = 0;
         $displayedCounter = 0;

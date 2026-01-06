@@ -23,6 +23,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
+use phpMyFAQ\Pagination\UrlConfig;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\UserNameTwigExtension;
@@ -48,14 +49,12 @@ final class AdminLogController extends AbstractAdministrationController
         $itemsPerPage = 15;
         $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT, 1);
 
-        // Pagination options
-        $options = [
-            'baseUrl' => $request->getUri(),
-            'total' => $this->adminLog->getNumberOfEntries(),
-            'perPage' => $itemsPerPage,
-            'pageParamName' => 'page',
-        ];
-        $pagination = new Pagination($options);
+        $pagination = new Pagination(
+            baseUrl: $request->getUri(),
+            total: $this->adminLog->getNumberOfEntries(),
+            perPage: $itemsPerPage,
+            urlConfig: new UrlConfig(pageParamName: 'page'),
+        );
 
         $loggingData = $this->adminLog->getAll();
 

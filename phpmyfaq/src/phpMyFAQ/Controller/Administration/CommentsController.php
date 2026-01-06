@@ -63,17 +63,17 @@ final class CommentsController extends AbstractAdministrationController
 
         $baseUrl = sprintf('%sadmin/comments?page=%d', $this->configuration->getDefaultUrl(), $page);
 
-        $faqCommentsPagination = new Pagination([
-            'baseUrl' => $baseUrl,
-            'total' => is_countable($allFaqComments) ? count($allFaqComments) : 0,
-            'perPage' => $itemsPerPage,
-        ]);
+        $faqCommentsPagination = new Pagination(
+            baseUrl: $baseUrl,
+            total: is_countable($allFaqComments) ? count($allFaqComments) : 0,
+            perPage: $itemsPerPage,
+        );
 
-        $newsCommentsPagination = new Pagination([
-            'baseUrl' => $baseUrl,
-            'total' => is_countable($allNewsComments) ? count($allNewsComments) : 0,
-            'perPage' => $itemsPerPage,
-        ]);
+        $newsCommentsPagination = new Pagination(
+            baseUrl: $baseUrl,
+            total: is_countable($allNewsComments) ? count($allNewsComments) : 0,
+            perPage: $itemsPerPage,
+        );
 
         $this->addExtension(new IntlExtension());
         $this->addExtension(new AttributeExtension(FaqTwigExtension::class));

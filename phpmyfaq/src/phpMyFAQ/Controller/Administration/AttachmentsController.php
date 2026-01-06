@@ -56,11 +56,11 @@ final class AttachmentsController extends AbstractAdministrationController
 
         $baseUrl = sprintf('%sadmin/attachments?page=%d', $this->configuration->getDefaultUrl(), $page);
 
-        $pagination = new Pagination([
-            'baseUrl' => $baseUrl,
-            'total' => is_countable($allCrumbs) ? count($allCrumbs) : 0,
-            'perPage' => $itemsPerPage,
-        ]);
+        $pagination = new Pagination(
+            baseUrl: $baseUrl,
+            total: is_countable($allCrumbs) ? count($allCrumbs) : 0,
+            perPage: $itemsPerPage,
+        );
 
         $this->addExtension(new AttributeExtension(FormatBytesTwigExtension::class));
         return $this->render('@admin/content/attachments.twig', [
