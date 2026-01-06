@@ -22,8 +22,8 @@ namespace phpMyFAQ\Controller\Administration\Api;
 use phpMyFAQ\Administration\Report;
 use phpMyFAQ\Auth;
 use phpMyFAQ\Category;
-use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\MailHelper;
@@ -40,7 +40,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class UserController extends AbstractController
+final class UserController extends AbstractAdministrationApiController
 {
     /**
      * @throws Exception
@@ -102,7 +102,6 @@ final class UserController extends AbstractController
             ['ID', 'Status', 'Super Admin', 'Visible', 'Display Name', 'Username', 'Email', 'Auth Source'],
             separator: ',',
             enclosure: '"',
-            escape: '\\',
             eol: PHP_EOL,
         );
 
@@ -122,7 +121,6 @@ final class UserController extends AbstractController
                 ],
                 separator: ',',
                 enclosure: '"',
-                escape: '\\',
                 eol: PHP_EOL,
             );
         }
@@ -208,6 +206,7 @@ final class UserController extends AbstractController
         $currentUser->getUserById((int) $userId, allowBlockedUsers: true);
         try {
             if ($currentUser->activateUser()) {
+                $this->adminLog->log($this->currentUser, AdminLogType::USER_EDIT->value . ' (activated):' . $userId);
                 return $this->json(['success' => $currentUser->getStatus()], Response::HTTP_OK);
             }
 
@@ -254,6 +253,8 @@ final class UserController extends AbstractController
                 return $this->json(['error' => Translation::get(key: 'ad_passwd_fail')], Response::HTTP_BAD_REQUEST);
             }
 
+            $this->adminLog->log($this->currentUser, AdminLogType::USER_CHANGE_PASSWORD->value . ':' . $userId);
+
             return $this->json(['success' => Translation::get(key: 'ad_passwdsuc')], Response::HTTP_OK);
         }
 
@@ -299,6 +300,8 @@ final class UserController extends AbstractController
             $permissions = Permission::create(permLevel: 'medium', configuration: $this->configuration);
             $permissions->removeFromAllGroups($userId);
         }
+
+        $this->adminLog->log($this->currentUser, AdminLogType::USER_DELETE->value . ':' . $userId);
 
         return $this->json(['success' => Translation::get(key: 'ad_user_deleted')], Response::HTTP_OK);
     }
@@ -374,6 +377,8 @@ final class UserController extends AbstractController
                 /* @mago-expect lint:no-empty-catch-clause */
             }
 
+            $this->adminLog->log($this->currentUser, AdminLogType::USER_ADD->value . ':' . $newUser->getUserId());
+
             return $this->json(['success' => Translation::get(key: 'ad_adus_suc')], Response::HTTP_OK);
         }
 
@@ -433,6 +438,8 @@ final class UserController extends AbstractController
             return $this->json(['error' => 'ad_msg_mysqlerr'], Response::HTTP_BAD_REQUEST);
         }
 
+        $this->adminLog->log($this->currentUser, AdminLogType::USER_EDIT->value . ':' . $userId);
+
         $success =
             Translation::get(key: 'ad_msg_savedsuc_1')
             . ' "'
@@ -477,6 +484,8 @@ final class UserController extends AbstractController
         foreach ($userRights as $userRight) {
             $user->perm->grantUserRight($userId, (int) $userRight);
         }
+
+        $this->adminLog->log($this->currentUser, AdminLogType::USER_CHANGE_PERMISSIONS->value . ':' . $userId);
 
         $user->terminateSessionId();
         $success =

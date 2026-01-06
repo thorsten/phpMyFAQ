@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
-use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User\CurrentUser;
@@ -28,7 +27,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class GroupController extends AbstractController
+final class GroupController extends AbstractAdministrationApiController
 {
     /**
      * @throws Exception
