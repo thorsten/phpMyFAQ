@@ -171,7 +171,7 @@ class Pagination
 
         $urlToParse = '%s%s%s=%d';
         $cleanedUrl = Strings::preg_replace(
-            ['$&(amp;|)' . $this->urlConfig->pageParamName . '=(\d+)$'],
+            ['/[?&](amp;|)' . $this->urlConfig->pageParamName . '=(\d+)/'],
             replacement: '',
             subject: $url,
         );
