@@ -46,7 +46,7 @@ final class AdminLogController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::STATISTICS_ADMINLOG);
 
         $itemsPerPage = 15;
-        $page = Filter::filterVar($request->attributes->get('page'), FILTER_VALIDATE_INT, 1);
+        $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT, 1);
 
         // Pagination options
         $options = [
