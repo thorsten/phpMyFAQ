@@ -20,6 +20,7 @@ import {
   handleCreateReport,
   handleDeleteAdminLog,
   handleDeleteSessions,
+  handleExportAdminLog,
   handleSessions,
   handleSessionsFilter,
   handleStatistics,
@@ -140,6 +141,7 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
 
   // Statistics
   handleDeleteAdminLog();
+  handleExportAdminLog();
   handleStatistics();
   handleCreateReport();
   handleTruncateSearchTerms();

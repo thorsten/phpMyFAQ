@@ -17,6 +17,7 @@
 
 declare(strict_types=1);
 
+use phpMyFAQ\Controller\Administration\Api\AdminLogController;
 use phpMyFAQ\Controller\Administration\Api\AttachmentController;
 use phpMyFAQ\Controller\Administration\Api\CategoryController;
 use phpMyFAQ\Controller\Administration\Api\CommentController;
@@ -522,6 +523,11 @@ $routesConfig = [
         'methods' => 'POST',
     ],
     // Statistics API
+    'admin.api.statistics.adminlog.export' => [
+        'path' => '/statistics/admin-log/export',
+        'controller' => [AdminLogController::class, 'export'],
+        'methods' => 'POST',
+    ],
     'admin.api.statistics.adminlog.delete' => [
         'path' => '/statistics/admin-log',
         'controller' => [StatisticsController::class, 'deleteAdminLog'],
