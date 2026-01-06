@@ -26,6 +26,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Entity\SeoEntity;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Filter;
@@ -280,6 +281,9 @@ final class CategoryController extends AbstractAdministrationController
                     FILTER_SANITIZE_SPECIAL_CHARS,
                 ));
             $seo->create($seoEntity);
+
+            // Admin Log
+            $this->adminLog->log($this->currentUser, AdminLogType::CATEGORY_ADD->value . ':' . $categoryId);
 
             $templateVars = [
                 ...$templateVars,
@@ -720,6 +724,9 @@ final class CategoryController extends AbstractAdministrationController
             } else {
                 $seoService->update($seoEntity);
             }
+
+            // Admin Log
+            $this->adminLog->log($this->currentUser, AdminLogType::CATEGORY_EDIT->value . ':' . $categoryId);
 
             $templateVars = [
                 ...$templateVars,

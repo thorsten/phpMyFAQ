@@ -20,8 +20,8 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Administration\Helper;
-use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
@@ -37,7 +37,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 
-final class ConfigurationTabController extends AbstractController
+final class ConfigurationTabController extends AbstractAdministrationApiController
 {
     /**
      * @throws TemplateException
@@ -183,7 +183,7 @@ final class ConfigurationTabController extends AbstractController
             $newConfigValues[$key] = $value;
         }
 
-        // Replace main.referenceUrl in FAQs
+        // Replace "main.referenceUrl" in FAQs
         if ($oldConfigurationData['main.referenceURL'] !== $newConfigValues['main.referenceURL']) {
             $this->configuration->replaceMainReferenceUrl(
                 $oldConfigurationData['main.referenceURL'],
@@ -192,6 +192,9 @@ final class ConfigurationTabController extends AbstractController
         }
 
         $this->configuration->update($newConfigValues);
+
+        $changedKeys = array_keys(array_diff_assoc($newConfigValues, $oldConfigurationData));
+        $this->adminLog->log($this->currentUser, AdminLogType::CONFIG_CHANGE->value . ':' . implode(',', $changedKeys));
 
         return $this->json(['success' => Translation::get(key: 'ad_config_saved')], Response::HTTP_OK);
     }

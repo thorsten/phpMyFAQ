@@ -32,6 +32,7 @@ enum AdminLogType: string
     case FAQ_TRANSLATE = 'faq-translate';
     case FAQ_ANSWER_ADD = 'faq-answer-add';
     case FAQ_DELETE = 'faq-delete';
+    case FAQ_PUBLISH = 'faq-publish';
 
     // Category operations
     case CATEGORY_ADD = 'category-add';
