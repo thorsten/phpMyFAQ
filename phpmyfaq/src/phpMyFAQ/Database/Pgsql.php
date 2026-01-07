@@ -53,6 +53,11 @@ class Pgsql implements DatabaseDriver
     private Connection|bool $conn = false;
 
     /**
+     * Prepared statements.
+     */
+    private array $preparedStatements = [];
+
+    /**
      * Connects to the database.
      *
      * @param string $host Database hostname
@@ -327,8 +332,9 @@ class Pgsql implements DatabaseDriver
      */
     public function prepare(string $query, array $options = []): string|false
     {
-        $stmtName = 'pmf_stmt_' . md5($query);
+        $stmtName = 'pmf_stmt_' . (count($this->preparedStatements) + 1);
         if (pg_prepare($this->conn, $stmtName, $query)) {
+            $this->preparedStatements[$stmtName] = $query;
             return $stmtName;
         }
         return false;

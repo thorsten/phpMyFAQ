@@ -318,27 +318,35 @@ class Sqlsrv implements DatabaseDriver
      *
      * @param string $query   The SQL query
      * @param array  $options The driver options
-     * @return resource|false
+     * @return resource|string|false
      */
     public function prepare(string $query, array $options = []): mixed
     {
+        if (str_contains($query, '?')) {
+            return $query;
+        }
+
         return sqlsrv_prepare($this->conn, $query, [], $options);
     }
 
     /**
      * Executes a prepared statement.
      *
-     * @param mixed $statement The prepared statement
+     * @param mixed $statement The prepared statement (resource or SQL string)
      * @param array $params    The parameters
      * @return bool
      */
     public function execute(mixed $statement, array $params = []): bool
     {
-        if (!is_resource($statement)) {
-            return false;
+        if (is_resource($statement) && empty($params)) {
+            return sqlsrv_execute($statement);
         }
 
-        return sqlsrv_execute($statement);
+        if (is_string($statement)) {
+            return (bool) sqlsrv_query($this->conn, $statement, $params);
+        }
+
+        return false;
     }
 
     /**
