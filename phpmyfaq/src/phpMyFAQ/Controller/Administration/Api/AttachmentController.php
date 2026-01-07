@@ -22,8 +22,8 @@ namespace phpMyFAQ\Controller\Administration\Api;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;
-use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
@@ -33,7 +33,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class AttachmentController extends AbstractController
+final class AttachmentController extends AbstractAdministrationApiController
 {
     /**
      * @throws \Exception
@@ -51,6 +51,11 @@ final class AttachmentController extends AbstractController
 
             $attachment = AttachmentFactory::create($deleteData->attId);
             if ($attachment->delete()) {
+                $this->adminLog->log(
+                    $this->currentUser,
+                    AdminLogType::ATTACHMENT_DELETE->value . ':' . $deleteData->attId,
+                );
+
                 return $this->json(['success' => Translation::get(key: 'msgAttachmentsDeleted')], Response::HTTP_OK);
             }
 
@@ -148,6 +153,15 @@ final class AttachmentController extends AbstractController
             } else {
                 return $this->json(['error' => Translation::get(key: 'msgImageTooLarge')], Response::HTTP_BAD_REQUEST);
             }
+        }
+
+        if (!empty($uploadedFiles)) {
+            $adminLog = $this->container->get(id: 'phpmyfaq.admin.admin-log');
+            $attachmentIds = array_column($uploadedFiles, 'attachmentId');
+            $adminLog->log(
+                $this->currentUser,
+                AdminLogType::ATTACHMENT_ADD->value . ':' . implode(',', $attachmentIds),
+            );
         }
 
         return $this->json($uploadedFiles, Response::HTTP_OK);

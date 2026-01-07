@@ -22,8 +22,8 @@ namespace phpMyFAQ\Controller\Administration\Api;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Category\Relation;
-use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
@@ -34,7 +34,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class CategoryController extends AbstractController
+final class CategoryController extends AbstractAdministrationApiController
 {
     /**
      * @throws Exception
@@ -83,6 +83,8 @@ final class CategoryController extends AbstractController
             $category->delete((int) $data->categoryId, $data->language)
             && $categoryRelation->delete((int) $data->categoryId, $data->language)
         ) {
+            $this->adminLog->log($this->currentUser, AdminLogType::CATEGORY_DELETE->value . ':' . $data->categoryId);
+
             return $this->json(['success' => Translation::get(key: 'ad_categ_deleted')], Response::HTTP_OK);
         }
 
@@ -157,6 +159,8 @@ final class CategoryController extends AbstractController
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
         $category->updateParentCategory((int) $data->categoryId, $parentId);
+
+        $this->adminLog->log($this->currentUser, AdminLogType::CATEGORY_REORDER->value . ':' . $data->categoryId);
 
         return $this->json(['success' => Translation::get(key: 'ad_categ_save_order')], Response::HTTP_OK);
     }

@@ -27,9 +27,9 @@ use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Permission as CategoryPermission;
 use phpMyFAQ\Category\Relation;
-use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Entity\SeoEntity;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Faq;
@@ -54,7 +54,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class FaqController extends AbstractController
+final class FaqController extends AbstractAdministrationApiController
 {
     /**
      * @throws \phpMyFAQ\Core\Exception
@@ -70,7 +70,6 @@ final class FaqController extends AbstractController
         $faq = $this->container->get(id: 'phpmyfaq.faq');
         $tagging = $this->container->get(id: 'phpmyfaq.tags');
         $notification = $this->container->get(id: 'phpmyfaq.notification');
-        $logging = $this->container->get(id: 'phpmyfaq.admin.admin-log');
         $changelog = $this->container->get(id: 'phpmyfaq.admin.changelog');
         $visits = $this->container->get(id: 'phpmyfaq.visits');
         $seo = $this->container->get(id: 'phpmyfaq.seo');
@@ -115,7 +114,7 @@ final class FaqController extends AbstractController
         // Permissions
         $permissions = $faqPermission->createPermissionArray();
 
-        $logging->log($this->currentUser, 'admin-save-new-faq');
+        $this->adminLog->log($this->currentUser, AdminLogType::FAQ_ADD->value);
 
         if ($question === '' && $content === '') {
             return $this->json(['error' => Translation::get(key: 'msgNoQuestionAndAnswer')], Response::HTTP_CONFLICT);
@@ -221,7 +220,7 @@ final class FaqController extends AbstractController
                 }
             }
 
-            // Let the admin and the category owners to be informed by email of this new entry
+            // Let the admin and the category owners be informed by email of this new entry
             try {
                 $categoryHelper = new CategoryHelper();
                 $categoryHelper->setCategory($category)->setConfiguration($this->configuration);
@@ -334,9 +333,9 @@ final class FaqController extends AbstractController
         // Permissions
         $permissions = $faqPermission->createPermissionArray();
 
-        $logging->log($this->currentUser, 'admin-save-existing-faq ' . $faqId);
+        $logging->log($this->currentUser, AdminLogType::FAQ_EDIT->value . ':' . $faqId);
         if ($active === 'yes') {
-            $logging->log($this->currentUser, 'admin-publish-existing-faq ' . $faqId);
+            $logging->log($this->currentUser, AdminLogType::FAQ_PUBLISH->value . ':' . $faqId);
         }
 
         if ('yes' === $revision && $this->configuration->get(item: 'records.enableAutoRevisions')) {
@@ -563,6 +562,7 @@ final class FaqController extends AbstractController
             }
 
             if ($success) {
+                $this->adminLog->log($this->currentUser, AdminLogType::FAQ_EDIT->value);
                 return $this->json(['success' => Translation::get(key: 'ad_entry_savedsuc')], Response::HTTP_OK);
             }
 
@@ -633,8 +633,7 @@ final class FaqController extends AbstractController
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-        $adminLog = $this->container->get(id: 'phpmyfaq.admin.admin-log');
-        $adminLog->log($this->currentUser, 'Deleted FAQ ID ' . $faqId);
+        $this->adminLog->log($this->currentUser, AdminLogType::FAQ_DELETE->value . ':' . $faqId);
 
         try {
             $faq->delete($faqId, $faqLanguage);

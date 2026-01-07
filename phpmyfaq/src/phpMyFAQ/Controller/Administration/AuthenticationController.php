@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
@@ -33,7 +34,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class AuthenticationController extends AbstractAdministrationController
 {
     #[Route(path: '/authenticate', name: 'admin.auth.authenticate', methods: ['POST'])]
-    public function authenticate(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function authenticate(Request $request): RedirectResponse
     {
         if ($this->currentUser->isLoggedIn()) {
             return new RedirectResponse(url: './');
@@ -63,12 +64,18 @@ final class AuthenticationController extends AbstractAdministrationController
             try {
                 $this->currentUser = $userAuthentication->authenticate($username, $password);
                 if ($userAuthentication->hasTwoFactorAuthentication()) {
+                    $this->adminLog->log(
+                        $this->currentUser,
+                        AdminLogType::AUTH_LOGIN_SUCCESS->value . ' (2FA required):' . $username,
+                    );
                     return new RedirectResponse(url: './token?user-id=' . $this->currentUser->getUserId());
                 }
+
+                $this->adminLog->log($this->currentUser, AdminLogType::AUTH_LOGIN_SUCCESS->value . ':' . $username);
             } catch (Exception) {
                 $this->adminLog->log(
                     $this->currentUser,
-                    'Login-error\nLogin: ' . $username . '\nErrors: '
+                    AdminLogType::AUTH_LOGIN_FAILED->value . ':' . $username . ' - '
                         . implode(separator: ', ', array: $this->currentUser->errors),
                 );
                 return new RedirectResponse(url: './login');
@@ -124,7 +131,7 @@ final class AuthenticationController extends AbstractAdministrationController
      * @throws \Exception
      */
     #[Route(path: '/logout', name: 'admin.auth.logout', methods: ['GET'])]
-    public function logout(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function logout(Request $request): RedirectResponse
     {
         $this->userIsAuthenticated();
 
@@ -136,6 +143,11 @@ final class AuthenticationController extends AbstractAdministrationController
             // @todo add an error message
             return $redirectResponse->send();
         }
+
+        $this->adminLog->log(
+            $this->currentUser,
+            AdminLogType::AUTH_LOGOUT->value . ':' . $this->currentUser->getLogin(),
+        );
 
         $this->currentUser->deleteFromSession(deleteCookie: true);
         $ssoLogout = $this->configuration->get(item: 'security.ssoLogoutRedirect');
@@ -179,7 +191,7 @@ final class AuthenticationController extends AbstractAdministrationController
      * @throws \Exception
      */
     #[Route(path: '/check', name: 'admin.auth.check', methods: ['POST'])]
-    public function check(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function check(Request $request): RedirectResponse
     {
         if ($this->currentUser->isLoggedIn()) {
             return new RedirectResponse(url: './');
@@ -197,8 +209,11 @@ final class AuthenticationController extends AbstractAdministrationController
 
             if ($result) {
                 $user->twoFactorSuccess();
+                $this->adminLog->log($user, AdminLogType::AUTH_2FA_SUCCESS->value . ':' . $user->getLogin());
                 return new RedirectResponse(url: './');
             }
+
+            $this->adminLog->log($user, AdminLogType::AUTH_2FA_FAILED->value . ':' . $user->getLogin());
         }
 
         return new RedirectResponse('./token?user-id=' . $userId);

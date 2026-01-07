@@ -24,6 +24,7 @@ use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
+use phpMyFAQ\Pagination\UrlConfig;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Twig\Extensions\FaqTwigExtension;
 use phpMyFAQ\Twig\Extensions\TitleSlugifierTwigExtension;
@@ -61,19 +62,19 @@ final class CommentsController extends AbstractAdministrationController
         $news = $this->container->get(id: 'phpmyfaq.news');
         $newsHeader = $news->getHeader();
 
-        $baseUrl = sprintf('%sadmin/comments?page=%d', $this->configuration->getDefaultUrl(), $page);
+        $faqCommentsPagination = new Pagination(
+            baseUrl: $request->getUri(),
+            total: is_countable($allFaqComments) ? count($allFaqComments) : 0,
+            perPage: $itemsPerPage,
+            urlConfig: new UrlConfig(pageParamName: 'page'),
+        );
 
-        $faqCommentsPagination = new Pagination([
-            'baseUrl' => $baseUrl,
-            'total' => is_countable($allFaqComments) ? count($allFaqComments) : 0,
-            'perPage' => $itemsPerPage,
-        ]);
-
-        $newsCommentsPagination = new Pagination([
-            'baseUrl' => $baseUrl,
-            'total' => is_countable($allNewsComments) ? count($allNewsComments) : 0,
-            'perPage' => $itemsPerPage,
-        ]);
+        $newsCommentsPagination = new Pagination(
+            baseUrl: $request->getUri(),
+            total: is_countable($allNewsComments) ? count($allNewsComments) : 0,
+            perPage: $itemsPerPage,
+            urlConfig: new UrlConfig(pageParamName: 'page'),
+        );
 
         $this->addExtension(new IntlExtension());
         $this->addExtension(new AttributeExtension(FaqTwigExtension::class));

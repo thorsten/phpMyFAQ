@@ -34,6 +34,7 @@ use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Instance\Search\Elasticsearch;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link\Util\TitleSlugifier;
+use phpMyFAQ\Pagination\UrlConfig;
 use stdClass;
 
 /*
@@ -441,15 +442,12 @@ class Faq
                 $page,
             );
 
-            $options = [
-                'baseUrl' => $baseUrl,
-                'total' => $num,
-                'perPage' => $this->configuration->get(item: 'records.numberOfRecordsPerPage'),
-                'rewriteUrl' => $rewriteUrl,
-                'pageParamName' => 'seite',
-            ];
-
-            $pagination = new Pagination($options);
+            $pagination = new Pagination(
+                baseUrl: $baseUrl,
+                total: $num,
+                perPage: $this->configuration->get(item: 'records.numberOfRecordsPerPage'),
+                urlConfig: new UrlConfig(pageParamName: 'seite', rewriteUrl: $rewriteUrl),
+            );
             $output .= $pagination->render();
         }
 

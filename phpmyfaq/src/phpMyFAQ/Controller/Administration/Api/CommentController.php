@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
-use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class CommentController extends AbstractController
+final class CommentController extends AbstractAdministrationApiController
 {
     /**
      * @throws \Exception
@@ -55,6 +55,13 @@ final class CommentController extends AbstractController
 
             foreach ($commentIds as $commentId) {
                 $result = $comments->delete($data->type, $commentId);
+            }
+
+            if ($result) {
+                $this->adminLog->log(
+                    $this->currentUser,
+                    AdminLogType::COMMENT_DELETE->value . ':' . implode(',', $commentIds),
+                );
             }
 
             return $this->json(['success' => $result], Response::HTTP_OK);

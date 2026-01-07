@@ -8,6 +8,9 @@
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group mr-2">
+        <button class="btn btn-outline-success" id="pmf-export-admin-log" data-pmf-csrf="{{ csrfExportAdminLogToken }}">
+          <i aria-hidden="true" class="bi bi-download"></i> {{ buttonExportAdminLog }}
+        </button>
         <button class="btn btn-outline-danger" id="pmf-delete-admin-log" data-pmf-csrf="{{ csrfDeleteAdminLogToken }}">
           <i aria-hidden="true" class="bi bi-trash"></i> {{ buttonDeleteAdminLog }}
         </button>

@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
@@ -114,6 +115,7 @@ final class GroupController extends AbstractAdministrationController
         }
 
         if ($groupId !== 0) {
+            $this->adminLog->log($this->currentUser, AdminLogType::GROUP_ADD->value . ':' . $groupId);
             $message = sprintf('<div class="alert alert-success">%s</div>', Translation::get(key: 'ad_group_suc'));
         }
 
@@ -175,6 +177,7 @@ final class GroupController extends AbstractAdministrationController
         }
 
         if ($deleteResult) {
+            $this->adminLog->log($this->currentUser, AdminLogType::GROUP_DELETE->value . ':' . $groupId);
             $message = sprintf('<div class="alert alert-success">%s</div>', Translation::get(key: 'ad_group_deleted'));
         }
 
@@ -222,6 +225,7 @@ final class GroupController extends AbstractAdministrationController
         }
 
         if ($changeResult) {
+            $this->adminLog->log($this->currentUser, AdminLogType::GROUP_EDIT->value . ':' . $groupId);
             $message = sprintf(
                 '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
                 Translation::get(key: 'ad_msg_savedsuc_1'),
@@ -264,6 +268,8 @@ final class GroupController extends AbstractAdministrationController
                 $user->perm->addToGroup((int) $groupMember, $groupId);
             }
 
+            $this->adminLog->log($this->currentUser, AdminLogType::GROUP_EDIT->value . ' (members):' . $groupId);
+
             $message = sprintf(
                 '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
                 Translation::get(key: 'ad_msg_savedsuc_1'),
@@ -305,6 +311,8 @@ final class GroupController extends AbstractAdministrationController
             foreach ($groupPermissions as $groupPermission) {
                 $user->perm->grantGroupRight($groupId, (int) $groupPermission);
             }
+
+            $this->adminLog->log($this->currentUser, AdminLogType::GROUP_CHANGE_PERMISSIONS->value . ':' . $groupId);
 
             $message = sprintf(
                 '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',

@@ -20,8 +20,8 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use DateTime;
-use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Entity\NewsMessage;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\News;
@@ -32,7 +32,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class NewsController extends AbstractController
+final class NewsController extends AbstractAdministrationApiController
 {
     /**
      * @throws \Exception
@@ -76,6 +76,8 @@ final class NewsController extends AbstractController
             ->setCreated(new DateTime());
 
         if ($news->create($newsMessage)) {
+            $this->adminLog->log($this->currentUser, AdminLogType::NEWS_ADD->value);
+
             return $this->json(['success' => Translation::get(key: 'ad_news_updatesuc')], Response::HTTP_OK);
         }
 
@@ -101,6 +103,8 @@ final class NewsController extends AbstractController
         $deleteId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
 
         if ($news->delete((int) $deleteId)) {
+            $this->adminLog->log($this->currentUser, AdminLogType::NEWS_DELETE->value . ':' . $deleteId);
+
             return $this->json(['success' => Translation::get(key: 'ad_news_delsuc')], Response::HTTP_OK);
         }
 
@@ -151,6 +155,8 @@ final class NewsController extends AbstractController
             ->setCreated(new DateTime());
 
         if ($news->update($newsMessage)) {
+            $this->adminLog->log($this->currentUser, AdminLogType::NEWS_EDIT->value . ':' . $newsId);
+
             return $this->json(['success' => Translation::get(key: 'ad_news_updatesuc')], Response::HTTP_OK);
         }
 
@@ -177,10 +183,14 @@ final class NewsController extends AbstractController
 
         if ($status) {
             $news->activate($newsId);
+            $this->adminLog->log($this->currentUser, AdminLogType::NEWS_EDIT->value . ':' . $newsId);
+
             return $this->json(['success' => Translation::get(key: 'ad_news_updatesuc')], Response::HTTP_OK);
         }
 
         $news->deactivate($newsId);
+        $this->adminLog->log($this->currentUser, AdminLogType::NEWS_EDIT->value . ':' . $newsId);
+
         return $this->json(['success' => Translation::get(key: 'ad_news_updatesuc')], Response::HTTP_OK);
     }
 }

@@ -159,6 +159,7 @@ final class SearchController extends AbstractFrontController
             'currentPage' => $searchData['currentPage'],
             'from' => Translation::get(key: 'msgVoteFrom'),
             'msgSearchResults' => $plurals->GetMsg('plmsgSearchAmount', $searchData['numberOfSearchResults'] ?? 0),
+            'msgSearchResultsPagination' => $plurals->GetMsg('plmsgPagesTotal', $searchData['totalPages'] ?? 0),
             'searchTerm' => $searchData['searchTerm'],
             'searchTags' => $searchData['searchTags'],
             'msgSearchWord' => Translation::get(key: 'msgSearchWord'),

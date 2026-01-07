@@ -21,7 +21,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use Exception;
-use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
@@ -32,7 +32,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class SessionController extends AbstractController
+final class SessionController extends AbstractAdministrationApiController
 {
     /**
      * @throws Exception
@@ -57,10 +57,13 @@ final class SessionController extends AbstractController
         $file = fopen($filePath, mode: 'w');
         if ($file) {
             foreach ($data as $row) {
-                fputcsv($file, [$row['ip'], $row['time']], separator: ',', enclosure: '"', escape: '\\', eol: PHP_EOL);
+                fputcsv($file, [$row['ip'], $row['time']], separator: ',', enclosure: '"', eol: PHP_EOL);
             }
 
             fclose($file);
+
+            $this->adminLog->log($this->currentUser, AdminLogType::DATA_EXPORT_SESSIONS->value);
+
             $binaryFileResponse = new BinaryFileResponse($filePath);
             $binaryFileResponse->setContentDisposition(
                 ResponseHeaderBag::DISPOSITION_INLINE,

@@ -29,6 +29,8 @@ use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Helper\TagsHelper;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Pagination;
+use phpMyFAQ\Pagination\PaginationTemplates;
+use phpMyFAQ\Pagination\UrlConfig;
 use phpMyFAQ\Search;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
@@ -137,18 +139,18 @@ final class SearchService
         ));
 
         // Setup pagination
-        $confPerPage = $this->configuration->get('records.numberOfRecordsPerPage');
+        $confPerPage = (int) $this->configuration->get('records.numberOfRecordsPerPage');
         $totalPages = (int) ceil($numOfResults / $confPerPage);
 
-        $options = [
-            'baseUrl' => $baseUrl,
-            'total' => $numOfResults,
-            'perPage' => $confPerPage,
-            'pageParamName' => 'seite',
-            'layoutTpl' => '<ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul>',
-        ];
-
-        $faqPagination = new Pagination($options);
+        $faqPagination = new Pagination(
+            baseUrl: $baseUrl,
+            total: $numOfResults,
+            perPage: $confPerPage,
+            templates: new PaginationTemplates(
+                layout: '<ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul>',
+            ),
+            urlConfig: new UrlConfig(pageParamName: 'seite'),
+        );
 
         // Get formatted search results
         $formattedSearchResults = [];

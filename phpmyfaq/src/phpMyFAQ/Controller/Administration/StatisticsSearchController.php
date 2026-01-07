@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller\Administration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Pagination;
+use phpMyFAQ\Pagination\UrlConfig;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,14 +49,12 @@ final class StatisticsSearchController extends AbstractAdministrationController
         $searchesCount = $search->getSearchesCount();
         $searchesList = $search->getMostPopularSearches($searchesCount + 1, true);
 
-        // Pagination options
-        $options = [
-            'baseUrl' => $request->getUri(),
-            'total' => is_countable($searchesList) ? count($searchesList) : 0,
-            'perPage' => $perPage,
-            'pageParamName' => 'page',
-        ];
-        $pagination = new Pagination($options);
+        $pagination = new Pagination(
+            baseUrl: $request->getUri(),
+            total: is_countable($searchesList) ? count($searchesList) : 0,
+            perPage: $perPage,
+            urlConfig: new UrlConfig(pageParamName: 'page'),
+        );
 
         return $this->render('@admin/statistics/search.twig', [
             ...$this->getHeader($request),

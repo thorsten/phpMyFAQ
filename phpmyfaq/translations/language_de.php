@@ -1538,6 +1538,7 @@ $PMF_LANG['msgError500'] = 'Interner Serverfehler';
 $PMF_LANG['msgError500Description'] = 'Der Server hat einen internen Fehler festgestellt und konnte Ihre Anfrage nicht abschließen. Bitte versuchen Sie es später erneut.';
 $PMF_LANG['msgErrorDetails'] = 'Fehlerdetails';
 $PMF_LANG['msgTryAgain'] = 'Erneut versuchen';
+$PMF_LANG['msgAdminLogExportCsv'] = "Admin-Logs als CSV exportieren";
 
 // Plugins
 $PMF_LANG["msgPlugins"] = "Plugins";

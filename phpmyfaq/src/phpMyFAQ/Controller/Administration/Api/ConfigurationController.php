@@ -19,8 +19,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
-use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
@@ -30,7 +30,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class ConfigurationController extends AbstractController
+final class ConfigurationController extends AbstractAdministrationApiController
 {
     /**
      * @throws Exception|\Exception
@@ -83,6 +83,8 @@ final class ConfigurationController extends AbstractController
         }
 
         $this->configuration->set('main.maintenanceMode', 'true');
+
+        $this->adminLog->log($this->currentUser, AdminLogType::SYSTEM_MAINTENANCE_MODE_ENABLED->value);
 
         return $this->json(['success' => Translation::get(key: 'healthCheckOkay')], Response::HTTP_OK);
     }
