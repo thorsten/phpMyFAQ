@@ -20,18 +20,25 @@ import { Response } from '../interfaces';
  *
  * @param name
  * @param active
+ * @param csrfToken
  */
-export const togglePluginStatus = async (name: string, active: boolean): Promise<Response> => {
+export const togglePluginStatus = async (name: string, active: boolean, csrfToken: string): Promise<Response> => {
     const response = await fetch('api/plugin/toggle', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'X-CSRF-Token': csrfToken,
         },
         body: JSON.stringify({
             name,
             active,
         }),
     });
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `HTTP error! status: ${response.status} ${response.statusText}`);
+    }
 
     return (await response.json()) as Response;
 };
@@ -41,18 +48,30 @@ export const togglePluginStatus = async (name: string, active: boolean): Promise
  *
  * @param name
  * @param config
+ * @param csrfToken
  */
-export const savePluginConfig = async (name: string, config: Record<string, any>): Promise<Response> => {
+export const savePluginConfig = async (
+    name: string,
+    config: Record<string, any>,
+    csrfToken: string
+): Promise<Response> => {
     const response = await fetch('api/plugin/config', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'X-CSRF-Token': csrfToken,
         },
         body: JSON.stringify({
             name,
             config,
+            csrf: csrfToken, // Also including in body as requested for backend validation
         }),
     });
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `HTTP error! status: ${response.status} ${response.statusText}`);
+    }
 
     return (await response.json()) as Response;
 };

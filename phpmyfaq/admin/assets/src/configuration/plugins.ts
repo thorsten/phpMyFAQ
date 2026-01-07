@@ -20,6 +20,8 @@ import { pushNotification, pushErrorNotification } from '../../../../assets/src/
  * Handles plugin status toggling and configuration modal
  */
 export const handlePlugins = (): void => {
+    const getCsrfToken = () => document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
     const toggleCheckboxes = document.querySelectorAll<HTMLInputElement>('.plugin-toggle');
     toggleCheckboxes.forEach((checkbox) => {
         checkbox.addEventListener('change', async (event) => {
@@ -27,13 +29,14 @@ export const handlePlugins = (): void => {
             const row = target.closest('tr');
             const pluginName = row ? row.getAttribute('data-plugin-name') : null;
             const active = target.checked;
+            const csrfToken = getCsrfToken();
 
             if (!pluginName) {
                 return;
             }
 
             try {
-                const result = await togglePluginStatus(pluginName, active);
+                const result = await togglePluginStatus(pluginName, active, csrfToken);
 
                 if (!result.success) {
                     target.checked = !active; // Revert
@@ -41,10 +44,10 @@ export const handlePlugins = (): void => {
                 } else {
                     pushNotification('Plugin status updated successfully.');
                 }
-            } catch (error) {
+            } catch (error: any) {
                 target.checked = !active; // Revert
                 console.error('Error toggling plugin:', error);
-                pushErrorNotification('An error occurred while updating plugin status.');
+                pushErrorNotification(error.message || 'An error occurred while updating plugin status.');
             }
         });
     });
@@ -113,18 +116,47 @@ export const handlePlugins = (): void => {
                             label.textContent = key;
                             label.htmlFor = 'config_' + key;
 
-                            let input: HTMLInputElement;
+                            let input: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
                             if (typeof value === 'boolean') {
                                 div.className = 'form-check form-switch mb-3';
-                                input = document.createElement('input');
-                                input.type = 'checkbox';
-                                input.className = 'form-check-input';
-                                input.checked = value;
-                                input.value = '1';
+                                const checkInput = document.createElement('input');
+                                checkInput.type = 'checkbox';
+                                checkInput.className = 'form-check-input';
+                                checkInput.checked = value;
+                                checkInput.value = '1';
                                 label.className = 'form-check-label';
-                                div.appendChild(input);
+                                div.appendChild(checkInput);
                                 div.appendChild(label);
+                                input = checkInput;
+                            } else if (typeof value === 'number' || !isNaN(Number(value)) && String(value).trim() !== '') {
+                                input = document.createElement('input');
+                                input.type = 'number';
+                                input.className = 'form-control';
+                                input.value = String(value);
+                                div.appendChild(label);
+                                div.appendChild(input);
+                            } else if (key.toLowerCase().includes('email')) {
+                                input = document.createElement('input');
+                                input.type = 'email';
+                                input.className = 'form-control';
+                                input.value = String(value);
+                                div.appendChild(label);
+                                div.appendChild(input);
+                            } else if (key.toLowerCase().includes('date')) {
+                                input = document.createElement('input');
+                                input.type = 'date';
+                                input.className = 'form-control';
+                                input.value = String(value);
+                                div.appendChild(label);
+                                div.appendChild(input);
+                            } else if (String(value).length > 50) {
+                                input = document.createElement('textarea');
+                                input.className = 'form-control';
+                                input.rows = 3;
+                                input.value = String(value);
+                                div.appendChild(label);
+                                div.appendChild(input);
                             } else {
                                 input = document.createElement('input');
                                 input.type = 'text';
@@ -163,6 +195,7 @@ export const handlePlugins = (): void => {
 
             const nameInput = form.querySelector<HTMLInputElement>('input[name="name"]');
             const pluginName = nameInput?.value;
+            const csrfToken = getCsrfToken();
             const configData: Record<string, any> = {};
 
             const inputs = container.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(
@@ -174,6 +207,11 @@ export const handlePlugins = (): void => {
                     const key = nameAttr.substring(7, nameAttr.length - 1);
                     if (input instanceof HTMLInputElement && input.type === 'checkbox') {
                         configData[key] = input.checked;
+                    } else if (input instanceof HTMLInputElement && input.type === 'number') {
+                        configData[key] = input.value.includes('.') ? parseFloat(input.value) : parseInt(input.value, 10);
+                        if (isNaN(configData[key])) {
+                            configData[key] = 0;
+                        }
                     } else {
                         configData[key] = input.value;
                     }
@@ -183,16 +221,16 @@ export const handlePlugins = (): void => {
             if (!pluginName) return;
 
             try {
-                const result = await savePluginConfig(pluginName, configData);
+                const result = await savePluginConfig(pluginName, configData, csrfToken);
 
                 if (result.success) {
                     window.location.reload();
                 } else {
                     pushErrorNotification('Failed to save configuration: ' + (result.message || 'Unknown error'));
                 }
-            } catch (error) {
+            } catch (error: any) {
                 console.error('Error saving config:', error);
-                pushErrorNotification('An error occurred while saving configuration.');
+                pushErrorNotification(error.message || 'An error occurred while saving configuration.');
             }
         });
     }

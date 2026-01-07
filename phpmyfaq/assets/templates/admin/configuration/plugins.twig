@@ -32,9 +32,10 @@
           <td>{{ plugin.name }}</td>
           <td>{{ plugin.version }}</td>
           <td>
+            {% set safePluginName = plugin.name | replace({'.': '_', ' ': '_'}) %}
             <div class="form-check form-switch">
-              <input class="form-check-input plugin-toggle" type="checkbox" id="active_{{ plugin.name }}" {% if activePlugins[plugin.name] %}checked{% endif %}>
-              <label class="form-check-label visually-hidden" for="active_{{ plugin.name }}">
+              <input class="form-check-input plugin-toggle" type="checkbox" id="active_{{ safePluginName }}" {% if activePlugins[plugin.name] %}checked{% endif %}>
+              <label class="form-check-label visually-hidden" for="active_{{ safePluginName }}">
                 {{ 'msgActive' | translate }}
               </label>
             </div>
@@ -50,7 +51,7 @@
               data-plugin-name="{{ plugin.name }}"
               data-plugin-description="{{ plugin.getAdvDescription()|default(plugin.description) }}"
               data-plugin-implementation="{{ plugin.getImplementation()|default('') }}"
-              data-plugin-config='{{ plugin.config | json_encode }}'
+              data-plugin-config="{{ plugin.config | json_encode | e('html_attr') }}"
               title="{{ 'msgConfig' | translate }}"
             >
               <i class="bi bi-gear-fill" aria-hidden="true"></i>

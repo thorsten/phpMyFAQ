@@ -176,7 +176,7 @@ class PdoSqlsrv extends Database implements DriverInterface
         'faqdata_plugins' => 'CREATE TABLE %sfaqdata_plugins (
             name NVARCHAR(255) NOT NULL,
             active INTEGER NOT NULL DEFAULT 0,
-            config NVARCHAR(MAX) DEFAULT NULL,
+            config VARCHAR(MAX) DEFAULT NULL,
             PRIMARY KEY (name))',
         'faqdata_tags' => 'CREATE TABLE %sfaqdata_tags (
             record_id INTEGER NOT NULL,

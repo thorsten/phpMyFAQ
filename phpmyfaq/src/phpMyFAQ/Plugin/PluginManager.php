@@ -401,13 +401,7 @@ class PluginManager
         return PMF_ROOT_DIR . '/content/plugins/' . $pluginName;
     }
 
-    /**
-     * Gets the relative web path for a plugin
-     */
-    private function getPluginWebPath(string $pluginName): string
-    {
-        return 'content/plugins/' . $pluginName;
-    }
+
 
 
     private function registerPluginStylesheets(string $pluginName, array $stylesheets): void

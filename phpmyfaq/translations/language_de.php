@@ -1461,14 +1461,18 @@ $LANG_CONF['seo.contentRobotsText'] = ['area', 'Inhalt für die robots.txt', '']
 $LANG_CONF['seo.contentLlmsText'] = ['area', 'Inhalt für die llms.txt', ''];
 $PMF_LANG['msgActivateMaintenanceMode'] = 'Wartungs-Modus aktivieren';
 $PMF_LANG['msgPlugins'] = 'Plugins';
-$PMF_LANG['msgPluginListing'] = 'Liste der installierten Plugins und ihrer Versionen';
+$PMF_LANG['msgPluginListing'] = 'Plugin-Übersicht';
 $PMF_LANG['msgPluginName'] = 'Plugin-Name';
 $PMF_LANG['msgPluginVersion'] = 'Version';
 $PMF_LANG['msgPluginAuthor'] = 'Autor';
 $PMF_LANG['msgPluginDescription'] = 'Beschreibung';
-$PMF_LANG['msgPluginReason'] = 'Grund';
+$PMF_LANG['msgActions'] = 'Aktionen';
+$PMF_LANG['msgConfig'] = 'Konfiguration';
 $PMF_LANG['msgIncompatiblePlugins'] = 'Inkompatible Plugins';
-$PMF_LANG['msgIncompatiblePluginsInfo'] = 'Die folgenden Plugins konnten aufgrund von Kompatibilitätsproblemen nicht geladen werden.';
+$PMF_LANG['msgIncompatiblePluginsInfo'] = 'Die folgenden Plugins sind mit Ihrer phpMyFAQ-Version inkompatibel und können nicht aktiviert werden.';
+$PMF_LANG['msgPluginReason'] = 'Grund';
+$PMF_LANG['msgNoPluginConfig'] = 'Keine Konfiguration verfügbar.';
+$PMF_LANG['msgPluginImplementation'] = 'Implementierung';
 
 // added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
 $PMF_LANG['msgReportABug'] = 'Melde einen Fehler';
@@ -1540,20 +1544,6 @@ $PMF_LANG['msgErrorDetails'] = 'Fehlerdetails';
 $PMF_LANG['msgTryAgain'] = 'Erneut versuchen';
 $PMF_LANG['msgAdminLogExportCsv'] = "Admin-Logs als CSV exportieren";
 
-// Plugins
-$PMF_LANG["msgPlugins"] = "Plugins";
-$PMF_LANG["msgPluginListing"] = "Plugin-Übersicht";
-$PMF_LANG["msgPluginName"] = "Plugin-Name";
-$PMF_LANG["msgPluginVersion"] = "Version";
-$PMF_LANG["msgPluginAuthor"] = "Autor";
-$PMF_LANG["msgPluginDescription"] = "Beschreibung";
-$PMF_LANG["msgActions"] = "Aktionen";
-$PMF_LANG["msgConfig"] = "Konfiguration";
-$PMF_LANG["msgIncompatiblePlugins"] = "Inkompatible Plugins";
-$PMF_LANG["msgIncompatiblePluginsInfo"] = "Die folgenden Plugins sind mit Ihrer phpMyFAQ-Version inkompatibel und können nicht aktiviert werden.";
-$PMF_LANG["msgPluginReason"] = "Grund";
-$PMF_LANG["msgNoPluginConfig"] = "Keine Konfiguration verfügbar.";
-$PMF_LANG["msgPluginImplementation"] = "Implementierung";
 
 return $PMF_LANG;
 

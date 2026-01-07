@@ -1143,7 +1143,7 @@ class Update extends AbstractSetup
                     break;
                 case 'pgsql':
                 case 'pdo_pgsql':
-                     $this->queries[] = sprintf(
+                    $this->queries[] = sprintf(
                         'CREATE TABLE %sfaqdata_plugins (
                             name VARCHAR(255) NOT NULL,
                             active INTEGER NOT NULL DEFAULT 0,
@@ -1154,7 +1154,7 @@ class Update extends AbstractSetup
                     break;
                 case 'sqlite3':
                 case 'pdo_sqlite':
-                     $this->queries[] = sprintf(
+                    $this->queries[] = sprintf(
                         'CREATE TABLE %sfaqdata_plugins (
                             name VARCHAR(255) NOT NULL,
                             active INTEGER NOT NULL DEFAULT 0,
@@ -1165,11 +1165,11 @@ class Update extends AbstractSetup
                     break;
                 case 'sqlsrv':
                 case 'pdo_sqlsrv':
-                     $this->queries[] = sprintf(
+                    $this->queries[] = sprintf(
                         'CREATE TABLE %sfaqdata_plugins (
                             name NVARCHAR(255) NOT NULL,
                             active INTEGER NOT NULL DEFAULT 0,
-                            config NVARCHAR(MAX) DEFAULT NULL,
+                            config VARCHAR(MAX) DEFAULT NULL,
                             PRIMARY KEY (name))',
                         Database::getTablePrefix(),
                     );
