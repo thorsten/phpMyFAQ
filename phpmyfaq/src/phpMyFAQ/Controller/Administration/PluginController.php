@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Core\Exception;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -38,10 +39,16 @@ final class PluginController extends AbstractAdministrationController
         $pluginManager = $this->container->get(id: 'phpmyfaq.plugin.plugin-manager');
         $pluginManager->loadPlugins();
 
+        $activePlugins = [];
+        foreach ($pluginManager->getPlugins() as $plugin) {
+            $activePlugins[$plugin->getName()] = $pluginManager->isPluginActive($plugin->getName());
+        }
+
         return $this->render('@admin/configuration/plugins.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
             'pluginList' => $pluginManager->getPlugins(),
+            'activePlugins' => $activePlugins,
             'incompatiblePlugins' => $pluginManager->getIncompatiblePlugins(),
         ]);
     }

@@ -177,6 +177,11 @@ class Pgsql extends Database implements DriverInterface
             record_id INTEGER NOT NULL,
             group_id INTEGER NOT NULL,
             PRIMARY KEY (record_id, group_id))',
+        'faqdata_plugins' => 'CREATE TABLE %sfaqdata_plugins (
+            name VARCHAR(255) NOT NULL,
+            active INTEGER NOT NULL DEFAULT 0,
+            config TEXT DEFAULT NULL,
+            PRIMARY KEY (name))',
         'faqdata_tags' => 'CREATE TABLE %sfaqdata_tags (
             record_id INTEGER NOT NULL,
             tagging_id INTEGER NOT NULL,

@@ -184,6 +184,9 @@ class Update extends AbstractSetup
         $this->applyUpdates410Alpha2();
         $this->applyUpdates410Alpha3();
 
+        // 4.2 updates
+        $this->applyUpdates420Alpha();
+
         // Optimize the tables
         $this->optimizeTables();
 
@@ -1116,6 +1119,59 @@ class Update extends AbstractSetup
                         'CREATE INDEX IF NOT EXISTS idx_faqsearches_date_term_lang ON %sfaqsearches '
                         . '(searchdate, searchterm, lang)',
                         $tablePrefix,
+                    );
+                    break;
+            }
+        }
+    }
+
+    private function applyUpdates420Alpha(): void
+    {
+        if (version_compare($this->version, '4.2.0-alpha', '<')) {
+            switch (Database::getType()) {
+                case 'mysqli':
+                case 'pdo_mysql':
+                    $this->queries[] = sprintf(
+                        'CREATE TABLE %sfaqdata_plugins (
+                            name VARCHAR(255) NOT NULL,
+                            active INT(1) NOT NULL DEFAULT 0,
+                            config LONGTEXT DEFAULT NULL,
+                            PRIMARY KEY (name))
+                            DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+                        Database::getTablePrefix(),
+                    );
+                    break;
+                case 'pgsql':
+                case 'pdo_pgsql':
+                     $this->queries[] = sprintf(
+                        'CREATE TABLE %sfaqdata_plugins (
+                            name VARCHAR(255) NOT NULL,
+                            active INTEGER NOT NULL DEFAULT 0,
+                            config TEXT DEFAULT NULL,
+                            PRIMARY KEY (name))',
+                        Database::getTablePrefix(),
+                    );
+                    break;
+                case 'sqlite3':
+                case 'pdo_sqlite':
+                     $this->queries[] = sprintf(
+                        'CREATE TABLE %sfaqdata_plugins (
+                            name VARCHAR(255) NOT NULL,
+                            active INTEGER NOT NULL DEFAULT 0,
+                            config TEXT DEFAULT NULL,
+                            PRIMARY KEY (name))',
+                        Database::getTablePrefix(),
+                    );
+                    break;
+                case 'sqlsrv':
+                case 'pdo_sqlsrv':
+                     $this->queries[] = sprintf(
+                        'CREATE TABLE %sfaqdata_plugins (
+                            name NVARCHAR(255) NOT NULL,
+                            active INTEGER NOT NULL DEFAULT 0,
+                            config NVARCHAR(MAX) DEFAULT NULL,
+                            PRIMARY KEY (name))',
+                        Database::getTablePrefix(),
                     );
                     break;
             }

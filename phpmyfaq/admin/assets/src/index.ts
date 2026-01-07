@@ -35,6 +35,7 @@ import {
   handleFormEdit,
   handleFormTranslations,
   handleOpenSearch,
+  handlePlugins,
 } from './configuration';
 import {
   handleAttachmentUploads,
@@ -164,6 +165,9 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   // Configuration → Elasticsearch / OpenSearch configuration
   await handleElasticsearch();
   await handleOpenSearch();
+
+  // Configuration → Plugins
+  handlePlugins();
 
   // Import & Export → Import Records
   await handleUploadCSVForm();

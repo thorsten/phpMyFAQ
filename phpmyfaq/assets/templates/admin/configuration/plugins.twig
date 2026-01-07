@@ -20,21 +20,90 @@
         <tr>
           <th>{{ 'msgPluginName' | translate }}</th>
           <th>{{ 'msgPluginVersion' | translate }}</th>
+          <th>{{ 'msgActive' | translate }}</th>
           <th>{{ 'msgPluginAuthor' | translate }}</th>
           <th>{{ 'msgPluginDescription' | translate }}</th>
+          <th class="text-end">{{ 'msgActions' | translate }}</th>
         </tr>
       </thead>
       <tbody>
         {% for plugin in pluginList %}
-        <tr>
+        <tr data-plugin-name="{{ plugin.name }}">
           <td>{{ plugin.name }}</td>
           <td>{{ plugin.version }}</td>
+          <td>
+            <div class="form-check form-switch">
+              <input class="form-check-input plugin-toggle" type="checkbox" id="active_{{ plugin.name }}" {% if activePlugins[plugin.name] %}checked{% endif %}>
+              <label class="form-check-label visually-hidden" for="active_{{ plugin.name }}">
+                {{ 'msgActive' | translate }}
+              </label>
+            </div>
+          </td>
           <td>{{ plugin.author }}</td>
           <td>{{ plugin.description }}</td>
+          <td class="text-end">
+              <button
+              class="btn btn-sm btn-secondary plugin-config-btn"
+              type="button"
+              data-bs-toggle="modal"
+              data-bs-target="#pluginConfigModal"
+              data-plugin-name="{{ plugin.name }}"
+              data-plugin-description="{{ plugin.getAdvDescription()|default(plugin.description) }}"
+              data-plugin-implementation="{{ plugin.getImplementation()|default('') }}"
+              data-plugin-config='{{ plugin.config | json_encode }}'
+              title="{{ 'msgConfig' | translate }}"
+            >
+              <i class="bi bi-gear-fill" aria-hidden="true"></i>
+            </button>
+          </td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
+
+    <div class="modal fade" id="pluginConfigModal" tabindex="-1" aria-labelledby="pluginConfigModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="pluginConfigModalLabel">{{ 'msgConfig' | translate }}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <div class="mb-3">
+                  <strong>{{ 'msgPluginDescription' | translate }}:</strong>
+                  <p id="pluginDescriptionText" class="mt-1"></p>
+              </div>
+
+              <div id="pluginImplementationContainer" class="mb-3 d-none">
+                  <strong>{{ 'msgPluginImplementation' | translate|default('Implementation') }}:</strong>
+                  <div class="card bg-light mt-1">
+                      <div class="card-body py-2">
+                          <code id="pluginImplementationCode"></code>
+                      </div>
+                  </div>
+              </div>
+
+              <hr>
+
+              <form id="pluginConfigForm">
+                <input type="hidden" id="configPluginName" name="name">
+                <div id="configFieldsContainer">
+                  <!-- Config fields will be generated here -->
+                </div>
+                <div id="pluginNoConfigMsg" class="alert alert-info d-none">
+                  {{ 'msgNoPluginConfig' | translate }}
+                </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'msgCancel' | translate }}</button>
+            <button type="button" class="btn btn-primary" id="savePluginConfigBtn">{{ 'msgSave' | translate }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
 
     {% if incompatiblePlugins is not empty %}
     <div class="alert alert-warning mt-4" role="alert">

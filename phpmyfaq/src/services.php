@@ -297,7 +297,10 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.configuration'),
     ]);
 
-    $services->set('phpmyfaq.plugin.plugin-manager', PluginManager::class);
+    $services->set('phpmyfaq.plugin.plugin-manager', PluginManager::class)->factory([
+        service('phpmyfaq.configuration'),
+        'getPluginManager',
+    ]);
 
     $services->set('phpmyfaq.question', Question::class)->args([
         service('phpmyfaq.configuration'),

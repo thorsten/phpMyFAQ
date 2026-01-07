@@ -1538,4 +1538,20 @@ $PMF_LANG['msgError500Description'] = 'The server encountered an internal error 
 $PMF_LANG['msgErrorDetails'] = 'Error Details';
 $PMF_LANG['msgTryAgain'] = 'Try Again';
 
+// Plugins
+$PMF_LANG["msgPlugins"] = "Plugins";
+$PMF_LANG["msgPluginListing"] = "Plugin Listing";
+$PMF_LANG["msgPluginName"] = "Plugin Name";
+$PMF_LANG["msgPluginVersion"] = "Version";
+$PMF_LANG["msgPluginAuthor"] = "Author";
+$PMF_LANG["msgPluginDescription"] = "Description";
+$PMF_LANG["msgActions"] = "Actions";
+$PMF_LANG["msgConfig"] = "Configuration";
+$PMF_LANG["msgIncompatiblePlugins"] = "Incompatible Plugins";
+$PMF_LANG["msgIncompatiblePluginsInfo"] = "The following plugins are incompatible with your current phpMyFAQ version and cannot be activated.";
+$PMF_LANG["msgPluginReason"] = "Reason";
+$PMF_LANG["msgNoPluginConfig"] = "No configuration available.";
+$PMF_LANG["msgPluginImplementation"] = "Implementation";
+
 return $PMF_LANG;
+

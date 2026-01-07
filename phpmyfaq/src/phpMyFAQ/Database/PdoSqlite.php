@@ -243,6 +243,7 @@ class PdoSqlite implements DatabaseDriver
             $prefix . 'faquser_right',
             $prefix . 'faqvisits',
             $prefix . 'faqvoting',
+            $prefix . 'faqdata_plugins',
         ];
     }
 
