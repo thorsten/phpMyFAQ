@@ -142,13 +142,7 @@ class PluginManager
                     }
                 }
             } else {
-                // Determine if we should treat new plugins as active or inactive.
-                // For safety, inactivity is better, but existing users expect plugins to work if folder exists.
-                // However, user requested "Activation/Deactivation".
-                // If I default to false, all current plugins will stop working until activated.
-                // I should probably insert them as active=0 initially, or maybe active=1 if migrating?
-                // The implementation plan said: "Benutzer muss entscheiden, ob vorhandene Plugins standardmäßig als 'inaktiv'..."
-                // User said "ok sounds good".
+
                 // I will default to inactive (false) for new plugins found on disk but not in DB.
                 $isActive = false; 
             }
@@ -307,8 +301,6 @@ class PluginManager
         $table = \phpMyFAQ\Database::getTablePrefix() . 'faqdata_plugins';
         
         // Ensure table exists to avoid crashes during update/install if not yet run
-        // But we expect it to exist if we are running. 
-        // We can catch exception or just query.
         try {
             $result = $db->query("SELECT name, active, config FROM $table");
         } catch (\Exception $e) {
