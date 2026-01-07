@@ -6,20 +6,23 @@
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Thorsten Rinne
  * @copyright 2025-2026 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2025-01-07
  */
 
 import { togglePluginStatus, savePluginConfig } from '../api';
-import { pushNotification, pushErrorNotification } from '../../../../assets/src/utils';
+import { addElement, pushNotification, pushErrorNotification, TranslationService } from '../../../../assets/src/utils';
 
 /**
  * Handles plugin status toggling and configuration modal
  */
-export const handlePlugins = (): void => {
+export const handlePlugins = async (): Promise<void> => {
+    const Translator = new TranslationService();
+    await Translator.loadTranslations(document.documentElement.lang);
+
     const getCsrfToken = () => document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
     const toggleCheckboxes = document.querySelectorAll<HTMLInputElement>('.plugin-toggle');
@@ -40,39 +43,41 @@ export const handlePlugins = (): void => {
 
                 if (!result.success) {
                     target.checked = !active; // Revert
-                    pushErrorNotification('Failed to update plugin status: ' + (result.message || 'Unknown error'));
+                    pushErrorNotification(
+                        Translator.translate('msgPluginStatusError') + ' ' + (result.message || Translator.translate('msgUnknownError')),
+                    );
                 } else {
-                    pushNotification('Plugin status updated successfully.');
+                    pushNotification(Translator.translate('msgPluginStatusSuccess'));
                 }
             } catch (error: any) {
                 target.checked = !active; // Revert
                 console.error('Error toggling plugin:', error);
-                pushErrorNotification(error.message || 'An error occurred while updating plugin status.');
+                pushErrorNotification(error.message || Translator.translate('msgUnknownError'));
             }
         });
     });
 
     // Configuration Modal
-    const configModalEl = document.getElementById('pluginConfigModal');
-    if (configModalEl) {
-        configModalEl.addEventListener('show.bs.modal', (event: any) => {
+    const pluginConfigModal = document.getElementById('pluginConfigModal');
+    if (pluginConfigModal) {
+        pluginConfigModal.addEventListener('show.bs.modal', (event: any) => {
             const button = event.relatedTarget as HTMLElement;
             const pluginName = button.getAttribute('data-plugin-name');
             const pluginDescription = button.getAttribute('data-plugin-description');
             const pluginImplementation = button.getAttribute('data-plugin-implementation');
             const configJson = button.getAttribute('data-plugin-config');
 
-            const modalTitle = configModalEl.querySelector('.modal-title');
-            const nameInput = configModalEl.querySelector<HTMLInputElement>('#configPluginName');
-            const container = configModalEl.querySelector('#configFieldsContainer');
-            const descText = configModalEl.querySelector('#pluginDescriptionText');
-            const implContainer = configModalEl.querySelector('#pluginImplementationContainer');
-            const implCode = configModalEl.querySelector('#pluginImplementationCode');
-            const noConfigMsg = configModalEl.querySelector('#pluginNoConfigMsg');
+            const modalTitle = pluginConfigModal.querySelector('.modal-title');
+            const nameInput = pluginConfigModal.querySelector<HTMLInputElement>('#configPluginName');
+            const container = pluginConfigModal.querySelector('#configFieldsContainer');
+            const descText = pluginConfigModal.querySelector('#pluginDescriptionText');
+            const implContainer = pluginConfigModal.querySelector('#pluginImplementationContainer');
+            const implCode = pluginConfigModal.querySelector('#pluginImplementationCode');
+            const noConfigMsg = pluginConfigModal.querySelector('#pluginNoConfigMsg');
             const saveBtn = document.getElementById('savePluginConfigBtn');
 
             if (modalTitle && pluginName) {
-                modalTitle.textContent = 'Configuration: ' + pluginName;
+                modalTitle.textContent = Translator.translate('msgConfig') + ': ' + pluginName;
             }
             if (nameInput && pluginName) {
                 nameInput.value = pluginName;
@@ -108,69 +113,51 @@ export const handlePlugins = (): void => {
 
                         Object.keys(configData).forEach((key) => {
                             const value = configData[key];
-                            const div = document.createElement('div');
-                            div.className = 'mb-3';
-
-                            const label = document.createElement('label');
-                            label.className = 'form-label';
-                            label.textContent = key;
-                            label.htmlFor = 'config_' + key;
-
-                            let input: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+                            let input: HTMLElement;
 
                             if (typeof value === 'boolean') {
-                                div.className = 'form-check form-switch mb-3';
-                                const checkInput = document.createElement('input');
-                                checkInput.type = 'checkbox';
-                                checkInput.className = 'form-check-input';
-                                checkInput.checked = value;
-                                checkInput.value = '1';
-                                label.className = 'form-check-label';
-                                div.appendChild(checkInput);
-                                div.appendChild(label);
-                                input = checkInput;
-                            } else if (typeof value === 'number' || !isNaN(Number(value)) && String(value).trim() !== '') {
-                                input = document.createElement('input');
-                                input.type = 'number';
-                                input.className = 'form-control';
-                                input.value = String(value);
-                                div.appendChild(label);
-                                div.appendChild(input);
-                            } else if (key.toLowerCase().includes('email')) {
-                                input = document.createElement('input');
-                                input.type = 'email';
-                                input.className = 'form-control';
-                                input.value = String(value);
-                                div.appendChild(label);
-                                div.appendChild(input);
-                            } else if (key.toLowerCase().includes('date')) {
-                                input = document.createElement('input');
-                                input.type = 'date';
-                                input.className = 'form-control';
-                                input.value = String(value);
-                                div.appendChild(label);
-                                div.appendChild(input);
-                            } else if (String(value).length > 50) {
-                                input = document.createElement('textarea');
-                                input.className = 'form-control';
-                                input.rows = 3;
-                                input.value = String(value);
-                                div.appendChild(label);
-                                div.appendChild(input);
+                                input = addElement('div', { className: 'form-check form-switch mb-3' }, [
+                                    addElement('input', {
+                                        type: 'checkbox',
+                                        className: 'form-check-input',
+                                        checked: value,
+                                        value: '1',
+                                        id: 'config_' + key,
+                                        name: 'config[' + key + ']',
+                                    }),
+                                    addElement('label', {
+                                        className: 'form-check-label',
+                                        textContent: key,
+                                        htmlFor: 'config_' + key,
+                                    }),
+                                ]);
                             } else {
-                                input = document.createElement('input');
-                                input.type = 'text';
-                                input.className = 'form-control';
-                                input.value = String(value);
-                                div.appendChild(label);
-                                div.appendChild(input);
+                                const type = (typeof value === 'number' || !isNaN(Number(value)) && String(value).trim() !== '') ? 'number' :
+                                    (key.toLowerCase().includes('email')) ? 'email' :
+                                        (key.toLowerCase().includes('date')) ? 'date' : 'text';
+
+                                const props: Record<string, any> = {
+                                    className: 'form-control',
+                                    value: String(value),
+                                    id: 'config_' + key,
+                                    name: 'config[' + key + ']',
+                                };
+
+                                if (String(value).length > 50 && type === 'text') {
+                                    input = addElement('div', { className: 'mb-3' }, [
+                                        addElement('label', { className: 'form-label', textContent: key, htmlFor: 'config_' + key }),
+                                        addElement('textarea', { ...props, rows: 3 }),
+                                    ]);
+                                } else {
+                                    input = addElement('div', { className: 'mb-3' }, [
+                                        addElement('label', { className: 'form-label', textContent: key, htmlFor: 'config_' + key }),
+                                        addElement('input', { ...props, type }),
+                                    ]);
+                                }
                             }
 
-                            input.id = 'config_' + key;
-                            input.setAttribute('name', 'config[' + key + ']');
-
                             if (container) {
-                                container.appendChild(div);
+                                container.appendChild(input);
                             }
                         });
                     }
@@ -224,13 +211,16 @@ export const handlePlugins = (): void => {
                 const result = await savePluginConfig(pluginName, configData, csrfToken);
 
                 if (result.success) {
+                    pushNotification(Translator.translate('msgPluginConfigSuccess'));
                     window.location.reload();
                 } else {
-                    pushErrorNotification('Failed to save configuration: ' + (result.message || 'Unknown error'));
+                    pushErrorNotification(
+                        Translator.translate('msgPluginConfigError') + ' ' + (result.message || Translator.translate('msgUnknownError')),
+                    );
                 }
             } catch (error: any) {
                 console.error('Error saving config:', error);
-                pushErrorNotification(error.message || 'An error occurred while saving configuration.');
+                pushErrorNotification(error.message || Translator.translate('msgUnknownError'));
             }
         });
     }

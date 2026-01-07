@@ -1132,7 +1132,7 @@ class Update extends AbstractSetup
                 case 'mysqli':
                 case 'pdo_mysql':
                     $this->queries[] = sprintf(
-                        'CREATE TABLE %sfaqdata_plugins (
+                        'CREATE TABLE %sfaqplugins (
                             name VARCHAR(255) NOT NULL,
                             active INT(1) NOT NULL DEFAULT 0,
                             config LONGTEXT DEFAULT NULL,
@@ -1144,7 +1144,7 @@ class Update extends AbstractSetup
                 case 'pgsql':
                 case 'pdo_pgsql':
                     $this->queries[] = sprintf(
-                        'CREATE TABLE %sfaqdata_plugins (
+                        'CREATE TABLE %sfaqplugins (
                             name VARCHAR(255) NOT NULL,
                             active INTEGER NOT NULL DEFAULT 0,
                             config TEXT DEFAULT NULL,
@@ -1155,7 +1155,7 @@ class Update extends AbstractSetup
                 case 'sqlite3':
                 case 'pdo_sqlite':
                     $this->queries[] = sprintf(
-                        'CREATE TABLE %sfaqdata_plugins (
+                        'CREATE TABLE %sfaqplugins (
                             name VARCHAR(255) NOT NULL,
                             active INTEGER NOT NULL DEFAULT 0,
                             config TEXT DEFAULT NULL,
@@ -1166,7 +1166,7 @@ class Update extends AbstractSetup
                 case 'sqlsrv':
                 case 'pdo_sqlsrv':
                     $this->queries[] = sprintf(
-                        'CREATE TABLE %sfaqdata_plugins (
+                        'CREATE TABLE %sfaqplugins (
                             name NVARCHAR(255) NOT NULL,
                             active INTEGER NOT NULL DEFAULT 0,
                             config VARCHAR(MAX) DEFAULT NULL,

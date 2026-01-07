@@ -314,8 +314,36 @@ class Pgsql implements DatabaseDriver
             $prefix . 'faquser_right',
             $prefix . 'faqvisits',
             $prefix . 'faqvoting',
-            $prefix . 'faqdata_plugins',
+            $prefix . 'faqplugins',
         ];
+    }
+
+    /**
+     * Prepares a statement for execution and returns a statement object.
+     *
+     * @param string $query   The SQL query
+     * @param array  $options The driver options
+     * @return string|false
+     */
+    public function prepare(string $query, array $options = []): string|false
+    {
+        $stmtName = 'pmf_stmt_' . md5($query);
+        if (pg_prepare($this->conn, $stmtName, $query)) {
+            return $stmtName;
+        }
+        return false;
+    }
+
+    /**
+     * Executes a prepared statement.
+     *
+     * @param mixed $statement The prepared statement (name)
+     * @param array $params    The parameters
+     * @return bool
+     */
+    public function execute(mixed $statement, array $params = []): bool
+    {
+        return (bool) pg_execute($this->conn, (string) $statement, $params);
     }
 
     /**

@@ -180,7 +180,7 @@ class Mysqli extends Database implements DriverInterface
             record_id INT(11) NOT NULL,
             group_id INT(11) NOT NULL,
             PRIMARY KEY (record_id, group_id))',
-        'faqdata_plugins' => 'CREATE TABLE %sfaqdata_plugins (
+        'faqplugins' => 'CREATE TABLE %sfaqplugins (
             name VARCHAR(255) NOT NULL,
             active INT(1) NOT NULL DEFAULT 0,
             config LONGTEXT DEFAULT NULL,

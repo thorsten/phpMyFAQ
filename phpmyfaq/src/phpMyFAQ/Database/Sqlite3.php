@@ -270,7 +270,7 @@ class Sqlite3 implements DatabaseDriver
             $prefix . 'faquser_right',
             $prefix . 'faqvisits',
             $prefix . 'faqvoting',
-            $prefix . 'faqdata_plugins',
+            $prefix . 'faqplugins',
         ];
     }
 
@@ -302,6 +302,46 @@ class Sqlite3 implements DatabaseDriver
     {
         $version = \Sqlite3::version();
         return $version['versionString'];
+    }
+
+    /**
+     * Prepares a statement for execution and returns a statement object.
+     *
+     * @param string $query   The SQL query
+     * @param array  $options The driver options
+     * @return \SQLite3Stmt|false
+     */
+    public function prepare(string $query, array $options = []): \SQLite3Stmt|false
+    {
+        return $this->conn->prepare($query);
+    }
+
+    /**
+     * Executes a prepared statement.
+     *
+     * @param mixed $statement The prepared statement
+     * @param array $params    The parameters
+     * @return bool
+     */
+    public function execute(mixed $statement, array $params = []): bool
+    {
+        if (!$statement instanceof \SQLite3Stmt) {
+            return false;
+        }
+
+        foreach ($params as $index => $param) {
+            $type = SQLITE3_TEXT;
+            if (is_int($param)) {
+                $type = SQLITE3_INTEGER;
+            } elseif (is_float($param)) {
+                $type = SQLITE3_FLOAT;
+            } elseif (is_null($param)) {
+                $type = SQLITE3_NULL;
+            }
+            $statement->bindValue($index + 1, $param, $type);
+        }
+
+        return (bool) $statement->execute();
     }
 
     /**

@@ -309,8 +309,36 @@ class Sqlsrv implements DatabaseDriver
             $prefix . 'faquser_right',
             $prefix . 'faqvisits',
             $prefix . 'faqvoting',
-            $prefix . 'faqdata_plugins',
+            $prefix . 'faqplugins',
         ];
+    }
+
+    /**
+     * Prepares a statement for execution and returns a statement object.
+     *
+     * @param string $query   The SQL query
+     * @param array  $options The driver options
+     * @return resource|false
+     */
+    public function prepare(string $query, array $options = []): mixed
+    {
+        return sqlsrv_prepare($this->conn, $query, [], $options);
+    }
+
+    /**
+     * Executes a prepared statement.
+     *
+     * @param mixed $statement The prepared statement
+     * @param array $params    The parameters
+     * @return bool
+     */
+    public function execute(mixed $statement, array $params = []): bool
+    {
+        if (!is_resource($statement)) {
+            return false;
+        }
+
+        return sqlsrv_execute($statement);
     }
 
     /**

@@ -252,7 +252,7 @@ class Mysqli implements DatabaseDriver
             $prefix . 'faquser_right',
             $prefix . 'faqvisits',
             $prefix . 'faqvoting',
-            $prefix . 'faqdata_plugins',
+            $prefix . 'faqplugins',
         ];
     }
 
@@ -314,6 +314,50 @@ class Mysqli implements DatabaseDriver
         }
 
         return $result;
+    }
+
+    /**
+     * Prepares a statement for execution and returns a statement object.
+     *
+     * @param string $query   The SQL query
+     * @param array  $options The driver options
+     * @return \mysqli_stmt|false
+     */
+    public function prepare(string $query, array $options = []): \mysqli_stmt|false
+    {
+        return $this->conn->prepare($query);
+    }
+
+    /**
+     * Executes a prepared statement.
+     *
+     * @param mixed $statement The prepared statement
+     * @param array $params    The parameters
+     * @return bool
+     */
+    public function execute(mixed $statement, array $params = []): bool
+    {
+        if (!$statement instanceof \mysqli_stmt) {
+            return false;
+        }
+
+        if (!empty($params)) {
+            $types = '';
+            foreach ($params as $param) {
+                if (is_int($param)) {
+                    $types .= 'i';
+                } elseif (is_float($param)) {
+                    $types .= 'd';
+                } elseif (is_string($param)) {
+                    $types .= 's';
+                } else {
+                    $types .= 'b';
+                }
+            }
+            $statement->bind_param($types, ...$params);
+        }
+
+        return $statement->execute();
     }
 
     /**

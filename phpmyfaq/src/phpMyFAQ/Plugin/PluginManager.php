@@ -8,7 +8,7 @@
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Thorsten Rinne
  * @copyright 2024-2026 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
@@ -236,28 +236,22 @@ class PluginManager
     {
         $jsonConfig = json_encode($configData);
         $db = $this->configuration->getDb();
-        $table = \phpMyFAQ\Database::getTablePrefix() . 'faqdata_plugins';
+        $table = \phpMyFAQ\Database::getTablePrefix() . 'faqplugins';
 
         // Check if exists
-        $select = sprintf("SELECT name FROM %s WHERE name = '%s'", $table, $db->escape($pluginName));
-        $result = $db->query($select);
+        $select = sprintf('SELECT name FROM %s WHERE name = ?', $table);
+        $stmt = $db->prepare($select);
+        $db->execute($stmt, [$pluginName]);
+        $result = $stmt->fetchAll();
 
-        if ($db->numRows($result) > 0) {
-            $update = sprintf(
-                "UPDATE %s SET config = '%s' WHERE name = '%s'",
-                $table,
-                $db->escape($jsonConfig),
-                $db->escape($pluginName)
-            );
-            $db->query($update);
+        if (count($result) > 0) {
+            $update = sprintf('UPDATE %s SET config = ? WHERE name = ?', $table);
+            $stmt = $db->prepare($update);
+            $db->execute($stmt, [$jsonConfig, $pluginName]);
         } else {
-             $insert = sprintf(
-                "INSERT INTO %s (name, active, config) VALUES ('%s', 0, '%s')",
-                $table,
-                $db->escape($pluginName),
-                $db->escape($jsonConfig)
-            );
-            $db->query($insert);
+            $insert = sprintf('INSERT INTO %s (name, active, config) VALUES (?, 0, ?)', $table);
+            $stmt = $db->prepare($insert);
+            $db->execute($stmt, [$pluginName, $jsonConfig]);
         }
     }
 
@@ -267,29 +261,24 @@ class PluginManager
     private function updatePluginStatus(string $pluginName, bool $active): void
     {
         $db = $this->configuration->getDb();
-        $table = \phpMyFAQ\Database::getTablePrefix() . 'faqdata_plugins';
+        $table = \phpMyFAQ\Database::getTablePrefix() . 'faqplugins';
         $activeInt = $active ? 1 : 0;
 
         // Check if exists
-        $select = sprintf("SELECT name FROM %s WHERE name = '%s'", $table, $db->escape($pluginName));
-        $result = $db->query($select);
+        $select = sprintf('SELECT name FROM %s WHERE name = ?', $table);
+        $stmt = $db->prepare($select);
+        $db->execute($stmt, [$pluginName]);
+        $result = $stmt->fetchAll();
 
-        if ($db->numRows($result) > 0) {
-            $query = sprintf(
-                "UPDATE %s SET active = %d WHERE name = '%s'",
-                $table,
-                $activeInt,
-                $db->escape($pluginName)
-            );
+        if (count($result) > 0) {
+            $query = sprintf('UPDATE %s SET active = ? WHERE name = ?', $table);
+            $params = [$activeInt, $pluginName];
         } else {
-            $query = sprintf(
-                "INSERT INTO %s (name, active) VALUES ('%s', %d)",
-                $table,
-                $db->escape($pluginName),
-                $activeInt
-            );
+            $query = sprintf('INSERT INTO %s (name, active) VALUES (?, ?)', $table);
+            $params = [$pluginName, $activeInt];
         }
-        $db->query($query);
+        $stmt = $db->prepare($query);
+        $db->execute($stmt, $params);
     }
 
     /**
@@ -298,7 +287,7 @@ class PluginManager
     private function getPluginsFromDatabase(): array
     {
         $db = $this->configuration->getDb();
-        $table = \phpMyFAQ\Database::getTablePrefix() . 'faqdata_plugins';
+        $table = \phpMyFAQ\Database::getTablePrefix() . 'faqplugins';
         
         // Ensure table exists to avoid crashes during update/install if not yet run
         try {
