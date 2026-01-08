@@ -143,6 +143,10 @@ class Sqlite3 implements DatabaseDriver
             $result = $result->result;
         }
 
+        if ($result instanceof Sqlite3Statement) {
+            $result = $result->result;
+        }
+
         $ret = [];
         if (false === $result) {
             throw new Exception('Error while fetching result: ' . $this->error());
@@ -300,6 +304,7 @@ class Sqlite3 implements DatabaseDriver
             $prefix . 'faquser_right',
             $prefix . 'faqvisits',
             $prefix . 'faqvoting',
+            $prefix . 'faqplugins',
             $prefix . 'faqplugins',
         ];
     }

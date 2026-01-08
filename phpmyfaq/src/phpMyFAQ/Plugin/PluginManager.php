@@ -290,7 +290,7 @@ class PluginManager
     {
         $db = $this->configuration->getDb();
         $table = \phpMyFAQ\Database::getTablePrefix() . 'faqplugins';
-
+        
         // Ensure table exists to avoid crashes during update/install if not yet run
         try {
             $result = $db->query("SELECT name, active, config FROM $table");

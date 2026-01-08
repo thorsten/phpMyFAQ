@@ -31,7 +31,7 @@ class SqlsrvStatement
 {
     public function __construct(
         public mixed $statement,
-        public mixed $result = null,
+        public mixed $result = null
     ) {
     }
 
@@ -348,6 +348,13 @@ class Sqlsrv implements DatabaseDriver
         ];
     }
 
+    /**
+     * Prepares a statement for execution and returns a statement object.
+     *
+     * @param string $query   The SQL query
+     * @param array  $options The driver options
+     * @return resource|string|false
+     */
     /**
      * Prepares a statement for execution and returns a statement object.
      *
