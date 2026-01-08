@@ -113,6 +113,10 @@ class PluginManager
                 $isActive = (bool) $dbPlugins[$pluginName]['active'];
                 if (!empty($dbPlugins[$pluginName]['config']) && $plugin->getConfig()) {
                     $configArray = json_decode($dbPlugins[$pluginName]['config'], true);
+                    if (json_last_error() !== JSON_ERROR_NONE) {
+                        error_log("Failed to decode config for plugin {$pluginName}: " . json_last_error_msg());
+                        continue;
+                    }
                     if (is_array($configArray)) {
                         $configObject = $plugin->getConfig();
                         foreach ($configArray as $key => $value) {
@@ -144,6 +148,7 @@ class PluginManager
             } else {
 
                 // I will default to inactive (false) for new plugins found on disk but not in DB.
+
                 $isActive = false;
             }
 
@@ -157,6 +162,7 @@ class PluginManager
 
                 if (!empty($plugin->getConfig())) {
                     $this->loadPluginConfig($plugin->getName(), $plugin->getConfig());
+
                     // Apply DB config overrides here if possible
                 }
 
@@ -188,6 +194,7 @@ class PluginManager
                     $this->registerPluginScripts($plugin->getName(), $plugin->getScripts());
                 }
             } elseif (!$this->areDependenciesMet($plugin)) {
+
                 $missingDeps = $this->getMissingDependencies($plugin);
                 $this->incompatiblePlugins[$plugin->getName()] = [
                     'plugin' => $plugin,
@@ -231,28 +238,22 @@ class PluginManager
     {
         $jsonConfig = json_encode($configData);
         $db = $this->configuration->getDb();
-        $table = \phpMyFAQ\Database::getTablePrefix() . 'faqdata_plugins';
+        $table = \phpMyFAQ\Database::getTablePrefix() . 'faqplugins';
 
         // Check if exists
-        $select = sprintf("SELECT name FROM %s WHERE name = '%s'", $table, $db->escape($pluginName));
-        $result = $db->query($select);
+        $select = sprintf('SELECT name FROM %s WHERE name = ?', $table);
+        $stmt = $db->prepare($select);
+        $db->execute($stmt, [$pluginName]);
+        $result = $db->fetchAll($stmt);
 
-        if ($db->numRows($result) > 0) {
-            $update = sprintf(
-                "UPDATE %s SET config = '%s' WHERE name = '%s'",
-                $table,
-                $db->escape($jsonConfig),
-                $db->escape($pluginName)
-            );
-            $db->query($update);
+        if (count($result) > 0) {
+            $update = sprintf('UPDATE %s SET config = ? WHERE name = ?', $table);
+            $stmt = $db->prepare($update);
+            $db->execute($stmt, [$jsonConfig, $pluginName]);
         } else {
-             $insert = sprintf(
-                "INSERT INTO %s (name, active, config) VALUES ('%s', 0, '%s')",
-                $table,
-                $db->escape($pluginName),
-                $db->escape($jsonConfig)
-            );
-            $db->query($insert);
+            $insert = sprintf('INSERT INTO %s (name, active, config) VALUES (?, 0, ?)', $table);
+            $stmt = $db->prepare($insert);
+            $db->execute($stmt, [$pluginName, $jsonConfig]);
         }
     }
 
@@ -262,29 +263,24 @@ class PluginManager
     private function updatePluginStatus(string $pluginName, bool $active): void
     {
         $db = $this->configuration->getDb();
-        $table = \phpMyFAQ\Database::getTablePrefix() . 'faqdata_plugins';
+        $table = \phpMyFAQ\Database::getTablePrefix() . 'faqplugins';
         $activeInt = $active ? 1 : 0;
 
         // Check if exists
-        $select = sprintf("SELECT name FROM %s WHERE name = '%s'", $table, $db->escape($pluginName));
-        $result = $db->query($select);
+        $select = sprintf('SELECT name FROM %s WHERE name = ?', $table);
+        $stmt = $db->prepare($select);
+        $db->execute($stmt, [$pluginName]);
+        $result = $db->fetchAll($stmt);
 
-        if ($db->numRows($result) > 0) {
-            $query = sprintf(
-                "UPDATE %s SET active = %d WHERE name = '%s'",
-                $table,
-                $activeInt,
-                $db->escape($pluginName)
-            );
+        if (count($result) > 0) {
+            $query = sprintf('UPDATE %s SET active = ? WHERE name = ?', $table);
+            $params = [$activeInt, $pluginName];
         } else {
-            $query = sprintf(
-                "INSERT INTO %s (name, active) VALUES ('%s', %d)",
-                $table,
-                $db->escape($pluginName),
-                $activeInt
-            );
+            $query = sprintf('INSERT INTO %s (name, active) VALUES (?, ?)', $table);
+            $params = [$pluginName, $activeInt];
         }
-        $db->query($query);
+        $stmt = $db->prepare($query);
+        $db->execute($stmt, $params);
     }
 
     /**
@@ -293,7 +289,7 @@ class PluginManager
     private function getPluginsFromDatabase(): array
     {
         $db = $this->configuration->getDb();
-        $table = \phpMyFAQ\Database::getTablePrefix() . 'faqdata_plugins';
+        $table = \phpMyFAQ\Database::getTablePrefix() . 'faqplugins';
 
         // Ensure table exists to avoid crashes during update/install if not yet run
         try {
@@ -396,6 +392,11 @@ class PluginManager
         return PMF_ROOT_DIR . '/content/plugins/' . $pluginName;
     }
 
+    /**
+     * Registers stylesheets for a plugin
+     *
+     * @param string[] $stylesheets Relative paths to CSS files
+     */
     private function registerPluginStylesheets(string $pluginName, array $stylesheets): void
     {
         $pluginDir = $this->getPluginDirectory($pluginName);

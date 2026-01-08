@@ -1543,6 +1543,11 @@ $PMF_LANG['msgError500Description'] = 'Der Server hat einen internen Fehler fest
 $PMF_LANG['msgErrorDetails'] = 'Fehlerdetails';
 $PMF_LANG['msgTryAgain'] = 'Erneut versuchen';
 $PMF_LANG['msgAdminLogExportCsv'] = "Admin-Logs als CSV exportieren";
+$PMF_LANG['msgPluginStatusSuccess'] = 'Plugin-Status erfolgreich aktualisiert.';
+$PMF_LANG['msgPluginStatusError'] = 'Plugin-Status konnte nicht aktualisiert werden:';
+$PMF_LANG['msgPluginConfigSuccess'] = 'Plugin-Konfiguration erfolgreich gespeichert.';
+$PMF_LANG['msgPluginConfigError'] = 'Konfiguration konnte nicht gespeichert werden:';
+$PMF_LANG['msgUnknownError'] = 'Unbekannter Fehler';
 
 
 return $PMF_LANG;

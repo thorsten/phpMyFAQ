@@ -28,6 +28,32 @@ use phpMyFAQ\Database;
 use SensitiveParameter;
 
 /**
+ * Class MysqliStatement
+ */
+class MysqliStatement
+{
+    public function __construct(
+        public \mysqli_stmt $stmt,
+        public mixed $result = null,
+    ) {
+    }
+
+    /**
+     * @deprecated Use DatabaseDriver::fetchAll() instead.
+     */
+    public function fetchAll(): array
+    {
+        $ret = [];
+        if ($this->result) {
+            while ($row = $this->result->fetch_object()) {
+                $ret[] = $row;
+            }
+        }
+        return $ret;
+    }
+}
+
+/**
  * Class Mysqli
  *
  * @package phpMyFAQ\Database
@@ -140,6 +166,10 @@ class Mysqli implements DatabaseDriver
      */
     public function fetchAll(mixed $result): ?array
     {
+        if ($result instanceof MysqliStatement) {
+            $result = $result->result;
+        }
+
         $ret = [];
         if (false === $result) {
             throw new Exception('Error while fetching result: ' . $this->error());
@@ -252,7 +282,7 @@ class Mysqli implements DatabaseDriver
             $prefix . 'faquser_right',
             $prefix . 'faqvisits',
             $prefix . 'faqvoting',
-            $prefix . 'faqdata_plugins',
+            $prefix . 'faqplugins',
         ];
     }
 
@@ -314,6 +344,62 @@ class Mysqli implements DatabaseDriver
         }
 
         return $result;
+    }
+
+    /**
+     * Prepares a statement for execution and returns a statement object.
+     *
+     * @param string $query   The SQL query
+     * @param array  $options The driver options
+     * @return MysqliStatement|false
+     */
+    public function prepare(string $query, array $options = []): MysqliStatement|false
+    {
+        $stmt = $this->conn->prepare($query);
+        if ($stmt) {
+            return new MysqliStatement($stmt);
+        }
+        return false;
+    }
+
+    /**
+     * Executes a prepared statement.
+     *
+     * @param mixed $statement The prepared statement
+     * @param array $params    The parameters
+     * @return bool
+     */
+    public function execute(mixed $statement, array $params = []): bool
+    {
+        if (!$statement instanceof MysqliStatement) {
+            return false;
+        }
+
+        if (!empty($params)) {
+            $types = '';
+            foreach ($params as $param) {
+                if (is_int($param)) {
+                    $types .= 'i';
+                } elseif (is_float($param)) {
+                    $types .= 'd';
+                } elseif (is_string($param)) {
+                    $types .= 's';
+                } else {
+                    $types .= 'b';
+                }
+            }
+            $statement->stmt->bind_param($types, ...$params);
+        }
+
+        $success = $statement->stmt->execute();
+        if ($success) {
+            $result = $statement->stmt->get_result();
++            if ($result !== false) {
++                $statement->result = $result;
++            }
+        }
+
+        return $success;
     }
 
     /**

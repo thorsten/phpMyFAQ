@@ -8,7 +8,7 @@
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Thorsten Rinne
  * @copyright 2025-2026 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de

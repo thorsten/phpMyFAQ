@@ -9,6 +9,7 @@ The plugin system is based on the Symfony Dependency Injection component.
 Plugins are installed in the `content/plugins` directory of your phpMyFAQ installation.
 The plugin directory should contain a subdirectory for each plugin, e.g. `content/plugins/HelloWorld`.
 The plugin directory should contain a `HelloWorldPlugin.php` file that implements the `PluginInterface` interface.
+The plugin must then be activated in the backend and can be deactivated again at any time without a complete uninstallation.
 If you want to remove a plugin, you can delete the plugin in the plugin directory.
 
 ## 9.2 Configuration
@@ -17,7 +18,7 @@ Plugins can have configuration options, implemented via the `PluginConfiguration
 Configuration options can be defined in the plugin configuration class with Constructor Property Promotion by adding 
 public properties. There are no other options to configure plugins at this time.
 
-### 9.3.1 Example configuration class
+### 9.2.1 Example configuration class
 
 ```php
 class MyPluginConfiguration implements PluginConfigurationInterface
@@ -29,6 +30,7 @@ class MyPluginConfiguration implements PluginConfigurationInterface
     }
 }
 ```
+These predefined values ​​in the file form the basis for the configuration options in the backend plugin overview. All future changes to these values ​​in the backend plugin settings will be saved in the database.
 
 ## 9.3 Plugin development
 
@@ -77,6 +79,26 @@ class MyPlugin implements PluginInterface
     public function getVersion(): string
     {
         return '0.2.0';
+    }
+
+    public function getDescription(): string
+    {
+        return 'A simple Hello World plugin';
+    }
+
+    public function getAuthor(): string
+    {
+        return 'phpMyFAQ Team';
+    }
+
+    public function getAdvDescription(): string
+    {
+        return 'A simple Hello World plugin that demonstrates event handling in phpMyFAQ and with Configuration options.';
+    }
+
+    public function getImplementation(): string
+    {
+        return '{{ phpMyFAQPlugin(\'hello.world\', \'Hello, World!\') | raw }} oder {{ phpMyFAQPlugin(\'user.login\', \'John Doe\') | raw }}';
     }
 
     public function getDependencies(): array
@@ -139,6 +161,7 @@ class MyPlugin implements PluginInterface
     {{ phpMyFAQPlugin('user.login', 'John Doe') | raw }}
 </div>
 ```
+Note: If the fields "Extended Description" and "Implementation" are defined in the plugin, you will find explanations on how to integrate the plugin in the plugin's configuration settings.
 
 ## 9.6 Stylesheets
 

@@ -137,4 +137,22 @@ interface DatabaseDriver
      * @return string String that you can pass to SQL as in: SELECT <result of phpMyFAQ\DatabaseDriver->now()>
      */
     public function now(): string;
+
+    /**
+     * Prepares a statement for execution and returns a statement object.
+     *
+     * @param string $query   The SQL query
+     * @param array  $options The driver options
+     * @return mixed
+     */
+    public function prepare(string $query, array $options = []): mixed;
+
+    /**
+     * Executes a prepared statement.
+     *
+     * @param mixed $statement The prepared statement
+     * @param array $params    The parameters
+     * @return bool
+     */
+    public function execute(mixed $statement, array $params = []): bool;
 }
