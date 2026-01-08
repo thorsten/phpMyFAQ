@@ -53,7 +53,7 @@ class PluginManager
     private readonly ContainerBuilder $containerBuilder;
 
     public function __construct(
-        private readonly \phpMyFAQ\Configuration $configuration
+        private readonly \phpMyFAQ\Configuration $configuration,
     ) {
         $this->eventDispatcher = new EventDispatcher();
         $this->containerBuilder = new ContainerBuilder();
@@ -103,14 +103,14 @@ class PluginManager
 
         // Fetch plugin states and config from database
         $dbPlugins = $this->getPluginsFromDatabase();
-        
+
         foreach ($this->plugins as $plugin) {
             $pluginName = $plugin->getName();
             $isActive = false;
 
             // Apply configuration and check status from DB
             if (isset($dbPlugins[$pluginName])) {
-                $isActive = (bool)$dbPlugins[$pluginName]['active'];
+                $isActive = (bool) $dbPlugins[$pluginName]['active'];
                 if (!empty($dbPlugins[$pluginName]['config']) && $plugin->getConfig()) {
                     $configArray = json_decode($dbPlugins[$pluginName]['config'], true);
                     if (is_array($configArray)) {
@@ -123,13 +123,13 @@ class PluginManager
                                         $typeName = $type instanceof \ReflectionNamedType ? $type->getName() : null;
                                         switch ($typeName) {
                                             case 'int':
-                                                $value = (int)$value;
+                                                $value = (int) $value;
                                                 break;
                                             case 'bool':
                                                 $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
                                                 break;
                                             case 'float':
-                                                $value = (float)$value;
+                                                $value = (float) $value;
                                                 break;
                                         }
                                     }
@@ -144,17 +144,17 @@ class PluginManager
             } else {
 
                 // I will default to inactive (false) for new plugins found on disk but not in DB.
-                $isActive = false; 
+                $isActive = false;
             }
-            
+
             // Allow checking if it IS active.
             // But we only REGISTER events and LOAD scripts if active.
-            
+
             if ($isActive && $this->areDependenciesMet($plugin)) {
                 $this->loadedPlugins[] = $plugin->getName();
-                
+
                 $plugin->registerEvents($this->eventDispatcher);
-                
+
                 if (!empty($plugin->getConfig())) {
                     $this->loadPluginConfig($plugin->getName(), $plugin->getConfig());
                     // Apply DB config overrides here if possible
@@ -165,7 +165,7 @@ class PluginManager
                 if (method_exists($plugin, 'getTranslationsPath')) {
                     $translationsPath = $plugin->getTranslationsPath();
                 }
-                
+
                 if ($translationsPath !== null) {
                     $pluginDir = $this->getPluginDirectory($plugin->getName());
                     $absoluteTranslationsPath = $pluginDir . '/' . $translationsPath;
@@ -173,14 +173,10 @@ class PluginManager
                     if (is_dir($absoluteTranslationsPath)) {
                         $translation = Translation::getInstance();
                         if (method_exists($translation, 'registerPluginTranslations')) {
-                            $translation->registerPluginTranslations(
-                                $plugin->getName(),
-                                $absoluteTranslationsPath,
-                            );
+                            $translation->registerPluginTranslations($plugin->getName(), $absoluteTranslationsPath);
                         }
                     }
                 }
-
 
                 // Register plugin stylesheets
                 if (method_exists($plugin, 'getStylesheets')) {
@@ -192,7 +188,6 @@ class PluginManager
                     $this->registerPluginScripts($plugin->getName(), $plugin->getScripts());
                 }
             } elseif (!$this->areDependenciesMet($plugin)) {
-
                 $missingDeps = $this->getMissingDependencies($plugin);
                 $this->incompatiblePlugins[$plugin->getName()] = [
                     'plugin' => $plugin,
@@ -220,7 +215,7 @@ class PluginManager
     {
         $this->updatePluginStatus($pluginName, false);
     }
-    
+
     /**
      * Checks if a plugin is active
      */
@@ -299,7 +294,7 @@ class PluginManager
     {
         $db = $this->configuration->getDb();
         $table = \phpMyFAQ\Database::getTablePrefix() . 'faqdata_plugins';
-        
+
         // Ensure table exists to avoid crashes during update/install if not yet run
         try {
             $result = $db->query("SELECT name, active, config FROM $table");
@@ -312,7 +307,7 @@ class PluginManager
         while ($row = $db->fetchObject($result)) {
             $plugins[$row->name] = [
                 'active' => $row->active,
-                'config' => $row->config
+                'config' => $row->config,
             ];
         }
         return $plugins;
@@ -401,9 +396,6 @@ class PluginManager
         return PMF_ROOT_DIR . '/content/plugins/' . $pluginName;
     }
 
-
-
-
     private function registerPluginStylesheets(string $pluginName, array $stylesheets): void
     {
         $pluginDir = $this->getPluginDirectory($pluginName);
@@ -427,7 +419,6 @@ class PluginManager
             $this->pluginStylesheets[$pluginName] = $validatedStylesheets;
         }
     }
-
 
     /**
      * Returns all registered plugin stylesheets for template injection
@@ -478,7 +469,6 @@ class PluginManager
             $this->pluginScripts[$pluginName] = $validatedScripts;
         }
     }
-
 
     /**
      * Returns all registered plugin scripts for template injection
