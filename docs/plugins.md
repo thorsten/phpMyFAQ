@@ -30,7 +30,7 @@ class MyPluginConfiguration implements PluginConfigurationInterface
     }
 }
 ```
-These predefined values ​​in the file form the basis for the configuration options in the backend plugin overview. All future changes to these values ​​in the backend plugin settings will be saved in the database.
+These predefined values in the file form the basis for the configuration options in the backend plugin overview. All future changes to these values in the backend plugin settings will be saved in the database.
 
 ## 9.3 Plugin development
 
@@ -91,11 +91,13 @@ class MyPlugin implements PluginInterface
         return 'phpMyFAQ Team';
     }
 
+    // Extended description of the plugin that will be displayed in the plugin settings
     public function getAdvDescription(): string
     {
         return 'A simple Hello World plugin that demonstrates event handling in phpMyFAQ and with Configuration options.';
     }
 
+    // Implementation of the plugin that will be displayed in the plugin settings
     public function getImplementation(): string
     {
         return '{{ phpMyFAQPlugin(\'hello.world\', \'Hello, World!\') | raw }} oder {{ phpMyFAQPlugin(\'user.login\', \'John Doe\') | raw }}';

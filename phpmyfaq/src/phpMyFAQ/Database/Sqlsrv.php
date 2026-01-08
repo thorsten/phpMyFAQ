@@ -31,7 +31,7 @@ class SqlsrvStatement
 {
     public function __construct(
         public mixed $statement,
-        public mixed $result = null
+        public mixed $result = null,
     ) {
     }
 

@@ -32,7 +32,7 @@ final class PluginController extends AbstractAdministrationController
     public function toggleStatus(Request $request): JsonResponse
     {
         $csrfToken = $request->headers->get('X-CSRF-Token');
-        if (!Token::getInstance($this->session)->verifyToken($csrfToken, 'admin-plugins')) {
+        if (!Token::getInstance($this->session)->verifyToken('admin-plugins', $csrfToken)) {
             return new JsonResponse(['success' => false, 'message' => 'Invalid CSRF token'], 403);
         }
 
@@ -79,8 +79,7 @@ final class PluginController extends AbstractAdministrationController
         }
 
         $csrfToken = $data['csrf'] ?? $request->headers->get('X-CSRF-Token');
-        if (!Token::getInstance($this->session)->verifyToken($csrfToken, 'admin-plugins')) {
-            return new JsonResponse(['success' => false, 'message' => 'Invalid CSRF token'], 403);
+        if (!Token::getInstance($this->session)->verifyToken('admin-plugins', $csrfToken)) {            return new JsonResponse(['success' => false, 'message' => 'Invalid CSRF token'], 403);
         }
 
         $pluginManager = $this->container->get(id: 'phpmyfaq.plugin.plugin-manager');

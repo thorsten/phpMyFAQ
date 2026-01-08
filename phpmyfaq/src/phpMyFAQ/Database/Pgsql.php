@@ -34,7 +34,7 @@ class PgsqlStatement
 {
     public function __construct(
         private string $name,
-        public mixed $result = null
+        public mixed $result = null,
     ) {
     }
 

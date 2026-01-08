@@ -143,10 +143,6 @@ class Sqlite3 implements DatabaseDriver
             $result = $result->result;
         }
 
-        if ($result instanceof Sqlite3Statement) {
-            $result = $result->result;
-        }
-
         $ret = [];
         if (false === $result) {
             throw new Exception('Error while fetching result: ' . $this->error());
@@ -305,7 +301,6 @@ class Sqlite3 implements DatabaseDriver
             $prefix . 'faqvisits',
             $prefix . 'faqvoting',
             $prefix . 'faqplugins',
-            $prefix . 'faqplugins',
         ];
     }
 
@@ -377,8 +372,8 @@ class Sqlite3 implements DatabaseDriver
             } elseif (is_null($param)) {
                 $type = SQLITE3_NULL;
             } elseif (is_bool($param)) {
-+                $type = SQLITE3_INTEGER;
-+                $param = $param ? 1 : 0;
+                $type = SQLITE3_INTEGER;
+                $param = $param ? 1 : 0;
             }
             $statement->stmt->bindValue($index + 1, $param, $type);
         }

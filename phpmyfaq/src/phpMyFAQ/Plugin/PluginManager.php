@@ -130,7 +130,7 @@ class PluginManager
                                                 $value = (int) $value;
                                                 break;
                                             case 'bool':
-                                                $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+                                                $value = (bool) $value;
                                                 break;
                                             case 'float':
                                                 $value = (float) $value;
@@ -146,7 +146,6 @@ class PluginManager
                     }
                 }
             } else {
-
                 // I will default to inactive (false) for new plugins found on disk but not in DB.
 
                 $isActive = false;
@@ -194,7 +193,6 @@ class PluginManager
                     $this->registerPluginScripts($plugin->getName(), $plugin->getScripts());
                 }
             } elseif (!$this->areDependenciesMet($plugin)) {
-
                 $missingDeps = $this->getMissingDependencies($plugin);
                 $this->incompatiblePlugins[$plugin->getName()] = [
                     'plugin' => $plugin,
@@ -290,7 +288,7 @@ class PluginManager
     {
         $db = $this->configuration->getDb();
         $table = \phpMyFAQ\Database::getTablePrefix() . 'faqplugins';
-        
+
         // Ensure table exists to avoid crashes during update/install if not yet run
         try {
             $result = $db->query("SELECT name, active, config FROM $table");

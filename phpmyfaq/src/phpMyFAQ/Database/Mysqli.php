@@ -170,10 +170,6 @@ class Mysqli implements DatabaseDriver
             $result = $result->result;
         }
 
-        if ($result instanceof MysqliStatement) {
-            $result = $result->result;
-        }
-
         $ret = [];
         if (false === $result) {
             throw new Exception('Error while fetching result: ' . $this->error());
@@ -287,7 +283,6 @@ class Mysqli implements DatabaseDriver
             $prefix . 'faqvisits',
             $prefix . 'faqvoting',
             $prefix . 'faqplugins',
-            $prefix . 'faqplugins',
         ];
     }
 
@@ -399,9 +394,9 @@ class Mysqli implements DatabaseDriver
         $success = $statement->stmt->execute();
         if ($success) {
             $result = $statement->stmt->get_result();
-+            if ($result !== false) {
-+                $statement->result = $result;
-+            }
+            if ($result !== false) {
+                $statement->result = $result;
+            }
         }
 
         return $success;
