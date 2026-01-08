@@ -23,6 +23,32 @@ use phpMyFAQ\Core\Exception;
 use SensitiveParameter;
 
 /**
+ * Class Sqlite3Statement
+ */
+class Sqlite3Statement
+{
+    public function __construct(
+        public \SQLite3Stmt $stmt,
+        public mixed $result = null
+    ) {
+    }
+
+    /**
+     * @deprecated Use DatabaseDriver::fetchAll() instead.
+     */
+    public function fetchAll(): array
+    {
+        $ret = [];
+        if ($this->result) {
+            while ($row = $this->result->fetchArray(SQLITE3_ASSOC)) {
+                $ret[] = (object) $row;
+            }
+        }
+        return $ret;
+    }
+}
+
+/**
  * Class Sqlite3
  *
  * @package phpMyFAQ\Database
@@ -113,6 +139,10 @@ class Sqlite3 implements DatabaseDriver
      */
     public function fetchAll(mixed $result): ?array
     {
+        if ($result instanceof Sqlite3Statement) {
+            $result = $result->result;
+        }
+
         $ret = [];
         if (false === $result) {
             throw new Exception('Error while fetching result: ' . $this->error());
@@ -309,11 +339,15 @@ class Sqlite3 implements DatabaseDriver
      *
      * @param string $query   The SQL query
      * @param array  $options The driver options
-     * @return \SQLite3Stmt|false
+     * @return Sqlite3Statement|false
      */
-    public function prepare(string $query, array $options = []): \SQLite3Stmt|false
+    public function prepare(string $query, array $options = []): Sqlite3Statement|false
     {
-        return $this->conn->prepare($query);
+        $stmt = $this->conn->prepare($query);
+        if ($stmt) {
+            return new Sqlite3Statement($stmt);
+        }
+        return false;
     }
 
     /**
@@ -325,7 +359,7 @@ class Sqlite3 implements DatabaseDriver
      */
     public function execute(mixed $statement, array $params = []): bool
     {
-        if (!$statement instanceof \SQLite3Stmt) {
+        if (!$statement instanceof Sqlite3Statement) {
             return false;
         }
 
@@ -338,10 +372,15 @@ class Sqlite3 implements DatabaseDriver
             } elseif (is_null($param)) {
                 $type = SQLITE3_NULL;
             }
-            $statement->bindValue($index + 1, $param, $type);
+            $statement->stmt->bindValue($index + 1, $param, $type);
         }
 
-        return (bool) $statement->execute();
+        $result = $statement->stmt->execute();
+        if ($result) {
+            $statement->result = $result;
+        }
+
+        return (bool) $result;
     }
 
     /**

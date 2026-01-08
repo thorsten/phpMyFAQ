@@ -28,6 +28,32 @@ use phpMyFAQ\Database;
 use SensitiveParameter;
 
 /**
+ * Class MysqliStatement
+ */
+class MysqliStatement
+{
+    public function __construct(
+        public \mysqli_stmt $stmt,
+        public mixed $result = null
+    ) {
+    }
+
+    /**
+     * @deprecated Use DatabaseDriver::fetchAll() instead.
+     */
+    public function fetchAll(): array
+    {
+        $ret = [];
+        if ($this->result) {
+            while ($row = $this->result->fetch_object()) {
+                $ret[] = $row;
+            }
+        }
+        return $ret;
+    }
+}
+
+/**
  * Class Mysqli
  *
  * @package phpMyFAQ\Database
@@ -140,6 +166,10 @@ class Mysqli implements DatabaseDriver
      */
     public function fetchAll(mixed $result): ?array
     {
+        if ($result instanceof MysqliStatement) {
+            $result = $result->result;
+        }
+
         $ret = [];
         if (false === $result) {
             throw new Exception('Error while fetching result: ' . $this->error());
@@ -321,11 +351,15 @@ class Mysqli implements DatabaseDriver
      *
      * @param string $query   The SQL query
      * @param array  $options The driver options
-     * @return \mysqli_stmt|false
+     * @return MysqliStatement|false
      */
-    public function prepare(string $query, array $options = []): \mysqli_stmt|false
+    public function prepare(string $query, array $options = []): MysqliStatement|false
     {
-        return $this->conn->prepare($query);
+        $stmt = $this->conn->prepare($query);
+        if ($stmt) {
+            return new MysqliStatement($stmt);
+        }
+        return false;
     }
 
     /**
@@ -337,7 +371,7 @@ class Mysqli implements DatabaseDriver
      */
     public function execute(mixed $statement, array $params = []): bool
     {
-        if (!$statement instanceof \mysqli_stmt) {
+        if (!$statement instanceof MysqliStatement) {
             return false;
         }
 
@@ -354,10 +388,15 @@ class Mysqli implements DatabaseDriver
                     $types .= 'b';
                 }
             }
-            $statement->bind_param($types, ...$params);
+            $statement->stmt->bind_param($types, ...$params);
         }
 
-        return $statement->execute();
+        $success = $statement->stmt->execute();
+        if ($success) {
+            $statement->result = $statement->stmt->get_result();
+        }
+
+        return $success;
     }
 
     /**

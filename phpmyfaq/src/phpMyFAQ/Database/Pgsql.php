@@ -28,6 +28,37 @@ use phpMyFAQ\Database;
 use SensitiveParameter;
 
 /**
+ * Class PgsqlStatement
+ */
+class PgsqlStatement
+{
+    public function __construct(
+        private string $name,
+        public mixed $result = null
+    ) {
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @deprecated Use DatabaseDriver::fetchAll() instead.
+     */
+    public function fetchAll(): array
+    {
+        $ret = [];
+        if ($this->result) {
+            while ($row = pg_fetch_object($this->result)) {
+                $ret[] = $row;
+            }
+        }
+        return $ret;
+    }
+}
+
+/**
  * Class Pgsql
  *
  * @package phpMyFAQ\Database
@@ -150,6 +181,10 @@ class Pgsql implements DatabaseDriver
      */
     public function fetchAll(mixed $result): ?array
     {
+        if ($result instanceof PgsqlStatement) {
+            $result = $result->result;
+        }
+
         $ret = [];
         if (false === $result) {
             throw new Exception('Error while fetching result: ' . $this->error());
@@ -328,14 +363,14 @@ class Pgsql implements DatabaseDriver
      *
      * @param string $query   The SQL query
      * @param array  $options The driver options
-     * @return string|false
+     * @return PgsqlStatement|false
      */
-    public function prepare(string $query, array $options = []): string|false
+    public function prepare(string $query, array $options = []): PgsqlStatement|false
     {
         $stmtName = 'pmf_stmt_' . (count($this->preparedStatements) + 1);
         if (pg_prepare($this->conn, $stmtName, $query)) {
             $this->preparedStatements[$stmtName] = $query;
-            return $stmtName;
+            return new PgsqlStatement($stmtName);
         }
         return false;
     }
@@ -349,7 +384,14 @@ class Pgsql implements DatabaseDriver
      */
     public function execute(mixed $statement, array $params = []): bool
     {
-        return (bool) pg_execute($this->conn, (string) $statement, $params);
+        $name = (string) $statement;
+        $result = pg_execute($this->conn, $name, $params);
+
+        if ($statement instanceof PgsqlStatement) {
+            $statement->result = $result;
+        }
+
+        return (bool) $result;
     }
 
     /**

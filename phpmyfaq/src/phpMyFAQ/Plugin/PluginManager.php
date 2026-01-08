@@ -8,7 +8,7 @@
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
- * @author    Thorsten Rinne
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2024-2026 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
@@ -146,15 +146,15 @@ class PluginManager
                 // I will default to inactive (false) for new plugins found on disk but not in DB.
                 $isActive = false; 
             }
-            
+
             // Allow checking if it IS active.
             // But we only REGISTER events and LOAD scripts if active.
-            
+
             if ($isActive && $this->areDependenciesMet($plugin)) {
                 $this->loadedPlugins[] = $plugin->getName();
-                
+
                 $plugin->registerEvents($this->eventDispatcher);
-                
+
                 if (!empty($plugin->getConfig())) {
                     $this->loadPluginConfig($plugin->getName(), $plugin->getConfig());
                     // Apply DB config overrides here if possible
@@ -165,7 +165,7 @@ class PluginManager
                 if (method_exists($plugin, 'getTranslationsPath')) {
                     $translationsPath = $plugin->getTranslationsPath();
                 }
-                
+
                 if ($translationsPath !== null) {
                     $pluginDir = $this->getPluginDirectory($plugin->getName());
                     $absoluteTranslationsPath = $pluginDir . '/' . $translationsPath;
@@ -220,7 +220,7 @@ class PluginManager
     {
         $this->updatePluginStatus($pluginName, false);
     }
-    
+
     /**
      * Checks if a plugin is active
      */
@@ -242,7 +242,7 @@ class PluginManager
         $select = sprintf('SELECT name FROM %s WHERE name = ?', $table);
         $stmt = $db->prepare($select);
         $db->execute($stmt, [$pluginName]);
-        $result = $stmt->fetchAll();
+        $result = $db->fetchAll($stmt);
 
         if (count($result) > 0) {
             $update = sprintf('UPDATE %s SET config = ? WHERE name = ?', $table);
@@ -268,7 +268,7 @@ class PluginManager
         $select = sprintf('SELECT name FROM %s WHERE name = ?', $table);
         $stmt = $db->prepare($select);
         $db->execute($stmt, [$pluginName]);
-        $result = $stmt->fetchAll();
+        $result = $db->fetchAll($stmt);
 
         if (count($result) > 0) {
             $query = sprintf('UPDATE %s SET active = ? WHERE name = ?', $table);
@@ -390,9 +390,11 @@ class PluginManager
         return PMF_ROOT_DIR . '/content/plugins/' . $pluginName;
     }
 
-
-
-
+    /**
+     * Registers stylesheets for a plugin
+     *
+     * @param string[] $stylesheets Relative paths to CSS files
+     */
     private function registerPluginStylesheets(string $pluginName, array $stylesheets): void
     {
         $pluginDir = $this->getPluginDirectory($pluginName);
@@ -416,7 +418,6 @@ class PluginManager
             $this->pluginStylesheets[$pluginName] = $validatedStylesheets;
         }
     }
-
 
     /**
      * Returns all registered plugin stylesheets for template injection
@@ -467,7 +468,6 @@ class PluginManager
             $this->pluginScripts[$pluginName] = $validatedScripts;
         }
     }
-
 
     /**
      * Returns all registered plugin scripts for template injection
