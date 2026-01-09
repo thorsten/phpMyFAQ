@@ -112,13 +112,8 @@ if ($user->isLoggedIn()) {
 }
 
 if (
-    $attachment
-    && $attachment->getRecordId() > 0
-    && (
-        $faqConfig->get('records.allowDownloadsForGuests')
-        || ($groupPermission || $groupPermission && $userPermission)
-        && isset($permission['dlattachment'])
-    )
+    $attachment && $attachment->getRecordId() > 0 && ($faqConfig->get('records.allowDownloadsForGuests') ||
+        (($groupPermission || $userPermission) && isset($permission['dlattachment']) && $permission['dlattachment'] === true))
 ) {
     $response = new StreamedResponse(function () use ($attachment) {
         $attachment->rawOut();
