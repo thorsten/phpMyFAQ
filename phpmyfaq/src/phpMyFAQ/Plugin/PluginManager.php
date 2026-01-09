@@ -52,8 +52,9 @@ class PluginManager
 
     private readonly ContainerBuilder $containerBuilder;
 
-    public function __construct()
-    {
+    public function __construct(
+        private readonly \phpMyFAQ\Configuration $configuration,
+    ) {
         $this->eventDispatcher = new EventDispatcher();
         $this->containerBuilder = new ContainerBuilder();
     }
@@ -85,6 +86,10 @@ class PluginManager
      */
     public function loadPlugins(): void
     {
+        if (!empty($this->loadedPlugins)) {
+            return;
+        }
+
         $pluginDir = PMF_ROOT_DIR . '/content/plugins/';
         $pluginFiles = glob($pluginDir . '*/*Plugin.php');
 
@@ -96,49 +101,210 @@ class PluginManager
             $this->registerPlugin($fullClassName);
         }
 
+        // Fetch plugin states and config from database
+        $dbPlugins = $this->getPluginsFromDatabase();
+
         foreach ($this->plugins as $plugin) {
-            if ($this->areDependenciesMet($plugin)) {
+            $pluginName = $plugin->getName();
+            $isActive = false;
+
+            // Apply configuration and check status from DB
+            if (isset($dbPlugins[$pluginName])) {
+                $isActive = (bool) $dbPlugins[$pluginName]['active'];
+                if (!empty($dbPlugins[$pluginName]['config']) && $plugin->getConfig()) {
+                    $configArray = json_decode($dbPlugins[$pluginName]['config'], true);
+                    if (json_last_error() !== JSON_ERROR_NONE) {
+                        error_log("Failed to decode config for plugin {$pluginName}: " . json_last_error_msg());
+                        continue;
+                    }
+                    if (is_array($configArray)) {
+                        $configObject = $plugin->getConfig();
+                        foreach ($configArray as $key => $value) {
+                            if (property_exists($configObject, $key)) {
+                                try {
+                                    $rp = new \ReflectionProperty($configObject, $key);
+                                    if ($type = $rp->getType()) {
+                                        $typeName = $type instanceof \ReflectionNamedType ? $type->getName() : null;
+                                        switch ($typeName) {
+                                            case 'int':
+                                                $value = (int) $value;
+                                                break;
+                                            case 'bool':
+                                                $value = (bool) $value;
+                                                break;
+                                            case 'float':
+                                                $value = (float) $value;
+                                                break;
+                                        }
+                                    }
+                                } catch (\ReflectionException $e) {
+                                    // Fallback to direct assignment if reflection fails
+                                }
+                                $configObject->$key = $value;
+                            }
+                        }
+                    }
+                }
+            } else {
+                // I will default to inactive (false) for new plugins found on disk but not in DB.
+
+                $isActive = false;
+            }
+
+            // Allow checking if it IS active.
+            // But we only REGISTER events and LOAD scripts if active.
+
+            if ($isActive && $this->areDependenciesMet($plugin)) {
                 $this->loadedPlugins[] = $plugin->getName();
+
                 $plugin->registerEvents($this->eventDispatcher);
+
                 if (!empty($plugin->getConfig())) {
                     $this->loadPluginConfig($plugin->getName(), $plugin->getConfig());
+
+                    // Apply DB config overrides here if possible
                 }
 
                 // Register plugin translations
-                $translationsPath = $plugin->getTranslationsPath();
+                $translationsPath = null;
+                if (method_exists($plugin, 'getTranslationsPath')) {
+                    $translationsPath = $plugin->getTranslationsPath();
+                }
+
                 if ($translationsPath !== null) {
                     $pluginDir = $this->getPluginDirectory($plugin->getName());
                     $absoluteTranslationsPath = $pluginDir . '/' . $translationsPath;
 
                     if (is_dir($absoluteTranslationsPath)) {
-                        Translation::getInstance()->registerPluginTranslations(
-                            $plugin->getName(),
-                            $absoluteTranslationsPath,
-                        );
+                        $translation = Translation::getInstance();
+                        if (method_exists($translation, 'registerPluginTranslations')) {
+                            $translation->registerPluginTranslations($plugin->getName(), $absoluteTranslationsPath);
+                        }
                     }
                 }
 
                 // Register plugin stylesheets
-                $stylesheets = $plugin->getStylesheets();
-                if (!empty($stylesheets)) {
-                    $this->registerPluginStylesheets($plugin->getName(), $stylesheets);
+                if (method_exists($plugin, 'getStylesheets')) {
+                    $this->registerPluginStylesheets($plugin->getName(), $plugin->getStylesheets());
                 }
 
                 // Register plugin scripts
-                $scripts = $plugin->getScripts();
-                if (!empty($scripts)) {
-                    $this->registerPluginScripts($plugin->getName(), $scripts);
+                if (method_exists($plugin, 'getScripts')) {
+                    $this->registerPluginScripts($plugin->getName(), $plugin->getScripts());
                 }
-            } else {
+            } elseif (!$this->areDependenciesMet($plugin)) {
                 $missingDeps = $this->getMissingDependencies($plugin);
                 $this->incompatiblePlugins[$plugin->getName()] = [
                     'plugin' => $plugin,
                     'reason' => sprintf('Missing dependencies: %s', implode(', ', $missingDeps)),
                 ];
-                // Remove plugin from the plugins array since it's incompatible
+                // Remove plugin from the plugins array since it's incompatible (actually, maybe keep it but mark inactive?)
+                // Original code removed it. I'll stick to original behavior for incompatible ones.
                 unset($this->plugins[$plugin->getName()]);
             }
         }
+    }
+
+    /**
+     * Activates a plugin
+     */
+    public function activatePlugin(string $pluginName): void
+    {
+        $this->updatePluginStatus($pluginName, true);
+    }
+
+    /**
+     * Deactivates a plugin
+     */
+    public function deactivatePlugin(string $pluginName): void
+    {
+        $this->updatePluginStatus($pluginName, false);
+    }
+
+    /**
+     * Checks if a plugin is active
+     */
+    public function isPluginActive(string $pluginName): bool
+    {
+        return in_array($pluginName, $this->loadedPlugins, true);
+    }
+
+    /**
+     * Saves plugin configuration
+     */
+    public function savePluginConfig(string $pluginName, array $configData): void
+    {
+        $jsonConfig = json_encode($configData);
+        $db = $this->configuration->getDb();
+        $table = \phpMyFAQ\Database::getTablePrefix() . 'faqplugins';
+
+        // Check if exists
+        $select = sprintf('SELECT name FROM %s WHERE name = ?', $table);
+        $stmt = $db->prepare($select);
+        $db->execute($stmt, [$pluginName]);
+        $result = $db->fetchAll($stmt);
+
+        if (count($result) > 0) {
+            $update = sprintf('UPDATE %s SET config = ? WHERE name = ?', $table);
+            $stmt = $db->prepare($update);
+            $db->execute($stmt, [$jsonConfig, $pluginName]);
+        } else {
+            $insert = sprintf('INSERT INTO %s (name, active, config) VALUES (?, 0, ?)', $table);
+            $stmt = $db->prepare($insert);
+            $db->execute($stmt, [$pluginName, $jsonConfig]);
+        }
+    }
+
+    /**
+     * Updates plugin status in DB
+     */
+    private function updatePluginStatus(string $pluginName, bool $active): void
+    {
+        $db = $this->configuration->getDb();
+        $table = \phpMyFAQ\Database::getTablePrefix() . 'faqplugins';
+        $activeInt = $active ? 1 : 0;
+
+        // Check if exists
+        $select = sprintf('SELECT name FROM %s WHERE name = ?', $table);
+        $stmt = $db->prepare($select);
+        $db->execute($stmt, [$pluginName]);
+        $result = $db->fetchAll($stmt);
+
+        if (count($result) > 0) {
+            $query = sprintf('UPDATE %s SET active = ? WHERE name = ?', $table);
+            $params = [$activeInt, $pluginName];
+        } else {
+            $query = sprintf('INSERT INTO %s (name, active) VALUES (?, ?)', $table);
+            $params = [$pluginName, $activeInt];
+        }
+        $stmt = $db->prepare($query);
+        $db->execute($stmt, $params);
+    }
+
+    /**
+     * Fetch plugins from DB
+     */
+    private function getPluginsFromDatabase(): array
+    {
+        $db = $this->configuration->getDb();
+        $table = \phpMyFAQ\Database::getTablePrefix() . 'faqplugins';
+
+        // Ensure table exists to avoid crashes during update/install if not yet run
+        try {
+            $result = $db->query("SELECT name, active, config FROM $table");
+        } catch (\Exception $e) {
+            // Table might not exist yet
+            return [];
+        }
+
+        $plugins = [];
+        while ($row = $db->fetchObject($result)) {
+            $plugins[$row->name] = [
+                'active' => $row->active,
+                'config' => $row->config,
+            ];
+        }
+        return $plugins;
     }
 
     /**
@@ -234,14 +400,17 @@ class PluginManager
         $pluginDir = $this->getPluginDirectory($pluginName);
         $validatedStylesheets = [];
 
-        foreach ($stylesheets as $stylesheet) {
-            // Security: Validate a path to prevent directory traversal
-            $absolutePath = realpath($pluginDir . '/' . $stylesheet);
+        // Normalize the path for comparison (slashes and case)
+        $realPluginDir = str_replace('\\', '/', realpath($pluginDir) ?: $pluginDir);
+        $realPluginDir = rtrim($realPluginDir, '/') . '/';
 
-            if ($absolutePath && str_starts_with($absolutePath, $pluginDir) && file_exists($absolutePath)) {
-                // Store relative path from web root for use in templates
-                $webPath = 'content/plugins/' . $pluginName . '/' . $stylesheet;
-                $validatedStylesheets[] = $webPath;
+        foreach ($stylesheets as $stylesheet) {
+            $fullPath = $pluginDir . '/' . $stylesheet;
+            $absolutePath = str_replace('\\', '/', realpath($fullPath) ?: $fullPath);
+
+            // Security check: Must be inside the plugin directory (case-insensitive for Windows)
+            if (str_starts_with(strtolower($absolutePath), strtolower($realPluginDir)) && file_exists($fullPath)) {
+                $validatedStylesheets[] = 'content/plugins/' . $pluginName . '/' . $stylesheet;
             }
         }
 
@@ -276,24 +445,22 @@ class PluginManager
         return $this->pluginStylesheets[$pluginName] ?? [];
     }
 
-    /**
-     * Registers scripts for a plugin
-     *
-     * @param string[] $scripts Relative paths to JavaScript files
-     */
     private function registerPluginScripts(string $pluginName, array $scripts): void
     {
         $pluginDir = $this->getPluginDirectory($pluginName);
         $validatedScripts = [];
 
-        foreach ($scripts as $script) {
-            // Security: Validate path to prevent directory traversal
-            $absolutePath = realpath($pluginDir . '/' . $script);
+        // Normalize the path for comparison (slashes and case)
+        $realPluginDir = str_replace('\\', '/', realpath($pluginDir) ?: $pluginDir);
+        $realPluginDir = rtrim($realPluginDir, '/') . '/';
 
-            if ($absolutePath && str_starts_with($absolutePath, $pluginDir) && file_exists($absolutePath)) {
-                // Store relative path from web root for use in templates
-                $webPath = 'content/plugins/' . $pluginName . '/' . $script;
-                $validatedScripts[] = $webPath;
+        foreach ($scripts as $script) {
+            $fullPath = $pluginDir . '/' . $script;
+            $absolutePath = str_replace('\\', '/', realpath($fullPath) ?: $fullPath);
+
+            // Security check: Must be inside the plugin directory (case-insensitive for Windows)
+            if (str_starts_with(strtolower($absolutePath), strtolower($realPluginDir)) && file_exists($fullPath)) {
+                $validatedScripts[] = 'content/plugins/' . $pluginName . '/' . $script;
             }
         }
 

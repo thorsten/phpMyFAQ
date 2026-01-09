@@ -23,6 +23,32 @@ use phpMyFAQ\Core\Exception;
 use SensitiveParameter;
 
 /**
+ * Class Sqlite3Statement
+ */
+class Sqlite3Statement
+{
+    public function __construct(
+        public \SQLite3Stmt $stmt,
+        public mixed $result = null,
+    ) {
+    }
+
+    /**
+     * @deprecated Use DatabaseDriver::fetchAll() instead.
+     */
+    public function fetchAll(): array
+    {
+        $ret = [];
+        if ($this->result) {
+            while ($row = $this->result->fetchArray(SQLITE3_ASSOC)) {
+                $ret[] = (object) $row;
+            }
+        }
+        return $ret;
+    }
+}
+
+/**
  * Class Sqlite3
  *
  * @package phpMyFAQ\Database
@@ -113,6 +139,10 @@ class Sqlite3 implements DatabaseDriver
      */
     public function fetchAll(mixed $result): ?array
     {
+        if ($result instanceof Sqlite3Statement) {
+            $result = $result->result;
+        }
+
         $ret = [];
         if (false === $result) {
             throw new Exception('Error while fetching result: ' . $this->error());
@@ -270,6 +300,7 @@ class Sqlite3 implements DatabaseDriver
             $prefix . 'faquser_right',
             $prefix . 'faqvisits',
             $prefix . 'faqvoting',
+            $prefix . 'faqplugins',
         ];
     }
 
@@ -301,6 +332,58 @@ class Sqlite3 implements DatabaseDriver
     {
         $version = \Sqlite3::version();
         return $version['versionString'];
+    }
+
+    /**
+     * Prepares a statement for execution and returns a statement object.
+     *
+     * @param string $query   The SQL query
+     * @param array  $options The driver options
+     * @return Sqlite3Statement|false
+     */
+    public function prepare(string $query, array $options = []): Sqlite3Statement|false
+    {
+        $stmt = $this->conn->prepare($query);
+        if ($stmt) {
+            return new Sqlite3Statement($stmt);
+        }
+        return false;
+    }
+
+    /**
+     * Executes a prepared statement.
+     *
+     * @param mixed $statement The prepared statement
+     * @param array $params    The parameters
+     * @return bool
+     */
+    public function execute(mixed $statement, array $params = []): bool
+    {
+        if (!$statement instanceof Sqlite3Statement) {
+            return false;
+        }
+
+        foreach ($params as $index => $param) {
+            $type = SQLITE3_TEXT;
+            if (is_int($param)) {
+                $type = SQLITE3_INTEGER;
+            } elseif (is_float($param)) {
+                $type = SQLITE3_FLOAT;
+            } elseif (is_null($param)) {
+                $type = SQLITE3_NULL;
+            } elseif (is_bool($param)) {
+                $type = SQLITE3_INTEGER;
+                $param = $param ? 1 : 0;
+            }
+            $statement->stmt->bindValue($index + 1, $param, $type);
+        }
+
+        $result = $statement->stmt->execute();
+        if ($result) {
+            $statement->result = $result;
+        }
+
+        return (bool) $result;
     }
 
     /**

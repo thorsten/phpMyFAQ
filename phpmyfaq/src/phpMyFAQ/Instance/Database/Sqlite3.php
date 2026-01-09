@@ -174,6 +174,11 @@ class Sqlite3 extends Database implements DriverInterface
             record_id INTEGER NOT NULL,
             group_id INTEGER NOT NULL,
             PRIMARY KEY (record_id, group_id))',
+        'faqplugins' => 'CREATE TABLE %sfaqplugins (
+            name VARCHAR(255) NOT NULL,
+            active INTEGER NOT NULL DEFAULT 0,
+            config TEXT DEFAULT NULL,
+            PRIMARY KEY (name))',
         'faqdata_tags' => 'CREATE TABLE %sfaqdata_tags (
             record_id INTEGER NOT NULL,
             tagging_id INTEGER NOT NULL,

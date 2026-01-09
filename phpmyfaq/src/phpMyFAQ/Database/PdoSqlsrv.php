@@ -219,6 +219,7 @@ class PdoSqlsrv implements DatabaseDriver
             $prefix . 'faquser_right',
             $prefix . 'faqvisits',
             $prefix . 'faqvoting',
+            $prefix . 'faqplugins',
         ];
     }
 

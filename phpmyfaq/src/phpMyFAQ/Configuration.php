@@ -506,7 +506,7 @@ class Configuration
      */
     public function setPluginManager(): Configuration
     {
-        $this->pluginManager = new PluginManager();
+        $this->pluginManager = new PluginManager($this);
         $this->pluginManager->loadPlugins();
 
         $this->config['core.pluginManager'] = $this->pluginManager;

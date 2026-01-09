@@ -28,6 +28,6 @@ class PluginTwigExtension extends AbstractExtension
     #[AsTwigFunction(name: 'phpMyFAQPlugin')]
     public static function triggerPluginEvent(string $eventName, mixed $data = null): string
     {
-        return Configuration::getConfigurationInstance()->getPluginManager()->triggerEvent($eventName, $data);
+        return Configuration::getConfigurationInstance()->getPluginManager()->triggerEvent($eventName, $data ?? '');
     }
 }

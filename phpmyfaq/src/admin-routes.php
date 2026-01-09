@@ -166,6 +166,16 @@ $routesConfig = [
         'controller' => [PluginController::class, 'index'],
         'methods' => 'GET',
     ],
+    'admin.configuration.plugins.config' => [
+        'path' => '/plugins/config',
+        'controller' => [PluginController::class, 'saveConfig'],
+        'methods' => 'POST',
+    ],
+    'admin.configuration.plugins.toggle' => [
+        'path' => '/plugins/toggle',
+        'controller' => [PluginController::class, 'toggleStatus'],
+        'methods' => 'POST',
+    ],
     'admin.dashboard' => [
         'path' => '/',
         'controller' => [DashboardController::class, 'index'],

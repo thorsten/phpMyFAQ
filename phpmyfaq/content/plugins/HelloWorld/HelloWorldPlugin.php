@@ -21,6 +21,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Plugin\HelloWorld;
 
+require_once __DIR__ . '/HelloWorldPluginConfiguration.php';
+
 use phpMyFAQ\Plugin\PluginEvent;
 use phpMyFAQ\Plugin\PluginInterface;
 use phpMyFAQ\Plugin\PluginConfigurationInterface;
@@ -36,7 +38,7 @@ class HelloWorldPlugin implements PluginInterface
 
     public function getVersion(): string
     {
-        return '0.2.0';
+        return '0.3.0';
     }
 
     public function getDescription(): string
@@ -49,19 +51,32 @@ class HelloWorldPlugin implements PluginInterface
         return 'phpMyFAQ Team';
     }
 
+    public function getAdvDescription(): string
+    {
+        return 'A simple Hello World plugin that demonstrates event handling in phpMyFAQ and with Configuration options.';
+    }
+
+    public function getImplementation(): string
+    {
+        return '{{ phpMyFAQPlugin(\'hello.world\', \'Hello, World!\') | raw }} oder {{ phpMyFAQPlugin(\'user.login\', \'John Doe\') | raw }}';
+    }
+
     public function getDependencies(): array
     {
         return [];
     }
 
+    private ?HelloWorldPluginConfiguration $config = null;
+
     public function getConfig(): ?PluginConfigurationInterface
     {
-        return null; // No configuration needed for this simple plugin
-    }
-
-    public function getStylesheets(): array
-    {
-        return []; // No stylesheets for this simple plugin
+        if ($this->config === null) {
+            if (!class_exists(HelloWorldPluginConfiguration::class)) {
+                require_once __DIR__ . '/HelloWorldPluginConfiguration.php';
+            }
+            $this->config = new HelloWorldPluginConfiguration();
+        }
+        return $this->config;
     }
 
     public function getTranslationsPath(): ?string
@@ -69,20 +84,25 @@ class HelloWorldPlugin implements PluginInterface
         return null; // No translations for this simple plugin
     }
 
-    public function getScripts(): array
-    {
-        return []; // No scripts for this simple plugin
-    }
-
     public function registerEvents(EventDispatcherInterface $eventDispatcher): void
     {
         $eventDispatcher->addListener('hello.world', [$this, 'onContentLoaded']);
+        $eventDispatcher->addListener('user.login', [$this, 'onUserLogin']);
     }
 
     public function onContentLoaded(PluginEvent $event): void
     {
         $content = $event->getData();
-        $output = 'phpMyFAQ says ' . $content . '<br>';
+        $greeting = $this->getConfig()->greeting;
+        $output = 'phpMyFAQ says ' . $greeting . ' (Content: ' . $content . ')';
+        $event->setOutput($output);
+    }
+
+    public function onUserLogin(PluginEvent $event): void
+    {
+        $username = $event->getData();
+        $configuredUsername = $this->getConfig()->username;
+        $output = 'Welcome back, ' . $username . '! (Configured: ' . $configuredUsername . ')<br>';
         $event->setOutput($output);
     }
 }

@@ -25,6 +25,37 @@ use phpMyFAQ\Database;
 use SensitiveParameter;
 
 /**
+ * Class SqlsrvStatement
+ */
+class SqlsrvStatement
+{
+    public function __construct(
+        public mixed $statement,
+        public mixed $result = null,
+    ) {
+    }
+
+    public function __toString(): string
+    {
+        return is_string($this->statement) ? $this->statement : '';
+    }
+
+    /**
+     * @deprecated Use DatabaseDriver::fetchAll() instead.
+     */
+    public function fetchAll(): array
+    {
+        $ret = [];
+        if ($this->result) {
+            while ($row = sqlsrv_fetch_object($this->result)) {
+                $ret[] = $row;
+            }
+        }
+        return $ret;
+    }
+}
+
+/**
  * Class Sqlsrv
  *
  * @package phpMyFAQ\Database
@@ -113,6 +144,10 @@ class Sqlsrv implements DatabaseDriver
      */
     public function fetchAll(mixed $result): ?array
     {
+        if ($result instanceof SqlsrvStatement) {
+            $result = $result->result;
+        }
+
         $ret = [];
         if (false === $result) {
             throw new Exception('Error while fetching result: ' . $this->error());
@@ -309,7 +344,67 @@ class Sqlsrv implements DatabaseDriver
             $prefix . 'faquser_right',
             $prefix . 'faqvisits',
             $prefix . 'faqvoting',
+            $prefix . 'faqplugins',
         ];
+    }
+
+    /**
+     * Prepares a statement for execution and returns a statement object.
+     *
+     * @param string $query   The SQL query
+     * @param array  $options The driver options
+     * @return resource|string|false
+     */
+    /**
+     * Prepares a statement for execution and returns a statement object.
+     *
+     * @param string $query   The SQL query
+     * @param array  $options The driver options
+     * @return SqlsrvStatement|false
+     */
+    public function prepare(string $query, array $options = []): SqlsrvStatement|false
+    {
+        if (str_contains($query, '?')) {
+            return new SqlsrvStatement($query);
+        }
+
+        $stmt = sqlsrv_prepare($this->conn, $query, [], $options);
+        if ($stmt) {
+            return new SqlsrvStatement($stmt);
+        }
+        return false;
+    }
+
+    /**
+     * Executes a prepared statement.
+     *
+     * @param mixed $statement The prepared statement (SqlsrvStatement resource or SQL string)
+     * @param array $params    The parameters
+     * @return bool
+     */
+    public function execute(mixed $statement, array $params = []): bool
+    {
+        if (!$statement instanceof SqlsrvStatement) {
+            return false;
+        }
+
+        if (is_resource($statement->statement) && empty($params)) {
+            $success = sqlsrv_execute($statement->statement);
+            if ($success) {
+                $statement->result = $statement->statement;
+            }
+            return $success;
+        }
+
+        if (is_string($statement->statement)) {
+            $result = sqlsrv_query($this->conn, $statement->statement, $params);
+            if ($result) {
+                $statement->result = $result;
+            }
+            return (bool) $result;
+        }
+
+        return false;
     }
 
     /**

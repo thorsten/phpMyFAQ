@@ -179,6 +179,12 @@ class PdoMysql extends Database implements DriverInterface
             record_id INT(11) NOT NULL,
             group_id INT(11) NOT NULL,
             PRIMARY KEY (record_id, group_id))',
+        'faqplugins' => 'CREATE TABLE %sfaqplugins (
+            name VARCHAR(255) NOT NULL,
+            active INT(1) NOT NULL DEFAULT 0,
+            config LONGTEXT DEFAULT NULL,
+            PRIMARY KEY (name)) 
+            DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
         'faqdata_tags' => 'CREATE TABLE %sfaqdata_tags (
             record_id INT(11) NOT NULL,
             tagging_id INT(11) NOT NULL,

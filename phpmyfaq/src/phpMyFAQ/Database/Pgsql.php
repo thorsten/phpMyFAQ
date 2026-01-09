@@ -28,6 +28,37 @@ use phpMyFAQ\Database;
 use SensitiveParameter;
 
 /**
+ * Class PgsqlStatement
+ */
+class PgsqlStatement
+{
+    public function __construct(
+        private string $name,
+        public mixed $result = null,
+    ) {
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @deprecated Use DatabaseDriver::fetchAll() instead.
+     */
+    public function fetchAll(): array
+    {
+        $ret = [];
+        if ($this->result) {
+            while ($row = pg_fetch_object($this->result)) {
+                $ret[] = $row;
+            }
+        }
+        return $ret;
+    }
+}
+
+/**
  * Class Pgsql
  *
  * @package phpMyFAQ\Database
@@ -51,6 +82,11 @@ class Pgsql implements DatabaseDriver
      * The connection resource.
      */
     private Connection|bool $conn = false;
+
+    /**
+     * Prepared statements.
+     */
+    private array $preparedStatements = [];
 
     /**
      * Connects to the database.
@@ -145,6 +181,10 @@ class Pgsql implements DatabaseDriver
      */
     public function fetchAll(mixed $result): ?array
     {
+        if ($result instanceof PgsqlStatement) {
+            $result = $result->result;
+        }
+
         $ret = [];
         if (false === $result) {
             throw new Exception('Error while fetching result: ' . $this->error());
@@ -314,7 +354,44 @@ class Pgsql implements DatabaseDriver
             $prefix . 'faquser_right',
             $prefix . 'faqvisits',
             $prefix . 'faqvoting',
+            $prefix . 'faqplugins',
         ];
+    }
+
+    /**
+     * Prepares a statement for execution and returns a statement object.
+     *
+     * @param string $query   The SQL query
+     * @param array  $options The driver options
+     * @return PgsqlStatement|false
+     */
+    public function prepare(string $query, array $options = []): PgsqlStatement|false
+    {
+        $stmtName = 'pmf_stmt_' . (count($this->preparedStatements) + 1);
+        if (pg_prepare($this->conn, $stmtName, $query)) {
+            $this->preparedStatements[$stmtName] = $query;
+            return new PgsqlStatement($stmtName);
+        }
+        return false;
+    }
+
+    /**
+     * Executes a prepared statement.
+     *
+     * @param mixed $statement The prepared statement (name)
+     * @param array $params    The parameters
+     * @return bool
+     */
+    public function execute(mixed $statement, array $params = []): bool
+    {
+        $name = (string) $statement;
+        $result = pg_execute($this->conn, $name, $params);
+
+        if ($statement instanceof PgsqlStatement) {
+            $statement->result = $result;
+        }
+
+        return (bool) $result;
     }
 
     /**
