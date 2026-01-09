@@ -20,6 +20,7 @@ namespace phpMyFAQ\Controller\Api;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Setup\Update;
 use phpMyFAQ\System;
@@ -69,7 +70,7 @@ class SetupController extends AbstractController
 
     public function backup(Request $request): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         if (empty($request->getContent())) {
             return $this->json(['message' => 'No version given.'], Response::HTTP_BAD_REQUEST);
@@ -96,7 +97,7 @@ class SetupController extends AbstractController
 
     public function updateDatabase(Request $request): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         if (empty($request->getContent())) {
             return $this->json(['message' => 'No version given.'], Response::HTTP_BAD_REQUEST);
