@@ -71,7 +71,7 @@ class OpenQuestionController extends AbstractController
     public function list(): JsonResponse
     {
         $question = new Question($this->configuration);
-        $result = $question->getAll();
+        $result = $question->getAll(false);
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
             return $this->json([], Response::HTTP_NOT_FOUND);
