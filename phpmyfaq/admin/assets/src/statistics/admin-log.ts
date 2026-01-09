@@ -68,6 +68,69 @@ export const handleExportAdminLog = (): void => {
   }
 };
 
+export const handleVerifyAdminLog = async (): Promise<void> => {
+  const verifyButton = document.getElementById('pmf-button-verify-admin-log') as HTMLButtonElement;
+  const resultContainer = document.getElementById('pmf-admin-log-verification-result') as HTMLDivElement;
+
+  if (!verifyButton || !resultContainer) {
+    return;
+  }
+
+  verifyButton.addEventListener('click', async (event: Event) => {
+    event.preventDefault();
+
+    verifyButton.disabled = true;
+    verifyButton.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Checking...';
+
+    resultContainer.classList.add('d-none');
+
+    try {
+      const csrfToken = verifyButton.dataset.pmfCsrf;
+
+      if (!csrfToken) {
+        throw new Error('CSRF Token not found');
+      }
+
+      const response = await fetch(`./api/statistics/admin-log/verify?csrf=${csrfToken}`, {
+        method: 'GET',
+        headers: { Accept: 'application/json' },
+      });
+
+      const data = await response.json();
+
+      resultContainer.classList.remove('d-none');
+
+      if (data.success && data.verification.valid) {
+        resultContainer.className = 'alert alert-success';
+        resultContainer.innerHTML = `
+          <i class="bi bi-check-circle-fill"></i>
+          <strong>Integrity verified</strong>
+          <p class="mb-0">${data.verification.verified} of ${data.verification.total} entries successfully checked.</p>
+        `;
+      } else if (data.success && !data.verification.valid) {
+        const errors = data.verification.errors.map((err: string) => `<li>${err}</li>`).join('');
+        resultContainer.className = 'alert alert-danger';
+        resultContainer.innerHTML = `
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <strong>⚠️ Manipulation erkannt!</strong>
+          <p>${data.verification.verified} verifiziert, ${data.verification.failed} fehlgeschlagen</p>
+          <ul>${errors}</ul>
+        `;
+      } else {
+        resultContainer.className = 'alert alert-warning';
+        resultContainer.textContent = data.error || 'Fehler bei der Verifikation';
+      }
+    } catch (error) {
+      resultContainer.classList.remove('d-none');
+      resultContainer.className = 'alert alert-danger';
+      resultContainer.textContent = `Fehler: ${error instanceof Error ? error.message : 'Netzwerkfehler'}`;
+    } finally {
+      verifyButton.disabled = false;
+      verifyButton.innerHTML = '<i class="bi bi-shield-check"></i> Integrität prüfen';
+    }
+  });
+};
+
 export const handleDeleteAdminLog = (): void => {
   const buttonDeleteAdminLog = document.getElementById('pmf-delete-admin-log') as HTMLButtonElement | null;
 

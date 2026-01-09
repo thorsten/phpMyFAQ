@@ -523,15 +523,20 @@ $routesConfig = [
         'methods' => 'POST',
     ],
     // Statistics API
-    'admin.api.statistics.adminlog.export' => [
+    'admin.api.statistics.admin-log.export' => [
         'path' => '/statistics/admin-log/export',
         'controller' => [AdminLogController::class, 'export'],
         'methods' => 'POST',
     ],
-    'admin.api.statistics.adminlog.delete' => [
+    'admin.api.statistics.admin-log.delete' => [
         'path' => '/statistics/admin-log',
-        'controller' => [StatisticsController::class, 'deleteAdminLog'],
+        'controller' => [AdminLogController::class, 'delete'],
         'methods' => 'DELETE',
+    ],
+    'admin.api.statistics.admin-log.verify' => [
+        'path' => '/statistics/admin-log/verify',
+        'controller' => [AdminLogController::class, 'verify'],
+        'methods' => 'POST',
     ],
     'admin.api.statistics.ratings.clear' => [
         'path' => '/statistics/ratings/clear',

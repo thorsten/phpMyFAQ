@@ -72,7 +72,11 @@ readonly class AdminLog
         }
 
         $request = Request::createFromGlobals();
-        return $this->adminLogRepository->add($user, $logText, $request);
+
+        // Get the hash of the last log entry for chaining
+        $previousHash = $this->adminLogRepository->getLastHash();
+
+        return $this->adminLogRepository->add($user, $logText, $request, $previousHash);
     }
 
     /**
@@ -82,5 +86,71 @@ readonly class AdminLog
     {
         $timestamp = (int) Request::createFromGlobals()->server->get(key: 'REQUEST_TIME') - (30 * 86400);
         return $this->adminLogRepository->deleteOlderThan($timestamp);
+    }
+
+    /**
+     * Verifies the integrity of the entire admin log chain.
+     * @return array{valid: bool, errors: array<int, string>, total: int, verified: int}
+     */
+    public function verifyChainIntegrity(): array
+    {
+        $logs = $this->getAll();
+        $errors = [];
+        $verified = 0;
+        $total = count($logs);
+
+        if ($total === 0) {
+            return [
+                'valid' => true,
+                'errors' => [],
+                'total' => 0,
+                'verified' => 0,
+            ];
+        }
+
+        $previousHash = null;
+
+        foreach ($logs as $log) {
+            // Verify the hash matches the stored hash
+            if (!$log->verifyIntegrity()) {
+                $errors[] = sprintf('Log ID %d: Hash verification failed - data has been tampered', $log->getId());
+                continue;
+            }
+
+            // Verify the chain (previous hash matches)
+            if ($previousHash !== null && $log->getPreviousHash() !== $previousHash) {
+                $errors[] = sprintf(
+                    'Log ID %d: Chain broken - previous hash mismatch (expected: %s, got: %s)',
+                    $log->getId(),
+                    substr($previousHash, 0, 8) . '...',
+                    substr($log->getPreviousHash() ?? 'NULL', 0, 8) . '...',
+                );
+                continue;
+            }
+
+            // The first entry should have null previous hash
+            if ($previousHash === null && $log->getPreviousHash() !== null) {
+                $errors[] = sprintf('Log ID %d: First entry should have null previous hash', $log->getId());
+                continue;
+            }
+
+            $verified++;
+            $previousHash = $log->getHash();
+        }
+
+        return [
+            'valid' => empty($errors),
+            'errors' => $errors,
+            'total' => $total,
+            'verified' => $verified,
+        ];
+    }
+
+    /**
+     * Calculates hash for a single log entry (for migration or manual verification).
+     */
+    public function calculateHash(AdminLogEntity $log): string
+    {
+        return $log->calculateHash();
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Adminlog entity class.
+ * Admin log entity class.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -21,15 +21,18 @@ namespace phpMyFAQ\Entity;
 
 class AdminLog
 {
-    private int $id;
+    private int $id = 0;
 
-    private int $time;
+    private int $time = 0;
 
-    private int $userId;
+    private int $userId = 0;
 
-    private string $text;
+    private string $text = '';
 
-    private string $ip;
+    private string $ip = '';
+
+    private ?string $hash = null;
+    private ?string $previousHash = null;
 
     public function getId(): int
     {
@@ -84,5 +87,60 @@ class AdminLog
     {
         $this->ip = $ip;
         return $this;
+    }
+
+    public function getHash(): ?string
+    {
+        return $this->hash;
+    }
+
+    public function setHash(?string $hash): AdminLog
+    {
+        $this->hash = $hash;
+        return $this;
+    }
+
+    public function getPreviousHash(): ?string
+    {
+        return $this->previousHash;
+    }
+
+    public function setPreviousHash(?string $previousHash): AdminLog
+    {
+        $this->previousHash = $previousHash;
+        return $this;
+    }
+
+    /**
+     * Calculates SHA-256 hash over all log data.
+     * Note: ID is not included because it's auto-generated after INSERT
+     * @return string 64-character hex hash
+     */
+    public function calculateHash(): string
+    {
+        $data = implode('|', [
+            (string) $this->time,
+            (string) $this->userId,
+            $this->ip,
+            $this->text,
+            $this->previousHash ?? '',
+        ]);
+
+        return hash('sha256', $data);
+    }
+
+    /**
+     * Verifies if the stored hash matches the calculated hash.
+     * @return bool True if the hash is valid, false if tampered
+     */
+    public function verifyIntegrity(): bool
+    {
+        if ($this->hash === null) {
+            return false;
+        }
+
+        $calculatedHash = $this->calculateHash();
+
+        return hash_equals($this->hash, $calculatedHash);
     }
 }

@@ -193,7 +193,10 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
 
         $this->configuration->update($newConfigValues);
 
-        $changedKeys = array_keys(array_diff_assoc($newConfigValues, $oldConfigurationData));
+        // Filter out non-scalar values from old config before comparison
+        $oldConfigComparable = array_filter($oldConfigurationData, fn($value) => is_scalar($value) || $value === null);
+
+        $changedKeys = array_keys(array_diff_assoc($newConfigValues, $oldConfigComparable));
 
         // General configuration change log
         $this->adminLog->log($this->currentUser, AdminLogType::CONFIG_CHANGE->value . ':' . implode(',', $changedKeys));
@@ -237,7 +240,9 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         if ($securityChanges !== []) {
             $details = [];
             foreach ($securityChanges as $key) {
-                $details[] = $key . ':' . ($oldConfig[$key] ?? 'null') . '->' . ($newConfig[$key] ?? 'null');
+                $oldValue = $this->convertToString($oldConfig[$key] ?? null);
+                $newValue = $this->convertToString($newConfig[$key] ?? null);
+                $details[] = $key . ':' . $oldValue . '->' . $newValue;
             }
             $this->adminLog->log(
                 $this->currentUser,
@@ -419,5 +424,29 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         $this->userIsAuthenticated();
 
         return new Response(Helper::renderMetaRobotsDropdown($request->attributes->get(key: 'current')));
+    }
+
+    /**
+     * Converts a value to string safely, handling objects and null values
+     */
+    private function convertToString(mixed $value): string
+    {
+        if ($value === null) {
+            return 'null';
+        }
+
+        if (is_scalar($value)) {
+            return (string) $value;
+        }
+
+        if (is_object($value)) {
+            return get_class($value);
+        }
+
+        if (is_array($value)) {
+            return 'array';
+        }
+
+        return 'unknown';
     }
 }

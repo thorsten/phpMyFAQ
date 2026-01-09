@@ -11,12 +11,18 @@
         <button class="btn btn-outline-success" id="pmf-export-admin-log" data-pmf-csrf="{{ csrfExportAdminLogToken }}">
           <i aria-hidden="true" class="bi bi-download"></i> {{ buttonExportAdminLog }}
         </button>
+        <button class="btn btn-success" id="pmf-button-verify-admin-log" data-pmf-csrf="{{ csrfVerifyAdminLogToken }}">
+          <i class="bi bi-shield-check"></i> {{ 'msgAdminLogVerifyIntegrity' | translate }}
+        </button>
         <button class="btn btn-outline-danger" id="pmf-delete-admin-log" data-pmf-csrf="{{ csrfDeleteAdminLogToken }}">
           <i aria-hidden="true" class="bi bi-trash"></i> {{ buttonDeleteAdminLog }}
         </button>
       </div>
     </div>
   </div>
+
+  {# Verification Result Alert (initially hidden) #}
+  <div id="pmf-admin-log-verification-result" class="alert d-none" role="alert"></div>
 
   <table class="table table-striped align-middle border shadow">
     <thead>

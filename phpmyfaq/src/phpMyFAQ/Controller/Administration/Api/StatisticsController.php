@@ -37,30 +37,6 @@ final class StatisticsController extends AbstractController
      * @throws Exception|JsonException
      * @throws \Exception
      */
-    #[Route(path: './admin/api/statistics/admin-log', methods: ['DELETE'])]
-    public function deleteAdminLog(Request $request): JsonResponse
-    {
-        $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
-
-        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
-
-        if (!Token::getInstance($this->session)->verifyToken('delete-adminlog', $data->csrfToken)) {
-            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
-        }
-
-        if ($this->container->get(id: 'phpmyfaq.admin.admin-log')->delete()) {
-            return $this->json(['success' => Translation::get(key: 'ad_adminlog_delete_success')], Response::HTTP_OK);
-        }
-
-        return $this->json(['error' => Translation::get(
-            key: 'ad_adminlog_delete_failure',
-        )], Response::HTTP_BAD_REQUEST);
-    }
-
-    /**
-     * @throws Exception|JsonException
-     * @throws \Exception
-     */
     #[Route(
         path: './admin/api/statistics/sessions',
         name: 'admin.api.statistics.sessions.truncate',

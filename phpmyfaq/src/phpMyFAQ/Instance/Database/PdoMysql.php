@@ -36,6 +36,8 @@ class PdoMysql extends Database implements DriverInterface
             time INT(11) NOT NULL,
             usr INT(11) NOT NULL,
             text TEXT NOT NULL,
+            hash VARCHAR(64) NULL,
+            previous_hash VARCHAR(64) NULL,
             ip VARCHAR(64) NOT NULL,
             PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
         'faqattachment' => 'CREATE TABLE %sfaqattachment (
