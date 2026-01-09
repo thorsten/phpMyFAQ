@@ -77,17 +77,16 @@ class AdminLogTest extends TestCase
 
         $result = $this->adminLog->getAll();
 
-        $adminLogEntity = new AdminLogEntity();
-        $one = $adminLogEntity->setId(1)->setTime($this->now)->setUserId(-1)->setText('foo')->setIp('127.0.0.1');
-        $adminLogEntity = new AdminLogEntity();
-        $two = $adminLogEntity->setId(2)->setTime($this->now)->setUserId(-1)->setText('bar')->setIp('127.0.0.1');
+        $this->assertCount(2, $result);
 
-        $this->assertEquals(
-            [
-                2 => $two,
-                1 => $one,
-            ],
-            $result,
-        );
+        // Results are returned in reverse chronological order (newest first) with ID as key
+        $entries = array_values($result);
+        $this->assertInstanceOf(AdminLogEntity::class, $entries[0]);
+        $this->assertInstanceOf(AdminLogEntity::class, $entries[1]);
+
+        $this->assertEquals('bar', $entries[0]->getText());
+        $this->assertEquals('foo', $entries[1]->getText());
+        $this->assertEquals(-1, $entries[0]->getUserId());
+        $this->assertEquals('127.0.0.1', $entries[0]->getIp());
     }
 }

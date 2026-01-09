@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Setup;
 
+use phpMyFAQ\Administration\AdminLog;
+use phpMyFAQ\Administration\AdminLogRepository;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -183,6 +185,9 @@ class Update extends AbstractSetup
         $this->applyUpdates410Alpha();
         $this->applyUpdates410Alpha2();
         $this->applyUpdates410Alpha3();
+
+        // 4.2 updates
+        $this->applyUpdates420Alpha();
 
         // Optimize the tables
         $this->optimizeTables();
@@ -1122,6 +1127,63 @@ class Update extends AbstractSetup
         }
     }
 
+    private function applyUpdates420Alpha(): void
+    {
+        if (version_compare($this->version, '4.2.0-alpha', '<')) {
+            // Create the new columns first
+            switch (Database::getType()) {
+                case 'mysqli':
+                case 'pdo_mysql':
+                    $alterQueries = [
+                        sprintf(
+                            'ALTER TABLE %sfaqadminlog ADD COLUMN hash VARCHAR(64) AFTER text',
+                            Database::getTablePrefix(),
+                        ),
+                        sprintf(
+                            'ALTER TABLE %sfaqadminlog ADD COLUMN previous_hash VARCHAR(64) AFTER hash',
+                            Database::getTablePrefix(),
+                        ),
+                        sprintf('CREATE INDEX idx_hash ON %sfaqadminlog (hash)', Database::getTablePrefix()),
+                    ];
+                    break;
+
+                case 'pgsql':
+                case 'pdo_pgsql':
+                case 'sqlite3':
+                case 'pdo_sqlite':
+                    $alterQueries = [
+                        sprintf('ALTER TABLE %sfaqadminlog ADD COLUMN hash VARCHAR(64)', Database::getTablePrefix()),
+                        sprintf(
+                            'ALTER TABLE %sfaqadminlog ADD COLUMN previous_hash VARCHAR(64)',
+                            Database::getTablePrefix(),
+                        ),
+                        sprintf('CREATE INDEX idx_hash ON %sfaqadminlog (hash)', Database::getTablePrefix()),
+                    ];
+                    break;
+
+                case 'sqlsrv':
+                case 'pdo_sqlsrv':
+                    $alterQueries = [
+                        sprintf('ALTER TABLE %sfaqadminlog ADD hash VARCHAR(64)', Database::getTablePrefix()),
+                        sprintf('ALTER TABLE %sfaqadminlog ADD previous_hash VARCHAR(64)', Database::getTablePrefix()),
+                        sprintf('CREATE INDEX idx_hash ON %sfaqadminlog (hash)', Database::getTablePrefix()),
+                    ];
+                    break;
+
+                default:
+                    $alterQueries = [];
+            }
+
+            // Execute ALTER TABLE queries immediately
+            foreach ($alterQueries as $query) {
+                $this->configuration->getDb()->query($query);
+            }
+
+            // Now migrate the existing data
+            $this->migrateAdminLogHashes();
+        }
+    }
+
     private function updateVersion(): void
     {
         $this->configuration->update(['main.currentApiVersion' => System::getApiVersion()]);
@@ -1139,5 +1201,41 @@ class Update extends AbstractSetup
         }
 
         return $this->backupFilename;
+    }
+
+    private function migrateAdminLogHashes(): void
+    {
+        if (version_compare($this->version, '4.2.0-alpha', '<')) {
+            $repository = new AdminLogRepository($this->configuration);
+
+            try {
+                $entries = $repository->getAll();
+                $previousHash = null;
+
+                foreach ($entries as $entity) {
+                    if ($entity->getHash() === null) {
+                        $entity->setPreviousHash($previousHash);
+                        $hash = $entity->calculateHash();
+
+                        // Execute UPDATE directly instead of adding to the queries array
+                        $updateQuery = sprintf(
+                            "UPDATE %sfaqadminlog SET hash = '%s', previous_hash = %s WHERE id = %d",
+                            Database::getTablePrefix(),
+                            $this->configuration->getDb()->escape($hash),
+                            $previousHash !== null
+                                ? "'" . $this->configuration->getDb()->escape($previousHash) . "'"
+                                : 'NULL',
+                            $entity->getId(),
+                        );
+
+                        $this->configuration->getDb()->query($updateQuery);
+
+                        $previousHash = $hash;
+                    }
+                }
+            } catch (\Exception $e) {
+                $this->configuration->getLogger()->error('Admin log hash migration failed: ' . $e->getMessage());
+            }
+        }
     }
 }

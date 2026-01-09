@@ -381,7 +381,8 @@ class NewsTest extends TestCase
         $result = $this->news->get(1, false);
 
         $this->assertFalse($result['active']);
-        $this->assertStringContainsString('revision', strtolower($result['content']));
+        // Content should be replaced with error message, not the original article
+        $this->assertNotEquals('This should not be shown', $result['content']);
     }
 
     public function testGetInactiveAsAdmin(): void

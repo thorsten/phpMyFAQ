@@ -36,6 +36,8 @@ class PdoPgsql extends Database implements DriverInterface
             time INTEGER NOT NULL,
             usr INTEGER NOT NULL,
             text TEXT NOT NULL,
+            hash VARCHAR(64) NULL,
+            previous_hash VARCHAR(64) NULL,
             ip VARCHAR(64) NOT NULL,
             PRIMARY KEY (id))',
         'faqattachment' => 'CREATE TABLE %sfaqattachment (

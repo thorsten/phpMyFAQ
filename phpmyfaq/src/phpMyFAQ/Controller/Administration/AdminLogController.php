@@ -70,6 +70,7 @@ final class AdminLogController extends AbstractAdministrationController
             'buttonExportAdminLog' => Translation::get(key: 'msgAdminLogExportCsv'),
             'buttonDeleteAdminLog' => Translation::get(key: 'ad_adminlog_del_older_30d'),
             'csrfExportAdminLogToken' => Token::getInstance($this->session)->getTokenString('export-adminlog'),
+            'csrfVerifyAdminLogToken' => Token::getInstance($this->session)->getTokenString('admin-log-verify'),
             'csrfDeleteAdminLogToken' => Token::getInstance($this->session)->getTokenString('delete-adminlog'),
             'currentLocale' => $this->configuration->getLanguage()->getLanguage(),
             'pagination' => $pagination->render(),

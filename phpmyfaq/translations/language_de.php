@@ -1539,5 +1539,6 @@ $PMF_LANG['msgError500Description'] = 'Der Server hat einen internen Fehler fest
 $PMF_LANG['msgErrorDetails'] = 'Fehlerdetails';
 $PMF_LANG['msgTryAgain'] = 'Erneut versuchen';
 $PMF_LANG['msgAdminLogExportCsv'] = "Admin-Logs als CSV exportieren";
+$PMF_LANG['msgAdminLogVerifyIntegrity'] = 'Integrität prüfen';
 
 return $PMF_LANG;

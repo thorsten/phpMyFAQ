@@ -36,6 +36,8 @@ class Sqlite3 extends Database implements DriverInterface
             time INTEGER NOT NULL,
             usr INTEGER NOT NULL,
             text VARCHAR(8000) NOT NULL,
+            hash VARCHAR(64) NULL,
+            previous_hash VARCHAR(64) NULL,
             ip VARCHAR(64) NOT NULL,
             PRIMARY KEY (id))',
         'faqattachment' => 'CREATE TABLE %sfaqattachment (

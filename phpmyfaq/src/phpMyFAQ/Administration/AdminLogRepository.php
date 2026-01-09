@@ -47,7 +47,7 @@ readonly class AdminLogRepository
         $data = [];
 
         $query = sprintf(
-            'SELECT id, time, usr AS user, text, ip FROM %sfaqadminlog ORDER BY id DESC',
+            'SELECT id, time, usr AS user, text, ip, hash, previous_hash FROM %sfaqadminlog ORDER BY id DESC',
             Database::getTablePrefix(),
         );
 
@@ -60,32 +60,52 @@ readonly class AdminLogRepository
                 ->setTime((int) $row->time)
                 ->setUserId((int) $row->user)
                 ->setText($row->text)
-                ->setIp($row->ip);
+                ->setIp($row->ip)
+                ->setHash($row->hash ?? null)
+                ->setPreviousHash($row->previous_hash ?? null);
             $data[$row->id] = $adminLog;
         }
 
         return $data;
     }
 
-    public function add(User $user, string $logText, Request $request): bool
+    /**
+     * Adds a new logging entry with hash chain integrity.
+     *
+     * @param User    $user         User object
+     * @param string  $logText      Logged string
+     * @param Request $request      Request object
+     * @param string|null $previousHash Hash of the previous entry
+     */
+    public function add(User $user, string $logText, Request $request, ?string $previousHash = null): bool
     {
-        $table = Database::getTablePrefix() . 'faqadminlog';
-        $id = $this->configuration->getDb()->nextId($table, 'id');
-        $time = (int) $request->server->get('REQUEST_TIME');
+        $time = (int) $request->server->get('REQUEST_TIME', time());
         $userId = $user->getUserId();
-        $text = $this->configuration->getDb()->escape(nl2br($logText));
-        $ip = $this->configuration->getDb()->escape((string) $request->getClientIp());
+        $ip = $request->getClientIp() ?? '';
 
-        $query = strtr("INSERT INTO table: (id, time, usr, text, ip) VALUES (id:, time:, userId:, 'text:', 'ip:')", [
-            'table:' => $table,
-            'id:' => (string) $id,
-            'time:' => (string) $time,
-            'userId:' => (string) $userId,
-            'text:' => $text,
-            'ip:' => $ip,
-        ]);
+        // Create a temporary entity to calculate hash
+        $entity = new AdminLogEntity();
+        $entity->setTime($time);
+        $entity->setUserId($userId);
+        $entity->setIp($ip);
+        $entity->setText($logText);
+        $entity->setPreviousHash($previousHash);
 
-        return (bool) $this->configuration->getDb()->query($query);
+        // Calculate hash for this entry
+        $hash = $entity->calculateHash();
+
+        $insert = sprintf(
+            "INSERT INTO %sfaqadminlog (time, usr, ip, text, hash, previous_hash) VALUES (%d, %d, '%s', '%s', '%s', %s)",
+            Database::getTablePrefix(),
+            $time,
+            $userId,
+            $this->configuration->getDb()->escape($ip),
+            $this->configuration->getDb()->escape($logText),
+            $hash,
+            $previousHash !== null ? "'" . $this->configuration->getDb()->escape($previousHash) . "'" : 'NULL',
+        );
+
+        return (bool) $this->configuration->getDb()->query($insert);
     }
 
     public function deleteOlderThan(int $timestamp): bool
@@ -97,5 +117,23 @@ readonly class AdminLogRepository
         ]);
 
         return (bool) $this->configuration->getDb()->query($query);
+    }
+
+    /**
+     * Returns the hash of the most recent log entry for chain linking.
+     *
+     * @return string|null Hash of the last entry or null if no entries exist
+     */
+    public function getLastHash(): ?string
+    {
+        $query = sprintf('SELECT hash FROM %sfaqadminlog ORDER BY id DESC LIMIT 1', Database::getTablePrefix());
+
+        $result = $this->configuration->getDb()->query($query);
+
+        if ($result && ($row = $this->configuration->getDb()->fetchObject($result))) {
+            return $row->hash;
+        }
+
+        return null;
     }
 }

@@ -25,6 +25,7 @@ import {
   handleSessionsFilter,
   handleStatistics,
   handleTruncateSearchTerms,
+  handleVerifyAdminLog,
 } from './statistics';
 import {
   handleConfiguration,
@@ -142,6 +143,7 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   // Statistics
   handleDeleteAdminLog();
   handleExportAdminLog();
+  await handleVerifyAdminLog();
   handleStatistics();
   handleCreateReport();
   handleTruncateSearchTerms();
