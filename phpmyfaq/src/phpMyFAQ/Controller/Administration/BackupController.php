@@ -25,7 +25,6 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
-use RuntimeException;
 use SodiumException;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
@@ -112,13 +111,23 @@ class BackupController extends AbstractAdministrationController
 
         $file = $request->files->get(key: 'userfile');
 
-        if (!$file) {
-            throw new RuntimeException(message: 'No file uploaded');
-        }
-
         $templateVars = [
             'adminHeaderRestore' => Translation::get(key: 'ad_csv_rest'),
         ];
+
+        if (!$file) {
+            $templateVars = [
+                ...$templateVars,
+                'errorMessageUpload' => Translation::get(key: 'ad_csv_no'),
+                'errorMessageUploadDetails' => 'No file was uploaded. Please select a backup file to restore.',
+            ];
+
+            return $this->render(file: '@admin/backup/import.twig', context: [
+                ...$this->getHeader($request),
+                ...$this->getFooter(),
+                ...$templateVars,
+            ]);
+        }
 
         if (!$file->isValid()) {
             $errorMessage = match ($file->getError()) {

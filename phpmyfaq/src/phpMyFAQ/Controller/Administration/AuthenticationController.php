@@ -70,7 +70,7 @@ final class AuthenticationController extends AbstractAdministrationController
             } catch (Exception) {
                 $logging->log(
                     $this->currentUser,
-                    'Login-error\nLogin: ' . $username . '\nErrors: '
+                    'Login-error for: ' . $username . ' with errors: '
                         . implode(separator: ', ', array: $this->currentUser->errors),
                 );
                 return new RedirectResponse(url: './login');
