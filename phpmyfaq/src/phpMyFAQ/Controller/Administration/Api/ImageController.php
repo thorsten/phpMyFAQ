@@ -101,14 +101,24 @@ final class ImageController extends AbstractController
                 // Add to the list of uploaded files
                 $uploadedFiles[] = $fileName;
             }
-
-            return $this->json(['success' => false], Response::HTTP_BAD_REQUEST, $headers);
         }
+
+        // Build full URLs for Jodit editor
+        $fileUrls = array_map(
+            fn($file) => $this->configuration->getDefaultUrl() . 'content/user/images/' . $file,
+            $uploadedFiles,
+        );
 
         $response = [
             'success' => true,
             'time' => (new DateTime())->format('Y-m-d H:i:s'),
             'data' => [
+                'messages' => ['Files uploaded successfully'],
+                'files' => $fileUrls, // For Jodit uploader
+                'isImages' => array_map(
+                    fn($file) => !in_array(pathinfo($file, PATHINFO_EXTENSION), ['mov', 'mp4', 'webm']),
+                    $uploadedFiles,
+                ),
                 'sources' => [
                     [
                         'baseurl' => $this->configuration->getDefaultUrl(),
