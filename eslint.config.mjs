@@ -10,6 +10,7 @@ const ignoresConfig = globalIgnores([
   'html-coverage/*',
   'node_modules/*',
   'phpmyfaq/assets/public/*',
+  'phpmyfaq/content/upgrades/*',
   'phpmyfaq/src/libs/*',
   'volumes/*',
 ]);

@@ -17,6 +17,11 @@ DirectoryIndex index.php
 <IfModule mod_negotiation.c>
     Options +FollowSymlinks -MultiViews -Indexes
 </IfModule>
+# Increase upload limits for PHP (adjust as needed)
+php_value upload_max_filesize 100M
+php_value post_max_size 100M
+php_value max_execution_time 300
+php_value max_input_time 300
 # X-Frame-Options to prevent clickjacking
 Header always append X-Frame-Options SAMEORIGIN
 # CORS

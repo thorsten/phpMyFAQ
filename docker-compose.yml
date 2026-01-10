@@ -98,6 +98,8 @@ services:
       - PMF_MEMORY_LIMIT="2048M" # only for development
       - PHP_LOG_ERRORS="On"
       - PHP_ERROR_REPORTING="E_ALL & E_DEPRECATED" # Production Value: E_ALL & ~E_DEPRECATED
+      - PHP_POST_MAX_SIZE="200M" # Increased upload limit
+      - PHP_UPLOAD_MAX_FILESIZE="200M" # Increased upload limit
       - OPENSEARCH_BASE_URI=http://opensearch:9201
       - ELASTICSEARCH_BASE_URI=http://elasticsearch:9200
       - SEARCH_WAIT_TIMEOUT=30

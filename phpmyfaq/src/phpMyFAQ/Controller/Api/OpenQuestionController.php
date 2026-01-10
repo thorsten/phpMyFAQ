@@ -72,7 +72,7 @@ final class OpenQuestionController extends AbstractController
     {
         /** @var Question $question */
         $question = $this->container?->get(id: 'phpmyfaq.question');
-        $result = $question->getAll();
+        $result = $question->getAll(false);
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
             return $this->json([], Response::HTTP_NOT_FOUND);
