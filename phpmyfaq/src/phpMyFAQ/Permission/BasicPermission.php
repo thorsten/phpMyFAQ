@@ -275,6 +275,7 @@ class BasicPermission implements PermissionInterface
     {
         return $this->repository->refuseAllUserRights($userId);
     }
+
     /**
      * Returns an array with the IDs of all groups the user belongs to.
      * Since this is BasicPermission, always return an empty array.
