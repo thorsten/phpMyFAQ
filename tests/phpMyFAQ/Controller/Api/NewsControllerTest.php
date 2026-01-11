@@ -29,7 +29,6 @@ class NewsControllerTest extends TestCase
         $this->configuration->setLanguage($language);
     }
 
-
     public function testListReturnsJsonResponse(): void
     {
         $controller = new NewsController();

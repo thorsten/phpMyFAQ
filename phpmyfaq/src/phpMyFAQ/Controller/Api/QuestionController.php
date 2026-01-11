@@ -48,7 +48,7 @@ final class QuestionController extends AbstractController
      * @throws \JsonException
      * @throws \Exception
      */
-    #[OA\Post(path: '/api/v3.1/question', operationId: 'createQuestion', tags: ['Endpoints with Authentication'])]
+    #[OA\Post(path: '/api/v3.2/question', operationId: 'createQuestion', tags: ['Endpoints with Authentication'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the question.',

@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 #[AllowMockObjectsWithoutExpectations]
 class TagControllerTest extends TestCase
 {
-
     public function testListReturnsJsonResponse(): void
     {
         $controller = new TagController();

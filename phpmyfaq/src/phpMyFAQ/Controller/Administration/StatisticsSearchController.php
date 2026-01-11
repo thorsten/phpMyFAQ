@@ -25,10 +25,12 @@ use phpMyFAQ\Pagination;
 use phpMyFAQ\Pagination\UrlConfig;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\Extensions\LanguageCodeTwigExtension;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
+use Twig\Extension\AttributeExtension;
 
 final class StatisticsSearchController extends AbstractAdministrationController
 {
@@ -56,6 +58,7 @@ final class StatisticsSearchController extends AbstractAdministrationController
             urlConfig: new UrlConfig(pageParamName: 'page'),
         );
 
+        $this->addExtension(new AttributeExtension(LanguageCodeTwigExtension::class));
         return $this->render('@admin/statistics/search.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),

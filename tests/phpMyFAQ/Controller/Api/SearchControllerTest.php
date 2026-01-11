@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 #[AllowMockObjectsWithoutExpectations]
 class SearchControllerTest extends TestCase
 {
-
     public function testSearchReturnsJsonResponse(): void
     {
         $request = new Request(['q' => 'test']);
@@ -29,7 +28,11 @@ class SearchControllerTest extends TestCase
         $controller = new SearchController();
         $response = $controller->search($request);
 
-        $this->assertContains($response->getStatusCode(), [Response::HTTP_OK, Response::HTTP_NOT_FOUND, Response::HTTP_INTERNAL_SERVER_ERROR]);
+        $this->assertContains($response->getStatusCode(), [
+            Response::HTTP_OK,
+            Response::HTTP_NOT_FOUND,
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+        ]);
     }
 
     public function testPopularReturnsJsonResponse(): void

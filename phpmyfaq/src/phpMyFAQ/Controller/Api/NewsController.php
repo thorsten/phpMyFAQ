@@ -37,7 +37,7 @@ final class NewsController extends AbstractController
         }
     }
 
-    #[OA\Get(path: '/api/v3.1/news', operationId: 'getNews', tags: ['Public Endpoints'])]
+    #[OA\Get(path: '/api/v3.2/news', operationId: 'getNews', tags: ['Public Endpoints'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the open questions.',

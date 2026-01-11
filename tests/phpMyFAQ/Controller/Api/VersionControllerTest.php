@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 #[AllowMockObjectsWithoutExpectations]
 class VersionControllerTest extends TestCase
 {
-
     public function testIndex(): void
     {
         $versionNumber = System::getVersion();
