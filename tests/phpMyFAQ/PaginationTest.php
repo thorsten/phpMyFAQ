@@ -12,11 +12,7 @@ class PaginationTest extends TestCase
 {
     public function testRender(): void
     {
-        $pagination = new Pagination(
-            baseUrl: 'http://example.com/foo',
-            total: 30,
-            perPage: 10,
-        );
+        $pagination = new Pagination(baseUrl: 'http://example.com/foo', total: 30, perPage: 10);
 
         $expectedOutput =
             '<ul class="pagination justify-content-center">'
@@ -38,12 +34,7 @@ class PaginationTest extends TestCase
     public function testRenderWithCustomUrlConfig(): void
     {
         $urlConfig = new UrlConfig(pageParamName: 'seite');
-        $pagination = new Pagination(
-            baseUrl: 'http://example.com/faq',
-            total: 20,
-            perPage: 10,
-            urlConfig: $urlConfig,
-        );
+        $pagination = new Pagination(baseUrl: 'http://example.com/faq', total: 20, perPage: 10, urlConfig: $urlConfig);
 
         $output = $pagination->render();
 
@@ -58,12 +49,7 @@ class PaginationTest extends TestCase
             currentPage: '<span class="active"><a href="{LINK_URL}">{LINK_TEXT}</a></span>',
         );
 
-        $pagination = new Pagination(
-            baseUrl: 'http://example.com/foo',
-            total: 20,
-            perPage: 10,
-            templates: $templates,
-        );
+        $pagination = new Pagination(baseUrl: 'http://example.com/foo', total: 20, perPage: 10, templates: $templates);
 
         $output = $pagination->render();
 
@@ -74,12 +60,7 @@ class PaginationTest extends TestCase
     public function testRenderWithRewriteUrl(): void
     {
         $urlConfig = new UrlConfig(rewriteUrl: '/page-%d.html');
-        $pagination = new Pagination(
-            baseUrl: '',
-            total: 30,
-            perPage: 10,
-            urlConfig: $urlConfig,
-        );
+        $pagination = new Pagination(baseUrl: '', total: 30, perPage: 10, urlConfig: $urlConfig);
 
         $output = $pagination->render();
 
@@ -92,8 +73,8 @@ class PaginationTest extends TestCase
     {
         $pagination = new Pagination(
             baseUrl: 'http://example.com/foo',
-            total: -10,  // Should be converted to 0
-            perPage: 0,  // Should be converted to 1
+            total: -10, // Should be converted to 0
+            perPage: 0, // Should be converted to 1
             adjacent: 0, // Should be converted to 1
         );
 
@@ -104,61 +85,42 @@ class PaginationTest extends TestCase
 
     public function testCurrentPageExtraction(): void
     {
-        $pagination = new Pagination(
-            baseUrl: 'http://example.com/foo?page=2',
-            total: 30,
-            perPage: 10,
-        );
+        $pagination = new Pagination(baseUrl: 'http://example.com/foo?page=2', total: 30, perPage: 10);
 
         $output = $pagination->render();
 
         // Page 2 should be the active page
-        $this->assertStringContainsString(
-            '<li class="page-item active">',
-            $output
-        );
+        $this->assertStringContainsString('<li class="page-item active">', $output);
         $this->assertStringContainsString('>2</a>', $output);
     }
 
     public function testNavigationButtons(): void
     {
-        $pagination = new Pagination(
-            baseUrl: 'http://example.com/foo?page=2',
-            total: 50,
-            perPage: 10,
-        );
+        $pagination = new Pagination(baseUrl: 'http://example.com/foo?page=2', total: 50, perPage: 10);
 
         $output = $pagination->render();
 
         // Should have first, prev, next, and last buttons
         $this->assertStringContainsString('&#8676;', $output); // First
-        $this->assertStringContainsString('&larr;', $output);  // Prev
-        $this->assertStringContainsString('&rarr;', $output);  // Next
+        $this->assertStringContainsString('&larr;', $output); // Prev
+        $this->assertStringContainsString('&rarr;', $output); // Next
         $this->assertStringContainsString('&#8677;', $output); // Last
     }
 
     public function testNoNavigationOnFirstPage(): void
     {
-        $pagination = new Pagination(
-            baseUrl: 'http://example.com/foo',
-            total: 30,
-            perPage: 10,
-        );
+        $pagination = new Pagination(baseUrl: 'http://example.com/foo', total: 30, perPage: 10);
 
         $output = $pagination->render();
 
         // Should not have first and prev buttons on page 1
         $this->assertStringNotContainsString('&#8676;', $output); // First
-        $this->assertStringNotContainsString('&larr;', $output);  // Prev
+        $this->assertStringNotContainsString('&larr;', $output); // Prev
     }
 
     public function testNoNavigationOnLastPage(): void
     {
-        $pagination = new Pagination(
-            baseUrl: 'http://example.com/foo?page=3',
-            total: 30,
-            perPage: 10,
-        );
+        $pagination = new Pagination(baseUrl: 'http://example.com/foo?page=3', total: 30, perPage: 10);
 
         $output = $pagination->render();
 
@@ -169,18 +131,14 @@ class PaginationTest extends TestCase
 
     public function testSinglePage(): void
     {
-        $pagination = new Pagination(
-            baseUrl: 'http://example.com/foo',
-            total: 5,
-            perPage: 10,
-        );
+        $pagination = new Pagination(baseUrl: 'http://example.com/foo', total: 5, perPage: 10);
 
         $output = $pagination->render();
 
         // Should only show page 1
         $this->assertStringContainsString(
             '<li class="page-item active"><a class="page-link" href="http://example.com/foo?page=1">1</a>',
-            $output
+            $output,
         );
         $this->assertStringNotContainsString('page=2', $output);
     }

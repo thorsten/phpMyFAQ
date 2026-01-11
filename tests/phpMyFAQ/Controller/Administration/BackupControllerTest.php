@@ -2,18 +2,16 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Controller;
+namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Administration\Backup\BackupExportResult;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Controller\Administration\BackupController;
 use phpMyFAQ\Enums\BackupType;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;

@@ -12,32 +12,29 @@ class PaginationTemplatesTest extends TestCase
 
         $this->assertEquals(
             '<li class="page-item"><a class="page-link" href="{LINK_URL}">{LINK_TEXT}</a></li>',
-            $templates->link
+            $templates->link,
         );
         $this->assertEquals(
             '<li class="page-item active"><a class="page-link" href="{LINK_URL}">{LINK_TEXT}</a></li>',
-            $templates->currentPage
+            $templates->currentPage,
         );
         $this->assertEquals(
             '<li class="page-item"><a class="page-link" href="{LINK_URL}">&rarr;</a></li>',
-            $templates->nextPage
+            $templates->nextPage,
         );
         $this->assertEquals(
             '<li class="page-item"><a class="page-link" href="{LINK_URL}">&larr;</a></li>',
-            $templates->prevPage
+            $templates->prevPage,
         );
         $this->assertEquals(
             '<li class="page-item"><a class="page-link" href="{LINK_URL}">&#8676;</a></li>',
-            $templates->firstPage
+            $templates->firstPage,
         );
         $this->assertEquals(
             '<li class="page-item"><a class="page-link" href="{LINK_URL}">&#8677;</a></li>',
-            $templates->lastPage
+            $templates->lastPage,
         );
-        $this->assertEquals(
-            '<ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul>',
-            $templates->layout
-        );
+        $this->assertEquals('<ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul>', $templates->layout);
     }
 
     public function testDefaultFactoryMethod(): void
@@ -47,37 +44,27 @@ class PaginationTemplatesTest extends TestCase
         $this->assertInstanceOf(PaginationTemplates::class, $templates);
         $this->assertEquals(
             '<li class="page-item"><a class="page-link" href="{LINK_URL}">{LINK_TEXT}</a></li>',
-            $templates->link
+            $templates->link,
         );
     }
 
     public function testCustomLink(): void
     {
-        $templates = new PaginationTemplates(
-            link: '<span><a href="{LINK_URL}">{LINK_TEXT}</a></span>'
-        );
+        $templates = new PaginationTemplates(link: '<span><a href="{LINK_URL}">{LINK_TEXT}</a></span>');
 
-        $this->assertEquals(
-            '<span><a href="{LINK_URL}">{LINK_TEXT}</a></span>',
-            $templates->link
-        );
+        $this->assertEquals('<span><a href="{LINK_URL}">{LINK_TEXT}</a></span>', $templates->link);
         // Other templates should keep their defaults
         $this->assertEquals(
             '<li class="page-item active"><a class="page-link" href="{LINK_URL}">{LINK_TEXT}</a></li>',
-            $templates->currentPage
+            $templates->currentPage,
         );
     }
 
     public function testCustomCurrentPage(): void
     {
-        $templates = new PaginationTemplates(
-            currentPage: '<strong><a href="{LINK_URL}">{LINK_TEXT}</a></strong>'
-        );
+        $templates = new PaginationTemplates(currentPage: '<strong><a href="{LINK_URL}">{LINK_TEXT}</a></strong>');
 
-        $this->assertEquals(
-            '<strong><a href="{LINK_URL}">{LINK_TEXT}</a></strong>',
-            $templates->currentPage
-        );
+        $this->assertEquals('<strong><a href="{LINK_URL}">{LINK_TEXT}</a></strong>', $templates->currentPage);
     }
 
     public function testCustomNavigationTemplates(): void
@@ -97,14 +84,9 @@ class PaginationTemplatesTest extends TestCase
 
     public function testCustomLayout(): void
     {
-        $templates = new PaginationTemplates(
-            layout: '<nav class="my-pagination">{LAYOUT_CONTENT}</nav>'
-        );
+        $templates = new PaginationTemplates(layout: '<nav class="my-pagination">{LAYOUT_CONTENT}</nav>');
 
-        $this->assertEquals(
-            '<nav class="my-pagination">{LAYOUT_CONTENT}</nav>',
-            $templates->layout
-        );
+        $this->assertEquals('<nav class="my-pagination">{LAYOUT_CONTENT}</nav>', $templates->layout);
     }
 
     public function testAllCustomTemplates(): void
@@ -192,4 +174,3 @@ class PaginationTemplatesTest extends TestCase
         $this->assertEquals('<div>{LAYOUT_CONTENT}</div>', $templates->layout);
     }
 }
-

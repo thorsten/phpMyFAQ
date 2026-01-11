@@ -2,7 +2,8 @@
 
 namespace phpMyFAQ\Pagination;
 
-use Error;use PHPUnit\Framework\TestCase;
+use Error;
+use PHPUnit\Framework\TestCase;
 
 class UrlConfigTest extends TestCase
 {
@@ -44,11 +45,7 @@ class UrlConfigTest extends TestCase
 
     public function testAllCustomValues(): void
     {
-        $config = new UrlConfig(
-            pageParamName: 'p',
-            seoName: 'articles',
-            rewriteUrl: '/articles/page-%d',
-        );
+        $config = new UrlConfig(pageParamName: 'p', seoName: 'articles', rewriteUrl: '/articles/page-%d');
 
         $this->assertEquals('p', $config->pageParamName);
         $this->assertEquals('articles', $config->seoName);
@@ -84,15 +81,10 @@ class UrlConfigTest extends TestCase
     public function testNamedParametersOrder(): void
     {
         // Test that parameters can be passed in any order
-        $config = new UrlConfig(
-            rewriteUrl: '/test-%d',
-            pageParamName: 'p',
-            seoName: 'test',
-        );
+        $config = new UrlConfig(rewriteUrl: '/test-%d', pageParamName: 'p', seoName: 'test');
 
         $this->assertEquals('p', $config->pageParamName);
         $this->assertEquals('test', $config->seoName);
         $this->assertEquals('/test-%d', $config->rewriteUrl);
     }
 }
-
