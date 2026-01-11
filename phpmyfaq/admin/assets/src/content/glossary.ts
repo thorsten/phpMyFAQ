@@ -15,6 +15,7 @@
 
 import { createGlossary, deleteGlossary, getGlossary, updateGlossary } from '../api';
 import { addElement, pushNotification } from '../../../../assets/src/utils';
+import bootstrap, { Modal } from 'bootstrap';
 
 export const handleDeleteGlossary = (): void => {
   const deleteButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.pmf-admin-delete-glossary');
@@ -42,7 +43,6 @@ export const handleDeleteGlossary = (): void => {
 export const handleAddGlossary = (): void => {
   const saveGlossaryButton = document.getElementById('pmf-admin-glossary-add') as HTMLButtonElement | null;
   const modal = document.getElementById('addGlossaryModal') as HTMLElement | null;
-  const modalBackdrop: HTMLCollectionOf<Element> = document.getElementsByClassName('modal-backdrop fade show');
 
   if (saveGlossaryButton) {
     saveGlossaryButton.addEventListener('click', async (event: Event) => {
@@ -57,11 +57,13 @@ export const handleAddGlossary = (): void => {
 
       if (response) {
         if (modal) {
-          modal.style.display = 'none';
-          modal.classList.remove('show');
-        }
-        if (modalBackdrop[0]) {
-          modalBackdrop[0].parentNode?.removeChild(modalBackdrop[0]);
+          // Close modal properly using Bootstrap
+          const bootstrapModal = bootstrap.Modal.getInstance(modal) as Modal;
+          bootstrapModal.hide();
+
+          // Reset form fields for the next entry
+          (document.getElementById('item') as HTMLInputElement).value = '';
+          (document.getElementById('definition') as HTMLInputElement).value = '';
         }
 
         const tableBody = document.querySelector('#pmf-admin-glossary-table tbody') as HTMLElement;
@@ -130,7 +132,6 @@ export const onOpenUpdateGlossaryModal = (): void => {
 export const handleUpdateGlossary = (): void => {
   const updateGlossaryButton = document.getElementById('pmf-admin-glossary-update') as HTMLButtonElement | null;
   const modal = document.getElementById('updateGlossaryModal') as HTMLElement | null;
-  const modalBackdrop: HTMLCollectionOf<Element> = document.getElementsByClassName('modal-backdrop fade show');
 
   if (updateGlossaryButton) {
     updateGlossaryButton.addEventListener('click', async (event: Event): Promise<void> => {
@@ -146,11 +147,9 @@ export const handleUpdateGlossary = (): void => {
 
       if (response) {
         if (modal) {
-          modal.style.display = 'none';
-          modal.classList.remove('show');
-        }
-        if (modalBackdrop[0]) {
-          modalBackdrop[0].parentNode?.removeChild(modalBackdrop[0]);
+          // Close modal properly using Bootstrap
+          const bootstrapModal = bootstrap.Modal.getInstance(modal) as Modal;
+          bootstrapModal.hide();
         }
 
         const itemLink = document.querySelector(
