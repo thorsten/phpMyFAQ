@@ -183,10 +183,14 @@ abstract class AbstractController
     }
 
     /**
-     * @throws ForbiddenException
+     * @throws UnauthorizedHttpException|ForbiddenException
      */
     protected function userHasGroupPermission(): void
     {
+        if (!$this->currentUser->isLoggedIn()) {
+            throw new UnauthorizedHttpException(challenge: 'User is not authenticated.');
+        }
+
         $currentUser = $this->currentUser;
         if (
             !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value)
@@ -199,10 +203,14 @@ abstract class AbstractController
     }
 
     /**
-     * @throws ForbiddenException
+     * @throws UnauthorizedHttpException|ForbiddenException
      */
     protected function userHasUserPermission(): void
     {
+        if (!$this->currentUser->isLoggedIn()) {
+            throw new UnauthorizedHttpException(challenge: 'User is not authenticated.');
+        }
+
         $currentUser = $this->currentUser;
         if (
             !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value)
@@ -214,10 +222,14 @@ abstract class AbstractController
     }
 
     /**
-     * @throws ForbiddenException
+     * @throws UnauthorizedHttpException|ForbiddenException
      */
     protected function userHasPermission(PermissionType $permissionType): void
     {
+        if (!$this->currentUser->isLoggedIn()) {
+            throw new UnauthorizedHttpException(challenge: 'User is not authenticated.');
+        }
+
         $currentUser = $this->currentUser;
         if (!$currentUser->perm->hasPermission($currentUser->getUserId(), $permissionType->value)) {
             throw new ForbiddenException(message: sprintf('User has no "%s" permission.', $permissionType->name));
