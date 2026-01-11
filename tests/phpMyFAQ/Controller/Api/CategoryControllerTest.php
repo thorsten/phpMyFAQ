@@ -40,7 +40,6 @@ class CategoryControllerTest extends TestCase
         $this->configuration = Configuration::getConfigurationInstance();
     }
 
-
     /**
      * @throws MockException
      */

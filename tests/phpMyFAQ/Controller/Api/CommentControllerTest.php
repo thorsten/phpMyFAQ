@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 #[AllowMockObjectsWithoutExpectations]
 class CommentControllerTest extends TestCase
 {
-
     /**
      * @throws Exception
      */

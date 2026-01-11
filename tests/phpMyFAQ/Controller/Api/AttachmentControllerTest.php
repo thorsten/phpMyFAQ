@@ -74,10 +74,11 @@ class AttachmentControllerTest extends TestCase
         $controller = new AttachmentController();
         $response = $controller->list($request);
 
-        $this->assertContains(
-            $response->getStatusCode(),
-            [Response::HTTP_OK, Response::HTTP_NOT_FOUND, Response::HTTP_INTERNAL_SERVER_ERROR]
-        );
+        $this->assertContains($response->getStatusCode(), [
+            Response::HTTP_OK,
+            Response::HTTP_NOT_FOUND,
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+        ]);
     }
 
     public function testListReturnsJsonData(): void
@@ -112,11 +113,16 @@ class AttachmentControllerTest extends TestCase
         $response = $controller->list($request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
-        // Invalid ID should result in no attachments found
-        $this->assertContains(
-            $response->getStatusCode(),
-            [Response::HTTP_NOT_FOUND, Response::HTTP_INTERNAL_SERVER_ERROR]
-        );
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+
+        // Verify envelope structure with empty data
+        $data = json_decode($response->getContent(), true);
+        $this->assertArrayHasKey('success', $data);
+        $this->assertArrayHasKey('data', $data);
+        $this->assertArrayHasKey('meta', $data);
+        $this->assertTrue($data['success']);
+        $this->assertIsArray($data['data']);
+        $this->assertCount(0, $data['data']);
     }
 
     public function testListWithZeroFaqId(): void
@@ -149,10 +155,16 @@ class AttachmentControllerTest extends TestCase
         $response = $controller->list($request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertContains(
-            $response->getStatusCode(),
-            [Response::HTTP_NOT_FOUND, Response::HTTP_INTERNAL_SERVER_ERROR]
-        );
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+
+        // Verify envelope structure with empty data
+        $data = json_decode($response->getContent(), true);
+        $this->assertArrayHasKey('success', $data);
+        $this->assertArrayHasKey('data', $data);
+        $this->assertArrayHasKey('meta', $data);
+        $this->assertTrue($data['success']);
+        $this->assertIsArray($data['data']);
+        $this->assertCount(0, $data['data']);
     }
 
     public function testListWithLargeFaqId(): void
@@ -164,10 +176,11 @@ class AttachmentControllerTest extends TestCase
         $response = $controller->list($request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertContains(
-            $response->getStatusCode(),
-            [Response::HTTP_OK, Response::HTTP_NOT_FOUND, Response::HTTP_INTERNAL_SERVER_ERROR]
-        );
+        $this->assertContains($response->getStatusCode(), [
+            Response::HTTP_OK,
+            Response::HTTP_NOT_FOUND,
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+        ]);
     }
 
     public function testListResponseContentIsNotNull(): void
@@ -220,13 +233,25 @@ class AttachmentControllerTest extends TestCase
         $data = json_decode($response->getContent(), true);
         $this->assertIsArray($data);
 
-        // If there are attachments, verify the structure
-        if ($response->getStatusCode() === Response::HTTP_OK && count($data) > 0) {
-            foreach ($data as $attachment) {
+        // Verify envelope structure
+        $this->assertArrayHasKey('success', $data);
+        $this->assertArrayHasKey('data', $data);
+        $this->assertArrayHasKey('meta', $data);
+        $this->assertTrue($data['success']);
+        $this->assertIsArray($data['data']);
+
+        // Verify meta contains pagination
+        $this->assertArrayHasKey('pagination', $data['meta']);
+        $this->assertArrayHasKey('total', $data['meta']['pagination']);
+        $this->assertArrayHasKey('per_page', $data['meta']['pagination']);
+        $this->assertArrayHasKey('current_page', $data['meta']['pagination']);
+
+        // If there are attachments, verify the attachment structure
+        if (count($data['data']) > 0) {
+            foreach ($data['data'] as $attachment) {
                 $this->assertArrayHasKey('filename', $attachment);
                 $this->assertArrayHasKey('url', $attachment);
             }
         }
     }
 }
-

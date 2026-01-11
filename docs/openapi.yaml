@@ -13,11 +13,11 @@ servers:
   - url: 'https://localhost'
     description: 'Local dockerized server'
 paths:
-  '/api/v3.1/attachments/{faqId}':
+  '/api/v3.2/attachments/{faqId}':
     get:
       tags:
         - 'Public Endpoints'
-      description: 'Returns a list of attachments for a given FAQ record ID.'
+      description: 'Returns a paginated list of attachments for a given FAQ record ID with optional sorting.'
       operationId: getAttachments
       parameters:
         - name: faqId
@@ -26,9 +26,65 @@ paths:
           required: true
           schema:
             type: integer
+        - name: page
+          in: query
+          description: 'Page number for pagination (1-indexed)'
+          required: false
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: per_page
+          in: query
+          description: 'Number of items per page'
+          required: false
+          schema:
+            type: integer
+            default: 25
+            maximum: 100
+            minimum: 1
+        - name: limit
+          in: query
+          description: 'Alternative to per_page for offset-based pagination'
+          required: false
+          schema:
+            type: integer
+            default: 25
+            maximum: 100
+            minimum: 1
+        - name: offset
+          in: query
+          description: 'Offset for pagination (overrides page parameter)'
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - name: sort
+          in: query
+          description: 'Field to sort by'
+          required: false
+          schema:
+            type: string
+            enum:
+              - id
+              - filename
+              - mime_type
+              - filesize
+              - created
+        - name: order
+          in: query
+          description: 'Sort order'
+          required: false
+          schema:
+            type: string
+            default: asc
+            enum:
+              - asc
+              - desc
       responses:
         '200':
-          description: 'If the FAQ has at least one attached file.'
+          description: 'Paginated list of attachments with metadata.'
           headers:
             Accept-Language:
               description: 'The language code for the attachment.'
@@ -37,7 +93,7 @@ paths:
           content:
             application/json:
               schema: {}
-              example: "\n        [\n            {\n                \"filename\": \"attachment-1.pdf\",\n                \"url\": \"https://www.example.org/attachment/1\"\n            },\n            {\n                \"filename\": \"attachment-2.pdf\",\n                \"url\": \"https://www.example.org/attachment/2\"\n            }\n        ]"
+              example: "{\n            \"success\": true,\n            \"data\": [\n                {\n                    \"filename\": \"attachment-1.pdf\",\n                    \"url\": \"https://www.example.org/attachment/1\"\n                },\n                {\n                    \"filename\": \"attachment-2.pdf\",\n                    \"url\": \"https://www.example.org/attachment/2\"\n                }\n            ],\n            \"meta\": {\n                \"pagination\": {\n                    \"total\": 2,\n                    \"count\": 2,\n                    \"per_page\": 25,\n                    \"current_page\": 1,\n                    \"total_pages\": 1,\n                    \"offset\": 0,\n                    \"has_more\": false,\n                    \"has_previous\": false,\n                    \"links\": {\n                        \"first\": \"/api/v3.2/attachments/1?page=1&per_page=25\",\n                        \"last\": \"/api/v3.2/attachments/1?page=1&per_page=25\",\n                        \"prev\": null,\n                        \"next\": null\n                    }\n                },\n                \"sorting\": {\n                    \"field\": \"filename\",\n                    \"order\": \"asc\"\n                }\n            }\n        }"
         '404':
           description: 'If the FAQ has no attachments.'
           headers:
@@ -48,7 +104,7 @@ paths:
           content:
             application/json:
               schema: {}
-              example: []
+              example: '{"success": true, "data": [], "meta": {"pagination": {"total": 0}}}'
   '/api/v3.2/backup/{type}':
     get:
       tags:
@@ -103,7 +159,7 @@ paths:
               description: 'phpMyFAQ client API Token, generated in admin backend'
               schema:
                 type: string
-  /api/v3.1/categories:
+  /api/v3.2/categories:
     get:
       tags:
         - 'Public Endpoints'
@@ -131,7 +187,7 @@ paths:
             application/json:
               schema: {}
               example: []
-  /api/v3.1/category:
+  /api/v3.2/category:
     post:
       tags:
         - 'Endpoints with Authentication'
@@ -230,7 +286,7 @@ paths:
               description: 'phpMyFAQ client API Token, generated in admin backend'
               schema:
                 type: string
-  '/api/v3.1/comments/{faqId}':
+  '/api/v3.2/comments/{faqId}':
     get:
       tags:
         - 'Public Endpoints'
@@ -368,7 +424,7 @@ paths:
           content:
             application/json:
               schema: {}
-              example: "[\n            {\n                \"record_id\": 1,\n                \"record_lang\": \"en\",\n                \"category_id\": 1,\n                \"record_title\": \"Is there life after death?\",\n                \"record_preview\": \"Maybe!\",\n                \"record_link\": \"/phpmyfaq//content/1/1/en/is-there-life-after-death.html\",\n                \"record_updated\": \"20191010175452\",\n                \"visits\": 3,\n                \"record_created\": \"2018-09-03T21:30:17+02:00\"\n            }\n        ]"
+              example: "[\n            {\n                \"record_id\": 1,\n                \"record_lang\": \"en\",\n                \"category_id\": 1,\n                \"record_title\": \"Is there life after death?\",\n                \"record_preview\": \"Maybe!\",\n                \"record_link\": \"/phpmyfaq/content/1/1/en/is-there-life-after-death.html\",\n                \"record_updated\": \"20191010175452\",\n                \"visits\": 3,\n                \"record_created\": \"2018-09-03T21:30:17+02:00\"\n            }\n        ]"
         '404':
           description: 'If the tag ID has no FAQs.'
           headers:
@@ -767,7 +823,7 @@ paths:
               description: 'The language code for the login.'
               schema:
                 type: string
-  /api/v3.1/language:
+  /api/v3.2/language:
     get:
       tags:
         - 'Public Endpoints'
@@ -822,7 +878,7 @@ paths:
             application/json:
               schema: {}
               example: '{ "loggedin": false, "error": "Wrong username or password." }'
-  /api/v3.1/news:
+  /api/v3.2/news:
     get:
       tags:
         - 'Public Endpoints'
@@ -920,7 +976,7 @@ paths:
             application/json:
               schema: {}
               example: []
-  /api/v3.1/question:
+  /api/v3.2/question:
     post:
       tags:
         - 'Endpoints with Authentication'
@@ -973,7 +1029,7 @@ paths:
               description: 'phpMyFAQ client API Token, generated in admin backend'
               schema:
                 type: string
-  /api/v3.1/register:
+  /api/v3.2/register:
     post:
       tags:
         - 'Endpoints with Authentication'

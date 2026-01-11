@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 #[AllowMockObjectsWithoutExpectations]
 class OpenQuestionControllerTest extends TestCase
 {
-
     /**
      * @throws Exception
      */

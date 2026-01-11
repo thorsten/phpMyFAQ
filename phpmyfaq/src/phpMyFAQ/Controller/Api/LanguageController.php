@@ -35,7 +35,7 @@ final class LanguageController extends AbstractController
         }
     }
 
-    #[OA\Get(path: '/api/v3.1/language', operationId: 'getLanguage', tags: ['Public Endpoints'])]
+    #[OA\Get(path: '/api/v3.2/language', operationId: 'getLanguage', tags: ['Public Endpoints'])]
     #[OA\Response(
         response: 200,
         description: 'Returns the default language as language code.',

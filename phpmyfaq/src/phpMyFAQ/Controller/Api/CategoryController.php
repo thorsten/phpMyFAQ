@@ -48,7 +48,7 @@ final class CategoryController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[OA\Get(path: '/api/v3.1/categories', operationId: 'getCategories', tags: ['Public Endpoints'])]
+    #[OA\Get(path: '/api/v3.2/categories', operationId: 'getCategories', tags: ['Public Endpoints'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the categories.',
@@ -104,7 +104,7 @@ final class CategoryController extends AbstractController
     /**
      * @throws Exception|\JsonException
      */
-    #[OA\Post(path: '/api/v3.1/category', operationId: 'createCategory', tags: ['Endpoints with Authentication'])]
+    #[OA\Post(path: '/api/v3.2/category', operationId: 'createCategory', tags: ['Endpoints with Authentication'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the login.',

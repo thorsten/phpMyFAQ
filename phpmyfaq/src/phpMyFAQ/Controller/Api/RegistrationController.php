@@ -47,7 +47,7 @@ final class RegistrationController extends AbstractController
      * @throws Exception
      * @throws \JsonException
      */
-    #[OA\Post(path: '/api/v3.1/register', operationId: 'createUser', tags: ['Endpoints with Authentication'])]
+    #[OA\Post(path: '/api/v3.2/register', operationId: 'createUser', tags: ['Endpoints with Authentication'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the question.',

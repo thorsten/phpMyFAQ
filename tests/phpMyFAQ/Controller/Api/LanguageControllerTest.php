@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[AllowMockObjectsWithoutExpectations]
 class LanguageControllerTest extends TestCase
 {
-
     /**
      * @throws Exception
      */
