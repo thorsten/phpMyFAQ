@@ -80,4 +80,91 @@ class QuestionControllerTest extends TestCase
         $this->expectException(\Exception::class);
         $controller->create($request);
     }
+
+    public function testCreateWithInvalidJsonThrowsException(): void
+    {
+        $requestData = 'invalid json';
+
+        $request = new Request([], [], [], [], [], [], $requestData);
+        $controller = new QuestionController();
+
+        $this->expectException(\Exception::class);
+        $controller->create($request);
+    }
+
+    public function testCreateWithMissingCategoryId(): void
+    {
+        $requestData = json_encode([
+            'question' => 'Is this a test question?',
+            'author' => 'Test Author',
+            'email' => 'test@example.com',
+        ]);
+
+        $request = new Request([], [], [], [], [], [], $requestData);
+        $controller = new QuestionController();
+
+        $this->expectException(\Exception::class);
+        $controller->create($request);
+    }
+
+    public function testCreateWithMissingQuestion(): void
+    {
+        $requestData = json_encode([
+            'category-id' => 1,
+            'author' => 'Test Author',
+            'email' => 'test@example.com',
+        ]);
+
+        $request = new Request([], [], [], [], [], [], $requestData);
+        $controller = new QuestionController();
+
+        $this->expectException(\Exception::class);
+        $controller->create($request);
+    }
+
+    public function testCreateWithMissingAuthor(): void
+    {
+        $requestData = json_encode([
+            'category-id' => 1,
+            'question' => 'Is this a test question?',
+            'email' => 'test@example.com',
+        ]);
+
+        $request = new Request([], [], [], [], [], [], $requestData);
+        $controller = new QuestionController();
+
+        $this->expectException(\Exception::class);
+        $controller->create($request);
+    }
+
+    public function testCreateWithMissingEmail(): void
+    {
+        $requestData = json_encode([
+            'category-id' => 1,
+            'question' => 'Is this a test question?',
+            'author' => 'Test Author',
+        ]);
+
+        $request = new Request([], [], [], [], [], [], $requestData);
+        $controller = new QuestionController();
+
+        $this->expectException(\Exception::class);
+        $controller->create($request);
+    }
+
+    public function testCreateWithInvalidCategoryId(): void
+    {
+        $requestData = json_encode([
+            'category-id' => 'invalid',
+            'question' => 'Is this a test question?',
+            'author' => 'Test Author',
+            'email' => 'test@example.com',
+        ]);
+
+        $request = new Request([], [], [], [], [], [], $requestData);
+        $controller = new QuestionController();
+
+        $this->expectException(\Exception::class);
+        $controller->create($request);
+    }
 }
