@@ -28,6 +28,7 @@ class GlossaryControllerTest extends TestCase
         $this->configuration->setLanguage($language);
     }
 
+
     public function testListReturnsGlossaryItems(): void
     {
         $glossaryController = new GlossaryController();

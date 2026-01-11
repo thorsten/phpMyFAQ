@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 #[AllowMockObjectsWithoutExpectations]
 class TitleControllerTest extends TestCase
 {
+
     public function testIndex(): void
     {
         $title = Configuration::getConfigurationInstance()->getTitle();
