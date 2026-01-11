@@ -47,7 +47,7 @@ readonly class AdminLogRepository
         $data = [];
 
         $query = sprintf(
-            'SELECT id, time, usr AS user, text, ip, hash, previous_hash FROM %sfaqadminlog ORDER BY id DESC',
+            'SELECT id, time, usr AS user, text, ip, hash, previous_hash FROM %sfaqadminlog ORDER BY id ASC',
             Database::getTablePrefix(),
         );
 

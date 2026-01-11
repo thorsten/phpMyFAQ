@@ -84,8 +84,8 @@ class AdminLogTest extends TestCase
         $this->assertInstanceOf(AdminLogEntity::class, $entries[0]);
         $this->assertInstanceOf(AdminLogEntity::class, $entries[1]);
 
-        $this->assertEquals('bar', $entries[0]->getText());
-        $this->assertEquals('foo', $entries[1]->getText());
+        $this->assertEquals('bar', $entries[1]->getText());
+        $this->assertEquals('foo', $entries[0]->getText());
         $this->assertEquals(-1, $entries[0]->getUserId());
         $this->assertEquals('127.0.0.1', $entries[0]->getIp());
     }
