@@ -29,6 +29,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
+use phpMyFAQ\Twig\Extensions\LanguageCodeTwigExtension;
+use Twig\Extension\AttributeExtension;
 
 final class StatisticsSearchController extends AbstractAdministrationController
 {
@@ -41,6 +43,7 @@ final class StatisticsSearchController extends AbstractAdministrationController
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
+        $this->addExtension(new AttributeExtension(LanguageCodeTwigExtension::class));
 
         $perPage = 10;
 

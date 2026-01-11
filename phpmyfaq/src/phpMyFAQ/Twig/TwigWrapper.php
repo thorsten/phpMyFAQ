@@ -24,7 +24,6 @@ use phpMyFAQ\Environment as phpMyFAQEnvironment;
 use phpMyFAQ\System;
 use phpMyFAQ\Twig\Extensions\PluginTwigExtension;
 use phpMyFAQ\Twig\Extensions\TranslateTwigExtension;
-use phpMyFAQ\Twig\Extensions\LanguageCodeTwigExtension;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -63,9 +62,6 @@ class TwigWrapper
 
         // Always add the translation extension
         $this->twigEnvironment->addExtension(new AttributeExtension(TranslateTwigExtension::class));
-
-        // Always add the LanguageCode Extension
-        $this->twigEnvironment->addExtension(new AttributeExtension(LanguageCodeTwigExtension::class));
 
         // Add the plugin extension if it's not in the setup phase
         if (!$this->isSetup) {
