@@ -95,8 +95,10 @@ readonly class AdminLogRepository
         $hash = $entity->calculateHash();
 
         $insert = sprintf(
-            "INSERT INTO %sfaqadminlog (time, usr, ip, text, hash, previous_hash) VALUES (%d, %d, '%s', '%s', '%s', %s)",
+            'INSERT INTO %sfaqadminlog (id, time, usr, ip, text, hash, previous_hash) '
+            . "VALUES (%d, %d, %d, '%s', '%s', '%s', %s)",
             Database::getTablePrefix(),
+            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqadminlog', 'id'),
             $time,
             $userId,
             $this->configuration->getDb()->escape($ip),
