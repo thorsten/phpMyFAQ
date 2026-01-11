@@ -43,7 +43,6 @@ export const handleDeleteGlossary = () => {
 export const handleAddGlossary = () => {
   const saveGlossaryButton = document.getElementById('pmf-admin-glossary-add');
   const modal = document.getElementById('addGlossaryModal');
-  const modalBackdrop = document.getElementsByClassName('modal-backdrop fade show');
 
   if (saveGlossaryButton) {
     saveGlossaryButton.addEventListener('click', async (event) => {
@@ -57,9 +56,13 @@ export const handleAddGlossary = () => {
       const response = await createGlossary(glossaryLanguage, glossaryItem, glossaryDefinition, csrfToken);
 
       if (response) {
-        modal.style.display = 'none';
-        modal.classList.remove('show');
-        modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
+        // Close modal properly using Bootstrap
+        const bootstrapModal = bootstrap.Modal.getInstance(modal);
+        bootstrapModal.hide();
+
+        // Reset form fields for the next entry
+        document.getElementById('item').value = '';
+        document.getElementById('definition').value = '';
 
         const tableBody = document.querySelector('#pmf-admin-glossary-table tbody');
         const row = addElement('tr', {}, [
@@ -94,8 +97,6 @@ export const onOpenUpdateGlossaryModal = () => {
       const glossaryId = event.relatedTarget.getAttribute('data-pmf-glossary-id');
       const glossaryLang = event.relatedTarget.getAttribute('data-pmf-glossary-language');
       const response = await getGlossary(glossaryId, glossaryLang);
-
-      console.log(response.language);
 
       document.getElementById('update-id').value = response.id;
       document.getElementById('update-language').value = response.language;
