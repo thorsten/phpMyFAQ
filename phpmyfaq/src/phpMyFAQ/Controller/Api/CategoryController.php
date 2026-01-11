@@ -23,7 +23,6 @@ use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission as CategoryPermission;
-use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Filter;
@@ -32,19 +31,9 @@ use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-final class CategoryController extends AbstractController
+final class CategoryController extends AbstractApiController
 {
-    public function __construct()
-    {
-        parent::__construct();
-
-        if (!$this->isApiEnabled()) {
-            throw new UnauthorizedHttpException(challenge: 'API is not enabled');
-        }
-    }
-
     /**
      * @throws \Exception
      */
@@ -54,30 +43,91 @@ final class CategoryController extends AbstractController
         description: 'The language code for the categories.',
         schema: new OA\Schema(type: 'string'),
     )]
-    #[OA\Response(
-        response: 200,
-        description: 'Returns the the categories for the given language provided by "Accept-Language".',
-        content: new OA\JsonContent(example: '
-        [
-            {
-                "id": 1,
-                "lang": "en",
-                "parent_id": 0,
-                "name": "Test",
-                "description": "Hello, World! Hello, Tests!",
-                "user_id": 1,
-                "group_id": 1,
-                "active": 1,
-                "show_home": 1,
-                "image": "category-1-en.png",
-                "level": 1
-              }
-        ]'),
+    #[OA\Parameter(
+        name: 'page',
+        description: 'Page number for pagination (page-based)',
+        in: 'query',
+        required: false,
+        schema: new OA\Schema(type: 'integer', default: 1),
+    )]
+    #[OA\Parameter(
+        name: 'per_page',
+        description: 'Items per page (page-based, max 100)',
+        in: 'query',
+        required: false,
+        schema: new OA\Schema(type: 'integer', default: 25),
+    )]
+    #[OA\Parameter(
+        name: 'limit',
+        description: 'Number of items to return (offset-based, max 100)',
+        in: 'query',
+        required: false,
+        schema: new OA\Schema(type: 'integer', default: 25),
+    )]
+    #[OA\Parameter(
+        name: 'offset',
+        description: 'Starting offset (offset-based)',
+        in: 'query',
+        required: false,
+        schema: new OA\Schema(type: 'integer', default: 0),
+    )]
+    #[OA\Parameter(name: 'sort', description: 'Field to sort by', in: 'query', required: false, schema: new OA\Schema(
+        type: 'string',
+        default: 'id',
+        enum: ['id', 'name', 'parent_id', 'active'],
+    ))]
+    #[OA\Parameter(
+        name: 'order',
+        description: 'Sort direction',
+        in: 'query',
+        required: false,
+        schema: new OA\Schema(type: 'string', default: 'asc', enum: ['asc', 'desc']),
     )]
     #[OA\Response(
-        response: 404,
-        description: 'If no categories are found for the given language.',
-        content: new OA\JsonContent(example: []),
+        response: 200,
+        description: 'Returns paginated categories for the given language provided by "Accept-Language".',
+        content: new OA\JsonContent(example: '{
+            "success": true,
+            "data": [
+                {
+                    "id": 1,
+                    "lang": "en",
+                    "parent_id": 0,
+                    "name": "Test",
+                    "description": "Hello, World! Hello, Tests!",
+                    "user_id": 1,
+                    "group_id": 1,
+                    "active": 1,
+                    "show_home": 1,
+                    "image": "category-1-en.png",
+                    "level": 1
+                }
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 50,
+                    "count": 25,
+                    "per_page": 25,
+                    "current_page": 1,
+                    "total_pages": 2,
+                    "links": {
+                        "first": "/api/v3.2/categories?page=1&per_page=25",
+                        "last": "/api/v3.2/categories?page=2&per_page=25",
+                        "prev": null,
+                        "next": "/api/v3.2/categories?page=2&per_page=25"
+                    }
+                },
+                "sorting": {
+                    "field": "id",
+                    "order": "asc"
+                }
+            }
+        }'),
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'If no categories are found, returns empty data array.',
+        content: new OA\JsonContent(example: '{"success": true, "data": []}'),
     )]
     public function list(): JsonResponse
     {
@@ -92,13 +142,31 @@ final class CategoryController extends AbstractController
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
 
-        $result = array_values($category->getAllCategories());
+        // Get pagination and sorting parameters
+        $pagination = $this->getPaginationRequest();
+        $sort = $this->getSortRequest(
+            allowedFields: ['id', 'name', 'parent_id', 'active'],
+            defaultField: 'id',
+            defaultOrder: 'asc',
+        );
 
-        if ($result === []) {
-            return $this->json($result, Response::HTTP_NOT_FOUND);
-        }
+        // Get paginated categories
+        $categories = $category->getCategoriesPaginated(
+            limit: $pagination->limit,
+            offset: $pagination->offset,
+            sortField: $sort->getField() ?? 'id',
+            sortOrder: $sort->getOrderSql(),
+        );
 
-        return $this->json($result, Response::HTTP_OK);
+        // Get total count
+        $total = $category->countCategories();
+
+        return $this->paginatedResponse(
+            data: array_values($categories),
+            total: $total,
+            pagination: $pagination,
+            sort: $sort,
+        );
     }
 
     /**

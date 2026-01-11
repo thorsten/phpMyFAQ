@@ -60,6 +60,72 @@ final readonly class NewsRepository implements NewsRepositoryInterface
     }
 
     /**
+     * Fetch paginated news rows for a language with sorting support.
+     *
+     * @param string $language Language code
+     * @param bool $active Filter by active status
+     * @param int $limit Number of items per page
+     * @param int $offset Starting offset
+     * @param string $sortField Field to sort by (id, datum, header, author_name)
+     * @param string $sortOrder Sort direction (ASC, DESC)
+     * @return iterable<stdClass>
+     */
+    public function getLatestPaginated(
+        string $language,
+        bool $active = true,
+        int $limit = 25,
+        int $offset = 0,
+        string $sortField = 'datum',
+        string $sortOrder = 'DESC',
+    ): iterable {
+        // Whitelist validation for sort field
+        $allowedSortFields = ['id', 'datum', 'header', 'author_name', 'active'];
+        if (!in_array($sortField, $allowedSortFields, strict: true)) {
+            $sortField = 'datum';
+        }
+
+        $whereActive = $active ? "AND active = 'y'" : '';
+        $query = sprintf(
+            "SELECT * FROM %sfaqnews WHERE lang = '%s' %s ORDER BY %s %s LIMIT %d OFFSET %d",
+            Database::getTablePrefix(),
+            $this->configuration->getDb()->escape($language),
+            $whereActive,
+            $sortField,
+            $sortOrder,
+            $limit,
+            $offset,
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            yield $row;
+        }
+    }
+
+    /**
+     * Count total news entries for a language.
+     *
+     * @param string $language Language code
+     * @param bool $active Filter by active status
+     * @return int Total count
+     */
+    public function countLatest(string $language, bool $active = true): int
+    {
+        $whereActive = $active ? "AND active = 'y'" : '';
+        $query = sprintf(
+            "SELECT COUNT(*) as total FROM %sfaqnews WHERE lang = '%s' %s",
+            Database::getTablePrefix(),
+            $this->configuration->getDb()->escape($language),
+            $whereActive,
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+        $row = $this->configuration->getDb()->fetchObject($result);
+
+        return (int) ($row->total ?? 0);
+    }
+
+    /**
      * Fetch headers for a language.
      *
      * @return iterable<stdClass>

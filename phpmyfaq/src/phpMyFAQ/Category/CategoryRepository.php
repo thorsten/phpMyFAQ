@@ -167,6 +167,75 @@ class CategoryRepository implements CategoryRepositoryInterface
         return $categories;
     }
 
+    /**
+     * Find categories with pagination and sorting support.
+     *
+     * @param string|null $language Language code filter
+     * @param int $limit Number of items per page
+     * @param int $offset Starting offset
+     * @param string $sortField Field to sort by
+     * @param string $sortOrder Sort direction (ASC, DESC)
+     * @return array
+     */
+    public function findCategoriesPaginated(
+        ?string $language = null,
+        int $limit = 25,
+        int $offset = 0,
+        string $sortField = 'id',
+        string $sortOrder = 'ASC',
+    ): array {
+        $categories = [];
+        $prefix = Database::getTablePrefix();
+
+        // Whitelist validation for sort field
+        $allowedSortFields = ['id', 'name', 'parent_id', 'active'];
+        if (!in_array($sortField, $allowedSortFields, strict: true)) {
+            $sortField = 'id';
+        }
+
+        $query = sprintf(
+            'SELECT id, lang, parent_id, name, description, user_id, group_id, active, show_home, image FROM %sfaqcategories',
+            $prefix,
+        );
+
+        if ($language !== null && preg_match(pattern: '/^[a-z\-]{2,}$/', subject: $language)) {
+            $query .= " WHERE lang = '" . $this->configuration->getDb()->escape($language) . "'";
+        }
+
+        $query .= sprintf(' ORDER BY %s %s LIMIT %d OFFSET %d', $sortField, $sortOrder, $limit, $offset);
+
+        $result = $this->configuration->getDb()->query($query);
+
+        if ($result) {
+            while ($row = $this->configuration->getDb()->fetchArray($result)) {
+                $mapped = $this->mapRow($row);
+                $categories[$mapped['id']] = $mapped;
+            }
+        }
+
+        return $categories;
+    }
+
+    /**
+     * Count total categories for a language.
+     *
+     * @param string|null $language Language code filter
+     * @return int Total count
+     */
+    public function countCategories(?string $language = null): int
+    {
+        $query = sprintf('SELECT COUNT(*) as total FROM %sfaqcategories', Database::getTablePrefix());
+
+        if ($language !== null && preg_match(pattern: '/^[a-z\-]{2,}$/', subject: $language)) {
+            $query .= " WHERE lang = '" . $this->configuration->getDb()->escape($language) . "'";
+        }
+
+        $result = $this->configuration->getDb()->query($query);
+        $row = $this->configuration->getDb()->fetchObject($result);
+
+        return (int) ($row->total ?? 0);
+    }
+
     public function findByIdAndLanguage(int $categoryId, string $language): ?CategoryEntity
     {
         $categoryEntity = null;

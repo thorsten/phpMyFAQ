@@ -293,6 +293,49 @@ class Category
     }
 
     /**
+     * Gets paginated categories with sorting support for API.
+     *
+     * @param int $limit Number of items per page
+     * @param int $offset Starting offset
+     * @param string $sortField Field to sort by
+     * @param string $sortOrder Sort direction (ASC, DESC)
+     * @return array
+     */
+    public function getCategoriesPaginated(
+        int $limit = 25,
+        int $offset = 0,
+        string $sortField = 'id',
+        string $sortOrder = 'ASC',
+    ): array {
+        $categories = [];
+        $rows = $this->getCategoryRepository()->findCategoriesPaginated(
+            $this->language,
+            $limit,
+            $offset,
+            $sortField,
+            $sortOrder,
+        );
+        foreach ($rows as $id => $row) {
+            $categories[$id] = $row
+            + [
+                'level' => $this->getLevelOf($id),
+            ];
+        }
+
+        return $categories;
+    }
+
+    /**
+     * Counts total categories for current language.
+     *
+     * @return int Total count
+     */
+    public function countCategories(): int
+    {
+        return $this->getCategoryRepository()->countCategories($this->language);
+    }
+
+    /**
      * Builds the category tree.
      */
     public function buildCategoryTree(int $parentId = 0, int $indent = 0): void

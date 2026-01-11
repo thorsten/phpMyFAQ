@@ -136,6 +136,74 @@ readonly class News
     }
 
     /**
+     * Fetches paginated news data with sorting support for API.
+     *
+     * @param bool $active Filter by active status
+     * @param int $limit Number of items per page
+     * @param int $offset Starting offset
+     * @param string $sortField Field to sort by
+     * @param string $sortOrder Sort direction (ASC, DESC)
+     * @return array
+     */
+    public function getLatestDataPaginated(
+        bool $active = true,
+        int $limit = 25,
+        int $offset = 0,
+        string $sortField = 'datum',
+        string $sortOrder = 'DESC',
+    ): array {
+        $news = [];
+        $language = $this->configuration->getLanguage()->getLanguage();
+
+        foreach ($this->newsRepository->getLatestPaginated(
+            $language,
+            $active,
+            $limit,
+            $offset,
+            $sortField,
+            $sortOrder,
+        ) as $row) {
+            $url = sprintf(
+                '%snews/%d/%s/%s.html',
+                $this->configuration->getDefaultUrl(),
+                $row->id,
+                $row->lang,
+                TitleSlugifier::slug($row->header),
+            );
+            $item = [
+                'id' => (int) $row->id,
+                'lang' => $row->lang,
+                'date' => Date::createIsoDate($row->datum, DATE_ATOM),
+                'header' => $row->header,
+                'content' => $row->artikel,
+                'authorName' => $row->author_name,
+                'authorEmail' => $row->author_email,
+                'active' => 'y' === $row->active,
+                'allowComments' => 'y' === $row->comment,
+                'link' => $row->link,
+                'linkTitle' => $row->linktitel,
+                'target' => $row->target,
+                'url' => $url,
+            ];
+            $news[] = $item;
+        }
+
+        return $news;
+    }
+
+    /**
+     * Counts total news entries for current language.
+     *
+     * @param bool $active Filter by active status
+     * @return int Total count
+     */
+    public function countLatestData(bool $active = true): int
+    {
+        $language = $this->configuration->getLanguage()->getLanguage();
+        return $this->newsRepository->countLatest($language, $active);
+    }
+
+    /**
      * Fetches all news headers.
      */
     public function getHeader(): array
