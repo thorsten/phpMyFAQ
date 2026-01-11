@@ -63,6 +63,9 @@ class TwigWrapper
         // Always add the translation extension
         $this->twigEnvironment->addExtension(new AttributeExtension(TranslateTwigExtension::class));
 
+        // Always add the LanguageCode Extension
+        $this->twigEnvironment->addExtension(new AttributeExtension(\phpMyFAQ\Twig\Extensions\LanguageCodeTwigExtension::class));
+
         // Add the plugin extension if it's not in the setup phase
         if (!$this->isSetup) {
             $this->twigEnvironment->addExtension(new AttributeExtension(PluginTwigExtension::class));
