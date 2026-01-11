@@ -246,6 +246,12 @@ class AbstractControllerTest extends TestCase
 
     public function testUserHasGroupPermissionThrowsExceptionWhenMissingPermissions(): void
     {
+        // Mock that user is logged in (so we get to the permission check)
+        $this->currentUserMock
+            ->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(true);
+
         $this->currentUserMock
             ->expects($this->once()) // Only called once since the exception is thrown on the first check
             ->method('getUserId')
@@ -265,6 +271,12 @@ class AbstractControllerTest extends TestCase
 
     public function testUserHasGroupPermissionSucceedsWhenAllPermissionsPresent(): void
     {
+        // Mock that user is logged in
+        $this->currentUserMock
+            ->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(true);
+
         $this->currentUserMock
             ->expects($this->exactly(4))
             ->method('getUserId')
@@ -291,6 +303,12 @@ class AbstractControllerTest extends TestCase
 
     public function testUserHasUserPermissionThrowsExceptionWhenMissingPermissions(): void
     {
+        // Mock that user is logged in (so we get to the permission check)
+        $this->currentUserMock
+            ->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(true);
+
         $this->currentUserMock
             ->expects($this->once()) // Only called once since exception is thrown on first check
             ->method('getUserId')
@@ -310,6 +328,12 @@ class AbstractControllerTest extends TestCase
 
     public function testUserHasUserPermissionSucceedsWhenAllPermissionsPresent(): void
     {
+        // Mock that user is logged in
+        $this->currentUserMock
+            ->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(true);
+
         $this->currentUserMock
             ->expects($this->exactly(3))
             ->method('getUserId')
@@ -335,6 +359,12 @@ class AbstractControllerTest extends TestCase
 
     public function testUserHasPermissionThrowsExceptionWhenMissingPermission(): void
     {
+        // Mock that user is logged in (so we get to the permission check)
+        $this->currentUserMock
+            ->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(true);
+
         $permissionType = PermissionType::FAQ_ADD;
         $this->currentUserMock
             ->expects($this->once())
@@ -354,6 +384,12 @@ class AbstractControllerTest extends TestCase
 
     public function testUserHasPermissionSucceedsWhenPermissionPresent(): void
     {
+        // Mock that user is logged in
+        $this->currentUserMock
+            ->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(true);
+
         $permissionType = PermissionType::FAQ_ADD;
         $this->currentUserMock
             ->expects($this->once())
@@ -512,6 +548,12 @@ class AbstractControllerTest extends TestCase
     #[DataProvider('permissionDataProvider')]
     public function testUserHasPermissionWithDifferentPermissionTypes(PermissionType $permissionType): void
     {
+        // Mock that user is logged in
+        $this->currentUserMock
+            ->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(true);
+
         $this->currentUserMock
             ->expects($this->once())
             ->method('getUserId')
