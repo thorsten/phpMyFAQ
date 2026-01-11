@@ -183,7 +183,7 @@ class AttachmentFactory
     }
 
     /**
-     * Initializing factory with global attachment settings.
+     * Initializing the factory with global attachment settings.
      *
      * @param string $defaultKey        Default key
      * @param bool   $encryptionEnabled Enabled encryption?

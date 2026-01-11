@@ -150,7 +150,7 @@ abstract class AbstractAttachment
 
     public function buildUrl(): string
     {
-        return sprintf('./attachment/%d', $this->id);
+        return sprintf('attachment/%d', $this->id);
     }
 
     /**

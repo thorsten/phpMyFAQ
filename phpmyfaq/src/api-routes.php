@@ -60,7 +60,7 @@ $routes = new RouteCollection();
 $routesConfig = [
     // Public REST API
     'api.attachments' => [
-        'path' => "v{$apiVersion}/attachments/{recordId}",
+        'path' => "v{$apiVersion}/attachments/{faqId}",
         'controller' => [AttachmentController::class, 'list'],
         'methods' => 'GET',
     ],

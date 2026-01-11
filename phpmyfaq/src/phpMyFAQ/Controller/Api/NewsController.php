@@ -20,62 +20,130 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
-use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\News;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\HttpFoundation\Request;
 
-final class NewsController extends AbstractController
+final class NewsController extends AbstractApiController
 {
-    public function __construct()
-    {
-        parent::__construct();
-
-        if (!$this->isApiEnabled()) {
-            throw new UnauthorizedHttpException(challenge: 'API is not enabled');
-        }
-    }
-
     #[OA\Get(path: '/api/v3.2/news', operationId: 'getNews', tags: ['Public Endpoints'])]
     #[OA\Header(
         header: 'Accept-Language',
-        description: 'The language code for the open questions.',
+        description: 'The language code for the news.',
         schema: new OA\Schema(type: 'string'),
+    )]
+    #[OA\Parameter(
+        name: 'page',
+        description: 'Page number for pagination (page-based)',
+        in: 'query',
+        required: false,
+        schema: new OA\Schema(type: 'integer', default: 1),
+    )]
+    #[OA\Parameter(
+        name: 'per_page',
+        description: 'Items per page (page-based, max 100)',
+        in: 'query',
+        required: false,
+        schema: new OA\Schema(type: 'integer', default: 25),
+    )]
+    #[OA\Parameter(
+        name: 'limit',
+        description: 'Number of items to return (offset-based, max 100)',
+        in: 'query',
+        required: false,
+        schema: new OA\Schema(type: 'integer', default: 25),
+    )]
+    #[OA\Parameter(
+        name: 'offset',
+        description: 'Starting offset (offset-based)',
+        in: 'query',
+        required: false,
+        schema: new OA\Schema(type: 'integer', default: 0),
+    )]
+    #[OA\Parameter(name: 'sort', description: 'Field to sort by', in: 'query', required: false, schema: new OA\Schema(
+        type: 'string',
+        default: 'datum',
+        enum: ['id', 'datum', 'header', 'author_name'],
+    ))]
+    #[OA\Parameter(
+        name: 'order',
+        description: 'Sort direction',
+        in: 'query',
+        required: false,
+        schema: new OA\Schema(type: 'string', default: 'desc', enum: ['asc', 'desc']),
     )]
     #[OA\Response(
         response: 200,
-        description: 'Returns the news for the given language provided by "Accept-Language".',
-        content: new OA\JsonContent(example: '
-        [
-            {
-                "id": 1,
-                "lang": "en",
-                "date": "2019-08-23T20:43:00+0200",
-                "header": "Hallo, World!",
-                "content": "Hello, phpMyFAQ!",
-                "authorName": "phpMyFAQ User",
-                "authorEmail": "user@example.org",
-                "dateStart": "0",
-                "dateEnd": "99991231235959",
-                "active": true,
-                "allowComments": true,
-                "link": "",
-                "linkTitle": "",
-                "target": "",
-                "url": "https://www.example.org/news/1/de/hallo-phpmyfaq.html"
-              }
-        ]'),
+        description: 'Returns paginated news for the given language provided by "Accept-Language".',
+        content: new OA\JsonContent(example: '{
+            "success": true,
+            "data": [
+                {
+                    "id": 1,
+                    "lang": "en",
+                    "date": "2019-08-23T20:43:00+0200",
+                    "header": "Hallo, World!",
+                    "content": "Hello, phpMyFAQ!",
+                    "authorName": "phpMyFAQ User",
+                    "authorEmail": "user@example.org",
+                    "active": true,
+                    "allowComments": true,
+                    "link": "",
+                    "linkTitle": "",
+                    "target": "",
+                    "url": "https://www.example.org/news/1/de/hallo-phpmyfaq.html"
+                }
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 50,
+                    "count": 25,
+                    "per_page": 25,
+                    "current_page": 1,
+                    "total_pages": 2,
+                    "links": {
+                        "first": "/api/v3.2/news?page=1&per_page=25",
+                        "last": "/api/v3.2/news?page=2&per_page=25",
+                        "prev": null,
+                        "next": "/api/v3.2/news?page=2&per_page=25"
+                    }
+                },
+                "sorting": {
+                    "field": "datum",
+                    "order": "desc"
+                }
+            }
+        }'),
     )]
-    #[OA\Response(response: 404, description: 'If no news are stored.', content: new OA\JsonContent(example: []))]
+    #[OA\Response(
+        response: 200,
+        description: 'If no news are stored, returns empty data array.',
+        content: new OA\JsonContent(example: '{"success": true, "data": []}'),
+    )]
     public function list(): JsonResponse
     {
-        $news = new News($this->configuration);
-        $result = $news->getLatestData(showArchive: false, active: true, forceConfLimit: true);
-        if ((is_countable($result) ? count($result) : 0) === 0) {
-            return $this->json($result, Response::HTTP_NOT_FOUND);
-        }
+        // Get pagination and sorting parameters
+        $pagination = $this->getPaginationRequest();
+        $sort = $this->getSortRequest(
+            allowedFields: ['id', 'datum', 'header', 'author_name'],
+            defaultField: 'datum',
+            defaultOrder: 'desc',
+        );
 
-        return $this->json($result, Response::HTTP_OK);
+        $news = new News($this->configuration);
+
+        // Get paginated news data
+        $data = $news->getLatestDataPaginated(
+            active: true,
+            limit: $pagination->limit,
+            offset: $pagination->offset,
+            sortField: $sort->getField() ?? 'datum',
+            sortOrder: $sort->getOrderSql(),
+        );
+
+        // Get total count
+        $total = $news->countLatestData();
+
+        return $this->paginatedResponse(data: $data, total: $total, pagination: $pagination, sort: $sort);
     }
 }

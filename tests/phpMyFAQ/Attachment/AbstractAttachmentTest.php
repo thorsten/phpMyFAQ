@@ -173,7 +173,7 @@ class AbstractAttachmentTest extends TestCase
 
         $url = $this->attachment->buildUrl();
 
-        $this->assertEquals('./attachment/42', $url);
+        $this->assertEquals('attachment/42', $url);
     }
 
     public function testSetAndGetId(): void

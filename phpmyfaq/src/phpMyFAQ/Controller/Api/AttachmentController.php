@@ -135,7 +135,7 @@ class AttachmentController extends AbstractApiController
     )]
     public function list(Request $request): JsonResponse
     {
-        $recordId = (int) Filter::filterVar($request->attributes->get(key: 'faqId'), FILTER_VALIDATE_INT);
+        $faqId = (int) Filter::filterVar($request->attributes->get(key: 'faqId'), FILTER_VALIDATE_INT);
 
         // Get pagination and sorting parameters
         $pagination = $this->getPaginationRequest();
@@ -149,7 +149,7 @@ class AttachmentController extends AbstractApiController
             // Fetch paginated attachments using property access (PHP 8.4 property hooks)
             $attachments = AttachmentFactory::fetchByRecordIdPaginated(
                 configuration: $this->configuration,
-                recordId: $recordId,
+                recordId: $faqId,
                 limit: $pagination->limit,
                 offset: $pagination->offset,
                 sortField: $sort->getField() ?? 'id',
@@ -157,7 +157,7 @@ class AttachmentController extends AbstractApiController
             );
 
             // Get total count for pagination metadata
-            $total = AttachmentFactory::countByRecordId($this->configuration, $recordId);
+            $total = AttachmentFactory::countByRecordId($this->configuration, $faqId);
 
             // Return paginated response with envelope
             return $this->paginatedResponse(data: $attachments, total: $total, pagination: $pagination, sort: $sort);
