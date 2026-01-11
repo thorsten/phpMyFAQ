@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Language;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception as MockException;
@@ -20,7 +19,6 @@ class NewsControllerTest extends TestCase
     private Configuration $configuration;
 
     /**
-     * @throws Exception
      * @throws MockException
      */
     protected function setUp(): void

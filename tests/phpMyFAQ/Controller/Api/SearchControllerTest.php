@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 #[AllowMockObjectsWithoutExpectations]
 class SearchControllerTest extends TestCase
 {
+
     public function testSearchReturnsJsonResponse(): void
     {
         $request = new Request(['q' => 'test']);

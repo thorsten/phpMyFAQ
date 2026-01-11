@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 #[AllowMockObjectsWithoutExpectations]
 class VersionControllerTest extends TestCase
 {
+
     public function testIndex(): void
     {
         $versionNumber = System::getVersion();
@@ -40,7 +41,7 @@ class VersionControllerTest extends TestCase
         $version = json_decode($response->getContent(), true);
         $this->assertNotEmpty($version);
         $this->assertIsString($version);
-        // Version should match semantic versioning pattern
+        // Version should match a semantic versioning pattern
         $this->assertMatchesRegularExpression('/^\d+\.\d+\.\d+/', $version);
     }
 
