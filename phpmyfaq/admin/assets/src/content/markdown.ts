@@ -145,6 +145,22 @@ export const handleMarkdownForm = (): void => {
 
           const responseData = await response.json();
           if (responseData.success) {
+            // Extract uploaded files and insert them into the editor
+            let markdownImages: string = '';
+            responseData.data.sources.forEach((source: { baseurl: string; path: string; files: string[] }): void => {
+              source.files.forEach((file: string): void => {
+                const imageUrl = `${source.baseurl}${source.path}${file}`;
+                markdownImages += `![Image](${imageUrl})\n`;
+              });
+            });
+
+            // Insert the Markdown images at the cursor position
+            const startPos: number = answer.selectionStart;
+            const endPos: number = answer.selectionEnd;
+            answer.value = answer.value.substring(0, startPos) + markdownImages + answer.value.substring(endPos);
+            answer.setSelectionRange(startPos + markdownImages.length, startPos + markdownImages.length);
+            answer.focus();
+
             pushNotification('Files uploaded successfully');
           } else {
             pushErrorNotification('Upload failed:' + responseData.messages);

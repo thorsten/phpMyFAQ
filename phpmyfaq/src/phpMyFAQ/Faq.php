@@ -1347,6 +1347,10 @@ class Faq
                     }
 
                     $where .= ')';
+                } elseif ($data === 'IS NOT NULL') {
+                    $where .= ' IS NOT NULL';
+                } elseif ($data === 'IS NULL') {
+                    $where .= ' IS NULL';
                 } else {
                     $where .= " = '" . $this->configuration->getDb()->escape($data) . "'";
                 }

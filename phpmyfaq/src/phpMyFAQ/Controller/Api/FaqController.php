@@ -206,7 +206,7 @@ final class FaqController extends AbstractController
                 "category_id": 1,
                 "record_title": "Is there life after death?",
                 "record_preview": "Maybe!",
-                "record_link": "/phpmyfaq//content/1/1/en/is-there-life-after-death.html",
+                "record_link": "/phpmyfaq/content/1/1/en/is-there-life-after-death.html",
                 "record_updated": "20191010175452",
                 "visits": 3,
                 "record_created": "2018-09-03T21:30:17+02:00"
@@ -478,8 +478,10 @@ final class FaqController extends AbstractController
         $faq = $this->container->get(id: 'phpmyfaq.faq');
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
-        $faq->getAllFaqs(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $this->configuration->getLanguage()->getLanguage()]);
-
+        $faq->getAllFaqs(FAQ_SORTING_TYPE_CATID_FAQID, [
+            'lang' => $this->configuration->getLanguage()->getLanguage(),
+            'fcr.category_id' => 'IS NOT NULL',
+        ]);
         $result = $faq->faqRecords;
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
