@@ -43,6 +43,7 @@ final class StatisticsSearchController extends AbstractAdministrationController
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
+        $this->addExtension(new AttributeExtension(LanguageCodeTwigExtension::class));
 
         $perPage = 10;
 
