@@ -47,6 +47,12 @@ import hljs from 'highlight.js';
 interface UploaderResponse {
   error?: string;
   msg?: string;
+  success?: boolean;
+  data?: {
+    files?: string[];
+    messages?: string[];
+    isImages?: boolean[];
+  };
 }
 
 let joditEditorInstance: Jodit | null = null;
@@ -241,10 +247,19 @@ export const renderEditor = () => {
       url: '/admin/api/content/images?csrf=' + (document.getElementById('pmf-csrf-token') as HTMLInputElement).value,
       format: 'json',
       isSuccess: (response: UploaderResponse) => {
-        return !response.error;
+        return !response.error && response.success === true;
       },
       getMessage: (response: UploaderResponse) => {
-        return response.msg;
+        return response.msg || (response.data?.messages ? response.data.messages.join(', ') : '');
+      },
+      process: (response: UploaderResponse) => {
+        // Extract file URLs from the response for Jodit to insert
+        return {
+          files: response.data?.files || [],
+          isImages: response.data?.isImages || [],
+          baseurl: '',
+          path: '',
+        };
       },
     },
     filebrowser: {

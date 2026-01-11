@@ -16,7 +16,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - improved API errors with formatted RFC 7807 Problem Details JSON responses (Thorsten)
 - migrated codebase to use PHP 8.4 language features (Thorsten)
 
-### phpMyFAQ v4.1.0-RC.2 - 2026-01-06
+### phpMyFAQ v4.1.0-RC.3 - unreleased
 
 - changed PHP requirement to PHP 8.3 or later (Thorsten)
 - added configuration to edit robots.txt (Thorsten)
