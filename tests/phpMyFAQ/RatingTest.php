@@ -39,6 +39,9 @@ class RatingTest extends TestCase
         $configuration->setLanguage($language);
 
         $this->rating = new Rating($configuration);
+
+        // Clean up any existing data before each test
+        $this->dbHandle->query('DELETE FROM faqvoting');
     }
 
     protected function tearDown(): void

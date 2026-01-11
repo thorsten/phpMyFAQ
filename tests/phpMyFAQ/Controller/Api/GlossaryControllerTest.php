@@ -5,6 +5,7 @@ namespace phpMyFAQ\Controller\Api;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Language;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +17,9 @@ class GlossaryControllerTest extends TestCase
 {
     private Configuration $configuration;
 
+    /**
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         $this->configuration = Configuration::getConfigurationInstance();
@@ -42,7 +46,6 @@ class GlossaryControllerTest extends TestCase
         $response = $glossaryController->list($request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
-        // Response can be 200 with data or 404 if no glossary items exist
         $this->assertContains($response->getStatusCode(), [Response::HTTP_OK, Response::HTTP_NOT_FOUND]);
         $this->assertEquals('application/json', $response->headers->get('Content-Type'));
 
@@ -54,7 +57,6 @@ class GlossaryControllerTest extends TestCase
     {
         $glossaryController = new GlossaryController();
 
-        // Test with complex Accept-Language header
         $request = Request::create(
             '/api/v3.2/glossary',
             'GET',
@@ -82,5 +84,42 @@ class GlossaryControllerTest extends TestCase
 
         $this->assertInstanceOf(JsonResponse::class, $response);
         $this->assertContains($response->getStatusCode(), [Response::HTTP_OK, Response::HTTP_NOT_FOUND]);
+    }
+
+    public function testListReturnsJsonData(): void
+    {
+        $glossaryController = new GlossaryController();
+
+        $request = Request::create('/api/v3.2/glossary', 'GET');
+
+        $response = $glossaryController->list($request);
+
+        $this->assertJson($response->getContent());
+    }
+
+    public function testListResponseContentIsNotNull(): void
+    {
+        $glossaryController = new GlossaryController();
+
+        $request = Request::create('/api/v3.2/glossary', 'GET');
+
+        $response = $glossaryController->list($request);
+
+        $this->assertNotNull($response->getContent());
+    }
+
+    public function testListReturnsEmptyArrayOn404(): void
+    {
+        $glossaryController = new GlossaryController();
+
+        $request = Request::create('/api/v3.2/glossary', 'GET');
+
+        $response = $glossaryController->list($request);
+
+        if ($response->getStatusCode() === Response::HTTP_NOT_FOUND) {
+            $this->assertEquals([], json_decode($response->getContent(), true));
+        } else {
+            $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        }
     }
 }
