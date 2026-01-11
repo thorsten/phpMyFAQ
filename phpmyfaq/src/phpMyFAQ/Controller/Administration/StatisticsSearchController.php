@@ -25,11 +25,11 @@ use phpMyFAQ\Pagination;
 use phpMyFAQ\Pagination\UrlConfig;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\Extensions\LanguageCodeTwigExtension;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
-use phpMyFAQ\Twig\Extensions\LanguageCodeTwigExtension;
 use Twig\Extension\AttributeExtension;
 
 final class StatisticsSearchController extends AbstractAdministrationController
