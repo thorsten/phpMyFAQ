@@ -286,5 +286,5 @@ class BasicPermission implements PermissionInterface
     public function getUserGroups(int $userId): array
     {
         return [];
-    }	
+    }
 }
