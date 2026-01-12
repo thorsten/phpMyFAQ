@@ -41,6 +41,10 @@ final class MarkdownController extends AbstractController
     {
         $data = json_decode($request->getContent());
 
+        if (!$data || !isset($data->text)) {
+            throw new \Exception('Invalid JSON data');
+        }
+
         $answer = Filter::filterVar($data->text, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $config = [

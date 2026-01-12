@@ -52,6 +52,18 @@ final class UnauthorizedUserController
     {
         $data = json_decode($request->getContent());
 
+        if (!$data) {
+            throw new Exception('Invalid JSON data');
+        }
+
+        if (!isset($data->username)) {
+            return $this->json(['error' => 'Missing username'], Response::HTTP_CONFLICT);
+        }
+
+        if (!isset($data->email)) {
+            return $this->json(['error' => 'Missing email'], Response::HTTP_CONFLICT);
+        }
+
         $username = trim((string) Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS));
         $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
 
