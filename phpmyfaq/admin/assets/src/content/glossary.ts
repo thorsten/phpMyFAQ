@@ -15,7 +15,7 @@
 
 import { createGlossary, deleteGlossary, getGlossary, updateGlossary } from '../api';
 import { addElement, pushNotification } from '../../../../assets/src/utils';
-import bootstrap, { Modal } from 'bootstrap';
+import { Modal } from 'bootstrap';
 
 export const handleDeleteGlossary = (): void => {
   const deleteButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.pmf-admin-delete-glossary');
@@ -58,8 +58,8 @@ export const handleAddGlossary = (): void => {
       if (response) {
         if (modal) {
           // Close modal properly using Bootstrap
-          const bootstrapModal = bootstrap.Modal.getInstance(modal) as Modal;
-          bootstrapModal.hide();
+          const bootstrapModal = Modal.getInstance(modal);
+          bootstrapModal?.hide();
 
           // Reset form fields for the next entry
           (document.getElementById('item') as HTMLInputElement).value = '';
@@ -148,8 +148,8 @@ export const handleUpdateGlossary = (): void => {
       if (response) {
         if (modal) {
           // Close modal properly using Bootstrap
-          const bootstrapModal = bootstrap.Modal.getInstance(modal) as Modal;
-          bootstrapModal.hide();
+          const bootstrapModal = Modal.getInstance(modal);
+          bootstrapModal?.hide();
         }
 
         const itemLink = document.querySelector(
