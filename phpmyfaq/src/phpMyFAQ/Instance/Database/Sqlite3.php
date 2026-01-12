@@ -236,6 +236,18 @@ class Sqlite3 extends Database implements DriverInterface
             linktitel VARCHAR(255) DEFAULT NULL,
             target VARCHAR(255) NOT NULL,
             PRIMARY KEY (id))',
+        'faqcustompages' => 'CREATE TABLE %sfaqcustompages (
+            id INTEGER NOT NULL,
+            lang VARCHAR(5) NOT NULL,
+            page_title VARCHAR(255) NOT NULL,
+            slug VARCHAR(255) NOT NULL,
+            content TEXT NOT NULL,
+            author_name VARCHAR(255) NOT NULL,
+            author_email VARCHAR(255) NOT NULL,
+            active CHAR(1) NOT NULL DEFAULT \'n\',
+            created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated TIMESTAMP NULL,
+            PRIMARY KEY (id, lang))',
         'faqquestions' => 'CREATE TABLE %sfaqquestions (
             id INTEGER NOT NULL,
             lang VARCHAR(5) NOT NULL,

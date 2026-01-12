@@ -235,6 +235,18 @@ class PdoSqlsrv extends Database implements DriverInterface
             linktitel NVARCHAR(255) DEFAULT NULL,
             target NVARCHAR(255) NOT NULL,
             PRIMARY KEY (id))',
+        'faqcustompages' => 'CREATE TABLE %sfaqcustompages (
+            id INT NOT NULL,
+            lang VARCHAR(5) NOT NULL,
+            page_title VARCHAR(255) NOT NULL,
+            slug VARCHAR(255) NOT NULL,
+            content NVARCHAR(MAX) NOT NULL,
+            author_name VARCHAR(255) NOT NULL,
+            author_email VARCHAR(255) NOT NULL,
+            active CHAR(1) NOT NULL DEFAULT \'n\',
+            created DATETIME NOT NULL DEFAULT GETDATE(),
+            updated DATETIME NULL,
+            PRIMARY KEY (id, lang))',
         'faqquestions' => 'CREATE TABLE %sfaqquestions (
             id INTEGER NOT NULL,
             lang NVARCHAR(5) NOT NULL,

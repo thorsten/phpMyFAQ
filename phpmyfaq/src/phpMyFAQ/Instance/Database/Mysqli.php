@@ -243,6 +243,20 @@ class Mysqli extends Database implements DriverInterface
             linktitel VARCHAR(255) DEFAULT NULL,
             target VARCHAR(255) NOT NULL,
             PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+        'faqcustompages' => 'CREATE TABLE %sfaqcustompages (
+            id INT(11) NOT NULL,
+            lang VARCHAR(5) NOT NULL,
+            page_title VARCHAR(255) NOT NULL,
+            slug VARCHAR(255) NOT NULL,
+            content TEXT NOT NULL,
+            author_name VARCHAR(255) NOT NULL,
+            author_email VARCHAR(255) NOT NULL,
+            active CHAR(1) NOT NULL DEFAULT \'n\',
+            created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated TIMESTAMP NULL,
+            PRIMARY KEY (id, lang),
+            INDEX idx_custompages_slug (slug, lang))
+            DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
         'faqquestions' => 'CREATE TABLE %sfaqquestions (
             id INT(11) NOT NULL,
             lang VARCHAR(5) NOT NULL,

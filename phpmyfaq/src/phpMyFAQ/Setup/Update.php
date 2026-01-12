@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Setup;
 
-use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Administration\AdminLogRepository;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
@@ -1181,6 +1180,93 @@ class Update extends AbstractSetup
 
             // Now migrate the existing data
             $this->migrateAdminLogHashes();
+
+            // Create custom pages table
+            switch (Database::getType()) {
+                case 'mysqli':
+                case 'pdo_mysql':
+                    $this->queries[] = sprintf(
+                        'CREATE TABLE IF NOT EXISTS %sfaqcustompages (
+                            id INT(11) NOT NULL,
+                            lang VARCHAR(5) NOT NULL,
+                            page_title VARCHAR(255) NOT NULL,
+                            slug VARCHAR(255) NOT NULL,
+                            content TEXT NOT NULL,
+                            author_name VARCHAR(255) NOT NULL,
+                            author_email VARCHAR(255) NOT NULL,
+                            active CHAR(1) NOT NULL DEFAULT \'n\',
+                            created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            updated TIMESTAMP NULL,
+                            PRIMARY KEY (id, lang),
+                            INDEX idx_custompages_slug (slug, lang)
+                        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+                        Database::getTablePrefix(),
+                    );
+                    break;
+
+                case 'pgsql':
+                case 'pdo_pgsql':
+                    $this->queries[] = sprintf('CREATE TABLE IF NOT EXISTS %sfaqcustompages (
+                            id INTEGER NOT NULL,
+                            lang VARCHAR(5) NOT NULL,
+                            page_title VARCHAR(255) NOT NULL,
+                            slug VARCHAR(255) NOT NULL,
+                            content TEXT NOT NULL,
+                            author_name VARCHAR(255) NOT NULL,
+                            author_email VARCHAR(255) NOT NULL,
+                            active CHAR(1) NOT NULL DEFAULT \'n\',
+                            created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            updated TIMESTAMP NULL,
+                            PRIMARY KEY (id, lang)
+                        )', Database::getTablePrefix());
+                    $this->queries[] = sprintf(
+                        'CREATE INDEX IF NOT EXISTS idx_custompages_slug ON %sfaqcustompages (slug, lang)',
+                        Database::getTablePrefix(),
+                    );
+                    break;
+
+                case 'sqlite3':
+                case 'pdo_sqlite':
+                    $this->queries[] = sprintf('CREATE TABLE IF NOT EXISTS %sfaqcustompages (
+                            id INTEGER NOT NULL,
+                            lang VARCHAR(5) NOT NULL,
+                            page_title VARCHAR(255) NOT NULL,
+                            slug VARCHAR(255) NOT NULL,
+                            content TEXT NOT NULL,
+                            author_name VARCHAR(255) NOT NULL,
+                            author_email VARCHAR(255) NOT NULL,
+                            active CHAR(1) NOT NULL DEFAULT \'n\',
+                            created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            updated TIMESTAMP NULL,
+                            PRIMARY KEY (id, lang)
+                        )', Database::getTablePrefix());
+                    $this->queries[] = sprintf(
+                        'CREATE INDEX IF NOT EXISTS idx_custompages_slug ON %sfaqcustompages (slug, lang)',
+                        Database::getTablePrefix(),
+                    );
+                    break;
+
+                case 'sqlsrv':
+                case 'pdo_sqlsrv':
+                    $this->queries[] = sprintf('CREATE TABLE %sfaqcustompages (
+                            id INT NOT NULL,
+                            lang VARCHAR(5) NOT NULL,
+                            page_title VARCHAR(255) NOT NULL,
+                            slug VARCHAR(255) NOT NULL,
+                            content NVARCHAR(MAX) NOT NULL,
+                            author_name VARCHAR(255) NOT NULL,
+                            author_email VARCHAR(255) NOT NULL,
+                            active CHAR(1) NOT NULL DEFAULT \'n\',
+                            created DATETIME NOT NULL DEFAULT GETDATE(),
+                            updated DATETIME NULL,
+                            PRIMARY KEY (id, lang)
+                        )', Database::getTablePrefix());
+                    $this->queries[] = sprintf(
+                        'CREATE INDEX idx_custompages_slug ON %sfaqcustompages (slug, lang)',
+                        Database::getTablePrefix(),
+                    );
+                    break;
+            }
         }
     }
 

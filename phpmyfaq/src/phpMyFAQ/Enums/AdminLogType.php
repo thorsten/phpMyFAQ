@@ -52,6 +52,11 @@ enum AdminLogType: string
     case NEWS_EDIT = 'news-edit';
     case NEWS_DELETE = 'news-delete';
 
+    // Custom Pages
+    case PAGE_ADD = 'page-add';
+    case PAGE_EDIT = 'page-edit';
+    case PAGE_DELETE = 'page-delete';
+
     // Configuration
     case CONFIG_CHANGE = 'config-change';
     case CONFIG_SECURITY_CHANGED = 'config-security-changed';
