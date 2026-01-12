@@ -63,8 +63,25 @@ final class FaqController extends AbstractController
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
+        if (!isset($data->name)) {
+            throw new Exception('Missing name');
+        }
+
+        if (!isset($data->question) || empty($data->question)) {
+            throw new Exception('Missing or empty question');
+        }
+
+        if (!isset($data->answer)) {
+            throw new Exception('Missing answer');
+        }
+
         $author = trim((string) Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS));
         $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
+
+        if (!$email) {
+            throw new Exception('Invalid email address');
+        }
+
         $questionText = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
         $questionText = trim(strip_tags((string) $questionText));
 
@@ -86,7 +103,11 @@ final class FaqController extends AbstractController
 
             $categories = Filter::filterArray($data->rubrik);
         } else {
-            $categories = [$category->getAllCategoryIds()[0]];
+            $allCategoryIds = $category->getAllCategoryIds();
+            if (empty($allCategoryIds)) {
+                throw new Exception('No categories available');
+            }
+            $categories = [$allCategoryIds[0]];
         }
 
         if (!$this->captchaCodeIsValid($request)) {

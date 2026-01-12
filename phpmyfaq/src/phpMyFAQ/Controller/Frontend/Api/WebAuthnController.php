@@ -56,6 +56,11 @@ final class WebAuthnController extends AbstractController
     public function prepare(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+
+        if (!isset($data->username)) {
+            throw new Exception('Missing username');
+        }
+
         $username = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!$this->user->getUserByLogin($username, raiseError: false)) {
@@ -93,9 +98,19 @@ final class WebAuthnController extends AbstractController
     public function register(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+
+        if (!isset($data->register)) {
+            throw new Exception('Missing register data');
+        }
+
         $register = Filter::filterVar($data->register, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $webAuthnUser = $this->authWebAuthn->getUserFromSession();
+
+        if (!$webAuthnUser) {
+            throw new Exception('User not found in session');
+        }
+
         $webAuthnUser->setWebAuthnKeys($this->authWebAuthn->register($register, $webAuthnUser->getWebAuthnKeys()));
 
         try {
@@ -122,6 +137,11 @@ final class WebAuthnController extends AbstractController
     public function prepareLogin(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+
+        if (!isset($data->username)) {
+            throw new Exception('Missing username');
+        }
+
         $login = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
 
         try {
@@ -144,6 +164,15 @@ final class WebAuthnController extends AbstractController
     public function login(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+
+        if (!isset($data->username)) {
+            throw new Exception('Missing username');
+        }
+
+        if (!isset($data->login)) {
+            throw new Exception('Missing login data');
+        }
+
         $login = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
         $loginData = $data->login;
 

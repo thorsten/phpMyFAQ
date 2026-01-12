@@ -56,24 +56,50 @@ final class CommentController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_FORBIDDEN);
         }
 
-        if (!$this->captchaCodeIsValid($request)) {
-            return $this->json(['error' => Translation::get(key: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
-        }
-
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+
+        if (!isset($data->{'pmf-csrf-token'})) {
+            throw new Exception('Missing CSRF token');
+        }
 
         if (!Token::getInstance($this->session)->verifyToken(
             page: 'add-comment',
             requestToken: $data->{'pmf-csrf-token'},
         )) {
-            return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
+            throw new Exception('Invalid CSRF token');
+        }
+
+        if (!isset($data->user)) {
+            throw new Exception('Missing user');
+        }
+
+        if (!isset($data->mail)) {
+            throw new Exception('Missing email');
+        }
+
+        if (!isset($data->comment_text) || empty($data->comment_text)) {
+            throw new Exception('Missing or empty comment text');
         }
 
         $type = Filter::filterVar($data->type, FILTER_SANITIZE_SPECIAL_CHARS);
+
+        if ($type === 'news') {
+            throw new Exception('News comments not supported');
+        }
+
         $faqId = Filter::filterVar($data->id ?? null, FILTER_VALIDATE_INT, default: 0);
         $newsId = Filter::filterVar($data->newsId ?? null, FILTER_VALIDATE_INT);
         $username = Filter::filterVar($data->user, FILTER_SANITIZE_SPECIAL_CHARS);
         $email = Filter::filterVar($data->mail, FILTER_VALIDATE_EMAIL);
+
+        if (!$email) {
+            throw new Exception('Invalid email address');
+        }
+
+        if (!$this->captchaCodeIsValid($request)) {
+            return $this->json(['error' => Translation::get(key: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
+        }
+
         $commentText = Filter::filterVar($data->comment_text, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $commentId = match ($type) {

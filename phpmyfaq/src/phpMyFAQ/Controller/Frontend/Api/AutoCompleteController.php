@@ -39,6 +39,10 @@ final class AutoCompleteController extends AbstractController
     {
         $searchString = Filter::filterVar($request->query->get(key: 'search'), FILTER_SANITIZE_SPECIAL_CHARS);
 
+        if (is_null($searchString) || $searchString === '' || $searchString === '0') {
+            return $this->json([], Response::HTTP_NOT_FOUND);
+        }
+
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $category = new Category($this->configuration, $currentGroups);
@@ -51,21 +55,17 @@ final class AutoCompleteController extends AbstractController
         $faqSearch = $this->container->get(id: 'phpmyfaq.search');
         $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
 
-        if (!is_null($searchString)) {
-            $faqSearch->setCategory($category);
+        $faqSearch->setCategory($category);
 
-            $searchResult = $faqSearch->autoComplete($searchString);
+        $searchResult = $faqSearch->autoComplete($searchString);
 
-            $searchResultSet->reviewResultSet($searchResult);
+        $searchResultSet->reviewResultSet($searchResult);
 
-            $faqSearchHelper = $this->container->get(id: 'phpmyfaq.helper.search');
-            $faqSearchHelper->setSearchTerm($searchString);
-            $faqSearchHelper->setCategory($category);
-            $faqSearchHelper->setPlurals($this->container->get(id: 'phpmyfaq.language.plurals'));
+        $faqSearchHelper = $this->container->get(id: 'phpmyfaq.helper.search');
+        $faqSearchHelper->setSearchTerm($searchString);
+        $faqSearchHelper->setCategory($category);
+        $faqSearchHelper->setPlurals($this->container->get(id: 'phpmyfaq.language.plurals'));
 
-            return $this->json($faqSearchHelper->createAutoCompleteResult($searchResultSet), Response::HTTP_OK);
-        }
-
-        return $this->json([], Response::HTTP_NOT_FOUND);
+        return $this->json($faqSearchHelper->createAutoCompleteResult($searchResultSet), Response::HTTP_OK);
     }
 }

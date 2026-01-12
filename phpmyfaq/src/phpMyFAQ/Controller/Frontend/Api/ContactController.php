@@ -43,12 +43,32 @@ final class ContactController extends AbstractController
     {
         $data = json_decode($request->getContent());
 
+        if (!$data) {
+            throw new Exception('Invalid JSON data');
+        }
+
+        if (!isset($data->name)) {
+            throw new Exception('Missing name');
+        }
+
+        if (!isset($data->question)) {
+            throw new Exception('Missing question');
+        }
+
         $author = trim((string) Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS));
         $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL);
         $question = trim((string) Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS));
 
+        if (!$email) {
+            throw new Exception('Invalid email address');
+        }
+
+        if ($question === '' || $question === '0') {
+            throw new Exception('Empty question');
+        }
+
         if (!$this->captchaCodeIsValid($request)) {
-            return $this->json(['error' => Translation::get(key: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
+            throw new Exception('Invalid captcha');
         }
 
         $stopWords = $this->container->get(id: 'phpmyfaq.stop-words');

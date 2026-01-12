@@ -198,9 +198,17 @@ final class UserController extends AbstractController
     {
         $data = json_decode($request->getContent());
 
+        if (!$data) {
+            throw new Exception('Invalid JSON data');
+        }
+
+        if (!isset($data->{'pmf-csrf-token'})) {
+            throw new Exception('Missing CSRF token');
+        }
+
         $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'}, FILTER_SANITIZE_SPECIAL_CHARS);
         if (!Token::getInstance($this->session)->verifyToken('request-removal', $csrfToken)) {
-            return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
+            throw new Exception('Invalid CSRF token');
         }
 
         $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT);
@@ -268,25 +276,34 @@ final class UserController extends AbstractController
     public function removeTwofactorConfig(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent());
+
+        if (!$data) {
+            throw new Exception('Invalid JSON data');
+        }
+
+        if (!isset($data->csrfToken)) {
+            throw new Exception('Missing CSRF token');
+        }
+
         $twoFactor = new TwoFactor($this->configuration, $this->currentUser);
 
         $csrfToken = Filter::filterVar($data->csrfToken, FILTER_SANITIZE_SPECIAL_CHARS);
         if (!Token::getInstance($this->session)->verifyToken('remove-twofactor', $csrfToken)) {
-            return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
+            throw new Exception('Invalid CSRF token');
         }
 
-        if ($this->currentUser->isLoggedIn()) {
-            $newSecret = $twoFactor->generateSecret();
-
-            if ($this->currentUser->setUserData(['secret' => $newSecret, 'twofactor_enabled' => 0])) {
-                return $this->json(['success' => Translation::get(
-                    'msgRemoveTwofactorConfigSuccessful',
-                )], Response::HTTP_OK);
-            }
-
-            return $this->json(['error' => Translation::get(key: 'msgErrorOccurred')], Response::HTTP_BAD_REQUEST);
+        if (!$this->currentUser->isLoggedIn()) {
+            throw new Exception('The user is not logged in.');
         }
 
-        throw new Exception('The user is not logged in.');
+        $newSecret = $twoFactor->generateSecret();
+
+        if ($this->currentUser->setUserData(['secret' => $newSecret, 'twofactor_enabled' => 0])) {
+            return $this->json(['success' => Translation::get(
+                'msgRemoveTwofactorConfigSuccessful',
+            )], Response::HTTP_OK);
+        }
+
+        return $this->json(['error' => Translation::get(key: 'msgErrorOccurred')], Response::HTTP_BAD_REQUEST);
     }
 }

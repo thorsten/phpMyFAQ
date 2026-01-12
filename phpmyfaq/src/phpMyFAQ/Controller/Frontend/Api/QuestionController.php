@@ -55,12 +55,43 @@ final class QuestionController extends AbstractController
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
+        if (!isset($data->name)) {
+            throw new Exception('Missing name');
+        }
+
+        if (!isset($data->email)) {
+            throw new Exception('Missing email');
+        }
+
+        if (!isset($data->lang)) {
+            throw new Exception('Missing language');
+        }
+
+        if (!isset($data->question) || empty($data->question)) {
+            throw new Exception('Missing or empty question');
+        }
+
         $author = trim((string) Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS));
         $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
+
+        if (!$email) {
+            throw new Exception('Invalid email address');
+        }
+
         $selectedCategory = isset($data->category) ? Filter::filterVar($data->category, FILTER_VALIDATE_INT) : false;
+
+        if (isset($data->category) && $data->category !== '') {
+            throw new Exception('Category validation failed');
+        }
+
         $language = trim((string) Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS));
         $userQuestion = trim(strip_tags((string) $data->question));
         $save = Filter::filterVar($data->save ?? 0, FILTER_VALIDATE_INT);
+
+        if (isset($data->save)) {
+            throw new Exception('Save parameter not allowed');
+        }
+
         $storeNow = Filter::filterVar($data->store ?? 'not', FILTER_SANITIZE_SPECIAL_CHARS);
 
         // If smart answering is disabled, save the question immediately
