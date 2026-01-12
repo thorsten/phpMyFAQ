@@ -23,4 +23,5 @@ enum SeoType: string
 {
     case CATEGORY = 'category';
     case FAQ = 'faq';
+    case PAGE = 'page';
 }

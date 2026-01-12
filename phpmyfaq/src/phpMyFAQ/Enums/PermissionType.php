@@ -88,6 +88,12 @@ enum PermissionType: string
 
     case NEWS_VIEW = 'view_news';
 
+    case PAGE_ADD = 'addpage';
+
+    case PAGE_EDIT = 'editpage';
+
+    case PAGE_DELETE = 'delpage';
+
     case PASSWORD_CHANGE = 'passwd';
 
     case QUESTION_ADD = 'addquestion';

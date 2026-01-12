@@ -39,6 +39,8 @@ use phpMyFAQ\Command\CreateHashesCommand;
 use phpMyFAQ\Comment\CommentsRepository;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\CustomPage;
+use phpMyFAQ\CustomPage\CustomPageRepository;
 use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Date;
 use phpMyFAQ\Faq;
@@ -291,6 +293,16 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('phpmyfaq.news', News::class)->args([
         service('phpmyfaq.configuration'),
+    ]);
+
+    $services->set('phpmyfaq.custom-page-repository', CustomPageRepository::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+
+    $services->set('phpmyfaq.custom-page', CustomPage::class)->args([
+        service('phpmyfaq.configuration'),
+        service('phpmyfaq.custom-page-repository'),
+        service('phpmyfaq.seo-repository'),
     ]);
 
     $services->set('phpmyfaq.notification', Notification::class)->args([
