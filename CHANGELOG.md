@@ -12,6 +12,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added Symfony Router for frontend (Thorsten)
 - added API for glossary definitions (Thorsten)
 - added admin log CSV export feature (Thorsten)
+- added pagination, sorting, and filtering for APIs (Thorsten)
 - improved audit and activity log with comprehensive security event tracking (Thorsten)
 - improved API errors with formatted RFC 7807 Problem Details JSON responses (Thorsten)
 - migrated codebase to use PHP 8.4 language features (Thorsten)

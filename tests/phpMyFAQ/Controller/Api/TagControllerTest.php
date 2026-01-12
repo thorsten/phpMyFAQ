@@ -4,14 +4,31 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Language;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
 class TagControllerTest extends TestCase
 {
+    private Configuration $configuration;
+
+    /**
+     * @throws Exception
+     */
+    protected function setUp(): void
+    {
+        $this->configuration = Configuration::getConfigurationInstance();
+        $language = new Language($this->configuration, $this->createStub(Session::class));
+        $language->setLanguageWithDetection('language_en.php');
+        $this->configuration->setLanguage($language);
+    }
+
     public function testListReturnsJsonResponse(): void
     {
         $controller = new TagController();
@@ -58,17 +75,25 @@ class TagControllerTest extends TestCase
         $controller = new TagController();
         $response = $controller->list();
 
-        if ($response->getStatusCode() === Response::HTTP_OK) {
-            $data = json_decode($response->getContent(), true);
-            $this->assertNotEmpty($data);
+        $data = json_decode($response->getContent(), true);
 
-            foreach ($data as $tag) {
+        // Check for paginated response structure
+        $this->assertArrayHasKey('success', $data);
+        $this->assertArrayHasKey('data', $data);
+        $this->assertTrue($data['success']);
+
+        if ($response->getStatusCode() === Response::HTTP_OK && !empty($data['data'])) {
+            // Check pagination metadata exists
+            $this->assertArrayHasKey('meta', $data);
+            $this->assertArrayHasKey('pagination', $data['meta']);
+            $this->assertArrayHasKey('sorting', $data['meta']);
+
+            // Check tag structure
+            foreach ($data['data'] as $tag) {
                 $this->assertArrayHasKey('tagId', $tag);
                 $this->assertArrayHasKey('tagName', $tag);
                 $this->assertArrayHasKey('tagFrequency', $tag);
             }
-        } else {
-            $this->assertEquals([], json_decode($response->getContent(), true));
         }
     }
 
@@ -77,10 +102,14 @@ class TagControllerTest extends TestCase
         $controller = new TagController();
         $response = $controller->list();
 
-        if ($response->getStatusCode() === Response::HTTP_NOT_FOUND) {
-            $this->assertEquals([], json_decode($response->getContent(), true));
-        } else {
-            $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        }
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+
+        $data = json_decode($response->getContent(), true);
+        $this->assertArrayHasKey('success', $data);
+        $this->assertArrayHasKey('data', $data);
+        $this->assertTrue($data['success']);
+
+        // Data can be empty array if no tags exist
+        $this->assertIsArray($data['data']);
     }
 }

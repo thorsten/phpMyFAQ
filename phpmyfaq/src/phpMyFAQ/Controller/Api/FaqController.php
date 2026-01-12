@@ -23,7 +23,6 @@ use Exception;
 use League\CommonMark\Exception\CommonMarkException;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
-use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Filter;
 use phpMyFAQ\User\CurrentUser;
@@ -31,19 +30,9 @@ use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-final class FaqController extends AbstractController
+final class FaqController extends AbstractApiController
 {
-    public function __construct()
-    {
-        parent::__construct();
-
-        if (!$this->isApiEnabled()) {
-            throw new UnauthorizedHttpException(challenge: 'API is not enabled');
-        }
-    }
-
     /**
      * @throws \phpMyFAQ\Core\Exception|Exception
      */
@@ -435,7 +424,7 @@ final class FaqController extends AbstractController
     #[OA\Get(
         path: '/api/v3.2/faqs',
         operationId: 'getAll',
-        description: 'This endpoint returns all the FAQs for the given language provided by "Accept-Language".',
+        description: 'This endpoint returns paginated FAQs for the given language provided by "Accept-Language".',
         tags: ['Public Endpoints'],
     )]
     #[OA\Header(
@@ -443,33 +432,95 @@ final class FaqController extends AbstractController
         description: 'The language code for the FAQ.',
         schema: new OA\Schema(type: 'string'),
     )]
-    #[OA\Response(response: 200, description: "If there's at least one FAQ.", content: new OA\JsonContent(
-        example: '[
-            {
-                "id": "1",
-                "lang": "en",
-                "solution_id": "1000",
-                "revision_id": "0",
-                "active": "yes",
-                "sticky": "0",
-                "keywords": "",
-                "title": "Is there life after death?",
-                "content": "Maybe!",
-                "author": "phpMyFAQ User",
-                "email": "user@example.org",
-                "comment": "y",
-                "updated": "2009-10-10 17:54:00",
-                "dateStart": "00000000000000",
-                "dateEnd": "99991231235959",
-                "created": "2008-09-03T21:30:17+02:00",
-                "notes": ""
+    #[OA\Parameter(
+        name: 'page',
+        description: 'Page number for pagination (page-based)',
+        in: 'query',
+        required: false,
+        schema: new OA\Schema(type: 'integer', default: 1),
+    )]
+    #[OA\Parameter(
+        name: 'per_page',
+        description: 'Items per page (page-based, max 100)',
+        in: 'query',
+        required: false,
+        schema: new OA\Schema(type: 'integer', default: 25),
+    )]
+    #[OA\Parameter(
+        name: 'limit',
+        description: 'Number of items to return (offset-based, max 100)',
+        in: 'query',
+        required: false,
+        schema: new OA\Schema(type: 'integer', default: 25),
+    )]
+    #[OA\Parameter(
+        name: 'offset',
+        description: 'Starting offset (offset-based)',
+        in: 'query',
+        required: false,
+        schema: new OA\Schema(type: 'integer', default: 0),
+    )]
+    #[OA\Parameter(name: 'sort', description: 'Field to sort by', in: 'query', required: false, schema: new OA\Schema(
+        type: 'string',
+        default: 'id',
+        enum: ['id', 'title', 'author', 'updated', 'created'],
+    ))]
+    #[OA\Parameter(
+        name: 'order',
+        description: 'Sort direction',
+        in: 'query',
+        required: false,
+        schema: new OA\Schema(type: 'string', default: 'asc', enum: ['asc', 'desc']),
+    )]
+    #[OA\Response(response: 200, description: 'Returns paginated FAQs.', content: new OA\JsonContent(
+        example: '{
+            "success": true,
+            "data": [
+                {
+                    "id": "1",
+                    "lang": "en",
+                    "solution_id": "1000",
+                    "revision_id": "0",
+                    "active": "yes",
+                    "sticky": "0",
+                    "keywords": "",
+                    "title": "Is there life after death?",
+                    "content": "Maybe!",
+                    "author": "phpMyFAQ User",
+                    "email": "user@example.org",
+                    "comment": "y",
+                    "updated": "2009-10-10 17:54:00",
+                    "dateStart": "00000000000000",
+                    "dateEnd": "99991231235959",
+                    "created": "2008-09-03T21:30:17+02:00",
+                    "notes": ""
+                }
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 50,
+                    "count": 25,
+                    "per_page": 25,
+                    "current_page": 1,
+                    "total_pages": 2,
+                    "links": {
+                        "first": "/api/v3.2/faqs?page=1&per_page=25",
+                        "last": "/api/v3.2/faqs?page=2&per_page=25",
+                        "prev": null,
+                        "next": "/api/v3.2/faqs?page=2&per_page=25"
+                    }
+                },
+                "sorting": {
+                    "field": "id",
+                    "order": "asc"
+                }
             }
-        ]',
+        }',
     ))]
     #[OA\Response(
-        response: 404,
-        description: "If there's not one single FAQ.",
-        content: new OA\JsonContent(example: []),
+        response: 200,
+        description: 'If no FAQs are found, returns empty data array.',
+        content: new OA\JsonContent(example: '{"success": true, "data": []}'),
     )]
     public function list(): JsonResponse
     {
@@ -478,17 +529,48 @@ final class FaqController extends AbstractController
         $faq = $this->container->get(id: 'phpmyfaq.faq');
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
-        $faq->getAllFaqs(FAQ_SORTING_TYPE_CATID_FAQID, [
-            'lang' => $this->configuration->getLanguage()->getLanguage(),
-            'fcr.category_id' => 'IS NOT NULL',
-        ]);
-        $result = $faq->faqRecords;
 
-        if ((is_countable($result) ? count($result) : 0) === 0) {
-            return $this->json($result, Response::HTTP_NOT_FOUND);
+        // Get pagination and sorting parameters
+        $pagination = $this->getPaginationRequest();
+        $sort = $this->getSortRequest(
+            allowedFields: ['id', 'title', 'author', 'updated', 'created'],
+            defaultField: 'id',
+            defaultOrder: 'asc',
+        );
+
+        // Get all FAQs (this populates $faq->faqRecords)
+        $faq->getAllFaqs(
+            FAQ_SORTING_TYPE_CATID_FAQID,
+            [
+                'lang' => $this->configuration->getLanguage()->getLanguage(),
+                'fcr.category_id' => 'IS NOT NULL',
+            ],
+            $sort->getOrderSql(),
+        );
+
+        $allFaqs = $faq->faqRecords;
+        $total = is_countable($allFaqs) ? count($allFaqs) : 0;
+
+        // Apply sorting if needed (basic client-side sorting)
+        if ($sort->getField() && $sort->getField() !== 'id') {
+            usort($allFaqs, function ($a, $b) use ($sort) {
+                $field = $sort->getField();
+                $aVal = $a[$field] ?? '';
+                $bVal = $b[$field] ?? '';
+                $result = $aVal <=> $bVal;
+                return $sort->getOrderSql() === 'DESC' ? -$result : $result;
+            });
         }
 
-        return $this->json($result, Response::HTTP_OK);
+        // Apply pagination (client-side slicing)
+        $result = array_slice($allFaqs, $pagination->offset, $pagination->limit);
+
+        return $this->paginatedResponse(
+            data: array_values($result),
+            total: $total,
+            pagination: $pagination,
+            sort: $sort,
+        );
     }
 
     /**
