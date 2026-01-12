@@ -43,7 +43,7 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
                 %sfaqcomments
             WHERE
                 type = '%s'
-            AND 
+            AND
                 id = %d
         SQL;
 
@@ -57,6 +57,94 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
         $result = $this->coreConfiguration->getDb()->query($query);
         $rows = $this->coreConfiguration->getDb()->fetchAll($result);
         return is_array($rows) ? $rows : [];
+    }
+
+    /**
+     * Fetch comments with pagination and sorting
+     *
+     * @param int $referenceId Record ID
+     * @param string $type Type (faq or news)
+     * @param int $limit Items per page
+     * @param int $offset Offset for pagination
+     * @param string $sortField Field to sort by
+     * @param string $sortOrder Sort order (ASC or DESC)
+     * @return array<int, object>
+     */
+    public function fetchPaginated(
+        int $referenceId,
+        string $type,
+        int $limit,
+        int $offset,
+        string $sortField = 'id_comment',
+        string $sortOrder = 'ASC',
+    ): array {
+        $allowedSortFields = ['id_comment', 'id', 'usr', 'email', 'datum'];
+        $sortField = in_array($sortField, $allowedSortFields) ? $sortField : 'id_comment';
+        $sortOrder = strtoupper($sortOrder) === 'DESC' ? 'DESC' : 'ASC';
+
+        $sql = <<<SQL
+            SELECT
+                id_comment, id, usr, email, comment, datum
+            FROM
+                %sfaqcomments
+            WHERE
+                type = '%s'
+            AND
+                id = %d
+            ORDER BY
+                %s %s
+            LIMIT %d OFFSET %d
+        SQL;
+
+        $query = sprintf(
+            $sql,
+            Database::getTablePrefix(),
+            $this->coreConfiguration->getDb()->escape($type),
+            $referenceId,
+            $sortField,
+            $sortOrder,
+            $limit,
+            $offset,
+        );
+
+        $result = $this->coreConfiguration->getDb()->query($query);
+        $rows = $this->coreConfiguration->getDb()->fetchAll($result);
+        return is_array($rows) ? $rows : [];
+    }
+
+    /**
+     * Count total comments for a reference ID and type
+     *
+     * @param int $referenceId Record ID
+     * @param string $type Type (faq or news)
+     * @return int
+     */
+    public function countByReferenceIdAndType(int $referenceId, string $type): int
+    {
+        $sql = <<<SQL
+            SELECT
+                COUNT(*) AS total
+            FROM
+                %sfaqcomments
+            WHERE
+                type = '%s'
+            AND
+                id = %d
+        SQL;
+
+        $query = sprintf(
+            $sql,
+            Database::getTablePrefix(),
+            $this->coreConfiguration->getDb()->escape($type),
+            $referenceId,
+        );
+
+        $result = $this->coreConfiguration->getDb()->query($query);
+        if ($row = $this->coreConfiguration->getDb()->fetchObject($result)) {
+            return (int) $row->total;
+        }
+
+        return 0;
     }
 
     public function insert(Comment $comment): bool

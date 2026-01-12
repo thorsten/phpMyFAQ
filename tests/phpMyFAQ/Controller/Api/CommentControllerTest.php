@@ -138,11 +138,15 @@ class CommentControllerTest extends TestCase
         $controller = new CommentController();
         $response = $controller->list($request);
 
-        if ($response->getStatusCode() === Response::HTTP_NOT_FOUND) {
-            $this->assertEquals([], json_decode($response->getContent(), true));
-        } else {
-            $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        }
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+
+        $data = json_decode($response->getContent(), true);
+        $this->assertArrayHasKey('success', $data);
+        $this->assertArrayHasKey('data', $data);
+        $this->assertTrue($data['success']);
+
+        // Data can be empty array if no comments exist
+        $this->assertIsArray($data['data']);
     }
 
     /**

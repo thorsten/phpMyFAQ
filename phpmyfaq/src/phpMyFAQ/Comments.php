@@ -70,6 +70,58 @@ class Comments
     }
 
     /**
+     * Returns paginated user comments from a record by type.
+     *
+     * @param int $referenceId Record ID
+     * @param string $type Record type: {faq|news}
+     * @param int $limit Items per page
+     * @param int $offset Offset for pagination
+     * @param string $sortField Field to sort by
+     * @param string $sortOrder Sort order (ASC or DESC)
+     *
+     * @return Comment[]
+     */
+    public function getCommentsDataPaginated(
+        int $referenceId,
+        string $type,
+        int $limit,
+        int $offset,
+        string $sortField = 'id_comment',
+        string $sortOrder = 'ASC',
+    ): array {
+        $comments = [];
+
+        $rows = $this->commentsRepository->fetchPaginated($referenceId, $type, $limit, $offset, $sortField, $sortOrder);
+
+        foreach ($rows as $row) {
+            $comment = new Comment();
+            $comment
+                ->setId((int) $row->id_comment)
+                ->setRecordId((int) $row->id)
+                ->setComment($row->comment)
+                ->setDate(Date::createIsoDateFromUnixTimestamp($row->datum, DateTimeInterface::ATOM))
+                ->setUsername($row->usr)
+                ->setEmail($row->email)
+                ->setType($type);
+            $comments[] = $comment;
+        }
+
+        return $comments;
+    }
+
+    /**
+     * Count total comments for a reference ID and type.
+     *
+     * @param int $referenceId Record ID
+     * @param string $type Record type: {faq|news}
+     * @return int
+     */
+    public function countComments(int $referenceId, string $type): int
+    {
+        return $this->commentsRepository->countByReferenceIdAndType($referenceId, $type);
+    }
+
+    /**
      * Adds a new comment.
      */
     public function create(Comment $comment): bool
