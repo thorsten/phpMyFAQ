@@ -59,7 +59,6 @@ final class StatisticsSearchController extends AbstractAdministrationController
             urlConfig: new UrlConfig(pageParamName: 'page'),
         );
 
-        $this->addExtension(new AttributeExtension(LanguageCodeTwigExtension::class));
         return $this->render('@admin/statistics/search.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
