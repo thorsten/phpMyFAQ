@@ -1,0 +1,139 @@
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">
+    <i aria-hidden="true" class="bi bi-file-earmark-plus"></i> {{ ad_page_add }}
+  </h1>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <form id="pmf-add-page-form" action="#" method="post" accept-charset="utf-8">
+      <input type="hidden" name="pmf-csrf-token" id="pmf-csrf-token" value="{{ csrfToken_savePage }}" />
+
+      <ul class="nav nav-tabs" id="pageTabsNav" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="content-tab" data-bs-toggle="tab" data-bs-target="#content-pane"
+                  type="button" role="tab" aria-controls="content-pane" aria-selected="true">
+            {{ ad_page_tab_content }}
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="seo-tab" data-bs-toggle="tab" data-bs-target="#seo"
+                  type="button" role="tab" aria-controls="seo" aria-selected="false">
+            {{ ad_page_tab_seo }}
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings"
+                  type="button" role="tab" aria-controls="settings" aria-selected="false">
+            {{ ad_page_tab_settings }}
+          </button>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="pageTabsContent">
+        <!-- Content Tab -->
+        <div class="tab-pane fade show active" id="content-pane" role="tabpanel" aria-labelledby="content-tab">
+          <div class="row mt-3">
+            <div class="col-lg-12">
+              <div class="mb-3">
+                <label for="pageTitle" class="form-label">{{ ad_page_title }}</label>
+                <input type="text" class="form-control" id="pageTitle" name="pageTitle" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="slug" class="form-label">{{ ad_page_slug }}</label>
+                <div class="input-group">
+                  <span class="input-group-text">{{ defaultUrl }}page/</span>
+                  <input type="text" class="form-control" id="slug" name="slug" required>
+                  <span class="input-group-text">.html</span>
+                </div>
+                <div class="form-text">{{ ad_page_slug_help }}</div>
+                <div id="slug-feedback" class="invalid-feedback"></div>
+              </div>
+
+              <div class="mb-3">
+                <label for="content" class="form-label">{{ ad_page_content }}</label>
+                <textarea class="form-control" id="content" name="content" rows="15"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEO Tab -->
+        <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo-tab">
+          <div class="row mt-3">
+            <div class="col-lg-12">
+              <div class="mb-3">
+                <label for="seoTitle" class="form-label">{{ ad_page_seo_title }}</label>
+                <input type="text" class="form-control" id="seoTitle" name="seoTitle" maxlength="60">
+                <div class="form-text">
+                  <span id="seo-title-counter">0</span>/60 characters
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="seoDescription" class="form-label">{{ ad_page_seo_description }}</label>
+                <textarea class="form-control" id="seoDescription" name="seoDescription" rows="3" maxlength="160"></textarea>
+                <div class="form-text">
+                  <span id="seo-description-counter">0</span>/160 characters
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="seoRobots" class="form-label">{{ ad_page_seo_robots }}</label>
+                <select class="form-select" id="seoRobots" name="seoRobots">
+                  <option value="index,follow" selected>index,follow</option>
+                  <option value="noindex,follow">noindex,follow</option>
+                  <option value="index,nofollow">index,nofollow</option>
+                  <option value="noindex,nofollow">noindex,nofollow</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+          <div class="row mt-3">
+            <div class="col-lg-6">
+              <div class="mb-3">
+                <label for="lang" class="form-label">{{ msgLanguage }}</label>
+                {{ selectLanguage | raw }}
+              </div>
+
+              <div class="mb-3">
+                <label for="authorName" class="form-label">{{ ad_page_author_name }}</label>
+                <input type="text" class="form-control" id="authorName" name="authorName" value="{{ userName }}" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="authorEmail" class="form-label">{{ ad_page_author_email }}</label>
+                <input type="email" class="form-control" id="authorEmail" name="authorEmail" value="{{ userEmail }}" required>
+              </div>
+
+              <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="active" name="active" checked>
+                <label class="form-check-label" for="active">{{ ad_page_set_active }}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-lg-12">
+          <button type="submit" class="btn btn-primary" id="pmf-submit-page">
+            <i class="bi bi-check-lg"></i> {{ ad_page_add }}
+          </button>
+          <a href="./pages" class="btn btn-secondary">
+            <i class="bi bi-x-lg"></i> {{ ad_entry_back }}
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

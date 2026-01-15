@@ -254,6 +254,9 @@ class Mysqli extends Database implements DriverInterface
             active CHAR(1) NOT NULL DEFAULT \'n\',
             created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             updated TIMESTAMP NULL,
+            seo_title VARCHAR(60) NULL,
+            seo_description VARCHAR(160) NULL,
+            seo_robots VARCHAR(50) NOT NULL DEFAULT \'index,follow\',
             PRIMARY KEY (id, lang),
             INDEX idx_custompages_slug (slug, lang))
             DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',

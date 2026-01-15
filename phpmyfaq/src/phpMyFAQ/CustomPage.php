@@ -249,6 +249,9 @@ readonly class CustomPage
             'active' => $row->active,
             'created' => $row->created,
             'updated' => $row->updated ?? null,
+            'seo_title' => $row->seo_title ?? null,
+            'seo_description' => $row->seo_description ?? null,
+            'seo_robots' => $row->seo_robots ?? 'index,follow',
         ];
     }
 }

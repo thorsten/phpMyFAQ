@@ -1,0 +1,109 @@
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-file-earmark-text"></i> {{ msgPages }}
+    </h1>
+    {% if permissionAddPage == true %}
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group mr-2">
+        <a href="./page/add">
+          <button class="btn btn-outline-success">
+            <i aria-hidden="true" class="bi bi-plus"></i> {{ ad_page_add }}
+          </button>
+        </a>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <table class="table table-hover align-middle border shadow">
+        <thead class="thead-dark">
+        <tr>
+          <th>{{ ad_page_title }}</th>
+          <th>{{ ad_page_slug }}</th>
+          <th>{{ msgLanguage }}</th>
+          <th>{{ ad_page_created }}</th>
+          <th colspan="2">&nbsp;</th>
+          <th>{{ ad_entry_active }}</th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+          <td colspan="7">{{ pagination | raw }}</td>
+        </tr>
+        </tfoot>
+        <tbody>
+        {% if pages|length > 0 %}
+          {% for page in pages %}
+            <tr>
+              <td>{{ page.page_title|escape }}</td>
+              <td><code>{{ page.slug|escape }}</code></td>
+              <td>{{ page.lang|escape }}</td>
+              <td>{{ page.created|formatDate }}</td>
+              <td>
+                {% if permissionEditPage == true %}
+                <a class="btn btn-primary btn-sm" href="./page/edit/{{ page.id }}">
+                  <span title="{{ ad_page_update }}" class="bi bi-pencil"></span>
+                </a>
+                {% endif %}
+              </td>
+              <td>
+                {% if permissionDeletePage == true %}
+                <a class="btn btn-danger btn-sm" data-pmf-pageid="{{ page.id }}" data-pmf-lang="{{ page.lang }}" id="deletePage">
+                  <span title="{{ ad_page_delete }}" class="bi bi-trash"></span>
+                </a>
+                {% endif %}
+              </td>
+              <td>
+                {% if permissionEditPage == true %}
+                <input class="form-check-input" type="checkbox" id="activate" data-pmf-id="{{ page.id }}"
+                       data-pmf-csrf-token="{{ csrfToken_activatePage }}"
+                       {% if page.active == 'y' %} checked {% endif %} />
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="7">{{ ad_page_nodata }}</td>
+          </tr>
+        {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="modal fade" id="confirmDeletePageModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeletePageModal"
+       aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmDeletePageLabel">
+            <i aria-hidden="true" class="bi bi-trash"></i> {{ msgDeletePage }}
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="pageId" id="pageId" value="">
+          <input type="hidden" name="pageLang" id="pageLang" value="">
+          <input type="hidden" name="pmf-csrf-token" id="pmf-csrf-token-delete" value="{{ csrfToken_deletePage }}" />
+          <div class="row">
+            <p>{{ ad_page_del }}</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">
+            {{ ad_page_nodelete }}
+          </button>
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="pmf-delete-page-action">
+            {{ ad_page_yesdelete }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

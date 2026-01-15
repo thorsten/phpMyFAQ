@@ -60,6 +60,9 @@ import {
   handleAddNews,
   handleNews,
   handleEditNews,
+  handleAddPage,
+  handlePages,
+  handleEditPage,
   handleSaveFaqData,
   handleUpdateQuestion,
   handleRefreshAttachments,
@@ -182,6 +185,11 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   handleAddNews();
   handleNews();
   handleEditNews();
+
+  // Custom Pages
+  handleAddPage();
+  handlePages();
+  handleEditPage();
 
   // Initialize tooltips everywhere
   initializeTooltips();

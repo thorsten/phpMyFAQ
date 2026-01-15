@@ -67,6 +67,7 @@ use phpMyFAQ\Question;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Search;
 use phpMyFAQ\Seo;
+use phpMyFAQ\Seo\SeoRepository;
 use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Service\McpServer\PhpMyFaqMcpServer;
 use phpMyFAQ\Session\SessionWrapper;
@@ -324,6 +325,10 @@ return static function (ContainerConfigurator $container): void {
     ]);
 
     $services->set('phpmyfaq.seo', Seo::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+
+    $services->set('phpmyfaq.seo-repository', SeoRepository::class)->args([
         service('phpmyfaq.configuration'),
     ]);
 
