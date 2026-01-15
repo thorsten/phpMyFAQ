@@ -36,13 +36,13 @@ readonly class FormsRepository implements FormsRepositoryInterface
     public function fetchFormDataByFormId(int $formId): array
     {
         $sql = <<<SQL
-            SELECT
-                form_id, input_id, input_type, input_label, input_active, input_required, input_lang
-            FROM
-                %sfaqforms
-            WHERE
-                form_id = %d
-        SQL;
+                SELECT
+                    form_id, input_id, input_type, input_label, input_active, input_required, input_lang
+                FROM
+                    %sfaqforms
+                WHERE
+                    form_id = %d
+            SQL;
 
         $query = sprintf($sql, Database::getTablePrefix(), $formId);
 

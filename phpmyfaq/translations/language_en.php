@@ -250,6 +250,40 @@ $PMF_LANG["ad_news_nodelete"] = "no";
 $PMF_LANG["ad_news_delsuc"] = "The news entry has been successfully deleted.";
 $PMF_LANG["ad_news_updatenews"] = "News entry updated.";
 
+// Custom Page management
+$PMF_LANG["msgPages"] = "Custom Pages";
+$PMF_LANG["ad_menu_pages"] = "Custom Pages";
+$PMF_LANG["ad_page_add"] = "Add Custom Page";
+$PMF_LANG["ad_page_edit"] = "Edit Custom Page";
+$PMF_LANG["ad_page_header"] = "Page Header";
+$PMF_LANG["ad_page_title"] = "Page Title";
+$PMF_LANG["ad_page_slug"] = "URL Slug";
+$PMF_LANG["ad_page_slug_help"] = "URL-friendly identifier for this page (e.g., 'privacy-policy')";
+$PMF_LANG["ad_page_slug_exists"] = "This slug already exists for this language";
+$PMF_LANG["ad_page_content"] = "Page Content";
+$PMF_LANG["ad_page_author_name"] = "Author Name";
+$PMF_LANG["ad_page_author_email"] = "Author Email";
+$PMF_LANG["ad_page_set_active"] = "Activate page";
+$PMF_LANG["ad_page_created"] = "Created";
+$PMF_LANG["ad_page_updated"] = "Updated";
+$PMF_LANG["ad_page_update"] = "Update";
+$PMF_LANG["ad_page_delete"] = "Delete";
+$PMF_LANG["ad_page_nodata"] = "No custom pages found";
+$PMF_LANG["ad_page_updatesuc"] = "The custom page has been successfully updated.";
+$PMF_LANG["ad_page_updatefail"] = "An error occurred updating the custom page.";
+$PMF_LANG["ad_page_insertfail"] = "An error occurred creating the custom page.";
+$PMF_LANG["ad_page_del"] = "Are you sure you want to delete this custom page?";
+$PMF_LANG["ad_page_yesdelete"] = "Yes, delete!";
+$PMF_LANG["ad_page_nodelete"] = "No";
+$PMF_LANG["ad_page_delsuc"] = "The custom page has been successfully deleted.";
+$PMF_LANG["msgDeletePage"] = "Delete Custom Page";
+$PMF_LANG["ad_page_tab_content"] = "Content";
+$PMF_LANG["ad_page_tab_seo"] = "SEO";
+$PMF_LANG["ad_page_tab_settings"] = "Settings";
+$PMF_LANG["ad_page_seo_title"] = "SEO Title";
+$PMF_LANG["ad_page_seo_description"] = "SEO Meta Description";
+$PMF_LANG["ad_page_seo_robots"] = "Robots Directive";
+
 // Category management
 $PMF_LANG["msgNewCategory"] = "Add new category";
 $PMF_LANG["ad_categ_catnum"] = "Category number";

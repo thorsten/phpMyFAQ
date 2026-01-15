@@ -35,6 +35,7 @@ use phpMyFAQ\Controller\Administration\ImportController;
 use phpMyFAQ\Controller\Administration\InstanceController;
 use phpMyFAQ\Controller\Administration\NewsController;
 use phpMyFAQ\Controller\Administration\OpenQuestionsController;
+use phpMyFAQ\Controller\Administration\PageController;
 use phpMyFAQ\Controller\Administration\OpenSearchController;
 use phpMyFAQ\Controller\Administration\OrphanedFaqsController;
 use phpMyFAQ\Controller\Administration\PasswordChangeController;
@@ -310,6 +311,21 @@ $routesConfig = [
         'path' => '/news/edit/{newsId}',
         'controller' => [NewsController::class, 'edit'],
         'methods' => 'POST',
+    ],
+    'admin.pages' => [
+        'path' => '/pages',
+        'controller' => [PageController::class, 'index'],
+        'methods' => 'GET',
+    ],
+    'admin.page.add' => [
+        'path' => '/page/add',
+        'controller' => [PageController::class, 'add'],
+        'methods' => 'GET',
+    ],
+    'admin.page.edit' => [
+        'path' => '/page/edit/{pageId}',
+        'controller' => [PageController::class, 'edit'],
+        'methods' => 'GET',
     ],
     'admin.password.change' => [
         'path' => '/password/change',

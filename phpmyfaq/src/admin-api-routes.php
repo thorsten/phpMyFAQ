@@ -36,6 +36,7 @@ use phpMyFAQ\Controller\Administration\Api\MarkdownController;
 use phpMyFAQ\Controller\Administration\Api\MediaBrowserController;
 use phpMyFAQ\Controller\Administration\Api\NewsController;
 use phpMyFAQ\Controller\Administration\Api\OpenSearchController;
+use phpMyFAQ\Controller\Administration\Api\PageController;
 use phpMyFAQ\Controller\Administration\Api\QuestionController;
 use phpMyFAQ\Controller\Administration\Api\SearchController;
 use phpMyFAQ\Controller\Administration\Api\SessionController;
@@ -604,6 +605,37 @@ $routesConfig = [
         'path' => '/news/activate',
         'controller' => [NewsController::class, 'activate'],
         'methods' => 'POST',
+    ],
+    // Page API
+    'admin.api.page.create' => [
+        'path' => '/page/create',
+        'controller' => [PageController::class, 'create'],
+        'methods' => 'POST',
+    ],
+    'admin.api.page.delete' => [
+        'path' => '/page/delete',
+        'controller' => [PageController::class, 'delete'],
+        'methods' => 'DELETE',
+    ],
+    'admin.api.page.update' => [
+        'path' => '/page/update',
+        'controller' => [PageController::class, 'update'],
+        'methods' => 'PUT',
+    ],
+    'admin.api.page.activate' => [
+        'path' => '/page/activate',
+        'controller' => [PageController::class, 'activate'],
+        'methods' => 'POST',
+    ],
+    'admin.api.page.check-slug' => [
+        'path' => '/page/check-slug',
+        'controller' => [PageController::class, 'checkSlug'],
+        'methods' => 'POST',
+    ],
+    'admin.api.page.list' => [
+        'path' => '/page/list',
+        'controller' => [PageController::class, 'list'],
+        'methods' => 'GET',
     ],
 ];
 

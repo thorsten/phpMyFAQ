@@ -42,8 +42,8 @@ readonly class BookmarkRepository implements BookmarkRepositoryInterface
         $userId = $this->currentUser->getUserId();
 
         $query = <<<SQL
-            INSERT INTO {$table} (userid, faqid) VALUES ({$userId},{$faqId})
-        SQL;
+                INSERT INTO {$table} (userid, faqid) VALUES ({$userId},{$faqId})
+            SQL;
 
         return (bool) $this->configuration->getDb()->query($query);
     }
@@ -57,8 +57,8 @@ readonly class BookmarkRepository implements BookmarkRepositoryInterface
         $userId = $this->currentUser->getUserId();
 
         $query = <<<SQL
-            SELECT faqid FROM {$table} WHERE userid = {$userId}
-        SQL;
+                SELECT faqid FROM {$table} WHERE userid = {$userId}
+            SQL;
 
         $result = $this->configuration->getDb()->query($query);
         $data = $this->configuration->getDb()->fetchAll($result);
@@ -76,8 +76,8 @@ readonly class BookmarkRepository implements BookmarkRepositoryInterface
         $userId = $this->currentUser->getUserId();
 
         $query = <<<SQL
-            DELETE FROM {$table} WHERE userid = {$userId} AND faqid = {$faqId}
-        SQL;
+                DELETE FROM {$table} WHERE userid = {$userId} AND faqid = {$faqId}
+            SQL;
 
         return (bool) $this->configuration->getDb()->query($query);
     }
@@ -88,8 +88,8 @@ readonly class BookmarkRepository implements BookmarkRepositoryInterface
         $userId = $this->currentUser->getUserId();
 
         $query = <<<SQL
-            DELETE FROM {$table} WHERE userid = {$userId}
-        SQL;
+                DELETE FROM {$table} WHERE userid = {$userId}
+            SQL;
 
         return (bool) $this->configuration->getDb()->query($query);
     }

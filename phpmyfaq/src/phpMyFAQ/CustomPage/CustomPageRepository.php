@@ -25,7 +25,7 @@ use phpMyFAQ\Entity\CustomPageEntity;
 use stdClass;
 
 /**
- * Repository for faqcustompages table access.
+ * Repository for "faqcustompages" table access.
  */
 final readonly class CustomPageRepository implements CustomPageRepositoryInterface
 {
@@ -179,9 +179,9 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
         $query = sprintf(
             "
             INSERT INTO %sfaqcustompages
-            (id, lang, page_title, slug, content, author_name, author_email, active, created, updated)
+            (id, lang, page_title, slug, content, author_name, author_email, active, created, updated, seo_title, seo_description, seo_robots)
             VALUES
-            (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %s)",
+            (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %s, %s, %s, '%s')",
             Database::getTablePrefix(),
             $id,
             $this->configuration->getDb()->escape($page->getLanguage()),
@@ -193,6 +193,11 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
             $page->isActive() ? 'y' : 'n',
             $page->getCreated()->format(format: 'Y-m-d H:i:s'),
             'NULL',
+            $page->getSeoTitle() ? "'" . $this->configuration->getDb()->escape($page->getSeoTitle()) . "'" : 'NULL',
+            $page->getSeoDescription()
+                ? "'" . $this->configuration->getDb()->escape($page->getSeoDescription()) . "'"
+                : 'NULL',
+            $this->configuration->getDb()->escape($page->getSeoRobots()),
         );
         $this->configuration->getDb()->query($query);
         $page->setId($id);
@@ -216,7 +221,10 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
                 author_name = '%s',
                 author_email = '%s',
                 active = '%s',
-                updated = '%s'
+                updated = '%s',
+                seo_title = %s,
+                seo_description = %s,
+                seo_robots = '%s'
             WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($page->getPageTitle()),
@@ -226,6 +234,11 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
             $this->configuration->getDb()->escape($page->getAuthorEmail()),
             $page->isActive() ? 'y' : 'n',
             $page->getUpdated()?->format(format: 'Y-m-d H:i:s') ?? date('Y-m-d H:i:s'),
+            $page->getSeoTitle() ? "'" . $this->configuration->getDb()->escape($page->getSeoTitle()) . "'" : 'NULL',
+            $page->getSeoDescription()
+                ? "'" . $this->configuration->getDb()->escape($page->getSeoDescription()) . "'"
+                : 'NULL',
+            $this->configuration->getDb()->escape($page->getSeoRobots()),
             $page->getId(),
             $this->configuration->getDb()->escape($page->getLanguage()),
         );

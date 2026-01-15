@@ -341,3 +341,242 @@ export const renderEditor = () => {
   // Store the editor instance so it can be accessed by other modules
   joditEditorInstance = joditEditor;
 };
+
+export const renderPageEditor = () => {
+  const contentField = document.getElementById('content') as HTMLTextAreaElement | null;
+  if (!contentField) {
+    return;
+  }
+
+  // Check if editor container wrapper exists - if not, don't initialize
+  const parentDiv = contentField.closest('.mb-3');
+  if (!parentDiv) {
+    return;
+  }
+
+  // Detect browser color scheme preference (dark/light)
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+  const joditEditor = Jodit.make(contentField, {
+    zIndex: 0,
+    readonly: false,
+    beautifyHTML: false,
+    sourceEditor: 'area',
+    activeButtonsInReadOnly: ['source', 'fullsize', 'print', 'about', 'dots'],
+    toolbarButtonSize: 'middle',
+    theme: prefersDark.matches ? 'dark' : 'default',
+    saveModeInStorage: false,
+    spellcheck: true,
+    editorClassName: false,
+    triggerChangeEvent: true,
+    width: 'auto',
+    height: 500,
+    minHeight: 300,
+    maxHeight: 800,
+    direction: '',
+    language: 'auto',
+    debugLanguage: false,
+    tabIndex: -1,
+    toolbar: true,
+    enter: 'p',
+    defaultMode: 1, // MODE_WYSIWYG
+    useSplitMode: false,
+    askBeforePasteFromWord: true,
+    processPasteFromWord: true,
+    defaultActionOnPasteFromWord: 'insert_clear_html',
+    colors: {
+      greyscale: [
+        '#000000',
+        '#434343',
+        '#666666',
+        '#999999',
+        '#B7B7B7',
+        '#CCCCCC',
+        '#D9D9D9',
+        '#EFEFEF',
+        '#F3F3F3',
+        '#FFFFFF',
+      ],
+      palette: [
+        '#980000',
+        '#FF0000',
+        '#FF9900',
+        '#FFFF00',
+        '#00F0F0',
+        '#00FFFF',
+        '#4A86E8',
+        '#0000FF',
+        '#9900FF',
+        '#FF00FF',
+      ],
+      full: [
+        '#E6B8AF',
+        '#F4CCCC',
+        '#FCE5CD',
+        '#FFF2CC',
+        '#D9EAD3',
+        '#D0E0E3',
+        '#C9DAF8',
+        '#CFE2F3',
+        '#D9D2E9',
+        '#EAD1DC',
+        '#DD7E6B',
+        '#EA9999',
+        '#F9CB9C',
+        '#FFE599',
+        '#B6D7A8',
+        '#A2C4C9',
+        '#A4C2F4',
+        '#9FC5E8',
+        '#B4A7D6',
+        '#D5A6BD',
+        '#CC4125',
+        '#E06666',
+        '#F6B26B',
+        '#FFD966',
+        '#93C47D',
+        '#76A5AF',
+        '#6D9EEB',
+        '#6FA8DC',
+        '#8E7CC3',
+        '#C27BA0',
+        '#A61C00',
+        '#CC0000',
+        '#E69138',
+        '#F1C232',
+        '#6AA84F',
+        '#45818E',
+        '#3C78D8',
+        '#3D85C6',
+        '#674EA7',
+        '#A64D79',
+        '#85200C',
+        '#990000',
+        '#B45F06',
+        '#BF9000',
+        '#38761D',
+        '#134F5C',
+        '#1155CC',
+        '#0B5394',
+        '#351C75',
+        '#733554',
+        '#5B0F00',
+        '#660000',
+        '#783F04',
+        '#7F6000',
+        '#274E13',
+        '#0C343D',
+        '#1C4587',
+        '#073763',
+        '#20124D',
+        '#4C1130',
+      ],
+    },
+    colorPickerDefaultTab: 'background',
+    imageDefaultWidth: 300,
+    imageProcessor: { replaceDataURIToBlobIdInView: false },
+    removeButtons: [],
+    disablePlugins: [],
+    extraPlugins: ['phpMyFAQ', 'codeSnippet'],
+    extraButtons: [],
+    buttons: [
+      'source',
+      '|',
+      'bold',
+      'strikethrough',
+      'underline',
+      'italic',
+      '|',
+      'ul',
+      'ol',
+      '|',
+      'font',
+      'fontsize',
+      'brush',
+      'paragraph',
+      '|',
+      'image',
+      'video',
+      'table',
+      'link',
+      '|',
+      'left',
+      'center',
+      'right',
+      'justify',
+      '|',
+      'undo',
+      'redo',
+      '|',
+      'hr',
+      'eraser',
+      'copyformat',
+      '|',
+      'symbol',
+      'fullsize',
+      'print',
+    ],
+    controls: {},
+    placeholder: '',
+    showPlaceholder: true,
+    popup: {},
+    uploader: {
+      url: './api/image/upload',
+      format: 'json',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+      prepareData: function (formData: FormData) {
+        return formData;
+      },
+      isSuccess: function (response: UploaderResponse): boolean {
+        return response.success === true;
+      },
+      getMessage: function (response: UploaderResponse): string {
+        return response.msg || '';
+      },
+      process: function (response: UploaderResponse): {
+        files: string[];
+        error?: string;
+        msg?: string;
+      } {
+        return {
+          files: response.data?.files || [],
+          error: response.error,
+          msg: response.msg,
+        };
+      },
+      error: function (error: Error): void {
+        console.error('Upload error:', error);
+      },
+      defaultHandlerSuccess: function (response: UploaderResponse): void {
+        if (response.data?.files) {
+          response.data.files.forEach((filename: string, index: number) => {
+            const isImage = response.data?.isImages?.[index] ?? false;
+            if (isImage) {
+              joditEditor.selection.insertImage(filename, null, 300);
+            } else {
+              joditEditor.selection.insertHTML(`<a href="${filename}">${filename}</a>`);
+            }
+          });
+        }
+      },
+    },
+  });
+
+  // Syntax highlighting for code blocks
+  joditEditor.events.on('afterInit', (): void => {
+    joditEditor.container.querySelectorAll('pre code').forEach((block: Element): void => {
+      hljs.highlightElement(block as HTMLElement);
+    });
+  });
+
+  joditEditor.events.on('change', (): void => {
+    joditEditor.container.querySelectorAll('pre code').forEach((block: Element): void => {
+      hljs.highlightElement(block as HTMLElement);
+    });
+  });
+
+  // Store the editor instance
+  joditEditorInstance = joditEditor;
+};
