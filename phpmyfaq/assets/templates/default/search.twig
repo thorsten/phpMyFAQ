@@ -64,8 +64,14 @@
             {% if result.renderedScore > 0 %}
             {{ result.renderedScore | raw }}
             {% endif %}
+            {% if result.path is defined and result.path != '' %}
             <strong>{{ result.path }}</strong><br>
+            {% endif %}
+            {% if result.isCustomPage is defined and result.isCustomPage %}
+            <i class="bi bi-file-text"></i>
+            {% else %}
             <i class="bi bi-question-circle-o"></i>
+            {% endif %}
             <a title="Test" href="{{ result.url }}">{{ result.question | raw }}</a>
             <br>
             <small class="small"><i class="bi bi-chat-dots"></i> {{ result.answerPreview | raw }}...</small>

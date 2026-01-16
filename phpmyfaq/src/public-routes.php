@@ -22,6 +22,7 @@ use phpMyFAQ\Controller\Frontend\AttachmentController;
 use phpMyFAQ\Controller\Frontend\AuthenticationController;
 use phpMyFAQ\Controller\Frontend\CategoryController;
 use phpMyFAQ\Controller\Frontend\ContactController;
+use phpMyFAQ\Controller\Frontend\CustomPageController;
 use phpMyFAQ\Controller\Frontend\FaqController;
 use phpMyFAQ\Controller\Frontend\GlossaryController;
 use phpMyFAQ\Controller\Frontend\NewsController;
@@ -122,6 +123,11 @@ $routesConfig = [
     'public.news' => [
         'path' => '/news/{newsId}/{newsLang}/{slug}.html',
         'controller' => [NewsController::class, 'index'],
+        'methods' => 'GET',
+    ],
+    'public.page' => [
+        'path' => '/page/{slug}.html',
+        'controller' => [CustomPageController::class, 'show'],
         'methods' => 'GET',
     ],
     'public.open-questions' => [

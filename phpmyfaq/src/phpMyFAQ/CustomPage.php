@@ -119,14 +119,13 @@ readonly class CustomPage
      *
      * @param int $pageId Page ID
      * @param string|null $language Language code (optional, uses current if not provided)
-     * @return array|null Page data or null if not found
+     * @return CustomPageEntity|null Page entity or null if not found
      */
-    public function getById(int $pageId, ?string $language = null): ?array
+    public function getById(int $pageId, ?string $language = null): ?CustomPageEntity
     {
         $language = $language ?? $this->configuration->getLanguage()->getLanguage();
         $row = $this->repository->getById($pageId, $language);
-
-        return $row ? $this->mapRowToArray($row) : null;
+        return $row ? $this->mapRowToEntity($row) : null;
     }
 
     /**
@@ -134,14 +133,13 @@ readonly class CustomPage
      *
      * @param string $slug URL slug
      * @param string|null $language Language code (optional, uses current if not provided)
-     * @return array|null Page data or null if not found
+     * @return CustomPageEntity|null Page entity or null if not found
      */
-    public function getBySlug(string $slug, ?string $language = null): ?array
+    public function getBySlug(string $slug, ?string $language = null): ?CustomPageEntity
     {
         $language = $language ?? $this->configuration->getLanguage()->getLanguage();
         $row = $this->repository->getBySlug($slug, $language);
-
-        return $row ? $this->mapRowToArray($row) : null;
+        return $row ? $this->mapRowToEntity($row) : null;
     }
 
     /**
@@ -253,5 +251,36 @@ readonly class CustomPage
             'seo_description' => $row->seo_description ?? null,
             'seo_robots' => $row->seo_robots ?? 'index,follow',
         ];
+    }
+
+    /**
+     * Map database row to CustomPageEntity.
+     *
+     * @param stdClass $row Database row
+     * @return CustomPageEntity Page entity
+     * @throws \DateMalformedStringException
+     */
+    private function mapRowToEntity(stdClass $row): CustomPageEntity
+    {
+        $entity = new CustomPageEntity();
+        $entity
+            ->setId((int) $row->id)
+            ->setLanguage($row->lang)
+            ->setPageTitle($row->page_title)
+            ->setSlug($row->slug)
+            ->setContent($row->content)
+            ->setAuthorName($row->author_name)
+            ->setAuthorEmail($row->author_email)
+            ->setActive($row->active === 'y')
+            ->setSeoTitle($row->seo_title ?? null)
+            ->setSeoDescription($row->seo_description ?? null)
+            ->setSeoRobots($row->seo_robots ?? 'index,follow')
+            ->setCreated(new DateTime($row->created));
+
+        if (isset($row->updated)) {
+            $entity->setUpdated(new DateTime($row->updated));
+        }
+
+        return $entity;
     }
 }

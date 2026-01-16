@@ -117,7 +117,26 @@ final class PageController extends AbstractAdministrationController
         $pageId = (int) Filter::filterVar($request->attributes->get('pageId'), FILTER_VALIDATE_INT);
 
         $customPage = $this->container->get(id: 'phpmyfaq.custom-page');
-        $pageData = $customPage->getById($pageId);
+        $pageEntity = $customPage->getById($pageId);
+
+        if ($pageEntity === null) {
+            throw new Exception('Page not found');
+        }
+
+        // Convert entity to array for template
+        $pageData = [
+            'id' => $pageEntity->getId(),
+            'lang' => $pageEntity->getLanguage(),
+            'page_title' => $pageEntity->getPageTitle(),
+            'slug' => $pageEntity->getSlug(),
+            'content' => $pageEntity->getContent(),
+            'author_name' => $pageEntity->getAuthorName(),
+            'author_email' => $pageEntity->getAuthorEmail(),
+            'active' => $pageEntity->isActive() ? 'y' : 'n',
+            'seo_title' => $pageEntity->getSeoTitle(),
+            'seo_description' => $pageEntity->getSeoDescription(),
+            'seo_robots' => $pageEntity->getSeoRobots(),
+        ];
 
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatDateTwigExtension::class));
@@ -126,9 +145,7 @@ final class PageController extends AbstractAdministrationController
             ...$this->getFooter(),
             ...$this->getBaseTemplateVars(),
             'pageData' => $pageData,
-            'pageDataContent' => isset($pageData['content'])
-                ? htmlspecialchars((string) $pageData['content'], ENT_QUOTES)
-                : '',
+            'pageDataContent' => htmlspecialchars($pageEntity->getContent(), ENT_QUOTES),
             'pageId' => $pageId,
         ]);
     }

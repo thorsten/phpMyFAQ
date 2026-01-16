@@ -1,0 +1,41 @@
+{% extends 'index.twig' %}
+
+{% block content %}
+<div class="row g-5">
+  <div class="col-md-8">
+    <h1 class="mb-4 border-bottom pb-3">{{ pageTitle }}</h1>
+
+    <article class="pmf-custom-page-content">
+      {{ pageContent | raw }}
+    </article>
+  </div>
+
+  <div class="col-md-4">
+    <div class="position-sticky" style="top: 2rem">
+      <div class="p-4 mb-3 bg-light-subtle border rounded">
+        <h5 class="mb-3">{{ 'msgAboutThisPage' | translate }}</h5>
+        <ul class="list-group list-group-flush">
+          {% if pageCreated %}
+          <li class="list-group-item">
+            <strong>{{ 'msgCreated' | translate }}:</strong>
+            <time datetime="{{ pageCreated }}">{{ pageCreated | date('Y-m-d') }}</time>
+          </li>
+          {% endif %}
+          {% if pageUpdated %}
+          <li class="list-group-item">
+            <strong>{{ 'msgUpdated' | translate }}:</strong>
+            <time datetime="{{ pageUpdated }}">{{ pageUpdated | date('Y-m-d') }}</time>
+          </li>
+          {% endif %}
+          {% if authorName %}
+          <li class="list-group-item">
+            <strong>{{ 'msgAuthor' | translate }}:</strong>
+            {{ authorName }}
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

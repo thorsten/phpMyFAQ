@@ -78,26 +78,54 @@ class SearchHelper extends AbstractHelper
                     continue;
                 }
 
-                // Build the link to the faq record
-                $currentUrl = sprintf(
-                    '%scontent/%d/%d/%s/%s.html?highlight=%s',
-                    $this->configuration->getDefaultUrl(),
-                    $result->category_id,
-                    $result->id,
-                    $result->lang,
-                    TitleSlugifier::slug($result->question),
-                    urlencode($this->searchTerm),
-                );
+                // Check if this is a custom page result
+                $isCustomPage = isset($result->content_type) && $result->content_type === 'page';
 
-                $question = html_entity_decode((string) $result->question, ENT_QUOTES | ENT_XML1 | ENT_HTML5, 'UTF-8');
-                $link = new Link($currentUrl, $this->configuration);
-                $link->setTitle($result->question);
-                $faq = new stdClass();
-                $faq->category = $this->Category->getPath((int) $result->category_id ?? 0);
-                $faq->question = Utils::chopString($question, 15);
-                $faq->url = $link->toString();
+                if ($isCustomPage) {
+                    // Build the link to the custom page
+                    $currentUrl = sprintf('%spage/%s.html', $this->configuration->getDefaultUrl(), $result->slug);
 
-                $results[] = $faq;
+                    $question = html_entity_decode(
+                        (string) $result->question,
+                        ENT_QUOTES | ENT_XML1 | ENT_HTML5,
+                        'UTF-8',
+                    );
+                    $link = new Link($currentUrl, $this->configuration);
+                    $link->setTitle($result->question);
+                    $faq = new stdClass();
+                    $faq->category = ''; // Custom pages don't have categories
+                    $faq->question = Utils::chopString($question, 15);
+                    $faq->url = $link->toString();
+
+                    $results[] = $faq;
+                } else {
+                    // Build the link to the faq record
+                    $currentUrl = sprintf(
+                        '%scontent/%d/%d/%s/%s.html?highlight=%s',
+                        $this->configuration->getDefaultUrl(),
+                        $result->category_id,
+                        $result->id,
+                        $result->lang,
+                        TitleSlugifier::slug($result->question),
+                        urlencode($this->searchTerm),
+                    );
+
+                    $question = html_entity_decode(
+                        (string) $result->question,
+                        ENT_QUOTES | ENT_XML1 | ENT_HTML5,
+                        'UTF-8',
+                    );
+                    $link = new Link($currentUrl, $this->configuration);
+                    $link->setTitle($result->question);
+                    $faq = new stdClass();
+                    $faq->category = $this->Category->getPath((int) $result->category_id ?? 0);
+                    $faq->question = Utils::chopString($question, 15);
+                    $faq->url = $link->toString();
+
+                    $results[] = $faq;
+                }
+
+                ++$i;
             }
         }
 
@@ -176,57 +204,102 @@ class SearchHelper extends AbstractHelper
 
                 ++$displayedCounter;
 
-                // Set language for the current category to fetch the correct category name
-                $this->Category->setLanguage($resultSet->lang);
+                // Check if this is a custom page result
+                $isCustomPage = isset($resultSet->content_type) && $resultSet->content_type === 'page';
 
-                $categoryInfo = $this->Category->getCategoriesFromFaq((int) $resultSet->id);
-                $categoryInfo = array_values($categoryInfo); //Reset the array keys
-                $question = Utils::chopString(Strings::htmlentities($resultSet->question), 15);
-                $answerPreview = $faqHelper->renderAnswerPreview($resultSet->answer, 20);
+                if ($isCustomPage) {
+                    // Handle custom page results
+                    $question = Utils::chopString(Strings::htmlentities($resultSet->question), 15);
+                    $answerPreview = $faqHelper->renderAnswerPreview($resultSet->answer, 20);
 
-                $searchTerm = str_replace(
-                    ['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'],
-                    '',
-                    $this->searchTerm,
-                );
-                $searchTerm = preg_quote($searchTerm, '/');
-                $searchItems = explode(' ', $searchTerm);
+                    $searchTerm = str_replace(
+                        ['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'],
+                        '',
+                        $this->searchTerm,
+                    );
+                    $searchTerm = preg_quote($searchTerm, '/');
+                    $searchItems = explode(' ', $searchTerm);
 
-                if (
-                    $this->configuration->get(item: 'search.enableHighlighting')
-                    && Strings::strlen($searchItems[0]) > 1
-                ) {
-                    foreach ($searchItems as $searchItem) {
-                        if (Strings::strlen($searchItem) <= 2) {
-                            continue;
+                    if (
+                        $this->configuration->get(item: 'search.enableHighlighting')
+                        && Strings::strlen($searchItems[0]) > 1
+                    ) {
+                        foreach ($searchItems as $searchItem) {
+                            if (Strings::strlen($searchItem) <= 2) {
+                                continue;
+                            }
+
+                            $question = Utils::setHighlightedString($question, $searchItem);
+                            $answerPreview = Utils::setHighlightedString($answerPreview, $searchItem);
                         }
-
-                        $question = Utils::setHighlightedString($question, $searchItem);
-                        $answerPreview = Utils::setHighlightedString($answerPreview, $searchItem);
                     }
+
+                    // Build the link to the custom page
+                    $currentUrl = sprintf('%spage/%s.html', $this->configuration->getDefaultUrl(), $resultSet->slug);
+
+                    $oLink = new Link($currentUrl, $this->configuration);
+                    $oLink->setTitle($resultSet->question);
+
+                    $result->renderedScore = $this->renderScore($resultSet->score * 33);
+                    $result->question = $question;
+                    $result->path = ''; // Custom pages don't have category paths
+                    $result->url = $oLink->toString();
+                    $result->answerPreview = $answerPreview;
+                    $result->isCustomPage = true;
+                } else {
+                    // Handle FAQ results
+                    // Set language for the current category to fetch the correct category name
+                    $this->Category->setLanguage($resultSet->lang);
+
+                    $categoryInfo = $this->Category->getCategoriesFromFaq((int) $resultSet->id);
+                    $categoryInfo = array_values($categoryInfo); //Reset the array keys
+                    $question = Utils::chopString(Strings::htmlentities($resultSet->question), 15);
+                    $answerPreview = $faqHelper->renderAnswerPreview($resultSet->answer, 20);
+
+                    $searchTerm = str_replace(
+                        ['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'],
+                        '',
+                        $this->searchTerm,
+                    );
+                    $searchTerm = preg_quote($searchTerm, '/');
+                    $searchItems = explode(' ', $searchTerm);
+
+                    if (
+                        $this->configuration->get(item: 'search.enableHighlighting')
+                        && Strings::strlen($searchItems[0]) > 1
+                    ) {
+                        foreach ($searchItems as $searchItem) {
+                            if (Strings::strlen($searchItem) <= 2) {
+                                continue;
+                            }
+
+                            $question = Utils::setHighlightedString($question, $searchItem);
+                            $answerPreview = Utils::setHighlightedString($answerPreview, $searchItem);
+                        }
+                    }
+
+                    // Build the link to the faq record
+                    $currentUrl = sprintf(
+                        '%scontent/%d/%d/%s/%s.html?highlight=%s',
+                        $this->configuration->getDefaultUrl(),
+                        $resultSet->category_id,
+                        $resultSet->id,
+                        $resultSet->lang,
+                        TitleSlugifier::slug($resultSet->question),
+                        urlencode($searchTerm),
+                    );
+
+                    $oLink = new Link($currentUrl, $this->configuration);
+                    $oLink->setTitle($resultSet->question);
+
+                    $path = isset($categoryInfo[0]['id']) ? $this->Category->getPath($categoryInfo[0]['id']) : '';
+
+                    $result->renderedScore = $this->renderScore($resultSet->score * 33);
+                    $result->question = $question;
+                    $result->path = $path;
+                    $result->url = $oLink->toString();
+                    $result->answerPreview = $answerPreview;
                 }
-
-                // Build the link to the faq record
-                $currentUrl = sprintf(
-                    '%scontent/%d/%d/%s/%s.html?highlight=%s',
-                    $this->configuration->getDefaultUrl(),
-                    $resultSet->category_id,
-                    $resultSet->id,
-                    $resultSet->lang,
-                    TitleSlugifier::slug($resultSet->question),
-                    urlencode($searchTerm),
-                );
-
-                $oLink = new Link($currentUrl, $this->configuration);
-                $oLink->setTitle($resultSet->question);
-
-                $path = isset($categoryInfo[0]['id']) ? $this->Category->getPath($categoryInfo[0]['id']) : '';
-
-                $result->renderedScore = $this->renderScore($resultSet->score * 33);
-                $result->question = $question;
-                $result->path = $path;
-                $result->url = $oLink->toString();
-                $result->answerPreview = $answerPreview;
 
                 $results[] = $result;
             }

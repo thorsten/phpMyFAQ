@@ -25,6 +25,8 @@ use phpMyFAQ\Entity\CustomPageEntity;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Instance\Search\Elasticsearch;
+use phpMyFAQ\Instance\Search\OpenSearch;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -34,6 +36,112 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class PageController extends AbstractAdministrationApiController
 {
+    /**
+     * Index a custom page in Elasticsearch and OpenSearch
+     *
+     * @param array<string, mixed> $pageData
+     */
+    private function indexCustomPage(array $pageData): void
+    {
+        // Index in Elasticsearch if enabled
+        if ($this->configuration->get(item: 'search.enableElasticsearch')) {
+            try {
+                /** @var Elasticsearch $elasticsearch */
+                $elasticsearch = $this->container->get(id: 'phpmyfaq.instance.elasticsearch');
+                $elasticsearch->indexCustomPage($pageData);
+            } catch (\Exception $e) {
+                $this->configuration->getLogger()->error('Failed to index custom page in Elasticsearch', [
+                    'error' => $e->getMessage(),
+                    'page_id' => $pageData['id'] ?? null,
+                ]);
+            }
+        }
+
+        // Index in OpenSearch if enabled
+        if ($this->configuration->get(item: 'search.enableOpenSearch')) {
+            try {
+                /** @var OpenSearch $openSearch */
+                $openSearch = $this->container->get(id: 'phpmyfaq.instance.opensearch');
+                $openSearch->indexCustomPage($pageData);
+            } catch (\Exception $e) {
+                $this->configuration->getLogger()->error('Failed to index custom page in OpenSearch', [
+                    'error' => $e->getMessage(),
+                    'page_id' => $pageData['id'] ?? null,
+                ]);
+            }
+        }
+    }
+
+    /**
+     * Update a custom page in Elasticsearch and OpenSearch
+     *
+     * @param array<string, mixed> $pageData
+     */
+    private function updateCustomPageIndex(array $pageData): void
+    {
+        // Update in Elasticsearch if enabled
+        if ($this->configuration->get(item: 'search.enableElasticsearch')) {
+            try {
+                /** @var Elasticsearch $elasticsearch */
+                $elasticsearch = $this->container->get(id: 'phpmyfaq.instance.elasticsearch');
+                $elasticsearch->updateCustomPage($pageData);
+            } catch (\Exception $e) {
+                $this->configuration->getLogger()->error('Failed to update custom page in Elasticsearch', [
+                    'error' => $e->getMessage(),
+                    'page_id' => $pageData['id'] ?? null,
+                ]);
+            }
+        }
+
+        // Update in OpenSearch if enabled
+        if ($this->configuration->get(item: 'search.enableOpenSearch')) {
+            try {
+                /** @var OpenSearch $openSearch */
+                $openSearch = $this->container->get(id: 'phpmyfaq.instance.opensearch');
+                $openSearch->updateCustomPage($pageData);
+            } catch (\Exception $e) {
+                $this->configuration->getLogger()->error('Failed to update custom page in OpenSearch', [
+                    'error' => $e->getMessage(),
+                    'page_id' => $pageData['id'] ?? null,
+                ]);
+            }
+        }
+    }
+
+    /**
+     * Delete a custom page from Elasticsearch and OpenSearch
+     */
+    private function deleteCustomPageFromIndex(int $pageId, string $lang): void
+    {
+        // Delete from Elasticsearch if enabled
+        if ($this->configuration->get(item: 'search.enableElasticsearch')) {
+            try {
+                /** @var Elasticsearch $elasticsearch */
+                $elasticsearch = $this->container->get(id: 'phpmyfaq.instance.elasticsearch');
+                $elasticsearch->deleteCustomPage($pageId, $lang);
+            } catch (\Exception $e) {
+                $this->configuration->getLogger()->error('Failed to delete custom page from Elasticsearch', [
+                    'error' => $e->getMessage(),
+                    'page_id' => $pageId,
+                ]);
+            }
+        }
+
+        // Delete from OpenSearch if enabled
+        if ($this->configuration->get(item: 'search.enableOpenSearch')) {
+            try {
+                /** @var OpenSearch $openSearch */
+                $openSearch = $this->container->get(id: 'phpmyfaq.instance.opensearch');
+                $openSearch->deleteCustomPage($pageId, $lang);
+            } catch (\Exception $e) {
+                $this->configuration->getLogger()->error('Failed to delete custom page from OpenSearch', [
+                    'error' => $e->getMessage(),
+                    'page_id' => $pageId,
+                ]);
+            }
+        }
+    }
+
     /**
      * @throws \Exception
      */
@@ -101,6 +209,16 @@ final class PageController extends AbstractAdministrationApiController
         if ($pageId > 0) {
             $this->adminLog->log($this->currentUser, AdminLogType::PAGE_ADD->value);
 
+            // Index in Elasticsearch/OpenSearch
+            $this->indexCustomPage([
+                'id' => $pageId,
+                'lang' => $language,
+                'page_title' => $pageTitle,
+                'content' => $pageEntity->getContent(),
+                'slug' => $slug,
+                'active' => $active ? 'y' : 'n',
+            ]);
+
             return $this->json([
                 'success' => Translation::get(key: 'ad_page_updatesuc'),
                 'id' => $pageId,
@@ -143,6 +261,9 @@ final class PageController extends AbstractAdministrationApiController
 
         if ($customPage->delete((int) $deleteId, $language)) {
             $this->adminLog->log($this->currentUser, AdminLogType::PAGE_DELETE->value . ':' . $deleteId);
+
+            // Delete from Elasticsearch/OpenSearch
+            $this->deleteCustomPageFromIndex((int) $deleteId, $language);
 
             return $this->json(['success' => Translation::get(key: 'ad_page_delsuc')], Response::HTTP_OK);
         }
@@ -221,6 +342,16 @@ final class PageController extends AbstractAdministrationApiController
         if ($customPage->update($pageEntity)) {
             $this->adminLog->log($this->currentUser, AdminLogType::PAGE_EDIT->value . ':' . $pageId);
 
+            // Update in Elasticsearch/OpenSearch
+            $this->updateCustomPageIndex([
+                'id' => $pageId,
+                'lang' => $language,
+                'page_title' => $pageTitle,
+                'content' => $pageEntity->getContent(),
+                'slug' => $slug,
+                'active' => $active ? 'y' : 'n',
+            ]);
+
             return $this->json(['success' => Translation::get(key: 'ad_page_updatesuc')], Response::HTTP_OK);
         }
 
@@ -259,6 +390,20 @@ final class PageController extends AbstractAdministrationApiController
 
         if ($customPage->activate($pageId, $status)) {
             $this->adminLog->log($this->currentUser, AdminLogType::PAGE_EDIT->value . ':' . $pageId);
+
+            // Get page data for indexing
+            $pageEntity = $customPage->getById($pageId);
+            if ($pageEntity) {
+                // Update in Elasticsearch/OpenSearch with new active status
+                $this->updateCustomPageIndex([
+                    'id' => $pageId,
+                    'lang' => $pageEntity->getLanguage(),
+                    'page_title' => $pageEntity->getPageTitle(),
+                    'content' => $pageEntity->getContent(),
+                    'slug' => $pageEntity->getSlug(),
+                    'active' => $status ? 'y' : 'n',
+                ]);
+            }
 
             return $this->json(['success' => Translation::get(key: 'ad_page_updatesuc')], Response::HTTP_OK);
         }

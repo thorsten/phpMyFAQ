@@ -252,6 +252,9 @@ $PMF_LANG["ad_news_updatenews"] = "News entry updated.";
 
 // Custom Page management
 $PMF_LANG["msgPages"] = "Custom Pages";
+$PMF_LANG["msgAboutThisPage"] = "About this page";
+$PMF_LANG["msgCreated"] = "Created";
+$PMF_LANG["msgUpdated"] = "Updated";
 $PMF_LANG["ad_menu_pages"] = "Custom Pages";
 $PMF_LANG["ad_page_add"] = "Add Custom Page";
 $PMF_LANG["ad_page_edit"] = "Edit Custom Page";

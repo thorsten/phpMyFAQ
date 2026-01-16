@@ -107,6 +107,7 @@ class Search
             $elasticsearch->setCategoryIds($allCategories);
             $elasticsearch->setLanguage($this->configuration->getLanguage()->getLanguage());
 
+            // Elasticsearch autoComplete now includes custom pages from the index
             return $elasticsearch->autoComplete($searchTerm);
         }
 
@@ -117,6 +118,7 @@ class Search
             $opensearch->setCategoryIds($allCategories);
             $opensearch->setLanguage($this->configuration->getLanguage()->getLanguage());
 
+            // OpenSearch autoComplete will include custom pages once indexed
             return $opensearch->autoComplete($searchTerm);
         }
 
@@ -182,11 +184,88 @@ class Search
 
         $result = $searchDatabase->search($searchTerm);
 
-        if ($this->configuration->getDb()->numRows($result) === 0) {
+        $faqResults = [];
+        if ($this->configuration->getDb()->numRows($result) > 0) {
+            $faqResults = $this->configuration->getDb()->fetchAll($result);
+        }
+
+        // Search custom pages (skip if searching by solution ID)
+        $pageResults = [];
+        if (!is_numeric($searchTerm)) {
+            $pageResults = $this->searchCustomPages($searchTerm, $allLanguages);
+        }
+
+        // Merge FAQ and custom page results
+        return array_merge($faqResults, $pageResults);
+    }
+
+    /**
+     * Search custom pages for the given search term.
+     *
+     * @param string $searchTerm Search term
+     * @param bool $allLanguages Search all languages or current only
+     * @return array Custom page search results
+     */
+    private function searchCustomPages(string $searchTerm, bool $allLanguages = true): array
+    {
+        $cpTable = Database::getTablePrefix() . 'faqcustompages';
+        $escapedSearchTerm = $this->configuration->getDb()->escape($searchTerm);
+
+        // Build WHERE clause with LIKE for custom pages (no FULLTEXT index)
+        $searchWords = explode(' ', $escapedSearchTerm);
+        $searchConditions = [];
+
+        foreach ($searchWords as $word) {
+            if (strlen($word) > 2) {
+                $searchConditions[] = sprintf("(page_title LIKE '%%%s%%' OR content LIKE '%%%s%%')", $word, $word);
+            }
+        }
+
+        if (empty($searchConditions)) {
             return [];
         }
 
-        return $this->configuration->getDb()->fetchAll($result);
+        $searchClause = implode(' OR ', $searchConditions);
+
+        // Build language condition
+        $langCondition = '';
+        if (!$allLanguages) {
+            $langCondition = sprintf(" AND lang = '%s'", $this->configuration->getLanguage()->getLanguage());
+        }
+
+        // Build the query
+        $query = sprintf("
+            SELECT
+                id,
+                lang,
+                0 AS solution_id,
+                0 AS category_id,
+                page_title AS question,
+                content AS answer,
+                slug,
+                0.5 AS score
+            FROM
+                %s
+            WHERE
+                active = 'y'
+                %s
+                AND (%s)
+            ", $cpTable, $langCondition, $searchClause);
+
+        $result = $this->configuration->getDb()->query($query);
+
+        if (!$result || $this->configuration->getDb()->numRows($result) === 0) {
+            return [];
+        }
+
+        $pages = $this->configuration->getDb()->fetchAll($result);
+
+        // Mark results as custom pages for later identification
+        foreach ($pages as &$page) {
+            $page->content_type = 'page';
+        }
+
+        return $pages;
     }
 
     /**
@@ -212,6 +291,7 @@ class Search
             $elasticsearch->setLanguage($this->configuration->getLanguage()->getLanguage());
         }
 
+        // Elasticsearch search now includes custom pages in the index
         return $elasticsearch->search($searchTerm);
     }
 
@@ -231,6 +311,7 @@ class Search
             $opensearch->setLanguage($this->configuration->getLanguage()->getLanguage());
         }
 
+        // OpenSearch search now includes custom pages in the index
         return $opensearch->search($searchTerm);
     }
 
