@@ -68,6 +68,12 @@ class Elasticsearch
                 'analyzer' => 'autocomplete',
                 'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER,
             ],
+            'content_type' => [
+                'type' => 'keyword',
+            ],
+            'slug' => [
+                'type' => 'keyword',
+            ],
         ],
     ];
 
@@ -349,5 +355,151 @@ class Elasticsearch
             $this->configuration->getLogger()->error('Elasticsearch ping failed.', [$e->getMessage()]);
             return false;
         }
+    }
+
+    /**
+     * Indexing of a custom page
+     *
+     * @param array<string, mixed> $page
+     */
+    public function indexCustomPage(array $page): ?object
+    {
+        $params = [
+            'index' => $this->elasticsearchConfiguration->getIndex(),
+            'id' => 'page_' . $page['id'] . '_' . $page['lang'],
+            'body' => [
+                'id' => $page['id'],
+                'lang' => $page['lang'],
+                'question' => $page['page_title'],
+                'answer' => strip_tags($page['content']),
+                'keywords' => '',
+                'category_id' => 0,
+                'content_type' => 'page',
+                'slug' => $page['slug'],
+            ],
+        ];
+
+        try {
+            return $this->client->index($params)->asObject();
+        } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
+            $this->configuration->getLogger()->error('Index custom page error.', [$e->getMessage()]);
+            return null;
+        }
+    }
+
+    /**
+     * Updates a custom page document
+     *
+     * @param array<string, mixed> $page
+     * @return array<string, mixed>
+     */
+    public function updateCustomPage(array $page): array
+    {
+        $params = [
+            'index' => $this->elasticsearchConfiguration->getIndex(),
+            'id' => 'page_' . $page['id'] . '_' . $page['lang'],
+            'body' => [
+                'doc' => [
+                    'id' => $page['id'],
+                    'lang' => $page['lang'],
+                    'question' => $page['page_title'],
+                    'answer' => strip_tags($page['content']),
+                    'keywords' => '',
+                    'category_id' => 0,
+                    'content_type' => 'page',
+                    'slug' => $page['slug'],
+                ],
+            ],
+        ];
+
+        try {
+            return $this->client->update($params)->asArray();
+        } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
+            return ['error' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * Deletes a custom page document
+     *
+     * @return array<string, mixed>
+     */
+    public function deleteCustomPage(int $pageId, string $lang): array
+    {
+        $params = [
+            'index' => $this->elasticsearchConfiguration->getIndex(),
+            'id' => 'page_' . $pageId . '_' . $lang,
+        ];
+
+        try {
+            return $this->client->delete($params)->asArray();
+        } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
+            return ['error' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * Bulk indexing of custom pages
+     *
+     * @param array<int, array<string, mixed>> $pages
+     * @return array<string, mixed>
+     */
+    public function bulkIndexCustomPages(array $pages): array
+    {
+        $params = ['body' => []];
+        $responses = [];
+        $i = 1;
+
+        foreach ($pages as $page) {
+            if ('n' === $page['active']) {
+                continue;
+            }
+
+            $params['body'][] = [
+                'index' => [
+                    '_index' => $this->elasticsearchConfiguration->getIndex(),
+                    '_id' => 'page_' . $page['id'] . '_' . $page['lang'],
+                ],
+            ];
+
+            $params['body'][] = [
+                'id' => $page['id'],
+                'lang' => $page['lang'],
+                'question' => $page['page_title'],
+                'answer' => strip_tags($page['content']),
+                'keywords' => '',
+                'category_id' => 0,
+                'content_type' => 'page',
+                'slug' => $page['slug'],
+            ];
+
+            if (($i % 1000) === 0) {
+                try {
+                    $responses = $this->client->bulk($params);
+                } catch (ClientResponseException|ServerResponseException $e) {
+                    return ['error' => $e->getMessage()];
+                }
+
+                $params = ['body' => []];
+                unset($responses);
+            }
+
+            ++$i;
+        }
+
+        // Send the last batch if it exists
+        if (!empty($params['body'])) {
+            try {
+                $responses = $this->client->bulk($params);
+            } catch (ClientResponseException|ServerResponseException $e) {
+                return ['error' => $e->getMessage()];
+            }
+        }
+
+        if (isset($responses) && $responses->getStatusCode() === 200) {
+            return ['success' => $responses];
+        }
+
+        return ['success' => true];
     }
 }

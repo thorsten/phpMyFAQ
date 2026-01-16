@@ -110,6 +110,9 @@ class CustomPageTest extends TestCase
         $mockData->active = 'y';
         $mockData->created = '2026-01-12 12:00:00';
         $mockData->updated = null;
+        $mockData->seo_title = null;
+        $mockData->seo_description = null;
+        $mockData->seo_robots = 'index,follow';
 
         $this->mockRepository
             ->expects($this->once())
@@ -118,9 +121,9 @@ class CustomPageTest extends TestCase
             ->willReturn($mockData);
 
         $result = $this->customPage->getById(1);
-        $this->assertIsArray($result);
-        $this->assertEquals(1, $result['id']);
-        $this->assertEquals('Test Page', $result['page_title']);
+        $this->assertInstanceOf(CustomPageEntity::class, $result);
+        $this->assertEquals(1, $result->getId());
+        $this->assertEquals('Test Page', $result->getPageTitle());
     }
 
     public function testGetByIdReturnsNull(): void
@@ -148,6 +151,9 @@ class CustomPageTest extends TestCase
         $mockData->active = 'y';
         $mockData->created = '2026-01-12 12:00:00';
         $mockData->updated = null;
+        $mockData->seo_title = null;
+        $mockData->seo_description = null;
+        $mockData->seo_robots = 'index,follow';
 
         $this->mockRepository
             ->expects($this->once())
@@ -156,8 +162,8 @@ class CustomPageTest extends TestCase
             ->willReturn($mockData);
 
         $result = $this->customPage->getBySlug('test-slug');
-        $this->assertIsArray($result);
-        $this->assertEquals('test-slug', $result['slug']);
+        $this->assertInstanceOf(CustomPageEntity::class, $result);
+        $this->assertEquals('test-slug', $result->getSlug());
     }
 
     public function testDelete(): void
@@ -195,6 +201,9 @@ class CustomPageTest extends TestCase
         $mockData1->active = 'y';
         $mockData1->created = '2026-01-12 12:00:00';
         $mockData1->updated = null;
+        $mockData1->seo_title = null;
+        $mockData1->seo_description = null;
+        $mockData1->seo_robots = 'index,follow';
 
         $mockData2 = new stdClass();
         $mockData2->id = 2;
@@ -207,6 +216,9 @@ class CustomPageTest extends TestCase
         $mockData2->active = 'n';
         $mockData2->created = '2026-01-12 13:00:00';
         $mockData2->updated = null;
+        $mockData2->seo_title = null;
+        $mockData2->seo_description = null;
+        $mockData2->seo_robots = 'index,follow';
 
         $this->mockRepository
             ->expects($this->once())
@@ -234,6 +246,9 @@ class CustomPageTest extends TestCase
         $mockData->active = 'y';
         $mockData->created = '2026-01-12 12:00:00';
         $mockData->updated = null;
+        $mockData->seo_title = null;
+        $mockData->seo_description = null;
+        $mockData->seo_robots = 'index,follow';
 
         $this->mockRepository
             ->expects($this->once())
@@ -309,5 +324,35 @@ class CustomPageTest extends TestCase
 
         $uniqueSlug = $this->customPage->generateUniqueSlug('test-slug', null, 123);
         $this->assertEquals('test-slug', $uniqueSlug);
+    }
+
+    public function testGetByIdWithSeoFields(): void
+    {
+        $mockData = new stdClass();
+        $mockData->id = 1;
+        $mockData->lang = 'en';
+        $mockData->page_title = 'Test Page';
+        $mockData->slug = 'test-page';
+        $mockData->content = '<p>Test content</p>';
+        $mockData->author_name = 'Test Author';
+        $mockData->author_email = 'test@example.org';
+        $mockData->active = 'y';
+        $mockData->created = '2026-01-12 12:00:00';
+        $mockData->updated = null;
+        $mockData->seo_title = 'SEO Test Title';
+        $mockData->seo_description = 'SEO Test Description';
+        $mockData->seo_robots = 'noindex,nofollow';
+
+        $this->mockRepository
+            ->expects($this->once())
+            ->method('getById')
+            ->with(1, 'en')
+            ->willReturn($mockData);
+
+        $result = $this->customPage->getById(1);
+        $this->assertInstanceOf(CustomPageEntity::class, $result);
+        $this->assertEquals('SEO Test Title', $result->getSeoTitle());
+        $this->assertEquals('SEO Test Description', $result->getSeoDescription());
+        $this->assertEquals('noindex,nofollow', $result->getSeoRobots());
     }
 }

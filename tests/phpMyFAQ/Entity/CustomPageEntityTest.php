@@ -172,6 +172,66 @@ class CustomPageEntityTest extends TestCase
     }
 
     /**
+     * Test seoTitle getter and setter
+     */
+    public function testSeoTitleGetterAndSetter(): void
+    {
+        $seoTitle = 'SEO Title for Test Page';
+        $result = $this->customPage->setSeoTitle($seoTitle);
+
+        $this->assertInstanceOf(CustomPageEntity::class, $result);
+        $this->assertEquals($seoTitle, $this->customPage->getSeoTitle());
+    }
+
+    /**
+     * Test seoTitle returns null when not set
+     */
+    public function testSeoTitleReturnsNullWhenNotSet(): void
+    {
+        $this->assertNull($this->customPage->getSeoTitle());
+    }
+
+    /**
+     * Test seoDescription getter and setter
+     */
+    public function testSeoDescriptionGetterAndSetter(): void
+    {
+        $seoDescription = 'SEO Description for Test Page';
+        $result = $this->customPage->setSeoDescription($seoDescription);
+
+        $this->assertInstanceOf(CustomPageEntity::class, $result);
+        $this->assertEquals($seoDescription, $this->customPage->getSeoDescription());
+    }
+
+    /**
+     * Test seoDescription returns null when not set
+     */
+    public function testSeoDescriptionReturnsNullWhenNotSet(): void
+    {
+        $this->assertNull($this->customPage->getSeoDescription());
+    }
+
+    /**
+     * Test seoRobots getter and setter
+     */
+    public function testSeoRobotsGetterAndSetter(): void
+    {
+        $seoRobots = 'noindex,nofollow';
+        $result = $this->customPage->setSeoRobots($seoRobots);
+
+        $this->assertInstanceOf(CustomPageEntity::class, $result);
+        $this->assertEquals($seoRobots, $this->customPage->getSeoRobots());
+    }
+
+    /**
+     * Test seoRobots has default value
+     */
+    public function testSeoRobotsHasDefaultValue(): void
+    {
+        $this->assertEquals('index,follow', $this->customPage->getSeoRobots());
+    }
+
+    /**
      * Test fluent interface with method chaining
      */
     public function testFluentInterface(): void
@@ -185,6 +245,9 @@ class CustomPageEntityTest extends TestCase
             ->setAuthorName('Test Author')
             ->setAuthorEmail('test@example.com')
             ->setActive(true)
+            ->setSeoTitle('SEO Title')
+            ->setSeoDescription('SEO Description')
+            ->setSeoRobots('index,nofollow')
             ->setCreated(new DateTime());
 
         $this->assertInstanceOf(CustomPageEntity::class, $result);
@@ -192,5 +255,8 @@ class CustomPageEntityTest extends TestCase
         $this->assertEquals('en', $this->customPage->getLanguage());
         $this->assertEquals('Test Page', $this->customPage->getPageTitle());
         $this->assertEquals('test-page', $this->customPage->getSlug());
+        $this->assertEquals('SEO Title', $this->customPage->getSeoTitle());
+        $this->assertEquals('SEO Description', $this->customPage->getSeoDescription());
+        $this->assertEquals('index,nofollow', $this->customPage->getSeoRobots());
     }
 }

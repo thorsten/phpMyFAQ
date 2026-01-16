@@ -65,6 +65,8 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
     {
         $result = [];
         $this->resultSet = [];
+
+        // Build search query that includes both FAQs and custom pages
         $searchParams = [
             'index' => $this->elasticsearchConfiguration->getIndex(),
             'size' => 100,
@@ -82,9 +84,24 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
                                 'fuzziness' => 'AUTO',
                             ],
                         ],
-                        'filter' => [
-                            'terms' => ['category_id' => $this->getCategoryIds()],
+                        'should' => [
+                            // FAQs: must match category filter
+                            [
+                                'bool' => [
+                                    'must_not' => [
+                                        'term' => ['content_type' => 'page'],
+                                    ],
+                                    'filter' => [
+                                        'terms' => ['category_id' => $this->getCategoryIds()],
+                                    ],
+                                ],
+                            ],
+                            // Custom pages: no category filter
+                            [
+                                'term' => ['content_type' => 'page'],
+                            ],
                         ],
+                        'minimum_should_match' => 1,
                     ],
                 ],
             ],
@@ -103,9 +120,15 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
                 $resultSet->lang = $hit['_source']['lang'];
                 $resultSet->question = $hit['_source']['question'];
                 $resultSet->answer = $hit['_source']['answer'];
-                $resultSet->keywords = $hit['_source']['keywords'];
+                $resultSet->keywords = $hit['_source']['keywords'] ?? '';
                 $resultSet->category_id = $hit['_source']['category_id'];
                 $resultSet->score = $hit['_score'];
+
+                // Add custom page specific fields if present
+                if (isset($hit['_source']['content_type']) && $hit['_source']['content_type'] === 'page') {
+                    $resultSet->content_type = 'page';
+                    $resultSet->slug = $hit['_source']['slug'];
+                }
 
                 $this->resultSet[] = $resultSet;
             }
@@ -187,9 +210,15 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
                 $resultSet->lang = $hit['_source']['lang'];
                 $resultSet->question = $hit['_source']['question'];
                 $resultSet->answer = $hit['_source']['answer'];
-                $resultSet->keywords = $hit['_source']['keywords'];
+                $resultSet->keywords = $hit['_source']['keywords'] ?? '';
                 $resultSet->category_id = $hit['_source']['category_id'];
                 $resultSet->score = $hit['_score'];
+
+                // Add custom page specific fields if present
+                if (isset($hit['_source']['content_type']) && $hit['_source']['content_type'] === 'page') {
+                    $resultSet->content_type = 'page';
+                    $resultSet->slug = $hit['_source']['slug'];
+                }
 
                 $this->resultSet[] = $resultSet;
             }

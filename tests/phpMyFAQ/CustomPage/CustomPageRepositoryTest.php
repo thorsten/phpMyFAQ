@@ -327,4 +327,60 @@ class CustomPageRepositoryTest extends TestCase
         ));
         $this->assertIsArray($pages);
     }
+
+    public function testInsertAndFetchWithSeoFields(): void
+    {
+        $page = new CustomPageEntity();
+        $page
+            ->setLanguage('en')
+            ->setPageTitle('SEO Test Page')
+            ->setSlug('seo-test-page')
+            ->setContent('<p>Content with SEO</p>')
+            ->setAuthorName('SEO Author')
+            ->setAuthorEmail('seo@example.com')
+            ->setActive(true)
+            ->setSeoTitle('Custom SEO Title')
+            ->setSeoDescription('Custom SEO Description for testing')
+            ->setSeoRobots('noindex,follow')
+            ->setCreated(new DateTime());
+
+        $pageId = $this->repository->insert($page);
+        $this->assertGreaterThan(0, $pageId);
+
+        $fetched = $this->repository->getById($pageId, 'en');
+        $this->assertNotNull($fetched);
+        $this->assertEquals('Custom SEO Title', $fetched->seo_title);
+        $this->assertEquals('Custom SEO Description for testing', $fetched->seo_description);
+        $this->assertEquals('noindex,follow', $fetched->seo_robots);
+    }
+
+    public function testUpdateWithSeoFields(): void
+    {
+        $page = new CustomPageEntity();
+        $page
+            ->setLanguage('en')
+            ->setPageTitle('Update SEO Test')
+            ->setSlug('update-seo-test')
+            ->setContent('<p>Content</p>')
+            ->setAuthorName('Author')
+            ->setAuthorEmail('author@example.com')
+            ->setActive(true)
+            ->setCreated(new DateTime());
+
+        $pageId = $this->repository->insert($page);
+
+        $page
+            ->setId($pageId)
+            ->setSeoTitle('Updated SEO Title')
+            ->setSeoDescription('Updated SEO Description')
+            ->setSeoRobots('index,nofollow')
+            ->setUpdated(new DateTime());
+
+        $this->assertTrue($this->repository->update($page));
+
+        $fetched = $this->repository->getById($pageId, 'en');
+        $this->assertEquals('Updated SEO Title', $fetched->seo_title);
+        $this->assertEquals('Updated SEO Description', $fetched->seo_description);
+        $this->assertEquals('index,nofollow', $fetched->seo_robots);
+    }
 }
