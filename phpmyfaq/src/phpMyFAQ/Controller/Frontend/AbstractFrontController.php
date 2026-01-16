@@ -111,6 +111,10 @@ abstract class AbstractFrontController extends AbstractController
             'footerNavigation' => $this->getFooterNavigation($request),
             'isPrivacyLinkEnabled' => $this->configuration->get('layout.enablePrivacyLink'),
             'msgPrivacyNote' => Translation::get(key: 'msgPrivacyNote'),
+            'isTermsLinkEnabled' => !empty($this->configuration->get('main.termsURL')),
+            'msgTermsOfService' => Translation::get(key: 'msgTermsOfService'),
+            'isImprintLinkEnabled' => !empty($this->configuration->get('main.imprintURL')),
+            'msgImprint' => Translation::get(key: 'msgImprint'),
             'isCookieConsentEnabled' => $this->configuration->get('layout.enableCookieConsent'),
             'cookiePreferences' => Translation::get(key: 'cookiePreferences'),
         ];

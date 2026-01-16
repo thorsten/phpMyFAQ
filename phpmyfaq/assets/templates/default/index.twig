@@ -178,6 +178,20 @@
                     </a>
                   </li>
                 {% endif %}
+                {% if isTermsLinkEnabled %}
+                  <li class="nav-item">
+                    <a class="nav-link d-inline-block px-0 pt-1 pb-2" target="_blank" href="./terms.html">
+                      {{ msgTermsOfService }}
+                    </a>
+                  </li>
+                {% endif %}
+                {% if isImprintLinkEnabled %}
+                  <li class="nav-item">
+                    <a class="nav-link d-inline-block px-0 pt-1 pb-2" target="_blank" href="./imprint.html">
+                      {{ msgImprint }}
+                    </a>
+                  </li>
+                {% endif %}
                 {% if isCookieConsentEnabled %}
                   <li class="nav-item">
                     <a id="showCookieConsent" class="nav-link d-inline-block px-0 pt-1 pb-2" href="#">

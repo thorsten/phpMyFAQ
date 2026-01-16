@@ -1282,6 +1282,17 @@ class Update extends AbstractSetup
             $user->perm->grantUserRight(1, $user->perm->addRight($pageAddRight));
             $user->perm->grantUserRight(1, $user->perm->addRight($pageEditRight));
             $user->perm->grantUserRight(1, $user->perm->addRight($pageDeleteRight));
+
+            // Add configuration entries for legal page URLs if they don't exist
+            if (!$this->configuration->exists('main.termsURL')) {
+                $this->configuration->add('main.termsURL', '');
+            }
+            if (!$this->configuration->exists('main.imprintURL')) {
+                $this->configuration->add('main.imprintURL', '');
+            }
+            if (!$this->configuration->exists('main.cookiePolicyURL')) {
+                $this->configuration->add('main.cookiePolicyURL', '');
+            }
         }
     }
 
