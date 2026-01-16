@@ -86,8 +86,8 @@ class OpenSearch extends AbstractSearch implements SearchInterface
                             // FAQs: must match category filter
                             [
                                 'bool' => [
-                                    'must_not' => [
-                                        'term' => ['content_type' => 'page'],
+                                    'must' => [
+                                        'term' => ['content_type' => 'faq'],
                                     ],
                                     'filter' => [
                                         'terms' => ['category_id' => $this->getCategoryIds()],

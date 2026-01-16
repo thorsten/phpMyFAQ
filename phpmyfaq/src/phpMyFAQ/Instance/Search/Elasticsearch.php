@@ -224,6 +224,7 @@ class Elasticsearch
                 'answer' => strip_tags($faq['answer']),
                 'keywords' => $faq['keywords'],
                 'category_id' => $faq['category_id'],
+                'content_type' => 'faq',
             ],
         ];
 
@@ -265,6 +266,7 @@ class Elasticsearch
                 'answer' => strip_tags((string) $faq['content']),
                 'keywords' => $faq['keywords'],
                 'category_id' => $faq['category_id'],
+                'content_type' => 'faq',
             ];
 
             if (($i % 1000) === 0) {
@@ -314,6 +316,7 @@ class Elasticsearch
                     'answer' => strip_tags($faq['answer']),
                     'keywords' => $faq['keywords'],
                     'category_id' => $faq['category_id'],
+                    'content_type' => 'faq',
                 ],
             ],
         ];
@@ -364,6 +367,13 @@ class Elasticsearch
      */
     public function indexCustomPage(array $page): ?object
     {
+        // Only index active pages
+        if (isset($page['active']) && $page['active'] === 'n') {
+            // Delete from index if it exists (in case it was previously active)
+            $this->deleteCustomPage((int) $page['id'], $page['lang']);
+            return null;
+        }
+
         $params = [
             'index' => $this->elasticsearchConfiguration->getIndex(),
             'id' => 'page_' . $page['id'] . '_' . $page['lang'],
@@ -395,6 +405,11 @@ class Elasticsearch
      */
     public function updateCustomPage(array $page): array
     {
+        // Only index active pages - delete from index if inactive
+        if (isset($page['active']) && $page['active'] === 'n') {
+            return $this->deleteCustomPage((int) $page['id'], $page['lang']);
+        }
+
         $params = [
             'index' => $this->elasticsearchConfiguration->getIndex(),
             'id' => 'page_' . $page['id'] . '_' . $page['lang'],
@@ -415,6 +430,12 @@ class Elasticsearch
         try {
             return $this->client->update($params)->asArray();
         } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
+            // If document doesn't exist, try to create it
+            if (str_contains($e->getMessage(), 'document_missing_exception')) {
+                $result = $this->indexCustomPage($page);
+                return $result ? ['success' => true] : ['error' => 'Failed to create document'];
+            }
+            $this->configuration->getLogger()->error('Update custom page error.', [$e->getMessage()]);
             return ['error' => $e->getMessage()];
         }
     }
