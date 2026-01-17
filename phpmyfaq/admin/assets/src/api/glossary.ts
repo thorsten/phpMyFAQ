@@ -13,6 +13,7 @@
  * @since     2024-01-27
  */
 
+import { fetchJson } from './fetch-wrapper';
 import { Response, GlossaryResponse } from '../interfaces';
 
 export const createGlossary = async (
@@ -21,7 +22,7 @@ export const createGlossary = async (
   definition: string,
   csrfToken: string
 ): Promise<Response | undefined> => {
-  const response = await fetch('./api/glossary/create', {
+  return await fetchJson('./api/glossary/create', {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -34,12 +35,6 @@ export const createGlossary = async (
       definition: definition,
     }),
   });
-
-  if (response.status === 200) {
-    return await response.json();
-  }
-
-  throw new Error('Network response was not ok.');
 };
 
 export const deleteGlossary = async (
@@ -47,7 +42,7 @@ export const deleteGlossary = async (
   glossaryLang: string,
   csrfToken: string
 ): Promise<Response | undefined> => {
-  const response = await fetch('./api/glossary/delete', {
+  return await fetchJson('./api/glossary/delete', {
     method: 'DELETE',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -59,31 +54,19 @@ export const deleteGlossary = async (
       lang: glossaryLang,
     }),
   });
-
-  if (response.status === 200) {
-    return await response.json();
-  }
-
-  throw new Error('Network response was not ok.');
 };
 
 export const getGlossary = async (
   glossaryId: string,
   glossaryLanguage: string
 ): Promise<GlossaryResponse | undefined> => {
-  const response = await fetch(`./api/glossary/${glossaryId}/${glossaryLanguage}`, {
+  return await fetchJson(`./api/glossary/${glossaryId}/${glossaryLanguage}`, {
     method: 'GET',
     headers: {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
   });
-
-  if (response.status === 200) {
-    return await response.json();
-  }
-
-  throw new Error('Network response was not ok.');
 };
 
 export const updateGlossary = async (
@@ -93,7 +76,7 @@ export const updateGlossary = async (
   definition: string,
   csrfToken: string
 ): Promise<Response | undefined> => {
-  const response = await fetch('./api/glossary/update', {
+  return await fetchJson('./api/glossary/update', {
     method: 'PUT',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -107,10 +90,4 @@ export const updateGlossary = async (
       definition: definition,
     }),
   });
-
-  if (response.status === 200) {
-    return await response.json();
-  }
-
-  throw new Error('Network response was not ok.');
 };

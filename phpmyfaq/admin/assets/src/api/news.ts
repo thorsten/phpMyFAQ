@@ -14,8 +14,10 @@
  * @since     2024-04-21
  */
 
+import { fetchJson } from './fetch-wrapper';
+
 export const addNews = async (data: Record<string, unknown> = {}): Promise<unknown> => {
-  const response = await fetch('api/news/create', {
+  return await fetchJson('api/news/create', {
     method: 'POST',
     cache: 'no-cache',
     headers: {
@@ -25,12 +27,10 @@ export const addNews = async (data: Record<string, unknown> = {}): Promise<unkno
     referrerPolicy: 'no-referrer',
     body: JSON.stringify(data),
   });
-
-  return await response.json();
 };
 
 export const deleteNews = async (csrfToken: string, id: string): Promise<unknown> => {
-  const response = await fetch('api/news/delete', {
+  return await fetchJson('api/news/delete', {
     method: 'DELETE',
     cache: 'no-cache',
     headers: {
@@ -43,12 +43,10 @@ export const deleteNews = async (csrfToken: string, id: string): Promise<unknown
       id: id,
     }),
   });
-
-  return await response.json();
 };
 
 export const updateNews = async (data: Record<string, unknown> = {}): Promise<unknown> => {
-  const response = await fetch('api/news/update', {
+  return await fetchJson('api/news/update', {
     method: 'PUT',
     cache: 'no-cache',
     headers: {
@@ -58,12 +56,10 @@ export const updateNews = async (data: Record<string, unknown> = {}): Promise<un
     referrerPolicy: 'no-referrer',
     body: JSON.stringify(data),
   });
-
-  return await response.json();
 };
 
 export const activateNews = async (id: string, status: string, csrfToken: string): Promise<unknown> => {
-  const response = await fetch('api/news/activate', {
+  return await fetchJson('api/news/activate', {
     method: 'POST',
     cache: 'no-cache',
     headers: {
@@ -77,6 +73,4 @@ export const activateNews = async (id: string, status: string, csrfToken: string
       csrfToken: csrfToken,
     }),
   });
-
-  return await response.json();
 };

@@ -19,5 +19,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": ["phpmyfaq/assets/src", "phpmyfaq/admin/assets/src"]
 }

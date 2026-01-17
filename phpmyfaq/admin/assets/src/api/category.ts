@@ -12,10 +12,11 @@
  * @link      https://www.phpmyfaq.de
  * @since     2023-12-28
  */
+import { fetchJson } from './fetch-wrapper';
 import { CategoryTranslations, Response } from '../interfaces';
 
 export const fetchCategoryTranslations = async (categoryId: string): Promise<CategoryTranslations> => {
-  const response = await fetch(`./api/category/translations/${categoryId}`, {
+  return await fetchJson(`./api/category/translations/${categoryId}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -24,8 +25,6 @@ export const fetchCategoryTranslations = async (categoryId: string): Promise<Cat
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   });
-
-  return await response.json();
 };
 
 export const deleteCategory = async (
@@ -33,7 +32,7 @@ export const deleteCategory = async (
   language: string,
   csrfToken: string
 ): Promise<Response | undefined> => {
-  const response = await fetch(`./api/category/delete`, {
+  return await fetchJson(`./api/category/delete`, {
     method: 'DELETE',
     cache: 'no-cache',
     headers: {
@@ -47,8 +46,6 @@ export const deleteCategory = async (
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   });
-
-  return await response.json();
 };
 
 export const setCategoryTree = async (
@@ -56,7 +53,7 @@ export const setCategoryTree = async (
   categoryId: string,
   csrfToken: string
 ): Promise<Response | undefined> => {
-  const response = await fetch('./api/category/update-order', {
+  return await fetchJson('./api/category/update-order', {
     method: 'POST',
     cache: 'no-cache',
     headers: {
@@ -70,6 +67,4 @@ export const setCategoryTree = async (
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   });
-
-  return await response.json();
 };

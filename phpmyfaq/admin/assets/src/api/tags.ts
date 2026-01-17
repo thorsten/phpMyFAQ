@@ -13,13 +13,15 @@
  * @since     2023-04-12
  */
 
+import { fetchJson } from './fetch-wrapper';
+
 interface TagResponse {
   id: string;
   name: string;
 }
 
 export const fetchTags = async (searchString: string): Promise<TagResponse[]> => {
-  const response = await fetch(`./api/content/tags?search=${searchString}`, {
+  return await fetchJson(`./api/content/tags?search=${searchString}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -28,12 +30,10 @@ export const fetchTags = async (searchString: string): Promise<TagResponse[]> =>
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   });
-
-  return await response.json();
 };
 
 export const deleteTag = async (tagId: string): Promise<{ success?: string; error?: string }> => {
-  const response = await fetch(`./api/content/tags/${tagId}`, {
+  return await fetchJson(`./api/content/tags/${tagId}`, {
     method: 'DELETE',
     cache: 'no-cache',
     headers: {
@@ -42,6 +42,4 @@ export const deleteTag = async (tagId: string): Promise<{ success?: string; erro
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   });
-
-  return await response.json();
 };

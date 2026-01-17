@@ -38,17 +38,20 @@ describe('fetchFaqsByAutocomplete', () => {
     expect(global.fetch).toHaveBeenCalled();
   });
 
-  test('should throw an error if the network response is not ok', async () => {
+  test('should return error JSON for non-ok response', async () => {
+    const mockError = { error: 'Server error', status: 500 };
     global.fetch = vi.fn(() =>
       Promise.resolve({
         status: 500,
+        json: () => Promise.resolve(mockError),
       } as Response)
     );
 
     const searchTerm = 'faq';
     const csrfToken = 'csrfToken';
 
-    await expect(fetchFaqsByAutocomplete(searchTerm, csrfToken)).rejects.toThrow('Network response was not ok.');
+    const result = await fetchFaqsByAutocomplete(searchTerm, csrfToken);
+    expect(result).toEqual(mockError);
   });
 });
 
@@ -71,10 +74,12 @@ describe('deleteFaq', () => {
     expect(global.fetch).toHaveBeenCalled();
   });
 
-  test('should throw an error if the network response is not ok', async () => {
+  test('should return error JSON for non-ok response', async () => {
+    const mockError = { error: 'Failed to delete', status: 500 };
     global.fetch = vi.fn(() =>
       Promise.resolve({
         status: 500,
+        json: () => Promise.resolve(mockError),
       } as Response)
     );
 
@@ -82,7 +87,8 @@ describe('deleteFaq', () => {
     const faqLanguage = 'en';
     const csrfToken = 'csrfToken';
 
-    await expect(deleteFaq(faqId, faqLanguage, csrfToken)).rejects.toThrow('Network response was not ok.');
+    const result = await deleteFaq(faqId, faqLanguage, csrfToken);
+    expect(result).toEqual(mockError);
   });
 });
 
