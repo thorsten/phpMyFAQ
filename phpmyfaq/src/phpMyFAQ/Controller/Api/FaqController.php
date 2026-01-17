@@ -539,13 +539,14 @@ final class FaqController extends AbstractApiController
         );
 
         $onlyActive = (bool) $this->configuration->get('api.onlyActiveFaqs');
+        $ignoreOrphanedFaqs = (bool) $this->configuration->get('api.ignoreOrphanedFaqs');
 
         // Get all FAQs (this populates $faq->faqRecords)
         $faq->getAllFaqs(
             FAQ_SORTING_TYPE_CATID_FAQID,
             [
                 'lang' => $this->configuration->getLanguage()->getLanguage(),
-                'fcr.category_id' => 'IS NOT NULL',
+                'fcr.category_id' => $ignoreOrphanedFaqs ? 'IS NOT NULL' : null,
                 'fd.active' => $onlyActive ? 'yes' : null,
             ],
             $sort->getOrderSql(),

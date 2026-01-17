@@ -1333,6 +1333,9 @@ class Faq
     ): void {
         $where = '';
         if (!is_null($condition)) {
+            // Filter out null values from conditions
+            $condition = array_filter($condition, fn($value) => $value !== null);
+
             $num = count($condition);
             $where = 'WHERE ';
             foreach ($condition as $field => $data) {
