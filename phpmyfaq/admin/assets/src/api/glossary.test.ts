@@ -33,10 +33,12 @@ describe('createGlossary', () => {
     });
   });
 
-  it('should throw an error if the network response is not ok', async () => {
+  it('should return error JSON for non-ok response', async () => {
+    const mockError = { error: 'Failed to create glossary', status: 500 };
     global.fetch = vi.fn(() =>
       Promise.resolve({
         status: 500,
+        json: () => Promise.resolve(mockError),
       } as Response)
     );
 
@@ -45,7 +47,8 @@ describe('createGlossary', () => {
     const definition = 'definition';
     const csrfToken = 'csrfToken';
 
-    await expect(createGlossary(language, item, definition, csrfToken)).rejects.toThrow('Network response was not ok.');
+    const result = await createGlossary(language, item, definition, csrfToken);
+    expect(result).toEqual(mockError);
   });
 });
 
@@ -79,10 +82,12 @@ describe('deleteGlossary', () => {
     });
   });
 
-  it('should throw an error if the network response is not ok', async () => {
+  it('should return error JSON for non-ok response', async () => {
+    const mockError = { error: 'Failed to delete glossary', status: 500 };
     global.fetch = vi.fn(() =>
       Promise.resolve({
         status: 500,
+        json: () => Promise.resolve(mockError),
       } as Response)
     );
 
@@ -90,7 +95,8 @@ describe('deleteGlossary', () => {
     const glossaryLang = 'en';
     const csrfToken = 'csrfToken';
 
-    await expect(deleteGlossary(glossaryId, glossaryLang, csrfToken)).rejects.toThrow('Network response was not ok.');
+    const result = await deleteGlossary(glossaryId, glossaryLang, csrfToken);
+    expect(result).toEqual(mockError);
   });
 });
 
@@ -118,17 +124,20 @@ describe('getGlossary', () => {
     });
   });
 
-  it('should throw an error if the network response is not ok', async () => {
+  it('should return error JSON for non-ok response', async () => {
+    const mockError = { error: 'Glossary not found', status: 404 };
     global.fetch = vi.fn(() =>
       Promise.resolve({
-        status: 500,
+        status: 404,
+        json: () => Promise.resolve(mockError),
       } as Response)
     );
 
     const glossaryId = '123';
     const glossaryLanguage = 'en';
 
-    await expect(getGlossary(glossaryId, glossaryLanguage)).rejects.toThrow('Network response was not ok.');
+    const result = await getGlossary(glossaryId, glossaryLanguage);
+    expect(result).toEqual(mockError);
   });
 });
 
@@ -166,10 +175,12 @@ describe('updateGlossary', () => {
     });
   });
 
-  it('should throw an error if the network response is not ok', async () => {
+  it('should return error JSON for non-ok response', async () => {
+    const mockError = { error: 'Failed to update glossary', status: 500 };
     global.fetch = vi.fn(() =>
       Promise.resolve({
         status: 500,
+        json: () => Promise.resolve(mockError),
       } as Response)
     );
 
@@ -179,8 +190,7 @@ describe('updateGlossary', () => {
     const definition = 'definition';
     const csrfToken = 'csrfToken';
 
-    await expect(updateGlossary(glossaryId, glossaryLanguage, item, definition, csrfToken)).rejects.toThrow(
-      'Network response was not ok.'
-    );
+    const result = await updateGlossary(glossaryId, glossaryLanguage, item, definition, csrfToken);
+    expect(result).toEqual(mockError);
   });
 });

@@ -13,6 +13,7 @@
  * @since     2025-01-26
  */
 
+import { fetchJson } from './fetch-wrapper';
 import { InstanceResponse } from '../interfaces';
 
 export const addInstance = async (
@@ -24,7 +25,7 @@ export const addInstance = async (
   admin: string,
   password: string
 ): Promise<InstanceResponse> => {
-  const response = await fetch(`./api/faq/search`, {
+  return await fetchJson(`./api/faq/search`, {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -40,12 +41,10 @@ export const addInstance = async (
       password: password,
     }),
   });
-
-  return await response.json();
 };
 
 export const deleteInstance = async (csrf: string, instanceId: string): Promise<InstanceResponse> => {
-  const response = await fetch('./api/instance/delete', {
+  return await fetchJson('./api/instance/delete', {
     method: 'DELETE',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -56,6 +55,4 @@ export const deleteInstance = async (csrf: string, instanceId: string): Promise<
       instanceId: instanceId,
     }),
   });
-
-  return await response.json();
 };

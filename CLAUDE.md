@@ -54,6 +54,7 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 - TypeScript code in watch mode: pnpm test:watch
 - TypeScript linting: pnpm lint
 - TypeScript code formatting: pnpm lint:fix
+- TypeScript errors have to be fixed before committing code.
 
 ## Building
 

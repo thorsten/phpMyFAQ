@@ -13,6 +13,7 @@
  * @since     2023-12-27
  */
 
+import { fetchJson } from './fetch-wrapper';
 import { Response } from '../interfaces';
 import { FaqList } from '../interfaces';
 
@@ -37,7 +38,7 @@ export const fetchAllFaqsByCategory = async (
   if (onlyNew) {
     url.searchParams.set('only-new', onlyNew as unknown as string);
   }
-  const response = await fetch(url.toString(), {
+  return await fetchJson(url.toString(), {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -46,12 +47,10 @@ export const fetchAllFaqsByCategory = async (
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   });
-
-  return await response.json();
 };
 
 export const fetchFaqsByAutocomplete = async (searchTerm: string, csrfToken: string): Promise<Response | undefined> => {
-  const response = await fetch(`./api/faq/search`, {
+  return await fetchJson(`./api/faq/search`, {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -62,16 +61,10 @@ export const fetchFaqsByAutocomplete = async (searchTerm: string, csrfToken: str
       csrf: csrfToken,
     }),
   });
-
-  if (response.status === 200) {
-    return await response.json();
-  }
-
-  throw new Error('Network response was not ok.');
 };
 
 export const deleteFaq = async (faqId: string, faqLanguage: string, token: string): Promise<Response | undefined> => {
-  const response = await fetch('./api/faq/delete', {
+  return await fetchJson('./api/faq/delete', {
     method: 'DELETE',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -83,16 +76,10 @@ export const deleteFaq = async (faqId: string, faqLanguage: string, token: strin
       faqLanguage: faqLanguage,
     }),
   });
-
-  if (response.status === 200) {
-    return await response.json();
-  }
-
-  throw new Error('Network response was not ok.');
 };
 
 export const create = async (formData: unknown): Promise<Response | undefined> => {
-  const response = await fetch('./api/faq/create', {
+  return await fetchJson('./api/faq/create', {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -102,12 +89,10 @@ export const create = async (formData: unknown): Promise<Response | undefined> =
       data: formData,
     }),
   });
-
-  return await response.json();
 };
 
 export const update = async (formData: unknown): Promise<Response | undefined> => {
-  const response = await fetch('./api/faq/update', {
+  return await fetchJson('./api/faq/update', {
     method: 'PUT',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -117,6 +102,4 @@ export const update = async (formData: unknown): Promise<Response | undefined> =
       data: formData,
     }),
   });
-
-  return await response.json();
 };

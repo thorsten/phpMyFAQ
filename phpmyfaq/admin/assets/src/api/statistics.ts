@@ -13,10 +13,11 @@
  * @since     2024-04-21
  */
 
+import { fetchJson } from './fetch-wrapper';
 import { Response } from '../interfaces';
 
 export const deleteAdminLog = async (csrfToken: string): Promise<Response | undefined> => {
-  const response = await fetch(`./api/statistics/admin-log`, {
+  return await fetchJson(`./api/statistics/admin-log`, {
     method: 'DELETE',
     cache: 'no-cache',
     headers: {
@@ -28,12 +29,10 @@ export const deleteAdminLog = async (csrfToken: string): Promise<Response | unde
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   });
-
-  return await response.json();
 };
 
 export const truncateSearchTerms = async (csrfToken: string): Promise<Response | undefined> => {
-  const response = await fetch(`./api/statistics/search-terms`, {
+  return await fetchJson(`./api/statistics/search-terms`, {
     method: 'DELETE',
     cache: 'no-cache',
     headers: {
@@ -45,12 +44,10 @@ export const truncateSearchTerms = async (csrfToken: string): Promise<Response |
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   });
-
-  return await response.json();
 };
 
 export const clearRatings = async (csrfToken: string): Promise<Response | undefined> => {
-  const response = await fetch(`./api/statistics/ratings/clear`, {
+  return await fetchJson(`./api/statistics/ratings/clear`, {
     method: 'DELETE',
     cache: 'no-cache',
     headers: {
@@ -62,12 +59,10 @@ export const clearRatings = async (csrfToken: string): Promise<Response | undefi
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   });
-
-  return await response.json();
 };
 
 export const clearVisits = async (csrfToken: string): Promise<Response | undefined> => {
-  const response = await fetch(`./api/statistics/visits/clear`, {
+  return await fetchJson(`./api/statistics/visits/clear`, {
     method: 'DELETE',
     cache: 'no-cache',
     headers: {
@@ -79,12 +74,10 @@ export const clearVisits = async (csrfToken: string): Promise<Response | undefin
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   });
-
-  return await response.json();
 };
 
 export const deleteSessions = async (csrfToken: string, month: string): Promise<Response | undefined> => {
-  const response = await fetch(`./api/statistics/sessions`, {
+  return await fetchJson(`./api/statistics/sessions`, {
     method: 'DELETE',
     cache: 'no-cache',
     headers: {
@@ -97,6 +90,4 @@ export const deleteSessions = async (csrfToken: string, month: string): Promise<
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   });
-
-  return await response.json();
 };

@@ -13,10 +13,11 @@
  * @since     2022-03-23
  */
 
+import { fetchJson } from './fetch-wrapper';
 import { Response, UserData } from '../interfaces';
 
 export const fetchUsers = async (userName: string): Promise<Response> => {
-  const response = await fetch(`./api/user/users?filter=${userName}`, {
+  return await fetchJson(`./api/user/users?filter=${userName}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -25,12 +26,10 @@ export const fetchUsers = async (userName: string): Promise<Response> => {
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   });
-
-  return await response.json();
 };
 
 export const fetchUserData = async (userId: string): Promise<UserData> => {
-  const response = await fetch(`./api/user/data/${userId}`, {
+  return await fetchJson(`./api/user/data/${userId}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -39,12 +38,10 @@ export const fetchUserData = async (userId: string): Promise<UserData> => {
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   });
-
-  return await response.json();
 };
 
 export const fetchUserRights = async (userId: string): Promise<number[]> => {
-  const response = await fetch(`./api/user/permissions/${userId}`, {
+  return await fetchJson(`./api/user/permissions/${userId}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -53,12 +50,10 @@ export const fetchUserRights = async (userId: string): Promise<number[]> => {
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   });
-
-  return await response.json();
 };
 
 export const fetchAllUsers = async (): Promise<Response> => {
-  const response = await fetch('./api/user/users', {
+  return await fetchJson('./api/user/users', {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -67,8 +62,6 @@ export const fetchAllUsers = async (): Promise<Response> => {
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   });
-
-  return await response.json();
 };
 
 export const overwritePassword = async (
@@ -77,7 +70,7 @@ export const overwritePassword = async (
   newPassword: string,
   passwordRepeat: string
 ): Promise<Response | undefined> => {
-  const response = await fetch('./api/user/overwrite-password', {
+  return await fetchJson('./api/user/overwrite-password', {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -90,12 +83,10 @@ export const overwritePassword = async (
       passwordRepeat: passwordRepeat,
     }),
   });
-
-  return await response.json();
 };
 
 export const postUserData = async (url: string = '', data: Record<string, unknown> = {}): Promise<Response> => {
-  const response = await fetch(url, {
+  return await fetchJson(url, {
     method: 'POST',
     cache: 'no-cache',
     headers: {
@@ -105,12 +96,10 @@ export const postUserData = async (url: string = '', data: Record<string, unknow
     referrerPolicy: 'no-referrer',
     body: JSON.stringify(data),
   });
-
-  return await response.json();
 };
 
 export const activateUser = async (userId: string, csrfToken: string): Promise<Response> => {
-  const response = await fetch('./api/user/activate', {
+  return await fetchJson('./api/user/activate', {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -121,12 +110,10 @@ export const activateUser = async (userId: string, csrfToken: string): Promise<R
       userId: userId,
     }),
   });
-
-  return await response.json();
 };
 
 export const deleteUser = async (userId: string, csrfToken: string): Promise<Response> => {
-  const response = await fetch('./api/user/delete', {
+  return await fetchJson('./api/user/delete', {
     method: 'DELETE',
     cache: 'no-cache',
     headers: {
@@ -139,6 +126,4 @@ export const deleteUser = async (userId: string, csrfToken: string): Promise<Res
       userId: userId,
     }),
   });
-
-  return await response.json();
 };

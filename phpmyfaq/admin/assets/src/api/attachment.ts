@@ -13,10 +13,11 @@
  * @since     2024-05-01
  */
 
+import { fetchJson } from './fetch-wrapper';
 import { Response } from '../interfaces';
 
 export const deleteAttachments = async (attachmentId: string, csrfToken: string): Promise<Response> => {
-  const response = await fetch('./api/content/attachments', {
+  return await fetchJson('./api/content/attachments', {
     method: 'DELETE',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -24,12 +25,10 @@ export const deleteAttachments = async (attachmentId: string, csrfToken: string)
     },
     body: JSON.stringify({ attId: attachmentId, csrf: csrfToken }),
   });
-
-  return await response.json();
 };
 
 export const refreshAttachments = async (attachmentId: string, csrfToken: string): Promise<Response> => {
-  const response = await fetch('./api/content/attachments/refresh', {
+  return await fetchJson('./api/content/attachments/refresh', {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -37,16 +36,12 @@ export const refreshAttachments = async (attachmentId: string, csrfToken: string
     },
     body: JSON.stringify({ attId: attachmentId, csrf: csrfToken }),
   });
-
-  return await response.json();
 };
 
 export const uploadAttachments = async (formData: FormData): Promise<Response> => {
-  const response = await fetch('./api/content/attachments/upload', {
+  return await fetchJson('./api/content/attachments/upload', {
     method: 'POST',
     cache: 'no-cache',
     body: formData,
   });
-
-  return await response.json();
 };

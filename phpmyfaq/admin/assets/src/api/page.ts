@@ -13,8 +13,10 @@
  * @since     2026-01-15
  */
 
+import { fetchJson } from './fetch-wrapper';
+
 export const addPage = async (data: Record<string, unknown> = {}): Promise<unknown> => {
-  const response = await fetch('api/page/create', {
+  return await fetchJson('api/page/create', {
     method: 'POST',
     cache: 'no-cache',
     headers: {
@@ -24,12 +26,10 @@ export const addPage = async (data: Record<string, unknown> = {}): Promise<unkno
     referrerPolicy: 'no-referrer',
     body: JSON.stringify(data),
   });
-
-  return await response.json();
 };
 
 export const deletePage = async (csrfToken: string, id: string, lang: string): Promise<unknown> => {
-  const response = await fetch('api/page/delete', {
+  return await fetchJson('api/page/delete', {
     method: 'DELETE',
     cache: 'no-cache',
     headers: {
@@ -43,12 +43,10 @@ export const deletePage = async (csrfToken: string, id: string, lang: string): P
       lang: lang,
     }),
   });
-
-  return await response.json();
 };
 
 export const updatePage = async (data: Record<string, unknown> = {}): Promise<unknown> => {
-  const response = await fetch('api/page/update', {
+  return await fetchJson('api/page/update', {
     method: 'PUT',
     cache: 'no-cache',
     headers: {
@@ -58,12 +56,10 @@ export const updatePage = async (data: Record<string, unknown> = {}): Promise<un
     referrerPolicy: 'no-referrer',
     body: JSON.stringify(data),
   });
-
-  return await response.json();
 };
 
 export const activatePage = async (id: string, status: boolean, csrfToken: string): Promise<unknown> => {
-  const response = await fetch('api/page/activate', {
+  return await fetchJson('api/page/activate', {
     method: 'POST',
     cache: 'no-cache',
     headers: {
@@ -77,8 +73,6 @@ export const activatePage = async (id: string, status: boolean, csrfToken: strin
       csrfToken: csrfToken,
     }),
   });
-
-  return await response.json();
 };
 
 export const checkSlug = async (
@@ -87,7 +81,7 @@ export const checkSlug = async (
   csrfToken: string,
   excludeId?: string
 ): Promise<unknown> => {
-  const response = await fetch('api/page/check-slug', {
+  return await fetchJson('api/page/check-slug', {
     method: 'POST',
     cache: 'no-cache',
     headers: {
@@ -102,6 +96,4 @@ export const checkSlug = async (
       excludeId: excludeId,
     }),
   });
-
-  return await response.json();
 };
