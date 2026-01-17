@@ -183,11 +183,11 @@ class CategoryRepository implements CategoryRepositoryInterface
         int $offset = 0,
         string $sortField = 'id',
         string $sortOrder = 'ASC',
+        bool $activeOnly = false,
     ): array {
         $categories = [];
-        $prefix = Database::getTablePrefix();
 
-        // Whitelist validation for sort field
+        // Whitelist validation for the sort field
         $allowedSortFields = ['id', 'name', 'parent_id', 'active'];
         if (!in_array($sortField, $allowedSortFields, strict: true)) {
             $sortField = 'id';
@@ -195,11 +195,21 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         $query = sprintf(
             'SELECT id, lang, parent_id, name, description, user_id, group_id, active, show_home, image FROM %sfaqcategories',
-            $prefix,
+            Database::getTablePrefix(),
         );
 
+        $whereConditions = [];
+
         if ($language !== null && preg_match(pattern: '/^[a-z\-]{2,}$/', subject: $language)) {
-            $query .= " WHERE lang = '" . $this->configuration->getDb()->escape($language) . "'";
+            $whereConditions[] = "lang = '" . $this->configuration->getDb()->escape($language) . "'";
+        }
+
+        if ($activeOnly) {
+            $whereConditions[] = 'active = 1';
+        }
+
+        if (!empty($whereConditions)) {
+            $query .= ' WHERE ' . implode(' AND ', $whereConditions);
         }
 
         $query .= sprintf(' ORDER BY %s %s LIMIT %d OFFSET %d', $sortField, $sortOrder, $limit, $offset);
@@ -220,14 +230,25 @@ class CategoryRepository implements CategoryRepositoryInterface
      * Count total categories for a language.
      *
      * @param string|null $language Language code filter
+     * @param bool $activeOnly Only count active categories
      * @return int Total count
      */
-    public function countCategories(?string $language = null): int
+    public function countCategories(?string $language = null, bool $activeOnly = false): int
     {
         $query = sprintf('SELECT COUNT(*) as total FROM %sfaqcategories', Database::getTablePrefix());
 
+        $whereConditions = [];
+
         if ($language !== null && preg_match(pattern: '/^[a-z\-]{2,}$/', subject: $language)) {
-            $query .= " WHERE lang = '" . $this->configuration->getDb()->escape($language) . "'";
+            $whereConditions[] = "lang = '" . $this->configuration->getDb()->escape($language) . "'";
+        }
+
+        if ($activeOnly) {
+            $whereConditions[] = 'active = 1';
+        }
+
+        if (!empty($whereConditions)) {
+            $query .= ' WHERE ' . implode(' AND ', $whereConditions);
         }
 
         $result = $this->configuration->getDb()->query($query);
