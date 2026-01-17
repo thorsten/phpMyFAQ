@@ -1546,7 +1546,6 @@ $PMF_LANG["msgUpdated"] = "Updated";
 $PMF_LANG["ad_menu_pages"] = "Custom Pages";
 $PMF_LANG["ad_page_add"] = "Add Custom Page";
 $PMF_LANG["ad_page_edit"] = "Edit Custom Page";
-$PMF_LANG["ad_page_header"] = "Page Header";
 $PMF_LANG["ad_page_title"] = "Page Title";
 $PMF_LANG["ad_page_slug"] = "URL Slug";
 $PMF_LANG["ad_page_slug_help"] = "URL-friendly identifier for this page (e.g., 'privacy-policy')";

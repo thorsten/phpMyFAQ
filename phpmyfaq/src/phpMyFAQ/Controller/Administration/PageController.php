@@ -233,7 +233,6 @@ final class PageController extends AbstractAdministrationController
             'ad_page_delete' => Translation::get(key: 'ad_page_delete'),
             'ad_page_nodata' => Translation::get(key: 'ad_page_nodata'),
             'ad_page_edit' => Translation::get(key: 'ad_page_edit'),
-            'ad_page_header' => Translation::get(key: 'ad_page_header'),
             'ad_page_content' => Translation::get(key: 'ad_page_content'),
             'msgLanguage' => Translation::get(key: 'msgLanguage'),
             'ad_page_insertfail' => Translation::get(key: 'ad_page_insertfail'),
