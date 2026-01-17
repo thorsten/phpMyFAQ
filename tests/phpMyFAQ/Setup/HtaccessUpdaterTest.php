@@ -61,35 +61,35 @@ class HtaccessUpdaterTest extends TestCase
     {
         // Create a test .htaccess file with user-generated content
         $originalContent = <<<HTACCESS
-        ##
-        # phpMyFAQ .htaccess file for Apache 2.x
-        #
-        DirectoryIndex index.php
+            ##
+            # phpMyFAQ .htaccess file for Apache 2.x
+            #
+            DirectoryIndex index.php
 
-        # User added custom directory protection
-        AuthType Basic
-        AuthName "Protected Area"
-        AuthUserFile /path/to/.htpasswd
-        Require valid-user
+            # User added custom directory protection
+            AuthType Basic
+            AuthName "Protected Area"
+            AuthUserFile /path/to/.htpasswd
+            Require valid-user
 
-        # Custom redirect
-        Redirect 301 /old-page.html /new-page.html
+            # Custom redirect
+            Redirect 301 /old-page.html /new-page.html
 
-        <IfModule mod_rewrite.c>
-            RewriteEngine On
-            # the path to your phpMyFAQ installation
-            RewriteBase /old/path/
-            
-            # User added custom rules
-            RewriteRule ^api/(.*)$ api/index.php [L,QSA]
-            
-            # Error pages
-            ErrorDocument 404 /index.php?action=404
-        </IfModule>
+            <IfModule mod_rewrite.c>
+                RewriteEngine On
+                # the path to your phpMyFAQ installation
+                RewriteBase /old/path/
+                
+                # User added custom rules
+                RewriteRule ^api/(.*)$ api/index.php [L,QSA]
+                
+                # Error pages
+                ErrorDocument 404 /index.php?action=404
+            </IfModule>
 
-        # User added custom headers
-        Header set X-Custom-Header "Custom Value"
-        HTACCESS;
+            # User added custom headers
+            Header set X-Custom-Header "Custom Value"
+            HTACCESS;
 
         file_put_contents($this->testHtaccessPath, $originalContent);
 
@@ -118,13 +118,13 @@ class HtaccessUpdaterTest extends TestCase
     {
         // Create a test .htaccess file without RewriteBase
         $originalContent = <<<HTACCESS
-        <IfModule mod_rewrite.c>
-            RewriteEngine On
-            
-            # Some custom rules
-            RewriteRule ^api/(.*)$ api/index.php [L,QSA]
-        </IfModule>
-        HTACCESS;
+            <IfModule mod_rewrite.c>
+                RewriteEngine On
+                
+                # Some custom rules
+                RewriteRule ^api/(.*)$ api/index.php [L,QSA]
+            </IfModule>
+            HTACCESS;
 
         file_put_contents($this->testHtaccessPath, $originalContent);
 
@@ -144,11 +144,11 @@ class HtaccessUpdaterTest extends TestCase
     {
         // Create a valid .htaccess file
         $validContent = <<<HTACCESS
-        <IfModule mod_rewrite.c>
-            RewriteEngine On
-            RewriteBase /
-        </IfModule>
-        HTACCESS;
+            <IfModule mod_rewrite.c>
+                RewriteEngine On
+                RewriteBase /
+            </IfModule>
+            HTACCESS;
 
         file_put_contents($this->testHtaccessPath, $validContent);
 
@@ -171,11 +171,11 @@ class HtaccessUpdaterTest extends TestCase
     {
         // Create a test .htaccess file
         $originalContent = <<<HTACCESS
-        <IfModule mod_rewrite.c>
-            RewriteEngine On
-            RewriteBase /subfolder/
-        </IfModule>
-        HTACCESS;
+            <IfModule mod_rewrite.c>
+                RewriteEngine On
+                RewriteBase /subfolder/
+            </IfModule>
+            HTACCESS;
 
         file_put_contents($this->testHtaccessPath, $originalContent);
 
@@ -194,10 +194,10 @@ class HtaccessUpdaterTest extends TestCase
     public function testRepeatedCallsAreIdempotentAndDoNotDuplicateOrCreateMultipleBackups(): void
     {
         $content = <<<HTACCESS
-        <IfModule mod_rewrite.c>
-            RewriteEngine On
-        </IfModule>
-        HTACCESS;
+            <IfModule mod_rewrite.c>
+                RewriteEngine On
+            </IfModule>
+            HTACCESS;
         file_put_contents($this->testHtaccessPath, $content);
 
         // First run should add one RewriteBase and create exactly one backup
@@ -218,11 +218,11 @@ class HtaccessUpdaterTest extends TestCase
     public function testExistingRewriteBaseWithoutTrailingSlashIsTreatedAsEqual(): void
     {
         $content = <<<HTACCESS
-        <IfModule mod_rewrite.c>
-            RewriteEngine On
-            RewriteBase /foo/bar
-        </IfModule>
-        HTACCESS;
+            <IfModule mod_rewrite.c>
+                RewriteEngine On
+                RewriteBase /foo/bar
+            </IfModule>
+            HTACCESS;
         file_put_contents($this->testHtaccessPath, $content);
 
         // Should detect equivalence and not write a backup

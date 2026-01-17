@@ -280,7 +280,7 @@ class CustomPageTest extends TestCase
             ->method('slugExists')
             ->willReturnMap([
                 ['existing-slug', 'en', null, true],
-                ['new-slug', 'en', null, false],
+                ['new-slug',      'en', null, false],
             ]);
 
         $this->assertTrue($this->customPage->slugExists('existing-slug'));
@@ -293,7 +293,7 @@ class CustomPageTest extends TestCase
             ->expects($this->exactly(3))
             ->method('slugExists')
             ->willReturnMap([
-                ['test-slug', 'en', null, true],
+                ['test-slug',   'en', null, true],
                 ['test-slug-1', 'en', null, true],
                 ['test-slug-2', 'en', null, false],
             ]);

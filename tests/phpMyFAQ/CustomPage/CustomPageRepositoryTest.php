@@ -159,7 +159,7 @@ class CustomPageRepositoryTest extends TestCase
                 ->setContent("<p>Content $i</p>")
                 ->setAuthorName('Test')
                 ->setAuthorEmail('test@example.com')
-                ->setActive($i % 2 === 1)
+                ->setActive(($i % 2) === 1)
                 ->setCreated(new DateTime());
 
             $this->repository->insert($page);
@@ -176,14 +176,7 @@ class CustomPageRepositoryTest extends TestCase
 
     public function testGetAllPaginated(): void
     {
-        $pages = iterator_to_array($this->repository->getAllPaginated(
-            'en',
-            false,
-            2,
-            0,
-            'page_title',
-            'ASC'
-        ));
+        $pages = iterator_to_array($this->repository->getAllPaginated('en', false, 2, 0, 'page_title', 'ASC'));
 
         $this->assertLessThanOrEqual(2, count($pages));
     }
@@ -238,15 +231,7 @@ class CustomPageRepositoryTest extends TestCase
         $this->assertGreaterThan(0, $pageIdEn);
 
         $pageDe = new CustomPageEntity();
-        $pageDe
-            ->setLanguage('de')
-            ->setPageTitle('German Page')
-            ->setSlug('multilang-page') // Same slug, different language
-            ->setContent('<p>German content</p>')
-            ->setAuthorName('Test')
-            ->setAuthorEmail('test@example.com')
-            ->setActive(true)
-            ->setCreated(new DateTime());
+        $pageDe->setLanguage('de')->setPageTitle('German Page')->setSlug('multilang-page')->setContent('<p>German content</p>')->setAuthorName('Test')->setAuthorEmail('test@example.com')->setActive(true)->setCreated(new DateTime()); // Same slug, different language
 
         $pageIdDe = $this->repository->insert($pageDe);
         $this->assertGreaterThan(0, $pageIdDe);
@@ -271,60 +256,25 @@ class CustomPageRepositoryTest extends TestCase
     public function testSortFieldWhitelist(): void
     {
         // Valid sort fields should work
-        $pages = iterator_to_array($this->repository->getAllPaginated(
-            'en',
-            false,
-            10,
-            0,
-            'page_title',
-            'ASC'
-        ));
+        $pages = iterator_to_array($this->repository->getAllPaginated('en', false, 10, 0, 'page_title', 'ASC'));
         $this->assertIsArray($pages);
 
         // Invalid sort field should default to 'created'
-        $pages = iterator_to_array($this->repository->getAllPaginated(
-            'en',
-            false,
-            10,
-            0,
-            'invalid_field',
-            'ASC'
-        ));
+        $pages = iterator_to_array($this->repository->getAllPaginated('en', false, 10, 0, 'invalid_field', 'ASC'));
         $this->assertIsArray($pages);
     }
 
     public function testSortOrderValidation(): void
     {
         // Valid sort orders
-        $pagesAsc = iterator_to_array($this->repository->getAllPaginated(
-            'en',
-            false,
-            10,
-            0,
-            'page_title',
-            'ASC'
-        ));
+        $pagesAsc = iterator_to_array($this->repository->getAllPaginated('en', false, 10, 0, 'page_title', 'ASC'));
         $this->assertIsArray($pagesAsc);
 
-        $pagesDesc = iterator_to_array($this->repository->getAllPaginated(
-            'en',
-            false,
-            10,
-            0,
-            'page_title',
-            'DESC'
-        ));
+        $pagesDesc = iterator_to_array($this->repository->getAllPaginated('en', false, 10, 0, 'page_title', 'DESC'));
         $this->assertIsArray($pagesDesc);
 
         // Invalid sort order should default to 'DESC'
-        $pages = iterator_to_array($this->repository->getAllPaginated(
-            'en',
-            false,
-            10,
-            0,
-            'page_title',
-            'INVALID'
-        ));
+        $pages = iterator_to_array($this->repository->getAllPaginated('en', false, 10, 0, 'page_title', 'INVALID'));
         $this->assertIsArray($pages);
     }
 
