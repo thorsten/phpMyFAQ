@@ -181,6 +181,20 @@ final class PageController extends AbstractAdministrationApiController
         $seoDescription = Filter::filterVar($data->seoDescription ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
         $seoRobots = Filter::filterVar($data->seoRobots ?? 'index,follow', FILTER_SANITIZE_SPECIAL_CHARS);
 
+        // Check if this is a translation (pageId provided)
+        $isTranslation = isset($data->pageId) && $data->pageId > 0;
+        $translationPageId = $isTranslation ? Filter::filterVar($data->pageId, FILTER_VALIDATE_INT) : null;
+
+        // For translations, check if language already exists for this page ID
+        if ($isTranslation) {
+            $existingLanguages = $customPage->getExistingLanguages($translationPageId);
+            if (in_array($language, $existingLanguages)) {
+                return $this->json([
+                    'error' => 'Translation for this language already exists',
+                ], Response::HTTP_CONFLICT);
+            }
+        }
+
         // Check if slug exists
         if ($customPage->slugExists($slug, $language)) {
             return $this->json(['error' => Translation::get(key: 'ad_page_slug_exists')], Response::HTTP_CONFLICT);
@@ -204,9 +218,16 @@ final class PageController extends AbstractAdministrationApiController
             ->setSeoRobots($seoRobots)
             ->setCreated(new DateTime());
 
-        $pageId = $customPage->create($pageEntity);
+        // Create translation or new page
+        if ($isTranslation) {
+            $success = $customPage->createTranslation($pageEntity, $translationPageId);
+            $pageId = $success ? $translationPageId : 0;
+        } else {
+            $pageId = $customPage->create($pageEntity);
+            $success = $pageId > 0;
+        }
 
-        if ($pageId > 0) {
+        if ($success) {
             $this->adminLog->log($this->currentUser, AdminLogType::PAGE_ADD->value);
 
             // Index in Elasticsearch/OpenSearch

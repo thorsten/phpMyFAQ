@@ -27,13 +27,13 @@
           <th>{{ ad_page_slug }}</th>
           <th>{{ msgLanguage }}</th>
           <th>{{ ad_page_created }}</th>
-          <th colspan="2">&nbsp;</th>
+          <th colspan="3">&nbsp;</th>
           <th>{{ ad_entry_active }}</th>
         </tr>
         </thead>
         <tfoot>
         <tr>
-          <td colspan="7">{{ pagination | raw }}</td>
+          <td colspan="8">{{ pagination | raw }}</td>
         </tr>
         </tfoot>
         <tbody>
@@ -42,12 +42,19 @@
             <tr>
               <td>{{ page.page_title|escape }}</td>
               <td><code>{{ page.slug|escape }}</code></td>
-              <td>{{ page.lang|escape }}</td>
+              <td>{{ page.lang|getFromLanguageCode }}</td>
               <td>{{ page.created|formatDate }}</td>
               <td>
                 {% if permissionEditPage == true %}
                 <a class="btn btn-primary btn-sm" href="./page/edit/{{ page.id }}">
                   <span title="{{ ad_page_update }}" class="bi bi-pencil"></span>
+                </a>
+                {% endif %}
+              </td>
+              <td>
+                {% if permissionAddPage == true %}
+                <a class="btn btn-info btn-sm" href="./page/translate/{{ page.id }}">
+                  <span title="{{ ad_page_add_translation }}" class="bi bi-translate"></span>
                 </a>
                 {% endif %}
               </td>
@@ -69,7 +76,7 @@
           {% endfor %}
         {% else %}
           <tr>
-            <td colspan="7">{{ ad_page_nodata }}</td>
+            <td colspan="8">{{ ad_page_nodata }}</td>
           </tr>
         {% endif %}
         </tbody>

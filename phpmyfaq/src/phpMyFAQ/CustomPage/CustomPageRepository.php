@@ -105,6 +105,52 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
     }
 
     /**
+     * Get all custom pages across all languages with pagination.
+     *
+     * @param bool $activeOnly Filter by active status
+     * @param int $limit Number of items per page
+     * @param int $offset Starting offset
+     * @param string $sortField Field to sort by
+     * @param string $sortOrder Sort direction (ASC, DESC)
+     * @return iterable<stdClass> Generator of page data
+     */
+    public function getAllLanguagesPaginated(
+        bool $activeOnly,
+        int $limit,
+        int $offset,
+        string $sortField,
+        string $sortOrder,
+    ): iterable {
+        // Validate sort field
+        $allowedSortFields = ['id', 'lang', 'page_title', 'slug', 'created', 'updated'];
+        if (!in_array($sortField, $allowedSortFields, strict: true)) {
+            $sortField = 'created';
+        }
+
+        // Validate sort order
+        $sortOrder = strtoupper($sortOrder);
+        if (!in_array($sortOrder, ['ASC', 'DESC'], strict: true)) {
+            $sortOrder = 'DESC';
+        }
+
+        $whereActive = $activeOnly ? "WHERE active = 'y'" : '';
+        $query = sprintf(
+            'SELECT * FROM %sfaqcustompages %s ORDER BY %s %s LIMIT %d OFFSET %d',
+            Database::getTablePrefix(),
+            $whereActive,
+            $sortField,
+            $sortOrder,
+            $limit,
+            $offset,
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            yield $row;
+        }
+    }
+
+    /**
      * Count total custom pages for a language.
      *
      * @param string $language Language code
@@ -120,6 +166,23 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
             $this->configuration->getDb()->escape($language),
             $whereActive,
         );
+
+        $result = $this->configuration->getDb()->query($query);
+        $row = $this->configuration->getDb()->fetchObject($result);
+
+        return (int) ($row->total ?? 0);
+    }
+
+    /**
+     * Count total custom pages across all languages.
+     *
+     * @param bool $activeOnly Filter by active status
+     * @return int Total count
+     */
+    public function countAllLanguages(bool $activeOnly = false): int
+    {
+        $whereActive = $activeOnly ? "WHERE active = 'y'" : '';
+        $query = sprintf('SELECT COUNT(*) as total FROM %sfaqcustompages %s', Database::getTablePrefix(), $whereActive);
 
         $result = $this->configuration->getDb()->query($query);
         $row = $this->configuration->getDb()->fetchObject($result);
@@ -168,6 +231,27 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
     }
 
     /**
+     * Get all existing languages for a given page ID.
+     *
+     * @param int $pageId Page ID
+     * @return array<string> Array of language codes
+     */
+    public function getExistingLanguages(int $pageId): array
+    {
+        $query = sprintf(
+            'SELECT lang FROM %sfaqcustompages WHERE id = %d ORDER BY lang',
+            Database::getTablePrefix(),
+            $pageId,
+        );
+        $result = $this->configuration->getDb()->query($query);
+        $languages = [];
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            $languages[] = $row->lang;
+        }
+        return $languages;
+    }
+
+    /**
      * Insert a new custom page.
      *
      * @param CustomPageEntity $page Custom page entity
@@ -202,6 +286,46 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
         $this->configuration->getDb()->query($query);
         $page->setId($id);
         return $id;
+    }
+
+    /**
+     * Insert a translation for an existing custom page (using same ID, different language).
+     *
+     * @param CustomPageEntity $page Custom page entity
+     * @param int $pageId The existing page ID to use
+     * @return bool Success status
+     */
+    public function insertTranslation(CustomPageEntity $page, int $pageId): bool
+    {
+        $query = sprintf(
+            "
+            INSERT INTO %sfaqcustompages
+            (id, lang, page_title, slug, content, author_name, author_email, active, created, updated, seo_title, seo_description, seo_robots)
+            VALUES
+            (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %s, %s, %s, '%s')",
+            Database::getTablePrefix(),
+            $pageId,
+            $this->configuration->getDb()->escape($page->getLanguage()),
+            $this->configuration->getDb()->escape($page->getPageTitle()),
+            $this->configuration->getDb()->escape($page->getSlug()),
+            $this->configuration->getDb()->escape($page->getContent()),
+            $this->configuration->getDb()->escape($page->getAuthorName()),
+            $this->configuration->getDb()->escape($page->getAuthorEmail()),
+            $page->isActive() ? 'y' : 'n',
+            $page->getCreated()->format(format: 'Y-m-d H:i:s'),
+            'NULL',
+            $page->getSeoTitle() ? "'" . $this->configuration->getDb()->escape($page->getSeoTitle()) . "'" : 'NULL',
+            $page->getSeoDescription()
+                ? "'" . $this->configuration->getDb()->escape($page->getSeoDescription()) . "'"
+                : 'NULL',
+            $this->configuration->getDb()->escape($page->getSeoRobots()),
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+        if ($result) {
+            $page->setId($pageId);
+        }
+        return (bool) $result;
     }
 
     /**

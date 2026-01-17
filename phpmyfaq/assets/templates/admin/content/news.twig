@@ -20,7 +20,7 @@
 
   <div class="row">
     <div class="col-12">
-      <table class="table table-hover align-middle">
+      <table class="table table-hover align-middle border shadow">
         <thead class="thead-dark">
         <tr>
           <th>{{ ad_news_headline }}</th>
@@ -37,14 +37,14 @@
               <td>{{ newsItem.date|formatDate }}</td>
               <td>
                 {% if permissionEditNews == true %}
-                <a class="btn btn-primary" href="./news/edit/{{ newsItem.id }}">
+                <a class="btn btn-primary btn-sm" href="./news/edit/{{ newsItem.id }}">
                   <span title="{{ ad_news_update }}" class="bi bi-pencil"></span>
                 </a>
                 {% endif %}
               </td>
               <td>
                 {% if permissionDeleteNews == true %}
-                <a class="btn btn-danger" data-pmf-newsid="{{ newsItem.id }}" id="deleteNews">
+                <a class="btn btn-danger btn-sm" data-pmf-newsid="{{ newsItem.id }}" id="deleteNews">
                   <span title="{{ ad_news_delete }}" class="bi bi-trash"></span>
                 </a>
                 {% endif %}

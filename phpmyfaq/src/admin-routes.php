@@ -322,6 +322,11 @@ $routesConfig = [
         'controller' => [PageController::class, 'add'],
         'methods' => 'GET',
     ],
+    'admin.page.translate' => [
+        'path' => '/page/translate/{pageId}',
+        'controller' => [PageController::class, 'translate'],
+        'methods' => 'GET',
+    ],
     'admin.page.edit' => [
         'path' => '/page/edit/{pageId}',
         'controller' => [PageController::class, 'edit'],

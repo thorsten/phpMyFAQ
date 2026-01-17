@@ -212,6 +212,216 @@ You can delete them, too.
 
 You can edit existing tags, and if you need to, you can delete the tag.
 
+### 5.2.10 Custom Pages Administration
+
+Custom Pages allow you to create database-backed, SEO-friendly pages for legal information, about pages, and other 
+static content using a WYSIWYG editor. Custom pages support multi-language content, are automatically included in 
+sitemaps, and are searchable alongside FAQs.
+
+#### 5.2.10.1 Creating a Custom Page
+
+To create a new custom page:
+
+1. Navigate to **Content → Custom Pages** in the admin menu
+2. Click the **Add new page** button
+3. Fill in the required information across three tabs:
+
+**Content Tab:**
+- **Page Title**: The main title of your page (e.g., "Privacy Policy")
+- **URL Slug**: SEO-friendly URL identifier (e.g., "privacy-policy")
+  - Automatically generated from the title
+  - Must be unique per language
+  - Real-time validation shows availability
+  - Results in URL: `https://example.com/page/privacy-policy.html`
+- **Content**: Rich text editor (TinyMCE) for page content
+  - Full WYSIWYG editing with formatting, images, links
+  - No HTML knowledge required
+  - Images can be uploaded and managed
+
+**SEO Tab:**
+- **SEO Title**: Custom title for search engines (max 60 characters)
+  - Character counter helps optimize length
+  - Falls back to the page title if empty
+- **Meta-Description**: Description for search results (max 160 characters)
+  - Character counter helps optimize length
+- **Robots Directive**: Controls search engine indexing
+  - `index, follow` (default): Allow indexing and following links
+  - `noindex, follow`: Don't index but follow links
+  - `index, nofollow`: Index but don't follow links
+  - `noindex, nofollow`: Don't index and don't follow links
+
+**Settings Tab:**
+- **Language**: Select the page language (supports multi-language content)
+- **Author Name**: Name of the content author
+- **Author Email**: Email of the content author
+- **Active**: Toggle to publish/unpublish the page
+  - Only active pages appear in search results and sitemaps
+  - Inactive pages return 404 errors when accessed
+
+4. Click **Save** to create the page
+
+#### 5.2.10.2 Managing Custom Pages
+
+The Custom Pages list view provides:
+
+- **Pagination**: Navigate through pages with configurable items per page
+- **Sorting**: Click column headers to sort by title, slug, language, or date
+- **Filtering**: Filter by language or active status
+- **Actions**:
+  - **Edit**: Modify existing pages
+  - **Delete**: Remove pages (with confirmation)
+  - **Active Toggle**: Quickly publish/unpublish pages
+
+#### 5.2.10.3 Multi-Language Support
+
+Custom pages support multiple languages:
+
+- Create the same page in different languages using the same ID
+- Each language version has its own slug
+- Language is selected from the Settings tab
+- Example: "Privacy Policy" can exist as:
+  - English: `privacy-policy`
+  - German: `datenschutz`
+  - French: `politique-de-confidentialite`
+
+#### 5.2.10.4 Legal Pages Integration
+
+Custom pages can be used for legal pages with automatic footer link integration:
+
+**Configuration Setup:**
+
+Navigate to **Configuration → Main Settings** and configure:
+
+- **Privacy URL** (`main.privacyURL`)
+- **Terms of Service URL** (`main.termsURL`)
+- **Imprint URL** (`main.imprintURL`)
+- **Cookie Policy URL** (`main.cookiePolicyURL`)
+
+**Two Configuration Options:**
+
+1. **Custom Page Reference**: Use format `page:slug`
+   - Example: `page:privacy-policy`
+   - Redirects `/privacy.html` → `/page/privacy-policy.html`
+   - Recommended for database-backed legal pages
+
+2. **External URL**: Use full URL
+   - Example: `https://example.com/legal/privacy`
+   - Redirects to external website
+   - Useful if legal pages are hosted elsewhere
+
+**Footer Links:**
+
+When configured, links automatically appear in the footer:
+- Privacy Statement (if `main.privacyURL` is set)
+- Terms of Service (if `main.termsURL` is set)
+- Imprint (if `main.imprintURL` is set)
+- Cookie Policy (if `main.cookiePolicyURL` is set)
+
+**Example Configuration:**
+
+```
+main.privacyURL = page:privacy-policy
+main.termsURL = page:terms-of-service
+main.imprintURL = page:imprint
+main.cookiePolicyURL = page:cookie-policy
+```
+
+#### 5.2.10.5 Search Integration
+
+Custom pages are automatically integrated with all search engines:
+
+**Database Search:**
+- Uses LIKE queries on title and content
+- Works without additional configuration
+- Searches alongside FAQs
+
+**Elasticsearch Integration:**
+- Automatically indexed with `content_type='page'`
+- Updated in real-time on create/update/delete
+- Priority 0.80 in search results
+- Bulk import via **Elasticsearch → Import Data**
+
+**OpenSearch Integration:**
+- Same functionality as Elasticsearch
+- Automatic real-time indexing
+- Bulk import via **OpenSearch → Import Data**
+
+**Search Results:**
+- Custom pages appear with a file-text icon (📄)
+- FAQs appear with a question-circle icon (❓)
+- Results link directly to `/page/{slug}.html`
+
+#### 5.2.10.6 Sitemap Integration
+
+Active custom pages are automatically included in XML sitemaps:
+
+- Only active pages (`active='y'`) are included
+- Priority: 0.80 (FAQs have 1.00)
+- Last modified date from `updated` or `created` field
+- URL format: `https://example.com/page/{slug}.html`
+- No manual configuration needed
+
+Access sitemap at:
+- `https://example.com/sitemap.xml`
+- `https://example.com/sitemap.xml.gz` (gzipped)
+
+#### 5.2.10.7 SEO Best Practices
+
+**Slug Guidelines:**
+- Use lowercase letters, numbers, and hyphens only
+- Keep short and descriptive (e.g., `about-us`, `privacy-policy`)
+- Avoid special characters or spaces
+- Make it meaningful for users and search engines
+
+**Content Guidelines:**
+- Write clear, concise content focused on user needs
+- Use headings (H2, H3) to structure content
+- Keep paragraphs short for readability
+- Include relevant keywords naturally
+- Update regularly to keep content current
+
+**SEO Optimization:**
+- Fill in SEO title (under 60 characters)
+- Write compelling meta description (under 160 characters)
+- Use appropriate robots directive
+- Set pages as active when ready to publish
+- Use descriptive page titles
+
+#### 5.2.10.8 Permissions
+
+Custom pages require the following permissions:
+
+- **PAGE_ADD**: Create new custom pages
+- **PAGE_EDIT**: Modify existing pages
+- **PAGE_DELETE**: Delete pages
+
+Permissions are granted via **User Administration** → **Edit User** → **Permissions**.
+
+Super admins have all permissions by default.
+
+#### 5.2.10.9 Troubleshooting
+
+**Slug validation fails:**
+- Ensure slug is unique per language
+- Check for special characters (only lowercase, numbers, hyphens allowed)
+- Try a different slug
+
+**Page not appearing in search:**
+- Verify page is set to active
+- Re-index search engine (Elasticsearch/OpenSearch → Drop Index → Create Index → Import Data)
+- Check search configuration is enabled
+
+**404 error when accessing the page:**
+- Verify the page is active
+- Check slug matches URL exactly
+- Ensure language matches current site language
+
+**Footer links do not appear:**
+- Verify configuration values are set correctly
+- Use format `page:slug` or full URL
+- Check page exists and is active
+- Clear cache if using caching
+
 ## 5.3 Statistics
 
 ### 5.3.1 Ratings
