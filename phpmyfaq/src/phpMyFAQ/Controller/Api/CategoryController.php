@@ -137,6 +137,8 @@ final class CategoryController extends AbstractApiController
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
 
+        $onlyActive = (bool) $this->configuration->get('api.onlyActiveCategories');
+
         // Get pagination and sorting parameters
         $pagination = $this->getPaginationRequest();
         $sort = $this->getSortRequest(
@@ -151,10 +153,11 @@ final class CategoryController extends AbstractApiController
             offset: $pagination->offset,
             sortField: $sort->getField() ?? 'id',
             sortOrder: $sort->getOrderSql(),
+            activeOnly: $onlyActive,
         );
 
         // Get total count
-        $total = $category->countCategories();
+        $total = $category->countCategories(activeOnly: $onlyActive);
 
         return $this->paginatedResponse(
             data: array_values($categories),

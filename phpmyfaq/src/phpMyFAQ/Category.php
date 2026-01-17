@@ -306,6 +306,7 @@ class Category
         int $offset = 0,
         string $sortField = 'id',
         string $sortOrder = 'ASC',
+        bool $activeOnly = false,
     ): array {
         $categories = [];
         $rows = $this->getCategoryRepository()->findCategoriesPaginated(
@@ -314,6 +315,7 @@ class Category
             $offset,
             $sortField,
             $sortOrder,
+            $activeOnly,
         );
         foreach ($rows as $id => $row) {
             $categories[$id] = $row
@@ -328,11 +330,12 @@ class Category
     /**
      * Counts total categories for current language.
      *
+     * @param bool $activeOnly Only count active categories
      * @return int Total count
      */
-    public function countCategories(): int
+    public function countCategories(bool $activeOnly = false): int
     {
-        return $this->getCategoryRepository()->countCategories($this->language);
+        return $this->getCategoryRepository()->countCategories($this->language, $activeOnly);
     }
 
     /**
