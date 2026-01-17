@@ -115,11 +115,6 @@ final class NewsController extends AbstractApiController
             }
         }'),
     )]
-    #[OA\Response(
-        response: 200,
-        description: 'If no news are stored, returns empty data array.',
-        content: new OA\JsonContent(example: '{"success": true, "data": []}'),
-    )]
     public function list(): JsonResponse
     {
         // Get pagination and sorting parameters
