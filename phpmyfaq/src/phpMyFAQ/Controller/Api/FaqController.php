@@ -153,10 +153,15 @@ final class FaqController extends AbstractApiController
 
         $faqId = (int) Filter::filterVar($request->attributes->get(key: 'faqId'), FILTER_VALIDATE_INT);
         $categoryId = (int) Filter::filterVar($request->attributes->get(key: 'categoryId'), FILTER_VALIDATE_INT);
+        $onlyActive = (bool) $this->configuration->get('api.onlyActiveFaqs');
 
         $result = $faq->getFaqByIdAndCategoryId($faqId, $categoryId);
 
-        if ((is_countable($result) ? count($result) : 0) === 0 || $result['solution_id'] === 42) {
+        if (
+            (is_countable($result) ? count($result) : 0) === 0
+            || $result['solution_id'] === 42
+            || $onlyActive && $result['active'] !== 'yes'
+        ) {
             $result = new stdClass();
             return $this->json($result, Response::HTTP_NOT_FOUND);
         }
@@ -533,12 +538,15 @@ final class FaqController extends AbstractApiController
             defaultOrder: 'asc',
         );
 
+        $onlyActive = (bool) $this->configuration->get('api.onlyActiveFaqs');
+
         // Get all FAQs (this populates $faq->faqRecords)
         $faq->getAllFaqs(
             FAQ_SORTING_TYPE_CATID_FAQID,
             [
                 'lang' => $this->configuration->getLanguage()->getLanguage(),
                 'fcr.category_id' => 'IS NOT NULL',
+                'fd.active' => $onlyActive ? 'yes' : null,
             ],
             $sort->getOrderSql(),
         );
