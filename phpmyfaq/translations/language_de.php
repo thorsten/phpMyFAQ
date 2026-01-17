@@ -1587,5 +1587,9 @@ $PMF_LANG["ad_page_no_available_languages"] = "Für diese Seite sind Übersetzun
 $LANG_CONF['main.termsURL'] = ['input', 'URL für Nutzungsbedingungen','verwenden Sie "page:slug" für eigene Seiten oder vollständige URL für externe Seiten'];
 $LANG_CONF['main.imprintURL'] = ['input', 'URL für Impressum','verwenden Sie "page:slug" für eigene Seiten oder vollständige URL für externe Seiten'];
 $LANG_CONF['main.cookiePolicyURL'] = ['input', 'URL für Cookie-Richtlinie','verwenden Sie "page:slug" für eigene Seiten oder vollständige URL für externe Seiten'];
+$LANG_CONF['api.onlyActiveFaqs'] = ['checkbox', 'Nur aktive FAQs werden von der API zurückgegeben'];
+$LANG_CONF['api.onlyActiveCategories'] = ['checkbox', 'Nur aktive Kategorien werden von der API zurückgegeben'];
+$LANG_CONF['api.onlyPublicQuestions'] = ['checkbox', 'Nur öffentliche Fragen werden von der API zurückgegeben'];
+$LANG_CONF['api.ignoreOrphanedFaqs'] = ['checkbox', 'Verwaiste FAQs werden von der API ignoriert'];
 
 return $PMF_LANG;
