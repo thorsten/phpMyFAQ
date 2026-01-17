@@ -146,7 +146,9 @@ abstract class AbstractFrontController extends AbstractController
         ];
     }
 
-    private function getUserDropdown(): array
+    /**
+     * @throws \Exception
+     */ private function getUserDropdown(): array
     {
         $templateVars = [];
         if ($this->currentUser->isLoggedIn() && $this->currentUser->getUserId() > 0) {
