@@ -50,12 +50,12 @@ class SvgSanitizerTest extends TestCase
     public function testIsSafeReturnsTrueForSafeSvg(): void
     {
         $safeSvg = <<<SVG
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
-    <circle cx="50" cy="50" r="40" fill="blue"/>
-    <rect x="10" y="10" width="20" height="20" fill="red"/>
-</svg>
-SVG;
+            <?xml version="1.0" encoding="UTF-8"?>
+            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+                <circle cx="50" cy="50" r="40" fill="blue"/>
+                <rect x="10" y="10" width="20" height="20" fill="red"/>
+            </svg>
+            SVG;
 
         $filePath = $this->testDir . '/safe.svg';
         file_put_contents($filePath, $safeSvg);
@@ -66,10 +66,10 @@ SVG;
     public function testIsSafeReturnsFalseForSvgWithOnload(): void
     {
         $maliciousSvg = <<<SVG
-<svg xmlns="http://www.w3.org/2000/svg" onload="alert('XSS')">
-    <circle cx="50" cy="50" r="40" fill="blue"/>
-</svg>
-SVG;
+            <svg xmlns="http://www.w3.org/2000/svg" onload="alert('XSS')">
+                <circle cx="50" cy="50" r="40" fill="blue"/>
+            </svg>
+            SVG;
 
         $filePath = $this->testDir . '/malicious_onload.svg';
         file_put_contents($filePath, $maliciousSvg);
@@ -80,11 +80,11 @@ SVG;
     public function testIsSafeReturnsFalseForSvgWithScript(): void
     {
         $maliciousSvg = <<<SVG
-<svg xmlns="http://www.w3.org/2000/svg">
-    <script>alert('XSS')</script>
-    <circle cx="50" cy="50" r="40" fill="blue"/>
-</svg>
-SVG;
+            <svg xmlns="http://www.w3.org/2000/svg">
+                <script>alert('XSS')</script>
+                <circle cx="50" cy="50" r="40" fill="blue"/>
+            </svg>
+            SVG;
 
         $filePath = $this->testDir . '/malicious_script.svg';
         file_put_contents($filePath, $maliciousSvg);
@@ -95,14 +95,14 @@ SVG;
     public function testIsSafeReturnsFalseForSvgWithForeignObject(): void
     {
         $maliciousSvg = <<<SVG
-<svg xmlns="http://www.w3.org/2000/svg">
-    <foreignObject width="100" height="100">
-        <body xmlns="http://www.w3.org/1999/xhtml">
-            <script>alert('XSS')</script>
-        </body>
-    </foreignObject>
-</svg>
-SVG;
+            <svg xmlns="http://www.w3.org/2000/svg">
+                <foreignObject width="100" height="100">
+                    <body xmlns="http://www.w3.org/1999/xhtml">
+                        <script>alert('XSS')</script>
+                    </body>
+                </foreignObject>
+            </svg>
+            SVG;
 
         $filePath = $this->testDir . '/malicious_foreign.svg';
         file_put_contents($filePath, $maliciousSvg);
@@ -113,12 +113,12 @@ SVG;
     public function testIsSafeReturnsFalseForSvgWithJavascriptUrl(): void
     {
         $maliciousSvg = <<<SVG
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <a xlink:href="javascript:alert('XSS')">
-        <circle cx="50" cy="50" r="40" fill="blue"/>
-    </a>
-</svg>
-SVG;
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <a xlink:href="javascript:alert('XSS')">
+                    <circle cx="50" cy="50" r="40" fill="blue"/>
+                </a>
+            </svg>
+            SVG;
 
         $filePath = $this->testDir . '/malicious_javascript.svg';
         file_put_contents($filePath, $maliciousSvg);
@@ -129,11 +129,11 @@ SVG;
     public function testSanitizeRemovesScriptTags(): void
     {
         $maliciousSvg = <<<SVG
-<svg xmlns="http://www.w3.org/2000/svg">
-    <script>alert('XSS')</script>
-    <circle cx="50" cy="50" r="40" fill="blue"/>
-</svg>
-SVG;
+            <svg xmlns="http://www.w3.org/2000/svg">
+                <script>alert('XSS')</script>
+                <circle cx="50" cy="50" r="40" fill="blue"/>
+            </svg>
+            SVG;
 
         $filePath = $this->testDir . '/to_sanitize_script.svg';
         file_put_contents($filePath, $maliciousSvg);
@@ -149,10 +149,10 @@ SVG;
     public function testSanitizeRemovesEventHandlers(): void
     {
         $maliciousSvg = <<<SVG
-<svg xmlns="http://www.w3.org/2000/svg" onload="alert('XSS')">
-    <circle cx="50" cy="50" r="40" fill="blue" onclick="alert('click')"/>
-</svg>
-SVG;
+            <svg xmlns="http://www.w3.org/2000/svg" onload="alert('XSS')">
+                <circle cx="50" cy="50" r="40" fill="blue" onclick="alert('click')"/>
+            </svg>
+            SVG;
 
         $filePath = $this->testDir . '/to_sanitize_events.svg';
         file_put_contents($filePath, $maliciousSvg);
@@ -168,15 +168,15 @@ SVG;
     public function testSanitizeRemovesForeignObject(): void
     {
         $maliciousSvg = <<<SVG
-<svg xmlns="http://www.w3.org/2000/svg">
-    <circle cx="50" cy="50" r="40" fill="blue"/>
-    <foreignObject width="100" height="100">
-        <body xmlns="http://www.w3.org/1999/xhtml">
-            <div>content</div>
-        </body>
-    </foreignObject>
-</svg>
-SVG;
+            <svg xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="40" fill="blue"/>
+                <foreignObject width="100" height="100">
+                    <body xmlns="http://www.w3.org/1999/xhtml">
+                        <div>content</div>
+                    </body>
+                </foreignObject>
+            </svg>
+            SVG;
 
         $filePath = $this->testDir . '/to_sanitize_foreign.svg';
         file_put_contents($filePath, $maliciousSvg);
@@ -191,12 +191,12 @@ SVG;
     public function testSanitizeRemovesJavascriptUrls(): void
     {
         $maliciousSvg = <<<SVG
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <a xlink:href="javascript:alert('XSS')">
-        <circle cx="50" cy="50" r="40" fill="blue"/>
-    </a>
-</svg>
-SVG;
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <a xlink:href="javascript:alert('XSS')">
+                    <circle cx="50" cy="50" r="40" fill="blue"/>
+                </a>
+            </svg>
+            SVG;
 
         $filePath = $this->testDir . '/to_sanitize_js_url.svg';
         file_put_contents($filePath, $maliciousSvg);
@@ -211,11 +211,11 @@ SVG;
     public function testSanitizePreservesSafeContent(): void
     {
         $safeSvg = <<<SVG
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
-    <circle cx="50" cy="50" r="40" fill="blue" stroke="red" stroke-width="2"/>
-    <rect x="10" y="10" width="30" height="30" fill="green" opacity="0.5"/>
-</svg>
-SVG;
+            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" fill="blue" stroke="red" stroke-width="2"/>
+                <rect x="10" y="10" width="30" height="30" fill="green" opacity="0.5"/>
+            </svg>
+            SVG;
 
         $filePath = $this->testDir . '/safe_content.svg';
         file_put_contents($filePath, $safeSvg);
@@ -243,10 +243,10 @@ SVG;
     public function testSanitizeRemovesCSSExpressions(): void
     {
         $maliciousSvg = <<<SVG
-<svg xmlns="http://www.w3.org/2000/svg">
-    <circle cx="50" cy="50" r="40" style="fill: expression(alert('XSS'))"/>
-</svg>
-SVG;
+            <svg xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="40" style="fill: expression(alert('XSS'))"/>
+            </svg>
+            SVG;
 
         $filePath = $this->testDir . '/malicious_css.svg';
         file_put_contents($filePath, $maliciousSvg);
@@ -261,10 +261,10 @@ SVG;
     public function testSanitizeRemovesDataTextHtmlUrls(): void
     {
         $maliciousSvg = <<<'SVG'
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <image xlink:href="data:text/html,%3Cscript%3Ealert%28%27XSS%27%29%3C%2Fscript%3E"/>
-</svg>
-SVG;
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <image xlink:href="data:text/html,%3Cscript%3Ealert%28%27XSS%27%29%3C%2Fscript%3E"/>
+            </svg>
+            SVG;
 
         $filePath = $this->testDir . '/malicious_data_url.svg';
         file_put_contents($filePath, $maliciousSvg);

@@ -99,12 +99,12 @@ class EnvironmentConfiguratorTest extends TestCase
         // Set up a proper .htaccess file with ErrorDocument directive
         $htaccessPath = dirname(__DIR__, 2) . '/.htaccess';
         $htaccessContent = <<<'HTACCESS'
-        <IfModule mod_rewrite.c>
-            RewriteEngine On
-            RewriteBase /phpmyfaq-test/
-            ErrorDocument 404 /404.html
-        </IfModule>
-        HTACCESS;
+            <IfModule mod_rewrite.c>
+                RewriteEngine On
+                RewriteBase /phpmyfaq-test/
+                ErrorDocument 404 /404.html
+            </IfModule>
+            HTACCESS;
         file_put_contents($htaccessPath, $htaccessContent);
 
         $configuration = $this->createStub(Configuration::class);
@@ -127,12 +127,12 @@ class EnvironmentConfiguratorTest extends TestCase
         // Set up a proper .htaccess file with ErrorDocument directive
         $htaccessPath = dirname(__DIR__, 2) . '/.htaccess';
         $htaccessContent = <<<'HTACCESS'
-        <IfModule mod_rewrite.c>
-            RewriteEngine On
-            RewriteBase /
-            ErrorDocument 404 /404.html
-        </IfModule>
-        HTACCESS;
+            <IfModule mod_rewrite.c>
+                RewriteEngine On
+                RewriteBase /
+                ErrorDocument 404 /404.html
+            </IfModule>
+            HTACCESS;
         file_put_contents($htaccessPath, $htaccessContent);
 
         $configuration = $this->createStub(Configuration::class);
