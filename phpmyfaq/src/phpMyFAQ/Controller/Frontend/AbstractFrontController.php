@@ -96,12 +96,6 @@ abstract class AbstractFrontController extends AbstractController
             'pluginStylesheets' => $this->configuration->getPluginManager()->getAllPluginStylesheets(),
             'pluginScripts' => $this->configuration->getPluginManager()->getAllPluginScripts(),
             'msgRegisterUser' => Translation::get(key: 'msgRegisterUser'),
-            'sendPassword' =>
-                '<a href="'
-                    . $faqSystem->getSystemUri($this->configuration)
-                    . 'forgot-password">'
-                    . Translation::get(key: 'lostPassword')
-                    . '</a>',
             'msgFullName' => Translation::get(key: 'ad_user_loggedin') . $this->currentUser->getLogin(),
             'msgLoginName' => $this->currentUser->getUserData('display_name'),
             'loginHeader' => Translation::get(key: 'msgLoginUser'),
