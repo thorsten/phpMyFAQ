@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\CustomPage;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Environment;
 use phpMyFAQ\Helper\LanguageHelper;
@@ -28,7 +29,10 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\TwigWrapper;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Twig\Error\LoaderError;
 
 abstract class AbstractFrontController extends AbstractController
 {
@@ -206,5 +210,41 @@ abstract class AbstractFrontController extends AbstractController
                 'active' => 'contact' == $action ? 'active' : '',
             ],
         ];
+    }
+
+    /**
+     * Handles static page redirects (cookie policy, imprint, terms, privacy).
+     * Checks if the URL is a reference to a custom page or external URL.
+     *
+     * @param string $configKey Configuration key for the URL (e.g., 'main.cookiePolicyURL')
+     * @return Response RedirectResponse or 404 error page
+     * @throws Exception|LoaderError|\Exception
+     */
+    protected function handleStaticPageRedirect(string $configKey): Response
+    {
+        $url = $this->configuration->get($configKey);
+
+        // Check if this is a reference to a custom page (format: "page:slug")
+        if (str_starts_with((string) $url, 'page:')) {
+            $slug = substr((string) $url, 5);
+            $customPage = new CustomPage($this->configuration);
+            $page = $customPage->getBySlug($slug);
+
+            if ($page && $page->isActive()) {
+                // Redirect to the custom page URL
+                $pageUrl = $this->configuration->getDefaultUrl() . 'page/' . $page->getSlug() . '.html';
+                return new RedirectResponse($pageUrl);
+            }
+        }
+
+        // Default behavior: redirect to external URL
+        if ((string) $url !== '') {
+            return new RedirectResponse($url);
+        }
+
+        // If no URL configured and no fallback, return 404
+        $response = new Response();
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        return $this->render('error/404.twig', [], $response);
     }
 }

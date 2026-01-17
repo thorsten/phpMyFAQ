@@ -19,8 +19,6 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
-use phpMyFAQ\CustomPage;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -34,23 +32,6 @@ final class PrivacyController extends AbstractFrontController
     #[Route(path: '/privacy.html', name: 'public.privacy')]
     public function index(Request $request): Response
     {
-        $privacyUrl = $this->configuration->get('main.privacyURL');
-
-        // Check if this is a reference to a custom page (format: "page:slug")
-        if (str_starts_with((string) $privacyUrl, 'page:')) {
-            $slug = substr((string) $privacyUrl, 5);
-            $customPage = new CustomPage($this->configuration);
-            $page = $customPage->getBySlug($slug);
-
-            if ($page && $page->isActive()) {
-                // Redirect to the custom page URL
-                $pageUrl = $this->configuration->getDefaultUrl() . 'page/' . $page->getSlug() . '.html';
-                return new RedirectResponse($pageUrl);
-            }
-        }
-
-        // Default behavior: redirect to external URL
-        $redirectUrl = (string) $privacyUrl !== '' ? $privacyUrl : $this->configuration->get('main.referenceURL');
-        return new RedirectResponse($redirectUrl);
+        return $this->handleStaticPageRedirect('main.privacyURL');
     }
 }

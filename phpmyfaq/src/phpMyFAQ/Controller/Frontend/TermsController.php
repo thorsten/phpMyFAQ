@@ -20,8 +20,6 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Frontend;
 
 use Exception;
-use phpMyFAQ\CustomPage;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -35,27 +33,6 @@ final class TermsController extends AbstractFrontController
     #[Route(path: '/terms.html', name: 'public.terms')]
     public function index(Request $request): Response
     {
-        $termsUrl = $this->configuration->get('main.termsURL');
-
-        // Check if this is a reference to a custom page (format: "page:slug")
-        if (str_starts_with((string) $termsUrl, 'page:')) {
-            $slug = substr((string) $termsUrl, 5);
-            $customPage = new CustomPage($this->configuration);
-            $page = $customPage->getBySlug($slug);
-
-            if ($page && $page->isActive()) {
-                // Redirect to the custom page URL
-                $pageUrl = $this->configuration->getDefaultUrl() . 'page/' . $page->getSlug() . '.html';
-                return new RedirectResponse($pageUrl);
-            }
-        }
-
-        // Default behavior: redirect to external URL or 404
-        if ((string) $termsUrl !== '') {
-            return new RedirectResponse($termsUrl);
-        }
-
-        // If no URL configured, return 404
-        return $this->render('error/404.twig', [], Response::HTTP_NOT_FOUND);
+        return $this->handleStaticPageRedirect('main.termsURL');
     }
 }
