@@ -44,13 +44,34 @@ interface CustomPageRepositoryInterface
         string $sortOrder,
     ): iterable;
 
+    /**
+     * Get all pages across all languages with pagination
+     * @return iterable<stdClass>
+     */
+    public function getAllLanguagesPaginated(
+        bool $activeOnly,
+        int $limit,
+        int $offset,
+        string $sortField,
+        string $sortOrder,
+    ): iterable;
+
     public function countAll(string $language, bool $activeOnly = false): int;
+
+    public function countAllLanguages(bool $activeOnly = false): int;
 
     public function getById(int $pageId, string $language): ?stdClass;
 
     public function getBySlug(string $slug, string $language): ?stdClass;
 
+    /**
+     * @return array<string>
+     */
+    public function getExistingLanguages(int $pageId): array;
+
     public function insert(CustomPageEntity $page): int;
+
+    public function insertTranslation(CustomPageEntity $page, int $pageId): bool;
 
     public function update(CustomPageEntity $page): bool;
 

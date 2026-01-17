@@ -99,6 +99,20 @@ final class SitemapController extends AbstractController
             ];
         }
 
+        // Add custom pages to sitemap
+        $customPage = $this->container->get(id: 'phpmyfaq.custom-page');
+        $pages = $customPage->getAllPages();
+
+        foreach ($pages as $page) {
+            if ($page['active'] === 'y') {
+                $urls[] = [
+                    'loc' => $this->configuration->getDefaultUrl() . 'page/' . $page['slug'] . '.html',
+                    'lastmod' => $page['updated'] ?? $page['created'],
+                    'priority' => '0.80',
+                ];
+            }
+        }
+
         return $this->renderView(pathToTwigFile: './sitemap.xml.twig', templateVars: ['urls' => $urls]);
     }
 

@@ -29,6 +29,7 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\FormatDateTwigExtension;
 use phpMyFAQ\Twig\Extensions\IsoDateTwigExtension;
+use phpMyFAQ\Twig\Extensions\LanguageCodeTwigExtension;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -54,7 +55,8 @@ final class PageController extends AbstractAdministrationController
         $itemsPerPage = 25;
         $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT, 1);
 
-        $totalPages = $customPage->countPages(activeOnly: false);
+        // Get ALL pages across all languages
+        $totalPages = $customPage->countAllLanguages(activeOnly: false);
 
         $pagination = new Pagination(
             baseUrl: $request->getUri(),
@@ -64,16 +66,17 @@ final class PageController extends AbstractAdministrationController
         );
 
         $offset = ($page - 1) * $itemsPerPage;
-        $pages = $customPage->getPagesPaginated(
+        $pages = $customPage->getAllLanguagesPaginated(
             activeOnly: false,
             limit: $itemsPerPage,
             offset: $offset,
-            sortField: 'created',
+            sortField: 'id',
             sortOrder: 'DESC',
         );
 
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatDateTwigExtension::class));
+        $this->addExtension(new AttributeExtension(LanguageCodeTwigExtension::class));
         return $this->render('@admin/content/pages.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
@@ -99,6 +102,55 @@ final class PageController extends AbstractAdministrationController
             ...$this->getHeader($request),
             ...$this->getFooter(),
             ...$this->getBaseTemplateVars(),
+            'userEmail' => $this->currentUser->getUserData('email'),
+            'userName' => $this->currentUser->getUserData('display_name'),
+        ]);
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws Exception
+     * @throws \Exception
+     */
+    #[Route(path: '/page/translate/:pageId', name: 'admin.page.translate', methods: ['GET'])]
+    public function translate(Request $request): Response
+    {
+        $this->userHasPermission(PermissionType::PAGE_ADD);
+
+        $pageId = (int) Filter::filterVar($request->attributes->get('pageId'), FILTER_VALIDATE_INT);
+
+        $customPage = $this->container->get(id: 'phpmyfaq.custom-page');
+        $pageEntity = $customPage->getById($pageId);
+
+        if ($pageEntity === null) {
+            throw new Exception('Page not found');
+        }
+
+        // Get all existing languages for this page ID
+        $existingLanguages = $customPage->getExistingLanguages($pageId);
+
+        // Get available languages that don't have translations yet
+        $allLanguages = LanguageHelper::getAvailableLanguages();
+        $availableLanguages = array_diff_key($allLanguages, array_flip($existingLanguages));
+
+        if (empty($availableLanguages)) {
+            // All languages already have translations - redirect back to list
+            return $this->redirect('./pages');
+        }
+
+        $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
+        $this->addExtension(new AttributeExtension(FormatDateTwigExtension::class));
+        $this->addExtension(new AttributeExtension(LanguageCodeTwigExtension::class));
+        return $this->render('@admin/content/page.translate.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'pageId' => $pageId,
+            'originalTitle' => $pageEntity->getPageTitle(),
+            'originalLanguage' => $pageEntity->getLanguage(),
+            'originalSlug' => $pageEntity->getSlug(),
+            'existingLanguages' => $existingLanguages,
+            'availableLanguages' => $availableLanguages,
             'userEmail' => $this->currentUser->getUserData('email'),
             'userName' => $this->currentUser->getUserData('display_name'),
         ]);
@@ -147,6 +199,7 @@ final class PageController extends AbstractAdministrationController
             'pageData' => $pageData,
             'pageDataContent' => htmlspecialchars($pageEntity->getContent(), ENT_QUOTES),
             'pageId' => $pageId,
+            'availableLanguages' => LanguageHelper::getAvailableLanguages(),
         ]);
     }
 
@@ -171,7 +224,6 @@ final class PageController extends AbstractAdministrationController
             'ad_page_author_email' => Translation::get(key: 'ad_page_author_email'),
             'ad_page_set_active' => Translation::get(key: 'ad_page_set_active'),
             'selectLanguage' => LanguageHelper::renderSelectLanguage($language, false, [], 'lang'),
-            'ad_entry_back' => Translation::get(key: 'ad_entry_back'),
             'ad_menu_pages' => Translation::get(key: 'ad_menu_pages'),
             'ad_page_title' => Translation::get(key: 'ad_page_title'),
             'ad_page_slug' => Translation::get(key: 'ad_page_slug'),
@@ -203,6 +255,13 @@ final class PageController extends AbstractAdministrationController
             'ad_page_seo_description' => Translation::get(key: 'ad_page_seo_description'),
             'ad_page_seo_robots' => Translation::get(key: 'ad_page_seo_robots'),
             'ad_page_slug_help' => Translation::get(key: 'ad_page_slug_help'),
+            'ad_page_lang_cannot_change' => Translation::get(key: 'ad_page_lang_cannot_change'),
+            'ad_page_add_translation' => Translation::get(key: 'ad_page_add_translation'),
+            'ad_page_translate' => Translation::get(key: 'ad_page_translate'),
+            'ad_page_original_language' => Translation::get(key: 'ad_page_original_language'),
+            'ad_page_select_translation_language' => Translation::get(key: 'ad_page_select_translation_language'),
+            'ad_page_existing_translations' => Translation::get(key: 'ad_page_existing_translations'),
+            'ad_page_no_available_languages' => Translation::get(key: 'ad_page_no_available_languages'),
         ];
     }
 }

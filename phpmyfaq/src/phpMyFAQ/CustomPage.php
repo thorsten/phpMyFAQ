@@ -103,6 +103,38 @@ readonly class CustomPage
     }
 
     /**
+     * Get paginated custom pages across all languages with sorting support.
+     *
+     * @param bool $activeOnly Filter by active status
+     * @param int $limit Number of items per page
+     * @param int $offset Starting offset
+     * @param string $sortField Field to sort by
+     * @param string $sortOrder Sort direction (ASC, DESC)
+     * @return array
+     */
+    public function getAllLanguagesPaginated(
+        bool $activeOnly = false,
+        int $limit = 25,
+        int $offset = 0,
+        string $sortField = 'created',
+        string $sortOrder = 'DESC',
+    ): array {
+        $pages = [];
+
+        foreach ($this->repository->getAllLanguagesPaginated(
+            $activeOnly,
+            $limit,
+            $offset,
+            $sortField,
+            $sortOrder,
+        ) as $row) {
+            $pages[] = $this->mapRowToArray($row);
+        }
+
+        return $pages;
+    }
+
+    /**
      * Count total pages for the current language.
      *
      * @param bool $activeOnly Filter by active status
@@ -112,6 +144,17 @@ readonly class CustomPage
     {
         $language = $this->configuration->getLanguage()->getLanguage();
         return $this->repository->countAll($language, $activeOnly);
+    }
+
+    /**
+     * Count total pages across all languages.
+     *
+     * @param bool $activeOnly Filter by active status
+     * @return int Total count
+     */
+    public function countAllLanguages(bool $activeOnly = false): int
+    {
+        return $this->repository->countAllLanguages($activeOnly);
     }
 
     /**
@@ -143,6 +186,17 @@ readonly class CustomPage
     }
 
     /**
+     * Get all existing languages for a given page ID.
+     *
+     * @param int $pageId Page ID
+     * @return array<string> Array of language codes
+     */
+    public function getExistingLanguages(int $pageId): array
+    {
+        return $this->repository->getExistingLanguages($pageId);
+    }
+
+    /**
      * Create a new custom page.
      *
      * @param CustomPageEntity $page Custom page entity
@@ -151,6 +205,18 @@ readonly class CustomPage
     public function create(CustomPageEntity $page): int
     {
         return $this->repository->insert($page);
+    }
+
+    /**
+     * Create a translation for an existing custom page.
+     *
+     * @param CustomPageEntity $page Custom page entity
+     * @param int $pageId The existing page ID to use
+     * @return bool Success status
+     */
+    public function createTranslation(CustomPageEntity $page, int $pageId): bool
+    {
+        return $this->repository->insertTranslation($page, $pageId);
     }
 
     /**

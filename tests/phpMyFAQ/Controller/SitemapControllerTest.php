@@ -43,33 +43,17 @@ class SitemapControllerTest extends TestCase
      */
     public function testEmptyIndex(): void
     {
-        $expectedXml =
-            '<?xml version="1.0" encoding="UTF-8"?>'
-            . "\n"
-            . '<urlset'
-            . "\n"
-            . '  xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"'
-            . "\n"
-            . '  xmlns:xhtml="https://www.w3.org/1999/xhtml"'
-            . "\n"
-            . '  xmlns:image="https://www.google.com/schemas/sitemap-image/1.1"'
-            . "\n"
-            . '  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"'
-            . "\n"
-            . '  xsi:schemaLocation="https://www.sitemaps.org/schemas/sitemap/0.9'
-            . "\n"
-            . '        https://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">'
-            . "\n"
-            . '  </urlset>'
-            . "\n";
-
-        $this->twig->method('render')->willReturn($expectedXml);
-
         $response = $this->controller->index();
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals('text/xml', $response->headers->get('Content-Type'));
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertEquals($expectedXml, $response->getContent());
+
+        $content = $response->getContent();
+        // Check that it's valid XML with the sitemap structure
+        $this->assertStringContainsString('<?xml version="1.0" encoding="UTF-8"?>', $content);
+        $this->assertStringContainsString('<urlset', $content);
+        $this->assertStringContainsString('xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"', $content);
+        $this->assertStringContainsString('</urlset>', $content);
     }
 }

@@ -319,6 +319,7 @@ abstract class AbstractAdministrationController extends AbstractController
             case 'admin.pages':
             case 'admin.page.add':
             case 'admin.page.edit':
+            case 'admin.page.translate':
             case 'admin.questions':
             case 'admin.tags':
                 $contentPage = true;
