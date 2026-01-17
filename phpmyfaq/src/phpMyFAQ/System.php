@@ -129,19 +129,19 @@ class System
         ],
         'pdo_mysql' => [
             self::VERSION_MINIMUM_PHP,
-            'MySQL v8 / MariaDB v10 / Percona Server v8 / Galera Cluster v4 (PDO_MYSQL, preferred, experimental)',
+            'MySQL v8 / MariaDB v10 / Percona Server v8 / Galera Cluster v4 (PDO_MYSQL, preferred)',
         ],
         'pdo_pgsql' => [
             self::VERSION_MINIMUM_PHP,
-            'PostgreSQL v10 or later (PDO_PGSQL, preferred, experimental)',
+            'PostgreSQL v10 or later (PDO_PGSQL, preferred)',
         ],
         'pdo_sqlite' => [
             self::VERSION_MINIMUM_PHP,
-            'SQLite 3 (PDO_SQLITE, preferred, experimental)',
+            'SQLite 3 (PDO_SQLITE, preferred)',
         ],
         'pdo_sqlsrv' => [
             self::VERSION_MINIMUM_PHP,
-            'MS SQL Server 2016 or later / SQL Azure (PDO_SQLSRV, preferred, experimental)',
+            'MS SQL Server 2016 or later / SQL Azure (PDO_SQLSRV, preferred)',
         ],
     ];
 

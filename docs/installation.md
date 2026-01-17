@@ -60,8 +60,7 @@ Please be aware that modules like `mod_security` can cause problems with the ins
 - [Percona Server](http://www.percona.com) (via MySQLi extension or PDO)
 - [Azure SQL Database](https://azure.microsoft.com/en-us/products/azure-sql/database) (via PDO, experimental)
 
-The PDO extension is the preferred way to connect to your database server even though it's still marketed as 
-experimental for now.
+The PDO extension is the preferred way to connect to your database server.
 
 ### Optional Search engine
 
@@ -118,7 +117,7 @@ Writing permission for your script is needed in this directory to be able to wri
 during installation. The installation script will stop when your web server isn't configured as needed.
 
 It might help to set chmod 775 to the whole phpMyFAQ directory to avoid problems during the installation. If you're
-running a very restrictive mod_php installation you should keep the chmod 775 for the following files and directories
+running a very restrictive mod_php installation, you should keep the chmod 775 for the following files and directories
 even after the successful installation:
 
 - the directory **content/core/config/**
@@ -362,7 +361,7 @@ You need a running Elasticsearch instance accessible by phpMyFAQ via HTTP/REST.
 You can add the IP(s)/Domain(s) and port(s) of your Elasticsearch cluster during installation or later by renaming the
 Elasticsearch file located in the folder config/.
 If you choose to add this during installation, the file will be automatically written and the index will be built.
-If you enabled Elasticsearch support in the admin configuration panel, you can create, re-import, and delete your
+If you enable Elasticsearch support in the admin configuration panel, you can create, re-import, and delete your
 index with a user-friendly interface.
 
 ## 2.17 OpenSearch Support
@@ -372,7 +371,7 @@ You need a running OpenSearch instance accessible by phpMyFAQ via HTTP/REST.
 You can add the IP(s)/Domain(s) and port(s) of your OpenSearch cluster during installation or later by renaming the
 OpenSearch file located in the folder config/.
 If you choose to add this during installation, the file will be automatically written and the index will be built.
-If you enabled OpenSearch support in the admin configuration panel, you can create, re-import, and delete your
+If you enable OpenSearch support in the admin configuration panel, you can create, re-import, and delete your
 index with a user-friendly interface.
 
 ## 2.18 SSO (Single Sign-On) Support
@@ -678,30 +677,9 @@ your-domain.com {
 }
 ```
 
-#### Step 3: Create FrankenPHP Worker Script (Optional)
+#### Step 3: User FrankenPHP Worker Script (Optional)
 
-For better performance, create a worker script at `/var/www/html/frankenphp-worker.php`:
-
-```php
-<?php
-/**
- * FrankenPHP Worker for phpMyFAQ
- */
-
-// Set up error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-// Include phpMyFAQ bootstrap
-require_once __DIR__ . '/src/Bootstrap.php';
-
-// FrankenPHP worker loop
-while ($worker = \frankenphp_handle_request()) {
-    // The worker will handle each request here
-    // phpMyFAQ's routing and processing will be handled by the main application
-    // through the Bootstrap.php inclusion
-}
-```
+For better performance, use the worker script at `/var/www/html/frankenphp-worker.php`:
 
 #### Step 4: Start FrankenPHP
 

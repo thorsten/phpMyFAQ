@@ -6,11 +6,11 @@
  * It preloads phpMyFAQ's bootstrap and handles requests in a long-running process.
  * 
  * @package phpMyFAQ
- *  @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- *  @copyright 2025-2026 phpMyFAQ Team
- *  @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *  @link      https://www.phpmyfaq.de
- *  @since     2025-07-06
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2025-2026 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2025-07-06
  */
 
 // Include phpMyFAQ bootstrap (sets up error handling via Environment)

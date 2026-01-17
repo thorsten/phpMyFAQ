@@ -1,4 +1,4 @@
-# phpMyFAQ 4.1-dev
+# phpMyFAQ 4.2-dev
 
 ![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/thorsten/phpMyFAQ)
 ![GitHub](https://img.shields.io/github/license/thorsten/phpMyFAQ)
@@ -7,28 +7,42 @@
 
 ## What is phpMyFAQ?
 
-phpMyFAQ is a multilingual, completely database-driven FAQ system.
-It supports various databases to store all data; PHP 8.3+ is needed to access this data.
-phpMyFAQ also offers a multi-language Content Management System with a WYSIWYG editor and a media manager, real time 
-search support with Elasticsearch and OpenSearch, flexible multi-user support with user and group based permissions on 
-categories and records, a wiki-like revision feature, a news system, user-tracking, 40+ supported languages, enhanced 
-automatic content negotiation, HTML5/CSS3 based responsive templates, PDF-support, a backup and restore system, a 
-dynamic sitemap, related FAQs, tagging, enhanced SEO features, built-in spam protection systems, Microsoft Entra ID, 
-Microsoft Active Directory and OpenLDAP support, a experimental MCP server, and an easy-to-use installation. 
-It's possible to update your phpMyFAQ installation via the web interface or on the command line.
+phpMyFAQ is a comprehensive, multilingual FAQ system that is entirely database-driven.
+It is compatible with a variety of databases for data storage and requires PHP 8.4+ for data access.
+The system features a multi-language Content Management System equipped with a WYSIWYG editor and an Image Manager.
+It also provides real-time search capabilities with Elasticsearch or OpenSearch.
+
+phpMyFAQ supports flexible multi-user functionality, offering user and group-based permissions on categories and FAQs.
+It includes a wiki-like revision feature, a news system, and configurable user-tracking.
+Administrators can monitor user activities through detailed log files.
+Additionally, phpMyFAQ supports adding its own custom pages to the FAQ system.
+With support for over 40 languages, it also boasts enhanced automatic content negotiation and HTML5- / CSS3-based
+responsive templates.
+These Twig-based templates allow for the inclusion of your own text and HTML snippets. There's also a built-in plugin
+system for further customization.
+
+Additional features include PDF support, a backup system, a dynamic sitemap, related FAQs, tagging, a plugin system,
+and built-in spam protection systems.
+phpMyFAQ also supports two-factor authentication (2FA) for enhanced security.
+A REST API is available for integration with other systems.
+It also supports OpenLDAP, Microsoft Active Directory, Microsoft Entra ID, and an MCP Server for AI agents.
+The system is easy to install, thanks to its user-friendly installation script.
+
+phpMyFAQ is versatile
+and can be run on almost any web hosting provider or deployed in the cloud using a Docker container.
 
 ## Requirements
 
 phpMyFAQ is only supported on PHP 8.3 and up, you need a database as well. Supported databases are MySQL, MariaDB,
-Percona Server, PostgreSQL, Microsoft SQL Server and SQLite3. If you want to use Elasticsearch or Opensearch as the main 
-search engine, you need Elasticsearch v6+ or OpenSearch v1+. Check our detailed requirements on
+Percona Server, PostgreSQL, Microsoft SQL Server, and SQLite3. If you want to use Elasticsearch or Opensearch as the 
+main search engine, you need Elasticsearch v6+ or OpenSearch v1+. Check our detailed requirements on
 [phpmyfaq.de](https://www.phpmyfaq.de/requirements) for more information.
 
 ## Installation
 
 ### phpMyFAQ installation package for end-users
 
-The best way to install phpMyFAQ is to download it on [phpmyfaq.de](https://www.phpmyfaq.de/download), unzip the package
+The best way to install phpMyFAQ is to download it on [phpmyfaq.de](https://www.phpmyfaq.de/download), unzip the package,
 and open http://www.example.org/phpmyfaq/setup/ in your preferred browser.
 
 ### phpMyFAQ installation with Docker
@@ -165,7 +179,7 @@ And constructed with the following guidelines:
 
 - Breaking backward compatibility bumps the major (and resets the minor and patch)
 - New additions without breaking backward compatibility bump the minor (and reset the patch)
-- Bug fixes and misc changes bumps the patch
+- Bug fixes and misc changes bump the patch
 
 For more information on SemVer, please visit http://semver.org/.
 
