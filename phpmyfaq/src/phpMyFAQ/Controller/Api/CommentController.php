@@ -128,11 +128,6 @@ final class CommentController extends AbstractApiController
             }
         }',
     ))]
-    #[OA\Response(
-        response: 200,
-        description: 'If no comments are found, returns empty data array.',
-        content: new OA\JsonContent(example: '{"success": true, "data": []}'),
-    )]
     public function list(Request $request): JsonResponse
     {
         $recordId = (int) Filter::filterVar($request->attributes->get(key: 'recordId'), FILTER_VALIDATE_INT);

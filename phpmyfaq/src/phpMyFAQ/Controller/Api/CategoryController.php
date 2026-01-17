@@ -124,11 +124,6 @@ final class CategoryController extends AbstractApiController
             }
         }'),
     )]
-    #[OA\Response(
-        response: 200,
-        description: 'If no categories are found, returns empty data array.',
-        content: new OA\JsonContent(example: '{"success": true, "data": []}'),
-    )]
     public function list(): JsonResponse
     {
         /** @var Language $language */

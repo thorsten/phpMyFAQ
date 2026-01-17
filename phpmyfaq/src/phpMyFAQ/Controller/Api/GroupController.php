@@ -107,11 +107,6 @@ final class GroupController extends AbstractApiController
             }
         }',
     ))]
-    #[OA\Response(
-        response: 200,
-        description: 'If no groups are found, returns empty data array.',
-        content: new OA\JsonContent(example: '{"success": true, "data": []}'),
-    )]
     #[OA\Response(response: 401, description: 'If the user is not authenticated.')]
     public function list(): JsonResponse
     {

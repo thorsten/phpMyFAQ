@@ -125,11 +125,6 @@ final class SearchController extends AbstractApiController
             }
         }',
     ))]
-    #[OA\Response(
-        response: 200,
-        description: 'If the search returns no results, returns empty data array.',
-        content: new OA\JsonContent(example: '{"success": true, "data": []}'),
-    )]
     public function search(Request $request): JsonResponse
     {
         $search = $this->container->get(id: 'phpmyfaq.search');

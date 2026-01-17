@@ -117,11 +117,6 @@ final class OpenQuestionController extends AbstractApiController
             }
         }',
     ))]
-    #[OA\Response(
-        response: 200,
-        description: 'If no open questions are found, returns empty data array.',
-        content: new OA\JsonContent(example: '{"success": true, "data": []}'),
-    )]
     public function list(): JsonResponse
     {
         /** @var Question $question */
