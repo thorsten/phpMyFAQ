@@ -1284,15 +1284,13 @@ class Update extends AbstractSetup
             $user->perm->grantUserRight(1, $user->perm->addRight($pageDeleteRight));
 
             // Add configuration entries for legal page URLs if they don't exist
-            if (!$this->configuration->exists('main.termsURL')) {
-                $this->configuration->add('main.termsURL', '');
-            }
-            if (!$this->configuration->exists('main.imprintURL')) {
-                $this->configuration->add('main.imprintURL', '');
-            }
-            if (!$this->configuration->exists('main.cookiePolicyURL')) {
-                $this->configuration->add('main.cookiePolicyURL', '');
-            }
+            $this->configuration->add('main.termsURL', '');
+            $this->configuration->add('main.imprintURL', '');
+            $this->configuration->add('main.cookiePolicyURL', '');
+            $this->configuration->add('api.onlyActiveFaqs', 'true');
+            $this->configuration->add('api.onlyActiveCategories', 'true');
+            $this->configuration->add('api.onlyPublicQuestions', 'true');
+            $this->configuration->add('api.ignoreOrphanedFaqs', 'true');
         }
     }
 

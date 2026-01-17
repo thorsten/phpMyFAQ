@@ -1586,5 +1586,9 @@ $PMF_LANG["ad_page_no_available_languages"] = "All available languages have tran
 $LANG_CONF['main.termsURL'] = ['input', 'URL for Terms of Service','use "page:slug" for custom page or full URL for external'];
 $LANG_CONF['main.imprintURL'] = ['input', 'URL for Imprint','use "page:slug" for custom page or full URL for external'];
 $LANG_CONF['main.cookiePolicyURL'] = ['input', 'URL for Cookie Policy','use "page:slug" for custom page or full URL for external'];
+$LANG_CONF['api.onlyActiveFaqs'] = ['checkbox', 'API returns only active FAQs'];
+$LANG_CONF['api.onlyActiveCategories'] = ['checkbox', 'API returns only active categories'];
+$LANG_CONF['api.onlyPublicQuestions'] = ['checkbox', 'API returns only public questions'];
+$LANG_CONF['api.ignoreOrphanedFaqs'] = ['checkbox', 'API ignores orphaned FAQs'];
 
 return $PMF_LANG;
