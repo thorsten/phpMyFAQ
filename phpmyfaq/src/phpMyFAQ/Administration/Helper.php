@@ -251,6 +251,7 @@ class Helper
             'google' => 'Google Cloud Translation',
             'deepl' => 'DeepL',
             'azure' => 'Azure Translator',
+            'amazon' => 'Amazon Translate',
             'libretranslate' => 'LibreTranslate',
         ];
         $output = '';

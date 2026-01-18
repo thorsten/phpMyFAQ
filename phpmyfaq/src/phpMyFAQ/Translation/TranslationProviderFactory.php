@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Translation;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Translation\Provider\AmazonTranslationProvider;
 use phpMyFAQ\Translation\Provider\AzureTranslationProvider;
 use phpMyFAQ\Translation\Provider\DeepLTranslationProvider;
 use phpMyFAQ\Translation\Provider\GoogleTranslationProvider;
@@ -48,6 +49,7 @@ class TranslationProviderFactory
             'google' => new GoogleTranslationProvider($configuration, $httpClient),
             'deepl' => new DeepLTranslationProvider($configuration, $httpClient),
             'azure' => new AzureTranslationProvider($configuration, $httpClient),
+            'amazon' => new AmazonTranslationProvider($configuration, $httpClient),
             'libretranslate' => new LibreTranslationProvider($configuration, $httpClient),
             default => null,
         };

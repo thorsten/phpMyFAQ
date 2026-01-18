@@ -231,7 +231,15 @@ class CustomPageRepositoryTest extends TestCase
         $this->assertGreaterThan(0, $pageIdEn);
 
         $pageDe = new CustomPageEntity();
-        $pageDe->setLanguage('de')->setPageTitle('German Page')->setSlug('multilang-page')->setContent('<p>German content</p>')->setAuthorName('Test')->setAuthorEmail('test@example.com')->setActive(true)->setCreated(new DateTime()); // Same slug, different language
+        $pageDe
+            ->setLanguage('de')
+            ->setPageTitle('German Page')
+            ->setSlug('multilang-page')
+            ->setContent('<p>German content</p>')
+            ->setAuthorName('Test')
+            ->setAuthorEmail('test@example.com')
+            ->setActive(true)
+            ->setCreated(new DateTime()); // Same slug, different language
 
         $pageIdDe = $this->repository->insert($pageDe);
         $this->assertGreaterThan(0, $pageIdDe);

@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Translation;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Translation\Provider\AmazonTranslationProvider;
 use phpMyFAQ\Translation\Provider\AzureTranslationProvider;
 use phpMyFAQ\Translation\Provider\DeepLTranslationProvider;
 use phpMyFAQ\Translation\Provider\GoogleTranslationProvider;
@@ -57,6 +58,18 @@ class TranslationProviderFactoryTest extends TestCase
         $provider = TranslationProviderFactory::create($this->configuration, $this->httpClient);
 
         $this->assertInstanceOf(AzureTranslationProvider::class, $provider);
+    }
+
+    public function testCreateAmazonProvider(): void
+    {
+        $this->configuration
+            ->method('get')
+            ->with('translation.provider')
+            ->willReturn('amazon');
+
+        $provider = TranslationProviderFactory::create($this->configuration, $this->httpClient);
+
+        $this->assertInstanceOf(AmazonTranslationProvider::class, $provider);
     }
 
     public function testCreateLibreTranslateProvider(): void
