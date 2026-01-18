@@ -29,7 +29,7 @@ final class PrivacyController extends AbstractFrontController
      * Displays the privacy page - either a custom page or redirects to configured URL.
      * @throws \Exception
      */
-    #[Route(path: '/privacy.html', name: 'public.privacy')]
+    #[Route(path: '/privacy.html', name: 'public.privacy', methods: ['GET'])]
     public function index(Request $request): Response
     {
         return $this->handleStaticPageRedirect('main.privacyURL');

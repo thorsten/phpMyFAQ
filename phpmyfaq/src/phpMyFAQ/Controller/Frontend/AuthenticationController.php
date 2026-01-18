@@ -35,7 +35,7 @@ final class AuthenticationController extends AbstractFrontController
      * @throws Exception
      * @throws LoaderError
      * @throws \Exception
-     */ #[Route(path: '/login', name: 'public.auth.login')]
+     */ #[Route(path: '/login', name: 'public.auth.login', methods: ['GET'])]
     public function login(Request $request): Response
     {
         $faqSession = $this->container->get('phpmyfaq.user.session');
@@ -81,7 +81,7 @@ final class AuthenticationController extends AbstractFrontController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route(path: '/forgot-password', name: 'public.auth.forgot-password')]
+    #[Route(path: '/forgot-password', name: 'public.forgot-password', methods: ['GET', 'POST'])]
     public function forgotPassword(Request $request): Response
     {
         $faqSession = $this->container->get('phpmyfaq.user.session');
@@ -99,7 +99,7 @@ final class AuthenticationController extends AbstractFrontController
     /**
      * @throws \Exception
      */
-    #[Route(path: '/logout', name: 'public.auth.logout')]
+    #[Route(path: '/logout', name: 'public.auth.logout', methods: ['GET'])]
     public function logout(Request $request): RedirectResponse
     {
         $session = $this->container->get('session');
@@ -199,7 +199,7 @@ final class AuthenticationController extends AbstractFrontController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route(path: '/token', name: 'public.auth.token')]
+    #[Route(path: '/token', name: 'public.auth.token', methods: ['GET'])]
     public function token(Request $request): Response
     {
         if ($this->currentUser->isLoggedIn()) {
@@ -231,7 +231,7 @@ final class AuthenticationController extends AbstractFrontController
      *
      * @throws \Exception
      */
-    #[Route(path: '/check', name: 'public.twofactor.check', methods: ['POST'])]
+    #[Route(path: '/check', name: 'public.auth.check', methods: ['POST'])]
     public function check(Request $request): RedirectResponse
     {
         if ($this->currentUser->isLoggedIn()) {

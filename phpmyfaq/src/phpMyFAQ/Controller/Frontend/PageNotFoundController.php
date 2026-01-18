@@ -32,7 +32,7 @@ final class PageNotFoundController extends AbstractFrontController
      * Handles the 404 Not Found page
      * @throws Exception
      */
-    #[Route(path: '/404.html', name: 'public.404')]
+    #[Route(path: '/404.html', name: 'public.404', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $faqSession = $this->container->get('phpmyfaq.user.session');

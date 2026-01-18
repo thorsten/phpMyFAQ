@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
+use phpMyFAQ\Attachment\AbstractAttachment;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentService;
 use phpMyFAQ\Core\Exception;
@@ -35,7 +36,12 @@ final class AttachmentController extends AbstractFrontController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route(path: '/attachment/{attachmentId}', name: 'public.attachment')]
+    #[Route(
+        path: '/attachment/{attachmentId}',
+        name: 'public.attachment',
+        requirements: ['attachmentId' => '\d+'],
+        methods: ['GET'],
+    )]
     public function index(Request $request): Response
     {
         $id = Filter::filterVar($request->attributes->get('attachmentId'), FILTER_VALIDATE_INT);
@@ -59,7 +65,7 @@ final class AttachmentController extends AbstractFrontController
         }
 
         if (
-            $attachment instanceof \phpMyFAQ\Attachment\AbstractAttachment
+            $attachment instanceof AbstractAttachment
             && $attachment->getRecordId() > 0
             && $attachmentService->canDownloadAttachment($attachment)
         ) {

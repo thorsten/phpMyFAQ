@@ -42,7 +42,7 @@ final class SearchController extends AbstractFrontController
      * @throws Exception
      */
     #[Route(path: '/tags/{tagId}/{page}/{slug}.html', name: 'public.tags.paginated', methods: ['GET'])]
-    public function tagsPaginated(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function tagsPaginated(Request $request): RedirectResponse
     {
         $tagId = Filter::filterVar($request->attributes->get('tagId'), FILTER_VALIDATE_INT, 0);
         $page = Filter::filterVar($request->attributes->get('page'), FILTER_VALIDATE_INT, 1);
@@ -56,7 +56,7 @@ final class SearchController extends AbstractFrontController
      * @throws Exception
      */
     #[Route(path: '/tags/{tagId}/{slug}.html', name: 'public.tags', methods: ['GET'])]
-    public function tags(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function tags(Request $request): RedirectResponse
     {
         $tagId = Filter::filterVar($request->attributes->get('tagId'), FILTER_VALIDATE_INT, 0);
 

@@ -30,7 +30,7 @@ final class ImprintController extends AbstractFrontController
      * Displays the imprint page - either a custom page or redirects to configured URL.
      * @throws Exception
      */
-    #[Route(path: '/imprint.html', name: 'public.imprint')]
+    #[Route(path: '/imprint.html', name: 'public.imprint', methods: ['GET'])]
     public function index(Request $request): Response
     {
         return $this->handleStaticPageRedirect('main.imprintURL');

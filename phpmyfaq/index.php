@@ -55,11 +55,11 @@ try {
     echo sprintf('Error: %s at line %d at %s', $exception->getMessage(), $exception->getLine(), $exception->getFile());
 }
 
-$routes = include PMF_SRC_DIR  . '/public-routes.php';
-
 $app = new Application($container);
+$app->setRoutingContext('public');
 try {
-    $app->run($routes);
+    // Auto-loads routes from attributes (falls back to public-routes.php during migration)
+    $app->run();
 } catch (Exception $exception) {
     echo sprintf('Error: %s at line %d at %s', $exception->getMessage(), $exception->getLine(), $exception->getFile());
 }

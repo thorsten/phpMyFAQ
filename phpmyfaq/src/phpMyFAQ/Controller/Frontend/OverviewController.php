@@ -36,7 +36,7 @@ final class OverviewController extends AbstractFrontController
      * @throws Exception
      * @throws LoaderError
      * @throws \Exception
-     */ #[Route(path: '/overview.html', name: 'public.overview')]
+     */ #[Route(path: '/overview.html', name: 'public.overview', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $faqSession = $this->container->get('phpmyfaq.user.session');

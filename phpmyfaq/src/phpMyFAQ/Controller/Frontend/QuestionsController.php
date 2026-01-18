@@ -40,7 +40,7 @@ final class QuestionsController extends AbstractFrontController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route(path: '/open-questions.html', name: 'public.open-questions')]
+    #[Route(path: '/open-questions.html', name: 'public.open-questions', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $faqSession = $this->container->get('phpmyfaq.user.session');

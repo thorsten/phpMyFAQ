@@ -41,11 +41,16 @@ final class PdfController extends AbstractFrontController
     /**
      * @throws Exception|\Exception|CommonMarkException
      */
-    #[Route(path: '/pdf/{categoryId}/{faqId}/{faqLanguage}', name: 'public.pdf.faq', requirements: [
-        'categoryId' => '\d+',
-        'faqId' => '\d+',
-        'faqLanguage' => '[a-z]{2}(_[a-z]{2})?',
-    ])]
+    #[Route(
+        path: '/pdf/{categoryId}/{faqId}/{faqLanguage}',
+        name: 'public.pdf.faq',
+        requirements: [
+            'categoryId' => '\d+',
+            'faqId' => '\d+',
+            'faqLanguage' => '[a-z]{2}(_[a-z]{2})?',
+        ],
+        methods: ['GET'],
+    )]
     public function index(Request $request): Response
     {
         $categoryId = Filter::filterVar($request->attributes->get('categoryId'), FILTER_VALIDATE_INT);
