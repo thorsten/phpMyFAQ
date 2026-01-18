@@ -1577,6 +1577,7 @@ $PMF_LANG["msgTermsOfService"] = "Terms of Service";
 $PMF_LANG["msgImprint"] = "Imprint";
 $PMF_LANG["msgCookiePolicy"] = "Cookie Policy";
 $PMF_LANG["ad_page_lang_cannot_change"] = "Language cannot be changed after creation.";
+$PMF_LANG['msgTranslation'] = 'Translation';
 $PMF_LANG["ad_page_add_translation"] = "Add Translation";
 $PMF_LANG["ad_page_translate"] = "Translate Page";
 $PMF_LANG["ad_page_original_language"] = "Original Language";
@@ -1592,7 +1593,7 @@ $LANG_CONF['api.onlyPublicQuestions'] = ['checkbox', 'API returns only public qu
 $LANG_CONF['api.ignoreOrphanedFaqs'] = ['checkbox', 'API ignores orphaned FAQs'];
 
 // Translation configuration
-$LANG_CONF['translation.provider'] = ['select', 'Translation service provider', 'Options: none, Google, Deepl, Azure, LibreTranslate'];
+$LANG_CONF['translation.provider'] = ['select', 'Translation service provider'];
 $LANG_CONF['translation.googleApiKey'] = ['password', 'Google Cloud Translation API key'];
 $LANG_CONF['translation.deeplApiKey'] = ['password', 'DeepL API key'];
 $LANG_CONF['translation.deeplUseFreeApi'] = ['checkbox', 'Use DeepL Free API (instead of Pro)'];
