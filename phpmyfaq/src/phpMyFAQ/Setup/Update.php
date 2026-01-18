@@ -1299,6 +1299,9 @@ class Update extends AbstractSetup
             $this->configuration->add('translation.deeplUseFreeApi', 'true');
             $this->configuration->add('translation.azureKey', '');
             $this->configuration->add('translation.azureRegion', '');
+            $this->configuration->add('translation.amazonAccessKeyId', '');
+            $this->configuration->add('translation.amazonSecretAccessKey', '');
+            $this->configuration->add('translation.amazonRegion', 'us-east-1');
             $this->configuration->add('translation.libreTranslateUrl', 'https://libretranslate.com');
             $this->configuration->add('translation.libreTranslateApiKey', '');
         }

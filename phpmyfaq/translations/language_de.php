@@ -1578,7 +1578,6 @@ $PMF_LANG["msgTermsOfService"] = "Nutzungsbedingungen";
 $PMF_LANG["msgImprint"] = "Impressum";
 $PMF_LANG["msgCookiePolicy"] = "Cookie-Richtlinie";
 $PMF_LANG["ad_page_lang_cannot_change"] = "Die Sprache kann nach der Erstellung nicht geändert werden.";
-$PMF_LANG['msgTranslation'] = 'Übersetzung';
 $PMF_LANG["ad_page_add_translation"] = "Übersetzung hinzufügen";
 $PMF_LANG["ad_page_translate"] = "Seite übersetzen";
 $PMF_LANG["ad_page_original_language"] = "Ursprungssprache";
@@ -1599,11 +1598,15 @@ $LANG_CONF['translation.googleApiKey'] = ['password', 'Google Cloud Translation 
 $LANG_CONF['translation.deeplApiKey'] = ['password', 'DeepL API-Schlüssel'];
 $LANG_CONF['translation.deeplUseFreeApi'] = ['checkbox', 'DeepL Free API verwenden (anstelle von Pro)'];
 $LANG_CONF['translation.azureKey'] = ['password', 'Azure Translator API-Schlüssel'];
-$LANG_CONF['translation.azureRegion'] = ['input', 'Azure-Region (z.B. eastus, westeurope)'];
+$LANG_CONF['translation.azureRegion'] = ['input', 'Azure-Region', 'z.B. eastus, westeurope'];
+$LANG_CONF['translation.amazonAccessKeyId'] = ['input', 'Amazon Translate AWS Access Key ID'];
+$LANG_CONF['translation.amazonSecretAccessKey'] = ['password', 'Amazon Translate AWS Secret Access Key'];
+$LANG_CONF['translation.amazonRegion'] = ['input', 'Amazon Translate AWS-Region', 'z.B. us-east-1, eu-west-1'];
 $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'LibreTranslate Server-URL'];
 $LANG_CONF['translation.libreTranslateApiKey'] = ['password', 'LibreTranslate API-Schlüssel (optional)'];
 
 // Translation UI strings
+$PMF_LANG['msgTranslation'] = 'Übersetzung';
 $PMF_LANG['msgTranslateWithAI'] = 'Mit KI übersetzen';
 $PMF_LANG['msgTranslating'] = 'Übersetze...';
 $PMF_LANG['msgTranslationSuccess'] = 'Übersetzung erfolgreich abgeschlossen';
