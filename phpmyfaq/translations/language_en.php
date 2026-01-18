@@ -1540,4 +1540,9 @@ $PMF_LANG['msgTryAgain'] = 'Try Again';
 $PMF_LANG['msgAdminLogExportCsv'] = 'Export admin logs as CSV';
 $PMF_LANG['msgAdminLogVerifyIntegrity'] = 'Verify Integrity';
 
+// added v4.2.0-alpha - 2026-01-17 by d0ubIeU
+$PMF_LANG['msgStickyRemoved'] = 'Successfully removed "important" status.';
+$PMF_LANG['msgConfirmUnstick'] = 'Do you really want to remove this entry from the list of important FAQs?';
+$PMF_LANG['msgTooltipUnstick'] = 'Remove important status';
+
 return $PMF_LANG;
