@@ -78,6 +78,7 @@ final class PageController extends AbstractAdministrationApiController
      * Update a custom page in Elasticsearch and OpenSearch
      *
      * @param array<string, mixed> $pageData
+     * @throws Exception
      */
     private function updateCustomPageIndex(array $pageData): void
     {
@@ -115,7 +116,7 @@ final class PageController extends AbstractAdministrationApiController
      */
     private function deleteCustomPageFromIndex(int $pageId, string $lang): void
     {
-        // Delete from Elasticsearch if enabled
+        // Delete it from Elasticsearch if enabled
         if ($this->configuration->get(item: 'search.enableElasticsearch')) {
             try {
                 /** @var Elasticsearch $elasticsearch */
@@ -147,7 +148,7 @@ final class PageController extends AbstractAdministrationApiController
     /**
      * @throws Exception
      */
-    #[Route(path: 'admin/api/page/create')]
+    #[Route(path: 'admin/api/page/create', name: 'admin.api.page.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::PAGE_ADD);
@@ -220,7 +221,7 @@ final class PageController extends AbstractAdministrationApiController
             ->setSeoRobots($seoRobots)
             ->setCreated(new DateTime());
 
-        // Create translation or new page
+        // Create a translation or new page
         if ($isTranslation) {
             $success = $customPage->createTranslation($pageEntity, $translationPageId);
             $pageId = $success ? $translationPageId : 0;
@@ -254,7 +255,7 @@ final class PageController extends AbstractAdministrationApiController
     /**
      * @throws Exception
      */
-    #[Route(path: 'admin/api/page/delete')]
+    #[Route(path: 'admin/api/page/delete', name: 'admin.api.page.delete', methods: ['DELETE'])]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::PAGE_DELETE);
@@ -297,7 +298,7 @@ final class PageController extends AbstractAdministrationApiController
     /**
      * @throws Exception
      */
-    #[Route(path: 'admin/api/page/update')]
+    #[Route(path: 'admin/api/page/update', name: 'admin.api.page.update', methods: ['PUT'])]
     public function update(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::PAGE_EDIT);
@@ -384,7 +385,7 @@ final class PageController extends AbstractAdministrationApiController
     /**
      * @throws Exception
      */
-    #[Route(path: 'admin/api/page/activate')]
+    #[Route(path: 'admin/api/page/activate', name: 'admin.api.page.activate', methods: ['PUT'])]
     public function activate(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::PAGE_EDIT);
@@ -439,7 +440,7 @@ final class PageController extends AbstractAdministrationApiController
      *
      * @throws Exception
      */
-    #[Route(path: 'admin/api/page/check-slug')]
+    #[Route(path: 'admin/api/page/check-slug', name: 'admin.api.page.check-slug', methods: ['POST'])]
     public function checkSlug(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::PAGE_ADD);
@@ -474,11 +475,11 @@ final class PageController extends AbstractAdministrationApiController
     }
 
     /**
-     * Get paginated list of pages
+     * Get a paginated list of pages
      *
      * @throws Exception
      */
-    #[Route(path: 'admin/api/page/list')]
+    #[Route(path: 'admin/api/page/list', name: 'admin.api.page.list', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::PAGE_EDIT);

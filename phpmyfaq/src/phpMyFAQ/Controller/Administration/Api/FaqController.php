@@ -461,7 +461,7 @@ final class FaqController extends AbstractAdministrationApiController
             }
         }
 
-        // If OpenSearch is enabled, update an active or delete inactive FAQ document
+        // If OpenSearch is enabled, update an active or delete an inactive FAQ document
         if ($this->configuration->get(item: 'search.enableOpenSearch')) {
             $openSearch = new OpenSearch($this->configuration);
             if ('yes' === $active) {

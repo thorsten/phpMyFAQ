@@ -21,7 +21,6 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use Exception;
 use JsonException;
-use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -37,7 +36,7 @@ final class AdminLogController extends AbstractAdministrationApiController
 {
     /**
      * @throws \phpMyFAQ\Core\Exception|JsonException
-     * @throws \Exception
+     * @throws Exception
      */
     #[Route(
         path: './admin/api/statistics/admin-log',

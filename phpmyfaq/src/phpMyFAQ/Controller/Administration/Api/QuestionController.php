@@ -35,7 +35,7 @@ final class QuestionController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route(path: 'admin/api/question/delete')]
+    #[Route(path: 'admin/api/question/delete', name: 'admin.api.question.delete', methods: ['DELETE'])]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::QUESTION_DELETE);
@@ -64,7 +64,7 @@ final class QuestionController extends AbstractController
         return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
     }
 
-    #[Route(path: 'admin/api/question/toggle')]
+    #[Route(path: 'admin/api/question/toggle', name: 'admin.api.question.toggle', methods: ['PUT'])]
     public function toggle(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::QUESTION_ADD);

@@ -36,7 +36,7 @@ final class ImageController extends AbstractController
     /**
      * @throws Exception|\Exception
      */
-    #[Route(path: 'admin/api/content/images')]
+    #[Route(path: 'admin/api/content/images', name: 'admin.api.content.images', methods: ['POST'])]
     public function upload(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);

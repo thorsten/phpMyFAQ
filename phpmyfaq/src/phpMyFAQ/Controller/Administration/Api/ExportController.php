@@ -203,7 +203,7 @@ final class ExportController extends AbstractController
 
         $handle = fopen('php://temp', mode: 'r+');
         foreach ($text as $row) {
-            fputcsv($handle, fields: $row, separator: ',', enclosure: '"', escape: '\\', eol: PHP_EOL);
+            fputcsv($handle, fields: $row, separator: ',', enclosure: '"');
         }
 
         rewind($handle);

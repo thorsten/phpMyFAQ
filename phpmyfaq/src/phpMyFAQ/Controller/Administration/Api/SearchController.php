@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Controller\AbstractController;
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Search;
@@ -36,7 +35,7 @@ final class SearchController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route(path: 'admin/api/search/term')]
+    #[Route(path: 'admin/api/search/term', name: 'admin.api.search.term', methods: ['GET'])]
     public function deleteTerm(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);

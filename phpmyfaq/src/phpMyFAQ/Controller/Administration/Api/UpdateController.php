@@ -44,7 +44,7 @@ final class UpdateController extends AbstractController
     /**
      * @throws Exception|\Exception
      */
-    #[Route(path: 'admin/api/health-check')]
+    #[Route(path: 'admin/api/health-check', name: 'admin.api.health-check', methods: ['GET'])]
     public function healthCheck(): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -74,7 +74,7 @@ final class UpdateController extends AbstractController
         }
     }
 
-    #[Route(path: 'admin/api/versions')]
+    #[Route(path: 'admin/api/versions', name: 'admin.api.versions', methods: ['GET'])]
     public function versions(): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -92,7 +92,7 @@ final class UpdateController extends AbstractController
     /**
      * @throws Exception|\Exception
      */
-    #[Route(path: 'admin/api/update-check')]
+    #[Route(path: 'admin/api/update-check', name: 'admin.api.update-check', methods: ['GET'])]
     public function updateCheck(): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -142,7 +142,7 @@ final class UpdateController extends AbstractController
      * @throws \JsonException
      * @throws Exception|\Exception
      */
-    #[Route(path: 'admin/api/download-package')]
+    #[Route(path: 'admin/api/download-package', name: 'admin.api.download-package', methods: ['POST'])]
     public function downloadPackage(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -174,7 +174,7 @@ final class UpdateController extends AbstractController
         return $this->json(['success' => Translation::get(key: 'downloadSuccessful')], Response::HTTP_OK);
     }
 
-    #[Route(path: 'admin/api/extract-package')]
+    #[Route(path: 'admin/api/extract-package', name: 'admin.api.extract-package', methods: ['POST'])]
     public function extractPackage(): StreamedResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -195,7 +195,7 @@ final class UpdateController extends AbstractController
         });
     }
 
-    #[Route(path: 'admin/api/create-temporary-backup')]
+    #[Route(path: 'admin/api/create-temporary-backup', name: 'admin.api.create-temporary-backup', methods: ['POST'])]
     public function createTemporaryBackup(): StreamedResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -216,7 +216,7 @@ final class UpdateController extends AbstractController
         });
     }
 
-    #[Route(path: 'admin/api/install-package')]
+    #[Route(path: 'admin/api/install-package', name: 'admin.api.install-package', methods: ['POST'])]
     public function installPackage(): StreamedResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -236,7 +236,7 @@ final class UpdateController extends AbstractController
         });
     }
 
-    #[Route(path: 'admin/api/update-database')]
+    #[Route(path: 'admin/api/update-database', name: 'admin.api.update-database', methods: ['POST'])]
     public function updateDatabase(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -261,7 +261,7 @@ final class UpdateController extends AbstractController
     /**
      * @throws Exception|\Exception
      */
-    #[Route(path: 'admin/api/cleanup')]
+    #[Route(path: 'admin/api/cleanup', name: 'admin.api.cleanup', methods: ['POST'])]
     public function cleanUp(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);

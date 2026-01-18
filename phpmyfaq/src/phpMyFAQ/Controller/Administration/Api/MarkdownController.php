@@ -36,7 +36,7 @@ final class MarkdownController extends AbstractController
     /**
      * @throws CommonMarkException
      */
-    #[Route(path: 'admin/api/content/markdown')]
+    #[Route(path: 'admin/api/content/markdown', name: 'admin.api.content.markdown', methods: ['POST'])]
     public function renderMarkdown(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent());

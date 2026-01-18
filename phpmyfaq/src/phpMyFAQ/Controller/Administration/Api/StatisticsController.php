@@ -65,7 +65,11 @@ final class StatisticsController extends AbstractController
      * @throws Exception|JsonException
      * @throws \Exception
      */
-    #[Route(path: './admin/api/statistics/search-terms', methods: ['DELETE'])]
+    #[Route(
+        path: './admin/api/statistics/search-terms',
+        name: 'admin.api.statistics.search-terms',
+        methods: ['DELETE'],
+    )]
     public function truncateSearchTerms(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
