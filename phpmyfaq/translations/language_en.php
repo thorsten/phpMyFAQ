@@ -1592,7 +1592,7 @@ $LANG_CONF['api.onlyPublicQuestions'] = ['checkbox', 'API returns only public qu
 $LANG_CONF['api.ignoreOrphanedFaqs'] = ['checkbox', 'API ignores orphaned FAQs'];
 
 // Translation configuration
-$LANG_CONF['translation.provider'] = ['select', 'Translation service provider', 'Options: none, google, deepl, azure, libretranslate'];
+$LANG_CONF['translation.provider'] = ['select', 'Translation service provider', 'Options: none, Google, Deepl, Azure, LibreTranslate'];
 $LANG_CONF['translation.googleApiKey'] = ['password', 'Google Cloud Translation API key'];
 $LANG_CONF['translation.deeplApiKey'] = ['password', 'DeepL API key'];
 $LANG_CONF['translation.deeplUseFreeApi'] = ['checkbox', 'Use DeepL Free API (instead of Pro)'];

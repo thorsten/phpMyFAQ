@@ -161,6 +161,11 @@ $routesConfig = [
         'controller' => [ConfigurationTabController::class, 'templates'],
         'methods' => 'GET',
     ],
+    'admin.api.configuration.translation-provider' => [
+        'path' => '/configuration/translation-provider/{current}',
+        'controller' => [ConfigurationTabController::class, 'translationProvider'],
+        'methods' => 'GET',
+    ],
     // Glossary API
     'admin.api.glossary.create' => [
         'path' => '/glossary/create',

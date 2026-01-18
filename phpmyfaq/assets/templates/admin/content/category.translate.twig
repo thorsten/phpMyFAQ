@@ -22,6 +22,9 @@
         {% endif %}
         <input type="hidden" name="restricted_users" value="{{ userPermission }}">
         {{ csrfInputToken | raw }}
+        <input type="hidden" id="originalCategoryLang" value="{{ category.lang }}">
+        <input type="hidden" id="pmf-category-name" value="{{ categoryName }}">
+        <input type="hidden" id="pmf-category-description" value="{{ category.description }}">
 
         <div class="row mb-2">
           <label class="col-lg-2 col-form-label" for="name">{{ 'categoryNameLabel' | translate }}:</label>
@@ -42,7 +45,15 @@
         <div class="row mb-2">
           <label class="col-lg-2 col-form-label">{{ 'categoryDescriptionLabel' | translate }}</label>
           <div class="col-lg-4">
-            <textarea name="description" rows="3" class="form-control"></textarea>
+            <textarea name="description" rows="3" class="form-control" id="description"></textarea>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <div class="offset-lg-2 col-lg-4">
+            <button type="button" class="btn btn-info" id="btn-translate-category-ai">
+              <i class="bi bi-translate"></i> {{ 'msgTranslateWithAI' | translate }}
+            </button>
           </div>
         </div>
 

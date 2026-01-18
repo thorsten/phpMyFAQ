@@ -85,6 +85,9 @@ class Application
             $configuration = $this->container->get(id: 'phpmyfaq.configuration');
             $language = $this->container->get(id: 'phpmyfaq.language');
 
+            // Set container in configuration for lazy loading of services like translation provider
+            $configuration->setContainer($this->container);
+
             $detect = (bool) $configuration->get(item: 'main.languageDetection');
             $configLang = $configuration->get(item: 'main.language');
 

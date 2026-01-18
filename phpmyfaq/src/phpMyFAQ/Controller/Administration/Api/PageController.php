@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use DateTime;
+use Exception;
 use phpMyFAQ\CustomPage;
 use phpMyFAQ\Entity\CustomPageEntity;
 use phpMyFAQ\Enums\AdminLogType;
@@ -40,6 +41,7 @@ final class PageController extends AbstractAdministrationApiController
      * Index a custom page in Elasticsearch and OpenSearch
      *
      * @param array<string, mixed> $pageData
+     * @throws Exception
      */
     private function indexCustomPage(array $pageData): void
     {
@@ -49,7 +51,7 @@ final class PageController extends AbstractAdministrationApiController
                 /** @var Elasticsearch $elasticsearch */
                 $elasticsearch = $this->container->get(id: 'phpmyfaq.instance.elasticsearch');
                 $elasticsearch->indexCustomPage($pageData);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->configuration->getLogger()->error('Failed to index custom page in Elasticsearch', [
                     'error' => $e->getMessage(),
                     'page_id' => $pageData['id'] ?? null,
@@ -63,7 +65,7 @@ final class PageController extends AbstractAdministrationApiController
                 /** @var OpenSearch $openSearch */
                 $openSearch = $this->container->get(id: 'phpmyfaq.instance.opensearch');
                 $openSearch->indexCustomPage($pageData);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->configuration->getLogger()->error('Failed to index custom page in OpenSearch', [
                     'error' => $e->getMessage(),
                     'page_id' => $pageData['id'] ?? null,
@@ -85,7 +87,7 @@ final class PageController extends AbstractAdministrationApiController
                 /** @var Elasticsearch $elasticsearch */
                 $elasticsearch = $this->container->get(id: 'phpmyfaq.instance.elasticsearch');
                 $elasticsearch->updateCustomPage($pageData);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->configuration->getLogger()->error('Failed to update custom page in Elasticsearch', [
                     'error' => $e->getMessage(),
                     'page_id' => $pageData['id'] ?? null,
@@ -99,7 +101,7 @@ final class PageController extends AbstractAdministrationApiController
                 /** @var OpenSearch $openSearch */
                 $openSearch = $this->container->get(id: 'phpmyfaq.instance.opensearch');
                 $openSearch->updateCustomPage($pageData);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->configuration->getLogger()->error('Failed to update custom page in OpenSearch', [
                     'error' => $e->getMessage(),
                     'page_id' => $pageData['id'] ?? null,
@@ -119,7 +121,7 @@ final class PageController extends AbstractAdministrationApiController
                 /** @var Elasticsearch $elasticsearch */
                 $elasticsearch = $this->container->get(id: 'phpmyfaq.instance.elasticsearch');
                 $elasticsearch->deleteCustomPage($pageId, $lang);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->configuration->getLogger()->error('Failed to delete custom page from Elasticsearch', [
                     'error' => $e->getMessage(),
                     'page_id' => $pageId,
@@ -133,7 +135,7 @@ final class PageController extends AbstractAdministrationApiController
                 /** @var OpenSearch $openSearch */
                 $openSearch = $this->container->get(id: 'phpmyfaq.instance.opensearch');
                 $openSearch->deleteCustomPage($pageId, $lang);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->configuration->getLogger()->error('Failed to delete custom page from OpenSearch', [
                     'error' => $e->getMessage(),
                     'page_id' => $pageId,
@@ -143,7 +145,7 @@ final class PageController extends AbstractAdministrationApiController
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     #[Route(path: 'admin/api/page/create')]
     public function create(Request $request): JsonResponse
@@ -250,7 +252,7 @@ final class PageController extends AbstractAdministrationApiController
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     #[Route(path: 'admin/api/page/delete')]
     public function delete(Request $request): JsonResponse
@@ -293,7 +295,7 @@ final class PageController extends AbstractAdministrationApiController
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     #[Route(path: 'admin/api/page/update')]
     public function update(Request $request): JsonResponse
@@ -380,7 +382,7 @@ final class PageController extends AbstractAdministrationApiController
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     #[Route(path: 'admin/api/page/activate')]
     public function activate(Request $request): JsonResponse
@@ -435,7 +437,7 @@ final class PageController extends AbstractAdministrationApiController
     /**
      * Check if a slug is available
      *
-     * @throws \Exception
+     * @throws Exception
      */
     #[Route(path: 'admin/api/page/check-slug')]
     public function checkSlug(Request $request): JsonResponse
@@ -474,7 +476,7 @@ final class PageController extends AbstractAdministrationApiController
     /**
      * Get paginated list of pages
      *
-     * @throws \Exception
+     * @throws Exception
      */
     #[Route(path: 'admin/api/page/list')]
     public function list(Request $request): JsonResponse

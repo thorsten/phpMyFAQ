@@ -1291,6 +1291,16 @@ class Update extends AbstractSetup
             $this->configuration->add('api.onlyActiveCategories', 'true');
             $this->configuration->add('api.onlyPublicQuestions', 'true');
             $this->configuration->add('api.ignoreOrphanedFaqs', 'true');
+
+            // Add translation service configuration
+            $this->configuration->add('translation.provider', 'none');
+            $this->configuration->add('translation.googleApiKey', '');
+            $this->configuration->add('translation.deeplApiKey', '');
+            $this->configuration->add('translation.deeplUseFreeApi', 'true');
+            $this->configuration->add('translation.azureKey', '');
+            $this->configuration->add('translation.azureRegion', '');
+            $this->configuration->add('translation.libreTranslateUrl', 'https://libretranslate.com');
+            $this->configuration->add('translation.libreTranslateApiKey', '');
         }
     }
 

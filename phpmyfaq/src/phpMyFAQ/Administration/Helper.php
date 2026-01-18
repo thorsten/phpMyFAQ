@@ -244,6 +244,29 @@ class Helper
         return $output;
     }
 
+    public static function renderTranslationProviderOptions(string $current): string
+    {
+        $providers = [
+            'none' => 'None',
+            'google' => 'Google Cloud Translation',
+            'deepl' => 'DeepL',
+            'azure' => 'Azure Translator',
+            'libretranslate' => 'LibreTranslate',
+        ];
+        $output = '';
+
+        foreach ($providers as $value => $label) {
+            $output .= sprintf(
+                '<option value="%s"%s>%s</option>',
+                $value,
+                $value === $current ? ' selected' : '',
+                $label,
+            );
+        }
+
+        return $output;
+    }
+
     /**
      * Checks if the current user can access the content.
      */

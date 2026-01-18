@@ -26,7 +26,13 @@
   <div class="col-lg-12">
     <form id="pmf-translate-page-form" action="#" method="post" accept-charset="utf-8">
       <input type="hidden" name="pmf-csrf-token" id="pmf-csrf-token" value="{{ csrfToken_savePage }}" />
+      <input type="hidden" name="pmf-csrf-token-translate" id="pmf-csrf-token-translate" value="{{ csrfTokenTranslate }}" />
       <input type="hidden" name="pageId" id="pageId" value="{{ pageId }}" />
+      <input type="hidden" name="originalLang" id="originalLang" value="{{ originalLanguage }}" />
+      <input type="hidden" id="pmf-customPage-pageTitle" value="{{ originalTitle }}" />
+      <input type="hidden" id="pmf-customPage-content" value="{{ originalContent }}" />
+      <input type="hidden" id="pmf-customPage-seoTitle" value="{{ originalSeoTitle }}" />
+      <input type="hidden" id="pmf-customPage-seoDescription" value="{{ originalSeoDescription }}" />
 
       <ul class="nav nav-tabs" id="pageTabsNav" role="tablist">
         <li class="nav-item" role="presentation">
@@ -73,6 +79,12 @@
               <div class="mb-3">
                 <label for="content" class="form-label">{{ ad_page_content }}</label>
                 <textarea class="form-control" id="content" name="content" rows="15"></textarea>
+              </div>
+
+              <div class="mb-3">
+                <button type="button" class="btn btn-info" id="btn-translate-page-ai">
+                  <i class="bi bi-translate"></i> {{ 'msgTranslateWithAI' | translate }}
+                </button>
               </div>
             </div>
           </div>
@@ -144,13 +156,13 @@
         </div>
       </div>
 
-      <div class="row mt-3">
+      <div class="row my-3">
         <div class="col-lg-12">
           <button type="submit" class="btn btn-primary" id="pmf-submit-page">
             <i class="bi bi-check-lg"></i> {{ ad_page_add }}
           </button>
           <a href="./pages" class="btn btn-secondary">
-            <i class="bi bi-x-lg"></i> {{ msgCancel | translate }}
+            <i class="bi bi-x-lg"></i> {{ 'msgCancel' | translate }}
           </a>
         </div>
       </div>
