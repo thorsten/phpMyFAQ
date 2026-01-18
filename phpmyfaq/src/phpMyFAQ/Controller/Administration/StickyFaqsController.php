@@ -55,7 +55,9 @@ final class StickyFaqsController extends AbstractAdministrationController
             'msgConfirmUnstick' => Translation::get(key: 'msgConfirmUnstick'),
             'msgSuccessUnstick' => Translation::get(key: 'msgStickyRemoved'),
             'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('order-stickyfaqs'),
-            'csrfTokenApi' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('pmf-csrf-token'),
+            'csrfTokenApi' => Token::getInstance($this->container->get(id: 'session'))->getTokenString(
+                'pmf-csrf-token',
+            ),
         ]);
     }
 }

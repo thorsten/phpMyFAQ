@@ -1654,8 +1654,8 @@ class Faq
                 $data['url'] = $oLink->toString();
                 $data['id'] = (int) $row->id;
                 $data['order'] = (int) $row->sticky_order;
-                $data['category_id'] = $row->category_id;
-                $data['lang'] = $row->lang;
+                $data['category_id'] = (int) $row->category_id;
+                $data['lang'] = (string) $row->lang;
 
                 $sticky[] = $data;
             }

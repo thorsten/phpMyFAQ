@@ -123,10 +123,19 @@ export const handleStickyFaqs = (): void => {
   });
 };
 
+interface StickyOrderResponse {
+  success?: string;
+  error?: string;
+}
+
 const saveStatus = async (currentOrder: string[], container: HTMLElement): Promise<void> => {
   const successAlert = document.getElementById('successAlert');
   const csrf = container.getAttribute('data-csrf') || '';
 
+  if (!csrf) {
+    console.warn('CSRF token not found on container');
+  }
+  
   if (successAlert) {
     successAlert.remove();
   }
@@ -145,7 +154,7 @@ const saveStatus = async (currentOrder: string[], container: HTMLElement): Promi
     });
 
     if (response.ok) {
-      let jsonResponse: any = {};
+      let jsonResponse: StickyOrderResponse = {};
       try {
         jsonResponse = await response.json();
       } catch {
