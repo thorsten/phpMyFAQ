@@ -1604,6 +1604,11 @@ $LANG_CONF['translation.amazonRegion'] = ['input', 'Amazon Translate AWS region'
 $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'LibreTranslate server URL'];
 $LANG_CONF['translation.libreTranslateApiKey'] = ['password', 'LibreTranslate API key (optional)'];
 
+// added v4.2.0 - 2026-01-18 by Thorsten
+$LANG_CONF['routing.useAttributesOnly'] = ['checkbox', 'Use only route attributes (disable file-based routing)'];
+$LANG_CONF['routing.cache.enabled'] = ['checkbox', 'Enable route caching for better performance'];
+$LANG_CONF['routing.cache.dir'] = ['input', 'Route cache directory'];
+
 // Translation UI strings
 $PMF_LANG['msgTranslation'] = 'Translation';
 $PMF_LANG['msgTranslateWithAI'] = 'Translate with AI';
