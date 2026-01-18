@@ -37,7 +37,7 @@ final class BookmarkController extends AbstractController
      * @throws JsonException
      * @throws Exception
      */
-    #[Route(path: 'api/bookmark/create', name: 'api.private.bookmark.create', methods: ['POST'])]
+    #[Route(path: 'bookmark/create', name: 'api.private.bookmark.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();

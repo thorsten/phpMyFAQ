@@ -38,7 +38,7 @@ final class ContactController extends AbstractController
      * @throws \Exception
      *
      */
-    #[Route(path: 'api/contact', name: 'api.private.contact', methods: ['POST'])]
+    #[Route(path: 'contact', name: 'api.private.contact', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent());
