@@ -422,6 +422,139 @@ Super admins have all permissions by default.
 - Check page exists and is active
 - Clear cache if using caching
 
+### 5.2.11 AI-Assisted Translation
+
+phpMyFAQ includes an AI-assisted translation feature that helps you translate FAQ content, custom pages, categories, and
+news articles into multiple languages using professional translation APIs. The feature preserves HTML formatting and
+provides high-quality automated translations.
+
+#### 5.2.11.1 Overview
+
+The AI translation feature integrates with leading translation services:
+
+- **Google Cloud Translation** - Neural machine translation with 100+ languages
+- **DeepL** - Premium quality translations, especially for European languages
+- **Azure Translator** - Microsoft's translation service with generous free tier
+- **Amazon Translate** - AWS translation service with 75+ languages
+- **LibreTranslate** - Open-source, self-hosted option for privacy
+
+#### 5.2.11.2 Configuration
+
+Navigate to **Configuration → Translation** tab to configure your translation provider:
+
+1. Select your preferred **Translation Provider** from the dropdown
+2. Enter the required API credentials for your chosen provider
+3. Click **Save Configuration** to activate
+
+**Provider-Specific Credentials:**
+
+- **Google**: API key from Google Cloud Console
+- **DeepL**: API key from DeepL dashboard (Free or Pro)
+- **Azure**: API key and region from Azure Portal
+- **Amazon**: AWS Access Key ID, Secret Access Key, and region
+- **LibreTranslate**: Server URL and optional API key
+
+For detailed setup instructions for each provider, see the [AI Translation Guide](ai-translation.md) and
+[Quick Start Guide](ai-translation-quickstart.md).
+
+#### 5.2.11.3 Translating Content
+
+**Translating FAQs:**
+
+1. Navigate to **FAQs** and select an FAQ to translate
+2. Click on the **Translation** tab or **Translate FAQ**
+3. Select the target language from the dropdown
+4. Click the **"Translate with AI"** button
+5. Review the translated question, answer, and keywords
+6. Make any necessary edits
+7. Click **Save** to store the translation
+
+The AI will translate:
+- Question text
+- Answer (HTML formatting preserved)
+- Keywords/tags
+
+**Translating Custom Pages:**
+
+1. Navigate to **Content → Custom Pages**
+2. Select a page and click **Translate**
+3. Select the target language
+4. Click **"Translate with AI"**
+5. Review translated content (title, content, SEO fields)
+6. Adjust settings in the **Settings** tab
+7. Click **Save**
+
+The AI will translate:
+- Page title
+- Page content (HTML formatting preserved)
+- SEO title
+- SEO description
+
+**Translating Categories:**
+
+1. Navigate to **Categories**
+2. Select a category and click **Translate Category**
+3. Select the target language
+4. Click **"Translate with AI"**
+5. Review the translated name and description
+6. Click **Save**
+
+**Translating News:**
+
+1. Create or edit a news article
+2. Use the translation interface to create language versions
+3. The AI assists with translating headline and content
+
+#### 5.2.11.4 Best Practices
+
+**Review All Translations:**
+- AI translation is very accurate but not perfect
+- Always review technical terms, brand names, and legal content
+- Edit translations before publishing to ensure quality
+
+**Maintain Consistency:**
+- Use the same translation provider across your site
+- Keep a glossary of key terms and their preferred translations
+- Use consistent terminology in source content
+
+**HTML Formatting:**
+- Simple HTML (bold, italic, links, lists) translates best
+- Complex nested structures may need manual adjustment
+- Always preview translated content before publishing
+
+**Cost Management:**
+- Start with free tiers (DeepL Free: 500k chars/month, Azure: 2M chars/month)
+- Monitor usage in your provider's dashboard
+- Don't re-translate unnecessarily - review and edit instead
+
+#### 5.2.11.5 Troubleshooting
+
+**Translation button is disabled:**
+- Verify translation provider is configured in settings
+- Ensure source and target languages are different
+- Check that both languages are supported by your provider
+
+**Translation fails with error:**
+- Verify API credentials are correct
+- Check you haven't exceeded free tier limits
+- For Azure: ensure region format is correct (e.g., "eastus" not "East US")
+
+**Poor translation quality:**
+- Try DeepL for better quality (European languages)
+- Simplify source text (shorter sentences, clear language)
+- Review and edit translations manually
+- Verify language is well-supported by your provider
+
+**HTML formatting issues:**
+- Ensure source content has valid, clean HTML
+- Simplify complex HTML structures
+- Preview before saving
+- Re-translate if formatting is broken
+
+For comprehensive documentation, see:
+- [Complete AI Translation Guide](ai-translation.md) - Full documentation
+- [Quick Start Guide](ai-translation-quickstart.md) - Get started in 5 minutes
+
 ## 5.3 Statistics
 
 ### 5.3.1 Ratings

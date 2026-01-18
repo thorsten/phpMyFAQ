@@ -14,9 +14,11 @@ responsive templates.
 These Twig-based templates allow for the inclusion of your own text and HTML snippets. There's also a built-in plugin
 system for further customization.
 
-Additional features include PDF support, a backup system, a dynamic sitemap, related FAQs, tagging, a plugin system, 
+Additional features include PDF support, a backup system, a dynamic sitemap, related FAQs, tagging, a plugin system,
 and built-in spam protection systems.
 phpMyFAQ also supports two-factor authentication (2FA) for enhanced security.
+An AI-assisted translation feature helps translate content into multiple languages using Google Cloud Translation, DeepL,
+Azure Translator, Amazon Translate, or LibreTranslate.
 A REST API is available for integration with other systems.
 It also supports OpenLDAP, Microsoft Active Directory, Microsoft Entra ID, and an MCP Server for AI agents.
 The system is easy to install, thanks to its user-friendly installation script.
