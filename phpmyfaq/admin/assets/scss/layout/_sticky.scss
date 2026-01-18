@@ -1,0 +1,36 @@
+//
+// Sticky FAQ List
+//
+
+.list-group-numbered > .list-group-item::before {
+    margin-left: 1.25rem;
+}
+
+.no-drag {
+    cursor: default !important;
+    background-color: rgba(var(--bs-light-rgb), 0.1);
+}
+
+.js-unstick-button.sticky-toggle-btn {
+    color: var(--bs-secondary) !important;
+    transition: all 0.15s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    text-decoration: none !important;
+}
+
+.js-unstick-button.sticky-toggle-btn i.sticky-icon {
+    font-size: 1.25rem;
+    font-style: normal;
+}
+
+.js-unstick-button.sticky-toggle-btn:hover {
+    color: var(--bs-danger) !important;
+}
+
+.js-unstick-button.sticky-toggle-btn:hover i.sticky-icon::before {
+    content: "\f4ea" !important;
+}

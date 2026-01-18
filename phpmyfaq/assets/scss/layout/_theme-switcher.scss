@@ -464,6 +464,25 @@
     }
   }
 
+  .text-body {
+    color: var(--bs-light) !important;
+  }
+
+  a:hover {
+    color: var(--bs-dark) !important;
+    background-color: var(--bs-primary) !important;
+  }
+
+  .js-unstick-button.sticky-toggle-btn {
+    background-color: var(--bs-dark) !important;
+    color: var(--bs-primary) !important;
+
+    &:hover {
+      color: var(--bs-primary) !important;
+      outline: 2px solid var(--bs-light);
+    }
+  }
+
   // Improve readability of badges
   .badge {
     border: 4px solid var(--bs-dark);
