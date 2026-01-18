@@ -18,6 +18,7 @@ import { Modal } from 'bootstrap';
 import { deleteCategory, setCategoryTree } from '../api';
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 import { Response } from '../interfaces';
+import { Translator } from '../translation/translator';
 
 const nestedQuery = '.nested-sortable';
 const identifier = 'pmfCatid';
@@ -46,7 +47,7 @@ export const handleCategories = (): void => {
         });
       },
       onEnd: async (event: SortableEvent): Promise<void> => {
-        // Remove class from all drop zones when drag ends
+        // Remove the class from all drop zones when drag ends
         const allSortables = document.querySelectorAll<HTMLElement>(nestedQuery);
         allSortables.forEach((sortable: HTMLElement): void => {
           sortable.classList.remove('sortable-drag-active');
@@ -132,4 +133,53 @@ export const handleResetCategoryImage = (): void => {
       categoryImageLabel.innerHTML = '';
     });
   }
+};
+
+export const handleCategoryTranslate = (): void => {
+  const translateButton = document.getElementById('btn-translate-category-ai') as HTMLButtonElement | null;
+  const langSelect = document.getElementById('catlang') as HTMLSelectElement | null;
+  const originalLangInput = document.getElementById('originalCategoryLang') as HTMLInputElement | null;
+
+  if (!translateButton || !langSelect || !originalLangInput) {
+    return;
+  }
+
+  // Initialize translator when target language is selected
+  langSelect.addEventListener('change', () => {
+    const sourceLang = originalLangInput.value;
+    const targetLang = langSelect.value;
+
+    if (sourceLang && targetLang && sourceLang !== targetLang) {
+      // Enable the translate button
+      translateButton.disabled = false;
+
+      // Initialize the Translator
+      try {
+        new Translator({
+          buttonSelector: '#btn-translate-category-ai',
+          contentType: 'category',
+          sourceLang: sourceLang,
+          targetLang: targetLang,
+          fieldMapping: {
+            name: '#name',
+            description: '#description',
+          },
+          onTranslationSuccess: () => {
+            pushNotification('Translation completed successfully');
+          },
+          onTranslationError: (error) => {
+            pushErrorNotification(`Translation failed: ${error}`);
+          },
+        });
+      } catch (error) {
+        console.error('Failed to initialize translator:', error);
+      }
+    } else {
+      // Disable the translate button if same language or no target language
+      translateButton.disabled = true;
+    }
+  });
+
+  // Initially disable the button
+  translateButton.disabled = true;
 };

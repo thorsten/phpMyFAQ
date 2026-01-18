@@ -110,7 +110,7 @@ export class Translator {
       if (response.success) {
         this.populateTranslatedFields(response.translatedFields);
         this.showSuccess();
-        this.onTranslationSuccess?.(response.translatedFields);
+        this.onTranslationSuccess?.();
       } else {
         this.showError(response.error);
         this.onTranslationError?.(response.error);
@@ -186,12 +186,12 @@ export class Translator {
    * Get CSRF token from the page
    */
   private getCsrfToken(): string | null {
-    const tokenInput = document.querySelector<HTMLInputElement>('input[name="pmf-csrf-token"]');
+    const tokenInput = document.querySelector<HTMLInputElement>('input[name="pmf-csrf-token-translate"]');
     return tokenInput?.value || null;
   }
 
   /**
-   * Set button loading state
+   * Set the button loading state
    */
   private setButtonLoading(loading: boolean): void {
     if (loading) {

@@ -153,6 +153,7 @@ final class PageController extends AbstractAdministrationController
             'availableLanguages' => $availableLanguages,
             'userEmail' => $this->currentUser->getUserData('email'),
             'userName' => $this->currentUser->getUserData('display_name'),
+            'csrfTokenTranslate' => Token::getInstance($this->session)->getTokenString('translate'),
         ]);
     }
 

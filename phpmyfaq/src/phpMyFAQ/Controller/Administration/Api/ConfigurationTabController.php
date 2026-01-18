@@ -426,6 +426,18 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         return new Response(Helper::renderMetaRobotsDropdown($request->attributes->get(key: 'current')));
     }
 
+    #[Route(
+        path: 'admin/api/configuration/translation-provider/{current}',
+        name: 'admin.api.configuration.translation-provider',
+        methods: ['GET'],
+    )]
+    public function translationProvider(Request $request): Response
+    {
+        $this->userIsAuthenticated();
+
+        return new Response(Helper::renderTranslationProviderOptions($request->attributes->get(key: 'current')));
+    }
+
     /**
      * Converts a value to string safely, handling objects and null values
      */

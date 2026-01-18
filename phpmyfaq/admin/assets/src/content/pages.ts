@@ -18,6 +18,7 @@ import { Modal } from 'bootstrap';
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 import { Response } from '../interfaces';
 import { renderPageEditor } from './editor';
+import { Translator } from '../translation/translator';
 
 interface PageData {
   pageTitle: string;
@@ -193,7 +194,7 @@ export const handleTranslatePage = (): void => {
   const form = document.getElementById('pmf-translate-page-form') as HTMLFormElement | null;
   if (!form) return;
 
-  // Initialize WYSIWYG editor for content field
+  // Initialize WYSIWYG editor for the content field
   renderPageEditor();
 
   const titleInput = document.getElementById('pageTitle') as HTMLInputElement | null;
@@ -246,6 +247,53 @@ export const handleTranslatePage = (): void => {
   updateCharCounter('seoTitle', 'seo-title-counter', 60);
   updateCharCounter('seoDescription', 'seo-description-counter', 160);
 
+  // AI Translation integration
+  const translateButton = document.getElementById('btn-translate-page-ai') as HTMLButtonElement | null;
+  const originalLangInput = document.getElementById('originalLang') as HTMLInputElement | null;
+
+  if (translateButton && langInput && originalLangInput) {
+    // Initialize translator when the target language is selected
+    langInput.addEventListener('change', () => {
+      const sourceLang = originalLangInput.value;
+      const targetLang = langInput.value;
+
+      if (sourceLang && targetLang && sourceLang !== targetLang) {
+        // Enable the translate button
+        translateButton.disabled = false;
+
+        // Initialize the Translator
+        try {
+          new Translator({
+            buttonSelector: '#btn-translate-page-ai',
+            contentType: 'customPage',
+            sourceLang: sourceLang,
+            targetLang: targetLang,
+            fieldMapping: {
+              pageTitle: '#pageTitle',
+              content: '#content',
+              seoTitle: '#seoTitle',
+              seoDescription: '#seoDescription',
+            },
+            onTranslationSuccess: () => {
+              pushNotification('Translation completed successfully');
+            },
+            onTranslationError: (error) => {
+              pushErrorNotification(`Translation failed: ${error}`);
+            },
+          });
+        } catch (error) {
+          console.error('Failed to initialize translator:', error);
+        }
+      } else {
+        // Disable the translation button if the same language or no target language
+        translateButton.disabled = true;
+      }
+    });
+
+    // Initially disable the button
+    translateButton.disabled = true;
+  }
+
   // Form submission
   const submitButton = document.getElementById('pmf-submit-page') as HTMLButtonElement | null;
   if (submitButton) {
@@ -268,14 +316,10 @@ export const handleTranslatePage = (): void => {
       };
 
       const response = (await addPage(data)) as unknown as Response;
-      if (typeof response.success === 'string') {
-        pushNotification(response.success);
-        setTimeout(() => {
-          window.location.href = './pages';
-        }, 2000);
-      } else {
-        pushErrorNotification(response.error || 'An error occurred');
-      }
+      pushNotification(response.success);
+      setTimeout(() => {
+        window.location.href = './pages';
+      }, 2000);
     });
   }
 };
@@ -287,7 +331,7 @@ export const handleEditPage = (): void => {
   const form = document.getElementById('pmf-edit-page-form') as HTMLFormElement | null;
   if (!form) return;
 
-  // Initialize WYSIWYG editor for content field
+  // Initialize WYSIWYG editor for the content field
   renderPageEditor();
 
   const slugInput = document.getElementById('slug') as HTMLInputElement | null;
@@ -347,14 +391,10 @@ export const handleEditPage = (): void => {
       };
 
       const response = (await updatePage(data)) as unknown as Response;
-      if (typeof response.success === 'string') {
-        pushNotification(response.success);
-        setTimeout(() => {
-          window.location.href = './pages';
-        }, 2000);
-      } else {
-        pushErrorNotification(response.error || 'An error occurred');
-      }
+      pushNotification(response.success);
+      setTimeout(() => {
+        window.location.href = './pages';
+      }, 2000);
     });
   }
 };
@@ -388,14 +428,10 @@ export const handlePages = (): void => {
         const pageLang = (document.getElementById('pageLang') as HTMLInputElement).value;
 
         const response = (await deletePage(csrfToken, pageId, pageLang)) as unknown as Response;
-        if (typeof response.success === 'string') {
-          pushNotification(response.success);
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
-        } else {
-          pushErrorNotification(response.error || 'An error occurred');
-        }
+        pushNotification(response.success);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       });
     }
   }
@@ -410,12 +446,7 @@ export const handlePages = (): void => {
 
       const response = (await activatePage(pageId, status, csrfToken)) as unknown as Response;
 
-      if (typeof response.success === 'string') {
-        pushNotification(response.success);
-      } else {
-        pushErrorNotification(response.error || 'An error occurred');
-        checkbox.checked = !status;
-      }
+      pushNotification(response.success);
     });
   });
 };

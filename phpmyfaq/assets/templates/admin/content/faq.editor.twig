@@ -100,6 +100,13 @@
                 <input type="hidden" name="notifyUser" id="notifyUser" value="{{ notifyUser }}">
                 <input type="hidden" name="notifyEmail" id="notifyEmail" value="{{ notifyEmail }}">
                 <input type="hidden" name="pmf-csrf-token" id="pmf-csrf-token" value="{{ csrfToken }}">
+                {% if not editExistingFaq %}
+                  {# Hidden fields for translation source content #}
+                  <input type="hidden" id="originalFaqLang" value="{{ faqData['lang'] }}">
+                  <input type="hidden" id="pmf-faq-question" value="{{ faqData['title'] }}">
+                  <input type="hidden" id="pmf-faq-answer" value="{{ faqData['content'] | raw }}">
+                  <input type="hidden" id="pmf-faq-keywords" value="{{ faqData['keywords'] }}">
+                {% endif %}
 
                 <!-- Question -->
                 <div class="form-group mb-2">
@@ -171,6 +178,17 @@
                     <div class="col-lg-12">
                       <textarea id="editor" name="answer" class="form-control" rows="7"
                                 placeholder="{{ 'msgAnswer' | translate }}">{{ faqData['content'] | raw }}</textarea>
+                    </div>
+                  </div>
+                {% endif %}
+
+                {% if not editExistingFaq %}
+                  {# Translation button for FAQ translation mode #}
+                  <div class="row mt-3">
+                    <div class="col-lg-12">
+                      <button type="button" class="btn btn-info" id="btn-translate-faq-ai">
+                        <i class="bi bi-translate"></i> {{ 'msgTranslateWithAI' | translate }}
+                      </button>
                     </div>
                   </div>
                 {% endif %}
