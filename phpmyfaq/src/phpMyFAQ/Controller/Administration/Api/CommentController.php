@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
+use Exception;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
@@ -31,9 +32,9 @@ use Symfony\Component\Routing\Attribute\Route;
 final class CommentController extends AbstractAdministrationApiController
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
-    #[Route(path: 'admin/api/content/comments')]
+    #[Route(path: 'admin/api/content/comments', name: 'admin.api.content.comments', methods: ['DELETE'])]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::COMMENT_DELETE);

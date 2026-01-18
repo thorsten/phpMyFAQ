@@ -29,6 +29,7 @@ use phpMyFAQ\Translation\Exception\TranslationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class TranslationController extends AbstractAdministrationApiController
 {
@@ -37,6 +38,7 @@ final class TranslationController extends AbstractAdministrationApiController
      *
      * @throws \Exception
      */
+    #[Route(path: 'admin/api/content/translate', name: 'admin.api.content.translate', methods: ['POST'])]
     public function translate(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FAQ_TRANSLATE);

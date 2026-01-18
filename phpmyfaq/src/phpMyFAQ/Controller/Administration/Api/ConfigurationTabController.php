@@ -45,7 +45,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route(path: 'admin/api/configuration/list/{mode}')]
+    #[Route(path: 'admin/api/configuration/list/{mode}', name: 'admin.api.configuration.list', methods: ['GET'])]
     public function list(Request $request): Response
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -83,7 +83,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     /**
      * @throws \Exception
      */
-    #[Route(path: 'admin/api/configuration')]
+    #[Route(path: 'admin/api/configuration', name: 'admin.api.configuration.save', methods: ['POST'])]
     public function save(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -157,9 +157,9 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         }
 
         // Only process fields that were available in the current form
-        // For checkboxes: if field is available but not in configurationData, set to false
+        // For checkboxes: if the field is available but not in configurationData, set to false
         // For other fields: keep original value if not in configurationData
-        if ($availableFields !== [] && $availableFields !== null) {
+        if ($availableFields !== []) {
             foreach ($availableFields as $availableField) {
                 if (array_key_exists($availableField, $newConfigValues)) {
                     continue;

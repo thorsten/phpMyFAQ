@@ -45,7 +45,7 @@ final class UserController extends AbstractAdministrationApiController
     /**
      * @throws Exception
      */
-    #[Route(path: 'admin/api/user/users')]
+    #[Route(path: 'admin/api/user/users', name: 'admin.api.user.users', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
         $this->userHasUserPermission();
@@ -88,7 +88,7 @@ final class UserController extends AbstractAdministrationApiController
     /**
      * @throws Exception
      */
-    #[Route(path: 'admin/api/user/users/csv')]
+    #[Route(path: 'admin/api/user/users.csv', name: 'admin.api.user.users.csv', methods: ['GET'])]
     public function csvExport(): Response
     {
         $this->userHasUserPermission();
@@ -143,7 +143,7 @@ final class UserController extends AbstractAdministrationApiController
     /**
      * @throws Exception|\Exception
      */
-    #[Route(path: 'admin/api/user/data/:userId')]
+    #[Route(path: 'admin/api/user/data/{userId}', name: 'admin.api.user.data', methods: ['GET'])]
     public function userData(Request $request): JsonResponse
     {
         $this->userHasUserPermission();
@@ -174,7 +174,7 @@ final class UserController extends AbstractAdministrationApiController
     /**
      * @throws Exception
      */
-    #[Route(path: 'admin/api/user/permissions/:userId')]
+    #[Route(path: 'admin/api/user/permissions/{userId}', name: 'admin.api.user.permissions', methods: ['GET'])]
     public function userPermissions(Request $request): JsonResponse
     {
         $this->userHasUserPermission();
@@ -191,7 +191,7 @@ final class UserController extends AbstractAdministrationApiController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route(path: 'admin/api/user/activate')]
+    #[Route(path: 'admin/api/user/activate', name: 'admin.api.user.activate', methods: ['PUT'])]
     public function activate(Request $request): JsonResponse
     {
         $this->userHasUserPermission();
@@ -222,7 +222,7 @@ final class UserController extends AbstractAdministrationApiController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route(path: 'admin/api/user/overwrite-password')]
+    #[Route(path: 'admin/api/user/overwrite-password', name: 'admin.api.user.overwrite-password', methods: ['PUT'])]
     public function overwritePassword(Request $request): JsonResponse
     {
         $this->userHasUserPermission();
@@ -268,7 +268,7 @@ final class UserController extends AbstractAdministrationApiController
      * *@throws \Exception
      *
      */
-    #[Route(path: 'admin/api/user/delete')]
+    #[Route(path: 'admin/api/user/delete', name: 'admin.api.user.delete', methods: ['DELETE'])]
     public function deleteUser(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::USER_DELETE);
@@ -312,7 +312,7 @@ final class UserController extends AbstractAdministrationApiController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route(path: 'admin/api/user/add')]
+    #[Route(path: 'admin/api/user/add', name: 'admin.api.user.add', methods: ['POST'])]
     public function addUser(Request $request): JsonResponse
     {
         $this->userHasUserPermission();
@@ -390,7 +390,7 @@ final class UserController extends AbstractAdministrationApiController
     /**
      * @throws Exception|\Exception|TransportExceptionInterface
      */
-    #[Route(path: 'admin/api/user/edit')]
+    #[Route(path: 'admin/api/user/edit', name: 'admin.api.user.edit', methods: ['PUT'])]
     public function editUser(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::USER_EDIT);
@@ -470,7 +470,7 @@ final class UserController extends AbstractAdministrationApiController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route(path: 'admin/api/user/update-rights')]
+    #[Route(path: 'admin/api/user/update-rights', name: 'admin.api.user.update-rights', methods: ['PUT'])]
     public function updateUserRights(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::USER_EDIT);

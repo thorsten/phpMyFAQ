@@ -37,7 +37,7 @@ final class NewsController extends AbstractAdministrationApiController
     /**
      * @throws \Exception
      */
-    #[Route(path: 'admin/api/news/create')]
+    #[Route(path: 'admin/api/news/create', name: 'admin.api.news.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::NEWS_ADD);
@@ -87,7 +87,7 @@ final class NewsController extends AbstractAdministrationApiController
     /**
      * @throws \Exception
      */
-    #[Route(path: 'admin/api/news/delete')]
+    #[Route(path: 'admin/api/news/delete', name: 'admin.api.news.delete', methods: ['DELETE'])]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::NEWS_DELETE);
@@ -114,7 +114,7 @@ final class NewsController extends AbstractAdministrationApiController
     /**
      * @throws \Exception
      */
-    #[Route(path: 'admin/api/news/update')]
+    #[Route(path: 'admin/api/news/update', name: 'admin.api.news.update', methods: ['PUT'])]
     public function update(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::NEWS_DELETE);
@@ -166,7 +166,7 @@ final class NewsController extends AbstractAdministrationApiController
     /**
      * @throws \Exception
      */
-    #[Route(path: 'admin/api/news/activate')]
+    #[Route(path: 'admin/api/news/activate', name: 'admin.api.news.activate', methods: ['PUT'])]
     public function activate(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::NEWS_EDIT);

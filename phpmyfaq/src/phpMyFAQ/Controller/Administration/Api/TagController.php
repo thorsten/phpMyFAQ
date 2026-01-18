@@ -38,7 +38,7 @@ final class TagController extends AbstractController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route(path: 'admin/api/content/tag')]
+    #[Route(path: 'admin/api/content/tag', name: 'admin.api.content.tag', methods: ['PUT'])]
     public function update(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
@@ -66,7 +66,7 @@ final class TagController extends AbstractController
     /**
      * @throws Exception|\Exception
      */
-    #[Route(path: 'admin/api/content/tags')]
+    #[Route(path: 'admin/api/content/tags', name: 'admin.api.content.tags', methods: ['POST'])]
     public function search(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -114,7 +114,7 @@ final class TagController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route(path: 'admin/api/content/tag/:tagId')]
+    #[Route(path: 'admin/api/content/tag/:tagId', name: 'admin.api.content.tag.delete', methods: ['DELETE'])]
     public function delete(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
