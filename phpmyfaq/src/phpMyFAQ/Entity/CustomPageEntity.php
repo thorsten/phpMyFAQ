@@ -43,6 +43,12 @@ class CustomPageEntity
 
     private ?DateTime $updated = null;
 
+    private ?string $seoTitle = null;
+
+    private ?string $seoDescription = null;
+
+    private string $seoRobots = 'index,follow';
+
     public function getId(): int
     {
         return $this->id;
@@ -150,6 +156,39 @@ class CustomPageEntity
     public function setUpdated(DateTime $updated): CustomPageEntity
     {
         $this->updated = $updated;
+        return $this;
+    }
+
+    public function getSeoTitle(): ?string
+    {
+        return $this->seoTitle;
+    }
+
+    public function setSeoTitle(?string $seoTitle): CustomPageEntity
+    {
+        $this->seoTitle = $seoTitle;
+        return $this;
+    }
+
+    public function getSeoDescription(): ?string
+    {
+        return $this->seoDescription;
+    }
+
+    public function setSeoDescription(?string $seoDescription): CustomPageEntity
+    {
+        $this->seoDescription = $seoDescription;
+        return $this;
+    }
+
+    public function getSeoRobots(): string
+    {
+        return $this->seoRobots;
+    }
+
+    public function setSeoRobots(string $seoRobots): CustomPageEntity
+    {
+        $this->seoRobots = $seoRobots;
         return $this;
     }
 }

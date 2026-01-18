@@ -14,7 +14,8 @@
  */
 
 import { deleteAttachments } from '../api';
-import { pushNotification } from '../../../../assets/src/utils';
+import { pushNotification, pushErrorNotification } from '../../../../assets/src/utils';
+import { Translator } from '../translation/translator';
 
 const showHelp = (option: string): void => {
   const optionHelp = document.getElementById(`${option}Help`) as HTMLElement;
@@ -142,4 +143,54 @@ const checkForHash = (): void => {
     questionHelp.classList.add('visually-hidden');
     submitButton.removeAttribute('disabled');
   }
+};
+
+export const handleFaqTranslate = (): void => {
+  const translateButton = document.getElementById('btn-translate-faq-ai') as HTMLButtonElement | null;
+  const langSelect = document.getElementById('lang') as HTMLSelectElement | null;
+  const originalLangInput = document.getElementById('originalFaqLang') as HTMLInputElement | null;
+
+  if (!translateButton || !langSelect || !originalLangInput) {
+    return;
+  }
+
+  // Initialize translator when target language is selected
+  langSelect.addEventListener('change', () => {
+    const sourceLang = originalLangInput.value;
+    const targetLang = langSelect.value;
+
+    if (sourceLang && targetLang && sourceLang !== targetLang) {
+      // Enable the translate button
+      translateButton.disabled = false;
+
+      // Initialize the Translator
+      try {
+        new Translator({
+          buttonSelector: '#btn-translate-faq-ai',
+          contentType: 'faq',
+          sourceLang: sourceLang,
+          targetLang: targetLang,
+          fieldMapping: {
+            question: '#question',
+            answer: '#editor',
+            keywords: '#keywords',
+          },
+          onTranslationSuccess: () => {
+            pushNotification('Translation completed successfully');
+          },
+          onTranslationError: (error) => {
+            pushErrorNotification(`Translation failed: ${error}`);
+          },
+        });
+      } catch (error) {
+        console.error('Failed to initialize translator:', error);
+      }
+    } else {
+      // Disable the translate button if same language or no target language
+      translateButton.disabled = true;
+    }
+  });
+
+  // Initially disable the button
+  translateButton.disabled = true;
 };

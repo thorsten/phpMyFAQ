@@ -124,11 +124,6 @@ final class CategoryController extends AbstractApiController
             }
         }'),
     )]
-    #[OA\Response(
-        response: 200,
-        description: 'If no categories are found, returns empty data array.',
-        content: new OA\JsonContent(example: '{"success": true, "data": []}'),
-    )]
     public function list(): JsonResponse
     {
         /** @var Language $language */
@@ -141,6 +136,8 @@ final class CategoryController extends AbstractApiController
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
+
+        $onlyActive = (bool) $this->configuration->get('api.onlyActiveCategories');
 
         // Get pagination and sorting parameters
         $pagination = $this->getPaginationRequest();
@@ -156,10 +153,11 @@ final class CategoryController extends AbstractApiController
             offset: $pagination->offset,
             sortField: $sort->getField() ?? 'id',
             sortOrder: $sort->getOrderSql(),
+            activeOnly: $onlyActive,
         );
 
         // Get total count
-        $total = $category->countCategories();
+        $total = $category->countCategories(activeOnly: $onlyActive);
 
         return $this->paginatedResponse(
             data: array_values($categories),

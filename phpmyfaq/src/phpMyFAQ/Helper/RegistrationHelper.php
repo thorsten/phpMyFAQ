@@ -112,8 +112,8 @@ class RegistrationHelper extends AbstractHelper
             'registered' => true,
             'success' =>
                 trim((string) Translation::get(key: 'successMessage'))
-                . ' '
-                . trim((string) Translation::get(key: 'msgRegThankYou')),
+                    . ' '
+                    . trim((string) Translation::get(key: 'msgRegThankYou')),
         ];
     }
 

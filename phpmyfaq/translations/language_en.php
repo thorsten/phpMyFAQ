@@ -1207,7 +1207,7 @@ $PMF_LANG['loginPageMessage'] = 'Log in to ';
 $PMF_LANG['msgFAQMetaData'] = 'FAQ metadata';
 
 // added v3.0.8 - 2021-01-22
-$LANG_CONF['main.privacyURL'] = ['input', 'URL for Privacy note'];
+$LANG_CONF['main.privacyURL'] = ['input', 'URL for Privacy note','Use "page:slug" for custom page or full URL for external'];
 
 // added v3.1.0-alpha - 2020-03-27 by Thorsten
 $PMF_LANG['msgUserDataVisible'] = 'Username should be visible';
@@ -1539,6 +1539,89 @@ $PMF_LANG['msgErrorDetails'] = 'Error Details';
 $PMF_LANG['msgTryAgain'] = 'Try Again';
 $PMF_LANG['msgAdminLogExportCsv'] = 'Export admin logs as CSV';
 $PMF_LANG['msgAdminLogVerifyIntegrity'] = 'Verify Integrity';
+$PMF_LANG["msgPages"] = "Custom Pages";
+$PMF_LANG["msgAboutThisPage"] = "About this page";
+$PMF_LANG["msgCreated"] = "Created";
+$PMF_LANG["msgUpdated"] = "Updated";
+$PMF_LANG["ad_menu_pages"] = "Custom Pages";
+$PMF_LANG["ad_page_add"] = "Add Custom Page";
+$PMF_LANG["ad_page_edit"] = "Edit Custom Page";
+$PMF_LANG["ad_page_title"] = "Page Title";
+$PMF_LANG["ad_page_slug"] = "URL Slug";
+$PMF_LANG["ad_page_slug_help"] = "URL-friendly identifier for this page (e.g., 'privacy-policy')";
+$PMF_LANG["ad_page_slug_exists"] = "This slug already exists for this language";
+$PMF_LANG["ad_page_content"] = "Page Content";
+$PMF_LANG["ad_page_author_name"] = "Author Name";
+$PMF_LANG["ad_page_author_email"] = "Author Email";
+$PMF_LANG["ad_page_set_active"] = "Activate page";
+$PMF_LANG["ad_page_created"] = "Created";
+$PMF_LANG["ad_page_updated"] = "Updated";
+$PMF_LANG["ad_page_update"] = "Update";
+$PMF_LANG["ad_page_delete"] = "Delete";
+$PMF_LANG["ad_page_nodata"] = "No custom pages found";
+$PMF_LANG["ad_page_updatesuc"] = "The custom page has been successfully updated.";
+$PMF_LANG["ad_page_updatefail"] = "An error occurred updating the custom page.";
+$PMF_LANG["ad_page_insertfail"] = "An error occurred creating the custom page.";
+$PMF_LANG["ad_page_del"] = "Are you sure you want to delete this custom page?";
+$PMF_LANG["ad_page_yesdelete"] = "Yes, delete!";
+$PMF_LANG["ad_page_nodelete"] = "No";
+$PMF_LANG["ad_page_delsuc"] = "The custom page has been successfully deleted.";
+$PMF_LANG["msgDeletePage"] = "Delete Custom Page";
+$PMF_LANG["ad_page_tab_content"] = "Content";
+$PMF_LANG["ad_page_tab_seo"] = "SEO";
+$PMF_LANG["ad_page_tab_settings"] = "Settings";
+$PMF_LANG["ad_page_seo_title"] = "SEO Title";
+$PMF_LANG["ad_page_seo_description"] = "SEO Meta Description";
+$PMF_LANG["ad_page_seo_robots"] = "Robots Directive";
+$PMF_LANG["msgTermsOfService"] = "Terms of Service";
+$PMF_LANG["msgImprint"] = "Imprint";
+$PMF_LANG["msgCookiePolicy"] = "Cookie Policy";
+$PMF_LANG["ad_page_lang_cannot_change"] = "Language cannot be changed after creation.";
+$PMF_LANG["ad_page_add_translation"] = "Add Translation";
+$PMF_LANG["ad_page_translate"] = "Translate Page";
+$PMF_LANG["ad_page_original_language"] = "Original Language";
+$PMF_LANG["ad_page_select_translation_language"] = "Select Translation Language";
+$PMF_LANG["ad_page_existing_translations"] = "Existing Translations";
+$PMF_LANG["ad_page_no_available_languages"] = "All available languages have translations for this page.";
+$LANG_CONF['main.termsURL'] = ['input', 'URL for Terms of Service','use "page:slug" for custom page or full URL for external'];
+$LANG_CONF['main.imprintURL'] = ['input', 'URL for Imprint','use "page:slug" for custom page or full URL for external'];
+$LANG_CONF['main.cookiePolicyURL'] = ['input', 'URL for Cookie Policy','use "page:slug" for custom page or full URL for external'];
+$LANG_CONF['api.onlyActiveFaqs'] = ['checkbox', 'API returns only active FAQs'];
+$LANG_CONF['api.onlyActiveCategories'] = ['checkbox', 'API returns only active categories'];
+$LANG_CONF['api.onlyPublicQuestions'] = ['checkbox', 'API returns only public questions'];
+$LANG_CONF['api.ignoreOrphanedFaqs'] = ['checkbox', 'API ignores orphaned FAQs'];
+
+// Translation configuration
+$LANG_CONF['translation.provider'] = ['select', 'Translation service provider'];
+$LANG_CONF['translation.googleApiKey'] = ['password', 'Google Cloud Translation API key'];
+$LANG_CONF['translation.deeplApiKey'] = ['password', 'DeepL API key'];
+$LANG_CONF['translation.deeplUseFreeApi'] = ['checkbox', 'Use DeepL Free API (instead of Pro)'];
+$LANG_CONF['translation.azureKey'] = ['password', 'Azure Translator API key'];
+$LANG_CONF['translation.azureRegion'] = ['input', 'Azure region', 'e.g., eastus, westeurope'];
+$LANG_CONF['translation.amazonAccessKeyId'] = ['input', 'Amazon Translate AWS Access Key ID'];
+$LANG_CONF['translation.amazonSecretAccessKey'] = ['password', 'Amazon Translate AWS Secret Access Key'];
+$LANG_CONF['translation.amazonRegion'] = ['input', 'Amazon Translate AWS region', 'e.g., us-east-1, eu-west-1'];
+$LANG_CONF['translation.libreTranslateUrl'] = ['input', 'LibreTranslate server URL'];
+$LANG_CONF['translation.libreTranslateApiKey'] = ['password', 'LibreTranslate API key (optional)'];
+
+// added v4.2.0 - 2026-01-18 by Thorsten
+$LANG_CONF['routing.useAttributesOnly'] = ['checkbox', 'Use only route attributes (disable file-based routing)'];
+$LANG_CONF['routing.cache.enabled'] = ['checkbox', 'Enable route caching for better performance'];
+$LANG_CONF['routing.cache.dir'] = ['input', 'Route cache directory'];
+
+// Translation UI strings
+$PMF_LANG['msgTranslation'] = 'Translation';
+$PMF_LANG['msgTranslateWithAI'] = 'Translate with AI';
+$PMF_LANG['msgTranslating'] = 'Translating...';
+$PMF_LANG['msgTranslationSuccess'] = 'Translation completed successfully';
+$PMF_LANG['msgTranslationError'] = 'Translation failed';
+$PMF_LANG['msgNoTranslationProvider'] = 'No translation provider configured';
+
+// added v4.2.0-alpha - 2026-01-17 by d0ubIeU
+$PMF_LANG['msgStickyRemoved'] = 'Successfully removed "important" status.';
+$PMF_LANG['msgConfirmUnstick'] = 'Do you really want to remove this entry from the list of important FAQs?';
+$PMF_LANG['msgTooltipUnstick'] = 'Remove important status';
+$PMF_LANG['msgConfirmAction'] = "Confirm Action";
 
 // added v4.2.0-alpha - 2026-01-17 by d0ubIeU
 $PMF_LANG['msgStickyRemoved'] = 'Successfully removed "important" status.';

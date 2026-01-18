@@ -38,6 +38,8 @@ use phpMyFAQ\Configuration\UrlSettings;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Plugin\PluginException;
 use phpMyFAQ\Plugin\PluginManager;
+use phpMyFAQ\Translation\TranslationProviderFactory;
+use phpMyFAQ\Translation\TranslationProviderInterface;
 
 /**
  * Class Configuration
@@ -166,6 +168,14 @@ class Configuration
     public function getLanguage(): Language
     {
         return $this->config['core.language'];
+    }
+
+    /**
+     * Sets the Service Container.
+     */
+    public function setContainer(mixed $container): void
+    {
+        $this->config['core.container'] = $container;
     }
 
     /**
@@ -390,6 +400,47 @@ class Configuration
     }
 
     /**
+     * Sets the Translation Provider instance.
+     */
+    public function setTranslationProvider(TranslationProviderInterface $provider): void
+    {
+        $this->config['core.translationProvider'] = $provider;
+    }
+
+    /**
+     * Returns the Translation Provider instance.
+     */
+    public function getTranslationProvider(): ?TranslationProviderInterface
+    {
+        // Lazy initialization: If not set yet and configuration exists, try to initialize
+        if (!isset($this->config['core.translationProvider']) && $this->get('translation.provider') !== 'none') {
+            $this->initializeTranslationProvider();
+        }
+
+        return $this->config['core.translationProvider'] ?? null;
+    }
+
+    /**
+     * Initialize the translation provider based on configuration.
+     */
+    private function initializeTranslationProvider(): void
+    {
+        try {
+            // Get HTTP client from service container if available
+            $container = $this->config['core.container'] ?? null;
+            if ($container && $container->has('phpmyfaq.http-client')) {
+                $httpClient = $container->get('phpmyfaq.http-client');
+                $provider = TranslationProviderFactory::create($this, $httpClient);
+                if ($provider !== null) {
+                    $this->config['core.translationProvider'] = $provider;
+                }
+            }
+        } catch (\Exception $e) {
+            $this->getLogger()->error('Failed to initialize translation provider: ' . $e->getMessage());
+        }
+    }
+
+    /**
      * Adds a configuration item for the database.
      */
     public function add(string $name, mixed $value): bool
@@ -434,7 +485,9 @@ class Configuration
             'core.opensearch',
             'core.elasticsearchConfig',
             'core.openSearchConfig',
+            'core.translationProvider',
             'core.pluginManager',
+            'core.container',
         ];
 
         foreach ($newConfigs as $name => $value) {

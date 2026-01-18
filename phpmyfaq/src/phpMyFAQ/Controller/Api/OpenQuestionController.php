@@ -117,15 +117,12 @@ final class OpenQuestionController extends AbstractApiController
             }
         }',
     ))]
-    #[OA\Response(
-        response: 200,
-        description: 'If no open questions are found, returns empty data array.',
-        content: new OA\JsonContent(example: '{"success": true, "data": []}'),
-    )]
     public function list(): JsonResponse
     {
         /** @var Question $question */
         $question = $this->container?->get(id: 'phpmyfaq.question');
+
+        $onlyPublic = (bool) $this->configuration->get('api.onlyPublicQuestions');
 
         // Get pagination and sorting parameters
         $pagination = $this->getPaginationRequest();
@@ -136,7 +133,7 @@ final class OpenQuestionController extends AbstractApiController
         );
 
         // Get all open questions
-        $allQuestions = $question->getAll(false);
+        $allQuestions = $question->getAll($onlyPublic);
         $total = is_countable($allQuestions) ? count($allQuestions) : 0;
 
         // Apply sorting if needed

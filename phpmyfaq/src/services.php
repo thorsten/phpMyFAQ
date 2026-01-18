@@ -67,6 +67,7 @@ use phpMyFAQ\Question;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Search;
 use phpMyFAQ\Seo;
+use phpMyFAQ\Seo\SeoRepository;
 use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Service\McpServer\PhpMyFaqMcpServer;
 use phpMyFAQ\Session\SessionWrapper;
@@ -78,6 +79,9 @@ use phpMyFAQ\Sitemap;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\System;
 use phpMyFAQ\Tags;
+use phpMyFAQ\Translation\ContentTranslationService;
+use phpMyFAQ\Translation\TranslationProviderFactory;
+use phpMyFAQ\Translation\TranslationProviderInterface;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
@@ -85,8 +89,10 @@ use phpMyFAQ\User\UserSession;
 use phpMyFAQ\Visits;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
@@ -327,6 +333,10 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.configuration'),
     ]);
 
+    $services->set('phpmyfaq.seo-repository', SeoRepository::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+
     $services
         ->set('phpmyfaq.session.token', Token::class)
         ->factory([Token::class, 'getInstance'])
@@ -365,6 +375,29 @@ return static function (ContainerConfigurator $container): void {
     $services->set('phpmyfaq.system', System::class);
 
     $services->set('phpmyfaq.tags', Tags::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+
+    // HTTP Client for Translation APIs
+    $services
+        ->set('phpmyfaq.http-client', HttpClientInterface::class)
+        ->factory([HttpClient::class, 'create'])
+        ->args([[
+            'max_redirects' => 2,
+            'timeout' => 30,
+        ]]);
+
+    // Translation Provider (factory-created)
+    $services
+        ->set('phpmyfaq.translation.provider', TranslationProviderInterface::class)
+        ->factory([TranslationProviderFactory::class, 'create'])
+        ->args([
+            service('phpmyfaq.configuration'),
+            service('phpmyfaq.http-client'),
+        ]);
+
+    // Content Translation Service
+    $services->set('phpmyfaq.translation.content-translation-service', ContentTranslationService::class)->args([
         service('phpmyfaq.configuration'),
     ]);
 

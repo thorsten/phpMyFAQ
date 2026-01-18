@@ -34,14 +34,14 @@ readonly class RatingRepository implements RatingRepositoryInterface
     public function fetchByRecordId(int $id): ?object
     {
         $sql = <<<SQL
-            SELECT
-                (vote/usr) as voting,
-                usr
-            FROM
-                %sfaqvoting
-            WHERE
-                artikel = %d
-        SQL;
+                SELECT
+                    (vote/usr) as voting,
+                    usr
+                FROM
+                    %sfaqvoting
+                WHERE
+                    artikel = %d
+            SQL;
 
         $query = sprintf($sql, Database::getTablePrefix(), $id);
         $result = $this->configuration->getDb()->query($query);
@@ -58,15 +58,15 @@ readonly class RatingRepository implements RatingRepositoryInterface
         $check = Request::createFromGlobals()->server->get('REQUEST_TIME') - 300;
 
         $sql = <<<SQL
-            SELECT
-                id
-            FROM
-                %sfaqvoting
-            WHERE
-                artikel = %d
-            AND
-                (ip = '%s' AND datum > '%s')
-        SQL;
+                SELECT
+                    id
+                FROM
+                    %sfaqvoting
+                WHERE
+                    artikel = %d
+                AND
+                    (ip = '%s' AND datum > '%s')
+            SQL;
 
         $query = sprintf($sql, Database::getTablePrefix(), $id, $this->configuration->getDb()->escape($ip), $check);
 
@@ -77,13 +77,13 @@ readonly class RatingRepository implements RatingRepositoryInterface
     public function getNumberOfVotings(int $recordId): int
     {
         $sql = <<<SQL
-            SELECT
-                usr
-            FROM
-                %sfaqvoting
-            WHERE
-                artikel = %d
-        SQL;
+                SELECT
+                    usr
+                FROM
+                    %sfaqvoting
+                WHERE
+                    artikel = %d
+            SQL;
 
         $query = sprintf($sql, Database::getTablePrefix(), $recordId);
         $result = $this->configuration->getDb()->query($query);
@@ -102,11 +102,11 @@ readonly class RatingRepository implements RatingRepositoryInterface
     public function create(Vote $vote): bool
     {
         $sql = <<<SQL
-            INSERT INTO
-                %sfaqvoting
-            VALUES
-                (%d, %d, %d, 1, %d, '%s')
-        SQL;
+                INSERT INTO
+                    %sfaqvoting
+                VALUES
+                    (%d, %d, %d, 1, %d, '%s')
+            SQL;
 
         $query = sprintf(
             $sql,
@@ -124,16 +124,16 @@ readonly class RatingRepository implements RatingRepositoryInterface
     public function update(Vote $vote): bool
     {
         $sql = <<<SQL
-            UPDATE
-                %sfaqvoting
-            SET
-                vote = vote + %d,
-                usr = usr + 1,
-                datum = %d,
-                ip = '%s'
-            WHERE
-                artikel = %d
-        SQL;
+                UPDATE
+                    %sfaqvoting
+                SET
+                    vote = vote + %d,
+                    usr = usr + 1,
+                    datum = %d,
+                    ip = '%s'
+                WHERE
+                    artikel = %d
+            SQL;
 
         $query = sprintf(
             $sql,
@@ -150,9 +150,9 @@ readonly class RatingRepository implements RatingRepositoryInterface
     public function deleteAll(): bool
     {
         $sql = <<<SQL
-            DELETE FROM
-                %sfaqvoting
-        SQL;
+                DELETE FROM
+                    %sfaqvoting
+            SQL;
 
         $query = sprintf($sql, Database::getTablePrefix());
         return (bool) $this->configuration->getDb()->query($query);

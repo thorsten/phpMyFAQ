@@ -65,6 +65,7 @@
     "zircote/swagger-php": "^6.0"
   },
   "suggest": {
+    "ext-frankenphp": "*",
     "ext-ldap": "*",
     "ext-openssl": "*",
     "ext-pdo": "*",

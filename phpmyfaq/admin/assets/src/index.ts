@@ -60,6 +60,10 @@ import {
   handleAddNews,
   handleNews,
   handleEditNews,
+  handleAddPage,
+  handlePages,
+  handleEditPage,
+  handleTranslatePage,
   handleSaveFaqData,
   handleUpdateQuestion,
   handleRefreshAttachments,
@@ -67,6 +71,8 @@ import {
   handleResetCategoryImage,
   handleResetButton,
   handleDeleteFaqEditorModal,
+  handleFaqTranslate,
+  handleCategoryTranslate,
 } from './content';
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
@@ -103,11 +109,13 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   // Content → Categories
   handleCategories();
   handleResetCategoryImage();
+  handleCategoryTranslate();
   await handleCategoryDelete();
 
   // Content → add/edit FAQs
   renderEditor();
   handleFaqForm();
+  handleFaqTranslate();
   handleMarkdownForm();
   handleAttachmentUploads();
   handleFileFilter();
@@ -182,6 +190,12 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   handleAddNews();
   handleNews();
   handleEditNews();
+
+  // Custom Pages
+  handleAddPage();
+  handlePages();
+  handleEditPage();
+  handleTranslatePage();
 
   // Initialize tooltips everywhere
   initializeTooltips();

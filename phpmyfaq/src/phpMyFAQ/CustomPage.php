@@ -103,6 +103,38 @@ readonly class CustomPage
     }
 
     /**
+     * Get paginated custom pages across all languages with sorting support.
+     *
+     * @param bool $activeOnly Filter by active status
+     * @param int $limit Number of items per page
+     * @param int $offset Starting offset
+     * @param string $sortField Field to sort by
+     * @param string $sortOrder Sort direction (ASC, DESC)
+     * @return array
+     */
+    public function getAllLanguagesPaginated(
+        bool $activeOnly = false,
+        int $limit = 25,
+        int $offset = 0,
+        string $sortField = 'created',
+        string $sortOrder = 'DESC',
+    ): array {
+        $pages = [];
+
+        foreach ($this->repository->getAllLanguagesPaginated(
+            $activeOnly,
+            $limit,
+            $offset,
+            $sortField,
+            $sortOrder,
+        ) as $row) {
+            $pages[] = $this->mapRowToArray($row);
+        }
+
+        return $pages;
+    }
+
+    /**
      * Count total pages for the current language.
      *
      * @param bool $activeOnly Filter by active status
@@ -115,18 +147,28 @@ readonly class CustomPage
     }
 
     /**
+     * Count total pages across all languages.
+     *
+     * @param bool $activeOnly Filter by active status
+     * @return int Total count
+     */
+    public function countAllLanguages(bool $activeOnly = false): int
+    {
+        return $this->repository->countAllLanguages($activeOnly);
+    }
+
+    /**
      * Get a custom page by ID.
      *
      * @param int $pageId Page ID
      * @param string|null $language Language code (optional, uses current if not provided)
-     * @return array|null Page data or null if not found
+     * @return CustomPageEntity|null Page entity or null if not found
      */
-    public function getById(int $pageId, ?string $language = null): ?array
+    public function getById(int $pageId, ?string $language = null): ?CustomPageEntity
     {
         $language = $language ?? $this->configuration->getLanguage()->getLanguage();
         $row = $this->repository->getById($pageId, $language);
-
-        return $row ? $this->mapRowToArray($row) : null;
+        return $row ? $this->mapRowToEntity($row) : null;
     }
 
     /**
@@ -134,14 +176,24 @@ readonly class CustomPage
      *
      * @param string $slug URL slug
      * @param string|null $language Language code (optional, uses current if not provided)
-     * @return array|null Page data or null if not found
+     * @return CustomPageEntity|null Page entity or null if not found
      */
-    public function getBySlug(string $slug, ?string $language = null): ?array
+    public function getBySlug(string $slug, ?string $language = null): ?CustomPageEntity
     {
         $language = $language ?? $this->configuration->getLanguage()->getLanguage();
         $row = $this->repository->getBySlug($slug, $language);
+        return $row ? $this->mapRowToEntity($row) : null;
+    }
 
-        return $row ? $this->mapRowToArray($row) : null;
+    /**
+     * Get all existing languages for a given page ID.
+     *
+     * @param int $pageId Page ID
+     * @return array<string> Array of language codes
+     */
+    public function getExistingLanguages(int $pageId): array
+    {
+        return $this->repository->getExistingLanguages($pageId);
     }
 
     /**
@@ -153,6 +205,18 @@ readonly class CustomPage
     public function create(CustomPageEntity $page): int
     {
         return $this->repository->insert($page);
+    }
+
+    /**
+     * Create a translation for an existing custom page.
+     *
+     * @param CustomPageEntity $page Custom page entity
+     * @param int $pageId The existing page ID to use
+     * @return bool Success status
+     */
+    public function createTranslation(CustomPageEntity $page, int $pageId): bool
+    {
+        return $this->repository->insertTranslation($page, $pageId);
     }
 
     /**
@@ -249,6 +313,40 @@ readonly class CustomPage
             'active' => $row->active,
             'created' => $row->created,
             'updated' => $row->updated ?? null,
+            'seo_title' => $row->seo_title ?? null,
+            'seo_description' => $row->seo_description ?? null,
+            'seo_robots' => $row->seo_robots ?? 'index,follow',
         ];
+    }
+
+    /**
+     * Map database row to CustomPageEntity.
+     *
+     * @param stdClass $row Database row
+     * @return CustomPageEntity Page entity
+     * @throws \DateMalformedStringException
+     */
+    private function mapRowToEntity(stdClass $row): CustomPageEntity
+    {
+        $entity = new CustomPageEntity();
+        $entity
+            ->setId((int) $row->id)
+            ->setLanguage($row->lang)
+            ->setPageTitle($row->page_title)
+            ->setSlug($row->slug)
+            ->setContent($row->content)
+            ->setAuthorName($row->author_name)
+            ->setAuthorEmail($row->author_email)
+            ->setActive($row->active === 'y')
+            ->setSeoTitle($row->seo_title ?? null)
+            ->setSeoDescription($row->seo_description ?? null)
+            ->setSeoRobots($row->seo_robots ?? 'index,follow')
+            ->setCreated(new DateTime($row->created));
+
+        if (isset($row->updated)) {
+            $entity->setUpdated(new DateTime($row->updated));
+        }
+
+        return $entity;
     }
 }

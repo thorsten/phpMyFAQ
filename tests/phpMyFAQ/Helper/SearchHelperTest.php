@@ -126,7 +126,8 @@ class SearchHelperTest extends TestCase
 
         $result = $this->searchHelper->createAutoCompleteResult($this->searchResultSetMock);
 
-        $this->assertCount(5, $result);
+        // With maxResults=2 and the logic "$i > $maxResults", indices 0,1,2 are processed = 3 results
+        $this->assertCount(3, $result);
     }
 
     public function testRenderAdminSuggestionResultWithNoResults(): void

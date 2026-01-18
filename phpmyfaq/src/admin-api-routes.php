@@ -36,12 +36,14 @@ use phpMyFAQ\Controller\Administration\Api\MarkdownController;
 use phpMyFAQ\Controller\Administration\Api\MediaBrowserController;
 use phpMyFAQ\Controller\Administration\Api\NewsController;
 use phpMyFAQ\Controller\Administration\Api\OpenSearchController;
+use phpMyFAQ\Controller\Administration\Api\PageController;
 use phpMyFAQ\Controller\Administration\Api\QuestionController;
 use phpMyFAQ\Controller\Administration\Api\SearchController;
 use phpMyFAQ\Controller\Administration\Api\SessionController;
 use phpMyFAQ\Controller\Administration\Api\StatisticsController;
 use phpMyFAQ\Controller\Administration\Api\StopWordController;
 use phpMyFAQ\Controller\Administration\Api\TagController;
+use phpMyFAQ\Controller\Administration\Api\TranslationController;
 use phpMyFAQ\Controller\Administration\Api\UpdateController;
 use phpMyFAQ\Controller\Administration\Api\UserController;
 use Symfony\Component\Routing\Route;
@@ -157,6 +159,11 @@ $routesConfig = [
     'admin.api.configuration.templates' => [
         'path' => '/configuration/templates',
         'controller' => [ConfigurationTabController::class, 'templates'],
+        'methods' => 'GET',
+    ],
+    'admin.api.configuration.translation-provider' => [
+        'path' => '/configuration/translation-provider/{current}',
+        'controller' => [ConfigurationTabController::class, 'translationProvider'],
         'methods' => 'GET',
     ],
     // Glossary API
@@ -419,6 +426,12 @@ $routesConfig = [
         'controller' => [TagController::class, 'delete'],
         'methods' => 'GET',
     ],
+    // Translation API
+    'admin.api.translation.translate' => [
+        'path' => '/translation/translate',
+        'controller' => [TranslationController::class, 'translate'],
+        'methods' => 'POST',
+    ],
     // Update API
     'admin.api.health-check' => [
         'path' => '/health-check',
@@ -604,6 +617,37 @@ $routesConfig = [
         'path' => '/news/activate',
         'controller' => [NewsController::class, 'activate'],
         'methods' => 'POST',
+    ],
+    // Page API
+    'admin.api.page.create' => [
+        'path' => '/page/create',
+        'controller' => [PageController::class, 'create'],
+        'methods' => 'POST',
+    ],
+    'admin.api.page.delete' => [
+        'path' => '/page/delete',
+        'controller' => [PageController::class, 'delete'],
+        'methods' => 'DELETE',
+    ],
+    'admin.api.page.update' => [
+        'path' => '/page/update',
+        'controller' => [PageController::class, 'update'],
+        'methods' => 'PUT',
+    ],
+    'admin.api.page.activate' => [
+        'path' => '/page/activate',
+        'controller' => [PageController::class, 'activate'],
+        'methods' => 'POST',
+    ],
+    'admin.api.page.check-slug' => [
+        'path' => '/page/check-slug',
+        'controller' => [PageController::class, 'checkSlug'],
+        'methods' => 'POST',
+    ],
+    'admin.api.page.list' => [
+        'path' => '/page/list',
+        'controller' => [PageController::class, 'list'],
+        'methods' => 'GET',
     ],
 ];
 

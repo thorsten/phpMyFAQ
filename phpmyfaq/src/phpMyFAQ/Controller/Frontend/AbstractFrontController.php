@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\CustomPage;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Environment;
 use phpMyFAQ\Helper\LanguageHelper;
@@ -28,7 +29,10 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\TwigWrapper;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Twig\Error\LoaderError;
 
 abstract class AbstractFrontController extends AbstractController
 {
@@ -92,12 +96,6 @@ abstract class AbstractFrontController extends AbstractController
             'pluginStylesheets' => $this->configuration->getPluginManager()->getAllPluginStylesheets(),
             'pluginScripts' => $this->configuration->getPluginManager()->getAllPluginScripts(),
             'msgRegisterUser' => Translation::get(key: 'msgRegisterUser'),
-            'sendPassword' =>
-                '<a href="'
-                . $faqSystem->getSystemUri($this->configuration)
-                . 'forgot-password">'
-                . Translation::get(key: 'lostPassword')
-                . '</a>',
             'msgFullName' => Translation::get(key: 'ad_user_loggedin') . $this->currentUser->getLogin(),
             'msgLoginName' => $this->currentUser->getUserData('display_name'),
             'loginHeader' => Translation::get(key: 'msgLoginUser'),
@@ -111,6 +109,10 @@ abstract class AbstractFrontController extends AbstractController
             'footerNavigation' => $this->getFooterNavigation($request),
             'isPrivacyLinkEnabled' => $this->configuration->get('layout.enablePrivacyLink'),
             'msgPrivacyNote' => Translation::get(key: 'msgPrivacyNote'),
+            'isTermsLinkEnabled' => !empty($this->configuration->get('main.termsURL')),
+            'msgTermsOfService' => Translation::get(key: 'msgTermsOfService'),
+            'isImprintLinkEnabled' => !empty($this->configuration->get('main.imprintURL')),
+            'msgImprint' => Translation::get(key: 'msgImprint'),
             'isCookieConsentEnabled' => $this->configuration->get('layout.enableCookieConsent'),
             'cookiePreferences' => Translation::get(key: 'cookiePreferences'),
         ];
@@ -144,7 +146,9 @@ abstract class AbstractFrontController extends AbstractController
         ];
     }
 
-    private function getUserDropdown(): array
+    /**
+     * @throws \Exception
+     */ private function getUserDropdown(): array
     {
         $templateVars = [];
         if ($this->currentUser->isLoggedIn() && $this->currentUser->getUserId() > 0) {
@@ -202,5 +206,41 @@ abstract class AbstractFrontController extends AbstractController
                 'active' => 'contact' == $action ? 'active' : '',
             ],
         ];
+    }
+
+    /**
+     * Handles static page redirects (cookie policy, imprint, terms, privacy).
+     * Checks if the URL is a reference to a custom page or external URL.
+     *
+     * @param string $configKey Configuration key for the URL (e.g., 'main.cookiePolicyURL')
+     * @return Response RedirectResponse or 404 error page
+     * @throws Exception|LoaderError|\Exception
+     */
+    protected function handleStaticPageRedirect(string $configKey): Response
+    {
+        $url = $this->configuration->get($configKey);
+
+        // Check if this is a reference to a custom page (format: "page:slug")
+        if (str_starts_with((string) $url, 'page:')) {
+            $slug = substr((string) $url, 5);
+            $customPage = new CustomPage($this->configuration);
+            $page = $customPage->getBySlug($slug);
+
+            if ($page && $page->isActive()) {
+                // Redirect to the custom page URL
+                $pageUrl = $this->configuration->getDefaultUrl() . 'page/' . $page->getSlug() . '.html';
+                return new RedirectResponse($pageUrl);
+            }
+        }
+
+        // Default behavior: redirect to external URL
+        if ((string) $url !== '') {
+            return new RedirectResponse($url);
+        }
+
+        // If no URL configured and no fallback, return 404
+        $response = new Response();
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        return $this->render('error/404.twig', [], $response);
     }
 }

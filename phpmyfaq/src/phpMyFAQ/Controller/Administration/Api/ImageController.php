@@ -23,6 +23,7 @@ use DateTime;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Helper\SvgSanitizer as SvgSanitizer;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -104,6 +105,32 @@ final class ImageController extends AbstractController
             $fileName = $timestamp . '_' . $file->getClientOriginalName();
             $fileName = str_replace(' ', replace: '_', subject: $fileName);
             $file->move($uploadDir, $fileName);
+
+            $fileExtension = strtolower((string) $file->getClientOriginalExtension());
+            if ($fileExtension === 'svg') {
+                $sanitizer = new SvgSanitizer();
+                $filePath = $uploadDir . $fileName;
+
+                if (!$sanitizer->isSafe($filePath)) {
+                    $this->configuration
+                        ->getLogger()
+                        ->info(sprintf(
+                            'Potentially malicious SVG upload detected: %s by user %d',
+                            $fileName,
+                            $this->currentUser->getUserId(),
+                        ));
+
+                    if (!$sanitizer->sanitize($filePath)) {
+                        if (file_exists($filePath)) {
+                            unlink($filePath);
+                        }
+                        $this->configuration
+                            ->getLogger()
+                            ->info(sprintf('SVG sanitization failed, file deleted: %s', $fileName));
+                        continue;
+                    }
+                }
+            }
 
             // Add to the list of uploaded files
             $uploadedFiles[] = $fileName;

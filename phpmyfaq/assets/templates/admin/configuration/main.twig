@@ -90,6 +90,12 @@
               </a>
             </li>
             <li role="presentation" class="nav-item">
+              <a href="#translation" aria-controls="ldap" role="tab" data-bs-toggle="tab" class="nav-link">
+                <i aria-hidden="true" class="bi bi-translate"></i>
+                {{ 'msgTranslation' | translate }}
+              </a>
+            </li>
+            <li role="presentation" class="nav-item">
               <a href="#ldap" aria-controls="ldap" role="tab" data-bs-toggle="tab" class="nav-link">
                 <i aria-hidden="true" class="bi bi-database"></i>
                 LDAP
@@ -108,6 +114,7 @@
             <div role="tabpanel" class="tab-pane fade" id="mail"></div>
             <div role="tabpanel" class="tab-pane fade" id="api"></div>
             <div role="tabpanel" class="tab-pane fade" id="upgrade"></div>
+            <div role="tabpanel" class="tab-pane fade" id="translation"></div>
             <div role="tabpanel" class="tab-pane fade" id="ldap"></div>
           </div>
         </div>

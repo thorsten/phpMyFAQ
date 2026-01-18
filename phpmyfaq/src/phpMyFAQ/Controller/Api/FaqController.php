@@ -153,10 +153,15 @@ final class FaqController extends AbstractApiController
 
         $faqId = (int) Filter::filterVar($request->attributes->get(key: 'faqId'), FILTER_VALIDATE_INT);
         $categoryId = (int) Filter::filterVar($request->attributes->get(key: 'categoryId'), FILTER_VALIDATE_INT);
+        $onlyActive = (bool) $this->configuration->get('api.onlyActiveFaqs');
 
         $result = $faq->getFaqByIdAndCategoryId($faqId, $categoryId);
 
-        if ((is_countable($result) ? count($result) : 0) === 0 || $result['solution_id'] === 42) {
+        if (
+            (is_countable($result) ? count($result) : 0) === 0
+            || $result['solution_id'] === 42
+            || $onlyActive && $result['active'] !== 'yes'
+        ) {
             $result = new stdClass();
             return $this->json($result, Response::HTTP_NOT_FOUND);
         }
@@ -517,11 +522,6 @@ final class FaqController extends AbstractApiController
             }
         }',
     ))]
-    #[OA\Response(
-        response: 200,
-        description: 'If no FAQs are found, returns empty data array.',
-        content: new OA\JsonContent(example: '{"success": true, "data": []}'),
-    )]
     public function list(): JsonResponse
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -538,12 +538,16 @@ final class FaqController extends AbstractApiController
             defaultOrder: 'asc',
         );
 
+        $onlyActive = (bool) $this->configuration->get('api.onlyActiveFaqs');
+        $ignoreOrphanedFaqs = (bool) $this->configuration->get('api.ignoreOrphanedFaqs');
+
         // Get all FAQs (this populates $faq->faqRecords)
         $faq->getAllFaqs(
             FAQ_SORTING_TYPE_CATID_FAQID,
             [
                 'lang' => $this->configuration->getLanguage()->getLanguage(),
-                'fcr.category_id' => 'IS NOT NULL',
+                'fcr.category_id' => $ignoreOrphanedFaqs ? 'IS NOT NULL' : null,
+                'fd.active' => $onlyActive ? 'yes' : null,
             ],
             $sort->getOrderSql(),
         );

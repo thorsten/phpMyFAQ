@@ -58,7 +58,6 @@ final class AuthenticationController extends AbstractFrontController
             ...$this->getHeader($request),
             'title' => sprintf('%s - %s', Translation::get(key: 'msgLoginUser'), $this->configuration->getTitle()),
             'loginHeader' => Translation::get(key: 'msgLoginUser'),
-            'sendPassword' => Translation::get(key: 'lostPassword'),
             'errorMessage' => $errorMessage,
             'writeLoginPath' => $this->configuration->getDefaultUrl(),
             'login' => Translation::get(key: 'ad_auth_ok'),

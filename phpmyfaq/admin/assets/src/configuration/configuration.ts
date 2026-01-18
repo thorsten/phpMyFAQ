@@ -26,6 +26,7 @@ import {
   fetchSeoMetaTags,
   fetchTemplates,
   fetchTranslations,
+  fetchTranslationProvider,
   saveConfiguration,
 } from '../api';
 import { Response } from '../interfaces';
@@ -68,6 +69,9 @@ export const handleConfiguration = async (): Promise<void> => {
             break;
           case '#mail':
             await handleSMTPPasswordToggle();
+            break;
+          case '#translation':
+            await handleTranslationProvider();
             break;
         }
 
@@ -237,6 +241,17 @@ export const handleSeoMetaTags = async (): Promise<void> => {
       const options = await fetchSeoMetaTags(currentValue);
       seoMetaTagsSelectBox.insertAdjacentHTML('beforeend', options);
     }
+  }
+};
+
+export const handleTranslationProvider = async (): Promise<void> => {
+  const translationProviderSelectBox = document.getElementsByName(
+    'edit[translation.provider]'
+  ) as NodeListOf<HTMLSelectElement>;
+  if (translationProviderSelectBox !== null && translationProviderSelectBox[0]) {
+    const currentValue = (translationProviderSelectBox[0].dataset.pmfConfigurationCurrentValue as string) || 'none';
+    const options = await fetchTranslationProvider(currentValue);
+    translationProviderSelectBox[0].insertAdjacentHTML('beforeend', options);
   }
 };
 

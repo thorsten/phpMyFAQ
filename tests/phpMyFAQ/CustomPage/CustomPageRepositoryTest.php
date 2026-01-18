@@ -159,7 +159,7 @@ class CustomPageRepositoryTest extends TestCase
                 ->setContent("<p>Content $i</p>")
                 ->setAuthorName('Test')
                 ->setAuthorEmail('test@example.com')
-                ->setActive($i % 2 === 1)
+                ->setActive(($i % 2) === 1)
                 ->setCreated(new DateTime());
 
             $this->repository->insert($page);
@@ -176,14 +176,7 @@ class CustomPageRepositoryTest extends TestCase
 
     public function testGetAllPaginated(): void
     {
-        $pages = iterator_to_array($this->repository->getAllPaginated(
-            'en',
-            false,
-            2,
-            0,
-            'page_title',
-            'ASC'
-        ));
+        $pages = iterator_to_array($this->repository->getAllPaginated('en', false, 2, 0, 'page_title', 'ASC'));
 
         $this->assertLessThanOrEqual(2, count($pages));
     }
@@ -241,12 +234,12 @@ class CustomPageRepositoryTest extends TestCase
         $pageDe
             ->setLanguage('de')
             ->setPageTitle('German Page')
-            ->setSlug('multilang-page') // Same slug, different language
+            ->setSlug('multilang-page')
             ->setContent('<p>German content</p>')
             ->setAuthorName('Test')
             ->setAuthorEmail('test@example.com')
             ->setActive(true)
-            ->setCreated(new DateTime());
+            ->setCreated(new DateTime()); // Same slug, different language
 
         $pageIdDe = $this->repository->insert($pageDe);
         $this->assertGreaterThan(0, $pageIdDe);
@@ -271,60 +264,81 @@ class CustomPageRepositoryTest extends TestCase
     public function testSortFieldWhitelist(): void
     {
         // Valid sort fields should work
-        $pages = iterator_to_array($this->repository->getAllPaginated(
-            'en',
-            false,
-            10,
-            0,
-            'page_title',
-            'ASC'
-        ));
+        $pages = iterator_to_array($this->repository->getAllPaginated('en', false, 10, 0, 'page_title', 'ASC'));
         $this->assertIsArray($pages);
 
         // Invalid sort field should default to 'created'
-        $pages = iterator_to_array($this->repository->getAllPaginated(
-            'en',
-            false,
-            10,
-            0,
-            'invalid_field',
-            'ASC'
-        ));
+        $pages = iterator_to_array($this->repository->getAllPaginated('en', false, 10, 0, 'invalid_field', 'ASC'));
         $this->assertIsArray($pages);
     }
 
     public function testSortOrderValidation(): void
     {
         // Valid sort orders
-        $pagesAsc = iterator_to_array($this->repository->getAllPaginated(
-            'en',
-            false,
-            10,
-            0,
-            'page_title',
-            'ASC'
-        ));
+        $pagesAsc = iterator_to_array($this->repository->getAllPaginated('en', false, 10, 0, 'page_title', 'ASC'));
         $this->assertIsArray($pagesAsc);
 
-        $pagesDesc = iterator_to_array($this->repository->getAllPaginated(
-            'en',
-            false,
-            10,
-            0,
-            'page_title',
-            'DESC'
-        ));
+        $pagesDesc = iterator_to_array($this->repository->getAllPaginated('en', false, 10, 0, 'page_title', 'DESC'));
         $this->assertIsArray($pagesDesc);
 
         // Invalid sort order should default to 'DESC'
-        $pages = iterator_to_array($this->repository->getAllPaginated(
-            'en',
-            false,
-            10,
-            0,
-            'page_title',
-            'INVALID'
-        ));
+        $pages = iterator_to_array($this->repository->getAllPaginated('en', false, 10, 0, 'page_title', 'INVALID'));
         $this->assertIsArray($pages);
+    }
+
+    public function testInsertAndFetchWithSeoFields(): void
+    {
+        $page = new CustomPageEntity();
+        $page
+            ->setLanguage('en')
+            ->setPageTitle('SEO Test Page')
+            ->setSlug('seo-test-page')
+            ->setContent('<p>Content with SEO</p>')
+            ->setAuthorName('SEO Author')
+            ->setAuthorEmail('seo@example.com')
+            ->setActive(true)
+            ->setSeoTitle('Custom SEO Title')
+            ->setSeoDescription('Custom SEO Description for testing')
+            ->setSeoRobots('noindex,follow')
+            ->setCreated(new DateTime());
+
+        $pageId = $this->repository->insert($page);
+        $this->assertGreaterThan(0, $pageId);
+
+        $fetched = $this->repository->getById($pageId, 'en');
+        $this->assertNotNull($fetched);
+        $this->assertEquals('Custom SEO Title', $fetched->seo_title);
+        $this->assertEquals('Custom SEO Description for testing', $fetched->seo_description);
+        $this->assertEquals('noindex,follow', $fetched->seo_robots);
+    }
+
+    public function testUpdateWithSeoFields(): void
+    {
+        $page = new CustomPageEntity();
+        $page
+            ->setLanguage('en')
+            ->setPageTitle('Update SEO Test')
+            ->setSlug('update-seo-test')
+            ->setContent('<p>Content</p>')
+            ->setAuthorName('Author')
+            ->setAuthorEmail('author@example.com')
+            ->setActive(true)
+            ->setCreated(new DateTime());
+
+        $pageId = $this->repository->insert($page);
+
+        $page
+            ->setId($pageId)
+            ->setSeoTitle('Updated SEO Title')
+            ->setSeoDescription('Updated SEO Description')
+            ->setSeoRobots('index,nofollow')
+            ->setUpdated(new DateTime());
+
+        $this->assertTrue($this->repository->update($page));
+
+        $fetched = $this->repository->getById($pageId, 'en');
+        $this->assertEquals('Updated SEO Title', $fetched->seo_title);
+        $this->assertEquals('Updated SEO Description', $fetched->seo_description);
+        $this->assertEquals('index,nofollow', $fetched->seo_robots);
     }
 }

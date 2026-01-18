@@ -1540,6 +1540,89 @@ $PMF_LANG['msgErrorDetails'] = 'Fehlerdetails';
 $PMF_LANG['msgTryAgain'] = 'Erneut versuchen';
 $PMF_LANG['msgAdminLogExportCsv'] = "Admin-Logs als CSV exportieren";
 $PMF_LANG['msgAdminLogVerifyIntegrity'] = 'Integrität prüfen';
+$PMF_LANG["msgPages"] = "Eigene Seiten";
+$PMF_LANG["msgAboutThisPage"] = "Über diese Seite";
+$PMF_LANG["msgCreated"] = "Erstellt";
+$PMF_LANG["msgUpdated"] = "Aktualisiert";
+$PMF_LANG["ad_menu_pages"] = "Eigene Seiten";
+$PMF_LANG["ad_page_add"] = "Eigene Seite hinzufügen";
+$PMF_LANG["ad_page_edit"] = "Eigene Seite bearbeiten";
+$PMF_LANG["ad_page_title"] = "Seitentitel";
+$PMF_LANG["ad_page_slug"] = "URL-Slug";
+$PMF_LANG["ad_page_slug_help"] = "URL-freundliche Kennung für diese Seite (z.B. 'datenschutzerklaerung')";
+$PMF_LANG["ad_page_slug_exists"] = "Dieser Slug existiert bereits für diese Sprache";
+$PMF_LANG["ad_page_content"] = "Seiteninhalt";
+$PMF_LANG["ad_page_author_name"] = "Autor";
+$PMF_LANG["ad_page_author_email"] = "E-Mail-Adresse des Autors";
+$PMF_LANG["ad_page_set_active"] = "Seite aktivieren";
+$PMF_LANG["ad_page_created"] = "Erstellt";
+$PMF_LANG["ad_page_updated"] = "Aktualisiert";
+$PMF_LANG["ad_page_update"] = "Aktualisieren";
+$PMF_LANG["ad_page_delete"] = "Löschen";
+$PMF_LANG["ad_page_nodata"] = "Keine eigenen Seiten gefunden";
+$PMF_LANG["ad_page_updatesuc"] = "Die eigene Seite wurde erfolgreich aktualisiert.";
+$PMF_LANG["ad_page_updatefail"] = "Beim Aktualisieren der eigenen Seite ist ein Fehler aufgetreten.";
+$PMF_LANG["ad_page_insertfail"] = "Beim Erstellen der eigenen Seite ist ein Fehler aufgetreten.";
+$PMF_LANG["ad_page_del"] = "Sind Sie sicher, dass Sie diese eigene Seite löschen möchten?";
+$PMF_LANG["ad_page_yesdelete"] = "Ja, löschen!";
+$PMF_LANG["ad_page_nodelete"] = "Nein";
+$PMF_LANG["ad_page_delsuc"] = "Die eigene Seite wurde erfolgreich gelöscht.";
+$PMF_LANG["msgDeletePage"] = "Eigene Seite löschen";
+$PMF_LANG["ad_page_tab_content"] = "Inhalt";
+$PMF_LANG["ad_page_tab_seo"] = "SEO";
+$PMF_LANG["ad_page_tab_settings"] = "Einstellungen";
+$PMF_LANG["ad_page_seo_title"] = "SEO-Titel";
+$PMF_LANG["ad_page_seo_description"] = "SEO-Meta-Beschreibung";
+$PMF_LANG["ad_page_seo_robots"] = "Robots-Direktive";
+$PMF_LANG["msgTermsOfService"] = "Nutzungsbedingungen";
+$PMF_LANG["msgImprint"] = "Impressum";
+$PMF_LANG["msgCookiePolicy"] = "Cookie-Richtlinie";
+$PMF_LANG["ad_page_lang_cannot_change"] = "Die Sprache kann nach der Erstellung nicht geändert werden.";
+$PMF_LANG["ad_page_add_translation"] = "Übersetzung hinzufügen";
+$PMF_LANG["ad_page_translate"] = "Seite übersetzen";
+$PMF_LANG["ad_page_original_language"] = "Ursprungssprache";
+$PMF_LANG["ad_page_select_translation_language"] = "Übersetzungssprache auswählen";
+$PMF_LANG["ad_page_existing_translations"] = "Vorhandene Übersetzungen";
+$PMF_LANG["ad_page_no_available_languages"] = "Für diese Seite sind Übersetzungen in allen verfügbaren Sprachen vorhanden.";
+$LANG_CONF['main.termsURL'] = ['input', 'URL für Nutzungsbedingungen','verwenden Sie "page:slug" für eigene Seiten oder vollständige URL für externe Seiten'];
+$LANG_CONF['main.imprintURL'] = ['input', 'URL für Impressum','verwenden Sie "page:slug" für eigene Seiten oder vollständige URL für externe Seiten'];
+$LANG_CONF['main.cookiePolicyURL'] = ['input', 'URL für Cookie-Richtlinie','verwenden Sie "page:slug" für eigene Seiten oder vollständige URL für externe Seiten'];
+$LANG_CONF['api.onlyActiveFaqs'] = ['checkbox', 'Nur aktive FAQs werden von der API zurückgegeben'];
+$LANG_CONF['api.onlyActiveCategories'] = ['checkbox', 'Nur aktive Kategorien werden von der API zurückgegeben'];
+$LANG_CONF['api.onlyPublicQuestions'] = ['checkbox', 'Nur öffentliche Fragen werden von der API zurückgegeben'];
+$LANG_CONF['api.ignoreOrphanedFaqs'] = ['checkbox', 'Verwaiste FAQs werden von der API ignoriert'];
+
+// Translation configuration
+$LANG_CONF['translation.provider'] = ['select', 'Übersetzungsdienst-Anbieter'];
+$LANG_CONF['translation.googleApiKey'] = ['password', 'Google Cloud Translation API-Schlüssel'];
+$LANG_CONF['translation.deeplApiKey'] = ['password', 'DeepL API-Schlüssel'];
+$LANG_CONF['translation.deeplUseFreeApi'] = ['checkbox', 'DeepL Free API verwenden (anstelle von Pro)'];
+$LANG_CONF['translation.azureKey'] = ['password', 'Azure Translator API-Schlüssel'];
+$LANG_CONF['translation.azureRegion'] = ['input', 'Azure-Region', 'z.B. eastus, westeurope'];
+$LANG_CONF['translation.amazonAccessKeyId'] = ['input', 'Amazon Translate AWS Access Key ID'];
+$LANG_CONF['translation.amazonSecretAccessKey'] = ['password', 'Amazon Translate AWS Secret Access Key'];
+$LANG_CONF['translation.amazonRegion'] = ['input', 'Amazon Translate AWS-Region', 'z.B. us-east-1, eu-west-1'];
+$LANG_CONF['translation.libreTranslateUrl'] = ['input', 'LibreTranslate Server-URL'];
+$LANG_CONF['translation.libreTranslateApiKey'] = ['password', 'LibreTranslate API-Schlüssel (optional)'];
+
+// added v4.2.0 - 2026-01-18 by Thorsten
+$LANG_CONF['routing.useAttributesOnly'] = ['checkbox', 'Nur Route-Attribute verwenden (dateibasiertes Routing deaktivieren)'];
+$LANG_CONF['routing.cache.enabled'] = ['checkbox', 'Route-Caching für bessere Performance aktivieren'];
+$LANG_CONF['routing.cache.dir'] = ['input', 'Route-Cache-Verzeichnis'];
+
+// Translation UI strings
+$PMF_LANG['msgTranslation'] = 'Übersetzung';
+$PMF_LANG['msgTranslateWithAI'] = 'Mit KI übersetzen';
+$PMF_LANG['msgTranslating'] = 'Übersetze...';
+$PMF_LANG['msgTranslationSuccess'] = 'Übersetzung erfolgreich abgeschlossen';
+$PMF_LANG['msgTranslationError'] = 'Übersetzung fehlgeschlagen';
+$PMF_LANG['msgNoTranslationProvider'] = 'Kein Übersetzungsdienst konfiguriert';
+
+// added v4.2.0-alpha - 2026-01-17 by d0ubIeU
+$PMF_LANG['msgStickyRemoved'] = 'Status "Wichtig" erfolgreich entfernt.';
+$PMF_LANG['msgConfirmUnstick'] = 'Möchten Sie diesen Beitrag wirklich aus der Liste der wichtigen FAQs entfernen?';
+$PMF_LANG['msgTooltipUnstick'] = 'Wichtig-Status entfernen';
+$PMF_LANG['msgConfirmAction'] = "Aktion bestätigen";
 
 // added v4.2.0-alpha - 2026-01-17 by d0ubIeU
 $PMF_LANG['msgStickyRemoved'] = 'Status "Wichtig" erfolgreich entfernt.';

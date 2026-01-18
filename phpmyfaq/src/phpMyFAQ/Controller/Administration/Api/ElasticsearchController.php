@@ -23,6 +23,7 @@ use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\CustomPage;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Instance\Search\Elasticsearch;
@@ -90,12 +91,25 @@ final class ElasticsearchController extends AbstractController
         $faq = $this->container->get(id: 'phpmyfaq.faq');
         $faq->getAllFaqs();
 
+        // Index FAQs
         $bulkIndexResult = $elasticsearch->bulkIndex($faq->faqRecords);
-        if (isset($bulkIndexResult['success'])) {
-            return $this->json(['success' => Translation::get(key: 'ad_es_create_import_success')], Response::HTTP_OK);
+        if (!isset($bulkIndexResult['success'])) {
+            return $this->json(['error' => $bulkIndexResult], Response::HTTP_BAD_REQUEST);
         }
 
-        return $this->json(['error' => $bulkIndexResult], Response::HTTP_BAD_REQUEST);
+        // Index custom pages
+        /** @var CustomPage $customPage */
+        $customPage = $this->container->get(id: 'phpmyfaq.custom-page');
+        $pages = $customPage->getAllPages();
+
+        $bulkIndexPagesResult = $elasticsearch->bulkIndexCustomPages($pages);
+        if (!isset($bulkIndexPagesResult['success'])) {
+            return $this->json([
+                'error' => 'FAQs indexed but custom pages failed: ' . json_encode($bulkIndexPagesResult),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        return $this->json(['success' => Translation::get(key: 'ad_es_create_import_success')], Response::HTTP_OK);
     }
 
     /**

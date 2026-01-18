@@ -165,11 +165,8 @@ abstract class AbstractAdministrationController extends AbstractController
             'ad_menu_glossary',
             'glossary',
         );
-        $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
-            'addnews+editnews+delnews',
-            'ad_menu_news_edit',
-            'news',
-        );
+        $secLevelEntries['content'] .= $adminHelper->addMenuEntry('addnews+editnews+delnews', 'msgNews', 'news');
+        $secLevelEntries['content'] .= $adminHelper->addMenuEntry('addpage+editpage+delpage', 'ad_menu_pages', 'pages');
 
         $secLevelEntries['statistics'] = $adminHelper->addMenuEntry(
             PermissionType::STATISTICS_VIEWLOGS->value,
@@ -315,6 +312,10 @@ abstract class AbstractAdministrationController extends AbstractController
             case 'admin.news':
             case 'admin.news.add':
             case 'admin.news.edit':
+            case 'admin.pages':
+            case 'admin.page.add':
+            case 'admin.page.edit':
+            case 'admin.page.translate':
             case 'admin.questions':
             case 'admin.tags':
                 $contentPage = true;

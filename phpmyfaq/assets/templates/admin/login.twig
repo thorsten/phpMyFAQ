@@ -30,6 +30,11 @@
                       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                     {% endif %}
+
+                    <div id="session-timeout-message" class="alert alert-warning alert-dismissible fade show" role="alert" style="display: none;">
+                      <span id="session-timeout-text"></span>
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                   </div>
                   <div class="card-body">
                     <form action="{{ loginUrl }}" method="post" accept-charset="utf-8" role="form">
@@ -94,5 +99,22 @@
       <a href="{{ secureUrl }}">{{ msgNotSecure }}</a>
     </p>
   {% endif %}
+
+  <script>
+    // Check for session timeout message from sessionStorage
+    (function() {
+      const loginMessage = sessionStorage.getItem('loginMessage');
+      if (loginMessage) {
+        const messageEl = document.getElementById('session-timeout-message');
+        const textEl = document.getElementById('session-timeout-text');
+        if (messageEl && textEl) {
+          textEl.textContent = loginMessage;
+          messageEl.style.display = 'block';
+        }
+        // Clear the message from sessionStorage so it doesn't show again
+        sessionStorage.removeItem('loginMessage');
+      }
+    })();
+  </script>
 
 {% endblock %}

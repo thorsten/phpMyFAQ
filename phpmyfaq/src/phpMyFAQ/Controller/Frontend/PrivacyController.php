@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -27,15 +26,12 @@ use Symfony\Component\Routing\Attribute\Route;
 final class PrivacyController extends AbstractFrontController
 {
     /**
-     * Redirects to the privacy page stored in the configuration.
+     * Displays the privacy page - either a custom page or redirects to configured URL.
      * @throws \Exception
      */
     #[Route(path: '/privacy.html', name: 'public.privacy')]
-    public function index(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function index(Request $request): Response
     {
-        $privacyUrl = $this->configuration->get('main.privacyURL');
-        $redirectUrl = (string) $privacyUrl !== '' ? $privacyUrl : $this->configuration->get('main.referenceURL');
-
-        return new RedirectResponse($redirectUrl);
+        return $this->handleStaticPageRedirect('main.privacyURL');
     }
 }

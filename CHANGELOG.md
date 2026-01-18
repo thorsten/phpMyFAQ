@@ -13,9 +13,11 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added API for glossary definitions (Thorsten)
 - added admin log CSV export feature (Thorsten)
 - added pagination, sorting, and filtering for APIs (Thorsten)
-- WIP: added support for custom pages in the frontend (Thorsten)
+- added support for custom pages with WYSIWYG editor, SEO features, multi-language support, and search integration (Thorsten)
+- added a translation adapter system with support for Google Cloud Translation, DeepL, Azure Translator, Amazon Translate, and LibreTranslate (Thorsten)
 - improved audit and activity log with comprehensive security event tracking (Thorsten)
 - improved API errors with formatted RFC 7807 Problem Details JSON responses (Thorsten)
+- improved support for PDO (Thorsten)
 - migrated codebase to use PHP 8.4 language features (Thorsten)
 
 ### phpMyFAQ v4.1.0-RC.3 - unreleased
@@ -637,7 +639,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - removed bundled SyntaxHighlighter (Thorsten)
 - dropped support for ext/mysql (Thorsten)
 - dropped support for SQLite2 (Thorsten)
-- dropped support for Zeus Webserver, IIS 6 and lighttpd (Thorsten)
+- dropped support for Zeus Webserver, IIS 6, and lighttpd (Thorsten)
 - fixed a lot of minor bugs (Thorsten)
 
 ### phpMyFAQ v2.8.29 - 2016-05-31
@@ -863,7 +865,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - improved CSS development with LESS (Thorsten)
 - improved minified CSS output (Thorsten)
 - simplified the link verification (Thorsten)
-- dropped support for IBM DB2, Interbase/Firebird and Sybase (Thorsten)
+- dropped support for IBM DB2, Interbase/Firebird, and Sybase (Thorsten)
 - dropped support for PHP register_globals and magic_quotes_gpc (Thorsten)
 - dropped support for Google Translate API v1 (Thorsten)
 - removed Delicious support (Thorsten)
@@ -1903,7 +1905,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 - phpMyFAQ is now Open Source software
 - template system for free layouts
-- fully compatible with PHP 4.1, PHP 4.2 and PHP 4.3 (register_globals = off)
+- fully compatible with PHP 4.1, PHP 4.2, and PHP 4.3 (register_globals = off)
 - all color and font definitions with CSS
 - better SQL queries
 - better category navigation

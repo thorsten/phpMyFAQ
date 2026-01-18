@@ -23,6 +23,8 @@ use phpMyFAQ\Api\ProblemDetails;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Controller\Frontend\PageNotFoundController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Routing\RouteCacheManager;
+use phpMyFAQ\Routing\RouteCollectionBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -45,6 +47,10 @@ class Application
 
     private bool $isApiContext = false;
 
+    private bool $isAdminContext = false;
+
+    private string $routingContext = 'public';
+
     public function __construct(
         private readonly ?ContainerInterface $container = null,
     ) {
@@ -53,7 +59,7 @@ class Application
     /**
      * @throws Exception
      */
-    public function run(RouteCollection $routeCollection, ?Request $request = null): void
+    public function run(?RouteCollection $routeCollection = null, ?Request $request = null): void
     {
         $currentLanguage = $this->setLanguage();
         $this->initializeTranslation($currentLanguage);
@@ -61,6 +67,12 @@ class Application
         $request ??= Request::createFromGlobals();
         $requestContext = new RequestContext();
         $requestContext->fromRequest($request);
+
+        // Autoload routes if not provided
+        if ($routeCollection === null) {
+            $routeCollection = $this->loadRoutes();
+        }
+
         $this->handleRequest($routeCollection, $request, $requestContext);
     }
 
@@ -79,11 +91,24 @@ class Application
         $this->isApiContext = $isApiContext;
     }
 
+    public function setAdminContext(bool $isAdminContext): void
+    {
+        $this->isAdminContext = $isAdminContext;
+    }
+
+    public function setRoutingContext(string $context): void
+    {
+        $this->routingContext = $context;
+    }
+
     private function setLanguage(): string
     {
         if (!is_null($this->container)) {
             $configuration = $this->container->get(id: 'phpmyfaq.configuration');
             $language = $this->container->get(id: 'phpmyfaq.language');
+
+            // Set container in configuration for lazy loading of services like translation provider
+            $configuration->setContainer($this->container);
 
             $detect = (bool) $configuration->get(item: 'main.languageDetection');
             $configLang = $configuration->get(item: 'main.language');
@@ -127,9 +152,9 @@ class Application
         RequestContext $requestContext,
     ): void {
         $urlMatcher = new UrlMatcher($routeCollection, $requestContext);
-        $this->setUrlMatcher($urlMatcher);
+        $this->urlMatcher = $urlMatcher;
         $controllerResolver = new ControllerResolver();
-        $this->setControllerResolver($controllerResolver);
+        $this->controllerResolver = $controllerResolver;
         $argumentResolver = new ArgumentResolver();
         $response = new Response();
 
@@ -241,6 +266,46 @@ class Application
         }
 
         $response->send();
+    }
+
+    /**
+     * Load routes using the RouteCollectionBuilder.
+     *
+     * @return RouteCollection The loaded routes
+     */
+    private function loadRoutes(): RouteCollection
+    {
+        $configuration = $this->container?->get(id: 'phpmyfaq.configuration');
+
+        // Determine if we should use attributes only
+        $attributesOnly = $configuration?->get('routing.useAttributesOnly') ?? false;
+
+        // Determine if caching is enabled
+        $cacheEnabled = $configuration?->get('routing.cache.enabled') ?? false;
+        $cacheDir = $configuration?->get('routing.cache.dir') ?? './cache';
+
+        // Use appropriate context based on flags
+        $context = $this->routingContext;
+        if ($this->isAdminContext && $this->isApiContext) {
+            $context = 'admin-api';
+        } elseif ($this->isAdminContext) {
+            $context = 'admin';
+        } elseif ($this->isApiContext) {
+            $context = 'api';
+        }
+
+        // Load routes with caching if enabled
+        if ($cacheEnabled) {
+            $cacheManager = new RouteCacheManager($cacheDir, Environment::isDebugMode());
+            return $cacheManager->getRoutes($context, function () use ($configuration, $context, $attributesOnly) {
+                $builder = new RouteCollectionBuilder($configuration);
+                return $builder->build($context, $attributesOnly);
+            });
+        }
+
+        // Load routes without caching
+        $builder = new RouteCollectionBuilder($configuration);
+        return $builder->build($context, $attributesOnly);
     }
 
     /**

@@ -22,6 +22,7 @@ use phpMyFAQ\Controller\Frontend\AttachmentController;
 use phpMyFAQ\Controller\Frontend\AuthenticationController;
 use phpMyFAQ\Controller\Frontend\CategoryController;
 use phpMyFAQ\Controller\Frontend\ContactController;
+use phpMyFAQ\Controller\Frontend\CustomPageController;
 use phpMyFAQ\Controller\Frontend\FaqController;
 use phpMyFAQ\Controller\Frontend\GlossaryController;
 use phpMyFAQ\Controller\Frontend\NewsController;
@@ -29,6 +30,9 @@ use phpMyFAQ\Controller\Frontend\OverviewController;
 use phpMyFAQ\Controller\Frontend\PageNotFoundController;
 use phpMyFAQ\Controller\Frontend\PdfController;
 use phpMyFAQ\Controller\Frontend\PrivacyController;
+use phpMyFAQ\Controller\Frontend\TermsController;
+use phpMyFAQ\Controller\Frontend\ImprintController;
+use phpMyFAQ\Controller\Frontend\CookiePolicyController;
 use phpMyFAQ\Controller\Frontend\QuestionsController;
 use phpMyFAQ\Controller\Frontend\SearchController;
 use phpMyFAQ\Controller\Frontend\SitemapController as FrontendSitemapController;
@@ -124,6 +128,11 @@ $routesConfig = [
         'controller' => [NewsController::class, 'index'],
         'methods' => 'GET',
     ],
+    'public.page' => [
+        'path' => '/page/{slug}.html',
+        'controller' => [CustomPageController::class, 'show'],
+        'methods' => 'GET',
+    ],
     'public.open-questions' => [
         'path' => '/open-questions.html',
         'controller' => [QuestionsController::class, 'index'],
@@ -147,6 +156,21 @@ $routesConfig = [
     'public.privacy' => [
         'path' => '/privacy.html',
         'controller' => [PrivacyController::class, 'index'],
+        'methods' => 'GET',
+    ],
+    'public.terms' => [
+        'path' => '/terms.html',
+        'controller' => [TermsController::class, 'index'],
+        'methods' => 'GET',
+    ],
+    'public.imprint' => [
+        'path' => '/imprint.html',
+        'controller' => [ImprintController::class, 'index'],
+        'methods' => 'GET',
+    ],
+    'public.cookies' => [
+        'path' => '/cookies.html',
+        'controller' => [CookiePolicyController::class, 'index'],
         'methods' => 'GET',
     ],
     'public.index' => [

@@ -111,11 +111,6 @@ final class GlossaryController extends AbstractApiController
             }
         }',
     ))]
-    #[OA\Response(
-        response: 200,
-        description: 'If no glossary items are found, returns empty data array.',
-        content: new OA\JsonContent(example: '{"success": true, "data": []}'),
-    )]
     public function list(Request $request): JsonResponse
     {
         $glossary = $this->container->get(id: 'phpmyfaq.glossary');

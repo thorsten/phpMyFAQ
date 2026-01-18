@@ -994,46 +994,46 @@ class Update extends AbstractSetup
     {
         if (version_compare($this->version, '4.1.0-alpha', '<')) {
             $text = <<<EOT
-            User-agent: Amazonbot
-            User-agent: anthropic-ai
-            User-agent: Applebot-Extended
-            User-agent: Bytespider
-            User-agent: CCBot
-            User-agent: ChatGPT-User
-            User-agent: ClaudeBot
-            User-agent: Claude-Web
-            User-agent: cohere-ai
-            User-agent: Diffbot
-            User-agent: FacebookBot
-            User-agent: facebookexternalhit
-            User-agent: FriendlyCrawler
-            User-agent: Google-Extended
-            User-agent: GoogleOther
-            User-agent: GoogleOther-Image
-            User-agent: GoogleOther-Video
-            User-agent: GPTBot
-            User-agent: ICC-Crawler
-            User-agent: ImagesiftBot
-            User-agent: img2dataset
-            User-agent: Meta-ExternalAgent
-            User-agent: OAI-SearchBot
-            User-agent: omgili
-            User-agent: omgilibot
-            User-agent: PerplexityBot
-            User-agent: PetalBot
-            User-agent: Scrapy
-            User-agent: Timpibot
-            User-agent: VelenPublicWebCrawler
-            User-agent: YouBot
-            User-agent: Meta-ExternalFetcher
-            User-agent: Applebot
-            Disallow: /
+                User-agent: Amazonbot
+                User-agent: anthropic-ai
+                User-agent: Applebot-Extended
+                User-agent: Bytespider
+                User-agent: CCBot
+                User-agent: ChatGPT-User
+                User-agent: ClaudeBot
+                User-agent: Claude-Web
+                User-agent: cohere-ai
+                User-agent: Diffbot
+                User-agent: FacebookBot
+                User-agent: facebookexternalhit
+                User-agent: FriendlyCrawler
+                User-agent: Google-Extended
+                User-agent: GoogleOther
+                User-agent: GoogleOther-Image
+                User-agent: GoogleOther-Video
+                User-agent: GPTBot
+                User-agent: ICC-Crawler
+                User-agent: ImagesiftBot
+                User-agent: img2dataset
+                User-agent: Meta-ExternalAgent
+                User-agent: OAI-SearchBot
+                User-agent: omgili
+                User-agent: omgilibot
+                User-agent: PerplexityBot
+                User-agent: PetalBot
+                User-agent: Scrapy
+                User-agent: Timpibot
+                User-agent: VelenPublicWebCrawler
+                User-agent: YouBot
+                User-agent: Meta-ExternalFetcher
+                User-agent: Applebot
+                Disallow: /
 
-            User-agent: *
-            Disallow: /admin/
+                User-agent: *
+                Disallow: /admin/
 
-            Sitemap: /sitemap.xml
-            EOT;
+                Sitemap: /sitemap.xml
+                EOT;
             $this->configuration->add('seo.contentRobotsText', $text);
         }
     }
@@ -1130,48 +1130,33 @@ class Update extends AbstractSetup
     {
         if (version_compare($this->version, '4.2.0-alpha', '<')) {
             // Create the new columns first
-            switch (Database::getType()) {
-                case 'mysqli':
-                case 'pdo_mysql':
-                    $alterQueries = [
-                        sprintf(
-                            'ALTER TABLE %sfaqadminlog ADD COLUMN hash VARCHAR(64) AFTER text',
-                            Database::getTablePrefix(),
-                        ),
-                        sprintf(
-                            'ALTER TABLE %sfaqadminlog ADD COLUMN previous_hash VARCHAR(64) AFTER hash',
-                            Database::getTablePrefix(),
-                        ),
-                        sprintf('CREATE INDEX idx_hash ON %sfaqadminlog (hash)', Database::getTablePrefix()),
-                    ];
-                    break;
-
-                case 'pgsql':
-                case 'pdo_pgsql':
-                case 'sqlite3':
-                case 'pdo_sqlite':
-                    $alterQueries = [
-                        sprintf('ALTER TABLE %sfaqadminlog ADD COLUMN hash VARCHAR(64)', Database::getTablePrefix()),
-                        sprintf(
-                            'ALTER TABLE %sfaqadminlog ADD COLUMN previous_hash VARCHAR(64)',
-                            Database::getTablePrefix(),
-                        ),
-                        sprintf('CREATE INDEX idx_hash ON %sfaqadminlog (hash)', Database::getTablePrefix()),
-                    ];
-                    break;
-
-                case 'sqlsrv':
-                case 'pdo_sqlsrv':
-                    $alterQueries = [
-                        sprintf('ALTER TABLE %sfaqadminlog ADD hash VARCHAR(64)', Database::getTablePrefix()),
-                        sprintf('ALTER TABLE %sfaqadminlog ADD previous_hash VARCHAR(64)', Database::getTablePrefix()),
-                        sprintf('CREATE INDEX idx_hash ON %sfaqadminlog (hash)', Database::getTablePrefix()),
-                    ];
-                    break;
-
-                default:
-                    $alterQueries = [];
-            }
+            $alterQueries = match (Database::getType()) {
+                'mysqli', 'pdo_mysql' => [
+                    sprintf(
+                        'ALTER TABLE %sfaqadminlog ADD COLUMN hash VARCHAR(64) AFTER text',
+                        Database::getTablePrefix(),
+                    ),
+                    sprintf(
+                        'ALTER TABLE %sfaqadminlog ADD COLUMN previous_hash VARCHAR(64) AFTER hash',
+                        Database::getTablePrefix(),
+                    ),
+                    sprintf('CREATE INDEX idx_hash ON %sfaqadminlog (hash)', Database::getTablePrefix()),
+                ],
+                'pgsql', 'pdo_pgsql', 'sqlite3', 'pdo_sqlite' => [
+                    sprintf('ALTER TABLE %sfaqadminlog ADD COLUMN hash VARCHAR(64)', Database::getTablePrefix()),
+                    sprintf(
+                        'ALTER TABLE %sfaqadminlog ADD COLUMN previous_hash VARCHAR(64)',
+                        Database::getTablePrefix(),
+                    ),
+                    sprintf('CREATE INDEX idx_hash ON %sfaqadminlog (hash)', Database::getTablePrefix()),
+                ],
+                'sqlsrv', 'pdo_sqlsrv' => [
+                    sprintf('ALTER TABLE %sfaqadminlog ADD hash VARCHAR(64)', Database::getTablePrefix()),
+                    sprintf('ALTER TABLE %sfaqadminlog ADD previous_hash VARCHAR(64)', Database::getTablePrefix()),
+                    sprintf('CREATE INDEX idx_hash ON %sfaqadminlog (hash)', Database::getTablePrefix()),
+                ],
+                default => [],
+            };
 
             // Execute ALTER TABLE queries immediately
             foreach ($alterQueries as $query) {
@@ -1197,6 +1182,9 @@ class Update extends AbstractSetup
                             active CHAR(1) NOT NULL DEFAULT \'n\',
                             created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                             updated TIMESTAMP NULL,
+                            seo_title VARCHAR(60) NULL,
+                            seo_description VARCHAR(160) NULL,
+                            seo_robots VARCHAR(50) NOT NULL DEFAULT \'index,follow\',
                             PRIMARY KEY (id, lang),
                             INDEX idx_custompages_slug (slug, lang)
                         ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
@@ -1217,6 +1205,9 @@ class Update extends AbstractSetup
                             active CHAR(1) NOT NULL DEFAULT \'n\',
                             created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                             updated TIMESTAMP NULL,
+                            seo_title VARCHAR(60) NULL,
+                            seo_description VARCHAR(160) NULL,
+                            seo_robots VARCHAR(50) NOT NULL DEFAULT \'index,follow\',
                             PRIMARY KEY (id, lang)
                         )', Database::getTablePrefix());
                     $this->queries[] = sprintf(
@@ -1238,6 +1229,9 @@ class Update extends AbstractSetup
                             active CHAR(1) NOT NULL DEFAULT \'n\',
                             created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                             updated TIMESTAMP NULL,
+                            seo_title VARCHAR(60) NULL,
+                            seo_description VARCHAR(160) NULL,
+                            seo_robots VARCHAR(50) NOT NULL DEFAULT \'index,follow\',
                             PRIMARY KEY (id, lang)
                         )', Database::getTablePrefix());
                     $this->queries[] = sprintf(
@@ -1259,6 +1253,9 @@ class Update extends AbstractSetup
                             active CHAR(1) NOT NULL DEFAULT \'n\',
                             created DATETIME NOT NULL DEFAULT GETDATE(),
                             updated DATETIME NULL,
+                            seo_title VARCHAR(60) NULL,
+                            seo_description VARCHAR(160) NULL,
+                            seo_robots VARCHAR(50) NOT NULL DEFAULT \'index,follow\',
                             PRIMARY KEY (id, lang)
                         )', Database::getTablePrefix());
                     $this->queries[] = sprintf(
@@ -1267,6 +1264,51 @@ class Update extends AbstractSetup
                     );
                     break;
             }
+
+            // Add new permissions for custom pages
+            $user = new User($this->configuration);
+            $pageAddRight = [
+                'name' => PermissionType::PAGE_ADD->value,
+                'description' => 'Right to add custom pages',
+            ];
+            $pageEditRight = [
+                'name' => PermissionType::PAGE_EDIT->value,
+                'description' => 'Right to edit custom pages',
+            ];
+            $pageDeleteRight = [
+                'name' => PermissionType::PAGE_DELETE->value,
+                'description' => 'Right to delete custom pages',
+            ];
+            $user->perm->grantUserRight(1, $user->perm->addRight($pageAddRight));
+            $user->perm->grantUserRight(1, $user->perm->addRight($pageEditRight));
+            $user->perm->grantUserRight(1, $user->perm->addRight($pageDeleteRight));
+
+            // Add configuration entries for legal page URLs if they don't exist
+            $this->configuration->add('main.termsURL', '');
+            $this->configuration->add('main.imprintURL', '');
+            $this->configuration->add('main.cookiePolicyURL', '');
+            $this->configuration->add('api.onlyActiveFaqs', 'true');
+            $this->configuration->add('api.onlyActiveCategories', 'true');
+            $this->configuration->add('api.onlyPublicQuestions', 'true');
+            $this->configuration->add('api.ignoreOrphanedFaqs', 'true');
+
+            // Add translation service configuration
+            $this->configuration->add('translation.provider', 'none');
+            $this->configuration->add('translation.googleApiKey', '');
+            $this->configuration->add('translation.deeplApiKey', '');
+            $this->configuration->add('translation.deeplUseFreeApi', 'true');
+            $this->configuration->add('translation.azureKey', '');
+            $this->configuration->add('translation.azureRegion', '');
+            $this->configuration->add('translation.amazonAccessKeyId', '');
+            $this->configuration->add('translation.amazonSecretAccessKey', '');
+            $this->configuration->add('translation.amazonRegion', 'us-east-1');
+            $this->configuration->add('translation.libreTranslateUrl', 'https://libretranslate.com');
+            $this->configuration->add('translation.libreTranslateApiKey', '');
+
+            // Add routing configuration
+            $this->configuration->add('routing.useAttributesOnly', 'false');
+            $this->configuration->add('routing.cache.enabled', 'false');
+            $this->configuration->add('routing.cache.dir', './cache');
         }
     }
 

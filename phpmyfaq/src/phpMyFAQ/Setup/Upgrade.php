@@ -223,11 +223,94 @@ class Upgrade extends AbstractSetup
         });
 
         if ($zipFile) {
-            $zipArchive->extractTo($this->upgradeDirectory . '/new/');
+            // Secure extraction to prevent Zip Slip vulnerability
+            $extractPath = $this->upgradeDirectory . '/new/';
+            $this->secureExtractZip($zipArchive, $extractPath);
             return $zipArchive->close();
         }
 
         throw new Exception(message: 'Cannot open zipped download package.');
+    }
+
+    /**
+     * Securely extracts a ZIP archive, preventing Zip Slip attacks
+     *
+     * @param ZipArchive $zipArchive The ZIP archive to extract
+     * @param string $destination The destination directory
+     * @throws Exception If a malicious path is detected
+     */
+    private function secureExtractZip(ZipArchive $zipArchive, string $destination): void
+    {
+        // Normalize destination path
+        $destination = rtrim(realpath($destination) ?: $destination, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+
+        // Create destination directory if it doesn't exist
+        if (!is_dir($destination)) {
+            mkdir($destination, 0755, true);
+        }
+
+        // Iterate through all entries in the archive
+        for ($i = 0; $i < $zipArchive->numFiles; $i++) {
+            $entry = $zipArchive->getNameIndex($i);
+            if ($entry === false) {
+                continue;
+            }
+
+            // Validate the entry path to prevent directory traversal
+            if (!$this->isPathSafe($entry, $destination)) {
+                $this->configuration->getLogger()->error('Zip Slip attack detected in package', [
+                    'malicious_entry' => $entry,
+                ]);
+                throw new Exception(message: sprintf('Malicious path detected in archive: %s', $entry));
+            }
+
+            // Extract individual file
+            $zipArchive->extractTo($destination, $entry);
+        }
+    }
+
+    /**
+     * Validates that a ZIP entry path is safe and doesn't escape the destination directory
+     *
+     * @param string $entryPath The path from the ZIP entry
+     * @param string $destination The destination directory
+     * @return bool True if path is safe, false otherwise
+     */
+    private function isPathSafe(string $entryPath, string $destination): bool
+    {
+        // Remove any null bytes
+        $entryPath = str_replace("\0", '', $entryPath);
+
+        // Build the full destination path
+        $fullPath = $destination . $entryPath;
+
+        // Resolve the real path (this resolves .. and . sequences)
+        $realPath = realpath(dirname($fullPath));
+        if ($realPath === false) {
+            // Path doesn't exist yet, construct it manually
+            $realPath = realpath($destination) . DIRECTORY_SEPARATOR . dirname($entryPath);
+        }
+
+        // Normalize both paths for comparison
+        $normalizedDestination = rtrim(realpath($destination) ?: $destination, DIRECTORY_SEPARATOR);
+        $normalizedPath = rtrim($realPath, DIRECTORY_SEPARATOR);
+
+        // Check if the resolved path is within the destination directory
+        if (!str_starts_with($normalizedPath, $normalizedDestination)) {
+            return false;
+        }
+
+        // Additional check: reject paths with directory traversal sequences
+        if (preg_match('#(\.\./)|(\.\.)|(\./)|(^/)#', $entryPath)) {
+            return false;
+        }
+
+        // Check for absolute paths (Unix and Windows)
+        if (str_starts_with($entryPath, '/') || preg_match('#^[a-zA-Z]:#', $entryPath)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
