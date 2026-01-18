@@ -42,10 +42,15 @@ final class NewsController extends AbstractFrontController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route(path: '/news/{newsId}/{newsLang}/{slug}.html', name: 'public.news', requirements: [
-        'newsId' => '\d+',
-        'newsLang' => '[a-z\-_]+',
-    ])]
+    #[Route(
+        path: '/news/{newsId}/{newsLang}/{slug}.html',
+        name: 'public.news',
+        requirements: [
+            'newsId' => '\d+',
+            'newsLang' => '[a-z\-_]+',
+        ],
+        methods: ['GET'],
+    )]
     public function index(Request $request): Response
     {
         $newsId = Filter::filterVar($request->attributes->get('newsId'), FILTER_VALIDATE_INT);

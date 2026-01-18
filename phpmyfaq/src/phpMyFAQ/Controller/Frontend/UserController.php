@@ -39,7 +39,7 @@ final class UserController extends AbstractFrontController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route(path: '/user/request-removal', name: 'public.user.request-removal')]
+    #[Route(path: '/user/request-removal', name: 'public.user.request-removal', methods: ['GET'])]
     public function requestRemoval(Request $request): Response
     {
         if (!$this->currentUser->isLoggedIn()) {
@@ -70,7 +70,7 @@ final class UserController extends AbstractFrontController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route(path: '/user/bookmarks', name: 'public.user.bookmarks')]
+    #[Route(path: '/user/bookmarks', name: 'public.user.bookmarks', methods: ['GET'])]
     public function bookmarks(Request $request): Response
     {
         if (!$this->currentUser->isLoggedIn()) {
@@ -99,7 +99,7 @@ final class UserController extends AbstractFrontController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route(path: '/user/register', name: 'public.user.register')]
+    #[Route(path: '/user/register', name: 'public.user.register', methods: ['GET'])]
     public function register(Request $request): Response
     {
         if (!$this->configuration->get('security.enableRegistration')) {
@@ -133,7 +133,7 @@ final class UserController extends AbstractFrontController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route(path: '/user/ucp', name: 'public.user.ucp')]
+    #[Route(path: '/user/ucp', name: 'public.user.ucp', methods: ['GET'])]
     public function ucp(Request $request): Response
     {
         if (!$this->currentUser->isLoggedIn()) {

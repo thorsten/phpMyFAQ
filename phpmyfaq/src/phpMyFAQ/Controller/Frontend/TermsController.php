@@ -30,7 +30,7 @@ final class TermsController extends AbstractFrontController
      * Displays the terms of service page - either a custom page or redirects to configured URL.
      * @throws Exception
      */
-    #[Route(path: '/terms.html', name: 'public.terms')]
+    #[Route(path: '/terms.html', name: 'public.terms', methods: ['GET'])]
     public function index(Request $request): Response
     {
         return $this->handleStaticPageRedirect('main.termsURL');

@@ -31,7 +31,7 @@ final class WebAuthnController extends AbstractFrontController
     /**
      * @throws Exception|LoaderError
      */
-    #[Route(path: '/services/webauthn', name: 'public.webauthn.index')]
+    #[Route(path: '/services/webauthn', name: 'public.webauthn.index', methods: ['GET'])]
     public function index(Request $request): Response
     {
         return $this->render(file: '/webauthn.twig', context: [

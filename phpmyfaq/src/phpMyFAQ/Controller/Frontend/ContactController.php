@@ -31,7 +31,7 @@ final class ContactController extends AbstractFrontController
      * Handles both GET and POST requests for the contact form
      * @throws Exception
      */
-    #[Route(path: '/contact.html', name: 'public.contact')]
+    #[Route(path: '/contact.html', name: 'public.contact', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $faqSession = $this->container->get('phpmyfaq.user.session');

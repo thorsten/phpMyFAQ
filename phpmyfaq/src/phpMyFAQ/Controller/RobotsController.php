@@ -28,7 +28,7 @@ final class RobotsController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route(path: '/robots.txt', name: 'public.robots.index')]
+    #[Route(path: '/robots.txt', name: 'public.robots.txt', methods: ['GET'])]
     public function index(): Response
     {
         $response = new Response();

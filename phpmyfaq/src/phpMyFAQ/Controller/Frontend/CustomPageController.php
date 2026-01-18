@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\CustomPage;
 use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Seo;
@@ -28,15 +27,17 @@ use phpMyFAQ\Strings;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Twig\Error\LoaderError;
 
 final class CustomPageController extends AbstractFrontController
 {
     /**
      * Displays a custom page by its slug
      *
-     * @throws Exception
+     * @throws Exception|LoaderError*@throws \Exception
+     *
      */
-    #[Route(path: '/page/{slug}.html', name: 'public.page', requirements: ['slug' => '[a-z0-9\-_]+'])]
+    #[Route(path: '/page/{slug}.html', name: 'public.page', requirements: ['slug' => '[a-z0-9\-_]+'], methods: ['GET'])]
     public function show(Request $request): Response
     {
         $slug = $request->attributes->get('slug');
@@ -73,7 +74,7 @@ final class CustomPageController extends AbstractFrontController
             $metaTitle = $seoEntity->getTitle() ?: $pageEntity->getPageTitle();
             $metaDescription = $seoEntity->getDescription() ?: '';
         } catch (Exception $e) {
-            // SEO data not found, use page defaults
+            // SEO data aren't found, use page defaults
             $metaTitle = $pageEntity->getPageTitle();
             $metaDescription = '';
         }

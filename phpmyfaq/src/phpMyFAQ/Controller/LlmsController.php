@@ -28,7 +28,7 @@ final class LlmsController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route(path: '/llms.txt', name: 'public.llms.index')]
+    #[Route(path: '/llms.txt', name: 'public.llms.txt', methods: ['GET'])]
     public function index(): Response
     {
         $response = new Response();

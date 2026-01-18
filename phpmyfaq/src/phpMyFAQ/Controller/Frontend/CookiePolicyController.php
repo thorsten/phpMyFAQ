@@ -30,7 +30,7 @@ final class CookiePolicyController extends AbstractFrontController
      * Displays the cookie policy page - either a custom page or redirects to configured URL.
      * @throws Exception
      */
-    #[Route(path: '/cookies.html', name: 'public.cookies')]
+    #[Route(path: '/cookies.html', name: 'public.cookies', methods: ['GET'])]
     public function index(Request $request): Response
     {
         return $this->handleStaticPageRedirect('main.cookiePolicyURL');
