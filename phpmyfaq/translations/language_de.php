@@ -1578,6 +1578,7 @@ $PMF_LANG["msgTermsOfService"] = "Nutzungsbedingungen";
 $PMF_LANG["msgImprint"] = "Impressum";
 $PMF_LANG["msgCookiePolicy"] = "Cookie-Richtlinie";
 $PMF_LANG["ad_page_lang_cannot_change"] = "Die Sprache kann nach der Erstellung nicht geändert werden.";
+$PMF_LANG['msgTranslation'] = 'Übersetzung';
 $PMF_LANG["ad_page_add_translation"] = "Übersetzung hinzufügen";
 $PMF_LANG["ad_page_translate"] = "Seite übersetzen";
 $PMF_LANG["ad_page_original_language"] = "Ursprungssprache";
@@ -1593,7 +1594,7 @@ $LANG_CONF['api.onlyPublicQuestions'] = ['checkbox', 'Nur öffentliche Fragen we
 $LANG_CONF['api.ignoreOrphanedFaqs'] = ['checkbox', 'Verwaiste FAQs werden von der API ignoriert'];
 
 // Translation configuration
-$LANG_CONF['translation.provider'] = ['select', 'Übersetzungsdienst-Anbieter', 'Optionen: none, Google, Deepl, Azure, LibreTranslate'];
+$LANG_CONF['translation.provider'] = ['select', 'Übersetzungsdienst-Anbieter'];
 $LANG_CONF['translation.googleApiKey'] = ['password', 'Google Cloud Translation API-Schlüssel'];
 $LANG_CONF['translation.deeplApiKey'] = ['password', 'DeepL API-Schlüssel'];
 $LANG_CONF['translation.deeplUseFreeApi'] = ['checkbox', 'DeepL Free API verwenden (anstelle von Pro)'];
