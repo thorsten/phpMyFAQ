@@ -87,7 +87,7 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route(path: '/statistics/sessions/:day', name: 'admin.statistics.session', methods: ['GET'])]
+    #[Route(path: '/statistics/sessions/{date}', name: 'admin.statistics.sessions.day', methods: ['POST', 'GET'])]
     public function viewDay(Request $request): Response
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
@@ -121,7 +121,7 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route(path: '/statistics/session/:sessionId', name: 'admin.statistics.session', methods: ['POST'])]
+    #[Route(path: '/statistics/session/{sessionId}', name: 'admin.statistics.session.id', methods: ['GET'])]
     public function viewSession(Request $request): Response
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);

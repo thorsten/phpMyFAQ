@@ -160,7 +160,7 @@ final class FaqController extends AbstractAdministrationController
         ]);
     }
 
-    #[Route(path: '/faq/add/:categoryId/:categoryLanguage', name: 'admin.faq.add', methods: ['GET'])]
+    #[Route(path: '/faq/add/{categoryId}/{categoryLanguage}', name: 'admin.faq.add.category', methods: ['GET'])]
     public function addInCategory(Request $request): Response
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);

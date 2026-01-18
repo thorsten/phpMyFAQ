@@ -41,7 +41,7 @@ final class AdminLogController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route(path: '/statistics/admin-log')]
+    #[Route(path: '/statistics/admin-log', name: 'admin.statistics.admin-log', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::STATISTICS_ADMINLOG);

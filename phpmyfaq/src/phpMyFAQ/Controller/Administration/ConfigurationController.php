@@ -35,7 +35,7 @@ final class ConfigurationController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route(path: '/configuration', name: 'admin.instances', methods: ['GET'])]
+    #[Route(path: '/configuration', name: 'admin.configuration', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
