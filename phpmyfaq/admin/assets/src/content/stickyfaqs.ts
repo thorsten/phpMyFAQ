@@ -14,11 +14,62 @@
  */
 
 import Sortable from 'sortablejs';
+import { Modal } from 'bootstrap';
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
+import { updateStickyFaqsOrder, removeStickyFaq } from '../api/sticky-faqs';
+
+/**
+ * Show a Bootstrap confirmation modal using the template modal
+ * @param message The confirmation message to display
+ * @returns Promise that resolves to true if confirmed, false if cancelled
+ */
+const showConfirmModal = (message: string): Promise<boolean> => {
+  return new Promise((resolve) => {
+    const modal = document.getElementById('confirmUnstickyModal');
+    const modalBody = document.getElementById('confirmUnstickyModalBody');
+    const confirmBtn = document.getElementById('confirmUnstickyModalConfirm');
+
+    if (!modal || !modalBody || !confirmBtn) {
+      console.error('Confirmation modal not found in DOM');
+      resolve(false);
+      return;
+    }
+
+    // Set the message
+    modalBody.textContent = message;
+
+    // Initialize Bootstrap modal
+    const bsModal = new Modal(modal);
+
+    // Remove old event listeners by cloning the button
+    const newConfirmBtn = confirmBtn.cloneNode(true) as HTMLElement;
+    confirmBtn.parentNode?.replaceChild(newConfirmBtn, confirmBtn);
+
+    // Handle confirm button
+    const handleConfirm = () => {
+      bsModal.hide();
+      resolve(true);
+      newConfirmBtn.removeEventListener('click', handleConfirm);
+    };
+
+    newConfirmBtn.addEventListener('click', handleConfirm);
+
+    // Handle modal close/cancel
+    const handleHidden = () => {
+      modal.removeEventListener('hidden.bs.modal', handleHidden);
+      resolve(false);
+    };
+
+    modal.addEventListener('hidden.bs.modal', handleHidden, { once: true });
+
+    // Show modal
+    bsModal.show();
+  });
+};
 
 export const handleStickyFaqs = (): void => {
   const stickyFAQs = document.getElementById('stickyFAQs') as HTMLElement | null;
-  
+
   if (!stickyFAQs) {
     return;
   }
@@ -54,7 +105,8 @@ export const handleStickyFaqs = (): void => {
     const msgConfirm = stickyFAQs.getAttribute('data-lang-confirm') || 'Do you really want to remove this FAQ?';
     const msgSuccess = stickyFAQs.getAttribute('data-lang-success') || 'Successfully removed.';
 
-    if (!confirm(msgConfirm)) {
+    const confirmed = await showConfirmModal(msgConfirm);
+    if (!confirmed) {
       return;
     }
 
@@ -72,61 +124,35 @@ export const handleStickyFaqs = (): void => {
     }
 
     try {
-      const response = await fetch('./api/faq/sticky', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          'X-PMF-CSRF-Token': csrfToken,
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-        body: JSON.stringify({
-          csrf: csrfToken,
-          categoryId: categoryId,
-          faqIds: [faqId],
-          faqLanguage: lang,
-          checked: false,
-        }),
-      });
+      await removeStickyFaq(faqId, categoryId, csrfToken, lang);
 
-      if (response.ok) {
-        const result = await response.json();
-        if (result && result.success) {
-          const row = btn.closest('.list-group-item') as HTMLElement | null;
+      const row = btn.closest('.list-group-item') as HTMLElement | null;
 
-          if (!row) {
-            pushErrorNotification('Could not find FAQ item in the list.');
-            btn.disabled = false;
-            return;
-          }
-
-          row.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-          row.style.opacity = '0';
-          row.style.transform = 'translateX(20px)';
-
-          setTimeout(() => {
-            row.remove();
-            pushNotification(msgSuccess);
-          }, 300);
-        } else {
-          pushErrorNotification(result?.error || 'Unknown API Error');
-          btn.disabled = false;
-        }
-      } else {
-        throw new Error('Network response error');
+      if (!row) {
+        pushErrorNotification('Could not find FAQ item in the list.');
+        btn.disabled = false;
+        return;
       }
+
+      row.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+      row.style.opacity = '0';
+      row.style.transform = 'translateX(20px)';
+
+      setTimeout(() => {
+        row.remove();
+        pushNotification(msgSuccess);
+      }, 300);
     } catch (error) {
-      console.error(error);
-      pushErrorNotification('Error communicating with API');
+      if (error instanceof Error) {
+        pushErrorNotification(error.message);
+      } else {
+        console.error('Unknown error:', error);
+        pushErrorNotification('Error communicating with API');
+      }
       btn.disabled = false;
     }
   });
 };
-
-interface StickyOrderResponse {
-  success?: string;
-  error?: string;
-}
 
 const saveStatus = async (currentOrder: string[], container: HTMLElement): Promise<void> => {
   const successAlert = document.getElementById('successAlert');
@@ -135,42 +161,14 @@ const saveStatus = async (currentOrder: string[], container: HTMLElement): Promi
   if (!csrf) {
     console.warn('CSRF token not found on container');
   }
-  
+
   if (successAlert) {
     successAlert.remove();
   }
 
   try {
-    const response = await fetch('./api/faqs/sticky/order', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        faqIds: currentOrder,
-        csrf: csrf,
-      }),
-    });
-
-    if (response.ok) {
-      let jsonResponse: StickyOrderResponse = {};
-      try {
-        jsonResponse = await response.json();
-      } catch {
-        // Non-JSON success response — use generic message
-      }
-      pushNotification(jsonResponse?.success || 'Order updated');
-    } else {
-      let errMsg = 'Network response was not ok';
-      try {
-        const errJson = await response.json();
-        errMsg = errJson?.error || errMsg;
-      } catch {
-        // Could not parse error body; keep generic message
-      }
-      throw new Error(errMsg);
-    }
+    const response = await updateStickyFaqsOrder(currentOrder, csrf);
+    pushNotification(response?.success || 'Order updated');
   } catch (error) {
     if (error instanceof Error) {
       pushErrorNotification(error.message);

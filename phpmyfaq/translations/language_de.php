@@ -1622,5 +1622,6 @@ $PMF_LANG['msgNoTranslationProvider'] = 'Kein Übersetzungsdienst konfiguriert';
 $PMF_LANG['msgStickyRemoved'] = 'Status "Wichtig" erfolgreich entfernt.';
 $PMF_LANG['msgConfirmUnstick'] = 'Möchten Sie diesen Beitrag wirklich aus der Liste der wichtigen FAQs entfernen?';
 $PMF_LANG['msgTooltipUnstick'] = 'Wichtig-Status entfernen';
+$PMF_LANG['msgConfirmAction'] = "Aktion bestätigen";
 
 return $PMF_LANG;

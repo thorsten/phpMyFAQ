@@ -14,15 +14,13 @@
  */
 
 import { fetchJson } from './fetch-wrapper';
-import { Response } from '../interfaces';
-import { FaqList } from '../interfaces';
 
 export const fetchAllFaqsByCategory = async (
   categoryId: string,
   language: string,
   onlyInactive?: boolean,
   onlyNew?: boolean
-): Promise<FaqList> => {
+): Promise<unknown> => {
   let currentUrl: string = window.location.protocol + '//' + window.location.host;
   let pathname: string = window.location.pathname;
 
@@ -49,7 +47,7 @@ export const fetchAllFaqsByCategory = async (
   });
 };
 
-export const fetchFaqsByAutocomplete = async (searchTerm: string, csrfToken: string): Promise<Response | undefined> => {
+export const fetchFaqsByAutocomplete = async (searchTerm: string, csrfToken: string): Promise<unknown> => {
   return await fetchJson(`./api/faq/search`, {
     method: 'POST',
     headers: {
@@ -63,7 +61,7 @@ export const fetchFaqsByAutocomplete = async (searchTerm: string, csrfToken: str
   });
 };
 
-export const deleteFaq = async (faqId: string, faqLanguage: string, token: string): Promise<Response | undefined> => {
+export const deleteFaq = async (faqId: string, faqLanguage: string, token: string): Promise<unknown> => {
   return await fetchJson('./api/faq/delete', {
     method: 'DELETE',
     headers: {
@@ -78,7 +76,7 @@ export const deleteFaq = async (faqId: string, faqLanguage: string, token: strin
   });
 };
 
-export const create = async (formData: unknown): Promise<Response | undefined> => {
+export const create = async (formData: unknown): Promise<unknown> => {
   return await fetchJson('./api/faq/create', {
     method: 'POST',
     headers: {
@@ -91,7 +89,7 @@ export const create = async (formData: unknown): Promise<Response | undefined> =
   });
 };
 
-export const update = async (formData: unknown): Promise<Response | undefined> => {
+export const update = async (formData: unknown): Promise<unknown> => {
   return await fetchJson('./api/faq/update', {
     method: 'PUT',
     headers: {
