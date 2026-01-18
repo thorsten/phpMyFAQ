@@ -84,7 +84,7 @@ final class CategoryController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route(path: '/category/add', name: 'admin.category/add', methods: ['GET'])]
+    #[Route(path: '/category/add', name: 'admin.category.add', methods: ['GET'])]
     public function add(Request $request): Response
     {
         $this->userHasPermission(PermissionType::CATEGORY_ADD);

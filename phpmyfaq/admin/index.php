@@ -37,11 +37,11 @@ try {
     echo sprintf('Error: %s at line %d at %s', $exception->getMessage(), $exception->getLine(), $exception->getFile());
 }
 
-$routes = include PMF_SRC_DIR  . '/admin-routes.php';
-
 $app = new Application($container);
+$app->setRoutingContext('admin');
 try {
-    $app->run($routes);
+    // Auto-loads routes from attributes (falls back to admin-routes.php during migration)
+    $app->run();
 } catch (Exception $exception) {
     echo sprintf('Error: %s at line %d at %s', $exception->getMessage(), $exception->getLine(), $exception->getFile());
 }

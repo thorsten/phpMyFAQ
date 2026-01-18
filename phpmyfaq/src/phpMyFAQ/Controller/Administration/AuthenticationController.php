@@ -90,7 +90,7 @@ final class AuthenticationController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route(path: '/login', name: 'admin.auth.logout', methods: ['GET'])]
+    #[Route(path: '/login', name: 'admin.auth.login', methods: ['GET'])]
     public function login(Request $request): Response
     {
         // Redirect to authenticate if SSO is enabled and the user is already authenticated

@@ -37,7 +37,7 @@ final class OpenQuestionsController extends AbstractAdministrationController
      * @throws Exception
      * @throws LoaderError
      */
-    #[Route(path: '/question')]
+    #[Route(path: '/questions', name: 'admin.questions', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::QUESTION_DELETE);
