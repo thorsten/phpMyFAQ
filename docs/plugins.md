@@ -1,23 +1,23 @@
-# 9. Plugins
+# 10. Plugins
 
 With phpMyFAQ 4.0 and later, we have a new, currently experimental plugin system.
 This system allows you to extend phpMyFAQ with new features.
 The plugin system is based on the Symfony Dependency Injection component.
 
-## 9.1 Installation
+## 10.1 Installation
 
 Plugins are installed in the `content/plugins` directory of your phpMyFAQ installation.
 The plugin directory should contain a subdirectory for each plugin, e.g. `content/plugins/HelloWorld`.
 The plugin directory should contain a `HelloWorldPlugin.php` file that implements the `PluginInterface` interface.
 If you want to remove a plugin, you can delete the plugin in the plugin directory.
 
-## 9.2 Configuration
+## 10.2 Configuration
 
 Plugins can have configuration options, implemented via the `PluginConfigurationInterface` interface.
 Configuration options can be defined in the plugin configuration class with Constructor Property Promotion by adding 
 public properties. There are no other options to configure plugins at this time.
 
-### 9.3.1 Example configuration class
+### 10.3.1 Example configuration class
 
 ```php
 class MyPluginConfiguration implements PluginConfigurationInterface
@@ -30,22 +30,22 @@ class MyPluginConfiguration implements PluginConfigurationInterface
 }
 ```
 
-## 9.3 Plugin development
+## 10.3 Plugin development
 
 To develop a plugin, you need to create a new directory in the `content/plugins` directory.
 The main plugin class should implement the `PluginInterface` interface.
 The plugin class should have a constructor that accepts the plugin manager as an argument.
 The plugin manager is an instance of the `PluginManager` class.
 
-## 9.4 Plugin uninstallation
+## 10.4 Plugin uninstallation
 
 To uninstall a plugin, you can delete the plugin directory from the `content/plugins` directory.
 
-## 9.5 Examples
+## 10.5 Examples
 
 phpMyFAQ comes with an example plugin that demonstrates how to use the plugin system called `HelloWorldPlugin`.
 
-### 9.5.1 PHP code
+### 10.5.1 PHP code
 
 ```php
 <?php
@@ -126,7 +126,7 @@ class MyPlugin implements PluginInterface
 }
 ```
 
-### 9.5.2 Twig template
+### 10.5.2 Twig template
 
 ```twig
 
@@ -140,11 +140,11 @@ class MyPlugin implements PluginInterface
 </div>
 ```
 
-## 9.6 Stylesheets
+## 10.6 Stylesheets
 
 Plugins can provide pre-compiled CSS files that will be automatically injected into both frontend and admin pages.
 
-### 9.6.1 Adding stylesheets to your plugin
+### 10.6.1 Adding stylesheets to your plugin
 
 Implement the `getStylesheets()` method in your plugin class:
 
@@ -165,7 +165,7 @@ public function getStylesheets(): array
 - Stylesheets are automatically injected into page `<head>`
 - Works in both frontend and admin areas
 
-### 9.6.2 Plugin directory structure for CSS
+### 10.6.2 Plugin directory structure for CSS
 
 ```
 /content/plugins/YourPlugin/
@@ -175,11 +175,11 @@ public function getStylesheets(): array
     └── admin-style.css
 ```
 
-## 9.7 Translations
+## 10.7 Translations
 
 Plugins can provide translations in multiple languages that integrate seamlessly with phpMyFAQ's translation system.
 
-### 9.7.1 Adding translations to your plugin
+### 10.7.1 Adding translations to your plugin
 
 1. Implement the `getTranslationsPath()` method:
 
@@ -206,7 +206,7 @@ $PMF_LANG['greeting'] = 'Hallo';
 $PMF_LANG['message'] = 'Willkommen zu meinem Plugin!';
 ```
 
-### 9.7.2 Using plugin translations
+### 10.7.2 Using plugin translations
 
 **In PHP code:**
 ```php
@@ -222,7 +222,7 @@ $message = Translation::get('plugin.YourPlugin.message');
 {{ 'plugin.YourPlugin.message' | translate }}
 ```
 
-### 9.7.3 Translation key format
+### 10.7.3 Translation key format
 
 Plugin translations use a namespaced format:
 ```
@@ -239,7 +239,7 @@ plugin.{PluginName}.{messageKey}
 - Automatic fallback to English if translation missing in current language
 - Support all 45+ phpMyFAQ languages
 
-### 9.7.4 Plugin directory structure for translations
+### 10.7.4 Plugin directory structure for translations
 
 ```
 /content/plugins/YourPlugin/
@@ -251,11 +251,11 @@ plugin.{PluginName}.{messageKey}
     └── language_es.php
 ```
 
-## 9.8 JavaScript
+## 10.8 JavaScript
 
 Plugins can provide pre-compiled JavaScript files that will be automatically injected into both frontend and admin pages.
 
-### 9.8.1 Adding JavaScript to your plugin
+### 10.8.1 Adding JavaScript to your plugin
 
 Implement the `getScripts()` method in your plugin class:
 
@@ -276,7 +276,7 @@ public function getScripts(): array
 - Scripts are automatically injected at the end of `<body>`
 - Works in both frontend and admin areas
 
-### 9.8.2 Plugin directory structure for JavaScript
+### 10.8.2 Plugin directory structure for JavaScript
 
 ```
 /content/plugins/YourPlugin/
@@ -286,7 +286,7 @@ public function getScripts(): array
     └── admin-script.js
 ```
 
-### 9.8.3 JavaScript best practices
+### 10.8.3 JavaScript best practices
 
 **Example frontend script:**
 ```javascript
@@ -314,7 +314,7 @@ public function getScripts(): array
 - Validate and sanitize user input
 - Use DOM API safely
 
-## 9.9 Complete plugin example with CSS, JavaScript, and translations
+## 10.9 Complete plugin example with CSS, JavaScript, and translations
 
 See the `EnhancedExample` plugin for a complete working example demonstrating all features:
 
@@ -341,7 +341,7 @@ See the `EnhancedExample` plugin for a complete working example demonstrating al
 <p>{{ 'plugin.EnhancedExample.adminMessage' | translate }}</p>
 ```
 
-## 9.10 Plugin version history
+## 10.10 Plugin version history
 
 - 0.1.0: Initial version, shipped with phpMyFAQ 4.0.0
 - 0.2.0: Added support for plugin configuration, stylesheets, JavaScript, and translations, shipped with phpMyFAQ 4.1.0
