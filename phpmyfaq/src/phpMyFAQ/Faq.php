@@ -1575,7 +1575,8 @@ class Faq
     }
 
     /**
-     * Returns the sticky records with URL and Title.
+     * Returns the sticky records
+     * with URL, Faq_ID, Category_ID, Language and Title.
      */
     public function getStickyFaqsData(): array
     {
@@ -1656,6 +1657,8 @@ class Faq
                 $data['url'] = $oLink->toString();
                 $data['id'] = (int) $row->id;
                 $data['order'] = (int) $row->sticky_order;
+                $data['category_id'] = (int) $row->category_id;
+                $data['lang'] = (string) $row->lang;
 
                 $sticky[] = $data;
             }

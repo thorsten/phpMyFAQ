@@ -22,10 +22,23 @@
   {% if orderingStickyFaqsActivated != false %}
   <div class="card shadow mt-5 ml-5" id="mainCardStickyFAQs">
     <div class="card-body">
-      <ul class="list-group list-group-numbered {{ sortableDisabled }}" id="stickyFAQs" data-csrf="{{ csrfToken }}">
+      <ul class="list-group list-group-numbered {{ sortableDisabled }}" id="stickyFAQs" data-csrf="{{ csrfToken }}" data-lang-confirm="{{ msgConfirmUnstick|e }}" data-lang-success="{{ msgSuccessUnstick|e }}">
       {% for faq in stickyData %}
-        <li class="list-group-item" data-pmf-faqid="{{ faq.id|e }}">
-          <a href="{{ faq.url|e }}">{{ faq.question|e }}</a>
+        <li class="list-group-item d-flex justify-content-between align-items-center p-0" data-pmf-faqid="{{ faq.id|e }}">
+            <div class="ms-3 me-auto py-3 pe-3 flex-grow-1 drag-handle">
+                <a href="{{ faq.url|e }}" class="text-decoration-none text-body">{{ faq.question|e }}</a>
+            </div>
+            <div class="d-flex align-items-center border-start h-100 no-drag px-3 py-3">
+                <button class="btn btn-link p-0 sticky-toggle-btn js-unstick-button"
+                        title="{{ msgRemoveSticky|e }}"
+                        aria-label="{{ msgRemoveSticky|e }}"
+                        data-pmf-faq-id="{{ faq.id|e }}"
+                        data-pmf-category-id="{{ faq.category_id|e }}"
+                        data-pmf-csrf="{{ csrfTokenApi }}"
+                        data-pmf-lang="{{ faq.lang|e }}">
+                    <i class="bi bi-pin-fill sticky-icon" aria-hidden="true"></i>
+                </button>
+            </div>
         </li>
       {% endfor %}
       </ul>

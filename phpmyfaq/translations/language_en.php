@@ -1617,4 +1617,9 @@ $PMF_LANG['msgTranslationSuccess'] = 'Translation completed successfully';
 $PMF_LANG['msgTranslationError'] = 'Translation failed';
 $PMF_LANG['msgNoTranslationProvider'] = 'No translation provider configured';
 
+// added v4.2.0-alpha - 2026-01-17 by d0ubIeU
+$PMF_LANG['msgStickyRemoved'] = 'Successfully removed "important" status.';
+$PMF_LANG['msgConfirmUnstick'] = 'Do you really want to remove this entry from the list of important FAQs?';
+$PMF_LANG['msgTooltipUnstick'] = 'Remove important status';
+
 return $PMF_LANG;
