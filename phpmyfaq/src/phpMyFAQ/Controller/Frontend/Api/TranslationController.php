@@ -31,7 +31,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class TranslationController extends AbstractController
 {
-    #[Route(path: 'api/translations/{language}', name: 'api.private.translations', methods: ['POST'])]
+    #[Route(path: 'translations/{language}', name: 'api.private.translations', methods: ['GET'])]
     public function translations(Request $request): JsonResponse
     {
         $language = Filter::filterVar($request->attributes->get('language'), FILTER_SANITIZE_SPECIAL_CHARS);

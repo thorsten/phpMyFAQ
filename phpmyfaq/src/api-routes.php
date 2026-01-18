@@ -258,7 +258,7 @@ $routesConfig = [
     'api.private.translations' => [
         'path' => 'translations/{language}',
         'controller' => [TranslationController::class, 'translations'],
-        'methods' => 'POST',
+        'methods' => 'GET',
     ],
     'api.private.user.data.export' => [
         'path' => 'user/data/export',

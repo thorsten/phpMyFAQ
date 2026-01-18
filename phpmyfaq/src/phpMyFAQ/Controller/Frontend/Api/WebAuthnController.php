@@ -52,7 +52,7 @@ final class WebAuthnController extends AbstractController
      * @throws RandomException|\JsonException
      * @throws \Exception
      */
-    #[Route(path: 'api/webauthn/prepare', name: 'api.private.webauthn.prepare', methods: ['POST'])]
+    #[Route(path: 'webauthn/prepare', name: 'api.private.webauthn.prepare', methods: ['POST'])]
     public function prepare(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
@@ -94,7 +94,7 @@ final class WebAuthnController extends AbstractController
      * @throws Exception
      * @throws \JsonException
      */
-    #[Route(path: 'api/webauthn/register', name: 'api.private.webauthn.register', methods: ['POST'])]
+    #[Route(path: 'webauthn/register', name: 'api.private.webauthn.register', methods: ['POST'])]
     public function register(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
@@ -133,7 +133,7 @@ final class WebAuthnController extends AbstractController
      * @throws \JsonException
      * @throws RandomException
      */
-    #[Route(path: 'api/webauthn/prepare-login', name: 'api.private.webauthn.prepare-login', methods: ['POST'])]
+    #[Route(path: 'webauthn/prepare-login', name: 'api.private.webauthn.prepare-login', methods: ['POST'])]
     public function prepareLogin(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
@@ -160,7 +160,7 @@ final class WebAuthnController extends AbstractController
      * @throws \JsonException
      * @throws \Exception
      */
-    #[Route(path: 'api/webauthn/login', name: 'api.private.webauthn.login', methods: ['POST'])]
+    #[Route(path: 'webauthn/login', name: 'api.private.webauthn.login', methods: ['POST'])]
     public function login(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);

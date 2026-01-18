@@ -40,7 +40,7 @@ final class UserController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route(path: 'api/user/data/update', name: 'api.private.user.update', methods: ['PUT'])]
+    #[Route(path: 'user/data/update', name: 'api.private.user.update', methods: ['PUT'])]
     public function updateData(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -129,7 +129,7 @@ final class UserController extends AbstractController
      *
      * @throws \Exception
      */
-    #[Route(path: 'api/user/data/export', name: 'api.private.user.data.export', methods: ['POST'])]
+    #[Route(path: 'user/data/export', name: 'api.private.user.data.export', methods: ['POST'])]
     public function exportUserData(Request $request): Response
     {
         $this->userIsAuthenticated();
@@ -193,7 +193,7 @@ final class UserController extends AbstractController
     /**
      * @throws Exception|\Exception
      */
-    #[Route(path: 'api/user/request-removal', methods: ['POST'])]
+    #[Route(path: 'user/request-removal', name: 'api.private.user.request-removal', methods: ['POST'])]
     public function requestUserRemoval(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent());
@@ -272,7 +272,7 @@ final class UserController extends AbstractController
     /**
      * @throws \Exception|Exception|TwoFactorAuthException
      */
-    #[Route(path: 'api/user/remove-twofactor', name: 'api.private.user.remove-twofactor', methods: ['POST'])]
+    #[Route(path: 'user/remove-twofactor', name: 'api.private.user.remove-twofactor', methods: ['POST'])]
     public function removeTwofactorConfig(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent());
