@@ -43,6 +43,7 @@ use phpMyFAQ\Controller\Administration\Api\SessionController;
 use phpMyFAQ\Controller\Administration\Api\StatisticsController;
 use phpMyFAQ\Controller\Administration\Api\StopWordController;
 use phpMyFAQ\Controller\Administration\Api\TagController;
+use phpMyFAQ\Controller\Administration\Api\TranslationController;
 use phpMyFAQ\Controller\Administration\Api\UpdateController;
 use phpMyFAQ\Controller\Administration\Api\UserController;
 use Symfony\Component\Routing\Route;
@@ -419,6 +420,12 @@ $routesConfig = [
         'path' => '/content/tags/{tagId}',
         'controller' => [TagController::class, 'delete'],
         'methods' => 'GET',
+    ],
+    // Translation API
+    'admin.api.translation.translate' => [
+        'path' => '/translation/translate',
+        'controller' => [TranslationController::class, 'translate'],
+        'methods' => 'POST',
     ],
     // Update API
     'admin.api.health-check' => [

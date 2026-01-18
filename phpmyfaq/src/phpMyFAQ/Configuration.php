@@ -38,6 +38,7 @@ use phpMyFAQ\Configuration\UrlSettings;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Plugin\PluginException;
 use phpMyFAQ\Plugin\PluginManager;
+use phpMyFAQ\Translation\TranslationProviderInterface;
 
 /**
  * Class Configuration
@@ -390,6 +391,22 @@ class Configuration
     }
 
     /**
+     * Sets the Translation Provider instance.
+     */
+    public function setTranslationProvider(TranslationProviderInterface $provider): void
+    {
+        $this->config['core.translationProvider'] = $provider;
+    }
+
+    /**
+     * Returns the Translation Provider instance.
+     */
+    public function getTranslationProvider(): ?TranslationProviderInterface
+    {
+        return $this->config['core.translationProvider'] ?? null;
+    }
+
+    /**
      * Adds a configuration item for the database.
      */
     public function add(string $name, mixed $value): bool
@@ -434,6 +451,7 @@ class Configuration
             'core.opensearch',
             'core.elasticsearchConfig',
             'core.openSearchConfig',
+            'core.translationProvider',
             'core.pluginManager',
         ];
 

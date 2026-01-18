@@ -39,6 +39,7 @@ enum AdminLogType: string
     case CATEGORY_EDIT = 'category-edit';
     case CATEGORY_DELETE = 'category-delete';
     case CATEGORY_REORDER = 'category-reorder';
+    case CATEGORY_TRANSLATE = 'category-translate';
 
     // Comments
     case COMMENT_DELETE = 'comment-delete';
@@ -51,11 +52,13 @@ enum AdminLogType: string
     case NEWS_ADD = 'news-add';
     case NEWS_EDIT = 'news-edit';
     case NEWS_DELETE = 'news-delete';
+    case NEWS_TRANSLATE = 'news-translate';
 
     // Custom Pages
     case PAGE_ADD = 'page-add';
     case PAGE_EDIT = 'page-edit';
     case PAGE_DELETE = 'page-delete';
+    case PAGE_TRANSLATE = 'page-translate';
 
     // Configuration
     case CONFIG_CHANGE = 'config-change';
