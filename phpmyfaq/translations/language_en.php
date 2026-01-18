@@ -1591,4 +1591,21 @@ $LANG_CONF['api.onlyActiveCategories'] = ['checkbox', 'API returns only active c
 $LANG_CONF['api.onlyPublicQuestions'] = ['checkbox', 'API returns only public questions'];
 $LANG_CONF['api.ignoreOrphanedFaqs'] = ['checkbox', 'API ignores orphaned FAQs'];
 
+// Translation configuration
+$LANG_CONF['translation.provider'] = ['select', 'Translation service provider', 'Options: none, google, deepl, azure, libretranslate'];
+$LANG_CONF['translation.googleApiKey'] = ['password', 'Google Cloud Translation API key'];
+$LANG_CONF['translation.deeplApiKey'] = ['password', 'DeepL API key'];
+$LANG_CONF['translation.deeplUseFreeApi'] = ['checkbox', 'Use DeepL Free API (instead of Pro)'];
+$LANG_CONF['translation.azureKey'] = ['password', 'Azure Translator API key'];
+$LANG_CONF['translation.azureRegion'] = ['input', 'Azure region (e.g., eastus, westeurope)'];
+$LANG_CONF['translation.libreTranslateUrl'] = ['input', 'LibreTranslate server URL'];
+$LANG_CONF['translation.libreTranslateApiKey'] = ['password', 'LibreTranslate API key (optional)'];
+
+// Translation UI strings
+$PMF_LANG['msgTranslateWithAI'] = 'Translate with AI';
+$PMF_LANG['msgTranslating'] = 'Translating...';
+$PMF_LANG['msgTranslationSuccess'] = 'Translation completed successfully';
+$PMF_LANG['msgTranslationError'] = 'Translation failed';
+$PMF_LANG['msgNoTranslationProvider'] = 'No translation provider configured';
+
 return $PMF_LANG;

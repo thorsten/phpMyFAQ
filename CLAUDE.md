@@ -65,7 +65,7 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 ## Coding Standards
 
 - Use PER Coding Style 3.0 for PHP code.
-- Use TypeScript coding standards for TypeScript code.
+- Use TypeScript coding standards for TypeScript code in strict mode.
 - Use HTML5 and CSS3 standards for frontend code.
 - Use semicolons at the end of each statement.
 - Use single quotes for strings.
