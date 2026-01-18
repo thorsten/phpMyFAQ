@@ -179,7 +179,8 @@ Alternatively, you can take over a question and answer it yourself and hereby ad
 
 You can arrange the order of the sticky FAQs by drag'n'drop.
 The order of the sticky FAQs will be the same in the public frontend.
-To remove the "Important / Sticky" status from an FAQ and remove it from the overview, simply use the pin icon on the right. Only the status will be changed - the FAQ will not be deleted from the database.
+To remove the "Important / Sticky" status from an FAQ and remove it from the overview, simply use the pin icon on the right.
+Only the status will be changed - the FAQ will not be deleted from the database.
 
 ### 5.2.4 Comment Administration
 

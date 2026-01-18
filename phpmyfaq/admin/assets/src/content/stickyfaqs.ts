@@ -161,15 +161,7 @@ const saveStatus = async (currentOrder: string[], container: HTMLElement): Promi
   if (!csrf) {
     console.warn('CSRF token not found on container');
   }
-
-const saveStatus = async (currentOrder: string[], container: HTMLElement): Promise<void> => {
-  const successAlert = document.getElementById('successAlert');
-  const csrf = container.getAttribute('data-csrf') || '';
-
-  if (!csrf) {
-    console.warn('CSRF token not found on container');
-  }
-  
+   
   if (successAlert) {
     successAlert.remove();
   }
