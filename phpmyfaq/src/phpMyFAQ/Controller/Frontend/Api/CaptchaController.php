@@ -21,12 +21,14 @@ namespace phpMyFAQ\Controller\Frontend\Api;
 
 use phpMyFAQ\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class CaptchaController extends AbstractController
 {
     /**
      * @throws \JsonException|\Exception
      */
+    #[Route(path: 'captcha', name: 'api.private.captcha', methods: ['GET'])]
     public function renderImage(): Response
     {
         $response = new Response();

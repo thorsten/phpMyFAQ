@@ -30,6 +30,7 @@ use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class SearchController extends AbstractApiController
 {
@@ -125,6 +126,7 @@ final class SearchController extends AbstractApiController
             }
         }',
     ))]
+    #[Route(path: 'v3.2/search', name: 'api.search', methods: ['GET'])]
     public function search(Request $request): JsonResponse
     {
         $search = $this->container->get(id: 'phpmyfaq.search');
@@ -221,6 +223,7 @@ final class SearchController extends AbstractApiController
         description: 'If the popular search returns no results.',
         content: new OA\JsonContent(example: []),
     )]
+    #[Route(path: 'v3.2/searches/popular', name: 'api.search.popular', methods: ['GET'])]
     public function popular(): JsonResponse
     {
         $result = $this->container->get(id: 'phpmyfaq.search')->getMostPopularSearches(numResults: 7, withLang: true);

@@ -89,7 +89,7 @@ $routesConfig = [
         'controller' => [FaqController::class, 'update'],
         'methods' => 'PUT',
     ],
-    'api.faq-by-id' => [
+    'api.faq.by-id' => [
         'path' => "v{$apiVersion}/faq/{categoryId}/{faqId}",
         'controller' => [FaqController::class, 'getById'],
         'methods' => 'GET',

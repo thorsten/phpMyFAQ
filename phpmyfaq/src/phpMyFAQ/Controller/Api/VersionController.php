@@ -23,6 +23,7 @@ use OpenApi\Attributes as OA;
 use phpMyFAQ\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class VersionController extends AbstractController
 {
@@ -41,6 +42,7 @@ final class VersionController extends AbstractController
         description: 'Returns the phpMyFAQ version number as string.',
         content: new OA\JsonContent(example: '4.0.0'),
     )]
+    #[Route(path: 'v3.2/version', name: 'api.version', methods: ['GET'])]
     public function index(): JsonResponse
     {
         return $this->json($this->configuration->getVersion());

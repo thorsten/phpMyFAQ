@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend\Api;
 
+use JsonException;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
@@ -28,12 +29,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class RegistrationController extends AbstractController
 {
     /**
-     * @throws \JsonException
+     * @throws JsonException|Exception
      */
+    #[Route(path: 'register', name: 'api.private.register', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $registrationHelper = new RegistrationHelper($this->configuration);

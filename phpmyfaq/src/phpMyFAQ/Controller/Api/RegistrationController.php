@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class RegistrationController extends AbstractController
 {
@@ -102,6 +103,7 @@ final class RegistrationController extends AbstractController
         description: 'If the user is not authenticated.',
         content: new OA\JsonContent(example: '{ "registered": false }'),
     )]
+    #[Route(path: 'v3.2/register', name: 'api.registration.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $this->hasValidToken();

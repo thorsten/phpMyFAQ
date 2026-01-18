@@ -30,6 +30,7 @@ use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class FaqController extends AbstractApiController
 {
@@ -71,6 +72,7 @@ final class FaqController extends AbstractApiController
         ]',
     ))]
     #[OA\Response(response: 404, description: 'If the category has no FAQs.', content: new OA\JsonContent(example: []))]
+    #[Route(path: 'v3.2/faqs/{categoryId}', name: 'api.faqs.by-category-id', methods: ['GET'])]
     public function getByCategoryId(Request $request): JsonResponse
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -143,6 +145,7 @@ final class FaqController extends AbstractApiController
         description: 'If there are no FAQs for the given FAQ ID.',
         content: new OA\JsonContent(example: []),
     )]
+    #[Route(path: 'v3.2/faq/{categoryId}/{faqId}', name: 'api.faq.by-id', methods: ['GET'])]
     public function getById(Request $request): JsonResponse
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -208,6 +211,7 @@ final class FaqController extends AbstractApiController
         ]',
     ))]
     #[OA\Response(response: 404, description: 'If the tag ID has no FAQs.', content: new OA\JsonContent(example: []))]
+    #[Route(path: 'v3.2/faqs/tags/{tagId}', name: 'api.faqs.by-tag-id', methods: ['GET'])]
     public function getByTagId(Request $request): JsonResponse
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -259,6 +263,7 @@ final class FaqController extends AbstractApiController
         description: "If there's not a single popular FAQ.",
         content: new OA\JsonContent(example: []),
     )]
+    #[Route(path: 'v3.2/faqs/popular', name: 'api.faqs.popular', methods: ['GET'])]
     public function getPopular(): JsonResponse
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -307,6 +312,7 @@ final class FaqController extends AbstractApiController
         description: "If there's not one latest FAQ.",
         content: new OA\JsonContent(example: []),
     )]
+    #[Route(path: 'v3.2/faqs/latest', name: 'api.faqs.latest', methods: ['GET'])]
     public function getLatest(): JsonResponse
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -354,6 +360,7 @@ final class FaqController extends AbstractApiController
         description: "If there's not a single trending FAQ.",
         content: new OA\JsonContent(example: []),
     )]
+    #[Route(path: 'v3.2/faqs/trending', name: 'api.faqs.trending', methods: ['GET'])]
     public function getTrending(): JsonResponse
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -406,6 +413,7 @@ final class FaqController extends AbstractApiController
         description: "If there's not one sticky FAQ.",
         content: new OA\JsonContent(example: []),
     )]
+    #[Route(path: 'v3.2/faqs/sticky', name: 'api.faqs.sticky', methods: ['GET'])]
     public function getSticky(): JsonResponse
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -522,6 +530,7 @@ final class FaqController extends AbstractApiController
             }
         }',
     ))]
+    #[Route(path: 'v3.2/faqs', name: 'api.faqs.list', methods: ['GET'])]
     public function list(): JsonResponse
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -658,6 +667,7 @@ final class FaqController extends AbstractApiController
         content: new OA\JsonContent(example: '{ "stored": false, "error": "The given category name was not found" }'),
     )]
     #[OA\Response(response: 401, description: 'If the user is not authenticated.')]
+    #[Route(path: 'v3.2/faq/create', name: 'api.faq.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $this->hasValidToken();
@@ -693,7 +703,7 @@ final class FaqController extends AbstractApiController
         $isActive = Filter::filterVar($data->{'is-active'}, FILTER_VALIDATE_BOOLEAN);
         $isSticky = Filter::filterVar($data->{'is-sticky'}, FILTER_VALIDATE_BOOLEAN);
 
-        // Check if category name can be mapped
+        // Check if the category name can be mapped
         if (!is_null($categoryName)) {
             $categoryIdFound = $category->getCategoryIdFromName($categoryName);
             if ($categoryIdFound === false) {
@@ -816,6 +826,7 @@ final class FaqController extends AbstractApiController
         ),
     )]
     #[OA\Response(response: 401, description: 'If the user is not authenticated.')]
+    #[Route(path: 'v3.2/faq/update', name: 'api.faq.update', methods: ['PUT'])]
     public function update(Request $request): JsonResponse
     {
         $this->hasValidToken();
