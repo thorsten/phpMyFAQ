@@ -272,7 +272,7 @@ final class UserController extends AbstractController
     /**
      * @throws \Exception|Exception|TwoFactorAuthException
      */
-    #[Route(path: 'api/user/remove-twofactor', methods: ['POST'])]
+    #[Route(path: 'api/user/remove-twofactor', name: 'api.private.user.remove-twofactor', methods: ['POST'])]
     public function removeTwofactorConfig(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent());

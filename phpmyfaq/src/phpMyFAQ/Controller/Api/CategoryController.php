@@ -19,11 +19,11 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
+use JsonException;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission as CategoryPermission;
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
@@ -31,6 +31,7 @@ use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class CategoryController extends AbstractApiController
 {
@@ -124,6 +125,7 @@ final class CategoryController extends AbstractApiController
             }
         }'),
     )]
+    #[Route(path: 'v3.2/categories', name: 'api.categories.list', methods: ['GET'])]
     public function list(): JsonResponse
     {
         /** @var Language $language */
@@ -168,7 +170,8 @@ final class CategoryController extends AbstractApiController
     }
 
     /**
-     * @throws Exception|\JsonException
+     * @throws JsonException
+     * @throws \Exception
      */
     #[OA\Post(path: '/api/v3.2/category', operationId: 'createCategory', tags: ['Endpoints with Authentication'])]
     #[OA\Header(
@@ -244,6 +247,7 @@ final class CategoryController extends AbstractApiController
         ),
     )]
     #[OA\Response(response: 401, description: 'If the user is not authenticated.')]
+    #[Route(path: 'v3.2/category', name: 'api.category.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $this->hasValidToken();

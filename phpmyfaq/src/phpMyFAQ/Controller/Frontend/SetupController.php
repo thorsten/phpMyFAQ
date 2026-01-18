@@ -17,7 +17,7 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Controller\Frontend\Api;
+namespace phpMyFAQ\Controller\Frontend;
 
 use Elastic\Elasticsearch\Exception\AuthenticationException;
 use phpMyFAQ\Configuration;
@@ -40,7 +40,7 @@ final class SetupController
      * @throws TemplateException
      * @throws \Exception
      */
-    #[Route(path: '/setup', name: 'public.setup.update')]
+    #[Route(path: '/setup', name: 'public.setup.update', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $system = new System();
@@ -80,7 +80,7 @@ final class SetupController
      * @throws TemplateException
      * @throws \Exception
      */
-    #[Route(path: '/setup/install', name: 'public.setup.install')]
+    #[Route(path: '/setup/install', name: 'public.setup.install', methods: ['GET'])]
     public function install(): Response
     {
         $system = new System();
@@ -108,7 +108,7 @@ final class SetupController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route(path: '/update', name: 'public.setup.update')]
+    #[Route(path: '/update', name: 'public.setup.update', methods: ['GET'])]
     public function update(Request $request): Response
     {
         $currentStep = (int) Filter::filterVar($request->query->get('step') ?? 1, FILTER_VALIDATE_INT);

@@ -38,7 +38,7 @@ final class ContactController extends AbstractController
      * @throws \Exception
      *
      */
-    #[Route(path: 'api/contact', methods: ['POST'])]
+    #[Route(path: 'api/contact', name: 'api.private.contact', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent());
@@ -73,14 +73,7 @@ final class ContactController extends AbstractController
 
         $stopWords = $this->container->get(id: 'phpmyfaq.stop-words');
 
-        if (
-            $author !== ''
-            && $author !== '0'
-            && $email !== ''
-            && $question !== ''
-            && $question !== '0'
-            && $stopWords->checkBannedWord($question)
-        ) {
+        if ($author !== '' && $author !== '0' && $email !== '' && $stopWords->checkBannedWord($question)) {
             $question = sprintf(
                 '%s: %s<br>%s: %s<br><br>%s',
                 Translation::get(key: 'msgNewContentName'),

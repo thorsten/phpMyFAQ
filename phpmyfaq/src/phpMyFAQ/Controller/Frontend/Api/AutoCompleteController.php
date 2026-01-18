@@ -34,7 +34,7 @@ final class AutoCompleteController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route(path: 'api/autocomplete')]
+    #[Route(path: 'api/autocomplete', name: 'api.private.autocomplete', methods: ['GET'])]
     public function search(Request $request): JsonResponse
     {
         $searchString = Filter::filterVar($request->query->get(key: 'search'), FILTER_SANITIZE_SPECIAL_CHARS);

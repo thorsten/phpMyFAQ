@@ -34,12 +34,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class FaqController extends AbstractController
 {
     /**
      * @throws Exception|\JsonException|\Exception
      */
+    #[Route(path: 'faq/create', name: 'api.private.faq.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $faq = $this->container->get(id: 'phpmyfaq.faq');

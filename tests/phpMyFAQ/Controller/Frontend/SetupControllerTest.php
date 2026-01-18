@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Controller\Frontend\Api;
+namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;

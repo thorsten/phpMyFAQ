@@ -61,12 +61,12 @@ try {
     echo $e->getMessage();
 }
 
-$routes = include PMF_SRC_DIR . '/api-routes.php';
-
 $app = new Application($container);
 $app->setApiContext(true);
+$app->setRoutingContext('api');
 try {
-    $app->run($routes);
+    // Autoload routes from attributes (falls back to api-routes.php during migration)
+    $app->run();
 } catch (Exception $exception) {
     echo $exception->getMessage();
 }

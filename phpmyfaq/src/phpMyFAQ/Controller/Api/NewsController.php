@@ -23,6 +23,7 @@ use OpenApi\Attributes as OA;
 use phpMyFAQ\News;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class NewsController extends AbstractApiController
 {
@@ -115,6 +116,7 @@ final class NewsController extends AbstractApiController
             }
         }'),
     )]
+    #[Route('/api/v3.2/news', name: 'api_news_list', methods: ['GET'])]
     public function list(): JsonResponse
     {
         // Get pagination and sorting parameters
