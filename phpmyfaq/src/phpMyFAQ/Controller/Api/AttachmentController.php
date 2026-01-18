@@ -26,6 +26,7 @@ use phpMyFAQ\Filter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 class AttachmentController extends AbstractApiController
 {
@@ -133,6 +134,7 @@ class AttachmentController extends AbstractApiController
         description: 'If the FAQ has no attachments.',
         content: new OA\JsonContent(example: '{"success": true, "data": [], "meta": {"pagination": {"total": 0}}}'),
     )]
+    #[Route(path: 'v3.2/attachments/{faqId}', name: 'api.attachments', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
         $faqId = (int) Filter::filterVar($request->attributes->get(key: 'faqId'), FILTER_VALIDATE_INT);
