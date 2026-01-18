@@ -1621,5 +1621,6 @@ $PMF_LANG['msgNoTranslationProvider'] = 'No translation provider configured';
 $PMF_LANG['msgStickyRemoved'] = 'Successfully removed "important" status.';
 $PMF_LANG['msgConfirmUnstick'] = 'Do you really want to remove this entry from the list of important FAQs?';
 $PMF_LANG['msgTooltipUnstick'] = 'Remove important status';
+$PMF_LANG['msgConfirmAction'] = "Confirm Action";
 
 return $PMF_LANG;
