@@ -31,6 +31,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class LoginController extends AbstractController
 {
@@ -77,6 +78,7 @@ final class LoginController extends AbstractController
         description: 'If "username" and "password" combination are wrong.',
         content: new OA\JsonContent(example: '{ "loggedin": false, "error": "Wrong username or password." }'),
     )]
+    #[Route(path: 'v3.2/login', name: 'api.login', methods: ['POST'])]
     public function login(Request $request): JsonResponse
     {
         $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);

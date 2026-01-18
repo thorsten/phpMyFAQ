@@ -31,6 +31,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class QuestionController extends AbstractController
 {
@@ -89,6 +90,7 @@ final class QuestionController extends AbstractController
         content: new OA\JsonContent(example: '{ "stored": true }'),
     )]
     #[OA\Response(response: 401, description: 'If the user is not authenticated.')]
+    #[Route(path: 'v3.2/question', name: 'api.question.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $this->hasValidToken();

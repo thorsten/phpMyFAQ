@@ -26,7 +26,7 @@ use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Filter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class CommentController extends AbstractApiController
 {
@@ -128,6 +128,7 @@ final class CommentController extends AbstractApiController
             }
         }',
     ))]
+    #[Route(path: 'v3.2/comments/{recordId}', name: 'api.comments', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
         $recordId = (int) Filter::filterVar($request->attributes->get(key: 'recordId'), FILTER_VALIDATE_INT);

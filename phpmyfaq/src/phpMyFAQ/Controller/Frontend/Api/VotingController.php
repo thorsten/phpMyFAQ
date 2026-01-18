@@ -27,12 +27,14 @@ use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class VotingController extends AbstractController
 {
     /**
      * @throws Exception
      */
+    #[Route(path: 'voting', name: 'api.private.voting', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $rating = $this->container->get(id: 'phpmyfaq.rating');

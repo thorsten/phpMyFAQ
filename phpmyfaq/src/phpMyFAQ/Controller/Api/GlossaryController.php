@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class GlossaryController extends AbstractApiController
 {
@@ -111,6 +112,7 @@ final class GlossaryController extends AbstractApiController
             }
         }',
     ))]
+    #[Route(path: 'v3.2/glossary', name: 'api.glossary.list', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
         $glossary = $this->container->get(id: 'phpmyfaq.glossary');

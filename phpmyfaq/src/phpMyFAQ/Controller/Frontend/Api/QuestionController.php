@@ -31,6 +31,7 @@ use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class QuestionController extends AbstractController
 {
@@ -39,6 +40,7 @@ final class QuestionController extends AbstractController
      * @throws \JsonException
      * @throws \Exception
      */
+    #[Route(path: 'question/create', name: 'api.private.question.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         if (!$this->isAddingQuestionsAllowed()) {

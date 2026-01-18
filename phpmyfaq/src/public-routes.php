@@ -17,26 +17,26 @@
 
 declare(strict_types=1);
 
-use phpMyFAQ\Controller\Frontend\Api\SetupController;
 use phpMyFAQ\Controller\Frontend\AttachmentController;
 use phpMyFAQ\Controller\Frontend\AuthenticationController;
 use phpMyFAQ\Controller\Frontend\CategoryController;
 use phpMyFAQ\Controller\Frontend\ContactController;
+use phpMyFAQ\Controller\Frontend\CookiePolicyController;
 use phpMyFAQ\Controller\Frontend\CustomPageController;
 use phpMyFAQ\Controller\Frontend\FaqController;
 use phpMyFAQ\Controller\Frontend\GlossaryController;
+use phpMyFAQ\Controller\Frontend\ImprintController;
 use phpMyFAQ\Controller\Frontend\NewsController;
 use phpMyFAQ\Controller\Frontend\OverviewController;
 use phpMyFAQ\Controller\Frontend\PageNotFoundController;
 use phpMyFAQ\Controller\Frontend\PdfController;
 use phpMyFAQ\Controller\Frontend\PrivacyController;
-use phpMyFAQ\Controller\Frontend\TermsController;
-use phpMyFAQ\Controller\Frontend\ImprintController;
-use phpMyFAQ\Controller\Frontend\CookiePolicyController;
 use phpMyFAQ\Controller\Frontend\QuestionsController;
 use phpMyFAQ\Controller\Frontend\SearchController;
+use phpMyFAQ\Controller\Frontend\SetupController;
 use phpMyFAQ\Controller\Frontend\SitemapController as FrontendSitemapController;
 use phpMyFAQ\Controller\Frontend\StartpageController;
+use phpMyFAQ\Controller\Frontend\TermsController;
 use phpMyFAQ\Controller\Frontend\UserController;
 use phpMyFAQ\Controller\Frontend\WebAuthnController;
 use phpMyFAQ\Controller\LlmsController;

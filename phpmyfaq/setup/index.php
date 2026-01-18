@@ -25,7 +25,7 @@
 
 use Composer\Autoload\ClassLoader;
 use phpMyFAQ\Application;
-use phpMyFAQ\Controller\Frontend\Api\SetupController;
+use phpMyFAQ\Controller\Frontend\SetupController;
 use phpMyFAQ\Environment;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;

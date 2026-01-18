@@ -23,6 +23,7 @@ use OpenApi\Attributes as OA;
 use phpMyFAQ\Question;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class OpenQuestionController extends AbstractApiController
 {
@@ -117,6 +118,7 @@ final class OpenQuestionController extends AbstractApiController
             }
         }',
     ))]
+    #[Route('/api/v3.2/open-questions', name: 'api_open_questions', methods: ['GET'])]
     public function list(): JsonResponse
     {
         /** @var Question $question */

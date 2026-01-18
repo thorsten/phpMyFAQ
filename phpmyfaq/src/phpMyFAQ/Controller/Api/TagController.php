@@ -23,6 +23,7 @@ use OpenApi\Attributes as OA;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class TagController extends AbstractApiController
 {
@@ -105,6 +106,7 @@ final class TagController extends AbstractApiController
             }
         }',
     ))]
+    #[Route('/api/v3.2/tags', name: 'api.tags', methods: ['GET'])]
     public function list(): JsonResponse
     {
         $tags = $this->container->get(id: 'phpmyfaq.tags');

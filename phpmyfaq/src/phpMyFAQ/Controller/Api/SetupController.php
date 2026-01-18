@@ -29,9 +29,11 @@ use phpMyFAQ\System;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class SetupController extends AbstractController
 {
+    #[Route(path: 'v3.2/setup/check', name: 'api.private.setup.check', methods: ['POST'])]
     public function check(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -69,6 +71,7 @@ final class SetupController extends AbstractController
         return $this->json(['message' => 'Installation check successful'], Response::HTTP_OK);
     }
 
+    #[Route(path: 'v3.2/setup/backup', name: 'api.private.setup.backup', methods: ['POST'])]
     public function backup(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -96,6 +99,7 @@ final class SetupController extends AbstractController
         return $this->json(['message' => 'Backup successful', 'backupFile' => $pathToBackup], Response::HTTP_OK);
     }
 
+    #[Route(path: 'v3.2/setup/update-database', name: 'api.private.setup.update-database', methods: ['POST'])]
     public function updateDatabase(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);

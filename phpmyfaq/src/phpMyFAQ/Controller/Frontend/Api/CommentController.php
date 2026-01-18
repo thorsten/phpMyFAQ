@@ -31,6 +31,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class CommentController extends AbstractController
 {
@@ -39,6 +40,7 @@ final class CommentController extends AbstractController
      * @throws \JsonException
      * @throws \Exception|TransportExceptionInterface
      */
+    #[Route(path: 'comment/create', name: 'api.private.comment', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $faq = $this->container->get(id: 'phpmyfaq.faq');
@@ -77,7 +79,7 @@ final class CommentController extends AbstractController
             throw new Exception('Missing email');
         }
 
-        if (!isset($data->comment_text) || empty($data->comment_text)) {
+        if (!isset($data->comment_text)) {
             throw new Exception('Missing or empty comment text');
         }
 

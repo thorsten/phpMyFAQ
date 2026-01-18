@@ -23,6 +23,7 @@ use OpenApi\Attributes as OA;
 use phpMyFAQ\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class LanguageController extends AbstractController
 {
@@ -41,6 +42,7 @@ final class LanguageController extends AbstractController
         description: 'Returns the default language as language code.',
         content: new OA\JsonContent(example: '"en"'),
     )]
+    #[Route(path: 'v3.2/language', name: 'api.language', methods: ['GET'])]
     public function index(): JsonResponse
     {
         return new JsonResponse($this->configuration->getLanguage()->getLanguage());

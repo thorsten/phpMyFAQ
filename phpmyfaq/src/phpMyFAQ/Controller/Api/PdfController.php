@@ -31,6 +31,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class PdfController extends AbstractController
 {
@@ -82,6 +83,7 @@ final class PdfController extends AbstractController
         description: "If there's no FAQ and PDF for the given FAQ ID.",
         content: new OA\JsonContent(example: []),
     )]
+    #[Route(path: 'v3.2/pdf/{categoryId}/{faqId}', name: 'api.pdf.getById', methods: ['GET'])]
     public function getById(Request $request): JsonResponse
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
