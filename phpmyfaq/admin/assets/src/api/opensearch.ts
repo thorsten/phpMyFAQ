@@ -14,9 +14,10 @@
  */
 
 import { ElasticsearchResponse, Response } from '../interfaces';
+import { fetchWrapper, fetchJson } from './fetch-wrapper';
 
 export const fetchOpenSearchAction = async (action: string): Promise<Response> => {
-  const response = await fetch(`./api/opensearch/${action}`, {
+  return (await fetchJson(`./api/opensearch/${action}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -24,13 +25,11 @@ export const fetchOpenSearchAction = async (action: string): Promise<Response> =
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
-  });
-
-  return await response.json();
+  })) as Response;
 };
 
 export const fetchOpenSearchStatistics = async (): Promise<ElasticsearchResponse> => {
-  const response = await fetch('./api/opensearch/statistics', {
+  return (await fetchJson('./api/opensearch/statistics', {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -38,9 +37,7 @@ export const fetchOpenSearchStatistics = async (): Promise<ElasticsearchResponse
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
-  });
-
-  return await response.json();
+  })) as ElasticsearchResponse;
 };
 
 export const fetchOpenSearchHealthcheck = async (timeoutMs: number = 5000): Promise<Response> => {
@@ -48,7 +45,7 @@ export const fetchOpenSearchHealthcheck = async (timeoutMs: number = 5000): Prom
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
-    const response = await fetch('./api/opensearch/healthcheck', {
+    const response = await fetchWrapper('./api/opensearch/healthcheck', {
       method: 'GET',
       cache: 'no-cache',
       headers: {

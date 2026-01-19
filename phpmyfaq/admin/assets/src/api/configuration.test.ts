@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
   fetchConfiguration,
   fetchFaqsSortingKeys,
@@ -11,23 +11,32 @@ import {
   fetchTranslations,
   saveConfiguration,
 } from './configuration';
+import * as fetchWrapperModule from './fetch-wrapper';
+
+vi.mock('./fetch-wrapper', () => ({
+  fetchWrapper: vi.fn(),
+  fetchJson: vi.fn(),
+}));
 
 describe('fetchConfiguration', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should fetch configuration data and return as text', async () => {
     const mockResponse = 'Configuration data';
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: true,
-        text: () => Promise.resolve(mockResponse),
-      } as Response)
-    );
+    const mockResponseObj = {
+      ok: true,
+      text: () => Promise.resolve(mockResponse),
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
 
     const target = '#main';
     const language = 'en';
     const result = await fetchConfiguration(target, language);
 
     expect(result).toBe(mockResponse);
-    expect(global.fetch).toHaveBeenCalledWith(`./api/configuration/list/main`, {
+    expect(fetchWrapperModule.fetchWrapper).toHaveBeenCalledWith(`./api/configuration/list/main`, {
       headers: {
         'Accept-Language': language,
       },
@@ -35,11 +44,10 @@ describe('fetchConfiguration', () => {
   });
 
   it('should throw an error if the network response is not ok', async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: false,
-      } as Response)
-    );
+    const mockResponseObj = {
+      ok: false,
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
 
     const target = '#main';
     const language = 'en';
@@ -49,28 +57,32 @@ describe('fetchConfiguration', () => {
 });
 
 describe('fetchFaqsSortingKeys', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should fetch FAQs sorting keys and return as text', async () => {
     const mockResponse = 'Sorting keys data';
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: true,
-        text: () => Promise.resolve(mockResponse),
-      } as Response)
-    );
+    const mockResponseObj = {
+      ok: true,
+      text: () => Promise.resolve(mockResponse),
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
 
     const currentValue = 'someValue';
     const result = await fetchFaqsSortingKeys(currentValue);
 
     expect(result).toBe(mockResponse);
-    expect(global.fetch).toHaveBeenCalledWith(`./api/configuration/faqs-sorting-key/${currentValue}`);
+    expect(fetchWrapperModule.fetchWrapper).toHaveBeenCalledWith(
+      `./api/configuration/faqs-sorting-key/${currentValue}`
+    );
   });
 
   it('should return an empty string if the network response is not ok', async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: false,
-      } as Response)
-    );
+    const mockResponseObj = {
+      ok: false,
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
 
     const currentValue = 'someValue';
     const result = await fetchFaqsSortingKeys(currentValue);
@@ -80,28 +92,32 @@ describe('fetchFaqsSortingKeys', () => {
 });
 
 describe('fetchFaqsSortingPopular', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should fetch FAQs sorting popular data and return as text', async () => {
     const mockResponse = 'Popular sorting data';
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: true,
-        text: () => Promise.resolve(mockResponse),
-      } as Response)
-    );
+    const mockResponseObj = {
+      ok: true,
+      text: () => Promise.resolve(mockResponse),
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
 
     const currentValue = 'someValue';
     const result = await fetchFaqsSortingPopular(currentValue);
 
     expect(result).toBe(mockResponse);
-    expect(global.fetch).toHaveBeenCalledWith(`./api/configuration/faqs-sorting-popular/${currentValue}`);
+    expect(fetchWrapperModule.fetchWrapper).toHaveBeenCalledWith(
+      `./api/configuration/faqs-sorting-popular/${currentValue}`
+    );
   });
 
   it('should return an empty string if the network response is not ok', async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: false,
-      } as Response)
-    );
+    const mockResponseObj = {
+      ok: false,
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
 
     const currentValue = 'someValue';
     const result = await fetchFaqsSortingPopular(currentValue);
@@ -111,28 +127,30 @@ describe('fetchFaqsSortingPopular', () => {
 });
 
 describe('fetchPermLevel', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should fetch permission level data and return as text', async () => {
     const mockResponse = 'Permission level data';
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: true,
-        text: () => Promise.resolve(mockResponse),
-      } as Response)
-    );
+    const mockResponseObj = {
+      ok: true,
+      text: () => Promise.resolve(mockResponse),
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
 
     const currentValue = 'someValue';
     const result = await fetchPermLevel(currentValue);
 
     expect(result).toBe(mockResponse);
-    expect(global.fetch).toHaveBeenCalledWith(`./api/configuration/perm-level/${currentValue}`);
+    expect(fetchWrapperModule.fetchWrapper).toHaveBeenCalledWith(`./api/configuration/perm-level/${currentValue}`);
   });
 
   it('should return an empty string if the network response is not ok', async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: false,
-      } as Response)
-    );
+    const mockResponseObj = {
+      ok: false,
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
 
     const currentValue = 'someValue';
     const result = await fetchPermLevel(currentValue);
@@ -142,28 +160,32 @@ describe('fetchPermLevel', () => {
 });
 
 describe('fetchReleaseEnvironment', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should fetch release environment data and return as text', async () => {
     const mockResponse = 'Release environment data';
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: true,
-        text: () => Promise.resolve(mockResponse),
-      } as Response)
-    );
+    const mockResponseObj = {
+      ok: true,
+      text: () => Promise.resolve(mockResponse),
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
 
     const currentValue = 'someValue';
     const result = await fetchReleaseEnvironment(currentValue);
 
     expect(result).toBe(mockResponse);
-    expect(global.fetch).toHaveBeenCalledWith(`./api/configuration/release-environment/${currentValue}`);
+    expect(fetchWrapperModule.fetchWrapper).toHaveBeenCalledWith(
+      `./api/configuration/release-environment/${currentValue}`
+    );
   });
 
   it('should return an empty string if the network response is not ok', async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: false,
-      } as Response)
-    );
+    const mockResponseObj = {
+      ok: false,
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
 
     const currentValue = 'someValue';
     const result = await fetchReleaseEnvironment(currentValue);
@@ -173,28 +195,32 @@ describe('fetchReleaseEnvironment', () => {
 });
 
 describe('fetchSearchRelevance', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should fetch search relevance data and return as text', async () => {
     const mockResponse = 'Search relevance data';
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: true,
-        text: () => Promise.resolve(mockResponse),
-      } as Response)
-    );
+    const mockResponseObj = {
+      ok: true,
+      text: () => Promise.resolve(mockResponse),
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
 
     const currentValue = 'someValue';
     const result = await fetchSearchRelevance(currentValue);
 
     expect(result).toBe(mockResponse);
-    expect(global.fetch).toHaveBeenCalledWith(`./api/configuration/search-relevance/${currentValue}`);
+    expect(fetchWrapperModule.fetchWrapper).toHaveBeenCalledWith(
+      `./api/configuration/search-relevance/${currentValue}`
+    );
   });
 
   it('should return an empty string if the network response is not ok', async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: false,
-      } as Response)
-    );
+    const mockResponseObj = {
+      ok: false,
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
 
     const currentValue = 'someValue';
     const result = await fetchSearchRelevance(currentValue);
@@ -204,28 +230,30 @@ describe('fetchSearchRelevance', () => {
 });
 
 describe('fetchSeoMetaTags', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should fetch SEO meta tags data and return as text', async () => {
     const mockResponse = 'SEO meta tags data';
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: true,
-        text: () => Promise.resolve(mockResponse),
-      } as Response)
-    );
+    const mockResponseObj = {
+      ok: true,
+      text: () => Promise.resolve(mockResponse),
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
 
     const currentValue = 'someValue';
     const result = await fetchSeoMetaTags(currentValue);
 
     expect(result).toBe(mockResponse);
-    expect(global.fetch).toHaveBeenCalledWith(`./api/configuration/seo-metatags/${currentValue}`);
+    expect(fetchWrapperModule.fetchWrapper).toHaveBeenCalledWith(`./api/configuration/seo-metatags/${currentValue}`);
   });
 
   it('should return an empty string if the network response is not ok', async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: false,
-      } as Response)
-    );
+    const mockResponseObj = {
+      ok: false,
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
 
     const currentValue = 'someValue';
     const result = await fetchSeoMetaTags(currentValue);
@@ -235,27 +263,29 @@ describe('fetchSeoMetaTags', () => {
 });
 
 describe('fetchTemplates', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should fetch templates data and return as text', async () => {
     const mockResponse = 'Templates data';
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: true,
-        text: () => Promise.resolve(mockResponse),
-      } as Response)
-    );
+    const mockResponseObj = {
+      ok: true,
+      text: () => Promise.resolve(mockResponse),
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
 
     const result = await fetchTemplates();
 
     expect(result).toBe(mockResponse);
-    expect(global.fetch).toHaveBeenCalledWith('./api/configuration/templates');
+    expect(fetchWrapperModule.fetchWrapper).toHaveBeenCalledWith('./api/configuration/templates');
   });
 
   it('should return an empty string if the network response is not ok', async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: false,
-      } as Response)
-    );
+    const mockResponseObj = {
+      ok: false,
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
 
     const result = await fetchTemplates();
 
@@ -264,27 +294,29 @@ describe('fetchTemplates', () => {
 });
 
 describe('fetchTranslations', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should fetch translations data and return as text', async () => {
     const mockResponse = 'Translations data';
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: true,
-        text: () => Promise.resolve(mockResponse),
-      } as Response)
-    );
+    const mockResponseObj = {
+      ok: true,
+      text: () => Promise.resolve(mockResponse),
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
 
     const result = await fetchTranslations();
 
     expect(result).toBe(mockResponse);
-    expect(global.fetch).toHaveBeenCalledWith('./api/configuration/translations');
+    expect(fetchWrapperModule.fetchWrapper).toHaveBeenCalledWith('./api/configuration/translations');
   });
 
   it('should return an empty string if the network response is not ok', async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: false,
-      } as Response)
-    );
+    const mockResponseObj = {
+      ok: false,
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
 
     const result = await fetchTranslations();
 
@@ -293,14 +325,13 @@ describe('fetchTranslations', () => {
 });
 
 describe('saveConfiguration', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should save configuration and return JSON response if successful', async () => {
     const mockResponse = { success: true, data: 'Configuration saved' };
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        success: true,
-        json: () => Promise.resolve(mockResponse),
-      } as unknown as Response)
-    );
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
     const formData = new FormData();
     formData.append('key', 'value');
@@ -308,7 +339,7 @@ describe('saveConfiguration', () => {
     const result = await saveConfiguration(formData);
 
     expect(result).toEqual(mockResponse);
-    expect(global.fetch).toHaveBeenCalledWith('api/configuration', {
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('api/configuration', {
       method: 'POST',
       body: formData,
     });

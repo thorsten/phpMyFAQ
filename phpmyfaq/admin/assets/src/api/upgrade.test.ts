@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, afterEach, Mock } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import {
   fetchHealthCheck,
   activateMaintenanceMode,
@@ -9,24 +9,25 @@ import {
   startInstallation,
   startDatabaseUpdate,
 } from './upgrade';
+import * as fetchWrapperModule from './fetch-wrapper';
 
-global.fetch = vi.fn();
+vi.mock('./fetch-wrapper', () => ({
+  fetchJson: vi.fn(),
+  fetchWrapper: vi.fn(),
+}));
 
 describe('Upgrade API', (): void => {
   afterEach((): void => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('fetchHealthCheck should fetch health check and return JSON response if successful', async (): Promise<void> => {
     const mockResponse = { success: 'true', message: 'Health check passed' };
-    (fetch as Mock).mockResolvedValue({
-      ok: true,
-      json: async () => mockResponse,
-    });
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
     const result = await fetchHealthCheck();
     expect(result).toEqual(mockResponse);
-    expect(fetch).toHaveBeenCalledWith('./api/health-check', {
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('./api/health-check', {
       method: 'GET',
       cache: 'no-cache',
       headers: {
@@ -39,17 +40,13 @@ describe('Upgrade API', (): void => {
 
   it('activateMaintenanceMode should activate maintenance mode', async (): Promise<void> => {
     const mockResponse = { success: 'true' };
-    (fetch as Mock).mockResolvedValue({
-      ok: true,
-      json: async () => mockResponse,
-    });
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
     const result = await activateMaintenanceMode('csrfToken');
     expect(result).toEqual(mockResponse);
-    expect(fetch).toHaveBeenCalledWith('./api/configuration/activate-maintenance-mode', {
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('./api/configuration/activate-maintenance-mode', {
       method: 'POST',
       headers: {
-        Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ csrf: 'csrfToken' }),
@@ -58,17 +55,13 @@ describe('Upgrade API', (): void => {
 
   it('checkForUpdates should check for updates', async (): Promise<void> => {
     const mockResponse = { success: 'true', version: '1.0.0' };
-    (fetch as Mock).mockResolvedValue({
-      ok: true,
-      json: async () => mockResponse,
-    });
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
     const result = await checkForUpdates();
     expect(result).toEqual(mockResponse);
-    expect(fetch).toHaveBeenCalledWith('./api/update-check', {
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('./api/update-check', {
       method: 'POST',
       headers: {
-        Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
     });
@@ -76,17 +69,13 @@ describe('Upgrade API', (): void => {
 
   it('downloadPackage should download a package', async (): Promise<void> => {
     const mockResponse = { success: 'true' };
-    (fetch as Mock).mockResolvedValue({
-      ok: true,
-      json: async () => mockResponse,
-    });
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
     const result = await downloadPackage('1.0.0');
     expect(result).toEqual(mockResponse);
-    expect(fetch).toHaveBeenCalledWith('./api/download-package/1.0.0', {
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('./api/download-package/1.0.0', {
       method: 'POST',
       headers: {
-        Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
     });
@@ -94,17 +83,13 @@ describe('Upgrade API', (): void => {
 
   it('extractPackage should extract a package', async (): Promise<void> => {
     const mockResponse = { success: 'true' };
-    (fetch as Mock).mockResolvedValue({
-      ok: true,
-      json: async () => mockResponse,
-    });
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
     const result = await extractPackage();
     expect(result).toEqual(mockResponse);
-    expect(fetch).toHaveBeenCalledWith('./api/extract-package', {
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('./api/extract-package', {
       method: 'POST',
       headers: {
-        Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
     });
@@ -114,12 +99,12 @@ describe('Upgrade API', (): void => {
     const mockResponse = new Response(JSON.stringify({ progress: '50%' }), {
       headers: { 'Content-Type': 'application/json' },
     });
-    (fetch as Mock).mockResolvedValue(mockResponse);
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponse);
+
     await startTemporaryBackup();
-    expect(fetch).toHaveBeenCalledWith('./api/create-temporary-backup', {
+    expect(fetchWrapperModule.fetchWrapper).toHaveBeenCalledWith('./api/create-temporary-backup', {
       method: 'POST',
       headers: {
-        Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
     });
@@ -129,12 +114,12 @@ describe('Upgrade API', (): void => {
     const mockResponse = new Response(JSON.stringify({ progress: '50%' }), {
       headers: { 'Content-Type': 'application/json' },
     });
-    (fetch as Mock).mockResolvedValue(mockResponse);
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponse);
+
     await startInstallation();
-    expect(fetch).toHaveBeenCalledWith('./api/install-package', {
+    expect(fetchWrapperModule.fetchWrapper).toHaveBeenCalledWith('./api/install-package', {
       method: 'POST',
       headers: {
-        Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
     });
@@ -144,12 +129,12 @@ describe('Upgrade API', (): void => {
     const mockResponse = new Response(JSON.stringify({ progress: '50%' }), {
       headers: { 'Content-Type': 'application/json' },
     });
-    (fetch as Mock).mockResolvedValue(mockResponse);
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponse);
+
     await startDatabaseUpdate();
-    expect(fetch).toHaveBeenCalledWith('./api/update-database', {
+    expect(fetchWrapperModule.fetchWrapper).toHaveBeenCalledWith('./api/update-database', {
       method: 'POST',
       headers: {
-        Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
     });

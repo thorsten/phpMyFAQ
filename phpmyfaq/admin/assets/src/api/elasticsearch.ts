@@ -14,9 +14,10 @@
  */
 
 import { ElasticsearchResponse, Response } from '../interfaces';
+import { fetchWrapper, fetchJson } from './fetch-wrapper';
 
 export const fetchElasticsearchAction = async (action: string): Promise<Response> => {
-  const response = await fetch(`./api/elasticsearch/${action}`, {
+  return (await fetchJson(`./api/elasticsearch/${action}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -24,13 +25,11 @@ export const fetchElasticsearchAction = async (action: string): Promise<Response
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
-  });
-
-  return await response.json();
+  })) as Response;
 };
 
 export const fetchElasticsearchStatistics = async (): Promise<ElasticsearchResponse> => {
-  const response = await fetch('./api/elasticsearch/statistics', {
+  return (await fetchJson('./api/elasticsearch/statistics', {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -38,9 +37,7 @@ export const fetchElasticsearchStatistics = async (): Promise<ElasticsearchRespo
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
-  });
-
-  return await response.json();
+  })) as ElasticsearchResponse;
 };
 
 export const fetchElasticsearchHealthcheck = async (timeoutMs: number = 5000): Promise<Response> => {
@@ -48,7 +45,7 @@ export const fetchElasticsearchHealthcheck = async (timeoutMs: number = 5000): P
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
-    const response = await fetch('./api/elasticsearch/healthcheck', {
+    const response = await fetchWrapper('./api/elasticsearch/healthcheck', {
       method: 'GET',
       cache: 'no-cache',
       headers: {

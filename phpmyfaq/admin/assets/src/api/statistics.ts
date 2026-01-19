@@ -14,9 +14,8 @@
  */
 
 import { fetchJson } from './fetch-wrapper';
-import { Response } from '../interfaces';
 
-export const deleteAdminLog = async (csrfToken: string): Promise<Response | undefined> => {
+export const deleteAdminLog = async (csrfToken: string): Promise<unknown> => {
   return await fetchJson(`./api/statistics/admin-log`, {
     method: 'DELETE',
     cache: 'no-cache',
@@ -31,7 +30,7 @@ export const deleteAdminLog = async (csrfToken: string): Promise<Response | unde
   });
 };
 
-export const truncateSearchTerms = async (csrfToken: string): Promise<Response | undefined> => {
+export const truncateSearchTerms = async (csrfToken: string): Promise<unknown> => {
   return await fetchJson(`./api/statistics/search-terms`, {
     method: 'DELETE',
     cache: 'no-cache',
@@ -46,7 +45,7 @@ export const truncateSearchTerms = async (csrfToken: string): Promise<Response |
   });
 };
 
-export const clearRatings = async (csrfToken: string): Promise<Response | undefined> => {
+export const clearRatings = async (csrfToken: string): Promise<unknown> => {
   return await fetchJson(`./api/statistics/ratings/clear`, {
     method: 'DELETE',
     cache: 'no-cache',
@@ -61,7 +60,7 @@ export const clearRatings = async (csrfToken: string): Promise<Response | undefi
   });
 };
 
-export const clearVisits = async (csrfToken: string): Promise<Response | undefined> => {
+export const clearVisits = async (csrfToken: string): Promise<unknown> => {
   return await fetchJson(`./api/statistics/visits/clear`, {
     method: 'DELETE',
     cache: 'no-cache',
@@ -76,7 +75,7 @@ export const clearVisits = async (csrfToken: string): Promise<Response | undefin
   });
 };
 
-export const deleteSessions = async (csrfToken: string, month: string): Promise<Response | undefined> => {
+export const deleteSessions = async (csrfToken: string, month: string): Promise<unknown> => {
   return await fetchJson(`./api/statistics/sessions`, {
     method: 'DELETE',
     cache: 'no-cache',

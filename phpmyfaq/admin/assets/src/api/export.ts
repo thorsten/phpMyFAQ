@@ -14,10 +14,11 @@
  */
 
 import { Response } from '../interfaces';
+import { fetchWrapper } from './fetch-wrapper';
 
 export const createReport = async (data: unknown, csrfToken: string): Promise<Blob | Response | undefined> => {
   try {
-    const response = await fetch('./api/export/report', {
+    const response = await fetchWrapper('./api/export/report', {
       method: 'POST',
       cache: 'no-cache',
       headers: {

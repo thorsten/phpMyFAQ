@@ -1,29 +1,28 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { getRemoteHashes, verifyHashes } from './verification';
+import * as fetchWrapperModule from './fetch-wrapper';
+
+vi.mock('./fetch-wrapper', () => ({
+  fetchJson: vi.fn(),
+}));
 
 describe('Verification API', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('getRemoteHashes', () => {
     it('should fetch remote hashes and return JSON response if successful', async () => {
       const mockResponse = { 'file1.js': 'hash1', 'file2.js': 'hash2' };
-      global.fetch = vi.fn(() =>
-        Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve(mockResponse),
-        } as Response)
-      );
+      vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
       const version = '1.0.0';
       const result = await getRemoteHashes(version);
 
       expect(result).toEqual(mockResponse);
-      expect(global.fetch).toHaveBeenCalledWith('https://api.phpmyfaq.de/verify/1.0.0', {
+      expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('https://api.phpmyfaq.de/verify/1.0.0', {
         method: 'GET',
         headers: {
-          Accept: 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
         },
       });
@@ -31,7 +30,7 @@ describe('Verification API', () => {
 
     it('should throw an error if fetch fails', async () => {
       const mockError = new Error('Fetch failed');
-      global.fetch = vi.fn(() => Promise.reject(mockError));
+      vi.spyOn(fetchWrapperModule, 'fetchJson').mockRejectedValue(mockError);
 
       const version = '1.0.0';
 
@@ -42,21 +41,15 @@ describe('Verification API', () => {
   describe('verifyHashes', () => {
     it('should verify hashes and return JSON response if successful', async () => {
       const mockResponse = { success: true, message: 'Hashes verified' };
-      global.fetch = vi.fn(() =>
-        Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve(mockResponse),
-        } as Response)
-      );
+      vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
       const remoteHashes = { 'file1.js': 'hash1', 'file2.js': 'hash2' };
       const result = await verifyHashes(remoteHashes);
 
       expect(result).toEqual(mockResponse);
-      expect(global.fetch).toHaveBeenCalledWith('./api/dashboard/verify', {
+      expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('./api/dashboard/verify', {
         method: 'POST',
         headers: {
-          Accept: 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(remoteHashes),
@@ -65,7 +58,7 @@ describe('Verification API', () => {
 
     it('should throw an error if fetch fails', async () => {
       const mockError = new Error('Fetch failed');
-      global.fetch = vi.fn(() => Promise.reject(mockError));
+      vi.spyOn(fetchWrapperModule, 'fetchJson').mockRejectedValue(mockError);
 
       const remoteHashes = { 'file1.js': 'hash1', 'file2.js': 'hash2' };
 

@@ -13,16 +13,15 @@
  * @since     2025-02-08
  */
 
+import { fetchJson } from './fetch-wrapper';
+
 export const fetchByLanguage = async (language: string): Promise<unknown> => {
-  const response = await fetch(`./api/stopwords?language=${language}`, {
+  return await fetchJson(`./api/stopwords?language=${language}`, {
     method: 'GET',
     headers: {
-      Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
   });
-
-  return await response.json();
 };
 
 export const postStopWord = async (
@@ -31,10 +30,9 @@ export const postStopWord = async (
   stopWordId: number,
   stopWordLanguage: string
 ): Promise<unknown> => {
-  const response = await fetch('./api/stopword/save', {
+  return await fetchJson('./api/stopword/save', {
     method: 'POST',
     headers: {
-      Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -44,15 +42,12 @@ export const postStopWord = async (
       stopWordsLang: stopWordLanguage,
     }),
   });
-
-  return await response.json();
 };
 
 export const removeStopWord = async (csrf: string, stopWordId: number, stopWordLanguage: string): Promise<unknown> => {
-  const response = await fetch('./api/stopword/delete', {
+  return await fetchJson('./api/stopword/delete', {
     method: 'POST',
     headers: {
-      Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -61,6 +56,4 @@ export const removeStopWord = async (csrf: string, stopWordId: number, stopWordL
       stopWordsLang: stopWordLanguage,
     }),
   });
-
-  return await response.json();
 };

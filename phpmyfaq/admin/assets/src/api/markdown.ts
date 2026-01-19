@@ -12,17 +12,14 @@
  * @link      https://www.phpmyfaq.de
  * @since     2025-03-03
  */
-import { Response } from '../interfaces';
+import { fetchJson } from './fetch-wrapper';
 
 export const fetchMarkdownContent = async (text: string): Promise<Response> => {
-  const response = await fetch(`./api/content/markdown`, {
+  return (await fetchJson(`./api/content/markdown`, {
     method: 'POST',
     headers: {
-      Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ text }),
-  });
-
-  return await response.json();
+  })) as Response;
 };

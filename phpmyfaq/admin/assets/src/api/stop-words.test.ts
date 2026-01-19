@@ -1,7 +1,10 @@
-import { describe, it, expect, vi, Mock } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { fetchByLanguage, postStopWord, removeStopWord } from './stop-words';
+import * as fetchWrapperModule from './fetch-wrapper';
 
-global.fetch = vi.fn();
+vi.mock('./fetch-wrapper', () => ({
+  fetchJson: vi.fn(),
+}));
 
 describe('Stop Words API', () => {
   afterEach(() => {
@@ -10,16 +13,12 @@ describe('Stop Words API', () => {
 
   it('fetchByLanguage should fetch stop words by language', async () => {
     const mockResponse = [{ id: 1, lang: 'en', stopword: 'example' }];
-    (fetch as Mock).mockResolvedValue({
-      ok: true,
-      json: async () => mockResponse,
-    });
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
     const result = await fetchByLanguage('en');
-    expect(fetch).toHaveBeenCalledWith('./api/stopwords?language=en', {
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('./api/stopwords?language=en', {
       method: 'GET',
       headers: {
-        Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
     });
@@ -28,16 +27,12 @@ describe('Stop Words API', () => {
 
   it('postStopWord should post a new stop word', async () => {
     const mockResponse = { success: true };
-    (fetch as Mock).mockResolvedValue({
-      ok: true,
-      json: async () => mockResponse,
-    });
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
     const result = await postStopWord('csrfToken', 'example', 1, 'en');
-    expect(fetch).toHaveBeenCalledWith('./api/stopword/save', {
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('./api/stopword/save', {
       method: 'POST',
       headers: {
-        Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -52,16 +47,12 @@ describe('Stop Words API', () => {
 
   it('removeStopWord should delete a stop word', async () => {
     const mockResponse = { success: true };
-    (fetch as Mock).mockResolvedValue({
-      ok: true,
-      json: async () => mockResponse,
-    });
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
     const result = await removeStopWord('csrfToken', 1, 'en');
-    expect(fetch).toHaveBeenCalledWith('./api/stopword/delete', {
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('./api/stopword/delete', {
       method: 'POST',
       headers: {
-        Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

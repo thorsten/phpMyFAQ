@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
   fetchActivateInput,
   fetchSetInputAsRequired,
@@ -6,16 +6,20 @@ import {
   fetchDeleteTranslation,
   fetchAddTranslation,
 } from './forms';
+import * as fetchWrapperModule from './fetch-wrapper';
+
+vi.mock('./fetch-wrapper', () => ({
+  fetchJson: vi.fn(),
+}));
 
 describe('fetchActivateInput', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should activate input and return JSON response if successful', async () => {
     const mockResponse = { success: true };
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve(mockResponse),
-      } as Response)
-    );
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
     const csrf = 'csrfToken';
     const formId = 'formId';
@@ -24,10 +28,9 @@ describe('fetchActivateInput', () => {
     const result = await fetchActivateInput(csrf, formId, inputId, checked);
 
     expect(result).toEqual(mockResponse);
-    expect(global.fetch).toHaveBeenCalledWith('api/forms/activate', {
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('api/forms/activate', {
       method: 'POST',
       headers: {
-        Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -40,11 +43,7 @@ describe('fetchActivateInput', () => {
   });
 
   it('should throw an error if the network response is not ok', async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        status: 500,
-      } as Response)
-    );
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockRejectedValue(new Error('Network response was not ok.'));
 
     const csrf = 'csrfToken';
     const formId = 'formId';
@@ -56,14 +55,13 @@ describe('fetchActivateInput', () => {
 });
 
 describe('fetchSetInputAsRequired', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should set input as required and return JSON response if successful', async () => {
     const mockResponse = { success: true };
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve(mockResponse),
-      } as Response)
-    );
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
     const csrf = 'csrfToken';
     const formId = 'formId';
@@ -72,10 +70,9 @@ describe('fetchSetInputAsRequired', () => {
     const result = await fetchSetInputAsRequired(csrf, formId, inputId, checked);
 
     expect(result).toEqual(mockResponse);
-    expect(global.fetch).toHaveBeenCalledWith('api/forms/required', {
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('api/forms/required', {
       method: 'POST',
       headers: {
-        Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -88,11 +85,7 @@ describe('fetchSetInputAsRequired', () => {
   });
 
   it('should throw an error if the network response is not ok', async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        status: 500,
-      } as Response)
-    );
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockRejectedValue(new Error('Network response was not ok.'));
 
     const csrf = 'csrfToken';
     const formId = 'formId';
@@ -106,14 +99,13 @@ describe('fetchSetInputAsRequired', () => {
 });
 
 describe('fetchEditTranslation', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should edit translation and return JSON response if successful', async () => {
     const mockResponse = { success: true };
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve(mockResponse),
-      } as Response)
-    );
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
     const csrf = 'csrfToken';
     const formId = 'formId';
@@ -123,10 +115,9 @@ describe('fetchEditTranslation', () => {
     const result = await fetchEditTranslation(csrf, formId, inputId, label, lang);
 
     expect(result).toEqual(mockResponse);
-    expect(global.fetch).toHaveBeenCalledWith('api/forms/translation-edit', {
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('api/forms/translation-edit', {
       method: 'POST',
       headers: {
-        Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -140,11 +131,7 @@ describe('fetchEditTranslation', () => {
   });
 
   it('should throw an error if the network response is not ok', async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        status: 500,
-      } as Response)
-    );
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockRejectedValue(new Error('Network response was not ok.'));
 
     const csrf = 'csrfToken';
     const formId = 'formId';
@@ -159,14 +146,13 @@ describe('fetchEditTranslation', () => {
 });
 
 describe('fetchDeleteTranslation', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should delete translation and return JSON response if successful', async () => {
     const mockResponse = { success: true };
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve(mockResponse),
-      } as Response)
-    );
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
     const csrf = 'csrfToken';
     const formId = 'formId';
@@ -175,10 +161,9 @@ describe('fetchDeleteTranslation', () => {
     const result = await fetchDeleteTranslation(csrf, formId, inputId, lang);
 
     expect(result).toEqual(mockResponse);
-    expect(global.fetch).toHaveBeenCalledWith('api/forms/translation-delete', {
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('api/forms/translation-delete', {
       method: 'POST',
       headers: {
-        Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -191,11 +176,7 @@ describe('fetchDeleteTranslation', () => {
   });
 
   it('should throw an error if the network response is not ok', async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        status: 500,
-      } as Response)
-    );
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockRejectedValue(new Error('Network response was not ok.'));
 
     const csrf = 'csrfToken';
     const formId = 'formId';
@@ -207,14 +188,13 @@ describe('fetchDeleteTranslation', () => {
 });
 
 describe('fetchAddTranslation', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should add translation and return JSON response if successful', async () => {
     const mockResponse = { success: true };
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve(mockResponse),
-      } as Response)
-    );
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
     const csrf = 'csrfToken';
     const formId = 'formId';
@@ -224,10 +204,9 @@ describe('fetchAddTranslation', () => {
     const result = await fetchAddTranslation(csrf, formId, inputId, lang, translation);
 
     expect(result).toEqual(mockResponse);
-    expect(global.fetch).toHaveBeenCalledWith('api/forms/translation-add', {
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('api/forms/translation-add', {
       method: 'POST',
       headers: {
-        Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -241,11 +220,7 @@ describe('fetchAddTranslation', () => {
   });
 
   it('should throw an error if the network response is not ok', async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        status: 500,
-      } as Response)
-    );
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockRejectedValue(new Error('Network response was not ok.'));
 
     const csrf = 'csrfToken';
     const formId = 'formId';

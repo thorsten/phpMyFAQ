@@ -14,16 +14,14 @@
  */
 
 import { MediaBrowserApiResponse } from '../interfaces/';
+import { fetchJson } from './fetch-wrapper';
 
 export const fetchMediaBrowserContent = async (): Promise<MediaBrowserApiResponse> => {
-  const response = await fetch(`./api/media-browser`, {
+  return (await fetchJson(`./api/media-browser`, {
     method: 'POST',
     headers: {
-      Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ action: 'files' }),
-  });
-
-  return await response.json();
+  })) as MediaBrowserApiResponse;
 };

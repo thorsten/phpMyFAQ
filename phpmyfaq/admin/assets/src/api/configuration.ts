@@ -14,9 +14,10 @@
  */
 
 import { Response } from '../interfaces';
+import { fetchWrapper, fetchJson } from './fetch-wrapper';
 
 export const fetchConfiguration = async (target: string, language: string): Promise<string> => {
-  const response = await fetch(`./api/configuration/list/${target.substring(1)}`, {
+  const response = await fetchWrapper(`./api/configuration/list/${target.substring(1)}`, {
     headers: {
       'Accept-Language': language,
     },
@@ -30,7 +31,7 @@ export const fetchConfiguration = async (target: string, language: string): Prom
 };
 
 export const fetchFaqsSortingKeys = async (currentValue: string): Promise<string> => {
-  const response = await fetch(`./api/configuration/faqs-sorting-key/${currentValue}`);
+  const response = await fetchWrapper(`./api/configuration/faqs-sorting-key/${currentValue}`);
 
   if (!response.ok) {
     return '';
@@ -40,7 +41,7 @@ export const fetchFaqsSortingKeys = async (currentValue: string): Promise<string
 };
 
 export const fetchFaqsSortingOrder = async (currentValue: string): Promise<string> => {
-  const response = await fetch(`./api/configuration/faqs-sorting-order/${currentValue}`);
+  const response = await fetchWrapper(`./api/configuration/faqs-sorting-order/${currentValue}`);
 
   if (!response.ok) {
     return '';
@@ -50,7 +51,7 @@ export const fetchFaqsSortingOrder = async (currentValue: string): Promise<strin
 };
 
 export const fetchFaqsSortingPopular = async (currentValue: string): Promise<string> => {
-  const response = await fetch(`./api/configuration/faqs-sorting-popular/${currentValue}`);
+  const response = await fetchWrapper(`./api/configuration/faqs-sorting-popular/${currentValue}`);
 
   if (!response.ok) {
     return '';
@@ -60,7 +61,7 @@ export const fetchFaqsSortingPopular = async (currentValue: string): Promise<str
 };
 
 export const fetchPermLevel = async (currentValue: string): Promise<string> => {
-  const response = await fetch(`./api/configuration/perm-level/${currentValue}`);
+  const response = await fetchWrapper(`./api/configuration/perm-level/${currentValue}`);
 
   if (!response.ok) {
     return '';
@@ -70,7 +71,7 @@ export const fetchPermLevel = async (currentValue: string): Promise<string> => {
 };
 
 export const fetchReleaseEnvironment = async (currentValue: string): Promise<string> => {
-  const response = await fetch(`./api/configuration/release-environment/${currentValue}`);
+  const response = await fetchWrapper(`./api/configuration/release-environment/${currentValue}`);
 
   if (!response.ok) {
     return '';
@@ -80,7 +81,7 @@ export const fetchReleaseEnvironment = async (currentValue: string): Promise<str
 };
 
 export const fetchSearchRelevance = async (currentValue: string): Promise<string> => {
-  const response = await fetch(`./api/configuration/search-relevance/${currentValue}`);
+  const response = await fetchWrapper(`./api/configuration/search-relevance/${currentValue}`);
 
   if (!response.ok) {
     return '';
@@ -90,7 +91,7 @@ export const fetchSearchRelevance = async (currentValue: string): Promise<string
 };
 
 export const fetchSeoMetaTags = async (currentValue: string): Promise<string> => {
-  const response = await fetch(`./api/configuration/seo-metatags/${currentValue}`);
+  const response = await fetchWrapper(`./api/configuration/seo-metatags/${currentValue}`);
 
   if (!response.ok) {
     return '';
@@ -100,7 +101,7 @@ export const fetchSeoMetaTags = async (currentValue: string): Promise<string> =>
 };
 
 export const fetchTranslationProvider = async (currentValue: string): Promise<string> => {
-  const response = await fetch(`./api/configuration/translation-provider/${currentValue}`);
+  const response = await fetchWrapper(`./api/configuration/translation-provider/${currentValue}`);
 
   if (!response.ok) {
     return '';
@@ -110,7 +111,7 @@ export const fetchTranslationProvider = async (currentValue: string): Promise<st
 };
 
 export const fetchTemplates = async (): Promise<string> => {
-  const response = await fetch(`./api/configuration/templates`);
+  const response = await fetchWrapper(`./api/configuration/templates`);
 
   if (!response.ok) {
     return '';
@@ -120,7 +121,7 @@ export const fetchTemplates = async (): Promise<string> => {
 };
 
 export const fetchTranslations = async (): Promise<string> => {
-  const response = await fetch(`./api/configuration/translations`);
+  const response = await fetchWrapper(`./api/configuration/translations`);
 
   if (!response.ok) {
     return '';
@@ -129,11 +130,9 @@ export const fetchTranslations = async (): Promise<string> => {
   return await response.text();
 };
 
-export const saveConfiguration = async (data: FormData): Promise<unknown> => {
-  const response = (await fetch('api/configuration', {
+export const saveConfiguration = async (data: FormData): Promise<Response> => {
+  return (await fetchJson('api/configuration', {
     method: 'POST',
     body: data,
-  })) as unknown as Response;
-
-  return await response.json();
+  })) as Response;
 };

@@ -13,6 +13,8 @@
  * @since     2024-07-09
  */
 
+import { fetchJson } from './fetch-wrapper';
+
 interface RemoteHashes {
   [key: string]: string;
 }
@@ -22,26 +24,20 @@ interface VerificationResult {
 }
 
 export const getRemoteHashes = async (version: string): Promise<RemoteHashes | undefined> => {
-  const response = await fetch(`https://api.phpmyfaq.de/verify/${version}`, {
+  return (await fetchJson(`https://api.phpmyfaq.de/verify/${version}`, {
     method: 'GET',
     headers: {
-      Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
-  });
-
-  return await response.json();
+  })) as RemoteHashes | undefined;
 };
 
 export const verifyHashes = async (remoteHashes: RemoteHashes): Promise<VerificationResult> => {
-  const response = await fetch('./api/dashboard/verify', {
+  return (await fetchJson('./api/dashboard/verify', {
     method: 'POST',
     headers: {
-      Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(remoteHashes),
-  });
-
-  return await response.json();
+  })) as VerificationResult;
 };
