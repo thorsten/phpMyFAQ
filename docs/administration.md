@@ -79,7 +79,11 @@ For SEO reasons (reduced file size),
 you may want to **display the exact same file** as a background image **multiple times**.
 To do this, enter the same file name for each entry in your **database, "faqcategories" table, image field**.
 
-### 5.2.2 FAQ Administration
+### 5.2.2 Add a new FAQ
+
+You can create a completely new FAQ by using the 'Add new FAQ' option. When doing so, it is essential to select the desired category within the 'FAQ metadata' tab to ensure the entry is correctly indexed and visible to users. For a detailed explanation of all available settings and metadata options, please refer to section 5.2.3.
+
+### 5.2.3 FAQ Administration
 
 You can create entries directly in the admin area. Created entries aren't published by default. All available FAQs are
 listed on the page "Edit FAQs". By clicking on them, the same interface that lets you create records will open up, this
@@ -175,34 +179,35 @@ phpMyFAQ lets visitors contribute to the FAQ by asking questions. Every visitor 
 the public area and may give an answer. If you wish to get rid of open questions, you can do so using this section.
 Alternatively, you can take over a question and answer it yourself and hereby add it to the FAQ.
 
-### 5.2.3 Sticky FAQs
+### 5.2.4 Sticky FAQs
 
 You can arrange the order of the sticky FAQs by drag'n'drop.
 The order of the sticky FAQs will be the same in the public frontend.
 To remove the "Important / Sticky" status from an FAQ and remove it from the overview, simply use the pin icon on the right.
 Only the status will be changed - the FAQ will not be deleted from the database.
 
-### 5.2.4 Comment Administration
+### 5.2.5 Orphaned FAQs
 
-In this frontend, you can see all comments that'd been posted in the FAQs and the news. You can't edit comments,
-but you can delete them with one easy click.
+Orphaned FAQs are records that are no longer assigned to any category, often caused by deleting a category without moving its entries or through incomplete data imports. Because they lack a category assignment, these entries are hidden from users in the public frontend.
+To resolve this:
 
-### 5.2.5 Open Questions
+1. Open the FAQ: Click on an entry in the "Orphaned FAQ" list to open the FAQ Editor.
+2. Assign Category: Navigate to the "FAQ metadata" tab within the editor.
+3. Save Changes: Select a valid category and save the FAQ.
+
+Once saved, the entry will be visible in its new category and will automatically be removed from the Orphaned FAQ list.
+
+### 5.2.6 Open Questions
 
 On the "Open Questions" page, you can see all open questions that visitors have posted.
 You can answer them directly or, if they are not visible due to your configuration in the public area, you can activate
 them.
 Additionally, you can delete them, too.
 
-### 5.2.6 Glossary
+### 5.2.7 Comment Administration
 
-A glossary is a list of terms in a particular domain of knowledge with the definitions for those terms. You can add,
-edit, and delete glossary items here. The items will be automatically displayed in <abbr> tags in the frontend.
-
-### 5.2.7 News Administration
-
-phpMyFAQ offers the ability to post news on the starting page of your FAQ.
-In the administration area, you can create new news, edit existing news, or delete them.
+In this frontend, you can see all comments that have been posted in the FAQs and the news. You can't edit comments,
+but you can delete them with one easy click.
 
 ### 5.2.8 Attachment Administration
 
@@ -214,13 +219,23 @@ You can delete them, too.
 
 You can edit existing tags, and if you need to, you can delete the tag.
 
-### 5.2.10 Custom Pages Administration
+### 5.2.10 Glossary
+
+A glossary is a list of terms in a particular domain of knowledge with the definitions for those terms. You can add,
+edit, and delete glossary items here. The items will be automatically displayed in <abbr> tags in the frontend.
+
+### 5.2.11 News Administration
+
+phpMyFAQ offers the ability to post news on the starting page of your FAQ.
+In the administration area, you can create new news, edit existing news, or delete them.
+
+### 5.2.12 Custom Pages Administration
 
 Custom Pages allow you to create database-backed, SEO-friendly pages for legal information, about pages, and other 
 static content using a WYSIWYG editor. Custom pages support multi-language content, are automatically included in 
 sitemaps, and are searchable alongside FAQs.
 
-#### 5.2.10.1 Creating a Custom Page
+#### 5.2.12.1 Creating a Custom Page
 
 To create a new custom page:
 
@@ -262,7 +277,7 @@ To create a new custom page:
 
 4. Click **Save** to create the page
 
-#### 5.2.10.2 Managing Custom Pages
+#### 5.2.12.2 Managing Custom Pages
 
 The Custom Pages list view provides:
 
@@ -274,7 +289,7 @@ The Custom Pages list view provides:
   - **Delete**: Remove pages (with confirmation)
   - **Active Toggle**: Quickly publish/unpublish pages
 
-#### 5.2.10.3 Multi-Language Support
+#### 5.2.12.3 Multi-Language Support
 
 Custom pages support multiple languages:
 
@@ -286,7 +301,7 @@ Custom pages support multiple languages:
   - German: `datenschutz`
   - French: `politique-de-confidentialite`
 
-#### 5.2.10.4 Legal Pages Integration
+#### 5.2.12.4 Legal Pages Integration
 
 Custom pages can be used for legal pages with automatic footer link integration:
 
@@ -328,7 +343,7 @@ main.imprintURL = page:imprint
 main.cookiePolicyURL = page:cookie-policy
 ```
 
-#### 5.2.10.5 Search Integration
+#### 5.2.12.5 Search Integration
 
 Custom pages are automatically integrated with all search engines:
 
@@ -353,7 +368,7 @@ Custom pages are automatically integrated with all search engines:
 - FAQs appear with a question-circle icon (❓)
 - Results link directly to `/page/{slug}.html`
 
-#### 5.2.10.6 Sitemap Integration
+#### 5.2.12.6 Sitemap Integration
 
 Active custom pages are automatically included in XML sitemaps:
 
@@ -367,7 +382,7 @@ Access sitemap at:
 - `https://example.com/sitemap.xml`
 - `https://example.com/sitemap.xml.gz` (gzipped)
 
-#### 5.2.10.7 SEO Best Practices
+#### 5.2.12.7 SEO Best Practices
 
 **Slug Guidelines:**
 - Use lowercase letters, numbers, and hyphens only
@@ -389,7 +404,7 @@ Access sitemap at:
 - Set pages as active when ready to publish
 - Use descriptive page titles
 
-#### 5.2.10.8 Permissions
+#### 5.2.12.8 Permissions
 
 Custom pages require the following permissions:
 
@@ -401,7 +416,7 @@ Permissions are granted via **User Administration** → **Edit User** → **Perm
 
 Super admins have all permissions by default.
 
-#### 5.2.10.9 Troubleshooting
+#### 5.2.12.9 Troubleshooting
 
 **Slug validation fails:**
 - Ensure slug is unique per language
@@ -424,13 +439,13 @@ Super admins have all permissions by default.
 - Check page exists and is active
 - Clear cache if using caching
 
-### 5.2.11 AI-Assisted Translation
+### 5.2.13 AI-Assisted Translation
 
 phpMyFAQ includes an AI-assisted translation feature that helps you translate FAQ content, custom pages, categories, and
 news articles into multiple languages using professional translation APIs. The feature preserves HTML formatting and
 provides high-quality automated translations.
 
-#### 5.2.11.1 Overview
+#### 5.2.13.1 Overview
 
 The AI translation feature integrates with leading translation services:
 
@@ -440,7 +455,7 @@ The AI translation feature integrates with leading translation services:
 - **Amazon Translate** - AWS translation service with 75+ languages
 - **LibreTranslate** - Open-source, self-hosted option for privacy
 
-#### 5.2.11.2 Configuration
+#### 5.2.13.2 Configuration
 
 Navigate to **Configuration → Translation** tab to configure your translation provider:
 
@@ -459,7 +474,7 @@ Navigate to **Configuration → Translation** tab to configure your translation 
 For detailed setup instructions for each provider, see the [AI Translation Guide](ai-translation.md) and
 [Quick Start Guide](ai-translation-quickstart.md).
 
-#### 5.2.11.3 Translating Content
+#### 5.2.13.3 Translating Content
 
 **Translating FAQs:**
 
@@ -507,7 +522,7 @@ The AI will translate:
 2. Use the translation interface to create language versions
 3. The AI assists with translating headline and content
 
-#### 5.2.11.4 Best Practices
+#### 5.2.13.4 Best Practices
 
 **Review All Translations:**
 - AI translation is very accurate but not perfect
@@ -529,7 +544,7 @@ The AI will translate:
 - Monitor usage in your provider's dashboard
 - Don't re-translate unnecessarily - review and edit instead
 
-#### 5.2.11.5 Troubleshooting
+#### 5.2.13.5 Troubleshooting
 
 **Translation button is disabled:**
 - Verify translation provider is configured in settings
