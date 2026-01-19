@@ -277,9 +277,9 @@ class Application
     {
         $configuration = $this->container?->get(id: 'phpmyfaq.configuration');
 
-        // Determine if caching is enabled
-        $cacheEnabled = $configuration?->get('routing.cache.enabled') ?? false;
-        $cacheDir = $configuration?->get('routing.cache.dir') ?? './cache';
+        // Determine if caching is enabled via environment variable
+        $cacheEnabled = filter_var(Environment::get('ROUTING_CACHE_ENABLED', 'true'), FILTER_VALIDATE_BOOLEAN);
+        $cacheDir = Environment::get('ROUTING_CACHE_DIR', PMF_ROOT_DIR . '/cache/routes');
 
         // Use appropriate context based on flags
         $context = $this->routingContext;
@@ -291,8 +291,8 @@ class Application
             $context = 'api';
         }
 
-        // Load routes with caching if enabled
-        if ($cacheEnabled) {
+        // Load routes with caching if enabled (disabled automatically in debug mode)
+        if ($cacheEnabled && !Environment::isDebugMode()) {
             $cacheManager = new RouteCacheManager($cacheDir, Environment::isDebugMode());
             return $cacheManager->getRoutes($context, function () use ($configuration, $context) {
                 $builder = new RouteCollectionBuilder($configuration);
