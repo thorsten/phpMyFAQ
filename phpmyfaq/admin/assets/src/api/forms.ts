@@ -14,16 +14,17 @@
  * @since     2014-03-21
  */
 
+import { fetchJson } from './fetch-wrapper';
+
 export const fetchActivateInput = async (
   csrf: string,
   formId: string,
   inputId: string,
   checked: boolean
 ): Promise<unknown> => {
-  const response = await fetch('api/forms/activate', {
+  return await fetchJson('api/forms/activate', {
     method: 'POST',
     headers: {
-      Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -33,12 +34,6 @@ export const fetchActivateInput = async (
       checked: checked,
     }),
   });
-
-  if (response.status === 200) {
-    return await response.json();
-  }
-
-  throw new Error('Network response was not ok.');
 };
 
 export const fetchSetInputAsRequired = async (
@@ -47,10 +42,9 @@ export const fetchSetInputAsRequired = async (
   inputId: string,
   checked: boolean
 ): Promise<unknown> => {
-  const response = await fetch('api/forms/required', {
+  return await fetchJson('api/forms/required', {
     method: 'POST',
     headers: {
-      Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -60,12 +54,6 @@ export const fetchSetInputAsRequired = async (
       checked: checked,
     }),
   });
-
-  if (response.status === 200) {
-    return await response.json();
-  }
-
-  throw new Error('Network response was not ok.');
 };
 
 export const fetchEditTranslation = async (
@@ -75,10 +63,9 @@ export const fetchEditTranslation = async (
   label: string,
   lang: string
 ): Promise<unknown> => {
-  const response = await fetch('api/forms/translation-edit', {
+  return await fetchJson('api/forms/translation-edit', {
     method: 'POST',
     headers: {
-      Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -89,12 +76,6 @@ export const fetchEditTranslation = async (
       label: label,
     }),
   });
-
-  if (response.status === 200) {
-    return await response.json();
-  }
-
-  throw new Error('Network response was not ok.');
 };
 
 export const fetchDeleteTranslation = async (
@@ -103,10 +84,9 @@ export const fetchDeleteTranslation = async (
   inputId: string,
   lang: string
 ): Promise<unknown> => {
-  const response = await fetch('api/forms/translation-delete', {
+  return await fetchJson('api/forms/translation-delete', {
     method: 'POST',
     headers: {
-      Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -116,12 +96,6 @@ export const fetchDeleteTranslation = async (
       lang: lang,
     }),
   });
-
-  if (response.status === 200) {
-    return await response.json();
-  }
-
-  throw new Error('Network response was not ok.');
 };
 
 export const fetchAddTranslation = async (
@@ -131,10 +105,9 @@ export const fetchAddTranslation = async (
   lang: string,
   translation: string
 ): Promise<unknown> => {
-  const response = await fetch('api/forms/translation-add', {
+  return await fetchJson('api/forms/translation-add', {
     method: 'POST',
     headers: {
-      Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -145,10 +118,4 @@ export const fetchAddTranslation = async (
       translation: translation,
     }),
   });
-
-  if (response.status === 200) {
-    return await response.json();
-  }
-
-  throw new Error('Network response was not ok.');
 };

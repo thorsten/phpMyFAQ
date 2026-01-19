@@ -13,6 +13,8 @@
  * @since     2024-05-30
  */
 
+import { fetchWrapper, fetchJson } from './fetch-wrapper';
+
 interface ResponseData {
   success?: string;
   warning?: string;
@@ -23,7 +25,7 @@ interface ResponseData {
 }
 
 export const fetchHealthCheck = async (): Promise<ResponseData> => {
-  const response: Response = await fetch(`./api/health-check`, {
+  return (await fetchJson(`./api/health-check`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -31,85 +33,68 @@ export const fetchHealthCheck = async (): Promise<ResponseData> => {
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
-  });
-
-  return await response.json();
+  })) as ResponseData;
 };
 
 export const activateMaintenanceMode = async (csrfToken: string): Promise<ResponseData> => {
-  const response: Response = await fetch('./api/configuration/activate-maintenance-mode', {
+  return (await fetchJson('./api/configuration/activate-maintenance-mode', {
     method: 'POST',
     headers: {
-      Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ csrf: csrfToken }),
-  });
-
-  return await response.json();
+  })) as ResponseData;
 };
 
 export const checkForUpdates = async (): Promise<ResponseData> => {
-  const response: Response = await fetch('./api/update-check', {
+  return (await fetchJson('./api/update-check', {
     method: 'POST',
     headers: {
-      Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
-  });
-
-  return await response.json();
+  })) as ResponseData;
 };
 
 export const downloadPackage = async (version: string): Promise<ResponseData> => {
-  const response: Response = await fetch(`./api/download-package/${version}`, {
+  return (await fetchJson(`./api/download-package/${version}`, {
     method: 'POST',
     headers: {
-      Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
-  });
-
-  return await response.json();
+  })) as ResponseData;
 };
 
 export const extractPackage = async (): Promise<ResponseData> => {
-  const response: Response = await fetch('./api/extract-package', {
+  return (await fetchJson('./api/extract-package', {
     method: 'POST',
     headers: {
-      Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
-  });
-
-  return await response.json();
+  })) as ResponseData;
 };
 
 export const startTemporaryBackup = async (): Promise<Response> => {
-  return await fetch('./api/create-temporary-backup', {
+  return await fetchWrapper('./api/create-temporary-backup', {
     method: 'POST',
     headers: {
-      Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
   });
 };
 
 export const startInstallation = async (): Promise<Response> => {
-  return await fetch('./api/install-package', {
+  return await fetchWrapper('./api/install-package', {
     method: 'POST',
     headers: {
-      Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
   });
 };
 
 export const startDatabaseUpdate = async (): Promise<Response> => {
-  return await fetch('./api/update-database', {
+  return await fetchWrapper('./api/update-database', {
     method: 'POST',
     headers: {
-      Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
   });

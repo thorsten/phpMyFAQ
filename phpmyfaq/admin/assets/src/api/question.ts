@@ -14,13 +14,14 @@
  */
 
 import { Response } from '../interfaces';
+import { fetchJson } from './fetch-wrapper';
 
 export const toggleQuestionVisibility = async (
   questionId: string,
   visibility: boolean,
   csrfToken: string
 ): Promise<Response | undefined> => {
-  const response = await fetch(`./api/question/visibility/toggle`, {
+  return (await fetchJson(`./api/question/visibility/toggle`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -30,7 +31,5 @@ export const toggleQuestionVisibility = async (
       visibility: visibility,
       csrfToken: csrfToken,
     }),
-  });
-
-  return await response.json();
+  })) as Response;
 };

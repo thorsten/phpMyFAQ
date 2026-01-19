@@ -14,9 +14,8 @@
  */
 
 import { fetchJson } from './fetch-wrapper';
-import { Response } from '../interfaces';
 
-export const deleteAttachments = async (attachmentId: string, csrfToken: string): Promise<Response> => {
+export const deleteAttachments = async (attachmentId: string, csrfToken: string): Promise<unknown> => {
   return await fetchJson('./api/content/attachments', {
     method: 'DELETE',
     headers: {
@@ -27,7 +26,7 @@ export const deleteAttachments = async (attachmentId: string, csrfToken: string)
   });
 };
 
-export const refreshAttachments = async (attachmentId: string, csrfToken: string): Promise<Response> => {
+export const refreshAttachments = async (attachmentId: string, csrfToken: string): Promise<unknown> => {
   return await fetchJson('./api/content/attachments/refresh', {
     method: 'POST',
     headers: {
@@ -38,7 +37,7 @@ export const refreshAttachments = async (attachmentId: string, csrfToken: string
   });
 };
 
-export const uploadAttachments = async (formData: FormData): Promise<Response> => {
+export const uploadAttachments = async (formData: FormData): Promise<unknown> => {
   return await fetchJson('./api/content/attachments/upload', {
     method: 'POST',
     cache: 'no-cache',

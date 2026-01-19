@@ -14,9 +14,8 @@
  */
 
 import { fetchJson } from './fetch-wrapper';
-import { Response, UserData } from '../interfaces';
 
-export const fetchUsers = async (userName: string): Promise<Response> => {
+export const fetchUsers = async (userName: string): Promise<unknown> => {
   return await fetchJson(`./api/user/users?filter=${userName}`, {
     method: 'GET',
     cache: 'no-cache',
@@ -28,7 +27,7 @@ export const fetchUsers = async (userName: string): Promise<Response> => {
   });
 };
 
-export const fetchUserData = async (userId: string): Promise<UserData> => {
+export const fetchUserData = async (userId: string): Promise<unknown> => {
   return await fetchJson(`./api/user/data/${userId}`, {
     method: 'GET',
     cache: 'no-cache',
@@ -40,7 +39,7 @@ export const fetchUserData = async (userId: string): Promise<UserData> => {
   });
 };
 
-export const fetchUserRights = async (userId: string): Promise<number[]> => {
+export const fetchUserRights = async (userId: string): Promise<unknown> => {
   return await fetchJson(`./api/user/permissions/${userId}`, {
     method: 'GET',
     cache: 'no-cache',
@@ -52,7 +51,7 @@ export const fetchUserRights = async (userId: string): Promise<number[]> => {
   });
 };
 
-export const fetchAllUsers = async (): Promise<Response> => {
+export const fetchAllUsers = async (): Promise<unknown> => {
   return await fetchJson('./api/user/users', {
     method: 'GET',
     cache: 'no-cache',
@@ -69,7 +68,7 @@ export const overwritePassword = async (
   userId: string,
   newPassword: string,
   passwordRepeat: string
-): Promise<Response | undefined> => {
+): Promise<unknown> => {
   return await fetchJson('./api/user/overwrite-password', {
     method: 'POST',
     headers: {
@@ -85,7 +84,7 @@ export const overwritePassword = async (
   });
 };
 
-export const postUserData = async (url: string = '', data: Record<string, unknown> = {}): Promise<Response> => {
+export const postUserData = async (url: string = '', data: Record<string, unknown> = {}): Promise<unknown> => {
   return await fetchJson(url, {
     method: 'POST',
     cache: 'no-cache',
@@ -98,7 +97,7 @@ export const postUserData = async (url: string = '', data: Record<string, unknow
   });
 };
 
-export const activateUser = async (userId: string, csrfToken: string): Promise<Response> => {
+export const activateUser = async (userId: string, csrfToken: string): Promise<unknown> => {
   return await fetchJson('./api/user/activate', {
     method: 'POST',
     headers: {
@@ -112,7 +111,7 @@ export const activateUser = async (userId: string, csrfToken: string): Promise<R
   });
 };
 
-export const deleteUser = async (userId: string, csrfToken: string): Promise<Response> => {
+export const deleteUser = async (userId: string, csrfToken: string): Promise<unknown> => {
   return await fetchJson('./api/user/delete', {
     method: 'DELETE',
     cache: 'no-cache',

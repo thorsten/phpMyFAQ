@@ -1,20 +1,24 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { fetchAllGroups, fetchAllUsersForGroups, fetchAllMembers, fetchGroup, fetchGroupRights } from './group';
+import * as fetchWrapperModule from './fetch-wrapper';
+
+vi.mock('./fetch-wrapper', () => ({
+  fetchJson: vi.fn(),
+}));
 
 describe('fetchAllGroups', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should fetch all groups and return JSON response if successful', async () => {
     const mockResponse = { success: true, data: 'Groups data' };
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve(mockResponse),
-      } as Response)
-    );
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
     const result = await fetchAllGroups();
 
     expect(result).toEqual(mockResponse);
-    expect(global.fetch).toHaveBeenCalledWith('./api/group/groups', {
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('./api/group/groups', {
       method: 'GET',
       cache: 'no-cache',
       headers: {
@@ -26,30 +30,25 @@ describe('fetchAllGroups', () => {
   });
 
   it('should throw an error if the network response is not ok', async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        status: 500,
-      } as Response)
-    );
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockRejectedValue(new Error('Network response was not ok.'));
 
     await expect(fetchAllGroups()).rejects.toThrow('Network response was not ok.');
   });
 });
 
 describe('fetchAllUsersForGroups', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should fetch all users for groups and return JSON response if successful', async () => {
     const mockResponse = { success: true, data: 'Users data' };
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve(mockResponse),
-      } as Response)
-    );
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
     const result = await fetchAllUsersForGroups();
 
     expect(result).toEqual(mockResponse);
-    expect(global.fetch).toHaveBeenCalledWith('./api/group/users', {
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('./api/group/users', {
       method: 'GET',
       cache: 'no-cache',
       headers: {
@@ -61,31 +60,26 @@ describe('fetchAllUsersForGroups', () => {
   });
 
   it('should throw an error if the network response is not ok', async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        status: 500,
-      } as Response)
-    );
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockRejectedValue(new Error('Network response was not ok.'));
 
     await expect(fetchAllUsersForGroups()).rejects.toThrow('Network response was not ok.');
   });
 });
 
 describe('fetchAllMembers', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should fetch all members of a group and return JSON response if successful', async () => {
     const mockResponse = { success: true, data: 'Members data' };
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve(mockResponse),
-      } as Response)
-    );
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
     const groupId = '123';
     const result = await fetchAllMembers(groupId);
 
     expect(result).toEqual(mockResponse);
-    expect(global.fetch).toHaveBeenCalledWith(`./api/group/members/${groupId}`, {
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith(`./api/group/members/${groupId}`, {
       method: 'GET',
       cache: 'no-cache',
       headers: {
@@ -97,11 +91,7 @@ describe('fetchAllMembers', () => {
   });
 
   it('should throw an error if the network response is not ok', async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        status: 500,
-      } as Response)
-    );
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockRejectedValue(new Error('Network response was not ok.'));
 
     const groupId = '123';
 
@@ -110,20 +100,19 @@ describe('fetchAllMembers', () => {
 });
 
 describe('fetchGroup', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should fetch a group and return JSON response if successful', async () => {
     const mockResponse = { success: true, data: 'Group data' };
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve(mockResponse),
-      } as Response)
-    );
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
     const groupId = '123';
     const result = await fetchGroup(groupId);
 
     expect(result).toEqual(mockResponse);
-    expect(global.fetch).toHaveBeenCalledWith(`./api/group/data/${groupId}`, {
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith(`./api/group/data/${groupId}`, {
       method: 'GET',
       cache: 'no-cache',
       headers: {
@@ -135,11 +124,7 @@ describe('fetchGroup', () => {
   });
 
   it('should throw an error if the network response is not ok', async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        status: 500,
-      } as Response)
-    );
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockRejectedValue(new Error('Network response was not ok.'));
 
     const groupId = '123';
 
@@ -148,20 +133,19 @@ describe('fetchGroup', () => {
 });
 
 describe('fetchGroupRights', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should fetch group rights and return JSON response if successful', async () => {
     const mockResponse = { success: true, data: 'Group rights data' };
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve(mockResponse),
-      } as Response)
-    );
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
     const groupId = '123';
     const result = await fetchGroupRights(groupId);
 
     expect(result).toEqual(mockResponse);
-    expect(global.fetch).toHaveBeenCalledWith(`./api/group/permissions/${groupId}`, {
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith(`./api/group/permissions/${groupId}`, {
       method: 'GET',
       cache: 'no-cache',
       headers: {
@@ -173,11 +157,7 @@ describe('fetchGroupRights', () => {
   });
 
   it('should throw an error if the network response is not ok', async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        status: 500,
-      } as Response)
-    );
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockRejectedValue(new Error('Network response was not ok.'));
 
     const groupId = '123';
 

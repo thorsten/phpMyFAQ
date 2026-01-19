@@ -14,9 +14,10 @@
  */
 
 import { Group, Member, User } from '../interfaces';
+import { fetchJson } from './fetch-wrapper';
 
 export const fetchAllGroups = async (): Promise<Group[]> => {
-  const response = await fetch('./api/group/groups', {
+  return (await fetchJson('./api/group/groups', {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -24,17 +25,11 @@ export const fetchAllGroups = async (): Promise<Group[]> => {
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
-  });
-
-  if (response.status === 200) {
-    return await response.json();
-  }
-
-  throw new Error('Network response was not ok.');
+  })) as Group[];
 };
 
 export const fetchAllUsersForGroups = async (): Promise<User[]> => {
-  const response = await fetch('./api/group/users', {
+  return (await fetchJson('./api/group/users', {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -42,17 +37,11 @@ export const fetchAllUsersForGroups = async (): Promise<User[]> => {
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
-  });
-
-  if (response.status === 200) {
-    return await response.json();
-  }
-
-  throw new Error('Network response was not ok.');
+  })) as User[];
 };
 
 export const fetchAllMembers = async (groupId: string): Promise<Member[]> => {
-  const response = await fetch(`./api/group/members/${groupId}`, {
+  return (await fetchJson(`./api/group/members/${groupId}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -60,17 +49,11 @@ export const fetchAllMembers = async (groupId: string): Promise<Member[]> => {
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
-  });
-
-  if (response.status === 200) {
-    return await response.json();
-  }
-
-  throw new Error('Network response was not ok.');
+  })) as Member[];
 };
 
 export const fetchGroup = async (groupId: string): Promise<Group> => {
-  const response = await fetch(`./api/group/data/${groupId}`, {
+  return (await fetchJson(`./api/group/data/${groupId}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -78,17 +61,11 @@ export const fetchGroup = async (groupId: string): Promise<Group> => {
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
-  });
-
-  if (response.status === 200) {
-    return await response.json();
-  }
-
-  throw new Error('Network response was not ok.');
+  })) as Group;
 };
 
 export const fetchGroupRights = async (groupId: string): Promise<string[]> => {
-  const response = await fetch(`./api/group/permissions/${groupId}`, {
+  return (await fetchJson(`./api/group/permissions/${groupId}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -96,11 +73,5 @@ export const fetchGroupRights = async (groupId: string): Promise<string[]> => {
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
-  });
-
-  if (response.status === 200) {
-    return await response.json();
-  }
-
-  throw new Error('Network response was not ok.');
+  })) as string[];
 };
