@@ -206,7 +206,7 @@ Additionally, you can delete them, too.
 
 ### 5.2.7 Comment Administration
 
-In this frontend, you can see all comments that'd been posted in the FAQs and the news. You can't edit comments,
+In this frontend, you can see all comments that have been posted in the FAQs and the news. You can't edit comments,
 but you can delete them with one easy click.
 
 ### 5.2.8 Attachment Administration
