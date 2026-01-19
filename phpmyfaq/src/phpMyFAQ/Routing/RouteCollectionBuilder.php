@@ -25,8 +25,8 @@ use Symfony\Component\Routing\RouteCollection;
 /**
  * Class RouteCollectionBuilder
  *
- * Builds a RouteCollection by merging file-based routes with attribute-based routes.
- * During migration, both sources are supported. After migration, only attributes are used.
+ * Builds a RouteCollection from controller attributes using PHP 8+ Route attributes.
+ * All routes are defined using #[Route] attributes directly on controller methods.
  */
 class RouteCollectionBuilder
 {
@@ -42,49 +42,13 @@ class RouteCollectionBuilder
      * Build a RouteCollection for the specified context.
      *
      * @param string $context The routing context ('public', 'admin', 'admin-api', 'api')
-     * @param bool $attributesOnly If true, only load routes from attributes (skip file-based routes)
-     * @return RouteCollection The merged route collection
+     * @param bool $attributesOnly Deprecated parameter kept for backward compatibility (always true now)
+     * @return RouteCollection The route collection loaded from controller attributes
      */
-    public function build(string $context, bool $attributesOnly = false): RouteCollection
+    public function build(string $context, bool $attributesOnly = true): RouteCollection
     {
-        $collection = new RouteCollection();
-
-        // Load file-based routes during migration (unless attributesOnly is true)
-        if (!$attributesOnly) {
-            $fileRoutes = $this->loadFileRoutes($context);
-            if ($fileRoutes) {
-                $collection->addCollection($fileRoutes);
-            }
-        }
-
-        // Load attribute-based routes (these override file routes if there's a conflict)
-        $attributeRoutes = $this->loadAttributeRoutes($context);
-        $collection->addCollection($attributeRoutes);
-
-        return $collection;
-    }
-
-    /**
-     * Load routes from PHP files.
-     *
-     * @param string $context The routing context
-     * @return RouteCollection|null The file-based routes or null if file doesn't exist
-     */
-    private function loadFileRoutes(string $context): ?RouteCollection
-    {
-        $routeFile = match ($context) {
-            'public' => PMF_SRC_DIR . '/public-routes.php',
-            'admin' => PMF_SRC_DIR . '/admin-routes.php',
-            'admin-api' => PMF_SRC_DIR . '/admin-api-routes.php',
-            'api' => PMF_SRC_DIR . '/api-routes.php',
-            default => null,
-        };
-
-        if ($routeFile && file_exists($routeFile)) {
-            return include $routeFile;
-        }
-
-        return null;
+        // Load routes from controller attributes
+        return $this->loadAttributeRoutes($context);
     }
 
     /**
@@ -134,19 +98,5 @@ class RouteCollectionBuilder
             ],
             default => [$baseDir],
         };
-    }
-
-    /**
-     * Get the configuration option for attribute-only mode.
-     *
-     * @return bool True if only attributes should be used
-     */
-    private function isAttributesOnly(): bool
-    {
-        if ($this->configuration === null) {
-            return false;
-        }
-
-        return (bool) $this->configuration->get('routing.useAttributesOnly');
     }
 }

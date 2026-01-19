@@ -73,44 +73,71 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 
 ## Routing System
 
-The application uses Symfony Router for modern, controller-based routing.
+The application uses Symfony Router with PHP 8+ Route attributes for modern, controller-based routing.
 
 ### Architecture
 
-1. **index.php**: Entry point that tries Symfony Router first, falls back to legacy logic
-2. **public-routes.php**: Route definitions using Symfony RouteCollection for public routes
-3. **api-routes.php**: Route definitions using Symfony RouteCollection for API routes
-4. **admin-routes.php**: Route definitions using Symfony RouteCollection for admin routes
-5. **admin-api-routes.php**: Route definitions using Symfony RouteCollection for admin API routes
-6. **Controllers**: Modern Controller classes extending AbstractController
-7. **services.php**: Dependency injection configuration for services and classes
+1. **Entry Points**:
+   - `phpmyfaq/index.php`: Frontend entry point
+   - `phpmyfaq/admin/index.php`: Admin panel entry point
+   - `phpmyfaq/api/index.php`: API entry point
+2. **AttributeRouteLoader**: Automatically discovers routes from controller #[Route] attributes
+3. **RouteCollectionBuilder**: Builds route collections for different contexts (public, admin, api, admin-api)
+4. **RouteCacheManager**: Caches compiled routes for production performance
+5. **Controllers**: Modern Controller classes extending AbstractController
+6. **services.php**: Dependency injection configuration for services and classes
 
 ### Adding New Routes
 
+All routes are defined using PHP 8+ #[Route] attributes directly on controller methods. No separate route definition files are needed.
+
 To add a new route:
 
-1. Create a Controller in `phpmyfaq/src/phpMyFAQ/Controller/`
-2. Add the route to `phpmyfaq/src/public-routes.php`
-3. The Controller should extend `AbstractController`
+1. Create a Controller in the appropriate directory:
+   - Frontend routes: `phpmyfaq/src/phpMyFAQ/Controller/Frontend/`
+   - Admin routes: `phpmyfaq/src/phpMyFAQ/Controller/Administration/`
+   - API routes: `phpmyfaq/src/phpMyFAQ/Controller/Api/`
+   - Admin API routes: `phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/`
+2. Add the #[Route] attribute to your controller method
+3. The Controller should extend `AbstractController` (or `AbstractAdministrationApiController` for admin API)
 
 Example:
 
 ```php
-// MyController.php
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+
 final class MyController extends AbstractController
 {
+    #[Route(path: '/my-page.html', name: 'public.my-page', methods: ['GET'])]
     public function index(Request $request): Response
     {
         return $this->render('template.twig', ['data' => 'value']);
     }
 }
+```
 
-// public-routes.php
-'public.my_route' => [
-    'path' => '/my-page.html',
-    'controller' => [MyController::class, 'index'],
-    'methods' => 'GET'
-]
+### Route Naming Conventions
+
+- **Frontend routes**: `public.{resource}.{action}` (e.g., `public.faq.show`, `public.user.register`)
+- **Admin routes**: `admin.{resource}.{action}` (e.g., `admin.faq.edit`, `admin.category.add`)
+- **API routes**: `api.{resource}.{action}` (e.g., `api.search`, `api.faqs.list`)
+- **Admin API routes**: `admin.api.{resource}.{action}` (e.g., `admin.api.faq.create`)
+
+### Route Parameters
+
+Use curly braces `{param}` for route parameters:
+
+```php
+#[Route(path: '/faq/{categoryId}/{faqId}', name: 'public.faq.show', methods: ['GET'])]
+public function show(Request $request, int $categoryId, int $faqId): Response
+{
+    // Parameters are automatically extracted from the URL
+    $categoryId = $request->attributes->get('categoryId');
+    $faqId = $request->attributes->get('faqId');
+    // ...
+}
 ```
 
 ## UI guidelines
