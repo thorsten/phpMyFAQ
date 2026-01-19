@@ -102,7 +102,18 @@ final class CommentController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
         }
 
-        $commentText = Filter::filterVar($data->comment_text, FILTER_SANITIZE_SPECIAL_CHARS);
+        // Check if user is logged in and editor is enabled
+        $enableCommentEditor = (bool) $this->configuration->get('main.enableCommentEditor');
+        $isLoggedIn = $this->currentUser->isLoggedIn();
+
+        // Sanitize comment text based on user status and configuration
+        if ($enableCommentEditor && $isLoggedIn) {
+            // Allow HTML for logged-in users when editor is enabled
+            $commentText = $this->sanitizeHtmlComment($data->comment_text);
+        } else {
+            // Strip all HTML for anonymous users or when editor is disabled
+            $commentText = Filter::filterVar($data->comment_text, FILTER_SANITIZE_SPECIAL_CHARS);
+        }
 
         $commentId = match ($type) {
             'news' => (int) $newsId,
@@ -138,7 +149,11 @@ final class CommentController extends AbstractController
                 ->setType($type)
                 ->setUsername($username)
                 ->setEmail($email)
-                ->setComment(nl2br(strip_tags((string) $commentText)))
+                ->setComment(
+                    $enableCommentEditor && $isLoggedIn
+                        ? (string) $commentText
+                        : nl2br(strip_tags((string) $commentText)),
+                ) // Already sanitized with HTML support // Plain text with line breaks
                 ->setDate((string) $request->server->get(key: 'REQUEST_TIME'));
 
             if ($comment->create($commentEntity)) {
@@ -185,5 +200,60 @@ final class CommentController extends AbstractController
             !$this->configuration->get(item: 'records.allowCommentsForGuests')
             && !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::COMMENT_ADD->value)
         );
+    }
+
+    /**
+     * Sanitizes HTML comment text, allowing only safe tags and attributes
+     *
+     * @param string $html Raw HTML content from editor
+     * @return string Sanitized HTML with only allowed tags
+     */
+    private function sanitizeHtmlComment(string $html): string
+    {
+        // Allowed HTML tags for comments
+        $allowedTags = '<p><br><strong><em><u><s><a><ul><ol><li>';
+
+        // Strip all tags except allowed ones
+        $sanitized = strip_tags($html, $allowedTags);
+
+        // Additional sanitization for <a> tags - only allow specific attributes
+        $sanitized = preg_replace_callback(
+            '/<a\s+([^>]*)>/i',
+            function ($matches) {
+                $attributes = $matches[1];
+                $allowedAttrs = [];
+
+                // Extract and validate href
+                if (preg_match('/href\s*=\s*["\']([^"\']*)["\']/', $attributes, $hrefMatch)) {
+                    $href = htmlspecialchars($hrefMatch[1], ENT_QUOTES, 'UTF-8');
+                    // Only allow http, https, and mailto protocols
+                    if (preg_match('/^(https?:\/\/|mailto:)/i', $href) || preg_match('/^\/[^\/]/', $href)) {
+                        $allowedAttrs[] = 'href="' . $href . '"';
+                    }
+                }
+
+                // Extract and validate title
+                if (preg_match('/title\s*=\s*["\']([^"\']*)["\']/', $attributes, $titleMatch)) {
+                    $title = htmlspecialchars($titleMatch[1], ENT_QUOTES, 'UTF-8');
+                    $allowedAttrs[] = 'title="' . $title . '"';
+                }
+
+                // Extract and validate target
+                if (preg_match('/target\s*=\s*["\']([^"\']*)["\']/', $attributes, $targetMatch)) {
+                    $target = $targetMatch[1];
+                    if (in_array($target, ['_blank', '_self', '_parent', '_top'])) {
+                        $allowedAttrs[] = 'target="' . htmlspecialchars($target, ENT_QUOTES, 'UTF-8') . '"';
+                    }
+                }
+
+                return empty($allowedAttrs) ? '<a>' : '<a ' . implode(' ', $allowedAttrs) . '>';
+            },
+            $sanitized,
+        );
+
+        // Remove any remaining dangerous attributes from other tags
+        $sanitized = preg_replace('/<(\w+)\s+[^>]*?(on\w+|style|class|id)\s*=\s*[^>]*>/i', '<$1>', $sanitized);
+
+        return $sanitized;
     }
 }

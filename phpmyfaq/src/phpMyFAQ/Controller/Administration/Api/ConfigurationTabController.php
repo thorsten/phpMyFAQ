@@ -298,11 +298,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     /**
      * @throws \Exception
      */
-    #[Route(
-        path: 'admin/api/configuration/translations',
-        name: 'admin.api.configuration.translations',
-        methods: ['GET'],
-    )]
+    #[Route(path: 'configuration/translations', name: 'admin.api.configuration.translations', methods: ['GET'])]
     public function translations(): Response
     {
         $this->userIsAuthenticated();
@@ -347,7 +343,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     }
 
     #[Route(
-        path: 'admin/api/configuration/faqs-sorting-key',
+        path: 'configuration/faqs-sorting-key/{current}',
         name: 'admin.api.configuration.faqs-sorting-key',
         methods: ['GET'],
     )]
@@ -359,7 +355,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     }
 
     #[Route(
-        path: 'admin/api/configuration/faqs-sorting-order',
+        path: 'configuration/faqs-sorting-order/{current}',
         name: 'admin.api.configuration.faqs-sorting-order',
         methods: ['GET'],
     )]
@@ -371,7 +367,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     }
 
     #[Route(
-        path: 'admin/api/configuration/faqs-sorting-popular',
+        path: 'configuration/faqs-sorting-popular/{current}',
         name: 'admin.api.configuration.faqs-sorting-popular',
         methods: ['GET'],
     )]
@@ -382,11 +378,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         return new Response(Helper::sortingPopularFaqsOptions($request->attributes->get(key: 'current')));
     }
 
-    #[Route(
-        path: 'admin/api/configuration/perm-level/{current}',
-        name: 'admin.api.configuration.permLevel',
-        methods: ['GET'],
-    )]
+    #[Route(path: 'configuration/perm-level/{current}', name: 'admin.api.configuration.permLevel', methods: ['GET'])]
     public function permLevel(Request $request): Response
     {
         $this->userIsAuthenticated();
@@ -395,7 +387,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     }
 
     #[Route(
-        path: 'admin/api/configuration/release-environment',
+        path: 'configuration/release-environment/{current}',
         name: 'admin.api.configuration.release-environment',
         methods: ['GET'],
     )]
@@ -407,7 +399,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     }
 
     #[Route(
-        path: 'admin/api/configuration/search-relevance',
+        path: 'configuration/search-relevance/{current}',
         name: 'admin.api.configuration.search-relevance',
         methods: ['GET'],
     )]
@@ -419,7 +411,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     }
 
     #[Route(
-        path: 'admin/api/configuration/seo-metatags',
+        path: 'configuration/seo-metatags/{current}',
         name: 'admin.api.configuration.seo-metatags',
         methods: ['GET'],
     )]
@@ -431,7 +423,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     }
 
     #[Route(
-        path: 'admin/api/configuration/translation-provider/{current}',
+        path: 'configuration/translation-provider/{current}',
         name: 'admin.api.configuration.translation-provider',
         methods: ['GET'],
     )]

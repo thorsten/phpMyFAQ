@@ -37,6 +37,7 @@ services:
   #    ACCEPT_EULA: 'Y'
 
   apache:
+    profiles: ['apache']
     build:
       context: .
       dockerfile: .docker/apache/Dockerfile
@@ -114,6 +115,7 @@ services:
       - pnpm
 
   frankenphp:
+    profiles: ['frankenphp']
     build: .docker/frankenphp
     restart: always
     stdin_open: true

@@ -1623,4 +1623,7 @@ $PMF_LANG['msgConfirmUnstick'] = 'Do you really want to remove this entry from t
 $PMF_LANG['msgTooltipUnstick'] = 'Remove important status';
 $PMF_LANG['msgConfirmAction'] = "Confirm Action";
 
+$PMF_LANG["msgCommentEditorHint"] = "You can use the text editor to format your comment with bold, italic, lists, and links.";
+$LANG_CONF['main.enableCommentEditor'] = ["checkbox", "Enable WYSIWYG editor for comments (logged-in users only)"];
+
 return $PMF_LANG;
