@@ -504,7 +504,7 @@ final class FaqController extends AbstractAdministrationApiController
     /**
      * @throws Exception
      */
-    #[Route(path: 'admin/api/faqs/:categoryId/:language', name: 'admin.api.faqs', methods: ['GET'])]
+    #[Route(path: 'admin/api/faqs/{categoryId}/{language}', name: 'admin.api.faqs', methods: ['GET'])]
     public function listByCategory(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);

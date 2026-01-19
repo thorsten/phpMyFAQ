@@ -38,7 +38,7 @@ final class TranslationController extends AbstractAdministrationApiController
      *
      * @throws \Exception
      */
-    #[Route(path: 'admin/api/content/translate', name: 'admin.api.content.translate', methods: ['POST'])]
+    #[Route(path: 'admin/api/translation/translate', name: 'admin.api.translation.translate', methods: ['POST'])]
     public function translate(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FAQ_TRANSLATE);

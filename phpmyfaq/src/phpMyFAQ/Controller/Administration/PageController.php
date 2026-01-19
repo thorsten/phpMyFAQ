@@ -112,7 +112,7 @@ final class PageController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route(path: '/page/translate/:pageId', name: 'admin.page.translate', methods: ['GET'])]
+    #[Route(path: '/page/translate/{pageId}', name: 'admin.page.translate', methods: ['GET'])]
     public function translate(Request $request): Response
     {
         $this->userHasPermission(PermissionType::PAGE_ADD);
@@ -162,7 +162,7 @@ final class PageController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route(path: '/page/edit/:pageId', name: 'admin.page.edit', methods: ['GET'])]
+    #[Route(path: '/page/edit/{pageId}', name: 'admin.page.edit', methods: ['GET'])]
     public function edit(Request $request): Response
     {
         $this->userHasPermission(PermissionType::PAGE_EDIT);

@@ -66,8 +66,8 @@ final class StatisticsController extends AbstractController
      * @throws \Exception
      */
     #[Route(
-        path: './admin/api/statistics/search-terms',
-        name: 'admin.api.statistics.search-terms',
+        path: 'admin/api/statistics/search-terms',
+        name: 'admin.api.statistics.search-terms.truncate',
         methods: ['DELETE'],
     )]
     public function truncateSearchTerms(Request $request): JsonResponse
