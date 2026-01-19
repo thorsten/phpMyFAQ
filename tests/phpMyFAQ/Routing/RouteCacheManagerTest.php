@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ\Routing;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -59,7 +60,7 @@ class RouteCacheManagerTest extends TestCase
 
         $this->cacheManager->getRoutes('public', $loader);
 
-        // Check that cache file was created
+        // Check that a cache file was created
         $this->assertTrue($this->cacheManager->hasCache('public'));
     }
 
@@ -85,14 +86,14 @@ class RouteCacheManagerTest extends TestCase
         $routes1 = new RouteCollection();
         $routes1->add('test.route', new Route('/test'));
 
-        // First call to populate cache
+        // First call to populate the cache
         $loader = function () use ($routes1) {
             return $routes1;
         };
 
         $this->cacheManager->getRoutes('public', $loader);
 
-        // Second call should read from cache
+        // The second call should read from the cache
         $loaderCallCount = 0;
         $loader2 = function () use (&$loaderCallCount) {
             $loaderCallCount++;
@@ -160,6 +161,9 @@ class RouteCacheManagerTest extends TestCase
         $this->assertFalse($this->cacheManager->hasCache('nonexistent'));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testCachedRoutesCanBeRead(): void
     {
         $originalRoutes = new RouteCollection();
@@ -180,9 +184,14 @@ class RouteCacheManagerTest extends TestCase
         $this->cacheManager->getRoutes('public', $loader);
 
         // Read from cache (second call)
-        $cachedRoutes = $this->cacheManager->getRoutes('public', function () {
-            throw new \Exception('Loader should not be called when reading from cache');
-        });
+        $cachedRoutes = $this->cacheManager->getRoutes(
+            /**
+             * @throws Exception
+             */ 'public',
+            function () {
+                throw new Exception('Loader should not be called when reading from cache');
+            },
+        );
 
         $this->assertInstanceOf(RouteCollection::class, $cachedRoutes);
         $this->assertEquals(1, $cachedRoutes->count());
