@@ -38,7 +38,7 @@ final class AttachmentController extends AbstractAdministrationApiController
     /**
      * @throws \Exception
      */
-    #[Route(path: './admin/api/content/attachments', name: 'admin.api.content.attachments', methods: ['GET'])]
+    #[Route(path: 'content/attachments', name: 'admin.api.content.attachments', methods: ['GET'])]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::ATTACHMENT_DELETE);
@@ -108,11 +108,7 @@ final class AttachmentController extends AbstractAdministrationApiController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route(
-        path: './admin/api/content/attachments/upload',
-        name: 'admin.api.content.attachments.upload',
-        methods: ['POST'],
-    )]
+    #[Route(path: 'content/attachments/upload', name: 'admin.api.content.attachments.upload', methods: ['POST'])]
     public function upload(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::ATTACHMENT_ADD);

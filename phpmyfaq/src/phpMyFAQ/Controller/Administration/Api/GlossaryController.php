@@ -35,7 +35,7 @@ final class GlossaryController extends AbstractController
     /**
      * @throws Exception|\Exception
      */
-    #[Route(path: 'admin/api/glossary', name: 'admin.api.glossary', methods: ['GET'])]
+    #[Route(path: 'glossary', name: 'admin.api.glossary', methods: ['GET'])]
     public function fetch(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::GLOSSARY_EDIT);
@@ -55,7 +55,7 @@ final class GlossaryController extends AbstractController
     /**
      * @throws Exception|\Exception
      */
-    #[Route(path: 'admin/api/glossary/delete', name: 'admin.api.glossary.delete', methods: ['DELETE'])]
+    #[Route(path: 'glossary/delete', name: 'admin.api.glossary.delete', methods: ['DELETE'])]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::GLOSSARY_DELETE);
@@ -82,7 +82,7 @@ final class GlossaryController extends AbstractController
     /**
      * @throws Exception|\Exception
      */
-    #[Route(path: 'admin/api/glossary/create', name: 'admin.api.glossary.create', methods: ['POST'])]
+    #[Route(path: 'glossary/create', name: 'admin.api.glossary.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::GLOSSARY_ADD);
@@ -110,7 +110,7 @@ final class GlossaryController extends AbstractController
     /**
      * @throws Exception|\Exception
      */
-    #[Route(path: 'admin/api/glossary/update', name: 'admin.api.glossary.update', methods: ['PUT'])]
+    #[Route(path: 'glossary/update', name: 'admin.api.glossary.update', methods: ['PUT'])]
     public function update(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::GLOSSARY_EDIT);

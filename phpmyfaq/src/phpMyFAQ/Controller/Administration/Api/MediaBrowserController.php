@@ -40,7 +40,7 @@ final class MediaBrowserController extends AbstractController
      * @throws LoaderError
      * @throws Exception
      */
-    #[Route(path: 'admin/api/media-browser', name: 'admin.api.media.browser', methods: ['GET'])]
+    #[Route(path: 'media-browser', name: 'admin.api.media.browser', methods: ['GET'])]
     public function index(Request $request): JsonResponse|Response
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);

@@ -148,7 +148,7 @@ final class PageController extends AbstractAdministrationApiController
     /**
      * @throws Exception
      */
-    #[Route(path: 'admin/api/page/create', name: 'admin.api.page.create', methods: ['POST'])]
+    #[Route(path: 'page/create', name: 'admin.api.page.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::PAGE_ADD);
@@ -255,7 +255,7 @@ final class PageController extends AbstractAdministrationApiController
     /**
      * @throws Exception
      */
-    #[Route(path: 'admin/api/page/delete', name: 'admin.api.page.delete', methods: ['DELETE'])]
+    #[Route(path: 'page/delete', name: 'admin.api.page.delete', methods: ['DELETE'])]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::PAGE_DELETE);
@@ -298,7 +298,7 @@ final class PageController extends AbstractAdministrationApiController
     /**
      * @throws Exception
      */
-    #[Route(path: 'admin/api/page/update', name: 'admin.api.page.update', methods: ['PUT'])]
+    #[Route(path: 'page/update', name: 'admin.api.page.update', methods: ['PUT'])]
     public function update(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::PAGE_EDIT);
@@ -385,7 +385,7 @@ final class PageController extends AbstractAdministrationApiController
     /**
      * @throws Exception
      */
-    #[Route(path: 'admin/api/page/activate', name: 'admin.api.page.activate', methods: ['PUT'])]
+    #[Route(path: 'page/activate', name: 'admin.api.page.activate', methods: ['PUT'])]
     public function activate(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::PAGE_EDIT);
@@ -440,7 +440,7 @@ final class PageController extends AbstractAdministrationApiController
      *
      * @throws Exception
      */
-    #[Route(path: 'admin/api/page/check-slug', name: 'admin.api.page.check-slug', methods: ['POST'])]
+    #[Route(path: 'page/check-slug', name: 'admin.api.page.check-slug', methods: ['POST'])]
     public function checkSlug(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::PAGE_ADD);
@@ -479,7 +479,7 @@ final class PageController extends AbstractAdministrationApiController
      *
      * @throws Exception
      */
-    #[Route(path: 'admin/api/page/list', name: 'admin.api.page.list', methods: ['GET'])]
+    #[Route(path: 'page/list', name: 'admin.api.page.list', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::PAGE_EDIT);

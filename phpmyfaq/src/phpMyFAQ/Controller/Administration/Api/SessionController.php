@@ -37,7 +37,7 @@ final class SessionController extends AbstractAdministrationApiController
     /**
      * @throws Exception
      */
-    #[Route(path: './admin/api/session/export', name: 'admin.api.session.export', methods: ['POST'])]
+    #[Route(path: 'session/export', name: 'admin.api.session.export', methods: ['POST'])]
     public function export(Request $request): BinaryFileResponse|JsonResponse
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
