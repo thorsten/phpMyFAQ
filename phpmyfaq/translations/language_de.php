@@ -1624,4 +1624,7 @@ $PMF_LANG['msgConfirmUnstick'] = 'Möchten Sie diesen Beitrag wirklich aus der L
 $PMF_LANG['msgTooltipUnstick'] = 'Wichtig-Status entfernen';
 $PMF_LANG['msgConfirmAction'] = "Aktion bestätigen";
 
+$PMF_LANG["msgCommentEditorHint"] = "Sie können den Texteditor verwenden, um Ihren Kommentar mit Fettdruck, Kursivschrift, Listen und Links zu formatieren.";
+$LANG_CONF['main.enableCommentEditor'] = ["checkbox", "WYSIWYG-Editor für Kommentare aktivieren (nur für angemeldete Benutzer)"];
+
 return $PMF_LANG;

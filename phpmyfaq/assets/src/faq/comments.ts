@@ -16,6 +16,11 @@
 import { pushErrorNotification, pushNotification } from '../utils';
 import { createComment } from '../api';
 import { ApiResponse, CommentData } from '../interfaces';
+import { renderCommentEditor } from '../comment/editor';
+import type { Jodit } from 'jodit';
+
+// Store the Jodit editor instance
+let joditInstance: Jodit | null = null;
 
 export const handleSaveComment = (): void => {
   const saveButton = document.getElementById('pmf-button-save-comment') as HTMLButtonElement | null;
@@ -31,6 +36,14 @@ export const handleSaveComment = (): void => {
         form.classList.add('was-validated');
       } else {
         try {
+          // Sync Jodit content to textarea before form submission
+          if (joditInstance) {
+            const textarea = document.getElementById('comment_text') as HTMLTextAreaElement;
+            if (textarea) {
+              textarea.value = joditInstance.value;
+            }
+          }
+
           const comments = new FormData(form);
           const response = (await createComment(comments)) as ApiResponse;
 
@@ -54,12 +67,62 @@ export const handleSaveComment = (): void => {
           if (modalBackdrop.length > 0) {
             modalBackdrop[0].parentNode?.removeChild(modalBackdrop[0]);
           }
+
+          // Destroy editor instance on successful submission
+          destroyEditor();
+
           form.reset();
         } catch (error: unknown) {
           console.error('Error: ', error);
         }
       }
     });
+  }
+
+  // Initialize editor on modal show
+  initializeCommentEditor();
+};
+
+/**
+ * Initializes the comment editor when the modal is shown
+ */
+const initializeCommentEditor = (): void => {
+  const modal = document.getElementById('pmf-modal-add-comment') as HTMLElement | null;
+
+  if (!modal) {
+    return;
+  }
+
+  // Check if editor should be enabled
+  const enableEditor = modal.getAttribute('data-enable-editor') === 'true';
+  const isLoggedIn = modal.getAttribute('data-is-logged-in') === 'true';
+
+  if (!enableEditor || !isLoggedIn) {
+    return;
+  }
+
+  // Listen for Bootstrap modal show event
+  modal.addEventListener('show.bs.modal', () => {
+    // Destroy existing instance if any
+    destroyEditor();
+
+    // Initialize new editor instance
+    joditInstance = renderCommentEditor('#comment_text');
+  });
+
+  // Listen for Bootstrap modal hide event
+  modal.addEventListener('hide.bs.modal', () => {
+    destroyEditor();
+  });
+};
+
+/**
+ * Destroys the Jodit editor instance
+ */
+const destroyEditor = (): void => {
+  if (joditInstance) {
+    joditInstance.destruct();
+    joditInstance = null;
   }
 };
 

@@ -182,7 +182,9 @@
   </div>
 
   <div class="modal fade" id="pmf-modal-add-comment" tabindex="-1" aria-labelledby="commentModalLabel"
-       aria-hidden="true">
+       aria-hidden="true"
+       data-enable-editor="{{ enableCommentEditor ? 'true' : 'false' }}"
+       data-is-logged-in="{{ userId > 0 ? 'true' : 'false' }}">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -236,6 +238,11 @@
                 required
                 placeholder="{{ msgYourComment }}"
               ></textarea>
+              {% if enableCommentEditor and userId > 0 %}
+                <small class="form-text text-muted mt-1">
+                  {{ 'msgCommentEditorHint' | translate }}
+                </small>
+              {% endif %}
               </div>
             </div>
 

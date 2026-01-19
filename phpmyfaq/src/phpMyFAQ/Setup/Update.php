@@ -1305,10 +1305,7 @@ class Update extends AbstractSetup
             $this->configuration->add('translation.libreTranslateUrl', 'https://libretranslate.com');
             $this->configuration->add('translation.libreTranslateApiKey', '');
 
-            // Add routing configuration
-            $this->configuration->add('routing.useAttributesOnly', 'false');
-            $this->configuration->add('routing.cache.enabled', 'false');
-            $this->configuration->add('routing.cache.dir', './cache');
+            $this->configuration->add('main.enableCommentEditor', 'false');
         }
     }
 

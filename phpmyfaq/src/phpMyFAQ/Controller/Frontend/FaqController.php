@@ -414,6 +414,7 @@ final class FaqController extends AbstractFrontController
             'csrfTokenAddComment' => Token::getInstance($this->container->get('session'))->getTokenString(
                 'add-comment',
             ),
+            'enableCommentEditor' => (bool) $this->configuration->get('main.enableCommentEditor'),
             'captchaFieldset' => $captchaHelper->renderCaptcha(
                 $captcha,
                 'writecomment',

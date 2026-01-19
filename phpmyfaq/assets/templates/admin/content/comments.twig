@@ -59,7 +59,7 @@
                     </div>
                   </div>
                 </div>
-                {{ comment.comment | striptags }}
+                {{ comment.comment | raw }}
               </td>
             </tr>
           {% endfor %}
@@ -109,7 +109,7 @@
                     </div>
                   </div>
                 </div>
-                {{ comment.comment }}
+                {{ comment.comment | raw }}
               </td>
             </tr>
           {% endfor %}

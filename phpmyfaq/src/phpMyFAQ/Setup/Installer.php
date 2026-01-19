@@ -284,6 +284,7 @@ class Installer extends Setup
         'main.enableWysiwygEditor' => 'true',
         'main.enableWysiwygEditorFrontend' => 'false',
         'main.enableMarkdownEditor' => 'false',
+        'main.enableCommentEditor' => 'false',
         'main.dateFormat' => 'Y-m-d H:i',
         'main.maintenanceMode' => 'false',
         'main.enableGravatarSupport' => 'false',
