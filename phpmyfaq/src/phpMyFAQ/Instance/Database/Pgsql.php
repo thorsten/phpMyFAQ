@@ -362,6 +362,18 @@ class Pgsql extends Database implements DriverInterface
             datum VARCHAR(20) DEFAULT \'\',
             ip VARCHAR(15) DEFAULT \'\',
             PRIMARY KEY (id))',
+        'faqchat_messages' => 'CREATE TABLE %sfaqchat_messages (
+            id SERIAL NOT NULL,
+            sender_id INTEGER NOT NULL,
+            recipient_id INTEGER NOT NULL,
+            message TEXT NOT NULL,
+            is_read SMALLINT NOT NULL DEFAULT 0,
+            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id))',
+        'faqchat_messages_idx_sender' => 'CREATE INDEX idx_chat_sender_%s ON %sfaqchat_messages (sender_id)',
+        'faqchat_messages_idx_recipient' => 'CREATE INDEX idx_chat_recipient_%s ON %sfaqchat_messages (recipient_id)',
+        'faqchat_messages_idx_conversation' => 'CREATE INDEX idx_chat_conversation_%s ON %sfaqchat_messages (sender_id, recipient_id)',
+        'faqchat_messages_idx_created' => 'CREATE INDEX idx_chat_created_%s ON %sfaqchat_messages (created_at)',
     ];
 
     /**
@@ -379,7 +391,12 @@ class Pgsql extends Database implements DriverInterface
     public function createTables(string $prefix = ''): bool
     {
         foreach ($this->createTableStatements as $key => $stmt) {
-            if ($key == 'idx_records' || $key == 'faqsessions_idx') {
+            if (
+                $key == 'idx_records'
+                || $key == 'faqsessions_idx'
+                || str_starts_with($key, 'faqsearches_')
+                || str_starts_with($key, 'faqchat_messages_idx_')
+            ) {
                 $result = $this->configuration->getDb()->query(sprintf($stmt, $prefix, $prefix));
             } else {
                 $result = $this->configuration->getDb()->query(sprintf($stmt, $prefix));
