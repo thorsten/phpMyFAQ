@@ -64,7 +64,7 @@ readonly class Plurals
     {
         switch ($language) {
             case 'ar':
-                // Arabic has 6 plural forms following GNU gettext standard:
+                // Arabic has 6 plural forms following the GNU gettext standard:
                 // Form 0: zero (n==0)
                 // Form 1: one (n==1)
                 // Form 2: two (n==2)
@@ -252,30 +252,30 @@ readonly class Plurals
      * Returns a translated string in the correct plural form,
      * produced according to the formatting of the message.
      *
-     * @param string $translationKey Message identification
-     * @param int    $number     The number used to determine the plural form
+     * @param string $key Message identification
+     * @param int $number The number used to determine the plural form
      */
-    public function getMsg(string $translationKey, int $number): string
+    public function get(string $key, int $number): string
     {
-        return sprintf($this->getMsgTemplate($translationKey, $number), $number);
+        return sprintf($this->getMsgTemplate($key, $number), $number);
     }
 
     /**
-     * Helper function that returns the translation template in the correct plural form
-     * If translation is missing message in English plural form is returned.
+     * Helper function that returns the translation template in the correct plural form,
+     * If translation is missing, a message in English plural form is returned.
      *
-     * @param string $msgID Message identification
-     * @param int    $n     The number used to determine the plural form
+     * @param string $key Message identification
+     * @param int    $number     The number used to determine the plural form
      */
-    public function getMsgTemplate(string $msgID, int $n): string
+    public function getMsgTemplate(string $key, int $number): string
     {
-        $plural = $this->getPlural($n);
-        return Translation::get($msgID)[$plural] ?? Translation::get($msgID)[1];
+        $plural = $this->getPlural($number);
+        return Translation::get($key)[$plural] ?? Translation::get($key)[1];
     }
 
     /**
      * Determines the correct plural form for integer $n
-     * Returned integer is from interval [0, $nPlurals).
+     * Returned integer is from an interval [0, $nPlurals).
      *
      * @param int $number The number used to determine the plural form
      */

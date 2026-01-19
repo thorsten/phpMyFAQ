@@ -22,7 +22,6 @@ namespace phpMyFAQ\Controller\Frontend;
 use Exception;
 use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Search\SearchService;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -137,8 +136,7 @@ final class SearchController extends AbstractFrontController
             ? Translation::get(key: 'msgTagSearch')
             : Translation::get(key: 'msgAdvancedSearch');
 
-        // Get plurals helper
-        $plurals = new Plurals();
+        $plurals = $this->container->get('phpmyfaq.language.plurals');
 
         // Render template
         return $this->render('search.twig', [
@@ -158,8 +156,8 @@ final class SearchController extends AbstractFrontController
             'msgPage' => Translation::get(key: 'msgPage'),
             'currentPage' => $searchData['currentPage'],
             'from' => Translation::get(key: 'msgVoteFrom'),
-            'msgSearchResults' => $plurals->GetMsg('plmsgSearchAmount', $searchData['numberOfSearchResults'] ?? 0),
-            'msgSearchResultsPagination' => $plurals->GetMsg('plmsgPagesTotal', $searchData['totalPages'] ?? 0),
+            'msgSearchResults' => $plurals->get('plmsgSearchAmount', $searchData['numberOfSearchResults'] ?? 0),
+            'msgSearchResultsPagination' => $plurals->get('plmsgPagesTotal', $searchData['totalPages'] ?? 0),
             'searchTerm' => $searchData['searchTerm'],
             'searchTags' => $searchData['searchTags'],
             'msgSearchWord' => Translation::get(key: 'msgSearchWord'),

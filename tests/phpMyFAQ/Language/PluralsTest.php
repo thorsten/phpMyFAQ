@@ -262,7 +262,7 @@ class PluralsTest extends TestCase
 
     public function testGetMsgMethodExists(): void
     {
-        $this->assertTrue(method_exists($this->plurals, 'getMsg'));
+        $this->assertTrue(method_exists($this->plurals, 'get'));
     }
 
     public function testConstructorSetsProperties(): void

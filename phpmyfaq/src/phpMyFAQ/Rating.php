@@ -58,13 +58,15 @@ readonly class Rating
 
         if ($row !== null) {
             return sprintf(
-                ' <span data-rating="%s">%s</span> (' . $this->plurals->GetMsg('plmsgVotes', (int) $row->usr) . ')',
+                ' <span data-rating="%s">%s</span> ('
+                . $this->plurals->get(key: 'plmsgVotes', number: (int) $row->usr)
+                . ')',
                 round((int) $row->voting, 2),
                 round((int) $row->voting, 2),
             );
         }
 
-        return ' <span data-rating="0">0</span> (' . $this->plurals->GetMsg('plmsgVotes', 0) . ')';
+        return ' <span data-rating="0">0</span> (' . $this->plurals->get(key: 'plmsgVotes', number: 0) . ')';
     }
 
     /**
