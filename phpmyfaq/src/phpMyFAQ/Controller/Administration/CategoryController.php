@@ -112,7 +112,7 @@ final class CategoryController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route(path: '/category/add/:parentId/:language', name: 'admin.category.add.child', methods: ['GET'])]
+    #[Route(path: '/category/add/{parentId}/{language}', name: 'admin.category.add.child', methods: ['GET'])]
     public function addChild(Request $request): Response
     {
         $this->userHasPermission(PermissionType::CATEGORY_ADD);
@@ -311,7 +311,7 @@ final class CategoryController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route(path: '/category/edit/:categoryId', name: 'admin.category.edit', methods: ['GET'])]
+    #[Route(path: '/category/edit/{categoryId}', name: 'admin.category.edit', methods: ['GET'])]
     public function edit(Request $request): Response
     {
         $this->userHasPermission(PermissionType::CATEGORY_EDIT);
@@ -481,7 +481,7 @@ final class CategoryController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route(path: '/category/translate/:categoryId', name: 'admin.category.translate', methods: ['GET'])]
+    #[Route(path: '/category/translate/{categoryId}', name: 'admin.category.translate', methods: ['GET'])]
     public function translate(Request $request): Response
     {
         $this->userHasPermission(PermissionType::CATEGORY_EDIT);

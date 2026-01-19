@@ -55,7 +55,7 @@ final class InstanceController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route(path: '/instance/edit/:id', name: 'admin.instance.edit', methods: ['GET'])]
+    #[Route(path: '/instance/edit/{id}', name: 'admin.instance.edit', methods: ['GET'])]
     public function edit(Request $request): Response
     {
         $this->userHasPermission(PermissionType::INSTANCE_EDIT);

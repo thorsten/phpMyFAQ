@@ -86,7 +86,7 @@ final class NewsController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route(path: '/news/edit/:newsId', name: 'admin.news.edit', methods: ['GET'])]
+    #[Route(path: '/news/edit/{newsId}', name: 'admin.news.edit', methods: ['GET'])]
     public function edit(Request $request): Response
     {
         $this->userHasPermission(PermissionType::NEWS_ADD);

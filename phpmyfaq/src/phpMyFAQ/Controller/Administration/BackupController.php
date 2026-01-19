@@ -64,7 +64,7 @@ final class BackupController extends AbstractAdministrationController
         ]);
     }
 
-    #[Route(path: '/backup/export/:type', name: 'admin.backup.export', methods: ['GET'])]
+    #[Route(path: '/backup/export/{type}', name: 'admin.backup.export', methods: ['GET'])]
     public function export(Request $request): Response
     {
         $this->userHasPermission(PermissionType::BACKUP);

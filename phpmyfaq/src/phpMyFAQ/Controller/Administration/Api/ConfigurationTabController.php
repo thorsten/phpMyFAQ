@@ -382,7 +382,11 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         return new Response(Helper::sortingPopularFaqsOptions($request->attributes->get(key: 'current')));
     }
 
-    #[Route(path: 'admin/api/configuration/perm-level', name: 'admin.api.configuration.perm-level', methods: ['GET'])]
+    #[Route(
+        path: 'admin/api/configuration/perm-level/{current}',
+        name: 'admin.api.configuration.permLevel',
+        methods: ['GET'],
+    )]
     public function permLevel(Request $request): Response
     {
         $this->userIsAuthenticated();

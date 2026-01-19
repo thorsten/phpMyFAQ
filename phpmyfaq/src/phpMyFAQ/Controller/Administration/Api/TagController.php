@@ -114,7 +114,7 @@ final class TagController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route(path: 'admin/api/content/tag/:tagId', name: 'admin.api.content.tag.delete', methods: ['DELETE'])]
+    #[Route(path: 'admin/api/content/tags/{tagId}', name: 'admin.api.content.tags.id', methods: ['DELETE'])]
     public function delete(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();

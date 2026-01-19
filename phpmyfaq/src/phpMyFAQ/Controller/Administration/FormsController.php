@@ -65,7 +65,7 @@ final class FormsController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route(path: '/forms/translate/:formId/:inputId', name: 'admin.forms.translate', methods: ['GET'])]
+    #[Route(path: '/forms/translate/{formId}/{inputId}', name: 'admin.forms.translate', methods: ['GET'])]
     public function translate(Request $request): Response
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);

@@ -239,7 +239,7 @@ final class FaqController extends AbstractAdministrationController
      * @throws \Exception
      * @todo refactor Twig template variables
      */
-    #[Route(path: '/faq/edit/:faqId/:faqLanguage', name: 'admin.faq.edit', methods: ['GET'])]
+    #[Route(path: '/faq/edit/{faqId}/{faqLanguage}', name: 'admin.faq.edit', methods: ['GET'])]
     public function edit(Request $request): Response
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
@@ -367,7 +367,7 @@ final class FaqController extends AbstractAdministrationController
      * @throws \Exception
      * @todo refactor Twig template variables
      */
-    #[Route(path: '/faq/copy/:faqId/:faqLanguage', name: 'admin.faq.copy', methods: ['GET'])]
+    #[Route(path: '/faq/copy/{faqId}/{faqLanguage}', name: 'admin.faq.copy', methods: ['GET'])]
     public function copy(Request $request): Response
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);
@@ -442,7 +442,7 @@ final class FaqController extends AbstractAdministrationController
      * @throws \Exception
      * @todo refactor Twig template variables
      */
-    #[Route(path: '/faq/translate/:faqId/:faqLanguage', name: 'admin.faq.translate', methods: ['GET'])]
+    #[Route(path: '/faq/translate/{faqId}/{faqLanguage}', name: 'admin.faq.translate', methods: ['GET'])]
     public function translate(Request $request): Response
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);
@@ -517,7 +517,7 @@ final class FaqController extends AbstractAdministrationController
      * @throws \Exception
      * @todo refactor Twig template variables
      */
-    #[Route(path: '/faq/answer/:questionId/:faqLanguage', name: 'admin.faq.answer', methods: ['GET'])]
+    #[Route(path: '/faq/answer/{questionId}/{faqLanguage}', name: 'admin.faq.answer', methods: ['GET'])]
     public function answer(Request $request): Response
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);
