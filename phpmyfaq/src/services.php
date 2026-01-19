@@ -30,6 +30,7 @@ use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Attachment\AttachmentCollection;
 use phpMyFAQ\Auth;
 use phpMyFAQ\Bookmark;
+use phpMyFAQ\Chat;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Category\Image;
@@ -185,6 +186,10 @@ return static function (ContainerConfigurator $container): void {
         ]);
 
     $services->set('phpmyfaq.category.image', Image::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+
+    $services->set('phpmyfaq.chat', Chat::class)->args([
         service('phpmyfaq.configuration'),
     ]);
 

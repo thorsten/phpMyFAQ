@@ -187,6 +187,7 @@ class Update extends AbstractSetup
 
         // 4.2 updates
         $this->applyUpdates420Alpha();
+        $this->applyUpdates420Alpha2();
 
         // Optimize the tables
         $this->optimizeTables();
@@ -1360,6 +1361,120 @@ class Update extends AbstractSetup
                 }
             } catch (\Exception $e) {
                 $this->configuration->getLogger()->error('Admin log hash migration failed: ' . $e->getMessage());
+            }
+        }
+    }
+
+    private function applyUpdates420Alpha2(): void
+    {
+        if (version_compare($this->version, '4.2.0-alpha.2', '<')) {
+            // Create chat messages table for private user-to-user messaging
+            switch (Database::getType()) {
+                case 'mysqli':
+                case 'pdo_mysql':
+                    $this->queries[] = sprintf(
+                        'CREATE TABLE IF NOT EXISTS %sfaqchat_messages (
+                            id INT(11) NOT NULL AUTO_INCREMENT,
+                            sender_id INT(11) NOT NULL,
+                            recipient_id INT(11) NOT NULL,
+                            message TEXT NOT NULL,
+                            is_read TINYINT(1) NOT NULL DEFAULT 0,
+                            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            PRIMARY KEY (id),
+                            INDEX idx_chat_sender (sender_id),
+                            INDEX idx_chat_recipient (recipient_id),
+                            INDEX idx_chat_conversation (sender_id, recipient_id),
+                            INDEX idx_chat_created (created_at)
+                        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+                        Database::getTablePrefix(),
+                    );
+                    break;
+
+                case 'pgsql':
+                case 'pdo_pgsql':
+                    $this->queries[] = sprintf('CREATE TABLE IF NOT EXISTS %sfaqchat_messages (
+                            id SERIAL NOT NULL,
+                            sender_id INTEGER NOT NULL,
+                            recipient_id INTEGER NOT NULL,
+                            message TEXT NOT NULL,
+                            is_read SMALLINT NOT NULL DEFAULT 0,
+                            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            PRIMARY KEY (id)
+                        )', Database::getTablePrefix());
+                    $this->queries[] = sprintf(
+                        'CREATE INDEX IF NOT EXISTS idx_chat_sender ON %sfaqchat_messages (sender_id)',
+                        Database::getTablePrefix(),
+                    );
+                    $this->queries[] = sprintf(
+                        'CREATE INDEX IF NOT EXISTS idx_chat_recipient ON %sfaqchat_messages (recipient_id)',
+                        Database::getTablePrefix(),
+                    );
+                    $this->queries[] = sprintf(
+                        'CREATE INDEX IF NOT EXISTS idx_chat_conversation ON %sfaqchat_messages (sender_id, recipient_id)',
+                        Database::getTablePrefix(),
+                    );
+                    $this->queries[] = sprintf(
+                        'CREATE INDEX IF NOT EXISTS idx_chat_created ON %sfaqchat_messages (created_at)',
+                        Database::getTablePrefix(),
+                    );
+                    break;
+
+                case 'sqlite3':
+                case 'pdo_sqlite':
+                    $this->queries[] = sprintf('CREATE TABLE IF NOT EXISTS %sfaqchat_messages (
+                            id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                            sender_id INTEGER NOT NULL,
+                            recipient_id INTEGER NOT NULL,
+                            message TEXT NOT NULL,
+                            is_read INTEGER NOT NULL DEFAULT 0,
+                            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                        )', Database::getTablePrefix());
+                    $this->queries[] = sprintf(
+                        'CREATE INDEX IF NOT EXISTS idx_chat_sender ON %sfaqchat_messages (sender_id)',
+                        Database::getTablePrefix(),
+                    );
+                    $this->queries[] = sprintf(
+                        'CREATE INDEX IF NOT EXISTS idx_chat_recipient ON %sfaqchat_messages (recipient_id)',
+                        Database::getTablePrefix(),
+                    );
+                    $this->queries[] = sprintf(
+                        'CREATE INDEX IF NOT EXISTS idx_chat_conversation ON %sfaqchat_messages (sender_id, recipient_id)',
+                        Database::getTablePrefix(),
+                    );
+                    $this->queries[] = sprintf(
+                        'CREATE INDEX IF NOT EXISTS idx_chat_created ON %sfaqchat_messages (created_at)',
+                        Database::getTablePrefix(),
+                    );
+                    break;
+
+                case 'sqlsrv':
+                case 'pdo_sqlsrv':
+                    $this->queries[] = sprintf('CREATE TABLE %sfaqchat_messages (
+                            id INT IDENTITY(1,1) NOT NULL,
+                            sender_id INT NOT NULL,
+                            recipient_id INT NOT NULL,
+                            message NVARCHAR(MAX) NOT NULL,
+                            is_read TINYINT NOT NULL DEFAULT 0,
+                            created_at DATETIME NOT NULL DEFAULT GETDATE(),
+                            PRIMARY KEY (id)
+                        )', Database::getTablePrefix());
+                    $this->queries[] = sprintf(
+                        'CREATE INDEX idx_chat_sender ON %sfaqchat_messages (sender_id)',
+                        Database::getTablePrefix(),
+                    );
+                    $this->queries[] = sprintf(
+                        'CREATE INDEX idx_chat_recipient ON %sfaqchat_messages (recipient_id)',
+                        Database::getTablePrefix(),
+                    );
+                    $this->queries[] = sprintf(
+                        'CREATE INDEX idx_chat_conversation ON %sfaqchat_messages (sender_id, recipient_id)',
+                        Database::getTablePrefix(),
+                    );
+                    $this->queries[] = sprintf(
+                        'CREATE INDEX idx_chat_created ON %sfaqchat_messages (created_at)',
+                        Database::getTablePrefix(),
+                    );
+                    break;
             }
         }
     }

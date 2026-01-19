@@ -370,6 +370,19 @@ class Mysqli extends Database implements DriverInterface
             datum VARCHAR(20) DEFAULT \'\',
             ip VARCHAR(15) DEFAULT \'\',
             PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+        'faqchat_messages' => 'CREATE TABLE %sfaqchat_messages (
+            id INT(11) NOT NULL AUTO_INCREMENT,
+            sender_id INT(11) NOT NULL,
+            recipient_id INT(11) NOT NULL,
+            message TEXT NOT NULL,
+            is_read TINYINT(1) NOT NULL DEFAULT 0,
+            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            INDEX idx_chat_sender (sender_id),
+            INDEX idx_chat_recipient (recipient_id),
+            INDEX idx_chat_conversation (sender_id, recipient_id),
+            INDEX idx_chat_created (created_at))
+            DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
     ];
 
     /**

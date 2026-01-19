@@ -360,6 +360,17 @@ class Sqlite3 extends Database implements DriverInterface
             datum VARCHAR(20) DEFAULT \'\',
             ip VARCHAR(15) DEFAULT \'\',
             PRIMARY KEY (id))',
+        'faqchat_messages' => 'CREATE TABLE %sfaqchat_messages (
+            id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+            sender_id INTEGER NOT NULL,
+            recipient_id INTEGER NOT NULL,
+            message TEXT NOT NULL,
+            is_read INTEGER NOT NULL DEFAULT 0,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP)',
+        'faqchat_messages_idx_sender' => 'CREATE INDEX idx_chat_sender ON %sfaqchat_messages (sender_id)',
+        'faqchat_messages_idx_recipient' => 'CREATE INDEX idx_chat_recipient ON %sfaqchat_messages (recipient_id)',
+        'faqchat_messages_idx_conversation' => 'CREATE INDEX idx_chat_conversation ON %sfaqchat_messages (sender_id, recipient_id)',
+        'faqchat_messages_idx_created' => 'CREATE INDEX idx_chat_created ON %sfaqchat_messages (created_at)',
     ];
 
     /**
