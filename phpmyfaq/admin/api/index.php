@@ -17,11 +17,37 @@
  */
 
 use phpMyFAQ\Application;
+use phpMyFAQ\Core\Exception\DatabaseConnectionException;
+use phpMyFAQ\Environment;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
-require '../../src/Bootstrap.php';
+try {
+    require '../../src/Bootstrap.php';
+} catch (DatabaseConnectionException $exception) {
+    $errorMessage = Environment::isDebugMode()
+        ? $exception->getMessage()
+        : 'The database server is currently unavailable. Please try again later.';
+
+    $problemDetails = [
+        'type' => '/problems/database-unavailable',
+        'title' => 'Database Connection Error',
+        'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+        'detail' => $errorMessage,
+        'instance' => $_SERVER['REQUEST_URI'] ?? '/api',
+    ];
+
+    $response = new JsonResponse(
+        data: $problemDetails,
+        status: Response::HTTP_INTERNAL_SERVER_ERROR,
+        headers: ['Content-Type' => 'application/problem+json']
+    );
+    $response->send();
+    exit(1);
+}
 
 //
 // Service Containers
@@ -34,12 +60,13 @@ try {
     echo sprintf('Error: %s at line %d at %s', $exception->getMessage(), $exception->getLine(), $exception->getFile());
 }
 
-$routes = include PMF_SRC_DIR  . '/admin-api-routes.php';
-
 $app = new Application($container);
+$app->setAdminContext(true);
 $app->setApiContext(true);
+$app->setRoutingContext('admin-api');
 try {
-    $app->run($routes);
+    // Autoload routes from attributes (falls back to api-routes.php during migration)
+    $app->run();
 } catch (Exception $exception) {
     echo sprintf('Error: %s at line %d at %s', $exception->getMessage(), $exception->getLine(), $exception->getFile());
 }

@@ -45,7 +45,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route(path: 'admin/api/configuration/list/{mode}', name: 'admin.api.configuration.list', methods: ['GET'])]
+    #[Route(path: 'configuration/list/{mode}', name: 'admin.api.configuration.list', methods: ['GET'])]
     public function list(Request $request): Response
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -83,7 +83,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     /**
      * @throws \Exception
      */
-    #[Route(path: 'admin/api/configuration', name: 'admin.api.configuration.save', methods: ['POST'])]
+    #[Route(path: 'configuration', name: 'admin.api.configuration.save', methods: ['POST'])]
     public function save(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -328,7 +328,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     /**
      * @throws \Exception
      */
-    #[Route(path: 'admin/api/configuration/templates', name: 'admin.api.configuration.templates', methods: ['GET'])]
+    #[Route(path: 'configuration/templates', name: 'admin.api.configuration.templates', methods: ['GET'])]
     public function templates(): Response
     {
         $this->userIsAuthenticated();

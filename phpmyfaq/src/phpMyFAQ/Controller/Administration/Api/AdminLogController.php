@@ -38,11 +38,7 @@ final class AdminLogController extends AbstractAdministrationApiController
      * @throws \phpMyFAQ\Core\Exception|JsonException
      * @throws Exception
      */
-    #[Route(
-        path: './admin/api/statistics/admin-log',
-        name: 'admin.api.statistics.admin-log.delete',
-        methods: ['DELETE'],
-    )]
+    #[Route(path: 'statistics/admin-log', name: 'admin.api.statistics.admin-log.delete', methods: ['DELETE'])]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
@@ -65,11 +61,7 @@ final class AdminLogController extends AbstractAdministrationApiController
     /**
      * @throws Exception
      */
-    #[Route(
-        path: './admin/api/statistics/admin-log/export',
-        name: 'admin.api.statistics.admin-log.export',
-        methods: ['POST'],
-    )]
+    #[Route(path: 'statistics/admin-log/export', name: 'admin.api.statistics.admin-log.export', methods: ['POST'])]
     public function export(Request $request): Response|JsonResponse
     {
         $this->userHasPermission(PermissionType::STATISTICS_ADMINLOG);
