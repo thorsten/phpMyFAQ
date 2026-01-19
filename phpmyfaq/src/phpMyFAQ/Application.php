@@ -277,9 +277,6 @@ class Application
     {
         $configuration = $this->container?->get(id: 'phpmyfaq.configuration');
 
-        // Determine if we should use attributes only
-        $attributesOnly = $configuration?->get('routing.useAttributesOnly') ?? false;
-
         // Determine if caching is enabled
         $cacheEnabled = $configuration?->get('routing.cache.enabled') ?? false;
         $cacheDir = $configuration?->get('routing.cache.dir') ?? './cache';
@@ -297,15 +294,15 @@ class Application
         // Load routes with caching if enabled
         if ($cacheEnabled) {
             $cacheManager = new RouteCacheManager($cacheDir, Environment::isDebugMode());
-            return $cacheManager->getRoutes($context, function () use ($configuration, $context, $attributesOnly) {
+            return $cacheManager->getRoutes($context, function () use ($configuration, $context) {
                 $builder = new RouteCollectionBuilder($configuration);
-                return $builder->build($context, $attributesOnly);
+                return $builder->build($context);
             });
         }
 
-        // Load routes without caching
+        // Load routes without caching (routes are always loaded from controller attributes)
         $builder = new RouteCollectionBuilder($configuration);
-        return $builder->build($context, $attributesOnly);
+        return $builder->build($context);
     }
 
     /**
