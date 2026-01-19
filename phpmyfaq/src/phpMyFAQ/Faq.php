@@ -410,9 +410,9 @@ class Faq
                     $oLink->toHtmlAnchor(),
                     Utils::chopString(strip_tags((string) $row->answer), 20),
                 );
-                $renderedItems[$row->id] .= sprintf('<span id="viewsPerRecord" class="badge text-bg-primary rounded-pill">%s</span></li>', $this->plurals->getMsg(
-                    'plmsgViews',
-                    (int) $visits,
+                $renderedItems[$row->id] .= sprintf('<span id="viewsPerRecord" class="badge text-bg-primary rounded-pill">%s</span></li>', $this->plurals->get(
+                    key: 'plmsgViews',
+                    number: (int) $visits,
                 ));
             }
 

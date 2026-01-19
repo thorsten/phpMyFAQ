@@ -119,7 +119,7 @@ class CategoryHelper extends AbstractHelper
                 '<li data-category-id="%d">%s <span class="badge text-bg-primary">%s</span><br><small>%s</small>',
                 $node['id'],
                 $name,
-                $this->plurals->getMsg('plmsgEntries', $number),
+                $this->plurals->get(key: 'plmsgEntries', number: $number),
                 $node['description'],
             );
             $html .= sprintf('<ul>%s</ul>', $this->buildCategoryList(

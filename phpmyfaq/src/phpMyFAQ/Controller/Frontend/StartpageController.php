@@ -23,7 +23,6 @@ use phpMyFAQ\Category\Startpage;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\News;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\TagNameTwigExtension;
@@ -45,7 +44,7 @@ final class StartpageController extends AbstractFrontController
     public function index(Request $request): Response
     {
         $news = new News($this->configuration);
-        $plurals = new Plurals();
+        $plurals = $this->container->get('phpmyfaq.language.plurals');
         $faqStatistics = new Statistics($this->configuration);
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -92,7 +91,7 @@ final class StartpageController extends AbstractFrontController
             'errorMsgTrendingFaqs' => Translation::get(key: 'msgErrorNoRecords'),
             'msgNewsHeader' => Translation::get(key: 'newsArchive'),
             'newsList' => $news->getAll(),
-            'writeNumberOfArticles' => $plurals->getMsg(
+            'writeNumberOfArticles' => $plurals->get(
                 'plmsgHomeArticlesOnline',
                 $faqStatistics->totalFaqs($this->configuration->getLanguage()->getLanguage()),
             ),

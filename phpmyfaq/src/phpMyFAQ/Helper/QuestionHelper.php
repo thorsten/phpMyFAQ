@@ -42,9 +42,9 @@ class QuestionHelper extends AbstractHelper
     public function generateSmartAnswer(SearchResultSet $searchResultSet): string
     {
         $plurals = new Plurals();
-        $smartAnswer = sprintf('<h5>%s</h5>', $plurals->getMsg(
-            'plmsgSearchAmount',
-            $searchResultSet->getNumberOfResults(),
+        $smartAnswer = sprintf('<h5>%s</h5>', $plurals->get(
+            key: 'plmsgSearchAmount',
+            number: $searchResultSet->getNumberOfResults(),
         ));
 
         $smartAnswer .= '<ul>';

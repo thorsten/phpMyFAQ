@@ -131,13 +131,13 @@ class Statistics
             $entry->preview = $row['question'];
             $entry->url = $row['url'];
             if ('visits' === $type) {
-                $entry->visits = $this->plurals->GetMsg('plmsgViews', $row['visits']);
+                $entry->visits = $this->plurals->get(key: 'plmsgViews', number: $row['visits']);
             } else {
                 $entry->voted = sprintf(
                     '%s %s 5 - %s',
                     round($row['avg'], 2),
                     Translation::get(key: 'msgVoteFrom'),
-                    $this->plurals->GetMsg('plmsgVotes', $row['user']),
+                    $this->plurals->get(key: 'plmsgVotes', number: $row['user']),
                 );
             }
 
@@ -166,7 +166,7 @@ class Statistics
             $entry->url = $row['url'];
             $entry->title = Utils::makeShorterText($row['question'], 8);
             $entry->preview = $row['question'];
-            $entry->visits = $this->plurals->GetMsg('plmsgViews', $row['visits']);
+            $entry->visits = $this->plurals->get(key: 'plmsgViews', number: $row['visits']);
             $entry->date = $date->format($row['date']);
             $output[] = $entry;
         }
