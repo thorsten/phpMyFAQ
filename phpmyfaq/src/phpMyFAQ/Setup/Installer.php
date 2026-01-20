@@ -297,6 +297,7 @@ class Installer extends Setup
         'main.termsURL' => '',
         'main.imprintURL' => '',
         'main.cookiePolicyURL' => '',
+        'main.accessibilityStatementURL' => '',
         'main.enableAutoUpdateHint' => 'true',
         'main.enableAskQuestions' => 'false',
         'main.enableNotifications' => 'false',
