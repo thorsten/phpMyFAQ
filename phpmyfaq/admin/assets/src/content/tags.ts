@@ -16,9 +16,20 @@
 import autocomplete, { AutocompleteItem } from 'autocompleter';
 import { addElement, pushNotification } from '../../../../assets/src/utils';
 import { deleteTag, fetchTags } from '../api';
+import { fetchJson } from '../api/fetch-wrapper';
 
 interface Tag extends AutocompleteItem {
   tagName: string;
+}
+
+interface DeleteTagResponse {
+  success?: string;
+  error?: string;
+}
+
+interface TagResponse {
+  id: string;
+  name: string;
 }
 
 export const handleTags = (): void => {
@@ -63,7 +74,7 @@ export const handleTags = (): void => {
         const target = event.target as HTMLElement;
         const tagId = target.getAttribute('data-pmf-id') as string;
 
-        const response = await deleteTag(tagId);
+        const response = (await deleteTag(tagId)) as DeleteTagResponse;
         if (response.success) {
           pushNotification(response.success);
           const row = document.getElementById(`pmf-row-tag-id-${tagId}`) as HTMLElement;
@@ -76,7 +87,7 @@ export const handleTags = (): void => {
   }
 
   if (tagForm) {
-    tagForm.addEventListener('submit', (event: Event) => {
+    tagForm.addEventListener('submit', async (event: Event) => {
       event.preventDefault();
 
       const input = document.querySelector('input:focus') as HTMLInputElement;
@@ -91,49 +102,44 @@ export const handleTags = (): void => {
       const tag = input.value;
       const csrf = (document.querySelector('input[name=pmf-csrf-token]') as HTMLInputElement).value;
 
-      fetch('./api/content/tag', {
-        method: 'PUT',
-        headers: {
-          Accept: 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          csrf: csrf,
-          id: tagId,
-          tag: tag,
-        }),
-      })
-        .then(async (response) => {
-          if (response.ok) {
-            return response.json();
-          }
-          throw new Error('Network response was not ok: ', { cause: { response } });
-        })
-        .then(() => {
-          input.replaceWith(
-            addElement(
-              'span',
-              {
-                innerHTML: input.value.replace(/\//g, '&#x2F;'),
-                id: `tag-id-${tagId}`,
-              },
-              [
-                addElement('span', {
-                  classList: 'ms-1 badge rounded-pill bg-success',
-                  innerHTML: '✓',
-                }),
-              ]
-            )
-          );
-        })
-        .catch(async (error) => {
-          const errorMessage = await error.cause.response.json();
-          const table = document.querySelector('.table') as HTMLElement;
-          table.insertAdjacentElement(
-            'beforebegin',
-            addElement('div', { classList: 'alert alert-danger', innerText: errorMessage })
-          );
+      try {
+        await fetchJson('./api/content/tag', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            csrf: csrf,
+            id: tagId,
+            tag: tag,
+          }),
         });
+
+        input.replaceWith(
+          addElement(
+            'span',
+            {
+              innerHTML: input.value.replace(/\//g, '&#x2F;'),
+              id: `tag-id-${tagId}`,
+            },
+            [
+              addElement('span', {
+                classList: 'ms-1 badge rounded-pill bg-success',
+                innerHTML: '✓',
+              }),
+            ]
+          )
+        );
+      } catch (error) {
+        const table = document.querySelector('.table') as HTMLElement;
+        table.insertAdjacentElement(
+          'beforebegin',
+          addElement('div', {
+            classList: 'alert alert-danger',
+            innerText: error instanceof Error ? error.message : 'An error occurred',
+          })
+        );
+      }
     });
   }
 
@@ -154,14 +160,14 @@ export const handleTags = (): void => {
       },
       fetch: async (text, callback) => {
         let match = text.toLowerCase();
-        const tags = await fetchTags(match);
+        const tags = (await fetchTags(match)) as TagResponse[];
         const tagItems: Tag[] = tags
-          .filter((tag) => {
+          .filter((tag: TagResponse) => {
             const lastCommaIndex = match.lastIndexOf(',');
             match = match.substring(lastCommaIndex + 1);
             return tag.name.toLowerCase().indexOf(match) !== -1;
           })
-          .map((tag) => ({
+          .map((tag: TagResponse) => ({
             tagName: tag.name,
             label: tag.name,
           }));
