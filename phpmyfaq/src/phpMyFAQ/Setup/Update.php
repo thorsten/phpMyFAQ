@@ -187,7 +187,6 @@ class Update extends AbstractSetup
 
         // 4.2 updates
         $this->applyUpdates420Alpha();
-        $this->applyUpdates420Alpha2();
 
         // Optimize the tables
         $this->optimizeTables();
@@ -1288,6 +1287,7 @@ class Update extends AbstractSetup
             $this->configuration->add('main.termsURL', '');
             $this->configuration->add('main.imprintURL', '');
             $this->configuration->add('main.cookiePolicyURL', '');
+            $this->configuration->add('main.accessibilityStatementURL', '');
             $this->configuration->add('api.onlyActiveFaqs', 'true');
             $this->configuration->add('api.onlyActiveCategories', 'true');
             $this->configuration->add('api.onlyPublicQuestions', 'true');
@@ -1307,68 +1307,8 @@ class Update extends AbstractSetup
             $this->configuration->add('translation.libreTranslateApiKey', '');
 
             $this->configuration->add('main.enableCommentEditor', 'false');
-        }
-    }
 
-    private function updateVersion(): void
-    {
-        $this->configuration->update(['main.currentApiVersion' => System::getApiVersion()]);
-        $this->configuration->update(['main.currentVersion' => System::getVersion()]);
-    }
-
-    /**
-     * @throws RandomException
-     */
-    private function getBackupFilename(): string
-    {
-        if ($this->backupFilename === null) {
-            $randomHash = bin2hex(random_bytes(4)); // 8-character hex string
-            $this->backupFilename = sprintf('phpmyfaq-config-backup.%s.%s.zip', date(format: 'Y-m-d'), $randomHash);
-        }
-
-        return $this->backupFilename;
-    }
-
-    private function migrateAdminLogHashes(): void
-    {
-        if (version_compare($this->version, '4.2.0-alpha', '<')) {
-            $repository = new AdminLogRepository($this->configuration);
-
-            try {
-                $entries = $repository->getAll();
-                $previousHash = null;
-
-                foreach ($entries as $entity) {
-                    if ($entity->getHash() === null) {
-                        $entity->setPreviousHash($previousHash);
-                        $hash = $entity->calculateHash();
-
-                        // Execute UPDATE directly instead of adding to the queries array
-                        $updateQuery = sprintf(
-                            "UPDATE %sfaqadminlog SET hash = '%s', previous_hash = %s WHERE id = %d",
-                            Database::getTablePrefix(),
-                            $this->configuration->getDb()->escape($hash),
-                            $previousHash !== null
-                                ? "'" . $this->configuration->getDb()->escape($previousHash) . "'"
-                                : 'NULL',
-                            $entity->getId(),
-                        );
-
-                        $this->configuration->getDb()->query($updateQuery);
-
-                        $previousHash = $hash;
-                    }
-                }
-            } catch (\Exception $e) {
-                $this->configuration->getLogger()->error('Admin log hash migration failed: ' . $e->getMessage());
-            }
-        }
-    }
-
-    private function applyUpdates420Alpha2(): void
-    {
-        if (version_compare($this->version, '4.2.0-alpha.2', '<')) {
-            // Create chat messages table for private user-to-user messaging
+            // Create a chat messages table for private user-to-user messaging
             switch (Database::getType()) {
                 case 'mysqli':
                 case 'pdo_mysql':
@@ -1475,6 +1415,61 @@ class Update extends AbstractSetup
                         Database::getTablePrefix(),
                     );
                     break;
+            }
+        }
+    }
+
+    private function updateVersion(): void
+    {
+        $this->configuration->update(['main.currentApiVersion' => System::getApiVersion()]);
+        $this->configuration->update(['main.currentVersion' => System::getVersion()]);
+    }
+
+    /**
+     * @throws RandomException
+     */
+    private function getBackupFilename(): string
+    {
+        if ($this->backupFilename === null) {
+            $randomHash = bin2hex(random_bytes(4)); // 8-character hex string
+            $this->backupFilename = sprintf('phpmyfaq-config-backup.%s.%s.zip', date(format: 'Y-m-d'), $randomHash);
+        }
+
+        return $this->backupFilename;
+    }
+
+    private function migrateAdminLogHashes(): void
+    {
+        if (version_compare($this->version, '4.2.0-alpha', '<')) {
+            $repository = new AdminLogRepository($this->configuration);
+
+            try {
+                $entries = $repository->getAll();
+                $previousHash = null;
+
+                foreach ($entries as $entity) {
+                    if ($entity->getHash() === null) {
+                        $entity->setPreviousHash($previousHash);
+                        $hash = $entity->calculateHash();
+
+                        // Execute UPDATE directly instead of adding to the queries array
+                        $updateQuery = sprintf(
+                            "UPDATE %sfaqadminlog SET hash = '%s', previous_hash = %s WHERE id = %d",
+                            Database::getTablePrefix(),
+                            $this->configuration->getDb()->escape($hash),
+                            $previousHash !== null
+                                ? "'" . $this->configuration->getDb()->escape($previousHash) . "'"
+                                : 'NULL',
+                            $entity->getId(),
+                        );
+
+                        $this->configuration->getDb()->query($updateQuery);
+
+                        $previousHash = $hash;
+                    }
+                }
+            } catch (\Exception $e) {
+                $this->configuration->getLogger()->error('Admin log hash migration failed: ' . $e->getMessage());
             }
         }
     }

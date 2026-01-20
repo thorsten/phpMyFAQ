@@ -199,6 +199,11 @@
                     </a>
                   </li>
                 {% endif %}
+                {% if isAccessibilityStatementEnabled %}
+                  <a class="nav-link d-inline-block px-0 pt-1 pb-2" target="_blank" href="./accessibility.html">
+                    {{ msgAccessibilityStatement }}
+                  </a>
+                {% endif %}
               {% endif %}
             </ul>
           </div>
