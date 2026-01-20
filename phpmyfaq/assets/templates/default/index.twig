@@ -165,6 +165,13 @@
                     </a>
                   </li>
                 {% endfor %}
+                {% if isImprintLinkEnabled %}
+                  <li class="nav-item">
+                    <a class="nav-link d-inline-block px-0 pt-1 pb-2" target="_blank" href="./imprint.html">
+                      {{ msgImprint }}
+                    </a>
+                  </li>
+                {% endif %}
               {% endif %}
             </ul>
           </div>
@@ -185,13 +192,6 @@
                     </a>
                   </li>
                 {% endif %}
-                {% if isImprintLinkEnabled %}
-                  <li class="nav-item">
-                    <a class="nav-link d-inline-block px-0 pt-1 pb-2" target="_blank" href="./imprint.html">
-                      {{ msgImprint }}
-                    </a>
-                  </li>
-                {% endif %}
                 {% if isCookieConsentEnabled %}
                   <li class="nav-item">
                     <a id="showCookieConsent" class="nav-link d-inline-block px-0 pt-1 pb-2" href="#">
@@ -200,9 +200,11 @@
                   </li>
                 {% endif %}
                 {% if isAccessibilityStatementEnabled %}
-                  <a class="nav-link d-inline-block px-0 pt-1 pb-2" target="_blank" href="./accessibility.html">
-                    {{ msgAccessibilityStatement }}
-                  </a>
+                  <li class="nav-item">
+                    <a class="nav-link d-inline-block px-0 pt-1 pb-2" target="_blank" href="./accessibility.html">
+                      {{ msgAccessibilityStatement }}
+                    </a>
+                  </li>
                 {% endif %}
               {% endif %}
             </ul>

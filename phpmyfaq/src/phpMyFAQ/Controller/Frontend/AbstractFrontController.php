@@ -116,7 +116,7 @@ abstract class AbstractFrontController extends AbstractController
             'isCookieConsentEnabled' => $this->configuration->get('layout.enableCookieConsent'),
             'cookiePreferences' => Translation::get(key: 'cookiePreferences'),
             'isAccessibilityStatementEnabled' => !empty($this->configuration->get('main.accessibilityStatementURL')),
-            'accessibilityStatement' => Translation::get(key: 'msgAccessibilityStatement'),
+            'msgAccessibilityStatement' => Translation::get(key: 'msgAccessibilityStatement'),
         ];
     }
 
