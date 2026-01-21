@@ -247,7 +247,7 @@ class System
     public function getAvailableTemplates(): array
     {
         $templates = [];
-        $systemFolder = ['admin', 'setup'];
+        $systemFolder = ['admin', 'setup', 'error'];
 
         foreach (new DirectoryIterator(PMF_ROOT_DIR . '/assets/templates/') as $item) {
             $basename = $item->getBasename();
