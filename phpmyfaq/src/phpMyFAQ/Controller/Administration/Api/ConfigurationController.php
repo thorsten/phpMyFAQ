@@ -68,7 +68,7 @@ final class ConfigurationController extends AbstractAdministrationApiController
      * @throws \Exception
      */
     #[Route(
-        'admin/api/configuration/activate-maintenance-mode',
+        'configuration/activate-maintenance-mode',
         name: 'admin.api.configuration.activate-maintenance-mode',
         methods: ['POST'],
     )]
