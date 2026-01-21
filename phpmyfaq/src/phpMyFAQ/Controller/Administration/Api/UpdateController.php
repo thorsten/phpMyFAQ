@@ -92,7 +92,7 @@ final class UpdateController extends AbstractController
     /**
      * @throws Exception|\Exception
      */
-    #[Route(path: 'update-check', name: 'admin.api.update-check', methods: ['GET'])]
+    #[Route(path: 'update-check', name: 'admin.api.update-check', methods: ['POST'])]
     public function updateCheck(): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -142,7 +142,7 @@ final class UpdateController extends AbstractController
      * @throws \JsonException
      * @throws Exception|\Exception
      */
-    #[Route(path: 'download-package', name: 'admin.api.download-package', methods: ['POST'])]
+    #[Route(path: 'download-package/{versionNumber}', name: 'admin.api.download-package', methods: ['POST'])]
     public function downloadPackage(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
