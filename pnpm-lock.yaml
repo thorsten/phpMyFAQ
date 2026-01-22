@@ -57,7 +57,7 @@ devDependencies:
     version: 7.28.6(@babel/core@7.28.6)
   '@commitlint/cli':
     specifier: ^20.3.1
-    version: 20.3.1(@types/node@24.10.9)(typescript@5.9.3)
+    version: 20.3.1(@types/node@25.0.10)(typescript@5.9.3)
   '@commitlint/config-conventional':
     specifier: ^20.3.1
     version: 20.3.1
@@ -77,8 +77,8 @@ devDependencies:
     specifier: ^4.2.8
     version: 4.2.8
   '@types/node':
-    specifier: ^24.10.9
-    version: 24.10.9
+    specifier: ^25.0.10
+    version: 25.0.10
   '@types/sortablejs':
     specifier: ^1.15.9
     version: 1.15.9
@@ -123,7 +123,7 @@ devDependencies:
     version: 8.53.1(eslint@9.39.2)(typescript@5.9.3)
   vite:
     specifier: ^7.3.1
-    version: 7.3.1(@types/node@24.10.9)(sass@1.97.2)
+    version: 7.3.1(@types/node@25.0.10)(sass@1.97.2)
   vite-plugin-compression:
     specifier: ^0.5.1
     version: 0.5.1(vite@7.3.1)
@@ -138,7 +138,7 @@ devDependencies:
     version: 3.1.5(vite@7.3.1)
   vitest:
     specifier: ^4.0.17
-    version: 4.0.17(@types/node@24.10.9)(jsdom@27.4.0)(sass@1.97.2)
+    version: 4.0.17(@types/node@25.0.10)(jsdom@27.4.0)(sass@1.97.2)
   vitest-fetch-mock:
     specifier: ^0.4.5
     version: 0.4.5(vitest@4.0.17)
@@ -1232,14 +1232,14 @@ packages:
     engines: {node: '>=18'}
     dev: true
 
-  /@commitlint/cli@20.3.1(@types/node@24.10.9)(typescript@5.9.3):
+  /@commitlint/cli@20.3.1(@types/node@25.0.10)(typescript@5.9.3):
     resolution: {integrity: sha512-NtInjSlyev/+SLPvx/ulz8hRE25Wf5S9dLNDcIwazq0JyB4/w1ROF/5nV0ObPTX8YpRaKYeKtXDYWqumBNHWsw==}
     engines: {node: '>=v18'}
     hasBin: true
     dependencies:
       '@commitlint/format': 20.3.1
       '@commitlint/lint': 20.3.1
-      '@commitlint/load': 20.3.1(@types/node@24.10.9)(typescript@5.9.3)
+      '@commitlint/load': 20.3.1(@types/node@25.0.10)(typescript@5.9.3)
       '@commitlint/read': 20.3.1
       '@commitlint/types': 20.3.1
       tinyexec: 1.0.2
@@ -1308,7 +1308,7 @@ packages:
       '@commitlint/types': 20.3.1
     dev: true
 
-  /@commitlint/load@20.3.1(@types/node@24.10.9)(typescript@5.9.3):
+  /@commitlint/load@20.3.1(@types/node@25.0.10)(typescript@5.9.3):
     resolution: {integrity: sha512-YDD9XA2XhgYgbjju8itZ/weIvOOobApDqwlPYCX5NLO/cPtw2UMO5Cmn44Ks8RQULUVI5fUT6roKvyxcoLbNmw==}
     engines: {node: '>=v18'}
     dependencies:
@@ -1318,7 +1318,7 @@ packages:
       '@commitlint/types': 20.3.1
       chalk: 5.6.2
       cosmiconfig: 9.0.0(typescript@5.9.3)
-      cosmiconfig-typescript-loader: 6.2.0(@types/node@24.10.9)(cosmiconfig@9.0.0)(typescript@5.9.3)
+      cosmiconfig-typescript-loader: 6.2.0(@types/node@25.0.10)(cosmiconfig@9.0.0)(typescript@5.9.3)
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       lodash.uniq: 4.5.0
@@ -2230,7 +2230,7 @@ packages:
   /@types/conventional-commits-parser@5.0.2:
     resolution: {integrity: sha512-BgT2szDXnVypgpNxOK8aL5SGjUdaQbC++WZNjF1Qge3Og2+zhHj+RWhmehLhYyvQwqAmvezruVfOf8+3m74W+g==}
     dependencies:
-      '@types/node': 24.10.9
+      '@types/node': 25.0.10
     dev: true
 
   /@types/deep-eql@4.0.2:
@@ -2258,7 +2258,7 @@ packages:
   /@types/jsdom@27.0.0:
     resolution: {integrity: sha512-NZyFl/PViwKzdEkQg96gtnB8wm+1ljhdDay9ahn4hgb+SfVtPCbm3TlmDUFXTA+MGN3CijicnMhG18SI5H3rFw==}
     dependencies:
-      '@types/node': 24.10.9
+      '@types/node': 25.0.10
       '@types/tough-cookie': 4.0.5
       parse5: 7.3.0
     dev: true
@@ -2273,8 +2273,8 @@ packages:
       '@types/jquery': 3.5.33
     dev: true
 
-  /@types/node@24.10.9:
-    resolution: {integrity: sha512-ne4A0IpG3+2ETuREInjPNhUGis1SFjv1d5asp8MzEAGtOZeTeHVDOYqOgqfhvseqg/iXty2hjBf1zAOb7RNiNw==}
+  /@types/node@25.0.10:
+    resolution: {integrity: sha512-zWW5KPngR/yvakJgGOmZ5vTBemDoSqF3AcV/LrO5u5wTWyEAVVh+IT39G4gtyAkh3CtTZs8aX/yRM82OfzHJRg==}
     dependencies:
       undici-types: 7.16.0
     dev: true
@@ -2446,7 +2446,7 @@ packages:
       magicast: 0.5.1
       obug: 2.1.1
       tinyrainbow: 3.0.3
-      vitest: 4.0.17(@types/node@24.10.9)(jsdom@27.4.0)(sass@1.97.2)
+      vitest: 4.0.17(@types/node@25.0.10)(jsdom@27.4.0)(sass@1.97.2)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -2470,7 +2470,7 @@ packages:
       obug: 2.1.1
       std-env: 3.10.0
       tinyrainbow: 3.0.3
-      vitest: 4.0.17(@types/node@24.10.9)(jsdom@27.4.0)(sass@1.97.2)
+      vitest: 4.0.17(@types/node@25.0.10)(jsdom@27.4.0)(sass@1.97.2)
     dev: true
 
   /@vitest/expect@4.0.17:
@@ -2498,7 +2498,7 @@ packages:
       '@vitest/spy': 4.0.17
       estree-walker: 3.0.3
       magic-string: 0.30.21
-      vite: 7.3.1(@types/node@24.10.9)(sass@1.97.2)
+      vite: 7.3.1(@types/node@25.0.10)(sass@1.97.2)
     dev: true
 
   /@vitest/pretty-format@4.0.17:
@@ -2930,7 +2930,7 @@ packages:
       browserslist: 4.28.1
     dev: true
 
-  /cosmiconfig-typescript-loader@6.2.0(@types/node@24.10.9)(cosmiconfig@9.0.0)(typescript@5.9.3):
+  /cosmiconfig-typescript-loader@6.2.0(@types/node@25.0.10)(cosmiconfig@9.0.0)(typescript@5.9.3):
     resolution: {integrity: sha512-GEN39v7TgdxgIoNcdkRE3uiAzQt3UXLyHbRHD6YoL048XAeOomyxaP+Hh/+2C6C2wYjxJ2onhJcsQp+L4YEkVQ==}
     engines: {node: '>=v18'}
     peerDependencies:
@@ -2938,7 +2938,7 @@ packages:
       cosmiconfig: '>=9'
       typescript: '>=5'
     dependencies:
-      '@types/node': 24.10.9
+      '@types/node': 25.0.10
       cosmiconfig: 9.0.0(typescript@5.9.3)
       jiti: 2.6.1
       typescript: 5.9.3
@@ -4701,7 +4701,7 @@ packages:
       chalk: 4.1.2
       debug: 4.4.3
       fs-extra: 10.1.0
-      vite: 7.3.1(@types/node@24.10.9)(sass@1.97.2)
+      vite: 7.3.1(@types/node@25.0.10)(sass@1.97.2)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -4723,7 +4723,7 @@ packages:
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
       pathe: 0.2.0
-      vite: 7.3.1(@types/node@24.10.9)(sass@1.97.2)
+      vite: 7.3.1(@types/node@25.0.10)(sass@1.97.2)
     dev: true
 
   /vite-plugin-minify@2.1.0(vite@7.3.1):
@@ -4733,7 +4733,7 @@ packages:
     dependencies:
       '@types/html-minifier-terser': 7.0.2
       html-minifier-terser: 7.2.0
-      vite: 7.3.1(@types/node@24.10.9)(sass@1.97.2)
+      vite: 7.3.1(@types/node@25.0.10)(sass@1.97.2)
     dev: true
 
   /vite-plugin-static-copy@3.1.5(vite@7.3.1):
@@ -4746,10 +4746,10 @@ packages:
       p-map: 7.0.4
       picocolors: 1.1.1
       tinyglobby: 0.2.15
-      vite: 7.3.1(@types/node@24.10.9)(sass@1.97.2)
+      vite: 7.3.1(@types/node@25.0.10)(sass@1.97.2)
     dev: true
 
-  /vite@7.3.1(@types/node@24.10.9)(sass@1.97.2):
+  /vite@7.3.1(@types/node@25.0.10)(sass@1.97.2):
     resolution: {integrity: sha512-w+N7Hifpc3gRjZ63vYBXA56dvvRlNWRczTdmCBBa+CotUzAPf5b7YMdMR/8CQoeYE5LX3W4wj6RYTgonm1b9DA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
@@ -4789,7 +4789,7 @@ packages:
       yaml:
         optional: true
     dependencies:
-      '@types/node': 24.10.9
+      '@types/node': 25.0.10
       esbuild: 0.27.2
       fdir: 6.5.0(picomatch@4.0.3)
       picomatch: 4.0.3
@@ -4807,10 +4807,10 @@ packages:
     peerDependencies:
       vitest: '>=2.0.0'
     dependencies:
-      vitest: 4.0.17(@types/node@24.10.9)(jsdom@27.4.0)(sass@1.97.2)
+      vitest: 4.0.17(@types/node@25.0.10)(jsdom@27.4.0)(sass@1.97.2)
     dev: true
 
-  /vitest@4.0.17(@types/node@24.10.9)(jsdom@27.4.0)(sass@1.97.2):
+  /vitest@4.0.17(@types/node@25.0.10)(jsdom@27.4.0)(sass@1.97.2):
     resolution: {integrity: sha512-FQMeF0DJdWY0iOnbv466n/0BudNdKj1l5jYgl5JVTwjSsZSlqyXFt/9+1sEyhR6CLowbZpV7O1sCHrzBhucKKg==}
     engines: {node: ^20.0.0 || ^22.0.0 || >=24.0.0}
     hasBin: true
@@ -4844,7 +4844,7 @@ packages:
       jsdom:
         optional: true
     dependencies:
-      '@types/node': 24.10.9
+      '@types/node': 25.0.10
       '@vitest/expect': 4.0.17
       '@vitest/mocker': 4.0.17(vite@7.3.1)
       '@vitest/pretty-format': 4.0.17
@@ -4864,7 +4864,7 @@ packages:
       tinyexec: 1.0.2
       tinyglobby: 0.2.15
       tinyrainbow: 3.0.3
-      vite: 7.3.1(@types/node@24.10.9)(sass@1.97.2)
+      vite: 7.3.1(@types/node@25.0.10)(sass@1.97.2)
       why-is-node-running: 2.3.0
     transitivePeerDependencies:
       - jiti
