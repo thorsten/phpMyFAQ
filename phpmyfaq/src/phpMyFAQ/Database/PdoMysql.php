@@ -86,10 +86,17 @@ class PdoMysql implements DatabaseDriver
 
     /**
      * Escapes a string for use in a query.
+     * Note: Unlike PDO::quote(), this method does NOT add surrounding quotes.
      */
     public function escape(string $string): string
     {
-        return $string;
+        if ($this->pdo === null) {
+            return addslashes($string);
+        }
+
+        // PDO::quote() adds surrounding quotes, so we remove them
+        $quoted = $this->pdo->quote($string);
+        return substr($quoted, 1, -1);
     }
 
     /**

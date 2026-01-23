@@ -36,6 +36,7 @@ import {
 import { calculateReadingTime, handlePasswordStrength, handlePasswordToggle, handleReloadCaptcha } from './utils';
 import './utils/tooltip';
 import { handleWebAuthn } from './webauthn/webauthn';
+import { handleChat } from './chat';
 
 document.addEventListener('DOMContentLoaded', (): void => {
   // Reload Captchas
@@ -106,4 +107,7 @@ document.addEventListener('DOMContentLoaded', (): void => {
   // AutoComplete
   handleAutoComplete();
   handleCategorySelection();
+
+  // Handle Chat
+  handleChat();
 });
