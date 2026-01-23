@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller;
 
+use JsonException;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Configuration;
@@ -27,6 +28,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Form\FormsServiceProvider;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\Config\FileLocator;
@@ -237,7 +239,34 @@ abstract class AbstractController
     }
 
     /**
-     * @throws \JsonException
+     * Verifies CSRF token using session only (without cookie verification).
+     * Use this for authenticated API endpoints where the full cookie-based CSRF
+     * verification may fail due to domain/path mismatches.
+     * @throws \Exception
+     */
+    protected function verifySessionCsrfToken(string $page, string $requestToken): bool
+    {
+        if (empty($requestToken)) {
+            return false;
+        }
+
+        $sessionKey = sprintf('pmf-csrf-token.%s', $page);
+        $storedToken = $this->session->get($sessionKey);
+
+        if (!$storedToken instanceof Token) {
+            return false;
+        }
+
+        if (time() > $storedToken->getExpiry()) {
+            $this->session->remove($sessionKey);
+            return false;
+        }
+
+        return hash_equals($storedToken->getSessionToken(), $requestToken);
+    }
+
+    /**
+     * @throws JsonException
      * @throws \Exception
      */
     protected function captchaCodeIsValid(Request $request): bool

@@ -90,6 +90,14 @@
             {% else %}
               <li><a class="dropdown-item" href="./user/ucp">{{ msgUserControlDropDown }}</a></li>
               <li><a class="dropdown-item" href="./user/bookmarks">{{ msgBookmarks }}</a></li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center" href="./user/chat">
+                  {{ 'msgChat' | translate }}
+                  {% if unreadChatCount is defined and unreadChatCount > 0 %}
+                    <span class="badge bg-danger ms-auto">{{ unreadChatCount }}</span>
+                  {% endif %}
+                </a>
+              </li>
               {% if isUserHasAdminRights %}
                 <li><a class="dropdown-item" href="./admin">{{ msgAdmin }}</a></li>
               {% endif %}

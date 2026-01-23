@@ -1,0 +1,107 @@
+{% extends 'index.twig' %}
+
+{% block content %}
+<div class="row g-3">
+  <div class="col-12">
+    <h2>{{ 'msgChat' | translate }}</h2>
+  </div>
+
+  <div class="col-12">
+    <div class="card shadow-sm">
+      <div class="card-body p-0">
+        <div class="row g-0" style="min-height: 500px;">
+
+          <!-- Conversation List Sidebar -->
+          <div class="col-md-4 col-lg-3 border-end">
+            <div class="p-3 border-bottom">
+              <div class="input-group">
+                <span class="input-group-text bg-white border-end-0">
+                  <i class="bi bi-search"></i>
+                </span>
+                <input type="text" class="form-control border-start-0" id="pmf-chat-user-search"
+                       placeholder="{{ 'msgChatSearchUsers' | translate }}" autocomplete="off">
+              </div>
+              <div id="pmf-chat-user-search-results" class="position-relative"></div>
+            </div>
+
+            <div class="list-group list-group-flush" id="pmf-chat-conversation-list">
+              {% if conversations is empty %}
+                <div class="p-3 text-muted text-center">
+                  <i class="bi bi-chat-dots fs-1 d-block mb-2"></i>
+                  {{ 'msgChatNoMessages' | translate }}
+                </div>
+              {% else %}
+                {% for conversation in conversations %}
+                  <a href="#" class="list-group-item list-group-item-action d-flex align-items-center pmf-chat-conversation"
+                     data-user-id="{{ conversation.userId }}">
+                    <div class="flex-shrink-0">
+                      <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
+                           style="width: 40px; height: 40px;">
+                        {{ conversation.displayName|slice(0, 1)|upper }}
+                      </div>
+                    </div>
+                    <div class="flex-grow-1 ms-3 overflow-hidden">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <strong class="text-truncate">{{ conversation.displayName }}</strong>
+                        {% if conversation.unreadCount > 0 %}
+                          <span class="badge bg-primary rounded-pill">{{ conversation.unreadCount }}</span>
+                        {% endif %}
+                      </div>
+                      <small class="text-muted text-truncate d-block">{{ conversation.lastMessage|slice(0, 30) }}{% if conversation.lastMessage|length > 30 %}...{% endif %}</small>
+                    </div>
+                  </a>
+                {% endfor %}
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Message Area -->
+          <div class="col-md-8 col-lg-9 d-flex flex-column">
+            <!-- Chat Header -->
+            <div class="p-3 border-bottom d-none" id="pmf-chat-header">
+              <div class="d-flex align-items-center">
+                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3"
+                     style="width: 40px; height: 40px;" id="pmf-chat-partner-avatar">
+                </div>
+                <h5 class="mb-0" id="pmf-chat-partner-name"></h5>
+              </div>
+            </div>
+
+            <!-- Messages Container -->
+            <div class="flex-grow-1 p-3 overflow-auto" id="pmf-chat-messages" style="max-height: 400px;">
+              <div class="text-center text-muted py-5" id="pmf-chat-placeholder">
+                <i class="bi bi-chat-text fs-1 d-block mb-3"></i>
+                <p>{{ 'msgChatSelectConversation' | translate }}</p>
+              </div>
+            </div>
+
+            <!-- Message Input -->
+            <div class="p-3 border-top d-none" id="pmf-chat-input-area">
+              <form id="pmf-chat-form" class="d-flex gap-2">
+                <input type="hidden" id="pmf-chat-recipient-id" value="">
+                <input type="hidden" id="pmf-chat-csrf-token" value="{{ csrfTokenSendMessage }}">
+                <input type="text" class="form-control" id="pmf-chat-message-input"
+                       placeholder="{{ 'msgChatTypePlaceholder' | translate }}" autocomplete="off" maxlength="1000">
+                <button type="submit" class="btn btn-primary">
+                  <i class="bi bi-send"></i>
+                  <span class="d-none d-md-inline ms-1">{{ 'msgChatSend' | translate }}</span>
+                </button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Data attributes for JavaScript -->
+<script>
+  window.pmfChatConfig = {
+    currentUserId: {{ currentUserId }},
+    csrfTokenSendMessage: '{{ csrfTokenSendMessage }}',
+    csrfTokenMarkRead: '{{ csrfTokenMarkRead }}'
+  };
+</script>
+{% endblock %}

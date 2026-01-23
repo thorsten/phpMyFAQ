@@ -42,13 +42,18 @@ readonly class Chat
             return null;
         }
 
+        $table = Database::getTablePrefix() . 'faqchat_messages';
+        $nextId = $this->configuration->getDb()->nextId($table, 'id');
+
         $query = sprintf(
-            "INSERT INTO %sfaqchat_messages (sender_id, recipient_id, message, is_read, created_at)
-             VALUES (%d, %d, '%s', 0, NOW())",
-            Database::getTablePrefix(),
+            "INSERT INTO %s (id, sender_id, recipient_id, message, is_read, created_at)
+             VALUES (%d, %d, %d, '%s', 0, %s)",
+            $table,
+            $nextId,
             $senderId,
             $recipientId,
             $this->configuration->getDb()->escape($message),
+            $this->configuration->getDb()->now(),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -57,11 +62,9 @@ readonly class Chat
             return null;
         }
 
-        $lastId = $this->configuration->getDb()->lastInsertId();
-
         $chatMessage = new ChatMessage();
         $chatMessage
-            ->setId((int) $lastId)
+            ->setId($nextId)
             ->setSenderId($senderId)
             ->setRecipientId($recipientId)
             ->setMessage($message)
@@ -106,37 +109,88 @@ readonly class Chat
 
     /**
      * Gets the list of all users with whom the given user has conversations.
+     * Optimized to use correlated subqueries instead of N+1 queries.
      *
      * @return array<int, array{userId: int, displayName: string, lastMessage: string, lastMessageTime: string, unreadCount: int}>
      */
     public function getConversationList(int $userId): array
     {
-        $query = sprintf(
+        $prefix = Database::getTablePrefix();
+
+        // Get all unique conversation partners first
+        $partnersQuery = sprintf(
             'SELECT DISTINCT
                 CASE WHEN sender_id = %d THEN recipient_id ELSE sender_id END as partner_id
              FROM %sfaqchat_messages
              WHERE sender_id = %d OR recipient_id = %d',
             $userId,
-            Database::getTablePrefix(),
+            $prefix,
             $userId,
             $userId,
         );
 
-        $result = $this->configuration->getDb()->query($query);
-        $conversations = [];
+        $partnersResult = $this->configuration->getDb()->query($partnersQuery);
+        if (!$partnersResult) {
+            return [];
+        }
 
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
-            $partnerId = (int) $row->partner_id;
-            $partnerInfo = $this->getUserInfo($partnerId);
-            $lastMessage = $this->getLastMessage($userId, $partnerId);
-            $unreadCount = $this->getUnreadCountFromUser($userId, $partnerId);
+        $partnerIds = [];
+        while ($row = $this->configuration->getDb()->fetchObject($partnersResult)) {
+            $partnerIds[] = (int) $row->partner_id;
+        }
+
+        if (empty($partnerIds)) {
+            return [];
+        }
+
+        // Build a single query to get user info for all partners
+        $partnerIdList = implode(',', $partnerIds);
+        $userInfoQuery = sprintf(
+            'SELECT user_id, display_name FROM %sfaquserdata WHERE user_id IN (%s)',
+            $prefix,
+            $partnerIdList,
+        );
+        $userInfoResult = $this->configuration->getDb()->query($userInfoQuery);
+        $userInfo = [];
+        while ($row = $this->configuration->getDb()->fetchObject($userInfoResult)) {
+            $userInfo[(int) $row->user_id] = $row->display_name ?? 'Unknown User';
+        }
+
+        // Build conversations array with optimized queries per partner
+        $conversations = [];
+        foreach ($partnerIds as $partnerId) {
+            // Get last message
+            $lastMsgQuery = sprintf(
+                'SELECT message, created_at FROM %sfaqchat_messages
+                 WHERE (sender_id = %d AND recipient_id = %d)
+                    OR (sender_id = %d AND recipient_id = %d)
+                 ORDER BY created_at DESC LIMIT 1',
+                $prefix,
+                $userId,
+                $partnerId,
+                $partnerId,
+                $userId,
+            );
+            $lastMsgResult = $this->configuration->getDb()->query($lastMsgQuery);
+            $lastMsg = $this->configuration->getDb()->fetchObject($lastMsgResult);
+
+            // Get unread count
+            $unreadQuery = sprintf(
+                'SELECT COUNT(*) as cnt FROM %sfaqchat_messages
+                 WHERE sender_id = %d AND recipient_id = %d AND is_read = 0',
+                $prefix,
+                $partnerId,
+                $userId,
+            );
+            $unreadResult = $this->configuration->getDb()->query($unreadQuery);
+            $unreadRow = $this->configuration->getDb()->fetchObject($unreadResult);
 
             $conversations[] = [
                 'userId' => $partnerId,
-                'displayName' => $partnerInfo['display_name'] ?? 'Unknown User',
-                'lastMessage' => $lastMessage?->getMessage() ?? '',
-                'lastMessageTime' => $lastMessage?->getCreatedAt()->format('c') ?? '',
-                'unreadCount' => $unreadCount,
+                'displayName' => $userInfo[$partnerId] ?? 'Unknown User',
+                'lastMessage' => $lastMsg->message ?? '',
+                'lastMessageTime' => $lastMsg->created_at ?? '',
+                'unreadCount' => (int) ($unreadRow->cnt ?? 0),
             ];
         }
 
@@ -222,19 +276,20 @@ readonly class Chat
      */
     public function searchUsers(string $searchTerm, int $excludeUserId, int $limit = 10): array
     {
+        $escapedTerm = $this->configuration->getDb()->escape(mb_strtolower($searchTerm));
         $query = sprintf(
             "SELECT u.user_id, ud.display_name, ud.email
              FROM %sfaquser u
              LEFT JOIN %sfaquserdata ud ON u.user_id = ud.user_id
              WHERE u.user_id != %d
-               AND ud.display_name LIKE '%%%s%%'
+               AND u.user_id > 0
+               AND LOWER(ud.display_name) LIKE '%%%s%%'
                AND u.account_status = 'active'
-               AND ud.is_visible = 1
              LIMIT %d",
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $excludeUserId,
-            $this->configuration->getDb()->escape($searchTerm),
+            $escapedTerm,
             $limit,
         );
 
@@ -274,54 +329,61 @@ readonly class Chat
 
     /**
      * Converts multiple messages to an array for JSON serialization.
+     * Optimized to batch fetch user info for all senders in a single query.
      *
      * @param ChatMessage[] $messages
      * @return array<int, array<string, mixed>>
      */
     public function messagesToArray(array $messages): array
     {
-        return array_map(fn(ChatMessage $message) => $this->messageToArray($message), $messages);
-    }
-
-    /**
-     * Gets the last message in a conversation.
-     */
-    private function getLastMessage(int $userId1, int $userId2): ?ChatMessage
-    {
-        $query = sprintf('SELECT id, sender_id, recipient_id, message, is_read, created_at
-             FROM %sfaqchat_messages
-             WHERE (sender_id = %d AND recipient_id = %d)
-                OR (sender_id = %d AND recipient_id = %d)
-             ORDER BY created_at DESC
-             LIMIT 1', Database::getTablePrefix(), $userId1, $userId2, $userId2, $userId1);
-
-        $result = $this->configuration->getDb()->query($query);
-        $row = $this->configuration->getDb()->fetchObject($result);
-
-        if (!$row) {
-            return null;
+        if (empty($messages)) {
+            return [];
         }
 
-        return $this->mapRowToEntity($row);
+        // Collect unique sender IDs
+        $senderIds = array_unique(array_map(fn(ChatMessage $m) => $m->getSenderId(), $messages));
+
+        // Batch fetch user info
+        $userInfo = $this->getBatchUserInfo($senderIds);
+
+        return array_map(fn(ChatMessage $message) => [
+            'id' => $message->getId(),
+            'senderId' => $message->getSenderId(),
+            'senderName' => $userInfo[$message->getSenderId()] ?? 'Unknown User',
+            'recipientId' => $message->getRecipientId(),
+            'message' => $message->getMessage(),
+            'isRead' => $message->isRead(),
+            'createdAt' => $message->getCreatedAt()->format('c'),
+        ], $messages);
     }
 
     /**
-     * Gets the count of unread messages from a specific user.
+     * Gets user info for multiple users in a single query.
+     *
+     * @param int[] $userIds
+     * @return array<int, string> Map of userId => displayName
      */
-    private function getUnreadCountFromUser(int $userId, int $partnerId): int
+    private function getBatchUserInfo(array $userIds): array
     {
+        if (empty($userIds)) {
+            return [];
+        }
+
+        $idList = implode(',', array_map('intval', $userIds));
         $query = sprintf(
-            'SELECT COUNT(*) as count FROM %sfaqchat_messages
-             WHERE sender_id = %d AND recipient_id = %d AND is_read = 0',
+            'SELECT user_id, display_name FROM %sfaquserdata WHERE user_id IN (%s)',
             Database::getTablePrefix(),
-            $partnerId,
-            $userId,
+            $idList,
         );
 
         $result = $this->configuration->getDb()->query($query);
-        $row = $this->configuration->getDb()->fetchObject($result);
+        $userInfo = [];
 
-        return (int) ($row->count ?? 0);
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            $userInfo[(int) $row->user_id] = $row->display_name ?? 'Unknown User';
+        }
+
+        return $userInfo;
     }
 
     /**

@@ -38,7 +38,7 @@ final class ChatController extends AbstractController
      *
      * @throws Exception
      */
-    #[Route(path: 'api/chat/conversations', name: 'api.private.chat.conversations', methods: ['GET'])]
+    #[Route(path: 'chat/conversations', name: 'api.private.chat.conversations', methods: ['GET'])]
     public function getConversations(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -57,7 +57,7 @@ final class ChatController extends AbstractController
      *
      * @throws Exception
      */
-    #[Route(path: 'api/chat/messages/{userId}', name: 'api.private.chat.messages', methods: ['GET'])]
+    #[Route(path: 'chat/messages/{userId}', name: 'api.private.chat.messages', methods: ['GET'])]
     public function getMessages(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -89,17 +89,17 @@ final class ChatController extends AbstractController
      * @throws JsonException
      * @throws Exception
      */
-    #[Route(path: 'api/chat/send', name: 'api.private.chat.send', methods: ['POST'])]
+    #[Route(path: 'chat/send', name: 'api.private.chat.send', methods: ['POST'])]
     public function send(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
         $recipientId = Filter::filterVar($data->recipientId ?? 0, FILTER_VALIDATE_INT);
-        $message = Filter::filterVar($data->message ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
-        $csrfToken = Filter::filterVar($data->csrfToken ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $message = trim($data->message ?? '');
+        $csrfToken = trim($data->csrfToken ?? '');
 
-        if (!Token::getInstance($this->session)->verifyToken('send-chat-message', $csrfToken)) {
+        if (!$this->verifySessionCsrfToken('send-chat-message', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -127,7 +127,7 @@ final class ChatController extends AbstractController
      * @throws JsonException
      * @throws Exception
      */
-    #[Route(path: 'api/chat/read/{messageId}', name: 'api.private.chat.read', methods: ['POST'])]
+    #[Route(path: 'chat/read/{messageId}', name: 'api.private.chat.read', methods: ['POST'])]
     public function markAsRead(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -135,9 +135,9 @@ final class ChatController extends AbstractController
         $messageId = Filter::filterVar($request->attributes->get('messageId'), FILTER_VALIDATE_INT);
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
-        $csrfToken = Filter::filterVar($data->csrfToken ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $csrfToken = trim($data->csrfToken ?? '');
 
-        if (!Token::getInstance($this->session)->verifyToken('mark-chat-read', $csrfToken)) {
+        if (!$this->verifySessionCsrfToken('mark-chat-read', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -160,7 +160,7 @@ final class ChatController extends AbstractController
      *
      * @throws Exception
      */
-    #[Route(path: 'api/chat/unread-count', name: 'api.private.chat.unread-count', methods: ['GET'])]
+    #[Route(path: 'chat/unread-count', name: 'api.private.chat.unread-count', methods: ['GET'])]
     public function getUnreadCount(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -179,14 +179,14 @@ final class ChatController extends AbstractController
      *
      * @throws Exception
      */
-    #[Route(path: 'api/chat/users', name: 'api.private.chat.users', methods: ['GET'])]
+    #[Route(path: 'chat/users', name: 'api.private.chat.users', methods: ['GET'])]
     public function searchUsers(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
 
-        $query = Filter::filterVar($request->query->get('q', ''), FILTER_SANITIZE_SPECIAL_CHARS);
+        $query = trim($request->query->get('q', ''));
 
-        if (strlen($query) < 2) {
+        if (mb_strlen($query) < 2) {
             return $this->json([
                 'success' => true,
                 'users' => [],

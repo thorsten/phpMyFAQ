@@ -55,14 +55,16 @@ class PdoMysqlTest extends TestCase
     {
         $testString = "test'string";
         $result = $this->pdoMysql->escape($testString);
-        $this->assertEquals($testString, $result);
+        // Without a PDO connection, addslashes() is used as fallback
+        $this->assertEquals("test\\'string", $result);
     }
 
     public function testEscapeWithSpecialCharacters(): void
     {
         $testString = 'test"string\'with\\special;chars';
         $result = $this->pdoMysql->escape($testString);
-        $this->assertEquals($testString, $result);
+        // Without a PDO connection, addslashes() is used as fallback
+        $this->assertEquals('test\\"string\\\'with\\\\special;chars', $result);
     }
 
     public function testFetchArrayWithMockResult(): void
