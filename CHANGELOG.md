@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.1.0-RC.3 - unreleased
+### phpMyFAQ v4.1.0-RC.3 - 2026-01-23
 
 - changed PHP requirement to PHP 8.3 or later (Thorsten)
 - added configuration to edit robots.txt (Thorsten)
@@ -42,7 +42,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated from Webpack to Vite v7 (Thorsten)
 - migrated from Jest to Vitest v4 (Thorsten)
 
-### phpMyFAQ v4.0.17 - unreleased
+### phpMyFAQ v4.0.17 - 2026-01-23
 
 - fixed security vulnerabilities (Thorsten)
 - updated third party dependencies (Thorsten)
