@@ -37,15 +37,15 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
     public function fetchByReferenceIdAndType(int $referenceId, string $type): array
     {
         $sql = <<<SQL
-            SELECT
-                id_comment, id, usr, email, comment, datum
-            FROM
-                %sfaqcomments
-            WHERE
-                type = '%s'
-            AND 
-                id = %d
-        SQL;
+                SELECT
+                    id_comment, id, usr, email, comment, datum
+                FROM
+                    %sfaqcomments
+                WHERE
+                    type = '%s'
+                AND 
+                    id = %d
+            SQL;
 
         $query = sprintf($sql, Database::getTablePrefix(), $this->configuration->getDb()->escape($type), $referenceId);
 
@@ -60,11 +60,11 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
         $helpedSql = $helpedValue === null ? 'NULL' : "'" . ($helpedValue ? 'y' : 'n') . "'";
 
         $sql = <<<SQL
-            INSERT INTO
-                %sfaqcomments (id_comment, id, type, usr, email, comment, datum, helped)
-            VALUES
-                (%d, %d, '%s', '%s', '%s', '%s', '%s', %s)
-        SQL;
+                INSERT INTO
+                    %sfaqcomments (id_comment, id, type, usr, email, comment, datum, helped)
+                VALUES
+                    (%d, %d, '%s', '%s', '%s', '%s', '%s', %s)
+            SQL;
 
         $query = sprintf(
             $sql,
@@ -85,13 +85,13 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
     public function deleteByTypeAndId(string $type, int $commentId): bool
     {
         $sql = <<<SQL
-            DELETE FROM
-                %sfaqcomments
-            WHERE
-                type = '%s'
-            AND
-                id_comment = %d
-        SQL;
+                DELETE FROM
+                    %sfaqcomments
+                WHERE
+                    type = '%s'
+                AND
+                    id_comment = %d
+            SQL;
 
         $query = sprintf($sql, Database::getTablePrefix(), $this->configuration->getDb()->escape($type), $commentId);
 
@@ -104,16 +104,16 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
     public function countByTypeGroupedByRecordId(string $type = CommentType::FAQ): array
     {
         $sql = <<<SQL
-            SELECT
-                COUNT(id) AS anz,
-                id
-            FROM
-                %sfaqcomments
-            WHERE
-                type = '%s'
-            GROUP BY id
-            ORDER BY id
-        SQL;
+                SELECT
+                    COUNT(id) AS anz,
+                    id
+                FROM
+                    %sfaqcomments
+                WHERE
+                    type = '%s'
+                GROUP BY id
+                ORDER BY id
+            SQL;
 
         $query = sprintf($sql, Database::getTablePrefix(), $this->configuration->getDb()->escape($type));
 
@@ -128,20 +128,20 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
     public function countByCategoryForFaq(): array
     {
         $sql = <<<SQL
-            SELECT
-                COUNT(fc.id) AS number,
-                fcg.category_id AS category_id
-            FROM
-                %sfaqcomments fc
-            LEFT JOIN
-                %sfaqcategoryrelations fcg
-            ON
-                fc.id = fcg.record_id
-            WHERE
-                fc.type = '%s'
-            GROUP BY fcg.category_id
-            ORDER BY fcg.category_id
-        SQL;
+                SELECT
+                    COUNT(fc.id) AS number,
+                    fcg.category_id AS category_id
+                FROM
+                    %sfaqcomments fc
+                LEFT JOIN
+                    %sfaqcategoryrelations fcg
+                ON
+                    fc.id = fcg.record_id
+                WHERE
+                    fc.type = '%s'
+                GROUP BY fcg.category_id
+                ORDER BY fcg.category_id
+            SQL;
 
         $query = sprintf($sql, Database::getTablePrefix(), Database::getTablePrefix(), CommentType::FAQ);
 
@@ -186,15 +186,15 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
         $table = 'news' === $commentType ? 'faqnews' : 'faqdata';
 
         $sql = <<<SQL
-            SELECT
-                comment
-            FROM
-                %s%s
-            WHERE
-                id = %d
-            AND
-                lang = '%s'
-        SQL;
+                SELECT
+                    comment
+                FROM
+                    %s%s
+                WHERE
+                    id = %d
+                AND
+                    lang = '%s'
+            SQL;
 
         $query = sprintf(
             $sql,

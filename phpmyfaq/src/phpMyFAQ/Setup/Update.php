@@ -1053,46 +1053,46 @@ class Update extends AbstractSetup
     {
         if (version_compare($this->version, '4.1.0-alpha', '<')) {
             $text = <<<EOT
-            User-agent: Amazonbot
-            User-agent: anthropic-ai
-            User-agent: Applebot-Extended
-            User-agent: Bytespider
-            User-agent: CCBot
-            User-agent: ChatGPT-User
-            User-agent: ClaudeBot
-            User-agent: Claude-Web
-            User-agent: cohere-ai
-            User-agent: Diffbot
-            User-agent: FacebookBot
-            User-agent: facebookexternalhit
-            User-agent: FriendlyCrawler
-            User-agent: Google-Extended
-            User-agent: GoogleOther
-            User-agent: GoogleOther-Image
-            User-agent: GoogleOther-Video
-            User-agent: GPTBot
-            User-agent: ICC-Crawler
-            User-agent: ImagesiftBot
-            User-agent: img2dataset
-            User-agent: Meta-ExternalAgent
-            User-agent: OAI-SearchBot
-            User-agent: omgili
-            User-agent: omgilibot
-            User-agent: PerplexityBot
-            User-agent: PetalBot
-            User-agent: Scrapy
-            User-agent: Timpibot
-            User-agent: VelenPublicWebCrawler
-            User-agent: YouBot
-            User-agent: Meta-ExternalFetcher
-            User-agent: Applebot
-            Disallow: /
+                User-agent: Amazonbot
+                User-agent: anthropic-ai
+                User-agent: Applebot-Extended
+                User-agent: Bytespider
+                User-agent: CCBot
+                User-agent: ChatGPT-User
+                User-agent: ClaudeBot
+                User-agent: Claude-Web
+                User-agent: cohere-ai
+                User-agent: Diffbot
+                User-agent: FacebookBot
+                User-agent: facebookexternalhit
+                User-agent: FriendlyCrawler
+                User-agent: Google-Extended
+                User-agent: GoogleOther
+                User-agent: GoogleOther-Image
+                User-agent: GoogleOther-Video
+                User-agent: GPTBot
+                User-agent: ICC-Crawler
+                User-agent: ImagesiftBot
+                User-agent: img2dataset
+                User-agent: Meta-ExternalAgent
+                User-agent: OAI-SearchBot
+                User-agent: omgili
+                User-agent: omgilibot
+                User-agent: PerplexityBot
+                User-agent: PetalBot
+                User-agent: Scrapy
+                User-agent: Timpibot
+                User-agent: VelenPublicWebCrawler
+                User-agent: YouBot
+                User-agent: Meta-ExternalFetcher
+                User-agent: Applebot
+                Disallow: /
 
-            User-agent: *
-            Disallow: /admin/
+                User-agent: *
+                Disallow: /admin/
 
-            Sitemap: /sitemap.xml
-            EOT;
+                Sitemap: /sitemap.xml
+                EOT;
             $this->configuration->add('seo.contentRobotsText', $text);
         }
     }

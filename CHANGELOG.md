@@ -44,7 +44,9 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 ### phpMyFAQ v4.0.17 - unreleased
 
+- fixed security vulnerabilities (Thorsten)
 - updated third party dependencies (Thorsten)
+- fixed bugs (Thorsten)
 
 ### phpMyFAQ v4.0.16 - 2025-12-29
 

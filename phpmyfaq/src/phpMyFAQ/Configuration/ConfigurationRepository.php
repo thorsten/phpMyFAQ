@@ -33,8 +33,8 @@ readonly class ConfigurationRepository
     public function updateConfigValue(string $key, string $value): bool
     {
         $sql = <<<'SQL'
-            UPDATE %s%s SET config_value = '%s' WHERE config_name = '%s'
-        SQL;
+                UPDATE %s%s SET config_value = '%s' WHERE config_name = '%s'
+            SQL;
         $query = sprintf(
             $sql,
             Database::getTablePrefix(),
@@ -52,8 +52,8 @@ readonly class ConfigurationRepository
     public function fetchAll(): array
     {
         $sql = <<<'SQL'
-            SELECT config_name, config_value FROM %s%s
-        SQL;
+                SELECT config_name, config_value FROM %s%s
+            SQL;
         $query = sprintf($sql, Database::getTablePrefix(), $this->tableName);
 
         $result = $this->configuration->getDb()->query($query);
@@ -64,8 +64,8 @@ readonly class ConfigurationRepository
     public function insert(string $name, string $value): bool
     {
         $sql = <<<'SQL'
-            INSERT INTO %s%s (config_name, config_value) VALUES ('%s', '%s')
-        SQL;
+                INSERT INTO %s%s (config_name, config_value) VALUES ('%s', '%s')
+            SQL;
         $query = sprintf(
             $sql,
             Database::getTablePrefix(),
@@ -80,8 +80,8 @@ readonly class ConfigurationRepository
     public function delete(string $name): bool
     {
         $sql = <<<'SQL'
-            DELETE FROM %s%s WHERE config_name = '%s'
-        SQL;
+                DELETE FROM %s%s WHERE config_name = '%s'
+            SQL;
         $query = sprintf(
             $sql,
             Database::getTablePrefix(),
@@ -95,8 +95,8 @@ readonly class ConfigurationRepository
     public function renameKey(string $currentKey, string $newKey): bool
     {
         $sql = <<<'SQL'
-            UPDATE %s%s SET config_name = '%s' WHERE config_name = '%s'
-        SQL;
+                UPDATE %s%s SET config_name = '%s' WHERE config_name = '%s'
+            SQL;
         $query = sprintf(
             $sql,
             Database::getTablePrefix(),
@@ -114,8 +114,8 @@ readonly class ConfigurationRepository
     public function getFaqDataContents(): array
     {
         $sql = <<<'SQL'
-            SELECT content FROM %sfaqdata
-        SQL;
+                SELECT content FROM %sfaqdata
+            SQL;
         $query = sprintf($sql, Database::getTablePrefix());
         $response = $this->configuration->getDb()->query($query);
         $rows = $this->configuration->getDb()->fetchAll($response);
@@ -125,8 +125,8 @@ readonly class ConfigurationRepository
     public function updateFaqDataContent(string $oldContent, string $newContent): bool
     {
         $sql = <<<'SQL'
-            UPDATE %sfaqdata SET content='%s' WHERE content='%s'
-        SQL;
+                UPDATE %sfaqdata SET content='%s' WHERE content='%s'
+            SQL;
         $query = sprintf(
             $sql,
             Database::getTablePrefix(),

@@ -78,32 +78,32 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         $prefix = Database::getTablePrefix();
         $query = <<<SQL
-            SELECT
-                fc.id AS id,
-                fc.lang AS lang,
-                fc.parent_id AS parent_id,
-                fc.name AS name,
-                fc.description AS description,
-                fc.user_id AS user_id,
-                fc.group_id AS group_id,
-                fc.active AS active,
-                fc.image AS image,
-                fc.show_home AS show_home
-            FROM
-                {$prefix}faqcategories fc
-            LEFT JOIN {$prefix}faqcategory_group fg
-                ON fc.id = fg.category_id
-            LEFT JOIN {$prefix}faqcategory_order fco
-                ON fc.id = fco.category_id
-            LEFT JOIN {$prefix}faqcategory_user fu
-                ON fc.id = fu.category_id
-            {$where}
-            GROUP BY
-                fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id, fc.group_id, fc.active, fc.image,
-                fc.show_home, fco.position
-            ORDER BY
-                fco.position, fc.id ASC
-        SQL;
+                SELECT
+                    fc.id AS id,
+                    fc.lang AS lang,
+                    fc.parent_id AS parent_id,
+                    fc.name AS name,
+                    fc.description AS description,
+                    fc.user_id AS user_id,
+                    fc.group_id AS group_id,
+                    fc.active AS active,
+                    fc.image AS image,
+                    fc.show_home AS show_home
+                FROM
+                    {$prefix}faqcategories fc
+                LEFT JOIN {$prefix}faqcategory_group fg
+                    ON fc.id = fg.category_id
+                LEFT JOIN {$prefix}faqcategory_order fco
+                    ON fc.id = fco.category_id
+                LEFT JOIN {$prefix}faqcategory_user fu
+                    ON fc.id = fu.category_id
+                {$where}
+                GROUP BY
+                    fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id, fc.group_id, fc.active, fc.image,
+                    fc.show_home, fco.position
+                ORDER BY
+                    fco.position, fc.id ASC
+            SQL;
 
         $result = $this->configuration->getDb()->query($query);
         $categories = [];

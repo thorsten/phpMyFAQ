@@ -286,8 +286,8 @@ class Installer extends Setup
         'main.enableNotifications' => 'false',
         'main.botIgnoreList' =>
             'nustcrape,webpost,GoogleBot,msnbot,crawler,scooter,bravobrian,archiver,'
-            . 'w3c,controler,wget,bot,spider,Yahoo! Slurp,htdig,gsa-crawler,AirControler,Uptime-Kuma,facebookcatalog/1.0,'
-            . 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php),facebookexternalhit/1.1',
+                . 'w3c,controler,wget,bot,spider,Yahoo! Slurp,htdig,gsa-crawler,AirControler,Uptime-Kuma,facebookcatalog/1.0,'
+                . 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php),facebookexternalhit/1.1',
         'records.numberOfRecordsPerPage' => '10',
         'records.numberOfShownNewsEntries' => '3',
         'records.defaultActivation' => 'false',
@@ -358,11 +358,11 @@ class Installer extends Setup
         'seo.contentRobotsText' => 'User-agent: *\nDisallow: /admin/\nSitemap: /sitemap.xml',
         'seo.contentLlmsText' =>
             "# phpMyFAQ LLMs.txt\n\n"
-            . "This file provides information about the AI/LLM training data availability for this FAQ system.\n\n"
-            . "Contact: Please see the contact information on the main website.\n\n"
-            . "The FAQ content in this system is available for LLM training purposes.\n"
-            . "Please respect the licensing terms and usage guidelines of the content.\n\n"
-            . 'For more information about this FAQ system, visit: https://www.phpmyfaq.de',
+                . "This file provides information about the AI/LLM training data availability for this FAQ system.\n\n"
+                . "Contact: Please see the contact information on the main website.\n\n"
+                . "The FAQ content in this system is available for LLM training purposes.\n"
+                . "Please respect the licensing terms and usage guidelines of the content.\n\n"
+                . 'For more information about this FAQ system, visit: https://www.phpmyfaq.de',
         'mail.noReplySenderAddress' => '',
         'mail.remoteSMTP' => 'false',
         'mail.remoteSMTPServer' => '',
