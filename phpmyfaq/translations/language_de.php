@@ -1628,5 +1628,16 @@ $PMF_LANG['msgConfirmAction'] = "Aktion bestätigen";
 
 $PMF_LANG["msgCommentEditorHint"] = "Sie können den Texteditor verwenden, um Ihren Kommentar mit Fettdruck, Kursivschrift, Listen und Links zu formatieren.";
 $LANG_CONF['main.enableCommentEditor'] = ["checkbox", "WYSIWYG-Editor für Kommentare aktivieren (nur für angemeldete Benutzer)"];
+$PMF_LANG['msgToggleSidebar'] = "Seitenleiste ein-/ausblenden";
+
+// added v4.2.0-alpha - 2026-01-23 - Chat feature
+$PMF_LANG['msgChat'] = 'Nachrichten';
+$PMF_LANG['msgChatConversations'] = 'Unterhaltungen';
+$PMF_LANG['msgChatNoMessages'] = 'Noch keine Nachrichten';
+$PMF_LANG['msgChatSend'] = 'Senden';
+$PMF_LANG['msgChatNewConversation'] = 'Neue Unterhaltung';
+$PMF_LANG['msgChatSearchUsers'] = 'Benutzer suchen...';
+$PMF_LANG['msgChatTypePlaceholder'] = 'Nachricht eingeben...';
+$PMF_LANG['msgChatSelectConversation'] = 'Wählen Sie eine Unterhaltung aus oder suchen Sie nach einem Benutzer, um zu chatten';
 
 return $PMF_LANG;
