@@ -21,6 +21,7 @@ import {
   handleSaveComment,
   handleShareLinkButton,
   handleShowFaq,
+  handleSidebarToggle,
   handleUserVoting,
   renderFaqEditor,
 } from './faq';
@@ -74,6 +75,7 @@ document.addEventListener('DOMContentLoaded', (): void => {
   // Handle show FAQ
   handleShowFaq();
   handleShareLinkButton();
+  handleSidebarToggle();
 
   // Handle Adds a Question
   handleQuestion();

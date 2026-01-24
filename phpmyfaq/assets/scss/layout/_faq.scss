@@ -1,5 +1,122 @@
 @import 'jodit/es2021/jodit.min.css';
 
+// Sidebar toggle functionality
+.pmf-faq-container {
+  position: relative;
+}
+
+#pmf-content-column {
+  transition: all 0.3s ease-in-out;
+
+  &.pmf-content-expanded {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+#pmf-sidebar {
+  transition: all 0.3s ease-in-out;
+  overflow: hidden;
+
+  &.pmf-sidebar-collapsed {
+    flex: 0 0 0;
+    max-width: 0;
+    width: 0;
+    padding: 0 !important;
+    margin: 0 !important;
+    opacity: 0;
+    visibility: hidden;
+
+    // Hide inner content to prevent layout issues
+    > * {
+      display: none;
+    }
+  }
+}
+
+#pmf-sidebar-toggle {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1030;
+  width: 28px;
+  height: 56px;
+  padding: 0;
+  border: 1px solid var(--bs-border-color);
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: var(--bs-tertiary-bg);
+    width: 32px;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow:
+      -2px 0 8px rgba(0, 0, 0, 0.1),
+      0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+  }
+
+  i {
+    font-size: 1rem;
+    transition: transform 0.2s ease-in-out;
+  }
+
+  &.collapsed {
+    right: 0;
+
+    i {
+      transform: rotate(0deg);
+    }
+  }
+}
+
+// Hide sidebar toggle on small screens (sidebar stacks below content anyway)
+@media (max-width: 767.98px) {
+  #pmf-sidebar-toggle {
+    display: none;
+  }
+
+  #pmf-sidebar.pmf-sidebar-collapsed {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 1rem !important;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  #pmf-content-column.pmf-content-expanded {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+// Print styles - always show full content
+@media print {
+  #pmf-sidebar-toggle {
+    display: none !important;
+  }
+
+  #pmf-sidebar {
+    display: none !important;
+  }
+
+  #pmf-content-column {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+}
+
 .pmf-voting-star {
   background: none;
   border: none;
