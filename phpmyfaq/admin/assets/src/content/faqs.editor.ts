@@ -17,6 +17,7 @@ import { create, update, deleteFaq } from '../api';
 import { pushErrorNotification, pushNotification, serialize } from '../../../../assets/src/utils';
 import { Response } from '../interfaces';
 import { getJoditEditor } from './editor';
+import { analyzeReadability, SupportedLanguage } from '../utils/flesch-reading-ease';
 
 interface SerializedData {
   faqId: string;
@@ -153,6 +154,121 @@ export const handleResetButton = (): void => {
         revisionSelect.value = lastOption.value;
         revisionSelect.dispatchEvent(new Event('change'));
       }
+    });
+  }
+};
+
+/**
+ * Debounce function for performance
+ */
+const debounce = <T extends (...args: string[]) => void>(func: T, wait: number): ((...args: Parameters<T>) => void) => {
+  let timeout: ReturnType<typeof setTimeout>;
+  return (...args: Parameters<T>): void => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
+};
+
+/**
+ * Handles real-time Flesch Reading Ease calculation
+ */
+export const handleFleschReadingEase = (): void => {
+  const fleschScoreElement = document.getElementById('pmf-flesch-score') as HTMLElement | null;
+  const fleschLabelElement = document.getElementById('pmf-flesch-label') as HTMLElement | null;
+  const fleschBadgeElement = document.getElementById('pmf-flesch-badge') as HTMLElement | null;
+
+  if (!fleschScoreElement || !fleschLabelElement || !fleschBadgeElement) {
+    return;
+  }
+
+  /**
+   * Gets the current FAQ language from the form
+   */
+  const getLanguage = (): SupportedLanguage => {
+    const langSelect = document.getElementById('lang') as HTMLSelectElement | HTMLInputElement | null;
+    if (langSelect) {
+      const lang = langSelect.value.toLowerCase();
+      if (lang === 'de' || lang.startsWith('de-') || lang.startsWith('de_')) {
+        return 'de';
+      }
+    }
+    return 'en';
+  };
+
+  /**
+   * Updates the Flesch score display
+   */
+  const updateFleschDisplay = (content: string): void => {
+    const language = getLanguage();
+    const result = analyzeReadability(content, language);
+
+    fleschScoreElement.textContent = result.score.toString();
+    fleschLabelElement.textContent = result.label;
+
+    // Update badge color
+    fleschBadgeElement.className = `badge bg-${result.colorClass}`;
+  };
+
+  const debouncedUpdate = debounce(updateFleschDisplay, 300);
+
+  /**
+   * Gets content from available editor
+   */
+  const getEditorContent = (): string => {
+    const joditEditor = getJoditEditor();
+    if (joditEditor) {
+      return joditEditor.value;
+    }
+
+    const markdownEditor = document.getElementById('answer-markdown') as HTMLTextAreaElement | null;
+    if (markdownEditor) {
+      return markdownEditor.value;
+    }
+
+    const plainEditor = document.getElementById('editor') as HTMLTextAreaElement | null;
+    if (plainEditor) {
+      return plainEditor.value;
+    }
+
+    return '';
+  };
+
+  // Initial calculation
+  const initialContent = getEditorContent();
+  if (initialContent) {
+    updateFleschDisplay(initialContent);
+  }
+
+  // Handle Jodit WYSIWYG editor
+  const joditEditor = getJoditEditor();
+  if (joditEditor) {
+    joditEditor.events.on('change', (): void => {
+      debouncedUpdate(joditEditor.value);
+    });
+  }
+
+  // Handle Markdown editor
+  const markdownEditor = document.getElementById('answer-markdown') as HTMLTextAreaElement | null;
+  if (markdownEditor) {
+    markdownEditor.addEventListener('input', (): void => {
+      debouncedUpdate(markdownEditor.value);
+    });
+  }
+
+  // Handle plain text editor (fallback when no Jodit)
+  const plainEditor = document.getElementById('editor') as HTMLTextAreaElement | null;
+  if (plainEditor && !joditEditor) {
+    plainEditor.addEventListener('input', (): void => {
+      debouncedUpdate(plainEditor.value);
+    });
+  }
+
+  // Re-calculate when language changes
+  const langSelect = document.getElementById('lang') as HTMLSelectElement | null;
+  if (langSelect) {
+    langSelect.addEventListener('change', (): void => {
+      const content = getEditorContent();
+      updateFleschDisplay(content);
     });
   }
 };

@@ -73,6 +73,7 @@ import {
   handleDeleteFaqEditorModal,
   handleFaqTranslate,
   handleCategoryTranslate,
+  handleFleschReadingEase,
 } from './content';
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
@@ -123,6 +124,7 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   handleUpdateQuestion();
   handleDeleteFaqEditorModal();
   handleResetButton();
+  handleFleschReadingEase();
   await handleFaqOverview();
 
   // Content → Comments

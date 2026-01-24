@@ -16,6 +16,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added support for custom pages with WYSIWYG editor, SEO features, multi-language support, and search integration (Thorsten)
 - added a translation adapter system with support for Google Cloud Translation, DeepL, Azure Translator, Amazon Translate, and LibreTranslate (Thorsten)
 - added a simple chat for users (Thorsten)
+- added support for Flesch readability tests (Thorsten)
 - improved audit and activity log with comprehensive security event tracking (Thorsten)
 - improved API errors with formatted RFC 7807 Problem Details JSON responses (Thorsten)
 - improved support for PDO (Thorsten)

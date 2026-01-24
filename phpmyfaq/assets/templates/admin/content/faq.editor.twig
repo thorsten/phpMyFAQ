@@ -305,6 +305,28 @@
                 <p>{{ 'msgSerp' | translate }}</p>
               </div>
 
+              <!-- Flesch Reading Ease Index -->
+              <div class="row mb-3">
+                <label class="col-lg-3 col-form-label">
+                  {{ 'msgFleschReadingEase' | translate }}
+                  <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
+                     title="{{ 'msgFleschTooltip' | translate }}"></i>
+                </label>
+                <div class="col-lg-9">
+                  <div class="d-flex align-items-center">
+                    <span id="pmf-flesch-badge" class="badge bg-secondary me-2">
+                      <span id="pmf-flesch-score">--</span>
+                    </span>
+                    <span id="pmf-flesch-label" class="text-muted ms-2">
+                      {{ 'msgFleschNotCalculated' | translate }}
+                    </span>
+                  </div>
+                  <small class="text-muted mt-1 d-block">
+                    {{ 'msgFleschScaleHint' | translate }}
+                  </small>
+                </div>
+              </div>
+
               <!-- SERP Title -->
               <div class="row mb-2">
                 <label class="col-lg-3 col-form-label" for="serpTitle">{{ 'msgSerpTitle' | translate }}</label>
