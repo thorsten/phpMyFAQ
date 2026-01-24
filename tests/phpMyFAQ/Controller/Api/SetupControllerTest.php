@@ -4,7 +4,14 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
-use phpMyFAQ\Configuration;use phpMyFAQ\Controller\Frontend\Api\SetupController;use phpMyFAQ\Core\Exception;use phpMyFAQ\Strings;use phpMyFAQ\Translation;use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;use PHPUnit\Framework\TestCase;use Symfony\Component\HttpFoundation\Request;
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\Frontend\Api\SetupController;
+use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 #[AllowMockObjectsWithoutExpectations]
 class SetupControllerTest extends TestCase

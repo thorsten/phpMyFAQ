@@ -469,6 +469,94 @@ class BackupTest extends TestCase
         unlink($backupFile);
     }
 
+    public function testParseBackupFileWithMultiLineStatement(): void
+    {
+        $backupFile = PMF_TEST_DIR . '/test-backup-multiline.sql';
+        $content =
+            "-- pmf4.0: faqconfig\n"
+            . "-- DO NOT REMOVE THE FIRST LINE!\n"
+            . "-- pmftableprefix: pmf_\n"
+            . "INSERT INTO faqconfig VALUES (1, 'line1\n"
+            . "line2\n"
+            . "line3');";
+
+        file_put_contents($backupFile, $content);
+
+        $result = $this->backup->parseBackupFile($backupFile, '4.0.0');
+
+        // Should have 2 queries: DELETE FROM faqconfig and the INSERT
+        $this->assertCount(2, $result->queries);
+        $this->assertEquals('DELETE FROM faqconfig', $result->queries[0]);
+        $this->assertStringContainsString("line1\nline2\nline3", $result->queries[1]);
+
+        unlink($backupFile);
+    }
+
+    public function testParseBackupFileWithHashInData(): void
+    {
+        $backupFile = PMF_TEST_DIR . '/test-backup-hash.sql';
+        $content =
+            "-- pmf4.0: faqconfig\n"
+            . "-- DO NOT REMOVE THE FIRST LINE!\n"
+            . "-- pmftableprefix: pmf_\n"
+            . "# This is a MySQL comment\n"
+            . "INSERT INTO faqconfig VALUES (1, 'Text with # hash symbol');\n"
+            . "INSERT INTO faqconfig VALUES (2, 'C# programming');";
+
+        file_put_contents($backupFile, $content);
+
+        $result = $this->backup->parseBackupFile($backupFile, '4.0.0');
+
+        // Should have 3 queries: DELETE + 2 INSERTs (comment line skipped)
+        $this->assertCount(3, $result->queries);
+        $this->assertStringContainsString('# hash symbol', $result->queries[1]);
+        $this->assertStringContainsString('C#', $result->queries[2]);
+
+        unlink($backupFile);
+    }
+
+    public function testParseBackupFileWithEscapedQuotes(): void
+    {
+        $backupFile = PMF_TEST_DIR . '/test-backup-quotes.sql';
+        $content =
+            "-- pmf4.0: faqconfig\n"
+            . "-- DO NOT REMOVE THE FIRST LINE!\n"
+            . "-- pmftableprefix: pmf_\n"
+            . "INSERT INTO faqconfig VALUES (1, 'It''s a test');\n"
+            . "INSERT INTO faqconfig VALUES (2, 'He said \"hello\"');";
+
+        file_put_contents($backupFile, $content);
+
+        $result = $this->backup->parseBackupFile($backupFile, '4.0.0');
+
+        // Should have 3 queries: DELETE + 2 INSERTs
+        $this->assertCount(3, $result->queries);
+        $this->assertStringContainsString("It''s a test", $result->queries[1]);
+
+        unlink($backupFile);
+    }
+
+    public function testParseBackupFileWithSemicolonInData(): void
+    {
+        $backupFile = PMF_TEST_DIR . '/test-backup-semicolon.sql';
+        $content =
+            "-- pmf4.0: faqconfig\n"
+            . "-- DO NOT REMOVE THE FIRST LINE!\n"
+            . "-- pmftableprefix: pmf_\n"
+            . "INSERT INTO faqconfig VALUES (1, 'Text with; semicolon');\n"
+            . "INSERT INTO faqconfig VALUES (2, 'normal');";
+
+        file_put_contents($backupFile, $content);
+
+        $result = $this->backup->parseBackupFile($backupFile, '4.0.0');
+
+        // Should have 3 queries: DELETE + 2 INSERTs
+        $this->assertCount(3, $result->queries);
+        $this->assertStringContainsString('with; semicolon', $result->queries[1]);
+
+        unlink($backupFile);
+    }
+
     public function testParseBackupFileWithVersionMismatch(): void
     {
         $backupFile = PMF_TEST_DIR . '/test-backup-old.sql';

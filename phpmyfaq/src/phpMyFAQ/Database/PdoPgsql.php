@@ -85,10 +85,14 @@ class PdoPgsql implements DatabaseDriver
 
     /**
      * Escapes a string for use in a query.
+     *
+     * Note: Unlike PDO::quote(), this method intentionally does NOT add surrounding quotes.
+     * It only escapes special characters so callers can uniformly wrap values in SQL strings.
      */
     public function escape(string $string): string
     {
-        return $this->pdo->quote($string);
+        // For PostgreSQL, escape single quotes by doubling them (SQL standard)
+        return str_replace(search: "'", replace: "''", subject: $string);
     }
 
     /**
