@@ -54,7 +54,7 @@ class System
     /**
      * Pre-release version.
      */
-    private const string VERSION_PRE_RELEASE = 'RC.3';
+    private const string VERSION_PRE_RELEASE = 'RC.4';
 
     /**
      * API version.
