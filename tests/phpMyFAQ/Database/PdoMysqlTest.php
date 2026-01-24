@@ -55,7 +55,7 @@ class PdoMysqlTest extends TestCase
     {
         $testString = "test'string";
         $result = $this->pdoMysql->escape($testString);
-        // Without a PDO connection, addslashes() is used as fallback
+        // Single quotes should be escaped with backslash for MySQL
         $this->assertEquals("test\\'string", $result);
     }
 
@@ -63,8 +63,15 @@ class PdoMysqlTest extends TestCase
     {
         $testString = 'test"string\'with\\special;chars';
         $result = $this->pdoMysql->escape($testString);
-        // Without a PDO connection, addslashes() is used as fallback
-        $this->assertEquals('test\\"string\\\'with\\\\special;chars', $result);
+        // Single quotes and backslashes should be escaped for MySQL
+        $this->assertEquals('test"string\\\'with\\\\special;chars', $result);
+    }
+
+    public function testEscapeWithNoSpecialCharacters(): void
+    {
+        $testString = 'simple string without quotes';
+        $result = $this->pdoMysql->escape($testString);
+        $this->assertEquals($testString, $result);
     }
 
     public function testFetchArrayWithMockResult(): void
