@@ -2,9 +2,9 @@
 
 namespace phpMyFAQ;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class DateTest extends TestCase
@@ -17,7 +17,8 @@ class DateTest extends TestCase
         parent::setUp();
 
         $this->mockConfiguration = $this->createStub(Configuration::class);
-        $this->mockConfiguration->method('get')
+        $this->mockConfiguration
+            ->method('get')
             ->with('main.dateFormat')
             ->willReturn('Y-m-d H:i:s');
 
@@ -77,9 +78,7 @@ class DateTest extends TestCase
     {
         // Test with different configuration formats
         $mockConfig = $this->createStub(Configuration::class);
-        $mockConfig->method('get')
-            ->with('main.dateFormat')
-            ->willReturn('d.m.Y H:i');
+        $mockConfig->method('get')->with('main.dateFormat')->willReturn('d.m.Y H:i');
 
         $dateInstance = new Date($mockConfig);
         $inputDate = '2023-12-25 14:30:00';
@@ -92,9 +91,7 @@ class DateTest extends TestCase
     {
         // Mock logger to verify error logging - use Monolog\Logger instead of generic LoggerInterface
         $mockLogger = $this->createMock(\Monolog\Logger::class);
-        $mockLogger->expects($this->once())
-            ->method('error')
-            ->with($this->isString());
+        $mockLogger->expects($this->once())->method('error')->with($this->isString());
 
         $this->mockConfiguration->method('getLogger')->willReturn($mockLogger);
 

@@ -5,9 +5,9 @@ namespace phpMyFAQ\Export\Pdf;
 use Exception;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Translation;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class WrapperTest extends TestCase

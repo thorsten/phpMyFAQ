@@ -35,7 +35,9 @@ define('PMF_CONFIG_DIR', dirname(__DIR__) . '/tests/content/core/config');
 define('PMF_CONTENT_DIR', dirname(__DIR__) . '/tests/content');
 
 const PMF_LOG_DIR = __DIR__ . '/logs/phpmyfaq.log';
+
 const PMF_TEST_DIR = __DIR__;
+
 const IS_VALID_PHPMYFAQ = true;
 
 $_SERVER['HTTP_HOST'] = 'localhost';

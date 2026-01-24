@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Category;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class CategoryPermissionContextTest extends TestCase
@@ -168,4 +168,3 @@ class CategoryPermissionContextTest extends TestCase
         $this->assertSame(200, $context->getModeratorGroupId(1));
     }
 }
-

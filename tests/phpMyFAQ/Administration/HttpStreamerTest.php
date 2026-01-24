@@ -3,10 +3,10 @@
 namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Core\Exception;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Response;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class HttpStreamerTest extends TestCase
@@ -29,7 +29,7 @@ class HttpStreamerTest extends TestCase
         } catch (Exception $e) {
             $this->assertEquals(
                 'Error: unable to send my headers: someone already sent other headers!',
-                $e->getMessage()
+                $e->getMessage(),
             );
         }
 

@@ -3,10 +3,10 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class LanguageTest extends TestCase
@@ -47,8 +47,8 @@ class LanguageTest extends TestCase
     public function testIsLanguageAvailableWithId(): void
     {
         $this->dbHandle->query(
-            'INSERT INTO faqdata (id, lang, solution_id, active, sticky, thema, author, email, updated) VALUES' .
-            '(999, "en", 1001, 1, 1, "Test", "Author", "test@example.org", DATETIME("now", "localtime"))'
+            'INSERT INTO faqdata (id, lang, solution_id, active, sticky, thema, author, email, updated) VALUES'
+            . '(999, "en", 1001, 1, 1, "Test", "Author", "test@example.org", DATETIME("now", "localtime"))',
         );
         $result = $this->language->isLanguageAvailable(999);
 

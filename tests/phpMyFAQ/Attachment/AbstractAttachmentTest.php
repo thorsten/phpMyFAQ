@@ -3,10 +3,10 @@
 namespace phpMyFAQ\Attachment;
 
 use phpMyFAQ\Database\DatabaseDriver;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class AbstractAttachmentTest

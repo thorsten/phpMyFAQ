@@ -3,10 +3,11 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
-use phpMyFAQ\Glossary\GlossaryRepository;use PHPUnit\Framework\MockObject\Exception;
+use phpMyFAQ\Glossary\GlossaryRepository;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class GlossaryTest extends TestCase
@@ -89,7 +90,8 @@ class GlossaryTest extends TestCase
 
     public function testInsertItemsIntoContent(): void
     {
-        $glossary = $this->getMockBuilder(Glossary::class)
+        $glossary = $this
+            ->getMockBuilder(Glossary::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['fetchAll'])
             ->getMock();
@@ -151,7 +153,8 @@ class GlossaryTest extends TestCase
 
     public function testRepositoryErrorHandling(): void
     {
-        $repoMock = $this->getMockBuilder(GlossaryRepository::class)
+        $repoMock = $this
+            ->getMockBuilder(GlossaryRepository::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create', 'update', 'delete', 'fetchAll', 'fetch'])
             ->getMock();
@@ -163,8 +166,8 @@ class GlossaryTest extends TestCase
 
         $glossary = new Glossary($this->configuration, $repoMock);
         $glossary->setLanguage('en');
-        $this->assertFalse($glossary->create('x','y'));
-        $this->assertFalse($glossary->update(1,'x','y'));
+        $this->assertFalse($glossary->create('x', 'y'));
+        $this->assertFalse($glossary->update(1, 'x', 'y'));
         $this->assertFalse($glossary->delete(1));
         $this->assertEmpty($glossary->fetchAll());
         $this->assertEmpty($glossary->fetch(1));

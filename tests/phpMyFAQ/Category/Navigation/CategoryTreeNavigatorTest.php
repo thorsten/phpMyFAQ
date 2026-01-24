@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Category\Navigation;
 
-use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Category\CategoryCache;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class CategoryTreeNavigatorTest extends TestCase
@@ -98,8 +98,20 @@ class CategoryTreeNavigatorTest extends TestCase
     public function testCollapseAllChangesAllMinusToPlus(): void
     {
         // Arrange
-        $this->cache->addTreeTabEntry(['id' => 1, 'symbol' => 'minus', 'name' => 'A', 'level' => 0, 'numChildren' => 1]);
-        $this->cache->addTreeTabEntry(['id' => 2, 'symbol' => 'minus', 'name' => 'B', 'level' => 1, 'numChildren' => 0]);
+        $this->cache->addTreeTabEntry([
+            'id' => 1,
+            'symbol' => 'minus',
+            'name' => 'A',
+            'level' => 0,
+            'numChildren' => 1,
+        ]);
+        $this->cache->addTreeTabEntry([
+            'id' => 2,
+            'symbol' => 'minus',
+            'name' => 'B',
+            'level' => 1,
+            'numChildren' => 0,
+        ]);
         $this->cache->addTreeTabEntry(['id' => 3, 'symbol' => 'plus', 'name' => 'C', 'level' => 0, 'numChildren' => 1]);
 
         // Act
@@ -134,9 +146,27 @@ class CategoryTreeNavigatorTest extends TestCase
         ]);
 
         // Add tree tab entries
-        $this->cache->addTreeTabEntry(['id' => 1, 'symbol' => 'plus', 'name' => 'Root', 'level' => 0, 'numChildren' => 1]);
-        $this->cache->addTreeTabEntry(['id' => 2, 'symbol' => 'plus', 'name' => 'Middle', 'level' => 1, 'numChildren' => 1]);
-        $this->cache->addTreeTabEntry(['id' => 3, 'symbol' => 'angle', 'name' => 'Leaf', 'level' => 2, 'numChildren' => 0]);
+        $this->cache->addTreeTabEntry([
+            'id' => 1,
+            'symbol' => 'plus',
+            'name' => 'Root',
+            'level' => 0,
+            'numChildren' => 1,
+        ]);
+        $this->cache->addTreeTabEntry([
+            'id' => 2,
+            'symbol' => 'plus',
+            'name' => 'Middle',
+            'level' => 1,
+            'numChildren' => 1,
+        ]);
+        $this->cache->addTreeTabEntry([
+            'id' => 3,
+            'symbol' => 'angle',
+            'name' => 'Leaf',
+            'level' => 2,
+            'numChildren' => 0,
+        ]);
 
         // Act
         $this->navigator->expandTo($this->cache, 3);

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Category;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class CategoryCacheTest extends TestCase
@@ -221,4 +221,3 @@ class CategoryCacheTest extends TestCase
         $this->assertSame('Modified', $children[1]['name']);
     }
 }
-

@@ -8,8 +8,8 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\AdminLog as AdminLogEntity;
 use phpMyFAQ\System;
 use phpMyFAQ\User;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class AdminLogTest extends TestCase
@@ -47,7 +47,7 @@ class AdminLogTest extends TestCase
 
     public function testDelete(): void
     {
-        $_SERVER['REQUEST_TIME'] = $this->now - 31 * 86400;
+        $_SERVER['REQUEST_TIME'] = $this->now - (31 * 86400);
         $this->adminLog->log(new User($this->configuration), 'foo');
         $this->adminLog->log(new User($this->configuration), 'bar');
         $this->assertEquals(2, $this->adminLog->getNumberOfEntries());
@@ -78,24 +78,16 @@ class AdminLogTest extends TestCase
         $result = $this->adminLog->getAll();
 
         $adminLogEntity = new AdminLogEntity();
-        $one = $adminLogEntity->setId(1)
-            ->setTime($this->now)
-            ->setUserId(-1)
-            ->setText('foo')
-            ->setIp('127.0.0.1');
+        $one = $adminLogEntity->setId(1)->setTime($this->now)->setUserId(-1)->setText('foo')->setIp('127.0.0.1');
         $adminLogEntity = new AdminLogEntity();
-        $two = $adminLogEntity->setId(2)
-            ->setTime($this->now)
-            ->setUserId(-1)
-            ->setText('bar')
-            ->setIp('127.0.0.1');
+        $two = $adminLogEntity->setId(2)->setTime($this->now)->setUserId(-1)->setText('bar')->setIp('127.0.0.1');
 
         $this->assertEquals(
             [
                 2 => $two,
-                1 => $one
+                1 => $one,
             ],
-            $result
+            $result,
         );
     }
 }

@@ -17,9 +17,9 @@
 
 namespace phpMyFAQ;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class NetworkTest
@@ -83,7 +83,7 @@ class NetworkTest extends TestCase
 
         // Test banned IPv6
         $this->assertTrue($this->network->isBanned('2001:db8::1'));
-        
+
         // Test allowed IPv6
         $this->assertFalse($this->network->isBanned('2001:db8::2'));
     }
@@ -102,7 +102,7 @@ class NetworkTest extends TestCase
         $this->assertTrue($this->network->isBanned('192.168.1.50'));
         $this->assertTrue($this->network->isBanned('192.168.1.255'));
         $this->assertTrue($this->network->isBanned('10.1.2.3'));
-        
+
         // Test IP outside banned CIDR range
         $this->assertFalse($this->network->isBanned('192.168.2.1'));
         $this->assertFalse($this->network->isBanned('172.16.0.1'));
@@ -122,7 +122,7 @@ class NetworkTest extends TestCase
         $this->assertTrue($this->network->isBanned('2001:db8::1'));
         $this->assertTrue($this->network->isBanned('2001:db8:1234::5678'));
         $this->assertTrue($this->network->isBanned('fe80::1'));
-        
+
         // Test IPv6 outside banned CIDR range
         $this->assertFalse($this->network->isBanned('2001:db9::1'));
         $this->assertFalse($this->network->isBanned('2002::1'));
@@ -167,10 +167,10 @@ class NetworkTest extends TestCase
 
         // Test IPv4 localhost
         $this->assertTrue($this->network->isBanned('127.0.0.1'));
-        
+
         // Test IPv6 localhost
         $this->assertTrue($this->network->isBanned('::1'));
-        
+
         // Test other loopback addresses
         $this->assertFalse($this->network->isBanned('127.0.0.2'));
     }
@@ -187,14 +187,14 @@ class NetworkTest extends TestCase
 
         // Test Class A private range
         $this->assertTrue($this->network->isBanned('10.1.2.3'));
-        
+
         // Test Class B private range
         $this->assertTrue($this->network->isBanned('172.16.0.1'));
         $this->assertTrue($this->network->isBanned('172.31.255.255'));
-        
+
         // Test Class C private range
         $this->assertTrue($this->network->isBanned('192.168.1.1'));
-        
+
         // Test public IPs
         $this->assertFalse($this->network->isBanned('8.8.8.8'));
         $this->assertFalse($this->network->isBanned('1.1.1.1'));
@@ -214,7 +214,7 @@ class NetworkTest extends TestCase
         $this->assertFalse($this->network->isBanned('192.168.1.256'));
         $this->assertFalse($this->network->isBanned('not.an.ip.address'));
         $this->assertFalse($this->network->isBanned('192.168'));
-        
+
         // Test invalid IPv6
         $this->assertFalse($this->network->isBanned('gggg::1'));
         $this->assertFalse($this->network->isBanned('2001:db8:::1'));
@@ -234,7 +234,7 @@ class NetworkTest extends TestCase
         $this->assertTrue($this->network->isBanned('192.168.1.1'));
         $this->assertTrue($this->network->isBanned('10.0.0.50'));
         $this->assertFalse($this->network->isBanned('172.16.0.1'));
-        
+
         // Test IPv6 addresses
         $this->assertTrue($this->network->isBanned('2001:db8::1'));
         $this->assertTrue($this->network->isBanned('fe80::1234'));
@@ -254,7 +254,7 @@ class NetworkTest extends TestCase
         // Test edge IPv4 addresses
         $this->assertTrue($this->network->isBanned('0.0.0.0'));
         $this->assertTrue($this->network->isBanned('255.255.255.255'));
-        
+
         // Test edge IPv6 addresses
         $this->assertTrue($this->network->isBanned('::'));
         $this->assertTrue($this->network->isBanned('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff'));
@@ -266,15 +266,15 @@ class NetworkTest extends TestCase
     public function testConstructorReadonlyBehavior(): void
     {
         $network = new Network($this->config);
-        
+
         $this->assertInstanceOf(Network::class, $network);
-        
+
         // Verify that the network instance works correctly
         $this->config
             ->method('get')
             ->with('security.bannedIPs')
             ->willReturn('127.0.0.1');
-            
+
         $result = $network->isBanned('127.0.0.1');
         $this->assertTrue($result);
     }
@@ -289,7 +289,7 @@ class NetworkTest extends TestCase
         for ($i = 1; $i <= 100; $i++) {
             $bannedIps[] = "192.168.1.$i";
         }
-        
+
         $this->config
             ->method('get')
             ->with('security.bannedIPs')
@@ -299,7 +299,7 @@ class NetworkTest extends TestCase
         $this->assertTrue($this->network->isBanned('192.168.1.50'));
         $this->assertTrue($this->network->isBanned('192.168.1.1'));
         $this->assertTrue($this->network->isBanned('192.168.1.100'));
-        
+
         // Test IP not in the list
         $this->assertFalse($this->network->isBanned('192.168.2.1'));
     }
@@ -316,14 +316,14 @@ class NetworkTest extends TestCase
 
         // Test multiple IPs efficiently
         $testCases = [
-            ['192.168.100.1', true],
+            ['192.168.100.1',  true],
             ['10.255.255.255', true],
-            ['172.31.0.1', true],
-            ['169.254.1.1', true],
-            ['8.8.8.8', false],
-            ['1.1.1.1', false],
-            ['172.15.0.1', false],
-            ['172.32.0.1', false]
+            ['172.31.0.1',     true],
+            ['169.254.1.1',    true],
+            ['8.8.8.8',        false],
+            ['1.1.1.1',        false],
+            ['172.15.0.1',     false],
+            ['172.32.0.1',     false],
         ];
 
         foreach ($testCases as [$ip, $expected]) {

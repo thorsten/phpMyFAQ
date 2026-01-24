@@ -5,11 +5,11 @@ namespace phpMyFAQ\Helper;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Search\SearchResultSet;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class SearchHelperTest extends TestCase
@@ -68,12 +68,12 @@ class SearchHelperTest extends TestCase
     {
         $this->searchHelper->setSearchTerm('php test');
 
-        $this->configurationMock->method('get')
+        $this->configurationMock
+            ->method('get')
             ->with('records.numberOfRecordsPerPage')
             ->willReturn(10);
 
-        $this->configurationMock->method('getDefaultUrl')
-            ->willReturn('https://example.com/');
+        $this->configurationMock->method('getDefaultUrl')->willReturn('https://example.com/');
 
         $mockResult = new stdClass();
         $mockResult->category_id = 1;
@@ -84,7 +84,10 @@ class SearchHelperTest extends TestCase
         $this->searchResultSetMock->method('getNumberOfResults')->willReturn(1);
         $this->searchResultSetMock->method('getResultSet')->willReturn([$mockResult]);
 
-        $this->categoryMock->method('getPath')->with(1)->willReturn('Programming/PHP');
+        $this->categoryMock
+            ->method('getPath')
+            ->with(1)
+            ->willReturn('Programming/PHP');
 
         $result = $this->searchHelper->createAutoCompleteResult($this->searchResultSetMock);
 
@@ -99,12 +102,12 @@ class SearchHelperTest extends TestCase
 
     public function testCreateAutoCompleteResultLimitsResults(): void
     {
-        $this->configurationMock->method('get')
+        $this->configurationMock
+            ->method('get')
             ->with('records.numberOfRecordsPerPage')
             ->willReturn(2);
 
-        $this->configurationMock->method('getDefaultUrl')
-            ->willReturn('https://example.com/');
+        $this->configurationMock->method('getDefaultUrl')->willReturn('https://example.com/');
 
         $mockResults = [];
         for ($i = 1; $i <= 5; $i++) {
@@ -139,12 +142,12 @@ class SearchHelperTest extends TestCase
 
     public function testRenderAdminSuggestionResultWithResults(): void
     {
-        $this->configurationMock->method('get')
+        $this->configurationMock
+            ->method('get')
             ->with('records.numberOfRecordsPerPage')
             ->willReturn(10);
 
-        $this->configurationMock->method('getDefaultUrl')
-            ->willReturn('https://example.com/');
+        $this->configurationMock->method('getDefaultUrl')->willReturn('https://example.com/');
 
         $mockResult = new stdClass();
         $mockResult->id = 123;
@@ -184,14 +187,14 @@ class SearchHelperTest extends TestCase
     {
         $this->searchHelper->setSearchTerm('php programming');
 
-        $this->configurationMock->method('get')
+        $this->configurationMock
+            ->method('get')
             ->willReturnMap([
                 ['records.numberOfRecordsPerPage', 10],
-                ['search.enableHighlighting', true]
+                ['search.enableHighlighting',      true],
             ]);
 
-        $this->configurationMock->method('getDefaultUrl')
-            ->willReturn('https://example.com/');
+        $this->configurationMock->method('getDefaultUrl')->willReturn('https://example.com/');
 
         $mockResult = new stdClass();
         $mockResult->id = 123;
@@ -205,10 +208,12 @@ class SearchHelperTest extends TestCase
         $this->searchResultSetMock->method('getResultSet')->willReturn([$mockResult]);
 
         $this->categoryMock->method('setLanguage')->with('en');
-        $this->categoryMock->method('getCategoriesFromFaq')
+        $this->categoryMock
+            ->method('getCategoriesFromFaq')
             ->with(123)
             ->willReturn([1 => ['id' => 1, 'name' => 'Programming']]);
-        $this->categoryMock->method('getPath')
+        $this->categoryMock
+            ->method('getPath')
             ->with(1)
             ->willReturn('Programming/PHP');
 
@@ -230,14 +235,14 @@ class SearchHelperTest extends TestCase
 
     public function testGetSearchResultWithPagination(): void
     {
-        $this->configurationMock->method('get')
+        $this->configurationMock
+            ->method('get')
             ->willReturnMap([
                 ['records.numberOfRecordsPerPage', 2],
-                ['search.enableHighlighting', false]
+                ['search.enableHighlighting',      false],
             ]);
 
-        $this->configurationMock->method('getDefaultUrl')
-            ->willReturn('https://example.com/');
+        $this->configurationMock->method('getDefaultUrl')->willReturn('https://example.com/');
 
         $mockResults = [];
         for ($i = 1; $i <= 5; $i++) {
@@ -332,8 +337,7 @@ class SearchHelperTest extends TestCase
 
     public function testRenderRelatedFaqsWithResults(): void
     {
-        $this->configurationMock->method('getDefaultUrl')
-            ->willReturn('https://example.com/');
+        $this->configurationMock->method('getDefaultUrl')->willReturn('https://example.com/');
 
         $mockResults = [];
 
@@ -373,8 +377,7 @@ class SearchHelperTest extends TestCase
 
     public function testRenderRelatedFaqsLimitsToFiveResults(): void
     {
-        $this->configurationMock->method('getDefaultUrl')
-            ->willReturn('https://example.com/');
+        $this->configurationMock->method('getDefaultUrl')->willReturn('https://example.com/');
 
         $mockResults = [];
         for ($i = 1; $i <= 8; $i++) {
@@ -417,14 +420,11 @@ class SearchHelperTest extends TestCase
             'createAutoCompleteResult',
             'renderAdminSuggestionResult',
             'getSearchResult',
-            'renderRelatedFaqs'
+            'renderRelatedFaqs',
         ];
 
         foreach ($expectedMethods as $methodName) {
-            $this->assertTrue(
-                method_exists($this->searchHelper, $methodName),
-                "Method $methodName should exist"
-            );
+            $this->assertTrue(method_exists($this->searchHelper, $methodName), "Method $methodName should exist");
         }
     }
 

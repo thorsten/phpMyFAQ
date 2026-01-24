@@ -64,15 +64,15 @@ class BackupRepositoryTest extends TestCase
                 'filename' => 'backup1.sql',
                 'authkey' => 'key1',
                 'authcode' => 'code1',
-                'created' => '2025-12-22 10:00:00'
+                'created' => '2025-12-22 10:00:00',
             ],
             (object) [
                 'id' => 2,
                 'filename' => 'backup2.sql',
                 'authkey' => 'key2',
                 'authcode' => 'code2',
-                'created' => '2025-12-22 11:00:00'
-            ]
+                'created' => '2025-12-22 11:00:00',
+            ],
         ];
 
         $this->mockDb->method('query')->willReturn(true);
@@ -114,7 +114,7 @@ class BackupRepositoryTest extends TestCase
             'filename' => 'test-backup.sql',
             'authkey' => 'test-key',
             'authcode' => 'test-code',
-            'created' => '2025-12-22 10:00:00'
+            'created' => '2025-12-22 10:00:00',
         ];
 
         $this->mockDb->method('escape')->willReturnArgument(0);
@@ -149,7 +149,8 @@ class BackupRepositoryTest extends TestCase
 
     public function testFindByFilenameEscapesInput(): void
     {
-        $this->mockDb->expects($this->once())
+        $this->mockDb
+            ->expects($this->once())
             ->method('escape')
             ->with("test'; DROP TABLE faqbackup; --")
             ->willReturn("test\\'; DROP TABLE faqbackup; --");
@@ -166,60 +167,35 @@ class BackupRepositoryTest extends TestCase
         $this->mockDb->method('escape')->willReturnArgument(0);
         $this->mockDb->method('query')->willReturn(true);
 
-        $result = $this->repository->add(
-            'backup.sql',
-            'authkey123',
-            'authcode456',
-            '2025-12-22 10:00:00'
-        );
+        $result = $this->repository->add('backup.sql', 'authkey123', 'authcode456', '2025-12-22 10:00:00');
 
         $this->assertTrue($result);
     }
 
     public function testAddWithEmptyFilename(): void
     {
-        $result = $this->repository->add(
-            '',
-            'authkey123',
-            'authcode456',
-            '2025-12-22 10:00:00'
-        );
+        $result = $this->repository->add('', 'authkey123', 'authcode456', '2025-12-22 10:00:00');
 
         $this->assertFalse($result);
     }
 
     public function testAddWithEmptyAuthKey(): void
     {
-        $result = $this->repository->add(
-            'backup.sql',
-            '',
-            'authcode456',
-            '2025-12-22 10:00:00'
-        );
+        $result = $this->repository->add('backup.sql', '', 'authcode456', '2025-12-22 10:00:00');
 
         $this->assertFalse($result);
     }
 
     public function testAddWithEmptyAuthCode(): void
     {
-        $result = $this->repository->add(
-            'backup.sql',
-            'authkey123',
-            '',
-            '2025-12-22 10:00:00'
-        );
+        $result = $this->repository->add('backup.sql', 'authkey123', '', '2025-12-22 10:00:00');
 
         $this->assertFalse($result);
     }
 
     public function testAddWithEmptyCreated(): void
     {
-        $result = $this->repository->add(
-            'backup.sql',
-            'authkey123',
-            'authcode456',
-            ''
-        );
+        $result = $this->repository->add('backup.sql', 'authkey123', 'authcode456', '');
 
         $this->assertFalse($result);
     }
@@ -227,17 +203,13 @@ class BackupRepositoryTest extends TestCase
     public function testAddEscapesAllInputs(): void
     {
         $this->mockDb->method('nextId')->willReturn(1);
-        $this->mockDb->expects($this->exactly(4))
+        $this->mockDb
+            ->expects($this->exactly(4))
             ->method('escape')
             ->willReturnArgument(0);
         $this->mockDb->method('query')->willReturn(true);
 
-        $this->repository->add(
-            'backup.sql',
-            'authkey123',
-            'authcode456',
-            '2025-12-22 10:00:00'
-        );
+        $this->repository->add('backup.sql', 'authkey123', 'authcode456', '2025-12-22 10:00:00');
     }
 
     public function testDeleteById(): void
@@ -291,7 +263,8 @@ class BackupRepositoryTest extends TestCase
 
     public function testDeleteByFilenameEscapesInput(): void
     {
-        $this->mockDb->expects($this->once())
+        $this->mockDb
+            ->expects($this->once())
             ->method('escape')
             ->with("backup'; DROP TABLE faqbackup; --")
             ->willReturn("backup\\'; DROP TABLE faqbackup; --");
@@ -334,7 +307,7 @@ class BackupRepositoryTest extends TestCase
         $mockBackups = [
             (object) ['id' => 3, 'filename' => 'backup3.sql'],
             (object) ['id' => 2, 'filename' => 'backup2.sql'],
-            (object) ['id' => 1, 'filename' => 'backup1.sql']
+            (object) ['id' => 1, 'filename' => 'backup1.sql'],
         ];
 
         $this->mockDb->method('query')->willReturn(true);
@@ -356,21 +329,18 @@ class BackupRepositoryTest extends TestCase
         $this->mockDb->method('escape')->willReturnArgument(0);
         $this->mockDb->method('query')->willReturn(true);
 
-        $result = $this->repository->add(
-            'backup.sql',
-            $longAuthKey,
-            $longAuthCode,
-            '2025-12-22 10:00:00'
-        );
+        $result = $this->repository->add('backup.sql', $longAuthKey, $longAuthCode, '2025-12-22 10:00:00');
 
         $this->assertTrue($result);
     }
 
     public function testFindByFilenameWithSpecialCharacters(): void
     {
-        $this->mockDb->method('escape')->willReturnCallback(function ($input) {
-            return str_replace("'", "\\'", $input);
-        });
+        $this->mockDb
+            ->method('escape')
+            ->willReturnCallback(function ($input) {
+                return str_replace("'", "\\'", $input);
+            });
         $this->mockDb->method('query')->willReturn(true);
         $this->mockDb->method('numRows')->willReturn(0);
 

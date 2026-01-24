@@ -7,9 +7,9 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
 use phpMyFAQ\Faq;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class JsonTest
@@ -71,20 +71,23 @@ class JsonTest extends TestCase
                 'topic' => 'Test Question',
                 'content' => 'Test Answer',
                 'author_name' => 'Test Author',
-                'lastmodified' => '2025-01-15 10:30:00'
-            ]
+                'lastmodified' => '2025-01-15 10:30:00',
+            ],
         ];
 
-        $this->categoryMock->expects($this->once())
+        $this->categoryMock
+            ->expects($this->once())
             ->method('transform')
             ->with(0);
 
-        $this->faqMock->expects($this->once())
+        $this->faqMock
+            ->expects($this->once())
             ->method('get')
             ->with('faq_export_json', 0, true, '')
             ->willReturn($mockFaqData);
 
-        $this->categoryMock->expects($this->once())
+        $this->categoryMock
+            ->expects($this->once())
             ->method('getPath')
             ->with(1, ' >> ')
             ->willReturn('General');
@@ -108,8 +111,8 @@ class JsonTest extends TestCase
                 'topic' => 'Test <strong>Question</strong>',
                 'content' => 'Test Answer with <em>HTML</em> & special chars',
                 'author_name' => 'John Doe',
-                'lastmodified' => '2025-08-10 15:45:30'
-            ]
+                'lastmodified' => '2025-08-10 15:45:30',
+            ],
         ];
 
         $this->categoryMock->method('transform');
@@ -142,8 +145,8 @@ class JsonTest extends TestCase
                 'topic' => 'Question with <strong>bold</strong> and <em>italic</em> tags',
                 'content' => 'Answer',
                 'author_name' => 'Author',
-                'lastmodified' => '2025-01-01 00:00:00'
-            ]
+                'lastmodified' => '2025-01-01 00:00:00',
+            ],
         ];
 
         $this->categoryMock->method('transform');
@@ -167,8 +170,8 @@ class JsonTest extends TestCase
                 'topic' => 'Question',
                 'content' => 'Answer with <script>alert("xss")</script> and & symbols',
                 'author_name' => 'Author',
-                'lastmodified' => '2025-01-01 00:00:00'
-            ]
+                'lastmodified' => '2025-01-01 00:00:00',
+            ],
         ];
 
         $this->categoryMock->method('transform');
@@ -191,11 +194,13 @@ class JsonTest extends TestCase
         $downwards = false;
         $language = 'fr';
 
-        $this->categoryMock->expects($this->once())
+        $this->categoryMock
+            ->expects($this->once())
             ->method('transform')
             ->with($categoryId);
 
-        $this->faqMock->expects($this->once())
+        $this->faqMock
+            ->expects($this->once())
             ->method('get')
             ->with('faq_export_json', $categoryId, $downwards, $language)
             ->willReturn([]);
@@ -229,7 +234,7 @@ class JsonTest extends TestCase
                 'topic' => 'First Question',
                 'content' => 'First Answer',
                 'author_name' => 'Author 1',
-                'lastmodified' => '2025-01-01 10:00:00'
+                'lastmodified' => '2025-01-01 10:00:00',
             ],
             [
                 'id' => 2,
@@ -239,16 +244,17 @@ class JsonTest extends TestCase
                 'topic' => 'Second Question',
                 'content' => 'Second Answer',
                 'author_name' => 'Author 2',
-                'lastmodified' => '2025-01-02 11:00:00'
-            ]
+                'lastmodified' => '2025-01-02 11:00:00',
+            ],
         ];
 
         $this->categoryMock->method('transform');
         $this->faqMock->method('get')->willReturn($mockFaqData);
-        $this->categoryMock->method('getPath')
+        $this->categoryMock
+            ->method('getPath')
             ->willReturnMap([
                 [1, ' >> ', 'Category 1'],
-                [2, ' >> ', 'Category 2']
+                [2, ' >> ', 'Category 2'],
             ]);
 
         $result = $this->jsonExport->generate();
@@ -272,8 +278,8 @@ class JsonTest extends TestCase
                 'topic' => 'Question',
                 'content' => 'Answer',
                 'author_name' => 'Author',
-                'lastmodified' => '2025-01-01 00:00:00'
-            ]
+                'lastmodified' => '2025-01-01 00:00:00',
+            ],
         ];
 
         $this->categoryMock->method('transform');
@@ -302,8 +308,8 @@ class JsonTest extends TestCase
                 'topic' => 'Question',
                 'content' => 'Answer',
                 'author_name' => 'Author',
-                'lastmodified' => '2025-08-10 14:30:45'
-            ]
+                'lastmodified' => '2025-08-10 14:30:45',
+            ],
         ];
 
         $this->categoryMock->method('transform');
@@ -334,14 +340,15 @@ class JsonTest extends TestCase
                 'topic' => 'Question',
                 'content' => 'Answer',
                 'author_name' => 'Author',
-                'lastmodified' => '2025-01-01 00:00:00'
-            ]
+                'lastmodified' => '2025-01-01 00:00:00',
+            ],
         ];
 
         $this->categoryMock->method('transform');
         $this->faqMock->method('get')->willReturn($mockFaqData);
 
-        $this->categoryMock->expects($this->once())
+        $this->categoryMock
+            ->expects($this->once())
             ->method('getPath')
             ->with(3, ' >> ')
             ->willReturn('Root >> Subcategory >> Target');
@@ -363,8 +370,8 @@ class JsonTest extends TestCase
                 'topic' => null,
                 'content' => null,
                 'author_name' => null,
-                'lastmodified' => '2025-01-01 00:00:00'
-            ]
+                'lastmodified' => '2025-01-01 00:00:00',
+            ],
         ];
 
         $this->categoryMock->method('transform');

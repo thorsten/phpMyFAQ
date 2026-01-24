@@ -19,7 +19,7 @@ class BackupExecuteResultTest extends TestCase
             queriesOk: 10,
             queriesFailed: 2,
             lastErrorQuery: 'SELECT * FROM invalid_table',
-            lastErrorReason: 'Table does not exist'
+            lastErrorReason: 'Table does not exist',
         );
 
         $this->assertEquals(10, $result->queriesOk);
@@ -30,10 +30,7 @@ class BackupExecuteResultTest extends TestCase
 
     public function testConstructorWithOnlyRequiredParameters(): void
     {
-        $result = new BackupExecuteResult(
-            queriesOk: 15,
-            queriesFailed: 0
-        );
+        $result = new BackupExecuteResult(queriesOk: 15, queriesFailed: 0);
 
         $this->assertEquals(15, $result->queriesOk);
         $this->assertEquals(0, $result->queriesFailed);
@@ -43,10 +40,7 @@ class BackupExecuteResultTest extends TestCase
 
     public function testConstructorWithZeroQueries(): void
     {
-        $result = new BackupExecuteResult(
-            queriesOk: 0,
-            queriesFailed: 0
-        );
+        $result = new BackupExecuteResult(queriesOk: 0, queriesFailed: 0);
 
         $this->assertEquals(0, $result->queriesOk);
         $this->assertEquals(0, $result->queriesFailed);
@@ -58,7 +52,7 @@ class BackupExecuteResultTest extends TestCase
             queriesOk: 0,
             queriesFailed: 5,
             lastErrorQuery: 'INSERT INTO locked_table VALUES (1)',
-            lastErrorReason: 'Table is locked'
+            lastErrorReason: 'Table is locked',
         );
 
         $this->assertEquals(0, $result->queriesOk);
@@ -73,7 +67,7 @@ class BackupExecuteResultTest extends TestCase
             queriesOk: 100,
             queriesFailed: 0,
             lastErrorQuery: null,
-            lastErrorReason: null
+            lastErrorReason: null,
         );
 
         $this->assertEquals(100, $result->queriesOk);
@@ -84,10 +78,7 @@ class BackupExecuteResultTest extends TestCase
 
     public function testReadonlyProperties(): void
     {
-        $result = new BackupExecuteResult(
-            queriesOk: 5,
-            queriesFailed: 1
-        );
+        $result = new BackupExecuteResult(queriesOk: 5, queriesFailed: 1);
 
         // Verify properties are accessible
         $this->assertIsInt($result->queriesOk);
@@ -96,10 +87,7 @@ class BackupExecuteResultTest extends TestCase
 
     public function testConstructorWithLargeNumbers(): void
     {
-        $result = new BackupExecuteResult(
-            queriesOk: 99999,
-            queriesFailed: 1
-        );
+        $result = new BackupExecuteResult(queriesOk: 99999, queriesFailed: 1);
 
         $this->assertEquals(99999, $result->queriesOk);
         $this->assertEquals(1, $result->queriesFailed);
@@ -107,12 +95,7 @@ class BackupExecuteResultTest extends TestCase
 
     public function testConstructorWithErrorDetailsButNoErrors(): void
     {
-        $result = new BackupExecuteResult(
-            queriesOk: 10,
-            queriesFailed: 0,
-            lastErrorQuery: null,
-            lastErrorReason: null
-        );
+        $result = new BackupExecuteResult(queriesOk: 10, queriesFailed: 0, lastErrorQuery: null, lastErrorReason: null);
 
         $this->assertEquals(10, $result->queriesOk);
         $this->assertEquals(0, $result->queriesFailed);
@@ -128,7 +111,7 @@ class BackupExecuteResultTest extends TestCase
             queriesOk: 5,
             queriesFailed: 1,
             lastErrorQuery: 'SELECT * FROM missing_table',
-            lastErrorReason: $complexError
+            lastErrorReason: $complexError,
         );
 
         $this->assertEquals($complexError, $result->lastErrorReason);

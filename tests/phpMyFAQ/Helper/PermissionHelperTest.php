@@ -2,10 +2,10 @@
 
 namespace phpMyFAQ\Helper;
 
-use PHPUnit\Framework\MockObject\Exception;
-use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Configuration;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class PermissionHelperTest extends TestCase

@@ -6,10 +6,10 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Enums\AttachmentStorageType;
 use phpMyFAQ\Language;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class AttachmentFactoryTest
@@ -182,9 +182,10 @@ class AttachmentFactoryTest extends TestCase
 
         $expectedQueryPattern = "SELECT id FROM %sfaqattachment WHERE record_id = 456 AND record_lang = 'de'";
 
-        $this->mockDb->expects($this->once())
+        $this->mockDb
+            ->expects($this->once())
             ->method('query')
-            ->willReturnCallback(function($query) use ($expectedQueryPattern) {
+            ->willReturnCallback(function ($query) use ($expectedQueryPattern) {
                 $this->assertStringContainsString('SELECT id FROM', $query);
                 $this->assertStringContainsString('faqattachment', $query);
                 $this->assertStringContainsString('record_id = 456', $query);
@@ -249,9 +250,10 @@ class AttachmentFactoryTest extends TestCase
         // Test with French language
         Language::$language = 'fr';
 
-        $this->mockDb->expects($this->once())
+        $this->mockDb
+            ->expects($this->once())
             ->method('query')
-            ->willReturnCallback(function($query) {
+            ->willReturnCallback(function ($query) {
                 $this->assertStringContainsString("record_lang = 'fr'", $query);
                 return true;
             });

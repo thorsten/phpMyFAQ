@@ -6,8 +6,8 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\System;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 use Random\RandomException;
 
 #[AllowMockObjectsWithoutExpectations]
@@ -15,6 +15,7 @@ class UpdateTest extends TestCase
 {
     private Sqlite3 $dbHandle;
     private Update $update;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -59,7 +60,7 @@ class UpdateTest extends TestCase
         $this->assertMatchesRegularExpression(
             '/^phpmyfaq-config-backup\.\d{4}-\d{2}-\d{2}\.[0-9a-f]{8}\.zip$/',
             $filename,
-            'Backup filename should contain 8-character hexadecimal hash'
+            'Backup filename should contain 8-character hexadecimal hash',
         );
 
         // Cleanup

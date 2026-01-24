@@ -2,10 +2,10 @@
 
 namespace phpMyFAQ\Twig\Extensions;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Twig\Extension\AbstractExtension;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Test class for CategoryNameTwigExtension
@@ -112,7 +112,7 @@ class CategoryNameTwigExtensionTest extends TestCase
             'use phpMyFAQ\Configuration;',
             'use Twig\Attribute\AsTwigFilter;',
             'use Twig\Attribute\AsTwigFunction;',
-            'use Twig\Extension\AbstractExtension;'
+            'use Twig\Extension\AbstractExtension;',
         ];
 
         foreach ($expectedImports as $import) {
@@ -184,7 +184,11 @@ class CategoryNameTwigExtensionTest extends TestCase
         $method = $reflection->getMethod('getCategoryName');
 
         $attributes = $method->getAttributes();
-        $this->assertGreaterThanOrEqual(2, count($attributes), 'Should have at least 2 attributes (Filter and Function)');
+        $this->assertGreaterThanOrEqual(
+            2,
+            count($attributes),
+            'Should have at least 2 attributes (Filter and Function)',
+        );
 
         $attributeNames = array_map(fn($attr) => $attr->getName(), $attributes);
         $this->assertContains('Twig\Attribute\AsTwigFilter', $attributeNames);

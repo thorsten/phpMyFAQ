@@ -2,10 +2,10 @@
 
 namespace phpMyFAQ\Twig\Extensions;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Twig\Extension\AbstractExtension;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Test class for PluginTwigExtension
@@ -96,7 +96,7 @@ class PluginTwigExtensionTest extends TestCase
         $expectedImports = [
             'use phpMyFAQ\Configuration;',
             'use Twig\Attribute\AsTwigFunction;',
-            'use Twig\Extension\AbstractExtension;'
+            'use Twig\Extension\AbstractExtension;',
         ];
 
         foreach ($expectedImports as $import) {

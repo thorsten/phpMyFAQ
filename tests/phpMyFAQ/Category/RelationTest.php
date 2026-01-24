@@ -2,14 +2,14 @@
 
 namespace phpMyFAQ\Category;
 
-use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Language;
-use stdClass;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * Class RelationTest
@@ -30,11 +30,13 @@ class RelationTest extends TestCase
         $this->categoryMock = $this->createMock(Category::class);
         $this->languageMock = $this->createMock(Language::class);
 
-        $this->configurationMock->expects($this->any())
+        $this->configurationMock
+            ->expects($this->any())
             ->method('getDb')
             ->willReturn($this->databaseMock);
 
-        $this->configurationMock->expects($this->any())
+        $this->configurationMock
+            ->expects($this->any())
             ->method('getLanguage')
             ->willReturn($this->languageMock);
 
@@ -68,12 +70,14 @@ class RelationTest extends TestCase
     {
         Database::setTablePrefix('test_');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('SELECT'))
             ->willReturn('query_result');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('numRows')
             ->with('query_result')
             ->willReturn(0);
@@ -86,11 +90,13 @@ class RelationTest extends TestCase
     {
         Database::setTablePrefix('test_');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->willReturn('query_result');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('numRows')
             ->willReturn(2);
 
@@ -102,7 +108,8 @@ class RelationTest extends TestCase
         $row2->id_cat = 2;
         $row2->id = 20;
 
-        $this->databaseMock->expects($this->exactly(3))
+        $this->databaseMock
+            ->expects($this->exactly(3))
             ->method('fetchObject')
             ->willReturnOnConsecutiveCalls($row1, $row2, false);
 
@@ -110,7 +117,7 @@ class RelationTest extends TestCase
 
         $expected = [
             1 => [10 => true],
-            2 => [20 => true]
+            2 => [20 => true],
         ];
 
         $this->assertEquals($expected, $result);
@@ -120,11 +127,13 @@ class RelationTest extends TestCase
     {
         Database::setTablePrefix('test_');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->willReturn('query_result');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('numRows')
             ->willReturn(3);
 
@@ -140,7 +149,8 @@ class RelationTest extends TestCase
         $row3->id_cat = 2;
         $row3->id = 20;
 
-        $this->databaseMock->expects($this->exactly(4))
+        $this->databaseMock
+            ->expects($this->exactly(4))
             ->method('fetchObject')
             ->willReturnOnConsecutiveCalls($row1, $row2, $row3, false);
 
@@ -148,7 +158,7 @@ class RelationTest extends TestCase
 
         $expected = [
             1 => [10 => true, 11 => true],
-            2 => [20 => true]
+            2 => [20 => true],
         ];
 
         $this->assertEquals($expected, $result);
@@ -158,21 +168,25 @@ class RelationTest extends TestCase
     {
         Database::setTablePrefix('test_');
 
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('get')
             ->with('security.permLevel')
             ->willReturn('basic');
 
-        $this->languageMock->expects($this->any())
+        $this->languageMock
+            ->expects($this->any())
             ->method('getLanguage')
             ->willReturn('en');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains("fd.lang = 'en'"))
             ->willReturn('query_result');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('numRows')
             ->willReturn(1);
 
@@ -183,7 +197,8 @@ class RelationTest extends TestCase
         $categoryRow->description = 'Test Description';
         $categoryRow->number = 5;
 
-        $this->databaseMock->expects($this->exactly(2))
+        $this->databaseMock
+            ->expects($this->exactly(2))
             ->method('fetchObject')
             ->willReturnOnConsecutiveCalls($categoryRow, false);
 
@@ -195,8 +210,8 @@ class RelationTest extends TestCase
                 'parent_id' => 0,
                 'name' => 'Test Category',
                 'description' => 'Test Description',
-                'faqs' => 5
-            ]
+                'faqs' => 5,
+            ],
         ];
 
         $this->assertEquals($expected, $result);
@@ -206,29 +221,35 @@ class RelationTest extends TestCase
     {
         Database::setTablePrefix('test_');
 
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('get')
             ->with('security.permLevel')
             ->willReturn('medium');
 
-        $this->categoryMock->expects($this->any())
+        $this->categoryMock
+            ->expects($this->any())
             ->method('getUser')
             ->willReturn(42);
 
-        $this->categoryMock->expects($this->any())
+        $this->categoryMock
+            ->expects($this->any())
             ->method('getGroups')
             ->willReturn([1, 2, 3]);
 
-        $this->languageMock->expects($this->any())
+        $this->languageMock
+            ->expects($this->any())
             ->method('getLanguage')
             ->willReturn('de');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('fdu.user_id = 42'))
             ->willReturn('query_result');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('numRows')
             ->willReturn(0);
 
@@ -240,29 +261,35 @@ class RelationTest extends TestCase
     {
         Database::setTablePrefix('test_');
 
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('get')
             ->with('security.permLevel')
             ->willReturn('medium');
 
-        $this->categoryMock->expects($this->any())
+        $this->categoryMock
+            ->expects($this->any())
             ->method('getUser')
             ->willReturn(-1);
 
-        $this->categoryMock->expects($this->any())
+        $this->categoryMock
+            ->expects($this->any())
             ->method('getGroups')
             ->willReturn([1, 2]);
 
-        $this->languageMock->expects($this->any())
+        $this->languageMock
+            ->expects($this->any())
             ->method('getLanguage')
             ->willReturn('');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('fdg.group_id IN (1, 2)'))
             ->willReturn('query_result');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('numRows')
             ->willReturn(0);
 
@@ -274,16 +301,19 @@ class RelationTest extends TestCase
     {
         Database::setTablePrefix('test_');
 
-        $this->languageMock->expects($this->any())
+        $this->languageMock
+            ->expects($this->any())
             ->method('getLanguage')
             ->willReturn('en');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('COUNT(fcr.record_id) AS number'))
             ->willReturn('query_result');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('numRows')
             ->willReturn(1);
 
@@ -291,7 +321,8 @@ class RelationTest extends TestCase
         $row->category_id = 1;
         $row->number = 10;
 
-        $this->databaseMock->expects($this->exactly(2))
+        $this->databaseMock
+            ->expects($this->exactly(2))
             ->method('fetchObject')
             ->willReturnOnConsecutiveCalls($row, false);
 
@@ -308,16 +339,19 @@ class RelationTest extends TestCase
         // Set groups first
         $this->relation->setGroups([5]);
 
-        $this->languageMock->expects($this->any())
+        $this->languageMock
+            ->expects($this->any())
             ->method('getLanguage')
             ->willReturn('de');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('fdg.group_id = 5'))
             ->willReturn('query_result');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('numRows')
             ->willReturn(2);
 
@@ -329,7 +363,8 @@ class RelationTest extends TestCase
         $row2->category_id = 2;
         $row2->number = 8;
 
-        $this->databaseMock->expects($this->exactly(3))
+        $this->databaseMock
+            ->expects($this->exactly(3))
             ->method('fetchObject')
             ->willReturnOnConsecutiveCalls($row1, $row2, false);
 
@@ -343,16 +378,19 @@ class RelationTest extends TestCase
     {
         Database::setTablePrefix('test_');
 
-        $this->languageMock->expects($this->once())
+        $this->languageMock
+            ->expects($this->once())
             ->method('getLanguage')
             ->willReturn('');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains("AND fd.active = 'yes'"))
             ->willReturn('query_result');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('numRows')
             ->willReturn(0);
 
@@ -367,19 +405,22 @@ class RelationTest extends TestCase
         // Set groups first
         $this->relation->setGroups([3]);
 
-        $this->languageMock->expects($this->any())
+        $this->languageMock
+            ->expects($this->any())
             ->method('getLanguage')
             ->willReturn('fr');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->logicalAnd(
                 $this->stringContains('fdg.group_id = 3'),
-                $this->stringContains("fd.active = 'yes'")
+                $this->stringContains("fd.active = 'yes'"),
             ))
             ->willReturn('query_result');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('numRows')
             ->willReturn(0);
 
@@ -391,16 +432,19 @@ class RelationTest extends TestCase
     {
         Database::setTablePrefix('test_');
 
-        $this->languageMock->expects($this->any())
+        $this->languageMock
+            ->expects($this->any())
             ->method('getLanguage')
             ->willReturn('');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('COUNT(fcr.record_id) AS number'))
             ->willReturn('query_result');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('numRows')
             ->willReturn(0);
 

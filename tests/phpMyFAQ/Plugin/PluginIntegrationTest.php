@@ -30,103 +30,103 @@ class PluginIntegrationTest extends TestCase
         // Create CSS files
         file_put_contents(
             $this->testPluginDir . '/IntegrationTestPlugin/assets/style.css',
-            '.test-plugin { color: blue; }'
+            '.test-plugin { color: blue; }',
         );
 
         file_put_contents(
             $this->testPluginDir . '/IntegrationTestPlugin/assets/admin-style.css',
-            '.test-plugin-admin { color: red; }'
+            '.test-plugin-admin { color: red; }',
         );
 
         // Create JavaScript files
         file_put_contents(
             $this->testPluginDir . '/IntegrationTestPlugin/assets/script.js',
-            'console.log("Test plugin loaded");'
+            'console.log("Test plugin loaded");',
         );
 
         file_put_contents(
             $this->testPluginDir . '/IntegrationTestPlugin/assets/admin-script.js',
-            'console.log("Test plugin admin loaded");'
+            'console.log("Test plugin admin loaded");',
         );
 
         // Create translation files
         file_put_contents(
             $this->testPluginDir . '/IntegrationTestPlugin/translations/language_en.php',
-            "<?php\n\n\$PMF_LANG['testMessage'] = 'Test message in English';\n"
+            "<?php\n\n\$PMF_LANG['testMessage'] = 'Test message in English';\n",
         );
 
         file_put_contents(
             $this->testPluginDir . '/IntegrationTestPlugin/translations/language_de.php',
-            "<?php\n\n\$PMF_LANG['testMessage'] = 'Testnachricht auf Deutsch';\n"
+            "<?php\n\n\$PMF_LANG['testMessage'] = 'Testnachricht auf Deutsch';\n",
         );
 
         // Create a plugin class
         $pluginClass = <<<'PHP'
-<?php
+            <?php
 
-namespace phpMyFAQ\Plugin\IntegrationTestPlugin;
+            namespace phpMyFAQ\Plugin\IntegrationTestPlugin;
 
-use phpMyFAQ\Plugin\PluginInterface;
-use phpMyFAQ\Plugin\PluginConfigurationInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+            use phpMyFAQ\Plugin\PluginInterface;
+            use phpMyFAQ\Plugin\PluginConfigurationInterface;
+            use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class IntegrationTestPluginPlugin implements PluginInterface
-{
-    public function getName(): string
-    {
-        return 'IntegrationTestPlugin';
-    }
+            class IntegrationTestPluginPlugin implements PluginInterface
+            {
+                public function getName(): string
+                {
+                    return 'IntegrationTestPlugin';
+                }
 
-    public function getVersion(): string
-    {
-        return '0.2.0';
-    }
+                public function getVersion(): string
+                {
+                    return '0.2.0';
+                }
 
-    public function getDescription(): string
-    {
-        return 'Integration test plugin';
-    }
+                public function getDescription(): string
+                {
+                    return 'Integration test plugin';
+                }
 
-    public function getAuthor(): string
-    {
-        return 'phpMyFAQ Test';
-    }
+                public function getAuthor(): string
+                {
+                    return 'phpMyFAQ Test';
+                }
 
-    public function getDependencies(): array
-    {
-        return [];
-    }
+                public function getDependencies(): array
+                {
+                    return [];
+                }
 
-    public function getConfig(): ?PluginConfigurationInterface
-    {
-        return null;
-    }
+                public function getConfig(): ?PluginConfigurationInterface
+                {
+                    return null;
+                }
 
-    public function getStylesheets(): array
-    {
-        return ['assets/style.css', 'assets/admin-style.css'];
-    }
+                public function getStylesheets(): array
+                {
+                    return ['assets/style.css', 'assets/admin-style.css'];
+                }
 
-    public function getTranslationsPath(): ?string
-    {
-        return 'translations';
-    }
+                public function getTranslationsPath(): ?string
+                {
+                    return 'translations';
+                }
 
-    public function getScripts(): array
-    {
-        return ['assets/script.js', 'assets/admin-script.js'];
-    }
+                public function getScripts(): array
+                {
+                    return ['assets/script.js', 'assets/admin-script.js'];
+                }
 
-    public function registerEvents(EventDispatcherInterface $eventDispatcher): void
-    {
-        // No events for this test
-    }
-}
-PHP;
+                public function registerEvents(EventDispatcherInterface $eventDispatcher): void
+                {
+                    // No events for this test
+                }
+            }
+            PHP;
 
         file_put_contents(
             $this->testPluginDir . '/IntegrationTestPlugin/IntegrationTestPluginPlugin.php',
-            $pluginClass
+            $pluginClass,
         );
 
         // Setup Translation
@@ -135,15 +135,9 @@ PHP;
             mkdir($translationsDir, 0777, true);
         }
 
-        file_put_contents(
-            $translationsDir . '/language_en.php',
-            "<?php\n\nreturn ['core.key' => 'Core value'];\n"
-        );
+        file_put_contents($translationsDir . '/language_en.php', "<?php\n\nreturn ['core.key' => 'Core value'];\n");
 
-        file_put_contents(
-            $translationsDir . '/language_de.php',
-            "<?php\n\nreturn ['core.key' => 'Kernwert'];\n"
-        );
+        file_put_contents($translationsDir . '/language_de.php', "<?php\n\nreturn ['core.key' => 'Kernwert'];\n");
 
         Translation::resetInstance();
         Translation::create()

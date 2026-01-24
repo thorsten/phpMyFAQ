@@ -4,9 +4,9 @@ namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class RevisionTest extends TestCase
@@ -21,9 +21,7 @@ class RevisionTest extends TestCase
         $this->mockConfiguration = $this->createStub(Configuration::class);
 
         // Mock Database class
-        $this->mockDb = $this->getMockBuilder(DatabaseDriver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->mockDb = $this->getMockBuilder(DatabaseDriver::class)->disableOriginalConstructor()->getMock();
 
         // Stub the getDb method of Configuration to return the mockDb object
         $this->mockConfiguration->method('getDb')->willReturn($this->mockDb);
@@ -47,9 +45,10 @@ class RevisionTest extends TestCase
         $this->mockDb->method('escape')->willReturn('de');
 
         // Verify the SQL query structure
-        $this->mockDb->expects($this->once())
+        $this->mockDb
+            ->expects($this->once())
             ->method('query')
-            ->willReturnCallback(function($query) {
+            ->willReturnCallback(function ($query) {
                 // Verify the query contains expected SQL components
                 $this->assertStringContainsString('INSERT INTO', $query);
                 $this->assertStringContainsString('faqdata_revisions', $query);
@@ -76,7 +75,8 @@ class RevisionTest extends TestCase
         $this->mockDb->method('escape')->willReturn($escapedInput);
         $this->mockDb->method('query')->willReturn(true);
 
-        $this->mockDb->expects($this->once())
+        $this->mockDb
+            ->expects($this->once())
             ->method('escape')
             ->with($dangerousInput)
             ->willReturn($escapedInput);
@@ -109,8 +109,7 @@ class RevisionTest extends TestCase
         $mockResult->updated = '20250804120000';
         $mockResult->author = 'Jane Smith';
 
-        $this->mockDb->method('fetchObject')
-            ->willReturn($mockResult, false);
+        $this->mockDb->method('fetchObject')->willReturn($mockResult, false);
 
         $result = $this->revision->get(123, 'en', 'John Doe');
 
@@ -137,8 +136,7 @@ class RevisionTest extends TestCase
         $mockResult2->updated = '20250804140000';
         $mockResult2->author = 'Author Two';
 
-        $this->mockDb->method('fetchObject')
-            ->willReturn($mockResult1, $mockResult2, false);
+        $this->mockDb->method('fetchObject')->willReturn($mockResult1, $mockResult2, false);
 
         $result = $this->revision->get(456, 'de', 'Fallback Author');
 
@@ -167,8 +165,7 @@ class RevisionTest extends TestCase
         $mockResult->updated = '20250804120000'; // This should be ignored for FAQ ID 0
         $mockResult->author = 'Database Author'; // This should be ignored for FAQ ID 0
 
-        $this->mockDb->method('fetchObject')
-            ->willReturn($mockResult, false);
+        $this->mockDb->method('fetchObject')->willReturn($mockResult, false);
 
         $result = $this->revision->get(0, 'en', 'john doe');
 
@@ -188,9 +185,10 @@ class RevisionTest extends TestCase
         $this->mockDb->method('numRows')->willReturn(0);
 
         // Verify the SQL query structure
-        $this->mockDb->expects($this->once())
+        $this->mockDb
+            ->expects($this->once())
             ->method('query')
-            ->willReturnCallback(function($query) {
+            ->willReturnCallback(function ($query) {
                 // Verify the query contains expected SQL components
                 $this->assertStringContainsString('SELECT', $query);
                 $this->assertStringContainsString('revision_id, updated, author', $query);
@@ -217,7 +215,8 @@ class RevisionTest extends TestCase
         $this->mockDb->method('query')->willReturn(true);
         $this->mockDb->method('numRows')->willReturn(0);
 
-        $this->mockDb->expects($this->once())
+        $this->mockDb
+            ->expects($this->once())
             ->method('escape')
             ->with($dangerousInput)
             ->willReturn($escapedInput);
@@ -252,9 +251,10 @@ class RevisionTest extends TestCase
         $this->mockDb->method('escape')->willReturn('it');
 
         // Verify the SQL query structure
-        $this->mockDb->expects($this->once())
+        $this->mockDb
+            ->expects($this->once())
             ->method('query')
-            ->willReturnCallback(function($query) {
+            ->willReturnCallback(function ($query) {
                 // Verify the query contains expected SQL components
                 $this->assertStringContainsString('DELETE FROM', $query);
                 $this->assertStringContainsString('faqdata_revisions', $query);
@@ -277,7 +277,8 @@ class RevisionTest extends TestCase
         $this->mockDb->method('escape')->willReturn($escapedInput);
         $this->mockDb->method('query')->willReturn(true);
 
-        $this->mockDb->expects($this->once())
+        $this->mockDb
+            ->expects($this->once())
             ->method('escape')
             ->with($dangerousInput)
             ->willReturn($escapedInput);

@@ -2,8 +2,8 @@
 
 namespace phpMyFAQ\Configuration;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for ElasticsearchConfiguration
@@ -54,7 +54,7 @@ class ElasticsearchConfigurationTest extends TestCase
     {
         $config = [
             'hosts' => ['localhost:9200', 'elastic.example.com:9200'],
-            'index' => 'phpmyfaq_test'
+            'index' => 'phpmyfaq_test',
         ];
 
         $configFile = $this->createConfigFile('valid_config.php', $config);
@@ -69,7 +69,7 @@ class ElasticsearchConfigurationTest extends TestCase
     {
         $config = [
             'hosts' => [],
-            'index' => ''
+            'index' => '',
         ];
 
         $configFile = $this->createConfigFile('minimal_config.php', $config);
@@ -83,7 +83,7 @@ class ElasticsearchConfigurationTest extends TestCase
     {
         $config = [
             'hosts' => ['http://localhost:9200'],
-            'index' => 'single_index'
+            'index' => 'single_index',
         ];
 
         $configFile = $this->createConfigFile('single_host_config.php', $config);
@@ -100,9 +100,9 @@ class ElasticsearchConfigurationTest extends TestCase
             'hosts' => [
                 'https://node1.elastic.example.com:9200',
                 'https://node2.elastic.example.com:9200',
-                'https://node3.elastic.example.com:9200'
+                'https://node3.elastic.example.com:9200',
             ],
-            'index' => 'production_faq_index'
+            'index' => 'production_faq_index',
         ];
 
         $configFile = $this->createConfigFile('multi_host_config.php', $config);
@@ -117,12 +117,12 @@ class ElasticsearchConfigurationTest extends TestCase
     {
         $hosts = [
             'cluster-node-1.elasticsearch.local:9200',
-            'cluster-node-2.elasticsearch.local:9200'
+            'cluster-node-2.elasticsearch.local:9200',
         ];
 
         $config = [
             'hosts' => $hosts,
-            'index' => 'test_index'
+            'index' => 'test_index',
         ];
 
         $configFile = $this->createConfigFile('hosts_test.php', $config);
@@ -139,7 +139,7 @@ class ElasticsearchConfigurationTest extends TestCase
 
         $config = [
             'hosts' => ['localhost:9200'],
-            'index' => $indexName
+            'index' => $indexName,
         ];
 
         $configFile = $this->createConfigFile('index_test.php', $config);
@@ -155,9 +155,9 @@ class ElasticsearchConfigurationTest extends TestCase
             'hosts' => [
                 'https://user:pass@secure-elastic.com:9200',
                 'http://192.168.1.100:9200',
-                'https://elastic-cluster.internal:443/elasticsearch'
+                'https://elastic-cluster.internal:443/elasticsearch',
             ],
-            'index' => 'complex_index_name_with_underscores'
+            'index' => 'complex_index_name_with_underscores',
         ];
 
         $configFile = $this->createConfigFile('complex_config.php', $config);
@@ -171,7 +171,7 @@ class ElasticsearchConfigurationTest extends TestCase
     {
         $config = [
             'hosts' => ['localhost:9200'],
-            'index' => 'readonly_test'
+            'index' => 'readonly_test',
         ];
 
         $configFile = $this->createConfigFile('readonly_config.php', $config);
@@ -191,7 +191,7 @@ class ElasticsearchConfigurationTest extends TestCase
     {
         $config = [
             'hosts' => [],
-            'index' => 'empty_hosts_index'
+            'index' => 'empty_hosts_index',
         ];
 
         $configFile = $this->createConfigFile('empty_hosts_config.php', $config);
@@ -208,9 +208,9 @@ class ElasticsearchConfigurationTest extends TestCase
             'hosts' => [
                 0 => 'first-host:9200',
                 1 => 'second-host:9200',
-                2 => 'third-host:9200'
+                2 => 'third-host:9200',
             ],
-            'index' => 'numeric_keys_index'
+            'index' => 'numeric_keys_index',
         ];
 
         $configFile = $this->createConfigFile('numeric_keys_config.php', $config);
@@ -226,7 +226,7 @@ class ElasticsearchConfigurationTest extends TestCase
     {
         $config = [
             'hosts' => ['localhost:9200'],
-            'index' => 'test-index_with.special-chars_2025'
+            'index' => 'test-index_with.special-chars_2025',
         ];
 
         $configFile = $this->createConfigFile('special_chars_config.php', $config);
@@ -240,12 +240,12 @@ class ElasticsearchConfigurationTest extends TestCase
         // Test dass verschiedene Instanzen unabhängig voneinander funktionieren
         $config1 = [
             'hosts' => ['host1:9200'],
-            'index' => 'index1'
+            'index' => 'index1',
         ];
 
         $config2 = [
             'hosts' => ['host2:9200', 'host3:9200'],
-            'index' => 'index2'
+            'index' => 'index2',
         ];
 
         $configFile1 = $this->createConfigFile('config1.php', $config1);
@@ -272,11 +272,16 @@ class ElasticsearchConfigurationTest extends TestCase
     public function testConstructorWithDefaultValues(): void
     {
         // Test mit expliziter Standard-Konfiguration
-        $configContent = '<?php' . PHP_EOL .
-                        '$PMF_ES = [' . PHP_EOL .
-                        '    "hosts" => [],' . PHP_EOL .
-                        '    "index" => "",' . PHP_EOL .
-                        '];';
+        $configContent =
+            '<?php'
+            . PHP_EOL
+            . '$PMF_ES = ['
+            . PHP_EOL
+            . '    "hosts" => [],'
+            . PHP_EOL
+            . '    "index" => "",'
+            . PHP_EOL
+            . '];';
 
         $configFile = $this->testConfigDir . '/default_config.php';
         file_put_contents($configFile, $configContent);

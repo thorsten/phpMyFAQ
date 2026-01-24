@@ -2,8 +2,8 @@
 
 namespace phpMyFAQ\Configuration;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for OpenSearchConfiguration
@@ -54,7 +54,7 @@ class OpenSearchConfigurationTest extends TestCase
     {
         $config = [
             'hosts' => ['localhost:9200', 'opensearch.example.com:9200'],
-            'index' => 'phpmyfaq_opensearch'
+            'index' => 'phpmyfaq_opensearch',
         ];
 
         $configFile = $this->createConfigFile('valid_config.php', $config);
@@ -69,7 +69,7 @@ class OpenSearchConfigurationTest extends TestCase
     {
         $config = [
             'hosts' => [],
-            'index' => ''
+            'index' => '',
         ];
 
         $configFile = $this->createConfigFile('minimal_config.php', $config);
@@ -83,7 +83,7 @@ class OpenSearchConfigurationTest extends TestCase
     {
         $config = [
             'hosts' => ['https://localhost:9200'],
-            'index' => 'single_node_index'
+            'index' => 'single_node_index',
         ];
 
         $configFile = $this->createConfigFile('single_node_config.php', $config);
@@ -100,9 +100,9 @@ class OpenSearchConfigurationTest extends TestCase
             'hosts' => [
                 'https://node1.opensearch.cluster.local:9200',
                 'https://node2.opensearch.cluster.local:9200',
-                'https://node3.opensearch.cluster.local:9200'
+                'https://node3.opensearch.cluster.local:9200',
             ],
-            'index' => 'production_cluster_index'
+            'index' => 'production_cluster_index',
         ];
 
         $configFile = $this->createConfigFile('multi_node_config.php', $config);
@@ -117,9 +117,9 @@ class OpenSearchConfigurationTest extends TestCase
     {
         $config = [
             'hosts' => [
-                'https://search-my-domain.us-east-1.es.amazonaws.com'
+                'https://search-my-domain.us-east-1.es.amazonaws.com',
             ],
-            'index' => 'aws_opensearch_index'
+            'index' => 'aws_opensearch_index',
         ];
 
         $configFile = $this->createConfigFile('aws_opensearch_config.php', $config);
@@ -134,9 +134,9 @@ class OpenSearchConfigurationTest extends TestCase
         $config = [
             'hosts' => [
                 'https://admin:password@secure-opensearch.example.com:9200',
-                'https://admin:password@secure-opensearch-2.example.com:9200'
+                'https://admin:password@secure-opensearch-2.example.com:9200',
             ],
-            'index' => 'secure_index_with_auth'
+            'index' => 'secure_index_with_auth',
         ];
 
         $configFile = $this->createConfigFile('secure_config.php', $config);
@@ -150,12 +150,12 @@ class OpenSearchConfigurationTest extends TestCase
     {
         $hosts = [
             'opensearch-cluster-1.internal:9200',
-            'opensearch-cluster-2.internal:9200'
+            'opensearch-cluster-2.internal:9200',
         ];
 
         $config = [
             'hosts' => $hosts,
-            'index' => 'test_index'
+            'index' => 'test_index',
         ];
 
         $configFile = $this->createConfigFile('hosts_test.php', $config);
@@ -172,7 +172,7 @@ class OpenSearchConfigurationTest extends TestCase
 
         $config = [
             'hosts' => ['localhost:9200'],
-            'index' => $indexName
+            'index' => $indexName,
         ];
 
         $configFile = $this->createConfigFile('index_test.php', $config);
@@ -186,7 +186,7 @@ class OpenSearchConfigurationTest extends TestCase
     {
         $config = [
             'hosts' => ['http://localhost:9200'],
-            'index' => 'dev_local_index'
+            'index' => 'dev_local_index',
         ];
 
         $configFile = $this->createConfigFile('dev_config.php', $config);
@@ -202,9 +202,9 @@ class OpenSearchConfigurationTest extends TestCase
             'hosts' => [
                 'https://prod-opensearch-1.company.com:443',
                 'https://prod-opensearch-2.company.com:443',
-                'https://prod-opensearch-3.company.com:443'
+                'https://prod-opensearch-3.company.com:443',
             ],
-            'index' => 'prod_faq_knowledge_base'
+            'index' => 'prod_faq_knowledge_base',
         ];
 
         $configFile = $this->createConfigFile('prod_config.php', $config);
@@ -219,7 +219,7 @@ class OpenSearchConfigurationTest extends TestCase
     {
         $config = [
             'hosts' => ['localhost:9200'],
-            'index' => 'readonly_test'
+            'index' => 'readonly_test',
         ];
 
         $configFile = $this->createConfigFile('readonly_config.php', $config);
@@ -239,7 +239,7 @@ class OpenSearchConfigurationTest extends TestCase
     {
         $config = [
             'hosts' => [],
-            'index' => 'empty_hosts_index'
+            'index' => 'empty_hosts_index',
         ];
 
         $configFile = $this->createConfigFile('empty_hosts_config.php', $config);
@@ -253,7 +253,7 @@ class OpenSearchConfigurationTest extends TestCase
     {
         $config = [
             'hosts' => ['localhost:9200'],
-            'index' => 'test-index_with.special-chars_2025'
+            'index' => 'test-index_with.special-chars_2025',
         ];
 
         $configFile = $this->createConfigFile('special_chars_config.php', $config);
@@ -267,9 +267,9 @@ class OpenSearchConfigurationTest extends TestCase
         $config = [
             'hosts' => [
                 'http://opensearch-node1:9200',
-                'http://opensearch-node2:9200'
+                'http://opensearch-node2:9200',
             ],
-            'index' => 'docker_compose_index'
+            'index' => 'docker_compose_index',
         ];
 
         $configFile = $this->createConfigFile('docker_config.php', $config);
@@ -283,9 +283,9 @@ class OpenSearchConfigurationTest extends TestCase
     {
         $config = [
             'hosts' => [
-                'https://opensearch-cluster.opensearch-system.svc.cluster.local:9200'
+                'https://opensearch-cluster.opensearch-system.svc.cluster.local:9200',
             ],
-            'index' => 'k8s_cluster_index'
+            'index' => 'k8s_cluster_index',
         ];
 
         $configFile = $this->createConfigFile('k8s_config.php', $config);
@@ -300,12 +300,12 @@ class OpenSearchConfigurationTest extends TestCase
         // Test dass verschiedene Instanzen unabhängig voneinander funktionieren
         $config1 = [
             'hosts' => ['http://dev-opensearch:9200'],
-            'index' => 'dev_index'
+            'index' => 'dev_index',
         ];
 
         $config2 = [
             'hosts' => ['https://prod-opensearch-1:9200', 'https://prod-opensearch-2:9200'],
-            'index' => 'prod_index'
+            'index' => 'prod_index',
         ];
 
         $configFile1 = $this->createConfigFile('config1.php', $config1);
@@ -318,7 +318,10 @@ class OpenSearchConfigurationTest extends TestCase
         $this->assertNotEquals($osConfig1->getIndex(), $osConfig2->getIndex());
 
         $this->assertEquals(['http://dev-opensearch:9200'], $osConfig1->getHosts());
-        $this->assertEquals(['https://prod-opensearch-1:9200', 'https://prod-opensearch-2:9200'], $osConfig2->getHosts());
+        $this->assertEquals(
+            ['https://prod-opensearch-1:9200', 'https://prod-opensearch-2:9200'],
+            $osConfig2->getHosts(),
+        );
         $this->assertEquals('dev_index', $osConfig1->getIndex());
         $this->assertEquals('prod_index', $osConfig2->getIndex());
     }
@@ -335,9 +338,9 @@ class OpenSearchConfigurationTest extends TestCase
             'hosts' => [
                 'https://opensearch-master:9200',
                 'https://opensearch-data-1:9201',
-                'https://opensearch-data-2:9202'
+                'https://opensearch-data-2:9202',
             ],
-            'index' => 'custom_port_index'
+            'index' => 'custom_port_index',
         ];
 
         $configFile = $this->createConfigFile('custom_port_config.php', $config);
@@ -352,9 +355,9 @@ class OpenSearchConfigurationTest extends TestCase
         $config = [
             'hosts' => [
                 'https://example.com/opensearch',
-                'https://backup.example.com/search-service'
+                'https://backup.example.com/search-service',
             ],
-            'index' => 'path_based_index'
+            'index' => 'path_based_index',
         ];
 
         $configFile = $this->createConfigFile('path_based_config.php', $config);

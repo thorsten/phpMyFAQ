@@ -2,11 +2,11 @@
 
 namespace phpMyFAQ\User;
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use phpMyFAQ\Configuration;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class UserDataTest extends TestCase
@@ -40,7 +40,7 @@ class UserDataTest extends TestCase
     {
         $this->database->method('query')->willReturn(true);
         $this->database->method('numRows')->willReturn(1);
-        $this->database->method('fetchObject')->willReturn((object)['key' => 'value']);
+        $this->database->method('fetchObject')->willReturn((object) ['key' => 'value']);
 
         $result = $this->userData->fetch('key', 'value');
         $this->assertEquals('value', $result);
@@ -70,10 +70,12 @@ class UserDataTest extends TestCase
     {
         $this->database->method('query')->willReturn(true);
         $this->userData->load(1);
-        $this->userData->set(
-            ['display_name', 'is_visible', 'twofactor_enabled', 'secret'],
-            ['value', 'value', 'value', 'value']
-        );
+        $this->userData->set(['display_name', 'is_visible', 'twofactor_enabled', 'secret'], [
+            'value',
+            'value',
+            'value',
+            'value',
+        ]);
 
         $result = $this->userData->save();
         $this->assertTrue($result);

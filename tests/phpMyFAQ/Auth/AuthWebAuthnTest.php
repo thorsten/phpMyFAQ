@@ -7,9 +7,9 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Plugin\PluginException;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class AuthWebAuthnTest extends TestCase
@@ -22,7 +22,6 @@ class AuthWebAuthnTest extends TestCase
      */
     protected function setUp(): void
     {
-
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $this->configuration = new Configuration($dbHandle);
@@ -217,10 +216,10 @@ class AuthWebAuthnTest extends TestCase
         // Create a WebAuthn data structure that matches the expected format
         // The AuthWebAuthn::prepareForLogin() expects objects with 'id' property
         $userWebAuthn = json_encode([
-            (object)[
+            (object) [
                 'id' => base64_encode('test-credential-id'),
-                'publicKey' => 'test-public-key'
-            ]
+                'publicKey' => 'test-public-key',
+            ],
         ]);
 
         $result = $this->authWebAuthn->prepareForLogin($userWebAuthn);
@@ -254,10 +253,10 @@ class AuthWebAuthnTest extends TestCase
 
         // Create proper WebAuthn structure with 'id' property for authenticate method
         $userWebAuthn = json_encode([
-            (object)[
+            (object) [
                 'id' => base64_encode('test-credential-id'),
-                'publicKey' => 'test-public-key'
-            ]
+                'publicKey' => 'test-public-key',
+            ],
         ]);
 
         // Expect TypeError from invalid JSON processing
@@ -285,4 +284,3 @@ class AuthWebAuthnTest extends TestCase
         $this->assertEquals('example.com', $result['publicKey']['rp']['id']);
     }
 }
-

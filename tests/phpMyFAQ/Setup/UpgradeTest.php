@@ -7,11 +7,11 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\DownloadHostType;
 use phpMyFAQ\System;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class UpgradeTest extends TestCase
@@ -92,7 +92,7 @@ class UpgradeTest extends TestCase
     {
         $this->expectException('phpMyFAQ\\Core\\Exception');
         $this->expectExceptionMessage(
-            'The files /content/core/config/constant.php and /content/core/config/database.php are missing.'
+            'The files /content/core/config/constant.php and /content/core/config/database.php are missing.',
         );
         $this->upgrade->checkFilesystem();
     }

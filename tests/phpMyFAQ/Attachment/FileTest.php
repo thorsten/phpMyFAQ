@@ -2,15 +2,15 @@
 
 namespace phpMyFAQ\Attachment;
 
+use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamDirectory;
 use phpMyFAQ\Attachment\Filesystem\AbstractFile as FilesystemFile;
 use phpMyFAQ\Attachment\Filesystem\File\EncryptedFile;
 use phpMyFAQ\Attachment\Filesystem\File\VanillaFile;
 use phpMyFAQ\Database\DatabaseDriver;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use org\bovigo\vfs\vfsStream;
-use org\bovigo\vfs\vfsStreamDirectory;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class FileTest
@@ -77,7 +77,7 @@ class FileTest extends TestCase
 
         $properties = [
             'encrypted' => false,
-            'realHash' => 'abcdefghijklmnopqrstuvwxyz123456'
+            'realHash' => 'abcdefghijklmnopqrstuvwxyz123456',
         ];
 
         foreach ($properties as $prop => $value) {
@@ -93,9 +93,16 @@ class FileTest extends TestCase
         $filePath = $this->file->testBuildFilePath();
 
         // Should create path with 3 subdirectories of 5 characters each
-        $expectedPattern = '/tmp/attachments' . DIRECTORY_SEPARATOR . 'abcde' .
-                          DIRECTORY_SEPARATOR . 'fghij' . DIRECTORY_SEPARATOR . 'klmno' .
-                          DIRECTORY_SEPARATOR . 'pqrstuvwxyz123456';
+        $expectedPattern =
+            '/tmp/attachments'
+            . DIRECTORY_SEPARATOR
+            . 'abcde'
+            . DIRECTORY_SEPARATOR
+            . 'fghij'
+            . DIRECTORY_SEPARATOR
+            . 'klmno'
+            . DIRECTORY_SEPARATOR
+            . 'pqrstuvwxyz123456';
 
         $this->assertEquals($expectedPattern, $filePath);
     }
@@ -115,8 +122,8 @@ class FileTest extends TestCase
         // Create directory structure first
         vfsStream::create([
             'existing' => [
-                'directory' => []
-            ]
+                'directory' => [],
+            ],
         ], $this->vfsRoot);
 
         $testPath = vfsStream::url('attachments/existing/directory/file.txt');
@@ -142,7 +149,7 @@ class FileTest extends TestCase
         $properties = [
             'encrypted' => false,
             'realHash' => 'testhash12345',
-            'id' => 1
+            'id' => 1,
         ];
 
         foreach ($properties as $prop => $value) {
@@ -165,7 +172,7 @@ class FileTest extends TestCase
         $reflection = new ReflectionClass($this->file);
         $properties = [
             'encrypted' => false,
-            'realHash' => 'verylonghashstringwithmorethan30charactersinthehashvalue123456789'
+            'realHash' => 'verylonghashstringwithmorethan30charactersinthehashvalue123456789',
         ];
 
         foreach ($properties as $prop => $value) {
@@ -181,9 +188,16 @@ class FileTest extends TestCase
         $filePath = $this->file->testBuildFilePath();
 
         // Should create proper subdirectories even with long hash
-        $expectedPattern = '/tmp/attachments' . DIRECTORY_SEPARATOR . 'veryl' .
-                          DIRECTORY_SEPARATOR . 'ongha' . DIRECTORY_SEPARATOR . 'shstr' .
-                          DIRECTORY_SEPARATOR . 'ingwithmorethan30charactersinthehashvalue123456789';
+        $expectedPattern =
+            '/tmp/attachments'
+            . DIRECTORY_SEPARATOR
+            . 'veryl'
+            . DIRECTORY_SEPARATOR
+            . 'ongha'
+            . DIRECTORY_SEPARATOR
+            . 'shstr'
+            . DIRECTORY_SEPARATOR
+            . 'ingwithmorethan30charactersinthehashvalue123456789';
 
         $this->assertEquals($expectedPattern, $filePath);
     }
@@ -194,7 +208,7 @@ class FileTest extends TestCase
         $reflection = new ReflectionClass($this->file);
         $properties = [
             'encrypted' => false,
-            'realHash' => 'test123456789'
+            'realHash' => 'test123456789',
         ];
 
         foreach ($properties as $prop => $value) {

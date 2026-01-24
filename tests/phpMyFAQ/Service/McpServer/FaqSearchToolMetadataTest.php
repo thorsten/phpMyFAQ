@@ -2,8 +2,8 @@
 
 namespace phpMyFAQ\Service\McpServer;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class FaqSearchToolMetadataTest extends TestCase

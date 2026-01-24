@@ -2,11 +2,11 @@
 
 namespace phpMyFAQ\Category;
 
-use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
-use stdClass;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * Class OrderTest
@@ -23,7 +23,8 @@ class OrderTest extends TestCase
         $this->databaseMock = $this->createMock(DatabaseDriver::class);
         $this->configurationMock = $this->createMock(Configuration::class);
 
-        $this->configurationMock->expects($this->any())
+        $this->configurationMock
+            ->expects($this->any())
             ->method('getDb')
             ->willReturn($this->databaseMock);
 
@@ -41,12 +42,14 @@ class OrderTest extends TestCase
         $parentId = 456;
         $nextId = 10;
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('nextId')
             ->with('faqcategory_order', 'position')
             ->willReturn($nextId);
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('INSERT INTO faqcategory_order'))
             ->willReturn(true);
@@ -61,12 +64,14 @@ class OrderTest extends TestCase
         $parentId = 456;
         $nextId = 10;
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('nextId')
             ->with('faqcategory_order', 'position')
             ->willReturn($nextId);
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->willReturn(false);
 
@@ -78,7 +83,8 @@ class OrderTest extends TestCase
     {
         $categoryId = 123;
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('DELETE FROM faqcategory_order WHERE category_id = 123'))
             ->willReturn(true);
@@ -91,7 +97,8 @@ class OrderTest extends TestCase
     {
         $categoryId = 123;
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->willReturn(false);
 
@@ -101,7 +108,8 @@ class OrderTest extends TestCase
 
     public function testSetCategoryTreeWithEmptyTree(): void
     {
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('DELETE FROM faqcategory_order'));
 
@@ -121,8 +129,7 @@ class OrderTest extends TestCase
         $categoryTree = [$category1, $category2];
 
         // Expect DELETE query first, then INSERT queries
-        $this->databaseMock->expects($this->exactly(3))
-            ->method('query');
+        $this->databaseMock->expects($this->exactly(3))->method('query');
 
         $this->order->setCategoryTree($categoryTree);
     }
@@ -140,8 +147,7 @@ class OrderTest extends TestCase
         $categoryTree = [$parentCategory];
 
         // Expect DELETE query first, then INSERT queries for parent and child
-        $this->databaseMock->expects($this->exactly(3))
-            ->method('query');
+        $this->databaseMock->expects($this->exactly(3))->method('query');
 
         $this->order->setCategoryTree($categoryTree);
     }
@@ -155,7 +161,8 @@ class OrderTest extends TestCase
         $categoryTree = [$category];
 
         // Only expect DELETE query, no INSERT because ID is invalid
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('DELETE FROM faqcategory_order'));
 
@@ -322,12 +329,16 @@ class OrderTest extends TestCase
 
     public function testGetAllCategoriesEmpty(): void
     {
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
-            ->with($this->stringContains('SELECT category_id, parent_id, position FROM faqcategory_order ORDER BY position'))
+            ->with($this->stringContains(
+                'SELECT category_id, parent_id, position FROM faqcategory_order ORDER BY position',
+            ))
             ->willReturn('mock_result');
 
-        $this->databaseMock->expects($this->exactly(1))
+        $this->databaseMock
+            ->expects($this->exactly(1))
             ->method('fetchArray')
             ->with('mock_result')
             ->willReturn(false);
@@ -343,18 +354,16 @@ class OrderTest extends TestCase
             ['category_id' => '2', 'parent_id' => '1', 'position' => '2'],
         ];
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->willReturn('mock_result');
 
-        $this->databaseMock->expects($this->exactly(3))
+        $this->databaseMock
+            ->expects($this->exactly(3))
             ->method('fetchArray')
             ->with('mock_result')
-            ->willReturnOnConsecutiveCalls(
-                $mockData[0],
-                $mockData[1],
-                false
-            );
+            ->willReturnOnConsecutiveCalls($mockData[0], $mockData[1], false);
 
         $result = $this->order->getAllCategories();
         $this->assertEquals($mockData, $result);

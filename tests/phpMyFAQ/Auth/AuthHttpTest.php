@@ -4,8 +4,8 @@ namespace phpMyFAQ\Auth;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class AuthHttpTest extends TestCase

@@ -2,10 +2,10 @@
 
 namespace phpMyFAQ\Twig\Extensions;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Twig\Extension\AbstractExtension;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Test class for TranslateTwigExtension
@@ -108,6 +108,7 @@ class TranslateTwigExtensionTest extends TestCase
     {
         // Test parameter type enforcement
         $this->expectNotToPerformAssertions();
+
         // The method exists and accepts string parameters as verified in other tests
     }
 
@@ -144,7 +145,7 @@ class TranslateTwigExtensionTest extends TestCase
         $expectedImports = [
             'use phpMyFAQ\Translation;',
             'use Twig\Attribute\AsTwigFilter;',
-            'use Twig\Extension\AbstractExtension;'
+            'use Twig\Extension\AbstractExtension;',
         ];
 
         foreach ($expectedImports as $import) {

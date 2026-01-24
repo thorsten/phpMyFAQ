@@ -3,16 +3,16 @@
 namespace phpMyFAQ\Command;
 
 use DateTime;
-use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\System;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Test class for UpdateCommand

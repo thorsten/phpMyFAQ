@@ -8,10 +8,10 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Language;
 use phpMyFAQ\Translation;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class CategoryHelperTest extends TestCase
@@ -36,7 +36,8 @@ class CategoryHelperTest extends TestCase
         $this->mockConfiguration = $this->createStub(Configuration::class);
         $this->mockCategory = $this->createStub(Category::class);
 
-        $this->categoryHelper = $this->getMockBuilder(CategoryHelper::class)
+        $this->categoryHelper = $this
+            ->getMockBuilder(CategoryHelper::class)
             ->onlyMethods(['getCategory', 'getConfiguration'])
             ->getMock();
 
@@ -150,7 +151,8 @@ class CategoryHelperTest extends TestCase
             ]);
         $mockRelation->method('getAggregatedFaqNumbers')->willReturn([1 => 8, 2 => 3]);
 
-        $categoryHelper = $this->getMockBuilder(CategoryHelper::class)
+        $categoryHelper = $this
+            ->getMockBuilder(CategoryHelper::class)
             ->onlyMethods(['getCategory', 'getConfiguration', 'normalizeCategoryTree', 'buildCategoryList'])
             ->getMock();
 
@@ -195,7 +197,8 @@ class CategoryHelperTest extends TestCase
                 'French' => 'Catégorie française',
             ]);
 
-        $categoryHelper = $this->getMockBuilder(CategoryHelper::class)
+        $categoryHelper = $this
+            ->getMockBuilder(CategoryHelper::class)
             ->onlyMethods(['getCategory', 'getConfiguration', 'buildAvailableCategoryTranslationsList'])
             ->getMock();
 

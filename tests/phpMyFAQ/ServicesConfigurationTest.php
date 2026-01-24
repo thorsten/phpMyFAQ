@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class ServicesConfigurationTest extends TestCase
@@ -54,7 +54,11 @@ class ServicesConfigurationTest extends TestCase
         }
 
         // Find all factory arrays like [Foo\Bar::class, 'method']
-        preg_match_all('/\[\s*([\\\\A-Za-z0-9_]+)::class\s*,\s*[\'\"]([A-Za-z_][A-Za-z0-9_]*)[\'\"]\s*\]/', $contents, $factoryMatches);
+        preg_match_all(
+            '/\[\s*([\\\\A-Za-z0-9_]+)::class\s*,\s*[\'\"]([A-Za-z_][A-Za-z0-9_]*)[\'\"]\s*\]/',
+            $contents,
+            $factoryMatches,
+        );
         $factories = [];
         $count = count($factoryMatches[1] ?? []);
         for ($i = 0; $i < $count; $i++) {
@@ -69,7 +73,12 @@ class ServicesConfigurationTest extends TestCase
 
         $missing = [];
         foreach ($fqSymbols as $fqcn) {
-            if (!class_exists($fqcn) && !interface_exists($fqcn) && !(function_exists('enum_exists') && enum_exists($fqcn)) && !trait_exists($fqcn)) {
+            if (
+                !class_exists($fqcn)
+                && !interface_exists($fqcn)
+                && !(function_exists('enum_exists') && enum_exists($fqcn))
+                && !trait_exists($fqcn)
+            ) {
                 $missing[] = $fqcn;
             }
         }

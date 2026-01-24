@@ -3,15 +3,16 @@
 namespace phpMyFAQ\Comment;
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\Relation;use phpMyFAQ\Configuration;
+use phpMyFAQ\Category\Relation;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\Comment as CommentEntity;
 use phpMyFAQ\Entity\CommentType;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\Session\Session;
 use phpMyFAQ\Language;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
 class CommentsRepositoryTest extends TestCase
@@ -134,16 +135,16 @@ class CommentsRepositoryTest extends TestCase
     {
         $prefix = Database::getTablePrefix();
         // Ensure a faqdata row for id=1, lang='en' exists
-        $this->configuration->getDb()->query(
-            "INSERT OR IGNORE INTO {$prefix}faqdata (id, lang, solution_id, revision_id, active, sticky, thema, author, email, comment, updated, date_start, date_end) VALUES (1, 'en', 1, 0, 'yes', 0, 'Test', 'Admin', 'admin@example.org', 'n', '20200101000000', '00000000000000', '99991231235959')"
-        );
+        $this->configuration
+            ->getDb()
+            ->query(
+                "INSERT OR IGNORE INTO {$prefix}faqdata (id, lang, solution_id, revision_id, active, sticky, thema, author, email, comment, updated, date_start, date_end) VALUES (1, 'en', 1, 0, 'yes', 0, 'Test', 'Admin', 'admin@example.org', 'n', '20200101000000', '00000000000000', '99991231235959')",
+            );
         // Set comment flag to 'y'
-        $this->configuration->getDb()->query(sprintf(
-            "UPDATE %sfaqdata SET comment = 'y' WHERE id = 1 AND lang = 'en'",
-            $prefix
-        ));
+        $this->configuration
+            ->getDb()
+            ->query(sprintf("UPDATE %sfaqdata SET comment = 'y' WHERE id = 1 AND lang = 'en'", $prefix));
 
         $this->assertTrue($this->repository->isCommentAllowed(1, 'en', CommentType::FAQ));
     }
 }
-

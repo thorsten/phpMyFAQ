@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Category;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use phpMyFAQ\Entity\CategoryEntity;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class CategoryServiceTest extends TestCase
@@ -28,7 +28,8 @@ class CategoryServiceTest extends TestCase
             2 => ['id' => 2, 'name' => 'Category 2'],
         ];
 
-        $this->repository->expects($this->once())
+        $this->repository
+            ->expects($this->once())
             ->method('findAllCategories')
             ->with('en')
             ->willReturn($expected);
@@ -41,7 +42,8 @@ class CategoryServiceTest extends TestCase
     {
         $expected = [1, 2, 3];
 
-        $this->repository->expects($this->once())
+        $this->repository
+            ->expects($this->once())
             ->method('findAllCategoryIds')
             ->with('en')
             ->willReturn($expected);
@@ -56,7 +58,8 @@ class CategoryServiceTest extends TestCase
             1 => ['id' => 1, 'name' => 'Category 1'],
         ];
 
-        $this->repository->expects($this->once())
+        $this->repository
+            ->expects($this->once())
             ->method('findCategoriesFromFaq')
             ->with(42, 'en')
             ->willReturn($expected);
@@ -67,7 +70,8 @@ class CategoryServiceTest extends TestCase
 
     public function testGetCategoryIdFromFaq(): void
     {
-        $this->repository->expects($this->once())
+        $this->repository
+            ->expects($this->once())
             ->method('findCategoriesFromFaq')
             ->with(42, 'en')
             ->willReturn([
@@ -80,7 +84,8 @@ class CategoryServiceTest extends TestCase
 
     public function testGetCategoryIdFromFaqReturnsZeroWhenEmpty(): void
     {
-        $this->repository->expects($this->once())
+        $this->repository
+            ->expects($this->once())
             ->method('findCategoriesFromFaq')
             ->with(42, 'en')
             ->willReturn([]);
@@ -91,7 +96,8 @@ class CategoryServiceTest extends TestCase
 
     public function testGetCategoryIdsFromFaq(): void
     {
-        $this->repository->expects($this->once())
+        $this->repository
+            ->expects($this->once())
             ->method('findCategoriesFromFaq')
             ->with(42, 'en')
             ->willReturn([
@@ -106,7 +112,8 @@ class CategoryServiceTest extends TestCase
 
     public function testGetCategoryIdFromName(): void
     {
-        $this->repository->expects($this->once())
+        $this->repository
+            ->expects($this->once())
             ->method('findCategoryIdByName')
             ->with('Test Category')
             ->willReturn(42);
@@ -117,7 +124,8 @@ class CategoryServiceTest extends TestCase
 
     public function testGetCategoryIdFromNameReturnsFalseWhenNotFound(): void
     {
-        $this->repository->expects($this->once())
+        $this->repository
+            ->expects($this->once())
             ->method('findCategoryIdByName')
             ->with('Non Existent')
             ->willReturn(null);
@@ -131,7 +139,8 @@ class CategoryServiceTest extends TestCase
         $entity = new CategoryEntity();
         $entity->setId(42);
 
-        $this->repository->expects($this->once())
+        $this->repository
+            ->expects($this->once())
             ->method('findByIdAndLanguage')
             ->with(42, 'en')
             ->willReturn($entity);
@@ -142,7 +151,8 @@ class CategoryServiceTest extends TestCase
 
     public function testGetCategoryDataReturnsNewEntityWhenNotFound(): void
     {
-        $this->repository->expects($this->once())
+        $this->repository
+            ->expects($this->once())
             ->method('findByIdAndLanguage')
             ->with(42, 'en')
             ->willReturn(null);
@@ -156,7 +166,8 @@ class CategoryServiceTest extends TestCase
     {
         $entity = new CategoryEntity();
 
-        $this->repository->expects($this->once())
+        $this->repository
+            ->expects($this->once())
             ->method('create')
             ->with($entity)
             ->willReturn(42);
@@ -169,7 +180,8 @@ class CategoryServiceTest extends TestCase
     {
         $entity = new CategoryEntity();
 
-        $this->repository->expects($this->once())
+        $this->repository
+            ->expects($this->once())
             ->method('update')
             ->with($entity)
             ->willReturn(true);
@@ -180,7 +192,8 @@ class CategoryServiceTest extends TestCase
 
     public function testDelete(): void
     {
-        $this->repository->expects($this->once())
+        $this->repository
+            ->expects($this->once())
             ->method('delete')
             ->with(42, 'en')
             ->willReturn(true);
@@ -191,7 +204,8 @@ class CategoryServiceTest extends TestCase
 
     public function testMoveOwnership(): void
     {
-        $this->repository->expects($this->once())
+        $this->repository
+            ->expects($this->once())
             ->method('moveOwnership')
             ->with(10, 20)
             ->willReturn(true);
@@ -202,7 +216,8 @@ class CategoryServiceTest extends TestCase
 
     public function testHasLanguage(): void
     {
-        $this->repository->expects($this->once())
+        $this->repository
+            ->expects($this->once())
             ->method('hasLanguage')
             ->with(42, 'de')
             ->willReturn(true);
@@ -213,7 +228,8 @@ class CategoryServiceTest extends TestCase
 
     public function testUpdateParentCategory(): void
     {
-        $this->repository->expects($this->once())
+        $this->repository
+            ->expects($this->once())
             ->method('updateParentCategory')
             ->with(42, 10)
             ->willReturn(true);
@@ -224,8 +240,7 @@ class CategoryServiceTest extends TestCase
 
     public function testUpdateParentCategoryReturnsFalseWhenSameId(): void
     {
-        $this->repository->expects($this->never())
-            ->method('updateParentCategory');
+        $this->repository->expects($this->never())->method('updateParentCategory');
 
         $result = $this->service->updateParentCategory(42, 42);
         $this->assertFalse($result);
@@ -238,7 +253,8 @@ class CategoryServiceTest extends TestCase
         $entity->setLang('en');
         $entity->setParentId(0);
 
-        $this->repository->expects($this->once())
+        $this->repository
+            ->expects($this->once())
             ->method('countByNameLangParent')
             ->with('Test', 'en', 0)
             ->willReturn(1);
@@ -251,7 +267,8 @@ class CategoryServiceTest extends TestCase
     {
         $expected = ['en' => 'English Category', 'de' => 'Deutsche Kategorie'];
 
-        $this->repository->expects($this->once())
+        $this->repository
+            ->expects($this->once())
             ->method('getCategoryLanguagesTranslated')
             ->with(42)
             ->willReturn($expected);
@@ -267,7 +284,8 @@ class CategoryServiceTest extends TestCase
             ['id' => 2, 'lang' => 'fr'],
         ];
 
-        $this->repository->expects($this->once())
+        $this->repository
+            ->expects($this->once())
             ->method('findMissingCategories')
             ->with('en')
             ->willReturn($expected);
@@ -276,4 +294,3 @@ class CategoryServiceTest extends TestCase
         $this->assertSame($expected, $result);
     }
 }
-

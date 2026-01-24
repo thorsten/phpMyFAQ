@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Category\Tree;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class TreeBuilderTest extends TestCase
@@ -21,11 +21,14 @@ class TreeBuilderTest extends TestCase
 
         $tree = $builder->buildAdminCategoryTree($categories);
 
-        $this->assertSame([
-            1 => [],
-            2 => [],
-            3 => [],
-        ], $tree);
+        $this->assertSame(
+            [
+                1 => [],
+                2 => [],
+                3 => [],
+            ],
+            $tree,
+        );
     }
 
     public function testBuildLinearTreeNested(): void
@@ -47,4 +50,3 @@ class TreeBuilderTest extends TestCase
         $this->assertSame(1, $result[2]['parent_id']);
     }
 }
-

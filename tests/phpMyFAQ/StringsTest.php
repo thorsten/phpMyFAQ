@@ -2,8 +2,8 @@
 
 namespace phpMyFAQ;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class StringsTest extends TestCase
@@ -62,7 +62,7 @@ class StringsTest extends TestCase
             function ($matches) {
                 return strtoupper($matches[0]);
             },
-            'hello'
+            'hello',
         );
         $this->assertEquals('HELLO', $result);
     }
@@ -341,18 +341,18 @@ class StringsTest extends TestCase
         $result = Strings::preg_replace_callback(
             '/(\d+)°([CF])/',
             function ($matches) {
-                $temp = (int)$matches[1];
+                $temp = (int) $matches[1];
                 $unit = $matches[2];
 
                 if ($unit === 'C') {
-                    $fahrenheit = ($temp * 9/5) + 32;
+                    $fahrenheit = (($temp * 9) / 5) + 32;
                     return $temp . '°C (' . $fahrenheit . '°F)';
                 } else {
-                    $celsius = ($temp - 32) * 5/9;
+                    $celsius = (($temp - 32) * 5) / 9;
                     return $temp . '°F (' . round($celsius, 1) . '°C)';
                 }
             },
-            $text
+            $text,
         );
 
         $this->assertStringContainsString('25°C (77°F)', $result);

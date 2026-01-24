@@ -5,11 +5,11 @@ namespace phpMyFAQ\Database;
 use Error;
 use PDO;
 use PDOStatement;
-use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Core\Exception;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use stdClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class PdoMysqlTest
@@ -41,8 +41,7 @@ class PdoMysqlTest extends TestCase
 
         $this->expectException(Exception::class);
 
-        set_error_handler(function () {
-        }, E_WARNING);
+        set_error_handler(function () {}, E_WARNING);
 
         try {
             // This should fail and throw Exception
@@ -56,12 +55,21 @@ class PdoMysqlTest extends TestCase
     {
         $testString = "test'string";
         $result = $this->pdoMysql->escape($testString);
-        $this->assertEquals($testString, $result);
+        // Single quotes should be escaped with backslash for MySQL
+        $this->assertEquals("test\\'string", $result);
     }
 
     public function testEscapeWithSpecialCharacters(): void
     {
         $testString = 'test"string\'with\\special;chars';
+        $result = $this->pdoMysql->escape($testString);
+        // Single quotes and backslashes should be escaped for MySQL
+        $this->assertEquals('test"string\\\'with\\\\special;chars', $result);
+    }
+
+    public function testEscapeWithNoSpecialCharacters(): void
+    {
+        $testString = 'simple string without quotes';
         $result = $this->pdoMysql->escape($testString);
         $this->assertEquals($testString, $result);
     }
@@ -71,10 +79,7 @@ class PdoMysqlTest extends TestCase
         $statementMock = $this->createMock(PDOStatement::class);
         $expectedData = ['id' => 1, 'name' => 'test'];
 
-        $statementMock->expects($this->once())
-            ->method('fetch')
-            ->with(PDO::FETCH_ASSOC)
-            ->willReturn($expectedData);
+        $statementMock->expects($this->once())->method('fetch')->with(PDO::FETCH_ASSOC)->willReturn($expectedData);
 
         $result = $this->pdoMysql->fetchArray($statementMock);
         $this->assertEquals($expectedData, $result);
@@ -84,10 +89,7 @@ class PdoMysqlTest extends TestCase
     {
         $statementMock = $this->createMock(PDOStatement::class);
 
-        $statementMock->expects($this->once())
-            ->method('fetch')
-            ->with(PDO::FETCH_ASSOC)
-            ->willReturn(null);
+        $statementMock->expects($this->once())->method('fetch')->with(PDO::FETCH_ASSOC)->willReturn(null);
 
         $result = $this->pdoMysql->fetchArray($statementMock);
         $this->assertNull($result);
@@ -97,10 +99,7 @@ class PdoMysqlTest extends TestCase
     {
         $statementMock = $this->createMock(PDOStatement::class);
 
-        $statementMock->expects($this->once())
-            ->method('fetch')
-            ->with(PDO::FETCH_ASSOC)
-            ->willReturn(false);
+        $statementMock->expects($this->once())->method('fetch')->with(PDO::FETCH_ASSOC)->willReturn(false);
 
         $result = $this->pdoMysql->fetchArray($statementMock);
         $this->assertFalse($result);
@@ -110,7 +109,8 @@ class PdoMysqlTest extends TestCase
     {
         $statementMock = $this->createMock(PDOStatement::class);
 
-        $statementMock->expects($this->once())
+        $statementMock
+            ->expects($this->once())
             ->method('fetch')
             ->with(PDO::FETCH_NUM)
             ->willReturn(['test_value', 'other_value']);
@@ -123,10 +123,7 @@ class PdoMysqlTest extends TestCase
     {
         $statementMock = $this->createMock(PDOStatement::class);
 
-        $statementMock->expects($this->once())
-            ->method('fetch')
-            ->with(PDO::FETCH_NUM)
-            ->willReturn([]);
+        $statementMock->expects($this->once())->method('fetch')->with(PDO::FETCH_NUM)->willReturn([]);
 
         $result = $this->pdoMysql->fetchRow($statementMock);
         $this->assertFalse($result);
@@ -136,10 +133,7 @@ class PdoMysqlTest extends TestCase
     {
         $statementMock = $this->createMock(PDOStatement::class);
 
-        $statementMock->expects($this->once())
-            ->method('fetch')
-            ->with(PDO::FETCH_NUM)
-            ->willReturn(null);
+        $statementMock->expects($this->once())->method('fetch')->with(PDO::FETCH_NUM)->willReturn(null);
 
         $result = $this->pdoMysql->fetchRow($statementMock);
         $this->assertFalse($result);
@@ -152,10 +146,7 @@ class PdoMysqlTest extends TestCase
         $expectedObject->id = 1;
         $expectedObject->name = 'test';
 
-        $statementMock->expects($this->once())
-            ->method('fetch')
-            ->with(PDO::FETCH_OBJ)
-            ->willReturn($expectedObject);
+        $statementMock->expects($this->once())->method('fetch')->with(PDO::FETCH_OBJ)->willReturn($expectedObject);
 
         $result = $this->pdoMysql->fetchObject($statementMock);
         $this->assertEquals($expectedObject, $result);
@@ -165,10 +156,7 @@ class PdoMysqlTest extends TestCase
     {
         $statementMock = $this->createMock(PDOStatement::class);
 
-        $statementMock->expects($this->once())
-            ->method('fetch')
-            ->with(PDO::FETCH_OBJ)
-            ->willReturn(null);
+        $statementMock->expects($this->once())->method('fetch')->with(PDO::FETCH_OBJ)->willReturn(null);
 
         $result = $this->pdoMysql->fetchObject($statementMock);
         $this->assertNull($result);
@@ -185,10 +173,7 @@ class PdoMysqlTest extends TestCase
 
         $expectedData = [$object1, $object2];
 
-        $statementMock->expects($this->once())
-            ->method('fetchAll')
-            ->with(PDO::FETCH_OBJ)
-            ->willReturn($expectedData);
+        $statementMock->expects($this->once())->method('fetchAll')->with(PDO::FETCH_OBJ)->willReturn($expectedData);
 
         $result = $this->pdoMysql->fetchAll($statementMock);
         $this->assertEquals($expectedData, $result);
@@ -213,10 +198,7 @@ class PdoMysqlTest extends TestCase
     {
         $statementMock = $this->createMock(PDOStatement::class);
 
-        $statementMock->expects($this->once())
-            ->method('fetchAll')
-            ->with(PDO::FETCH_OBJ)
-            ->willReturn([]);
+        $statementMock->expects($this->once())->method('fetchAll')->with(PDO::FETCH_OBJ)->willReturn([]);
 
         $result = $this->pdoMysql->fetchAll($statementMock);
         $this->assertEquals([], $result);
@@ -226,9 +208,7 @@ class PdoMysqlTest extends TestCase
     {
         $statementMock = $this->createMock(PDOStatement::class);
 
-        $statementMock->expects($this->once())
-            ->method('rowCount')
-            ->willReturn(5);
+        $statementMock->expects($this->once())->method('rowCount')->willReturn(5);
 
         $result = $this->pdoMysql->numRows($statementMock);
         $this->assertEquals(5, $result);
@@ -238,9 +218,7 @@ class PdoMysqlTest extends TestCase
     {
         $statementMock = $this->createMock(PDOStatement::class);
 
-        $statementMock->expects($this->once())
-            ->method('rowCount')
-            ->willReturn(0);
+        $statementMock->expects($this->once())->method('rowCount')->willReturn(0);
 
         $result = $this->pdoMysql->numRows($statementMock);
         $this->assertEquals(0, $result);

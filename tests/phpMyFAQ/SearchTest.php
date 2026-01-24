@@ -5,9 +5,9 @@ namespace phpMyFAQ;
 use Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Plugin\PluginException;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class SearchTest extends TestCase
@@ -71,7 +71,8 @@ class SearchTest extends TestCase
     {
         $this->setConfigValue('search.searchForSolutionId', 'true');
 
-        $this->search = $this->getMockBuilder(Search::class)
+        $this->search = $this
+            ->getMockBuilder(Search::class)
             ->setConstructorArgs([$this->configuration])
             ->onlyMethods(['searchDatabase'])
             ->getMock();
@@ -100,7 +101,8 @@ class SearchTest extends TestCase
         $this->setConfigValue('search.enableElasticsearch', 'false');
         $this->setConfigValue('search.enableOpenSearch', 'false');
 
-        $this->search = $this->getMockBuilder(Search::class)
+        $this->search = $this
+            ->getMockBuilder(Search::class)
             ->setConstructorArgs([$this->configuration])
             ->onlyMethods(['searchDatabase'])
             ->getMock();
@@ -122,7 +124,8 @@ class SearchTest extends TestCase
         $this->setConfigValue('search.searchForSolutionId', 'false');
         $this->setConfigValue('search.enableElasticsearch', 'true');
 
-        $this->search = $this->getMockBuilder(Search::class)
+        $this->search = $this
+            ->getMockBuilder(Search::class)
             ->setConstructorArgs([$this->configuration])
             ->onlyMethods(['searchElasticsearch'])
             ->getMock();
@@ -145,7 +148,8 @@ class SearchTest extends TestCase
         $this->setConfigValue('search.enableElasticsearch', 'false');
         $this->setConfigValue('search.enableOpenSearch', 'true');
 
-        $this->search = $this->getMockBuilder(Search::class)
+        $this->search = $this
+            ->getMockBuilder(Search::class)
             ->setConstructorArgs([$this->configuration])
             ->onlyMethods(['searchOpenSearch'])
             ->getMock();
@@ -164,7 +168,8 @@ class SearchTest extends TestCase
      */
     public function testSearchWithNonNumericTerm(): void
     {
-        $this->search = $this->getMockBuilder(Search::class)
+        $this->search = $this
+            ->getMockBuilder(Search::class)
             ->setConstructorArgs([$this->configuration])
             ->onlyMethods(['searchDatabase'])
             ->getMock();

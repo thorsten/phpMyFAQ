@@ -16,9 +16,9 @@
 
 namespace phpMyFAQ\Entity;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class CommentTypeTest
@@ -79,7 +79,7 @@ class CommentTypeTest extends TestCase
     {
         $commentTypes = [
             CommentType::FAQ,
-            CommentType::NEWS
+            CommentType::NEWS,
         ];
 
         $this->assertCount(2, $commentTypes);

@@ -2,11 +2,11 @@
 
 namespace phpMyFAQ\Administration;
 
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class CategoryTest
@@ -27,9 +27,7 @@ class CategoryTest extends TestCase
 
         $this->databaseMock = $this->createMock(DatabaseDriver::class);
         $this->configurationMock = $this->createStub(Configuration::class);
-        $this->configurationMock
-            ->method('getDb')
-            ->willReturn($this->databaseMock);
+        $this->configurationMock->method('getDb')->willReturn($this->databaseMock);
 
         $this->category = new Category($this->configurationMock);
     }
@@ -84,7 +82,6 @@ class CategoryTest extends TestCase
 
     public function testLoadCategoriesWithoutLanguage(): void
     {
-
         $this->databaseMock
             ->expects($this->once())
             ->method('query')
@@ -136,7 +133,7 @@ class CategoryTest extends TestCase
             'group_id' => 1,
             'active' => 1,
             'show_home' => 1,
-            'image' => 'test.png'
+            'image' => 'test.png',
         ];
 
         $this->databaseMock
@@ -188,7 +185,7 @@ class CategoryTest extends TestCase
         $categories = [
             ['id' => 1, 'parent_id' => 0, 'name' => 'Root Category'],
             ['id' => 2, 'parent_id' => 1, 'name' => 'Child Category'],
-            ['id' => 3, 'parent_id' => 0, 'name' => 'Another Root']
+            ['id' => 3, 'parent_id' => 0, 'name' => 'Another Root'],
         ];
 
         $result = $this->category->buildAdminCategoryTree($categories);
@@ -204,7 +201,7 @@ class CategoryTest extends TestCase
         $categories = [
             ['id' => 1, 'parent_id' => 0, 'name' => 'Root Category'],
             ['id' => 2, 'parent_id' => 1, 'name' => 'Child Category'],
-            ['id' => 3, 'parent_id' => 1, 'name' => 'Another Child']
+            ['id' => 3, 'parent_id' => 1, 'name' => 'Another Child'],
         ];
 
         $result = $this->category->buildAdminCategoryTree($categories, 1);
@@ -240,7 +237,7 @@ class CategoryTest extends TestCase
             'group_id' => 1,
             'active' => 1,
             'show_home' => 1,
-            'image' => 'test.png'
+            'image' => 'test.png',
         ];
 
         $this->databaseMock

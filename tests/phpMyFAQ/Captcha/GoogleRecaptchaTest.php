@@ -16,11 +16,11 @@
 
 namespace phpMyFAQ\Tests\Captcha;
 
-use PHPUnit\Framework\TestCase;
-use phpMyFAQ\Captcha\GoogleRecaptcha;
 use phpMyFAQ\Captcha\CaptchaInterface;
+use phpMyFAQ\Captcha\GoogleRecaptcha;
 use phpMyFAQ\Configuration;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class GoogleRecaptchaTest
@@ -108,9 +108,7 @@ class GoogleRecaptchaTest extends TestCase
      */
     public function testFluentInterface(): void
     {
-        $result = $this->googleRecaptcha
-            ->setUserIsLoggedIn(true)
-            ->setUserIsLoggedIn(false);
+        $result = $this->googleRecaptcha->setUserIsLoggedIn(true)->setUserIsLoggedIn(false);
 
         $this->assertInstanceOf(GoogleRecaptcha::class, $result);
         $this->assertFalse($this->googleRecaptcha->isUserIsLoggedIn());
@@ -199,7 +197,7 @@ class GoogleRecaptchaTest extends TestCase
             'javascript:alert(1)',
             '../../etc/passwd',
             'SELECT * FROM users',
-            str_repeat('A', 10000) // Very long string
+            str_repeat('A', 10000), // Very long string
         ];
 
         foreach ($maliciousInputs as $input) {

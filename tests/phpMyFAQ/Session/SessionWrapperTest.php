@@ -2,10 +2,10 @@
 
 namespace phpMyFAQ\Session;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class SessionWrapperTest extends TestCase
@@ -36,6 +36,7 @@ class SessionWrapperTest extends TestCase
         // We can't easily test this without starting actual sessions, so we'll just verify
         // the constructor doesn't throw an exception
         $this->expectNotToPerformAssertions();
+
         // Note: In a real scenario, this would create a PhpBridgeSessionStorage session
         // but for unit testing, we'll focus on the mocked behavior
     }
@@ -154,7 +155,7 @@ class SessionWrapperTest extends TestCase
         // Test the workflow
         $this->sessionWrapper->set($key, $value);
         $result = $this->sessionWrapper->get($key);
-        
+
         $this->assertEquals($value, $result);
     }
 

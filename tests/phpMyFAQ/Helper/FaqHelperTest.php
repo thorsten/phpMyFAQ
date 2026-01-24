@@ -10,9 +10,9 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class FaqHelperTest extends TestCase
@@ -94,15 +94,15 @@ class FaqHelperTest extends TestCase
     public function testCleanUpContentWithYoutubeContent(): void
     {
         $content = <<<'HTML'
-        <iframe 
-          title="YouTube video player" 
-          src="https://www.youtube.com/embed/WaFetxHpCbE" 
-          width="560" 
-          height="315" 
-          frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-          allowfullscreen="allowfullscreen"></iframe>
-        HTML;
+            <iframe 
+              title="YouTube video player" 
+              src="https://www.youtube.com/embed/WaFetxHpCbE" 
+              width="560" 
+              height="315" 
+              frameborder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              allowfullscreen="allowfullscreen"></iframe>
+            HTML;
 
         $actualOutput = $this->faqHelper->cleanUpContent($content);
 

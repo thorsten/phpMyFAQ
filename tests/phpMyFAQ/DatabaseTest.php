@@ -5,13 +5,12 @@ namespace phpMyFAQ;
 use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class DatabaseTest extends TestCase
 {
-
     /**
      * @throws Exception
      */
@@ -53,7 +52,7 @@ class DatabaseTest extends TestCase
             $dbConfig->getUser(),
             $dbConfig->getPassword(),
             $dbConfig->getDatabase(),
-            $dbConfig->getPort()
+            $dbConfig->getPort(),
         );
 
         $actual = Database::checkOnEmptyTable('faqconfig');
@@ -66,17 +65,14 @@ class DatabaseTest extends TestCase
         Database::errorPage('Error message');
         $output = ob_get_clean();
 
-        $this->assertStringContainsString(
-            '<title>Fatal phpMyFAQ Error</title>',
-            $output
-        );
+        $this->assertStringContainsString('<title>Fatal phpMyFAQ Error</title>', $output);
         $this->assertStringContainsString(
             '<p class="alert alert-danger mt-5">The connection to the database server could not be established.</p>',
-            $output
+            $output,
         );
         $this->assertStringContainsString(
             '<p class="alert alert-info p-2">The error message of the database server: Error message</p>',
-            $output
+            $output,
         );
     }
 
@@ -100,7 +96,7 @@ class DatabaseTest extends TestCase
         $db->connect(PMF_TEST_DIR . '/test.db', '', '');
 
         // Create test table
-        $createTable = "CREATE TABLE IF NOT EXISTS test_table (id INTEGER PRIMARY KEY, name TEXT)";
+        $createTable = 'CREATE TABLE IF NOT EXISTS test_table (id INTEGER PRIMARY KEY, name TEXT)';
         $result = $db->query($createTable);
 
         $this->assertNotFalse($result);
@@ -114,7 +110,7 @@ class DatabaseTest extends TestCase
         $db = new Sqlite3();
         $db->connect(PMF_TEST_DIR . '/test.db', '', '');
 
-        $db->query("CREATE TABLE IF NOT EXISTS test_data (id INTEGER PRIMARY KEY, name TEXT, value INTEGER)");
+        $db->query('CREATE TABLE IF NOT EXISTS test_data (id INTEGER PRIMARY KEY, name TEXT, value INTEGER)');
 
         // Insert test data
         $insertSql = "INSERT INTO test_data (name, value) VALUES ('test_name', 42)";
@@ -155,11 +151,11 @@ class DatabaseTest extends TestCase
         $db->connect(PMF_TEST_DIR . '/test.db', '', '');
 
         // Test table creation
-        $createSql = "CREATE TABLE IF NOT EXISTS test_schema (
+        $createSql = 'CREATE TABLE IF NOT EXISTS test_schema (
             id INTEGER PRIMARY KEY,
             name VARCHAR(255),
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )";
+        )';
 
         $result = $db->query($createSql);
         $this->assertNotFalse($result);
@@ -212,7 +208,7 @@ class DatabaseTest extends TestCase
         $db2 = new Sqlite3();
         $db2->connect(PMF_TEST_DIR . '/test.db', '', '');
 
-        $db1->query("CREATE TABLE IF NOT EXISTS test_concurrent (id INTEGER PRIMARY KEY, thread TEXT)");
+        $db1->query('CREATE TABLE IF NOT EXISTS test_concurrent (id INTEGER PRIMARY KEY, thread TEXT)');
 
         // Both connections should work
         $result1 = $db1->query("INSERT INTO test_concurrent (thread) VALUES ('thread1')");
@@ -231,7 +227,7 @@ class DatabaseTest extends TestCase
         $db->connect(PMF_TEST_DIR . '/test.db', '', '');
 
         // Create and populate test table
-        $db->query("CREATE TABLE IF NOT EXISTS test_cleanup (id INTEGER PRIMARY KEY, temp_data TEXT)");
+        $db->query('CREATE TABLE IF NOT EXISTS test_cleanup (id INTEGER PRIMARY KEY, temp_data TEXT)');
         $db->query("INSERT INTO test_cleanup (temp_data) VALUES ('temp')");
 
         // Test cleanup

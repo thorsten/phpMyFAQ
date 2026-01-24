@@ -2,10 +2,10 @@
 
 namespace phpMyFAQ\Session;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class TokenTest extends TestCase
@@ -55,9 +55,7 @@ class TokenTest extends TestCase
 
     public function testGetTokenInput(): void
     {
-        $this->sessionMock
-            ->method('get')
-            ->willReturn($this->token->setSessionToken('testToken'));
+        $this->sessionMock->method('get')->willReturn($this->token->setSessionToken('testToken'));
 
         $inputHtml = $this->token->getTokenInput('testPage');
         $expectedHtml = '<input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token"';
@@ -69,9 +67,7 @@ class TokenTest extends TestCase
      */
     public function testGetTokenString(): void
     {
-        $this->sessionMock
-            ->method('get')
-            ->willReturn($this->token->setSessionToken('testToken'));
+        $this->sessionMock->method('get')->willReturn($this->token->setSessionToken('testToken'));
 
         $tokenString = $this->token->getTokenString('testPage');
         $this->assertIsString($tokenString);
@@ -80,18 +76,14 @@ class TokenTest extends TestCase
     public function testVerifyTokenReturnsFalseForInvalidToken(): void
     {
         $this->token->setSessionToken('testSessionToken');
-        $this->sessionMock
-            ->method('get')
-            ->willReturn($this->token);
+        $this->sessionMock->method('get')->willReturn($this->token);
 
         $this->assertFalse($this->token->verifyToken('testPage', 'invalidToken'));
     }
 
     public function testRemoveToken(): void
     {
-        $this->sessionMock
-            ->method('remove')
-            ->with($this->equalTo('pmf-csrf-token.testPage'));
+        $this->sessionMock->method('remove')->with($this->equalTo('pmf-csrf-token.testPage'));
 
         $this->assertTrue($this->token->removeToken('testPage'));
     }

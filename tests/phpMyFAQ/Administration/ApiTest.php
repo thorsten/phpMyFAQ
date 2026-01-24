@@ -4,18 +4,18 @@ namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\System;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class ApiTest extends TestCase
@@ -56,7 +56,8 @@ class ApiTest extends TestCase
         $response->method('getStatusCode')->willReturn(Response::HTTP_OK);
         $response->method('toArray')->willReturn($versions);
 
-        $this->httpClient->expects($this->once())
+        $this->httpClient
+            ->expects($this->once())
             ->method('request')
             ->with('GET', 'https://api.phpmyfaq.de/versions')
             ->willReturn($response);
@@ -67,7 +68,7 @@ class ApiTest extends TestCase
             'installed' => '5.0.0',
             'stable' => '5.0.0',
             'development' => '5.1.0',
-            'nightly' => '5.2.0'
+            'nightly' => '5.2.0',
         ];
 
         $this->assertEquals($expected, $this->api->getVersions());
@@ -84,7 +85,8 @@ class ApiTest extends TestCase
         $response->method('getContent')->willReturn('{"hash1": "abc", "hash2": "def"}');
         $response->method('getStatusCode')->willReturn(Response::HTTP_OK);
 
-        $this->httpClient->expects($this->once())
+        $this->httpClient
+            ->expects($this->once())
             ->method('request')
             ->willReturn($response);
 
@@ -100,7 +102,8 @@ class ApiTest extends TestCase
         $response = $this->createStub(ResponseInterface::class);
         $response->method('getStatusCode')->willReturn(Response::HTTP_INTERNAL_SERVER_ERROR);
 
-        $this->httpClient->expects($this->once())
+        $this->httpClient
+            ->expects($this->once())
             ->method('request')
             ->willReturn($response);
 
@@ -114,7 +117,8 @@ class ApiTest extends TestCase
      */
     public function testIsVerifiedTransportException(): void
     {
-        $this->httpClient->expects($this->once())
+        $this->httpClient
+            ->expects($this->once())
             ->method('request')
             ->willThrowException(new TransportException());
 
@@ -128,23 +132,22 @@ class ApiTest extends TestCase
     public function testGetVerificationIssues(): void
     {
         $this->configuration = $this->createStub(Configuration::class);
-        $mockSystem = $this->getMockBuilder(System::class)
-            ->onlyMethods(['createHashes'])
-            ->getMock();
+        $mockSystem = $this->getMockBuilder(System::class)->onlyMethods(['createHashes'])->getMock();
 
-        $mockSystem->expects($this->once())
+        $mockSystem
+            ->expects($this->once())
             ->method('createHashes')
             ->willReturn(json_encode([
                 'hash1' => 'abc123',
                 'hash2' => 'def456',
-                'hash3' => 'ghi789'
+                'hash3' => 'ghi789',
             ]));
 
         $api = new Api($this->configuration, $mockSystem);
 
         $api->setRemoteHashes(json_encode([
             'hash1' => 'abc123',
-            'hash3' => 'ghi789'
+            'hash3' => 'ghi789',
         ]));
 
         $result = $api->getVerificationIssues();
@@ -163,7 +166,8 @@ class ApiTest extends TestCase
         $response = $this->createStub(ResponseInterface::class);
         $response->method('getStatusCode')->willReturn(Response::HTTP_NOT_FOUND);
 
-        $this->httpClient->expects($this->once())
+        $this->httpClient
+            ->expects($this->once())
             ->method('request')
             ->with('GET', 'https://api.phpmyfaq.de/versions')
             ->willReturn($response);
@@ -174,7 +178,7 @@ class ApiTest extends TestCase
             'installed' => '4.0.0',
             'stable' => 'n/a',
             'development' => 'n/a',
-            'nightly' => 'n/a'
+            'nightly' => 'n/a',
         ];
 
         $this->assertEquals($expected, $this->api->getVersions());
@@ -188,7 +192,8 @@ class ApiTest extends TestCase
     {
         $transportException = new TransportException('Network error');
 
-        $this->httpClient->expects($this->once())
+        $this->httpClient
+            ->expects($this->once())
             ->method('request')
             ->willThrowException($transportException);
 
@@ -207,7 +212,8 @@ class ApiTest extends TestCase
         $response = $this->createStub(ResponseInterface::class);
         $response->method('getContent')->willReturn('invalid json content');
 
-        $this->httpClient->expects($this->once())
+        $this->httpClient
+            ->expects($this->once())
             ->method('request')
             ->willReturn($response);
 
@@ -224,7 +230,8 @@ class ApiTest extends TestCase
         $response = $this->createStub(ResponseInterface::class);
         $response->method('getContent')->willReturn('');
 
-        $this->httpClient->expects($this->once())
+        $this->httpClient
+            ->expects($this->once())
             ->method('request')
             ->willReturn($response);
 
@@ -237,7 +244,8 @@ class ApiTest extends TestCase
         $response = $this->createStub(ResponseInterface::class);
         $response->method('getContent')->willReturn('"just a string"');
 
-        $this->httpClient->expects($this->once())
+        $this->httpClient
+            ->expects($this->once())
             ->method('request')
             ->willReturn($response);
 
@@ -249,11 +257,10 @@ class ApiTest extends TestCase
     public function testIsVerifiedWithServerException(): void
     {
         $response = $this->createStub(ResponseInterface::class);
-        $response->method('getContent')->willThrowException(
-            $this->createMock(ServerExceptionInterface::class)
-        );
+        $response->method('getContent')->willThrowException($this->createMock(ServerExceptionInterface::class));
 
-        $this->httpClient->expects($this->once())
+        $this->httpClient
+            ->expects($this->once())
             ->method('request')
             ->willReturn($response);
 
@@ -326,9 +333,7 @@ class ApiTest extends TestCase
         $response->method('getStatusCode')->willReturn(Response::HTTP_OK);
         $response->method('toArray')->willReturn(['stable' => '1.0.0', 'development' => '1.1.0', 'nightly' => '1.2.0']);
 
-        $newHttpClient->expects($this->once())
-            ->method('request')
-            ->willReturn($response);
+        $newHttpClient->expects($this->once())->method('request')->willReturn($response);
 
         $this->configuration->method('getVersion')->willReturn('1.0.0');
 
@@ -385,7 +390,8 @@ class ApiTest extends TestCase
         $response = $this->createStub(ResponseInterface::class);
         $response->method('getContent')->willReturn($expectedHashes);
 
-        $this->httpClient->expects($this->once())
+        $this->httpClient
+            ->expects($this->once())
             ->method('request')
             ->willReturn($response);
 

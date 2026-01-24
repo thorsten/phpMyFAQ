@@ -2,12 +2,12 @@
 
 namespace phpMyFAQ\Category;
 
-use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
-use stdClass;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * Class PermissionTest
@@ -24,7 +24,8 @@ class PermissionTest extends TestCase
         $this->databaseMock = $this->createMock(DatabaseDriver::class);
         $this->configurationMock = $this->createMock(Configuration::class);
 
-        $this->configurationMock->expects($this->any())
+        $this->configurationMock
+            ->expects($this->any())
             ->method('getDb')
             ->willReturn($this->databaseMock);
 
@@ -50,12 +51,14 @@ class PermissionTest extends TestCase
         $userIds = [10, 20];
 
         // Mock existance check (returns 0 rows = not exists)
-        $this->databaseMock->expects($this->exactly(4))
+        $this->databaseMock
+            ->expects($this->exactly(4))
             ->method('numRows')
             ->willReturn(0);
 
         // Mock queries for existence checks and inserts
-        $this->databaseMock->expects($this->exactly(8))
+        $this->databaseMock
+            ->expects($this->exactly(8))
             ->method('query')
             ->willReturn(true);
 
@@ -70,11 +73,13 @@ class PermissionTest extends TestCase
         $categories = [1];
         $groupIds = [5];
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('numRows')
             ->willReturn(0);
 
-        $this->databaseMock->expects($this->exactly(2))
+        $this->databaseMock
+            ->expects($this->exactly(2))
             ->method('query')
             ->willReturn(true);
 
@@ -96,12 +101,14 @@ class PermissionTest extends TestCase
         $userIds = [10];
 
         // Mock existence check (returns 1 row = already exists)
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('numRows')
             ->willReturn(1);
 
         // Only expect one query for the existence check, no insert
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->willReturn(true);
 
@@ -115,7 +122,8 @@ class PermissionTest extends TestCase
 
         $categories = [1, 2];
 
-        $this->databaseMock->expects($this->exactly(2))
+        $this->databaseMock
+            ->expects($this->exactly(2))
             ->method('query')
             ->with($this->stringContains('faqcategory_user'))
             ->willReturn(true);
@@ -130,7 +138,8 @@ class PermissionTest extends TestCase
 
         $categories = [1];
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('DELETE FROM'))
             ->willReturn(true);
@@ -153,7 +162,8 @@ class PermissionTest extends TestCase
 
         // Mock for user permissions query
         $userResult = 'user_result';
-        $this->databaseMock->expects($this->exactly(2))
+        $this->databaseMock
+            ->expects($this->exactly(2))
             ->method('query')
             ->willReturnOnConsecutiveCalls($userResult, 'group_result');
 
@@ -161,7 +171,8 @@ class PermissionTest extends TestCase
         $userRow = new stdClass();
         $userRow->permission = 10;
 
-        $this->databaseMock->expects($this->any())
+        $this->databaseMock
+            ->expects($this->any())
             ->method('fetchObject')
             ->willReturnOnConsecutiveCalls($userRow, false, false);
 
@@ -176,7 +187,8 @@ class PermissionTest extends TestCase
         $categoryId = 1;
 
         // Mock for both queries
-        $this->databaseMock->expects($this->exactly(2))
+        $this->databaseMock
+            ->expects($this->exactly(2))
             ->method('query')
             ->willReturnOnConsecutiveCalls('user_result', 'group_result');
 
@@ -184,7 +196,8 @@ class PermissionTest extends TestCase
         $groupRow = new stdClass();
         $groupRow->permission = 5;
 
-        $this->databaseMock->expects($this->any())
+        $this->databaseMock
+            ->expects($this->any())
             ->method('fetchObject')
             ->willReturnOnConsecutiveCalls(false, $groupRow, false);
 
@@ -198,12 +211,14 @@ class PermissionTest extends TestCase
 
         $categoryId = 1;
 
-        $this->databaseMock->expects($this->exactly(2))
+        $this->databaseMock
+            ->expects($this->exactly(2))
             ->method('query')
             ->willReturnOnConsecutiveCalls('user_result', 'group_result');
 
         // Mock no permissions for both user and group
-        $this->databaseMock->expects($this->exactly(2))
+        $this->databaseMock
+            ->expects($this->exactly(2))
             ->method('fetchObject')
             ->willReturn(false);
 
@@ -218,7 +233,8 @@ class PermissionTest extends TestCase
         $categories = [1, 2];
 
         $result_mock = 'query_result';
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('SELECT user_id AS permission FROM test_faqcategory_user'))
             ->willReturn($result_mock);
@@ -228,7 +244,8 @@ class PermissionTest extends TestCase
         $row2 = new stdClass();
         $row2->permission = 20;
 
-        $this->databaseMock->expects($this->exactly(3))
+        $this->databaseMock
+            ->expects($this->exactly(3))
             ->method('fetchObject')
             ->with($result_mock)
             ->willReturnOnConsecutiveCalls($row1, $row2, false);
@@ -244,7 +261,8 @@ class PermissionTest extends TestCase
         $categories = [1];
 
         $result_mock = 'query_result';
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('SELECT group_id AS permission FROM test_faqcategory_group'))
             ->willReturn($result_mock);
@@ -252,7 +270,8 @@ class PermissionTest extends TestCase
         $row = new stdClass();
         $row->permission = 5;
 
-        $this->databaseMock->expects($this->exactly(2))
+        $this->databaseMock
+            ->expects($this->exactly(2))
             ->method('fetchObject')
             ->willReturnOnConsecutiveCalls($row, false);
 
@@ -272,11 +291,13 @@ class PermissionTest extends TestCase
 
         $categories = [1];
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->willReturn('query_result');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('fetchObject')
             ->willReturn(false);
 
@@ -291,7 +312,8 @@ class PermissionTest extends TestCase
         $categories = [1, 2];
 
         // Mock two queries (user and group)
-        $this->databaseMock->expects($this->exactly(2))
+        $this->databaseMock
+            ->expects($this->exactly(2))
             ->method('query')
             ->willReturnOnConsecutiveCalls('user_result', 'group_result');
 
@@ -309,11 +331,15 @@ class PermissionTest extends TestCase
         $groupRow->category_id = 1;
         $groupRow->permission = 5;
 
-        $this->databaseMock->expects($this->exactly(5))
+        $this->databaseMock
+            ->expects($this->exactly(5))
             ->method('fetchObject')
             ->willReturnOnConsecutiveCalls(
-                $userRow1, $userRow2, false, // User query results
-                $groupRow, false             // Group query results
+                $userRow1,
+                $userRow2,
+                false, // User query results
+                $groupRow,
+                false, // Group query results
             );
 
         $result = $this->permission->getAll($categories);
@@ -344,12 +370,14 @@ class PermissionTest extends TestCase
 
         $categories = [1];
 
-        $this->databaseMock->expects($this->exactly(2))
+        $this->databaseMock
+            ->expects($this->exactly(2))
             ->method('query')
             ->willReturnOnConsecutiveCalls('user_result', 'group_result');
 
         // Mock no results for both queries
-        $this->databaseMock->expects($this->exactly(2))
+        $this->databaseMock
+            ->expects($this->exactly(2))
             ->method('fetchObject')
             ->willReturn(false);
 

@@ -2,10 +2,10 @@
 
 namespace phpMyFAQ\Attachment\Filesystem\File;
 
-use org\bovigo\vfs\vfsStreamDirectory;
-use PHPUnit\Framework\TestCase;
 use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class VanillaFileTest extends TestCase
@@ -17,14 +17,15 @@ class VanillaFileTest extends TestCase
     {
         // Setup the virtual file system
         $this->root = vfsStream::setup('root', null, [
-            'file.txt' => 'test file content'
+            'file.txt' => 'test file content',
         ]);
 
         // Get the virtual file path
         $filePath = vfsStream::url('root/file.txt');
 
         // Mock the VanillaFile class and inject the virtual file
-        $this->mockFile = $this->getMockBuilder(VanillaFile::class)
+        $this->mockFile = $this
+            ->getMockBuilder(VanillaFile::class)
             ->setConstructorArgs([$filePath])
             ->onlyMethods(['getChunk', 'putChunk', 'eof'])
             ->getMock();
@@ -32,10 +33,11 @@ class VanillaFileTest extends TestCase
 
     public function testPutChunkWritesData(): void
     {
-        $data = "test chunk data";
+        $data = 'test chunk data';
 
         // Write data to the virtual file
-        $this->mockFile->expects($this->once())
+        $this->mockFile
+            ->expects($this->once())
             ->method('putChunk')
             ->with($data)
             ->willReturn(true);
@@ -47,7 +49,8 @@ class VanillaFileTest extends TestCase
     public function testGetChunkReadsData(): void
     {
         // Mocking the getChunk behavior to return content from the virtual file
-        $this->mockFile->expects($this->once())
+        $this->mockFile
+            ->expects($this->once())
             ->method('getChunk')
             ->willReturn('test file content');
 

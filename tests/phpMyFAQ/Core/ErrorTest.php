@@ -5,10 +5,10 @@ namespace phpMyFAQ\Core;
 use ErrorException;
 use Exception;
 use phpMyFAQ\Environment;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class ErrorTest extends TestCase
@@ -36,8 +36,8 @@ class ErrorTest extends TestCase
     public function testErrorHandlerThrowsExceptionWhenErrorReportingIsEnabled(): void
     {
         $level = E_NOTICE;
-        $message = "Undefined variable: x";
-        $filename = "test.php";
+        $message = 'Undefined variable: x';
+        $filename = 'test.php';
         $line = 10;
 
         error_reporting(E_ALL);
@@ -54,8 +54,8 @@ class ErrorTest extends TestCase
     public function testErrorHandlerDoesNotThrowExceptionWhenErrorReportingIsDisabled(): void
     {
         $level = E_NOTICE;
-        $message = "Undefined variable: x";
-        $filename = "test.php";
+        $message = 'Undefined variable: x';
+        $filename = 'test.php';
         $line = 10;
 
         error_reporting(0);
@@ -72,8 +72,8 @@ class ErrorTest extends TestCase
         }
 
         $level = E_WARNING;
-        $message = "Test warning";
-        $filename = "/path/to/test.php";
+        $message = 'Test warning';
+        $filename = '/path/to/test.php';
         $line = 15;
 
         try {
@@ -104,7 +104,7 @@ class ErrorTest extends TestCase
 
         foreach ($errorLevels as $level) {
             try {
-                Error::errorHandler($level, "Test message", "test.php", 1);
+                Error::errorHandler($level, 'Test message', 'test.php', 1);
                 $this->fail("Expected ErrorException was not thrown for level: $level");
             } catch (ErrorException $exception) {
                 $this->assertSame($level, $exception->getSeverity());
@@ -116,7 +116,7 @@ class ErrorTest extends TestCase
     #[RunInSeparateProcess]
     public function testExceptionHandlerSets404ResponseCode(): void
     {
-        $exception = new Exception("Not found", 404);
+        $exception = new Exception('Not found', 404);
 
         $this->expectOutputRegex('/<h1>phpMyFAQ Fatal error<\/h1>/');
 
@@ -129,7 +129,7 @@ class ErrorTest extends TestCase
     #[RunInSeparateProcess]
     public function testExceptionHandlerSets500ResponseCodeForNon404Errors(): void
     {
-        $exception = new Exception("Test error", 200);
+        $exception = new Exception('Test error', 200);
 
         $this->expectOutputRegex('/phpMyFAQ Fatal error/');
 
@@ -150,22 +150,22 @@ class ErrorTest extends TestCase
         Error::exceptionHandler($exception);
         $output = ob_get_clean();
 
-        $this->assertStringContainsString("<h1>phpMyFAQ Fatal error</h1>", $output);
+        $this->assertStringContainsString('<h1>phpMyFAQ Fatal error</h1>', $output);
         $this->assertStringContainsString("Uncaught exception: 'Exception'", $output);
         $this->assertStringContainsString("Message: '", $output);
-        $this->assertStringContainsString("Stack trace:", $output);
+        $this->assertStringContainsString('Stack trace:', $output);
         $this->assertStringContainsString("Thrown in '", $output);
-        $this->assertStringContainsString("on line ", $output);
+        $this->assertStringContainsString('on line ', $output);
 
-        $this->assertStringNotContainsString("<script>", $output);
-        $this->assertStringContainsString("&lt;script&gt;", $output);
+        $this->assertStringNotContainsString('<script>', $output);
+        $this->assertStringContainsString('&lt;script&gt;', $output);
     }
 
     #[PreserveGlobalState(false)]
     #[RunInSeparateProcess]
     public function testExceptionHandlerWithCustomException(): void
     {
-        $customException = new class ("Custom error message", 123) extends Exception {
+        $customException = new class('Custom error message', 123) extends Exception {
             // Custom exception class for testing
         };
 
@@ -185,7 +185,7 @@ class ErrorTest extends TestCase
         $logFile = tempnam(sys_get_temp_dir(), 'phpunit_error_log');
         ini_set('error_log', $logFile);
 
-        $exception = new Exception("Test log message", 500);
+        $exception = new Exception('Test log message', 500);
 
         try {
             ob_start();
@@ -195,9 +195,9 @@ class ErrorTest extends TestCase
 
             $this->assertFileExists($logFile);
             $logContent = file_get_contents($logFile);
-            $this->assertStringContainsString("phpMyFAQ Exception", $logContent);
-            $this->assertStringContainsString("Test log message", $logContent);
-            $this->assertStringContainsString("Stack trace:", $logContent);
+            $this->assertStringContainsString('phpMyFAQ Exception', $logContent);
+            $this->assertStringContainsString('Test log message', $logContent);
+            $this->assertStringContainsString('Stack trace:', $logContent);
         } finally {
             if (file_exists($logFile)) {
                 unlink($logFile);
@@ -216,7 +216,7 @@ class ErrorTest extends TestCase
 
         file_put_contents($logFile, '');
 
-        $exception = new Exception("Test message", 500);
+        $exception = new Exception('Test message', 500);
 
         try {
             ob_start();
@@ -237,13 +237,7 @@ class ErrorTest extends TestCase
     #[RunInSeparateProcess]
     public function testExceptionHandlerWithErrorException(): void
     {
-        $errorException = new ErrorException(
-            "Test error exception",
-            0,
-            E_ERROR,
-            "test.php",
-            42
-        );
+        $errorException = new ErrorException('Test error exception', 0, E_ERROR, 'test.php', 42);
 
         $this->expectOutputRegex('/Test error exception/');
 

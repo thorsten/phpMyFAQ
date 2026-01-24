@@ -10,8 +10,8 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\NewsMessage;
 use phpMyFAQ\News\NewsRepository;
 use phpMyFAQ\Strings;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class NewsRepositoryTest extends TestCase
@@ -74,4 +74,3 @@ class NewsRepositoryTest extends TestCase
         $this->assertNull($repo->getById($id, 'en'));
     }
 }
-

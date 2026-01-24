@@ -2,23 +2,23 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Core\Exception as PMFException;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use phpMyFAQ\Core\Exception as PMFException;
 use ReflectionClass;
 use ReflectionException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\HttpFoundation\Session\Session;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class ApplicationTest extends TestCase
@@ -79,25 +79,25 @@ class ApplicationTest extends TestCase
         $session = $this->createStub(Session::class);
         $language = new Language($configuration, $session);
 
-        $configuration->expects($this->exactly(2))
+        $configuration
+            ->expects($this->exactly(2))
             ->method('get')
             ->willReturnMap([
                 ['main.languageDetection', true],
-                ['main.language', 'en'],
+                ['main.language',          'en'],
             ]);
 
         // Keine Mock-Erwartung auf Language::setLanguage() – echte Instanz wird verwendet
 
         // Konfiguration speichert die Language-Instanz über setLanguage()
-        $configuration->expects($this->once())
-            ->method('setLanguage')
-            ->with($language);
+        $configuration->expects($this->once())->method('setLanguage')->with($language);
 
-        $this->container->expects($this->exactly(2))
+        $this->container
+            ->expects($this->exactly(2))
             ->method('get')
             ->willReturnMap([
                 ['phpmyfaq.configuration', $configuration],
-                ['phpmyfaq.language', $language],
+                ['phpmyfaq.language',      $language],
             ]);
 
         $reflection = new ReflectionClass(Application::class);
@@ -143,7 +143,7 @@ class ApplicationTest extends TestCase
         $routeCollection->add('test_route', new Route('/test', [
             '_controller' => function () {
                 return new Response('Test Response');
-            }
+            },
         ]));
 
         $request = Request::create('/test');
@@ -186,7 +186,7 @@ class ApplicationTest extends TestCase
         $routeCollection->add('api_route', new Route('/api/test', [
             '_controller' => function () {
                 throw new UnauthorizedHttpException('Bearer', 'Unauthorized');
-            }
+            },
         ]));
 
         $request = Request::create('/api/test');
@@ -213,7 +213,7 @@ class ApplicationTest extends TestCase
         $routeCollection->add('web_route', new Route('/test', [
             '_controller' => function () {
                 throw new UnauthorizedHttpException('Bearer', 'Unauthorized');
-            }
+            },
         ]));
 
         $request = Request::create('/test');
@@ -240,7 +240,7 @@ class ApplicationTest extends TestCase
         $routeCollection->add('bad_route', new Route('/bad', [
             '_controller' => function () {
                 throw new BadRequestException('Bad request');
-            }
+            },
         ]));
 
         $request = Request::create('/bad');
@@ -266,24 +266,24 @@ class ApplicationTest extends TestCase
         $session = $this->createStub(Session::class);
         $language = new Language($configuration, $session);
 
-        $configuration->expects($this->exactly(2))
+        $configuration
+            ->expects($this->exactly(2))
             ->method('get')
             ->willReturnMap([
                 ['main.languageDetection', true],
-                ['main.language', 'en'],
+                ['main.language',          'en'],
             ]);
 
         // Keine Mock-Erwartung auf Language::setLanguage() – echte Instanz wird verwendet
 
-        $configuration->expects($this->once())
-            ->method('setLanguage')
-            ->with($language);
+        $configuration->expects($this->once())->method('setLanguage')->with($language);
 
-        $this->container->expects($this->exactly(2))
+        $this->container
+            ->expects($this->exactly(2))
             ->method('get')
             ->willReturnMap([
                 ['phpmyfaq.configuration', $configuration],
-                ['phpmyfaq.language', $language],
+                ['phpmyfaq.language',      $language],
             ]);
 
         $routeCollection = new RouteCollection();

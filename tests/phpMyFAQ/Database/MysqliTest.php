@@ -3,10 +3,10 @@
 namespace phpMyFAQ\Database;
 
 use mysqli_result;
-use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Core\Exception;
-use stdClass;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * Class MysqliTest
@@ -37,9 +37,7 @@ class MysqliTest extends TestCase
         $resultMock = $this->createMock(mysqli_result::class);
         $expectedData = ['id' => 1, 'name' => 'test'];
 
-        $resultMock->expects($this->once())
-            ->method('fetch_assoc')
-            ->willReturn($expectedData);
+        $resultMock->expects($this->once())->method('fetch_assoc')->willReturn($expectedData);
 
         $result = $this->mysqli->fetchArray($resultMock);
         $this->assertEquals($expectedData, $result);
@@ -49,9 +47,7 @@ class MysqliTest extends TestCase
     {
         $resultMock = $this->createMock(mysqli_result::class);
 
-        $resultMock->expects($this->once())
-            ->method('fetch_assoc')
-            ->willReturn(null);
+        $resultMock->expects($this->once())->method('fetch_assoc')->willReturn(null);
 
         $result = $this->mysqli->fetchArray($resultMock);
         $this->assertNull($result);
@@ -61,9 +57,7 @@ class MysqliTest extends TestCase
     {
         $resultMock = $this->createMock(mysqli_result::class);
 
-        $resultMock->expects($this->once())
-            ->method('fetch_row')
-            ->willReturn(['test_value', 'other_value']);
+        $resultMock->expects($this->once())->method('fetch_row')->willReturn(['test_value', 'other_value']);
 
         $result = $this->mysqli->fetchRow($resultMock);
         $this->assertEquals('test_value', $result);
@@ -73,9 +67,7 @@ class MysqliTest extends TestCase
     {
         $resultMock = $this->createMock(mysqli_result::class);
 
-        $resultMock->expects($this->once())
-            ->method('fetch_row')
-            ->willReturn([]);
+        $resultMock->expects($this->once())->method('fetch_row')->willReturn([]);
 
         $result = $this->mysqli->fetchRow($resultMock);
         $this->assertFalse($result);
@@ -85,9 +77,7 @@ class MysqliTest extends TestCase
     {
         $resultMock = $this->createMock(mysqli_result::class);
 
-        $resultMock->expects($this->once())
-            ->method('fetch_row')
-            ->willReturn(null);
+        $resultMock->expects($this->once())->method('fetch_row')->willReturn(null);
 
         $result = $this->mysqli->fetchRow($resultMock);
         $this->assertFalse($result);
@@ -100,9 +90,7 @@ class MysqliTest extends TestCase
         $expectedObject->id = 1;
         $expectedObject->name = 'test';
 
-        $resultMock->expects($this->once())
-            ->method('fetch_object')
-            ->willReturn($expectedObject);
+        $resultMock->expects($this->once())->method('fetch_object')->willReturn($expectedObject);
 
         $result = $this->mysqli->fetchObject($resultMock);
         $this->assertEquals($expectedObject, $result);
@@ -112,9 +100,7 @@ class MysqliTest extends TestCase
     {
         $resultMock = $this->createMock(mysqli_result::class);
 
-        $resultMock->expects($this->once())
-            ->method('fetch_object')
-            ->willReturn(null);
+        $resultMock->expects($this->once())->method('fetch_object')->willReturn(null);
 
         $result = $this->mysqli->fetchObject($resultMock);
         $this->assertNull($result);
@@ -168,7 +154,8 @@ class MysqliTest extends TestCase
         $object2 = new stdClass();
         $object2->id = 2;
 
-        $resultMock->expects($this->exactly(3))
+        $resultMock
+            ->expects($this->exactly(3))
             ->method('fetch_object')
             ->willReturnOnConsecutiveCalls($object1, $object2, false);
 
@@ -198,9 +185,7 @@ class MysqliTest extends TestCase
     {
         $resultMock = $this->createMock(mysqli_result::class);
 
-        $resultMock->expects($this->once())
-            ->method('fetch_object')
-            ->willReturn(false);
+        $resultMock->expects($this->once())->method('fetch_object')->willReturn(false);
 
         $result = $this->mysqli->fetchAll($resultMock);
         $this->assertEquals([], $result);
@@ -214,8 +199,7 @@ class MysqliTest extends TestCase
 
         $this->expectException(Exception::class);
 
-        set_error_handler(function () {
-        }, E_WARNING);
+        set_error_handler(function () {}, E_WARNING);
 
         try {
             $mysqli->connect('', '', '', '');

@@ -6,9 +6,9 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Mail\Builtin;
 use phpMyFAQ\Mail\Smtp;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class MailTest extends TestCase
@@ -150,7 +150,7 @@ class MailTest extends TestCase
 
     public function testWrapLinesWithDefaultWidth(): void
     {
-        $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum acnunc quis neque tempor varius.";
+        $message = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum acnunc quis neque tempor varius.';
         $result = $this->mail->wrapLines($message);
 
         $expectedResult = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum\r\nacnunc quis neque tempor varius.";
@@ -159,7 +159,7 @@ class MailTest extends TestCase
 
     public function testWrapLinesWithCustomWidth(): void
     {
-        $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ac nunc quis neque tempor varius.";
+        $message = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ac nunc quis neque tempor varius.';
         $result = $this->mail->wrapLines($message, 30);
 
         $expectedResult = "Lorem ipsum dolor sit amet,\r\nconsectetur adipiscing elit.\r\nVestibulum ac nunc quis neque\r\ntempor varius.";

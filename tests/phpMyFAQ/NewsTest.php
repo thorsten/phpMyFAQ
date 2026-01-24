@@ -6,11 +6,11 @@ use DateTime;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\NewsMessage;
 use phpMyFAQ\News\NewsRepositoryInterface;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\Session\Session;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use stdClass;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
 class NewsTest extends TestCase
@@ -61,7 +61,8 @@ class NewsTest extends TestCase
             ->setActive(true)
             ->setComment(true);
 
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('insert')
             ->with($newsMessage)
             ->willReturn(true);
@@ -83,7 +84,8 @@ class NewsTest extends TestCase
             ->setActive(true)
             ->setComment(true);
 
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('update')
             ->with($newsMessage)
             ->willReturn(true);
@@ -93,7 +95,8 @@ class NewsTest extends TestCase
 
     public function testDelete(): void
     {
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('delete')
             ->with(1, 'en')
             ->willReturn(true);
@@ -103,7 +106,8 @@ class NewsTest extends TestCase
 
     public function testDeleteFails(): void
     {
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('delete')
             ->with(999, 'en')
             ->willReturn(false);
@@ -113,7 +117,8 @@ class NewsTest extends TestCase
 
     public function testActivate(): void
     {
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('activate')
             ->with(1, true)
             ->willReturn(true);
@@ -123,7 +128,8 @@ class NewsTest extends TestCase
 
     public function testDeactivate(): void
     {
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('activate')
             ->with(1, false)
             ->willReturn(true);
@@ -133,7 +139,7 @@ class NewsTest extends TestCase
 
     /**
      * @throws \Exception
-     */public function testGetAll(): void
+     */ public function testGetAll(): void
     {
         $mockRow = new stdClass();
         $mockRow->id = 1;
@@ -142,7 +148,8 @@ class NewsTest extends TestCase
         $mockRow->artikel = '<p>Test content</p>';
         $mockRow->datum = '20251222100000';
 
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('getLatest')
             ->with('en', true, 5)
             ->willReturn([$mockRow]);
@@ -159,7 +166,7 @@ class NewsTest extends TestCase
 
     /**
      * @throws \Exception
-     */public function testGetAllShowArchive(): void
+     */ public function testGetAllShowArchive(): void
     {
         $mockRow = new stdClass();
         $mockRow->id = 1;
@@ -168,7 +175,8 @@ class NewsTest extends TestCase
         $mockRow->artikel = 'Archived content';
         $mockRow->datum = '20200101120000';
 
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('getLatest')
             ->with('en', true, null)
             ->willReturn([$mockRow]);
@@ -181,7 +189,8 @@ class NewsTest extends TestCase
 
     public function testGetAllInactive(): void
     {
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('getLatest')
             ->with('en', false, null)
             ->willReturn([]);
@@ -207,7 +216,8 @@ class NewsTest extends TestCase
         $mockRow->linktitel = 'Example';
         $mockRow->target = '_blank';
 
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('getLatest')
             ->with('en', true, 5)
             ->willReturn([$mockRow]);
@@ -231,7 +241,8 @@ class NewsTest extends TestCase
 
     public function testGetLatestDataWithArchive(): void
     {
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('getLatest')
             ->with('en', true, null)
             ->willReturn([]);
@@ -245,7 +256,8 @@ class NewsTest extends TestCase
 
     public function testGetLatestDataForceConfLimit(): void
     {
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('getLatest')
             ->with('en', true, 10)
             ->willReturn([]);
@@ -266,7 +278,8 @@ class NewsTest extends TestCase
         $mockRow->datum = '20251222100000';
         $mockRow->active = 'y';
 
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('getHeaders')
             ->with('en')
             ->willReturn([$mockRow]);
@@ -282,7 +295,8 @@ class NewsTest extends TestCase
 
     public function testGetHeaderEmpty(): void
     {
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('getHeaders')
             ->with('en')
             ->willReturn([]);
@@ -308,7 +322,8 @@ class NewsTest extends TestCase
         $mockRow->linktitel = 'Example';
         $mockRow->target = '_self';
 
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('getById')
             ->with(1, 'en')
             ->willReturn($mockRow);
@@ -330,7 +345,8 @@ class NewsTest extends TestCase
 
     public function testGetNonExistent(): void
     {
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('getById')
             ->with(999, 'en')
             ->willReturn(null);
@@ -356,7 +372,8 @@ class NewsTest extends TestCase
         $mockRow->linktitel = '';
         $mockRow->target = '';
 
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('getById')
             ->with(1, 'en')
             ->willReturn($mockRow);
@@ -383,7 +400,8 @@ class NewsTest extends TestCase
         $mockRow->linktitel = '';
         $mockRow->target = '';
 
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('getById')
             ->with(1, 'en')
             ->willReturn($mockRow);
@@ -410,7 +428,8 @@ class NewsTest extends TestCase
         $mockRow->linktitel = '';
         $mockRow->target = '';
 
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('getById')
             ->with(1, 'en')
             ->willReturn($mockRow);

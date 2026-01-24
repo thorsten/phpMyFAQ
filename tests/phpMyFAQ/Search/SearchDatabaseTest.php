@@ -5,8 +5,8 @@ namespace phpMyFAQ\Search;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class SearchDatabaseTest
@@ -64,12 +64,14 @@ class SearchDatabaseTest extends TestCase
             'faqdata.id AS id',
             'faqdata.lang AS lang',
             'faqdata.thema AS question',
-            'faqdata.content AS answer'
+            'faqdata.content AS answer',
         ];
 
         $this->searchDatabase->setResultColumns($resultColumns);
-        $this->assertEquals('faqdata.id AS id, faqdata.lang AS lang, faqdata.thema AS question, faqdata.content AS answer',
-            $this->searchDatabase->getResultColumns());
+        $this->assertEquals(
+            'faqdata.id AS id, faqdata.lang AS lang, faqdata.thema AS question, faqdata.content AS answer',
+            $this->searchDatabase->getResultColumns(),
+        );
         $this->assertIsString($this->searchDatabase->getResultColumns());
     }
 
@@ -83,12 +85,14 @@ class SearchDatabaseTest extends TestCase
     {
         $joinedColumns = [
             'faqdata.id = faqcategoryrelations.record_id',
-            'faqdata.lang = faqcategoryrelations.record_lang'
+            'faqdata.lang = faqcategoryrelations.record_lang',
         ];
 
         $this->searchDatabase->setJoinedColumns($joinedColumns);
-        $this->assertEquals('faqdata.id = faqcategoryrelations.record_id AND faqdata.lang = faqcategoryrelations.record_lang ',
-            $this->searchDatabase->getJoinedColumns());
+        $this->assertEquals(
+            'faqdata.id = faqcategoryrelations.record_id AND faqdata.lang = faqcategoryrelations.record_lang ',
+            $this->searchDatabase->getJoinedColumns(),
+        );
         $this->assertIsString($this->searchDatabase->getJoinedColumns());
     }
 
@@ -103,12 +107,14 @@ class SearchDatabaseTest extends TestCase
         $matchingColumns = [
             'faqdata.thema',
             'faqdata.content',
-            'faqdata.keywords'
+            'faqdata.keywords',
         ];
 
         $this->searchDatabase->setMatchingColumns($matchingColumns);
-        $this->assertEquals('faqdata.thema, faqdata.content, faqdata.keywords',
-            $this->searchDatabase->getMatchingColumns());
+        $this->assertEquals(
+            'faqdata.thema, faqdata.content, faqdata.keywords',
+            $this->searchDatabase->getMatchingColumns(),
+        );
         $this->assertIsString($this->searchDatabase->getMatchingColumns());
     }
 
@@ -122,12 +128,14 @@ class SearchDatabaseTest extends TestCase
     {
         $conditions = [
             'faqdata.active' => "'yes'",
-            'faqcategoryrelations.category_id' => 1
+            'faqcategoryrelations.category_id' => 1,
         ];
 
         $this->searchDatabase->setConditions($conditions);
-        $this->assertEquals(" AND faqdata.active = 'yes' AND faqcategoryrelations.category_id = 1",
-            $this->searchDatabase->getConditions());
+        $this->assertEquals(
+            " AND faqdata.active = 'yes' AND faqcategoryrelations.category_id = 1",
+            $this->searchDatabase->getConditions(),
+        );
         $this->assertIsString($this->searchDatabase->getConditions());
     }
 
@@ -140,24 +148,27 @@ class SearchDatabaseTest extends TestCase
     public function testGetMatchClause()
     {
         $this->searchDatabase->setMatchingColumns(['faqdata.author']);
-        $this->assertEquals(" (faqdata.author LIKE '%Thorsten%')",
-            $this->searchDatabase->getMatchClause('Thorsten'));
+        $this->assertEquals(" (faqdata.author LIKE '%Thorsten%')", $this->searchDatabase->getMatchClause('Thorsten'));
         $this->assertIsString($this->searchDatabase->getMatchClause('Thorsten'));
     }
 
     public function testGetMatchClauseWithTwoSearchTerms()
     {
         $this->searchDatabase->setMatchingColumns(['faqdata.author']);
-        $this->assertEquals(" (faqdata.author LIKE '%Thorsten%') OR (faqdata.author LIKE '%Rinne%')",
-            $this->searchDatabase->getMatchClause('Thorsten Rinne'));
+        $this->assertEquals(
+            " (faqdata.author LIKE '%Thorsten%') OR (faqdata.author LIKE '%Rinne%')",
+            $this->searchDatabase->getMatchClause('Thorsten Rinne'),
+        );
         $this->assertIsString($this->searchDatabase->getMatchClause('Thorsten'));
     }
 
     public function testGetMatchClauseWithTwoColumns()
     {
         $this->searchDatabase->setMatchingColumns(['faqdata.author', 'faqdata.thema']);
-        $this->assertEquals(" (faqdata.author LIKE '%Thorsten%' OR faqdata.thema LIKE '%Thorsten%')",
-            $this->searchDatabase->getMatchClause('Thorsten'));
+        $this->assertEquals(
+            " (faqdata.author LIKE '%Thorsten%' OR faqdata.thema LIKE '%Thorsten%')",
+            $this->searchDatabase->getMatchClause('Thorsten'),
+        );
         $this->assertIsString($this->searchDatabase->getMatchClause('Thorsten'));
     }
 }

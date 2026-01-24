@@ -6,10 +6,10 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Mail;
 use phpMyFAQ\User;
 use phpMyFAQ\User\UserData;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class RegistrationHelperTest extends TestCase
@@ -47,7 +47,8 @@ class RegistrationHelperTest extends TestCase
     {
         $email = 'test@example.com';
 
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn('');
@@ -63,7 +64,8 @@ class RegistrationHelperTest extends TestCase
         $email = 'test@example.com';
         $whitelist = 'example.com,allowed.org';
 
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn($whitelist);
@@ -78,7 +80,8 @@ class RegistrationHelperTest extends TestCase
         $email = 'test@notallowed.com';
         $whitelist = 'example.com,allowed.org';
 
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn($whitelist);
@@ -99,7 +102,8 @@ class RegistrationHelperTest extends TestCase
 
         $whitelist = 'example.com, allowed.org, trusted.edu';
 
-        $this->configurationMock->method('get')
+        $this->configurationMock
+            ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn($whitelist);
 
@@ -115,7 +119,8 @@ class RegistrationHelperTest extends TestCase
         $email = 'test@spaced.com';
         $whitelist = ' spaced.com , another.com '; // With extra spaces
 
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn($whitelist);
@@ -129,7 +134,8 @@ class RegistrationHelperTest extends TestCase
     {
         $email = 'test@example.com';
 
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn('');
@@ -144,7 +150,8 @@ class RegistrationHelperTest extends TestCase
         $email = 'user.name+tag@sub.example.com';
         $whitelist = 'sub.example.com';
 
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn($whitelist);
@@ -159,7 +166,8 @@ class RegistrationHelperTest extends TestCase
         $email = 'test@Example.COM';
         $whitelist = 'example.com';
 
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn($whitelist);
@@ -174,20 +182,18 @@ class RegistrationHelperTest extends TestCase
         $expectedMethods = [
             '__construct',
             'createUser',
-            'isDomainAllowed'
+            'isDomainAllowed',
         ];
 
         foreach ($expectedMethods as $methodName) {
-            $this->assertTrue(
-                method_exists($this->registrationHelper, $methodName),
-                "Method $methodName should exist"
-            );
+            $this->assertTrue(method_exists($this->registrationHelper, $methodName), "Method $methodName should exist");
         }
     }
 
     public function testMethodReturnTypes(): void
     {
-        $this->configurationMock->method('get')
+        $this->configurationMock
+            ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn('example.com');
 
@@ -197,7 +203,8 @@ class RegistrationHelperTest extends TestCase
 
     public function testIsDomainAllowedEdgeCases(): void
     {
-        $this->configurationMock->method('get')
+        $this->configurationMock
+            ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn('example.com');
 
@@ -219,7 +226,8 @@ class RegistrationHelperTest extends TestCase
             'test+tag@example.co.uk' => 'example.co.uk',
         ];
 
-        $this->configurationMock->method('get')
+        $this->configurationMock
+            ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn('domain.com,sub.domain.org,example.co.uk');
 
@@ -259,7 +267,8 @@ class RegistrationHelperTest extends TestCase
     public function testIsDomainAllowedBoundaryConditions(): void
     {
         // Test single character domain
-        $this->configurationMock->method('get')
+        $this->configurationMock
+            ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn('a.b');
 
@@ -272,7 +281,8 @@ class RegistrationHelperTest extends TestCase
 
     public function testIsDomainAllowedWithoutAtSignReturnsFalse(): void
     {
-        $this->configurationMock->method('get')
+        $this->configurationMock
+            ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn('example.com');
 
@@ -281,7 +291,8 @@ class RegistrationHelperTest extends TestCase
 
     public function testIsDomainAllowedWithMultipleAtSignsReturnsFalse(): void
     {
-        $this->configurationMock->method('get')
+        $this->configurationMock
+            ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn('example.com');
 
@@ -290,7 +301,8 @@ class RegistrationHelperTest extends TestCase
 
     public function testIsDomainAllowedWithEmptyEmailReturnsFalse(): void
     {
-        $this->configurationMock->method('get')
+        $this->configurationMock
+            ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn('example.com');
 

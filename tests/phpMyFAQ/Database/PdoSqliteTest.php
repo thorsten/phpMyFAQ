@@ -4,10 +4,10 @@ namespace phpMyFAQ\Database;
 
 use PDO;
 use PDOStatement;
-use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Core\Exception;
-use stdClass;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * Class PdoSqliteTest
@@ -95,10 +95,7 @@ class PdoSqliteTest extends TestCase
         $statementMock = $this->createMock(PDOStatement::class);
         $expectedData = ['id' => 1, 'name' => 'test'];
 
-        $statementMock->expects($this->once())
-            ->method('fetch')
-            ->with(PDO::FETCH_ASSOC)
-            ->willReturn($expectedData);
+        $statementMock->expects($this->once())->method('fetch')->with(PDO::FETCH_ASSOC)->willReturn($expectedData);
 
         $result = $this->pdoSqlite->fetchArray($statementMock);
         $this->assertEquals($expectedData, $result);
@@ -108,10 +105,7 @@ class PdoSqliteTest extends TestCase
     {
         $statementMock = $this->createMock(PDOStatement::class);
 
-        $statementMock->expects($this->once())
-            ->method('fetch')
-            ->with(PDO::FETCH_ASSOC)
-            ->willReturn(null);
+        $statementMock->expects($this->once())->method('fetch')->with(PDO::FETCH_ASSOC)->willReturn(null);
 
         $result = $this->pdoSqlite->fetchArray($statementMock);
         $this->assertNull($result);
@@ -121,7 +115,8 @@ class PdoSqliteTest extends TestCase
     {
         $statementMock = $this->createMock(PDOStatement::class);
 
-        $statementMock->expects($this->once())
+        $statementMock
+            ->expects($this->once())
             ->method('fetch')
             ->with(PDO::FETCH_NUM)
             ->willReturn(['test_value', 'other_value']);
@@ -134,10 +129,7 @@ class PdoSqliteTest extends TestCase
     {
         $statementMock = $this->createMock(PDOStatement::class);
 
-        $statementMock->expects($this->once())
-            ->method('fetch')
-            ->with(PDO::FETCH_NUM)
-            ->willReturn([]);
+        $statementMock->expects($this->once())->method('fetch')->with(PDO::FETCH_NUM)->willReturn([]);
 
         $result = $this->pdoSqlite->fetchRow($statementMock);
         $this->assertFalse($result);
@@ -147,10 +139,7 @@ class PdoSqliteTest extends TestCase
     {
         $statementMock = $this->createMock(PDOStatement::class);
 
-        $statementMock->expects($this->once())
-            ->method('fetch')
-            ->with(PDO::FETCH_NUM)
-            ->willReturn(null);
+        $statementMock->expects($this->once())->method('fetch')->with(PDO::FETCH_NUM)->willReturn(null);
 
         $result = $this->pdoSqlite->fetchRow($statementMock);
         $this->assertFalse($result);
@@ -163,10 +152,7 @@ class PdoSqliteTest extends TestCase
         $expectedObject->id = 1;
         $expectedObject->name = 'test';
 
-        $statementMock->expects($this->once())
-            ->method('fetch')
-            ->with(PDO::FETCH_OBJ)
-            ->willReturn($expectedObject);
+        $statementMock->expects($this->once())->method('fetch')->with(PDO::FETCH_OBJ)->willReturn($expectedObject);
 
         $result = $this->pdoSqlite->fetchObject($statementMock);
         $this->assertEquals($expectedObject, $result);
@@ -176,10 +162,7 @@ class PdoSqliteTest extends TestCase
     {
         $statementMock = $this->createMock(PDOStatement::class);
 
-        $statementMock->expects($this->once())
-            ->method('fetch')
-            ->with(PDO::FETCH_OBJ)
-            ->willReturn(null);
+        $statementMock->expects($this->once())->method('fetch')->with(PDO::FETCH_OBJ)->willReturn(null);
 
         $result = $this->pdoSqlite->fetchObject($statementMock);
         $this->assertNull($result);
@@ -196,10 +179,7 @@ class PdoSqliteTest extends TestCase
 
         $expectedData = [$object1, $object2];
 
-        $statementMock->expects($this->once())
-            ->method('fetchAll')
-            ->with(PDO::FETCH_OBJ)
-            ->willReturn($expectedData);
+        $statementMock->expects($this->once())->method('fetchAll')->with(PDO::FETCH_OBJ)->willReturn($expectedData);
 
         $result = $this->pdoSqlite->fetchAll($statementMock);
         $this->assertEquals($expectedData, $result);
@@ -225,10 +205,7 @@ class PdoSqliteTest extends TestCase
     {
         $statementMock = $this->createMock(PDOStatement::class);
 
-        $statementMock->expects($this->once())
-            ->method('fetchAll')
-            ->with(PDO::FETCH_OBJ)
-            ->willReturn([]);
+        $statementMock->expects($this->once())->method('fetchAll')->with(PDO::FETCH_OBJ)->willReturn([]);
 
         $result = $this->pdoSqlite->fetchAll($statementMock);
         $this->assertEquals([], $result);
@@ -238,9 +215,7 @@ class PdoSqliteTest extends TestCase
     {
         $statementMock = $this->createMock(PDOStatement::class);
 
-        $statementMock->expects($this->once())
-            ->method('rowCount')
-            ->willReturn(7);
+        $statementMock->expects($this->once())->method('rowCount')->willReturn(7);
 
         $result = $this->pdoSqlite->numRows($statementMock);
         $this->assertEquals(7, $result);
@@ -250,9 +225,7 @@ class PdoSqliteTest extends TestCase
     {
         $statementMock = $this->createMock(PDOStatement::class);
 
-        $statementMock->expects($this->once())
-            ->method('rowCount')
-            ->willReturn(0);
+        $statementMock->expects($this->once())->method('rowCount')->willReturn(0);
 
         $result = $this->pdoSqlite->numRows($statementMock);
         $this->assertEquals(0, $result);
@@ -359,7 +332,7 @@ class PdoSqliteTest extends TestCase
             'faqconfig',
             'faqgroup',
             'faqcomments',
-            'faqnews'
+            'faqnews',
         ];
 
         foreach ($expectedTables as $expectedTable) {

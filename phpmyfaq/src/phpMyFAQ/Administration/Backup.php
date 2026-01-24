@@ -296,21 +296,49 @@ readonly class Backup
         }
 
         $tablePrefix = '';
+        $currentQuery = '';
 
         while ($line = fgets($handle, length: 65536)) {
-            $line = trim($line);
+            $trimmedLine = trim($line);
             $backupPrefixPattern = '-- pmftableprefix:';
             $backupPrefixPatternLength = Strings::strlen($backupPrefixPattern);
 
-            if (Strings::substr(string: $line, start: 0, length: $backupPrefixPatternLength) === $backupPrefixPattern) {
-                $tablePrefix = trim(Strings::substr($line, $backupPrefixPatternLength));
+            if (
+                Strings::substr(string: $trimmedLine, start: 0, length: $backupPrefixPatternLength)
+                === $backupPrefixPattern
+            ) {
+                $tablePrefix = trim(Strings::substr($trimmedLine, $backupPrefixPatternLength));
 
                 continue;
             }
 
-            if (Strings::substr(string: $line, start: 0, length: 2) !== '--' && $line !== '') {
-                $queries[] = trim(Strings::substr(string: $line, start: 0, length: -1));
+            // Skip comment lines (-- or # at start of line)
+            if (
+                Strings::substr(string: $trimmedLine, start: 0, length: 2) === '--'
+                || Strings::substr(string: $trimmedLine, start: 0, length: 1) === '#'
+            ) {
+                continue;
             }
+
+            // Skip empty lines
+            if ($trimmedLine === '') {
+                continue;
+            }
+
+            // Accumulate lines to handle multi-line SQL statements
+            $currentQuery .= $line;
+
+            // Check if statement is complete (ends with ; and quotes are balanced)
+            if ($this->isCompleteStatement($currentQuery)) {
+                $queries[] = trim(rtrim(trim($currentQuery), characters: ';'));
+                $currentQuery = '';
+            }
+        }
+
+        // Handle any remaining incomplete query
+        $remainingQuery = trim($currentQuery);
+        if ($remainingQuery !== '' && $remainingQuery !== ';') {
+            $queries[] = rtrim($remainingQuery, characters: ';');
         }
 
         fclose($handle);
@@ -364,5 +392,52 @@ readonly class Backup
     private function getRepository(): BackupRepository
     {
         return $this->repository;
+    }
+
+    /**
+     * Checks if a SQL statement is complete (ends with semicolon outside of string literals).
+     */
+    private function isCompleteStatement(string $query): bool
+    {
+        $trimmed = rtrim($query);
+        if (!str_ends_with($trimmed, ';')) {
+            return false;
+        }
+
+        // Count unescaped single quotes to determine if we're inside a string literal
+        // We need to account for escaped quotes: \' and '' (SQL escape)
+        $inString = false;
+        $length = strlen($trimmed);
+
+        for ($i = 0; $i < $length; $i++) {
+            $char = $trimmed[$i];
+
+            if ($char !== "'") {
+                continue;
+            }
+
+            if (!$inString) {
+                $inString = true;
+                continue;
+            }
+
+            // Inside a string - check for escaped quotes
+            // Double single quote escape ('')
+            if (($i + 1) < $length && $trimmed[$i + 1] === "'") {
+                $i++;
+                continue;
+            }
+
+            // Backslash escape (\')
+            if ($i > 0 && $trimmed[$i - 1] === '\\') {
+                continue;
+            }
+
+            // End of string literal
+            $inString = false;
+        }
+
+        // Statement is complete if we're not inside a string literal
+        return !$inString;
     }
 }

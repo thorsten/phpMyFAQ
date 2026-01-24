@@ -7,6 +7,7 @@ use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\User\CurrentUser;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -15,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Twig\Extension\ExtensionInterface;
 use Twig\TwigFilter;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class AbstractControllerTest extends TestCase

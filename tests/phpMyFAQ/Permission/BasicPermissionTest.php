@@ -7,8 +7,8 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\User\CurrentUser;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class BasicPermissionTest extends TestCase
@@ -152,7 +152,7 @@ class BasicPermissionTest extends TestCase
                 'for_groups' => 1,
                 'for_sections' => 1,
             ],
-            $this->basicPermission->checkRightData([])
+            $this->basicPermission->checkRightData([]),
         );
     }
 

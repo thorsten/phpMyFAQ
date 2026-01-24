@@ -4,9 +4,9 @@ namespace phpMyFAQ\Auth;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\AuthenticationSourceType;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class AuthSsoTest extends TestCase
@@ -32,7 +32,8 @@ class AuthSsoTest extends TestCase
         $password = 'password';
         $domain = 'example.com';
 
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('isLdapActive')
             ->willReturn(true);
 
@@ -50,7 +51,8 @@ class AuthSsoTest extends TestCase
         $password = 'password';
         $domain = 'example.com';
 
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('isLdapActive')
             ->willReturn(false);
 

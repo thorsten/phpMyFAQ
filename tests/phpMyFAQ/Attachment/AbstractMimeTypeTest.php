@@ -2,8 +2,8 @@
 
 namespace phpMyFAQ\Attachment;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class AbstractMimeTypeTest extends TestCase

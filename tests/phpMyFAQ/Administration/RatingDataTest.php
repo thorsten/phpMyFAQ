@@ -6,9 +6,9 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Link;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class RatingDataTest extends TestCase
@@ -23,9 +23,7 @@ class RatingDataTest extends TestCase
         $this->mockConfiguration = $this->createStub(Configuration::class);
 
         // Mock Database class
-        $this->mockDb = $this->getMockBuilder(DatabaseDriver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->mockDb = $this->getMockBuilder(DatabaseDriver::class)->disableOriginalConstructor()->getMock();
 
         // Stub the getDb method of Configuration to return the mockDb object
         $this->mockConfiguration->method('getDb')->willReturn($this->mockDb);
@@ -59,8 +57,7 @@ class RatingDataTest extends TestCase
         $mockResult->usr = 10;
 
         $this->mockDb->method('query')->willReturn(true);
-        $this->mockDb->method('fetchObject')
-            ->willReturn($mockResult, false);
+        $this->mockDb->method('fetchObject')->willReturn($mockResult, false);
 
         $result = $this->ratingData->getAll();
 
@@ -97,8 +94,7 @@ class RatingDataTest extends TestCase
         $mockResult2->usr = 5;
 
         $this->mockDb->method('query')->willReturn(true);
-        $this->mockDb->method('fetchObject')
-            ->willReturn($mockResult1, $mockResult2, false);
+        $this->mockDb->method('fetchObject')->willReturn($mockResult1, $mockResult2, false);
 
         $result = $this->ratingData->getAll();
 
@@ -128,8 +124,7 @@ class RatingDataTest extends TestCase
         $mockResult->usr = 10;
 
         $this->mockDb->method('query')->willReturn(true);
-        $this->mockDb->method('fetchObject')
-            ->willReturn($mockResult, false);
+        $this->mockDb->method('fetchObject')->willReturn($mockResult, false);
 
         $result = $this->ratingData->getAll();
 
@@ -153,8 +148,7 @@ class RatingDataTest extends TestCase
         $mockResult->usr = 10;
 
         $this->mockDb->method('query')->willReturn(true);
-        $this->mockDb->method('fetchObject')
-            ->willReturn($mockResult, false);
+        $this->mockDb->method('fetchObject')->willReturn($mockResult, false);
 
         $result = $this->ratingData->getAll();
 
@@ -177,8 +171,7 @@ class RatingDataTest extends TestCase
         $mockResult->usr = 7;
 
         $this->mockDb->method('query')->willReturn(true);
-        $this->mockDb->method('fetchObject')
-            ->willReturn($mockResult, false);
+        $this->mockDb->method('fetchObject')->willReturn($mockResult, false);
 
         $result = $this->ratingData->getAll();
 
@@ -193,9 +186,10 @@ class RatingDataTest extends TestCase
         $this->mockConfiguration->method('getDefaultUrl')->willReturn('http://example.com/');
 
         // Verify that query method is called with a SQL string containing expected elements
-        $this->mockDb->expects($this->once())
+        $this->mockDb
+            ->expects($this->once())
             ->method('query')
-            ->willReturnCallback(function($query) {
+            ->willReturnCallback(function ($query) {
                 // Verify the query contains expected SQL components
                 $this->assertStringContainsString('SELECT', $query);
                 $this->assertStringContainsString('faqvoting', $query);
@@ -227,8 +221,7 @@ class RatingDataTest extends TestCase
         $mockResult->usr = 12; // integer user count
 
         $this->mockDb->method('query')->willReturn(true);
-        $this->mockDb->method('fetchObject')
-            ->willReturn($mockResult, false);
+        $this->mockDb->method('fetchObject')->willReturn($mockResult, false);
 
         $result = $this->ratingData->getAll();
 

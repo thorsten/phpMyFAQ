@@ -4,10 +4,10 @@ namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class SessionTest extends TestCase
@@ -98,7 +98,8 @@ class SessionTest extends TestCase
         $first = 1609459200;
         $last = 1609545600;
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('DELETE FROM'))
             ->willReturn(true);
@@ -110,7 +111,8 @@ class SessionTest extends TestCase
 
     public function testDeleteAllSessions(): void
     {
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('DELETE FROM'))
             ->willReturn(true);
@@ -140,7 +142,7 @@ class SessionTest extends TestCase
         for ($date = $startDate; $date <= $endDate; $date += 86400) {
             $visit = new stdClass();
             $visit->date = date(format: 'Y-m-d', timestamp: $date);
-            $visit->number = ($date == $startDate + 86400) ? 1 : 0;
+            $visit->number = $date == ($startDate + 86400) ? 1 : 0;
             $expectedVisits[] = $visit;
         }
 

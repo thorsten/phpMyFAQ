@@ -3,9 +3,9 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class LinkTest
@@ -90,30 +90,12 @@ class LinkTest extends TestCase
     {
         $this->link = new Link('https://example.com/my-test-faq/', $this->configuration);
 
-        $this->assertEquals(
-            'hd-ready',
-            $this->link->getSEOTitle('HD Ready')
-        );
-        $this->assertEquals(
-            'hd-ready',
-            $this->link->getSEOTitle('HD Ready                     ')
-        );
-        $this->assertEquals(
-            'hd_ready',
-            $this->link->getSEOTitle('HD-Ready')
-        );
-        $this->assertEquals(
-            'hd-ready',
-            $this->link->getSEOTitle("HD\r\nReady")
-        );
-        $this->assertEquals(
-            'hd-ready',
-            $this->link->getSEOTitle('{HD + Ready}')
-        );
-        $this->assertEquals(
-            'hd-raedy',
-            $this->link->getSEOTitle('HD Rädy')
-        );
+        $this->assertEquals('hd-ready', $this->link->getSEOTitle('HD Ready'));
+        $this->assertEquals('hd-ready', $this->link->getSEOTitle('HD Ready                     '));
+        $this->assertEquals('hd_ready', $this->link->getSEOTitle('HD-Ready'));
+        $this->assertEquals('hd-ready', $this->link->getSEOTitle("HD\r\nReady"));
+        $this->assertEquals('hd-ready', $this->link->getSEOTitle('{HD + Ready}'));
+        $this->assertEquals('hd-raedy', $this->link->getSEOTitle('HD Rädy'));
     }
 
     /**
@@ -127,10 +109,7 @@ class LinkTest extends TestCase
         $this->link = new Link('https://example.com/my-test-faq/?foo=bar', $this->configuration);
         $this->assertEquals(array('foo' => 'bar'), $method->invokeArgs($this->link, array()));
 
-        $this->link = new Link(
-            'https://example.com/my-test-faq/?foo=bar&amp;action=noaction',
-            $this->configuration
-        );
+        $this->link = new Link('https://example.com/my-test-faq/?foo=bar&amp;action=noaction', $this->configuration);
         $this->assertEquals(array('foo' => 'bar', 'action' => 'noaction'), $method->invokeArgs($this->link, array()));
 
         $this->link = new Link('https://example.com/my-test-faq/?foo=bar&action=noaction', $this->configuration);
@@ -210,29 +189,18 @@ class LinkTest extends TestCase
 
         $this->link = new Link($url, $this->configuration);
         $this->link->class = 'pmf-foo';
-        $this->assertEquals(
-            sprintf(
-                '<a class="pmf-foo" href="%s">%s</a>',
-                $url,
-                $url
-            ),
-            $this->link->toHtmlAnchor()
-        );
+        $this->assertEquals(sprintf('<a class="pmf-foo" href="%s">%s</a>', $url, $url), $this->link->toHtmlAnchor());
 
         $this->link->id = 'pmf-id';
         $this->assertEquals(
-            sprintf(
-                '<a class="pmf-foo" id="pmf-id" href="%s">%s</a>',
-                $url,
-                $url
-            ),
-            $this->link->toHtmlAnchor()
+            sprintf('<a class="pmf-foo" id="pmf-id" href="%s">%s</a>', $url, $url),
+            $this->link->toHtmlAnchor(),
         );
 
         $this->link->text = 'Foo FAQ';
         $this->assertEquals(
             sprintf('<a class="pmf-foo" id="pmf-id" href="%s">Foo FAQ</a>', $url),
-            $this->link->toHtmlAnchor()
+            $this->link->toHtmlAnchor(),
         );
     }
 
@@ -258,32 +226,20 @@ class LinkTest extends TestCase
     public function testToStringWithEnabledRewriteRules(): void
     {
         $this->link = new Link('http://example.com/my-test-faq/', $this->configuration);
-        $this->assertEquals(
-            'http://example.com/my-test-faq/',
-            $this->link->toString()
-        );
+        $this->assertEquals('http://example.com/my-test-faq/', $this->link->toString());
 
         $this->link = new Link('http://example.com/my-test-faq/index.php?action=add', $this->configuration);
-        $this->assertEquals(
-            'http://example.com/my-test-faq/add-faq.html',
-            $this->link->toString()
-        );
+        $this->assertEquals('http://example.com/my-test-faq/add-faq.html', $this->link->toString());
 
         $this->link = new Link('http://example.com/my-test-faq/index.php?action=bookmarks', $this->configuration);
-        $this->assertEquals(
-            'http://example.com/my-test-faq/user/bookmarks',
-            $this->link->toString()
-        );
+        $this->assertEquals('http://example.com/my-test-faq/user/bookmarks', $this->link->toString());
 
         $this->link = new Link(
             'http://example.com/my-test-faq/index.php?action=faq&cat=1&id=36&artlang=de',
-            $this->configuration
+            $this->configuration,
         );
         $this->link->setTitle('HD Ready');
-        $this->assertEquals(
-            'http://example.com/my-test-faq/content/1/36/de/hd-ready.html',
-            $this->link->toString()
-        );
+        $this->assertEquals('http://example.com/my-test-faq/content/1/36/de/hd-ready.html', $this->link->toString());
     }
 
     /**
@@ -305,7 +261,7 @@ class LinkTest extends TestCase
         $this->link->setTitle('Foobar');
         $this->assertEquals(
             'https://example.com/my-test-faq/content/1/36/de/foobar.html',
-            $this->link->toStringWithoutSession()
+            $this->link->toStringWithoutSession(),
         );
     }
 }

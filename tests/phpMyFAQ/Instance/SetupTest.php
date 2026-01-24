@@ -5,9 +5,9 @@ namespace phpMyFAQ\Instance;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\User;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class SetupTest extends TestCase
@@ -38,7 +38,7 @@ class SetupTest extends TestCase
 
         $this->assertSame($rootDir, $property->getValue($this->setup));
     }
-    
+
     public function testCreateDatabaseFile(): void
     {
         $data = [

@@ -6,10 +6,10 @@ namespace phpMyFAQ;
 
 use FilesystemIterator;
 use phpMyFAQ\Core\Exception;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class TranslationTest extends TestCase

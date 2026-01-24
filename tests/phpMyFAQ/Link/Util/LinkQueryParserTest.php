@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Link\Util;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class LinkQueryParserTest extends TestCase
@@ -34,4 +34,3 @@ class LinkQueryParserTest extends TestCase
         $this->assertSame([], $params);
     }
 }
-

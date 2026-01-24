@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Category;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use phpMyFAQ\Category\Tree\TreeBuilder;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class CategoryTreeFacadeTest extends TestCase
@@ -32,7 +32,8 @@ class CategoryTreeFacadeTest extends TestCase
             ['id' => 2, 'indent' => 1],
         ];
 
-        $this->treeBuilder->expects($this->once())
+        $this->treeBuilder
+            ->expects($this->once())
             ->method('buildLinearTree')
             ->with($categories, 0, 0)
             ->willReturn($expected);
@@ -46,7 +47,8 @@ class CategoryTreeFacadeTest extends TestCase
         $categories = [1 => ['id' => 1]];
         $expected = [['id' => 1, 'indent' => 2]];
 
-        $this->treeBuilder->expects($this->once())
+        $this->treeBuilder
+            ->expects($this->once())
             ->method('buildLinearTree')
             ->with($categories, 5, 2)
             ->willReturn($expected);
@@ -63,7 +65,8 @@ class CategoryTreeFacadeTest extends TestCase
         ];
         $expected = [1 => [2 => []]];
 
-        $this->treeBuilder->expects($this->once())
+        $this->treeBuilder
+            ->expects($this->once())
             ->method('buildAdminCategoryTree')
             ->with($categories, 0)
             ->willReturn($expected);
@@ -77,7 +80,8 @@ class CategoryTreeFacadeTest extends TestCase
         $categories = [2 => ['id' => 2, 'parent_id' => 1]];
         $expected = [2 => []];
 
-        $this->treeBuilder->expects($this->once())
+        $this->treeBuilder
+            ->expects($this->once())
             ->method('buildAdminCategoryTree')
             ->with($categories, 1)
             ->willReturn($expected);
@@ -93,7 +97,8 @@ class CategoryTreeFacadeTest extends TestCase
         ];
         $expected = [1, 2];
 
-        $this->treeBuilder->expects($this->once())
+        $this->treeBuilder
+            ->expects($this->once())
             ->method('getChildren')
             ->with($childrenMap, 0)
             ->willReturn($expected);
@@ -110,7 +115,8 @@ class CategoryTreeFacadeTest extends TestCase
         ];
         $expected = [1, 2, 3];
 
-        $this->treeBuilder->expects($this->once())
+        $this->treeBuilder
+            ->expects($this->once())
             ->method('getChildNodes')
             ->with($childrenMap, 0)
             ->willReturn($expected);
@@ -127,7 +133,8 @@ class CategoryTreeFacadeTest extends TestCase
             3 => ['id' => 3, 'parent_id' => 2],
         ];
 
-        $this->treeBuilder->expects($this->once())
+        $this->treeBuilder
+            ->expects($this->once())
             ->method('computeLevel')
             ->with($categoryNames, 3)
             ->willReturn(2);
@@ -145,7 +152,8 @@ class CategoryTreeFacadeTest extends TestCase
         ];
         $expected = [1, 2, 3];
 
-        $this->treeBuilder->expects($this->once())
+        $this->treeBuilder
+            ->expects($this->once())
             ->method('getNodes')
             ->with($categoryNames, 3)
             ->willReturn($expected);
@@ -165,4 +173,3 @@ class CategoryTreeFacadeTest extends TestCase
         $this->assertIsInt($result);
     }
 }
-

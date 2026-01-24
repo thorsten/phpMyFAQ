@@ -5,6 +5,7 @@ namespace phpMyFAQ\Controller\Api;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\File;
 use phpMyFAQ\Configuration;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -13,7 +14,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Test-specific subclass of AttachmentController that allows us to control the behavior
@@ -26,6 +26,7 @@ class TestableAttachmentController extends AttachmentController
     public function __construct(mixed $returnValueOrException)
     {
         $this->returnValueOrException = $returnValueOrException;
+
         // Don't call parent constructor to avoid the API check
     }
 
@@ -81,19 +82,16 @@ class AttachmentControllerTest extends TestCase
     public function testConstructorWithApiEnabled(): void
     {
         $configuration = $this->createStub(Configuration::class);
-        $configuration->method('get')
-            ->with('api.enableAccess')
-            ->willReturn(true);
+        $configuration->method('get')->with('api.enableAccess')->willReturn(true);
 
-        $attachmentController = $this->getMockBuilder(AttachmentController::class)
+        $attachmentController = $this
+            ->getMockBuilder(AttachmentController::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['isApiEnabled'])
             ->getMock();
 
         // Expect isApiEnabled to be called exactly once during constructor
-        $attachmentController->expects($this->once())
-            ->method('isApiEnabled')
-            ->willReturn(true);
+        $attachmentController->expects($this->once())->method('isApiEnabled')->willReturn(true);
 
         $reflection = new ReflectionClass(AttachmentController::class);
         $constructor = $reflection->getConstructor();
@@ -109,19 +107,16 @@ class AttachmentControllerTest extends TestCase
     public function testConstructorWithApiDisabled(): void
     {
         $configuration = $this->createStub(Configuration::class);
-        $configuration->method('get')
-            ->with('api.enableAccess')
-            ->willReturn(false);
+        $configuration->method('get')->with('api.enableAccess')->willReturn(false);
 
-        $attachmentController = $this->getMockBuilder(AttachmentController::class)
+        $attachmentController = $this
+            ->getMockBuilder(AttachmentController::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['isApiEnabled'])
             ->getMock();
 
         // Expect isApiEnabled to be called exactly once during constructor
-        $attachmentController->expects($this->once())
-            ->method('isApiEnabled')
-            ->willReturn(false);
+        $attachmentController->expects($this->once())->method('isApiEnabled')->willReturn(false);
 
         $this->expectException(UnauthorizedHttpException::class);
 
@@ -208,8 +203,7 @@ class AttachmentControllerTest extends TestCase
         $attachmentController = new TestableAttachmentController($returnValueOrException);
 
         $configuration = $this->createStub(Configuration::class);
-        $configuration->method('getDefaultUrl')
-            ->willReturn('https://www.example.org/');
+        $configuration->method('getDefaultUrl')->willReturn('https://www.example.org/');
 
         $reflection = new ReflectionClass(AttachmentController::class);
 

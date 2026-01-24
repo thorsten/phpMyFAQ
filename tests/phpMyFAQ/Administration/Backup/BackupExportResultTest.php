@@ -50,9 +50,10 @@ class BackupExportResultTest extends TestCase
     public function testConstructorWithMultilineContent(): void
     {
         $fileName = 'phpmyfaq-data.2025-12-22-10-30-45.sql';
-        $content = "-- pmf4.0: faqconfig\n" .
-                   "-- DO NOT REMOVE THE FIRST LINE!\n" .
-                   "INSERT INTO faqconfig VALUES (1, 'test');";
+        $content =
+            "-- pmf4.0: faqconfig\n"
+            . "-- DO NOT REMOVE THE FIRST LINE!\n"
+            . "INSERT INTO faqconfig VALUES (1, 'test');";
 
         $result = new BackupExportResult($fileName, $content);
 
@@ -73,15 +74,9 @@ class BackupExportResultTest extends TestCase
 
     public function testConstructorWithDifferentBackupTypes(): void
     {
-        $dataBackup = new BackupExportResult(
-            'phpmyfaq-data.2025-12-22-10-30-45.sql',
-            'data content'
-        );
+        $dataBackup = new BackupExportResult('phpmyfaq-data.2025-12-22-10-30-45.sql', 'data content');
 
-        $logsBackup = new BackupExportResult(
-            'phpmyfaq-logs.2025-12-22-10-30-46.sql',
-            'logs content'
-        );
+        $logsBackup = new BackupExportResult('phpmyfaq-logs.2025-12-22-10-30-46.sql', 'logs content');
 
         $this->assertStringContainsString('data', $dataBackup->fileName);
         $this->assertStringContainsString('logs', $logsBackup->fileName);

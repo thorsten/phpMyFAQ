@@ -2,10 +2,10 @@
 
 namespace phpMyFAQ\Twig\Extensions;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Twig\Extension\AbstractExtension;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Test class for FormatDateTwigExtension
@@ -91,7 +91,7 @@ class FormatDateTwigExtensionTest extends TestCase
             'use phpMyFAQ\Configuration;',
             'use phpMyFAQ\Date;',
             'use Twig\Attribute\AsTwigFilter;',
-            'use Twig\Extension\AbstractExtension;'
+            'use Twig\Extension\AbstractExtension;',
         ];
 
         foreach ($expectedImports as $import) {

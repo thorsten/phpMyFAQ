@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Link\Strategy;
 
-use InvalidArgumentException;use phpMyFAQ\Link;
+use InvalidArgumentException;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Strings;
 use phpMyFAQ\Database\Sqlite3;
-use PHPUnit\Framework\TestCase;
+use phpMyFAQ\Link;
+use phpMyFAQ\Strings;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class FaqStrategyTest extends TestCase

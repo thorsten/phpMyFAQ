@@ -2,8 +2,8 @@
 
 namespace phpMyFAQ\Filesystem;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class FilesystemTest extends TestCase
@@ -47,10 +47,7 @@ class FilesystemTest extends TestCase
     public function testCopy(): void
     {
         $this->filesystem->createDirectory(PMF_CONTENT_DIR . '/copy-test');
-        $actual = $this->filesystem->copy(
-            PMF_TEST_DIR . '/path/foo.bar',
-            PMF_CONTENT_DIR . '/copy-test/foo.bar'
-        );
+        $actual = $this->filesystem->copy(PMF_TEST_DIR . '/path/foo.bar', PMF_CONTENT_DIR . '/copy-test/foo.bar');
         $this->assertTrue($actual);
 
         $actual = $this->filesystem->deleteDirectory(PMF_CONTENT_DIR . '/copy-test');
@@ -68,7 +65,7 @@ class FilesystemTest extends TestCase
         $this->filesystem->createDirectory(PMF_CONTENT_DIR . '/move-directory-test');
         $actual = $this->filesystem->moveDirectory(
             PMF_CONTENT_DIR . '/move-directory-test',
-            PMF_CONTENT_DIR . '/move-directory-test-moved'
+            PMF_CONTENT_DIR . '/move-directory-test-moved',
         );
         $this->assertTrue($actual);
         $actual = $this->filesystem->deleteDirectory(PMF_CONTENT_DIR . '/move-directory-test-moved');
@@ -91,9 +88,6 @@ class FilesystemTest extends TestCase
 
     public function testGetRootPath(): void
     {
-        $this->assertEquals(
-            PMF_TEST_DIR,
-            $this->filesystem->getRootPath()
-        );
+        $this->assertEquals(PMF_TEST_DIR, $this->filesystem->getRootPath());
     }
 }

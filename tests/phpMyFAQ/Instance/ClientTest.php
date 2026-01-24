@@ -5,8 +5,8 @@ namespace phpMyFAQ\Instance;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Filesystem\Filesystem;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ClientTest

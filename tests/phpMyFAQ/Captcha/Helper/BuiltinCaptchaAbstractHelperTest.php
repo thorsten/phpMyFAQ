@@ -16,10 +16,10 @@
 
 namespace phpMyFAQ\Captcha\Helper;
 
-use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Captcha\BuiltinCaptcha;
 use phpMyFAQ\Configuration;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class BuiltinCaptchaAbstractHelperTest
@@ -60,16 +60,9 @@ class BuiltinCaptchaAbstractHelperTest extends TestCase
 
         // Mock captcha behavior
         $this->captcha->captchaLength = 5;
-        $this->captcha
-            ->method('renderCaptchaImage')
-            ->willReturn('<img src="captcha.png" alt="Captcha">');
+        $this->captcha->method('renderCaptchaImage')->willReturn('<img src="captcha.png" alt="Captcha">');
 
-        $result = $this->helper->renderCaptcha(
-            $this->captcha,
-            'refresh-captcha',
-            'Captcha Label',
-            false
-        );
+        $result = $this->helper->renderCaptcha($this->captcha, 'refresh-captcha', 'Captcha Label', false);
 
         // Assertions
         $this->assertStringContainsString('Captcha Label', $result);
@@ -94,12 +87,7 @@ class BuiltinCaptchaAbstractHelperTest extends TestCase
             ->with('spam.enableCaptchaCode')
             ->willReturn(false);
 
-        $result = $this->helper->renderCaptcha(
-            $this->captcha,
-            'refresh-captcha',
-            'Captcha Label',
-            false
-        );
+        $result = $this->helper->renderCaptcha($this->captcha, 'refresh-captcha', 'Captcha Label', false);
 
         $this->assertEmpty($result);
     }
@@ -114,12 +102,7 @@ class BuiltinCaptchaAbstractHelperTest extends TestCase
             ->with('spam.enableCaptchaCode')
             ->willReturn(true);
 
-        $result = $this->helper->renderCaptcha(
-            $this->captcha,
-            'refresh-captcha',
-            'Captcha Label',
-            true // User is authenticated
-        );
+        $result = $this->helper->renderCaptcha($this->captcha, 'refresh-captcha', 'Captcha Label', true); // User is authenticated
 
         $this->assertEmpty($result);
     }
@@ -135,9 +118,7 @@ class BuiltinCaptchaAbstractHelperTest extends TestCase
             ->willReturn(true);
 
         $this->captcha->captchaLength = 6;
-        $this->captcha
-            ->method('renderCaptchaImage')
-            ->willReturn('');
+        $this->captcha->method('renderCaptchaImage')->willReturn('');
 
         $result = $this->helper->renderCaptcha($this->captcha);
 
@@ -157,16 +138,9 @@ class BuiltinCaptchaAbstractHelperTest extends TestCase
             ->willReturn(true);
 
         $this->captcha->captchaLength = 4;
-        $this->captcha
-            ->method('renderCaptchaImage')
-            ->willReturn('<img src="test.png">');
+        $this->captcha->method('renderCaptchaImage')->willReturn('<img src="test.png">');
 
-        $result = $this->helper->renderCaptcha(
-            $this->captcha,
-            'test-action',
-            'Test Label',
-            false
-        );
+        $result = $this->helper->renderCaptcha($this->captcha, 'test-action', 'Test Label', false);
 
         // Test Bootstrap grid classes
         $this->assertStringContainsString('col-md-3 col-sm-12 col-form-label', $result);
@@ -196,15 +170,13 @@ class BuiltinCaptchaAbstractHelperTest extends TestCase
             ->willReturn(true);
 
         $this->captcha->captchaLength = 5;
-        $this->captcha
-            ->method('renderCaptchaImage')
-            ->willReturn('<img src="test.png">');
+        $this->captcha->method('renderCaptchaImage')->willReturn('<img src="test.png">');
 
         $result = $this->helper->renderCaptcha(
             $this->captcha,
             'test-action&special=true',
             'Label with <script>alert("test")</script>',
-            false
+            false,
         );
 
         $this->assertStringContainsString('data-action="test-action&special=true"', $result);

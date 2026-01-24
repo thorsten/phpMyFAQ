@@ -16,8 +16,8 @@
 
 namespace phpMyFAQ\Core;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ExceptionTest

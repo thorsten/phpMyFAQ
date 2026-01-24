@@ -3,8 +3,8 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Database\DatabaseDriver;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class SystemTest extends TestCase
@@ -13,15 +13,18 @@ class SystemTest extends TestCase
     {
         $this->assertEquals(
             sprintf('powered with ❤️ and ☕️ by phpMyFAQ %s', System::getVersion()),
-            System::getPoweredByPlainString()
+            System::getPoweredByPlainString(),
         );
     }
 
     public function testGetPoweredByString(): void
     {
         $this->assertEquals(
-            sprintf('powered with ❤️ and ☕️ by <a class="link-light text-decoration-none" target="_blank" href="https://www.phpmyfaq.de/">phpMyFAQ</a> %s', System::getVersion()),
-            System::getPoweredByString()
+            sprintf(
+                'powered with ❤️ and ☕️ by <a class="link-light text-decoration-none" target="_blank" href="https://www.phpmyfaq.de/">phpMyFAQ</a> %s',
+                System::getVersion(),
+            ),
+            System::getPoweredByString(),
         );
     }
 
@@ -34,8 +37,7 @@ class SystemTest extends TestCase
     public function testSetDatabase(): void
     {
         // Create a mock DatabaseDriver object
-        $database = $this->getMockBuilder(DatabaseDriver::class)
-            ->getMock();
+        $database = $this->getMockBuilder(DatabaseDriver::class)->getMock();
 
         // Create a System object and set the mock database driver
         $system = new System();
@@ -79,7 +81,7 @@ class SystemTest extends TestCase
 
         $this->assertEquals($expectedUrl, $actualUrl);
     }
-    
+
     public function testGetAvailableTemplates()
     {
         $system = new System();
