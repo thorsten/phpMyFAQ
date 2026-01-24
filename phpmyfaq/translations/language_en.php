@@ -1628,6 +1628,10 @@ $PMF_LANG['msgConfirmAction'] = "Confirm Action";
 $PMF_LANG["msgCommentEditorHint"] = "You can use the text editor to format your comment with bold, italic, lists, and links.";
 $LANG_CONF['main.enableCommentEditor'] = ["checkbox", "Enable WYSIWYG editor for comments (logged-in users only)"];
 $PMF_LANG["msgToggleSidebar"] = "Toggle sidebar";
+$PMF_LANG['msgFleschReadingEase'] = 'Readability Score';
+$PMF_LANG['msgFleschTooltip'] = 'The Flesch Reading Ease score measures how easy your text is to read. Higher scores mean easier reading. Aim for 60-70 for general audiences.';
+$PMF_LANG['msgFleschNotCalculated'] = 'Start typing to calculate';
+$PMF_LANG['msgFleschScaleHint'] = '0-29: Very Difficult | 30-49: Difficult | 50-59: Fairly Difficult | 60-69: Standard | 70-79: Fairly Easy | 80-89: Easy | 90-100: Very Easy';
 
 // added v4.2.0-alpha - 2026-01-23 - Chat feature
 $PMF_LANG['msgChat'] = 'Messages';
