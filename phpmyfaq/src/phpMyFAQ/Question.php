@@ -71,10 +71,11 @@ readonly class Question
      *
      * @return QuestionEntity[]
      */
-    public function getAll(bool $showAll = true): array
+    public function getAll(bool $showAll = true, ?string $language = null): array
     {
         $questions = [];
-        $rows = $this->questionRepository->getAll($this->configuration->getLanguage()->getLanguage(), $showAll);
+        $targetLang = $language === null ? $this->configuration->getLanguage()->getLanguage() : $language;
+        $rows = $this->questionRepository->getAll($targetLang, $showAll);
 
         foreach ($rows as $row) {
             $question = new QuestionEntity();

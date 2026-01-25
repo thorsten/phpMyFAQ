@@ -43,6 +43,34 @@ final class OpenQuestionsController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::QUESTION_DELETE);
 
         $question = $this->container->get(id: 'phpmyfaq.question');
+        $currentLang = $this->configuration->getLanguage()->getLanguage();
+        $session = $this->container->get(id: 'session');
+        $questions = $question->getAll();
+        $allQuestions = $question->getAll(true, '');
+        $otherLangsData = [];
+        $otherCount = 0;
+
+        foreach ($allQuestions as $q) {
+            $langCode = $q->getLanguage();
+
+            if ($langCode !== $currentLang) {
+                $otherCount++;
+
+                if (class_exists('\Locale')) {
+                    $longName = \Locale::getDisplayLanguage($langCode, $currentLang);
+                } else {
+                    $longName = $langCode;
+                }
+
+                if (!isset($otherLangsData[$langCode])) {
+                    $otherLangsData[$langCode] = [
+                        'label' => $longName,
+                        'count' => 0,
+                    ];
+                }
+                $otherLangsData[$langCode]['count']++;
+            }
+        }
 
         $this->addExtension(new IntlExtension());
         $this->addExtension(new AttributeExtension(CategoryNameTwigExtension::class));
@@ -51,10 +79,12 @@ final class OpenQuestionsController extends AbstractAdministrationController
             ...$this->getFooter(),
             'msgOpenQuestions' => Translation::get(key: 'msgOpenQuestions'),
             'csrfTokenDeleteQuestion' => Token::getInstance($this->session)->getTokenString('delete-questions'),
-            'currentLocale' => $this->configuration->getLanguage()->getLanguage(),
+            'currentLocale' => $currentLang,
             'msgQuestion' => Translation::get(key: 'msgQuestion'),
             'msgVisibility' => Translation::get(key: 'ad_entry_visibility'),
-            'questions' => $question->getAll(),
+            'questions' => $questions,
+            'otherCount' => $otherCount,
+            'otherLangsData' => $otherLangsData,
             'yes' => Translation::get(key: 'ad_gen_yes'),
             'no' => Translation::get(key: 'ad_gen_no'),
             'enableCloseQuestion' => $this->configuration->get(item: 'records.enableCloseQuestion'),
@@ -64,6 +94,10 @@ final class OpenQuestionsController extends AbstractAdministrationController
                 'toggle-question-visibility',
             ),
             'msgDeleteAllOpenQuestions' => Translation::get(key: 'msgDelete'),
+            'msgAttention' => Translation::get(key: 'msgAttention'),
+            'msgOtherQuestionsDesc' => Translation::get(key: 'msgOtherQuestionsDesc'),
+            'msgChangeLanguageHint' => Translation::get(key: 'msgChangeLanguageHint'),
+            'msgOpenQuestion' => Translation::get(key: 'msgOpenQuestion'),
         ]);
     }
 }

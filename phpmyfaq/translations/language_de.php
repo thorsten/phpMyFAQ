@@ -1620,7 +1620,7 @@ $PMF_LANG['msgTranslationSuccess'] = 'Übersetzung erfolgreich abgeschlossen';
 $PMF_LANG['msgTranslationError'] = 'Übersetzung fehlgeschlagen';
 $PMF_LANG['msgNoTranslationProvider'] = 'Kein Übersetzungsdienst konfiguriert';
 
-// added v4.2.0-alpha - 2026-01-17 by d0ubIeU
+// added v4.2.0-alpha - 2026-01-17 by d0ubIeU - sticky FAQs admin page
 $PMF_LANG['msgStickyRemoved'] = 'Status "Wichtig" erfolgreich entfernt.';
 $PMF_LANG['msgConfirmUnstick'] = 'Möchten Sie diesen Beitrag wirklich aus der Liste der wichtigen FAQs entfernen?';
 $PMF_LANG['msgTooltipUnstick'] = 'Wichtig-Status entfernen';
@@ -1643,5 +1643,12 @@ $PMF_LANG['msgChatNewConversation'] = 'Neue Unterhaltung';
 $PMF_LANG['msgChatSearchUsers'] = 'Benutzer suchen...';
 $PMF_LANG['msgChatTypePlaceholder'] = 'Nachricht eingeben...';
 $PMF_LANG['msgChatSelectConversation'] = 'Wählen Sie eine Unterhaltung aus oder suchen Sie nach einem Benutzer, um zu chatten';
+
+// added v4.2.0-alpha - 2026-01-25 by d0ubIeU - open question admin page
+$PMF_LANG['msgAttention'] = 'Achtung!';
+$PMF_LANG['msgOtherQuestionsDesc'] = 'Es sind noch insgesamt %d offene Fragen in anderen Sprachen vorhanden:';
+$PMF_LANG['msgOtherQuestionDesc'] = 'Es ist noch eine offene Frage in anderen Sprachen vorhanden:';
+$PMF_LANG['msgChangeLanguageHint'] = 'Bitte wechseln Sie die Sprache in der Administration, um diese Fragen zu bearbeiten.';
+$PMF_LANG['msgOpenQuestion'] = 'Offene Frage';
 
 return $PMF_LANG;

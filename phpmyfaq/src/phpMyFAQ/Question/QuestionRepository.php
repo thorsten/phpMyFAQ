@@ -27,8 +27,7 @@ readonly class QuestionRepository
 {
     public function __construct(
         private Configuration $configuration,
-    ) {
-    }
+    ) {}
 
     /**
      * Adds a new question to the database.
@@ -125,20 +124,22 @@ readonly class QuestionRepository
     public function getAll(string $language, bool $showAll = true): array
     {
         $questions = [];
+        $langFilter = $language !== ''
+            ? sprintf("AND lang = '%s'", $this->configuration->getDb()->escape($language))
+            : '';
 
         $query = sprintf(
-            "
+            '
             SELECT
                 id, lang, username, email, category_id, question, created, answer_id, is_visible
             FROM
                 %sfaqquestions
             WHERE
-                lang = '%s'
-                %s
+                1 = 1 %s %s
             ORDER BY
-                created ASC",
+                created ASC',
             Database::getTablePrefix(),
-            $language,
+            $langFilter,
             $showAll === false ? " AND is_visible = 'Y'" : '',
         );
 

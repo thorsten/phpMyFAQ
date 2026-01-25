@@ -78,4 +78,44 @@
       </form>
     </div>
   </div>
+  {% if otherCount > 0 %}
+    <div class="row mt-4">
+      <div class="col-lg-12">
+        <div class="alert alert-warning shadow-sm" role="alert">
+            <h4 class="alert-heading">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                {{ msgAttention }}
+            </h4>
+            <p>
+                {% if otherCount == 1 %}
+                    {{ msgOtherQuestionDesc }}
+                {% else %}
+                    {{ msgOtherQuestionsDesc | format(otherCount) }}
+                {% endif %}
+            </p>
+            <ul class="list-group list-group-flush mb-3 rounded border bg-transparent">
+              {% for code, data in otherLangsData %}
+                  <li class="d-flex justify-content-between align-items-center p-2 border-bottom" style="cursor: default;"> 
+                      <div class="d-flex align-items-center">
+                          <strong class="text-uppercase" style="width: 25px; display: inline-block;">
+                              {{ code }}
+                          </strong>
+                          <span class="mx-2 text-muted">-</span>
+                          <span class="text-uppercase">
+                              {{ data.label }}
+                          </span>
+                      </div>                      
+                      <span class="badge bg-primary rounded-pill">
+                          {{ data.count }} {{ data.count == 1 ? msgOpenQuestion : msgOpenQuestions }}
+                      </span>
+                  </li>
+              {% endfor %}
+            </ul>
+            <p class="mb-0 small">
+                {{ msgChangeLanguageHint }}
+            </p>
+        </div>
+      </div>
+    </div>
+  {% endif %}
 {% endblock %}
