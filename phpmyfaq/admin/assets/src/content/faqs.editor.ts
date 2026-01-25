@@ -183,16 +183,37 @@ export const handleFleschReadingEase = (): void => {
 
   /**
    * Gets the current FAQ language from the form
+   * Maps language codes to supported Flesch formula languages
    */
   const getLanguage = (): SupportedLanguage => {
     const langSelect = document.getElementById('lang') as HTMLSelectElement | HTMLInputElement | null;
-    if (langSelect) {
-      const lang = langSelect.value.toLowerCase();
-      if (lang === 'de' || lang.startsWith('de-') || lang.startsWith('de_')) {
-        return 'de';
-      }
+    if (!langSelect) {
+      return 'en';
     }
-    return 'en';
+
+    const lang = langSelect.value.toLowerCase().split(/[-_]/)[0];
+
+    const languageMap: Record<string, SupportedLanguage> = {
+      de: 'de',
+      en: 'en',
+      es: 'es',
+      fr: 'fr',
+      it: 'it',
+      nl: 'nl',
+      pt: 'pt',
+      pl: 'pl',
+      ru: 'ru',
+      cs: 'cs',
+      tr: 'tr',
+      sv: 'sv',
+      da: 'da',
+      no: 'no',
+      nb: 'no', // Norwegian Bokmål
+      nn: 'no', // Norwegian Nynorsk
+      fi: 'fi',
+    };
+
+    return languageMap[lang] || 'en';
   };
 
   /**
