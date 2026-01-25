@@ -27,7 +27,8 @@ readonly class QuestionRepository
 {
     public function __construct(
         private Configuration $configuration,
-    ) {}
+    ) {
+    }
 
     /**
      * Adds a new question to the database.
