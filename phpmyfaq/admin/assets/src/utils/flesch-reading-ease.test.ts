@@ -18,6 +18,12 @@ import {
   stripHtml,
   countSyllablesEnglish,
   countSyllablesGerman,
+  countSyllablesRomance,
+  countSyllablesDutch,
+  countSyllablesSlavic,
+  countSyllablesNordic,
+  countSyllablesTurkish,
+  getSyllableCounter,
   countSentences,
   getWords,
   calculateFleschScore,
@@ -61,7 +67,6 @@ describe('Flesch Reading Ease', () => {
     });
 
     it('should count multi-syllable words', () => {
-      // Note: syllable counting is an approximation
       expect(countSyllablesEnglish('beautiful')).toBeGreaterThanOrEqual(3);
       expect(countSyllablesEnglish('computer')).toBeGreaterThanOrEqual(2);
     });
@@ -92,6 +97,102 @@ describe('Flesch Reading Ease', () => {
     it('should return 1 for very short words', () => {
       expect(countSyllablesGerman('am')).toBe(1);
       expect(countSyllablesGerman('im')).toBe(1);
+    });
+  });
+
+  describe('countSyllablesRomance', () => {
+    it('should count Spanish syllables', () => {
+      expect(countSyllablesRomance('hola')).toBe(2);
+      expect(countSyllablesRomance('gato')).toBe(2);
+      expect(countSyllablesRomance('día')).toBeGreaterThanOrEqual(1); // Approximation
+    });
+
+    it('should count French syllables', () => {
+      expect(countSyllablesRomance('bonjour')).toBeGreaterThanOrEqual(2);
+      expect(countSyllablesRomance('château')).toBeGreaterThanOrEqual(2); // Approximation
+    });
+
+    it('should count Italian syllables', () => {
+      expect(countSyllablesRomance('ciao')).toBeGreaterThanOrEqual(1);
+      expect(countSyllablesRomance('bello')).toBe(2);
+    });
+
+    it('should count Portuguese syllables', () => {
+      expect(countSyllablesRomance('olá')).toBeGreaterThanOrEqual(1); // Short word
+      expect(countSyllablesRomance('coração')).toBeGreaterThanOrEqual(2);
+    });
+  });
+
+  describe('countSyllablesDutch', () => {
+    it('should count Dutch syllables', () => {
+      expect(countSyllablesDutch('hallo')).toBe(2);
+      expect(countSyllablesDutch('goedemorgen')).toBeGreaterThanOrEqual(3);
+    });
+
+    it('should return 1 for short words', () => {
+      expect(countSyllablesDutch('de')).toBe(1);
+      expect(countSyllablesDutch('het')).toBe(1);
+    });
+  });
+
+  describe('countSyllablesSlavic', () => {
+    it('should count Polish syllables', () => {
+      expect(countSyllablesSlavic('dzień')).toBeGreaterThanOrEqual(1);
+      expect(countSyllablesSlavic('cześć')).toBeGreaterThanOrEqual(1);
+      expect(countSyllablesSlavic('polska')).toBeGreaterThanOrEqual(2);
+    });
+
+    it('should count Russian syllables (Cyrillic)', () => {
+      expect(countSyllablesSlavic('привет')).toBeGreaterThanOrEqual(2);
+      expect(countSyllablesSlavic('да')).toBe(1);
+    });
+  });
+
+  describe('countSyllablesNordic', () => {
+    it('should count Swedish syllables', () => {
+      expect(countSyllablesNordic('hej')).toBe(1);
+      expect(countSyllablesNordic('välkommen')).toBeGreaterThanOrEqual(2);
+    });
+
+    it('should count Norwegian/Danish syllables', () => {
+      expect(countSyllablesNordic('hei')).toBe(1);
+      expect(countSyllablesNordic('takk')).toBe(1);
+    });
+
+    it('should handle Nordic special characters', () => {
+      expect(countSyllablesNordic('öl')).toBe(1);
+      expect(countSyllablesNordic('fågel')).toBe(2);
+    });
+  });
+
+  describe('countSyllablesTurkish', () => {
+    it('should count Turkish syllables', () => {
+      expect(countSyllablesTurkish('merhaba')).toBeGreaterThanOrEqual(2);
+      expect(countSyllablesTurkish('güzel')).toBe(2);
+    });
+
+    it('should handle Turkish special characters', () => {
+      expect(countSyllablesTurkish('öğrenci')).toBeGreaterThanOrEqual(2);
+    });
+  });
+
+  describe('getSyllableCounter', () => {
+    it('should return correct counter for each language', () => {
+      expect(getSyllableCounter('en')).toBe(countSyllablesEnglish);
+      expect(getSyllableCounter('de')).toBe(countSyllablesGerman);
+      expect(getSyllableCounter('es')).toBe(countSyllablesRomance);
+      expect(getSyllableCounter('fr')).toBe(countSyllablesRomance);
+      expect(getSyllableCounter('it')).toBe(countSyllablesRomance);
+      expect(getSyllableCounter('pt')).toBe(countSyllablesRomance);
+      expect(getSyllableCounter('nl')).toBe(countSyllablesDutch);
+      expect(getSyllableCounter('pl')).toBe(countSyllablesSlavic);
+      expect(getSyllableCounter('ru')).toBe(countSyllablesSlavic);
+      expect(getSyllableCounter('cs')).toBe(countSyllablesSlavic);
+      expect(getSyllableCounter('sv')).toBe(countSyllablesNordic);
+      expect(getSyllableCounter('da')).toBe(countSyllablesNordic);
+      expect(getSyllableCounter('no')).toBe(countSyllablesNordic);
+      expect(getSyllableCounter('fi')).toBe(countSyllablesNordic);
+      expect(getSyllableCounter('tr')).toBe(countSyllablesTurkish);
     });
   });
 
@@ -131,6 +232,21 @@ describe('Flesch Reading Ease', () => {
       expect(words).toEqual(['Häuser', 'und', 'Übungen']);
     });
 
+    it('should handle French accents', () => {
+      const words = getWords('café résumé');
+      expect(words).toEqual(['café', 'résumé']);
+    });
+
+    it('should handle Spanish characters', () => {
+      const words = getWords('niño mañana');
+      expect(words).toEqual(['niño', 'mañana']);
+    });
+
+    it('should handle Russian Cyrillic', () => {
+      const words = getWords('привет мир');
+      expect(words).toEqual(['привет', 'мир']);
+    });
+
     it('should return empty array for empty text', () => {
       expect(getWords('')).toEqual([]);
     });
@@ -164,8 +280,63 @@ describe('Flesch Reading Ease', () => {
       expect(score).toBeLessThanOrEqual(100);
     });
 
+    it('should calculate Spanish score', () => {
+      const text = 'El gato se sienta en la alfombra. Era un buen día.';
+      const score = calculateFleschScore(text, 'es');
+      expect(score).toBeGreaterThan(0);
+      expect(score).toBeLessThanOrEqual(100);
+    });
+
+    it('should calculate French score', () => {
+      const text = 'Le chat est assis sur le tapis. Il fait beau.';
+      const score = calculateFleschScore(text, 'fr');
+      expect(score).toBeGreaterThan(0);
+      expect(score).toBeLessThanOrEqual(100);
+    });
+
+    it('should calculate Italian score', () => {
+      const text = 'Il gatto è seduto sul tappeto. Era una bella giornata.';
+      const score = calculateFleschScore(text, 'it');
+      expect(score).toBeGreaterThan(0);
+      expect(score).toBeLessThanOrEqual(100);
+    });
+
+    it('should calculate Dutch score', () => {
+      const text = 'De kat zit op de mat. Het was een mooie dag.';
+      const score = calculateFleschScore(text, 'nl');
+      expect(score).toBeGreaterThan(0);
+      expect(score).toBeLessThanOrEqual(100);
+    });
+
+    it('should calculate Portuguese score', () => {
+      const text = 'O gato está sentado no tapete. Foi um bom dia.';
+      const score = calculateFleschScore(text, 'pt');
+      expect(score).toBeGreaterThan(0);
+      expect(score).toBeLessThanOrEqual(100);
+    });
+
+    it('should calculate Russian score', () => {
+      const text = 'Кот сидит на коврике. Это был хороший день.';
+      const score = calculateFleschScore(text, 'ru');
+      expect(score).toBeGreaterThan(0);
+      expect(score).toBeLessThanOrEqual(100);
+    });
+
+    it('should calculate Swedish score', () => {
+      const text = 'Katten sitter på mattan. Det var en fin dag.';
+      const score = calculateFleschScore(text, 'sv');
+      expect(score).toBeGreaterThan(0);
+      expect(score).toBeLessThanOrEqual(100);
+    });
+
+    it('should calculate Turkish score', () => {
+      const text = 'Kedi evde. Güzel gün.'; // Simple short sentences
+      const score = calculateFleschScore(text, 'tr');
+      expect(score).toBeGreaterThanOrEqual(0);
+      expect(score).toBeLessThanOrEqual(100);
+    });
+
     it('should clamp scores to 0-100 range', () => {
-      // Very simple text that might exceed 100
       const simpleText = 'Go. Run. Jump.';
       const score = calculateFleschScore(simpleText, 'en');
       expect(score).toBeLessThanOrEqual(100);
@@ -265,6 +436,16 @@ describe('Flesch Reading Ease', () => {
 
     it('should handle German text', () => {
       const result = analyzeReadability('Hallo Welt.', 'de');
+      expect(result.score).toBeGreaterThanOrEqual(0);
+    });
+
+    it('should handle Spanish text', () => {
+      const result = analyzeReadability('Hola mundo.', 'es');
+      expect(result.score).toBeGreaterThanOrEqual(0);
+    });
+
+    it('should handle French text', () => {
+      const result = analyzeReadability('Bonjour monde.', 'fr');
       expect(result.score).toBeGreaterThanOrEqual(0);
     });
 
