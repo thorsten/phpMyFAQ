@@ -44,7 +44,6 @@ final class OpenQuestionsController extends AbstractAdministrationController
 
         $question = $this->container->get(id: 'phpmyfaq.question');
         $currentLang = $this->configuration->getLanguage()->getLanguage();
-        $session = $this->container->get(id: 'session');
         $questions = $question->getAll();
         $allQuestions = $question->getAll(true, '');
         $otherLangsData = [];
@@ -96,6 +95,7 @@ final class OpenQuestionsController extends AbstractAdministrationController
             'msgDeleteAllOpenQuestions' => Translation::get(key: 'msgDelete'),
             'msgAttention' => Translation::get(key: 'msgAttention'),
             'msgOtherQuestionsDesc' => Translation::get(key: 'msgOtherQuestionsDesc'),
+            'msgOtherQuestionDesc' => Translation::get(key: 'msgOtherQuestionDesc'),
             'msgChangeLanguageHint' => Translation::get(key: 'msgChangeLanguageHint'),
             'msgOpenQuestion' => Translation::get(key: 'msgOpenQuestion'),
         ]);
