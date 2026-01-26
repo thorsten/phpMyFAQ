@@ -57,18 +57,10 @@ class Update extends AbstractSetup
     }
 
     /** @var string[] Legacy dry-run queries for backward compatibility */
-    public array $dryRunQueries = [] {
-        get {
-            return $this->dryRunQueries;
-        }
-    }
+    public array $dryRunQueries = [];
 
     /** @var MigrationResult[] */
-    public array $migrationResults = [] {
-        get {
-            return $this->migrationResults;
-        }
-    }
+    public array $migrationResults = [];
 
     private ?string $backupFilename = null;
 
@@ -239,12 +231,7 @@ class Update extends AbstractSetup
      */
     private function allMigrationsSucceeded(): bool
     {
-        foreach ($this->migrationResults as $result) {
-            if (!$result->isSuccess()) {
-                return false;
-            }
-        }
-        return true;
+        return array_all($this->migrationResults, fn($result) => $result->isSuccess());
     }
 
     /**
