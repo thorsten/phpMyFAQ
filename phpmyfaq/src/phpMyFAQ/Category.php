@@ -90,13 +90,14 @@ class Category
         private readonly Configuration $configuration,
         array $groups = [],
         bool $withPermission = true,
-        ?string $faqLanguage = null
+        ?string $faqLanguage = null,
     ) {
         $this->categoryCache = new CategoryCache();
         $this->categoryPermissionContext = new CategoryPermissionContext($groups);
-        $languageToUse = ($faqLanguage !== null && $faqLanguage !== '')
-            ? $faqLanguage
-            : $this->configuration->getLanguage()->getLanguage();
+        $languageToUse =
+            $faqLanguage !== null && $faqLanguage !== ''
+                ? $faqLanguage
+                : $this->configuration->getLanguage()->getLanguage();
         $this->setLanguage($languageToUse);
         $this->getOrderedCategories($withPermission);
 

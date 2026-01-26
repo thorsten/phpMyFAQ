@@ -250,12 +250,7 @@ final class FaqController extends AbstractAdministrationController
         $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
         $selectedRevisionId = Filter::filterVar($request->attributes->get('selectedRevisionId'), FILTER_VALIDATE_INT);
 
-        $category = new Category(
-            $this->configuration, 
-            $currentAdminGroups, 
-            true, 
-            $faqLanguage
-        );
+        $category = new Category($this->configuration, $currentAdminGroups, true, $faqLanguage);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
         $category->buildCategoryTree();
