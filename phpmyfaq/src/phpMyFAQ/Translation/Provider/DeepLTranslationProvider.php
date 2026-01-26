@@ -109,7 +109,7 @@ class DeepLTranslationProvider extends AbstractTranslationProvider
 
             $data = $response->toArray();
             return array_map(static fn($t) => $t['text'], $data['translations']);
-        } catch (Exception|TransportExceptionInterface $e) {
+        } catch (DecodingExceptionInterface|Exception|TransportExceptionInterface $e) {
             throw new ApiException('DeepL API error: ' . $e->getMessage());
         }
     }

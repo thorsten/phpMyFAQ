@@ -231,7 +231,16 @@ class TableBuilder
         }
 
         // Add primary key if set and not already added via autoIncrement
-        if (!empty($this->primaryKey)) {
+        // For SQLite, autoIncrement() already includes PRIMARY KEY, so skip explicit PRIMARY KEY
+        $hasAutoIncrement = false;
+        foreach ($this->columns as $def) {
+            if ($def['type'] === 'AUTO_INCREMENT') {
+                $hasAutoIncrement = true;
+                break;
+            }
+        }
+
+        if (!empty($this->primaryKey) && !$hasAutoIncrement) {
             $pkColumns = implode(', ', $this->primaryKey);
             $parts[] = "PRIMARY KEY ($pkColumns)";
         }
