@@ -118,7 +118,9 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteRule ^api/ api/index.php [L,QSA]
     # Setup pages
     RewriteRule ^setup/ setup/index.php [L,QSA]
-    RewriteRule ^update$ update/ [R=301,L]
+    # Update page - route directly to index.php (handled by Symfony router)
+    RewriteRule ^update$ index.php [L,QSA]
+    RewriteRule ^update/ index.php [L,QSA]
     # Front controller: route all other requests to index.php (Symfony Router)
     # Skip if the file or directory exists
     RewriteCond %{REQUEST_FILENAME} !-f

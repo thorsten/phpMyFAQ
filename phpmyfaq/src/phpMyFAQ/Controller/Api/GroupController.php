@@ -22,7 +22,6 @@ namespace phpMyFAQ\Controller\Api;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Permission\MediumPermission;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 
 final class GroupController extends AbstractApiController
 {
@@ -124,7 +123,7 @@ final class GroupController extends AbstractApiController
 
         // Apply sorting if needed
         if ($sort->getOrderSql() === 'DESC') {
-            usort($allGroups, function ($a, $b) {
+            usort($allGroups, static function ($a, $b) {
                 return ($b['group-id'] ?? 0) <=> ($a['group-id'] ?? 0);
             });
         }

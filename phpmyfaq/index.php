@@ -56,7 +56,8 @@ try {
 }
 
 $app = new Application($container);
-$app->setRoutingContext('public');
+$app->routingContext = 'public';
+
 try {
     // Auto-loads routes from attributes (falls back to public-routes.php during migration)
     $app->run();

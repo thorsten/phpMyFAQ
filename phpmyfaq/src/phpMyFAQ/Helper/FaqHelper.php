@@ -28,7 +28,6 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq;
-use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Link;
 use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Utils;

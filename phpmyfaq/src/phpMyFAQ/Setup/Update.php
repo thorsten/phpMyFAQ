@@ -64,16 +64,10 @@ class Update extends AbstractSetup
 
     private ?string $backupFilename = null;
 
-    private MigrationRegistry $migrationRegistry {
-        get {
-            return $this->migrationRegistry;
-        }
-    }
-    private MigrationTracker $migrationTracker {
-        get {
-            return $this->migrationTracker;
-        }
-    }
+    private MigrationRegistry $migrationRegistry;
+
+    private MigrationTracker $migrationTracker;
+
     private MigrationExecutor $migrationExecutor;
 
     public function __construct(
@@ -231,7 +225,7 @@ class Update extends AbstractSetup
      */
     private function allMigrationsSucceeded(): bool
     {
-        return array_all($this->migrationResults, fn($result) => $result->isSuccess());
+        return array_all($this->migrationResults, static fn($result) => $result->isSuccess());
     }
 
     /**
@@ -245,9 +239,11 @@ class Update extends AbstractSetup
 
         foreach ($report['migrations'] as $migrationData) {
             foreach ($migrationData['operations'] as $operation) {
-                if ($operation['type'] === 'sql') {
-                    $this->dryRunQueries[] = $operation['query'];
+                if ($operation['type'] !== 'sql') {
+                    continue;
                 }
+
+                $this->dryRunQueries[] = $operation['query'];
             }
         }
     }
@@ -370,25 +366,27 @@ class Update extends AbstractSetup
                 $previousHash = null;
 
                 foreach ($entries as $entity) {
-                    if ($entity->getHash() === null) {
-                        $entity->setPreviousHash($previousHash);
-                        $hash = $entity->calculateHash();
-
-                        // Execute UPDATE directly instead of adding to the queries array
-                        $updateQuery = sprintf(
-                            "UPDATE %sfaqadminlog SET hash = '%s', previous_hash = %s WHERE id = %d",
-                            Database::getTablePrefix(),
-                            $this->configuration->getDb()->escape($hash),
-                            $previousHash !== null
-                                ? "'" . $this->configuration->getDb()->escape($previousHash) . "'"
-                                : 'NULL',
-                            $entity->getId(),
-                        );
-
-                        $this->configuration->getDb()->query($updateQuery);
-
-                        $previousHash = $hash;
+                    if ($entity->getHash() !== null) {
+                        continue;
                     }
+
+                    $entity->setPreviousHash($previousHash);
+                    $hash = $entity->calculateHash();
+
+                    // Execute UPDATE directly instead of adding to the queries array
+                    $updateQuery = sprintf(
+                        "UPDATE %sfaqadminlog SET hash = '%s', previous_hash = %s WHERE id = %d",
+                        Database::getTablePrefix(),
+                        $this->configuration->getDb()->escape($hash),
+                        $previousHash !== null
+                            ? "'" . $this->configuration->getDb()->escape($previousHash) . "'"
+                            : 'NULL',
+                        $entity->getId(),
+                    );
+
+                    $this->configuration->getDb()->query($updateQuery);
+
+                    $previousHash = $hash;
                 }
             } catch (\Exception $e) {
                 $this->configuration->getLogger()->error('Admin log hash migration failed: ' . $e->getMessage());

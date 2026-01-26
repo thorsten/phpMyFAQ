@@ -69,7 +69,8 @@ class AlterTableBuilder
         ?string $default = null,
         ?string $after = null,
     ): self {
-        $defaultVal = $default !== null ? "'$default'" : null;
+        // Escape single quotes in default value per SQL string literal rules (replace ' with '')
+        $defaultVal = $default !== null ? "'" . str_replace("'", "''", $default) . "'" : null;
         return $this->addColumn('ADD', $name, $this->dialect->varchar($length), $nullable, $defaultVal, $after);
     }
 
@@ -143,6 +144,11 @@ class AlterTableBuilder
      */
     public function build(): array
     {
+        // Validate that table() was called before building
+        if (!isset($this->tableName) || $this->tableName === '') {
+            throw new \RuntimeException('Table name not set. Call table() before building ALTER TABLE statements.');
+        }
+
         $statements = [];
 
         foreach ($this->alterations as $alt) {
@@ -183,6 +189,11 @@ class AlterTableBuilder
      */
     public function buildCombined(): string
     {
+        // Validate that table() was called before building
+        if (!isset($this->tableName) || $this->tableName === '') {
+            throw new \RuntimeException('Table name not set. Call table() before building ALTER TABLE statements.');
+        }
+
         if ($this->alterations === []) {
             throw new LogicException('No alterations defined for combined ALTER TABLE statement.');
         }

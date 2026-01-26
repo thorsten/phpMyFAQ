@@ -41,15 +41,27 @@ use Throwable;
 
 class Application
 {
-    private UrlMatcher $urlMatcher;
+    public UrlMatcher $urlMatcher {
+        set(UrlMatcher $value) {
+            $this->urlMatcher = $value;
+        }
+    }
 
-    private ControllerResolver $controllerResolver;
+    public ControllerResolver $controllerResolver {
+        set(ControllerResolver $value) {
+            $this->controllerResolver = $value;
+        }
+    }
 
     private bool $isApiContext = false;
 
     private bool $isAdminContext = false;
 
-    private string $routingContext = 'public';
+    public string $routingContext = 'public' {
+        set {
+            $this->routingContext = $value;
+        }
+    }
 
     public function __construct(
         private readonly ?ContainerInterface $container = null,
@@ -76,16 +88,6 @@ class Application
         $this->handleRequest($routeCollection, $request, $requestContext);
     }
 
-    public function setUrlMatcher(UrlMatcher $urlMatcher): void
-    {
-        $this->urlMatcher = $urlMatcher;
-    }
-
-    public function setControllerResolver(ControllerResolver $controllerResolver): void
-    {
-        $this->controllerResolver = $controllerResolver;
-    }
-
     public function setApiContext(bool $isApiContext): void
     {
         $this->isApiContext = $isApiContext;
@@ -94,11 +96,6 @@ class Application
     public function setAdminContext(bool $isAdminContext): void
     {
         $this->isAdminContext = $isAdminContext;
-    }
-
-    public function setRoutingContext(string $context): void
-    {
-        $this->routingContext = $context;
     }
 
     private function setLanguage(): string
@@ -294,7 +291,7 @@ class Application
         // Load routes with caching if enabled (disabled automatically in debug mode)
         if ($cacheEnabled && !Environment::isDebugMode()) {
             $cacheManager = new RouteCacheManager($cacheDir, Environment::isDebugMode());
-            return $cacheManager->getRoutes($context, function () use ($configuration, $context) {
+            return $cacheManager->getRoutes($context, static function () use ($configuration, $context) {
                 $builder = new RouteCollectionBuilder($configuration);
                 return $builder->build($context);
             });

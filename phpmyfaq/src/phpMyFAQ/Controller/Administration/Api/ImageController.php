@@ -149,7 +149,7 @@ final class ImageController extends AbstractController
                 'messages' => ['Files uploaded successfully'],
                 'files' => $fileUrls, // For Jodit uploader
                 'isImages' => array_map(
-                    fn($file) => !in_array(pathinfo($file, PATHINFO_EXTENSION), ['mov', 'mp4', 'webm']),
+                    static fn($file) => !in_array(pathinfo($file, PATHINFO_EXTENSION), ['mov', 'mp4', 'webm']),
                     $uploadedFiles,
                 ),
                 'sources' => [

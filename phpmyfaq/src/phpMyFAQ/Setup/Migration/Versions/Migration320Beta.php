@@ -47,8 +47,8 @@ readonly class Migration320Beta extends AbstractMigration
         // Delete link verification columns - use portable syntax
         if ($this->isSqlite()) {
             // SQLite requires table rebuild for dropping columns
-            $this->rebuildTableWithoutColumns($recorder, 'faqdata', ['links_state', 'links_check_date']);
-            $this->rebuildTableWithoutColumns($recorder, 'faqdata_revisions', ['links_state', 'links_check_date']);
+            $this->rebuildTableWithoutColumns($recorder, 'faqdata');
+            $this->rebuildTableWithoutColumns($recorder, 'faqdata_revisions');
         } else {
             // MySQL, PostgreSQL, SQL Server - use separate DROP COLUMN statements
             $recorder->addSql(
@@ -117,13 +117,11 @@ readonly class Migration320Beta extends AbstractMigration
     /**
      * Rebuilds a table without specified columns (for SQLite).
      *
-     * @param string[] $columnsToRemove
+     * Note: This method uses hardcoded schema definitions for faqdata and faqdata_revisions
+     * tables due to SQLite limitations with ALTER TABLE DROP COLUMN.
      */
-    private function rebuildTableWithoutColumns(
-        OperationRecorder $recorder,
-        string $tableName,
-        array $columnsToRemove,
-    ): void {
+    private function rebuildTableWithoutColumns(OperationRecorder $recorder, string $tableName): void
+    {
         $fullTableName = $this->tablePrefix . $tableName;
 
         // For faqdata and faqdata_revisions, we need to define the schema without the removed columns
