@@ -36,13 +36,22 @@ class TableBuilder
     /** @var array<string, array{columns: string[], unique: bool}> */
     private array $indexes = [];
 
+    /**
+     * Create a TableBuilder using the provided SQL dialect or a default dialect.
+     *
+     * @param DialectInterface|null $dialect The dialect implementation to use; if null, a default dialect is created.
+     */
     public function __construct(?DialectInterface $dialect = null)
     {
         $this->dialect = $dialect ?? DialectFactory::create();
     }
 
     /**
-     * Sets the table name.
+     * Set the table name for the builder, optionally applying the global table prefix.
+     *
+     * @param string $name The table name (without prefix).
+     * @param bool $withPrefix When true, prepend Database::getTablePrefix() to the name.
+     * @return self Fluent instance for method chaining.
      */
     public function table(string $name, bool $withPrefix = true): self
     {
@@ -51,7 +60,9 @@ class TableBuilder
     }
 
     /**
-     * Adds IF NOT EXISTS clause.
+     * Enable the IF NOT EXISTS clause for the CREATE TABLE statement.
+     *
+     * @return $this The current TableBuilder instance for method chaining.
      */
     public function ifNotExists(): self
     {
@@ -60,8 +71,13 @@ class TableBuilder
     }
 
     /**
-     * Adds an INTEGER column.
-     */
+         * Add an INTEGER column to the table definition.
+         *
+         * @param string $name Column name.
+         * @param bool $nullable Whether the column allows NULL.
+         * @param int|null $default Optional default value for the column.
+         * @return self The builder instance.
+         */
     public function integer(string $name, bool $nullable = true, ?int $default = null): self
     {
         return $this->addColumn(
@@ -86,7 +102,12 @@ class TableBuilder
     }
 
     /**
-     * Adds a SMALLINT column.
+     * Add a SMALLINT column to the table definition.
+     *
+     * @param string $name The column name.
+     * @param bool $nullable Whether the column allows NULL.
+     * @param int|null $default The default integer value for the column, or null for no default.
+     * @return self The current builder instance for method chaining.
      */
     public function smallInteger(string $name, bool $nullable = true, ?int $default = null): self
     {
@@ -99,7 +120,13 @@ class TableBuilder
     }
 
     /**
-     * Adds a VARCHAR column.
+     * Add a VARCHAR column to the table definition.
+     *
+     * @param string $name   Column name.
+     * @param int    $length Maximum character length for the column.
+     * @param bool   $nullable Whether the column allows NULL.
+     * @param string|null $default Default string value for the column (unquoted); `null` means no default.
+     * @return self The builder instance for method chaining.
      */
     public function varchar(string $name, int $length, bool $nullable = true, ?string $default = null): self
     {
@@ -108,7 +135,11 @@ class TableBuilder
     }
 
     /**
-     * Adds a TEXT column.
+     * Add a TEXT column to the table definition.
+     *
+     * @param string $name The column name.
+     * @param bool $nullable Whether the column allows NULL (default: true).
+     * @return self The current builder instance for method chaining.
      */
     public function text(string $name, bool $nullable = true): self
     {
@@ -116,8 +147,13 @@ class TableBuilder
     }
 
     /**
-     * Adds a BOOLEAN/TINYINT column.
-     */
+         * Adds a BOOLEAN/TINYINT column to the table definition.
+         *
+         * @param string $name The column name.
+         * @param bool $nullable Whether the column allows NULL (true) or is NOT NULL (false).
+         * @param bool|null $default Optional default value; when provided, `true` is converted to `'1'` and `false` to `'0'` for the column default.
+         * @return self The builder instance for chaining.
+         */
     public function boolean(string $name, bool $nullable = true, ?bool $default = null): self
     {
         $defaultVal = $default !== null ? ($default ? '1' : '0') : null;
@@ -125,7 +161,14 @@ class TableBuilder
     }
 
     /**
-     * Adds a TIMESTAMP/DATETIME column.
+     * Add a TIMESTAMP/DATETIME column to the table definition.
+     *
+     * If $defaultCurrent is true, sets the column default to the dialect's current timestamp expression.
+     *
+     * @param string $name Column name.
+     * @param bool $nullable Whether the column allows NULL.
+     * @param bool $defaultCurrent Whether to use the dialect's current timestamp as the column default.
+     * @return self The builder instance.
      */
     public function timestamp(string $name, bool $nullable = true, bool $defaultCurrent = false): self
     {
@@ -134,7 +177,14 @@ class TableBuilder
     }
 
     /**
-     * Adds a DATE column.
+     * Add a DATE column to the table definition.
+     *
+     * If `$defaultCurrent` is true, the column's default value will be the current date as provided by the configured SQL dialect.
+     *
+     * @param string $name The column name.
+     * @param bool $nullable Whether the column allows NULL.
+     * @param bool $defaultCurrent If true, set the column default to the dialect-specific current date.
+     * @return self The TableBuilder instance for method chaining.
      */
     public function date(string $name, bool $nullable = true, bool $defaultCurrent = false): self
     {
@@ -143,7 +193,13 @@ class TableBuilder
     }
 
     /**
-     * Adds a CHAR column.
+     * Adds a CHAR column definition to the table.
+     *
+     * @param string $name Column name.
+     * @param int $length Maximum character length for the CHAR column.
+     * @param bool $nullable Whether the column allows NULL.
+     * @param string|null $default Default string value for the column; if provided it will be used as the SQL default (wrapped in single quotes).
+     * @return self The builder instance for method chaining.
      */
     public function char(string $name, int $length, bool $nullable = true, ?string $default = null): self
     {
@@ -152,7 +208,10 @@ class TableBuilder
     }
 
     /**
-     * Adds an auto-increment primary key column.
+     * Add an auto-incrementing primary key column to the table definition.
+     *
+     * @param string $name Name of the column; defaults to 'id'.
+     * @return self The current builder instance for method chaining.
      */
     public function autoIncrement(string $name = 'id'): self
     {
@@ -166,9 +225,10 @@ class TableBuilder
     }
 
     /**
-     * Sets the primary key column(s).
+     * Set the table primary key to the given column or columns.
      *
-     * @param string|string[] $columns
+     * @param string|string[] $columns Column name or array of column names for the primary key.
+     * @return self The builder instance for chaining.
      */
     public function primaryKey(string|array $columns): self
     {
@@ -177,9 +237,11 @@ class TableBuilder
     }
 
     /**
-     * Adds an index.
+     * Register a non-unique index with the given name on the specified column(s).
      *
-     * @param string|string[] $columns
+     * @param string $name The index name.
+     * @param string|string[] $columns Column name or array of column names to include in the index.
+     * @return self The builder instance for chaining.
      */
     public function index(string $name, string|array $columns): self
     {
@@ -191,9 +253,11 @@ class TableBuilder
     }
 
     /**
-     * Adds a unique index.
+     * Register a unique index with the given name on specified column(s).
      *
-     * @param string|string[] $columns
+     * @param string $name The index name.
+     * @param string|string[] $columns Column name or list of column names to include in the index.
+     * @return self The current builder instance.
      */
     public function uniqueIndex(string $name, string|array $columns): self
     {
@@ -205,7 +269,13 @@ class TableBuilder
     }
 
     /**
-     * Builds the CREATE TABLE statement.
+     * Constructs the CREATE TABLE SQL statement for the configured table.
+     *
+     * Includes column definitions (respecting NULL/NOT NULL and DEFAULT), an optional PRIMARY KEY clause,
+     * and inline indexes. Delegates dialect-specific pieces such as auto-increment column rendering,
+     * table prefixing (including IF NOT EXISTS) and table suffix to the configured dialect.
+     *
+     * @return string The complete CREATE TABLE SQL statement.
      */
     public function build(): string
     {
@@ -254,9 +324,9 @@ class TableBuilder
     }
 
     /**
-     * Returns separate CREATE INDEX statements.
+     * Build separate CREATE INDEX statements for all defined indexes.
      *
-     * @return string[]
+     * @return string[] Array of CREATE INDEX SQL statements, one entry per defined index.
      */
     public function buildIndexStatements(): array
     {
@@ -272,6 +342,16 @@ class TableBuilder
         return $statements;
     }
 
+    /**
+     * Store a column definition for later SQL generation.
+     *
+     * @param string $name The column name.
+     * @param string $type The SQL column type or type expression (e.g., "VARCHAR(255)").
+     * @param bool $nullable Whether the column allows NULL.
+     * @param string|null $default The default value or SQL expression to use for the column, or null if none.
+     * @param string|null $extra Optional additional column attributes (e.g., "AUTO_INCREMENT").
+     * @return self The builder instance.
+     */
     private function addColumn(
         string $name,
         string $type,

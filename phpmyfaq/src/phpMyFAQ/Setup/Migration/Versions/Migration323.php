@@ -24,21 +24,43 @@ use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
 
 readonly class Migration323 extends AbstractMigration
 {
+    /**
+     * Get the migration version identifier.
+     *
+     * @return string The migration version identifier `3.2.3`.
+     */
     public function getVersion(): string
     {
         return '3.2.3';
     }
 
+    /**
+     * Migration versions that must be applied before this migration.
+     *
+     * @return string[] Array of dependent migration version identifiers.
+     */
     public function getDependencies(): array
     {
         return ['3.2.0-RC'];
     }
 
+    /**
+     * Short description of the migration: increase IP column size for IPv6 support.
+     *
+     * @return string The migration description.
+     */
     public function getDescription(): string
     {
         return 'Increase IP column size for IPv6 support';
     }
 
+    /**
+     * Apply schema changes to increase the faquser.ip column size to 64 characters for the active database platform.
+     *
+     * Queues database-specific SQL operations (ALTER TABLE or a table rebuild on SQLite) via the provided OperationRecorder.
+     *
+     * @param OperationRecorder $recorder Recorder used to enqueue the migration SQL statements and their descriptions.
+     */
     public function up(OperationRecorder $recorder): void
     {
         if ($this->isMySql()) {

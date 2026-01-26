@@ -24,21 +24,44 @@ use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
 
 readonly class Migration320Beta2 extends AbstractMigration
 {
+    /**
+     * Migration version identifier.
+     *
+     * @return string The migration version identifier '3.2.0-beta.2'.
+     */
     public function getVersion(): string
     {
         return '3.2.0-beta.2';
     }
 
+    /**
+     * Migration version identifiers required before applying this migration.
+     *
+     * @return string[] An array of version identifiers this migration depends on.
+     */
     public function getDependencies(): array
     {
         return ['3.2.0-beta'];
     }
 
+    /**
+     * Provide a short human-readable description of this migration.
+     *
+     * @return string The migration description: "HTML support for contact information, rename contactInformations".
+     */
     public function getDescription(): string
     {
         return 'HTML support for contact information, rename contactInformations';
     }
 
+    /**
+     * Apply migration changes for version 3.2.0-beta.2.
+     *
+     * Adds the configuration key `main.contactInformationHTML` with a default value of `false`
+     * and renames the configuration key `main.contactInformations` to `main.contactInformation`.
+     *
+     * @param OperationRecorder $recorder Recorder used to record configuration changes performed by the migration.
+     */
     public function up(OperationRecorder $recorder): void
     {
         $recorder->addConfig('main.contactInformationHTML', false);

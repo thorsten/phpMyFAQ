@@ -24,21 +24,45 @@ use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
 
 readonly class Migration407 extends AbstractMigration
 {
+    /**
+     * Get the migration version identifier.
+     *
+     * @return string The migration version identifier (e.g., "4.0.7").
+     */
     public function getVersion(): string
     {
         return '4.0.7';
     }
 
+    /**
+     * List migration version identifiers required before applying this migration.
+     *
+     * @return string[] Migration version identifiers that must be applied prior to this migration.
+     */
     public function getDependencies(): array
     {
         return ['4.0.5'];
     }
 
+    / **
+     * Migration description stating this migration fixes language codes for fr_CA and pt_BR.
+     *
+     * @return string The human-readable description: "Fix language codes for fr_CA and pt_BR".
+     */
     public function getDescription(): string
     {
         return 'Fix language codes for fr_CA and pt_BR';
     }
 
+    /**
+     * Enqueue SQL operations to normalize legacy language codes and update related config references.
+     *
+     * This method adds SQL statements to replace "fr-ca" with "fr_ca" and "pt-br" with "pt_br"
+     * for language columns across multiple tables, and updates the corresponding language file
+     * references in the faqconfig table.
+     *
+     * @param OperationRecorder $recorder Recorder used to collect SQL statements and their descriptions.
+     */
     public function up(OperationRecorder $recorder): void
     {
         // Define the table/column mappings for language code fixes

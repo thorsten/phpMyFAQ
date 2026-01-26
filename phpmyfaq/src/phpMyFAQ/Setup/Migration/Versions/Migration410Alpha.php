@@ -24,21 +24,41 @@ use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
 
 readonly class Migration410Alpha extends AbstractMigration
 {
+    /**
+     * Migration version identifier for this migration.
+     *
+     * @return string The migration version identifier: '4.1.0-alpha'.
+     */
     public function getVersion(): string
     {
         return '4.1.0-alpha';
     }
 
+    /**
+     * List migration version dependencies that must be applied before this migration.
+     *
+     * @return string[] Array of version strings this migration depends on.
+     */
     public function getDependencies(): array
     {
         return ['4.0.9'];
     }
 
+    /**
+     * Provide a human-readable description of this migration.
+     *
+     * @return string The migration description: 'robots.txt content configuration for AI crawlers'.
+     */
     public function getDescription(): string
     {
         return 'robots.txt content configuration for AI crawlers';
     }
 
+    /**
+     * Configure default robots.txt content targeting various AI crawlers and general rules.
+     *
+     * Stores a predefined robots.txt text under the configuration key 'seo.contentRobotsText' using the supplied OperationRecorder.
+     */
     public function up(OperationRecorder $recorder): void
     {
         $robotsText = <<<EOT

@@ -24,6 +24,12 @@ use phpMyFAQ\Core\Exception;
 
 readonly class SqlOperation implements OperationInterface
 {
+    / **
+     * Create a SQL migration operation with a query and optional description.
+     *
+     * @param string $query The SQL statement to execute during the migration.
+     * @param string $description Optional human-readable description; when empty a description will be derived from the query.
+     * /
     public function __construct(
         private Configuration $configuration,
         private string $query,
@@ -31,11 +37,26 @@ readonly class SqlOperation implements OperationInterface
     ) {
     }
 
+    /**
+     * Provide the operation type identifier.
+     *
+     * @return string The operation type "sql".
+     */
     public function getType(): string
     {
         return 'sql';
     }
 
+    /**
+     * Provide a human-readable description for this SQL operation.
+     *
+     * Returns the explicitly set description if present; otherwise derives a short
+     * description from the SQL query (for example, "Create table <name>" or
+     * "Insert into <name>"). If the query pattern is not recognized, returns
+     * "Execute SQL query".
+     *
+     * @return string The operation description.
+     */
     public function getDescription(): string
     {
         if ($this->description !== '') {
@@ -76,11 +97,23 @@ readonly class SqlOperation implements OperationInterface
         return 'Execute SQL query';
     }
 
+    /**
+     * Get the stored SQL query.
+     *
+     * @return string The raw SQL query.
+     */
     public function getQuery(): string
     {
         return $this->query;
     }
 
+    /**
+     * Execute the stored SQL query using the configured database connection.
+     *
+     * Runs the operation's SQL query and indicates whether execution succeeded.
+     *
+     * @return bool `true` if the query executed successfully, `false` otherwise.
+     */
     public function execute(): bool
     {
         try {
@@ -91,6 +124,14 @@ readonly class SqlOperation implements OperationInterface
         }
     }
 
+    /**
+     * Serialize the operation into an associative array representation.
+     *
+     * @return array{type:string,description:string,query:string} Associative array with keys:
+     *     - `type`: operation type identifier (e.g., "sql"),
+     *     - `description`: human-readable description of the operation,
+     *     - `query`: the raw SQL query to be executed.
+     */
     public function toArray(): array
     {
         return [

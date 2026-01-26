@@ -22,13 +22,17 @@ namespace phpMyFAQ\Setup\Migration\Operations;
 interface OperationInterface
 {
     /**
-     * Returns the type of operation (e.g., 'sql', 'config_add', 'file_copy').
-     */
+ * Get the operation type.
+ *
+ * @return string The operation type (e.g., 'sql', 'config_add', 'file_copy').
+ */
     public function getType(): string;
 
     /**
-     * Returns a human-readable description of the operation.
-     */
+ * Get a human-readable description of the operation.
+ *
+ * @return string A concise human-readable description of the operation.
+ */
     public function getDescription(): string;
 
     /**
@@ -39,9 +43,9 @@ interface OperationInterface
     public function execute(): bool;
 
     /**
-     * Returns an array representation of the operation for dry-run output.
-     *
-     * @return array<string, mixed>
-     */
+ * Provide an associative array representation of the operation suitable for dry-run output.
+ *
+ * @return array<string, mixed> Associative array describing the operation (string keys to mixed values).
+ */
     public function toArray(): array;
 }

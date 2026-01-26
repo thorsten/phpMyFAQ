@@ -26,13 +26,24 @@ class MigrationTracker
 {
     private const TABLE_NAME = 'faqmigrations';
 
+    /**
+     * Create a MigrationTracker bound to the provided configuration.
+     *
+     * @param Configuration $configuration Configuration instance used to access the database connection, table prefix, and related settings.
+     */
     public function __construct(
         private readonly Configuration $configuration,
     ) {
     }
 
     /**
-     * Creates the migrations tracking table if it doesn't exist.
+     * Ensure the migrations tracking table exists for the configured database.
+     *
+     * Creates the migrations tracking table using SQL appropriate for the current database type
+     * (MySQL, PostgreSQL, SQLite, or SQL Server) and the configured table prefix, and executes
+     * the CREATE statement on the configured database connection.
+     *
+     * @throws \RuntimeException If the current database type is not supported.
      */
     public function ensureTableExists(): void
     {
@@ -85,8 +96,11 @@ class MigrationTracker
     }
 
     /**
-     * Checks if a migration has been applied.
-     */
+         * Determine whether a migration version is recorded as applied.
+         *
+         * @param string $version The migration version identifier to check.
+         * @return bool `true` if the version is recorded as applied, `false` otherwise.
+         */
     public function isApplied(string $version): bool
     {
         $tableName = Database::getTablePrefix() . self::TABLE_NAME;
@@ -103,7 +117,15 @@ class MigrationTracker
     }
 
     /**
-     * Records a migration as applied.
+     * Insert a record marking a migration version as applied.
+     *
+     * Stores the migration version with its execution time (in milliseconds) and optional checksum and description
+     * in the migrations tracking table.
+     *
+     * @param string      $version         The migration version identifier.
+     * @param int         $executionTimeMs Execution time of the migration in milliseconds.
+     * @param string|null $checksum        Optional checksum for the migration, or null if not provided.
+     * @param string|null $description     Optional human-readable description for the migration, or null if not provided.
      */
     public function recordMigration(
         string $version,
@@ -127,7 +149,9 @@ class MigrationTracker
     }
 
     /**
-     * Removes a migration record (for rollback).
+     * Removes the recorded migration with the given version from the migrations table.
+     *
+     * @param string $version The migration version identifier to remove.
      */
     public function removeMigration(string $version): void
     {
@@ -142,10 +166,15 @@ class MigrationTracker
     }
 
     /**
-     * Returns all applied migrations.
-     *
-     * @return array<int, array{version: string, applied_at: string, execution_time_ms: int, checksum: string|null, description: string|null}>
-     */
+         * Retrieve all applied migrations with their metadata.
+         *
+         * @return array<int, array{version: string, applied_at: string, execution_time_ms: int, checksum: string|null, description: string|null}> Array of associative arrays containing:
+         *     - `version`: migration version string
+         *     - `applied_at`: timestamp when the migration was applied
+         *     - `execution_time_ms`: execution time in milliseconds
+         *     - `checksum`: optional checksum of the migration, or null
+         *     - `description`: optional migration description, or null
+         */
     public function getAppliedMigrations(): array
     {
         $tableName = Database::getTablePrefix() . self::TABLE_NAME;
@@ -171,9 +200,9 @@ class MigrationTracker
     }
 
     /**
-     * Returns the list of applied versions.
+     * Get the versions of all applied migrations.
      *
-     * @return string[]
+     * @return string[] List of applied migration version strings.
      */
     public function getAppliedVersions(): array
     {
@@ -181,7 +210,9 @@ class MigrationTracker
     }
 
     /**
-     * Returns the last applied migration version.
+     * Get the most recently applied migration version.
+     *
+     * @return string|null The version of the last applied migration, or `null` if no migrations have been recorded.
      */
     public function getLastAppliedVersion(): ?string
     {
@@ -195,8 +226,11 @@ class MigrationTracker
     }
 
     /**
-     * Checks if the tracking table exists.
-     */
+         * Determines whether the migrations tracking table exists for the current database.
+         *
+         * @return bool `true` if the tracking table exists, `false` otherwise.
+         * @throws \RuntimeException If the current database type is not supported.
+         */
     public function tableExists(): bool
     {
         $tableName = Database::getTablePrefix() . self::TABLE_NAME;

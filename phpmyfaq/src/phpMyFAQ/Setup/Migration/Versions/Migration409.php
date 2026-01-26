@@ -24,21 +24,47 @@ use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
 
 readonly class Migration409 extends AbstractMigration
 {
+    /**
+     * Get the migration version identifier.
+     *
+     * @return string The migration version string, e.g. "4.0.9".
+     */
     public function getVersion(): string
     {
         return '4.0.9';
     }
 
+    /**
+     * List migrations that must be applied before this migration.
+     *
+     * @return string[] Array of migration version strings this migration depends on (e.g., ['4.0.7']).
+     */
     public function getDependencies(): array
     {
         return ['4.0.7'];
     }
 
+    /**
+     * Migration description indicating this migration sets up a PostgreSQL sequence for the faqseo table.
+     *
+     * @return string The description text: "PostgreSQL sequence for faqseo table".
+     */
     public function getDescription(): string
     {
         return 'PostgreSQL sequence for faqseo table';
     }
 
+    /**
+     * Prepare and register PostgreSQL SQL operations to create and initialize the faqseo id sequence.
+     *
+     * When the connection is PostgreSQL, registers SQL statements to:
+     * - create the <prefix>faqseo_id_seq sequence,
+     * - set faqseo.id default to nextval(...) from that sequence,
+     * - set the sequence current value to the table's MAX(id),
+     * - mark faqseo.id as NOT NULL.
+     *
+     * @param OperationRecorder $recorder Recorder used to collect SQL operations for execution.
+     */
     public function up(OperationRecorder $recorder): void
     {
         // PostgreSQL-only migration for faqseo sequence

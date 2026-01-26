@@ -24,21 +24,45 @@ use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
 
 readonly class Migration320Beta extends AbstractMigration
 {
+    /**
+     * Retrieve the migration version identifier.
+     *
+     * @return string The migration version "3.2.0-beta".
+     */
     public function getVersion(): string
     {
         return '3.2.0-beta';
     }
 
+    /**
+     * Migration versions required before applying this migration.
+     *
+     * @return string[] Array of migration version identifiers required as dependencies.
+     */
     public function getDependencies(): array
     {
         return ['3.2.0-alpha'];
     }
 
+    /**
+     * Human-readable summary of the migration's purpose and changes.
+     *
+     * @return string A short description of the migration's intent and applied changes.
+     */
     public function getDescription(): string
     {
         return 'SMTP TLS config, remove link verification, config value as TEXT column';
     }
 
+    /**
+     * Apply migration changes for version 3.2.0-beta.
+     *
+     * Adds the mail.remoteSMTPDisableTLSPeerVerification config, removes main.enableLinkVerification,
+     * drops link verification columns from faqdata and faqdata_revisions, and converts
+     * faqconfig.config_value to a TEXT column using database-specific SQL.
+     *
+     * @param OperationRecorder $recorder Recorder used to record configuration changes and SQL statements.
+     */
     public function up(OperationRecorder $recorder): void
     {
         $recorder->addConfig('mail.remoteSMTPDisableTLSPeerVerification', false);

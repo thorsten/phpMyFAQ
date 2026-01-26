@@ -25,21 +25,45 @@ use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
 
 readonly class Migration420Alpha extends AbstractMigration
 {
+    /**
+     * Retrieve the migration version identifier for this migration.
+     *
+     * @return string The migration version: "4.2.0-alpha".
+     */
     public function getVersion(): string
     {
         return '4.2.0-alpha';
     }
 
+    /**
+     * Migration versions required to be applied before this migration.
+     *
+     * @return string[] An array of migration version strings that must be applied first.
+     */
     public function getDependencies(): array
     {
         return ['4.1.0-alpha.3'];
     }
 
+    /**
+     * Provide a short human-readable description of this migration's changes.
+     *
+     * @return string A concise description of the migration's purpose and affected areas.
+     */
     public function getDescription(): string
     {
         return 'Admin log hash columns, custom pages, chat messages, translation config';
     }
 
+    /**
+     * Applies the 4.2.0-alpha migration: schema changes, permissions, and configuration additions.
+     *
+     * Adds hash columns and an index to faqadminlog; creates the faqcustompages table and its slug index;
+     * grants page management permissions; inserts new configuration keys (URLs, API filters, translation
+     * provider settings, and comment editor toggle); and creates the faqchat_messages table with indexes.
+     *
+     * @param OperationRecorder $recorder Recorder used to register SQL statements, permission grants, and config entries for execution.
+     */
     public function up(OperationRecorder $recorder): void
     {
         // Add hash columns to faqadminlog

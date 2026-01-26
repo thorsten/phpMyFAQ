@@ -40,6 +40,12 @@ final class UpdateRunner
     ) {
     }
 
+    /**
+     * Executes the full update workflow by running each update task in sequence.
+     *
+     * @param Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle Console style helper used for progress and messages.
+     * @return int `Command::SUCCESS` if all steps completed successfully, `Command::FAILURE` otherwise.
+     */
     public function run(SymfonyStyle $symfonyStyle): int
     {
         $steps = [
@@ -64,7 +70,11 @@ final class UpdateRunner
     }
 
     /**
-     * Runs the update in dry-run mode, showing what would be executed without making changes.
+     * Displays a dry-run migration report for a given source version, showing the actions that would be performed without applying any changes.
+     *
+     * @param SymfonyStyle $symfonyStyle Console IO helper used to render the report.
+     * @param string $fromVersion The starting version to simulate updates from.
+     * @return int Command::SUCCESS if the dry-run report was generated successfully, Command::FAILURE if an error occurred.
      */
     public function runDryRun(SymfonyStyle $symfonyStyle, string $fromVersion): int
     {
@@ -91,10 +101,26 @@ final class UpdateRunner
     }
 
     /**
-     * Displays the dry-run report with all operations grouped by type.
-     *
-     * @param array<string, mixed> $report
-     */
+         * Render a human-readable dry-run update report grouped by operation type.
+         *
+         * Prints each migration's version and description, then lists operations grouped by type
+         * (e.g. `sql`, `config_add`, `config_delete`, `config_rename`, `config_update`,
+         * `file_copy`, `directory_copy`, `permission_grant`) with compact, formatted details.
+         * Finally prints a summary with total migrations, total operations, optional per-type
+         * counts, and a final dry-run warning.
+         *
+         * @param array<string,mixed> $report {
+         *     Report payload.
+         *
+         *     @type array<string,array{description:string,operations:array<int,array<string,mixed>>>} $migrations
+         *           Migrations keyed by version with description and a list of operations.
+         *     @type array{
+         *         migrationCount:int,
+         *         totalOperations:int,
+         *         operationsByType?:array<string,int>
+         *     } $summary Summary counts for the report.
+         * }
+         */
     private function displayDryRunReport(SymfonyStyle $symfonyStyle, array $report): void
     {
         if (empty($report['migrations'])) {
@@ -220,6 +246,13 @@ final class UpdateRunner
         $symfonyStyle->warning('This was a dry-run. No changes were made to the database.');
     }
 
+    /**
+     * Normalize whitespace, trim, and truncate a string to a maximum length, appending an ellipsis if truncated.
+     *
+     * @param string $str The input string to normalize and truncate.
+     * @param int $maxLength The maximum allowed length of the returned string (including the ellipsis when applied).
+     * @return string The normalized string, shortened with '...' if its length exceeded $maxLength.
+     */
     private function truncateString(string $str, int $maxLength): string
     {
         $str = preg_replace('/\s+/', ' ', trim($str));
@@ -229,6 +262,12 @@ final class UpdateRunner
         return $str;
     }
 
+    /**
+     * Format a value for human-readable display in dry-run and migration reports.
+     *
+     * @param mixed $value The value to format for display.
+     * @return string The formatted representation: `true`/`false` for booleans, quoted strings (strings longer than 40 characters are truncated to 37 characters plus `...`), `null` for null, or the string cast of other values.
+     */
     private function formatValue(mixed $value): string
     {
         if (is_bool($value)) {
@@ -246,6 +285,12 @@ final class UpdateRunner
         return (string) $value;
     }
 
+    /**
+     * Shortens a filesystem path for display by removing the PMF root and truncating long paths.
+     *
+     * @param string $path The original filesystem path; if `PMF_ROOT_DIR` is defined the prefix will be removed.
+     * @return string The path with the PMF root stripped when applicable and truncated to at most 50 characters, prefixed with `...` if truncated.
+     */
     private function shortenPath(string $path): string
     {
         if (defined('PMF_ROOT_DIR')) {
@@ -259,6 +304,15 @@ final class UpdateRunner
 
     private string $version = '';
 
+    /**
+     * Performs a pre-update health check: verifies maintenance mode and validates filesystem readiness.
+     *
+     * If maintenance mode is not enabled a warning is emitted. If filesystem validation fails an error
+     * is emitted and the method returns a failure status.
+     *
+     * @param SymfonyStyle $symfonyStyle Symfony console helper used to display warnings, errors and success messages.
+     * @return int `Command::SUCCESS` on successful health check, `Command::FAILURE` if the check fails.
+     */
     private function taskHealthCheck(SymfonyStyle $symfonyStyle): int
     {
         $upgrade = new Upgrade($this->system, $this->configuration);
@@ -401,6 +455,13 @@ final class UpdateRunner
         return Command::FAILURE;
     }
 
+    /**
+     * Applies pending database migrations, presents a summary of applied migrations, and updates maintenance mode.
+     *
+     * On success disables maintenance mode and displays migration results; on failure or exception displays error details.
+     *
+     * @return int `Command::SUCCESS` if migrations were applied successfully, `Command::FAILURE` otherwise.
+     */
     private function taskUpdateDatabase(SymfonyStyle $symfonyStyle): int
     {
         $update = new Update($this->system, $this->configuration);
@@ -433,10 +494,14 @@ final class UpdateRunner
     }
 
     /**
-     * Displays migration results in a formatted table.
-     *
-     * @param MigrationResult[] $results
-     */
+         * Render migration results as a table or show a note when no migrations were applied.
+         *
+         * When $results is empty a brief note is printed. Otherwise a table is rendered
+         * with the columns: Version, Description, Operations, Time, and Status (`SUCCESS` or `FAILED`).
+         *
+         * @param Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle The console I/O helper used to print output.
+         * @param MigrationResult[] $results Array of migration results to display.
+         */
     private function displayMigrationResults(SymfonyStyle $symfonyStyle, array $results): void
     {
         if (empty($results)) {
@@ -459,6 +524,11 @@ final class UpdateRunner
         $symfonyStyle->table(['Version', 'Description', 'Operations', 'Time', 'Status'], $tableRows);
     }
 
+    /**
+     * Performs cleanup of temporary upgrade artifacts and reports success to the console.
+     *
+     * @return int `Command::SUCCESS` on successful cleanup.
+     */
     private function taskCleanup(SymfonyStyle $symfonyStyle): int
     {
         $upgrade = new Upgrade($this->system, $this->configuration);

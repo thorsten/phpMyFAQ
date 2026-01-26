@@ -24,21 +24,41 @@ use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
 
 readonly class Migration400Alpha3 extends AbstractMigration
 {
+    /**
+     * Migration version identifier for this migration.
+     *
+     * @return string The migration version (e.g., '4.0.0-alpha.3').
+     */
     public function getVersion(): string
     {
         return '4.0.0-alpha.3';
     }
 
+    /**
+     * List migration version identifiers that this migration depends on.
+     *
+     * @return string[] Array of migration version strings that must be applied before this migration.
+     */
     public function getDependencies(): array
     {
         return ['4.0.0-alpha.2'];
     }
 
+    /**
+     * Provides a short human-readable description of this migration.
+     *
+     * @return string A brief summary of the migration's changes: SEO table, media hosts config, layout settings, and rich snippets.
+     */
     public function getDescription(): string
     {
         return 'SEO table, media hosts config, layout settings, rich snippets';
     }
 
+    /**
+     * Perform the migration for 4.0.0-alpha.3: create the SEO table (using DB-specific DDL) and apply configuration changes.
+     *
+     * @param OperationRecorder $recorder Recorder used to register SQL statements and configuration updates performed by this migration.
+     */
     public function up(OperationRecorder $recorder): void
     {
         // Create SEO table

@@ -33,6 +33,18 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class SetupController extends AbstractController
 {
+    /**
+     * Run pre-upgrade checks for the installed phpMyFAQ version provided in the request body.
+     *
+     * Validates the request content as the installed version, ensures maintenance mode is enabled,
+     * verifies the installed version meets the minimum upgradable version, and checks hard requirements.
+     *
+     * @param Request $request The HTTP request whose body must contain the installed phpMyFAQ version string.
+     * @return JsonResponse A JSON response containing a `message` and an HTTP status code:
+     *                      - 200: Installation check successful.
+     *                      - 400: No version given or pre-upgrade requirement failure (exception message).
+     *                      - 409: Maintenance mode not enabled or installed version below minimum required (advice message).
+     */
     #[Route(path: 'setup/check', name: 'api.private.setup.check', methods: ['POST'])]
     public function check(Request $request): JsonResponse
     {
@@ -71,6 +83,17 @@ final class SetupController extends AbstractController
         return $this->json(['message' => 'Installation check successful'], Response::HTTP_OK);
     }
 
+    /**
+     * Create a configuration backup for the provided installed version.
+     *
+     * Validates the request body for an installed version, determines the configuration
+     * directory based on that version, and attempts to create a backup file.
+     * Returns a JSON response with HTTP 200 and `backupFile` on success,
+     * HTTP 400 if no version is provided, or HTTP 502 if the backup fails.
+     *
+     * @param Request $request HTTP request whose body contains the installed version string.
+     * @return JsonResponse JSON containing a message and, on success, a `backupFile` path.
+     */
     #[Route(path: 'setup/backup', name: 'api.private.setup.backup', methods: ['POST'])]
     public function backup(Request $request): JsonResponse
     {
@@ -99,6 +122,14 @@ final class SetupController extends AbstractController
         return $this->json(['message' => 'Backup successful', 'backupFile' => $pathToBackup], Response::HTTP_OK);
     }
 
+    /**
+     * Performs the database upgrade for a given installed phpMyFAQ version and updates maintenance mode.
+     *
+     * Attempts to apply database updates for the installed version provided in the request body. On success, disables maintenance mode and returns a success message; on failure returns an error message describing the problem.
+     *
+     * @param Request $request HTTP request whose body must contain the installed phpMyFAQ version.
+     * @return JsonResponse JSON with `success` on success, or `error` with an explanatory message on failure.
+     */
     #[Route(path: 'setup/update-database', name: 'api.private.setup.update-database', methods: ['POST'])]
     public function updateDatabase(Request $request): JsonResponse
     {

@@ -29,6 +29,14 @@ class MigrationRegistry
     /** @var array<string, MigrationInterface>|null */
     private ?array $migrations = null;
 
+    /**
+     * Create a MigrationRegistry and register the default migration mappings.
+     *
+     * Stores the provided Configuration for use when instantiating migration classes
+     * and populates the registry with the built-in migrations.
+     *
+     * @param Configuration $configuration Configuration used to instantiate migration classes.
+     */
     public function __construct(
         private readonly Configuration $configuration,
     ) {
@@ -36,10 +44,14 @@ class MigrationRegistry
     }
 
     /**
-     * Registers a migration class.
-     *
-     * @param class-string<MigrationInterface> $className
-     */
+         * Register a migration class for the given version.
+         *
+         * Also clears the cached instantiated migrations so the new registration is picked up.
+         *
+         * @param string $version The version identifier for the migration.
+         * @param class-string<MigrationInterface> $className Fully-qualified migration class name.
+         * @return $this The current MigrationRegistry instance for fluent chaining.
+         */
     public function register(string $version, string $className): self
     {
         $this->migrationClasses[$version] = $className;
@@ -73,9 +85,12 @@ class MigrationRegistry
     }
 
     /**
-     * Returns all registered migrations, sorted by version.
+     * Get all registered migrations ordered by version.
      *
-     * @return array<string, MigrationInterface>
+     * Builds and caches MigrationInterface instances (constructed with the registry's Configuration)
+     * for each registered migration class that exists, then returns them keyed by version.
+     *
+     * @return array<string, MigrationInterface> Associative array mapping version strings to MigrationInterface instances, ordered by version.
      */
     public function getMigrations(): array
     {
@@ -98,7 +113,10 @@ class MigrationRegistry
     }
 
     /**
-     * Returns a specific migration by version.
+     * Retrieve the migration instance for a given version.
+     *
+     * @param string $version The migration version identifier.
+     * @return MigrationInterface|null The migration instance for the version, or `null` if no migration is registered for it.
      */
     public function getMigration(string $version): ?MigrationInterface
     {
@@ -107,9 +125,9 @@ class MigrationRegistry
     }
 
     /**
-     * Returns all versions in order.
+     * List registered migration version strings in ascending version order.
      *
-     * @return string[]
+     * @return string[] Array of migration version strings ordered from lowest to highest.
      */
     public function getVersions(): array
     {
@@ -117,10 +135,11 @@ class MigrationRegistry
     }
 
     /**
-     * Returns migrations that need to be applied to get from $currentVersion to the latest.
-     *
-     * @return MigrationInterface[]
-     */
+         * Get migrations with versions newer than the provided current version.
+         *
+         * @param string $currentVersion The current installed version to compare from.
+         * @return MigrationInterface[] Migrations whose version is greater than `$currentVersion`, keyed by version string.
+         */
     public function getPendingMigrations(string $currentVersion): array
     {
         $pending = [];
@@ -135,11 +154,11 @@ class MigrationRegistry
     }
 
     /**
-     * Returns migrations that need to be applied based on what's already tracked.
-     *
-     * @param string[] $appliedVersions
-     * @return MigrationInterface[]
-     */
+         * Determine migrations that are not present in the provided applied versions.
+         *
+         * @param string[] $appliedVersions List of migration version strings that have already been applied.
+         * @return MigrationInterface[] Migration instances keyed by version for migrations not listed in `$appliedVersions`.
+         */
     public function getUnappliedMigrations(array $appliedVersions): array
     {
         $unapplied = [];
@@ -154,7 +173,9 @@ class MigrationRegistry
     }
 
     /**
-     * Returns the latest migration version.
+     * Get the most recent registered migration version.
+     *
+     * @return string|null The latest migration version string, or `null` if no migrations are registered.
      */
     public function getLatestVersion(): ?string
     {
@@ -163,7 +184,10 @@ class MigrationRegistry
     }
 
     /**
-     * Checks if a migration version exists.
+     * Determine whether a migration is registered for the given version.
+     *
+     * @param string $version The migration version string to check.
+     * @return bool `true` if a migration for the version is registered, `false` otherwise.
      */
     public function hasMigration(string $version): bool
     {

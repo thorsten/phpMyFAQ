@@ -23,6 +23,14 @@ use phpMyFAQ\Filesystem\Filesystem;
 
 readonly class DirectoryCopyOperation implements OperationInterface
 {
+    /**
+     * Create a DirectoryCopyOperation configured to copy a directory from the given source to the given destination.
+     *
+     * @param Filesystem $filesystem The filesystem used to perform the recursive copy.
+     * @param string $source The source directory path to copy.
+     * @param string $destination The destination directory path.
+     * @param bool $onlyIfExists Whether to skip execution when the source directory does not exist (default true).
+     */
     public function __construct(
         private Filesystem $filesystem,
         private string $source,
@@ -31,11 +39,21 @@ readonly class DirectoryCopyOperation implements OperationInterface
     ) {
     }
 
+    /**
+     * Return the operation's type identifier.
+     *
+     * @return string The operation type identifier 'directory_copy'.
+     */
     public function getType(): string
     {
         return 'directory_copy';
     }
 
+    /**
+     * Build a human-friendly description of this directory copy operation.
+     *
+     * @return string A description in the form "Copy directory: {source} -> {destination}" where source and destination paths are shortened for display.
+     */
     public function getDescription(): string
     {
         $sourceShort = $this->shortenPath($this->source);
@@ -43,16 +61,33 @@ readonly class DirectoryCopyOperation implements OperationInterface
         return sprintf('Copy directory: %s -> %s', $sourceShort, $destShort);
     }
 
+    /**
+     * Get the configured source directory path for the operation.
+     *
+     * @return string The source directory path.
+     */
     public function getSource(): string
     {
         return $this->source;
     }
 
+    /**
+     * Get the configured destination path for the directory copy.
+     *
+     * @return string The destination filesystem path.
+     */
     public function getDestination(): string
     {
         return $this->destination;
     }
 
+    /**
+     * Executes the directory copy operation.
+     *
+     * If configured to run only when the source exists, the method returns `true` without performing any action when the source is not a directory. Otherwise it attempts a recursive copy from source to destination.
+     *
+     * @return bool `true` on success or when skipped due to a missing source while onlyIfExists is true, `false` on failure.
+     */
     public function execute(): bool
     {
         if ($this->onlyIfExists && !is_dir($this->source)) {
@@ -67,6 +102,18 @@ readonly class DirectoryCopyOperation implements OperationInterface
         }
     }
 
+    /**
+     * Serialize the operation into an associative array representation.
+     *
+     * The array contains keys describing the operation and its configuration:
+     * - `type`: operation type identifier
+     * - `description`: human-friendly description
+     * - `source`: source directory path
+     * - `destination`: destination directory path
+     * - `onlyIfExists`: whether the operation should be skipped when the source does not exist
+     *
+     * @return array{type:string,description:string,source:string,destination:string,onlyIfExists:bool}
+     */
     public function toArray(): array
     {
         return [
@@ -78,6 +125,12 @@ readonly class DirectoryCopyOperation implements OperationInterface
         ];
     }
 
+    /**
+     * Shortens a filesystem path for display by removing the PMF root directory prefix if defined.
+     *
+     * @param string $path The original filesystem path.
+     * @return string The possibly shortened path with the PMF root prefix removed when applicable.
+     */
     private function shortenPath(string $path): string
     {
         // Remove common prefixes to shorten the path for display

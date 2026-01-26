@@ -25,21 +25,45 @@ use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
 
 readonly class Migration400Alpha extends AbstractMigration
 {
+    /**
+     * Provide the migration's version identifier.
+     *
+     * @return string The migration version string (e.g., "4.0.0-alpha").
+     */
     public function getVersion(): string
     {
         return '4.0.0-alpha';
     }
 
+    /**
+     * Versions that must be applied before this migration.
+     *
+     * @return string[] Array of migration version strings this migration depends on.
+     */
     public function getDependencies(): array
     {
         return ['3.2.3'];
     }
 
+    /**
+     * Short description of the migration: new file layout, bookmarks, sticky order, online update config, and removal of social networks.
+     *
+     * @return string A short human-readable description of the migration.
+     */
     public function getDescription(): string
     {
         return 'New file layout, bookmarks, sticky order, online update config, remove social networks';
     }
 
+    /**
+     * Applies the migration steps required to upgrade the schema and configuration to version 4.0.0-alpha.
+     *
+     * Performs file and directory migrations, updates configuration keys, creates and alters database tables
+     * (bookmarks, sticky ordering, category ordering), removes deprecated settings and tables, and adds
+     * values used by the new release.
+     *
+     * @param OperationRecorder $recorder Recorder used to record filesystem operations, SQL statements, and configuration changes performed by the migration.
+     */
     public function up(OperationRecorder $recorder): void
     {
         // Copy database configuration

@@ -24,21 +24,44 @@ use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
 
 readonly class Migration410Alpha3 extends AbstractMigration
 {
+    /**
+     * Migration version identifier for this migration.
+     *
+     * @return string The migration version string (e.g. "4.1.0-alpha.3").
+     */
     public function getVersion(): string
     {
         return '4.1.0-alpha.3';
     }
 
+    /**
+     * List migration versions that this migration depends on.
+     *
+     * @return string[] An array of migration version strings that must be applied before this migration.
+     */
     public function getDependencies(): array
     {
         return ['4.1.0-alpha.2'];
     }
 
+    /**
+     * Provide a short, human-readable description of this migration.
+     *
+     * @return string A short, human-readable description of the migration's changes.
+     */
     public function getDescription(): string
     {
         return 'LLMs.txt config, LDAP group integration, search optimization indexes';
     }
 
+    /**
+     * Apply migration for 4.1.0-alpha.3: add configuration entries and schedule faqsearches indexes.
+     *
+     * Records the LLMs.txt content and LDAP/search configuration keys, and records SQL statements to
+     * create performance indexes on the faqsearches table using database-appropriate syntax.
+     *
+     * @param OperationRecorder $recorder Recorder used to persist configuration entries and SQL statements.
+     */
     public function up(OperationRecorder $recorder): void
     {
         $llmsText =

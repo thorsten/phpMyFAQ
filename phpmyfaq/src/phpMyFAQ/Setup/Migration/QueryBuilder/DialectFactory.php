@@ -28,7 +28,9 @@ use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\SqlServerDialect;
 class DialectFactory
 {
     /**
-     * Creates the appropriate dialect for the current database type.
+     * Instantiate a Dialect implementation appropriate for the application's current database type.
+     *
+     * @return DialectInterface The dialect instance corresponding to Database::getType().
      */
     public static function create(): DialectInterface
     {
@@ -36,7 +38,11 @@ class DialectFactory
     }
 
     /**
-     * Creates a dialect for the specified database type.
+     * Create a dialect instance corresponding to the given database type.
+     *
+     * @param string $dbType The database type identifier (accepted values: 'mysqli', 'pdo_mysql', 'pgsql', 'pdo_pgsql', 'sqlite3', 'pdo_sqlite', 'sqlsrv', 'pdo_sqlsrv').
+     * @return DialectInterface The dialect implementation for the specified database type.
+     * @throws \InvalidArgumentException If the provided database type is not supported.
      */
     public static function createForType(string $dbType): DialectInterface
     {

@@ -24,21 +24,45 @@ use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
 
 readonly class Migration400Alpha2 extends AbstractMigration
 {
+    /**
+     * Migration version identifier for this migration.
+     *
+     * @return string The semantic version string "4.0.0-alpha.2".
+     */
     public function getVersion(): string
     {
         return '4.0.0-alpha.2';
     }
 
+    /**
+     * List migration version identifiers that must be applied before this migration.
+     *
+     * @return string[] Array of migration version strings required to run before this migration.
+     */
     public function getDependencies(): array
     {
         return ['4.0.0-alpha'];
     }
 
+    /**
+     * Short human-readable description of this migration.
+     *
+     * @return string A brief description of the migration's purpose: "Forms table and forms_edit permission".
+     */
     public function getDescription(): string
     {
         return 'Forms table and forms_edit permission';
     }
 
+    /**
+     * Applies the migration by removing a deprecated configuration key, granting the forms edit permission, and creating the forms table.
+     *
+     * The migration deletes the `main.optionalMailAddress` config key, grants the `forms_edit` permission, and creates a table named `{tablePrefix}faqforms`
+     * with the columns: `form_id`, `input_id`, `input_type`, `input_label`, `input_active`, `input_required`, and `input_lang`.
+     * The exact DDL for the table depends on the database dialect (MySQL, SQL Server, or generic).
+     *
+     * Note: insertion of form inputs is handled separately by the Forms class.
+     */
     public function up(OperationRecorder $recorder): void
     {
         $recorder->deleteConfig('main.optionalMailAddress');

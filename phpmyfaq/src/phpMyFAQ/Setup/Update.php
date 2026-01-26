@@ -84,6 +84,16 @@ class Update extends AbstractSetup
     }
     private MigrationExecutor $migrationExecutor;
 
+    /**
+     * Create an Update instance and initialize migration components.
+     *
+     * Initializes the Update setup with the provided System and Configuration objects
+     * and constructs the MigrationRegistry, MigrationTracker, and MigrationExecutor
+     * used during the update process.
+     *
+     * @param System $system Application system utilities (environment and version access).
+     * @param Configuration $configuration Configuration and database access used by migrations.
+     */
     public function __construct(
         protected System $system,
         private readonly Configuration $configuration,
@@ -195,8 +205,15 @@ class Update extends AbstractSetup
     }
 
     /**
-     * @throws Exception
-     * @throws \Exception
+     * Run pending migrations for the configured version and perform related post-migration work.
+     *
+     * When dry-run mode is enabled, migrations are not applied and SQL statements from pending
+     * migrations and legacy queries are collected instead of executed. When not in dry-run mode,
+     * migration tracking is ensured, post-migration tasks are run, tables are optimized, legacy
+     * queries are executed, and the stored version values are updated.
+     *
+     * @return bool `true` if all migrations succeeded, `false` otherwise.
+     * @throws Exception If migration execution or any post-migration step fails.
      */
     public function applyUpdates(): bool
     {
@@ -238,7 +255,9 @@ class Update extends AbstractSetup
     }
 
     /**
-     * Returns true if all migrations succeeded.
+     * Determine whether every recorded migration result indicates success.
+     *
+     * @return bool `true` if all migrations succeeded, `false` otherwise.
      */
     private function allMigrationsSucceeded(): bool
     {
@@ -251,10 +270,10 @@ class Update extends AbstractSetup
     }
 
     /**
-     * Collects SQL queries from migrations for dry-run backward compatibility.
-     *
-     * @param array<string, MigrationInterface> $migrations
-     */
+         * Collect SQL statements produced by the given migrations and append them to the object's dry-run query list.
+         *
+         * @param array<string, MigrationInterface> $migrations Migrations to inspect for SQL operations.
+         */
     private function collectDryRunQueries(array $migrations): void
     {
         $report = $this->migrationExecutor->generateDryRunReport($migrations);
@@ -269,7 +288,11 @@ class Update extends AbstractSetup
     }
 
     /**
-     * Run any post-migration tasks that can't be handled by the migration system.
+     * Perform post-migration maintenance steps that are not implemented as migrations.
+     *
+     * Executes version-gated tasks:
+     * - Migrates admin log entry hashes when updating from a version earlier than 4.2.0-alpha.
+     * - Inserts form input definitions when updating from a version earlier than 4.0.0-alpha.2.
      */
     private function runPostMigrationTasks(): void
     {
@@ -285,7 +308,9 @@ class Update extends AbstractSetup
     }
 
     /**
-     * Insert form inputs (special handling required due to complex business logic).
+     * Generate INSERT queries for installer-defined form inputs and append them to the internal query queue.
+     *
+     * If generation fails (for example because the inputs already exist), any thrown exception is caught and ignored.
      */
     private function insertFormInputs(): void
     {
@@ -300,6 +325,12 @@ class Update extends AbstractSetup
         }
     }
 
+    /**
+     * Prepare appropriate database maintenance queries for the current DB type and append them to the internal query queue.
+     *
+     * For MySQL (`mysqli`) this adds an `OPTIMIZE TABLE <table>` statement for each table in the configured database.
+     * For PostgreSQL (`pgsql`) this adds a `VACUUM ANALYZE;` statement.
+     */
     public function optimizeTables(): void
     {
         switch (Database::getType()) {
@@ -317,9 +348,9 @@ class Update extends AbstractSetup
     }
 
     /**
-     * Returns detailed dry-run results including all operation types.
+     * Generate a detailed dry-run report for pending migrations against the current target version.
      *
-     * @return array<string, mixed>
+     * @return array<string, mixed> Associative report keyed by migration identifiers containing operation entries (including SQL and non-SQL operation types) and their metadata.
      */
     public function getDryRunResults(): array
     {
@@ -328,7 +359,9 @@ class Update extends AbstractSetup
     }
 
     /**
-     * Returns the formatted dry-run report as a string.
+     * Produce a human-readable formatted dry-run report for migrations pending for the current target version.
+     *
+     * @return string The formatted dry-run report.
      */
     public function getFormattedDryRunReport(): string
     {
@@ -338,7 +371,12 @@ class Update extends AbstractSetup
     }
 
     /**
-     * @throws Exception
+     * Execute collected SQL queries or record them for a dry run.
+     *
+     * When dry-run mode is enabled, appends each query to the dry-run query list.
+     * When not in dry-run mode, executes each query against the configured database.
+     *
+     * @throws Exception If executing any query fails; the thrown exception contains the original error message.
      */
     private function executeQueries(): void
     {

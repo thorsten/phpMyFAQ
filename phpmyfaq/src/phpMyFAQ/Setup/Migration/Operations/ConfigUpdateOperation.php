@@ -23,6 +23,13 @@ use phpMyFAQ\Configuration;
 
 readonly class ConfigUpdateOperation implements OperationInterface
 {
+    /**
+     * Create a new ConfigUpdateOperation.
+     *
+     * @param Configuration $configuration The configuration object to update.
+     * @param string $key The configuration key to set.
+     * @param mixed $value The new value for the configuration key.
+     */
     public function __construct(
         private Configuration $configuration,
         private string $key,
@@ -30,33 +37,69 @@ readonly class ConfigUpdateOperation implements OperationInterface
     ) {
     }
 
+    /**
+     * Identify the operation as a configuration update.
+     *
+     * @return string The operation type identifier 'config_update'.
+     */
     public function getType(): string
     {
         return 'config_update';
     }
 
+    /**
+     * Produce a human-readable description of the configuration update.
+     *
+     * @return string A description in the form "Update configuration: {key} = {displayValue}" where `{displayValue}` is a formatted representation of the value.
+     */
     public function getDescription(): string
     {
         $displayValue = $this->formatValue($this->value);
         return sprintf('Update configuration: %s = %s', $this->key, $displayValue);
     }
 
+    /**
+     * Get the configuration key targeted by this operation.
+     *
+     * @return string The configuration key.
+     */
     public function getKey(): string
     {
         return $this->key;
     }
 
+    /**
+     * Retrieve the configured value for this operation.
+     *
+     * @return mixed The value associated with the configuration key.
+     */
     public function getValue(): mixed
     {
         return $this->value;
     }
 
+    /**
+     * Apply the stored configuration change to the injected Configuration instance.
+     *
+     * @return bool `true` indicating the configuration update was invoked.
+     */
     public function execute(): bool
     {
         $this->configuration->update([$this->key => $this->value]);
         return true;
     }
 
+    /**
+     * Build a serializable representation of this operation.
+     *
+     * The returned array contains:
+     * - 'type': operation type string
+     * - 'description': human-readable description
+     * - 'key': configuration key being updated
+     * - 'value': configured value
+     *
+     * @return array<string,mixed> Associative array with keys 'type', 'description', 'key', and 'value'.
+     */
     public function toArray(): array
     {
         return [
@@ -67,6 +110,16 @@ readonly class ConfigUpdateOperation implements OperationInterface
         ];
     }
 
+    /**
+     * Format a value for human-readable display in migration descriptions.
+     *
+     * Booleans become `true` or `false`. Strings are wrapped in single quotes and
+     * truncated to 47 characters plus "..." if longer than 50 characters.
+     * `null` becomes `null`. Other values are cast to string.
+     *
+     * @param mixed $value The value to format.
+     * @return string The formatted string representation.
+     */
     private function formatValue(mixed $value): string
     {
         if (is_bool($value)) {

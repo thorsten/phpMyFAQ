@@ -30,6 +30,15 @@ class MigrationExecutor
     /** @var MigrationResult[] */
     private array $results = [];
 
+    /**
+     * Create a MigrationExecutor with its required dependencies.
+     *
+     * The provided Configuration and MigrationTracker are used for migration execution
+     * and persistent tracking. The Filesystem is optional and used for file-related
+     * operations during migrations when present.
+     *
+     * @param ?Filesystem $filesystem Optional filesystem used for file and directory operations.
+     */
     public function __construct(
         private readonly Configuration $configuration,
         private readonly MigrationTracker $tracker,
@@ -47,7 +56,9 @@ class MigrationExecutor
     }
 
     /**
-     * Returns whether dry-run mode is enabled.
+     * Indicates whether migrations will be simulated without applying changes.
+     *
+     * @return bool `true` if dry-run mode is enabled, `false` otherwise.
      */
     public function isDryRun(): bool
     {
@@ -55,7 +66,15 @@ class MigrationExecutor
     }
 
     /**
-     * Executes a single migration.
+     * Execute a single migration and collect per-operation results.
+     *
+     * Runs the migration's up() to gather operations, then simulates them when in dry-run mode
+     * or executes them otherwise. On success (and when not in dry-run), the migration is recorded
+     * with the tracker. The produced MigrationResult is stored internally and returned.
+     *
+     * @param MigrationInterface $migration The migration instance to execute.
+     * @return MigrationResult The result containing per-operation outcomes, total execution time (ms),
+     *                         dry-run flag, and any error message if execution failed.
      */
     public function executeMigration(MigrationInterface $migration): MigrationResult
     {
@@ -107,10 +126,12 @@ class MigrationExecutor
     }
 
     /**
-     * Executes multiple migrations in order.
+     * Executes each migration in the given order, collecting and returning their results.
      *
-     * @param MigrationInterface[] $migrations
-     * @return MigrationResult[]
+     * Execution stops after the first failed migration unless dry-run mode is enabled.
+     *
+     * @param MigrationInterface[] $migrations Migrations to execute, in desired order.
+     * @return MigrationResult[] Array of results for the migrations that were processed.
      */
     public function executeMigrations(array $migrations): array
     {
@@ -130,10 +151,12 @@ class MigrationExecutor
     }
 
     /**
-     * Collects operations from migrations without executing them.
+     * Collects operations produced by each migration's up() method without executing them.
      *
-     * @param MigrationInterface[] $migrations
-     * @return array<string, array{migration: MigrationInterface, operations: array<int, array<string, mixed>>}>
+     * @param MigrationInterface[] $migrations Array of migrations keyed by version.
+     * @return array<string, array{migration: MigrationInterface, operations: array<int, array<string, mixed>>}> Array keyed by migration version. Each entry contains:
+     *     - `migration`: the MigrationInterface instance
+     *     - `operations`: an indexed array of operation representations produced by the migration
      */
     public function collectOperations(array $migrations): array
     {
@@ -153,9 +176,9 @@ class MigrationExecutor
     }
 
     /**
-     * Returns all execution results.
+     * Get accumulated migration execution results.
      *
-     * @return MigrationResult[]
+     * @return MigrationResult[] The collected MigrationResult objects in execution order.
      */
     public function getResults(): array
     {
@@ -163,7 +186,9 @@ class MigrationExecutor
     }
 
     /**
-     * Clears stored results.
+     * Clear all accumulated migration results.
+     *
+     * @return $this The current executor instance for method chaining.
      */
     public function clearResults(): self
     {
@@ -172,10 +197,21 @@ class MigrationExecutor
     }
 
     /**
-     * Generates a dry-run report for the given migrations.
+     * Generate a dry-run report summarizing operations produced by each migration.
      *
-     * @param MigrationInterface[] $migrations
-     * @return array<string, mixed>
+     * The report contains two top-level keys:
+     * - `migrations` (array): keyed by migration version; each entry includes:
+     *   - `description` (string): migration description
+     *   - `operationCount` (int): total operations for the migration
+     *   - `operationsByType` (array): counts per operation type
+     *   - `operations` (array): the recorded operations
+     * - `summary` (array): aggregated totals with keys:
+     *   - `migrationCount` (int)
+     *   - `totalOperations` (int)
+     *   - `operationsByType` (array) aggregated across all migrations
+     *
+     * @param MigrationInterface[] $migrations Migrations keyed by version to include in the report.
+     * @return array<string,mixed> The aggregated dry-run report with `migrations` and `summary` keys.
      */
     public function generateDryRunReport(array $migrations): array
     {
@@ -215,9 +251,17 @@ class MigrationExecutor
     }
 
     /**
-     * Formats the dry-run report as a human-readable string.
+     * Produce a human-readable text report for a dry-run migration report.
      *
-     * @param array<string, mixed> $report
+     * The output contains a per-migration section (version, description and grouped
+     * operations: SQL, configuration changes, file operations, permission changes)
+     * followed by a summary with migration and operation counts and a breakdown by
+     * operation type.
+     *
+     * @param array<string,mixed> $report Dry-run report produced by generateDryRunReport(), expected to contain:
+     *                                   - 'migrations': array keyed by version with ['description' => string, 'operations' => array]
+     *                                   - 'summary': array with 'migrationCount', 'totalOperations' and optional 'operationsByType'
+     * @return string Formatted multi-line human-readable report.
      */
     public function formatDryRunReport(array $report): string
     {
@@ -295,6 +339,17 @@ class MigrationExecutor
         return $output;
     }
 
+    /**
+     * Normalize whitespace in a SQL query and shorten it to a maximum length.
+     *
+     * The query's consecutive whitespace characters are collapsed to single spaces and surrounding
+     * whitespace is trimmed. If the result exceeds `$maxLength`, it is truncated and an
+     * ellipsis (`...`) is appended so the returned string length does not exceed `$maxLength`.
+     *
+     * @param string $query The SQL query to normalize and truncate.
+     * @param int $maxLength The maximum allowed length of the returned string (including the ellipsis). Defaults to 100.
+     * @return string The normalized, possibly truncated query.
+     */
     private function truncateQuery(string $query, int $maxLength = 100): string
     {
         $query = preg_replace('/\s+/', ' ', trim($query));

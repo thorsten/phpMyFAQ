@@ -28,6 +28,14 @@ abstract readonly class AbstractMigration implements MigrationInterface
     protected string $tablePrefix;
     protected string $dbType;
 
+    /**
+     * Initialize the migration with a Configuration instance and capture environment-specific database settings.
+     *
+     * The constructor stores the provided Configuration for later access and sets the internal table prefix and
+     * database type based on the current Database environment.
+     *
+     * @param Configuration $configuration The configuration service used to read setup settings.
+     */
     public function __construct(
         protected Configuration $configuration,
     ) {
@@ -36,9 +44,9 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
-     * Default implementation returns an empty array (no dependencies).
+     * Get migration dependencies; override to declare required migration class names.
      *
-     * @return string[]
+     * @return string[] List of migration class names this migration depends on. Empty array if there are no dependencies.
      */
     public function getDependencies(): array
     {
@@ -46,7 +54,9 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
-     * Default implementation - migrations are not reversible unless overridden.
+     * Indicates whether the migration is reversible.
+     *
+     * @return bool `true` if the migration is reversible, `false` otherwise.
      */
     public function isReversible(): bool
     {
@@ -62,7 +72,10 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
-     * Returns the table name with a prefix.
+     * Resolve a table name using the configured table prefix.
+     *
+     * @param string $name The base table name (without prefix).
+     * @return string The fully qualified table name including the configured prefix.
      */
     protected function table(string $name): string
     {
@@ -70,9 +83,10 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
-     * Checks if the current database type matches any of the given types.
+     * Determines whether the current database type matches any of the provided type names.
      *
-     * @param string|string[] $types Database type(s) to check
+     * @param string|string[] $types Database type name or list of names to compare against (e.g. 'mysqli', 'pdo_mysql').
+     * @return bool `true` if the current database type is one of the provided types, `false` otherwise.
      */
     protected function isDbType(string|array $types): bool
     {
@@ -81,15 +95,19 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
-     * Returns true if running MySQL/MariaDB.
-     */
+         * Determine whether the active database type is MySQL or MariaDB.
+         *
+         * @return bool `true` if the current database type is MySQL/MariaDB, `false` otherwise.
+         */
     protected function isMySql(): bool
     {
         return $this->isDbType(['mysqli', 'pdo_mysql']);
     }
 
     /**
-     * Returns true if running PostgreSQL.
+     * Determine whether the active database is PostgreSQL.
+     *
+     * @return bool `true` if the current database type is PostgreSQL (`pgsql` or `pdo_pgsql`), `false` otherwise.
      */
     protected function isPostgreSql(): bool
     {
@@ -97,7 +115,9 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
-     * Returns true if running SQLite.
+     * Determine whether the current database type is SQLite.
+     *
+     * @return bool `true` if the active DB type is `sqlite3` or `pdo_sqlite`, `false` otherwise.
      */
     protected function isSqlite(): bool
     {
@@ -105,17 +125,24 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
-     * Returns true if running SQL Server.
-     */
+         * Determine whether the current database type is Microsoft SQL Server.
+         *
+         * @return bool `true` if the active database type is SQL Server (`sqlsrv` or `pdo_sqlsrv`), `false` otherwise.
+         */
     protected function isSqlServer(): bool
     {
         return $this->isDbType(['sqlsrv', 'pdo_sqlsrv']);
     }
 
     /**
-     * Helper to add a column to a table.
-     * Returns the appropriate SQL for the current database type.
-     */
+         * Builds an ALTER TABLE statement to add a column adapted to the active database dialect.
+         *
+         * @param string $table Unprefixed table name; the configured table prefix will be applied.
+         * @param string $column Column name to add.
+         * @param string $type SQL type definition for the new column (e.g. `VARCHAR(255)`).
+         * @param string|null $default Optional SQL expression for the DEFAULT clause (include quotes/literals as required).
+         * @return string The ALTER TABLE SQL statement that adds the specified column for the current DB type.
+         */
     protected function addColumn(string $table, string $column, string $type, ?string $default = null): string
     {
         $tableName = $this->table($table);
@@ -131,7 +158,11 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
-     * Helper to drop a column from a table.
+     * Builds an SQL statement to drop a column from a prefixed table.
+     *
+     * @param string $table  Unprefixed table name.
+     * @param string $column Column name to drop.
+     * @return string The SQL statement that drops the specified column from the prefixed table.
      */
     protected function dropColumn(string $table, string $column): string
     {
@@ -140,10 +171,12 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
-     * Helper to drop multiple columns from a table (MySQL syntax).
-     *
-     * @param string[] $columns
-     */
+         * Build an ALTER TABLE statement that drops multiple columns using MySQL-style syntax.
+         *
+         * @param string $table Unprefixed table name (will be prefixed by the migration's table prefix).
+         * @param string[] $columns Names of columns to drop.
+         * @return string The generated ALTER TABLE ... DROP COLUMN ... SQL statement.
+         */
     protected function dropColumns(string $table, array $columns): string
     {
         $tableName = $this->table($table);
@@ -152,7 +185,12 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
-     * Helper to create an index.
+     * Builds a CREATE INDEX SQL statement appropriate for the active database.
+     *
+     * @param string $table The logical table name (will be prefixed using the migration's table prefix).
+     * @param string $indexName The name of the index to create.
+     * @param string|array $columns Column name or list of column names to include in the index; an array is joined with ", ".
+     * @return string The SQL statement that creates the index if it does not already exist for the current DB. 
      */
     protected function createIndex(string $table, string $indexName, string|array $columns): string
     {
@@ -173,7 +211,10 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
-     * Helper to drop a table.
+     * Build a DROP TABLE statement for the given table name using the configured prefix.
+     *
+     * @param string $table Unprefixed table name.
+     * @return string SQL DROP TABLE statement targeting the prefixed table.
      */
     protected function dropTable(string $table): string
     {
@@ -181,15 +222,26 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
-     * Helper to drop a table if it exists.
-     */
+         * Builds a DROP TABLE IF EXISTS SQL statement for the given table name.
+         *
+         * @param string $table The table name without prefix.
+         * @return string The SQL statement to drop the prefixed table if it exists.
+         */
     protected function dropTableIfExists(string $table): string
     {
         return sprintf('DROP TABLE IF EXISTS %s', $this->table($table));
     }
 
     /**
-     * Helper for UPDATE queries with a language code fix pattern.
+     * Builds an UPDATE SQL statement that replaces a language code value in a specified column.
+     *
+     * The table name is passed through the migration's table-prefix resolver before being used.
+     *
+     * @param string $table The (unprefixed) table name to update.
+     * @param string $column The column containing the language code.
+     * @param string $oldCode The language code value to replace.
+     * @param string $newCode The language code value to set.
+     * @return string The constructed UPDATE SQL statement.
      */
     protected function updateLanguageCode(string $table, string $column, string $oldCode, string $newCode): string
     {
@@ -204,7 +256,9 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
-     * Returns the INTEGER type appropriate for the database.
+     * Get the SQL integer column type for the current database.
+     *
+     * @return string The SQL type name: 'INT' for MySQL/MariaDB, 'INTEGER' for other databases.
      */
     protected function integerType(): string
     {
@@ -215,7 +269,9 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
-     * Returns the TEXT type appropriate for the database.
+     * Determine the SQL column type to use for text fields for the current database.
+     *
+     * @return string The SQL type name for text columns: 'NVARCHAR(MAX)' for SQL Server variants, otherwise 'TEXT'.
      */
     protected function textType(): string
     {
@@ -226,7 +282,10 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
-     * Returns the VARCHAR type appropriate for the database.
+     * Selects the VARCHAR column type declaration appropriate for the active database.
+     *
+     * @param int $length The character length for the VARCHAR/NVARCHAR column.
+     * @return string The SQL type declaration, e.g. `NVARCHAR(255)` for SQL Server or `VARCHAR(255)` for other databases.
      */
     protected function varcharType(int $length): string
     {
@@ -237,8 +296,13 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
-     * Returns the TIMESTAMP/DATETIME type with default appropriate for the database.
-     */
+         * Selects the appropriate TIMESTAMP/DATETIME column type for the active database.
+         *
+         * When $withDefault is true, the returned string includes a database-specific default/current-timestamp clause.
+         *
+         * @param bool $withDefault If true, append the database-specific DEFAULT/current-timestamp clause.
+         * @return string The SQL column type (optionally including NOT NULL and DEFAULT clause) suitable for the current DB driver.
+         */
     protected function timestampType(bool $withDefault = true): string
     {
         $type = match ($this->dbType) {
@@ -259,8 +323,10 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
-     * Returns the BOOLEAN/TINYINT type appropriate for the database.
-     */
+         * Determine the SQL column type used to represent boolean values for the current database.
+         *
+         * @return string `TINYINT(1)` for MySQL, `TINYINT` for SQL Server, `INTEGER` for other databases.
+         */
     protected function booleanType(): string
     {
         return match ($this->dbType) {
@@ -271,7 +337,10 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
-     * Returns the auto-increment column definition appropriate for the database.
+     * Produce an auto-increment column definition suited to the active database type.
+     *
+     * @param string $columnName Name of the column; defaults to "id".
+     * @return string Column definition fragment including type and auto-increment syntax.
      */
     protected function autoIncrementColumn(string $columnName = 'id'): string
     {
@@ -285,7 +354,10 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
-     * Gets a configuration value safely.
+     * Retrieve the configuration value for the specified key.
+     *
+     * @param string $key The configuration key to retrieve.
+     * @return mixed The value associated with the configuration key.
      */
     protected function getConfig(string $key): mixed
     {
@@ -293,8 +365,12 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
-     * Calculates a checksum for migration integrity.
-     */
+         * Compute a checksum representing this migration's identity.
+         *
+         * The checksum is derived from the migration's version, description, and class name.
+         *
+         * @return string The SHA-256 hash of a JSON object containing the migration's version, description, and class name.
+         */
     public function getChecksum(): string
     {
         $data = [

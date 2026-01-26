@@ -24,6 +24,13 @@ use phpMyFAQ\User;
 
 readonly class PermissionGrantOperation implements OperationInterface
 {
+    /**
+     * Initialize the operation with configuration, the permission's name and description, and the target user ID.
+     *
+     * @param string $permissionName The machine name/key of the permission to create.
+     * @param string $permissionDescription Human-readable description of the permission.
+     * @param int $userId ID of the user who will receive the granted permission.
+     */
     public function __construct(
         private Configuration $configuration,
         private string $permissionName,
@@ -32,31 +39,61 @@ readonly class PermissionGrantOperation implements OperationInterface
     ) {
     }
 
+    /**
+     * Get the operation type identifier for this migration.
+     *
+     * @return string The operation type identifier 'permission_grant'.
+     */
     public function getType(): string
     {
         return 'permission_grant';
     }
 
+    /**
+     * Get a human-readable description of the permission being added.
+     *
+     * @return string The description formatted as "Add permission: {name} ({description})".
+     */
     public function getDescription(): string
     {
         return sprintf('Add permission: %s (%s)', $this->permissionName, $this->permissionDescription);
     }
 
+    /**
+     * Get the permission name configured for this operation.
+     *
+     * @return string The configured permission name.
+     */
     public function getPermissionName(): string
     {
         return $this->permissionName;
     }
 
+    /**
+     * Retrieve the human-readable description of the permission.
+     *
+     * @return string The permission description.
+     */
     public function getPermissionDescription(): string
     {
         return $this->permissionDescription;
     }
 
+    /**
+     * Get the target user id for the permission grant.
+     *
+     * @return int The user id to which the new permission will be granted.
+     */
     public function getUserId(): int
     {
         return $this->userId;
     }
 
+    /**
+     * Creates a new permission and assigns it to the configured user.
+     *
+     * @return bool `true` if the permission was added and granted to the user, `false` otherwise.
+     */
     public function execute(): bool
     {
         try {
@@ -73,6 +110,17 @@ readonly class PermissionGrantOperation implements OperationInterface
         }
     }
 
+    /**
+     * Serialize the operation into an associative array.
+     *
+     * @return array{
+     *     type: string,
+     *     description: string,
+     *     permissionName: string,
+     *     permissionDescription: string,
+     *     userId: int
+     * } An associative array with the operation's type, description, permission name and description, and target user ID.
+     */
     public function toArray(): array
     {
         return [

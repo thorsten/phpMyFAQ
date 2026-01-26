@@ -24,21 +24,46 @@ use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
 
 readonly class Migration405 extends AbstractMigration
 {
+    /**
+     * Gets the migration target version.
+     *
+     * @return string The migration version identifier (e.g., "4.0.5").
+     */
     public function getVersion(): string
     {
         return '4.0.5';
     }
 
+    /**
+     * Migration versions that must be applied before this migration.
+     *
+     * @return string[] Required migration version strings.
+     */
     public function getDependencies(): array
     {
         return ['4.0.0-beta.2'];
     }
 
+    /**
+     * Short human-readable description of the migration: remove old section permissions and increase the faqforms.input_label column size.
+     *
+     * @return string A brief description of the migration. 
+     */
     public function getDescription(): string
     {
         return 'Remove old section permissions, increase forms input_label column';
     }
 
+    /**
+     * Remove legacy section permissions and increase the size of the faqforms.input_label column.
+     *
+     * Executes SQL statements to delete the old permissions (view_sections, add_section, edit_section,
+     * delete_section) from the faqright table and updates the faqforms.input_label column to support
+     * up to 500 characters using database-specific operations (ALTER for MySQL/PostgreSQL/SQL Server,
+     * table rebuild for SQLite).
+     *
+     * @param OperationRecorder $recorder Recorder used to collect and execute migration SQL operations.
+     */
     public function up(OperationRecorder $recorder): void
     {
         // Delete old permissions

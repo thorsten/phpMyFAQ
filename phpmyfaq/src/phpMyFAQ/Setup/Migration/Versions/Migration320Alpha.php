@@ -24,16 +24,39 @@ use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
 
 readonly class Migration320Alpha extends AbstractMigration
 {
+    /**
+     * Migration version identifier.
+     *
+     * @return string The version identifier for this migration (e.g., "3.2.0-alpha").
+     */
     public function getVersion(): string
     {
         return '3.2.0-alpha';
     }
 
+    /**
+     * Provide a short human-readable summary of the migration's purpose.
+     *
+     * @return string A concise description listing the migration's changes: Microsoft Entra ID support, two-factor authentication support, creation of a backup table, Google ReCAPTCHA v2 support, and removal of section tables.
+     */
     public function getDescription(): string
     {
         return 'Microsoft Entra ID support, 2FA support, backup table, Google ReCAPTCHA v2, remove section tables';
     }
 
+    /**
+     * Apply schema and configuration changes required by the 3.2.0-alpha migration.
+     *
+     * Performs database schema updates and configuration additions/remappings, including:
+     * - enable Microsoft Entra ID sign-in and 2FA support flag,
+     * - add OAuth-related columns to faquser and 2FA columns to faquserdata,
+     * - create the faqbackup table,
+     * - migrate faqdata to InnoDB on MySQL,
+     * - add new main.* and Google ReCAPTCHA v2 configuration entries,
+     * - drop obsolete section-related tables.
+     *
+     * @param OperationRecorder $recorder Recorder used to schedule SQL and configuration operations for the migration.
+     */
     public function up(OperationRecorder $recorder): void
     {
         // Microsoft Entra ID support and 2FA-support

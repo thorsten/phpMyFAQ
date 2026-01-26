@@ -29,13 +29,25 @@ class AlterTableBuilder
     /** @var array<int, array{action: string, column: string, type: string|null, after: string|null, default: string|null, nullable: bool}> */
     private array $alterations = [];
 
+    /**
+     * Initialize the builder with an optional SQL dialect.
+     *
+     * If no dialect is provided, a default dialect is created via DialectFactory::create()
+     * and stored for later SQL generation.
+     *
+     * @param DialectInterface|null $dialect The dialect to use for SQL generation, or null to use the default.
+     */
     public function __construct(?DialectInterface $dialect = null)
     {
         $this->dialect = $dialect ?? DialectFactory::create();
     }
 
     /**
-     * Sets the table name.
+     * Set the target table for subsequent ALTER operations.
+     *
+     * @param string $name The table name without prefix.
+     * @param bool $withPrefix If true, prepend the configured table prefix to $name.
+     * @return self The current builder instance.
      */
     public function table(string $name, bool $withPrefix = true): self
     {
@@ -44,7 +56,13 @@ class AlterTableBuilder
     }
 
     /**
-     * Adds a new INTEGER column.
+     * Adds an INTEGER column definition to the builder for the current table.
+     *
+     * @param string $name The column name.
+     * @param bool $nullable Whether the column allows NULL.
+     * @param int|null $default Optional integer default value for the column.
+     * @param string|null $after Optional existing column name after which the new column should be placed.
+     * @return self The builder instance for method chaining.
      */
     public function addInteger(string $name, bool $nullable = true, ?int $default = null, ?string $after = null): self
     {
@@ -59,7 +77,14 @@ class AlterTableBuilder
     }
 
     /**
-     * Adds a new VARCHAR column.
+     * Add a VARCHAR column definition to the pending alterations for the current table.
+     *
+     * @param string $name Column name.
+     * @param int $length Length of the VARCHAR.
+     * @param bool $nullable Whether the column allows NULL.
+     * @param string|null $default Default value for the column (provided as an unquoted string; it will be quoted internally) or null for no default.
+     * @param string|null $after Optional column name to position the new column AFTER, or null to append.
+     * @return self The builder instance for method chaining.
      */
     public function addVarchar(
         string $name,
@@ -73,7 +98,12 @@ class AlterTableBuilder
     }
 
     /**
-     * Adds a new TEXT column.
+     * Add a TEXT column to the target table.
+     *
+     * @param string $name The column name.
+     * @param bool $nullable Whether the column allows NULL values.
+     * @param string|null $after Optional column name to position the new column after; ignored if the dialect does not support column positioning.
+     * @return self The builder instance for method chaining.
      */
     public function addText(string $name, bool $nullable = true, ?string $after = null): self
     {
@@ -81,7 +111,13 @@ class AlterTableBuilder
     }
 
     /**
-     * Adds a new BOOLEAN column.
+     * Add a BOOLEAN column to the current table definition.
+     *
+     * @param string $name The column name to add.
+     * @param bool $nullable Whether the column allows NULL.
+     * @param bool|null $default The default value for the column; when provided it will be converted to '1' or '0'.
+     * @param string|null $after Optional column name to position the new column after (may be ignored by some dialects).
+     * @return self The builder instance for method chaining.
      */
     public function addBoolean(string $name, bool $nullable = true, ?bool $default = null, ?string $after = null): self
     {
@@ -90,7 +126,13 @@ class AlterTableBuilder
     }
 
     /**
-     * Adds a new TIMESTAMP column.
+     * Adds a TIMESTAMP column definition to the builder for the configured table.
+     *
+     * @param string $name The column name.
+     * @param bool $nullable Whether the column allows NULL values.
+     * @param bool $defaultCurrent If true, sets the column default to the current timestamp.
+     * @param string|null $after Optional column name after which the new column should be placed.
+     * @return self The builder instance for method chaining.
      */
     public function addTimestamp(
         string $name,
@@ -103,7 +145,11 @@ class AlterTableBuilder
     }
 
     /**
-     * Modifies an existing column type.
+     * Queue a modification that changes the specified column's type.
+     *
+     * @param string $name The name of the column to modify.
+     * @param string $type The new SQL column type definition to apply.
+     * @return self The current builder instance for method chaining.
      */
     public function modifyColumn(string $name, string $type): self
     {
@@ -119,7 +165,10 @@ class AlterTableBuilder
     }
 
     /**
-     * Drops a column.
+     * Schedule removal of a column from the target table.
+     *
+     * @param string $name The name of the column to drop.
+     * @return $this The builder instance for method chaining.
      */
     public function dropColumn(string $name): self
     {
@@ -135,10 +184,9 @@ class AlterTableBuilder
     }
 
     /**
-     * Builds the ALTER TABLE statement(s).
-     * Returns an array of statements because some databases require separate statements for each alteration.
+     * Build ALTER TABLE statements for all queued alterations.
      *
-     * @return string[]
+     * @return string[] An array of SQL ALTER statements, one statement per recorded alteration.
      */
     public function build(): array
     {
@@ -178,7 +226,11 @@ class AlterTableBuilder
     }
 
     /**
-     * Builds a single ALTER TABLE statement combining all alterations (MySQL only).
+     * Build a single MySQL-style ALTER TABLE statement that combines all queued alterations.
+     *
+     * Processes ADD, MODIFY and DROP alterations in the order they were added. ADD parts include nullability and DEFAULT clauses, and will include an AFTER clause when the configured dialect supports column positioning.
+     *
+     * @return string The combined ALTER TABLE SQL statement for the configured table.
      */
     public function buildCombined(): string
     {
@@ -216,6 +268,17 @@ class AlterTableBuilder
         return "ALTER TABLE {$this->tableName} " . implode(', ', $parts);
     }
 
+    /**
+     * Append a column alteration entry to the builder's pending alterations.
+     *
+     * @param string $action The alteration action: 'ADD', 'MODIFY', or 'DROP'.
+     * @param string $name The column name to be altered.
+     * @param string $type The column SQL type or modification specification (e.g., "VARCHAR(255)").
+     * @param bool $nullable True if the column should allow NULL, false for NOT NULL.
+     * @param string|null $default The default value as an SQL literal (e.g., "'text'", "1") or null for none.
+     * @param string|null $after Optional column name to position the new column after, or null to omit positioning.
+     * @return self The current AlterTableBuilder instance for chaining.
+     */
     private function addColumn(
         string $action,
         string $name,
