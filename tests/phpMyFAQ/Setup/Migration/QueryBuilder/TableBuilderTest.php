@@ -1,0 +1,255 @@
+<?php
+
+namespace phpMyFAQ\Setup\Migration\QueryBuilder;
+
+use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\MysqlDialect;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
+
+#[AllowMockObjectsWithoutExpectations]
+class TableBuilderTest extends TestCase
+{
+    private TableBuilder $builder;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->builder = new TableBuilder(new MysqlDialect());
+    }
+
+    public function testTableSetsTableName(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->integer('id', false)
+            ->primaryKey('id')
+            ->build();
+
+        $this->assertStringContainsString('CREATE TABLE test', $sql);
+    }
+
+    public function testIfNotExists(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->ifNotExists()
+            ->integer('id', false)
+            ->primaryKey('id')
+            ->build();
+
+        $this->assertStringContainsString('CREATE TABLE IF NOT EXISTS test', $sql);
+    }
+
+    public function testIntegerColumn(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->integer('id', false)
+            ->primaryKey('id')
+            ->build();
+
+        $this->assertStringContainsString('id INT NOT NULL', $sql);
+    }
+
+    public function testIntegerColumnNullable(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->integer('nullable_col', true)
+            ->build();
+
+        $this->assertStringContainsString('nullable_col INT NULL', $sql);
+    }
+
+    public function testIntegerColumnWithDefault(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->integer('with_default', true, 0)
+            ->build();
+
+        $this->assertStringContainsString('DEFAULT 0', $sql);
+    }
+
+    public function testVarcharColumn(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->varchar('name', 255, false)
+            ->build();
+
+        $this->assertStringContainsString('name VARCHAR(255) NOT NULL', $sql);
+    }
+
+    public function testVarcharColumnWithDefault(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->varchar('status', 50, true, 'active')
+            ->build();
+
+        $this->assertStringContainsString("DEFAULT 'active'", $sql);
+    }
+
+    public function testTextColumn(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->text('content', true)
+            ->build();
+
+        $this->assertStringContainsString('content TEXT NULL', $sql);
+    }
+
+    public function testBooleanColumn(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->boolean('is_active', false, true)
+            ->build();
+
+        $this->assertStringContainsString('is_active TINYINT(1) NOT NULL DEFAULT 1', $sql);
+    }
+
+    public function testTimestampColumn(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->timestamp('created_at', false, true)
+            ->build();
+
+        $this->assertStringContainsString('created_at TIMESTAMP', $sql);
+        $this->assertStringContainsString('DEFAULT CURRENT_TIMESTAMP', $sql);
+    }
+
+    public function testDateColumn(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->date('birth_date', true)
+            ->build();
+
+        $this->assertStringContainsString('birth_date DATE NULL', $sql);
+    }
+
+    public function testCharColumn(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->char('flag', 1, false, 'Y')
+            ->build();
+
+        $this->assertStringContainsString("flag CHAR(1) NOT NULL DEFAULT 'Y'", $sql);
+    }
+
+    public function testAutoIncrementColumn(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->autoIncrement('id')
+            ->build();
+
+        $this->assertStringContainsString('id INT NOT NULL AUTO_INCREMENT', $sql);
+    }
+
+    public function testPrimaryKey(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->integer('id', false)
+            ->primaryKey('id')
+            ->build();
+
+        $this->assertStringContainsString('PRIMARY KEY (id)', $sql);
+    }
+
+    public function testCompositePrimaryKey(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->integer('id', false)
+            ->varchar('lang', 5, false)
+            ->primaryKey(['id', 'lang'])
+            ->build();
+
+        $this->assertStringContainsString('PRIMARY KEY (id, lang)', $sql);
+    }
+
+    public function testIndex(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->varchar('email', 255)
+            ->index('idx_email', 'email')
+            ->build();
+
+        $this->assertStringContainsString('INDEX idx_email (email)', $sql);
+    }
+
+    public function testCompositeIndex(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->integer('user_id')
+            ->integer('faq_id')
+            ->index('idx_user_faq', ['user_id', 'faq_id'])
+            ->build();
+
+        $this->assertStringContainsString('INDEX idx_user_faq (user_id, faq_id)', $sql);
+    }
+
+    public function testUniqueIndex(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->varchar('slug', 255)
+            ->uniqueIndex('idx_slug', 'slug')
+            ->build();
+
+        $this->assertStringContainsString('UNIQUE INDEX idx_slug (slug)', $sql);
+    }
+
+    public function testBuildIndexStatements(): void
+    {
+        $this->builder
+            ->table('test', false)
+            ->varchar('email', 255)
+            ->index('idx_email', 'email');
+
+        $statements = $this->builder->buildIndexStatements();
+
+        $this->assertCount(1, $statements);
+        $this->assertStringContainsString('CREATE INDEX idx_email ON test', $statements[0]);
+    }
+
+    public function testBigIntegerColumn(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->bigInteger('big_id', false)
+            ->build();
+
+        $this->assertStringContainsString('big_id BIGINT NOT NULL', $sql);
+    }
+
+    public function testSmallIntegerColumn(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->smallInteger('small_val', true)
+            ->build();
+
+        $this->assertStringContainsString('small_val SMALLINT NULL', $sql);
+    }
+
+    public function testCreateTableSuffix(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->integer('id', false)
+            ->build();
+
+        $this->assertStringContainsString('ENGINE = InnoDB', $sql);
+        $this->assertStringContainsString('utf8mb4', $sql);
+    }
+}
