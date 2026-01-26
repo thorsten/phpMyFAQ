@@ -19,11 +19,12 @@
         <th>{{ 'msgLanguage' | translate }}</th>
         <th>{{ 'msgQuestion' | translate }}</th>
       </tr>
+    </thead>
     <tbody>
     {% for faq in orphanedFaqs %}
       <tr>
         <td>{{ faq.faqId }}</td>
-        <td>{{ faq.language }}</td>
+        <td>{{ faq.languageName }}</td>
         <td>
           <a href="{{ faq.url }}">{{ faq.question }}</a>
         </td>

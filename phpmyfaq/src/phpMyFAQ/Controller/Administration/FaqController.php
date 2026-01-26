@@ -246,7 +246,16 @@ final class FaqController extends AbstractAdministrationController
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $category = new Category($this->configuration, $currentAdminGroups, true);
+        $faqId = (int) Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
+        $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $selectedRevisionId = Filter::filterVar($request->attributes->get('selectedRevisionId'), FILTER_VALIDATE_INT);
+
+        $category = new Category(
+            $this->configuration, 
+            $currentAdminGroups, 
+            true, 
+            $faqLanguage
+        );
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
         $category->buildCategoryTree();
@@ -257,10 +266,6 @@ final class FaqController extends AbstractAdministrationController
         $categoryRelation = new Relation($this->configuration, $category);
         $faq = $this->container->get(id: 'phpmyfaq.faq');
         $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
-
-        $faqId = (int) Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
-        $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
-        $selectedRevisionId = Filter::filterVar($request->attributes->get('selectedRevisionId'), FILTER_VALIDATE_INT);
 
         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_EDIT->value . ':' . $faqId);
 
