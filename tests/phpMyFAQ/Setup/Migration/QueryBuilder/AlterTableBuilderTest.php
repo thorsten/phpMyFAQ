@@ -5,7 +5,8 @@ namespace phpMyFAQ\Setup\Migration\QueryBuilder;
 use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\MysqlDialect;
 use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\PostgresDialect;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use PHPUnit\Framework\TestCase;use RuntimeException;
+use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 #[AllowMockObjectsWithoutExpectations]
 class AlterTableBuilderTest extends TestCase

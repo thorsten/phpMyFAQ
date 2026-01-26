@@ -337,4 +337,37 @@ class TableBuilderTest extends TestCase
         // Single quotes should be escaped as ''
         $this->assertStringContainsString("DEFAULT 'Y''all'", $sql);
     }
+
+    public function testSqliteAutoIncrementDoesNotDuplicatePrimaryKey(): void
+    {
+        $sqliteBuilder = new TableBuilder(new SqliteDialect());
+        $sql = $sqliteBuilder
+            ->table('test', false)
+            ->autoIncrement('id')
+            ->varchar('name', 100)
+            ->build();
+
+        // SQLite autoIncrement already includes PRIMARY KEY
+        $this->assertStringContainsString('INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT', $sql);
+
+        // Should NOT have a duplicate "PRIMARY KEY (id)" clause
+        // Count occurrences of "PRIMARY KEY" - should be exactly 1
+        $count = substr_count($sql, 'PRIMARY KEY');
+        $this->assertEquals(1, $count, 'Should have exactly one PRIMARY KEY clause, not duplicate');
+    }
+
+    public function testAutoIncrementSkipsExplicitPrimaryKey(): void
+    {
+        $sqliteBuilder = new TableBuilder(new SqliteDialect());
+        $sql = $sqliteBuilder
+            ->table('test', false)
+            ->autoIncrement('id')
+            ->varchar('name', 100)
+            ->primaryKey('id') // This should be ignored when autoIncrement is used
+            ->build();
+
+        // Should still only have one PRIMARY KEY (from autoIncrement)
+        $count = substr_count($sql, 'PRIMARY KEY');
+        $this->assertEquals(1, $count, 'Should skip explicit PRIMARY KEY when AUTO_INCREMENT exists');
+    }
 }

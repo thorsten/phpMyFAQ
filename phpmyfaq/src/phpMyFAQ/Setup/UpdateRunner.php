@@ -82,7 +82,15 @@ final class UpdateRunner
         $update->dryRun = true;
 
         try {
-            $update->applyUpdates();
+            $result = $update->applyUpdates();
+
+            // Check if applyUpdates returned false (indicating failure)
+            if ($result === false) {
+                $symfonyStyle->error('Dry-run failed: One or more migrations did not succeed.');
+                return Command::FAILURE;
+            }
+
+            // Only proceed if applyUpdates succeeded
             $report = $update->getDryRunResults();
 
             $this->displayDryRunReport($symfonyStyle, $report);
