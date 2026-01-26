@@ -40,7 +40,7 @@ final class DashboardController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route(path: '/', name: 'admin.dashboard', methods: ['GET'])]
+    #[Route(path: '/', name: 'admin.dashboard', methods: ['GET', 'POST'])]
     public function index(Request $request): Response
     {
         $this->userIsAuthenticated();

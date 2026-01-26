@@ -325,7 +325,11 @@ final class FaqController extends AbstractAdministrationController
             ...$this->getBaseTemplateVars(),
             'header' => Translation::get(key: 'ad_entry_edit_1') . ' ' . Translation::get(key: 'ad_entry_edit_2'),
             'editExistingFaq' => true,
-            'currentRevision' => sprintf('%s 1.%d', Translation::get(key: 'msgRevision'), $selectedRevisionId),
+            'currentRevision' => sprintf(
+                '%s 1.%d',
+                Translation::get(key: 'msgRevision'),
+                $selectedRevisionId ?? $faqData['revision_id'],
+            ),
             'numberOfRevisions' => count($revisions),
             'faqId' => $faqId,
             'faqLang' => $faqLanguage,

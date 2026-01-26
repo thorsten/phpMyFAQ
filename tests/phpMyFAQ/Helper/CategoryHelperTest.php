@@ -162,8 +162,8 @@ class CategoryHelperTest extends TestCase
 
         $result = $categoryHelper->buildAvailableCategoryTranslationsList($availableTranslations);
 
-        $this->assertStringContainsString('<li><strong>German</strong>', $result);
-        $this->assertStringContainsString('<li><strong>French</strong>', $result);
+        $this->assertStringContainsString('<li><strong>Deutsch</strong>', $result);
+        $this->assertStringContainsString('<li><strong>Français</strong>', $result);
         $this->assertStringContainsString('Deutsche Kategorie', $result);
         // French characters get HTML encoded, so check for that
         $this->assertStringContainsString('fran', $result);

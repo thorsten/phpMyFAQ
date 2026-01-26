@@ -28,8 +28,12 @@ use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Throwable;
 
 final class UpdateRunner
 {
@@ -73,7 +77,7 @@ final class UpdateRunner
 
         try {
             $upgrade->checkFilesystem();
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             $symfonyStyle->error(message: 'Error during health check: ' . $throwable->getMessage());
             return Command::FAILURE;
         }
@@ -105,12 +109,20 @@ final class UpdateRunner
             }
         } catch (Exception|TransportExceptionInterface|DecodingExceptionInterface $exception) {
             $symfonyStyle->error(message: 'Error during update check: ' . $exception->getMessage());
+            return Command::FAILURE;
         }
 
         return Command::SUCCESS;
     }
 
-    private function taskDownloadPackage(SymfonyStyle $symfonyStyle): int
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws \phpMyFAQ\Core\Exception
+     * @throws ClientExceptionInterface
+     * @throws \JsonException
+     */ private function taskDownloadPackage(SymfonyStyle $symfonyStyle): int
     {
         $upgrade = new Upgrade($this->system, $this->configuration);
         $pathToPackage = $upgrade->downloadPackage($this->version);
