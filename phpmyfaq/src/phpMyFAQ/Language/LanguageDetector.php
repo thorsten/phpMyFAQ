@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Language;
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
 use Symfony\Component\HttpFoundation\Request;

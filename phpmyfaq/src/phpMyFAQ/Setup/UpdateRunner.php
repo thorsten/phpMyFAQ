@@ -226,7 +226,7 @@ final class UpdateRunner
 
     private function truncateString(string $str, int $maxLength): string
     {
-        $str = preg_replace('/\s+/', ' ', trim($str));
+        $str = preg_replace('/\s+/', ' ', trim($str)) ?? '';
         if (strlen($str) > $maxLength) {
             return substr($str, 0, $maxLength - 3) . '...';
         }

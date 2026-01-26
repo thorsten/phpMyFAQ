@@ -86,9 +86,11 @@ class MigrationRegistry
         $this->migrations = [];
 
         foreach ($this->migrationClasses as $version => $className) {
-            if (class_exists($className)) {
-                $this->migrations[$version] = new $className($this->configuration);
+            if (!class_exists($className)) {
+                continue;
             }
+
+            $this->migrations[$version] = new $className($this->configuration);
         }
 
         // Sort by version
@@ -126,9 +128,11 @@ class MigrationRegistry
         $pending = [];
 
         foreach ($this->getMigrations() as $version => $migration) {
-            if (version_compare($currentVersion, $version, '<')) {
-                $pending[$version] = $migration;
+            if (!version_compare($currentVersion, $version, '<')) {
+                continue;
             }
+
+            $pending[$version] = $migration;
         }
 
         return $pending;
@@ -145,9 +149,11 @@ class MigrationRegistry
         $unapplied = [];
 
         foreach ($this->getMigrations() as $version => $migration) {
-            if (!in_array($version, $appliedVersions, true)) {
-                $unapplied[$version] = $migration;
+            if (in_array($version, $appliedVersions, true)) {
+                continue;
             }
+
+            $unapplied[$version] = $migration;
         }
 
         return $unapplied;

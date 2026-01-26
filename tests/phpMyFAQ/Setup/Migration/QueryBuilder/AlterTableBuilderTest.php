@@ -5,7 +5,7 @@ namespace phpMyFAQ\Setup\Migration\QueryBuilder;
 use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\MysqlDialect;
 use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\PostgresDialect;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\TestCase;use RuntimeException;
 
 #[AllowMockObjectsWithoutExpectations]
 class AlterTableBuilderTest extends TestCase
@@ -180,5 +180,34 @@ class AlterTableBuilderTest extends TestCase
             ->build();
 
         $this->assertStringContainsString('DEFAULT 0', $statements[0]);
+    }
+
+    public function testAddVarcharWithQuotesInDefault(): void
+    {
+        $statements = $this->mysqlBuilder
+            ->table('test', false)
+            ->addVarchar('status', 50, true, "it's working")
+            ->build();
+
+        // Single quotes should be escaped as ''
+        $this->assertStringContainsString("DEFAULT 'it''s working'", $statements[0]);
+    }
+
+    public function testBuildWithoutCallingTableThrowsException(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Table name not set. Call table() before building');
+
+        $builder = new AlterTableBuilder(new MysqlDialect());
+        $builder->addInteger('col1')->build();
+    }
+
+    public function testBuildCombinedWithoutCallingTableThrowsException(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Table name not set. Call table() before building');
+
+        $builder = new AlterTableBuilder(new MysqlDialect());
+        $builder->addInteger('col1')->buildCombined();
     }
 }

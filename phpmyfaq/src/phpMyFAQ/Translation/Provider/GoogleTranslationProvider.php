@@ -91,7 +91,7 @@ class GoogleTranslationProvider extends AbstractTranslationProvider
             ]);
 
             $data = $response->toArray();
-            return array_map(fn($translation) => $translation['translatedText'], $data['data']['translations']);
+            return array_map(static fn($translation) => $translation['translatedText'], $data['data']['translations']);
         } catch (Exception|TransportExceptionInterface $e) {
             throw new ApiException('Google Translation API error: ' . $e->getMessage());
         }

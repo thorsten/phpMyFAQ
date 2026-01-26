@@ -298,10 +298,10 @@ class MigrationExecutor
 
     private function truncateQuery(string $query, int $maxLength = 100): string
     {
-        $query = preg_replace('/\s+/', ' ', trim($query));
-        if (strlen($query) > $maxLength) {
-            return substr($query, 0, $maxLength - 3) . '...';
+        $sanitized = preg_replace('/\s+/', ' ', trim($query)) ?? '';
+        if (strlen($sanitized) > $maxLength) {
+            return substr($sanitized, 0, $maxLength - 3) . '...';
         }
-        return $query;
+        return $sanitized;
     }
 }

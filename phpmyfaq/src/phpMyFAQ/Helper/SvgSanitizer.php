@@ -132,16 +132,20 @@ class SvgSanitizer
 
         // Check for dangerous patterns
         foreach (self::DANGEROUS_PATTERNS as $pattern) {
-            if (preg_match($pattern, $content)) {
-                return false;
+            if (!preg_match($pattern, $content)) {
+                continue;
             }
+
+            return false;
         }
 
         // Check for dangerous element tags
         foreach (self::DANGEROUS_ELEMENTS as $element) {
-            if (preg_match('/<' . preg_quote($element, '/') . '\b/i', $content)) {
-                return false;
+            if (!preg_match('/<' . preg_quote($element, '/') . '\b/i', $content)) {
+                continue;
             }
+
+            return false;
         }
 
         return true;
@@ -207,15 +211,19 @@ class SvgSanitizer
         $issues = [];
 
         foreach (self::DANGEROUS_PATTERNS as $pattern) {
-            if (preg_match($pattern, $content, $matches)) {
-                $issues[] = 'Dangerous pattern detected: ' . substr($matches[0], 0, 100);
+            if (!preg_match($pattern, $content, $matches)) {
+                continue;
             }
+
+            $issues[] = 'Dangerous pattern detected: ' . substr($matches[0], 0, 100);
         }
 
         foreach (self::DANGEROUS_ELEMENTS as $element) {
-            if (preg_match('/<' . preg_quote($element, '/') . '\b/i', $content)) {
-                $issues[] = 'Dangerous element found: ' . $element;
+            if (!preg_match('/<' . preg_quote($element, '/') . '\b/i', $content)) {
+                continue;
             }
+
+            $issues[] = 'Dangerous element found: ' . $element;
         }
 
         return $issues;

@@ -246,7 +246,7 @@ class Upgrade extends AbstractSetup
 
         // Create destination directory if it doesn't exist
         if (!is_dir($destination)) {
-            mkdir($destination, 0755, true);
+            mkdir($destination, 0o755, true);
         }
 
         // Iterate through all entries in the archive

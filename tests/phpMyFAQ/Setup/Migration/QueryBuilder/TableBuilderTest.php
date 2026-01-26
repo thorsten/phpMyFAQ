@@ -213,6 +213,22 @@ class TableBuilderTest extends TestCase
 
     public function testBuildIndexStatements(): void
     {
+        // Use PostgreSQL builder since MySQL inlines indexes in CREATE TABLE
+        $postgresBuilder = new TableBuilder(new PostgresDialect());
+        $postgresBuilder
+            ->table('test', false)
+            ->varchar('email', 255)
+            ->index('idx_email', 'email');
+
+        $statements = $postgresBuilder->buildIndexStatements();
+
+        $this->assertCount(1, $statements);
+        $this->assertStringContainsString('CREATE INDEX idx_email ON test', $statements[0]);
+    }
+
+    public function testBuildIndexStatementsForMySqlReturnsEmpty(): void
+    {
+        // MySQL should return empty array since indexes are inlined in CREATE TABLE
         $this->builder
             ->table('test', false)
             ->varchar('email', 255)
@@ -220,8 +236,7 @@ class TableBuilderTest extends TestCase
 
         $statements = $this->builder->buildIndexStatements();
 
-        $this->assertCount(1, $statements);
-        $this->assertStringContainsString('CREATE INDEX idx_email ON test', $statements[0]);
+        $this->assertCount(0, $statements);
     }
 
     public function testBigIntegerColumn(): void
@@ -299,5 +314,27 @@ class TableBuilderTest extends TestCase
         $statements = $sqliteBuilder->buildIndexStatements();
         $this->assertCount(1, $statements);
         $this->assertStringContainsString('CREATE INDEX', $statements[0]);
+    }
+
+    public function testVarcharWithQuotesInDefault(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->varchar('author', 100, true, "O'Reilly")
+            ->build();
+
+        // Single quotes should be escaped as ''
+        $this->assertStringContainsString("DEFAULT 'O''Reilly'", $sql);
+    }
+
+    public function testCharWithQuotesInDefault(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->char('flag', 1, true, "Y'all")
+            ->build();
+
+        // Single quotes should be escaped as ''
+        $this->assertStringContainsString("DEFAULT 'Y''all'", $sql);
     }
 }

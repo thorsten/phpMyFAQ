@@ -22,7 +22,6 @@ namespace phpMyFAQ\Controller\Api;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class TagController extends AbstractApiController
@@ -128,7 +127,7 @@ final class TagController extends AbstractApiController
 
         // Apply sorting if needed
         if ($sort->getField()) {
-            usort($allTags, function ($a, $b) use ($sort) {
+            usort($allTags, static function ($a, $b) use ($sort) {
                 $field = $sort->getField();
                 $aVal = $a[$field] ?? '';
                 $bVal = $b[$field] ?? '';

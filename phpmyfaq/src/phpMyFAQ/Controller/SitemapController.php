@@ -104,13 +104,15 @@ final class SitemapController extends AbstractController
         $pages = $customPage->getAllPages();
 
         foreach ($pages as $page) {
-            if ($page['active'] === 'y') {
-                $urls[] = [
-                    'loc' => $this->configuration->getDefaultUrl() . 'page/' . $page['slug'] . '.html',
-                    'lastmod' => $page['updated'] ?? $page['created'],
-                    'priority' => '0.80',
-                ];
+            if ($page['active'] !== 'y') {
+                continue;
             }
+
+            $urls[] = [
+                'loc' => $this->configuration->getDefaultUrl() . 'page/' . $page['slug'] . '.html',
+                'lastmod' => $page['updated'] ?? $page['created'],
+                'priority' => '0.80',
+            ];
         }
 
         return $this->renderView(pathToTwigFile: './sitemap.xml.twig', templateVars: ['urls' => $urls]);

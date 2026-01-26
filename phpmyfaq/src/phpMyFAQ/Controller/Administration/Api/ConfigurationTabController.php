@@ -194,7 +194,10 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         $this->configuration->update($newConfigValues);
 
         // Filter out non-scalar values from old config before comparison
-        $oldConfigComparable = array_filter($oldConfigurationData, fn($value) => is_scalar($value) || $value === null);
+        $oldConfigComparable = array_filter(
+            $oldConfigurationData,
+            static fn($value) => is_scalar($value) || $value === null,
+        );
 
         $changedKeys = array_keys(array_diff_assoc($newConfigValues, $oldConfigComparable));
 

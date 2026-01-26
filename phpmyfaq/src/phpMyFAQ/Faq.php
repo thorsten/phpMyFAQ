@@ -1334,7 +1334,7 @@ class Faq
         $where = '';
         if (!is_null($condition)) {
             // Filter out null values from conditions
-            $condition = array_filter($condition, fn($value) => $value !== null);
+            $condition = array_filter($condition, static fn($value) => $value !== null);
 
             $num = count($condition);
             $where = 'WHERE ';

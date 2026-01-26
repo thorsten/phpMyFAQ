@@ -103,7 +103,8 @@ class TableBuilder
      */
     public function varchar(string $name, int $length, bool $nullable = true, ?string $default = null): self
     {
-        $defaultVal = $default !== null ? "'$default'" : null;
+        // Escape single quotes in default value per SQL string literal rules (replace ' with '')
+        $defaultVal = $default !== null ? "'" . str_replace("'", "''", $default) . "'" : null;
         return $this->addColumn($name, $this->dialect->varchar($length), $nullable, $defaultVal);
     }
 
@@ -147,7 +148,8 @@ class TableBuilder
      */
     public function char(string $name, int $length, bool $nullable = true, ?string $default = null): self
     {
-        $defaultVal = $default !== null ? "'$default'" : null;
+        // Escape single quotes in default value per SQL string literal rules (replace ' with '')
+        $defaultVal = $default !== null ? "'" . str_replace("'", "''", $default) . "'" : null;
         return $this->addColumn($name, $this->dialect->char($length), $nullable, $defaultVal);
     }
 
@@ -258,11 +260,18 @@ class TableBuilder
 
     /**
      * Returns separate CREATE INDEX statements.
+     * For MySQL, returns empty array since indexes are inlined in CREATE TABLE.
      *
      * @return string[]
      */
     public function buildIndexStatements(): array
     {
+        // MySQL already has indexes inlined in CREATE TABLE, so no separate statements needed
+        $isMysql = in_array($this->dialect->getType(), ['mysqli', 'pdo_mysql'], true);
+        if ($isMysql) {
+            return [];
+        }
+
         $statements = [];
         foreach ($this->indexes as $indexName => $indexDef) {
             $statements[] = $this->dialect->createIndex(

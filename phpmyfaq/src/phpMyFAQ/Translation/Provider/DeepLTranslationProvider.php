@@ -20,10 +20,7 @@ namespace phpMyFAQ\Translation\Provider;
 use Exception;
 use phpMyFAQ\Translation\AbstractTranslationProvider;
 use phpMyFAQ\Translation\Exception\ApiException;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 /**
@@ -111,7 +108,7 @@ class DeepLTranslationProvider extends AbstractTranslationProvider
             ]);
 
             $data = $response->toArray();
-            return array_map(fn($t) => $t['text'], $data['translations']);
+            return array_map(static fn($t) => $t['text'], $data['translations']);
         } catch (Exception|TransportExceptionInterface $e) {
             throw new ApiException('DeepL API error: ' . $e->getMessage());
         }

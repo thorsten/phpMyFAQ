@@ -46,7 +46,7 @@ final class ChatSseController extends AbstractController
         $this->session->save();
 
         return new StreamedResponse(
-            function () use ($userId, $lastId, $chat) {
+            static function () use ($userId, $lastId, $chat) {
                 if (ob_get_level() > 0) {
                     ob_end_clean();
                 }
