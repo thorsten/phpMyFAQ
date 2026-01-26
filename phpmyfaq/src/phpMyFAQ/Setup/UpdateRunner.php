@@ -24,6 +24,7 @@ use DateTimeInterface;
 use Exception;
 use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Setup\Migration\MigrationResult;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use Symfony\Component\Console\Command\Command;
@@ -60,6 +61,200 @@ final class UpdateRunner
         }
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Runs the update in dry-run mode, showing what would be executed without making changes.
+     */
+    public function runDryRun(SymfonyStyle $symfonyStyle, string $fromVersion): int
+    {
+        $symfonyStyle->title('phpMyFAQ Migration Dry-Run Report');
+        $symfonyStyle->text(sprintf('Current version: %s', $fromVersion));
+        $symfonyStyle->text(sprintf('Target version: %s', System::getVersion()));
+        $symfonyStyle->newLine();
+
+        $update = new Update($this->system, $this->configuration);
+        $update->version = $fromVersion;
+        $update->dryRun = true;
+
+        try {
+            $update->applyUpdates();
+            $report = $update->getDryRunResults();
+
+            $this->displayDryRunReport($symfonyStyle, $report);
+
+            return Command::SUCCESS;
+        } catch (Exception $exception) {
+            $symfonyStyle->error('Dry-run failed: ' . $exception->getMessage());
+            return Command::FAILURE;
+        }
+    }
+
+    /**
+     * Displays the dry-run report with all operations grouped by type.
+     *
+     * @param array<string, mixed> $report
+     */
+    private function displayDryRunReport(SymfonyStyle $symfonyStyle, array $report): void
+    {
+        if (empty($report['migrations'])) {
+            $symfonyStyle->success('No migrations to apply. Database is up to date.');
+            return;
+        }
+
+        foreach ($report['migrations'] as $version => $migrationData) {
+            $symfonyStyle->section(sprintf('Migration: %s', $version));
+            $symfonyStyle->text($migrationData['description']);
+            $symfonyStyle->newLine();
+
+            // Group operations by type
+            $byType = [];
+            foreach ($migrationData['operations'] as $op) {
+                $byType[$op['type']][] = $op;
+            }
+
+            // SQL Operations
+            if (!empty($byType['sql'])) {
+                $symfonyStyle->text(sprintf('<fg=cyan>SQL Operations (%d):</>', count($byType['sql'])));
+                $rows = [];
+                foreach ($byType['sql'] as $i => $op) {
+                    $query = $this->truncateString($op['query'], 80);
+                    $rows[] = [$i + 1, $op['description'], $query];
+                }
+                $symfonyStyle->table(['#', 'Description', 'Query'], $rows);
+            }
+
+            // Config Add Operations
+            if (!empty($byType['config_add'])) {
+                $symfonyStyle->text(sprintf(
+                    '<fg=green>Configuration Additions (%d):</>',
+                    count($byType['config_add']),
+                ));
+                $rows = [];
+                foreach ($byType['config_add'] as $i => $op) {
+                    $rows[] = [$i + 1, $op['key'], $this->formatValue($op['value'])];
+                }
+                $symfonyStyle->table(['#', 'Key', 'Value'], $rows);
+            }
+
+            // Config Delete Operations
+            if (!empty($byType['config_delete'])) {
+                $symfonyStyle->text(sprintf(
+                    '<fg=red>Configuration Deletions (%d):</>',
+                    count($byType['config_delete']),
+                ));
+                $rows = [];
+                foreach ($byType['config_delete'] as $i => $op) {
+                    $rows[] = [$i + 1, $op['key']];
+                }
+                $symfonyStyle->table(['#', 'Key'], $rows);
+            }
+
+            // Config Rename Operations
+            if (!empty($byType['config_rename'])) {
+                $symfonyStyle->text(sprintf(
+                    '<fg=yellow>Configuration Renames (%d):</>',
+                    count($byType['config_rename']),
+                ));
+                $rows = [];
+                foreach ($byType['config_rename'] as $i => $op) {
+                    $rows[] = [$i + 1, $op['oldKey'], $op['newKey']];
+                }
+                $symfonyStyle->table(['#', 'Old Key', 'New Key'], $rows);
+            }
+
+            // Config Update Operations
+            if (!empty($byType['config_update'])) {
+                $symfonyStyle->text(sprintf(
+                    '<fg=blue>Configuration Updates (%d):</>',
+                    count($byType['config_update']),
+                ));
+                $rows = [];
+                foreach ($byType['config_update'] as $i => $op) {
+                    $rows[] = [$i + 1, $op['key'], $this->formatValue($op['value'])];
+                }
+                $symfonyStyle->table(['#', 'Key', 'New Value'], $rows);
+            }
+
+            // File Operations
+            $fileOps = array_merge($byType['file_copy'] ?? [], $byType['directory_copy'] ?? []);
+            if (!empty($fileOps)) {
+                $symfonyStyle->text(sprintf('<fg=magenta>File Operations (%d):</>', count($fileOps)));
+                $rows = [];
+                foreach ($fileOps as $i => $op) {
+                    $source = $this->shortenPath($op['source']);
+                    $dest = $this->shortenPath($op['destination']);
+                    $rows[] = [$i + 1, $op['type'], $source, $dest];
+                }
+                $symfonyStyle->table(['#', 'Type', 'Source', 'Destination'], $rows);
+            }
+
+            // Permission Operations
+            if (!empty($byType['permission_grant'])) {
+                $symfonyStyle->text(sprintf(
+                    '<fg=white>Permission Grants (%d):</>',
+                    count($byType['permission_grant']),
+                ));
+                $rows = [];
+                foreach ($byType['permission_grant'] as $i => $op) {
+                    $rows[] = [$i + 1, $op['permissionName'], $op['permissionDescription']];
+                }
+                $symfonyStyle->table(['#', 'Permission', 'Description'], $rows);
+            }
+        }
+
+        // Summary
+        $symfonyStyle->section('Summary');
+        $symfonyStyle->text(sprintf('Total Migrations: %d', $report['summary']['migrationCount']));
+        $symfonyStyle->text(sprintf('Total Operations: %d', $report['summary']['totalOperations']));
+
+        if (!empty($report['summary']['operationsByType'])) {
+            $symfonyStyle->newLine();
+            $symfonyStyle->text('Operations by Type:');
+            foreach ($report['summary']['operationsByType'] as $type => $count) {
+                $symfonyStyle->text(sprintf('  - %s: %d', $type, $count));
+            }
+        }
+
+        $symfonyStyle->newLine();
+        $symfonyStyle->warning('This was a dry-run. No changes were made to the database.');
+    }
+
+    private function truncateString(string $str, int $maxLength): string
+    {
+        $str = preg_replace('/\s+/', ' ', trim($str));
+        if (strlen($str) > $maxLength) {
+            return substr($str, 0, $maxLength - 3) . '...';
+        }
+        return $str;
+    }
+
+    private function formatValue(mixed $value): string
+    {
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+        if (is_string($value)) {
+            if (strlen($value) > 40) {
+                return "'" . substr($value, 0, 37) . "...'";
+            }
+            return "'{$value}'";
+        }
+        if (is_null($value)) {
+            return 'null';
+        }
+        return (string) $value;
+    }
+
+    private function shortenPath(string $path): string
+    {
+        if (defined('PMF_ROOT_DIR')) {
+            $path = str_replace(PMF_ROOT_DIR, '', $path);
+        }
+        if (strlen($path) > 50) {
+            return '...' . substr($path, -47);
+        }
+        return $path;
     }
 
     private string $version = '';
@@ -209,7 +404,7 @@ final class UpdateRunner
     private function taskUpdateDatabase(SymfonyStyle $symfonyStyle): int
     {
         $update = new Update($this->system, $this->configuration);
-        $update->setVersion(System::getVersion());
+        $update->version = System::getVersion();
 
         $progressBar = $symfonyStyle->createProgressBar(max: 100);
         $progressBar->start();
@@ -221,10 +416,12 @@ final class UpdateRunner
 
             if ($result) {
                 $this->configuration->set(key: 'main.maintenanceMode', value: 'false');
+                $this->displayMigrationResults($symfonyStyle, $update->migrationResults);
                 $symfonyStyle->success(message: 'Database successfully updated.');
                 return Command::SUCCESS;
             }
 
+            $this->displayMigrationResults($symfonyStyle, $update->migrationResults);
             $symfonyStyle->error(message: 'Update database failed.');
             return Command::FAILURE;
         } catch (Exception $exception) {
@@ -233,6 +430,33 @@ final class UpdateRunner
             $symfonyStyle->error(message: 'Update database failed: ' . $exception->getMessage());
             return Command::FAILURE;
         }
+    }
+
+    /**
+     * Displays migration results in a formatted table.
+     *
+     * @param MigrationResult[] $results
+     */
+    private function displayMigrationResults(SymfonyStyle $symfonyStyle, array $results): void
+    {
+        if (empty($results)) {
+            $symfonyStyle->note('No migrations were applied.');
+            return;
+        }
+
+        $tableRows = [];
+        foreach ($results as $result) {
+            $status = $result->isSuccess() ? '<fg=green>SUCCESS</>' : '<fg=red>FAILED</>';
+            $tableRows[] = [
+                $result->getVersion(),
+                $result->getDescription(),
+                $result->getOperationCount(),
+                sprintf('%.2fms', $result->getExecutionTimeMs()),
+                $status,
+            ];
+        }
+
+        $symfonyStyle->table(['Version', 'Description', 'Operations', 'Time', 'Status'], $tableRows);
     }
 
     private function taskCleanup(SymfonyStyle $symfonyStyle): int
