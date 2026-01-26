@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Setup\Migration\QueryBuilder\Dialect;
 
 use phpMyFAQ\Setup\Migration\QueryBuilder\DialectInterface;
+use RuntimeException;
 
 class MysqlDialect implements DialectInterface
 {
@@ -112,8 +113,14 @@ class MysqlDialect implements DialectInterface
 
     public function createIndex(string $indexName, string $tableName, array $columns, bool $ifNotExists = false): string
     {
+        if ($ifNotExists) {
+            throw new RuntimeException(
+                'MySQL/MariaDB does not support IF NOT EXISTS for CREATE INDEX. '
+                . 'Check for index existence manually before creating it.',
+            );
+        }
+
         $columnList = implode(', ', $columns);
-        // MySQL doesn't support IF NOT EXISTS for CREATE INDEX directly
         return "CREATE INDEX $indexName ON $tableName ($columnList)";
     }
 

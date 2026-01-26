@@ -2,20 +2,21 @@
 
 namespace phpMyFAQ\Setup\Migration;
 
+use ArgumentCountError;
+use Error;
+use Exception;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Filesystem\Filesystem;
-use phpMyFAQ\Setup\Migration\Operations\OperationInterface;
 use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 
 #[AllowMockObjectsWithoutExpectations]
 class MigrationExecutorTest extends TestCase
 {
-    private Configuration $configuration;
     private MigrationTracker $tracker;
-    private Filesystem $filesystem;
     private MigrationExecutor $executor;
 
     protected function setUp(): void
@@ -23,13 +24,13 @@ class MigrationExecutorTest extends TestCase
         parent::setUp();
 
         $database = $this->createMock(DatabaseDriver::class);
-        $this->configuration = $this->createMock(Configuration::class);
-        $this->configuration->method('getDb')->willReturn($database);
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
 
         $this->tracker = $this->createMock(MigrationTracker::class);
-        $this->filesystem = $this->createMock(Filesystem::class);
+        $filesystem = $this->createMock(Filesystem::class);
 
-        $this->executor = new MigrationExecutor($this->configuration, $this->tracker, $this->filesystem);
+        $this->executor = new MigrationExecutor($configuration, $this->tracker, $filesystem);
     }
 
     public function testSetDryRunReturnsSelf(): void
@@ -296,6 +297,80 @@ class MigrationExecutorTest extends TestCase
         $formatted = $this->executor->formatDryRunReport($report);
 
         $this->assertStringContainsString('Permission Changes', $formatted);
+    }
+
+    public function testExecuteMigrationCatchesException(): void
+    {
+        $migration = $this->createMock(MigrationInterface::class);
+        $migration->method('getVersion')->willReturn('4.0.0');
+        $migration->method('getDescription')->willReturn('Test');
+        $migration->method('up')->willThrowException(new Exception('Test exception'));
+
+        $this->tracker->expects($this->never())->method('recordMigration');
+
+        $this->executor->setDryRun(false);
+        $result = $this->executor->executeMigration($migration);
+
+        $this->assertFalse($result->isSuccess());
+        $this->assertEquals('Test exception', $result->getErrorMessage());
+    }
+
+    public function testExecuteMigrationCatchesError(): void
+    {
+        $migration = $this->createMock(MigrationInterface::class);
+        $migration->method('getVersion')->willReturn('4.0.0');
+        $migration->method('getDescription')->willReturn('Test');
+        $migration->method('up')->willThrowException(new TypeError('Type error occurred'));
+
+        $this->tracker->expects($this->never())->method('recordMigration');
+
+        $this->executor->setDryRun(false);
+        $result = $this->executor->executeMigration($migration);
+
+        $this->assertFalse($result->isSuccess());
+        $this->assertEquals('Type error occurred', $result->getErrorMessage());
+    }
+
+    public function testExecuteMigrationCatchesThrowable(): void
+    {
+        $migration = $this->createMock(MigrationInterface::class);
+        $migration->method('getVersion')->willReturn('4.0.0');
+        $migration->method('getDescription')->willReturn('Test');
+        $migration->method('up')->willThrowException(new Error('Fatal error'));
+
+        $this->tracker->expects($this->never())->method('recordMigration');
+
+        $this->executor->setDryRun(false);
+        $result = $this->executor->executeMigration($migration);
+
+        $this->assertFalse($result->isSuccess());
+        $this->assertEquals('Fatal error', $result->getErrorMessage());
+    }
+
+    public function testExecuteMigrationDoesNotTrackOnException(): void
+    {
+        $migration = $this->createMock(MigrationInterface::class);
+        $migration->method('getVersion')->willReturn('4.0.0');
+        $migration->method('getDescription')->willReturn('Test');
+        $migration->method('up')->willThrowException(new \RuntimeException('Runtime error'));
+
+        $this->tracker->expects($this->never())->method('recordMigration');
+
+        $this->executor->setDryRun(false);
+        $this->executor->executeMigration($migration);
+    }
+
+    public function testExecuteMigrationDoesNotTrackOnError(): void
+    {
+        $migration = $this->createMock(MigrationInterface::class);
+        $migration->method('getVersion')->willReturn('4.0.0');
+        $migration->method('getDescription')->willReturn('Test');
+        $migration->method('up')->willThrowException(new ArgumentCountError('Argument count error'));
+
+        $this->tracker->expects($this->never())->method('recordMigration');
+
+        $this->executor->setDryRun(false);
+        $this->executor->executeMigration($migration);
     }
 
     private function createMockMigration(string $version, string $description): MigrationInterface

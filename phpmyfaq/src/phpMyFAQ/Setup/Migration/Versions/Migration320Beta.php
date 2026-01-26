@@ -44,19 +44,31 @@ readonly class Migration320Beta extends AbstractMigration
         $recorder->addConfig('mail.remoteSMTPDisableTLSPeerVerification', false);
         $recorder->deleteConfig('main.enableLinkVerification');
 
-        // Delete link verification columns
-        $recorder->addSql(
-            sprintf('ALTER TABLE %sfaqdata DROP COLUMN links_state, DROP COLUMN links_check_date', $this->tablePrefix),
-            'Remove link verification columns from faqdata',
-        );
+        // Delete link verification columns - use portable syntax
+        if ($this->isSqlite()) {
+            // SQLite requires table rebuild for dropping columns
+            $this->rebuildTableWithoutColumns($recorder, 'faqdata', ['links_state', 'links_check_date']);
+            $this->rebuildTableWithoutColumns($recorder, 'faqdata_revisions', ['links_state', 'links_check_date']);
+        } else {
+            // MySQL, PostgreSQL, SQL Server - use separate DROP COLUMN statements
+            $recorder->addSql(
+                sprintf('ALTER TABLE %sfaqdata DROP COLUMN links_state', $this->tablePrefix),
+                'Remove links_state column from faqdata',
+            );
+            $recorder->addSql(
+                sprintf('ALTER TABLE %sfaqdata DROP COLUMN links_check_date', $this->tablePrefix),
+                'Remove links_check_date column from faqdata',
+            );
 
-        $recorder->addSql(
-            sprintf(
-                'ALTER TABLE %sfaqdata_revisions DROP COLUMN links_state, DROP COLUMN links_check_date',
-                $this->tablePrefix,
-            ),
-            'Remove link verification columns from faqdata_revisions',
-        );
+            $recorder->addSql(
+                sprintf('ALTER TABLE %sfaqdata_revisions DROP COLUMN links_state', $this->tablePrefix),
+                'Remove links_state column from faqdata_revisions',
+            );
+            $recorder->addSql(
+                sprintf('ALTER TABLE %sfaqdata_revisions DROP COLUMN links_check_date', $this->tablePrefix),
+                'Remove links_check_date column from faqdata_revisions',
+            );
+        }
 
         // Configuration values in a TEXT column
         if ($this->isMySql()) {
@@ -100,5 +112,89 @@ readonly class Migration320Beta extends AbstractMigration
                 'Change faqconfig.config_value to TEXT (SQL Server)',
             );
         }
+    }
+
+    /**
+     * Rebuilds a table without specified columns (for SQLite).
+     *
+     * @param string[] $columnsToRemove
+     */
+    private function rebuildTableWithoutColumns(
+        OperationRecorder $recorder,
+        string $tableName,
+        array $columnsToRemove,
+    ): void {
+        $fullTableName = $this->tablePrefix . $tableName;
+
+        // For faqdata and faqdata_revisions, we need to define the schema without the removed columns
+        if ($tableName === 'faqdata') {
+            $recorder->addSql(
+                sprintf('CREATE TABLE %s_new (
+                        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                        lang VARCHAR(5) NOT NULL,
+                        solution_id INTEGER NOT NULL,
+                        revision_id INTEGER NOT NULL DEFAULT 0,
+                        active VARCHAR(3),
+                        sticky INTEGER NOT NULL,
+                        keywords TEXT,
+                        thema TEXT NOT NULL,
+                        content TEXT,
+                        author VARCHAR(255) NOT NULL,
+                        email VARCHAR(255) NOT NULL,
+                        comment VARCHAR(3),
+                        date VARCHAR(15) NOT NULL,
+                        dateStart VARCHAR(14) NOT NULL DEFAULT \'00000000000000\',
+                        dateEnd VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
+                        created DATETIME NOT NULL
+                    )', $fullTableName),
+                sprintf('Create new %s table without link verification columns (SQLite)', $tableName),
+            );
+
+            $recorder->addSql(
+                sprintf('INSERT INTO %s_new 
+                     SELECT id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, 
+                            author, email, comment, date, dateStart, dateEnd, created 
+                     FROM %s', $fullTableName, $fullTableName),
+                sprintf('Copy data to new %s table (SQLite)', $tableName),
+            );
+        } elseif ($tableName === 'faqdata_revisions') {
+            $recorder->addSql(
+                sprintf('CREATE TABLE %s_new (
+                        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                        faq_id INTEGER NOT NULL,
+                        lang VARCHAR(5) NOT NULL,
+                        solution_id INTEGER NOT NULL,
+                        revision_id INTEGER NOT NULL DEFAULT 0,
+                        active VARCHAR(3),
+                        sticky INTEGER NOT NULL,
+                        keywords TEXT,
+                        thema TEXT NOT NULL,
+                        content TEXT,
+                        author VARCHAR(255) NOT NULL,
+                        email VARCHAR(255) NOT NULL,
+                        comment VARCHAR(3),
+                        date VARCHAR(15) NOT NULL,
+                        dateStart VARCHAR(14) NOT NULL DEFAULT \'00000000000000\',
+                        dateEnd VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
+                        created DATETIME NOT NULL
+                    )', $fullTableName),
+                sprintf('Create new %s table without link verification columns (SQLite)', $tableName),
+            );
+
+            $recorder->addSql(
+                sprintf('INSERT INTO %s_new 
+                     SELECT id, faq_id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, 
+                            author, email, comment, date, dateStart, dateEnd, created 
+                     FROM %s', $fullTableName, $fullTableName),
+                sprintf('Copy data to new %s table (SQLite)', $tableName),
+            );
+        }
+
+        $recorder->addSql(sprintf('DROP TABLE %s', $fullTableName), sprintf('Drop old %s table (SQLite)', $tableName));
+
+        $recorder->addSql(
+            sprintf('ALTER TABLE %s_new RENAME TO %s', $fullTableName, $fullTableName),
+            sprintf('Rename new %s table (SQLite)', $tableName),
+        );
     }
 }

@@ -43,21 +43,28 @@ readonly class Migration409 extends AbstractMigration
     {
         // PostgreSQL-only migration for faqseo sequence
         if ($this->isPostgreSql()) {
+            $sequenceName = $this->tablePrefix . 'faqseo_id_seq';
+
             $recorder->addSql(
-                sprintf('CREATE SEQUENCE %sfaqseo_id_seq', $this->tablePrefix),
+                sprintf('CREATE SEQUENCE %s', $sequenceName),
                 'Create sequence for faqseo table (PostgreSQL)',
             );
 
             $recorder->addSql(
                 sprintf(
-                    "ALTER TABLE %sfaqseo ALTER COLUMN id SET DEFAULT nextval('faqseo_id_seq')",
+                    "ALTER TABLE %sfaqseo ALTER COLUMN id SET DEFAULT nextval('%s')",
                     $this->tablePrefix,
+                    $sequenceName,
                 ),
                 'Set default for faqseo.id using sequence (PostgreSQL)',
             );
 
             $recorder->addSql(
-                sprintf("SELECT setval('faqseo_id_seq', (SELECT MAX(id) FROM %sfaqseo))", $this->tablePrefix),
+                sprintf(
+                    "SELECT setval('%s', COALESCE((SELECT MAX(id) FROM %sfaqseo), 0))",
+                    $sequenceName,
+                    $this->tablePrefix,
+                ),
                 'Set sequence value to max id (PostgreSQL)',
             );
 

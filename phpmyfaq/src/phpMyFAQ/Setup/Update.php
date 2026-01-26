@@ -213,28 +213,25 @@ class Update extends AbstractSetup
 
         // Execute migrations
         $this->migrationResults = $this->migrationExecutor->executeMigrations($pendingMigrations);
+        $allSucceeded = $this->allMigrationsSucceeded();
 
         // If dry-run, collect all SQL queries for backward compatibility
         if ($this->dryRun) {
             $this->collectDryRunQueries($pendingMigrations);
-        } else {
-            // Special handling for migrations that require immediate execution
-            // (like admin log hash migration in 4.2.0-alpha)
-            $this->runPostMigrationTasks();
-
-            // Optimize the tables
-            $this->optimizeTables();
-
-            // Execute legacy queries (if any)
-            $this->executeQueries();
+            return $allSucceeded;
         }
 
-        // Always the last step: Update version number
-        if (!$this->dryRun) {
-            $this->updateVersion();
+        if (!$allSucceeded) {
+            return false;
         }
 
-        return $this->allMigrationsSucceeded();
+        // Special handling for migrations that require immediate execution
+        $this->runPostMigrationTasks();
+        $this->optimizeTables();
+        $this->executeQueries();
+        $this->updateVersion();
+
+        return true;
     }
 
     /**

@@ -258,6 +258,7 @@ final class UpdateRunner
     }
 
     private string $version = '';
+    private string $installedVersion = '';
 
     private function taskHealthCheck(SymfonyStyle $symfonyStyle): int
     {
@@ -288,6 +289,9 @@ final class UpdateRunner
             $this->configuration->set(key: 'upgrade.dateLastChecked', value: $dateLastChecked);
 
             $available = version_compare(version1: $versions['installed'], version2: $versions[$branch], operator: '<');
+
+            // Always store the installed version for migrations
+            $this->installedVersion = $versions['installed'];
 
             if ($available) {
                 $this->version = $versions[$branch];
@@ -404,7 +408,8 @@ final class UpdateRunner
     private function taskUpdateDatabase(SymfonyStyle $symfonyStyle): int
     {
         $update = new Update($this->system, $this->configuration);
-        $update->version = System::getVersion();
+        // Use the installed version (current version) for migrations, not the target version
+        $update->version = $this->installedVersion;
 
         $progressBar = $symfonyStyle->createProgressBar(max: 100);
         $progressBar->start();

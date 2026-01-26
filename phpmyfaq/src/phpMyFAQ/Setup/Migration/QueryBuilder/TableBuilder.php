@@ -234,11 +234,14 @@ class TableBuilder
             $parts[] = "PRIMARY KEY ($pkColumns)";
         }
 
-        // Add inline indexes (MySQL supports this)
-        foreach ($this->indexes as $indexName => $indexDef) {
-            $columnList = implode(', ', $indexDef['columns']);
-            $indexType = $indexDef['unique'] ? 'UNIQUE INDEX' : 'INDEX';
-            $parts[] = "$indexType $indexName ($columnList)";
+        // Add inline indexes only for MySQL (MySQL supports this, other databases don't)
+        $isMysql = in_array($this->dialect->getType(), ['mysqli', 'pdo_mysql'], true);
+        if ($isMysql) {
+            foreach ($this->indexes as $indexName => $indexDef) {
+                $columnList = implode(', ', $indexDef['columns']);
+                $indexType = $indexDef['unique'] ? 'UNIQUE INDEX' : 'INDEX';
+                $parts[] = "$indexType $indexName ($columnList)";
+            }
         }
 
         $columnDefs = implode(",\n    ", $parts);

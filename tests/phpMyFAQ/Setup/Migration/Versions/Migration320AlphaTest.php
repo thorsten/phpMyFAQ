@@ -64,22 +64,6 @@ class Migration320AlphaTest extends TestCase
         $this->migration->up($recorder);
     }
 
-    public function testUpAddsEnableSignInWithMicrosoftConfig(): void
-    {
-        $recorder = $this->createMock(OperationRecorder::class);
-
-        $recorder
-            ->expects($this->atLeastOnce())
-            ->method('addConfig')
-            ->with($this->callback(function ($key) {
-                static $keys = [];
-                $keys[] = $key;
-                return true;
-            }));
-
-        $this->migration->up($recorder);
-    }
-
     public function testUpAddsSqlForBackupTable(): void
     {
         $recorder = $this->createMock(OperationRecorder::class);

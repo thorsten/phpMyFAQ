@@ -162,7 +162,7 @@ readonly class Migration400Alpha extends AbstractMigration
         } elseif ($this->isSqlServer()) {
             $recorder->addSql(
                 sprintf(
-                    'ALTER TABLE %sfaqcategory_order ADD COLUMN parent_id INTEGER DEFAULT NULL AFTER category_id',
+                    'ALTER TABLE %sfaqcategory_order ADD COLUMN parent_id INTEGER DEFAULT NULL',
                     $this->tablePrefix,
                 ),
                 'Add parent_id column to faqcategory_order (SQL Server)',
@@ -180,7 +180,7 @@ readonly class Migration400Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'INSERT INTO %sfaqcategory_order_new SELECT * FROM %sfaqcategory_order',
+                    'INSERT INTO %sfaqcategory_order_new (category_id, parent_id, position) SELECT category_id, NULL AS parent_id, position FROM %sfaqcategory_order',
                     $this->tablePrefix,
                     $this->tablePrefix,
                 ),

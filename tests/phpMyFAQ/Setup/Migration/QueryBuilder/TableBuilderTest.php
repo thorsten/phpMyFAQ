@@ -3,6 +3,8 @@
 namespace phpMyFAQ\Setup\Migration\QueryBuilder;
 
 use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\MysqlDialect;
+use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\PostgresDialect;
+use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\SqliteDialect;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
@@ -251,5 +253,51 @@ class TableBuilderTest extends TestCase
 
         $this->assertStringContainsString('ENGINE = InnoDB', $sql);
         $this->assertStringContainsString('utf8mb4', $sql);
+    }
+
+    public function testMysqlDialectIncludesInlineIndexes(): void
+    {
+        $builder = new TableBuilder(new MysqlDialect());
+        $sql = $builder->table('test', false)->varchar('email', 255)->index('idx_email', 'email')->build();
+
+        // MySQL should have inline INDEX in CREATE TABLE
+        $this->assertStringContainsString('INDEX idx_email (email)', $sql);
+    }
+
+    public function testPostgresDialectDoesNotIncludeInlineIndexes(): void
+    {
+        $builder = new TableBuilder(new PostgresDialect());
+        $sql = $builder->table('test', false)->varchar('email', 255)->index('idx_email', 'email')->build();
+
+        // PostgreSQL should NOT have inline INDEX in CREATE TABLE
+        $this->assertStringNotContainsString('INDEX idx_email', $sql);
+    }
+
+    public function testSqliteDialectDoesNotIncludeInlineIndexes(): void
+    {
+        $builder = new TableBuilder(new SqliteDialect());
+        $sql = $builder->table('test', false)->varchar('email', 255)->index('idx_email', 'email')->build();
+
+        // SQLite should NOT have inline INDEX in CREATE TABLE
+        $this->assertStringNotContainsString('INDEX idx_email', $sql);
+    }
+
+    public function testBuildIndexStatementsWorksForAllDialects(): void
+    {
+        // Test PostgreSQL
+        $postgresBuilder = new TableBuilder(new PostgresDialect());
+        $postgresBuilder->table('test', false)->varchar('email', 255)->index('idx_email', 'email');
+
+        $statements = $postgresBuilder->buildIndexStatements();
+        $this->assertCount(1, $statements);
+        $this->assertStringContainsString('CREATE INDEX', $statements[0]);
+
+        // Test SQLite
+        $sqliteBuilder = new TableBuilder(new SqliteDialect());
+        $sqliteBuilder->table('test', false)->varchar('email', 255)->index('idx_email', 'email');
+
+        $statements = $sqliteBuilder->buildIndexStatements();
+        $this->assertCount(1, $statements);
+        $this->assertStringContainsString('CREATE INDEX', $statements[0]);
     }
 }

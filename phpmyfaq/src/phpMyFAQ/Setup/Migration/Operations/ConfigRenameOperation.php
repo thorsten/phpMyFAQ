@@ -52,8 +52,7 @@ readonly class ConfigRenameOperation implements OperationInterface
 
     public function execute(): bool
     {
-        $this->configuration->rename($this->oldKey, $this->newKey);
-        return true;
+        return $this->configuration->rename($this->oldKey, $this->newKey);
     }
 
     public function toArray(): array
