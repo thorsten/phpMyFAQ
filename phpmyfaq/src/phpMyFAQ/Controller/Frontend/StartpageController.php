@@ -40,7 +40,7 @@ final class StartpageController extends AbstractFrontController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route(path: '/', name: 'public.index', methods: ['GET'])]
+    #[Route(path: '/', name: 'public.index', methods: ['GET', 'POST'])]
     public function index(Request $request): Response
     {
         $news = new News($this->configuration);

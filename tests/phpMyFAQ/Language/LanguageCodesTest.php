@@ -38,7 +38,7 @@ class LanguageCodesTest extends TestCase
     public function testGetSupportedIsCaseInsensitive(): void
     {
         $language = LanguageCodes::getSupported('FR');
-        $this->assertEquals('French', $language);
+        $this->assertEquals('Français', $language);
     }
 
     public function testGetAllReturnsArray(): void
@@ -51,8 +51,8 @@ class LanguageCodesTest extends TestCase
         $this->assertArrayHasKey('de', $result);
         $this->assertArrayHasKey('fr', $result);
         $this->assertEquals('English', $result['en']);
-        $this->assertEquals('German', $result['de']);
-        $this->assertEquals('French', $result['fr']);
+        $this->assertEquals('Deutsch', $result['de']);
+        $this->assertEquals('Français', $result['fr']);
     }
 
     public function testGetAllSortedReturnsArraySortedByValue(): void
@@ -72,17 +72,17 @@ class LanguageCodesTest extends TestCase
     public function testGetWithValidLanguageCode(): void
     {
         $this->assertEquals('English', LanguageCodes::get('en'));
-        $this->assertEquals('German', LanguageCodes::get('de'));
-        $this->assertEquals('French', LanguageCodes::get('fr'));
-        $this->assertEquals('Spanish', LanguageCodes::get('es'));
-        $this->assertEquals('Chinese', LanguageCodes::get('zh'));
+        $this->assertEquals('Deutsch', LanguageCodes::get('de'));
+        $this->assertEquals('Français', LanguageCodes::get('fr'));
+        $this->assertEquals('Español', LanguageCodes::get('es'));
+        $this->assertEquals('中文', LanguageCodes::get('zh'));
     }
 
     public function testGetWithValidLanguageCodeCaseInsensitive(): void
     {
         $this->assertEquals('English', LanguageCodes::get('EN'));
-        $this->assertEquals('German', LanguageCodes::get('DE'));
-        $this->assertEquals('French', LanguageCodes::get('FR'));
+        $this->assertEquals('Deutsch', LanguageCodes::get('DE'));
+        $this->assertEquals('Français', LanguageCodes::get('FR'));
     }
 
     public function testGetWithInvalidLanguageCode(): void
@@ -95,16 +95,16 @@ class LanguageCodesTest extends TestCase
     public function testGetSupportedWithValidLanguageCode(): void
     {
         $this->assertEquals('English', LanguageCodes::getSupported('en'));
-        $this->assertEquals('German', LanguageCodes::getSupported('de'));
-        $this->assertEquals('French', LanguageCodes::getSupported('fr'));
-        $this->assertEquals('Portuguese (Brazil)', LanguageCodes::getSupported('pt_br'));
+        $this->assertEquals('Deutsch', LanguageCodes::getSupported('de'));
+        $this->assertEquals('Français', LanguageCodes::getSupported('fr'));
+        $this->assertEquals('Português (Brasil)', LanguageCodes::getSupported('pt_br'));
     }
 
     public function testGetSupportedWithValidLanguageCodeCaseInsensitive(): void
     {
         $this->assertEquals('English', LanguageCodes::getSupported('EN'));
-        $this->assertEquals('German', LanguageCodes::getSupported('DE'));
-        $this->assertEquals('French', LanguageCodes::getSupported('FR'));
+        $this->assertEquals('Deutsch', LanguageCodes::getSupported('DE'));
+        $this->assertEquals('Français', LanguageCodes::getSupported('FR'));
     }
 
     public function testGetSupportedWithInvalidLanguageCode(): void
@@ -118,9 +118,9 @@ class LanguageCodesTest extends TestCase
     public function testGetKeyWithValidLanguageName(): void
     {
         $this->assertEquals('en', LanguageCodes::getKey('English'));
-        $this->assertEquals('de', LanguageCodes::getKey('German'));
-        $this->assertEquals('fr', LanguageCodes::getKey('French'));
-        $this->assertEquals('es', LanguageCodes::getKey('Spanish'));
+        $this->assertEquals('de', LanguageCodes::getKey('Deutsch'));
+        $this->assertEquals('fr', LanguageCodes::getKey('Français'));
+        $this->assertEquals('es', LanguageCodes::getKey('Español'));
     }
 
     public function testGetKeyWithInvalidLanguageName(): void
@@ -145,8 +145,8 @@ class LanguageCodesTest extends TestCase
         $this->assertArrayHasKey('pt_br', $result);
 
         $this->assertEquals('English', $result['en']);
-        $this->assertEquals('German', $result['de']);
-        $this->assertEquals('Portuguese (Brazil)', $result['pt_br']);
+        $this->assertEquals('Deutsch', $result['de']);
+        $this->assertEquals('Português (Brasil)', $result['pt_br']);
     }
 
     public function testGetAllSupportedContainsSubsetOfGetAll(): void
@@ -165,17 +165,17 @@ class LanguageCodesTest extends TestCase
         $allCodes = LanguageCodes::getAll();
 
         $expectedCodes = [
-            'aa' => 'Afar',
-            'ab' => 'Abkhazian',
+            'aa' => 'Qafar',
+            'ab' => 'Аԥсуа бызшәа',
             'af' => 'Afrikaans',
-            'ar' => 'Arabic',
-            'zh_cn' => 'Chinese (China)',
-            'zh_tw' => 'Chinese (Taiwan)',
+            'ar' => 'العربية',
+            'zh_cn' => '中文 (中国)',
+            'zh_tw' => '中文 (台灣)',
             'en_us' => 'English (United States)',
             'en_gb' => 'English (United Kingdom)',
-            'es_mx' => 'Spanish (Mexico)',
-            'fr_ca' => 'French (Canada)',
-            'pt_br' => 'Portuguese (Brazil)',
+            'es_mx' => 'Español (México)',
+            'fr_ca' => 'Français (Canada)',
+            'pt_br' => 'Português (Brasil)',
         ];
 
         foreach ($expectedCodes as $code => $expectedName) {
@@ -186,11 +186,11 @@ class LanguageCodesTest extends TestCase
 
     public function testGetWithRegionalVariants(): void
     {
-        $this->assertEquals('Arabic (Egypt)', LanguageCodes::get('ar_eg'));
+        $this->assertEquals('العربية (مصر)', LanguageCodes::get('ar_eg'));
         $this->assertEquals('English (United States)', LanguageCodes::get('en_us'));
-        $this->assertEquals('Spanish (Mexico)', LanguageCodes::get('es_mx'));
-        $this->assertEquals('French (Canada)', LanguageCodes::get('fr_ca'));
-        $this->assertEquals('Chinese (China)', LanguageCodes::get('zh_cn'));
+        $this->assertEquals('Español (México)', LanguageCodes::get('es_mx'));
+        $this->assertEquals('Français (Canada)', LanguageCodes::get('fr_ca'));
+        $this->assertEquals('中文 (中国)', LanguageCodes::get('zh_cn'));
     }
 
     public function testArrayStructureIsValid(): void
