@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Setup\Migration\QueryBuilder;
 
+use LogicException;
 use phpMyFAQ\Database;
 
 class AlterTableBuilder
@@ -182,6 +183,10 @@ class AlterTableBuilder
      */
     public function buildCombined(): string
     {
+        if ($this->alterations === []) {
+            throw new LogicException('No alterations defined for combined ALTER TABLE statement.');
+        }
+
         $parts = [];
 
         foreach ($this->alterations as $alt) {

@@ -22,6 +22,7 @@ namespace phpMyFAQ\Setup\Migration;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Filesystem\Filesystem;
 use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
+use Throwable;
 
 class MigrationExecutor
 {
@@ -95,7 +96,7 @@ class MigrationExecutor
                     $migration->getDescription(),
                 );
             }
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             $result->setSuccess(false);
             $result->setErrorMessage($e->getMessage());
         }

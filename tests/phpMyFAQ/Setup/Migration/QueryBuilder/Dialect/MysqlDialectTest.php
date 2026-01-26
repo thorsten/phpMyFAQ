@@ -4,6 +4,7 @@ namespace phpMyFAQ\Setup\Migration\QueryBuilder\Dialect;
 
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 #[AllowMockObjectsWithoutExpectations]
 class MysqlDialectTest extends TestCase
@@ -127,6 +128,14 @@ class MysqlDialectTest extends TestCase
     {
         $result = $this->dialect->createIndex('idx_test', 'test_table', ['column1', 'column2']);
         $this->assertEquals('CREATE INDEX idx_test ON test_table (column1, column2)', $result);
+    }
+
+    public function testCreateIndexThrowsExceptionWhenIfNotExistsIsTrue(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('MySQL/MariaDB does not support IF NOT EXISTS for CREATE INDEX');
+
+        $this->dialect->createIndex('idx_test', 'test_table', ['column1'], true);
     }
 
     public function testDropIndex(): void

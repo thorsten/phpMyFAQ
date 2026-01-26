@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Setup\Migration;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -123,6 +124,11 @@ readonly class TestMigration extends AbstractMigration
     {
         return $this->autoIncrementColumn($columnName);
     }
+
+    public function exposeIndexExists(string $table, string $indexName): string
+    {
+        return $this->indexExists($table, $indexName);
+    }
 }
 
 #[AllowMockObjectsWithoutExpectations]
@@ -232,6 +238,11 @@ class AbstractMigrationTest extends TestCase
 
     public function testUpdateLanguageCode(): void
     {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnCallback(fn($value) => addslashes($value));
+
+        $this->configuration->method('getDb')->willReturn($db);
+
         $migration = new TestMigration($this->configuration);
 
         $sql = $migration->exposeUpdateLanguageCode('faq', 'lang', 'en-US', 'en');
@@ -239,5 +250,66 @@ class AbstractMigrationTest extends TestCase
         $this->assertStringContainsString('UPDATE', $sql);
         $this->assertStringContainsString("lang='en'", $sql);
         $this->assertStringContainsString("lang='en-US'", $sql);
+    }
+
+    public function testUpdateLanguageCodeEscapesValues(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->expects($this->exactly(2))->method('escape')->willReturnCallback(fn($value) => addslashes($value));
+
+        $this->configuration->method('getDb')->willReturn($db);
+
+        $migration = new TestMigration($this->configuration);
+
+        // Test with values that need escaping
+        $sql = $migration->exposeUpdateLanguageCode('faq', 'lang', "en'; DROP TABLE faq;--", 'en');
+
+        // The malicious code should be escaped with backslashes
+        $this->assertStringContainsString("en\\'", $sql);
+    }
+
+    public function testIndexExistsGeneratesQuery(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnCallback(fn($value) => addslashes($value));
+
+        $this->configuration->method('getDb')->willReturn($db);
+
+        $migration = new TestMigration($this->configuration);
+        $sql = $migration->exposeIndexExists('users', 'idx_username');
+
+        // Should generate a query to check for index existence
+        $this->assertStringContainsString('idx_username', $sql);
+        $this->assertStringContainsString('users', $sql);
+        $this->assertStringContainsString('COUNT', $sql);
+    }
+
+    public function testIndexExistsEscapesValues(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->expects($this->exactly(2))->method('escape')->willReturnCallback(fn($value) => addslashes($value));
+
+        $this->configuration->method('getDb')->willReturn($db);
+
+        $migration = new TestMigration($this->configuration);
+
+        // Test with values that need escaping
+        $sql = $migration->exposeIndexExists('users', "idx'; DROP TABLE users;--");
+
+        // The malicious code should be escaped
+        $this->assertStringContainsString("\\'", $sql);
+    }
+
+    public function testCreateIndexGeneratesValidSql(): void
+    {
+        $migration = new TestMigration($this->configuration);
+
+        $sql = $migration->exposeCreateIndex('users', 'idx_username', 'username');
+
+        // Should generate a CREATE INDEX statement
+        $this->assertStringContainsString('CREATE INDEX', $sql);
+        $this->assertStringContainsString('idx_username', $sql);
+        $this->assertStringContainsString('ON', $sql);
+        $this->assertStringContainsString('username', $sql);
     }
 }

@@ -169,7 +169,63 @@ abstract readonly class AbstractMigration implements MigrationInterface
             );
         }
 
+        // MySQL/MariaDB don't support IF NOT EXISTS in older versions
+        // Use conditional execution or manual check instead
+        if ($this->isMySql()) {
+            return sprintf('CREATE INDEX %s ON %s (%s)', $indexName, $tableName, $columnList);
+        }
+
+        // PostgreSQL and SQLite support IF NOT EXISTS
         return sprintf('CREATE INDEX IF NOT EXISTS %s ON %s (%s)', $indexName, $tableName, $columnList);
+    }
+
+    /**
+     * Helper to check if an index exists.
+     * Returns a SQL query that checks for index existence.
+     */
+    protected function indexExists(string $table, string $indexName): string
+    {
+        $db = $this->configuration->getDb();
+        $tableName = $this->table($table);
+        $escapedTableName = $db->escape($tableName);
+        $escapedIndexName = $db->escape($indexName);
+
+        if ($this->isMySql()) {
+            return sprintf(
+                'SELECT COUNT(*) as idx_count FROM information_schema.STATISTICS '
+                . "WHERE table_schema = DATABASE() AND table_name = '%s' AND index_name = '%s'",
+                $escapedTableName,
+                $escapedIndexName,
+            );
+        }
+
+        if ($this->isPostgreSql()) {
+            return sprintf(
+                'SELECT COUNT(*) as idx_count FROM pg_indexes '
+                . "WHERE schemaname = 'public' AND tablename = '%s' AND indexname = '%s'",
+                $escapedTableName,
+                $escapedIndexName,
+            );
+        }
+
+        if ($this->isSqlite()) {
+            return sprintf(
+                'SELECT COUNT(*) as idx_count FROM sqlite_master '
+                . "WHERE type = 'index' AND name = '%s' AND tbl_name = '%s'",
+                $escapedIndexName,
+                $escapedTableName,
+            );
+        }
+
+        if ($this->isSqlServer()) {
+            return sprintf(
+                'SELECT COUNT(*) as idx_count FROM sys.indexes ' . "WHERE name = '%s' AND object_id = OBJECT_ID('%s')",
+                $escapedIndexName,
+                $escapedTableName,
+            );
+        }
+
+        return '';
     }
 
     /**
@@ -193,13 +249,17 @@ abstract readonly class AbstractMigration implements MigrationInterface
      */
     protected function updateLanguageCode(string $table, string $column, string $oldCode, string $newCode): string
     {
+        $db = $this->configuration->getDb();
+        $escapedOldCode = $db->escape($oldCode);
+        $escapedNewCode = $db->escape($newCode);
+
         return sprintf(
             "UPDATE %s SET %s='%s' WHERE %s='%s'",
             $this->table($table),
             $column,
-            $newCode,
+            $escapedNewCode,
             $column,
-            $oldCode,
+            $escapedOldCode,
         );
     }
 

@@ -6,6 +6,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 #[AllowMockObjectsWithoutExpectations]
 class MigrationTrackerTest extends TestCase
@@ -27,8 +28,8 @@ class MigrationTrackerTest extends TestCase
 
     public function testIsAppliedReturnsTrueWhenMigrationExists(): void
     {
-        $resultMock = $this->createMock(\stdClass::class);
-        $rowMock = new \stdClass();
+        $resultMock = $this->createMock(stdClass::class);
+        $rowMock = new stdClass();
         $rowMock->cnt = 1;
 
         $this->database->method('escape')->willReturnArgument(0);
@@ -40,8 +41,8 @@ class MigrationTrackerTest extends TestCase
 
     public function testIsAppliedReturnsFalseWhenMigrationDoesNotExist(): void
     {
-        $resultMock = $this->createMock(\stdClass::class);
-        $rowMock = new \stdClass();
+        $resultMock = $this->createMock(stdClass::class);
+        $rowMock = new stdClass();
         $rowMock->cnt = 0;
 
         $this->database->method('escape')->willReturnArgument(0);
@@ -99,7 +100,7 @@ class MigrationTrackerTest extends TestCase
 
     public function testGetAppliedMigrationsReturnsEmptyArrayWhenNoMigrations(): void
     {
-        $resultMock = $this->createMock(\stdClass::class);
+        $resultMock = $this->createMock(stdClass::class);
 
         $this->database->method('query')->willReturn($resultMock);
         $this->database->method('fetchObject')->willReturn(null);
@@ -112,16 +113,16 @@ class MigrationTrackerTest extends TestCase
 
     public function testGetAppliedMigrationsReturnsMigrationData(): void
     {
-        $resultMock = $this->createMock(\stdClass::class);
+        $resultMock = $this->createMock(stdClass::class);
 
-        $row1 = new \stdClass();
+        $row1 = new stdClass();
         $row1->version = '3.2.0-alpha';
         $row1->applied_at = '2024-01-01 00:00:00';
         $row1->execution_time_ms = '100';
         $row1->checksum = 'abc123';
         $row1->description = 'First migration';
 
-        $row2 = new \stdClass();
+        $row2 = new stdClass();
         $row2->version = '3.2.0-beta';
         $row2->applied_at = '2024-01-02 00:00:00';
         $row2->execution_time_ms = '150';
@@ -143,16 +144,16 @@ class MigrationTrackerTest extends TestCase
 
     public function testGetAppliedVersionsReturnsVersionStrings(): void
     {
-        $resultMock = $this->createMock(\stdClass::class);
+        $resultMock = $this->createMock(stdClass::class);
 
-        $row1 = new \stdClass();
+        $row1 = new stdClass();
         $row1->version = '3.2.0-alpha';
         $row1->applied_at = '2024-01-01';
         $row1->execution_time_ms = '100';
         $row1->checksum = null;
         $row1->description = null;
 
-        $row2 = new \stdClass();
+        $row2 = new stdClass();
         $row2->version = '4.0.0';
         $row2->applied_at = '2024-01-02';
         $row2->execution_time_ms = '150';
@@ -169,7 +170,7 @@ class MigrationTrackerTest extends TestCase
 
     public function testGetLastAppliedVersionReturnsNullWhenEmpty(): void
     {
-        $resultMock = $this->createMock(\stdClass::class);
+        $resultMock = $this->createMock(stdClass::class);
 
         $this->database->method('query')->willReturn($resultMock);
         $this->database->method('fetchObject')->willReturn(null);
@@ -181,8 +182,8 @@ class MigrationTrackerTest extends TestCase
 
     public function testGetLastAppliedVersionReturnsVersion(): void
     {
-        $resultMock = $this->createMock(\stdClass::class);
-        $rowMock = new \stdClass();
+        $resultMock = $this->createMock(stdClass::class);
+        $rowMock = new stdClass();
         $rowMock->version = '4.2.0-alpha';
 
         $this->database->method('query')->willReturn($resultMock);
@@ -193,9 +194,31 @@ class MigrationTrackerTest extends TestCase
         $this->assertEquals('4.2.0-alpha', $version);
     }
 
+    public function testGetLastAppliedVersionUsesLimitForNonSqlServer(): void
+    {
+        $resultMock = $this->createMock(stdClass::class);
+        $rowMock = new stdClass();
+        $rowMock->version = '4.2.0';
+
+        $this->database
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->callback(function ($query) {
+                // Should use LIMIT 1 for MySQL/PostgreSQL/SQLite
+                return str_contains($query, 'LIMIT 1') && str_contains($query, 'ORDER BY id DESC');
+            }))
+            ->willReturn($resultMock);
+
+        $this->database->method('fetchObject')->willReturn($rowMock);
+
+        $version = $this->tracker->getLastAppliedVersion();
+
+        $this->assertEquals('4.2.0', $version);
+    }
+
     public function testTableExistsReturnsTrueWhenTableExists(): void
     {
-        $resultMock = $this->createMock(\stdClass::class);
+        $resultMock = $this->createMock(stdClass::class);
 
         $this->database->method('query')->willReturn($resultMock);
         $this->database->method('numRows')->willReturn(1);
@@ -205,7 +228,7 @@ class MigrationTrackerTest extends TestCase
 
     public function testTableExistsReturnsFalseWhenTableDoesNotExist(): void
     {
-        $resultMock = $this->createMock(\stdClass::class);
+        $resultMock = $this->createMock(stdClass::class);
 
         $this->database->method('query')->willReturn($resultMock);
         $this->database->method('numRows')->willReturn(0);

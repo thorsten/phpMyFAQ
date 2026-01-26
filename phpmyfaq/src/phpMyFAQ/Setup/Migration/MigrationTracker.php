@@ -186,12 +186,18 @@ class MigrationTracker
     public function getLastAppliedVersion(): ?string
     {
         $tableName = Database::getTablePrefix() . self::TABLE_NAME;
-        $query = sprintf('SELECT version FROM %s ORDER BY id DESC LIMIT 1', $tableName);
+        $dbType = Database::getType();
+
+        // Build database-specific query
+        $query = match ($dbType) {
+            'sqlsrv', 'pdo_sqlsrv' => sprintf('SELECT TOP 1 version FROM %s ORDER BY id DESC', $tableName),
+            default => sprintf('SELECT version FROM %s ORDER BY id DESC LIMIT 1', $tableName),
+        };
 
         $result = $this->configuration->getDb()->query($query);
         $row = $this->configuration->getDb()->fetchObject($result);
 
-        return $row !== null ? $row->version : null;
+        return $row?->version;
     }
 
     /**
