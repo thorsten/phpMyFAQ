@@ -239,7 +239,7 @@ final class FaqController extends AbstractAdministrationController
      * @throws \Exception
      * @todo refactor Twig template variables
      */
-    #[Route(path: '/faq/edit/{faqId}/{faqLanguage}', name: 'admin.faq.edit', methods: ['GET'])]
+    #[Route(path: '/faq/edit/{faqId}/{faqLanguage}', name: 'admin.faq.edit', methods: ['GET', 'POST'])]
     public function edit(Request $request): Response
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
@@ -248,7 +248,7 @@ final class FaqController extends AbstractAdministrationController
 
         $faqId = (int) Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
-        $selectedRevisionId = Filter::filterVar($request->attributes->get('selectedRevisionId'), FILTER_VALIDATE_INT);
+        $selectedRevisionId = Filter::filterVar($request->request->get('selectedRevisionId'), FILTER_VALIDATE_INT);
 
         $category = new Category($this->configuration, $currentAdminGroups, true, $faqLanguage);
         $category->setUser($currentAdminUser);

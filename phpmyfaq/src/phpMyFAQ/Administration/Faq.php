@@ -29,7 +29,8 @@ class Faq
 
     public function __construct(
         private readonly Configuration $configuration,
-    ) {}
+    ) {
+    }
 
     /**
      * Get all FAQs by category
@@ -246,7 +247,6 @@ class Faq
 
         $result = $this->configuration->getDb()->query($query);
         $orphaned = [];
-        $currentBackendLang = $this->configuration->getLanguage()->getLanguage();
         $seen = [];
         while ($row = $this->configuration->getDb()->fetchObject($result)) {
             $key = $row->id . '-' . $row->lang;
@@ -257,14 +257,6 @@ class Faq
                 $data->faqId = $row->id;
                 $data->language = $row->lang;
                 $data->question = $row->question;
-
-                if (class_exists('\Locale')) {
-                    $displayName = \Locale::getDisplayLanguage($row->lang, $currentBackendLang);
-                    $data->languageName = $displayName !== '' ? $displayName : $row->lang;
-                } else {
-                    $data->languageName = $row->lang;
-                }
-
                 $data->url = sprintf(
                     '%sadmin/faq/edit/%d/%s',
                     $this->configuration->getDefaultUrl(),

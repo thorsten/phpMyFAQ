@@ -24,7 +24,7 @@
     {% for faq in orphanedFaqs %}
       <tr>
         <td>{{ faq.faqId }}</td>
-        <td>{{ faq.languageName }}</td>
+        <td>{{ faq.language | getFromLanguageCode }}</td>
         <td>
           <a href="{{ faq.url }}">{{ faq.question }}</a>
         </td>
