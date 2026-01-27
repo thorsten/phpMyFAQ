@@ -227,8 +227,6 @@ class Faq
                 FROM
                     %sfaqdata fd
                 WHERE
-                    fd.lang = '%s'
-                AND 
                     fd.active = 'yes'
                 AND
                     fd.id NOT IN (
@@ -242,18 +240,19 @@ class Faq
                 GROUP BY
                     fd.id, fd.lang, fd.thema
                 ORDER BY
-                    fd.id DESC",
+                    fd.lang ASC, fd.id DESC",
             Database::getTablePrefix(),
-            $this->configuration->getLanguage()->getLanguage(),
             Database::getTablePrefix(),
         );
 
         $result = $this->configuration->getDb()->query($query);
         $orphaned = [];
-
-        $oldId = 0;
+        $seen = [];
         while ($row = $this->configuration->getDb()->fetchObject($result)) {
-            if ($oldId !== $row->id) {
+            $key = $row->id . '-' . $row->lang;
+
+            if (!isset($seen[$key])) {
+                $seen[$key] = true;
                 $data = new stdClass();
                 $data->faqId = $row->id;
                 $data->language = $row->lang;
@@ -266,8 +265,6 @@ class Faq
                 );
                 $orphaned[] = $data;
             }
-
-            $oldId = $row->id;
         }
 
         return $orphaned;
