@@ -5882,16 +5882,16 @@
     "packages-dev": [
         {
             "name": "carthage-software/mago",
-            "version": "1.1.0",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/carthage-software/mago.git",
-                "reference": "dcc682d0b12e332e7f22c31d39b7638d8518d413"
+                "reference": "9e6e3c629349f5bdc2a3b7c7404a22a3946a33f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/carthage-software/mago/zipball/dcc682d0b12e332e7f22c31d39b7638d8518d413",
-                "reference": "dcc682d0b12e332e7f22c31d39b7638d8518d413",
+                "url": "https://api.github.com/repos/carthage-software/mago/zipball/9e6e3c629349f5bdc2a3b7c7404a22a3946a33f0",
+                "reference": "9e6e3c629349f5bdc2a3b7c7404a22a3946a33f0",
                 "shasum": ""
             },
             "require": {
@@ -5929,7 +5929,7 @@
             ],
             "support": {
                 "issues": "https://github.com/carthage-software/mago/issues",
-                "source": "https://github.com/carthage-software/mago/tree/1.1.0"
+                "source": "https://github.com/carthage-software/mago/tree/1.2.2"
             },
             "funding": [
                 {
@@ -5937,7 +5937,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-01-13T09:58:07+00:00"
+            "time": "2026-01-25T13:20:59+00:00"
         },
         {
             "name": "doctrine/deprecations",
