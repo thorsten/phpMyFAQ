@@ -122,7 +122,7 @@ class PaginationRequest
             // Offset-based pagination
             $isOffsetBased = true;
             $offset = max(0, $offset); // Ensure non-negative
-            $limit = $limit ?? $perPage ?? $defaultPerPage;
+            $limit ??= $perPage ?? $defaultPerPage;
             $limit = self::validateLimit($limit, $maxPerPage);
             $perPage = $limit;
             // Calculate page from offset
@@ -130,7 +130,7 @@ class PaginationRequest
         } else {
             // Page-based pagination
             $isPageBased = true;
-            $perPage = $perPage ?? $limit ?? $defaultPerPage;
+            $perPage ??= $limit ?? $defaultPerPage;
             $perPage = self::validateLimit($perPage, $maxPerPage);
             $limit = $perPage;
             // Calculate offset from page

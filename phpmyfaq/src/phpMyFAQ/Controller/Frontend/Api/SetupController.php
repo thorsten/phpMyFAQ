@@ -45,7 +45,7 @@ final class SetupController extends AbstractController
         $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $update = new Update(new System(), $this->configuration);
-        $update->setVersion($installedVersion);
+        $update->version = $installedVersion;
 
         if (!$update->checkMaintenanceMode()) {
             return $this->json([
@@ -81,7 +81,7 @@ final class SetupController extends AbstractController
         }
 
         $update = new Update(new System(), $this->configuration);
-        $update->setVersion($this->configuration->getVersion());
+        $update->version = $this->configuration->getVersion();
 
         $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -111,7 +111,7 @@ final class SetupController extends AbstractController
         $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $update = new Update(new System(), $this->configuration);
-        $update->setVersion($installedVersion);
+        $update->version = $installedVersion;
 
         try {
             if ($update->applyUpdates()) {

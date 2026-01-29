@@ -166,7 +166,7 @@ readonly class CustomPage
      */
     public function getById(int $pageId, ?string $language = null): ?CustomPageEntity
     {
-        $language = $language ?? $this->configuration->getLanguage()->getLanguage();
+        $language ??= $this->configuration->getLanguage()->getLanguage();
         $row = $this->repository->getById($pageId, $language);
         return $row ? $this->mapRowToEntity($row) : null;
     }
@@ -180,7 +180,7 @@ readonly class CustomPage
      */
     public function getBySlug(string $slug, ?string $language = null): ?CustomPageEntity
     {
-        $language = $language ?? $this->configuration->getLanguage()->getLanguage();
+        $language ??= $this->configuration->getLanguage()->getLanguage();
         $row = $this->repository->getBySlug($slug, $language);
         return $row ? $this->mapRowToEntity($row) : null;
     }
@@ -242,7 +242,7 @@ readonly class CustomPage
      */
     public function delete(int $pageId, ?string $language = null): bool
     {
-        $language = $language ?? $this->configuration->getLanguage()->getLanguage();
+        $language ??= $this->configuration->getLanguage()->getLanguage();
         return $this->repository->delete($pageId, $language);
     }
 
@@ -268,7 +268,7 @@ readonly class CustomPage
      */
     public function slugExists(string $slug, ?string $language = null, ?int $excludeId = null): bool
     {
-        $language = $language ?? $this->configuration->getLanguage()->getLanguage();
+        $language ??= $this->configuration->getLanguage()->getLanguage();
         return $this->repository->slugExists($slug, $language, $excludeId);
     }
 
@@ -282,7 +282,7 @@ readonly class CustomPage
      */
     public function generateUniqueSlug(string $baseSlug, ?string $language = null, ?int $excludeId = null): string
     {
-        $language = $language ?? $this->configuration->getLanguage()->getLanguage();
+        $language ??= $this->configuration->getLanguage()->getLanguage();
         $slug = $baseSlug;
         $counter = 1;
 

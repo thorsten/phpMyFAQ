@@ -28,9 +28,13 @@
         php_server
     }
 
-    # Setup and update pages
+    # Setup pages
     @setup path /setup*
     rewrite @setup /setup/index.php
+
+    # Update page - route directly to index.php (handled by Symfony router)
+    @update path /update*
+    rewrite @update /index.php
 
     # Administration API
     @admin_api path /admin/api/*
@@ -88,12 +92,13 @@
         php_server
     }
 
-    # Setup and update pages
+    # Setup pages
     @setup path /setup*
     rewrite @setup /setup/index.php
 
+    # Update page - route directly to index.php (handled by Symfony router)
     @update path /update*
-    rewrite @update /update/index.php
+    rewrite @update /index.php
 
     # Administration API
     @admin_api path /admin/api/*

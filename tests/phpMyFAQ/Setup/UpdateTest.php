@@ -35,7 +35,7 @@ class UpdateTest extends TestCase
      */
     public function testCreateConfigBackup(): void
     {
-        $this->update->setVersion('4.0.0');
+        $this->update->version = '4.0.0';
         $configPath = PMF_TEST_DIR . '/content/core/config';
 
         // Clean up any existing backup files before test
@@ -69,7 +69,7 @@ class UpdateTest extends TestCase
 
     public function testIsConfigTableNotAvailable(): void
     {
-        $this->update->setVersion('5.0.0');
+        $this->update->version = '5.0.0';
         $this->assertFalse($this->update->isConfigTableNotAvailable($this->dbHandle));
     }
 
@@ -78,7 +78,8 @@ class UpdateTest extends TestCase
      */
     public function testApplyUpdates(): void
     {
-        $this->update->setVersion('5.0.0');
+        $this->update->version = '5.0.0';
+        $this->update->dryRun = true; // Use dry-run to avoid writing to read-only test database
         $result = $this->update->applyUpdates();
 
         $this->assertTrue($result);
@@ -86,23 +87,23 @@ class UpdateTest extends TestCase
 
     public function testApplyUpdatesWithDryRunForAlpha3(): void
     {
-        $this->update->setVersion('5.0.0-alpha.2');
-        $this->update->setDryRun(true);
+        $this->update->version = '5.0.0-alpha.2';
+        $this->update->dryRun = true;
         $this->update->applyUpdates();
 
-        $result = $this->update->getDryRunQueries();
+        $result = $this->update->dryRunQueries;
 
         $this->assertIsArray($result);
     }
 
-    public function testSetDryRun()
+    public function testSetDryRun(): void
     {
-        $this->update->setDryRun(true);
+        $this->update->dryRun = true;
         $reflection = new \ReflectionClass($this->update);
         $property = $reflection->getProperty('dryRun');
         $this->assertTrue($property->getValue($this->update));
 
-        $this->update->setDryRun(false);
+        $this->update->dryRun = false;
         $this->assertFalse($property->getValue($this->update));
     }
 }

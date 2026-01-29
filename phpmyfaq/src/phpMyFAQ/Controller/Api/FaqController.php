@@ -566,7 +566,7 @@ final class FaqController extends AbstractApiController
 
         // Apply sorting if needed (basic client-side sorting)
         if ($sort->getField() && $sort->getField() !== 'id') {
-            usort($allFaqs, function ($a, $b) use ($sort) {
+            usort($allFaqs, static function ($a, $b) use ($sort) {
                 $field = $sort->getField();
                 $aVal = $a[$field] ?? '';
                 $bVal = $b[$field] ?? '';

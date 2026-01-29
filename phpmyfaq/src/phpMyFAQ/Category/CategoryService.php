@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Category;
 
-use phpMyFAQ\Category\CategoryRepositoryInterface;
 use phpMyFAQ\Entity\CategoryEntity;
 
 /**

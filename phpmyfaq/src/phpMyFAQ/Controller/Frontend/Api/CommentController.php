@@ -219,7 +219,7 @@ final class CommentController extends AbstractController
         // Additional sanitization for <a> tags - only allow specific attributes
         $sanitized = preg_replace_callback(
             '/<a\s+([^>]*)>/i',
-            function ($matches) {
+            static function ($matches) {
                 $attributes = $matches[1];
                 $allowedAttrs = [];
 
@@ -252,8 +252,6 @@ final class CommentController extends AbstractController
         );
 
         // Remove any remaining dangerous attributes from other tags
-        $sanitized = preg_replace('/<(\w+)\s+[^>]*?(on\w+|style|class|id)\s*=\s*[^>]*>/i', '<$1>', $sanitized);
-
-        return $sanitized;
+        return preg_replace('/<(\w+)\s+[^>]*?(on\w+|style|class|id)\s*=\s*[^>]*>/i', '<$1>', $sanitized);
     }
 }

@@ -136,9 +136,11 @@ final class FaqDisplayService
             $searchItems = explode(' ', $processedHighlight);
 
             foreach ($searchItems as $searchItem) {
-                if (Strings::strlen($searchItem) > 2) {
-                    $answer = Utils::setHighlightedString($answer, $searchItem);
+                if (Strings::strlen($searchItem) <= 2) {
+                    continue;
                 }
+
+                $answer = Utils::setHighlightedString($answer, $searchItem);
             }
         }
 
@@ -157,9 +159,11 @@ final class FaqDisplayService
             $searchItems = explode(' ', $processedHighlight);
 
             foreach ($searchItems as $searchItem) {
-                if (Strings::strlen($searchItem) > 2) {
-                    $question = Utils::setHighlightedString($question, $searchItem);
+                if (Strings::strlen($searchItem) <= 2) {
+                    continue;
                 }
+
+                $question = Utils::setHighlightedString($question, $searchItem);
             }
         }
 

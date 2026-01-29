@@ -23,7 +23,6 @@ use Exception;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class GlossaryController extends AbstractApiController
@@ -137,7 +136,7 @@ final class GlossaryController extends AbstractApiController
 
         // Apply sorting if needed
         if ($sort->getField()) {
-            usort($allItems, function ($a, $b) use ($sort) {
+            usort($allItems, static function ($a, $b) use ($sort) {
                 $field = $sort->getField();
                 $aVal = $a[$field] ?? '';
                 $bVal = $b[$field] ?? '';
