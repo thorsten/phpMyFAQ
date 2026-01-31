@@ -137,61 +137,66 @@ readonly class Migration320Beta extends AbstractMigration
         if ($tableName === 'faqdata') {
             $recorder->addSql(
                 sprintf('CREATE TABLE %s_new (
-                        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                        id INTEGER NOT NULL,
                         lang VARCHAR(5) NOT NULL,
                         solution_id INTEGER NOT NULL,
                         revision_id INTEGER NOT NULL DEFAULT 0,
-                        active VARCHAR(3),
+                        active char(3) NOT NULL,
                         sticky INTEGER NOT NULL,
-                        keywords TEXT,
-                        thema TEXT NOT NULL,
-                        content TEXT,
+                        keywords text DEFAULT NULL,
+                        thema text NOT NULL,
+                        content text DEFAULT NULL,
                         author VARCHAR(255) NOT NULL,
                         email VARCHAR(255) NOT NULL,
-                        comment VARCHAR(3),
-                        date VARCHAR(15) NOT NULL,
-                        dateStart VARCHAR(14) NOT NULL DEFAULT \'00000000000000\',
-                        dateEnd VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
-                        created DATETIME NOT NULL
+                        comment char(1) default \'y\',
+                        updated VARCHAR(15) NOT NULL,
+                        date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\',
+                        date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
+                        created DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        notes text DEFAULT NULL,
+                        sticky_order INTEGER DEFAULT NULL,
+                        PRIMARY KEY (id, lang)
                     )', $fullTableName),
                 sprintf('Create new %s table without link verification columns (SQLite)', $tableName),
             );
 
             $recorder->addSql(
-                sprintf('INSERT INTO %s_new 
-                     SELECT id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, 
-                            author, email, comment, date, dateStart, dateEnd, created 
+                sprintf('INSERT INTO %s_new
+                     SELECT id, lang, solution_id, revision_id, active, sticky, keywords, thema, content,
+                            author, email, comment, updated, date_start, date_end, created, notes, sticky_order
                      FROM %s', $fullTableName, $fullTableName),
                 sprintf('Copy data to new %s table (SQLite)', $tableName),
             );
         } elseif ($tableName === 'faqdata_revisions') {
             $recorder->addSql(
                 sprintf('CREATE TABLE %s_new (
-                        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                        faq_id INTEGER NOT NULL,
+                        id INTEGER NOT NULL,
                         lang VARCHAR(5) NOT NULL,
                         solution_id INTEGER NOT NULL,
                         revision_id INTEGER NOT NULL DEFAULT 0,
-                        active VARCHAR(3),
+                        active char(3) NOT NULL,
                         sticky INTEGER NOT NULL,
-                        keywords TEXT,
-                        thema TEXT NOT NULL,
-                        content TEXT,
+                        keywords text DEFAULT NULL,
+                        thema text NOT NULL,
+                        content text DEFAULT NULL,
                         author VARCHAR(255) NOT NULL,
                         email VARCHAR(255) NOT NULL,
-                        comment VARCHAR(3),
-                        date VARCHAR(15) NOT NULL,
-                        dateStart VARCHAR(14) NOT NULL DEFAULT \'00000000000000\',
-                        dateEnd VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
-                        created DATETIME NOT NULL
+                        comment char(1) default \'y\',
+                        updated VARCHAR(15) NOT NULL,
+                        date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\',
+                        date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
+                        created DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        notes text DEFAULT NULL,
+                        sticky_order INTEGER DEFAULT NULL,
+                        PRIMARY KEY (id, lang, solution_id, revision_id)
                     )', $fullTableName),
                 sprintf('Create new %s table without link verification columns (SQLite)', $tableName),
             );
 
             $recorder->addSql(
-                sprintf('INSERT INTO %s_new 
-                     SELECT id, faq_id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, 
-                            author, email, comment, date, dateStart, dateEnd, created 
+                sprintf('INSERT INTO %s_new
+                     SELECT id, lang, solution_id, revision_id, active, sticky, keywords, thema, content,
+                            author, email, comment, updated, date_start, date_end, created, notes, sticky_order
                      FROM %s', $fullTableName, $fullTableName),
                 sprintf('Copy data to new %s table (SQLite)', $tableName),
             );
