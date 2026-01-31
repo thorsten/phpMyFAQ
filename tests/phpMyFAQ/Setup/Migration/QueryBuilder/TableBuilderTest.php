@@ -151,7 +151,7 @@ class TableBuilderTest extends TestCase
             ->autoIncrement('id')
             ->build();
 
-        $this->assertStringContainsString('id INT NOT NULL AUTO_INCREMENT', $sql);
+        $this->assertStringContainsString('id INT NOT NULL PRIMARY KEY AUTO_INCREMENT', $sql);
     }
 
     public function testPrimaryKey(): void

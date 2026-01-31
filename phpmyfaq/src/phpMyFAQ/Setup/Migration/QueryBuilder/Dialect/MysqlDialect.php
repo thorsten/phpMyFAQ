@@ -86,7 +86,7 @@ class MysqlDialect implements DialectInterface
 
     public function autoIncrement(string $columnName): string
     {
-        return "$columnName INT NOT NULL AUTO_INCREMENT";
+        return "$columnName INT NOT NULL PRIMARY KEY AUTO_INCREMENT";
     }
 
     public function createTablePrefix(string $tableName, bool $ifNotExists = false): string

@@ -81,8 +81,8 @@ class MysqlDialectTest extends TestCase
 
     public function testAutoIncrement(): void
     {
-        $this->assertEquals('id INT NOT NULL AUTO_INCREMENT', $this->dialect->autoIncrement('id'));
-        $this->assertEquals('user_id INT NOT NULL AUTO_INCREMENT', $this->dialect->autoIncrement('user_id'));
+        $this->assertEquals('id INT NOT NULL PRIMARY KEY AUTO_INCREMENT', $this->dialect->autoIncrement('id'));
+        $this->assertEquals('user_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT', $this->dialect->autoIncrement('user_id'));
     }
 
     public function testCreateTablePrefix(): void

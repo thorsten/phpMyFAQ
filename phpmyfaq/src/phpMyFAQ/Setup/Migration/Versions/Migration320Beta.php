@@ -109,7 +109,7 @@ readonly class Migration320Beta extends AbstractMigration
         } elseif ($this->isSqlServer()) {
             $recorder->addSql(
                 sprintf('ALTER TABLE %sfaqconfig ALTER COLUMN config_value NVARCHAR(MAX)', $this->tablePrefix),
-                'Change faqconfig.config_value to TEXT (SQL Server)',
+                'Change faqconfig.config_value to NVARCHAR(MAX) (SQL Server)',
             );
         }
     }
@@ -122,6 +122,15 @@ readonly class Migration320Beta extends AbstractMigration
      */
     private function rebuildTableWithoutColumns(OperationRecorder $recorder, string $tableName): void
     {
+        $allowedTables = ['faqdata', 'faqdata_revisions'];
+        if (!in_array($tableName, $allowedTables, true)) {
+            throw new \LogicException(sprintf(
+                'rebuildTableWithoutColumns() only supports [%s], got "%s"',
+                implode(', ', $allowedTables),
+                $tableName,
+            ));
+        }
+
         $fullTableName = $this->tablePrefix . $tableName;
 
         // For faqdata and faqdata_revisions, we need to define the schema without the removed columns

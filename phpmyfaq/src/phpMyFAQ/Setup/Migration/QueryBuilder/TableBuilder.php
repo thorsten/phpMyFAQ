@@ -164,6 +164,11 @@ class TableBuilder
             'default' => null,
             'extra' => null,
         ];
+
+        if (empty($this->primaryKey)) {
+            $this->primaryKey = [$name];
+        }
+
         return $this;
     }
 
@@ -211,6 +216,10 @@ class TableBuilder
      */
     public function build(): string
     {
+        if (empty($this->tableName)) {
+            throw new \LogicException('Table name not set: call table() before build()');
+        }
+
         $parts = [];
 
         foreach ($this->columns as $name => $def) {
@@ -231,7 +240,7 @@ class TableBuilder
         }
 
         // Add primary key if set and not already added via autoIncrement
-        // For SQLite, autoIncrement() already includes PRIMARY KEY, so skip explicit PRIMARY KEY
+        // For SQLite and MySQL, autoIncrement() already includes PRIMARY KEY, so skip explicit PRIMARY KEY
         $hasAutoIncrement = false;
         foreach ($this->columns as $def) {
             if ($def['type'] === 'AUTO_INCREMENT') {
@@ -240,8 +249,9 @@ class TableBuilder
             }
         }
 
-        $isSqlite = $this->dialect->getType() === 'sqlite3';
-        if (!empty($this->primaryKey) && !($hasAutoIncrement && $isSqlite)) {
+        $dialectType = $this->dialect->getType();
+        $autoIncrementIncludesPk = in_array($dialectType, ['sqlite3', 'mysqli', 'pdo_mysql'], true);
+        if (!empty($this->primaryKey) && !($hasAutoIncrement && $autoIncrementIncludesPk)) {
             $pkColumns = implode(', ', $this->primaryKey);
             $parts[] = "PRIMARY KEY ($pkColumns)";
         }
@@ -276,6 +286,10 @@ class TableBuilder
      */
     public function buildIndexStatements(): array
     {
+        if (empty($this->tableName)) {
+            throw new \LogicException('Table name not set: call table() before buildIndexStatements()');
+        }
+
         // MySQL already has indexes inlined in CREATE TABLE, so no separate statements needed
         $isMysql = in_array($this->dialect->getType(), ['mysqli', 'pdo_mysql'], true);
         if ($isMysql) {
