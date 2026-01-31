@@ -53,7 +53,7 @@ class ApplicationTest extends TestCase
     public function testSetUrlMatcher(): void
     {
         $urlMatcher = $this->createStub(UrlMatcher::class);
-        $this->application->setUrlMatcher($urlMatcher);
+        $this->application->urlMatcher = $urlMatcher;
 
         $reflection = new ReflectionClass(Application::class);
         $property = $reflection->getProperty('urlMatcher');
@@ -64,7 +64,7 @@ class ApplicationTest extends TestCase
     public function testSetControllerResolver(): void
     {
         $controllerResolver = $this->createStub(ControllerResolver::class);
-        $this->application->setControllerResolver($controllerResolver);
+        $this->application->controllerResolver = $controllerResolver;
 
         $reflection = new ReflectionClass(Application::class);
         $property = $reflection->getProperty('controllerResolver');

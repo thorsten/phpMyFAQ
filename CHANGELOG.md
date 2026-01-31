@@ -21,6 +21,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - improved API errors with formatted RFC 7807 Problem Details JSON responses (Thorsten)
 - improved support for PDO (Thorsten)
 - improved sticky FAQs administration (Thorsten)
+- improved update process (Thorsten)
 - migrated codebase using PHP 8.4 language features (Thorsten)
 - migrated routes using PHP 8+ #[Route] attributes (Thorsten)
 

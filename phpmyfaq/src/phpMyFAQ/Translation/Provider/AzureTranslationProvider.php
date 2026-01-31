@@ -69,7 +69,7 @@ class AzureTranslationProvider extends AbstractTranslationProvider
             . '&to='
             . $this->mapLanguageCode($targetLang);
 
-        $body = array_map(fn($text) => ['text' => $text], $texts);
+        $body = array_map(static fn($text) => ['text' => $text], $texts);
 
         try {
             $response = $this->httpClient->request('POST', $url, [
@@ -82,7 +82,7 @@ class AzureTranslationProvider extends AbstractTranslationProvider
             ]);
 
             $data = $response->toArray();
-            return array_map(fn($item) => $item['translations'][0]['text'] ?? '', $data);
+            return array_map(static fn($item) => $item['translations'][0]['text'] ?? '', $data);
         } catch (\Exception $e) {
             throw new ApiException('Azure Translator API error: ' . $e->getMessage());
         }

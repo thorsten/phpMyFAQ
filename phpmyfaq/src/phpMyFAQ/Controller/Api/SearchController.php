@@ -167,7 +167,7 @@ final class SearchController extends AbstractApiController
 
             // Apply sorting if needed
             if ($sort->getField()) {
-                usort($allResults, function ($a, $b) use ($sort) {
+                usort($allResults, static function ($a, $b) use ($sort) {
                     $field = $sort->getField();
                     $aVal = $a->{$field} ?? '';
                     $bVal = $b->{$field} ?? '';

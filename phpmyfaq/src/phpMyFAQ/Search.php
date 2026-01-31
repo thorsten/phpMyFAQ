@@ -216,9 +216,11 @@ class Search
         $searchConditions = [];
 
         foreach ($searchWords as $word) {
-            if (strlen($word) > 2) {
-                $searchConditions[] = sprintf("(page_title LIKE '%%%s%%' OR content LIKE '%%%s%%')", $word, $word);
+            if (strlen($word) <= 2) {
+                continue;
             }
+
+            $searchConditions[] = sprintf("(page_title LIKE '%%%s%%' OR content LIKE '%%%s%%')", $word, $word);
         }
 
         if (empty($searchConditions)) {

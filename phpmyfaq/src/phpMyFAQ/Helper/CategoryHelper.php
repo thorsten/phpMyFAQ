@@ -25,7 +25,6 @@ use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Link;
-use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
