@@ -70,7 +70,7 @@ readonly class TestMigration extends AbstractMigration
         return $this->dropColumn($table, $column);
     }
 
-    public function exposeDropColumns(string $table, array $columns): string
+    public function exposeDropColumns(string $table, array $columns): array
     {
         return $this->dropColumns($table, $columns);
     }
@@ -212,10 +212,12 @@ class AbstractMigrationTest extends TestCase
     {
         $migration = new TestMigration($this->configuration);
 
-        $sql = $migration->exposeDropColumns('users', ['col1', 'col2']);
+        $statements = $migration->exposeDropColumns('users', ['col1', 'col2']);
 
-        $this->assertStringContainsString('DROP COLUMN col1', $sql);
-        $this->assertStringContainsString('DROP COLUMN col2', $sql);
+        $this->assertIsArray($statements);
+        $this->assertCount(2, $statements);
+        $this->assertStringContainsString('DROP COLUMN col1', $statements[0]);
+        $this->assertStringContainsString('DROP COLUMN col2', $statements[1]);
     }
 
     public function testDropTable(): void

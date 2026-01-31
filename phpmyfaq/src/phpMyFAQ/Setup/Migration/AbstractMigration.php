@@ -144,19 +144,19 @@ abstract readonly class AbstractMigration implements MigrationInterface
 
     /**
      * Helper to drop multiple columns from a table.
-     * Emits one ALTER TABLE ... DROP COLUMN statement per column for cross-database compatibility.
+     * Returns one ALTER TABLE ... DROP COLUMN statement per column for cross-database compatibility.
      *
      * @param string[] $columns
+     * @return string[]
      */
-    protected function dropColumns(string $table, array $columns): string
+    protected function dropColumns(string $table, array $columns): array
     {
         $tableName = $this->table($table);
-        $parts = array_map(static fn(string $col): string => sprintf(
+        return array_map(static fn(string $col): string => sprintf(
             'ALTER TABLE %s DROP COLUMN %s',
             $tableName,
             $col,
         ), $columns);
-        return implode('; ', $parts);
     }
 
     /**

@@ -101,10 +101,12 @@ readonly class Migration400Alpha3 extends AbstractMigration
         }
 
         // Update bot ignore list
-        $recorder->updateConfig('main.botIgnoreList', 'nustcrape,webpost,GoogleBot,msnbot,crawler,scooter,
-            bravobrian,archiver,w3c,controler,wget,bot,spider,Yahoo! Slurp,htdig,gsa-crawler,AirControler,Uptime-Kuma,
-            facebookcatalog/1.0,facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php),
-            facebookexternalhit/1.1');
+        $recorder->updateConfig(
+            'main.botIgnoreList',
+            'nustcrape,webpost,GoogleBot,msnbot,crawler,scooter,bravobrian,archiver,'
+            . 'w3c,controler,wget,bot,spider,Yahoo! Slurp,htdig,gsa-crawler,AirControler,Uptime-Kuma,facebookcatalog/1.0,'
+            . 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php),facebookexternalhit/1.1',
+        );
 
         // New configuration items
         $recorder->addConfig('mail.noReplySenderAddress', '');
