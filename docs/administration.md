@@ -188,21 +188,31 @@ Only the status will be changed - the FAQ will not be deleted from the database.
 
 ### 5.2.5 Orphaned FAQs
 
-Orphaned FAQs are records that are no longer assigned to any category, often caused by deleting a category without moving its entries or through incomplete data imports. Because they lack a category assignment, these entries are hidden from users in the public frontend.
-To resolve this:
+Orphaned FAQs are records that are no longer assigned to any category. This typically happens when categories are deleted without moving the associated FAQs, or through incomplete data imports. As they lack a category assignment, these entries are hidden from users in the public frontend.
 
-1. Open the FAQ: Click on an entry in the "Orphaned FAQ" list to open the FAQ Editor.
-2. Assign Category: Navigate to the "FAQ metadata" tab within the editor.
+Cross-Language Management
+Administrators can manage orphaned FAQs across all installed languages, without needing to switch their backend interface language. The list displays all orphaned entries in the system, including the full language name, and allows direct editing within the correct linguistic context.
+
+How to Resolve Orphaned FAQs:
+To correct an orphaned FAQ entry, you must assign it to a valid category in the corresponding language:
+
+1. Open the FAQ: The orphaned FAQ list displays entries from all languages. Click on the desired entry to open the FAQ editor, which will automatically be set to the FAQ's language.
+
+2. Assign Category: Navigate to the "FAQ metadata" tab within the editor. The available categories in the dropdown list will automatically match the language of the FAQ you are editing, ensuring you can only select a category appropriate for that language.
+
 3. Save Changes: Select a valid category and save the FAQ.
 
 Once saved, the entry will be visible in its new category and will automatically be removed from the Orphaned FAQ list.
 
 ### 5.2.6 Open Questions
 
-On the "Open Questions" page, you can see all open questions that visitors have posted.
-You can answer them directly or, if they are not visible due to your configuration in the public area, you can activate
-them.
-Additionally, you can delete them, too.
+On the "Open Questions" page, you can see all open questions that visitors have posted in the currently selected administration language. 
+You can answer open questions directly or, if they are not visible in the public area due to visibility settings, you can activate them. 
+Additionally, you can delete them.
+
+Please note:
+Questions awaiting moderation in other languages are not automatically shown here. If questions exist in other active languages, a warning alert will be displayed at the bottom of the page indicating which languages have pending items and the respective counts.
+To process these other questions, you must change your current administration language using the language selector in the top menu.
 
 ### 5.2.7 Comment Administration
 
