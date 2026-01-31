@@ -195,7 +195,7 @@ readonly class Chat
         }
 
         // Sort by last message time descending
-        usort($conversations, fn($a, $b) => strcmp($b['lastMessageTime'], $a['lastMessageTime']));
+        usort($conversations, static fn($a, $b) => strcmp($b['lastMessageTime'], $a['lastMessageTime']));
 
         return $conversations;
     }
@@ -341,12 +341,12 @@ readonly class Chat
         }
 
         // Collect unique sender IDs
-        $senderIds = array_unique(array_map(fn(ChatMessage $m) => $m->getSenderId(), $messages));
+        $senderIds = array_unique(array_map(static fn(ChatMessage $m) => $m->getSenderId(), $messages));
 
         // Batch fetch user info
         $userInfo = $this->getBatchUserInfo($senderIds);
 
-        return array_map(fn(ChatMessage $message) => [
+        return array_map(static fn(ChatMessage $message) => [
             'id' => $message->getId(),
             'senderId' => $message->getSenderId(),
             'senderName' => $userInfo[$message->getSenderId()] ?? 'Unknown User',

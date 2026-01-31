@@ -40,7 +40,7 @@ class RouteCacheManager
 
         // Create a cache directory if it doesn't exist
         if (!is_dir($this->cacheDir)) {
-            mkdir($this->cacheDir, 0755, true);
+            mkdir($this->cacheDir, 0o755, true);
         }
     }
 
@@ -81,9 +81,11 @@ class RouteCacheManager
 
         if ($cacheFiles !== false) {
             foreach ($cacheFiles as $file) {
-                if (file_exists($file)) {
-                    unlink($file);
+                if (!file_exists($file)) {
+                    continue;
                 }
+
+                unlink($file);
             }
         }
     }

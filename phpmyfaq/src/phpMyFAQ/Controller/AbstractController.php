@@ -244,7 +244,7 @@ abstract class AbstractController
      * verification may fail due to domain/path mismatches.
      * @throws \Exception
      */
-    protected function verifySessionCsrfToken(string $page, string $requestToken): bool
+    protected function verifySessionCsrfToken(string $page, #[\SensitiveParameter] string $requestToken): bool
     {
         if (empty($requestToken)) {
             return false;

@@ -21,7 +21,6 @@ namespace phpMyFAQ\Translation\Provider;
 
 use phpMyFAQ\Translation\AbstractTranslationProvider;
 use phpMyFAQ\Translation\Exception\ApiException;
-use phpMyFAQ\Translation\Exception\UnsupportedLanguageException;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 /**

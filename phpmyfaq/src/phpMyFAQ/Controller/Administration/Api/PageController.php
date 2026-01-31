@@ -168,9 +168,11 @@ final class PageController extends AbstractAdministrationApiController
         // Validate required fields
         $requiredFields = ['pageTitle', 'slug', 'authorName', 'authorEmail', 'lang'];
         foreach ($requiredFields as $field) {
-            if (!isset($data->$field) || $data->$field === '') {
-                return $this->json(['error' => "Missing required field: $field"], Response::HTTP_BAD_REQUEST);
+            if (!(!isset($data->$field) || $data->$field === '')) {
+                continue;
             }
+
+            return $this->json(['error' => "Missing required field: $field"], Response::HTTP_BAD_REQUEST);
         }
 
         $pageTitle = Filter::filterVar($data->pageTitle, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -321,9 +323,11 @@ final class PageController extends AbstractAdministrationApiController
         // Validate required fields
         $requiredFields = ['id', 'pageTitle', 'slug', 'authorName', 'authorEmail', 'lang'];
         foreach ($requiredFields as $field) {
-            if (!isset($data->$field) || $data->$field === '') {
-                return $this->json(['error' => "Missing required field: $field"], Response::HTTP_BAD_REQUEST);
+            if (!(!isset($data->$field) || $data->$field === '')) {
+                continue;
             }
+
+            return $this->json(['error' => "Missing required field: $field"], Response::HTTP_BAD_REQUEST);
         }
 
         $pageId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);

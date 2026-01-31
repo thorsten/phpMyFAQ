@@ -38,7 +38,7 @@ try {
 }
 
 $app = new Application($container);
-$app->setRoutingContext('admin');
+$app->routingContext = 'admin';
 try {
     // Auto-loads routes from attributes (falls back to admin-routes.php during migration)
     $app->run();

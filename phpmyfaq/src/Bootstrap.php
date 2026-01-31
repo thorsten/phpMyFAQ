@@ -32,8 +32,6 @@ use phpMyFAQ\Environment;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage;
 
 //
 // Fix the PHP include path if PMF is running under a "strange" PHP configuration
@@ -95,7 +93,8 @@ if (!defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
 // Skip redirect if we're already in setup or API setup context
 //
 $requestUri = $_SERVER['REQUEST_URI'] ?? '';
-$isSetupContext = str_contains($requestUri, '/setup/') || str_contains($requestUri, '/api/setup/');
+$isSetupContext = str_contains($requestUri, '/setup/') || str_contains($requestUri, '/api/setup/') ||
+    str_contains($requestUri, '/update') || str_contains($requestUri, '/update/');
 
 if (!file_exists(PMF_CONFIG_DIR . '/database.php') && !file_exists(PMF_LEGACY_CONFIG_DIR . '/database.php')) {
     if (!$isSetupContext) {

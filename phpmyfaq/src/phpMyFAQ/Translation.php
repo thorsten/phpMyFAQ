@@ -304,20 +304,22 @@ class Translation
 
         foreach ($languageFiles as $languageFile) {
             // Extract language code from filename: language_en.php -> en
-            if (preg_match('/language_([a-z]{2,3}(_[a-z]{2})?)\.php$/i', basename($languageFile), $matches)) {
-                $langCode = strtolower($matches[1]);
-
-                // Include the file and extract the $PMF_LANG array
-                $PMF_LANG = [];
-                include $languageFile;
-
-                // Store in namespaced structure
-                if (!isset($this->pluginTranslations[$pluginName])) {
-                    $this->pluginTranslations[$pluginName] = [];
-                }
-
-                $this->pluginTranslations[$pluginName][$langCode] = $PMF_LANG;
+            if (!preg_match('/language_([a-z]{2,3}(_[a-z]{2})?)\.php$/i', basename($languageFile), $matches)) {
+                continue;
             }
+
+            $langCode = strtolower($matches[1]);
+
+            // Include the file and extract the $PMF_LANG array
+            $PMF_LANG = [];
+            include $languageFile;
+
+            // Store in namespaced structure
+            if (!isset($this->pluginTranslations[$pluginName])) {
+                $this->pluginTranslations[$pluginName] = [];
+            }
+
+            $this->pluginTranslations[$pluginName][$langCode] = $PMF_LANG;
         }
     }
 

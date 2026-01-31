@@ -63,10 +63,12 @@ class RouteCollectionBuilder
         $routes = new RouteCollection();
 
         foreach ($controllerDirs as $dir) {
-            if (is_dir($dir)) {
-                $dirRoutes = $this->attributeLoader->load($dir, $context);
-                $routes->addCollection($dirRoutes);
+            if (!is_dir($dir)) {
+                continue;
             }
+
+            $dirRoutes = $this->attributeLoader->load($dir, $context);
+            $routes->addCollection($dirRoutes);
         }
 
         return $routes;

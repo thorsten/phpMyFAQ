@@ -137,12 +137,14 @@ final class QuestionsController extends AbstractFrontController
 
         // Collect data for displaying form
         foreach ($questionData['formData'] as $input) {
-            if ((int) $input->input_active !== 0) {
-                $label = sprintf('id%d_label', (int) $input->input_id);
-                $required = sprintf('id%d_required', (int) $input->input_id);
-                $templateVars[$label] = $input->input_label;
-                $templateVars[$required] = (int) $input->input_required !== 0 ? 'required' : '';
+            if ((int) $input->input_active === 0) {
+                continue;
             }
+
+            $label = sprintf('id%d_label', (int) $input->input_id);
+            $required = sprintf('id%d_required', (int) $input->input_id);
+            $templateVars[$label] = $input->input_label;
+            $templateVars[$required] = (int) $input->input_required !== 0 ? 'required' : '';
         }
 
         return $this->render('ask.twig', $templateVars);

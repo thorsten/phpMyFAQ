@@ -63,7 +63,7 @@ try {
 $app = new Application($container);
 $app->setAdminContext(true);
 $app->setApiContext(true);
-$app->setRoutingContext('admin-api');
+$app->routingContext = 'admin-api';
 try {
     // Autoload routes from attributes (falls back to api-routes.php during migration)
     $app->run();

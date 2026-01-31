@@ -42,7 +42,7 @@ class HtmlPreserver
         // Replace all HTML tags (opening, closing, self-closing) with placeholders
         $textWithPlaceholders = preg_replace_callback(
             '/<[^>]+>/',
-            function ($matches) use (&$tagMap, &$counter) {
+            static function ($matches) use (&$tagMap, &$counter) {
                 $placeholder = self::PLACEHOLDER_PREFIX . $counter . self::PLACEHOLDER_SUFFIX;
                 $tagMap[$placeholder] = $matches[0];
                 $counter++;
