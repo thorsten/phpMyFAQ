@@ -53,8 +53,7 @@ readonly class ConfigUpdateOperation implements OperationInterface
 
     public function execute(): bool
     {
-        $this->configuration->update([$this->key => $this->value]);
-        return true;
+        return $this->configuration->update([$this->key => $this->value]);
     }
 
     public function toArray(): array

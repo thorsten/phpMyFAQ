@@ -108,7 +108,7 @@ readonly class Migration320Beta extends AbstractMigration
             );
         } elseif ($this->isSqlServer()) {
             $recorder->addSql(
-                sprintf('ALTER TABLE %sfaqconfig ALTER COLUMN config_value TEXT', $this->tablePrefix),
+                sprintf('ALTER TABLE %sfaqconfig ALTER COLUMN config_value NVARCHAR(MAX)', $this->tablePrefix),
                 'Change faqconfig.config_value to TEXT (SQL Server)',
             );
         }

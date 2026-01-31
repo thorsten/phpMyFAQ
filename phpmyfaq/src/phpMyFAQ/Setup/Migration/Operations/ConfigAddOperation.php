@@ -80,6 +80,20 @@ readonly class ConfigAddOperation implements OperationInterface
         if (is_null($value)) {
             return 'null';
         }
+        if (is_array($value)) {
+            $json = json_encode($value);
+            if ($json !== false && strlen($json) <= 50) {
+                return "'" . $json . "'";
+            }
+            return "'[array]...'";
+        }
+        if (is_object($value)) {
+            $json = json_encode($value);
+            if ($json !== false && strlen($json) <= 50) {
+                return "'" . $json . "'";
+            }
+            return "'[object " . get_class($value) . "]'";
+        }
         return (string) $value;
     }
 }

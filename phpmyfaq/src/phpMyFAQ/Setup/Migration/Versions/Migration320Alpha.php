@@ -41,21 +41,40 @@ readonly class Migration320Alpha extends AbstractMigration
 
         // Add columns for OAuth tokens
         if ($this->isSqlite()) {
-            $recorder->addSql(sprintf(
-                'ALTER TABLE %sfaquser
-                    ADD COLUMN refresh_token TEXT NULL DEFAULT NULL,
-                    ADD COLUMN access_token TEXT NULL DEFAULT NULL,
-                    ADD COLUMN code_verifier VARCHAR(255) NULL DEFAULT NULL,
-                    ADD COLUMN jwt TEXT NULL DEFAULT NULL',
-                $this->tablePrefix,
-            ), 'Add OAuth token columns to faquser (SQLite)');
+            $recorder->addSql(
+                sprintf('ALTER TABLE %sfaquser ADD COLUMN refresh_token TEXT NULL DEFAULT NULL', $this->tablePrefix),
+                'Add OAuth refresh_token to faquser (SQLite)',
+            );
+            $recorder->addSql(
+                sprintf('ALTER TABLE %sfaquser ADD COLUMN access_token TEXT NULL DEFAULT NULL', $this->tablePrefix),
+                'Add OAuth access_token to faquser (SQLite)',
+            );
+            $recorder->addSql(
+                sprintf(
+                    'ALTER TABLE %sfaquser ADD COLUMN code_verifier VARCHAR(255) NULL DEFAULT NULL',
+                    $this->tablePrefix,
+                ),
+                'Add OAuth code_verifier to faquser (SQLite)',
+            );
+            $recorder->addSql(
+                sprintf('ALTER TABLE %sfaquser ADD COLUMN jwt TEXT NULL DEFAULT NULL', $this->tablePrefix),
+                'Add OAuth jwt to faquser (SQLite)',
+            );
 
-            $recorder->addSql(sprintf(
-                'ALTER TABLE %sfaquserdata
-                    ADD COLUMN twofactor_enabled INT(1) NULL DEFAULT 0,
-                    ADD COLUMN secret VARCHAR(128) NULL DEFAULT NULL',
-                $this->tablePrefix,
-            ), 'Add 2FA columns to faquserdata (SQLite)');
+            $recorder->addSql(
+                sprintf(
+                    'ALTER TABLE %sfaquserdata ADD COLUMN twofactor_enabled INT(1) NULL DEFAULT 0',
+                    $this->tablePrefix,
+                ),
+                'Add 2FA twofactor_enabled to faquserdata (SQLite)',
+            );
+            $recorder->addSql(
+                sprintf(
+                    'ALTER TABLE %sfaquserdata ADD COLUMN secret VARCHAR(128) NULL DEFAULT NULL',
+                    $this->tablePrefix,
+                ),
+                'Add 2FA secret to faquserdata (SQLite)',
+            );
         } else {
             $recorder->addSql(sprintf(
                 'ALTER TABLE %sfaquser

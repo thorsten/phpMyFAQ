@@ -189,6 +189,13 @@ class AlterTableBuilder
      */
     public function buildCombined(): string
     {
+        if (!$this->dialect->supportsCombinedAlter()) {
+            throw new LogicException(sprintf(
+                'Combined ALTER TABLE is only supported on MySQL. Current dialect: %s. Use build() instead.',
+                $this->dialect->getType(),
+            ));
+        }
+
         // Validate that table() was called before building
         if (!isset($this->tableName) || $this->tableName === '') {
             throw new \RuntimeException('Table name not set. Call table() before building ALTER TABLE statements.');

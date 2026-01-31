@@ -127,6 +127,11 @@ interface DialectInterface
     public function supportsColumnPositioning(): bool;
 
     /**
+     * Returns whether combined ALTER TABLE statements (multiple clauses in one statement) are supported.
+     */
+    public function supportsCombinedAlter(): bool;
+
+    /**
      * Quotes an identifier (table name, column name).
      */
     public function quoteIdentifier(string $identifier): string;

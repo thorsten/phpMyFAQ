@@ -240,7 +240,8 @@ class TableBuilder
             }
         }
 
-        if (!empty($this->primaryKey) && !$hasAutoIncrement) {
+        $isSqlite = $this->dialect->getType() === 'sqlite3';
+        if (!empty($this->primaryKey) && !($hasAutoIncrement && $isSqlite)) {
             $pkColumns = implode(', ', $this->primaryKey);
             $parts[] = "PRIMARY KEY ($pkColumns)";
         }

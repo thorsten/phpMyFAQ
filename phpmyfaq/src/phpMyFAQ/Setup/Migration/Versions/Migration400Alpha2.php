@@ -56,7 +56,8 @@ readonly class Migration400Alpha2 extends AbstractMigration
                     input_label VARCHAR(100) NOT NULL,
                     input_active INT(1) NOT NULL,
                     input_required INT(1) NOT NULL,
-                    input_lang VARCHAR(11) NOT NULL)',
+                    input_lang VARCHAR(11) NOT NULL,
+                    PRIMARY KEY (form_id, input_id, input_lang))',
                 $this->tablePrefix,
             ), 'Create forms table (MySQL)');
         } elseif ($this->isSqlServer()) {
@@ -68,7 +69,8 @@ readonly class Migration400Alpha2 extends AbstractMigration
                     input_label NVARCHAR(100) NOT NULL,
                     input_active INTEGER NOT NULL,
                     input_required INTEGER NOT NULL,
-                    input_lang NVARCHAR(11) NOT NULL)',
+                    input_lang NVARCHAR(11) NOT NULL,
+                    PRIMARY KEY (form_id, input_id, input_lang))',
                 $this->tablePrefix,
             ), 'Create forms table (SQL Server)');
         } else {
@@ -80,7 +82,8 @@ readonly class Migration400Alpha2 extends AbstractMigration
                     input_label VARCHAR(100) NOT NULL,
                     input_active INTEGER NOT NULL,
                     input_required INTEGER NOT NULL,
-                    input_lang VARCHAR(11) NOT NULL)',
+                    input_lang VARCHAR(11) NOT NULL,
+                    PRIMARY KEY (form_id, input_id, input_lang))',
                 $this->tablePrefix,
             ), 'Create forms table');
         }

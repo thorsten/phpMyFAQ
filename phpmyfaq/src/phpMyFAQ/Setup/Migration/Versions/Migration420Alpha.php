@@ -78,10 +78,7 @@ readonly class Migration420Alpha extends AbstractMigration
             );
         }
 
-        $recorder->addSql(
-            sprintf('CREATE INDEX idx_hash ON %sfaqadminlog (hash)', $this->tablePrefix),
-            'Create hash index on faqadminlog',
-        );
+        $recorder->addSql($this->createIndex('faqadminlog', 'idx_hash', 'hash'), 'Create hash index on faqadminlog');
 
         // Create custom pages table
         if ($this->isMySql()) {
@@ -159,8 +156,10 @@ readonly class Migration420Alpha extends AbstractMigration
                 'Create slug index on custom pages (SQLite)',
             );
         } elseif ($this->isSqlServer()) {
-            $recorder->addSql(sprintf(
-                "CREATE TABLE %sfaqcustompages (
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'%sfaqcustompages') AND type = 'U') "
+                    . "CREATE TABLE %sfaqcustompages (
                     id INT NOT NULL,
                     lang VARCHAR(5) NOT NULL,
                     page_title VARCHAR(255) NOT NULL,
@@ -176,11 +175,20 @@ readonly class Migration420Alpha extends AbstractMigration
                     seo_robots VARCHAR(50) NOT NULL DEFAULT 'index,follow',
                     PRIMARY KEY (id, lang)
                 )",
-                $this->tablePrefix,
-            ), 'Create custom pages table (SQL Server)');
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create custom pages table (SQL Server)',
+            );
 
             $recorder->addSql(
-                sprintf('CREATE INDEX idx_custompages_slug ON %sfaqcustompages (slug, lang)', $this->tablePrefix),
+                sprintf(
+                    "IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_custompages_slug'"
+                    . " AND object_id = OBJECT_ID(N'%sfaqcustompages'))"
+                    . ' CREATE INDEX idx_custompages_slug ON %sfaqcustompages (slug, lang)',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
                 'Create slug index on custom pages (SQL Server)',
             );
         }
@@ -320,8 +328,10 @@ readonly class Migration420Alpha extends AbstractMigration
                 'Create created_at index on chat messages (SQLite)',
             );
         } elseif ($this->isSqlServer()) {
-            $recorder->addSql(sprintf(
-                'CREATE TABLE %sfaqchat_messages (
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'%sfaqchat_messages') AND type = 'U') "
+                    . 'CREATE TABLE %sfaqchat_messages (
                     id INT IDENTITY(1,1) NOT NULL,
                     sender_id INT NOT NULL,
                     recipient_id INT NOT NULL,
@@ -330,29 +340,53 @@ readonly class Migration420Alpha extends AbstractMigration
                     created_at DATETIME NOT NULL DEFAULT GETDATE(),
                     PRIMARY KEY (id)
                 )',
-                $this->tablePrefix,
-            ), 'Create chat messages table (SQL Server)');
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create chat messages table (SQL Server)',
+            );
 
             $recorder->addSql(
-                sprintf('CREATE INDEX idx_chat_sender ON %sfaqchat_messages (sender_id)', $this->tablePrefix),
+                sprintf(
+                    "IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_chat_sender'"
+                    . " AND object_id = OBJECT_ID(N'%sfaqchat_messages'))"
+                    . ' CREATE INDEX idx_chat_sender ON %sfaqchat_messages (sender_id)',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
                 'Create sender index on chat messages (SQL Server)',
             );
 
             $recorder->addSql(
-                sprintf('CREATE INDEX idx_chat_recipient ON %sfaqchat_messages (recipient_id)', $this->tablePrefix),
+                sprintf(
+                    "IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_chat_recipient'"
+                    . " AND object_id = OBJECT_ID(N'%sfaqchat_messages'))"
+                    . ' CREATE INDEX idx_chat_recipient ON %sfaqchat_messages (recipient_id)',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
                 'Create recipient index on chat messages (SQL Server)',
             );
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX idx_chat_conversation ON %sfaqchat_messages (sender_id, recipient_id)',
+                    "IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_chat_conversation'"
+                    . " AND object_id = OBJECT_ID(N'%sfaqchat_messages'))"
+                    . ' CREATE INDEX idx_chat_conversation ON %sfaqchat_messages (sender_id, recipient_id)',
+                    $this->tablePrefix,
                     $this->tablePrefix,
                 ),
                 'Create conversation index on chat messages (SQL Server)',
             );
 
             $recorder->addSql(
-                sprintf('CREATE INDEX idx_chat_created ON %sfaqchat_messages (created_at)', $this->tablePrefix),
+                sprintf(
+                    "IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_chat_created'"
+                    . " AND object_id = OBJECT_ID(N'%sfaqchat_messages'))"
+                    . ' CREATE INDEX idx_chat_created ON %sfaqchat_messages (created_at)',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
                 'Create created_at index on chat messages (SQL Server)',
             );
         }

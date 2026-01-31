@@ -67,21 +67,21 @@ class Migration320AlphaTest extends TestCase
     public function testUpAddsSqlForBackupTable(): void
     {
         $recorder = $this->createMock(OperationRecorder::class);
+        $foundBackup = false;
 
         $recorder
             ->expects($this->atLeastOnce())
             ->method('addSql')
-            ->with($this->callback(function ($sql) {
-                static $sqlStatements = [];
-                $sqlStatements[] = $sql;
-                // Check that at least one SQL contains backup table creation
+            ->with($this->callback(function ($sql) use (&$foundBackup) {
                 if (str_contains($sql, 'faqbackup')) {
-                    return true;
+                    $foundBackup = true;
                 }
                 return true;
             }));
 
         $this->migration->up($recorder);
+
+        $this->assertTrue($foundBackup, 'Expected at least one SQL statement containing "faqbackup"');
     }
 
     public function testGetChecksum(): void

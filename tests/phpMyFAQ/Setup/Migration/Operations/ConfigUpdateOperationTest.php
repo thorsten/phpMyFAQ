@@ -67,7 +67,8 @@ class ConfigUpdateOperationTest extends TestCase
         $this->configuration
             ->expects($this->once())
             ->method('update')
-            ->with(['test.key' => 'value']);
+            ->with(['test.key' => 'value'])
+            ->willReturn(true);
 
         $operation = new ConfigUpdateOperation($this->configuration, 'test.key', 'value');
         $result = $operation->execute();

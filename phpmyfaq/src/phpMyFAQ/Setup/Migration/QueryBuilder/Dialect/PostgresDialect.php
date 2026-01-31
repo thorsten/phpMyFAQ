@@ -127,6 +127,11 @@ class PostgresDialect implements DialectInterface
         return false;
     }
 
+    public function supportsCombinedAlter(): bool
+    {
+        return false;
+    }
+
     public function quoteIdentifier(string $identifier): string
     {
         return '"' . str_replace('"', '""', $identifier) . '"';
