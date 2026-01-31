@@ -21,10 +21,12 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Twig\Extensions\LanguageCodeTwigExtension;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
+use Twig\Extension\AttributeExtension;
 
 final class OrphanedFaqsController extends AbstractAdministrationController
 {
@@ -39,6 +41,8 @@ final class OrphanedFaqsController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
         $faq = $this->container->get(id: 'phpmyfaq.admin.faq');
+
+        $this->addExtension(new AttributeExtension(LanguageCodeTwigExtension::class));
 
         return $this->render('@admin/content/orphaned-faqs.twig', [
             ...$this->getHeader($request),
