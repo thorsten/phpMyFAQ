@@ -61,58 +61,19 @@ readonly class Migration410Alpha3 extends AbstractMigration
         $recorder->addConfig('search.popularSearchTimeWindow', '180');
 
         // Performance indexes for faqsearches table
-        if ($this->isSqlServer()) {
-            $recorder->addSql(
-                'IF NOT EXISTS (SELECT * FROM sys.indexes '
-                . "WHERE name = 'idx_faqsearches_searchterm') "
-                . sprintf('CREATE INDEX idx_faqsearches_searchterm ON %sfaqsearches ', $this->tablePrefix)
-                . '(searchterm)',
-                'Create searchterm index on faqsearches (SQL Server)',
-            );
+        $recorder->addSql(
+            $this->createIndex('faqsearches', 'idx_faqsearches_searchterm', 'searchterm'),
+            'Create searchterm index on faqsearches',
+        );
 
-            $recorder->addSql(
-                'IF NOT EXISTS (SELECT * FROM sys.indexes ' . "WHERE name = 'idx_faqsearches_date_term') "
-                    . sprintf(
-                        'CREATE INDEX idx_faqsearches_date_term ON %sfaqsearches (searchdate, searchterm)',
-                        $this->tablePrefix,
-                    ),
-                'Create date_term index on faqsearches (SQL Server)',
-            );
+        $recorder->addSql(
+            $this->createIndex('faqsearches', 'idx_faqsearches_date_term', ['searchdate', 'searchterm']),
+            'Create date_term index on faqsearches',
+        );
 
-            $recorder->addSql(
-                'IF NOT EXISTS (SELECT * FROM sys.indexes '
-                . "WHERE name = 'idx_faqsearches_date_term_lang') "
-                . sprintf('CREATE INDEX idx_faqsearches_date_term_lang ON %sfaqsearches ', $this->tablePrefix)
-                . '(searchdate, searchterm, lang)',
-                'Create date_term_lang index on faqsearches (SQL Server)',
-            );
-        } else {
-            // MySQL, PostgreSQL, SQLite: Use IF NOT EXISTS
-            $recorder->addSql(
-                sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_faqsearches_searchterm ON %sfaqsearches (searchterm)',
-                    $this->tablePrefix,
-                ),
-                'Create searchterm index on faqsearches',
-            );
-
-            $recorder->addSql(
-                sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_faqsearches_date_term ON %sfaqsearches '
-                    . '(searchdate, searchterm)',
-                    $this->tablePrefix,
-                ),
-                'Create date_term index on faqsearches',
-            );
-
-            $recorder->addSql(
-                sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_faqsearches_date_term_lang ON %sfaqsearches '
-                    . '(searchdate, searchterm, lang)',
-                    $this->tablePrefix,
-                ),
-                'Create date_term_lang index on faqsearches',
-            );
-        }
+        $recorder->addSql(
+            $this->createIndex('faqsearches', 'idx_faqsearches_date_term_lang', ['searchdate', 'searchterm', 'lang']),
+            'Create date_term_lang index on faqsearches',
+        );
     }
 }

@@ -95,7 +95,8 @@ class ConfigAddOperationTest extends TestCase
         $this->configuration
             ->expects($this->once())
             ->method('add')
-            ->with('test.key', 'value');
+            ->with('test.key', 'value')
+            ->willReturn(true);
 
         $operation = new ConfigAddOperation($this->configuration, 'test.key', 'value');
         $result = $operation->execute();

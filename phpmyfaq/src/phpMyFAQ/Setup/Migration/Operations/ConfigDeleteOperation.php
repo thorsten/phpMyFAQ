@@ -46,8 +46,7 @@ readonly class ConfigDeleteOperation implements OperationInterface
 
     public function execute(): bool
     {
-        $this->configuration->delete($this->key);
-        return true;
+        return $this->configuration->delete($this->key);
     }
 
     public function toArray(): array

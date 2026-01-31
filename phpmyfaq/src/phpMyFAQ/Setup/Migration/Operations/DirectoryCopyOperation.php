@@ -60,8 +60,7 @@ readonly class DirectoryCopyOperation implements OperationInterface
         }
 
         try {
-            $this->filesystem->recursiveCopy($this->source, $this->destination);
-            return true;
+            return $this->filesystem->recursiveCopy($this->source, $this->destination);
         } catch (\Exception) {
             return false;
         }

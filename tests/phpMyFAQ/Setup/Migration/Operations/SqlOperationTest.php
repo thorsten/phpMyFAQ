@@ -113,7 +113,8 @@ class SqlOperationTest extends TestCase
         $this->database
             ->expects($this->once())
             ->method('query')
-            ->with('SELECT 1');
+            ->with('SELECT 1')
+            ->willReturn(true);
 
         $operation = new SqlOperation($this->configuration, 'SELECT 1');
         $result = $operation->execute();

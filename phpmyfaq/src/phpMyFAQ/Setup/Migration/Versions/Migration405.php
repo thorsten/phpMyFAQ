@@ -73,7 +73,7 @@ readonly class Migration405 extends AbstractMigration
             );
         } elseif ($this->isPostgreSql()) {
             $recorder->addSql(
-                sprintf('ALTER TABLE %sfaqforms ALTER COLUMN input_label SET TYPE VARCHAR(500)', $this->tablePrefix),
+                sprintf('ALTER TABLE %sfaqforms ALTER COLUMN input_label TYPE VARCHAR(500)', $this->tablePrefix),
                 'Increase faqforms.input_label column size (PostgreSQL part 1)',
             );
 

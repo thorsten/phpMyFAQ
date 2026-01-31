@@ -119,7 +119,10 @@ abstract readonly class AbstractMigration implements MigrationInterface
     protected function addColumn(string $table, string $column, string $type, ?string $default = null): string
     {
         $tableName = $this->table($table);
-        $defaultClause = $default !== null ? " DEFAULT $default" : '';
+        $defaultClause = '';
+        if ($default !== null) {
+            $defaultClause = " DEFAULT $default";
+        }
 
         if ($this->isSqlite()) {
             return sprintf('ALTER TABLE %s ADD COLUMN %s %s%s', $tableName, $column, $type, $defaultClause);
@@ -140,15 +143,20 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
-     * Helper to drop multiple columns from a table (MySQL syntax).
+     * Helper to drop multiple columns from a table.
+     * Emits one ALTER TABLE ... DROP COLUMN statement per column for cross-database compatibility.
      *
      * @param string[] $columns
      */
     protected function dropColumns(string $table, array $columns): string
     {
         $tableName = $this->table($table);
-        $dropParts = array_map(static fn($col) => "DROP COLUMN $col", $columns);
-        return sprintf('ALTER TABLE %s %s', $tableName, implode(', ', $dropParts));
+        $parts = array_map(static fn(string $col): string => sprintf(
+            'ALTER TABLE %s DROP COLUMN %s',
+            $tableName,
+            $col,
+        ), $columns);
+        return implode('; ', $parts);
     }
 
     /**
@@ -225,7 +233,7 @@ abstract readonly class AbstractMigration implements MigrationInterface
             );
         }
 
-        return '';
+        throw new \RuntimeException("Unsupported database type for index existence check: {$this->dbType}");
     }
 
     /**

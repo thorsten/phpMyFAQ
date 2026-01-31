@@ -66,8 +66,11 @@ readonly class PermissionGrantOperation implements OperationInterface
                 'description' => $this->permissionDescription,
             ];
             $rightId = $user->perm->addRight($rightData);
-            $user->perm->grantUserRight($this->userId, $rightId);
-            return true;
+            if ($rightId <= 0) {
+                return false;
+            }
+
+            return $user->perm->grantUserRight($this->userId, $rightId);
         } catch (\Exception) {
             return false;
         }

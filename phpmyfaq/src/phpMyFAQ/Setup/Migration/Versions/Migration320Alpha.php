@@ -75,13 +75,17 @@ readonly class Migration320Alpha extends AbstractMigration
         }
 
         // New backup table
-        $recorder->addSql(sprintf('CREATE TABLE %sfaqbackup (
+        $timestampType = $this->timestampType(false);
+        $recorder->addSql(
+            sprintf('CREATE TABLE %sfaqbackup (
                 id INT NOT NULL,
                 filename VARCHAR(255) NOT NULL,
                 authkey VARCHAR(255) NOT NULL,
                 authcode VARCHAR(255) NOT NULL,
-                created timestamp NOT NULL,
-                PRIMARY KEY (id))', $this->tablePrefix), 'Create backup table');
+                created %s NOT NULL,
+                PRIMARY KEY (id))', $this->tablePrefix, $timestampType),
+            'Create backup table',
+        );
 
         // Migrate MySQL from MyISAM to InnoDB
         if ($this->isMySql()) {

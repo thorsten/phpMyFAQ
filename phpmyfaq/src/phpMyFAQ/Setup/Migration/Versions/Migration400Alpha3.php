@@ -66,7 +66,7 @@ readonly class Migration400Alpha3 extends AbstractMigration
                     title TEXT NULL,
                     description TEXT NULL,
                     slug TEXT NULL,
-                    created DATE NOT NULL DEFAULT GETDATE(),
+                    created DATETIME NOT NULL DEFAULT GETDATE(),
                     PRIMARY KEY (id))',
                 $this->tablePrefix,
             ), 'Create SEO table (SQL Server)');
@@ -80,7 +80,7 @@ readonly class Migration400Alpha3 extends AbstractMigration
                     title TEXT NULL,
                     description TEXT NULL,
                     slug TEXT NULL,
-                    created DATE NOT NULL DEFAULT (date(\'now\')),
+                    created DATETIME NOT NULL DEFAULT (datetime(\'now\')),
                     PRIMARY KEY (id))',
                 $this->tablePrefix,
             ), 'Create SEO table (SQLite)');
@@ -94,7 +94,7 @@ readonly class Migration400Alpha3 extends AbstractMigration
                     title TEXT,
                     description TEXT,
                     slug TEXT NULL,
-                    created DATE NOT NULL DEFAULT CURRENT_DATE,
+                    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                     PRIMARY KEY (id))',
                 $this->tablePrefix,
             ), 'Create SEO table (PostgreSQL)');

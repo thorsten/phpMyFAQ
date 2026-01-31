@@ -347,7 +347,7 @@ class PluginManager
     {
         $missingDeps = [];
         foreach ($plugin->getDependencies() as $dependency) {
-            if (in_array($dependency, $this->loadedPlugins)) {
+            if (in_array($dependency, $this->loadedPlugins, true)) {
                 continue;
             }
 

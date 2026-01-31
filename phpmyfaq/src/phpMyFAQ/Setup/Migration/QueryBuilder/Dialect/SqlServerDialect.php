@@ -120,7 +120,8 @@ class SqlServerDialect implements DialectInterface
         $columnList = implode(', ', $columns);
         if ($ifNotExists) {
             return (
-                "IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = '$indexName') "
+                "IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = '$indexName'"
+                . " AND object_id = OBJECT_ID(N'$tableName')) "
                 . "CREATE INDEX $indexName ON $tableName ($columnList)"
             );
         }

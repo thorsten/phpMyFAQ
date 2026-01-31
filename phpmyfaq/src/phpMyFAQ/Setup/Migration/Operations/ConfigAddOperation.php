@@ -53,8 +53,7 @@ readonly class ConfigAddOperation implements OperationInterface
 
     public function execute(): bool
     {
-        $this->configuration->add($this->key, $this->value);
-        return true;
+        return $this->configuration->add($this->key, $this->value);
     }
 
     public function toArray(): array

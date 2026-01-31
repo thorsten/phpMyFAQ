@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace phpMyFAQ\Setup\Migration\Operations;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Core\Exception;
 
 readonly class SqlOperation implements OperationInterface
 {
@@ -84,9 +83,9 @@ readonly class SqlOperation implements OperationInterface
     public function execute(): bool
     {
         try {
-            $this->configuration->getDb()->query($this->query);
-            return true;
-        } catch (Exception) {
+            $result = $this->configuration->getDb()->query($this->query);
+            return (bool) $result;
+        } catch (\Throwable) {
             return false;
         }
     }

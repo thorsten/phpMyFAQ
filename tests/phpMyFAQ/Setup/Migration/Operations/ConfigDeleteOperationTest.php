@@ -44,7 +44,8 @@ class ConfigDeleteOperationTest extends TestCase
         $this->configuration
             ->expects($this->once())
             ->method('delete')
-            ->with('test.key');
+            ->with('test.key')
+            ->willReturn(true);
 
         $operation = new ConfigDeleteOperation($this->configuration, 'test.key');
         $result = $operation->execute();
