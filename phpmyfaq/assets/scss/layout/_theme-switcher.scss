@@ -376,6 +376,14 @@
   }
 
   // Footer high contrast mode
+  footer {
+    background-color: var(--bs-dark) !important;
+    color: var(--bs-primary) !important;
+    border: 4px solid var(--bs-primary) !important;
+    border-radius: 0px 0px 10px 10px !important;
+    margin-top: -4px;
+  }
+
   .text-bg-pmf-footer {
     background-color: #000000 !important;
     border-top: 2px solid #ffffff !important;
@@ -584,12 +592,15 @@
 
   // Tables with strong contrast
   .table {
-    color: #ffffff;
-    border: 2px solid #ffffff;
+    border: 2px solid var(--bs-primary) !important;
+    background-color: var(--bs-dark);
+    color: var(--bs-light);
 
     th,
     td {
-      border: 1px solid #ffffff;
+      border: 2px solid var(--bs-primary) !important;
+      background-color: var(--bs-dark);
+      color: var(--bs-light);
     }
 
     &.table-striped > tbody > tr:nth-of-type(odd) > td {
