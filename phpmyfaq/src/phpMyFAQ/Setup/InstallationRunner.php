@@ -46,7 +46,6 @@ use phpMyFAQ\Link;
 use phpMyFAQ\Setup\Installation\DefaultDataSeeder;
 use phpMyFAQ\System;
 use phpMyFAQ\User;
-use Symfony\Component\HttpFoundation\Request;
 
 class InstallationRunner
 {
@@ -401,7 +400,7 @@ class InstallationRunner
         $link = new Link('', $this->configuration);
         $instanceEntity = new InstanceEntity();
         $instanceEntity
-            ->setUrl($link->getSystemUri(Request::createFromGlobals()->getScriptName()))
+            ->setUrl($link->getSystemUri())
             ->setInstance($link->getSystemRelativeUri('setup/index.php'))
             ->setComment('phpMyFAQ ' . System::getVersion());
 
