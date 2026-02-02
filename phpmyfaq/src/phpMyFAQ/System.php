@@ -111,37 +111,37 @@ class System
      * @var array<string, array<int, string>>
      */
     private array $supportedDatabases = [
-        'mysqli' => [
-            self::VERSION_MINIMUM_PHP,
-            'MySQL v8 / MariaDB v10 / Percona Server v8 / Galera Cluster v4 (ext/mysqli)',
-        ],
-        'pgsql' => [
-            self::VERSION_MINIMUM_PHP,
-            'PostgreSQL v10 or later',
-        ],
-        'sqlite3' => [
-            self::VERSION_MINIMUM_PHP,
-            'SQLite 3',
-        ],
-        'sqlsrv' => [
-            self::VERSION_MINIMUM_PHP,
-            'MS SQL Server 2016 or later',
-        ],
         'pdo_mysql' => [
             self::VERSION_MINIMUM_PHP,
             'MySQL v8 / MariaDB v10 / Percona Server v8 / Galera Cluster v4 (PDO_MYSQL, preferred)',
+        ],
+        'mysqli' => [
+            self::VERSION_MINIMUM_PHP,
+            'MySQL v8 / MariaDB v10 / Percona Server v8 / Galera Cluster v4 (ext/mysqli)',
         ],
         'pdo_pgsql' => [
             self::VERSION_MINIMUM_PHP,
             'PostgreSQL v10 or later (PDO_PGSQL, preferred)',
         ],
+        'pgsql' => [
+            self::VERSION_MINIMUM_PHP,
+            'PostgreSQL v10 or later',
+        ],
         'pdo_sqlite' => [
             self::VERSION_MINIMUM_PHP,
             'SQLite 3 (PDO_SQLITE, preferred)',
         ],
+        'sqlite3' => [
+            self::VERSION_MINIMUM_PHP,
+            'SQLite 3',
+        ],
         'pdo_sqlsrv' => [
             self::VERSION_MINIMUM_PHP,
             'MS SQL Server 2016 or later / SQL Azure (PDO_SQLSRV, preferred)',
+        ],
+        'sqlsrv' => [
+            self::VERSION_MINIMUM_PHP,
+            'MS SQL Server 2016 or later',
         ],
     ];
 
