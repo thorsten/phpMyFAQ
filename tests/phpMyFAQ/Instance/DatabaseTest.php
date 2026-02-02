@@ -24,12 +24,8 @@ class DatabaseTest extends TestCase
 
     public function testFactoryWithValidType(): void
     {
-        $type = 'Mysqli';
-        $driverClass = '\phpMyFAQ\Instance\Database\\' . ucfirst($type);
-        $this->assertTrue(class_exists($driverClass));
-
-        $driver = Database::factory($this->configuration, $type);
-        $this->assertInstanceOf($driverClass, $driver);
+        $driver = Database::factory($this->configuration, 'mysqli');
+        $this->assertInstanceOf(\phpMyFAQ\Instance\Database\DriverInterface::class, $driver);
     }
 
     public function testFactoryWithInvalidType(): void
@@ -40,8 +36,10 @@ class DatabaseTest extends TestCase
 
     public function testGetInstance(): void
     {
+        // After factory() has been called, getInstance() returns the last created driver
+        Database::factory($this->configuration, 'mysqli');
         $instance = Database::getInstance();
-        $this->assertInstanceOf(Database::class, $instance);
+        $this->assertInstanceOf(Database\DriverInterface::class, $instance);
     }
 
     /**

@@ -123,6 +123,42 @@ class OperationRecorder
     }
 
     /**
+     * Records a user creation operation.
+     */
+    public function createUser(
+        string $loginName,
+        string $password,
+        string $displayName,
+        string $email,
+        int $userId,
+        bool $isSuperAdmin = false,
+        string $status = 'protected',
+    ): self {
+        $this->operations[] = new UserCreateOperation(
+            $this->configuration,
+            $loginName,
+            $password,
+            $displayName,
+            $email,
+            $userId,
+            $isSuperAdmin,
+            $status,
+        );
+        return $this;
+    }
+
+    /**
+     * Records a form input insertion operation.
+     *
+     * @param array<string, int|string> $formInput
+     */
+    public function insertFormInput(array $formInput): self
+    {
+        $this->operations[] = new FormInputInsertOperation($this->configuration, $formInput);
+        return $this;
+    }
+
+    /**
      * Records a custom operation.
      */
     public function addOperation(OperationInterface $operation): self
