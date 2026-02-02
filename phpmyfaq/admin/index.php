@@ -20,11 +20,21 @@
  */
 
 use phpMyFAQ\Application;
+use phpMyFAQ\Controller\Frontend\ErrorController;
+use phpMyFAQ\Core\Exception\DatabaseConnectionException;
+use phpMyFAQ\Environment;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
-require dirname(__DIR__) . '/src/Bootstrap.php';
+try {
+    require dirname(__DIR__) . '/src/Bootstrap.php';
+} catch (DatabaseConnectionException $databaseConnectionException) {
+    $errorMessage = Environment::isDebugMode() ? $databaseConnectionException->getMessage() : null;
+    $response = ErrorController::renderBootstrapError($errorMessage);
+    $response->send();
+    exit(1);
+}
 
 //
 // Service Containers

@@ -166,7 +166,15 @@ try {
 // Fetch the configuration and add the database connection
 //
 $faqConfig = new Configuration($db);
-$faqConfig->getAll();
+try {
+    $faqConfig->getAll();
+} catch (Exception $exception) {
+    throw new DatabaseConnectionException(
+        message: 'Database tables not found or inaccessible: ' . $exception->getMessage(),
+        code: 500,
+        previous: $exception,
+    );
+}
 
 //
 // We always need a valid, secure session!
