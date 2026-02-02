@@ -71,12 +71,4 @@ class SessionWrapper
     {
         return $this->session->remove($key);
     }
-
-    /**
-     * Get the underlying Symfony Session instance
-     */
-    public function getSession(): Session
-    {
-        return $this->session;
-    }
 }

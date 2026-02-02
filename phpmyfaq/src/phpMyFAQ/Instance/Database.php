@@ -22,6 +22,8 @@ namespace phpMyFAQ\Instance;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Instance\Database\DriverInterface;
+use phpMyFAQ\Setup\Installation\SchemaInstaller;
+use phpMyFAQ\Setup\Migration\QueryBuilder\DialectFactory;
 
 /**
  * Class Database
@@ -87,25 +89,23 @@ class Database
     /**
      * Database factory.
      *
+     * Returns a SchemaInstaller that uses the dialect-agnostic DatabaseSchema.
+     *
      * @param Configuration $configuration phpMyFAQ configuration container
      * @param string        $type Database management system type
      * @throws Exception
      */
     public static function factory(Configuration $configuration, string $type): ?DriverInterface
     {
-        if (str_starts_with($type, 'pdo_')) {
-            $class = 'phpMyFAQ\Instance\Database\Pdo' . ucfirst(substr($type, 4));
-        } else {
-            $class = 'phpMyFAQ\Instance\Database\\' . ucfirst($type);
+        try {
+            $dialect = DialectFactory::createForType(strtolower($type));
+        } catch (\InvalidArgumentException) {
+            throw new Exception('Invalid Database Type: ' . $type);
         }
 
-        if (class_exists($class)) {
-            self::$driver = new $class($configuration);
+        self::$driver = new SchemaInstaller($configuration, $dialect);
 
-            return self::$driver;
-        }
-
-        throw new Exception('Invalid Database Type: ' . $type);
+        return self::$driver;
     }
 
     /**

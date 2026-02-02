@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Setup\Migration\QueryBuilder;
 
+use LogicException;
 use phpMyFAQ\Database;
 
 class TableBuilder
@@ -35,6 +36,9 @@ class TableBuilder
 
     /** @var array<string, array{columns: string[], unique: bool}> */
     private array $indexes = [];
+
+    /** @var array<string[]> */
+    private array $fullTextIndexes = [];
 
     public function __construct(?DialectInterface $dialect = null)
     {
@@ -104,7 +108,7 @@ class TableBuilder
     public function varchar(string $name, int $length, bool $nullable = true, ?string $default = null): self
     {
         // Escape single quotes in default value per SQL string literal rules (replace ' with '')
-        $defaultVal = $default !== null ? "'" . str_replace("'", "''", $default) . "'" : null;
+        $defaultVal = $default !== null ? "'" . str_replace(search: "'", replace: "''", subject: $default) . "'" : null;
         return $this->addColumn($name, $this->dialect->varchar($length), $nullable, $defaultVal);
     }
 
@@ -117,11 +121,31 @@ class TableBuilder
     }
 
     /**
+     * Adds a LONGTEXT column (or equivalent).
+     */
+    public function longText(string $name, bool $nullable = true): self
+    {
+        return $this->addColumn($name, $this->dialect->longText(), $nullable);
+    }
+
+    /**
+     * Adds a BLOB column (or equivalent).
+     */
+    public function blob(string $name, bool $nullable = true): self
+    {
+        return $this->addColumn($name, $this->dialect->blob(), $nullable);
+    }
+
+    /**
      * Adds a BOOLEAN/TINYINT column.
      */
     public function boolean(string $name, bool $nullable = true, ?bool $default = null): self
     {
-        $defaultVal = $default !== null ? ($default ? '1' : '0') : null;
+        $defaultVal = match (true) {
+            $default === null => null,
+            $default => '1',
+            default => '0',
+        };
         return $this->addColumn($name, $this->dialect->boolean(), $nullable, $defaultVal);
     }
 
@@ -149,7 +173,7 @@ class TableBuilder
     public function char(string $name, int $length, bool $nullable = true, ?string $default = null): self
     {
         // Escape single quotes in default value per SQL string literal rules (replace ' with '')
-        $defaultVal = $default !== null ? "'" . str_replace("'", "''", $default) . "'" : null;
+        $defaultVal = $default !== null ? "'" . str_replace(search: "'", replace: "''", subject: $default) . "'" : null;
         return $this->addColumn($name, $this->dialect->char($length), $nullable, $defaultVal);
     }
 
@@ -165,7 +189,7 @@ class TableBuilder
             'extra' => null,
         ];
 
-        if (empty($this->primaryKey)) {
+        if ($this->primaryKey === []) {
             $this->primaryKey = [$name];
         }
 
@@ -198,6 +222,17 @@ class TableBuilder
     }
 
     /**
+     * Adds a FULLTEXT index (MySQL only, ignored for other dialects).
+     *
+     * @param string|string[] $columns
+     */
+    public function fullTextIndex(string|array $columns): self
+    {
+        $this->fullTextIndexes[] = (array) $columns;
+        return $this;
+    }
+
+    /**
      * Adds a unique index.
      *
      * @param string|string[] $columns
@@ -216,8 +251,8 @@ class TableBuilder
      */
     public function build(): string
     {
-        if (empty($this->tableName)) {
-            throw new \LogicException('Table name not set: call table() before build()');
+        if ($this->tableName === '') {
+            throw new LogicException('Table name not set: call table() before build()');
         }
 
         $parts = [];
@@ -259,6 +294,11 @@ class TableBuilder
         // Add inline indexes only for MySQL (MySQL supports this, other databases don't)
         $isMysql = in_array($this->dialect->getType(), ['mysqli', 'pdo_mysql'], true);
         if ($isMysql) {
+            foreach ($this->fullTextIndexes as $ftColumns) {
+                $columnList = implode(',', $ftColumns);
+                $parts[] = "FULLTEXT ($columnList)";
+            }
+
             foreach ($this->indexes as $indexName => $indexDef) {
                 $columnList = implode(', ', $indexDef['columns']);
                 $indexType = $indexDef['unique'] ? 'UNIQUE INDEX' : 'INDEX';
@@ -286,8 +326,8 @@ class TableBuilder
      */
     public function buildIndexStatements(): array
     {
-        if (empty($this->tableName)) {
-            throw new \LogicException('Table name not set: call table() before buildIndexStatements()');
+        if ($this->tableName === '') {
+            throw new LogicException('Table name not set: call table() before buildIndexStatements()');
         }
 
         // MySQL already has indexes inlined in CREATE TABLE, so no separate statements needed

@@ -215,10 +215,7 @@ class TableBuilderTest extends TestCase
     {
         // Use PostgreSQL builder since MySQL inlines indexes in CREATE TABLE
         $postgresBuilder = new TableBuilder(new PostgresDialect());
-        $postgresBuilder
-            ->table('test', false)
-            ->varchar('email', 255)
-            ->index('idx_email', 'email');
+        $postgresBuilder->table('test', false)->varchar('email', 255)->index('idx_email', 'email');
 
         $statements = $postgresBuilder->buildIndexStatements();
 
@@ -341,11 +338,7 @@ class TableBuilderTest extends TestCase
     public function testSqliteAutoIncrementDoesNotDuplicatePrimaryKey(): void
     {
         $sqliteBuilder = new TableBuilder(new SqliteDialect());
-        $sql = $sqliteBuilder
-            ->table('test', false)
-            ->autoIncrement('id')
-            ->varchar('name', 100)
-            ->build();
+        $sql = $sqliteBuilder->table('test', false)->autoIncrement('id')->varchar('name', 100)->build();
 
         // SQLite autoIncrement already includes PRIMARY KEY
         $this->assertStringContainsString('INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT', $sql);
@@ -359,15 +352,54 @@ class TableBuilderTest extends TestCase
     public function testAutoIncrementSkipsExplicitPrimaryKey(): void
     {
         $sqliteBuilder = new TableBuilder(new SqliteDialect());
-        $sql = $sqliteBuilder
-            ->table('test', false)
-            ->autoIncrement('id')
-            ->varchar('name', 100)
-            ->primaryKey('id') // This should be ignored when autoIncrement is used
-            ->build();
+        $sql = $sqliteBuilder->table('test', false)->autoIncrement('id')->varchar('name', 100)->primaryKey('id')->build(); // This should be ignored when autoIncrement is used
 
         // Should still only have one PRIMARY KEY (from autoIncrement)
         $count = substr_count($sql, 'PRIMARY KEY');
         $this->assertEquals(1, $count, 'Should skip explicit PRIMARY KEY when AUTO_INCREMENT exists');
+    }
+
+    public function testLongTextColumnMysql(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->longText('content', true)
+            ->build();
+
+        $this->assertStringContainsString('content LONGTEXT NULL', $sql);
+    }
+
+    public function testLongTextColumnPostgres(): void
+    {
+        $builder = new TableBuilder(new PostgresDialect());
+        $sql = $builder->table('test', false)->longText('content', true)->build();
+
+        $this->assertStringContainsString('content TEXT NULL', $sql);
+    }
+
+    public function testBlobColumnMysql(): void
+    {
+        $sql = $this->builder
+            ->table('test', false)
+            ->blob('data', false)
+            ->build();
+
+        $this->assertStringContainsString('data BLOB NOT NULL', $sql);
+    }
+
+    public function testBlobColumnPostgres(): void
+    {
+        $builder = new TableBuilder(new PostgresDialect());
+        $sql = $builder->table('test', false)->blob('data', false)->build();
+
+        $this->assertStringContainsString('data BYTEA NOT NULL', $sql);
+    }
+
+    public function testBlobColumnSqlite(): void
+    {
+        $builder = new TableBuilder(new SqliteDialect());
+        $sql = $builder->table('test', false)->blob('data', false)->build();
+
+        $this->assertStringContainsString('data BLOB NOT NULL', $sql);
     }
 }
