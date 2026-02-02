@@ -26,6 +26,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Helper\CommentHelper;
 use phpMyFAQ\Helper\FaqHelper;
+use phpMyFAQ\Language;
 use phpMyFAQ\News;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -50,8 +51,16 @@ $comment = new Comments($faqConfig);
 
 $request = Request::createFromGlobals();
 $newsId = Filter::filterVar($request->query->get('newsid'), FILTER_VALIDATE_INT);
+$newsLang = Filter::filterVar($request->query->get('newslang'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 $oNews = new News($faqConfig);
+
+// If a specific language is requested via URL parameter, temporarily set it
+// This handles the case when a user copies a link (e.g., English news) and opens it in a browser
+// that auto-detects a different language (e.g., German)
+if ($newsLang !== null && $newsLang !== '' && $newsLang !== $faqConfig->getLanguage()->getLanguage()) {
+    Language::$language = $newsLang;
+}
 
 $faqSession->userTracking('news_view', $newsId);
 
@@ -60,6 +69,12 @@ $newsMainHeader = $faqConfig->getTitle() . Translation::get(key: 'msgNews');
 
 // Get all data from the news record
 $news = $oNews->get($newsId);
+
+// Check if news exists - if not, redirect to 404
+if (empty($news) || !isset($news['content'])) {
+    header('Location: ' . $faqConfig->getDefaultUrl() . 'index.php?action=404');
+    exit();
+}
 
 $newsContent = $news['content'];
 $newsHeader = $news['header'];
