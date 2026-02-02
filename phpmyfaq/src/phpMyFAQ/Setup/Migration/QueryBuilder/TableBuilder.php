@@ -24,7 +24,7 @@ use phpMyFAQ\Database;
 
 class TableBuilder
 {
-    private string $tableName;
+    private string $tableName = '';
     private bool $ifNotExists = false;
     private DialectInterface $dialect;
 

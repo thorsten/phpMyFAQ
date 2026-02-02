@@ -102,13 +102,13 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
         RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
     </IfModule>
     # the path to your phpMyFAQ installation
-    RewriteBase /
+    RewriteBase /Users/thorsten/htdocs/phpMyFAQ/phpmyfaq/src/libs/bin/phpunit/
     # Block zip files in content directory
     RewriteRule ^content/.*\.zip$ - [F,L]
     # Exclude assets from being handled by Symfony Router
     RewriteRule ^admin/assets($|/) - [L]
     # Error pages
-    ErrorDocument 404 /404.html
+    ErrorDocument 404 /Users/thorsten/htdocs/phpMyFAQ/phpmyfaq/src/libs/bin/phpunit/404.html
     # Administration API
     RewriteRule ^admin/api/ admin/api/index.php [L,QSA]
     # Administration pages (redirect /admin to /admin/)

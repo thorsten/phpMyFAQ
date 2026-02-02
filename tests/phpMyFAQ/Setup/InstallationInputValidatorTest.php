@@ -46,8 +46,8 @@ class InstallationInputValidatorTest extends TestCase
             rootDir: '/tmp',
         );
 
-        $this->assertEquals('admin', $input->loginName);
-        $this->assertEquals('password123', $input->password);
+        $this->assertEquals('admin', $input->getLoginName());
+        $this->assertEquals('password123', $input->getPassword());
         $this->assertEquals('en', $input->language);
         $this->assertFalse($input->ldapEnabled);
         $this->assertFalse($input->esEnabled);

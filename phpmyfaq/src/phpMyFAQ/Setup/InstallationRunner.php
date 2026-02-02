@@ -134,24 +134,37 @@ class InstallationRunner
             $classLoader->addPsr4('React\\Promise\\', PMF_SRC_DIR . '/libs/react/promise/src');
             $classLoader->register();
 
-            $esHosts = array_values($input->esSetup['hosts']);
-            $esClient = ClientBuilder::create()->setHosts($esHosts)->build();
-
-            if (!$esClient) {
-                throw new Exception('Elasticsearch Installation Error: No connection to Elasticsearch.');
+            try {
+                $esHosts = array_values($input->esSetup['hosts']);
+                $esClient = ClientBuilder::create()->setHosts($esHosts)->build();
+                $esClient->ping();
+            } catch (\Throwable $e) {
+                throw new Exception(sprintf(
+                    'Elasticsearch Installation Error: Could not connect to Elasticsearch: %s',
+                    $e->getMessage(),
+                ));
             }
         }
 
         // Validate OpenSearch connection if enabled
         if ($input->osEnabled && $input->osSetup !== []) {
-            $osHosts = array_values($input->osSetup['hosts']);
-            $osClient = new SymfonyClientFactory()->create([
-                'base_uri' => $osHosts[0],
-                'verify_peer' => false,
-            ]);
+            try {
+                $osHosts = array_values($input->osSetup['hosts']);
+                $osClient = new SymfonyClientFactory()->create([
+                    'base_uri' => $osHosts[0],
+                    'verify_peer' => false,
+                ]);
 
-            if (!$osClient) {
-                throw new Exception('OpenSearch Installation Error: No connection to OpenSearch.');
+                if (!$osClient->ping()) {
+                    throw new Exception('OpenSearch Installation Error: Server did not respond to ping.');
+                }
+            } catch (Exception $e) {
+                throw $e;
+            } catch (\Throwable $e) {
+                throw new Exception(sprintf(
+                    'OpenSearch Installation Error: Could not connect to OpenSearch: %s',
+                    $e->getMessage(),
+                ));
             }
         }
     }
@@ -259,7 +272,7 @@ class InstallationRunner
     private function stepSeedConfiguration(InstallationInput $input): void
     {
         $seeder = new DefaultDataSeeder();
-        $seeder->applyPersonalSettings($input->realname, $input->email, $input->language, $input->permLevel);
+        $seeder->applyPersonalSettings($input->realname, $input->getEmail(), $input->language, $input->permLevel);
         $seeder->seedConfig($this->configuration);
 
         $link = new Link('', $this->configuration);
@@ -275,7 +288,7 @@ class InstallationRunner
     private function stepCreateAdminUser(InstallationInput $input): void
     {
         $user = new User($this->configuration);
-        if (!$user->createUser($input->loginName, $input->password, '', 1)) {
+        if (!$user->createUser($input->getLoginName(), $input->getPassword(), '', 1)) {
             Installer::cleanFailedInstallationFiles();
             throw new Exception(sprintf(
                 'Fatal Installation Error: Could not create the admin user: %s',
@@ -283,13 +296,30 @@ class InstallationRunner
             ));
         }
 
-        $user->setStatus('protected');
+        if (!$user->setStatus('protected')) {
+            Installer::cleanFailedInstallationFiles();
+            throw new Exception(sprintf(
+                'Fatal Installation Error: Could not set admin user status: %s',
+                $user->error(),
+            ));
+        }
+
         $adminData = [
             'display_name' => $input->realname,
-            'email' => $input->email,
+            'email' => $input->getEmail(),
         ];
-        $user->setUserData($adminData);
-        $user->setSuperAdmin(true);
+        if (!$user->setUserData($adminData)) {
+            Installer::cleanFailedInstallationFiles();
+            throw new Exception(sprintf('Fatal Installation Error: Could not set admin user data: %s', $user->error()));
+        }
+
+        if (!$user->setSuperAdmin(true)) {
+            Installer::cleanFailedInstallationFiles();
+            throw new Exception(sprintf(
+                'Fatal Installation Error: Could not set admin as super admin: %s',
+                $user->error(),
+            ));
+        }
     }
 
     /**
@@ -354,8 +384,9 @@ class InstallationRunner
      */
     private function stepInitializeSearchEngine(InstallationInput $input): void
     {
-        if ($input->esEnabled && is_file($input->rootDir . '/config/elasticsearch.php')) {
-            $elasticsearchConfiguration = new ElasticsearchConfiguration($input->rootDir . '/config/elasticsearch.php');
+        if ($input->esEnabled && is_file($input->rootDir . '/content/core/config/elasticsearch.php')) {
+            $elasticsearchConfiguration = new ElasticsearchConfiguration($input->rootDir
+            . '/content/core/config/elasticsearch.php');
             $this->configuration->setElasticsearchConfig($elasticsearchConfiguration);
 
             $esClient = ClientBuilder::create()->setHosts($elasticsearchConfiguration->getHosts())->build();
@@ -365,8 +396,9 @@ class InstallationRunner
             $elasticsearch->createIndex();
         }
 
-        if ($input->osEnabled && is_file($input->rootDir . '/config/opensearch.php')) {
-            $openSearchConfiguration = new OpenSearchConfiguration($input->rootDir . '/config/opensearch.php');
+        if ($input->osEnabled && is_file($input->rootDir . '/content/core/config/opensearch.php')) {
+            $openSearchConfiguration = new OpenSearchConfiguration($input->rootDir
+            . '/content/core/config/opensearch.php');
             $this->configuration->setOpenSearchConfig($openSearchConfiguration);
 
             $osClient = new SymfonyClientFactory()->create([

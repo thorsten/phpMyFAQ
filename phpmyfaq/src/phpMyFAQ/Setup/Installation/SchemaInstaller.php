@@ -118,6 +118,10 @@ class SchemaInstaller implements DriverInterface
      */
     public function dropTables(string $prefix = ''): bool
     {
+        if ($prefix === '') {
+            $prefix = Database::getTablePrefix() ?? '';
+        }
+
         foreach ($this->schema->getTableNames() as $tableName) {
             $sql = sprintf('DROP TABLE %s%s', $prefix, $tableName);
             $result = $this->configuration->getDb()->query($sql);

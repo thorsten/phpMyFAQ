@@ -119,7 +119,7 @@ class InstallationInputValidator
         }
 
         $dbSetup['dbServer'] = Filter::filterInput(INPUT_POST, 'sql_server', FILTER_SANITIZE_SPECIAL_CHARS, '');
-        if (is_null($dbSetup['dbServer']) && !System::isSqlite($dbSetup['dbType'])) {
+        if (trim((string) $dbSetup['dbServer']) === '' && !System::isSqlite($dbSetup['dbType'])) {
             throw new Exception('Installation Error: Please add a database server.');
         }
 
@@ -134,7 +134,7 @@ class InstallationInputValidator
         }
 
         $dbSetup['dbUser'] = Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_SPECIAL_CHARS, '');
-        if (is_null($dbSetup['dbUser']) && !System::isSqlite($dbSetup['dbType'])) {
+        if (trim((string) $dbSetup['dbUser']) === '' && !System::isSqlite($dbSetup['dbType'])) {
             throw new Exception('Installation Error: Please add a database username.');
         }
 

@@ -111,14 +111,21 @@ class SchemaInstallerTest extends TestCase
         $installer->createTables('');
 
         $sql = $installer->getCollectedSql();
-        $createIndexCount = 0;
+        $indexes = [];
         foreach ($sql as $statement) {
             if (str_contains($statement, 'CREATE INDEX')) {
-                $createIndexCount++;
+                $indexes[] = $statement;
             }
         }
 
         // PostgreSQL should have separate CREATE INDEX statements for indexes
-        $this->assertGreaterThan(0, $createIndexCount, 'PostgreSQL should have separate CREATE INDEX statements');
+        $this->assertGreaterThan(0, count($indexes), 'PostgreSQL should have separate CREATE INDEX statements');
+
+        // No duplicate CREATE INDEX statements should be emitted
+        $this->assertEquals(
+            count($indexes),
+            count(array_unique($indexes)),
+            'PostgreSQL should not emit duplicate CREATE INDEX statements',
+        );
     }
 }

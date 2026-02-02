@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Setup;
 
+use SensitiveParameter;
+
 readonly class InstallationInput
 {
     /**
@@ -32,16 +34,32 @@ readonly class InstallationInput
         public array $ldapSetup,
         public array $esSetup,
         public array $osSetup,
-        public string $loginName,
-        public string $password,
+        private string $loginName,
+        #[SensitiveParameter]
+        private string $password,
         public string $language,
         public string $realname,
-        public string $email,
+        private string $email,
         public string $permLevel,
         public string $rootDir,
         public bool $ldapEnabled = false,
         public bool $esEnabled = false,
         public bool $osEnabled = false,
     ) {
+    }
+
+    public function getLoginName(): string
+    {
+        return $this->loginName;
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
     }
 }

@@ -56,16 +56,20 @@ readonly class UserCreateOperation implements OperationInterface
                 return false;
             }
 
-            $user->setStatus($this->status);
+            if (!$user->setStatus($this->status)) {
+                return false;
+            }
 
             $userData = [
                 'display_name' => $this->displayName,
                 'email' => $this->email,
             ];
-            $user->setUserData($userData);
+            if (!$user->setUserData($userData)) {
+                return false;
+            }
 
-            if ($this->isSuperAdmin) {
-                $user->setSuperAdmin(true);
+            if ($this->isSuperAdmin && !$user->setSuperAdmin(true)) {
+                return false;
             }
 
             return true;

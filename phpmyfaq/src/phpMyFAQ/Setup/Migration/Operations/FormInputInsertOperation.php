@@ -53,8 +53,7 @@ readonly class FormInputInsertOperation implements OperationInterface
     {
         try {
             $forms = new Forms($this->configuration);
-            $forms->insertInputIntoDatabase($this->formInput);
-            return true;
+            return $forms->insertInputIntoDatabase($this->formInput);
         } catch (Throwable) {
             return false;
         }
