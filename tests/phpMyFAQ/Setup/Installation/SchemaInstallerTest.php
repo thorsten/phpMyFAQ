@@ -35,12 +35,12 @@ class SchemaInstallerTest extends TestCase
         $configuration->method('getDb')->willReturn($db);
 
         $installer = new SchemaInstaller($configuration, $dialect);
-        $installer->setDryRun(true);
+        $installer->dryRun = true;
 
         $result = $installer->createTables('');
         $this->assertTrue($result);
 
-        $sql = $installer->getCollectedSql();
+        $sql = $installer->collectedSql;
         $this->assertNotEmpty($sql);
 
         // Should have at least one CREATE TABLE per table definition
@@ -62,7 +62,7 @@ class SchemaInstallerTest extends TestCase
         $configuration->method('getDb')->willReturn($db);
 
         $installer = new SchemaInstaller($configuration, $dialect);
-        $installer->setDryRun(true);
+        $installer->dryRun = true;
         $installer->createTables('');
     }
 
@@ -92,10 +92,10 @@ class SchemaInstallerTest extends TestCase
         $configuration->method('getDb')->willReturn($db);
 
         $installer = new SchemaInstaller($configuration, new MysqlDialect());
-        $installer->setDryRun(true);
+        $installer->dryRun = true;
         $installer->createTables('');
 
-        $allSql = implode("\n", $installer->getCollectedSql());
+        $allSql = implode("\n", $installer->collectedSql);
         $this->assertStringContainsString('InnoDB', $allSql);
         $this->assertStringContainsString('utf8mb4', $allSql);
     }
@@ -107,10 +107,10 @@ class SchemaInstallerTest extends TestCase
         $configuration->method('getDb')->willReturn($db);
 
         $installer = new SchemaInstaller($configuration, new PostgresDialect());
-        $installer->setDryRun(true);
+        $installer->dryRun = true;
         $installer->createTables('');
 
-        $sql = $installer->getCollectedSql();
+        $sql = $installer->collectedSql;
         $indexes = [];
         foreach ($sql as $statement) {
             if (str_contains($statement, 'CREATE INDEX')) {

@@ -37,9 +37,9 @@ class SchemaInstaller implements DriverInterface
     private readonly DatabaseSchema $schema;
 
     /** @var string[] Collected SQL for dry-run */
-    private array $collectedSql = [];
+    public array $collectedSql;
 
-    private bool $dryRun = false;
+    public bool $dryRun = false;
 
     public function __construct(
         private readonly Configuration $configuration,
@@ -47,24 +47,6 @@ class SchemaInstaller implements DriverInterface
     ) {
         $this->dialect = $dialect ?? DialectFactory::create();
         $this->schema = new DatabaseSchema($this->dialect);
-    }
-
-    /**
-     * Enables or disables dry-run mode. In dry-run mode, SQL is collected but not executed.
-     */
-    public function setDryRun(bool $dryRun): void
-    {
-        $this->dryRun = $dryRun;
-    }
-
-    /**
-     * Returns collected SQL statements from dry-run mode.
-     *
-     * @return string[]
-     */
-    public function getCollectedSql(): array
-    {
-        return $this->collectedSql;
     }
 
     /**
@@ -142,12 +124,6 @@ class SchemaInstaller implements DriverInterface
             return true;
         }
 
-        $result = $this->configuration->getDb()->query($sql);
-
-        if (!$result) {
-            return false;
-        }
-
-        return true;
+        return (bool) $this->configuration->getDb()->query($sql);
     }
 }

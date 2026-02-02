@@ -90,20 +90,29 @@ class InstallationRunner
     {
         Database::setTablePrefix($input->dbSetup['dbPrefix'] ?? '');
         $db = Database::factory($input->dbSetup['dbType']);
-        $db->connect(
-            $input->dbSetup['dbServer'],
-            $input->dbSetup['dbUser'],
-            $input->dbSetup['dbPassword'],
-            $input->dbSetup['dbDatabaseName'],
-            $input->dbSetup['dbPort'],
-        );
+
+        try {
+            $connected = $db->connect(
+                $input->dbSetup['dbServer'],
+                $input->dbSetup['dbUser'],
+                $input->dbSetup['dbPassword'],
+                $input->dbSetup['dbDatabaseName'],
+                $input->dbSetup['dbPort'],
+            );
+        } catch (\Throwable $e) {
+            throw new Exception(sprintf('Database Connection Error: %s', $e->getMessage()), 0, $e);
+        }
+
+        if ($connected === false || $connected === null) {
+            throw new Exception(sprintf('Database Connection Error: %s', $db->error()));
+        }
 
         $configuration = new Configuration($db);
 
         // Validate LDAP connection if enabled
         if ($input->ldapEnabled && $input->ldapSetup !== []) {
             $seeder = new DefaultDataSeeder();
-            foreach ($seeder->getMainConfig() as $configKey => $configValue) {
+            foreach ($seeder->mainConfig as $configKey => $configValue) {
                 if (!str_contains($configKey, 'ldap.')) {
                     continue;
                 }
@@ -137,7 +146,11 @@ class InstallationRunner
             try {
                 $esHosts = array_values($input->esSetup['hosts']);
                 $esClient = ClientBuilder::create()->setHosts($esHosts)->build();
-                $esClient->ping();
+                if (!$esClient->ping()->asBool()) {
+                    throw new Exception('Elasticsearch Installation Error: Server did not respond to ping.');
+                }
+            } catch (Exception $e) {
+                throw $e;
             } catch (\Throwable $e) {
                 throw new Exception(sprintf(
                     'Elasticsearch Installation Error: Could not connect to Elasticsearch: %s',
@@ -150,10 +163,10 @@ class InstallationRunner
         if ($input->osEnabled && $input->osSetup !== []) {
             try {
                 $osHosts = array_values($input->osSetup['hosts']);
-                $osClient = new SymfonyClientFactory()->create([
-                    'base_uri' => $osHosts[0],
-                    'verify_peer' => false,
-                ]);
+                $osClient = new SymfonyClientFactory()->create($this->buildOpenSearchClientOptions(
+                    $osHosts[0],
+                    $input->osSetup,
+                ));
 
                 if (!$osClient->ping()) {
                     throw new Exception('OpenSearch Installation Error: Server did not respond to ping.');
@@ -223,15 +236,20 @@ class InstallationRunner
             throw new Exception(sprintf('Database Installation Error: %s', $exception->getMessage()));
         }
 
-        $this->db->connect(
-            $databaseConfiguration->getServer(),
-            $databaseConfiguration->getUser(),
-            $databaseConfiguration->getPassword(),
-            $databaseConfiguration->getDatabase(),
-            $databaseConfiguration->getPort(),
-        );
+        try {
+            $connected = $this->db->connect(
+                $databaseConfiguration->getServer(),
+                $databaseConfiguration->getUser(),
+                $databaseConfiguration->getPassword(),
+                $databaseConfiguration->getDatabase(),
+                $databaseConfiguration->getPort(),
+            );
+        } catch (\Throwable $e) {
+            Installer::cleanFailedInstallationFiles();
+            throw new Exception(sprintf('Database Installation Error: %s', $e->getMessage()), 0, $e);
+        }
 
-        if (!$this->db instanceof DatabaseDriver) {
+        if ($connected === false || $connected === null) {
             Installer::cleanFailedInstallationFiles();
             throw new Exception(sprintf('Database Installation Error: %s', $this->db->error()));
         }
@@ -277,7 +295,13 @@ class InstallationRunner
 
         $link = new Link('', $this->configuration);
         $this->configuration->update(['main.referenceURL' => $link->getSystemUri('/setup/index.php')]);
-        $this->configuration->add('security.salt', md5($this->configuration->getDefaultUrl()));
+        try {
+            $salt = bin2hex(random_bytes(32));
+        } catch (\Random\RandomException $e) {
+            throw new Exception(sprintf('Installation Error: Could not generate security salt: %s', $e->getMessage()));
+        }
+
+        $this->configuration->add('security.salt', $salt);
     }
 
     /**
@@ -401,15 +425,47 @@ class InstallationRunner
             . '/content/core/config/opensearch.php');
             $this->configuration->setOpenSearchConfig($openSearchConfiguration);
 
-            $osClient = new SymfonyClientFactory()->create([
-                'base_uri' => $openSearchConfiguration->getHosts()[0],
-                'verify_peer' => false,
-            ]);
+            $osClient = new SymfonyClientFactory()->create($this->buildOpenSearchClientOptions(
+                $openSearchConfiguration->getHosts()[0],
+                $input->osSetup,
+            ));
             $this->configuration->setOpenSearch($osClient);
 
             $openSearch = new OpenSearch($this->configuration);
             $openSearch->createIndex();
         }
+    }
+
+    /**
+     * Builds the options array for OpenSearch SymfonyClientFactory.
+     *
+     * Defaults to verify_peer=true; callers may pass optional TLS overrides
+     * (verify_peer, cafile, capath) via the $tlsSettings array.
+     *
+     * @param string $baseUri The OpenSearch server base URI
+     * @param array<string, mixed> $tlsSettings Optional TLS settings from osSetup
+     * @return array<string, mixed>
+     */
+    private function buildOpenSearchClientOptions(string $baseUri, array $tlsSettings = []): array
+    {
+        $options = [
+            'base_uri' => $baseUri,
+            'verify_peer' => true,
+        ];
+
+        if (isset($tlsSettings['verify_peer'])) {
+            $options['verify_peer'] = filter_var($tlsSettings['verify_peer'], FILTER_VALIDATE_BOOLEAN);
+        }
+
+        if (isset($tlsSettings['cafile']) && $tlsSettings['cafile'] !== '') {
+            $options['cafile'] = (string) $tlsSettings['cafile'];
+        }
+
+        if (isset($tlsSettings['capath']) && $tlsSettings['capath'] !== '') {
+            $options['capath'] = (string) $tlsSettings['capath'];
+        }
+
+        return $options;
     }
 
     /**
