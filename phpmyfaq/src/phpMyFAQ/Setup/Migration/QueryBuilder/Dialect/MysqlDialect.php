@@ -54,6 +54,16 @@ class MysqlDialect implements DialectInterface
         return 'TEXT';
     }
 
+    public function longText(): string
+    {
+        return 'LONGTEXT';
+    }
+
+    public function blob(): string
+    {
+        return 'BLOB';
+    }
+
     public function boolean(): string
     {
         return 'TINYINT(1)';

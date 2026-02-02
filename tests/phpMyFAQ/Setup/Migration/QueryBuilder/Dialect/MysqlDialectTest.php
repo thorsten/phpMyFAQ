@@ -48,6 +48,16 @@ class MysqlDialectTest extends TestCase
         $this->assertEquals('TEXT', $this->dialect->text());
     }
 
+    public function testLongText(): void
+    {
+        $this->assertEquals('LONGTEXT', $this->dialect->longText());
+    }
+
+    public function testBlob(): void
+    {
+        $this->assertEquals('BLOB', $this->dialect->blob());
+    }
+
     public function testBoolean(): void
     {
         $this->assertEquals('TINYINT(1)', $this->dialect->boolean());
@@ -82,7 +92,10 @@ class MysqlDialectTest extends TestCase
     public function testAutoIncrement(): void
     {
         $this->assertEquals('id INT NOT NULL PRIMARY KEY AUTO_INCREMENT', $this->dialect->autoIncrement('id'));
-        $this->assertEquals('user_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT', $this->dialect->autoIncrement('user_id'));
+        $this->assertEquals(
+            'user_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
+            $this->dialect->autoIncrement('user_id'),
+        );
     }
 
     public function testCreateTablePrefix(): void

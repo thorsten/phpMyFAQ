@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Setup\Migration\QueryBuilder\Dialect;
 
 use phpMyFAQ\Setup\Migration\QueryBuilder\DialectInterface;
+use RuntimeException;
 
 class SqliteDialect implements DialectInterface
 {
@@ -51,6 +52,16 @@ class SqliteDialect implements DialectInterface
     public function text(): string
     {
         return 'TEXT';
+    }
+
+    public function longText(): string
+    {
+        return 'TEXT';
+    }
+
+    public function blob(): string
+    {
+        return 'BLOB';
     }
 
     public function boolean(): string
@@ -109,7 +120,7 @@ class SqliteDialect implements DialectInterface
     {
         // SQLite doesn't support ALTER COLUMN directly
         // This would require a table rebuild, which is handled separately
-        throw new \RuntimeException('SQLite does not support modifying columns. Use table rebuild pattern.');
+        throw new RuntimeException('SQLite does not support modifying columns. Use table rebuild pattern.');
     }
 
     public function createIndex(string $indexName, string $tableName, array $columns, bool $ifNotExists = false): string

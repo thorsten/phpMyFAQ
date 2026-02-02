@@ -26,6 +26,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Filesystem\Filesystem;
 use phpMyFAQ\Forms;
+use phpMyFAQ\Setup\Installation\DefaultDataSeeder;
 use phpMyFAQ\Setup\Migration\MigrationExecutor;
 use phpMyFAQ\Setup\Migration\MigrationInterface;
 use phpMyFAQ\Setup\Migration\MigrationRegistry;
@@ -253,14 +254,14 @@ class Update extends AbstractSetup
      */
     private function runPostMigrationTasks(): void
     {
-        // Handle admin log hash migration for 4.2.0-alpha
-        if (version_compare($this->version, '4.2.0-alpha', '<')) {
-            $this->migrateAdminLogHashes();
-        }
-
         // Insert form inputs for 4.0.0-alpha.2
         if (version_compare($this->version, '4.0.0-alpha.2', '<')) {
             $this->insertFormInputs();
+        }
+
+        // Handle admin log hash migration for 4.2.0-alpha
+        if (version_compare($this->version, '4.2.0-alpha', '<')) {
+            $this->migrateAdminLogHashes();
         }
     }
 
@@ -271,8 +272,8 @@ class Update extends AbstractSetup
     {
         try {
             $forms = new Forms($this->configuration);
-            $installer = new Installer(new System());
-            foreach ($installer->formInputs as $input) {
+            $seeder = new DefaultDataSeeder();
+            foreach ($seeder->getFormInputs() as $input) {
                 $this->queries[] = $forms->getInsertQueries($input);
             }
         } catch (\Exception) {

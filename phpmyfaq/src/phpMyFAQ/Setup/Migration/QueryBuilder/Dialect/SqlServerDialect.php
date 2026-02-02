@@ -53,6 +53,16 @@ class SqlServerDialect implements DialectInterface
         return 'NVARCHAR(MAX)';
     }
 
+    public function longText(): string
+    {
+        return 'NVARCHAR(MAX)';
+    }
+
+    public function blob(): string
+    {
+        return 'VARBINARY(MAX)';
+    }
+
     public function boolean(): string
     {
         return 'TINYINT';

@@ -52,6 +52,16 @@ interface DialectInterface
     public function text(): string;
 
     /**
+     * Returns the LONGTEXT column type (or equivalent).
+     */
+    public function longText(): string;
+
+    /**
+     * Returns the BLOB column type (or equivalent).
+     */
+    public function blob(): string;
+
+    /**
      * Returns the BOOLEAN/TINYINT column type.
      */
     public function boolean(): string;

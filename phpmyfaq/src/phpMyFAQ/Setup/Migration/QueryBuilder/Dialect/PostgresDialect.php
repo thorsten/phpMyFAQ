@@ -53,6 +53,16 @@ class PostgresDialect implements DialectInterface
         return 'TEXT';
     }
 
+    public function longText(): string
+    {
+        return 'TEXT';
+    }
+
+    public function blob(): string
+    {
+        return 'BYTEA';
+    }
+
     public function boolean(): string
     {
         return 'SMALLINT';
