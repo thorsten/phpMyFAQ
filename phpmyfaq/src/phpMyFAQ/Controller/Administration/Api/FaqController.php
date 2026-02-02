@@ -43,6 +43,7 @@ use phpMyFAQ\Instance\Search\OpenSearch;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
 use phpMyFAQ\Link\Util\TitleSlugifier;
+use phpMyFAQ\Push\WebPushService;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Session\Token;
@@ -256,6 +257,26 @@ final class FaqController extends AbstractAdministrationApiController
                     'keywords' => $faqData->getKeywords(),
                     'category_id' => $categories[0],
                 ]);
+            }
+
+            // Send Web Push notification for new active FAQs
+            if ($faqData->isActive()) {
+                /** @var WebPushService $webPushService */
+                $webPushService = $this->container->get('phpmyfaq.push.web-push-service');
+                $faqUrl = sprintf(
+                    '%scontent/%d/%d/%s/%s.html',
+                    $this->configuration->getDefaultUrl(),
+                    $categories[0],
+                    $faqData->getId(),
+                    $faqData->getLanguage(),
+                    TitleSlugifier::slug($faqData->getQuestion()),
+                );
+                $webPushService->sendToAll(
+                    Translation::get('msgPushNewFaq'),
+                    $faqData->getQuestion(),
+                    $faqUrl,
+                    'new-faq-' . $faqData->getId(),
+                );
             }
 
             return $this->json([

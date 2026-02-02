@@ -63,6 +63,8 @@ use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Mail;
 use phpMyFAQ\News;
 use phpMyFAQ\Notification;
+use phpMyFAQ\Push\PushSubscriptionRepository;
+use phpMyFAQ\Push\WebPushService;
 use phpMyFAQ\Plugin\PluginManager;
 use phpMyFAQ\Question;
 use phpMyFAQ\Rating;
@@ -316,8 +318,18 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.seo-repository'),
     ]);
 
+    $services->set('phpmyfaq.push.subscription-repository', PushSubscriptionRepository::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+
+    $services->set('phpmyfaq.push.web-push-service', WebPushService::class)->args([
+        service('phpmyfaq.configuration'),
+        service('phpmyfaq.push.subscription-repository'),
+    ]);
+
     $services->set('phpmyfaq.notification', Notification::class)->args([
         service('phpmyfaq.configuration'),
+        service('phpmyfaq.push.web-push-service'),
     ]);
 
     $services->set('phpmyfaq.plugin.plugin-manager', PluginManager::class);

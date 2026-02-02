@@ -23,6 +23,7 @@ use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Link\Util\TitleSlugifier;
+use phpMyFAQ\Push\WebPushService;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 /**
@@ -45,6 +46,7 @@ readonly class Notification
      */
     public function __construct(
         private Configuration $configuration,
+        private ?WebPushService $webPushService = null,
     ) {
         $this->mail = new Mail($this->configuration);
         $this->faq = new Faq($this->configuration);
@@ -130,6 +132,18 @@ readonly class Notification
 
             $this->mail->send();
         }
+
+        $this->sendWebPush(
+            Translation::get(key: 'msgPushNewFaq'),
+            $this->faq->getQuestion($faqEntity->getId()),
+            sprintf(
+                '%sadmin/faq/edit/%d/%s',
+                $this->configuration->getDefaultUrl(),
+                $faqEntity->getId(),
+                $faqEntity->getLanguage(),
+            ),
+            'new-faq-' . $faqEntity->getId(),
+        );
     }
 
     /**
@@ -298,6 +312,26 @@ readonly class Notification
             unset($mail);
         } catch (Exception|TransportExceptionInterface $exception) {
             $this->configuration->getLogger()->error('Error sending mail: ' . $exception->getMessage());
+        }
+
+        $this->sendWebPush(
+            Translation::get(key: 'msgPushNewQuestion'),
+            mb_substr($questionEntity->getQuestion(), 0, 200),
+            $this->configuration->getDefaultUrl() . 'admin/',
+            'new-question',
+        );
+    }
+
+    private function sendWebPush(string $title, string $body, string $url = '', string $tag = ''): void
+    {
+        if ($this->webPushService === null || !$this->webPushService->isEnabled()) {
+            return;
+        }
+
+        try {
+            $this->webPushService->sendToAll($title, $body, $url, $tag);
+        } catch (\Throwable $exception) {
+            $this->configuration->getLogger()->error('Web Push notification failed: ' . $exception->getMessage());
         }
     }
 }

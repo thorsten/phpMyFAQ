@@ -56,6 +56,21 @@ class Permission
         }
 
         foreach ($ids as $id) {
+            // Check if permission already exists to avoid duplicate key errors
+            $checkQuery = sprintf(
+                'SELECT 1 FROM %sfaqdata_%s WHERE record_id = %d AND %s_id = %d',
+                Database::getTablePrefix(),
+                $mode,
+                $faqId,
+                $mode,
+                $id,
+            );
+
+            $result = $this->configuration->getDb()->query($checkQuery);
+            if ($this->configuration->getDb()->numRows($result) > 0) {
+                continue; // Permission already exists, skip
+            }
+
             $query = sprintf(
                 'INSERT INTO %sfaqdata_%s (record_id, %s_id) VALUES (%d, %d)',
                 Database::getTablePrefix(),

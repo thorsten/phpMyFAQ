@@ -1650,4 +1650,25 @@ $PMF_LANG['msgOtherQuestionDesc'] = 'There is one more open question in another 
 $PMF_LANG['msgChangeLanguageHint'] = 'Please change the language in the administration to process these questions.';
 $PMF_LANG['msgOpenQuestion'] = 'Open question';
 
+// added v4.2.0-alpha.2 - 2026-02-02 - Web Push Notifications
+$LANG_CONF['push.enableWebPush'] = ['checkbox', 'Enable Web Push notifications'];
+$LANG_CONF['push.vapidPublicKey'] = ['print', 'VAPID Public Key'];
+$LANG_CONF['push.vapidPrivateKey'] = ['print', 'VAPID Private Key'];
+$LANG_CONF['push.vapidSubject'] = ['input', 'VAPID Subject (mailto: or URL)'];
+
+$PMF_LANG['msgPushNotifications'] = 'Push Notifications';
+$PMF_LANG['msgPushNotificationsEnable'] = 'Enable push notifications';
+$PMF_LANG['msgPushNotificationsDisable'] = 'Disable push notifications';
+$PMF_LANG['msgPushNotificationsEnabled'] = 'Push notifications enabled';
+$PMF_LANG['msgPushNotificationsDisabled'] = 'Push notifications disabled';
+$PMF_LANG['msgPushNotificationsNotSupported'] = 'Push notifications are not supported by your browser';
+$PMF_LANG['msgPushNotificationsPermissionDenied'] = 'Push notification permission was denied';
+$PMF_LANG['msgPushNewFaq'] = 'New FAQ published';
+$PMF_LANG['msgPushNewQuestion'] = 'New open question submitted';
+$PMF_LANG['msgPushNotificationsDescription'] = 'Receive browser notifications when new FAQs are published or questions are submitted.';
+$PMF_LANG['pushControlCenter'] = 'Push';
+$PMF_LANG['msgGenerateVapidKeys'] = 'Generate VAPID Keys';
+$PMF_LANG['msgVapidKeysGenerated'] = 'VAPID keys have been generated successfully.';
+$PMF_LANG['msgVapidKeysError'] = 'Failed to generate VAPID keys.';
+
 return $PMF_LANG;
