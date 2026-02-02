@@ -112,7 +112,7 @@ class InstallationRunner
         // Validate LDAP connection if enabled
         if ($input->ldapEnabled && $input->ldapSetup !== []) {
             $seeder = new DefaultDataSeeder();
-            foreach ($seeder->mainConfig as $configKey => $configValue) {
+            foreach ($seeder->getMainConfig() as $configKey => $configValue) {
                 if (!str_contains($configKey, 'ldap.')) {
                     continue;
                 }
@@ -266,10 +266,19 @@ class InstallationRunner
     {
         try {
             $databaseInstaller = InstanceDatabase::factory($this->configuration, $input->dbSetup['dbType']);
-            $databaseInstaller->createTables($input->dbSetup['dbPrefix'] ?? '');
+            $result = $databaseInstaller->createTables($input->dbSetup['dbPrefix'] ?? '');
         } catch (Exception $exception) {
             Installer::cleanFailedInstallationFiles();
             throw new Exception(sprintf('Database Installation Error: %s', $exception->getMessage()));
+        }
+
+        if (!$result) {
+            Installer::cleanFailedInstallationFiles();
+            throw new Exception(sprintf(
+                'Database Installation Error: Failed to create tables for database type "%s" with prefix "%s".',
+                $input->dbSetup['dbType'],
+                $input->dbSetup['dbPrefix'] ?? '',
+            ));
         }
     }
 

@@ -37,7 +37,7 @@ class SchemaInstaller implements DriverInterface
     private readonly DatabaseSchema $schema;
 
     /** @var string[] Collected SQL for dry-run */
-    public array $collectedSql;
+    public array $collectedSql = [];
 
     public bool $dryRun = false;
 
