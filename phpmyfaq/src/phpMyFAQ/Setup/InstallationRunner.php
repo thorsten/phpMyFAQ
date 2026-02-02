@@ -78,7 +78,7 @@ class InstallationRunner
         $this->stepCreateAnonymousUser($input);
         $this->stepCreateInstance();
         $this->stepInitializeSearchEngine($input);
-        $this->stepAdjustHtaccess();
+        $this->stepAdjustHtaccess($input);
     }
 
     /**
@@ -414,9 +414,16 @@ class InstallationRunner
 
     /**
      * Step 13: Adjust .htaccess RewriteBase.
+     *
+     * Skips when the installation rootDir differs from the application's root path
+     * (e.g. in test environments) to avoid modifying the real .htaccess file.
      */
-    private function stepAdjustHtaccess(): void
+    private function stepAdjustHtaccess(InstallationInput $input): void
     {
+        if (realpath($input->rootDir) !== realpath($this->configuration->getRootPath())) {
+            return;
+        }
+
         $environmentConfigurator = new EnvironmentConfigurator($this->configuration);
         $environmentConfigurator->adjustRewriteBaseHtaccess();
     }
