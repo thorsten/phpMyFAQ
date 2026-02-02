@@ -8,3 +8,132 @@
   text-overflow: ellipsis;
   vertical-align: top;
 }
+
+[data-bs-theme='high-contrast'] {
+  .jodit-container {
+    --jd-color-background-default: var(--bs-dark);
+    --jd-color-border: var(--bs-primary);
+    --jd-color-panel: var(--bs-dark);
+    --jd-color-icon: var(--bs-primary);
+    --jd-color-button-background-hover: var(--bs-primary);
+    --jd-color-text: var(--bs-light);
+    --jd-color-text-icons: var(--bs-primary);
+    --jd-color-placeholder: var(--bs-primary);
+    --jd-toolbar-button-size: 34px;
+
+    .jodit-toolbar-button {
+      height: var(--jd-toolbar-button-size) !important;
+      width: auto !important;
+      min-width: calc(var(--jd-toolbar-button-size) - 6px) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+
+      &:hover,
+      &:focus,
+      &.jodit_active {
+        background-color: var(--jd-color-button-background-hover) !important;
+
+        svg path,
+        svg g,
+        svg circle,
+        svg {
+          fill: var(--bs-dark) !important;
+        }
+      }
+    }
+
+    .jodit-toolbar-button__icon {
+      height: var(--jd-toolbar-button-size) !important;
+      width: 20px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+
+      svg {
+        height: 20px !important;
+        width: 20px !important;
+
+        path,
+        g,
+        polygon,
+        circle {
+          fill: var(--jd-color-icon) !important;
+          fill-rule: evenodd !important;
+        }
+
+        rect {
+          fill: none !important;
+        }
+      }
+    }
+
+    .jodit-toolbar-button__trigger {
+      height: 100% !important;
+      width: 14px !important;
+      display: flex !important;
+      align-items: center !important;
+      margin-left: -2px !important;
+      opacity: 1 !important;
+
+      svg {
+        fill: var(--jd-color-icon) !important;
+      }
+    }
+  }
+
+  .jodit-wysiwyg {
+    &::selection,
+    ::selection {
+      background-color: var(--bs-primary) !important;
+      color: var(--bs-dark) !important;
+    }
+  }
+
+  .jodit-dialog {
+    background-color: var(--bs-dark) !important;
+
+    .form-control::placeholder {
+      color: var(--bs-primary) !important;
+      opacity: 0.9 !important;
+    }
+
+    * {
+      background-color: var(--bs-dark);
+      color: var(--bs-primary);
+    }
+
+    .jodit-button {
+      &:hover {
+        background-color: var(--bs-primary) !important;
+        color: var(--bs-dark) !important;
+
+        * {
+          color: var(--bs-dark) !important;
+          background-color: transparent !important;
+          fill: var(--bs-dark) !important;
+        }
+
+        &::before {
+          color: var(--bs-dark) !important;
+        }
+      }
+    }
+
+    .btn-primary {
+      &:hover,
+      &:focus,
+      &:active {
+        background-color: var(--bs-primary) !important;
+        border-color: var(--bs-primary) !important;
+        color: var(--bs-dark) !important;
+      }
+
+      &:hover *,
+      &:focus * {
+        color: var(--bs-dark) !important;
+        background-color: transparent !important;
+      }
+    }
+  }
+}
