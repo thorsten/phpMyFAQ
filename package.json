@@ -42,7 +42,7 @@
     "choices.js": "^11.1.0",
     "handlebars": "4.7.8",
     "highlight.js": "^11.11.1",
-    "jodit": "^4.8.9",
+    "jodit": "^4.9.4",
     "masonry-layout": "^4.2.2",
     "sortablejs": "^1.15.6",
     "vanilla-cookieconsent": "^3.1.0"
