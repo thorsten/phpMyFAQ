@@ -1,54 +1,167 @@
 {% extends 'index.twig' %}
 
 {% block content %}
-<section class="col-12">
-  <h2 class="mb-4 border-bottom">{{ pageHeader }}</h2>
+<section class="col-12" aria-labelledby="page-header">
+  <h2 id="page-header" class="mb-4 border-bottom">{{ pageHeader }}</h2>
   <p>{{ msgQuestionText }}</p>
 
-  <table class="table table-striped align-middle mb-5">
-    <tr>
-      <th>{{ msgDate_User }}</th>
-      <th colspan="2">{{ msgQuestion2 }}</th>
-    </tr>
+  {% set showActionColumn = userHasPermissionToAnswer %}
+
+  {% if not showActionColumn and isCloseQuestionEnabled %}
+    {% for question in openQuestions.questions %}
+        {% if question.answerId > 0 %}
+            {% set showActionColumn = true %}
+        {% endif %}
+    {% endfor %}
+  {% endif %}
+
+  {% set totalColumns = showActionColumn ? 3 : 2 %}
+  {% set questionColspan = showActionColumn ? 2 : 1 %}
+
+  <div class="d-none d-md-block shadow rounded-2 overflow-hidden mb-5">
+    <div class="table-responsive">
+      <table class="table table-striped align-middle mb-0"{% if openQuestions.numberInvisibleQuestions > 0 %} aria-describedby="questions-info"{% endif %}>
+        <caption class="visually-hidden">{{ pageHeader }}</caption>
+        <colgroup>
+          <col style="width: 25%;">
+          {% if showActionColumn %}
+            <col style="width: 60%;">
+            <col style="width: 15%;">
+          {% else %}
+            <col style="width: 75%;">
+          {% endif %}
+        </colgroup>
+        <thead>
+          <tr class="border-bottom">
+            <th scope="col" class="ps-3 py-3">{{ msgDate_User }}</th>
+            <th scope="col" colspan="{{ questionColspan }}" class="py-3">{{ msgQuestion2 }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if openQuestions.numberQuestions > 0 %}
+            {% for question in openQuestions.questions %}
+              <tr>
+                <td class="text-break small ps-3">
+                  <i class="bi bi-calendar-date me-1" aria-hidden="true"></i>{{ question.date }}<br>
+                  <a href="mailto:{{ question.email }}" title="{{ msgEmailTo }} {{ question.userName }}">
+                    <i class="bi bi-person me-1" aria-hidden="true"></i>{{ question.userName }}
+                  </a>
+                </td>
+                
+                <td class="text-break">
+                  <div class="d-flex align-items-center mb-1">
+                    <div style="width: 25px;" class="flex-shrink-0">
+                      <i class="bi bi-card-list text-muted" aria-hidden="true"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                      <strong>{{ question.categoryName }}:</strong>
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-start">
+                    <div style="width: 25px;" class="flex-shrink-0">
+                      <i class="bi bi-question-square text-muted" aria-hidden="true"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                      <span>{{ question.question }}</span>
+                    </div>
+                  </div>
+                </td>
+
+                {% if showActionColumn %}
+                  <td class="text-end pe-3" style="white-space: nowrap;">
+                    {% if isCloseQuestionEnabled and question.answerId > 0 %}
+                      <a class="btn btn-primary" href="./content/{{ question.categoryId }}/{{ question.answerId }}/{{ question.lang }}/{{ question.slug }}.html">
+                        <i class="bi bi-check-circle me-1" aria-hidden="true"></i>{{ msg2answerFAQ }}
+                      </a>
+                    {% elseif userHasPermissionToAnswer %}
+                      <a class="btn btn-primary" href="./add-faq.html?question={{ question.id }}&cat={{ question.categoryId }}">
+                        <i class="bi bi-chat-left-text me-1" aria-hidden="true"></i>{{ msg2answer }}
+                      </a>
+                    {% endif %}
+                  </td>
+                {% endif %}
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="{{ totalColumns }}" class="text-center py-4">{{ msgNoQuestionsAvailable }}</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="d-md-none mb-5"{% if openQuestions.numberInvisibleQuestions > 0 %} aria-describedby="questions-info"{% endif %}>
     {% if openQuestions.numberQuestions > 0 %}
       {% for question in openQuestions.questions %}
-        <tr>
-          <td>
-            <small>{{ question.date }}</small><br><a href="mailto:{{ question.email }}">{{ question.userName }}</a>
-          </td>
-          <td>
-            <strong>{{ question.categoryName }}:</strong><br>{{ question.question }}
-          </td>
-          {% if isCloseQuestionEnabled and question.answerId > 0 %}
-            <td class="text-end">
-              <a class="btn btn-primary"  href="./content/{{ question.categoryId }}/{{ question.answerId }}/{{ question.lang }}/{{ question.slug }}.html">
-                {{ msg2answerFAQ }}
+        <div class="card shadow mb-4">
+          <div class="card-body">
+            <h5 class="card-title text-center mb-3">
+              <i class="bi bi-card-list text-warning" aria-hidden="true"></i>
+              <span class="text-warning">{{ question.categoryName }}</span>
+            </h5>
+
+            <div class="mb-3 small text-muted border-bottom pb-2">
+              <div class="d-flex align-items-center mb-1">
+                <div class="flex-shrink-0" style="width: 25px;">
+                  <i class="bi bi-calendar-date" aria-hidden="true"></i>
+                </div>
+                <div>{{ question.date }}</div>
+              </div>
+
+              <a href="mailto:{{ question.email }}" class="text-decoration-none text-muted d-flex align-items-center" title="{{ msgEmailTo }} {{ question.userName }}">
+                <div class="flex-shrink-0" style="width: 25px;">
+                  <i class="bi bi-person" aria-hidden="true"></i>
+                </div>
+                <div class="text-break">
+                  {{ question.userName }}
+                </div>
               </a>
-            </td>
-          {% elseif userHasPermissionToAnswer %}
-            <td class="text-end">
-              <a class="btn btn-primary" href="./add-faq.html?question={{ question.id }}&cat={{ question.categoryId }}">
-                {{ msg2answer }}
-              </a>
-            </td>
-          {% else %}
-            <td class="text-end"></td>
-          {% endif %}
-        </tr>
+            </div>
+
+            <div class="card-text text-break mb-3 d-flex">
+              <div class="flex-shrink-0 me-2">
+                <i class="bi bi-question-square text-warning" aria-hidden="true"></i>
+              </div>
+              <div>
+                {{ question.question }}
+              </div>
+            </div>
+            
+            {% if showActionColumn %}
+              <div class="d-grid gap-2">
+                {% if isCloseQuestionEnabled and question.answerId > 0 %}
+                  <a class="btn btn-primary bg-gradient" href="./content/{{ question.categoryId }}/{{ question.answerId }}/{{ question.lang }}/{{ question.slug }}.html">
+                    <i class="bi bi-check-circle me-2" aria-hidden="true"></i>{{ msg2answerFAQ }}
+                  </a>
+                {% elseif userHasPermissionToAnswer %}
+                  <a class="btn btn-primary bg-gradient" href="./add-faq.html?question={{ question.id }}&cat={{ question.categoryId }}">
+                    <i class="bi bi-chat-left-text me-2" aria-hidden="true"></i>{{ msg2answer }}
+                  </a>
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
       {% endfor %}
     {% else %}
-      <tr>
-        <td colspan="3">{{ msgNoQuestionsAvailable }}</td>
-      </tr>
+
+      <div class="card shadow mb-4">
+        <div class="card-body text-center py-4 text-muted">
+          <i class="bi bi-inbox mb-2 d-block h4" aria-hidden="true"></i>
+          {{ msgNoQuestionsAvailable }}
+        </div>
+      </div>
     {% endif %}
-    {% if openQuestions.numberInvisibleQuestions > 0 %}
-      <tr>
-        <td colspan="3">
-          {{ openQuestions.numberInvisibleQuestions }} {{ msgQuestionsWaiting }}
-        </td>
-      </tr>
-    {% endif %}
-  </table>
+  </div>
+
+  {% if openQuestions.numberInvisibleQuestions > 0 %}
+    <div id="questions-info" class="alert alert-light border border-primary text-muted fst-italic text-center mb-5" role="note">
+      <i class="bi bi-info-circle me-2" aria-hidden="true"></i>
+      <strong>{{ openQuestions.numberInvisibleQuestions }}</strong> {{ msgQuestionsWaiting }}
+    </div>
+  {% endif %}
 </section>
 
 {% endblock %}

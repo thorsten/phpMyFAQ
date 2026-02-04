@@ -99,10 +99,11 @@ $PMF_LANG['msgAskCategory'] = "Kategorie";
 $PMF_LANG['msgAskYourQuestion'] = "Frage";
 $PMF_LANG['msgAskThx4Mail'] = "Vielen Dank für diese Anfrage.";
 $PMF_LANG['msgDate_User'] = "Datum / Verfasser";
-$PMF_LANG['msgQuestion2'] = "Frage";
+$PMF_LANG['msgQuestion2'] = "Kategorie / Frage";
 $PMF_LANG['msg2answer'] = "beantworten";
 $PMF_LANG['msgQuestionText'] = "Hier sind die Fragen anderer Nutzer zu sehen. Diese können hier beantwortet werden. Der Eintrag wird dadurch auch den FAQ-Beiträgen hinzugefügt.";
 $PMF_LANG['msgNoQuestionsAvailable'] = "Derzeit gibt es keine offenen Fragen.";
+$PMF_LANG['msgEmailTo'] = "E-Mail an";
 
 // Contact
 $PMF_LANG['msgContactEMail'] = "E-Mail an den Betreiber";
