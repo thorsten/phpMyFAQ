@@ -64,10 +64,9 @@ final class QuestionsController extends AbstractFrontController
             'msgQuestion2' => Translation::get(key: 'msgQuestion2'),
             'openQuestions' => $questionHelper->getOpenQuestions(),
             'isCloseQuestionEnabled' => $this->configuration->get('records.enableCloseQuestion'),
-            'userHasPermissionToAnswer' => $this->currentUser->perm->hasPermission(
-                $this->currentUser->getUserId(),
-                PermissionType::FAQ_ADD->value
-            ) || $this->configuration->get('records.allowNewFaqsForGuests'),
+            'userHasPermissionToAnswer' =>
+                $this->currentUser->perm->hasPermission($this->currentUser->getUserId(), PermissionType::FAQ_ADD->value)
+                || $this->configuration->get('records.allowNewFaqsForGuests'),
             'msgQuestionsWaiting' => Translation::get(key: 'msgQuestionsWaiting'),
             'msgNoQuestionsAvailable' => Translation::get(key: 'msgNoQuestionsAvailable'),
             'msg2answerFAQ' => Translation::get(key: 'msg2answerFAQ'),
