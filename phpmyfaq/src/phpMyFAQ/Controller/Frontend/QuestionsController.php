@@ -66,12 +66,13 @@ final class QuestionsController extends AbstractFrontController
             'isCloseQuestionEnabled' => $this->configuration->get('records.enableCloseQuestion'),
             'userHasPermissionToAnswer' => $this->currentUser->perm->hasPermission(
                 $this->currentUser->getUserId(),
-                PermissionType::FAQ_ADD->value,
-            ),
+                PermissionType::FAQ_ADD->value
+            ) || $this->configuration->get('records.allowNewFaqsForGuests'),
             'msgQuestionsWaiting' => Translation::get(key: 'msgQuestionsWaiting'),
             'msgNoQuestionsAvailable' => Translation::get(key: 'msgNoQuestionsAvailable'),
             'msg2answerFAQ' => Translation::get(key: 'msg2answerFAQ'),
             'msg2answer' => Translation::get(key: 'msg2answer'),
+            'msgEmailTo' => Translation::get(key: 'msgEmailTo'),
         ]);
     }
 
