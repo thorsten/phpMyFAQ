@@ -50,12 +50,14 @@ $templateVars = [
     'msgQuestion2' => Translation::get(key: 'msgQuestion2'),
     'openQuestions' => $questionHelper->getOpenQuestions(),
     'isCloseQuestionEnabled' => $faqConfig->get('records.enableCloseQuestion'),
-    'userHasPermissionToAnswer' => $user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD->value),
+    'userHasPermissionToAnswer' =>
+        $user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD->value)
+        || $faqConfig->get('records.allowNewFaqsForGuests'),
     'msgQuestionsWaiting' => Translation::get(key: 'msgQuestionsWaiting'),
     'msgNoQuestionsAvailable' => Translation::get(key: 'msgNoQuestionsAvailable'),
     'msg2answerFAQ' => Translation::get(key: 'msg2answerFAQ'),
     'msg2answer' => Translation::get(key: 'msg2answer'),
+    'msgEmailTo' => Translation::get(key: 'msgEmailTo'),
 ];
 
 return $templateVars;
-
