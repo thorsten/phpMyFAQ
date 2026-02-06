@@ -5,6 +5,7 @@ export interface Response {
   error?: string;
   status?: string;
   data?: string;
+  delete?: boolean;
 }
 
 export interface GlossaryResponse {

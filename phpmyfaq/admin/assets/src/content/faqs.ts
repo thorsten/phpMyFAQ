@@ -15,6 +15,7 @@
 
 import { deleteAttachments } from '../api';
 import { pushNotification, pushErrorNotification } from '../../../../assets/src/utils';
+import { Response } from '../interfaces';
 import { Translator } from '../translation/translator';
 
 const showHelp = (option: string): void => {
@@ -44,7 +45,7 @@ export const handleFaqForm = (): void => {
         const attachmentId = target.getAttribute('data-pmf-attachment-id') as string;
         const csrfToken = target.getAttribute('data-pmf-csrf-token') as string;
 
-        const response = await deleteAttachments(attachmentId, csrfToken);
+        const response = (await deleteAttachments(attachmentId, csrfToken)) as unknown as Response;
 
         if (response.success) {
           const listItemToDelete = document.getElementById(`attachment-id-${attachmentId}`) as HTMLElement;

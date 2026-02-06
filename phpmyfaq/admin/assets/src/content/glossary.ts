@@ -16,6 +16,7 @@
 import { createGlossary, deleteGlossary, getGlossary, updateGlossary } from '../api';
 import { addElement, pushNotification } from '../../../../assets/src/utils';
 import { Modal } from 'bootstrap';
+import { GlossaryResponse, Response } from '../interfaces';
 
 export const handleDeleteGlossary = (): void => {
   const deleteButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.pmf-admin-delete-glossary');
@@ -29,7 +30,7 @@ export const handleDeleteGlossary = (): void => {
         const csrfToken = button.getAttribute('data-pmf-csrf-token') as string;
         const glossaryLang = button.getAttribute('data-pmf-glossary-language') as string;
 
-        const response = await deleteGlossary(glossaryId, glossaryLang, csrfToken);
+        const response = (await deleteGlossary(glossaryId, glossaryLang, csrfToken)) as Response | undefined;
 
         if (response) {
           (button.closest('tr') as HTMLElement).remove();
@@ -53,7 +54,9 @@ export const handleAddGlossary = (): void => {
       const glossaryDefinition = (document.getElementById('definition') as HTMLInputElement).value as string;
       const csrfToken = (document.getElementById('pmf-csrf-token') as HTMLInputElement).value as string;
 
-      const response = await createGlossary(glossaryLanguage, glossaryItem, glossaryDefinition, csrfToken);
+      const response = (await createGlossary(glossaryLanguage, glossaryItem, glossaryDefinition, csrfToken)) as
+        | Response
+        | undefined;
 
       if (response) {
         if (modal) {
@@ -118,7 +121,7 @@ export const onOpenUpdateGlossaryModal = (): void => {
       (document.getElementById('update-language') as HTMLInputElement).value = glossaryLang;
 
       try {
-        const response = await getGlossary(glossaryId, glossaryLang);
+        const response = (await getGlossary(glossaryId, glossaryLang)) as GlossaryResponse | undefined;
 
         (document.getElementById('update-item') as HTMLInputElement).value = response?.item ?? '';
         (document.getElementById('update-definition') as HTMLInputElement).value = response?.definition ?? '';
@@ -143,7 +146,13 @@ export const handleUpdateGlossary = (): void => {
       const glossaryDefinition = (document.getElementById('update-definition') as HTMLInputElement).value as string;
       const csrfToken = (document.getElementById('update-csrf-token') as HTMLInputElement).value as string;
 
-      const response = await updateGlossary(glossaryId, glossaryLanguage, glossaryItem, glossaryDefinition, csrfToken);
+      const response = (await updateGlossary(
+        glossaryId,
+        glossaryLanguage,
+        glossaryItem,
+        glossaryDefinition,
+        csrfToken
+      )) as Response | undefined;
 
       if (response) {
         if (modal) {

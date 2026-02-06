@@ -59,14 +59,14 @@ export const handleAddNews = (): void => {
         target: target,
         csrfToken: (document.getElementById('pmf-csrf-token') as HTMLInputElement).value,
       };
-      const response = (await addNews(data)) as unknown as Response;
+      const response = (await addNews(data as unknown as Record<string, unknown>)) as unknown as Response;
       if (typeof response.success === 'string') {
         pushNotification(response.success);
         setTimeout(() => {
           window.location.href = './news';
         }, 3000);
       } else {
-        pushErrorNotification(response.error);
+        pushErrorNotification(response.error ?? 'An error occurred');
       }
     });
   }
@@ -96,22 +96,22 @@ export const handleNews = (): void => {
             window.location.reload();
           }, 3000);
         } else {
-          pushErrorNotification(response.error);
+          pushErrorNotification(response.error ?? 'An error occurred');
         }
       }
     );
     document.querySelectorAll<HTMLInputElement>('#activate').forEach((item) => {
       item.addEventListener('click', async () => {
-        const response = await activateNews(
+        const response = (await activateNews(
           item.getAttribute('data-pmf-id') as string,
-          item.checked,
+          String(item.checked),
           item.getAttribute('data-pmf-csrf-token') as string
-        );
+        )) as unknown as Response;
 
         if (typeof response.success === 'string') {
           pushNotification(response.success);
         } else {
-          pushErrorNotification(response.error);
+          pushErrorNotification(response.error ?? 'An error occurred');
         }
       });
     });
@@ -145,14 +145,14 @@ export const handleEditNews = (): void => {
         target: target,
       };
 
-      const reponse = (await updateNews(data)) as unknown as Response;
+      const reponse = (await updateNews(data as unknown as Record<string, unknown>)) as unknown as Response;
       if (typeof reponse.success === 'string') {
         pushNotification(reponse.success);
         setTimeout(() => {
           window.location.href = './news';
         }, 3000);
       } else {
-        pushErrorNotification(reponse.error);
+        pushErrorNotification(reponse.error ?? 'An error occurred');
       }
     });
   }
