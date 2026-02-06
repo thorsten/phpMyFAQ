@@ -1,25 +1,13 @@
 <?php
 
-/**
- * Test case for WebPushService
- *
- * This Source Code Form is subject to the terms of the Mozilla Public License,
- * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at https://mozilla.org/MPL/2.0/.
- *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2026 phpMyFAQ Team
- * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- */
-
 namespace phpMyFAQ\Push;
 
 use phpMyFAQ\Configuration;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 class WebPushServiceTest extends TestCase
 {
     private Configuration&MockObject $configuration;
@@ -40,8 +28,8 @@ class WebPushServiceTest extends TestCase
         $this->configuration
             ->method('get')
             ->willReturnMap([
-                ['push.enableWebPush', 'true'],
-                ['push.vapidPublicKey', 'BNcR...publicKey'],
+                ['push.enableWebPush',   'true'],
+                ['push.vapidPublicKey',  'BNcR...publicKey'],
                 ['push.vapidPrivateKey', 'privateKeyValue'],
             ]);
 
@@ -53,8 +41,8 @@ class WebPushServiceTest extends TestCase
         $this->configuration
             ->method('get')
             ->willReturnMap([
-                ['push.enableWebPush', 'false'],
-                ['push.vapidPublicKey', 'BNcR...publicKey'],
+                ['push.enableWebPush',   'false'],
+                ['push.vapidPublicKey',  'BNcR...publicKey'],
                 ['push.vapidPrivateKey', 'privateKeyValue'],
             ]);
 
@@ -66,8 +54,8 @@ class WebPushServiceTest extends TestCase
         $this->configuration
             ->method('get')
             ->willReturnMap([
-                ['push.enableWebPush', 'true'],
-                ['push.vapidPublicKey', ''],
+                ['push.enableWebPush',   'true'],
+                ['push.vapidPublicKey',  ''],
                 ['push.vapidPrivateKey', 'privateKeyValue'],
             ]);
 
@@ -79,8 +67,8 @@ class WebPushServiceTest extends TestCase
         $this->configuration
             ->method('get')
             ->willReturnMap([
-                ['push.enableWebPush', 'true'],
-                ['push.vapidPublicKey', 'BNcR...publicKey'],
+                ['push.enableWebPush',   'true'],
+                ['push.vapidPublicKey',  'BNcR...publicKey'],
                 ['push.vapidPrivateKey', ''],
             ]);
 
@@ -122,14 +110,12 @@ class WebPushServiceTest extends TestCase
         $this->configuration
             ->method('get')
             ->willReturnMap([
-                ['push.enableWebPush', 'false'],
-                ['push.vapidPublicKey', ''],
+                ['push.enableWebPush',   'false'],
+                ['push.vapidPublicKey',  ''],
                 ['push.vapidPrivateKey', ''],
             ]);
 
-        $this->repository
-            ->expects($this->never())
-            ->method('getAll');
+        $this->repository->expects($this->never())->method('getAll');
 
         $this->service->sendToAll('Test', 'Body');
     }
@@ -139,14 +125,12 @@ class WebPushServiceTest extends TestCase
         $this->configuration
             ->method('get')
             ->willReturnMap([
-                ['push.enableWebPush', 'true'],
-                ['push.vapidPublicKey', 'BNcR...publicKey'],
+                ['push.enableWebPush',   'true'],
+                ['push.vapidPublicKey',  'BNcR...publicKey'],
                 ['push.vapidPrivateKey', 'privateKeyValue'],
             ]);
 
-        $this->repository
-            ->method('getAll')
-            ->willReturn([]);
+        $this->repository->method('getAll')->willReturn([]);
 
         $this->service->sendToAll('Test', 'Body');
 

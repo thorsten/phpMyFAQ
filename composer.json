@@ -21,6 +21,8 @@
     "ext-filter": "*",
     "ext-gd": "*",
     "ext-json": "*",
+    "ext-mbstring": "*",
+    "ext-openssl": "*",
     "ext-sodium": "*",
     "ext-xml": "*",
     "ext-xmlwriter": "*",
@@ -66,9 +68,10 @@
     "zircote/swagger-php": "^6.0"
   },
   "suggest": {
+    "ext-bcmath": "*",
     "ext-frankenphp": "*",
+    "ext-gmp": "*",
     "ext-ldap": "*",
-    "ext-openssl": "*",
     "ext-pdo": "*",
     "ext-pgsql": "*",
     "ext-sqlite3": "*",

@@ -122,7 +122,7 @@ abstract class AbstractFrontController extends AbstractController
                     $this->configuration->get('push.enableWebPush') === 'true'
                     || $this->configuration->get('push.enableWebPush') === true
                 )
-                    && $this->configuration->get('push.vapidPublicKey') !== '',
+                    && !empty($this->configuration->get('push.vapidPublicKey')),
         ];
     }
 

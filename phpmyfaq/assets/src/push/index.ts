@@ -14,6 +14,7 @@
  */
 
 import { getVapidPublicKey, subscribePush, unsubscribePush } from '../api/push';
+import { addElement } from '../utils';
 
 const PUSH_DISMISSED_KEY = 'pmf-push-banner-dismissed';
 
@@ -21,7 +22,10 @@ const urlBase64ToUint8Array = (base64String: string): Uint8Array => {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
   const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
+
+  // Use an explicit ArrayBuffer so TypeScript knows the backing store is an ArrayBuffer (not ArrayBufferLike)
+  const buffer = new ArrayBuffer(rawData.length);
+  const outputArray = new Uint8Array(buffer);
 
   for (let i = 0; i < rawData.length; ++i) {
     outputArray[i] = rawData.charCodeAt(i);
@@ -48,10 +52,24 @@ const showToast = (message: string, type: 'success' | 'danger'): void => {
     return;
   }
 
-  const alert = document.createElement('div');
-  alert.className = `alert alert-${type} alert-dismissible fade show`;
-  alert.role = 'alert';
-  alert.innerHTML = `${message}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`;
+  const messageNode = document.createTextNode(message);
+
+  const closeButton = addElement('button', {
+    type: 'button',
+    className: 'btn-close',
+    'data-bs-dismiss': 'alert',
+    ariaLabel: 'Close',
+  });
+
+  const alert = addElement(
+    'div',
+    {
+      className: `alert alert-${type} alert-dismissible fade show`,
+      role: 'alert',
+    },
+    [messageNode, closeButton]
+  );
+
   container.appendChild(alert);
 
   setTimeout(() => {
@@ -66,7 +84,7 @@ const subscribeUser = async (
 ): Promise<PushSubscription> => {
   const subscription = await registration.pushManager.subscribe({
     userVisibleOnly: true,
-    applicationServerKey: urlBase64ToUint8Array(vapidPublicKey),
+    applicationServerKey: urlBase64ToUint8Array(vapidPublicKey) as unknown as BufferSource,
   });
 
   await subscribePush(subscription);
@@ -234,8 +252,11 @@ export const handlePushNotifications = async (): Promise<void> => {
       return;
     }
 
-    // Register service worker - use absolute path from site root
-    const registration = await navigator.serviceWorker.register('/sw.js');
+    // Register service worker - compute URL from base href to support subdirectory installs
+    const baseElement = document.querySelector('base');
+    const baseHref = baseElement?.getAttribute('href') ?? '/';
+    const swUrl = new URL('sw.js', baseHref).href;
+    const registration = await navigator.serviceWorker.register(swUrl);
     const existingSubscription = await registration.pushManager.getSubscription();
     const isSubscribed = existingSubscription !== null;
 

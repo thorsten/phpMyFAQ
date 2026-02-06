@@ -16,7 +16,7 @@ describe('Push API', () => {
         } as Response)
       );
 
-      const result = await fetchGenerateVapidKeys();
+      const result = await fetchGenerateVapidKeys('csrf-token');
 
       expect(result).toEqual(mockResponse);
       expect(globalThis.fetch).toHaveBeenCalledWith('./api/push/generate-vapid-keys', {
@@ -25,6 +25,7 @@ describe('Push API', () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ csrf: 'csrf-token' }),
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
       });
@@ -34,7 +35,7 @@ describe('Push API', () => {
       const mockError = new Error('Fetch failed');
       globalThis.fetch = vi.fn(() => Promise.reject(mockError));
 
-      await expect(fetchGenerateVapidKeys()).rejects.toThrow(mockError);
+      await expect(fetchGenerateVapidKeys('csrf-token')).rejects.toThrow(mockError);
     });
   });
 });

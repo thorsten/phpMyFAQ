@@ -93,6 +93,8 @@ class System
         'gd',
         'intl',
         'json',
+        'mbstring',
+        'openssl',
         'sodium',
         'xml',
         'zip',

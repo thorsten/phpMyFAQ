@@ -46,6 +46,10 @@ readonly class PushSubscriptionRepository
         $query = sprintf("SELECT id FROM %s WHERE endpoint_hash = '%s'", $this->table, $db->escape($endpointHash));
 
         $result = $db->query($query);
+        if ($result === false) {
+            return false;
+        }
+
         $existing = $db->fetchObject($result);
 
         if ($existing) {
@@ -126,6 +130,42 @@ readonly class PushSubscriptionRepository
         $query = sprintf('SELECT * FROM %s WHERE user_id = %d ORDER BY created_at DESC', $this->table, $userId);
 
         $result = $db->query($query);
+        if ($result === false) {
+            return [];
+        }
+
+        $subscriptions = [];
+
+        $row = $db->fetchObject($result);
+        while ($row) {
+            $subscriptions[] = $this->mapRowToEntity($row);
+            $row = $db->fetchObject($result);
+        }
+
+        return $subscriptions;
+    }
+
+    /**
+     * Gets all subscriptions for multiple users.
+     *
+     * @param int[] $userIds
+     * @return PushSubscriptionEntity[]
+     */
+    public function getByUserIds(array $userIds): array
+    {
+        if ($userIds === []) {
+            return [];
+        }
+
+        $db = $this->configuration->getDb();
+        $ids = implode(',', array_map('intval', $userIds));
+        $query = sprintf('SELECT * FROM %s WHERE user_id IN (%s) ORDER BY created_at DESC', $this->table, $ids);
+
+        $result = $db->query($query);
+        if ($result === false) {
+            return [];
+        }
+
         $subscriptions = [];
 
         $row = $db->fetchObject($result);
@@ -148,6 +188,10 @@ readonly class PushSubscriptionRepository
         $query = sprintf('SELECT * FROM %s ORDER BY created_at DESC', $this->table);
 
         $result = $db->query($query);
+        if ($result === false) {
+            return [];
+        }
+
         $subscriptions = [];
 
         $row = $db->fetchObject($result);
@@ -168,6 +212,10 @@ readonly class PushSubscriptionRepository
         $query = sprintf('SELECT id FROM %s WHERE user_id = %d', $this->table, $userId);
 
         $result = $db->query($query);
+        if ($result === false) {
+            return false;
+        }
+
         return (bool) $db->fetchObject($result);
     }
 

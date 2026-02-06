@@ -21,7 +21,10 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Push\WebPushService;
+use phpMyFAQ\Session\Token;
+use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -31,24 +34,40 @@ final class PushController extends AbstractAdministrationApiController
      * Generates a new VAPID key pair and saves it to configuration.
      */
     #[Route(path: 'push/generate-vapid-keys', name: 'admin.api.push.generate-vapid-keys', methods: ['POST'])]
-    public function generateVapidKeys(): JsonResponse
+    public function generateVapidKeys(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $keys = WebPushService::generateVapidKeys();
+        $data = json_decode($request->getContent());
 
-        $this->configuration->update(['push.vapidPublicKey' => $keys['publicKey']]);
-        $this->configuration->update(['push.vapidPrivateKey' => $keys['privateKey']]);
-
-        if ($this->configuration->get('push.vapidSubject') === '') {
-            $this->configuration->update([
-                'push.vapidSubject' => 'mailto:' . $this->configuration->getAdminEmail(),
-            ]);
+        if (!Token::getInstance($this->session)->verifyToken('pmf-csrf-token', $data->csrf ?? '')) {
+            return $this->json([
+                'success' => false,
+                'error' => Translation::get('msgNoPermission'),
+            ], Response::HTTP_UNAUTHORIZED);
         }
 
-        return $this->json([
-            'success' => true,
-            'publicKey' => $keys['publicKey'],
-        ], Response::HTTP_OK);
+        try {
+            $keys = WebPushService::generateVapidKeys();
+
+            $this->configuration->update(['push.vapidPublicKey' => $keys['publicKey']]);
+            $this->configuration->update(['push.vapidPrivateKey' => $keys['privateKey']]);
+
+            if (($this->configuration->get('push.vapidSubject') ?? '') === '') {
+                $this->configuration->update([
+                    'push.vapidSubject' => 'mailto:' . $this->configuration->getAdminEmail(),
+                ]);
+            }
+
+            return $this->json([
+                'success' => true,
+                'publicKey' => $keys['publicKey'],
+            ], Response::HTTP_OK);
+        } catch (\Throwable $e) {
+            return $this->json([
+                'success' => false,
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

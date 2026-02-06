@@ -67,6 +67,11 @@ class Permission
             );
 
             $result = $this->configuration->getDb()->query($checkQuery);
+            if ($result === false) {
+                // Query failed, skip this permission to avoid further errors
+                continue;
+            }
+
             if ($this->configuration->getDb()->numRows($result) > 0) {
                 continue; // Permission already exists, skip
             }
@@ -80,7 +85,11 @@ class Permission
                 $id,
             );
 
-            $this->configuration->getDb()->query($query);
+            $insertResult = $this->configuration->getDb()->query($query);
+            if ($insertResult === false) {
+                // Insert failed, continue with next permission
+                continue;
+            }
         }
 
         return true;

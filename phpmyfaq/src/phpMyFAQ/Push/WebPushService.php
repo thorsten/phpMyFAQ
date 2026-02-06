@@ -39,14 +39,13 @@ readonly class WebPushService
     public function isEnabled(): bool
     {
         $enableWebPush = $this->configuration->get('push.enableWebPush');
-        // Handle both string 'true' and boolean true
-        $isEnabled = $enableWebPush === 'true' || $enableWebPush === true;
+        // Handle null, string 'true', and boolean true
+        $isEnabled = $enableWebPush !== null && ($enableWebPush === 'true' || $enableWebPush === true);
 
-        return (
-            $isEnabled
-            && $this->configuration->get('push.vapidPublicKey') !== ''
-            && $this->configuration->get('push.vapidPrivateKey') !== ''
-        );
+        $vapidPublicKey = $this->configuration->get('push.vapidPublicKey');
+        $vapidPrivateKey = $this->configuration->get('push.vapidPrivateKey');
+
+        return $isEnabled && !empty($vapidPublicKey) && !empty($vapidPrivateKey);
     }
 
     /**
@@ -94,6 +93,25 @@ readonly class WebPushService
         }
 
         $subscriptions = $this->repository->getByUserId($userId);
+        if ($subscriptions === []) {
+            return;
+        }
+
+        $this->sendToSubscriptions($subscriptions, $title, $body, $url, $tag);
+    }
+
+    /**
+     * Sends a push notification to multiple specific users.
+     *
+     * @param int[] $userIds
+     */
+    public function sendToUsers(array $userIds, string $title, string $body, string $url = '', string $tag = ''): void
+    {
+        if (!$this->isEnabled() || $userIds === []) {
+            return;
+        }
+
+        $subscriptions = $this->repository->getByUserIds($userIds);
         if ($subscriptions === []) {
             return;
         }

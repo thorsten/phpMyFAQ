@@ -34,7 +34,7 @@ final class PushController extends AbstractController
     /**
      * Returns the VAPID public key and whether push is enabled.
      */
-    #[Route(path: 'push/vapid-public-key', name: 'api.private.push.vapid-public-key', methods: ['GET'])]
+    #[Route(path: 'push/vapid-public-key', name: 'api.public.push.vapid-public-key', methods: ['GET'])]
     public function getVapidPublicKey(): JsonResponse
     {
         /** @var WebPushService $webPushService */
@@ -48,15 +48,17 @@ final class PushController extends AbstractController
 
     /**
      * Subscribes the current user to push notifications.
-     *
-     * @throws \JsonException
      */
     #[Route(path: 'push/subscribe', name: 'api.private.push.subscribe', methods: ['POST'])]
     public function subscribe(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
 
-        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        try {
+            $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        } catch (\JsonException) {
+            return $this->json(['error' => 'Invalid JSON payload'], Response::HTTP_BAD_REQUEST);
+        }
 
         $endpoint = Filter::filterVar($data->endpoint ?? '', FILTER_SANITIZE_URL);
         $publicKey = Filter::filterVar($data->publicKey ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -88,15 +90,17 @@ final class PushController extends AbstractController
 
     /**
      * Unsubscribes the current user from push notifications.
-     *
-     * @throws \JsonException
      */
     #[Route(path: 'push/unsubscribe', name: 'api.private.push.unsubscribe', methods: ['POST'])]
     public function unsubscribe(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
 
-        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        try {
+            $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        } catch (\JsonException) {
+            return $this->json(['error' => 'Invalid JSON payload'], Response::HTTP_BAD_REQUEST);
+        }
 
         $endpoint = Filter::filterVar($data->endpoint ?? '', FILTER_SANITIZE_URL);
 

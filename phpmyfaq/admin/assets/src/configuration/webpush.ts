@@ -73,7 +73,8 @@ export const handleWebPush = async (): Promise<void> => {
       '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
 
     try {
-      const response = await fetchGenerateVapidKeys();
+      const csrfToken = (document.getElementById('pmf-csrf-token') as HTMLInputElement)?.value ?? '';
+      const response = await fetchGenerateVapidKeys(csrfToken);
 
       if (response.success) {
         publicKeyInput.value = response.publicKey;

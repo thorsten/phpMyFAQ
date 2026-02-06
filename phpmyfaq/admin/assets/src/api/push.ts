@@ -21,7 +21,7 @@ export interface VapidKeysResponse {
   error?: string;
 }
 
-export const fetchGenerateVapidKeys = async (): Promise<VapidKeysResponse> => {
+export const fetchGenerateVapidKeys = async (csrfToken: string): Promise<VapidKeysResponse> => {
   return (await fetchJson('./api/push/generate-vapid-keys', {
     method: 'POST',
     cache: 'no-cache',
@@ -30,5 +30,6 @@ export const fetchGenerateVapidKeys = async (): Promise<VapidKeysResponse> => {
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
+    body: JSON.stringify({ csrf: csrfToken }),
   })) as VapidKeysResponse;
 };

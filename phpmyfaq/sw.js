@@ -53,18 +53,19 @@ self.addEventListener('push', (event) => {
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
-  const url = event.notification.data?.url || '/';
+  // Resolve relative URL to absolute URL for proper comparison with client.url
+  const resolvedUrl = new self.URL(event.notification.data?.url || '/', self.location.origin).href;
 
   event.waitUntil(
     self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
       for (const client of clientList) {
-        if (client.url === url && 'focus' in client) {
+        if (client.url === resolvedUrl && 'focus' in client) {
           return client.focus();
         }
       }
 
       if (self.clients.openWindow) {
-        return self.clients.openWindow(url);
+        return self.clients.openWindow(resolvedUrl);
       }
     })
   );
