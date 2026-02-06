@@ -239,6 +239,14 @@ readonly class PushSubscriptionRepository
     private function mapRowToEntity(object $row): PushSubscriptionEntity
     {
         $entity = new PushSubscriptionEntity();
+
+        try {
+            $createdAt = new DateTimeImmutable($row->created_at);
+        } catch (\Exception) {
+            // Fallback to current time if created_at is malformed
+            $createdAt = new DateTimeImmutable();
+        }
+
         $entity
             ->setId((int) $row->id)
             ->setUserId((int) $row->user_id)
@@ -247,7 +255,7 @@ readonly class PushSubscriptionRepository
             ->setPublicKey($row->public_key)
             ->setAuthToken($row->auth_token)
             ->setContentEncoding($row->content_encoding)
-            ->setCreatedAt(new DateTimeImmutable($row->created_at));
+            ->setCreatedAt($createdAt);
 
         return $entity;
     }
