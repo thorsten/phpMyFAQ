@@ -352,7 +352,12 @@ class TableBuilderTest extends TestCase
     public function testAutoIncrementSkipsExplicitPrimaryKey(): void
     {
         $sqliteBuilder = new TableBuilder(new SqliteDialect());
-        $sql = $sqliteBuilder->table('test', false)->autoIncrement('id')->varchar('name', 100)->primaryKey('id')->build(); // This should be ignored when autoIncrement is used
+        $sql = $sqliteBuilder
+            ->table('test', false)
+            ->autoIncrement('id')
+            ->varchar('name', 100)
+            ->primaryKey('id')
+            ->build(); // This should be ignored when autoIncrement is used
 
         // Should still only have one PRIMARY KEY (from autoIncrement)
         $count = substr_count($sql, 'PRIMARY KEY');

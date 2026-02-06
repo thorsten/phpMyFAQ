@@ -105,7 +105,7 @@ class MigrationRegistryTest extends TestCase
 
     public function testGetPendingMigrationsFromCurrentVersion(): void
     {
-        $pending = $this->registry->getPendingMigrations('4.2.0-alpha');
+        $pending = $this->registry->getPendingMigrations('4.2.0-alpha.2');
 
         $this->assertEmpty($pending);
     }

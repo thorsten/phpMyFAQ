@@ -293,6 +293,44 @@
       </div>
       {% endif %}
 
+      {% if pushEnabled %}
+      <!-- Push Notifications -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="h6 m-0 font-weight-bold">
+            <i aria-hidden="true" class="bi bi-bell"></i>
+            {{ 'msgPushNotifications' | translate }}
+          </h6>
+        </div>
+        <div class="card-body">
+          <p class="pb-3 mb-3">
+            {{ 'msgPushNotificationsDescription' | translate }}
+          </p>
+
+          <div id="pmf-push-toast-container"></div>
+
+          <div class="row">
+            <div class="col-12 text-end">
+              <button
+                type="button"
+                class="btn btn-primary"
+                id="pmf-push-toggle"
+                disabled
+                data-label-enable="{{ 'msgPushNotificationsEnable' | translate }}"
+                data-label-disable="{{ 'msgPushNotificationsDisable' | translate }}"
+                data-label-not-supported="{{ 'msgPushNotificationsNotSupported' | translate }}"
+                data-msg-enabled="{{ 'msgPushNotificationsEnabled' | translate }}"
+                data-msg-disabled="{{ 'msgPushNotificationsDisabled' | translate }}"
+                data-msg-permission-denied="{{ 'msgPushNotificationsPermissionDenied' | translate }}"
+              >
+                {{ 'msgPushNotificationsEnable' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
       <!-- EU Data Act data export -->
       <div class="card shadow mb-4">
         <div class="card-header py-3">

@@ -5,3 +5,4 @@ export * from './instance';
 export * from './opensearch';
 export * from './stopwords';
 export * from './upgrade';
+export * from './webpush';

@@ -963,6 +963,28 @@ class User
     }
 
     /**
+     * Returns an array of user IDs that have the superadmin flag set.
+     *
+     * @return int[]
+     */
+    public static function getSuperAdminIds(Configuration $configuration): array
+    {
+        $query = sprintf('SELECT user_id FROM %sfaquser WHERE is_superadmin = 1', Database::getTablePrefix());
+
+        $result = $configuration->getDb()->query($query);
+        if ($result === false) {
+            return [];
+        }
+
+        $superAdminIds = [];
+        while ($row = $configuration->getDb()->fetchObject($result)) {
+            $superAdminIds[] = (int) $row->user_id;
+        }
+
+        return $superAdminIds;
+    }
+
+    /**
      * Terminates the session ID of user
      */
     public function terminateSessionId(): bool

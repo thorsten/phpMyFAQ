@@ -284,7 +284,8 @@ final class UserController extends AbstractAdministrationApiController
         $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT);
 
         $currentUser->getUserById($userId, allowBlockedUsers: true);
-        if ($currentUser->getStatus() === 'protected' || $userId === 1) {
+        $superAdminIds = User::getSuperAdminIds($this->configuration);
+        if ($currentUser->getStatus() === 'protected' || in_array($userId, $superAdminIds, true)) {
             return $this->json(['error' => Translation::get(
                 key: 'ad_user_error_protectedAccount',
             )], Response::HTTP_BAD_REQUEST);

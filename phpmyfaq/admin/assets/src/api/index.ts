@@ -12,6 +12,7 @@ export * from './markdown';
 export * from './media-browser';
 export * from './news';
 export * from './opensearch';
+export * from './push';
 export * from './page';
 export * from './question';
 export * from './statistics';

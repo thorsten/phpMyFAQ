@@ -25,7 +25,6 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Notification;
 use phpMyFAQ\Question;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -120,7 +119,7 @@ final class QuestionController extends AbstractController
 
         $categories = $category->getAllCategories();
 
-        $notification = new Notification($this->configuration);
+        $notification = $this->container->get('phpmyfaq.notification');
         $notification->sendQuestionSuccessMail($questionEntity, $categories);
 
         return $this->json(['stored' => true], Response::HTTP_CREATED);

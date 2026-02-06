@@ -38,6 +38,7 @@ import { calculateReadingTime, handlePasswordStrength, handlePasswordToggle, han
 import './utils/tooltip';
 import { handleWebAuthn } from './webauthn/webauthn';
 import { handleChat } from './chat';
+import { handlePushNotifications } from './push';
 
 document.addEventListener('DOMContentLoaded', (): void => {
   // Reload Captchas
@@ -112,4 +113,7 @@ document.addEventListener('DOMContentLoaded', (): void => {
 
   // Handle Chat
   handleChat();
+
+  // Handle Push Notifications
+  handlePushNotifications();
 });

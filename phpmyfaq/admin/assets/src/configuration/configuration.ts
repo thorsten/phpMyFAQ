@@ -29,6 +29,7 @@ import {
   fetchTranslationProvider,
   saveConfiguration,
 } from '../api';
+import { handleWebPush } from './webpush';
 import { Response } from '../interfaces';
 
 export const handleConfiguration = async (): Promise<void> => {
@@ -72,6 +73,9 @@ export const handleConfiguration = async (): Promise<void> => {
             break;
           case '#translation':
             await handleTranslationProvider();
+            break;
+          case '#push':
+            await handleWebPush();
             break;
         }
 

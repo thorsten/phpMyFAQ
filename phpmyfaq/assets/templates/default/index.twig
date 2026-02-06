@@ -228,6 +228,25 @@
   </div>
 </footer>
 
+<!-- Push notification opt-in banner -->
+{% if pushEnabled and isUserLoggedIn %}
+<div id="pmf-push-banner" class="position-fixed bottom-0 start-0 end-0 d-none" style="z-index: 1050;">
+  <div class="container">
+    <div class="alert alert-info alert-dismissible shadow-lg mb-0 rounded-0 rounded-top d-flex align-items-center" role="alert">
+      <i class="bi bi-bell fs-4 me-3 flex-shrink-0" aria-hidden="true"></i>
+      <div class="flex-grow-1">
+        <strong>{{ 'msgPushNotifications' | translate }}</strong>
+        <span class="ms-1 d-none d-md-inline">{{ 'msgPushNotificationsDescription' | translate }}</span>
+      </div>
+      <button type="button" class="btn btn-primary btn-sm ms-3 flex-shrink-0" id="pmf-push-banner-enable">
+        {{ 'msgPushNotificationsEnable' | translate }}
+      </button>
+      <button type="button" class="btn-close ms-2 flex-shrink-0" id="pmf-push-banner-dismiss" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+{% endif %}
+
 <!-- Frontend toasts -->
 <div class="toast-container position-fixed top-0 start-50 translate-middle-x mt-5 p-3">
   <div id="pmf-notification" class="toast align-items-center text-bg-success shadow border-0" role="alert"

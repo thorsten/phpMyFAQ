@@ -23,6 +23,7 @@ use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Link\Util\TitleSlugifier;
+use phpMyFAQ\Push\WebPushService;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 /**
@@ -45,6 +46,7 @@ readonly class Notification
      */
     public function __construct(
         private Configuration $configuration,
+        private ?WebPushService $webPushService = null,
     ) {
         $this->mail = new Mail($this->configuration);
         $this->faq = new Faq($this->configuration);
@@ -130,6 +132,9 @@ readonly class Notification
 
             $this->mail->send();
         }
+
+        // Note: Web push notification for new FAQs is sent from FaqController::create()
+        // with the public FAQ URL, which is more useful for end-users.
     }
 
     /**
@@ -298,6 +303,47 @@ readonly class Notification
             unset($mail);
         } catch (Exception|TransportExceptionInterface $exception) {
             $this->configuration->getLogger()->error('Error sending mail: ' . $exception->getMessage());
+        }
+
+        // Send push notification only to admin and category owner (not all subscribers)
+        // since the URL points to the admin area
+        $adminUserIds = [];
+        if ($userId > 0) {
+            $adminUserIds[] = $userId;
+        }
+        // Add all superadmins
+        $superAdminIds = User::getSuperAdminIds($this->configuration);
+        $adminUserIds = array_unique(array_merge($adminUserIds, $superAdminIds));
+
+        $this->sendWebPushToUsers(
+            $adminUserIds,
+            Translation::get(key: 'msgPushNewQuestion'),
+            mb_substr($questionEntity->getQuestion(), 0, 200),
+            $this->configuration->getDefaultUrl() . 'admin/',
+            'new-question',
+        );
+    }
+
+    /**
+     * Sends a web push notification to specific users.
+     *
+     * @param int[] $userIds
+     */
+    private function sendWebPushToUsers(
+        array $userIds,
+        string $title,
+        string $body,
+        string $url = '',
+        string $tag = '',
+    ): void {
+        if ($this->webPushService === null || !$this->webPushService->isEnabled()) {
+            return;
+        }
+
+        try {
+            $this->webPushService->sendToUsers($userIds, $title, $body, $url, $tag);
+        } catch (\Throwable $exception) {
+            $this->configuration->getLogger()->error('Web Push notification failed: ' . $exception->getMessage());
         }
     }
 }
