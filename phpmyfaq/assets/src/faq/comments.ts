@@ -13,6 +13,7 @@
  * @since     2016-01-11
  */
 
+import { Modal } from 'bootstrap';
 import { pushErrorNotification, pushNotification } from '../utils';
 import { createComment } from '../api';
 import { ApiResponse, CommentData } from '../interfaces';
@@ -24,10 +25,9 @@ let joditInstance: Jodit | null = null;
 
 export const handleSaveComment = (): void => {
   const saveButton = document.getElementById('pmf-button-save-comment') as HTMLButtonElement | null;
-  const modal = document.getElementById('pmf-modal-add-comment') as HTMLElement | null;
-  const modalBackdrop = document.getElementsByClassName('modal-backdrop fade show') as HTMLCollectionOf<HTMLElement>;
+  const modalElement = document.getElementById('pmf-modal-add-comment') as HTMLElement | null;
 
-  if (saveButton) {
+  if (saveButton && modalElement) {
     saveButton.addEventListener('click', async (event: MouseEvent) => {
       event.preventDefault();
       event.stopPropagation();
@@ -60,13 +60,9 @@ export const handleSaveComment = (): void => {
             pushErrorNotification(response.error);
           }
 
-          if (modal) {
-            modal.style.display = 'none';
-            modal.classList.remove('show');
-          }
-          if (modalBackdrop.length > 0) {
-            modalBackdrop[0].parentNode?.removeChild(modalBackdrop[0]);
-          }
+          // Close modal properly using Bootstrap's Modal API
+          const bootstrapModal = Modal.getInstance(modalElement) || new Modal(modalElement);
+          bootstrapModal.hide();
 
           // Destroy editor instance on successful submission
           destroyEditor();
