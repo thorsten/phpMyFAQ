@@ -21,7 +21,6 @@ namespace phpMyFAQ\Push;
 
 use DateTimeImmutable;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\PushSubscriptionEntity;
 
@@ -67,7 +66,7 @@ readonly class PushSubscriptionRepository
             if ($result !== false) {
                 return true;
             }
-        } catch (Exception) {
+        } catch (\Throwable) {
             // Likely a duplicate key constraint violation, fall through to update
         }
 
@@ -86,7 +85,7 @@ readonly class PushSubscriptionRepository
 
         try {
             return (bool) $db->query($updateQuery);
-        } catch (Exception) {
+        } catch (\Throwable) {
             return false;
         }
     }
