@@ -100,6 +100,23 @@ readonly class PushSubscriptionRepository
     }
 
     /**
+     * Deletes a subscription by endpoint hash scoped to a specific user.
+     * This ensures users can only delete their own subscriptions.
+     */
+    public function deleteByEndpointHashAndUserId(string $endpointHash, int $userId): bool
+    {
+        $db = $this->configuration->getDb();
+        $query = sprintf(
+            "DELETE FROM %s WHERE endpoint_hash = '%s' AND user_id = %d",
+            $this->table,
+            $db->escape($endpointHash),
+            $userId,
+        );
+
+        return (bool) $db->query($query);
+    }
+
+    /**
      * Deletes all subscriptions for a user.
      */
     public function deleteByUserId(int $userId): bool

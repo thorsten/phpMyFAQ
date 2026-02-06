@@ -311,10 +311,9 @@ readonly class Notification
         if ($userId > 0) {
             $adminUserIds[] = $userId;
         }
-        // Add main admin (user ID 1 is typically the super admin)
-        if (!in_array(1, $adminUserIds, true)) {
-            $adminUserIds[] = 1;
-        }
+        // Add all superadmins
+        $superAdminIds = User::getSuperAdminIds($this->configuration);
+        $adminUserIds = array_unique(array_merge($adminUserIds, $superAdminIds));
 
         $this->sendWebPushToUsers(
             $adminUserIds,

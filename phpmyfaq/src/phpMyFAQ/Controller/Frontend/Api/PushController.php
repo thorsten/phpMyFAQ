@@ -111,8 +111,9 @@ final class PushController extends AbstractController
         /** @var PushSubscriptionRepository $repository */
         $repository = $this->container->get('phpmyfaq.push.subscription-repository');
         $endpointHash = hash('sha256', $endpoint);
+        $userId = $this->currentUser->getUserId();
 
-        if ($repository->deleteByEndpointHash($endpointHash)) {
+        if ($repository->deleteByEndpointHashAndUserId($endpointHash, $userId)) {
             return $this->json(['success' => true], Response::HTTP_OK);
         }
 
