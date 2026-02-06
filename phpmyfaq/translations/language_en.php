@@ -1650,7 +1650,7 @@ $PMF_LANG['msgOtherQuestionDesc'] = 'There is one more open question in another 
 $PMF_LANG['msgChangeLanguageHint'] = 'Please change the language in the administration to process these questions.';
 $PMF_LANG['msgOpenQuestion'] = 'Open question';
 
-// added v4.2.0-alpha.2 - 2026-02-02 - Web Push Notifications
+// added v4.2.0-alpha - 2026-02-02 - Web Push Notifications
 $LANG_CONF['push.enableWebPush'] = ['checkbox', 'Enable Web Push notifications'];
 $LANG_CONF['push.vapidPublicKey'] = ['print', 'VAPID Public Key'];
 $LANG_CONF['push.vapidPrivateKey'] = ['print', 'VAPID Private Key'];
