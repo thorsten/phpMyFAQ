@@ -21,6 +21,7 @@ namespace phpMyFAQ\Push;
 
 use DateTimeImmutable;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\PushSubscriptionEntity;
 
@@ -36,40 +37,16 @@ readonly class PushSubscriptionRepository
 
     /**
      * Saves a push subscription (upsert by endpoint_hash).
+     *
+     * Uses an atomic approach: attempts INSERT first, and if a duplicate key
+     * constraint violation occurs, falls back to UPDATE to avoid race conditions.
      */
     public function save(PushSubscriptionEntity $entity): bool
     {
         $db = $this->configuration->getDb();
         $endpointHash = hash('sha256', $entity->getEndpoint());
 
-        // Check if subscription exists
-        $query = sprintf("SELECT id FROM %s WHERE endpoint_hash = '%s'", $this->table, $db->escape($endpointHash));
-
-        $result = $db->query($query);
-        if ($result === false) {
-            return false;
-        }
-
-        $existing = $db->fetchObject($result);
-
-        if ($existing) {
-            // Update existing subscription
-            $updateQuery = sprintf(
-                "UPDATE %s SET user_id = %d, endpoint = '%s', public_key = '%s', auth_token = '%s', "
-                . "content_encoding = '%s' WHERE endpoint_hash = '%s'",
-                $this->table,
-                $entity->getUserId(),
-                $db->escape($entity->getEndpoint()),
-                $db->escape($entity->getPublicKey()),
-                $db->escape($entity->getAuthToken()),
-                $db->escape($entity->getContentEncoding() ?? 'aesgcm'),
-                $db->escape($endpointHash),
-            );
-
-            return (bool) $db->query($updateQuery);
-        }
-
-        // Insert new subscription
+        // Try to insert first (atomic approach to avoid race conditions)
         $nextId = $db->nextId($this->table, 'id');
         $insertQuery = sprintf(
             'INSERT INTO %s (id, user_id, endpoint, endpoint_hash, public_key, auth_token, content_encoding, created_at)'
@@ -85,7 +62,33 @@ readonly class PushSubscriptionRepository
             $db->now(),
         );
 
-        return (bool) $db->query($insertQuery);
+        try {
+            $result = $db->query($insertQuery);
+            if ($result !== false) {
+                return true;
+            }
+        } catch (Exception) {
+            // Likely a duplicate key constraint violation, fall through to update
+        }
+
+        // INSERT failed (duplicate key constraint), perform UPDATE instead
+        $updateQuery = sprintf(
+            "UPDATE %s SET user_id = %d, endpoint = '%s', public_key = '%s', auth_token = '%s', "
+            . "content_encoding = '%s' WHERE endpoint_hash = '%s'",
+            $this->table,
+            $entity->getUserId(),
+            $db->escape($entity->getEndpoint()),
+            $db->escape($entity->getPublicKey()),
+            $db->escape($entity->getAuthToken()),
+            $db->escape($entity->getContentEncoding() ?? 'aesgcm'),
+            $db->escape($endpointHash),
+        );
+
+        try {
+            return (bool) $db->query($updateQuery);
+        } catch (Exception) {
+            return false;
+        }
     }
 
     /**
