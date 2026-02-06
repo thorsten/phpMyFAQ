@@ -18,5 +18,23 @@ const ignoresConfig = globalIgnores([
 export default defineConfig([
   {
     extends: [ignoresConfig, eslint.configs.recommended, tseslint.configs.strict],
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
+    },
+  },
+  {
+    files: ['phpmyfaq/sw.js'],
+    languageOptions: {
+      globals: {
+        self: 'readonly',
+      },
+    },
   },
 ]);

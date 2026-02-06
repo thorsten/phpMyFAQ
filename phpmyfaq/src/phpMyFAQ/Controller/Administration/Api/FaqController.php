@@ -43,6 +43,7 @@ use phpMyFAQ\Instance\Search\OpenSearch;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
 use phpMyFAQ\Link\Util\TitleSlugifier;
+use phpMyFAQ\Push\WebPushService;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Session\Token;
@@ -256,6 +257,32 @@ final class FaqController extends AbstractAdministrationApiController
                     'keywords' => $faqData->getKeywords(),
                     'category_id' => $categories[0],
                 ]);
+            }
+
+            // Send Web Push notification for new active FAQs.
+            // This is done here (not in Notification::sendNewFaqAdded) to provide
+            // the public FAQ URL, which is more useful for end-users.
+            if ($faqData->isActive()) {
+                try {
+                    /** @var WebPushService $webPushService */
+                    $webPushService = $this->container->get('phpmyfaq.push.web-push-service');
+                    $faqUrl = sprintf(
+                        '%scontent/%d/%d/%s/%s.html',
+                        $this->configuration->getDefaultUrl(),
+                        $categories[0],
+                        $faqData->getId(),
+                        $faqData->getLanguage(),
+                        TitleSlugifier::slug($faqData->getQuestion()),
+                    );
+                    $webPushService->sendToAll(
+                        Translation::get('msgPushNewFaq'),
+                        $faqData->getQuestion(),
+                        $faqUrl,
+                        'new-faq-' . $faqData->getId(),
+                    );
+                } catch (\Throwable $e) {
+                    $this->configuration->getLogger()->error('Send web push notification failed: ' . $e->getMessage());
+                }
             }
 
             return $this->json([

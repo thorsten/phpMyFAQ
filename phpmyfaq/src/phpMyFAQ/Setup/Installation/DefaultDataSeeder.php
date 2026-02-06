@@ -282,6 +282,10 @@ class DefaultDataSeeder
             'layout.enableCookieConsent' => 'true',
             'layout.contactInformationHTML' => 'false',
             'layout.customCss' => '',
+            'push.enableWebPush' => 'false',
+            'push.vapidPublicKey' => '',
+            'push.vapidPrivateKey' => '',
+            'push.vapidSubject' => '',
         ];
 
         // Apply dynamic values

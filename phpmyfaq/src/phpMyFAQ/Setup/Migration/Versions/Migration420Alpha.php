@@ -390,5 +390,134 @@ readonly class Migration420Alpha extends AbstractMigration
                 'Create created_at index on chat messages (SQL Server)',
             );
         }
+
+        // Create a push subscriptions table
+        if ($this->isMySql()) {
+            $recorder->addSql(sprintf(
+                'CREATE TABLE IF NOT EXISTS %sfaqpush_subscriptions (
+                    id INT(11) NOT NULL AUTO_INCREMENT,
+                    user_id INT(11) NOT NULL,
+                    endpoint TEXT NOT NULL,
+                    endpoint_hash VARCHAR(64) NOT NULL,
+                    public_key TEXT NOT NULL,
+                    auth_token TEXT NOT NULL,
+                    content_encoding VARCHAR(50) NULL,
+                    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (id),
+                    INDEX idx_push_user_id (user_id),
+                    UNIQUE INDEX idx_push_endpoint_hash (endpoint_hash)
+                ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+                $this->tablePrefix,
+            ), 'Create push subscriptions table (MySQL)');
+        } elseif ($this->isPostgreSql()) {
+            $recorder->addSql(sprintf(
+                'CREATE TABLE IF NOT EXISTS %sfaqpush_subscriptions (
+                    id SERIAL NOT NULL,
+                    user_id INTEGER NOT NULL,
+                    endpoint TEXT NOT NULL,
+                    endpoint_hash VARCHAR(64) NOT NULL,
+                    public_key TEXT NOT NULL,
+                    auth_token TEXT NOT NULL,
+                    content_encoding VARCHAR(50) NULL,
+                    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (id)
+                )',
+                $this->tablePrefix,
+            ), 'Create push subscriptions table (PostgreSQL)');
+
+            $recorder->addSql(
+                sprintf(
+                    'CREATE INDEX IF NOT EXISTS idx_push_user_id ON %sfaqpush_subscriptions (user_id)',
+                    $this->tablePrefix,
+                ),
+                'Create user_id index on push subscriptions (PostgreSQL)',
+            );
+
+            $recorder->addSql(
+                sprintf(
+                    'CREATE UNIQUE INDEX IF NOT EXISTS idx_push_endpoint_hash ON %sfaqpush_subscriptions (endpoint_hash)',
+                    $this->tablePrefix,
+                ),
+                'Create endpoint_hash unique index on push subscriptions (PostgreSQL)',
+            );
+        } elseif ($this->isSqlite()) {
+            $recorder->addSql(sprintf(
+                'CREATE TABLE IF NOT EXISTS %sfaqpush_subscriptions (
+                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER NOT NULL,
+                    endpoint TEXT NOT NULL,
+                    endpoint_hash VARCHAR(64) NOT NULL,
+                    public_key TEXT NOT NULL,
+                    auth_token TEXT NOT NULL,
+                    content_encoding VARCHAR(50) NULL,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )',
+                $this->tablePrefix,
+            ), 'Create push subscriptions table (SQLite)');
+
+            $recorder->addSql(
+                sprintf(
+                    'CREATE INDEX IF NOT EXISTS idx_push_user_id ON %sfaqpush_subscriptions (user_id)',
+                    $this->tablePrefix,
+                ),
+                'Create user_id index on push subscriptions (SQLite)',
+            );
+
+            $recorder->addSql(
+                sprintf(
+                    'CREATE UNIQUE INDEX IF NOT EXISTS idx_push_endpoint_hash ON %sfaqpush_subscriptions (endpoint_hash)',
+                    $this->tablePrefix,
+                ),
+                'Create endpoint_hash unique index on push subscriptions (SQLite)',
+            );
+        } elseif ($this->isSqlServer()) {
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'%sfaqpush_subscriptions') AND type = 'U') "
+                    . 'CREATE TABLE %sfaqpush_subscriptions (
+                    id INT IDENTITY(1,1) NOT NULL,
+                    user_id INT NOT NULL,
+                    endpoint NVARCHAR(MAX) NOT NULL,
+                    endpoint_hash VARCHAR(64) NOT NULL,
+                    public_key NVARCHAR(MAX) NOT NULL,
+                    auth_token NVARCHAR(MAX) NOT NULL,
+                    content_encoding VARCHAR(50) NULL,
+                    created_at DATETIME NOT NULL DEFAULT GETDATE(),
+                    PRIMARY KEY (id)
+                )',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create push subscriptions table (SQL Server)',
+            );
+
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_push_user_id'"
+                    . " AND object_id = OBJECT_ID(N'%sfaqpush_subscriptions'))"
+                    . ' CREATE INDEX idx_push_user_id ON %sfaqpush_subscriptions (user_id)',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create user_id index on push subscriptions (SQL Server)',
+            );
+
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_push_endpoint_hash'"
+                    . " AND object_id = OBJECT_ID(N'%sfaqpush_subscriptions'))"
+                    . ' CREATE UNIQUE INDEX idx_push_endpoint_hash ON %sfaqpush_subscriptions (endpoint_hash)',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create endpoint_hash unique index on push subscriptions (SQL Server)',
+            );
+        }
+
+        // Add Web Push configuration entries
+        $recorder->addConfig('push.enableWebPush', 'false');
+        $recorder->addConfig('push.vapidPublicKey', '');
+        $recorder->addConfig('push.vapidPrivateKey', '');
+        $recorder->addConfig('push.vapidSubject', '');
     }
 }

@@ -83,6 +83,7 @@ class DatabaseSchema
             'faqvisits' => $this->faqvisits(),
             'faqvoting' => $this->faqvoting(),
             'faqchat_messages' => $this->faqchatMessages(),
+            'faqpush_subscriptions' => $this->faqpushSubscriptions(),
         ];
     }
 
@@ -651,5 +652,21 @@ class DatabaseSchema
             ->index('idx_chat_recipient', 'recipient_id')
             ->index('idx_chat_conversation', ['sender_id', 'recipient_id'])
             ->index('idx_chat_created', 'created_at');
+    }
+
+    public function faqpushSubscriptions(): TableBuilder
+    {
+        return new TableBuilder($this->dialect)
+            ->table('faqpush_subscriptions')
+            ->autoIncrement('id')
+            ->integer('user_id', false)
+            ->text('endpoint', false)
+            ->varchar('endpoint_hash', 64, false)
+            ->text('public_key', false)
+            ->text('auth_token', false)
+            ->varchar('content_encoding', 50)
+            ->timestamp('created_at', false, true)
+            ->index('idx_push_user_id', 'user_id')
+            ->uniqueIndex('idx_push_endpoint_hash', 'endpoint_hash');
     }
 }
