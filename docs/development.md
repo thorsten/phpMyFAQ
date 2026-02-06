@@ -171,7 +171,43 @@ Please be aware that changes to the admin backend templates can break the functi
 The default CSS theme is located in the **assets/templates/default** directory and is stored in the file **theme.css**.
 You can create your own CSS theme by copying the default theme and modifying it to suit your needs.
 The CSS theme is based on Bootstrap’s CSS custom properties for fast and forward-looking design and development.
-We support a light and a dark mode in our default theme.
+phpMyFAQ officially supports three modes in the default theme: **Light**, **Dark**, and **High Contrast**.
+**Accessibility Guidelines:**
+The High Contrast mode is specifically engineered for users with visual impairments and features the __Atkinson Hyperlegible Next__ font to maximize character recognition.
+
+*   **Prioritize Legibility:** When customizing this mode, avoid "visual noise" such as text-shadows, transitions, or decorative gradients that could interfere with assistive technologies.
+*   **Contrast Standards:** Customizations **must** adhere to the [WCAG 2.2 Contrast Guidelines](https://www.w3.org/TR/WCAG22/). For the High Contrast theme, we aim for **Level AAA**, requiring a contrast ratio of at least **7:1** for normal text and **4.5:1** for large text.
+
+**Defining Mode-Specific CSS:**
+phpMyFAQ uses Bootstrap’s color mode architecture. You can target specific modes using the **data-bs-theme** attribute in your CSS:
+
+```css
+/* Default (Light) Mode */
+:root {
+    --primary-text: #212529;
+}
+
+/* Dark Mode */
+[data-bs-theme='dark'] {
+    --primary-text: #eceff9;
+}
+
+/* High Contrast Mode (A11y focused) */
+[data-bs-theme='high-contrast'] {
+    /* Enforce maximum contrast ratio (WCAG AAA) */
+    --primary-text: #ffff00;
+    --primary-bg: #000000;
+    
+    /* 
+       We use !important here to ensure that accessibility-critical styles 
+       cannot be accidentally overridden by decorative styles or third-party 
+       plugins, maintaining the integrity of the high-contrast interface.
+    */
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+```
+
 For more information, check out the documentation on [Bootstrap](https://getbootstrap.com/docs/5.3/customize/css-variables/).
 
 ## 8.4 Custom CSS
