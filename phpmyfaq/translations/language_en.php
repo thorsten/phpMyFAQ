@@ -98,10 +98,11 @@ $PMF_LANG["msgAskCategory"] = "Category";
 $PMF_LANG["msgAskYourQuestion"] = "Your question";
 $PMF_LANG["msgAskThx4Mail"] = "Thank you for your question!";
 $PMF_LANG["msgDate_User"] = "Date / User";
-$PMF_LANG["msgQuestion2"] = "Question";
+$PMF_LANG["msgQuestion2"] = "Category / Question";
 $PMF_LANG["msg2answer"] = "Answer";
 $PMF_LANG["msgQuestionText"] = "Here you can see questions asked by other users. If you answer these questions, your answers may be inserted into the FAQ.";
 $PMF_LANG["msgNoQuestionsAvailable"] = "Currently there are no pending questions.";
+$PMF_LANG["msgEmailTo"] = "Email to";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Email the FAQ owner";
