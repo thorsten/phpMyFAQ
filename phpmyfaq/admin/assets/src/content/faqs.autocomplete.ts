@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       fetch: async (text: string, update: (items: FaqItem[]) => void) => {
         const match = text.toLowerCase();
-        const faqs = await fetchFaqsByAutocomplete(match, csrfToken);
+        const faqs = (await fetchFaqsByAutocomplete(match, csrfToken)) as { success: FaqItem[] };
         update(
           faqs.success.filter((n: FaqItem) => {
             return n.question.toLowerCase().indexOf(match) !== -1;

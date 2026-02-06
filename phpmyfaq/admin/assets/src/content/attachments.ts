@@ -32,7 +32,7 @@ export const handleDeleteAttachments = (): void => {
         const csrf = newButton.getAttribute('data-csrf');
 
         if (attachmentId && csrf) {
-          const response = await deleteAttachments(attachmentId, csrf);
+          const response = (await deleteAttachments(attachmentId, csrf)) as unknown as Response;
 
           if (response.success) {
             pushNotification(response.success);

@@ -51,7 +51,7 @@ export const handleOpenQuestions = (): void => {
             );
             const questionsToDelete = document.querySelectorAll('tr td input:checked') as NodeListOf<HTMLInputElement>;
             questionsToDelete.forEach((toDelete) => {
-              toDelete.parentNode?.parentNode?.parentNode?.remove();
+              (toDelete.parentNode?.parentNode?.parentNode as HTMLElement | null)?.remove();
             });
           } else {
             responseMessage.append(addElement('div', { classList: 'alert alert-danger', innerText: response.error }));
@@ -77,15 +77,13 @@ export const handleToggleVisibility = (): void => {
         const visibility = element.getAttribute('data-pmf-visibility') as string;
         const csrfToken = element.getAttribute('data-pmf-csrf') as string;
 
-        const response = await toggleQuestionVisibility(questionId, visibility, csrfToken);
+        const response = await toggleQuestionVisibility(questionId, visibility === 'true', csrfToken);
 
-        if (response.success) {
+        if (response?.success) {
           element.innerText = response.success;
         } else {
-          pushErrorNotification(response.error);
+          pushErrorNotification(response?.error ?? 'An error occurred');
         }
-
-        console.log(questionId, visibility, csrfToken);
       });
     });
   }

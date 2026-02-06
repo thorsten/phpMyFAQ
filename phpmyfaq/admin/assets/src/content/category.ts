@@ -144,13 +144,13 @@ export const handleCategoryTranslate = (): void => {
     return;
   }
 
-  // Initialize translator when target language is selected
+  // Initialize translator when the target language is selected
   langSelect.addEventListener('change', () => {
     const sourceLang = originalLangInput.value;
     const targetLang = langSelect.value;
 
     if (sourceLang && targetLang && sourceLang !== targetLang) {
-      // Enable the translate button
+      // Enable the translation button
       translateButton.disabled = false;
 
       // Initialize the Translator
@@ -175,7 +175,7 @@ export const handleCategoryTranslate = (): void => {
         console.error('Failed to initialize translator:', error);
       }
     } else {
-      // Disable the translate button if same language or no target language
+      // Disable the translation button if same language or no target language
       translateButton.disabled = true;
     }
   });
