@@ -53,6 +53,10 @@ If a user is logged in, the name and e-mail address are filled automatically.
 ## 4.6 Ask questions
 
 On the _Ask question_ page, it's possible for all users to add a new question without an answer.
+
+Note for Guests:
+By default, guests can only submit questions if the administrator has enabled the setting "Allow adding questions for guests" in the configuration. If this setting is disabled, guests must log in to access the form.
+
 If the question is submitted, phpMyFAQ checks the words for the question and will do a full text search on the database
 with the existing FAQs.
 If we found some matches, the user will get some recommendations depending on the question he submitted.
@@ -65,9 +69,14 @@ If a user is logged in, the name and email address are filled automatically.
 
 ## 4.7 Open questions
 
-This page displays all open questions, and it's possible for all users to add an answer for this question.
-The user will be directed to the "Add FAQ" page.
-If the spam protection is enabled, they have to enter the correct captcha code, too.
+This page displays all open questions. Depending on the configuration and user permissions, the page offers the following options:
+
+*   **Answer question:** Users with the required permissions can add an answer. This is also available for guests if the setting **"Allow adding new FAQs for guests"** is enabled, as answering an open question technically creates a new FAQ entry. By clicking the button, the user is directed to the "Add FAQ" page, where the question and the category selected by the inquirer are automatically pre-filled into the form. If spam protection is enabled, the correct captcha code must also be entered.
+*   **Read answer:** If the option **"Close open question after answer?"** is enabled and an answer to a question already exists in the system, a direct link to the corresponding FAQ entry is displayed. This allows users to access the existing solution directly.
+
+If both the "Allow adding new FAQs for guests" setting and the "Close open question after answer?" setting are disabled or a user does not have the corresponding **user permissions**, the page serves as a read-only overview. In this case, **guests and restricted users** can view the questions but are not authorized to provide answers or access existing answers through this list.
+
+Furthermore, the **number of questions** that have not yet been approved or published by an administrator is displayed at the bottom of the list. This serves as a confirmation for inquirers that their submitted question has been successfully received by the system and is currently awaiting moderation.
 
 ## 4.8 User registration
 
