@@ -32,6 +32,56 @@ describe('addElement', () => {
 
     expect(result.childNodes.length).toBe(0);
   });
+
+  test('should handle data attributes with kebab-case', () => {
+    const properties = {
+      'data-pmf-id': '123',
+      'data-pmf-category-id-sticky': 'true',
+      'data-pmf-faq-id': '456',
+    };
+
+    const result: HTMLElement = addElement('button', properties);
+
+    expect(result.getAttribute('data-pmf-id')).toBe('123');
+    expect(result.getAttribute('data-pmf-category-id-sticky')).toBe('true');
+    expect(result.getAttribute('data-pmf-faq-id')).toBe('456');
+  });
+
+  test('should handle aria attributes', () => {
+    const properties = {
+      'aria-hidden': 'true',
+      'aria-label': 'Close',
+    };
+
+    const result: HTMLElement = addElement('button', properties);
+
+    expect(result.getAttribute('aria-hidden')).toBe('true');
+    expect(result.getAttribute('aria-label')).toBe('Close');
+  });
+
+  test('should handle classList property', () => {
+    const properties = {
+      classList: 'btn btn-primary btn-lg',
+    };
+
+    const result: HTMLElement = addElement('button', properties);
+
+    expect(result.classList.contains('btn')).toBe(true);
+    expect(result.classList.contains('btn-primary')).toBe(true);
+    expect(result.classList.contains('btn-lg')).toBe(true);
+  });
+
+  test('should handle boolean attributes', () => {
+    const properties = {
+      checked: true,
+      disabled: false,
+    };
+
+    const result: HTMLElement = addElement('input', properties);
+
+    expect(result.hasAttribute('checked')).toBe(true);
+    expect(result.hasAttribute('disabled')).toBe(false);
+  });
 });
 
 describe('escape', () => {
