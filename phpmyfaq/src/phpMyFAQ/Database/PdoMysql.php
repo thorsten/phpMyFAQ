@@ -275,11 +275,11 @@ class PdoMysql implements DatabaseDriver
         try {
             $result = $this->pdo->query($query);
         } catch (PDOException $pdoException) {
-            throw new Exception($pdoException->getMessage());
+            throw new Exception($pdoException->getMessage() . ' in query: ' . $query);
         }
 
         if (false === $result) {
-            $this->sqlLog .= $this->pdo->errorCode() . ': ' . $this->error();
+            $this->sqlLog .= $this->pdo->errorCode() . ': ' . $this->error() . ' in query: ' . $query;
         }
 
         return $result;

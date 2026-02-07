@@ -6,7 +6,6 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -58,10 +57,21 @@ class PermissionTest extends TestCase
     public function testAddUserPermissionSuccessfully(): void
     {
         $this->dbMock
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('query')
-            ->with($this->stringContains('INSERT INTO'))
-            ->willReturn(true);
+            ->willReturnCallback(function ($query) {
+                if (str_contains($query, 'SELECT 1 FROM')) {
+                    // Return a result that indicates no existing permission
+                    $result = $this->createMock(\SQLite3Result::class);
+                    $result->method('fetchArray')->willReturn(false);
+                    return $result;
+                }
+                return true;
+            });
+
+        $this->dbMock
+            ->method('numRows')
+            ->willReturn(0);
 
         $result = $this->permission->add(Permission::USER, 123, [456]);
         $this->assertTrue($result);
@@ -70,10 +80,20 @@ class PermissionTest extends TestCase
     public function testAddGroupPermissionSuccessfully(): void
     {
         $this->dbMock
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('query')
-            ->with($this->stringContains('INSERT INTO'))
-            ->willReturn(true);
+            ->willReturnCallback(function ($query) {
+                if (str_contains($query, 'SELECT 1 FROM')) {
+                    $result = $this->createMock(\SQLite3Result::class);
+                    $result->method('fetchArray')->willReturn(false);
+                    return $result;
+                }
+                return true;
+            });
+
+        $this->dbMock
+            ->method('numRows')
+            ->willReturn(0);
 
         $result = $this->permission->add(Permission::GROUP, 123, [789]);
         $this->assertTrue($result);
@@ -82,10 +102,20 @@ class PermissionTest extends TestCase
     public function testAddMultipleIdsSuccessfully(): void
     {
         $this->dbMock
-            ->expects($this->exactly(3))
+            ->expects($this->exactly(6)) // 3 SELECTs + 3 INSERTs
             ->method('query')
-            ->with($this->stringContains('INSERT INTO'))
-            ->willReturn(true);
+            ->willReturnCallback(function ($query) {
+                if (str_contains($query, 'SELECT 1 FROM')) {
+                    $result = $this->createMock(\SQLite3Result::class);
+                    $result->method('fetchArray')->willReturn(false);
+                    return $result;
+                }
+                return true;
+            });
+
+        $this->dbMock
+            ->method('numRows')
+            ->willReturn(0);
 
         $result = $this->permission->add(Permission::USER, 123, [456, 789, 101]);
         $this->assertTrue($result);
@@ -109,13 +139,22 @@ class PermissionTest extends TestCase
 
     public function testAddGeneratesCorrectUserQuery(): void
     {
-        $expectedQuery = 'INSERT INTO faqdata_user (record_id, user_id) VALUES (123, 456)';
+        $this->dbMock
+            ->expects($this->exactly(2))
+            ->method('query')
+            ->willReturnCallback(function ($query) {
+                $this->assertStringContainsString('faqdata_user', $query);
+                if (str_contains($query, 'SELECT 1 FROM')) {
+                    $result = $this->createMock(\SQLite3Result::class);
+                    $result->method('fetchArray')->willReturn(false);
+                    return $result;
+                }
+                return true;
+            });
 
         $this->dbMock
-            ->expects($this->once())
-            ->method('query')
-            ->with($this->stringContains('faqdata_user'))
-            ->willReturn(true);
+            ->method('numRows')
+            ->willReturn(0);
 
         $this->permission->add(Permission::USER, 123, [456]);
     }
@@ -123,10 +162,21 @@ class PermissionTest extends TestCase
     public function testAddGeneratesCorrectGroupQuery(): void
     {
         $this->dbMock
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('query')
-            ->with($this->stringContains('faqdata_group'))
-            ->willReturn(true);
+            ->willReturnCallback(function ($query) {
+                $this->assertStringContainsString('faqdata_group', $query);
+                if (str_contains($query, 'SELECT 1 FROM')) {
+                    $result = $this->createMock(\SQLite3Result::class);
+                    $result->method('fetchArray')->willReturn(false);
+                    return $result;
+                }
+                return true;
+            });
+
+        $this->dbMock
+            ->method('numRows')
+            ->willReturn(0);
 
         $this->permission->add(Permission::GROUP, 123, [456]);
     }
@@ -342,10 +392,22 @@ class PermissionTest extends TestCase
     public function testAddWithNegativeFaqIdIsHandled(): void
     {
         $this->dbMock
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('query')
-            ->with($this->stringContains('VALUES (-123, 456)'))
-            ->willReturn(true);
+            ->willReturnCallback(function ($query) {
+                if (str_contains($query, 'SELECT 1 FROM')) {
+                    $this->assertStringContainsString('record_id = -123', $query);
+                    $result = $this->createMock(\SQLite3Result::class);
+                    $result->method('fetchArray')->willReturn(false);
+                    return $result;
+                }
+                $this->assertStringContainsString('VALUES (-123, 456)', $query);
+                return true;
+            });
+
+        $this->dbMock
+            ->method('numRows')
+            ->willReturn(0);
 
         $result = $this->permission->add(Permission::USER, -123, [456]);
         $this->assertTrue($result);
@@ -388,12 +450,47 @@ class PermissionTest extends TestCase
         $largeIdArray = range(1, 100);
 
         $this->dbMock
-            ->expects($this->exactly(100))
+            ->expects($this->exactly(200)) // 100 SELECTs + 100 INSERTs
             ->method('query')
-            ->willReturn(true);
+            ->willReturnCallback(function ($query) {
+                if (str_contains($query, 'SELECT 1 FROM')) {
+                    $result = $this->createMock(\SQLite3Result::class);
+                    $result->method('fetchArray')->willReturn(false);
+                    return $result;
+                }
+                return true;
+            });
+
+        $this->dbMock
+            ->method('numRows')
+            ->willReturn(0);
 
         $result = $this->permission->add(Permission::USER, 123, $largeIdArray);
         $this->assertTrue($result);
+    }
+
+    public function testAddSkipsDuplicatePermissions(): void
+    {
+        $this->dbMock
+            ->expects($this->once())
+            ->method('query')
+            ->willReturnCallback(function ($query) {
+                if (str_contains($query, 'SELECT 1 FROM')) {
+                    $result = $this->createMock(\SQLite3Result::class);
+                    $result->method('fetchArray')->willReturn(['1']); // Permission exists
+                    return $result;
+                }
+                // INSERT should never be called
+                $this->fail('INSERT should not be called for duplicate permission');
+                return false;
+            });
+
+        $this->dbMock
+            ->method('numRows')
+            ->willReturn(1); // Permission already exists
+
+        $result = $this->permission->add(Permission::USER, 123, [456]);
+        $this->assertTrue($result); // Should still return true, just skip the insert
     }
 
     public function testConstantsAreDefinedCorrectly(): void
