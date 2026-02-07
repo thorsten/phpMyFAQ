@@ -15,6 +15,7 @@
 
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 import { clearVisits, deleteSessions } from '../api';
+import { Response } from '../interfaces';
 
 export const handleSessionsFilter = (): void => {
   const button = document.getElementById('pmf-admin-session-day') as HTMLButtonElement | null;
@@ -104,7 +105,7 @@ export const handleClearVisits = (): void => {
         return;
       }
 
-      const response = await clearVisits(csrf);
+      const response = (await clearVisits(csrf)) as Response | undefined;
 
       if (!response) {
         pushErrorNotification('No response received');
@@ -128,7 +129,7 @@ export const handleDeleteSessions = (): void => {
       event.preventDefault();
       const csrf = (document.getElementById('pmf-csrf-token') as HTMLInputElement).value;
       const month = (document.getElementById('month') as HTMLInputElement).value;
-      const response = await deleteSessions(csrf, month);
+      const response = (await deleteSessions(csrf, month)) as Response | undefined;
 
       if (!response) {
         pushErrorNotification('No response received');
