@@ -36,12 +36,26 @@ export const addElement = (
   properties: Record<string, unknown> = {},
   children: Node[] = []
 ): HTMLElement => {
-  const element = Object.assign(document.createElement(HTMLElement), properties);
+  const element = document.createElement(HTMLElement);
 
   Object.keys(properties).forEach((key: string): void => {
-    if (key.startsWith('data-')) {
-      const dataKey: string = key.replace('data-', '');
-      element.dataset[dataKey] = properties[key] as string;
+    if (key.startsWith('data-') || key.startsWith('aria-')) {
+      // Set data-* and aria-* attributes directly as HTML attributes
+      element.setAttribute(key, properties[key] as string);
+    } else if (key === 'classList') {
+      // Handle classList specially
+      const classes = properties[key] as string;
+      classes.split(' ').forEach((cls) => {
+        if (cls) element.classList.add(cls);
+      });
+    } else if (key === 'checked' || key === 'disabled' || key === 'selected') {
+      // Handle boolean attributes
+      if (properties[key]) {
+        element.setAttribute(key, '');
+      }
+    } else {
+      // Set other properties directly
+      element[key] = properties[key];
     }
   });
 

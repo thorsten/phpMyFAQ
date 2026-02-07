@@ -65,6 +65,7 @@ import {
   handleResetCategoryImage,
   handleResetButton,
   handleDeleteFaqEditorModal,
+  handleDeleteFaqModal,
 } from './content';
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
@@ -114,6 +115,7 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   handleDeleteFaqEditorModal();
   handleResetButton();
   await handleFaqOverview();
+  handleDeleteFaqModal();
 
   // Content → Comments
   handleDeleteComments();
