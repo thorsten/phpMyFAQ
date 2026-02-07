@@ -259,6 +259,38 @@
     color: var(--bs-light) !important;
   }
 
+    // Custom scrollbar for high contrast mode
+  scrollbar-color: var(--bs-primary) var(--bs-dark);
+  scrollbar-width: auto;
+
+  &::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+    display: block;
+  }
+
+  *::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+  }
+
+  &::-webkit-scrollbar-track,
+  *::-webkit-scrollbar-track {
+    background: var(--bs-dark) !important;
+    box-shadow: inset 0 0 0 1px var(--bs-primary);
+  }
+
+  &::-webkit-scrollbar-thumb,
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--bs-primary) !important;
+    border-radius: 0;
+    border: 2px solid var(--bs-dark);
+
+    &:hover {
+      background-color: var(--bs-light) !important;
+    }
+  }
+
   //Theme Switcher Button for high contrast mode
   .pmf-theme-switcher {
     button {
@@ -344,9 +376,12 @@
   }
 
   // Footer high contrast mode
-  .text-bg-pmf-footer {
-    background-color: #000000 !important;
-    border-top: 2px solid #ffffff !important;
+  footer {
+    background-color: var(--bs-dark) !important;
+    color: var(--bs-primary) !important;
+    border: 4px solid var(--bs-primary) !important;
+    border-radius: 0px 0px 10px 10px !important;
+    margin-top: -4px;
   }
 
   // Links in high contrast mode - yellow for maximum visibility
@@ -533,12 +568,15 @@
 
   // Tables with strong contrast
   .table {
-    color: #ffffff;
-    border: 2px solid #ffffff;
+    border: 2px solid var(--bs-primary) !important;
+    background-color: var(--bs-dark);
+    color: var(--bs-light);
 
     th,
     td {
-      border: 1px solid #ffffff;
+      border: 2px solid var(--bs-primary) !important;
+      background-color: var(--bs-dark);
+      color: var(--bs-light);
     }
 
     &.table-striped > tbody > tr:nth-of-type(odd) > td {
