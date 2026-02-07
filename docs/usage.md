@@ -2,6 +2,10 @@
 
 The public phpMyFAQ frontend has a simple, HTML5 / CCS3-based default layout based on
 [Bootstrap v5.3](https://getbootstrap.com/docs/5.3/).
+To ensure the best possible user experience for everyone, phpMyFAQ supports three distinct visual modes, which can be toggled via the theme switcher in the header:
+*   **Light Mode:** The classic bright interface.
+*   **Dark Mode:** A reduced-glare interface for low-light environments.
+*   **High Contrast Mode:** Specifically designed for better accessibility (**A11y**). It features the __Atkinson Hyperlegible Next__ font to maximize character recognition and strictly adheres to high contrast standards (WCAG AAA).
 The header has the main links for all categories, propose new FAQs, add questions, open questions, and a login.
 On the left side you only see the main categories.
 You can also change the current language at the bottom of the FAQ,

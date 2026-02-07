@@ -281,7 +281,7 @@ class PdoMysql implements DatabaseDriver
         }
 
         if (false === $result) {
-            $this->sqlLog .= $this->pdo->errorCode() . ': ' . $this->error();
+            $this->sqlLog .= $this->pdo->errorCode() . ': ' . $this->error() . ' in query: ' . $query;
         }
 
         return $result;
