@@ -77,7 +77,7 @@ describe('addElement', () => {
       disabled: false,
     };
 
-    const result: HTMLInputElement = addElement('input', properties);
+    const result: HTMLElement = addElement('input', properties);
 
     expect(result.hasAttribute('checked')).toBe(true);
     expect(result.hasAttribute('disabled')).toBe(false);

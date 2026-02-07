@@ -55,7 +55,7 @@ export const addElement = (
       }
     } else {
       // Set other properties directly
-      element[key] = properties[key];
+      (element as unknown as Record<string, unknown>)[key] = properties[key];
     }
   });
 
