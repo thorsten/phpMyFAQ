@@ -193,7 +193,7 @@ final class FaqDisplayService
     }
 
     /**
-     * Get rendered category path for multi-category FAQs
+     * Get a rendered category path for multicategory FAQs
      */
     public function getRenderedCategoryPath(int $faqId): string
     {
@@ -241,7 +241,7 @@ final class FaqDisplayService
     }
 
     /**
-     * Get number of comments for FAQ
+     * Get a number of comments for FAQ
      *
      * @return array<int, int>
      */
@@ -299,7 +299,10 @@ final class FaqDisplayService
      */
     private function shouldApplyHighlighting(?string $highlight): bool
     {
-        return !in_array($highlight, [null, '/', '<', '>'], true) && Strings::strlen($highlight) > 3;
+        return (
+            !in_array(needle: $highlight, haystack: [null, '/', '<', '>'], strict: true)
+            && Strings::strlen($highlight) > 3
+        );
     }
 
     /**
@@ -307,8 +310,12 @@ final class FaqDisplayService
      */
     private function processHighlight(string $highlight): string
     {
-        $highlight = str_replace("'", '´', $highlight);
-        $highlight = str_replace(['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']'], '', $highlight);
-        return preg_quote($highlight, '/');
+        $highlight = str_replace(search: "'", replace: '´', subject: $highlight);
+        $highlight = str_replace(
+            search: ['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']'],
+            replace: '',
+            subject: $highlight,
+        );
+        return preg_quote($highlight, delimiter: '/');
     }
 }
