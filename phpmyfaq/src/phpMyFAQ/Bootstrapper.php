@@ -149,7 +149,7 @@ class Bootstrapper
             );
 
             $this->switchToTenantSchema($dbConfig);
-        } catch (Exception $exception) {
+        } catch (Exception|RuntimeException $exception) {
             throw new DatabaseConnectionException(
                 message: 'Database connection failed: ' . $exception->getMessage(),
                 code: 500,
