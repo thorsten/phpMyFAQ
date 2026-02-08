@@ -30,7 +30,7 @@ class TenantContextResolver
         $hostname = $request->getHost();
 
         if ($hostname === '') {
-            $hostname = (string) ($_SERVER['HTTP_HOST'] ?? 'localhost');
+            $hostname = 'localhost';
         }
 
         $configDir = defined('PMF_CONFIG_DIR') ? PMF_CONFIG_DIR : '';

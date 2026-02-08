@@ -205,7 +205,7 @@ class Bootstrapper
                     throw new RuntimeException('Failed to switch to tenant schema for PostgreSQL.');
                 }
             }
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new RuntimeException(
                 'Failed to switch to tenant schema: ' . $exception->getMessage(),
                 previous: $exception,

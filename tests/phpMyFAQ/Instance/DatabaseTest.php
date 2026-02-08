@@ -72,15 +72,15 @@ class DatabaseTest extends TestCase
         $this->assertFalse($result);
     }
 
-    public function testCreateTenantDatabaseReturnsFalseForInvalidDatabaseName(): void
+    public function testCreateTenantDatabaseThrowsForInvalidDatabaseName(): void
     {
         $dbMock = $this->createMock(DatabaseDriver::class);
         $this->configuration->method('getDb')->willReturn($dbMock);
         $dbMock->expects($this->never())->method('query');
 
-        $result = Database::createTenantDatabase($this->configuration, 'pgsql', 'tenant-db');
+        $this->expectException(\InvalidArgumentException::class);
 
-        $this->assertFalse($result);
+        Database::createTenantDatabase($this->configuration, 'pgsql', 'tenant-db');
     }
 
     public function testCreateTenantDatabaseCreatesPgsqlDatabaseWhenMissing(): void

@@ -143,11 +143,21 @@ class Client extends Instance
      * Creates all tables in a dedicated database for tenant isolation.
      *
      * Supported drivers: PostgreSQL, SQL Server.
+     *
+     * @throws Exception
      */
     private function createClientTablesWithDatabase(string $databaseName): void
     {
         if (!preg_match('/^[A-Za-z0-9_]+$/', $databaseName)) {
-            return;
+            throw new Exception('Invalid tenant database identifier.');
+        }
+
+        $dbType = strtolower(Database::getType());
+        if (!str_contains($dbType, 'pgsql') && !str_contains($dbType, 'sqlsrv')) {
+            throw new Exception(sprintf(
+                'Database-per-tenant isolation is not supported for driver "%s". Use PostgreSQL or SQL Server.',
+                Database::getType(),
+            ));
         }
 
         $credentials = $this->getDatabaseCredentials();
@@ -213,6 +223,8 @@ class Client extends Instance
         if (str_contains($dbType, 'pgsql') || str_contains($dbType, 'Pgsql')) {
             $targetPrefix = sprintf('"%s".', $schema);
             $this->configuration->getDb()->query(sprintf('SET search_path TO "%s"', $schema));
+        } elseif (str_contains($dbType, 'sqlsrv') || str_contains($dbType, 'Sqlsrv')) {
+            $targetPrefix = sprintf('[%s].', $schema);
         }
 
         $this->configuration
@@ -302,7 +314,7 @@ class Client extends Instance
     {
         foreach ($rows as $row) {
             $rowData = (array) $row;
-            $columns = array_keys($rowData);
+            $quotedColumns = array_map($this->quoteIdentifier(...), array_keys($rowData));
             $values = array_map(fn(mixed $value): string => $value === null
                 ? 'NULL'
                 : sprintf("'%s'", $this->configuration->getDb()->escape((string) $value)), array_values($rowData));
@@ -310,12 +322,30 @@ class Client extends Instance
             $query = sprintf(
                 'INSERT INTO %s (%s) VALUES (%s)',
                 $table,
-                implode(', ', $columns),
+                implode(', ', $quotedColumns),
                 implode(', ', $values),
             );
 
             $this->configuration->getDb()->query($query);
         }
+    }
+
+    /**
+     * Quotes a column or table identifier for the current database driver.
+     */
+    private function quoteIdentifier(string $name): string
+    {
+        $dbType = Database::getType();
+
+        if (str_contains($dbType, 'sqlsrv') || str_contains($dbType, 'Sqlsrv')) {
+            return sprintf('[%s]', str_replace(']', ']]', $name));
+        }
+
+        if (str_contains($dbType, 'pgsql') || str_contains($dbType, 'Pgsql') || str_contains($dbType, 'sqlite')) {
+            return sprintf('"%s"', str_replace('"', '""', $name));
+        }
+
+        return sprintf('`%s`', str_replace('`', '``', $name));
     }
 
     /**

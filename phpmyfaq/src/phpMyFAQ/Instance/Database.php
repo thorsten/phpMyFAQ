@@ -127,14 +127,16 @@ class Database
     }
 
     /**
-     * Creates a dedicated tenant database for supported drivers.
+     * Creates a dedicated tenant database for supported drivers (PostgreSQL, SQL Server).
+     *
+     * @throws \RuntimeException if the driver does not support database-per-tenant isolation
      */
     public static function createTenantDatabase(Configuration $configuration, string $type, string $databaseName): bool
     {
         $normalizedType = strtolower($type);
 
         if (!preg_match('/^[A-Za-z0-9_]+$/', $databaseName)) {
-            return false;
+            throw new \InvalidArgumentException(sprintf('Invalid tenant database identifier: "%s".', $databaseName));
         }
 
         if (str_contains($normalizedType, 'pgsql')) {
@@ -160,7 +162,10 @@ class Database
                 ));
         }
 
-        return false;
+        throw new \RuntimeException(sprintf(
+            'Database-per-tenant isolation is not supported for driver "%s". Use PostgreSQL or SQL Server.',
+            $type,
+        ));
     }
 
     /**

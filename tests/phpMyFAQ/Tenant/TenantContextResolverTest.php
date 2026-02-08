@@ -63,7 +63,6 @@ class TenantContextResolverTest extends TestCase
      */
     public function testResolveFallsBackToDefaultsWhenEnvironmentIsMissing(): void
     {
-        $_SERVER['HTTP_HOST'] = 'fallback.example.com';
         Database::setTablePrefix('');
 
         $request = $this->createStub(Request::class);
@@ -73,7 +72,7 @@ class TenantContextResolverTest extends TestCase
         $context = $resolver->resolve($request);
 
         $this->assertSame(0, $context->getTenantId());
-        $this->assertSame('fallback.example.com', $context->getHostname());
+        $this->assertSame('localhost', $context->getHostname());
         $this->assertSame('', $context->getTablePrefix());
         $this->assertSame(PMF_CONFIG_DIR, $context->getConfigDir());
         $this->assertSame('free', $context->getPlan());

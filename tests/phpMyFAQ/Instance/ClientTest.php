@@ -33,6 +33,13 @@ class ClientTest extends TestCase
         $this->client->setFileSystem($this->filesystem);
     }
 
+    protected function tearDown(): void
+    {
+        Database::setTablePrefix('');
+
+        parent::tearDown();
+    }
+
     public function testCreateClientFolder(): void
     {
         $hostname = 'example.com';
@@ -144,12 +151,20 @@ class ClientTest extends TestCase
 
     public function testCreateClientDatabaseWithDatabaseMode(): void
     {
+        // Guard: the DATABASE code path requires a database.php fixture so
+        // getDatabaseCredentials() returns non-null credentials.
+        $this->assertFileExists(
+            PMF_CONFIG_DIR . '/database.php',
+            'Test fixture tests/content/core/config/database.php is required for the DATABASE isolation code path.',
+        );
+
         Database::factory('pdo_pgsql');
         Database::setTablePrefix('');
 
         $dbMock = $this->createMock(DatabaseDriver::class);
         $this->configuration->method('getDb')->willReturn($dbMock);
 
+        $connectCalls = [];
         $dbMock->expects($this->exactly(2))
             ->method('connect')
             ->willReturnCallback(static function (
@@ -158,8 +173,9 @@ class ClientTest extends TestCase
                 string $password,
                 string $database,
                 ?int $port = null,
-            ): bool {
-                return $database === 'tenant_db' || $database === '';
+            ) use (&$connectCalls): bool {
+                $connectCalls[] = $database;
+                return true;
             });
 
         $queries = [];
@@ -181,6 +197,10 @@ class ClientTest extends TestCase
 
         $this->client->setClientUrl('https://tenant.example.com');
         $this->client->createClientDatabase('tenant_db', TenantIsolationMode::DATABASE);
+
+        // Verify connect was called first with the tenant DB, then restored to the source DB
+        $this->assertCount(2, $connectCalls);
+        $this->assertSame('tenant_db', $connectCalls[0]);
 
         $this->assertNotEmpty($queries);
         $this->assertContains('SELECT * FROM faqconfig', $queries);

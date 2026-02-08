@@ -70,7 +70,7 @@ class MultisiteConfigurationLocator
             return null;
         }
 
-        $baseDomain = ltrim($baseDomain, characters: '.');
+        $baseDomain = strtolower(ltrim($baseDomain, characters: '.'));
         $suffix = '.' . $baseDomain;
 
         if (!str_ends_with($host, $suffix)) {
