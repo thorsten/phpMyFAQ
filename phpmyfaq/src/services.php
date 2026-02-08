@@ -82,6 +82,8 @@ use phpMyFAQ\Sitemap;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\System;
 use phpMyFAQ\Tags;
+use phpMyFAQ\Tenant\TenantContext;
+use phpMyFAQ\Tenant\TenantContextResolver;
 use phpMyFAQ\Translation\ContentTranslationService;
 use phpMyFAQ\Translation\TranslationProviderFactory;
 use phpMyFAQ\Translation\TranslationProviderInterface;
@@ -214,6 +216,12 @@ return static function (ContainerConfigurator $container): void {
     $services->set('phpmyfaq.comments', Comments::class)->args([
         service('phpmyfaq.configuration'),
         service('phpmyfaq.comment.comments-repository'),
+    ]);
+
+    $services->set('phpmyfaq.tenant.context-resolver', TenantContextResolver::class);
+    $services->set('phpmyfaq.tenant.context', TenantContext::class)->factory([
+        service('phpmyfaq.tenant.context-resolver'),
+        'resolve',
     ]);
 
     $services->set('phpmyfaq.configuration', Configuration::class)->factory([
