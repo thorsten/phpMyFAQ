@@ -41,6 +41,10 @@ class PhpConfiguratorTest extends TestCase
 
     public function testConfigureSessionSetsIniValues(): void
     {
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            $this->markTestSkipped('Session already active; ini values cannot be changed.');
+        }
+
         PhpConfigurator::configureSession();
 
         $this->assertEquals('1', ini_get('session.use_only_cookies'));
