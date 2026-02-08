@@ -32,13 +32,55 @@ class MultisiteConfigurationLocator
         $parsed = parse_url($protocol . '://' . $host . $scriptName);
 
         if (isset($parsed['host']) && $parsed['host'] !== '') {
+            // 1. Try exact hostname match (existing behavior)
             $configDir = rtrim($configurationDirectory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $parsed['host'];
 
             if (is_dir($configDir)) {
                 return $configDir;
             }
+
+            // 2. Try subdomain-based tenant matching
+            $tenantName = self::extractTenantFromSubdomain($parsed['host']);
+            if ($tenantName !== null) {
+                $configDir = rtrim($configurationDirectory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $tenantName;
+
+                if (is_dir($configDir)) {
+                    return $configDir;
+                }
+            }
         }
 
         return null;
+    }
+
+    /**
+     * Extracts the tenant identifier from a subdomain pattern.
+     *
+     * Checks the PMF_MULTISITE_BASE_DOMAIN environment variable. If set,
+     * extracts the subdomain part from hostnames matching {tenant}.{baseDomain}.
+     *
+     * Example: With PMF_MULTISITE_BASE_DOMAIN=faq.example.com,
+     * the host "acme.faq.example.com" returns "acme".
+     */
+    public static function extractTenantFromSubdomain(string $host): ?string
+    {
+        $baseDomain = getenv('PMF_MULTISITE_BASE_DOMAIN');
+        if ($baseDomain === false || $baseDomain === '') {
+            return null;
+        }
+
+        $baseDomain = ltrim($baseDomain, characters: '.');
+        $suffix = '.' . $baseDomain;
+
+        if (!str_ends_with($host, $suffix)) {
+            return null;
+        }
+
+        $tenant = substr($host, offset: 0, length: -strlen($suffix));
+        if ($tenant === '' || str_contains($tenant, '.')) {
+            return null;
+        }
+
+        return $tenant;
     }
 }

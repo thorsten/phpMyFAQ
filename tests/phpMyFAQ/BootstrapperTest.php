@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Configuration\DatabaseConfiguration;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
@@ -30,5 +31,12 @@ class BootstrapperTest extends TestCase
         $this->assertNull($bootstrapper->getFaqConfig());
         $this->assertNull($bootstrapper->getDb());
         $this->assertNull($bootstrapper->getRequest());
+    }
+
+    public function testDatabaseConfigurationIncludesSchemaField(): void
+    {
+        $config = new DatabaseConfiguration(dirname(__FILE__, 2) . '/content/core/config/database.php');
+
+        $this->assertNull($config->getSchema());
     }
 }

@@ -386,8 +386,10 @@ class Sqlite3 extends Database implements DriverInterface
      *
      *
      */
-    public function createTables(string $prefix = ''): bool
+    public function createTables(string $prefix = '', ?string $schema = null): bool
     {
+        // SQLite does not support schema-based isolation; use separate database files instead.
+
         foreach ($this->createTableStatements as $createTableStatement) {
             $result = $this->configuration->getDb()->query(sprintf($createTableStatement, $prefix));
 

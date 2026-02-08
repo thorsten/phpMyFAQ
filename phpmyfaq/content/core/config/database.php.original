@@ -6,3 +6,4 @@ $DB['password'] = '';
 $DB['db'] = '';
 $DB['prefix'] = '';
 $DB['type'] = '';
+$DB['schema'] = '';

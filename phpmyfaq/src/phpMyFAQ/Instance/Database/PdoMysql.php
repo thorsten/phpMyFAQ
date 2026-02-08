@@ -397,8 +397,13 @@ class PdoMysql extends Database implements DriverInterface
      *
      *
      */
-    public function createTables(string $prefix = ''): bool
+    public function createTables(string $prefix = '', ?string $schema = null): bool
     {
+        if ($schema !== null && $schema !== '') {
+            $this->configuration->getDb()->query(sprintf('CREATE DATABASE IF NOT EXISTS `%s`', $schema));
+            $this->configuration->getDb()->query(sprintf('USE `%s`', $schema));
+        }
+
         foreach ($this->createTableStatements as $createTableStatement) {
             $result = $this->configuration->getDb()->query(sprintf($createTableStatement, $prefix));
 

@@ -387,8 +387,13 @@ class PdoPgsql extends Database implements DriverInterface
      * Executes all CREATE TABLE and CREATE INDEX statements.
      *
      */
-    public function createTables(string $prefix = ''): bool
+    public function createTables(string $prefix = '', ?string $schema = null): bool
     {
+        if ($schema !== null && $schema !== '') {
+            $this->configuration->getDb()->query(sprintf('CREATE SCHEMA IF NOT EXISTS "%s"', $schema));
+            $this->configuration->getDb()->query(sprintf('SET search_path TO "%s"', $schema));
+        }
+
         foreach ($this->createTableStatements as $key => $stmt) {
             if ($key == 'idx_records' || $key == 'faqsessions_idx') {
                 $result = $this->configuration->getDb()->query(sprintf($stmt, $prefix, $prefix));

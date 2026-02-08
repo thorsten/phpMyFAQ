@@ -385,8 +385,18 @@ class Sqlsrv extends Database implements DriverInterface
     /**
      * Executes all CREATE TABLE and CREATE INDEX statements.
      */
-    public function createTables(string $prefix = ''): bool
+    public function createTables(string $prefix = '', ?string $schema = null): bool
     {
+        if ($schema !== null && $schema !== '') {
+            $this->configuration
+                ->getDb()
+                ->query(sprintf(
+                    "IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = '%s') EXEC('CREATE SCHEMA [%s]')",
+                    $schema,
+                    $schema,
+                ));
+        }
+
         foreach ($this->createTableStatements as $createTableStatement) {
             $result = $this->configuration->getDb()->query(sprintf($createTableStatement, $prefix));
 

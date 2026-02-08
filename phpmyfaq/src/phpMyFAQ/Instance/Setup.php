@@ -140,6 +140,9 @@ $DB[\'server\'] = \''
             . "';\n"
             . "\$DB['type'] = '"
             . $data['dbType']
+            . "';\n"
+            . "\$DB['schema'] = '"
+            . ($data['dbSchema'] ?? '')
             . "';",
             LOCK_EX,
         );

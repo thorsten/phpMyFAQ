@@ -146,6 +146,8 @@ class Bootstrapper
                 $dbConfig->getDatabase(),
                 $dbConfig->getPort(),
             );
+
+            $this->switchToTenantSchema($dbConfig);
         } catch (Exception $exception) {
             throw new DatabaseConnectionException(
                 message: 'Database connection failed: ' . $exception->getMessage(),
@@ -164,6 +166,30 @@ class Bootstrapper
                 previous: $exception,
             );
         }
+    }
+
+    /**
+     * Switches to the tenant's schema or database after connection, if configured.
+     */
+    private function switchToTenantSchema(DatabaseConfiguration $dbConfig): void
+    {
+        $schema = $dbConfig->getSchema();
+        if ($schema === null || $schema === '') {
+            return;
+        }
+
+        $dbType = $dbConfig->getType();
+
+        if (str_contains($dbType, 'mysql') || str_contains($dbType, 'mysqli')) {
+            $this->db->query(sprintf('USE `%s`', $schema));
+            return;
+        }
+
+        if (str_contains($dbType, 'pgsql')) {
+            $this->db->query(sprintf('SET search_path TO "%s"', $schema));
+        }
+
+        // SQL Server uses schema prefix in queries; no global switch needed.
     }
 
     private function configureLdap(): void

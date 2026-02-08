@@ -4,6 +4,7 @@ namespace phpMyFAQ\Instance;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Enums\TenantIsolationMode;
 use phpMyFAQ\Filesystem\Filesystem;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -92,5 +93,55 @@ class ClientTest extends TestCase
         $result = $this->client->deleteClientFolder($sourceUrl);
 
         $this->assertTrue($result);
+    }
+
+    public function testCreateClientDatabaseWithPrefixMode(): void
+    {
+        $prefix = 'tenant_';
+        $dbMock = $this->createMock(DatabaseDriver::class);
+        $this->configuration->method('getDb')->willReturn($dbMock);
+
+        $dbMock->expects($this->atLeastOnce())->method('query');
+
+        $this->client->setClientUrl('https://tenant.example.com');
+        $this->client->createClientDatabase($prefix, TenantIsolationMode::PREFIX);
+    }
+
+    public function testCreateClientDatabaseWithSchemaMode(): void
+    {
+        $dbMock = $this->createMock(DatabaseDriver::class);
+        $this->configuration->method('getDb')->willReturn($dbMock);
+
+        $dbMock->expects($this->atLeastOnce())->method('query');
+
+        $this->client->setClientUrl('https://tenant.example.com');
+        $this->client->createClientDatabase('tenant_schema', TenantIsolationMode::SCHEMA);
+    }
+
+    public function testCreateClientDatabaseWithDatabaseMode(): void
+    {
+        $dbMock = $this->createMock(DatabaseDriver::class);
+        $this->configuration->method('getDb')->willReturn($dbMock);
+
+        $dbMock->expects($this->atLeastOnce())->method('query');
+
+        $this->client->setClientUrl('https://tenant.example.com');
+        $this->client->createClientDatabase('tenant_db', TenantIsolationMode::DATABASE);
+    }
+
+    public function testCreateClientDatabaseDefaultsToPrefix(): void
+    {
+        putenv('PMF_TENANT_ISOLATION_MODE=prefix');
+
+        $prefix = 'default_';
+        $dbMock = $this->createMock(DatabaseDriver::class);
+        $this->configuration->method('getDb')->willReturn($dbMock);
+
+        $dbMock->expects($this->atLeastOnce())->method('query');
+
+        $this->client->setClientUrl('https://default.example.com');
+        $this->client->createClientDatabase($prefix);
+
+        putenv('PMF_TENANT_ISOLATION_MODE');
     }
 }

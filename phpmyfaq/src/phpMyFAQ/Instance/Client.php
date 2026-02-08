@@ -22,6 +22,7 @@ namespace phpMyFAQ\Instance;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
+use phpMyFAQ\Enums\TenantIsolationMode;
 use phpMyFAQ\Filesystem\Filesystem;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Database as InstanceDatabase;
@@ -85,6 +86,88 @@ class Client extends Instance
     }
 
     /**
+     * Creates client database isolation based on the configured tenant isolation mode.
+     *
+     * Supports three isolation strategies:
+     * - prefix: Table prefix isolation in a shared database (default, delegates to createClientTables)
+     * - schema: Schema-per-tenant in a shared database
+     * - database: Separate database per tenant
+     *
+     * @param string $tenantIdentifier The prefix, schema name, or database name for the tenant
+     * @param TenantIsolationMode|null $mode Isolation mode defaults to reading from PMF_TENANT_ISOLATION_MODE env var
+     */
+    public function createClientDatabase(string $tenantIdentifier, ?TenantIsolationMode $mode = null): void
+    {
+        $envValue = getenv('PMF_TENANT_ISOLATION_MODE');
+        $mode ??=
+            TenantIsolationMode::tryFrom($envValue !== false && $envValue !== '' ? $envValue : 'prefix')
+            ?? TenantIsolationMode::PREFIX;
+
+        match ($mode) {
+            TenantIsolationMode::PREFIX => $this->createClientTables($tenantIdentifier),
+            TenantIsolationMode::SCHEMA, TenantIsolationMode::DATABASE => $this->createClientTablesWithSchema(
+                $tenantIdentifier,
+            ),
+        };
+    }
+
+    /**
+     * Creates all tables in a dedicated schema or database for tenant isolation.
+     *
+     * @param string $schema Schema or database name for the tenant
+     */
+    private function createClientTablesWithSchema(string $schema): void
+    {
+        try {
+            $instanceDatabase = InstanceDatabase::factory($this->configuration, Database::getType());
+            $instanceDatabase->createTables('', $schema);
+
+            $this->copyBaseDataToSchema($schema);
+        } catch (Exception) {
+        }
+    }
+
+    /**
+     * Copies base configuration, rights, and user data into a tenant's schema/database.
+     */
+    private function copyBaseDataToSchema(string $schema): void
+    {
+        $dbType = Database::getType();
+        $sourcePrefix = Database::getTablePrefix();
+
+        $targetPrefix = sprintf('`%s`.', $schema);
+
+        if (str_contains($dbType, 'pgsql') || str_contains($dbType, 'Pgsql')) {
+            $targetPrefix = sprintf('"%s".', $schema);
+            $this->configuration->getDb()->query(sprintf('SET search_path TO "%s"', $schema));
+        }
+
+        $this->configuration
+            ->getDb()
+            ->query(sprintf('INSERT INTO %sfaqconfig SELECT * FROM %sfaqconfig', $targetPrefix, $sourcePrefix));
+
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                "UPDATE %sfaqconfig SET config_value = '%s' WHERE config_name = 'main.referenceURL'",
+                $targetPrefix,
+                $this->clientUrl,
+            ));
+
+        $this->configuration
+            ->getDb()
+            ->query(sprintf('INSERT INTO %sfaqright SELECT * FROM %sfaqright', $targetPrefix, $sourcePrefix));
+
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                'INSERT INTO %sfaquser_right SELECT * FROM %sfaquser_right WHERE user_id = 1',
+                $targetPrefix,
+                $sourcePrefix,
+            ));
+    }
+
+    /**
      * Creates all tables with the given table prefix from the primary tables.
      *
      * @param string $prefix SQL table prefix
@@ -144,7 +227,7 @@ class Client extends Instance
     }
 
     /**
-     * Copies a defined template folder to a new client instance, by default,
+     * Copies a defined template folder to a new client instance; by default,
      * the default template located at ./assets/templates/default/ will be copied.
      *
      * @param string $destination Destination folder
