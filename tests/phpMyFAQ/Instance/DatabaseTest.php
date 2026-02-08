@@ -71,4 +71,57 @@ class DatabaseTest extends TestCase
 
         $this->assertFalse($result);
     }
+
+    public function testCreateTenantDatabaseReturnsFalseForInvalidDatabaseName(): void
+    {
+        $dbMock = $this->createMock(DatabaseDriver::class);
+        $this->configuration->method('getDb')->willReturn($dbMock);
+        $dbMock->expects($this->never())->method('query');
+
+        $result = Database::createTenantDatabase($this->configuration, 'pgsql', 'tenant-db');
+
+        $this->assertFalse($result);
+    }
+
+    public function testCreateTenantDatabaseCreatesPgsqlDatabaseWhenMissing(): void
+    {
+        $dbMock = $this->createMock(DatabaseDriver::class);
+        $this->configuration->method('getDb')->willReturn($dbMock);
+
+        $dbMock->method('escape')->willReturnArgument(0);
+        $queryCall = 0;
+        $dbMock->expects($this->exactly(2))
+            ->method('query')
+            ->willReturnCallback(function (string $query) use (&$queryCall): mixed {
+                if ($queryCall === 0) {
+                    $this->assertStringContainsString('SELECT 1 FROM pg_database', $query);
+                    $queryCall++;
+                    return new \stdClass();
+                }
+
+                $this->assertStringContainsString('CREATE DATABASE "tenantdb"', $query);
+                return true;
+            });
+        $dbMock->expects($this->once())->method('numRows')->willReturn(0);
+
+        $result = Database::createTenantDatabase($this->configuration, 'pgsql', 'tenantdb');
+
+        $this->assertTrue($result);
+    }
+
+    public function testCreateTenantDatabaseCreatesSqlServerDatabaseWhenMissing(): void
+    {
+        $dbMock = $this->createMock(DatabaseDriver::class);
+        $this->configuration->method('getDb')->willReturn($dbMock);
+
+        $dbMock->method('escape')->willReturnArgument(0);
+        $dbMock->expects($this->once())
+            ->method('query')
+            ->with($this->stringContains("IF DB_ID('tenantdb') IS NULL CREATE DATABASE [tenantdb]"))
+            ->willReturn(true);
+
+        $result = Database::createTenantDatabase($this->configuration, 'sqlsrv', 'tenantdb');
+
+        $this->assertTrue($result);
+    }
 }

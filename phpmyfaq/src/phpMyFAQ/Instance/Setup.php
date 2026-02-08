@@ -117,35 +117,54 @@ class Setup
             throw new Exception('File [' . $this->rootDir . $folder . '] is not writable.');
         }
 
+        $schema = (string) ($data['dbSchema'] ?? '');
+        if ($schema !== '' && !preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $schema)) {
+            throw new Exception('Invalid database schema name.');
+        }
+
+        $dbServer = $this->escapeForSingleQuotedPhpString((string) ($data['dbServer'] ?? ''));
+        $dbPort = $this->escapeForSingleQuotedPhpString((string) ($data['dbPort'] ?? ''));
+        $dbUser = $this->escapeForSingleQuotedPhpString((string) ($data['dbUser'] ?? ''));
+        $dbPassword = $this->escapeForSingleQuotedPhpString((string) ($data['dbPassword'] ?? ''));
+        $dbDatabaseName = $this->escapeForSingleQuotedPhpString((string) ($data['dbDatabaseName'] ?? ''));
+        $dbPrefix = $this->escapeForSingleQuotedPhpString((string) ($data['dbPrefix'] ?? ''));
+        $dbType = $this->escapeForSingleQuotedPhpString((string) ($data['dbType'] ?? ''));
+        $dbSchema = $this->escapeForSingleQuotedPhpString($schema);
+
         return file_put_contents(
             $this->rootDir . $folder . '/database.php',
             '<?php
 $DB[\'server\'] = \''
-            . $data['dbServer']
+            . $dbServer
             . "';\n"
             . "\$DB['port'] = '"
-            . $data['dbPort']
+            . $dbPort
             . "';\n"
             . "\$DB['user'] = '"
-            . $data['dbUser']
+            . $dbUser
             . "';\n"
             . "\$DB['password'] = '"
-            . $data['dbPassword']
+            . $dbPassword
             . "';\n"
             . "\$DB['db'] = '"
-            . $data['dbDatabaseName']
+            . $dbDatabaseName
             . "';\n"
             . "\$DB['prefix'] = '"
-            . $data['dbPrefix']
+            . $dbPrefix
             . "';\n"
             . "\$DB['type'] = '"
-            . $data['dbType']
+            . $dbType
             . "';\n"
             . "\$DB['schema'] = '"
-            . ($data['dbSchema'] ?? '')
+            . $dbSchema
             . "';",
             LOCK_EX,
         );
+    }
+
+    private function escapeForSingleQuotedPhpString(string $value): string
+    {
+        return str_replace(['\\', "'"], ['\\\\', "\\'"], $value);
     }
 
     /**

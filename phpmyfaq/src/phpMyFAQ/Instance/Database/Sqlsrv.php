@@ -388,13 +388,20 @@ class Sqlsrv extends Database implements DriverInterface
     public function createTables(string $prefix = '', ?string $schema = null): bool
     {
         if ($schema !== null && $schema !== '') {
-            $this->configuration
-                ->getDb()
-                ->query(sprintf(
-                    "IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = '%s') EXEC('CREATE SCHEMA [%s]')",
-                    $schema,
-                    $schema,
-                ));
+            if (!preg_match('/^[A-Za-z0-9_]+$/', $schema)) {
+                return false;
+            }
+
+            $schemaLiteral = str_replace("'", "''", $schema);
+            $schemaIdentifier = sprintf('[%s]', str_replace(']', ']]', $schema));
+
+            if (!$this->configuration->getDb()->query(sprintf(
+                "IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = '%s') EXEC('CREATE SCHEMA %s')",
+                $schemaLiteral,
+                $schemaIdentifier,
+            ))) {
+                return false;
+            }
         }
 
         foreach ($this->createTableStatements as $createTableStatement) {

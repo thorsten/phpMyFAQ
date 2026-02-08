@@ -105,9 +105,8 @@ class Client extends Instance
 
         match ($mode) {
             TenantIsolationMode::PREFIX => $this->createClientTables($tenantIdentifier),
-            TenantIsolationMode::SCHEMA, TenantIsolationMode::DATABASE => $this->createClientTablesWithSchema(
-                $tenantIdentifier,
-            ),
+            TenantIsolationMode::SCHEMA => $this->createClientTablesWithSchema($tenantIdentifier),
+            TenantIsolationMode::DATABASE => $this->createClientTablesWithDatabase($tenantIdentifier),
         };
     }
 
@@ -115,25 +114,99 @@ class Client extends Instance
      * Creates all tables in a dedicated schema or database for tenant isolation.
      *
      * @param string $schema Schema or database name for the tenant
+     * @throws Exception
      */
     private function createClientTablesWithSchema(string $schema): void
     {
         try {
+            if (!preg_match('/^[A-Za-z0-9_]+$/', $schema)) {
+                throw new Exception('Invalid tenant schema identifier.');
+            }
+
             $instanceDatabase = InstanceDatabase::factory($this->configuration, Database::getType());
-            $instanceDatabase->createTables('', $schema);
+            if (!$instanceDatabase->createTables('', $schema)) {
+                throw new Exception('Failed to create tenant tables in schema.');
+            }
 
             $this->copyBaseDataToSchema($schema);
+        } catch (Exception $exception) {
+            $this->configuration->getLogger()->error('Failed to create tenant schema tables.', [
+                'message' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString(),
+                'schema' => $schema,
+            ]);
+            throw $exception;
+        }
+    }
+
+    /**
+     * Creates all tables in a dedicated database for tenant isolation.
+     *
+     * Supported drivers: PostgreSQL, SQL Server.
+     */
+    private function createClientTablesWithDatabase(string $databaseName): void
+    {
+        if (!preg_match('/^[A-Za-z0-9_]+$/', $databaseName)) {
+            return;
+        }
+
+        $credentials = $this->getDatabaseCredentials();
+        if ($credentials === null) {
+            return;
+        }
+
+        $sourcePrefix = Database::getTablePrefix();
+        $targetPrefix = $sourcePrefix ?? '';
+        $seedRows = $this->collectSeedRows($sourcePrefix ?? '');
+        $sourceDatabase = $credentials['database'];
+
+        try {
+            if (!InstanceDatabase::createTenantDatabase($this->configuration, Database::getType(), $databaseName)) {
+                return;
+            }
+
+            if (!$this->configuration->getDb()->connect(
+                $credentials['server'],
+                $credentials['user'],
+                $credentials['password'],
+                $databaseName,
+                $credentials['port'],
+            )) {
+                return;
+            }
+
+            $instanceDatabase = InstanceDatabase::factory($this->configuration, Database::getType());
+            if (!$instanceDatabase->createTables($targetPrefix)) {
+                return;
+            }
+
+            $this->insertSeedRows($targetPrefix, $seedRows);
         } catch (Exception) {
+        } finally {
+            $this->configuration->getDb()->connect(
+                $credentials['server'],
+                $credentials['user'],
+                $credentials['password'],
+                $sourceDatabase,
+                $credentials['port'],
+            );
         }
     }
 
     /**
      * Copies base configuration, rights, and user data into a tenant's schema/database.
+     *
+     * @throws Exception
      */
     private function copyBaseDataToSchema(string $schema): void
     {
+        if (!preg_match('/^[A-Za-z0-9_]+$/', $schema)) {
+            throw new Exception('Invalid tenant schema identifier.');
+        }
+
         $dbType = Database::getType();
         $sourcePrefix = Database::getTablePrefix();
+        $escapedClientUrl = $this->configuration->getDb()->escape($this->clientUrl);
 
         $targetPrefix = sprintf('`%s`.', $schema);
 
@@ -151,7 +224,7 @@ class Client extends Instance
             ->query(sprintf(
                 "UPDATE %sfaqconfig SET config_value = '%s' WHERE config_name = 'main.referenceURL'",
                 $targetPrefix,
-                $this->clientUrl,
+                $escapedClientUrl,
             ));
 
         $this->configuration
@@ -167,10 +240,89 @@ class Client extends Instance
             ));
     }
 
+    private function getDatabaseCredentials(): ?array
+    {
+        $databaseFile = PMF_CONFIG_DIR . '/database.php';
+        if (!file_exists($databaseFile)) {
+            return null;
+        }
+
+        $DB = [];
+        include $databaseFile;
+
+        if (!isset($DB['server'], $DB['user'], $DB['password'], $DB['db'])) {
+            return null;
+        }
+
+        return [
+            'server' => (string) $DB['server'],
+            'port' => ($DB['port'] ?? '') === '' ? null : (int) $DB['port'],
+            'user' => (string) $DB['user'],
+            'password' => (string) $DB['password'],
+            'database' => (string) $DB['db'],
+        ];
+    }
+
+    /**
+     * Reads seed data from source database before switching to the tenant database.
+     */
+    private function collectSeedRows(string $prefix): array
+    {
+        $tables = [
+            'faqconfig' => sprintf('SELECT * FROM %sfaqconfig', $prefix),
+            'faqright' => sprintf('SELECT * FROM %sfaqright', $prefix),
+            'faquser_right' => sprintf('SELECT * FROM %sfaquser_right WHERE user_id = 1', $prefix),
+        ];
+
+        $rows = [];
+        foreach ($tables as $table => $query) {
+            $result = $this->configuration->getDb()->query($query);
+            $rows[$table] = $result === false ? [] : $this->configuration->getDb()->fetchAll($result) ?? [];
+        }
+
+        return $rows;
+    }
+
+    private function insertSeedRows(string $prefix, array $seedRows): void
+    {
+        $this->insertRows($prefix . 'faqconfig', $seedRows['faqconfig'] ?? []);
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                "UPDATE %sfaqconfig SET config_value = '%s' WHERE config_name = 'main.referenceURL'",
+                $prefix,
+                $this->configuration->getDb()->escape($this->clientUrl),
+            ));
+
+        $this->insertRows($prefix . 'faqright', $seedRows['faqright'] ?? []);
+        $this->insertRows($prefix . 'faquser_right', $seedRows['faquser_right'] ?? []);
+    }
+
+    private function insertRows(string $table, array $rows): void
+    {
+        foreach ($rows as $row) {
+            $rowData = (array) $row;
+            $columns = array_keys($rowData);
+            $values = array_map(fn(mixed $value): string => $value === null
+                ? 'NULL'
+                : sprintf("'%s'", $this->configuration->getDb()->escape((string) $value)), array_values($rowData));
+
+            $query = sprintf(
+                'INSERT INTO %s (%s) VALUES (%s)',
+                $table,
+                implode(', ', $columns),
+                implode(', ', $values),
+            );
+
+            $this->configuration->getDb()->query($query);
+        }
+    }
+
     /**
      * Creates all tables with the given table prefix from the primary tables.
      *
      * @param string $prefix SQL table prefix
+     * @throws Exception
      */
     public function createClientTables(string $prefix): void
     {
@@ -208,7 +360,13 @@ class Client extends Instance
                     $prefix,
                     Database::getTablePrefix(),
                 ));
-        } catch (Exception) {
+        } catch (Exception $exception) {
+            $this->configuration->getLogger()->error('Failed to create tenant prefix tables.', [
+                'message' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString(),
+                'prefix' => $prefix,
+            ]);
+            throw $exception;
         }
     }
 

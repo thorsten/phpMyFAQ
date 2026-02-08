@@ -391,8 +391,19 @@ class Pgsql extends Database implements DriverInterface
     public function createTables(string $prefix = '', ?string $schema = null): bool
     {
         if ($schema !== null && $schema !== '') {
-            $this->configuration->getDb()->query(sprintf('CREATE SCHEMA IF NOT EXISTS "%s"', $schema));
-            $this->configuration->getDb()->query(sprintf('SET search_path TO "%s"', $schema));
+            if (!preg_match('/^[A-Za-z0-9_]+$/', $schema)) {
+                return false;
+            }
+
+            $quotedSchema = sprintf('"%s"', str_replace('"', '""', $schema));
+
+            if (!$this->configuration->getDb()->query(sprintf('CREATE SCHEMA IF NOT EXISTS %s', $quotedSchema))) {
+                return false;
+            }
+
+            if (!$this->configuration->getDb()->query(sprintf('SET search_path TO %s', $quotedSchema))) {
+                return false;
+            }
         }
 
         foreach ($this->createTableStatements as $key => $stmt) {

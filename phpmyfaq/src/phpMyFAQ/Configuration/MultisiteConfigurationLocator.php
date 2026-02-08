@@ -32,7 +32,7 @@ class MultisiteConfigurationLocator
         $parsed = parse_url($protocol . '://' . $host . $scriptName);
 
         if (isset($parsed['host']) && $parsed['host'] !== '') {
-            // 1. Try exact hostname match (existing behavior)
+            // 1. Try an exact hostname match (existing behavior)
             $configDir = rtrim($configurationDirectory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $parsed['host'];
 
             if (is_dir($configDir)) {
@@ -64,6 +64,7 @@ class MultisiteConfigurationLocator
      */
     public static function extractTenantFromSubdomain(string $host): ?string
     {
+        $host = strtolower($host);
         $baseDomain = getenv('PMF_MULTISITE_BASE_DOMAIN');
         if ($baseDomain === false || $baseDomain === '') {
             return null;
@@ -76,7 +77,7 @@ class MultisiteConfigurationLocator
             return null;
         }
 
-        $tenant = substr($host, offset: 0, length: -strlen($suffix));
+        $tenant = strtolower(substr($host, offset: 0, length: -strlen($suffix)));
         if ($tenant === '' || str_contains($tenant, '.')) {
             return null;
         }

@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Instance;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Enums\TenantIsolationMode;
 use phpMyFAQ\Filesystem\Filesystem;
@@ -109,24 +110,102 @@ class ClientTest extends TestCase
 
     public function testCreateClientDatabaseWithSchemaMode(): void
     {
+        Database::factory('pdo_pgsql');
+        Database::setTablePrefix('');
+
         $dbMock = $this->createMock(DatabaseDriver::class);
         $this->configuration->method('getDb')->willReturn($dbMock);
 
-        $dbMock->expects($this->atLeastOnce())->method('query');
+        $queries = [];
+        $dbMock->method('query')->willReturnCallback(
+            static function (string $query) use (&$queries): bool {
+                $queries[] = $query;
+                return true;
+            }
+        );
+        $dbMock->method('escape')->willReturnCallback(static fn (string $value): string => $value);
 
         $this->client->setClientUrl('https://tenant.example.com');
         $this->client->createClientDatabase('tenant_schema', TenantIsolationMode::SCHEMA);
+
+        $this->assertNotEmpty($queries);
+        $this->assertTrue($this->queryContains($queries, 'SET search_path TO "tenant_schema"'));
+        $this->assertContains('INSERT INTO "tenant_schema".faqconfig SELECT * FROM faqconfig', $queries);
+        $this->assertContains('INSERT INTO "tenant_schema".faqright SELECT * FROM faqright', $queries);
+        $this->assertContains(
+            'INSERT INTO "tenant_schema".faquser_right SELECT * FROM faquser_right WHERE user_id = 1',
+            $queries,
+        );
+        $this->assertContains(
+            "UPDATE \"tenant_schema\".faqconfig SET config_value = 'https://tenant.example.com' WHERE config_name = 'main.referenceURL'",
+            $queries,
+        );
     }
 
     public function testCreateClientDatabaseWithDatabaseMode(): void
     {
+        Database::factory('pdo_pgsql');
+        Database::setTablePrefix('');
+
         $dbMock = $this->createMock(DatabaseDriver::class);
         $this->configuration->method('getDb')->willReturn($dbMock);
 
-        $dbMock->expects($this->atLeastOnce())->method('query');
+        $dbMock->expects($this->exactly(2))
+            ->method('connect')
+            ->willReturnCallback(static function (
+                string $server,
+                string $user,
+                string $password,
+                string $database,
+                ?int $port = null,
+            ): bool {
+                return $database === 'tenant_db' || $database === '';
+            });
+
+        $queries = [];
+        $dbMock->method('query')->willReturnCallback(
+            static function (string $query) use (&$queries): mixed {
+                $queries[] = $query;
+                if (str_starts_with($query, 'SELECT * FROM faq')) {
+                    return new \stdClass();
+                }
+                if (str_starts_with($query, 'SELECT 1 FROM pg_database')) {
+                    return new \stdClass();
+                }
+                return true;
+            }
+        );
+        $dbMock->method('fetchAll')->willReturn([]);
+        $dbMock->method('numRows')->willReturn(0);
+        $dbMock->method('escape')->willReturnCallback(static fn (string $value): string => $value);
 
         $this->client->setClientUrl('https://tenant.example.com');
         $this->client->createClientDatabase('tenant_db', TenantIsolationMode::DATABASE);
+
+        $this->assertNotEmpty($queries);
+        $this->assertContains('SELECT * FROM faqconfig', $queries);
+        $this->assertContains('SELECT * FROM faqright', $queries);
+        $this->assertContains('SELECT * FROM faquser_right WHERE user_id = 1', $queries);
+        $this->assertContains("SELECT 1 FROM pg_database WHERE datname = 'tenant_db'", $queries);
+        $this->assertContains('CREATE DATABASE "tenant_db"', $queries);
+        $this->assertContains(
+            "UPDATE faqconfig SET config_value = 'https://tenant.example.com' WHERE config_name = 'main.referenceURL'",
+            $queries,
+        );
+    }
+
+    /**
+     * @param string[] $queries
+     */
+    private function queryContains(array $queries, string $needle): bool
+    {
+        foreach ($queries as $query) {
+            if (str_contains($query, $needle)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function testCreateClientDatabaseDefaultsToPrefix(): void

@@ -27,6 +27,7 @@ use phpMyFAQ\Configuration\LdapConfiguration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Core\Exception\DatabaseConnectionException;
 use phpMyFAQ\Database\DatabaseDriver;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 
 class Bootstrapper
@@ -170,6 +171,8 @@ class Bootstrapper
 
     /**
      * Switches to the tenant's schema or database after connection, if configured.
+     *
+     * @throws RuntimeException
      */
     private function switchToTenantSchema(DatabaseConfiguration $dbConfig): void
     {
@@ -178,18 +181,38 @@ class Bootstrapper
             return;
         }
 
+        $schema = trim($schema);
+        if (!preg_match('/^[A-Za-z0-9_]+$/', $schema)) {
+            throw new RuntimeException('Invalid tenant schema identifier.');
+        }
+
         $dbType = $dbConfig->getType();
 
-        if (str_contains($dbType, 'mysql') || str_contains($dbType, 'mysqli')) {
-            $this->db->query(sprintf('USE `%s`', $schema));
-            return;
+        try {
+            if (str_contains($dbType, 'mysql')) {
+                $quotedSchema = sprintf('`%s`', str_replace('`', '``', $schema));
+                $result = $this->db->query(sprintf('USE %s', $quotedSchema));
+                if ($result === false) {
+                    throw new RuntimeException('Failed to switch to tenant schema for MySQL.');
+                }
+                return;
+            }
+
+            if (str_contains($dbType, 'pgsql')) {
+                $quotedSchema = sprintf('"%s"', str_replace('"', '""', $schema));
+                $result = $this->db->query(sprintf('SET search_path TO %s', $quotedSchema));
+                if ($result === false) {
+                    throw new RuntimeException('Failed to switch to tenant schema for PostgreSQL.');
+                }
+            }
+        } catch (Exception $exception) {
+            throw new RuntimeException(
+                'Failed to switch to tenant schema: ' . $exception->getMessage(),
+                previous: $exception,
+            );
         }
 
-        if (str_contains($dbType, 'pgsql')) {
-            $this->db->query(sprintf('SET search_path TO "%s"', $schema));
-        }
-
-        // SQL Server uses schema prefix in queries; no global switch needed.
+        // SQL Server uses a schema prefix in queries; no global switch needed.
     }
 
     private function configureLdap(): void
