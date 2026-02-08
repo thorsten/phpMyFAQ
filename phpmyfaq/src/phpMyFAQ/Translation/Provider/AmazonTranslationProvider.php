@@ -287,19 +287,20 @@ class AmazonTranslationProvider extends AbstractTranslationProvider
         $canonicalQuerystring = '';
         $canonicalHeaders =
             "content-type:application/x-amz-json-1.1\n"
-            . "host:$host\n"
-            . "x-amz-date:$amzDate\n"
+            . "host:{$host}\n"
+            . "x-amz-date:{$amzDate}\n"
             . "x-amz-target:AWSShineFrontendService_20170701.TranslateText\n";
         $signedHeaders = 'content-type;host;x-amz-date;x-amz-target';
         $payloadHash = hash('sha256', $payload);
 
         $canonicalRequest =
-            "$method\n$canonicalUri\n$canonicalQuerystring\n" . "$canonicalHeaders\n$signedHeaders\n$payloadHash";
+            "{$method}\n{$canonicalUri}\n{$canonicalQuerystring}\n"
+            . "{$canonicalHeaders}\n{$signedHeaders}\n{$payloadHash}";
 
         // Task 2: Create string to sign
         $algorithm = 'AWS4-HMAC-SHA256';
-        $credentialScope = "$dateStamp/$region/$service/aws4_request";
-        $stringToSign = "$algorithm\n$amzDate\n$credentialScope\n" . hash('sha256', $canonicalRequest);
+        $credentialScope = "{$dateStamp}/{$region}/{$service}/aws4_request";
+        $stringToSign = "{$algorithm}\n{$amzDate}\n{$credentialScope}\n" . hash('sha256', $canonicalRequest);
 
         // Task 3: Calculate signature
         $kDate = hash_hmac('sha256', $dateStamp, 'AWS4' . $secretAccessKey, true);
@@ -310,8 +311,8 @@ class AmazonTranslationProvider extends AbstractTranslationProvider
 
         // Task 4: Add signing information to the request
         $authorizationHeader =
-            "$algorithm Credential=$accessKeyId/$credentialScope, "
-            . "SignedHeaders=$signedHeaders, Signature=$signature";
+            "{$algorithm} Credential={$accessKeyId}/{$credentialScope}, "
+            . "SignedHeaders={$signedHeaders}, Signature={$signature}";
 
         return [
             'Content-Type' => 'application/x-amz-json-1.1',

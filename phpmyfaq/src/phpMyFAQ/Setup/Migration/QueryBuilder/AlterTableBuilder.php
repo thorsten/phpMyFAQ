@@ -219,7 +219,7 @@ class AlterTableBuilder
                     if ($alt['default'] !== null) {
                         $type .= ' DEFAULT ' . $alt['default'];
                     }
-                    $part = "ADD COLUMN {$alt['column']} $type";
+                    $part = "ADD COLUMN {$alt['column']} {$type}";
                     if ($this->dialect->supportsColumnPositioning() && $alt['after'] !== null) {
                         $part .= " AFTER {$alt['after']}";
                     }

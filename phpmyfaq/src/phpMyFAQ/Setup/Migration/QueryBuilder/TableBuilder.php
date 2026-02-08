@@ -261,7 +261,7 @@ class TableBuilder
             if ($def['type'] === 'AUTO_INCREMENT') {
                 $parts[] = $this->dialect->autoIncrement($name);
             } else {
-                $col = "$name {$def['type']}";
+                $col = "{$name} {$def['type']}";
                 if (!$def['nullable']) {
                     $col .= ' NOT NULL';
                 } elseif ($def['default'] === null && $def['nullable']) {
@@ -278,17 +278,19 @@ class TableBuilder
         // For SQLite and MySQL, autoIncrement() already includes PRIMARY KEY, so skip explicit PRIMARY KEY
         $hasAutoIncrement = false;
         foreach ($this->columns as $def) {
-            if ($def['type'] === 'AUTO_INCREMENT') {
-                $hasAutoIncrement = true;
-                break;
+            if ($def['type'] !== 'AUTO_INCREMENT') {
+                continue;
             }
+
+            $hasAutoIncrement = true;
+            break;
         }
 
         $dialectType = $this->dialect->getType();
         $autoIncrementIncludesPk = in_array($dialectType, ['sqlite3', 'mysqli', 'pdo_mysql'], true);
         if (!empty($this->primaryKey) && !($hasAutoIncrement && $autoIncrementIncludesPk)) {
             $pkColumns = implode(', ', $this->primaryKey);
-            $parts[] = "PRIMARY KEY ($pkColumns)";
+            $parts[] = "PRIMARY KEY ({$pkColumns})";
         }
 
         // Add inline indexes only for MySQL (MySQL supports this, other databases don't)
@@ -296,13 +298,13 @@ class TableBuilder
         if ($isMysql) {
             foreach ($this->fullTextIndexes as $ftColumns) {
                 $columnList = implode(',', $ftColumns);
-                $parts[] = "FULLTEXT ($columnList)";
+                $parts[] = "FULLTEXT ({$columnList})";
             }
 
             foreach ($this->indexes as $indexName => $indexDef) {
                 $columnList = implode(', ', $indexDef['columns']);
                 $indexType = $indexDef['unique'] ? 'UNIQUE INDEX' : 'INDEX';
-                $parts[] = "$indexType $indexName ($columnList)";
+                $parts[] = "{$indexType} {$indexName} ({$columnList})";
             }
         }
 
@@ -310,7 +312,7 @@ class TableBuilder
         $prefix = $this->dialect->createTablePrefix($this->tableName, $this->ifNotExists);
         $suffix = $this->dialect->createTableSuffix();
 
-        $sql = "$prefix (\n    $columnDefs\n)";
+        $sql = "{$prefix} (\n    {$columnDefs}\n)";
         if ($suffix !== '') {
             $sql .= ' ' . $suffix;
         }

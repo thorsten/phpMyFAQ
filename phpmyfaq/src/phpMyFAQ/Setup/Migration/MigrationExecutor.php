@@ -225,7 +225,7 @@ class MigrationExecutor
         $output = "=== Migration Dry-Run Report ===\n\n";
 
         foreach ($report['migrations'] as $version => $migrationData) {
-            $output .= "Version: $version\n";
+            $output .= "Version: {$version}\n";
             $output .= "Description: {$migrationData['description']}\n\n";
 
             // Group operations by type
@@ -289,7 +289,7 @@ class MigrationExecutor
         if (!empty($report['summary']['operationsByType'])) {
             $output .= "By Type:\n";
             foreach ($report['summary']['operationsByType'] as $type => $count) {
-                $output .= "  - $type: $count\n";
+                $output .= "  - {$type}: {$count}\n";
             }
         }
 

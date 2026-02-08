@@ -89,7 +89,7 @@ final class ChatSseController extends AbstractController
 
                     if ((time() - $startTime) >= $maxRuntime) {
                         echo "event: reconnect\n";
-                        echo "data: {\"lastId\": $currentLastId}\n\n";
+                        echo "data: {\"lastId\": {$currentLastId}}\n\n";
                         if (ob_get_level() > 0) {
                             ob_flush();
                         }

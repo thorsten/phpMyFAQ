@@ -45,7 +45,7 @@ class SqlServerDialect implements DialectInterface
 
     public function varchar(int $length): string
     {
-        return "NVARCHAR($length)";
+        return "NVARCHAR({$length})";
     }
 
     public function text(): string
@@ -80,7 +80,7 @@ class SqlServerDialect implements DialectInterface
 
     public function char(int $length): string
     {
-        return "NCHAR($length)";
+        return "NCHAR({$length})";
     }
 
     public function currentTimestamp(): string
@@ -95,18 +95,18 @@ class SqlServerDialect implements DialectInterface
 
     public function autoIncrement(string $columnName): string
     {
-        return "$columnName INT IDENTITY(1,1) NOT NULL";
+        return "{$columnName} INT IDENTITY(1,1) NOT NULL";
     }
 
     public function createTablePrefix(string $tableName, bool $ifNotExists = false): string
     {
         if ($ifNotExists) {
             return (
-                "IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='$tableName' AND xtype='U') "
-                . "CREATE TABLE $tableName"
+                "IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='{$tableName}' AND xtype='U') "
+                . "CREATE TABLE {$tableName}"
             );
         }
-        return "CREATE TABLE $tableName";
+        return "CREATE TABLE {$tableName}";
     }
 
     public function createTableSuffix(): string
@@ -117,12 +117,12 @@ class SqlServerDialect implements DialectInterface
     public function addColumn(string $tableName, string $columnName, string $type, ?string $after = null): string
     {
         // SQL Server doesn't support AFTER clause, and uses different syntax
-        return "ALTER TABLE $tableName ADD $columnName $type";
+        return "ALTER TABLE {$tableName} ADD {$columnName} {$type}";
     }
 
     public function modifyColumn(string $tableName, string $columnName, string $newType): string
     {
-        return "ALTER TABLE $tableName ALTER COLUMN $columnName $newType";
+        return "ALTER TABLE {$tableName} ALTER COLUMN {$columnName} {$newType}";
     }
 
     public function createIndex(string $indexName, string $tableName, array $columns, bool $ifNotExists = false): string
@@ -130,17 +130,17 @@ class SqlServerDialect implements DialectInterface
         $columnList = implode(', ', $columns);
         if ($ifNotExists) {
             return (
-                "IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = '$indexName'"
-                . " AND object_id = OBJECT_ID(N'$tableName')) "
-                . "CREATE INDEX $indexName ON $tableName ($columnList)"
+                "IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = '{$indexName}'"
+                . " AND object_id = OBJECT_ID(N'{$tableName}')) "
+                . "CREATE INDEX {$indexName} ON {$tableName} ({$columnList})"
             );
         }
-        return "CREATE INDEX $indexName ON $tableName ($columnList)";
+        return "CREATE INDEX {$indexName} ON {$tableName} ({$columnList})";
     }
 
     public function dropIndex(string $indexName, string $tableName): string
     {
-        return "DROP INDEX $indexName ON $tableName";
+        return "DROP INDEX {$indexName} ON {$tableName}";
     }
 
     public function supportsColumnPositioning(): bool

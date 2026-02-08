@@ -46,7 +46,7 @@ class SqliteDialect implements DialectInterface
 
     public function varchar(int $length): string
     {
-        return "VARCHAR($length)";
+        return "VARCHAR({$length})";
     }
 
     public function text(): string
@@ -81,7 +81,7 @@ class SqliteDialect implements DialectInterface
 
     public function char(int $length): string
     {
-        return "CHAR($length)";
+        return "CHAR({$length})";
     }
 
     public function currentTimestamp(): string
@@ -96,7 +96,7 @@ class SqliteDialect implements DialectInterface
 
     public function autoIncrement(string $columnName): string
     {
-        return "$columnName INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT";
+        return "{$columnName} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT";
     }
 
     public function createTablePrefix(string $tableName, bool $ifNotExists = false): string
@@ -113,7 +113,7 @@ class SqliteDialect implements DialectInterface
     public function addColumn(string $tableName, string $columnName, string $type, ?string $after = null): string
     {
         // SQLite doesn't support AFTER clause
-        return "ALTER TABLE $tableName ADD COLUMN $columnName $type";
+        return "ALTER TABLE {$tableName} ADD COLUMN {$columnName} {$type}";
     }
 
     public function modifyColumn(string $tableName, string $columnName, string $newType): string
@@ -127,12 +127,12 @@ class SqliteDialect implements DialectInterface
     {
         $columnList = implode(', ', $columns);
         $exists = $ifNotExists ? 'IF NOT EXISTS ' : '';
-        return "CREATE INDEX {$exists}$indexName ON $tableName ($columnList)";
+        return "CREATE INDEX {$exists}{$indexName} ON {$tableName} ({$columnList})";
     }
 
     public function dropIndex(string $indexName, string $tableName): string
     {
-        return "DROP INDEX IF EXISTS $indexName";
+        return "DROP INDEX IF EXISTS {$indexName}";
     }
 
     public function supportsColumnPositioning(): bool

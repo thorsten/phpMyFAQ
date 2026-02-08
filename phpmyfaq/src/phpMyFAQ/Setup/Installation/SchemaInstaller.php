@@ -81,9 +81,11 @@ class SchemaInstaller implements DriverInterface
                 }
 
                 foreach ($tableBuilder->buildIndexStatements() as $indexSql) {
-                    if (!$this->executeSql($indexSql)) {
-                        return false;
+                    if ($this->executeSql($indexSql)) {
+                        continue;
                     }
+
+                    return false;
                 }
             }
 

@@ -45,7 +45,7 @@ class PostgresDialect implements DialectInterface
 
     public function varchar(int $length): string
     {
-        return "VARCHAR($length)";
+        return "VARCHAR({$length})";
     }
 
     public function text(): string
@@ -80,7 +80,7 @@ class PostgresDialect implements DialectInterface
 
     public function char(int $length): string
     {
-        return "CHAR($length)";
+        return "CHAR({$length})";
     }
 
     public function currentTimestamp(): string
@@ -95,7 +95,7 @@ class PostgresDialect implements DialectInterface
 
     public function autoIncrement(string $columnName): string
     {
-        return "$columnName SERIAL NOT NULL";
+        return "{$columnName} SERIAL NOT NULL";
     }
 
     public function createTablePrefix(string $tableName, bool $ifNotExists = false): string
@@ -112,24 +112,24 @@ class PostgresDialect implements DialectInterface
     public function addColumn(string $tableName, string $columnName, string $type, ?string $after = null): string
     {
         // PostgreSQL doesn't support AFTER clause
-        return "ALTER TABLE $tableName ADD COLUMN $columnName $type";
+        return "ALTER TABLE {$tableName} ADD COLUMN {$columnName} {$type}";
     }
 
     public function modifyColumn(string $tableName, string $columnName, string $newType): string
     {
-        return "ALTER TABLE $tableName ALTER COLUMN $columnName TYPE $newType";
+        return "ALTER TABLE {$tableName} ALTER COLUMN {$columnName} TYPE {$newType}";
     }
 
     public function createIndex(string $indexName, string $tableName, array $columns, bool $ifNotExists = false): string
     {
         $columnList = implode(', ', $columns);
         $exists = $ifNotExists ? 'IF NOT EXISTS ' : '';
-        return "CREATE INDEX {$exists}$indexName ON $tableName ($columnList)";
+        return "CREATE INDEX {$exists}{$indexName} ON {$tableName} ({$columnList})";
     }
 
     public function dropIndex(string $indexName, string $tableName): string
     {
-        return "DROP INDEX $indexName";
+        return "DROP INDEX {$indexName}";
     }
 
     public function supportsColumnPositioning(): bool

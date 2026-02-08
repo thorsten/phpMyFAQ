@@ -78,8 +78,7 @@ class User
 
     final public const string ERROR_USER_NO_AUTH_WRITABLE = 'No authentication object is writable.';
 
-    final public const string ERROR_USER_TOO_MANY_FAILED_LOGINS =
-        'You exceeded the maximum amounts of login attempts' . ' and are temporarily blocked. Please try again later.';
+    final public const string ERROR_USER_TOO_MANY_FAILED_LOGINS = 'You exceeded the maximum amounts of login attempts and are temporarily blocked. Please try again later.';
 
     final public const string STATUS_USER_PROTECTED = 'User account is protected. ';
 

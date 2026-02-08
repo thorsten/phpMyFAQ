@@ -121,7 +121,7 @@ abstract readonly class AbstractMigration implements MigrationInterface
         $tableName = $this->table($table);
         $defaultClause = '';
         if ($default !== null) {
-            $defaultClause = " DEFAULT $default";
+            $defaultClause = " DEFAULT {$default}";
         }
 
         if ($this->isSqlite()) {
@@ -299,8 +299,8 @@ abstract readonly class AbstractMigration implements MigrationInterface
     protected function varcharType(int $length): string
     {
         return match ($this->dbType) {
-            'sqlsrv', 'pdo_sqlsrv' => "NVARCHAR($length)",
-            default => "VARCHAR($length)",
+            'sqlsrv', 'pdo_sqlsrv' => "NVARCHAR({$length})",
+            default => "VARCHAR({$length})",
         };
     }
 
@@ -344,11 +344,11 @@ abstract readonly class AbstractMigration implements MigrationInterface
     protected function autoIncrementColumn(string $columnName = 'id'): string
     {
         return match ($this->dbType) {
-            'mysqli', 'pdo_mysql' => "$columnName INT NOT NULL AUTO_INCREMENT",
-            'pgsql', 'pdo_pgsql' => "$columnName SERIAL NOT NULL",
-            'sqlite3', 'pdo_sqlite' => "$columnName INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT",
-            'sqlsrv', 'pdo_sqlsrv' => "$columnName INT IDENTITY(1,1) NOT NULL",
-            default => "$columnName INTEGER NOT NULL",
+            'mysqli', 'pdo_mysql' => "{$columnName} INT NOT NULL AUTO_INCREMENT",
+            'pgsql', 'pdo_pgsql' => "{$columnName} SERIAL NOT NULL",
+            'sqlite3', 'pdo_sqlite' => "{$columnName} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT",
+            'sqlsrv', 'pdo_sqlsrv' => "{$columnName} INT IDENTITY(1,1) NOT NULL",
+            default => "{$columnName} INTEGER NOT NULL",
         };
     }
 
