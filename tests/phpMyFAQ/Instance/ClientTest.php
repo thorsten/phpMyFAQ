@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ\Instance;
 
+use Monolog\Logger;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
@@ -9,6 +10,8 @@ use phpMyFAQ\Enums\TenantIsolationMode;
 use phpMyFAQ\Filesystem\Filesystem;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
+use RuntimeException;
 
 /**
  * Class ClientTest
@@ -124,13 +127,13 @@ class ClientTest extends TestCase
         $this->configuration->method('getDb')->willReturn($dbMock);
 
         $queries = [];
-        $dbMock->method('query')->willReturnCallback(
-            static function (string $query) use (&$queries): bool {
+        $dbMock
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$queries): bool {
                 $queries[] = $query;
                 return true;
-            }
-        );
-        $dbMock->method('escape')->willReturnCallback(static fn (string $value): string => $value);
+            });
+        $dbMock->method('escape')->willReturnCallback(static fn(string $value): string => $value);
 
         $this->client->setClientUrl('https://tenant.example.com');
         $this->client->createClientDatabase('tenant_schema', TenantIsolationMode::SCHEMA);
@@ -165,7 +168,8 @@ class ClientTest extends TestCase
         $this->configuration->method('getDb')->willReturn($dbMock);
 
         $connectCalls = [];
-        $dbMock->expects($this->exactly(2))
+        $dbMock
+            ->expects($this->exactly(2))
             ->method('connect')
             ->willReturnCallback(static function (
                 string $server,
@@ -179,8 +183,9 @@ class ClientTest extends TestCase
             });
 
         $queries = [];
-        $dbMock->method('query')->willReturnCallback(
-            static function (string $query) use (&$queries): mixed {
+        $dbMock
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$queries): mixed {
                 $queries[] = $query;
                 if (str_starts_with($query, 'SELECT * FROM faq')) {
                     return new \stdClass();
@@ -189,11 +194,10 @@ class ClientTest extends TestCase
                     return new \stdClass();
                 }
                 return true;
-            }
-        );
+            });
         $dbMock->method('fetchAll')->willReturn([]);
         $dbMock->method('numRows')->willReturn(0);
-        $dbMock->method('escape')->willReturnCallback(static fn (string $value): string => $value);
+        $dbMock->method('escape')->willReturnCallback(static fn(string $value): string => $value);
 
         $this->client->setClientUrl('https://tenant.example.com');
         $this->client->createClientDatabase('tenant_db', TenantIsolationMode::DATABASE);
@@ -242,5 +246,61 @@ class ClientTest extends TestCase
         $this->client->createClientDatabase($prefix);
 
         putenv('PMF_TENANT_ISOLATION_MODE');
+    }
+
+    public function testInsertRowsThrowsOnQueryFailure(): void
+    {
+        $dbMock = $this->createMock(DatabaseDriver::class);
+        $loggerMock = $this->createMock(Logger::class);
+
+        $this->configuration->method('getDb')->willReturn($dbMock);
+        $this->configuration->method('getLogger')->willReturn($loggerMock);
+
+        $dbMock->method('query')->willReturn(false);
+        $dbMock->method('error')->willReturn('Duplicate entry for key PRIMARY');
+        $dbMock->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+
+        $loggerMock
+            ->expects($this->once())
+            ->method('error')
+            ->with('Failed to insert row into tenant table.', $this->callback(static function (array $context): bool {
+                return (
+                    $context['table'] === 'test_faqconfig'
+                    && str_contains($context['query'], 'INSERT INTO test_faqconfig')
+                    && $context['error'] === 'Duplicate entry for key PRIMARY'
+                );
+            }));
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Failed to insert row into test_faqconfig: Duplicate entry for key PRIMARY');
+
+        $method = new ReflectionMethod(Client::class, 'insertRows');
+
+        $rows = [(object) ['config_name' => 'test.key', 'config_value' => 'test_value']];
+        $method->invoke($this->client, 'test_faqconfig', $rows);
+    }
+
+    public function testInsertRowsSucceedsWhenQueryReturnsTrue(): void
+    {
+        $dbMock = $this->createMock(DatabaseDriver::class);
+        $loggerMock = $this->createMock(Logger::class);
+
+        $this->configuration->method('getDb')->willReturn($dbMock);
+        $this->configuration->method('getLogger')->willReturn($loggerMock);
+
+        $dbMock->method('query')->willReturn(true);
+        $dbMock->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+
+        $loggerMock->expects($this->never())->method('error');
+
+        $method = new ReflectionMethod(Client::class, 'insertRows');
+
+        $rows = [
+            (object) ['config_name' => 'key1', 'config_value' => 'value1'],
+            (object) ['config_name' => 'key2', 'config_value' => 'value2'],
+        ];
+        $method->invoke($this->client, 'test_faqconfig', $rows);
+
+        $this->addToAssertionCount(1);
     }
 }

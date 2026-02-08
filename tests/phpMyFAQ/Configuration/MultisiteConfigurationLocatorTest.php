@@ -116,9 +116,7 @@ class MultisiteConfigurationLocatorTest extends TestCase
     {
         putenv('PMF_MULTISITE_BASE_DOMAIN=faq.example.com');
 
-        $this->assertNull(
-            MultisiteConfigurationLocator::extractTenantFromSubdomain('deep.nested.faq.example.com')
-        );
+        $this->assertNull(MultisiteConfigurationLocator::extractTenantFromSubdomain('deep.nested.faq.example.com'));
 
         putenv('PMF_MULTISITE_BASE_DOMAIN');
     }

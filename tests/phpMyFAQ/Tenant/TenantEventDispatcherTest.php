@@ -19,7 +19,7 @@ class TenantEventDispatcherTest extends TestCase
 
         $dispatcher->addListener(TenantEventDispatcher::TENANT_CREATED, function (
             TenantLifecycleEvent $event,
-            string $eventName
+            string $eventName,
         ) use (&$receivedEvent, &$receivedName): void {
             $receivedEvent = $event;
             $receivedName = $eventName;
@@ -41,7 +41,7 @@ class TenantEventDispatcherTest extends TestCase
         $receivedEvent = null;
 
         $dispatcher->addListener(TenantEventDispatcher::TENANT_SUSPENDED, function (TenantLifecycleEvent $event) use (
-            &$receivedEvent
+            &$receivedEvent,
         ): void {
             $receivedEvent = $event;
         });
@@ -60,7 +60,7 @@ class TenantEventDispatcherTest extends TestCase
         $receivedEvent = null;
 
         $dispatcher->addListener(TenantEventDispatcher::TENANT_DELETED, function (TenantLifecycleEvent $event) use (
-            &$receivedEvent
+            &$receivedEvent,
         ): void {
             $receivedEvent = $event;
         });
@@ -81,7 +81,7 @@ class TenantEventDispatcherTest extends TestCase
 
         $dispatcher->addListener(TenantEventDispatcher::TENANT_PLAN_CHANGED, function (
             TenantLifecycleEvent $event,
-            string $eventName
+            string $eventName,
         ) use (&$receivedEvent, &$receivedName): void {
             $receivedEvent = $event;
             $receivedName = $eventName;

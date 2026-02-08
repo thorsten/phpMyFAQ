@@ -90,7 +90,8 @@ class DatabaseTest extends TestCase
 
         $dbMock->method('escape')->willReturnArgument(0);
         $queryCall = 0;
-        $dbMock->expects($this->exactly(2))
+        $dbMock
+            ->expects($this->exactly(2))
             ->method('query')
             ->willReturnCallback(function (string $query) use (&$queryCall): mixed {
                 if ($queryCall === 0) {
@@ -115,7 +116,8 @@ class DatabaseTest extends TestCase
         $this->configuration->method('getDb')->willReturn($dbMock);
 
         $dbMock->method('escape')->willReturnArgument(0);
-        $dbMock->expects($this->once())
+        $dbMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains("IF DB_ID('tenantdb') IS NULL CREATE DATABASE [tenantdb]"))
             ->willReturn(true);

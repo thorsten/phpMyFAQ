@@ -326,7 +326,18 @@ class Client extends Instance
                 implode(', ', $values),
             );
 
-            $this->configuration->getDb()->query($query);
+            $result = $this->configuration->getDb()->query($query);
+
+            if ($result === false) {
+                $dbError = $this->configuration->getDb()->error();
+                $this->configuration->getLogger()->error('Failed to insert row into tenant table.', [
+                    'table' => $table,
+                    'query' => $query,
+                    'error' => $dbError,
+                ]);
+
+                throw new \RuntimeException(sprintf('Failed to insert row into %s: %s', $table, $dbError));
+            }
         }
     }
 
