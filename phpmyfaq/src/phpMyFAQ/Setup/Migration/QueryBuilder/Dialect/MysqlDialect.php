@@ -46,7 +46,7 @@ class MysqlDialect implements DialectInterface
 
     public function varchar(int $length): string
     {
-        return "VARCHAR($length)";
+        return "VARCHAR({$length})";
     }
 
     public function text(): string
@@ -81,7 +81,7 @@ class MysqlDialect implements DialectInterface
 
     public function char(int $length): string
     {
-        return "CHAR($length)";
+        return "CHAR({$length})";
     }
 
     public function currentTimestamp(): string
@@ -96,7 +96,7 @@ class MysqlDialect implements DialectInterface
 
     public function autoIncrement(string $columnName): string
     {
-        return "$columnName INT NOT NULL PRIMARY KEY AUTO_INCREMENT";
+        return "{$columnName} INT NOT NULL PRIMARY KEY AUTO_INCREMENT";
     }
 
     public function createTablePrefix(string $tableName, bool $ifNotExists = false): string
@@ -112,13 +112,13 @@ class MysqlDialect implements DialectInterface
 
     public function addColumn(string $tableName, string $columnName, string $type, ?string $after = null): string
     {
-        $afterClause = $after !== null ? " AFTER $after" : '';
+        $afterClause = $after !== null ? " AFTER {$after}" : '';
         return "ALTER TABLE $tableName ADD COLUMN $columnName $type$afterClause";
     }
 
     public function modifyColumn(string $tableName, string $columnName, string $newType): string
     {
-        return "ALTER TABLE $tableName MODIFY $columnName $newType";
+        return "ALTER TABLE {$tableName} MODIFY {$columnName} {$newType}";
     }
 
     public function createIndex(string $indexName, string $tableName, array $columns, bool $ifNotExists = false): string
@@ -131,12 +131,12 @@ class MysqlDialect implements DialectInterface
         }
 
         $columnList = implode(', ', $columns);
-        return "CREATE INDEX $indexName ON $tableName ($columnList)";
+        return "CREATE INDEX {$indexName} ON {$tableName} ({$columnList})";
     }
 
     public function dropIndex(string $indexName, string $tableName): string
     {
-        return "DROP INDEX $indexName ON $tableName";
+        return "DROP INDEX {$indexName} ON {$tableName}";
     }
 
     public function supportsColumnPositioning(): bool

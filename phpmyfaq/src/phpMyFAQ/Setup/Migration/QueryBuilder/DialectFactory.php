@@ -45,7 +45,7 @@ class DialectFactory
             'pgsql', 'pdo_pgsql' => new PostgresDialect(),
             'sqlite3', 'pdo_sqlite' => new SqliteDialect(),
             'sqlsrv', 'pdo_sqlsrv' => new SqlServerDialect(),
-            default => throw new \InvalidArgumentException("Unsupported database type: $dbType"),
+            default => throw new \InvalidArgumentException("Unsupported database type: {$dbType}"),
         };
     }
 }

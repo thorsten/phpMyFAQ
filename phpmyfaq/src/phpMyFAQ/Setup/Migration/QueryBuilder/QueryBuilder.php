@@ -65,7 +65,7 @@ class QueryBuilder
     public function dropTable(string $tableName, bool $withPrefix = true): string
     {
         $fullName = $withPrefix ? $this->tablePrefix . $tableName : $tableName;
-        return "DROP TABLE $fullName";
+        return "DROP TABLE {$fullName}";
     }
 
     /**
@@ -74,7 +74,7 @@ class QueryBuilder
     public function dropTableIfExists(string $tableName, bool $withPrefix = true): string
     {
         $fullName = $withPrefix ? $this->tablePrefix . $tableName : $tableName;
-        return "DROP TABLE IF EXISTS $fullName";
+        return "DROP TABLE IF EXISTS {$fullName}";
     }
 
     /**

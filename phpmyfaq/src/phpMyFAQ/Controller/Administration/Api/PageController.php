@@ -172,7 +172,7 @@ final class PageController extends AbstractAdministrationApiController
                 continue;
             }
 
-            return $this->json(['error' => "Missing required field: $field"], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => "Missing required field: {$field}"], Response::HTTP_BAD_REQUEST);
         }
 
         $pageTitle = Filter::filterVar($data->pageTitle, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -327,7 +327,7 @@ final class PageController extends AbstractAdministrationApiController
                 continue;
             }
 
-            return $this->json(['error' => "Missing required field: $field"], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => "Missing required field: {$field}"], Response::HTTP_BAD_REQUEST);
         }
 
         $pageId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
