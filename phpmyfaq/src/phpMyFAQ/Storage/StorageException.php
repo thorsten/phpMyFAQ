@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Attachment storage type enum
+ * Storage exception.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -9,19 +9,19 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2023-2026 phpMyFAQ Team
+ * @copyright 2026 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2023-03-12
+ * @since     2026-02-08
  */
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Enums;
+namespace phpMyFAQ\Storage;
 
-enum AttachmentStorageType: int
-{
-    case FILESYSTEM = 0;
-    case DATABASE = 1; // not used currently
-    case S3 = 2;
-}
+/**
+ * Class StorageException
+ *
+ * @package phpMyFAQ\Storage
+ */
+class StorageException extends \RuntimeException {}

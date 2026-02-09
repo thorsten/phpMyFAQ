@@ -183,6 +183,10 @@ class Configuration
      */
     public function getDefaultLanguage(): string
     {
+        if (!isset($this->config['main.language'])) {
+            return 'en';
+        }
+
         return str_replace(['language_', '.php'], replace: '', subject: (string) $this->config['main.language']);
     }
 

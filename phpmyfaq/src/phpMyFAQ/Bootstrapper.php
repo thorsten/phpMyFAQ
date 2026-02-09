@@ -104,10 +104,12 @@ class Bootstrapper
             }
 
             // 16. Attachments directory
-            ConfigDirectoryResolver::resolveAttachmentsDir(
-                (string) $this->faqConfig->get('records.attachmentsPath'),
-                dirname(__DIR__, levels: 2),
-            );
+            if (strtolower((string) $this->faqConfig->get('storage.type')) !== 's3') {
+                ConfigDirectoryResolver::resolveAttachmentsDir(
+                    (string) $this->faqConfig->get('records.attachmentsPath'),
+                    dirname(__DIR__, levels: 2),
+                );
+            }
 
             // 17. Proxy header fix
             $this->fixProxyHeaders();

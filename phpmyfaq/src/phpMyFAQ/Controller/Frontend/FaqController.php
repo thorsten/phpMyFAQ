@@ -399,7 +399,7 @@ final class FaqController extends AbstractFrontController
             'msgVoteSubmit' => Translation::get(key: 'msgVoteSubmit'),
             'msgWriteComment' => Translation::get(key: 'msgWriteComment'),
             'id' => $faqId,
-            'lang' => $this->configuration->getLanguage()->getLanguage(),
+            'lang' => $faq->faqRecord['lang'],
             'msgNewContentName' => Translation::get(key: 'msgNewContentName'),
             'msgNewContentMail' => Translation::get(key: 'msgNewContentMail'),
             'defaultContentMail' => $this->currentUser->getUserId() > 0
