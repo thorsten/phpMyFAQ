@@ -28,7 +28,9 @@ use phpMyFAQ\Administration\LatestUsers;
 use phpMyFAQ\Administration\RatingData;
 use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Attachment\AttachmentCollection;
-use phpMyFAQ\Auth;
+use phpMyFAQ\Auth as LegacyAuth;
+use phpMyFAQ\Auth\ApiKeyAuthenticator;
+use phpMyFAQ\Auth\AuthChain;
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\Chat;
 use phpMyFAQ\Captcha\Captcha;
@@ -168,8 +170,15 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.configuration'),
     ]);
 
-    $services->set('phpmyfaq.auth', Auth::class)->args([
+    $services->set('phpmyfaq.auth', LegacyAuth::class)->args([
         service('phpmyfaq.configuration'),
+    ]);
+    $services->set('phpmyfaq.auth.api-key-authenticator', ApiKeyAuthenticator::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+    $services->set('phpmyfaq.auth.chain', AuthChain::class)->args([
+        service('phpmyfaq.user.current_user'),
+        service('phpmyfaq.auth.api-key-authenticator'),
     ]);
 
     $services->set('phpmyfaq.backup', Backup::class)->args([

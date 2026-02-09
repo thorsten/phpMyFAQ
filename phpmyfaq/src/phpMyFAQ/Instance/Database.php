@@ -44,6 +44,7 @@ class Database
         'DROP TABLE %sfaqadminlog',
         'DROP TABLE %sfaqattachment',
         'DROP TABLE %sfaqattachment_file',
+        'DROP TABLE %sfaqapi_keys',
         'DROP TABLE %sfaqbackup',
         'DROP TABLE %sfaqcaptcha',
         'DROP TABLE %sfaqcategories',

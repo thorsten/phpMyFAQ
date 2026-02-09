@@ -64,6 +64,7 @@ class DatabaseSchema
             'faqglossary' => $this->faqglossary(),
             'faqgroup' => $this->faqgroup(),
             'faqgroup_right' => $this->faqgroupRight(),
+            'faqapi_keys' => $this->faqapiKeys(),
             'faqinstances' => $this->faqinstances(),
             'faqinstances_config' => $this->faqinstancesConfig(),
             'faqnews' => $this->faqnews(),
@@ -417,6 +418,23 @@ class DatabaseSchema
             ->varchar('config_name', 255, false, '')
             ->varchar('config_value', 255)
             ->primaryKey(['instance_id', 'config_name']);
+    }
+
+    public function faqapiKeys(): TableBuilder
+    {
+        return new TableBuilder($this->dialect)
+            ->table('faqapi_keys')
+            ->integer('id', false)
+            ->integer('user_id', false)
+            ->varchar('api_key', 64, false)
+            ->varchar('name', 255)
+            ->text('scopes')
+            ->timestamp('last_used_at')
+            ->timestamp('expires_at')
+            ->timestamp('created')
+            ->primaryKey('id')
+            ->uniqueIndex('idx_api_key_unique', 'api_key')
+            ->index('idx_api_key_user', 'user_id');
     }
 
     public function faqnews(): TableBuilder

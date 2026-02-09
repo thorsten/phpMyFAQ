@@ -27,13 +27,13 @@ class TenantScopedStorageTest extends TestCase
 
         $this->assertSame(
             [
-                ['put', '15/attachments/a.txt'],
+                ['put',       '15/attachments/a.txt'],
                 ['putStream', '15/attachments/b.txt'],
-                ['get', '15/attachments/c.txt'],
-                ['delete', '15/attachments/d.txt'],
-                ['exists', '15/attachments/e.txt'],
-                ['url', '15/attachments/f.txt'],
-                ['size', '15/attachments/g.txt'],
+                ['get',       '15/attachments/c.txt'],
+                ['delete',    '15/attachments/d.txt'],
+                ['exists',    '15/attachments/e.txt'],
+                ['url',       '15/attachments/f.txt'],
+                ['size',      '15/attachments/g.txt'],
             ],
             $inner->calls,
         );

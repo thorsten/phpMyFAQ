@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class DatabaseSchemaTest extends TestCase
 {
-    private const EXPECTED_TABLE_COUNT = 44;
+    private const EXPECTED_TABLE_COUNT = 45;
 
     /**
      * @return array<string, array{DialectInterface}>
@@ -45,6 +45,7 @@ class DatabaseSchemaTest extends TestCase
         $this->assertContains('faqdata', $names);
         $this->assertContains('faquser', $names);
         $this->assertContains('faqconfig', $names);
+        $this->assertContains('faqapi_keys', $names);
         $this->assertContains('faqchat_messages', $names);
         $this->assertContains('faqcustompages', $names);
         $this->assertContains('faqseo', $names);
