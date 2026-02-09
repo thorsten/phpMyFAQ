@@ -155,8 +155,19 @@ class File extends AbstractAttachment implements AttachmentInterface
 
     /**
      * Retrieve file contents into a variable.
+     *
+     * @throws AttachmentException
      */
-    public function get(): string {}
+    public function get(): string
+    {
+        $file = $this->getFile();
+        $contents = '';
+        while (!$file->eof()) {
+            $contents .= $file->getChunk();
+        }
+
+        return $contents;
+    }
 
     /**
      * Output current file to stdout.
