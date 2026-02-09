@@ -101,8 +101,8 @@ class StorageFactoryTest extends TestCase
         $configuration
             ->method('get')
             ->willReturnMap([
-                ['storage.type',                     'filesystem'],
-                ['storage.filesystem.root',          $readOnlyDir . '/phpmyfaq-test-unwritable'],
+                ['storage.type', 'filesystem'],
+                ['storage.filesystem.root', $readOnlyDir . '/phpmyfaq-test-unwritable'],
                 ['storage.filesystem.publicBaseUrl', null],
             ]);
 

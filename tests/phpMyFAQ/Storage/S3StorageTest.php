@@ -177,8 +177,9 @@ final class ArrayAccessS3Client
  */
 final class ArrayAccessResult implements \ArrayAccess
 {
-    public function __construct(private array $data)
-    {
+    public function __construct(
+        private array $data,
+    ) {
     }
 
     public function offsetExists(mixed $offset): bool

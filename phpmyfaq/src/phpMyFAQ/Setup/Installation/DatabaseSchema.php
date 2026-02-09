@@ -64,6 +64,12 @@ class DatabaseSchema
             'faqglossary' => $this->faqglossary(),
             'faqgroup' => $this->faqgroup(),
             'faqgroup_right' => $this->faqgroupRight(),
+            'faqapi_keys' => $this->faqapiKeys(),
+            'faqoauth_clients' => $this->faqoauthClients(),
+            'faqoauth_scopes' => $this->faqoauthScopes(),
+            'faqoauth_access_tokens' => $this->faqoauthAccessTokens(),
+            'faqoauth_refresh_tokens' => $this->faqoauthRefreshTokens(),
+            'faqoauth_auth_codes' => $this->faqoauthAuthCodes(),
             'faqinstances' => $this->faqinstances(),
             'faqinstances_config' => $this->faqinstancesConfig(),
             'faqnews' => $this->faqnews(),
@@ -417,6 +423,93 @@ class DatabaseSchema
             ->varchar('config_name', 255, false, '')
             ->varchar('config_value', 255)
             ->primaryKey(['instance_id', 'config_name']);
+    }
+
+    public function faqapiKeys(): TableBuilder
+    {
+        return new TableBuilder($this->dialect)
+            ->table('faqapi_keys')
+            ->integer('id', false)
+            ->integer('user_id', false)
+            ->varchar('api_key', 64, false)
+            ->varchar('name', 255)
+            ->text('scopes')
+            ->timestamp('last_used_at')
+            ->timestamp('expires_at')
+            ->timestamp('created', false, true)
+            ->primaryKey('id')
+            ->uniqueIndex('idx_api_key_unique', 'api_key')
+            ->index('idx_api_key_user', 'user_id');
+    }
+
+    public function faqoauthClients(): TableBuilder
+    {
+        return new TableBuilder($this->dialect)
+            ->table('faqoauth_clients')
+            ->varchar('client_id', 80, false)
+            ->varchar('client_secret', 255)
+            ->varchar('name', 255, false)
+            ->text('redirect_uri')
+            ->varchar('grants', 255)
+            ->smallInteger('is_confidential', true, 1)
+            ->integer('user_id')
+            ->timestamp('created', false, true)
+            ->primaryKey('client_id');
+    }
+
+    public function faqoauthScopes(): TableBuilder
+    {
+        return new TableBuilder($this->dialect)
+            ->table('faqoauth_scopes')
+            ->varchar('scope_id', 80, false)
+            ->varchar('description', 255)
+            ->primaryKey('scope_id');
+    }
+
+    public function faqoauthAccessTokens(): TableBuilder
+    {
+        return new TableBuilder($this->dialect)
+            ->table('faqoauth_access_tokens')
+            ->varchar('identifier', 100, false)
+            ->varchar('client_id', 80, false)
+            ->varchar('user_id', 80)
+            ->text('scopes')
+            ->smallInteger('revoked', true, 0)
+            ->timestamp('expires_at', false)
+            ->timestamp('created', false, true)
+            ->primaryKey('identifier')
+            ->index('idx_oauth_access_client', 'client_id')
+            ->index('idx_oauth_access_user', 'user_id');
+    }
+
+    public function faqoauthRefreshTokens(): TableBuilder
+    {
+        return new TableBuilder($this->dialect)
+            ->table('faqoauth_refresh_tokens')
+            ->varchar('identifier', 100, false)
+            ->varchar('access_token_identifier', 100, false)
+            ->smallInteger('revoked', true, 0)
+            ->timestamp('expires_at', false)
+            ->timestamp('created', false, true)
+            ->primaryKey('identifier')
+            ->index('idx_oauth_refresh_access', 'access_token_identifier');
+    }
+
+    public function faqoauthAuthCodes(): TableBuilder
+    {
+        return new TableBuilder($this->dialect)
+            ->table('faqoauth_auth_codes')
+            ->varchar('identifier', 100, false)
+            ->varchar('client_id', 80, false)
+            ->varchar('user_id', 80)
+            ->text('redirect_uri')
+            ->text('scopes')
+            ->smallInteger('revoked', true, 0)
+            ->timestamp('expires_at', false)
+            ->timestamp('created', false, true)
+            ->primaryKey('identifier')
+            ->index('idx_oauth_code_client', 'client_id')
+            ->index('idx_oauth_code_user', 'user_id');
     }
 
     public function faqnews(): TableBuilder

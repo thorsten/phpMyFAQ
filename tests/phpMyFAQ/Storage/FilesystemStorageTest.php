@@ -86,10 +86,7 @@ class FilesystemStorageTest extends TestCase
     {
         $storage = new FilesystemStorage($this->tmpDir, 'https://cdn.example.com/storage/');
 
-        $this->assertSame(
-            'https://cdn.example.com/storage/foo/bar.txt',
-            $storage->url('foo/bar.txt'),
-        );
+        $this->assertSame('https://cdn.example.com/storage/foo/bar.txt', $storage->url('foo/bar.txt'));
     }
 
     public function testConstructorTrimsTrailingSlashes(): void

@@ -37,7 +37,7 @@ readonly class Migration420Alpha extends AbstractMigration
 
     public function getDescription(): string
     {
-        return 'Admin log hash columns, custom pages, chat messages, translation config';
+        return 'Admin log hash columns, custom pages, chat messages, translation config, API keys, OAuth2 tables';
     }
 
     public function up(OperationRecorder $recorder): void
@@ -519,5 +519,534 @@ readonly class Migration420Alpha extends AbstractMigration
         $recorder->addConfig('push.vapidPublicKey', '');
         $recorder->addConfig('push.vapidPrivateKey', '');
         $recorder->addConfig('push.vapidSubject', '');
+
+        // Create API keys table
+        if ($this->isMySql()) {
+            $recorder->addSql(sprintf(
+                'CREATE TABLE IF NOT EXISTS %sfaqapi_keys (
+                    id INT(11) NOT NULL,
+                    user_id INT(11) NOT NULL,
+                    api_key VARCHAR(64) NOT NULL,
+                    name VARCHAR(255) NULL,
+                    scopes TEXT NULL,
+                    last_used_at TIMESTAMP NULL,
+                    expires_at TIMESTAMP NULL,
+                    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (id),
+                    UNIQUE INDEX idx_api_key_unique (api_key),
+                    INDEX idx_api_key_user (user_id)
+                ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+                $this->tablePrefix,
+            ), 'Create API keys table (MySQL)');
+        } elseif ($this->isPostgreSql()) {
+            $recorder->addSql(sprintf('CREATE TABLE IF NOT EXISTS %sfaqapi_keys (
+                    id INTEGER NOT NULL,
+                    user_id INTEGER NOT NULL,
+                    api_key VARCHAR(64) NOT NULL,
+                    name VARCHAR(255) NULL,
+                    scopes TEXT NULL,
+                    last_used_at TIMESTAMP NULL,
+                    expires_at TIMESTAMP NULL,
+                    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (id)
+                )', $this->tablePrefix), 'Create API keys table (PostgreSQL)');
+
+            $recorder->addSql(
+                sprintf(
+                    'CREATE UNIQUE INDEX IF NOT EXISTS idx_api_key_unique ON %sfaqapi_keys (api_key)',
+                    $this->tablePrefix,
+                ),
+                'Create api_key unique index on API keys (PostgreSQL)',
+            );
+
+            $recorder->addSql(
+                sprintf('CREATE INDEX IF NOT EXISTS idx_api_key_user ON %sfaqapi_keys (user_id)', $this->tablePrefix),
+                'Create user_id index on API keys (PostgreSQL)',
+            );
+        } elseif ($this->isSqlite()) {
+            $recorder->addSql(sprintf('CREATE TABLE IF NOT EXISTS %sfaqapi_keys (
+                    id INTEGER NOT NULL,
+                    user_id INTEGER NOT NULL,
+                    api_key VARCHAR(64) NOT NULL,
+                    name VARCHAR(255) NULL,
+                    scopes TEXT NULL,
+                    last_used_at DATETIME NULL,
+                    expires_at DATETIME NULL,
+                    created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (id)
+                )', $this->tablePrefix), 'Create API keys table (SQLite)');
+
+            $recorder->addSql(
+                sprintf(
+                    'CREATE UNIQUE INDEX IF NOT EXISTS idx_api_key_unique ON %sfaqapi_keys (api_key)',
+                    $this->tablePrefix,
+                ),
+                'Create api_key unique index on API keys (SQLite)',
+            );
+
+            $recorder->addSql(
+                sprintf('CREATE INDEX IF NOT EXISTS idx_api_key_user ON %sfaqapi_keys (user_id)', $this->tablePrefix),
+                'Create user_id index on API keys (SQLite)',
+            );
+        } elseif ($this->isSqlServer()) {
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'%sfaqapi_keys') AND type = 'U') "
+                    . 'CREATE TABLE %sfaqapi_keys (
+                    id INT NOT NULL,
+                    user_id INT NOT NULL,
+                    api_key VARCHAR(64) NOT NULL,
+                    name VARCHAR(255) NULL,
+                    scopes NVARCHAR(MAX) NULL,
+                    last_used_at DATETIME NULL,
+                    expires_at DATETIME NULL,
+                    created DATETIME NOT NULL DEFAULT GETDATE(),
+                    PRIMARY KEY (id)
+                )',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create API keys table (SQL Server)',
+            );
+
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_api_key_unique'"
+                    . " AND object_id = OBJECT_ID(N'%sfaqapi_keys'))"
+                    . ' CREATE UNIQUE INDEX idx_api_key_unique ON %sfaqapi_keys (api_key)',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create api_key unique index on API keys (SQL Server)',
+            );
+
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_api_key_user'"
+                    . " AND object_id = OBJECT_ID(N'%sfaqapi_keys'))"
+                    . ' CREATE INDEX idx_api_key_user ON %sfaqapi_keys (user_id)',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create user_id index on API keys (SQL Server)',
+            );
+        }
+
+        // OAuth2 configuration entries
+        $recorder->addConfig('oauth2.enable', 'false');
+        $recorder->addConfig('oauth2.privateKeyPath', '');
+        $recorder->addConfig('oauth2.publicKeyPath', '');
+        $recorder->addConfig('oauth2.encryptionKey', '');
+        $recorder->addConfig('oauth2.accessTokenTTL', 'PT1H');
+        $recorder->addConfig('oauth2.refreshTokenTTL', 'P1M');
+        $recorder->addConfig('oauth2.authCodeTTL', 'PT10M');
+
+        // OAuth2 storage tables
+        if ($this->isMySql()) {
+            $recorder->addSql(sprintf(
+                'CREATE TABLE IF NOT EXISTS %sfaqoauth_clients (
+                    client_id VARCHAR(80) NOT NULL,
+                    client_secret VARCHAR(255) NULL,
+                    name VARCHAR(255) NOT NULL,
+                    redirect_uri TEXT NULL,
+                    grants VARCHAR(255) NULL,
+                    is_confidential TINYINT(1) NOT NULL DEFAULT 1,
+                    user_id INT(11) NULL,
+                    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (client_id)
+                ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+                $this->tablePrefix,
+            ), 'Create OAuth2 clients table (MySQL)');
+
+            $recorder->addSql(sprintf(
+                'CREATE TABLE IF NOT EXISTS %sfaqoauth_scopes (
+                    scope_id VARCHAR(80) NOT NULL,
+                    description VARCHAR(255) NULL,
+                    PRIMARY KEY (scope_id)
+                ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+                $this->tablePrefix,
+            ), 'Create OAuth2 scopes table (MySQL)');
+
+            $recorder->addSql(sprintf(
+                'CREATE TABLE IF NOT EXISTS %sfaqoauth_access_tokens (
+                    identifier VARCHAR(100) NOT NULL,
+                    client_id VARCHAR(80) NOT NULL,
+                    user_id VARCHAR(80) NULL,
+                    scopes TEXT NULL,
+                    revoked TINYINT(1) NOT NULL DEFAULT 0,
+                    expires_at TIMESTAMP NOT NULL,
+                    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (identifier),
+                    INDEX idx_oauth_access_client (client_id),
+                    INDEX idx_oauth_access_user (user_id)
+                ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+                $this->tablePrefix,
+            ), 'Create OAuth2 access tokens table (MySQL)');
+
+            $recorder->addSql(sprintf(
+                'CREATE TABLE IF NOT EXISTS %sfaqoauth_refresh_tokens (
+                    identifier VARCHAR(100) NOT NULL,
+                    access_token_identifier VARCHAR(100) NOT NULL,
+                    revoked TINYINT(1) NOT NULL DEFAULT 0,
+                    expires_at TIMESTAMP NOT NULL,
+                    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (identifier),
+                    INDEX idx_oauth_refresh_access (access_token_identifier)
+                ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+                $this->tablePrefix,
+            ), 'Create OAuth2 refresh tokens table (MySQL)');
+
+            $recorder->addSql(sprintf(
+                'CREATE TABLE IF NOT EXISTS %sfaqoauth_auth_codes (
+                    identifier VARCHAR(100) NOT NULL,
+                    client_id VARCHAR(80) NOT NULL,
+                    user_id VARCHAR(80) NULL,
+                    redirect_uri TEXT NULL,
+                    scopes TEXT NULL,
+                    revoked TINYINT(1) NOT NULL DEFAULT 0,
+                    expires_at TIMESTAMP NOT NULL,
+                    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (identifier),
+                    INDEX idx_oauth_code_client (client_id),
+                    INDEX idx_oauth_code_user (user_id)
+                ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+                $this->tablePrefix,
+            ), 'Create OAuth2 auth codes table (MySQL)');
+        } elseif ($this->isPostgreSql()) {
+            $recorder->addSql(sprintf(
+                'CREATE TABLE IF NOT EXISTS %sfaqoauth_clients (
+                    client_id VARCHAR(80) NOT NULL,
+                    client_secret VARCHAR(255) NULL,
+                    name VARCHAR(255) NOT NULL,
+                    redirect_uri TEXT NULL,
+                    grants VARCHAR(255) NULL,
+                    is_confidential SMALLINT NOT NULL DEFAULT 1,
+                    user_id INTEGER NULL,
+                    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (client_id)
+                )',
+                $this->tablePrefix,
+            ), 'Create OAuth2 clients table (PostgreSQL)');
+
+            $recorder->addSql(sprintf(
+                'CREATE TABLE IF NOT EXISTS %sfaqoauth_scopes (
+                    scope_id VARCHAR(80) NOT NULL,
+                    description VARCHAR(255) NULL,
+                    PRIMARY KEY (scope_id)
+                )',
+                $this->tablePrefix,
+            ), 'Create OAuth2 scopes table (PostgreSQL)');
+
+            $recorder->addSql(sprintf(
+                'CREATE TABLE IF NOT EXISTS %sfaqoauth_access_tokens (
+                    identifier VARCHAR(100) NOT NULL,
+                    client_id VARCHAR(80) NOT NULL,
+                    user_id VARCHAR(80) NULL,
+                    scopes TEXT NULL,
+                    revoked SMALLINT NOT NULL DEFAULT 0,
+                    expires_at TIMESTAMP NOT NULL,
+                    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (identifier)
+                )',
+                $this->tablePrefix,
+            ), 'Create OAuth2 access tokens table (PostgreSQL)');
+
+            $recorder->addSql(
+                sprintf(
+                    'CREATE INDEX IF NOT EXISTS idx_oauth_access_client ON %sfaqoauth_access_tokens (client_id)',
+                    $this->tablePrefix,
+                ),
+                'Create OAuth2 access client index (PostgreSQL)',
+            );
+            $recorder->addSql(
+                sprintf(
+                    'CREATE INDEX IF NOT EXISTS idx_oauth_access_user ON %sfaqoauth_access_tokens (user_id)',
+                    $this->tablePrefix,
+                ),
+                'Create OAuth2 access user index (PostgreSQL)',
+            );
+
+            $recorder->addSql(sprintf(
+                'CREATE TABLE IF NOT EXISTS %sfaqoauth_refresh_tokens (
+                    identifier VARCHAR(100) NOT NULL,
+                    access_token_identifier VARCHAR(100) NOT NULL,
+                    revoked SMALLINT NOT NULL DEFAULT 0,
+                    expires_at TIMESTAMP NOT NULL,
+                    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (identifier)
+                )',
+                $this->tablePrefix,
+            ), 'Create OAuth2 refresh tokens table (PostgreSQL)');
+            $recorder->addSql(
+                sprintf(
+                    'CREATE INDEX IF NOT EXISTS idx_oauth_refresh_access ON %sfaqoauth_refresh_tokens (access_token_identifier)',
+                    $this->tablePrefix,
+                ),
+                'Create OAuth2 refresh index (PostgreSQL)',
+            );
+
+            $recorder->addSql(sprintf(
+                'CREATE TABLE IF NOT EXISTS %sfaqoauth_auth_codes (
+                    identifier VARCHAR(100) NOT NULL,
+                    client_id VARCHAR(80) NOT NULL,
+                    user_id VARCHAR(80) NULL,
+                    redirect_uri TEXT NULL,
+                    scopes TEXT NULL,
+                    revoked SMALLINT NOT NULL DEFAULT 0,
+                    expires_at TIMESTAMP NOT NULL,
+                    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (identifier)
+                )',
+                $this->tablePrefix,
+            ), 'Create OAuth2 auth codes table (PostgreSQL)');
+            $recorder->addSql(
+                sprintf(
+                    'CREATE INDEX IF NOT EXISTS idx_oauth_code_client ON %sfaqoauth_auth_codes (client_id)',
+                    $this->tablePrefix,
+                ),
+                'Create OAuth2 auth code client index (PostgreSQL)',
+            );
+            $recorder->addSql(
+                sprintf(
+                    'CREATE INDEX IF NOT EXISTS idx_oauth_code_user ON %sfaqoauth_auth_codes (user_id)',
+                    $this->tablePrefix,
+                ),
+                'Create OAuth2 auth code user index (PostgreSQL)',
+            );
+        } elseif ($this->isSqlite()) {
+            $recorder->addSql(sprintf('CREATE TABLE IF NOT EXISTS %sfaqoauth_clients (
+                    client_id VARCHAR(80) NOT NULL,
+                    client_secret VARCHAR(255) NULL,
+                    name VARCHAR(255) NOT NULL,
+                    redirect_uri TEXT NULL,
+                    grants VARCHAR(255) NULL,
+                    is_confidential INTEGER NOT NULL DEFAULT 1,
+                    user_id INTEGER NULL,
+                    created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (client_id)
+                )', $this->tablePrefix), 'Create OAuth2 clients table (SQLite)');
+
+            $recorder->addSql(sprintf('CREATE TABLE IF NOT EXISTS %sfaqoauth_scopes (
+                    scope_id VARCHAR(80) NOT NULL,
+                    description VARCHAR(255) NULL,
+                    PRIMARY KEY (scope_id)
+                )', $this->tablePrefix), 'Create OAuth2 scopes table (SQLite)');
+
+            $recorder->addSql(sprintf(
+                'CREATE TABLE IF NOT EXISTS %sfaqoauth_access_tokens (
+                    identifier VARCHAR(100) NOT NULL,
+                    client_id VARCHAR(80) NOT NULL,
+                    user_id VARCHAR(80) NULL,
+                    scopes TEXT NULL,
+                    revoked INTEGER NOT NULL DEFAULT 0,
+                    expires_at DATETIME NOT NULL,
+                    created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (identifier)
+                )',
+                $this->tablePrefix,
+            ), 'Create OAuth2 access tokens table (SQLite)');
+            $recorder->addSql(
+                sprintf(
+                    'CREATE INDEX IF NOT EXISTS idx_oauth_access_client ON %sfaqoauth_access_tokens (client_id)',
+                    $this->tablePrefix,
+                ),
+                'Create OAuth2 access client index (SQLite)',
+            );
+            $recorder->addSql(
+                sprintf(
+                    'CREATE INDEX IF NOT EXISTS idx_oauth_access_user ON %sfaqoauth_access_tokens (user_id)',
+                    $this->tablePrefix,
+                ),
+                'Create OAuth2 access user index (SQLite)',
+            );
+
+            $recorder->addSql(sprintf(
+                'CREATE TABLE IF NOT EXISTS %sfaqoauth_refresh_tokens (
+                    identifier VARCHAR(100) NOT NULL,
+                    access_token_identifier VARCHAR(100) NOT NULL,
+                    revoked INTEGER NOT NULL DEFAULT 0,
+                    expires_at DATETIME NOT NULL,
+                    created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (identifier)
+                )',
+                $this->tablePrefix,
+            ), 'Create OAuth2 refresh tokens table (SQLite)');
+            $recorder->addSql(
+                sprintf(
+                    'CREATE INDEX IF NOT EXISTS idx_oauth_refresh_access ON %sfaqoauth_refresh_tokens (access_token_identifier)',
+                    $this->tablePrefix,
+                ),
+                'Create OAuth2 refresh index (SQLite)',
+            );
+
+            $recorder->addSql(sprintf(
+                'CREATE TABLE IF NOT EXISTS %sfaqoauth_auth_codes (
+                    identifier VARCHAR(100) NOT NULL,
+                    client_id VARCHAR(80) NOT NULL,
+                    user_id VARCHAR(80) NULL,
+                    redirect_uri TEXT NULL,
+                    scopes TEXT NULL,
+                    revoked INTEGER NOT NULL DEFAULT 0,
+                    expires_at DATETIME NOT NULL,
+                    created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (identifier)
+                )',
+                $this->tablePrefix,
+            ), 'Create OAuth2 auth codes table (SQLite)');
+            $recorder->addSql(
+                sprintf(
+                    'CREATE INDEX IF NOT EXISTS idx_oauth_code_client ON %sfaqoauth_auth_codes (client_id)',
+                    $this->tablePrefix,
+                ),
+                'Create OAuth2 auth code client index (SQLite)',
+            );
+            $recorder->addSql(
+                sprintf(
+                    'CREATE INDEX IF NOT EXISTS idx_oauth_code_user ON %sfaqoauth_auth_codes (user_id)',
+                    $this->tablePrefix,
+                ),
+                'Create OAuth2 auth code user index (SQLite)',
+            );
+        } elseif ($this->isSqlServer()) {
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'%sfaqoauth_clients') AND type = 'U') "
+                    . 'CREATE TABLE %sfaqoauth_clients (
+                    client_id VARCHAR(80) NOT NULL,
+                    client_secret VARCHAR(255) NULL,
+                    name VARCHAR(255) NOT NULL,
+                    redirect_uri NVARCHAR(MAX) NULL,
+                    grants VARCHAR(255) NULL,
+                    is_confidential TINYINT NOT NULL DEFAULT 1,
+                    user_id INT NULL,
+                    created DATETIME NOT NULL DEFAULT GETDATE(),
+                    PRIMARY KEY (client_id)
+                )',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create OAuth2 clients table (SQL Server)',
+            );
+
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'%sfaqoauth_scopes') AND type = 'U') "
+                    . 'CREATE TABLE %sfaqoauth_scopes (
+                    scope_id VARCHAR(80) NOT NULL,
+                    description VARCHAR(255) NULL,
+                    PRIMARY KEY (scope_id)
+                )',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create OAuth2 scopes table (SQL Server)',
+            );
+
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'%sfaqoauth_access_tokens') AND type = 'U') "
+                    . 'CREATE TABLE %sfaqoauth_access_tokens (
+                    identifier VARCHAR(100) NOT NULL,
+                    client_id VARCHAR(80) NOT NULL,
+                    user_id VARCHAR(80) NULL,
+                    scopes NVARCHAR(MAX) NULL,
+                    revoked TINYINT NOT NULL DEFAULT 0,
+                    expires_at DATETIME NOT NULL,
+                    created DATETIME NOT NULL DEFAULT GETDATE(),
+                    PRIMARY KEY (identifier)
+                )',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create OAuth2 access tokens table (SQL Server)',
+            );
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_oauth_access_client'"
+                    . " AND object_id = OBJECT_ID(N'%sfaqoauth_access_tokens'))"
+                    . ' CREATE INDEX idx_oauth_access_client ON %sfaqoauth_access_tokens (client_id)',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create OAuth2 access client index (SQL Server)',
+            );
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_oauth_access_user'"
+                    . " AND object_id = OBJECT_ID(N'%sfaqoauth_access_tokens'))"
+                    . ' CREATE INDEX idx_oauth_access_user ON %sfaqoauth_access_tokens (user_id)',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create OAuth2 access user index (SQL Server)',
+            );
+
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'%sfaqoauth_refresh_tokens') AND type = 'U') "
+                    . 'CREATE TABLE %sfaqoauth_refresh_tokens (
+                    identifier VARCHAR(100) NOT NULL,
+                    access_token_identifier VARCHAR(100) NOT NULL,
+                    revoked TINYINT NOT NULL DEFAULT 0,
+                    expires_at DATETIME NOT NULL,
+                    created DATETIME NOT NULL DEFAULT GETDATE(),
+                    PRIMARY KEY (identifier)
+                )',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create OAuth2 refresh tokens table (SQL Server)',
+            );
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_oauth_refresh_access'"
+                    . " AND object_id = OBJECT_ID(N'%sfaqoauth_refresh_tokens'))"
+                    . ' CREATE INDEX idx_oauth_refresh_access ON %sfaqoauth_refresh_tokens (access_token_identifier)',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create OAuth2 refresh index (SQL Server)',
+            );
+
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'%sfaqoauth_auth_codes') AND type = 'U') "
+                    . 'CREATE TABLE %sfaqoauth_auth_codes (
+                    identifier VARCHAR(100) NOT NULL,
+                    client_id VARCHAR(80) NOT NULL,
+                    user_id VARCHAR(80) NULL,
+                    redirect_uri NVARCHAR(MAX) NULL,
+                    scopes NVARCHAR(MAX) NULL,
+                    revoked TINYINT NOT NULL DEFAULT 0,
+                    expires_at DATETIME NOT NULL,
+                    created DATETIME NOT NULL DEFAULT GETDATE(),
+                    PRIMARY KEY (identifier)
+                )',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create OAuth2 auth codes table (SQL Server)',
+            );
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_oauth_code_client'"
+                    . " AND object_id = OBJECT_ID(N'%sfaqoauth_auth_codes'))"
+                    . ' CREATE INDEX idx_oauth_code_client ON %sfaqoauth_auth_codes (client_id)',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create OAuth2 auth code client index (SQL Server)',
+            );
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_oauth_code_user'"
+                    . " AND object_id = OBJECT_ID(N'%sfaqoauth_auth_codes'))"
+                    . ' CREATE INDEX idx_oauth_code_user ON %sfaqoauth_auth_codes (user_id)',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create OAuth2 auth code user index (SQL Server)',
+            );
+        }
     }
 }
