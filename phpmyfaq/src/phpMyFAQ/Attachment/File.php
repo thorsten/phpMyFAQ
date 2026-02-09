@@ -156,9 +156,7 @@ class File extends AbstractAttachment implements AttachmentInterface
     /**
      * Retrieve file contents into a variable.
      */
-    public function get(): string
-    {
-    }
+    public function get(): string {}
 
     /**
      * Output current file to stdout.

@@ -40,13 +40,17 @@ class FilesystemStorageTest extends TestCase
     {
         $storage = new FilesystemStorage($this->tmpDir);
         $stream = fopen('php://memory', 'rb+');
-        fwrite($stream, 'stream content');
-        rewind($stream);
+        $this->assertIsResource($stream);
 
-        $this->assertTrue($storage->putStream('stream/file.txt', $stream));
-        $this->assertSame('stream content', $storage->get('stream/file.txt'));
+        try {
+            fwrite($stream, 'stream content');
+            rewind($stream);
 
-        fclose($stream);
+            $this->assertTrue($storage->putStream('stream/file.txt', $stream));
+            $this->assertSame('stream content', $storage->get('stream/file.txt'));
+        } finally {
+            fclose($stream);
+        }
     }
 
     public function testPutStreamThrowsForInvalidStream(): void

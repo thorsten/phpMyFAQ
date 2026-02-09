@@ -84,6 +84,56 @@ class StorageFactoryTest extends TestCase
         $this->assertInstanceOf(S3Storage::class, $storage);
     }
 
+    public function testCreateThrowsWhenFilesystemRootIsNotWritable(): void
+    {
+        // Use a path under /proc (Linux) or /System (macOS) that exists but is not writable
+        $readOnlyDir = PHP_OS_FAMILY === 'Darwin' ? '/System' : '/proc';
+        if (!is_dir($readOnlyDir) || is_writable($readOnlyDir)) {
+            $this->markTestSkipped('No read-only directory available for this test.');
+        }
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['storage.type',                     'filesystem'],
+                ['storage.filesystem.root',          $readOnlyDir . '/phpmyfaq-test-unwritable'],
+                ['storage.filesystem.publicBaseUrl', null],
+            ]);
+
+        $factory = new StorageFactory($configuration);
+
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage('Storage root directory');
+        $factory->create();
+    }
+
+    public function testCreateCreatesFilesystemRootIfMissing(): void
+    {
+        $tmpDir = sys_get_temp_dir() . '/phpmyfaq-factory-test-' . uniqid('', true);
+
+        try {
+            $configuration = $this->createStub(Configuration::class);
+            $configuration
+                ->method('get')
+                ->willReturnMap([
+                    ['storage.type',                     'filesystem'],
+                    ['storage.filesystem.root',          $tmpDir],
+                    ['storage.filesystem.publicBaseUrl', null],
+                ]);
+
+            $factory = new StorageFactory($configuration);
+            $storage = $factory->create();
+
+            $this->assertInstanceOf(FilesystemStorage::class, $storage);
+            $this->assertDirectoryExists($tmpDir);
+        } finally {
+            if (is_dir($tmpDir)) {
+                rmdir($tmpDir);
+            }
+        }
+    }
+
     public function testCreateThrowsWhenOnlyS3KeyProvided(): void
     {
         $configuration = $this->createStub(Configuration::class);
