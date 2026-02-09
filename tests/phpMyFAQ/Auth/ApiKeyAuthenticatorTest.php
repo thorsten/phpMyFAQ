@@ -51,7 +51,7 @@ class ApiKeyAuthenticatorTest extends TestCase
             ->willReturn((object) [
                 'id' => 42,
                 'user_id' => 7,
-                'api_key' => 'pmf_abc123',
+                'api_key' => hash('sha256', 'pmf_abc123'),
                 'name' => 'test key',
                 'scopes' => '["faq.read"]',
                 'expires_at' => null,
@@ -74,7 +74,7 @@ class ApiKeyAuthenticatorTest extends TestCase
             ->willReturn((object) [
                 'id' => 11,
                 'user_id' => 3,
-                'api_key' => 'pmf_expired',
+                'api_key' => hash('sha256', 'pmf_expired'),
                 'name' => 'expired',
                 'scopes' => '["faq.read"]',
                 'expires_at' => '2000-01-01 00:00:00',
@@ -104,7 +104,7 @@ class ApiKeyAuthenticatorTest extends TestCase
             ->willReturn((object) [
                 'id' => 100,
                 'user_id' => 12,
-                'api_key' => 'pmf_valid123',
+                'api_key' => hash('sha256', 'pmf_valid123'),
                 'name' => 'CI key',
                 'scopes' => '["faq.read","faq.write"]',
                 'last_used_at' => null,

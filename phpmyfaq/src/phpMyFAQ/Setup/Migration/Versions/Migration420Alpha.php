@@ -531,7 +531,7 @@ readonly class Migration420Alpha extends AbstractMigration
                     scopes TEXT NULL,
                     last_used_at TIMESTAMP NULL,
                     expires_at TIMESTAMP NULL,
-                    created TIMESTAMP NULL,
+                    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                     PRIMARY KEY (id),
                     UNIQUE INDEX idx_api_key_unique (api_key),
                     INDEX idx_api_key_user (user_id)
@@ -547,7 +547,7 @@ readonly class Migration420Alpha extends AbstractMigration
                     scopes TEXT NULL,
                     last_used_at TIMESTAMP NULL,
                     expires_at TIMESTAMP NULL,
-                    created TIMESTAMP NULL,
+                    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                     PRIMARY KEY (id)
                 )', $this->tablePrefix), 'Create API keys table (PostgreSQL)');
 
@@ -572,7 +572,7 @@ readonly class Migration420Alpha extends AbstractMigration
                     scopes TEXT NULL,
                     last_used_at DATETIME NULL,
                     expires_at DATETIME NULL,
-                    created DATETIME NULL,
+                    created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                     PRIMARY KEY (id)
                 )', $this->tablePrefix), 'Create API keys table (SQLite)');
 
@@ -600,7 +600,7 @@ readonly class Migration420Alpha extends AbstractMigration
                     scopes NVARCHAR(MAX) NULL,
                     last_used_at DATETIME NULL,
                     expires_at DATETIME NULL,
-                    created DATETIME NULL,
+                    created DATETIME NOT NULL DEFAULT GETDATE(),
                     PRIMARY KEY (id)
                 )',
                     $this->tablePrefix,

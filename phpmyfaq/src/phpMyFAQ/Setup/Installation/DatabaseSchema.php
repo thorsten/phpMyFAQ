@@ -431,7 +431,7 @@ class DatabaseSchema
             ->text('scopes')
             ->timestamp('last_used_at')
             ->timestamp('expires_at')
-            ->timestamp('created')
+            ->timestamp('created', false, true)
             ->primaryKey('id')
             ->uniqueIndex('idx_api_key_unique', 'api_key')
             ->index('idx_api_key_user', 'user_id');

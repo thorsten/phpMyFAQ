@@ -82,6 +82,7 @@ final class ApiKeyController extends AbstractAdministrationApiController
         $db = $this->configuration->getDb();
         $id = $db->nextId(Database::getTablePrefix() . 'faqapi_keys', 'id');
         $apiKey = 'pmf_' . bin2hex(random_bytes(20));
+        $apiKeyHash = hash('sha256', $apiKey);
 
         $insert = sprintf(
             "INSERT INTO %sfaqapi_keys
@@ -91,7 +92,7 @@ final class ApiKeyController extends AbstractAdministrationApiController
             Database::getTablePrefix(),
             $id,
             $this->currentUser->getUserId(),
-            $db->escape($apiKey),
+            $db->escape($apiKeyHash),
             $db->escape($name),
             $db->escape((string) json_encode($scopes)),
             $expiresAt === '' ? 'NULL' : "'" . $db->escape($expiresAt) . "'",
@@ -126,6 +127,10 @@ final class ApiKeyController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
+        if ($request->attributes->get('id') === null) {
+            return $this->json(['error' => 'API key ID is required.'], Response::HTTP_BAD_REQUEST);
+        }
+
         $id = (int) $request->attributes->get('id');
         $name = Filter::filterVar($data->name ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         if ($name === '') {
@@ -141,6 +146,18 @@ final class ApiKeyController extends AbstractAdministrationApiController
         }
 
         $db = $this->configuration->getDb();
+
+        $check = sprintf(
+            'SELECT id FROM %sfaqapi_keys WHERE id = %d AND user_id = %d',
+            Database::getTablePrefix(),
+            $id,
+            $this->currentUser->getUserId(),
+        );
+        $checkResult = $db->query($check);
+        if ($checkResult === false || $db->numRows($checkResult) === 0) {
+            return $this->json(['error' => 'API key not found.'], Response::HTTP_NOT_FOUND);
+        }
+
         $update = sprintf(
             "UPDATE %sfaqapi_keys
              SET name = '%s', scopes = '%s', expires_at = %s
@@ -167,17 +184,26 @@ final class ApiKeyController extends AbstractAdministrationApiController
 
     /**
      * @throws \Exception
-     * @throws JsonException
      */
     #[Route(path: 'user/api-keys/{id}', name: 'admin.api.user.api-keys.delete', methods: ['DELETE'])]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::USER_EDIT);
 
-        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
-        $csrf = Filter::filterVar($data->csrf ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $csrf = $request->headers->get('X-CSRF-Token') ?? $request->query->get('csrf');
+
+        if ($csrf === null) {
+            $body = json_decode($request->getContent(), false);
+            $csrf = $body->csrf ?? null;
+        }
+
+        $csrf = Filter::filterVar((string) ($csrf ?? ''), FILTER_SANITIZE_SPECIAL_CHARS);
         if (!$this->verifySessionCsrfToken('api-key-delete', $csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if ($request->attributes->get('id') === null) {
+            return $this->json(['error' => 'API key ID is required.'], Response::HTTP_BAD_REQUEST);
         }
 
         $id = (int) $request->attributes->get('id');

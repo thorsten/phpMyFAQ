@@ -170,10 +170,7 @@ class GoogleRecaptchaTest extends TestCase
 
         set_error_handler(static fn(): bool => true);
         try {
-            $result = $this->googleRecaptcha->checkCaptchaCode('');
-            $this->assertIsBool($result);
-        } catch (\Throwable $e) {
-            $this->assertNotEmpty($e->getMessage());
+            $this->assertFalse($this->googleRecaptcha->checkCaptchaCode(''));
         } finally {
             restore_error_handler();
         }

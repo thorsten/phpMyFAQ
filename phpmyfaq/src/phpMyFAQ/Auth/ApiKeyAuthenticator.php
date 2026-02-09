@@ -55,10 +55,11 @@ final class ApiKeyAuthenticator
         }
 
         $apiKey = $matches[1];
+        $apiKeyHash = hash('sha256', $apiKey);
         $db = $this->configuration->getDb();
         $sql = sprintf("SELECT id, user_id, api_key, name, scopes, last_used_at, expires_at, created
              FROM %sfaqapi_keys
-             WHERE api_key = '%s'", Database::getTablePrefix(), $db->escape($apiKey));
+             WHERE api_key = '%s'", Database::getTablePrefix(), $db->escape($apiKeyHash));
 
         $result = $db->query($sql);
         if ($result === false) {
