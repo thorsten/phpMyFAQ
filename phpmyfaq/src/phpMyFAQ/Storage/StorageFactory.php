@@ -21,11 +21,13 @@ namespace phpMyFAQ\Storage;
 
 use Aws\S3\S3Client;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Tenant\TenantContext;
 
 final readonly class StorageFactory
 {
     public function __construct(
         private Configuration $configuration,
+        private ?TenantContext $tenantContext = null,
     ) {
     }
 
@@ -33,7 +35,7 @@ final readonly class StorageFactory
     {
         $type = strtolower((string) ($this->configuration->get('storage.type') ?? 'filesystem'));
 
-        return match ($type) {
+        $storage = match ($type) {
             'filesystem' => new FilesystemStorage(
                 $this->resolveFilesystemRoot(),
                 $this->readStringConfig('storage.filesystem.publicBaseUrl'),
@@ -41,6 +43,8 @@ final readonly class StorageFactory
             's3' => $this->createS3Storage(),
             default => throw new StorageException('Unsupported storage type: ' . $type),
         };
+
+        return new TenantScopedStorage($storage, $this->tenantPrefix());
     }
 
     private function createS3Storage(): S3Storage
@@ -127,5 +131,12 @@ final readonly class StorageFactory
         }
 
         return trim((string) $value);
+    }
+
+    private function tenantPrefix(): string
+    {
+        $tenantId = $this->tenantContext?->getTenantId() ?? 0;
+
+        return sprintf('%d/attachments', $tenantId);
     }
 }

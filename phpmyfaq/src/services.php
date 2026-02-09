@@ -227,6 +227,7 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('phpmyfaq.storage.factory', StorageFactory::class)->args([
         service('phpmyfaq.configuration'),
+        service('phpmyfaq.tenant.context'),
     ]);
     $services->set('phpmyfaq.storage', StorageInterface::class)->factory([
         service('phpmyfaq.storage.factory'),

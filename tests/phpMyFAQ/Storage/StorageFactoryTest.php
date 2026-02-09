@@ -3,6 +3,8 @@
 namespace phpMyFAQ\Storage;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Tenant\TenantContext;
+use phpMyFAQ\Tenant\TenantQuotas;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
@@ -10,6 +12,9 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(StorageFactory::class)]
 #[UsesClass(FilesystemStorage::class)]
 #[UsesClass(S3Storage::class)]
+#[UsesClass(TenantScopedStorage::class)]
+#[UsesClass(TenantContext::class)]
+#[UsesClass(TenantQuotas::class)]
 class StorageFactoryTest extends TestCase
 {
     public function testCreateReturnsFilesystemStorageByDefault(): void
@@ -23,10 +28,10 @@ class StorageFactoryTest extends TestCase
                 ['storage.filesystem.publicBaseUrl', null],
             ]);
 
-        $factory = new StorageFactory($configuration);
+        $factory = new StorageFactory($configuration, $this->createTenantContext(7));
         $storage = $factory->create();
 
-        $this->assertInstanceOf(FilesystemStorage::class, $storage);
+        $this->assertInstanceOf(TenantScopedStorage::class, $storage);
     }
 
     public function testCreateReturnsFilesystemStorageWhenConfigured(): void
@@ -40,10 +45,10 @@ class StorageFactoryTest extends TestCase
                 ['storage.filesystem.publicBaseUrl', 'https://cdn.example.com/files'],
             ]);
 
-        $factory = new StorageFactory($configuration);
+        $factory = new StorageFactory($configuration, $this->createTenantContext(12));
         $storage = $factory->create();
 
-        $this->assertInstanceOf(FilesystemStorage::class, $storage);
+        $this->assertInstanceOf(TenantScopedStorage::class, $storage);
     }
 
     public function testCreateThrowsForUnsupportedStorageType(): void
@@ -55,7 +60,7 @@ class StorageFactoryTest extends TestCase
                 ['storage.type', 'unsupported'],
             ]);
 
-        $factory = new StorageFactory($configuration);
+        $factory = new StorageFactory($configuration, $this->createTenantContext(5));
 
         $this->expectException(StorageException::class);
         $this->expectExceptionMessage('Unsupported storage type: unsupported');
@@ -79,9 +84,9 @@ class StorageFactoryTest extends TestCase
                 ['storage.s3.usePathStyle',  null],
             ]);
 
-        $factory = new StorageFactory($configuration);
+        $factory = new StorageFactory($configuration, $this->createTenantContext(8));
         $storage = $factory->create();
-        $this->assertInstanceOf(S3Storage::class, $storage);
+        $this->assertInstanceOf(TenantScopedStorage::class, $storage);
     }
 
     public function testCreateThrowsWhenFilesystemRootIsNotWritable(): void
@@ -101,7 +106,7 @@ class StorageFactoryTest extends TestCase
                 ['storage.filesystem.publicBaseUrl', null],
             ]);
 
-        $factory = new StorageFactory($configuration);
+        $factory = new StorageFactory($configuration, $this->createTenantContext(10));
 
         $this->expectException(StorageException::class);
         $this->expectExceptionMessage('Storage root directory');
@@ -122,10 +127,10 @@ class StorageFactoryTest extends TestCase
                     ['storage.filesystem.publicBaseUrl', null],
                 ]);
 
-            $factory = new StorageFactory($configuration);
+            $factory = new StorageFactory($configuration, $this->createTenantContext(9));
             $storage = $factory->create();
 
-            $this->assertInstanceOf(FilesystemStorage::class, $storage);
+            $this->assertInstanceOf(TenantScopedStorage::class, $storage);
             $this->assertDirectoryExists($tmpDir);
         } finally {
             if (is_dir($tmpDir)) {
@@ -151,7 +156,7 @@ class StorageFactoryTest extends TestCase
                 ['storage.s3.usePathStyle',  null],
             ]);
 
-        $factory = new StorageFactory($configuration);
+        $factory = new StorageFactory($configuration, $this->createTenantContext(11));
 
         $this->expectException(StorageException::class);
         $this->expectExceptionMessage('Both storage.s3.key and storage.s3.secret must be provided together.');
@@ -175,10 +180,74 @@ class StorageFactoryTest extends TestCase
                 ['storage.s3.usePathStyle',  null],
             ]);
 
-        $factory = new StorageFactory($configuration);
+        $factory = new StorageFactory($configuration, $this->createTenantContext(11));
 
         $this->expectException(StorageException::class);
         $this->expectExceptionMessage('Both storage.s3.key and storage.s3.secret must be provided together.');
         $factory->create();
+    }
+
+    public function testCreatePrefixesFilesystemPathsWithTenantPath(): void
+    {
+        $tmpDir = sys_get_temp_dir() . '/phpmyfaq-factory-prefix-' . uniqid('', true);
+
+        try {
+            $configuration = $this->createStub(Configuration::class);
+            $configuration
+                ->method('get')
+                ->willReturnMap([
+                    ['storage.type',                     'filesystem'],
+                    ['storage.filesystem.root',          $tmpDir],
+                    ['storage.filesystem.publicBaseUrl', null],
+                ]);
+
+            $factory = new StorageFactory($configuration, $this->createTenantContext(42));
+            $storage = $factory->create();
+            $this->assertTrue($storage->put('my/file.txt', 'content'));
+
+            $this->assertFileExists($tmpDir . '/42/attachments/my/file.txt');
+        } finally {
+            $this->removeDirectory($tmpDir);
+        }
+    }
+
+    private function createTenantContext(int $tenantId): TenantContext
+    {
+        return new TenantContext(
+            tenantId: $tenantId,
+            hostname: 'tenant.example.com',
+            tablePrefix: '',
+            configDir: '/tmp',
+            plan: 'free',
+            quotas: new TenantQuotas(),
+        );
+    }
+
+    private function removeDirectory(string $directory): void
+    {
+        if (!is_dir($directory)) {
+            return;
+        }
+
+        $entries = scandir($directory);
+        if ($entries === false) {
+            return;
+        }
+
+        foreach ($entries as $entry) {
+            if ($entry === '.' || $entry === '..') {
+                continue;
+            }
+
+            $path = $directory . '/' . $entry;
+            if (is_dir($path)) {
+                $this->removeDirectory($path);
+                continue;
+            }
+
+            unlink($path);
+        }
+
+        rmdir($directory);
     }
 }
