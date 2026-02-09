@@ -110,7 +110,9 @@ class WebPushServiceTest extends TestCase
         }
 
         if ($warnings !== []) {
-            $this->markTestSkipped('VAPID key generation is not available in this environment: ' . implode(' | ', $warnings));
+            $this->markTestSkipped(
+                'VAPID key generation is not available in this environment: ' . implode(' | ', $warnings),
+            );
         }
 
         $this->assertArrayHasKey('publicKey', $keys);

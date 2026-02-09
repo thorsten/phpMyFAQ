@@ -519,5 +519,117 @@ readonly class Migration420Alpha extends AbstractMigration
         $recorder->addConfig('push.vapidPublicKey', '');
         $recorder->addConfig('push.vapidPrivateKey', '');
         $recorder->addConfig('push.vapidSubject', '');
+
+        // Create API keys table
+        if ($this->isMySql()) {
+            $recorder->addSql(sprintf(
+                'CREATE TABLE IF NOT EXISTS %sfaqapi_keys (
+                    id INT(11) NOT NULL,
+                    user_id INT(11) NOT NULL,
+                    api_key VARCHAR(64) NOT NULL,
+                    name VARCHAR(255) NULL,
+                    scopes TEXT NULL,
+                    last_used_at TIMESTAMP NULL,
+                    expires_at TIMESTAMP NULL,
+                    created TIMESTAMP NULL,
+                    PRIMARY KEY (id),
+                    UNIQUE INDEX idx_api_key_unique (api_key),
+                    INDEX idx_api_key_user (user_id)
+                ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+                $this->tablePrefix,
+            ), 'Create API keys table (MySQL)');
+        } elseif ($this->isPostgreSql()) {
+            $recorder->addSql(sprintf('CREATE TABLE IF NOT EXISTS %sfaqapi_keys (
+                    id INTEGER NOT NULL,
+                    user_id INTEGER NOT NULL,
+                    api_key VARCHAR(64) NOT NULL,
+                    name VARCHAR(255) NULL,
+                    scopes TEXT NULL,
+                    last_used_at TIMESTAMP NULL,
+                    expires_at TIMESTAMP NULL,
+                    created TIMESTAMP NULL,
+                    PRIMARY KEY (id)
+                )', $this->tablePrefix), 'Create API keys table (PostgreSQL)');
+
+            $recorder->addSql(
+                sprintf(
+                    'CREATE UNIQUE INDEX IF NOT EXISTS idx_api_key_unique ON %sfaqapi_keys (api_key)',
+                    $this->tablePrefix,
+                ),
+                'Create api_key unique index on API keys (PostgreSQL)',
+            );
+
+            $recorder->addSql(
+                sprintf('CREATE INDEX IF NOT EXISTS idx_api_key_user ON %sfaqapi_keys (user_id)', $this->tablePrefix),
+                'Create user_id index on API keys (PostgreSQL)',
+            );
+        } elseif ($this->isSqlite()) {
+            $recorder->addSql(sprintf('CREATE TABLE IF NOT EXISTS %sfaqapi_keys (
+                    id INTEGER NOT NULL,
+                    user_id INTEGER NOT NULL,
+                    api_key VARCHAR(64) NOT NULL,
+                    name VARCHAR(255) NULL,
+                    scopes TEXT NULL,
+                    last_used_at DATETIME NULL,
+                    expires_at DATETIME NULL,
+                    created DATETIME NULL,
+                    PRIMARY KEY (id)
+                )', $this->tablePrefix), 'Create API keys table (SQLite)');
+
+            $recorder->addSql(
+                sprintf(
+                    'CREATE UNIQUE INDEX IF NOT EXISTS idx_api_key_unique ON %sfaqapi_keys (api_key)',
+                    $this->tablePrefix,
+                ),
+                'Create api_key unique index on API keys (SQLite)',
+            );
+
+            $recorder->addSql(
+                sprintf('CREATE INDEX IF NOT EXISTS idx_api_key_user ON %sfaqapi_keys (user_id)', $this->tablePrefix),
+                'Create user_id index on API keys (SQLite)',
+            );
+        } elseif ($this->isSqlServer()) {
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'%sfaqapi_keys') AND type = 'U') "
+                    . 'CREATE TABLE %sfaqapi_keys (
+                    id INT NOT NULL,
+                    user_id INT NOT NULL,
+                    api_key VARCHAR(64) NOT NULL,
+                    name VARCHAR(255) NULL,
+                    scopes NVARCHAR(MAX) NULL,
+                    last_used_at DATETIME NULL,
+                    expires_at DATETIME NULL,
+                    created DATETIME NULL,
+                    PRIMARY KEY (id)
+                )',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create API keys table (SQL Server)',
+            );
+
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_api_key_unique'"
+                    . " AND object_id = OBJECT_ID(N'%sfaqapi_keys'))"
+                    . ' CREATE UNIQUE INDEX idx_api_key_unique ON %sfaqapi_keys (api_key)',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create api_key unique index on API keys (SQL Server)',
+            );
+
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_api_key_user'"
+                    . " AND object_id = OBJECT_ID(N'%sfaqapi_keys'))"
+                    . ' CREATE INDEX idx_api_key_user ON %sfaqapi_keys (user_id)',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create user_id index on API keys (SQL Server)',
+            );
+        }
     }
 }

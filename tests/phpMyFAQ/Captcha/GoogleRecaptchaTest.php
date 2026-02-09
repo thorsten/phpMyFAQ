@@ -143,7 +143,7 @@ class GoogleRecaptchaTest extends TestCase
 
         $this->googleRecaptcha->setUserIsLoggedIn(false);
 
-        set_error_handler(static fn (): bool => true);
+        set_error_handler(static fn(): bool => true);
 
         try {
             // We only assert integration with configuration; runtime behavior depends on network availability.
@@ -154,7 +154,6 @@ class GoogleRecaptchaTest extends TestCase
         } finally {
             restore_error_handler();
         }
-
     }
 
     /**
@@ -169,7 +168,7 @@ class GoogleRecaptchaTest extends TestCase
             ->with('security.googleReCaptchaV2SecretKey')
             ->willReturn('test-secret');
 
-        set_error_handler(static fn (): bool => true);
+        set_error_handler(static fn(): bool => true);
         try {
             $result = $this->googleRecaptcha->checkCaptchaCode('');
             $this->assertIsBool($result);
