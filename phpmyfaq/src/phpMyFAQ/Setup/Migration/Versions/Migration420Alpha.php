@@ -37,7 +37,7 @@ readonly class Migration420Alpha extends AbstractMigration
 
     public function getDescription(): string
     {
-        return 'Admin log hash columns, custom pages, chat messages, translation config, API keys, OAuth2 tables';
+        return 'Admin log hash columns, custom pages, chat messages, translation config, API rate limiting, API keys, OAuth2 tables';
     }
 
     public function up(OperationRecorder $recorder): void
@@ -207,6 +207,8 @@ readonly class Migration420Alpha extends AbstractMigration
         $recorder->addConfig('api.onlyActiveCategories', 'true');
         $recorder->addConfig('api.onlyPublicQuestions', 'true');
         $recorder->addConfig('api.ignoreOrphanedFaqs', 'true');
+        $recorder->addConfig('api.rateLimit.requests', '100');
+        $recorder->addConfig('api.rateLimit.interval', '3600');
 
         // Translation service configuration
         $recorder->addConfig('translation.provider', 'none');
@@ -519,6 +521,55 @@ readonly class Migration420Alpha extends AbstractMigration
         $recorder->addConfig('push.vapidPublicKey', '');
         $recorder->addConfig('push.vapidPrivateKey', '');
         $recorder->addConfig('push.vapidSubject', '');
+
+        // Create API rate-limit table
+        if ($this->isMySql()) {
+            $recorder->addSql(sprintf(
+                'CREATE TABLE IF NOT EXISTS %sfaqrate_limits (
+                    rate_key VARCHAR(255) NOT NULL,
+                    window_start INT(11) NOT NULL,
+                    requests INT(11) NOT NULL DEFAULT 0,
+                    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (rate_key, window_start)
+                ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+                $this->tablePrefix,
+            ), 'Create API rate limits table (MySQL)');
+        } elseif ($this->isPostgreSql()) {
+            $recorder->addSql(sprintf(
+                'CREATE TABLE IF NOT EXISTS %sfaqrate_limits (
+                    rate_key VARCHAR(255) NOT NULL,
+                    window_start INTEGER NOT NULL,
+                    requests INTEGER NOT NULL DEFAULT 0,
+                    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (rate_key, window_start)
+                )',
+                $this->tablePrefix,
+            ), 'Create API rate limits table (PostgreSQL)');
+        } elseif ($this->isSqlite()) {
+            $recorder->addSql(sprintf('CREATE TABLE IF NOT EXISTS %sfaqrate_limits (
+                    rate_key VARCHAR(255) NOT NULL,
+                    window_start INTEGER NOT NULL,
+                    requests INTEGER NOT NULL DEFAULT 0,
+                    created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (rate_key, window_start)
+                )', $this->tablePrefix), 'Create API rate limits table (SQLite)');
+        } elseif ($this->isSqlServer()) {
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'%sfaqrate_limits') AND type = 'U') "
+                    . 'CREATE TABLE %sfaqrate_limits (
+                    rate_key VARCHAR(255) NOT NULL,
+                    window_start INT NOT NULL,
+                    requests INT NOT NULL DEFAULT 0,
+                    created DATETIME NOT NULL DEFAULT GETDATE(),
+                    PRIMARY KEY (rate_key, window_start)
+                )',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create API rate limits table (SQL Server)',
+            );
+        }
 
         // Create API keys table
         if ($this->isMySql()) {

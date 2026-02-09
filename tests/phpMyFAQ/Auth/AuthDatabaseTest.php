@@ -16,14 +16,25 @@ class AuthDatabaseTest extends TestCase
     {
         $this->authDatabase = new AuthDatabase(Configuration::getConfigurationInstance());
         $this->authDatabase->getEncryptionContainer('sha1');
+
+        // Clean up leftover users from previous runs
+        foreach (['testUser', 'testUser2'] as $login) {
+            try {
+                $this->authDatabase->delete($login);
+            } catch (Exception) {
+                // Ignore — user may not exist
+            }
+        }
     }
 
     protected function tearDown(): void
     {
-        try {
-            $this->authDatabase->delete('testUser');
-        } catch (Exception $e) {
-            // Ignore
+        foreach (['testUser', 'testUser2'] as $login) {
+            try {
+                $this->authDatabase->delete($login);
+            } catch (Exception) {
+                // Ignore — user may not exist
+            }
         }
     }
 
