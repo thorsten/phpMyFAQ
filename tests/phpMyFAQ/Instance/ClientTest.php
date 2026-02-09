@@ -153,6 +153,40 @@ class ClientTest extends TestCase
         );
     }
 
+    public function testCreateClientDatabaseWithSchemaModeThrowsOnQueryFailure(): void
+    {
+        Database::factory('pdo_pgsql');
+        Database::setTablePrefix('');
+
+        $dbMock = $this->createMock(DatabaseDriver::class);
+        $loggerMock = $this->createMock(Logger::class);
+
+        $this->configuration->method('getDb')->willReturn($dbMock);
+        $this->configuration->method('getLogger')->willReturn($loggerMock);
+
+        // SET search_path succeeds, INSERT INTO faqconfig fails
+        $dbMock->method('query')->willReturnCallback(static function (string $query): mixed {
+            if (str_contains($query, 'SET search_path')) {
+                return true;
+            }
+            if (str_contains($query, 'CREATE')) {
+                return true;
+            }
+            // First INSERT fails
+            return false;
+        });
+        $dbMock->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $dbMock->method('error')->willReturn('relation "faqconfig" does not exist');
+
+        $loggerMock->expects($this->once())->method('error');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Failed to INSERT faqconfig');
+
+        $this->client->setClientUrl('https://tenant.example.com');
+        $this->client->createClientDatabase('fail_schema', TenantIsolationMode::SCHEMA);
+    }
+
     public function testCreateClientDatabaseWithDatabaseMode(): void
     {
         if (!file_exists(PMF_CONFIG_DIR . '/database.php')) {
@@ -441,8 +475,7 @@ class ClientTest extends TestCase
         $this->configuration->method('getDb')->willReturn($dbMock);
         $this->configuration->method('getLogger')->willReturn($loggerMock);
 
-        $queryCount = 0;
-        $dbMock->method('query')->willReturnCallback(static function (string $query) use (&$queryCount): mixed {
+        $dbMock->method('query')->willReturnCallback(static function (string $query): mixed {
             if (str_starts_with($query, 'SELECT * FROM')) {
                 return new \stdClass();
             }
@@ -471,5 +504,63 @@ class ClientTest extends TestCase
 
         $this->client->setClientUrl('https://tenant.example.com');
         $this->client->createClientDatabase('tables_fail_db', TenantIsolationMode::DATABASE);
+    }
+
+    public function testReconnectFailureIsLoggedWithoutSwallowingOriginalException(): void
+    {
+        $this->assertFileExists(
+            PMF_CONFIG_DIR . '/database.php',
+            'Test fixture tests/content/core/config/database.php is required.',
+        );
+
+        Database::factory('pdo_pgsql');
+        Database::setTablePrefix('');
+
+        $dbMock = $this->createMock(DatabaseDriver::class);
+        $loggerMock = $this->createMock(Logger::class);
+
+        $this->configuration->method('getDb')->willReturn($dbMock);
+        $this->configuration->method('getLogger')->willReturn($loggerMock);
+
+        $dbMock->method('query')->willReturnCallback(static function (string $query): mixed {
+            if (str_starts_with($query, 'SELECT * FROM')) {
+                return new \stdClass();
+            }
+            if (str_starts_with($query, 'SELECT 1 FROM pg_database')) {
+                return new \stdClass();
+            }
+            // CREATE DATABASE fails to trigger the original exception
+            if (str_starts_with($query, 'CREATE DATABASE')) {
+                return false;
+            }
+            return true;
+        });
+        $dbMock->method('fetchAll')->willReturn([]);
+        $dbMock->method('numRows')->willReturn(0);
+        $dbMock->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+
+        // Reconnect throws an exception
+        $dbMock->method('connect')->willThrowException(new \RuntimeException('Connection lost'));
+
+        // Expect two logger->error calls: one for the original failure, one for the reconnect failure
+        $logMessages = [];
+        $loggerMock
+            ->expects($this->exactly(2))
+            ->method('error')
+            ->willReturnCallback(static function (string $message, array $context) use (&$logMessages): void {
+                $logMessages[] = $message;
+            });
+
+        try {
+            $this->client->setClientUrl('https://tenant.example.com');
+            $this->client->createClientDatabase('reconnect_fail_db', TenantIsolationMode::DATABASE);
+            $this->fail('Expected Exception was not thrown.');
+        } catch (Exception $exception) {
+            // The original exception is preserved, not the reconnect one
+            $this->assertStringContainsString('Failed to create tenant database "reconnect_fail_db"', $exception->getMessage());
+        }
+
+        $this->assertContains('Failed to create tenant database tables.', $logMessages);
+        $this->assertContains('Failed to reconnect to source database.', $logMessages);
     }
 }

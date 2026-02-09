@@ -208,13 +208,21 @@ class Client extends Instance
             ]);
             throw $exception;
         } finally {
-            $this->configuration->getDb()->connect(
-                $credentials['server'],
-                $credentials['user'],
-                $credentials['password'],
-                $sourceDatabase,
-                $credentials['port'],
-            );
+            try {
+                $this->configuration->getDb()->connect(
+                    $credentials['server'],
+                    $credentials['user'],
+                    $credentials['password'],
+                    $sourceDatabase,
+                    $credentials['port'],
+                );
+            } catch (\Throwable $reconnectException) {
+                $this->configuration->getLogger()->error('Failed to reconnect to source database.', [
+                    'message' => $reconnectException->getMessage(),
+                    'trace' => $reconnectException->getTraceAsString(),
+                    'database' => $sourceDatabase,
+                ]);
+            }
         }
     }
 
@@ -237,34 +245,75 @@ class Client extends Instance
 
         if (str_contains($dbType, 'pgsql') || str_contains($dbType, 'Pgsql')) {
             $targetPrefix = sprintf('"%s".', $schema);
-            $this->configuration->getDb()->query(sprintf('SET search_path TO "%s"', $schema));
+            $this->executeSchemaQuery(
+                sprintf('SET search_path TO "%s"', $schema),
+                'SET search_path',
+                $targetPrefix,
+                $sourcePrefix,
+            );
         } elseif (str_contains($dbType, 'sqlsrv') || str_contains($dbType, 'Sqlsrv')) {
             $targetPrefix = sprintf('[%s].', $schema);
         }
 
-        $this->configuration
-            ->getDb()
-            ->query(sprintf('INSERT INTO %sfaqconfig SELECT * FROM %sfaqconfig', $targetPrefix, $sourcePrefix));
+        $this->executeSchemaQuery(
+            sprintf('INSERT INTO %sfaqconfig SELECT * FROM %sfaqconfig', $targetPrefix, $sourcePrefix),
+            'INSERT faqconfig',
+            $targetPrefix,
+            $sourcePrefix,
+        );
 
-        $this->configuration
-            ->getDb()
-            ->query(sprintf(
+        $this->executeSchemaQuery(
+            sprintf(
                 "UPDATE %sfaqconfig SET config_value = '%s' WHERE config_name = 'main.referenceURL'",
                 $targetPrefix,
                 $escapedClientUrl,
-            ));
+            ),
+            'UPDATE faqconfig',
+            $targetPrefix,
+            $sourcePrefix,
+        );
 
-        $this->configuration
-            ->getDb()
-            ->query(sprintf('INSERT INTO %sfaqright SELECT * FROM %sfaqright', $targetPrefix, $sourcePrefix));
+        $this->executeSchemaQuery(
+            sprintf('INSERT INTO %sfaqright SELECT * FROM %sfaqright', $targetPrefix, $sourcePrefix),
+            'INSERT faqright',
+            $targetPrefix,
+            $sourcePrefix,
+        );
 
-        $this->configuration
-            ->getDb()
-            ->query(sprintf(
+        $this->executeSchemaQuery(
+            sprintf(
                 'INSERT INTO %sfaquser_right SELECT * FROM %sfaquser_right WHERE user_id = 1',
                 $targetPrefix,
                 $sourcePrefix,
+            ),
+            'INSERT faquser_right',
+            $targetPrefix,
+            $sourcePrefix,
+        );
+    }
+
+    /**
+     * Executes a query during schema data copy and throws on failure.
+     *
+     * @throws Exception
+     */
+    private function executeSchemaQuery(
+        string $query,
+        string $operation,
+        string $targetPrefix,
+        string $sourcePrefix,
+    ): void {
+        $result = $this->configuration->getDb()->query($query);
+
+        if ($result === false) {
+            throw new Exception(sprintf(
+                'Failed to %s (target: %s, source: %s): %s',
+                $operation,
+                $targetPrefix,
+                $sourcePrefix,
+                $this->configuration->getDb()->error(),
             ));
+        }
     }
 
     private function getDatabaseCredentials(): ?array
