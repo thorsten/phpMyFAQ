@@ -82,7 +82,6 @@ final readonly class StorageFactory
             $s3Config['use_path_style_endpoint'] = filter_var($usePathStyle, FILTER_VALIDATE_BOOL);
         }
 
-        /** @var object $client */
         $client = new S3Client($s3Config);
 
         return new S3Storage($client, $bucket, $prefix, $publicBaseUrl);
