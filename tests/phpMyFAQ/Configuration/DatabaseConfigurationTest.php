@@ -19,5 +19,6 @@ class DatabaseConfigurationTest extends TestCase
         $this->assertEquals('', $config->getDatabase());
         $this->assertEquals('', $config->getPrefix());
         $this->assertEquals('pdo_sqlite', $config->getType());
+        $this->assertNull($config->getSchema());
     }
 }

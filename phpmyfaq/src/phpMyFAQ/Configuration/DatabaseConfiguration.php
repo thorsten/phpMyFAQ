@@ -35,6 +35,8 @@ readonly class DatabaseConfiguration
 
     private string $type;
 
+    private ?string $schema;
+
     public function __construct(string $filename)
     {
         $DB = [
@@ -45,6 +47,7 @@ readonly class DatabaseConfiguration
             'db' => '',
             'prefix' => '',
             'type' => '',
+            'schema' => '',
         ];
 
         include $filename;
@@ -56,6 +59,7 @@ readonly class DatabaseConfiguration
         $this->database = $DB['db'];
         $this->prefix = $DB['prefix'];
         $this->type = $DB['type'];
+        $this->schema = $DB['schema'] === '' ? null : $DB['schema'];
     }
 
     public function getServer(): string
@@ -91,5 +95,10 @@ readonly class DatabaseConfiguration
     public function getType(): string
     {
         return $this->type;
+    }
+
+    public function getSchema(): ?string
+    {
+        return $this->schema;
     }
 }

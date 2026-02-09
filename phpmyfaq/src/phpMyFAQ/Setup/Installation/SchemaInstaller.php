@@ -61,8 +61,11 @@ class SchemaInstaller implements DriverInterface
      * Executes all CREATE TABLE and CREATE INDEX statements.
      *
      * @param string $prefix Table prefix to apply. The previous prefix is restored after execution.
+     * @param string|null $schema Schema or database name for schema/database-based tenant isolation.
+     *                            For MySQL: creates and switches to a database.
+     *                            For PostgreSQL: creates and switches to a schema.
      */
-    public function createTables(string $prefix = ''): bool
+    public function createTables(string $prefix = '', ?string $schema = null): bool
     {
         $previousPrefix = Database::getTablePrefix();
 
@@ -73,6 +76,12 @@ class SchemaInstaller implements DriverInterface
         $this->collectedSql = [];
 
         try {
+            if ($schema !== null && $schema !== '') {
+                if (!$this->createAndUseSchema($schema)) {
+                    return false;
+                }
+            }
+
             foreach ($this->schema->getAllTables() as $tableBuilder) {
                 $createTableSql = $tableBuilder->build();
 
@@ -95,6 +104,41 @@ class SchemaInstaller implements DriverInterface
                 Database::setTablePrefix($previousPrefix ?? '');
             }
         }
+    }
+
+    /**
+     * Creates a schema/database and switches to it.
+     *
+     * For MySQL: CREATE DATABASE + USE.
+     * For PostgreSQL: CREATE SCHEMA + SET search_path.
+     */
+    private function createAndUseSchema(string $schema): bool
+    {
+        $dialectClass = $this->dialect::class;
+
+        if (str_contains($dialectClass, 'Mysql')) {
+            return (
+                $this->executeSql(sprintf('CREATE DATABASE IF NOT EXISTS `%s`', $schema))
+                && $this->executeSql(sprintf('USE `%s`', $schema))
+            );
+        }
+
+        if (str_contains($dialectClass, 'Pgsql')) {
+            return (
+                $this->executeSql(sprintf('CREATE SCHEMA IF NOT EXISTS "%s"', $schema))
+                && $this->executeSql(sprintf('SET search_path TO "%s"', $schema))
+            );
+        }
+
+        if (str_contains($dialectClass, 'Sqlsrv')) {
+            return $this->executeSql(sprintf(
+                "IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = '%s') EXEC('CREATE SCHEMA [%s]')",
+                $schema,
+                $schema,
+            ));
+        }
+
+        return true;
     }
 
     /**

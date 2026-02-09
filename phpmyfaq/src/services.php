@@ -82,6 +82,9 @@ use phpMyFAQ\Sitemap;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\System;
 use phpMyFAQ\Tags;
+use phpMyFAQ\Tenant\TenantContext;
+use phpMyFAQ\Tenant\TenantContextResolver;
+use phpMyFAQ\Tenant\TenantEventDispatcher;
 use phpMyFAQ\Translation\ContentTranslationService;
 use phpMyFAQ\Translation\TranslationProviderFactory;
 use phpMyFAQ\Translation\TranslationProviderInterface;
@@ -91,6 +94,8 @@ use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\User\UserSession;
 use phpMyFAQ\Visits;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -111,6 +116,8 @@ return static function (ContainerConfigurator $container): void {
 
     // ========== Core Symfony framework services ==========
     $services->set('filesystem', Filesystem::class);
+    $services->set('phpmyfaq.event_dispatcher', EventDispatcher::class);
+    $services->alias(EventDispatcherInterface::class, 'phpmyfaq.event_dispatcher');
     $services->set('session', Session::class);
     $services->alias(SessionInterface::class, 'session');
 
@@ -214,6 +221,15 @@ return static function (ContainerConfigurator $container): void {
     $services->set('phpmyfaq.comments', Comments::class)->args([
         service('phpmyfaq.configuration'),
         service('phpmyfaq.comment.comments-repository'),
+    ]);
+
+    $services->set('phpmyfaq.tenant.context-resolver', TenantContextResolver::class);
+    $services->set('phpmyfaq.tenant.context', TenantContext::class)->factory([
+        service('phpmyfaq.tenant.context-resolver'),
+        'resolve',
+    ]);
+    $services->set('phpmyfaq.tenant.event-dispatcher', TenantEventDispatcher::class)->args([
+        service('phpmyfaq.event_dispatcher'),
     ]);
 
     $services->set('phpmyfaq.configuration', Configuration::class)->factory([

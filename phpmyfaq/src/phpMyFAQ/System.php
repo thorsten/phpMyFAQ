@@ -407,6 +407,10 @@ class System
 
         try {
             foreach ($files as $file) {
+                if ($file->isDir()) {
+                    continue;
+                }
+
                 if ('php' !== pathinfo((string) $file->getFilename(), PATHINFO_EXTENSION)) {
                     continue;
                 }
