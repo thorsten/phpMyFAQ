@@ -56,7 +56,7 @@ class AttachmentFactory
     public static function create(?int $attachmentId = null, ?string $key = null): File
     {
         $return = match (self::$storageType) {
-            AttachmentStorageType::FILESYSTEM->value => new File($attachmentId),
+            AttachmentStorageType::FILESYSTEM->value, AttachmentStorageType::S3->value => new File($attachmentId),
             default => throw new AttachmentException('Unknown attachment storage type'),
         };
 
@@ -187,8 +187,9 @@ class AttachmentFactory
      *
      * @param string $defaultKey        Default key
      * @param bool   $encryptionEnabled Enabled encryption?
+     * @param int|null $storageType Optional storage type (defaults to filesystem)
      */
-    public static function init(string $defaultKey, bool $encryptionEnabled): void
+    public static function init(string $defaultKey, bool $encryptionEnabled, ?int $storageType = null): void
     {
         if (null === self::$defaultKey) {
             self::$defaultKey = $defaultKey;
@@ -196,6 +197,10 @@ class AttachmentFactory
 
         if (null === self::$encryptionEnabled) {
             self::$encryptionEnabled = $encryptionEnabled;
+        }
+
+        if ($storageType !== null) {
+            self::$storageType = $storageType;
         }
     }
 }

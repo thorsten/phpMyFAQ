@@ -93,6 +93,15 @@ class AttachmentFactoryTest extends TestCase
         AttachmentFactory::create(123);
     }
 
+    public function testCreateWithS3StorageType(): void
+    {
+        $this->setStorageType(AttachmentStorageType::S3->value);
+
+        $attachment = AttachmentFactory::create(123, 'testkey');
+
+        $this->assertInstanceOf(File::class, $attachment);
+    }
+
     public function testCreateWithEncryptionEnabled(): void
     {
         $this->setStorageType(AttachmentStorageType::FILESYSTEM->value);

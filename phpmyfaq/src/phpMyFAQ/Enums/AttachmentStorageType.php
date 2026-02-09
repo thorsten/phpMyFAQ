@@ -23,4 +23,5 @@ enum AttachmentStorageType: int
 {
     case FILESYSTEM = 0;
     case DATABASE = 1; // not used currently
+    case S3 = 2;
 }

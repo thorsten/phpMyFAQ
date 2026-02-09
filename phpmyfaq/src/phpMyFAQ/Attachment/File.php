@@ -23,6 +23,10 @@ use phpMyFAQ\Attachment\Filesystem\AbstractFile as FilesystemFile;
 use phpMyFAQ\Attachment\Filesystem\File\EncryptedFile;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Attachment\Filesystem\File\VanillaFile;
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Storage\StorageException;
+use phpMyFAQ\Storage\StorageFactory;
+use phpMyFAQ\Storage\StorageInterface;
 
 /**
  * Class File
@@ -31,6 +35,8 @@ use phpMyFAQ\Attachment\Filesystem\File\VanillaFile;
  */
 class File extends AbstractAttachment implements AttachmentInterface
 {
+    private ?StorageInterface $storage = null;
+
     /**
      * Build a file path under which the attachment file is accessible in filesystem
      *
@@ -38,17 +44,31 @@ class File extends AbstractAttachment implements AttachmentInterface
      */
     protected function buildFilePath(): string
     {
+        $storagePath = $this->buildStoragePath();
         $attachmentPath = PMF_ATTACHMENTS_DIR;
+
+        return $attachmentPath . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $storagePath);
+    }
+
+    /**
+     * Build the storage key/path for the current attachment.
+     *
+     * @throws AttachmentException
+     */
+    protected function buildStoragePath(): string
+    {
         $fsHash = $this->mkVirtualHash();
         $subDirCount = 3;
         $subDirNameLength = 5;
+        $segments = [];
 
         for ($i = 0; $i < $subDirCount; ++$i) {
-            $attachmentPath .=
-                DIRECTORY_SEPARATOR . substr((string) $fsHash, $i * $subDirNameLength, $subDirNameLength);
+            $segments[] = substr((string) $fsHash, $i * $subDirNameLength, $subDirNameLength);
         }
 
-        return $attachmentPath . (DIRECTORY_SEPARATOR . substr((string) $fsHash, $i * $subDirNameLength));
+        $segments[] = substr((string) $fsHash, $i * $subDirNameLength);
+
+        return implode('/', $segments);
     }
 
     /**
@@ -72,6 +92,10 @@ class File extends AbstractAttachment implements AttachmentInterface
      */
     public function isStorageOk(): bool
     {
+        if ($this->usesCloudStorage()) {
+            return true;
+        }
+
         clearstatcache();
         $attachmentDir = dirname($this->buildFilePath());
 
@@ -103,31 +127,36 @@ class File extends AbstractAttachment implements AttachmentInterface
 
             $this->saveMeta();
 
-            $targetFile = $this->buildFilePath();
-
-            if ($this->createSubDirs($targetFile)) {
-                // Doing this check, we're sure not to unnecessarily
-                // overwrite existing unencrypted file duplicates.
-                if (!$this->linkedRecords()) {
-                    $vanillaFile = new VanillaFile($filePath);
-                    $target = $this->getFile(FilesystemFile::MODE_WRITE);
-
-                    $success = $vanillaFile->moveTo($target);
+            if ($this->linkedRecords()) {
+                $success = true;
+            } else {
+                try {
+                    if ($this->encrypted) {
+                        $targetFile = $this->buildFilePath();
+                        if ($this->createSubDirs($targetFile)) {
+                            $vanillaFile = new VanillaFile($filePath);
+                            $target = $this->getFile(FilesystemFile::MODE_WRITE);
+                            $success = $vanillaFile->moveTo($target);
+                        }
+                    } else {
+                        $contents = file_get_contents($filePath);
+                        if ($contents !== false) {
+                            $success = $this->getStorage()->put($this->buildStoragePath(), $contents);
+                        }
+                    }
+                } catch (StorageException $storageException) {
+                    throw new AttachmentException($storageException->getMessage(), 0, $storageException);
                 }
+            }
 
-                if ($this->linkedRecords()) {
-                    $success = true;
-                }
+            if ($success) {
+                $this->postUpdateMeta();
+            }
 
-                if ($success) {
-                    $this->postUpdateMeta();
-                }
-
-                if (!$success) {
-                    // File wasn't saved
-                    $this->delete();
-                    $success = false;
-                }
+            if (!$success) {
+                // File wasn't saved
+                $this->delete();
+                $success = false;
             }
         }
 
@@ -145,7 +174,15 @@ class File extends AbstractAttachment implements AttachmentInterface
 
         // Won't delete the file if there are still some records hanging on it
         if (!$this->linkedRecords()) {
-            $success &= $this->getFile()->delete();
+            if ($this->encrypted) {
+                $success &= $this->getFile()->delete();
+            } else {
+                try {
+                    $this->getStorage()->delete($this->buildStoragePath());
+                } catch (StorageException $storageException) {
+                    throw new AttachmentException($storageException->getMessage(), 0, $storageException);
+                }
+            }
         }
 
         $this->deleteMeta();
@@ -160,6 +197,14 @@ class File extends AbstractAttachment implements AttachmentInterface
      */
     public function get(): string
     {
+        if (!$this->encrypted) {
+            try {
+                return $this->getStorage()->get($this->buildStoragePath());
+            } catch (StorageException $storageException) {
+                throw new AttachmentException($storageException->getMessage(), 0, $storageException);
+            }
+        }
+
         $file = $this->getFile();
         $contents = '';
         while (!$file->eof()) {
@@ -176,6 +221,11 @@ class File extends AbstractAttachment implements AttachmentInterface
      */
     public function rawOut(): void
     {
+        if (!$this->encrypted) {
+            echo $this->get();
+            return;
+        }
+
         $file = $this->getFile();
         while (!$file->eof()) {
             echo $file->getChunk();
@@ -195,5 +245,34 @@ class File extends AbstractAttachment implements AttachmentInterface
         }
 
         return new VanillaFile($this->buildFilePath(), $mode);
+    }
+
+    /**
+     * @throws AttachmentException
+     */
+    private function getStorage(): StorageInterface
+    {
+        if ($this->storage instanceof StorageInterface) {
+            return $this->storage;
+        }
+
+        $configuration = Configuration::getConfigurationInstance();
+        if ($configuration === null) {
+            throw new AttachmentException('Storage cannot be initialized without configuration.');
+        }
+
+        $this->storage = new StorageFactory($configuration)->create();
+
+        return $this->storage;
+    }
+
+    private function usesCloudStorage(): bool
+    {
+        $configuration = Configuration::getConfigurationInstance();
+        if ($configuration === null) {
+            return false;
+        }
+
+        return strtolower((string) $configuration->get('storage.type')) === 's3';
     }
 }
