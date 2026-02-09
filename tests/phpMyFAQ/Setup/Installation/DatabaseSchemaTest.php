@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class DatabaseSchemaTest extends TestCase
 {
-    private const EXPECTED_TABLE_COUNT = 50;
+    private const EXPECTED_TABLE_COUNT = 51;
 
     /**
      * @return array<string, array{DialectInterface}>
