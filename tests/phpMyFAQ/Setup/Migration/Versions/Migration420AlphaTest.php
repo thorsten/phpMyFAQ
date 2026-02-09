@@ -59,4 +59,24 @@ class Migration420AlphaTest extends TestCase
 
         $this->assertTrue($foundApiKeysTable, 'Expected at least one SQL statement containing "faqapi_keys"');
     }
+
+    public function testUpAddsOAuthStorageTablesSql(): void
+    {
+        $recorder = $this->createMock(OperationRecorder::class);
+        $foundOauthTable = false;
+
+        $recorder->expects($this->atLeastOnce())->method('addSql')->with($this->callback(function (string $sql) use (
+            &$foundOauthTable,
+        ): bool {
+            if (str_contains($sql, 'faqoauth_clients')) {
+                $foundOauthTable = true;
+            }
+
+            return true;
+        }), $this->anything());
+
+        $this->migration->up($recorder);
+
+        $this->assertTrue($foundOauthTable, 'Expected at least one SQL statement containing "faqoauth_clients"');
+    }
 }
