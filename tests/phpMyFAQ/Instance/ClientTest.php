@@ -165,16 +165,18 @@ class ClientTest extends TestCase
         $this->configuration->method('getLogger')->willReturn($loggerMock);
 
         // SET search_path succeeds, INSERT INTO faqconfig fails
-        $dbMock->method('query')->willReturnCallback(static function (string $query): mixed {
-            if (str_contains($query, 'SET search_path')) {
-                return true;
-            }
-            if (str_contains($query, 'CREATE')) {
-                return true;
-            }
-            // First INSERT fails
-            return false;
-        });
+        $dbMock
+            ->method('query')
+            ->willReturnCallback(static function (string $query): mixed {
+                if (str_contains($query, 'SET search_path')) {
+                    return true;
+                }
+                if (str_contains($query, 'CREATE')) {
+                    return true;
+                }
+                // First INSERT fails
+                return false;
+            });
         $dbMock->method('escape')->willReturnCallback(static fn(string $value): string => $value);
         $dbMock->method('error')->willReturn('relation "faqconfig" does not exist');
 
@@ -391,21 +393,23 @@ class ClientTest extends TestCase
         $this->configuration->method('getDb')->willReturn($dbMock);
         $this->configuration->method('getLogger')->willReturn($loggerMock);
 
-        $dbMock->method('query')->willReturnCallback(static function (string $query): mixed {
-            // collectSeedRows SELECT queries return a result
-            if (str_starts_with($query, 'SELECT * FROM')) {
-                return new \stdClass();
-            }
-            // createTenantDatabase: SELECT 1 FROM pg_database returns a result
-            if (str_starts_with($query, 'SELECT 1 FROM pg_database')) {
-                return new \stdClass();
-            }
-            // CREATE DATABASE fails
-            if (str_starts_with($query, 'CREATE DATABASE')) {
-                return false;
-            }
-            return true;
-        });
+        $dbMock
+            ->method('query')
+            ->willReturnCallback(static function (string $query): mixed {
+                // collectSeedRows SELECT queries return a result
+                if (str_starts_with($query, 'SELECT * FROM')) {
+                    return new \stdClass();
+                }
+                // createTenantDatabase: SELECT 1 FROM pg_database returns a result
+                if (str_starts_with($query, 'SELECT 1 FROM pg_database')) {
+                    return new \stdClass();
+                }
+                // CREATE DATABASE fails
+                if (str_starts_with($query, 'CREATE DATABASE')) {
+                    return false;
+                }
+                return true;
+            });
         $dbMock->method('fetchAll')->willReturn([]);
         $dbMock->method('numRows')->willReturn(0); // database does not exist yet
         $dbMock->method('escape')->willReturnCallback(static fn(string $value): string => $value);
@@ -435,15 +439,17 @@ class ClientTest extends TestCase
         $this->configuration->method('getDb')->willReturn($dbMock);
         $this->configuration->method('getLogger')->willReturn($loggerMock);
 
-        $dbMock->method('query')->willReturnCallback(static function (string $query): mixed {
-            if (str_starts_with($query, 'SELECT * FROM')) {
-                return new \stdClass();
-            }
-            if (str_starts_with($query, 'SELECT 1 FROM pg_database')) {
-                return new \stdClass();
-            }
-            return true;
-        });
+        $dbMock
+            ->method('query')
+            ->willReturnCallback(static function (string $query): mixed {
+                if (str_starts_with($query, 'SELECT * FROM')) {
+                    return new \stdClass();
+                }
+                if (str_starts_with($query, 'SELECT 1 FROM pg_database')) {
+                    return new \stdClass();
+                }
+                return true;
+            });
         $dbMock->method('fetchAll')->willReturn([]);
         $dbMock->method('numRows')->willReturn(0);
         $dbMock->method('escape')->willReturnCallback(static fn(string $value): string => $value);
@@ -475,23 +481,25 @@ class ClientTest extends TestCase
         $this->configuration->method('getDb')->willReturn($dbMock);
         $this->configuration->method('getLogger')->willReturn($loggerMock);
 
-        $dbMock->method('query')->willReturnCallback(static function (string $query): mixed {
-            if (str_starts_with($query, 'SELECT * FROM')) {
-                return new \stdClass();
-            }
-            if (str_starts_with($query, 'SELECT 1 FROM pg_database')) {
-                return new \stdClass();
-            }
-            // Let createTenantDatabase's CREATE DATABASE succeed
-            if (str_starts_with($query, 'CREATE DATABASE')) {
+        $dbMock
+            ->method('query')
+            ->willReturnCallback(static function (string $query): mixed {
+                if (str_starts_with($query, 'SELECT * FROM')) {
+                    return new \stdClass();
+                }
+                if (str_starts_with($query, 'SELECT 1 FROM pg_database')) {
+                    return new \stdClass();
+                }
+                // Let createTenantDatabase's CREATE DATABASE succeed
+                if (str_starts_with($query, 'CREATE DATABASE')) {
+                    return true;
+                }
+                // Fail on the first CREATE TABLE (from createTables/SchemaInstaller)
+                if (str_starts_with($query, 'CREATE TABLE')) {
+                    return false;
+                }
                 return true;
-            }
-            // Fail on the first CREATE TABLE (from createTables/SchemaInstaller)
-            if (str_starts_with($query, 'CREATE TABLE')) {
-                return false;
-            }
-            return true;
-        });
+            });
         $dbMock->method('fetchAll')->willReturn([]);
         $dbMock->method('numRows')->willReturn(0);
         $dbMock->method('escape')->willReturnCallback(static fn(string $value): string => $value);
@@ -522,19 +530,21 @@ class ClientTest extends TestCase
         $this->configuration->method('getDb')->willReturn($dbMock);
         $this->configuration->method('getLogger')->willReturn($loggerMock);
 
-        $dbMock->method('query')->willReturnCallback(static function (string $query): mixed {
-            if (str_starts_with($query, 'SELECT * FROM')) {
-                return new \stdClass();
-            }
-            if (str_starts_with($query, 'SELECT 1 FROM pg_database')) {
-                return new \stdClass();
-            }
-            // CREATE DATABASE fails to trigger the original exception
-            if (str_starts_with($query, 'CREATE DATABASE')) {
-                return false;
-            }
-            return true;
-        });
+        $dbMock
+            ->method('query')
+            ->willReturnCallback(static function (string $query): mixed {
+                if (str_starts_with($query, 'SELECT * FROM')) {
+                    return new \stdClass();
+                }
+                if (str_starts_with($query, 'SELECT 1 FROM pg_database')) {
+                    return new \stdClass();
+                }
+                // CREATE DATABASE fails to trigger the original exception
+                if (str_starts_with($query, 'CREATE DATABASE')) {
+                    return false;
+                }
+                return true;
+            });
         $dbMock->method('fetchAll')->willReturn([]);
         $dbMock->method('numRows')->willReturn(0);
         $dbMock->method('escape')->willReturnCallback(static fn(string $value): string => $value);
@@ -557,7 +567,10 @@ class ClientTest extends TestCase
             $this->fail('Expected Exception was not thrown.');
         } catch (Exception $exception) {
             // The original exception is preserved, not the reconnect one
-            $this->assertStringContainsString('Failed to create tenant database "reconnect_fail_db"', $exception->getMessage());
+            $this->assertStringContainsString(
+                'Failed to create tenant database "reconnect_fail_db"',
+                $exception->getMessage(),
+            );
         }
 
         $this->assertContains('Failed to create tenant database tables.', $logMessages);

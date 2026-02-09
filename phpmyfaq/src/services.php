@@ -28,7 +28,17 @@ use phpMyFAQ\Administration\LatestUsers;
 use phpMyFAQ\Administration\RatingData;
 use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Attachment\AttachmentCollection;
-use phpMyFAQ\Auth;
+use phpMyFAQ\Auth as LegacyAuth;
+use phpMyFAQ\Auth\ApiKeyAuthenticator;
+use phpMyFAQ\Auth\AuthChain;
+use phpMyFAQ\Auth\OAuth2\Repository\AccessTokenRepository;
+use phpMyFAQ\Auth\OAuth2\Repository\AuthCodeRepository;
+use phpMyFAQ\Auth\OAuth2\Repository\ClientRepository;
+use phpMyFAQ\Auth\OAuth2\Repository\RefreshTokenRepository;
+use phpMyFAQ\Auth\OAuth2\Repository\ScopeRepository;
+use phpMyFAQ\Auth\OAuth2\Repository\UserRepository;
+use phpMyFAQ\Auth\OAuth2\AuthorizationServer as OAuth2AuthorizationServer;
+use phpMyFAQ\Auth\OAuth2\ResourceServer as OAuth2ResourceServer;
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\Chat;
 use phpMyFAQ\Captcha\Captcha;
@@ -168,7 +178,38 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.configuration'),
     ]);
 
-    $services->set('phpmyfaq.auth', Auth::class)->args([
+    $services->set('phpmyfaq.auth', LegacyAuth::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+    $services->set('phpmyfaq.auth.api-key-authenticator', ApiKeyAuthenticator::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+    $services->set('phpmyfaq.auth.chain', AuthChain::class)->args([
+        service('phpmyfaq.user.current_user'),
+        service('phpmyfaq.auth.api-key-authenticator'),
+    ])->call('setOAuth2Authenticator', [[service('phpmyfaq.auth.oauth2.resource-server'), 'authenticate']]);
+    $services->set('phpmyfaq.auth.oauth2.authorization-server', OAuth2AuthorizationServer::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+    $services->set('phpmyfaq.auth.oauth2.resource-server', OAuth2ResourceServer::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+    $services->set('phpmyfaq.auth.oauth2.repository.client', ClientRepository::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+    $services->set('phpmyfaq.auth.oauth2.repository.scope', ScopeRepository::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+    $services->set('phpmyfaq.auth.oauth2.repository.access-token', AccessTokenRepository::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+    $services->set('phpmyfaq.auth.oauth2.repository.refresh-token', RefreshTokenRepository::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+    $services->set('phpmyfaq.auth.oauth2.repository.auth-code', AuthCodeRepository::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+    $services->set('phpmyfaq.auth.oauth2.repository.user', UserRepository::class)->args([
         service('phpmyfaq.configuration'),
     ]);
 

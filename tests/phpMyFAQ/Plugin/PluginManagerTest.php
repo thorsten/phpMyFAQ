@@ -278,6 +278,7 @@ class PluginManagerTest extends TestCase
 
             public function registerEvents(\Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher): void
             {
+                unset($dispatcher);
             }
 
             public function getStylesheets(): array
