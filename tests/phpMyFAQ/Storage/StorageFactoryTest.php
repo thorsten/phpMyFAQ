@@ -1,0 +1,86 @@
+<?php
+
+namespace phpMyFAQ\Storage;
+
+use phpMyFAQ\Configuration;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\TestCase;
+
+#[CoversClass(StorageFactory::class)]
+#[UsesClass(FilesystemStorage::class)]
+#[UsesClass(S3Storage::class)]
+class StorageFactoryTest extends TestCase
+{
+    public function testCreateReturnsFilesystemStorageByDefault(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['storage.type',                     null],
+                ['storage.filesystem.root',          null],
+                ['storage.filesystem.publicBaseUrl', null],
+            ]);
+
+        $factory = new StorageFactory($configuration);
+        $storage = $factory->create();
+
+        $this->assertInstanceOf(FilesystemStorage::class, $storage);
+    }
+
+    public function testCreateReturnsFilesystemStorageWhenConfigured(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['storage.type',                     'filesystem'],
+                ['storage.filesystem.root',          '/tmp/phpmyfaq-storage'],
+                ['storage.filesystem.publicBaseUrl', 'https://cdn.example.com/files'],
+            ]);
+
+        $factory = new StorageFactory($configuration);
+        $storage = $factory->create();
+
+        $this->assertInstanceOf(FilesystemStorage::class, $storage);
+    }
+
+    public function testCreateThrowsForUnsupportedStorageType(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['storage.type', 'unsupported'],
+            ]);
+
+        $factory = new StorageFactory($configuration);
+
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage('Unsupported storage type: unsupported');
+        $factory->create();
+    }
+
+    public function testCreateReturnsS3StorageWhenConfigured(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['storage.type',             's3'],
+                ['storage.s3.bucket',        'pmf-bucket'],
+                ['storage.s3.prefix',        null],
+                ['storage.s3.publicBaseUrl', null],
+                ['storage.s3.region',        null],
+                ['storage.s3.endpoint',      null],
+                ['storage.s3.key',           null],
+                ['storage.s3.secret',        null],
+                ['storage.s3.usePathStyle',  null],
+            ]);
+
+        $factory = new StorageFactory($configuration);
+        $storage = $factory->create();
+        $this->assertInstanceOf(S3Storage::class, $storage);
+    }
+}

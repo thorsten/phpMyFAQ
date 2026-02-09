@@ -407,7 +407,7 @@ class System
 
         try {
             foreach ($files as $file) {
-                if ($file->isDir()) {
+                if (!$file->isFile() || !$file->isReadable()) {
                     continue;
                 }
 
@@ -433,7 +433,12 @@ class System
                     continue;
                 }
 
-                $hashes[$current] = sha1(file_get_contents($file->getPathname()));
+                $contents = file_get_contents($file->getPathname());
+                if ($contents === false) {
+                    continue;
+                }
+
+                $hashes[$current] = sha1($contents);
             }
         } catch (UnexpectedValueException $unexpectedValueException) {
             $hashes[$current . ' failed'] = $unexpectedValueException->getMessage();
