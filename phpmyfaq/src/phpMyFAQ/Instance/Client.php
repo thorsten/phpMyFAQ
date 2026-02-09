@@ -162,7 +162,7 @@ class Client extends Instance
 
         $credentials = $this->getDatabaseCredentials();
         if ($credentials === null) {
-            return;
+            throw new Exception(sprintf('Database credentials not found for tenant database "%s".', $databaseName));
         }
 
         $sourcePrefix = Database::getTablePrefix();
@@ -172,7 +172,7 @@ class Client extends Instance
 
         try {
             if (!InstanceDatabase::createTenantDatabase($this->configuration, Database::getType(), $databaseName)) {
-                return;
+                throw new Exception(sprintf('Failed to create tenant database "%s".', $databaseName));
             }
 
             if (!$this->configuration->getDb()->connect(
@@ -182,16 +182,31 @@ class Client extends Instance
                 $databaseName,
                 $credentials['port'],
             )) {
-                return;
+                throw new Exception(sprintf(
+                    'Failed to connect to tenant database "%s" on server "%s": %s',
+                    $databaseName,
+                    $credentials['server'],
+                    $this->configuration->getDb()->error(),
+                ));
             }
 
             $instanceDatabase = InstanceDatabase::factory($this->configuration, Database::getType());
             if (!$instanceDatabase->createTables($targetPrefix)) {
-                return;
+                throw new Exception(sprintf(
+                    'Failed to create tables in tenant database "%s" with prefix "%s".',
+                    $databaseName,
+                    $targetPrefix,
+                ));
             }
 
             $this->insertSeedRows($targetPrefix, $seedRows);
-        } catch (Exception) {
+        } catch (Exception $exception) {
+            $this->configuration->getLogger()->error('Failed to create tenant database tables.', [
+                'message' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString(),
+                'database' => $databaseName,
+            ]);
+            throw $exception;
         } finally {
             $this->configuration->getDb()->connect(
                 $credentials['server'],

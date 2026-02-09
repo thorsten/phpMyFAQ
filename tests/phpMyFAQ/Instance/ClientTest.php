@@ -4,6 +4,7 @@ namespace phpMyFAQ\Instance;
 
 use Monolog\Logger;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Enums\TenantIsolationMode;
@@ -154,12 +155,12 @@ class ClientTest extends TestCase
 
     public function testCreateClientDatabaseWithDatabaseMode(): void
     {
-        // Guard: the DATABASE code path requires a database.php fixture so
-        // getDatabaseCredentials() returns non-null credentials.
-        $this->assertFileExists(
-            PMF_CONFIG_DIR . '/database.php',
-            'Test fixture tests/content/core/config/database.php is required for the DATABASE isolation code path.',
-        );
+        if (!file_exists(PMF_CONFIG_DIR . '/database.php')) {
+            $this->markTestSkipped(
+                'Test fixture tests/content/core/config/database.php is missing; '
+                . 'the DATABASE isolation code path requires valid database credentials.',
+            );
+        }
 
         Database::factory('pdo_pgsql');
         Database::setTablePrefix('');
@@ -236,16 +237,18 @@ class ClientTest extends TestCase
     {
         putenv('PMF_TENANT_ISOLATION_MODE=prefix');
 
-        $prefix = 'default_';
-        $dbMock = $this->createMock(DatabaseDriver::class);
-        $this->configuration->method('getDb')->willReturn($dbMock);
+        try {
+            $prefix = 'default_';
+            $dbMock = $this->createMock(DatabaseDriver::class);
+            $this->configuration->method('getDb')->willReturn($dbMock);
 
-        $dbMock->expects($this->atLeastOnce())->method('query');
+            $dbMock->expects($this->atLeastOnce())->method('query');
 
-        $this->client->setClientUrl('https://default.example.com');
-        $this->client->createClientDatabase($prefix);
-
-        putenv('PMF_TENANT_ISOLATION_MODE');
+            $this->client->setClientUrl('https://default.example.com');
+            $this->client->createClientDatabase($prefix);
+        } finally {
+            putenv('PMF_TENANT_ISOLATION_MODE');
+        }
     }
 
     public function testInsertRowsThrowsOnQueryFailure(): void
@@ -302,5 +305,171 @@ class ClientTest extends TestCase
         $method->invoke($this->client, 'test_faqconfig', $rows);
 
         $this->addToAssertionCount(1);
+    }
+
+    public function testCreateClientTablesWithDatabaseThrowsOnMissingCredentials(): void
+    {
+        Database::factory('pdo_pgsql');
+        Database::setTablePrefix('');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Database credentials not found for tenant database "tenant_db".');
+
+        $method = new ReflectionMethod(Client::class, 'createClientTablesWithDatabase');
+
+        // Use a non-existent config dir to ensure getDatabaseCredentials returns null
+        $origConfigDir = PMF_CONFIG_DIR;
+        // We can't change the constant, but getDatabaseCredentials reads from PMF_CONFIG_DIR/database.php.
+        // Instead, test by invoking on a client whose config dir won't have the file.
+        // Since PMF_CONFIG_DIR is set to tests/content/core/config, if database.php doesn't exist there
+        // the test would pass. But it does exist. So we test via a different approach:
+        // We'll just verify the exception is thrown by temporarily renaming the file.
+        $dbFile = PMF_CONFIG_DIR . '/database.php';
+        $tempFile = PMF_CONFIG_DIR . '/database.php.bak';
+
+        if (!file_exists($dbFile)) {
+            // If no database.php exists, the method should throw directly
+            $method->invoke($this->client, 'tenant_db');
+            return;
+        }
+
+        rename($dbFile, $tempFile);
+        try {
+            $method->invoke($this->client, 'tenant_db');
+        } finally {
+            rename($tempFile, $dbFile);
+        }
+    }
+
+    public function testCreateClientTablesWithDatabaseThrowsOnCreateTenantDatabaseFailure(): void
+    {
+        $this->assertFileExists(
+            PMF_CONFIG_DIR . '/database.php',
+            'Test fixture tests/content/core/config/database.php is required.',
+        );
+
+        Database::factory('pdo_pgsql');
+        Database::setTablePrefix('');
+
+        $dbMock = $this->createMock(DatabaseDriver::class);
+        $loggerMock = $this->createMock(Logger::class);
+
+        $this->configuration->method('getDb')->willReturn($dbMock);
+        $this->configuration->method('getLogger')->willReturn($loggerMock);
+
+        $dbMock->method('query')->willReturnCallback(static function (string $query): mixed {
+            // collectSeedRows SELECT queries return a result
+            if (str_starts_with($query, 'SELECT * FROM')) {
+                return new \stdClass();
+            }
+            // createTenantDatabase: SELECT 1 FROM pg_database returns a result
+            if (str_starts_with($query, 'SELECT 1 FROM pg_database')) {
+                return new \stdClass();
+            }
+            // CREATE DATABASE fails
+            if (str_starts_with($query, 'CREATE DATABASE')) {
+                return false;
+            }
+            return true;
+        });
+        $dbMock->method('fetchAll')->willReturn([]);
+        $dbMock->method('numRows')->willReturn(0); // database does not exist yet
+        $dbMock->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+
+        $loggerMock->expects($this->once())->method('error');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Failed to create tenant database "fail_db".');
+
+        $this->client->setClientUrl('https://tenant.example.com');
+        $this->client->createClientDatabase('fail_db', TenantIsolationMode::DATABASE);
+    }
+
+    public function testCreateClientTablesWithDatabaseThrowsOnConnectFailure(): void
+    {
+        $this->assertFileExists(
+            PMF_CONFIG_DIR . '/database.php',
+            'Test fixture tests/content/core/config/database.php is required.',
+        );
+
+        Database::factory('pdo_pgsql');
+        Database::setTablePrefix('');
+
+        $dbMock = $this->createMock(DatabaseDriver::class);
+        $loggerMock = $this->createMock(Logger::class);
+
+        $this->configuration->method('getDb')->willReturn($dbMock);
+        $this->configuration->method('getLogger')->willReturn($loggerMock);
+
+        $dbMock->method('query')->willReturnCallback(static function (string $query): mixed {
+            if (str_starts_with($query, 'SELECT * FROM')) {
+                return new \stdClass();
+            }
+            if (str_starts_with($query, 'SELECT 1 FROM pg_database')) {
+                return new \stdClass();
+            }
+            return true;
+        });
+        $dbMock->method('fetchAll')->willReturn([]);
+        $dbMock->method('numRows')->willReturn(0);
+        $dbMock->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $dbMock->method('connect')->willReturn(false);
+        $dbMock->method('error')->willReturn('Connection refused');
+
+        $loggerMock->expects($this->once())->method('error');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Failed to connect to tenant database "connect_fail_db"');
+
+        $this->client->setClientUrl('https://tenant.example.com');
+        $this->client->createClientDatabase('connect_fail_db', TenantIsolationMode::DATABASE);
+    }
+
+    public function testCreateClientTablesWithDatabaseThrowsOnCreateTablesFailure(): void
+    {
+        $this->assertFileExists(
+            PMF_CONFIG_DIR . '/database.php',
+            'Test fixture tests/content/core/config/database.php is required.',
+        );
+
+        Database::factory('pdo_pgsql');
+        Database::setTablePrefix('');
+
+        $dbMock = $this->createMock(DatabaseDriver::class);
+        $loggerMock = $this->createMock(Logger::class);
+
+        $this->configuration->method('getDb')->willReturn($dbMock);
+        $this->configuration->method('getLogger')->willReturn($loggerMock);
+
+        $queryCount = 0;
+        $dbMock->method('query')->willReturnCallback(static function (string $query) use (&$queryCount): mixed {
+            if (str_starts_with($query, 'SELECT * FROM')) {
+                return new \stdClass();
+            }
+            if (str_starts_with($query, 'SELECT 1 FROM pg_database')) {
+                return new \stdClass();
+            }
+            // Let createTenantDatabase's CREATE DATABASE succeed
+            if (str_starts_with($query, 'CREATE DATABASE')) {
+                return true;
+            }
+            // Fail on the first CREATE TABLE (from createTables/SchemaInstaller)
+            if (str_starts_with($query, 'CREATE TABLE')) {
+                return false;
+            }
+            return true;
+        });
+        $dbMock->method('fetchAll')->willReturn([]);
+        $dbMock->method('numRows')->willReturn(0);
+        $dbMock->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $dbMock->method('connect')->willReturn(true);
+
+        $loggerMock->expects($this->once())->method('error');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Failed to create tables in tenant database "tables_fail_db"');
+
+        $this->client->setClientUrl('https://tenant.example.com');
+        $this->client->createClientDatabase('tables_fail_db', TenantIsolationMode::DATABASE);
     }
 }
