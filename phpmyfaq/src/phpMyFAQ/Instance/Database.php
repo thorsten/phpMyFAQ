@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The phpMyFAQ instances basic database class.
+ * The phpMyFAQ instance basic database class.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -44,12 +44,14 @@ class Database
         'DROP TABLE %sfaqadminlog',
         'DROP TABLE %sfaqattachment',
         'DROP TABLE %sfaqattachment_file',
+        'DROP TABLE %sfaqbackup',
         'DROP TABLE %sfaqcaptcha',
         'DROP TABLE %sfaqcategories',
         'DROP TABLE %sfaqcategoryrelations',
         'DROP TABLE %sfaqcategory_group',
         'DROP TABLE %sfaqcategory_user',
         'DROP TABLE %sfaqchanges',
+        'DROP TABLE %sfaqchat_messages',
         'DROP TABLE %sfaqcomments',
         'DROP TABLE %sfaqconfig',
         'DROP TABLE %sfaqdata',
@@ -62,10 +64,13 @@ class Database
         'DROP TABLE %sfaqgroup_right',
         'DROP TABLE %sfaqinstances',
         'DROP TABLE %sfaqinstances_config',
+        'DROP TABLE %sfaqmigrations',
         'DROP TABLE %sfaqnews',
+        'DROP TABLE %sfaqpush_subscriptions',
         'DROP TABLE %sfaqquestions',
         'DROP TABLE %sfaqright',
         'DROP TABLE %sfaqsearches',
+        'DROP TABLE %sfaqseo',
         'DROP TABLE %sfaqsessions',
         'DROP TABLE %sfaqstopwords',
         'DROP TABLE %sfaqtags',
@@ -119,6 +124,48 @@ class Database
         }
 
         return self::$driver;
+    }
+
+    /**
+     * Creates a dedicated tenant database for supported drivers (PostgreSQL, SQL Server).
+     *
+     * @throws \RuntimeException if the driver does not support database-per-tenant isolation
+     */
+    public static function createTenantDatabase(Configuration $configuration, string $type, string $databaseName): bool
+    {
+        $normalizedType = strtolower($type);
+
+        if (!preg_match('/^[A-Za-z0-9_]+$/', $databaseName)) {
+            throw new \InvalidArgumentException(sprintf('Invalid tenant database identifier: "%s".', $databaseName));
+        }
+
+        if (str_contains($normalizedType, 'pgsql')) {
+            $existsQuery = sprintf(
+                "SELECT 1 FROM pg_database WHERE datname = '%s'",
+                $configuration->getDb()->escape($databaseName),
+            );
+            $existsResult = $configuration->getDb()->query($existsQuery);
+            if ($existsResult !== false && $configuration->getDb()->numRows($existsResult) > 0) {
+                return true;
+            }
+
+            return (bool) $configuration->getDb()->query(sprintf('CREATE DATABASE "%s"', $databaseName));
+        }
+
+        if (str_contains($normalizedType, 'sqlsrv')) {
+            return (bool) $configuration
+                ->getDb()
+                ->query(sprintf(
+                    "IF DB_ID('%s') IS NULL CREATE DATABASE [%s]",
+                    $configuration->getDb()->escape($databaseName),
+                    $databaseName,
+                ));
+        }
+
+        throw new \RuntimeException(sprintf(
+            'Database-per-tenant isolation is not supported for driver "%s". Use PostgreSQL or SQL Server.',
+            $type,
+        ));
     }
 
     /**

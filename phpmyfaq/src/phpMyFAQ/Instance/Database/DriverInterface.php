@@ -29,7 +29,8 @@ interface DriverInterface
     /**
      * Executes all CREATE TABLE and CREATE INDEX statements.
      *
-     *
+     * @param string $prefix Table prefix for prefix-based isolation
+     * @param string|null $schema Schema or database name for schema/database-based isolation
      */
-    public function createTables(string $prefix = ''): bool;
+    public function createTables(string $prefix = '', ?string $schema = null): bool;
 }

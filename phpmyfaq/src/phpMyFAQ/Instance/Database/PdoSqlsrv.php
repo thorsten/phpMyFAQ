@@ -384,8 +384,25 @@ class PdoSqlsrv extends Database implements DriverInterface
     /**
      * Executes all CREATE TABLE and CREATE INDEX statements.
      */
-    public function createTables(string $prefix = ''): bool
+    public function createTables(string $prefix = '', ?string $schema = null): bool
     {
+        if ($schema !== null && $schema !== '') {
+            if (!preg_match('/^[A-Za-z0-9_]+$/', $schema)) {
+                return false;
+            }
+
+            $schemaLiteral = str_replace("'", "''", $schema);
+            $schemaIdentifier = sprintf('[%s]', str_replace(']', ']]', $schema));
+
+            if (!$this->configuration->getDb()->query(sprintf(
+                "IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = '%s') EXEC('CREATE SCHEMA %s')",
+                $schemaLiteral,
+                $schemaIdentifier,
+            ))) {
+                return false;
+            }
+        }
+
         foreach ($this->createTableStatements as $createTableStatement) {
             $result = $this->configuration->getDb()->query(sprintf($createTableStatement, $prefix));
 
