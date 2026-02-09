@@ -1672,4 +1672,7 @@ $PMF_LANG['msgGenerateVapidKeys'] = 'Generate VAPID Keys';
 $PMF_LANG['msgVapidKeysGenerated'] = 'VAPID keys have been generated successfully.';
 $PMF_LANG['msgVapidKeysError'] = 'Failed to generate VAPID keys.';
 
+$LANG_CONF['api.rateLimit.requests'] = ['input', 'API rate limit', 'Standard: 100 requests'];
+$LANG_CONF['api.rateLimit.interval'] = ['input', 'API rate limit interval in seconds', 'Standard: 60 seconds'];
+
 return $PMF_LANG;
