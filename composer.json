@@ -28,6 +28,7 @@
     "ext-xmlwriter": "*",
     "ext-zip": "*",
     "2tvenom/cborencode": "^1.0",
+    "aws/aws-sdk-php": "^3.0",
     "elasticsearch/elasticsearch": "8.*",
     "endroid/qr-code": "^6.0.2",
     "guzzlehttp/guzzle": "^7.5",

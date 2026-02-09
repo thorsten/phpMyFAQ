@@ -177,10 +177,7 @@ final class FaqDisplayService
      */
     public function getAttachmentList(int $faqId): array
     {
-        if (
-            !(bool) $this->configuration->get('records.disableAttachments')
-            || $this->faq->faqRecord['active'] !== 'yes'
-        ) {
+        if (!$this->configuration->get('records.disableAttachments') || $this->faq->faqRecord['active'] !== 'yes') {
             return [];
         }
 

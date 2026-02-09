@@ -79,6 +79,8 @@ use phpMyFAQ\Setup\EnvironmentConfigurator;
 use phpMyFAQ\Setup\Update;
 use phpMyFAQ\Setup\Upgrade;
 use phpMyFAQ\Sitemap;
+use phpMyFAQ\Storage\StorageFactory;
+use phpMyFAQ\Storage\StorageInterface;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\System;
 use phpMyFAQ\Tags;
@@ -221,6 +223,15 @@ return static function (ContainerConfigurator $container): void {
     $services->set('phpmyfaq.comments', Comments::class)->args([
         service('phpmyfaq.configuration'),
         service('phpmyfaq.comment.comments-repository'),
+    ]);
+
+    $services->set('phpmyfaq.storage.factory', StorageFactory::class)->args([
+        service('phpmyfaq.configuration'),
+        service('phpmyfaq.tenant.context'),
+    ]);
+    $services->set('phpmyfaq.storage', StorageInterface::class)->factory([
+        service('phpmyfaq.storage.factory'),
+        'create',
     ]);
 
     $services->set('phpmyfaq.tenant.context-resolver', TenantContextResolver::class);

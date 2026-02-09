@@ -221,4 +221,23 @@ class FileTest extends TestCase
         $this->assertNotNull($hash);
         $this->assertIsString($hash);
     }
+
+    public function testBuildStoragePath(): void
+    {
+        $reflection = new ReflectionClass($this->file);
+        $properties = [
+            'encrypted' => false,
+            'realHash' => 'abcdefghijklmnopqrstuvwxyz123456',
+        ];
+
+        foreach ($properties as $prop => $value) {
+            $property = $reflection->getProperty($prop);
+            $property->setValue($this->file, $value);
+        }
+
+        $method = $reflection->getMethod('buildStoragePath');
+        $storagePath = $method->invoke($this->file);
+
+        $this->assertEquals('abcde/fghij/klmno/pqrstuvwxyz123456', $storagePath);
+    }
 }
