@@ -76,6 +76,7 @@ class DatabaseSchema
             'faqcustompages' => $this->faqcustompages(),
             'faqquestions' => $this->faqquestions(),
             'faqright' => $this->faqright(),
+            'faqrate_limits' => $this->faqrateLimits(),
             'faqsearches' => $this->faqsearches(),
             'faqseo' => $this->faqseo(),
             'faqsessions' => $this->faqsessions(),
@@ -579,6 +580,17 @@ class DatabaseSchema
             ->integer('for_groups', true, 1)
             ->integer('for_sections', true, 1)
             ->primaryKey('right_id');
+    }
+
+    public function faqrateLimits(): TableBuilder
+    {
+        return new TableBuilder($this->dialect)
+            ->table('faqrate_limits')
+            ->varchar('rate_key', 255, false)
+            ->integer('window_start', false)
+            ->integer('requests', false, 0)
+            ->timestamp('created')
+            ->primaryKey(['rate_key', 'window_start']);
     }
 
     public function faqsearches(): TableBuilder

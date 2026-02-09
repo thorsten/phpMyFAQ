@@ -45,6 +45,7 @@ class DatabaseSchemaTest extends TestCase
         $this->assertContains('faqdata', $names);
         $this->assertContains('faquser', $names);
         $this->assertContains('faqconfig', $names);
+        $this->assertContains('faqrate_limits', $names);
         $this->assertContains('faqapi_keys', $names);
         $this->assertContains('faqoauth_clients', $names);
         $this->assertContains('faqoauth_access_tokens', $names);
