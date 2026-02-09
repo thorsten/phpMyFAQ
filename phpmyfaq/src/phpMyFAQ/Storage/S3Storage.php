@@ -67,7 +67,7 @@ final readonly class S3Storage implements StorageInterface
             'Key' => $key,
         ]));
 
-        if (!is_array($result) || !array_key_exists('Body', $result)) {
+        if (!isset($result['Body'])) {
             throw new StorageException('Invalid S3 response while reading object: ' . $key);
         }
 
@@ -112,7 +112,7 @@ final readonly class S3Storage implements StorageInterface
             'Key' => $key,
         ]));
 
-        if (!is_array($result) || !isset($result['ContentLength'])) {
+        if (!isset($result['ContentLength'])) {
             throw new StorageException('Invalid S3 response while reading object size: ' . $key);
         }
 
@@ -134,8 +134,15 @@ final readonly class S3Storage implements StorageInterface
     private function buildKey(string $path): string
     {
         $normalizedPath = ltrim(str_replace('\\', '/', trim($path)), '/');
-        if ($normalizedPath === '' || str_contains($normalizedPath, '..')) {
+        if ($normalizedPath === '') {
             throw new StorageException('Invalid storage path.');
+        }
+
+        $segments = explode('/', $normalizedPath);
+        foreach ($segments as $segment) {
+            if ($segment === '..' || $segment === '') {
+                throw new StorageException('Invalid storage path.');
+            }
         }
 
         if ($this->prefix === '') {

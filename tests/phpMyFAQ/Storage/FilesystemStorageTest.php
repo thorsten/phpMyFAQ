@@ -57,12 +57,67 @@ class FilesystemStorageTest extends TestCase
         $storage->putStream('invalid/file.txt', 'not-a-stream');
     }
 
-    public function testInvalidPathThrowsException(): void
+    public function testUrlAlwaysUsesForwardSlashes(): void
+    {
+        $storage = new FilesystemStorage($this->tmpDir, 'https://cdn.example.com/files');
+
+        // Even with backslashes in the input path, the URL should use forward slashes
+        $this->assertSame(
+            'https://cdn.example.com/files/attachments/123/file.pdf',
+            $storage->url('attachments\\123\\file.pdf'),
+        );
+    }
+
+    public function testUrlWithoutBaseUrlUsesForwardSlashes(): void
+    {
+        $storage = new FilesystemStorage($this->tmpDir);
+
+        $url = $storage->url('sub/dir/file.txt');
+
+        $this->assertStringNotContainsString('\\', $url);
+        $this->assertStringContainsString('sub/dir/file.txt', $url);
+    }
+
+    public function testUrlWithTrailingSlashInBaseUrl(): void
+    {
+        $storage = new FilesystemStorage($this->tmpDir, 'https://cdn.example.com/storage/');
+
+        $this->assertSame(
+            'https://cdn.example.com/storage/foo/bar.txt',
+            $storage->url('foo/bar.txt'),
+        );
+    }
+
+    public function testConstructorTrimsTrailingSlashes(): void
+    {
+        // Forward slash trailing
+        $storage = new FilesystemStorage($this->tmpDir . '/', 'https://cdn.example.com');
+        $this->assertTrue($storage->put('trim-test.txt', 'ok'));
+        $this->assertSame('ok', $storage->get('trim-test.txt'));
+    }
+
+    public function testDoubleDotInFilenameIsAllowed(): void
+    {
+        $storage = new FilesystemStorage($this->tmpDir);
+
+        $this->assertTrue($storage->put('backups/file..backup.txt', 'data'));
+        $this->assertSame('data', $storage->get('backups/file..backup.txt'));
+    }
+
+    public function testTraversalPathThrowsException(): void
     {
         $storage = new FilesystemStorage($this->tmpDir);
 
         $this->expectException(StorageException::class);
         $storage->put('../escape.txt', 'invalid');
+    }
+
+    public function testEmptySegmentPathThrowsException(): void
+    {
+        $storage = new FilesystemStorage($this->tmpDir);
+
+        $this->expectException(StorageException::class);
+        $storage->put('foo//bar.txt', 'invalid');
     }
 
     private function removeDirectory(string $directory): void

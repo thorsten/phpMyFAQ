@@ -83,4 +83,52 @@ class StorageFactoryTest extends TestCase
         $storage = $factory->create();
         $this->assertInstanceOf(S3Storage::class, $storage);
     }
+
+    public function testCreateThrowsWhenOnlyS3KeyProvided(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['storage.type',             's3'],
+                ['storage.s3.bucket',        'pmf-bucket'],
+                ['storage.s3.prefix',        null],
+                ['storage.s3.publicBaseUrl', null],
+                ['storage.s3.region',        null],
+                ['storage.s3.endpoint',      null],
+                ['storage.s3.key',           'AKIAIOSFODNN7EXAMPLE'],
+                ['storage.s3.secret',        null],
+                ['storage.s3.usePathStyle',  null],
+            ]);
+
+        $factory = new StorageFactory($configuration);
+
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage('Both storage.s3.key and storage.s3.secret must be provided together.');
+        $factory->create();
+    }
+
+    public function testCreateThrowsWhenOnlyS3SecretProvided(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['storage.type',             's3'],
+                ['storage.s3.bucket',        'pmf-bucket'],
+                ['storage.s3.prefix',        null],
+                ['storage.s3.publicBaseUrl', null],
+                ['storage.s3.region',        null],
+                ['storage.s3.endpoint',      null],
+                ['storage.s3.key',           null],
+                ['storage.s3.secret',        'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'],
+                ['storage.s3.usePathStyle',  null],
+            ]);
+
+        $factory = new StorageFactory($configuration);
+
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage('Both storage.s3.key and storage.s3.secret must be provided together.');
+        $factory->create();
+    }
 }

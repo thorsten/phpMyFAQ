@@ -66,6 +66,10 @@ final readonly class StorageFactory
 
         $key = $this->readStringConfig('storage.s3.key');
         $secret = $this->readStringConfig('storage.s3.secret');
+        if (($key === null) !== ($secret === null)) {
+            throw new StorageException('Both storage.s3.key and storage.s3.secret must be provided together.');
+        }
+
         if ($key !== null && $secret !== null) {
             $s3Config['credentials'] = [
                 'key' => $key,

@@ -27,7 +27,7 @@ final readonly class FilesystemStorage implements StorageInterface
         string $rootPath,
         private ?string $publicBaseUrl = null,
     ) {
-        $this->rootPath = rtrim($rootPath, DIRECTORY_SEPARATOR);
+        $this->rootPath = rtrim($rootPath, '/\\');
     }
 
     public function put(string $path, string $contents): bool
@@ -108,12 +108,12 @@ final readonly class FilesystemStorage implements StorageInterface
 
     public function url(string $path): string
     {
-        $normalizedPath = $this->normalizePath($path);
+        $normalizedPath = $this->normalizePathForUrl($path);
         if ($this->publicBaseUrl !== null && $this->publicBaseUrl !== '') {
             return rtrim($this->publicBaseUrl, '/') . '/' . $normalizedPath;
         }
 
-        return $this->buildFullPath($path);
+        return str_replace('\\', '/', $this->buildFullPath($path));
     }
 
     public function size(string $path): int
@@ -133,13 +133,25 @@ final readonly class FilesystemStorage implements StorageInterface
         return $this->rootPath . DIRECTORY_SEPARATOR . $this->normalizePath($path);
     }
 
-    private function normalizePath(string $path): string
+    private function normalizePathForUrl(string $path): string
     {
         $normalizedPath = ltrim(str_replace('\\', '/', trim($path)), '/');
-        if ($normalizedPath === '' || str_contains($normalizedPath, '..')) {
+        if ($normalizedPath === '') {
             throw new StorageException('Invalid storage path.');
         }
 
-        return str_replace('/', DIRECTORY_SEPARATOR, $normalizedPath);
+        $segments = explode('/', $normalizedPath);
+        foreach ($segments as $segment) {
+            if ($segment === '..' || $segment === '') {
+                throw new StorageException('Invalid storage path.');
+            }
+        }
+
+        return $normalizedPath;
+    }
+
+    private function normalizePath(string $path): string
+    {
+        return str_replace('/', DIRECTORY_SEPARATOR, $this->normalizePathForUrl($path));
     }
 }
