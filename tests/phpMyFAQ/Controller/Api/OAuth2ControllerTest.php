@@ -9,6 +9,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -75,7 +76,13 @@ class OAuth2ControllerTest extends TestCase
      */
     public function testAuthorizeRequiresAuthenticatedUser(): void
     {
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(false);
+
         $controller = new OAuth2Controller();
+        $reflection = new \ReflectionProperty($controller, 'currentUser');
+        $reflection->setValue($controller, $currentUser);
+
         $response = $controller->authorize(new Request());
 
         $this->assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());

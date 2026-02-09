@@ -116,7 +116,7 @@ final class AuthorizationServer
         }
     }
 
-    public function buildLeagueAuthorizationServer(): LeagueAuthorizationServer
+    private function buildLeagueAuthorizationServer(): LeagueAuthorizationServer
     {
         $privateKeyPath = $this->getConfigString('oauth2.privateKeyPath');
         $encryptionKey = $this->getConfigString('oauth2.encryptionKey');
@@ -131,7 +131,7 @@ final class AuthorizationServer
             new ClientRepository($this->configuration),
             new AccessTokenRepository($this->configuration),
             new ScopeRepository($this->configuration),
-            new CryptKey($privateKeyPath, null, false),
+            new CryptKey($privateKeyPath),
             $encryptionKey,
         );
 
@@ -176,14 +176,22 @@ final class AuthorizationServer
                 $headers[$headerName] = implode(', ', $values);
             }
 
+            $body = json_decode((string) $response->getBody(), true);
+            if (!is_array($body)) {
+                $body = [
+                    'error' => 'server_error',
+                    'error_description' => 'Invalid OAuth2 authorization response body',
+                ];
+            }
+
             return [
-                'body' => (string) $response->getBody(),
+                'body' => $body,
                 'status' => $response->getStatusCode(),
                 'headers' => $headers,
             ];
         } catch (OAuthServerException $exception) {
             return [
-                'body' => json_encode($exception->getPayload(), JSON_THROW_ON_ERROR),
+                'body' => $exception->getPayload(),
                 'status' => $exception->getHttpStatusCode(),
                 'headers' => $exception->getHttpHeaders(),
             ];

@@ -48,6 +48,13 @@ final class ApiKeyController extends AbstractAdministrationApiController
         $result = $db->query($sql);
         $rows = $result === false ? [] : $db->fetchAll($result) ?? [];
 
+        foreach ($rows as &$row) {
+            $decoded = is_string($row['scopes'] ?? null) ? json_decode($row['scopes'], true) : null;
+            $row['scopes'] = is_array($decoded) ? $decoded : [];
+        }
+
+        unset($row);
+
         return $this->json($rows, Response::HTTP_OK);
     }
 

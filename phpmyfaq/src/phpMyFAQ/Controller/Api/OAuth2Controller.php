@@ -45,6 +45,15 @@ final class OAuth2Controller extends AbstractApiController
                 $statusCode = Response::HTTP_SERVICE_UNAVAILABLE;
             }
 
+            if ($statusCode >= 500) {
+                $this->configuration->getLogger()->error('OAuth2 token error: ' . $exception->getMessage());
+
+                return $this->json([
+                    'error' => 'oauth2_unavailable',
+                    'error_description' => 'Internal server error',
+                ], $statusCode);
+            }
+
             return $this->json([
                 'error' => 'oauth2_unavailable',
                 'error_description' => $exception->getMessage(),
@@ -54,19 +63,39 @@ final class OAuth2Controller extends AbstractApiController
 
     /**
      * OAuth2 authorization endpoint for authorization_code grant.
+     *
+     * @throws \Exception
      */
     #[Route(path: 'oauth/authorize', name: 'api.oauth2.authorize', methods: ['GET', 'POST'])]
     public function authorize(Request $request): Response
     {
-        if (!$this->currentUser->isLoggedIn()) {
+        if (!$this->currentUser?->isLoggedIn()) {
             return $this->json(['error' => 'access_denied', 'error_description' => 'User is not authenticated.'], 401);
         }
 
-        $approval = $request->get('approve', 'true');
-        $isApproved = filter_var($approval, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-        if ($isApproved === null) {
-            $isApproved = true;
+        if ($request->getMethod() === 'GET') {
+            return $this->json([
+                'error' => 'consent_required',
+                'error_description' => 'Submit a POST request with an explicit approve parameter and CSRF token.',
+            ], Response::HTTP_BAD_REQUEST);
         }
+
+        $csrf = $request->headers->get('X-CSRF-Token') ?? $request->request->get('csrf', '');
+        if (!$this->verifySessionCsrfToken('oauth2-authorize', (string) $csrf)) {
+            return $this->json([
+                'error' => 'invalid_request',
+                'error_description' => 'CSRF token validation failed.',
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        if (!$request->request->has('approve')) {
+            return $this->json([
+                'error' => 'invalid_request',
+                'error_description' => 'Missing required approve parameter.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $isApproved = filter_var($request->request->get('approve'), FILTER_VALIDATE_BOOLEAN);
 
         try {
             $result = $this->getAuthorizationServer()->completeAuthorization(
@@ -75,10 +104,24 @@ final class OAuth2Controller extends AbstractApiController
                 $isApproved,
             );
         } catch (\RuntimeException $exception) {
+            $statusCode = $exception->getCode();
+            if ($statusCode < 400 || $statusCode > 599) {
+                $statusCode = Response::HTTP_SERVICE_UNAVAILABLE;
+            }
+
+            if ($statusCode >= 500) {
+                $this->configuration->getLogger()->error('OAuth2 authorization error: ' . $exception->getMessage());
+
+                return $this->json([
+                    'error' => 'oauth2_unavailable',
+                    'error_description' => 'Internal server error',
+                ], $statusCode);
+            }
+
             return $this->json([
                 'error' => 'oauth2_unavailable',
                 'error_description' => $exception->getMessage(),
-            ], 503);
+            ], $statusCode);
         }
 
         if (isset($result['headers']['Location'])) {
@@ -98,6 +141,21 @@ final class OAuth2Controller extends AbstractApiController
 
     private function getAuthorizationServer(): OAuth2AuthorizationServer
     {
-        return $this->authorizationServer ?? $this->container->get(id: 'phpmyfaq.auth.oauth2.authorization-server');
+        if ($this->authorizationServer instanceof OAuth2AuthorizationServer) {
+            return $this->authorizationServer;
+        }
+
+        $serviceId = 'phpmyfaq.auth.oauth2.authorization-server';
+        if (!$this->container->has($serviceId)) {
+            throw new \RuntimeException('OAuth2 authorization server service not registered: ' . $serviceId);
+        }
+
+        $server = $this->container->get($serviceId);
+        if (!$server instanceof OAuth2AuthorizationServer) {
+            throw new \RuntimeException('OAuth2 authorization server service returned an unexpected type: '
+            . $serviceId);
+        }
+
+        return $server;
     }
 }

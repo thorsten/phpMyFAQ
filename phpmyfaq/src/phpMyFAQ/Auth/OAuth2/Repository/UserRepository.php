@@ -44,7 +44,7 @@ final class UserRepository extends AbstractRepository implements UserRepositoryI
         }
 
         $query = sprintf(
-            "SELECT user_id FROM %s WHERE login = '%s' LIMIT 1",
+            "SELECT user_id FROM %s WHERE login = '%s'",
             $this->table('faquser'),
             $this->db()->escape($username),
         );

@@ -77,7 +77,7 @@ final class ResourceServer
             $psrRequest = $this->toPsr7Request($request);
             $server = new LeagueResourceServer(
                 new AccessTokenRepository($this->configuration),
-                new CryptKey($publicKeyPath, null, false),
+                new CryptKey($publicKeyPath),
             );
             $validatedRequest = $server->validateAuthenticatedRequest($psrRequest);
             $userId = $validatedRequest->getAttribute('oauth_user_id');

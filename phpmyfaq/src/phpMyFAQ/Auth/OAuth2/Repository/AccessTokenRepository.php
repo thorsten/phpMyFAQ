@@ -66,12 +66,17 @@ final class AccessTokenRepository extends AbstractRepository implements AccessTo
                 ? 'NULL'
                 : "'" . $this->db()->escape($accessTokenEntity->getUserIdentifier()) . "'",
             $this->db()->escape((string) json_encode($scopes)),
-            $accessTokenEntity->getExpiryDateTime()->format('Y-m-d H:i:s'),
+            $this->db()->escape($accessTokenEntity->getExpiryDateTime()->format('Y-m-d H:i:s')),
             $this->db()->now(),
         );
 
         if ($this->db()->query($insert) === false) {
-            throw UniqueTokenIdentifierConstraintViolationException::create();
+            $dbError = strtolower($this->db()->error());
+            if (str_contains($dbError, 'duplicate') || str_contains($dbError, 'unique')) {
+                throw UniqueTokenIdentifierConstraintViolationException::create();
+            }
+
+            throw new \RuntimeException('Failed to persist access token: ' . $this->db()->error());
         }
     }
 

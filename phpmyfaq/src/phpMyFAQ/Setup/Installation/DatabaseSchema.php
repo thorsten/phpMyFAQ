@@ -453,7 +453,7 @@ class DatabaseSchema
             ->varchar('grants', 255)
             ->smallInteger('is_confidential', true, 1)
             ->integer('user_id')
-            ->timestamp('created')
+            ->timestamp('created', false, true)
             ->primaryKey('client_id');
     }
 
@@ -476,7 +476,7 @@ class DatabaseSchema
             ->text('scopes')
             ->smallInteger('revoked', true, 0)
             ->timestamp('expires_at', false)
-            ->timestamp('created')
+            ->timestamp('created', false, true)
             ->primaryKey('identifier')
             ->index('idx_oauth_access_client', 'client_id')
             ->index('idx_oauth_access_user', 'user_id');
@@ -490,7 +490,7 @@ class DatabaseSchema
             ->varchar('access_token_identifier', 100, false)
             ->smallInteger('revoked', true, 0)
             ->timestamp('expires_at', false)
-            ->timestamp('created')
+            ->timestamp('created', false, true)
             ->primaryKey('identifier')
             ->index('idx_oauth_refresh_access', 'access_token_identifier');
     }
@@ -506,7 +506,7 @@ class DatabaseSchema
             ->text('scopes')
             ->smallInteger('revoked', true, 0)
             ->timestamp('expires_at', false)
-            ->timestamp('created')
+            ->timestamp('created', false, true)
             ->primaryKey('identifier')
             ->index('idx_oauth_code_client', 'client_id')
             ->index('idx_oauth_code_user', 'user_id');
