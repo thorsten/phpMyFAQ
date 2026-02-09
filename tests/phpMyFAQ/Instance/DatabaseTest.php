@@ -42,36 +42,6 @@ class DatabaseTest extends TestCase
         $this->assertInstanceOf(Database\DriverInterface::class, $instance);
     }
 
-    /**
-     * @throws Exception
-     * @throws \PHPUnit\Framework\MockObject\Exception
-     */
-    public function testDropTables(): void
-    {
-        $dbMock = $this->createStub(DatabaseDriver::class);
-        $this->configuration->method('getDb')->willReturn($dbMock);
-
-        $dbMock->method('query')->willReturn(true);
-
-        $database = Database::factory($this->configuration, 'mysqli');
-        $result = $database->dropTables('test_');
-
-        $this->assertTrue($result);
-    }
-
-    public function testDropTablesWithFailure(): void
-    {
-        $dbMock = $this->createStub(DatabaseDriver::class);
-        $this->configuration->method('getDb')->willReturn($dbMock);
-
-        $dbMock->method('query')->willReturn(false);
-
-        $database = Database::factory($this->configuration, 'mysqli');
-        $result = $database->dropTables('test_');
-
-        $this->assertFalse($result);
-    }
-
     public function testCreateTenantDatabaseThrowsForInvalidDatabaseName(): void
     {
         $dbMock = $this->createMock(DatabaseDriver::class);

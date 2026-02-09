@@ -38,58 +38,6 @@ class Database
     private static ?DriverInterface $driver = null;
 
     /**
-     * DROP TABLE statements.
-     */
-    private array $dropTableStmts = [
-        'DROP TABLE %sfaqadminlog',
-        'DROP TABLE %sfaqattachment',
-        'DROP TABLE %sfaqattachment_file',
-        'DROP TABLE %sfaqapi_keys',
-        'DROP TABLE %sfaqoauth_clients',
-        'DROP TABLE %sfaqoauth_scopes',
-        'DROP TABLE %sfaqoauth_access_tokens',
-        'DROP TABLE %sfaqoauth_refresh_tokens',
-        'DROP TABLE %sfaqoauth_auth_codes',
-        'DROP TABLE %sfaqbackup',
-        'DROP TABLE %sfaqcaptcha',
-        'DROP TABLE %sfaqcategories',
-        'DROP TABLE %sfaqcategoryrelations',
-        'DROP TABLE %sfaqcategory_group',
-        'DROP TABLE %sfaqcategory_user',
-        'DROP TABLE %sfaqchanges',
-        'DROP TABLE %sfaqchat_messages',
-        'DROP TABLE %sfaqcomments',
-        'DROP TABLE %sfaqconfig',
-        'DROP TABLE %sfaqdata',
-        'DROP TABLE %sfaqdata_revisions',
-        'DROP TABLE %sfaqdata_group',
-        'DROP TABLE %sfaqdata_tags',
-        'DROP TABLE %sfaqdata_user',
-        'DROP TABLE %sfaqglossary',
-        'DROP TABLE %sfaqgroup',
-        'DROP TABLE %sfaqgroup_right',
-        'DROP TABLE %sfaqinstances',
-        'DROP TABLE %sfaqinstances_config',
-        'DROP TABLE %sfaqmigrations',
-        'DROP TABLE %sfaqnews',
-        'DROP TABLE %sfaqpush_subscriptions',
-        'DROP TABLE %sfaqquestions',
-        'DROP TABLE %sfaqright',
-        'DROP TABLE %sfaqsearches',
-        'DROP TABLE %sfaqseo',
-        'DROP TABLE %sfaqsessions',
-        'DROP TABLE %sfaqstopwords',
-        'DROP TABLE %sfaqtags',
-        'DROP TABLE %sfaquser',
-        'DROP TABLE %sfaquserdata',
-        'DROP TABLE %sfaquserlogin',
-        'DROP TABLE %sfaquser_group',
-        'DROP TABLE %sfaquser_right',
-        'DROP TABLE %sfaqvisits',
-        'DROP TABLE %sfaqvoting',
-    ];
-
-    /**
      * Constructor.
      */
     private function __construct(
@@ -172,21 +120,5 @@ class Database
             'Database-per-tenant isolation is not supported for driver "%s". Use PostgreSQL or SQL Server.',
             $type,
         ));
-    }
-
-    /**
-     * Executes all DROP TABLE statements.
-     */
-    public function dropTables(string $prefix = ''): bool
-    {
-        foreach ($this->dropTableStmts as $dropTableStmt) {
-            $result = $this->configuration->getDb()->query(sprintf($dropTableStmt, $prefix));
-
-            if (!$result) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }

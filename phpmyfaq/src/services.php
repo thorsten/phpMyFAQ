@@ -59,6 +59,7 @@ use phpMyFAQ\Faq\MetaData;
 use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Forms;
 use phpMyFAQ\Glossary;
+use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Helper\QuestionHelper;
@@ -318,6 +319,10 @@ return static function (ContainerConfigurator $container): void {
     ]);
 
     $services->set('phpmyfaq.glossary', Glossary::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+
+    $services->set('phpmyfaq.http.rate-limiter', RateLimiter::class)->args([
         service('phpmyfaq.configuration'),
     ]);
 

@@ -257,6 +257,8 @@ class DefaultDataSeeder
             'api.apiClientToken' => '',
             'api.onlyActiveFaqs' => 'true',
             'api.onlyActiveCategories' => 'true',
+            'api.rateLimit.requests' => '100',
+            'api.rateLimit.interval' => '3600',
             'translation.provider' => 'none',
             'translation.googleApiKey' => '',
             'translation.deeplApiKey' => '',

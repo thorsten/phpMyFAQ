@@ -446,18 +446,4 @@ class System
 
         return json_encode($hashes, JSON_THROW_ON_ERROR);
     }
-
-    /**
-     * Drops all given tables
-     *
-     * @param array<string> $queries
-     */
-    public function dropTables(array $queries): void
-    {
-        if ($this->databaseDriver instanceof DatabaseDriver) {
-            foreach ($queries as $query) {
-                $this->databaseDriver->query($query);
-            }
-        }
-    }
 }
