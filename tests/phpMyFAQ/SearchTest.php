@@ -254,7 +254,7 @@ class SearchTest extends TestCase
 
     public function testSetAndGetCategory(): void
     {
-        $categoryMock = $this->getMockBuilder(Category::class)->disableOriginalConstructor()->getMock();
+        $categoryMock = $this->createMock(Category::class);
         $this->search->setCategory($categoryMock);
 
         $this->assertEquals($categoryMock, $this->search->getCategory());

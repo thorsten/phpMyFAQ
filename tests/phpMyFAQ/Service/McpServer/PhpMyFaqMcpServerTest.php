@@ -23,12 +23,12 @@ class PhpMyFaqMcpServerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configMock = $this->createStub(Configuration::class);
-        $languageMock = $this->createStub(Language::class);
+        $this->configMock = $this->createMock(Configuration::class);
+        $languageMock = $this->createMock(Language::class);
         $this->searchMock = $this->createMock(Search::class);
-        $this->faqMock = $this->createStub(Faq::class);
+        $this->faqMock = $this->createMock(Faq::class);
 
-        $loggerMock = $this->createStub(Logger::class);
+        $loggerMock = $this->createMock(Logger::class);
         $this->configMock->method('getLogger')->willReturn($loggerMock);
         $this->configMock->method('setLanguage')->with($languageMock);
         $this->configMock->method('getDefaultUrl')->willReturn('https://example.com');

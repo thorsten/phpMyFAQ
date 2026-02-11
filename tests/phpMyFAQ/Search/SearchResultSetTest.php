@@ -26,8 +26,8 @@ class SearchResultSetTest extends TestCase
         $dbHandle = new Sqlite3();
         $configuration = new Configuration($dbHandle);
 
-        $userMock = $this->getMockBuilder('phpMyFAQ\User\CurrentUser')->disableOriginalConstructor()->getMock();
-        $faqPermissionMock = $this->getMockBuilder('phpMyFAQ\Faq\Permission')->disableOriginalConstructor()->getMock();
+        $userMock = $this->createMock(\phpMyFAQ\User\CurrentUser::class);
+        $faqPermissionMock = $this->createMock(\phpMyFAQ\Faq\Permission::class);
 
         $this->SearchResultSet = new SearchResultSet($userMock, $faqPermissionMock, $configuration);
     }

@@ -275,6 +275,7 @@ class DefaultDataSeeder
             'routing.cache.dir' => './cache',
             'api.onlyPublicQuestions' => 'true',
             'api.ignoreOrphanedFaqs' => 'true',
+            'queue.transport' => 'database',
             'upgrade.dateLastChecked' => '',
             'upgrade.lastDownloadedPackage' => '',
             'upgrade.onlineUpdateEnabled' => 'false',

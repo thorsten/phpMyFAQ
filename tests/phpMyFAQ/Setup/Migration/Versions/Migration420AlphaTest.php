@@ -103,6 +103,7 @@ class Migration420AlphaTest extends TestCase
 
         $this->assertContains('api.rateLimit.requests', $addedConfigKeys);
         $this->assertContains('api.rateLimit.interval', $addedConfigKeys);
+        $this->assertContains('queue.transport', $addedConfigKeys);
     }
 
     public function testUpAddsFaqrateLimitsTableSql(): void
@@ -128,5 +129,30 @@ class Migration420AlphaTest extends TestCase
         $this->migration->up($recorder);
 
         $this->assertTrue($foundRateLimitSql, 'Expected migration SQL creating faqrate_limits table.');
+    }
+
+    public function testUpAddsFaqjobsTableSql(): void
+    {
+        $recorder = $this->createMock(OperationRecorder::class);
+        $foundQueueSql = false;
+
+        $recorder
+            ->method('addSql')
+            ->willReturnCallback(static function (string $sql, string $description) use (
+                &$foundQueueSql,
+                $recorder,
+            ): OperationRecorder {
+                if (str_contains($sql, 'faqjobs')) {
+                    $foundQueueSql = true;
+                }
+
+                return $recorder;
+            });
+        $recorder->method('addConfig')->willReturn($recorder);
+        $recorder->method('grantPermission')->willReturn($recorder);
+
+        $this->migration->up($recorder);
+
+        $this->assertTrue($foundQueueSql, 'Expected migration SQL creating faqjobs table.');
     }
 }

@@ -33,9 +33,9 @@ class BuiltinCaptchaAbstractHelperTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configuration = $this->createStub(Configuration::class);
+        $this->configuration = $this->createMock(Configuration::class);
         $this->helper = new BuiltinCaptchaAbstractHelper($this->configuration);
-        $this->captcha = $this->createStub(BuiltinCaptcha::class);
+        $this->captcha = $this->createMock(BuiltinCaptcha::class);
     }
 
     /**

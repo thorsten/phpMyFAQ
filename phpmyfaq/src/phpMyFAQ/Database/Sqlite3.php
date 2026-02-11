@@ -289,6 +289,14 @@ class Sqlite3 implements DatabaseDriver
     }
 
     /**
+     * Returns the number of rows affected by the last INSERT, UPDATE, or DELETE query.
+     */
+    public function affectedRows(): int
+    {
+        return $this->conn->changes();
+    }
+
+    /**
      * Returns the library version string.
      */
     public function serverVersion(): string
@@ -311,6 +319,14 @@ class Sqlite3 implements DatabaseDriver
     public function close(): bool
     {
         return $this->conn->close();
+    }
+
+    /**
+     * Returns the ID of the last inserted row.
+     */
+    public function lastInsertId(): int|string
+    {
+        return $this->conn->lastInsertRowID();
     }
 
     public function now(): string

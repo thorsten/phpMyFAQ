@@ -49,6 +49,11 @@ class PdoSqlsrv implements DatabaseDriver
     private string $sqlLog = '';
 
     /**
+     * The last query result for tracking affected rows.
+     */
+    private ?PDOStatement $lastStatement = null;
+
+    /**
      * Connects to the database.
      *
      * @param string $host Hostname or path to socket
@@ -285,7 +290,17 @@ class PdoSqlsrv implements DatabaseDriver
             $this->sqlLog .= $this->pdo->errorCode() . ': ' . $this->error();
         }
 
+        $this->lastStatement = $result instanceof PDOStatement ? $result : null;
+
         return $result;
+    }
+
+    /**
+     * Returns the number of rows affected by the last INSERT, UPDATE, or DELETE query.
+     */
+    public function affectedRows(): int
+    {
+        return $this->lastStatement?->rowCount() ?? 0;
     }
 
     /**
@@ -337,6 +352,14 @@ class PdoSqlsrv implements DatabaseDriver
     public function __destruct()
     {
         $this->close();
+    }
+
+    /**
+     * Returns the ID of the last inserted row.
+     */
+    public function lastInsertId(): int|string
+    {
+        return (int) $this->pdo->lastInsertId();
     }
 
     public function now(): string

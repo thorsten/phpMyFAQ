@@ -30,8 +30,8 @@ class McpServerCommandTest extends TestCase
 
     public function testExecuteWithInfoOptionShowsServerInfo(): void
     {
-        $input = $this->createStub(InputInterface::class);
-        $output = $this->createStub(OutputInterface::class);
+        $input = $this->createMock(InputInterface::class);
+        $output = $this->createMock(OutputInterface::class);
 
         $input->method('getOption')->with('info')->willReturn(true);
 
@@ -52,8 +52,8 @@ class McpServerCommandTest extends TestCase
 
     public function testExecuteRunsServerSuccessfully(): void
     {
-        $input = $this->createStub(InputInterface::class);
-        $output = $this->createStub(OutputInterface::class);
+        $input = $this->createMock(InputInterface::class);
+        $output = $this->createMock(OutputInterface::class);
 
         $input->method('getOption')->with('info')->willReturn(false);
 
@@ -68,8 +68,8 @@ class McpServerCommandTest extends TestCase
 
     public function testExecuteHandlesException(): void
     {
-        $input = $this->createStub(InputInterface::class);
-        $output = $this->createStub(OutputInterface::class);
+        $input = $this->createMock(InputInterface::class);
+        $output = $this->createMock(OutputInterface::class);
 
         $input->method('getOption')->with('info')->willReturn(false);
 

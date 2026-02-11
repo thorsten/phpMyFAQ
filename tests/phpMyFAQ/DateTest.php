@@ -16,7 +16,7 @@ class DateTest extends TestCase
     {
         parent::setUp();
 
-        $this->mockConfiguration = $this->createStub(Configuration::class);
+        $this->mockConfiguration = $this->createMock(Configuration::class);
         $this->mockConfiguration
             ->method('get')
             ->with('main.dateFormat')
@@ -77,7 +77,7 @@ class DateTest extends TestCase
     public function testFormatWithDifferentDateFormats(): void
     {
         // Test with different configuration formats
-        $mockConfig = $this->createStub(Configuration::class);
+        $mockConfig = $this->createMock(Configuration::class);
         $mockConfig->method('get')->with('main.dateFormat')->willReturn('d.m.Y H:i');
 
         $dateInstance = new Date($mockConfig);

@@ -23,7 +23,7 @@ class RatingDataTest extends TestCase
         $this->mockConfiguration = $this->createStub(Configuration::class);
 
         // Mock Database class
-        $this->mockDb = $this->getMockBuilder(DatabaseDriver::class)->disableOriginalConstructor()->getMock();
+        $this->mockDb = $this->createMock(DatabaseDriver::class);
 
         // Stub the getDb method of Configuration to return the mockDb object
         $this->mockConfiguration->method('getDb')->willReturn($this->mockDb);

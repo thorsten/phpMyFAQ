@@ -29,10 +29,10 @@ class AttachmentCollectionTest extends TestCase
     protected function setUp(): void
     {
         // Mock the Configuration object
-        $this->mockConfiguration = $this->createStub(Configuration::class);
+        $this->mockConfiguration = $this->createMock(Configuration::class);
 
         // Mock the Database object
-        $this->mockDatabase = $this->createStub(DatabaseDriver::class);
+        $this->mockDatabase = $this->createMock(DatabaseDriver::class);
 
         // Set up the configuration to return the mock Database
         $this->mockConfiguration->method('getDb')->willReturn($this->mockDatabase);

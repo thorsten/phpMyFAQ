@@ -45,9 +45,18 @@ class GoogleRecaptcha implements CaptchaInterface
             $code,
         );
 
-        $response = file_get_contents($url);
-        $response = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
-        return $response['success'] === true;
+        $response = @file_get_contents($url);
+        if (!is_string($response) || $response === '') {
+            return false;
+        }
+
+        try {
+            $decoded = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException) {
+            return false;
+        }
+
+        return is_array($decoded) && ($decoded['success'] ?? false) === true;
     }
 
     public function isUserIsLoggedIn(): bool

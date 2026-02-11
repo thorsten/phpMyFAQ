@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Setup\Migration\Operations;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\DatabaseDriver;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -127,7 +128,7 @@ class SqlOperationTest extends TestCase
         $this->database
             ->expects($this->once())
             ->method('query')
-            ->willThrowException(new \phpMyFAQ\Core\Exception('Query failed'));
+            ->willThrowException(new Exception('Query failed'));
 
         $operation = new SqlOperation($this->configuration, 'INVALID SQL');
         $result = $operation->execute();
