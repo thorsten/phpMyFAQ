@@ -8,6 +8,7 @@ use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Tenant\QuotaExceededException;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -53,6 +54,7 @@ class FaqTest extends TestCase
     protected function tearDown(): void
     {
         parent::tearDown();
+        putenv('PMF_TENANT_QUOTA_MAX_FAQS');
 
         $faqEntity = $this->getFaqEntity();
         $this->faq->delete(1, $faqEntity->getLanguage());
@@ -94,6 +96,14 @@ class FaqTest extends TestCase
         $this->faq->create($this->getFaqEntity());
 
         $this->assertGreaterThan(1, $this->faq->getNextSolutionId());
+    }
+
+    public function testCreateThrowsWhenFaqQuotaIsExceeded(): void
+    {
+        putenv('PMF_TENANT_QUOTA_MAX_FAQS=0');
+
+        $this->expectException(QuotaExceededException::class);
+        $this->faq->create($this->getFaqEntity());
     }
 
     public function testUpdate(): void

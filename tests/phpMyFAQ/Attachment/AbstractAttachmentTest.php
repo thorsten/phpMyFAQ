@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Attachment;
 
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Tenant\QuotaExceededException;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -61,6 +62,12 @@ class AbstractAttachmentTest extends TestCase
                 $this->postUpdateMeta();
             }
         };
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        putenv('PMF_TENANT_QUOTA_MAX_ATTACHMENT_SIZE');
     }
 
     public function testConstructorWithoutAttachmentId(): void
@@ -292,6 +299,45 @@ class AbstractAttachmentTest extends TestCase
 
         $this->assertIsString($mimeType);
         $this->assertEquals($mimeType, $this->attachment->getMimeType());
+    }
+
+    public function testSaveMetaThrowsWhenAttachmentQuotaIsExceeded(): void
+    {
+        putenv('PMF_TENANT_QUOTA_MAX_ATTACHMENT_SIZE=0');
+
+        $reflection = new ReflectionClass($this->attachment);
+        $properties = [
+            'recordId' => 123,
+            'recordLang' => 'en',
+            'realHash' => 'real123',
+            'virtualHash' => 'virtual456',
+            'passwordHash' => 'pwd789',
+            'filename' => 'test.pdf',
+            'filesize' => 1,
+            'encrypted' => true,
+            'mimeType' => 'application/pdf',
+        ];
+
+        foreach ($properties as $prop => $value) {
+            $reflection->getProperty($prop)->setValue($this->attachment, $value);
+        }
+
+        $reflection->getProperty('id')->setValue($this->attachment, null);
+
+        $this->mockDb
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->stringContains('SELECT COALESCE(SUM(filesize), 0)'))
+            ->willReturn(true);
+        $this->mockDb
+            ->expects($this->once())
+            ->method('fetchArray')
+            ->with(true)
+            ->willReturn(['amount' => 0]);
+        $this->mockDb->expects($this->never())->method('nextId');
+
+        $this->expectException(QuotaExceededException::class);
+        $this->attachment->saveMeta();
     }
 
     public function testMkVirtualHashUnencrypted(): void

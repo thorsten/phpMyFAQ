@@ -35,6 +35,7 @@ use phpMyFAQ\Instance\Search\Elasticsearch;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Pagination\UrlConfig;
+use phpMyFAQ\Tenant\TenantQuotaEnforcer;
 use stdClass;
 
 /*
@@ -91,6 +92,7 @@ class Faq
      * Flag for Group support.
      */
     private bool $groupSupport = false;
+    private ?TenantQuotaEnforcer $tenantQuotaEnforcer = null;
 
     /**
      * Constructor.
@@ -915,6 +917,8 @@ class Faq
      */
     public function create(FaqEntity $faqEntity): FaqEntity
     {
+        $this->getTenantQuotaEnforcer()->assertCanCreateFaq();
+
         if (is_null($faqEntity->getId())) {
             $faqEntity->setId($this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'));
         }
@@ -955,6 +959,11 @@ class Faq
         $this->configuration->getDb()->query($query);
 
         return $faqEntity;
+    }
+
+    private function getTenantQuotaEnforcer(): TenantQuotaEnforcer
+    {
+        return $this->tenantQuotaEnforcer ??= TenantQuotaEnforcer::createFromDatabaseDriver($this->configuration->getDb());
     }
 
     /**
