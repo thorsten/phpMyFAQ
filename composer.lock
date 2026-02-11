@@ -9474,16 +9474,16 @@
         },
         {
             "name": "zircote/swagger-php",
-            "version": "6.0.4",
+            "version": "6.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zircote/swagger-php.git",
-                "reference": "f0717a52c616291ea6599d241fe5c04bbf7e7ef2"
+                "reference": "9a0a612584e7dea0e069b3b1a2120b404f3a51d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/f0717a52c616291ea6599d241fe5c04bbf7e7ef2",
-                "reference": "f0717a52c616291ea6599d241fe5c04bbf7e7ef2",
+                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/9a0a612584e7dea0e069b3b1a2120b404f3a51d4",
+                "reference": "9a0a612584e7dea0e069b3b1a2120b404f3a51d4",
                 "shasum": ""
             },
             "require": {
@@ -9552,7 +9552,7 @@
             ],
             "support": {
                 "issues": "https://github.com/zircote/swagger-php/issues",
-                "source": "https://github.com/zircote/swagger-php/tree/6.0.4"
+                "source": "https://github.com/zircote/swagger-php/tree/6.0.5"
             },
             "funding": [
                 {
@@ -9560,7 +9560,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-03T23:31:40+00:00"
+            "time": "2026-02-10T20:05:00+00:00"
         }
     ],
     "aliases": [],
