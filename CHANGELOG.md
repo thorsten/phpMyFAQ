@@ -20,14 +20,13 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added support for Flesch readability tests (Thorsten)
 - added storage abstraction layer with support for local filesystem, and Amazon S3 (Thorsten)
 - added experimental support for API key authentication via OAuth2 (Thorsten)
-- added experimental support for API rate limits (Thorsten)
+- added experimental per-tenant quota enforcement covering max FAQs, categories users, attachment size, and API request rate limits (Thorsten)
 - improved audit and activity log with comprehensive security event tracking (Thorsten)
 - improved API errors with formatted RFC 7807 Problem Details JSON responses (Thorsten)
 - improved support for PDO (Thorsten)
 - improved sticky FAQs administration (Thorsten)
 - improved update process (Thorsten)
 - improved and hardened multi tenancy support (Thorsten)
-- 
 - migrated codebase using PHP 8.4 language features (Thorsten)
 - migrated routes using PHP 8+ #[Route] attributes (Thorsten)
 

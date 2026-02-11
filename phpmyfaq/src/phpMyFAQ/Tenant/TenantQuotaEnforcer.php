@@ -64,7 +64,9 @@ final readonly class TenantQuotaEnforcer
         }
 
         $currentSizeBytes = $this->readAttachmentSizeBytes();
-        $maxSizeBytes = $maxAttachmentSizeMb * 1024 * 1024;
+        $maxSizeBytes = $maxAttachmentSizeMb > (int) (PHP_INT_MAX / (1024 * 1024))
+            ? PHP_INT_MAX
+            : $maxAttachmentSizeMb * 1024 * 1024;
 
         if (($currentSizeBytes + $newAttachmentSizeBytes) > $maxSizeBytes) {
             throw new QuotaExceededException(sprintf(
