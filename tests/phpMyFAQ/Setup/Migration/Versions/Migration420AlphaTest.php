@@ -85,13 +85,16 @@ class Migration420AlphaTest extends TestCase
         $recorder = $this->createMock(OperationRecorder::class);
         $addedConfigKeys = [];
 
-        $recorder->method('addConfig')->willReturnCallback(
-            static function (string $name, string $value) use (&$addedConfigKeys, $recorder): OperationRecorder {
+        $recorder
+            ->method('addConfig')
+            ->willReturnCallback(static function (string $name, string $value) use (
+                &$addedConfigKeys,
+                $recorder,
+            ): OperationRecorder {
                 $addedConfigKeys[] = $name;
 
                 return $recorder;
-            },
-        );
+            });
 
         $recorder->method('addSql')->willReturn($recorder);
         $recorder->method('grantPermission')->willReturn($recorder);
@@ -107,15 +110,18 @@ class Migration420AlphaTest extends TestCase
         $recorder = $this->createMock(OperationRecorder::class);
         $foundRateLimitSql = false;
 
-        $recorder->method('addSql')->willReturnCallback(
-            static function (string $sql, string $description) use (&$foundRateLimitSql, $recorder): OperationRecorder {
+        $recorder
+            ->method('addSql')
+            ->willReturnCallback(static function (string $sql, string $description) use (
+                &$foundRateLimitSql,
+                $recorder,
+            ): OperationRecorder {
                 if (str_contains($sql, 'faqrate_limits')) {
                     $foundRateLimitSql = true;
                 }
 
                 return $recorder;
-            },
-        );
+            });
         $recorder->method('addConfig')->willReturn($recorder);
         $recorder->method('grantPermission')->willReturn($recorder);
 

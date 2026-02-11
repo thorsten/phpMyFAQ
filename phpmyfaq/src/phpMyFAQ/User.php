@@ -25,6 +25,7 @@ use Exception;
 use phpMyFAQ\Auth\AuthDriverInterface;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Tenant\TenantQuotaEnforcer;
 use phpMyFAQ\User\UserData;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -135,6 +136,7 @@ class User
 
     /** @var string $authSource Authentication, e.g. local, ldap, azure, sso, ... */
     private string $authSource = 'local';
+    private ?TenantQuotaEnforcer $tenantQuotaEnforcer = null;
 
     /**
      * array of allowed values for status.
@@ -378,6 +380,8 @@ class User
             }
         }
 
+        $this->getTenantQuotaEnforcer()->assertCanCreateUser();
+
         // set user-ID
         if (0 === $userId) {
             $this->userId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faquser', 'user_id');
@@ -432,6 +436,11 @@ class User
         }
 
         return $this->getUserByLogin($login, false);
+    }
+
+    private function getTenantQuotaEnforcer(): TenantQuotaEnforcer
+    {
+        return $this->tenantQuotaEnforcer ??= TenantQuotaEnforcer::createFromDatabaseDriver($this->configuration->getDb());
     }
 
     /**

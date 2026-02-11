@@ -21,6 +21,7 @@ namespace phpMyFAQ\Attachment;
 
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Tenant\TenantQuotaEnforcer;
 
 /**
  * Class AttachmentAbstract
@@ -94,6 +95,7 @@ abstract class AbstractAttachment
      * Attachment file mime type.
      */
     protected string $mimeType = '';
+    private ?TenantQuotaEnforcer $tenantQuotaEnforcer = null;
 
     /**
      * Constructor.
@@ -232,6 +234,7 @@ abstract class AbstractAttachment
         $attachmentTableName = sprintf('%sfaqattachment', Database::getTablePrefix());
 
         if (null === $this->id) {
+            $this->getTenantQuotaEnforcer()->assertCanStoreAttachment($this->filesize);
             $this->id = $this->databaseDriver->nextId($attachmentTableName, 'id');
 
             $sql = sprintf(
@@ -259,6 +262,11 @@ abstract class AbstractAttachment
         }
 
         return $this->id;
+    }
+
+    protected function getTenantQuotaEnforcer(): TenantQuotaEnforcer
+    {
+        return $this->tenantQuotaEnforcer ??= TenantQuotaEnforcer::createFromDatabaseDriver($this->databaseDriver);
     }
 
     public function getFilename(): string

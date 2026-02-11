@@ -4,6 +4,7 @@ namespace phpMyFAQ;
 
 use Exception;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Tenant\QuotaExceededException;
 use phpMyFAQ\User\UserData;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -21,7 +22,7 @@ class UserTest extends TestCase
     protected function setUp(): void
     {
         $this->configuration = $this->createStub(Configuration::class);
-        $this->database = $this->createStub(Sqlite3::class);
+        $this->database = $this->createMock(Sqlite3::class);
         $this->userData = $this->createMock(UserData::class);
 
         $this->configuration->method('getDb')->willReturn($this->database);
@@ -33,6 +34,12 @@ class UserTest extends TestCase
 
         $this->user = new User($this->configuration);
         $this->user->userdata = $this->userData;
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        putenv('PMF_TENANT_QUOTA_MAX_USERS');
     }
 
     public function testIsEmailAddressReturnsTrueForValidEmail(): void
@@ -110,5 +117,26 @@ class UserTest extends TestCase
             ]);
 
         $this->user->createUser('existinguser');
+    }
+
+    public function testCreateUserThrowsWhenUserQuotaIsExceeded(): void
+    {
+        putenv('PMF_TENANT_QUOTA_MAX_USERS=0');
+
+        $this->database
+            ->expects($this->exactly(2))
+            ->method('query')
+            ->willReturnOnConsecutiveCalls(true, true);
+        $this->database->method('escape')->willReturnArgument(0);
+        $this->database->method('numRows')->willReturn(0);
+        $this->database
+            ->expects($this->once())
+            ->method('fetchArray')
+            ->with(true)
+            ->willReturn(['amount' => 0]);
+        $this->database->expects($this->never())->method('nextId');
+
+        $this->expectException(QuotaExceededException::class);
+        $this->user->createUser('new_user');
     }
 }

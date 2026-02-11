@@ -23,9 +23,12 @@ use phpMyFAQ\Category\Permission\CategoryPermissionService;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\CategoryEntity;
+use phpMyFAQ\Tenant\TenantQuotaEnforcer;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
+    private ?TenantQuotaEnforcer $tenantQuotaEnforcer = null;
+
     public function __construct(
         private readonly Configuration $configuration,
     ) {
@@ -353,6 +356,8 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function create(CategoryEntity $categoryEntity): ?int
     {
+        $this->getTenantQuotaEnforcer()->assertCanCreateCategory();
+
         if ($categoryEntity->getId() === 0) {
             $categoryEntity->setId($this->configuration->getDb()->nextId(
                 Database::getTablePrefix() . 'faqcategories',
@@ -378,6 +383,11 @@ class CategoryRepository implements CategoryRepositoryInterface
         $this->configuration->getDb()->query($query);
 
         return $categoryEntity->getId();
+    }
+
+    private function getTenantQuotaEnforcer(): TenantQuotaEnforcer
+    {
+        return $this->tenantQuotaEnforcer ??= TenantQuotaEnforcer::createFromDatabaseDriver($this->configuration->getDb());
     }
 
     public function update(CategoryEntity $categoryEntity): bool
