@@ -11,6 +11,27 @@ use PHPUnit\Framework\TestCase;
 #[AllowMockObjectsWithoutExpectations]
 class DatabaseTest extends TestCase
 {
+    private string $sqliteTestFile;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sqliteTestFile = tempnam(sys_get_temp_dir(), 'pmf-db-test-');
+        if ($this->sqliteTestFile === false) {
+            $this->fail('Could not create temporary SQLite test file.');
+        }
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        if (isset($this->sqliteTestFile) && is_file($this->sqliteTestFile)) {
+            @unlink($this->sqliteTestFile);
+        }
+    }
+
     /**
      * @throws Exception
      */
@@ -82,7 +103,7 @@ class DatabaseTest extends TestCase
     public function testDatabaseConnectionSuccess(): void
     {
         $db = new Sqlite3();
-        $result = $db->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $result = $db->connect($this->sqliteTestFile, '', '');
 
         $this->assertTrue($result);
     }
@@ -93,7 +114,7 @@ class DatabaseTest extends TestCase
     public function testQueryExecution(): void
     {
         $db = new Sqlite3();
-        $db->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $db->connect($this->sqliteTestFile, '', '');
 
         // Create test table
         $createTable = 'CREATE TABLE IF NOT EXISTS test_table (id INTEGER PRIMARY KEY, name TEXT)';
@@ -108,7 +129,7 @@ class DatabaseTest extends TestCase
     public function testDataInsertionAndRetrieval(): void
     {
         $db = new Sqlite3();
-        $db->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $db->connect($this->sqliteTestFile, '', '');
 
         $db->query('CREATE TABLE IF NOT EXISTS test_data (id INTEGER PRIMARY KEY, name TEXT, value INTEGER)');
 
@@ -148,7 +169,7 @@ class DatabaseTest extends TestCase
     public function testSchemaOperations(): void
     {
         $db = new Sqlite3();
-        $db->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $db->connect($this->sqliteTestFile, '', '');
 
         // Test table creation
         $createSql = 'CREATE TABLE IF NOT EXISTS test_schema (
@@ -186,7 +207,7 @@ class DatabaseTest extends TestCase
     public function testDatabaseVersion(): void
     {
         $db = new Sqlite3();
-        $db->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $db->connect($this->sqliteTestFile, '', '');
 
         $version = $db->clientVersion();
         $this->assertIsString($version);
@@ -203,10 +224,10 @@ class DatabaseTest extends TestCase
     public function testConcurrentAccess(): void
     {
         $db1 = new Sqlite3();
-        $db1->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $db1->connect($this->sqliteTestFile, '', '');
 
         $db2 = new Sqlite3();
-        $db2->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $db2->connect($this->sqliteTestFile, '', '');
 
         $db1->query('CREATE TABLE IF NOT EXISTS test_concurrent (id INTEGER PRIMARY KEY, thread TEXT)');
 
@@ -224,7 +245,7 @@ class DatabaseTest extends TestCase
     public function testDatabaseCleanup(): void
     {
         $db = new Sqlite3();
-        $db->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $db->connect($this->sqliteTestFile, '', '');
 
         // Create and populate test table
         $db->query('CREATE TABLE IF NOT EXISTS test_cleanup (id INTEGER PRIMARY KEY, temp_data TEXT)');

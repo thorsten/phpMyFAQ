@@ -41,6 +41,9 @@ class Sqlsrv implements DatabaseDriver
     /** The query log string. */
     private string $sqlLog = '';
 
+    /** @var resource|false|null The last query result for tracking affected rows. */
+    private mixed $lastResult = null;
+
     /**
      * Connection options array.
      */
@@ -217,7 +220,22 @@ class Sqlsrv implements DatabaseDriver
             $this->sqlLog .= $this->error();
         }
 
+        $this->lastResult = $result;
+
         return $result;
+    }
+
+    /**
+     * Returns the number of rows affected by the last INSERT, UPDATE, or DELETE query.
+     */
+    public function affectedRows(): int
+    {
+        if ($this->lastResult === false || $this->lastResult === null) {
+            return 0;
+        }
+
+        $rows = sqlsrv_rows_affected($this->lastResult);
+        return $rows === false ? 0 : $rows;
     }
 
     /**
@@ -320,6 +338,17 @@ class Sqlsrv implements DatabaseDriver
     public function close(): void
     {
         sqlsrv_close($this->conn);
+    }
+
+    /**
+     * Returns the ID of the last inserted row.
+     */
+    public function lastInsertId(): int|string
+    {
+        $result = sqlsrv_query($this->conn, 'SELECT SCOPE_IDENTITY() AS id');
+        sqlsrv_fetch($result);
+
+        return (int) sqlsrv_get_field($result, 0);
     }
 
     public function now(): string

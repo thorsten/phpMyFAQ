@@ -37,7 +37,7 @@ readonly class Migration420Alpha extends AbstractMigration
 
     public function getDescription(): string
     {
-        return 'Admin log hash columns, custom pages, chat messages, translation config, API rate limiting, API keys, OAuth2 tables';
+        return 'Admin log hash columns, custom pages, chat messages, translation config, API rate limiting, queue jobs, API keys, OAuth2 tables';
     }
 
     public function up(OperationRecorder $recorder): void
@@ -209,6 +209,7 @@ readonly class Migration420Alpha extends AbstractMigration
         $recorder->addConfig('api.ignoreOrphanedFaqs', 'true');
         $recorder->addConfig('api.rateLimit.requests', '100');
         $recorder->addConfig('api.rateLimit.interval', '3600');
+        $recorder->addConfig('queue.transport', 'database');
 
         // Translation service configuration
         $recorder->addConfig('translation.provider', 'none');
@@ -568,6 +569,119 @@ readonly class Migration420Alpha extends AbstractMigration
                     $this->tablePrefix,
                 ),
                 'Create API rate limits table (SQL Server)',
+            );
+        }
+
+        // Create a queue jobs table
+        if ($this->isMySql()) {
+            $recorder->addSql(sprintf(
+                "CREATE TABLE IF NOT EXISTS %sfaqjobs (
+                    id INT NOT NULL AUTO_INCREMENT,
+                    queue VARCHAR(100) NOT NULL DEFAULT 'default',
+                    body TEXT NOT NULL,
+                    headers TEXT NULL,
+                    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    available_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    delivered_at TIMESTAMP NULL,
+                    PRIMARY KEY (id),
+                    INDEX idx_faqjobs_queue_available (queue, available_at),
+                    INDEX idx_faqjobs_delivered_at (delivered_at)
+                ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB",
+                $this->tablePrefix,
+            ), 'Create queue jobs table (MySQL)');
+        } elseif ($this->isPostgreSql()) {
+            $recorder->addSql(sprintf('CREATE TABLE IF NOT EXISTS %sfaqjobs (
+                    id SERIAL NOT NULL,
+                    queue VARCHAR(100) NOT NULL DEFAULT \'default\',
+                    body TEXT NOT NULL,
+                    headers TEXT NULL,
+                    available_at TIMESTAMP NOT NULL,
+                    delivered_at TIMESTAMP NULL,
+                    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (id)
+                )', $this->tablePrefix), 'Create queue jobs table (PostgreSQL)');
+
+            $recorder->addSql(
+                sprintf(
+                    'CREATE INDEX IF NOT EXISTS idx_faqjobs_queue_available ON %sfaqjobs (queue, available_at)',
+                    $this->tablePrefix,
+                ),
+                'Create queue/available index on queue jobs (PostgreSQL)',
+            );
+
+            $recorder->addSql(
+                sprintf(
+                    'CREATE INDEX IF NOT EXISTS idx_faqjobs_delivered_at ON %sfaqjobs (delivered_at)',
+                    $this->tablePrefix,
+                ),
+                'Create delivered_at index on queue jobs (PostgreSQL)',
+            );
+        } elseif ($this->isSqlite()) {
+            $recorder->addSql(sprintf('CREATE TABLE IF NOT EXISTS %sfaqjobs (
+                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                    queue VARCHAR(100) NOT NULL DEFAULT \'default\',
+                    body TEXT NOT NULL,
+                    headers TEXT NULL,
+                    available_at DATETIME NOT NULL,
+                    delivered_at DATETIME NULL,
+                    created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+                )', $this->tablePrefix), 'Create queue jobs table (SQLite)');
+
+            $recorder->addSql(
+                sprintf(
+                    'CREATE INDEX IF NOT EXISTS idx_faqjobs_queue_available ON %sfaqjobs (queue, available_at)',
+                    $this->tablePrefix,
+                ),
+                'Create queue/available index on queue jobs (SQLite)',
+            );
+
+            $recorder->addSql(
+                sprintf(
+                    'CREATE INDEX IF NOT EXISTS idx_faqjobs_delivered_at ON %sfaqjobs (delivered_at)',
+                    $this->tablePrefix,
+                ),
+                'Create delivered_at index on queue jobs (SQLite)',
+            );
+        } elseif ($this->isSqlServer()) {
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'%sfaqjobs') AND type = 'U') "
+                    . "CREATE TABLE %sfaqjobs (
+                    id INT IDENTITY(1,1) NOT NULL,
+                    queue VARCHAR(100) NOT NULL DEFAULT 'default',
+                    body NVARCHAR(MAX) NOT NULL,
+                    headers NVARCHAR(MAX) NULL,
+                    available_at DATETIME NOT NULL,
+                    delivered_at DATETIME NULL,
+                    created DATETIME NOT NULL DEFAULT GETDATE(),
+                    PRIMARY KEY (id)
+                )",
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create queue jobs table (SQL Server)',
+            );
+
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_faqjobs_queue_available'"
+                    . " AND object_id = OBJECT_ID(N'%sfaqjobs'))"
+                    . ' CREATE INDEX idx_faqjobs_queue_available ON %sfaqjobs (queue, available_at)',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create queue/available index on queue jobs (SQL Server)',
+            );
+
+            $recorder->addSql(
+                sprintf(
+                    "IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_faqjobs_delivered_at'"
+                    . " AND object_id = OBJECT_ID(N'%sfaqjobs'))"
+                    . ' CREATE INDEX idx_faqjobs_delivered_at ON %sfaqjobs (delivered_at)',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create delivered_at index on queue jobs (SQL Server)',
             );
         }
 

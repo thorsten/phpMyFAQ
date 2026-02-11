@@ -37,7 +37,7 @@ class SystemTest extends TestCase
     public function testSetDatabase(): void
     {
         // Create a mock DatabaseDriver object
-        $database = $this->getMockBuilder(DatabaseDriver::class)->getMock();
+        $database = $this->createMock(DatabaseDriver::class);
 
         // Create a System object and set the mock database driver
         $system = new System();
