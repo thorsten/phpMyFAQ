@@ -57,7 +57,7 @@
     "@types/highlightjs": "^9.12.6",
     "@types/jsdom": "^27.0.0",
     "@types/masonry-layout": "^4.2.8",
-    "@types/node": "^25.2.2",
+    "@types/node": "^25.2.3",
     "@types/sortablejs": "^1.15.9",
     "@vitest/coverage-istanbul": "^4.0.17",
     "@vitest/coverage-v8": "^4.0.17",
