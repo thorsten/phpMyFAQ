@@ -74,6 +74,16 @@ use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Mail;
 use phpMyFAQ\News;
 use phpMyFAQ\Notification;
+use phpMyFAQ\Queue\DatabaseMessageBus;
+use phpMyFAQ\Queue\Handler\ExportHandler;
+use phpMyFAQ\Queue\Handler\IndexFaqHandler;
+use phpMyFAQ\Queue\Handler\SendMailHandler;
+use phpMyFAQ\Queue\Message\ExportMessage;
+use phpMyFAQ\Queue\Message\IndexFaqMessage;
+use phpMyFAQ\Queue\Message\SendMailMessage;
+use phpMyFAQ\Queue\MessageBusFactory;
+use phpMyFAQ\Queue\Transport\DatabaseTransport;
+use phpMyFAQ\Queue\Worker;
 use phpMyFAQ\Push\PushSubscriptionRepository;
 use phpMyFAQ\Push\WebPushService;
 use phpMyFAQ\Plugin\PluginManager;
@@ -324,6 +334,37 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('phpmyfaq.http.rate-limiter', RateLimiter::class)->args([
         service('phpmyfaq.configuration'),
+    ]);
+
+    $services->set('phpmyfaq.queue.transport.database', DatabaseTransport::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+
+    $services->set('phpmyfaq.queue.message-bus-factory', MessageBusFactory::class)->args([
+        service('phpmyfaq.configuration'),
+        service('phpmyfaq.queue.transport.database'),
+    ]);
+
+    $services->set('phpmyfaq.queue.message-bus', DatabaseMessageBus::class)->factory([
+        service('phpmyfaq.queue.message-bus-factory'),
+        'create',
+    ]);
+
+    $services->set('phpmyfaq.queue.handler.send-mail', SendMailHandler::class);
+    $services->set('phpmyfaq.queue.handler.index-faq', IndexFaqHandler::class);
+    $services->set('phpmyfaq.queue.handler.export', ExportHandler::class);
+
+    $services->set('phpmyfaq.queue.worker', Worker::class)->args([
+        service('phpmyfaq.queue.transport.database'),
+    ])->call('registerHandler', [
+        SendMailMessage::class,
+        service('phpmyfaq.queue.handler.send-mail'),
+    ])->call('registerHandler', [
+        IndexFaqMessage::class,
+        service('phpmyfaq.queue.handler.index-faq'),
+    ])->call('registerHandler', [
+        ExportMessage::class,
+        service('phpmyfaq.queue.handler.export'),
     ]);
 
     $services->set('phpmyfaq.helper.category-helper', CategoryHelper::class);

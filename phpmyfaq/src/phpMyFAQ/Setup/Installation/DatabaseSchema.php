@@ -74,6 +74,7 @@ class DatabaseSchema
             'faqinstances_config' => $this->faqinstancesConfig(),
             'faqnews' => $this->faqnews(),
             'faqcustompages' => $this->faqcustompages(),
+            'faqjobs' => $this->faqjobs(),
             'faqquestions' => $this->faqquestions(),
             'faqright' => $this->faqright(),
             'faqrate_limits' => $this->faqrateLimits(),
@@ -551,6 +552,22 @@ class DatabaseSchema
             ->varchar('seo_robots', 50, false, 'index,follow')
             ->primaryKey(['id', 'lang'])
             ->index('idx_custompages_slug', ['slug', 'lang']);
+    }
+
+    public function faqjobs(): TableBuilder
+    {
+        return new TableBuilder($this->dialect)
+            ->table('faqjobs')
+            ->bigInteger('id', false)
+            ->varchar('queue', 100, false, 'default')
+            ->text('body', false)
+            ->text('headers')
+            ->timestamp('available_at', false)
+            ->timestamp('delivered_at')
+            ->timestamp('created', false, true)
+            ->primaryKey('id')
+            ->index('idx_faqjobs_queue_available', ['queue', 'available_at'])
+            ->index('idx_faqjobs_delivered_at', 'delivered_at');
     }
 
     public function faqquestions(): TableBuilder
