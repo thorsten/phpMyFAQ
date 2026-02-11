@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Tenant;
 
-use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use RuntimeException;
 
@@ -84,7 +83,7 @@ final readonly class TenantQuotaEnforcer
             return;
         }
 
-        $query = sprintf('SELECT COUNT(1) AS amount FROM %s%s', Database::getTablePrefix(), $table);
+        $query = sprintf('SELECT COUNT(1) AS amount FROM %s%s', $this->tenantContext->getTablePrefix(), $table);
         $result = $this->databaseDriver->query($query);
 
         if (!$result) {
@@ -112,7 +111,7 @@ final readonly class TenantQuotaEnforcer
     {
         $query = sprintf(
             'SELECT COALESCE(SUM(filesize), 0) AS amount FROM %sfaqattachment',
-            Database::getTablePrefix(),
+            $this->tenantContext->getTablePrefix(),
         );
         $result = $this->databaseDriver->query($query);
 
