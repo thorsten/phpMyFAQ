@@ -42,8 +42,8 @@ dependencies:
     specifier: ^4.2.2
     version: 4.2.2
   sortablejs:
-    specifier: ^1.15.6
-    version: 1.15.6
+    specifier: ^1.15.7
+    version: 1.15.7
   vanilla-cookieconsent:
     specifier: ^3.1.0
     version: 3.1.0
@@ -4377,8 +4377,8 @@ packages:
     resolution: {integrity: sha512-fCvEXfh6NWpm+YSuY2bpXb/VIihqWA6hLsgboC+0nl71Q7N7o2eaCW8mJa/NLvQhs6jpd3VZV4UiUQlV6+lc8g==}
     dev: true
 
-  /sortablejs@1.15.6:
-    resolution: {integrity: sha512-aNfiuwMEpfBM/CN6LY0ibyhxPfPbyFeBTYJKCvzkJ2GkUpazIt3H+QIPAMHwqQ7tMKaHz1Qj+rJJCqljnf4p3A==}
+  /sortablejs@1.15.7:
+    resolution: {integrity: sha512-Kk8wLQPlS+yi1ZEf48a4+fzHa4yxjC30M/Sr2AnQu+f/MPwvvX9XjZ6OWejiz8crBsLwSq8GHqaxaET7u6ux0A==}
     dev: false
 
   /source-map-js@1.2.1:
