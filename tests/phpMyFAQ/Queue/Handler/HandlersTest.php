@@ -21,7 +21,7 @@ class HandlersTest extends TestCase
 {
     public function testSendMailHandlerAcceptsConfiguration(): void
     {
-        $configuration = $this->createMock(Configuration::class);
+        $configuration = $this->createStub(Configuration::class);
         $handler = new SendMailHandler($configuration);
 
         $this->assertInstanceOf(SendMailHandler::class, $handler);
@@ -29,7 +29,7 @@ class HandlersTest extends TestCase
 
     public function testIndexFaqHandlerThrowsWhenElasticsearchNotConfigured(): void
     {
-        $configuration = $this->createMock(Configuration::class);
+        $configuration = $this->createStub(Configuration::class);
         $configuration->method('isElasticsearchActive')->willReturn(false);
 
         $handler = new IndexFaqHandler($configuration);
@@ -41,7 +41,7 @@ class HandlersTest extends TestCase
 
     public function testExportHandlerAcceptsConfiguration(): void
     {
-        $configuration = $this->createMock(Configuration::class);
+        $configuration = $this->createStub(Configuration::class);
         $handler = new ExportHandler($configuration);
 
         $this->assertInstanceOf(ExportHandler::class, $handler);

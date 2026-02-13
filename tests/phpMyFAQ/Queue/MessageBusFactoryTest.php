@@ -18,7 +18,7 @@ class MessageBusFactoryTest extends TestCase
         $configuration = $this->createMock(Configuration::class);
         $configuration->method('get')->with('queue.transport')->willReturn('database');
 
-        $transport = $this->createMock(DatabaseTransport::class);
+        $transport = $this->createStub(DatabaseTransport::class);
         $factory = new MessageBusFactory($configuration, $transport);
 
         $bus = $factory->create();
@@ -31,7 +31,7 @@ class MessageBusFactoryTest extends TestCase
         $configuration = $this->createMock(Configuration::class);
         $configuration->method('get')->with('queue.transport')->willReturn('sqs');
 
-        $transport = $this->createMock(DatabaseTransport::class);
+        $transport = $this->createStub(DatabaseTransport::class);
         $factory = new MessageBusFactory($configuration, $transport);
 
         $this->expectException(RuntimeException::class);

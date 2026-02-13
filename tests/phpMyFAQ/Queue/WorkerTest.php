@@ -16,7 +16,7 @@ class WorkerTest extends TestCase
 {
     public function testRunOnceReturnsFalseWhenNoJobExists(): void
     {
-        $transport = $this->createMock(DatabaseTransport::class);
+        $transport = $this->createStub(DatabaseTransport::class);
         $transport->method('reserve')->willReturn(null);
 
         $worker = new Worker($transport);

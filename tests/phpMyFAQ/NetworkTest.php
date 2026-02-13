@@ -33,7 +33,7 @@ class NetworkTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->config = $this->createStub(Configuration::class);
+        $this->config = $this->createMock(Configuration::class);
         $this->network = new Network($this->config);
     }
 

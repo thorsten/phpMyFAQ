@@ -26,14 +26,14 @@ class TrackingTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configurationMock = $this->createStub(Configuration::class);
-        $this->requestMock = $this->createStub(Request::class);
+        $this->configurationMock = $this->createMock(Configuration::class);
+        $this->requestMock = $this->createMock(Request::class);
         $this->requestMock->headers = new HeaderBag([
             'X-Forwarded-For' => '192.168.1.1',
         ]);
         $this->requestMock->method('getClientIp')->willReturn('127.0.0.1');
-        $this->userSessionMock = $this->createStub(UserSession::class);
-        $this->databaseMock = $this->createStub(DatabaseDriver::class);
+        $this->userSessionMock = $this->createMock(UserSession::class);
+        $this->databaseMock = $this->createMock(DatabaseDriver::class);
 
         $this->configurationMock->method('getDb')->willReturn($this->databaseMock);
         $this->tracking = Tracking::getInstance($this->configurationMock, $this->requestMock, $this->userSessionMock);

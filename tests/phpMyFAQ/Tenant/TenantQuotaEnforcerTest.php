@@ -83,8 +83,12 @@ class TenantQuotaEnforcerTest extends TestCase
         Database::setTablePrefix('pmf_');
 
         $db = $this->createMock(DatabaseDriver::class);
-        $db->method('query')->willReturn(false);
-        $db->method('error')->willReturn('db failed');
+        $db
+            ->expects($this->once())
+            ->method('query')
+            ->with('SELECT COUNT(1) AS amount FROM pmf_faquser')
+            ->willReturn(false);
+        $db->expects($this->once())->method('error')->willReturn('db failed');
 
         $enforcer = new TenantQuotaEnforcer(
             $db,
