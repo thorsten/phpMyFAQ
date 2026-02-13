@@ -76,15 +76,25 @@ final readonly class ExportHandler
 
         $email = $user->getUserData('email');
         if (is_string($email) && $email !== '') {
-            $mail = new Mail($this->configuration);
-            $mail->addTo($email);
-            $mail->subject = 'Your phpMyFAQ export is ready';
-            $mail->message = sprintf(
-                'Your %s export has been generated and is available for download: %s',
-                strtoupper($message->format),
-                $filename,
-            );
-            $mail->send();
+            try {
+                $mail = new Mail($this->configuration);
+                $mail->addTo($email);
+                $mail->subject = 'Your phpMyFAQ export is ready';
+                $mail->message = sprintf(
+                    'Your %s export has been generated and is available for download: %s',
+                    strtoupper($message->format),
+                    $filename,
+                );
+                $mail->send();
+            } catch (\Throwable $e) {
+                error_log(sprintf(
+                    'ExportHandler: failed to send notification email to %s for %s export file %s: %s',
+                    $email,
+                    $message->format,
+                    $filename,
+                    $e->getMessage(),
+                ));
+            }
         }
     }
 }
