@@ -23,6 +23,7 @@ namespace phpMyFAQ;
 
 use DateTime;
 use Exception;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Search\Search\Elasticsearch;
 use phpMyFAQ\Search\Search\OpenSearch;
 use phpMyFAQ\Search\SearchFactory;
@@ -137,7 +138,8 @@ class Search
         $fdTable = Database::getTablePrefix() . 'faqdata AS fd';
         $fcrTable = Database::getTablePrefix() . 'faqcategoryrelations';
         $condition = ['fd.active' => "'yes'"];
-        $searchDatabase = SearchFactory::create($this->configuration, ['database' => Database::getType()]);
+        $searchDatabase = SearchFactory::create($this->configuration, ['database' =>
+            $this->resolveSearchDatabaseType()]);
 
         if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {
             if ($this->getCategory() instanceof Category) {
@@ -197,6 +199,26 @@ class Search
 
         // Merge FAQ and custom page results
         return array_merge($faqResults, $pageResults);
+    }
+
+    private function resolveSearchDatabaseType(): string
+    {
+        $driverClass = strtolower($this->getDatabaseDriverClassName($this->configuration->getDb()));
+
+        return match ($driverClass) {
+            'pdomysql' => 'pdo_mysql',
+            'pdopgsql' => 'pdo_pgsql',
+            'pdosqlite' => 'pdo_sqlite',
+            'pdosqlsrv' => 'pdo_sqlsrv',
+            default => $driverClass,
+        };
+    }
+
+    private function getDatabaseDriverClassName(DatabaseDriver $databaseDriver): string
+    {
+        $classNameParts = explode('\\', $databaseDriver::class);
+
+        return end($classNameParts) ?: 'sqlite3';
     }
 
     /**
