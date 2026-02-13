@@ -90,6 +90,7 @@ use phpMyFAQ\Plugin\PluginManager;
 use phpMyFAQ\Question;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Search;
+use phpMyFAQ\Scheduler\TaskScheduler;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Seo\SeoRepository;
 use phpMyFAQ\Service\Gravatar;
@@ -371,6 +372,13 @@ return static function (ContainerConfigurator $container): void {
     ])->call('registerHandler', [
         ExportMessage::class,
         service('phpmyfaq.queue.handler.export'),
+    ]);
+
+    $services->set('phpmyfaq.scheduler.task-scheduler', TaskScheduler::class)->args([
+        service('phpmyfaq.configuration'),
+        service('phpmyfaq.admin.session'),
+        service('phpmyfaq.admin.backup'),
+        service('phpmyfaq.faq.statistics'),
     ]);
 
     $services->set('phpmyfaq.helper.category-helper', CategoryHelper::class);
