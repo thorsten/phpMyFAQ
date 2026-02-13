@@ -36,10 +36,10 @@ class CategoryHelperTest extends TestCase
         $this->mockConfiguration = $this->createStub(Configuration::class);
         $this->mockCategory = $this->createStub(Category::class);
 
-        $this->categoryHelper = $this
-            ->getMockBuilder(CategoryHelper::class)
-            ->onlyMethods(['getCategory', 'getConfiguration'])
-            ->getMock();
+        $this->categoryHelper = $this->createPartialMock(
+            CategoryHelper::class,
+            ['getCategory', 'getConfiguration']
+        );
 
         $this->categoryHelper->method('getCategory')->willReturn($this->mockCategory);
         $this->categoryHelper->method('getConfiguration')->willReturn($this->mockConfiguration);
@@ -58,10 +58,10 @@ class CategoryHelperTest extends TestCase
                 'French' => 'Catégorie française',
             ]);
 
-        $categoryHelper = $this
-            ->getMockBuilder(CategoryHelper::class)
-            ->onlyMethods(['getCategory', 'getConfiguration', 'buildAvailableCategoryTranslationsList'])
-            ->getMock();
+        $categoryHelper = $this->createPartialMock(
+            CategoryHelper::class,
+            ['getCategory', 'getConfiguration', 'buildAvailableCategoryTranslationsList']
+        );
 
         $categoryHelper->method('getCategory')->willReturn($this->mockCategory);
         $categoryHelper->method('getConfiguration')->willReturn($this->mockConfiguration);

@@ -22,7 +22,7 @@ class FaqTest extends TestCase
         $this->mockConfiguration = $this->createStub(Configuration::class);
 
         // Mock Database class
-        $this->mockDb = $this->getMockBuilder(DatabaseDriver::class)->disableOriginalConstructor()->getMock();
+        $this->mockDb = $this->createMock(DatabaseDriver::class);
 
         // Stub the getDb method of Configuration to return the mockDb object
         $this->mockConfiguration->method('getDb')->willReturn($this->mockDb);
@@ -46,7 +46,7 @@ class FaqTest extends TestCase
     public function testGetAllFaqsByCategoryReturnsFaqData(): void
     {
         // Simulate a single database result object (row)
-        $mockResult = $this->getMockBuilder(stdClass::class)->getMock();
+        $mockResult = $this->createMock(stdClass::class);
         $mockResult->id = 1;
         $mockResult->lang = 'en';
         $mockResult->solution_id = 101;
@@ -213,7 +213,7 @@ class FaqTest extends TestCase
     public function testGetInactiveFaqsDataReturnsEmptyArrayWhenNoResults(): void
     {
         // Mock the configuration language
-        $mockLanguage = $this->getMockBuilder(Language::class)->disableOriginalConstructor()->getMock();
+        $mockLanguage = $this->createMock(Language::class);
         $mockLanguage->method('getLanguage')->willReturn('en');
         $this->mockConfiguration->method('getLanguage')->willReturn($mockLanguage);
 
@@ -229,7 +229,7 @@ class FaqTest extends TestCase
     public function testGetInactiveFaqsDataReturnsInactiveFaqs(): void
     {
         // Mock the configuration language and default URL
-        $mockLanguage = $this->getMockBuilder(Language::class)->disableOriginalConstructor()->getMock();
+        $mockLanguage = $this->createMock(Language::class);
         $mockLanguage->method('getLanguage')->willReturn('en');
         $this->mockConfiguration->method('getLanguage')->willReturn($mockLanguage);
         $this->mockConfiguration->method('getDefaultUrl')->willReturn('http://example.com/');
@@ -258,7 +258,7 @@ class FaqTest extends TestCase
     public function testGetOrphanedFaqsReturnsEmptyArrayWhenNoResults(): void
     {
         // Mock the configuration language
-        $mockLanguage = $this->getMockBuilder(Language::class)->disableOriginalConstructor()->getMock();
+        $mockLanguage = $this->createMock(Language::class);
         $mockLanguage->method('getLanguage')->willReturn('en');
         $this->mockConfiguration->method('getLanguage')->willReturn($mockLanguage);
 
@@ -273,7 +273,7 @@ class FaqTest extends TestCase
     public function testGetOrphanedFaqsReturnsOrphanedFaqs(): void
     {
         // Mock the configuration language and default URL
-        $mockLanguage = $this->getMockBuilder(Language::class)->disableOriginalConstructor()->getMock();
+        $mockLanguage = $this->createMock(Language::class);
         $mockLanguage->method('getLanguage')->willReturn('en');
         $this->mockConfiguration->method('getLanguage')->willReturn($mockLanguage);
         $this->mockConfiguration->method('getDefaultUrl')->willReturn('http://example.com/');

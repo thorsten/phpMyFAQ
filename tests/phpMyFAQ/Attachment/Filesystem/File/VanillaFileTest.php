@@ -24,8 +24,7 @@ class VanillaFileTest extends TestCase
         $filePath = vfsStream::url('root/file.txt');
 
         // Mock the VanillaFile class and inject the virtual file
-        $this->mockFile = $this
-            ->getMockBuilder(VanillaFile::class)
+        $this->mockFile = $this->getMockBuilder(VanillaFile::class)
             ->setConstructorArgs([$filePath])
             ->onlyMethods(['getChunk', 'putChunk', 'eof'])
             ->getMock();

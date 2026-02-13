@@ -132,7 +132,7 @@ class ApiTest extends TestCase
     public function testGetVerificationIssues(): void
     {
         $this->configuration = $this->createStub(Configuration::class);
-        $mockSystem = $this->getMockBuilder(System::class)->onlyMethods(['createHashes'])->getMock();
+        $mockSystem = $this->createPartialMock(System::class, ['createHashes']);
 
         $mockSystem
             ->expects($this->once())

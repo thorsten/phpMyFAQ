@@ -74,8 +74,7 @@ class SearchTest extends TestCase
     {
         $this->setConfigValue('search.searchForSolutionId', 'true');
 
-        $this->search = $this
-            ->getMockBuilder(Search::class)
+        $this->search = $this->getMockBuilder(Search::class)
             ->setConstructorArgs([$this->configuration])
             ->onlyMethods(['searchDatabase'])
             ->getMock();
@@ -104,8 +103,7 @@ class SearchTest extends TestCase
         $this->setConfigValue('search.enableElasticsearch', 'false');
         $this->setConfigValue('search.enableOpenSearch', 'false');
 
-        $this->search = $this
-            ->getMockBuilder(Search::class)
+        $this->search = $this->getMockBuilder(Search::class)
             ->setConstructorArgs([$this->configuration])
             ->onlyMethods(['searchDatabase'])
             ->getMock();
@@ -127,8 +125,7 @@ class SearchTest extends TestCase
         $this->setConfigValue('search.searchForSolutionId', 'false');
         $this->setConfigValue('search.enableElasticsearch', 'true');
 
-        $this->search = $this
-            ->getMockBuilder(Search::class)
+        $this->search = $this->getMockBuilder(Search::class)
             ->setConstructorArgs([$this->configuration])
             ->onlyMethods(['searchElasticsearch'])
             ->getMock();
@@ -151,8 +148,7 @@ class SearchTest extends TestCase
         $this->setConfigValue('search.enableElasticsearch', 'false');
         $this->setConfigValue('search.enableOpenSearch', 'true');
 
-        $this->search = $this
-            ->getMockBuilder(Search::class)
+        $this->search = $this->getMockBuilder(Search::class)
             ->setConstructorArgs([$this->configuration])
             ->onlyMethods(['searchOpenSearch'])
             ->getMock();
@@ -171,8 +167,7 @@ class SearchTest extends TestCase
      */
     public function testSearchWithNonNumericTerm(): void
     {
-        $this->search = $this
-            ->getMockBuilder(Search::class)
+        $this->search = $this->getMockBuilder(Search::class)
             ->setConstructorArgs([$this->configuration])
             ->onlyMethods(['searchDatabase'])
             ->getMock();
@@ -254,7 +249,7 @@ class SearchTest extends TestCase
 
     public function testSetAndGetCategory(): void
     {
-        $categoryMock = $this->getMockBuilder(Category::class)->disableOriginalConstructor()->getMock();
+        $categoryMock = $this->createMock(Category::class);
         $this->search->setCategory($categoryMock);
 
         $this->assertEquals($categoryMock, $this->search->getCategory());
