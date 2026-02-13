@@ -263,6 +263,21 @@ Set up your user information with your real name and a working e-mail address:
 
     $ git config --global user.name "Your Name"
     $ git config --global user.email you@example.com
+
+### 9.6.4 Background jobs during development
+
+phpMyFAQ uses the internal queue for asynchronous tasks such as mail delivery.
+Run the worker locally while testing features that send email:
+
+```bash
+php bin/worker.php
+```
+
+Optionally limit processing to a fixed number of jobs:
+
+```bash
+php bin/worker.php 10
+```
     $ git config core.autocrlf # if you're on Windows
 
 ### 9.6.4 How to get the phpMyFAQ source code?

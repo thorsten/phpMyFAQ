@@ -33,9 +33,23 @@ final readonly class SendMailHandler
     public function __invoke(SendMailMessage $message): void
     {
         $mail = new Mail($this->configuration);
+
+        $envelope = $message->metadata['envelope'] ?? null;
+        if (
+            is_array($envelope)
+            && isset($envelope['recipients'], $envelope['headers'], $envelope['body'])
+            && is_string($envelope['recipients'])
+            && is_array($envelope['headers'])
+            && is_string($envelope['body'])
+        ) {
+            $mail->sendPreparedEnvelope($envelope['recipients'], $envelope['headers'], $envelope['body']);
+
+            return;
+        }
+
         $mail->addTo($message->recipient);
         $mail->subject = $message->subject;
         $mail->message = $message->body;
-        $mail->send();
+        $mail->send(forceSynchronousDelivery: true);
     }
 }
