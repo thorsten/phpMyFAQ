@@ -45,12 +45,49 @@ class TaskScheduler
      */
     public function run(): array
     {
-        return [
-            'sessionCleanup' => $this->cleanupSessions(),
-            'searchOptimization' => $this->optimizeSearchIndex(),
-            'statisticsAggregation' => $this->aggregateStatistics(),
-            'backupCreation' => $this->createBackup(),
-        ];
+        $results = [];
+
+        try {
+            $results['sessionCleanup'] = $this->cleanupSessions();
+        } catch (Throwable $throwable) {
+            $this->configuration->getLogger()->error('Scheduled session cleanup threw an exception.', [
+                'message' => $throwable->getMessage(),
+                'trace' => $throwable->getTraceAsString(),
+            ]);
+            $results['sessionCleanup'] = null;
+        }
+
+        try {
+            $results['searchOptimization'] = $this->optimizeSearchIndex();
+        } catch (Throwable $throwable) {
+            $this->configuration->getLogger()->error('Scheduled search optimization threw an exception.', [
+                'message' => $throwable->getMessage(),
+                'trace' => $throwable->getTraceAsString(),
+            ]);
+            $results['searchOptimization'] = null;
+        }
+
+        try {
+            $results['statisticsAggregation'] = $this->aggregateStatistics();
+        } catch (Throwable $throwable) {
+            $this->configuration->getLogger()->error('Scheduled statistics aggregation threw an exception.', [
+                'message' => $throwable->getMessage(),
+                'trace' => $throwable->getTraceAsString(),
+            ]);
+            $results['statisticsAggregation'] = null;
+        }
+
+        try {
+            $results['backupCreation'] = $this->createBackup();
+        } catch (Throwable $throwable) {
+            $this->configuration->getLogger()->error('Scheduled backup creation threw an exception.', [
+                'message' => $throwable->getMessage(),
+                'trace' => $throwable->getTraceAsString(),
+            ]);
+            $results['backupCreation'] = null;
+        }
+
+        return $results;
     }
 
     /**
@@ -61,7 +98,18 @@ class TaskScheduler
         $configuredRetention = (int) ($this->configuration->get('session.scheduler.retentionSeconds') ?? 0);
         $retentionSeconds = $configuredRetention > 0 ? $configuredRetention : self::DEFAULT_SESSION_RETENTION_SECONDS;
         $cutoffTimestamp = time() - $retentionSeconds;
-        $success = $this->adminSession->deleteSessions(0, $cutoffTimestamp);
+
+        try {
+            $success = $this->adminSession->deleteSessions(0, $cutoffTimestamp);
+        } catch (Throwable $throwable) {
+            $this->configuration->getLogger()->error('Scheduled session cleanup threw an exception.', [
+                'message' => $throwable->getMessage(),
+                'trace' => $throwable->getTraceAsString(),
+                'cutoffTimestamp' => $cutoffTimestamp,
+                'retentionSeconds' => $retentionSeconds,
+            ]);
+            $success = false;
+        }
 
         if (!$success) {
             $this->configuration->getLogger()->warning('Scheduled session cleanup failed.', [
@@ -85,7 +133,7 @@ class TaskScheduler
         $elasticsearchResult = null;
         $openSearchResult = null;
 
-        if ((bool) $this->configuration->get('search.enableElasticsearch')) {
+        if ($this->configuration->get('search.enableElasticsearch')) {
             try {
                 $this->configuration
                     ->getElasticsearch()
@@ -104,7 +152,7 @@ class TaskScheduler
             }
         }
 
-        if ((bool) $this->configuration->get('search.enableOpenSearch')) {
+        if ($this->configuration->get('search.enableOpenSearch')) {
             try {
                 $this->configuration
                     ->getOpenSearch()
@@ -135,16 +183,32 @@ class TaskScheduler
     }
 
     /**
-     * @return array{success: bool, generatedAt: int, totalFaqs: int, totalSessions: int}
+     * @return array{success: bool, generatedAt: int, totalFaqs: int|null, totalSessions: int|null, error: string|null}
      */
     public function aggregateStatistics(): array
     {
-        return [
-            'success' => true,
-            'generatedAt' => time(),
-            'totalFaqs' => $this->statistics->totalFaqs(),
-            'totalSessions' => $this->adminSession->getNumberOfSessions(),
-        ];
+        try {
+            return [
+                'success' => true,
+                'generatedAt' => time(),
+                'totalFaqs' => $this->statistics->totalFaqs(),
+                'totalSessions' => $this->adminSession->getNumberOfSessions(),
+                'error' => null,
+            ];
+        } catch (Throwable $throwable) {
+            $this->configuration->getLogger()->error('Scheduled statistics aggregation failed.', [
+                'message' => $throwable->getMessage(),
+                'trace' => $throwable->getTraceAsString(),
+            ]);
+
+            return [
+                'success' => false,
+                'generatedAt' => time(),
+                'totalFaqs' => null,
+                'totalSessions' => null,
+                'error' => $throwable->getMessage(),
+            ];
+        }
     }
 
     /**

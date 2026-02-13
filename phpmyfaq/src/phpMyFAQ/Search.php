@@ -218,7 +218,7 @@ class Search
     {
         $classNameParts = explode('\\', $databaseDriver::class);
 
-        return end($classNameParts) ?: 'sqlite3';
+        return (string) end($classNameParts);
     }
 
     /**

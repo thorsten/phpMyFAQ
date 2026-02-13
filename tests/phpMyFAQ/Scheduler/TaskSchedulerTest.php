@@ -48,6 +48,68 @@ class TaskSchedulerTest extends TestCase
         $this->assertSame('phpmyfaq-data.sql', $result['backupCreation']['fileName']);
     }
 
+    public function testRunIsolatesTaskFailuresAndContinuesRemaining(): void
+    {
+        $configuration = $this->createConfigurationStub([
+            'session.scheduler.retentionSeconds' => 3600,
+            'search.enableElasticsearch' => false,
+            'search.enableOpenSearch' => false,
+        ]);
+
+        $logger = $this->createStub(Logger::class);
+        $configuration->method('getLogger')->willReturn($logger);
+
+        $session = $this->createMock(Session::class);
+        $session->method('deleteSessions')->willThrowException(new RuntimeException('DB connection lost'));
+        $session->method('getNumberOfSessions')->willReturn(5);
+
+        $statistics = $this->createMock(Statistics::class);
+        $statistics->expects($this->once())->method('totalFaqs')->willReturn(42);
+
+        $backup = $this->createStub(Backup::class);
+        $backup->method('export')->willReturn(new BackupExportResult('phpmyfaq-data.sql', '-- sql --'));
+
+        $scheduler = new TaskScheduler($configuration, $session, $backup, $statistics);
+        $result = $scheduler->run();
+
+        $this->assertIsArray($result['sessionCleanup']);
+        $this->assertFalse($result['sessionCleanup']['success']);
+        $this->assertIsArray($result['searchOptimization']);
+        $this->assertTrue($result['searchOptimization']['skipped']);
+        $this->assertSame(42, $result['statisticsAggregation']['totalFaqs']);
+        $this->assertTrue($result['backupCreation']['success']);
+    }
+
+    public function testCleanupSessionsReturnsFailureWhenDeleteSessionsThrows(): void
+    {
+        $configuration = $this->createConfigurationStub([
+            'session.scheduler.retentionSeconds' => 7200,
+        ]);
+
+        $logger = $this->createMock(Logger::class);
+        $logger
+            ->expects($this->once())
+            ->method('error')
+            ->with($this->stringContains('session cleanup threw an exception'), $this->callback(
+                static fn(array $context): bool => isset($context['message'], $context['trace'], $context['cutoffTimestamp'], $context['retentionSeconds'])
+            ));
+        $logger->expects($this->once())->method('warning');
+        $configuration->method('getLogger')->willReturn($logger);
+
+        $session = $this->createStub(Session::class);
+        $session->method('deleteSessions')->willThrowException(new RuntimeException('DB gone'));
+
+        $backup = $this->createStub(Backup::class);
+        $statistics = $this->createStub(Statistics::class);
+
+        $scheduler = new TaskScheduler($configuration, $session, $backup, $statistics);
+        $result = $scheduler->cleanupSessions();
+
+        $this->assertFalse($result['success']);
+        $this->assertArrayHasKey('cutoffTimestamp', $result);
+        $this->assertSame(7200, $result['retentionSeconds']);
+    }
+
     public function testOptimizeSearchIndexHandlesElasticsearchFailure(): void
     {
         $configuration = $this->createConfigurationStub([
@@ -74,6 +136,32 @@ class TaskSchedulerTest extends TestCase
         $this->assertFalse($result['skipped']);
         $this->assertFalse($result['elasticsearch']);
         $this->assertNull($result['opensearch']);
+    }
+
+    public function testAggregateStatisticsReturnsFailureWhenExceptionThrown(): void
+    {
+        $configuration = $this->createConfigurationStub([]);
+
+        $logger = $this->createMock(Logger::class);
+        $logger
+            ->expects($this->once())
+            ->method('error')
+            ->with($this->stringContains('statistics aggregation failed'), $this->arrayHasKey('message'));
+        $configuration->method('getLogger')->willReturn($logger);
+
+        $session = $this->createStub(Session::class);
+        $backup = $this->createStub(Backup::class);
+        $statistics = $this->createStub(Statistics::class);
+        $statistics->method('totalFaqs')->willThrowException(new RuntimeException('Query failed'));
+
+        $scheduler = new TaskScheduler($configuration, $session, $backup, $statistics);
+        $result = $scheduler->aggregateStatistics();
+
+        $this->assertFalse($result['success']);
+        $this->assertArrayHasKey('generatedAt', $result);
+        $this->assertNull($result['totalFaqs']);
+        $this->assertNull($result['totalSessions']);
+        $this->assertSame('Query failed', $result['error']);
     }
 
     public function testCreateBackupReturnsFailureWhenExportThrows(): void
