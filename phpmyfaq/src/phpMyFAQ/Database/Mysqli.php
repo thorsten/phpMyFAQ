@@ -318,6 +318,14 @@ class Mysqli implements DatabaseDriver
     }
 
     /**
+     * Returns the number of rows affected by the last INSERT, UPDATE, or DELETE query.
+     */
+    public function affectedRows(): int
+    {
+        return (int) $this->conn->affected_rows;
+    }
+
+    /**
      * Returns the client version string.
      */
     public function clientVersion(): string

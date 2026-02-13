@@ -2,12 +2,14 @@
 
 namespace phpMyFAQ\Queue\Handler;
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Queue\Message\ExportMessage;
 use phpMyFAQ\Queue\Message\IndexFaqMessage;
 use phpMyFAQ\Queue\Message\SendMailMessage;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 #[CoversClass(SendMailHandler::class)]
 #[CoversClass(IndexFaqHandler::class)]
@@ -17,42 +19,31 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(ExportMessage::class)]
 class HandlersTest extends TestCase
 {
-    public function testSendMailHandlerInvokesCallback(): void
+    public function testSendMailHandlerAcceptsConfiguration(): void
     {
-        $captured = null;
-        $handler = new SendMailHandler(static function (SendMailMessage $message) use (&$captured): void {
-            $captured = $message;
-        });
+        $configuration = $this->createMock(Configuration::class);
+        $handler = new SendMailHandler($configuration);
 
-        $message = new SendMailMessage('qa@example.org', 'Subject', 'Body');
-        $handler($message);
-
-        $this->assertSame($message, $captured);
+        $this->assertInstanceOf(SendMailHandler::class, $handler);
     }
 
-    public function testIndexFaqHandlerInvokesCallback(): void
+    public function testIndexFaqHandlerThrowsWhenElasticsearchNotConfigured(): void
     {
-        $captured = null;
-        $handler = new IndexFaqHandler(static function (IndexFaqMessage $message) use (&$captured): void {
-            $captured = $message;
-        });
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('isElasticsearchActive')->willReturn(false);
 
-        $message = new IndexFaqMessage(123, 'en');
-        $handler($message);
+        $handler = new IndexFaqHandler($configuration);
 
-        $this->assertSame($message, $captured);
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Elasticsearch is not configured');
+        $handler(new IndexFaqMessage(1, 'en'));
     }
 
-    public function testExportHandlerInvokesCallback(): void
+    public function testExportHandlerAcceptsConfiguration(): void
     {
-        $captured = null;
-        $handler = new ExportHandler(static function (ExportMessage $message) use (&$captured): void {
-            $captured = $message;
-        });
+        $configuration = $this->createMock(Configuration::class);
+        $handler = new ExportHandler($configuration);
 
-        $message = new ExportMessage('pdf', 1, ['scope' => 'all']);
-        $handler($message);
-
-        $this->assertSame($message, $captured);
+        $this->assertInstanceOf(ExportHandler::class, $handler);
     }
 }

@@ -49,6 +49,11 @@ class PdoMysql implements DatabaseDriver
     private string $sqlLog = '';
 
     /**
+     * The last query result for tracking affected rows.
+     */
+    private ?PDOStatement $lastStatement = null;
+
+    /**
      * Connects to the database.
      *
      * @param string $host Hostname or path to socket
@@ -284,7 +289,17 @@ class PdoMysql implements DatabaseDriver
             $this->sqlLog .= $this->pdo->errorCode() . ': ' . $this->error() . ' in query: ' . $query;
         }
 
+        $this->lastStatement = $result instanceof PDOStatement ? $result : null;
+
         return $result;
+    }
+
+    /**
+     * Returns the number of rows affected by the last INSERT, UPDATE, or DELETE query.
+     */
+    public function affectedRows(): int
+    {
+        return $this->lastStatement?->rowCount() ?? 0;
     }
 
     /**

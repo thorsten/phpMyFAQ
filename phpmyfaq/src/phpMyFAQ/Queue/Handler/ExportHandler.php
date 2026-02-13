@@ -19,19 +19,29 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Queue\Handler;
 
+use phpMyFAQ\Category;
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Export;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Queue\Message\ExportMessage;
 
 final readonly class ExportHandler
 {
     public function __construct(
-        private mixed $callback = null,
+        private Configuration $configuration,
     ) {
     }
 
     public function __invoke(ExportMessage $message): void
     {
-        if (is_callable($this->callback)) {
-            ($this->callback)($message);
-        }
+        $faq = new Faq($this->configuration);
+        $category = new Category($this->configuration);
+
+        $exporter = Export::create($faq, $category, $this->configuration, $message->format);
+        $exporter->generate(
+            categoryId: (int) ($message->options['categoryId'] ?? 0),
+            downwards: (bool) ($message->options['downwards'] ?? true),
+            language: (string) ($message->options['language'] ?? ''),
+        );
     }
 }

@@ -23,13 +23,14 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 require __DIR__ . '/../phpmyfaq/src/Bootstrap.php';
-require __DIR__ . '/../phpmyfaq/src/libs/autoload.php';
+require __DIR__ . '/../phpmyfaq/src/autoload.php';
 
 $maxJobs = isset($argv[1]) ? max(0, (int) $argv[1]) : 0;
 
 $container = new ContainerBuilder();
 $loader = new PhpFileLoader($container, new FileLocator(__DIR__));
 $loader->load('../phpmyfaq/src/services.php');
+$container->compile();
 
 $worker = $container->get('phpmyfaq.queue.worker');
 $processed = $worker->run($maxJobs);

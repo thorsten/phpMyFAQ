@@ -53,6 +53,11 @@ class Pgsql implements DatabaseDriver
     private Connection|bool $conn = false;
 
     /**
+     * The last query result for tracking affected rows.
+     */
+    private Result|bool|null $lastResult = null;
+
+    /**
      * Connects to the database.
      *
      * @param string $host Database hostname
@@ -114,11 +119,25 @@ class Pgsql implements DatabaseDriver
             $this->sqlLog .= $this->error();
         }
 
+        $this->lastResult = $result;
+
         if (pg_result_status($result) === PGSQL_COMMAND_OK) {
             return true;
         }
 
         return $result;
+    }
+
+    /**
+     * Returns the number of rows affected by the last INSERT, UPDATE, or DELETE query.
+     */
+    public function affectedRows(): int
+    {
+        if ($this->lastResult instanceof Result) {
+            return pg_affected_rows($this->lastResult);
+        }
+
+        return 0;
     }
 
     /**

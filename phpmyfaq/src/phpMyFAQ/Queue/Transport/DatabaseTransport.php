@@ -107,6 +107,10 @@ readonly class DatabaseTransport
                 continue;
             }
 
+            if ($db->affectedRows() !== 1) {
+                continue;
+            }
+
             return [
                 'id' => $jobId,
                 'queue' => (string) $row['queue'],
@@ -127,18 +131,31 @@ readonly class DatabaseTransport
         return $db->query($query) !== false;
     }
 
-    public function release(int $jobId, ?DateTimeImmutable $availableAt = null): bool
+    /**
+     * @param array<string, mixed>|null $headers Updated headers to persist, or null to leave unchanged.
+     */
+    public function release(int $jobId, ?DateTimeImmutable $availableAt = null, ?array $headers = null): bool
     {
         $db = $this->configuration->getDb();
         $table = Database::getTablePrefix() . 'faqjobs';
         $availableAt ??= new DateTimeImmutable('+60 seconds');
 
-        $query = sprintf(
-            "UPDATE %s SET delivered_at = NULL, available_at = '%s' WHERE id = %d",
-            $table,
-            $db->escape($availableAt->format('Y-m-d H:i:s')),
-            $jobId,
-        );
+        if ($headers !== null) {
+            $query = sprintf(
+                "UPDATE %s SET delivered_at = NULL, available_at = '%s', headers = '%s' WHERE id = %d",
+                $table,
+                $db->escape($availableAt->format('Y-m-d H:i:s')),
+                $db->escape((string) json_encode($headers, JSON_THROW_ON_ERROR)),
+                $jobId,
+            );
+        } else {
+            $query = sprintf(
+                "UPDATE %s SET delivered_at = NULL, available_at = '%s' WHERE id = %d",
+                $table,
+                $db->escape($availableAt->format('Y-m-d H:i:s')),
+                $jobId,
+            );
+        }
 
         return $db->query($query) !== false;
     }

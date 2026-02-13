@@ -48,6 +48,11 @@ class PdoSqlite implements DatabaseDriver
     private string $sqlLog = '';
 
     /**
+     * The last query result for tracking affected rows.
+     */
+    private ?PDOStatement $lastStatement = null;
+
+    /**
      * Connects to the database.
      *
      * @return null|bool true, if connected, otherwise false
@@ -305,7 +310,17 @@ class PdoSqlite implements DatabaseDriver
             $this->sqlLog .= $this->pdo->errorCode() . ': ' . $this->error();
         }
 
+        $this->lastStatement = $result instanceof PDOStatement ? $result : null;
+
         return $result;
+    }
+
+    /**
+     * Returns the number of rows affected by the last INSERT, UPDATE, or DELETE query.
+     */
+    public function affectedRows(): int
+    {
+        return $this->lastStatement?->rowCount() ?? 0;
     }
 
     /**

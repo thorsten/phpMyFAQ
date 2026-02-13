@@ -61,6 +61,7 @@ class DatabaseTransportTest extends TestCase
 
             return false;
         });
+        $db->method('affectedRows')->willReturn(1);
         $db
             ->method('fetchArray')
             ->with('result-set')

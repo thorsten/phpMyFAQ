@@ -129,6 +129,11 @@ interface DatabaseDriver
     public function close();
 
     /**
+     * Returns the number of rows affected by the last INSERT, UPDATE, or DELETE query.
+     */
+    public function affectedRows(): int;
+
+    /**
      * Return an SQL expression that yields current datetime in the local timezone.
      * The actual SQL value may be of SQL datetime type (or timestamp or similar),
      * or it may be varchar/text (as is in SQLite3) - so make sure the consumer

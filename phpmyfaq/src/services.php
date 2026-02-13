@@ -350,9 +350,15 @@ return static function (ContainerConfigurator $container): void {
         'create',
     ]);
 
-    $services->set('phpmyfaq.queue.handler.send-mail', SendMailHandler::class);
-    $services->set('phpmyfaq.queue.handler.index-faq', IndexFaqHandler::class);
-    $services->set('phpmyfaq.queue.handler.export', ExportHandler::class);
+    $services->set('phpmyfaq.queue.handler.send-mail', SendMailHandler::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+    $services->set('phpmyfaq.queue.handler.index-faq', IndexFaqHandler::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+    $services->set('phpmyfaq.queue.handler.export', ExportHandler::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
 
     $services->set('phpmyfaq.queue.worker', Worker::class)->args([
         service('phpmyfaq.queue.transport.database'),

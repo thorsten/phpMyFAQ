@@ -19,19 +19,43 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Queue\Handler;
 
+use phpMyFAQ\Category;
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Instance\Search\Elasticsearch;
 use phpMyFAQ\Queue\Message\IndexFaqMessage;
+use RuntimeException;
 
 final readonly class IndexFaqHandler
 {
     public function __construct(
-        private mixed $callback = null,
+        private Configuration $configuration,
     ) {
     }
 
     public function __invoke(IndexFaqMessage $message): void
     {
-        if (is_callable($this->callback)) {
-            ($this->callback)($message);
+        if (!$this->configuration->isElasticsearchActive()) {
+            throw new RuntimeException('Elasticsearch is not configured');
+        }
+
+        $faq = new Faq($this->configuration);
+        $faq->getFaq($message->faqId);
+
+        if ($faq->faqRecord['id'] === $message->faqId && $faq->faqRecord['content'] !== '') {
+            $category = new Category($this->configuration);
+            $categoryId = $category->getCategoryIdFromFaq($message->faqId);
+
+            $elasticsearch = new Elasticsearch($this->configuration);
+            $elasticsearch->index([
+                'id' => $faq->faqRecord['id'],
+                'lang' => $message->language !== '' ? $message->language : $faq->faqRecord['lang'],
+                'solution_id' => $faq->faqRecord['solution_id'],
+                'question' => $faq->faqRecord['title'],
+                'answer' => $faq->faqRecord['content'],
+                'keywords' => $faq->faqRecord['keywords'],
+                'category_id' => $categoryId,
+            ]);
         }
     }
 }

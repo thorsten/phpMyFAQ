@@ -19,19 +19,23 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Queue\Handler;
 
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Mail;
 use phpMyFAQ\Queue\Message\SendMailMessage;
 
 final readonly class SendMailHandler
 {
     public function __construct(
-        private mixed $callback = null,
+        private Configuration $configuration,
     ) {
     }
 
     public function __invoke(SendMailMessage $message): void
     {
-        if (is_callable($this->callback)) {
-            ($this->callback)($message);
-        }
+        $mail = new Mail($this->configuration);
+        $mail->addTo($message->recipient);
+        $mail->subject = $message->subject;
+        $mail->message = $message->body;
+        $mail->send();
     }
 }

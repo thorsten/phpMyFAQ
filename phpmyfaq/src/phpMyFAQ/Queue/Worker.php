@@ -23,11 +23,12 @@ use DateTimeImmutable;
 use phpMyFAQ\Queue\Message\QueueMessageInterface;
 use phpMyFAQ\Queue\Transport\DatabaseTransport;
 use RuntimeException;
-use stdClass;
 use Throwable;
 
 class Worker
 {
+    private const int MAX_RETRIES = 3;
+
     /** @var array<string, callable> */
     private array $handlers = [];
 
@@ -51,6 +52,9 @@ class Worker
             return false;
         }
 
+        $jobId = (int) $job['id'];
+        $headers = $job['headers'];
+
         try {
             $message = $this->decodeMessage((string) $job['body']);
             $handler = $this->handlers[$message::class] ?? null;
@@ -60,35 +64,52 @@ class Worker
             }
 
             $handler($message);
-            $this->databaseTransport->acknowledge((int) $job['id']);
+            $this->databaseTransport->acknowledge($jobId);
 
             return true;
-        } catch (Throwable $exception) {
-            $this->databaseTransport->release((int) $job['id'], new DateTimeImmutable('+60 seconds'));
-            throw $exception;
+        } catch (Throwable) {
+            $attempts = (int) ($headers['attempts'] ?? 0) + 1;
+            $headers['attempts'] = $attempts;
+
+            if ($attempts >= self::MAX_RETRIES) {
+                $this->databaseTransport->acknowledge($jobId);
+            } else {
+                $this->databaseTransport->release($jobId, new DateTimeImmutable('+60 seconds'), $headers);
+            }
+
+            return true;
         }
     }
 
     /**
      * Runs until the queue is empty or the maximum number of jobs has been processed.
-     * @throws Throwable
      */
     public function run(int $maxJobs = 0, string $queue = 'default'): int
     {
         $processed = 0;
 
         while ($maxJobs === 0 || $processed < $maxJobs) {
-            if (!$this->runOnce($queue)) {
-                break;
-            }
+            try {
+                if (!$this->runOnce($queue)) {
+                    break;
+                }
 
-            ++$processed;
+                ++$processed;
+            } catch (Throwable $exception) {
+                error_log(sprintf(
+                    'Queue worker error in run() while processing queue "%s": %s in %s:%d',
+                    $queue,
+                    $exception->getMessage(),
+                    $exception->getFile(),
+                    $exception->getLine(),
+                ));
+            }
         }
 
         return $processed;
     }
 
-    private function decodeMessage(string $body): object
+    private function decodeMessage(string $body): QueueMessageInterface
     {
         $decoded = json_decode($body, true);
         if (!is_array($decoded) || !isset($decoded['class'])) {
@@ -102,15 +123,14 @@ class Worker
             throw new RuntimeException('Queue job references unknown message class: ' . $messageClass);
         }
 
-        if (is_subclass_of($messageClass, QueueMessageInterface::class)) {
-            /** @var class-string<QueueMessageInterface> $messageClass */
-            return $messageClass::fromArray($payload);
+        if (!is_subclass_of($messageClass, QueueMessageInterface::class)) {
+            throw new RuntimeException('Queue message class '
+            . $messageClass
+            . ' does not implement '
+            . QueueMessageInterface::class);
         }
 
-        $message = new stdClass();
-        $message->class = $messageClass;
-        $message->payload = $payload;
-
-        return $message;
+        /** @var class-string<QueueMessageInterface> $messageClass */
+        return $messageClass::fromArray($payload);
     }
 }

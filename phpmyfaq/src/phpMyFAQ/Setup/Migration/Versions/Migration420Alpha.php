@@ -580,9 +580,9 @@ readonly class Migration420Alpha extends AbstractMigration
                     queue VARCHAR(100) NOT NULL DEFAULT \'default\',
                     body TEXT NOT NULL,
                     headers TEXT NULL,
-                    available_at TIMESTAMP NOT NULL,
-                    delivered_at TIMESTAMP NULL,
                     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    available_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    delivered_at TIMESTAMP NULL,
                     PRIMARY KEY (id),
                     INDEX idx_faqjobs_queue_available (queue, available_at),
                     INDEX idx_faqjobs_delivered_at (delivered_at)
