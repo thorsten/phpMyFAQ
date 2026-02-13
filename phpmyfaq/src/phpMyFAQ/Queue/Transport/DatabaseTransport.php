@@ -75,24 +75,21 @@ readonly class DatabaseTransport
         $table = Database::getTablePrefix() . 'faqjobs';
         $escapedQueue = $db->escape($queue);
 
+        $nowValue = $db->escape(new DateTimeImmutable()->format('Y-m-d H:i:s'));
+
         $query = sprintf(
-            "SELECT id, queue, body, headers, available_at FROM %s WHERE queue = '%s' AND delivered_at IS NULL ORDER BY available_at ASC, id ASC",
+            "SELECT id, queue, body, headers FROM %s WHERE queue = '%s' AND delivered_at IS NULL AND available_at <= '%s' ORDER BY available_at ASC, id ASC",
             $table,
             $escapedQueue,
+            $nowValue,
         );
 
-        $result = $db->query($query);
+        $result = $db->query($query, 0, 10);
         if ($result === false) {
             throw new RuntimeException('Unable to fetch queued jobs: ' . $db->error());
         }
 
-        $now = time();
         while ($row = $db->fetchArray($result)) {
-            $availableAt = strtotime((string) ($row['available_at'] ?? ''));
-            if ($availableAt !== false && $availableAt > $now) {
-                continue;
-            }
-
             $jobId = (int) $row['id'];
             $markDelivered = sprintf(
                 'UPDATE %s SET delivered_at = %s WHERE id = %d AND delivered_at IS NULL',

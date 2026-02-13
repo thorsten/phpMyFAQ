@@ -73,7 +73,6 @@ class DatabaseTransportTest extends TestCase
                 'queue' => 'default',
                 'body' => '{"class":"X"}',
                 'headers' => '{"attempt":1}',
-                'available_at' => date('Y-m-d H:i:s', time() - 5),
             ], false);
 
         $configuration = $this->createStub(Configuration::class);

@@ -352,7 +352,14 @@ class Pgsql implements DatabaseDriver
     public function lastInsertId(): int|string
     {
         $result = pg_query($this->conn, 'SELECT lastval()');
+        if ($result === false) {
+            return 0;
+        }
+
         $row = pg_fetch_row($result);
+        if ($row === false) {
+            return 0;
+        }
 
         return (int) $row[0];
     }
