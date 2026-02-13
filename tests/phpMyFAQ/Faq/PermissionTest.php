@@ -69,9 +69,7 @@ class PermissionTest extends TestCase
                 return true;
             });
 
-        $this->dbMock
-            ->method('numRows')
-            ->willReturn(0);
+        $this->dbMock->method('numRows')->willReturn(0);
 
         $result = $this->permission->add(Permission::USER, 123, [456]);
         $this->assertTrue($result);
@@ -91,9 +89,7 @@ class PermissionTest extends TestCase
                 return true;
             });
 
-        $this->dbMock
-            ->method('numRows')
-            ->willReturn(0);
+        $this->dbMock->method('numRows')->willReturn(0);
 
         $result = $this->permission->add(Permission::GROUP, 123, [789]);
         $this->assertTrue($result);
@@ -113,9 +109,7 @@ class PermissionTest extends TestCase
                 return true;
             });
 
-        $this->dbMock
-            ->method('numRows')
-            ->willReturn(0);
+        $this->dbMock->method('numRows')->willReturn(0);
 
         $result = $this->permission->add(Permission::USER, 123, [456, 789, 101]);
         $this->assertTrue($result);
@@ -152,9 +146,7 @@ class PermissionTest extends TestCase
                 return true;
             });
 
-        $this->dbMock
-            ->method('numRows')
-            ->willReturn(0);
+        $this->dbMock->method('numRows')->willReturn(0);
 
         $this->permission->add(Permission::USER, 123, [456]);
     }
@@ -174,9 +166,7 @@ class PermissionTest extends TestCase
                 return true;
             });
 
-        $this->dbMock
-            ->method('numRows')
-            ->willReturn(0);
+        $this->dbMock->method('numRows')->willReturn(0);
 
         $this->permission->add(Permission::GROUP, 123, [456]);
     }
@@ -405,9 +395,7 @@ class PermissionTest extends TestCase
                 return true;
             });
 
-        $this->dbMock
-            ->method('numRows')
-            ->willReturn(0);
+        $this->dbMock->method('numRows')->willReturn(0);
 
         $result = $this->permission->add(Permission::USER, -123, [456]);
         $this->assertTrue($result);
@@ -461,9 +449,7 @@ class PermissionTest extends TestCase
                 return true;
             });
 
-        $this->dbMock
-            ->method('numRows')
-            ->willReturn(0);
+        $this->dbMock->method('numRows')->willReturn(0);
 
         $result = $this->permission->add(Permission::USER, 123, $largeIdArray);
         $this->assertTrue($result);
@@ -485,9 +471,7 @@ class PermissionTest extends TestCase
                 return false;
             });
 
-        $this->dbMock
-            ->method('numRows')
-            ->willReturn(1); // Permission already exists
+        $this->dbMock->method('numRows')->willReturn(1); // Permission already exists
 
         $result = $this->permission->add(Permission::USER, 123, [456]);
         $this->assertTrue($result); // Should still return true, just skip the insert

@@ -1,6 +1,6 @@
 {
   "name": "@thorsten/phpmyfaq",
-  "version": "4.1.0-RC.4",
+  "version": "4.1.0-RC.5",
   "description": "phpMyFAQ",
   "repository": "git://github.com/thorsten/phpMyFAQ.git",
   "author": "Thorsten Rinne",
@@ -42,9 +42,9 @@
     "choices.js": "^11.1.0",
     "handlebars": "4.7.8",
     "highlight.js": "^11.11.1",
-    "jodit": "^4.9.4",
+    "jodit": "^4.9.6",
     "masonry-layout": "^4.2.2",
-    "sortablejs": "^1.15.6",
+    "sortablejs": "^1.15.7",
     "vanilla-cookieconsent": "^3.1.0"
   },
   "devDependencies": {
@@ -57,7 +57,7 @@
     "@types/highlightjs": "^9.12.6",
     "@types/jsdom": "^27.0.0",
     "@types/masonry-layout": "^4.2.8",
-    "@types/node": "^24.10.11",
+    "@types/node": "^24.10.13",
     "@types/sortablejs": "^1.15.9",
     "@vitest/coverage-istanbul": "^4.0.18",
     "@vitest/coverage-v8": "^4.0.18",
@@ -71,7 +71,7 @@
     "sass": "^1.97.3",
     "sigmund": "^1.0.1",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.54.0",
+    "typescript-eslint": "^8.55.0",
     "vite": "^7.3.1",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-html": "^3.2.2",
