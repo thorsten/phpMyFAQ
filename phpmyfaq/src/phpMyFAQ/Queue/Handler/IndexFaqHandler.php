@@ -42,7 +42,11 @@ final readonly class IndexFaqHandler
         $faq = new Faq($this->configuration);
         $faq->getFaq($message->faqId);
 
-        if ($faq->faqRecord['id'] === $message->faqId && $faq->faqRecord['content'] !== '') {
+        if (
+            $faq->faqRecord['id'] === $message->faqId
+            && $faq->faqRecord['active'] === 'yes'
+            && $faq->faqRecord['content'] !== ''
+        ) {
             $category = new Category($this->configuration);
             $categoryId = $category->getCategoryIdFromFaq($message->faqId);
 

@@ -141,7 +141,8 @@ class LdapTest extends TestCase
     public function testConnectionStateValidation(): void
     {
         // Create a partial mock that allows us to test the validation logic
-        $ldapMock = $this->getMockBuilder(Ldap::class)
+        $ldapMock = $this
+            ->getMockBuilder(Ldap::class)
             ->setConstructorArgs([$this->configuration])
             ->onlyMethods(['error'])
             ->getMock();
@@ -232,7 +233,8 @@ class LdapTest extends TestCase
         // These tests expect the methods to check connection state before calling LDAP functions
 
         // Create a spy/partial mock that can track method calls
-        $ldapSpy = $this->getMockBuilder(Ldap::class)
+        $ldapSpy = $this
+            ->getMockBuilder(Ldap::class)
             ->setConstructorArgs([$this->configuration])
             ->onlyMethods([]) // Don't mock any methods, use real implementation
             ->getMock();

@@ -353,6 +353,14 @@ class PdoMysql implements DatabaseDriver
         $this->close();
     }
 
+    /**
+     * Returns the ID of the last inserted row.
+     */
+    public function lastInsertId(): int|string
+    {
+        return (int) $this->pdo->lastInsertId();
+    }
+
     public function now(): string
     {
         return 'NOW()';

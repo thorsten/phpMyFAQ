@@ -42,7 +42,6 @@ readonly class DatabaseTransport
     ): int {
         $db = $this->configuration->getDb();
         $table = Database::getTablePrefix() . 'faqjobs';
-        $id = $db->nextId($table, 'id');
 
         $availableAt ??= new DateTimeImmutable();
         $availableAtValue = $db->escape($availableAt->format('Y-m-d H:i:s'));
@@ -51,9 +50,8 @@ readonly class DatabaseTransport
         $headersValue = $db->escape((string) json_encode($headers, JSON_THROW_ON_ERROR));
 
         $query = sprintf(
-            "INSERT INTO %s (id, queue, body, headers, available_at, delivered_at, created) VALUES (%d, '%s', '%s', '%s', '%s', NULL, %s)",
+            "INSERT INTO %s (queue, body, headers, available_at, delivered_at, created) VALUES ('%s', '%s', '%s', '%s', NULL, %s)",
             $table,
-            $id,
             $queueValue,
             $bodyValue,
             $headersValue,
@@ -65,7 +63,7 @@ readonly class DatabaseTransport
             throw new RuntimeException('Unable to enqueue job: ' . $db->error());
         }
 
-        return $id;
+        return (int) $db->lastInsertId();
     }
 
     /**

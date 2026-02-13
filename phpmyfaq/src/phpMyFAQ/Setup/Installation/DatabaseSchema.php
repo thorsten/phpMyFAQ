@@ -558,14 +558,13 @@ class DatabaseSchema
     {
         return new TableBuilder($this->dialect)
             ->table('faqjobs')
-            ->bigInteger('id', false)
+            ->autoIncrement('id')
             ->varchar('queue', 100, false, 'default')
             ->text('body', false)
             ->text('headers')
             ->timestamp('available_at', false)
             ->timestamp('delivered_at')
             ->timestamp('created', false, true)
-            ->primaryKey('id')
             ->index('idx_faqjobs_queue_available', ['queue', 'available_at'])
             ->index('idx_faqjobs_delivered_at', 'delivered_at');
     }

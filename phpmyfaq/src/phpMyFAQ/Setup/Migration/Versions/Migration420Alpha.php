@@ -572,12 +572,12 @@ readonly class Migration420Alpha extends AbstractMigration
             );
         }
 
-        // Create queue jobs table
+        // Create a queue jobs table
         if ($this->isMySql()) {
             $recorder->addSql(sprintf(
                 "CREATE TABLE IF NOT EXISTS %sfaqjobs (
-                    id BIGINT NOT NULL,
-                    queue VARCHAR(100) NOT NULL DEFAULT \'default\',
+                    id INT NOT NULL AUTO_INCREMENT,
+                    queue VARCHAR(100) NOT NULL DEFAULT 'default',
                     body TEXT NOT NULL,
                     headers TEXT NULL,
                     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -591,7 +591,7 @@ readonly class Migration420Alpha extends AbstractMigration
             ), 'Create queue jobs table (MySQL)');
         } elseif ($this->isPostgreSql()) {
             $recorder->addSql(sprintf('CREATE TABLE IF NOT EXISTS %sfaqjobs (
-                    id BIGINT NOT NULL,
+                    id SERIAL NOT NULL,
                     queue VARCHAR(100) NOT NULL DEFAULT \'default\',
                     body TEXT NOT NULL,
                     headers TEXT NULL,
@@ -618,14 +618,13 @@ readonly class Migration420Alpha extends AbstractMigration
             );
         } elseif ($this->isSqlite()) {
             $recorder->addSql(sprintf('CREATE TABLE IF NOT EXISTS %sfaqjobs (
-                    id BIGINT NOT NULL,
+                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                     queue VARCHAR(100) NOT NULL DEFAULT \'default\',
                     body TEXT NOT NULL,
                     headers TEXT NULL,
                     available_at DATETIME NOT NULL,
                     delivered_at DATETIME NULL,
-                    created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                    PRIMARY KEY (id)
+                    created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
                 )', $this->tablePrefix), 'Create queue jobs table (SQLite)');
 
             $recorder->addSql(
@@ -648,7 +647,7 @@ readonly class Migration420Alpha extends AbstractMigration
                 sprintf(
                     "IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'%sfaqjobs') AND type = 'U') "
                     . "CREATE TABLE %sfaqjobs (
-                    id BIGINT NOT NULL,
+                    id INT IDENTITY(1,1) NOT NULL,
                     queue VARCHAR(100) NOT NULL DEFAULT 'default',
                     body NVARCHAR(MAX) NOT NULL,
                     headers NVARCHAR(MAX) NULL,

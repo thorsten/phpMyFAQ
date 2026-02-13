@@ -20,7 +20,8 @@ class AttachmentControllerTest extends TestCase
      */
     public function testConstructorWithApiEnabled(): void
     {
-        $attachmentController = $this->getMockBuilder(AttachmentController::class)
+        $attachmentController = $this
+            ->getMockBuilder(AttachmentController::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['isApiEnabled'])
             ->getMock();
@@ -39,7 +40,8 @@ class AttachmentControllerTest extends TestCase
      */
     public function testConstructorWithApiDisabled(): void
     {
-        $attachmentController = $this->getMockBuilder(AttachmentController::class)
+        $attachmentController = $this
+            ->getMockBuilder(AttachmentController::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['isApiEnabled'])
             ->getMock();

@@ -322,7 +322,9 @@ class Mysqli implements DatabaseDriver
      */
     public function affectedRows(): int
     {
-        return (int) $this->conn->affected_rows;
+        $rows = $this->conn->affected_rows;
+
+        return $rows < 0 ? 0 : (int) $rows;
     }
 
     /**
@@ -356,6 +358,14 @@ class Mysqli implements DatabaseDriver
         if ($this->conn) {
             $this->conn->close();
         }
+    }
+
+    /**
+     * Returns the ID of the last inserted row.
+     */
+    public function lastInsertId(): int|string
+    {
+        return (int) $this->conn->insert_id;
     }
 
     public function now(): string

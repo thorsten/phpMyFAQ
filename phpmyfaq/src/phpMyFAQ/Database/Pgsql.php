@@ -346,6 +346,17 @@ class Pgsql implements DatabaseDriver
         return pg_close($this->conn);
     }
 
+    /**
+     * Returns the ID of the last inserted row.
+     */
+    public function lastInsertId(): int|string
+    {
+        $result = pg_query($this->conn, 'SELECT lastval()');
+        $row = pg_fetch_row($result);
+
+        return (int) $row[0];
+    }
+
     public function now(): string
     {
         return 'CURRENT_TIMESTAMP';

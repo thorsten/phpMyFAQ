@@ -134,6 +134,11 @@ interface DatabaseDriver
     public function affectedRows(): int;
 
     /**
+     * Returns the ID of the last inserted row or sequence value.
+     */
+    public function lastInsertId(): int|string;
+
+    /**
      * Return an SQL expression that yields current datetime in the local timezone.
      * The actual SQL value may be of SQL datetime type (or timestamp or similar),
      * or it may be varchar/text (as is in SQLite3) - so make sure the consumer

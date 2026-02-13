@@ -149,10 +149,13 @@ class GlossaryTest extends TestCase
 
     public function testRepositoryErrorHandling(): void
     {
-        $repoMock = $this->createPartialMock(
-            GlossaryRepository::class,
-            ['create', 'update', 'delete', 'fetchAll', 'fetch']
-        );
+        $repoMock = $this->createPartialMock(GlossaryRepository::class, [
+            'create',
+            'update',
+            'delete',
+            'fetchAll',
+            'fetch',
+        ]);
         $repoMock->method('fetchAll')->willReturn([]);
         $repoMock->method('fetch')->willReturn([]);
         $repoMock->method('create')->willReturn(false);

@@ -340,6 +340,17 @@ class Sqlsrv implements DatabaseDriver
         sqlsrv_close($this->conn);
     }
 
+    /**
+     * Returns the ID of the last inserted row.
+     */
+    public function lastInsertId(): int|string
+    {
+        $result = sqlsrv_query($this->conn, 'SELECT SCOPE_IDENTITY() AS id');
+        sqlsrv_fetch($result);
+
+        return (int) sqlsrv_get_field($result, 0);
+    }
+
     public function now(): string
     {
         return 'GETDATE()';

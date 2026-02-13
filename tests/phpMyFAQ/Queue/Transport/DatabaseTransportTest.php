@@ -28,7 +28,7 @@ class DatabaseTransportTest extends TestCase
         Database::setTablePrefix('pmf_');
 
         $db = $this->createMock(DatabaseDriver::class);
-        $db->method('nextId')->willReturn(42);
+        $db->method('lastInsertId')->willReturn(42);
         $db->method('escape')->willReturnArgument(0);
         $db->method('now')->willReturn('CURRENT_TIMESTAMP');
         $db

@@ -321,6 +321,14 @@ class Sqlite3 implements DatabaseDriver
         return $this->conn->close();
     }
 
+    /**
+     * Returns the ID of the last inserted row.
+     */
+    public function lastInsertId(): int|string
+    {
+        return $this->conn->lastInsertRowID();
+    }
+
     public function now(): string
     {
         return "DATETIME('now', 'localtime')";

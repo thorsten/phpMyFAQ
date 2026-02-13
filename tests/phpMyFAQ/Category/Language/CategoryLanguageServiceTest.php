@@ -22,7 +22,8 @@ final class CategoryLanguageServiceTest extends TestCase
     {
         parent::setUp();
         $this->configuration = $this->createStub(Configuration::class);
-        $this->language = $this->getMockBuilder(PmfLanguage::class)
+        $this->language = $this
+            ->getMockBuilder(PmfLanguage::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['isLanguageAvailable'])
             ->getMock();
