@@ -79,11 +79,7 @@ class WorkerTest extends TestCase
         $transport
             ->expects($this->once())
             ->method('release')
-            ->with(
-                8,
-                $this->isInstanceOf(DateTimeImmutable::class),
-                $this->equalTo(['attempts' => 1]),
-            )
+            ->with(8, $this->isInstanceOf(DateTimeImmutable::class), $this->equalTo(['attempts' => 1]))
             ->willReturn(true);
         $transport->expects($this->never())->method('acknowledge');
 
@@ -113,11 +109,7 @@ class WorkerTest extends TestCase
         $transport
             ->expects($this->once())
             ->method('release')
-            ->with(
-                10,
-                $this->isInstanceOf(DateTimeImmutable::class),
-                $this->equalTo(['attempts' => 2]),
-            )
+            ->with(10, $this->isInstanceOf(DateTimeImmutable::class), $this->equalTo(['attempts' => 2]))
             ->willReturn(true);
         $transport->expects($this->never())->method('acknowledge');
 
@@ -134,30 +126,27 @@ class WorkerTest extends TestCase
         $this->expectOutputRegex('/Queue worker error in run\(\)/');
 
         $transport = $this->createMock(DatabaseTransport::class);
-        $transport
-            ->method('reserve')
-            ->willReturnOnConsecutiveCalls(
-                $this->throwException(new RuntimeException('DB connection lost')),
-                [
-                    'id' => 20,
-                    'queue' => 'default',
-                    'body' => json_encode([
-                        'class' => SendMailMessage::class,
-                        'payload' => [
-                            'recipient' => 'user@example.org',
-                            'subject' => 'Hi',
-                            'body' => 'Test',
-                        ],
-                    ], JSON_THROW_ON_ERROR),
-                    'headers' => [],
-                ],
-                null,
-            );
+        $transport->method('reserve')->willReturnOnConsecutiveCalls(
+            $this->throwException(new RuntimeException('DB connection lost')),
+            [
+                'id' => 20,
+                'queue' => 'default',
+                'body' => json_encode([
+                    'class' => SendMailMessage::class,
+                    'payload' => [
+                        'recipient' => 'user@example.org',
+                        'subject' => 'Hi',
+                        'body' => 'Test',
+                    ],
+                ], JSON_THROW_ON_ERROR),
+                'headers' => [],
+            ],
+            null,
+        );
         $transport->expects($this->once())->method('acknowledge')->with(20)->willReturn(true);
 
         $worker = new Worker($transport);
-        $worker->registerHandler(SendMailMessage::class, static function (): void {
-        });
+        $worker->registerHandler(SendMailMessage::class, static function (): void {});
 
         $processed = $worker->run(3);
         $this->assertSame(1, $processed);

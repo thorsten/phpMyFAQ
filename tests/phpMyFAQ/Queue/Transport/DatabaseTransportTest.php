@@ -20,6 +20,9 @@ class DatabaseTransportTest extends TestCase
         Database::setTablePrefix('');
     }
 
+    /**
+     * @throws \JsonException
+     */
     public function testEnqueueCreatesJobAndReturnsId(): void
     {
         Database::setTablePrefix('pmf_');
