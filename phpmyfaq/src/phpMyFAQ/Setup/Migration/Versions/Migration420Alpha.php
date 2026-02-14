@@ -218,6 +218,7 @@ readonly class Migration420Alpha extends AbstractMigration
         $recorder->addConfig('mail.sesRegion', '');
         $recorder->addConfig('mail.mailgunApiKey', '');
         $recorder->addConfig('mail.mailgunDomain', '');
+        $recorder->addConfig('mail.mailgunRegion', 'eu');
 
         // Translation service configuration
         $recorder->addConfig('translation.provider', 'none');

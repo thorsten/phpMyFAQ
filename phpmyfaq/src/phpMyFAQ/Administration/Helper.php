@@ -275,7 +275,6 @@ class Helper
             'smtp' => 'SMTP',
             'sendgrid' => 'SendGrid',
             'ses' => 'Amazon SES',
-            'mailgun' => 'Mailgun',
         ];
         $output = '';
 

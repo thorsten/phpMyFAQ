@@ -780,7 +780,6 @@ Mail delivery supports multiple providers:
 - `smtp` (default; supports per-tenant SMTP settings)
 - `sendgrid`
 - `ses`
-- `mailgun` (reserved for upcoming provider implementation)
 
 Configuration keys:
 
@@ -790,8 +789,6 @@ Configuration keys:
 - `mail.sesAccessKeyId`
 - `mail.sesSecretAccessKey`
 - `mail.sesRegion`
-- `mail.mailgunApiKey`
-- `mail.mailgunDomain`
 
 Outgoing emails are queued by default (queue `mail`) and delivered by the background worker:
 

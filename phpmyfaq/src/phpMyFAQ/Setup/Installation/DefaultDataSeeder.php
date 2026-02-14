@@ -243,6 +243,7 @@ class DefaultDataSeeder
             'mail.sesRegion' => 'us-east-1',
             'mail.mailgunApiKey' => '',
             'mail.mailgunDomain' => '',
+            'mail.mailgunRegion' => 'eu',
             'ldap.ldapSupport' => 'false',
             'ldap.ldap_mapping.name' => 'cn',
             'ldap.ldap_mapping.username' => 'samAccountName',

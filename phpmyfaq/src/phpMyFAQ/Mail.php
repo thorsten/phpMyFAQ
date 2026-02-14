@@ -23,6 +23,7 @@ namespace phpMyFAQ;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Mail\Builtin;
 use phpMyFAQ\Mail\MailProviderInterface;
+use phpMyFAQ\Mail\Provider\MailgunProvider;
 use phpMyFAQ\Mail\Provider\SendGridProvider;
 use phpMyFAQ\Mail\Provider\SesProvider;
 use phpMyFAQ\Mail\Smtp;
@@ -452,7 +453,7 @@ class Mail
             'smtp' => $this->sendViaSmtpAgent($recipients, $headers, $body),
             'sendgrid' => $this->createProvider('sendgrid')->send($recipients, $headers, $body),
             'ses' => $this->createProvider('ses')->send($recipients, $headers, $body),
-            'mailgun' => throw new Exception('Mailgun provider is not implemented yet.'),
+            'mailgun' => $this->createProvider('mailgun')->send($recipients, $headers, $body),
             default => $this->sendViaSmtpAgent($recipients, $headers, $body),
         };
     }
@@ -813,6 +814,7 @@ class Mail
         return match ($provider) {
             'sendgrid' => new SendGridProvider($this->configuration),
             'ses' => new SesProvider($this->configuration),
+            'mailgun' => new MailgunProvider($this->configuration),
             default => throw new Exception('Unsupported mail provider: ' . $provider),
         };
     }
