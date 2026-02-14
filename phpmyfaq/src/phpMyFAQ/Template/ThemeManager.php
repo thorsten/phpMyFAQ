@@ -105,6 +105,15 @@ readonly class ThemeManager
     public function activateTheme(string $themeName): bool
     {
         $this->assertValidThemeName($themeName);
+
+        $indexPath = $this->themeStoragePath($themeName, 'index.twig');
+        if (!$this->storage->exists($indexPath)) {
+            throw new RuntimeException(sprintf(
+                'Cannot activate theme "%s": missing required "index.twig".',
+                $themeName,
+            ));
+        }
+
         return $this->configuration->set('layout.templateSet', $themeName);
     }
 

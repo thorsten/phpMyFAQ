@@ -97,8 +97,22 @@ class ThemeManagerTest extends TestCase
             ->with('layout.templateSet', 'tenant-theme')
             ->willReturn(true);
 
-        $manager = new ThemeManager($configuration, new InMemoryStorage(), 'themes');
+        $storage = new InMemoryStorage();
+        $storage->put('themes/tenant-theme/index.twig', '<h1>Hello</h1>');
+
+        $manager = new ThemeManager($configuration, $storage, 'themes');
         $this->assertTrue($manager->activateTheme('tenant-theme'));
+    }
+
+    public function testActivateThemeRejectsMissingIndexTemplate(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $manager = new ThemeManager($configuration, new InMemoryStorage(), 'themes');
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('missing required "index.twig"');
+
+        $manager->activateTheme('tenant-theme');
     }
 
     public function testActivateDefaultThemePersistsDefaultTemplateSetConfig(): void
