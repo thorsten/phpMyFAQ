@@ -21,6 +21,7 @@ class TwigWrapperTest extends TestCase
      */
     protected function setUp(): void
     {
+        TwigWrapper::setTemplateSetName();
         $this->twigWrapper = new TwigWrapper($this->templatePath);
     }
 
@@ -105,5 +106,23 @@ class TwigWrapperTest extends TestCase
         TwigWrapper::setTemplateSetName('newTemplateSet');
         $this->assertEquals('newTemplateSet', TwigWrapper::getTemplateSetName());
         TwigWrapper::setTemplateSetName();
+    }
+
+    public function testConstructorFallsBackToDefaultForMissingTemplateSet(): void
+    {
+        $twigWrapper = new TwigWrapper($this->templatePath, false, 'missing-template-set');
+        $template = $twigWrapper->loadTemplate('index.twig');
+
+        $this->assertInstanceOf(TemplateWrapper::class, $template);
+        $this->assertEquals('default', TwigWrapper::getTemplateSetName());
+    }
+
+    public function testConstructorFallsBackToDefaultForInvalidTemplateSetName(): void
+    {
+        $twigWrapper = new TwigWrapper($this->templatePath, false, '../invalid');
+        $template = $twigWrapper->loadTemplate('index.twig');
+
+        $this->assertInstanceOf(TemplateWrapper::class, $template);
+        $this->assertEquals('default', TwigWrapper::getTemplateSetName());
     }
 }

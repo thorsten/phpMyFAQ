@@ -28,9 +28,11 @@ use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\PermissionHelper;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Template\ThemeManager;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\TemplateException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -77,7 +79,42 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
                 'ssoSupport' => Request::createFromGlobals()->server->get(key: 'REMOTE_USER'),
                 'buttonTes',
             ],
+            'themeCsrfToken' => Token::getInstance($this->session)->getTokenString('theme-manager'),
+            'activeTheme' => (string) $this->configuration->get('layout.templateSet'),
         ]);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[Route(path: 'configuration/themes/upload', name: 'admin.api.configuration.themes.upload', methods: ['POST'])]
+    public function uploadTheme(Request $request): JsonResponse
+    {
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+
+        if (!$this->hasValidThemeCsrfToken($request)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $file = $request->files->get('themeArchive');
+        if (!$file instanceof UploadedFile || !$file->isValid()) {
+            return $this->json(['error' => 'No valid ZIP file uploaded.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $themeName = trim((string) $request->request->get('themeName', ''));
+        if ($themeName === '') {
+            $themeName = pathinfo((string) $file->getClientOriginalName(), PATHINFO_FILENAME);
+        }
+
+        try {
+            $uploadedFiles = $this->themeManager()->uploadTheme($themeName, $file->getPathname());
+
+            return $this->json([
+                'success' => sprintf('Theme "%s" uploaded (%d files).', $themeName, $uploadedFiles),
+            ], Response::HTTP_OK);
+        } catch (\RuntimeException $runtimeException) {
+            return $this->json(['error' => $runtimeException->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
@@ -471,5 +508,21 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         }
 
         return 'unknown';
+    }
+
+    private function hasValidThemeCsrfToken(Request $request): bool
+    {
+        $csrfToken = (string) $request->request->get('pmf-csrf-token', '');
+        return Token::getInstance($this->session)->verifyToken('theme-manager', $csrfToken);
+    }
+
+    private function themeManager(): ThemeManager
+    {
+        $themeManager = $this->container->get(id: 'phpmyfaq.template.theme-manager');
+        if (!$themeManager instanceof ThemeManager) {
+            throw new BadRequestException('Theme manager service is not available.');
+        }
+
+        return $themeManager;
     }
 }

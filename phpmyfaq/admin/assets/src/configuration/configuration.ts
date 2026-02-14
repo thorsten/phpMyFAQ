@@ -28,6 +28,7 @@ import {
   fetchTemplates,
   fetchTranslations,
   fetchTranslationProvider,
+  uploadThemeArchive,
   saveConfiguration,
 } from '../api';
 import { handleWebPush } from './webpush';
@@ -51,6 +52,7 @@ export const handleConfiguration = async (): Promise<void> => {
             break;
           case '#layout':
             await handleTemplates();
+            await handleThemes();
             break;
           case '#records':
             await handleFaqsSortingKeys();
@@ -267,6 +269,26 @@ export const handleMailProvider = async (): Promise<void> => {
     const currentValue = (mailProviderSelectBox[0].dataset.pmfConfigurationCurrentValue as string) || 'smtp';
     const options = await fetchMailProvider(currentValue);
     mailProviderSelectBox[0].insertAdjacentHTML('beforeend', options);
+  }
+};
+
+export const handleThemes = async (): Promise<void> => {
+  const uploadForm = document.getElementById('theme-upload-form') as HTMLFormElement | null;
+
+  if (uploadForm) {
+    uploadForm.addEventListener('submit', async (event: Event): Promise<void> => {
+      event.preventDefault();
+
+      const response = (await uploadThemeArchive(new FormData(uploadForm))) as unknown as Response;
+      if (typeof response.success === 'string') {
+        pushNotification(response.success);
+        await handleConfigurationTab('#layout');
+        await handleTemplates();
+        await handleThemes();
+      } else {
+        pushErrorNotification(response.error || 'Theme upload failed.');
+      }
+    });
   }
 };
 

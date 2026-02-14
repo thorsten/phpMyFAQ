@@ -20,6 +20,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added support for Flesch readability tests (Thorsten)
 - added storage abstraction layer with support for local filesystem, and Amazon S3 (Thorsten)
 - added support for SendGrid, AWS SES, and Mailgun (Thorsten)
+- added theme manager with support for multiple themes and theme switching (Thorsten)
 - added experimental support for API key authentication via OAuth2 (Thorsten)
 - added experimental per-tenant quota enforcement, and API request rate limits (Thorsten)
 - improved audit and activity log with comprehensive security event tracking (Thorsten)
