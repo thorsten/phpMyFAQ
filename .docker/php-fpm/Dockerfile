@@ -1,12 +1,12 @@
 #
-# This image uses a php:8.4-fpm base image and does not have any phpMyFAQ code with it.
+# This image uses a php:8.5-fpm base image and does not have any phpMyFAQ code with it.
 # It's for development only, it's meant to be run with docker-compose
 #
 
 #####################################
 #=== Unique stage without payload ===
 #####################################
-FROM php:8.4-fpm
+FROM php:8.5-fpm
 
 #=== Install gd PHP dependencies ===
 RUN set -x \
@@ -60,6 +60,10 @@ RUN set -ex \
 #=== Install xdebug PHP dependencies ===
 RUN pecl install xdebug-3.5.0 \
 && docker-php-ext-enable xdebug
+
+#=== Install redis PHP extension ===
+RUN pecl install redis \
+ && docker-php-ext-enable redis
 
 #=== php default ===
 ENV PMF_TIMEZONE="Europe/Berlin" \

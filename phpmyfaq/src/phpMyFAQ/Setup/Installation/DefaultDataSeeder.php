@@ -285,6 +285,8 @@ class DefaultDataSeeder
             'api.onlyPublicQuestions' => 'true',
             'api.ignoreOrphanedFaqs' => 'true',
             'queue.transport' => 'database',
+            'session.handler' => 'files',
+            'session.redisDsn' => 'tcp://redis:6379?database=0',
             'upgrade.dateLastChecked' => '',
             'upgrade.lastDownloadedPackage' => '',
             'upgrade.onlineUpdateEnabled' => 'false',

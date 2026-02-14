@@ -67,6 +67,10 @@ The PDO extension is the preferred way to connect to your database server.
 - [Elasticsearch](https://www.elastic.co/products/elasticsearch) 7.x or 8.x
 - [OpenSearch](https://opensearch.org/) 2.x
 
+### Optional In-Memory Data Store
+
+- [Redis](https://redis.io/) 8.x or later
+
 ### Additional requirements
 
 - correctly set: access permissions, owner, group

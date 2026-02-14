@@ -41,6 +41,10 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
  RUN pecl install xdebug \
      && docker-php-ext-enable xdebug
 
+#=== Install redis PHP extension ===
+RUN pecl install redis \
+    && docker-php-ext-enable redis
+
 #=== Environment variables ===
 ENV PMF_TIMEZONE="Europe/Berlin" \
     PMF_ENABLE_UPLOADS=On \
