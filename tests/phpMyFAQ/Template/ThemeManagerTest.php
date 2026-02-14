@@ -110,7 +110,7 @@ class ThemeManagerTest extends TestCase
         $this->assertTrue($manager->activateDefaultTheme());
     }
 
-    public function testUploadThemeRejectsInvalidThemeName(): void
+    public function testActivateThemeRejectsInvalidThemeName(): void
     {
         $configuration = $this->createStub(Configuration::class);
         $manager = new ThemeManager($configuration, new InMemoryStorage(), 'themes');
@@ -119,6 +119,17 @@ class ThemeManagerTest extends TestCase
         $this->expectExceptionMessage('Invalid theme name');
 
         $manager->activateTheme('../invalid');
+    }
+
+    public function testUploadThemeRejectsInvalidThemeName(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $manager = new ThemeManager($configuration, new InMemoryStorage(), 'themes');
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Invalid theme name');
+
+        $manager->uploadTheme('../invalid', '/tmp/nonexistent.zip');
     }
 
     /**

@@ -52,8 +52,10 @@ readonly class ThemeManager
             throw new RuntimeException('Failed to open theme archive.');
         }
 
-        $uploadedFiles = 0;
         $containsIndexTemplate = false;
+
+        /** @var array<string, string> */
+        $validatedEntries = [];
 
         try {
             for ($index = 0; $index < $zip->numFiles; $index++) {
@@ -79,8 +81,7 @@ readonly class ThemeManager
                 }
 
                 $storagePath = $this->themeStoragePath($themeName, $normalizedEntryPath);
-                $this->storage->put($storagePath, $contents);
-                $uploadedFiles++;
+                $validatedEntries[$storagePath] = $contents;
             }
         } finally {
             $zip->close();
@@ -90,11 +91,15 @@ readonly class ThemeManager
             throw new RuntimeException('Invalid theme archive: missing required "index.twig".');
         }
 
-        if ($uploadedFiles === 0) {
+        if ($validatedEntries === []) {
             throw new RuntimeException('Theme archive does not contain uploadable files.');
         }
 
-        return $uploadedFiles;
+        foreach ($validatedEntries as $storagePath => $contents) {
+            $this->storage->put($storagePath, $contents);
+        }
+
+        return count($validatedEntries);
     }
 
     public function activateTheme(string $themeName): bool
