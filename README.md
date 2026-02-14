@@ -8,7 +8,7 @@
 ## What is phpMyFAQ?
 
 phpMyFAQ is a comprehensive, multilingual FAQ system that is entirely database-driven.
-It is compatible with a variety of databases for data storage and requires PHP 8.5+ for data access.
+It is compatible with a variety of databases for data storage and requires PHP 8.4+ for data access.
 The system features a multi-language Content Management System equipped with a WYSIWYG editor and an Image Manager.
 It also provides real-time search capabilities with Elasticsearch or OpenSearch.
 
@@ -33,7 +33,7 @@ and can be run on almost any web hosting provider or deployed in the cloud using
 
 ## Requirements
 
-phpMyFAQ is only supported on PHP 8.3 and up, you need a database as well. Supported databases are MySQL, MariaDB,
+phpMyFAQ is only supported on PHP 8.4+, you need a database as well. Supported databases are MySQL, MariaDB,
 Percona Server, PostgreSQL, Microsoft SQL Server, and SQLite3. If you want to use Elasticsearch or Opensearch as the 
 main search engine, you need Elasticsearch v6+ or OpenSearch v1+. Check our detailed requirements on
 [phpmyfaq.de](https://www.phpmyfaq.de/requirements) for more information.
