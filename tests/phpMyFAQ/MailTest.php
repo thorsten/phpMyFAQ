@@ -265,6 +265,7 @@ class MailTest extends TestCase
             ->willReturnCallback(static function (string $item) use ($container): mixed {
                 return match ($item) {
                     'mail.remoteSMTP' => false,
+                    'mail.useQueue' => true,
                     'core.container' => $container,
                     default => null,
                 };
@@ -281,5 +282,45 @@ class MailTest extends TestCase
         $mail->message = 'Queued message';
 
         $this->assertSame(1, $mail->send());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSendCanBypassQueueWhenDisabled(): void
+    {
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects($this->never())->method('has');
+        $container->expects($this->never())->method('get');
+
+        $configuration = $this->createMock(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnCallback(static function (string $item) use ($container): mixed {
+                return match ($item) {
+                    'mail.remoteSMTP' => false,
+                    'mail.useQueue' => false,
+                    'core.container' => $container,
+                    default => null,
+                };
+            });
+        $configuration->method('getVersion')->willReturn('4.2.0-alpha');
+        $configuration->method('getAdminEmail')->willReturn('admin@example.com');
+        $configuration->method('getTitle')->willReturn('phpMyFAQ');
+        $configuration->method('getMailProvider')->willReturn('smtp');
+        $configuration->method('getLogger')->willReturn($this->createStub(\Monolog\Logger::class));
+
+        $mail = new class($configuration) extends Mail {
+            public function sendPreparedEnvelope(string $recipients, array $headers, string $body): int
+            {
+                return 7;
+            }
+        };
+
+        $mail->addTo('user@example.com');
+        $mail->subject = 'Direct subject';
+        $mail->message = 'Direct message';
+
+        $this->assertSame(7, $mail->send());
     }
 }

@@ -1683,5 +1683,6 @@ $LANG_CONF['mail.sesSecretAccessKey'] = ['password', 'Amazon SES Secret Access K
 $LANG_CONF['mail.sesRegion'] = ['input', 'Amazon SES-Region'];
 $LANG_CONF['mail.mailgunApiKey'] = ['password', 'Mailgun API-Schlüssel'];
 $LANG_CONF['mail.mailgunDomain'] = ['input', 'Mailgun-Domain'];
+$LANG_CONF['mail.useQueue'] = ['checkbox', 'Use background worker queue for email delivery'];
 
 return $PMF_LANG;

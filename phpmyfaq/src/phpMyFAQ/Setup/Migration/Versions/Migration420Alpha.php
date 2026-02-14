@@ -210,6 +210,7 @@ readonly class Migration420Alpha extends AbstractMigration
         $recorder->addConfig('api.rateLimit.requests', '100');
         $recorder->addConfig('api.rateLimit.interval', '3600');
         $recorder->addConfig('queue.transport', 'database');
+        $recorder->addConfig('mail.useQueue', 'true');
         $recorder->addConfig('mail.provider', 'smtp');
         $recorder->addConfig('mail.sendgridApiKey', '');
         $recorder->addConfig('mail.sesAccessKeyId', '');

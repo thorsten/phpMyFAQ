@@ -429,7 +429,11 @@ class Mail
         // Prepare the body
         $this->createBody();
 
-        if (!$forceSynchronousDelivery && $this->enqueueForDelivery($recipients, $this->headers, $this->body)) {
+        if (
+            !$forceSynchronousDelivery
+            && $this->isQueueDeliveryEnabled()
+            && $this->enqueueForDelivery($recipients, $this->headers, $this->body)
+        ) {
             return count($this->to) + count($this->cc) + count($this->bcc);
         }
 
@@ -789,6 +793,16 @@ class Mail
 
             return false;
         }
+    }
+
+    private function isQueueDeliveryEnabled(): bool
+    {
+        $useQueue = $this->configuration->get('mail.useQueue');
+        if ($useQueue === null) {
+            return true;
+        }
+
+        return (bool) $useQueue;
     }
 
     /**

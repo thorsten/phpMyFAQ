@@ -785,6 +785,7 @@ Mail delivery supports multiple providers:
 Configuration keys:
 
 - `mail.provider`
+- `mail.useQueue`
 - `mail.sendgridApiKey`
 - `mail.sesAccessKeyId`
 - `mail.sesSecretAccessKey`
