@@ -6,6 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
+
 ### phpMyFAQ v4.2.0-alpha - unreleased
 
 - changed PHP requirement to PHP 8.4 or later (Thorsten)
@@ -32,7 +33,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated codebase using PHP 8.4 language features (Thorsten)
 - migrated routes using PHP 8+ #[Route] attributes (Thorsten)
 
-### phpMyFAQ v4.1.0-RC.4 - 2026-02-06
+### phpMyFAQ v4.1.0-RC.5 - 2026-02-13
 
 - changed PHP requirement to PHP 8.3 or later (Thorsten)
 - added configuration to edit robots.txt (Thorsten)
