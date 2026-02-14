@@ -120,8 +120,20 @@ class ThemeManagerTest extends TestCase
         $configuration = $this->createMock(Configuration::class);
         $configuration->expects($this->once())->method('set')->with('layout.templateSet', 'default')->willReturn(true);
 
-        $manager = new ThemeManager($configuration, new InMemoryStorage(), 'themes');
+        $storage = new InMemoryStorage();
+        $storage->put('themes/default/index.twig', '<h1>Default</h1>');
+
+        $manager = new ThemeManager($configuration, $storage, 'themes');
         $this->assertTrue($manager->activateDefaultTheme());
+    }
+
+    public function testActivateDefaultThemeReturnsFalseWhenIndexTemplateMissing(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->expects($this->never())->method('set');
+
+        $manager = new ThemeManager($configuration, new InMemoryStorage(), 'themes');
+        $this->assertFalse($manager->activateDefaultTheme());
     }
 
     public function testActivateThemeRejectsInvalidThemeName(): void

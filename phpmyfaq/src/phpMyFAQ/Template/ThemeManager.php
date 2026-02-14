@@ -119,6 +119,11 @@ readonly class ThemeManager
 
     public function activateDefaultTheme(): bool
     {
+        $indexPath = $this->themeStoragePath('default', 'index.twig');
+        if (!$this->storage->exists($indexPath)) {
+            return false;
+        }
+
         return $this->configuration->set('layout.templateSet', 'default');
     }
 
