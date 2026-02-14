@@ -25,14 +25,17 @@ class RedisSessionHandler
 {
     public const string DEFAULT_DSN = 'tcp://redis:6379?database=0';
 
-    public static function configure(string $dsn = ''): void
+    public static function configure(string $dsn = '', bool $validate = false): void
     {
         if (!extension_loaded('redis')) {
             throw new RuntimeException('Redis session handler requires the PHP redis extension (ext-redis).');
         }
 
         $redisDsn = trim($dsn) !== '' ? trim($dsn) : self::DEFAULT_DSN;
-        self::validateConnection($redisDsn);
+
+        if ($validate) {
+            self::validateConnection($redisDsn);
+        }
 
         ini_set('session.save_handler', value: 'redis');
         ini_set('session.save_path', value: $redisDsn);

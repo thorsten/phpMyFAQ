@@ -90,7 +90,7 @@ class PhpConfiguratorTest extends TestCase
         $configuration
             ->method('get')
             ->willReturnMap([
-                ['session.handler',  'database'],
+                ['session.handler',  'files'],
                 ['session.redisDsn', ''],
             ]);
 

@@ -75,7 +75,6 @@ class PhpConfigurator
 
             switch ($sessionHandler) {
                 case 'files':
-                case 'database':
                     ini_set('session.save_handler', value: 'files');
                     break;
                 case 'redis':
@@ -83,7 +82,7 @@ class PhpConfigurator
                     break;
                 default:
                     throw new RuntimeException(sprintf(
-                        'Unsupported session handler "%s". Allowed values: files, database, redis.',
+                        'Unsupported session handler "%s". Allowed values: files, redis.',
                         $sessionHandler,
                     ));
             }

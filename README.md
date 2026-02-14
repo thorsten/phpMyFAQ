@@ -8,7 +8,7 @@
 ## What is phpMyFAQ?
 
 phpMyFAQ is a comprehensive, multilingual FAQ system that is entirely database-driven.
-It is compatible with a variety of databases for data storage and requires PHP 8.4+ for data access.
+It is compatible with a variety of databases for data storage and requires PHP 8.5+ for data access.
 The system features a multi-language Content Management System equipped with a WYSIWYG editor and an Image Manager.
 It also provides real-time search capabilities with Elasticsearch or OpenSearch.
 
@@ -77,16 +77,16 @@ _Running using named volumes:_
 - **opensearch**: OpenSearch image (it means it does not have XPack installed)
 - **redis**: image with a Redis database
 
-_Running apache web server with PHP 8.4 support:_
+_Running apache web server with PHP 8.5 support:_
 
 - **apache**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
 
-_Running nginx web server with PHP 8.4 support:_
+_Running nginx web server with PHP 8.5 support:_
 
 - **nginx**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
-- **php-fpm**: PHP-FPM image with PHP 8.4 support
+- **php-fpm**: PHP-FPM image with PHP 8.5 support
 
-_Running FrankenPHP web server with PHP 8.4 support:_
+_Running FrankenPHP web server with PHP 8.5 support:_
 
 - **frankenphp**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
 

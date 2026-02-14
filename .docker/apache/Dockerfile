@@ -62,7 +62,7 @@ RUN pecl install xdebug-3.5.0  \
 && docker-php-ext-enable xdebug
 
 #=== Install redis PHP extension ===
-RUN pecl install redis \
+RUN pecl install redis-6.3.0 \
  && docker-php-ext-enable redis
 
 #=== php default ===
