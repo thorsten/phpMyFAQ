@@ -24,6 +24,7 @@ import {
   fetchReleaseEnvironment,
   fetchSearchRelevance,
   fetchSeoMetaTags,
+  fetchMailProvider,
   fetchTemplates,
   fetchTranslations,
   fetchTranslationProvider,
@@ -70,6 +71,7 @@ export const handleConfiguration = async (): Promise<void> => {
             break;
           case '#mail':
             await handleSMTPPasswordToggle();
+            await handleMailProvider();
             break;
           case '#translation':
             await handleTranslationProvider();
@@ -256,6 +258,15 @@ export const handleTranslationProvider = async (): Promise<void> => {
     const currentValue = (translationProviderSelectBox[0].dataset.pmfConfigurationCurrentValue as string) || 'none';
     const options = await fetchTranslationProvider(currentValue);
     translationProviderSelectBox[0].insertAdjacentHTML('beforeend', options);
+  }
+};
+
+export const handleMailProvider = async (): Promise<void> => {
+  const mailProviderSelectBox = document.getElementsByName('edit[mail.provider]') as NodeListOf<HTMLSelectElement>;
+  if (mailProviderSelectBox !== null && mailProviderSelectBox[0]) {
+    const currentValue = (mailProviderSelectBox[0].dataset.pmfConfigurationCurrentValue as string) || 'smtp';
+    const options = await fetchMailProvider(currentValue);
+    mailProviderSelectBox[0].insertAdjacentHTML('beforeend', options);
   }
 };
 

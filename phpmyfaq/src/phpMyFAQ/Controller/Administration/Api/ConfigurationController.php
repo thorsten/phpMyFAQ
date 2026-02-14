@@ -35,11 +35,7 @@ final class ConfigurationController extends AbstractAdministrationApiController
     /**
      * @throws Exception|\Exception
      */
-    #[Route(
-        'admin/api/configuration/send-test-mail',
-        name: 'admin.api.configuration.send-test-mail',
-        methods: ['POST'],
-    )]
+    #[Route(path: 'configuration/send-test-mail', name: 'admin.api.configuration.send-test-mail', methods: ['POST'])]
     public function sendTestMail(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -68,7 +64,7 @@ final class ConfigurationController extends AbstractAdministrationApiController
      * @throws \Exception
      */
     #[Route(
-        'configuration/activate-maintenance-mode',
+        path: 'configuration/activate-maintenance-mode',
         name: 'admin.api.configuration.activate-maintenance-mode',
         methods: ['POST'],
     )]

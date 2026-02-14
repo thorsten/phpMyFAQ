@@ -37,7 +37,7 @@ readonly class Migration420Alpha extends AbstractMigration
 
     public function getDescription(): string
     {
-        return 'Admin log hash columns, custom pages, chat messages, translation config, API rate limiting, queue jobs, API keys, OAuth2 tables';
+        return 'Admin log hash columns, custom pages, chat messages, translation config, API rate limiting, queue jobs, mail provider config, API keys, OAuth2 tables';
     }
 
     public function up(OperationRecorder $recorder): void
@@ -210,6 +210,15 @@ readonly class Migration420Alpha extends AbstractMigration
         $recorder->addConfig('api.rateLimit.requests', '100');
         $recorder->addConfig('api.rateLimit.interval', '3600');
         $recorder->addConfig('queue.transport', 'database');
+        $recorder->addConfig('mail.useQueue', 'true');
+        $recorder->addConfig('mail.provider', 'smtp');
+        $recorder->addConfig('mail.sendgridApiKey', '');
+        $recorder->addConfig('mail.sesAccessKeyId', '');
+        $recorder->addConfig('mail.sesSecretAccessKey', '');
+        $recorder->addConfig('mail.sesRegion', '');
+        $recorder->addConfig('mail.mailgunApiKey', '');
+        $recorder->addConfig('mail.mailgunDomain', '');
+        $recorder->addConfig('mail.mailgunRegion', 'eu');
 
         // Translation service configuration
         $recorder->addConfig('translation.provider', 'none');

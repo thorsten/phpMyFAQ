@@ -7,6 +7,7 @@ import {
   fetchReleaseEnvironment,
   fetchSearchRelevance,
   fetchSeoMetaTags,
+  fetchMailProvider,
   fetchTemplates,
   fetchTranslations,
   saveConfiguration,
@@ -288,6 +289,39 @@ describe('fetchTemplates', () => {
     vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
 
     const result = await fetchTemplates();
+
+    expect(result).toBe('');
+  });
+});
+
+describe('fetchMailProvider', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should fetch mail provider data and return as text', async () => {
+    const mockResponse = 'Mail provider data';
+    const mockResponseObj = {
+      ok: true,
+      text: () => Promise.resolve(mockResponse),
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
+
+    const currentValue = 'smtp';
+    const result = await fetchMailProvider(currentValue);
+
+    expect(result).toBe(mockResponse);
+    expect(fetchWrapperModule.fetchWrapper).toHaveBeenCalledWith(`./api/configuration/mail-provider/${currentValue}`);
+  });
+
+  it('should return an empty string if the network response is not ok', async () => {
+    const mockResponseObj = {
+      ok: false,
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
+
+    const currentValue = 'smtp';
+    const result = await fetchMailProvider(currentValue);
 
     expect(result).toBe('');
   });

@@ -1673,4 +1673,17 @@ $PMF_LANG['msgGenerateVapidKeys'] = 'VAPID-Schlüssel generieren';
 $PMF_LANG['msgVapidKeysGenerated'] = 'VAPID-Schlüssel wurden erfolgreich generiert.';
 $PMF_LANG['msgVapidKeysError'] = 'VAPID-Schlüssel konnten nicht generiert werden.';
 
+$LANG_CONF['api.rateLimit.requests'] = ['input', 'API-Ratenlimit', 'Standard: 100 Anfragen'];
+$LANG_CONF['api.rateLimit.interval'] = ['input', 'API-Ratenlimit-Intervall in Sekunden', 'Standard: 3600 Sekunden'];
+
+$LANG_CONF['mail.provider'] = ['select', 'E-Mail-Anbieter'];
+$LANG_CONF['mail.sendgridApiKey'] = ['password', 'SendGrid API-Schlüssel'];
+$LANG_CONF['mail.sesAccessKeyId'] = ['input', 'Amazon SES Access Key ID'];
+$LANG_CONF['mail.sesSecretAccessKey'] = ['password', 'Amazon SES Secret Access Key'];
+$LANG_CONF['mail.sesRegion'] = ['input', 'Amazon SES-Region'];
+$LANG_CONF['mail.mailgunApiKey'] = ['password', 'Mailgun API-Schlüssel'];
+$LANG_CONF['mail.mailgunDomain'] = ['input', 'Mailgun-Domain'];
+$LANG_CONF['mail.mailgunRegion'] = ['input', 'Mailgun Region', 'z.B. us, eu'];
+$LANG_CONF['mail.useQueue'] = ['checkbox', 'Hintergrund-Worker-Warteschlange für die E-Mail-Zustellung verwenden'];
+
 return $PMF_LANG;

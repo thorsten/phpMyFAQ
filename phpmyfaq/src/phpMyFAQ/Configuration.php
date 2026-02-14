@@ -227,6 +227,11 @@ class Configuration
         return $this->mailSettings->getNoReplyEmail();
     }
 
+    public function getMailProvider(): string
+    {
+        return $this->mailSettings->getProvider();
+    }
+
     /**
      * Returns the default URL of the phpMyFAQ installation.
      */
