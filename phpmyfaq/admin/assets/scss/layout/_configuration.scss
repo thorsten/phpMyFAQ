@@ -3,6 +3,74 @@
 //
 
 #pmf-admin-configuration-container {
+  .pmf-configuration-filter {
+    background: $body-bg;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding-top: 0.125rem;
+  }
+
+  .pmf-configuration-tabs {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .pmf-configuration-group {
+    color: $secondary;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    list-style: none;
+    margin: 0.75rem 0 0.25rem;
+    text-transform: uppercase;
+  }
+
+  .pmf-configuration-group span {
+    display: block;
+    padding: 0 0.75rem;
+  }
+
+  .pmf-configuration-tabs .pmf-configuration-group:first-child {
+    margin-top: 0.25rem;
+  }
+
+  .pmf-configuration-tabs .nav-item {
+    flex: 0 0 auto;
+  }
+
+  .pmf-configuration-tabs .nav-link {
+    white-space: nowrap;
+  }
+
+  @media (min-width: 992px) {
+    .pmf-configuration-filter {
+      margin-bottom: 0.5rem;
+    }
+
+    .pmf-configuration-tabs {
+      overflow: visible;
+      max-height: none;
+      padding-right: 0;
+      scrollbar-width: auto;
+    }
+
+    .pmf-configuration-tabs .nav-item {
+      width: 100%;
+    }
+
+    .pmf-configuration-tabs .nav-link {
+      width: 100%;
+      text-align: left;
+    }
+
+    .pmf-configuration-group span {
+      padding-left: 0.5rem;
+    }
+  }
+
   a.nav-link.active {
     background: $light-bg-subtle;
   }
