@@ -104,6 +104,8 @@ class Migration420AlphaTest extends TestCase
         $this->assertContains('api.rateLimit.requests', $addedConfigKeys);
         $this->assertContains('api.rateLimit.interval', $addedConfigKeys);
         $this->assertContains('queue.transport', $addedConfigKeys);
+        $this->assertContains('session.handler', $addedConfigKeys);
+        $this->assertContains('session.redisDsn', $addedConfigKeys);
     }
 
     public function testUpAddsFaqrateLimitsTableSql(): void

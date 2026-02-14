@@ -75,6 +75,7 @@ _Running using named volumes:_
 - **sqlserver**: image with Microsoft SQL Server for Linux
 - **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
 - **opensearch**: OpenSearch image (it means it does not have XPack installed)
+- **redis**: image with a Redis database
 
 _Running apache web server with PHP 8.4 support:_
 

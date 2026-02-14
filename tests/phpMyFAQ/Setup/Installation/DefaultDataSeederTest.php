@@ -29,6 +29,8 @@ class DefaultDataSeederTest extends TestCase
         $this->assertArrayHasKey('main.phpMyFAQToken', $config);
         $this->assertArrayHasKey('security.permLevel', $config);
         $this->assertArrayHasKey('spam.enableCaptchaCode', $config);
+        $this->assertArrayHasKey('session.handler', $config);
+        $this->assertArrayHasKey('session.redisDsn', $config);
     }
 
     public function testGetMainConfigHasDynamicValues(): void

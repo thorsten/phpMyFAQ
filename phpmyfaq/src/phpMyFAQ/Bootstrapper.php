@@ -85,7 +85,7 @@ class Bootstrapper
             $this->connectDatabase($databaseFile);
 
             // 12. Session configuration
-            PhpConfigurator::configureSession();
+            PhpConfigurator::configureSession($this->faqConfig);
 
             // 13. LDAP
             $this->configureLdap();
