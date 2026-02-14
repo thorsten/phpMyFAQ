@@ -60,12 +60,12 @@ readonly class ThemeManager
         try {
             for ($index = 0; $index < $zip->numFiles; $index++) {
                 $entryName = $zip->getNameIndex($index);
-                if ($entryName === false) {
+                if ($entryName === false || $entryName === '' || str_ends_with($entryName, '/')) {
                     continue;
                 }
 
                 $normalizedEntryPath = $this->normalizeArchivePath($entryName, $themeName);
-                if ($normalizedEntryPath === '' || str_ends_with($normalizedEntryPath, '/')) {
+                if ($normalizedEntryPath === '') {
                     continue;
                 }
 
