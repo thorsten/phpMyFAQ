@@ -33,7 +33,7 @@ and can be run on almost any web hosting provider or deployed in the cloud using
 
 ## Requirements
 
-phpMyFAQ is only supported on PHP 8.3 and up, you need a database as well. Supported databases are MySQL, MariaDB,
+phpMyFAQ is only supported on PHP 8.4+, you need a database as well. Supported databases are MySQL, MariaDB,
 Percona Server, PostgreSQL, Microsoft SQL Server, and SQLite3. If you want to use Elasticsearch or Opensearch as the 
 main search engine, you need Elasticsearch v6+ or OpenSearch v1+. Check our detailed requirements on
 [phpmyfaq.de](https://www.phpmyfaq.de/requirements) for more information.
@@ -75,17 +75,18 @@ _Running using named volumes:_
 - **sqlserver**: image with Microsoft SQL Server for Linux
 - **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
 - **opensearch**: OpenSearch image (it means it does not have XPack installed)
+- **redis**: image with a Redis database
 
-_Running apache web server with PHP 8.4 support:_
+_Running apache web server with PHP 8.5 support:_
 
 - **apache**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
 
-_Running nginx web server with PHP 8.4 support:_
+_Running nginx web server with PHP 8.5 support:_
 
 - **nginx**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
-- **php-fpm**: PHP-FPM image with PHP 8.4 support
+- **php-fpm**: PHP-FPM image with PHP 8.5 support
 
-_Running FrankenPHP web server with PHP 8.4 support:_
+_Running FrankenPHP web server with PHP 8.5 support:_
 
 - **frankenphp**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
 

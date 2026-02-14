@@ -19,6 +19,10 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Bootstrap;
 
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Session\RedisSessionHandler;
+use RuntimeException;
+
 class PhpConfigurator
 {
     /**
@@ -53,7 +57,7 @@ class PhpConfigurator
     /**
      * Configures secure session settings if no session is active yet.
      */
-    public static function configureSession(): void
+    public static function configureSession(?Configuration $configuration = null): void
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
             ini_set('session.use_only_cookies', value: '1');
@@ -64,6 +68,23 @@ class PhpConfigurator
 
             if (defined('PMF_SESSION_SAVE_PATH') && PMF_SESSION_SAVE_PATH !== '') {
                 ini_set('session.save_path', value: PMF_SESSION_SAVE_PATH);
+            }
+
+            $sessionHandler = strtolower((string) ($configuration?->get('session.handler') ?? 'files'));
+            $redisDsn = trim((string) ($configuration?->get('session.redisDsn') ?? ''));
+
+            switch ($sessionHandler) {
+                case 'files':
+                    ini_set('session.save_handler', value: 'files');
+                    break;
+                case 'redis':
+                    RedisSessionHandler::configure($redisDsn);
+                    break;
+                default:
+                    throw new RuntimeException(sprintf(
+                        'Unsupported session handler "%s". Allowed values: files, redis.',
+                        $sessionHandler,
+                    ));
             }
         }
     }
