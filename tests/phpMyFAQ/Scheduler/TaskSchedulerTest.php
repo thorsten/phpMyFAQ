@@ -59,7 +59,7 @@ class TaskSchedulerTest extends TestCase
         $logger = $this->createStub(Logger::class);
         $configuration->method('getLogger')->willReturn($logger);
 
-        $session = $this->createMock(Session::class);
+        $session = $this->createStub(Session::class);
         $session->method('deleteSessions')->willThrowException(new RuntimeException('DB connection lost'));
         $session->method('getNumberOfSessions')->willReturn(5);
 
@@ -90,9 +90,17 @@ class TaskSchedulerTest extends TestCase
         $logger
             ->expects($this->once())
             ->method('error')
-            ->with($this->stringContains('session cleanup threw an exception'), $this->callback(
-                static fn(array $context): bool => isset($context['message'], $context['trace'], $context['cutoffTimestamp'], $context['retentionSeconds'])
-            ));
+            ->with(
+                $this->stringContains('session cleanup threw an exception'),
+                $this->callback(
+                    static fn(array $context): bool => isset(
+                        $context['message'],
+                        $context['trace'],
+                        $context['cutoffTimestamp'],
+                        $context['retentionSeconds'],
+                    ),
+                ),
+            );
         $logger->expects($this->once())->method('warning');
         $configuration->method('getLogger')->willReturn($logger);
 

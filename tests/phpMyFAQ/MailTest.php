@@ -6,8 +6,12 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Mail\Builtin;
 use phpMyFAQ\Mail\Smtp;
+use phpMyFAQ\Queue\DatabaseMessageBus;
+use phpMyFAQ\Queue\Message\SendMailMessage;
+use phpMyFAQ\Queue\Transport\DatabaseTransport;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 #[AllowMockObjectsWithoutExpectations]
@@ -221,5 +225,102 @@ class MailTest extends TestCase
 
         $result = $instance->safeEmail('test@example.com');
         $this->assertSame('test@example.com', $result);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSendQueuesMessageWhenQueueBusIsAvailable(): void
+    {
+        $logger = $this->createStub(\Monolog\Logger::class);
+
+        $transport = $this->createMock(DatabaseTransport::class);
+        $transport
+            ->expects($this->once())
+            ->method('enqueue')
+            ->with(
+                $this->callback(static function (string $payload): bool {
+                    $decoded = json_decode($payload, true);
+
+                    return (
+                        is_array($decoded)
+                        && ($decoded['class'] ?? null)
+                        === SendMailMessage::class
+                        && isset($decoded['payload']['metadata']['envelope'])
+                    );
+                }),
+                $this->isArray(),
+                'mail',
+            )
+            ->willReturn(1);
+        $messageBus = new DatabaseMessageBus($transport);
+
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects($this->once())->method('has')->with('phpmyfaq.queue.message-bus')->willReturn(true);
+        $container->expects($this->once())->method('get')->with('phpmyfaq.queue.message-bus')->willReturn($messageBus);
+
+        $configuration = $this->createMock(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnCallback(static function (string $item) use ($container): mixed {
+                return match ($item) {
+                    'mail.remoteSMTP' => false,
+                    'mail.useQueue' => true,
+                    'core.container' => $container,
+                    default => null,
+                };
+            });
+        $configuration->method('getVersion')->willReturn('4.2.0-alpha');
+        $configuration->method('getAdminEmail')->willReturn('admin@example.com');
+        $configuration->method('getTitle')->willReturn('phpMyFAQ');
+        $configuration->method('getMailProvider')->willReturn('smtp');
+        $configuration->method('getLogger')->willReturn($logger);
+
+        $mail = new Mail($configuration);
+        $mail->addTo('user@example.com');
+        $mail->subject = 'Queued subject';
+        $mail->message = 'Queued message';
+
+        $this->assertSame(1, $mail->send());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSendCanBypassQueueWhenDisabled(): void
+    {
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects($this->never())->method('has');
+        $container->expects($this->never())->method('get');
+
+        $configuration = $this->createMock(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnCallback(static function (string $item) use ($container): mixed {
+                return match ($item) {
+                    'mail.remoteSMTP' => false,
+                    'mail.useQueue' => false,
+                    'core.container' => $container,
+                    default => null,
+                };
+            });
+        $configuration->method('getVersion')->willReturn('4.2.0-alpha');
+        $configuration->method('getAdminEmail')->willReturn('admin@example.com');
+        $configuration->method('getTitle')->willReturn('phpMyFAQ');
+        $configuration->method('getMailProvider')->willReturn('smtp');
+        $configuration->method('getLogger')->willReturn($this->createStub(\Monolog\Logger::class));
+
+        $mail = new class($configuration) extends Mail {
+            public function sendPreparedEnvelope(string $recipients, array $headers, string $body): int
+            {
+                return 7;
+            }
+        };
+
+        $mail->addTo('user@example.com');
+        $mail->subject = 'Direct subject';
+        $mail->message = 'Direct message';
+
+        $this->assertSame(7, $mail->send());
     }
 }

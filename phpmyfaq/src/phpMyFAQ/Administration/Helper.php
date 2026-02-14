@@ -268,6 +268,29 @@ class Helper
         return $output;
     }
 
+    public static function renderMailProviderOptions(string $current): string
+    {
+        $providers = [
+            'none' => 'None',
+            'smtp' => 'SMTP',
+            'sendgrid' => 'SendGrid',
+            'ses' => 'Amazon SES',
+            'mailgun' => 'Mailgun',
+        ];
+        $output = '';
+
+        foreach ($providers as $value => $label) {
+            $output .= sprintf(
+                '<option value="%s"%s>%s</option>',
+                $value,
+                $value === $current ? ' selected' : '',
+                $label,
+            );
+        }
+
+        return $output;
+    }
+
     /**
      * Checks if the current user can access the content.
      */

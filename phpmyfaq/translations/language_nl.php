@@ -1296,4 +1296,13 @@ $PMF_LANG['msgError500Description'] = 'De server heeft een interne fout aangetro
 $PMF_LANG['msgErrorDetails'] = 'Foutdetails';
 $PMF_LANG['msgTryAgain'] = 'Opnieuw proberen';
 
+$LANG_CONF['mail.provider'] = ['select', 'Mail provider'];
+$LANG_CONF['mail.sendgridApiKey'] = ['password', 'SendGrid API key'];
+$LANG_CONF['mail.sesAccessKeyId'] = ['input', 'Amazon SES Access Key ID'];
+$LANG_CONF['mail.sesSecretAccessKey'] = ['password', 'Amazon SES Secret Access Key'];
+$LANG_CONF['mail.sesRegion'] = ['input', 'Amazon SES region'];
+$LANG_CONF['mail.mailgunApiKey'] = ['password', 'Mailgun API key'];
+$LANG_CONF['mail.mailgunDomain'] = ['input', 'Mailgun domain'];
+$LANG_CONF['mail.useQueue'] = ['checkbox', 'Use background worker queue for email delivery'];
+
 return $PMF_LANG;

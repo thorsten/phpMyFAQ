@@ -23,6 +23,9 @@ use phpMyFAQ\Configuration as CoreConfiguration;
 
 readonly class MailSettings
 {
+    private const string DEFAULT_PROVIDER = 'smtp';
+    private const array ALLOWED_PROVIDERS = ['smtp', 'sendgrid', 'ses', 'mailgun'];
+
     public function __construct(
         private CoreConfiguration $coreConfiguration,
     ) {
@@ -36,5 +39,18 @@ readonly class MailSettings
         }
 
         return (string) $sender;
+    }
+
+    public function getProvider(): string
+    {
+        $provider = strtolower(
+            (string) ($this->coreConfiguration->get(item: 'mail.provider') ?? self::DEFAULT_PROVIDER),
+        );
+
+        if (!in_array($provider, self::ALLOWED_PROVIDERS, true)) {
+            return self::DEFAULT_PROVIDER;
+        }
+
+        return $provider;
     }
 }

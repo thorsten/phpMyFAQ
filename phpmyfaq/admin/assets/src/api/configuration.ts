@@ -110,6 +110,16 @@ export const fetchTranslationProvider = async (currentValue: string): Promise<st
   return await response.text();
 };
 
+export const fetchMailProvider = async (currentValue: string): Promise<string> => {
+  const response = await fetchWrapper(`./api/configuration/mail-provider/${currentValue}`);
+
+  if (!response.ok) {
+    return '';
+  }
+
+  return await response.text();
+};
+
 export const fetchTemplates = async (): Promise<string> => {
   const response = await fetchWrapper(`./api/configuration/templates`);
 

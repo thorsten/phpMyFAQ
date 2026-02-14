@@ -22,9 +22,16 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Mail\Builtin;
+use phpMyFAQ\Mail\MailProviderInterface;
+use phpMyFAQ\Mail\Provider\MailgunProvider;
+use phpMyFAQ\Mail\Provider\SendGridProvider;
+use phpMyFAQ\Mail\Provider\SesProvider;
 use phpMyFAQ\Mail\Smtp;
+use phpMyFAQ\Queue\DatabaseMessageBus;
+use phpMyFAQ\Queue\Message\SendMailMessage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Throwable;
 
 /**
  * Class Mail
@@ -373,7 +380,7 @@ class Mail
      *
      * @throws Exception|TransportExceptionInterface
      */
-    public function send(): int
+    public function send(bool $forceSynchronousDelivery = false): int
     {
         // Check
         if ((count($this->to) + count($this->cc) + count($this->bcc)) < 1) {
@@ -423,22 +430,31 @@ class Mail
         // Prepare the body
         $this->createBody();
 
-        // Send the email adopting to the given MUA
-        $mua = self::getMUA($this->agent);
-
-        if (method_exists($mua, method: 'setAuthConfig')) {
-            $mua->setAuthConfig(
-                $this->configuration->get(item: 'mail.remoteSMTPServer'),
-                $this->configuration->get(item: 'mail.remoteSMTPUsername'),
-                $this->configuration->get(item: 'mail.remoteSMTPPassword'),
-                (int) $this->configuration->get(item: 'mail.remoteSMTPPort'),
-                $this->configuration->get(item: 'mail.remoteSMTPDisableTLSPeerVerification'),
-            );
+        if (
+            !$forceSynchronousDelivery
+            && $this->isQueueDeliveryEnabled()
+            && $this->enqueueForDelivery($recipients, $this->headers, $this->body)
+        ) {
+            return count($this->to) + count($this->cc) + count($this->bcc);
         }
 
-        return match ($this->agent) {
-            'smtp', 'built-in' => $mua->send($recipients, $this->headers, $this->body),
-            default => throw new Exception('<strong>Mail Class</strong>: ' . $this->agent . ' has no implementation!'),
+        return $this->sendPreparedEnvelope($recipients, $this->headers, $this->body);
+    }
+
+    /**
+     * @param array<string, string|int> $headers
+     * @throws Exception|TransportExceptionInterface
+     */
+    public function sendPreparedEnvelope(string $recipients, array $headers, string $body): int
+    {
+        $provider = $this->configuration->getMailProvider();
+
+        return match ($provider) {
+            'smtp' => $this->sendViaSmtpAgent($recipients, $headers, $body),
+            'sendgrid' => $this->createProvider('sendgrid')->send($recipients, $headers, $body),
+            'ses' => $this->createProvider('ses')->send($recipients, $headers, $body),
+            'mailgun' => $this->createProvider('mailgun')->send($recipients, $headers, $body),
+            default => $this->sendViaSmtpAgent($recipients, $headers, $body),
         };
     }
 
@@ -703,6 +719,104 @@ class Mail
         $class = 'phpMyFAQ\Mail\\' . $className;
 
         return new $class();
+    }
+
+    /**
+     * @param array<string, string|int> $headers
+     * @throws Exception|TransportExceptionInterface
+     */
+    private function sendViaSmtpAgent(string $recipients, array $headers, string $body): int
+    {
+        $mua = self::getMUA($this->agent);
+
+        if (method_exists($mua, method: 'setAuthConfig')) {
+            $mua->setAuthConfig(
+                $this->configuration->get(item: 'mail.remoteSMTPServer'),
+                $this->configuration->get(item: 'mail.remoteSMTPUsername'),
+                $this->configuration->get(item: 'mail.remoteSMTPPassword'),
+                (int) $this->configuration->get(item: 'mail.remoteSMTPPort'),
+                (bool) $this->configuration->get(item: 'mail.remoteSMTPDisableTLSPeerVerification'),
+            );
+        }
+
+        return match ($this->agent) {
+            'smtp', 'built-in' => $mua->send($recipients, $headers, $body),
+            default => throw new Exception('<strong>Mail Class</strong>: ' . $this->agent . ' has no implementation!'),
+        };
+    }
+
+    /**
+     * @param array<string, string|int> $headers
+     */
+    private function enqueueForDelivery(string $recipients, array $headers, string $body): bool
+    {
+        try {
+            $container = $this->configuration->get('core.container');
+            if (!is_object($container) || !method_exists($container, 'has') || !method_exists($container, 'get')) {
+                return false;
+            }
+
+            if (!$container->has('phpmyfaq.queue.message-bus')) {
+                return false;
+            }
+
+            $messageBus = $container->get('phpmyfaq.queue.message-bus');
+            if (!$messageBus instanceof DatabaseMessageBus) {
+                return false;
+            }
+
+            $firstRecipient = array_key_first($this->to);
+            if ($firstRecipient === null) {
+                return false;
+            }
+
+            $message = new SendMailMessage(
+                recipient: $firstRecipient,
+                subject: (string) ($headers['Subject'] ?? $this->subject),
+                body: $this->message !== '' ? $this->message : $body,
+                metadata: [
+                    'envelope' => [
+                        'recipients' => $recipients,
+                        'headers' => $headers,
+                        'body' => $body,
+                    ],
+                ],
+            );
+
+            $messageBus->dispatch($message, 'mail');
+
+            return true;
+        } catch (Throwable $throwable) {
+            $this->configuration->getLogger()->error('Queueing mail failed, falling back to synchronous delivery.', [
+                'message' => $throwable->getMessage(),
+                'trace' => $throwable->getTraceAsString(),
+            ]);
+
+            return false;
+        }
+    }
+
+    private function isQueueDeliveryEnabled(): bool
+    {
+        $useQueue = $this->configuration->get('mail.useQueue');
+        if ($useQueue === null) {
+            return false;
+        }
+
+        return (bool) $useQueue;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createProvider(string $provider): MailProviderInterface
+    {
+        return match ($provider) {
+            'sendgrid' => new SendGridProvider($this->configuration),
+            'ses' => new SesProvider($this->configuration),
+            'mailgun' => new MailgunProvider($this->configuration),
+            default => throw new Exception('Unsupported mail provider: ' . $provider),
+        };
     }
 
     /**

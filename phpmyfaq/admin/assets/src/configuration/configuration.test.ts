@@ -12,6 +12,7 @@ import {
   handleReleaseEnvironment,
   handleSearchRelevance,
   handleSeoMetaTags,
+  handleMailProvider,
 } from './configuration';
 import {
   fetchConfiguration,
@@ -22,6 +23,7 @@ import {
   fetchReleaseEnvironment,
   fetchSearchRelevance,
   fetchSeoMetaTags,
+  fetchMailProvider,
   fetchTemplates,
   fetchTranslations,
   saveConfiguration,
@@ -200,6 +202,21 @@ describe('Configuration Functions', () => {
 
       const selectBox = document.querySelector('select[name="edit[seo.metaTags]"]');
       expect(selectBox?.innerHTML).toContain('<option value="meta">Meta</option>');
+    });
+  });
+
+  describe('handleMailProvider', () => {
+    it('should fetch and insert mail provider options', async () => {
+      document.body.innerHTML = `
+        <select name="edit[mail.provider]" data-pmf-configuration-current-value="smtp"></select>
+      `;
+
+      (fetchMailProvider as Mock).mockResolvedValue('<option value="smtp">SMTP</option>');
+
+      await handleMailProvider();
+
+      const selectBox = document.querySelector('select[name="edit[mail.provider]"]');
+      expect(selectBox?.innerHTML).toContain('<option value="smtp">SMTP</option>');
     });
   });
 

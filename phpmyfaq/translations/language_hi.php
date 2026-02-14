@@ -1547,4 +1547,13 @@ $PMF_LANG['msgError500Description'] = 'सर्वर को एक आंत�
 $PMF_LANG['msgErrorDetails'] = 'त्रुटि विवरण';
 $PMF_LANG['msgTryAgain'] = 'पुनः प्रयास करें';
 
+$LANG_CONF['mail.provider'] = ['select', 'Mail provider'];
+$LANG_CONF['mail.sendgridApiKey'] = ['password', 'SendGrid API key'];
+$LANG_CONF['mail.sesAccessKeyId'] = ['input', 'Amazon SES Access Key ID'];
+$LANG_CONF['mail.sesSecretAccessKey'] = ['password', 'Amazon SES Secret Access Key'];
+$LANG_CONF['mail.sesRegion'] = ['input', 'Amazon SES region'];
+$LANG_CONF['mail.mailgunApiKey'] = ['password', 'Mailgun API key'];
+$LANG_CONF['mail.mailgunDomain'] = ['input', 'Mailgun domain'];
+$LANG_CONF['mail.useQueue'] = ['checkbox', 'Use background worker queue for email delivery'];
+
 return $PMF_LANG;
