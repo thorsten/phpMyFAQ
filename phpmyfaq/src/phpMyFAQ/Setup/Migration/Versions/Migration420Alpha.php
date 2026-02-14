@@ -214,7 +214,7 @@ readonly class Migration420Alpha extends AbstractMigration
         $recorder->addConfig('mail.sendgridApiKey', '');
         $recorder->addConfig('mail.sesAccessKeyId', '');
         $recorder->addConfig('mail.sesSecretAccessKey', '');
-        $recorder->addConfig('mail.sesRegion', 'us-east-1');
+        $recorder->addConfig('mail.sesRegion', '');
         $recorder->addConfig('mail.mailgunApiKey', '');
         $recorder->addConfig('mail.mailgunDomain', '');
 

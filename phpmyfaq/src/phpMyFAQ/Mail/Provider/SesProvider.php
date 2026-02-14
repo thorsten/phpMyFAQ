@@ -27,7 +27,7 @@ use Throwable;
 
 final class SesProvider implements MailProviderInterface
 {
-    private ?SesClient $sesClient = null;
+    private ?SesClient $sesClient;
 
     public function __construct(
         private readonly Configuration $configuration,
@@ -42,7 +42,7 @@ final class SesProvider implements MailProviderInterface
      */
     public function send(string $recipients, array $headers, string $body): int
     {
-        $source = $this->extractEmailAddress((string) ($headers['From'] ?? ''));
+        $source = $this->extractEmailAddress($headers['From'] ?? '');
         if ($source === '') {
             throw new Exception('Missing valid From header for SES provider.');
         }
@@ -60,7 +60,7 @@ final class SesProvider implements MailProviderInterface
                 ],
                 'Message' => [
                     'Subject' => [
-                        'Data' => (string) ($headers['Subject'] ?? ''),
+                        'Data' => $headers['Subject'] ?? '',
                         'Charset' => 'UTF-8',
                     ],
                     'Body' => [

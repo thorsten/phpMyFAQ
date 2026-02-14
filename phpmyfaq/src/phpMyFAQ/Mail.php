@@ -430,14 +430,14 @@ class Mail
         $this->createBody();
 
         if (!$forceSynchronousDelivery && $this->enqueueForDelivery($recipients, $this->headers, $this->body)) {
-            return 1;
+            return count($this->to) + count($this->cc) + count($this->bcc);
         }
 
         return $this->sendPreparedEnvelope($recipients, $this->headers, $this->body);
     }
 
     /**
-     * @param array<string, string> $headers
+     * @param array<string, string|int> $headers
      * @throws Exception|TransportExceptionInterface
      */
     public function sendPreparedEnvelope(string $recipients, array $headers, string $body): int
@@ -717,7 +717,7 @@ class Mail
     }
 
     /**
-     * @param array<string, string> $headers
+     * @param array<string, string|int> $headers
      * @throws Exception|TransportExceptionInterface
      */
     private function sendViaSmtpAgent(string $recipients, array $headers, string $body): int

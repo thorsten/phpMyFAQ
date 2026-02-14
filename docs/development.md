@@ -263,6 +263,7 @@ Set up your user information with your real name and a working e-mail address:
 
     $ git config --global user.name "Your Name"
     $ git config --global user.email you@example.com
+    $ git config core.autocrlf # if you're on Windows
 
 ### 9.6.4 Background jobs during development
 
@@ -280,7 +281,7 @@ php bin/worker.php 10
 ```
     $ git config core.autocrlf # if you're on Windows
 
-### 9.6.4 How to get the phpMyFAQ source code?
+### 9.6.5 How to get the phpMyFAQ source code?
 
 Clone your forked phpMyFAQ repository locally:
 
@@ -294,7 +295,7 @@ Add the upstream repository as remote:
 Please check our [coding standards](https://www.phpmyfaq.de/docs/standards) before sending patches or pull requests.
 Every PR on GitHub will check the coding standards and tests as well.
 
-### 9.6.5 Run Docker Compose
+### 9.6.6 Run Docker Compose
 
 The Dockerfile provided in the phpMyFAQ repository only builds an environment
 to run any release for development purposes.
@@ -341,7 +342,7 @@ Then services will be available at the following addresses:
 - phpMyAdmin: (http://localhost:8000)
 - pgAdmin: (http://localhost:8008)
 
-### 9.6.6 Fetch third party libraries and install phpMyFAQ
+### 9.6.7 Fetch third party libraries and install phpMyFAQ
 
 After cloning your forked repository, you have to fetch the 3rd party libraries used in phpMyFAQ:
 
@@ -377,14 +378,14 @@ To run the Vitest-based tests, you can use the following command:
 
     $ pnpm test
 
-### 9.6.7 Coding standards
+### 9.6.8 Coding standards
 
 The following coding standards are used in phpMyFAQ:
 
 - PHP: [PER Coding Style 3.0](https://www.php-fig.org/per/coding-style/)
 - TypeScript with ESLint recommendations
 
-### 9.6.8 Rebase your Patch
+### 9.6.9 Rebase your Patch
 
 Before submitting your patch, please update your local branch:
 
@@ -394,7 +395,7 @@ Before submitting your patch, please update your local branch:
     $ git checkout YOUR_BRANCH_NAME
     $ git rebase main
 
-### 9.6.9 Make a Pull Request
+### 9.6.10 Make a Pull Request
 
 You can now make a pull request on the phpMyFAQ GitHub repository.
 

@@ -1355,4 +1355,12 @@ $PMF_LANG['msgError500Description'] = 'Ο διακομιστής αντιμετ�
 $PMF_LANG['msgErrorDetails'] = 'Λεπτομέρειες σφάλματος';
 $PMF_LANG['msgTryAgain'] = 'Δοκιμάστε ξανά';
 
+$LANG_CONF['mail.provider'] = ['select', 'Mail provider'];
+$LANG_CONF['mail.sendgridApiKey'] = ['password', 'SendGrid API key'];
+$LANG_CONF['mail.sesAccessKeyId'] = ['input', 'Amazon SES Access Key ID'];
+$LANG_CONF['mail.sesSecretAccessKey'] = ['password', 'Amazon SES Secret Access Key'];
+$LANG_CONF['mail.sesRegion'] = ['input', 'Amazon SES region'];
+$LANG_CONF['mail.mailgunApiKey'] = ['password', 'Mailgun API key'];
+$LANG_CONF['mail.mailgunDomain'] = ['input', 'Mailgun domain'];
+
 return $PMF_LANG;

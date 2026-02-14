@@ -123,7 +123,7 @@ final class AdminLogController extends AbstractAdministrationApiController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/statistics/admin-log/verify', name: 'admin.api.statistics.admin-log.verify', methods: ['GET'])]
+    #[Route(path: 'statistics/admin-log/verify', name: 'admin.api.statistics.admin-log.verify', methods: ['GET'])]
     public function verify(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::STATISTICS_ADMINLOG);

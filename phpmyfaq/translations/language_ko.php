@@ -1543,4 +1543,12 @@ $PMF_LANG['msgError500Description'] = '서버에서 내부 오류가 발생하�
 $PMF_LANG['msgErrorDetails'] = '오류 세부정보';
 $PMF_LANG['msgTryAgain'] = '다시 시도';
 
+$LANG_CONF['mail.provider'] = ['select', 'Mail provider'];
+$LANG_CONF['mail.sendgridApiKey'] = ['password', 'SendGrid API key'];
+$LANG_CONF['mail.sesAccessKeyId'] = ['input', 'Amazon SES Access Key ID'];
+$LANG_CONF['mail.sesSecretAccessKey'] = ['password', 'Amazon SES Secret Access Key'];
+$LANG_CONF['mail.sesRegion'] = ['input', 'Amazon SES region'];
+$LANG_CONF['mail.mailgunApiKey'] = ['password', 'Mailgun API key'];
+$LANG_CONF['mail.mailgunDomain'] = ['input', 'Mailgun domain'];
+
 return $PMF_LANG;
