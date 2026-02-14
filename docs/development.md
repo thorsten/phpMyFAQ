@@ -496,6 +496,49 @@ Example:
 
     {{ userId | userName }}
 
+### 9.2.3 Dynamic template set and theme upload
+
+phpMyFAQ v4.2 introduced dynamic template set loading and a storage-backed `ThemeManager`.
+
+- Runtime template set is read from configuration key `layout.templateSet`.
+- `TwigWrapper` now validates the requested set and falls back to `default` if the
+  configured set is invalid or missing on disk.
+- Tenant provisioning can skip physical template copies and only persist the
+  template reference in `faqconfig` (`layout.templateSet`).
+
+Theme uploads use `phpMyFAQ\Template\ThemeManager`:
+
+- Input format: ZIP archive.
+- Required file: `index.twig` (theme root or `<themeName>/index.twig`).
+- Allowed file extensions:
+  `.twig`, `.css`, `.js`, `.json`, `.png`, `.jpg`, `.jpeg`, `.svg`, `.webp`, `.gif`,
+  `.woff`, `.woff2`, `.ttf`, `.otf`.
+- Upload target: `StorageInterface` at `<themeRootPath>/<themeName>/...`
+  (default root path: `themes`).
+- Activation: `layout.templateSet` is updated via `ThemeManager::activateTheme()`.
+
+Example usage:
+
+```php
+use phpMyFAQ\Template\ThemeManager;
+
+$themeManager = new ThemeManager($configuration, $storage, 'themes');
+$themeManager->uploadTheme('tenant-theme', '/tmp/tenant-theme.zip');
+$themeManager->activateTheme('tenant-theme');
+```
+
+Admin UI:
+
+- Open `/admin/configuration`
+- Use the `layout` tab
+- Upload ZIP in the `layout` tab
+- Select the template in `layout.templateSet` and save configuration
+
+Security checks:
+
+- Requires `CONFIGURATION_EDIT` permission
+- CSRF token (`theme-manager`) is required for upload/activation
+
 ## 9.8 Working with the Docker containers
 
 ### 9.9.1 Create a new SSL certificate

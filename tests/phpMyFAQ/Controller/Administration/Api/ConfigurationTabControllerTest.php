@@ -176,4 +176,16 @@ class ConfigurationTabControllerTest extends TestCase
         $this->expectException(\Exception::class);
         $controller->save($request);
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadThemeRequiresAuthentication(): void
+    {
+        $request = new Request();
+        $controller = new ConfigurationTabController();
+
+        $this->expectException(\Exception::class);
+        $controller->uploadTheme($request);
+    }
 }

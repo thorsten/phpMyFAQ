@@ -60,10 +60,20 @@ class ClientTest extends TestCase
         $dbMock = $this->createMock(DatabaseDriver::class);
         $this->configuration->method('getDb')->willReturn($dbMock);
 
-        $dbMock->expects($this->exactly(5))->method('query');
+        $queries = [];
+        $dbMock
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$queries): bool {
+                $queries[] = $query;
+                return true;
+            });
+        $dbMock->method('escape')->willReturnCallback(static fn(string $value): string => $value);
 
         $this->client->setClientUrl('https://example.com');
+        $this->client->setClientTemplateSet('tenant-theme');
         $this->client->createClientTables($prefix);
+
+        $this->assertTrue($this->queryContains($queries, "WHERE config_name = 'layout.templateSet'"));
     }
 
     public function testCopyConstantsFile(): void
@@ -84,6 +94,15 @@ class ClientTest extends TestCase
         $this->filesystem->expects($this->once())->method('recursiveCopy');
 
         $this->client->copyTemplateFolder($destination, $templateDir);
+    }
+
+    public function testCopyTemplateFolderWithoutCopyOnlyUpdatesTemplateReference(): void
+    {
+        $this->filesystem->expects($this->never())->method('recursiveCopy');
+
+        $this->client->copyTemplateFolder('/path/to/destination', 'tenant-theme', false);
+
+        $this->assertTrue(true);
     }
 
     public function testMoveClientFolder(): void
@@ -142,6 +161,10 @@ class ClientTest extends TestCase
         $this->assertNotEmpty($queries);
         $this->assertTrue($this->queryContains($queries, 'SET search_path TO "tenant_schema"'));
         $this->assertContains('INSERT INTO "tenant_schema".faqconfig SELECT * FROM faqconfig', $queries);
+        $this->assertContains(
+            "UPDATE \"tenant_schema\".faqconfig SET config_value = 'default' WHERE config_name = 'layout.templateSet'",
+            $queries,
+        );
         $this->assertContains('INSERT INTO "tenant_schema".faqright SELECT * FROM faqright', $queries);
         $this->assertContains(
             'INSERT INTO "tenant_schema".faquser_right SELECT * FROM faquser_right WHERE user_id = 1',

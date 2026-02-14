@@ -146,3 +146,10 @@ export const saveConfiguration = async (data: FormData): Promise<Response> => {
     body: data,
   })) as Response;
 };
+
+export const uploadThemeArchive = async (data: FormData): Promise<Response> => {
+  return (await fetchJson('api/configuration/themes/upload', {
+    method: 'POST',
+    body: data,
+  })) as Response;
+};
