@@ -746,7 +746,7 @@ class Mail
     }
 
     /**
-     * @param array<string, string> $headers
+     * @param array<string, string|int> $headers
      */
     private function enqueueForDelivery(string $recipients, array $headers, string $body): bool
     {
@@ -800,7 +800,7 @@ class Mail
     {
         $useQueue = $this->configuration->get('mail.useQueue');
         if ($useQueue === null) {
-            return true;
+            return false;
         }
 
         return (bool) $useQueue;

@@ -1684,6 +1684,6 @@ $LANG_CONF['mail.sesRegion'] = ['input', 'Amazon SES-Region'];
 $LANG_CONF['mail.mailgunApiKey'] = ['password', 'Mailgun API-Schlüssel'];
 $LANG_CONF['mail.mailgunDomain'] = ['input', 'Mailgun-Domain'];
 $LANG_CONF['mail.mailgunRegion'] = ['input', 'Mailgun Region', 'z.B. us, eu'];
-$LANG_CONF['mail.useQueue'] = ['checkbox', 'Use background worker queue for email delivery'];
+$LANG_CONF['mail.useQueue'] = ['checkbox', 'Hintergrund-Worker-Warteschlange für die E-Mail-Zustellung verwenden'];
 
 return $PMF_LANG;
