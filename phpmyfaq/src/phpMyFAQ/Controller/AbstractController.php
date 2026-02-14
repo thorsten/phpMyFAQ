@@ -130,7 +130,11 @@ abstract class AbstractController
      */
     public function getTwigWrapper(): TwigWrapper
     {
-        $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+        $twigWrapper = new TwigWrapper(
+            PMF_ROOT_DIR . '/assets/templates',
+            false,
+            $this->configuration->getTemplateSet(),
+        );
 
         foreach ($this->twigExtensions as $twigExtension) {
             $twigWrapper->addExtension($twigExtension);

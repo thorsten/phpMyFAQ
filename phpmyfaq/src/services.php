@@ -106,6 +106,7 @@ use phpMyFAQ\Storage\StorageInterface;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\System;
 use phpMyFAQ\Tags;
+use phpMyFAQ\Template\ThemeManager;
 use phpMyFAQ\Tenant\TenantContext;
 use phpMyFAQ\Tenant\TenantContextResolver;
 use phpMyFAQ\Tenant\TenantEventDispatcher;
@@ -521,6 +522,11 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('phpmyfaq.tags', Tags::class)->args([
         service('phpmyfaq.configuration'),
+    ]);
+
+    $services->set('phpmyfaq.template.theme-manager', ThemeManager::class)->args([
+        service('phpmyfaq.configuration'),
+        service('phpmyfaq.storage'),
     ]);
 
     // HTTP Client for Translation APIs

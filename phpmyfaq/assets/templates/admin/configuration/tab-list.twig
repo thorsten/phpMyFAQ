@@ -20,6 +20,13 @@
   </div>
 {% endfor %}
 
+{% if mode == 'layout' %}
+  {% include '@admin/configuration/themes.upload.twig' with {
+    csrfToken: themeCsrfToken,
+    activeTheme: activeTheme
+  } only %}
+{% endif %}
+
 <script>
   try {
     const generateUUID = () => {

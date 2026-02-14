@@ -50,9 +50,13 @@ class TwigWrapper
         string $templatePath,
         /* @mago-ignore lint:no-boolean-flag-parameter */
         private bool $isSetup = false,
+        ?string $templateSetName = null,
     ) {
+        $resolvedTemplateSet = $this->resolveTemplateSetName($templatePath, $templateSetName);
+        self::$templateSetName = $resolvedTemplateSet;
+
         $filesystemLoader = new FilesystemLoader();
-        $filesystemLoader->addPath($templatePath . '/' . self::$templateSetName);
+        $filesystemLoader->addPath($templatePath . '/' . $resolvedTemplateSet);
         $filesystemLoader->addPath($templatePath . '/admin', namespace: 'admin');
         $filesystemLoader->addPath($templatePath . '/setup', namespace: 'setup');
 
@@ -125,5 +129,20 @@ class TwigWrapper
     public static function setTemplateSetName(string $tplSetName = 'default'): void
     {
         self::$templateSetName = $tplSetName;
+    }
+
+    private function resolveTemplateSetName(string $templatePath, ?string $templateSetName): string
+    {
+        $requestedTemplateSet = trim((string) ($templateSetName ?? self::$templateSetName));
+        if ($requestedTemplateSet === '' || !preg_match('/^[A-Za-z0-9_-]+$/', $requestedTemplateSet)) {
+            $requestedTemplateSet = 'default';
+        }
+
+        $requestedPath = $templatePath . '/' . $requestedTemplateSet;
+        if (is_dir($requestedPath)) {
+            return $requestedTemplateSet;
+        }
+
+        return 'default';
     }
 }

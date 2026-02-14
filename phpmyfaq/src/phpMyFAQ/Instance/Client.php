@@ -40,6 +40,8 @@ class Client extends Instance
 
     private string $clientUrl;
 
+    private string $clientTemplateSet = 'default';
+
     /**
      * Constructor.
      */
@@ -56,6 +58,16 @@ class Client extends Instance
     public function setClientUrl(string $clientUrl): void
     {
         $this->clientUrl = $clientUrl;
+    }
+
+    public function setClientTemplateSet(string $templateSet): void
+    {
+        $templateSet = trim($templateSet);
+        if ($templateSet === '') {
+            $templateSet = 'default';
+        }
+
+        $this->clientTemplateSet = $templateSet;
     }
 
     /**
@@ -274,6 +286,17 @@ class Client extends Instance
         );
 
         $this->executeSchemaQuery(
+            sprintf(
+                "UPDATE %sfaqconfig SET config_value = '%s' WHERE config_name = 'layout.templateSet'",
+                $targetPrefix,
+                $this->configuration->getDb()->escape($this->clientTemplateSet),
+            ),
+            'UPDATE faqconfig',
+            $targetPrefix,
+            $sourcePrefix,
+        );
+
+        $this->executeSchemaQuery(
             sprintf('INSERT INTO %sfaqright SELECT * FROM %sfaqright', $targetPrefix, $sourcePrefix),
             'INSERT faqright',
             $targetPrefix,
@@ -369,6 +392,13 @@ class Client extends Instance
                 $prefix,
                 $this->configuration->getDb()->escape($this->clientUrl),
             ));
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                "UPDATE %sfaqconfig SET config_value = '%s' WHERE config_name = 'layout.templateSet'",
+                $prefix,
+                $this->configuration->getDb()->escape($this->clientTemplateSet),
+            ));
 
         $this->insertRows($prefix . 'faqright', $seedRows['faqright'] ?? []);
         $this->insertRows($prefix . 'faquser_right', $seedRows['faquser_right'] ?? []);
@@ -454,6 +484,13 @@ class Client extends Instance
             $this->configuration
                 ->getDb()
                 ->query(sprintf(
+                    "UPDATE %sfaqconfig SET config_value = '%s' WHERE config_name = 'layout.templateSet'",
+                    $prefix,
+                    $this->configuration->getDb()->escape($this->clientTemplateSet),
+                ));
+            $this->configuration
+                ->getDb()
+                ->query(sprintf(
                     'INSERT INTO %sfaqright SELECT * FROM %sfaqright',
                     $prefix,
                     Database::getTablePrefix(),
@@ -495,10 +532,20 @@ class Client extends Instance
      *
      * @param string $destination Destination folder
      * @param string $templateDir Template folder
+     * @param bool $copyTemplateFiles Set to false to only reference the template set in config
      * @throws Exception
      */
-    public function copyTemplateFolder(string $destination, string $templateDir = 'default'): void
-    {
+    public function copyTemplateFolder(
+        string $destination,
+        string $templateDir = 'default',
+        bool $copyTemplateFiles = true,
+    ): void {
+        $this->setClientTemplateSet($templateDir);
+
+        if (!$copyTemplateFiles) {
+            return;
+        }
+
         $sourceTpl = $this->filesystem->getRootPath() . '/assets/templates/' . $templateDir;
         $destTpl = $destination . '/assets/templates/';
 
