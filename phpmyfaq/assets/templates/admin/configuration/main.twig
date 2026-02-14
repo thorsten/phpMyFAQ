@@ -24,92 +24,121 @@
 
     <div id="pmf-configuration-result"></div>
 
-    <div class="row">
-      <div class="col-lg-12">
-        <div id="pmf-admin-configuration-container">
-
-          <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="nav-item">
+    <div id="pmf-admin-configuration-container">
+      <div class="row g-3">
+        <div class="col-12 col-lg-3 col-xl-2">
+          <div class="pmf-configuration-filter mb-2">
+            <label class="visually-hidden" for="pmf-configuration-tab-filter">Filter configuration tabs</label>
+            <input
+              type="search"
+              class="form-control form-control-sm"
+              id="pmf-configuration-tab-filter"
+              placeholder="Filter tabs..."
+              autocomplete="off"
+            >
+          </div>
+          <ul class="nav nav-tabs pmf-configuration-tabs flex-nowrap flex-lg-column" role="tablist">
+            <li class="pmf-configuration-group" data-config-group="core">
+              <span>General</span>
+            </li>
+            <li role="presentation" class="nav-item" data-config-group="core" data-config-label="{{ 'mainControlCenter' | translate }}">
               <a href="#main" aria-controls="main" role="tab" data-bs-toggle="tab" class="nav-link active">
                 <i aria-hidden="true" class="bi bi-house-check"></i>
                 {{ 'mainControlCenter' | translate }}
               </a>
             </li>
-            <li role="presentation" class="nav-item">
+            <li role="presentation" class="nav-item" data-config-group="core" data-config-label="{{ 'recordsControlCenter' | translate }}">
               <a href="#records" aria-controls="records" role="tab" data-bs-toggle="tab" class="nav-link">
                 <i aria-hidden="true" class="bi bi-list"></i>
                 {{ 'recordsControlCenter' | translate }}
               </a>
             </li>
-            <li role="presentation" class="nav-item">
+            <li role="presentation" class="nav-item" data-config-group="core" data-config-label="{{ 'searchControlCenter' | translate }}">
               <a href="#search" aria-controls="search" role="tab" data-bs-toggle="tab" class="nav-link">
                 <i aria-hidden="true" class="bi bi-search"></i>
                 {{ 'searchControlCenter' | translate }}
               </a>
             </li>
-            <li role="presentation" class="nav-item">
+            <li class="pmf-configuration-group" data-config-group="security">
+              <span>{{ 'securityControlCenter' | translate }}</span>
+            </li>
+            <li role="presentation" class="nav-item" data-config-group="security" data-config-label="{{ 'securityControlCenter' | translate }}">
               <a href="#security" aria-controls="security" role="tab" data-bs-toggle="tab" class="nav-link">
                 <i aria-hidden="true" class="bi bi-exclamation-circle"></i>
                 {{ 'securityControlCenter' | translate }}
               </a>
             </li>
-            <li role="presentation" class="nav-item">
+            <li role="presentation" class="nav-item" data-config-group="security" data-config-label="{{ 'spamControlCenter' | translate }}">
               <a href="#spam" aria-controls="spam" role="tab" data-bs-toggle="tab" class="nav-link">
                 <i aria-hidden="true" class="bi bi-hand-thumbs-down"></i>
                 {{ 'spamControlCenter' | translate }}
               </a>
             </li>
-            <li role="presentation" class="nav-item">
+            <li role="presentation" class="nav-item" data-config-group="security" data-config-label="{{ 'msgSeoCenter' | translate }}">
               <a href="#seo" aria-controls="seo" role="tab" data-bs-toggle="tab" class="nav-link">
                 <i aria-hidden="true" class="bi bi-search"></i>
                 {{ 'msgSeoCenter' | translate }}
               </a>
             </li>
-            <li role="presentation" class="nav-item">
-              <a href="#layout" aria-controls="seo" role="tab" data-bs-toggle="tab" class="nav-link">
+            <li class="pmf-configuration-group" data-config-group="appearance">
+              <span>{{ 'layoutControlCenter' | translate }}</span>
+            </li>
+            <li role="presentation" class="nav-item" data-config-group="appearance" data-config-label="{{ 'layoutControlCenter' | translate }}">
+              <a href="#layout" aria-controls="layout" role="tab" data-bs-toggle="tab" class="nav-link">
                 <i aria-hidden="true" class="bi bi-pencil"></i>
                 {{ 'layoutControlCenter' | translate }}
               </a>
             </li>
-            <li role="presentation" class="nav-item">
+            <li class="pmf-configuration-group" data-config-group="communication">
+              <span>Communication</span>
+            </li>
+            <li role="presentation" class="nav-item" data-config-group="communication" data-config-label="{{ 'mailControlCenter' | translate }}">
               <a href="#mail" aria-controls="mail" role="tab" data-bs-toggle="tab" class="nav-link">
                 <i aria-hidden="true" class="bi bi-inbox"></i>
                 {{ 'mailControlCenter' | translate }}
               </a>
             </li>
-            <li role="presentation" class="nav-item">
-              <a href="#api" aria-controls="ldap" role="tab" data-bs-toggle="tab" class="nav-link">
-                <i aria-hidden="true" class="bi bi-gear"></i>
-                API
-              </a>
-            </li>
-            <li role="presentation" class="nav-item">
-              <a href="#upgrade" aria-controls="upgrade" role="tab" data-bs-toggle="tab" class="nav-link">
-                <i aria-hidden="true" class="bi bi-arrow-clockwise"></i>
-                {{ 'upgradeControlCenter' | translate }}
-              </a>
-            </li>
-            <li role="presentation" class="nav-item">
-              <a href="#translation" aria-controls="ldap" role="tab" data-bs-toggle="tab" class="nav-link">
+            <li role="presentation" class="nav-item" data-config-group="communication" data-config-label="{{ 'msgTranslation' | translate }}">
+              <a href="#translation" aria-controls="translation" role="tab" data-bs-toggle="tab" class="nav-link">
                 <i aria-hidden="true" class="bi bi-translate"></i>
                 {{ 'msgTranslation' | translate }}
               </a>
             </li>
-            <li role="presentation" class="nav-item">
+            <li role="presentation" class="nav-item" data-config-group="communication" data-config-label="{{ 'pushControlCenter' | translate }}">
               <a href="#push" aria-controls="push" role="tab" data-bs-toggle="tab" class="nav-link">
                 <i aria-hidden="true" class="bi bi-bell"></i>
                 {{ 'pushControlCenter' | translate }}
               </a>
             </li>
-            <li role="presentation" class="nav-item">
+            <li class="pmf-configuration-group" data-config-group="integrations">
+              <span>Integrations</span>
+            </li>
+            <li role="presentation" class="nav-item" data-config-group="integrations" data-config-label="API">
+              <a href="#api" aria-controls="api" role="tab" data-bs-toggle="tab" class="nav-link">
+                <i aria-hidden="true" class="bi bi-gear"></i>
+                API
+              </a>
+            </li>
+            <li role="presentation" class="nav-item" data-config-group="integrations" data-config-label="LDAP">
               <a href="#ldap" aria-controls="ldap" role="tab" data-bs-toggle="tab" class="nav-link">
                 <i aria-hidden="true" class="bi bi-database"></i>
                 LDAP
               </a>
             </li>
+            <li class="pmf-configuration-group" data-config-group="maintenance">
+              <span>{{ 'upgradeControlCenter' | translate }}</span>
+            </li>
+            <li role="presentation" class="nav-item" data-config-group="maintenance" data-config-label="{{ 'upgradeControlCenter' | translate }}">
+              <a href="#upgrade" aria-controls="upgrade" role="tab" data-bs-toggle="tab" class="nav-link">
+                <i aria-hidden="true" class="bi bi-arrow-clockwise"></i>
+                {{ 'upgradeControlCenter' | translate }}
+              </a>
+            </li>
           </ul>
+        </div>
 
-          <div class="tab-content p-2 pt-4 pmf-configuration-panel border-bottom mb-4 shadow">
+        <div class="col-12 col-lg-9 col-xl-10">
+          <div class="tab-content p-2 pt-4 pmf-configuration-panel border-bottom mb-4">
             <div role="tabpanel" class="tab-pane fade show active" id="main"></div>
             <div role="tabpanel" class="tab-pane fade" id="records"></div>
             <div role="tabpanel" class="tab-pane fade" id="search"></div>

@@ -35,8 +35,13 @@ import { handleWebPush } from './webpush';
 import { Response } from '../interfaces';
 
 export const handleConfiguration = async (): Promise<void> => {
-  const configTabList: HTMLElement[] = [].slice.call(document.querySelectorAll('#configuration-list a'));
+  const configTabList: HTMLElement[] = [].slice.call(
+    document.querySelectorAll('#configuration-list .pmf-configuration-tabs a[data-bs-toggle="tab"]')
+  );
   const result = document.getElementById('pmf-configuration-result') as HTMLElement;
+
+  handleConfigurationTabFiltering();
+
   if (configTabList.length) {
     let tabLoaded: boolean = false;
     configTabList.forEach((element: HTMLElement): void => {
@@ -96,6 +101,57 @@ export const handleConfiguration = async (): Promise<void> => {
       await handleTranslation();
     }
   }
+};
+
+export const handleConfigurationTabFiltering = (): void => {
+  const filterInput = document.getElementById('pmf-configuration-tab-filter') as HTMLInputElement | null;
+  const tabList = document.querySelector('.pmf-configuration-tabs') as HTMLElement | null;
+
+  if (!filterInput || !tabList) {
+    return;
+  }
+
+  const navItems = Array.from(tabList.querySelectorAll('li.nav-item[data-config-group]')) as HTMLLIElement[];
+  const groupHeaders = Array.from(
+    tabList.querySelectorAll('li.pmf-configuration-group[data-config-group]')
+  ) as HTMLLIElement[];
+
+  if (!navItems.length) {
+    return;
+  }
+
+  const updateVisibleTabs = (): void => {
+    const query = filterInput.value.trim().toLowerCase();
+    const visibleGroups = new Set<string>();
+
+    navItems.forEach((item: HTMLLIElement): void => {
+      const link = item.querySelector('a.nav-link');
+      const label = (item.dataset.configLabel || link?.textContent || '').trim().toLowerCase();
+      const isVisible = query === '' || label.includes(query);
+      item.classList.toggle('d-none', !isVisible);
+
+      if (isVisible) {
+        visibleGroups.add(item.dataset.configGroup || '');
+      }
+    });
+
+    groupHeaders.forEach((groupHeader: HTMLLIElement): void => {
+      const groupName = groupHeader.dataset.configGroup || '';
+      groupHeader.classList.toggle('d-none', !visibleGroups.has(groupName));
+    });
+
+    const activeLink = tabList.querySelector('a.nav-link.active') as HTMLAnchorElement | null;
+    const activeItem = activeLink?.closest('li.nav-item') as HTMLLIElement | null;
+
+    if (activeItem?.classList.contains('d-none')) {
+      const firstVisibleLink = tabList.querySelector('li.nav-item:not(.d-none) a.nav-link') as HTMLAnchorElement | null;
+      firstVisibleLink?.click();
+    }
+  };
+
+  filterInput.addEventListener('input', updateVisibleTabs);
+  filterInput.addEventListener('search', updateVisibleTabs);
+  updateVisibleTabs();
 };
 
 export const handleSaveConfiguration = async (): Promise<void> => {

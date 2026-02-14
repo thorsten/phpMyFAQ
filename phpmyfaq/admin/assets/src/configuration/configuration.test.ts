@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import {
   handleConfiguration,
+  handleConfigurationTabFiltering,
   handleSaveConfiguration,
   handleSMTPPasswordToggle,
   handleTranslation,
@@ -223,10 +224,16 @@ describe('Configuration Functions', () => {
   describe('handleConfiguration', () => {
     it('should handle configuration tabs and load data', async () => {
       document.body.innerHTML = `
-        <div id="configuration-list">
-          <a href="#main"></a>
-          <a href="#layout"></a>
-        </div>
+        <form id="configuration-list">
+          <ul class="pmf-configuration-tabs">
+            <li class="nav-item" data-config-group="core" data-config-label="Main">
+              <a href="#main" data-bs-toggle="tab"></a>
+            </li>
+            <li class="nav-item" data-config-group="appearance" data-config-label="Layout">
+              <a href="#layout" data-bs-toggle="tab"></a>
+            </li>
+          </ul>
+        </form>
         <div id="pmf-configuration-result"></div>
         <input id="pmf-language" value="en">
         <div id="main"></div>
@@ -240,6 +247,40 @@ describe('Configuration Functions', () => {
       document.querySelector('#configuration-list a')?.dispatchEvent(event);
 
       expect(fetchConfiguration).toHaveBeenCalled();
+    });
+  });
+
+  describe('handleConfigurationTabFiltering', () => {
+    it('should filter tabs and hide non-matching groups', () => {
+      document.body.innerHTML = `
+        <input id="pmf-configuration-tab-filter" value="" />
+        <ul class="pmf-configuration-tabs">
+          <li class="pmf-configuration-group" data-config-group="core"><span>Core</span></li>
+          <li class="nav-item" data-config-group="core" data-config-label="Main">
+            <a class="nav-link" href="#main"></a>
+          </li>
+          <li class="pmf-configuration-group" data-config-group="maintenance"><span>Maintenance</span></li>
+          <li class="nav-item" data-config-group="maintenance" data-config-label="Upgrade">
+            <a class="nav-link active" href="#upgrade"></a>
+          </li>
+        </ul>
+      `;
+
+      handleConfigurationTabFiltering();
+
+      const filterInput = document.getElementById('pmf-configuration-tab-filter') as HTMLInputElement;
+      filterInput.value = 'main';
+      filterInput.dispatchEvent(new Event('input'));
+
+      const mainItem = document.querySelector('li.nav-item[data-config-label="Main"]');
+      const upgradeItem = document.querySelector('li.nav-item[data-config-label="Upgrade"]');
+      const coreGroup = document.querySelector('li.pmf-configuration-group[data-config-group="core"]');
+      const maintenanceGroup = document.querySelector('li.pmf-configuration-group[data-config-group="maintenance"]');
+
+      expect(mainItem?.classList.contains('d-none')).toBe(false);
+      expect(upgradeItem?.classList.contains('d-none')).toBe(true);
+      expect(coreGroup?.classList.contains('d-none')).toBe(false);
+      expect(maintenanceGroup?.classList.contains('d-none')).toBe(true);
     });
   });
 });
