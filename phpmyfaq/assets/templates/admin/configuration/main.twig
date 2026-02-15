@@ -39,7 +39,7 @@
           </div>
           <ul class="nav nav-tabs pmf-configuration-tabs flex-nowrap flex-lg-column" role="tablist">
             <li class="pmf-configuration-group" data-config-group="core">
-              <span>General</span>
+              <span>{{ 'mainControlCenter' | translate }}</span>
             </li>
             <li role="presentation" class="nav-item" data-config-group="core" data-config-label="{{ 'mainControlCenter' | translate }}">
               <a href="#main" aria-controls="main" role="tab" data-bs-toggle="tab" class="nav-link active">
@@ -59,6 +59,12 @@
                 {{ 'searchControlCenter' | translate }}
               </a>
             </li>
+            <li role="presentation" class="nav-item" data-config-group="communication" data-config-label="{{ 'msgTranslation' | translate }}">
+              <a href="#translation" aria-controls="translation" role="tab" data-bs-toggle="tab" class="nav-link">
+                <i aria-hidden="true" class="bi bi-translate"></i>
+                {{ 'msgTranslation' | translate }}
+              </a>
+            </li>
             <li class="pmf-configuration-group" data-config-group="security">
               <span>{{ 'securityControlCenter' | translate }}</span>
             </li>
@@ -74,12 +80,6 @@
                 {{ 'spamControlCenter' | translate }}
               </a>
             </li>
-            <li role="presentation" class="nav-item" data-config-group="security" data-config-label="{{ 'msgSeoCenter' | translate }}">
-              <a href="#seo" aria-controls="seo" role="tab" data-bs-toggle="tab" class="nav-link">
-                <i aria-hidden="true" class="bi bi-search"></i>
-                {{ 'msgSeoCenter' | translate }}
-              </a>
-            </li>
             <li class="pmf-configuration-group" data-config-group="appearance">
               <span>{{ 'layoutControlCenter' | translate }}</span>
             </li>
@@ -89,6 +89,12 @@
                 {{ 'layoutControlCenter' | translate }}
               </a>
             </li>
+            <li role="presentation" class="nav-item" data-config-group="security" data-config-label="{{ 'msgSeoCenter' | translate }}">
+              <a href="#seo" aria-controls="seo" role="tab" data-bs-toggle="tab" class="nav-link">
+                <i aria-hidden="true" class="bi bi-search"></i>
+                {{ 'msgSeoCenter' | translate }}
+              </a>
+            </li>
             <li class="pmf-configuration-group" data-config-group="communication">
               <span>Communication</span>
             </li>
@@ -96,12 +102,6 @@
               <a href="#mail" aria-controls="mail" role="tab" data-bs-toggle="tab" class="nav-link">
                 <i aria-hidden="true" class="bi bi-inbox"></i>
                 {{ 'mailControlCenter' | translate }}
-              </a>
-            </li>
-            <li role="presentation" class="nav-item" data-config-group="communication" data-config-label="{{ 'msgTranslation' | translate }}">
-              <a href="#translation" aria-controls="translation" role="tab" data-bs-toggle="tab" class="nav-link">
-                <i aria-hidden="true" class="bi bi-translate"></i>
-                {{ 'msgTranslation' | translate }}
               </a>
             </li>
             <li role="presentation" class="nav-item" data-config-group="communication" data-config-label="{{ 'pushControlCenter' | translate }}">
@@ -138,7 +138,7 @@
         </div>
 
         <div class="col-12 col-lg-9 col-xl-10">
-          <div class="tab-content p-2 pt-4 pmf-configuration-panel border-bottom mb-4">
+          <div class="tab-content p-2 pt-4 pmf-configuration-panel border mb-4">
             <div role="tabpanel" class="tab-pane fade show active" id="main"></div>
             <div role="tabpanel" class="tab-pane fade" id="records"></div>
             <div role="tabpanel" class="tab-pane fade" id="search"></div>
