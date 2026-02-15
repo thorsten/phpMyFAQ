@@ -251,8 +251,9 @@ describe('Configuration Functions', () => {
   });
 
   describe('handleConfigurationTabFiltering', () => {
-    it('should filter tabs and hide non-matching groups', () => {
+    const buildFilterDOM = (): void => {
       document.body.innerHTML = `
+        <input id="pmf-language" value="en" />
         <input id="pmf-configuration-tab-filter" value="" />
         <ul class="pmf-configuration-tabs">
           <li class="pmf-configuration-group" data-config-group="core"><span>Core</span></li>
@@ -264,13 +265,47 @@ describe('Configuration Functions', () => {
             <a class="nav-link active" href="#upgrade"></a>
           </li>
         </ul>
+        <div id="main">
+          <div class="pmf-config-item" data-config-key="main.language">Default language</div>
+          <div class="pmf-config-item" data-config-key="main.titleFAQ">FAQ title</div>
+        </div>
+        <div id="records"></div>
+        <div id="search"></div>
+        <div id="security"></div>
+        <div id="spam"></div>
+        <div id="seo"></div>
+        <div id="layout"></div>
+        <div id="mail">
+          <div class="pmf-config-item" data-config-key="mail.remoteSMTP">SMTP server address</div>
+          <div class="pmf-config-item" data-config-key="mail.remoteSMTPPassword">SMTP password</div>
+        </div>
+        <div id="api"></div>
+        <div id="upgrade">
+          <div class="pmf-config-item" data-config-key="upgrade.releaseEnvironment">Release environment</div>
+        </div>
+        <div id="translation"></div>
+        <div id="push"></div>
+        <div id="ldap"></div>
       `;
+    };
+
+    const triggerFilterAndFlush = async (query: string): Promise<void> => {
+      const filterInput = document.getElementById('pmf-configuration-tab-filter') as HTMLInputElement;
+      filterInput.value = query;
+      filterInput.dispatchEvent(new Event('input'));
+      vi.advanceTimersByTime(300);
+      await vi.runAllTimersAsync();
+    };
+
+    it('should filter tabs by tab label and hide non-matching groups', async () => {
+      vi.useFakeTimers();
+      buildFilterDOM();
+
+      (fetchConfiguration as Mock).mockResolvedValue('');
 
       handleConfigurationTabFiltering();
 
-      const filterInput = document.getElementById('pmf-configuration-tab-filter') as HTMLInputElement;
-      filterInput.value = 'main';
-      filterInput.dispatchEvent(new Event('input'));
+      await triggerFilterAndFlush('main');
 
       const mainItem = document.querySelector('li.nav-item[data-config-label="Main"]');
       const upgradeItem = document.querySelector('li.nav-item[data-config-label="Upgrade"]');
@@ -281,6 +316,78 @@ describe('Configuration Functions', () => {
       expect(upgradeItem?.classList.contains('d-none')).toBe(true);
       expect(coreGroup?.classList.contains('d-none')).toBe(false);
       expect(maintenanceGroup?.classList.contains('d-none')).toBe(true);
+
+      vi.useRealTimers();
+    });
+
+    it('should show matching config items and hide non-matching ones', async () => {
+      vi.useFakeTimers();
+      buildFilterDOM();
+
+      (fetchConfiguration as Mock).mockResolvedValue('');
+
+      handleConfigurationTabFiltering();
+
+      await triggerFilterAndFlush('smtp');
+
+      const smtpItem = document.querySelector('.pmf-config-item[data-config-key="mail.remoteSMTP"]');
+      const smtpPasswordItem = document.querySelector('.pmf-config-item[data-config-key="mail.remoteSMTPPassword"]');
+      const languageItem = document.querySelector('.pmf-config-item[data-config-key="main.language"]');
+
+      expect(smtpItem?.classList.contains('d-none')).toBe(false);
+      expect(smtpPasswordItem?.classList.contains('d-none')).toBe(false);
+      expect(languageItem?.classList.contains('d-none')).toBe(true);
+
+      vi.useRealTimers();
+    });
+
+    it('should hide tabs with zero matching items', async () => {
+      vi.useFakeTimers();
+      buildFilterDOM();
+
+      (fetchConfiguration as Mock).mockResolvedValue('');
+
+      handleConfigurationTabFiltering();
+
+      await triggerFilterAndFlush('smtp');
+
+      const mainItem = document.querySelector('li.nav-item[data-config-label="Main"]');
+      const upgradeItem = document.querySelector('li.nav-item[data-config-label="Upgrade"]');
+
+      expect(mainItem?.classList.contains('d-none')).toBe(true);
+      expect(upgradeItem?.classList.contains('d-none')).toBe(true);
+
+      vi.useRealTimers();
+    });
+
+    it('should restore all items and tabs when filter is cleared', async () => {
+      vi.useFakeTimers();
+      buildFilterDOM();
+
+      (fetchConfiguration as Mock).mockResolvedValue('');
+
+      handleConfigurationTabFiltering();
+
+      await triggerFilterAndFlush('smtp');
+
+      await triggerFilterAndFlush('');
+
+      const allItems = document.querySelectorAll('.pmf-config-item');
+      allItems.forEach((item) => {
+        expect(item.classList.contains('d-none')).toBe(false);
+      });
+
+      const allNavItems = document.querySelectorAll('li.nav-item[data-config-group]');
+      allNavItems.forEach((item) => {
+        expect(item.classList.contains('d-none')).toBe(false);
+      });
+
+      const allGroupHeaders = document.querySelectorAll('li.pmf-configuration-group');
+      allGroupHeaders.forEach((header) => {
+        expect(header.classList.contains('d-none')).toBe(false);
+      });
+
+      vi.useRealTimers();
     });
   });
 });

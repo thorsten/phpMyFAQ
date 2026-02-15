@@ -20,7 +20,7 @@
 <h4 class="h4 pt-2 pb-1 mb-4 border-bottom">{{ headlineKey | translate }}</h4>
 
 {% for key, configItem in configurationList %}
-  <div class="row mb-2 p-1">
+  <div class="row mb-2 p-1 pmf-config-item" data-config-key="{{ key }}">
     {% if configItem.element == 'area' %}
       {{ macros.generateTextarea(configItem.label, key, configurationData[key], configItem.description) }}
     {% elseif configItem.element == 'checkbox' %}

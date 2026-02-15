@@ -30,6 +30,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - improved sticky FAQs administration (Thorsten)
 - improved update process (Thorsten)
 - improved and hardened multi tenancy support (Thorsten)
+- improved and redesigned searchable admin configuration frontend (Thorsten)
 - migrated codebase using PHP 8.4 language features (Thorsten)
 - migrated routes using PHP 8+ #[Route] attributes (Thorsten)
 
