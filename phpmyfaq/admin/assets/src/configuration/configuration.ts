@@ -34,6 +34,65 @@ import {
 import { handleWebPush } from './webpush';
 import { Response } from '../interfaces';
 
+const TAB_TARGETS = [
+  '#main',
+  '#records',
+  '#search',
+  '#security',
+  '#spam',
+  '#seo',
+  '#layout',
+  '#mail',
+  '#api',
+  '#upgrade',
+  '#translation',
+  '#push',
+  '#ldap',
+];
+
+let allTabsLoaded = false;
+
+const loadTabForSearch = async (target: string): Promise<void> => {
+  const pane = document.querySelector(target) as HTMLElement | null;
+  if (!pane || pane.children.length > 0) {
+    return;
+  }
+
+  const languageElement = document.getElementById('pmf-language') as HTMLInputElement | null;
+  if (!languageElement) {
+    return;
+  }
+
+  const response = await fetchConfiguration(target, languageElement.value);
+  pane.innerHTML = response.toString();
+};
+
+const ensureAllTabsLoaded = async (): Promise<void> => {
+  if (allTabsLoaded) {
+    return;
+  }
+
+  await Promise.all(TAB_TARGETS.map((target) => loadTabForSearch(target)));
+  allTabsLoaded = true;
+};
+
+const applyItemFilterToPane = (pane: HTMLElement, query: string): number => {
+  const items = Array.from(pane.querySelectorAll('.pmf-config-item')) as HTMLElement[];
+  let matchCount = 0;
+
+  items.forEach((item) => {
+    const text = (item.textContent || '').toLowerCase();
+    const key = (item.dataset.configKey || '').toLowerCase();
+    const matches = query === '' || text.includes(query) || key.includes(query);
+    item.classList.toggle('d-none', !matches);
+    if (matches) {
+      matchCount++;
+    }
+  });
+
+  return matchCount;
+};
+
 export const handleConfiguration = async (): Promise<void> => {
   const configTabList: HTMLElement[] = [].slice.call(
     document.querySelectorAll('#configuration-list .pmf-configuration-tabs a[data-bs-toggle="tab"]')
@@ -93,6 +152,15 @@ export const handleConfiguration = async (): Promise<void> => {
           configTabTrigger.show();
         }
         result.innerHTML = '';
+
+        const filterInput = document.getElementById('pmf-configuration-tab-filter') as HTMLInputElement | null;
+        if (filterInput && filterInput.value.trim() !== '') {
+          const query = filterInput.value.trim().toLowerCase();
+          const pane = document.querySelector(target) as HTMLElement | null;
+          if (pane) {
+            applyItemFilterToPane(pane, query);
+          }
+        }
       });
     });
 
@@ -120,14 +188,44 @@ export const handleConfigurationTabFiltering = (): void => {
     return;
   }
 
-  const updateVisibleTabs = (): void => {
+  let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+
+  const updateVisibility = async (): Promise<void> => {
     const query = filterInput.value.trim().toLowerCase();
+
+    if (query === '') {
+      navItems.forEach((item) => item.classList.remove('d-none'));
+      groupHeaders.forEach((header) => header.classList.remove('d-none'));
+
+      TAB_TARGETS.forEach((target) => {
+        const pane = document.querySelector(target) as HTMLElement | null;
+        if (pane) {
+          const items = Array.from(pane.querySelectorAll('.pmf-config-item')) as HTMLElement[];
+          items.forEach((item) => item.classList.remove('d-none'));
+        }
+      });
+      return;
+    }
+
+    await ensureAllTabsLoaded();
+
     const visibleGroups = new Set<string>();
 
-    navItems.forEach((item: HTMLLIElement): void => {
-      const link = item.querySelector('a.nav-link');
-      const label = (item.dataset.configLabel || link?.textContent || '').trim().toLowerCase();
-      const isVisible = query === '' || label.includes(query);
+    navItems.forEach((item) => {
+      const link = item.querySelector('a.nav-link') as HTMLAnchorElement | null;
+      const tabTarget = link?.getAttribute('href') || '';
+      const tabLabel = (item.dataset.configLabel || link?.textContent || '').trim().toLowerCase();
+
+      let hasMatchingItems = false;
+      if (tabTarget) {
+        const pane = document.querySelector(tabTarget) as HTMLElement | null;
+        if (pane) {
+          const matchCount = applyItemFilterToPane(pane, query);
+          hasMatchingItems = matchCount > 0;
+        }
+      }
+
+      const isVisible = tabLabel.includes(query) || hasMatchingItems;
       item.classList.toggle('d-none', !isVisible);
 
       if (isVisible) {
@@ -135,7 +233,7 @@ export const handleConfigurationTabFiltering = (): void => {
       }
     });
 
-    groupHeaders.forEach((groupHeader: HTMLLIElement): void => {
+    groupHeaders.forEach((groupHeader) => {
       const groupName = groupHeader.dataset.configGroup || '';
       groupHeader.classList.toggle('d-none', !visibleGroups.has(groupName));
     });
@@ -149,9 +247,18 @@ export const handleConfigurationTabFiltering = (): void => {
     }
   };
 
-  filterInput.addEventListener('input', updateVisibleTabs);
-  filterInput.addEventListener('search', updateVisibleTabs);
-  updateVisibleTabs();
+  const debouncedUpdate = (): void => {
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+    }
+    debounceTimer = setTimeout(() => {
+      updateVisibility();
+    }, 250);
+  };
+
+  filterInput.addEventListener('input', debouncedUpdate);
+  filterInput.addEventListener('search', debouncedUpdate);
+  updateVisibility();
 };
 
 export const handleSaveConfiguration = async (): Promise<void> => {
