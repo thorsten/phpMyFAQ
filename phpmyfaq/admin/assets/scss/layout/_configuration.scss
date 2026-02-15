@@ -43,6 +43,7 @@
 
   .pmf-configuration-tabs .nav-link {
     white-space: nowrap;
+    border-radius: 0;
   }
 
   @media (min-width: 992px) {
@@ -73,7 +74,10 @@
 
   a.nav-link.active {
     background: $light-bg-subtle;
+    border-radius: var(--bs-border-radius-sm);
+    border: 1px solid var(--bs-gray-300);
   }
+
   .tab-content {
     color: $black;
     padding: 5px 15px;
