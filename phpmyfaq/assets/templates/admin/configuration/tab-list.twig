@@ -1,5 +1,24 @@
 {% import '@admin/configuration/macros.twig' as macros %}
 
+{% set tabHeadlines = {
+  'main': 'mainControlCenter',
+  'records': 'recordsControlCenter',
+  'search': 'searchControlCenter',
+  'translation': 'msgTranslation',
+  'security': 'securityControlCenter',
+  'spam': 'spamControlCenter',
+  'layout': 'layoutControlCenter',
+  'seo': 'msgSeoCenter',
+  'mail': 'mailControlCenter',
+  'push': 'pushControlCenter',
+  'api': 'API',
+  'ldap': 'LDAP',
+  'upgrade': 'upgradeControlCenter',
+} %}
+
+{% set headlineKey = tabHeadlines[mode] ?? mode %}
+<h4 class="h4 pt-2 pb-1 mb-4 border-bottom">{{ headlineKey | translate }}</h4>
+
 {% for key, configItem in configurationList %}
   <div class="row mb-2 p-1">
     {% if configItem.element == 'area' %}
