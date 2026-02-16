@@ -3,14 +3,14 @@
 /**
  * Abstract Controller for phpMyFAQ
  *
- * This Source Code Form is subject to the terms of the Mozilla protected License,
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2023-2026 phpMyFAQ Team
- * @license   https://www.mozilla.org/MPL/2.0/ Mozilla protected License Version 2.0
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-10-24
  */
@@ -33,6 +33,7 @@ use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,13 +55,15 @@ use Twig\TwigFilter;
 #[OA\License(name: 'Mozilla Public Licence 2.0', url: 'https://www.mozilla.org/MPL/2.0/')]
 abstract class AbstractController
 {
-    protected ?ContainerBuilder $container = null;
+    protected ?ContainerInterface $container = null;
 
     protected ?Configuration $configuration = null;
 
     protected ?CurrentUser $currentUser = null;
 
     protected ?SessionInterface $session = null;
+
+    private bool $containerInitialized = false;
 
     /** @var ExtensionInterface[] */
     private array $twigExtensions = [];
@@ -69,19 +72,47 @@ abstract class AbstractController
     private array $twigFilters = [];
 
     /**
-     * Check if the FAQ should be secured.
+     * Creates a fallback container for controllers instantiated outside the Kernel.
+     * When using the Kernel, setContainer() is called by the ControllerContainerListener
+     * before the controller method runs, overriding this container.
      *
      * @throws \Exception
      */
     public function __construct()
     {
         $this->container = $this->createContainer();
+        $this->initializeFromContainer();
+    }
+
+    /**
+     * Sets the shared DI container from the Kernel.
+     * Called by ControllerContainerListener on kernel.controller event.
+     */
+    public function setContainer(ContainerInterface $container): void
+    {
+        $this->container = $container;
+        $this->initializeFromContainer();
+    }
+
+    /**
+     * Initializes configuration, user, and session from the container.
+     */
+    protected function initializeFromContainer(): void
+    {
+        if ($this->container === null) {
+            return;
+        }
+
         $this->configuration = $this->container->get(id: 'phpmyfaq.configuration');
         $this->currentUser = $this->container->get(id: 'phpmyfaq.user.current_user');
         $this->session = $this->container->get(id: 'session');
 
         TwigWrapper::setTemplateSetName($this->configuration->getTemplateSet());
-        $this->isSecured();
+
+        if (!$this->containerInitialized) {
+            $this->containerInitialized = true;
+            $this->isSecured();
+        }
     }
 
     /**
