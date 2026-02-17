@@ -43,7 +43,7 @@ final class VotingController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route(path: 'voting', name: 'api.private.voting', methods: ['POST'])]
+    #[Route(path: 'voting', name: 'public.voting.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $this->userSession->setCurrentUser($this->currentUser);

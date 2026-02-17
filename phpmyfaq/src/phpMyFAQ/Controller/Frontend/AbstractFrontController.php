@@ -46,6 +46,10 @@ abstract class AbstractFrontController extends AbstractController
     {
         parent::initializeFromContainer();
 
+        if ($this->container === null) {
+            return;
+        }
+
         $this->faqSystem = $this->container->get(id: 'phpmyfaq.system');
         $this->seo = $this->container->get(id: 'phpmyfaq.seo');
     }
@@ -58,6 +62,14 @@ abstract class AbstractFrontController extends AbstractController
     protected function getHeader(Request $request): array
     {
         $action = $request->query->get(key: 'action', default: 'index');
+        $faqSystem = $this->faqSystem;
+        $seo = $this->seo;
+
+        if ($faqSystem === null || $seo === null) {
+            throw new \LogicException(
+                'Front controller dependencies are not initialized. Ensure initializeFromContainer() is called before getHeader().',
+            );
+        }
 
         $isUserHasAdminRights = $this->currentUser->perm->hasPermission(
             $this->currentUser->getUserId(),
@@ -82,14 +94,14 @@ abstract class AbstractFrontController extends AbstractController
                 : Translation::get(key: 'msgLoginUser'),
             'isUserLoggedIn' => $this->currentUser->isLoggedIn(),
             'isUserHasAdminRights' => $isUserHasAdminRights || $this->currentUser->isSuperAdmin(),
-            'baseHref' => $this->faqSystem->getSystemUri($this->configuration),
+            'baseHref' => $faqSystem->getSystemUri($this->configuration),
             'customCss' => $this->configuration->getCustomCss(),
             'version' => $this->configuration->getVersion(),
             'header' => str_replace('"', '', $this->configuration->getTitle()),
             'metaDescription' => $this->configuration->get('seo.description'),
             'metaPublisher' => $this->configuration->get('main.metaPublisher'),
             'metaLanguage' => Translation::get(key: 'metaLanguage'),
-            'metaRobots' => $this->seo->getMetaRobots($action),
+            'metaRobots' => $seo->getMetaRobots($action),
             'phpmyfaqVersion' => $this->configuration->getVersion(),
             'stylesheet' => Translation::get(key: 'direction') == 'rtl' ? 'style.rtl' : 'style',
             'currentPageUrl' => $request->getSchemeAndHttpHost() . $request->getRequestUri(),
