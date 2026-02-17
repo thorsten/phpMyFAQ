@@ -7011,16 +7011,16 @@
     "packages-dev": [
         {
             "name": "carthage-software/mago",
-            "version": "1.8.0",
+            "version": "1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/carthage-software/mago.git",
-                "reference": "8d58c5c129d7259f42e8de596cf17c41b49c293d"
+                "reference": "16d2b042a3fc47b1a4efb8fa545519b4ab596d4d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/carthage-software/mago/zipball/8d58c5c129d7259f42e8de596cf17c41b49c293d",
-                "reference": "8d58c5c129d7259f42e8de596cf17c41b49c293d",
+                "url": "https://api.github.com/repos/carthage-software/mago/zipball/16d2b042a3fc47b1a4efb8fa545519b4ab596d4d",
+                "reference": "16d2b042a3fc47b1a4efb8fa545519b4ab596d4d",
                 "shasum": ""
             },
             "require": {
@@ -7038,6 +7038,9 @@
                 "class": "Mago\\MagoPlugin"
             },
             "autoload": {
+                "files": [
+                    "composer/functions.php"
+                ],
                 "psr-4": {
                     "Mago\\": "composer/"
                 }
@@ -7058,7 +7061,7 @@
             ],
             "support": {
                 "issues": "https://github.com/carthage-software/mago/issues",
-                "source": "https://github.com/carthage-software/mago/tree/1.8.0"
+                "source": "https://github.com/carthage-software/mago/tree/1.9.0"
             },
             "funding": [
                 {
@@ -7066,7 +7069,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-12T05:55:55+00:00"
+            "time": "2026-02-17T01:40:44+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -9590,5 +9593,5 @@
     "platform-overrides": {
         "php": "8.4.0"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
