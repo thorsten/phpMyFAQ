@@ -21,9 +21,11 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\EventListener;
 
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Controller\Frontend\PageNotFoundController;
 use phpMyFAQ\Environment;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,6 +39,11 @@ use Throwable;
 
 class WebExceptionListener
 {
+    public function __construct(
+        private readonly ?ContainerInterface $container = null,
+    ) {
+    }
+
     public function onKernelException(ExceptionEvent $event): void
     {
         $request = $event->getRequest();
@@ -85,6 +92,15 @@ class WebExceptionListener
             $controllerResolver = new ControllerResolver();
             $argumentResolver = new ArgumentResolver();
             $controller = $controllerResolver->getController($request);
+
+            if (is_array($controller) && $controller[0] instanceof AbstractController) {
+                if ($this->container instanceof ContainerInterface) {
+                    $controller[0]->setContainer($this->container);
+                } else {
+                    throw new \RuntimeException('Container is required to render the styled 404 page.');
+                }
+            }
+
             $arguments = $argumentResolver->getArguments($request, $controller);
             return call_user_func_array($controller, $arguments);
         } catch (Throwable) {

@@ -35,16 +35,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class SearchController extends AbstractApiController
 {
-    private readonly Search $search;
-
-    public function __construct(?Search $search = null)
-    {
+    public function __construct(
+        private readonly Search $search,
+    ) {
         parent::__construct();
-        $resolvedSearch = $search ?? $this->container?->get(id: 'phpmyfaq.search');
-        if (!$resolvedSearch instanceof Search) {
-            throw new \RuntimeException('Search service "phpmyfaq.search" is not available.');
-        }
-        $this->search = $resolvedSearch;
     }
 
     /**

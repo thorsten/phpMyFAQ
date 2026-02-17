@@ -3,6 +3,7 @@
 namespace phpMyFAQ\EventListener;
 
 use phpMyFAQ\Controller\Exception\ForbiddenException;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
+#[AllowMockObjectsWithoutExpectations]
 class WebExceptionListenerTest extends TestCase
 {
     private WebExceptionListener $listener;

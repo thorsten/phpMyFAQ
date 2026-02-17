@@ -108,7 +108,7 @@ final class GroupController extends AbstractApiController
         }',
     ))]
     #[OA\Response(response: 401, description: 'If the user is not authenticated.')]
-    #[Route(path: 'v3.2/groups', name: 'api.groups', methods: ['GET'])]
+    #[Route(path: 'v3.2/groups', name: 'api.groups.list', methods: ['GET'])]
     public function list(?Request $request = null): JsonResponse
     {
         $this->userIsAuthenticated();

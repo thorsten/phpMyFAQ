@@ -47,6 +47,26 @@ use phpMyFAQ\Category\Image;
 use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Command\CreateHashesCommand;
+use phpMyFAQ\Controller\Administration\Api\CategoryController as AdminApiCategoryController;
+use phpMyFAQ\Controller\Administration\Api\ElasticsearchController as AdminApiElasticsearchController;
+use phpMyFAQ\Controller\Api\CategoryController as ApiCategoryController;
+use phpMyFAQ\Controller\Api\CommentController as ApiCommentController;
+use phpMyFAQ\Controller\Api\FaqController as ApiFaqController;
+use phpMyFAQ\Controller\Api\GlossaryController as ApiGlossaryController;
+use phpMyFAQ\Controller\Api\OpenQuestionController as ApiOpenQuestionController;
+use phpMyFAQ\Controller\Api\QuestionController as ApiQuestionController;
+use phpMyFAQ\Controller\Api\SearchController as ApiSearchController;
+use phpMyFAQ\Controller\Api\TagController as ApiTagController;
+use phpMyFAQ\Controller\Frontend\Api\AutoCompleteController as FrontendApiAutoCompleteController;
+use phpMyFAQ\Controller\Frontend\Api\CaptchaController as FrontendApiCaptchaController;
+use phpMyFAQ\Controller\Frontend\Api\CommentController as FrontendApiCommentController;
+use phpMyFAQ\Controller\Frontend\Api\ContactController as FrontendApiContactController;
+use phpMyFAQ\Controller\Frontend\Api\FaqController as FrontendApiFaqController;
+use phpMyFAQ\Controller\Frontend\Api\PushController as FrontendApiPushController;
+use phpMyFAQ\Controller\Frontend\Api\QuestionController as FrontendApiQuestionController;
+use phpMyFAQ\Controller\Frontend\Api\UserController as FrontendApiUserController;
+use phpMyFAQ\Controller\Frontend\Api\VotingController as FrontendApiVotingController;
+use phpMyFAQ\Controller\SitemapController as RootSitemapController;
 use phpMyFAQ\Comment\CommentsRepository;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
@@ -586,5 +606,110 @@ return static function (ContainerConfigurator $container): void {
     $services->set(CreateHashesCommand::class)->args([
         service('phpmyfaq.system'),
         service('filesystem'),
+    ]);
+
+    // ========== Controller services (constructor injection) ==========
+
+    // Batch 1: Controller/Api/
+    $services->set(ApiCategoryController::class)->args([
+        service('phpmyfaq.language'),
+    ]);
+    $services->set(ApiCommentController::class)->args([
+        service('phpmyfaq.comments'),
+    ]);
+    $services->set(ApiFaqController::class)->args([
+        service('phpmyfaq.faq'),
+        service('phpmyfaq.tags'),
+        service('phpmyfaq.faq.statistics'),
+        service('phpmyfaq.faq.metadata'),
+    ]);
+    $services->set(ApiGlossaryController::class)->args([
+        service('phpmyfaq.glossary'),
+        service('phpmyfaq.language'),
+    ]);
+    $services->set(ApiOpenQuestionController::class)->args([
+        service('phpmyfaq.question'),
+    ]);
+    $services->set(ApiSearchController::class)->args([
+        service('phpmyfaq.search'),
+    ]);
+    $services->set(ApiTagController::class)->args([
+        service('phpmyfaq.tags'),
+    ]);
+    $services->set(ApiQuestionController::class)->args([
+        service('phpmyfaq.notification'),
+    ]);
+
+    // Batch 2: Controller/Frontend/Api/
+    $services->set(FrontendApiAutoCompleteController::class)->args([
+        service('phpmyfaq.faq.permission'),
+        service('phpmyfaq.search'),
+        service('phpmyfaq.helper.search'),
+        service('phpmyfaq.language.plurals'),
+    ]);
+    $services->set(FrontendApiCaptchaController::class)->args([
+        service('phpmyfaq.captcha'),
+    ]);
+    $services->set(FrontendApiCommentController::class)->args([
+        service('phpmyfaq.faq'),
+        service('phpmyfaq.comments'),
+        service('phpmyfaq.stop-words'),
+        service('phpmyfaq.user.session'),
+        service('phpmyfaq.language'),
+        service('phpmyfaq.user'),
+        service('phpmyfaq.notification'),
+        service('phpmyfaq.news'),
+        service('phpmyfaq.services.gravatar'),
+    ]);
+    $services->set(FrontendApiContactController::class)->args([
+        service('phpmyfaq.stop-words'),
+        service('phpmyfaq.mail'),
+    ]);
+    $services->set(FrontendApiFaqController::class)->args([
+        service('phpmyfaq.faq'),
+        service('phpmyfaq.helper.faq'),
+        service('phpmyfaq.question'),
+        service('phpmyfaq.stop-words'),
+        service('phpmyfaq.user.session'),
+        service('phpmyfaq.language'),
+        service('phpmyfaq.helper.category-helper'),
+        service('phpmyfaq.notification'),
+    ]);
+    $services->set(FrontendApiPushController::class)->args([
+        service('phpmyfaq.push.web-push-service'),
+        service('phpmyfaq.push.subscription-repository'),
+    ]);
+    $services->set(FrontendApiQuestionController::class)->args([
+        service('phpmyfaq.stop-words'),
+        service('phpmyfaq.helper.question'),
+        service('phpmyfaq.search'),
+        service('phpmyfaq.question'),
+        service('phpmyfaq.notification'),
+    ]);
+    $services->set(FrontendApiUserController::class)->args([
+        service('phpmyfaq.stop-words'),
+        service('phpmyfaq.mail'),
+    ]);
+    $services->set(FrontendApiVotingController::class)->args([
+        service('phpmyfaq.rating'),
+        service('phpmyfaq.user.session'),
+    ]);
+
+    // Batch 3: Controller/Administration/Api/
+    $services->set(AdminApiCategoryController::class)->args([
+        service('phpmyfaq.category.image'),
+        service('phpmyfaq.category.order'),
+        service('phpmyfaq.category.permission'),
+    ]);
+    $services->set(AdminApiElasticsearchController::class)->args([
+        service('phpmyfaq.instance.elasticsearch'),
+        service('phpmyfaq.faq'),
+        service('phpmyfaq.custom-page'),
+    ]);
+
+    // Batch 6: Root controllers
+    $services->set(RootSitemapController::class)->args([
+        service('phpmyfaq.faq.statistics'),
+        service('phpmyfaq.custom-page'),
     ]);
 };

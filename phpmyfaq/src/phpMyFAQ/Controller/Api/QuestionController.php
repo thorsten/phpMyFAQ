@@ -33,16 +33,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class QuestionController extends AbstractApiController
 {
-    private readonly Notification $notification;
-
-    public function __construct(?Notification $notification = null)
-    {
+    public function __construct(
+        private readonly Notification $notification,
+    ) {
         parent::__construct();
-        $resolvedNotification = $notification ?? $this->container?->get(id: 'phpmyfaq.notification');
-        if (!$resolvedNotification instanceof Notification) {
-            throw new \RuntimeException('Notification service "phpmyfaq.notification" is not available.');
-        }
-        $this->notification = $resolvedNotification;
     }
 
     /**

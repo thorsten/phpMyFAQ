@@ -29,19 +29,11 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class GlossaryController extends AbstractApiController
 {
-    private readonly Glossary $glossary;
-    private readonly Language $language;
-
-    public function __construct(?Glossary $glossary = null, ?Language $language = null)
-    {
+    public function __construct(
+        private readonly Glossary $glossary,
+        private readonly Language $language,
+    ) {
         parent::__construct();
-        $resolvedGlossary = $glossary ?? $this->container?->get(id: 'phpmyfaq.glossary');
-        $resolvedLanguage = $language ?? $this->container?->get(id: 'phpmyfaq.language');
-        if (!$resolvedGlossary instanceof Glossary || !$resolvedLanguage instanceof Language) {
-            throw new \RuntimeException('Glossary services are not available in the container.');
-        }
-        $this->glossary = $resolvedGlossary;
-        $this->language = $resolvedLanguage;
     }
 
     /**

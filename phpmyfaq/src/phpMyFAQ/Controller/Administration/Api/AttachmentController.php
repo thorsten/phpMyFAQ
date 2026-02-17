@@ -152,9 +152,8 @@ final class AttachmentController extends AbstractAdministrationApiController
         }
 
         if (!empty($uploadedFiles)) {
-            $adminLog = $this->container->get(id: 'phpmyfaq.admin.admin-log');
             $attachmentIds = array_column($uploadedFiles, 'attachmentId');
-            $adminLog->log(
+            $this->adminLog->log(
                 $this->currentUser,
                 AdminLogType::ATTACHMENT_ADD->value . ':' . implode(',', $attachmentIds),
             );

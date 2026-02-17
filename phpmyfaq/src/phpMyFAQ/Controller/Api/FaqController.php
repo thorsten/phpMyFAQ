@@ -38,36 +38,13 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class FaqController extends AbstractApiController
 {
-    private readonly Faq $faq;
-    private readonly Tags $tags;
-    private readonly FaqStatistics $faqStatistics;
-    private readonly FaqMetaData $faqMetaData;
-
     public function __construct(
-        ?Faq $faq = null,
-        ?Tags $tags = null,
-        ?FaqStatistics $faqStatistics = null,
-        ?FaqMetaData $faqMetaData = null,
+        private readonly Faq $faq,
+        private readonly Tags $tags,
+        private readonly FaqStatistics $faqStatistics,
+        private readonly FaqMetaData $faqMetaData,
     ) {
         parent::__construct();
-        $resolvedFaq = $faq ?? $this->container?->get(id: 'phpmyfaq.faq');
-        $resolvedTags = $tags ?? $this->container?->get(id: 'phpmyfaq.tags');
-        $resolvedFaqStatistics = $faqStatistics ?? $this->container?->get(id: 'phpmyfaq.faq.statistics');
-        $resolvedFaqMetaData = $faqMetaData ?? $this->container?->get(id: 'phpmyfaq.faq.metadata');
-
-        if (
-            !$resolvedFaq instanceof Faq
-            || !$resolvedTags instanceof Tags
-            || !$resolvedFaqStatistics instanceof FaqStatistics
-            || !$resolvedFaqMetaData instanceof FaqMetaData
-        ) {
-            throw new \RuntimeException('FAQ-related services are not available in the container.');
-        }
-
-        $this->faq = $resolvedFaq;
-        $this->tags = $resolvedTags;
-        $this->faqStatistics = $resolvedFaqStatistics;
-        $this->faqMetaData = $resolvedFaqMetaData;
     }
 
     /**

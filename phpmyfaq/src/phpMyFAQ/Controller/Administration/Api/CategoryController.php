@@ -20,6 +20,8 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\Image;
+use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Core\Exception;
@@ -36,6 +38,14 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class CategoryController extends AbstractAdministrationApiController
 {
+    public function __construct(
+        private readonly Image $categoryImage,
+        private readonly Order $categoryOrder,
+        private readonly Permission $categoryPermission,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws \Exception
@@ -59,13 +69,9 @@ final class CategoryController extends AbstractAdministrationApiController
 
         $categoryRelation = new Relation($this->configuration, $category);
 
-        $categoryImage = $this->container->get(id: 'phpmyfaq.category.image');
-        $categoryImage->setFileName($category->getCategoryData((int) $data->categoryId)->getImage());
+        $this->categoryImage->setFileName($category->getCategoryData((int) $data->categoryId)->getImage());
 
-        $categoryOrder = $this->container->get(id: 'phpmyfaq.category.order');
-        $categoryOrder->remove((int) $data->categoryId);
-
-        $categoryPermission = $this->container->get(id: 'phpmyfaq.category.permission');
+        $this->categoryOrder->remove((int) $data->categoryId);
 
         if (
             (

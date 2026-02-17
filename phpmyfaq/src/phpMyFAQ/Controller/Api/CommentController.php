@@ -30,16 +30,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class CommentController extends AbstractApiController
 {
-    private readonly Comments $comments;
-
-    public function __construct(?Comments $comments = null)
-    {
+    public function __construct(
+        private readonly Comments $comments,
+    ) {
         parent::__construct();
-        $resolvedComments = $comments ?? $this->container?->get(id: 'phpmyfaq.comments');
-        if (!$resolvedComments instanceof Comments) {
-            throw new \RuntimeException('Comments service "phpmyfaq.comments" is not available.');
-        }
-        $this->comments = $resolvedComments;
     }
 
     /**

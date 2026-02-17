@@ -74,9 +74,9 @@ class LanguageListener
             ? $language->setLanguageWithDetection($configLang)
             : $language->setLanguageFromConfiguration($configLang);
 
-        require PMF_TRANSLATION_DIR . '/language_en.php';
+        require_once PMF_TRANSLATION_DIR . '/language_en.php';
         if (Language::isASupportedLanguage($currentLanguage)) {
-            require PMF_TRANSLATION_DIR . '/language_' . strtolower($currentLanguage) . '.php';
+            require_once PMF_TRANSLATION_DIR . '/language_' . strtolower($currentLanguage) . '.php';
         }
 
         $configuration->setLanguage($language);

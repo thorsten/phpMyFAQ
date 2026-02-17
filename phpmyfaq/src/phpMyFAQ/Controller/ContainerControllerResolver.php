@@ -38,23 +38,19 @@ class ContainerControllerResolver extends ControllerResolver
     #[\Override]
     public function getController(Request $request): callable|false
     {
-        $controller = parent::getController($request);
+        $controllerAttr = $request->attributes->get('_controller');
 
-        if ($controller === false) {
-            return false;
-        }
-
-        // Handle array-style callables [object, method]
-        if (is_array($controller) && isset($controller[0]) && is_object($controller[0])) {
-            $controllerClass = $controller[0]::class;
-
-            if ($this->container->has($controllerClass)) {
-                $controller[0] = $this->container->get($controllerClass);
+        // If the controller is in ClassName::method format and registered in the container,
+        // resolve it from the container BEFORE parent tries to instantiate with `new`.
+        if (is_string($controllerAttr) && str_contains($controllerAttr, '::')) {
+            [$class, $method] = explode('::', $controllerAttr, 2);
+            if (class_exists($class) && $this->container->has($class)) {
+                $instance = $this->container->get($class);
+                return [$instance, $method];
             }
-
-            return $controller;
         }
 
-        return $controller;
+        // Fall back to default resolution for unregistered controllers
+        return parent::getController($request);
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Api;
 
 use Exception;
+use phpMyFAQ\Comments;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,7 +23,7 @@ class CommentControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('recordId', '1');
 
-        $controller = new CommentController();
+        $controller = new CommentController($this->createStub(Comments::class));
         $response = $controller->list($request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -36,7 +37,7 @@ class CommentControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('recordId', '1');
 
-        $controller = new CommentController();
+        $controller = new CommentController($this->createStub(Comments::class));
         $response = $controller->list($request);
 
         $this->assertContains($response->getStatusCode(), [Response::HTTP_OK, Response::HTTP_NOT_FOUND]);
@@ -50,7 +51,7 @@ class CommentControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('recordId', '999999');
 
-        $controller = new CommentController();
+        $controller = new CommentController($this->createStub(Comments::class));
         $response = $controller->list($request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -64,7 +65,7 @@ class CommentControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('recordId', '1');
 
-        $controller = new CommentController();
+        $controller = new CommentController($this->createStub(Comments::class));
         $response = $controller->list($request);
 
         $this->assertJson($response->getContent());
@@ -78,7 +79,7 @@ class CommentControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('recordId', '1');
 
-        $controller = new CommentController();
+        $controller = new CommentController($this->createStub(Comments::class));
         $response = $controller->list($request);
 
         $data = json_decode($response->getContent(), true);
@@ -93,7 +94,7 @@ class CommentControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('recordId', 'invalid');
 
-        $controller = new CommentController();
+        $controller = new CommentController($this->createStub(Comments::class));
         $response = $controller->list($request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -107,7 +108,7 @@ class CommentControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('recordId', '0');
 
-        $controller = new CommentController();
+        $controller = new CommentController($this->createStub(Comments::class));
         $response = $controller->list($request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -121,7 +122,7 @@ class CommentControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('recordId', '1');
 
-        $controller = new CommentController();
+        $controller = new CommentController($this->createStub(Comments::class));
         $response = $controller->list($request);
 
         $this->assertNotNull($response->getContent());
@@ -135,7 +136,7 @@ class CommentControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('recordId', '999999');
 
-        $controller = new CommentController();
+        $controller = new CommentController($this->createStub(Comments::class));
         $response = $controller->list($request);
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
@@ -157,7 +158,7 @@ class CommentControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('recordId', '-1');
 
-        $controller = new CommentController();
+        $controller = new CommentController($this->createStub(Comments::class));
         $response = $controller->list($request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -171,7 +172,7 @@ class CommentControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('recordId', '999999999');
 
-        $controller = new CommentController();
+        $controller = new CommentController($this->createStub(Comments::class));
         $response = $controller->list($request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);

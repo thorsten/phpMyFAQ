@@ -6,6 +6,9 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\CustomPage;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Instance\Search\Elasticsearch;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -16,6 +19,9 @@ use Symfony\Component\HttpFoundation\Request;
 class ElasticsearchControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private Elasticsearch $elasticsearch;
+    private Faq $faq;
+    private CustomPage $customPage;
 
     /**
      * @throws Exception
@@ -33,6 +39,9 @@ class ElasticsearchControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+        $this->elasticsearch = $this->createStub(Elasticsearch::class);
+        $this->faq = $this->createStub(Faq::class);
+        $this->customPage = $this->createStub(CustomPage::class);
     }
 
     /**
@@ -41,7 +50,7 @@ class ElasticsearchControllerTest extends TestCase
     public function testCreateRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new ElasticsearchController();
+        $controller = new ElasticsearchController($this->elasticsearch, $this->faq, $this->customPage);
 
         $this->expectException(\Exception::class);
         $controller->create();
@@ -53,7 +62,7 @@ class ElasticsearchControllerTest extends TestCase
     public function testDropRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new ElasticsearchController();
+        $controller = new ElasticsearchController($this->elasticsearch, $this->faq, $this->customPage);
 
         $this->expectException(\Exception::class);
         $controller->drop();
@@ -65,7 +74,7 @@ class ElasticsearchControllerTest extends TestCase
     public function testImportRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new ElasticsearchController();
+        $controller = new ElasticsearchController($this->elasticsearch, $this->faq, $this->customPage);
 
         $this->expectException(\Exception::class);
         $controller->import();
@@ -77,7 +86,7 @@ class ElasticsearchControllerTest extends TestCase
     public function testStatisticsRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new ElasticsearchController();
+        $controller = new ElasticsearchController($this->elasticsearch, $this->faq, $this->customPage);
 
         $this->expectException(\Exception::class);
         $controller->statistics();
@@ -89,7 +98,7 @@ class ElasticsearchControllerTest extends TestCase
     public function testHealthcheckRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new ElasticsearchController();
+        $controller = new ElasticsearchController($this->elasticsearch, $this->faq, $this->customPage);
 
         $this->expectException(\Exception::class);
         $controller->healthcheck();

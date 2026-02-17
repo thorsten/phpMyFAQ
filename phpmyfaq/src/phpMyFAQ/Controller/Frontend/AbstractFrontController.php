@@ -25,6 +25,7 @@ use phpMyFAQ\CustomPage;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Environment;
 use phpMyFAQ\Helper\LanguageHelper;
+use phpMyFAQ\Seo;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
@@ -36,6 +37,19 @@ use Twig\Error\LoaderError;
 
 abstract class AbstractFrontController extends AbstractController
 {
+    protected ?System $faqSystem = null;
+
+    protected ?Seo $seo = null;
+
+    #[\Override]
+    protected function initializeFromContainer(): void
+    {
+        parent::initializeFromContainer();
+
+        $this->faqSystem = $this->container->get(id: 'phpmyfaq.system');
+        $this->seo = $this->container->get(id: 'phpmyfaq.seo');
+    }
+
     /**
      * @return string[]
      * @throws Exception
@@ -43,8 +57,6 @@ abstract class AbstractFrontController extends AbstractController
      */
     protected function getHeader(Request $request): array
     {
-        $faqSystem = $this->container->get(id: 'phpmyfaq.system');
-        $seo = $this->container->get(id: 'phpmyfaq.seo');
         $action = $request->query->get(key: 'action', default: 'index');
 
         $isUserHasAdminRights = $this->currentUser->perm->hasPermission(
@@ -53,9 +65,8 @@ abstract class AbstractFrontController extends AbstractController
         );
 
         // Get flash messages
-        $session = $this->container->get('session');
-        $successMessages = $session->getFlashBag()->get('success');
-        $errorMessages = $session->getFlashBag()->get('error');
+        $successMessages = $this->session->getFlashBag()->get('success');
+        $errorMessages = $this->session->getFlashBag()->get('error');
 
         return [
             ...$this->getUserDropdown(),
@@ -71,14 +82,14 @@ abstract class AbstractFrontController extends AbstractController
                 : Translation::get(key: 'msgLoginUser'),
             'isUserLoggedIn' => $this->currentUser->isLoggedIn(),
             'isUserHasAdminRights' => $isUserHasAdminRights || $this->currentUser->isSuperAdmin(),
-            'baseHref' => $faqSystem->getSystemUri($this->configuration),
+            'baseHref' => $this->faqSystem->getSystemUri($this->configuration),
             'customCss' => $this->configuration->getCustomCss(),
             'version' => $this->configuration->getVersion(),
             'header' => str_replace('"', '', $this->configuration->getTitle()),
             'metaDescription' => $metaDescription ?? $this->configuration->get('seo.description'),
             'metaPublisher' => $this->configuration->get('main.metaPublisher'),
             'metaLanguage' => Translation::get(key: 'metaLanguage'),
-            'metaRobots' => $seo->getMetaRobots($action),
+            'metaRobots' => $this->seo->getMetaRobots($action),
             'phpmyfaqVersion' => $this->configuration->getVersion(),
             'stylesheet' => Translation::get(key: 'direction') == 'rtl' ? 'style.rtl' : 'style',
             'currentPageUrl' => $request->getSchemeAndHttpHost() . $request->getRequestUri(),
@@ -160,7 +171,7 @@ abstract class AbstractFrontController extends AbstractController
     {
         $templateVars = [];
         if ($this->currentUser->isLoggedIn() && $this->currentUser->getUserId() > 0) {
-            $csrfLogoutToken = Token::getInstance($this->container->get('session'))->getTokenString('logout');
+            $csrfLogoutToken = Token::getInstance($this->session)->getTokenString('logout');
 
             if (
                 $this->currentUser->perm->hasPermission(

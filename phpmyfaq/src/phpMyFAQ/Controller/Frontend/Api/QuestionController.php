@@ -26,7 +26,12 @@ use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\QuestionHelper;
+use phpMyFAQ\Notification;
+use phpMyFAQ\Question;
+use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
+use phpMyFAQ\StopWords;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,6 +40,16 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class QuestionController extends AbstractController
 {
+    public function __construct(
+        private readonly StopWords $stopWords,
+        private readonly QuestionHelper $questionHelper,
+        private readonly Search $search,
+        private readonly Question $question,
+        private readonly Notification $notification,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws \JsonException
@@ -47,11 +62,9 @@ final class QuestionController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_FORBIDDEN);
         }
 
-        $stopWords = $this->container->get(id: 'phpmyfaq.stop-words');
         $category = new Category($this->configuration);
 
-        $questionHelper = $this->container->get(id: 'phpmyfaq.helper.question');
-        $questionHelper->setConfiguration($this->configuration)->setCategory($category);
+        $this->questionHelper->setConfiguration($this->configuration)->setCategory($category);
 
         $categories = $category->getAllCategories();
 
@@ -107,7 +120,12 @@ final class QuestionController extends AbstractController
         }
 
         // Check if all necessary fields are provided and not empty
-        if ($author !== '' && $email !== '' && $userQuestion !== '' && $stopWords->checkBannedWord($userQuestion)) {
+        if (
+            $author !== ''
+            && $email !== ''
+            && $userQuestion !== ''
+            && $this->stopWords->checkBannedWord($userQuestion)
+        ) {
             if ($selectedCategory === false) {
                 $selectedCategory = $category->getAllCategoryIds()[0];
             }
@@ -125,16 +143,15 @@ final class QuestionController extends AbstractController
 
             // Save the question immediately if smart answering is disabled
             if (false === (bool) $save) {
-                $cleanQuestion = $stopWords->clean($userQuestion);
+                $cleanQuestion = $this->stopWords->clean($userQuestion);
 
-                $faqSearch = $this->container->get(id: 'phpmyfaq.search');
-                $faqSearch->setCategory(new Category($this->configuration));
-                $faqSearch->setCategoryId((int) $selectedCategory);
+                $this->search->setCategory(new Category($this->configuration));
+                $this->search->setCategoryId((int) $selectedCategory);
 
                 $faqPermission = new Permission($this->configuration);
                 $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
 
-                $searchResult = array_merge(...array_map(static fn($word) => $faqSearch->search(
+                $searchResult = array_merge(...array_map(fn($word) => $this->search->search(
                     $word,
                     allLanguages: false,
                 ), array_filter($cleanQuestion)));
@@ -142,15 +159,13 @@ final class QuestionController extends AbstractController
                 $searchResultSet->reviewResultSet($searchResult);
 
                 if ($searchResultSet->getNumberOfResults() > 0) {
-                    $smartAnswer = $questionHelper->generateSmartAnswer($searchResultSet);
+                    $smartAnswer = $this->questionHelper->generateSmartAnswer($searchResultSet);
                     return $this->json(['result' => $smartAnswer], Response::HTTP_OK);
                 }
             }
 
-            $question = $this->container->get(id: 'phpmyfaq.question');
-            $question->add($questionEntity);
-            $notification = $this->container->get(id: 'phpmyfaq.notification');
-            $notification->sendQuestionSuccessMail($questionEntity, $categories);
+            $this->question->add($questionEntity);
+            $this->notification->sendQuestionSuccessMail($questionEntity, $categories);
 
             return $this->json(['success' => Translation::get(key: 'msgAskThx4Mail')], Response::HTTP_OK);
         }

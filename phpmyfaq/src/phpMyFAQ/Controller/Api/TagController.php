@@ -28,16 +28,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class TagController extends AbstractApiController
 {
-    private readonly Tags $tags;
-
-    public function __construct(?Tags $tags = null)
-    {
+    public function __construct(
+        private readonly Tags $tags,
+    ) {
         parent::__construct();
-        $resolvedTags = $tags ?? $this->container?->get(id: 'phpmyfaq.tags');
-        if (!$resolvedTags instanceof Tags) {
-            throw new \RuntimeException('Tags service "phpmyfaq.tags" is not available.');
-        }
-        $this->tags = $resolvedTags;
     }
 
     /**
@@ -119,7 +113,7 @@ final class TagController extends AbstractApiController
             }
         }',
     ))]
-    #[Route('/api/v3.2/tags', name: 'api.tags', methods: ['GET'])]
+    #[Route('/api/v3.2/tags', name: 'api.tags.list', methods: ['GET'])]
     public function list(?Request $request = null): JsonResponse
     {
         $request ??= Request::createFromGlobals();

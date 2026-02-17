@@ -25,11 +25,19 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\MetaData;
 use phpMyFAQ\Faq\Permission as FaqPermission;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\CategoryHelper;
+use phpMyFAQ\Helper\FaqHelper;
+use phpMyFAQ\Language;
+use phpMyFAQ\Notification;
+use phpMyFAQ\Question;
+use phpMyFAQ\StopWords;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\UserSession;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,26 +46,33 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class FaqController extends AbstractController
 {
+    public function __construct(
+        private readonly Faq $faq,
+        private readonly FaqHelper $faqHelper,
+        private readonly Question $question,
+        private readonly StopWords $stopWords,
+        private readonly UserSession $userSession,
+        private readonly Language $language,
+        private readonly CategoryHelper $categoryHelper,
+        private readonly Notification $notification,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception|\JsonException|\Exception
      */
     #[Route(path: 'faq/create', name: 'api.private.faq.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
-        $faq = $this->container->get(id: 'phpmyfaq.faq');
-        $faqHelper = $this->container->get(id: 'phpmyfaq.helper.faq');
-        $question = $this->container->get(id: 'phpmyfaq.question');
-        $stopWords = $this->container->get(id: 'phpmyfaq.stop-words');
-        $session = $this->container->get(id: 'phpmyfaq.user.session');
-        $session->setCurrentUser($this->currentUser);
+        $this->userSession->setCurrentUser($this->currentUser);
 
         $categoryPermission = new CategoryPermission($this->configuration);
         $faqPermission = new FaqPermission($this->configuration);
 
-        $language = $this->container->get(id: 'phpmyfaq.language');
         $languageCode = $this->configuration->get(item: 'main.languageDetection')
-            ? $language->setLanguageWithDetection($this->configuration->get(item: 'main.language'))
-            : $language->setLanguageFromConfiguration($this->configuration->get(item: 'main.language'));
+            ? $this->language->setLanguageWithDetection($this->configuration->get(item: 'main.language'))
+            : $this->language->setLanguageFromConfiguration($this->configuration->get(item: 'main.language'));
 
         if (!$this->isAddingFaqsAllowed($this->currentUser)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_FORBIDDEN);
@@ -123,15 +138,15 @@ final class FaqController extends AbstractController
             && $email !== '0'
             && $questionText !== ''
             && $questionText !== '0'
-            && $stopWords->checkBannedWord(strip_tags($questionText))
+            && $this->stopWords->checkBannedWord(strip_tags($questionText))
         ) {
             if ($answer !== '' && $answer !== '0') {
-                $stopWords->checkBannedWord(strip_tags($answer));
+                $this->stopWords->checkBannedWord(strip_tags($answer));
             } else {
                 $answer = '';
             }
 
-            $session->userTracking('save_new_entry', 0);
+            $this->userSession->userTracking('save_new_entry', 0);
 
             $autoActivate = $this->configuration->get(item: 'records.defaultActivation');
 
@@ -148,15 +163,15 @@ final class FaqController extends AbstractController
                 ->setComment(true)
                 ->setNotes('');
 
-            $faq->create($faqEntity);
+            $this->faq->create($faqEntity);
             $recordId = $faqEntity->getId();
 
             $openQuestionId = Filter::filterVar($data->openQuestionID, FILTER_VALIDATE_INT);
             if ($openQuestionId) {
                 if ($this->configuration->get(item: 'records.enableDeleteQuestion')) {
-                    $question->delete($openQuestionId);
+                    $this->question->delete($openQuestionId);
                 } else { // adds this faq record id to the related open question
-                    $question->updateQuestionAnswer((int) $openQuestionId, (int) $recordId, (int) $categories[0]);
+                    $this->question->updateQuestionAnswer((int) $openQuestionId, (int) $recordId, (int) $categories[0]);
                 }
             }
 
@@ -168,10 +183,9 @@ final class FaqController extends AbstractController
                 ->save();
 
             // Let the admin and the category owners to be informed by email of this new entry
-            $categoryHelper = $this->container->get(id: 'phpmyfaq.helper.category-helper');
-            $categoryHelper->setCategory($category)->setConfiguration($this->configuration);
+            $this->categoryHelper->setCategory($category)->setConfiguration($this->configuration);
 
-            $moderators = $categoryHelper->getModerators($categories);
+            $moderators = $this->categoryHelper->getModerators($categories);
 
             // Add user and group permissions
             $permissions = $categoryPermission->getAll($categories);
@@ -183,15 +197,14 @@ final class FaqController extends AbstractController
             }
 
             try {
-                $notification = $this->container->get(id: 'phpmyfaq.notification');
-                $notification->sendNewFaqAdded($moderators, $faqEntity);
+                $this->notification->sendNewFaqAdded($moderators, $faqEntity);
             } catch (Exception|TransportExceptionInterface $e) {
                 $this->configuration->getLogger()->info('Notification could not be sent: ', [$e->getMessage()]);
             }
 
             if ($this->configuration->get(item: 'records.defaultActivation')) {
                 $link = [
-                    'link' => $faqHelper->createFaqUrl($faqEntity, $categories[0]),
+                    'link' => $this->faqHelper->createFaqUrl($faqEntity, $categories[0]),
                     'info' => Translation::get(key: 'msgRedirect'),
                 ];
             } else {

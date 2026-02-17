@@ -6,6 +6,8 @@ namespace phpMyFAQ\Controller\Frontend\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Mail;
+use phpMyFAQ\StopWords;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -16,6 +18,8 @@ use Symfony\Component\HttpFoundation\Request;
 class ContactControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private StopWords $stopWords;
+    private Mail $mailer;
 
     /**
      * @throws Exception
@@ -33,6 +37,14 @@ class ContactControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+
+        $this->stopWords = $this->createStub(StopWords::class);
+        $this->mailer = $this->createStub(Mail::class);
+    }
+
+    private function createController(): ContactController
+    {
+        return new ContactController($this->stopWords, $this->mailer);
     }
 
     /**
@@ -44,7 +56,7 @@ class ContactControllerTest extends TestCase
         $requestData = 'invalid json';
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new ContactController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -62,7 +74,7 @@ class ContactControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new ContactController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -81,7 +93,7 @@ class ContactControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new ContactController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -100,7 +112,7 @@ class ContactControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new ContactController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -118,7 +130,7 @@ class ContactControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new ContactController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -137,7 +149,7 @@ class ContactControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new ContactController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);

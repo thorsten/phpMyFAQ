@@ -22,7 +22,9 @@ namespace phpMyFAQ\Controller\Frontend\Api;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Mail;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\StopWords;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\TwoFactor;
 use RobThree\Auth\TwoFactorAuthException;
@@ -37,6 +39,13 @@ use ZipArchive;
 
 final class UserController extends AbstractController
 {
+    public function __construct(
+        private readonly StopWords $stopWords,
+        private readonly Mail $mailer,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws \Exception
      */
@@ -229,7 +238,6 @@ final class UserController extends AbstractController
             )], Response::HTTP_BAD_REQUEST);
         }
 
-        $stopWords = $this->container->get(id: 'phpmyfaq.stop-words');
         if (
             $author !== ''
             && $author !== '0'
@@ -237,7 +245,7 @@ final class UserController extends AbstractController
             && $email !== '0'
             && $question !== ''
             && $question !== '0'
-            && $stopWords->checkBannedWord($question)
+            && $this->stopWords->checkBannedWord($question)
         ) {
             $question = sprintf(
                 '%s %s<br>%s %s<br>%s %s<br><br>%s',
@@ -250,15 +258,13 @@ final class UserController extends AbstractController
                 $question,
             );
 
-            $mailer = $this->container->get(id: 'phpmyfaq.mail');
             try {
-                $mailer->setReplyTo($email, $author);
-                $mailer->addTo($this->configuration->getAdminEmail());
-                $mailer->setReplyTo($this->configuration->getNoReplyEmail());
-                $mailer->subject = $this->configuration->getTitle() . ': Remove User Request';
-                $mailer->message = $question;
-                $mailer->send();
-                unset($mailer);
+                $this->mailer->setReplyTo($email, $author);
+                $this->mailer->addTo($this->configuration->getAdminEmail());
+                $this->mailer->setReplyTo($this->configuration->getNoReplyEmail());
+                $this->mailer->subject = $this->configuration->getTitle() . ': Remove User Request';
+                $this->mailer->message = $question;
+                $this->mailer->send();
 
                 return $this->json(['success' => Translation::get(key: 'msgMailContact')], Response::HTTP_OK);
             } catch (Exception|TransportExceptionInterface $exception) {

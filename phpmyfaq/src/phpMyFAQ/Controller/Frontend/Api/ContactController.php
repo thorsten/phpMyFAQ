@@ -22,6 +22,8 @@ namespace phpMyFAQ\Controller\Frontend\Api;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Mail;
+use phpMyFAQ\StopWords;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,6 +34,13 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ContactController extends AbstractController
 {
+    public function __construct(
+        private readonly StopWords $stopWords,
+        private readonly Mail $mailer,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws \JsonException
@@ -71,9 +80,7 @@ final class ContactController extends AbstractController
             throw new Exception('Invalid captcha');
         }
 
-        $stopWords = $this->container->get(id: 'phpmyfaq.stop-words');
-
-        if ($author !== '' && $author !== '0' && $email !== '' && $stopWords->checkBannedWord($question)) {
+        if ($author !== '' && $author !== '0' && $email !== '' && $this->stopWords->checkBannedWord($question)) {
             $question = sprintf(
                 '%s: %s<br>%s: %s<br><br>%s',
                 Translation::get(key: 'msgNewContentName'),
@@ -83,18 +90,16 @@ final class ContactController extends AbstractController
                 $question,
             );
 
-            $mailer = $this->container->get(id: 'phpmyfaq.mail');
             try {
-                $mailer->setReplyTo($email, $author);
-                $mailer->addTo($this->configuration->getAdminEmail());
-                $mailer->setReplyTo($this->configuration->getNoReplyEmail());
-                $mailer->subject = Utils::resolveMarkers(
+                $this->mailer->setReplyTo($email, $author);
+                $this->mailer->addTo($this->configuration->getAdminEmail());
+                $this->mailer->setReplyTo($this->configuration->getNoReplyEmail());
+                $this->mailer->subject = Utils::resolveMarkers(
                     text: 'Feedback: %sitename%',
                     configuration: $this->configuration,
                 );
-                $mailer->message = $question;
-                $mailer->send();
-                unset($mailer);
+                $this->mailer->message = $question;
+                $this->mailer->send();
 
                 return $this->json(['success' => Translation::get(key: 'msgMailContact')], Response::HTTP_OK);
             } catch (Exception|TransportExceptionInterface $e) {

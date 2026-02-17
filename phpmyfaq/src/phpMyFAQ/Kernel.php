@@ -187,7 +187,7 @@ class Kernel implements HttpKernelInterface
         $dispatcher->addListener(KernelEvents::EXCEPTION, [$apiExceptionListener, 'onKernelException'], 0);
 
         // Web exception listener — handles web (non-API) exceptions (priority -10, after API listener)
-        $webExceptionListener = new WebExceptionListener();
+        $webExceptionListener = new WebExceptionListener($this->container);
         $dispatcher->addListener(KernelEvents::EXCEPTION, [$webExceptionListener, 'onKernelException'], -10);
 
         // Controller container listener — injects shared container into controllers

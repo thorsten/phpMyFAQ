@@ -116,7 +116,7 @@ final class NewsController extends AbstractApiController
             }
         }'),
     )]
-    #[Route('/api/v3.2/news', name: 'api_news_list', methods: ['GET'])]
+    #[Route('/api/v3.2/news', name: 'api.news.list', methods: ['GET'])]
     public function list(?Request $request = null): JsonResponse
     {
         $request ??= Request::createFromGlobals();

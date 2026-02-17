@@ -3,6 +3,7 @@
 namespace phpMyFAQ\EventListener;
 
 use phpMyFAQ\Controller\AbstractController;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 class ControllerContainerListenerTest extends TestCase
 {
     public function testInjectsContainerIntoAbstractController(): void

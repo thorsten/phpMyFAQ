@@ -23,7 +23,9 @@ use Exception;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Entity\Vote;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Rating;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\UserSession;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,15 +33,20 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class VotingController extends AbstractController
 {
+    public function __construct(
+        private readonly Rating $rating,
+        private readonly UserSession $userSession,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      */
     #[Route(path: 'voting', name: 'api.private.voting', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
-        $rating = $this->container->get(id: 'phpmyfaq.rating');
-        $session = $this->container->get(id: 'phpmyfaq.user.session');
-        $session->setCurrentUser($this->currentUser);
+        $this->userSession->setCurrentUser($this->currentUser);
 
         $data = json_decode($request->getContent());
 
@@ -67,30 +74,30 @@ final class VotingController extends AbstractController
             throw new Exception('Invalid vote value');
         }
 
-        if (isset($vote) && $rating->check($faqId, $userIp) && $vote > 0 && $vote < 6) {
-            $session->userTracking('save_voting', $faqId);
+        if (isset($vote) && $this->rating->check($faqId, $userIp) && $vote > 0 && $vote < 6) {
+            $this->userSession->userTracking('save_voting', $faqId);
 
             $votingData = new Vote();
             $votingData->setFaqId($faqId)->setVote($vote)->setIp($userIp);
 
-            if ($rating->getNumberOfVotings($faqId) === 0) {
-                $rating->create($votingData);
+            if ($this->rating->getNumberOfVotings($faqId) === 0) {
+                $this->rating->create($votingData);
             } else {
-                $rating->update($votingData);
+                $this->rating->update($votingData);
             }
 
             return $this->json([
                 'success' => Translation::get(key: 'msgVoteThanks'),
-                'rating' => $rating->get($faqId),
+                'rating' => $this->rating->get($faqId),
             ], Response::HTTP_OK);
         }
 
-        if (!$rating->check($faqId, $userIp)) {
-            $session->userTracking('error_save_voting', $faqId);
+        if (!$this->rating->check($faqId, $userIp)) {
+            $this->userSession->userTracking('error_save_voting', $faqId);
             return $this->json(['error' => Translation::get(key: 'err_VoteTooMuch')], Response::HTTP_BAD_REQUEST);
         }
 
-        $session->userTracking('error_save_voting', $faqId);
+        $this->userSession->userTracking('error_save_voting', $faqId);
         return $this->json(['error' => Translation::get(key: 'err_noVote')], Response::HTTP_BAD_REQUEST);
     }
 }

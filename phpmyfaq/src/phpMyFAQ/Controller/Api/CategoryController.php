@@ -35,16 +35,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class CategoryController extends AbstractApiController
 {
-    private readonly Language $language;
-
-    public function __construct(?Language $language = null)
-    {
+    public function __construct(
+        private readonly Language $language,
+    ) {
         parent::__construct();
-        $resolvedLanguage = $language ?? $this->container?->get(id: 'phpmyfaq.language');
-        if (!$resolvedLanguage instanceof Language) {
-            throw new \RuntimeException('Language service "phpmyfaq.language" is not available.');
-        }
-        $this->language = $resolvedLanguage;
     }
 
     /**

@@ -456,7 +456,11 @@ class AbstractControllerTest extends TestCase
 
     public function testSetContainerReEvaluatesIsSecuredWhenContainerChanges(): void
     {
-        $controller = new class() extends AbstractController {};
+        $controller = new class() extends AbstractController {
+            public function __construct()
+            {
+            }
+        };
 
         $session = $this->createMock(SessionInterface::class);
 

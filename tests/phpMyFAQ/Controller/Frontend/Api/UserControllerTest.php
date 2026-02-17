@@ -6,6 +6,8 @@ namespace phpMyFAQ\Controller\Frontend\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Mail;
+use phpMyFAQ\StopWords;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -16,6 +18,8 @@ use Symfony\Component\HttpFoundation\Request;
 class UserControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private StopWords $stopWords;
+    private Mail $mailer;
 
     /**
      * @throws Exception
@@ -33,6 +37,14 @@ class UserControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+
+        $this->stopWords = $this->createStub(StopWords::class);
+        $this->mailer = $this->createStub(Mail::class);
+    }
+
+    private function createController(): UserController
+    {
+        return new UserController($this->stopWords, $this->mailer);
     }
 
     /**
@@ -49,7 +61,7 @@ class UserControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->updateData($request);
@@ -63,7 +75,7 @@ class UserControllerTest extends TestCase
         $requestData = 'invalid json';
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->updateData($request);
@@ -75,7 +87,7 @@ class UserControllerTest extends TestCase
     public function testExportUserDataRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new UserController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->exportUserData($request);
@@ -96,7 +108,7 @@ class UserControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->requestUserRemoval($request);
@@ -110,7 +122,7 @@ class UserControllerTest extends TestCase
         $requestData = 'invalid json';
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->requestUserRemoval($request);
@@ -126,7 +138,7 @@ class UserControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->removeTwofactorConfig($request);
@@ -140,7 +152,7 @@ class UserControllerTest extends TestCase
         $requestData = 'invalid json';
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->removeTwofactorConfig($request);

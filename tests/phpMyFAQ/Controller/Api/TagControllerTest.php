@@ -6,6 +6,7 @@ namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Language;
+use phpMyFAQ\Tags;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
@@ -31,7 +32,7 @@ class TagControllerTest extends TestCase
 
     public function testListReturnsJsonResponse(): void
     {
-        $controller = new TagController();
+        $controller = new TagController($this->createStub(Tags::class));
         $response = $controller->list();
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -39,7 +40,7 @@ class TagControllerTest extends TestCase
 
     public function testListReturnsValidStatusCode(): void
     {
-        $controller = new TagController();
+        $controller = new TagController($this->createStub(Tags::class));
         $response = $controller->list();
 
         $this->assertContains($response->getStatusCode(), [Response::HTTP_OK, Response::HTTP_NOT_FOUND]);
@@ -47,7 +48,7 @@ class TagControllerTest extends TestCase
 
     public function testListReturnsJsonData(): void
     {
-        $controller = new TagController();
+        $controller = new TagController($this->createStub(Tags::class));
         $response = $controller->list();
 
         $this->assertJson($response->getContent());
@@ -55,7 +56,7 @@ class TagControllerTest extends TestCase
 
     public function testListReturnsArrayData(): void
     {
-        $controller = new TagController();
+        $controller = new TagController($this->createStub(Tags::class));
         $response = $controller->list();
 
         $data = json_decode($response->getContent(), true);
@@ -64,7 +65,7 @@ class TagControllerTest extends TestCase
 
     public function testListResponseContentIsNotNull(): void
     {
-        $controller = new TagController();
+        $controller = new TagController($this->createStub(Tags::class));
         $response = $controller->list();
 
         $this->assertNotNull($response->getContent());
@@ -72,7 +73,7 @@ class TagControllerTest extends TestCase
 
     public function testListReturnsCorrectStructureWhenTagsExist(): void
     {
-        $controller = new TagController();
+        $controller = new TagController($this->createStub(Tags::class));
         $response = $controller->list();
 
         $data = json_decode($response->getContent(), true);
@@ -99,7 +100,7 @@ class TagControllerTest extends TestCase
 
     public function testListReturnsEmptyArrayOn404(): void
     {
-        $controller = new TagController();
+        $controller = new TagController($this->createStub(Tags::class));
         $response = $controller->list();
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());

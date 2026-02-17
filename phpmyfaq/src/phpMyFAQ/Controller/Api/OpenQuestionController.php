@@ -27,16 +27,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class OpenQuestionController extends AbstractApiController
 {
-    private readonly Question $question;
-
-    public function __construct(?Question $question = null)
-    {
+    public function __construct(
+        private readonly Question $question,
+    ) {
         parent::__construct();
-        $resolvedQuestion = $question ?? $this->container?->get(id: 'phpmyfaq.question');
-        if (!$resolvedQuestion instanceof Question) {
-            throw new \RuntimeException('Question service "phpmyfaq.question" is not available.');
-        }
-        $this->question = $resolvedQuestion;
     }
 
     /**
@@ -130,7 +124,7 @@ final class OpenQuestionController extends AbstractApiController
             }
         }',
     ))]
-    #[Route('/api/v3.2/open-questions', name: 'api_open_questions', methods: ['GET'])]
+    #[Route(path: 'v3.2/open-questions', name: 'api.open-questions.list', methods: ['GET'])]
     public function list(?Request $request = null): JsonResponse
     {
         $request ??= Request::createFromGlobals();

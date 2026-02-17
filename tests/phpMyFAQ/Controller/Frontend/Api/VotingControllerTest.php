@@ -6,8 +6,10 @@ namespace phpMyFAQ\Controller\Frontend\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Rating;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\UserSession;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +18,8 @@ use Symfony\Component\HttpFoundation\Request;
 class VotingControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private Rating $rating;
+    private UserSession $userSession;
 
     /**
      * @throws Exception
@@ -33,6 +37,14 @@ class VotingControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+
+        $this->rating = $this->createStub(Rating::class);
+        $this->userSession = $this->createStub(UserSession::class);
+    }
+
+    private function createController(): VotingController
+    {
+        return new VotingController($this->rating, $this->userSession);
     }
 
     /**
@@ -43,7 +55,7 @@ class VotingControllerTest extends TestCase
         $requestData = 'invalid json';
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new VotingController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -59,7 +71,7 @@ class VotingControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new VotingController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -75,7 +87,7 @@ class VotingControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new VotingController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -94,7 +106,7 @@ class VotingControllerTest extends TestCase
         $request = new Request([], [], [], [], [], [], $requestData);
         $request->server->set('REMOTE_ADDR', '127.0.0.1');
 
-        $controller = new VotingController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -113,7 +125,7 @@ class VotingControllerTest extends TestCase
         $request = new Request([], [], [], [], [], [], $requestData);
         $request->server->set('REMOTE_ADDR', '127.0.0.1');
 
-        $controller = new VotingController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -132,7 +144,7 @@ class VotingControllerTest extends TestCase
         $request = new Request([], [], [], [], [], [], $requestData);
         $request->server->set('REMOTE_ADDR', '127.0.0.1');
 
-        $controller = new VotingController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -151,7 +163,7 @@ class VotingControllerTest extends TestCase
         $request = new Request([], [], [], [], [], [], $requestData);
         $request->server->set('REMOTE_ADDR', '127.0.0.1');
 
-        $controller = new VotingController();
+        $controller = $this->createController();
 
         try {
             $response = $controller->create($request);
