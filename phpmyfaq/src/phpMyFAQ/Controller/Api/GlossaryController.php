@@ -125,7 +125,7 @@ final class GlossaryController extends AbstractApiController
     {
         $currentLanguage = $this->language->setLanguageByAcceptLanguage();
 
-        if ($currentLanguage !== false) {
+        if ($currentLanguage !== '') {
             $this->glossary->setLanguage($currentLanguage);
         }
 

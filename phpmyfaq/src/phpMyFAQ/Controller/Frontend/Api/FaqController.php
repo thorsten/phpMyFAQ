@@ -141,7 +141,11 @@ final class FaqController extends AbstractController
             && $this->stopWords->checkBannedWord(strip_tags($questionText))
         ) {
             if ($answer !== '' && $answer !== '0') {
-                $this->stopWords->checkBannedWord(strip_tags($answer));
+                if (!$this->stopWords->checkBannedWord(strip_tags($answer))) {
+                    return $this->json(['error' => Translation::get(
+                        key: 'errSaveEntries',
+                    )], Response::HTTP_BAD_REQUEST);
+                }
             } else {
                 $answer = '';
             }

@@ -117,10 +117,8 @@ final class NewsController extends AbstractApiController
         }'),
     )]
     #[Route('/api/v3.2/news', name: 'api.news.list', methods: ['GET'])]
-    public function list(?Request $request = null): JsonResponse
+    public function list(Request $request): JsonResponse
     {
-        $request ??= Request::createFromGlobals();
-
         // Get pagination and sorting parameters
         $pagination = $this->getPaginationRequest($request);
         $sort = $this->getSortRequest(

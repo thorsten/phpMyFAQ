@@ -86,7 +86,7 @@ abstract class AbstractFrontController extends AbstractController
             'customCss' => $this->configuration->getCustomCss(),
             'version' => $this->configuration->getVersion(),
             'header' => str_replace('"', '', $this->configuration->getTitle()),
-            'metaDescription' => $metaDescription ?? $this->configuration->get('seo.description'),
+            'metaDescription' => $this->configuration->get('seo.description'),
             'metaPublisher' => $this->configuration->get('main.metaPublisher'),
             'metaLanguage' => Translation::get(key: 'metaLanguage'),
             'metaRobots' => $this->seo->getMetaRobots($action),

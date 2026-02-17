@@ -120,7 +120,7 @@ class Elasticsearch
      */
     private function buildMappings(): array
     {
-        $tokenizer = $this->getTokenizer();
+        $searchAnalyzer = $this->getSearchAnalyzer();
 
         return [
             '_source' => [
@@ -130,22 +130,22 @@ class Elasticsearch
                 'question' => [
                     'type' => 'search_as_you_type',
                     'analyzer' => 'autocomplete',
-                    'search_analyzer' => $tokenizer,
+                    'search_analyzer' => $searchAnalyzer,
                 ],
                 'answer' => [
                     'type' => 'search_as_you_type',
                     'analyzer' => 'autocomplete',
-                    'search_analyzer' => $tokenizer,
+                    'search_analyzer' => $searchAnalyzer,
                 ],
                 'keywords' => [
                     'type' => 'search_as_you_type',
                     'analyzer' => 'autocomplete',
-                    'search_analyzer' => $tokenizer,
+                    'search_analyzer' => $searchAnalyzer,
                 ],
                 'categories' => [
                     'type' => 'search_as_you_type',
                     'analyzer' => 'autocomplete',
-                    'search_analyzer' => $tokenizer,
+                    'search_analyzer' => $searchAnalyzer,
                 ],
                 'content_type' => [
                     'type' => 'keyword',
@@ -155,6 +155,18 @@ class Elasticsearch
                 ],
             ],
         ];
+    }
+
+    private function getSearchAnalyzer(): string
+    {
+        if (defined('PMF_ELASTICSEARCH_SEARCH_ANALYZER')) {
+            $searchAnalyzer = constant('PMF_ELASTICSEARCH_SEARCH_ANALYZER');
+            if (is_string($searchAnalyzer) && $searchAnalyzer !== '') {
+                return $searchAnalyzer;
+            }
+        }
+
+        return 'standard';
     }
 
     private function getTokenizer(): string

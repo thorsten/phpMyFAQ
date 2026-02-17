@@ -74,7 +74,7 @@ final class VotingController extends AbstractController
             throw new Exception('Invalid vote value');
         }
 
-        if (isset($vote) && $this->rating->check($faqId, $userIp) && $vote > 0 && $vote < 6) {
+        if ($this->rating->check($faqId, $userIp)) {
             $this->userSession->userTracking('save_voting', $faqId);
 
             $votingData = new Vote();
@@ -90,14 +90,9 @@ final class VotingController extends AbstractController
                 'success' => Translation::get(key: 'msgVoteThanks'),
                 'rating' => $this->rating->get($faqId),
             ], Response::HTTP_OK);
-        }
-
-        if (!$this->rating->check($faqId, $userIp)) {
+        } else {
             $this->userSession->userTracking('error_save_voting', $faqId);
             return $this->json(['error' => Translation::get(key: 'err_VoteTooMuch')], Response::HTTP_BAD_REQUEST);
         }
-
-        $this->userSession->userTracking('error_save_voting', $faqId);
-        return $this->json(['error' => Translation::get(key: 'err_noVote')], Response::HTTP_BAD_REQUEST);
     }
 }
