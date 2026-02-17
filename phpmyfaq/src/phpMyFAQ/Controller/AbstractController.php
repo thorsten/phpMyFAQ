@@ -63,8 +63,6 @@ abstract class AbstractController
 
     protected ?SessionInterface $session = null;
 
-    private bool $containerInitialized = false;
-
     /** @var ExtensionInterface[] */
     private array $twigExtensions = [];
 
@@ -108,11 +106,7 @@ abstract class AbstractController
         $this->session = $this->container->get(id: 'session');
 
         TwigWrapper::setTemplateSetName($this->configuration->getTemplateSet());
-
-        if (!$this->containerInitialized) {
-            $this->containerInitialized = true;
-            $this->isSecured();
-        }
+        $this->isSecured();
     }
 
     /**

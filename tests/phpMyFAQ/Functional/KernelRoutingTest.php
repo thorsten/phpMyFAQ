@@ -40,7 +40,7 @@ use Symfony\Component\Routing\RouteCollection;
 
 class KernelRoutingTest extends TestCase
 {
-    private function createKernelStack(RouteCollection $routes, bool $isApi = false): HttpKernel
+    private function createKernelStack(RouteCollection $routes, bool $isApi = false): HttpKernelInterface
     {
         $dispatcher = new EventDispatcher();
 
@@ -55,12 +55,25 @@ class KernelRoutingTest extends TestCase
         $webListener = new WebExceptionListener();
         $dispatcher->addListener(KernelEvents::EXCEPTION, [$webListener, 'onKernelException'], -10);
 
-        return new HttpKernel(
-            $dispatcher,
-            new ControllerResolver(),
-            new RequestStack(),
-            new ArgumentResolver(),
-        );
+        $kernel = new HttpKernel($dispatcher, new ControllerResolver(), new RequestStack(), new ArgumentResolver());
+
+        if (!$isApi) {
+            return $kernel;
+        }
+
+        return new class($kernel) implements HttpKernelInterface {
+            public function __construct(
+                private readonly HttpKernelInterface $kernel,
+            ) {
+            }
+
+            public function handle(Request $request, int $type = self::MAIN_REQUEST, bool $catch = true): Response
+            {
+                $request->attributes->set('_api_context', true);
+
+                return $this->kernel->handle($request, $type, $catch);
+            }
+        };
     }
 
     public function testSuccessfulRouteReturnsOk(): void
@@ -181,12 +194,19 @@ class KernelRoutingTest extends TestCase
     public function testRouteWithParameters(): void
     {
         $routes = new RouteCollection();
-        $routes->add('param_route', new Route('/items/{id}', [
-            '_controller' => function (Request $request) {
-                $id = $request->attributes->get('id');
-                return new Response(sprintf('Item %s', $id));
-            },
-        ], requirements: ['id' => '\d+']));
+        $routes->add(
+            'param_route',
+            new Route(
+                '/items/{id}',
+                [
+                    '_controller' => function (Request $request) {
+                        $id = $request->attributes->get('id');
+                        return new Response(sprintf('Item %s', $id));
+                    },
+                ],
+                requirements: ['id' => '\d+'],
+            ),
+        );
 
         $kernel = $this->createKernelStack($routes);
 

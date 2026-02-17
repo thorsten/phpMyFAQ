@@ -51,9 +51,21 @@ final class VotingController extends AbstractController
             throw new Exception('Missing vote value');
         }
 
+        if (!isset($data->id)) {
+            throw new Exception('Missing FAQ ID');
+        }
+
         $faqId = Filter::filterVar($data->id ?? null, FILTER_VALIDATE_INT, 0);
         $vote = Filter::filterVar($data->value, FILTER_VALIDATE_INT);
         $userIp = Filter::filterVar($request->server->get('REMOTE_ADDR'), FILTER_VALIDATE_IP) ?? '';
+
+        if ($faqId <= 0) {
+            throw new Exception('Missing FAQ ID');
+        }
+
+        if (!isset($vote) || $vote < 1 || $vote > 5) {
+            throw new Exception('Invalid vote value');
+        }
 
         if (isset($vote) && $rating->check($faqId, $userIp) && $vote > 0 && $vote < 6) {
             $session->userTracking('save_voting', $faqId);

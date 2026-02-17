@@ -21,12 +21,29 @@ namespace phpMyFAQ\Controller\Api;
 
 use Exception;
 use OpenApi\Attributes as OA;
+use phpMyFAQ\Glossary;
+use phpMyFAQ\Language;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class GlossaryController extends AbstractApiController
 {
+    private readonly Glossary $glossary;
+    private readonly Language $language;
+
+    public function __construct(?Glossary $glossary = null, ?Language $language = null)
+    {
+        parent::__construct();
+        $resolvedGlossary = $glossary ?? $this->container?->get(id: 'phpmyfaq.glossary');
+        $resolvedLanguage = $language ?? $this->container?->get(id: 'phpmyfaq.language');
+        if (!$resolvedGlossary instanceof Glossary || !$resolvedLanguage instanceof Language) {
+            throw new \RuntimeException('Glossary services are not available in the container.');
+        }
+        $this->glossary = $resolvedGlossary;
+        $this->language = $resolvedLanguage;
+    }
+
     /**
      * @throws Exception
      */
@@ -114,24 +131,23 @@ final class GlossaryController extends AbstractApiController
     #[Route(path: 'v3.2/glossary', name: 'api.glossary.list', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
-        $glossary = $this->container->get(id: 'phpmyfaq.glossary');
-        $language = $this->container->get(id: 'phpmyfaq.language');
-        $currentLanguage = $language->setLanguageByAcceptLanguage();
+        $currentLanguage = $this->language->setLanguageByAcceptLanguage();
 
         if ($currentLanguage !== false) {
-            $glossary->setLanguage($currentLanguage);
+            $this->glossary->setLanguage($currentLanguage);
         }
 
         // Get pagination and sorting parameters
-        $pagination = $this->getPaginationRequest();
+        $pagination = $this->getPaginationRequest($request);
         $sort = $this->getSortRequest(
+            $request,
             allowedFields: ['id', 'item', 'definition'],
             defaultField: 'item',
             defaultOrder: 'asc',
         );
 
         // Get all glossary items
-        $allItems = $glossary->fetchAll();
+        $allItems = $this->glossary->fetchAll();
         $total = is_countable($allItems) ? count($allItems) : 0;
 
         // Apply sorting if needed
@@ -149,6 +165,7 @@ final class GlossaryController extends AbstractApiController
         $result = array_slice($allItems, $pagination->offset, $pagination->limit);
 
         return $this->paginatedResponse(
+            $request,
             data: array_values($result),
             total: $total,
             pagination: $pagination,

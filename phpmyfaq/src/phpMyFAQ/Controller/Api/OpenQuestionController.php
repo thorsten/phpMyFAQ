@@ -22,10 +22,23 @@ namespace phpMyFAQ\Controller\Api;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Question;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class OpenQuestionController extends AbstractApiController
 {
+    private readonly Question $question;
+
+    public function __construct(?Question $question = null)
+    {
+        parent::__construct();
+        $resolvedQuestion = $question ?? $this->container?->get(id: 'phpmyfaq.question');
+        if (!$resolvedQuestion instanceof Question) {
+            throw new \RuntimeException('Question service "phpmyfaq.question" is not available.');
+        }
+        $this->question = $resolvedQuestion;
+    }
+
     /**
      * @throws \Exception
      */
@@ -118,23 +131,22 @@ final class OpenQuestionController extends AbstractApiController
         }',
     ))]
     #[Route('/api/v3.2/open-questions', name: 'api_open_questions', methods: ['GET'])]
-    public function list(): JsonResponse
+    public function list(?Request $request = null): JsonResponse
     {
-        /** @var Question $question */
-        $question = $this->container?->get(id: 'phpmyfaq.question');
-
+        $request ??= Request::createFromGlobals();
         $onlyPublic = (bool) $this->configuration->get('api.onlyPublicQuestions');
 
         // Get pagination and sorting parameters
-        $pagination = $this->getPaginationRequest();
+        $pagination = $this->getPaginationRequest($request);
         $sort = $this->getSortRequest(
+            $request,
             allowedFields: ['id', 'username', 'created', 'categoryId'],
             defaultField: 'id',
             defaultOrder: 'asc',
         );
 
         // Get all open questions
-        $allQuestions = $question->getAll($onlyPublic);
+        $allQuestions = $this->question->getAll($onlyPublic);
         $total = is_countable($allQuestions) ? count($allQuestions) : 0;
 
         // Apply sorting if needed
@@ -152,6 +164,7 @@ final class OpenQuestionController extends AbstractApiController
         $result = array_slice($allQuestions, $pagination->offset, $pagination->limit);
 
         return $this->paginatedResponse(
+            $request,
             data: array_values($result),
             total: $total,
             pagination: $pagination,

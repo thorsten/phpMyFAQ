@@ -35,6 +35,18 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class CategoryController extends AbstractApiController
 {
+    private readonly Language $language;
+
+    public function __construct(?Language $language = null)
+    {
+        parent::__construct();
+        $resolvedLanguage = $language ?? $this->container?->get(id: 'phpmyfaq.language');
+        if (!$resolvedLanguage instanceof Language) {
+            throw new \RuntimeException('Language service "phpmyfaq.language" is not available.');
+        }
+        $this->language = $resolvedLanguage;
+    }
+
     /**
      * @throws \Exception
      */
@@ -126,11 +138,10 @@ final class CategoryController extends AbstractApiController
         }'),
     )]
     #[Route(path: 'v3.2/categories', name: 'api.categories.list', methods: ['GET'])]
-    public function list(): JsonResponse
+    public function list(?Request $request = null): JsonResponse
     {
-        /** @var Language $language */
-        $language = $this->container->get(id: 'phpmyfaq.language');
-        $currentLanguage = $language->setLanguageByAcceptLanguage();
+        $request ??= Request::createFromGlobals();
+        $currentLanguage = $this->language->setLanguageByAcceptLanguage();
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
@@ -142,8 +153,9 @@ final class CategoryController extends AbstractApiController
         $onlyActive = (bool) $this->configuration->get('api.onlyActiveCategories');
 
         // Get pagination and sorting parameters
-        $pagination = $this->getPaginationRequest();
+        $pagination = $this->getPaginationRequest($request);
         $sort = $this->getSortRequest(
+            $request,
             allowedFields: ['id', 'name', 'parent_id', 'active'],
             defaultField: 'id',
             defaultOrder: 'asc',
@@ -162,6 +174,7 @@ final class CategoryController extends AbstractApiController
         $total = $category->countCategories(activeOnly: $onlyActive);
 
         return $this->paginatedResponse(
+            $request,
             data: array_values($categories),
             total: $total,
             pagination: $pagination,

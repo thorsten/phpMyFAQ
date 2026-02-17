@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Controller\ContainerControllerResolver;
 use phpMyFAQ\EventListener\ApiExceptionListener;
 use phpMyFAQ\EventListener\ControllerContainerListener;
 use phpMyFAQ\EventListener\LanguageListener;
@@ -39,7 +40,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
-use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -116,8 +116,12 @@ class Kernel implements HttpKernelInterface
 
         try {
             $phpFileLoader->load(resource: 'services.php');
-        } catch (\Exception $exception) {
-            error_log('Kernel: Failed to load services.php: ' . $exception->getMessage());
+        } catch (\Throwable $exception) {
+            throw new \RuntimeException(
+                'Kernel boot failed while loading "services.php"; cannot resolve "phpmyfaq.event_dispatcher".',
+                0,
+                $exception,
+            );
         }
 
         // Register Forms services
@@ -158,7 +162,7 @@ class Kernel implements HttpKernelInterface
 
         $this->registerEventListeners($dispatcher);
 
-        $controllerResolver = new ControllerResolver();
+        $controllerResolver = new ContainerControllerResolver($this->container);
         $requestStack = new RequestStack();
         $argumentResolver = new ArgumentResolver();
 

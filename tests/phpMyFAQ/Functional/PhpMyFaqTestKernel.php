@@ -25,9 +25,6 @@ class PhpMyFaqTestKernel extends Kernel
 {
     public function __construct(string $routingContext = 'public')
     {
-        parent::__construct(
-            routingContext: $routingContext,
-            debug: true,
-        );
+        parent::__construct(routingContext: $routingContext, debug: true);
     }
 }

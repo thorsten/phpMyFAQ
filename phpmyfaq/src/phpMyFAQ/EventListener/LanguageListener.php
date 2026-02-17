@@ -98,7 +98,7 @@ class LanguageListener
                 ->setCurrentLanguage($currentLanguage)
                 ->setMultiByteLanguage();
         } catch (Exception $exception) {
-            throw new Exception($exception->getMessage());
+            throw $exception;
         }
     }
 }

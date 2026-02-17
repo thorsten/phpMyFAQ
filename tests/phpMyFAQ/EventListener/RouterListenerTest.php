@@ -6,7 +6,10 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -65,7 +68,7 @@ class RouterListenerTest extends TestCase
         $this->assertEquals('SomeController::action', $request->attributes->get('_controller'));
     }
 
-    public function testThrowsOnNoMatch(): void
+    public function testThrowsNotFoundHttpExceptionOnNoMatch(): void
     {
         $routes = new RouteCollection();
         $listener = new RouterListener($routes);
@@ -73,7 +76,44 @@ class RouterListenerTest extends TestCase
         $request = Request::create('/nonexistent');
         $event = $this->createEvent($request);
 
-        $this->expectException(ResourceNotFoundException::class);
-        $listener->onKernelRequest($event);
+        try {
+            $listener->onKernelRequest($event);
+            $this->fail('Expected NotFoundHttpException was not thrown.');
+        } catch (NotFoundHttpException $exception) {
+            $this->assertInstanceOf(ResourceNotFoundException::class, $exception->getPrevious());
+        }
+    }
+
+    public function testThrowsMethodNotAllowedHttpExceptionWhenMethodIsNotAllowed(): void
+    {
+        $routes = new RouteCollection();
+        $routes->add(
+            'test_route',
+            new Route(
+                '/test',
+                [
+                    '_controller' => static function () {
+                        return new Response('OK');
+                    },
+                ],
+                [],
+                [],
+                '',
+                [],
+                ['GET'],
+            ),
+        );
+
+        $listener = new RouterListener($routes);
+        $request = Request::create('/test', 'POST');
+        $event = $this->createEvent($request);
+
+        try {
+            $listener->onKernelRequest($event);
+            $this->fail('Expected MethodNotAllowedHttpException was not thrown.');
+        } catch (MethodNotAllowedHttpException $exception) {
+            $this->assertStringContainsString('GET', $exception->getHeaders()['Allow'] ?? '');
+            $this->assertInstanceOf(MethodNotAllowedException::class, $exception->getPrevious());
+        }
     }
 }

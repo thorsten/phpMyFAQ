@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
@@ -40,6 +41,8 @@ class WebExceptionListener
     {
         $request = $event->getRequest();
         $pathInfo = $request->getPathInfo();
+        $baseUrl = '/' . ltrim(rtrim($request->getBaseUrl(), '/'), '/');
+        $loginPath = $baseUrl === '/' ? '/login' : $baseUrl . '/login';
 
         // Skip API requests — handled by ApiExceptionListener
         if (str_starts_with($pathInfo, '/api/') || $request->attributes->get('_api_context', false)) {
@@ -49,8 +52,10 @@ class WebExceptionListener
         $throwable = $event->getThrowable();
 
         $response = match (true) {
-            $throwable instanceof ResourceNotFoundException => $this->handleNotFound($event),
-            $throwable instanceof UnauthorizedHttpException => new RedirectResponse(url: './login'),
+            $throwable instanceof ResourceNotFoundException,
+            $throwable instanceof NotFoundHttpException,
+                => $this->handleNotFound($event),
+            $throwable instanceof UnauthorizedHttpException => new RedirectResponse(url: $loginPath),
             $throwable instanceof ForbiddenException => $this->handleErrorResponse(
                 'An error occurred: :message at line :line at :file',
                 'Forbidden',

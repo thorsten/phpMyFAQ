@@ -43,12 +43,7 @@ class ControllerContainerListenerTest extends TestCase
         $kernel = $this->createMock(HttpKernelInterface::class);
         $request = Request::create('/test');
 
-        $event = new ControllerEvent(
-            $kernel,
-            [$controller, 'testAction'],
-            $request,
-            HttpKernelInterface::MAIN_REQUEST,
-        );
+        $event = new ControllerEvent($kernel, [$controller, 'testAction'], $request, HttpKernelInterface::MAIN_REQUEST);
 
         $listener->onKernelController($event);
 
@@ -67,12 +62,7 @@ class ControllerContainerListenerTest extends TestCase
         $kernel = $this->createMock(HttpKernelInterface::class);
         $request = Request::create('/test');
 
-        $event = new ControllerEvent(
-            $kernel,
-            $controller,
-            $request,
-            HttpKernelInterface::MAIN_REQUEST,
-        );
+        $event = new ControllerEvent($kernel, $controller, $request, HttpKernelInterface::MAIN_REQUEST);
 
         // Should not throw or error
         $listener->onKernelController($event);

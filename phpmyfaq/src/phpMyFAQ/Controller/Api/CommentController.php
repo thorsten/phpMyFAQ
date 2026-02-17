@@ -30,6 +30,18 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class CommentController extends AbstractApiController
 {
+    private readonly Comments $comments;
+
+    public function __construct(?Comments $comments = null)
+    {
+        parent::__construct();
+        $resolvedComments = $comments ?? $this->container?->get(id: 'phpmyfaq.comments');
+        if (!$resolvedComments instanceof Comments) {
+            throw new \RuntimeException('Comments service "phpmyfaq.comments" is not available.');
+        }
+        $this->comments = $resolvedComments;
+    }
+
     /**
      * @throws Exception
      */
@@ -133,19 +145,17 @@ final class CommentController extends AbstractApiController
     {
         $recordId = (int) Filter::filterVar($request->attributes->get(key: 'recordId'), FILTER_VALIDATE_INT);
 
-        /** @var Comments $comments */
-        $comments = $this->container->get(id: 'phpmyfaq.comments');
-
         // Get pagination and sorting parameters
-        $pagination = $this->getPaginationRequest();
+        $pagination = $this->getPaginationRequest($request);
         $sort = $this->getSortRequest(
+            $request,
             allowedFields: ['id_comment', 'id', 'usr', 'email', 'datum'],
             defaultField: 'id_comment',
             defaultOrder: 'asc',
         );
 
         // Get paginated comments
-        $result = $comments->getCommentsDataPaginated(
+        $result = $this->comments->getCommentsDataPaginated(
             referenceId: $recordId,
             type: CommentType::FAQ,
             limit: $pagination->limit,
@@ -155,8 +165,8 @@ final class CommentController extends AbstractApiController
         );
 
         // Get total count
-        $total = $comments->countComments($recordId, CommentType::FAQ);
+        $total = $this->comments->countComments($recordId, CommentType::FAQ);
 
-        return $this->paginatedResponse(data: $result, total: $total, pagination: $pagination, sort: $sort);
+        return $this->paginatedResponse($request, data: $result, total: $total, pagination: $pagination, sort: $sort);
     }
 }

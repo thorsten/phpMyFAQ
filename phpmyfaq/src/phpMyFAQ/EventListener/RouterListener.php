@@ -22,6 +22,10 @@ declare(strict_types=1);
 namespace phpMyFAQ\EventListener;
 
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
@@ -50,7 +54,18 @@ class RouterListener
         $requestContext->fromRequest($request);
 
         $urlMatcher = new UrlMatcher($this->routes, $requestContext);
-        $parameters = $urlMatcher->match($request->getPathInfo());
+        try {
+            $parameters = $urlMatcher->match($request->getPathInfo());
+        } catch (ResourceNotFoundException $exception) {
+            throw new NotFoundHttpException($exception->getMessage(), $exception);
+        } catch (MethodNotAllowedException $exception) {
+            throw new MethodNotAllowedHttpException(
+                $exception->getAllowedMethods(),
+                $exception->getMessage(),
+                $exception,
+            );
+        }
+
         $request->attributes->add($parameters);
     }
 }

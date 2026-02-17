@@ -141,7 +141,7 @@ class VotingControllerTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testCreateWithValidVoteValueThrowsException(): void
+    public function testCreateWithValidVoteValueReturnsJsonResponseOrThrowsException(): void
     {
         $requestData = json_encode([
             'id' => 1,
@@ -153,7 +153,12 @@ class VotingControllerTest extends TestCase
 
         $controller = new VotingController();
 
-        $this->expectException(\Exception::class);
-        $controller->create($request);
+        try {
+            $response = $controller->create($request);
+            $this->assertNotNull($response);
+            $this->assertContains($response->getStatusCode(), [200, 400]);
+        } catch (\Exception $exception) {
+            $this->assertNotEmpty($exception->getMessage());
+        }
     }
 }

@@ -20,12 +20,26 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
+use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class TagController extends AbstractApiController
 {
+    private readonly Tags $tags;
+
+    public function __construct(?Tags $tags = null)
+    {
+        parent::__construct();
+        $resolvedTags = $tags ?? $this->container?->get(id: 'phpmyfaq.tags');
+        if (!$resolvedTags instanceof Tags) {
+            throw new \RuntimeException('Tags service "phpmyfaq.tags" is not available.');
+        }
+        $this->tags = $resolvedTags;
+    }
+
     /**
      * @throws \Exception
      */
@@ -106,23 +120,25 @@ final class TagController extends AbstractApiController
         }',
     ))]
     #[Route('/api/v3.2/tags', name: 'api.tags', methods: ['GET'])]
-    public function list(): JsonResponse
+    public function list(?Request $request = null): JsonResponse
     {
-        $tags = $this->container->get(id: 'phpmyfaq.tags');
+        $request ??= Request::createFromGlobals();
+
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
-        $tags->setUser($currentUser);
-        $tags->setGroups($currentGroups);
+        $this->tags->setUser($currentUser);
+        $this->tags->setGroups($currentGroups);
 
         // Get pagination and sorting parameters
-        $pagination = $this->getPaginationRequest();
+        $pagination = $this->getPaginationRequest($request);
         $sort = $this->getSortRequest(
+            $request,
             allowedFields: ['tagId', 'tagName', 'tagFrequency'],
             defaultField: 'tagFrequency',
             defaultOrder: 'desc',
         );
 
         // Get all tags (we'll use a high limit to get all tags)
-        $allTags = $tags->getPopularTagsAsArray(limit: 1000);
+        $allTags = $this->tags->getPopularTagsAsArray(limit: 1000);
         $total = is_countable($allTags) ? count($allTags) : 0;
 
         // Apply sorting if needed
@@ -140,6 +156,7 @@ final class TagController extends AbstractApiController
         $result = array_slice($allTags, $pagination->offset, $pagination->limit);
 
         return $this->paginatedResponse(
+            $request,
             data: array_values($result),
             total: $total,
             pagination: $pagination,

@@ -21,26 +21,28 @@ namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
-use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Notification;
 use phpMyFAQ\Question;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class QuestionController extends AbstractController
+final class QuestionController extends AbstractApiController
 {
-    public function __construct()
+    private readonly Notification $notification;
+
+    public function __construct(?Notification $notification = null)
     {
         parent::__construct();
-
-        if (!$this->isApiEnabled()) {
-            throw new UnauthorizedHttpException(challenge: 'API is not enabled');
+        $resolvedNotification = $notification ?? $this->container?->get(id: 'phpmyfaq.notification');
+        if (!$resolvedNotification instanceof Notification) {
+            throw new \RuntimeException('Notification service "phpmyfaq.notification" is not available.');
         }
+        $this->notification = $resolvedNotification;
     }
 
     /**
@@ -119,8 +121,7 @@ final class QuestionController extends AbstractController
 
         $categories = $category->getAllCategories();
 
-        $notification = $this->container->get('phpmyfaq.notification');
-        $notification->sendQuestionSuccessMail($questionEntity, $categories);
+        $this->notification->sendQuestionSuccessMail($questionEntity, $categories);
 
         return $this->json(['stored' => true], Response::HTTP_CREATED);
     }

@@ -28,6 +28,7 @@ use phpMyFAQ\Environment;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
@@ -51,7 +52,7 @@ readonly class ApiExceptionListener
         $throwable = $event->getThrowable();
 
         [$status, $defaultDetail] = match (true) {
-            $throwable instanceof ResourceNotFoundException => [
+            $throwable instanceof ResourceNotFoundException, $throwable instanceof NotFoundHttpException => [
                 Response::HTTP_NOT_FOUND,
                 'The requested resource was not found.',
             ],

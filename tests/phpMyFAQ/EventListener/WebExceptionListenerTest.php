@@ -71,7 +71,7 @@ class WebExceptionListenerTest extends TestCase
         $response = $event->getResponse();
         $this->assertNotNull($response);
         $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode());
-        $this->assertEquals('./login', $response->headers->get('Location'));
+        $this->assertEquals('/login', $response->headers->get('Location'));
     }
 
     public function testHandlesForbiddenException(): void

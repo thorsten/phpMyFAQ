@@ -55,10 +55,10 @@ abstract class WebTestCase extends TestCase
     {
         $response ??= static::$client?->getResponse();
         static::assertNotNull($response, 'No response available. Did you make a request?');
-        static::assertTrue(
-            $response->isSuccessful(),
-            sprintf('Expected successful response, got %d', $response->getStatusCode()),
-        );
+        static::assertTrue($response->isSuccessful(), sprintf(
+            'Expected successful response, got %d',
+            $response->getStatusCode(),
+        ));
     }
 
     protected static function assertResponseHeaderSame(
@@ -108,13 +108,6 @@ class HttpKernelBrowser extends AbstractBrowser
 
     public function getResponse(): ?Response
     {
-        $response = $this->getInternalResponse();
-
-        // Try the stored response first
-        if ($this->response !== null) {
-            return $this->response;
-        }
-
-        return null;
+        return $this->response;
     }
 }
