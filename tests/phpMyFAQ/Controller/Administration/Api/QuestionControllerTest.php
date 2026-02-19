@@ -6,6 +6,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Question;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 class QuestionControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private Question $question;
 
     /**
      * @throws Exception
@@ -33,6 +35,7 @@ class QuestionControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+        $this->question = $this->createStub(Question::class);
     }
 
     /**
@@ -47,7 +50,7 @@ class QuestionControllerTest extends TestCase
             ],
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new QuestionController();
+        $controller = new QuestionController($this->question);
 
         $this->expectException(\Exception::class);
         $controller->delete($request);
@@ -60,7 +63,7 @@ class QuestionControllerTest extends TestCase
     {
         $requestData = json_encode(['csrfToken' => 'test-token', 'questionId' => 1]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new QuestionController();
+        $controller = new QuestionController($this->question);
 
         $this->expectException(\Exception::class);
         $controller->toggle($request);
@@ -72,7 +75,7 @@ class QuestionControllerTest extends TestCase
     public function testDeleteWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new QuestionController();
+        $controller = new QuestionController($this->question);
 
         $this->expectException(\Exception::class);
         $controller->delete($request);
@@ -84,7 +87,7 @@ class QuestionControllerTest extends TestCase
     public function testToggleWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new QuestionController();
+        $controller = new QuestionController($this->question);
 
         $this->expectException(\Exception::class);
         $controller->toggle($request);
@@ -101,7 +104,7 @@ class QuestionControllerTest extends TestCase
             ],
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new QuestionController();
+        $controller = new QuestionController($this->question);
 
         $this->expectException(\Exception::class);
         $controller->delete($request);
@@ -114,7 +117,7 @@ class QuestionControllerTest extends TestCase
     {
         $requestData = json_encode(['questionId' => 1]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new QuestionController();
+        $controller = new QuestionController($this->question);
 
         $this->expectException(\Exception::class);
         $controller->toggle($request);

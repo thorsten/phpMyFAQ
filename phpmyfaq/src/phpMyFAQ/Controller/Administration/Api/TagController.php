@@ -25,6 +25,7 @@ use phpMyFAQ\Entity\Tag;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -34,6 +35,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class TagController extends AbstractController
 {
+    public function __construct(
+        private readonly Tags $tags,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws \Exception
@@ -56,7 +63,7 @@ final class TagController extends AbstractController
         $tag->setId($id);
         $tag->setName($newTag);
 
-        if ($this->container->get(id: 'phpmyfaq.tags')->update($tag)) {
+        if ($this->tags->update($tag)) {
             return $this->json(['updated' => Translation::get(key: 'ad_entryins_suc')], Response::HTTP_OK);
         }
 
@@ -71,8 +78,6 @@ final class TagController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $tag = $this->container->get(id: 'phpmyfaq.tags');
-
         $autoCompleteValue = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $tags = [];
@@ -82,7 +87,7 @@ final class TagController extends AbstractController
                 $autoCompleteValue = end($arrayOfValues);
             }
 
-            $tags = $tag->getAllTags(
+            $tags = $this->tags->getAllTags(
                 strtolower(trim((string) $autoCompleteValue)),
                 PMF_TAGS_CLOUD_RESULT_SET_SIZE,
                 strict: true,
@@ -90,7 +95,7 @@ final class TagController extends AbstractController
         }
 
         if (is_null($autoCompleteValue)) {
-            $tags = $tag->getAllTags();
+            $tags = $this->tags->getAllTags();
         }
 
         if ($this->currentUser->perm->hasPermission($this->currentUser->getUserId(), PermissionType::FAQ_EDIT)) {
@@ -121,7 +126,7 @@ final class TagController extends AbstractController
 
         $tagId = (int) Filter::filterVar($request->attributes->get('tagId'), FILTER_VALIDATE_INT);
 
-        if ($this->container->get(id: 'phpmyfaq.tags')->delete($tagId)) {
+        if ($this->tags->delete($tagId)) {
             return $this->json(['success' => Translation::get(key: 'ad_tag_delete_success')], Response::HTTP_OK);
         }
 

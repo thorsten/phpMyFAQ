@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\BackupType;
@@ -38,6 +39,12 @@ use function in_array;
 
 final class BackupController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly Backup $backup,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws LoaderError
@@ -76,7 +83,7 @@ final class BackupController extends AbstractAdministrationController
 
         $this->adminLog->log($this->currentUser, AdminLogType::BACKUP_EXPORT->value);
 
-        $backup = $this->container->get(id: 'phpmyfaq.backup');
+        $backup = $this->backup;
 
         $backupType = $type === 'content' ? BackupType::BACKUP_TYPE_DATA : BackupType::BACKUP_TYPE_LOGS;
 
@@ -159,7 +166,7 @@ final class BackupController extends AbstractAdministrationController
             ]);
         }
 
-        $backup = $this->container->get(id: 'phpmyfaq.backup');
+        $backup = $this->backup;
 
         $fileName = $file->getClientOriginalName();
 

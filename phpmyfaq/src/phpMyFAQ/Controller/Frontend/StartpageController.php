@@ -21,9 +21,13 @@ namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Category\Startpage;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\News;
+use phpMyFAQ\System;
+use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\TagNameTwigExtension;
 use phpMyFAQ\User\CurrentUser;
@@ -34,6 +38,14 @@ use Twig\Extension\AttributeExtension;
 
 final class StartpageController extends AbstractFrontController
 {
+    public function __construct(
+        private readonly Plurals $plurals,
+        private readonly Faq $faq,
+        private readonly Tags $tags,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * Displays the start page with categories, Top 10, and latest messages.
      *
@@ -44,7 +56,6 @@ final class StartpageController extends AbstractFrontController
     public function index(Request $request): Response
     {
         $news = new News($this->configuration);
-        $plurals = $this->container->get('phpmyfaq.language.plurals');
         $faqStatistics = new Statistics($this->configuration);
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -60,26 +71,23 @@ final class StartpageController extends AbstractFrontController
         // Get top ten parameter
         $param = $this->configuration->get('records.orderingPopularFaqs') === 'visits' ? 'visits' : 'voted';
 
-        $faq = $this->container->get('phpmyfaq.faq');
-        $faq->setUser($currentUser);
-        $faq->setGroups($currentGroups);
+        $this->faq->setUser($currentUser);
+        $this->faq->setGroups($currentGroups);
 
-        $tags = $this->container->get('phpmyfaq.tags');
-        $tags->setUser($currentUser)->setGroups($currentGroups);
+        $this->tags->setUser($currentUser)->setGroups($currentGroups);
 
-        $faqSystem = $this->container->get('phpmyfaq.system');
         Filter::filterVar($request->query->get('cat'), FILTER_VALIDATE_INT, 0);
 
         $this->addExtension(new AttributeExtension(TagNameTwigExtension::class));
         return $this->render('startpage.twig', [
             ...$this->getHeader($request),
-            'baseHref' => $faqSystem->getSystemUri($this->configuration),
+            'baseHref' => $this->faqSystem->getSystemUri($this->configuration),
             'title' => $this->configuration->getTitle(),
             'pageHeader' => $this->configuration->getTitle(),
             'startPageCategories' => (is_countable($startPageCategories) ? count($startPageCategories) : 0) > 0,
             'startPageCategoryDecks' => $startPageCategories,
             'stickyRecordsHeader' => Translation::get(key: 'stickyRecordsHeader'),
-            'stickyRecordsList' => $faq->getStickyFaqsData(),
+            'stickyRecordsList' => $this->faq->getStickyFaqsData(),
             'writeTopTenHeader' => Translation::get(key: 'msgTopTen'),
             'topRecordsList' => $faqStatistics->getTopTen($param),
             'errorMsgTopTen' => Translation::get(key: 'err_noTopTen'),
@@ -91,12 +99,12 @@ final class StartpageController extends AbstractFrontController
             'errorMsgTrendingFaqs' => Translation::get(key: 'msgErrorNoRecords'),
             'msgNewsHeader' => Translation::get(key: 'newsArchive'),
             'newsList' => $news->getAll(),
-            'writeNumberOfArticles' => $plurals->get(
+            'writeNumberOfArticles' => $this->plurals->get(
                 'plmsgHomeArticlesOnline',
                 $faqStatistics->totalFaqs($this->configuration->getLanguage()->getLanguage()),
             ),
             'msgTags' => Translation::get(key: 'msgPopularTags'),
-            'tagsList' => $tags->getPopularTags(12),
+            'tagsList' => $this->tags->getPopularTags(12),
         ]);
     }
 }

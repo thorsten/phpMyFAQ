@@ -26,6 +26,7 @@ use phpMyFAQ\Pagination;
 use phpMyFAQ\Pagination\UrlConfig;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Twig\Extensions\PermissionTranslationTwigExtension;
+use phpMyFAQ\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -34,6 +35,12 @@ use Twig\Extension\AttributeExtension;
 
 final class UserController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly User $user,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws LoaderError
@@ -85,8 +92,7 @@ final class UserController extends AbstractAdministrationController
     #[Route(path: '/user/list', name: 'admin.user.list', methods: ['GET'])]
     public function list(Request $request): Response
     {
-        $user = $this->container->get(id: 'phpmyfaq.user');
-        $allUsers = $user->getAllUsers(false);
+        $allUsers = $this->user->getAllUsers(false);
         $numUsers = is_countable($allUsers) ? count($allUsers) : 0;
 
         $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT, 0);
@@ -105,7 +111,7 @@ final class UserController extends AbstractAdministrationController
         $displayedCounter = 0;
         $users = [];
         foreach ($allUsers as $allUser) {
-            $user->getUserById($allUser, true);
+            $this->user->getUserById($allUser, true);
 
             if ($displayedCounter >= $perPage) {
                 continue;
@@ -119,13 +125,13 @@ final class UserController extends AbstractAdministrationController
             ++$displayedCounter;
 
             $tempUser = [
-                'display_name' => $user->getUserData('display_name'),
-                'id' => $user->getUserId(),
-                'email' => $user->getUserData('email'),
-                'status' => $user->getStatus(),
-                'isSuperAdmin' => $user->isSuperAdmin(),
-                'isVisible' => $user->getUserData('is_visible'),
-                'login' => $user->getLogin(),
+                'display_name' => $this->user->getUserData('display_name'),
+                'id' => $this->user->getUserId(),
+                'email' => $this->user->getUserData('email'),
+                'status' => $this->user->getStatus(),
+                'isSuperAdmin' => $this->user->isSuperAdmin(),
+                'isVisible' => $this->user->getUserData('is_visible'),
+                'login' => $this->user->getLogin(),
             ];
 
             $users[] = $tempUser;
@@ -150,7 +156,6 @@ final class UserController extends AbstractAdministrationController
     private function getBaseTemplateVars(): array
     {
         $currentUserId = $this->currentUser->getUserId();
-        $user = $this->container->get(id: 'phpmyfaq.user');
 
         return [
             'permissionAddUser' => $this->currentUser->perm->hasPermission(
@@ -171,7 +176,7 @@ final class UserController extends AbstractAdministrationController
             'csrfToken_deleteUser' => Token::getInstance($this->session)->getTokenString('delete-user'),
             'csrfToken_addUser' => Token::getInstance($this->session)->getTokenString('add-user'),
             'csrfToken_overwritePassword' => Token::getInstance($this->session)->getTokenString('overwrite-password'),
-            'userRights' => $user->perm->getAllRightsData(),
+            'userRights' => $this->user->perm->getAllRightsData(),
             'userIsSuperAdmin' => $this->currentUser->isSuperAdmin(),
         ];
     }

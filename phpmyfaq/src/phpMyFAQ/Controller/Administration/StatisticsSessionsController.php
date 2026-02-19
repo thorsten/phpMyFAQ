@@ -19,12 +19,15 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Date;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\StatisticsHelper;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Visits;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -32,6 +35,14 @@ use Twig\Error\LoaderError;
 
 final class StatisticsSessionsController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly AdminSession $adminSession,
+        private readonly Date $date,
+        private readonly Visits $visits,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws LoaderError
      * @throws Exception
@@ -42,9 +53,9 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
-        $adminSession = $this->container->get(id: 'phpmyfaq.admin.session');
-        $date = $this->container->get(id: 'phpmyfaq.date');
-        $visits = $this->container->get(id: 'phpmyfaq.visits');
+        $adminSession = $this->adminSession;
+        $date = $this->date;
+        $visits = $this->visits;
         $statisticsHelper = new StatisticsHelper($adminSession, $visits, $date);
 
         $stats = $statisticsHelper->getTrackingFilesStatistics();
@@ -101,8 +112,7 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
         $firstHour = strtotime(datetime: 'midnight', baseTimestamp: $day);
         $lastHour = strtotime(datetime: 'tomorrow', baseTimestamp: $firstHour) - 1;
 
-        $session = $this->container->get(id: 'phpmyfaq.admin.session');
-        $sessionData = $session->getSessionsByDate($firstHour, $lastHour);
+        $sessionData = $this->adminSession->getSessionsByDate($firstHour, $lastHour);
 
         return $this->render(file: '@admin/statistics/sessions.day.twig', context: [
             ...$this->getHeader($request),
@@ -128,8 +138,7 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
 
         $sessionId = (int) Filter::filterVar($request->attributes->get(key: 'sessionId'), FILTER_VALIDATE_INT);
 
-        $session = $this->container->get(id: 'phpmyfaq.admin.session');
-        $time = $session->getTimeFromSessionId($sessionId);
+        $time = $this->adminSession->getTimeFromSessionId($sessionId);
         $trackingData = explode(
             separator: "\n",
             string: file_get_contents(PMF_CONTENT_DIR . '/core/data/tracking' . date(format: 'dmY', timestamp: $time)),

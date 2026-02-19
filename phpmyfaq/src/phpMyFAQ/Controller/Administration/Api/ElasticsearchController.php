@@ -137,10 +137,7 @@ final class ElasticsearchController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        /** @var Elasticsearch $elasticsearch */
-        $elasticsearch = $this->container->get(id: 'phpmyfaq.instance.elasticsearch');
-
-        $isAvailable = $elasticsearch->isAvailable();
+        $isAvailable = $this->elasticsearch->isAvailable();
 
         return $this->json(
             [

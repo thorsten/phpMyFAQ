@@ -23,6 +23,13 @@ class ElasticsearchControllerTest extends TestCase
     private Faq $faq;
     private CustomPage $customPage;
 
+    public static function setUpBeforeClass(): void
+    {
+        if (!defined('PMF_ELASTICSEARCH_TOKENIZER')) {
+            define('PMF_ELASTICSEARCH_TOKENIZER', 'standard');
+        }
+    }
+
     /**
      * @throws Exception
      */

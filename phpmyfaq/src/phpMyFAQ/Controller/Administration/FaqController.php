@@ -19,23 +19,31 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Administration\Changelog;
 use phpMyFAQ\Administration\Revision;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Relation;
+use phpMyFAQ\Comments;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\SeoType;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Permission;
+use phpMyFAQ\Faq\Permission as FaqPermission;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\LanguageHelper;
+use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Link;
 use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Question;
+use phpMyFAQ\Seo;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\FormatBytesTwigExtension;
 use phpMyFAQ\Twig\Extensions\IsoDateTwigExtension;
@@ -49,6 +57,20 @@ use Twig\Extension\AttributeExtension;
 
 final class FaqController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly Comments $comments,
+        private readonly Faq $faq,
+        private readonly Tags $tags,
+        private readonly Seo $seo,
+        private readonly CategoryHelper $categoryHelper,
+        private readonly UserHelper $userHelper,
+        private readonly FaqPermission $faqPermission,
+        private readonly Changelog $changelog,
+        private readonly Question $question,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws LoaderError
@@ -72,17 +94,14 @@ final class FaqController extends AbstractAdministrationController
         $categoryRelation = new Relation($this->configuration, $category);
         $categoryRelation->setGroups($currentAdminGroups);
 
-        $comments = $this->container->get(id: 'phpmyfaq.comments');
-        $sessions = $this->session;
-
         return $this->render('@admin/content/faq.overview.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'csrfTokenSearch' => Token::getInstance($sessions)->getTokenInput('pmf-csrf-token'),
-            'csrfTokenOverview' => Token::getInstance($sessions)->getTokenString('pmf-csrf-token'),
+            'csrfTokenSearch' => Token::getInstance($this->session)->getTokenInput('pmf-csrf-token'),
+            'csrfTokenOverview' => Token::getInstance($this->session)->getTokenString('pmf-csrf-token'),
             'categories' => $category->getCategoryTree(),
             'numberOfRecords' => $categoryRelation->getNumberOfFaqsPerCategory(),
-            'numberOfComments' => $comments->getNumberOfCommentsByCategory(),
+            'numberOfComments' => $this->comments->getNumberOfCommentsByCategory(),
         ]);
     }
 
@@ -104,11 +123,7 @@ final class FaqController extends AbstractAdministrationController
         $category->setGroups($currentAdminGroups);
         $category->buildCategoryTree();
 
-        $categoryHelper = $this->container->get(id: 'phpmyfaq.helper.category-helper');
-        $categoryHelper->setCategory($category);
-
-        $faq = $this->container->get(id: 'phpmyfaq.faq');
-        $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
+        $this->categoryHelper->setCategory($category);
 
         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_ADD->value);
         $categories = [];
@@ -147,7 +162,7 @@ final class FaqController extends AbstractAdministrationController
                 : '',
             'allUsers' => true,
             'restrictedUsers' => false,
-            'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
+            'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => [],
             'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
                 $this->currentUser->getUserId(),
@@ -155,7 +170,7 @@ final class FaqController extends AbstractAdministrationController
             ),
             'isActive' => null,
             'isInActive' => 'checked',
-            'nextSolutionId' => $faq->getNextSolutionId(),
+            'nextSolutionId' => $this->faq->getNextSolutionId(),
             'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
         ]);
     }
@@ -178,11 +193,7 @@ final class FaqController extends AbstractAdministrationController
             FILTER_SANITIZE_SPECIAL_CHARS,
         );
 
-        $categoryHelper = $this->container->get(id: 'phpmyfaq.helper.category-helper');
-        $categoryHelper->setCategory($category);
-
-        $faq = $this->container->get(id: 'phpmyfaq.faq');
-        $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
+        $this->categoryHelper->setCategory($category);
 
         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_ADD->value);
 
@@ -220,7 +231,7 @@ final class FaqController extends AbstractAdministrationController
                 : '',
             'allUsers' => true,
             'restrictedUsers' => false,
-            'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
+            'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => [],
             'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
                 $this->currentUser->getUserId(),
@@ -228,7 +239,7 @@ final class FaqController extends AbstractAdministrationController
             ),
             'isActive' => null,
             'isInActive' => 'checked',
-            'nextSolutionId' => $faq->getNextSolutionId(),
+            'nextSolutionId' => $this->faq->getNextSolutionId(),
             'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
         ]);
     }
@@ -255,27 +266,24 @@ final class FaqController extends AbstractAdministrationController
         $category->setGroups($currentAdminGroups);
         $category->buildCategoryTree();
 
-        $categoryHelper = $this->container->get(id: 'phpmyfaq.helper.category-helper');
-        $categoryHelper->setCategory($category);
+        $this->categoryHelper->setCategory($category);
 
         $categoryRelation = new Relation($this->configuration, $category);
-        $faq = $this->container->get(id: 'phpmyfaq.faq');
-        $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
 
         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_EDIT->value . ':' . $faqId);
 
         $categories = $categoryRelation->getCategories($faqId, $faqLanguage);
 
-        $faq->getFaq($faqId, null, true);
-        $faqData = $faq->faqRecord;
+        $this->faq->getFaq($faqId, null, true);
+        $faqData = $this->faq->faqRecord;
 
         // Tags
-        $faqData['tags'] = implode(', ', $this->container->get(id: 'phpmyfaq.tags')->getAllTagsById($faqId));
+        $faqData['tags'] = implode(', ', $this->tags->getAllTagsById($faqId));
 
         // SERP
         $seoEntity = new SeoEntity();
         $seoEntity->setSeoType(SeoType::FAQ)->setReferenceId($faqId)->setReferenceLanguage($faqLanguage);
-        $seoData = $this->container->get(id: 'phpmyfaq.seo')->get($seoEntity);
+        $seoData = $this->seo->get($seoEntity);
         $faqData['serp-title'] = $seoData->getTitle();
         $faqData['serp-description'] = $seoData->getDescription();
 
@@ -294,7 +302,7 @@ final class FaqController extends AbstractAdministrationController
         );
 
         // User permissions
-        $userPermission = $this->container->get(id: 'phpmyfaq.faq.permission')->get(Permission::USER, $faqId);
+        $userPermission = $this->faqPermission->get(Permission::USER, $faqId);
         if (count($userPermission) === 0 || $userPermission[0] === -1) {
             $allUsers = true;
             $restrictedUsers = false;
@@ -305,7 +313,7 @@ final class FaqController extends AbstractAdministrationController
         }
 
         // Group permissions
-        $groupPermission = $this->container->get(id: 'phpmyfaq.faq.permission')->get(Permission::GROUP, $faqId);
+        $groupPermission = $this->faqPermission->get(Permission::GROUP, $faqId);
         if (count($groupPermission) === 0 || $groupPermission[0] === -1) {
             $allGroups = true;
             $restrictedGroups = false;
@@ -353,14 +361,14 @@ final class FaqController extends AbstractAdministrationController
             'allUsers' => $allUsers,
             'restrictedUsers' => $restrictedUsers,
             'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
-            'changelogs' => $this->container->get(id: 'phpmyfaq.admin.changelog')->getByFaqId($faqId),
+            'changelogs' => $this->changelog->getByFaqId($faqId),
             'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_APPROVE->value,
             ),
             'isActive' => $faqData['active'] === 'yes' ? 'checked' : null,
             'isInActive' => $faqData['active'] !== 'yes' ? 'checked' : null,
-            'nextSolutionId' => $faq->getNextSolutionId(),
+            'nextSolutionId' => $this->faq->getNextSolutionId(),
             'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
         ]);
     }
@@ -383,11 +391,7 @@ final class FaqController extends AbstractAdministrationController
         $category->setGroups($currentAdminGroups);
         $category->buildCategoryTree();
 
-        $categoryHelper = $this->container->get(id: 'phpmyfaq.helper.category-helper');
-        $categoryHelper->setCategory($category);
-
-        $faq = $this->container->get(id: 'phpmyfaq.faq');
-        $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
+        $this->categoryHelper->setCategory($category);
 
         $faqId = (int) Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
@@ -396,8 +400,8 @@ final class FaqController extends AbstractAdministrationController
 
         $categories = [];
 
-        $faq->getFaq($faqId, null, true);
-        $faqData = $faq->faqRecord;
+        $this->faq->getFaq($faqId, null, true);
+        $faqData = $this->faq->faqRecord;
         $faqData['title'] = 'Copy of ' . $faqData['title'];
 
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
@@ -427,7 +431,7 @@ final class FaqController extends AbstractAdministrationController
                 : '',
             'allUsers' => true,
             'restrictedUsers' => false,
-            'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
+            'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => [],
             'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
                 $this->currentUser->getUserId(),
@@ -435,7 +439,7 @@ final class FaqController extends AbstractAdministrationController
             ),
             'isActive' => null,
             'isInActive' => null,
-            'nextSolutionId' => $faq->getNextSolutionId(),
+            'nextSolutionId' => $this->faq->getNextSolutionId(),
             'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
         ]);
     }
@@ -458,11 +462,7 @@ final class FaqController extends AbstractAdministrationController
         $category->setGroups($currentAdminGroups);
         $category->buildCategoryTree();
 
-        $categoryHelper = $this->container->get(id: 'phpmyfaq.helper.category-helper');
-        $categoryHelper->setCategory($category);
-
-        $faq = $this->container->get(id: 'phpmyfaq.faq');
-        $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
+        $this->categoryHelper->setCategory($category);
 
         $faqId = (int) Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
@@ -471,8 +471,8 @@ final class FaqController extends AbstractAdministrationController
 
         $categories = [];
 
-        $faq->getFaq($faqId, null, true);
-        $faqData = $faq->faqRecord;
+        $this->faq->getFaq($faqId, null, true);
+        $faqData = $this->faq->faqRecord;
         $faqData['title'] = 'Translation of ' . $faqData['title'];
 
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
@@ -502,7 +502,7 @@ final class FaqController extends AbstractAdministrationController
                 : '',
             'allUsers' => true,
             'restrictedUsers' => false,
-            'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
+            'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => [],
             'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
                 $this->currentUser->getUserId(),
@@ -510,7 +510,7 @@ final class FaqController extends AbstractAdministrationController
             ),
             'isActive' => null,
             'isInActive' => null,
-            'nextSolutionId' => $faq->getNextSolutionId(),
+            'nextSolutionId' => $this->faq->getNextSolutionId(),
             'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
         ]);
     }
@@ -533,20 +533,14 @@ final class FaqController extends AbstractAdministrationController
         $category->setGroups($currentAdminGroups);
         $category->buildCategoryTree();
 
-        $categoryHelper = $this->container->get(id: 'phpmyfaq.helper.category-helper');
-        $categoryHelper->setCategory($category);
-
-        $faq = $this->container->get(id: 'phpmyfaq.faq');
-        $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
+        $this->categoryHelper->setCategory($category);
 
         $questionId = (int) Filter::filterVar($request->attributes->get('questionId'), FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_ANSWER_ADD->value . ':' . $questionId);
 
-        /** @var Question $question */
-        $question = $this->container->get(id: 'phpmyfaq.question');
-        $questionData = $question->get($questionId);
+        $questionData = $this->question->get($questionId);
 
         $faqData = [
             'id' => 0,
@@ -590,7 +584,7 @@ final class FaqController extends AbstractAdministrationController
                 : '',
             'allUsers' => true,
             'restrictedUsers' => false,
-            'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
+            'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => [],
             'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
                 $this->currentUser->getUserId(),
@@ -598,7 +592,7 @@ final class FaqController extends AbstractAdministrationController
             ),
             'isActive' => null,
             'isInActive' => null,
-            'nextSolutionId' => $faq->getNextSolutionId(),
+            'nextSolutionId' => $this->faq->getNextSolutionId(),
             'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
         ]);
     }

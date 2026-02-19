@@ -24,6 +24,8 @@ use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\User\UserAuthentication;
 use phpMyFAQ\User\UserException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -33,6 +35,13 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class AuthenticationController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly CurrentUser $currentUserService,
+        private readonly TwoFactor $twoFactor,
+    ) {
+        parent::__construct();
+    }
+
     #[Route(path: '/authenticate', name: 'admin.auth.authenticate', methods: ['POST'])]
     public function authenticate(Request $request): RedirectResponse
     {
@@ -200,11 +209,11 @@ final class AuthenticationController extends AbstractAdministrationController
         $token = Filter::filterVar($request->request->get(key: 'token'), FILTER_SANITIZE_SPECIAL_CHARS);
         $userId = (int) Filter::filterVar($request->request->get(key: 'user-id'), FILTER_VALIDATE_INT);
 
-        $user = $this->container->get(id: 'phpmyfaq.user.current_user');
+        $user = $this->currentUserService;
         $user->getUserById($userId);
 
         if (strlen((string) $token) === 6) {
-            $tfa = $this->container->get(id: 'phpmyfaq.user.two-factor');
+            $tfa = $this->twoFactor;
             $result = $tfa->validateToken($token, $userId);
 
             if ($result) {

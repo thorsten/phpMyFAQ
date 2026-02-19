@@ -80,9 +80,9 @@ final class CategoryController extends AbstractAdministrationApiController
                     : 0
             ) === 1
         ) {
-            $categoryPermission->delete(Permission::USER, [(int) $data->categoryId]);
-            $categoryPermission->delete(Permission::GROUP, [(int) $data->categoryId]);
-            $categoryImage->delete();
+            $this->categoryPermission->delete(Permission::USER, [(int) $data->categoryId]);
+            $this->categoryPermission->delete(Permission::GROUP, [(int) $data->categoryId]);
+            $this->categoryImage->delete();
         }
 
         if (
@@ -104,8 +104,6 @@ final class CategoryController extends AbstractAdministrationApiController
     {
         $this->userIsAuthenticated();
 
-        $categoryPermission = $this->container->get(id: 'phpmyfaq.category.permission');
-
         $categoryData = $request->attributes->get('categories');
 
         if (in_array($categoryData, [null, '', false], true)) {
@@ -121,8 +119,8 @@ final class CategoryController extends AbstractAdministrationApiController
         }
 
         return $this->json([
-            'user' => $categoryPermission->get(Permission::USER, $categories),
-            'group' => $categoryPermission->get(Permission::GROUP, $categories),
+            'user' => $this->categoryPermission->get(Permission::USER, $categories),
+            'group' => $this->categoryPermission->get(Permission::GROUP, $categories),
         ], Response::HTTP_OK);
     }
 
@@ -156,10 +154,9 @@ final class CategoryController extends AbstractAdministrationApiController
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $categoryOrder = $this->container->get(id: 'phpmyfaq.category.order');
-        $categoryOrder->setCategoryTree($data->categoryTree);
+        $this->categoryOrder->setCategoryTree($data->categoryTree);
 
-        $parentId = $categoryOrder->getParentId($data->categoryTree, (int) $data->categoryId);
+        $parentId = $this->categoryOrder->getParentId($data->categoryTree, (int) $data->categoryId);
 
         $category = new Category($this->configuration, [], false);
         $category->setUser($currentAdminUser);

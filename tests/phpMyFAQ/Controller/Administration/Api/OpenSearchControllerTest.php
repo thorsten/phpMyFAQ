@@ -6,6 +6,9 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\CustomPage;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Instance\Search\OpenSearch;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -16,6 +19,9 @@ use Symfony\Component\HttpFoundation\Request;
 class OpenSearchControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private OpenSearch $openSearch;
+    private Faq $faq;
+    private CustomPage $customPage;
 
     /**
      * @throws Exception
@@ -33,6 +39,9 @@ class OpenSearchControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+        $this->openSearch = $this->createStub(OpenSearch::class);
+        $this->faq = $this->createStub(Faq::class);
+        $this->customPage = $this->createStub(CustomPage::class);
     }
 
     /**
@@ -40,7 +49,7 @@ class OpenSearchControllerTest extends TestCase
      */
     public function testCreateRequiresAuthentication(): void
     {
-        $controller = new OpenSearchController();
+        $controller = new OpenSearchController($this->openSearch, $this->faq, $this->customPage);
 
         $this->expectException(\Exception::class);
         $controller->create();
@@ -51,7 +60,7 @@ class OpenSearchControllerTest extends TestCase
      */
     public function testDropRequiresAuthentication(): void
     {
-        $controller = new OpenSearchController();
+        $controller = new OpenSearchController($this->openSearch, $this->faq, $this->customPage);
 
         $this->expectException(\Exception::class);
         $controller->drop();
@@ -62,7 +71,7 @@ class OpenSearchControllerTest extends TestCase
      */
     public function testImportRequiresAuthentication(): void
     {
-        $controller = new OpenSearchController();
+        $controller = new OpenSearchController($this->openSearch, $this->faq, $this->customPage);
 
         $this->expectException(\Exception::class);
         $controller->import();
@@ -73,7 +82,7 @@ class OpenSearchControllerTest extends TestCase
      */
     public function testStatisticsRequiresAuthentication(): void
     {
-        $controller = new OpenSearchController();
+        $controller = new OpenSearchController($this->openSearch, $this->faq, $this->customPage);
 
         $this->expectException(\Exception::class);
         $controller->statistics();
@@ -84,7 +93,7 @@ class OpenSearchControllerTest extends TestCase
      */
     public function testHealthcheckRequiresAuthentication(): void
     {
-        $controller = new OpenSearchController();
+        $controller = new OpenSearchController($this->openSearch, $this->faq, $this->customPage);
 
         $this->expectException(\Exception::class);
         $controller->healthcheck();

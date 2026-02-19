@@ -20,13 +20,24 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Frontend;
 
 use Exception;
+use phpMyFAQ\Captcha\CaptchaInterface;
+use phpMyFAQ\Captcha\Helper\CaptchaHelperInterface;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\UserSession;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class ContactController extends AbstractFrontController
 {
+    public function __construct(
+        private readonly UserSession $userSession,
+        private readonly CaptchaInterface $captcha,
+        private readonly CaptchaHelperInterface $captchaHelper,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * Handles both GET and POST requests for the contact form
      * @throws Exception
@@ -34,12 +45,8 @@ final class ContactController extends AbstractFrontController
     #[Route(path: '/contact.html', name: 'public.contact', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        $faqSession = $this->container->get('phpmyfaq.user.session');
-        $faqSession->setCurrentUser($this->currentUser);
-        $faqSession->userTracking('contact', 0);
-
-        $captcha = $this->container->get('phpmyfaq.captcha');
-        $captchaHelper = $this->container->get('phpmyfaq.captcha.helper.captcha_helper');
+        $this->userSession->setCurrentUser($this->currentUser);
+        $this->userSession->userTracking('contact', 0);
 
         if ($this->configuration->get('layout.contactInformationHTML')) {
             $contactText = html_entity_decode((string) $this->configuration->get('main.contactInformation'));
@@ -58,8 +65,8 @@ final class ContactController extends AbstractFrontController
                 ? $this->currentUser->getUserData('display_name')
                 : '',
             'version' => $this->configuration->getVersion(),
-            'captchaFieldset' => $captchaHelper->renderCaptcha(
-                $captcha,
+            'captchaFieldset' => $this->captchaHelper->renderCaptcha(
+                $this->captcha,
                 'contact',
                 Translation::get(key: 'msgCaptcha'),
                 $this->currentUser->isLoggedIn(),

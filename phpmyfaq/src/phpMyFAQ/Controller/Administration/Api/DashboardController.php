@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 use Exception;
 use JsonException;
 use phpMyFAQ\Administration\Api;
+use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Faq;
 use phpMyFAQ\System;
@@ -35,6 +36,12 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 final class DashboardController extends AbstractController
 {
+    public function __construct(
+        private readonly AdminSession $adminSession,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws JsonException
      */
@@ -88,9 +95,8 @@ final class DashboardController extends AbstractController
         $this->userIsAuthenticated();
 
         if ($this->configuration->get(item: 'main.enableUserTracking')) {
-            $session = $this->container->get(id: 'phpmyfaq.admin.session');
             $endDate = $request->server->get('REQUEST_TIME');
-            return $this->json($session->getLast30DaysVisits($endDate));
+            return $this->json($this->adminSession->getLast30DaysVisits($endDate));
         }
 
         return $this->json(['error' => 'User tracking is disabled.'], 400);

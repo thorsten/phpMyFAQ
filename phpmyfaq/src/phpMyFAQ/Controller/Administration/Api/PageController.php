@@ -37,6 +37,13 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class PageController extends AbstractAdministrationApiController
 {
+    public function __construct(
+        private readonly Elasticsearch $elasticsearch,
+        private readonly OpenSearch $openSearch,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * Index a custom page in Elasticsearch and OpenSearch
      *
@@ -48,9 +55,7 @@ final class PageController extends AbstractAdministrationApiController
         // Index in Elasticsearch if enabled
         if ($this->configuration->get(item: 'search.enableElasticsearch')) {
             try {
-                /** @var Elasticsearch $elasticsearch */
-                $elasticsearch = $this->container->get(id: 'phpmyfaq.instance.elasticsearch');
-                $elasticsearch->indexCustomPage($pageData);
+                $this->elasticsearch->indexCustomPage($pageData);
             } catch (Exception $e) {
                 $this->configuration->getLogger()->error('Failed to index custom page in Elasticsearch', [
                     'error' => $e->getMessage(),
@@ -62,9 +67,7 @@ final class PageController extends AbstractAdministrationApiController
         // Index in OpenSearch if enabled
         if ($this->configuration->get(item: 'search.enableOpenSearch')) {
             try {
-                /** @var OpenSearch $openSearch */
-                $openSearch = $this->container->get(id: 'phpmyfaq.instance.opensearch');
-                $openSearch->indexCustomPage($pageData);
+                $this->openSearch->indexCustomPage($pageData);
             } catch (Exception $e) {
                 $this->configuration->getLogger()->error('Failed to index custom page in OpenSearch', [
                     'error' => $e->getMessage(),
@@ -85,9 +88,7 @@ final class PageController extends AbstractAdministrationApiController
         // Update in Elasticsearch if enabled
         if ($this->configuration->get(item: 'search.enableElasticsearch')) {
             try {
-                /** @var Elasticsearch $elasticsearch */
-                $elasticsearch = $this->container->get(id: 'phpmyfaq.instance.elasticsearch');
-                $elasticsearch->updateCustomPage($pageData);
+                $this->elasticsearch->updateCustomPage($pageData);
             } catch (Exception $e) {
                 $this->configuration->getLogger()->error('Failed to update custom page in Elasticsearch', [
                     'error' => $e->getMessage(),
@@ -99,9 +100,7 @@ final class PageController extends AbstractAdministrationApiController
         // Update in OpenSearch if enabled
         if ($this->configuration->get(item: 'search.enableOpenSearch')) {
             try {
-                /** @var OpenSearch $openSearch */
-                $openSearch = $this->container->get(id: 'phpmyfaq.instance.opensearch');
-                $openSearch->updateCustomPage($pageData);
+                $this->openSearch->updateCustomPage($pageData);
             } catch (Exception $e) {
                 $this->configuration->getLogger()->error('Failed to update custom page in OpenSearch', [
                     'error' => $e->getMessage(),
@@ -119,9 +118,7 @@ final class PageController extends AbstractAdministrationApiController
         // Delete it from Elasticsearch if enabled
         if ($this->configuration->get(item: 'search.enableElasticsearch')) {
             try {
-                /** @var Elasticsearch $elasticsearch */
-                $elasticsearch = $this->container->get(id: 'phpmyfaq.instance.elasticsearch');
-                $elasticsearch->deleteCustomPage($pageId, $lang);
+                $this->elasticsearch->deleteCustomPage($pageId, $lang);
             } catch (Exception $e) {
                 $this->configuration->getLogger()->error('Failed to delete custom page from Elasticsearch', [
                     'error' => $e->getMessage(),
@@ -133,9 +130,7 @@ final class PageController extends AbstractAdministrationApiController
         // Delete from OpenSearch if enabled
         if ($this->configuration->get(item: 'search.enableOpenSearch')) {
             try {
-                /** @var OpenSearch $openSearch */
-                $openSearch = $this->container->get(id: 'phpmyfaq.instance.opensearch');
-                $openSearch->deleteCustomPage($pageId, $lang);
+                $this->openSearch->deleteCustomPage($pageId, $lang);
             } catch (Exception $e) {
                 $this->configuration->getLogger()->error('Failed to delete custom page from OpenSearch', [
                     'error' => $e->getMessage(),

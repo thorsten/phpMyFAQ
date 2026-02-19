@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
+use phpMyFAQ\Captcha\CaptchaInterface;
+use phpMyFAQ\Captcha\Helper\CaptchaHelperInterface;
 use phpMyFAQ\Category;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
@@ -26,6 +28,7 @@ use phpMyFAQ\Faq\QuestionService;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\QuestionHelper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\UserSession;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,6 +37,14 @@ use Twig\TwigFilter;
 
 final class QuestionsController extends AbstractFrontController
 {
+    public function __construct(
+        private readonly UserSession $faqSession,
+        private readonly CaptchaInterface $captcha,
+        private readonly CaptchaHelperInterface $captchaHelper,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * Displays the open questions page.
      *
@@ -43,9 +54,8 @@ final class QuestionsController extends AbstractFrontController
     #[Route(path: '/open-questions.html', name: 'public.open-questions', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        $faqSession = $this->container->get('phpmyfaq.user.session');
-        $faqSession->setCurrentUser($this->currentUser);
-        $faqSession->userTracking('open_questions', 0);
+        $this->faqSession->setCurrentUser($this->currentUser);
+        $this->faqSession->userTracking('open_questions', 0);
 
         $category = new Category($this->configuration);
         $questionHelper = new QuestionHelper();
@@ -83,9 +93,8 @@ final class QuestionsController extends AbstractFrontController
     #[Route(path: '/add-question.html', name: 'public.question.ask', methods: ['GET'])]
     public function ask(Request $request): Response
     {
-        $faqSession = $this->container->get('phpmyfaq.user.session');
-        $faqSession->setCurrentUser($this->currentUser);
-        $faqSession->userTracking('ask_question', 0);
+        $this->faqSession->setCurrentUser($this->currentUser);
+        $this->faqSession->userTracking('ask_question', 0);
 
         // Get current groups
         $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
@@ -99,9 +108,6 @@ final class QuestionsController extends AbstractFrontController
         $categoryId = Filter::filterVar($request->query->get('category_id'), FILTER_VALIDATE_INT, 0);
 
         $questionData = $questionService->prepareAskQuestionData($categoryId);
-
-        $captcha = $this->container->get('phpmyfaq.captcha');
-        $captchaHelper = $this->container->get('phpmyfaq.captcha.helper.captcha_helper');
 
         // Add Twig filter
         $this->addFilter(new TwigFilter('repeat', static fn($string, $times): string => str_repeat(
@@ -124,8 +130,8 @@ final class QuestionsController extends AbstractFrontController
             'defaultContentName' => $questionService->getDefaultUserName(),
             'selectedCategory' => $questionData['selectedCategory'],
             'categories' => $questionData['categories'],
-            'captchaFieldset' => $captchaHelper->renderCaptcha(
-                $captcha,
+            'captchaFieldset' => $this->captchaHelper->renderCaptcha(
+                $this->captcha,
                 'ask',
                 Translation::get(key: 'msgCaptcha'),
                 $this->currentUser->isLoggedIn(),
