@@ -6,6 +6,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Instance;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 class InstanceControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private Instance $instance;
 
     /**
      * @throws Exception
@@ -33,6 +35,7 @@ class InstanceControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+        $this->instance = $this->createStub(Instance::class);
     }
 
     /**
@@ -50,7 +53,7 @@ class InstanceControllerTest extends TestCase
             'password' => 'password123',
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new InstanceController();
+        $controller = new InstanceController($this->instance);
 
         $this->expectException(\Exception::class);
         $controller->add($request);
@@ -63,7 +66,7 @@ class InstanceControllerTest extends TestCase
     {
         $requestData = json_encode(['csrf' => 'test-token', 'instanceId' => 1]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new InstanceController();
+        $controller = new InstanceController($this->instance);
 
         $this->expectException(\Exception::class);
         $controller->delete($request);
@@ -75,7 +78,7 @@ class InstanceControllerTest extends TestCase
     public function testAddWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new InstanceController();
+        $controller = new InstanceController($this->instance);
 
         $this->expectException(\Exception::class);
         $controller->add($request);
@@ -87,7 +90,7 @@ class InstanceControllerTest extends TestCase
     public function testDeleteWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new InstanceController();
+        $controller = new InstanceController($this->instance);
 
         $this->expectException(\Exception::class);
         $controller->delete($request);
@@ -107,7 +110,7 @@ class InstanceControllerTest extends TestCase
             'password' => 'password123',
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new InstanceController();
+        $controller = new InstanceController($this->instance);
 
         $this->expectException(\Exception::class);
         $controller->add($request);
@@ -120,7 +123,7 @@ class InstanceControllerTest extends TestCase
     {
         $requestData = json_encode(['instanceId' => 1]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new InstanceController();
+        $controller = new InstanceController($this->instance);
 
         $this->expectException(\Exception::class);
         $controller->delete($request);

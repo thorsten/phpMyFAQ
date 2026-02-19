@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Plugin\PluginManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -27,6 +28,12 @@ use Twig\Error\LoaderError;
 
 final class PluginController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly PluginManager $pluginManager,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws LoaderError
      * @throws Exception
@@ -35,7 +42,7 @@ final class PluginController extends AbstractAdministrationController
     #[Route(path: '/plugins', name: 'admin.configuration.plugins', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        $pluginManager = $this->container->get(id: 'phpmyfaq.plugin.plugin-manager');
+        $pluginManager = $this->pluginManager;
         $pluginManager->loadPlugins();
 
         return $this->render('@admin/configuration/plugins.twig', [

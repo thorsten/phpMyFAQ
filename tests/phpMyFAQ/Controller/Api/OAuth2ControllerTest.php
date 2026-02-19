@@ -43,7 +43,7 @@ class OAuth2ControllerTest extends TestCase
      */
     public function testTokenReturnsServiceUnavailableWhenOAuth2NotConfigured(): void
     {
-        $controller = new OAuth2Controller();
+        $controller = new OAuth2Controller(new OAuth2AuthorizationServer($this->configuration));
         $response = $controller->token(new Request([], [], [], [], [], [], ''));
 
         $this->assertSame(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());
@@ -55,7 +55,7 @@ class OAuth2ControllerTest extends TestCase
      */
     public function testTokenReturnsIssuerResponsePayload(): void
     {
-        $controller = new OAuth2Controller();
+        $controller = new OAuth2Controller(new OAuth2AuthorizationServer($this->configuration));
         $authorizationServer = new OAuth2AuthorizationServer($this->configuration);
         $authorizationServer->setTokenIssuer(static fn(): array => [
             'body' => ['access_token' => 'abc123', 'token_type' => 'Bearer'],
@@ -79,7 +79,7 @@ class OAuth2ControllerTest extends TestCase
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method('isLoggedIn')->willReturn(false);
 
-        $controller = new OAuth2Controller();
+        $controller = new OAuth2Controller(new OAuth2AuthorizationServer($this->configuration));
         $reflection = new \ReflectionProperty($controller, 'currentUser');
         $reflection->setValue($controller, $currentUser);
 

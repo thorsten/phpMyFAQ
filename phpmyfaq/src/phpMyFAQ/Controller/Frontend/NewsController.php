@@ -20,15 +20,20 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
+use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Mail;
 use phpMyFAQ\News\NewsService;
+use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\UserSession;
 use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,6 +41,16 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class NewsController extends AbstractFrontController
 {
+    public function __construct(
+        private readonly UserSession $faqSession,
+        private readonly Captcha $captcha,
+        private readonly Date $date,
+        private readonly Mail $mail,
+        private readonly Gravatar $gravatar,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * Displays a news article with comments.
      *
@@ -61,20 +76,16 @@ final class NewsController extends AbstractFrontController
             ]);
         }
 
-        $faqSession = $this->container->get('phpmyfaq.user.session');
-        $faqSession->setCurrentUser($this->currentUser);
-        $faqSession->userTracking('news_view', $newsId);
+        $this->faqSession->setCurrentUser($this->currentUser);
+        $this->faqSession->userTracking('news_view', $newsId);
 
         $newsService = new NewsService($this->configuration, $this->currentUser);
         $news = $newsService->getProcessedNews($newsId);
 
-        $captcha = $this->container->get('phpmyfaq.captcha');
         $captchaHelper = CaptchaHelper::getInstance($this->configuration);
 
         $comment = new Comments($this->configuration);
         $comments = $comment->getCommentsData($newsId, CommentType::NEWS);
-
-        $session = $this->container->get('session');
 
         return $this->render('news.twig', [
             ...$this->getHeader($request),
@@ -97,11 +108,11 @@ final class NewsController extends AbstractFrontController
                 ? $this->currentUser->getUserData('display_name')
                 : '',
             'msgYourComment' => Translation::get(key: 'msgYourComment'),
-            'csrfInput' => Token::getInstance($session)->getTokenInput('add-comment'),
+            'csrfInput' => Token::getInstance($this->session)->getTokenInput('add-comment'),
             'msgCancel' => Translation::get(key: 'ad_gen_cancel'),
             'msgNewContentSubmit' => Translation::get(key: 'msgNewContentSubmit'),
             'captchaFieldset' => $captchaHelper->renderCaptcha(
-                $captcha,
+                $this->captcha,
                 'writecomment',
                 Translation::get(key: 'msgCaptcha'),
                 $this->currentUser->isLoggedIn(),
@@ -120,10 +131,6 @@ final class NewsController extends AbstractFrontController
      */
     private function prepareCommentsData(array $comments): array
     {
-        $date = $this->container->get('phpmyfaq.date');
-        $mail = $this->container->get('phpmyfaq.mail');
-        $gravatar = $this->container->get('phpmyfaq.services.gravatar');
-
         $preparedComments = [];
         $gravatarImages = [];
         $safeEmails = [];
@@ -139,9 +146,9 @@ final class NewsController extends AbstractFrontController
                 'comment' => Utils::parseUrl($comment->getComment()),
             ];
 
-            $gravatarImages[$commentId] = $gravatar->getImage($comment->getEmail(), ['class' => 'img-thumbnail']);
-            $safeEmails[$commentId] = $mail->safeEmail($comment->getEmail());
-            $formattedDates[$commentId] = $date->format($comment->getDate());
+            $gravatarImages[$commentId] = $this->gravatar->getImage($comment->getEmail(), ['class' => 'img-thumbnail']);
+            $safeEmails[$commentId] = $this->mail->safeEmail($comment->getEmail());
+            $formattedDates[$commentId] = $this->date->format($comment->getDate());
         }
 
         return [

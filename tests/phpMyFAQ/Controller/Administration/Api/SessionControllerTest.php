@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
+use phpMyFAQ\Administration\Session;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Strings;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 class SessionControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private Session $adminSession;
 
     /**
      * @throws Exception
@@ -33,6 +35,7 @@ class SessionControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+        $this->adminSession = $this->createStub(Session::class);
     }
 
     /**
@@ -47,7 +50,7 @@ class SessionControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new SessionController();
+        $controller = new SessionController($this->adminSession);
 
         $this->expectException(\Exception::class);
         $controller->export($request);
@@ -59,7 +62,7 @@ class SessionControllerTest extends TestCase
     public function testExportWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new SessionController();
+        $controller = new SessionController($this->adminSession);
 
         $this->expectException(\Exception::class);
         $controller->export($request);
@@ -76,7 +79,7 @@ class SessionControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new SessionController();
+        $controller = new SessionController($this->adminSession);
 
         $this->expectException(\Exception::class);
         $controller->export($request);
@@ -92,7 +95,7 @@ class SessionControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new SessionController();
+        $controller = new SessionController($this->adminSession);
 
         $this->expectException(\Exception::class);
         $controller->export($request);

@@ -24,6 +24,8 @@ use phpMyFAQ\Entity\InstanceEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filesystem\Filesystem;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Instance;
+use phpMyFAQ\Instance\Client;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,6 +35,13 @@ use Twig\Error\LoaderError;
 
 final class InstanceController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly Instance $instance,
+        private readonly Client $instanceClient,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws LoaderError
      * @throws Exception
@@ -62,14 +71,13 @@ final class InstanceController extends AbstractAdministrationController
 
         $instanceId = (int) Filter::filterVar($request->attributes->get('id'), FILTER_VALIDATE_INT);
 
-        $instance = $this->container->get(id: 'phpmyfaq.instance');
-        $instanceData = $instance->getById($instanceId, 'array');
+        $instanceData = $this->instance->getById($instanceId, 'array');
 
         return $this->render('@admin/configuration/instances.edit.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
             'ad_menu_instances' => Translation::get(key: 'ad_menu_instances'),
-            'instanceConfig' => $instance->getInstanceConfig((int) $instanceData->id),
+            'instanceConfig' => $this->instance->getInstanceConfig((int) $instanceData->id),
             'ad_instance_url' => Translation::get(key: 'ad_instance_url'),
             'ad_instance_button' => Translation::get(key: 'ad_instance_button'),
             'ad_instance_path' => Translation::get(key: 'ad_instance_path'),
@@ -93,14 +101,13 @@ final class InstanceController extends AbstractAdministrationController
         $instanceId = (int) Filter::filterVar($request->attributes->get('id'), FILTER_VALIDATE_INT);
 
         $fileSystem = new Filesystem(PMF_ROOT_DIR);
-        $currentClient = $this->container->get(id: 'phpmyfaq.instance.client');
+        $currentClient = clone $this->instanceClient;
         $currentClient->setFileSystem($fileSystem);
 
-        $instance = $this->container->get(id: 'phpmyfaq.instance');
-        $updatedClient = $this->container->get(id: 'phpmyfaq.instance.client');
+        $updatedClient = clone $this->instanceClient;
 
         $moveInstance = false;
-        $instance->setId($instanceId);
+        $this->instance->setId($instanceId);
 
         // Collect updated data for database
         $instanceEntity = new InstanceEntity();
@@ -117,7 +124,7 @@ final class InstanceController extends AbstractAdministrationController
         // Original data
         $originalData = $currentClient->getById($instanceId);
 
-        if ($originalData->url !== $instanceEntity->getUrl() && !$instance->getConfig('isMaster')) {
+        if ($originalData->url !== $instanceEntity->getUrl() && !$this->instance->getConfig('isMaster')) {
             $moveInstance = true;
         }
 
@@ -160,18 +167,16 @@ final class InstanceController extends AbstractAdministrationController
             PermissionType::INSTANCE_ADD->value,
         );
 
-        $instance = $this->container->get(id: 'phpmyfaq.instance');
-
         $mainConfig = [];
-        foreach ($instance->getAll() as $site) {
-            $mainConfig[$site->id] = $instance->getInstanceConfig((int) $site->id)['isMaster'];
+        foreach ($this->instance->getAll() as $site) {
+            $mainConfig[$site->id] = $this->instance->getInstanceConfig((int) $site->id)['isMaster'];
         }
 
         return [
             'userPermInstanceAdd' => $userPermInstanceAdd,
             'multisiteFolderIsWritable' => is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite'),
             'ad_instance_add' => Translation::get(key: 'ad_instance_add'),
-            'allInstances' => $instance->getAll(),
+            'allInstances' => $this->instance->getAll(),
             'csrfTokenDeleteInstance' => Token::getInstance($this->session)->getTokenString('delete-instance'),
             'csrfTokenAddInstance' => Token::getInstance($this->session)->getTokenString('add-instance'),
             'mainConfig' => $mainConfig,

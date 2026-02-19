@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
+use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Strings;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 class CommentControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private Comments $comments;
 
     /**
      * @throws Exception
@@ -33,6 +35,7 @@ class CommentControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+        $this->comments = $this->createStub(Comments::class);
     }
 
     /**
@@ -48,7 +51,7 @@ class CommentControllerTest extends TestCase
             'type' => 'faq',
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new CommentController();
+        $controller = new CommentController($this->comments);
 
         $this->expectException(\Exception::class);
         $controller->delete($request);
@@ -60,7 +63,7 @@ class CommentControllerTest extends TestCase
     public function testDeleteWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new CommentController();
+        $controller = new CommentController($this->comments);
 
         $this->expectException(\Exception::class);
         $controller->delete($request);
@@ -78,7 +81,7 @@ class CommentControllerTest extends TestCase
             'type' => 'faq',
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new CommentController();
+        $controller = new CommentController($this->comments);
 
         $this->expectException(\Exception::class);
         $controller->delete($request);

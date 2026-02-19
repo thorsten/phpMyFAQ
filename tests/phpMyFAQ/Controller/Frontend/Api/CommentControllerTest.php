@@ -4,10 +4,19 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend\Api;
 
+use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Language;
+use phpMyFAQ\News;
+use phpMyFAQ\Notification;
+use phpMyFAQ\Service\Gravatar;
+use phpMyFAQ\StopWords;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User;
+use phpMyFAQ\User\UserSession;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +25,15 @@ use Symfony\Component\HttpFoundation\Request;
 class CommentControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private Faq $faq;
+    private Comments $comments;
+    private StopWords $stopWords;
+    private UserSession $userSession;
+    private Language $language;
+    private User $user;
+    private Notification $notification;
+    private News $news;
+    private Gravatar $gravatar;
 
     /**
      * @throws Exception
@@ -33,6 +51,31 @@ class CommentControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+
+        $this->faq = $this->createStub(Faq::class);
+        $this->comments = $this->createStub(Comments::class);
+        $this->stopWords = $this->createStub(StopWords::class);
+        $this->userSession = $this->createStub(UserSession::class);
+        $this->language = $this->createStub(Language::class);
+        $this->user = $this->createStub(User::class);
+        $this->notification = $this->createStub(Notification::class);
+        $this->news = $this->createStub(News::class);
+        $this->gravatar = $this->createStub(Gravatar::class);
+    }
+
+    private function createController(): CommentController
+    {
+        return new CommentController(
+            $this->faq,
+            $this->comments,
+            $this->stopWords,
+            $this->userSession,
+            $this->language,
+            $this->user,
+            $this->notification,
+            $this->news,
+            $this->gravatar,
+        );
     }
 
     /**
@@ -44,7 +87,7 @@ class CommentControllerTest extends TestCase
         $requestData = 'invalid json';
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new CommentController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -65,7 +108,7 @@ class CommentControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new CommentController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -87,7 +130,7 @@ class CommentControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new CommentController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -108,7 +151,7 @@ class CommentControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new CommentController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -130,7 +173,7 @@ class CommentControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new CommentController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -152,7 +195,7 @@ class CommentControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new CommentController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);

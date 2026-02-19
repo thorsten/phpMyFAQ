@@ -49,7 +49,7 @@ final class AdminLogController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if ($this->container->get(id: 'phpmyfaq.admin.admin-log')->delete()) {
+        if ($this->adminLog->delete()) {
             return $this->json(['success' => Translation::get(key: 'ad_adminlog_delete_success')], Response::HTTP_OK);
         }
 

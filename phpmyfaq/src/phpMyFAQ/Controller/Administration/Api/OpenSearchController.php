@@ -23,6 +23,7 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\CustomPage;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Instance\Search\OpenSearch;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,6 +32,14 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class OpenSearchController extends AbstractController
 {
+    public function __construct(
+        private readonly OpenSearch $openSearch,
+        private readonly Faq $faq,
+        private readonly CustomPage $customPage,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws \Exception
      */
@@ -39,11 +48,8 @@ final class OpenSearchController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        /* @var OpenSearch $openSearch */
-        $openSearch = $this->container->get(id: 'phpmyfaq.instance.opensearch');
-
         try {
-            $openSearch->createIndex();
+            $this->openSearch->createIndex();
             return $this->json(['success' => Translation::get(
                 'msgAdminOpenSearchCreateIndex_success',
             )], Response::HTTP_OK);
@@ -60,11 +66,8 @@ final class OpenSearchController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        /* @var OpenSearch $openSearch */
-        $openSearch = $this->container->get(id: 'phpmyfaq.instance.opensearch');
-
         try {
-            $openSearch->dropIndex();
+            $this->openSearch->dropIndex();
             return $this->json(['success' => Translation::get(
                 'msgAdminOpenSearchDropIndex_success',
             )], Response::HTTP_OK);
@@ -81,24 +84,18 @@ final class OpenSearchController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        /* @var OpenSearch $openSearch */
-        $openSearch = $this->container->get(id: 'phpmyfaq.instance.opensearch');
-
-        $faq = $this->container->get(id: 'phpmyfaq.faq');
-        $faq->getAllFaqs();
+        $this->faq->getAllFaqs();
 
         // Index FAQs
-        $bulkIndexResult = $openSearch->bulkIndex($faq->faqRecords);
+        $bulkIndexResult = $this->openSearch->bulkIndex($this->faq->faqRecords);
         if (!isset($bulkIndexResult['success'])) {
             return $this->json(['error' => $bulkIndexResult], Response::HTTP_BAD_REQUEST);
         }
 
         // Index custom pages
-        /** @var CustomPage $customPage */
-        $customPage = $this->container->get(id: 'phpmyfaq.custom-page');
-        $pages = $customPage->getAllPages();
+        $pages = $this->customPage->getAllPages();
 
-        $bulkIndexPagesResult = $openSearch->bulkIndexCustomPages($pages);
+        $bulkIndexPagesResult = $this->openSearch->bulkIndexCustomPages($pages);
         if (!isset($bulkIndexPagesResult['success'])) {
             return $this->json([
                 'error' => 'FAQs indexed but custom pages failed: ' . json_encode($bulkIndexPagesResult),
@@ -137,10 +134,7 @@ final class OpenSearchController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        /* @var OpenSearch $openSearch */
-        $openSearch = $this->container->get(id: 'phpmyfaq.instance.opensearch');
-
-        $isAvailable = $openSearch->isAvailable();
+        $isAvailable = $this->openSearch->isAvailable();
 
         return $this->json(
             [

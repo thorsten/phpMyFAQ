@@ -440,7 +440,9 @@ class User
 
     private function getTenantQuotaEnforcer(): TenantQuotaEnforcer
     {
-        return $this->tenantQuotaEnforcer ??= TenantQuotaEnforcer::createFromDatabaseDriver($this->configuration->getDb());
+        return $this->tenantQuotaEnforcer ??= TenantQuotaEnforcer::createFromDatabaseDriver(
+            $this->configuration->getDb(),
+        );
     }
 
     /**

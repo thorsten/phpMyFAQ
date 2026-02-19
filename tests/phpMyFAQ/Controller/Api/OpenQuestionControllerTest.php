@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Api;
 
 use Exception;
+use phpMyFAQ\Question;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,7 +19,7 @@ class OpenQuestionControllerTest extends TestCase
      */
     public function testListReturnsJsonResponse(): void
     {
-        $controller = new OpenQuestionController();
+        $controller = new OpenQuestionController($this->createStub(Question::class));
         $response = $controller->list();
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -29,7 +30,7 @@ class OpenQuestionControllerTest extends TestCase
      */
     public function testListReturnsValidStatusCode(): void
     {
-        $controller = new OpenQuestionController();
+        $controller = new OpenQuestionController($this->createStub(Question::class));
         $response = $controller->list();
 
         $this->assertContains($response->getStatusCode(), [Response::HTTP_OK, Response::HTTP_NOT_FOUND]);
@@ -40,7 +41,7 @@ class OpenQuestionControllerTest extends TestCase
      */
     public function testListReturnsJsonData(): void
     {
-        $controller = new OpenQuestionController();
+        $controller = new OpenQuestionController($this->createStub(Question::class));
         $response = $controller->list();
 
         $this->assertJson($response->getContent());
@@ -51,7 +52,7 @@ class OpenQuestionControllerTest extends TestCase
      */
     public function testListReturnsArrayData(): void
     {
-        $controller = new OpenQuestionController();
+        $controller = new OpenQuestionController($this->createStub(Question::class));
         $response = $controller->list();
 
         $data = json_decode($response->getContent(), true);
@@ -63,7 +64,7 @@ class OpenQuestionControllerTest extends TestCase
      */
     public function testListResponseContentIsNotNull(): void
     {
-        $controller = new OpenQuestionController();
+        $controller = new OpenQuestionController($this->createStub(Question::class));
         $response = $controller->list();
 
         $this->assertNotNull($response->getContent());
@@ -74,7 +75,7 @@ class OpenQuestionControllerTest extends TestCase
      */
     public function testListReturnsEmptyArrayOn404(): void
     {
-        $controller = new OpenQuestionController();
+        $controller = new OpenQuestionController($this->createStub(Question::class));
         $response = $controller->list();
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());

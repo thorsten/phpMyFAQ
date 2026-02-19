@@ -21,7 +21,11 @@ namespace phpMyFAQ\Controller\Frontend\Api;
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\SearchHelper;
+use phpMyFAQ\Language\Plurals;
+use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,6 +35,15 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class AutoCompleteController extends AbstractController
 {
+    public function __construct(
+        private readonly Permission $faqPermission,
+        private readonly Search $faqSearch,
+        private readonly SearchHelper $faqSearchHelper,
+        private readonly Plurals $plurals,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws \Exception
      */
@@ -51,21 +64,18 @@ final class AutoCompleteController extends AbstractController
         $category->transform(categoryId: 0);
         $category->buildCategoryTree();
 
-        $faqPermission = $this->container->get(id: 'phpmyfaq.faq.permission');
-        $faqSearch = $this->container->get(id: 'phpmyfaq.search');
-        $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
+        $searchResultSet = new SearchResultSet($this->currentUser, $this->faqPermission, $this->configuration);
 
-        $faqSearch->setCategory($category);
+        $this->faqSearch->setCategory($category);
 
-        $searchResult = $faqSearch->autoComplete($searchString);
+        $searchResult = $this->faqSearch->autoComplete($searchString);
 
         $searchResultSet->reviewResultSet($searchResult);
 
-        $faqSearchHelper = $this->container->get(id: 'phpmyfaq.helper.search');
-        $faqSearchHelper->setSearchTerm($searchString);
-        $faqSearchHelper->setCategory($category);
-        $faqSearchHelper->setPlurals($this->container->get(id: 'phpmyfaq.language.plurals'));
+        $this->faqSearchHelper->setSearchTerm($searchString);
+        $this->faqSearchHelper->setCategory($category);
+        $this->faqSearchHelper->setPlurals($this->plurals);
 
-        return $this->json($faqSearchHelper->createAutoCompleteResult($searchResultSet), Response::HTTP_OK);
+        return $this->json($this->faqSearchHelper->createAutoCompleteResult($searchResultSet), Response::HTTP_OK);
     }
 }

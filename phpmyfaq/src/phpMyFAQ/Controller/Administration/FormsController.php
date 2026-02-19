@@ -23,6 +23,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\Forms\FormIds;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Forms;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
@@ -34,6 +35,12 @@ use Twig\TwigFilter;
 
 final class FormsController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly Forms $forms,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws LoaderError
@@ -44,13 +51,11 @@ final class FormsController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
 
-        $forms = $this->container->get(id: 'phpmyfaq.forms');
-
         return $this->render('@admin/configuration/forms.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'formDataAskQuestion' => $forms->getFormData(FormIds::ASK_QUESTION->value),
-            'formDataAddContent' => $forms->getFormData(FormIds::ADD_NEW_FAQ->value),
+            'formDataAskQuestion' => $this->forms->getFormData(FormIds::ASK_QUESTION->value),
+            'formDataAddContent' => $this->forms->getFormData(FormIds::ADD_NEW_FAQ->value),
             'csrfActivate' => Token::getInstance($this->session)->getTokenString('activate-input'),
             'csrfRequired' => Token::getInstance($this->session)->getTokenString('require-input'),
             'ad_entry_id' => Translation::get(key: 'ad_entry_id'),
@@ -73,12 +78,10 @@ final class FormsController extends AbstractAdministrationController
         $formId = (int) Filter::filterVar($request->attributes->get('formId'), FILTER_VALIDATE_INT);
         $inputId = (int) Filter::filterVar($request->attributes->get('inputId'), FILTER_VALIDATE_INT);
 
-        $forms = $this->container->get(id: 'phpmyfaq.forms');
-
         // Get supported languages for adding new translations
         $languages = [];
         foreach (LanguageCodes::getAllSupported() as $code => $language) {
-            if (in_array($code, $forms->getTranslatedLanguages($formId, $inputId), strict: true)) {
+            if (in_array($code, $this->forms->getTranslatedLanguages($formId, $inputId), strict: true)) {
                 continue;
             }
 
@@ -100,7 +103,7 @@ final class FormsController extends AbstractAdministrationController
         return $this->render('@admin/configuration/forms.translations.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'translations' => $forms->getTranslations($formId, $inputId),
+            'translations' => $this->forms->getTranslations($formId, $inputId),
             'ad_sess_pageviews' => Translation::get(key: 'ad_sess_pageviews'),
             'csrfTokenEditTranslation' => Token::getInstance($this->session)->getTokenString('edit-translation'),
             'csrfTokenDeleteTranslation' => Token::getInstance($this->session)->getTokenString('delete-translation'),

@@ -49,7 +49,7 @@ class CategoryControllerTest extends TestCase
         $language->setLanguageWithDetection('language_en.php');
         $this->configuration->setLanguage($language);
 
-        $controller = new CategoryController();
+        $controller = new CategoryController($this->createStub(Language::class));
         $response = $controller->list();
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -64,7 +64,7 @@ class CategoryControllerTest extends TestCase
         $language->setLanguageWithDetection('language_en.php');
         $this->configuration->setLanguage($language);
 
-        $controller = new CategoryController();
+        $controller = new CategoryController($this->createStub(Language::class));
         $response = $controller->list();
 
         $this->assertContains($response->getStatusCode(), [Response::HTTP_OK, Response::HTTP_NOT_FOUND]);
@@ -84,7 +84,7 @@ class CategoryControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new CategoryController();
+        $controller = new CategoryController($this->createStub(Language::class));
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -95,7 +95,7 @@ class CategoryControllerTest extends TestCase
         $requestData = 'invalid json';
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new CategoryController();
+        $controller = new CategoryController($this->createStub(Language::class));
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -108,7 +108,7 @@ class CategoryControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new CategoryController();
+        $controller = new CategoryController($this->createStub(Language::class));
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -123,7 +123,7 @@ class CategoryControllerTest extends TestCase
         $language->setLanguageWithDetection('language_en.php');
         $this->configuration->setLanguage($language);
 
-        $controller = new CategoryController();
+        $controller = new CategoryController($this->createStub(Language::class));
         $response = $controller->list();
 
         $this->assertJson($response->getContent());
@@ -138,7 +138,7 @@ class CategoryControllerTest extends TestCase
         $language->setLanguageWithDetection('language_en.php');
         $this->configuration->setLanguage($language);
 
-        $controller = new CategoryController();
+        $controller = new CategoryController($this->createStub(Language::class));
         $response = $controller->list();
 
         $data = json_decode($response->getContent(), true);
@@ -154,7 +154,7 @@ class CategoryControllerTest extends TestCase
         $language->setLanguageWithDetection('language_en.php');
         $this->configuration->setLanguage($language);
 
-        $controller = new CategoryController();
+        $controller = new CategoryController($this->createStub(Language::class));
         $response = $controller->list();
 
         $this->assertNotNull($response->getContent());
@@ -169,7 +169,7 @@ class CategoryControllerTest extends TestCase
         $language->setLanguageWithDetection('language_en.php');
         $this->configuration->setLanguage($language);
 
-        $controller = new CategoryController();
+        $controller = new CategoryController($this->createStub(Language::class));
         $response = $controller->list();
 
         if ($response->getStatusCode() === Response::HTTP_NOT_FOUND) {

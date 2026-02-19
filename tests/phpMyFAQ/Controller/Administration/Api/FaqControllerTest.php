@@ -4,10 +4,20 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
+use phpMyFAQ\Administration\AdminLog;
+use phpMyFAQ\Administration\Changelog;
+use phpMyFAQ\Administration\Faq as FaqAdministration;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Notification;
+use phpMyFAQ\Push\WebPushService;
+use phpMyFAQ\Question;
+use phpMyFAQ\Seo;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Visits;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +26,16 @@ use Symfony\Component\HttpFoundation\Request;
 class FaqControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private Faq $faq;
+    private FaqAdministration $adminFaq;
+    private Tags $tags;
+    private Notification $notification;
+    private Changelog $changelog;
+    private Visits $visits;
+    private Seo $seo;
+    private Question $question;
+    private AdminLog $logging;
+    private WebPushService $webPushService;
 
     /**
      * @throws Exception
@@ -33,6 +53,16 @@ class FaqControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+        $this->faq = $this->createStub(Faq::class);
+        $this->adminFaq = $this->createStub(FaqAdministration::class);
+        $this->tags = $this->createStub(Tags::class);
+        $this->notification = $this->createStub(Notification::class);
+        $this->changelog = $this->createStub(Changelog::class);
+        $this->visits = $this->createStub(Visits::class);
+        $this->seo = $this->createStub(Seo::class);
+        $this->question = $this->createStub(Question::class);
+        $this->logging = $this->createStub(AdminLog::class);
+        $this->webPushService = $this->createStub(WebPushService::class);
     }
 
     /**
@@ -52,7 +82,18 @@ class FaqControllerTest extends TestCase
             ],
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->faq,
+            $this->adminFaq,
+            $this->tags,
+            $this->notification,
+            $this->changelog,
+            $this->visits,
+            $this->seo,
+            $this->question,
+            $this->logging,
+            $this->webPushService,
+        );
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -74,7 +115,18 @@ class FaqControllerTest extends TestCase
             ],
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->faq,
+            $this->adminFaq,
+            $this->tags,
+            $this->notification,
+            $this->changelog,
+            $this->visits,
+            $this->seo,
+            $this->question,
+            $this->logging,
+            $this->webPushService,
+        );
 
         $this->expectException(\Exception::class);
         $controller->update($request);
@@ -86,7 +138,18 @@ class FaqControllerTest extends TestCase
     public function testListPermissionsRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->faq,
+            $this->adminFaq,
+            $this->tags,
+            $this->notification,
+            $this->changelog,
+            $this->visits,
+            $this->seo,
+            $this->question,
+            $this->logging,
+            $this->webPushService,
+        );
 
         $this->expectException(\Exception::class);
         $controller->listPermissions($request);
@@ -98,7 +161,18 @@ class FaqControllerTest extends TestCase
     public function testListByCategoryRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->faq,
+            $this->adminFaq,
+            $this->tags,
+            $this->notification,
+            $this->changelog,
+            $this->visits,
+            $this->seo,
+            $this->question,
+            $this->logging,
+            $this->webPushService,
+        );
 
         $this->expectException(\Exception::class);
         $controller->listByCategory($request);
@@ -111,7 +185,18 @@ class FaqControllerTest extends TestCase
     {
         $requestData = json_encode(['csrf' => 'test-token', 'faqIds' => [1], 'faqLanguage' => 'en', 'checked' => true]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->faq,
+            $this->adminFaq,
+            $this->tags,
+            $this->notification,
+            $this->changelog,
+            $this->visits,
+            $this->seo,
+            $this->question,
+            $this->logging,
+            $this->webPushService,
+        );
 
         $this->expectException(\Exception::class);
         $controller->activate($request);
@@ -124,7 +209,18 @@ class FaqControllerTest extends TestCase
     {
         $requestData = json_encode(['csrf' => 'test-token', 'faqIds' => [1], 'faqLanguage' => 'en', 'checked' => true]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->faq,
+            $this->adminFaq,
+            $this->tags,
+            $this->notification,
+            $this->changelog,
+            $this->visits,
+            $this->seo,
+            $this->question,
+            $this->logging,
+            $this->webPushService,
+        );
 
         $this->expectException(\Exception::class);
         $controller->sticky($request);
@@ -137,7 +233,18 @@ class FaqControllerTest extends TestCase
     {
         $requestData = json_encode(['csrf' => 'test-token', 'faqId' => 1, 'faqLanguage' => 'en']);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->faq,
+            $this->adminFaq,
+            $this->tags,
+            $this->notification,
+            $this->changelog,
+            $this->visits,
+            $this->seo,
+            $this->question,
+            $this->logging,
+            $this->webPushService,
+        );
 
         $this->expectException(\Exception::class);
         $controller->delete($request);
@@ -150,7 +257,18 @@ class FaqControllerTest extends TestCase
     {
         $requestData = json_encode(['csrf' => 'test-token', 'search' => 'test']);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->faq,
+            $this->adminFaq,
+            $this->tags,
+            $this->notification,
+            $this->changelog,
+            $this->visits,
+            $this->seo,
+            $this->question,
+            $this->logging,
+            $this->webPushService,
+        );
 
         $this->expectException(\Exception::class);
         $controller->search($request);
@@ -163,7 +281,18 @@ class FaqControllerTest extends TestCase
     {
         $requestData = json_encode(['csrf' => 'test-token', 'faqIds' => [1, 2, 3]]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->faq,
+            $this->adminFaq,
+            $this->tags,
+            $this->notification,
+            $this->changelog,
+            $this->visits,
+            $this->seo,
+            $this->question,
+            $this->logging,
+            $this->webPushService,
+        );
 
         $this->expectException(\Exception::class);
         $controller->saveOrderOfStickyFaqs($request);
@@ -175,7 +304,18 @@ class FaqControllerTest extends TestCase
     public function testImportRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->faq,
+            $this->adminFaq,
+            $this->tags,
+            $this->notification,
+            $this->changelog,
+            $this->visits,
+            $this->seo,
+            $this->question,
+            $this->logging,
+            $this->webPushService,
+        );
 
         $this->expectException(\Exception::class);
         $controller->import($request);
@@ -187,7 +327,18 @@ class FaqControllerTest extends TestCase
     public function testCreateWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->faq,
+            $this->adminFaq,
+            $this->tags,
+            $this->notification,
+            $this->changelog,
+            $this->visits,
+            $this->seo,
+            $this->question,
+            $this->logging,
+            $this->webPushService,
+        );
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -199,7 +350,18 @@ class FaqControllerTest extends TestCase
     public function testUpdateWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->faq,
+            $this->adminFaq,
+            $this->tags,
+            $this->notification,
+            $this->changelog,
+            $this->visits,
+            $this->seo,
+            $this->question,
+            $this->logging,
+            $this->webPushService,
+        );
 
         $this->expectException(\Exception::class);
         $controller->update($request);
@@ -211,7 +373,18 @@ class FaqControllerTest extends TestCase
     public function testActivateWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->faq,
+            $this->adminFaq,
+            $this->tags,
+            $this->notification,
+            $this->changelog,
+            $this->visits,
+            $this->seo,
+            $this->question,
+            $this->logging,
+            $this->webPushService,
+        );
 
         $this->expectException(\Exception::class);
         $controller->activate($request);
@@ -223,7 +396,18 @@ class FaqControllerTest extends TestCase
     public function testDeleteWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->faq,
+            $this->adminFaq,
+            $this->tags,
+            $this->notification,
+            $this->changelog,
+            $this->visits,
+            $this->seo,
+            $this->question,
+            $this->logging,
+            $this->webPushService,
+        );
 
         $this->expectException(\Exception::class);
         $controller->delete($request);
@@ -241,7 +425,18 @@ class FaqControllerTest extends TestCase
             ],
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->faq,
+            $this->adminFaq,
+            $this->tags,
+            $this->notification,
+            $this->changelog,
+            $this->visits,
+            $this->seo,
+            $this->question,
+            $this->logging,
+            $this->webPushService,
+        );
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -254,7 +449,18 @@ class FaqControllerTest extends TestCase
     {
         $requestData = json_encode(['faqIds' => [1], 'faqLanguage' => 'en', 'checked' => true]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->faq,
+            $this->adminFaq,
+            $this->tags,
+            $this->notification,
+            $this->changelog,
+            $this->visits,
+            $this->seo,
+            $this->question,
+            $this->logging,
+            $this->webPushService,
+        );
 
         $this->expectException(\Exception::class);
         $controller->activate($request);

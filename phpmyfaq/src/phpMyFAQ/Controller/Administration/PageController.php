@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\CustomPage;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
@@ -38,6 +39,12 @@ use Twig\Extension\AttributeExtension;
 
 final class PageController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly CustomPage $customPage,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws LoaderError
@@ -50,7 +57,7 @@ final class PageController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::PAGE_DELETE);
         $this->userHasPermission(PermissionType::PAGE_EDIT);
 
-        $customPage = $this->container->get(id: 'phpmyfaq.custom-page');
+        $customPage = $this->customPage;
 
         $itemsPerPage = 25;
         $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT, 1);
@@ -119,7 +126,7 @@ final class PageController extends AbstractAdministrationController
 
         $pageId = (int) Filter::filterVar($request->attributes->get('pageId'), FILTER_VALIDATE_INT);
 
-        $customPage = $this->container->get(id: 'phpmyfaq.custom-page');
+        $customPage = $this->customPage;
         $pageEntity = $customPage->getById($pageId);
 
         if ($pageEntity === null) {
@@ -169,7 +176,7 @@ final class PageController extends AbstractAdministrationController
 
         $pageId = (int) Filter::filterVar($request->attributes->get('pageId'), FILTER_VALIDATE_INT);
 
-        $customPage = $this->container->get(id: 'phpmyfaq.custom-page');
+        $customPage = $this->customPage;
         $pageEntity = $customPage->getById($pageId);
 
         if ($pageEntity === null) {

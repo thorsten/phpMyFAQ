@@ -6,6 +6,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 class ExportControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private Faq $faq;
 
     /**
      * @throws Exception
@@ -33,6 +35,7 @@ class ExportControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+        $this->faq = $this->createStub(Faq::class);
     }
 
     /**
@@ -41,7 +44,7 @@ class ExportControllerTest extends TestCase
     public function testExportFileRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new ExportController();
+        $controller = new ExportController($this->faq);
 
         $this->expectException(\Exception::class);
         $controller->exportFile($request);
@@ -58,7 +61,7 @@ class ExportControllerTest extends TestCase
             ],
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new ExportController();
+        $controller = new ExportController($this->faq);
 
         $this->expectException(\Exception::class);
         $controller->exportReport($request);
@@ -70,7 +73,7 @@ class ExportControllerTest extends TestCase
     public function testExportReportWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new ExportController();
+        $controller = new ExportController($this->faq);
 
         $this->expectException(\Exception::class);
         $controller->exportReport($request);
@@ -85,7 +88,7 @@ class ExportControllerTest extends TestCase
             'data' => [],
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new ExportController();
+        $controller = new ExportController($this->faq);
 
         $this->expectException(\Exception::class);
         $controller->exportReport($request);

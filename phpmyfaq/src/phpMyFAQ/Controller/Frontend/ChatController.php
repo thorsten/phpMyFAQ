@@ -23,6 +23,7 @@ use phpMyFAQ\Chat;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\UserSession;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,6 +31,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ChatController extends AbstractFrontController
 {
+    public function __construct(
+        private readonly UserSession $userSession,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * Displays the user's chat/messages page.
      *
@@ -43,12 +50,10 @@ final class ChatController extends AbstractFrontController
             return new RedirectResponse($this->configuration->getDefaultUrl());
         }
 
-        $faqSession = $this->container->get('phpmyfaq.user.session');
-        $faqSession->setCurrentUser($this->currentUser);
-        $faqSession->userTracking('chat', 0);
+        $this->userSession->setCurrentUser($this->currentUser);
+        $this->userSession->userTracking('chat', 0);
 
         $chat = new Chat($this->configuration);
-        $session = $this->container->get('session');
 
         $conversations = $chat->getConversationList($this->currentUser->getUserId());
         $unreadCount = $chat->getUnreadCount($this->currentUser->getUserId());
@@ -59,8 +64,8 @@ final class ChatController extends AbstractFrontController
             'conversations' => $conversations,
             'unreadCount' => $unreadCount,
             'currentUserId' => $this->currentUser->getUserId(),
-            'csrfTokenSendMessage' => Token::getInstance($session)->getTokenString('send-chat-message'),
-            'csrfTokenMarkRead' => Token::getInstance($session)->getTokenString('mark-chat-read'),
+            'csrfTokenSendMessage' => Token::getInstance($this->session)->getTokenString('send-chat-message'),
+            'csrfTokenMarkRead' => Token::getInstance($this->session)->getTokenString('mark-chat-read'),
         ]);
     }
 }

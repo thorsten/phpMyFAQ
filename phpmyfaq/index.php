@@ -22,15 +22,11 @@
 
 declare(strict_types=1);
 
-
-use phpMyFAQ\Application;
 use phpMyFAQ\Controller\Frontend\ErrorController;
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Core\Exception\DatabaseConnectionException;
 use phpMyFAQ\Environment;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use phpMyFAQ\Kernel;
+use Symfony\Component\HttpFoundation\Request;
 
 //
 // Bootstrapping
@@ -44,23 +40,11 @@ try {
     exit(1);
 }
 
-//
-// Service Containers
-//
-$container = new ContainerBuilder();
-$loader = new PhpFileLoader($container, new FileLocator(__DIR__));
-try {
-    $loader->load('./src/services.php');
-} catch (Exception $exception) {
-    echo sprintf('Error: %s at line %d at %s', $exception->getMessage(), $exception->getLine(), $exception->getFile());
-}
+$kernel = new Kernel(
+    routingContext: 'public',
+    debug: Environment::isDebugMode(),
+);
 
-$app = new Application($container);
-$app->routingContext = 'public';
-
-try {
-    // Auto-loads routes from attributes (falls back to public-routes.php during migration)
-    $app->run();
-} catch (Exception $exception) {
-    echo sprintf('Error: %s at line %d at %s', $exception->getMessage(), $exception->getLine(), $exception->getFile());
-}
+$request = Request::createFromGlobals();
+$response = $kernel->handle($request);
+$response->send();

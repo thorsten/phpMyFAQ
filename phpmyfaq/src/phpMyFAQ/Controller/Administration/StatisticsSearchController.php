@@ -23,6 +23,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Pagination\UrlConfig;
+use phpMyFAQ\Search;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\LanguageCodeTwigExtension;
@@ -34,6 +35,12 @@ use Twig\Extension\AttributeExtension;
 
 final class StatisticsSearchController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly Search $search,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws LoaderError
      * @throws Exception
@@ -47,7 +54,7 @@ final class StatisticsSearchController extends AbstractAdministrationController
 
         $perPage = 10;
 
-        $search = $this->container->get(id: 'phpmyfaq.search');
+        $search = $this->search;
 
         $searchesCount = $search->getSearchesCount();
         $searchesList = $search->getMostPopularSearches($searchesCount + 1, true);

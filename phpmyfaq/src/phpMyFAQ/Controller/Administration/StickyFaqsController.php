@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,6 +31,12 @@ use Twig\Error\LoaderError;
 
 final class StickyFaqsController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly Faq $faq,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws LoaderError
@@ -46,7 +53,7 @@ final class StickyFaqsController extends AbstractAdministrationController
             ...$this->getHeader($request),
             ...$this->getFooter(),
             'stickyFAQsHeader' => Translation::get(key: 'stickyRecordsHeader'),
-            'stickyData' => $this->container->get(id: 'phpmyfaq.faq')->getStickyFaqsData(),
+            'stickyData' => $this->faq->getStickyFaqsData(),
             'sortableDisabled' => $customOrdering === false ? 'sortable-disabled' : '',
             'orderingStickyFaqsActivated' => $this->configuration->get(item: 'records.orderStickyFaqsCustom'),
             'alertMessageStickyFaqsDeactivated' => Translation::get(key: 'msgOrderStickyFaqsCustomDeactivated'),
@@ -57,10 +64,8 @@ final class StickyFaqsController extends AbstractAdministrationController
             'msgConfirmAction' => Translation::get(key: 'msgConfirmAction'),
             'msgCancel' => Translation::get(key: 'ad_gen_cancel'),
             'msgConfirm' => Translation::get(key: 'ad_gen_save'),
-            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('order-stickyfaqs'),
-            'csrfTokenApi' => Token::getInstance($this->container->get(id: 'session'))->getTokenString(
-                'pmf-csrf-token',
-            ),
+            'csrfToken' => Token::getInstance($this->session)->getTokenString('order-stickyfaqs'),
+            'csrfTokenApi' => Token::getInstance($this->session)->getTokenString('pmf-csrf-token'),
         ]);
     }
 }

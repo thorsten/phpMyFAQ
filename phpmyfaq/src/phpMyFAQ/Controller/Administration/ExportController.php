@@ -23,6 +23,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\HeaderUtils;
@@ -33,6 +34,12 @@ use Twig\Error\LoaderError;
 
 final class ExportController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly CategoryHelper $categoryHelper,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws LoaderError*@throws \Exception
@@ -50,8 +57,7 @@ final class ExportController extends AbstractAdministrationController
         $category->setGroups($currentGroups);
         $category->buildCategoryTree();
 
-        $categoryHelper = $this->container->get(id: 'phpmyfaq.helper.category-helper');
-        $categoryHelper->setCategory($category);
+        $this->categoryHelper->setCategory($category);
 
         return $this->render('@admin/import-export/export.twig', [
             ...$this->getHeader($request),

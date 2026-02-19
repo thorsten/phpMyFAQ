@@ -16,13 +16,11 @@
  * @since     2023-07-02
  */
 
-use phpMyFAQ\Application;
 use phpMyFAQ\Core\Exception\DatabaseConnectionException;
 use phpMyFAQ\Environment;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use phpMyFAQ\Kernel;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 try {
@@ -49,24 +47,11 @@ try {
     exit(1);
 }
 
-//
-// Service Containers
-//
-$container = new ContainerBuilder();
-$loader = new PhpFileLoader($container, new FileLocator(__DIR__));
-try {
-    $loader->load('../../src/services.php');
-} catch (Exception $exception) {
-    echo sprintf('Error: %s at line %d at %s', $exception->getMessage(), $exception->getLine(), $exception->getFile());
-}
+$kernel = new Kernel(
+    routingContext: 'admin-api',
+    debug: Environment::isDebugMode(),
+);
 
-$app = new Application($container);
-$app->setAdminContext(true);
-$app->setApiContext(true);
-$app->routingContext = 'admin-api';
-try {
-    // Autoload routes from attributes (falls back to api-routes.php during migration)
-    $app->run();
-} catch (Exception $exception) {
-    echo sprintf('Error: %s at line %d at %s', $exception->getMessage(), $exception->getLine(), $exception->getFile());
-}
+$request = Request::createFromGlobals();
+$response = $kernel->handle($request);
+$response->send();

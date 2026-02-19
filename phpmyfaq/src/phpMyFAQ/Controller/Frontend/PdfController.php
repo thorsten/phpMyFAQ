@@ -28,8 +28,10 @@ use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Export\Pdf;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\AttachmentHelper;
+use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,6 +40,13 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class PdfController extends AbstractFrontController
 {
+    public function __construct(
+        private readonly Faq $faq,
+        private readonly Tags $tags,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception|\Exception|CommonMarkException
      */
@@ -63,33 +72,31 @@ final class PdfController extends AbstractFrontController
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faq = $this->container->get('phpmyfaq.faq');
-        $faq->setUser($currentUser);
-        $faq->setGroups($currentGroups);
+        $this->faq->setUser($currentUser);
+        $this->faq->setGroups($currentGroups);
 
         $category = new Category($this->configuration, $currentGroups, true);
         $category->setUser($currentUser);
 
-        $tags = $this->container->get('phpmyfaq.tags');
-        $tags->setUser($currentUser)->setGroups($currentGroups);
+        $this->tags->setUser($currentUser)->setGroups($currentGroups);
 
-        $pdf = new Pdf($faq, $category, $this->configuration);
+        $pdf = new Pdf($this->faq, $category, $this->configuration);
 
-        $faq->getFaq($faqId);
-        $faq->faqRecord['category_id'] = $categoryId;
+        $this->faq->getFaq($faqId);
+        $this->faq->faqRecord['category_id'] = $categoryId;
 
-        if (!$this->configuration->get('records.disableAttachments') && 'yes' === $faq->faqRecord['active']) {
+        if (!$this->configuration->get('records.disableAttachments') && 'yes' === $this->faq->faqRecord['active']) {
             try {
                 $attachmentHelper = new AttachmentHelper();
                 $attList = AttachmentFactory::fetchByRecordId($this->configuration, $faqId);
-                $faq->faqRecord['attachmentList'] = $attachmentHelper->getAttachmentList($attList);
+                $this->faq->faqRecord['attachmentList'] = $attachmentHelper->getAttachmentList($attList);
             } catch (AttachmentException) {
-                $faq->faqRecord['attachmentList'] = '';
+                $this->faq->faqRecord['attachmentList'] = '';
             }
         }
 
         $filename = 'FAQ-' . $faqId . '-' . $faqLanguage . '.pdf';
-        $pdfFile = $pdf->generateFile($faq->faqRecord, $filename);
+        $pdfFile = $pdf->generateFile($this->faq->faqRecord, $filename);
 
         $response = new Response();
         $response->setExpires(new DateTime());

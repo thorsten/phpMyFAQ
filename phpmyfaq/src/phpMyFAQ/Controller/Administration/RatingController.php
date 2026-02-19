@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Administration\RatingData;
 use phpMyFAQ\Category;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
@@ -32,6 +33,12 @@ use Twig\Error\LoaderError;
 
 final class RatingController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly RatingData $ratingData,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws LoaderError
@@ -48,7 +55,7 @@ final class RatingController extends AbstractAdministrationController
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
 
-        $ratingData = $this->container->get(id: 'phpmyfaq.admin.rating-data');
+        $ratingData = $this->ratingData;
 
         $data = $ratingData->getAll();
         $numberOfRatings = is_countable($data) ? count($data) : 0;

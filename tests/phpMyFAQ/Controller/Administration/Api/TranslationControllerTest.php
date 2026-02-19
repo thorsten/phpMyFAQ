@@ -8,6 +8,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Translation\ContentTranslationService;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 class TranslationControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private ContentTranslationService $translationService;
 
     /**
      * @throws Exception
@@ -33,6 +35,7 @@ class TranslationControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+        $this->translationService = $this->createStub(ContentTranslationService::class);
     }
 
     /**
@@ -48,7 +51,7 @@ class TranslationControllerTest extends TestCase
             'pmf-csrf-token' => 'test-token',
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new TranslationController();
+        $controller = new TranslationController($this->translationService);
 
         $this->expectException(\Exception::class);
         $controller->translate($request);
@@ -60,7 +63,7 @@ class TranslationControllerTest extends TestCase
     public function testTranslateWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new TranslationController();
+        $controller = new TranslationController($this->translationService);
 
         $this->expectException(\Exception::class);
         $controller->translate($request);
@@ -78,7 +81,7 @@ class TranslationControllerTest extends TestCase
             'fields' => ['question' => 'What is phpMyFAQ?'],
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new TranslationController();
+        $controller = new TranslationController($this->translationService);
 
         $this->expectException(\Exception::class);
         $controller->translate($request);
@@ -96,7 +99,7 @@ class TranslationControllerTest extends TestCase
             'pmf-csrf-token' => 'test-token',
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new TranslationController();
+        $controller = new TranslationController($this->translationService);
 
         $this->expectException(\Exception::class);
         $controller->translate($request);
@@ -114,7 +117,7 @@ class TranslationControllerTest extends TestCase
             'pmf-csrf-token' => 'test-token',
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new TranslationController();
+        $controller = new TranslationController($this->translationService);
 
         $this->expectException(\Exception::class);
         $controller->translate($request);
@@ -132,7 +135,7 @@ class TranslationControllerTest extends TestCase
             'pmf-csrf-token' => 'test-token',
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new TranslationController();
+        $controller = new TranslationController($this->translationService);
 
         $this->expectException(\Exception::class);
         $controller->translate($request);
@@ -151,7 +154,7 @@ class TranslationControllerTest extends TestCase
             'pmf-csrf-token' => 'test-token',
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new TranslationController();
+        $controller = new TranslationController($this->translationService);
 
         $this->expectException(\Exception::class);
         $controller->translate($request);
@@ -170,7 +173,7 @@ class TranslationControllerTest extends TestCase
             'pmf-csrf-token' => 'test-token',
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new TranslationController();
+        $controller = new TranslationController($this->translationService);
 
         $this->expectException(\Exception::class);
         $controller->translate($request);

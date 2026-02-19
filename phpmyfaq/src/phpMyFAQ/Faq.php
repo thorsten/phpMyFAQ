@@ -447,7 +447,7 @@ class Faq
             $pagination = new Pagination(
                 baseUrl: $baseUrl,
                 total: $num,
-                perPage: $this->configuration->get(item: 'records.numberOfRecordsPerPage'),
+                perPage: (int) $this->configuration->get(item: 'records.numberOfRecordsPerPage'),
                 urlConfig: new UrlConfig(pageParamName: 'seite', rewriteUrl: $rewriteUrl),
             );
             $output .= $pagination->render();
@@ -963,7 +963,9 @@ class Faq
 
     private function getTenantQuotaEnforcer(): TenantQuotaEnforcer
     {
-        return $this->tenantQuotaEnforcer ??= TenantQuotaEnforcer::createFromDatabaseDriver($this->configuration->getDb());
+        return $this->tenantQuotaEnforcer ??= TenantQuotaEnforcer::createFromDatabaseDriver(
+            $this->configuration->getDb(),
+        );
     }
 
     /**

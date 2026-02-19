@@ -20,6 +20,8 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller;
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\CustomPage;
+use phpMyFAQ\Faq\Statistics as FaqStatistics;
 use phpMyFAQ\Twig\TemplateException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +29,13 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class SitemapController extends AbstractController
 {
+    public function __construct(
+        private readonly FaqStatistics $faqStatistics,
+        private readonly CustomPage $customPage,
+    ) {
+        parent::__construct();
+    }
+
     private const int PMF_SITEMAP_GOOGLE_MAX_URLS = 50000;
 
     /**
@@ -87,8 +96,7 @@ final class SitemapController extends AbstractController
             return null;
         }
 
-        $faqStatistics = $this->container->get(id: 'phpmyfaq.faq.statistics');
-        $items = $faqStatistics->getTopTenData(self::PMF_SITEMAP_GOOGLE_MAX_URLS - 1);
+        $items = $this->faqStatistics->getTopTenData(self::PMF_SITEMAP_GOOGLE_MAX_URLS - 1);
 
         $urls = [];
         foreach ($items as $item) {
@@ -100,8 +108,7 @@ final class SitemapController extends AbstractController
         }
 
         // Add custom pages to sitemap
-        $customPage = $this->container->get(id: 'phpmyfaq.custom-page');
-        $pages = $customPage->getAllPages();
+        $pages = $this->customPage->getAllPages();
 
         foreach ($pages as $page) {
             if ($page['active'] !== 'y') {

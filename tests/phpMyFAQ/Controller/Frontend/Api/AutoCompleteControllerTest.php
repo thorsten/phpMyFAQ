@@ -6,6 +6,10 @@ namespace phpMyFAQ\Controller\Frontend\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Faq\Permission;
+use phpMyFAQ\Helper\SearchHelper;
+use phpMyFAQ\Language\Plurals;
+use phpMyFAQ\Search;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -18,6 +22,10 @@ use Symfony\Component\HttpFoundation\Response;
 class AutoCompleteControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private Permission $faqPermission;
+    private Search $faqSearch;
+    private SearchHelper $faqSearchHelper;
+    private Plurals $plurals;
 
     /**
      * @throws Exception
@@ -35,6 +43,21 @@ class AutoCompleteControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+
+        $this->faqPermission = $this->createStub(Permission::class);
+        $this->faqSearch = $this->createStub(Search::class);
+        $this->faqSearchHelper = $this->createStub(SearchHelper::class);
+        $this->plurals = $this->createStub(Plurals::class);
+    }
+
+    private function createController(): AutoCompleteController
+    {
+        return new AutoCompleteController(
+            $this->faqPermission,
+            $this->faqSearch,
+            $this->faqSearchHelper,
+            $this->plurals,
+        );
     }
 
     /**
@@ -44,7 +67,7 @@ class AutoCompleteControllerTest extends TestCase
     {
         $request = new Request(['search' => 'test']);
 
-        $controller = new AutoCompleteController();
+        $controller = $this->createController();
         $response = $controller->search($request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -57,7 +80,7 @@ class AutoCompleteControllerTest extends TestCase
     {
         $request = new Request(['search' => 'test']);
 
-        $controller = new AutoCompleteController();
+        $controller = $this->createController();
         $response = $controller->search($request);
 
         $this->assertContains($response->getStatusCode(), [Response::HTTP_OK, Response::HTTP_NOT_FOUND]);
@@ -70,7 +93,7 @@ class AutoCompleteControllerTest extends TestCase
     {
         $request = new Request();
 
-        $controller = new AutoCompleteController();
+        $controller = $this->createController();
         $response = $controller->search($request);
 
         $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
@@ -83,7 +106,7 @@ class AutoCompleteControllerTest extends TestCase
     {
         $request = new Request(['search' => 'test']);
 
-        $controller = new AutoCompleteController();
+        $controller = $this->createController();
         $response = $controller->search($request);
 
         $this->assertJson($response->getContent());
@@ -96,7 +119,7 @@ class AutoCompleteControllerTest extends TestCase
     {
         $request = new Request(['search' => 'test']);
 
-        $controller = new AutoCompleteController();
+        $controller = $this->createController();
         $response = $controller->search($request);
 
         $data = json_decode($response->getContent(), true);
@@ -110,7 +133,7 @@ class AutoCompleteControllerTest extends TestCase
     {
         $request = new Request(['search' => 'test']);
 
-        $controller = new AutoCompleteController();
+        $controller = $this->createController();
         $response = $controller->search($request);
 
         $this->assertTrue($response->headers->has('Content-Type'));
@@ -124,7 +147,7 @@ class AutoCompleteControllerTest extends TestCase
     {
         $request = new Request(['search' => '']);
 
-        $controller = new AutoCompleteController();
+        $controller = $this->createController();
         $response = $controller->search($request);
 
         $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
@@ -139,7 +162,7 @@ class AutoCompleteControllerTest extends TestCase
 
         foreach ($queries as $query) {
             $request = new Request(['search' => $query]);
-            $controller = new AutoCompleteController();
+            $controller = $this->createController();
             $response = $controller->search($request);
 
             $this->assertInstanceOf(JsonResponse::class, $response);
@@ -154,7 +177,7 @@ class AutoCompleteControllerTest extends TestCase
     {
         $request = new Request(['search' => 'test']);
 
-        $controller = new AutoCompleteController();
+        $controller = $this->createController();
         $response = $controller->search($request);
 
         $content = $response->getContent();
@@ -169,7 +192,7 @@ class AutoCompleteControllerTest extends TestCase
     {
         $request = new Request(['search' => '<script>alert("xss")</script>']);
 
-        $controller = new AutoCompleteController();
+        $controller = $this->createController();
         $response = $controller->search($request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);

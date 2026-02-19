@@ -32,6 +32,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class QuestionController extends AbstractController
 {
+    public function __construct(
+        private readonly Question $question,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      */
@@ -69,8 +75,6 @@ final class QuestionController extends AbstractController
     {
         $this->userHasPermission(PermissionType::QUESTION_ADD);
 
-        $question = $this->container->get(id: 'phpmyfaq.question');
-
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance($this->session)->verifyToken('toggle-question-visibility', $data->csrfToken)) {
@@ -80,8 +84,8 @@ final class QuestionController extends AbstractController
         $questionId = (int) $data->questionId;
 
         if (!is_null($questionId)) {
-            $isVisible = $question->getVisibility($questionId);
-            $question->setVisibility($questionId, $isVisible === 'N' ? 'Y' : 'N');
+            $isVisible = $this->question->getVisibility($questionId);
+            $this->question->setVisibility($questionId, $isVisible === 'N' ? 'Y' : 'N');
             $translation = $isVisible === 'N'
                 ? Translation::get(key: 'ad_gen_yes')
                 : Translation::get(key: 'ad_gen_no');

@@ -25,6 +25,7 @@ use phpMyFAQ\Administration\TranslationStatistics;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\LanguageCodeTwigExtension;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,6 +35,12 @@ use Twig\Extension\AttributeExtension;
 
 final class SystemInformationController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly System $system,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws \Exception
@@ -43,7 +50,7 @@ final class SystemInformationController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $faqSystem = $this->container->get(id: 'phpmyfaq.system');
+        $faqSystem = $this->system;
 
         if ($this->configuration->get(item: 'search.enableElasticsearch')) {
             try {

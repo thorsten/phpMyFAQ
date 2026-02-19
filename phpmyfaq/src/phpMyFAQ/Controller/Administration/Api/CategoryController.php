@@ -20,6 +20,8 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\Image;
+use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Core\Exception;
@@ -36,6 +38,14 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class CategoryController extends AbstractAdministrationApiController
 {
+    public function __construct(
+        private readonly Image $categoryImage,
+        private readonly Order $categoryOrder,
+        private readonly Permission $categoryPermission,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws \Exception
@@ -59,13 +69,9 @@ final class CategoryController extends AbstractAdministrationApiController
 
         $categoryRelation = new Relation($this->configuration, $category);
 
-        $categoryImage = $this->container->get(id: 'phpmyfaq.category.image');
-        $categoryImage->setFileName($category->getCategoryData((int) $data->categoryId)->getImage());
+        $this->categoryImage->setFileName($category->getCategoryData((int) $data->categoryId)->getImage());
 
-        $categoryOrder = $this->container->get(id: 'phpmyfaq.category.order');
-        $categoryOrder->remove((int) $data->categoryId);
-
-        $categoryPermission = $this->container->get(id: 'phpmyfaq.category.permission');
+        $this->categoryOrder->remove((int) $data->categoryId);
 
         if (
             (
@@ -74,9 +80,9 @@ final class CategoryController extends AbstractAdministrationApiController
                     : 0
             ) === 1
         ) {
-            $categoryPermission->delete(Permission::USER, [(int) $data->categoryId]);
-            $categoryPermission->delete(Permission::GROUP, [(int) $data->categoryId]);
-            $categoryImage->delete();
+            $this->categoryPermission->delete(Permission::USER, [(int) $data->categoryId]);
+            $this->categoryPermission->delete(Permission::GROUP, [(int) $data->categoryId]);
+            $this->categoryImage->delete();
         }
 
         if (
@@ -98,8 +104,6 @@ final class CategoryController extends AbstractAdministrationApiController
     {
         $this->userIsAuthenticated();
 
-        $categoryPermission = $this->container->get(id: 'phpmyfaq.category.permission');
-
         $categoryData = $request->attributes->get('categories');
 
         if (in_array($categoryData, [null, '', false], true)) {
@@ -115,8 +119,8 @@ final class CategoryController extends AbstractAdministrationApiController
         }
 
         return $this->json([
-            'user' => $categoryPermission->get(Permission::USER, $categories),
-            'group' => $categoryPermission->get(Permission::GROUP, $categories),
+            'user' => $this->categoryPermission->get(Permission::USER, $categories),
+            'group' => $this->categoryPermission->get(Permission::GROUP, $categories),
         ], Response::HTTP_OK);
     }
 
@@ -150,10 +154,9 @@ final class CategoryController extends AbstractAdministrationApiController
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $categoryOrder = $this->container->get(id: 'phpmyfaq.category.order');
-        $categoryOrder->setCategoryTree($data->categoryTree);
+        $this->categoryOrder->setCategoryTree($data->categoryTree);
 
-        $parentId = $categoryOrder->getParentId($data->categoryTree, (int) $data->categoryId);
+        $parentId = $this->categoryOrder->getParentId($data->categoryTree, (int) $data->categoryId);
 
         $category = new Category($this->configuration, [], false);
         $category->setUser($currentAdminUser);

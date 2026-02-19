@@ -6,6 +6,7 @@ namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Notification;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -46,7 +47,7 @@ class QuestionControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new QuestionController();
+        $controller = new QuestionController($this->createStub(Notification::class));
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -62,7 +63,7 @@ class QuestionControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new QuestionController();
+        $controller = new QuestionController($this->createStub(Notification::class));
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -75,7 +76,7 @@ class QuestionControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new QuestionController();
+        $controller = new QuestionController($this->createStub(Notification::class));
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -86,7 +87,7 @@ class QuestionControllerTest extends TestCase
         $requestData = 'invalid json';
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new QuestionController();
+        $controller = new QuestionController($this->createStub(Notification::class));
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -101,7 +102,7 @@ class QuestionControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new QuestionController();
+        $controller = new QuestionController($this->createStub(Notification::class));
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -116,7 +117,7 @@ class QuestionControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new QuestionController();
+        $controller = new QuestionController($this->createStub(Notification::class));
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -131,7 +132,7 @@ class QuestionControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new QuestionController();
+        $controller = new QuestionController($this->createStub(Notification::class));
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -146,7 +147,7 @@ class QuestionControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new QuestionController();
+        $controller = new QuestionController($this->createStub(Notification::class));
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -162,7 +163,7 @@ class QuestionControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new QuestionController();
+        $controller = new QuestionController($this->createStub(Notification::class));
 
         $this->expectException(\Exception::class);
         $controller->create($request);

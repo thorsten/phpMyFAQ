@@ -6,8 +6,12 @@ namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Faq\MetaData as FaqMetaData;
+use phpMyFAQ\Faq\Statistics as FaqStatistics;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -49,7 +53,12 @@ class FaqControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('categoryId', '1');
 
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getByCategoryId($request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -63,7 +72,12 @@ class FaqControllerTest extends TestCase
         $request->attributes->set('faqId', '1');
         $request->attributes->set('categoryId', '1');
 
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getById($request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -76,7 +90,12 @@ class FaqControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('tagId', '1');
 
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getByTagId($request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -86,7 +105,12 @@ class FaqControllerTest extends TestCase
      * @throws Exception
      */ public function testGetPopularReturnsJsonResponse(): void
     {
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getPopular();
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -96,7 +120,12 @@ class FaqControllerTest extends TestCase
      * @throws Exception
      */ public function testGetLatestReturnsJsonResponse(): void
     {
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getLatest();
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -106,7 +135,12 @@ class FaqControllerTest extends TestCase
      * @throws Exception
      */ public function testGetTrendingReturnsJsonResponse(): void
     {
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getTrending();
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -116,7 +150,12 @@ class FaqControllerTest extends TestCase
      * @throws Exception
      */ public function testGetStickyReturnsJsonResponse(): void
     {
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getSticky();
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -126,7 +165,12 @@ class FaqControllerTest extends TestCase
      * @throws Exception
      */ public function testListReturnsJsonResponse(): void
     {
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->list();
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -150,7 +194,12 @@ class FaqControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -175,7 +224,12 @@ class FaqControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
 
         $this->expectException(\Exception::class);
         $controller->update($request);
@@ -189,7 +243,12 @@ class FaqControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('categoryId', '1');
 
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getByCategoryId($request);
 
         $this->assertContains($response->getStatusCode(), [200, 500]);
@@ -204,7 +263,12 @@ class FaqControllerTest extends TestCase
         $request->attributes->set('faqId', '1');
         $request->attributes->set('categoryId', '1');
 
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getById($request);
 
         $this->assertContains($response->getStatusCode(), [200, 404]);
@@ -219,7 +283,12 @@ class FaqControllerTest extends TestCase
         $request->attributes->set('faqId', '999999');
         $request->attributes->set('categoryId', '999999');
 
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getById($request);
 
         $this->assertEquals(404, $response->getStatusCode());
@@ -233,7 +302,12 @@ class FaqControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('tagId', '1');
 
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getByTagId($request);
 
         $this->assertContains($response->getStatusCode(), [200, 500]);
@@ -244,7 +318,12 @@ class FaqControllerTest extends TestCase
      */
     public function testGetPopularReturnsValidStatusCode(): void
     {
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getPopular();
 
         $this->assertContains($response->getStatusCode(), [200, 404]);
@@ -255,7 +334,12 @@ class FaqControllerTest extends TestCase
      */
     public function testGetLatestReturnsValidStatusCode(): void
     {
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getLatest();
 
         $this->assertContains($response->getStatusCode(), [200, 404]);
@@ -266,7 +350,12 @@ class FaqControllerTest extends TestCase
      */
     public function testGetTrendingReturnsValidStatusCode(): void
     {
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getTrending();
 
         $this->assertContains($response->getStatusCode(), [200, 404]);
@@ -277,7 +366,12 @@ class FaqControllerTest extends TestCase
      */
     public function testGetStickyReturnsValidStatusCode(): void
     {
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getSticky();
 
         $this->assertContains($response->getStatusCode(), [200, 404]);
@@ -288,7 +382,12 @@ class FaqControllerTest extends TestCase
      */
     public function testListReturnsValidStatusCode(): void
     {
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->list();
 
         $this->assertContains($response->getStatusCode(), [200, 404]);
@@ -302,7 +401,12 @@ class FaqControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('categoryId', '1');
 
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getByCategoryId($request);
 
         $this->assertJson($response->getContent());
@@ -317,7 +421,12 @@ class FaqControllerTest extends TestCase
         $request->attributes->set('faqId', '1');
         $request->attributes->set('categoryId', '1');
 
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getById($request);
 
         $this->assertJson($response->getContent());
@@ -328,7 +437,12 @@ class FaqControllerTest extends TestCase
      */
     public function testListReturnsArrayData(): void
     {
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->list();
 
         $data = json_decode($response->getContent(), true);
@@ -344,7 +458,12 @@ class FaqControllerTest extends TestCase
         $requestData = 'invalid json';
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -359,7 +478,12 @@ class FaqControllerTest extends TestCase
         $requestData = 'invalid json';
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
 
         $this->expectException(\Exception::class);
         $controller->update($request);
@@ -373,7 +497,12 @@ class FaqControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('categoryId', '1');
 
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getByCategoryId($request);
 
         $this->assertTrue($response->headers->has('Content-Type'));
@@ -389,7 +518,12 @@ class FaqControllerTest extends TestCase
         $request->attributes->set('faqId', '1');
         $request->attributes->set('categoryId', '1');
 
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getById($request);
 
         $this->assertTrue($response->headers->has('Content-Type'));
@@ -400,7 +534,12 @@ class FaqControllerTest extends TestCase
      */
     public function testGetPopularResponseIsNotEmpty(): void
     {
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getPopular();
 
         $content = $response->getContent();
@@ -413,7 +552,12 @@ class FaqControllerTest extends TestCase
      */
     public function testGetLatestResponseIsNotEmpty(): void
     {
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getLatest();
 
         $content = $response->getContent();
@@ -426,7 +570,12 @@ class FaqControllerTest extends TestCase
      */
     public function testGetTrendingResponseIsNotEmpty(): void
     {
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getTrending();
 
         $content = $response->getContent();
@@ -439,7 +588,12 @@ class FaqControllerTest extends TestCase
      */
     public function testGetStickyResponseIsNotEmpty(): void
     {
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getSticky();
 
         $content = $response->getContent();
@@ -452,7 +606,12 @@ class FaqControllerTest extends TestCase
      */
     public function testListResponseIsNotEmpty(): void
     {
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->list();
 
         $content = $response->getContent();
@@ -471,7 +630,12 @@ class FaqControllerTest extends TestCase
             $request = new Request();
             $request->attributes->set('categoryId', $categoryId);
 
-            $controller = new FaqController();
+            $controller = new FaqController(
+                $this->createStub(Faq::class),
+                $this->createStub(Tags::class),
+                $this->createStub(FaqStatistics::class),
+                $this->createStub(FaqMetaData::class),
+            );
             $response = $controller->getByCategoryId($request);
 
             $this->assertInstanceOf(JsonResponse::class, $response);
@@ -495,7 +659,12 @@ class FaqControllerTest extends TestCase
             $request->attributes->set('faqId', $faq['faqId']);
             $request->attributes->set('categoryId', $faq['categoryId']);
 
-            $controller = new FaqController();
+            $controller = new FaqController(
+                $this->createStub(Faq::class),
+                $this->createStub(Tags::class),
+                $this->createStub(FaqStatistics::class),
+                $this->createStub(FaqMetaData::class),
+            );
             $response = $controller->getById($request);
 
             $this->assertInstanceOf(JsonResponse::class, $response);
@@ -513,7 +682,12 @@ class FaqControllerTest extends TestCase
             $request = new Request();
             $request->attributes->set('tagId', $tagId);
 
-            $controller = new FaqController();
+            $controller = new FaqController(
+                $this->createStub(Faq::class),
+                $this->createStub(Tags::class),
+                $this->createStub(FaqStatistics::class),
+                $this->createStub(FaqMetaData::class),
+            );
             $response = $controller->getByTagId($request);
 
             $this->assertInstanceOf(JsonResponse::class, $response);
@@ -529,7 +703,12 @@ class FaqControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('categoryId', '1');
 
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getByCategoryId($request);
 
         $data = json_decode($response->getContent(), true);
@@ -549,7 +728,12 @@ class FaqControllerTest extends TestCase
         $request->attributes->set('faqId', '1');
         $request->attributes->set('categoryId', '1');
 
-        $controller = new FaqController();
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
         $response = $controller->getById($request);
 
         $content = $response->getContent();

@@ -19,6 +19,10 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
+use phpMyFAQ\Bookmark;
+use phpMyFAQ\Captcha\CaptchaInterface;
+use phpMyFAQ\Captcha\Helper\CaptchaHelperInterface;
+use phpMyFAQ\Category;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\SeoEntity;
@@ -31,12 +35,15 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
 use phpMyFAQ\Link\Util\TitleSlugifier;
+use phpMyFAQ\Mail;
 use phpMyFAQ\Seo;
+use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Services;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\LanguageCodeTwigExtension;
+use phpMyFAQ\User\UserSession;
 use phpMyFAQ\Utils;
 use phpMyFAQ\Visits;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -49,6 +56,20 @@ use Twig\TwigFilter;
 
 final class FaqController extends AbstractFrontController
 {
+    public function __construct(
+        private readonly UserSession $faqSession,
+        private readonly CaptchaInterface $captcha,
+        private readonly CaptchaHelperInterface $captchaHelper,
+        private readonly Faq $faq,
+        private readonly Category $category,
+        private readonly Bookmark $bookmark,
+        private readonly Date $date,
+        private readonly Mail $mail,
+        private readonly Gravatar $gravatar,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * Displays the form to add a new FAQ
      *
@@ -57,9 +78,8 @@ final class FaqController extends AbstractFrontController
     #[Route(path: '/add-faq.html', name: 'public.faq.add', methods: ['GET'])]
     public function add(Request $request): Response
     {
-        $faqSession = $this->container->get('phpmyfaq.user.session');
-        $faqSession->setCurrentUser($this->currentUser);
-        $faqSession->userTracking('new_entry', 0);
+        $this->faqSession->setCurrentUser($this->currentUser);
+        $this->faqSession->userTracking('new_entry', 0);
 
         // Get current groups
         $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
@@ -78,9 +98,6 @@ final class FaqController extends AbstractFrontController
         $selectedCategory = Filter::filterVar($request->query->get('cat'), FILTER_VALIDATE_INT, -1);
 
         $faqData = $faqCreationService->prepareAddFaqData($selectedQuestion, $selectedCategory);
-
-        $captcha = $this->container->get('phpmyfaq.captcha');
-        $captchaHelper = $this->container->get('phpmyfaq.captcha.helper.captcha_helper');
 
         // Add Twig filter
         $this->addFilter(new TwigFilter('repeat', static fn($string, $times): string => str_repeat(
@@ -114,8 +131,8 @@ final class FaqController extends AbstractFrontController
             'msgNewContentArticle' => Translation::get(key: 'msgNewContentArticle'),
             'msgNewContentKeywords' => Translation::get(key: 'msgNewContentKeywords'),
             'msgNewContentLink' => Translation::get(key: 'msgNewContentLink'),
-            'captchaFieldset' => $captchaHelper->renderCaptcha(
-                $captcha,
+            'captchaFieldset' => $this->captchaHelper->renderCaptcha(
+                $this->captcha,
                 'add',
                 Translation::get(key: 'msgCaptcha'),
                 $this->currentUser->isLoggedIn(),
@@ -157,8 +174,7 @@ final class FaqController extends AbstractFrontController
             return new Response('', Response::HTTP_NOT_FOUND);
         }
 
-        $faq = $this->container->get('phpmyfaq.faq');
-        $faqData = $faq->getIdFromSolutionId($solutionId);
+        $faqData = $this->faq->getIdFromSolutionId($solutionId);
 
         if (empty($faqData)) {
             return new Response('', Response::HTTP_NOT_FOUND);
@@ -187,10 +203,8 @@ final class FaqController extends AbstractFrontController
             return new Response('', Response::HTTP_NOT_FOUND);
         }
 
-        $faq = $this->container->get('phpmyfaq.faq');
-
         // Query the FAQ data directly for the specified language
-        $result = $faq->getFaqResult($faqId, $faqLang);
+        $result = $this->faq->getFaqResult($faqId, $faqLang);
 
         if ($this->configuration->getDb()->numRows($result) === 0) {
             return new Response('', Response::HTTP_NOT_FOUND);
@@ -201,8 +215,7 @@ final class FaqController extends AbstractFrontController
             return new Response('', Response::HTTP_NOT_FOUND);
         }
 
-        $category = $this->container->get('phpmyfaq.category');
-        $categoryId = $category->getCategoryIdFromFaq($faqId);
+        $categoryId = $this->category->getCategoryIdFromFaq($faqId);
 
         if ($categoryId === 0) {
             return new Response('', Response::HTTP_NOT_FOUND);
@@ -224,8 +237,7 @@ final class FaqController extends AbstractFrontController
     #[Route(path: '/content/{categoryId}/{faqId}/{faqLang}/{slug}.html', name: 'public.faq.show', methods: ['GET'])]
     public function show(Request $request): Response
     {
-        $faqSession = $this->container->get('phpmyfaq.user.session');
-        $faqSession->setCurrentUser($this->currentUser);
+        $this->faqSession->setCurrentUser($this->currentUser);
 
         // Get parameters
         $categoryId = Filter::filterVar($request->attributes->get('categoryId'), FILTER_VALIDATE_INT, 0);
@@ -244,10 +256,9 @@ final class FaqController extends AbstractFrontController
             ) ?? $this->configuration->getLanguage()->getLanguage();
 
         // Temporarily set the language in session for this request
-        $session = $this->container->get('session');
-        $originalLanguage = $session->get('lang');
+        $originalLanguage = $this->session->get('lang');
         if ($requestedLanguage !== $originalLanguage) {
-            $session->set('lang', $requestedLanguage);
+            $this->session->set('lang', $requestedLanguage);
             // Update the static language variable
             Language::$language = $requestedLanguage;
         }
@@ -258,17 +269,15 @@ final class FaqController extends AbstractFrontController
 
         // Initialize core objects
         $faq = new Faq($this->configuration);
-        $category = $this->container->get('phpmyfaq.category');
         $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
 
         // Handle bookmarks
-        $bookmark = $this->container->get('phpmyfaq.bookmark');
         if ($bookmarkAction === 'add' && $faqId > 0) {
-            $bookmark->add($faqId);
+            $this->bookmark->add($faqId);
         }
 
         if ($bookmarkAction === 'remove' && $faqId > 0) {
-            $bookmark->remove($faqId);
+            $this->bookmark->remove($faqId);
         }
 
         // Create a detail service
@@ -277,19 +286,19 @@ final class FaqController extends AbstractFrontController
             $this->currentUser,
             $currentGroups,
             $faq,
-            $category,
+            $this->category,
         );
 
         // Load FAQ data
         $faqId = $faqDisplayService->loadFaq($faqId, $solutionId);
 
         // Track visit
-        $faqSession->userTracking('article_view', $faqId);
+        $this->faqSession->userTracking('article_view', $faqId);
         $faqVisits = new Visits($this->configuration);
         $faqVisits->logViews($faqId);
 
         // Check if category and FAQ are linked
-        if (!$category->categoryHasLinkToFaq($faqId, $categoryId)) {
+        if (!$this->category->categoryHasLinkToFaq($faqId, $categoryId)) {
             return new Response('', Response::HTTP_NOT_FOUND);
         }
 
@@ -365,10 +374,6 @@ final class FaqController extends AbstractFrontController
         // Date formatter
         $date = new Date($this->configuration);
 
-        // Captcha
-        $captcha = $this->container->get('phpmyfaq.captcha');
-        $captchaHelper = $this->container->get('phpmyfaq.captcha.helper.captcha_helper');
-
         // Build template variables
         $templateVars = [
             ...$this->getHeader($request),
@@ -376,7 +381,7 @@ final class FaqController extends AbstractFrontController
             'metaDescription' => $seoData->getDescription(),
             'solutionId' => $faq->faqRecord['solution_id'],
             'solutionIdLink' => './solution_id_' . $faq->faqRecord['solution_id'] . '.html',
-            'breadcrumb' => $category->getPathWithStartpage($categoryId, '/', true),
+            'breadcrumb' => $this->category->getPathWithStartpage($categoryId, '/', true),
             'question' => $question,
             'answer' => $answer,
             'attachmentList' => $attachmentList,
@@ -411,12 +416,10 @@ final class FaqController extends AbstractFrontController
             'msgYourComment' => Translation::get(key: 'msgYourComment'),
             'msgCancel' => Translation::get(key: 'ad_gen_cancel'),
             'msgNewContentSubmit' => Translation::get(key: 'msgNewContentSubmit'),
-            'csrfTokenAddComment' => Token::getInstance($this->container->get('session'))->getTokenString(
-                'add-comment',
-            ),
+            'csrfTokenAddComment' => Token::getInstance($this->session)->getTokenString('add-comment'),
             'enableCommentEditor' => (bool) $this->configuration->get('main.enableCommentEditor'),
-            'captchaFieldset' => $captchaHelper->renderCaptcha(
-                $captcha,
+            'captchaFieldset' => $this->captchaHelper->renderCaptcha(
+                $this->captcha,
                 'writecomment',
                 Translation::get(key: 'msgCaptcha'),
                 $this->currentUser->isLoggedIn(),
@@ -434,23 +437,21 @@ final class FaqController extends AbstractFrontController
             'bookmarkAction' => $bookmarkAction ?? '',
             'msgBookmarkAdded' => Translation::get(key: 'msgBookmarkAdded'),
             'msgBookmarkRemoved' => Translation::get(key: 'msgBookmarkRemoved'),
-            'csrfTokenRemoveBookmark' => Token::getInstance($this->container->get('session'))->getTokenString(
-                'delete-bookmark',
-            ),
-            'csrfTokenAddBookmark' => Token::getInstance($this->container->get('session'))->getTokenString(
-                'add-bookmark',
-            ),
+            'csrfTokenRemoveBookmark' => Token::getInstance($this->session)->getTokenString('delete-bookmark'),
+            'csrfTokenAddBookmark' => Token::getInstance($this->session)->getTokenString('add-bookmark'),
             'numberOfComments' => sprintf('%d %s', $numComments[$faqId] ?? 0, Translation::get(key: 'msgComments')),
             'writeCommentMsg' => $commentMessage,
         ];
 
         // Add conditional variables
         if (-1 !== $this->currentUser->getUserId()) {
-            $templateVars['bookmarkIcon'] = $bookmark->isFaqBookmark($faqId) ? 'bi bi-bookmark-fill' : 'bi bi-bookmark';
-            $templateVars['msgAddBookmark'] = $bookmark->isFaqBookmark($faqId)
+            $templateVars['bookmarkIcon'] = $this->bookmark->isFaqBookmark($faqId)
+                ? 'bi bi-bookmark-fill'
+                : 'bi bi-bookmark';
+            $templateVars['msgAddBookmark'] = $this->bookmark->isFaqBookmark($faqId)
                 ? Translation::get(key: 'removeBookmark')
                 : Translation::get(key: 'msgAddBookmark');
-            $templateVars['isFaqBookmark'] = $bookmark->isFaqBookmark($faqId);
+            $templateVars['isFaqBookmark'] = $this->bookmark->isFaqBookmark($faqId);
         }
 
         if ($availableLanguages !== [] && count($availableLanguages) > 1) {
@@ -494,10 +495,6 @@ final class FaqController extends AbstractFrontController
      */
     private function prepareCommentsData(array $comments): array
     {
-        $date = $this->container->get('phpmyfaq.date');
-        $mail = $this->container->get('phpmyfaq.mail');
-        $gravatar = $this->container->get('phpmyfaq.services.gravatar');
-
         $preparedComments = [];
         $gravatarImages = [];
         $safeEmails = [];
@@ -513,9 +510,9 @@ final class FaqController extends AbstractFrontController
                 'comment' => Utils::parseUrl($comment->getComment()),
             ];
 
-            $gravatarImages[$commentId] = $gravatar->getImage($comment->getEmail(), ['class' => 'img-thumbnail']);
-            $safeEmails[$commentId] = $mail->safeEmail($comment->getEmail());
-            $formattedDates[$commentId] = $date->format($comment->getDate());
+            $gravatarImages[$commentId] = $this->gravatar->getImage($comment->getEmail(), ['class' => 'img-thumbnail']);
+            $safeEmails[$commentId] = $this->mail->safeEmail($comment->getEmail());
+            $formattedDates[$commentId] = $this->date->format($comment->getDate());
         }
 
         return [

@@ -20,6 +20,8 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use DateTime;
 use Exception;
+use phpMyFAQ\Administration\AdminLog;
+use phpMyFAQ\Administration\Changelog;
 use phpMyFAQ\Administration\Faq as FaqAdministration;
 use phpMyFAQ\Administration\Revision;
 use phpMyFAQ\Attachment\AttachmentException;
@@ -43,12 +45,17 @@ use phpMyFAQ\Instance\Search\OpenSearch;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
 use phpMyFAQ\Link\Util\TitleSlugifier;
+use phpMyFAQ\Notification;
 use phpMyFAQ\Push\WebPushService;
+use phpMyFAQ\Question;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
+use phpMyFAQ\Seo;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\Visits;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,6 +64,21 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class FaqController extends AbstractAdministrationApiController
 {
+    public function __construct(
+        private readonly Faq $faq,
+        private readonly FaqAdministration $adminFaq,
+        private readonly Tags $tags,
+        private readonly Notification $notification,
+        private readonly Changelog $changelog,
+        private readonly Visits $visits,
+        private readonly Seo $seo,
+        private readonly Question $question,
+        private readonly AdminLog $logging,
+        private readonly WebPushService $webPushService,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws \phpMyFAQ\Core\Exception
      * @throws Exception
@@ -68,12 +90,6 @@ final class FaqController extends AbstractAdministrationApiController
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faq = $this->container->get(id: 'phpmyfaq.faq');
-        $tagging = $this->container->get(id: 'phpmyfaq.tags');
-        $notification = $this->container->get(id: 'phpmyfaq.notification');
-        $changelog = $this->container->get(id: 'phpmyfaq.admin.changelog');
-        $visits = $this->container->get(id: 'phpmyfaq.visits');
-        $seo = $this->container->get(id: 'phpmyfaq.seo');
         $categoryPermission = new CategoryPermission($this->configuration);
         $faqPermission = new FaqPermission($this->configuration);
 
@@ -144,11 +160,11 @@ final class FaqController extends AbstractAdministrationApiController
             ->setNotes(Filter::removeAttributes($notes));
 
         // Add a new record and get that ID
-        $faqData = $faq->create($faqData);
+        $faqData = $this->faq->create($faqData);
 
         if ($faqData->getId()) {
             // Create ChangeLog entry
-            $changelog->add(
+            $this->changelog->add(
                 $faqData->getId(),
                 $this->currentUser->getUserId(),
                 nl2br((string) $changed),
@@ -156,14 +172,14 @@ final class FaqController extends AbstractAdministrationApiController
             );
 
             // Create the visit entry
-            $visits->logViews($faqData->getId());
+            $this->visits->logViews($faqData->getId());
 
             $categoryRelation = new Relation($this->configuration, $category);
             $categoryRelation->add($categories, $faqData->getId(), $faqData->getLanguage());
 
             // Insert the tags
             if ($tags !== '') {
-                $tagging->create($faqData->getId(), explode(separator: ',', string: trim((string) $tags)));
+                $this->tags->create($faqData->getId(), explode(separator: ',', string: trim((string) $tags)));
             }
 
             // Add user permissions
@@ -183,20 +199,19 @@ final class FaqController extends AbstractAdministrationApiController
                 ->setReferenceLanguage($faqData->getLanguage())
                 ->setTitle($serpTitle)
                 ->setDescription($serpDescription);
-            $seo->create($seoEntity);
+            $this->seo->create($seoEntity);
 
             // Open question answered
-            $questionObject = $this->container->get(id: 'phpmyfaq.question');
             $openQuestionId = Filter::filterVar($data->openQuestionId, FILTER_VALIDATE_INT);
             if (0 !== $openQuestionId) {
                 if ($this->configuration->get(item: 'records.enableDeleteQuestion')) {
                     // deletes question
-                    $questionObject->delete($openQuestionId);
+                    $this->question->delete($openQuestionId);
                 }
 
                 if (!$this->configuration->get(item: 'records.enableDeleteQuestion')) {
                     // adds this faq record id to the related open question
-                    $questionObject->updateQuestionAnswer($openQuestionId, $faqData->getId(), $categories[0]);
+                    $this->question->updateQuestionAnswer($openQuestionId, $faqData->getId(), $categories[0]);
                 }
 
                 $url = sprintf(
@@ -213,7 +228,7 @@ final class FaqController extends AbstractAdministrationApiController
                 try {
                     $notifyEmail = Filter::filterVar($data->notifyEmail, FILTER_SANITIZE_EMAIL);
                     $notifyUser = Filter::filterVar($data->notifyUser, FILTER_SANITIZE_SPECIAL_CHARS);
-                    $notification->sendOpenQuestionAnswered($notifyEmail, $notifyUser, $oLink->toString());
+                    $this->notification->sendOpenQuestionAnswered($notifyEmail, $notifyUser, $oLink->toString());
                 } catch (Exception|TransportExceptionInterface $e) {
                     $this->configuration
                         ->getLogger()
@@ -226,7 +241,7 @@ final class FaqController extends AbstractAdministrationApiController
                 $categoryHelper = new CategoryHelper();
                 $categoryHelper->setCategory($category)->setConfiguration($this->configuration);
                 $moderators = $categoryHelper->getModerators($categories);
-                $notification->sendNewFaqAdded($moderators, $faqData);
+                $this->notification->sendNewFaqAdded($moderators, $faqData);
             } catch (Exception|TransportExceptionInterface $e) {
                 $this->configuration->getLogger()->error('Send moderator notification failed: ' . $e->getMessage());
             }
@@ -264,8 +279,6 @@ final class FaqController extends AbstractAdministrationApiController
             // the public FAQ URL, which is more useful for end-users.
             if ($faqData->isActive()) {
                 try {
-                    /** @var WebPushService $webPushService */
-                    $webPushService = $this->container->get('phpmyfaq.push.web-push-service');
                     $faqUrl = sprintf(
                         '%scontent/%d/%d/%s/%s.html',
                         $this->configuration->getDefaultUrl(),
@@ -274,7 +287,7 @@ final class FaqController extends AbstractAdministrationApiController
                         $faqData->getLanguage(),
                         TitleSlugifier::slug($faqData->getQuestion()),
                     );
-                    $webPushService->sendToAll(
+                    $this->webPushService->sendToAll(
                         Translation::get('msgPushNewFaq'),
                         $faqData->getQuestion(),
                         $faqUrl,
@@ -305,12 +318,6 @@ final class FaqController extends AbstractAdministrationApiController
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faq = $this->container->get(id: 'phpmyfaq.faq');
-        $tagging = $this->container->get(id: 'phpmyfaq.tags');
-        $logging = $this->container->get(id: 'phpmyfaq.admin.admin-log');
-        $changelog = $this->container->get(id: 'phpmyfaq.admin.changelog');
-        $visits = $this->container->get(id: 'phpmyfaq.visits');
-        $seo = $this->container->get(id: 'phpmyfaq.seo');
         $faqPermission = new FaqPermission($this->configuration);
 
         $category = new Category($this->configuration, [], withPermission: false);
@@ -360,9 +367,9 @@ final class FaqController extends AbstractAdministrationApiController
         // Permissions
         $permissions = $faqPermission->createPermissionArray();
 
-        $logging->log($this->currentUser, AdminLogType::FAQ_EDIT->value . ':' . $faqId);
+        $this->logging->log($this->currentUser, AdminLogType::FAQ_EDIT->value . ':' . $faqId);
         if ($active === 'yes') {
-            $logging->log($this->currentUser, AdminLogType::FAQ_PUBLISH->value . ':' . $faqId);
+            $this->logging->log($this->currentUser, AdminLogType::FAQ_PUBLISH->value . ':' . $faqId);
         }
 
         if ('yes' === $revision && $this->configuration->get(item: 'records.enableAutoRevisions')) {
@@ -407,7 +414,7 @@ final class FaqController extends AbstractAdministrationApiController
         }
 
         // Create ChangeLog entry
-        $changelog->add(
+        $this->changelog->add(
             $faqData->getId(),
             $this->currentUser->getUserId(),
             (string) $changed,
@@ -416,15 +423,15 @@ final class FaqController extends AbstractAdministrationApiController
         );
 
         // Create the visit entry
-        $visits->logViews($faqData->getId());
+        $this->visits->logViews($faqData->getId());
 
         // save or update the FAQ record
-        if ($faq->hasTranslation($faqData->getId(), $faqData->getLanguage())) {
-            $faqData = $faq->update($faqData);
+        if ($this->faq->hasTranslation($faqData->getId(), $faqData->getLanguage())) {
+            $faqData = $this->faq->update($faqData);
         }
 
-        if (!$faq->hasTranslation($faqData->getId(), $faqData->getLanguage())) {
-            $faqData = $faq->create($faqData);
+        if (!$this->faq->hasTranslation($faqData->getId(), $faqData->getLanguage())) {
+            $faqData = $this->faq->create($faqData);
         }
 
         if (!isset($categories)) {
@@ -437,11 +444,11 @@ final class FaqController extends AbstractAdministrationApiController
 
         // Insert the tags
         if ($tags !== '') {
-            $tagging->create($faqData->getId(), explode(separator: ',', string: trim((string) $tags)));
+            $this->tags->create($faqData->getId(), explode(separator: ',', string: trim((string) $tags)));
         }
 
         if ($tags === '') {
-            $tagging->deleteByRecordId($faqData->getId());
+            $this->tags->deleteByRecordId($faqData->getId());
         }
 
         // Update the SEO data
@@ -453,14 +460,14 @@ final class FaqController extends AbstractAdministrationApiController
             ->setTitle($serpTitle)
             ->setDescription($serpDescription);
 
-        if ($seo->get($seoEntity)->getId() === null) {
+        if ($this->seo->get($seoEntity)->getId() === null) {
             $seoEntity->setTitle($serpTitle)->setDescription($serpDescription);
-            $seo->create($seoEntity);
+            $this->seo->create($seoEntity);
         }
 
-        if ($seo->get($seoEntity)->getId() !== null) {
+        if ($this->seo->get($seoEntity)->getId() !== null) {
             $seoEntity->setTitle($serpTitle)->setDescription($serpDescription);
-            $seo->update($seoEntity);
+            $this->seo->update($seoEntity);
         }
 
         // Add user permissions
@@ -721,8 +728,7 @@ final class FaqController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $faq = $this->container->get(id: 'phpmyfaq.admin.faq');
-        $faq->setStickyFaqOrder($data->faqIds);
+        $this->adminFaq->setStickyFaqOrder($data->faqIds);
 
         return $this->json(['success' => Translation::get(key: 'ad_categ_save_order')], Response::HTTP_OK);
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
+use phpMyFAQ\Search;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,7 +17,7 @@ class SearchControllerTest extends TestCase
     public function testSearchReturnsJsonResponse(): void
     {
         $request = new Request(['q' => 'test']);
-        $controller = new SearchController();
+        $controller = new SearchController($this->createStub(Search::class));
         $response = $controller->search($request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -25,7 +26,7 @@ class SearchControllerTest extends TestCase
     public function testSearchReturnsValidStatusCode(): void
     {
         $request = new Request(['q' => 'test']);
-        $controller = new SearchController();
+        $controller = new SearchController($this->createStub(Search::class));
         $response = $controller->search($request);
 
         $this->assertContains($response->getStatusCode(), [
@@ -37,7 +38,7 @@ class SearchControllerTest extends TestCase
 
     public function testPopularReturnsJsonResponse(): void
     {
-        $controller = new SearchController();
+        $controller = new SearchController($this->createStub(Search::class));
         $response = $controller->popular();
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -45,7 +46,7 @@ class SearchControllerTest extends TestCase
 
     public function testPopularReturnsValidStatusCode(): void
     {
-        $controller = new SearchController();
+        $controller = new SearchController($this->createStub(Search::class));
         $response = $controller->popular();
 
         $this->assertContains($response->getStatusCode(), [Response::HTTP_OK, Response::HTTP_NOT_FOUND]);
@@ -54,7 +55,7 @@ class SearchControllerTest extends TestCase
     public function testSearchWithEmptyQuery(): void
     {
         $request = new Request(['q' => '']);
-        $controller = new SearchController();
+        $controller = new SearchController($this->createStub(Search::class));
         $response = $controller->search($request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -63,7 +64,7 @@ class SearchControllerTest extends TestCase
     public function testSearchReturnsJsonData(): void
     {
         $request = new Request(['q' => 'test']);
-        $controller = new SearchController();
+        $controller = new SearchController($this->createStub(Search::class));
         $response = $controller->search($request);
 
         $this->assertJson($response->getContent());
@@ -72,7 +73,7 @@ class SearchControllerTest extends TestCase
     public function testSearchReturnsArrayData(): void
     {
         $request = new Request(['q' => 'test']);
-        $controller = new SearchController();
+        $controller = new SearchController($this->createStub(Search::class));
         $response = $controller->search($request);
 
         $data = json_decode($response->getContent(), true);
@@ -81,7 +82,7 @@ class SearchControllerTest extends TestCase
 
     public function testPopularReturnsJsonData(): void
     {
-        $controller = new SearchController();
+        $controller = new SearchController($this->createStub(Search::class));
         $response = $controller->popular();
 
         $this->assertJson($response->getContent());
@@ -89,7 +90,7 @@ class SearchControllerTest extends TestCase
 
     public function testPopularReturnsArrayData(): void
     {
-        $controller = new SearchController();
+        $controller = new SearchController($this->createStub(Search::class));
         $response = $controller->popular();
 
         $data = json_decode($response->getContent(), true);
@@ -99,7 +100,7 @@ class SearchControllerTest extends TestCase
     public function testSearchWithSpecialCharacters(): void
     {
         $request = new Request(['q' => '@#$%^&*()']);
-        $controller = new SearchController();
+        $controller = new SearchController($this->createStub(Search::class));
         $response = $controller->search($request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -108,7 +109,7 @@ class SearchControllerTest extends TestCase
     public function testSearchWithUnicodeCharacters(): void
     {
         $request = new Request(['q' => '日本語テスト']);
-        $controller = new SearchController();
+        $controller = new SearchController($this->createStub(Search::class));
         $response = $controller->search($request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -118,7 +119,7 @@ class SearchControllerTest extends TestCase
     public function testSearchWithLongQuery(): void
     {
         $request = new Request(['q' => str_repeat('a', 1000)]);
-        $controller = new SearchController();
+        $controller = new SearchController($this->createStub(Search::class));
         $response = $controller->search($request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -127,7 +128,7 @@ class SearchControllerTest extends TestCase
     public function testSearchWithWhitespaceQuery(): void
     {
         $request = new Request(['q' => '   ']);
-        $controller = new SearchController();
+        $controller = new SearchController($this->createStub(Search::class));
         $response = $controller->search($request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
@@ -136,7 +137,7 @@ class SearchControllerTest extends TestCase
     public function testSearchResponseContentIsNotNull(): void
     {
         $request = new Request(['q' => 'test']);
-        $controller = new SearchController();
+        $controller = new SearchController($this->createStub(Search::class));
         $response = $controller->search($request);
 
         $this->assertNotNull($response->getContent());
@@ -144,7 +145,7 @@ class SearchControllerTest extends TestCase
 
     public function testPopularResponseContentIsNotNull(): void
     {
-        $controller = new SearchController();
+        $controller = new SearchController($this->createStub(Search::class));
         $response = $controller->popular();
 
         $this->assertNotNull($response->getContent());

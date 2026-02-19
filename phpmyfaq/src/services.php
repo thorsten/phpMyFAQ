@@ -47,6 +47,86 @@ use phpMyFAQ\Category\Image;
 use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Command\CreateHashesCommand;
+use phpMyFAQ\Controller\Administration\Api\CategoryController as AdminApiCategoryController;
+use phpMyFAQ\Controller\Administration\Api\CommentController as AdminApiCommentController;
+use phpMyFAQ\Controller\Administration\Api\ConfigurationController as AdminApiConfigurationController;
+use phpMyFAQ\Controller\Administration\Api\ConfigurationTabController as AdminApiConfigurationTabController;
+use phpMyFAQ\Controller\Administration\Api\DashboardController as AdminApiDashboardController;
+use phpMyFAQ\Controller\Administration\Api\ElasticsearchController as AdminApiElasticsearchController;
+use phpMyFAQ\Controller\Administration\Api\ExportController as AdminApiExportController;
+use phpMyFAQ\Controller\Administration\Api\FaqController as AdminApiFaqController;
+use phpMyFAQ\Controller\Administration\Api\GlossaryController as AdminApiGlossaryController;
+use phpMyFAQ\Controller\Administration\Api\InstanceController as AdminApiInstanceController;
+use phpMyFAQ\Controller\Administration\Api\OpenSearchController as AdminApiOpenSearchController;
+use phpMyFAQ\Controller\Administration\Api\PageController as AdminApiPageController;
+use phpMyFAQ\Controller\Administration\Api\QuestionController as AdminApiQuestionController;
+use phpMyFAQ\Controller\Administration\Api\SessionController as AdminApiSessionController;
+use phpMyFAQ\Controller\Administration\Api\StatisticsController as AdminApiStatisticsController;
+use phpMyFAQ\Controller\Administration\Api\TagController as AdminApiTagController;
+use phpMyFAQ\Controller\Administration\Api\TranslationController as AdminApiTranslationController;
+use phpMyFAQ\Controller\Administration\Api\UpdateController as AdminApiUpdateController;
+use phpMyFAQ\Controller\Administration\Api\UserController as AdminApiUserController;
+use phpMyFAQ\Controller\Administration\AttachmentsController as AdminAttachmentsController;
+use phpMyFAQ\Controller\Administration\AuthenticationController as AdminAuthenticationController;
+use phpMyFAQ\Controller\Administration\BackupController as AdminBackupController;
+use phpMyFAQ\Controller\Administration\CategoryController as AdminCategoryController;
+use phpMyFAQ\Controller\Administration\CommentsController as AdminCommentsController;
+use phpMyFAQ\Controller\Administration\DashboardController as AdminDashboardController;
+use phpMyFAQ\Controller\Administration\ExportController as AdminExportController;
+use phpMyFAQ\Controller\Administration\FaqController as AdminFaqController;
+use phpMyFAQ\Controller\Administration\FormsController as AdminFormsController;
+use phpMyFAQ\Controller\Administration\GlossaryController as AdminGlossaryController;
+use phpMyFAQ\Controller\Administration\GroupController as AdminGroupController;
+use phpMyFAQ\Controller\Administration\InstanceController as AdminInstanceController;
+use phpMyFAQ\Controller\Administration\NewsController as AdminNewsController;
+use phpMyFAQ\Controller\Administration\OpenQuestionsController as AdminOpenQuestionsController;
+use phpMyFAQ\Controller\Administration\OrphanedFaqsController as AdminOrphanedFaqsController;
+use phpMyFAQ\Controller\Administration\PageController as AdminPageController;
+use phpMyFAQ\Controller\Administration\PasswordChangeController as AdminPasswordChangeController;
+use phpMyFAQ\Controller\Administration\PluginController as AdminPluginController;
+use phpMyFAQ\Controller\Administration\RatingController as AdminRatingController;
+use phpMyFAQ\Controller\Administration\StatisticsSearchController as AdminStatisticsSearchController;
+use phpMyFAQ\Controller\Administration\StatisticsSessionsController as AdminStatisticsSessionsController;
+use phpMyFAQ\Controller\Administration\StickyFaqsController as AdminStickyFaqsController;
+use phpMyFAQ\Controller\Administration\SystemInformationController as AdminSystemInformationController;
+use phpMyFAQ\Controller\Administration\TagController as AdminTagController;
+use phpMyFAQ\Controller\Administration\UserController as AdminUserController;
+use phpMyFAQ\Controller\Api\CategoryController as ApiCategoryController;
+use phpMyFAQ\Controller\Api\OAuth2Controller;
+use phpMyFAQ\Controller\Api\CommentController as ApiCommentController;
+use phpMyFAQ\Controller\Api\FaqController as ApiFaqController;
+use phpMyFAQ\Controller\Api\GlossaryController as ApiGlossaryController;
+use phpMyFAQ\Controller\Api\OpenQuestionController as ApiOpenQuestionController;
+use phpMyFAQ\Controller\Api\QuestionController as ApiQuestionController;
+use phpMyFAQ\Controller\Api\SearchController as ApiSearchController;
+use phpMyFAQ\Controller\Api\TagController as ApiTagController;
+use phpMyFAQ\Controller\Frontend\AttachmentController;
+use phpMyFAQ\Controller\Frontend\AuthenticationController as FrontendAuthenticationController;
+use phpMyFAQ\Controller\Frontend\CategoryController as FrontendCategoryController;
+use phpMyFAQ\Controller\Frontend\ChatController as FrontendChatController;
+use phpMyFAQ\Controller\Frontend\ContactController as FrontendContactController;
+use phpMyFAQ\Controller\Frontend\CustomPageController as FrontendCustomPageController;
+use phpMyFAQ\Controller\Frontend\FaqController as FrontendFaqController;
+use phpMyFAQ\Controller\Frontend\GlossaryController as FrontendGlossaryController;
+use phpMyFAQ\Controller\Frontend\NewsController as FrontendNewsController;
+use phpMyFAQ\Controller\Frontend\OverviewController as FrontendOverviewController;
+use phpMyFAQ\Controller\Frontend\PageNotFoundController;
+use phpMyFAQ\Controller\Frontend\PdfController;
+use phpMyFAQ\Controller\Frontend\QuestionsController as FrontendQuestionsController;
+use phpMyFAQ\Controller\Frontend\SearchController as FrontendSearchController;
+use phpMyFAQ\Controller\Frontend\SitemapController as FrontendSitemapController;
+use phpMyFAQ\Controller\Frontend\StartpageController;
+use phpMyFAQ\Controller\Frontend\UserController as FrontendUserController;
+use phpMyFAQ\Controller\Frontend\Api\AutoCompleteController as FrontendApiAutoCompleteController;
+use phpMyFAQ\Controller\Frontend\Api\CaptchaController as FrontendApiCaptchaController;
+use phpMyFAQ\Controller\Frontend\Api\CommentController as FrontendApiCommentController;
+use phpMyFAQ\Controller\Frontend\Api\ContactController as FrontendApiContactController;
+use phpMyFAQ\Controller\Frontend\Api\FaqController as FrontendApiFaqController;
+use phpMyFAQ\Controller\Frontend\Api\PushController as FrontendApiPushController;
+use phpMyFAQ\Controller\Frontend\Api\QuestionController as FrontendApiQuestionController;
+use phpMyFAQ\Controller\Frontend\Api\UserController as FrontendApiUserController;
+use phpMyFAQ\Controller\Frontend\Api\VotingController as FrontendApiVotingController;
+use phpMyFAQ\Controller\SitemapController as RootSitemapController;
 use phpMyFAQ\Comment\CommentsRepository;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
@@ -583,8 +663,372 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.faq'),
     ]);
 
-    $services->set(CreateHashesCommand::class)->args([
+    $services->set(CreateHashesCommand::class, CreateHashesCommand::class)->args([
         service('phpmyfaq.system'),
         service('filesystem'),
+    ]);
+
+    // ========== Controller services (constructor injection) ==========
+
+    // Batch 1: Controller/Api/
+    $services->set(ApiCategoryController::class, ApiCategoryController::class)->args([
+        service('phpmyfaq.language'),
+    ]);
+    $services->set(ApiCommentController::class, ApiCommentController::class)->args([
+        service('phpmyfaq.comments'),
+    ]);
+    $services->set(ApiFaqController::class, ApiFaqController::class)->args([
+        service('phpmyfaq.faq'),
+        service('phpmyfaq.tags'),
+        service('phpmyfaq.faq.statistics'),
+        service('phpmyfaq.faq.metadata'),
+    ]);
+    $services->set(ApiGlossaryController::class, ApiGlossaryController::class)->args([
+        service('phpmyfaq.glossary'),
+        service('phpmyfaq.language'),
+    ]);
+    $services->set(ApiOpenQuestionController::class, ApiOpenQuestionController::class)->args([
+        service('phpmyfaq.question'),
+    ]);
+    $services->set(ApiSearchController::class, ApiSearchController::class)->args([
+        service('phpmyfaq.search'),
+    ]);
+    $services->set(ApiTagController::class, ApiTagController::class)->args([
+        service('phpmyfaq.tags'),
+    ]);
+    $services->set(ApiQuestionController::class, ApiQuestionController::class)->args([
+        service('phpmyfaq.notification'),
+    ]);
+
+    // Batch 2: Controller/Frontend/Api/
+    $services->set(FrontendApiAutoCompleteController::class, FrontendApiAutoCompleteController::class)->args([
+        service('phpmyfaq.faq.permission'),
+        service('phpmyfaq.search'),
+        service('phpmyfaq.helper.search'),
+        service('phpmyfaq.language.plurals'),
+    ]);
+    $services->set(FrontendApiCaptchaController::class, FrontendApiCaptchaController::class)->args([
+        service('phpmyfaq.captcha'),
+    ]);
+    $services->set(FrontendApiCommentController::class, FrontendApiCommentController::class)->args([
+        service('phpmyfaq.faq'),
+        service('phpmyfaq.comments'),
+        service('phpmyfaq.stop-words'),
+        service('phpmyfaq.user.session'),
+        service('phpmyfaq.language'),
+        service('phpmyfaq.user'),
+        service('phpmyfaq.notification'),
+        service('phpmyfaq.news'),
+        service('phpmyfaq.services.gravatar'),
+    ]);
+    $services->set(FrontendApiContactController::class, FrontendApiContactController::class)->args([
+        service('phpmyfaq.stop-words'),
+        service('phpmyfaq.mail'),
+    ]);
+    $services->set(FrontendApiFaqController::class, FrontendApiFaqController::class)->args([
+        service('phpmyfaq.faq'),
+        service('phpmyfaq.helper.faq'),
+        service('phpmyfaq.question'),
+        service('phpmyfaq.stop-words'),
+        service('phpmyfaq.user.session'),
+        service('phpmyfaq.language'),
+        service('phpmyfaq.helper.category-helper'),
+        service('phpmyfaq.notification'),
+    ]);
+    $services->set(FrontendApiPushController::class, FrontendApiPushController::class)->args([
+        service('phpmyfaq.push.web-push-service'),
+        service('phpmyfaq.push.subscription-repository'),
+    ]);
+    $services->set(FrontendApiQuestionController::class, FrontendApiQuestionController::class)->args([
+        service('phpmyfaq.stop-words'),
+        service('phpmyfaq.helper.question'),
+        service('phpmyfaq.search'),
+        service('phpmyfaq.question'),
+        service('phpmyfaq.notification'),
+    ]);
+    $services->set(FrontendApiUserController::class, FrontendApiUserController::class)->args([
+        service('phpmyfaq.stop-words'),
+        service('phpmyfaq.mail'),
+    ]);
+    $services->set(FrontendApiVotingController::class, FrontendApiVotingController::class)->args([
+        service('phpmyfaq.rating'),
+        service('phpmyfaq.user.session'),
+    ]);
+
+    // Batch 3: Controller/Administration/Api/
+    $services->set(AdminApiCategoryController::class, AdminApiCategoryController::class)->args([
+        service('phpmyfaq.category.image'),
+        service('phpmyfaq.category.order'),
+        service('phpmyfaq.category.permission'),
+    ]);
+    $services->set(AdminApiElasticsearchController::class, AdminApiElasticsearchController::class)->args([
+        service('phpmyfaq.instance.elasticsearch'),
+        service('phpmyfaq.faq'),
+        service('phpmyfaq.custom-page'),
+    ]);
+    $services->set(AdminApiCommentController::class, AdminApiCommentController::class)->args([
+        service('phpmyfaq.comments'),
+    ]);
+    $services->set(AdminApiConfigurationController::class, AdminApiConfigurationController::class)->args([
+        service('phpmyfaq.mail'),
+    ]);
+    $services->set(AdminApiConfigurationTabController::class, AdminApiConfigurationTabController::class)->args([
+        service('phpmyfaq.language'),
+        service('phpmyfaq.system'),
+        service('phpmyfaq.template.theme-manager'),
+    ]);
+    $services->set(AdminApiDashboardController::class, AdminApiDashboardController::class)->args([
+        service('phpmyfaq.admin.session'),
+    ]);
+    $services->set(AdminApiExportController::class, AdminApiExportController::class)->args([
+        service('phpmyfaq.faq'),
+    ]);
+    $services->set(AdminApiFaqController::class, AdminApiFaqController::class)->args([
+        service('phpmyfaq.faq'),
+        service('phpmyfaq.admin.faq'),
+        service('phpmyfaq.tags'),
+        service('phpmyfaq.notification'),
+        service('phpmyfaq.admin.changelog'),
+        service('phpmyfaq.visits'),
+        service('phpmyfaq.seo'),
+        service('phpmyfaq.question'),
+        service('phpmyfaq.admin.admin-log'),
+        service('phpmyfaq.push.web-push-service'),
+    ]);
+    $services->set(AdminApiGlossaryController::class, AdminApiGlossaryController::class)->args([
+        service('phpmyfaq.glossary'),
+    ]);
+    $services->set(AdminApiInstanceController::class, AdminApiInstanceController::class)->args([
+        service('phpmyfaq.instance'),
+    ]);
+    $services->set(AdminApiOpenSearchController::class, AdminApiOpenSearchController::class)->args([
+        service('phpmyfaq.instance.opensearch'),
+        service('phpmyfaq.faq'),
+        service('phpmyfaq.custom-page'),
+    ]);
+    $services->set(AdminApiPageController::class, AdminApiPageController::class)->args([
+        service('phpmyfaq.instance.elasticsearch'),
+        service('phpmyfaq.instance.opensearch'),
+    ]);
+    $services->set(AdminApiQuestionController::class, AdminApiQuestionController::class)->args([
+        service('phpmyfaq.question'),
+    ]);
+    $services->set(AdminApiSessionController::class, AdminApiSessionController::class)->args([
+        service('phpmyfaq.admin.session'),
+    ]);
+    $services->set(AdminApiStatisticsController::class, AdminApiStatisticsController::class)->args([
+        service('phpmyfaq.helper.statistics'),
+        service('phpmyfaq.search'),
+        service('phpmyfaq.rating'),
+    ]);
+    $services->set(AdminApiTagController::class, AdminApiTagController::class)->args([
+        service('phpmyfaq.tags'),
+    ]);
+    $services->set(AdminApiTranslationController::class, AdminApiTranslationController::class)->args([
+        service('phpmyfaq.translation.content-translation-service'),
+    ]);
+    $services->set(AdminApiUpdateController::class, AdminApiUpdateController::class)->args([
+        service('phpmyfaq.setup.upgrade'),
+        service('phpmyfaq.admin.api'),
+        service('phpmyfaq.setup.update'),
+        service('phpmyfaq.setup.environment_configurator'),
+    ]);
+    $services->set(AdminApiUserController::class, AdminApiUserController::class)->args([
+        service('phpmyfaq.user.current_user'),
+    ]);
+
+    // Batch 4: Controller/Frontend/
+    $services->set(AttachmentController::class, AttachmentController::class)->args([
+        service('phpmyfaq.faq.permission'),
+    ]);
+    $services->set(FrontendAuthenticationController::class, FrontendAuthenticationController::class)->args([
+        service('phpmyfaq.user.session'),
+        service('phpmyfaq.user.current_user'),
+        service('phpmyfaq.user.two-factor'),
+    ]);
+    $services->set(FrontendCategoryController::class, FrontendCategoryController::class)->args([
+        service('phpmyfaq.user.session'),
+        service('phpmyfaq.category'),
+        service('phpmyfaq.faq'),
+    ]);
+    $services->set(FrontendChatController::class, FrontendChatController::class)->args([
+        service('phpmyfaq.user.session'),
+    ]);
+    $services->set(FrontendContactController::class, FrontendContactController::class)->args([
+        service('phpmyfaq.user.session'),
+        service('phpmyfaq.captcha'),
+        service('phpmyfaq.captcha.helper.captcha_helper'),
+    ]);
+    $services->set(FrontendCustomPageController::class, FrontendCustomPageController::class)->args([
+        service('phpmyfaq.custom-page'),
+    ]);
+    $services->set(FrontendFaqController::class, FrontendFaqController::class)->args([
+        service('phpmyfaq.user.session'),
+        service('phpmyfaq.captcha'),
+        service('phpmyfaq.captcha.helper.captcha_helper'),
+        service('phpmyfaq.faq'),
+        service('phpmyfaq.category'),
+        service('phpmyfaq.bookmark'),
+        service('phpmyfaq.date'),
+        service('phpmyfaq.mail'),
+        service('phpmyfaq.services.gravatar'),
+    ]);
+    $services->set(FrontendGlossaryController::class, FrontendGlossaryController::class)->args([
+        service('phpmyfaq.user.session'),
+        service('phpmyfaq.glossary'),
+    ]);
+    $services->set(FrontendNewsController::class, FrontendNewsController::class)->args([
+        service('phpmyfaq.user.session'),
+        service('phpmyfaq.captcha'),
+        service('phpmyfaq.date'),
+        service('phpmyfaq.mail'),
+        service('phpmyfaq.services.gravatar'),
+    ]);
+    $services->set(FrontendOverviewController::class, FrontendOverviewController::class)->args([
+        service('phpmyfaq.user.session'),
+        service('phpmyfaq.helper.faq'),
+        service('phpmyfaq.faq'),
+    ]);
+    $services->set(PageNotFoundController::class, PageNotFoundController::class)->args([
+        service('phpmyfaq.user.session'),
+    ]);
+    $services->set(PdfController::class, PdfController::class)->args([
+        service('phpmyfaq.faq'),
+        service('phpmyfaq.tags'),
+    ]);
+    $services->set(FrontendQuestionsController::class, FrontendQuestionsController::class)->args([
+        service('phpmyfaq.user.session'),
+        service('phpmyfaq.captcha'),
+        service('phpmyfaq.captcha.helper.captcha_helper'),
+    ]);
+    $services->set(FrontendSearchController::class, FrontendSearchController::class)->args([
+        service('phpmyfaq.user.session'),
+        service('phpmyfaq.language.plurals'),
+    ]);
+    $services->set(FrontendSitemapController::class, FrontendSitemapController::class)->args([
+        service('phpmyfaq.user.session'),
+        service('phpmyfaq.sitemap'),
+    ]);
+    $services->set(StartpageController::class, StartpageController::class)->args([
+        service('phpmyfaq.language.plurals'),
+        service('phpmyfaq.faq'),
+        service('phpmyfaq.tags'),
+    ]);
+    $services->set(FrontendUserController::class, FrontendUserController::class)->args([
+        service('phpmyfaq.user.session'),
+        service('phpmyfaq.captcha'),
+        service('phpmyfaq.captcha.helper.captcha_helper'),
+        service('phpmyfaq.services.gravatar'),
+    ]);
+
+    // Batch 5: Controller/Administration/
+    $services->set(AdminAttachmentsController::class, AdminAttachmentsController::class)->args([
+        service('phpmyfaq.attachment-collection'),
+    ]);
+    $services->set(AdminAuthenticationController::class, AdminAuthenticationController::class)->args([
+        service('phpmyfaq.user.current_user'),
+        service('phpmyfaq.user.two-factor'),
+    ]);
+    $services->set(AdminBackupController::class, AdminBackupController::class)->args([
+        service('phpmyfaq.backup'),
+    ]);
+    $services->set(AdminCategoryController::class, AdminCategoryController::class)->args([
+        service('phpmyfaq.admin.category'),
+        service('phpmyfaq.category.order'),
+        service('phpmyfaq.category.permission'),
+        service('phpmyfaq.category.image'),
+        service('phpmyfaq.seo'),
+        service('phpmyfaq.helper.user-helper'),
+    ]);
+    $services->set(AdminCommentsController::class, AdminCommentsController::class)->args([
+        service('phpmyfaq.comments'),
+        service('phpmyfaq.news'),
+    ]);
+    $services->set(AdminDashboardController::class, AdminDashboardController::class)->args([
+        service('phpmyfaq.admin.session'),
+        service('phpmyfaq.admin.faq'),
+        service('phpmyfaq.admin.backup'),
+        service('phpmyfaq.admin.latest-users'),
+        service('phpmyfaq.admin.api'),
+    ]);
+    $services->set(AdminExportController::class, AdminExportController::class)->args([
+        service('phpmyfaq.helper.category-helper'),
+    ]);
+    $services->set(AdminFaqController::class, AdminFaqController::class)->args([
+        service('phpmyfaq.comments'),
+        service('phpmyfaq.faq'),
+        service('phpmyfaq.tags'),
+        service('phpmyfaq.seo'),
+        service('phpmyfaq.helper.category-helper'),
+        service('phpmyfaq.helper.user-helper'),
+        service('phpmyfaq.faq.permission'),
+        service('phpmyfaq.admin.changelog'),
+        service('phpmyfaq.question'),
+    ]);
+    $services->set(AdminFormsController::class, AdminFormsController::class)->args([
+        service('phpmyfaq.forms'),
+    ]);
+    $services->set(AdminGlossaryController::class, AdminGlossaryController::class)->args([
+        service('phpmyfaq.glossary'),
+    ]);
+    $services->set(AdminGroupController::class, AdminGroupController::class)->args([
+        service('phpmyfaq.user'),
+    ]);
+    $services->set(AdminInstanceController::class, AdminInstanceController::class)->args([
+        service('phpmyfaq.instance'),
+        service('phpmyfaq.instance.client'),
+    ]);
+    $services->set(AdminNewsController::class, AdminNewsController::class)->args([
+        service('phpmyfaq.news'),
+        service('phpmyfaq.comments'),
+    ]);
+    $services->set(AdminOpenQuestionsController::class, AdminOpenQuestionsController::class)->args([
+        service('phpmyfaq.question'),
+    ]);
+    $services->set(AdminOrphanedFaqsController::class, AdminOrphanedFaqsController::class)->args([
+        service('phpmyfaq.admin.faq'),
+    ]);
+    $services->set(AdminPageController::class, AdminPageController::class)->args([
+        service('phpmyfaq.custom-page'),
+    ]);
+    $services->set(AdminPasswordChangeController::class, AdminPasswordChangeController::class)->args([
+        service('phpmyfaq.auth'),
+    ]);
+    $services->set(AdminPluginController::class, AdminPluginController::class)->args([
+        service('phpmyfaq.plugin.plugin-manager'),
+    ]);
+    $services->set(AdminRatingController::class, AdminRatingController::class)->args([
+        service('phpmyfaq.admin.rating-data'),
+    ]);
+    $services->set(AdminStatisticsSearchController::class, AdminStatisticsSearchController::class)->args([
+        service('phpmyfaq.search'),
+    ]);
+    $services->set(AdminStatisticsSessionsController::class, AdminStatisticsSessionsController::class)->args([
+        service('phpmyfaq.admin.session'),
+        service('phpmyfaq.date'),
+        service('phpmyfaq.visits'),
+    ]);
+    $services->set(AdminStickyFaqsController::class, AdminStickyFaqsController::class)->args([
+        service('phpmyfaq.faq'),
+    ]);
+    $services->set(AdminSystemInformationController::class, AdminSystemInformationController::class)->args([
+        service('phpmyfaq.system'),
+    ]);
+    $services->set(AdminTagController::class, AdminTagController::class)->args([
+        service('phpmyfaq.tags'),
+    ]);
+    $services->set(AdminUserController::class, AdminUserController::class)->args([
+        service('phpmyfaq.user'),
+    ]);
+
+    // Api/OAuth2Controller
+    $services->set(OAuth2Controller::class, OAuth2Controller::class)->args([
+        service('phpmyfaq.auth.oauth2.authorization-server'),
+    ]);
+
+    // Batch 6: Root controllers
+    $services->set(RootSitemapController::class, RootSitemapController::class)->args([
+        service('phpmyfaq.faq.statistics'),
+        service('phpmyfaq.custom-page'),
     ]);
 };

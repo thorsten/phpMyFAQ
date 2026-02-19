@@ -6,6 +6,9 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Helper\StatisticsHelper;
+use phpMyFAQ\Rating;
+use phpMyFAQ\Search;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -16,6 +19,9 @@ use Symfony\Component\HttpFoundation\Request;
 class StatisticsControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private StatisticsHelper $statisticsHelper;
+    private Search $search;
+    private Rating $rating;
 
     /**
      * @throws Exception
@@ -33,6 +39,9 @@ class StatisticsControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+        $this->statisticsHelper = $this->createStub(StatisticsHelper::class);
+        $this->search = $this->createStub(Search::class);
+        $this->rating = $this->createStub(Rating::class);
     }
 
     /**
@@ -46,7 +55,7 @@ class StatisticsControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new StatisticsController();
+        $controller = new StatisticsController($this->statisticsHelper, $this->search, $this->rating);
 
         $this->expectException(\Exception::class);
         $controller->truncateSessions($request);
@@ -58,7 +67,7 @@ class StatisticsControllerTest extends TestCase
     public function testTruncateSessionsWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new StatisticsController();
+        $controller = new StatisticsController($this->statisticsHelper, $this->search, $this->rating);
 
         $this->expectException(\Exception::class);
         $controller->truncateSessions($request);
@@ -74,7 +83,7 @@ class StatisticsControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new StatisticsController();
+        $controller = new StatisticsController($this->statisticsHelper, $this->search, $this->rating);
 
         $this->expectException(\Exception::class);
         $controller->truncateSearchTerms($request);
@@ -86,7 +95,7 @@ class StatisticsControllerTest extends TestCase
     public function testTruncateSearchTermsWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new StatisticsController();
+        $controller = new StatisticsController($this->statisticsHelper, $this->search, $this->rating);
 
         $this->expectException(\Exception::class);
         $controller->truncateSearchTerms($request);
@@ -102,7 +111,7 @@ class StatisticsControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new StatisticsController();
+        $controller = new StatisticsController($this->statisticsHelper, $this->search, $this->rating);
 
         $this->expectException(\Exception::class);
         $controller->clearRatings($request);
@@ -114,7 +123,7 @@ class StatisticsControllerTest extends TestCase
     public function testClearRatingsWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new StatisticsController();
+        $controller = new StatisticsController($this->statisticsHelper, $this->search, $this->rating);
 
         $this->expectException(\Exception::class);
         $controller->clearRatings($request);
@@ -130,7 +139,7 @@ class StatisticsControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new StatisticsController();
+        $controller = new StatisticsController($this->statisticsHelper, $this->search, $this->rating);
 
         $this->expectException(\Exception::class);
         $controller->clearVisits($request);
@@ -142,7 +151,7 @@ class StatisticsControllerTest extends TestCase
     public function testClearVisitsWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new StatisticsController();
+        $controller = new StatisticsController($this->statisticsHelper, $this->search, $this->rating);
 
         $this->expectException(\Exception::class);
         $controller->clearVisits($request);

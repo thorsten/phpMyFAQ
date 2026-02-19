@@ -19,11 +19,14 @@ namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\CategoryNameTwigExtension;
 use phpMyFAQ\Twig\Extensions\CreateLinkTwigExtension;
 use phpMyFAQ\Twig\Extensions\FaqTwigExtension;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\UserSession;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -32,6 +35,14 @@ use Twig\Extension\AttributeExtension;
 
 final class OverviewController extends AbstractFrontController
 {
+    public function __construct(
+        private readonly UserSession $faqSession,
+        private readonly FaqHelper $faqHelper,
+        private readonly Faq $faq,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws LoaderError
@@ -39,20 +50,16 @@ final class OverviewController extends AbstractFrontController
      */ #[Route(path: '/overview.html', name: 'public.overview', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        $faqSession = $this->container->get('phpmyfaq.user.session');
-        $faqSession->setCurrentUser($this->currentUser);
-        $faqSession->userTracking('overview', 0);
-
-        $faqHelper = $this->container->get('phpmyfaq.helper.faq');
+        $this->faqSession->setCurrentUser($this->currentUser);
+        $this->faqSession->userTracking('overview', 0);
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $category = new Category($this->configuration, $currentGroups, true);
         $category->setUser($currentUser)->setGroups($currentGroups);
 
-        $faq = $this->container->get('phpmyfaq.faq');
-        $faq->setUser($currentUser);
-        $faq->setGroups($currentGroups);
+        $this->faq->setUser($currentUser);
+        $this->faq->setGroups($currentGroups);
 
         $this->addExtension(new AttributeExtension(CategoryNameTwigExtension::class));
         $this->addExtension(new AttributeExtension(CreateLinkTwigExtension::class));
@@ -65,9 +72,9 @@ final class OverviewController extends AbstractFrontController
                 $this->configuration->getTitle(),
             ),
             'pageHeader' => Translation::get(key: 'faqOverview'),
-            'faqOverview' => $faqHelper->createOverview(
+            'faqOverview' => $this->faqHelper->createOverview(
                 $category,
-                $faq,
+                $this->faq,
                 $this->configuration->getLanguage()->getLanguage(),
             ),
             'msgAuthor' => Translation::get(key: 'msgAuthor'),

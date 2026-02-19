@@ -6,6 +6,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Mail;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 class ConfigurationControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private Mail $mail;
 
     /**
      * @throws Exception
@@ -33,6 +35,7 @@ class ConfigurationControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+        $this->mail = $this->createStub(Mail::class);
     }
 
     /**
@@ -42,7 +45,7 @@ class ConfigurationControllerTest extends TestCase
     {
         $requestData = json_encode(['csrf' => 'test-token']);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new ConfigurationController();
+        $controller = new ConfigurationController($this->mail);
 
         $this->expectException(\Exception::class);
         $controller->sendTestMail($request);
@@ -55,7 +58,7 @@ class ConfigurationControllerTest extends TestCase
     {
         $requestData = json_encode(['csrf' => 'test-token']);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new ConfigurationController();
+        $controller = new ConfigurationController($this->mail);
 
         $this->expectException(\Exception::class);
         $controller->activateMaintenanceMode($request);
@@ -67,7 +70,7 @@ class ConfigurationControllerTest extends TestCase
     public function testSendTestMailWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new ConfigurationController();
+        $controller = new ConfigurationController($this->mail);
 
         $this->expectException(\Exception::class);
         $controller->sendTestMail($request);
@@ -79,7 +82,7 @@ class ConfigurationControllerTest extends TestCase
     public function testActivateMaintenanceModeWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new ConfigurationController();
+        $controller = new ConfigurationController($this->mail);
 
         $this->expectException(\Exception::class);
         $controller->activateMaintenanceMode($request);
@@ -92,7 +95,7 @@ class ConfigurationControllerTest extends TestCase
     {
         $requestData = json_encode([]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new ConfigurationController();
+        $controller = new ConfigurationController($this->mail);
 
         $this->expectException(\Exception::class);
         $controller->sendTestMail($request);
@@ -105,7 +108,7 @@ class ConfigurationControllerTest extends TestCase
     {
         $requestData = json_encode([]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new ConfigurationController();
+        $controller = new ConfigurationController($this->mail);
 
         $this->expectException(\Exception::class);
         $controller->activateMaintenanceMode($request);

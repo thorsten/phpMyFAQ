@@ -24,9 +24,10 @@ class AbstractAdministrationApiController extends AbstractController
 {
     protected ?AdminLog $adminLog = null;
 
-    public function __construct()
+    #[\Override]
+    protected function initializeFromContainer(): void
     {
-        parent::__construct();
+        parent::initializeFromContainer();
 
         $this->adminLog = $this->container->get(id: 'phpmyfaq.admin.admin-log');
     }

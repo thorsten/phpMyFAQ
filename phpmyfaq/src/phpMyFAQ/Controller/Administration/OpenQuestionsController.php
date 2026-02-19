@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Question;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\CategoryNameTwigExtension;
@@ -33,6 +34,12 @@ use Twig\Extra\Intl\IntlExtension;
 
 final class OpenQuestionsController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly Question $question,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws LoaderError
@@ -42,7 +49,7 @@ final class OpenQuestionsController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::QUESTION_DELETE);
 
-        $question = $this->container->get(id: 'phpmyfaq.question');
+        $question = $this->question;
         $currentLang = $this->configuration->getLanguage()->getLanguage();
         $questions = $question->getAll();
         $allQuestions = $question->getAll(true, '');

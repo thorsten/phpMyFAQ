@@ -19,11 +19,13 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Comments;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
+use phpMyFAQ\News;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\FormatDateTwigExtension;
@@ -36,6 +38,13 @@ use Twig\Extension\AttributeExtension;
 
 final class NewsController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly News $news,
+        private readonly Comments $comments,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws LoaderError
@@ -48,15 +57,13 @@ final class NewsController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::NEWS_DELETE);
         $this->userHasPermission(PermissionType::NEWS_EDIT);
 
-        $news = $this->container->get(id: 'phpmyfaq.news');
-
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatDateTwigExtension::class));
         return $this->render('@admin/content/news.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
             ...$this->getBaseTemplateVars(),
-            'news' => $news->getHeader(),
+            'news' => $this->news->getHeader(),
         ]);
     }
 
@@ -93,9 +100,7 @@ final class NewsController extends AbstractAdministrationController
 
         $newsId = (int) Filter::filterVar($request->attributes->get('newsId'), FILTER_VALIDATE_INT);
 
-        $news = $this->container->get(id: 'phpmyfaq.news');
-        $comment = $this->container->get(id: 'phpmyfaq.comments');
-        $newsData = $news->get($newsId, true);
+        $newsData = $this->news->get($newsId, true);
 
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatDateTwigExtension::class));

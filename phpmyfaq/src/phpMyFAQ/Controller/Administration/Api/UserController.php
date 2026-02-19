@@ -42,6 +42,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class UserController extends AbstractAdministrationApiController
 {
+    public function __construct(
+        private readonly CurrentUser $currentUserService,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      */
@@ -148,21 +154,19 @@ final class UserController extends AbstractAdministrationApiController
     {
         $this->userHasUserPermission();
 
-        $user = $this->container->get(id: 'phpmyfaq.user.current_user');
-
-        $user->getUserById((int) $request->attributes->get(key: 'userId'), allowBlockedUsers: true);
+        $this->currentUserService->getUserById((int) $request->attributes->get(key: 'userId'), allowBlockedUsers: true);
 
         $userData = [];
 
-        $data = $user->userdata->get(field: '*');
+        $data = $this->currentUserService->userdata->get(field: '*');
         if (is_array($data)) {
             $userData = $data;
-            $userData['userId'] = $user->getUserId();
-            $userData['status'] = $user->getStatus();
-            $userData['login'] = $user->getLogin();
+            $userData['userId'] = $this->currentUserService->getUserId();
+            $userData['status'] = $this->currentUserService->getStatus();
+            $userData['login'] = $this->currentUserService->getLogin();
             $userData['displayName'] = $userData['display_name'];
-            $userData['isSuperadmin'] = $user->isSuperAdmin();
-            $userData['authSource'] = $user->getUserAuthSource();
+            $userData['isSuperadmin'] = $this->currentUserService->isSuperAdmin();
+            $userData['authSource'] = $this->currentUserService->getUserAuthSource();
             $userData['isVisible'] = $userData['is_visible'];
             $userData['twoFactorEnabled'] = $userData['twofactor_enabled'];
             $userData['lastModified'] = $userData['last_modified'];

@@ -19,6 +19,11 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Administration\Api;
+use phpMyFAQ\Administration\Backup;
+use phpMyFAQ\Administration\Faq as AdminFaq;
+use phpMyFAQ\Administration\LatestUsers;
+use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
@@ -35,6 +40,16 @@ use Twig\Error\LoaderError;
 
 final class DashboardController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly AdminSession $adminSession,
+        private readonly AdminFaq $adminFaq,
+        private readonly Backup $backup,
+        private readonly LatestUsers $latestUsers,
+        private readonly Api $adminApi,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws LoaderError
      * @throws Exception
@@ -45,15 +60,10 @@ final class DashboardController extends AbstractAdministrationController
     {
         $this->userIsAuthenticated();
 
-        $session = $this->container->get(id: 'phpmyfaq.admin.session');
-        $faq = $this->container->get(id: 'phpmyfaq.admin.faq');
-        $backup = $this->container->get(id: 'phpmyfaq.admin.backup');
-        $latestUsers = $this->container->get(id: 'phpmyfaq.admin.latest-users');
-
         $faqTableInfo = $this->configuration->getDb()->getTableStatus(Database::getTablePrefix());
         $userId = $this->currentUser->getUserId();
 
-        $backupInfo = $backup->getLastBackupInfo();
+        $backupInfo = $this->backup->getLastBackupInfo();
 
         $templateVars = [
             'isDebugMode' => Environment::isDebugMode(),
@@ -65,18 +75,18 @@ final class DashboardController extends AbstractAdministrationController
                 System::getVersion(),
                 System::getGitHubIssuesUrl(),
             ),
-            'adminDashboardInfoNumVisits' => $session->getNumberOfSessions(),
+            'adminDashboardInfoNumVisits' => $this->adminSession->getNumberOfSessions(),
             'adminDashboardInfoNumFaqs' => $faqTableInfo[Database::getTablePrefix() . 'faqdata'],
             'adminDashboardInfoNumComments' => $faqTableInfo[Database::getTablePrefix() . 'faqcomments'],
             'adminDashboardInfoNumQuestions' => $faqTableInfo[Database::getTablePrefix() . 'faqquestions'],
             'adminDashboardInfoUser' => Translation::get(key: 'msgNews'),
             'adminDashboardInfoNumUser' => $faqTableInfo[Database::getTablePrefix() . 'faquser'] - 1,
             'adminDashboardHeaderUsersOnline' => Translation::get(key: 'msgUserOnline'),
-            'adminDashboardInfoNumUsersOnline' => $session->getNumberOfOnlineUsers(windowSeconds: 600),
+            'adminDashboardInfoNumUsersOnline' => $this->adminSession->getNumberOfOnlineUsers(windowSeconds: 600),
             'adminDashboardHeaderVisits' => Translation::get(key: 'ad_stat_report_visits'),
             'hasUserTracking' => $this->configuration->get(item: 'main.enableUserTracking'),
             'adminDashboardHeaderInactiveFaqs' => Translation::get(key: 'ad_record_inactive'),
-            'adminDashboardInactiveFaqs' => $faq->getInactiveFaqsData(),
+            'adminDashboardInactiveFaqs' => $this->adminFaq->getInactiveFaqsData(),
             'hasPermissionEditConfig' => $this->currentUser->perm->hasPermission(
                 $userId,
                 PermissionType::CONFIGURATION_EDIT->value,
@@ -85,7 +95,7 @@ final class DashboardController extends AbstractAdministrationController
             'documentationUrl' => System::getDocumentationUrl(),
             'lastBackupDate' => $backupInfo['lastBackupDate'],
             'isBackupOlderThan30Days' => $backupInfo['isBackupOlderThan30Days'],
-            'adminDashboardLatestUsers' => $latestUsers->getList(limit: 5),
+            'adminDashboardLatestUsers' => $this->latestUsers->getList(limit: 5),
         ];
 
         if (version_compare($this->configuration->getVersion(), System::getVersion(), operator: '<')) {
@@ -100,7 +110,7 @@ final class DashboardController extends AbstractAdministrationController
             $version = Filter::filterVar($request->attributes->get(key: 'param'), FILTER_SANITIZE_SPECIAL_CHARS);
             if (!$this->configuration->get(item: 'main.enableAutoUpdateHint') && $version === 'version') {
                 try {
-                    $versions = $this->container->get(id: 'phpmyfaq.admin.api')->getVersions();
+                    $versions = $this->adminApi->getVersions();
                     $templateVars = [
                         ...$templateVars,
                         'adminDashboardShouldUpdateMessage' => false,

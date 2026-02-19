@@ -21,8 +21,11 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\User\UserAuthentication;
 use phpMyFAQ\User\UserException;
+use phpMyFAQ\User\UserSession;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,6 +34,14 @@ use Twig\Error\LoaderError;
 
 final class AuthenticationController extends AbstractFrontController
 {
+    public function __construct(
+        private readonly UserSession $userSession,
+        private readonly CurrentUser $currentUserService,
+        private readonly TwoFactor $twoFactor,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws LoaderError
@@ -38,9 +49,8 @@ final class AuthenticationController extends AbstractFrontController
      */ #[Route(path: '/login', name: 'public.auth.login', methods: ['GET'])]
     public function login(Request $request): Response
     {
-        $faqSession = $this->container->get('phpmyfaq.user.session');
-        $faqSession->setCurrentUser($this->currentUser);
-        $faqSession->userTracking('login', 0);
+        $this->userSession->setCurrentUser($this->currentUser);
+        $this->userSession->userTracking('login', 0);
 
         // Redirect to authenticate if SSO is enabled and the user is already authenticated
         if (
@@ -50,8 +60,7 @@ final class AuthenticationController extends AbstractFrontController
             return new RedirectResponse(url: './authenticate');
         }
 
-        $session = $this->container->get('session');
-        $errorMessages = $session->getFlashBag()->get('error');
+        $errorMessages = $this->session->getFlashBag()->get('error');
         $errorMessage = empty($errorMessages) ? null : $errorMessages[0];
 
         return $this->render('login.twig', [
@@ -84,9 +93,8 @@ final class AuthenticationController extends AbstractFrontController
     #[Route(path: '/forgot-password', name: 'public.forgot-password', methods: ['GET', 'POST'])]
     public function forgotPassword(Request $request): Response
     {
-        $faqSession = $this->container->get('phpmyfaq.user.session');
-        $faqSession->setCurrentUser($this->currentUser);
-        $faqSession->userTracking('forgot_password', 0);
+        $this->userSession->setCurrentUser($this->currentUser);
+        $this->userSession->userTracking('forgot_password', 0);
 
         return $this->render('password.twig', [
             ...$this->getHeader($request),
@@ -102,13 +110,12 @@ final class AuthenticationController extends AbstractFrontController
     #[Route(path: '/logout', name: 'public.auth.logout', methods: ['GET'])]
     public function logout(Request $request): RedirectResponse
     {
-        $session = $this->container->get('session');
         $csrfToken = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $redirectResponse = new RedirectResponse(url: $this->configuration->getDefaultUrl());
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('logout', $csrfToken)) {
-            $session->getFlashBag()->add('error', 'CSRF Problem detected: ' . $csrfToken);
+        if (!Token::getInstance($this->session)->verifyToken('logout', $csrfToken)) {
+            $this->session->getFlashBag()->add('error', 'CSRF Problem detected: ' . $csrfToken);
             return $redirectResponse;
         }
 
@@ -119,7 +126,7 @@ final class AuthenticationController extends AbstractFrontController
         $this->currentUser->deleteFromSession(true);
 
         // Add a success message
-        $session->getFlashBag()->add('success', Translation::get('ad_logout'));
+        $this->session->getFlashBag()->add('success', Translation::get('ad_logout'));
 
         // SSO Logout
         $ssoLogout = $this->configuration->get('security.ssoLogoutRedirect');
@@ -183,12 +190,12 @@ final class AuthenticationController extends AbstractFrontController
                 return new RedirectResponse('./');
             } catch (UserException $e) {
                 $this->configuration->getLogger()->error('Login-error: ' . $e->getMessage());
-                $this->container->get('session')->getFlashBag()->add('error', $e->getMessage());
+                $this->session->getFlashBag()->add('error', $e->getMessage());
                 return new RedirectResponse('./login');
             }
         }
 
-        $this->container->get('session')->getFlashBag()->add('error', Translation::get('ad_auth_fail'));
+        $this->session->getFlashBag()->add('error', Translation::get('ad_auth_fail'));
         return new RedirectResponse($this->configuration->getDefaultUrl() . 'login');
     }
 
@@ -206,9 +213,8 @@ final class AuthenticationController extends AbstractFrontController
             return new RedirectResponse(url: './');
         }
 
-        $faqSession = $this->container->get('phpmyfaq.user.session');
-        $faqSession->setCurrentUser($this->currentUser);
-        $faqSession->userTracking('twofactor', 0);
+        $this->userSession->setCurrentUser($this->currentUser);
+        $this->userSession->userTracking('twofactor', 0);
 
         $userId = (int) Filter::filterVar($request->query->get(key: 'user-id'), FILTER_VALIDATE_INT);
 
@@ -241,15 +247,13 @@ final class AuthenticationController extends AbstractFrontController
         $token = Filter::filterVar($request->request->get(key: 'token'), FILTER_SANITIZE_SPECIAL_CHARS);
         $userId = (int) Filter::filterVar($request->request->get(key: 'user-id'), FILTER_VALIDATE_INT);
 
-        $user = $this->container->get(id: 'phpmyfaq.user.current_user');
-        $user->getUserById($userId);
+        $this->currentUserService->getUserById($userId);
 
         if (strlen((string) $token) === 6) {
-            $tfa = $this->container->get(id: 'phpmyfaq.user.two-factor');
-            $result = $tfa->validateToken($token, $userId);
+            $result = $this->twoFactor->validateToken($token, $userId);
 
             if ($result) {
-                $user->twoFactorSuccess();
+                $this->currentUserService->twoFactorSuccess();
                 return new RedirectResponse(url: './');
             }
         }

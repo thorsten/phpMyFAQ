@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
+use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Strings;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 class DashboardControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private AdminSession $adminSession;
 
     /**
      * @throws Exception
@@ -33,6 +35,7 @@ class DashboardControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+        $this->adminSession = $this->createStub(AdminSession::class);
     }
 
     /**
@@ -41,7 +44,7 @@ class DashboardControllerTest extends TestCase
     public function testVerifyRequiresAuthentication(): void
     {
         $request = new Request([], [], [], [], [], [], '{}');
-        $controller = new DashboardController();
+        $controller = new DashboardController($this->adminSession);
 
         $this->expectException(\Exception::class);
         $controller->verify($request);
@@ -52,7 +55,7 @@ class DashboardControllerTest extends TestCase
      */
     public function testVersionsRequiresAuthentication(): void
     {
-        $controller = new DashboardController();
+        $controller = new DashboardController($this->adminSession);
 
         $this->expectException(\Exception::class);
         $controller->versions();
@@ -64,7 +67,7 @@ class DashboardControllerTest extends TestCase
     public function testVisitsRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new DashboardController();
+        $controller = new DashboardController($this->adminSession);
 
         $this->expectException(\Exception::class);
         $controller->visits($request);
@@ -75,7 +78,7 @@ class DashboardControllerTest extends TestCase
      */
     public function testTopTenRequiresAuthentication(): void
     {
-        $controller = new DashboardController();
+        $controller = new DashboardController($this->adminSession);
 
         $this->expectException(\Exception::class);
         $controller->topTen();
@@ -87,7 +90,7 @@ class DashboardControllerTest extends TestCase
     public function testVerifyWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new DashboardController();
+        $controller = new DashboardController($this->adminSession);
 
         $this->expectException(\Exception::class);
         $controller->verify($request);
@@ -99,7 +102,7 @@ class DashboardControllerTest extends TestCase
     public function testVerifyWithEmptyDataThrowsException(): void
     {
         $request = new Request();
-        $controller = new DashboardController();
+        $controller = new DashboardController($this->adminSession);
 
         $this->expectException(\Exception::class);
         $controller->verify($request);

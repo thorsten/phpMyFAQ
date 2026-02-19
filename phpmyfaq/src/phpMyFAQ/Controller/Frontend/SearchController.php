@@ -22,10 +22,12 @@ namespace phpMyFAQ\Controller\Frontend;
 use Exception;
 use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Search\SearchService;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\TagNameTwigExtension;
+use phpMyFAQ\User\UserSession;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,6 +37,13 @@ use Twig\TwigFilter;
 
 final class SearchController extends AbstractFrontController
 {
+    public function __construct(
+        private readonly UserSession $faqSession,
+        private readonly Plurals $plurals,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * Redirects tag URLs with pagination to search
      *
@@ -97,10 +106,9 @@ final class SearchController extends AbstractFrontController
         }
 
         // Track user session
-        $faqSession = $this->container->get('phpmyfaq.user.session');
-        $faqSession->setCurrentUser($this->currentUser);
-        $faqSession->userTracking('fulltext_search', 0);
-        $faqSession->userTracking('fulltext_search', $inputSearchTerm);
+        $this->faqSession->setCurrentUser($this->currentUser);
+        $this->faqSession->userTracking('fulltext_search', 0);
+        $this->faqSession->userTracking('fulltext_search', $inputSearchTerm);
 
         // Get current groups
         $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
@@ -136,8 +144,6 @@ final class SearchController extends AbstractFrontController
             ? Translation::get(key: 'msgTagSearch')
             : Translation::get(key: 'msgAdvancedSearch');
 
-        $plurals = $this->container->get('phpmyfaq.language.plurals');
-
         // Render template
         return $this->render('search.twig', [
             ...$this->getHeader($request),
@@ -156,8 +162,8 @@ final class SearchController extends AbstractFrontController
             'msgPage' => Translation::get(key: 'msgPage'),
             'currentPage' => $searchData['currentPage'],
             'from' => Translation::get(key: 'msgVoteFrom'),
-            'msgSearchResults' => $plurals->get('plmsgSearchAmount', $searchData['numberOfSearchResults'] ?? 0),
-            'msgSearchResultsPagination' => $plurals->get('plmsgPagesTotal', $searchData['totalPages'] ?? 0),
+            'msgSearchResults' => $this->plurals->get('plmsgSearchAmount', $searchData['numberOfSearchResults'] ?? 0),
+            'msgSearchResultsPagination' => $this->plurals->get('plmsgPagesTotal', $searchData['totalPages'] ?? 0),
             'searchTerm' => $searchData['searchTerm'],
             'searchTags' => $searchData['searchTags'],
             'msgSearchWord' => Translation::get(key: 'msgSearchWord'),

@@ -6,7 +6,10 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
+use phpMyFAQ\System;
+use phpMyFAQ\Template\ThemeManager;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -16,6 +19,9 @@ use Symfony\Component\HttpFoundation\Request;
 class ConfigurationTabControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private Language $language;
+    private System $system;
+    private ThemeManager $themeManager;
 
     /**
      * @throws Exception
@@ -33,6 +39,9 @@ class ConfigurationTabControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+        $this->language = $this->createStub(Language::class);
+        $this->system = $this->createStub(System::class);
+        $this->themeManager = $this->createStub(ThemeManager::class);
     }
 
     /**
@@ -41,7 +50,7 @@ class ConfigurationTabControllerTest extends TestCase
     public function testListRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new ConfigurationTabController();
+        $controller = new ConfigurationTabController($this->language, $this->system, $this->themeManager);
 
         $this->expectException(\Exception::class);
         $controller->list($request);
@@ -53,7 +62,7 @@ class ConfigurationTabControllerTest extends TestCase
     public function testSaveRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new ConfigurationTabController();
+        $controller = new ConfigurationTabController($this->language, $this->system, $this->themeManager);
 
         $this->expectException(\Exception::class);
         $controller->save($request);
@@ -64,7 +73,7 @@ class ConfigurationTabControllerTest extends TestCase
      */
     public function testTranslationsRequiresAuthentication(): void
     {
-        $controller = new ConfigurationTabController();
+        $controller = new ConfigurationTabController($this->language, $this->system, $this->themeManager);
 
         $this->expectException(\Exception::class);
         $controller->translations();
@@ -75,7 +84,7 @@ class ConfigurationTabControllerTest extends TestCase
      */
     public function testTemplatesRequiresAuthentication(): void
     {
-        $controller = new ConfigurationTabController();
+        $controller = new ConfigurationTabController($this->language, $this->system, $this->themeManager);
 
         $this->expectException(\Exception::class);
         $controller->templates();
@@ -87,7 +96,7 @@ class ConfigurationTabControllerTest extends TestCase
     public function testFaqsSortingKeyRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new ConfigurationTabController();
+        $controller = new ConfigurationTabController($this->language, $this->system, $this->themeManager);
 
         $this->expectException(\Exception::class);
         $controller->faqsSortingKey($request);
@@ -99,7 +108,7 @@ class ConfigurationTabControllerTest extends TestCase
     public function testFaqsSortingOrderRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new ConfigurationTabController();
+        $controller = new ConfigurationTabController($this->language, $this->system, $this->themeManager);
 
         $this->expectException(\Exception::class);
         $controller->faqsSortingOrder($request);
@@ -111,7 +120,7 @@ class ConfigurationTabControllerTest extends TestCase
     public function testFaqsSortingPopularRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new ConfigurationTabController();
+        $controller = new ConfigurationTabController($this->language, $this->system, $this->themeManager);
 
         $this->expectException(\Exception::class);
         $controller->faqsSortingPopular($request);
@@ -123,7 +132,7 @@ class ConfigurationTabControllerTest extends TestCase
     public function testPermLevelRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new ConfigurationTabController();
+        $controller = new ConfigurationTabController($this->language, $this->system, $this->themeManager);
 
         $this->expectException(\Exception::class);
         $controller->permLevel($request);
@@ -135,7 +144,7 @@ class ConfigurationTabControllerTest extends TestCase
     public function testReleaseEnvironmentRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new ConfigurationTabController();
+        $controller = new ConfigurationTabController($this->language, $this->system, $this->themeManager);
 
         $this->expectException(\Exception::class);
         $controller->releaseEnvironment($request);
@@ -147,7 +156,7 @@ class ConfigurationTabControllerTest extends TestCase
     public function testSearchRelevanceRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new ConfigurationTabController();
+        $controller = new ConfigurationTabController($this->language, $this->system, $this->themeManager);
 
         $this->expectException(\Exception::class);
         $controller->searchRelevance($request);
@@ -159,7 +168,7 @@ class ConfigurationTabControllerTest extends TestCase
     public function testSeoMetaTagsRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new ConfigurationTabController();
+        $controller = new ConfigurationTabController($this->language, $this->system, $this->themeManager);
 
         $this->expectException(\Exception::class);
         $controller->seoMetaTags($request);
@@ -171,7 +180,7 @@ class ConfigurationTabControllerTest extends TestCase
     public function testSaveWithMissingCsrfTokenThrowsException(): void
     {
         $request = new Request();
-        $controller = new ConfigurationTabController();
+        $controller = new ConfigurationTabController($this->language, $this->system, $this->themeManager);
 
         $this->expectException(\Exception::class);
         $controller->save($request);
@@ -183,7 +192,7 @@ class ConfigurationTabControllerTest extends TestCase
     public function testUploadThemeRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new ConfigurationTabController();
+        $controller = new ConfigurationTabController($this->language, $this->system, $this->themeManager);
 
         $this->expectException(\Exception::class);
         $controller->uploadTheme($request);

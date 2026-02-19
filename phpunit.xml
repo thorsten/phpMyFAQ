@@ -21,6 +21,10 @@
     <testsuites>
         <testsuite name="phpMyFAQ Test Suite">
             <directory>./tests/phpMyFAQ</directory>
+            <exclude>./tests/phpMyFAQ/Functional</exclude>
+        </testsuite>
+        <testsuite name="functional">
+            <directory>./tests/phpMyFAQ/Functional</directory>
         </testsuite>
     </testsuites>
     <coverage>

@@ -11,8 +11,10 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Twig\Extension\ExtensionInterface;
 use Twig\TwigFilter;
@@ -450,6 +452,59 @@ class AbstractControllerTest extends TestCase
 
         $this->abstractController->isSecuredPublic();
         $this->assertTrue(true);
+    }
+
+    public function testSetContainerReEvaluatesIsSecuredWhenContainerChanges(): void
+    {
+        $controller = new class() extends AbstractController {
+            public function __construct()
+            {
+            }
+        };
+
+        $session = $this->createMock(SessionInterface::class);
+
+        $firstConfiguration = $this->createMock(Configuration::class);
+        $firstConfiguration->expects($this->once())->method('getTemplateSet')->willReturn('default');
+
+        $firstCurrentUser = $this->createMock(CurrentUser::class);
+        $firstCurrentUser->expects($this->once())->method('isLoggedIn')->willReturn(true);
+
+        $firstContainer = $this->createMock(ContainerInterface::class);
+        $firstContainer
+            ->method('get')
+            ->willReturnCallback(static function (string $id) use ($firstConfiguration, $firstCurrentUser, $session) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $firstConfiguration,
+                    'phpmyfaq.user.current_user' => $firstCurrentUser,
+                    'session' => $session,
+                    default => throw new \InvalidArgumentException(sprintf('Unexpected service id "%s".', $id)),
+                };
+            });
+
+        $controller->setContainer($firstContainer);
+
+        $secondConfiguration = $this->createMock(Configuration::class);
+        $secondConfiguration->expects($this->once())->method('getTemplateSet')->willReturn('default');
+        $secondConfiguration->expects($this->once())->method('get')->with('security.enableLoginOnly')->willReturn(true);
+
+        $secondCurrentUser = $this->createMock(CurrentUser::class);
+        $secondCurrentUser->expects($this->once())->method('isLoggedIn')->willReturn(false);
+
+        $secondContainer = $this->createMock(ContainerInterface::class);
+        $secondContainer
+            ->method('get')
+            ->willReturnCallback(static function (string $id) use ($secondConfiguration, $secondCurrentUser, $session) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $secondConfiguration,
+                    'phpmyfaq.user.current_user' => $secondCurrentUser,
+                    'session' => $session,
+                    default => throw new \InvalidArgumentException(sprintf('Unexpected service id "%s".', $id)),
+                };
+            });
+
+        $this->expectException(UnauthorizedHttpException::class);
+        $controller->setContainer($secondContainer);
     }
 
     public function testCreateContainerReturnsContainerBuilder(): void

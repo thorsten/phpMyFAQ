@@ -24,6 +24,7 @@ use phpMyFAQ\Attachment\AbstractAttachment;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentService;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,6 +33,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class AttachmentController extends AbstractFrontController
 {
+    public function __construct(
+        private readonly Permission $faqPermission,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws \Exception
@@ -48,11 +55,7 @@ final class AttachmentController extends AbstractFrontController
         $attachmentErrors = [];
         $attachment = null;
 
-        $attachmentService = new AttachmentService(
-            $this->configuration,
-            $this->currentUser,
-            $this->container->get('phpmyfaq.faq.permission'),
-        );
+        $attachmentService = new AttachmentService($this->configuration, $this->currentUser, $this->faqPermission);
 
         if ($id === false || $id === null) {
             $attachmentErrors[] = $attachmentService->getGenericErrorMessage();

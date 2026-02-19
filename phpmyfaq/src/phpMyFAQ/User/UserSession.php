@@ -150,8 +150,9 @@ class UserSession
             $this->setCurrentSessionId(0);
         }
 
+        $userAgent = (string) $request->headers->get('user-agent');
         foreach ($this->getBotIgnoreList() as $bot) {
-            if (!Strings::strstr($request->headers->get('user-agent'), $bot)) {
+            if (!Strings::strstr($userAgent, $bot)) {
                 continue;
             }
 
@@ -168,6 +169,14 @@ class UserSession
 
         // clean up as well
         $remoteAddress = preg_replace('([^0-9a-z:.]+)i', '', (string) $remoteAddress);
+
+        if (
+            !is_string($remoteAddress)
+            || $remoteAddress === ''
+            || filter_var($remoteAddress, FILTER_VALIDATE_IP) === false
+        ) {
+            $remoteAddress = '127.0.0.1';
+        }
 
         // Anonymize IP address
         $remoteAddress = IpUtils::anonymize($remoteAddress);

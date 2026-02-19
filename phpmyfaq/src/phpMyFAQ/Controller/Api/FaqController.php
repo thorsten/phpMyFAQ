@@ -24,7 +24,11 @@ use League\CommonMark\Exception\CommonMarkException;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Faq\MetaData as FaqMetaData;
+use phpMyFAQ\Faq\Statistics as FaqStatistics;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
 use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -34,6 +38,15 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class FaqController extends AbstractApiController
 {
+    public function __construct(
+        private readonly Faq $faq,
+        private readonly Tags $tags,
+        private readonly FaqStatistics $faqStatistics,
+        private readonly FaqMetaData $faqMetaData,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws \phpMyFAQ\Core\Exception|Exception
      */
@@ -77,14 +90,13 @@ final class FaqController extends AbstractApiController
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faq = $this->container->get(id: 'phpmyfaq.faq');
-        $faq->setUser($currentUser);
-        $faq->setGroups($currentGroups);
+        $this->faq->setUser($currentUser);
+        $this->faq->setGroups($currentGroups);
 
         $categoryId = (int) Filter::filterVar($request->attributes->get(key: 'categoryId'), FILTER_VALIDATE_INT);
 
         try {
-            $result = $faq->getAllAvailableFaqsByCategoryId($categoryId);
+            $result = $this->faq->getAllAvailableFaqsByCategoryId($categoryId);
             return $this->json($result, Response::HTTP_OK);
         } catch (Exception|CommonMarkException $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -150,15 +162,14 @@ final class FaqController extends AbstractApiController
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faq = $this->container->get(id: 'phpmyfaq.faq');
-        $faq->setUser($currentUser);
-        $faq->setGroups($currentGroups);
+        $this->faq->setUser($currentUser);
+        $this->faq->setGroups($currentGroups);
 
         $faqId = (int) Filter::filterVar($request->attributes->get(key: 'faqId'), FILTER_VALIDATE_INT);
         $categoryId = (int) Filter::filterVar($request->attributes->get(key: 'categoryId'), FILTER_VALIDATE_INT);
         $onlyActive = (bool) $this->configuration->get('api.onlyActiveFaqs');
 
-        $result = $faq->getFaqByIdAndCategoryId($faqId, $categoryId);
+        $result = $this->faq->getFaqByIdAndCategoryId($faqId, $categoryId);
 
         if (
             (is_countable($result) ? count($result) : 0) === 0
@@ -216,17 +227,15 @@ final class FaqController extends AbstractApiController
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faq = $this->container->get(id: 'phpmyfaq.faq');
-        $faq->setUser($currentUser);
-        $faq->setGroups($currentGroups);
+        $this->faq->setUser($currentUser);
+        $this->faq->setGroups($currentGroups);
 
         $tagId = (int) Filter::filterVar($request->attributes->get(key: 'tagId'), FILTER_VALIDATE_INT);
 
-        $tags = $this->container->get(id: 'phpmyfaq.tags');
-        $recordIds = $tags->getFaqsByTagId($tagId);
+        $recordIds = $this->tags->getFaqsByTagId($tagId);
 
         try {
-            $result = $faq->getFaqsByIds($recordIds);
+            $result = $this->faq->getFaqsByIds($recordIds);
             return $this->json($result, Response::HTTP_OK);
         } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -268,11 +277,10 @@ final class FaqController extends AbstractApiController
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faqStatistics = $this->container->get(id: 'phpmyfaq.faq.statistics');
-        $faqStatistics->setUser($currentUser);
-        $faqStatistics->setGroups($currentGroups);
+        $this->faqStatistics->setUser($currentUser);
+        $this->faqStatistics->setGroups($currentGroups);
 
-        $result = array_values($faqStatistics->getTopTenData());
+        $result = array_values($this->faqStatistics->getTopTenData());
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
             $this->json($result, Response::HTTP_NOT_FOUND);
@@ -317,11 +325,10 @@ final class FaqController extends AbstractApiController
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faqStatistics = $this->container->get(id: 'phpmyfaq.faq.statistics');
-        $faqStatistics->setUser($currentUser);
-        $faqStatistics->setGroups($currentGroups);
+        $this->faqStatistics->setUser($currentUser);
+        $this->faqStatistics->setGroups($currentGroups);
 
-        $result = array_values($faqStatistics->getLatestData());
+        $result = array_values($this->faqStatistics->getLatestData());
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
             return $this->json($result, Response::HTTP_NOT_FOUND);
@@ -365,11 +372,10 @@ final class FaqController extends AbstractApiController
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faqStatistics = $this->container->get(id: 'phpmyfaq.faq.statistics');
-        $faqStatistics->setUser($currentUser);
-        $faqStatistics->setGroups($currentGroups);
+        $this->faqStatistics->setUser($currentUser);
+        $this->faqStatistics->setGroups($currentGroups);
 
-        $result = array_values($faqStatistics->getTrendingData());
+        $result = array_values($this->faqStatistics->getTrendingData());
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
             $this->json($result, Response::HTTP_NOT_FOUND);
@@ -418,11 +424,10 @@ final class FaqController extends AbstractApiController
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faq = $this->container->get(id: 'phpmyfaq.faq');
-        $faq->setUser($currentUser);
-        $faq->setGroups($currentGroups);
+        $this->faq->setUser($currentUser);
+        $this->faq->setGroups($currentGroups);
 
-        $result = array_values($faq->getStickyFaqsData());
+        $result = array_values($this->faq->getStickyFaqsData());
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
             return $this->json($result, Response::HTTP_NOT_FOUND);
@@ -531,17 +536,18 @@ final class FaqController extends AbstractApiController
         }',
     ))]
     #[Route(path: 'v3.2/faqs', name: 'api.faqs.list', methods: ['GET'])]
-    public function list(): JsonResponse
+    public function list(?Request $request = null): JsonResponse
     {
+        $request ??= Request::createFromGlobals();
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faq = $this->container->get(id: 'phpmyfaq.faq');
-        $faq->setUser($currentUser);
-        $faq->setGroups($currentGroups);
+        $this->faq->setUser($currentUser);
+        $this->faq->setGroups($currentGroups);
 
         // Get pagination and sorting parameters
-        $pagination = $this->getPaginationRequest();
+        $pagination = $this->getPaginationRequest($request);
         $sort = $this->getSortRequest(
+            $request,
             allowedFields: ['id', 'title', 'author', 'updated', 'created'],
             defaultField: 'id',
             defaultOrder: 'asc',
@@ -550,8 +556,8 @@ final class FaqController extends AbstractApiController
         $onlyActive = (bool) $this->configuration->get('api.onlyActiveFaqs');
         $ignoreOrphanedFaqs = (bool) $this->configuration->get('api.ignoreOrphanedFaqs');
 
-        // Get all FAQs (this populates $faq->faqRecords)
-        $faq->getAllFaqs(
+        // Get all FAQs (this populates $this->faq->faqRecords)
+        $this->faq->getAllFaqs(
             FAQ_SORTING_TYPE_CATID_FAQID,
             [
                 'lang' => $this->configuration->getLanguage()->getLanguage(),
@@ -561,7 +567,7 @@ final class FaqController extends AbstractApiController
             $sort->getOrderSql(),
         );
 
-        $allFaqs = $faq->faqRecords;
+        $allFaqs = $this->faq->faqRecords;
         $total = is_countable($allFaqs) ? count($allFaqs) : 0;
 
         // Apply sorting if needed (basic client-side sorting)
@@ -579,6 +585,7 @@ final class FaqController extends AbstractApiController
         $result = array_slice($allFaqs, $pagination->offset, $pagination->limit);
 
         return $this->paginatedResponse(
+            $request,
             data: array_values($result),
             total: $total,
             pagination: $pagination,
@@ -683,9 +690,8 @@ final class FaqController extends AbstractApiController
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
 
-        $faq = $this->container->get(id: 'phpmyfaq.faq');
-        $faq->setUser($currentUser);
-        $faq->setGroups($currentGroups);
+        $this->faq->setUser($currentUser);
+        $this->faq->setGroups($currentGroups);
 
         $languageCode = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS);
         $categoryId = Filter::filterVar($data->{'category-id'}, FILTER_VALIDATE_INT);
@@ -718,7 +724,7 @@ final class FaqController extends AbstractApiController
             $categoryId = $categoryIdFound;
         }
 
-        if ($faq->hasTitleAHash($question)) {
+        if ($this->faq->hasTitleAHash($question)) {
             $result = [
                 'stored' => false,
                 'error' => 'It is not allowed, that the question title contains a hash.',
@@ -743,10 +749,13 @@ final class FaqController extends AbstractApiController
             ->setComment(comment: false)
             ->setNotes(notes: '');
 
-        $faqEntity = $faq->create($faqData);
+        $faqEntity = $this->faq->create($faqData);
 
-        $faqMetaData = $this->container->get(id: 'phpmyfaq.faq.metadata');
-        $faqMetaData->setFaqId($faqEntity->getId())->setFaqLanguage($languageCode)->setCategories($categories)->save();
+        $this->faqMetaData
+            ->setFaqId($faqEntity->getId())
+            ->setFaqLanguage($languageCode)
+            ->setCategories($categories)
+            ->save();
 
         return $this->json(['stored' => true], Response::HTTP_CREATED);
     }
@@ -842,9 +851,8 @@ final class FaqController extends AbstractApiController
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
 
-        $faq = $this->container->get(id: 'phpmyfaq.faq');
-        $faq->setUser($currentUser);
-        $faq->setGroups($currentGroups);
+        $this->faq->setUser($currentUser);
+        $this->faq->setGroups($currentGroups);
 
         $faqId = Filter::filterVar($data->{'faq-id'}, FILTER_VALIDATE_INT);
         $languageCode = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -856,7 +864,7 @@ final class FaqController extends AbstractApiController
         $isActive = Filter::filterVar($data->{'is-active'}, FILTER_VALIDATE_BOOLEAN);
         $isSticky = Filter::filterVar($data->{'is-sticky'}, FILTER_VALIDATE_BOOLEAN);
 
-        if ($faq->hasTitleAHash($question)) {
+        if ($this->faq->hasTitleAHash($question)) {
             $result = [
                 'stored' => false,
                 'error' => 'It is not allowed, that the question title contains a hash.',
@@ -882,7 +890,7 @@ final class FaqController extends AbstractApiController
             ->setComment(comment: false)
             ->setNotes(notes: '');
 
-        $faq->update($faqEntity);
+        $this->faq->update($faqEntity);
 
         return $this->json(['stored' => true], Response::HTTP_OK);
     }

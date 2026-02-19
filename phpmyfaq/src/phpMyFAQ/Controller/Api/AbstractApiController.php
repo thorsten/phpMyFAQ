@@ -43,18 +43,13 @@ abstract class AbstractApiController extends AbstractController
     protected const int MAX_PER_PAGE = 100;
 
     /**
-     * Constructor
-     *
-     * Verifies that API access is enabled before allowing any API operations.
-     *
-     * @throws UnauthorizedHttpException If API is not enabled
-     * @throws Exception
+     * Initializes API controller and verifies API access is enabled.
      */
-    public function __construct()
+    #[\Override]
+    protected function initializeFromContainer(): void
     {
-        parent::__construct();
+        parent::initializeFromContainer();
 
-        // Verify API is enabled
         if (!$this->isApiEnabled()) {
             throw new UnauthorizedHttpException(challenge: 'API is not enabled');
         }
@@ -70,11 +65,11 @@ abstract class AbstractApiController extends AbstractController
      * @return PaginationRequest
      */
     protected function getPaginationRequest(
+        Request $request,
         int $defaultPerPage = self::DEFAULT_PER_PAGE,
         ?int $maxPerPage = null,
     ): PaginationRequest {
         $maxPerPage ??= self::MAX_PER_PAGE;
-        $request = Request::createFromGlobals();
 
         return PaginationRequest::fromRequest($request, $defaultPerPage, $maxPerPage);
     }
@@ -90,12 +85,11 @@ abstract class AbstractApiController extends AbstractController
      * @return SortRequest
      */
     protected function getSortRequest(
+        Request $request,
         array $allowedFields,
         ?string $defaultField = null,
         string $defaultOrder = 'asc',
     ): SortRequest {
-        $request = Request::createFromGlobals();
-
         return SortRequest::fromRequest($request, $allowedFields, $defaultField, $defaultOrder);
     }
 
@@ -115,10 +109,8 @@ abstract class AbstractApiController extends AbstractController
      *     'created_from' => 'date',
      * ]
      */
-    protected function getFilterRequest(array $allowedFilters): FilterRequest
+    protected function getFilterRequest(Request $request, array $allowedFilters): FilterRequest
     {
-        $request = Request::createFromGlobals();
-
         return FilterRequest::fromRequest($request, $allowedFilters);
     }
 
@@ -134,6 +126,7 @@ abstract class AbstractApiController extends AbstractController
      * @return JsonResponse
      */
     protected function paginatedResponse(
+        Request $request,
         array $data,
         int $total,
         PaginationRequest $pagination,
@@ -141,8 +134,6 @@ abstract class AbstractApiController extends AbstractController
         ?FilterRequest $filters = null,
         int $status = Response::HTTP_OK,
     ): JsonResponse {
-        $request = Request::createFromGlobals();
-
         // Build base URL for pagination links
         $baseUrl = $request->getPathInfo();
         if ($request->getQueryString()) {

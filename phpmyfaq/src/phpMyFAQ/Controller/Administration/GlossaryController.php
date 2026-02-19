@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Glossary;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,6 +31,12 @@ use Twig\Error\LoaderError;
 
 final class GlossaryController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly Glossary $glossary,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws LoaderError
      * @throws Exception
@@ -42,8 +49,7 @@ final class GlossaryController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::GLOSSARY_EDIT);
         $this->userHasPermission(PermissionType::GLOSSARY_DELETE);
 
-        $glossary = $this->container->get(id: 'phpmyfaq.glossary');
-        $glossary->setLanguage($this->configuration->getLanguage()->getLanguage());
+        $this->glossary->setLanguage($this->configuration->getLanguage()->getLanguage());
 
         return $this->render('@admin/content/glossary.twig', [
             ...$this->getHeader($request),
@@ -52,7 +58,7 @@ final class GlossaryController extends AbstractAdministrationController
             'msgAddGlossary' => Translation::get(key: 'ad_glossary_add'),
             'msgGlossaryItem' => Translation::get(key: 'ad_glossary_item'),
             'msgGlossaryDefinition' => Translation::get(key: 'ad_glossary_definition'),
-            'glossaryItems' => $glossary->fetchAll(),
+            'glossaryItems' => $this->glossary->fetchAll(),
             'buttonDelete' => Translation::get(key: 'msgDelete'),
             'csrfTokenDelete' => Token::getInstance($this->session)->getTokenString('delete-glossary'),
             'currentLanguage' => $this->configuration->getLanguage()->getLanguage(),

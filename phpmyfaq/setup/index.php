@@ -24,11 +24,19 @@
  */
 
 use Composer\Autoload\ClassLoader;
-use phpMyFAQ\Application;
 use phpMyFAQ\Controller\Frontend\SetupController;
 use phpMyFAQ\Environment;
+use phpMyFAQ\EventListener\RouterListener;
+use phpMyFAQ\EventListener\WebExceptionListener;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
+use Symfony\Component\HttpKernel\Controller\ControllerResolver;
+use Symfony\Component\HttpKernel\HttpKernel;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -95,9 +103,25 @@ foreach ($routeDefinitions as $name => [$path, $controller, $action]) {
     $routes->add($name, new Route($path, ['_controller' => [$controller, $action]]));
 }
 
-$app = new Application();
+$dispatcher = new EventDispatcher();
+
+$routerListener = new RouterListener($routes);
+$dispatcher->addListener(KernelEvents::REQUEST, [$routerListener, 'onKernelRequest'], 256);
+
+$webExceptionListener = new WebExceptionListener();
+$dispatcher->addListener(KernelEvents::EXCEPTION, [$webExceptionListener, 'onKernelException'], -10);
+
+$kernel = new HttpKernel(
+    $dispatcher,
+    new ControllerResolver(),
+    new RequestStack(),
+    new ArgumentResolver(),
+);
+
 try {
-    $app->run($routes);
+    $request = Request::createFromGlobals();
+    $response = $kernel->handle($request);
+    $response->send();
 } catch (Exception $exception) {
     echo $exception->getMessage();
 }

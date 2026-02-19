@@ -6,8 +6,16 @@ namespace phpMyFAQ\Controller\Frontend\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Helper\CategoryHelper;
+use phpMyFAQ\Helper\FaqHelper;
+use phpMyFAQ\Language;
+use phpMyFAQ\Notification;
+use phpMyFAQ\Question;
+use phpMyFAQ\StopWords;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\UserSession;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +25,14 @@ use Throwable;
 class FaqControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private Faq $faq;
+    private FaqHelper $faqHelper;
+    private Question $question;
+    private StopWords $stopWords;
+    private UserSession $userSession;
+    private Language $language;
+    private CategoryHelper $categoryHelper;
+    private Notification $notification;
 
     /**
      * @throws Exception
@@ -34,6 +50,29 @@ class FaqControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+
+        $this->faq = $this->createStub(Faq::class);
+        $this->faqHelper = $this->createStub(FaqHelper::class);
+        $this->question = $this->createStub(Question::class);
+        $this->stopWords = $this->createStub(StopWords::class);
+        $this->userSession = $this->createStub(UserSession::class);
+        $this->language = $this->createStub(Language::class);
+        $this->categoryHelper = $this->createStub(CategoryHelper::class);
+        $this->notification = $this->createStub(Notification::class);
+    }
+
+    private function createController(): FaqController
+    {
+        return new FaqController(
+            $this->faq,
+            $this->faqHelper,
+            $this->question,
+            $this->stopWords,
+            $this->userSession,
+            $this->language,
+            $this->categoryHelper,
+            $this->notification,
+        );
     }
 
     /**
@@ -44,7 +83,7 @@ class FaqControllerTest extends TestCase
         $requestData = 'invalid json';
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -64,7 +103,7 @@ class FaqControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -85,7 +124,7 @@ class FaqControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -106,7 +145,7 @@ class FaqControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -126,7 +165,7 @@ class FaqControllerTest extends TestCase
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController();
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);

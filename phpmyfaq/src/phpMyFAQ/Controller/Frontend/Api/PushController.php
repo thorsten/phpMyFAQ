@@ -31,18 +31,22 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class PushController extends AbstractController
 {
+    public function __construct(
+        private readonly WebPushService $webPushService,
+        private readonly PushSubscriptionRepository $pushSubscriptionRepository,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * Returns the VAPID public key and whether push is enabled.
      */
     #[Route(path: 'push/vapid-public-key', name: 'api.public.push.vapid-public-key', methods: ['GET'])]
     public function getVapidPublicKey(): JsonResponse
     {
-        /** @var WebPushService $webPushService */
-        $webPushService = $this->container->get('phpmyfaq.push.web-push-service');
-
         return $this->json([
-            'enabled' => $webPushService->isEnabled(),
-            'vapidPublicKey' => $webPushService->getVapidPublicKey(),
+            'enabled' => $this->webPushService->isEnabled(),
+            'vapidPublicKey' => $this->webPushService->getVapidPublicKey(),
         ], Response::HTTP_OK);
     }
 
@@ -78,10 +82,7 @@ final class PushController extends AbstractController
             ->setAuthToken($authToken)
             ->setContentEncoding($contentEncoding);
 
-        /** @var PushSubscriptionRepository $repository */
-        $repository = $this->container->get('phpmyfaq.push.subscription-repository');
-
-        if ($repository->save($entity)) {
+        if ($this->pushSubscriptionRepository->save($entity)) {
             return $this->json(['success' => true], Response::HTTP_CREATED);
         }
 
@@ -108,12 +109,10 @@ final class PushController extends AbstractController
             return $this->json(['error' => 'Missing endpoint'], Response::HTTP_BAD_REQUEST);
         }
 
-        /** @var PushSubscriptionRepository $repository */
-        $repository = $this->container->get('phpmyfaq.push.subscription-repository');
         $endpointHash = hash('sha256', $endpoint);
         $userId = $this->currentUser->getUserId();
 
-        if ($repository->deleteByEndpointHashAndUserId($endpointHash, $userId)) {
+        if ($this->pushSubscriptionRepository->deleteByEndpointHashAndUserId($endpointHash, $userId)) {
             return $this->json(['success' => true], Response::HTTP_OK);
         }
 
@@ -128,11 +127,8 @@ final class PushController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        /** @var PushSubscriptionRepository $repository */
-        $repository = $this->container->get('phpmyfaq.push.subscription-repository');
-
         return $this->json([
-            'subscribed' => $repository->hasSubscription($this->currentUser->getUserId()),
+            'subscribed' => $this->pushSubscriptionRepository->hasSubscription($this->currentUser->getUserId()),
         ], Response::HTTP_OK);
     }
 }

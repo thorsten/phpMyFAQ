@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,6 +30,12 @@ use Twig\Error\LoaderError;
 
 final class TagController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly Tags $tags,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws LoaderError
      * @throws Exception
@@ -39,7 +46,7 @@ final class TagController extends AbstractAdministrationController
     {
         $this->userIsAuthenticated();
 
-        $tagData = $this->container->get(id: 'phpmyfaq.tags')->getAllTags();
+        $tagData = $this->tags->getAllTags();
 
         return $this->render('@admin/content/tags.twig', [
             ...$this->getHeader($request),

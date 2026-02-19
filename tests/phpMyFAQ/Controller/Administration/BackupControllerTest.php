@@ -13,7 +13,6 @@ use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -45,7 +44,7 @@ class BackupControllerTest extends TestCase
 
     private function createController(): BackupController
     {
-        $controller = new BackupController();
+        $controller = new BackupController($this->backupServiceMock);
 
         // Use reflection to inject dependencies
         $reflectionClass = new \ReflectionClass($controller);
@@ -61,13 +60,6 @@ class BackupControllerTest extends TestCase
 
         $adminLogProperty = $reflectionClass->getProperty('adminLog');
         $adminLogProperty->setValue($controller, $this->adminLogMock);
-
-        $containerProperty = $reflectionClass->getProperty('container');
-        $container = new ContainerBuilder();
-        $container->set('phpmyfaq.backup', $this->backupServiceMock);
-        $container->set('phpmyfaq.admin.admin-log', $this->adminLogMock);
-        $container->set('session', $this->session);
-        $containerProperty->setValue($controller, $container);
 
         // Berechtigung immer erlauben
         $this->permissionMock->method('hasPermission')->willReturn(true);

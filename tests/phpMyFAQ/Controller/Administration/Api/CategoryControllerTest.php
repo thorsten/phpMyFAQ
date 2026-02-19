@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
+use phpMyFAQ\Category\Image;
+use phpMyFAQ\Category\Order;
+use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Strings;
@@ -16,6 +19,9 @@ use Symfony\Component\HttpFoundation\Request;
 class CategoryControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private Image $categoryImage;
+    private Order $categoryOrder;
+    private Permission $categoryPermission;
 
     /**
      * @throws Exception
@@ -33,6 +39,9 @@ class CategoryControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+        $this->categoryImage = $this->createStub(Image::class);
+        $this->categoryOrder = $this->createStub(Order::class);
+        $this->categoryPermission = $this->createStub(Permission::class);
     }
 
     /**
@@ -42,7 +51,7 @@ class CategoryControllerTest extends TestCase
     {
         $requestData = json_encode(['csrfToken' => 'test-token', 'categoryId' => 1]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new CategoryController();
+        $controller = new CategoryController($this->categoryImage, $this->categoryOrder, $this->categoryPermission);
 
         $this->expectException(\Exception::class);
         $controller->delete($request);
@@ -54,7 +63,7 @@ class CategoryControllerTest extends TestCase
     public function testPermissionsRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new CategoryController();
+        $controller = new CategoryController($this->categoryImage, $this->categoryOrder, $this->categoryPermission);
 
         $this->expectException(\Exception::class);
         $controller->permissions($request);
@@ -66,7 +75,7 @@ class CategoryControllerTest extends TestCase
     public function testTranslationsRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new CategoryController();
+        $controller = new CategoryController($this->categoryImage, $this->categoryOrder, $this->categoryPermission);
 
         $this->expectException(\Exception::class);
         $controller->translations($request);
@@ -79,7 +88,7 @@ class CategoryControllerTest extends TestCase
     {
         $requestData = json_encode(['csrfToken' => 'test-token', 'categoryId' => 1]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new CategoryController();
+        $controller = new CategoryController($this->categoryImage, $this->categoryOrder, $this->categoryPermission);
 
         $this->expectException(\Exception::class);
         $controller->updateOrder($request);
@@ -91,7 +100,7 @@ class CategoryControllerTest extends TestCase
     public function testDeleteWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new CategoryController();
+        $controller = new CategoryController($this->categoryImage, $this->categoryOrder, $this->categoryPermission);
 
         $this->expectException(\Exception::class);
         $controller->delete($request);
@@ -103,7 +112,7 @@ class CategoryControllerTest extends TestCase
     public function testUpdateOrderWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new CategoryController();
+        $controller = new CategoryController($this->categoryImage, $this->categoryOrder, $this->categoryPermission);
 
         $this->expectException(\Exception::class);
         $controller->updateOrder($request);
@@ -116,7 +125,7 @@ class CategoryControllerTest extends TestCase
     {
         $requestData = json_encode(['categoryId' => 1]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new CategoryController();
+        $controller = new CategoryController($this->categoryImage, $this->categoryOrder, $this->categoryPermission);
 
         $this->expectException(\Exception::class);
         $controller->delete($request);
@@ -129,7 +138,7 @@ class CategoryControllerTest extends TestCase
     {
         $requestData = json_encode(['categoryId' => 1]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new CategoryController();
+        $controller = new CategoryController($this->categoryImage, $this->categoryOrder, $this->categoryPermission);
 
         $this->expectException(\Exception::class);
         $controller->updateOrder($request);

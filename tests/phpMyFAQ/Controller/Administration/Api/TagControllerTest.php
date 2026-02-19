@@ -7,6 +7,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 class TagControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private Tags $tags;
 
     /**
      * @throws Exception
@@ -33,6 +35,7 @@ class TagControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+        $this->tags = $this->createStub(Tags::class);
     }
 
     /**
@@ -42,7 +45,7 @@ class TagControllerTest extends TestCase
     {
         $requestData = json_encode(['csrf' => 'test-token', 'id' => 1, 'tag' => 'test']);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new TagController();
+        $controller = new TagController($this->tags);
 
         $this->expectException(\Exception::class);
         $controller->update($request);
@@ -54,7 +57,7 @@ class TagControllerTest extends TestCase
     public function testSearchRequiresAuthentication(): void
     {
         $request = new Request(['search' => 'test']);
-        $controller = new TagController();
+        $controller = new TagController($this->tags);
 
         $this->expectException(\Exception::class);
         $controller->search($request);
@@ -66,7 +69,7 @@ class TagControllerTest extends TestCase
     public function testDeleteRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new TagController();
+        $controller = new TagController($this->tags);
 
         $this->expectException(\Exception::class);
         $controller->delete($request);
@@ -78,7 +81,7 @@ class TagControllerTest extends TestCase
     public function testUpdateWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new TagController();
+        $controller = new TagController($this->tags);
 
         $this->expectException(\Exception::class);
         $controller->update($request);
@@ -91,7 +94,7 @@ class TagControllerTest extends TestCase
     {
         $requestData = json_encode(['id' => 1, 'tag' => 'test']);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new TagController();
+        $controller = new TagController($this->tags);
 
         $this->expectException(\Exception::class);
         $controller->update($request);
