@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use Exception;
+use phpMyFAQ\Administration\Session;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
@@ -34,6 +35,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class SessionController extends AbstractAdministrationApiController
 {
+    public function __construct(
+        private readonly Session $adminSession,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      */
@@ -48,8 +55,7 @@ final class SessionController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $session = $this->container->get(id: 'phpmyfaq.admin.session');
-        $data = $session->getSessionsByDate(
+        $data = $this->adminSession->getSessionsByDate(
             strtotime((string) $requestData->firstHour),
             strtotime((string) $requestData->lastHour),
         );

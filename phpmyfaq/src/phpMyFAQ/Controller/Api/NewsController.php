@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller\Api;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\News;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class NewsController extends AbstractApiController
@@ -115,12 +116,13 @@ final class NewsController extends AbstractApiController
             }
         }'),
     )]
-    #[Route('/api/v3.2/news', name: 'api_news_list', methods: ['GET'])]
-    public function list(): JsonResponse
+    #[Route('/api/v3.2/news', name: 'api.news.list', methods: ['GET'])]
+    public function list(Request $request): JsonResponse
     {
         // Get pagination and sorting parameters
-        $pagination = $this->getPaginationRequest();
+        $pagination = $this->getPaginationRequest($request);
         $sort = $this->getSortRequest(
+            $request,
             allowedFields: ['id', 'datum', 'header', 'author_name'],
             defaultField: 'datum',
             defaultOrder: 'desc',
@@ -140,6 +142,6 @@ final class NewsController extends AbstractApiController
         // Get total count
         $total = $news->countLatestData();
 
-        return $this->paginatedResponse(data: $data, total: $total, pagination: $pagination, sort: $sort);
+        return $this->paginatedResponse($request, data: $data, total: $total, pagination: $pagination, sort: $sort);
     }
 }

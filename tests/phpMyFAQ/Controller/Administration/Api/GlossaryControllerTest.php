@@ -6,6 +6,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Glossary;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 class GlossaryControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private Glossary $glossary;
 
     /**
      * @throws Exception
@@ -33,6 +35,7 @@ class GlossaryControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+        $this->glossary = $this->createStub(Glossary::class);
     }
 
     /**
@@ -41,7 +44,7 @@ class GlossaryControllerTest extends TestCase
     public function testFetchRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new GlossaryController();
+        $controller = new GlossaryController($this->glossary);
 
         $this->expectException(\Exception::class);
         $controller->fetch($request);
@@ -54,7 +57,7 @@ class GlossaryControllerTest extends TestCase
     {
         $requestData = json_encode(['csrf' => 'test-token', 'id' => 1, 'lang' => 'en']);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new GlossaryController();
+        $controller = new GlossaryController($this->glossary);
 
         $this->expectException(\Exception::class);
         $controller->delete($request);
@@ -72,7 +75,7 @@ class GlossaryControllerTest extends TestCase
             'definition' => 'Definition',
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new GlossaryController();
+        $controller = new GlossaryController($this->glossary);
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -91,7 +94,7 @@ class GlossaryControllerTest extends TestCase
             'definition' => 'Definition',
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new GlossaryController();
+        $controller = new GlossaryController($this->glossary);
 
         $this->expectException(\Exception::class);
         $controller->update($request);
@@ -103,7 +106,7 @@ class GlossaryControllerTest extends TestCase
     public function testDeleteWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new GlossaryController();
+        $controller = new GlossaryController($this->glossary);
 
         $this->expectException(\Exception::class);
         $controller->delete($request);
@@ -115,7 +118,7 @@ class GlossaryControllerTest extends TestCase
     public function testCreateWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new GlossaryController();
+        $controller = new GlossaryController($this->glossary);
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -127,7 +130,7 @@ class GlossaryControllerTest extends TestCase
     public function testUpdateWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new GlossaryController();
+        $controller = new GlossaryController($this->glossary);
 
         $this->expectException(\Exception::class);
         $controller->update($request);
@@ -140,7 +143,7 @@ class GlossaryControllerTest extends TestCase
     {
         $requestData = json_encode(['id' => 1, 'lang' => 'en']);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new GlossaryController();
+        $controller = new GlossaryController($this->glossary);
 
         $this->expectException(\Exception::class);
         $controller->delete($request);

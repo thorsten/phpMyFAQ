@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Administration\Faq as AdminFaq;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Twig\Extensions\LanguageCodeTwigExtension;
@@ -30,6 +31,12 @@ use Twig\Extension\AttributeExtension;
 
 final class OrphanedFaqsController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly AdminFaq $adminFaq,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws LoaderError
@@ -40,7 +47,7 @@ final class OrphanedFaqsController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $faq = $this->container->get(id: 'phpmyfaq.admin.faq');
+        $faq = $this->adminFaq;
 
         $this->addExtension(new AttributeExtension(LanguageCodeTwigExtension::class));
 

@@ -2,6 +2,8 @@
 
 namespace phpMyFAQ\Controller;
 
+use phpMyFAQ\CustomPage;
+use phpMyFAQ\Faq\Statistics as FaqStatistics;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\TemplateException;
@@ -15,6 +17,8 @@ use Twig\Environment;
 class SitemapControllerTest extends TestCase
 {
     private Environment $twig;
+    private FaqStatistics $faqStatistics;
+    private CustomPage $customPage;
     private SitemapController $controller;
 
     /**
@@ -34,7 +38,9 @@ class SitemapControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->twig = $this->createStub(Environment::class);
-        $this->controller = new SitemapController();
+        $this->faqStatistics = $this->createStub(FaqStatistics::class);
+        $this->customPage = $this->createStub(CustomPage::class);
+        $this->controller = new SitemapController($this->faqStatistics, $this->customPage);
     }
 
     /**

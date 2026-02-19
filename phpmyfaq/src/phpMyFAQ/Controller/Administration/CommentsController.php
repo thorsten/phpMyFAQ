@@ -19,10 +19,12 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Comments;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\News;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Pagination\UrlConfig;
 use phpMyFAQ\Session\Token;
@@ -37,6 +39,13 @@ use Twig\Extra\Intl\IntlExtension;
 
 final class CommentsController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly Comments $comments,
+        private readonly News $news,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws LoaderError
      * @throws Exception
@@ -50,17 +59,14 @@ final class CommentsController extends AbstractAdministrationController
         $page = Filter::filterVar($request->query->get(key: 'page'), FILTER_VALIDATE_INT);
         $page = max(1, $page);
 
-        $comment = $this->container->get(id: 'phpmyfaq.comments');
-
         $itemsPerPage = 10;
-        $allFaqComments = $comment->getAllComments();
-        $allNewsComments = $comment->getAllComments(CommentType::NEWS);
+        $allFaqComments = $this->comments->getAllComments();
+        $allNewsComments = $this->comments->getAllComments(CommentType::NEWS);
 
         $faqComments = array_slice($allFaqComments, ($page - 1) * $itemsPerPage, $itemsPerPage);
         $newsComments = array_slice($allNewsComments, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
-        $news = $this->container->get(id: 'phpmyfaq.news');
-        $newsHeader = $news->getHeader();
+        $newsHeader = $this->news->getHeader();
 
         $faqCommentsPagination = new Pagination(
             baseUrl: $request->getUri(),

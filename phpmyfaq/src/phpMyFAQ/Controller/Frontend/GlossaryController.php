@@ -19,9 +19,11 @@ namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Glossary;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Pagination\UrlConfig;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\UserSession;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -29,6 +31,13 @@ use Twig\Error\LoaderError;
 
 final class GlossaryController extends AbstractFrontController
 {
+    public function __construct(
+        private readonly UserSession $faqSession,
+        private readonly Glossary $glossary,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws LoaderError
@@ -36,14 +45,12 @@ final class GlossaryController extends AbstractFrontController
      */ #[Route(path: '/glossary.html', name: 'public.glossary', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        $faqSession = $this->container->get('phpmyfaq.user.session');
-        $faqSession->setCurrentUser($this->currentUser);
-        $faqSession->userTracking('glossary', 0);
+        $this->faqSession->setCurrentUser($this->currentUser);
+        $this->faqSession->userTracking('glossary', 0);
 
         $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT, 1);
 
-        $glossary = $this->container->get('phpmyfaq.glossary');
-        $glossaryItems = $glossary->fetchAll();
+        $glossaryItems = $this->glossary->fetchAll();
 
         $itemsPerPage = 8;
         $baseUrl = sprintf('%sglossary.html?page=%d', $this->configuration->getDefaultUrl(), $page);

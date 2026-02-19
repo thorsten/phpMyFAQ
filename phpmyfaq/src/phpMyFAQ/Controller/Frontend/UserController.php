@@ -21,10 +21,14 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Bookmark;
+use phpMyFAQ\Captcha\CaptchaInterface;
+use phpMyFAQ\Captcha\Helper\CaptchaHelperInterface;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\TwoFactor;
+use phpMyFAQ\User\UserSession;
 use RobThree\Auth\TwoFactorAuthException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,6 +37,15 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class UserController extends AbstractFrontController
 {
+    public function __construct(
+        private readonly UserSession $faqSession,
+        private readonly CaptchaInterface $captcha,
+        private readonly CaptchaHelperInterface $captchaHelper,
+        private readonly Gravatar $gravatar,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * Displays the request removal page.
      *
@@ -46,14 +59,13 @@ final class UserController extends AbstractFrontController
             return new RedirectResponse($this->configuration->getDefaultUrl());
         }
 
-        $faqSession = $this->container->get('phpmyfaq.user.session');
-        $faqSession->setCurrentUser($this->currentUser);
-        $faqSession->userTracking('request_removal', 0);
+        $this->faqSession->setCurrentUser($this->currentUser);
+        $this->faqSession->userTracking('request_removal', 0);
 
         return $this->render('request-removal.twig', [
             ...$this->getHeader($request),
             'privacyURL' => $this->configuration->get('main.privacyURL'),
-            'csrf' => Token::getInstance($this->container->get('session'))->getTokenInput('request-removal'),
+            'csrf' => Token::getInstance($this->session)->getTokenInput('request-removal'),
             'lang' => $this->configuration->getLanguage()->getLanguage(),
             'userId' => $this->currentUser->getUserId(),
             'defaultContentMail' => $this->currentUser->getUserId() > 0 ? $this->currentUser->getUserData('email') : '',
@@ -77,19 +89,17 @@ final class UserController extends AbstractFrontController
             return new RedirectResponse($this->configuration->getDefaultUrl());
         }
 
-        $faqSession = $this->container->get('phpmyfaq.user.session');
-        $faqSession->setCurrentUser($this->currentUser);
-        $faqSession->userTracking('bookmarks', 0);
+        $this->faqSession->setCurrentUser($this->currentUser);
+        $this->faqSession->userTracking('bookmarks', 0);
 
         $bookmark = new Bookmark($this->configuration, $this->currentUser);
-        $session = $this->container->get('session');
 
         return $this->render('bookmarks.twig', [
             ...$this->getHeader($request),
             'title' => sprintf('%s - %s', Translation::get(key: 'msgBookmarks'), $this->configuration->getTitle()),
             'bookmarksList' => $bookmark->getBookmarkList(),
-            'csrfTokenDeleteBookmark' => Token::getInstance($session)->getTokenString('delete-bookmark'),
-            'csrfTokenDeleteAllBookmarks' => Token::getInstance($session)->getTokenString('delete-all-bookmarks'),
+            'csrfTokenDeleteBookmark' => Token::getInstance($this->session)->getTokenString('delete-bookmark'),
+            'csrfTokenDeleteAllBookmarks' => Token::getInstance($this->session)->getTokenString('delete-all-bookmarks'),
         ]);
     }
 
@@ -106,20 +116,16 @@ final class UserController extends AbstractFrontController
             return new RedirectResponse($this->configuration->getDefaultUrl());
         }
 
-        $faqSession = $this->container->get('phpmyfaq.user.session');
-        $faqSession->setCurrentUser($this->currentUser);
-        $faqSession->userTracking('registration', 0);
-
-        $captcha = $this->container->get('phpmyfaq.captcha');
-        $captchaHelper = $this->container->get('phpmyfaq.captcha.helper.captcha_helper');
+        $this->faqSession->setCurrentUser($this->currentUser);
+        $this->faqSession->userTracking('registration', 0);
 
         return $this->render('register.twig', [
             ...$this->getHeader($request),
             'title' => sprintf('%s - %s', Translation::get(key: 'msgRegistration'), $this->configuration->getTitle()),
             'lang' => $this->configuration->getLanguage()->getLanguage(),
             'isWebAuthnEnabled' => $this->configuration->get('security.enableWebAuthnSupport'),
-            'captchaFieldset' => $captchaHelper->renderCaptcha(
-                $captcha,
+            'captchaFieldset' => $this->captchaHelper->renderCaptcha(
+                $this->captcha,
                 'register',
                 Translation::get(key: 'msgCaptcha'),
                 $this->currentUser->isLoggedIn(),
@@ -140,13 +146,11 @@ final class UserController extends AbstractFrontController
             return new RedirectResponse($this->configuration->getDefaultUrl());
         }
 
-        $faqSession = $this->container->get('phpmyfaq.user.session');
-        $faqSession->setCurrentUser($this->currentUser);
-        $faqSession->userTracking('user_control_panel', $this->currentUser->getUserId());
+        $this->faqSession->setCurrentUser($this->currentUser);
+        $this->faqSession->userTracking('user_control_panel', $this->currentUser->getUserId());
 
         if ($this->configuration->get('main.enableGravatarSupport')) {
-            $gravatar = $this->container->get('phpmyfaq.services.gravatar');
-            $gravatarImg = sprintf('<a target="_blank" href="https://www.gravatar.com">%s</a>', $gravatar->getImage(
+            $gravatarImg = sprintf('<a target="_blank" href="https://www.gravatar.com">%s</a>', $this->gravatar->getImage(
                 $this->currentUser->getUserData('email'),
                 ['class' => 'img-responsive rounded-circle', 'size' => 125],
             ));
@@ -174,15 +178,13 @@ final class UserController extends AbstractFrontController
             $this->configuration->getLogger()->error('2FA error: ' . $exception->getMessage());
         }
 
-        $session = $this->container->get('session');
-
         return $this->render('ucp.twig', [
             ...$this->getHeader($request),
             'headerUserControlPanel' => Translation::get(key: 'headerUserControlPanel'),
             'ucpGravatarImage' => $gravatarImg,
             'msgHeaderUserData' => Translation::get(key: 'headerUserControlPanel'),
             'userid' => $this->currentUser->getUserId(),
-            'csrf' => Token::getInstance($session)->getTokenInput('ucp'),
+            'csrf' => Token::getInstance($this->session)->getTokenInput('ucp'),
             'lang' => $this->configuration->getLanguage()->getLanguage(),
             'readonly' => $this->currentUser->isLocalUser() ? '' : 'readonly disabled',
             'msgRealName' => Translation::get(key: 'ad_user_name'),
@@ -207,10 +209,10 @@ final class UserController extends AbstractFrontController
             'ad_gen_yes' => Translation::get(key: 'ad_gen_yes'),
             'ad_gen_no' => Translation::get(key: 'ad_gen_no'),
             'msgConfirmTwofactorConfig' => Translation::get(key: 'msgConfirmTwofactorConfig'),
-            'csrfTokenRemoveTwofactor' => Token::getInstance($session)->getTokenString('remove-twofactor'),
+            'csrfTokenRemoveTwofactor' => Token::getInstance($this->session)->getTokenString('remove-twofactor'),
             'msgGravatarNotConnected' => Translation::get(key: 'msgGravatarNotConnected'),
             'webauthnSupportEnabled' => $this->configuration->get('security.enableWebAuthnSupport'),
-            'csrfExportUserData' => Token::getInstance($session)->getTokenInput('export-userdata'),
+            'csrfExportUserData' => Token::getInstance($this->session)->getTokenInput('export-userdata'),
             'exportUserDataUrl' => 'api/user/data/export',
             'msgDownloadYourData' => Translation::get(key: 'msgDownloadYourData'),
             'msgDataExportDescription' => Translation::get(key: 'msgDataExportDescription'),

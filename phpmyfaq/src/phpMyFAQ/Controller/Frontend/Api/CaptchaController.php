@@ -19,12 +19,19 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend\Api;
 
+use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class CaptchaController extends AbstractController
 {
+    public function __construct(
+        private readonly Captcha $captcha,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws \JsonException|\Exception
      */
@@ -36,7 +43,7 @@ final class CaptchaController extends AbstractController
         $response->headers->set('Content-Type', 'image/jpeg');
 
         // Set image content
-        $response->setContent($this->container->get(id: 'phpmyfaq.captcha')->getCaptchaImage());
+        $response->setContent($this->captcha->getCaptchaImage());
 
         return $response;
     }

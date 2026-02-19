@@ -38,6 +38,14 @@ final class CategoryController extends AbstractFrontController
 {
     private CategoryHelper $categoryHelper;
 
+    public function __construct(
+        private readonly UserSession $userSession,
+        private readonly Category $category,
+        private readonly Faq $faq,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * Displays a specific category with its FAQs
      *
@@ -46,8 +54,7 @@ final class CategoryController extends AbstractFrontController
     #[Route(path: '/category/{categoryId}/{slug}.html', name: 'public.category.show', methods: ['GET'])]
     public function show(Request $request): Response
     {
-        $faqSession = $this->container->get('phpmyfaq.user.session');
-        $faqSession->setCurrentUser($this->currentUser);
+        $this->userSession->setCurrentUser($this->currentUser);
 
         $categoryId = Filter::filterVar($request->attributes->get('categoryId'), FILTER_VALIDATE_INT);
         $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
@@ -56,7 +63,7 @@ final class CategoryController extends AbstractFrontController
         $faq = $this->initializeFaq($currentGroups);
         $this->categoryHelper = $this->createCategoryHelper();
 
-        $templateVars = $this->renderSpecificCategory($request, $faqSession, $categoryId, $category, $faq);
+        $templateVars = $this->renderSpecificCategory($request, $this->userSession, $categoryId, $category, $faq);
 
         return $this->render('show.twig', $templateVars);
     }
@@ -69,15 +76,14 @@ final class CategoryController extends AbstractFrontController
     #[Route(path: '/show-categories.html', name: 'public.category.showAll', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        $faqSession = $this->container->get('phpmyfaq.user.session');
-        $faqSession->setCurrentUser($this->currentUser);
+        $this->userSession->setCurrentUser($this->currentUser);
 
         $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
 
         $category = $this->initializeCategory($currentGroups);
         $this->categoryHelper = $this->createCategoryHelper();
 
-        $templateVars = $this->renderAllCategories($request, $faqSession, $category);
+        $templateVars = $this->renderAllCategories($request, $this->userSession, $category);
 
         return $this->render('show.twig', $templateVars);
     }
@@ -90,7 +96,7 @@ final class CategoryController extends AbstractFrontController
      */
     private function initializeCategory(array $currentGroups): Category
     {
-        $category = $this->container->get('phpmyfaq.category');
+        $category = $this->category;
         $category->setUser($this->currentUser->getUserId());
         $category->setGroups($currentGroups);
         $category->buildCategoryTree();
@@ -106,7 +112,7 @@ final class CategoryController extends AbstractFrontController
      */
     private function initializeFaq(array $currentGroups): Faq
     {
-        $faq = $this->container->get('phpmyfaq.faq');
+        $faq = $this->faq;
         $faq->setUser($this->currentUser->getUserId());
         $faq->setGroups($currentGroups);
 

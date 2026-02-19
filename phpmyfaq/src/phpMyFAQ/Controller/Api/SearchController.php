@@ -25,6 +25,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Link\Util\TitleSlugifier;
+use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -34,6 +35,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class SearchController extends AbstractApiController
 {
+    public function __construct(
+        private readonly Search $search,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      */
@@ -129,19 +136,19 @@ final class SearchController extends AbstractApiController
     #[Route(path: 'v3.2/search', name: 'api.search', methods: ['GET'])]
     public function search(Request $request): JsonResponse
     {
-        $search = $this->container->get(id: 'phpmyfaq.search');
-        $search->setCategory(new Category($this->configuration));
+        $this->search->setCategory(new Category($this->configuration));
 
         $faqPermission = new Permission($this->configuration);
         $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
 
         $searchString = Filter::filterVar($request->query->get(key: 'q'), FILTER_SANITIZE_SPECIAL_CHARS);
-        $searchResults = $search->search(searchTerm: $searchString, allLanguages: false);
+        $searchResults = $this->search->search(searchTerm: $searchString, allLanguages: false);
         $searchResultSet->reviewResultSet($searchResults);
 
         // Get pagination and sorting parameters
-        $pagination = $this->getPaginationRequest();
+        $pagination = $this->getPaginationRequest($request);
         $sort = $this->getSortRequest(
+            $request,
             allowedFields: ['id', 'question', 'category_id'],
             defaultField: 'id',
             defaultOrder: 'asc',
@@ -180,6 +187,7 @@ final class SearchController extends AbstractApiController
             $result = array_slice($allResults, $pagination->offset, $pagination->limit);
 
             return $this->paginatedResponse(
+                $request,
                 data: array_values($result),
                 total: $total,
                 pagination: $pagination,
@@ -187,7 +195,7 @@ final class SearchController extends AbstractApiController
             );
         }
 
-        return $this->paginatedResponse(data: [], total: 0, pagination: $pagination, sort: $sort);
+        return $this->paginatedResponse($request, data: [], total: 0, pagination: $pagination, sort: $sort);
     }
 
     /**
@@ -226,7 +234,7 @@ final class SearchController extends AbstractApiController
     #[Route(path: 'v3.2/searches/popular', name: 'api.search.popular', methods: ['GET'])]
     public function popular(): JsonResponse
     {
-        $result = $this->container->get(id: 'phpmyfaq.search')->getMostPopularSearches(numResults: 7, withLang: true);
+        $result = $this->search->getMostPopularSearches(numResults: 7, withLang: true);
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
             return $this->json([], Response::HTTP_NOT_FOUND);

@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Auth;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -31,6 +32,12 @@ use Twig\Error\LoaderError;
 
 final class PasswordChangeController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly Auth $auth,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws LoaderError
      * @throws Exception
@@ -64,7 +71,7 @@ final class PasswordChangeController extends AbstractAdministrationController
             throw new Exception('Invalid CSRF token');
         }
 
-        $auth = $this->container->get(id: 'phpmyfaq.auth');
+        $auth = $this->auth;
         $authSource = $auth->selectAuth($this->currentUser->getAuthSource('name'));
         $authSource->getEncryptionContainer($this->currentUser->getAuthData('encType'));
 

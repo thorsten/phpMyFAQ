@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Attachment\AttachmentCollection;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -35,6 +36,12 @@ use Twig\Extension\AttributeExtension;
 
 final class AttachmentsController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly AttachmentCollection $attachmentCollection,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws LoaderError
@@ -48,7 +55,7 @@ final class AttachmentsController extends AbstractAdministrationController
         $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT);
         $page = max(1, $page);
 
-        $collection = $this->container->get(id: 'phpmyfaq.attachment-collection');
+        $collection = $this->attachmentCollection;
 
         $itemsPerPage = 24;
         $allCrumbs = $collection->getBreadcrumbs();

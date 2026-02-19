@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller\Api;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Permission\MediumPermission;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 final class GroupController extends AbstractApiController
 {
@@ -107,17 +108,23 @@ final class GroupController extends AbstractApiController
         }',
     ))]
     #[OA\Response(response: 401, description: 'If the user is not authenticated.')]
-    #[Route(path: 'v3.2/groups', name: 'api.groups', methods: ['GET'])]
-    public function list(): JsonResponse
+    #[Route(path: 'v3.2/groups', name: 'api.groups.list', methods: ['GET'])]
+    public function list(?Request $request = null): JsonResponse
     {
         $this->userIsAuthenticated();
+        $request ??= Request::createFromGlobals();
 
         $mediumPermission = new MediumPermission($this->configuration);
         $allGroups = $mediumPermission->getAllGroups($this->currentUser);
 
         // Get pagination and sorting parameters
-        $pagination = $this->getPaginationRequest();
-        $sort = $this->getSortRequest(allowedFields: ['group-id'], defaultField: 'group-id', defaultOrder: 'asc');
+        $pagination = $this->getPaginationRequest($request);
+        $sort = $this->getSortRequest(
+            $request,
+            allowedFields: ['group-id'],
+            defaultField: 'group-id',
+            defaultOrder: 'asc',
+        );
 
         $total = is_countable($allGroups) ? count($allGroups) : 0;
 
@@ -132,6 +139,7 @@ final class GroupController extends AbstractApiController
         $result = array_slice($allGroups, $pagination->offset, $pagination->limit);
 
         return $this->paginatedResponse(
+            $request,
             data: array_values($result),
             total: $total,
             pagination: $pagination,

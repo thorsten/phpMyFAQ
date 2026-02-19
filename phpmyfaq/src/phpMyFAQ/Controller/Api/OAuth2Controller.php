@@ -23,6 +23,12 @@ final class OAuth2Controller extends AbstractApiController
 {
     private ?OAuth2AuthorizationServer $authorizationServer = null;
 
+    public function __construct(
+        private readonly OAuth2AuthorizationServer $oauth2AuthorizationServer,
+    ) {
+        parent::__construct();
+    }
+
     public function setAuthorizationServer(OAuth2AuthorizationServer $authorizationServer): void
     {
         $this->authorizationServer = $authorizationServer;
@@ -145,17 +151,6 @@ final class OAuth2Controller extends AbstractApiController
             return $this->authorizationServer;
         }
 
-        $serviceId = 'phpmyfaq.auth.oauth2.authorization-server';
-        if (!$this->container->has($serviceId)) {
-            throw new \RuntimeException('OAuth2 authorization server service not registered: ' . $serviceId);
-        }
-
-        $server = $this->container->get($serviceId);
-        if (!$server instanceof OAuth2AuthorizationServer) {
-            throw new \RuntimeException('OAuth2 authorization server service returned an unexpected type: '
-            . $serviceId);
-        }
-
-        return $server;
+        return $this->oauth2AuthorizationServer;
     }
 }

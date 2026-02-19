@@ -8,6 +8,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 class UserControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private CurrentUser $currentUserService;
 
     /**
      * @throws Exception
@@ -33,6 +35,7 @@ class UserControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+        $this->currentUserService = $this->createStub(CurrentUser::class);
     }
 
     /**
@@ -41,7 +44,7 @@ class UserControllerTest extends TestCase
     public function testListRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new UserController();
+        $controller = new UserController($this->currentUserService);
 
         $this->expectException(\Exception::class);
         $controller->list($request);
@@ -52,7 +55,7 @@ class UserControllerTest extends TestCase
      */
     public function testCsvExportRequiresAuthentication(): void
     {
-        $controller = new UserController();
+        $controller = new UserController($this->currentUserService);
 
         $this->expectException(\Exception::class);
         $controller->csvExport();
@@ -64,7 +67,7 @@ class UserControllerTest extends TestCase
     public function testUserDataRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new UserController();
+        $controller = new UserController($this->currentUserService);
 
         $this->expectException(\Exception::class);
         $controller->userData($request);
@@ -76,7 +79,7 @@ class UserControllerTest extends TestCase
     public function testUserPermissionsRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new UserController();
+        $controller = new UserController($this->currentUserService);
 
         $this->expectException(\Exception::class);
         $controller->userPermissions($request);
@@ -89,7 +92,7 @@ class UserControllerTest extends TestCase
     {
         $requestData = json_encode(['csrfToken' => 'test-token', 'userId' => 1]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController();
+        $controller = new UserController($this->currentUserService);
 
         $this->expectException(\Exception::class);
         $controller->activate($request);
@@ -107,7 +110,7 @@ class UserControllerTest extends TestCase
             'passwordRepeat' => 'password123',
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController();
+        $controller = new UserController($this->currentUserService);
 
         $this->expectException(\Exception::class);
         $controller->overwritePassword($request);
@@ -120,7 +123,7 @@ class UserControllerTest extends TestCase
     {
         $requestData = json_encode(['csrfToken' => 'test-token', 'userId' => 1]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController();
+        $controller = new UserController($this->currentUserService);
 
         $this->expectException(\Exception::class);
         $controller->deleteUser($request);
@@ -142,7 +145,7 @@ class UserControllerTest extends TestCase
             'isSuperAdmin' => false,
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController();
+        $controller = new UserController($this->currentUserService);
 
         $this->expectException(\Exception::class);
         $controller->addUser($request);
@@ -161,7 +164,7 @@ class UserControllerTest extends TestCase
             'user_status' => 'active',
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController();
+        $controller = new UserController($this->currentUserService);
 
         $this->expectException(\Exception::class);
         $controller->editUser($request);
@@ -178,7 +181,7 @@ class UserControllerTest extends TestCase
             'userRights' => [1, 2, 3],
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController();
+        $controller = new UserController($this->currentUserService);
 
         $this->expectException(\Exception::class);
         $controller->updateUserRights($request);
@@ -190,7 +193,7 @@ class UserControllerTest extends TestCase
     public function testActivateWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new UserController();
+        $controller = new UserController($this->currentUserService);
 
         $this->expectException(\Exception::class);
         $controller->activate($request);
@@ -202,7 +205,7 @@ class UserControllerTest extends TestCase
     public function testOverwritePasswordWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new UserController();
+        $controller = new UserController($this->currentUserService);
 
         $this->expectException(\Exception::class);
         $controller->overwritePassword($request);
@@ -214,7 +217,7 @@ class UserControllerTest extends TestCase
     public function testDeleteUserWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new UserController();
+        $controller = new UserController($this->currentUserService);
 
         $this->expectException(\Exception::class);
         $controller->deleteUser($request);
@@ -226,7 +229,7 @@ class UserControllerTest extends TestCase
     public function testAddUserWithInvalidJsonThrowsException(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new UserController();
+        $controller = new UserController($this->currentUserService);
 
         $this->expectException(\Exception::class);
         $controller->addUser($request);
@@ -239,7 +242,7 @@ class UserControllerTest extends TestCase
     {
         $requestData = json_encode(['userId' => 1]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController();
+        $controller = new UserController($this->currentUserService);
 
         $this->expectException(\Exception::class);
         $controller->activate($request);
@@ -256,7 +259,7 @@ class UserControllerTest extends TestCase
             'passwordRepeat' => 'password123',
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController();
+        $controller = new UserController($this->currentUserService);
 
         $this->expectException(\Exception::class);
         $controller->overwritePassword($request);
@@ -269,7 +272,7 @@ class UserControllerTest extends TestCase
     {
         $requestData = json_encode(['userId' => 1]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController();
+        $controller = new UserController($this->currentUserService);
 
         $this->expectException(\Exception::class);
         $controller->deleteUser($request);
@@ -287,7 +290,7 @@ class UserControllerTest extends TestCase
             'password' => 'password123',
         ]);
         $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController();
+        $controller = new UserController($this->currentUserService);
 
         $this->expectException(\Exception::class);
         $controller->addUser($request);

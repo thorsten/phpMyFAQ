@@ -34,6 +34,14 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ElasticsearchController extends AbstractController
 {
+    public function __construct(
+        private readonly Elasticsearch $elasticsearch,
+        private readonly Faq $faq,
+        private readonly CustomPage $customPage,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws \Exception
      */
@@ -42,11 +50,8 @@ final class ElasticsearchController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        /** @var Elasticsearch $elasticsearch */
-        $elasticsearch = $this->container->get(id: 'phpmyfaq.instance.elasticsearch');
-
         try {
-            $elasticsearch->createIndex();
+            $this->elasticsearch->createIndex();
             return $this->json(['success' => Translation::get(
                 'msgAdminElasticsearchCreateIndex_success',
             )], Response::HTTP_OK);
@@ -63,11 +68,8 @@ final class ElasticsearchController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        /** @var Elasticsearch $elasticsearch */
-        $elasticsearch = $this->container->get(id: 'phpmyfaq.instance.elasticsearch');
-
         try {
-            $elasticsearch->dropIndex();
+            $this->elasticsearch->dropIndex();
             return $this->json(['success' => Translation::get(
                 'msgAdminElasticsearchDropIndex_success',
             )], Response::HTTP_OK);
@@ -84,25 +86,18 @@ final class ElasticsearchController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        /** @var Elasticsearch $elasticsearch */
-        $elasticsearch = $this->container->get(id: 'phpmyfaq.instance.elasticsearch');
-
-        /** @var Faq $faq */
-        $faq = $this->container->get(id: 'phpmyfaq.faq');
-        $faq->getAllFaqs();
+        $this->faq->getAllFaqs();
 
         // Index FAQs
-        $bulkIndexResult = $elasticsearch->bulkIndex($faq->faqRecords);
+        $bulkIndexResult = $this->elasticsearch->bulkIndex($this->faq->faqRecords);
         if (!isset($bulkIndexResult['success'])) {
             return $this->json(['error' => $bulkIndexResult], Response::HTTP_BAD_REQUEST);
         }
 
         // Index custom pages
-        /** @var CustomPage $customPage */
-        $customPage = $this->container->get(id: 'phpmyfaq.custom-page');
-        $pages = $customPage->getAllPages();
+        $pages = $this->customPage->getAllPages();
 
-        $bulkIndexPagesResult = $elasticsearch->bulkIndexCustomPages($pages);
+        $bulkIndexPagesResult = $this->elasticsearch->bulkIndexCustomPages($pages);
         if (!isset($bulkIndexPagesResult['success'])) {
             return $this->json([
                 'error' => 'FAQs indexed but custom pages failed: ' . json_encode($bulkIndexPagesResult),
@@ -142,10 +137,7 @@ final class ElasticsearchController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        /** @var Elasticsearch $elasticsearch */
-        $elasticsearch = $this->container->get(id: 'phpmyfaq.instance.elasticsearch');
-
-        $isAvailable = $elasticsearch->isAvailable();
+        $isAvailable = $this->elasticsearch->isAvailable();
 
         return $this->json(
             [

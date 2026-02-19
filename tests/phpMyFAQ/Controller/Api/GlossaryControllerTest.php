@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Glossary;
 use phpMyFAQ\Language;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
@@ -30,7 +31,10 @@ class GlossaryControllerTest extends TestCase
 
     public function testListReturnsGlossaryItems(): void
     {
-        $glossaryController = new GlossaryController();
+        $glossaryController = new GlossaryController(
+            $this->createStub(Glossary::class),
+            $this->createStub(Language::class),
+        );
 
         $request = Request::create(
             '/api/v3.2/glossary',
@@ -55,7 +59,10 @@ class GlossaryControllerTest extends TestCase
 
     public function testListHandlesAcceptLanguageHeader(): void
     {
-        $glossaryController = new GlossaryController();
+        $glossaryController = new GlossaryController(
+            $this->createStub(Glossary::class),
+            $this->createStub(Language::class),
+        );
 
         $request = Request::create(
             '/api/v3.2/glossary',
@@ -76,7 +83,10 @@ class GlossaryControllerTest extends TestCase
 
     public function testListWithoutAcceptLanguageHeader(): void
     {
-        $glossaryController = new GlossaryController();
+        $glossaryController = new GlossaryController(
+            $this->createStub(Glossary::class),
+            $this->createStub(Language::class),
+        );
 
         $request = Request::create('/api/v3.2/glossary', 'GET');
 
@@ -88,7 +98,10 @@ class GlossaryControllerTest extends TestCase
 
     public function testListReturnsJsonData(): void
     {
-        $glossaryController = new GlossaryController();
+        $glossaryController = new GlossaryController(
+            $this->createStub(Glossary::class),
+            $this->createStub(Language::class),
+        );
 
         $request = Request::create('/api/v3.2/glossary', 'GET');
 
@@ -99,7 +112,10 @@ class GlossaryControllerTest extends TestCase
 
     public function testListResponseContentIsNotNull(): void
     {
-        $glossaryController = new GlossaryController();
+        $glossaryController = new GlossaryController(
+            $this->createStub(Glossary::class),
+            $this->createStub(Language::class),
+        );
 
         $request = Request::create('/api/v3.2/glossary', 'GET');
 
@@ -110,7 +126,10 @@ class GlossaryControllerTest extends TestCase
 
     public function testListReturnsEmptyArrayOn404(): void
     {
-        $glossaryController = new GlossaryController();
+        $glossaryController = new GlossaryController(
+            $this->createStub(Glossary::class),
+            $this->createStub(Language::class),
+        );
 
         $request = Request::create('/api/v3.2/glossary', 'GET');
 

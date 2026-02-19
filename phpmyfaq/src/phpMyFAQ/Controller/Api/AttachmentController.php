@@ -140,8 +140,9 @@ class AttachmentController extends AbstractApiController
         $faqId = (int) Filter::filterVar($request->attributes->get(key: 'faqId'), FILTER_VALIDATE_INT);
 
         // Get pagination and sorting parameters
-        $pagination = $this->getPaginationRequest();
+        $pagination = $this->getPaginationRequest($request);
         $sort = $this->getSortRequest(
+            $request,
             allowedFields: ['id', 'filename', 'mime_type', 'filesize', 'created'],
             defaultField: 'id',
             defaultOrder: 'asc',
@@ -162,7 +163,13 @@ class AttachmentController extends AbstractApiController
             $total = AttachmentFactory::countByRecordId($this->configuration, $faqId);
 
             // Return paginated response with envelope
-            return $this->paginatedResponse(data: $attachments, total: $total, pagination: $pagination, sort: $sort);
+            return $this->paginatedResponse(
+                $request,
+                data: $attachments,
+                total: $total,
+                pagination: $pagination,
+                sort: $sort,
+            );
         } catch (AttachmentException) {
             return $this->errorResponse(
                 message: 'Failed to fetch attachments',

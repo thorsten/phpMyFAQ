@@ -24,6 +24,9 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\StatisticsHelper;
+use phpMyFAQ\Rating;
+use phpMyFAQ\Search;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -33,6 +36,14 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class StatisticsController extends AbstractController
 {
+    public function __construct(
+        private readonly StatisticsHelper $statisticsHelper,
+        private readonly Search $search,
+        private readonly Rating $rating,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception|JsonException
      * @throws \Exception
@@ -50,7 +61,7 @@ final class StatisticsController extends AbstractController
 
         $month = Filter::filterVar($request->getPayload()->get('month'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if ($this->container->get(id: 'phpmyfaq.helper.statistics')->deleteTrackingFiles($month)) {
+        if ($this->statisticsHelper->deleteTrackingFiles($month)) {
             return $this->json(['success' => Translation::get(key: 'ad_adminlog_delete_success')], Response::HTTP_OK);
         }
 
@@ -76,7 +87,7 @@ final class StatisticsController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if ($this->container->get(id: 'phpmyfaq.search')->deleteAllSearchTerms()) {
+        if ($this->search->deleteAllSearchTerms()) {
             return $this->json(['success' => Translation::get(key: 'ad_searchterm_del_suc')], Response::HTTP_OK);
         }
 
@@ -97,7 +108,7 @@ final class StatisticsController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if ($this->container->get(id: 'phpmyfaq.rating')->deleteAll()) {
+        if ($this->rating->deleteAll()) {
             return $this->json(['success' => Translation::get(key: 'msgDeleteAllVotings')], Response::HTTP_OK);
         }
 
@@ -118,7 +129,7 @@ final class StatisticsController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if ($this->container->get(id: 'phpmyfaq.helper.statistics')->clearAllVisits()) {
+        if ($this->statisticsHelper->clearAllVisits()) {
             return $this->json(['success' => Translation::get(key: 'ad_reset_visits_success')], Response::HTTP_OK);
         }
 

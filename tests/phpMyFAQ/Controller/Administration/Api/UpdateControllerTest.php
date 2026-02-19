@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
+use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Setup\EnvironmentConfigurator;
+use phpMyFAQ\Setup\Update;
+use phpMyFAQ\Setup\Upgrade;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -16,6 +20,10 @@ use Symfony\Component\HttpFoundation\Request;
 class UpdateControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private Upgrade $upgrade;
+    private Api $adminApi;
+    private Update $update;
+    private EnvironmentConfigurator $configurator;
 
     /**
      * @throws Exception
@@ -33,6 +41,10 @@ class UpdateControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+        $this->upgrade = $this->createStub(Upgrade::class);
+        $this->adminApi = $this->createStub(Api::class);
+        $this->update = $this->createStub(Update::class);
+        $this->configurator = $this->createStub(EnvironmentConfigurator::class);
     }
 
     /**
@@ -40,7 +52,7 @@ class UpdateControllerTest extends TestCase
      */
     public function testHealthCheckRequiresAuthentication(): void
     {
-        $controller = new UpdateController();
+        $controller = new UpdateController($this->upgrade, $this->adminApi, $this->update, $this->configurator);
 
         $this->expectException(\Exception::class);
         $controller->healthCheck();
@@ -51,7 +63,7 @@ class UpdateControllerTest extends TestCase
      */
     public function testVersionsRequiresAuthentication(): void
     {
-        $controller = new UpdateController();
+        $controller = new UpdateController($this->upgrade, $this->adminApi, $this->update, $this->configurator);
 
         $this->expectException(\Exception::class);
         $controller->versions();
@@ -62,7 +74,7 @@ class UpdateControllerTest extends TestCase
      */
     public function testUpdateCheckRequiresAuthentication(): void
     {
-        $controller = new UpdateController();
+        $controller = new UpdateController($this->upgrade, $this->adminApi, $this->update, $this->configurator);
 
         $this->expectException(\Exception::class);
         $controller->updateCheck();
@@ -74,7 +86,7 @@ class UpdateControllerTest extends TestCase
     public function testDownloadPackageRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new UpdateController();
+        $controller = new UpdateController($this->upgrade, $this->adminApi, $this->update, $this->configurator);
 
         $this->expectException(\Exception::class);
         $controller->downloadPackage($request);
@@ -85,7 +97,7 @@ class UpdateControllerTest extends TestCase
      */
     public function testExtractPackageRequiresAuthentication(): void
     {
-        $controller = new UpdateController();
+        $controller = new UpdateController($this->upgrade, $this->adminApi, $this->update, $this->configurator);
 
         $this->expectException(\Exception::class);
         $controller->extractPackage();
@@ -96,7 +108,7 @@ class UpdateControllerTest extends TestCase
      */
     public function testCreateTemporaryBackupRequiresAuthentication(): void
     {
-        $controller = new UpdateController();
+        $controller = new UpdateController($this->upgrade, $this->adminApi, $this->update, $this->configurator);
 
         $this->expectException(\Exception::class);
         $controller->createTemporaryBackup();
@@ -107,7 +119,7 @@ class UpdateControllerTest extends TestCase
      */
     public function testInstallPackageRequiresAuthentication(): void
     {
-        $controller = new UpdateController();
+        $controller = new UpdateController($this->upgrade, $this->adminApi, $this->update, $this->configurator);
 
         $this->expectException(\Exception::class);
         $controller->installPackage();
@@ -118,7 +130,7 @@ class UpdateControllerTest extends TestCase
      */
     public function testUpdateDatabaseRequiresAuthentication(): void
     {
-        $controller = new UpdateController();
+        $controller = new UpdateController($this->upgrade, $this->adminApi, $this->update, $this->configurator);
 
         $this->expectException(\Exception::class);
         $controller->updateDatabase();
@@ -129,7 +141,7 @@ class UpdateControllerTest extends TestCase
      */
     public function testCleanUpRequiresAuthentication(): void
     {
-        $controller = new UpdateController();
+        $controller = new UpdateController($this->upgrade, $this->adminApi, $this->update, $this->configurator);
 
         $this->expectException(\Exception::class);
         $controller->cleanUp();

@@ -26,8 +26,10 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\PermissionHelper;
+use phpMyFAQ\Language;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
+use phpMyFAQ\System;
 use phpMyFAQ\Template\ThemeManager;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\TemplateException;
@@ -41,6 +43,14 @@ use Twig\Error\LoaderError;
 
 final class ConfigurationTabController extends AbstractAdministrationApiController
 {
+    public function __construct(
+        private readonly Language $language,
+        private readonly System $faqSystem,
+        private readonly ThemeManager $themeManager,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws TemplateException
      * @throws Exception
@@ -52,8 +62,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $language = $this->container->get(id: 'phpmyfaq.language');
-        $currentLanguage = $language->setLanguageByAcceptLanguage();
+        $currentLanguage = $this->language->setLanguageByAcceptLanguage();
 
         try {
             Translation::create()
@@ -107,7 +116,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         }
 
         try {
-            $uploadedFiles = $this->themeManager()->uploadTheme($themeName, $file->getPathname());
+            $uploadedFiles = $this->themeManager->uploadTheme($themeName, $file->getPathname());
 
             return $this->json([
                 'success' => sprintf('Theme "%s" uploaded (%d files).', $themeName, $uploadedFiles),
@@ -370,8 +379,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         $this->userIsAuthenticated();
 
         $response = new Response();
-        $faqSystem = $this->container->get(id: 'phpmyfaq.system');
-        $templates = $faqSystem->getAvailableTemplates();
+        $templates = $this->faqSystem->getAvailableTemplates();
         $htmlString = '';
 
         foreach ($templates as $template => $selected) {
@@ -514,15 +522,5 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $csrfToken = (string) $request->request->get('pmf-csrf-token', '');
         return Token::getInstance($this->session)->verifyToken('theme-manager', $csrfToken);
-    }
-
-    private function themeManager(): ThemeManager
-    {
-        $themeManager = $this->container->get(id: 'phpmyfaq.template.theme-manager');
-        if (!$themeManager instanceof ThemeManager) {
-            throw new BadRequestException('Theme manager service is not available.');
-        }
-
-        return $themeManager;
     }
 }

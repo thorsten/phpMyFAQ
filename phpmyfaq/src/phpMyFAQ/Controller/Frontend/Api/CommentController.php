@@ -19,14 +19,23 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend\Api;
 
+use phpMyFAQ\Comments;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Language;
+use phpMyFAQ\News;
+use phpMyFAQ\Notification;
+use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\StopWords;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\UserSession;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,6 +44,20 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class CommentController extends AbstractController
 {
+    public function __construct(
+        private readonly Faq $faq,
+        private readonly Comments $comments,
+        private readonly StopWords $stopWords,
+        private readonly UserSession $userSession,
+        private readonly Language $language,
+        private readonly User $user,
+        private readonly Notification $notification,
+        private readonly News $news,
+        private readonly Gravatar $gravatar,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws \JsonException
@@ -43,16 +66,11 @@ final class CommentController extends AbstractController
     #[Route(path: 'comment/create', name: 'api.private.comment', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
-        $faq = $this->container->get(id: 'phpmyfaq.faq');
-        $comment = $this->container->get(id: 'phpmyfaq.comments');
-        $stopWords = $this->container->get(id: 'phpmyfaq.stop-words');
-        $session = $this->container->get(id: 'phpmyfaq.user.session');
-        $session->setCurrentUser($this->currentUser);
+        $this->userSession->setCurrentUser($this->currentUser);
 
-        $language = $this->container->get(id: 'phpmyfaq.language');
         $languageCode = $this->configuration->get(item: 'main.languageDetection')
-            ? $language->setLanguageWithDetection($this->configuration->get(item: 'main.language'))
-            : $language->setLanguageFromConfiguration($this->configuration->get(item: 'main.language'));
+            ? $this->language->setLanguageWithDetection($this->configuration->get(item: 'main.language'))
+            : $this->language->setLanguageFromConfiguration($this->configuration->get(item: 'main.language'));
 
         if (!$this->isCommentAllowed($this->currentUser)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_FORBIDDEN);
@@ -127,8 +145,7 @@ final class CommentController extends AbstractController
 
         // Check display name and e-mail address for not logged-in users
         if (!$this->currentUser->isLoggedIn()) {
-            $user = $this->container->get(id: 'phpmyfaq.user');
-            if ($user->checkDisplayName($username) && $user->checkMailAddress($email)) {
+            if ($this->user->checkDisplayName($username) && $this->user->checkMailAddress($email)) {
                 $this->configuration->getLogger()->error(message: 'Name and email already used by registered user.');
                 return $this->json(['error' => Translation::get(key: 'errSaveComment')], Response::HTTP_CONFLICT);
             }
@@ -138,11 +155,11 @@ final class CommentController extends AbstractController
             $username !== ''
             && $email !== ''
             && $commentText !== ''
-            && $stopWords->checkBannedWord($commentText)
-            && $comment->isCommentAllowed($commentId, $languageCode, $type)
-            && $faq->isActive($commentId, $languageCode, $type)
+            && $this->stopWords->checkBannedWord($commentText)
+            && $this->comments->isCommentAllowed($commentId, $languageCode, $type)
+            && $this->faq->isActive($commentId, $languageCode, $type)
         ) {
-            $session->userTracking(action: 'save_comment', data: $commentId);
+            $this->userSession->userTracking(action: 'save_comment', data: $commentId);
             $commentEntity = new Comment();
             $commentEntity
                 ->setRecordId((int) $commentId)
@@ -156,19 +173,19 @@ final class CommentController extends AbstractController
                 ) // Already sanitized with HTML support // Plain text with line breaks
                 ->setDate((string) $request->server->get(key: 'REQUEST_TIME'));
 
-            if ($comment->create($commentEntity)) {
-                $notification = $this->container->get(id: 'phpmyfaq.notification');
+            if ($this->comments->create($commentEntity)) {
                 if ('faq' === $type) {
-                    $faq->getFaq($commentId);
-                    $notification->sendFaqCommentNotification($faq, $commentEntity);
+                    $this->faq->getFaq($commentId);
+                    $this->notification->sendFaqCommentNotification($this->faq, $commentEntity);
                 } else {
-                    $news = $this->container->get(id: 'phpmyfaq.news');
-                    $newsData = $news->get($commentId);
-                    $notification->sendNewsCommentNotification($newsData, $commentEntity);
+                    $newsData = $this->news->get($commentId);
+                    $this->notification->sendNewsCommentNotification($newsData, $commentEntity);
                 }
 
-                $gravatar = $this->container->get(id: 'phpmyfaq.services.gravatar');
-                $gravatarUrl = $gravatar->getImageUrl($commentEntity->getEmail(), ['size' => 50, 'default' => 'mm']);
+                $gravatarUrl = $this->gravatar->getImageUrl($commentEntity->getEmail(), [
+                    'size' => 50,
+                    'default' => 'mm',
+                ]);
 
                 return $this->json([
                     'success' => Translation::get(key: 'msgCommentThanks'),
@@ -182,7 +199,7 @@ final class CommentController extends AbstractController
                 ], Response::HTTP_OK);
             }
 
-            $session->userTracking(action: 'error_save_comment', data: $commentId);
+            $this->userSession->userTracking(action: 'error_save_comment', data: $commentId);
             return $this->json(['error' => Translation::get(key: 'errSaveComment')], Response::HTTP_BAD_REQUEST);
         }
 

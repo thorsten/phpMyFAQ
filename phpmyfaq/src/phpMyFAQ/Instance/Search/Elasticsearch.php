@@ -43,39 +43,7 @@ class Elasticsearch
      * Elasticsearch mapping
      * @var array<string, mixed>
      */
-    private array $mappings = [
-        '_source' => [
-            'enabled' => true,
-        ],
-        'properties' => [
-            'question' => [
-                'type' => 'search_as_you_type',
-                'analyzer' => 'autocomplete',
-                'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER,
-            ],
-            'answer' => [
-                'type' => 'search_as_you_type',
-                'analyzer' => 'autocomplete',
-                'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER,
-            ],
-            'keywords' => [
-                'type' => 'search_as_you_type',
-                'analyzer' => 'autocomplete',
-                'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER,
-            ],
-            'categories' => [
-                'type' => 'search_as_you_type',
-                'analyzer' => 'autocomplete',
-                'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER,
-            ],
-            'content_type' => [
-                'type' => 'keyword',
-            ],
-            'slug' => [
-                'type' => 'keyword',
-            ],
-        ],
-    ];
+    private array $mappings = [];
 
     /**
      * Elasticsearch constructor.
@@ -85,6 +53,7 @@ class Elasticsearch
     ) {
         $this->client = $configuration->getElasticsearch();
         $this->elasticsearchConfiguration = $configuration->getElasticsearchConfig();
+        $this->mappings = $this->buildMappings();
     }
 
     /**
@@ -109,12 +78,14 @@ class Elasticsearch
      */
     private function getParams(): array
     {
+        $tokenizer = $this->getTokenizer();
+
         return [
             'index' => $this->elasticsearchConfiguration->getIndex(),
             'body' => [
                 'settings' => [
-                    'number_of_shards' => PMF_ELASTICSEARCH_NUMBER_SHARDS,
-                    'number_of_replicas' => PMF_ELASTICSEARCH_NUMBER_REPLICAS,
+                    'number_of_shards' => $this->getNumberOfShards(),
+                    'number_of_replicas' => $this->getNumberOfReplicas(),
                     'analysis' => [
                         'filter' => [
                             'autocomplete_filter' => [
@@ -124,13 +95,13 @@ class Elasticsearch
                             ],
                             'Language_stemmer' => [
                                 'type' => 'stemmer',
-                                'name' => PMF_ELASTICSEARCH_STEMMING_LANGUAGE[$this->configuration->getDefaultLanguage()],
+                                'name' => $this->getStemmingLanguage(),
                             ],
                         ],
                         'analyzer' => [
                             'autocomplete' => [
                                 'type' => 'custom',
-                                'tokenizer' => PMF_ELASTICSEARCH_TOKENIZER,
+                                'tokenizer' => $tokenizer,
                                 'filter' => [
                                     'lowercase',
                                     'autocomplete_filter',
@@ -142,6 +113,105 @@ class Elasticsearch
                 ],
             ],
         ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function buildMappings(): array
+    {
+        $searchAnalyzer = $this->getSearchAnalyzer();
+
+        return [
+            '_source' => [
+                'enabled' => true,
+            ],
+            'properties' => [
+                'question' => [
+                    'type' => 'search_as_you_type',
+                    'analyzer' => 'autocomplete',
+                    'search_analyzer' => $searchAnalyzer,
+                ],
+                'answer' => [
+                    'type' => 'search_as_you_type',
+                    'analyzer' => 'autocomplete',
+                    'search_analyzer' => $searchAnalyzer,
+                ],
+                'keywords' => [
+                    'type' => 'search_as_you_type',
+                    'analyzer' => 'autocomplete',
+                    'search_analyzer' => $searchAnalyzer,
+                ],
+                'categories' => [
+                    'type' => 'search_as_you_type',
+                    'analyzer' => 'autocomplete',
+                    'search_analyzer' => $searchAnalyzer,
+                ],
+                'content_type' => [
+                    'type' => 'keyword',
+                ],
+                'slug' => [
+                    'type' => 'keyword',
+                ],
+            ],
+        ];
+    }
+
+    private function getSearchAnalyzer(): string
+    {
+        if (defined('PMF_ELASTICSEARCH_SEARCH_ANALYZER')) {
+            $searchAnalyzer = constant('PMF_ELASTICSEARCH_SEARCH_ANALYZER');
+            if (is_string($searchAnalyzer) && $searchAnalyzer !== '') {
+                return $searchAnalyzer;
+            }
+        }
+
+        return 'standard';
+    }
+
+    private function getTokenizer(): string
+    {
+        if (defined('PMF_ELASTICSEARCH_TOKENIZER')) {
+            return (string) constant('PMF_ELASTICSEARCH_TOKENIZER');
+        }
+
+        return 'standard';
+    }
+
+    private function getNumberOfShards(): int
+    {
+        if (defined('PMF_ELASTICSEARCH_NUMBER_SHARDS')) {
+            return (int) constant('PMF_ELASTICSEARCH_NUMBER_SHARDS');
+        }
+
+        return 2;
+    }
+
+    private function getNumberOfReplicas(): int
+    {
+        if (defined('PMF_ELASTICSEARCH_NUMBER_REPLICAS')) {
+            return (int) constant('PMF_ELASTICSEARCH_NUMBER_REPLICAS');
+        }
+
+        return 0;
+    }
+
+    private function getStemmingLanguage(): string
+    {
+        if (!defined('PMF_ELASTICSEARCH_STEMMING_LANGUAGE')) {
+            return 'english';
+        }
+
+        $defaultLanguage = $this->configuration->getDefaultLanguage();
+        $stemmingLanguages = constant('PMF_ELASTICSEARCH_STEMMING_LANGUAGE');
+
+        if (!is_array($stemmingLanguages)) {
+            return 'english';
+        }
+
+        $stemmer = $stemmingLanguages[$defaultLanguage] ?? 'english';
+
+        return is_string($stemmer) ? $stemmer : 'english';
     }
 
     /**

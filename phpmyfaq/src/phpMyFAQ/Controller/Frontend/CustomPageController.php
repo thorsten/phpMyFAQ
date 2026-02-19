@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\CustomPage;
 use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Seo;
@@ -31,6 +32,12 @@ use Twig\Error\LoaderError;
 
 final class CustomPageController extends AbstractFrontController
 {
+    public function __construct(
+        private readonly CustomPage $customPage,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * Displays a custom page by its slug
      *
@@ -48,11 +55,10 @@ final class CustomPageController extends AbstractFrontController
             ]);
         }
 
-        $customPage = $this->container->get('phpmyfaq.custom-page');
         $language = $this->configuration->getLanguage()->getLanguage();
 
         // Get page by slug
-        $pageEntity = $customPage->getBySlug($slug, $language);
+        $pageEntity = $this->customPage->getBySlug($slug, $language);
 
         // If not found or not active, show 404
         if ($pageEntity === null || !$pageEntity->isActive()) {

@@ -33,6 +33,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class TranslationController extends AbstractAdministrationApiController
 {
+    public function __construct(
+        private readonly ContentTranslationService $translationService,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * Translates content using a configured AI translation provider
      *
@@ -72,16 +78,13 @@ final class TranslationController extends AbstractAdministrationApiController
         }
 
         try {
-            /** @var ContentTranslationService $translationService */
-            $translationService = $this->container->get(id: 'phpmyfaq.translation.content-translation-service');
-
             $translationRequest = new TranslationRequest($contentType, $sourceLang, $targetLang, $fields);
 
             $result = match ($contentType) {
-                'faq' => $translationService->translateFaq($translationRequest),
-                'customPage' => $translationService->translateCustomPage($translationRequest),
-                'category' => $translationService->translateCategory($translationRequest),
-                'news' => $translationService->translateNews($translationRequest),
+                'faq' => $this->translationService->translateFaq($translationRequest),
+                'customPage' => $this->translationService->translateCustomPage($translationRequest),
+                'category' => $this->translationService->translateCategory($translationRequest),
+                'news' => $this->translationService->translateNews($translationRequest),
                 default => throw new TranslationException('Unsupported content type'),
             };
 

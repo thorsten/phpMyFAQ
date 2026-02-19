@@ -19,8 +19,11 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Administration\Category as AdminCategory;
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\Image;
 use phpMyFAQ\Category\Language\CategoryLanguageService;
+use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission as CategoryPermission;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -32,6 +35,7 @@ use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Language\LanguageCodes;
+use phpMyFAQ\Seo;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -44,6 +48,17 @@ use Twig\Error\LoaderError;
 
 final class CategoryController extends AbstractAdministrationController
 {
+    public function __construct(
+        private readonly AdminCategory $adminCategory,
+        private readonly Order $categoryOrder,
+        private readonly CategoryPermission $categoryPermission,
+        private readonly Image $categoryImage,
+        private readonly Seo $seo,
+        private readonly UserHelper $userHelper,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws LoaderError
@@ -61,9 +76,8 @@ final class CategoryController extends AbstractAdministrationController
 
         $categoryInfo = $category->getAllCategories();
 
-        $categoryOrder = $this->container->get(id: 'phpmyfaq.category.order');
-        $orderedCategories = $categoryOrder->getAllCategories();
-        $categoryTree = $categoryOrder->getCategoryTree($orderedCategories);
+        $orderedCategories = $this->categoryOrder->getAllCategories();
+        $categoryTree = $this->categoryOrder->getCategoryTree($orderedCategories);
 
         if (in_array($categoryTree, [[], null, false], true)) {
             // Fallback if no category order is available
@@ -91,11 +105,10 @@ final class CategoryController extends AbstractAdministrationController
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $category = $this->container->get(id: 'phpmyfaq.admin.category');
-        $category->setUser($currentAdminUser);
-        $category->setGroups($currentAdminGroups);
-        $category->setLanguage($this->configuration->getLanguage()->getLanguage());
-        $category->loadCategories();
+        $this->adminCategory->setUser($currentAdminUser);
+        $this->adminCategory->setGroups($currentAdminGroups);
+        $this->adminCategory->setLanguage($this->configuration->getLanguage()->getLanguage());
+        $this->adminCategory->loadCategories();
 
         return $this->render(file: '@admin/content/category.add.twig', context: [
             ...$this->getHeader($request),
@@ -119,13 +132,10 @@ final class CategoryController extends AbstractAdministrationController
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $category = $this->container->get(id: 'phpmyfaq.admin.category');
-        $categoryPermission = $this->container->get(id: 'phpmyfaq.category.permission');
-
-        $category->setUser($currentAdminUser);
-        $category->setGroups($currentAdminGroups);
-        $category->setLanguage($this->configuration->getLanguage()->getLanguage());
-        $category->loadCategories();
+        $this->adminCategory->setUser($currentAdminUser);
+        $this->adminCategory->setGroups($currentAdminGroups);
+        $this->adminCategory->setLanguage($this->configuration->getLanguage()->getLanguage());
+        $this->adminCategory->loadCategories();
 
         $parentId = (int) Filter::filterVar($request->attributes->get(key: 'parentId'), FILTER_VALIDATE_INT);
 
@@ -142,10 +152,10 @@ final class CategoryController extends AbstractAdministrationController
             ...$this->getBaseTemplateVars(),
             'faqLangCode' => $this->configuration->getLanguage()->getLanguage(),
             'parentId' => $parentId,
-            'categoryNameLangCode' => LanguageCodes::get($category->categoryName[$parentId]['lang'] ?? 'en'),
-            'userAllowed' => $categoryPermission->get(CategoryPermission::USER, [$parentId])[0] ?? -1,
-            'groupsAllowed' => $categoryPermission->get(CategoryPermission::GROUP, [$parentId]),
-            'categoryName' => $category->categoryName[$parentId]['name'],
+            'categoryNameLangCode' => LanguageCodes::get($this->adminCategory->categoryName[$parentId]['lang'] ?? 'en'),
+            'userAllowed' => $this->categoryPermission->get(CategoryPermission::USER, [$parentId])[0] ?? -1,
+            'groupsAllowed' => $this->categoryPermission->get(CategoryPermission::GROUP, [$parentId]),
+            'categoryName' => $this->adminCategory->categoryName[$parentId]['name'],
             'msgMainCategory' => Translation::get(key: 'msgMainCategory'),
             ...$templateVars,
         ]);
@@ -169,7 +179,7 @@ final class CategoryController extends AbstractAdministrationController
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $categoryPermission = new CategoryPermission($this->configuration);
-        $seo = $this->container->get(id: 'phpmyfaq.seo');
+        $seo = $this->seo;
 
         $category = new Category($this->configuration, [], false);
         $category->setUser($currentAdminUser);
@@ -180,9 +190,8 @@ final class CategoryController extends AbstractAdministrationController
         $categoryLang = Filter::filterVar($request->request->get(key: 'lang'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $uploadedFile = $request->files->get('image') ?? [];
-        $categoryImage = $this->container->get(id: 'phpmyfaq.category.image');
         if ($uploadedFile instanceof UploadedFile) {
-            $categoryImage->setUploadedFile($uploadedFile);
+            $this->categoryImage->setUploadedFile($uploadedFile);
         }
 
         $hasUploadedImage = $uploadedFile instanceof UploadedFile;
@@ -199,7 +208,7 @@ final class CategoryController extends AbstractAdministrationController
             ->setUserId(Filter::filterVar($request->request->get(key: 'user_id'), FILTER_VALIDATE_INT))
             ->setGroupId(Filter::filterVar($request->request->get(key: 'group_id'), FILTER_VALIDATE_INT) ?? -1)
             ->setActive((bool) Filter::filterVar($request->request->get(key: 'active'), FILTER_VALIDATE_INT))
-            ->setImage($hasUploadedImage ? $categoryImage->getFileName($categoryId, $categoryLang) : '')
+            ->setImage($hasUploadedImage ? $this->categoryImage->getFileName($categoryId, $categoryLang) : '')
             ->setParentId($parentId)
             ->setShowHome(Filter::filterVar($request->request->get(key: 'show_home'), FILTER_VALIDATE_INT));
 
@@ -255,7 +264,7 @@ final class CategoryController extends AbstractAdministrationController
 
             if ($hasUploadedImage) {
                 try {
-                    $categoryImage->upload();
+                    $this->categoryImage->upload();
                 } catch (Throwable $exception) {
                     $templateVars = [
                         ...$templateVars,
@@ -266,8 +275,7 @@ final class CategoryController extends AbstractAdministrationController
             }
 
             // Category Order entry
-            $categoryOrder = $this->container->get(id: 'phpmyfaq.category.order');
-            $categoryOrder->add($categoryId, $parentId);
+            $this->categoryOrder->add($categoryId, $parentId);
 
             // SEO data
             $seoEntity = new SeoEntity();
@@ -324,9 +332,6 @@ final class CategoryController extends AbstractAdministrationController
             default: 0,
         );
 
-        $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
-        $categoryPermission = $this->container->get(id: 'phpmyfaq.category.permission');
-
         $category = new Category($this->configuration, [], withPermission: false);
         $category
             ->setUser($currentAdminUser)
@@ -340,10 +345,9 @@ final class CategoryController extends AbstractAdministrationController
         $seoEntity->setReferenceId($categoryId);
         $seoEntity->setReferenceLanguage($categoryEntity->getLang());
 
-        $seoService = $this->container->get(id: 'phpmyfaq.seo');
-        $seoData = $seoService->get($seoEntity);
+        $seoData = $this->seo->get($seoEntity);
 
-        $userPermission = $categoryPermission->get(CategoryPermission::USER, [$categoryId]);
+        $userPermission = $this->categoryPermission->get(CategoryPermission::USER, [$categoryId]);
         if ($userPermission[0] === -1) {
             $allUsers = true;
             $restrictedUsers = false;
@@ -352,7 +356,7 @@ final class CategoryController extends AbstractAdministrationController
             $restrictedUsers = true;
         }
 
-        $groupPermission = $categoryPermission->get(CategoryPermission::GROUP, [$categoryId]);
+        $groupPermission = $this->categoryPermission->get(CategoryPermission::GROUP, [$categoryId]);
         if ($groupPermission[0] === -1) {
             $allGroups = true;
             $restrictedGroups = false;
@@ -395,7 +399,7 @@ final class CategoryController extends AbstractAdministrationController
             'categoryActive' => 1 === (int) $categoryEntity->getActive() ? 'checked' : '',
             'categoryShowHome' => 1 === (int) $categoryEntity->getShowHome() ? 'checked' : '',
             'categoryImageReset' => Translation::get(key: 'msgCategoryImageReset'),
-            'userSelection' => $userHelper->getAllUsersForTemplate($categoryEntity->getUserId()),
+            'userSelection' => $this->userHelper->getAllUsersForTemplate($categoryEntity->getUserId()),
             'isMediumPermission' => $this->configuration->get(item: 'security.permLevel') !== 'basic',
             'allGroupsOptions' => $allGroupsOptions,
             'allGroups' => $allGroups ? 'checked' : '',
@@ -499,8 +503,8 @@ final class CategoryController extends AbstractAdministrationController
         $translateTo = Filter::filterVar($request->query->get(key: 'translateTo'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         // Re-add permission arrays used in the template
-        $userPermission = $categoryPermission->get(CategoryPermission::USER, [$categoryId]);
-        $groupPermission = $categoryPermission->get(CategoryPermission::GROUP, [$categoryId]);
+        $userPermission = $this->categoryPermission->get(CategoryPermission::USER, [$categoryId]);
+        $groupPermission = $this->categoryPermission->get(CategoryPermission::GROUP, [$categoryId]);
 
         // Prepare language selection data via service
         $categoryLanguageService = new CategoryLanguageService();
@@ -549,7 +553,6 @@ final class CategoryController extends AbstractAdministrationController
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $categoryPermission = new CategoryPermission($this->configuration);
-        $this->container->get(id: 'phpmyfaq.seo');
 
         $category = new Category($this->configuration, [], withPermission: false);
         $category->setUser($currentAdminUser);
@@ -564,14 +567,13 @@ final class CategoryController extends AbstractAdministrationController
         );
 
         $uploadedFile = $request->files->get(key: 'image') ?? [];
-        $categoryImage = $this->container->get(id: 'phpmyfaq.category.image');
         if ($uploadedFile instanceof UploadedFile) {
-            $categoryImage->setUploadedFile($uploadedFile);
+            $this->categoryImage->setUploadedFile($uploadedFile);
         }
 
         $existingImage = is_null($existingImage) ? '' : $existingImage;
         $hasUploadedImage = $uploadedFile instanceof UploadedFile;
-        $image = $hasUploadedImage ? $categoryImage->getFileName($categoryId, $categoryLang) : $existingImage;
+        $image = $hasUploadedImage ? $this->categoryImage->getFileName($categoryId, $categoryLang) : $existingImage;
 
         $categoryEntity = new CategoryEntity();
         $categoryEntity
@@ -656,11 +658,10 @@ final class CategoryController extends AbstractAdministrationController
                         filter: FILTER_SANITIZE_SPECIAL_CHARS,
                     ));
 
-                $seoService = $this->container->get(id: 'phpmyfaq.seo');
-                if ($seoService->get($seoEntity)->getId() === null) {
-                    $seoService->create($seoEntity);
+                if ($this->seo->get($seoEntity)->getId() === null) {
+                    $this->seo->create($seoEntity);
                 } else {
-                    $seoService->update($seoEntity);
+                    $this->seo->update($seoEntity);
                 }
 
                 $templateVars = [
@@ -691,7 +692,7 @@ final class CategoryController extends AbstractAdministrationController
 
             if ($hasUploadedImage) {
                 try {
-                    $categoryImage->upload();
+                    $this->categoryImage->upload();
                 } catch (Throwable $exception) {
                     $templateVars = [
                         ...$templateVars,
@@ -718,11 +719,10 @@ final class CategoryController extends AbstractAdministrationController
                     filter: FILTER_SANITIZE_SPECIAL_CHARS,
                 ));
 
-            $seoService = $this->container->get(id: 'phpmyfaq.seo');
-            if ($seoService->get($seoEntity)->getId() === null) {
-                $seoService->create($seoEntity);
+            if ($this->seo->get($seoEntity)->getId() === null) {
+                $this->seo->create($seoEntity);
             } else {
-                $seoService->update($seoEntity);
+                $this->seo->update($seoEntity);
             }
 
             // Admin Log
@@ -755,11 +755,9 @@ final class CategoryController extends AbstractAdministrationController
      */
     private function getBaseTemplateVars(): array
     {
-        $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
-
         return [
             'csrfTokenInput' => Token::getInstance($this->session)->getTokenInput(page: 'save-category'),
-            'userSelection' => $userHelper->getAllUsersForTemplate(),
+            'userSelection' => $this->userHelper->getAllUsersForTemplate(),
             'permLevel' => $this->configuration->get(item: 'security.permLevel'),
             'msgAccessAllUsers' => Translation::get(key: 'msgAccessAllUsers'),
             'ad_entry_restricted_users' => Translation::get(key: 'ad_entry_restricted_users'),

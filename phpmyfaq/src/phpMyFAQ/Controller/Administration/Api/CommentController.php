@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use Exception;
+use phpMyFAQ\Comments;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
@@ -31,6 +32,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class CommentController extends AbstractAdministrationApiController
 {
+    public function __construct(
+        private readonly Comments $comments,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      */
@@ -45,7 +52,6 @@ final class CommentController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $comments = $this->container->get(id: 'phpmyfaq.comments');
         $commentIds = $data->data->{'comments[]'} ?? [];
 
         $result = false;
@@ -55,7 +61,7 @@ final class CommentController extends AbstractAdministrationApiController
             }
 
             foreach ($commentIds as $commentId) {
-                $result = $comments->delete($data->type, $commentId);
+                $result = $this->comments->delete($data->type, $commentId);
             }
 
             if ($result) {

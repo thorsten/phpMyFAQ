@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Mail;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,6 +33,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ConfigurationController extends AbstractAdministrationApiController
 {
+    public function __construct(
+        private readonly Mail $mail,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception|\Exception
      */
@@ -47,12 +54,11 @@ final class ConfigurationController extends AbstractAdministrationApiController
         }
 
         try {
-            $mail = $this->container->get(id: 'phpmyfaq.mail');
-            $mail->addTo($this->configuration->getAdminEmail());
-            $mail->setReplyTo($this->configuration->getNoReplyEmail());
-            $mail->subject = $this->configuration->getTitle() . ': Mail test successful.';
-            $mail->message = 'It works on my machine. 🚀';
-            $result = $mail->send();
+            $this->mail->addTo($this->configuration->getAdminEmail());
+            $this->mail->setReplyTo($this->configuration->getNoReplyEmail());
+            $this->mail->subject = $this->configuration->getTitle() . ': Mail test successful.';
+            $this->mail->message = 'It works on my machine. 🚀';
+            $result = $this->mail->send();
 
             return $this->json(['success' => $result], Response::HTTP_OK);
         } catch (Exception|TransportExceptionInterface $e) {

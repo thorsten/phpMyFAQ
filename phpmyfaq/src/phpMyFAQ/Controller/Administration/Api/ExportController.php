@@ -28,6 +28,7 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Export;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Link\Util\TitleSlugifier;
@@ -40,6 +41,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ExportController extends AbstractController
 {
+    public function __construct(
+        private readonly Faq $faq,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws \Exception
      */
@@ -53,12 +60,11 @@ final class ExportController extends AbstractController
         $inlineDisposition = Filter::filterVar($request->request->get('disposition'), FILTER_SANITIZE_SPECIAL_CHARS);
         $type = Filter::filterVar($request->request->get('export-type'), FILTER_SANITIZE_SPECIAL_CHARS, 'none');
 
-        $faq = $this->container->get(id: 'phpmyfaq.faq');
         $category = new Category($this->configuration, [], false);
         $category->buildCategoryTree($categoryId);
 
         try {
-            $export = Export::create($faq, $category, $this->configuration, $type);
+            $export = Export::create($this->faq, $category, $this->configuration, $type);
             $content = $export->generate($categoryId, $downwards, $this->configuration->getLanguage()->getLanguage());
 
             // Stream the file content

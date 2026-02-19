@@ -27,6 +27,7 @@ use phpMyFAQ\Entity\InstanceEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filesystem\Filesystem;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Client;
 use phpMyFAQ\Instance\Setup;
 use phpMyFAQ\Session\Token;
@@ -39,6 +40,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class InstanceController extends AbstractController
 {
+    public function __construct(
+        private readonly Instance $instance,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      * @throws \Exception
@@ -47,8 +54,6 @@ final class InstanceController extends AbstractController
     public function add(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::INSTANCE_ADD);
-
-        $configuration = $this->container->get(id: 'phpmyfaq.configuration');
 
         $data = json_decode($request->getContent());
 
@@ -89,11 +94,10 @@ final class InstanceController extends AbstractController
         $data = new InstanceEntity();
         $data->setUrl($url)->setInstance($instance)->setComment($comment);
 
-        $faqInstance = $this->container->get(id: 'phpmyfaq.instance');
-        $instanceId = $faqInstance->create($data);
+        $instanceId = $this->instance->create($data);
 
-        $faqInstanceClient = new Client($configuration);
-        $faqInstanceClient->createClient($faqInstance);
+        $faqInstanceClient = new Client($this->configuration);
+        $faqInstanceClient->createClient($this->instance);
         $faqInstanceClient->setFileSystem(new Filesystem());
 
         $urlParts = parse_url($data->getUrl());
@@ -128,7 +132,7 @@ final class InstanceController extends AbstractController
             Database::setTablePrefix($dbSetup['dbPrefix']);
 
             // add an admin account and rights
-            $user = new User($configuration);
+            $user = new User($this->configuration);
             $user->createUser($admin, $password, '', 1);
             $user->setStatus('protected');
             $instanceAdminData = [
@@ -139,7 +143,7 @@ final class InstanceController extends AbstractController
 
             // Add an anonymous user account
             try {
-                $clientSetup->createAnonymousUser($configuration);
+                $clientSetup->createAnonymousUser($this->configuration);
             } catch (Exception $e) {
                 return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
             }
@@ -148,7 +152,7 @@ final class InstanceController extends AbstractController
         }
 
         if (!$faqInstanceClient->createClientFolder($hostname)) {
-            $faqInstance->delete($instanceId);
+            $this->instance->delete($instanceId);
             return $this->json(['error' => 'Cannot create instance.'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -167,8 +171,6 @@ final class InstanceController extends AbstractController
     {
         $this->userHasPermission(PermissionType::INSTANCE_DELETE);
 
-        $configuration = $this->container->get(id: 'phpmyfaq.configuration');
-
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance($this->session)->verifyToken('delete-instance', $data->csrf)) {
@@ -178,7 +180,7 @@ final class InstanceController extends AbstractController
         $instanceId = Filter::filterVar($data->instanceId, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (null !== $instanceId) {
-            $client = new Client($configuration);
+            $client = new Client($this->configuration);
             $client->setFileSystem(new Filesystem());
             $clientData = $client->getById($instanceId);
             if (1 !== $instanceId && $client->deleteClientFolder($clientData->url) && $client->delete($instanceId)) {
