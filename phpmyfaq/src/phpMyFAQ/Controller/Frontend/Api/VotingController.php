@@ -70,7 +70,7 @@ final class VotingController extends AbstractController
             throw new Exception('Missing FAQ ID');
         }
 
-        if (!isset($vote) || $vote < 1 || $vote > 5) {
+        if ($vote === false || $vote < 1 || $vote > 5) {
             throw new Exception('Invalid vote value');
         }
 
