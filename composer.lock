@@ -7011,16 +7011,16 @@
     "packages-dev": [
         {
             "name": "carthage-software/mago",
-            "version": "1.8.0",
+            "version": "1.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/carthage-software/mago.git",
-                "reference": "8d58c5c129d7259f42e8de596cf17c41b49c293d"
+                "reference": "b50e6aa3e4e6abe144101720deddbf456cb7e0a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/carthage-software/mago/zipball/8d58c5c129d7259f42e8de596cf17c41b49c293d",
-                "reference": "8d58c5c129d7259f42e8de596cf17c41b49c293d",
+                "url": "https://api.github.com/repos/carthage-software/mago/zipball/b50e6aa3e4e6abe144101720deddbf456cb7e0a1",
+                "reference": "b50e6aa3e4e6abe144101720deddbf456cb7e0a1",
                 "shasum": ""
             },
             "require": {
@@ -7038,6 +7038,9 @@
                 "class": "Mago\\MagoPlugin"
             },
             "autoload": {
+                "files": [
+                    "composer/functions.php"
+                ],
                 "psr-4": {
                     "Mago\\": "composer/"
                 }
@@ -7058,7 +7061,7 @@
             ],
             "support": {
                 "issues": "https://github.com/carthage-software/mago/issues",
-                "source": "https://github.com/carthage-software/mago/tree/1.8.0"
+                "source": "https://github.com/carthage-software/mago/tree/1.9.1"
             },
             "funding": [
                 {
@@ -7066,7 +7069,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-12T05:55:55+00:00"
+            "time": "2026-02-18T03:12:50+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -8037,16 +8040,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "12.5.11",
+            "version": "12.5.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "9b518cb40f9474572c9f0178e96ff3dc1cf02bf1"
+                "reference": "47283cfd98d553edcb1353591f4e255dc1bb61f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/9b518cb40f9474572c9f0178e96ff3dc1cf02bf1",
-                "reference": "9b518cb40f9474572c9f0178e96ff3dc1cf02bf1",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/47283cfd98d553edcb1353591f4e255dc1bb61f0",
+                "reference": "47283cfd98d553edcb1353591f4e255dc1bb61f0",
                 "shasum": ""
             },
             "require": {
@@ -8115,7 +8118,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.11"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.14"
             },
             "funding": [
                 {
@@ -8139,20 +8142,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-02-10T12:32:02+00:00"
+            "time": "2026-02-18T12:38:40+00:00"
         },
         {
             "name": "radebatz/type-info-extras",
-            "version": "1.0.5",
+            "version": "1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DerManoMann/type-info-extras.git",
-                "reference": "217e249a35dbdbd9537f99de622cc080c3f8fb2c"
+                "reference": "577ac42f3a819b6c0b94821df0c40575811e0c1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DerManoMann/type-info-extras/zipball/217e249a35dbdbd9537f99de622cc080c3f8fb2c",
-                "reference": "217e249a35dbdbd9537f99de622cc080c3f8fb2c",
+                "url": "https://api.github.com/repos/DerManoMann/type-info-extras/zipball/577ac42f3a819b6c0b94821df0c40575811e0c1b",
+                "reference": "577ac42f3a819b6c0b94821df0c40575811e0c1b",
                 "shasum": ""
             },
             "require": {
@@ -8199,9 +8202,9 @@
             ],
             "support": {
                 "issues": "https://github.com/DerManoMann/type-info-extras/issues",
-                "source": "https://github.com/DerManoMann/type-info-extras/tree/1.0.5"
+                "source": "https://github.com/DerManoMann/type-info-extras/tree/1.0.6"
             },
-            "time": "2026-02-07T00:19:33+00:00"
+            "time": "2026-02-15T21:52:16+00:00"
         },
         {
             "name": "rector/rector",
@@ -9625,16 +9628,16 @@
         },
         {
             "name": "webmozart/assert",
-            "version": "2.1.2",
+            "version": "2.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozarts/assert.git",
-                "reference": "ce6a2f100c404b2d32a1dd1270f9b59ad4f57649"
+                "reference": "79155f94852fa27e2f73b459f6503f5e87e2c188"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozarts/assert/zipball/ce6a2f100c404b2d32a1dd1270f9b59ad4f57649",
-                "reference": "ce6a2f100c404b2d32a1dd1270f9b59ad4f57649",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/79155f94852fa27e2f73b459f6503f5e87e2c188",
+                "reference": "79155f94852fa27e2f73b459f6503f5e87e2c188",
                 "shasum": ""
             },
             "require": {
@@ -9681,9 +9684,9 @@
             ],
             "support": {
                 "issues": "https://github.com/webmozarts/assert/issues",
-                "source": "https://github.com/webmozarts/assert/tree/2.1.2"
+                "source": "https://github.com/webmozarts/assert/tree/2.1.5"
             },
-            "time": "2026-01-13T14:02:24+00:00"
+            "time": "2026-02-18T14:09:36+00:00"
         },
         {
             "name": "zircote/swagger-php",
@@ -9801,5 +9804,5 @@
     "platform-overrides": {
         "php": "8.4.0"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
