@@ -39,7 +39,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
 
     private string $language = '';
 
-    /**@var int[] */
+    /** @var int[] */
     private array $categoryIds = [];
 
     /**
