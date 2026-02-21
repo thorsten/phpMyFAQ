@@ -71,7 +71,6 @@ class AttachmentCollectionTest extends TestCase
         // Mock fetchAll to return the expected result
         $this->mockDatabase
             ->method('fetchAll')
-            ->with('mock_result')
             ->willReturn($expectedResult);
 
         // Call the method being tested

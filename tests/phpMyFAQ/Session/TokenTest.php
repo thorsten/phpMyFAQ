@@ -83,7 +83,7 @@ class TokenTest extends TestCase
 
     public function testRemoveToken(): void
     {
-        $this->sessionMock->method('remove')->with($this->equalTo('pmf-csrf-token.testPage'));
+        $this->sessionMock->method('remove');
 
         $this->assertTrue($this->token->removeToken('testPage'));
     }

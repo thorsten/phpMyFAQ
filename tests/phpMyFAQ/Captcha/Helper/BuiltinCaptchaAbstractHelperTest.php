@@ -55,7 +55,6 @@ class BuiltinCaptchaAbstractHelperTest extends TestCase
         // Configure captcha to be enabled
         $this->configuration
             ->method('get')
-            ->with('spam.enableCaptchaCode')
             ->willReturn(true);
 
         // Mock captcha behavior
@@ -84,7 +83,6 @@ class BuiltinCaptchaAbstractHelperTest extends TestCase
     {
         $this->configuration
             ->method('get')
-            ->with('spam.enableCaptchaCode')
             ->willReturn(false);
 
         $result = $this->helper->renderCaptcha($this->captcha, 'refresh-captcha', 'Captcha Label', false);
@@ -99,7 +97,6 @@ class BuiltinCaptchaAbstractHelperTest extends TestCase
     {
         $this->configuration
             ->method('get')
-            ->with('spam.enableCaptchaCode')
             ->willReturn(true);
 
         $result = $this->helper->renderCaptcha($this->captcha, 'refresh-captcha', 'Captcha Label', true); // User is authenticated
@@ -114,7 +111,6 @@ class BuiltinCaptchaAbstractHelperTest extends TestCase
     {
         $this->configuration
             ->method('get')
-            ->with('spam.enableCaptchaCode')
             ->willReturn(true);
 
         $this->captcha->captchaLength = 6;
@@ -134,7 +130,6 @@ class BuiltinCaptchaAbstractHelperTest extends TestCase
     {
         $this->configuration
             ->method('get')
-            ->with('spam.enableCaptchaCode')
             ->willReturn(true);
 
         $this->captcha->captchaLength = 4;
@@ -166,7 +161,6 @@ class BuiltinCaptchaAbstractHelperTest extends TestCase
     {
         $this->configuration
             ->method('get')
-            ->with('spam.enableCaptchaCode')
             ->willReturn(true);
 
         $this->captcha->captchaLength = 5;

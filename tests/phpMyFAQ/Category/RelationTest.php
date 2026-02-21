@@ -182,7 +182,10 @@ class RelationTest extends TestCase
         $this->databaseMock
             ->expects($this->once())
             ->method('query')
-            ->with($this->stringContains("fd.lang = 'en'"))
+            ->with($this->logicalAnd(
+                $this->stringContains("fd.lang = 'en'"),
+                $this->stringContains('count(DISTINCT fcr.record_id)'),
+            ))
             ->willReturn('query_result');
 
         $this->databaseMock
