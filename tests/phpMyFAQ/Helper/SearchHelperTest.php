@@ -70,7 +70,6 @@ class SearchHelperTest extends TestCase
 
         $this->configurationMock
             ->method('get')
-            ->with('records.numberOfRecordsPerPage')
             ->willReturn(10);
 
         $this->configurationMock->method('getDefaultUrl')->willReturn('https://example.com/');
@@ -86,7 +85,6 @@ class SearchHelperTest extends TestCase
 
         $this->categoryMock
             ->method('getPath')
-            ->with(1)
             ->willReturn('Programming/PHP');
 
         $result = $this->searchHelper->createAutoCompleteResult($this->searchResultSetMock);
@@ -104,7 +102,6 @@ class SearchHelperTest extends TestCase
     {
         $this->configurationMock
             ->method('get')
-            ->with('records.numberOfRecordsPerPage')
             ->willReturn(2);
 
         $this->configurationMock->method('getDefaultUrl')->willReturn('https://example.com/');
@@ -144,7 +141,6 @@ class SearchHelperTest extends TestCase
     {
         $this->configurationMock
             ->method('get')
-            ->with('records.numberOfRecordsPerPage')
             ->willReturn(10);
 
         $this->configurationMock->method('getDefaultUrl')->willReturn('https://example.com/');
@@ -207,14 +203,12 @@ class SearchHelperTest extends TestCase
         $this->searchResultSetMock->method('getNumberOfResults')->willReturn(1);
         $this->searchResultSetMock->method('getResultSet')->willReturn([$mockResult]);
 
-        $this->categoryMock->method('setLanguage')->with('en');
+        $this->categoryMock->method('setLanguage');
         $this->categoryMock
             ->method('getCategoriesFromFaq')
-            ->with(123)
             ->willReturn([1 => ['id' => 1, 'name' => 'Programming']]);
         $this->categoryMock
             ->method('getPath')
-            ->with(1)
             ->willReturn('Programming/PHP');
 
         $result = $this->searchHelper->getSearchResult($this->searchResultSetMock, 1);

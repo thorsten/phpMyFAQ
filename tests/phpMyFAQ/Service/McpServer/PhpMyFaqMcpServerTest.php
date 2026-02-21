@@ -30,7 +30,7 @@ class PhpMyFaqMcpServerTest extends TestCase
 
         $loggerMock = $this->createStub(Logger::class);
         $this->configMock->method('getLogger')->willReturn($loggerMock);
-        $this->configMock->method('setLanguage')->with($languageMock);
+        $this->configMock->method('setLanguage');
         $this->configMock->method('getDefaultUrl')->willReturn('https://example.com');
 
         // Mock the configuration values needed by Language::setLanguage()

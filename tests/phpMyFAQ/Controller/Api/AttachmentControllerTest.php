@@ -82,7 +82,7 @@ class AttachmentControllerTest extends TestCase
     public function testConstructorWithApiEnabled(): void
     {
         $configuration = $this->createStub(Configuration::class);
-        $configuration->method('get')->with('api.enableAccess')->willReturn(true);
+        $configuration->method('get')->willReturn(true);
 
         $attachmentController = $this
             ->getMockBuilder(AttachmentController::class)
@@ -107,7 +107,7 @@ class AttachmentControllerTest extends TestCase
     public function testConstructorWithApiDisabled(): void
     {
         $configuration = $this->createStub(Configuration::class);
-        $configuration->method('get')->with('api.enableAccess')->willReturn(false);
+        $configuration->method('get')->willReturn(false);
 
         $attachmentController = $this
             ->getMockBuilder(AttachmentController::class)

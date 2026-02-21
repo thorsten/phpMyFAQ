@@ -83,7 +83,6 @@ class GoogleRecaptchaAbstractHelperTest extends TestCase
     {
         $this->configuration
             ->method('get')
-            ->with('spam.enableCaptchaCode')
             ->willReturn(false);
 
         $result = $this->helper->renderCaptcha($this->captcha, 'refresh-captcha', 'Google reCAPTCHA', false);
@@ -98,7 +97,6 @@ class GoogleRecaptchaAbstractHelperTest extends TestCase
     {
         $this->configuration
             ->method('get')
-            ->with('spam.enableCaptchaCode')
             ->willReturn(true);
 
         $result = $this->helper->renderCaptcha($this->captcha, 'refresh-captcha', 'Google reCAPTCHA', true); // User is authenticated

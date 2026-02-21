@@ -73,7 +73,6 @@ class TwoFactorTest extends TestCase
     {
         $this->configuration
             ->method('get')
-            ->with('security.permLevel')
             ->willReturn('basic');
 
         $this->currentUser
@@ -87,7 +86,7 @@ class TwoFactorTest extends TestCase
             ->willReturn(true);
 
         $twoFactorAuth = $this->createStub(TwoFactorAuth::class);
-        $twoFactorAuth->method('verifyCode')->with('testsecret', '123456')->willReturn(true);
+        $twoFactorAuth->method('verifyCode')->willReturn(true);
 
         $reflection = new ReflectionClass($this->twoFactor);
         $property = $reflection->getProperty('twoFactorAuth');

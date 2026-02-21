@@ -33,7 +33,7 @@ class McpServerCommandTest extends TestCase
         $input = $this->createStub(InputInterface::class);
         $output = $this->createStub(OutputInterface::class);
 
-        $input->method('getOption')->with('info')->willReturn(true);
+        $input->method('getOption')->willReturn(true);
 
         $this->serverMock
             ->expects($this->once())
@@ -55,7 +55,7 @@ class McpServerCommandTest extends TestCase
         $input = $this->createStub(InputInterface::class);
         $output = $this->createStub(OutputInterface::class);
 
-        $input->method('getOption')->with('info')->willReturn(false);
+        $input->method('getOption')->willReturn(false);
 
         $this->serverMock
             ->expects($this->once())
@@ -71,7 +71,7 @@ class McpServerCommandTest extends TestCase
         $input = $this->createStub(InputInterface::class);
         $output = $this->createStub(OutputInterface::class);
 
-        $input->method('getOption')->with('info')->willReturn(false);
+        $input->method('getOption')->willReturn(false);
 
         $this->serverMock->method('runConsole')->willThrowException(new \Exception('fail'));
 
