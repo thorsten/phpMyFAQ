@@ -81,7 +81,6 @@ class TrackingTest extends TestCase
     {
         $this->configurationMock
             ->method('get')
-            ->with('main.botIgnoreList')
             ->willReturn('bot1,bot2');
         $this->requestMock->headers = new HeaderBag([
             'user-agent' => 'bot1',

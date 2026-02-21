@@ -98,7 +98,7 @@ class Relation
                 fc.parent_id AS parent_id,
                 fc.name AS category_name,
                 fc.description AS description,
-                count(fcr.category_id) AS number
+                count(DISTINCT fcr.record_id) AS number
             FROM
                 %sfaqcategoryrelations fcr
                 JOIN %sfaqdata fd ON fcr.record_id = fd.id AND fcr.record_lang = fd.lang
