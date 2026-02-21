@@ -1656,7 +1656,7 @@ $PMF_LANG['msgOpenQuestion'] = 'Offene Frage';
 $LANG_CONF['push.enableWebPush'] = ['checkbox', 'Web-Push-Benachrichtigungen aktivieren'];
 $LANG_CONF['push.vapidPublicKey'] = ['print', 'VAPID öffentlicher Schlüssel'];
 $LANG_CONF['push.vapidPrivateKey'] = ['print', 'VAPID privater Schlüssel'];
-$LANG_CONF['push.vapidSubject'] = ['input', 'VAPID Subject (mailto: oder URL)'];
+$LANG_CONF['push.vapidSubject'] = ['input', 'VAPID Subject', 'mailto: oder URL'];
 
 $PMF_LANG['msgPushNotifications'] = 'Push-Benachrichtigungen';
 $PMF_LANG['msgPushNotificationsEnable'] = 'Push-Benachrichtigungen aktivieren';
