@@ -23,6 +23,7 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
@@ -52,13 +53,27 @@ class WebAuthnController extends AbstractController
     #[Route('api/webauthn/prepare', name: 'api.private.webauthn.prepare', methods: ['POST'])]
     public function prepare(Request $request): JsonResponse
     {
+        if (!$this->configuration->get('security.enableWebAuthnSupport')) {
+            return $this->json(['error' => 'WebAuthn support is disabled.'], Response::HTTP_FORBIDDEN);
+        }
+
+        if (!$this->configuration->get('security.enableRegistration')) {
+            return $this->json(['error' => 'Registration is disabled.'], Response::HTTP_FORBIDDEN);
+        }
+
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+
+        $csrfToken = Filter::filterVar($data->csrf, FILTER_SANITIZE_SPECIAL_CHARS);
+        if (!Token::getInstance()->verifyToken('webauthn-prepare', $csrfToken)) {
+            return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
+        }
+
         $username = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!$this->user->getUserByLogin($username, false)) {
             try {
                 $this->user->createUser($username);
-                $this->user->setStatus('active');
+                $this->user->setStatus('blocked');
                 $this->user->setAuthSource(AuthenticationSourceType::AUTH_WEB_AUTHN->value);
                 $this->user->setUserData(
                     [

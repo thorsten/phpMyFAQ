@@ -16,6 +16,7 @@
  * @since     2008-01-25
  */
 
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -53,6 +54,7 @@ $templateVars = [
     'title' => sprintf('%s - %s', Translation::get('msgRegistration'), $faqConfig->getTitle()),
     'lang' => $faqLangCode,
     'isWebAuthnEnabled' => $faqConfig->get('security.enableWebAuthnSupport'),
+    'csrfTokenWebAuthn' => Token::getInstance()->getTokenString('webauthn-prepare'),
     'captchaFieldset' => $captchaHelper->renderCaptcha(
         $captcha,
         'register',

@@ -89,6 +89,7 @@
 
           <form action="{{ loginUrl }}" method="post" accept-charset="utf-8" role="form" id="pmf-webauthn-form">
             <input type="hidden" name="lang" id="lang" value="{{ lang }}">
+            <input type="hidden" id="pmf-csrf-token-webauthn" value="{{ csrfTokenWebAuthn }}">
 
             <div class="col-12 mb-4">
               <label class="form-label" for="webauthn">{{ 'msgEmail' | translate }}</label>

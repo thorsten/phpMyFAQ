@@ -30,12 +30,13 @@ export const handleWebAuthn = () => {
 
       try {
         const registerUsername = document.querySelector('[id=webauthn]').value;
+        const csrfToken = document.getElementById('pmf-csrf-token-webauthn').value;
         const response = await fetch('./api/webauthn/prepare', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ username: registerUsername }),
+          body: JSON.stringify({ username: registerUsername, csrf: csrfToken }),
         });
 
         if (response.ok) {
