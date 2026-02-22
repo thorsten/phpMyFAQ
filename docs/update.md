@@ -82,6 +82,23 @@ URL in your browser:
 
 Click the button of the update script, your version will automatically be updated.
 
+### Online update
+
+If you're running phpMyFAQ 4.0 or later, you can use the built-in online update feature.
+Log in as admin into the admin section and enable the maintenance mode.
+(Configuration >> Edit Configuration >> Set FAQ in maintenance mode)
+Then go to the "phpMyFAQ Update" page in the configuration section and click through the update wizard:
+
+1. Check for System Health: this checks if your system is ready for the upgrade
+2. Check for Updates: this checks if there is a new version of phpMyFAQ available
+3. Download of phpMyFAQ: this downloads the latest version of phpMyFAQ in the background, this can take some seconds
+4. Extracting phpMyFAQ: this extracts the downloaded archive, this can take a while
+5. Install downloaded package: first, it creates a backup of your current installation, then it copies the downloaded
+   files into your installation, and in the end, the database is updated
+
+Note:
+The online update feature is experimental and might not work in all environments.
+
 ## Upgrading from phpMyFAQ 4.1.x
 
 ### Manual upgrade
@@ -100,9 +117,8 @@ URL in your browser:
 
 Click the button of the update script, your version will automatically be updated.
 
-### Online update (Experimental feature)
+### Online update
 
-If you're running phpMyFAQ 4.0.0 or later, you can use the built-in online update feature.
 Log in as admin into the admin section and enable the maintenance mode.
 (Configuration >> Edit Configuration >> Set FAQ in maintenance mode)
 Then go to the "phpMyFAQ Update" page in the configuration section and click through the update wizard:
