@@ -6088,39 +6088,32 @@
     "packages-dev": [
         {
             "name": "carthage-software/mago",
-            "version": "1.9.1",
+            "version": "1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/carthage-software/mago.git",
-                "reference": "b50e6aa3e4e6abe144101720deddbf456cb7e0a1"
+                "reference": "0e21384330e235da9df3be2d50ba655ea94514df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/carthage-software/mago/zipball/b50e6aa3e4e6abe144101720deddbf456cb7e0a1",
-                "reference": "b50e6aa3e4e6abe144101720deddbf456cb7e0a1",
+                "url": "https://api.github.com/repos/carthage-software/mago/zipball/0e21384330e235da9df3be2d50ba655ea94514df",
+                "reference": "0e21384330e235da9df3be2d50ba655ea94514df",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "^2.6",
                 "php": "~8.1 || ~8.2 || ~8.3 || ~8.4 || ~8.5 || ~8.6"
             },
-            "require-dev": {
-                "composer/composer": "^2.8"
+            "suggest": {
+                "ext-curl": "To show binary download progress"
             },
             "bin": [
                 "composer/bin/mago"
             ],
-            "type": "composer-plugin",
-            "extra": {
-                "class": "Mago\\MagoPlugin"
-            },
+            "type": "library",
             "autoload": {
                 "files": [
                     "composer/functions.php"
-                ],
-                "psr-4": {
-                    "Mago\\": "composer/"
-                }
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -6138,7 +6131,7 @@
             ],
             "support": {
                 "issues": "https://github.com/carthage-software/mago/issues",
-                "source": "https://github.com/carthage-software/mago/tree/1.9.1"
+                "source": "https://github.com/carthage-software/mago/tree/1.10.0"
             },
             "funding": [
                 {
@@ -6146,7 +6139,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-18T03:12:50+00:00"
+            "time": "2026-02-22T09:15:34+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -7223,16 +7216,16 @@
         },
         {
             "name": "rector/rector",
-            "version": "2.3.7",
+            "version": "2.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "9c46ad17f57963932c9788fd1b0f1d07ff450370"
+                "reference": "bbd37aedd8df749916cffa2a947cfc4714d1ba2c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/9c46ad17f57963932c9788fd1b0f1d07ff450370",
-                "reference": "9c46ad17f57963932c9788fd1b0f1d07ff450370",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/bbd37aedd8df749916cffa2a947cfc4714d1ba2c",
+                "reference": "bbd37aedd8df749916cffa2a947cfc4714d1ba2c",
                 "shasum": ""
             },
             "require": {
@@ -7271,7 +7264,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.3.7"
+                "source": "https://github.com/rectorphp/rector/tree/2.3.8"
             },
             "funding": [
                 {
@@ -7279,7 +7272,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-19T14:44:16+00:00"
+            "time": "2026-02-22T09:45:50+00:00"
         },
         {
             "name": "sebastian/cli-parser",
