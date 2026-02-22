@@ -79,9 +79,7 @@ class TrackingTest extends TestCase
      */
     public function testCountBots(): void
     {
-        $this->configurationMock
-            ->method('get')
-            ->willReturn('bot1,bot2');
+        $this->configurationMock->method('get')->willReturn('bot1,bot2');
         $this->requestMock->headers = new HeaderBag([
             'user-agent' => 'bot1',
         ]);

@@ -25,6 +25,7 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
@@ -55,6 +56,10 @@ final class WebAuthnController extends AbstractController
     #[Route(path: 'webauthn/prepare', name: 'api.private.webauthn.prepare', methods: ['POST'])]
     public function prepare(Request $request): JsonResponse
     {
+        if (!$this->configuration->get('security.enableWebAuthnSupport')) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
+
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
         if (!isset($data->username)) {
@@ -64,6 +69,20 @@ final class WebAuthnController extends AbstractController
         $username = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!$this->user->getUserByLogin($username, raiseError: false)) {
+            if (!$this->configuration->get('security.enableRegistration')) {
+                return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+            }
+
+            $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'} ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+
+            if (!Token::getInstance($this->session)->verifyToken('webauthn', $csrfToken)) {
+                return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            }
+
+            if (!$this->captchaCodeIsValid($request)) {
+                return $this->json(['error' => Translation::get(key: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
+            }
+
             try {
                 $this->user->createUser($username);
                 $this->user->setStatus(status: 'active');
@@ -97,6 +116,10 @@ final class WebAuthnController extends AbstractController
     #[Route(path: 'webauthn/register', name: 'api.private.webauthn.register', methods: ['POST'])]
     public function register(Request $request): JsonResponse
     {
+        if (!$this->configuration->get('security.enableWebAuthnSupport')) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
+
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
         if (!isset($data->register)) {
@@ -136,6 +159,10 @@ final class WebAuthnController extends AbstractController
     #[Route(path: 'webauthn/prepare-login', name: 'api.private.webauthn.prepare-login', methods: ['POST'])]
     public function prepareLogin(Request $request): JsonResponse
     {
+        if (!$this->configuration->get('security.enableWebAuthnSupport')) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
+
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
         if (!isset($data->username)) {
@@ -163,6 +190,10 @@ final class WebAuthnController extends AbstractController
     #[Route(path: 'webauthn/login', name: 'api.private.webauthn.login', methods: ['POST'])]
     public function login(Request $request): JsonResponse
     {
+        if (!$this->configuration->get('security.enableWebAuthnSupport')) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
+
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
         if (!isset($data->username)) {
