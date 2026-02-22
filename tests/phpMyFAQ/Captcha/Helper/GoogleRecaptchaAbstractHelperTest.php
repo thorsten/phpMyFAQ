@@ -81,9 +81,7 @@ class GoogleRecaptchaAbstractHelperTest extends TestCase
      */
     public function testRenderCaptchaWhenDisabled(): void
     {
-        $this->configuration
-            ->method('get')
-            ->willReturn(false);
+        $this->configuration->method('get')->willReturn(false);
 
         $result = $this->helper->renderCaptcha($this->captcha, 'refresh-captcha', 'Google reCAPTCHA', false);
 
@@ -95,9 +93,7 @@ class GoogleRecaptchaAbstractHelperTest extends TestCase
      */
     public function testRenderCaptchaWhenAuthenticated(): void
     {
-        $this->configuration
-            ->method('get')
-            ->willReturn(true);
+        $this->configuration->method('get')->willReturn(true);
 
         $result = $this->helper->renderCaptcha($this->captcha, 'refresh-captcha', 'Google reCAPTCHA', true); // User is authenticated
 

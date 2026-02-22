@@ -124,6 +124,7 @@ final class UserController extends AbstractFrontController
             'title' => sprintf('%s - %s', Translation::get(key: 'msgRegistration'), $this->configuration->getTitle()),
             'lang' => $this->configuration->getLanguage()->getLanguage(),
             'isWebAuthnEnabled' => $this->configuration->get('security.enableWebAuthnSupport'),
+            'csrfTokenWebAuthn' => Token::getInstance($this->session)->getTokenString('webauthn'),
             'captchaFieldset' => $this->captchaHelper->renderCaptcha(
                 $this->captcha,
                 'register',

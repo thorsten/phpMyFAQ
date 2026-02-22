@@ -10,12 +10,18 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 #[AllowMockObjectsWithoutExpectations]
 class WebAuthnControllerTest extends TestCase
 {
     private Configuration $configuration;
+
+    private string $originalWebAuthnValue;
+
+    private string $originalRegistrationValue;
 
     /**
      * @throws Exception
@@ -33,6 +39,94 @@ class WebAuthnControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+
+        // Save original values
+        $configArray = $this->getConfigArray();
+        $this->originalWebAuthnValue = $configArray['security.enableWebAuthnSupport'] ?? 'false';
+        $this->originalRegistrationValue = $configArray['security.enableRegistration'] ?? 'true';
+    }
+
+    protected function tearDown(): void
+    {
+        // Restore original config values in-memory (no DB writes)
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', $this->originalWebAuthnValue);
+        $this->setInMemoryConfig('security.enableRegistration', $this->originalRegistrationValue);
+
+        parent::tearDown();
+    }
+
+    /**
+     * Sets a config value directly in the in-memory config array using Reflection.
+     */
+    private function setInMemoryConfig(string $key, string $value): void
+    {
+        $reflection = new ReflectionClass($this->configuration);
+        $property = $reflection->getProperty('config');
+        $config = $property->getValue($this->configuration);
+        $config[$key] = $value;
+        $property->setValue($this->configuration, $config);
+    }
+
+    /**
+     * Gets the in-memory config array using Reflection.
+     */
+    private function getConfigArray(): array
+    {
+        $reflection = new ReflectionClass($this->configuration);
+        $property = $reflection->getProperty('config');
+        return $property->getValue($this->configuration);
+    }
+
+    public function testPrepareReturnsForbiddenWhenWebAuthnDisabled(): void
+    {
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', 'false');
+
+        $requestData = json_encode(['username' => 'testuser']);
+        $request = new Request([], [], [], [], [], [], $requestData);
+        $controller = new WebAuthnController();
+
+        $response = $controller->prepare($request);
+
+        $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    public function testRegisterReturnsForbiddenWhenWebAuthnDisabled(): void
+    {
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', 'false');
+
+        $requestData = json_encode(['register' => 'test-data']);
+        $request = new Request([], [], [], [], [], [], $requestData);
+        $controller = new WebAuthnController();
+
+        $response = $controller->register($request);
+
+        $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    public function testPrepareLoginReturnsForbiddenWhenWebAuthnDisabled(): void
+    {
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', 'false');
+
+        $requestData = json_encode(['username' => 'testuser']);
+        $request = new Request([], [], [], [], [], [], $requestData);
+        $controller = new WebAuthnController();
+
+        $response = $controller->prepareLogin($request);
+
+        $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    public function testLoginReturnsForbiddenWhenWebAuthnDisabled(): void
+    {
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', 'false');
+
+        $requestData = json_encode(['username' => 'testuser', 'login' => 'test-data']);
+        $request = new Request([], [], [], [], [], [], $requestData);
+        $controller = new WebAuthnController();
+
+        $response = $controller->login($request);
+
+        $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
     /**
@@ -41,6 +135,8 @@ class WebAuthnControllerTest extends TestCase
      */
     public function testPrepareWithInvalidJsonThrowsException(): void
     {
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', 'true');
+
         $requestData = 'invalid json';
 
         $request = new Request([], [], [], [], [], [], $requestData);
@@ -57,6 +153,8 @@ class WebAuthnControllerTest extends TestCase
      */
     public function testPrepareWithMissingUsernameThrowsException(): void
     {
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', 'true');
+
         $requestData = json_encode([]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
@@ -72,6 +170,8 @@ class WebAuthnControllerTest extends TestCase
      */
     public function testRegisterWithInvalidJsonThrowsException(): void
     {
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', 'true');
+
         $requestData = 'invalid json';
 
         $request = new Request([], [], [], [], [], [], $requestData);
@@ -87,6 +187,8 @@ class WebAuthnControllerTest extends TestCase
      */
     public function testRegisterWithMissingRegisterDataThrowsException(): void
     {
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', 'true');
+
         $requestData = json_encode([]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
@@ -102,6 +204,8 @@ class WebAuthnControllerTest extends TestCase
      */
     public function testPrepareLoginWithInvalidJsonThrowsException(): void
     {
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', 'true');
+
         $requestData = 'invalid json';
 
         $request = new Request([], [], [], [], [], [], $requestData);
@@ -117,6 +221,8 @@ class WebAuthnControllerTest extends TestCase
      */
     public function testPrepareLoginWithMissingUsernameThrowsException(): void
     {
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', 'true');
+
         $requestData = json_encode([]);
 
         $request = new Request([], [], [], [], [], [], $requestData);
@@ -133,6 +239,8 @@ class WebAuthnControllerTest extends TestCase
      */
     public function testLoginWithInvalidJsonThrowsException(): void
     {
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', 'true');
+
         $requestData = 'invalid json';
 
         $request = new Request([], [], [], [], [], [], $requestData);
@@ -149,6 +257,8 @@ class WebAuthnControllerTest extends TestCase
      */
     public function testLoginWithMissingUsernameThrowsException(): void
     {
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', 'true');
+
         $requestData = json_encode([
             'login' => 'test-data',
         ]);
@@ -167,6 +277,8 @@ class WebAuthnControllerTest extends TestCase
      */
     public function testLoginWithMissingLoginDataThrowsException(): void
     {
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', 'true');
+
         $requestData = json_encode([
             'username' => 'testuser',
         ]);
@@ -176,5 +288,19 @@ class WebAuthnControllerTest extends TestCase
 
         $this->expectException(\Exception::class);
         $controller->login($request);
+    }
+
+    public function testPrepareReturnsForbiddenWhenRegistrationDisabled(): void
+    {
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', 'true');
+        $this->setInMemoryConfig('security.enableRegistration', 'false');
+
+        $requestData = json_encode(['username' => 'nonexistent_user_' . uniqid()]);
+        $request = new Request([], [], [], [], [], [], $requestData);
+        $controller = new WebAuthnController();
+
+        $response = $controller->prepare($request);
+
+        $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 }

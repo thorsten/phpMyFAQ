@@ -53,9 +53,7 @@ class BuiltinCaptchaAbstractHelperTest extends TestCase
     public function testRenderCaptchaWhenEnabledAndNotAuthenticated(): void
     {
         // Configure captcha to be enabled
-        $this->configuration
-            ->method('get')
-            ->willReturn(true);
+        $this->configuration->method('get')->willReturn(true);
 
         // Mock captcha behavior
         $this->captcha->captchaLength = 5;
@@ -81,9 +79,7 @@ class BuiltinCaptchaAbstractHelperTest extends TestCase
      */
     public function testRenderCaptchaWhenDisabled(): void
     {
-        $this->configuration
-            ->method('get')
-            ->willReturn(false);
+        $this->configuration->method('get')->willReturn(false);
 
         $result = $this->helper->renderCaptcha($this->captcha, 'refresh-captcha', 'Captcha Label', false);
 
@@ -95,9 +91,7 @@ class BuiltinCaptchaAbstractHelperTest extends TestCase
      */
     public function testRenderCaptchaWhenAuthenticated(): void
     {
-        $this->configuration
-            ->method('get')
-            ->willReturn(true);
+        $this->configuration->method('get')->willReturn(true);
 
         $result = $this->helper->renderCaptcha($this->captcha, 'refresh-captcha', 'Captcha Label', true); // User is authenticated
 
@@ -109,9 +103,7 @@ class BuiltinCaptchaAbstractHelperTest extends TestCase
      */
     public function testRenderCaptchaWithEmptyParameters(): void
     {
-        $this->configuration
-            ->method('get')
-            ->willReturn(true);
+        $this->configuration->method('get')->willReturn(true);
 
         $this->captcha->captchaLength = 6;
         $this->captcha->method('renderCaptchaImage')->willReturn('');
@@ -128,9 +120,7 @@ class BuiltinCaptchaAbstractHelperTest extends TestCase
      */
     public function testRenderCaptchaHtmlStructure(): void
     {
-        $this->configuration
-            ->method('get')
-            ->willReturn(true);
+        $this->configuration->method('get')->willReturn(true);
 
         $this->captcha->captchaLength = 4;
         $this->captcha->method('renderCaptchaImage')->willReturn('<img src="test.png">');
@@ -159,9 +149,7 @@ class BuiltinCaptchaAbstractHelperTest extends TestCase
      */
     public function testRenderCaptchaWithSpecialCharacters(): void
     {
-        $this->configuration
-            ->method('get')
-            ->willReturn(true);
+        $this->configuration->method('get')->willReturn(true);
 
         $this->captcha->captchaLength = 5;
         $this->captcha->method('renderCaptchaImage')->willReturn('<img src="test.png">');
