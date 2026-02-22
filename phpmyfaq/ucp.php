@@ -104,6 +104,7 @@ if ($user->isLoggedIn()) {
         ),
         'msgGravatarNotConnected' => Translation::get(key: 'msgGravatarNotConnected'),
         'webauthnSupportEnabled' => $faqConfig->get('security.enableWebAuthnSupport'),
+        'csrfTokenWebauthn' => Token::getInstance($container->get('session'))->getTokenString('webauthn-prepare'),
         'csrfExportUserData' => Token::getInstance($container->get('session'))->getTokenInput('export-userdata'),
         'exportUserDataUrl' => 'api/user/data/export',
         'msgDownloadYourData' => Translation::get(key: 'msgDownloadYourData'),

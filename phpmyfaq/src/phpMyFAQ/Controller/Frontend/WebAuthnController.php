@@ -25,6 +25,7 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
@@ -55,7 +56,21 @@ final class WebAuthnController extends AbstractController
     #[Route(path: 'api/webauthn/prepare', name: 'api.private.webauthn.prepare', methods: ['POST'])]
     public function prepare(Request $request): JsonResponse
     {
+        if (!$this->configuration->get(item: 'security.enableWebAuthnSupport')) {
+            return $this->json(['error' => 'WebAuthn support is disabled.'], Response::HTTP_FORBIDDEN);
+        }
+
+        if (!$this->configuration->get(item: 'security.enableRegistration')) {
+            return $this->json(['error' => 'User registration is disabled.'], Response::HTTP_FORBIDDEN);
+        }
+
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+
+        $csrfToken = Filter::filterVar($data->csrfToken ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('webauthn-prepare', $csrfToken)) {
+            return $this->json(['error' => Translation::get(key: 'err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+        }
+
         $username = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!$this->user->getUserByLogin($username, raiseError: false)) {
@@ -82,6 +97,9 @@ final class WebAuthnController extends AbstractController
                 $username,
                 (string) $this->user->getUserId(),
             ),
+            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString(
+                'webauthn-register',
+            ),
         ], Response::HTTP_OK);
     }
 
@@ -92,7 +110,17 @@ final class WebAuthnController extends AbstractController
     #[Route(path: 'api/webauthn/register', name: 'api.private.webauthn.register', methods: ['POST'])]
     public function register(Request $request): JsonResponse
     {
+        if (!$this->configuration->get(item: 'security.enableWebAuthnSupport')) {
+            return $this->json(['error' => 'WebAuthn support is disabled.'], Response::HTTP_FORBIDDEN);
+        }
+
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+
+        $csrfToken = Filter::filterVar($data->csrfToken ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('webauthn-register', $csrfToken)) {
+            return $this->json(['error' => Translation::get(key: 'err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+        }
+
         $register = Filter::filterVar($data->register, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $webAuthnUser = $this->authWebAuthn->getUserFromSession();
@@ -121,6 +149,10 @@ final class WebAuthnController extends AbstractController
     #[Route(path: 'api/webauthn/prepare-login', name: 'api.private.webauthn.prepare-login', methods: ['POST'])]
     public function prepareLogin(Request $request): JsonResponse
     {
+        if (!$this->configuration->get(item: 'security.enableWebAuthnSupport')) {
+            return $this->json(['error' => 'WebAuthn support is disabled.'], Response::HTTP_FORBIDDEN);
+        }
+
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
         $login = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -143,6 +175,10 @@ final class WebAuthnController extends AbstractController
     #[Route(path: 'api/webauthn/login', name: 'api.private.webauthn.login', methods: ['POST'])]
     public function login(Request $request): JsonResponse
     {
+        if (!$this->configuration->get(item: 'security.enableWebAuthnSupport')) {
+            return $this->json(['error' => 'WebAuthn support is disabled.'], Response::HTTP_FORBIDDEN);
+        }
+
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
         $login = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
         $loginData = $data->login;
