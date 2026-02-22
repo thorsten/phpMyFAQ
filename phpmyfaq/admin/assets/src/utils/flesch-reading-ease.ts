@@ -44,9 +44,8 @@ export type SupportedLanguage =
  * Strips HTML tags from content to get plain text
  */
 export const stripHtml = (html: string): string => {
-  const temp = document.createElement('div');
-  temp.innerHTML = html;
-  return temp.textContent || temp.innerText || '';
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  return doc.body.textContent || '';
 };
 
 /**
