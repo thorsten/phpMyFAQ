@@ -222,7 +222,15 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
             }
 
             if (isset($parsedUrl['pass']) && $parsedUrl['pass'] !== '') {
-                if ($redis->auth($parsedUrl['pass']) !== true) {
+                $pass = urldecode($parsedUrl['pass']);
+                if (isset($parsedUrl['user']) && $parsedUrl['user'] !== '') {
+                    $user = urldecode($parsedUrl['user']);
+                    $authResult = $redis->auth([$user, $pass]);
+                } else {
+                    $authResult = $redis->auth($pass);
+                }
+
+                if ($authResult !== true) {
                     throw new RuntimeException('Redis authentication failed for configuration storage.');
                 }
             }
