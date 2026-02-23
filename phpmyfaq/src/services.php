@@ -102,6 +102,7 @@ use phpMyFAQ\Controller\Api\SearchController as ApiSearchController;
 use phpMyFAQ\Controller\Api\TagController as ApiTagController;
 use phpMyFAQ\Controller\Frontend\AttachmentController;
 use phpMyFAQ\Controller\Frontend\AuthenticationController as FrontendAuthenticationController;
+use phpMyFAQ\Controller\Frontend\AzureAuthenticationController as FrontendAzureAuthenticationController;
 use phpMyFAQ\Controller\Frontend\CategoryController as FrontendCategoryController;
 use phpMyFAQ\Controller\Frontend\ChatController as FrontendChatController;
 use phpMyFAQ\Controller\Frontend\ContactController as FrontendContactController;
@@ -846,6 +847,7 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.user.current_user'),
         service('phpmyfaq.user.two-factor'),
     ]);
+    $services->set(FrontendAzureAuthenticationController::class, FrontendAzureAuthenticationController::class);
     $services->set(FrontendCategoryController::class, FrontendCategoryController::class)->args([
         service('phpmyfaq.user.session'),
         service('phpmyfaq.category'),

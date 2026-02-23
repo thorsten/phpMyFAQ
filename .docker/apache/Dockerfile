@@ -29,7 +29,7 @@ RUN set -x \
  && apt-get purge -y ${buildDeps} \
  && rm -rf /var/lib/apt/lists/*
 
-#=== Install intl, opcache and zip PHP dependencies ===
+#=== Install intl and zip PHP dependencies (opcache is built-in in PHP 8.5 images) ===
 RUN set -x \
  && buildDeps="libicu-dev zlib1g-dev libxml2-dev libzip-dev"  \
  && apt-get update && apt-get install -y ${buildDeps} --no-install-recommends \
@@ -37,7 +37,7 @@ RUN set -x \
  && docker-php-ext-configure intl \
  && docker-php-ext-install intl \
  && docker-php-ext-install zip \
- && docker-php-ext-install opcache \
+ && docker-php-ext-enable opcache || true \
  \
  && apt-get purge -y ${buildDeps} \
  && rm -rf /var/lib/apt/lists/*

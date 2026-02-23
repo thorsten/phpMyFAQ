@@ -11,6 +11,7 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use TypeError;
 
 const AAD_OAUTH_TENANTID = 'test-tenant-id';
@@ -153,35 +154,24 @@ class AuthEntraIdTest extends TestCase
             ->method('setCookie')
             ->with(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER, $this->isString(), 7200, false);
 
-        // Capture output to prevent HTML output in test results
-        ob_start();
-        try {
-            $this->authEntraId->authorize();
-        } catch (\Exception $e) {
-            // Expected - RedirectResponse will try to send headers
-        }
-        $output = ob_get_clean();
+        $response = $this->authEntraId->authorize();
 
-        // Verify redirect URL is generated correctly
-        $this->assertStringContainsString('login.microsoftonline.com', $output);
-        $this->assertStringContainsString('test-tenant-id', $output);
-        $this->assertStringContainsString('test-client-id', $output);
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertStringContainsString('login.microsoftonline.com', (string) $response->headers->get('Location'));
+        $this->assertStringContainsString('test-tenant-id', (string) $response->headers->get('Location'));
+        $this->assertStringContainsString('test-client-id', (string) $response->headers->get('Location'));
     }
 
     public function testLogout(): void
     {
-        // Capture output to prevent HTML output in test results
-        ob_start();
-        try {
-            $this->authEntraId->logout();
-        } catch (\Exception $e) {
-            // Expected - RedirectResponse will try to send headers
-        }
-        $output = ob_get_clean();
+        $response = $this->authEntraId->logout();
 
-        // Verify logout redirect URL
-        $this->assertStringContainsString('login.microsoftonline.com/common/wsfederation', $output);
-        $this->assertStringContainsString('wa=wsignout1.0', $output);
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertStringContainsString(
+            'login.microsoftonline.com/common/wsfederation',
+            (string) $response->headers->get('Location'),
+        );
+        $this->assertStringContainsString('wa=wsignout1.0', (string) $response->headers->get('Location'));
     }
 
     public function testCreateOAuthChallengeGeneration(): void

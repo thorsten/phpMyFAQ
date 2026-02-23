@@ -129,7 +129,7 @@ class AuthEntraId extends Auth implements AuthDriverInterface
      *
      * @throws \Exception
      */
-    public function authorize(): void
+    public function authorize(): RedirectResponse
     {
         $this->createOAuthChallenge();
         $this->oAuth->getEntraIdSession()->setCurrentSessionKey();
@@ -152,18 +152,16 @@ class AuthEntraId extends Auth implements AuthDriverInterface
             self::ENTRAID_CHALLENGE_METHOD,
         );
 
-        $redirectResponse = new RedirectResponse($oAuthURL);
-        $redirectResponse->send();
+        return new RedirectResponse($oAuthURL);
     }
 
     /**
      * Logout
      *
      */
-    public function logout(): void
+    public function logout(): RedirectResponse
     {
-        $redirectResponse = new RedirectResponse(self::ENTRAID_LOGOUT_URL);
-        $redirectResponse->send();
+        return new RedirectResponse(self::ENTRAID_LOGOUT_URL);
     }
 
     /**
