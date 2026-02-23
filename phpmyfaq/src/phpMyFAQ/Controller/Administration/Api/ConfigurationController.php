@@ -23,6 +23,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Mail;
+use phpMyFAQ\Session\RedisSessionHandler;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -89,5 +90,41 @@ final class ConfigurationController extends AbstractAdministrationApiController
         $this->adminLog->log($this->currentUser, AdminLogType::SYSTEM_MAINTENANCE_MODE_ENABLED->value);
 
         return $this->json(['success' => Translation::get(key: 'healthCheckOkay')], Response::HTTP_OK);
+    }
+
+    /**
+     * @throws Exception|\Exception
+     */
+    #[Route(
+        path: 'configuration/test-redis-connection',
+        name: 'admin.api.configuration.test-redis-connection',
+        methods: ['POST'],
+    )]
+    public function testRedisConnection(Request $request): JsonResponse
+    {
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+
+        $data = json_decode($request->getContent());
+
+        if (!Token::getInstance($this->session)->verifyToken('configuration', $data->csrf)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $redisDsn = trim((string) ($data->redisDsn ?? $this->configuration->get('storage.redisDsn') ?? ''));
+        $timeout = (float) ($data->timeout ?? $this->configuration->get('storage.redisConnectTimeout') ?? 1.0);
+        if ($timeout <= 0) {
+            $timeout = 1.0;
+        }
+
+        try {
+            RedisSessionHandler::validateConnection($redisDsn, $timeout);
+
+            return $this->json([
+                'success' => true,
+                'message' => 'Redis connection successful.',
+            ], Response::HTTP_OK);
+        } catch (\Throwable $throwable) {
+            return $this->json(['error' => $throwable->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
     }
 }

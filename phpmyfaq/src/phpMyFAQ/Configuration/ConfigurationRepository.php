@@ -20,30 +20,36 @@ declare(strict_types=1);
 namespace phpMyFAQ\Configuration;
 
 use phpMyFAQ\Configuration as CoreConfiguration;
+use phpMyFAQ\Configuration\Storage\ConfigurationStorageSettingsResolver;
+use phpMyFAQ\Configuration\Storage\DatabaseConfigurationStore;
+use phpMyFAQ\Configuration\Storage\HybridConfigurationStore;
 use phpMyFAQ\Database;
 
-readonly class ConfigurationRepository
+class ConfigurationRepository
 {
+    private DatabaseConfigurationStore $databaseConfigurationStore;
+
+    private HybridConfigurationStore $hybridConfigurationStore;
+
     public function __construct(
         private CoreConfiguration $coreConfiguration,
         private string $tableName = 'faqconfig',
     ) {
+        $this->databaseConfigurationStore = new DatabaseConfigurationStore(
+            $this->coreConfiguration->getDb(),
+            $tableName,
+        );
+        $settingsResolver = new ConfigurationStorageSettingsResolver($this->databaseConfigurationStore);
+        $this->hybridConfigurationStore = new HybridConfigurationStore(
+            $this->databaseConfigurationStore,
+            $settingsResolver,
+            $this->coreConfiguration->getLogger(),
+        );
     }
 
     public function updateConfigValue(string $key, string $value): bool
     {
-        $sql = <<<'SQL'
-                UPDATE %s%s SET config_value = '%s' WHERE config_name = '%s'
-            SQL;
-        $query = sprintf(
-            $sql,
-            Database::getTablePrefix(),
-            $this->tableName,
-            $this->coreConfiguration->getDb()->escape(trim($value)),
-            $this->coreConfiguration->getDb()->escape(trim($key)),
-        );
-
-        return (bool) $this->coreConfiguration->getDb()->query($query);
+        return $this->hybridConfigurationStore->updateConfigValue($key, $value);
     }
 
     /**
@@ -51,61 +57,22 @@ readonly class ConfigurationRepository
      */
     public function fetchAll(): array
     {
-        $sql = <<<'SQL'
-                SELECT config_name, config_value FROM %s%s
-            SQL;
-        $query = sprintf($sql, Database::getTablePrefix(), $this->tableName);
-
-        $result = $this->coreConfiguration->getDb()->query($query);
-        $rows = $this->coreConfiguration->getDb()->fetchAll($result);
-        return is_array($rows) ? $rows : [];
+        return $this->hybridConfigurationStore->fetchAll();
     }
 
     public function insert(string $name, string $value): bool
     {
-        $sql = <<<'SQL'
-                INSERT INTO %s%s (config_name, config_value) VALUES ('%s', '%s')
-            SQL;
-        $query = sprintf(
-            $sql,
-            Database::getTablePrefix(),
-            $this->tableName,
-            $this->coreConfiguration->getDb()->escape(trim($name)),
-            $this->coreConfiguration->getDb()->escape(trim($value)),
-        );
-
-        return (bool) $this->coreConfiguration->getDb()->query($query);
+        return $this->hybridConfigurationStore->insert($name, $value);
     }
 
     public function delete(string $name): bool
     {
-        $sql = <<<'SQL'
-                DELETE FROM %s%s WHERE config_name = '%s'
-            SQL;
-        $query = sprintf(
-            $sql,
-            Database::getTablePrefix(),
-            $this->tableName,
-            $this->coreConfiguration->getDb()->escape(trim($name)),
-        );
-
-        return (bool) $this->coreConfiguration->getDb()->query($query);
+        return $this->hybridConfigurationStore->delete($name);
     }
 
     public function renameKey(string $currentKey, string $newKey): bool
     {
-        $sql = <<<'SQL'
-                UPDATE %s%s SET config_name = '%s' WHERE config_name = '%s'
-            SQL;
-        $query = sprintf(
-            $sql,
-            Database::getTablePrefix(),
-            $this->tableName,
-            $this->coreConfiguration->getDb()->escape(trim($newKey)),
-            $this->coreConfiguration->getDb()->escape(trim($currentKey)),
-        );
-
-        return (bool) $this->coreConfiguration->getDb()->query($query);
+        return $this->hybridConfigurationStore->renameKey($currentKey, $newKey);
     }
 
     /**

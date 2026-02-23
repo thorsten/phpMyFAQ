@@ -113,4 +113,46 @@ class ConfigurationControllerTest extends TestCase
         $this->expectException(\Exception::class);
         $controller->activateMaintenanceMode($request);
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testTestRedisConnectionRequiresAuthentication(): void
+    {
+        $requestData = json_encode([
+            'csrf' => 'test-token',
+            'redisDsn' => 'tcp://redis:6379?database=1',
+            'timeout' => 1,
+        ]);
+        $request = new Request([], [], [], [], [], [], $requestData);
+        $controller = new ConfigurationController($this->mail);
+
+        $this->expectException(\Exception::class);
+        $controller->testRedisConnection($request);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testTestRedisConnectionWithInvalidJsonThrowsException(): void
+    {
+        $request = new Request([], [], [], [], [], [], 'invalid json');
+        $controller = new ConfigurationController($this->mail);
+
+        $this->expectException(\Exception::class);
+        $controller->testRedisConnection($request);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testTestRedisConnectionWithMissingCsrfTokenThrowsException(): void
+    {
+        $requestData = json_encode([]);
+        $request = new Request([], [], [], [], [], [], $requestData);
+        $controller = new ConfigurationController($this->mail);
+
+        $this->expectException(\Exception::class);
+        $controller->testRedisConnection($request);
+    }
 }

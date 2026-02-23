@@ -24,6 +24,7 @@ Suggested PHP extensions:
 
 - mbstring
 - zlib
+- redis (if you want to use Redis as an in-memory data store)
 
 ### Web server requirements
 
@@ -783,3 +784,76 @@ frankenphp {
 3. Restart FrankenPHP
 
 Worker mode significantly improves performance by keeping PHP code in memory between requests.
+
+## 2.20 Redis-Backed Configuration Storage
+
+phpMyFAQ can optionally use Redis to cache configuration values from `faqconfig`.
+
+- Source of truth remains the database (`faqconfig`)
+- Redis is used as a fast read layer
+- On write, phpMyFAQ updates database first, then Redis
+- If Redis is unavailable, phpMyFAQ falls back to database reads/writes
+
+### Admin Setup
+
+Open **Administration → Configuration → Storage** and configure:
+
+- `Enable Redis for configuration storage`
+- `Redis DSN for configuration storage`
+- `Redis key prefix for configuration storage`
+- `Redis connection timeout in seconds`
+
+Use **Test Redis connection** before enabling Redis storage.
+
+### DSN Examples
+
+- Docker Compose service name:
+    - `tcp://redis:6379?database=1`
+- Local host:
+    - `tcp://127.0.0.1:6379?database=1`
+- Unix socket:
+    - `unix:///var/run/redis/redis.sock?database=1`
+
+### Docker Notes
+
+`redis` as hostname works only if:
+
+- a `redis` service/container is running
+- your PHP container and Redis container are in the same Docker network
+
+Check quickly:
+
+```bash
+docker compose ps
+docker compose exec php-fpm getent hosts redis
+docker compose exec php-fpm sh -lc 'nc -zv redis 6379'
+```
+
+If `getaddrinfo for redis failed: Name or service not known`, either Redis is not running or hostname/networking is wrong.
+
+### Recommended Defaults
+
+- DSN: `tcp://redis:6379?database=1`
+- Prefix: `pmf:config:`
+- Timeout: `1.0`
+
+Use a unique prefix per phpMyFAQ instance when sharing one Redis server.
+
+### Troubleshooting
+
+#### Test button returns login redirect
+
+This means the session is no longer valid (HTTP 401). Log in again and retry.
+
+#### Test button says Redis connection failed
+
+Open browser dev tools and inspect the API JSON response for the concrete reason:
+
+- DNS/hostname resolution issue
+- connection refused (Redis not listening)
+- timeout
+- invalid DSN
+
+#### Redis enabled, but the app still works when Redis is down
+
+This is expected behavior: phpMyFAQ falls back to the database.

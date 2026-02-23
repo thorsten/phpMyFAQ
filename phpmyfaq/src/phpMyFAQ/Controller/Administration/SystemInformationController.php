@@ -97,8 +97,9 @@ final class SystemInformationController extends AbstractAdministrationController
                 'Database Driver' => Database::getType(),
                 'Database Server Version' => $this->configuration->getDb()->serverVersion(),
                 'Database Client Version' => $this->configuration->getDb()->clientVersion(),
-                'Elasticsearch Version' => $esInformation,
-                'OpenSearch Version' => $openSearchInformation,
+                'Elasticsearch Version' => $esInformation ?? 'n/a',
+                'OpenSearch Version' => $openSearchInformation ?? 'n/a',
+                'Redis Version' => 'n/a',
             ],
             'translationInformation' => $translationStatistics,
         ]);

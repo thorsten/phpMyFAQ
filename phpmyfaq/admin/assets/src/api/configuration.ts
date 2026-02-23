@@ -153,3 +153,21 @@ export const uploadThemeArchive = async (data: FormData): Promise<Response> => {
     body: data,
   })) as Response;
 };
+
+export const sendTestMail = async (csrf: string): Promise<Response> => {
+  return (await fetchJson('api/configuration/send-test-mail', {
+    method: 'POST',
+    body: JSON.stringify({ csrf }),
+  })) as Response;
+};
+
+export const testRedisConnection = async (csrf: string, redisDsn: string, timeout: number): Promise<Response> => {
+  return (await fetchJson('api/configuration/test-redis-connection', {
+    method: 'POST',
+    body: JSON.stringify({
+      csrf,
+      redisDsn,
+      timeout,
+    }),
+  })) as Response;
+};

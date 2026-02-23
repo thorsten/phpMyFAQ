@@ -80,13 +80,14 @@
 
 {# button #}
 {% macro sendTestMailButton(label, key, description) %}
+  {% set action = key == 'mail.sendTestEmail' ? 'send-mail-test' : (key == 'storage.testRedisConnection' ? 'test-redis-connection' : '') %}
   <label for="edit[{{ key }}]" class="col-3 col-form-label small mb-1 text-end">
     {{ label | raw }}<br>
     <span class="form-text">{{ description }}</span>
   </label>
   <div class="col-3">
     <button type="button" class="btn btn-primary" id="btn-phpmyfaq-{{ key|replace({'.': '-'}) }}"
-            onclick="handleSendTestMail()">
+            data-pmf-config-action="{{ action }}">
       {{ key | translate }}
     </button>
   </div>

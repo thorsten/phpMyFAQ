@@ -1668,6 +1668,7 @@ $PMF_LANG['msgPushNewFaq'] = 'New FAQ published';
 $PMF_LANG['msgPushNewQuestion'] = 'New open question submitted';
 $PMF_LANG['msgPushNotificationsDescription'] = 'Receive browser notifications when new FAQs are published or questions are submitted.';
 $PMF_LANG['pushControlCenter'] = 'Push';
+$PMF_LANG['storageControlCenter'] = 'Storage';
 $PMF_LANG['msgGenerateVapidKeys'] = 'Generate VAPID Keys';
 $PMF_LANG['msgVapidKeysGenerated'] = 'VAPID keys have been generated successfully.';
 $PMF_LANG['msgVapidKeysError'] = 'Failed to generate VAPID keys.';
@@ -1684,5 +1685,32 @@ $LANG_CONF['mail.mailgunApiKey'] = ['password', 'Mailgun API key'];
 $LANG_CONF['mail.mailgunDomain'] = ['input', 'Mailgun domain'];
 $LANG_CONF['mail.mailgunRegion'] = ['input', 'Mailgun region', 'e.g., us, eu'];
 $LANG_CONF['mail.useQueue'] = ['checkbox', 'Use background worker queue for email delivery'];
+
+$LANG_CONF['storage.useRedisForConfiguration'] = [
+    'checkbox',
+    'Enable Redis for configuration storage',
+    'If disabled, phpMyFAQ uses the database only.',
+];
+$LANG_CONF['storage.redisDsn'] = [
+    'input',
+    'Redis DSN for configuration storage',
+    'Examples: tcp://redis:6379?database=1 (Docker service name), tcp://127.0.0.1:6379?database=1',
+];
+$LANG_CONF['storage.redisPrefix'] = [
+    'input',
+    'Redis key prefix for configuration storage',
+    'Use different prefixes for multiple phpMyFAQ instances sharing one Redis server.',
+];
+$LANG_CONF['storage.redisConnectTimeout'] = [
+    'input',
+    'Redis connection timeout in seconds',
+    'Default: 1.0',
+];
+$LANG_CONF['storage.testRedisConnection'] = [
+    'button',
+    'Test Redis connection using current settings',
+    'The test uses DSN and timeout from this form.',
+];
+$PMF_LANG['storage.testRedisConnection'] = 'Test Redis connection';
 
 return $PMF_LANG;

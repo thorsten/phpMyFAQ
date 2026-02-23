@@ -796,6 +796,24 @@ Outgoing emails are queued by default (queue `mail`) and delivered by the backgr
 php bin/worker.php
 ```
 
+### 5.6.5 Redis-backed configuration storage
+
+The **Storage** tab allows enabling Redis as a configuration cache.
+
+- The database table `faqconfig` remains the source of truth.
+- Redis is used as fast read storage.
+- If Redis is unavailable, phpMyFAQ falls back to database reads/writes.
+
+Before enabling it in production:
+
+1. Configure DSN, prefix, and timeout in **Configuration → Storage**
+2. Use **Test Redis connection**
+3. Save configuration and verify application behavior
+
+For full setup examples and troubleshooting, see:
+
+- [Redis-Backed Configuration Storage](redis-configuration-storage.md)
+
 ### 5.6.2 FAQ Multi-sites
 
 You can see a list of all multisite installations, and you're able to add new ones.

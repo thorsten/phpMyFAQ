@@ -32,6 +32,12 @@ services:
     image: redis:7-alpine
     restart: always
     command: redis-server --appendonly yes
+    healthcheck:
+      test: [ 'CMD', 'redis-cli', 'ping' ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     ports:
       - '6379:6379'
     volumes:
@@ -78,7 +84,10 @@ services:
     volumes:
       - ./phpmyfaq:/var/www/html
     depends_on:
-      - pnpm
+      pnpm:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
 
   nginx:
     image: nginx:latest
@@ -123,7 +132,10 @@ services:
     volumes:
       - ./phpmyfaq:/var/www/html
     depends_on:
-      - pnpm
+      pnpm:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
 
   frankenphp:
     profiles: ['frankenphp']
@@ -161,7 +173,10 @@ services:
       - ./volumes/caddy_data:/data
       - ./volumes/caddy_config:/config
     depends_on:
-      - pnpm
+      pnpm:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
 
   pnpm:
     image: node:24-alpine
