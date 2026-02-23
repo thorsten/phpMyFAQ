@@ -791,7 +791,7 @@ phpMyFAQ can optionally use Redis to cache configuration values from `faqconfig`
 
 - Source of truth remains the database (`faqconfig`)
 - Redis is used as a fast read layer
-- On write, phpMyFAQ updates database first, then Redis
+- On writing, phpMyFAQ updates the database first, then Redis
 - If Redis is unavailable, phpMyFAQ falls back to database reads/writes
 
 ### Admin Setup
@@ -809,19 +809,19 @@ Use **Test Redis connection** before enabling Redis storage.
 
 Docker Compose service name:
 
-```
+```text
 tcp://redis:6379?database=1
 ```
 
 Local host:
 
-```
+```text
 tcp://127.0.0.1:6379?database=1
 ```
 
 Unix socket:
 
-```
+```text
 unix:///var/run/redis/redis.sock?database=1
 ```
 

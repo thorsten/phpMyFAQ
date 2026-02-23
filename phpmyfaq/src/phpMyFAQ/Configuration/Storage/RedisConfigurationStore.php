@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Configuration\Storage;
 
 use Redis;
+use RedisException;
 use RuntimeException;
 
 class RedisConfigurationStore implements ConfigurationStoreInterface
@@ -33,8 +34,12 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
 
     public function updateConfigValue(string $key, string $value): bool
     {
-        $redis = $this->getRedisClient();
-        return false !== $redis->hSet($this->getHashKey(), $key, $value);
+        try {
+            $redis = $this->getRedisClient();
+            return false !== $redis->hSet($this->getHashKey(), $key, $value);
+        } catch (RedisException $e) {
+            throw new RuntimeException('Redis updateConfigValue failed: ' . $e->getMessage(), 0, $e);
+        }
     }
 
     /**
@@ -42,67 +47,88 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
      */
     public function fetchAll(): array
     {
-        $redis = $this->getRedisClient();
-        $entries = $redis->hGetAll($this->getHashKey());
-        if (!is_array($entries) || $entries === []) {
-            return [];
-        }
+        try {
+            $redis = $this->getRedisClient();
+            $entries = $redis->hGetAll($this->getHashKey());
+            if (!is_array($entries) || $entries === []) {
+                return [];
+            }
 
-        $rows = [];
-        foreach ($entries as $name => $value) {
-            $rows[] = (object) [
-                'config_name' => (string) $name,
-                'config_value' => (string) $value,
-            ];
-        }
+            $rows = [];
+            foreach ($entries as $name => $value) {
+                $rows[] = (object) [
+                    'config_name' => (string) $name,
+                    'config_value' => (string) $value,
+                ];
+            }
 
-        return $rows;
+            return $rows;
+        } catch (RedisException $e) {
+            throw new RuntimeException('Redis fetchAll failed: ' . $e->getMessage(), 0, $e);
+        }
     }
 
     public function insert(string $name, string $value): bool
     {
-        $redis = $this->getRedisClient();
-        return (bool) $redis->hSetNx($this->getHashKey(), $name, $value);
+        try {
+            $redis = $this->getRedisClient();
+            return (bool) $redis->hSetNx($this->getHashKey(), $name, $value);
+        } catch (RedisException $e) {
+            throw new RuntimeException('Redis insert failed: ' . $e->getMessage(), 0, $e);
+        }
     }
 
     public function delete(string $name): bool
     {
-        $redis = $this->getRedisClient();
-        return $redis->hDel($this->getHashKey(), $name) >= 0;
+        try {
+            $redis = $this->getRedisClient();
+            $result = $redis->hDel($this->getHashKey(), $name);
+            return $result !== false && $result > 0;
+        } catch (RedisException $e) {
+            throw new RuntimeException('Redis delete failed: ' . $e->getMessage(), 0, $e);
+        }
     }
 
     public function renameKey(string $currentKey, string $newKey): bool
     {
-        $redis = $this->getRedisClient();
-        $oldValue = $redis->hGet($this->getHashKey(), $currentKey);
-        if ($oldValue === false) {
-            return false;
-        }
+        try {
+            $redis = $this->getRedisClient();
+            $oldValue = $redis->hGet($this->getHashKey(), $currentKey);
+            if ($oldValue === false) {
+                return false;
+            }
 
-        $setResult = $redis->hSet($this->getHashKey(), $newKey, (string) $oldValue);
-        if ($setResult === false) {
-            return false;
-        }
+            $setResult = $redis->hSet($this->getHashKey(), $newKey, (string) $oldValue);
+            if ($setResult === false) {
+                return false;
+            }
 
-        if ($redis->hDel($this->getHashKey(), $currentKey) < 1) {
-            $redis->hDel($this->getHashKey(), $newKey);
-            return false;
-        }
+            if ($redis->hDel($this->getHashKey(), $currentKey) < 1) {
+                $redis->hDel($this->getHashKey(), $newKey);
+                return false;
+            }
 
-        return true;
+            return true;
+        } catch (RedisException $e) {
+            throw new RuntimeException('Redis renameKey failed: ' . $e->getMessage(), 0, $e);
+        }
     }
 
     public function getInstalledRedisVersion(): string
     {
-        $redis = $this->getRedisClient();
-        $serverInfo = $redis->info('server');
+        try {
+            $redis = $this->getRedisClient();
+            $serverInfo = $redis->info('server');
 
-        $serverVersion = is_array($serverInfo) && isset($serverInfo['redis_version'])
-            ? (string) $serverInfo['redis_version']
-            : 'unknown';
-        $extensionVersion = (string) (phpversion('redis') ?: 'unknown');
+            $serverVersion = is_array($serverInfo) && isset($serverInfo['redis_version'])
+                ? (string) $serverInfo['redis_version']
+                : 'unknown';
+            $extensionVersion = (string) (phpversion('redis') ?: 'unknown');
 
-        return sprintf('%s (ext-redis %s)', $serverVersion, $extensionVersion);
+            return sprintf('%s (ext-redis %s)', $serverVersion, $extensionVersion);
+        } catch (RedisException $e) {
+            throw new RuntimeException('Redis getInstalledRedisVersion failed: ' . $e->getMessage(), 0, $e);
+        }
     }
 
     /**
@@ -114,21 +140,31 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
             return true;
         }
 
-        $redis = $this->getRedisClient();
-        $keyValueMap = [];
-        foreach ($rows as $row) {
-            if (!isset($row->config_name)) {
-                continue;
+        try {
+            $redis = $this->getRedisClient();
+            $keyValueMap = [];
+            foreach ($rows as $row) {
+                if (!isset($row->config_name)) {
+                    continue;
+                }
+
+                $keyValueMap[(string) $row->config_name] = (string) ($row->config_value ?? '');
             }
 
-            $keyValueMap[(string) $row->config_name] = (string) ($row->config_value ?? '');
-        }
+            if ($keyValueMap === []) {
+                return true;
+            }
 
-        if ($keyValueMap === []) {
-            return true;
-        }
+            $hashKey = $this->getHashKey();
+            $redis->multi();
+            $redis->del($hashKey);
+            $redis->hMSet($hashKey, $keyValueMap);
+            $results = $redis->exec();
 
-        return false !== $redis->hMSet($this->getHashKey(), $keyValueMap);
+            return is_array($results) && ($results[1] ?? null) !== false;
+        } catch (RedisException $e) {
+            throw new RuntimeException('Redis warmFromRows failed: ' . $e->getMessage(), 0, $e);
+        }
     }
 
     private function getRedisClient(): Redis
@@ -156,53 +192,57 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
             throw new RuntimeException('Invalid Redis DSN for configuration storage.');
         }
 
-        $redis = new Redis();
-        $scheme = strtolower((string) $parsedUrl['scheme']);
-        $timeout = $this->settings->connectTimeout;
+        try {
+            $redis = new Redis();
+            $scheme = strtolower((string) $parsedUrl['scheme']);
+            $timeout = $this->settings->connectTimeout;
 
-        if ($scheme === 'redis' || $scheme === 'tcp') {
-            $host = $parsedUrl['host'] ?? '127.0.0.1';
-            $port = (int) ($parsedUrl['port'] ?? 6379);
-            $connected = $redis->connect($host, $port, $timeout);
-            if ($connected !== true) {
-                throw new RuntimeException(sprintf('Unable to connect to Redis at %s:%d', $host, $port));
+            if ($scheme === 'redis' || $scheme === 'tcp') {
+                $host = $parsedUrl['host'] ?? '127.0.0.1';
+                $port = (int) ($parsedUrl['port'] ?? 6379);
+                $connected = $redis->connect($host, $port, $timeout);
+                if ($connected !== true) {
+                    throw new RuntimeException(sprintf('Unable to connect to Redis at %s:%d', $host, $port));
+                }
+            } elseif ($scheme === 'unix') {
+                $path = $parsedUrl['path'] ?? '';
+                if ($path === '') {
+                    throw new RuntimeException('Invalid Redis unix socket DSN for configuration storage.');
+                }
+
+                $connected = $redis->connect($path, 0, $timeout);
+                if ($connected !== true) {
+                    throw new RuntimeException(sprintf('Unable to connect to Redis unix socket at %s', $path));
+                }
+            } else {
+                throw new RuntimeException(sprintf(
+                    'Unsupported Redis DSN scheme "%s" for configuration storage.',
+                    $scheme,
+                ));
             }
-        } elseif ($scheme === 'unix') {
-            $path = $parsedUrl['path'] ?? '';
-            if ($path === '') {
-                throw new RuntimeException('Invalid Redis unix socket DSN for configuration storage.');
+
+            if (isset($parsedUrl['pass']) && $parsedUrl['pass'] !== '') {
+                if ($redis->auth($parsedUrl['pass']) !== true) {
+                    throw new RuntimeException('Redis authentication failed for configuration storage.');
+                }
             }
 
-            $connected = $redis->connect($path, 0, $timeout);
-            if ($connected !== true) {
-                throw new RuntimeException(sprintf('Unable to connect to Redis unix socket at %s', $path));
+            $database = 0;
+            if (isset($parsedUrl['query'])) {
+                parse_str($parsedUrl['query'], $queryParams);
+                $database = (int) ($queryParams['database'] ?? $queryParams['db'] ?? 0);
             }
-        } else {
-            throw new RuntimeException(sprintf(
-                'Unsupported Redis DSN scheme "%s" for configuration storage.',
-                $scheme,
-            ));
-        }
 
-        if (isset($parsedUrl['pass']) && $parsedUrl['pass'] !== '') {
-            if ($redis->auth($parsedUrl['pass']) !== true) {
-                throw new RuntimeException('Redis authentication failed for configuration storage.');
+            if ($redis->select($database) !== true) {
+                throw new RuntimeException(sprintf(
+                    'Failed to select Redis database %d for configuration storage.',
+                    $database,
+                ));
             }
-        }
 
-        $database = 0;
-        if (isset($parsedUrl['query'])) {
-            parse_str($parsedUrl['query'], $queryParams);
-            $database = (int) ($queryParams['database'] ?? $queryParams['db'] ?? 0);
+            return $redis;
+        } catch (RedisException $e) {
+            throw new RuntimeException('Redis connection failed: ' . $e->getMessage(), 0, $e);
         }
-
-        if ($redis->select($database) !== true) {
-            throw new RuntimeException(sprintf(
-                'Failed to select Redis database %d for configuration storage.',
-                $database,
-            ));
-        }
-
-        return $redis;
     }
 }
