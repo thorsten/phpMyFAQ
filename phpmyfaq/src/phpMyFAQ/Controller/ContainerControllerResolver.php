@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller;
 
+use Override;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
@@ -35,13 +36,13 @@ class ContainerControllerResolver extends ControllerResolver
         parent::__construct();
     }
 
-    #[\Override]
+    #[Override]
     public function getController(Request $request): callable|false
     {
         $controllerAttr = $request->attributes->get('_controller');
 
         // If the controller is in ClassName::method format and registered in the container,
-        // resolve it from the container BEFORE parent tries to instantiate with `new`.
+        // resolve it from the container BEFORE the parent tries to instantiate with `new`.
         if (is_string($controllerAttr) && str_contains($controllerAttr, '::')) {
             [$class, $method] = explode('::', $controllerAttr, 2);
             if (class_exists($class) && $this->container->has($class)) {

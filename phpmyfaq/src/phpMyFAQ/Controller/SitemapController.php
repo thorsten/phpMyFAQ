@@ -20,9 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller;
 
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\CustomPage;
-use phpMyFAQ\Faq\Statistics as FaqStatistics;
-use phpMyFAQ\Twig\TemplateException;
+use phpMyFAQ\Seo\SitemapXmlService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -30,18 +28,15 @@ use Symfony\Component\Routing\Attribute\Route;
 final class SitemapController extends AbstractController
 {
     public function __construct(
-        private readonly FaqStatistics $faqStatistics,
-        private readonly CustomPage $customPage,
+        private readonly SitemapXmlService $sitemapXmlService,
     ) {
         parent::__construct();
     }
 
-    private const int PMF_SITEMAP_GOOGLE_MAX_URLS = 50000;
-
     /**
      * Returns gzipped sitemap.xml or redirects to plain XML if zlib is not available
      *
-     * @throws TemplateException|Exception|\Exception
+     * @throws Exception|\Exception
      */
     #[Route(path: '/sitemap.gz', name: 'public.sitemap.gz')]
     public function sitemapGz(): Response
@@ -52,7 +47,7 @@ final class SitemapController extends AbstractController
     /**
      * Returns gzipped sitemap.xml or redirects to plain XML if zlib is not available
      *
-     * @throws TemplateException|Exception|\Exception
+     * @throws Exception|\Exception
      */
     #[Route(path: '/sitemap.xml.gz', name: 'public.sitemap.xml.gz')]
     public function sitemapXmlGz(): Response
@@ -61,83 +56,12 @@ final class SitemapController extends AbstractController
     }
 
     /**
-     * @throws TemplateException|Exception|\Exception
+     * @throws Exception|\Exception
      */
     #[Route(path: '/sitemap.xml', name: 'public.sitemap.xml')]
     public function index(): Response
     {
-        $response = new Response();
-
-        $xml = $this->generateSitemapXml();
-
-        if ($xml === null) {
-            $response->setStatusCode(Response::HTTP_NOT_FOUND);
-            $response->setContent('XML Sitemap is disabled.');
-            return $response;
-        }
-
-        $response->headers->set('Content-Type', 'text/xml');
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->setContent($xml);
-
-        return $response;
-    }
-
-    /**
-     * Generates the sitemap XML content
-     *
-     * @throws TemplateException|Exception|\Exception
-     * @return string|null Returns XML content or null if sitemap is disabled
-     */
-    private function generateSitemapXml(): ?string
-    {
-        $siteMapEnabled = $this->configuration->get(item: 'seo.enableXMLSitemap');
-        if (!$siteMapEnabled) {
-            return null;
-        }
-
-        $items = $this->faqStatistics->getTopTenData(self::PMF_SITEMAP_GOOGLE_MAX_URLS - 1);
-
-        $urls = [];
-        foreach ($items as $item) {
-            $urls[] = [
-                'loc' => $item['url'],
-                'lastmod' => $item['date'],
-                'priority' => '1.00',
-            ];
-        }
-
-        // Add custom pages to sitemap
-        $pages = $this->customPage->getAllPages();
-
-        foreach ($pages as $page) {
-            if ($page['active'] !== 'y') {
-                continue;
-            }
-
-            $urls[] = [
-                'loc' => $this->configuration->getDefaultUrl() . 'page/' . $page['slug'] . '.html',
-                'lastmod' => $page['updated'] ?? $page['created'],
-                'priority' => '0.80',
-            ];
-        }
-
-        return $this->renderView(pathToTwigFile: './sitemap.xml.twig', templateVars: ['urls' => $urls]);
-    }
-
-    /**
-     * Generates a gzipped sitemap response or redirects if zlib is unavailable
-     *
-     * @throws TemplateException|Exception|\Exception
-     */
-    private function generateGzippedSitemap(): Response
-    {
-        // Fallback to plain XML if zlib extension is not available
-        if (!extension_loaded('zlib')) {
-            return new RedirectResponse('/sitemap.xml', Response::HTTP_MOVED_PERMANENTLY);
-        }
-
-        $xml = $this->generateSitemapXml();
+        $xml = $this->sitemapXmlService->generateXml();
 
         if ($xml === null) {
             $response = new Response();
@@ -146,7 +70,36 @@ final class SitemapController extends AbstractController
             return $response;
         }
 
-        $gzipped = gzencode($xml, 9);
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/xml');
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->setContent($xml);
+
+        return $response;
+    }
+
+    /**
+     * Generates a gzipped sitemap response or redirects if zlib is unavailable
+     *
+     * @throws Exception|\Exception
+     */
+    private function generateGzippedSitemap(): Response
+    {
+        // Fallback to plain XML if zlib extension is not available
+        if (!extension_loaded('zlib')) {
+            return new RedirectResponse('/sitemap.xml', Response::HTTP_MOVED_PERMANENTLY);
+        }
+
+        $xml = $this->sitemapXmlService->generateXml();
+
+        if ($xml === null) {
+            $response = new Response();
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
+            $response->setContent('XML Sitemap is disabled.');
+            return $response;
+        }
+
+        $gzipped = gzencode($xml, level: 9);
 
         $response = new Response($gzipped);
         $response->headers->set('Content-Type', 'application/x-gzip');

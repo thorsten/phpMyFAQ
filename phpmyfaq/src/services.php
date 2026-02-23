@@ -174,6 +174,7 @@ use phpMyFAQ\Search;
 use phpMyFAQ\Scheduler\TaskScheduler;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Seo\SeoRepository;
+use phpMyFAQ\Seo\SitemapXmlService;
 use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Service\McpServer\PhpMyFaqMcpServer;
 use phpMyFAQ\Session\SessionWrapper;
@@ -562,6 +563,12 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('phpmyfaq.seo-repository', SeoRepository::class)->args([
         service('phpmyfaq.configuration'),
+    ]);
+
+    $services->set('phpmyfaq.seo.sitemap-xml', SitemapXmlService::class)->args([
+        service('phpmyfaq.configuration'),
+        service('phpmyfaq.faq.statistics'),
+        service('phpmyfaq.custom-page'),
     ]);
 
     $services
@@ -1030,7 +1037,6 @@ return static function (ContainerConfigurator $container): void {
 
     // Batch 6: Root controllers
     $services->set(RootSitemapController::class, RootSitemapController::class)->args([
-        service('phpmyfaq.faq.statistics'),
-        service('phpmyfaq.custom-page'),
+        service('phpmyfaq.seo.sitemap-xml'),
     ]);
 };

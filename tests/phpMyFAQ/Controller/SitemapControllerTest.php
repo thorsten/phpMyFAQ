@@ -2,23 +2,18 @@
 
 namespace phpMyFAQ\Controller;
 
-use phpMyFAQ\CustomPage;
-use phpMyFAQ\Faq\Statistics as FaqStatistics;
+use phpMyFAQ\Seo\SitemapXmlService;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
-use phpMyFAQ\Twig\TemplateException;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Environment;
 
 #[AllowMockObjectsWithoutExpectations]
 class SitemapControllerTest extends TestCase
 {
-    private Environment $twig;
-    private FaqStatistics $faqStatistics;
-    private CustomPage $customPage;
+    private SitemapXmlService $sitemapXmlService;
     private SitemapController $controller;
 
     /**
@@ -37,18 +32,20 @@ class SitemapControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->twig = $this->createStub(Environment::class);
-        $this->faqStatistics = $this->createStub(FaqStatistics::class);
-        $this->customPage = $this->createStub(CustomPage::class);
-        $this->controller = new SitemapController($this->faqStatistics, $this->customPage);
+        $this->sitemapXmlService = $this->createStub(SitemapXmlService::class);
+        $this->controller = new SitemapController($this->sitemapXmlService);
     }
 
     /**
-     * @throws TemplateException
      * @throws \phpMyFAQ\Core\Exception
      */
     public function testEmptyIndex(): void
     {
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n" .
+            '<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"></urlset>';
+
+        $this->sitemapXmlService->method('generateXml')->willReturn($xml);
+
         $response = $this->controller->index();
 
         $this->assertInstanceOf(Response::class, $response);
@@ -56,10 +53,22 @@ class SitemapControllerTest extends TestCase
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
 
         $content = $response->getContent();
-        // Check that it's valid XML with the sitemap structure
         $this->assertStringContainsString('<?xml version="1.0" encoding="UTF-8"?>', $content);
         $this->assertStringContainsString('<urlset', $content);
         $this->assertStringContainsString('xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"', $content);
         $this->assertStringContainsString('</urlset>', $content);
+    }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testIndexReturns404WhenDisabled(): void
+    {
+        $this->sitemapXmlService->method('generateXml')->willReturn(null);
+
+        $response = $this->controller->index();
+
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        $this->assertEquals('XML Sitemap is disabled.', $response->getContent());
     }
 }
