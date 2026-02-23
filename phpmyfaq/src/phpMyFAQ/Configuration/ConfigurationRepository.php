@@ -81,7 +81,7 @@ class ConfigurationRepository
     public function getFaqDataContents(): array
     {
         $sql = <<<'SQL'
-                SELECT content FROM %sfaqdata
+                SELECT id, lang, content FROM %sfaqdata
             SQL;
         $query = sprintf($sql, Database::getTablePrefix());
         $response = $this->coreConfiguration->getDb()->query($query);
@@ -89,16 +89,17 @@ class ConfigurationRepository
         return is_array($rows) ? $rows : [];
     }
 
-    public function updateFaqDataContent(string $oldContent, string $newContent): bool
+    public function updateFaqDataContentById(int $faqId, string $lang, string $newContent): bool
     {
         $sql = <<<'SQL'
-                UPDATE %sfaqdata SET content='%s' WHERE content='%s'
+                UPDATE %sfaqdata SET content='%s' WHERE id=%d AND lang='%s'
             SQL;
         $query = sprintf(
             $sql,
             Database::getTablePrefix(),
             $this->coreConfiguration->getDb()->escape($newContent),
-            $this->coreConfiguration->getDb()->escape($oldContent),
+            $faqId,
+            $this->coreConfiguration->getDb()->escape($lang),
         );
         return (bool) $this->coreConfiguration->getDb()->query($query);
     }
