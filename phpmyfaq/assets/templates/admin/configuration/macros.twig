@@ -60,11 +60,10 @@
   }[key] | default('text') %}
 
   <label for="edit[{{ key }}]" class="col-3 col-form-label small mb-1 text-end">
-    {{ label | raw }}<br>
-    <span class="form-text">{{ description }}</span>
+    {{ label | raw }}
   </label>
   <div class="col-6">
-    <div class="input-group mb-3">
+    <div class="input-group mb-1">
       <input class="form-control" type="{{ type }}" name="edit[{{ key }}]" id="edit[{{ key }}]"
              value="{{ value | raw }}" step="1" min="0">
       {% if key == 'api.apiClientToken' %}
@@ -73,6 +72,9 @@
         </button>
       {% endif %}
     </div>
+    {% if description != '' %}
+      <span class="form-text">{{ description }}</span>
+    {% endif %}
   </div>
 {% endmacro %}
 
@@ -80,13 +82,21 @@
 
 {# button #}
 {% macro sendTestMailButton(label, key, description) %}
+  {% if key == 'mail.sendTestEmail' %}
+    {% set action = 'send-mail-test' %}
+  {% elseif key == 'storage.testRedisConnection' %}
+    {% set action = 'test-redis-connection' %}
+  {% else %}
+    {% set action = 'unsupported-action' %}
+    <!-- WARNING: sendTestMailButton called with an unsupported key "{{ key }}" — button will be inert -->
+  {% endif %}
   <label for="edit[{{ key }}]" class="col-3 col-form-label small mb-1 text-end">
     {{ label | raw }}<br>
     <span class="form-text">{{ description }}</span>
   </label>
   <div class="col-3">
     <button type="button" class="btn btn-primary" id="btn-phpmyfaq-{{ key|replace({'.': '-'}) }}"
-            onclick="handleSendTestMail()">
+            data-pmf-config-action="{{ action }}">
       {{ key | translate }}
     </button>
   </div>

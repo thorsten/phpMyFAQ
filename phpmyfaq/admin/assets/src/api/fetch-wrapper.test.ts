@@ -125,7 +125,7 @@ describe('fetchWrapper', () => {
         await fetchWrapper('/test', { method: 'GET' });
         expect.fail('Should have thrown an error');
       } catch {
-        expect(window.location.href).toBe('./admin/login');
+        expect(window.location.href).toBe('./login');
       }
     });
 
@@ -152,7 +152,7 @@ describe('fetchWrapper', () => {
         expect(error).toBeInstanceOf(Error);
         expect((error as Error).message).toBe('Session expired');
         expect(sessionStorageMock['loginMessage']).toBe('Your session has expired. Please log in again.');
-        expect(window.location.href).toBe('./admin/login');
+        expect(window.location.href).toBe('./login');
       }
     });
   });

@@ -528,21 +528,16 @@ class Configuration
     public function replaceMainReferenceUrl(string $oldUrl, string $newUrl): bool
     {
         $contentItems = $this->configurationRepository->getFaqDataContents();
-        $newContentItems = [];
 
         foreach ($contentItems as $contentItem) {
             if (str_contains((string) $contentItem->content, $oldUrl)) {
-                $newContentItems[] = str_replace($oldUrl, $newUrl, $contentItem->content);
-                continue;
+                $newContent = str_replace($oldUrl, $newUrl, $contentItem->content);
+                $this->configurationRepository->updateFaqDataContentById(
+                    (int) $contentItem->id,
+                    (string) $contentItem->lang,
+                    $newContent,
+                );
             }
-
-            $newContentItems[] = $contentItem->content;
-        }
-
-        $count = 0;
-        foreach ($newContentItems as $newContentItem) {
-            $this->configurationRepository->updateFaqDataContent($contentItems[$count]->content, $newContentItem);
-            $count++;
         }
 
         return true;

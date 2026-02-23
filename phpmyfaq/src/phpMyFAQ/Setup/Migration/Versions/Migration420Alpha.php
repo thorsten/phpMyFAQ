@@ -237,6 +237,12 @@ readonly class Migration420Alpha extends AbstractMigration
 
         $recorder->addConfig('main.enableCommentEditor', 'false');
 
+        // Redis support configuration
+        $recorder->addConfig('storage.useRedisForConfiguration', 'false');
+        $recorder->addConfig('storage.redisDsn', 'tcp://redis:6379?database=1');
+        $recorder->addConfig('storage.redisPrefix', 'pmf:config:');
+        $recorder->addConfig('storage.redisConnectTimeout', '1.0');
+
         // Create the chat messages table
         if ($this->isMySql()) {
             $recorder->addSql(sprintf(

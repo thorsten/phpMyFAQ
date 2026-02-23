@@ -840,21 +840,35 @@ You can click through the update wizard:
 5. Install downloaded package: first, it creates a backup of your current installation, then it copies the downloaded
    files into your installation, and in the end, the database is updated
 
-### 5.6.5 Elasticsearch configuration
+### 5.6.5 Redis-backed configuration storage
+
+The **Storage** tab allows enabling Redis as a configuration cache.
+
+- The database table `faqconfig` remains the source of truth.
+- Redis is used as fast read storage.
+- If Redis is unavailable, phpMyFAQ falls back to database reads/writes.
+
+Before enabling it in production:
+
+1. Configure DSN, prefix, and timeout in **Configuration → Storage**
+2. Use **Test Redis connection**
+3. Save configuration and verify application behavior
+
+### 5.6.6 Elasticsearch configuration
 
 Here you can create and drop the Elasticsearch index, and you can run a full import of all data from your database
 into the Elasticsearch index. 
-You can also see some Elasticsearch relevant usage data. 
+You can also see some Elasticsearch-relevant usage data. 
 This page is only available if Elasticsearch is enabled.
 
-### 5.6.6 OpenSearch configuration
+### 5.6.7 OpenSearch configuration
 
 Here you can create and drop the OpenSearch index, and you can run a full import of all data from your database
 into the OpenSearch index.
-You can also see some OpenSearch relevant usage data.
+You can also see some OpenSearch-relevant usage data.
 This page is only available if OpenSearch is enabled.
 
-### 5.6.7 System information
+### 5.6.8 System information
 
 On this page, phpMyFAQ displays some relevant system information like PHP version, database version, or session path.
 Please use this information when reporting bugs.

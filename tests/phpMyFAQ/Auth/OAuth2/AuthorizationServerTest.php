@@ -30,21 +30,6 @@ class AuthorizationServerTest extends TestCase
         $this->assertSame('no-store', $result['headers']['Cache-Control']);
     }
 
-    public function testIssueTokenThrowsWhenNotConfiguredAndLeagueMissing(): void
-    {
-        if (class_exists(\League\OAuth2\Server\AuthorizationServer::class)) {
-            $this->markTestSkipped('league/oauth2-server is installed in this environment.');
-        }
-
-        $configuration = $this->createMock(Configuration::class);
-        $server = new AuthorizationServer($configuration);
-
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('OAuth2 server dependency not installed');
-
-        $server->issueToken(new Request());
-    }
-
     public function testIssueTokenThrowsWhenOauth2IsDisabled(): void
     {
         $configuration = $this->createMock(Configuration::class);

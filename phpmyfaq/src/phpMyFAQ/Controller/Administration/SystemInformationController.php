@@ -22,6 +22,9 @@ namespace phpMyFAQ\Controller\Administration;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
 use phpMyFAQ\Administration\TranslationStatistics;
+use phpMyFAQ\Configuration\Storage\ConfigurationStorageSettingsResolver;
+use phpMyFAQ\Configuration\Storage\DatabaseConfigurationStore;
+use phpMyFAQ\Configuration\Storage\RedisConfigurationStore;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
@@ -76,6 +79,19 @@ final class SystemInformationController extends AbstractAdministrationController
             $openSearchInformation = 'n/a';
         }
 
+        $redisInformation = 'n/a';
+        if (extension_loaded('redis')) {
+            try {
+                $databaseStore = new DatabaseConfigurationStore($this->configuration->getDb());
+                $settingsResolver = new ConfigurationStorageSettingsResolver($databaseStore);
+                $settings = $settingsResolver->resolve();
+                $redisStore = new RedisConfigurationStore($settings);
+                $redisInformation = $redisStore->getInstalledRedisVersion();
+            } catch (\Throwable $throwable) {
+                $redisInformation = 'n/a (' . $throwable->getMessage() . ')';
+            }
+        }
+
         $translationInformation = new TranslationStatistics();
         $translationStatistics = $translationInformation->getStatistics();
 
@@ -97,8 +113,9 @@ final class SystemInformationController extends AbstractAdministrationController
                 'Database Driver' => Database::getType(),
                 'Database Server Version' => $this->configuration->getDb()->serverVersion(),
                 'Database Client Version' => $this->configuration->getDb()->clientVersion(),
-                'Elasticsearch Version' => $esInformation,
-                'OpenSearch Version' => $openSearchInformation,
+                'Elasticsearch Version' => $esInformation ?? 'n/a',
+                'OpenSearch Version' => $openSearchInformation ?? 'n/a',
+                'Redis Version' => $redisInformation,
             ],
             'translationInformation' => $translationStatistics,
         ]);
