@@ -15,6 +15,5 @@ nav:
   - 8. AI-Assisted Translation Feature: 'ai-translation.md'
   - 9. Developer documentation: 'development.md'
   - 10. Plugins: 'plugins.md'
-  - 11. Redis Configuration Storage: 'redis-configuration-storage.md'
-  - 12. MCP Server: 'mcp-server.md'
-  - 13. Thank you!: 'thank-you.md'
+  - 11. MCP Server: 'mcp-server.md'
+  - 12. Thank you!: 'thank-you.md'

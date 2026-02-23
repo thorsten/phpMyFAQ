@@ -70,7 +70,7 @@ The PDO extension is the preferred way to connect to your database server.
 
 ### Optional In-Memory Data Store
 
-- [Redis](https://redis.io/) 8.x or later
+- [Redis](https://redis.io/) 7.x or later
 
 ### Additional requirements
 

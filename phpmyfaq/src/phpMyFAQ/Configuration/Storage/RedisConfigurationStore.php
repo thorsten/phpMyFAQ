@@ -86,6 +86,19 @@ readonly class RedisConfigurationStore implements ConfigurationStoreInterface
         return true;
     }
 
+    public function getInstalledRedisVersion(): string
+    {
+        $redis = $this->createRedisClient();
+        $serverInfo = $redis->info('server');
+
+        $serverVersion = is_array($serverInfo) && isset($serverInfo['redis_version'])
+            ? (string) $serverInfo['redis_version']
+            : 'unknown';
+        $extensionVersion = (string) (phpversion('redis') ?: 'unknown');
+
+        return sprintf('%s (ext-redis %s)', $serverVersion, $extensionVersion);
+    }
+
     /**
      * @param array<int, object> $rows
      */
@@ -157,7 +170,9 @@ readonly class RedisConfigurationStore implements ConfigurationStoreInterface
         }
 
         if (isset($parsedUrl['pass']) && $parsedUrl['pass'] !== '') {
-            $redis->auth($parsedUrl['pass']);
+            if ($redis->auth($parsedUrl['pass']) !== true) {
+                throw new RuntimeException('Redis authentication failed for configuration storage.');
+            }
         }
 
         $database = 0;
@@ -166,7 +181,12 @@ readonly class RedisConfigurationStore implements ConfigurationStoreInterface
             $database = (int) ($queryParams['database'] ?? $queryParams['db'] ?? 0);
         }
 
-        $redis->select($database);
+        if ($redis->select($database) !== true) {
+            throw new RuntimeException(sprintf(
+                'Failed to select Redis database %d for configuration storage.',
+                $database,
+            ));
+        }
 
         return $redis;
     }

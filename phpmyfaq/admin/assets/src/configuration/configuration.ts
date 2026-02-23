@@ -595,6 +595,8 @@ export const handleTestRedisConnection = async (): Promise<void> => {
   }
 };
 
+let redisInputListener: (() => void) | null = null;
+
 export const setupRedisTestButtonState = (): void => {
   const redisDsnInput = document.getElementById('edit[storage.redisDsn]') as HTMLInputElement | null;
   const button = document.getElementById('btn-phpmyfaq-storage-testRedisConnection') as HTMLButtonElement | null;
@@ -603,11 +605,14 @@ export const setupRedisTestButtonState = (): void => {
     return;
   }
 
-  const updateState = (): void => {
+  if (redisInputListener) {
+    redisDsnInput.removeEventListener('input', redisInputListener);
+  }
+
+  redisInputListener = (): void => {
     button.disabled = redisDsnInput.value.trim() === '';
   };
 
-  redisDsnInput.removeEventListener('input', updateState);
-  redisDsnInput.addEventListener('input', updateState);
-  updateState();
+  redisDsnInput.addEventListener('input', redisInputListener);
+  redisInputListener();
 };

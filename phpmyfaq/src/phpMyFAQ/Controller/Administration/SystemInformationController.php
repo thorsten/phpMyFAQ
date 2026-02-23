@@ -22,6 +22,8 @@ namespace phpMyFAQ\Controller\Administration;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
 use phpMyFAQ\Administration\TranslationStatistics;
+use phpMyFAQ\Configuration\Storage\ConfigurationStorageSettings;
+use phpMyFAQ\Configuration\Storage\RedisConfigurationStore;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
@@ -76,6 +78,36 @@ final class SystemInformationController extends AbstractAdministrationController
             $openSearchInformation = 'n/a';
         }
 
+        $redisInformation = 'n/a';
+        if (extension_loaded('redis')) {
+            $redisDsn = trim((string) ($this->configuration->get('storage.redisDsn') ?? ''));
+            if ($redisDsn === '') {
+                $redisDsn = 'tcp://redis:6379?database=1';
+            }
+
+            $redisPrefix = (string) ($this->configuration->get('storage.redisPrefix') ?? '');
+            if ($redisPrefix === '') {
+                $redisPrefix = 'pmf:config:';
+            }
+
+            $redisTimeout = (float) ($this->configuration->get('storage.redisConnectTimeout') ?? 1.0);
+            if ($redisTimeout <= 0) {
+                $redisTimeout = 1.0;
+            }
+
+            try {
+                $redisStore = new RedisConfigurationStore(new ConfigurationStorageSettings(
+                    enabled: true,
+                    redisDsn: $redisDsn,
+                    redisPrefix: $redisPrefix,
+                    connectTimeout: $redisTimeout,
+                ));
+                $redisInformation = $redisStore->getInstalledRedisVersion();
+            } catch (\Throwable $throwable) {
+                $redisInformation = 'n/a (' . $throwable->getMessage() . ')';
+            }
+        }
+
         $translationInformation = new TranslationStatistics();
         $translationStatistics = $translationInformation->getStatistics();
 
@@ -99,7 +131,7 @@ final class SystemInformationController extends AbstractAdministrationController
                 'Database Client Version' => $this->configuration->getDb()->clientVersion(),
                 'Elasticsearch Version' => $esInformation ?? 'n/a',
                 'OpenSearch Version' => $openSearchInformation ?? 'n/a',
-                'Redis Version' => 'n/a',
+                'Redis Version' => $redisInformation,
             ],
             'translationInformation' => $translationStatistics,
         ]);

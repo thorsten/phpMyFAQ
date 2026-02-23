@@ -80,7 +80,14 @@
 
 {# button #}
 {% macro sendTestMailButton(label, key, description) %}
-  {% set action = key == 'mail.sendTestEmail' ? 'send-mail-test' : (key == 'storage.testRedisConnection' ? 'test-redis-connection' : '') %}
+  {% if key == 'mail.sendTestEmail' %}
+    {% set action = 'send-mail-test' %}
+  {% elseif key == 'storage.testRedisConnection' %}
+    {% set action = 'test-redis-connection' %}
+  {% else %}
+    {% set action = 'unsupported-action' %}
+    <!-- WARNING: sendTestMailButton called with unsupported key "{{ key }}" — button will be inert -->
+  {% endif %}
   <label for="edit[{{ key }}]" class="col-3 col-form-label small mb-1 text-end">
     {{ label | raw }}<br>
     <span class="form-text">{{ description }}</span>

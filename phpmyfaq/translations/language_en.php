@@ -1694,7 +1694,7 @@ $LANG_CONF['storage.useRedisForConfiguration'] = [
 $LANG_CONF['storage.redisDsn'] = [
     'input',
     'Redis DSN for configuration storage',
-    'Examples: tcp://redis:6379?database=1 (Docker service name), tcp://127.0.0.1:6379?database=1',
+    'Examples: tcp://127.0.0.1:6379?database=1, tcp://redis:6379?database=1 (use the service hostname)',
 ];
 $LANG_CONF['storage.redisPrefix'] = [
     'input',
