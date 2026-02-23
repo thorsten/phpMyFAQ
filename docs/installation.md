@@ -844,7 +844,7 @@ If `getaddrinfo for redis failed: Name or service not known`, either Redis is no
 
 ### Recommended Defaults
 
-- DSN: `tcp://redis:6379?database=1`
+- DSN: `tcp://redis:6379?database=1` (Docker) or `tcp://127.0.0.1:6379?database=1` (non-Docker). Replace the hostname with your Redis server address if it differs.
 - Prefix: `pmf:config:`
 - Timeout: `1.0`
 

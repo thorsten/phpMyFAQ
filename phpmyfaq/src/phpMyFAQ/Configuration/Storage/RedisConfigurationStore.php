@@ -240,6 +240,9 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
                 ));
             }
 
+            $readTimeout = $timeout > 0 ? $timeout : (float) ini_get('default_socket_timeout');
+            $redis->setOption(Redis::OPT_READ_TIMEOUT, $readTimeout);
+
             return $redis;
         } catch (RedisException $e) {
             throw new RuntimeException('Redis connection failed: ' . $e->getMessage(), 0, $e);
