@@ -854,22 +854,18 @@ Before enabling it in production:
 2. Use **Test Redis connection**
 3. Save configuration and verify application behavior
 
-For full setup examples and troubleshooting, see:
-
-- [Redis-Backed Configuration Storage](redis-configuration-storage.md)
-
 ### 5.6.6 Elasticsearch configuration
 
 Here you can create and drop the Elasticsearch index, and you can run a full import of all data from your database
 into the Elasticsearch index. 
-You can also see some Elasticsearch relevant usage data. 
+You can also see some Elasticsearch-relevant usage data. 
 This page is only available if Elasticsearch is enabled.
 
 ### 5.6.7 OpenSearch configuration
 
 Here you can create and drop the OpenSearch index, and you can run a full import of all data from your database
 into the OpenSearch index.
-You can also see some OpenSearch relevant usage data.
+You can also see some OpenSearch-relevant usage data.
 This page is only available if OpenSearch is enabled.
 
 ### 5.6.8 System information

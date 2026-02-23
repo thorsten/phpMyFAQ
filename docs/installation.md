@@ -807,12 +807,23 @@ Use **Test Redis connection** before enabling Redis storage.
 
 ### DSN Examples
 
-- Docker Compose service name:
-    - `tcp://redis:6379?database=1`
-- Local host:
-    - `tcp://127.0.0.1:6379?database=1`
-- Unix socket:
-    - `unix:///var/run/redis/redis.sock?database=1`
+Docker Compose service name:
+
+```
+tcp://redis:6379?database=1
+```
+
+Local host:
+
+```
+tcp://127.0.0.1:6379?database=1
+```
+
+Unix socket:
+
+```
+unix:///var/run/redis/redis.sock?database=1
+```
 
 ### Docker Notes
 

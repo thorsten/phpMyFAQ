@@ -22,16 +22,18 @@ namespace phpMyFAQ\Configuration\Storage;
 use Redis;
 use RuntimeException;
 
-readonly class RedisConfigurationStore implements ConfigurationStoreInterface
+class RedisConfigurationStore implements ConfigurationStoreInterface
 {
+    private ?Redis $redisClient = null;
+
     public function __construct(
-        private ConfigurationStorageSettings $settings,
+        private readonly ConfigurationStorageSettings $settings,
     ) {
     }
 
     public function updateConfigValue(string $key, string $value): bool
     {
-        $redis = $this->createRedisClient();
+        $redis = $this->getRedisClient();
         return false !== $redis->hSet($this->getHashKey(), $key, $value);
     }
 
@@ -40,7 +42,7 @@ readonly class RedisConfigurationStore implements ConfigurationStoreInterface
      */
     public function fetchAll(): array
     {
-        $redis = $this->createRedisClient();
+        $redis = $this->getRedisClient();
         $entries = $redis->hGetAll($this->getHashKey());
         if (!is_array($entries) || $entries === []) {
             return [];
@@ -59,19 +61,19 @@ readonly class RedisConfigurationStore implements ConfigurationStoreInterface
 
     public function insert(string $name, string $value): bool
     {
-        $redis = $this->createRedisClient();
+        $redis = $this->getRedisClient();
         return (bool) $redis->hSetNx($this->getHashKey(), $name, $value);
     }
 
     public function delete(string $name): bool
     {
-        $redis = $this->createRedisClient();
+        $redis = $this->getRedisClient();
         return $redis->hDel($this->getHashKey(), $name) >= 0;
     }
 
     public function renameKey(string $currentKey, string $newKey): bool
     {
-        $redis = $this->createRedisClient();
+        $redis = $this->getRedisClient();
         $oldValue = $redis->hGet($this->getHashKey(), $currentKey);
         if ($oldValue === false) {
             return false;
@@ -82,13 +84,17 @@ readonly class RedisConfigurationStore implements ConfigurationStoreInterface
             return false;
         }
 
-        $redis->hDel($this->getHashKey(), $currentKey);
+        if ($redis->hDel($this->getHashKey(), $currentKey) < 1) {
+            $redis->hDel($this->getHashKey(), $newKey);
+            return false;
+        }
+
         return true;
     }
 
     public function getInstalledRedisVersion(): string
     {
-        $redis = $this->createRedisClient();
+        $redis = $this->getRedisClient();
         $serverInfo = $redis->info('server');
 
         $serverVersion = is_array($serverInfo) && isset($serverInfo['redis_version'])
@@ -108,7 +114,7 @@ readonly class RedisConfigurationStore implements ConfigurationStoreInterface
             return true;
         }
 
-        $redis = $this->createRedisClient();
+        $redis = $this->getRedisClient();
         $keyValueMap = [];
         foreach ($rows as $row) {
             if (!isset($row->config_name)) {
@@ -123,6 +129,15 @@ readonly class RedisConfigurationStore implements ConfigurationStoreInterface
         }
 
         return false !== $redis->hMSet($this->getHashKey(), $keyValueMap);
+    }
+
+    private function getRedisClient(): Redis
+    {
+        if ($this->redisClient === null) {
+            $this->redisClient = $this->createRedisClient();
+        }
+
+        return $this->redisClient;
     }
 
     private function getHashKey(): string
