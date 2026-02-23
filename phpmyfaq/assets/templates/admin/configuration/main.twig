@@ -125,6 +125,12 @@
                 LDAP
               </a>
             </li>
+            <li role="presentation" class="nav-item" data-config-group="integrations" data-config-label="{{ 'storageControlCenter' | translate }}">
+              <a href="#storage" aria-controls="storage" role="tab" data-bs-toggle="tab" class="nav-link">
+                <i aria-hidden="true" class="bi bi-database-gear"></i>
+                {{ 'storageControlCenter' | translate }}
+              </a>
+            </li>
             <li class="pmf-configuration-group" data-config-group="maintenance">
               <span>{{ 'upgradeControlCenter' | translate }}</span>
             </li>
@@ -150,6 +156,7 @@
             <div role="tabpanel" class="tab-pane fade" id="api"></div>
             <div role="tabpanel" class="tab-pane fade" id="upgrade"></div>
             <div role="tabpanel" class="tab-pane fade" id="translation"></div>
+            <div role="tabpanel" class="tab-pane fade" id="storage"></div>
             <div role="tabpanel" class="tab-pane fade" id="push"></div>
             <div role="tabpanel" class="tab-pane fade" id="ldap"></div>
           </div>

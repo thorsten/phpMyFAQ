@@ -14,6 +14,9 @@ import {
   handleSearchRelevance,
   handleSeoMetaTags,
   handleMailProvider,
+  handleSendTestMail,
+  handleTestRedisConnection,
+  setupRedisTestButtonState,
 } from './configuration';
 import {
   fetchConfiguration,
@@ -28,6 +31,8 @@ import {
   fetchTemplates,
   fetchTranslations,
   saveConfiguration,
+  sendTestMail,
+  testRedisConnection,
 } from '../api';
 
 vi.mock('../api');
@@ -218,6 +223,60 @@ describe('Configuration Functions', () => {
 
       const selectBox = document.querySelector('select[name="edit[mail.provider]"]');
       expect(selectBox?.innerHTML).toContain('<option value="smtp">SMTP</option>');
+    });
+  });
+
+  describe('handleSendTestMail', () => {
+    it('should call send test mail API with csrf token', async () => {
+      document.body.innerHTML = `
+        <input id="pmf-csrf-token" value="csrf-token" />
+      `;
+
+      (sendTestMail as Mock).mockResolvedValue({ success: true, message: 'ok' });
+
+      await handleSendTestMail();
+
+      expect(sendTestMail).toHaveBeenCalledWith('csrf-token');
+    });
+  });
+
+  describe('handleTestRedisConnection', () => {
+    it('should call redis test API with form values', async () => {
+      document.body.innerHTML = `
+        <input id="pmf-csrf-token" value="csrf-token" />
+        <input id="edit[storage.redisDsn]" value="tcp://redis:6379?database=1" />
+        <input id="edit[storage.redisConnectTimeout]" value="1.5" />
+        <button id="btn-phpmyfaq-storage-testRedisConnection">Test Redis connection</button>
+      `;
+
+      (testRedisConnection as Mock).mockResolvedValue({ success: true, message: 'ok' });
+
+      await handleTestRedisConnection();
+
+      expect(testRedisConnection).toHaveBeenCalledWith('csrf-token', 'tcp://redis:6379?database=1', 1.5);
+      const button = document.getElementById('btn-phpmyfaq-storage-testRedisConnection') as HTMLButtonElement;
+      expect(button.disabled).toBe(false);
+      expect(button.innerHTML).toContain('Test Redis connection');
+    });
+  });
+
+  describe('setupRedisTestButtonState', () => {
+    it('should disable button when DSN is empty and enable it when DSN is set', () => {
+      document.body.innerHTML = `
+        <input id="edit[storage.redisDsn]" value="" />
+        <button id="btn-phpmyfaq-storage-testRedisConnection">Test Redis connection</button>
+      `;
+
+      setupRedisTestButtonState();
+
+      const redisDsnInput = document.getElementById('edit[storage.redisDsn]') as HTMLInputElement;
+      const button = document.getElementById('btn-phpmyfaq-storage-testRedisConnection') as HTMLButtonElement;
+      expect(button.disabled).toBe(true);
+
+      redisDsnInput.value = 'tcp://redis:6379?database=1';
+      redisDsnInput.dispatchEvent(new Event('input'));
+
+      expect(button.disabled).toBe(false);
     });
   });
 

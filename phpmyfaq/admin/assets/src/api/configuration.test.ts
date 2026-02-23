@@ -11,6 +11,8 @@ import {
   fetchTemplates,
   fetchTranslations,
   saveConfiguration,
+  sendTestMail,
+  testRedisConnection,
 } from './configuration';
 import * as fetchWrapperModule from './fetch-wrapper';
 
@@ -376,6 +378,48 @@ describe('saveConfiguration', () => {
     expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('api/configuration', {
       method: 'POST',
       body: formData,
+    });
+  });
+});
+
+describe('sendTestMail', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should send test mail request with csrf payload', async () => {
+    const mockResponse = { success: true, message: 'ok' };
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
+
+    const result = await sendTestMail('csrf-token');
+
+    expect(result).toEqual(mockResponse);
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('api/configuration/send-test-mail', {
+      method: 'POST',
+      body: JSON.stringify({ csrf: 'csrf-token' }),
+    });
+  });
+});
+
+describe('testRedisConnection', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should send redis connection test request with payload', async () => {
+    const mockResponse = { success: true, message: 'Redis connection successful.' };
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
+
+    const result = await testRedisConnection('csrf-token', 'tcp://redis:6379?database=1', 1.0);
+
+    expect(result).toEqual(mockResponse);
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('api/configuration/test-redis-connection', {
+      method: 'POST',
+      body: JSON.stringify({
+        csrf: 'csrf-token',
+        redisDsn: 'tcp://redis:6379?database=1',
+        timeout: 1.0,
+      }),
     });
   });
 });

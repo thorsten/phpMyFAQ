@@ -105,7 +105,7 @@ class MigrationRegistryTest extends TestCase
 
     public function testGetPendingMigrationsFromCurrentVersion(): void
     {
-        $pending = $this->registry->getPendingMigrations('4.2.0-alpha.2');
+        $pending = $this->registry->getPendingMigrations('4.2.0-alpha');
 
         $this->assertEmpty($pending);
     }
@@ -151,10 +151,10 @@ class MigrationRegistryTest extends TestCase
 
     public function testMigrationsCaching(): void
     {
-        // First call should initialize migrations
+        // The first call should initialize migrations
         $migrations1 = $this->registry->getMigrations();
 
-        // Second call should return cached migrations
+        // The second call should return cached migrations
         $migrations2 = $this->registry->getMigrations();
 
         $this->assertSame($migrations1, $migrations2);

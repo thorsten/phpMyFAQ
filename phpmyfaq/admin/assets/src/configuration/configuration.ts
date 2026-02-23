@@ -28,6 +28,8 @@ import {
   fetchTemplates,
   fetchTranslations,
   fetchTranslationProvider,
+  sendTestMail,
+  testRedisConnection,
   uploadThemeArchive,
   saveConfiguration,
 } from '../api';
@@ -46,6 +48,7 @@ const TAB_TARGETS = [
   '#api',
   '#upgrade',
   '#translation',
+  '#storage',
   '#push',
   '#ldap',
 ];
@@ -138,6 +141,11 @@ export const handleConfiguration = async (): Promise<void> => {
           case '#mail':
             await handleSMTPPasswordToggle();
             await handleMailProvider();
+            await registerConfigurationActionButtons();
+            break;
+          case '#storage':
+            await registerConfigurationActionButtons();
+            setupRedisTestButtonState();
             break;
           case '#translation':
             await handleTranslationProvider();
@@ -484,4 +492,127 @@ export const handleConfigurationTab = async (target: string): Promise<void> => {
       dateLastChecked.value = 'n/a';
     }
   }
+};
+
+const registerConfigurationActionButtons = async (): Promise<void> => {
+  const actionButtons = document.querySelectorAll('[data-pmf-config-action]') as NodeListOf<HTMLButtonElement>;
+  actionButtons.forEach((button: HTMLButtonElement): void => {
+    const action = button.dataset.pmfConfigAction ?? '';
+
+    if (action === 'send-mail-test') {
+      button.onclick = async (event: Event): Promise<void> => {
+        event.preventDefault();
+        await handleSendTestMail();
+      };
+      return;
+    }
+
+    if (action === 'test-redis-connection') {
+      button.onclick = async (event: Event): Promise<void> => {
+        event.preventDefault();
+        await handleTestRedisConnection();
+      };
+    }
+  });
+};
+
+export const handleSendTestMail = async (): Promise<void> => {
+  const csrfInput = document.getElementById('pmf-csrf-token') as HTMLInputElement | null;
+  if (!csrfInput || csrfInput.value === '') {
+    pushErrorNotification('Missing CSRF token.');
+    return;
+  }
+
+  try {
+    const response = (await sendTestMail(csrfInput.value)) as unknown as Response;
+    if (response.success) {
+      pushNotification(response.message || 'Test email sent successfully.');
+      return;
+    }
+
+    const errorMessage =
+      response.error ||
+      response.message ||
+      (typeof response.success === 'string' ? response.success : '') ||
+      'Sending test email failed.';
+    pushErrorNotification(errorMessage);
+  } catch (error) {
+    pushErrorNotification(error instanceof Error ? error.message : 'Sending test email failed.');
+  }
+};
+
+export const handleTestRedisConnection = async (): Promise<void> => {
+  const csrfInput = document.getElementById('pmf-csrf-token') as HTMLInputElement | null;
+  const redisDsnInput = document.getElementById('edit[storage.redisDsn]') as HTMLInputElement | null;
+  const timeoutInput = document.getElementById('edit[storage.redisConnectTimeout]') as HTMLInputElement | null;
+  const button = document.getElementById('btn-phpmyfaq-storage-testRedisConnection') as HTMLButtonElement | null;
+
+  if (!csrfInput || csrfInput.value === '') {
+    pushErrorNotification('Missing CSRF token.');
+    return;
+  }
+
+  if (!redisDsnInput || redisDsnInput.value.trim() === '') {
+    pushErrorNotification('Redis DSN is required.');
+    return;
+  }
+
+  const originalButtonHtml = button?.innerHTML ?? '';
+  if (button) {
+    button.disabled = true;
+    button.innerHTML =
+      '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Testing...';
+  }
+
+  const timeout = timeoutInput ? parseFloat(timeoutInput.value) : 1.0;
+  const timeoutValue = Number.isFinite(timeout) && timeout > 0 ? timeout : 1.0;
+
+  try {
+    const response = (await testRedisConnection(
+      csrfInput.value,
+      redisDsnInput.value.trim(),
+      timeoutValue
+    )) as unknown as Response;
+
+    if (response.success) {
+      pushNotification(response.message || 'Redis connection successful.');
+      return;
+    }
+
+    const errorMessage =
+      response.error ||
+      response.message ||
+      (typeof response.success === 'string' ? response.success : '') ||
+      'Redis connection test failed.';
+    pushErrorNotification(errorMessage);
+  } catch (error) {
+    pushErrorNotification(error instanceof Error ? error.message : 'Redis connection test failed.');
+  } finally {
+    if (button) {
+      button.disabled = false;
+      button.innerHTML = originalButtonHtml;
+    }
+  }
+};
+
+let redisInputListener: (() => void) | null = null;
+
+export const setupRedisTestButtonState = (): void => {
+  const redisDsnInput = document.getElementById('edit[storage.redisDsn]') as HTMLInputElement | null;
+  const button = document.getElementById('btn-phpmyfaq-storage-testRedisConnection') as HTMLButtonElement | null;
+
+  if (!redisDsnInput || !button) {
+    return;
+  }
+
+  if (redisInputListener) {
+    redisDsnInput.removeEventListener('input', redisInputListener);
+  }
+
+  redisInputListener = (): void => {
+    button.disabled = redisDsnInput.value.trim() === '';
+  };
+
+  redisDsnInput.addEventListener('input', redisInputListener);
+  redisInputListener();
 };

@@ -29,8 +29,8 @@ export const fetchWrapper = async (url: string, options?: RequestInit): Promise<
     // Store a flash message in sessionStorage to show after redirect
     sessionStorage.setItem('loginMessage', 'Your session has expired. Please log in again.');
 
-    // Redirect to the login page
-    window.location.href = './admin/login';
+    // Redirect to the admin login page
+    window.location.href = './login';
 
     // Throw error to stop further processing
     throw new Error('Session expired');

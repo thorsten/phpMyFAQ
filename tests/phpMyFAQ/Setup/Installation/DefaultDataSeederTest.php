@@ -31,6 +31,10 @@ class DefaultDataSeederTest extends TestCase
         $this->assertArrayHasKey('spam.enableCaptchaCode', $config);
         $this->assertArrayHasKey('session.handler', $config);
         $this->assertArrayHasKey('session.redisDsn', $config);
+        $this->assertArrayHasKey('storage.useRedisForConfiguration', $config);
+        $this->assertArrayHasKey('storage.redisDsn', $config);
+        $this->assertArrayHasKey('storage.redisPrefix', $config);
+        $this->assertArrayHasKey('storage.redisConnectTimeout', $config);
     }
 
     public function testGetMainConfigHasDynamicValues(): void
