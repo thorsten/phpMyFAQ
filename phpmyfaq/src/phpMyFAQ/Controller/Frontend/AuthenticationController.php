@@ -140,7 +140,7 @@ final class AuthenticationController extends AbstractFrontController
             $this->configuration->isSignInWithMicrosoftActive()
             && $this->currentUser->getUserAuthSource() === 'azure'
         ) {
-            return new RedirectResponse($this->configuration->getDefaultUrl() . 'services/azure/logout.php');
+            return new RedirectResponse($this->configuration->getDefaultUrl() . 'auth/azure/logout');
         }
 
         return $redirectResponse;

@@ -87,7 +87,22 @@ class OAuth
             ],
         ]);
 
-        return json_decode($response->getContent(), null, 512, JSON_THROW_ON_ERROR);
+        $content = $response->getContent(false);
+        $statusCode = $response->getStatusCode();
+
+        if ($statusCode >= 400) {
+            try {
+                /** @var stdClass $errorPayload */
+                $errorPayload = json_decode($content, null, 512, JSON_THROW_ON_ERROR);
+                $error = $errorPayload->error ?? 'oauth_error';
+                $description = $errorPayload->error_description ?? $content;
+                throw new \RuntimeException(sprintf('OAuth token exchange failed (%s): %s', $error, $description));
+            } catch (JsonException) {
+                throw new \RuntimeException(sprintf('OAuth token exchange failed: %s', $content));
+            }
+        }
+
+        return json_decode($content, null, 512, JSON_THROW_ON_ERROR);
     }
 
     /**
