@@ -1689,7 +1689,7 @@ $LANG_CONF['mail.useQueue'] = ['checkbox', 'Use background worker queue for emai
 $LANG_CONF['storage.useRedisForConfiguration'] = [
     'checkbox',
     'Enable Redis for configuration storage',
-    'If disabled, phpMyFAQ uses the database only.',
+    'If disabled, phpMyFAQ uses the database only',
 ];
 $LANG_CONF['storage.redisDsn'] = [
     'input',
@@ -1699,18 +1699,14 @@ $LANG_CONF['storage.redisDsn'] = [
 $LANG_CONF['storage.redisPrefix'] = [
     'input',
     'Redis key prefix for configuration storage',
-    'Use different prefixes for multiple phpMyFAQ instances sharing one Redis server.',
+    'Use different prefixes for multiple phpMyFAQ instances sharing one Redis server',
 ];
 $LANG_CONF['storage.redisConnectTimeout'] = [
     'input',
     'Redis connection timeout in seconds',
     'Default: 1.0',
 ];
-$LANG_CONF['storage.testRedisConnection'] = [
-    'button',
-    'Test Redis connection using current settings',
-    'The test uses DSN and timeout from this form.',
-];
+$LANG_CONF['storage.testRedisConnection'] = ['button', 'Test Redis connection'];
 $PMF_LANG['storage.testRedisConnection'] = 'Test Redis connection';
 
 return $PMF_LANG;
