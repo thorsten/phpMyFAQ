@@ -84,7 +84,7 @@ readonly class AdminLog
      */
     public function delete(): bool
     {
-        $timestamp = (int) Request::createFromGlobals()->server->get(key: 'REQUEST_TIME') - (30 * 86400);
+        $timestamp = (int) Request::createFromGlobals()->server->get(key: 'REQUEST_TIME') - (30 * 86_400);
         return $this->adminLogRepository->deleteOlderThan($timestamp);
     }
 
@@ -122,8 +122,8 @@ readonly class AdminLog
                 $errors[] = sprintf(
                     'Log ID %d: Chain broken - previous hash mismatch (expected: %s, got: %s)',
                     $log->getId(),
-                    substr($previousHash, 0, 8) . '...',
-                    substr($log->getPreviousHash() ?? 'NULL', 0, 8) . '...',
+                    substr(string: $previousHash, offset: 0, length: 8) . '...',
+                    substr(string: $log->getPreviousHash() ?? 'NULL', offset: 0, length: 8) . '...',
                 );
                 continue;
             }
@@ -139,7 +139,7 @@ readonly class AdminLog
         }
 
         return [
-            'valid' => empty($errors),
+            'valid' => $errors === [],
             'errors' => $errors,
             'total' => $total,
             'verified' => $verified,

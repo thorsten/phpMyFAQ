@@ -172,7 +172,7 @@ final class CategoryController extends AbstractApiController
             data: array_values($categories),
             total: $total,
             pagination: $pagination,
-            sort: $sort,
+            options: new PaginatedResponseOptions(sort: $sort),
         );
     }
 
@@ -276,14 +276,18 @@ final class CategoryController extends AbstractApiController
         $parentId = Filter::filterVar($data->{'parent-id'}, FILTER_VALIDATE_INT);
         $parentCategoryName = null;
 
-        if (isset($data->{'parent-category-name'})) {
+        if (property_exists($data, 'parent-category-name') && $data->{'parent-category-name'} !== null) {
             $parentCategoryName = Filter::filterVar($data->{'parent-category-name'}, FILTER_SANITIZE_SPECIAL_CHARS);
         }
 
         $name = Filter::filterVar($data->{'category-name'}, FILTER_SANITIZE_SPECIAL_CHARS);
         $description = Filter::filterVar($data->{'description'}, FILTER_SANITIZE_SPECIAL_CHARS);
-        $userId = isset($data->{'user-id'}) ? Filter::filterVar($data->{'user-id'}, FILTER_VALIDATE_INT) : 1;
-        $groupId = isset($data->{'group-id'}) ? Filter::filterVar($data->{'group-id'}, FILTER_VALIDATE_INT) : -1;
+        $userId = property_exists($data, 'user-id') && $data->{'user-id'} !== null
+            ? Filter::filterVar($data->{'user-id'}, FILTER_VALIDATE_INT)
+            : 1;
+        $groupId = property_exists($data, 'group-id') && $data->{'group-id'} !== null
+            ? Filter::filterVar($data->{'group-id'}, FILTER_VALIDATE_INT)
+            : -1;
         $active = Filter::filterVar($data->{'is-active'}, FILTER_VALIDATE_BOOLEAN);
         $showOnHome = Filter::filterVar($data->{'show-on-homepage'}, FILTER_VALIDATE_BOOLEAN);
 

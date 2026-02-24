@@ -30,15 +30,14 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Session\SessionWrapper;
 use phpMyFAQ\User;
 use SensitiveParameter;
 use Symfony\Component\HttpFoundation\Request;
 
 /* user defined constants */
-define('SESSION_CURRENT_USER', 'CURRENT_USER');
-define('SESSION_ID_TIMESTAMP', 'SESSION_TIMESTAMP');
+define(constant_name: 'SESSION_CURRENT_USER', value: 'CURRENT_USER');
+define(constant_name: 'SESSION_ID_TIMESTAMP', value: 'SESSION_TIMESTAMP');
 
 /**
  * Class CurrentUser
@@ -53,7 +52,10 @@ define('SESSION_ID_TIMESTAMP', 'SESSION_TIMESTAMP');
  */
 class CurrentUser extends User
 {
-    private const int PMF_REMEMBER_ME_EXPIRED_TIME = 1209600; // 2 weeks
+    use CurrentUserAccountStateTrait;
+    use CurrentUserSessionLookupTrait;
+
+    private const int PMF_REMEMBER_ME_EXPIRED_TIME = 1_209_600; // 2 weeks
 
     private bool $loggedIn = false;
 
@@ -149,9 +151,9 @@ class CurrentUser extends User
             $this->configuration->isLdapActive()
             && $this->configuration->get(item: 'ldap.ldap_use_domain_prefix')
             && '' !== $password
-            && ($pos = strpos($login, '\\')) !== false
+            && ($pos = strpos($login, needle: '\\')) !== false
         ) {
-            $optData['domain'] = $pos !== 0 ? substr($login, 0, $pos) : '';
+            $optData['domain'] = $pos !== 0 ? substr($login, offset: 0, length: $pos) : '';
             $login = substr($login, $pos + 1);
         }
 
@@ -161,7 +163,7 @@ class CurrentUser extends User
             && $request->server->get('REMOTE_USER')
             && '' === $password
         ) {
-            $login = strtok($login, '@\\');
+            $login = strtok($login, token: chr(64) . '\\');
         }
 
         // Attempt to authenticate a user by login and password
@@ -254,36 +256,6 @@ class CurrentUser extends User
     }
 
     /**
-     * Returns true if the user is a local user, otherwise false.
-     */
-    public function isLocalUser(): bool
-    {
-        $query = sprintf(
-            "SELECT auth_source FROM %sfaquser WHERE auth_source = 'local' AND user_id = %d",
-            Database::getTablePrefix(),
-            $this->getUserId(),
-        );
-
-        $result = $this->configuration->getDb()->query($query);
-
-        return (bool) $this->configuration->getDb()->fetchRow($result);
-    }
-
-    public function isBlocked(): bool
-    {
-        $query = sprintf(
-            'SELECT account_status FROM %sfaquser WHERE user_id = %d',
-            Database::getTablePrefix(),
-            $this->getUserId(),
-        );
-
-        $result = $this->configuration->getDb()->query($query);
-        $row = $this->configuration->getDb()->fetchRow($result);
-
-        return $row === 'blocked';
-    }
-
-    /**
      * Returns false if the CurrentUser object stored in the session is valid and not timed out.
      * There are two parameters for session timeouts: $this->sessionTimeout and $this->sessionIdTimeout.
      */
@@ -358,12 +330,12 @@ class CurrentUser extends User
         if (session_regenerate_id(true)) {
             $sessionPath = session_save_path();
             if (str_contains($sessionPath, ';')) {
-                $sessionPath = substr($sessionPath, strpos($sessionPath, ';') + 1);
+                $sessionPath = substr($sessionPath, strpos($sessionPath, needle: ';') + 1);
             }
 
             $sessionFilename = $sessionPath . '/sess_' . $oldSessionId;
-            if (@file_exists($sessionFilename)) {
-                @unlink($sessionFilename);
+            if (file_exists($sessionFilename)) {
+                unlink($sessionFilename);
             }
         }
 
@@ -454,151 +426,6 @@ class CurrentUser extends User
         //session_destroy();
 
         return true;
-    }
-
-    /**
-     * Returns the current user object from cookie or session
-     *
-     * @throws Exception
-     */
-    public static function getCurrentUser(Configuration $configuration): CurrentUser
-    {
-        $user = self::getFromCookie($configuration);
-
-        if (!$user instanceof CurrentUser) {
-            $user = self::getFromSession($configuration);
-        }
-
-        if ($user instanceof CurrentUser) {
-            $user->setLoggedIn(true);
-        } else {
-            $user = new CurrentUser($configuration);
-        }
-
-        return $user;
-    }
-
-    /**
-     * Returns the current user ID and group IDs as an array, default values are -1
-     *
-     * @return array{0: int, 1: int[]}
-     */
-    public static function getCurrentUserGroupId(?CurrentUser $user = null): array
-    {
-        if (!is_null($user)) {
-            $currentUser = $user->getUserId();
-            if ($user->perm instanceof MediumPermission) {
-                $currentGroups = $user->perm->getUserGroups($currentUser);
-            } else {
-                $currentGroups = [-1];
-            }
-
-            if ($currentGroups === []) {
-                $currentGroups = [-1];
-            }
-        } else {
-            $currentUser = -1;
-            $currentGroups = [-1];
-        }
-
-        return [$currentUser, $currentGroups];
-    }
-
-    /**
-     * This static method returns a valid CurrentUser object if there is one
-     * in the session that is not timed out. The session-ID is updated if
-     * necessary. The CurrentUser will be removed from the session if it is
-     * timed out. If there is no valid CurrentUser in the session or the
-     * session is timed out, null will be returned. If the session data is
-     * correct, but there is no user found in the user table, false will be
-     * returned. On success, a valid CurrentUser object is returned.
-     *
-     * @static
-     * @throws Exception
-     */
-    public static function getFromSession(Configuration $configuration): ?CurrentUser
-    {
-        $sessionWrapper = new SessionWrapper();
-        // there is no valid user object in session
-        if (!$sessionWrapper->has(SESSION_CURRENT_USER) || !$sessionWrapper->has(SESSION_ID_TIMESTAMP)) {
-            return null;
-        }
-
-        // create a new CurrentUser object
-        $user = new self($configuration);
-        $user->getUserById($sessionWrapper->get(SESSION_CURRENT_USER));
-
-        // user object is timed out
-        if ($user->sessionIsTimedOut()) {
-            $user->deleteFromSession();
-            $user->errors[] = 'Session timed out.';
-
-            return null;
-        }
-
-        // session-id not found in user table
-        $sessionInfo = $user->getSessionInfo();
-        $sessionId = $sessionInfo['session_id'] ?? '';
-        if ($sessionId === '' || $sessionId !== session_id()) {
-            return null;
-        }
-
-        // check ip
-        if (
-            $configuration->get('security.ipCheck')
-            && $sessionInfo['ip'] != Request::createFromGlobals()->getClientIp()
-        ) {
-            return null;
-        }
-
-        // session-id needs to be updated
-        if ($user->sessionIdIsTimedOut()) {
-            $user->updateSessionId();
-        }
-
-        // user is now logged in
-        $user->loggedIn = true;
-        // save current user to session and return the instance
-        $user->saveToSession();
-
-        return $user;
-    }
-
-    /**
-     * This static method returns a valid CurrentUser object if there is one
-     * in the cookie that is not timed out. The session-ID is updated then.
-     * The CurrentUser will be removed from the session if it is
-     * timed out. If there is no valid CurrentUser in the cookie or the
-     * cookie is timed out, null will be returned. If the cookie is correct,
-     * but there is no user found in the user table, false will be returned.
-     * On success, a valid CurrentUser object is returned.
-     *
-     * @static
-     * @throws Exception
-     */
-    public static function getFromCookie(Configuration $configuration): ?CurrentUser
-    {
-        $request = Request::createFromGlobals();
-        if ($request->cookies->get(UserSession::COOKIE_NAME_REMEMBER_ME) === null) {
-            return null;
-        }
-
-        // create a new CurrentUser object
-        $user = new self($configuration);
-        $user->getUserByCookie($request->cookies->get(UserSession::COOKIE_NAME_REMEMBER_ME));
-
-        if (-1 === $user->getUserId()) {
-            return null;
-        }
-
-        // sessionId needs to be updated
-        $user->updateSessionId(true);
-        // user is now logged in
-        $user->loggedIn = true;
-        // save current user to session and return the instance
-        $user->saveToSession();
-
-        return $user;
     }
 
     /**

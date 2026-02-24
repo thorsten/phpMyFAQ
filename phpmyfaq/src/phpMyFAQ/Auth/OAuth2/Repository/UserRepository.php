@@ -29,7 +29,7 @@ final class UserRepository extends AbstractRepository implements UserRepositoryI
 {
     public function getUserEntityByUserCredentials(
         string $username,
-        string $password,
+        #[\SensitiveParameter] string $password,
         string $grantType,
         ClientEntityInterface $clientEntity,
     ): ?UserEntityInterface {
@@ -55,7 +55,7 @@ final class UserRepository extends AbstractRepository implements UserRepositoryI
         }
 
         $row = $this->db()->fetchObject($result);
-        if (!is_object($row) || !isset($row->user_id)) {
+        if (!is_object($row) || !property_exists($row, 'user_id') || $row->user_id === null) {
             return null;
         }
 

@@ -143,7 +143,7 @@ final class GroupController extends AbstractApiController
             data: array_values($result),
             total: $total,
             pagination: $pagination,
-            sort: $sort,
+            options: new PaginatedResponseOptions(sort: $sort),
         );
     }
 }

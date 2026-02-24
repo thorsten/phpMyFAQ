@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
-use Exception;
 use phpMyFAQ\Api\Filtering\FilterRequest;
 use phpMyFAQ\Api\Pagination\PaginationMetadata;
 use phpMyFAQ\Api\Pagination\PaginationRequest;
@@ -130,10 +129,10 @@ abstract class AbstractApiController extends AbstractController
         array $data,
         int $total,
         PaginationRequest $pagination,
-        ?SortRequest $sort = null,
-        ?FilterRequest $filters = null,
-        int $status = Response::HTTP_OK,
+        ?PaginatedResponseOptions $options = null,
     ): JsonResponse {
+        $options ??= new PaginatedResponseOptions();
+
         // Build base URL for pagination links
         $baseUrl = $request->getPathInfo();
         if ($request->getQueryString()) {
@@ -152,11 +151,11 @@ abstract class AbstractApiController extends AbstractController
         $responseData = ApiResponse::success(
             data: $data,
             pagination: $paginationMetadata,
-            sort: $sort,
-            filters: $filters,
+            sort: $options->sort,
+            filters: $options->filters,
         );
 
-        return new JsonResponse($responseData, $status);
+        return new JsonResponse($responseData, $options->status);
     }
 
     /**

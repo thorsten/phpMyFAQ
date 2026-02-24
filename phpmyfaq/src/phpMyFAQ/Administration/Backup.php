@@ -66,10 +66,10 @@ readonly class Backup
             $backups = $this->getRepository()->getAll();
             $lastBackup = $backups[0] ?? null;
 
-            if ($lastBackup !== null && isset($lastBackup->created)) {
+            if ($lastBackup !== null && property_exists($lastBackup, 'created') && $lastBackup->created !== null) {
                 $createdRaw = (string) $lastBackup->created;
-                $createdDate = DateTimeImmutable::createFromFormat(format: 'Y-m-d H:i:s', datetime: $createdRaw)
-                ?: null;
+                $createdDate = DateTimeImmutable::createFromFormat(format: 'Y-m-d H:i:s', datetime: $createdRaw);
+                $createdDate = $createdDate === false ? null : $createdDate;
                 if ($createdDate !== null) {
                     $lastBackupDateFormatted = $createdDate->format(format: 'Y-m-d H:i:s');
                     $threshold = new DateTimeImmutable(datetime: '-30 days');
@@ -269,7 +269,7 @@ readonly class Backup
             throw new Exception(message: sprintf('Cannot open backup file "%s".', $filePath));
         }
 
-        $firstLine = fgets($handle, length: 65536);
+        $firstLine = fgets($handle, length: 65_536);
         if (false === $firstLine) {
             fclose($handle);
             throw new Exception(message: 'Empty backup file.');
@@ -295,7 +295,12 @@ readonly class Backup
         $tablePrefix = '';
         $currentQuery = '';
 
-        while ($line = fgets($handle, length: 65536)) {
+        while (true) {
+            $line = fgets($handle, length: 65_536);
+            if ($line === false) {
+                break;
+            }
+
             $trimmedLine = trim($line);
             $backupPrefixPattern = '-- pmftableprefix:';
             $backupPrefixPatternLength = Strings::strlen($backupPrefixPattern);

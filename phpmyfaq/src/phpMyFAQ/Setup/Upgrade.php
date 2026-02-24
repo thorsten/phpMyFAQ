@@ -159,7 +159,7 @@ class Upgrade extends AbstractSetup
                 }
 
                 // Short sleep to mitigate transient network issues
-                usleep(microseconds: 250000); // 250ms
+                usleep(microseconds: 250_000); // 250ms
             }
         }
 
@@ -242,11 +242,14 @@ class Upgrade extends AbstractSetup
     private function secureExtractZip(ZipArchive $zipArchive, string $destination): void
     {
         // Normalize destination path
-        $destination = rtrim(realpath($destination) ?: $destination, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $resolvedDestination = realpath($destination);
+        $destination =
+            rtrim($resolvedDestination !== false ? $resolvedDestination : $destination, DIRECTORY_SEPARATOR)
+            . DIRECTORY_SEPARATOR;
 
         // Create destination directory if it doesn't exist
         if (!is_dir($destination)) {
-            mkdir($destination, 0o755, true);
+            mkdir(directory: $destination, permissions: 0o755, recursive: true);
         }
 
         // Iterate through all entries in the archive
@@ -279,7 +282,7 @@ class Upgrade extends AbstractSetup
     private function isPathSafe(string $entryPath, string $destination): bool
     {
         // Remove any null bytes
-        $entryPath = str_replace("\0", '', $entryPath);
+        $entryPath = str_replace(search: "\0", replace: '', subject: $entryPath);
 
         // Build the full destination path
         $fullPath = $destination . $entryPath;
@@ -292,7 +295,11 @@ class Upgrade extends AbstractSetup
         }
 
         // Normalize both paths for comparison
-        $normalizedDestination = rtrim(realpath($destination) ?: $destination, DIRECTORY_SEPARATOR);
+        $resolvedNormalizedDestination = realpath($destination);
+        $normalizedDestination = rtrim(
+            $resolvedNormalizedDestination !== false ? $resolvedNormalizedDestination : $destination,
+            DIRECTORY_SEPARATOR,
+        );
         $normalizedPath = rtrim($realPath, DIRECTORY_SEPARATOR);
 
         // Check if the resolved path is within the destination directory

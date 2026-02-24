@@ -161,6 +161,12 @@ final class CommentController extends AbstractApiController
         // Get total count
         $total = $this->comments->countComments($recordId, CommentType::FAQ);
 
-        return $this->paginatedResponse($request, data: $result, total: $total, pagination: $pagination, sort: $sort);
+        return $this->paginatedResponse(
+            $request,
+            data: $result,
+            total: $total,
+            pagination: $pagination,
+            options: new PaginatedResponseOptions(sort: $sort),
+        );
     }
 }

@@ -26,7 +26,6 @@ use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\News;
-use phpMyFAQ\System;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\TagNameTwigExtension;
