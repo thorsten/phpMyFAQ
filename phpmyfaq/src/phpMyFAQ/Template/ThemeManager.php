@@ -129,13 +129,13 @@ readonly class ThemeManager
 
     public function getThemeRootPath(): string
     {
-        return trim($this->themeRootPath, '/');
+        return trim(string: $this->themeRootPath, characters: '/');
     }
 
     private function themeStoragePath(string $themeName, string $relativePath = ''): string
     {
-        $basePath = trim($this->themeRootPath, '/') . '/' . $themeName;
-        $relativePath = ltrim($relativePath, '/');
+        $basePath = trim(string: $this->themeRootPath, characters: '/') . '/' . $themeName;
+        $relativePath = ltrim(string: $relativePath, characters: '/');
 
         if ($relativePath === '') {
             return $basePath;
@@ -160,16 +160,16 @@ readonly class ThemeManager
 
     private function normalizeArchivePath(string $entryName, string $themeName): string
     {
-        $normalizedPath = str_replace('\\', '/', trim($entryName));
-        $normalizedPath = ltrim($normalizedPath, '/');
+        $normalizedPath = str_replace(search: '\\', replace: '/', subject: trim($entryName));
+        $normalizedPath = ltrim(string: $normalizedPath, characters: '/');
 
         // Flatten root folder archives: "mytheme/index.twig" -> "index.twig".
         $pathParts = array_values(array_filter(
             explode('/', $normalizedPath),
             static fn(string $part): bool => $part !== '',
         ));
-        if (count($pathParts) > 1 && $pathParts[0] === $themeName) {
-            $pathParts = array_slice($pathParts, 1);
+        if (count(value: $pathParts) > 1 && $pathParts[0] === $themeName) {
+            $pathParts = array_slice($pathParts, offset: 1);
         }
 
         $rebuiltPath = implode('/', $pathParts);

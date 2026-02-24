@@ -40,23 +40,23 @@ class Gravatar
         $imageUrl = $this->getUrl() . 'avatar/' . $this->getHash($email);
         $opts = [];
 
-        if (isset($params['default'])) {
+        if (array_key_exists('default', $params)) {
             $opts[] = 'default=' . $params['default'];
         }
 
-        if (isset($params['size'])) {
+        if (array_key_exists('size', $params)) {
             $opts[] = 'size=' . $params['size'];
         }
 
-        if (isset($params['rating'])) {
+        if (array_key_exists('rating', $params)) {
             $opts[] = 'rating=' . $params['rating'];
         }
 
-        if (isset($params['force_default']) && $params['force_default']) {
+        if (array_key_exists('force_default', $params) && $params['force_default']) {
             $opts[] = 'forcedefault=y';
         }
 
-        if (!isset($params['class'])) {
+        if (!array_key_exists('class', $params)) {
             $params['class'] = '';
         }
 
@@ -76,19 +76,19 @@ class Gravatar
         $imageUrl = $this->getUrl() . 'avatar/' . $this->getHash($email);
         $opts = [];
 
-        if (isset($params['default'])) {
+        if (array_key_exists('default', $params)) {
             $opts[] = 'default=' . $params['default'];
         }
 
-        if (isset($params['size'])) {
+        if (array_key_exists('size', $params)) {
             $opts[] = 'size=' . $params['size'];
         }
 
-        if (isset($params['rating'])) {
+        if (array_key_exists('rating', $params)) {
             $opts[] = 'rating=' . $params['rating'];
         }
 
-        if (isset($params['force_default']) && $params['force_default']) {
+        if (array_key_exists('force_default', $params) && $params['force_default']) {
             $opts[] = 'forcedefault=y';
         }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Authentication Controller to handle login, logout, and password reset
  *

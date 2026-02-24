@@ -97,7 +97,7 @@ class InstallationInputValidator
             Database::setTablePrefix($dbSetup['dbPrefix']);
         }
 
-        if (!isset($setup['dbType'])) {
+        if ($setup === null || !array_key_exists('dbType', $setup)) {
             $dbSetup['dbType'] = Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_SPECIAL_CHARS);
         } else {
             $dbSetup['dbType'] = $setup['dbType'];
@@ -123,7 +123,7 @@ class InstallationInputValidator
             throw new Exception('Installation Error: Please add a database server.');
         }
 
-        if (!isset($setup['dbType'])) {
+        if ($setup === null || !array_key_exists('dbType', $setup)) {
             $dbSetup['dbPort'] = Filter::filterInput(INPUT_POST, 'sql_port', FILTER_VALIDATE_INT);
         } else {
             $dbSetup['dbPort'] = $setup['dbPort'];
@@ -143,7 +143,7 @@ class InstallationInputValidator
             $dbSetup['dbPassword'] = '';
         }
 
-        if (!isset($setup['dbType'])) {
+        if ($setup === null || !array_key_exists('dbType', $setup)) {
             $dbSetup['dbDatabaseName'] = Filter::filterInput(INPUT_POST, 'sql_db', FILTER_SANITIZE_SPECIAL_CHARS);
         } else {
             $dbSetup['dbDatabaseName'] = $setup['dbDatabaseName'];
@@ -278,7 +278,7 @@ class InstallationInputValidator
      */
     private function validateUserCredentials(?array $setup): array
     {
-        if (!isset($setup['loginname'])) {
+        if ($setup === null || !array_key_exists('loginname', $setup)) {
             $loginName = Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_SPECIAL_CHARS);
         } else {
             $loginName = $setup['loginname'];
@@ -288,7 +288,7 @@ class InstallationInputValidator
             throw new Exception('Installation Error: Please add a login name for your account.');
         }
 
-        if (!isset($setup['password'])) {
+        if ($setup === null || !array_key_exists('password', $setup)) {
             $password = Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
         } else {
             $password = $setup['password'];
@@ -298,7 +298,7 @@ class InstallationInputValidator
             throw new Exception('Installation Error: Please add a password for your account.');
         }
 
-        if (!isset($setup['password_retyped'])) {
+        if ($setup === null || !array_key_exists('password_retyped', $setup)) {
             $passwordRetyped = Filter::filterInput(INPUT_POST, 'password_retyped', FILTER_SANITIZE_SPECIAL_CHARS);
         } else {
             $passwordRetyped = $setup['password_retyped'];

@@ -120,10 +120,14 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
             $redis = $this->getRedisClient();
             $serverInfo = $redis->info('server');
 
-            $serverVersion = is_array($serverInfo) && isset($serverInfo['redis_version'])
-                ? (string) $serverInfo['redis_version']
-                : 'unknown';
-            $extensionVersion = (string) (phpversion('redis') ?: 'unknown');
+            $serverVersion = 'unknown';
+            if (is_array($serverInfo) && array_key_exists('redis_version', $serverInfo)) {
+                $serverVersion = (string) $serverInfo['redis_version'];
+            }
+            $configuredExtensionVersion = phpversion('redis');
+            $extensionVersion = (string) (
+                $configuredExtensionVersion !== false ? $configuredExtensionVersion : 'unknown'
+            );
 
             return sprintf('%s (ext-redis %s)', $serverVersion, $extensionVersion);
         } catch (RedisException $e) {
@@ -144,7 +148,7 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
             $redis = $this->getRedisClient();
             $keyValueMap = [];
             foreach ($rows as $row) {
-                if (!isset($row->config_name)) {
+                if (!property_exists($row, 'config_name') || $row->config_name === null) {
                     continue;
                 }
 
@@ -188,7 +192,7 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
         }
 
         $parsedUrl = parse_url($this->settings->redisDsn);
-        if ($parsedUrl === false || !isset($parsedUrl['scheme'])) {
+        if ($parsedUrl === false || !array_key_exists('scheme', $parsedUrl)) {
             throw new RuntimeException('Invalid Redis DSN for configuration storage.');
         }
 
@@ -221,9 +225,9 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
                 ));
             }
 
-            if (isset($parsedUrl['pass']) && $parsedUrl['pass'] !== '') {
+            if (array_key_exists('pass', $parsedUrl) && $parsedUrl['pass'] !== '') {
                 $pass = urldecode($parsedUrl['pass']);
-                if (isset($parsedUrl['user']) && $parsedUrl['user'] !== '') {
+                if (array_key_exists('user', $parsedUrl) && $parsedUrl['user'] !== '') {
                     $user = urldecode($parsedUrl['user']);
                     $authResult = $redis->auth([$user, $pass]);
                 } else {
@@ -236,7 +240,7 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
             }
 
             $database = 0;
-            if (isset($parsedUrl['query'])) {
+            if (array_key_exists('query', $parsedUrl)) {
                 parse_str($parsedUrl['query'], $queryParams);
                 $database = (int) ($queryParams['database'] ?? $queryParams['db'] ?? 0);
             }

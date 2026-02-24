@@ -63,7 +63,7 @@ class BasicPermission implements PermissionInterface
     {
         $rightData = $this->getRightData($rightId);
 
-        if (!isset($rightData['for_users'])) {
+        if (!array_key_exists('for_users', $rightData)) {
             return false;
         }
 
@@ -209,24 +209,22 @@ class BasicPermission implements PermissionInterface
      */
     public function checkRightData(array $rightData): array
     {
-        if (!isset($rightData['name']) || !is_string($rightData['name'])) {
-            $rightData['name'] = $this->defaultRightData['name'];
+        $stringFields = ['name', 'description'];
+        foreach ($stringFields as $field) {
+            if (array_key_exists($field, $rightData) && is_string($rightData[$field])) {
+                continue;
+            }
+
+            $rightData[$field] = $this->defaultRightData[$field];
         }
 
-        if (!isset($rightData['description']) || !is_string($rightData['description'])) {
-            $rightData['description'] = $this->defaultRightData['description'];
-        }
+        $booleanLikeFields = ['for_users', 'for_groups', 'for_sections'];
+        foreach ($booleanLikeFields as $field) {
+            if (array_key_exists($field, $rightData)) {
+                continue;
+            }
 
-        if (!isset($rightData['for_users'])) {
-            $rightData['for_users'] = $this->defaultRightData['for_users'];
-        }
-
-        if (!isset($rightData['for_groups'])) {
-            $rightData['for_groups'] = $this->defaultRightData['for_groups'];
-        }
-
-        if (!isset($rightData['for_sections'])) {
-            $rightData['for_sections'] = $this->defaultRightData['for_sections'];
+            $rightData[$field] = $this->defaultRightData[$field];
         }
 
         $rightData['for_users'] = (int) $rightData['for_users'];

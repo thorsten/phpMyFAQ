@@ -163,15 +163,15 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         ];
 
         // Special checks
-        if (isset($configurationData['main.enableMarkdownEditor'])) {
+        if (array_key_exists('main.enableMarkdownEditor', $configurationData)) {
             $configurationData['main.enableWysiwygEditor'] = false; // Disable WYSIWYG editor if Markdown is enabled
         }
 
-        if (isset($configurationData['main.currentVersion'])) {
+        if (array_key_exists('main.currentVersion', $configurationData)) {
             unset($configurationData['main.currentVersion']); // don't update the version number
         }
 
-        if (isset($configurationData['records.attachmentsPath'])) {
+        if (array_key_exists('records.attachmentsPath', $configurationData)) {
             $realPath = realpath($configurationData['records.attachmentsPath']);
 
             if (false === $realPath) {
@@ -188,7 +188,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         }
 
         if (
-            isset($configurationData['main.referenceURL'])
+            array_key_exists('main.referenceURL', $configurationData)
             && is_null(Filter::filterVar($configurationData['main.referenceURL'], FILTER_VALIDATE_URL))
         ) {
             unset($configurationData['main.referenceURL']);
@@ -197,7 +197,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         foreach ($configurationData as $key => $value) {
             $newConfigValues[$key] = (string) $value;
             // Escape some values
-            if (isset($escapeValues[$key])) {
+            if (in_array($key, $escapeValues, strict: true)) {
                 $newConfigValues[$key] = Strings::htmlspecialchars($value, ENT_QUOTES);
             }
         }
@@ -212,7 +212,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
                 }
 
                 if (
-                    isset($oldConfigurationData[$availableField])
+                    array_key_exists($availableField, $oldConfigurationData)
                     && $oldConfigurationData[$availableField] === 'true'
                 ) {
                     $newConfigValues[$availableField] = 'false';
@@ -262,7 +262,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     private function logSecurityConfigChanges(array $changedKeys, array $oldConfig, array $newConfig): void
     {
         // Maintenance mode changes
-        if (in_array('main.maintenanceMode', $changedKeys)) {
+        if (in_array('main.maintenanceMode', $changedKeys, strict: true)) {
             if ($newConfig['main.maintenanceMode'] === 'false' && $oldConfig['main.maintenanceMode'] === 'true') {
                 $this->adminLog->log($this->currentUser, AdminLogType::SYSTEM_MAINTENANCE_MODE_DISABLED->value);
             } elseif ($newConfig['main.maintenanceMode'] === 'true' && $oldConfig['main.maintenanceMode'] === 'false') {

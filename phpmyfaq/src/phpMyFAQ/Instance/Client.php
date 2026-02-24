@@ -349,7 +349,12 @@ class Client extends Instance
         $DB = [];
         include $databaseFile;
 
-        if (!isset($DB['server'], $DB['user'], $DB['password'], $DB['db'])) {
+        if (
+            !array_key_exists('server', $DB)
+            || !array_key_exists('user', $DB)
+            || !array_key_exists('password', $DB)
+            || !array_key_exists('db', $DB)
+        ) {
             return null;
         }
 
@@ -443,14 +448,14 @@ class Client extends Instance
         $dbType = Database::getType();
 
         if (str_contains($dbType, 'sqlsrv') || str_contains($dbType, 'Sqlsrv')) {
-            return sprintf('[%s]', str_replace(']', ']]', $name));
+            return sprintf('[%s]', str_replace(search: ']', replace: ']]', subject: $name));
         }
 
         if (str_contains($dbType, 'pgsql') || str_contains($dbType, 'Pgsql') || str_contains($dbType, 'sqlite')) {
-            return sprintf('"%s"', str_replace('"', '""', $name));
+            return sprintf('"%s"', str_replace(search: '"', replace: '""', subject: $name));
         }
 
-        return sprintf('`%s`', str_replace('`', '``', $name));
+        return sprintf('`%s`', str_replace(search: '`', replace: '``', subject: $name));
     }
 
     /**
@@ -561,8 +566,8 @@ class Client extends Instance
             return false;
         }
 
-        $sourcePath = str_replace('https://', '', $sourceUrl);
-        $destinationPath = str_replace('https://', '', $destinationUrl);
+        $sourcePath = str_replace(search: 'https://', replace: '', subject: $sourceUrl);
+        $destinationPath = str_replace(search: 'https://', replace: '', subject: $destinationUrl);
 
         return $this->filesystem->moveDirectory(
             $this->clientFolder . $sourcePath,
@@ -579,7 +584,7 @@ class Client extends Instance
             return false;
         }
 
-        $sourcePath = str_replace('https://', '', $sourceUrl);
+        $sourcePath = str_replace(search: 'https://', replace: '', subject: $sourceUrl);
         return $this->filesystem->deleteDirectory($this->clientFolder . $sourcePath);
     }
 

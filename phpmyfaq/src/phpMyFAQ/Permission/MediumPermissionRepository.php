@@ -62,7 +62,12 @@ readonly class MediumPermissionRepository
 
         $res = $this->configuration->getDb()->query($select);
         $result = [];
-        while ($row = $this->configuration->getDb()->fetchArray($res)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchArray($res);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $result[] = (int) $row['right_id'];
         }
 
@@ -276,7 +281,12 @@ readonly class MediumPermissionRepository
 
         $res = $this->configuration->getDb()->query($select);
         $result = [];
-        while ($row = $this->configuration->getDb()->fetchArray($res)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchArray($res);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $result[] = (int) $row['user_id'];
         }
 
@@ -316,7 +326,12 @@ readonly class MediumPermissionRepository
 
         $res = $this->configuration->getDb()->query($select);
         $result = [-1];
-        while ($row = $this->configuration->getDb()->fetchArray($res)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchArray($res);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $result[] = (int) $row['group_id'];
         }
 
@@ -352,7 +367,12 @@ readonly class MediumPermissionRepository
 
         $res = $this->configuration->getDb()->query($select);
         $result = [];
-        while ($row = $this->configuration->getDb()->fetchArray($res)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchArray($res);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $result[] = (int) $row['group_id'];
         }
 
@@ -427,7 +447,12 @@ readonly class MediumPermissionRepository
 
         $res = $this->configuration->getDb()->query($select);
         $result = [];
-        while ($row = $this->configuration->getDb()->fetchArray($res)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchArray($res);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $result[] = (int) $row['right_id'];
         }
 
@@ -449,7 +474,12 @@ readonly class MediumPermissionRepository
         }
 
         $result = [];
-        while ($row = $this->configuration->getDb()->fetchArray($res)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchArray($res);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $result[] = (int) $row['group_id'];
         }
 

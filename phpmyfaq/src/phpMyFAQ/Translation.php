@@ -72,20 +72,19 @@ class Translation
             self::$translation->checkInit();
             self::$translation->checkLanguageLoaded();
 
-            // Check if key uses plugin namespace format: plugin.PluginName.messageKey
+            // Check if the key uses the plugin namespace format: plugin.PluginName.messageKey
             if (str_starts_with($key, 'plugin.')) {
-                $parts = explode('.', $key, 3);
+                $parts = explode(separator: '.', string: $key, limit: 3);
 
                 if (count($parts) === 3) {
                     [$namespace, $pluginName, $messageKey] = $parts;
 
                     // Try the current language first
-                    if (
-                        isset(
-                            self::$translation->pluginTranslations[$pluginName][self::$translation->currentLanguage][$messageKey],
-                        )
-                    ) {
-                        return self::$translation->pluginTranslations[$pluginName][self::$translation->currentLanguage][$messageKey];
+                    $currentTranslation =
+                        self::$translation->pluginTranslations[$pluginName][self::$translation->currentLanguage][$messageKey]
+                        ?? null;
+                    if ($currentTranslation !== null) {
+                        return $currentTranslation;
                     }
 
                     return (
@@ -95,11 +94,10 @@ class Translation
                 }
             }
 
-            if (
-                isset(self::$translation->loadedLanguages[self::$translation->currentLanguage][$key])
-                && self::$translation->loadedLanguages[self::$translation->currentLanguage][$key] !== ''
-            ) {
-                return self::$translation->loadedLanguages[self::$translation->currentLanguage][$key];
+            $currentLanguageTranslations = self::$translation->loadedLanguages[self::$translation->currentLanguage]
+            ?? [];
+            if (array_key_exists($key, $currentLanguageTranslations) && $currentLanguageTranslations[$key] !== '') {
+                return $currentLanguageTranslations[$key];
             }
 
             return self::$translation->loadedLanguages[self::$translation->defaultLanguage][$key] ?? null;
@@ -123,32 +121,36 @@ class Translation
 
             // Check plugin namespace
             if (str_starts_with($key, 'plugin.')) {
-                $parts = explode('.', $key, 3);
+                $parts = explode(separator: '.', string: $key, limit: 3);
 
                 if (count($parts) === 3) {
                     [$namespace, $pluginName, $messageKey] = $parts;
-                    if (
-                        isset(
-                            self::$translation->pluginTranslations[$pluginName][self::$translation->currentLanguage][$messageKey],
-                        )
-                    ) {
+                    $currentLanguagePluginTranslations = self::$translation->pluginTranslations[$pluginName][self::$translation->currentLanguage]
+                    ?? [];
+                    if (array_key_exists($messageKey, $currentLanguagePluginTranslations)) {
                         return true;
                     }
-                    return isset(
-                        self::$translation->pluginTranslations[$pluginName][self::$translation->defaultLanguage][$messageKey],
-                    );
+
+                    $defaultLanguagePluginTranslations = self::$translation->pluginTranslations[$pluginName][self::$translation->defaultLanguage]
+                    ?? [];
+                    return array_key_exists($messageKey, $defaultLanguagePluginTranslations);
                 }
             }
 
             // Original core logic
-            if (isset(self::$translation->loadedLanguages[self::$translation->currentLanguage][$key])) {
+            $currentLanguageTranslations = self::$translation->loadedLanguages[self::$translation->currentLanguage]
+            ?? [];
+            if (array_key_exists($key, $currentLanguageTranslations)) {
                 return true;
             }
 
-            if (isset(self::$translation->loadedLanguages[self::$translation->defaultLanguage][$key])) {
+            $defaultLanguageTranslations = self::$translation->loadedLanguages[self::$translation->defaultLanguage]
+            ?? [];
+            if (array_key_exists($key, $defaultLanguageTranslations)) {
                 return true;
             }
-        } catch (Exception) { /* @mago-expect lint:no-empty-catch-clause */
+        } catch (Exception) {
+            return false;
         }
 
         return false;
@@ -217,7 +219,7 @@ class Translation
      */
     public static function getInstance(): Translation
     {
-        if (!self::$translation instanceof \phpMyFAQ\Translation) {
+        if (!self::$translation instanceof Translation) {
             $className = self::class;
             self::$translation = new $className();
         }
@@ -295,15 +297,15 @@ class Translation
             return; // Silently skip if no translations directory
         }
 
-        // Load all language files from plugin translations directory
+        // Load all language files from the plugin translations directory
         $languageFiles = glob($translationsDir . '/language_*.php');
 
         if ($languageFiles === false) {
-            return; // Silently skip if glob fails
+            return; // Silently skip if the glob fails
         }
 
         foreach ($languageFiles as $languageFile) {
-            // Extract language code from filename: language_en.php -> en
+            // Extract language code from the filename: language_en.php -> en
             if (!preg_match('/language_([a-z]{2,3}(_[a-z]{2})?)\.php$/i', basename($languageFile), $matches)) {
                 continue;
             }
@@ -314,18 +316,14 @@ class Translation
             $PMF_LANG = [];
             include $languageFile;
 
-            // Store in namespaced structure
-            if (!isset($this->pluginTranslations[$pluginName])) {
+            // Store in a namespaced structure
+            if (!array_key_exists($pluginName, $this->pluginTranslations)) {
                 $this->pluginTranslations[$pluginName] = [];
             }
 
             $this->pluginTranslations[$pluginName][$langCode] = $PMF_LANG;
         }
     }
-
-    // ---------------------------------------------------------------------
-    // Internal helpers (initialization, loading, filesystem checks)
-    // ---------------------------------------------------------------------
 
     /**
      * Checks if the default language is already loaded.
@@ -350,7 +348,7 @@ class Translation
     {
         $loadedLanguages = &self::$translation->loadedLanguages;
 
-        if (isset($loadedLanguages[$language]) && $loadedLanguages[$language] !== []) {
+        if (array_key_exists($language, $loadedLanguages) && $loadedLanguages[$language] !== []) {
             return;
         }
 

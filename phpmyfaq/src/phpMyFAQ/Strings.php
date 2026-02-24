@@ -105,7 +105,7 @@ class Strings
     }
 
     /**
-     * Get occurrence of a string within another.
+     * Get the occurrence of a string within another.
      *
      * @param string $haystack Haystack
      * @param string $needle Needle

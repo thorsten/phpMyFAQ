@@ -110,7 +110,7 @@ readonly class Import
     public function parseCSV($handle): array
     {
         $csvData = [];
-        while (($record = fgetcsv($handle, null, ',', '"', '')) !== false) {
+        while (($record = fgetcsv(stream: $handle, separator: ',', enclosure: '"', escape: '')) !== false) {
             $csvData[] = $record;
         }
 
@@ -127,7 +127,7 @@ readonly class Import
         $allowedExtensions = ['csv'];
         $fileExtension = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_EXTENSION);
 
-        return in_array(strtolower($fileExtension), $allowedExtensions);
+        return in_array(strtolower($fileExtension), $allowedExtensions, strict: true);
     }
 
     /**
@@ -156,8 +156,8 @@ readonly class Import
             $validBooleanValues = ['true', 'false'];
 
             if (
-                !in_array(strtolower((string) $row[$activatedColumn]), $validBooleanValues)
-                || !in_array(strtolower((string) $row[$importantFAQColumn]), $validBooleanValues)
+                !in_array(strtolower((string) $row[$activatedColumn]), $validBooleanValues, strict: true)
+                || !in_array(strtolower((string) $row[$importantFAQColumn]), $validBooleanValues, strict: true)
             ) {
                 return false;
             }

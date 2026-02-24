@@ -46,7 +46,8 @@ class AmazonTranslationProvider extends AbstractTranslationProvider
      */
     protected function doTranslate(string $text, string $sourceLang, string $targetLang): string
     {
-        $region = $this->configuration->get('translation.amazonRegion') ?: 'us-east-1';
+        $configuredRegion = $this->configuration->get('translation.amazonRegion');
+        $region = $configuredRegion !== '' ? $configuredRegion : 'us-east-1';
         $accessKeyId = $this->configuration->get('translation.amazonAccessKeyId');
         $secretAccessKey = $this->configuration->get('translation.amazonSecretAccessKey');
 
@@ -82,9 +83,9 @@ class AmazonTranslationProvider extends AbstractTranslationProvider
                 throw new ApiException('Amazon Translate API error: HTTP ' . $statusCode);
             }
 
-            $data = json_decode($response->getContent(), true);
+            $data = json_decode(json: $response->getContent(), associative: true);
 
-            if (!isset($data['TranslatedText'])) {
+            if (!array_key_exists('TranslatedText', $data)) {
                 throw new ApiException('Invalid response from Amazon Translate API');
             }
 
@@ -123,7 +124,12 @@ class AmazonTranslationProvider extends AbstractTranslationProvider
     ): array {
         if ($preserveHtml) {
             // Process each text individually with HTML preservation
-            return array_map(fn($text) => $this->translate($text, $sourceLang, $targetLang, true), $texts);
+            return array_map(fn($text) => $this->translate(
+                $text,
+                $sourceLang,
+                $targetLang,
+                preserveHtml: true,
+            ), $texts);
         }
 
         return $this->doTranslateBatch($texts, $sourceLang, $targetLang);
@@ -161,7 +167,10 @@ class AmazonTranslationProvider extends AbstractTranslationProvider
     public function supportsLanguagePair(string $sourceLang, string $targetLang): bool
     {
         $supportedLanguages = $this->getSupportedLanguages();
-        return in_array($sourceLang, $supportedLanguages, true) && in_array($targetLang, $supportedLanguages, true);
+        return (
+            in_array($sourceLang, $supportedLanguages, strict: true)
+            && in_array($targetLang, $supportedLanguages, strict: true)
+        );
     }
 
     /**
@@ -303,10 +312,10 @@ class AmazonTranslationProvider extends AbstractTranslationProvider
         $stringToSign = "{$algorithm}\n{$amzDate}\n{$credentialScope}\n" . hash('sha256', $canonicalRequest);
 
         // Task 3: Calculate signature
-        $kDate = hash_hmac('sha256', $dateStamp, 'AWS4' . $secretAccessKey, true);
-        $kRegion = hash_hmac('sha256', $region, $kDate, true);
-        $kService = hash_hmac('sha256', $service, $kRegion, true);
-        $kSigning = hash_hmac('sha256', 'aws4_request', $kService, true);
+        $kDate = hash_hmac(algo: 'sha256', data: $dateStamp, key: 'AWS4' . $secretAccessKey, binary: true);
+        $kRegion = hash_hmac(algo: 'sha256', data: $region, key: $kDate, binary: true);
+        $kService = hash_hmac(algo: 'sha256', data: $service, key: $kRegion, binary: true);
+        $kSigning = hash_hmac(algo: 'sha256', data: 'aws4_request', key: $kService, binary: true);
         $signature = hash_hmac('sha256', $stringToSign, $kSigning);
 
         // Task 4: Add signing information to the request

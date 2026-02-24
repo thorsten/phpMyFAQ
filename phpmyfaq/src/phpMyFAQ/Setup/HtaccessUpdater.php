@@ -62,16 +62,17 @@ class HtaccessUpdater
 
         // Normalize base path: ensure leading slash and a single trailing slash, '/' stays '/'
         $trimmed = trim($newBasePath);
-        $trimmed = trim($trimmed, "/\t\n\r\0\x0B");
+        $trimmed = trim(string: $trimmed, characters: "/\t\n\r\0\x0B");
 
-        $newBasePath = $trimmed === '' ? '/' : '/' . trim($trimmed, '/');
+        $newBasePath = $trimmed === '' ? '/' : '/' . trim(string: $trimmed, characters: '/');
         if ($newBasePath !== '/') {
             $newBasePath .= '/';
         }
 
         // No-op if an equivalent RewriteBase already exists (with or without trailing slash, optional comment)
-        $equivalentBase = rtrim($newBasePath, '/');
-        $equivalentRegex = '/^\s*RewriteBase\s+' . preg_quote($equivalentBase, '/') . '\/?(?:\s*(?:#.*)?)?\s*$/mi';
+        $equivalentBase = rtrim(string: $newBasePath, characters: '/');
+        $equivalentRegex =
+            '/^\s*RewriteBase\s+' . preg_quote(str: $equivalentBase, delimiter: '/') . '\/?(?:\s*(?:#.*)?)?\s*$/mi';
         if (preg_match($equivalentRegex, $content) === 1) {
             return true; // unchanged, avoid backup
         }
@@ -80,7 +81,13 @@ class HtaccessUpdater
         $pattern = '/^(\s*RewriteBase\s+)([^\s#]+)(.*)$/mi';
         $replacement = '${1}' . $newBasePath . '${3}';
         $replaceCount = 0;
-        $updatedContent = preg_replace($pattern, $replacement, $content, -1, $replaceCount);
+        $updatedContent = preg_replace(
+            pattern: $pattern,
+            replacement: $replacement,
+            subject: $content,
+            limit: -1,
+            count: $replaceCount,
+        );
         if ($updatedContent === null) {
             throw new Exception('Failed to update RewriteBase directive');
         }
@@ -115,7 +122,13 @@ class HtaccessUpdater
         $pattern = '/^(\s*RewriteEngine\s+On\s*)$/mi';
         $replacement = '$1' . "\n    # the path to your phpMyFAQ installation\n    RewriteBase " . $basePath;
         $count = 0;
-        $updated = preg_replace($pattern, $replacement, $content, 1, $count);
+        $updated = preg_replace(
+            pattern: $pattern,
+            replacement: $replacement,
+            subject: $content,
+            limit: 1,
+            count: $count,
+        );
 
         if ($count > 0) {
             return $updated;
@@ -128,7 +141,13 @@ class HtaccessUpdater
             . "\n    # This has to be 'On'\n    RewriteEngine On\n    "
             . "# the path to your phpMyFAQ installation\n    RewriteBase "
             . $basePath;
-        $updated = preg_replace($pattern, $replacement, $content, 1, $count);
+        $updated = preg_replace(
+            pattern: $pattern,
+            replacement: $replacement,
+            subject: $content,
+            limit: 1,
+            count: $count,
+        );
 
         if ($count > 0) {
             return $updated;

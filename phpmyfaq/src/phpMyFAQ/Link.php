@@ -315,7 +315,7 @@ class Link
         $request = Request::createFromGlobals();
         $scriptName = $request->getScriptName();
 
-        if (isset($path)) {
+        if ($path !== null) {
             return str_replace(search: $path, replace: '', subject: $scriptName);
         }
 
@@ -385,7 +385,7 @@ class Link
         }
 
         $p = $this->getHttpGetParameters();
-        if (!isset($p[self::LINK_GET_ACTION])) {
+        if (!array_key_exists(self::LINK_GET_ACTION, $p)) {
             return $url;
         }
 
@@ -397,11 +397,11 @@ class Link
             $url .= $built;
         }
 
-        if (isset($p[self::LINK_GET_SIDS])) {
+        if (array_key_exists(self::LINK_GET_SIDS, $p)) {
             $url = $this->appendSessionId($url, (int) $p[self::LINK_GET_SIDS]);
         }
 
-        if (isset($p['fragment'])) {
+        if (array_key_exists('fragment', $p)) {
             $url .= self::LINK_FRAGMENT_SEPARATOR . $p['fragment'];
         }
 
@@ -452,7 +452,12 @@ class Link
     {
         $parsed = parse_url($this->url);
 
-        return isset($parsed['scheme']) && ($parsed['scheme'] !== '' && $parsed['scheme'] !== '0');
+        return (
+            is_array($parsed) && array_key_exists('scheme', $parsed) && (
+                $parsed['scheme'] !== ''
+                && $parsed['scheme'] !== '0'
+            )
+        );
     }
 
     /**
@@ -543,11 +548,11 @@ class Link
         if ($this->url !== '' && $this->url !== '0') {
             $parsed = parse_url($this->url);
 
-            if (isset($parsed['query'])) {
+            if (is_array($parsed) && array_key_exists('query', $parsed)) {
                 $query['main'] = filter_var($parsed['query'], FILTER_SANITIZE_SPECIAL_CHARS);
             }
 
-            if (isset($parsed['fragment'])) {
+            if (is_array($parsed) && array_key_exists('fragment', $parsed)) {
                 $query['fragment'] = filter_var($parsed['fragment'], FILTER_SANITIZE_SPECIAL_CHARS);
             }
         }

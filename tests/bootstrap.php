@@ -74,15 +74,18 @@ $loader->add('phpMyFAQ', PMF_SRC_DIR);
 $loader->register();
 
 //
-// Delete a possible SQLite file first
+// Use tests/test.db as stable SQLite test database expected by tests.
 //
-@unlink(PMF_TEST_DIR . '/test.db');
+$testDbAlias = PMF_TEST_DIR . '/test.db';
+if (file_exists($testDbAlias) && !is_dir($testDbAlias)) {
+    @unlink($testDbAlias);
+}
 
 //
 // Create database credentials for SQLite
 //
 $setup = [
-    'dbServer' => PMF_TEST_DIR . '/test.db',
+    'dbServer' => $testDbAlias,
     'dbType' => 'pdo_sqlite',
     'dbPort' => null,
     'dbDatabaseName' => '',
@@ -101,7 +104,15 @@ try {
     $installer = new Installer(new System());
     $installer->startInstall($setup);
 } catch (Exception $exception) {
-    echo $exception->getMessage();
+    throw new RuntimeException(
+        'PHPUnit bootstrap failed during test database installation: ' . $exception->getMessage(),
+        0,
+        $exception,
+    );
+}
+
+if (!file_exists(PMF_TEST_DIR . '/content/core/config/database.php')) {
+    throw new RuntimeException('PHPUnit bootstrap failed: tests/content/core/config/database.php was not generated.');
 }
 
 require PMF_TEST_DIR . '/content/core/config/database.php';

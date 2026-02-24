@@ -285,8 +285,9 @@ class Wrapper extends TCPDF
         }
 
         // Set font
-        if (array_key_exists(Translation::get(key: 'metaLanguage'), $this->fontFiles)) {
-            $this->currentFont = (string) $this->fontFiles[Translation::get(key: 'metaLanguage')];
+        $metaLanguage = (string) (Translation::get(key: 'metaLanguage') ?? '');
+        if ($metaLanguage !== '' && array_key_exists($metaLanguage, $this->fontFiles)) {
+            $this->currentFont = (string) $this->fontFiles[$metaLanguage];
         }
     }
 

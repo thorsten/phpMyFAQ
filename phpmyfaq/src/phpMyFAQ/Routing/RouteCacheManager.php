@@ -35,12 +35,12 @@ class RouteCacheManager
 
     public function __construct(string $cacheDir, bool $debug = false)
     {
-        $this->cacheDir = rtrim($cacheDir, '/');
+        $this->cacheDir = rtrim(string: $cacheDir, characters: '/');
         $this->debug = $debug;
 
         // Create a cache directory if it doesn't exist
         if (!is_dir($this->cacheDir)) {
-            mkdir($this->cacheDir, 0o755, true);
+            mkdir(directory: $this->cacheDir, permissions: 0o755, recursive: true);
         }
     }
 
@@ -161,16 +161,16 @@ class RouteCacheManager
      */
     private function generateRouteCode(string $name, Route $route): string
     {
-        $path = var_export($route->getPath(), true);
-        $defaults = var_export($route->getDefaults(), true);
-        $requirements = var_export($route->getRequirements(), true);
-        $options = var_export($route->getOptions(), true);
-        $host = var_export($route->getHost(), true);
-        $schemes = var_export($route->getSchemes(), true);
-        $methods = var_export($route->getMethods(), true);
-        $condition = var_export($route->getCondition(), true);
+        $path = var_export(value: $route->getPath(), return: true);
+        $defaults = var_export(value: $route->getDefaults(), return: true);
+        $requirements = var_export(value: $route->getRequirements(), return: true);
+        $options = var_export(value: $route->getOptions(), return: true);
+        $host = var_export(value: $route->getHost(), return: true);
+        $schemes = var_export(value: $route->getSchemes(), return: true);
+        $methods = var_export(value: $route->getMethods(), return: true);
+        $condition = var_export(value: $route->getCondition(), return: true);
 
-        $code = '$routes->add(' . var_export($name, true) . ', new Route(' . PHP_EOL;
+        $code = '$routes->add(' . var_export(value: $name, return: true) . ', new Route(' . PHP_EOL;
         $code .= '    path: ' . $path . ',' . PHP_EOL;
         $code .= '    defaults: ' . $defaults . ',' . PHP_EOL;
         $code .= '    requirements: ' . $requirements . ',' . PHP_EOL;

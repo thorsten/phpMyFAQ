@@ -27,18 +27,22 @@ final readonly class FilesystemStorage implements StorageInterface
         string $rootPath,
         private ?string $publicBaseUrl = null,
     ) {
-        $this->rootPath = rtrim($rootPath, '/\\');
+        $this->rootPath = rtrim(string: $rootPath, characters: '/\\');
     }
 
     public function put(string $path, string $contents): bool
     {
         $fullPath = $this->buildFullPath($path);
         $directory = dirname($fullPath);
-        if (!is_dir($directory) && !mkdir($directory, 0o775, true) && !is_dir($directory)) {
+        if (
+            !is_dir($directory)
+            && !mkdir(directory: $directory, permissions: 0o775, recursive: true)
+            && !is_dir($directory)
+        ) {
             throw new StorageException('Unable to create directory for storage path: ' . $directory);
         }
 
-        $result = file_put_contents($fullPath, $contents, LOCK_EX);
+        $result = file_put_contents(filename: $fullPath, data: $contents, flags: LOCK_EX);
         if ($result === false) {
             throw new StorageException('Unable to write file to storage path: ' . $path);
         }
@@ -54,11 +58,15 @@ final readonly class FilesystemStorage implements StorageInterface
 
         $fullPath = $this->buildFullPath($path);
         $directory = dirname($fullPath);
-        if (!is_dir($directory) && !mkdir($directory, 0o775, true) && !is_dir($directory)) {
+        if (
+            !is_dir($directory)
+            && !mkdir(directory: $directory, permissions: 0o775, recursive: true)
+            && !is_dir($directory)
+        ) {
             throw new StorageException('Unable to create directory for storage path: ' . $directory);
         }
 
-        $target = fopen($fullPath, 'wb');
+        $target = fopen(filename: $fullPath, mode: 'wb');
         if ($target === false) {
             throw new StorageException('Unable to open file for writing: ' . $path);
         }
@@ -110,10 +118,10 @@ final readonly class FilesystemStorage implements StorageInterface
     {
         $normalizedPath = $this->normalizePathForUrl($path);
         if ($this->publicBaseUrl !== null && $this->publicBaseUrl !== '') {
-            return rtrim($this->publicBaseUrl, '/') . '/' . $normalizedPath;
+            return rtrim(string: $this->publicBaseUrl, characters: '/') . '/' . $normalizedPath;
         }
 
-        return str_replace('\\', '/', $this->buildFullPath($path));
+        return str_replace(search: '\\', replace: '/', subject: $this->buildFullPath($path));
     }
 
     public function size(string $path): int
@@ -135,7 +143,7 @@ final readonly class FilesystemStorage implements StorageInterface
 
     private function normalizePathForUrl(string $path): string
     {
-        $normalizedPath = ltrim(str_replace('\\', '/', trim($path)), '/');
+        $normalizedPath = ltrim(string: str_replace(search: '\\', replace: '/', subject: trim($path)), characters: '/');
         if ($normalizedPath === '') {
             throw new StorageException('Invalid storage path.');
         }

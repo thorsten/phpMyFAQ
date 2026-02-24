@@ -141,7 +141,7 @@ class SvgSanitizer
 
         // Check for dangerous element tags
         foreach (self::DANGEROUS_ELEMENTS as $element) {
-            if (!preg_match('/<' . preg_quote($element, '/') . '\b/i', $content)) {
+            if (!preg_match('/<' . preg_quote($element, delimiter: '/') . '\b/i', $content)) {
                 continue;
             }
 
@@ -165,38 +165,46 @@ class SvgSanitizer
         foreach (self::DANGEROUS_ELEMENTS as $element) {
             // Remove opening and closing tags with content
             $sanitized = preg_replace(
-                '/<' . preg_quote($element, '/') . '\b[^>]*>.*?<\/' . preg_quote($element, '/') . '>/is',
-                '',
-                $sanitized,
+                '/<'
+                . preg_quote($element, delimiter: '/')
+                . '\b[^>]*>.*?<\/'
+                . preg_quote($element, delimiter: '/')
+                . '>/is',
+                replacement: '',
+                subject: $sanitized,
             );
 
             // Remove self-closing tags
-            $sanitized = preg_replace('/<' . preg_quote($element, '/') . '\b[^>]*\/>/is', '', $sanitized);
+            $sanitized = preg_replace(
+                '/<' . preg_quote($element, delimiter: '/') . '\b[^>]*\/>/is',
+                replacement: '',
+                subject: $sanitized,
+            );
         }
 
         // Second pass: Remove dangerous patterns using regex
         foreach (self::DANGEROUS_PATTERNS as $pattern) {
-            $sanitized = preg_replace($pattern, '', $sanitized);
+            $sanitized = preg_replace($pattern, replacement: '', subject: $sanitized);
         }
 
         // Third pass: Additional cleanup for remaining event handlers
         // This catches edge cases where the attribute might not have quotes
-        $sanitized = preg_replace('/\s+on\w+\s*=\s*[^\s>]+/i', '', $sanitized);
+        $sanitized = preg_replace('/\s+on\w+\s*=\s*[^\s>]+/i', replacement: '', subject: $sanitized);
 
         // Fourth pass: Clean up any remaining javascript: or data:text/html in attributes
         $sanitized = preg_replace(
             '/(href|xlink:href|src)\s*=\s*(["\'])(?:javascript:|data:text\/html|vbscript:)[^\2]*\2/i',
-            '',
-            $sanitized,
+            replacement: '',
+            subject: $sanitized,
         );
 
         // Fifth pass: Remove CDATA sections with script content
-        $sanitized = preg_replace('/<!\[CDATA\[.*?<script.*?\]\]>/is', '', $sanitized);
+        $sanitized = preg_replace('/<!\[CDATA\[.*?<script.*?\]\]>/is', replacement: '', subject: $sanitized);
 
         // Normalize whitespace (optional, for cleaner output)
-        $sanitized = preg_replace('/\s+/', ' ', $sanitized);
+        $sanitized = preg_replace('/\s+/', replacement: ' ', subject: $sanitized);
 
-        return preg_replace('/>\s+</', '><', $sanitized);
+        return preg_replace('/>\s+</', replacement: '><', subject: $sanitized);
     }
 
     /**
@@ -215,11 +223,11 @@ class SvgSanitizer
                 continue;
             }
 
-            $issues[] = 'Dangerous pattern detected: ' . substr($matches[0], 0, 100);
+            $issues[] = 'Dangerous pattern detected: ' . substr(string: $matches[0], offset: 0, length: 100);
         }
 
         foreach (self::DANGEROUS_ELEMENTS as $element) {
-            if (!preg_match('/<' . preg_quote($element, '/') . '\b/i', $content)) {
+            if (!preg_match('/<' . preg_quote($element, delimiter: '/') . '\b/i', $content)) {
                 continue;
             }
 

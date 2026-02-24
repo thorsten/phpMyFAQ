@@ -117,12 +117,14 @@ class Update extends AbstractSetup
 
         foreach ($files as $file) {
             if ($file instanceof SplFileInfo) {
-                $filePath = $file->getRealPath() ?: $file->getPathname();
+                $realPath = $file->getRealPath();
+                $filePath = $realPath !== false ? $realPath : $file->getPathname();
                 $isDir = $file->isDir();
                 $isFile = $file->isFile();
             } else {
                 $filePath = is_string($file) ? $file : (string) $file;
-                $filePath = realpath($filePath) ?: $filePath;
+                $realPath = realpath($filePath);
+                $filePath = $realPath !== false ? $realPath : $filePath;
                 $isDir = is_dir($filePath);
                 $isFile = is_file($filePath);
             }
@@ -147,7 +149,7 @@ class Update extends AbstractSetup
             }
 
             // Compute a relative path inside the archive
-            $relativePath = str_replace($configDir . DIRECTORY_SEPARATOR, '', $filePath);
+            $relativePath = str_replace(search: $configDir . DIRECTORY_SEPARATOR, replace: '', subject: $filePath);
             $relativePath = ltrim($relativePath, DIRECTORY_SEPARATOR);
 
             if ($isDir) {
@@ -173,7 +175,7 @@ class Update extends AbstractSetup
     public function checkInitialRewriteBasePath(Request $request): bool
     {
         $basePath = $request->getBasePath();
-        $basePath = rtrim($basePath, 'update');
+        $basePath = rtrim(string: $basePath, characters: 'update');
 
         $htaccessPath = PMF_ROOT_DIR . '/.htaccess';
 
@@ -255,12 +257,12 @@ class Update extends AbstractSetup
     private function runPostMigrationTasks(): void
     {
         // Insert form inputs for 4.0.0-alpha.2
-        if (version_compare($this->version, '4.0.0-alpha.2', '<')) {
+        if (version_compare(version1: $this->version, version2: '4.0.0-alpha.2', operator: '<')) {
             $this->insertFormInputs();
         }
 
         // Handle admin log hash migration for 4.2.0-alpha
-        if (version_compare($this->version, '4.2.0-alpha', '<')) {
+        if (version_compare(version1: $this->version, version2: '4.2.0-alpha', operator: '<')) {
             $this->migrateAdminLogHashes();
         }
     }
@@ -278,6 +280,7 @@ class Update extends AbstractSetup
             }
         } catch (\Exception) {
             // Form inputs may already exist
+            return;
         }
     }
 
@@ -359,7 +362,7 @@ class Update extends AbstractSetup
 
     private function migrateAdminLogHashes(): void
     {
-        if (version_compare($this->version, '4.2.0-alpha', '<')) {
+        if (version_compare(version1: $this->version, version2: '4.2.0-alpha', operator: '<')) {
             $repository = new AdminLogRepository($this->configuration);
 
             try {

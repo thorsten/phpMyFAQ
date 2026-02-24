@@ -41,7 +41,20 @@ readonly class StatisticsHelper
         $first = PHP_INT_MAX;
         $last = 0;
         $dir = opendir(PMF_ROOT_DIR . '/content/core/data');
-        while ($dat = readdir($dir)) {
+        if ($dir === false) {
+            $result = new stdClass();
+            $result->numberOfDays = 0;
+            $result->firstDate = $first;
+            $result->lastDate = $last;
+            return $result;
+        }
+
+        while (true) {
+            $dat = readdir($dir);
+            if ($dat === false) {
+                break;
+            }
+
             if ($dat !== '.' && $dat !== '..') {
                 ++$numberOfDays;
             }
@@ -75,9 +88,12 @@ readonly class StatisticsHelper
         $date = 0;
 
         if (is_file(PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $firstDate))) {
-            $fp = fopen(PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $firstDate), 'r');
+            $fp = fopen(
+                filename: PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $firstDate),
+                mode: 'r',
+            );
             while (($data = fgetcsv($fp, length: 1024, separator: ';', enclosure: '"', escape: '\\')) !== false) {
-                $date = isset($data[7]) && 10 === strlen($data[7]) ? $data[7] : $requestTime;
+                $date = array_key_exists(7, $data) && 10 === strlen($data[7]) ? $data[7] : $requestTime;
             }
 
             fclose($fp);
@@ -93,11 +109,14 @@ readonly class StatisticsHelper
         $requestTime = $request->server->get('REQUEST_TIME');
 
         if (is_file(PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $lastDate))) {
-            $fp = fopen(PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $lastDate), 'r');
+            $fp = fopen(
+                filename: PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $lastDate),
+                mode: 'r',
+            );
 
             $date = null;
             while (($data = fgetcsv($fp, length: 1024, separator: ';', enclosure: '"', escape: '\\')) !== false) {
-                $date = isset($data[7]) && 10 === strlen($data[7]) ? $data[7] : $requestTime;
+                $date = array_key_exists(7, $data) && 10 === strlen($data[7]) ? $data[7] : $requestTime;
             }
 
             fclose($fp);
@@ -140,8 +159,16 @@ readonly class StatisticsHelper
         $dir = opendir(PMF_ROOT_DIR . '/content/core/data');
         $first = PHP_INT_MAX;
         $last = 0;
+        if ($dir === false) {
+            return false;
+        }
 
-        while ($trackingFile = readdir($dir)) {
+        while (true) {
+            $trackingFile = readdir($dir);
+            if ($trackingFile === false) {
+                break;
+            }
+
             // The filename format is: trackingDDMMYYYY
             // e.g.: tracking02042006
             if (!($trackingFile !== '.' && $trackingFile !== '..' && 10 === strpos($trackingFile, $month))) {

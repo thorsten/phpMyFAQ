@@ -85,7 +85,7 @@ class Sqlsrv implements DatabaseDriver
      */
     public function escape(string $string): string
     {
-        return str_replace("'", "''", $string);
+        return str_replace(search: "'", replace: "''", subject: $string);
     }
 
     /**
@@ -121,7 +121,12 @@ class Sqlsrv implements DatabaseDriver
             throw new Exception('Error while fetching result: ' . $this->error());
         }
 
-        while ($row = $this->fetchObject($result)) {
+        while (true) {
+            $row = $this->fetchObject($result);
+            if ($row === false) {
+                break;
+            }
+
             $ret[] = $row;
         }
 
@@ -191,7 +196,12 @@ class Sqlsrv implements DatabaseDriver
             ORDER BY obj.name";
         $result = $this->query($query);
 
-        while ($row = $this->fetchObject($result)) {
+        while (true) {
+            $row = $this->fetchObject($result);
+            if ($row === false) {
+                break;
+            }
+
             $tables[$row->table_name] = $row->table_rows;
         }
 
@@ -255,7 +265,8 @@ class Sqlsrv implements DatabaseDriver
         $result = $this->query($select);
         sqlsrv_fetch($result);
 
-        return sqlsrv_get_field($result, 0) + 1;
+        $fieldIndex = 0;
+        return sqlsrv_get_field($result, $fieldIndex) + 1;
     }
 
     /**
@@ -345,10 +356,12 @@ class Sqlsrv implements DatabaseDriver
      */
     public function lastInsertId(): int|string
     {
-        $result = sqlsrv_query($this->conn, 'SELECT SCOPE_IDENTITY() AS id');
+        $query = 'SELECT SCOPE_IDENTITY() AS id';
+        $result = sqlsrv_query($this->conn, $query);
         sqlsrv_fetch($result);
 
-        return (int) sqlsrv_get_field($result, 0);
+        $fieldIndex = 0;
+        return (int) sqlsrv_get_field($result, $fieldIndex);
     }
 
     public function now(): string

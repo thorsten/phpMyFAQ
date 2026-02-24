@@ -93,7 +93,7 @@ class OAuth
         if ($statusCode >= 400) {
             try {
                 /** @var stdClass $errorPayload */
-                $errorPayload = json_decode($content, null, 512, JSON_THROW_ON_ERROR);
+                $errorPayload = json_decode(json: $content, associative: null, depth: 512, flags: JSON_THROW_ON_ERROR);
                 $error = $errorPayload->error ?? 'oauth_error';
                 $description = $errorPayload->error_description ?? $content;
                 throw new \RuntimeException(sprintf('OAuth token exchange failed (%s): %s', $error, $description));
@@ -102,7 +102,7 @@ class OAuth
             }
         }
 
-        return json_decode($content, null, 512, JSON_THROW_ON_ERROR);
+        return json_decode(json: $content, associative: null, depth: 512, flags: JSON_THROW_ON_ERROR);
     }
 
     /**
@@ -122,7 +122,7 @@ class OAuth
             ],
         ]);
 
-        return json_decode($response->getContent(), null, 512, JSON_THROW_ON_ERROR);
+        return json_decode(json: $response->getContent(), associative: null, depth: 512, flags: JSON_THROW_ON_ERROR);
     }
 
     public function getToken(): stdClass
@@ -141,7 +141,7 @@ class OAuth
                 return $this;
             }
 
-            $idToken = base64_decode($parts[1]);
+            $idToken = base64_decode(string: $parts[1], strict: true);
             if ($idToken === false) {
                 // Invalid base64 - set empty token
                 $this->token = new stdClass();
@@ -149,8 +149,11 @@ class OAuth
                 return $this;
             }
 
-            $this->token = json_decode($idToken, null, 512, JSON_THROW_ON_ERROR);
-            $this->entraIdSession->set(EntraIdSession::ENTRA_ID_JWT, json_encode($this->token, JSON_THROW_ON_ERROR));
+            $this->token = json_decode(json: $idToken, associative: null, depth: 512, flags: JSON_THROW_ON_ERROR);
+            $this->entraIdSession->set(EntraIdSession::ENTRA_ID_JWT, json_encode(
+                value: $this->token,
+                flags: JSON_THROW_ON_ERROR,
+            ));
         } catch (JsonException) {
             // Malformed JSON - set empty token
             $this->token = new stdClass();

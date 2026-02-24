@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Storage;
 
+use ArrayAccess;
 use Throwable;
 
 final readonly class S3Storage implements StorageInterface
@@ -67,11 +68,11 @@ final readonly class S3Storage implements StorageInterface
             'Key' => $key,
         ]));
 
-        if (!isset($result['Body'])) {
+        if (!$this->hasResultField($result, 'Body')) {
             throw new StorageException('Invalid S3 response while reading object: ' . $key);
         }
 
-        return (string) $result['Body'];
+        return (string) $this->getResultField($result, 'Body');
     }
 
     public function delete(string $path): bool
@@ -96,7 +97,7 @@ final readonly class S3Storage implements StorageInterface
     {
         $key = $this->buildKey($path);
         if ($this->publicBaseUrl !== null && $this->publicBaseUrl !== '') {
-            return rtrim($this->publicBaseUrl, '/') . '/' . $key;
+            return rtrim(string: $this->publicBaseUrl, characters: '/') . '/' . $key;
         }
 
         $result = $this->run(fn(): mixed => $this->client->getObjectUrl($this->bucket, $key));
@@ -112,11 +113,11 @@ final readonly class S3Storage implements StorageInterface
             'Key' => $key,
         ]));
 
-        if (!isset($result['ContentLength'])) {
+        if (!$this->hasResultField($result, 'ContentLength')) {
             throw new StorageException('Invalid S3 response while reading object size: ' . $key);
         }
 
-        return (int) $result['ContentLength'];
+        return (int) $this->getResultField($result, 'ContentLength');
     }
 
     /**
@@ -127,13 +128,13 @@ final readonly class S3Storage implements StorageInterface
         try {
             return $callback();
         } catch (Throwable $throwable) {
-            throw new StorageException($throwable->getMessage(), previous: $throwable);
+            throw new StorageException(message: $throwable->getMessage(), previous: $throwable);
         }
     }
 
     private function buildKey(string $path): string
     {
-        $normalizedPath = ltrim(str_replace('\\', '/', trim($path)), '/');
+        $normalizedPath = ltrim(string: str_replace(search: '\\', replace: '/', subject: trim($path)), characters: '/');
         if ($normalizedPath === '') {
             throw new StorageException('Invalid storage path.');
         }
@@ -149,6 +150,32 @@ final readonly class S3Storage implements StorageInterface
             return $normalizedPath;
         }
 
-        return trim($this->prefix, '/') . '/' . $normalizedPath;
+        return trim(string: $this->prefix, characters: '/') . '/' . $normalizedPath;
+    }
+
+    private function hasResultField(mixed $result, string $field): bool
+    {
+        if (is_array($result)) {
+            return array_key_exists($field, $result);
+        }
+
+        if ($result instanceof ArrayAccess) {
+            return $result->offsetExists($field);
+        }
+
+        return false;
+    }
+
+    private function getResultField(mixed $result, string $field): mixed
+    {
+        if (is_array($result)) {
+            return $result[$field] ?? null;
+        }
+
+        if ($result instanceof ArrayAccess) {
+            return $result->offsetGet($field);
+        }
+
+        return null;
     }
 }

@@ -135,7 +135,7 @@ class Statistics
             } else {
                 $entry->voted = sprintf(
                     '%s %s 5 - %s',
-                    round($row['avg'], 2),
+                    round(num: $row['avg'], precision: 2),
                     Translation::get(key: 'msgVoteFrom'),
                     $this->plurals->get(key: 'plmsgVotes', number: $row['user']),
                 );
@@ -237,7 +237,7 @@ class Statistics
                 AND fd.lang = fv.lang
                 AND fd.active = \'yes\'';
 
-        if (isset($language) && Language::isASupportedLanguage($language)) {
+        if ($language !== null && Language::isASupportedLanguage($language)) {
             $query .= '
             AND
                 fd.lang = \'' . $this->configuration->getDb()->escape($language) . "'";
@@ -256,16 +256,21 @@ class Statistics
         $data = [];
 
         if ($result) {
-            while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 if ($this->groupSupport) {
-                    if (!in_array($row->user_id, [-1, $this->user])) {
+                    if (!in_array($row->user_id, [-1, $this->user], strict: true)) {
                         continue;
                     }
 
-                    if (!in_array($row->group_id, $this->groups)) {
+                    if (!in_array($row->group_id, $this->groups, strict: true)) {
                         continue;
                     }
-                } elseif (!in_array($row->user_id, [-1, $this->user])) {
+                } elseif (!in_array($row->user_id, [-1, $this->user], strict: true)) {
                     continue;
                 }
 
@@ -359,7 +364,7 @@ class Statistics
                 AND fd.lang = fv.lang
                 AND fd.active = \'yes\'';
 
-        if (isset($language) && Language::isASupportedLanguage($language)) {
+        if ($language !== null && Language::isASupportedLanguage($language)) {
             $query .= '
             AND
                 fd.lang = \'' . $this->configuration->getDb()->escape($language) . "'";
@@ -380,16 +385,21 @@ class Statistics
         $data = [];
 
         if ($result) {
-            while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 if ($this->groupSupport) {
-                    if (!in_array($row->user_id, [-1, $this->user])) {
+                    if (!in_array($row->user_id, [-1, $this->user], strict: true)) {
                         continue;
                     }
 
-                    if (!in_array($row->group_id, $this->groups)) {
+                    if (!in_array($row->group_id, $this->groups, strict: true)) {
                         continue;
                     }
-                } elseif (!in_array($row->user_id, [-1, $this->user])) {
+                } elseif (!in_array($row->user_id, [-1, $this->user], strict: true)) {
                     continue;
                 }
 
@@ -495,7 +505,7 @@ class Statistics
                 fcr.category_id = \'' . $categoryId . "'";
         }
 
-        if (isset($language) && Language::isASupportedLanguage($language)) {
+        if ($language !== null && Language::isASupportedLanguage($language)) {
             $query .= '
             AND
                 fd.lang = \'' . $this->configuration->getDb()->escape($language) . "'";
@@ -515,16 +525,21 @@ class Statistics
         $data = [];
 
         if ($result) {
-            while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 if ($this->groupSupport) {
-                    if (!in_array($row->user_id, [-1, $this->user])) {
+                    if (!in_array($row->user_id, [-1, $this->user], strict: true)) {
                         continue;
                     }
 
-                    if (!in_array($row->group_id, $this->groups)) {
+                    if (!in_array($row->group_id, $this->groups, strict: true)) {
                         continue;
                     }
-                } elseif (!in_array($row->user_id, [-1, $this->user])) {
+                } elseif (!in_array($row->user_id, [-1, $this->user], strict: true)) {
                     continue;
                 }
 
@@ -615,13 +630,13 @@ class Statistics
             $now,
         );
 
-        if (isset($categoryId) && is_numeric($categoryId) && $categoryId != 0) {
+        if (is_numeric($categoryId) && (int) $categoryId !== 0) {
             $query .= '
             AND
                 fcr.category_id = \'' . $categoryId . "'";
         }
 
-        if (isset($language) && Language::isASupportedLanguage($language)) {
+        if ($language !== null && Language::isASupportedLanguage($language)) {
             $query .= '
             AND
                 fd.lang = \'' . $this->configuration->getDb()->escape($language) . "'";
@@ -636,8 +651,13 @@ class Statistics
 
         $i = 1;
         $oldId = 0;
-        while (($row = $this->configuration->getDb()->fetchObject($result)) && $i <= $count) {
-            if ($oldId != $row->id) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $i > $count) {
+                break;
+            }
+
+            if ($oldId !== $row->id) {
                 $data['avg'] = $row->avg;
                 $data['question'] = $row->thema;
                 $data['date'] = $row->updated;

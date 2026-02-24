@@ -97,13 +97,13 @@ abstract class AbstractFrontController extends AbstractController
             'baseHref' => $faqSystem->getSystemUri($this->configuration),
             'customCss' => $this->configuration->getCustomCss(),
             'version' => $this->configuration->getVersion(),
-            'header' => str_replace('"', '', $this->configuration->getTitle()),
+            'header' => str_replace(search: '"', replace: '', subject: $this->configuration->getTitle()),
             'metaDescription' => $this->configuration->get('seo.description'),
             'metaPublisher' => $this->configuration->get('main.metaPublisher'),
             'metaLanguage' => Translation::get(key: 'metaLanguage'),
             'metaRobots' => $seo->getMetaRobots($action),
             'phpmyfaqVersion' => $this->configuration->getVersion(),
-            'stylesheet' => Translation::get(key: 'direction') == 'rtl' ? 'style.rtl' : 'style',
+            'stylesheet' => Translation::get(key: 'direction') === 'rtl' ? 'style.rtl' : 'style',
             'currentPageUrl' => $request->getSchemeAndHttpHost() . $request->getRequestUri(),
             'action' => $action,
             'dir' => Translation::get(key: 'direction'),
@@ -167,12 +167,12 @@ abstract class AbstractFrontController extends AbstractController
             [
                 'name' => Translation::get(key: 'msgQuestion'),
                 'link' => './add-question.html',
-                'active' => 'ask' == $action ? 'active' : '',
+                'active' => 'ask' === $action ? 'active' : '',
             ],
             [
                 'name' => Translation::get(key: 'msgOpenQuestions'),
                 'link' => './open-questions.html',
-                'active' => 'open-questions' == $action ? 'active' : '',
+                'active' => 'open-questions' === $action ? 'active' : '',
             ],
         ];
     }
@@ -220,22 +220,22 @@ abstract class AbstractFrontController extends AbstractController
             [
                 'name' => Translation::get(key: 'faqOverview'),
                 'link' => './overview.html',
-                'active' => 'faq-overview' == $action ? 'active' : '',
+                'active' => 'faq-overview' === $action ? 'active' : '',
             ],
             [
                 'name' => Translation::get(key: 'msgSitemap'),
                 'link' => './sitemap/A/' . $this->configuration->getLanguage()->getLanguage() . '.html',
-                'active' => 'sitemap' == $action ? 'active' : '',
+                'active' => 'sitemap' === $action ? 'active' : '',
             ],
             [
                 'name' => Translation::get(key: 'ad_menu_glossary'),
                 'link' => './glossary.html',
-                'active' => 'glossary' == $action ? 'active' : '',
+                'active' => 'glossary' === $action ? 'active' : '',
             ],
             [
                 'name' => Translation::get(key: 'msgContact'),
                 'link' => './contact.html',
-                'active' => 'contact' == $action ? 'active' : '',
+                'active' => 'contact' === $action ? 'active' : '',
             ],
         ];
     }
@@ -254,7 +254,7 @@ abstract class AbstractFrontController extends AbstractController
 
         // Check if this is a reference to a custom page (format: "page:slug")
         if (str_starts_with((string) $url, 'page:')) {
-            $slug = substr((string) $url, 5);
+            $slug = substr(string: (string) $url, offset: 5);
             $customPage = new CustomPage($this->configuration);
             $page = $customPage->getBySlug($slug);
 

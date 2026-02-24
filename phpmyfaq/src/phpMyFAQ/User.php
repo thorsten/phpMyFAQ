@@ -31,7 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 if (!defined('PMF_ENCRYPTION_TYPE')) {
-    define('PMF_ENCRYPTION_TYPE', 'hash');
+    define(constant_name: 'PMF_ENCRYPTION_TYPE', value: 'hash');
 }
 
 /**
@@ -290,7 +290,7 @@ class User
      */
     public function getUserId(): int
     {
-        if (isset($this->userId)) {
+        if ($this->userId !== 0) {
             return $this->userId;
         }
 
@@ -344,7 +344,12 @@ class User
         }
 
         $result = [];
-        while ($row = $this->configuration->getDb()->fetchArray($res)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchArray($res);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $result[] = $row;
         }
 
@@ -518,19 +523,26 @@ class User
         $skipped = false;
 
         while (strlen($newPassword) < $minimumLength) {
-            $caseFunc = random_int(0, 1) !== 0 ? 'strtoupper' : 'strtolower';
+            $caseFunc = random_int(min: 0, max: 1) !== 0 ? 'strtoupper' : 'strtolower';
 
-            switch (random_int(0, $skipped ? 3 : ($allowUnderscore ? 5 : 4))) {
+            $randomMax = 4;
+            if ($skipped) {
+                $randomMax = 3;
+            } elseif ($allowUnderscore) {
+                $randomMax = 5;
+            }
+
+            switch (random_int(min: 0, max: $randomMax)) {
                 case 0:
                 case 1:
-                    $nextChar = $caseFunc($consonants[random_int(0, 18)]);
+                    $nextChar = $caseFunc($consonants[random_int(min: 0, max: 18)]);
                     break;
                 case 2:
                 case 3:
-                    $nextChar = $caseFunc($vowels[random_int(0, 3)]);
+                    $nextChar = $caseFunc($vowels[random_int(min: 0, max: 3)]);
                     break;
                 case 4:
-                    $nextChar = (string) random_int(2, 9);
+                    $nextChar = (string) random_int(min: 2, max: 9);
                     break;
                 case 5:
                     $newPassword .= '_';
@@ -555,20 +567,20 @@ class User
      */
     public function deleteUser(): bool
     {
-        if (!isset($this->userId) || $this->userId === 0) {
+        if ($this->userId === 0) {
             $this->errors[] = self::ERROR_USER_NO_USERID;
 
             return false;
         }
 
-        if (!isset($this->login) || $this->login === '') {
+        if ($this->login === '') {
             $this->errors[] = self::ERROR_USER_LOGIN_INVALID;
 
             return false;
         }
 
         if (
-            isset($this->allowedStatus[$this->status])
+            array_key_exists($this->status, $this->allowedStatus)
             && $this->allowedStatus[$this->status] === self::STATUS_USER_PROTECTED
         ) {
             $this->errors[] = self::ERROR_USER_CANNOT_DELETE_USER . self::STATUS_USER_PROTECTED;
@@ -615,7 +627,7 @@ class User
             $this->errors[] = self::ERROR_USER_NO_AUTH_WRITABLE;
         }
 
-        return in_array(true, $delete);
+        return in_array(true, $delete, true);
     }
 
     /**
@@ -674,7 +686,12 @@ class User
             return $result;
         }
 
-        while ($row = $this->configuration->getDb()->fetchArray($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchArray($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $users[] = (int) $row['user_id'];
         }
 
@@ -806,7 +823,7 @@ class User
 
         $userData = $this->userdata->fetchAll('email', $email);
 
-        return !isset($userData['is_visible']) || $userData['is_visible'];
+        return !array_key_exists('is_visible', $userData) || $userData['is_visible'];
     }
 
     /**
@@ -845,7 +862,7 @@ class User
      */
     public function getStatus(): string
     {
-        if (!isset($this->status)) {
+        if ($this->status === '') {
             return '';
         }
 
@@ -865,7 +882,7 @@ class User
     {
         // is status allowed?
         $status = strtolower($status);
-        if (!in_array($status, array_keys($this->allowedStatus))) {
+        if (!in_array($status, array_keys($this->allowedStatus), true)) {
             $this->errors[] = self::ERROR_USER_INVALID_STATUS;
 
             return false;
@@ -987,7 +1004,12 @@ class User
         }
 
         $superAdminIds = [];
-        while ($row = $configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $superAdminIds[] = (int) $row->user_id;
         }
 
