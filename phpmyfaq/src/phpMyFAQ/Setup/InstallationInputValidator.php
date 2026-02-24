@@ -97,25 +97,20 @@ class InstallationInputValidator
             Database::setTablePrefix($dbSetup['dbPrefix']);
         }
 
-        if ($setup === null || !array_key_exists('dbType', $setup)) {
-            $dbSetup['dbType'] = Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_SPECIAL_CHARS);
-        } else {
-            $dbSetup['dbType'] = $setup['dbType'];
-        }
+        $dbSetup['dbType'] = $setup === null || !array_key_exists('dbType', $setup)
+            ? Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_SPECIAL_CHARS)
+            : $setup['dbType'];
 
-        if (!is_null($dbSetup['dbType'])) {
-            $dbSetup['dbType'] = trim((string) $dbSetup['dbType']);
-            if (str_starts_with($dbSetup['dbType'], 'pdo_')) {
-                $dataBaseFile = 'Pdo' . ucfirst(substr($dbSetup['dbType'], offset: 4));
-            } else {
-                $dataBaseFile = ucfirst($dbSetup['dbType']);
-            }
-
-            if (!file_exists(PMF_SRC_DIR . '/phpMyFAQ/Instance/Database/' . $dataBaseFile . '.php')) {
-                throw new Exception(sprintf('Installation Error: Invalid server type "%s"', $dbSetup['dbType']));
-            }
-        } else {
+        if (is_null($dbSetup['dbType'])) {
             throw new Exception('Installation Error: Please select a database type.');
+        }
+        $dbSetup['dbType'] = trim((string) $dbSetup['dbType']);
+        $dataBaseFile = str_starts_with($dbSetup['dbType'], 'pdo_')
+            ? 'Pdo' . ucfirst(substr($dbSetup['dbType'], offset: 4))
+            : ucfirst($dbSetup['dbType']);
+
+        if (!file_exists(PMF_SRC_DIR . '/phpMyFAQ/Instance/Database/' . $dataBaseFile . '.php')) {
+            throw new Exception(sprintf('Installation Error: Invalid server type "%s"', $dbSetup['dbType']));
         }
 
         $dbSetup['dbServer'] = Filter::filterInput(INPUT_POST, 'sql_server', FILTER_SANITIZE_SPECIAL_CHARS, '');
@@ -123,11 +118,9 @@ class InstallationInputValidator
             throw new Exception('Installation Error: Please add a database server.');
         }
 
-        if ($setup === null || !array_key_exists('dbType', $setup)) {
-            $dbSetup['dbPort'] = Filter::filterInput(INPUT_POST, 'sql_port', FILTER_VALIDATE_INT);
-        } else {
-            $dbSetup['dbPort'] = $setup['dbPort'];
-        }
+        $dbSetup['dbPort'] = $setup === null || !array_key_exists('dbType', $setup)
+            ? Filter::filterInput(INPUT_POST, 'sql_port', FILTER_VALIDATE_INT)
+            : $setup['dbPort'];
 
         if (is_null($dbSetup['dbPort']) && !System::isSqlite($dbSetup['dbType'])) {
             throw new Exception('Installation Error: Please add a valid database port.');
@@ -143,11 +136,9 @@ class InstallationInputValidator
             $dbSetup['dbPassword'] = '';
         }
 
-        if ($setup === null || !array_key_exists('dbType', $setup)) {
-            $dbSetup['dbDatabaseName'] = Filter::filterInput(INPUT_POST, 'sql_db', FILTER_SANITIZE_SPECIAL_CHARS);
-        } else {
-            $dbSetup['dbDatabaseName'] = $setup['dbDatabaseName'];
-        }
+        $dbSetup['dbDatabaseName'] = $setup === null || !array_key_exists('dbType', $setup)
+            ? Filter::filterInput(INPUT_POST, 'sql_db', FILTER_SANITIZE_SPECIAL_CHARS)
+            : $setup['dbDatabaseName'];
 
         if (is_null($dbSetup['dbDatabaseName']) && !System::isSqlite($dbSetup['dbType'])) {
             throw new Exception('Installation Error: Please add a database name.');
@@ -278,31 +269,25 @@ class InstallationInputValidator
      */
     private function validateUserCredentials(?array $setup): array
     {
-        if ($setup === null || !array_key_exists('loginname', $setup)) {
-            $loginName = Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_SPECIAL_CHARS);
-        } else {
-            $loginName = $setup['loginname'];
-        }
+        $loginName = $setup === null || !array_key_exists('loginname', $setup)
+            ? Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_SPECIAL_CHARS)
+            : $setup['loginname'];
 
         if (is_null($loginName)) {
             throw new Exception('Installation Error: Please add a login name for your account.');
         }
 
-        if ($setup === null || !array_key_exists('password', $setup)) {
-            $password = Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
-        } else {
-            $password = $setup['password'];
-        }
+        $password = $setup === null || !array_key_exists('password', $setup)
+            ? Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS)
+            : $setup['password'];
 
         if (is_null($password)) {
             throw new Exception('Installation Error: Please add a password for your account.');
         }
 
-        if ($setup === null || !array_key_exists('password_retyped', $setup)) {
-            $passwordRetyped = Filter::filterInput(INPUT_POST, 'password_retyped', FILTER_SANITIZE_SPECIAL_CHARS);
-        } else {
-            $passwordRetyped = $setup['password_retyped'];
-        }
+        $passwordRetyped = $setup === null || !array_key_exists('password_retyped', $setup)
+            ? Filter::filterInput(INPUT_POST, 'password_retyped', FILTER_SANITIZE_SPECIAL_CHARS)
+            : $setup['password_retyped'];
 
         if (is_null($passwordRetyped)) {
             throw new Exception('Installation Error: Please add a retyped password.');

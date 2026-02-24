@@ -40,12 +40,11 @@ trait CurrentUserSessionLookupTrait
             $user = self::getFromSession($configuration);
         }
 
-        if ($user instanceof CurrentUser) {
-            $user->setLoggedIn(true);
-        } else {
-            $user = new CurrentUser($configuration);
+        if (!$user instanceof CurrentUser) {
+            return new CurrentUser($configuration);
         }
 
+        $user->setLoggedIn(true);
         return $user;
     }
 
@@ -56,19 +55,17 @@ trait CurrentUserSessionLookupTrait
      */
     public static function getCurrentUserGroupId(?CurrentUser $user = null): array
     {
-        if ($user !== null) {
-            $currentUser = $user->getUserId();
-            if ($user->perm instanceof MediumPermission) {
-                $currentGroups = $user->perm->getUserGroups($currentUser);
-            } else {
-                $currentGroups = [-1];
-            }
+        if ($user === null) {
+            return [-1, [-1]];
+        }
 
-            if ($currentGroups === []) {
-                $currentGroups = [-1];
-            }
-        } else {
-            $currentUser = -1;
+        $currentUser = $user->getUserId();
+        $currentGroups = [-1];
+        if ($user->perm instanceof MediumPermission) {
+            $currentGroups = $user->perm->getUserGroups($currentUser);
+        }
+
+        if ($currentGroups === []) {
             $currentGroups = [-1];
         }
 

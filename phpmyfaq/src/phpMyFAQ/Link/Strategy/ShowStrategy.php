@@ -34,8 +34,9 @@ final class ShowStrategy implements StrategyInterface
         }
 
         $url = Link::LINK_CATEGORY . $cat;
-        if (isset($params[Link::LINK_GET_PAGE])) {
-            $url .= Link::LINK_HTML_SLASH . $params[Link::LINK_GET_PAGE];
+        $page = $params[Link::LINK_GET_PAGE] ?? null;
+        if ($page !== null) {
+            $url .= Link::LINK_HTML_SLASH . $page;
         }
 
         return $url . Link::LINK_HTML_SLASH . $link->getSEOTitle() . Link::LINK_HTML_EXTENSION;

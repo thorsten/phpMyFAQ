@@ -46,12 +46,18 @@ readonly class Migration323 extends AbstractMigration
                 sprintf('ALTER TABLE %sfaquser CHANGE ip ip VARCHAR(64) NULL DEFAULT NULL', $this->tablePrefix),
                 'Increase faquser.ip column size (MySQL)',
             );
-        } elseif ($this->isPostgreSql()) {
+            return;
+        }
+
+        if ($this->isPostgreSql()) {
             $recorder->addSql(
                 sprintf('ALTER TABLE %sfaquser ALTER COLUMN ip TYPE VARCHAR(64)', $this->tablePrefix),
                 'Increase faquser.ip column size (PostgreSQL)',
             );
-        } elseif ($this->isSqlite()) {
+            return;
+        }
+
+        if ($this->isSqlite()) {
             // SQLite requires table rebuild
             $recorder->addSql(sprintf(
                 'CREATE TABLE %sfaquser_new (
@@ -87,7 +93,10 @@ readonly class Migration323 extends AbstractMigration
                 sprintf('ALTER TABLE %sfaquser_new RENAME TO %sfaquser', $this->tablePrefix, $this->tablePrefix),
                 'Rename new faquser table (SQLite)',
             );
-        } elseif ($this->isSqlServer()) {
+            return;
+        }
+
+        if ($this->isSqlServer()) {
             $recorder->addSql(
                 sprintf('ALTER TABLE %sfaquser ALTER COLUMN ip VARCHAR(64)', $this->tablePrefix),
                 'Increase faquser.ip column size (SQL Server)',

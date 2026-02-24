@@ -57,7 +57,7 @@ abstract class AbstractTranslationProvider implements TranslationProviderInterfa
      */
     public function translate(string $text, string $sourceLang, string $targetLang, bool $preserveHtml = false): string
     {
-        if (empty($text)) {
+        if ($text === '') {
             return '';
         }
 

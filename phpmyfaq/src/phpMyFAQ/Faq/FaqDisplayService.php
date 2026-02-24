@@ -103,10 +103,10 @@ final class FaqDisplayService
     {
         if ($solutionId === null || $solutionId === 0) {
             $this->faq->getFaq($faqId);
-        } else {
-            $this->faq->getFaqBySolutionId($solutionId);
+            return (int) ($this->faq->faqRecord['id'] ?? $faqId);
         }
 
+        $this->faq->getFaqBySolutionId($solutionId);
         return (int) ($this->faq->faqRecord['id'] ?? $faqId);
     }
 
@@ -118,10 +118,9 @@ final class FaqDisplayService
         $question = $this->faq->getQuestion((int) $this->faq->faqRecord['id']);
 
         // Convert Markdown if enabled
+        $answer = $this->faq->faqRecord['content'];
         if ((bool) $this->configuration->get('main.enableMarkdownEditor')) {
             $answer = $this->markdownConverter->convert($this->faq->faqRecord['content'])->getContent();
-        } else {
-            $answer = $this->faq->faqRecord['content'];
         }
 
         // Cleanup and rewrite

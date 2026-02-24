@@ -44,7 +44,7 @@ class ContainerControllerResolver extends ControllerResolver
         // If the controller is in ClassName::method format and registered in the container,
         // resolve it from the container BEFORE the parent tries to instantiate with `new`.
         if (is_string($controllerAttr) && str_contains($controllerAttr, '::')) {
-            [$class, $method] = explode('::', $controllerAttr, 2);
+            [$class, $method] = explode('::', $controllerAttr, limit: 2);
             if (class_exists($class) && $this->container->has($class)) {
                 $instance = $this->container->get($class);
                 return [$instance, $method];

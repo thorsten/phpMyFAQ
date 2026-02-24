@@ -52,9 +52,8 @@ class Helper
         ?string $route = null,
         bool $checkPerm = true,
     ): string {
-        if (Translation::get($caption) !== null) {
-            $renderedCaption = Translation::get($caption);
-        } else {
+        $renderedCaption = Translation::get($caption);
+        if ($renderedCaption === null) {
             $renderedCaption = 'No string for ' . $caption;
         }
 
@@ -79,29 +78,28 @@ class Helper
     private function evaluatePermission(string $restrictions): bool
     {
         if (str_contains($restrictions, '+')) {
-            $hasPermission = false;
             foreach (explode('+', $restrictions) as $restriction) {
-                $hasPermission = $this->evaluatePermission($restriction);
-                if ($hasPermission) {
-                    break;
+                if ($this->evaluatePermission($restriction)) {
+                    return true;
                 }
             }
-        } elseif (str_contains($restrictions, '*')) {
-            $hasPermission = true;
+
+            return false;
+        }
+
+        if (str_contains($restrictions, '*')) {
             foreach (explode('*', $restrictions) as $restriction) {
-                if (isset($this->permission[$restriction]) && $this->permission[$restriction]) {
+                if (($this->permission[$restriction] ?? false) === true) {
                     continue;
                 }
 
-                $hasPermission = false;
-                break;
+                return false;
             }
-        } else {
-            $hasPermission =
-                $restrictions !== '' && isset($this->permission[$restrictions]) && $this->permission[$restrictions];
+
+            return true;
         }
 
-        return $hasPermission;
+        return $restrictions !== '' && ($this->permission[$restrictions] ?? false);
     }
 
     /**
@@ -118,7 +116,7 @@ class Helper
         // check user rights, set them TRUE
         $allUserRights = $user->perm->getAllUserRights($user->getUserId());
         foreach ($allRights as $allRight) {
-            if (!in_array((int) $allRight['right_id'], $allUserRights, true)) {
+            if (!in_array((int) $allRight['right_id'], $allUserRights, strict: true)) {
                 continue;
             }
 

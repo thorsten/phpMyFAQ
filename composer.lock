@@ -2237,16 +2237,16 @@
         },
         {
             "name": "nette/schema",
-            "version": "v1.3.4",
+            "version": "v1.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/schema.git",
-                "reference": "086497a2f34b82fede9b5a41cc8e131d087cd8f7"
+                "reference": "f0ab1a3cda782dbc5da270d28545236aa80c4002"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/schema/zipball/086497a2f34b82fede9b5a41cc8e131d087cd8f7",
-                "reference": "086497a2f34b82fede9b5a41cc8e131d087cd8f7",
+                "url": "https://api.github.com/repos/nette/schema/zipball/f0ab1a3cda782dbc5da270d28545236aa80c4002",
+                "reference": "f0ab1a3cda782dbc5da270d28545236aa80c4002",
                 "shasum": ""
             },
             "require": {
@@ -2254,8 +2254,10 @@
                 "php": "8.1 - 8.5"
             },
             "require-dev": {
+                "nette/phpstan-rules": "^1.0",
                 "nette/tester": "^2.6",
-                "phpstan/phpstan": "^2.0@stable",
+                "phpstan/extension-installer": "^1.4@stable",
+                "phpstan/phpstan": "^2.1.39@stable",
                 "tracy/tracy": "^2.8"
             },
             "type": "library",
@@ -2296,9 +2298,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/schema/issues",
-                "source": "https://github.com/nette/schema/tree/v1.3.4"
+                "source": "https://github.com/nette/schema/tree/v1.3.5"
             },
-            "time": "2026-02-08T02:54:00+00:00"
+            "time": "2026-02-23T03:47:12+00:00"
         },
         {
             "name": "nette/utils",
@@ -7011,16 +7013,16 @@
     "packages-dev": [
         {
             "name": "carthage-software/mago",
-            "version": "1.10.0",
+            "version": "1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/carthage-software/mago.git",
-                "reference": "0e21384330e235da9df3be2d50ba655ea94514df"
+                "reference": "24bf68e20a953ee11a2cd8d0547771f37a598d14"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/carthage-software/mago/zipball/0e21384330e235da9df3be2d50ba655ea94514df",
-                "reference": "0e21384330e235da9df3be2d50ba655ea94514df",
+                "url": "https://api.github.com/repos/carthage-software/mago/zipball/24bf68e20a953ee11a2cd8d0547771f37a598d14",
+                "reference": "24bf68e20a953ee11a2cd8d0547771f37a598d14",
                 "shasum": ""
             },
             "require": {
@@ -7035,7 +7037,8 @@
             "type": "library",
             "autoload": {
                 "files": [
-                    "composer/functions.php"
+                    "composer/functions.php",
+                    "composer/internal.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -7054,7 +7057,7 @@
             ],
             "support": {
                 "issues": "https://github.com/carthage-software/mago/issues",
-                "source": "https://github.com/carthage-software/mago/tree/1.10.0"
+                "source": "https://github.com/carthage-software/mago/tree/1.11.0"
             },
             "funding": [
                 {
@@ -7062,7 +7065,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-22T09:15:34+00:00"
+            "time": "2026-02-24T14:34:25+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -7634,11 +7637,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.39",
+            "version": "2.1.40",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c6f73a2af4cbcd99c931d0fb8f08548cc0fa8224",
-                "reference": "c6f73a2af4cbcd99c931d0fb8f08548cc0fa8224",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9b2c7aeb83a75d8680ea5e7c9b7fca88052b766b",
+                "reference": "9b2c7aeb83a75d8680ea5e7c9b7fca88052b766b",
                 "shasum": ""
             },
             "require": {
@@ -7683,7 +7686,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-11T14:48:56+00:00"
+            "time": "2026-02-23T15:04:35+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -9797,5 +9800,5 @@
     "platform-overrides": {
         "php": "8.4.0"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

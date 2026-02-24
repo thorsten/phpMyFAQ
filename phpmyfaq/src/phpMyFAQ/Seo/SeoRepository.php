@@ -75,7 +75,12 @@ class SeoRepository implements SeoRepositoryInterface
         $result = $databaseDriver->query($query);
 
         if ($databaseDriver->numRows($result) > 0) {
-            while ($row = $databaseDriver->fetchObject($result)) {
+            while (true) {
+                $row = $databaseDriver->fetchObject($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 $seoEntity
                     ->setId((int) $row->id)
                     ->setTitle($row->title)

@@ -80,6 +80,7 @@ class Sitemap
      */
     public function getAllFirstLetters(): array
     {
+        $permPart = sprintf('( fdu.user_id = %d OR fdu.user_id = -1 )', $this->user);
         if ($this->groupSupport) {
             $permPart = sprintf(
                 '( fdg.group_id IN (%s)
@@ -89,8 +90,6 @@ class Sitemap
                 $this->user,
                 implode(', ', $this->groups),
             );
-        } else {
-            $permPart = sprintf('( fdu.user_id = %d OR fdu.user_id = -1 )', $this->user);
         }
 
         $letters = [];
@@ -126,7 +125,12 @@ class Sitemap
         );
 
         $result = $this->configuration->getDb()->query($query);
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $letter = new stdClass();
             $letter->letter = Strings::strtoupper($row->letters);
 
@@ -155,6 +159,7 @@ class Sitemap
      */
     public function getFaqsFromLetter(string $letter = 'A'): array
     {
+        $permPart = sprintf('( fdu.user_id = %d OR fdu.user_id = -1 )', $this->user);
         if ($this->groupSupport) {
             $permPart = sprintf(
                 '( fdg.group_id IN (%s)
@@ -164,8 +169,6 @@ class Sitemap
                 $this->user,
                 implode(', ', $this->groups),
             );
-        } else {
-            $permPart = sprintf('( fdu.user_id = %d OR fdu.user_id = -1 )', $this->user);
         }
 
         $letter = Strings::strtoupper($this->configuration->getDb()->escape(Strings::substr($letter, 0, 1)));
@@ -217,7 +220,12 @@ class Sitemap
             'allow_unsafe_links' => false,
         ]);
 
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             if ($oldId !== $row->id) {
                 $faq = new stdClass();
                 $faq->question = $row->thema;
@@ -230,10 +238,9 @@ class Sitemap
                     TitleSlugifier::slug($row->thema),
                 );
 
+                $answer = strip_tags((string) $row->snap);
                 if ($this->configuration->get(item: 'main.enableMarkdownEditor')) {
                     $answer = strip_tags($commonMarkConverter->convert($row->snap)->getContent());
-                } else {
-                    $answer = strip_tags((string) $row->snap);
                 }
 
                 $faq->answer = Utils::chopString($answer, 25);
