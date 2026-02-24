@@ -79,7 +79,7 @@ class SearchHelper extends AbstractHelper
                 }
 
                 // Check if this is a custom page result
-                $isCustomPage = isset($result->content_type) && $result->content_type === 'page';
+                $isCustomPage = ($result->content_type ?? null) === 'page';
 
                 if ($isCustomPage) {
                     // Build the link to the custom page
@@ -88,7 +88,7 @@ class SearchHelper extends AbstractHelper
                     $question = html_entity_decode(
                         (string) $result->question,
                         ENT_QUOTES | ENT_XML1 | ENT_HTML5,
-                        'UTF-8',
+                        encoding: 'UTF-8',
                     );
                     $link = new Link($currentUrl, $this->configuration);
                     $link->setTitle($result->question);
@@ -113,7 +113,7 @@ class SearchHelper extends AbstractHelper
                     $question = html_entity_decode(
                         (string) $result->question,
                         ENT_QUOTES | ENT_XML1 | ENT_HTML5,
-                        'UTF-8',
+                        encoding: 'UTF-8',
                     );
                     $link = new Link($currentUrl, $this->configuration);
                     $link->setTitle($result->question);
@@ -150,7 +150,7 @@ class SearchHelper extends AbstractHelper
                     continue;
                 }
 
-                if (!isset($result->solution_id)) {
+                if (($result->solution_id ?? null) === null) {
                     $faq = new Faq($this->configuration);
                     $solutionId = $faq->getSolutionIdFromId($result->id, $result->lang);
                 } else {
@@ -158,9 +158,13 @@ class SearchHelper extends AbstractHelper
                 }
 
                 // Build the link to the faq record
-                $currentUrl = $this->configuration->getDefaultUrl() . sprintf('solution_id_%d.html', $solutionId);
-                $adminUrl =
-                    $this->configuration->getDefaultUrl() . sprintf('admin/faq/edit/%d/%s', $result->id, $result->lang);
+                $currentUrl = sprintf('%ssolution_id_%d.html', $this->configuration->getDefaultUrl(), $solutionId);
+                $adminUrl = sprintf(
+                    '%sadmin/faq/edit/%d/%s',
+                    $this->configuration->getDefaultUrl(),
+                    $result->id,
+                    $result->lang,
+                );
 
                 $results[] = ['url' => $currentUrl, 'question' => $result->question, 'adminUrl' => $adminUrl];
                 ++$i;
@@ -205,7 +209,7 @@ class SearchHelper extends AbstractHelper
                 ++$displayedCounter;
 
                 // Check if this is a custom page result
-                $isCustomPage = isset($resultSet->content_type) && $resultSet->content_type === 'page';
+                $isCustomPage = ($resultSet->content_type ?? null) === 'page';
 
                 if ($isCustomPage) {
                     // Handle custom page results
@@ -213,11 +217,11 @@ class SearchHelper extends AbstractHelper
                     $answerPreview = $faqHelper->renderAnswerPreview($resultSet->answer, 20);
 
                     $searchTerm = str_replace(
-                        ['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'],
-                        '',
-                        $this->searchTerm,
+                        search: ['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'],
+                        replace: '',
+                        subject: $this->searchTerm,
                     );
-                    $searchTerm = preg_quote($searchTerm, '/');
+                    $searchTerm = preg_quote($searchTerm, delimiter: '/');
                     $searchItems = explode(' ', $searchTerm);
 
                     if (
@@ -257,11 +261,11 @@ class SearchHelper extends AbstractHelper
                     $answerPreview = $faqHelper->renderAnswerPreview($resultSet->answer, 20);
 
                     $searchTerm = str_replace(
-                        ['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'],
-                        '',
-                        $this->searchTerm,
+                        search: ['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'],
+                        replace: '',
+                        subject: $this->searchTerm,
                     );
-                    $searchTerm = preg_quote($searchTerm, '/');
+                    $searchTerm = preg_quote($searchTerm, delimiter: '/');
                     $searchItems = explode(' ', $searchTerm);
 
                     if (
@@ -292,7 +296,9 @@ class SearchHelper extends AbstractHelper
                     $oLink = new Link($currentUrl, $this->configuration);
                     $oLink->setTitle($resultSet->question);
 
-                    $path = isset($categoryInfo[0]['id']) ? $this->Category->getPath($categoryInfo[0]['id']) : '';
+                    $path = ($categoryInfo[0]['id'] ?? null) !== null
+                        ? $this->Category->getPath($categoryInfo[0]['id'])
+                        : '';
 
                     $result->renderedScore = $this->renderScore($resultSet->score * 33);
                     $result->question = $question;
@@ -343,7 +349,7 @@ class SearchHelper extends AbstractHelper
                     continue;
                 }
 
-                if ($recordId == $result->id) {
+                if ($recordId === $result->id) {
                     continue;
                 }
 

@@ -49,7 +49,7 @@ final class ApiKeyController extends AbstractAdministrationApiController
         $rows = $result === false ? [] : $db->fetchAll($result) ?? [];
 
         foreach ($rows as &$row) {
-            $decoded = is_string($row['scopes'] ?? null) ? json_decode($row['scopes'], true) : null;
+            $decoded = is_string($row['scopes'] ?? null) ? json_decode(json: $row['scopes'], associative: true) : null;
             $row['scopes'] = is_array($decoded) ? $decoded : [];
         }
 
@@ -67,7 +67,7 @@ final class ApiKeyController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::USER_EDIT);
 
-        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
         $csrf = Filter::filterVar($data->csrf ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         if (!$this->verifySessionCsrfToken('api-key-create', $csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
@@ -79,7 +79,7 @@ final class ApiKeyController extends AbstractAdministrationApiController
         }
 
         $scopes = is_array($data->scopes ?? null) ? array_values($data->scopes) : [];
-        $scopes = array_values(array_filter($scopes, static fn(mixed $scope): bool => is_string($scope)));
+        $scopes = array_values(array_filter($scopes, is_string(...)));
         $expiresAt = Filter::filterVar($data->expiresAt ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
 
         if ($expiresAt !== '' && strtotime($expiresAt) === false) {
@@ -87,7 +87,7 @@ final class ApiKeyController extends AbstractAdministrationApiController
         }
 
         $db = $this->configuration->getDb();
-        $id = $db->nextId(Database::getTablePrefix() . 'faqapi_keys', 'id');
+        $id = $db->nextId(Database::getTablePrefix() . 'faqapi_keys', column: 'id');
         $apiKey = 'pmf_' . bin2hex(random_bytes(20));
         $apiKeyHash = hash('sha256', $apiKey);
 
@@ -128,7 +128,7 @@ final class ApiKeyController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::USER_EDIT);
 
-        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
         $csrf = Filter::filterVar($data->csrf ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         if (!$this->verifySessionCsrfToken('api-key-update', $csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
@@ -145,7 +145,7 @@ final class ApiKeyController extends AbstractAdministrationApiController
         }
 
         $scopes = is_array($data->scopes ?? null) ? array_values($data->scopes) : [];
-        $scopes = array_values(array_filter($scopes, static fn(mixed $scope): bool => is_string($scope)));
+        $scopes = array_values(array_filter($scopes, is_string(...)));
         $expiresAt = Filter::filterVar($data->expiresAt ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
 
         if ($expiresAt !== '' && strtotime($expiresAt) === false) {
@@ -200,7 +200,7 @@ final class ApiKeyController extends AbstractAdministrationApiController
         $csrf = $request->headers->get('X-CSRF-Token') ?? $request->query->get('csrf');
 
         if ($csrf === null) {
-            $body = json_decode($request->getContent(), false);
+            $body = json_decode(json: $request->getContent(), associative: false);
             $csrf = $body->csrf ?? null;
         }
 

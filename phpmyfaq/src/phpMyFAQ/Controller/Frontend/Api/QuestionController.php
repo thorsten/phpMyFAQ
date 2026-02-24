@@ -70,19 +70,19 @@ final class QuestionController extends AbstractController
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
-        if (!isset($data->name)) {
+        if (($data->name ?? null) === null) {
             throw new Exception('Missing name');
         }
 
-        if (!isset($data->email)) {
+        if (($data->email ?? null) === null) {
             throw new Exception('Missing email');
         }
 
-        if (!isset($data->lang)) {
+        if (($data->lang ?? null) === null) {
             throw new Exception('Missing language');
         }
 
-        if (!isset($data->question) || empty($data->question)) {
+        if (($data->question ?? null) === null || $data->question === '') {
             throw new Exception('Missing or empty question');
         }
 
@@ -93,9 +93,11 @@ final class QuestionController extends AbstractController
             throw new Exception('Invalid email address');
         }
 
-        $selectedCategory = isset($data->category) ? Filter::filterVar($data->category, FILTER_VALIDATE_INT) : false;
+        $selectedCategory = ($data->category ?? null) !== null
+            ? Filter::filterVar($data->category, FILTER_VALIDATE_INT)
+            : false;
 
-        if (isset($data->category) && $data->category !== '') {
+        if (($data->category ?? null) !== null && $data->category !== '') {
             throw new Exception('Category validation failed');
         }
 
@@ -103,7 +105,7 @@ final class QuestionController extends AbstractController
         $userQuestion = trim(strip_tags((string) $data->question));
         $save = Filter::filterVar($data->save ?? 0, FILTER_VALIDATE_INT);
 
-        if (isset($data->save)) {
+        if (($data->save ?? null) !== null) {
             throw new Exception('Save parameter not allowed');
         }
 

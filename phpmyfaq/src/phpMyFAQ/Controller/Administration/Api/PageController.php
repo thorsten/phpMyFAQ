@@ -163,7 +163,7 @@ final class PageController extends AbstractAdministrationApiController
         // Validate required fields
         $requiredFields = ['pageTitle', 'slug', 'authorName', 'authorEmail', 'lang'];
         foreach ($requiredFields as $field) {
-            if (!(!isset($data->$field) || $data->$field === '')) {
+            if (!(($data->$field ?? null) === null || $data->$field === '')) {
                 continue;
             }
 
@@ -182,13 +182,13 @@ final class PageController extends AbstractAdministrationApiController
         $seoRobots = Filter::filterVar($data->seoRobots ?? 'index,follow', FILTER_SANITIZE_SPECIAL_CHARS);
 
         // Check if this is a translation (pageId provided)
-        $isTranslation = isset($data->pageId) && $data->pageId > 0;
+        $isTranslation = ($data->pageId ?? null) !== null && $data->pageId > 0;
         $translationPageId = $isTranslation ? Filter::filterVar($data->pageId, FILTER_VALIDATE_INT) : null;
 
         // For translations, check if language already exists for this page ID
         if ($isTranslation) {
             $existingLanguages = $customPage->getExistingLanguages($translationPageId);
-            if (in_array($language, $existingLanguages)) {
+            if (in_array($language, $existingLanguages, strict: true)) {
                 return $this->json([
                     'error' => 'Translation for this language already exists',
                 ], Response::HTTP_CONFLICT);
@@ -213,8 +213,8 @@ final class PageController extends AbstractAdministrationApiController
             ->setAuthorName($authorName)
             ->setAuthorEmail($authorEmail)
             ->setActive((bool) $active)
-            ->setSeoTitle($seoTitle ?: null)
-            ->setSeoDescription($seoDescription ?: null)
+            ->setSeoTitle($seoTitle !== '' ? $seoTitle : null)
+            ->setSeoDescription($seoDescription !== '' ? $seoDescription : null)
             ->setSeoRobots($seoRobots)
             ->setCreated(new DateTime());
 
@@ -273,7 +273,7 @@ final class PageController extends AbstractAdministrationApiController
         }
 
         // Validate required fields
-        if (!isset($data->id) || !isset($data->lang)) {
+        if (($data->id ?? null) === null || ($data->lang ?? null) === null) {
             return $this->json(['error' => 'Missing required fields: id, lang'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -318,7 +318,7 @@ final class PageController extends AbstractAdministrationApiController
         // Validate required fields
         $requiredFields = ['id', 'pageTitle', 'slug', 'authorName', 'authorEmail', 'lang'];
         foreach ($requiredFields as $field) {
-            if (!(!isset($data->$field) || $data->$field === '')) {
+            if (!(($data->$field ?? null) === null || $data->$field === '')) {
                 continue;
             }
 
@@ -356,8 +356,8 @@ final class PageController extends AbstractAdministrationApiController
             ->setAuthorName($authorName)
             ->setAuthorEmail($authorEmail)
             ->setActive((bool) $active)
-            ->setSeoTitle($seoTitle ?: null)
-            ->setSeoDescription($seoDescription ?: null)
+            ->setSeoTitle($seoTitle !== '' ? $seoTitle : null)
+            ->setSeoDescription($seoDescription !== '' ? $seoDescription : null)
             ->setSeoRobots($seoRobots)
             ->setCreated(new DateTime())
             ->setUpdated(new DateTime());
@@ -404,7 +404,7 @@ final class PageController extends AbstractAdministrationApiController
         }
 
         // Validate required fields
-        if (!isset($data->id) || !isset($data->status)) {
+        if (($data->id ?? null) === null || ($data->status ?? null) === null) {
             return $this->json(['error' => 'Missing required fields: id, status'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -457,13 +457,15 @@ final class PageController extends AbstractAdministrationApiController
         }
 
         // Validate required fields
-        if (!isset($data->slug) || !isset($data->lang)) {
+        if (($data->slug ?? null) === null || ($data->lang ?? null) === null) {
             return $this->json(['error' => 'Missing required fields: slug, lang'], Response::HTTP_BAD_REQUEST);
         }
 
         $slug = Filter::filterVar($data->slug, FILTER_SANITIZE_SPECIAL_CHARS);
         $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
-        $excludeId = isset($data->excludeId) ? Filter::filterVar($data->excludeId, FILTER_VALIDATE_INT) : null;
+        $excludeId = ($data->excludeId ?? null) !== null
+            ? Filter::filterVar($data->excludeId, FILTER_VALIDATE_INT)
+            : null;
 
         $exists = $customPage->slugExists($slug, $language, $excludeId);
 

@@ -57,28 +57,32 @@ class Smtp implements MailUserAgentInterface
     public function send(string $recipients, array $headers, string $body): int
     {
         $sender = '';
-        if ('WIN' !== strtoupper(substr(PHP_OS, 0, 3)) && !ini_get('safe_mode') && isset($headers['Return-Path'])) {
-            $sender = str_replace(['<', '>'], '', $headers['Return-Path']);
+        if (
+            'WIN' !== strtoupper(string: substr(string: PHP_OS, offset: 0, length: 3))
+            && !ini_get(option: 'safe_mode')
+            && array_key_exists('Return-Path', $headers)
+        ) {
+            $sender = str_replace(search: ['<', '>'], replace: '', subject: $headers['Return-Path']);
             unset($headers['Return-Path']);
         }
 
         $email = new Email()
-            ->from(empty($sender) ? $this->user : $sender)
+            ->from($sender === '' ? $this->user : $sender)
             ->to($recipients)
             ->subject($headers['Subject'])
             ->text($body)
             ->html($body);
 
-        if (isset($headers['CC']) || isset($headers['Cc'])) {
+        if (array_key_exists('CC', $headers) || array_key_exists('Cc', $headers)) {
             $cc = $headers['CC'] ?? $headers['Cc'];
             $email->cc($cc);
         }
 
-        if (isset($headers['Bcc'])) {
+        if (array_key_exists('Bcc', $headers)) {
             $email->bcc($headers['Bcc']);
         }
 
-        if (isset($headers['Reply-To'])) {
+        if (array_key_exists('Reply-To', $headers)) {
             $email->replyTo($headers['Reply-To']);
         }
 

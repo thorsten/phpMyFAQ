@@ -78,7 +78,7 @@ final class CommentController extends AbstractController
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
-        if (!isset($data->{'pmf-csrf-token'})) {
+        if (($data->{'pmf-csrf-token'} ?? null) === null) {
             throw new Exception('Missing CSRF token');
         }
 
@@ -89,15 +89,15 @@ final class CommentController extends AbstractController
             throw new Exception('Invalid CSRF token');
         }
 
-        if (!isset($data->user)) {
+        if (($data->user ?? null) === null) {
             throw new Exception('Missing user');
         }
 
-        if (!isset($data->mail)) {
+        if (($data->mail ?? null) === null) {
             throw new Exception('Missing email');
         }
 
-        if (!isset($data->comment_text)) {
+        if (($data->comment_text ?? null) === null) {
             throw new Exception('Missing or empty comment text');
         }
 
@@ -241,8 +241,12 @@ final class CommentController extends AbstractController
                 $allowedAttrs = [];
 
                 // Extract and validate href
-                if (preg_match('/href\s*=\s*["\']([^"\']*)["\']/', $attributes, $hrefMatch)) {
-                    $href = htmlspecialchars($hrefMatch[1], ENT_QUOTES, 'UTF-8');
+                if (preg_match(
+                    pattern: '/href\s*=\s*["\']([^"\']*)["\']/',
+                    subject: $attributes,
+                    matches: $hrefMatch,
+                )) {
+                    $href = htmlspecialchars(string: $hrefMatch[1], flags: ENT_QUOTES, encoding: 'UTF-8');
                     // Only allow http, https, and mailto protocols
                     if (preg_match('/^(https?:\/\/|mailto:)/i', $href) || preg_match('/^\/[^\/]/', $href)) {
                         $allowedAttrs[] = 'href="' . $href . '"';
@@ -250,16 +254,21 @@ final class CommentController extends AbstractController
                 }
 
                 // Extract and validate title
-                if (preg_match('/title\s*=\s*["\']([^"\']*)["\']/', $attributes, $titleMatch)) {
-                    $title = htmlspecialchars($titleMatch[1], ENT_QUOTES, 'UTF-8');
+                if (preg_match(
+                    pattern: '/title\s*=\s*["\']([^"\']*)["\']/',
+                    subject: $attributes,
+                    matches: $titleMatch,
+                )) {
+                    $title = htmlspecialchars(string: $titleMatch[1], flags: ENT_QUOTES, encoding: 'UTF-8');
                     $allowedAttrs[] = 'title="' . $title . '"';
                 }
 
                 // Extract and validate target
                 if (preg_match('/target\s*=\s*["\']([^"\']*)["\']/', $attributes, $targetMatch)) {
                     $target = $targetMatch[1];
-                    if (in_array($target, ['_blank', '_self', '_parent', '_top'])) {
-                        $allowedAttrs[] = 'target="' . htmlspecialchars($target, ENT_QUOTES, 'UTF-8') . '"';
+                    if (in_array($target, ['_blank', '_self', '_parent', '_top'], strict: true)) {
+                        $allowedAttrs[] =
+                            'target="' . htmlspecialchars(string: $target, flags: ENT_QUOTES, encoding: 'UTF-8') . '"';
                     }
                 }
 
@@ -269,6 +278,10 @@ final class CommentController extends AbstractController
         );
 
         // Remove any remaining dangerous attributes from other tags
-        return preg_replace('/<(\w+)\s+[^>]*?(on\w+|style|class|id)\s*=\s*[^>]*>/i', '<$1>', $sanitized);
+        return preg_replace(
+            pattern: '/<(\w+)\s+[^>]*?(on\w+|style|class|id)\s*=\s*[^>]*>/i',
+            replacement: '<$1>',
+            subject: $sanitized,
+        );
     }
 }

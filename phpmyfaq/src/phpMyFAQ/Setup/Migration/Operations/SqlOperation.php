@@ -43,31 +43,31 @@ readonly class SqlOperation implements OperationInterface
 
         // Generate description from query
         $query = trim($this->query);
-        if (stripos($query, 'CREATE TABLE') === 0) {
+        if (stripos(haystack: $query, needle: 'CREATE TABLE') === 0) {
             preg_match('/CREATE TABLE\s+(?:IF NOT EXISTS\s+)?(\S+)/i', $query, $matches);
             return sprintf('Create table %s', $matches[1] ?? 'unknown');
         }
-        if (stripos($query, 'ALTER TABLE') === 0) {
+        if (stripos(haystack: $query, needle: 'ALTER TABLE') === 0) {
             preg_match('/ALTER TABLE\s+(\S+)/i', $query, $matches);
             return sprintf('Alter table %s', $matches[1] ?? 'unknown');
         }
-        if (stripos($query, 'DROP TABLE') === 0) {
+        if (stripos(haystack: $query, needle: 'DROP TABLE') === 0) {
             preg_match('/DROP TABLE\s+(?:IF EXISTS\s+)?(\S+)/i', $query, $matches);
             return sprintf('Drop table %s', $matches[1] ?? 'unknown');
         }
-        if (stripos($query, 'CREATE INDEX') === 0) {
+        if (stripos(haystack: $query, needle: 'CREATE INDEX') === 0) {
             preg_match('/CREATE INDEX\s+(?:IF NOT EXISTS\s+)?(\S+)/i', $query, $matches);
             return sprintf('Create index %s', $matches[1] ?? 'unknown');
         }
-        if (stripos($query, 'INSERT INTO') === 0) {
+        if (stripos(haystack: $query, needle: 'INSERT INTO') === 0) {
             preg_match('/INSERT INTO\s+(\S+)/i', $query, $matches);
             return sprintf('Insert into %s', $matches[1] ?? 'unknown');
         }
-        if (stripos($query, 'UPDATE') === 0) {
+        if (stripos(haystack: $query, needle: 'UPDATE') === 0) {
             preg_match('/UPDATE\s+(\S+)/i', $query, $matches);
             return sprintf('Update %s', $matches[1] ?? 'unknown');
         }
-        if (stripos($query, 'DELETE FROM') === 0) {
+        if (stripos(haystack: $query, needle: 'DELETE FROM') === 0) {
             preg_match('/DELETE FROM\s+(\S+)/i', $query, $matches);
             return sprintf('Delete from %s', $matches[1] ?? 'unknown');
         }

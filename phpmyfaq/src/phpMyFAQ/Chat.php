@@ -100,7 +100,12 @@ readonly class Chat
         $result = $this->configuration->getDb()->query($query);
         $messages = [];
 
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $messages[] = $this->mapRowToEntity($row);
         }
 
@@ -135,7 +140,12 @@ readonly class Chat
         }
 
         $partnerIds = [];
-        while ($row = $this->configuration->getDb()->fetchObject($partnersResult)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($partnersResult);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $partnerIds[] = (int) $row->partner_id;
         }
 
@@ -152,7 +162,12 @@ readonly class Chat
         );
         $userInfoResult = $this->configuration->getDb()->query($userInfoQuery);
         $userInfo = [];
-        while ($row = $this->configuration->getDb()->fetchObject($userInfoResult)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($userInfoResult);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $userInfo[(int) $row->user_id] = $row->display_name ?? 'Unknown User';
         }
 
@@ -262,7 +277,12 @@ readonly class Chat
         $result = $this->configuration->getDb()->query($query);
         $messages = [];
 
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $messages[] = $this->mapRowToEntity($row);
         }
 
@@ -296,7 +316,12 @@ readonly class Chat
         $result = $this->configuration->getDb()->query($query);
         $users = [];
 
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $users[] = [
                 'userId' => (int) $row->user_id,
                 'displayName' => $row->display_name ?? 'Unknown',
@@ -379,7 +404,12 @@ readonly class Chat
         $result = $this->configuration->getDb()->query($query);
         $userInfo = [];
 
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $userInfo[(int) $row->user_id] = $row->display_name ?? 'Unknown User';
         }
 

@@ -91,107 +91,114 @@ final class ExportController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
+        $hasDataField = static function (object $payload, string $field): bool {
+            return property_exists($payload, $field) && $payload->{$field} !== null;
+        };
+
         $text = [];
         $text[0] = [];
-        if (isset($data->category)) {
+        if ($hasDataField(payload: $data, field: 'category')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_category');
         }
 
-        if (isset($data->sub_category)) {
+        if ($hasDataField(payload: $data, field: 'sub_category')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_sub_category');
         }
 
-        if (isset($data->translations)) {
+        if ($hasDataField(payload: $data, field: 'translations')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_translations');
         }
 
-        if (isset($data->language)) {
+        if ($hasDataField(payload: $data, field: 'language')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_language');
         }
 
-        if (isset($data->id)) {
+        if ($hasDataField(payload: $data, field: 'id')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_id');
         }
 
-        if (isset($data->sticky)) {
+        if ($hasDataField(payload: $data, field: 'sticky')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_sticky');
         }
 
-        if (isset($data->title)) {
+        if ($hasDataField(payload: $data, field: 'title')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_title');
         }
 
-        if (isset($data->creation_date)) {
+        if ($hasDataField(payload: $data, field: 'creation_date')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_creation_date');
         }
 
-        if (isset($data->owner)) {
+        if ($hasDataField(payload: $data, field: 'owner')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_owner');
         }
 
-        if (isset($data->last_modified_person)) {
+        if ($hasDataField(payload: $data, field: 'last_modified_person')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_last_modified_person');
         }
 
-        if (isset($data->url)) {
+        if ($hasDataField(payload: $data, field: 'url')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_url');
         }
 
-        if (isset($data->visits)) {
+        if ($hasDataField(payload: $data, field: 'visits')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_visits');
         }
 
         $report = new Report($this->configuration);
         foreach ($report->getReportingData() as $reportData) {
             $i = $reportData['faq_id'];
-            if (isset($data->category, $reportData['category_name'])) {
+            if ($hasDataField(payload: $data, field: 'category') && array_key_exists('category_name', $reportData)) {
                 $text[$i][] = Report::sanitize($report->convertEncoding($reportData['category_name']));
                 if (0 !== $reportData['category_parent']) {
                     $text[$i][] = Report::sanitize($reportData['category_parent']);
                 }
             }
 
-            if (isset($data->sub_category)) {
+            if ($hasDataField(payload: $data, field: 'sub_category')) {
                 $text[$i][] = 'n/a';
                 if (0 !== $reportData['category_parent']) {
                     $text[$i][] = Report::sanitize($report->convertEncoding($reportData['category_name']));
                 }
             }
 
-            if (isset($data->translations)) {
+            if ($hasDataField(payload: $data, field: 'translations')) {
                 $text[$i][] = $reportData['faq_translations'];
             }
 
-            if (isset($data->language) && LanguageCodes::get($reportData['faq_language'])) {
+            if ($hasDataField(payload: $data, field: 'language') && LanguageCodes::get($reportData['faq_language'])) {
                 $text[$i][] = $report->convertEncoding(LanguageCodes::get($reportData['faq_language']));
             }
 
-            if (isset($data->id)) {
+            if ($hasDataField(payload: $data, field: 'id')) {
                 $text[$i][] = $reportData['faq_id'];
             }
 
-            if (isset($data->sticky)) {
+            if ($hasDataField(payload: $data, field: 'sticky')) {
                 $text[$i][] = $reportData['faq_sticky'];
             }
 
-            if (isset($data->title)) {
+            if ($hasDataField(payload: $data, field: 'title')) {
                 $text[$i][] = Report::sanitize($report->convertEncoding($reportData['faq_question']));
             }
 
-            if (isset($data->creation_date)) {
+            if ($hasDataField(payload: $data, field: 'creation_date')) {
                 $text[$i][] = $reportData['faq_updated'];
             }
 
-            if (isset($data->owner)) {
+            if ($hasDataField(payload: $data, field: 'owner')) {
                 $text[$i][] = Report::sanitize($report->convertEncoding($reportData['faq_org_author']));
             }
 
             $text[$i][] = '';
-            if (isset($data->last_modified_person, $reportData['faq_last_author'])) {
+            if (
+                $hasDataField(payload: $data, field: 'last_modified_person')
+                && array_key_exists('faq_last_author', $reportData)
+            ) {
                 $text[$i][] = Report::sanitize($report->convertEncoding($reportData['faq_last_author']));
             }
 
-            if (isset($data->url)) {
+            if ($hasDataField(payload: $data, field: 'url')) {
                 $text[$i][] = Report::sanitize($report->convertEncoding(sprintf(
                     '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
@@ -202,7 +209,7 @@ final class ExportController extends AbstractController
                 )));
             }
 
-            if (isset($data->visits)) {
+            if ($hasDataField(payload: $data, field: 'visits')) {
                 $text[$i][] = $reportData['faq_visits'];
             }
         }

@@ -121,7 +121,12 @@ class Tags
 
         $result = $this->configuration->getDb()->query($query);
         if ($result) {
-            while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 $tags[$row->tagging_id] = $row->tagging_name;
             }
         }
@@ -148,8 +153,12 @@ class Tags
         // Store tags and references for the faq record
         foreach ($tags as $tag) {
             $tag = trim($tag);
-            if (Strings::strlen($tag) > 0 && !in_array($tag, $registeredTags, true)) {
-                if (!in_array(Strings::strtolower($tag), array_map(['phpMyFAQ\Strings', 'strtolower'], $currentTags))) {
+            if (Strings::strlen($tag) > 0 && !in_array($tag, $registeredTags, strict: true)) {
+                if (!in_array(
+                    Strings::strtolower($tag),
+                    array_map(['phpMyFAQ\Strings', 'strtolower'], $currentTags),
+                    strict: true,
+                )) {
                     // Create the new tag
                     $newTagId = $this->configuration->getDb()->nextId(
                         Database::getTablePrefix() . 'faqtags',
@@ -179,7 +188,7 @@ class Tags
                         array_search(
                             Strings::strtolower($tag),
                             array_map(['phpMyFAQ\Strings', 'strtolower'], $currentTags),
-                            true,
+                            strict: true,
                         ),
                     );
                 }
@@ -252,7 +261,7 @@ class Tags
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $showInactive ? '' : "AND d.active = 'yes'",
-            isset($search) && $search !== '' ? 'AND tagging_name ' . $like . " '" . $search . "%'" : '',
+            $search !== null && $search !== '' ? 'AND tagging_name ' . $like . " '" . $search . "%'" : '',
             $permissionCheck,
         );
 
@@ -260,7 +269,12 @@ class Tags
 
         if ($result) {
             $i = 0;
-            while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 if ($i < $limit) {
                     $allTags[$row->tagging_id] = $row->tagging_name;
                 } else {
@@ -351,8 +365,15 @@ class Tags
 
         $records = [];
         $result = $this->configuration->getDb()->query($query);
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
-            $records[] = $row->record_id;
+        if ($result) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
+                $records[] = $row->record_id;
+            }
         }
 
         return $records;
@@ -380,8 +401,15 @@ class Tags
 
         $records = [];
         $result = $this->configuration->getDb()->query($query);
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
-            $records[] = $row->record_id;
+        if ($result) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
+                $records[] = $row->record_id;
+            }
         }
 
         return $records;
@@ -427,7 +455,12 @@ class Tags
         $result = $this->configuration->getDb()->query($query);
 
         if ($result) {
-            while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 $tags[$row->tagging_id] = $row->freq;
                 if (--$limit === 0) {
                     break;
@@ -452,7 +485,8 @@ class Tags
         );
 
         $result = $this->configuration->getDb()->query($query);
-        if ($row = $this->configuration->getDb()->fetchObject($result)) {
+        $row = $result ? $this->configuration->getDb()->fetchObject($result) : false;
+        if ($row !== false && $row !== null && $row !== []) {
             return $row->tagging_name;
         }
 

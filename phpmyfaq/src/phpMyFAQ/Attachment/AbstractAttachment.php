@@ -58,12 +58,12 @@ abstract class AbstractAttachment
     /**
      * Record language.
      */
-    protected string $recordLang;
+    protected string $recordLang = '';
 
     /**
      * Real file md5 hash.
      */
-    protected string $realHash;
+    protected string $realHash = '';
 
     /**
      * Virtual unique md5 hash used for encrypted files.
@@ -79,12 +79,12 @@ abstract class AbstractAttachment
     /**
      * Filesize in bytes.
      */
-    protected int $filesize;
+    protected int $filesize = 0;
 
     /**
      * Filename.
      */
-    protected string $filename;
+    protected string $filename = '';
 
     /**
      * Encrypted.
@@ -329,33 +329,22 @@ abstract class AbstractAttachment
      */
     protected function mkVirtualHash(): ?string
     {
-        if ($this->encrypted) {
-            if (
-                !isset($this->id)
-                || !isset($this->recordId)
-                || !isset($this->realHash)
-                || !isset($this->filename)
-                || !isset($this->key)
-                || null === $this->id
-                || null === $this->recordId
-                || null === $this->realHash
-                || null === $this->filename
-                || null === $this->key
-            ) {
-                throw new AttachmentException(
-                    'All of id, recordId, hash, filename, key is needed to generate fs hash for encrypted files',
-                );
-            }
-
-            $src = $this->id . $this->recordId . $this->realHash . $this->filename . $this->key;
-            $this->virtualHash = md5($src);
-        }
-
         if (!$this->encrypted) {
-            if (isset($this->realHash)) {
+            if ($this->realHash !== '') {
                 $this->virtualHash = $this->realHash;
             }
+
+            return $this->virtualHash;
         }
+
+        if ($this->recordId === null || $this->realHash === '' || $this->filename === '' || $this->key === null) {
+            throw new AttachmentException(
+                'All of id, recordId, hash, filename, key is needed to generate fs hash for encrypted files',
+            );
+        }
+
+        $src = $this->id . $this->recordId . $this->realHash . $this->filename . $this->key;
+        $this->virtualHash = md5($src);
 
         return $this->virtualHash;
     }
@@ -381,7 +370,7 @@ abstract class AbstractAttachment
             $assoc = $this->databaseDriver->fetchArray($result);
         }
 
-        return isset($assoc['count']) && $assoc['count'] > 1;
+        return array_key_exists('count', $assoc) && $assoc['count'] > 1;
     }
 
     /**

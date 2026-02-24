@@ -381,7 +381,6 @@ final class UserController extends AbstractAdministrationApiController
             try {
                 $mailHelper->sendMailToNewUser($newUser, $userPassword);
             } catch (Exception|TransportExceptionInterface) {
-                /* @mago-expect lint:no-empty-catch-clause */
             }
 
             $this->adminLog->log($this->currentUser, AdminLogType::USER_ADD->value . ':' . $newUser->getUserId());

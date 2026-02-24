@@ -93,7 +93,7 @@ class SearchResultSet
             if ('medium' === $this->configuration->get(item: 'security.permLevel')) {
                 $groupPermissions = $this->faqPermission->get(Permission::GROUP, (int) $result->id);
                 foreach ($groupPermissions as $groupPermission) {
-                    if (!in_array($groupPermission, $currentGroupIds)) {
+                    if (!in_array($groupPermission, $currentGroupIds, strict: true)) {
                         continue;
                     }
 
@@ -105,18 +105,19 @@ class SearchResultSet
             if ('basic' === $this->configuration->get(item: 'security.permLevel')) {
                 $userPermission = $this->faqPermission->get(Permission::USER, (int) $result->id);
                 $permission =
-                    in_array(-1, $userPermission) || in_array($this->currentUser->getUserId(), $userPermission);
+                    in_array(-1, $userPermission, strict: true)
+                    || in_array($this->currentUser->getUserId(), $userPermission, strict: true);
             }
 
             // check on duplicates
-            if (!isset($duplicateResults[$result->id])) {
+            if (!array_key_exists($result->id, $duplicateResults)) {
                 $duplicateResults[$result->id] = 1;
             } else {
                 ++$duplicateResults[$result->id];
                 continue;
             }
 
-            if (!isset($result->score)) {
+            if (!property_exists($result, 'score') || $result->score === null) {
                 $result->score = $this->getScore($result);
             }
 
@@ -142,15 +143,15 @@ class SearchResultSet
     {
         $score = 0;
 
-        if (isset($object->relevance_thema)) {
+        if (property_exists($object, 'relevance_thema') && $object->relevance_thema !== null) {
             $score += $object->relevance_thema;
         }
 
-        if (isset($object->relevance_content)) {
+        if (property_exists($object, 'relevance_content') && $object->relevance_content !== null) {
             $score += $object->relevance_content;
         }
 
-        if (isset($object->relevance_keywords)) {
+        if (property_exists($object, 'relevance_keywords') && $object->relevance_keywords !== null) {
             $score += $object->relevance_keywords;
         }
 

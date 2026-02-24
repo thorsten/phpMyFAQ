@@ -105,8 +105,16 @@ class Api
 
         try {
             $this->remoteHashes = $response->getContent();
-            if (json_decode($this->remoteHashes, null, 512, JSON_THROW_ON_ERROR) instanceof stdClass) {
-                return is_array(json_decode($this->remoteHashes, true, 512, JSON_THROW_ON_ERROR));
+            if (
+                json_decode(json: $this->remoteHashes, associative: null, depth: 512, flags: JSON_THROW_ON_ERROR)
+                instanceof stdClass
+            ) {
+                return is_array(json_decode(
+                    json: $this->remoteHashes,
+                    associative: true,
+                    depth: 512,
+                    flags: JSON_THROW_ON_ERROR,
+                ));
             }
         } catch (
             ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|TransportExceptionInterface $exception
@@ -129,8 +137,8 @@ class Api
     public function getVerificationIssues(): array
     {
         return array_diff(
-            json_decode($this->system->createHashes(), true, 512, JSON_THROW_ON_ERROR),
-            json_decode((string) $this->remoteHashes, true, 512, JSON_THROW_ON_ERROR),
+            json_decode(json: $this->system->createHashes(), associative: true, depth: 512, flags: JSON_THROW_ON_ERROR),
+            json_decode(json: (string) $this->remoteHashes, associative: true, depth: 512, flags: JSON_THROW_ON_ERROR),
         );
     }
 

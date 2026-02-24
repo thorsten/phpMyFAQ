@@ -79,7 +79,12 @@ class Relation
         $result = $this->configuration->getDb()->query($query);
 
         if ($this->configuration->getDb()->numRows($result) > 0) {
-            while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 $matrix[$row->id_cat][$row->id] = true;
             }
         }
@@ -145,7 +150,12 @@ class Relation
 
         $result = $this->configuration->getDb()->query($query);
         if ($this->configuration->getDb()->numRows($result) > 0) {
-            while ($category = $this->configuration->getDb()->fetchObject($result)) {
+            while (true) {
+                $category = $this->configuration->getDb()->fetchObject($result);
+                if ($category === false || $category === null || $category === []) {
+                    break;
+                }
+
                 $categoryTree[(int) $category->id] = [
                     'category_id' => (int) $category->id,
                     'parent_id' => (int) $category->parent_id,
@@ -230,7 +240,12 @@ class Relation
 
         $result = $this->configuration->getDb()->query($query);
         if ($this->configuration->getDb()->numRows($result) > 0) {
-            while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 $numRecordsByCat[$row->category_id] = (int) $row->number;
             }
         }
@@ -255,7 +270,7 @@ class Relation
             $aggregatedFaqs[$categoryId] = $numFaqs;
 
             if ($parentId !== 0) {
-                if (!isset($childrenMap[$parentId])) {
+                if (!array_key_exists($parentId, $childrenMap)) {
                     $childrenMap[$parentId] = [];
                 }
 
@@ -269,7 +284,7 @@ class Relation
         foreach ($categories as $category) {
             $categoryId = $category['category_id'];
 
-            if (!isset($processedCategories[$categoryId])) {
+            if (!array_key_exists($categoryId, $processedCategories)) {
                 $this->aggregateRecursively($categoryId, $childrenMap, $aggregatedFaqs, $processedCategories);
             }
         }
@@ -286,13 +301,13 @@ class Relation
         array &$aggregatedFaqs,
         array &$processedCategories,
     ): int {
-        if (isset($processedCategories[$categoryId])) {
+        if (array_key_exists($categoryId, $processedCategories)) {
             return $aggregatedFaqs[$categoryId];
         }
 
         $total = $aggregatedFaqs[$categoryId] ?? 0;
 
-        if (isset($childrenMap[$categoryId])) {
+        if (array_key_exists($categoryId, $childrenMap)) {
             foreach ($childrenMap[$categoryId] as $childId) {
                 $total += $this->aggregateRecursively($childId, $childrenMap, $aggregatedFaqs, $processedCategories);
             }
@@ -325,11 +340,18 @@ class Relation
                 record_lang = '%s'", Database::getTablePrefix(), $faqId, $faqLang);
 
         $result = $this->configuration->getDb()->query($query);
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
-            $categories[$row->category_id] = [
-                'category_id' => $row->category_id,
-                'category_lang' => $row->category_lang,
-            ];
+        if ($result) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
+                $categories[$row->category_id] = [
+                    'category_id' => $row->category_id,
+                    'category_lang' => $row->category_lang,
+                ];
+            }
         }
 
         return $categories;

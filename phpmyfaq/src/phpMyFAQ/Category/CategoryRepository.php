@@ -42,16 +42,16 @@ class CategoryRepository implements CategoryRepositoryInterface
     private function mapRow(array $row): array
     {
         return [
-            'id' => (int) $row['id'],
-            'lang' => (string) $row['lang'],
-            'parent_id' => (int) $row['parent_id'],
-            'name' => (string) $row['name'],
-            'description' => (string) $row['description'],
-            'user_id' => (int) $row['user_id'],
-            'group_id' => (int) $row['group_id'],
-            'active' => (int) $row['active'],
-            'show_home' => (int) $row['show_home'],
-            'image' => (string) $row['image'],
+            'id' => (int) ($row['id'] ?? 0),
+            'lang' => (string) ($row['lang'] ?? ''),
+            'parent_id' => (int) ($row['parent_id'] ?? 0),
+            'name' => (string) ($row['name'] ?? ''),
+            'description' => (string) ($row['description'] ?? ''),
+            'user_id' => (int) ($row['user_id'] ?? 0),
+            'group_id' => (int) ($row['group_id'] ?? -1),
+            'active' => (int) ($row['active'] ?? 0),
+            'show_home' => (int) ($row['show_home'] ?? 0),
+            'image' => (string) ($row['image'] ?? ''),
         ];
     }
 
@@ -112,7 +112,12 @@ class CategoryRepository implements CategoryRepositoryInterface
         $categories = [];
 
         if ($result) {
-            while ($row = $this->configuration->getDb()->fetchArray($result)) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchArray($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 $mapped = $this->mapRow($row);
                 $categories[$mapped['id']] = $mapped;
             }
@@ -139,7 +144,12 @@ class CategoryRepository implements CategoryRepositoryInterface
         $result = $this->configuration->getDb()->query($query);
 
         if ($result) {
-            while ($row = $this->configuration->getDb()->fetchArray($result)) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchArray($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 $mapped = $this->mapRow($row);
                 $categories[$mapped['id']] = $mapped;
             }
@@ -163,8 +173,15 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         $result = $this->configuration->getDb()->query($query);
 
-        while ($row = $this->configuration->getDb()->fetchArray($result)) {
-            $categories[] = (int) $row['id'];
+        if ($result) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchArray($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
+                $categories[] = (int) $row['id'];
+            }
         }
 
         return $categories;
@@ -220,7 +237,12 @@ class CategoryRepository implements CategoryRepositoryInterface
         $result = $this->configuration->getDb()->query($query);
 
         if ($result) {
-            while ($row = $this->configuration->getDb()->fetchArray($result)) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchArray($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 $mapped = $this->mapRow($row);
                 $categories[$mapped['id']] = $mapped;
             }
@@ -273,7 +295,8 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         $result = $this->configuration->getDb()->query($query);
 
-        if ($row = $this->configuration->getDb()->fetchObject($result)) {
+        $row = $result ? $this->configuration->getDb()->fetchObject($result) : false;
+        if ($row !== false && $row !== null && $row !== []) {
             return new CategoryEntity()
                 ->setId((int) $row->id)
                 ->setLang($row->lang)
@@ -324,7 +347,12 @@ class CategoryRepository implements CategoryRepositoryInterface
         $result = $this->configuration->getDb()->query($query);
         $categories = [];
         if ($this->configuration->getDb()->numRows($result) > 0) {
-            while ($row = $this->configuration->getDb()->fetchArray($result)) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchArray($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 $categories[(int) $row['id']] = [
                     'id' => (int) $row['id'],
                     'lang' => (string) $row['lang'],
@@ -483,7 +511,8 @@ class CategoryRepository implements CategoryRepositoryInterface
             );
 
             $result = $this->configuration->getDb()->query($query);
-            if ($row = $this->configuration->getDb()->fetchArray($result)) {
+            $row = $result ? $this->configuration->getDb()->fetchArray($result) : false;
+            if ($row !== false && $row !== null && $row !== []) {
                 $translated[$existingLanguage] =
                     $row['name'] . ($row['description'] === '' ? '' : '  (' . $row['description'] . ')');
             }
@@ -508,17 +537,24 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         $result = $this->configuration->getDb()->query($query);
         $categories = [];
-        while ($row = $this->configuration->getDb()->fetchArray($result)) {
-            $categories[] = [
-                'id' => (int) $row['id'],
-                'lang' => (string) $row['lang'],
-                'parent_id' => (int) $row['parent_id'],
-                'name' => (string) $row['name'],
-                'description' => (string) $row['description'],
-                'user_id' => (int) $row['user_id'],
-                'group_id' => (int) $row['group_id'],
-                'active' => (int) $row['active'],
-            ];
+        if ($result) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchArray($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
+                $categories[] = [
+                    'id' => (int) $row['id'],
+                    'lang' => (string) $row['lang'],
+                    'parent_id' => (int) $row['parent_id'],
+                    'name' => (string) $row['name'],
+                    'description' => (string) $row['description'],
+                    'user_id' => (int) $row['user_id'],
+                    'group_id' => (int) $row['group_id'],
+                    'active' => (int) $row['active'],
+                ];
+            }
         }
 
         return $categories;
@@ -537,7 +573,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         $result = $this->configuration->getDb()->query($query);
         if ($result) {
             $row = $this->configuration->getDb()->fetchArray($result);
-            if ($row && isset($row['cnt'])) {
+            if ($row !== false && $row !== null && $row !== [] && array_key_exists('cnt', $row)) {
                 return (int) $row['cnt'];
             }
         }
@@ -560,7 +596,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         $result = $this->configuration->getDb()->query($query);
         if ($result) {
             $row = $this->configuration->getDb()->fetchArray($result);
-            if ($row && isset($row['cnt'])) {
+            if ($row !== false && $row !== null && $row !== [] && array_key_exists('cnt', $row)) {
                 return (int) $row['cnt'] > 0;
             }
         }

@@ -50,7 +50,12 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
         );
 
         $result = $this->configuration->getDb()->query($query);
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             yield $row;
         }
     }
@@ -99,7 +104,12 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
         );
 
         $result = $this->configuration->getDb()->query($query);
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             yield $row;
         }
     }
@@ -145,7 +155,12 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
         );
 
         $result = $this->configuration->getDb()->query($query);
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             yield $row;
         }
     }
@@ -207,7 +222,7 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
         );
         $result = $this->configuration->getDb()->query($query);
         $row = $this->configuration->getDb()->fetchObject($result);
-        return $row ?: null;
+        return $row === false ? null : $row;
     }
 
     /**
@@ -227,7 +242,7 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
         );
         $result = $this->configuration->getDb()->query($query);
         $row = $this->configuration->getDb()->fetchObject($result);
-        return $row ?: null;
+        return $row === false ? null : $row;
     }
 
     /**
@@ -245,7 +260,12 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
         );
         $result = $this->configuration->getDb()->query($query);
         $languages = [];
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $languages[] = $row->lang;
         }
         return $languages;

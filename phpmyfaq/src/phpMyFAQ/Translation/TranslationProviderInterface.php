@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Translation provider interface for multi-provider translation support.
  *

@@ -41,16 +41,16 @@ use stdClass;
 /*
  * Query type definitions
  */
-define('FAQ_QUERY_TYPE_DEFAULT', 'faq_default');
+define(constant_name: 'FAQ_QUERY_TYPE_DEFAULT', value: 'faq_default');
 
 /*
  * Sorting type definitions
  */
-define('FAQ_SORTING_TYPE_NONE', 0);
-define('FAQ_SORTING_TYPE_CATID_FAQID', 1);
-define('FAQ_SORTING_TYPE_FAQTITLE_FAQID', 2);
-define('FAQ_SORTING_TYPE_DATE_FAQID', 3);
-define('FAQ_SORTING_TYPE_FAQID', 4);
+define(constant_name: 'FAQ_SORTING_TYPE_NONE', value: 0);
+define(constant_name: 'FAQ_SORTING_TYPE_CATID_FAQID', value: 1);
+define(constant_name: 'FAQ_SORTING_TYPE_FAQTITLE_FAQID', value: 2);
+define(constant_name: 'FAQ_SORTING_TYPE_DATE_FAQID', value: 3);
+define(constant_name: 'FAQ_SORTING_TYPE_FAQID', value: 4);
 
 /**
  * Class Faq
@@ -210,7 +210,12 @@ class Faq
 
         if ($num > 0) {
             $faqHelper = new FaqHelper($this->configuration);
-            while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 $visits = empty($row->visits) ? 0 : $row->visits;
 
                 $url = sprintf(
@@ -353,7 +358,7 @@ class Faq
         $num = $this->configuration->getDb()->numRows($result);
         $pages = (int) ceil($num / $numPerPage);
 
-        $first = $page == 1 ? 0 : ($page * $numPerPage) - $numPerPage;
+        $first = $page === 1 ? 0 : ($page * $numPerPage) - $numPerPage;
 
         if ($num > 0) {
             if ($pages > 1) {
@@ -372,7 +377,12 @@ class Faq
             $counter = 0;
             $displayedCounter = 0;
             $renderedItems = [];
-            while (($row = $this->configuration->getDb()->fetchObject($result)) && $displayedCounter < $numPerPage) {
+            while ($displayedCounter < $numPerPage) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 ++$counter;
                 if ($counter <= $first) {
                     continue;
@@ -548,10 +558,12 @@ class Faq
             $displayedCounter = 0;
             $lastFaqId = 0;
             $faqHelper = new FaqHelper($this->configuration);
-            while (
-                ($row = $this->configuration->getDb()->fetchObject($result))
-                && (!$usePagination || $displayedCounter < $numberPerPage)
-            ) {
+            while (!$usePagination || $displayedCounter < $numberPerPage) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 ++$counter;
                 if ($usePagination && $counter <= $first) {
                     continue;
@@ -559,7 +571,7 @@ class Faq
 
                 ++$displayedCounter;
 
-                if ($lastFaqId == $row->id) {
+                if ($lastFaqId === $row->id) {
                     continue; // Don't show multiple FAQs
                 }
 
@@ -612,7 +624,8 @@ class Faq
             $result = $this->getFaqResult($faqId, $defaultLanguage, $faqRevisionId, $isAdmin);
         }
 
-        if ($row = $this->configuration->getDb()->fetchObject($result)) {
+        $row = $this->configuration->getDb()->fetchObject($result);
+        if ($row) {
             $question = nl2br((string) $row->thema);
             $answer = $row->content;
             $active = 'yes' === $row->active;
@@ -702,11 +715,11 @@ class Faq
                 fd.lang = '%s'
                 %s",
             Database::getTablePrefix(),
-            isset($faqRevisionId) ? 'faqdata_revisions' : 'faqdata',
+            $faqRevisionId !== null ? 'faqdata_revisions' : 'faqdata',
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $faqId,
-            isset($faqRevisionId) ? 'AND revision_id = ' . $faqRevisionId : '',
+            $faqRevisionId !== null ? 'AND revision_id = ' . $faqRevisionId : '',
             $faqLanguage,
             $isAdmin ? 'AND 1=1' : $queryHelper->queryPermission($this->groupSupport),
         );
@@ -775,7 +788,12 @@ class Faq
         $result = $this->configuration->getDb()->query($query);
 
         $faqHelper = new FaqHelper($this->configuration);
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $visits = empty($row->visits) ? 0 : $row->visits;
 
             $url = sprintf(
@@ -874,7 +892,8 @@ class Faq
 
         $result = $this->configuration->getDb()->query($query);
 
-        if ($row = $this->configuration->getDb()->fetchObject($result)) {
+        $row = $this->configuration->getDb()->fetchObject($result);
+        if ($row) {
             $url = sprintf(
                 '%scontent/%d/%d/%s/%s.html',
                 $this->configuration->getDefaultUrl(),
@@ -979,7 +998,13 @@ class Faq
 
         $result = $this->configuration->getDb()->query($query);
 
-        if ($result && ($row = $this->configuration->getDb()->fetchObject($result))) {
+        if ($result) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+        } else {
+            $row = false;
+        }
+
+        if ($row) {
             $latestId = $row->solution_id;
         }
 
@@ -1129,7 +1154,8 @@ class Faq
 
         $result = $this->configuration->getDb()->query($query);
 
-        if ($row = $this->configuration->getDb()->fetchObject($result)) {
+        $row = $this->configuration->getDb()->fetchObject($result);
+        if ($row) {
             return (int) $row->solution_id;
         }
 
@@ -1185,7 +1211,8 @@ class Faq
 
         $result = $this->configuration->getDb()->query($query);
 
-        if ($row = $this->configuration->getDb()->fetchObject($result)) {
+        $row = $this->configuration->getDb()->fetchObject($result);
+        if ($row) {
             if ($row->active === 'y' || $row->active === 'yes') {
                 return true;
             }
@@ -1248,7 +1275,7 @@ class Faq
         if ($row) {
             $question = nl2br((string) $row->thema);
             $content = $row->content;
-            $active = 'yes' == $row->active;
+            $active = 'yes' === $row->active;
             $expired = date(format: 'YmdHis') > $row->date_end;
 
             if (!$active) {
@@ -1317,7 +1344,8 @@ class Faq
 
         $result = $this->configuration->getDb()->query($query);
 
-        if ($row = $this->configuration->getDb()->fetchObject($result)) {
+        $row = $this->configuration->getDb()->fetchObject($result);
+        if ($row) {
             return [
                 'id' => $row->id,
                 'lang' => $row->lang,
@@ -1443,9 +1471,14 @@ class Faq
 
         $result = $this->configuration->getDb()->query($query);
 
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $content = $row->content;
-            $active = 'yes' == $row->active;
+            $active = 'yes' === $row->active;
             $expired = date(format: 'YmdHis') > $row->date_end;
 
             if (!$active) {
@@ -1486,7 +1519,7 @@ class Faq
      */
     public function getQuestion(int $faqId): string
     {
-        if (isset($this->faqRecord['id']) && $this->faqRecord['id'] === $faqId) {
+        if (array_key_exists('id', $this->faqRecord) && $this->faqRecord['id'] === $faqId) {
             return $this->faqRecord['title'];
         }
 
@@ -1501,7 +1534,12 @@ class Faq
         $result = $this->configuration->getDb()->query($query);
 
         if ($this->configuration->getDb()->numRows($result) > 0) {
-            while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 $question = $row->question;
             }
         } else {
@@ -1518,7 +1556,7 @@ class Faq
      */
     public function getKeywords(int $faqId): string
     {
-        if (isset($this->faqRecord['id']) && $this->faqRecord['id'] === $faqId) {
+        if (array_key_exists('id', $this->faqRecord) && $this->faqRecord['id'] === $faqId) {
             return $this->faqRecord['keywords'];
         }
 
@@ -1558,7 +1596,12 @@ class Faq
 
         if ($this->configuration->getDb()->numRows($result) > 0) {
             $i = 0;
-            while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 $faq = [];
                 $faq['id'] = $row->id;
                 $faq['solution_id'] = $row->solution_id;
@@ -1649,8 +1692,13 @@ class Faq
         $data = [];
 
         $oldId = 0;
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
-            if ($oldId != $row->id) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
+            if ($oldId !== $row->id) {
                 $data['question'] = $row->thema;
 
                 $title = $row->thema;
