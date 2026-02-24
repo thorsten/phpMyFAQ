@@ -59,9 +59,10 @@ readonly class News
         $output = [];
         $date = new Date($this->configuration);
         $language = $this->configuration->getLanguage()->getLanguage();
-        $limit = $showArchive
-            ? null
-            : ($active ? (int) $this->configuration->get(item: 'records.numberOfShownNewsEntries') : null);
+        $limit = null;
+        if (!$showArchive && $active) {
+            $limit = (int) $this->configuration->get(item: 'records.numberOfShownNewsEntries');
+        }
 
         foreach ($this->newsRepository->getLatest($language, $active, $limit) as $row) {
             $entry = new stdClass();
@@ -95,15 +96,8 @@ readonly class News
         $language = $this->configuration->getLanguage()->getLanguage();
         $configuredLimit = (int) $this->configuration->get(item: 'records.numberOfShownNewsEntries');
         $limit = null;
-        if ($configuredLimit > 0) {
-            if ($showArchive) {
-                $limit = null; // show all
-            } elseif ($forceConfLimit) {
-                $limit = $configuredLimit; // force limit
-            } else {
-                // default behavior: same as original logic for active front-end listing
-                $limit = $configuredLimit;
-            }
+        if ($configuredLimit > 0 && !$showArchive) {
+            $limit = $configuredLimit;
         }
 
         foreach ($this->newsRepository->getLatest($language, $active, $limit) as $row) {

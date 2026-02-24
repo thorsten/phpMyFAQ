@@ -102,8 +102,13 @@ class Faq
         $num = $this->configuration->getDb()->numRows($result);
 
         if ($num > 0) {
-            while ($row = $this->configuration->getDb()->fetchObject($result)) {
-                $visits = empty($row->visits) ? 0 : $row->visits;
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
+                $visits = (int) ($row->visits ?? 0);
 
                 $faqData[] = [
                     'id' => (int) $row->id,
@@ -193,8 +198,13 @@ class Faq
         $data = [];
 
         $oldId = 0;
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
-            if ($oldId != $row->id) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
+            if ($oldId !== $row->id) {
                 $data['question'] = $row->thema;
                 $data['url'] = sprintf(
                     '%sadmin/faq/edit/%d/%s',
@@ -248,10 +258,15 @@ class Faq
         $result = $this->configuration->getDb()->query($query);
         $orphaned = [];
         $seen = [];
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $key = $row->id . '-' . $row->lang;
 
-            if (!isset($seen[$key])) {
+            if (($seen[$key] ?? false) === false) {
                 $seen[$key] = true;
                 $data = new stdClass();
                 $data->faqId = $row->id;

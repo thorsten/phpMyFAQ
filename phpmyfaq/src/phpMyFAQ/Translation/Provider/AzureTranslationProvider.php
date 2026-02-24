@@ -56,11 +56,11 @@ class AzureTranslationProvider extends AbstractTranslationProvider
         $apiKey = $this->configuration->get('translation.azureKey');
         $region = $this->configuration->get('translation.azureRegion');
 
-        if (empty($apiKey)) {
+        if ((string) $apiKey === '') {
             throw new ApiException('Azure Translator API key not configured');
         }
 
-        if (empty($region)) {
+        if ((string) $region === '') {
             throw new ApiException('Azure Translator region not configured');
         }
 

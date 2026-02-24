@@ -97,6 +97,7 @@ class CategoryHelper extends AbstractHelper
                 break;
             }
 
+            $name = Strings::htmlentities($node['name']);
             if ($categoryNumbers[$categoryId]['faqs'] > 0) {
                 $url = sprintf(
                     '%sindex.php?%saction=show&cat=%d',
@@ -110,8 +111,6 @@ class CategoryHelper extends AbstractHelper
                 $link->text = Strings::htmlentities($node['name']);
                 $link->tooltip = is_null($node['description']) ? '' : Strings::htmlentities($node['description']);
                 $name = $link->toHtmlAnchor();
-            } else {
-                $name = Strings::htmlentities($node['name']);
             }
 
             $html .= sprintf(
@@ -207,7 +206,11 @@ class CategoryHelper extends AbstractHelper
             $user->getUserById($userId);
             $emailCategoryOwner = $user->getUserData('email');
 
-            if (!empty($emailCategoryOwner) && !isset($seen[$emailCategoryOwner])) {
+            if (
+                is_string($emailCategoryOwner)
+                && $emailCategoryOwner !== ''
+                && !array_key_exists($emailCategoryOwner, $seen)
+            ) {
                 $recipients[] = $emailCategoryOwner;
                 $seen[$emailCategoryOwner] = true;
             }
@@ -217,11 +220,11 @@ class CategoryHelper extends AbstractHelper
                 foreach ($moderators as $moderator) {
                     $user->getUserById($moderator);
                     $moderatorEmail = $user->getUserData('email');
-                    if (empty($moderatorEmail)) {
+                    if (!is_string($moderatorEmail) || $moderatorEmail === '') {
                         continue;
                     }
 
-                    if (isset($seen[$moderatorEmail])) {
+                    if (array_key_exists($moderatorEmail, $seen)) {
                         continue;
                     }
 

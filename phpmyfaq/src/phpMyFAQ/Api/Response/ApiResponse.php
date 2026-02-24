@@ -112,6 +112,6 @@ class ApiResponse
             $meta['filters'] = $filters->toArray();
         }
 
-        return empty($meta) ? null : $meta;
+        return $meta === [] ? null : $meta;
     }
 }

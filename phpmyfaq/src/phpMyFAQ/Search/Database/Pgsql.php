@@ -115,9 +115,9 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
         $this->addedRelevanceColumns = [];
 
         foreach ($this->matchingColumns as $matchingColumn) {
-            $columnName = substr(strstr($matchingColumn, '.'), 1);
+            $columnName = substr(strstr($matchingColumn, needle: '.'), offset: 1);
 
-            if (isset($weight[$columnName])) {
+            if (array_key_exists($columnName, $weight)) {
                 $column = sprintf(
                     "TS_RANK_CD(SETWEIGHT(TO_TSVECTOR(COALESCE(%s, '')), '%s'), query) AS relevance_%s",
                     $matchingColumn,
@@ -145,7 +145,7 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
 
         foreach ($list as $field) {
             // Only add to ORDER BY if this relevance column was actually added to SELECT
-            if (!in_array($field, $this->addedRelevanceColumns)) {
+            if (!in_array($field, $this->addedRelevanceColumns, strict: true)) {
                 continue;
             }
 

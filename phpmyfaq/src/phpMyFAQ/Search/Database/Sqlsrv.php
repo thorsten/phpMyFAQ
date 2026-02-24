@@ -41,27 +41,27 @@ class Sqlsrv extends SearchDatabase implements DatabaseInterface
     public function search(string $searchTerm): mixed
     {
         if (is_numeric($searchTerm) && $this->configuration->get(item: 'search.searchForSolutionId')) {
-            parent::search($searchTerm);
-        } else {
-            $query = sprintf(
-                '
-                SELECT
-                    %s
-                FROM 
-                    %s %s %s
-                WHERE
-                    %s
-                    %s',
-                $this->getResultColumns(),
-                $this->getTable(),
-                $this->getJoinedTable(),
-                $this->getJoinedColumns(),
-                $this->getMatchClause($searchTerm),
-                $this->getConditions(),
-            );
-
-            $this->resultSet = $this->configuration->getDb()->query($query);
+            return parent::search($searchTerm);
         }
+
+        $query = sprintf(
+            '
+            SELECT
+                %s
+            FROM 
+                %s %s %s
+            WHERE
+                %s
+                %s',
+            $this->getResultColumns(),
+            $this->getTable(),
+            $this->getJoinedTable(),
+            $this->getJoinedColumns(),
+            $this->getMatchClause($searchTerm),
+            $this->getConditions(),
+        );
+
+        $this->resultSet = $this->configuration->getDb()->query($query);
 
         return $this->resultSet;
     }

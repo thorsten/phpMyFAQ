@@ -130,13 +130,22 @@ final class OAuth2Controller extends AbstractApiController
             ], $statusCode);
         }
 
-        if (isset($result['headers']['Location'])) {
-            return new RedirectResponse($result['headers']['Location'], $result['status'], $result['headers']);
+        $locationHeader = null;
+        if (
+            array_key_exists('headers', $result)
+            && is_array($result['headers'])
+            && array_key_exists('Location', $result['headers'])
+        ) {
+            $locationHeader = $result['headers']['Location'];
+        }
+
+        if (is_string($locationHeader)) {
+            return new RedirectResponse($locationHeader, $result['status'], $result['headers']);
         }
 
         $contentType = $result['headers']['Content-Type'] ?? '';
         if (str_contains($contentType, 'application/json')) {
-            $data = json_decode((string) $result['body'], true);
+            $data = json_decode((string) $result['body'], associative: true);
             if (is_array($data)) {
                 return $this->json($data, $result['status'], $result['headers']);
             }

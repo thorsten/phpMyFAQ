@@ -42,20 +42,23 @@ final class RegistrationController extends AbstractController
         $registrationHelper = new RegistrationHelper($this->configuration);
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        if (!is_object($data)) {
+            throw new Exception('Invalid request payload');
+        }
 
-        if (!isset($data->realname)) {
+        if (!property_exists($data, 'realname')) {
             throw new Exception('Missing realname');
         }
 
-        if (!isset($data->name)) {
+        if (!property_exists($data, 'name')) {
             throw new Exception('Missing username');
         }
 
-        if (!isset($data->email) || empty($data->email)) {
+        if (!property_exists($data, 'email') || trim((string) $data->email) === '') {
             throw new Exception('Missing or empty email');
         }
 
-        if (isset($data->isVisible)) {
+        if (property_exists($data, 'isVisible')) {
             throw new Exception('isVisible parameter not allowed');
         }
 

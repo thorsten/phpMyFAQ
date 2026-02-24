@@ -48,7 +48,7 @@ class Database
         self::$dbType = $type;
 
         if (str_starts_with($type, 'pdo_')) {
-            $class = 'phpMyFAQ\Database\Pdo' . ucfirst(substr($type, 4));
+            $class = 'phpMyFAQ\Database\Pdo' . ucfirst(substr($type, offset: 4));
         } else {
             $class = 'phpMyFAQ\Database\\' . ucfirst($type);
         }
@@ -66,7 +66,7 @@ class Database
      */
     public static function getInstance(): ?DatabaseDriver
     {
-        if (null == self::$databaseDriver) {
+        if (null === self::$databaseDriver) {
             $className = self::class;
             self::$databaseDriver = new $className();
         }

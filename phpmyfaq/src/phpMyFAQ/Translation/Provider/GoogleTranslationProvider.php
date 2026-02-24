@@ -48,7 +48,7 @@ class GoogleTranslationProvider extends AbstractTranslationProvider
     {
         $apiKey = $this->configuration->get('translation.googleApiKey');
 
-        if (empty($apiKey)) {
+        if ((string) $apiKey === '') {
             throw new ApiException('Google Cloud Translation API key not configured');
         }
 
@@ -77,7 +77,7 @@ class GoogleTranslationProvider extends AbstractTranslationProvider
     {
         $apiKey = $this->configuration->get('translation.googleApiKey');
 
-        if (empty($apiKey)) {
+        if ((string) $apiKey === '') {
             throw new ApiException('Google Cloud Translation API key not configured');
         }
 

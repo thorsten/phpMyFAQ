@@ -461,15 +461,15 @@ class InstallationRunner
             'verify_peer' => true,
         ];
 
-        if (isset($tlsSettings['verify_peer'])) {
+        if (array_key_exists('verify_peer', $tlsSettings)) {
             $options['verify_peer'] = filter_var($tlsSettings['verify_peer'], FILTER_VALIDATE_BOOLEAN);
         }
 
-        if (isset($tlsSettings['cafile']) && $tlsSettings['cafile'] !== '') {
+        if (($tlsSettings['cafile'] ?? '') !== '') {
             $options['cafile'] = (string) $tlsSettings['cafile'];
         }
 
-        if (isset($tlsSettings['capath']) && $tlsSettings['capath'] !== '') {
+        if (($tlsSettings['capath'] ?? '') !== '') {
             $options['capath'] = (string) $tlsSettings['capath'];
         }
 

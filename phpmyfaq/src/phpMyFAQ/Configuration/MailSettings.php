@@ -47,7 +47,7 @@ readonly class MailSettings
             (string) ($this->coreConfiguration->get(item: 'mail.provider') ?? self::DEFAULT_PROVIDER),
         );
 
-        if (!in_array($provider, self::ALLOWED_PROVIDERS, true)) {
+        if (!in_array($provider, self::ALLOWED_PROVIDERS, strict: true)) {
             return self::DEFAULT_PROVIDER;
         }
 

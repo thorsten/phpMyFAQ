@@ -48,11 +48,11 @@ class LibreTranslationProvider extends AbstractTranslationProvider
     {
         $baseUrl = $this->configuration->get('translation.libreTranslateUrl');
 
-        if (empty($baseUrl)) {
+        if ((string) $baseUrl === '') {
             throw new ApiException('LibreTranslate server URL not configured');
         }
 
-        return rtrim($baseUrl, '/') . '/translate';
+        return rtrim(string: $baseUrl, characters: '/') . '/translate';
     }
 
     /**
@@ -69,7 +69,7 @@ class LibreTranslationProvider extends AbstractTranslationProvider
             'format' => 'text',
         ];
 
-        if (!empty($apiKey)) {
+        if ((string) $apiKey !== '') {
             $body['api_key'] = $apiKey;
         }
 

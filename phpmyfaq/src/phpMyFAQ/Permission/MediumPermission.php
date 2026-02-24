@@ -177,15 +177,15 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function checkGroupData(array $groupData): array
     {
-        if (!isset($groupData['name']) || !is_string($groupData['name'])) {
+        if (!array_key_exists('name', $groupData) || !is_string($groupData['name'])) {
             $groupData['name'] = $this->defaultGroupData['name'];
         }
 
-        if (!isset($groupData['description']) || !is_string($groupData['description'])) {
+        if (!array_key_exists('description', $groupData) || !is_string($groupData['description'])) {
             $groupData['description'] = $this->defaultGroupData['description'];
         }
 
-        if (!isset($groupData['auto_join'])) {
+        if (!array_key_exists('auto_join', $groupData)) {
             $groupData['auto_join'] = $this->defaultGroupData['auto_join'];
         }
 
@@ -270,7 +270,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $options .= sprintf(
                 '<option value="%d" %s>%s</option>',
                 $allGroup,
-                in_array($allGroup, $groups, strict: true) || isset($groups[0]) && $groups[0] === -1 ? 'selected' : '',
+                in_array($allGroup, $groups, strict: true) || ($groups[0] ?? null) === -1 ? 'selected' : '',
                 $this->getGroupName($allGroup),
             );
         }
@@ -466,7 +466,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         // Create a new group if it doesn't exist
         $groupData = [
             'name' => $name,
-            'description' => $description ?: 'Auto-created group for ' . $name,
+            'description' => $description === '' ? 'Auto-created group for ' . $name : $description,
             'auto_join' => false,
         ];
 

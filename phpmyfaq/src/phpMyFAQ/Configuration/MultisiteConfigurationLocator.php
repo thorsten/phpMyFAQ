@@ -31,7 +31,7 @@ class MultisiteConfigurationLocator
 
         $parsed = parse_url($protocol . '://' . $host . $scriptName);
 
-        if (isset($parsed['host']) && $parsed['host'] !== '') {
+        if (($parsed['host'] ?? '') !== '') {
             // 1. Try an exact hostname match (existing behavior)
             $configDir = rtrim($configurationDirectory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $parsed['host'];
 

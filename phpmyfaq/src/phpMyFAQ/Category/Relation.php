@@ -130,7 +130,8 @@ class Relation
                     implode(', ', $this->category->getGroups()),
                     implode(', ', $this->category->getGroups()),
                 );
-            } else {
+            }
+            if (-1 !== $this->category->getUser()) {
                 $query .= sprintf(
                     'AND ( fdu.user_id = %d OR fdg.group_id IN (%s) )
                     AND ( fcu.user_id = %d OR fcg.group_id IN (%s) )',
@@ -203,7 +204,8 @@ class Relation
                 $this->groups[0],
                 $onlyActive ? " AND fd.active = 'yes'" : '',
             );
-        } else {
+        }
+        if (!$categoryRestriction) {
             $query = sprintf(
                 '
                 SELECT

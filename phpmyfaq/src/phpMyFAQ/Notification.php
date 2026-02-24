@@ -199,7 +199,7 @@ readonly class Notification
             $catUser->getUserById($userId);
             $catOwnerEmail = $catUser->getUserData(field: 'email');
 
-            if ($catOwnerEmail !== '' && (!isset($send[$catOwnerEmail]) && $catOwnerEmail !== $emailTo)) {
+            if ($catOwnerEmail !== '' && (!array_key_exists($catOwnerEmail, $send) && $catOwnerEmail !== $emailTo)) {
                 $this->mail->addCc($catOwnerEmail);
                 $send[$catOwnerEmail] = 1;
             }
@@ -293,7 +293,7 @@ readonly class Notification
             $mail->addTo($mainAdminEmail);
 
             // Let the category owner get a copy of the message
-            if (isset($userEmail) && $mainAdminEmail !== $userEmail) {
+            if ($userEmail !== null && $mainAdminEmail !== $userEmail) {
                 $mail->addCc($userEmail);
             }
 
@@ -318,7 +318,7 @@ readonly class Notification
         $this->sendWebPushToUsers(
             $adminUserIds,
             Translation::get(key: 'msgPushNewQuestion'),
-            mb_substr($questionEntity->getQuestion(), 0, 200),
+            mb_substr($questionEntity->getQuestion(), start: 0, length: 200),
             $this->configuration->getDefaultUrl() . 'admin/',
             'new-question',
         );

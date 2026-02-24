@@ -28,11 +28,11 @@ final class NewsStrategy implements StrategyInterface
      */
     public function build(array $params, Link $link): string
     {
-        if (!isset($params[Link::LINK_GET_NEWS_ID])) {
+        if (!array_key_exists(Link::LINK_GET_NEWS_ID, $params)) {
             throw new \InvalidArgumentException('Missing required parameter: newsid');
         }
 
-        if (!isset($params[Link::LINK_GET_NEWS_LANG])) {
+        if (!array_key_exists(Link::LINK_GET_NEWS_LANG, $params)) {
             throw new \InvalidArgumentException('Missing required parameter: newslang');
         }
 

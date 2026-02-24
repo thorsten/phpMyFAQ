@@ -260,18 +260,23 @@ class TableBuilder
         foreach ($this->columns as $name => $def) {
             if ($def['type'] === 'AUTO_INCREMENT') {
                 $parts[] = $this->dialect->autoIncrement($name);
-            } else {
-                $col = "{$name} {$def['type']}";
-                if (!$def['nullable']) {
-                    $col .= ' NOT NULL';
-                } elseif ($def['default'] === null && $def['nullable']) {
-                    $col .= ' NULL';
-                }
-                if ($def['default'] !== null) {
-                    $col .= ' DEFAULT ' . $def['default'];
-                }
-                $parts[] = $col;
+                continue;
             }
+
+            $col = "{$name} {$def['type']}";
+            if (!$def['nullable']) {
+                $col .= ' NOT NULL';
+            }
+
+            if ($def['nullable'] && $def['default'] === null) {
+                $col .= ' NULL';
+            }
+
+            if ($def['default'] !== null) {
+                $col .= ' DEFAULT ' . $def['default'];
+            }
+
+            $parts[] = $col;
         }
 
         // Add primary key if set and not already added via autoIncrement
@@ -287,14 +292,14 @@ class TableBuilder
         }
 
         $dialectType = $this->dialect->getType();
-        $autoIncrementIncludesPk = in_array($dialectType, ['sqlite3', 'mysqli', 'pdo_mysql'], true);
-        if (!empty($this->primaryKey) && !($hasAutoIncrement && $autoIncrementIncludesPk)) {
+        $autoIncrementIncludesPk = in_array($dialectType, ['sqlite3', 'mysqli', 'pdo_mysql'], strict: true);
+        if ($this->primaryKey !== [] && !($hasAutoIncrement && $autoIncrementIncludesPk)) {
             $pkColumns = implode(', ', $this->primaryKey);
             $parts[] = "PRIMARY KEY ({$pkColumns})";
         }
 
         // Add inline indexes only for MySQL (MySQL supports this, other databases don't)
-        $isMysql = in_array($this->dialect->getType(), ['mysqli', 'pdo_mysql'], true);
+        $isMysql = in_array($this->dialect->getType(), ['mysqli', 'pdo_mysql'], strict: true);
         if ($isMysql) {
             foreach ($this->fullTextIndexes as $ftColumns) {
                 $columnList = implode(',', $ftColumns);
@@ -333,7 +338,7 @@ class TableBuilder
         }
 
         // MySQL already has indexes inlined in CREATE TABLE, so no separate statements needed
-        $isMysql = in_array($this->dialect->getType(), ['mysqli', 'pdo_mysql'], true);
+        $isMysql = in_array($this->dialect->getType(), ['mysqli', 'pdo_mysql'], strict: true);
         if ($isMysql) {
             return [];
         }

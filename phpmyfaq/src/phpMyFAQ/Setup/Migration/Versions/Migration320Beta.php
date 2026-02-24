@@ -49,7 +49,8 @@ readonly class Migration320Beta extends AbstractMigration
             // SQLite requires table rebuild for dropping columns
             $this->rebuildTableWithoutColumns($recorder, 'faqdata');
             $this->rebuildTableWithoutColumns($recorder, 'faqdata_revisions');
-        } else {
+        }
+        if (!$this->isSqlite()) {
             // MySQL, PostgreSQL, SQL Server - use separate DROP COLUMN statements
             $recorder->addSql(
                 sprintf('ALTER TABLE %sfaqdata DROP COLUMN links_state', $this->tablePrefix),
@@ -76,12 +77,18 @@ readonly class Migration320Beta extends AbstractMigration
                 sprintf('ALTER TABLE %sfaqconfig MODIFY config_value TEXT DEFAULT NULL', $this->tablePrefix),
                 'Change faqconfig.config_value to TEXT (MySQL)',
             );
-        } elseif ($this->isPostgreSql()) {
+            return;
+        }
+
+        if ($this->isPostgreSql()) {
             $recorder->addSql(
                 sprintf('ALTER TABLE %sfaqconfig ALTER COLUMN config_value TYPE TEXT', $this->tablePrefix),
                 'Change faqconfig.config_value to TEXT (PostgreSQL)',
             );
-        } elseif ($this->isSqlite()) {
+            return;
+        }
+
+        if ($this->isSqlite()) {
             // SQLite requires table rebuild
             $recorder->addSql(sprintf('CREATE TABLE %sfaqconfig_new (
                     config_name VARCHAR(255) NOT NULL default \'\',
@@ -106,7 +113,10 @@ readonly class Migration320Beta extends AbstractMigration
                 sprintf('ALTER TABLE %sfaqconfig_new RENAME TO %sfaqconfig', $this->tablePrefix, $this->tablePrefix),
                 'Rename new faqconfig table (SQLite)',
             );
-        } elseif ($this->isSqlServer()) {
+            return;
+        }
+
+        if ($this->isSqlServer()) {
             $recorder->addSql(
                 sprintf('ALTER TABLE %sfaqconfig ALTER COLUMN config_value NVARCHAR(MAX)', $this->tablePrefix),
                 'Change faqconfig.config_value to NVARCHAR(MAX) (SQL Server)',
@@ -123,7 +133,7 @@ readonly class Migration320Beta extends AbstractMigration
     private function rebuildTableWithoutColumns(OperationRecorder $recorder, string $tableName): void
     {
         $allowedTables = ['faqdata', 'faqdata_revisions'];
-        if (!in_array($tableName, $allowedTables, true)) {
+        if (!in_array($tableName, $allowedTables, strict: true)) {
             throw new \LogicException(sprintf(
                 'rebuildTableWithoutColumns() only supports [%s], got "%s"',
                 implode(', ', $allowedTables),
@@ -167,7 +177,9 @@ readonly class Migration320Beta extends AbstractMigration
                      FROM %s', $fullTableName, $fullTableName),
                 sprintf('Copy data to new %s table (SQLite)', $tableName),
             );
-        } elseif ($tableName === 'faqdata_revisions') {
+        }
+
+        if ($tableName === 'faqdata_revisions') {
             $recorder->addSql(
                 sprintf('CREATE TABLE %s_new (
                         id INTEGER NOT NULL,

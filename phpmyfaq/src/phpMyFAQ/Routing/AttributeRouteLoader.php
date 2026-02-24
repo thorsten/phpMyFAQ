@@ -70,7 +70,10 @@ class AttributeRouteLoader
                     foreach ($attributes as $attribute) {
                         $route = $this->createRouteFromAttribute($attribute, $class, $method->getName());
                         if ($route && $this->matchesContext($route, $context)) {
-                            $name = $route->getDefault('_route') ?: 'route_' . md5($class . $method->getName());
+                            $routeName = $route->getDefault('_route');
+                            $name = is_string($routeName) && $routeName !== ''
+                                ? $routeName
+                                : 'route_' . md5($class . $method->getName());
                             $routes->add($name, $route);
                         }
                     }

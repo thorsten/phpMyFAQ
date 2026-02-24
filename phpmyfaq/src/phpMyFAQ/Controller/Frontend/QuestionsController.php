@@ -75,8 +75,10 @@ final class QuestionsController extends AbstractFrontController
             'openQuestions' => $questionHelper->getOpenQuestions(),
             'isCloseQuestionEnabled' => $this->configuration->get('records.enableCloseQuestion'),
             'userHasPermissionToAnswer' =>
-                $this->currentUser->perm->hasPermission($this->currentUser->getUserId(), PermissionType::FAQ_ADD->value)
-                    || $this->configuration->get('records.allowNewFaqsForGuests'),
+                $this->currentUser?->perm->hasPermission(
+                    $this->currentUser->getUserId(),
+                    PermissionType::FAQ_ADD->value,
+                ) || $this->configuration->get('records.allowNewFaqsForGuests'),
             'msgQuestionsWaiting' => Translation::get(key: 'msgQuestionsWaiting'),
             'msgNoQuestionsAvailable' => Translation::get(key: 'msgNoQuestionsAvailable'),
             'msg2answerFAQ' => Translation::get(key: 'msg2answerFAQ'),
@@ -97,7 +99,7 @@ final class QuestionsController extends AbstractFrontController
         $this->faqSession->userTracking('ask_question', 0);
 
         // Get current groups
-        $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
+        $currentGroups = $this->currentUser?->perm->getUserGroups($this->currentUser->getUserId());
 
         $questionService = new QuestionService($this->configuration, $this->currentUser, $currentGroups);
 

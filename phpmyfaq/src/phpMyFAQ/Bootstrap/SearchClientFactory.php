@@ -49,13 +49,13 @@ class SearchClientFactory
                     if ($code >= 200 && $code < 500) {
                         break;
                     }
-                } catch (Throwable) {
-                    // ignore and retry
+                } catch (Throwable $exception) {
+                    unset($exception);
                 }
                 usleep(500_000);
             } while (time() < $deadline);
-        } catch (Throwable) {
-            // do not block bootstrap if a health check fails
+        } catch (Throwable $exception) {
+            unset($exception);
         }
     }
 
@@ -78,8 +78,8 @@ class SearchClientFactory
             $esClient = ClientBuilder::create()->setHosts([$esBaseUri])->build();
             $faqConfig->setElasticsearch($esClient);
             $faqConfig->setElasticsearchConfig($esConfig);
-        } catch (AuthenticationException $e) {
-            // @handle AuthenticationException
+        } catch (AuthenticationException $exception) {
+            unset($exception);
         }
     }
 

@@ -99,7 +99,12 @@ class QuestionHelper extends AbstractHelper
 
         if ($result && $this->configuration->getDb()->numRows($result) > 0) {
             $openQuestions->numberQuestions = $this->configuration->getDb()->numRows($result);
-            while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 $question = new stdClass();
                 $question->id = $row->id;
                 $question->lang = $row->lang;

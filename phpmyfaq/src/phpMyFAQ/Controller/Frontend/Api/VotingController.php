@@ -54,11 +54,11 @@ final class VotingController extends AbstractController
             throw new Exception('Invalid JSON data');
         }
 
-        if (!isset($data->value)) {
+        if (!property_exists($data, 'value')) {
             throw new Exception('Missing vote value');
         }
 
-        if (!isset($data->id)) {
+        if (!property_exists($data, 'id')) {
             throw new Exception('Missing FAQ ID');
         }
 
@@ -74,25 +74,25 @@ final class VotingController extends AbstractController
             throw new Exception('Invalid vote value');
         }
 
-        if ($this->rating->check($faqId, $userIp)) {
-            $this->userSession->userTracking('save_voting', $faqId);
-
-            $votingData = new Vote();
-            $votingData->setFaqId($faqId)->setVote($vote)->setIp($userIp);
-
-            if ($this->rating->getNumberOfVotings($faqId) === 0) {
-                $this->rating->create($votingData);
-            } else {
-                $this->rating->update($votingData);
-            }
-
-            return $this->json([
-                'success' => Translation::get(key: 'msgVoteThanks'),
-                'rating' => $this->rating->get($faqId),
-            ], Response::HTTP_OK);
-        } else {
+        if (!$this->rating->check($faqId, $userIp)) {
             $this->userSession->userTracking('error_save_voting', $faqId);
             return $this->json(['error' => Translation::get(key: 'err_VoteTooMuch')], Response::HTTP_BAD_REQUEST);
         }
+
+        $this->userSession->userTracking('save_voting', $faqId);
+
+        $votingData = new Vote();
+        $votingData->setFaqId($faqId)->setVote($vote)->setIp($userIp);
+
+        if ($this->rating->getNumberOfVotings($faqId) === 0) {
+            $this->rating->create($votingData);
+        } else {
+            $this->rating->update($votingData);
+        }
+
+        return $this->json([
+            'success' => Translation::get(key: 'msgVoteThanks'),
+            'rating' => $this->rating->get($faqId),
+        ], Response::HTTP_OK);
     }
 }

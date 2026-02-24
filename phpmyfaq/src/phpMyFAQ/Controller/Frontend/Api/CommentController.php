@@ -125,12 +125,10 @@ final class CommentController extends AbstractController
         $isLoggedIn = $this->currentUser->isLoggedIn();
 
         // Sanitize comment text based on user status and configuration
+        $commentText = Filter::filterVar($data->comment_text, FILTER_SANITIZE_SPECIAL_CHARS);
         if ($enableCommentEditor && $isLoggedIn) {
             // Allow HTML for logged-in users when editor is enabled
             $commentText = $this->sanitizeHtmlComment($data->comment_text);
-        } else {
-            // Strip all HTML for anonymous users or when editor is disabled
-            $commentText = Filter::filterVar($data->comment_text, FILTER_SANITIZE_SPECIAL_CHARS);
         }
 
         $commentId = match ($type) {
@@ -177,7 +175,9 @@ final class CommentController extends AbstractController
                 if ('faq' === $type) {
                     $this->faq->getFaq($commentId);
                     $this->notification->sendFaqCommentNotification($this->faq, $commentEntity);
-                } else {
+                }
+
+                if ('news' === $type) {
                     $newsData = $this->news->get($commentId);
                     $this->notification->sendNewsCommentNotification($newsData, $commentEntity);
                 }
@@ -272,7 +272,7 @@ final class CommentController extends AbstractController
                     }
                 }
 
-                return empty($allowedAttrs) ? '<a>' : '<a ' . implode(' ', $allowedAttrs) . '>';
+                return $allowedAttrs === [] ? '<a>' : '<a ' . implode(' ', $allowedAttrs) . '>';
             },
             $sanitized,
         );

@@ -209,7 +209,7 @@ class Token
 
     private function getCookieName(string $page): string
     {
-        return sprintf('%s-%s', self::PMF_SESSION_NAME, substr(md5($page), 0, 10));
+        return sprintf('%s-%s', self::PMF_SESSION_NAME, substr(string: md5($page), offset: 0, length: 10));
     }
 
     public static function resetInstanceForTests(): void

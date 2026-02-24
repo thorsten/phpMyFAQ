@@ -66,7 +66,8 @@ readonly class BackupRepository
 
         $result = $this->configuration->getDb()->query($query);
         if ($this->configuration->getDb()->numRows($result) > 0) {
-            return $this->configuration->getDb()->fetchObject($result) ?: null;
+            $row = $this->configuration->getDb()->fetchObject($result);
+            return is_object($row) ? $row : null;
         }
 
         return null;

@@ -154,11 +154,13 @@ class Tags
         foreach ($tags as $tag) {
             $tag = trim($tag);
             if (Strings::strlen($tag) > 0 && !in_array($tag, $registeredTags, strict: true)) {
-                if (!in_array(
+                $existingTagId = array_search(
                     Strings::strtolower($tag),
                     array_map(['phpMyFAQ\Strings', 'strtolower'], $currentTags),
                     strict: true,
-                )) {
+                );
+
+                if ($existingTagId === false) {
                     // Create the new tag
                     $newTagId = $this->configuration->getDb()->nextId(
                         Database::getTablePrefix() . 'faqtags',
@@ -179,17 +181,15 @@ class Tags
                         $recordId,
                         $newTagId,
                     );
-                } else {
+                }
+
+                if ($existingTagId !== false) {
                     // Add the tag reference for the faq record
                     $query = sprintf(
                         'INSERT INTO %sfaqdata_tags (record_id, tagging_id) VALUES (%d, %d)',
                         Database::getTablePrefix(),
                         $recordId,
-                        array_search(
-                            Strings::strtolower($tag),
-                            array_map(['phpMyFAQ\Strings', 'strtolower'], $currentTags),
-                            strict: true,
-                        ),
+                        $existingTagId,
                     );
                 }
 
@@ -275,12 +275,11 @@ class Tags
                     break;
                 }
 
-                if ($i < $limit) {
-                    $allTags[$row->tagging_id] = $row->tagging_name;
-                } else {
+                if ($i >= $limit) {
                     break;
                 }
 
+                $allTags[$row->tagging_id] = $row->tagging_name;
                 ++$i;
             }
         }

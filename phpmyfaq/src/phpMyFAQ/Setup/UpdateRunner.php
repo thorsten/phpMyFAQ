@@ -109,7 +109,7 @@ final class UpdateRunner
      */
     private function displayDryRunReport(SymfonyStyle $symfonyStyle, array $report): void
     {
-        if (empty($report['migrations'])) {
+        if (($report['migrations'] ?? []) === []) {
             $symfonyStyle->success('No migrations to apply. Database is up to date.');
             return;
         }
@@ -126,7 +126,7 @@ final class UpdateRunner
             }
 
             // SQL Operations
-            if (!empty($byType['sql'])) {
+            if (($byType['sql'] ?? []) !== []) {
                 $symfonyStyle->text(sprintf('<fg=cyan>SQL Operations (%d):</>', count($byType['sql'])));
                 $rows = [];
                 foreach ($byType['sql'] as $i => $op) {
@@ -137,7 +137,7 @@ final class UpdateRunner
             }
 
             // Config Add Operations
-            if (!empty($byType['config_add'])) {
+            if (($byType['config_add'] ?? []) !== []) {
                 $symfonyStyle->text(sprintf(
                     '<fg=green>Configuration Additions (%d):</>',
                     count($byType['config_add']),
@@ -150,7 +150,7 @@ final class UpdateRunner
             }
 
             // Config Delete Operations
-            if (!empty($byType['config_delete'])) {
+            if (($byType['config_delete'] ?? []) !== []) {
                 $symfonyStyle->text(sprintf(
                     '<fg=red>Configuration Deletions (%d):</>',
                     count($byType['config_delete']),
@@ -163,7 +163,7 @@ final class UpdateRunner
             }
 
             // Config Rename Operations
-            if (!empty($byType['config_rename'])) {
+            if (($byType['config_rename'] ?? []) !== []) {
                 $symfonyStyle->text(sprintf(
                     '<fg=yellow>Configuration Renames (%d):</>',
                     count($byType['config_rename']),
@@ -176,7 +176,7 @@ final class UpdateRunner
             }
 
             // Config Update Operations
-            if (!empty($byType['config_update'])) {
+            if (($byType['config_update'] ?? []) !== []) {
                 $symfonyStyle->text(sprintf(
                     '<fg=blue>Configuration Updates (%d):</>',
                     count($byType['config_update']),
@@ -190,7 +190,7 @@ final class UpdateRunner
 
             // File Operations
             $fileOps = array_merge($byType['file_copy'] ?? [], $byType['directory_copy'] ?? []);
-            if (!empty($fileOps)) {
+            if ($fileOps !== []) {
                 $symfonyStyle->text(sprintf('<fg=magenta>File Operations (%d):</>', count($fileOps)));
                 $rows = [];
                 foreach ($fileOps as $i => $op) {
@@ -202,7 +202,7 @@ final class UpdateRunner
             }
 
             // Permission Operations
-            if (!empty($byType['permission_grant'])) {
+            if (($byType['permission_grant'] ?? []) !== []) {
                 $symfonyStyle->text(sprintf(
                     '<fg=white>Permission Grants (%d):</>',
                     count($byType['permission_grant']),
@@ -220,7 +220,7 @@ final class UpdateRunner
         $symfonyStyle->text(sprintf('Total Migrations: %d', $report['summary']['migrationCount']));
         $symfonyStyle->text(sprintf('Total Operations: %d', $report['summary']['totalOperations']));
 
-        if (!empty($report['summary']['operationsByType'])) {
+        if (($report['summary']['operationsByType'] ?? []) !== []) {
             $symfonyStyle->newLine();
             $symfonyStyle->text('Operations by Type:');
             foreach ($report['summary']['operationsByType'] as $type => $count) {
@@ -234,10 +234,11 @@ final class UpdateRunner
 
     private function truncateString(string $str, int $maxLength): string
     {
-        $str = preg_replace('/\s+/', ' ', trim($str)) ?? '';
+        $str = preg_replace(pattern: '/\s+/', replacement: ' ', subject: trim($str)) ?? '';
         if (strlen($str) > $maxLength) {
-            return substr($str, 0, $maxLength - 3) . '...';
+            return substr(string: $str, offset: 0, length: $maxLength - 3) . '...';
         }
+
         return $str;
     }
 
@@ -248,8 +249,9 @@ final class UpdateRunner
         }
         if (is_string($value)) {
             if (strlen($value) > 40) {
-                return "'" . substr($value, 0, 37) . "...'";
+                return "'" . substr(string: $value, offset: 0, length: 37) . "...'";
             }
+
             return "'{$value}'";
         }
         if (is_null($value)) {
@@ -261,11 +263,13 @@ final class UpdateRunner
     private function shortenPath(string $path): string
     {
         if (defined('PMF_ROOT_DIR')) {
-            $path = str_replace(PMF_ROOT_DIR, '', $path);
+            $path = str_replace(search: PMF_ROOT_DIR, replace: '', subject: $path);
         }
+
         if (strlen($path) > 50) {
-            return '...' . substr($path, -47);
+            return '...' . substr(string: $path, offset: -47);
         }
+
         return $path;
     }
 
@@ -308,12 +312,11 @@ final class UpdateRunner
             if ($available) {
                 $this->version = $versions[$branch];
                 $symfonyStyle->success(message: Translation::get(key: 'msgCurrentVersion') . $versions[$branch]);
-            } else {
-                $this->version = $versions['installed'];
-                $symfonyStyle->success(
-                    message: Translation::get(key: 'versionIsUpToDate') . ' (' . $this->version . ')',
-                );
+                return Command::SUCCESS;
             }
+
+            $this->version = $versions['installed'];
+            $symfonyStyle->success(message: Translation::get(key: 'versionIsUpToDate') . ' (' . $this->version . ')');
         } catch (Exception|TransportExceptionInterface|DecodingExceptionInterface $exception) {
             $symfonyStyle->error(message: 'Error during update check: ' . $exception->getMessage());
             return Command::FAILURE;
@@ -464,7 +467,7 @@ final class UpdateRunner
      */
     private function displayMigrationResults(SymfonyStyle $symfonyStyle, array $results): void
     {
-        if (empty($results)) {
+        if ($results === []) {
             $symfonyStyle->note('No migrations were applied.');
             return;
         }

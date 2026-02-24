@@ -174,7 +174,7 @@ readonly class QueryHelper
     {
         $sqlWhereFilter = '';
 
-        if (!isset($category)) {
+        if ($category === null) {
             $category = new Category($this->configuration);
         }
 

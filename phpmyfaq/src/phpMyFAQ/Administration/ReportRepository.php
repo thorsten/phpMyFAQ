@@ -86,7 +86,12 @@ readonly class ReportRepository
         $result = $this->configuration->getDb()->query($query);
 
         $rows = [];
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $rows[] = $row;
         }
 

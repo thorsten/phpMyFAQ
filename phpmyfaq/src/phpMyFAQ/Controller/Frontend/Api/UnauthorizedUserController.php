@@ -56,11 +56,11 @@ final class UnauthorizedUserController
             throw new Exception('Invalid JSON data');
         }
 
-        if (!isset($data->username)) {
+        if (!property_exists($data, 'username')) {
             return $this->json(['error' => 'Missing username'], Response::HTTP_CONFLICT);
         }
 
-        if (!isset($data->email)) {
+        if (!property_exists($data, 'email')) {
             return $this->json(['error' => 'Missing email'], Response::HTTP_CONFLICT);
         }
 
@@ -71,7 +71,7 @@ final class UnauthorizedUserController
             $user = CurrentUser::getCurrentUser($this->configuration);
             $loginExist = $user->getUserByLogin($username);
 
-            if ($loginExist && $email == $user->getUserData('email')) {
+            if ($loginExist && $email === $user->getUserData('email')) {
                 try {
                     $newPassword = $user->createPassword();
                 } catch (\Exception $exception) {
@@ -86,8 +86,11 @@ final class UnauthorizedUserController
 
                 $text =
                     Translation::get(key: 'lostpwd_text_1')
-                    . sprintf('<br><br>Username: %s', $username)
-                    . sprintf('<br>New Password: %s<br><br>', $newPassword)
+                    . '<br><br>Username: '
+                    . $username
+                    . '<br>New Password: '
+                    . $newPassword
+                    . '<br><br>'
                     . Translation::get(key: 'lostpwd_text_2');
 
                 $mail = new Mail($this->configuration);

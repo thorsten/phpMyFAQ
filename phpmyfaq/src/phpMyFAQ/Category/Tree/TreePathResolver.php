@@ -57,7 +57,7 @@ final class TreePathResolver
      */
     public function getChildren(array $childrenMap, int $categoryId): array
     {
-        return isset($childrenMap[$categoryId]) ? array_keys($childrenMap[$categoryId]) : [];
+        return array_key_exists($categoryId, $childrenMap) ? array_keys($childrenMap[$categoryId]) : [];
     }
 
     /**
@@ -69,7 +69,7 @@ final class TreePathResolver
     public function getChildNodes(array $childrenMap, int $categoryId): array
     {
         $result = [];
-        if (!isset($childrenMap[$categoryId])) {
+        if (!array_key_exists($categoryId, $childrenMap)) {
             return $result;
         }
 
@@ -103,7 +103,11 @@ final class TreePathResolver
     {
         $alreadyListed = [$categoryId];
         $level = 0;
-        while (isset($categoryName[$categoryId]['parent_id']) && (int) $categoryName[$categoryId]['parent_id'] !== 0) {
+        while (
+            array_key_exists($categoryId, $categoryName)
+            && array_key_exists('parent_id', $categoryName[$categoryId])
+            && (int) $categoryName[$categoryId]['parent_id'] !== 0
+        ) {
             ++$level;
             $categoryId = (int) $categoryName[$categoryId]['parent_id'];
             if (in_array($categoryId, $alreadyListed, strict: true)) {
@@ -123,7 +127,7 @@ final class TreePathResolver
      */
     private function getValidParentId(array $categoryName, int $currentCategoryId): ?int
     {
-        if (!isset($categoryName[$currentCategoryId])) {
+        if (!array_key_exists($currentCategoryId, $categoryName)) {
             return null;
         }
 
@@ -133,7 +137,7 @@ final class TreePathResolver
             return null;
         }
 
-        if (!isset($categoryName[$parentId])) {
+        if (!array_key_exists($parentId, $categoryName)) {
             return null;
         }
 

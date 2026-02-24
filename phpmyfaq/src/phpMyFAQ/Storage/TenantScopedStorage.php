@@ -64,8 +64,11 @@ final readonly class TenantScopedStorage implements StorageInterface
 
     private function prefixPath(string $path): string
     {
-        $normalizedPath = ltrim(str_replace('\\', '/', trim($path)), '/');
-        $prefix = trim($this->tenantPrefix, '/');
+        $normalizedPath = ltrim(
+            string: str_replace(search: '\\', replace: '/', subject: trim(string: $path)),
+            characters: '/',
+        );
+        $prefix = trim(string: $this->tenantPrefix, characters: '/');
 
         if ($normalizedPath === '') {
             return $prefix;

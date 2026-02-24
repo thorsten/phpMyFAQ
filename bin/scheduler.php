@@ -27,7 +27,7 @@ require __DIR__ . '/../phpmyfaq/src/autoload.php';
 
 $command = $argv[1] ?? '';
 if ($command !== 'run') {
-    fwrite(STDERR, "Usage: php bin/scheduler.php run\n");
+    fwrite(stream: STDERR, data: "Usage: php bin/scheduler.php run\n");
     exit(1);
 }
 

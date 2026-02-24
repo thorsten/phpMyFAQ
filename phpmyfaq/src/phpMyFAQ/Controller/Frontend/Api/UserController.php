@@ -78,8 +78,9 @@ final class UserController extends AbstractController
             return $this->json(['error' => 'User ID mismatch!'], Response::HTTP_BAD_REQUEST);
         }
 
+        $success = false;
         if (!$isAzureAdUser) {
-            if ($password !== $confirm) {
+            if (!hash_equals($password, $confirm)) {
                 return $this->json(['error' => Translation::get(
                     'ad_user_error_passwordsDontMatch',
                 )], Response::HTTP_CONFLICT);
@@ -89,18 +90,13 @@ final class UserController extends AbstractController
                 return $this->json(['error' => Translation::get(key: 'ad_passwd_fail')], Response::HTTP_CONFLICT);
             }
 
-            if ($isWebAuthnUser) {
-                $userData = [
-                    'display_name' => $userName,
-                    'is_visible' => $isVisible === 'on' ? 1 : 0,
-                ];
-            } else {
-                $userData = [
-                    'display_name' => $userName,
-                    'email' => $email,
-                    'is_visible' => $isVisible === 'on' ? 1 : 0,
-                    'twofactor_enabled' => $twoFactorEnabled === 'on' ? 1 : 0,
-                ];
+            $userData = [
+                'display_name' => $userName,
+                'is_visible' => $isVisible === 'on' ? 1 : 0,
+            ];
+            if (!$isWebAuthnUser) {
+                $userData['email'] = $email;
+                $userData['twofactor_enabled'] = $twoFactorEnabled === 'on' ? 1 : 0;
             }
 
             $success = $this->currentUser->setUserData($userData);
@@ -116,7 +112,9 @@ final class UserController extends AbstractController
 
                 $success = true;
             }
-        } else {
+        }
+
+        if ($isAzureAdUser) {
             $userData = [
                 'is_visible' => $isVisible === 'on' ? 1 : 0,
                 'twofactor_enabled' => $twoFactorEnabled === 'on' ? 1 : 0,
@@ -176,7 +174,7 @@ final class UserController extends AbstractController
         }
 
         // Create a temporary ZIP file
-        $tmpFile = tempnam(sys_get_temp_dir(), 'pmf_userdata_');
+        $tmpFile = tempnam(directory: sys_get_temp_dir(), prefix: 'pmf_userdata_');
         if ($tmpFile === false) {
             return $this->json(['error' => 'Failed to create temp file.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -211,7 +209,7 @@ final class UserController extends AbstractController
             throw new Exception('Invalid JSON data');
         }
 
-        if (!isset($data->{'pmf-csrf-token'})) {
+        if (($data->{'pmf-csrf-token'} ?? null) === null) {
             throw new Exception('Missing CSRF token');
         }
 
@@ -286,7 +284,7 @@ final class UserController extends AbstractController
             throw new Exception('Invalid JSON data');
         }
 
-        if (!isset($data->csrfToken)) {
+        if (($data->csrfToken ?? null) === null) {
             throw new Exception('Missing CSRF token');
         }
 

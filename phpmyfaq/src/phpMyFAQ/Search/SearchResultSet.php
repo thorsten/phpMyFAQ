@@ -110,12 +110,12 @@ class SearchResultSet
             }
 
             // check on duplicates
-            if (!array_key_exists($result->id, $duplicateResults)) {
-                $duplicateResults[$result->id] = 1;
-            } else {
+            if (array_key_exists($result->id, $duplicateResults)) {
                 ++$duplicateResults[$result->id];
                 continue;
             }
+
+            $duplicateResults[$result->id] = 1;
 
             if (!property_exists($result, 'score') || $result->score === null) {
                 $result->score = $this->getScore($result);

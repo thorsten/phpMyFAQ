@@ -41,7 +41,7 @@ final class StopWordsController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $hasPermission = $this->currentUser->perm->hasPermission(
+        $hasPermission = $this->currentUser?->perm->hasPermission(
             $this->currentUser->getUserId(),
             PermissionType::CONFIGURATION_EDIT,
         );

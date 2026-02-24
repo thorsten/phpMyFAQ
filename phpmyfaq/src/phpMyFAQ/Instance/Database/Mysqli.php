@@ -405,7 +405,7 @@ class Mysqli extends Database implements DriverInterface
                 return false;
             }
 
-            $quotedSchema = sprintf('`%s`', str_replace('`', '``', $schema));
+            $quotedSchema = sprintf('`%s`', str_replace('`', replace: '``', subject: $schema));
 
             if (!$this->configuration->getDb()->query(sprintf('CREATE DATABASE IF NOT EXISTS %s', $quotedSchema))) {
                 return false;

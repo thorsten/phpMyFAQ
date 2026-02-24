@@ -40,7 +40,7 @@ final class CategoryValidator
      */
     public function isDirectChild(array $category, mixed $categoryId, int $parentId): bool
     {
-        if (!isset($category['parent_id'])) {
+        if (!array_key_exists('parent_id', $category)) {
             return false;
         }
 

@@ -56,7 +56,7 @@ class Worker
         $headers = $job['headers'];
 
         try {
-            $message = $this->decodeMessage((string) $job['body']);
+            $message = $this->decodeMessage($job['body']);
             $handler = $this->handlers[$message::class] ?? null;
 
             if (!is_callable($handler)) {
@@ -73,10 +73,10 @@ class Worker
 
             if ($attempts >= self::MAX_RETRIES) {
                 $this->databaseTransport->acknowledge($jobId);
-            } else {
-                $this->databaseTransport->release($jobId, new DateTimeImmutable('+60 seconds'), $headers);
+                return true;
             }
 
+            $this->databaseTransport->release($jobId, new DateTimeImmutable('+60 seconds'), $headers);
             return true;
         }
     }
@@ -111,8 +111,8 @@ class Worker
 
     private function decodeMessage(string $body): QueueMessageInterface
     {
-        $decoded = json_decode($body, true);
-        if (!is_array($decoded) || !isset($decoded['class'])) {
+        $decoded = json_decode($body, associative: true);
+        if (!is_array($decoded) || !array_key_exists('class', $decoded)) {
             throw new RuntimeException('Queue job body has an invalid format.');
         }
 

@@ -79,7 +79,7 @@ final class CategoryController extends AbstractAdministrationController
         $orderedCategories = $this->categoryOrder->getAllCategories();
         $categoryTree = $this->categoryOrder->getCategoryTree($orderedCategories);
 
-        if (in_array($categoryTree, [[], null, false], true)) {
+        if (in_array($categoryTree, [[], null, false], strict: true)) {
             // Fallback if no category order is available
             $categoryTree = $category->buildAdminCategoryTree($categoryInfo);
         }
@@ -142,7 +142,7 @@ final class CategoryController extends AbstractAdministrationController
         $templateVars = [];
         if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
             $templateVars = [
-                'groupsOptions' => $this->currentUser->perm->getAllGroupsOptions([], $this->currentUser),
+                'groupsOptions' => $this->currentUser?->perm->getAllGroupsOptions([], $this->currentUser),
             ];
         }
 
@@ -375,7 +375,7 @@ final class CategoryController extends AbstractAdministrationController
         $allGroupsOptions = '';
         $restrictedGroupOptions = '';
         if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
-            $allGroupsOptions = $this->currentUser->perm->getAllGroupsOptions(
+            $allGroupsOptions = $this->currentUser?->perm->getAllGroupsOptions(
                 [$categoryEntity->getGroupId()],
                 $this->currentUser,
             );
@@ -765,7 +765,7 @@ final class CategoryController extends AbstractAdministrationController
             'ad_categ_add' => Translation::get(key: 'ad_categ_add'),
             'ad_entry_restricted_groups' => Translation::get(key: 'ad_entry_restricted_groups'),
             'restricted_groups' => $this->configuration->get(item: 'security.permLevel') === 'medium'
-                ? $this->currentUser->perm->getAllGroupsOptions([], $this->currentUser)
+                ? $this->currentUser?->perm->getAllGroupsOptions([], $this->currentUser)
                 : '',
             'buttonCancel' => Translation::get(key: 'ad_gen_cancel'),
         ];

@@ -343,7 +343,7 @@ readonly class CustomPage
             ->setSeoRobots($row->seo_robots ?? 'index,follow')
             ->setCreated(new DateTime($row->created));
 
-        if (isset($row->updated)) {
+        if (property_exists($row, 'updated') && $row->updated !== null) {
             $entity->setUpdated(new DateTime($row->updated));
         }
 

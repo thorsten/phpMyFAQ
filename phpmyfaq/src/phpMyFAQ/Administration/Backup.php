@@ -66,20 +66,28 @@ readonly class Backup
             $backups = $this->getRepository()->getAll();
             $lastBackup = $backups[0] ?? null;
 
-            if ($lastBackup !== null && property_exists($lastBackup, 'created') && $lastBackup->created !== null) {
-                $createdRaw = (string) $lastBackup->created;
-                $createdDate = DateTimeImmutable::createFromFormat(format: 'Y-m-d H:i:s', datetime: $createdRaw);
-                $createdDate = $createdDate === false ? null : $createdDate;
-                if ($createdDate !== null) {
-                    $lastBackupDateFormatted = $createdDate->format(format: 'Y-m-d H:i:s');
-                    $threshold = new DateTimeImmutable(datetime: '-30 days');
-                    $isBackupOlderThan30Days = $createdDate < $threshold;
-                } else {
-                    $isBackupOlderThan30Days = true;
-                }
-            } else {
+            if ($lastBackup === null || !property_exists($lastBackup, 'created') || $lastBackup->created === null) {
                 $isBackupOlderThan30Days = true;
+                return [
+                    'lastBackupDate' => $lastBackupDateFormatted,
+                    'isBackupOlderThan30Days' => $isBackupOlderThan30Days,
+                ];
             }
+
+            $createdRaw = (string) $lastBackup->created;
+            $createdDate = DateTimeImmutable::createFromFormat(format: 'Y-m-d H:i:s', datetime: $createdRaw);
+            $createdDate = $createdDate === false ? null : $createdDate;
+            if ($createdDate === null) {
+                $isBackupOlderThan30Days = true;
+                return [
+                    'lastBackupDate' => $lastBackupDateFormatted,
+                    'isBackupOlderThan30Days' => $isBackupOlderThan30Days,
+                ];
+            }
+
+            $lastBackupDateFormatted = $createdDate->format(format: 'Y-m-d H:i:s');
+            $threshold = new DateTimeImmutable(datetime: '-30 days');
+            $isBackupOlderThan30Days = $createdDate < $threshold;
         } catch (\Throwable) {
             $isBackupOlderThan30Days = true;
         }

@@ -108,3 +108,4 @@ nbproject/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/tests/.phpunit-bootstrap.lock

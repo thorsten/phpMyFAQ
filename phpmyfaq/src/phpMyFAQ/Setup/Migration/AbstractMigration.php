@@ -77,7 +77,7 @@ abstract readonly class AbstractMigration implements MigrationInterface
     protected function isDbType(string|array $types): bool
     {
         $types = (array) $types;
-        return in_array($this->dbType, $types, true);
+        return in_array($this->dbType, $types, strict: true);
     }
 
     /**

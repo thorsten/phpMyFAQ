@@ -220,7 +220,13 @@ class Ldap
 
         $entries = ldap_get_entries($this->ds, $searchResult);
         for ($i = 0; $i < $entries['count']; ++$i) {
-            if (!isset($entries[$i][$fields[0]][0])) {
+            if (
+                !array_key_exists($i, $entries)
+                || !is_array($entries[$i])
+                || !array_key_exists($fields[0], $entries[$i])
+                || !is_array($entries[$i][$fields[0]])
+                || !array_key_exists(0, $entries[$i][$fields[0]])
+            ) {
                 continue;
             }
 
@@ -351,7 +357,7 @@ class Ldap
         $entries = ldap_get_entries($this->ds, $searchResult);
         $groups = [];
 
-        if ($entries['count'] > 0 && isset($entries[0]['memberof'])) {
+        if ($entries['count'] > 0 && array_key_exists(0, $entries) && array_key_exists('memberof', $entries[0])) {
             for ($i = 0; $i < $entries[0]['memberof']['count']; $i++) {
                 $groups[] = $entries[0]['memberof'][$i];
             }

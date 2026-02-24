@@ -33,13 +33,12 @@ final class BreadcrumbsHtmlRenderer
         $items = [];
         foreach ($segments as $index => $segment) {
             // Handle startpage (ID -1) with homepage URL
+            $url = strtr('{base}index.php?action=show&cat={id}', [
+                '{base}' => $configuration->getDefaultUrl(),
+                '{id}' => (string) $segment['id'],
+            ]);
             if ($segment['id'] === -1) {
                 $url = $configuration->getDefaultUrl();
-            } else {
-                $url = strtr('{base}index.php?action=show&cat={id}', [
-                    '{base}' => $configuration->getDefaultUrl(),
-                    '{id}' => (string) $segment['id'],
-                ]);
             }
 
             $oLink = new Link($url, $configuration);

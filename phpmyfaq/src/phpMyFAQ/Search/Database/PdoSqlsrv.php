@@ -40,9 +40,12 @@ class PdoSqlsrv extends SearchDatabase implements DatabaseInterface
     {
         if (is_numeric($searchTerm) && $this->configuration->get(item: 'search.searchForSolutionId')) {
             parent::search($searchTerm);
-        } else {
-            $query = sprintf(
-                '
+
+            return $this->resultSet;
+        }
+
+        $query = sprintf(
+            '
                 SELECT
                     %s
                 FROM 
@@ -50,16 +53,15 @@ class PdoSqlsrv extends SearchDatabase implements DatabaseInterface
                 WHERE
                     %s
                     %s',
-                $this->getResultColumns(),
-                $this->getTable(),
-                $this->getJoinedTable(),
-                $this->getJoinedColumns(),
-                $this->getMatchClause($searchTerm),
-                $this->getConditions(),
-            );
+            $this->getResultColumns(),
+            $this->getTable(),
+            $this->getJoinedTable(),
+            $this->getJoinedColumns(),
+            $this->getMatchClause($searchTerm),
+            $this->getConditions(),
+        );
 
-            $this->resultSet = $this->configuration->getDb()->query($query);
-        }
+        $this->resultSet = $this->configuration->getDb()->query($query);
 
         return $this->resultSet;
     }

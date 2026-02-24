@@ -69,7 +69,7 @@ class Bookmark
         }
 
         foreach ($bookmarks as $bookmark) {
-            if (!(isset($bookmark->faqid) && (int) $bookmark->faqid === $faqId)) {
+            if (!(property_exists($bookmark, 'faqid') && (int) $bookmark->faqid === $faqId)) {
                 continue;
             }
 

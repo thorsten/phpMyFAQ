@@ -38,11 +38,11 @@ class SearchFactory
         $type = current($searchHandler);
         $connector = ucfirst((string) key($searchHandler));
         if (str_starts_with(current($searchHandler), 'pdo_')) {
-            $searchClass = sprintf('\phpMyFAQ\Search\%s\Pdo%s', $connector, ucfirst(substr($type, 4)));
-        } else {
-            $searchClass = sprintf('\phpMyFAQ\Search\%s\%s', $connector, ucfirst($type));
+            $searchClass = sprintf('\phpMyFAQ\Search\%s\Pdo%s', $connector, ucfirst(substr(string: $type, offset: 4)));
+            return new $searchClass($configuration);
         }
 
+        $searchClass = sprintf('\phpMyFAQ\Search\%s\%s', $connector, ucfirst($type));
         return new $searchClass($configuration);
     }
 }

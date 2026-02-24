@@ -118,7 +118,12 @@ class Sqlite3 implements DatabaseDriver
             throw new Exception('Error while fetching result: ' . $this->error());
         }
 
-        while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+        while (true) {
+            $row = $result->fetchArray(SQLITE3_ASSOC);
+            if (!is_array($row)) {
+                break;
+            }
+
             $ret[] = (object) $row;
         }
 
@@ -157,7 +162,12 @@ class Sqlite3 implements DatabaseDriver
 
         // Use sqlite_schema (preferred) instead of sqlite_master to avoid linter complaints and for newer SQLite
         $result = $this->query("SELECT name FROM sqlite_schema WHERE type='table' ORDER BY name");
-        while ($row = $this->fetchAssoc($result)) {
+        while (true) {
+            $row = $this->fetchAssoc($result);
+            if ($row === []) {
+                break;
+            }
+
             $numResult = $this->query('SELECT * FROM ' . $row['name']);
             $arr[$row['name']] = $this->numRows($numResult);
         }
@@ -203,7 +213,7 @@ class Sqlite3 implements DatabaseDriver
      */
     public function numRows(mixed $result): int
     {
-        if (isset($result->fetchedByPMF) && $result->fetchedByPMF) {
+        if (property_exists($result, 'fetchedByPMF') && $result->fetchedByPMF) {
             throw new Exception(self::ERROR_MESSAGE);
         }
 

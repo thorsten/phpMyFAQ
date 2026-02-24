@@ -45,7 +45,7 @@ readonly class Relation
      */
     public function getAllRelatedByQuestion(string $question, string $keywords): array
     {
-        $terms = str_replace('-', ' ', $question) . ' ' . $keywords;
+        $terms = str_replace(search: '-', replace: ' ', subject: $question) . ' ' . $keywords;
         $searchDatabase = SearchFactory::create($this->configuration, ['database' => Database::getType()]);
 
         $searchDatabase

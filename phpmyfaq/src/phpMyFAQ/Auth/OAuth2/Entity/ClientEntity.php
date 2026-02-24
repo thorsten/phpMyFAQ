@@ -68,6 +68,6 @@ final class ClientEntity implements ClientEntityInterface
             return true;
         }
 
-        return in_array($grantType, $this->allowedGrants, true);
+        return in_array($grantType, $this->allowedGrants, strict: true);
     }
 }

@@ -123,6 +123,6 @@ readonly class DatabaseConfigurationStore implements ConfigurationStoreInterface
         $result = $this->databaseDriver->query($query);
         $row = $this->databaseDriver->fetchObject($result);
 
-        return isset($row->config_value) ? (string) $row->config_value : null;
+        return is_object($row) && property_exists($row, 'config_value') ? (string) $row->config_value : null;
     }
 }

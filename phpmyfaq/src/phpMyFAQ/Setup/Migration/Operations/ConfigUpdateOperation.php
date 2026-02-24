@@ -73,7 +73,7 @@ readonly class ConfigUpdateOperation implements OperationInterface
         }
         if (is_string($value)) {
             if (strlen($value) > 50) {
-                return "'" . substr($value, 0, 47) . "...'";
+                return "'" . substr($value, offset: 0, length: 47) . "...'";
             }
             return "'{$value}'";
         }

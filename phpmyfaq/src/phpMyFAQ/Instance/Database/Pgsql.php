@@ -395,7 +395,7 @@ class Pgsql extends Database implements DriverInterface
                 return false;
             }
 
-            $quotedSchema = sprintf('"%s"', str_replace('"', '""', $schema));
+            $quotedSchema = sprintf('"%s"', str_replace('"', replace: '""', subject: $schema));
 
             if (!$this->configuration->getDb()->query(sprintf('CREATE SCHEMA IF NOT EXISTS %s', $quotedSchema))) {
                 return false;
@@ -408,8 +408,8 @@ class Pgsql extends Database implements DriverInterface
 
         foreach ($this->createTableStatements as $key => $stmt) {
             if (
-                $key == 'idx_records'
-                || $key == 'faqsessions_idx'
+                $key === 'idx_records'
+                || $key === 'faqsessions_idx'
                 || str_starts_with($key, 'faqsearches_')
                 || str_starts_with($key, 'faqchat_messages_idx_')
             ) {

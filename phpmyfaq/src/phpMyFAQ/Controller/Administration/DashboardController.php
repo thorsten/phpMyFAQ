@@ -87,7 +87,7 @@ final class DashboardController extends AbstractAdministrationController
             'hasUserTracking' => $this->configuration->get(item: 'main.enableUserTracking'),
             'adminDashboardHeaderInactiveFaqs' => Translation::get(key: 'ad_record_inactive'),
             'adminDashboardInactiveFaqs' => $this->adminFaq->getInactiveFaqsData(),
-            'hasPermissionEditConfig' => $this->currentUser->perm->hasPermission(
+            'hasPermissionEditConfig' => $this->currentUser?->perm->hasPermission(
                 $userId,
                 PermissionType::CONFIGURATION_EDIT->value,
             ),

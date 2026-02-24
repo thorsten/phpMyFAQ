@@ -60,7 +60,10 @@ readonly class Migration400Alpha2 extends AbstractMigration
                     PRIMARY KEY (form_id, input_id, input_lang))',
                 $this->tablePrefix,
             ), 'Create forms table (MySQL)');
-        } elseif ($this->isSqlServer()) {
+            return;
+        }
+
+        if ($this->isSqlServer()) {
             $recorder->addSql(sprintf(
                 'CREATE TABLE %sfaqforms (
                     form_id INTEGER NOT NULL,
@@ -73,20 +76,21 @@ readonly class Migration400Alpha2 extends AbstractMigration
                     PRIMARY KEY (form_id, input_id, input_lang))',
                 $this->tablePrefix,
             ), 'Create forms table (SQL Server)');
-        } else {
-            $recorder->addSql(sprintf(
-                'CREATE TABLE %sfaqforms (
-                    form_id INTEGER NOT NULL,
-                    input_id INTEGER NOT NULL,
-                    input_type VARCHAR(1000) NOT NULL,
-                    input_label VARCHAR(100) NOT NULL,
-                    input_active INTEGER NOT NULL,
-                    input_required INTEGER NOT NULL,
-                    input_lang VARCHAR(11) NOT NULL,
-                    PRIMARY KEY (form_id, input_id, input_lang))',
-                $this->tablePrefix,
-            ), 'Create forms table');
+            return;
         }
+
+        $recorder->addSql(sprintf(
+            'CREATE TABLE %sfaqforms (
+                form_id INTEGER NOT NULL,
+                input_id INTEGER NOT NULL,
+                input_type VARCHAR(1000) NOT NULL,
+                input_label VARCHAR(100) NOT NULL,
+                input_active INTEGER NOT NULL,
+                input_required INTEGER NOT NULL,
+                input_lang VARCHAR(11) NOT NULL,
+                PRIMARY KEY (form_id, input_id, input_lang))',
+            $this->tablePrefix,
+        ), 'Create forms table');
 
         // Note: The form inputs insertion is handled separately through the Forms class
         // because it requires complex business logic that varies by installation

@@ -90,7 +90,7 @@ final class ElasticsearchController extends AbstractController
 
         // Index FAQs
         $bulkIndexResult = $this->elasticsearch->bulkIndex($this->faq->faqRecords);
-        if (!isset($bulkIndexResult['success'])) {
+        if (!array_key_exists('success', $bulkIndexResult)) {
             return $this->json(['error' => $bulkIndexResult], Response::HTTP_BAD_REQUEST);
         }
 
@@ -98,7 +98,7 @@ final class ElasticsearchController extends AbstractController
         $pages = $this->customPage->getAllPages();
 
         $bulkIndexPagesResult = $this->elasticsearch->bulkIndexCustomPages($pages);
-        if (!isset($bulkIndexPagesResult['success'])) {
+        if (!array_key_exists('success', $bulkIndexPagesResult)) {
             return $this->json([
                 'error' => 'FAQs indexed but custom pages failed: ' . json_encode($bulkIndexPagesResult),
             ], Response::HTTP_BAD_REQUEST);

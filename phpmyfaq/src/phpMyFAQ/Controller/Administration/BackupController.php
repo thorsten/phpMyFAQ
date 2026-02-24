@@ -95,10 +95,7 @@ final class BackupController extends AbstractAdministrationController
 
         $response = new Response($result->content);
 
-        $disposition = HeaderUtils::makeDisposition(
-            HeaderUtils::DISPOSITION_ATTACHMENT,
-            urlencode((string) $result->fileName),
-        );
+        $disposition = HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, urlencode($result->fileName));
 
         $response->headers->set(key: 'Content-Type', values: 'application/octet-stream; charset=UTF-8');
         $response->headers->set(key: 'Content-Disposition', values: $disposition);

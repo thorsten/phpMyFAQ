@@ -138,16 +138,15 @@ class Language
             $sessionLang = $this->session->get('lang');
             if ($sessionLang !== null && self::isASupportedLanguage($sessionLang)) {
                 self::$language = $sessionLang;
-            } else {
+            }
+
+            if (self::$language === '') {
                 // Try to fall back to the configured default language
                 try {
                     $defaultLang = $this->configuration->getDefaultLanguage();
-                    if ($defaultLang !== '' && self::isASupportedLanguage($defaultLang)) {
-                        self::$language = $defaultLang;
-                    } else {
-                        // Ultimate fallback to 'en'
-                        self::$language = 'en';
-                    }
+                    self::$language = $defaultLang !== '' && self::isASupportedLanguage($defaultLang)
+                        ? $defaultLang
+                        : 'en';
                 } catch (\Throwable) {
                     // If configuration is not available or throws an error, use 'en'
                     self::$language = 'en';

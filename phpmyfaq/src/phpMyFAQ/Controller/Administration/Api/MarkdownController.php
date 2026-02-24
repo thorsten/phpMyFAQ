@@ -41,7 +41,7 @@ final class MarkdownController extends AbstractController
     {
         $data = json_decode($request->getContent());
 
-        if (!$data || !isset($data->text)) {
+        if (!is_object($data) || !property_exists($data, 'text')) {
             throw new \Exception('Invalid JSON data');
         }
 

@@ -140,7 +140,7 @@ final class PageController extends AbstractAdministrationController
         $allLanguages = LanguageHelper::getAvailableLanguages();
         $availableLanguages = array_diff_key($allLanguages, array_flip($existingLanguages));
 
-        if (empty($availableLanguages)) {
+        if ($availableLanguages === []) {
             // All languages already have translations - redirect back to list
             return $this->redirect('./pages');
         }
@@ -221,7 +221,7 @@ final class PageController extends AbstractAdministrationController
         $language = $this->configuration->getLanguage()->getLanguage();
 
         return [
-            'permissionAddPage' => $user->perm->hasPermission($user->getUserId(), PermissionType::PAGE_ADD),
+            'permissionAddPage' => $user?->perm->hasPermission($user->getUserId(), PermissionType::PAGE_ADD),
             'permissionEditPage' => $user->perm->hasPermission($user->getUserId(), PermissionType::PAGE_EDIT),
             'permissionDeletePage' => $user->perm->hasPermission($user->getUserId(), PermissionType::PAGE_DELETE),
             'defaultUrl' => $this->configuration->getDefaultUrl(),

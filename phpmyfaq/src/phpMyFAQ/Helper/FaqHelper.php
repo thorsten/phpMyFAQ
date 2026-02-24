@@ -136,7 +136,11 @@ class FaqHelper extends AbstractHelper
 
         $sanitizedContent = $htmlSanitizer->sanitize($content);
 
-        $sanitizedContent = preg_replace('/<iframe\b(?:(?!src)[^>])*>\s*<\/iframe>/i', '', $sanitizedContent);
+        $sanitizedContent = preg_replace(
+            '/<iframe\b(?:(?!src)[^>])*>\s*<\/iframe>/i',
+            replacement: '',
+            subject: $sanitizedContent,
+        );
 
         return preg_replace_callback(
             '/style\s*=\s*"([^"]*)"/i',
@@ -144,7 +148,7 @@ class FaqHelper extends AbstractHelper
                 $styles = explode(';', $matches[1]);
                 $filteredStyles = array_filter(
                     $styles,
-                    static fn(string $style): bool => stripos(trim($style), 'overflow:') !== 0,
+                    static fn(string $style): bool => stripos(trim($style), needle: 'overflow:') !== 0,
                 );
                 $newStyle = implode('; ', $filteredStyles);
                 // Remove the style attribute if empty

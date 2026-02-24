@@ -70,7 +70,7 @@ class EntraIdSession extends AbstractSession
      */
     public function setCurrentSessionKey(): EntraIdSession
     {
-        if (!isset($this->currentSessionKey)) {
+        if ($this->currentSessionKey === null) {
             $this->createCurrentSessionKey();
         }
 

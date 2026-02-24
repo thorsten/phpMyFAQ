@@ -109,7 +109,7 @@ final class NewsController extends AbstractAdministrationController
             ...$this->getFooter(),
             ...$this->getBaseTemplateVars(),
             'newsData' => $newsData,
-            'newsDataContent' => isset($newsData['content'])
+            'newsDataContent' => array_key_exists('content', $newsData)
                 ? htmlspecialchars((string) $newsData['content'], ENT_QUOTES)
                 : '',
             'newsId' => $newsId,
@@ -128,7 +128,7 @@ final class NewsController extends AbstractAdministrationController
         $language = $this->configuration->getLanguage()->getLanguage();
 
         return [
-            'permissionAddNews' => $user->perm->hasPermission($user->getUserId(), PermissionType::NEWS_ADD),
+            'permissionAddNews' => $user?->perm->hasPermission($user->getUserId(), PermissionType::NEWS_ADD),
             'permissionEditNews' => $user->perm->hasPermission($user->getUserId(), PermissionType::NEWS_EDIT),
             'permissionDeleteNews' => $user->perm->hasPermission($user->getUserId(), PermissionType::NEWS_DELETE),
             'defaultUrl' => $this->configuration->getDefaultUrl(),

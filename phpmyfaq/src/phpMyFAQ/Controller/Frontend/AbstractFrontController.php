@@ -71,7 +71,7 @@ abstract class AbstractFrontController extends AbstractController
             );
         }
 
-        $isUserHasAdminRights = $this->currentUser->perm->hasPermission(
+        $isUserHasAdminRights = $this->currentUser?->perm->hasPermission(
             $this->currentUser->getUserId(),
             PermissionType::VIEW_ADMIN_LINK->value,
         );
@@ -82,8 +82,8 @@ abstract class AbstractFrontController extends AbstractController
 
         return [
             ...$this->getUserDropdown(),
-            'successMessage' => empty($successMessages) ? null : $successMessages[0],
-            'errorMessage' => empty($errorMessages) ? null : $errorMessages[0],
+            'successMessage' => count($successMessages) > 0 ? $successMessages[0] : null,
+            'errorMessage' => count($errorMessages) > 0 ? $errorMessages[0] : null,
             'isMaintenanceMode' => $this->configuration->get('main.maintenanceMode'),
             'isCompletelySecured' => $this->configuration->get('security.enableLoginOnly'),
             'isDebugEnabled' => Environment::isDebugMode(),
@@ -132,20 +132,21 @@ abstract class AbstractFrontController extends AbstractController
             'footerNavigation' => $this->getFooterNavigation($request),
             'isPrivacyLinkEnabled' => $this->configuration->get('layout.enablePrivacyLink'),
             'msgPrivacyNote' => Translation::get(key: 'msgPrivacyNote'),
-            'isTermsLinkEnabled' => !empty($this->configuration->get('main.termsURL')),
+            'isTermsLinkEnabled' => (string) $this->configuration->get('main.termsURL') !== '',
             'msgTermsOfService' => Translation::get(key: 'msgTermsOfService'),
-            'isImprintLinkEnabled' => !empty($this->configuration->get('main.imprintURL')),
+            'isImprintLinkEnabled' => (string) $this->configuration->get('main.imprintURL') !== '',
             'msgImprint' => Translation::get(key: 'msgImprint'),
             'isCookieConsentEnabled' => $this->configuration->get('layout.enableCookieConsent'),
             'cookiePreferences' => Translation::get(key: 'cookiePreferences'),
-            'isAccessibilityStatementEnabled' => !empty($this->configuration->get('main.accessibilityStatementURL')),
+            'isAccessibilityStatementEnabled' =>
+                (string) $this->configuration->get('main.accessibilityStatementURL') !== '',
             'msgAccessibilityStatement' => Translation::get(key: 'msgAccessibilityStatement'),
             'pushEnabled' =>
                 (
                     $this->configuration->get('push.enableWebPush') === 'true'
                     || $this->configuration->get('push.enableWebPush') === true
                 )
-                    && !empty($this->configuration->get('push.vapidPublicKey')),
+                    && (string) $this->configuration->get('push.vapidPublicKey') !== '',
         ];
     }
 
@@ -187,7 +188,7 @@ abstract class AbstractFrontController extends AbstractController
             $csrfLogoutToken = Token::getInstance($this->session)->getTokenString('logout');
 
             if (
-                $this->currentUser->perm->hasPermission(
+                $this->currentUser?->perm->hasPermission(
                     $this->currentUser->getUserId(),
                     PermissionType::VIEW_ADMIN_LINK->value,
                 )

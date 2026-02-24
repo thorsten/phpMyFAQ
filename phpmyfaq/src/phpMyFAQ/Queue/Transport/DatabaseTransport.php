@@ -47,7 +47,7 @@ readonly class DatabaseTransport
         $availableAtValue = $db->escape($availableAt->format('Y-m-d H:i:s'));
         $queueValue = $db->escape($queue);
         $bodyValue = $db->escape($body);
-        $headersValue = $db->escape((string) json_encode($headers, JSON_THROW_ON_ERROR));
+        $headersValue = $db->escape(json_encode($headers, JSON_THROW_ON_ERROR));
 
         $query = sprintf(
             "INSERT INTO %s (queue, body, headers, available_at, delivered_at, created) VALUES ('%s', '%s', '%s', '%s', NULL, %s)",
@@ -89,7 +89,12 @@ readonly class DatabaseTransport
             throw new RuntimeException('Unable to fetch queued jobs: ' . $db->error());
         }
 
-        while ($row = $db->fetchArray($result)) {
+        while (true) {
+            $row = $db->fetchArray($result);
+            if (!is_array($row)) {
+                break;
+            }
+
             $jobId = (int) $row['id'];
             $markDelivered = sprintf(
                 'UPDATE %s SET delivered_at = %s WHERE id = %d AND delivered_at IS NULL',
@@ -135,19 +140,19 @@ readonly class DatabaseTransport
         $table = Database::getTablePrefix() . 'faqjobs';
         $availableAt ??= new DateTimeImmutable('+60 seconds');
 
+        $query = sprintf(
+            "UPDATE %s SET delivered_at = NULL, available_at = '%s' WHERE id = %d",
+            $table,
+            $db->escape($availableAt->format('Y-m-d H:i:s')),
+            $jobId,
+        );
+
         if ($headers !== null) {
             $query = sprintf(
                 "UPDATE %s SET delivered_at = NULL, available_at = '%s', headers = '%s' WHERE id = %d",
                 $table,
                 $db->escape($availableAt->format('Y-m-d H:i:s')),
-                $db->escape((string) json_encode($headers, JSON_THROW_ON_ERROR)),
-                $jobId,
-            );
-        } else {
-            $query = sprintf(
-                "UPDATE %s SET delivered_at = NULL, available_at = '%s' WHERE id = %d",
-                $table,
-                $db->escape($availableAt->format('Y-m-d H:i:s')),
+                $db->escape(json_encode($headers, JSON_THROW_ON_ERROR)),
                 $jobId,
             );
         }
@@ -164,7 +169,7 @@ readonly class DatabaseTransport
             return [];
         }
 
-        $decoded = json_decode($rawHeaders, true);
+        $decoded = json_decode($rawHeaders, associative: true);
         return is_array($decoded) ? $decoded : [];
     }
 }

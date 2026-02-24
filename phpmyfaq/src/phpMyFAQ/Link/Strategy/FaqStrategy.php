@@ -29,11 +29,11 @@ final class FaqStrategy implements StrategyInterface
      */
     public function build(array $params, Link $link): string
     {
-        if (!isset($params[Link::LINK_GET_CATEGORY])) {
+        if (!array_key_exists(Link::LINK_GET_CATEGORY, $params)) {
             throw new InvalidArgumentException('Missing required parameter: category');
         }
 
-        if (!isset($params[Link::LINK_GET_ID])) {
+        if (!array_key_exists(Link::LINK_GET_ID, $params)) {
             throw new InvalidArgumentException('Missing required parameter: id');
         }
 
@@ -49,12 +49,12 @@ final class FaqStrategy implements StrategyInterface
             . $link->getSEOTitle()
             . Link::LINK_HTML_EXTENSION;
 
-        if (isset($params[Link::LINK_GET_HIGHLIGHT])) {
+        if (array_key_exists(Link::LINK_GET_HIGHLIGHT, $params)) {
             $url .=
                 Link::LINK_SEARCHPART_SEPARATOR . Link::LINK_GET_HIGHLIGHT . '=' . $params[Link::LINK_GET_HIGHLIGHT];
         }
 
-        if (isset($params[Link::LINK_FRAGMENT_SEPARATOR])) {
+        if (array_key_exists(Link::LINK_FRAGMENT_SEPARATOR, $params)) {
             $url .= Link::LINK_FRAGMENT_SEPARATOR . $params[Link::LINK_FRAGMENT_SEPARATOR];
         }
 

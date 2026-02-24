@@ -68,12 +68,11 @@ class Mysqli implements DatabaseDriver
         ?int $port = null,
     ): ?bool {
         try {
+            // Connect to MySQL via network by default.
+            $this->conn = new \mysqli($host, $user, $password, null, $port);
             if (str_starts_with($host, '/')) {
                 // Connect to MySQL via socket
                 $this->conn = new \mysqli(null, $user, $password, null, $port, $host);
-            } else {
-                // Connect to MySQL via network
-                $this->conn = new \mysqli($host, $user, $password, null, $port);
             }
         } catch (mysqli_sql_exception $mysqlisqlexception) {
             throw new Exception($mysqlisqlexception->getMessage());
@@ -145,7 +144,12 @@ class Mysqli implements DatabaseDriver
             throw new Exception('Error while fetching result: ' . $this->error());
         }
 
-        while ($row = $this->fetchObject($result)) {
+        while (true) {
+            $row = $this->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $ret[] = $row;
         }
 

@@ -62,7 +62,7 @@ final class WebAuthnController extends AbstractController
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
-        if (!isset($data->username)) {
+        if (!is_object($data) || !property_exists($data, 'username')) {
             throw new Exception('Missing username');
         }
 
@@ -122,7 +122,7 @@ final class WebAuthnController extends AbstractController
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
-        if (!isset($data->register)) {
+        if (!is_object($data) || !property_exists($data, 'register')) {
             throw new Exception('Missing register data');
         }
 
@@ -165,7 +165,7 @@ final class WebAuthnController extends AbstractController
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
-        if (!isset($data->username)) {
+        if (!is_object($data) || !property_exists($data, 'username')) {
             throw new Exception('Missing username');
         }
 
@@ -196,11 +196,11 @@ final class WebAuthnController extends AbstractController
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
-        if (!isset($data->username)) {
+        if (!is_object($data) || !property_exists($data, 'username')) {
             throw new Exception('Missing username');
         }
 
-        if (!isset($data->login)) {
+        if (!property_exists($data, 'login')) {
             throw new Exception('Missing login data');
         }
 

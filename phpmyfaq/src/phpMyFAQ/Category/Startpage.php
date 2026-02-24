@@ -125,7 +125,12 @@ readonly class Startpage
 
         $result = $this->configuration->getDb()->query($query);
 
-        while ($row = $this->configuration->getDb()->fetchArray($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchArray($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $link = sprintf('./category/%d/%s.html', $row['id'], TitleSlugifier::slug($row['name']));
             $image = '' === $row['image'] ? '' : 'content/user/images/' . $row['image'];
 

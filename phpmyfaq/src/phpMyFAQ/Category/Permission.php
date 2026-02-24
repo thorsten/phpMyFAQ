@@ -116,10 +116,11 @@ class Permission
     {
         $hasUserPermissions = $this->get(self::USER, [$categoryId]);
         $hasGroupPermissions = $this->get(self::GROUP, [$categoryId]);
+
         return (
-            isset($hasUserPermissions[0])
+            array_key_exists(0, $hasUserPermissions)
             && $hasUserPermissions[0] !== -1
-            || isset($hasGroupPermissions[0])
+            || array_key_exists(0, $hasGroupPermissions)
             && $hasGroupPermissions[0] !== -1
         );
     }
@@ -148,7 +149,12 @@ class Permission
         );
 
         $result = $this->configuration->getDb()->query($query);
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null) {
+                break;
+            }
+
             $permissions[] = (int) $row->permission;
         }
 
@@ -179,7 +185,12 @@ class Permission
         );
 
         $result = $this->configuration->getDb()->query($query);
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null) {
+                break;
+            }
+
             $permissions[$row->category_id][self::USER][] = (int) $row->permission;
         }
 
@@ -190,7 +201,12 @@ class Permission
         );
 
         $result = $this->configuration->getDb()->query($query);
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null) {
+                break;
+            }
+
             $permissions[$row->category_id][self::GROUP][] = (int) $row->permission;
         }
 

@@ -62,7 +62,11 @@ final readonly class ExportHandler
         }
 
         $exportDir = PMF_ROOT_DIR . '/content/user/exports';
-        if (!is_dir($exportDir) && !mkdir($exportDir, 0o775, true) && !is_dir($exportDir)) {
+        if (
+            !is_dir($exportDir)
+            && !mkdir(directory: $exportDir, permissions: 0o775, recursive: true)
+            && !is_dir($exportDir)
+        ) {
             throw new RuntimeException('Unable to create export directory: ' . $exportDir);
         }
 

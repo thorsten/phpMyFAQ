@@ -107,7 +107,7 @@ final class CategoryCache
 
     public function updateTreeTabEntry(int $index, array $entry): void
     {
-        if (isset($this->treeTab[$index])) {
+        if (array_key_exists($index, $this->treeTab)) {
             $this->treeTab[$index] = array_merge($this->treeTab[$index], $entry);
         }
     }

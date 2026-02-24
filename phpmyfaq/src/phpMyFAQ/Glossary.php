@@ -32,7 +32,7 @@ class Glossary
 {
     private string $definition = '';
 
-    private string $language;
+    private string $language = '';
 
     private array $cachedItems = [];
 
@@ -119,7 +119,7 @@ class Glossary
     {
         $language = $this->currentLanguage();
 
-        if (isset($this->cachedItems[$language])) {
+        if (($this->cachedItems[$language] ?? null) !== null) {
             return $this->cachedItems[$language];
         }
 
@@ -196,7 +196,7 @@ class Glossary
      */
     private function currentLanguage(): string
     {
-        if (isset($this->language) && $this->language !== '') {
+        if ($this->language !== '') {
             return $this->language;
         }
 

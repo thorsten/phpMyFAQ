@@ -132,7 +132,7 @@ class TwigWrapper
 
     private function resolveTemplateSetName(string $templatePath, ?string $templateSetName): string
     {
-        $requestedTemplateSet = trim((string) ($templateSetName ?? self::$templateSetName));
+        $requestedTemplateSet = trim($templateSetName ?? self::$templateSetName);
         if ($requestedTemplateSet === '' || !preg_match('/^[A-Za-z0-9_-]+$/', $requestedTemplateSet)) {
             $requestedTemplateSet = 'default';
         }

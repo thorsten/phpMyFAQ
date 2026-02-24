@@ -107,6 +107,7 @@ class OpenSearch extends AbstractSearch implements SearchInterface
 
         $result = $this->client->search($searchParams);
 
+        $this->resultSet = [];
         if ($result['hits']['total']['value'] > 0) {
             foreach ($result['hits']['hits'] as $hit) {
                 $resultSet = new stdClass();
@@ -119,15 +120,13 @@ class OpenSearch extends AbstractSearch implements SearchInterface
                 $resultSet->score = $hit['_score'];
 
                 // Add custom page specific fields if present
-                if (isset($hit['_source']['content_type']) && $hit['_source']['content_type'] === 'page') {
+                if (array_key_exists('content_type', $hit['_source']) && $hit['_source']['content_type'] === 'page') {
                     $resultSet->content_type = 'page';
                     $resultSet->slug = $hit['_source']['slug'];
                 }
 
                 $this->resultSet[] = $resultSet;
             }
-        } else {
-            $this->resultSet = [];
         }
 
         return $this->resultSet;
@@ -193,6 +192,7 @@ class OpenSearch extends AbstractSearch implements SearchInterface
 
         $result = $this->client->search($searchParams);
 
+        $this->resultSet = [];
         if (0 !== $result['hits']['total']['value'] || 0 !== $result['hits']['total']) {
             foreach ($result['hits']['hits'] as $hit) {
                 $resultSet = new stdClass();
@@ -205,15 +205,13 @@ class OpenSearch extends AbstractSearch implements SearchInterface
                 $resultSet->score = $hit['_score'];
 
                 // Add custom page specific fields if present
-                if (isset($hit['_source']['content_type']) && $hit['_source']['content_type'] === 'page') {
+                if (array_key_exists('content_type', $hit['_source']) && $hit['_source']['content_type'] === 'page') {
                     $resultSet->content_type = 'page';
                     $resultSet->slug = $hit['_source']['slug'];
                 }
 
                 $this->resultSet[] = $resultSet;
             }
-        } else {
-            $this->resultSet = [];
         }
 
         return $this->resultSet;

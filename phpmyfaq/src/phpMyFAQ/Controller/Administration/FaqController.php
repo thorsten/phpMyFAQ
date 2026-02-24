@@ -158,13 +158,13 @@ final class FaqController extends AbstractAdministrationController
             'allGroups' => true,
             'restrictedGroups' => false,
             'groupPermissionOptions' => $this->configuration->get(item: 'security.permLevel') === 'medium'
-                ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
+                ? $this->currentUser?->perm->getAllGroupsOptions([-1], $this->currentUser)
                 : '',
             'allUsers' => true,
             'restrictedUsers' => false,
             'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => [],
-            'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
+            'hasPermissionForApprove' => $this->currentUser?->perm->hasPermission(
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_APPROVE->value,
             ),
@@ -227,13 +227,13 @@ final class FaqController extends AbstractAdministrationController
             'allGroups' => true,
             'restrictedGroups' => false,
             'groupPermissionOptions' => $this->configuration->get(item: 'security.permLevel') === 'medium'
-                ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
+                ? $this->currentUser?->perm->getAllGroupsOptions([-1], $this->currentUser)
                 : '',
             'allUsers' => true,
             'restrictedUsers' => false,
             'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => [],
-            'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
+            'hasPermissionForApprove' => $this->currentUser?->perm->hasPermission(
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_APPROVE->value,
             ),
@@ -303,24 +303,22 @@ final class FaqController extends AbstractAdministrationController
 
         // User permissions
         $userPermission = $this->faqPermission->get(Permission::USER, $faqId);
+        $allUsers = false;
+        $restrictedUsers = true;
         if (count($userPermission) === 0 || $userPermission[0] === -1) {
             $allUsers = true;
             $restrictedUsers = false;
             $userPermission[0] = -1;
-        } else {
-            $allUsers = false;
-            $restrictedUsers = true;
         }
 
         // Group permissions
         $groupPermission = $this->faqPermission->get(Permission::GROUP, $faqId);
+        $allGroups = false;
+        $restrictedGroups = true;
         if (count($groupPermission) === 0 || $groupPermission[0] === -1) {
             $allGroups = true;
             $restrictedGroups = false;
             $groupPermission[0] = -1;
-        } else {
-            $allGroups = false;
-            $restrictedGroups = true;
         }
 
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
@@ -356,13 +354,13 @@ final class FaqController extends AbstractAdministrationController
             'allGroups' => $allGroups,
             'restrictedGroups' => $restrictedGroups,
             'groupPermissionOptions' => $this->configuration->get(item: 'security.permLevel') === 'medium'
-                ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
+                ? $this->currentUser?->perm->getAllGroupsOptions([-1], $this->currentUser)
                 : '',
             'allUsers' => $allUsers,
             'restrictedUsers' => $restrictedUsers,
             'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => $this->changelog->getByFaqId($faqId),
-            'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
+            'hasPermissionForApprove' => $this->currentUser?->perm->hasPermission(
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_APPROVE->value,
             ),
@@ -427,13 +425,13 @@ final class FaqController extends AbstractAdministrationController
             'allGroups' => true,
             'restrictedGroups' => false,
             'groupPermissionOptions' => $this->configuration->get(item: 'security.permLevel') === 'medium'
-                ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
+                ? $this->currentUser?->perm->getAllGroupsOptions([-1], $this->currentUser)
                 : '',
             'allUsers' => true,
             'restrictedUsers' => false,
             'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => [],
-            'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
+            'hasPermissionForApprove' => $this->currentUser?->perm->hasPermission(
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_APPROVE->value,
             ),
@@ -498,13 +496,13 @@ final class FaqController extends AbstractAdministrationController
             'allGroups' => true,
             'restrictedGroups' => false,
             'groupPermissionOptions' => $this->configuration->get(item: 'security.permLevel') === 'medium'
-                ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
+                ? $this->currentUser?->perm->getAllGroupsOptions([-1], $this->currentUser)
                 : '',
             'allUsers' => true,
             'restrictedUsers' => false,
             'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => [],
-            'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
+            'hasPermissionForApprove' => $this->currentUser?->perm->hasPermission(
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_APPROVE->value,
             ),
@@ -580,13 +578,13 @@ final class FaqController extends AbstractAdministrationController
             'allGroups' => true,
             'restrictedGroups' => false,
             'groupPermissionOptions' => $this->configuration->get(item: 'security.permLevel') === 'medium'
-                ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
+                ? $this->currentUser?->perm->getAllGroupsOptions([-1], $this->currentUser)
                 : '',
             'allUsers' => true,
             'restrictedUsers' => false,
             'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => [],
-            'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
+            'hasPermissionForApprove' => $this->currentUser?->perm->hasPermission(
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_APPROVE->value,
             ),
@@ -605,7 +603,7 @@ final class FaqController extends AbstractAdministrationController
     {
         $token = Token::getInstance($this->session);
 
-        $canAddAttachments = $this->currentUser->perm->hasPermission(
+        $canAddAttachments = $this->currentUser?->perm->hasPermission(
             $this->currentUser->getUserId(),
             PermissionType::ATTACHMENT_ADD->value,
         );

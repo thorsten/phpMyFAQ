@@ -179,7 +179,12 @@ readonly class BasicPermissionRepository
 
         $res = $this->configuration->getDb()->query($select);
         $result = [];
-        while ($row = $this->configuration->getDb()->fetchArray($res)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchArray($res);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $result[] = (int) $row['right_id'];
         }
 
@@ -257,7 +262,12 @@ readonly class BasicPermissionRepository
         $i = 0;
 
         if ($res) {
-            while ($row = $this->configuration->getDb()->fetchArray($res)) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchArray($res);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 $result[$i] = $row;
                 ++$i;
             }

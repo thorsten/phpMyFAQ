@@ -98,20 +98,21 @@ class UserSession
 
         if ($this->configuration->getDb()->numRows($result) === 0) {
             $this->userTracking(SessionActionType::OLD_SESSION->value, $sessionIdToCheck);
-        } else {
-            // Update global session id
-            $this->setCurrentSessionId($sessionIdToCheck);
-            // Update db tracking
-            $query = sprintf(
-                "UPDATE %sfaqsessions SET time = %d, user_id = %d WHERE sid = %d AND ip = '%s'",
-                Database::getTablePrefix(),
-                Request::createFromGlobals()->server->get('REQUEST_TIME'),
-                $this->currentUser->getUserId(),
-                $sessionIdToCheck,
-                $ipAddress,
-            );
-            $this->configuration->getDb()->query($query);
+            return;
         }
+
+        // Update global session id
+        $this->setCurrentSessionId($sessionIdToCheck);
+        // Update db tracking
+        $query = sprintf(
+            "UPDATE %sfaqsessions SET time = %d, user_id = %d WHERE sid = %d AND ip = '%s'",
+            Database::getTablePrefix(),
+            Request::createFromGlobals()->server->get('REQUEST_TIME'),
+            $this->currentUser->getUserId(),
+            $sessionIdToCheck,
+            $ipAddress,
+        );
+        $this->configuration->getDb()->query($query);
     }
 
     /**

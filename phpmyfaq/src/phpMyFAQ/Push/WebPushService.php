@@ -45,7 +45,7 @@ readonly class WebPushService
         $vapidPublicKey = $this->configuration->get('push.vapidPublicKey');
         $vapidPrivateKey = $this->configuration->get('push.vapidPrivateKey');
 
-        return $isEnabled && !empty($vapidPublicKey) && !empty($vapidPrivateKey);
+        return $isEnabled && (string) $vapidPublicKey !== '' && (string) $vapidPrivateKey !== '';
     }
 
     /**

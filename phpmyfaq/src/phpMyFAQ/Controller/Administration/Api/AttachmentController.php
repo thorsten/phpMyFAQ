@@ -85,14 +85,13 @@ final class AttachmentController extends AbstractAdministrationApiController
             }
 
             $attachment = AttachmentFactory::create($dataToCheck->attId);
+            $result = [
+                'success' => Translation::get(key: 'msgAdminAttachmentRefreshed'),
+                'delete' => false,
+            ];
             if (!$attachment->isStorageOk()) {
                 $attachment->deleteMeta();
                 $result = ['success' => Translation::get(key: 'ad_att_delsuc'), 'delete' => true];
-            } else {
-                $result = [
-                    'success' => Translation::get(key: 'msgAdminAttachmentRefreshed'),
-                    'delete' => false,
-                ];
             }
 
             return $this->json($result, Response::HTTP_OK);
@@ -123,35 +122,35 @@ final class AttachmentController extends AbstractAdministrationApiController
 
         foreach ($files as $file) {
             if (
-                $file->isValid()
-                && $file->getSize() <= $this->configuration->get(item: 'records.maxAttachmentSize')
-                && $file->getMimeType() !== 'text/html'
+                !$file->isValid()
+                || $file->getSize() > $this->configuration->get(item: 'records.maxAttachmentSize')
+                || $file->getMimeType() === 'text/html'
             ) {
-                $attachment = AttachmentFactory::create();
-                $attachment->setRecordId($request->attributes->get('record_id'));
-                $attachment->setRecordLang($request->attributes->get('record_lang'));
-                try {
-                    if (!$attachment->save($file->getPathname(), $file->getClientOriginalName())) {
-                        return $this->json(['error' => Translation::get(
-                            'msgImageCouldNotBeUploaded',
-                        )], Response::HTTP_INTERNAL_SERVER_ERROR);
-                    }
-                } catch (AttachmentException|FileNotFoundException $exception) {
-                    return $this->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
-                }
-
-                $uploadedFiles[] = [
-                    'attachmentId' => $attachment->getId(),
-                    'fileName' => $attachment->getFilename(),
-                    'faqId' => $request->attributes->get('record_id'),
-                    'faqLanguage' => $request->attributes->get('record_lang'),
-                ];
-            } else {
                 return $this->json(['error' => Translation::get(key: 'msgImageTooLarge')], Response::HTTP_BAD_REQUEST);
             }
+
+            $attachment = AttachmentFactory::create();
+            $attachment->setRecordId($request->attributes->get('record_id'));
+            $attachment->setRecordLang($request->attributes->get('record_lang'));
+            try {
+                if (!$attachment->save($file->getPathname(), $file->getClientOriginalName())) {
+                    return $this->json(['error' => Translation::get(
+                        'msgImageCouldNotBeUploaded',
+                    )], Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
+            } catch (AttachmentException|FileNotFoundException $exception) {
+                return $this->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+            $uploadedFiles[] = [
+                'attachmentId' => $attachment->getId(),
+                'fileName' => $attachment->getFilename(),
+                'faqId' => $request->attributes->get('record_id'),
+                'faqLanguage' => $request->attributes->get('record_lang'),
+            ];
         }
 
-        if (!empty($uploadedFiles)) {
+        if ($uploadedFiles !== []) {
             $attachmentIds = array_column($uploadedFiles, 'attachmentId');
             $this->adminLog->log(
                 $this->currentUser,

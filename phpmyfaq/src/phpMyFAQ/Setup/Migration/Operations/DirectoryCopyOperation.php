@@ -81,7 +81,7 @@ readonly class DirectoryCopyOperation implements OperationInterface
     {
         // Remove common prefixes to shorten the path for display
         if (defined('PMF_ROOT_DIR')) {
-            $path = str_replace(PMF_ROOT_DIR, '', $path);
+            $path = str_replace(PMF_ROOT_DIR, replace: '', subject: $path);
         }
         return $path;
     }

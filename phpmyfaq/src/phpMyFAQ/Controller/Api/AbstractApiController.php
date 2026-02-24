@@ -116,12 +116,11 @@ abstract class AbstractApiController extends AbstractController
     /**
      * Creates a paginated API response with standardized envelope format
      *
-     * @param array $data The response data
-     * @param int $total Total number of items across all pages
-     * @param PaginationRequest $pagination Pagination parameters
-     * @param SortRequest|null $sort Optional sorting information
-     * @param FilterRequest|null $filters Optional filtering information
-     * @param int $status HTTP status code
+     * @param Request                       $request
+     * @param array                         $data The response data
+     * @param int                           $total Total number of items across all pages
+     * @param PaginationRequest             $pagination Pagination parameters
+     * @param PaginatedResponseOptions|null $options
      * @return JsonResponse
      */
     protected function paginatedResponse(

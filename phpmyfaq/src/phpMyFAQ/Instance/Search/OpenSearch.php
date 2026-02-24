@@ -157,7 +157,7 @@ readonly class OpenSearch
 
             $response = $this->client->indices()->putMapping($params);
 
-            if (isset($response['acknowledged']) && true === $response['acknowledged']) {
+            if (($response['acknowledged'] ?? false) === true) {
                 return true;
             }
         }
@@ -255,7 +255,7 @@ readonly class OpenSearch
         // Send the last batch if it exists
         $responses = $this->client->bulk($params);
 
-        if (isset($responses)) {
+        if ($responses !== null) {
             return ['success' => $responses];
         }
 
@@ -325,7 +325,7 @@ readonly class OpenSearch
     public function indexCustomPage(array $page): array
     {
         // Only index active pages
-        if (isset($page['active']) && $page['active'] === 'n') {
+        if (($page['active'] ?? null) === 'n') {
             // Delete from index if it exists (in case it was previously active)
             return $this->deleteCustomPage((int) $page['id'], $page['lang']);
         }
@@ -362,7 +362,7 @@ readonly class OpenSearch
     public function updateCustomPage(array $page): array
     {
         // Only index active pages - delete from index if inactive
-        if (isset($page['active']) && $page['active'] === 'n') {
+        if (($page['active'] ?? null) === 'n') {
             return $this->deleteCustomPage((int) $page['id'], $page['lang']);
         }
 
@@ -458,11 +458,12 @@ readonly class OpenSearch
         }
 
         // Send the last batch if it exists
-        if (!empty($params['body'])) {
+        $responses = null;
+        if (($params['body'] ?? []) !== []) {
             $responses = $this->client->bulk($params);
         }
 
-        if (isset($responses)) {
+        if ($responses !== null) {
             return ['success' => $responses];
         }
 

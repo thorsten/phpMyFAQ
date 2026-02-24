@@ -50,7 +50,7 @@ readonly class Plurals
         $this->nPlurals = (int) Translation::get(key: 'nplurals');
         $this->lang = Translation::get(key: 'metaLanguage') ?? 'en';
 
-        $this->useDefaultPluralForm = $this->plural(language: (string) $this->lang, number: 0) === -1;
+        $this->useDefaultPluralForm = $this->plural(language: $this->lang, number: 0) === -1;
     }
 
     /**

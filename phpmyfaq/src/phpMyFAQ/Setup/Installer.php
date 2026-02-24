@@ -119,11 +119,11 @@ class Installer extends Setup
                 $hints .= "<li>{$failedDir}</li>\n";
             }
 
-            return $hints
-            . sprintf(
-                '</ul><p class="alert alert-danger">Please create %s manually and/or change access to chmod 775 (or '
-                . 'greater if necessary).</p>',
-                1 < $numDirs ? 'them' : 'it',
+            return (
+                $hints
+                . '</ul><p class="alert alert-danger">Please create '
+                . (1 < $numDirs ? 'them' : 'it')
+                . ' manually and/or change access to chmod 775 (or greater if necessary).</p>'
             );
         }
 
@@ -190,7 +190,7 @@ class Installer extends Setup
     public function checkInitialRewriteBasePath(Request $request): bool
     {
         $basePath = $request->getBasePath();
-        $basePath = rtrim($basePath, 'setup');
+        $basePath = rtrim($basePath, characters: 'setup');
 
         $htaccessPath = PMF_ROOT_DIR . '/.htaccess';
 

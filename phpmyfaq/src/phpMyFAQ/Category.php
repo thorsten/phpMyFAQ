@@ -102,7 +102,7 @@ class Category
         $this->getOrderedCategories($withPermission);
 
         foreach ($this->categoryCache->getCategoryNames() as $categoryName) {
-            if (!(is_array($categoryName) && isset($categoryName['id']))) {
+            if (!(is_array($categoryName) && array_key_exists('id', $categoryName))) {
                 continue;
             }
 
@@ -416,7 +416,7 @@ class Category
         for ($i = 0; $i < $numAscendants; ++$i) {
             $lineIndex = $this->getLineCategory($ascendants[$i]);
             $entry = $this->categoryCache->getTreeTabEntry($lineIndex);
-            if ($entry !== null && isset($entry['numChildren'])) {
+            if ($entry !== null && array_key_exists('numChildren', $entry)) {
                 $numChildren = $entry['numChildren'];
                 if ($numChildren > 0) {
                     $this->expand($ascendants[$i]);
@@ -436,7 +436,7 @@ class Category
         $numTreeTab = $this->categoryCache->countTreeTab();
         for ($i = 0; $i < $numTreeTab; ++$i) {
             $entry = $this->categoryCache->getTreeTabEntry($i);
-            if ($entry !== null && isset($entry['symbol']) && $entry['symbol'] === 'minus') {
+            if ($entry !== null && array_key_exists('symbol', $entry) && $entry['symbol'] === 'minus') {
                 $this->categoryCache->updateTreeTabEntry($i, ['symbol' => 'plus']);
             }
         }
@@ -450,7 +450,7 @@ class Category
         $num = $this->categoryCache->countTreeTab();
         for ($i = 0; $i < $num; ++$i) {
             $entry = $this->categoryCache->getTreeTabEntry($i);
-            if ($entry !== null && isset($entry['id']) && $entry['id'] === $categoryId) {
+            if ($entry !== null && array_key_exists('id', $entry) && $entry['id'] === $categoryId) {
                 return $i;
             }
         }
@@ -544,7 +544,7 @@ class Category
         $categories = $this->getCategoriesFromFaq($faqId);
         $result = [];
         foreach ($categories as $category) {
-            if (!isset($category['id'])) {
+            if (!array_key_exists('id', $category)) {
                 continue;
             }
 

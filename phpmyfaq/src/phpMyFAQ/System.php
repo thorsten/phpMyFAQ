@@ -429,7 +429,7 @@ class System
 
                 $current = str_replace(PMF_ROOT_DIR, replace: '', subject: (string) $file->getPathname());
 
-                if (isset($ignoredFiles[$current])) {
+                if (array_key_exists($current, $ignoredFiles)) {
                     continue;
                 }
 

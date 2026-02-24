@@ -98,7 +98,11 @@ readonly class Order
                     $position,
                 );
 
-                if (!empty($category->children)) {
+                if (
+                    property_exists($category, 'children')
+                    && is_array($category->children)
+                    && $category->children !== []
+                ) {
                     // Pass the same reference of $insertQueries to the recursive call
                     $this->setCategoryTree($category->children, $id, 1, $insertQueries);
                 }
@@ -136,7 +140,7 @@ readonly class Order
 
             if ($categoryParentId === $parentId) {
                 // Check if this category has already been visited to prevent cycles
-                if (isset($visited[$categoryId])) {
+                if (array_key_exists($categoryId, $visited)) {
                     continue;
                 }
 
@@ -163,7 +167,7 @@ readonly class Order
                 return (int) $parentId;
             }
 
-            if (!empty($category->children)) {
+            if (property_exists($category, 'children') && is_array($category->children) && $category->children !== []) {
                 $foundParentId = $this->getParentId($category->children, $categoryId, (int) $category->id);
                 if ($foundParentId !== null) {
                     return $foundParentId;
@@ -189,7 +193,12 @@ readonly class Order
 
         $categories = [];
 
-        while ($row = $this->configuration->getDb()->fetchArray($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchArray($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $categories[] = $row;
         }
 

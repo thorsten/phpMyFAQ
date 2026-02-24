@@ -85,7 +85,7 @@ final class BreadcrumbsBuilder
     {
         $segments = [];
         foreach ($ids as $id) {
-            if (!isset($categoryNameMap[$id])) {
+            if (!array_key_exists($id, $categoryNameMap)) {
                 continue;
             }
 

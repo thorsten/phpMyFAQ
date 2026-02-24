@@ -64,10 +64,7 @@ class PluginManager
     public function registerPlugin(string $pluginClass): void
     {
         $plugin = new $pluginClass();
-        if ($this->isCompatible($plugin)) {
-            $this->plugins[$plugin->getName()] = $plugin;
-            $this->containerBuilder->register($plugin->getName(), $pluginClass);
-        } else {
+        if (!$this->isCompatible($plugin)) {
             $this->incompatiblePlugins[$plugin->getName()] = [
                 'plugin' => $plugin,
                 'reason' => sprintf(
@@ -76,7 +73,11 @@ class PluginManager
                     System::getPluginVersion(),
                 ),
             ];
+            return;
         }
+
+        $this->plugins[$plugin->getName()] = $plugin;
+        $this->containerBuilder->register($plugin->getName(), $pluginClass);
     }
 
     /**
@@ -90,46 +91,14 @@ class PluginManager
 
         foreach ($pluginFiles as $pluginFile) {
             require_once $pluginFile;
-            $className = basename($pluginFile, '.php');
+            $className = basename(path: $pluginFile, suffix: '.php');
             $namespace = $this->getNamespaceFromFile($pluginFile);
             $fullClassName = $namespace . '\\' . $className;
             $this->registerPlugin($fullClassName);
         }
 
         foreach ($this->plugins as $plugin) {
-            if ($this->areDependenciesMet($plugin)) {
-                $this->loadedPlugins[] = $plugin->getName();
-                $plugin->registerEvents($this->eventDispatcher);
-                if (!empty($plugin->getConfig())) {
-                    $this->loadPluginConfig($plugin->getName(), $plugin->getConfig());
-                }
-
-                // Register plugin translations
-                $translationsPath = $plugin->getTranslationsPath();
-                if ($translationsPath !== null) {
-                    $pluginDir = $this->getPluginDirectory($plugin->getName());
-                    $absoluteTranslationsPath = $pluginDir . '/' . $translationsPath;
-
-                    if (is_dir($absoluteTranslationsPath)) {
-                        Translation::getInstance()->registerPluginTranslations(
-                            $plugin->getName(),
-                            $absoluteTranslationsPath,
-                        );
-                    }
-                }
-
-                // Register plugin stylesheets
-                $stylesheets = $plugin->getStylesheets();
-                if (!empty($stylesheets)) {
-                    $this->registerPluginStylesheets($plugin->getName(), $stylesheets);
-                }
-
-                // Register plugin scripts
-                $scripts = $plugin->getScripts();
-                if (!empty($scripts)) {
-                    $this->registerPluginScripts($plugin->getName(), $scripts);
-                }
-            } else {
+            if (!$this->areDependenciesMet($plugin)) {
                 $missingDeps = $this->getMissingDependencies($plugin);
                 $this->incompatiblePlugins[$plugin->getName()] = [
                     'plugin' => $plugin,
@@ -137,6 +106,40 @@ class PluginManager
                 ];
                 // Remove plugin from the plugins array since it's incompatible
                 unset($this->plugins[$plugin->getName()]);
+                continue;
+            }
+
+            $this->loadedPlugins[] = $plugin->getName();
+            $plugin->registerEvents($this->eventDispatcher);
+            $pluginConfig = $plugin->getConfig();
+            if ($pluginConfig instanceof PluginConfigurationInterface) {
+                $this->loadPluginConfig($plugin->getName(), $pluginConfig);
+            }
+
+            // Register plugin translations
+            $translationsPath = $plugin->getTranslationsPath();
+            if ($translationsPath !== null) {
+                $pluginDir = $this->getPluginDirectory($plugin->getName());
+                $absoluteTranslationsPath = $pluginDir . '/' . $translationsPath;
+
+                if (is_dir($absoluteTranslationsPath)) {
+                    Translation::getInstance()->registerPluginTranslations(
+                        $plugin->getName(),
+                        $absoluteTranslationsPath,
+                    );
+                }
+            }
+
+            // Register plugin stylesheets
+            $stylesheets = $plugin->getStylesheets();
+            if ($stylesheets !== []) {
+                $this->registerPluginStylesheets($plugin->getName(), $stylesheets);
+            }
+
+            // Register plugin scripts
+            $scripts = $plugin->getScripts();
+            if ($scripts !== []) {
+                $this->registerPluginScripts($plugin->getName(), $scripts);
             }
         }
     }
@@ -193,7 +196,7 @@ class PluginManager
      */
     private function isCompatible(PluginInterface $plugin): bool
     {
-        return version_compare($plugin->getVersion(), System::getPluginVersion(), '>=');
+        return version_compare(version1: $plugin->getVersion(), version2: System::getPluginVersion(), operator: '>=');
     }
 
     /**
@@ -206,7 +209,7 @@ class PluginManager
         }
 
         foreach ($plugin->getDependencies() as $dependency) {
-            if (in_array($dependency, $this->loadedPlugins)) {
+            if (in_array($dependency, $this->loadedPlugins, strict: true)) {
                 continue;
             }
 
@@ -347,7 +350,7 @@ class PluginManager
     {
         $missingDeps = [];
         foreach ($plugin->getDependencies() as $dependency) {
-            if (in_array($dependency, $this->loadedPlugins, true)) {
+            if (in_array($dependency, $this->loadedPlugins, strict: true)) {
                 continue;
             }
 

@@ -40,7 +40,12 @@ readonly class RatingData
         $query = $this->buildQuery();
         $result = $this->configuration->getDb()->query($query);
 
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if (!is_object($row)) {
+                break;
+            }
+
             $ratings[] = $this->mapRowToRating($row);
         }
 

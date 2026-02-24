@@ -94,7 +94,7 @@ final class RateLimiter
         $result = $db->query($selectQuery);
         $row = $result !== false ? $db->fetchObject($result) : false;
 
-        if (!is_object($row) || !isset($row->requests)) {
+        if (!is_object($row) || !property_exists($row, 'requests')) {
             // Cannot read authoritative count — deny the request (fail-closed)
             $this->headersStorage = [
                 'X-RateLimit-Limit' => $limit,

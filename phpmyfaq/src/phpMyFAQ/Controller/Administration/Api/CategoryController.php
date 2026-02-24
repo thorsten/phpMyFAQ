@@ -106,11 +106,11 @@ final class CategoryController extends AbstractAdministrationApiController
 
         $categoryData = $request->attributes->get('categories');
 
-        if (in_array($categoryData, [null, '', false], true)) {
+        if (in_array($categoryData, [null, '', false], strict: true)) {
             $categories = [-1]; // Access for all users and groups
         }
 
-        if (!in_array($categoryData, [null, '', false], true)) {
+        if (!in_array($categoryData, [null, '', false], strict: true)) {
             $categories = explode(',', (string) $categoryData);
         }
 

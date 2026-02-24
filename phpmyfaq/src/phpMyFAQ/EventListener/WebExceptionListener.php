@@ -48,7 +48,7 @@ class WebExceptionListener
     {
         $request = $event->getRequest();
         $pathInfo = $request->getPathInfo();
-        $baseUrl = '/' . ltrim(rtrim($request->getBaseUrl(), '/'), '/');
+        $baseUrl = '/' . ltrim(rtrim($request->getBaseUrl(), characters: '/'), characters: '/');
         $loginPath = $baseUrl === '/' ? '/login' : $baseUrl . '/login';
 
         // Skip API requests — handled by ApiExceptionListener
