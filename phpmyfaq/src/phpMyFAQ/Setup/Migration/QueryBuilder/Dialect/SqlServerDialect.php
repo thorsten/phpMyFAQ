@@ -155,6 +155,6 @@ class SqlServerDialect implements DialectInterface
 
     public function quoteIdentifier(string $identifier): string
     {
-        return '[' . str_replace(']', ']]', $identifier) . ']';
+        return '[' . str_replace(search: ']', replace: ']]', subject: $identifier) . ']';
     }
 }

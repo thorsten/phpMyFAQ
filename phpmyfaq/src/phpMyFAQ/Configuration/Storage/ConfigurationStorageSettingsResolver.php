@@ -33,16 +33,16 @@ readonly class ConfigurationStorageSettingsResolver
     public function resolve(): ConfigurationStorageSettings
     {
         $enabledValue = strtolower(
-            (string) ($this->databaseConfigurationStore->fetchValue('storage.useRedisForConfiguration') ?? 'false'),
+            $this->databaseConfigurationStore->fetchValue('storage.useRedisForConfiguration') ?? 'false',
         );
-        $enabled = in_array($enabledValue, ['1', 'true', 'yes', 'on'], true);
+        $enabled = in_array($enabledValue, ['1', 'true', 'yes', 'on'], strict: true);
 
-        $redisDsn = trim((string) ($this->databaseConfigurationStore->fetchValue('storage.redisDsn') ?? ''));
+        $redisDsn = trim($this->databaseConfigurationStore->fetchValue('storage.redisDsn') ?? '');
         if ($redisDsn === '') {
             $redisDsn = self::DEFAULT_REDIS_DSN;
         }
 
-        $redisPrefix = (string) ($this->databaseConfigurationStore->fetchValue('storage.redisPrefix') ?? '');
+        $redisPrefix = $this->databaseConfigurationStore->fetchValue('storage.redisPrefix') ?? '';
         if ($redisPrefix === '') {
             $redisPrefix = self::DEFAULT_REDIS_PREFIX;
         }

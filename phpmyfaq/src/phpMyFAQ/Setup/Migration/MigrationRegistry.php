@@ -94,7 +94,7 @@ class MigrationRegistry
         }
 
         // Sort by version
-        uksort($this->migrations, 'version_compare');
+        uksort($this->migrations, callback: 'version_compare');
 
         return $this->migrations;
     }
@@ -128,7 +128,7 @@ class MigrationRegistry
         $pending = [];
 
         foreach ($this->getMigrations() as $version => $migration) {
-            if (!version_compare($currentVersion, $version, '<')) {
+            if (!version_compare(version1: $currentVersion, version2: $version, operator: '<')) {
                 continue;
             }
 
@@ -149,7 +149,7 @@ class MigrationRegistry
         $unapplied = [];
 
         foreach ($this->getMigrations() as $version => $migration) {
-            if (in_array($version, $appliedVersions, true)) {
+            if (in_array($version, $appliedVersions, strict: true)) {
                 continue;
             }
 
@@ -165,7 +165,7 @@ class MigrationRegistry
     public function getLatestVersion(): ?string
     {
         $versions = $this->getVersions();
-        return !empty($versions) ? end($versions) : null;
+        return $versions !== [] ? end($versions) : null;
     }
 
     /**
@@ -173,6 +173,6 @@ class MigrationRegistry
      */
     public function hasMigration(string $version): bool
     {
-        return isset($this->migrationClasses[$version]);
+        return array_key_exists($version, $this->migrationClasses);
     }
 }

@@ -434,7 +434,7 @@ final class FaqController extends AbstractAdministrationApiController
             $faqData = $this->faq->create($faqData);
         }
 
-        if (!isset($categories)) {
+        if ($categories === null) {
             $categories = [];
         }
 
@@ -558,7 +558,7 @@ final class FaqController extends AbstractAdministrationApiController
 
         return $this->json([
             'faqs' => $faq->getAllFaqsByCategory($categoryId, $onlyInactive, $onlyNew),
-            'isAllowedToTranslate' => $this->currentUser->perm->hasPermission(
+            'isAllowedToTranslate' => $this->currentUser?->perm->hasPermission(
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_TRANSLATE->value,
             ),
@@ -583,7 +583,7 @@ final class FaqController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if (!in_array($faqIds, [false, [], null], true)) {
+        if (!in_array($faqIds, [false, [], null], strict: true)) {
             $faq = new FaqAdministration($this->configuration);
             $success = false;
 
@@ -624,7 +624,7 @@ final class FaqController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if (!in_array($faqIds, [false, [], null], true)) {
+        if (!in_array($faqIds, [false, [], null], strict: true)) {
             $faq = new FaqAdministration($this->configuration);
             $success = false;
 
@@ -742,7 +742,7 @@ final class FaqController extends AbstractAdministrationApiController
         $this->userHasPermission(PermissionType::FAQ_ADD);
 
         $file = $request->files->get(key: 'file');
-        if (!isset($file)) {
+        if ($file === null) {
             return $this->json(['error' => 'Bad request: There is no file submitted.'], Response::HTTP_BAD_REQUEST);
         }
 

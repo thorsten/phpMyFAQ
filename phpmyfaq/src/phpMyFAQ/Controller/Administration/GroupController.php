@@ -144,7 +144,7 @@ final class GroupController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::GROUP_DELETE);
 
         $groupId = (int) Filter::filterVar($request->request->get('group_list_select'), FILTER_VALIDATE_INT);
-        $groupData = $this->currentUser->perm->getGroupData($groupId);
+        $groupData = $this->currentUser?->perm->getGroupData($groupId);
 
         $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
         return $this->render('@admin/user/group.confirm.twig', [
@@ -172,7 +172,7 @@ final class GroupController extends AbstractAdministrationController
             throw new UnauthorizedHttpException('Invalid CSRF token');
         }
 
-        $deleteResult = $this->currentUser->perm->deleteGroup($groupId);
+        $deleteResult = $this->currentUser?->perm->deleteGroup($groupId);
         $message = '';
         if (!$deleteResult) {
             $message = sprintf(

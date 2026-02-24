@@ -35,8 +35,8 @@ final class LinkQueryParser
         }
 
         $parsed = parse_url($url);
-        if (isset($parsed['query'])) {
-            $rawQuery = str_replace(['&amp;', '#38;', 'amp;'], '&', $parsed['query']);
+        if (array_key_exists('query', $parsed) && is_string($parsed['query'])) {
+            $rawQuery = str_replace(search: ['&amp;', '#38;', 'amp;'], replace: '&', subject: $parsed['query']);
             $tmp = [];
             parse_str($rawQuery, $tmp);
             foreach ($tmp as $k => $v) {
@@ -44,11 +44,11 @@ final class LinkQueryParser
                     continue;
                 }
 
-                $parameters[(string) $k] = $v;
+                $parameters[$k] = $v;
             }
         }
 
-        if (isset($parsed['fragment'])) {
+        if (array_key_exists('fragment', $parsed) && is_string($parsed['fragment'])) {
             $fragment = $parsed['fragment'];
             $parameters['#'] = $fragment; // historisch
             $parameters['fragment'] = $fragment;

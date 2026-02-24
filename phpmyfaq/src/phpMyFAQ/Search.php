@@ -218,7 +218,7 @@ class Search
     {
         $classNameParts = explode('\\', $databaseDriver::class);
 
-        return (string) end($classNameParts);
+        return end($classNameParts);
     }
 
     /**
@@ -245,7 +245,7 @@ class Search
             $searchConditions[] = sprintf("(page_title LIKE '%%%s%%' OR content LIKE '%%%s%%')", $word, $word);
         }
 
-        if (empty($searchConditions)) {
+        if ($searchConditions === []) {
             return [];
         }
 
@@ -430,7 +430,12 @@ class Search
         $result = $this->configuration->getDb()->query($query);
 
         if (false !== $result) {
-            while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if (!is_object($row)) {
+                    break;
+                }
+
                 $searchResult[] = (array) $row;
             }
         }

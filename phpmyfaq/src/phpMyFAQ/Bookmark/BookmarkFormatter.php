@@ -44,7 +44,7 @@ readonly class BookmarkFormatter
      */
     public function format(object $bookmark): ?array
     {
-        if (!isset($bookmark->faqid)) {
+        if (($bookmark->faqid ?? null) === null) {
             return null;
         }
 
@@ -59,7 +59,7 @@ readonly class BookmarkFormatter
         $faq->getFaq($faqId);
         $faqData = $faq->faqRecord;
 
-        if (!isset($faqData['id'])) {
+        if (($faqData['id'] ?? null) === null) {
             return null;
         }
 

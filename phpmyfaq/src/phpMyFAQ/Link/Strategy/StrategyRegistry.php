@@ -43,7 +43,7 @@ final class StrategyRegistry
 
     public function has(string $action): bool
     {
-        return isset($this->strategies[$action]);
+        return array_key_exists($action, $this->strategies);
     }
 
     public function get(string $action): ?StrategyInterface

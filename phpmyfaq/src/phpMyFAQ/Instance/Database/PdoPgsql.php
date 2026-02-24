@@ -394,7 +394,7 @@ class PdoPgsql extends Database implements DriverInterface
                 return false;
             }
 
-            $quotedSchema = sprintf('"%s"', str_replace('"', '""', $schema));
+            $quotedSchema = sprintf('"%s"', str_replace(search: '"', replace: '""', subject: $schema));
 
             if (!$this->configuration->getDb()->query(sprintf('CREATE SCHEMA IF NOT EXISTS %s', $quotedSchema))) {
                 return false;
@@ -406,12 +406,16 @@ class PdoPgsql extends Database implements DriverInterface
         }
 
         foreach ($this->createTableStatements as $key => $stmt) {
-            if ($key == 'idx_records' || $key == 'faqsessions_idx') {
+            if ($key === 'idx_records' || $key === 'faqsessions_idx') {
                 $result = $this->configuration->getDb()->query(sprintf($stmt, $prefix, $prefix));
-            } else {
-                $result = $this->configuration->getDb()->query(sprintf($stmt, $prefix));
+                if (!$result) {
+                    return false;
+                }
+
+                continue;
             }
 
+            $result = $this->configuration->getDb()->query(sprintf($stmt, $prefix));
             if (!$result) {
                 return false;
             }

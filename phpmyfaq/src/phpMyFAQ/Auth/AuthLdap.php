@@ -126,11 +126,9 @@ class AuthLdap extends Auth implements AuthDriverInterface
             $groupName = $this->extractGroupNameFromDn($userGroup);
 
             // Check if there's a specific mapping for this AD group
-            if (count($groupMapping) > 0 && isset($groupMapping[$groupName])) {
+            $faqGroupName = $groupName;
+            if (count($groupMapping) > 0 && array_key_exists($groupName, $groupMapping)) {
                 $faqGroupName = $groupMapping[$groupName];
-            } else {
-                // Default: use the AD group name
-                $faqGroupName = $groupName;
             }
 
             // Find or create the group
@@ -190,22 +188,23 @@ class AuthLdap extends Auth implements AuthDriverInterface
 
         // Get active LDAP server for current user
         if ($this->multipleServers) {
-            // Try all LDAP servers
-            foreach (array_keys($this->ldapServer) as $key) {
+            $key = array_key_first($this->ldapServer);
+            if ($key !== null) {
                 $this->connect($key);
                 $this->activeServer = (int) $key;
-                break;
             }
         }
 
         $bindLogin = $login;
-        if ($this->configuration->get(item: 'ldap.ldap_use_domain_prefix')) {
-            if (array_key_exists('domain', $optionalData)) {
+        $usesDomainPrefix = (bool) $this->configuration->get(item: 'ldap.ldap_use_domain_prefix');
+        if ($usesDomainPrefix) {
+            if (is_array($optionalData) && array_key_exists('domain', $optionalData)) {
                 $bindLogin = $optionalData['domain'] . '\\' . $login;
             }
-        } else {
-            $this->connect($this->activeServer);
+        }
 
+        if (!$usesDomainPrefix) {
+            $this->connect($this->activeServer);
             $bindLogin = $this->ldapCore->getDn($login);
         }
 
@@ -263,11 +262,10 @@ class AuthLdap extends Auth implements AuthDriverInterface
     {
         // Get active LDAP server for current user
         if ($this->multipleServers) {
-            // Try all LDAP servers
-            foreach (array_keys($this->ldapServer) as $key) {
+            $key = array_key_first($this->ldapServer);
+            if ($key !== null) {
                 $this->connect($key);
                 $this->activeServer = (int) $key;
-                break;
             }
         }
 
@@ -286,7 +284,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
             $this->ldapServer[$activeServer]['ldap_password'],
         );
 
-        if ($this->ldapCore->error) {
+        if ($this->ldapCore?->error) {
             $this->configuration->getLogger()->error($this->ldapCore->error);
             $this->errors[] = $this->ldapCore->error;
         }

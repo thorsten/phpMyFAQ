@@ -45,13 +45,20 @@ class GoogleRecaptcha implements CaptchaInterface
             $code,
         );
 
-        $response = @file_get_contents($url);
+        $response = false;
+        set_error_handler(static fn() => true);
+        try {
+            $response = file_get_contents($url);
+        } finally {
+            restore_error_handler();
+        }
+
         if (!is_string($response) || $response === '') {
             return false;
         }
 
         try {
-            $decoded = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
+            $decoded = json_decode($response, associative: true, depth: 512, flags: JSON_THROW_ON_ERROR);
         } catch (\JsonException) {
             return false;
         }

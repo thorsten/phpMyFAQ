@@ -224,7 +224,7 @@ abstract class AbstractController
 
         $currentUser = $this->currentUser;
         if (
-            !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value)
+            !$currentUser?->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value)
             || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_EDIT->value)
             || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_DELETE->value)
             || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::GROUP_EDIT->value)
@@ -244,7 +244,7 @@ abstract class AbstractController
 
         $currentUser = $this->currentUser;
         if (
-            !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value)
+            !$currentUser?->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value)
             || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_EDIT->value)
             || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_DELETE->value)
         ) {
@@ -262,7 +262,7 @@ abstract class AbstractController
         }
 
         $currentUser = $this->currentUser;
-        if (!$currentUser->perm->hasPermission($currentUser->getUserId(), $permissionType->value)) {
+        if (!$currentUser?->perm->hasPermission($currentUser->getUserId(), $permissionType->value)) {
             throw new ForbiddenException(message: sprintf('User has no "%s" permission.', $permissionType->name));
         }
     }
@@ -275,7 +275,7 @@ abstract class AbstractController
      */
     protected function verifySessionCsrfToken(string $page, #[\SensitiveParameter] string $requestToken): bool
     {
-        if (empty($requestToken)) {
+        if ($requestToken === '') {
             return false;
         }
 

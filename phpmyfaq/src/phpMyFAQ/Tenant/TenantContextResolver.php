@@ -71,6 +71,6 @@ class TenantContextResolver
             return null;
         }
 
-        return trim((string) $value);
+        return trim($value);
     }
 }

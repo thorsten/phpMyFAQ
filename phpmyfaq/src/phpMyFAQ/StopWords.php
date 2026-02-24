@@ -142,12 +142,17 @@ class StopWords
 
         $stopWords = [];
 
-        if ($wordsOnly) {
-            while (($row = $this->configuration->getDb()->fetchObject($result)) == true) {
-                $stopWords[] = Strings::htmlentities($row->stopword);
-            }
-        } else {
+        if (!$wordsOnly) {
             return $this->configuration->getDb()->fetchAll($result);
+        }
+
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if (!is_object($row)) {
+                break;
+            }
+
+            $stopWords[] = Strings::htmlentities($row->stopword);
         }
 
         return $stopWords;
@@ -175,11 +180,11 @@ class StopWords
                 continue;
             }
 
-            if (in_array($word, $stopWords)) {
+            if (in_array($word, $stopWords, strict: true)) {
                 continue;
             }
 
-            if (in_array($word, $result)) {
+            if (in_array($word, $result, strict: true)) {
                 continue;
             }
 

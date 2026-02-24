@@ -51,7 +51,7 @@ class AmazonTranslationProvider extends AbstractTranslationProvider
         $accessKeyId = $this->configuration->get('translation.amazonAccessKeyId');
         $secretAccessKey = $this->configuration->get('translation.amazonSecretAccessKey');
 
-        if (empty($accessKeyId) || empty($secretAccessKey)) {
+        if ((string) $accessKeyId === '' || (string) $secretAccessKey === '') {
             throw new ApiException('Amazon Translate API credentials not configured');
         }
 

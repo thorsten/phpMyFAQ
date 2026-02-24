@@ -155,7 +155,9 @@ class Update extends AbstractSetup
             if ($isDir) {
                 // Ensure directory entries end with a slash
                 $zipArchive->addEmptyDir(rtrim($relativePath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR);
-            } elseif ($isFile) {
+            }
+
+            if ($isFile) {
                 $zipArchive->addFile($filePath, $relativePath);
             }
         }
@@ -330,13 +332,15 @@ class Update extends AbstractSetup
             foreach ($this->queries as $query) {
                 $this->dryRunQueries[] = $query;
             }
-        } else {
-            foreach ($this->queries as $query) {
-                try {
-                    $this->configuration->getDb()->query($query);
-                } catch (Exception $exception) {
-                    throw new Exception($exception->getMessage());
-                }
+
+            return;
+        }
+
+        foreach ($this->queries as $query) {
+            try {
+                $this->configuration->getDb()->query($query);
+            } catch (Exception $exception) {
+                throw new Exception($exception->getMessage());
             }
         }
     }

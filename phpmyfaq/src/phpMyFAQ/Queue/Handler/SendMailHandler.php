@@ -37,7 +37,9 @@ final readonly class SendMailHandler
         $envelope = $message->metadata['envelope'] ?? null;
         if (
             is_array($envelope)
-            && isset($envelope['recipients'], $envelope['headers'], $envelope['body'])
+            && array_key_exists('recipients', $envelope)
+            && array_key_exists('headers', $envelope)
+            && array_key_exists('body', $envelope)
             && is_string($envelope['recipients'])
             && is_array($envelope['headers'])
             && is_string($envelope['body'])

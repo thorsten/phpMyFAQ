@@ -43,7 +43,9 @@ readonly class SessionRepository
         $result = $this->configuration->getDb()->query($query);
         if ($result) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            return isset($row->cnt) ? (int) $row->cnt : 0;
+            if ($row !== null && property_exists($row, 'cnt')) {
+                return (int) $row->cnt;
+            }
         }
 
         return 0;
@@ -63,7 +65,9 @@ readonly class SessionRepository
         $result = $this->configuration->getDb()->query($query);
         if ($result) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            return isset($row->cnt) ? (int) $row->cnt : 0;
+            if ($row !== null && property_exists($row, 'cnt')) {
+                return (int) $row->cnt;
+            }
         }
 
         return 0;
@@ -80,7 +84,7 @@ readonly class SessionRepository
 
         if ($result) {
             $res = $this->configuration->getDb()->fetchObject($result);
-            if ($res && isset($res->time)) {
+            if ($res !== null && property_exists($res, 'time')) {
                 return (int) $res->time;
             }
         }
@@ -105,7 +109,12 @@ readonly class SessionRepository
         $result = $this->configuration->getDb()->query($query);
         $sessions = [];
 
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === null || $row === false) {
+                break;
+            }
+
             $sessions[] = $row;
         }
 
@@ -170,7 +179,12 @@ readonly class SessionRepository
         $result = $this->configuration->getDb()->query($query);
         $timestamps = [];
 
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === null || $row === false) {
+                break;
+            }
+
             $timestamps[] = (int) $row->time;
         }
 

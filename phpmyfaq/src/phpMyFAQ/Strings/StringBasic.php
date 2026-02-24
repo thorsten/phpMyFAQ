@@ -80,7 +80,7 @@ class StringBasic extends AbstractString
      */
     public function substr(string $str, int $start, $length = null): string
     {
-        $length = null == $length ? strlen($str) : $length;
+        $length = null === $length ? strlen($str) : $length;
 
         return substr($str, $start, $length);
     }

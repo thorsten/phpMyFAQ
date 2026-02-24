@@ -48,8 +48,9 @@ readonly class LdapSettings
         // Additional servers if enabled
         if (true === $this->coreConfiguration->get(item: 'ldap.ldap_use_multiple_servers')) {
             $key = 1;
-            while (isset($ldapConfiguration->getServers()[$key])) {
-                $servers[$key] = $ldapConfiguration->getServers()[$key];
+            $configuredServers = $ldapConfiguration->getServers();
+            while (array_key_exists($key, $configuredServers)) {
+                $servers[$key] = $configuredServers[$key];
                 ++$key;
             }
         }

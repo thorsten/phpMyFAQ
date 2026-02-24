@@ -150,7 +150,7 @@ class Pdf extends Export
 
             $this->wrapper->Ln(h: 10);
 
-            if (isset($faq['keywords'])) {
+            if (array_key_exists('keywords', $faq)) {
                 $this->wrapper->Ln();
                 $this->wrapper->Write(
                     h: 5,
@@ -222,7 +222,7 @@ class Pdf extends Export
             : (string) $faqData['content'];
         $this->wrapper->WriteHTML($content);
 
-        if (isset($faqData['attachmentList'])) {
+        if (array_key_exists('attachmentList', $faqData)) {
             $this->wrapper->Ln(h: 10);
             $this->wrapper->Ln();
             $this->wrapper->Write(h: 5, txt: Translation::get(key: 'msgAttachedFiles') . ':');

@@ -144,11 +144,21 @@ readonly class Import
 
             $requiredColumns = [0, 1, 2, 4, 5, 6, 7, 8];
             foreach ($requiredColumns as $requiredColumn) {
-                if (!empty($row[$requiredColumn])) {
-                    continue;
+                if (!array_key_exists($requiredColumn, $row)) {
+                    return false;
                 }
 
-                return false;
+                $value = $row[$requiredColumn];
+                if (
+                    $value === null
+                    || $value === ''
+                    || $value === '0'
+                    || $value === 0
+                    || $value === false
+                    || $value === []
+                ) {
+                    return false;
+                }
             }
 
             $activatedColumn = 7;

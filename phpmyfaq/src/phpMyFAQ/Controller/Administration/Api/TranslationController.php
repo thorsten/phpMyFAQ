@@ -49,7 +49,7 @@ final class TranslationController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::FAQ_TRANSLATE);
 
-        $data = json_decode($request->getContent(), true);
+        $data = json_decode($request->getContent(), associative: true);
 
         if (!Token::getInstance($this->session)->verifyToken('translate', $data['pmf-csrf-token'] ?? '')) {
             return $this->json([
@@ -64,7 +64,13 @@ final class TranslationController extends AbstractAdministrationApiController
         $targetLang = $data['targetLang'] ?? '';
         $fields = $data['fields'] ?? [];
 
-        if (empty($contentType) || empty($sourceLang) || empty($targetLang) || empty($fields)) {
+        if (
+            $contentType === ''
+            || $sourceLang === ''
+            || $targetLang === ''
+            || !is_array($fields)
+            || count($fields) === 0
+        ) {
             return $this->json([
                 'success' => false,
                 'error' => 'Missing required parameters',
@@ -73,7 +79,7 @@ final class TranslationController extends AbstractAdministrationApiController
 
         // Validate content type
         $validContentTypes = ['faq', 'customPage', 'category', 'news'];
-        if (!in_array($contentType, $validContentTypes, true)) {
+        if (!in_array($contentType, $validContentTypes, strict: true)) {
             return $this->json(['success' => false, 'error' => 'Invalid content type'], Response::HTTP_BAD_REQUEST);
         }
 

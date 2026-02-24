@@ -113,7 +113,7 @@ class MysqlDialect implements DialectInterface
     public function addColumn(string $tableName, string $columnName, string $type, ?string $after = null): string
     {
         $afterClause = $after !== null ? " AFTER {$after}" : '';
-        return "ALTER TABLE $tableName ADD COLUMN $columnName $type$afterClause";
+        return "ALTER TABLE {$tableName} ADD COLUMN {$columnName} {$type}{$afterClause}";
     }
 
     public function modifyColumn(string $tableName, string $columnName, string $newType): string
@@ -151,6 +151,6 @@ class MysqlDialect implements DialectInterface
 
     public function quoteIdentifier(string $identifier): string
     {
-        return '`' . str_replace('`', '``', $identifier) . '`';
+        return '`' . str_replace(search: '`', replace: '``', subject: $identifier) . '`';
     }
 }

@@ -79,7 +79,7 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
         string $sortOrder = 'ASC',
     ): array {
         $allowedSortFields = ['id_comment', 'id', 'usr', 'email', 'datum'];
-        $sortField = in_array($sortField, $allowedSortFields) ? $sortField : 'id_comment';
+        $sortField = in_array($sortField, $allowedSortFields, strict: true) ? $sortField : 'id_comment';
         $sortOrder = strtoupper($sortOrder) === 'DESC' ? 'DESC' : 'ASC';
 
         $sql = <<<SQL
@@ -140,7 +140,8 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
         );
 
         $result = $this->coreConfiguration->getDb()->query($query);
-        if ($row = $this->coreConfiguration->getDb()->fetchObject($result)) {
+        $row = $this->coreConfiguration->getDb()->fetchObject($result);
+        if ($row !== false && $row !== null && $row !== []) {
             return (int) $row->total;
         }
 
@@ -265,7 +266,8 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
                 $prefix,
                 $escapedType,
             );
-        } else {
+        }
+        if ($type !== CommentType::FAQ) {
             $query = sprintf(
                 'SELECT fc.id_comment AS comment_id, fc.id AS record_id, fc.usr AS username, fc.email AS email, '
                 . "fc.comment AS comment, fc.datum AS comment_date FROM %sfaqcomments fc WHERE type = '%s'",
@@ -303,7 +305,8 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
         );
 
         $result = $this->coreConfiguration->getDb()->query($query);
-        if ($row = $this->coreConfiguration->getDb()->fetchObject($result)) {
+        $row = $this->coreConfiguration->getDb()->fetchObject($result);
+        if ($row !== false && $row !== null && $row !== []) {
             return $row->comment === 'y';
         }
 

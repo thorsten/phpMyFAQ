@@ -57,7 +57,8 @@ class PdoMysql extends SearchDatabase implements DatabaseInterface
         if ($this->relevanceSupport && $relevance) {
             $columns .= ', ' . $this->setRelevanceRanking($searchTerm);
             $orderBy = 'ORDER BY score DESC';
-        } else {
+        }
+        if (!$this->relevanceSupport || !$relevance) {
             $orderBy = '';
         }
 

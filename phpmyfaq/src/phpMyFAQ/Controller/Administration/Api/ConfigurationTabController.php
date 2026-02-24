@@ -112,7 +112,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
 
         $themeName = trim((string) $request->request->get('themeName', ''));
         if ($themeName === '') {
-            $themeName = pathinfo((string) $file->getClientOriginalName(), PATHINFO_FILENAME);
+            $themeName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         }
 
         try {
@@ -265,7 +265,9 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         if (in_array('main.maintenanceMode', $changedKeys, strict: true)) {
             if ($newConfig['main.maintenanceMode'] === 'false' && $oldConfig['main.maintenanceMode'] === 'true') {
                 $this->adminLog->log($this->currentUser, AdminLogType::SYSTEM_MAINTENANCE_MODE_DISABLED->value);
-            } elseif ($newConfig['main.maintenanceMode'] === 'true' && $oldConfig['main.maintenanceMode'] === 'false') {
+            }
+
+            if ($newConfig['main.maintenanceMode'] === 'true' && $oldConfig['main.maintenanceMode'] === 'false') {
                 $this->adminLog->log($this->currentUser, AdminLogType::SYSTEM_MAINTENANCE_MODE_ENABLED->value);
             }
         }

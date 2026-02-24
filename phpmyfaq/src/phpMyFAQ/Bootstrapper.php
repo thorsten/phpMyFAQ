@@ -192,7 +192,7 @@ class Bootstrapper
 
         try {
             if (str_contains($dbType, 'mysql')) {
-                $quotedSchema = sprintf('`%s`', str_replace('`', '``', $schema));
+                $quotedSchema = sprintf('`%s`', str_replace(search: '`', replace: '``', subject: $schema));
                 $result = $this->db->query(sprintf('USE %s', $quotedSchema));
                 if ($result === false) {
                     throw new RuntimeException('Failed to switch to tenant schema for MySQL.');
@@ -201,7 +201,7 @@ class Bootstrapper
             }
 
             if (str_contains($dbType, 'pgsql')) {
-                $quotedSchema = sprintf('"%s"', str_replace('"', '""', $schema));
+                $quotedSchema = sprintf('"%s"', str_replace(search: '"', replace: '""', subject: $schema));
                 $result = $this->db->query(sprintf('SET search_path TO %s', $quotedSchema));
                 if ($result === false) {
                     throw new RuntimeException('Failed to switch to tenant schema for PostgreSQL.');
@@ -227,7 +227,7 @@ class Bootstrapper
 
     private function fixProxyHeaders(): void
     {
-        if ($this->request->server->has('HTTP_HOST')) {
+        if ($this->request?->server->has('HTTP_HOST')) {
             return;
         }
 

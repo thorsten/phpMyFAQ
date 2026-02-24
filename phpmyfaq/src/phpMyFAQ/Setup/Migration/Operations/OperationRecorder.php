@@ -51,7 +51,7 @@ class OperationRecorder
     public function addSqlForDbType(string $query, string|array $dbTypes, string $description = ''): self
     {
         $dbTypes = (array) $dbTypes;
-        if (in_array(Database::getType(), $dbTypes, true)) {
+        if (in_array(Database::getType(), $dbTypes, strict: true)) {
             $this->operations[] = new SqlOperation($this->configuration, $query, $description);
         }
         return $this;

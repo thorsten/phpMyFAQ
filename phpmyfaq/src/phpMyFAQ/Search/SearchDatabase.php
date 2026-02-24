@@ -219,9 +219,10 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
         foreach ($this->conditions as $column => $value) {
             if (is_array($value)) {
                 $conditions .= ' AND ' . $column . ' IN (' . implode(', ', $value) . ')';
-            } else {
-                $conditions .= ' AND ' . $column . ' = ' . $value;
+                continue;
             }
+
+            $conditions .= ' AND ' . $column . ' = ' . $value;
         }
 
         return $conditions;

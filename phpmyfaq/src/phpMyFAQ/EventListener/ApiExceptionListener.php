@@ -95,7 +95,7 @@ readonly class ApiExceptionListener
     ): Response {
         $baseUrl = '';
         if ($this->configuration !== null) {
-            $baseUrl = rtrim($this->configuration->getDefaultUrl(), '/');
+            $baseUrl = rtrim($this->configuration->getDefaultUrl(), characters: '/');
         }
 
         $type = match ($status) {

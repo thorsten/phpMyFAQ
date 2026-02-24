@@ -166,7 +166,7 @@ class Translation
         self::$translation->checkInit();
         self::$translation->checkLanguageLoaded();
 
-        return self::$translation->loadedLanguages[self::$translation->currentLanguage];
+        return self::$translation?->loadedLanguages[self::$translation?->currentLanguage];
     }
 
     /**
@@ -211,7 +211,7 @@ class Translation
 
     public function getCurrentLanguage(): string
     {
-        return self::$translation->currentLanguage;
+        return self::$translation?->currentLanguage;
     }
 
     /**
@@ -330,7 +330,7 @@ class Translation
      */
     protected function checkDefaultLanguageLoaded(): void
     {
-        $this->ensureLanguageLoaded(self::$translation->defaultLanguage);
+        $this->ensureLanguageLoaded(self::$translation?->defaultLanguage);
     }
 
     /**
@@ -338,7 +338,7 @@ class Translation
      */
     protected function checkLanguageLoaded(): void
     {
-        $this->ensureLanguageLoaded(self::$translation->currentLanguage);
+        $this->ensureLanguageLoaded(self::$translation?->currentLanguage);
     }
 
     /**
@@ -362,7 +362,7 @@ class Translation
      */
     protected function checkTranslationsDirectory(): void
     {
-        if (!is_dir(self::$translation->translationsDir)) {
+        if (!is_dir(self::$translation?->translationsDir)) {
             throw new Exception('The directory ' . self::$translation->translationsDir . ' was not found!');
         }
     }
@@ -373,7 +373,7 @@ class Translation
      */
     protected function checkDefaultLanguage(): void
     {
-        if (!file_exists(static::filename(self::$translation->defaultLanguage))) {
+        if (!file_exists(static::filename(self::$translation?->defaultLanguage))) {
             throw new Exception('Default language "' . self::$translation->defaultLanguage . '"not found!');
         }
     }
@@ -384,7 +384,7 @@ class Translation
      */
     protected function checkInit(): void
     {
-        if (!self::$translation->isReady) {
+        if (!self::$translation?->isReady) {
             $this->performInit();
         }
     }
@@ -408,8 +408,8 @@ class Translation
      */
     protected function checkCurrentLanguage(): void
     {
-        if (!file_exists(self::$translation->filename(self::$translation->currentLanguage))) {
-            self::$translation->currentLanguage = self::$translation->defaultLanguage;
+        if (!file_exists(self::$translation->filename(self::$translation?->currentLanguage))) {
+            self::$translation->currentLanguage = self::$translation?->defaultLanguage;
         }
     }
 
@@ -418,7 +418,13 @@ class Translation
      */
     protected function filename(string $language): string
     {
-        return self::$translation->translationsDir . DIRECTORY_SEPARATOR . 'language_' . strtolower($language) . '.php';
+        return (
+            self::$translation?->translationsDir
+            . DIRECTORY_SEPARATOR
+            . 'language_'
+            . strtolower($language)
+            . '.php'
+        );
     }
 
     /**
@@ -429,7 +435,7 @@ class Translation
     {
         $LANG_CONF = [];
         include self::$translation->filename(language: 'en');
-        include self::$translation->filename(self::$translation->currentLanguage);
+        include self::$translation->filename(self::$translation?->currentLanguage);
 
         return $LANG_CONF;
     }

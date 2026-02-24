@@ -28,15 +28,16 @@ class SessionWrapper
 
     public function __construct(?Session $session = null)
     {
-        if (!$session instanceof Session) {
-            // If no session is provided, create one with PhpBridgeSessionStorage
-            // This connects to the existing PHP session
-            $this->session = new Session(new PhpBridgeSessionStorage());
-            if (!$this->session->isStarted()) {
-                $this->session->start();
-            }
-        } else {
+        if ($session instanceof Session) {
             $this->session = $session;
+            return;
+        }
+
+        // If no session is provided, create one with PhpBridgeSessionStorage
+        // This connects to the existing PHP session
+        $this->session = new Session(new PhpBridgeSessionStorage());
+        if (!$this->session->isStarted()) {
+            $this->session->start();
         }
     }
 

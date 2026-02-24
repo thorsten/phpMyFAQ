@@ -88,6 +88,14 @@ final class SearchService
         $searchResults = [];
         $relTags = '';
         $tags = [];
+        $baseUrl = sprintf(
+            '%ssearch.html?search=%s&seite=%d%s&pmf-search-category=%d',
+            $this->configuration->getDefaultUrl(),
+            urlencode($inputSearchTerm),
+            $page,
+            $allLanguages ? '&langs=all' : '',
+            $inputCategory,
+        );
 
         // Handle tag search
         if ($inputTag !== '') {
@@ -98,16 +106,6 @@ final class SearchService
             $relTags = $tagSearchData['relTags'];
             $tags = $tagSearchData['tags'];
             $baseUrl = $tagSearchData['baseUrl'];
-        } else {
-            // Set base URL for fulltext search
-            $baseUrl = sprintf(
-                '%ssearch.html?search=%s&seite=%d%s&pmf-search-category=%d',
-                $this->configuration->getDefaultUrl(),
-                urlencode($inputSearchTerm),
-                $page,
-                $allLanguages ? '&langs=all' : '',
-                $inputCategory,
-            );
         }
 
         // Handle fulltext search
@@ -193,7 +191,7 @@ final class SearchService
         $tagsHelper->setTaggingIds($tagIds);
 
         foreach ($tagIds as $tagId) {
-            if (isset($tags[$tagId])) {
+            if (array_key_exists($tagId, $tags)) {
                 continue;
             }
             if (!is_numeric($tagId)) {
@@ -205,6 +203,7 @@ final class SearchService
 
         $recordIds = $this->tags->getFaqsByIntersectionTags($tags);
 
+        $numOfResults = 0;
         if (count($recordIds) > 0) {
             $relatedTags = $this->calculateRelatedTags($recordIds, $tags);
 
@@ -226,8 +225,6 @@ final class SearchService
             $paginatedRecordIds = array_slice($recordIds, $first, $confPerPage);
 
             $searchResults = $this->faq->renderFaqsByFaqIds($paginatedRecordIds, 'fd.id', 'ASC', false);
-        } else {
-            $numOfResults = 0;
         }
 
         // Set base URL scheme for tag search
@@ -262,15 +259,11 @@ final class SearchService
         foreach ($recordIds as $recordId) {
             $resultTags = $this->tags->getAllTagsById($recordId);
             foreach (array_keys($resultTags) as $resultTagId) {
-                if (isset($tags[$resultTagId])) {
+                if (array_key_exists($resultTagId, $tags)) {
                     continue;
                 }
 
-                if (isset($relatedTags[$resultTagId])) {
-                    ++$relatedTags[$resultTagId];
-                } else {
-                    $relatedTags[$resultTagId] = 1;
-                }
+                $relatedTags[$resultTagId] = ($relatedTags[$resultTagId] ?? 0) + 1;
             }
         }
 

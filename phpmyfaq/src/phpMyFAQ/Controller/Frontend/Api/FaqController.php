@@ -79,16 +79,19 @@ final class FaqController extends AbstractController
         }
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        if (!is_object($data)) {
+            throw new Exception('Invalid request payload');
+        }
 
-        if (!isset($data->name)) {
+        if (!property_exists($data, 'name')) {
             throw new Exception('Missing name');
         }
 
-        if (!isset($data->question) || empty($data->question)) {
+        if (!property_exists($data, 'question') || trim((string) $data->question) === '') {
             throw new Exception('Missing or empty question');
         }
 
-        if (!isset($data->answer)) {
+        if (!property_exists($data, 'answer')) {
             throw new Exception('Missing answer');
         }
 
@@ -102,28 +105,33 @@ final class FaqController extends AbstractController
         $questionText = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
         $questionText = trim(strip_tags((string) $questionText));
 
+        $answer = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
         if ($this->configuration->get(item: 'main.enableWysiwygEditorFrontend')) {
-            $answer = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
             $answer = trim(html_entity_decode((string) $answer));
-        } else {
-            $answer = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
-            $answer = strip_tags((string) $answer);
-            $answer = trim(nl2br($answer));
+        }
+
+        if (!$this->configuration->get(item: 'main.enableWysiwygEditorFrontend')) {
+            $answer = trim(nl2br(strip_tags((string) $answer)));
         }
 
         $category = new Category($this->configuration);
         $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
-        if (isset($data->rubrik)) {
+        $categories = [];
+
+        if (property_exists($data, 'rubrik')) {
             if (is_string($data->rubrik)) {
                 $data->rubrik = [$data->rubrik];
             }
 
             $categories = Filter::filterArray($data->rubrik);
-        } else {
+        }
+
+        if ($categories === []) {
             $allCategoryIds = $category->getAllCategoryIds();
-            if (empty($allCategoryIds)) {
+            if (count($allCategoryIds) === 0) {
                 throw new Exception('No categories available');
             }
+
             $categories = [$allCategoryIds[0]];
         }
 
@@ -140,14 +148,12 @@ final class FaqController extends AbstractController
             && $questionText !== '0'
             && $this->stopWords->checkBannedWord(strip_tags($questionText))
         ) {
-            if ($answer !== '' && $answer !== '0') {
-                if (!$this->stopWords->checkBannedWord(strip_tags($answer))) {
-                    return $this->json(['error' => Translation::get(
-                        key: 'errSaveEntries',
-                    )], Response::HTTP_BAD_REQUEST);
-                }
-            } else {
+            if ($answer === '' || $answer === '0') {
                 $answer = '';
+            }
+
+            if ($answer !== '' && !$this->stopWords->checkBannedWord(strip_tags($answer))) {
+                return $this->json(['error' => Translation::get(key: 'errSaveEntries')], Response::HTTP_BAD_REQUEST);
             }
 
             $this->userSession->userTracking('save_new_entry', 0);
@@ -174,7 +180,10 @@ final class FaqController extends AbstractController
             if ($openQuestionId) {
                 if ($this->configuration->get(item: 'records.enableDeleteQuestion')) {
                     $this->question->delete($openQuestionId);
-                } else { // adds this faq record id to the related open question
+                }
+
+                if (!$this->configuration->get(item: 'records.enableDeleteQuestion')) {
+                    // Adds this faq record id to the related open question.
                     $this->question->updateQuestionAnswer((int) $openQuestionId, (int) $recordId, (int) $categories[0]);
                 }
             }
@@ -206,13 +215,12 @@ final class FaqController extends AbstractController
                 $this->configuration->getLogger()->info('Notification could not be sent: ', [$e->getMessage()]);
             }
 
+            $link = [];
             if ($this->configuration->get(item: 'records.defaultActivation')) {
                 $link = [
                     'link' => $this->faqHelper->createFaqUrl($faqEntity, $categories[0]),
                     'info' => Translation::get(key: 'msgRedirect'),
                 ];
-            } else {
-                $link = [];
             }
 
             return $this->json([

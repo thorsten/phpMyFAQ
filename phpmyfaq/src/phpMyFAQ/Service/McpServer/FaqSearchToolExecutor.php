@@ -60,7 +60,7 @@ readonly class FaqSearchToolExecutor implements ToolExecutorInterface, Identifie
         $limit = $toolCall->arguments['limit'] ?? 10;
         $allLanguages = $toolCall->arguments['all_languages'] ?? false;
 
-        if (empty($query)) {
+        if (trim((string) $query) === '') {
             return new ToolCallResult('Error: Search query cannot be empty.', 'text', 'application/json');
         }
 
@@ -89,7 +89,7 @@ readonly class FaqSearchToolExecutor implements ToolExecutorInterface, Identifie
             // Format the results
             $validResults = [];
             foreach ($searchResults as $searchResult) {
-                $this->configuration->getLogger()->info(var_export($searchResult, true));
+                $this->configuration->getLogger()->info(var_export($searchResult, return: true));
 
                 $validResults[] = [
                     'id' => $searchResult->id,
@@ -103,7 +103,7 @@ readonly class FaqSearchToolExecutor implements ToolExecutorInterface, Identifie
             }
 
             // Limit results
-            $limitedResults = array_slice($validResults, 0, (int) $limit);
+            $limitedResults = array_slice($validResults, offset: 0, length: (int) $limit);
 
             if ($limitedResults === []) {
                 return new ToolCallResult(

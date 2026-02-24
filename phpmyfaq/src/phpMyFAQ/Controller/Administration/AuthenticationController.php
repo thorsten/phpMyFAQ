@@ -85,7 +85,7 @@ final class AuthenticationController extends AbstractAdministrationController
                 $this->adminLog->log(
                     $this->currentUser,
                     AdminLogType::AUTH_LOGIN_FAILED->value . ':' . $username . ' - '
-                        . implode(separator: ', ', array: $this->currentUser->errors),
+                        . implode(separator: ', ', array: $this->currentUser?->errors),
                 );
                 return new RedirectResponse(url: './login');
             }
@@ -109,12 +109,13 @@ final class AuthenticationController extends AbstractAdministrationController
         ) {
             return new RedirectResponse(url: './authenticate');
         }
+        $error = $request->query->get(key: 'error');
 
         return $this->render(file: '@admin/login.twig', context: [
             ...$this->getHeader($request),
             ...$this->getFooter(),
             'isSecure' => $request->isSecure() || !$this->configuration->get(item: 'security.useSslForLogins'),
-            'isError' => isset($error) && (string) $error !== '',
+            'isError' => $error !== null && (string) $error !== '',
             'errorMessage' => 'to be implemented',
             'loginMessage' => Translation::get(key: 'ad_auth_insert'),
             'isLogout' => $request->query->get(key: 'action') === 'logout',

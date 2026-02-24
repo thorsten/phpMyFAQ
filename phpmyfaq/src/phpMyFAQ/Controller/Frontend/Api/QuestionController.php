@@ -188,7 +188,7 @@ final class QuestionController extends AbstractController
             return true;
         }
 
-        return $this->currentUser->perm->hasPermission(
+        return $this->currentUser?->perm->hasPermission(
             $this->currentUser->getUserId(),
             PermissionType::QUESTION_ADD->value,
         );

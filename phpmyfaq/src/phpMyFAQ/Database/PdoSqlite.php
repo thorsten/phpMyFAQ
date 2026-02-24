@@ -94,7 +94,7 @@ class PdoSqlite implements DatabaseDriver
     public function escape(string $string): string
     {
         // For SQLite, escaping single quotes by doubling them is enough.
-        return str_replace("'", "''", $string);
+        return str_replace("'", replace: "''", subject: $string);
     }
 
     /**
@@ -149,7 +149,7 @@ class PdoSqlite implements DatabaseDriver
         try {
             $sql = $result->queryString ?? '';
             if (is_string($sql) && $sql !== '' && preg_match('/^\s*SELECT\b/i', $sql) === 1) {
-                $inner = rtrim($sql, " \t\n\r\0\x0B;");
+                $inner = rtrim($sql, characters: " \t\n\r\0\x0B;");
                 $countSql = 'SELECT COUNT(*) AS c FROM (' . $inner . ') AS _pmf_cnt';
                 $stmt = $this->pdo->query($countSql);
                 if ($stmt === false) {
@@ -157,10 +157,12 @@ class PdoSqlite implements DatabaseDriver
                 }
 
                 $row = $stmt->fetch(PDO::FETCH_NUM);
-                return isset($row[0]) ? (int) $row[0] : 0;
+                return is_array($row) && array_key_exists(0, $row) ? (int) $row[0] : 0;
             }
-        } catch (\Throwable) {
-            // ignore
+        } catch (\Throwable $exception) {
+            $this->configuration
+                ->getLogger()
+                ->debug('SQLite numRows fallback after COUNT query failure: ' . $exception->getMessage());
         }
 
         // Fallback: for non-SELECT statements rely on rowCount (INSERT/UPDATE/DELETE)

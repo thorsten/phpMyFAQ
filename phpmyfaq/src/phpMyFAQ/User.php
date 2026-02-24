@@ -554,9 +554,10 @@ class User
             // Ensure letters and numbers only occur once.
             if (!str_contains($newPassword, $nextChar)) {
                 $newPassword .= $nextChar;
-            } else {
-                $skipped = true;
+                continue;
             }
+
+            $skipped = true;
         }
 
         return $newPassword;
@@ -627,7 +628,7 @@ class User
             $this->errors[] = self::ERROR_USER_NO_AUTH_WRITABLE;
         }
 
-        return in_array(true, $delete, true);
+        return in_array(true, $delete, strict: true);
     }
 
     /**
@@ -882,7 +883,7 @@ class User
     {
         // is status allowed?
         $status = strtolower($status);
-        if (!in_array($status, array_keys($this->allowedStatus), true)) {
+        if (!in_array($status, array_keys($this->allowedStatus), strict: true)) {
             $this->errors[] = self::ERROR_USER_INVALID_STATUS;
 
             return false;

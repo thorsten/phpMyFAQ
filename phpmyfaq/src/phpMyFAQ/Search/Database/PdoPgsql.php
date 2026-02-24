@@ -57,15 +57,18 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
     {
         if (is_numeric($searchTerm) && $this->configuration->get(item: 'search.searchForSolutionId')) {
             parent::search($searchTerm);
-        } else {
-            $enableRelevance = $this->configuration->get(item: 'search.enableRelevance');
 
-            $columns = $this->getResultColumns();
-            $columns .= $enableRelevance ? $this->getMatchingColumnsAsResult() : '';
-            $orderBy = $enableRelevance ? 'ORDER BY ' . $this->getMatchingOrder() : '';
+            return $this->resultSet;
+        }
 
-            $query = sprintf(
-                "
+        $enableRelevance = $this->configuration->get(item: 'search.enableRelevance');
+
+        $columns = $this->getResultColumns();
+        $columns .= $enableRelevance ? $this->getMatchingColumnsAsResult() : '';
+        $orderBy = $enableRelevance ? 'ORDER BY ' . $this->getMatchingOrder() : '';
+
+        $query = sprintf(
+            "
                 SELECT
                     %s
                 FROM
@@ -74,21 +77,20 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
                     (%s) ILIKE ('%%%s%%')
                     %s
                     %s",
-                $columns,
-                $this->getTable(),
-                $this->getJoinedTable(),
-                $this->getJoinedColumns(),
-                $enableRelevance
-                    ? ", plainto_tsquery('" . $this->configuration->getDb()->escape($searchTerm) . "') query "
-                    : '',
-                $this->getMatchingColumns(),
-                $this->configuration->getDb()->escape($searchTerm),
-                $this->getConditions(),
-                $orderBy,
-            );
+            $columns,
+            $this->getTable(),
+            $this->getJoinedTable(),
+            $this->getJoinedColumns(),
+            $enableRelevance
+                ? ", plainto_tsquery('" . $this->configuration->getDb()->escape($searchTerm) . "') query "
+                : '',
+            $this->getMatchingColumns(),
+            $this->configuration->getDb()->escape($searchTerm),
+            $this->getConditions(),
+            $orderBy,
+        );
 
-            $this->resultSet = $this->configuration->getDb()->query($query);
-        }
+        $this->resultSet = $this->configuration->getDb()->query($query);
 
         return $this->resultSet;
     }
@@ -113,9 +115,9 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
         $this->addedRelevanceColumns = [];
 
         foreach ($this->matchingColumns as $matchingColumn) {
-            $columnName = substr(strstr($matchingColumn, '.'), 1);
+            $columnName = substr(string: strstr(haystack: $matchingColumn, needle: '.'), offset: 1);
 
-            if (isset($weight[$columnName])) {
+            if (array_key_exists($columnName, $weight)) {
                 $column = sprintf(
                     "TS_RANK_CD(SETWEIGHT(TO_TSVECTOR(COALESCE(%s, '')), '%s'), query) AS relevance_%s",
                     $matchingColumn,
@@ -143,16 +145,16 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
 
         foreach ($list as $field) {
             // Only add to ORDER BY if this relevance column was actually added to SELECT
-            if (!in_array($field, $this->addedRelevanceColumns)) {
+            if (!in_array($field, $this->addedRelevanceColumns, strict: true)) {
                 continue;
             }
 
             $string = sprintf('relevance_%s DESC', $field);
-            if ($order === '' || $order === '0') {
-                $order .= $string;
-            } else {
-                $order .= ', ' . $string;
+            if ($order !== '' && $order !== '0') {
+                $order .= ', ';
             }
+
+            $order .= $string;
         }
 
         return $order;
@@ -166,24 +168,19 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
     {
         $enableRelevance = $this->configuration->get(item: 'search.enableRelevance');
 
-        if ($enableRelevance) {
-            $matchColumns = '';
-
-            foreach ($this->matchingColumns as $matchingColumn) {
-                $match = sprintf("to_tsvector(coalesce(%s,''))", $matchingColumn);
-                if ($matchColumns === '' || $matchColumns === '0') {
-                    $matchColumns .= '(' . $match;
-                } else {
-                    $matchColumns .= ' || ' . $match;
-                }
-            }
-
-            // Add the ILIKE since the FULLTEXT looks for the exact phrase only
-            $matchColumns .= ') @@ query) OR (' . implode(" || ' ' || ", $this->matchingColumns);
-        } else {
-            $matchColumns = implode(" || ' ' || ", $this->matchingColumns);
+        if (!$enableRelevance) {
+            return implode(" || ' ' || ", $this->matchingColumns);
         }
 
-        return $matchColumns;
+        $matchColumns = [];
+        foreach ($this->matchingColumns as $matchingColumn) {
+            $matchColumns[] = sprintf("to_tsvector(coalesce(%s,''))", $matchingColumn);
+        }
+
+        // Add the ILIKE since the FULLTEXT looks for the exact phrase only
+        $matchColumnsValue = '(' . implode(' || ', $matchColumns) . ') @@ query) OR (';
+        $matchColumnsValue .= implode(" || ' ' || ", $this->matchingColumns);
+
+        return $matchColumnsValue;
     }
 }

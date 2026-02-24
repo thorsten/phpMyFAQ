@@ -56,11 +56,11 @@ final class ContactController extends AbstractController
             throw new Exception('Invalid JSON data');
         }
 
-        if (!isset($data->name)) {
+        if (!property_exists($data, 'name')) {
             throw new Exception('Missing name');
         }
 
-        if (!isset($data->question)) {
+        if (!property_exists($data, 'question')) {
             throw new Exception('Missing question');
         }
 

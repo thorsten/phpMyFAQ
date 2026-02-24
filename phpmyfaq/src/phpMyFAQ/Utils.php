@@ -301,7 +301,7 @@ class Utils
     {
         $parsedUrl = parse_url($url);
 
-        if ($parsedUrl && isset($parsedUrl['host'])) {
+        if (is_array($parsedUrl) && array_key_exists('host', $parsedUrl)) {
             return $parsedUrl['host'];
         }
 
@@ -315,7 +315,7 @@ class Utils
      */
     public static function moveToTop(array &$array, string $key): void
     {
-        if (isset($array[$key])) {
+        if (array_key_exists($key, $array)) {
             $temp = [$key => $array[$key]];
             unset($array[$key]);
             $array = $temp + $array;

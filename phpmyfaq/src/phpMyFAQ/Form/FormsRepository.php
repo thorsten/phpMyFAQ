@@ -134,7 +134,7 @@ readonly class FormsRepository implements FormsRepositoryInterface
         $response = $this->coreConfiguration->getDb()->query($query);
         $obj = $this->coreConfiguration->getDb()->fetchObject($response);
 
-        return $obj ?: null;
+        return is_object($obj) ? $obj : null;
     }
 
     public function insertTranslationRow(

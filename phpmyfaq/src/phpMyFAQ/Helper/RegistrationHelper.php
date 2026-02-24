@@ -83,13 +83,12 @@ class RegistrationHelper extends AbstractHelper
         $user->setStatus('blocked');
 
         $isNowActive = !$this->configuration->get(item: 'spam.manualActivation') && $user->activateUser();
+        $adminMessage = 'To activate this user please use';
         if ($isNowActive) {
             // @todo add translation strings
             $adminMessage =
                 'This user has been automatically activated, you can still'
                 . ' modify the users permissions or decline membership by visiting the admin section';
-        } else {
-            $adminMessage = 'To activate this user please use';
         }
 
         $text = sprintf(
@@ -137,7 +136,7 @@ class RegistrationHelper extends AbstractHelper
             return false;
         }
 
-        $atPos = strrpos($email, '@');
+        $atPos = strrpos(haystack: $email, needle: '@');
         if ($atPos === false) {
             return false; // should not happen after filter_var, but double-check
         }

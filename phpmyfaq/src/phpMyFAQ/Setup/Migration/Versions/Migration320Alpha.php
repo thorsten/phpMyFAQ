@@ -75,7 +75,9 @@ readonly class Migration320Alpha extends AbstractMigration
                 ),
                 'Add 2FA secret to faquserdata (SQLite)',
             );
-        } else {
+        }
+
+        if (!$this->isSqlite()) {
             $recorder->addSql(sprintf(
                 'ALTER TABLE %sfaquser
                     ADD refresh_token TEXT NULL DEFAULT NULL,

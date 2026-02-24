@@ -169,7 +169,12 @@ class Pgsql implements DatabaseDriver
             throw new Exception('Error while fetching result: ' . $this->error());
         }
 
-        while ($row = $this->fetchObject($result)) {
+        while (true) {
+            $row = $this->fetchObject($result);
+            if (!is_object($row)) {
+                break;
+            }
+
             $ret[] = $row;
         }
 
@@ -220,7 +225,12 @@ class Pgsql implements DatabaseDriver
         $select = 'SELECT relname FROM pg_stat_user_tables ORDER BY relname;';
         $arr = [];
         $result = $this->query($select);
-        while ($row = $this->fetchArray($result)) {
+        while (true) {
+            $row = $this->fetchArray($result);
+            if (!is_array($row)) {
+                break;
+            }
+
             $count = $this->getOne('SELECT count(1) FROM ' . $row['relname'] . ';');
             $arr[$row['relname']] = $count;
         }
@@ -233,7 +243,7 @@ class Pgsql implements DatabaseDriver
      */
     public function fetchArray(mixed $result): ?array
     {
-        $result = pg_fetch_array($result, null, PGSQL_ASSOC);
+        $result = pg_fetch_array($result, row: null, mode: PGSQL_ASSOC);
         if ($result) {
             return $result;
         }
@@ -351,7 +361,7 @@ class Pgsql implements DatabaseDriver
      */
     public function lastInsertId(): int|string
     {
-        $result = pg_query($this->conn, 'SELECT lastval()');
+        $result = pg_query($this->conn, query: 'SELECT lastval()');
         if ($result === false) {
             return 0;
         }

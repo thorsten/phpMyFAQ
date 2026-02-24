@@ -56,7 +56,10 @@ readonly class Migration400Alpha3 extends AbstractMigration
                     PRIMARY KEY (id)) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
                 $this->tablePrefix,
             ), 'Create SEO table (MySQL)');
-        } elseif ($this->isSqlServer()) {
+            return;
+        }
+
+        if ($this->isSqlServer()) {
             $recorder->addSql(sprintf(
                 'CREATE TABLE %sfaqseo (
                     id INT NOT NULL,
@@ -70,7 +73,10 @@ readonly class Migration400Alpha3 extends AbstractMigration
                     PRIMARY KEY (id))',
                 $this->tablePrefix,
             ), 'Create SEO table (SQL Server)');
-        } elseif ($this->isSqlite()) {
+            return;
+        }
+
+        if ($this->isSqlite()) {
             $recorder->addSql(sprintf(
                 'CREATE TABLE %sfaqseo (
                     id INT NOT NULL,
@@ -84,7 +90,10 @@ readonly class Migration400Alpha3 extends AbstractMigration
                     PRIMARY KEY (id))',
                 $this->tablePrefix,
             ), 'Create SEO table (SQLite)');
-        } elseif ($this->isPostgreSql()) {
+            return;
+        }
+
+        if ($this->isPostgreSql()) {
             $recorder->addSql(sprintf(
                 'CREATE TABLE %sfaqseo (
                     id INTEGER NOT NULL,

@@ -85,7 +85,7 @@ class PaginationMetadata
         $basePath = $urlParts['path'] ?? '';
         $queryParams = [];
 
-        if (isset($urlParts['query'])) {
+        if (is_array($urlParts) && array_key_exists('query', $urlParts)) {
             parse_str($urlParts['query'], $queryParams);
         }
 

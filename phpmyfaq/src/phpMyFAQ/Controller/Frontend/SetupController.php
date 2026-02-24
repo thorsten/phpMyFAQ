@@ -69,7 +69,7 @@ final class SetupController
             'nonCriticalSettings' => $installer->checkNoncriticalSettings(),
             'filePermissions' => $installer->checkFilesystemPermissions(),
             'supportedDatabases' => $system->getSupportedSafeDatabases(),
-            'currentPath' => dirname(__DIR__, 4),
+            'currentPath' => dirname(path: __DIR__, levels: 4),
             'isLdapEnabled' => $installer->hasLdapSupport(),
             'isElasticsearchEnabled' => $installer->hasElasticsearchSupport(),
             'supportedTranslations' => LanguageCodes::getAllSupported(),

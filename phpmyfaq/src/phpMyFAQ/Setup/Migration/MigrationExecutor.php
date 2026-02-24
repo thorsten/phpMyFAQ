@@ -74,15 +74,16 @@ class MigrationExecutor
             foreach ($recorder->getOperations() as $operation) {
                 if ($this->dryRun) {
                     $result->addOperationResult($operation, true);
-                } else {
-                    $success = $operation->execute();
-                    $error = $success ? null : 'Operation failed';
-                    $result->addOperationResult($operation, $success, $error);
+                    continue;
+                }
 
-                    if (!$success) {
-                        $result->setErrorMessage("Failed at operation: {$operation->getDescription()}");
-                        break;
-                    }
+                $success = $operation->execute();
+                $error = $success ? null : 'Operation failed';
+                $result->addOperationResult($operation, $success, $error);
+
+                if (!$success) {
+                    $result->setErrorMessage("Failed at operation: {$operation->getDescription()}");
+                    break;
                 }
             }
 
@@ -235,7 +236,7 @@ class MigrationExecutor
             }
 
             // SQL Operations
-            if (!empty($byType['sql'])) {
+            if (($byType['sql'] ?? []) !== []) {
                 $output .= '--- SQL Operations (' . count($byType['sql']) . ") ---\n";
                 foreach ($byType['sql'] as $i => $op) {
                     $output .= ($i + 1) . ". {$op['description']}\n";
@@ -251,7 +252,7 @@ class MigrationExecutor
                 $byType['config_rename'] ?? [],
                 $byType['config_update'] ?? [],
             );
-            if (!empty($configOps)) {
+            if ($configOps !== []) {
                 $output .= '--- Configuration Changes (' . count($configOps) . ") ---\n";
                 foreach ($configOps as $i => $op) {
                     $output .= ($i + 1) . ". {$op['description']}\n";
@@ -261,7 +262,7 @@ class MigrationExecutor
 
             // File Operations
             $fileOps = array_merge($byType['file_copy'] ?? [], $byType['directory_copy'] ?? []);
-            if (!empty($fileOps)) {
+            if ($fileOps !== []) {
                 $output .= '--- File Operations (' . count($fileOps) . ") ---\n";
                 foreach ($fileOps as $i => $op) {
                     $output .= ($i + 1) . ". {$op['description']}\n";
@@ -270,7 +271,7 @@ class MigrationExecutor
             }
 
             // Permission Operations
-            if (!empty($byType['permission_grant'])) {
+            if (($byType['permission_grant'] ?? []) !== []) {
                 $output .= '--- Permission Changes (' . count($byType['permission_grant']) . ") ---\n";
                 foreach ($byType['permission_grant'] as $i => $op) {
                     $output .= ($i + 1) . ". {$op['description']}\n";
@@ -278,7 +279,7 @@ class MigrationExecutor
                 $output .= "\n";
             }
 
-            $output .= str_repeat('-', 50) . "\n\n";
+            $output .= str_repeat(string: '-', times: 50) . "\n\n";
         }
 
         // Summary
@@ -286,7 +287,7 @@ class MigrationExecutor
         $output .= "Migrations: {$report['summary']['migrationCount']}\n";
         $output .= "Total Operations: {$report['summary']['totalOperations']}\n";
 
-        if (!empty($report['summary']['operationsByType'])) {
+        if (($report['summary']['operationsByType'] ?? []) !== []) {
             $output .= "By Type:\n";
             foreach ($report['summary']['operationsByType'] as $type => $count) {
                 $output .= "  - {$type}: {$count}\n";
@@ -298,9 +299,9 @@ class MigrationExecutor
 
     private function truncateQuery(string $query, int $maxLength = 100): string
     {
-        $sanitized = preg_replace('/\s+/', ' ', trim($query)) ?? '';
+        $sanitized = preg_replace(pattern: '/\s+/', replacement: ' ', subject: trim($query)) ?? '';
         if (strlen($sanitized) > $maxLength) {
-            return substr($sanitized, 0, $maxLength - 3) . '...';
+            return substr(string: $sanitized, offset: 0, length: $maxLength - 3) . '...';
         }
         return $sanitized;
     }

@@ -144,8 +144,14 @@ readonly class QuestionRepository
             $showAll === false ? " AND is_visible = 'Y'" : '',
         );
 
-        if ($result = $this->configuration->getDb()->query($query)) {
-            while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        $result = $this->configuration->getDb()->query($query);
+        if ($result !== false) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if (!is_object($row)) {
+                    break;
+                }
+
                 $questions[] = [
                     'id' => (int) $row->id,
                     'lang' => $row->lang,

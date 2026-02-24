@@ -63,8 +63,15 @@ final class ChatController extends AbstractController
         $this->userIsAuthenticated();
 
         $partnerId = Filter::filterVar($request->attributes->get('userId'), FILTER_VALIDATE_INT);
-        $limit = Filter::filterVar($request->query->get('limit', 50), FILTER_VALIDATE_INT) ?: 50;
-        $offset = Filter::filterVar($request->query->get('offset', 0), FILTER_VALIDATE_INT) ?: 0;
+        $limit = Filter::filterVar($request->query->get('limit', 50), FILTER_VALIDATE_INT);
+        if ($limit === false) {
+            $limit = 50;
+        }
+
+        $offset = Filter::filterVar($request->query->get('offset', 0), FILTER_VALIDATE_INT);
+        if ($offset === false) {
+            $offset = 0;
+        }
 
         if (!$partnerId) {
             return $this->json(['error' => 'Invalid user ID'], Response::HTTP_BAD_REQUEST);

@@ -157,7 +157,12 @@ class MigrationTracker
         $result = $this->configuration->getDb()->query($query);
         $migrations = [];
 
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $migrations[] = [
                 'version' => $row->version,
                 'applied_at' => $row->applied_at,

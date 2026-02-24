@@ -71,10 +71,12 @@ class SortRequest
         // Validate sort field against whitelist
         if ($sortField && in_array($sortField, $allowedFields, strict: true)) {
             $field = $sortField;
-        } elseif ($defaultField && in_array($defaultField, $allowedFields, strict: true)) {
-            $field = $defaultField;
         } else {
             $field = null;
+        }
+
+        if ($field === null && $defaultField && in_array($defaultField, $allowedFields, strict: true)) {
+            $field = $defaultField;
         }
 
         // Parse sort order
@@ -179,7 +181,7 @@ class SortRequest
     private function escapeIdentifier(string $identifier): string
     {
         // Remove any existing backticks
-        $identifier = str_replace('`', '', $identifier);
+        $identifier = str_replace('`', replace: '', subject: $identifier);
 
         // Wrap in backticks
         return '`' . $identifier . '`';

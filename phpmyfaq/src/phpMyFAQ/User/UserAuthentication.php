@@ -80,21 +80,25 @@ class UserAuthentication
         $this->authenticateSso();
 
         try {
-            if ($this->currentUser->login($username, $password)) {
-                if ($this->currentUser->getUserData('twofactor_enabled')) {
-                    $this->setTwoFactorAuth(true);
-                    $this->currentUser->setLoggedIn(false);
-                } elseif ($this->currentUser->getStatus() !== 'blocked') {
-                    $this->currentUser->setLoggedIn(true);
-                } else {
-                    $this->currentUser->setLoggedIn(false);
-                    throw new UserException(
-                        (Translation::get(key: 'ad_auth_fail') ?? 'Authentication failed') . ' (' . $username . ')',
-                    );
-                }
-            } else {
+            if (!$this->currentUser->login($username, $password)) {
                 throw new UserException(Translation::get(key: 'ad_auth_fail') ?? 'Authentication failed');
             }
+
+            if ($this->currentUser->getUserData('twofactor_enabled')) {
+                $this->setTwoFactorAuth(true);
+                $this->currentUser->setLoggedIn(false);
+                return $this->currentUser;
+            }
+
+            if ($this->currentUser->getStatus() !== 'blocked') {
+                $this->currentUser->setLoggedIn(true);
+                return $this->currentUser;
+            }
+
+            $this->currentUser->setLoggedIn(false);
+            throw new UserException(
+                (Translation::get(key: 'ad_auth_fail') ?? 'Authentication failed') . ' (' . $username . ')',
+            );
         } catch (AuthException $authException) {
             throw new UserException($authException->getMessage());
         }

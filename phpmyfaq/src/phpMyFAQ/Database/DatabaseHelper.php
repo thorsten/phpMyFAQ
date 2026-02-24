@@ -71,7 +71,7 @@ readonly class DatabaseHelper
 
         Strings::preg_match_all('/^' . $startPattern . "\s+(\w+)(\s+|$)/i", $query, $matches);
 
-        if (isset($matches[1][0])) {
+        if (($matches[1][0] ?? null) !== null) {
             $oldTableFullName = $matches[1][0];
             $newTableFullName = $newValue . Strings::substr($oldTableFullName, Strings::strlen($oldValue));
             $return = str_replace($oldTableFullName, $newTableFullName, $query);
@@ -96,7 +96,12 @@ readonly class DatabaseHelper
 
         $queries[] = "\r\n-- Table: " . $table;
 
-        while ($row = $this->configuration->getDb()->fetchArray($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchArray($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $columns = [];
             $values = [];
             foreach ($row as $key => $val) {
@@ -107,11 +112,15 @@ readonly class DatabaseHelper
                 $columns[] = $key;
                 if ('rights' !== $key && is_numeric($val)) {
                     $values[] = $val;
-                } elseif (is_null($val)) {
-                    $values[] = 'NULL';
-                } else {
-                    $values[] = sprintf("'%s'", $this->configuration->getDb()->escape($val));
+                    continue;
                 }
+
+                if (is_null($val)) {
+                    $values[] = 'NULL';
+                    continue;
+                }
+
+                $values[] = sprintf("'%s'", $this->configuration->getDb()->escape($val));
             }
 
             $queries[] = sprintf(

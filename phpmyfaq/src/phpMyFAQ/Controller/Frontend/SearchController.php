@@ -111,7 +111,7 @@ final class SearchController extends AbstractFrontController
         $this->faqSession->userTracking('fulltext_search', $inputSearchTerm);
 
         // Get current groups
-        $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
+        $currentGroups = $this->currentUser?->perm->getUserGroups($this->currentUser->getUserId());
 
         // Initialize search service
         $searchService = new SearchService($this->configuration, $this->currentUser, $currentGroups);

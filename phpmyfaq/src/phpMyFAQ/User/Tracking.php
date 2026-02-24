@@ -177,7 +177,7 @@ class Tracking
         $data =
             $this->userSession->getCurrentSessionId()
             . ';'
-            . str_replace(';', ',', $action)
+            . str_replace(search: ';', replace: ',', subject: $action)
             . ';'
             . $data
             . ';'

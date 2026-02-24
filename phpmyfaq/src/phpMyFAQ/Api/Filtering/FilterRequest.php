@@ -77,12 +77,12 @@ class FilterRequest
             $value = null;
 
             // Check filter array parameter first (e.g., ?filter[category_id]=5)
-            if (isset($queryParams['filter'][$filterName])) {
+            if (is_array($queryParams['filter'] ?? null) && array_key_exists($filterName, $queryParams['filter'])) {
                 $value = self::parseFilterValue($queryParams['filter'][$filterName], $filterType);
             }
 
             // Check direct parameter - this takes precedence (e.g., ?active=true)
-            if (isset($queryParams[$filterName])) {
+            if (array_key_exists($filterName, $queryParams)) {
                 $directValue = self::parseFilterValue($queryParams[$filterName], $filterType);
                 if ($directValue !== null) {
                     $value = $directValue;
@@ -202,7 +202,7 @@ class FilterRequest
      */
     public function has(string $filterName): bool
     {
-        return isset($this->filters[$filterName]);
+        return array_key_exists($filterName, $this->filters);
     }
 
     /**

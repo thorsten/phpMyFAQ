@@ -355,16 +355,17 @@ class Wrapper extends TCPDF
                 reseth: true,
                 align: 'C',
             );
-        } else {
-            $this->MultiCell(
-                w: 0,
-                h: 10,
-                txt: html_entity_decode((string) $title, ENT_QUOTES, encoding: 'utf-8'),
-                border: 0,
-                align: 'C',
-            );
-            $this->SetMargins(PDF_MARGIN_LEFT, $this->getLastH() + 5, PDF_MARGIN_RIGHT);
+            return;
         }
+
+        $this->MultiCell(
+            w: 0,
+            h: 10,
+            txt: html_entity_decode((string) $title, ENT_QUOTES, encoding: 'utf-8'),
+            border: 0,
+            align: 'C',
+        );
+        $this->SetMargins(PDF_MARGIN_LEFT, $this->getLastH() + 5, PDF_MARGIN_RIGHT);
     }
 
     /**

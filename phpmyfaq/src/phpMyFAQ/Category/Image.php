@@ -110,7 +110,7 @@ class Image
     private function isValidMimeType(string $contentType): bool
     {
         $types = ['image/jpeg', 'image/gif', 'image/png', 'image/webp'];
-        return in_array($contentType, $types);
+        return in_array($contentType, $types, strict: true);
     }
 
     /**
@@ -134,7 +134,11 @@ class Image
             }
 
             // Ensure destination directory exists
-            if (!is_dir(self::UPLOAD_DIR) && (!@mkdir(self::UPLOAD_DIR, 0o775, true) && !is_dir(self::UPLOAD_DIR))) {
+            if (
+                !is_dir(self::UPLOAD_DIR) && (
+                    !@mkdir(self::UPLOAD_DIR, permissions: 0o775, recursive: true) && !is_dir(self::UPLOAD_DIR)
+                )
+            ) {
                 throw new Exception('Upload directory does not exist and could not be created: ' . self::UPLOAD_DIR);
             }
 

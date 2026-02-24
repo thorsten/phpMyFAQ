@@ -186,7 +186,7 @@ class Instance
      */
     public function getConfig(string $name): bool|string
     {
-        if (!isset($this->instanceConfig[$name])) {
+        if (!array_key_exists($name, $this->instanceConfig)) {
             $this->getInstanceConfig($this->getId());
         }
 

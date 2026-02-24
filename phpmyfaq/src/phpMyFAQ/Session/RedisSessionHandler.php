@@ -72,11 +72,11 @@ class RedisSessionHandler
     private static function buildSocketTarget(string $dsn): array
     {
         $parsedUrl = parse_url($dsn);
-        if ($parsedUrl === false || !isset($parsedUrl['scheme'])) {
+        if (!is_array($parsedUrl) || !array_key_exists('scheme', $parsedUrl)) {
             throw new RuntimeException('Invalid Redis DSN for sessions.');
         }
 
-        $scheme = strtolower((string) $parsedUrl['scheme']);
+        $scheme = strtolower($parsedUrl['scheme']);
         if ($scheme === 'redis' || $scheme === 'tcp') {
             $host = $parsedUrl['host'] ?? '127.0.0.1';
             $port = (int) ($parsedUrl['port'] ?? 6379);

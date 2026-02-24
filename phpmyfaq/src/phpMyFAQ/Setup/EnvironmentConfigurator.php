@@ -111,7 +111,7 @@ readonly class EnvironmentConfigurator
             }
 
             // Set new arguments: error code and path
-            $new404Path = rtrim($this->getServerPath(), '/') . '/404.html';
+            $new404Path = rtrim(string: $this->getServerPath(), characters: '/') . '/404.html';
             $errorDocument404->setArguments(['404', $new404Path]);
         }
 

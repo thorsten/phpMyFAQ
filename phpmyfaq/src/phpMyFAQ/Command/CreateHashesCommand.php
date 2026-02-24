@@ -66,7 +66,7 @@ class CreateHashesCommand extends Command
                 return Command::FAILURE;
             }
 
-            $rootDir = rtrim($root, '/');
+            $rootDir = rtrim($root, characters: '/');
         } else {
             $rootDir = defined('PMF_ROOT_DIR') ? PMF_ROOT_DIR : null;
         }

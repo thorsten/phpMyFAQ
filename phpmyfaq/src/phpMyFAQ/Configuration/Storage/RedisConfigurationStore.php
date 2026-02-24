@@ -125,9 +125,7 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
                 $serverVersion = (string) $serverInfo['redis_version'];
             }
             $configuredExtensionVersion = phpversion('redis');
-            $extensionVersion = (string) (
-                $configuredExtensionVersion !== false ? $configuredExtensionVersion : 'unknown'
-            );
+            $extensionVersion = $configuredExtensionVersion !== false ? $configuredExtensionVersion : 'unknown';
 
             return sprintf('%s (ext-redis %s)', $serverVersion, $extensionVersion);
         } catch (RedisException $e) {
@@ -198,7 +196,7 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
 
         try {
             $redis = new Redis();
-            $scheme = strtolower((string) $parsedUrl['scheme']);
+            $scheme = strtolower($parsedUrl['scheme']);
             $timeout = $this->settings->connectTimeout;
 
             if ($scheme === 'redis' || $scheme === 'tcp') {

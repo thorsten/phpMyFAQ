@@ -354,21 +354,24 @@ class Upgrade extends AbstractSetup
 
         foreach ($files as $file) {
             $file = $file->getRealPath();
-            if (!str_contains((string) $file, $this->upgradeDirectory . DIRECTORY_SEPARATOR)) {
-                if (is_dir($file)) {
-                    $zipArchive->addEmptyDir(str_replace(
-                        $sourceDir . DIRECTORY_SEPARATOR,
-                        replace: '',
-                        subject: $file . DIRECTORY_SEPARATOR,
-                    ));
-                } elseif (is_file($file)) {
-                    $zipArchive->addFile($file, str_replace(
-                        $sourceDir . DIRECTORY_SEPARATOR,
-                        replace: '',
-                        subject: $file,
-                    ));
-                }
+            if (str_contains((string) $file, $this->upgradeDirectory . DIRECTORY_SEPARATOR)) {
+                continue;
             }
+
+            if (is_dir($file)) {
+                $zipArchive->addEmptyDir(str_replace(
+                    $sourceDir . DIRECTORY_SEPARATOR,
+                    replace: '',
+                    subject: $file . DIRECTORY_SEPARATOR,
+                ));
+                continue;
+            }
+
+            if (!is_file($file)) {
+                continue;
+            }
+
+            $zipArchive->addFile($file, str_replace($sourceDir . DIRECTORY_SEPARATOR, replace: '', subject: $file));
         }
 
         $zipArchive->close();
@@ -401,9 +404,21 @@ class Upgrade extends AbstractSetup
                 if (!is_dir($destination)) {
                     mkdir($destination, permissions: 0o755, recursive: true);
                 }
-            } else {
-                copy($source, $destination);
+                ++$currentFile;
+                if (($currentFile % 10) !== 0) {
+                    continue;
+                }
+
+                $progress = 100;
+                if ($totalFiles > 0) {
+                    $progress = (int) (($currentFile / $totalFiles) * 100) . '%';
+                }
+
+                $progressCallback($progress);
+                continue;
             }
+
+            copy($source, $destination);
 
             ++$currentFile;
             if (($currentFile % 10) !== 0) {
@@ -436,9 +451,10 @@ class Upgrade extends AbstractSetup
         foreach ($files as $file) {
             if ($file->isDir()) {
                 rmdir($file->getRealPath());
-            } else {
-                unlink($file->getRealPath());
+                continue;
             }
+
+            unlink($file->getRealPath());
         }
 
         return rmdir($directoryToDelete);

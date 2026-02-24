@@ -208,8 +208,10 @@ class Mail
         $this->mailer = 'phpMyFAQ/' . $this->configuration->getVersion();
         try {
             $this->setFrom($this->configuration->getAdminEmail(), $this->configuration->getTitle());
-        } catch (Exception) {
-            // Silently ignore when admin email is not configured
+        } catch (Exception $exception) {
+            $this->configuration
+                ->getLogger()
+                ->warning('Unable to initialize mail sender defaults: ' . $exception->getMessage());
         }
     }
 
@@ -300,7 +302,7 @@ class Mail
             return false;
         }
 
-        if (isset($name)) {
+        if ($name !== null) {
             // Remove CR and LF characters to prevent header injection
             $name = str_replace(search: ["\n", "\r"], replace: '', subject: $name);
 
@@ -474,8 +476,9 @@ class Mail
             $this->headers['Content-Type'] = $this->contentType . '; format=flowed; charset="' . $this->charset . '"';
             // Content-Transfer-Encoding: 7bit
             $this->headers['Content-Transfer-Encoding'] = '7bit';
-        } else {
-            // Content-Type
+        }
+
+        if (str_contains($this->contentType, needle: 'multipart')) {
             $this->headers['Content-Type'] = $this->contentType . '; boundary="' . $this->boundary . '"';
         }
 
@@ -546,7 +549,7 @@ class Mail
         $this->headers['X-Mailer'] = $this->mailer;
 
         // X-MSMail-Priority
-        if (isset($this->priorities[$this->priority])) {
+        if (array_key_exists($this->priority, $this->priorities)) {
             $this->headers['X-MSMail-Priority'] = $this->priorities[$this->priority];
         }
 
@@ -627,7 +630,9 @@ class Mail
             $lines[] = self::wrapLines($this->message);
             // Close the boundary delimiter
             $lines[] = '--' . $this->boundary . '--';
-        } else {
+        }
+
+        if (!str_contains($this->contentType, needle: 'multipart')) {
             $lines[] = self::wrapLines($this->message);
         }
 

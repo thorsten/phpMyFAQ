@@ -82,10 +82,18 @@ class Setup
                 if (false === mkdir($this->rootDir . $dir)) {
                     // If the folder creation fails
                     $failedDirs[] = 'Folder [' . $dir . '] could not be created.';
-                } elseif (false === chmod($this->rootDir . $dir, 0o775)) {
+                }
+
+                if (is_dir($this->rootDir . $dir) && false === chmod($this->rootDir . $dir, permissions: 0o775)) {
                     $failedDirs[] = 'Folder [' . $dir . '] could not be given correct permissions (775).';
                 }
-            } elseif (false === is_writable($this->rootDir . $dir)) {
+            }
+
+            if (false === is_dir($this->rootDir . $dir)) {
+                continue;
+            }
+
+            if (false === is_writable($this->rootDir . $dir)) {
                 // The folder exists, check permissions
                 // If the folder exists but is not writeable
                 $failedDirs[] = 'Folder [' . $dir . '] exists but is not writable.';

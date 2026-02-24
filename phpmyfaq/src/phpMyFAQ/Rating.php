@@ -61,8 +61,8 @@ readonly class Rating
                 ' <span data-rating="%s">%s</span> ('
                 . $this->plurals->get(key: 'plmsgVotes', number: (int) $row->usr)
                 . ')',
-                round((int) $row->voting, 2),
-                round((int) $row->voting, 2),
+                round(num: (int) $row->voting, precision: 2),
+                round(num: (int) $row->voting, precision: 2),
             );
         }
 

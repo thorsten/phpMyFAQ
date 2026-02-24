@@ -61,7 +61,7 @@ class DeepLTranslationProvider extends AbstractTranslationProvider
     {
         $apiKey = $this->configuration->get('translation.deeplApiKey');
 
-        if (empty($apiKey)) {
+        if ((string) $apiKey === '') {
             throw new ApiException('DeepL API key not configured');
         }
 
@@ -92,7 +92,7 @@ class DeepLTranslationProvider extends AbstractTranslationProvider
     {
         $apiKey = $this->configuration->get('translation.deeplApiKey');
 
-        if (empty($apiKey)) {
+        if ((string) $apiKey === '') {
             throw new ApiException('DeepL API key not configured');
         }
 
@@ -140,7 +140,7 @@ class DeepLTranslationProvider extends AbstractTranslationProvider
     {
         // DeepL has limited language support
         $supported = $this->getSupportedLanguages();
-        return in_array($sourceLang, $supported) && in_array($targetLang, $supported);
+        return in_array($sourceLang, $supported, strict: true) && in_array($targetLang, $supported, strict: true);
     }
 
     /**

@@ -392,8 +392,8 @@ class Sqlsrv extends Database implements DriverInterface
                 return false;
             }
 
-            $schemaLiteral = str_replace("'", "''", $schema);
-            $schemaIdentifier = sprintf('[%s]', str_replace(']', ']]', $schema));
+            $schemaLiteral = str_replace("'", replace: "''", subject: $schema);
+            $schemaIdentifier = sprintf('[%s]', str_replace(']', replace: ']]', subject: $schema));
 
             if (!$this->configuration->getDb()->query(sprintf(
                 "IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = '%s') EXEC('CREATE SCHEMA %s')",

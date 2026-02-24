@@ -96,13 +96,13 @@ final readonly class StorageFactory
         $configuredRoot = $this->readStringConfig('storage.filesystem.root');
         if ($configuredRoot !== null && $configuredRoot !== '') {
             $root = $configuredRoot;
-        } elseif (defined('PMF_ATTACHMENTS_DIR') && PMF_ATTACHMENTS_DIR !== false) {
-            $root = (string) PMF_ATTACHMENTS_DIR;
         } else {
-            $root = PMF_ROOT_DIR . '/content/user/attachments';
+            $root = defined('PMF_ATTACHMENTS_DIR') && PMF_ATTACHMENTS_DIR !== false
+                ? (string) PMF_ATTACHMENTS_DIR
+                : PMF_ROOT_DIR . '/content/user/attachments';
         }
 
-        if (!is_dir($root) && !@mkdir($root, 0o775, true) && !is_dir($root)) {
+        if (!is_dir($root) && !@mkdir($root, permissions: 0o775, recursive: true) && !is_dir($root)) {
             throw new StorageException('Storage root directory could not be created: ' . $root);
         }
 

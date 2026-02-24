@@ -249,23 +249,23 @@ class AuthWebAuthn extends Auth
         $publicKey->id = $info->rawId;
 
         if ($userWebAuthn === '' || $userWebAuthn === '0') {
-            $userWebAuthn = [$publicKey];
-        } else {
-            $userWebAuthn = json_decode($userWebAuthn);
-            $found = false;
-            foreach ($userWebAuthn as $key) {
-                if (implode(separator: ',', array: $key->id) !== implode(separator: ',', array: $publicKey->id)) {
-                    continue;
-                }
+            return json_encode([$publicKey]);
+        }
 
-                $key->key = $publicKey->key;
-                $found = true;
-                break;
+        $userWebAuthn = json_decode($userWebAuthn);
+        $found = false;
+        foreach ($userWebAuthn as $key) {
+            if (implode(separator: ',', array: $key->id) !== implode(separator: ',', array: $publicKey->id)) {
+                continue;
             }
 
-            if (!$found) {
-                array_unshift($userWebAuthn, $publicKey);
-            }
+            $key->key = $publicKey->key;
+            $found = true;
+            break;
+        }
+
+        if (!$found) {
+            array_unshift($userWebAuthn, $publicKey);
         }
 
         return json_encode($userWebAuthn);
@@ -303,7 +303,9 @@ class AuthWebAuthn extends Auth
             }
 
             $userWebAuthn = json_encode($webauthn);
-        } else {
+        }
+
+        if ($userWebAuthn === '' || $userWebAuthn === '0') {
             $allow->id = [];
             $rb = md5((string) time());
             $allow->id = $this->stringToArray($rb);

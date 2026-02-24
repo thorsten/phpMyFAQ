@@ -269,8 +269,7 @@ final class UserController extends AbstractAdministrationApiController
 
     /**
      * @throws Exception
-     * *@throws \Exception
-     *
+     * @throws \Exception
      */
     #[Route(path: 'user/delete', name: 'admin.api.user.delete', methods: ['DELETE'])]
     public function deleteUser(Request $request): JsonResponse
@@ -289,7 +288,7 @@ final class UserController extends AbstractAdministrationApiController
 
         $currentUser->getUserById($userId, allowBlockedUsers: true);
         $superAdminIds = User::getSuperAdminIds($this->configuration);
-        if ($currentUser->getStatus() === 'protected' || in_array($userId, $superAdminIds, true)) {
+        if ($currentUser->getStatus() === 'protected' || in_array($userId, $superAdminIds, strict: true)) {
             return $this->json(['error' => Translation::get(
                 key: 'ad_user_error_protectedAccount',
             )], Response::HTTP_BAD_REQUEST);
@@ -380,7 +379,8 @@ final class UserController extends AbstractAdministrationApiController
             $mailHelper = new MailHelper($this->configuration);
             try {
                 $mailHelper->sendMailToNewUser($newUser, $userPassword);
-            } catch (Exception|TransportExceptionInterface) {
+            } catch (Exception|TransportExceptionInterface $exception) {
+                $this->configuration->getLogger()->warning('Failed to send new user mail.', [$exception->getMessage()]);
             }
 
             $this->adminLog->log($this->currentUser, AdminLogType::USER_ADD->value . ':' . $newUser->getUserId());
@@ -451,7 +451,9 @@ final class UserController extends AbstractAdministrationApiController
         $user->setSuperAdmin((bool) $isSuperAdmin);
         if (!$wasSuperAdmin && (bool) $isSuperAdmin) {
             $this->adminLog->log($this->currentUser, AdminLogType::USER_SUPERADMIN_GRANTED->value . ':' . $userId);
-        } elseif ($wasSuperAdmin && !(bool) $isSuperAdmin) {
+        }
+
+        if ($wasSuperAdmin && !(bool) $isSuperAdmin) {
             $this->adminLog->log($this->currentUser, AdminLogType::USER_SUPERADMIN_REVOKED->value . ':' . $userId);
         }
 

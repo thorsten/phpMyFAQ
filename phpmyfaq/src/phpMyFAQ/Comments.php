@@ -195,7 +195,7 @@ class Comments
                 ->setUsername($row->username)
                 ->setEmail($row->email);
 
-            if (isset($row->category_id)) {
+            if (($row->category_id ?? null) !== null) {
                 $comment->setCategoryId((int) $row->category_id);
             }
 

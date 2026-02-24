@@ -71,7 +71,10 @@ readonly class Migration405 extends AbstractMigration
                 ),
                 'Increase faqforms.input_label column size (MySQL)',
             );
-        } elseif ($this->isPostgreSql()) {
+            return;
+        }
+
+        if ($this->isPostgreSql()) {
             $recorder->addSql(
                 sprintf('ALTER TABLE %sfaqforms ALTER COLUMN input_label TYPE VARCHAR(500)', $this->tablePrefix),
                 'Increase faqforms.input_label column size (PostgreSQL part 1)',
@@ -81,7 +84,10 @@ readonly class Migration405 extends AbstractMigration
                 sprintf('ALTER TABLE %sfaqforms ALTER COLUMN input_label SET NOT NULL', $this->tablePrefix),
                 'Increase faqforms.input_label column size (PostgreSQL part 2)',
             );
-        } elseif ($this->isSqlite()) {
+            return;
+        }
+
+        if ($this->isSqlite()) {
             // SQLite requires table rebuild
             $recorder->addSql(
                 sprintf('ALTER TABLE %sfaqforms RENAME TO %sfaqforms_old', $this->tablePrefix, $this->tablePrefix),
@@ -110,7 +116,10 @@ readonly class Migration405 extends AbstractMigration
                 sprintf('DROP TABLE %sfaqforms_old', $this->tablePrefix),
                 'Drop old faqforms table (SQLite)',
             );
-        } elseif ($this->isSqlServer()) {
+            return;
+        }
+
+        if ($this->isSqlServer()) {
             $recorder->addSql(
                 sprintf('ALTER TABLE %sfaqforms ALTER COLUMN input_label NVARCHAR(500) NOT NULL', $this->tablePrefix),
                 'Increase faqforms.input_label column size (SQL Server)',

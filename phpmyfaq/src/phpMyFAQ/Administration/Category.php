@@ -108,8 +108,13 @@ class Category
 
         $result = $this->configuration->getDb()->query($query);
 
-        if ($result) {
-            while ($row = $this->configuration->getDb()->fetchArray($result)) {
+        if ($result !== false) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchArray($result);
+                if (!is_array($row)) {
+                    break;
+                }
+
                 $this->categoryName[(int) $row['id']] = $row;
                 $this->categories[(int) $row['id']] = $row;
                 $this->children[(int) $row['parent_id']][(int) $row['id']] = &$this->categoryName[(int) $row['id']];
@@ -133,7 +138,7 @@ class Category
 
             // Ensure level is set for each entry in categoryName
             foreach ($this->categoryName as $cid => $row) {
-                if (!(is_array($row) && isset($row['id']))) {
+                if (!(is_array($row) && array_key_exists('id', $row))) {
                     continue;
                 }
 
@@ -152,7 +157,7 @@ class Category
         $result = [];
 
         foreach ($categories as $category) {
-            if ($category['parent_id'] != $parentId) {
+            if ($category['parent_id'] !== $parentId) {
                 continue;
             }
 
@@ -217,12 +222,13 @@ class Category
         $level = 0;
 
         while (
-            isset($this->categoryName[$categoryId]['parent_id'])
+            array_key_exists($categoryId, $this->categoryName)
+            && array_key_exists('parent_id', $this->categoryName[$categoryId])
             && (int) $this->categoryName[$categoryId]['parent_id'] !== 0
         ) {
             ++$level;
             $categoryId = (int) $this->categoryName[$categoryId]['parent_id'];
-            if (in_array($categoryId, $alreadyListed)) {
+            if (in_array($categoryId, $alreadyListed, strict: true)) {
                 break;
             } else {
                 $alreadyListed[] = $categoryId;

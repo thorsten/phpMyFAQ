@@ -103,7 +103,7 @@ class Filter
         parse_str($queryString, $urlData);
 
         foreach ($urlData as $key => $urlPart) {
-            $cleanKey = strip_tags((string) $key);
+            $cleanKey = strip_tags($key);
             if (is_array($urlPart)) {
                 // sanitize one level deep; http_build_query will handle arrays
                 $cleanUrlData[$cleanKey] = array_map(static fn($v): string => strip_tags((string) $v), $urlPart);

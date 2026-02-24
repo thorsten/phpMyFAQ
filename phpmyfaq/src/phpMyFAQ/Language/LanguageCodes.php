@@ -338,7 +338,7 @@ class LanguageCodes
 
     public static function getKey(string $value): false|int|string
     {
-        return array_search($value, static::$languageCodes, true);
+        return array_search($value, static::$languageCodes, strict: true);
     }
 
     public static function getAllSupported(): array

@@ -149,7 +149,7 @@ readonly class Chat
             $partnerIds[] = (int) $row->partner_id;
         }
 
-        if (empty($partnerIds)) {
+        if ($partnerIds === []) {
             return [];
         }
 
@@ -361,7 +361,7 @@ readonly class Chat
      */
     public function messagesToArray(array $messages): array
     {
-        if (empty($messages)) {
+        if ($messages === []) {
             return [];
         }
 
@@ -390,7 +390,7 @@ readonly class Chat
      */
     private function getBatchUserInfo(array $userIds): array
     {
-        if (empty($userIds)) {
+        if ($userIds === []) {
             return [];
         }
 

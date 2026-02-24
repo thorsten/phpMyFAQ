@@ -74,7 +74,7 @@ final class AdminLogController extends AbstractAdministrationApiController
 
         $loggingData = $this->adminLog->getAll();
 
-        $handle = fopen('php://temp', 'r+');
+        $handle = fopen(filename: 'php://temp', mode: 'r+');
         fputcsv(
             $handle,
             ['ID', 'Date/Time', 'User ID', 'Username', 'IP Address', 'Action'],

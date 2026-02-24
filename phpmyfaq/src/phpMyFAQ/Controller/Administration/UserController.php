@@ -158,7 +158,7 @@ final class UserController extends AbstractAdministrationController
         $currentUserId = $this->currentUser->getUserId();
 
         return [
-            'permissionAddUser' => $this->currentUser->perm->hasPermission(
+            'permissionAddUser' => $this->currentUser?->perm->hasPermission(
                 $currentUserId,
                 PermissionType::USER_ADD->value,
             ),

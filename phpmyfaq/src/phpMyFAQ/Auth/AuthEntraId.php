@@ -187,9 +187,9 @@ class AuthEntraId extends Auth implements AuthDriverInterface
         }
 
         $this->oAuthChallenge = str_replace(
-            '=',
-            '',
-            strtr(base64_encode(pack('H*', hash('sha256', $verifier))), '+/', '-_'),
+            search: '=',
+            replace: '',
+            subject: strtr(string: base64_encode(pack('H*', hash('sha256', $verifier))), from: '+/', to: '-_'),
         );
     }
 }

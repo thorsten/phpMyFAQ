@@ -87,7 +87,7 @@ final class AuthorizationServer
                 $psrResponse,
             );
 
-            $body = json_decode((string) $leagueResponse->getBody(), true);
+            $body = json_decode((string) $leagueResponse->getBody(), associative: true);
             if (!is_array($body)) {
                 $body = ['error' => 'server_error', 'error_description' => 'Invalid OAuth2 token response body'];
             }
@@ -176,7 +176,7 @@ final class AuthorizationServer
                 $headers[$headerName] = implode(', ', $values);
             }
 
-            $body = json_decode((string) $response->getBody(), true);
+            $body = json_decode((string) $response->getBody(), associative: true);
             if (!is_array($body)) {
                 $body = [
                     'error' => 'server_error',
@@ -215,8 +215,10 @@ final class AuthorizationServer
             if ($value !== '') {
                 return new DateInterval($value);
             }
-        } catch (\Throwable) {
-            // Fallback to default interval.
+        } catch (\Throwable $exception) {
+            $this->configuration
+                ->getLogger()
+                ->notice(sprintf('Invalid OAuth interval "%s", using fallback "%s".', $value, $fallback));
         }
 
         return new DateInterval($fallback);

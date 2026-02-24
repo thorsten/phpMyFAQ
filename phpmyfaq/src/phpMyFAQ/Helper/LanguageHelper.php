@@ -50,21 +50,22 @@ class LanguageHelper
         );
         $languages = self::getAvailableLanguages();
 
-        if ($languages !== []) {
-            foreach ($languages as $lang => $value) {
-                if (in_array($lang, $excludedLanguages)) {
-                    continue;
-                }
-
-                $output .= sprintf(
-                    '<option value="%s" %s>%s</option>',
-                    $lang,
-                    $lang === $default ? 'selected' : '',
-                    $value,
-                );
-            }
-        } else {
+        if ($languages === []) {
             $output .= sprintf('<option value="en">%s</option>', LanguageCodes::get('en'));
+            return $output . '</select>';
+        }
+
+        foreach ($languages as $lang => $value) {
+            if (in_array($lang, $excludedLanguages, strict: true)) {
+                continue;
+            }
+
+            $output .= sprintf(
+                '<option value="%s" %s>%s</option>',
+                $lang,
+                $lang === $default ? 'selected' : '',
+                $value,
+            );
         }
 
         return $output . '</select>';
@@ -87,7 +88,11 @@ class LanguageHelper
                 continue;
             }
 
-            $languageFiles[] = strtoupper(str_replace($search, '', trim($fileInfo->getFilename())));
+            $languageFiles[] = strtoupper(str_replace(
+                search: $search,
+                replace: '',
+                subject: trim($fileInfo->getFilename()),
+            ));
         }
 
         foreach ($languageFiles as $languageFile) {
@@ -119,30 +124,31 @@ class LanguageHelper
     ): string {
         $output = '';
         foreach (LanguageHelper::getAvailableLanguages() as $key => $value) {
+            $normalizedKey = strtolower((string) $key);
+            if ($onlyThisLang && $normalizedKey !== $lang) {
+                continue;
+            }
+
+            $languageKey = $normalizedKey;
             if ($onlyThisLang) {
-                if (strtolower((string) $key) === $lang) {
-                    if ($fileLanguageValue) {
-                        $output .= "\t<option value=\"language_" . strtolower($lang) . '.php"';
-                    } else {
-                        $output .= "\t<option value=\"" . strtolower($lang) . '"';
-                    }
+                $languageKey = strtolower($lang);
+            }
 
-                    $output .= ' selected="selected"';
-                    $output .= '>' . $value . "</option>\n";
-                    break;
-                }
-            } else {
-                if ($fileLanguageValue) {
-                    $output .= "\t<option value=\"language_" . strtolower((string) $key) . '.php"';
-                } else {
-                    $output .= "\t<option value=\"" . strtolower((string) $key) . '"';
-                }
+            $optionValue = $languageKey;
+            if ($fileLanguageValue) {
+                $optionValue = 'language_' . $languageKey . '.php';
+            }
 
-                if (strtolower((string) $key) === $lang) {
-                    $output .= ' selected="selected"';
-                }
+            $output .= "\t<option value=\"" . $optionValue . '"';
 
-                $output .= '>' . $value . "</option>\n";
+            if ($normalizedKey === $lang) {
+                $output .= ' selected="selected"';
+            }
+
+            $output .= '>' . $value . "</option>\n";
+
+            if ($onlyThisLang) {
+                break;
             }
         }
 

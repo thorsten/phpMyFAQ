@@ -42,8 +42,8 @@ final class ExportController extends AbstractAdministrationController
 
     /**
      * @throws Exception
-     * @throws LoaderError*@throws \Exception
-     *
+     * @throws LoaderError
+     * @throws \Exception
      */
     #[Route(path: '/export', name: 'admin.export', methods: ['GET'])]
     public function index(Request $request): Response

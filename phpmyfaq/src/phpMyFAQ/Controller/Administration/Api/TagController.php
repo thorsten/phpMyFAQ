@@ -98,7 +98,7 @@ final class TagController extends AbstractController
             $tags = $this->tags->getAllTags();
         }
 
-        if ($this->currentUser->perm->hasPermission($this->currentUser->getUserId(), PermissionType::FAQ_EDIT)) {
+        if ($this->currentUser?->perm->hasPermission($this->currentUser->getUserId(), PermissionType::FAQ_EDIT)) {
             $numTags = 0;
             $tagNames = [];
             foreach ($tags as $tag) {

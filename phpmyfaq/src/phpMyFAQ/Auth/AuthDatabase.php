@@ -176,7 +176,12 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         }
 
         // if multiple accounts are ok, just 1 valid required
-        while ($user = $this->databaseDriver->fetchArray($check)) {
+        while (true) {
+            $user = $this->databaseDriver->fetchArray($check);
+            if ($user === false || $user === null || $user === []) {
+                break;
+            }
+
             if ($user['pass'] !== $this->encContainer->setSalt($user['login'])->encrypt($password)) {
                 continue;
             }

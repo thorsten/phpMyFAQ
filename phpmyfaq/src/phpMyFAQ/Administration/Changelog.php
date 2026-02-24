@@ -78,8 +78,14 @@ readonly class Changelog
                 beitrag = %d
             ORDER BY revision_id, datum DESC', Database::getTablePrefix(), $recordId);
 
-        if ($result = $this->configuration->getDb()->query($query)) {
-            while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        $result = $this->configuration->getDb()->query($query);
+        if ($result) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if (!$row) {
+                    break;
+                }
+
                 $entries[] = [
                     'revision_id' => $row->revision_id,
                     'user' => $row->usr,

@@ -24,7 +24,7 @@ use phpMyFAQ\Database;
 
 class AlterTableBuilder
 {
-    private string $tableName;
+    private string $tableName = '';
     private DialectInterface $dialect;
 
     /** @var array<int, array{action: string, column: string, type: string|null, after: string|null, default: string|null, nullable: bool}> */
@@ -70,7 +70,7 @@ class AlterTableBuilder
         ?string $after = null,
     ): self {
         // Escape single quotes in default value per SQL string literal rules (replace ' with '')
-        $defaultVal = $default !== null ? "'" . str_replace("'", "''", $default) . "'" : null;
+        $defaultVal = $default !== null ? "'" . str_replace(search: "'", replace: "''", subject: $default) . "'" : null;
         return $this->addColumn('ADD', $name, $this->dialect->varchar($length), $nullable, $defaultVal, $after);
     }
 
@@ -87,7 +87,11 @@ class AlterTableBuilder
      */
     public function addBoolean(string $name, bool $nullable = true, ?bool $default = null, ?string $after = null): self
     {
-        $defaultVal = $default !== null ? ($default ? '1' : '0') : null;
+        $defaultVal = null;
+        if ($default !== null) {
+            $defaultVal = $default ? '1' : '0';
+        }
+
         return $this->addColumn('ADD', $name, $this->dialect->boolean(), $nullable, $defaultVal, $after);
     }
 
@@ -145,7 +149,7 @@ class AlterTableBuilder
     public function build(): array
     {
         // Validate that table() was called before building
-        if (!isset($this->tableName) || $this->tableName === '') {
+        if ($this->tableName === '') {
             throw new \RuntimeException('Table name not set. Call table() before building ALTER TABLE statements.');
         }
 
@@ -157,9 +161,12 @@ class AlterTableBuilder
                     $type = $alt['type'];
                     if (!$alt['nullable']) {
                         $type .= ' NOT NULL';
-                    } elseif ($alt['default'] === null) {
+                    }
+
+                    if ($alt['nullable'] && $alt['default'] === null) {
                         $type .= ' NULL';
                     }
+
                     if ($alt['default'] !== null) {
                         $type .= ' DEFAULT ' . $alt['default'];
                     }
@@ -197,7 +204,7 @@ class AlterTableBuilder
         }
 
         // Validate that table() was called before building
-        if (!isset($this->tableName) || $this->tableName === '') {
+        if ($this->tableName === '') {
             throw new \RuntimeException('Table name not set. Call table() before building ALTER TABLE statements.');
         }
 
@@ -213,9 +220,12 @@ class AlterTableBuilder
                     $type = $alt['type'];
                     if (!$alt['nullable']) {
                         $type .= ' NOT NULL';
-                    } elseif ($alt['default'] === null) {
+                    }
+
+                    if ($alt['nullable'] && $alt['default'] === null) {
                         $type .= ' NULL';
                     }
+
                     if ($alt['default'] !== null) {
                         $type .= ' DEFAULT ' . $alt['default'];
                     }

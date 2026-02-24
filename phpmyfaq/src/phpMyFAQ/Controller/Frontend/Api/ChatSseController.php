@@ -40,7 +40,8 @@ final class ChatSseController extends AbstractController
         $this->userIsAuthenticated();
 
         $userId = $this->currentUser->getUserId();
-        $lastId = Filter::filterVar($request->query->get('lastId', 0), FILTER_VALIDATE_INT) ?: 0;
+        $lastIdValue = Filter::filterVar($request->query->get('lastId', 0), FILTER_VALIDATE_INT);
+        $lastId = $lastIdValue === false ? 0 : (int) $lastIdValue;
         $chat = new Chat($this->configuration);
 
         $this->session->save();
@@ -65,7 +66,7 @@ final class ChatSseController extends AbstractController
                 while (true) {
                     $messages = $chat->getNewMessages($userId, $currentLastId);
 
-                    if (!empty($messages)) {
+                    if ($messages !== []) {
                         $messageData = $chat->messagesToArray($messages);
                         echo 'data: ' . json_encode($messageData) . "\n\n";
 

@@ -68,7 +68,7 @@ final class OpenQuestionsController extends AbstractAdministrationController
                     $longName = $langCode;
                 }
 
-                if (!isset($otherLangsData[$langCode])) {
+                if (!array_key_exists($langCode, $otherLangsData)) {
                     $otherLangsData[$langCode] = [
                         'label' => $longName,
                         'count' => 0,

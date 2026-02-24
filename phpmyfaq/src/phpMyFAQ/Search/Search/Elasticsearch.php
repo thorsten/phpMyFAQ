@@ -111,6 +111,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
             $result = $this->client->search($searchParams)->asArray();
         } catch (ClientResponseException|ServerResponseException) {
             $this->resultSet = [];
+            return $this->resultSet;
         }
 
         if ($result['hits']['total']['value'] > 0) {
@@ -125,15 +126,13 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
                 $resultSet->score = $hit['_score'];
 
                 // Add custom page specific fields if present
-                if (isset($hit['_source']['content_type']) && $hit['_source']['content_type'] === 'page') {
+                if (($hit['_source']['content_type'] ?? null) === 'page') {
                     $resultSet->content_type = 'page';
                     $resultSet->slug = $hit['_source']['slug'];
                 }
 
                 $this->resultSet[] = $resultSet;
             }
-        } else {
-            $this->resultSet = [];
         }
 
         return $this->resultSet;
@@ -215,15 +214,13 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
                 $resultSet->score = $hit['_score'];
 
                 // Add custom page specific fields if present
-                if (isset($hit['_source']['content_type']) && $hit['_source']['content_type'] === 'page') {
+                if (($hit['_source']['content_type'] ?? null) === 'page') {
                     $resultSet->content_type = 'page';
                     $resultSet->slug = $hit['_source']['slug'];
                 }
 
                 $this->resultSet[] = $resultSet;
             }
-        } else {
-            $this->resultSet = [];
         }
 
         return $this->resultSet;

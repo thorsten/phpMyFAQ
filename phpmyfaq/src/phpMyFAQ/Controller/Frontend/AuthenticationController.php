@@ -63,7 +63,7 @@ final class AuthenticationController extends AbstractFrontController
         }
 
         $errorMessages = $this->session->getFlashBag()->get('error');
-        $errorMessage = empty($errorMessages) ? null : $errorMessages[0];
+        $errorMessage = count($errorMessages) > 0 ? $errorMessages[0] : null;
 
         return $this->render('login.twig', [
             ...$this->getHeader($request),

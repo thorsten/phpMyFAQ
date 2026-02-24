@@ -28,12 +28,12 @@ final class SearchStrategy implements StrategyInterface
      */
     public function build(array $params, Link $link): string
     {
-        $hasSearch = isset($params[Link::LINK_GET_ACTION_SEARCH]);
-        $isTag = !$hasSearch && isset($params[Link::LINK_GET_TAGGING_ID]);
+        $hasSearch = array_key_exists(Link::LINK_GET_ACTION_SEARCH, $params);
+        $isTag = !$hasSearch && array_key_exists(Link::LINK_GET_TAGGING_ID, $params);
 
         if ($isTag) {
             $url = Link::LINK_TAGS . $params[Link::LINK_GET_TAGGING_ID];
-            if (isset($params[Link::LINK_GET_PAGE])) {
+            if (array_key_exists(Link::LINK_GET_PAGE, $params)) {
                 $url .= Link::LINK_HTML_SLASH . $params[Link::LINK_GET_PAGE];
             }
 
@@ -46,13 +46,13 @@ final class SearchStrategy implements StrategyInterface
                     . Link::LINK_GET_ACTION_SEARCH
                     . '='
                     . $params[Link::LINK_GET_ACTION_SEARCH];
-                if (isset($params[Link::LINK_GET_PAGE])) {
+                if (array_key_exists(Link::LINK_GET_PAGE, $params)) {
                     $url .= Link::LINK_AMPERSAND . Link::LINK_GET_PAGE . '=' . $params[Link::LINK_GET_PAGE];
                 }
             }
         }
 
-        if (isset($params[Link::LINK_GET_LANGS])) {
+        if (array_key_exists(Link::LINK_GET_LANGS, $params)) {
             $url .= Link::LINK_AMPERSAND . Link::LINK_GET_LANGS . '=' . $params[Link::LINK_GET_LANGS];
         }
 

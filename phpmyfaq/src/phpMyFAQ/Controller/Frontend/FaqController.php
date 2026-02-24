@@ -82,7 +82,7 @@ final class FaqController extends AbstractFrontController
         $this->faqSession->userTracking('new_entry', 0);
 
         // Get current groups
-        $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
+        $currentGroups = $this->currentUser?->perm->getUserGroups($this->currentUser->getUserId());
 
         $faqCreationService = new FaqCreationService($this->configuration, $this->currentUser, $currentGroups);
 
@@ -176,7 +176,7 @@ final class FaqController extends AbstractFrontController
 
         $faqData = $this->faq->getIdFromSolutionId($solutionId);
 
-        if (empty($faqData)) {
+        if ($faqData === []) {
             return new Response('', Response::HTTP_NOT_FOUND);
         }
 
@@ -199,7 +199,7 @@ final class FaqController extends AbstractFrontController
         $faqId = Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT, 0);
         $faqLang = Filter::filterVar($request->attributes->get('faqLang'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if ($faqId === 0 || empty($faqLang)) {
+        if ($faqId === 0 || $faqLang === '') {
             return new Response('', Response::HTTP_NOT_FOUND);
         }
 
@@ -269,7 +269,7 @@ final class FaqController extends AbstractFrontController
 
         // Initialize core objects
         $faq = new Faq($this->configuration);
-        $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
+        $currentGroups = $this->currentUser?->perm->getUserGroups($this->currentUser->getUserId());
 
         // Handle bookmarks
         if ($bookmarkAction === 'add' && $faqId > 0) {
@@ -335,6 +335,11 @@ final class FaqController extends AbstractFrontController
         // Comment permissions
         $expired = $faqDisplayService->isExpired();
 
+        $commentMessage = sprintf(
+            '%s<a href="#" data-bs-toggle="modal" data-bs-target="#pmf-modal-add-comment">%s</a>',
+            Translation::get(key: 'msgYouCan'),
+            Translation::get(key: 'msgWriteComment'),
+        );
         if (
             -1 === $this->currentUser->getUserId() && !$this->configuration->get('records.allowCommentsForGuests')
             || $faq->faqRecord['active'] === 'no'
@@ -342,12 +347,6 @@ final class FaqController extends AbstractFrontController
             || $expired
         ) {
             $commentMessage = Translation::get(key: 'msgWriteNoComment');
-        } else {
-            $commentMessage = sprintf(
-                '%s<a href="#" data-bs-toggle="modal" data-bs-target="#pmf-modal-add-comment">%s</a>',
-                Translation::get(key: 'msgYouCan'),
-                Translation::get(key: 'msgWriteComment'),
-            );
         }
 
         // Services for social sharing
@@ -428,7 +427,7 @@ final class FaqController extends AbstractFrontController
             'msgShowMore' => Translation::get(key: 'msgShowMore'),
             'msg_about_faq' => Translation::get(key: 'msg_about_faq'),
             'userId' => $this->currentUser->getUserId(),
-            'permissionEditFaq' => $this->currentUser->perm->hasPermission(
+            'permissionEditFaq' => $this->currentUser?->perm->hasPermission(
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_EDIT->value,
             ),
@@ -459,8 +458,8 @@ final class FaqController extends AbstractFrontController
         }
 
         if (
-            $this->currentUser->perm->hasPermission($this->currentUser->getUserId(), PermissionType::FAQ_EDIT->value)
-            && isset($faq->faqRecord['notes'])
+            $this->currentUser?->perm->hasPermission($this->currentUser->getUserId(), PermissionType::FAQ_EDIT->value)
+            && array_key_exists('notes', $faq->faqRecord)
             && $faq->faqRecord['notes'] !== ''
         ) {
             $templateVars['notesHeader'] = Translation::get(key: 'ad_admin_notes');

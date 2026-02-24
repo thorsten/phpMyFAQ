@@ -41,15 +41,14 @@ final class CustomPageController extends AbstractFrontController
     /**
      * Displays a custom page by its slug
      *
-     * @throws Exception|LoaderError*@throws \Exception
-     *
+     * @throws Exception|LoaderError|\Exception
      */
     #[Route(path: '/page/{slug}.html', name: 'public.page', requirements: ['slug' => '[a-z0-9\-_]+'], methods: ['GET'])]
     public function show(Request $request): Response
     {
         $slug = $request->attributes->get('slug');
 
-        if (empty($slug)) {
+        if ($slug === null || $slug === '') {
             return $this->render('404.twig', [
                 ...$this->getHeader($request),
             ]);
@@ -77,8 +76,11 @@ final class CustomPageController extends AbstractFrontController
 
         try {
             $seoEntity = $seo->get($seoQueryEntity);
-            $metaTitle = $seoEntity->getTitle() ?: $pageEntity->getPageTitle();
-            $metaDescription = $seoEntity->getDescription() ?: '';
+            $seoTitle = $seoEntity->getTitle();
+            $metaTitle = $seoTitle !== '' && $seoTitle !== '0' ? $seoTitle : $pageEntity->getPageTitle();
+
+            $seoDescription = $seoEntity->getDescription();
+            $metaDescription = $seoDescription !== '' && $seoDescription !== '0' ? $seoDescription : '';
         } catch (Exception $e) {
             // SEO data aren't found, use page defaults
             $metaTitle = $pageEntity->getPageTitle();

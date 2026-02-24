@@ -141,7 +141,12 @@ class Permission
         $result = $this->configuration->getDb()->query($query);
 
         if ($this->configuration->getDb()->numRows($result) > 0) {
-            while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if (!is_object($row)) {
+                    break;
+                }
+
                 $permissions[] = (int) $row->permission;
             }
         }

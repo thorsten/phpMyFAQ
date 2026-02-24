@@ -56,10 +56,10 @@ class TagsHelper extends AbstractHelper
      */
     public function renderSearchTag(int $tagId, string $tagName): string
     {
-        $taggingIds = str_replace((string) $tagId, '', $this->getTaggingIds());
-        $taggingIds = str_replace(' ', '', $taggingIds);
-        $taggingIds = str_replace(',,', ',', $taggingIds);
-        $taggingIds = trim(implode(',', $taggingIds), ',');
+        $taggingIds = str_replace((string) $tagId, replace: '', subject: $this->getTaggingIds());
+        $taggingIds = str_replace(' ', replace: '', subject: $taggingIds);
+        $taggingIds = str_replace(',,', replace: ',', subject: $taggingIds);
+        $taggingIds = trim(implode(separator: ',', array: $taggingIds), characters: ',');
 
         return $taggingIds !== ''
             ? sprintf(

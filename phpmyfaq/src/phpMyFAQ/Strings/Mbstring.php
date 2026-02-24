@@ -74,7 +74,7 @@ class Mbstring extends AbstractString
      */
     public function substr(string $str, int $start, ?int $length = null): string
     {
-        $length = null == $length ? mb_strlen($str) : $length;
+        $length = $length === null || $length === 0 ? mb_strlen($str, $this->encoding) : $length;
 
         return mb_substr($str, $start, $length, $this->encoding);
     }
@@ -163,10 +163,10 @@ class Mbstring extends AbstractString
             foreach ($pattern as &$item) {
                 $item = $this->appendU($item);
             }
-        } else {
-            $pattern = $this->appendU($pattern);
+            return preg_replace_callback($pattern, $callback, $subject, $limit, $count);
         }
 
+        $pattern = $this->appendU($pattern);
         return preg_replace_callback($pattern, $callback, $subject, $limit, $count);
     }
 
@@ -190,10 +190,10 @@ class Mbstring extends AbstractString
             foreach ($pattern as &$item) {
                 $item = $this->appendU($item);
             }
-        } else {
-            $pattern = $this->appendU($pattern);
+            return preg_replace($pattern, $replacement, $subject, $limit, $count);
         }
 
+        $pattern = $this->appendU($pattern);
         return preg_replace($pattern, $replacement, $subject, $limit, $count);
     }
 

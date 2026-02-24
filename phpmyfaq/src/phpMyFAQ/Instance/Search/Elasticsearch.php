@@ -236,7 +236,7 @@ class Elasticsearch
 
             $response = $this->client->indices()->putMapping($params);
 
-            if (isset($response['acknowledged']) && true === $response['acknowledged']) {
+            if (($response['acknowledged'] ?? false) === true) {
                 return true;
             }
         }
@@ -354,13 +354,14 @@ class Elasticsearch
         }
 
         // Send the last batch if it exists
+        $responses = null;
         try {
             $responses = $this->client->bulk($params);
         } catch (ClientResponseException|ServerResponseException $e) {
             return ['error' => $e->getMessage()];
         }
 
-        if (isset($responses) && $responses->getStatusCode() === 200) {
+        if ($responses !== null && $responses->getStatusCode() === 200) {
             return ['success' => $responses];
         }
 
@@ -438,7 +439,7 @@ class Elasticsearch
     public function indexCustomPage(array $page): ?object
     {
         // Only index active pages
-        if (isset($page['active']) && $page['active'] === 'n') {
+        if (($page['active'] ?? null) === 'n') {
             // Delete from index if it exists (in case it was previously active)
             $this->deleteCustomPage((int) $page['id'], $page['lang']);
             return null;
@@ -476,7 +477,7 @@ class Elasticsearch
     public function updateCustomPage(array $page): array
     {
         // Only index active pages - delete from index if inactive
-        if (isset($page['active']) && $page['active'] === 'n') {
+        if (($page['active'] ?? null) === 'n') {
             return $this->deleteCustomPage((int) $page['id'], $page['lang']);
         }
 
@@ -579,7 +580,8 @@ class Elasticsearch
         }
 
         // Send the last batch if it exists
-        if (!empty($params['body'])) {
+        $responses = null;
+        if (($params['body'] ?? []) !== []) {
             try {
                 $responses = $this->client->bulk($params);
             } catch (ClientResponseException|ServerResponseException $e) {
@@ -587,7 +589,7 @@ class Elasticsearch
             }
         }
 
-        if (isset($responses) && $responses->getStatusCode() === 200) {
+        if ($responses !== null && $responses->getStatusCode() === 200) {
             return ['success' => $responses];
         }
 

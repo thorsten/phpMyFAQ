@@ -48,10 +48,9 @@ final class ContactController extends AbstractFrontController
         $this->userSession->setCurrentUser($this->currentUser);
         $this->userSession->userTracking('contact', 0);
 
+        $contactText = nl2br((string) $this->configuration->get('main.contactInformation'));
         if ($this->configuration->get('layout.contactInformationHTML')) {
             $contactText = html_entity_decode((string) $this->configuration->get('main.contactInformation'));
-        } else {
-            $contactText = nl2br((string) $this->configuration->get('main.contactInformation'));
         }
 
         return $this->render('contact.twig', [

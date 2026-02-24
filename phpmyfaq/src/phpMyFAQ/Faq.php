@@ -216,7 +216,7 @@ class Faq
                     break;
                 }
 
-                $visits = empty($row->visits) ? 0 : $row->visits;
+                $visits = (int) ($row->visits ?? 0);
 
                 $url = sprintf(
                     '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
@@ -390,7 +390,7 @@ class Faq
 
                 ++$displayedCounter;
 
-                $visits = empty($row->visits) ? 0 : $row->visits;
+                $visits = (int) ($row->visits ?? 0);
 
                 $title = Strings::htmlentities($row->question);
                 $url = sprintf(
@@ -449,7 +449,7 @@ class Faq
             $baseUrl = sprintf(
                 '%sindex.php?%saction=show&cat=%d&seite=%d',
                 $this->configuration->getDefaultUrl(),
-                empty($sids) ? '' : $sids,
+                $sids === '' || $sids === '0' ? '' : $sids,
                 $categoryId,
                 $page,
             );
@@ -794,7 +794,7 @@ class Faq
                 break;
             }
 
-            $visits = empty($row->visits) ? 0 : $row->visits;
+            $visits = (int) ($row->visits ?? 0);
 
             $url = sprintf(
                 '%scontent/%d/%d/%s/%s.html',
@@ -1743,6 +1743,6 @@ class Faq
 
     public function hasTitleAHash(string $title): bool
     {
-        return (bool) strpos($title, '#');
+        return (bool) strpos(haystack: $title, needle: '#');
     }
 }
