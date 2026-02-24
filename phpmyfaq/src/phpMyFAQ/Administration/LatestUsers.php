@@ -49,12 +49,19 @@ final readonly class LatestUsers
 
         $result = $databaseDriver->query($query, 0, $limit);
         if ($result) {
-            while ($row = $databaseDriver->fetchArray($result)) {
+            while (true) {
+                $row = $databaseDriver->fetchArray($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 $users[] = [
                     'id' => (int) ($row['user_id'] ?? 0),
                     'login' => (string) ($row['login'] ?? ''),
                     'display_name' => (string) ($row['display_name'] ?? ''),
-                    'member_since_iso' => empty($row['member_since']) ? '' : Date::createIsoDate($row['member_since']),
+                    'member_since_iso' => ($row['member_since'] ?? '') === ''
+                        ? ''
+                        : Date::createIsoDate((string) $row['member_since']),
                 ];
             }
         }

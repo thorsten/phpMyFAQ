@@ -228,7 +228,7 @@ class CategoryRepository implements CategoryRepositoryInterface
             $whereConditions[] = 'active = 1';
         }
 
-        if (!empty($whereConditions)) {
+        if ($whereConditions !== []) {
             $query .= ' WHERE ' . implode(' AND ', $whereConditions);
         }
 
@@ -272,7 +272,7 @@ class CategoryRepository implements CategoryRepositoryInterface
             $whereConditions[] = 'active = 1';
         }
 
-        if (!empty($whereConditions)) {
+        if ($whereConditions !== []) {
             $query .= ' WHERE ' . implode(' AND ', $whereConditions);
         }
 

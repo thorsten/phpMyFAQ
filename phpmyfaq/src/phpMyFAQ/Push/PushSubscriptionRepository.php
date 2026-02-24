@@ -66,8 +66,10 @@ readonly class PushSubscriptionRepository
             if ($result !== false) {
                 return true;
             }
-        } catch (\Throwable) {
-            // Likely a duplicate key constraint violation, fall through to update
+        } catch (\Throwable $throwable) {
+            // Likely a duplicate key constraint violation, fall through to update.
+            // Keep a reference to avoid an empty catch block while intentionally ignoring the exception.
+            $ignoredInsertException = $throwable;
         }
 
         // INSERT failed (duplicate key constraint), perform UPDATE instead

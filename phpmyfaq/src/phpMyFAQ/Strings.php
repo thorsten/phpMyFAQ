@@ -53,13 +53,16 @@ class Strings
      */
     public static function init(string $language = 'en'): void
     {
-        if (self::$instance === null) {
-            if (extension_loaded('mbstring') && function_exists('mb_regex_encoding')) {
-                self::$instance = Mbstring::getInstance($language);
-            } else {
-                self::$instance = StringBasic::getStringBasic($language);
-            }
+        if (self::$instance !== null) {
+            return;
         }
+
+        if (extension_loaded('mbstring') && function_exists('mb_regex_encoding')) {
+            self::$instance = Mbstring::getInstance($language);
+            return;
+        }
+
+        self::$instance = StringBasic::getStringBasic($language);
     }
 
     /**

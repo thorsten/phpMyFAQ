@@ -92,7 +92,12 @@ readonly class Revision
         $result = $this->configuration->getDb()->query($query);
 
         if ($this->configuration->getDb()->numRows($result) > 0) {
-            while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if ($row === false || $row === null || $row === []) {
+                    break;
+                }
+
                 $revisionData[] = [
                     'revision_id' => $row->revision_id,
                     'updated' => $faqId === 0 ? date(format: 'YmdHis') : $row->updated,

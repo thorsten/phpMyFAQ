@@ -68,7 +68,7 @@ class CategoryTreeNavigator
     private function transformRecursive(CategoryCache $categoryCache, array $tree, int $indent, array &$entries): void
     {
         // Skip invalid or empty trees
-        if ($tree === [] || !isset($tree['id'])) {
+        if ($tree === [] || !array_key_exists('id', $tree)) {
             return;
         }
 
@@ -135,7 +135,7 @@ class CategoryTreeNavigator
         $numTreeTab = $categoryCache->countTreeTab();
         for ($i = 0; $i < $numTreeTab; ++$i) {
             $entry = $categoryCache->getTreeTabEntry($i);
-            if ($entry !== null && isset($entry['symbol']) && $entry['symbol'] === 'minus') {
+            if ($entry !== null && array_key_exists('symbol', $entry) && $entry['symbol'] === 'minus') {
                 $categoryCache->updateTreeTabEntry($i, ['symbol' => 'plus']);
             }
         }
@@ -158,7 +158,7 @@ class CategoryTreeNavigator
             }
 
             $entry = $categoryCache->getTreeTabEntry($lineIndex);
-            if ($entry !== null && isset($entry['numChildren'])) {
+            if ($entry !== null && array_key_exists('numChildren', $entry)) {
                 $numChildren = $entry['numChildren'];
                 if ($numChildren > 0) {
                     $this->expand($categoryCache, $ascendants[$i]);
@@ -178,7 +178,7 @@ class CategoryTreeNavigator
         $num = $categoryCache->countTreeTab();
         for ($i = 0; $i < $num; ++$i) {
             $entry = $categoryCache->getTreeTabEntry($i);
-            if ($entry !== null && isset($entry['id']) && $entry['id'] === $categoryId) {
+            if ($entry !== null && array_key_exists('id', $entry) && $entry['id'] === $categoryId) {
                 return $i;
             }
         }

@@ -64,8 +64,7 @@ final readonly class AttachmentService
 
         return (
             ($hasGroupPermission || $hasGroupPermission && $hasUserPermission)
-            && isset($userRights['dlattachment'])
-            && $userRights['dlattachment']
+            && ($userRights['dlattachment'] ?? false)
         );
     }
 

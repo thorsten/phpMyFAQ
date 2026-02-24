@@ -54,7 +54,12 @@ final readonly class NewsRepository implements NewsRepositoryInterface
         }
 
         $result = $this->configuration->getDb()->query($query);
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             yield $row;
         }
     }
@@ -97,7 +102,12 @@ final readonly class NewsRepository implements NewsRepositoryInterface
         );
 
         $result = $this->configuration->getDb()->query($query);
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             yield $row;
         }
     }
@@ -138,7 +148,12 @@ final readonly class NewsRepository implements NewsRepositoryInterface
             $this->configuration->getDb()->escape($language),
         );
         $result = $this->configuration->getDb()->query($query);
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             yield $row;
         }
     }
@@ -153,7 +168,7 @@ final readonly class NewsRepository implements NewsRepositoryInterface
         );
         $result = $this->configuration->getDb()->query($query);
         $row = $this->configuration->getDb()->fetchObject($result);
-        return $row ?: null;
+        return $row !== false && $row !== null && $row !== [] ? $row : null;
     }
 
     public function insert(NewsMessage $newsMessage): bool

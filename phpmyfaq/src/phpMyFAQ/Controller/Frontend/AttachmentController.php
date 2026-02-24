@@ -59,7 +59,8 @@ final class AttachmentController extends AbstractFrontController
 
         if ($id === false || $id === null) {
             $attachmentErrors[] = $attachmentService->getGenericErrorMessage();
-        } else {
+        }
+        if ($id !== false && $id !== null) {
             try {
                 $attachment = $attachmentService->getAttachment($id);
             } catch (AttachmentException $attachmentException) {
@@ -84,7 +85,8 @@ final class AttachmentController extends AbstractFrontController
                     'Content-Disposition',
                     'inline; filename="' . rawurlencode($attachment->getFilename()) . '"',
                 );
-            } else {
+            }
+            if ($attachment->getMimeType() !== 'application/pdf') {
                 $streamedResponse->headers->set(
                     'Content-Disposition',
                     'attachment; filename="' . rawurlencode($attachment->getFilename()) . '"',
@@ -93,9 +95,12 @@ final class AttachmentController extends AbstractFrontController
 
             $streamedResponse->headers->set('Content-MD5', $attachment->getRealHash());
             $streamedResponse->send();
-        } else {
-            $attachmentErrors[] = $attachmentService->getGenericErrorMessage();
+            return $this->render('attachment.twig', [
+                ...$this->getHeader($request),
+                'attachmentErrors' => $attachmentErrors,
+            ]);
         }
+        $attachmentErrors[] = $attachmentService->getGenericErrorMessage();
 
         return $this->render('attachment.twig', [
             ...$this->getHeader($request),

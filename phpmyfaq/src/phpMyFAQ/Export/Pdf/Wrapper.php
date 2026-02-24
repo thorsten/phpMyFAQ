@@ -608,7 +608,7 @@ class Wrapper extends TCPDF
 
         $info = getimagesizefromstring($base64);
 
-        return $info && $info[0] > 0 && $info[1] > 0 && isset($info['mime']);
+        return $info && $info[0] > 0 && $info[1] > 0 && array_key_exists('mime', $info);
     }
 
     public function concatenatePaths(string $path, string $file): string
@@ -649,7 +649,7 @@ class Wrapper extends TCPDF
                 $imageUrl = $matches[1];
                 // Parse the URL to get the host
                 $parsedUrl = parse_url($imageUrl);
-                if (!$parsedUrl || !isset($parsedUrl['host'])) {
+                if (!$parsedUrl || !array_key_exists('host', $parsedUrl)) {
                     return $fullMatch; // Return original if URL is malformed
                 }
 
