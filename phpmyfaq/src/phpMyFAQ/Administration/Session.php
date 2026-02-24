@@ -124,12 +124,12 @@ readonly class Session
 
         $visits = $this->sessionRepository->getSessionTimestamps($startDate, $endDate);
 
-        for ($date = $startDate; $date <= $endDate; $date += 86400) {
+        for ($date = $startDate; $date <= $endDate; $date += 86_400) {
             $stats[date(format: 'Y-m-d', timestamp: $date)] = 0;
         }
 
         foreach ($visits as $visitDate) {
-            if (!isset($stats[date(format: 'Y-m-d', timestamp: $visitDate)])) {
+            if (!array_key_exists(date(format: 'Y-m-d', timestamp: $visitDate), $stats)) {
                 continue;
             }
 

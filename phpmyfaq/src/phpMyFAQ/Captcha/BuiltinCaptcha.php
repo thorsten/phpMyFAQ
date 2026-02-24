@@ -160,7 +160,7 @@ class BuiltinCaptcha implements CaptchaInterface
         $this->drawText();
 
         ob_start();
-        imagejpeg($this->gdImage, null, $this->quality);
+        imagejpeg(image: $this->gdImage, file: null, quality: $this->quality);
 
         return ob_get_clean();
     }
@@ -173,9 +173,9 @@ class BuiltinCaptcha implements CaptchaInterface
     private function createBackground(): void
     {
         $this->gdImage = imagecreate($this->width, $this->height);
-        $this->backgroundColor['r'] = random_int(210, 255);
-        $this->backgroundColor['g'] = random_int(220, 255);
-        $this->backgroundColor['b'] = random_int(210, 255);
+        $this->backgroundColor['r'] = random_int(min: 210, max: 255);
+        $this->backgroundColor['g'] = random_int(min: 220, max: 255);
+        $this->backgroundColor['b'] = random_int(min: 210, max: 255);
 
         $colorAllocate = imagecolorallocate(
             $this->gdImage,
@@ -184,7 +184,14 @@ class BuiltinCaptcha implements CaptchaInterface
             $this->backgroundColor['b'],
         );
 
-        imagefilledrectangle($this->gdImage, 0, 0, $this->width, $this->height, $colorAllocate);
+        imagefilledrectangle(
+            image: $this->gdImage,
+            x1: 0,
+            y1: 0,
+            x2: $this->width,
+            y2: $this->height,
+            color: $colorAllocate,
+        );
     }
 
     /**
@@ -194,32 +201,46 @@ class BuiltinCaptcha implements CaptchaInterface
      */
     private function drawLines(): void
     {
-        $color1 = random_int(150, 185);
-        $color2 = random_int(185, 225);
+        $color1 = random_int(min: 150, max: 185);
+        $color2 = random_int(min: 185, max: 225);
         $nextLine = 4;
         $w1 = 0;
         $w2 = 0;
 
         for ($x = 0; $x < $this->width; $x += $nextLine) {
             if ($x < $this->width) {
-                imageline($this->gdImage, $x + $w1, 0, $x + $w2, $this->height - 1, random_int($color1, $color2));
+                imageline(
+                    image: $this->gdImage,
+                    x1: $x + $w1,
+                    y1: 0,
+                    x2: $x + $w2,
+                    y2: $this->height - 1,
+                    color: random_int(min: $color1, max: $color2),
+                );
             }
 
             if ($x < $this->height) {
-                imageline($this->gdImage, 0, $x - $w2, $this->width - 1, $x - $w1, random_int($color1, $color2));
+                imageline(
+                    image: $this->gdImage,
+                    x1: 0,
+                    y1: $x - $w2,
+                    x2: $this->width - 1,
+                    y2: $x - $w1,
+                    color: random_int(min: $color1, max: $color2),
+                );
             }
 
             if (function_exists('imagettftext')) {
-                $nextLine += random_int(-5, 7);
+                $nextLine += random_int(min: -5, max: 7);
                 if ($nextLine < 1) {
                     $nextLine = 2;
                 }
             } else {
-                $nextLine += random_int(1, 7);
+                $nextLine += random_int(min: 1, max: 7);
             }
 
-            $w1 += random_int(-4, 4);
-            $w2 += random_int(-4, 4);
+            $w1 += random_int(min: -4, max: 4);
+            $w2 += random_int(min: -4, max: 4);
         }
     }
 
@@ -254,7 +275,7 @@ class BuiltinCaptcha implements CaptchaInterface
 
         // Create the captcha code
         for ($i = 1; $i <= $capLength; ++$i) {
-            $this->code .= $this->letters[random_int(0, 34)];
+            $this->code .= $this->letters[random_int(min: 0, max: 34)];
         }
 
         if (!$this->saveCaptcha()) {
@@ -281,7 +302,7 @@ class BuiltinCaptcha implements CaptchaInterface
             WHERE 
                 captcha_time < %d',
             Database::getTablePrefix(),
-            Request::createFromGlobals()->server->get('REQUEST_TIME') - 604800,
+            Request::createFromGlobals()->server->get('REQUEST_TIME') - 604_800,
         );
 
         $this->configuration->getDb()->query($delete);
@@ -356,22 +377,22 @@ class BuiltinCaptcha implements CaptchaInterface
 
         for ($p = 0; $p < $codeLength; ++$p) {
             $letter = $this->code[$p];
-            $size = random_int(16, $this->height - 3);
-            $rotation = random_int(-10, 10);
+            $size = random_int(min: 16, max: $this->height - 3);
+            $rotation = random_int(min: -10, max: 10);
             $y = random_int($size, $this->height + 5);
             $x = $w1 + ($w2 * $p);
             $foreColor = [];
 
             do {
-                $foreColor['r'] = random_int(30, 199);
+                $foreColor['r'] = random_int(min: 30, max: 199);
             } while ($foreColor['r'] === $this->backgroundColor['r']);
 
             do {
-                $foreColor['g'] = random_int(30, 199);
+                $foreColor['g'] = random_int(min: 30, max: 199);
             } while ($foreColor['g'] === $this->backgroundColor['g']);
 
             do {
-                $foreColor['b'] = random_int(30, 199);
+                $foreColor['b'] = random_int(min: 30, max: 199);
             } while ($foreColor['b'] === $this->backgroundColor['b']);
 
             $colorOne = imagecolorallocate($this->gdImage, $foreColor['r'], $foreColor['g'], $foreColor['b']);
@@ -383,7 +404,7 @@ class BuiltinCaptcha implements CaptchaInterface
                 imagettftext($this->gdImage, $size, $rotation, (int) $x, $y + 2, $colorOne, $this->font, $letter);
             } else {
                 $size = 5;
-                $c3 = imagecolorallocate($this->gdImage, 0, 0, 255);
+                $c3 = imagecolorallocate(image: $this->gdImage, red: 0, green: 0, blue: 255);
                 $x = 20;
                 $y = 12;
                 $s = 30;
@@ -427,13 +448,13 @@ class BuiltinCaptcha implements CaptchaInterface
         $captchaCode = Strings::strtoupper($captchaCode);
         // Help the user: treat "0" (ASCII 48) like "O" (ASCII 79)
         //                if "0" is not in the realm of captcha code letters
-        if (!in_array('0', $this->letters)) {
-            $captchaCode = str_replace('0', 'O', $captchaCode);
+        if (!in_array('0', $this->letters, strict: true)) {
+            $captchaCode = str_replace(search: '0', replace: 'O', subject: $captchaCode);
         }
 
         // Check
         for ($i = 0; $i < Strings::strlen($captchaCode); ++$i) {
-            if (in_array($captchaCode[$i], $this->letters)) {
+            if (in_array($captchaCode[$i], $this->letters, strict: true)) {
                 continue;
             }
 
@@ -447,7 +468,8 @@ class BuiltinCaptcha implements CaptchaInterface
             $this->configuration->getDb()->escape($captchaCode),
         );
 
-        if ($result = $this->configuration->getDb()->query($query)) {
+        $result = $this->configuration->getDb()->query($query);
+        if ($result) {
             $num = $this->configuration->getDb()->numRows($result);
             if ($num > 0) {
                 $this->code = $captchaCode;
@@ -467,7 +489,7 @@ class BuiltinCaptcha implements CaptchaInterface
      */
     private function removeCaptcha(?string $captchaCode = null): void
     {
-        if ($captchaCode == null) {
+        if ($captchaCode === null) {
             $captchaCode = $this->code;
         }
 

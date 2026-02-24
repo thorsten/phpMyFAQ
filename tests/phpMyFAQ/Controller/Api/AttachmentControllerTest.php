@@ -3,56 +3,40 @@
 namespace phpMyFAQ\Controller\Api;
 
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
-use ReflectionException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
+class TestApiConstructorController extends AbstractApiController
+{
+    public function __construct(
+        private readonly bool $apiEnabled,
+    ) {
+        parent::__construct();
+    }
+
+    public function isApiEnabled(): bool
+    {
+        return $this->apiEnabled;
+    }
+}
+
 #[AllowMockObjectsWithoutExpectations]
 class AttachmentControllerTest extends TestCase
 {
-    /**
-     * @throws Exception|ReflectionException
-     */
     public function testConstructorWithApiEnabled(): void
     {
-        $attachmentController = $this
-            ->getMockBuilder(AttachmentController::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isApiEnabled'])
-            ->getMock();
+        $controller = new TestApiConstructorController(true);
 
-        $attachmentController->expects($this->once())->method('isApiEnabled')->willReturn(true);
-
-        $reflection = new ReflectionClass(AttachmentController::class);
-        $constructor = $reflection->getConstructor();
-        $constructor->invoke($attachmentController);
-
-        $this->assertTrue(true);
+        $this->assertInstanceOf(AbstractApiController::class, $controller);
     }
 
-    /**
-     * @throws Exception|ReflectionException
-     */
     public function testConstructorWithApiDisabled(): void
     {
-        $attachmentController = $this
-            ->getMockBuilder(AttachmentController::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isApiEnabled'])
-            ->getMock();
-
-        $attachmentController->expects($this->once())->method('isApiEnabled')->willReturn(false);
-
         $this->expectException(UnauthorizedHttpException::class);
-
-        $reflection = new ReflectionClass(AttachmentController::class);
-        $constructor = $reflection->getConstructor();
-        $constructor->invoke($attachmentController);
+        new TestApiConstructorController(false);
     }
 
     public function testListReturnsJsonResponse(): void

@@ -28,7 +28,7 @@ use Throwable;
 
 class TaskScheduler
 {
-    private const int DEFAULT_SESSION_RETENTION_SECONDS = 86400;
+    private const int DEFAULT_SESSION_RETENTION_SECONDS = 86_400;
 
     public function __construct(
         private readonly Configuration $configuration,

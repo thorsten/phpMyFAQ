@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class AttachmentController extends AbstractApiController
+final class AttachmentController extends AbstractApiController
 {
     #[OA\Get(
         path: '/api/v3.2/attachments/{faqId}',
@@ -168,7 +168,7 @@ class AttachmentController extends AbstractApiController
                 data: $attachments,
                 total: $total,
                 pagination: $pagination,
-                sort: $sort,
+                options: new PaginatedResponseOptions(sort: $sort),
             );
         } catch (AttachmentException) {
             return $this->errorResponse(

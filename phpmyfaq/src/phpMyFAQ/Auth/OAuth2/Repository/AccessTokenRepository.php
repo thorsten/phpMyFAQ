@@ -37,9 +37,11 @@ final class AccessTokenRepository extends AbstractRepository implements AccessTo
         $token->setClient($clientEntity);
 
         foreach ($scopes as $scope) {
-            if ($scope instanceof ScopeEntityInterface) {
-                $token->addScope($scope);
+            if (!$scope instanceof ScopeEntityInterface) {
+                continue;
             }
+
+            $token->addScope($scope);
         }
 
         if ($userIdentifier !== null) {

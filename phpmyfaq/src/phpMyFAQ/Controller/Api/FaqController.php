@@ -589,7 +589,7 @@ final class FaqController extends AbstractApiController
             data: array_values($result),
             total: $total,
             pagination: $pagination,
-            sort: $sort,
+            options: new PaginatedResponseOptions(sort: $sort),
         );
     }
 
@@ -697,7 +697,7 @@ final class FaqController extends AbstractApiController
         $categoryId = Filter::filterVar($data->{'category-id'}, FILTER_VALIDATE_INT);
         $categoryName = null;
 
-        if (isset($data->{'category-name'})) {
+        if (property_exists($data, 'category-name') && $data->{'category-name'} !== null) {
             $categoryName = Filter::filterVar($data->{'category-name'}, FILTER_SANITIZE_SPECIAL_CHARS);
         }
 

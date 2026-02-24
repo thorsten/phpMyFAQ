@@ -27,11 +27,7 @@ class SitemapXmlServiceTest extends TestCase
         $this->faqStatistics = $this->createStub(FaqStatistics::class);
         $this->customPage = $this->createStub(CustomPage::class);
 
-        $this->service = new SitemapXmlService(
-            $this->configuration,
-            $this->faqStatistics,
-            $this->customPage,
-        );
+        $this->service = new SitemapXmlService($this->configuration, $this->faqStatistics, $this->customPage);
     }
 
     public function testIsEnabledReturnsTrueWhenConfigEnabled(): void
@@ -57,7 +53,8 @@ class SitemapXmlServiceTest extends TestCase
 
     public function testCollectUrlsReturnsFaqUrlsWithCorrectPriority(): void
     {
-        $this->faqStatistics->method('getTopTenData')
+        $this->faqStatistics
+            ->method('getTopTenData')
             ->willReturn([
                 1 => [
                     'url' => 'https://example.com/faq/1',
@@ -82,25 +79,26 @@ class SitemapXmlServiceTest extends TestCase
     public function testCollectUrlsFiltersInactiveCustomPages(): void
     {
         $this->faqStatistics->method('getTopTenData')->willReturn([]);
-        $this->configuration->method('getDefaultUrl')
-            ->willReturn('https://example.com/');
+        $this->configuration->method('getDefaultUrl')->willReturn('https://example.com/');
 
-        $this->customPage->method('getAllPages')->willReturn([
-            [
-                'id' => 1,
-                'slug' => 'active-page',
-                'active' => 'y',
-                'created' => '2026-01-01 00:00:00',
-                'updated' => '2026-01-15 00:00:00',
-            ],
-            [
-                'id' => 2,
-                'slug' => 'inactive-page',
-                'active' => 'n',
-                'created' => '2026-01-01 00:00:00',
-                'updated' => null,
-            ],
-        ]);
+        $this->customPage
+            ->method('getAllPages')
+            ->willReturn([
+                [
+                    'id' => 1,
+                    'slug' => 'active-page',
+                    'active' => 'y',
+                    'created' => '2026-01-01 00:00:00',
+                    'updated' => '2026-01-15 00:00:00',
+                ],
+                [
+                    'id' => 2,
+                    'slug' => 'inactive-page',
+                    'active' => 'n',
+                    'created' => '2026-01-01 00:00:00',
+                    'updated' => null,
+                ],
+            ]);
 
         $urls = $this->service->collectUrls();
 
@@ -111,18 +109,19 @@ class SitemapXmlServiceTest extends TestCase
     public function testCollectUrlsBuildsCorrectCustomPageUrl(): void
     {
         $this->faqStatistics->method('getTopTenData')->willReturn([]);
-        $this->configuration->method('getDefaultUrl')
-            ->willReturn('https://example.com/');
+        $this->configuration->method('getDefaultUrl')->willReturn('https://example.com/');
 
-        $this->customPage->method('getAllPages')->willReturn([
-            [
-                'id' => 1,
-                'slug' => 'my-custom-page',
-                'active' => 'y',
-                'created' => '2026-01-01 00:00:00',
-                'updated' => '2026-02-01 00:00:00',
-            ],
-        ]);
+        $this->customPage
+            ->method('getAllPages')
+            ->willReturn([
+                [
+                    'id' => 1,
+                    'slug' => 'my-custom-page',
+                    'active' => 'y',
+                    'created' => '2026-01-01 00:00:00',
+                    'updated' => '2026-02-01 00:00:00',
+                ],
+            ]);
 
         $urls = $this->service->collectUrls();
 
@@ -135,18 +134,19 @@ class SitemapXmlServiceTest extends TestCase
     public function testCollectUrlsUsesCreatedDateWhenUpdatedIsNull(): void
     {
         $this->faqStatistics->method('getTopTenData')->willReturn([]);
-        $this->configuration->method('getDefaultUrl')
-            ->willReturn('https://example.com/');
+        $this->configuration->method('getDefaultUrl')->willReturn('https://example.com/');
 
-        $this->customPage->method('getAllPages')->willReturn([
-            [
-                'id' => 1,
-                'slug' => 'page-no-update',
-                'active' => 'y',
-                'created' => '2026-01-01 00:00:00',
-                'updated' => null,
-            ],
-        ]);
+        $this->customPage
+            ->method('getAllPages')
+            ->willReturn([
+                [
+                    'id' => 1,
+                    'slug' => 'page-no-update',
+                    'active' => 'y',
+                    'created' => '2026-01-01 00:00:00',
+                    'updated' => null,
+                ],
+            ]);
 
         $urls = $this->service->collectUrls();
 

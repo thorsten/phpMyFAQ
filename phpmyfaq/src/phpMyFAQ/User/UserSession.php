@@ -92,7 +92,7 @@ class UserSession
             Database::getTablePrefix(),
             $sessionIdToCheck,
             $ipAddress,
-            Request::createFromGlobals()->server->get('REQUEST_TIME') - 86400,
+            Request::createFromGlobals()->server->get('REQUEST_TIME') - 86_400,
         );
         $result = $this->configuration->getDb()->query($query);
 
@@ -163,12 +163,12 @@ class UserSession
         $remoteAddress = Request::createFromGlobals()->getClientIp();
         $localAddresses = ['127.0.0.1', '::1'];
 
-        if (in_array($remoteAddress, $localAddresses) && $request->headers->has('X-Forwarded-For')) {
+        if (in_array($remoteAddress, $localAddresses, strict: true) && $request->headers->has('X-Forwarded-For')) {
             $remoteAddress = $request->headers->get('X-Forwarded-For');
         }
 
         // clean up as well
-        $remoteAddress = preg_replace('([^0-9a-z:.]+)i', '', (string) $remoteAddress);
+        $remoteAddress = preg_replace('([^0-9a-z:.]+)i', replacement: '', subject: (string) $remoteAddress);
 
         if (
             !is_string($remoteAddress)
@@ -193,7 +193,7 @@ class UserSession
                     'sid',
                 );
                 // Check: force the session cookie to contains the current $sid
-                if (!is_null($cookieId) && !$cookieId != $this->getCurrentSessionId()) {
+                if ($cookieId !== null && $cookieId !== $this->getCurrentSessionId()) {
                     self::setCookie(self::COOKIE_NAME_SESSION_ID, $this->getCurrentSessionId());
                 }
 
@@ -212,17 +212,21 @@ class UserSession
             $data =
                 $this->getCurrentSessionId()
                 . ';'
-                . str_replace(';', ',', $action)
+                . str_replace(search: ';', replace: ',', subject: $action)
                 . ';'
                 . $data
                 . ';'
                 . $remoteAddress
                 . ';'
-                . str_replace(';', ',', $request->server->get('QUERY_STRING') ?? '')
+                . str_replace(search: ';', replace: ',', subject: $request->server->get('QUERY_STRING') ?? '')
                 . ';'
-                . str_replace(';', ',', $request->server->get('HTTP_REFERER') ?? '')
+                . str_replace(search: ';', replace: ',', subject: $request->server->get('HTTP_REFERER') ?? '')
                 . ';'
-                . str_replace(';', ',', urldecode((string) $request->server->get('HTTP_USER_AGENT')))
+                . str_replace(
+                    search: ';',
+                    replace: ',',
+                    subject: urldecode(string: (string) $request->server->get('HTTP_USER_AGENT')),
+                )
                 . ';'
                 . $request->server->get('REQUEST_TIME')
                 . ";\n";

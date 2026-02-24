@@ -137,12 +137,12 @@ final class ApiKeyAuthenticator
             return [];
         }
 
-        $decoded = json_decode($scopes, true);
+        $decoded = json_decode(json: $scopes, associative: true);
         if (!is_array($decoded)) {
             return [];
         }
 
-        return array_values(array_filter($decoded, static fn(mixed $scope): bool => is_string($scope)));
+        return array_values(array_filter($decoded, is_string(...)));
     }
 
     /**
@@ -155,6 +155,10 @@ final class ApiKeyAuthenticator
             return true;
         }
 
-        return array_all($requiredScopes, fn($requiredScope) => in_array($requiredScope, $grantedScopes, true));
+        return array_all($requiredScopes, static fn($requiredScope) => in_array(
+            $requiredScope,
+            $grantedScopes,
+            strict: true,
+        ));
     }
 }

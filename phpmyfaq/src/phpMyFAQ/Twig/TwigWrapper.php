@@ -48,7 +48,6 @@ class TwigWrapper
      */
     public function __construct(
         string $templatePath,
-        /* @mago-ignore lint:no-boolean-flag-parameter */
         private bool $isSetup = false,
         ?string $templateSetName = null,
     ) {

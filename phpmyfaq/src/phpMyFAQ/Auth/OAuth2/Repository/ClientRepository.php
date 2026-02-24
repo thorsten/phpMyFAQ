@@ -58,8 +58,11 @@ final class ClientRepository extends AbstractRepository implements ClientReposit
         return $entity;
     }
 
-    public function validateClient(string $clientIdentifier, ?string $clientSecret, ?string $grantType): bool
-    {
+    public function validateClient(
+        string $clientIdentifier,
+        #[\SensitiveParameter] ?string $clientSecret,
+        ?string $grantType,
+    ): bool {
         $client = $this->getClientEntity($clientIdentifier);
         if (!$client instanceof ClientEntity) {
             return false;

@@ -191,11 +191,17 @@ final class SearchController extends AbstractApiController
                 data: array_values($result),
                 total: $total,
                 pagination: $pagination,
-                sort: $sort,
+                options: new PaginatedResponseOptions(sort: $sort),
             );
         }
 
-        return $this->paginatedResponse($request, data: [], total: 0, pagination: $pagination, sort: $sort);
+        return $this->paginatedResponse(
+            $request,
+            data: [],
+            total: 0,
+            pagination: $pagination,
+            options: new PaginatedResponseOptions(sort: $sort),
+        );
     }
 
     /**
