@@ -94,9 +94,8 @@ final readonly class StorageFactory
     private function resolveFilesystemRoot(): string
     {
         $configuredRoot = $this->readStringConfig('storage.filesystem.root');
-        if ($configuredRoot !== null && $configuredRoot !== '') {
-            $root = $configuredRoot;
-        } else {
+        $root = $configuredRoot;
+        if ($root === null || $root === '') {
             $root = defined('PMF_ATTACHMENTS_DIR') && PMF_ATTACHMENTS_DIR !== false
                 ? (string) PMF_ATTACHMENTS_DIR
                 : PMF_ROOT_DIR . '/content/user/attachments';

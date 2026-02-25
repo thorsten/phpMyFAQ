@@ -147,7 +147,9 @@ class Search
                 $selectedCategory = [
                     $fcrTable . '.category_id' => array_merge((array) $this->getCategoryId(), $children),
                 ];
-            } else {
+            }
+
+            if (!$this->getCategory() instanceof Category) {
                 $selectedCategory = [
                     $fcrTable . '.category_id' => $this->getCategoryId(),
                 ];
@@ -180,7 +182,9 @@ class Search
 
         if (is_numeric($searchTerm)) {
             $searchDatabase->setMatchingColumns(['fd.solution_id']);
-        } else {
+        }
+
+        if (!is_numeric($searchTerm)) {
             $searchDatabase->setMatchingColumns(['fd.thema', 'fd.content', 'fd.keywords']);
         }
 
@@ -303,12 +307,12 @@ class Search
     {
         $elasticsearch = new Elasticsearch($this->configuration);
 
+        $allCategories = $this->getCategory()->getAllCategoryIds();
+        $elasticsearch->setCategoryIds($allCategories);
+
         if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {
             $children = $this->getCategory()->getChildNodes($this->getCategoryId());
             $elasticsearch->setCategoryIds(array_merge([$this->getCategoryId()], $children));
-        } else {
-            $allCategories = $this->getCategory()->getAllCategoryIds();
-            $elasticsearch->setCategoryIds($allCategories);
         }
 
         if (!$allLanguages) {
@@ -323,12 +327,12 @@ class Search
     {
         $opensearch = new OpenSearch($this->configuration);
 
+        $allCategories = $this->getCategory()->getAllCategoryIds();
+        $opensearch->setCategoryIds($allCategories);
+
         if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {
             $children = $this->getCategory()->getChildNodes($this->getCategoryId());
             $opensearch->setCategoryIds(array_merge([$this->getCategoryId()], $children));
-        } else {
-            $allCategories = $this->getCategory()->getAllCategoryIds();
-            $opensearch->setCategoryIds($allCategories);
         }
 
         if (!$allLanguages) {
