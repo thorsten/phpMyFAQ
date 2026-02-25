@@ -30,11 +30,10 @@ class Captcha
     public static function getInstance(Configuration $configuration): BuiltinCaptcha|GoogleRecaptcha
     {
         self::$configuration = $configuration;
+        self::$captcha = new BuiltinCaptcha(self::$configuration);
 
         if (self::$configuration->get('security.enableGoogleReCaptchaV2')) {
             self::$captcha = new GoogleRecaptcha(self::$configuration);
-        } else {
-            self::$captcha = new BuiltinCaptcha(self::$configuration);
         }
 
         return self::$captcha;

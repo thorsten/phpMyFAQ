@@ -100,9 +100,12 @@ class AuthSso extends Auth implements AuthDriverInterface
 
         // Check if "DOMAIN\user", "user@DOMAIN" or only "user"
         $remote = explode('\\', (string) $this->request->server->get('REMOTE_USER'));
+        $user = $this->request->server->get('REMOTE_USER');
         if (count($remote) > 1) {
             $user = $remote[1];
-        } else {
+        }
+
+        if (count($remote) <= 1) {
             $remote = explode('@', (string) $this->request->server->get('REMOTE_USER'));
             $user = is_array($remote) && count($remote) > 1 ? $remote[0] : $this->request->server->get('REMOTE_USER');
         }

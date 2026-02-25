@@ -46,7 +46,9 @@ readonly class Session
             if ($this->configuration->get(item: 'main.enableUserTracking')) {
                 $count = $this->sessionRepository->countOnlineUsersFromSessions($minTimestamp
                 - (PMF_AUTH_TIMEOUT * 60));
-            } else {
+            }
+
+            if (!$this->configuration->get(item: 'main.enableUserTracking')) {
                 $count = $this->sessionRepository->countOnlineUsersFromFaqUser($minTimestamp);
             }
         } catch (Throwable) {

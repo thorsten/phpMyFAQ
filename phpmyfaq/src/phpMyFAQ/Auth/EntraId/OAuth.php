@@ -70,10 +70,9 @@ class OAuth
     {
         $url = 'https://login.microsoftonline.com/' . AAD_OAUTH_TENANTID . '/oauth2/v2.0/token';
 
+        $codeVerifier = $this->entraIdSession->getCookie(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER);
         if ($this->entraIdSession->get(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER) !== '') {
             $codeVerifier = $this->entraIdSession->get(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER);
-        } else {
-            $codeVerifier = $this->entraIdSession->getCookie(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER);
         }
 
         $response = $this->httpClient->request('POST', $url, [

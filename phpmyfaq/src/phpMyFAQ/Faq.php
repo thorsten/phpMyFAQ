@@ -208,57 +208,59 @@ class Faq
         $result = $this->configuration->getDb()->query($query);
         $num = $this->configuration->getDb()->numRows($result);
 
-        if ($num > 0) {
-            $faqHelper = new FaqHelper($this->configuration);
-            while (true) {
-                $row = $this->configuration->getDb()->fetchObject($result);
-                if ($row === false || $row === null || $row === []) {
-                    break;
-                }
-
-                $visits = (int) ($row->visits ?? 0);
-
-                $url = sprintf(
-                    '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
-                    $this->configuration->getDefaultUrl(),
-                    $sids,
-                    $row->category_id,
-                    $row->id,
-                    $row->lang,
-                );
-                $oLink = new Link($url, $this->configuration);
-                $oLink->setTitle($row->thema);
-                $oLink->text = $row->thema;
-                $oLink->tooltip = $row->thema;
-
-                if ($preview) {
-                    $faqData[] = [
-                        'record_id' => $row->id,
-                        'record_lang' => $row->lang,
-                        'category_id' => $row->category_id,
-                        'record_title' => $row->thema,
-                        'record_preview' => $faqHelper->renderAnswerPreview($row->record_content, 25),
-                        'record_link' => $oLink->toString(),
-                        'record_updated' => $row->updated,
-                        'visits' => $visits,
-                        'record_created' => $row->created,
-                    ];
-                } else {
-                    $faqData[] = [
-                        'faq_id' => $row->id,
-                        'faq_lang' => $row->lang,
-                        'category_id' => $row->category_id,
-                        'question' => $row->thema,
-                        'answer' => $row->record_content,
-                        'link' => $oLink->toString(),
-                        'updated' => $row->updated,
-                        'visits' => $visits,
-                        'created' => $row->created,
-                    ];
-                }
-            }
-        } else {
+        if ($num <= 0) {
             return $faqData;
+        }
+
+        $faqHelper = new FaqHelper($this->configuration);
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
+            $visits = (int) ($row->visits ?? 0);
+
+            $url = sprintf(
+                '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
+                $this->configuration->getDefaultUrl(),
+                $sids,
+                $row->category_id,
+                $row->id,
+                $row->lang,
+            );
+            $oLink = new Link($url, $this->configuration);
+            $oLink->setTitle($row->thema);
+            $oLink->text = $row->thema;
+            $oLink->tooltip = $row->thema;
+
+            if ($preview) {
+                $faqData[] = [
+                    'record_id' => $row->id,
+                    'record_lang' => $row->lang,
+                    'category_id' => $row->category_id,
+                    'record_title' => $row->thema,
+                    'record_preview' => $faqHelper->renderAnswerPreview($row->record_content, 25),
+                    'record_link' => $oLink->toString(),
+                    'record_updated' => $row->updated,
+                    'visits' => $visits,
+                    'record_created' => $row->created,
+                ];
+            }
+
+            if (!$preview) {
+                $faqData[] = [
+                    'faq_id' => $row->id,
+                    'faq_lang' => $row->lang,
+                    'category_id' => $row->category_id,
+                    'question' => $row->thema,
+                    'answer' => $row->record_content,
+                    'link' => $oLink->toString(),
+                    'updated' => $row->updated,
+                    'visits' => $visits,
+                    'created' => $row->created,
+                ];
+            }
         }
 
         return $faqData;
@@ -283,16 +285,15 @@ class Faq
 
         $currentTable = $orderBy === 'visits' ? 'fv' : 'fd';
 
+        $order = sprintf(
+            'ORDER BY fd.sticky DESC, %s.%s %s',
+            $currentTable,
+            $this->configuration->getDb()->escape($orderBy),
+            $this->configuration->getDb()->escape($sortBy),
+        );
         // If random FAQs are activated, we don't need an order
         if (true === $this->configuration->get(item: 'records.randomSort')) {
             $order = '';
-        } else {
-            $order = sprintf(
-                'ORDER BY fd.sticky DESC, %s.%s %s',
-                $currentTable,
-                $this->configuration->getDb()->escape($orderBy),
-                $this->configuration->getDb()->escape($sortBy),
-            );
         }
 
         $now = date(format: 'YmdHis');
@@ -624,6 +625,26 @@ class Faq
             $result = $this->getFaqResult($faqId, $defaultLanguage, $faqRevisionId, $isAdmin);
         }
 
+        $this->faqRecord = [
+            'id' => $faqId,
+            'lang' => $currentLanguage,
+            'solution_id' => 42,
+            'revision_id' => $faqRevisionId,
+            'active' => 'no',
+            'sticky' => 0,
+            'keywords' => '',
+            'title' => '',
+            'content' => Translation::get(key: 'msgAccessDenied'),
+            'author' => '',
+            'email' => '',
+            'comment' => '',
+            'date' => Date::createIsoDate(date(format: 'YmdHis')),
+            'dateStart' => '',
+            'dateEnd' => '',
+            'notes' => '',
+            'created' => date(format: 'c'),
+        ];
+
         $row = $this->configuration->getDb()->fetchObject($result);
         if ($row) {
             $question = nl2br((string) $row->thema);
@@ -659,26 +680,6 @@ class Faq
                 'dateEnd' => $row->date_end,
                 'notes' => $row->notes,
                 'created' => $row->created,
-            ];
-        } else {
-            $this->faqRecord = [
-                'id' => $faqId,
-                'lang' => $currentLanguage,
-                'solution_id' => 42,
-                'revision_id' => $faqRevisionId,
-                'active' => 'no',
-                'sticky' => 0,
-                'keywords' => '',
-                'title' => '',
-                'content' => Translation::get(key: 'msgAccessDenied'),
-                'author' => '',
-                'email' => '',
-                'comment' => '',
-                'date' => Date::createIsoDate(date(format: 'YmdHis')),
-                'dateStart' => '',
-                'dateEnd' => '',
-                'notes' => '',
-                'created' => date(format: 'c'),
             ];
         }
     }
@@ -997,11 +998,9 @@ class Faq
         $query = sprintf('SELECT MAX(solution_id) AS solution_id FROM %sfaqdata', Database::getTablePrefix());
 
         $result = $this->configuration->getDb()->query($query);
-
+        $row = false;
         if ($result) {
             $row = $this->configuration->getDb()->fetchObject($result);
-        } else {
-            $row = false;
         }
 
         if ($row) {
@@ -1212,13 +1211,15 @@ class Faq
         $result = $this->configuration->getDb()->query($query);
 
         $row = $this->configuration->getDb()->fetchObject($result);
-        if ($row) {
-            if ($row->active === 'y' || $row->active === 'yes') {
-                return true;
-            }
-        } else {
+        if (!$row) {
             return false;
         }
+
+        if ($row->active === 'y' || $row->active === 'yes') {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -1272,6 +1273,11 @@ class Faq
             $row = $this->configuration->getDb()->fetchObject($fallbackResult);
         }
 
+        $this->faqRecord = [
+            // Ensure faqRecord has at least the requested solution_id to keep API stable
+            'solution_id' => $solutionId,
+        ];
+
         if ($row) {
             $question = nl2br((string) $row->thema);
             $content = $row->content;
@@ -1303,11 +1309,6 @@ class Faq
                 'dateStart' => $row->date_start,
                 'dateEnd' => $row->date_end,
                 'notes' => $row->notes,
-            ];
-        } else {
-            // Ensure faqRecord has at least the requested solution_id to keep API stable
-            $this->faqRecord = [
-                'solution_id' => $solutionId,
             ];
         }
     }
@@ -1389,11 +1390,17 @@ class Faq
                     }
 
                     $where .= ')';
-                } elseif ($data === 'IS NOT NULL') {
+                }
+
+                if (!is_array($data) && $data === 'IS NOT NULL') {
                     $where .= ' IS NOT NULL';
-                } elseif ($data === 'IS NULL') {
+                }
+
+                if (!is_array($data) && $data === 'IS NULL') {
                     $where .= ' IS NULL';
-                } else {
+                }
+
+                if (!is_array($data) && $data !== 'IS NOT NULL' && $data !== 'IS NULL') {
                     $where .= " = '" . $this->configuration->getDb()->escape($data) . "'";
                 }
 
@@ -1523,7 +1530,7 @@ class Faq
             return $this->faqRecord['title'];
         }
 
-        $question = '';
+        $question = Translation::get(key: 'no_cats');
 
         $query = sprintf(
             "SELECT thema AS question FROM %sfaqdata WHERE id = %d AND lang = '%s'",
@@ -1542,8 +1549,6 @@ class Faq
 
                 $question = $row->question;
             }
-        } else {
-            $question = Translation::get(key: 'no_cats');
         }
 
         return $question;

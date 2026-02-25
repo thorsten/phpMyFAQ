@@ -206,7 +206,9 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
                 if ($connected !== true) {
                     throw new RuntimeException(sprintf('Unable to connect to Redis at %s:%d', $host, $port));
                 }
-            } elseif ($scheme === 'unix') {
+            }
+
+            if ($scheme === 'unix') {
                 $path = $parsedUrl['path'] ?? '';
                 if ($path === '') {
                     throw new RuntimeException('Invalid Redis unix socket DSN for configuration storage.');
@@ -216,7 +218,9 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
                 if ($connected !== true) {
                     throw new RuntimeException(sprintf('Unable to connect to Redis unix socket at %s', $path));
                 }
-            } else {
+            }
+
+            if ($scheme !== 'redis' && $scheme !== 'tcp' && $scheme !== 'unix') {
                 throw new RuntimeException(sprintf(
                     'Unsupported Redis DSN scheme "%s" for configuration storage.',
                     $scheme,
@@ -225,11 +229,10 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
 
             if (array_key_exists('pass', $parsedUrl) && $parsedUrl['pass'] !== '') {
                 $pass = urldecode($parsedUrl['pass']);
+                $authResult = $redis->auth($pass);
                 if (array_key_exists('user', $parsedUrl) && $parsedUrl['user'] !== '') {
                     $user = urldecode($parsedUrl['user']);
                     $authResult = $redis->auth([$user, $pass]);
-                } else {
-                    $authResult = $redis->auth($pass);
                 }
 
                 if ($authResult !== true) {

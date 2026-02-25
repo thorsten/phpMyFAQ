@@ -388,10 +388,9 @@ class User
         $this->getTenantQuotaEnforcer()->assertCanCreateUser();
 
         // set user-ID
+        $this->userId = $userId;
         if (0 === $userId) {
             $this->userId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faquser', 'user_id');
-        } else {
-            $this->userId = $userId;
         }
 
         // create a user entry
@@ -528,7 +527,9 @@ class User
             $randomMax = 4;
             if ($skipped) {
                 $randomMax = 3;
-            } elseif ($allowUnderscore) {
+            }
+
+            if (!$skipped && $allowUnderscore) {
                 $randomMax = 5;
             }
 

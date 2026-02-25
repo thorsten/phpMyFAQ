@@ -150,13 +150,12 @@ final class UserController extends AbstractFrontController
         $this->faqSession->setCurrentUser($this->currentUser);
         $this->faqSession->userTracking('user_control_panel', $this->currentUser->getUserId());
 
+        $gravatarImg = '';
         if ($this->configuration->get('main.enableGravatarSupport')) {
             $gravatarImg = sprintf('<a target="_blank" href="https://www.gravatar.com">%s</a>', $this->gravatar->getImage(
                 $this->currentUser->getUserData('email'),
                 ['class' => 'img-responsive rounded-circle', 'size' => 125],
             ));
-        } else {
-            $gravatarImg = '';
         }
 
         $qrCode = '';

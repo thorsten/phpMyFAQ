@@ -346,6 +346,7 @@ readonly class MediumPermissionRepository
      */
     public function getAllGroups(?int $userId = null): array
     {
+        $select = sprintf('SELECT group_id FROM %sfaqgroup', Database::getTablePrefix());
         if ($userId !== null) {
             $select = sprintf(
                 '
@@ -361,8 +362,6 @@ readonly class MediumPermissionRepository
                 Database::getTablePrefix(),
                 $userId,
             );
-        } else {
-            $select = sprintf('SELECT group_id FROM %sfaqgroup', Database::getTablePrefix());
         }
 
         $res = $this->configuration->getDb()->query($select);

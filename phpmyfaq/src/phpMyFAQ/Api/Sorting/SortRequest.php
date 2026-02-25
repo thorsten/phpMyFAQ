@@ -69,10 +69,9 @@ class SortRequest
         $sortField = Filter::filterVar($request->query->get('sort'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         // Validate sort field against whitelist
+        $field = null;
         if ($sortField && in_array($sortField, $allowedFields, strict: true)) {
             $field = $sortField;
-        } else {
-            $field = null;
         }
 
         if ($field === null && $defaultField && in_array($defaultField, $allowedFields, strict: true)) {

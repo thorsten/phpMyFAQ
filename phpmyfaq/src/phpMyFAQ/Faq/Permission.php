@@ -173,7 +173,9 @@ class Permission
         if ($restrictedUsers === []) {
             if (is_string($data->restricted_users)) {
                 $restrictedUsers = [Filter::filterVar($data->restricted_users, FILTER_VALIDATE_INT)];
-            } elseif (is_array($data->restricted_users)) {
+            }
+
+            if (is_array($data->restricted_users)) {
                 $restrictedUsers = Filter::filterArray($data->restricted_users, FILTER_VALIDATE_INT);
             }
         }
@@ -190,7 +192,9 @@ class Permission
         if ($restrictedGroups === []) {
             if (is_string($data->restricted_groups)) {
                 $restrictedGroups = [Filter::filterVar($data->restricted_groups, FILTER_VALIDATE_INT)];
-            } elseif (is_array($data->restricted_groups)) {
+            }
+
+            if (is_array($data->restricted_groups)) {
                 $restrictedGroups = Filter::filterArray($data->restricted_groups, FILTER_VALIDATE_INT);
             }
         }
