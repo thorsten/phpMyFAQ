@@ -230,9 +230,9 @@ class Category
             $categoryId = (int) $this->categoryName[$categoryId]['parent_id'];
             if (in_array($categoryId, $alreadyListed, strict: true)) {
                 break;
-            } else {
-                $alreadyListed[] = $categoryId;
             }
+
+            $alreadyListed[] = $categoryId;
         }
 
         return $level;

@@ -84,9 +84,12 @@ final class VotingController extends AbstractController
         $votingData = new Vote();
         $votingData->setFaqId($faqId)->setVote($vote)->setIp($userIp);
 
-        if ($this->rating->getNumberOfVotings($faqId) === 0) {
+        $numberOfVotings = $this->rating->getNumberOfVotings($faqId);
+        if ($numberOfVotings === 0) {
             $this->rating->create($votingData);
-        } else {
+        }
+
+        if ($numberOfVotings !== 0) {
             $this->rating->update($votingData);
         }
 

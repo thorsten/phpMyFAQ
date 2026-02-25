@@ -56,7 +56,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 ),
                 'Add previous_hash column to faqadminlog (MySQL)',
             );
-        } elseif ($this->isSqlServer()) {
+        }
+
+        if (!$this->isMySql() && $this->isSqlServer()) {
             $recorder->addSql(
                 sprintf('ALTER TABLE %sfaqadminlog ADD hash VARCHAR(64)', $this->tablePrefix),
                 'Add hash column to faqadminlog (SQL Server)',
@@ -66,7 +68,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 sprintf('ALTER TABLE %sfaqadminlog ADD previous_hash VARCHAR(64)', $this->tablePrefix),
                 'Add previous_hash column to faqadminlog (SQL Server)',
             );
-        } else {
+        }
+
+        if (!$this->isMySql() && !$this->isSqlServer()) {
             $recorder->addSql(
                 sprintf('ALTER TABLE %sfaqadminlog ADD COLUMN hash VARCHAR(64)', $this->tablePrefix),
                 'Add hash column to faqadminlog',
@@ -102,7 +106,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB",
                 $this->tablePrefix,
             ), 'Create custom pages table (MySQL)');
-        } elseif ($this->isPostgreSql()) {
+        }
+
+        if (!$this->isMySql() && $this->isPostgreSql()) {
             $recorder->addSql(sprintf(
                 "CREATE TABLE IF NOT EXISTS %sfaqcustompages (
                     id INTEGER NOT NULL,
@@ -130,7 +136,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 ),
                 'Create slug index on custom pages (PostgreSQL)',
             );
-        } elseif ($this->isSqlite()) {
+        }
+
+        if (!$this->isMySql() && !$this->isPostgreSql() && $this->isSqlite()) {
             $recorder->addSql(sprintf("CREATE TABLE IF NOT EXISTS %sfaqcustompages (
                     id INTEGER NOT NULL,
                     lang VARCHAR(5) NOT NULL,
@@ -155,7 +163,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 ),
                 'Create slug index on custom pages (SQLite)',
             );
-        } elseif ($this->isSqlServer()) {
+        }
+
+        if (!$this->isMySql() && !$this->isPostgreSql() && !$this->isSqlite() && $this->isSqlServer()) {
             $recorder->addSql(
                 sprintf(
                     "IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'%sfaqcustompages') AND type = 'U') "
@@ -261,7 +271,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
                 $this->tablePrefix,
             ), 'Create chat messages table (MySQL)');
-        } elseif ($this->isPostgreSql()) {
+        }
+
+        if (!$this->isMySql() && $this->isPostgreSql()) {
             $recorder->addSql(sprintf(
                 'CREATE TABLE IF NOT EXISTS %sfaqchat_messages (
                     id SERIAL NOT NULL,
@@ -306,7 +318,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 ),
                 'Create created_at index on chat messages (PostgreSQL)',
             );
-        } elseif ($this->isSqlite()) {
+        }
+
+        if (!$this->isMySql() && !$this->isPostgreSql() && $this->isSqlite()) {
             $recorder->addSql(sprintf('CREATE TABLE IF NOT EXISTS %sfaqchat_messages (
                     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                     sender_id INTEGER NOT NULL,
@@ -347,7 +361,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 ),
                 'Create created_at index on chat messages (SQLite)',
             );
-        } elseif ($this->isSqlServer()) {
+        }
+
+        if (!$this->isMySql() && !$this->isPostgreSql() && !$this->isSqlite() && $this->isSqlServer()) {
             $recorder->addSql(
                 sprintf(
                     "IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'%sfaqchat_messages') AND type = 'U') "
@@ -429,7 +445,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
                 $this->tablePrefix,
             ), 'Create push subscriptions table (MySQL)');
-        } elseif ($this->isPostgreSql()) {
+        }
+
+        if (!$this->isMySql() && $this->isPostgreSql()) {
             $recorder->addSql(sprintf(
                 'CREATE TABLE IF NOT EXISTS %sfaqpush_subscriptions (
                     id SERIAL NOT NULL,
@@ -460,7 +478,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 ),
                 'Create endpoint_hash unique index on push subscriptions (PostgreSQL)',
             );
-        } elseif ($this->isSqlite()) {
+        }
+
+        if (!$this->isMySql() && !$this->isPostgreSql() && $this->isSqlite()) {
             $recorder->addSql(sprintf(
                 'CREATE TABLE IF NOT EXISTS %sfaqpush_subscriptions (
                     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -490,7 +510,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 ),
                 'Create endpoint_hash unique index on push subscriptions (SQLite)',
             );
-        } elseif ($this->isSqlServer()) {
+        }
+
+        if (!$this->isMySql() && !$this->isPostgreSql() && !$this->isSqlite() && $this->isSqlServer()) {
             $recorder->addSql(
                 sprintf(
                     "IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'%sfaqpush_subscriptions') AND type = 'U') "
@@ -552,7 +574,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
                 $this->tablePrefix,
             ), 'Create API rate limits table (MySQL)');
-        } elseif ($this->isPostgreSql()) {
+        }
+
+        if (!$this->isMySql() && $this->isPostgreSql()) {
             $recorder->addSql(sprintf(
                 'CREATE TABLE IF NOT EXISTS %sfaqrate_limits (
                     rate_key VARCHAR(255) NOT NULL,
@@ -563,7 +587,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 )',
                 $this->tablePrefix,
             ), 'Create API rate limits table (PostgreSQL)');
-        } elseif ($this->isSqlite()) {
+        }
+
+        if (!$this->isMySql() && !$this->isPostgreSql() && $this->isSqlite()) {
             $recorder->addSql(sprintf('CREATE TABLE IF NOT EXISTS %sfaqrate_limits (
                     rate_key VARCHAR(255) NOT NULL,
                     window_start INTEGER NOT NULL,
@@ -571,7 +597,9 @@ readonly class Migration420Alpha extends AbstractMigration
                     created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                     PRIMARY KEY (rate_key, window_start)
                 )', $this->tablePrefix), 'Create API rate limits table (SQLite)');
-        } elseif ($this->isSqlServer()) {
+        }
+
+        if (!$this->isMySql() && !$this->isPostgreSql() && !$this->isSqlite() && $this->isSqlServer()) {
             $recorder->addSql(
                 sprintf(
                     "IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'%sfaqrate_limits') AND type = 'U') "

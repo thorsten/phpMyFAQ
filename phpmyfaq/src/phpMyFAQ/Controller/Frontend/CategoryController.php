@@ -255,9 +255,8 @@ final class CategoryController extends AbstractFrontController
         $parentId = $categoryEntity->getParentId();
         $parentName = $category->getCategoryName($parentId);
 
-        if ($parentId === 0) {
-            $url = $this->configuration->getDefaultUrl() . 'show-categories.html';
-        } else {
+        $url = $this->configuration->getDefaultUrl() . 'show-categories.html';
+        if ($parentId !== 0) {
             $slug = TitleSlugifier::slug($parentName);
             $url = sprintf('%scategory/%d/%s.html', $this->configuration->getDefaultUrl(), $parentId, $slug);
         }

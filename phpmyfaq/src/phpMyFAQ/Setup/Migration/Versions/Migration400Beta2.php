@@ -49,7 +49,9 @@ readonly class Migration400Beta2 extends AbstractMigration
                 sprintf('ALTER TABLE %sfaquser ADD COLUMN webauthnkeys TEXT NULL DEFAULT NULL', $this->tablePrefix),
                 'Add WebAuthn keys column to faquser (SQLite)',
             );
-        } else {
+        }
+
+        if (!$this->isSqlite()) {
             $recorder->addSql(
                 sprintf('ALTER TABLE %sfaquser ADD webauthnkeys TEXT NULL DEFAULT NULL', $this->tablePrefix),
                 'Add WebAuthn keys column to faquser',

@@ -47,10 +47,9 @@ class Database
     {
         self::$dbType = $type;
 
+        $class = 'phpMyFAQ\Database\\' . ucfirst($type);
         if (str_starts_with($type, 'pdo_')) {
             $class = 'phpMyFAQ\Database\Pdo' . ucfirst(substr($type, offset: 4));
-        } else {
-            $class = 'phpMyFAQ\Database\\' . ucfirst($type);
         }
 
         if (class_exists($class)) {

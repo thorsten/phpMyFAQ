@@ -235,7 +235,9 @@ class BuiltinCaptcha implements CaptchaInterface
                 if ($nextLine < 1) {
                     $nextLine = 2;
                 }
-            } else {
+            }
+
+            if (!function_exists('imagettftext')) {
                 $nextLine += random_int(min: 1, max: 7);
             }
 
@@ -402,7 +404,9 @@ class BuiltinCaptcha implements CaptchaInterface
                 imagettftext($this->gdImage, $size, $rotation, (int) $x + 2, $y, $colorOne, $this->font, $letter);
                 imagettftext($this->gdImage, $size, $rotation, (int) $x + 1, $y + 1, $colorOne, $this->font, $letter);
                 imagettftext($this->gdImage, $size, $rotation, (int) $x, $y + 2, $colorOne, $this->font, $letter);
-            } else {
+            }
+
+            if (!function_exists('imagettftext')) {
                 $size = 5;
                 $c3 = imagecolorallocate(image: $this->gdImage, red: 0, green: 0, blue: 255);
                 $x = 20;

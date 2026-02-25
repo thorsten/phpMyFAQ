@@ -94,11 +94,11 @@ class WebExceptionListener
             $controller = $controllerResolver->getController($request);
 
             if (is_array($controller) && $controller[0] instanceof AbstractController) {
-                if ($this->container instanceof ContainerInterface) {
-                    $controller[0]->setContainer($this->container);
-                } else {
+                if (!$this->container instanceof ContainerInterface) {
                     throw new \RuntimeException('Container is required to render the styled 404 page.');
                 }
+
+                $controller[0]->setContainer($this->container);
             }
 
             $arguments = $argumentResolver->getArguments($request, $controller);

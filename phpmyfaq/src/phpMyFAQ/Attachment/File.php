@@ -129,7 +129,9 @@ class File extends AbstractAttachment implements AttachmentInterface
 
             if ($this->linkedRecords()) {
                 $success = true;
-            } else {
+            }
+
+            if (!$success) {
                 try {
                     if ($this->encrypted) {
                         $targetFile = $this->buildFilePath();
@@ -138,7 +140,9 @@ class File extends AbstractAttachment implements AttachmentInterface
                             $target = $this->getFile(FilesystemFile::MODE_WRITE);
                             $success = $vanillaFile->moveTo($target);
                         }
-                    } else {
+                    }
+
+                    if (!$this->encrypted) {
                         $contents = file_get_contents($filePath);
                         if ($contents !== false) {
                             $success = $this->getStorage()->put($this->buildStoragePath(), $contents);
@@ -173,15 +177,16 @@ class File extends AbstractAttachment implements AttachmentInterface
         $success = true;
 
         // Won't delete the file if there are still some records hanging on it
-        if (!$this->linkedRecords()) {
-            if ($this->encrypted) {
-                $success &= $this->getFile()->delete();
-            } else {
-                try {
-                    $this->getStorage()->delete($this->buildStoragePath());
-                } catch (StorageException $storageException) {
-                    throw new AttachmentException($storageException->getMessage(), 0, $storageException);
-                }
+        $hasLinkedRecords = $this->linkedRecords();
+        if (!$hasLinkedRecords && $this->encrypted) {
+            $success &= $this->getFile()->delete();
+        }
+
+        if (!$hasLinkedRecords && !$this->encrypted) {
+            try {
+                $this->getStorage()->delete($this->buildStoragePath());
+            } catch (StorageException $storageException) {
+                throw new AttachmentException($storageException->getMessage(), 0, $storageException);
             }
         }
 

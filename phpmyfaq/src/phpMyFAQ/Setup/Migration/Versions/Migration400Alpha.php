@@ -99,7 +99,9 @@ readonly class Migration400Alpha extends AbstractMigration
                 ),
                 'Create bookmarks table (MySQL)',
             );
-        } else {
+        }
+
+        if (!$this->isMySql()) {
             $recorder->addSql(
                 sprintf(
                     'CREATE TABLE %sfaqbookmarks (userid INTEGER DEFAULT NULL, faqid INTEGER DEFAULT NULL)',
@@ -123,7 +125,9 @@ readonly class Migration400Alpha extends AbstractMigration
                 ),
                 'Add sticky_order column to faqdata_revisions (MySQL)',
             );
-        } else {
+        }
+
+        if (!$this->isMySql()) {
             $recorder->addSql(
                 sprintf('ALTER TABLE %sfaqdata ADD COLUMN sticky_order integer DEFAULT NULL', $this->tablePrefix),
                 'Add sticky_order column to faqdata',
@@ -159,7 +163,9 @@ readonly class Migration400Alpha extends AbstractMigration
                 ),
                 'Add parent_id column to faqcategory_order (MySQL)',
             );
-        } elseif ($this->isSqlServer()) {
+        }
+
+        if (!$this->isMySql() && $this->isSqlServer()) {
             $recorder->addSql(
                 sprintf(
                     'ALTER TABLE %sfaqcategory_order ADD COLUMN parent_id INTEGER DEFAULT NULL',
@@ -167,7 +173,9 @@ readonly class Migration400Alpha extends AbstractMigration
                 ),
                 'Add parent_id column to faqcategory_order (SQL Server)',
             );
-        } else {
+        }
+
+        if (!$this->isMySql() && !$this->isSqlServer()) {
             // SQLite and PostgreSQL - table rebuild approach
             $recorder->addSql(sprintf(
                 'CREATE TABLE %sfaqcategory_order_new (

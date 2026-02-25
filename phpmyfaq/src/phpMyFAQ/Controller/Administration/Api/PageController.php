@@ -219,10 +219,14 @@ final class PageController extends AbstractAdministrationApiController
             ->setCreated(new DateTime());
 
         // Create a translation or new page
+        $success = false;
+        $pageId = 0;
         if ($isTranslation) {
             $success = $customPage->createTranslation($pageEntity, $translationPageId);
             $pageId = $success ? $translationPageId : 0;
-        } else {
+        }
+
+        if (!$isTranslation) {
             $pageId = $customPage->create($pageEntity);
             $success = $pageId > 0;
         }

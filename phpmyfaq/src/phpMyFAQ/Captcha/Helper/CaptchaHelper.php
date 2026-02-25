@@ -30,11 +30,10 @@ class CaptchaHelper
     public static function getInstance(Configuration $configuration): ?CaptchaHelperInterface
     {
         self::$configuration = $configuration;
+        self::$captchaHelper = new BuiltinCaptchaAbstractHelper(self::$configuration);
 
         if (self::$configuration->get('security.enableGoogleReCaptchaV2')) {
             self::$captchaHelper = new GoogleRecaptchaAbstractHelper(self::$configuration);
-        } else {
-            self::$captchaHelper = new BuiltinCaptchaAbstractHelper(self::$configuration);
         }
 
         return self::$captchaHelper;

@@ -110,15 +110,11 @@ class Statistics
      */
     public function getTopTen(string $type = 'visits'): array
     {
+        $result = $this->getTopVotedData(PMF_NUMBER_RECORDS_TOPTEN, $this->configuration->getLanguage()->getLanguage());
         if ('visits' === $type) {
             $result = $this->getTopTenData(
                 PMF_NUMBER_RECORDS_TOPTEN,
                 0,
-                $this->configuration->getLanguage()->getLanguage(),
-            );
-        } else {
-            $result = $this->getTopVotedData(
-                PMF_NUMBER_RECORDS_TOPTEN,
                 $this->configuration->getLanguage()->getLanguage(),
             );
         }
@@ -132,7 +128,9 @@ class Statistics
             $entry->url = $row['url'];
             if ('visits' === $type) {
                 $entry->visits = $this->plurals->get(key: 'plmsgViews', number: $row['visits']);
-            } else {
+            }
+
+            if ('visits' !== $type) {
                 $entry->voted = sprintf(
                     '%s %s 5 - %s',
                     round(num: $row['avg'], precision: 2),
@@ -270,7 +268,9 @@ class Statistics
                     if (!in_array($row->group_id, $this->groups, strict: true)) {
                         continue;
                     }
-                } elseif (!in_array($row->user_id, [-1, $this->user], strict: true)) {
+                }
+
+                if (!$this->groupSupport && !in_array($row->user_id, [-1, $this->user], strict: true)) {
                     continue;
                 }
 
@@ -399,7 +399,9 @@ class Statistics
                     if (!in_array($row->group_id, $this->groups, strict: true)) {
                         continue;
                     }
-                } elseif (!in_array($row->user_id, [-1, $this->user], strict: true)) {
+                }
+
+                if (!$this->groupSupport && !in_array($row->user_id, [-1, $this->user], strict: true)) {
                     continue;
                 }
 
@@ -539,7 +541,9 @@ class Statistics
                     if (!in_array($row->group_id, $this->groups, strict: true)) {
                         continue;
                     }
-                } elseif (!in_array($row->user_id, [-1, $this->user], strict: true)) {
+                }
+
+                if (!$this->groupSupport && !in_array($row->user_id, [-1, $this->user], strict: true)) {
                     continue;
                 }
 

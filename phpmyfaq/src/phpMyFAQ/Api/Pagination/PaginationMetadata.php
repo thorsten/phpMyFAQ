@@ -127,7 +127,9 @@ class PaginationMetadata
                 $nextParams = array_merge($queryParams, ['page' => $this->currentPage + 1]);
                 $links['next'] = $basePath . '?' . http_build_query($nextParams);
             }
-        } else {
+        }
+
+        if (!$request->isPageBased) {
             // Offset-based links
             $queryParams['limit'] = $this->perPage;
 

@@ -60,6 +60,7 @@ class CreateHashesCommand extends Command
         $symfonyStyle = new SymfonyStyle($input, $output);
 
         $root = $input->getOption('root');
+        $rootDir = defined('PMF_ROOT_DIR') ? PMF_ROOT_DIR : null;
         if (is_string($root) && '' !== $root) {
             if (!is_dir($root)) {
                 $symfonyStyle->error(sprintf("The provided root directory '%s' does not exist.", $root));
@@ -67,8 +68,6 @@ class CreateHashesCommand extends Command
             }
 
             $rootDir = rtrim($root, characters: '/');
-        } else {
-            $rootDir = defined('PMF_ROOT_DIR') ? PMF_ROOT_DIR : null;
         }
 
         if (null !== $rootDir && !defined('PMF_ROOT_DIR')) {

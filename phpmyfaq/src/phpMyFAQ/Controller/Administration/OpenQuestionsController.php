@@ -62,10 +62,9 @@ final class OpenQuestionsController extends AbstractAdministrationController
             if ($langCode !== $currentLang) {
                 $otherCount++;
 
+                $longName = $langCode;
                 if (class_exists('\Locale')) {
                     $longName = \Locale::getDisplayLanguage($langCode, $currentLang);
-                } else {
-                    $longName = $langCode;
                 }
 
                 if (!array_key_exists($langCode, $otherLangsData)) {

@@ -127,7 +127,9 @@ class PaginationRequest
             $perPage = $limit;
             // Calculate page from offset
             $page = (int) floor($offset / $limit) + 1;
-        } else {
+        }
+
+        if ($offset === null) {
             // Page-based pagination
             $isPageBased = true;
             $perPage ??= $limit ?? $defaultPerPage;
