@@ -38,7 +38,9 @@ final class SearchStrategy implements StrategyInterface
             }
 
             $url .= Link::LINK_SLASH . $link->getSEOTitle() . Link::LINK_HTML_EXTENSION;
-        } else {
+        }
+
+        if (!$isTag) {
             $url = Link::LINK_HTML_SEARCH;
             if ($hasSearch) {
                 $url .=

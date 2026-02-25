@@ -407,6 +407,7 @@ class Pgsql extends Database implements DriverInterface
         }
 
         foreach ($this->createTableStatements as $key => $stmt) {
+            $result = $this->configuration->getDb()->query(sprintf($stmt, $prefix));
             if (
                 $key === 'idx_records'
                 || $key === 'faqsessions_idx'
@@ -414,8 +415,6 @@ class Pgsql extends Database implements DriverInterface
                 || str_starts_with($key, 'faqchat_messages_idx_')
             ) {
                 $result = $this->configuration->getDb()->query(sprintf($stmt, $prefix, $prefix));
-            } else {
-                $result = $this->configuration->getDb()->query(sprintf($stmt, $prefix));
             }
 
             if (!$result) {

@@ -116,17 +116,17 @@ class Update extends AbstractSetup
         );
 
         foreach ($files as $file) {
+            $filePath = is_string($file) ? $file : (string) $file;
+            $realPath = realpath($filePath);
+            $filePath = $realPath !== false ? $realPath : $filePath;
+            $isDir = is_dir($filePath);
+            $isFile = is_file($filePath);
+
             if ($file instanceof SplFileInfo) {
                 $realPath = $file->getRealPath();
                 $filePath = $realPath !== false ? $realPath : $file->getPathname();
                 $isDir = $file->isDir();
                 $isFile = $file->isFile();
-            } else {
-                $filePath = is_string($file) ? $file : (string) $file;
-                $realPath = realpath($filePath);
-                $filePath = $realPath !== false ? $realPath : $filePath;
-                $isDir = is_dir($filePath);
-                $isFile = is_file($filePath);
             }
             if ($filePath === false) {
                 continue;

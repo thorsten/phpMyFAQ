@@ -58,39 +58,39 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
     public function search(string $searchTerm): mixed
     {
         if (is_numeric($searchTerm) && $this->configuration->get(item: 'search.searchForSolutionId')) {
-            parent::search($searchTerm);
-        } else {
-            $enableRelevance = $this->configuration->get(item: 'search.enableRelevance');
-
-            $columns = $this->getResultColumns();
-            $columns .= $enableRelevance ? $this->getMatchingColumnsAsResult() : '';
-            $orderBy = $enableRelevance ? 'ORDER BY ' . $this->getMatchingOrder() : '';
-
-            $query = sprintf(
-                "
-                SELECT
-                    %s
-                FROM
-                    %s %s %s %s
-                WHERE
-                    (%s) ILIKE ('%%%s%%')
-                    %s
-                    %s",
-                $columns,
-                $this->getTable(),
-                $this->getJoinedTable(),
-                $this->getJoinedColumns(),
-                $enableRelevance
-                    ? ", plainto_tsquery('" . $this->configuration->getDb()->escape($searchTerm) . "') query "
-                    : '',
-                $this->getMatchingColumns(),
-                $this->configuration->getDb()->escape($searchTerm),
-                $this->getConditions(),
-                $orderBy,
-            );
-
-            $this->resultSet = $this->configuration->getDb()->query($query);
+            return parent::search($searchTerm);
         }
+
+        $enableRelevance = $this->configuration->get(item: 'search.enableRelevance');
+
+        $columns = $this->getResultColumns();
+        $columns .= $enableRelevance ? $this->getMatchingColumnsAsResult() : '';
+        $orderBy = $enableRelevance ? 'ORDER BY ' . $this->getMatchingOrder() : '';
+
+        $query = sprintf(
+            "
+            SELECT
+                %s
+            FROM
+                %s %s %s %s
+            WHERE
+                (%s) ILIKE ('%%%s%%')
+                %s
+                %s",
+            $columns,
+            $this->getTable(),
+            $this->getJoinedTable(),
+            $this->getJoinedColumns(),
+            $enableRelevance
+                ? ", plainto_tsquery('" . $this->configuration->getDb()->escape($searchTerm) . "') query "
+                : '',
+            $this->getMatchingColumns(),
+            $this->configuration->getDb()->escape($searchTerm),
+            $this->getConditions(),
+            $orderBy,
+        );
+
+        $this->resultSet = $this->configuration->getDb()->query($query);
 
         return $this->resultSet;
     }
@@ -152,9 +152,10 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
             $string = sprintf('relevance_%s DESC', $field);
             if ($order === '' || $order === '0') {
                 $order .= $string;
-            } else {
-                $order .= ', ' . $string;
+                continue;
             }
+
+            $order .= ', ' . $string;
         }
 
         return $order;
@@ -175,14 +176,17 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
                 $match = sprintf("to_tsvector(coalesce(%s,''))", $matchingColumn);
                 if ($matchColumns === '' || $matchColumns === '0') {
                     $matchColumns .= '(' . $match;
-                } else {
-                    $matchColumns .= ' || ' . $match;
+                    continue;
                 }
+
+                $matchColumns .= ' || ' . $match;
             }
 
             // Add the ILIKE since the FULLTEXT looks for the exact phrase only
             $matchColumns .= ') @@ query) OR (' . implode(" || ' ' || ", $this->matchingColumns);
-        } else {
+        }
+
+        if (!$enableRelevance) {
             $matchColumns = implode(" || ' ' || ", $this->matchingColumns);
         }
 

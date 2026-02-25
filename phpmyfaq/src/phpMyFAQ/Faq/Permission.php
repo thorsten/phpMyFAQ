@@ -165,37 +165,39 @@ class Permission
 
         $data = json_decode(Request::createFromGlobals()->getContent())->data;
 
+        $restrictedUsers = [];
         if ('all' === Filter::filterVar($data->userpermission, FILTER_SANITIZE_SPECIAL_CHARS)) {
-            $permissions += [
-                'restricted_user' => [-1],
-            ];
-        } elseif (is_string($data->restricted_users)) {
-            $permissions += [
-                'restricted_user' => [Filter::filterVar($data->restricted_users, FILTER_VALIDATE_INT)],
-            ];
-        } else {
-            $permissions += [
-                'restricted_user' => is_array($data->restricted_users)
-                    ? Filter::filterArray($data->restricted_users, FILTER_VALIDATE_INT)
-                    : [],
-            ];
+            $restrictedUsers = [-1];
         }
 
-        if ('all' === Filter::filterVar($data->grouppermission, FILTER_SANITIZE_SPECIAL_CHARS)) {
-            $permissions += [
-                'restricted_groups' => [-1],
-            ];
-        } elseif (is_string($data->restricted_groups)) {
-            $permissions += [
-                'restricted_groups' => [Filter::filterVar($data->restricted_groups, FILTER_VALIDATE_INT)],
-            ];
-        } else {
-            $permissions += [
-                'restricted_groups' => is_array($data->restricted_groups)
-                    ? Filter::filterArray($data->restricted_groups, FILTER_VALIDATE_INT)
-                    : [],
-            ];
+        if ($restrictedUsers === []) {
+            if (is_string($data->restricted_users)) {
+                $restrictedUsers = [Filter::filterVar($data->restricted_users, FILTER_VALIDATE_INT)];
+            } elseif (is_array($data->restricted_users)) {
+                $restrictedUsers = Filter::filterArray($data->restricted_users, FILTER_VALIDATE_INT);
+            }
         }
+
+        $permissions += [
+            'restricted_user' => $restrictedUsers,
+        ];
+
+        $restrictedGroups = [];
+        if ('all' === Filter::filterVar($data->grouppermission, FILTER_SANITIZE_SPECIAL_CHARS)) {
+            $restrictedGroups = [-1];
+        }
+
+        if ($restrictedGroups === []) {
+            if (is_string($data->restricted_groups)) {
+                $restrictedGroups = [Filter::filterVar($data->restricted_groups, FILTER_VALIDATE_INT)];
+            } elseif (is_array($data->restricted_groups)) {
+                $restrictedGroups = Filter::filterArray($data->restricted_groups, FILTER_VALIDATE_INT);
+            }
+        }
+
+        $permissions += [
+            'restricted_groups' => $restrictedGroups,
+        ];
 
         return $permissions;
     }

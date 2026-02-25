@@ -263,7 +263,9 @@ class Client extends Instance
                 $targetPrefix,
                 $sourcePrefix,
             );
-        } elseif (str_contains($dbType, 'sqlsrv') || str_contains($dbType, 'Sqlsrv')) {
+        }
+
+        if (str_contains($dbType, 'sqlsrv') || str_contains($dbType, 'Sqlsrv')) {
             $targetPrefix = sprintf('[%s].', $schema);
         }
 

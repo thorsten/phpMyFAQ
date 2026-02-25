@@ -259,7 +259,9 @@ class Link
                 self::LINK_GET_ACTION_BOOKMARKS => new GenericPathStrategy(self::LINK_HTML_BOOKMARKS),
                 self::LINK_GET_ACTION_REGISTER => new GenericPathStrategy(self::LINK_HTML_REGISTER),
             ]);
-        } else {
+        }
+
+        if ($strategyRegistry instanceof StrategyRegistry) {
             // Merge missing default strategies when a custom registry is injected (non-destructive)
             $this->ensureDefaultStrategies($strategyRegistry);
         }
