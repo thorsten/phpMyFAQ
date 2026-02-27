@@ -1,4 +1,4 @@
-# phpMyFAQ 4.2-dev
+# phpMyFAQ
 
 ![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/thorsten/phpMyFAQ)
 ![GitHub](https://img.shields.io/github/license/thorsten/phpMyFAQ)
@@ -7,29 +7,15 @@
 
 ## What is phpMyFAQ?
 
-phpMyFAQ is a comprehensive, multilingual FAQ system that is entirely database-driven.
-It is compatible with a variety of databases for data storage and requires PHP 8.4+ for data access.
-The system features a multi-language Content Management System equipped with a WYSIWYG editor and an Image Manager.
-It also provides real-time search capabilities with Elasticsearch or OpenSearch.
+phpMyFAQ is a multilingual, AI-ready, and scalable FAQ platform built for modern knowledge management.
+Powered by PHP 8.4+ and a fully database-driven architecture, it delivers fast search with Elasticsearch/OpenSearch, 
+flexible multi-user permissions, and a powerful content management system with revision history and WYSIWYG editing.
 
-phpMyFAQ supports flexible multi-user functionality, offering user and group-based permissions on categories and FAQs.
-It includes a wiki-like revision feature, a news system, and configurable user-tracking.
-Administrators can monitor user activities through detailed log files.
-Additionally, phpMyFAQ supports adding its own custom pages to the FAQ system.
-With support for over 40 languages, it also boasts enhanced automatic content negotiation and HTML5- / CSS3-based
-responsive templates.
-These Twig-based templates allow for the inclusion of your own text and HTML snippets. There's also a built-in plugin
-system for further customization.
+With 40+ languages, responsive Twig-based templates, a REST API, 2FA security, enterprise authentication 
+(LDAP, Active Directory, Entra ID), and a built-in plugin system, phpMyFAQ integrates seamlessly into almost any 
+environment.
 
-Additional features include PDF support, a backup system, a dynamic sitemap, related FAQs, tagging, a plugin system,
-and built-in spam protection systems.
-phpMyFAQ also supports two-factor authentication (2FA) for enhanced security.
-A REST API is available for integration with other systems.
-It also supports OpenLDAP, Microsoft Active Directory, Microsoft Entra ID, and an MCP Server for AI agents.
-The system is easy to install, thanks to its user-friendly installation script.
-
-phpMyFAQ is versatile
-and can be run on almost any web hosting provider or deployed in the cloud using a Docker container.
+Deploy it on traditional hosting or run it in the cloud via Docker.
 
 ## Requirements
 
@@ -197,7 +183,7 @@ Please check out our page about contributing on [phpmyfaq.de](https://www.phpmyf
 
 You can read the complete documentation on [here](https://phpmyfaq.readthedocs.io/en/latest/).
 
-## REST API v3.1 documentation
+## REST API documentation
 
 The REST API documentation is available as an OpenAPI 3.0 specification:
 
