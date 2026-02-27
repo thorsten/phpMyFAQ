@@ -188,9 +188,48 @@ abstract class AbstractController
      */
     protected function isSecured(): void
     {
-        if (!$this->currentUser->isLoggedIn() && $this->configuration->get(item: 'security.enableLoginOnly')) {
-            throw new UnauthorizedHttpException(challenge: 'You are not allowed to view this content.');
+        if ($this->currentUser->isLoggedIn()) {
+            return;
         }
+
+        if (!$this->configuration->get(item: 'security.enableLoginOnly')) {
+            return;
+        }
+
+        $request = Request::createFromGlobals();
+        $pathInfo = rtrim($request->getPathInfo(), '/');
+        $pathInfo = $pathInfo === '' ? '/' : $pathInfo;
+
+        if ($this->isPublicAuthenticationPath($pathInfo)) {
+            return;
+        }
+
+        throw new UnauthorizedHttpException(challenge: 'You are not allowed to view this content.');
+    }
+
+    private function isPublicAuthenticationPath(string $pathInfo): bool
+    {
+        $publicAuthenticationPaths = [
+            '/login',
+            '/authenticate',
+            '/forgot-password',
+            '/token',
+            '/check',
+            '/contact.html',
+            '/imprint.html',
+            '/privacy.html',
+            '/terms.html',
+            '/accessibility.html',
+            '/auth/azure/authorize',
+            '/auth/azure/callback',
+            '/auth/azure/callback.php',
+            '/services/azure/callback',
+            '/services/azure/callback.php',
+            '/api/webauthn/prepare-login',
+            '/api/webauthn/login',
+        ];
+
+        return in_array($pathInfo, $publicAuthenticationPaths, true);
     }
 
     /**
