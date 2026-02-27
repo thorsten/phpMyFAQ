@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach, Mock } from 'vitest';
 
 const mockAutocomplete = vi.fn();
 
@@ -38,6 +38,10 @@ describe('faqs.autocomplete', () => {
         }
       }
     );
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   const importAndTrigger = async (): Promise<void> => {
@@ -80,7 +84,7 @@ describe('faqs.autocomplete', () => {
     const inputElement = document.getElementById('pmf-faq-overview-search-input');
 
     expect(config.input).toBe(inputElement);
-    expect(config.minLength).toBe(1);
+    expect(config.minLength).toBe(2);
     expect(config.emptyMsg).toBe('No users found');
     expect(typeof config.onSelect).toBe('function');
     expect(typeof config.fetch).toBe('function');
@@ -137,6 +141,8 @@ describe('faqs.autocomplete', () => {
   });
 
   it('should pass fetch that calls fetchFaqsByAutocomplete and filters results', async () => {
+    vi.useFakeTimers();
+
     document.body.innerHTML = `
       <input id="pmf-faq-overview-search-input" type="text" />
       <input id="pmf-csrf-token" value="csrf-789" />
@@ -157,10 +163,11 @@ describe('faqs.autocomplete', () => {
     const fetchFn = config.fetch as (
       text: string,
       update: (items: Array<{ question: string; adminUrl: string }>) => void
-    ) => Promise<void>;
+    ) => void;
 
     const update = vi.fn();
-    await fetchFn('how', update);
+    fetchFn('how', update);
+    await vi.advanceTimersByTimeAsync(300);
 
     expect(fetchFaqsByAutocomplete).toHaveBeenCalledWith('how', 'csrf-789');
     expect(update).toHaveBeenCalledTimes(1);

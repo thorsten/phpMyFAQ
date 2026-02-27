@@ -29,20 +29,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (autoComplete) {
     const csrfToken = (document.getElementById('pmf-csrf-token') as HTMLInputElement).value;
+    const debounceDelay = 300;
+    let debounceTimer: ReturnType<typeof setTimeout> | undefined;
+    let fetchRequestId = 0;
+
     autocomplete<FaqItem>({
       input: autoComplete,
-      minLength: 1,
+      minLength: 2,
       onSelect: (item: FaqItem) => {
         window.location.href = item.adminUrl;
       },
-      fetch: async (text: string, update: (items: FaqItem[]) => void) => {
+      fetch: (text: string, update: (items: FaqItem[]) => void) => {
+        if (debounceTimer) {
+          clearTimeout(debounceTimer);
+        }
+
         const match = text.toLowerCase();
-        const faqs = (await fetchFaqsByAutocomplete(match, csrfToken)) as { success: FaqItem[] };
-        update(
-          faqs.success.filter((n: FaqItem) => {
-            return n.question.toLowerCase().indexOf(match) !== -1;
-          })
-        );
+        const currentRequestId = ++fetchRequestId;
+
+        debounceTimer = setTimeout(async () => {
+          const faqs = (await fetchFaqsByAutocomplete(match, csrfToken)) as { success: FaqItem[] };
+
+          if (currentRequestId !== fetchRequestId) {
+            return;
+          }
+
+          update(
+            faqs.success.filter((n: FaqItem) => {
+              return n.question.toLowerCase().indexOf(match) !== -1;
+            })
+          );
+        }, debounceDelay);
       },
       render: (item: FaqItem, currentValue: string): HTMLDivElement => {
         const regex = new RegExp(currentValue, 'gi');
