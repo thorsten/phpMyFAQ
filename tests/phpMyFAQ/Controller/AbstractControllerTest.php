@@ -454,6 +454,93 @@ class AbstractControllerTest extends TestCase
         $this->assertTrue(true);
     }
 
+    public function testIsSecuredSucceedsOnLoginPathWhenNotLoggedInAndLoginRequired(): void
+    {
+        $_SERVER['REQUEST_URI'] = '/login';
+        $_SERVER['SCRIPT_NAME'] = '/index.php';
+
+        $this->currentUserMock
+            ->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(false);
+
+        $this->configurationMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('security.enableLoginOnly')
+            ->willReturn(true);
+
+        try {
+            $this->abstractController->isSecuredPublic();
+            $this->assertTrue(true);
+        } finally {
+            unset($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME']);
+        }
+    }
+
+    public function testIsSecuredSucceedsOnAuthenticatePathWhenNotLoggedInAndLoginRequired(): void
+    {
+        $_SERVER['REQUEST_URI'] = '/authenticate';
+        $_SERVER['SCRIPT_NAME'] = '/index.php';
+
+        $this->currentUserMock
+            ->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(false);
+
+        $this->configurationMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('security.enableLoginOnly')
+            ->willReturn(true);
+
+        try {
+            $this->abstractController->isSecuredPublic();
+            $this->assertTrue(true);
+        } finally {
+            unset($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME']);
+        }
+    }
+
+    #[DataProvider('publicStaticPathsProvider')]
+    public function testIsSecuredSucceedsOnPublicStaticPathWhenNotLoggedInAndLoginRequired(string $path): void
+    {
+        $_SERVER['REQUEST_URI'] = $path;
+        $_SERVER['SCRIPT_NAME'] = '/index.php';
+
+        $this->currentUserMock
+            ->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(false);
+
+        $this->configurationMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('security.enableLoginOnly')
+            ->willReturn(true);
+
+        try {
+            $this->abstractController->isSecuredPublic();
+            $this->assertTrue(true);
+        } finally {
+            unset($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME']);
+        }
+    }
+
+    /**
+     * @return array<string, array{0: string}>
+     */
+    public static function publicStaticPathsProvider(): array
+    {
+        return [
+            'contact' => ['/contact.html'],
+            'imprint' => ['/imprint.html'],
+            'privacy' => ['/privacy.html'],
+            'terms' => ['/terms.html'],
+            'accessibility' => ['/accessibility.html'],
+        ];
+    }
+
     public function testSetContainerReEvaluatesIsSecuredWhenContainerChanges(): void
     {
         $controller = new class() extends AbstractController {
