@@ -19,10 +19,14 @@ Deploy it on traditional hosting or run it in the cloud via Docker.
 
 ## Requirements
 
-phpMyFAQ is only supported on PHP 8.4+, you need a database as well. Supported databases are MySQL, MariaDB,
-Percona Server, PostgreSQL, Microsoft SQL Server, and SQLite3. If you want to use Elasticsearch or Opensearch as the 
-main search engine, you need Elasticsearch v6+ or OpenSearch v1+. Check our detailed requirements on
-[phpmyfaq.de](https://www.phpmyfaq.de/requirements) for more information.
+phpMyFAQ requires PHP 8.4 or higher and a supported database system.
+Supported databases include MySQL, MariaDB, Percona Server, PostgreSQL, Microsoft SQL Server, and SQLite3.
+
+For enhanced search capabilities using Elasticsearch or OpenSearch, Elasticsearch 6.x or later or OpenSearch 1.x or 
+later is required.
+
+For a complete and up-to-date list of system requirements, please refer to the official documentation at
+[phpmyfaq.de](https://www.phpmyfaq.de/requirements).
 
 ## Installation
 
