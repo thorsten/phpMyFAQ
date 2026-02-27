@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
+use LogicException;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\CustomPage;
@@ -37,9 +38,9 @@ use Twig\Error\LoaderError;
 
 abstract class AbstractFrontController extends AbstractController
 {
-    protected ?System $faqSystem = null;
+    protected System $faqSystem;
 
-    protected ?Seo $seo = null;
+    protected Seo $seo;
 
     #[\Override]
     protected function initializeFromContainer(): void
@@ -47,31 +48,33 @@ abstract class AbstractFrontController extends AbstractController
         parent::initializeFromContainer();
 
         if ($this->container === null) {
-            return;
+            throw new LogicException('Container is not initialized.');
         }
 
-        $this->faqSystem = $this->container->get(id: 'phpmyfaq.system');
-        $this->seo = $this->container->get(id: 'phpmyfaq.seo');
+        $faqSystem = $this->container->get(id: 'phpmyfaq.system');
+        if (!$faqSystem instanceof System) {
+            throw new LogicException('System service not found in container.');
+        }
+
+        $this->faqSystem = $faqSystem;
+
+        $seo = $this->container->get(id: 'phpmyfaq.seo');
+        if (!$seo instanceof Seo) {
+            throw new LogicException('Seo service not found in container.');
+        }
+
+        $this->seo = $seo;
     }
 
     /**
      * @return string[]
-     * @throws Exception
      * @throws \Exception
      */
     protected function getHeader(Request $request): array
     {
         $action = $request->query->get(key: 'action', default: 'index');
-        $faqSystem = $this->faqSystem;
-        $seo = $this->seo;
 
-        if ($faqSystem === null || $seo === null) {
-            throw new \LogicException(
-                'Front controller dependencies are not initialized. Ensure initializeFromContainer() is called before getHeader().',
-            );
-        }
-
-        $isUserHasAdminRights = $this->currentUser?->perm->hasPermission(
+        $isUserHasAdminRights = $this->currentUser->perm->hasPermission(
             $this->currentUser->getUserId(),
             PermissionType::VIEW_ADMIN_LINK->value,
         );
@@ -94,14 +97,14 @@ abstract class AbstractFrontController extends AbstractController
                 : Translation::get(key: 'msgLoginUser'),
             'isUserLoggedIn' => $this->currentUser->isLoggedIn(),
             'isUserHasAdminRights' => $isUserHasAdminRights || $this->currentUser->isSuperAdmin(),
-            'baseHref' => $faqSystem->getSystemUri($this->configuration),
+            'baseHref' => $this->faqSystem->getSystemUri($this->configuration),
             'customCss' => $this->configuration->getCustomCss(),
             'version' => $this->configuration->getVersion(),
             'header' => str_replace(search: '"', replace: '', subject: $this->configuration->getTitle()),
             'metaDescription' => $this->configuration->get('seo.description'),
             'metaPublisher' => $this->configuration->get('main.metaPublisher'),
             'metaLanguage' => Translation::get(key: 'metaLanguage'),
-            'metaRobots' => $seo->getMetaRobots($action),
+            'metaRobots' => $this->seo->getMetaRobots($action),
             'phpmyfaqVersion' => $this->configuration->getVersion(),
             'stylesheet' => Translation::get(key: 'direction') === 'rtl' ? 'style.rtl' : 'style',
             'currentPageUrl' => $request->getSchemeAndHttpHost() . $request->getRequestUri(),
@@ -119,7 +122,7 @@ abstract class AbstractFrontController extends AbstractController
             'pluginStylesheets' => $this->configuration->getPluginManager()->getAllPluginStylesheets(),
             'pluginScripts' => $this->configuration->getPluginManager()->getAllPluginScripts(),
             'msgRegisterUser' => Translation::get(key: 'msgRegisterUser'),
-            'msgFullName' => Translation::get(key: 'ad_user_loggedin') . $this->currentUser->getLogin(),
+            'msgFullName' => Translation::getString(key: 'ad_user_loggedin') . $this->currentUser->getLogin(),
             'msgLoginName' => $this->currentUser->getUserData('display_name'),
             'loginHeader' => Translation::get(key: 'msgLoginUser'),
             'msgAdvancedSearch' => Translation::get(key: 'msgAdvancedSearch'),
@@ -188,7 +191,7 @@ abstract class AbstractFrontController extends AbstractController
             $csrfLogoutToken = Token::getInstance($this->session)->getTokenString('logout');
 
             if (
-                $this->currentUser?->perm->hasPermission(
+                $this->currentUser->perm->hasPermission(
                     $this->currentUser->getUserId(),
                     PermissionType::VIEW_ADMIN_LINK->value,
                 )
@@ -268,7 +271,7 @@ abstract class AbstractFrontController extends AbstractController
 
         // Default behavior: redirect to external URL
         if ((string) $url !== '') {
-            return new RedirectResponse($url);
+            return new RedirectResponse((string) $url);
         }
 
         // If no URL configured and no fallback, return 404

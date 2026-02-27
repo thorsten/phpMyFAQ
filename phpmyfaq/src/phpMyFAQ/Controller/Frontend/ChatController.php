@@ -60,7 +60,7 @@ final class ChatController extends AbstractFrontController
 
         return $this->render('chat.twig', [
             ...$this->getHeader($request),
-            'title' => sprintf('%s - %s', Translation::get(key: 'msgChat'), $this->configuration->getTitle()),
+            'title' => sprintf('%s - %s', Translation::getString(key: 'msgChat'), $this->configuration->getTitle()),
             'conversations' => $conversations,
             'unreadCount' => $unreadCount,
             'currentUserId' => $this->currentUser->getUserId(),

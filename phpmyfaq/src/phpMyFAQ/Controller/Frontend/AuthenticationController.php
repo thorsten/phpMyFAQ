@@ -67,7 +67,11 @@ final class AuthenticationController extends AbstractFrontController
 
         return $this->render('login.twig', [
             ...$this->getHeader($request),
-            'title' => sprintf('%s - %s', Translation::get(key: 'msgLoginUser'), $this->configuration->getTitle()),
+            'title' => sprintf(
+                '%s - %s',
+                Translation::getString(key: 'msgLoginUser'),
+                $this->configuration->getTitle(),
+            ),
             'loginHeader' => Translation::get(key: 'msgLoginUser'),
             'errorMessage' => $errorMessage,
             'writeLoginPath' => $this->configuration->getDefaultUrl(),
@@ -224,7 +228,7 @@ final class AuthenticationController extends AbstractFrontController
             ...$this->getHeader($request),
             'title' => sprintf(
                 '%s - %s',
-                Translation::get(key: 'msgTwofactorEnabled'),
+                Translation::getString(key: 'msgTwofactorEnabled'),
                 $this->configuration->getTitle(),
             ),
             'msgTwofactorEnabled' => Translation::get(key: 'msgTwofactorEnabled'),

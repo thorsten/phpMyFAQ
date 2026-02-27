@@ -114,7 +114,7 @@ final class NewsController extends AbstractFrontController
             'captchaFieldset' => $captchaHelper->renderCaptcha(
                 $this->captcha,
                 'writecomment',
-                Translation::get(key: 'msgCaptcha'),
+                Translation::getString(key: 'msgCaptcha'),
                 $this->currentUser->isLoggedIn(),
             ),
             'comments' => $this->prepareCommentsData($comments),

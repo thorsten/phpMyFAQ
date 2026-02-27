@@ -60,7 +60,11 @@ final class ErrorController extends AbstractFrontController
         try {
             $response = $this->render('500.twig', [
                 ...$this->getHeader($request),
-                'title' => sprintf('%s - %s', Translation::get(key: 'msgError500'), $this->configuration->getTitle()),
+                'title' => sprintf(
+                    '%s - %s',
+                    Translation::getString(key: 'msgError500'),
+                    $this->configuration->getTitle(),
+                ),
                 'errorMessage' => $errorMessage,
             ]);
         } catch (Exception) {

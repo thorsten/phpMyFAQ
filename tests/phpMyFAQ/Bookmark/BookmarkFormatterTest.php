@@ -3,7 +3,8 @@
 namespace phpMyFAQ\Bookmark;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -19,6 +20,8 @@ class BookmarkFormatterTest extends TestCase
     private Configuration $configuration;
     private CurrentUser $currentUser;
     private BookmarkFormatter $formatter;
+    private DatabaseDriver $dbHandle;
+    private string $dbPath;
 
     /**
      * @throws MockException
@@ -36,10 +39,14 @@ class BookmarkFormatterTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $this->configuration = new Configuration($dbHandle);
-        $this->configuration->set('main.referenceURL', 'https://example.com');
+        $tempFile = tempnam(sys_get_temp_dir(), 'pmf-bookmarks-formatter-');
+        $this->assertNotFalse($tempFile);
+        $this->dbPath = $tempFile;
+        $this->assertTrue(copy(PMF_TEST_DIR . '/test.db', $this->dbPath));
+
+        $this->dbHandle = new PdoSqlite();
+        $this->dbHandle->connect($this->dbPath, '', '');
+        $this->configuration = new Configuration($this->dbHandle);
 
         $this->currentUser = CurrentUser::getCurrentUser($this->configuration);
         $language = new Language($this->configuration, $this->createStub(Session::class));
@@ -47,6 +54,15 @@ class BookmarkFormatterTest extends TestCase
         $this->configuration->setLanguage($language);
 
         $this->formatter = new BookmarkFormatter($this->configuration, $this->currentUser);
+    }
+
+    protected function tearDown(): void
+    {
+        $this->dbHandle->close();
+        if (isset($this->dbPath) && is_file($this->dbPath)) {
+            unlink($this->dbPath);
+        }
+        parent::tearDown();
     }
 
     public function testFormatValidBookmark(): void

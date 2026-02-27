@@ -5,7 +5,7 @@ namespace phpMyFAQ\Auth;
 use phpMyFAQ\Auth\WebAuthn\WebAuthnUser;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\Plugin\PluginException;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -22,12 +22,12 @@ class AuthWebAuthnTest extends TestCase
      */
     protected function setUp(): void
     {
-        $dbHandle = new Sqlite3();
+        $dbHandle = new PdoSqlite();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $this->configuration = new Configuration($dbHandle);
-        $this->configuration->set('main.referenceURL', 'https://example.com:443/');
 
         $this->authWebAuthn = new AuthWebAuthn($this->configuration);
+        $this->authWebAuthn->setAppId('example.com');
     }
 
     public function testPrepareChallengeForRegistration(): void

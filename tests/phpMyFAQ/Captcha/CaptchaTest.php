@@ -3,7 +3,6 @@
 namespace phpMyFAQ\Captcha;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -11,35 +10,31 @@ use PHPUnit\Framework\TestCase;
 #[AllowMockObjectsWithoutExpectations]
 class CaptchaTest extends TestCase
 {
-    private static ?CaptchaInterface $captcha = null;
-
-    protected Configuration $configuration;
-
     protected function setUp(): void
     {
         parent::setUp();
 
         Strings::init();
-
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $this->configuration = new Configuration($dbHandle);
     }
 
     public function testGetInstanceWithGoogleRecaptchaEnabled(): void
     {
-        $this->configuration->set('security.enableGoogleReCaptchaV2', true);
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('get')
+            ->willReturn(true);
 
-        $captcha = Captcha::getInstance($this->configuration);
+        $captcha = Captcha::getInstance($configuration);
 
         $this->assertInstanceOf(GoogleRecaptcha::class, $captcha);
     }
 
     public function testGetInstanceWithGoogleRecaptchaDisabled(): void
     {
-        $this->configuration->set('security.enableGoogleReCaptchaV2', false);
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('get')
+            ->willReturn(false);
 
-        $captcha = Captcha::getInstance($this->configuration);
+        $captcha = Captcha::getInstance($configuration);
 
         $this->assertInstanceOf(BuiltinCaptcha::class, $captcha);
     }

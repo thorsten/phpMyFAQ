@@ -62,9 +62,10 @@ class Translation
     }
 
     /**
-     * Returns the translation of a specific key from the current language
+     * Returns the translation of a specific key from the current language.
+     * Returns a string for regular keys, an array for plural form keys, or null if not found.
      *
-     * @return string|string[][]|null
+     * @return string|string[]|null
      */
     public static function get(string $key): string|array|null
     {
@@ -108,6 +109,18 @@ class Translation
         }
 
         return null;
+    }
+
+    /**
+     * Returns the translation of a specific key as a string.
+     * Use this for keys that are known to always return a string (not plural form keys).
+     * Returns an empty string if the key is not found or returns an array.
+     */
+    public static function getString(string $key): string
+    {
+        $value = self::get($key);
+
+        return is_string($value) ? $value : '';
     }
 
     /**

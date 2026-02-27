@@ -96,7 +96,11 @@ final class UserController extends AbstractFrontController
 
         return $this->render('bookmarks.twig', [
             ...$this->getHeader($request),
-            'title' => sprintf('%s - %s', Translation::get(key: 'msgBookmarks'), $this->configuration->getTitle()),
+            'title' => sprintf(
+                '%s - %s',
+                Translation::getString(key: 'msgBookmarks'),
+                $this->configuration->getTitle(),
+            ),
             'bookmarksList' => $bookmark->getBookmarkList(),
             'csrfTokenDeleteBookmark' => Token::getInstance($this->session)->getTokenString('delete-bookmark'),
             'csrfTokenDeleteAllBookmarks' => Token::getInstance($this->session)->getTokenString('delete-all-bookmarks'),
@@ -121,14 +125,18 @@ final class UserController extends AbstractFrontController
 
         return $this->render('register.twig', [
             ...$this->getHeader($request),
-            'title' => sprintf('%s - %s', Translation::get(key: 'msgRegistration'), $this->configuration->getTitle()),
+            'title' => sprintf(
+                '%s - %s',
+                Translation::getString(key: 'msgRegistration'),
+                $this->configuration->getTitle(),
+            ),
             'lang' => $this->configuration->getLanguage()->getLanguage(),
             'isWebAuthnEnabled' => $this->configuration->get('security.enableWebAuthnSupport'),
             'csrfTokenWebAuthn' => Token::getInstance($this->session)->getTokenString('webauthn'),
             'captchaFieldset' => $this->captchaHelper->renderCaptcha(
                 $this->captcha,
                 'register',
-                Translation::get(key: 'msgCaptcha'),
+                Translation::getString(key: 'msgCaptcha'),
                 $this->currentUser->isLoggedIn(),
             ),
         ]);

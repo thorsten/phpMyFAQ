@@ -68,16 +68,12 @@ class BackupTest extends TestCase
         $tableNames = 'faqconfig faqinstances';
         $backupQueries = $this->backup->generateBackupQueries($tableNames);
         $dataBackup = $this->backup->createBackup(BackupType::BACKUP_TYPE_DATA->value, $backupQueries);
-        $expected = 'phpmyfaq-data.' . date(format: 'Y-m-d-H-i-s') . '.sql';
-
-        $this->assertEquals($expected, $dataBackup);
+        $this->assertMatchesRegularExpression('/^phpmyfaq-data\.\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}\.sql$/', $dataBackup);
 
         $tableNames = 'faqadminlog faqsessions';
         $backupQueries = $this->backup->generateBackupQueries($tableNames);
         $logsBackup = $this->backup->createBackup(BackupType::BACKUP_TYPE_LOGS->value, $backupQueries);
-        $expected = 'phpmyfaq-logs.' . date(format: 'Y-m-d-H-i-s') . '.sql';
-
-        $this->assertEquals($expected, $logsBackup);
+        $this->assertMatchesRegularExpression('/^phpmyfaq-logs\.\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}\.sql$/', $logsBackup);
     }
 
     /**

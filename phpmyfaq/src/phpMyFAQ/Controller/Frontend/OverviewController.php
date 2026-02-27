@@ -68,9 +68,9 @@ final class OverviewController extends AbstractFrontController
         $this->addExtension(new AttributeExtension(FaqTwigExtension::class));
         return $this->render('overview.twig', [
             ...$this->getHeader($request),
-            'title' => sprintf('%s - %s', Translation::get(key: 'faqOverview'), $this->configuration->getTitle()),
+            'title' => sprintf('%s - %s', Translation::getString(key: 'faqOverview'), $this->configuration->getTitle()),
             'metaDescription' => sprintf(
-                Translation::get(key: 'msgOverviewMetaDesc'),
+                Translation::getString(key: 'msgOverviewMetaDesc'),
                 $this->configuration->getTitle(),
             ),
             'pageHeader' => Translation::get(key: 'faqOverview'),

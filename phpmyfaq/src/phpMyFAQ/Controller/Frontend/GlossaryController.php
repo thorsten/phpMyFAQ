@@ -66,9 +66,13 @@ final class GlossaryController extends AbstractFrontController
 
         return $this->render('glossary.twig', [
             ...$this->getHeader($request),
-            'title' => sprintf('%s - %s', Translation::get(key: 'ad_menu_glossary'), $this->configuration->getTitle()),
+            'title' => sprintf(
+                '%s - %s',
+                Translation::getString(key: 'ad_menu_glossary'),
+                $this->configuration->getTitle(),
+            ),
             'metaDescription' => sprintf(
-                Translation::get(key: 'msgGlossaryMetaDesc'),
+                Translation::getString(key: 'msgGlossaryMetaDesc'),
                 $this->configuration->getTitle(),
             ),
             'pageHeader' => Translation::get(key: 'ad_menu_glossary'),

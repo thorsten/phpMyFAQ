@@ -47,7 +47,7 @@ final class PageNotFoundController extends AbstractFrontController
 
         $response = $this->render('404.twig', [
             ...$this->getHeader($request),
-            'title' => sprintf('%s - %s', Translation::get(key: 'msgError404'), $this->configuration->getTitle()),
+            'title' => sprintf('%s - %s', Translation::getString(key: 'msgError404'), $this->configuration->getTitle()),
         ]);
 
         $response->setStatusCode(Response::HTTP_NOT_FOUND);

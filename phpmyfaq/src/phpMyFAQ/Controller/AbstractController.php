@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller;
 
 use JsonException;
+use LogicException;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Configuration;
@@ -57,11 +58,11 @@ abstract class AbstractController
 {
     protected ?ContainerInterface $container = null;
 
-    protected ?Configuration $configuration = null;
+    protected Configuration $configuration;
 
-    protected ?CurrentUser $currentUser = null;
+    protected CurrentUser $currentUser;
 
-    protected ?SessionInterface $session = null;
+    protected SessionInterface $session;
 
     /** @var ExtensionInterface[] */
     private array $twigExtensions = [];
@@ -84,7 +85,7 @@ abstract class AbstractController
 
     /**
      * Sets the shared DI container from the Kernel.
-     * Called by ControllerContainerListener on kernel.controller event.
+     * Called by ControllerContainerListener on "kernel.controller" event.
      */
     public function setContainer(ContainerInterface $container): void
     {
@@ -94,16 +95,35 @@ abstract class AbstractController
 
     /**
      * Initializes configuration, user, and session from the container.
+     *
+     * @throws \Exception
      */
     protected function initializeFromContainer(): void
     {
         if ($this->container === null) {
-            return;
+            throw new LogicException('Container is not initialized.');
         }
 
-        $this->configuration = $this->container->get(id: 'phpmyfaq.configuration');
-        $this->currentUser = $this->container->get(id: 'phpmyfaq.user.current_user');
-        $this->session = $this->container->get(id: 'session');
+        $configuration = $this->container->get(id: 'phpmyfaq.configuration');
+        if (!$configuration instanceof Configuration) {
+            throw new LogicException('Configuration service not found in container.');
+        }
+
+        $this->configuration = $configuration;
+
+        $currentUser = $this->container->get(id: 'phpmyfaq.user.current_user');
+        if (!$currentUser instanceof CurrentUser) {
+            throw new LogicException('CurrentUser service not found in container.');
+        }
+
+        $this->currentUser = $currentUser;
+
+        $session = $this->container->get(id: 'session');
+        if (!$session instanceof SessionInterface) {
+            throw new LogicException('Session service not found in container.');
+        }
+
+        $this->session = $session;
 
         TwigWrapper::setTemplateSetName($this->configuration->getTemplateSet());
         $this->isSecured();

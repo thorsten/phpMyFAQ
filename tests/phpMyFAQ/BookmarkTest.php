@@ -2,7 +2,8 @@
 
 namespace phpMyFAQ;
 
-use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
@@ -15,6 +16,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class BookmarkTest extends TestCase
 {
     private Bookmark $bookmark;
+    private DatabaseDriver $dbHandle;
+    private string $dbPath;
 
     /**
      * @throws Exception
@@ -32,10 +35,14 @@ class BookmarkTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $configuration = new Configuration($dbHandle);
-        $configuration->set('main.referenceURL', 'https://example.com');
+        $tempFile = tempnam(sys_get_temp_dir(), 'pmf-bookmark-');
+        $this->assertNotFalse($tempFile);
+        $this->dbPath = $tempFile;
+        $this->assertTrue(copy(PMF_TEST_DIR . '/test.db', $this->dbPath));
+
+        $this->dbHandle = new PdoSqlite();
+        $this->dbHandle->connect($this->dbPath, '', '');
+        $configuration = new Configuration($this->dbHandle);
 
         $user = CurrentUser::getCurrentUser($configuration);
         $language = new Language($configuration, $this->createStub(Session::class));
@@ -43,6 +50,16 @@ class BookmarkTest extends TestCase
         $configuration->setLanguage($language);
 
         $this->bookmark = new Bookmark($configuration, $user);
+    }
+
+    protected function tearDown(): void
+    {
+        $this->dbHandle->close();
+        if (isset($this->dbPath) && is_file($this->dbPath)) {
+            unlink($this->dbPath);
+        }
+
+        parent::tearDown();
     }
 
     public function testSaveFaqAsBookmarkById(): void

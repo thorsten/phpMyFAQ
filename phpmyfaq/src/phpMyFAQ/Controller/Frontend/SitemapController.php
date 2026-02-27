@@ -64,8 +64,11 @@ final class SitemapController extends AbstractFrontController
 
         return $this->render('sitemap.twig', [
             ...$this->getHeader($request),
-            'title' => sprintf('%s - %s', Translation::get(key: 'msgSitemap'), $this->configuration->getTitle()),
-            'metaDescription' => sprintf(Translation::get(key: 'msgSitemapMetaDesc'), $this->configuration->getTitle()),
+            'title' => sprintf('%s - %s', Translation::getString(key: 'msgSitemap'), $this->configuration->getTitle()),
+            'metaDescription' => sprintf(
+                Translation::getString(key: 'msgSitemapMetaDesc'),
+                $this->configuration->getTitle(),
+            ),
             'pageHeader' =>
                 $currLetter === '' || $currLetter === '0' ? Translation::get(key: 'msgSitemap') : $currLetter,
             'letters' => $this->siteMap->getAllFirstLetters(),
