@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Storage;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\Tenant\TenantContext;
 use phpMyFAQ\Tenant\TenantQuotas;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -15,6 +16,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(TenantScopedStorage::class)]
 #[UsesClass(TenantContext::class)]
 #[UsesClass(TenantQuotas::class)]
+#[UsesClass(PdoSqlite::class)]
 class StorageFactoryTest extends TestCase
 {
     public function testCreateReturnsFilesystemStorageByDefault(): void
