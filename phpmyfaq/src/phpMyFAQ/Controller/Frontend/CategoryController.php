@@ -57,7 +57,7 @@ final class CategoryController extends AbstractFrontController
         $this->userSession->setCurrentUser($this->currentUser);
 
         $categoryId = Filter::filterVar($request->attributes->get('categoryId'), FILTER_VALIDATE_INT);
-        $currentGroups = $this->currentUser?->perm->getUserGroups($this->currentUser->getUserId());
+        $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
 
         $category = $this->initializeCategory($currentGroups);
         $faq = $this->initializeFaq($currentGroups);
@@ -78,7 +78,7 @@ final class CategoryController extends AbstractFrontController
     {
         $this->userSession->setCurrentUser($this->currentUser);
 
-        $currentGroups = $this->currentUser?->perm->getUserGroups($this->currentUser->getUserId());
+        $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
 
         $category = $this->initializeCategory($currentGroups);
         $this->categoryHelper = $this->createCategoryHelper();
@@ -150,13 +150,13 @@ final class CategoryController extends AbstractFrontController
         $subCategoryContent = $this->getSubCategoryContent($category, $selectedCategoryId, $records);
         $categoryLevelUp = $this->buildParentNavigationLink($category, $categoryEntity);
         $categoryImage = $this->getCategoryImageUrl($categoryEntity);
-        $categoryHeader = Translation::get(key: 'msgEntriesIn') . $categoryEntity->getName();
+        $categoryHeader = Translation::getString(key: 'msgEntriesIn') . $categoryEntity->getName();
 
         return [
             ...$this->getHeader($request),
             'title' => sprintf('%s - %s', $categoryHeader, $this->configuration->getTitle()),
             'metaDescription' => sprintf(
-                Translation::get(key: 'msgCategoryMetaDesc'),
+                Translation::getString(key: 'msgCategoryMetaDesc'),
                 $this->configuration->getTitle(),
             ),
             'categoryHeader' => $categoryHeader,
@@ -189,7 +189,7 @@ final class CategoryController extends AbstractFrontController
             ...$this->getHeader($request),
             'title' => sprintf('%s - %s', $categoryHeader, $this->configuration->getTitle()),
             'metaDescription' => sprintf(
-                Translation::get(key: 'msgCategoryMetaDesc'),
+                Translation::getString(key: 'msgCategoryMetaDesc'),
                 $this->configuration->getTitle(),
             ),
             'categoryHeader' => $categoryHeader,
@@ -224,7 +224,7 @@ final class CategoryController extends AbstractFrontController
             return null;
         }
 
-        $currentGroups = $this->currentUser?->perm->getUserGroups($this->currentUser->getUserId());
+        $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
         $subCategory = new Category($this->configuration, $currentGroups, true);
         $subCategory->setUser($this->currentUser);
         $subCategory->transform($selectedCategoryId);

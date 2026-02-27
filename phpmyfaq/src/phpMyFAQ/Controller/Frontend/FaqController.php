@@ -82,7 +82,7 @@ final class FaqController extends AbstractFrontController
         $this->faqSession->userTracking('new_entry', 0);
 
         // Get current groups
-        $currentGroups = $this->currentUser?->perm->getUserGroups($this->currentUser->getUserId());
+        $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
 
         $faqCreationService = new FaqCreationService($this->configuration, $this->currentUser, $currentGroups);
 
@@ -108,7 +108,11 @@ final class FaqController extends AbstractFrontController
         // Prepare template variables
         $templateVars = [
             ...$this->getHeader($request),
-            'title' => sprintf('%s - %s', Translation::get(key: 'msgAddContent'), $this->configuration->getTitle()),
+            'title' => sprintf(
+                '%s - %s',
+                Translation::getString(key: 'msgAddContent'),
+                $this->configuration->getTitle(),
+            ),
             'metaDescription' => sprintf(
                 '%s | %s',
                 Translation::get(key: 'msgNewContentHeader'),
@@ -134,7 +138,7 @@ final class FaqController extends AbstractFrontController
             'captchaFieldset' => $this->captchaHelper->renderCaptcha(
                 $this->captcha,
                 'add',
-                Translation::get(key: 'msgCaptcha'),
+                Translation::getString(key: 'msgCaptcha'),
                 $this->currentUser->isLoggedIn(),
             ),
             'msgNewContentSubmit' => Translation::get(key: 'msgNewContentSubmit'),
@@ -269,7 +273,7 @@ final class FaqController extends AbstractFrontController
 
         // Initialize core objects
         $faq = new Faq($this->configuration);
-        $currentGroups = $this->currentUser?->perm->getUserGroups($this->currentUser->getUserId());
+        $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
 
         // Handle bookmarks
         if ($bookmarkAction === 'add' && $faqId > 0) {
@@ -420,14 +424,14 @@ final class FaqController extends AbstractFrontController
             'captchaFieldset' => $this->captchaHelper->renderCaptcha(
                 $this->captcha,
                 'writecomment',
-                Translation::get(key: 'msgCaptcha'),
+                Translation::getString(key: 'msgCaptcha'),
                 $this->currentUser->isLoggedIn(),
             ),
             'comments' => $this->prepareCommentsData($comments),
             'msgShowMore' => Translation::get(key: 'msgShowMore'),
             'msg_about_faq' => Translation::get(key: 'msg_about_faq'),
             'userId' => $this->currentUser->getUserId(),
-            'permissionEditFaq' => $this->currentUser?->perm->hasPermission(
+            'permissionEditFaq' => $this->currentUser->perm->hasPermission(
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_EDIT->value,
             ),
@@ -458,7 +462,7 @@ final class FaqController extends AbstractFrontController
         }
 
         if (
-            $this->currentUser?->perm->hasPermission($this->currentUser->getUserId(), PermissionType::FAQ_EDIT->value)
+            $this->currentUser->perm->hasPermission($this->currentUser->getUserId(), PermissionType::FAQ_EDIT->value)
             && array_key_exists('notes', $faq->faqRecord)
             && $faq->faqRecord['notes'] !== ''
         ) {

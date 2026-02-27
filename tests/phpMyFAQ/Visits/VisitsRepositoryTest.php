@@ -6,7 +6,7 @@ namespace phpMyFAQ\Visits\Test;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
-use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\Visits\VisitsRepository;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -19,10 +19,13 @@ class VisitsRepositoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $db = new Sqlite3();
+        $db = new PdoSqlite();
         $db->connect(PMF_TEST_DIR . '/test.db', '', '');
         $this->configuration = new Configuration($db);
         $this->repository = new VisitsRepository($this->configuration);
+
+        $query = sprintf('DELETE FROM %sfaqvisits', Database::getTablePrefix());
+        $this->configuration->getDb()->query($query);
     }
 
     protected function tearDown(): void

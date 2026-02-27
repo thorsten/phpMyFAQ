@@ -63,9 +63,13 @@ final class QuestionsController extends AbstractFrontController
 
         return $this->render('open-questions.twig', [
             ...$this->getHeader($request),
-            'title' => sprintf('%s - %s', Translation::get(key: 'msgOpenQuestions'), $this->configuration->getTitle()),
+            'title' => sprintf(
+                '%s - %s',
+                Translation::getString(key: 'msgOpenQuestions'),
+                $this->configuration->getTitle(),
+            ),
             'metaDescription' => sprintf(
-                Translation::get(key: 'msgOpenQuestionsMetaDesc'),
+                Translation::getString(key: 'msgOpenQuestionsMetaDesc'),
                 $this->configuration->getTitle(),
             ),
             'pageHeader' => Translation::get(key: 'msgOpenQuestions'),
@@ -75,10 +79,8 @@ final class QuestionsController extends AbstractFrontController
             'openQuestions' => $questionHelper->getOpenQuestions(),
             'isCloseQuestionEnabled' => $this->configuration->get('records.enableCloseQuestion'),
             'userHasPermissionToAnswer' =>
-                $this->currentUser?->perm->hasPermission(
-                    $this->currentUser->getUserId(),
-                    PermissionType::FAQ_ADD->value,
-                ) || $this->configuration->get('records.allowNewFaqsForGuests'),
+                $this->currentUser->perm->hasPermission($this->currentUser->getUserId(), PermissionType::FAQ_ADD->value)
+                    || $this->configuration->get('records.allowNewFaqsForGuests'),
             'msgQuestionsWaiting' => Translation::get(key: 'msgQuestionsWaiting'),
             'msgNoQuestionsAvailable' => Translation::get(key: 'msgNoQuestionsAvailable'),
             'msg2answerFAQ' => Translation::get(key: 'msg2answerFAQ'),
@@ -99,7 +101,7 @@ final class QuestionsController extends AbstractFrontController
         $this->faqSession->userTracking('ask_question', 0);
 
         // Get current groups
-        $currentGroups = $this->currentUser?->perm->getUserGroups($this->currentUser->getUserId());
+        $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
 
         $questionService = new QuestionService($this->configuration, $this->currentUser, $currentGroups);
 
@@ -120,9 +122,9 @@ final class QuestionsController extends AbstractFrontController
         // Prepare template variables
         $templateVars = [
             ...$this->getHeader($request),
-            'title' => sprintf('%s - %s', Translation::get(key: 'msgQuestion'), $this->configuration->getTitle()),
+            'title' => sprintf('%s - %s', Translation::getString(key: 'msgQuestion'), $this->configuration->getTitle()),
             'metaDescription' => sprintf(
-                Translation::get(key: 'msgQuestionMetaDesc'),
+                Translation::getString(key: 'msgQuestionMetaDesc'),
                 $this->configuration->getTitle(),
             ),
             'msgMatchingQuestions' => Translation::get(key: 'msgMatchingQuestions'),
@@ -135,7 +137,7 @@ final class QuestionsController extends AbstractFrontController
             'captchaFieldset' => $this->captchaHelper->renderCaptcha(
                 $this->captcha,
                 'ask',
-                Translation::get(key: 'msgCaptcha'),
+                Translation::getString(key: 'msgCaptcha'),
                 $this->currentUser->isLoggedIn(),
             ),
             'msgNewContentSubmit' => Translation::get(key: 'msgNewContentSubmit'),

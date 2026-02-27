@@ -55,7 +55,7 @@ final class ContactController extends AbstractFrontController
 
         return $this->render('contact.twig', [
             ...$this->getHeader($request),
-            'title' => sprintf('%s - %s', Translation::get(key: 'msgContact'), $this->configuration->getTitle()),
+            'title' => sprintf('%s - %s', Translation::getString(key: 'msgContact'), $this->configuration->getTitle()),
             'msgContactOwnText' => $contactText,
             'privacyURL' => $this->configuration->get('main.privacyURL'),
             'lang' => $this->configuration->getLanguage()->getLanguage(),
@@ -67,7 +67,7 @@ final class ContactController extends AbstractFrontController
             'captchaFieldset' => $this->captchaHelper->renderCaptcha(
                 $this->captcha,
                 'contact',
-                Translation::get(key: 'msgCaptcha'),
+                Translation::getString(key: 'msgCaptcha'),
                 $this->currentUser->isLoggedIn(),
             ),
         ]);

@@ -259,16 +259,16 @@ class Statistics
                 }
 
                 if ($this->groupSupport) {
-                    if (!in_array($row->user_id, [-1, $this->user], strict: true)) {
+                    if (!in_array((int) $row->user_id, [-1, $this->user], strict: true)) {
                         continue;
                     }
 
-                    if (!in_array($row->group_id, $this->groups, strict: true)) {
+                    if (!in_array((int) $row->group_id, $this->groups, strict: true)) {
                         continue;
                     }
                 }
 
-                if (!$this->groupSupport && !in_array($row->user_id, [-1, $this->user], strict: true)) {
+                if (!$this->groupSupport && !in_array((int) $row->user_id, [-1, $this->user], strict: true)) {
                     continue;
                 }
 
@@ -390,16 +390,16 @@ class Statistics
                 }
 
                 if ($this->groupSupport) {
-                    if (!in_array($row->user_id, [-1, $this->user], strict: true)) {
+                    if (!in_array((int) $row->user_id, [-1, $this->user], strict: true)) {
                         continue;
                     }
 
-                    if (!in_array($row->group_id, $this->groups, strict: true)) {
+                    if (!in_array((int) $row->group_id, $this->groups, strict: true)) {
                         continue;
                     }
                 }
 
-                if (!$this->groupSupport && !in_array($row->user_id, [-1, $this->user], strict: true)) {
+                if (!$this->groupSupport && !in_array((int) $row->user_id, [-1, $this->user], strict: true)) {
                     continue;
                 }
 
@@ -531,20 +531,18 @@ class Statistics
                 }
 
                 if ($this->groupSupport) {
-                    if (!in_array($row->user_id, [-1, $this->user], strict: true)) {
+                    if (!in_array((int) $row->user_id, [-1, $this->user], strict: true)) {
                         continue;
                     }
 
-                    if (!in_array($row->group_id, $this->groups, strict: true)) {
+                    if (!in_array((int) $row->group_id, $this->groups, strict: true)) {
                         continue;
                     }
                 }
 
-                if (!$this->groupSupport && !in_array($row->user_id, [-1, $this->user], strict: true)) {
+                if (!$this->groupSupport && !in_array((int) $row->user_id, [-1, $this->user], strict: true)) {
                     continue;
                 }
-
-                var_dump($row);
 
                 $data['visits'] = (int) $row->visits;
                 $data['question'] = Filter::filterVar($row->question, FILTER_SANITIZE_SPECIAL_CHARS);

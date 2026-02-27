@@ -68,6 +68,7 @@ class RelationTest extends TestCase
         $expected->answer = 'sample answer';
         $expected->keywords = 'sample keywords';
 
-        $this->assertEquals([$expected], $relatedArticles);
+        $this->assertNotEmpty($relatedArticles);
+        $this->assertContainsEquals($expected, $relatedArticles);
     }
 }

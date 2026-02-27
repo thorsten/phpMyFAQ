@@ -167,7 +167,7 @@ final class AzureAuthenticationController extends AbstractFrontController
             return ($this->currentUserFactory)();
         }
 
-        return $this->currentUser ?? new CurrentUser($this->configuration);
+        return $this->currentUser;
     }
 
     protected function loadAzureConfiguration(): void

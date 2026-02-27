@@ -55,9 +55,11 @@ final class StartpageController extends AbstractFrontController
     public function index(Request $request): Response
     {
         $news = new News($this->configuration);
-        $faqStatistics = new Statistics($this->configuration);
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+
+        $faqStatistics = new Statistics($this->configuration);
+        $faqStatistics->setUser($currentUser)->setGroups($currentGroups);
 
         $startpage = new Startpage($this->configuration);
         $startpage
