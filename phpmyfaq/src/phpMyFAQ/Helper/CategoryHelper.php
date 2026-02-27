@@ -79,8 +79,6 @@ class CategoryHelper extends AbstractHelper
         array $aggregatedNumbers = [],
         array $categoryNumbers = [],
     ): string {
-        global $sids;
-
         $html = '';
         foreach ($categoryTree as $categoryId => $node) {
             if ($node['parent_id'] !== $parentId) {
