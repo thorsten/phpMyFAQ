@@ -5094,16 +5094,16 @@
         },
         {
             "name": "symfony/mailer",
-            "version": "v8.0.4",
+            "version": "v8.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/mailer.git",
-                "reference": "a074d353f5b5a81d356652e8a2034fdd0501420b"
+                "reference": "a8971c86b25ff8557e844f08c1f6207d9b3e614c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/mailer/zipball/a074d353f5b5a81d356652e8a2034fdd0501420b",
-                "reference": "a074d353f5b5a81d356652e8a2034fdd0501420b",
+                "url": "https://api.github.com/repos/symfony/mailer/zipball/a8971c86b25ff8557e844f08c1f6207d9b3e614c",
+                "reference": "a8971c86b25ff8557e844f08c1f6207d9b3e614c",
                 "shasum": ""
             },
             "require": {
@@ -5150,7 +5150,7 @@
             "description": "Helps sending emails",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/mailer/tree/v8.0.4"
+                "source": "https://github.com/symfony/mailer/tree/v8.0.6"
             },
             "funding": [
                 {
@@ -5170,7 +5170,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-08T08:40:07+00:00"
+            "time": "2026-02-25T16:59:43+00:00"
         },
         {
             "name": "symfony/mcp-sdk",
@@ -5248,16 +5248,16 @@
         },
         {
             "name": "symfony/mime",
-            "version": "v8.0.4",
+            "version": "v8.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/mime.git",
-                "reference": "6b767f21415bec1a247f5d1a4777986e24b05174"
+                "reference": "632aef4f15ead4d48c16395e447f2da12543d201"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/mime/zipball/6b767f21415bec1a247f5d1a4777986e24b05174",
-                "reference": "6b767f21415bec1a247f5d1a4777986e24b05174",
+                "url": "https://api.github.com/repos/symfony/mime/zipball/632aef4f15ead4d48c16395e447f2da12543d201",
+                "reference": "632aef4f15ead4d48c16395e447f2da12543d201",
                 "shasum": ""
             },
             "require": {
@@ -5267,13 +5267,13 @@
             },
             "conflict": {
                 "egulias/email-validator": "~3.0.0",
-                "phpdocumentor/reflection-docblock": "<3.2.2",
-                "phpdocumentor/type-resolver": "<1.4.0"
+                "phpdocumentor/reflection-docblock": "<5.2|>=7",
+                "phpdocumentor/type-resolver": "<1.5.1"
             },
             "require-dev": {
                 "egulias/email-validator": "^2.1.10|^3.1|^4",
                 "league/html-to-markdown": "^5.0",
-                "phpdocumentor/reflection-docblock": "^3.0|^4.0|^5.0",
+                "phpdocumentor/reflection-docblock": "^5.2|^6.0",
                 "symfony/dependency-injection": "^7.4|^8.0",
                 "symfony/process": "^7.4|^8.0",
                 "symfony/property-access": "^7.4|^8.0",
@@ -5310,7 +5310,7 @@
                 "mime-type"
             ],
             "support": {
-                "source": "https://github.com/symfony/mime/tree/v8.0.4"
+                "source": "https://github.com/symfony/mime/tree/v8.0.6"
             },
             "funding": [
                 {
@@ -5330,7 +5330,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-08T22:36:47+00:00"
+            "time": "2026-02-05T16:06:41+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
