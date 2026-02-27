@@ -4821,16 +4821,16 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v8.0.5",
+            "version": "v8.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "e3422806e6f6760dbed0ddbc0a7fbfb6b5ce96bb"
+                "reference": "7745ff1aad45d855fe25b08969269ef83b1ad8bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/e3422806e6f6760dbed0ddbc0a7fbfb6b5ce96bb",
-                "reference": "e3422806e6f6760dbed0ddbc0a7fbfb6b5ce96bb",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/7745ff1aad45d855fe25b08969269ef83b1ad8bc",
+                "reference": "7745ff1aad45d855fe25b08969269ef83b1ad8bc",
                 "shasum": ""
             },
             "require": {
@@ -4877,7 +4877,7 @@
             "description": "Defines an object-oriented layer for the HTTP specification",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/http-foundation/tree/v8.0.5"
+                "source": "https://github.com/symfony/http-foundation/tree/v8.0.6"
             },
             "funding": [
                 {
@@ -4897,7 +4897,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-27T16:18:07+00:00"
+            "time": "2026-02-21T16:28:39+00:00"
         },
         {
             "name": "symfony/http-kernel",
