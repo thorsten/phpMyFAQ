@@ -57,11 +57,12 @@ export const stripHtml = (html: string): string => {
 
   // Decode a few common HTML entities needed for readability
   text = text.replace(/&nbsp;/gi, ' ');
-  text = text.replace(/&amp;/gi, '&');
   text = text.replace(/&lt;/gi, '<');
   text = text.replace(/&gt;/gi, '>');
   text = text.replace(/&quot;/gi, '"');
   text = text.replace(/&#39;/g, "'");
+  // Decode ampersand last to avoid double-unescaping sequences like "&amp;lt;"
+  text = text.replace(/&amp;/gi, '&');
 
   // Normalize whitespace
   text = text.replace(/\s+/g, ' ').trim();
