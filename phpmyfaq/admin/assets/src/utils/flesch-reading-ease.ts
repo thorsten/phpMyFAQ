@@ -42,10 +42,31 @@ export type SupportedLanguage =
 
 /**
  * Strips HTML tags from content to get plain text
+ *
+ * This implementation avoids parsing the input as HTML to prevent
+ * reinterpreting arbitrary text as markup. It removes tag-like
+ * structures and decodes a small set of common HTML entities.
  */
 export const stripHtml = (html: string): string => {
-  const doc = new DOMParser().parseFromString(html, 'text/html');
-  return doc.body.textContent || '';
+  if (!html) {
+    return '';
+  }
+
+  // Remove HTML tags
+  let text = html.replace(/<[^>]*>/g, ' ');
+
+  // Decode a few common HTML entities needed for readability
+  text = text.replace(/&nbsp;/gi, ' ');
+  text = text.replace(/&amp;/gi, '&');
+  text = text.replace(/&lt;/gi, '<');
+  text = text.replace(/&gt;/gi, '>');
+  text = text.replace(/&quot;/gi, '"');
+  text = text.replace(/&#39;/g, "'");
+
+  // Normalize whitespace
+  text = text.replace(/\s+/g, ' ').trim();
+
+  return text;
 };
 
 /**
