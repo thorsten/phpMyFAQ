@@ -181,8 +181,6 @@ class Statistics
      */
     public function getLatestData(int $count = PMF_NUMBER_RECORDS_LATEST, ?string $language = null): array
     {
-        global $sids;
-
         $now = date(format: 'YmdHis');
         $queryHelper = new QueryHelper($this->user, $this->groups);
         $query =
@@ -281,12 +279,12 @@ class Statistics
 
                 $title = $row->question;
                 $url = sprintf(
-                    '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
+                    '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
-                    $sids,
                     $row->category_id,
                     $row->id,
                     $row->lang,
+                    TitleSlugifier::slug($title),
                 );
                 $oLink = new Link($url, $this->configuration);
                 $oLink->setTitle($title);
@@ -447,8 +445,6 @@ class Statistics
         int $categoryId = 0,
         ?string $language = null,
     ): array {
-        global $sids;
-
         $now = date(format: 'YmdHis');
         $queryHelper = new QueryHelper($this->user, $this->groups);
         $query =
@@ -529,6 +525,7 @@ class Statistics
         if ($result) {
             while (true) {
                 $row = $this->configuration->getDb()->fetchObject($result);
+
                 if ($row === false || $row === null || $row === []) {
                     break;
                 }
@@ -547,6 +544,8 @@ class Statistics
                     continue;
                 }
 
+                var_dump($row);
+
                 $data['visits'] = (int) $row->visits;
                 $data['question'] = Filter::filterVar($row->question, FILTER_SANITIZE_SPECIAL_CHARS);
                 $data['answer'] = $row->answer;
@@ -555,12 +554,12 @@ class Statistics
 
                 $title = $row->question;
                 $url = sprintf(
-                    '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
+                    '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
-                    $sids,
                     $row->category_id,
                     $row->id,
                     $row->lang,
+                    TitleSlugifier::slug($row->question),
                 );
                 $oLink = new Link($url, $this->configuration);
                 $oLink->setTitle($row->question);
@@ -588,7 +587,6 @@ class Statistics
      */
     public function getTopVotedData(int $count = PMF_NUMBER_RECORDS_TOPTEN, ?string $language = null): array
     {
-        global $sids;
         $topten = [];
         $data = [];
 
@@ -634,12 +632,6 @@ class Statistics
             $now,
         );
 
-        if (is_numeric($categoryId) && (int) $categoryId !== 0) {
-            $query .= '
-            AND
-                fcr.category_id = \'' . $categoryId . "'";
-        }
-
         if ($language !== null && Language::isASupportedLanguage($language)) {
             $query .= '
             AND
@@ -657,7 +649,7 @@ class Statistics
         $oldId = 0;
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row === false || $i > $count) {
+            if ($row === false || $row === null || $i > $count) {
                 break;
             }
 
@@ -669,12 +661,12 @@ class Statistics
 
                 $title = $row->thema;
                 $url = sprintf(
-                    '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
+                    '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
-                    $sids,
                     $row->category_id,
                     $row->id,
                     $row->lang,
+                    TitleSlugifier::slug($row->thema),
                 );
                 $oLink = new Link($url, $this->configuration);
                 $oLink->setTitle($row->thema);

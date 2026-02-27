@@ -136,8 +136,6 @@ class Faq
         string $sortBy = 'ASC',
         bool $preview = true,
     ): array {
-        global $sids;
-
         $faqData = [];
 
         $currentTable = $orderBy === 'visits' ? 'fv' : 'fd';
@@ -222,12 +220,12 @@ class Faq
             $visits = (int) ($row->visits ?? 0);
 
             $url = sprintf(
-                '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
+                '%scontent/%d/%d/%s/%s.html',
                 $this->configuration->getDefaultUrl(),
-                $sids,
                 $row->category_id,
                 $row->id,
                 $row->lang,
+                TitleSlugifier::slug($row->thema),
             );
             $oLink = new Link($url, $this->configuration);
             $oLink->setTitle($row->thema);
@@ -276,8 +274,6 @@ class Faq
      */
     public function renderFaqsByCategoryId(int $categoryId, string $orderBy = 'id', string $sortBy = 'ASC'): string
     {
-        global $sids;
-
         $numPerPage = $this->configuration->get(item: 'records.numberOfRecordsPerPage');
         $page = Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
         $output = '';
@@ -395,12 +391,12 @@ class Faq
 
                 $title = Strings::htmlentities($row->question);
                 $url = sprintf(
-                    '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
+                    '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
-                    $sids,
                     $row->category_id,
                     $row->id,
                     $row->lang,
+                    TitleSlugifier::slug($row->question),
                 );
 
                 $oLink = new Link($url, $this->configuration);
@@ -1639,8 +1635,6 @@ class Faq
      */
     public function getStickyFaqsData(): array
     {
-        global $sids;
-
         $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = sprintf(
             "
@@ -1708,12 +1702,12 @@ class Faq
 
                 $title = $row->thema;
                 $url = sprintf(
-                    '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
+                    '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
-                    $sids,
                     $row->category_id,
                     $row->id,
                     $row->lang,
+                    TitleSlugifier::slug($row->thema),
                 );
                 $oLink = new Link($url, $this->configuration);
                 $oLink->setTitle($row->thema);
