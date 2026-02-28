@@ -12,6 +12,7 @@ use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Language;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
@@ -19,14 +20,27 @@ class CommentsRepositoryTest extends TestCase
 {
     private Configuration $configuration;
     private CommentsRepository $repository;
+    private string $databasePath;
+    private Sqlite3 $dbHandle;
+    private ?Configuration $previousConfiguration = null;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $this->configuration = new Configuration($dbHandle);
+        $configurationReflection = new ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $this->previousConfiguration = $configurationProperty->getValue();
+
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-comments-repository-');
+        self::assertNotFalse($databasePath);
+        self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
+        $this->databasePath = $databasePath;
+
+        $this->dbHandle = new Sqlite3();
+        $this->dbHandle->connect($this->databasePath, '', '');
+        $this->configuration = new Configuration($this->dbHandle);
+        $this->initializeDatabaseStatics($this->dbHandle);
         $language = new Language($this->configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');
         $this->configuration->setLanguage($language);
@@ -36,14 +50,19 @@ class CommentsRepositoryTest extends TestCase
 
     protected function tearDown(): void
     {
+        $configurationReflection = new ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, $this->previousConfiguration);
+
+        if (isset($this->dbHandle)) {
+            $this->dbHandle->close();
+        }
+
+        if (isset($this->databasePath) && is_file($this->databasePath)) {
+            unlink($this->databasePath);
+        }
+
         parent::tearDown();
-        // Best-effort cleanup: remove comment with id_comment = 1 if exists (first insert in clean DB)
-        $this->repository->deleteByTypeAndId(CommentType::FAQ, 1);
-        // Remove potential category relation
-        $category = new Category($this->configuration);
-        $category->setLanguage('en');
-        $relation = new Relation($this->configuration, $category);
-        $relation->delete(1, 'en');
     }
 
     private function makeComment(): CommentEntity
@@ -146,5 +165,18 @@ class CommentsRepositoryTest extends TestCase
             ->query(sprintf("UPDATE %sfaqdata SET comment = 'y' WHERE id = 1 AND lang = 'en'", $prefix));
 
         $this->assertTrue($this->repository->isCommentAllowed(1, 'en', CommentType::FAQ));
+    }
+
+    private function initializeDatabaseStatics(Sqlite3 $dbHandle): void
+    {
+        $databaseReflection = new ReflectionClass(Database::class);
+
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $dbHandle);
+
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlite3');
+
+        Database::setTablePrefix('');
     }
 }

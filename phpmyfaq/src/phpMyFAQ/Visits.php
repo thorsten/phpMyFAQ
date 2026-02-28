@@ -67,7 +67,7 @@ readonly class Visits
     public function add(int $faqId): bool
     {
         $language = $this->configuration->getLanguage()->getLanguage();
-        $timestamp = Request::createFromGlobals()->server->get(key: 'REQUEST_TIME');
+        $timestamp = $this->getRequestTimestamp();
 
         // If a row already exists for this (id, lang), update it instead of inserting to avoid unique constraint errors
         if ($this->visitsRepository->exists($faqId, $language)) {
@@ -86,7 +86,7 @@ readonly class Visits
     private function update(int $faqId): void
     {
         $language = $this->configuration->getLanguage()->getLanguage();
-        $timestamp = Request::createFromGlobals()->server->get(key: 'REQUEST_TIME');
+        $timestamp = $this->getRequestTimestamp();
 
         $this->visitsRepository->update($faqId, $language, $timestamp);
     }
@@ -106,7 +106,14 @@ readonly class Visits
      */
     public function resetAll(): bool
     {
-        $timestamp = Request::createFromGlobals()->server->get(key: 'REQUEST_TIME');
+        $timestamp = $this->getRequestTimestamp();
         return $this->visitsRepository->resetAll($timestamp);
+    }
+
+    private function getRequestTimestamp(): int
+    {
+        $timestamp = Request::createFromGlobals()->server->get(key: 'REQUEST_TIME');
+
+        return is_int($timestamp) ? $timestamp : time();
     }
 }

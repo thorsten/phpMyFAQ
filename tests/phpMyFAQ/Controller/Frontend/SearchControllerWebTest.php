@@ -12,6 +12,34 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 #[UsesNamespace('phpMyFAQ')]
 final class SearchControllerWebTest extends ControllerWebTestCase
 {
+    public function testSearchPageRendersAdvancedSearchView(): void
+    {
+        $this->overrideConfigurationValues([
+            'main.enableUserTracking' => false,
+            'search.enableElasticsearch' => false,
+            'search.enableOpenSearch' => false,
+        ]);
+
+        $response = $this->requestPublic('GET', '/search.html');
+
+        self::assertResponseIsSuccessful($response);
+        self::assertResponseContains('<h2 class="mb-4 border-bottom">Advanced search</h2>', $response);
+    }
+
+    public function testSearchPageRendersTaggedEntriesView(): void
+    {
+        $this->overrideConfigurationValues([
+            'main.enableUserTracking' => false,
+            'search.enableElasticsearch' => false,
+            'search.enableOpenSearch' => false,
+        ]);
+
+        $response = $this->requestPublic('GET', '/search.html?tagging_id=12');
+
+        self::assertResponseIsSuccessful($response);
+        self::assertResponseContains('<h2 class="mb-4 border-bottom">Tagged entries</h2>', $response);
+    }
+
     public function testTagRouteRedirectsToSearch(): void
     {
         $response = $this->requestPublic('GET', '/tags/12/example-tag.html');

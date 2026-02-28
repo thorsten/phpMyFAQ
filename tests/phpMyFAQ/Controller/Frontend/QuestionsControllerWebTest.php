@@ -77,4 +77,17 @@ final class QuestionsControllerWebTest extends ControllerWebTestCase
         self::assertResponseStatusCodeSame(302, $response);
         self::assertRedirectLocationContains('login', $response);
     }
+
+    public function testAskQuestionPageRendersWhenGuestQuestionsAreEnabled(): void
+    {
+        $this->overrideConfigurationValues([
+            'main.enableUserTracking' => false,
+            'records.allowQuestionsForGuests' => 1,
+        ]);
+
+        $response = $this->requestPublic('GET', '/add-question.html');
+
+        self::assertResponseIsSuccessful($response);
+        self::assertResponseContains('missing configured categories', $response);
+    }
 }

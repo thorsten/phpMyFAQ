@@ -226,7 +226,7 @@ final class CategoryController extends AbstractFrontController
 
         $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
         $subCategory = new Category($this->configuration, $currentGroups, true);
-        $subCategory->setUser($this->currentUser);
+        $subCategory->setUser($this->currentUser->getUserId());
         $subCategory->transform($selectedCategoryId);
         $this->categoryHelper->setConfiguration($this->configuration)->setCategory($subCategory);
 

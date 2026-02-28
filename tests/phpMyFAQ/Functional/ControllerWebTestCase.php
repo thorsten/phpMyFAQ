@@ -12,6 +12,9 @@ abstract class ControllerWebTestCase extends WebTestCase
 {
     private static ?string $activeContext = null;
 
+    /** @var array<string, array{configuration: Configuration, values: array<string, mixed>}> */
+    private array $originalConfigurations = [];
+
     protected function requestPublic(string $method, string $uri, array $parameters = [], array $server = []): Response
     {
         return $this->requestWithContext('public', $method, $uri, $parameters, $server);
@@ -59,6 +62,13 @@ abstract class ControllerWebTestCase extends WebTestCase
 
         $currentConfig = $configProperty->getValue($configuration);
         self::assertIsArray($currentConfig);
+
+        if (!array_key_exists($context, $this->originalConfigurations)) {
+            $this->originalConfigurations[$context] = [
+                'configuration' => $configuration,
+                'values' => $currentConfig,
+            ];
+        }
 
         $configProperty->setValue($configuration, array_merge($currentConfig, $values));
     }
@@ -151,6 +161,14 @@ abstract class ControllerWebTestCase extends WebTestCase
 
     protected function tearDown(): void
     {
+        foreach ($this->originalConfigurations as $configurationSnapshot) {
+            $configuration = $configurationSnapshot['configuration'];
+            $reflection = new ReflectionClass(Configuration::class);
+            $configProperty = $reflection->getProperty('config');
+            $configProperty->setValue($configuration, $configurationSnapshot['values']);
+        }
+
+        $this->originalConfigurations = [];
         self::$activeContext = null;
         parent::tearDown();
     }
