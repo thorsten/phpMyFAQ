@@ -2,7 +2,7 @@
 
 namespace phpMyFAQ;
 
-use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\Entity\CategoryEntity;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
@@ -13,23 +13,37 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class CategoryTest extends TestCase
 {
     private Category $category;
+    private PdoSqlite $dbHandle;
+    private string $databaseFile;
 
     /**
-     * @throws Exception
+     * @throws Exception|Core\Exception
      */
     protected function setUp(): void
     {
         parent::setUp();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $configuration = new Configuration($dbHandle);
+        $this->databaseFile = tempnam(sys_get_temp_dir(), 'phpmyfaq-category-test-');
+        copy(PMF_TEST_DIR . '/test.db', $this->databaseFile);
+
+        $this->dbHandle = new PdoSqlite();
+        $this->dbHandle->connect($this->databaseFile, '', '');
+
+        $configuration = new Configuration($this->dbHandle);
         $configuration->set('main.currentVersion', System::getVersion());
         $language = new Language($configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');
         $configuration->setLanguage($language);
 
         $this->category = new Category($configuration);
+    }
+
+    protected function tearDown(): void
+    {
+        $this->dbHandle->close();
+        @unlink($this->databaseFile);
+
+        parent::tearDown();
     }
 
     public function testGetGroups(): void

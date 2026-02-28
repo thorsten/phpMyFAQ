@@ -38,20 +38,6 @@ use phpMyFAQ\Pagination\UrlConfig;
 use phpMyFAQ\Tenant\TenantQuotaEnforcer;
 use stdClass;
 
-/*
- * Query type definitions
- */
-define(constant_name: 'FAQ_QUERY_TYPE_DEFAULT', value: 'faq_default');
-
-/*
- * Sorting type definitions
- */
-define(constant_name: 'FAQ_SORTING_TYPE_NONE', value: 0);
-define(constant_name: 'FAQ_SORTING_TYPE_CATID_FAQID', value: 1);
-define(constant_name: 'FAQ_SORTING_TYPE_FAQTITLE_FAQID', value: 2);
-define(constant_name: 'FAQ_SORTING_TYPE_DATE_FAQID', value: 3);
-define(constant_name: 'FAQ_SORTING_TYPE_FAQID', value: 4);
-
 /**
  * Class Faq
  *
@@ -61,6 +47,13 @@ define(constant_name: 'FAQ_SORTING_TYPE_FAQID', value: 4);
  */
 class Faq
 {
+    public const string QUERY_TYPE_DEFAULT = 'faq_default';
+    public const int SORTING_TYPE_NONE = 0;
+    public const int SORTING_TYPE_CATID_FAQID = 1;
+    public const int SORTING_TYPE_FAQTITLE_FAQID = 2;
+    public const int SORTING_TYPE_DATE_FAQID = 3;
+    public const int SORTING_TYPE_FAQID = 4;
+
     /**
      * The current FAQ record.
      */
@@ -1363,7 +1356,7 @@ class Faq
      * @param ?string    $sortOrder Sorting order
      */
     public function getAllFaqs(
-        int $sortType = FAQ_SORTING_TYPE_CATID_FAQID,
+        int $sortType = self::SORTING_TYPE_CATID_FAQID,
         ?array $condition = null,
         ?string $sortOrder = 'ASC',
     ): void {
@@ -1407,10 +1400,10 @@ class Faq
         }
 
         $orderBy = match ($sortType) {
-            FAQ_SORTING_TYPE_CATID_FAQID => sprintf('ORDER BY fcr.category_id, fd.id %s', $sortOrder),
-            FAQ_SORTING_TYPE_FAQID => sprintf('ORDER BY fd.id %s', $sortOrder),
-            FAQ_SORTING_TYPE_FAQTITLE_FAQID => sprintf('ORDER BY fcr.category_id, fd.thema %s', $sortOrder),
-            FAQ_SORTING_TYPE_DATE_FAQID => sprintf('ORDER BY fcr.category_id, fd.updated %s', $sortOrder),
+            self::SORTING_TYPE_CATID_FAQID => sprintf('ORDER BY fcr.category_id, fd.id %s', $sortOrder),
+            self::SORTING_TYPE_FAQID => sprintf('ORDER BY fd.id %s', $sortOrder),
+            self::SORTING_TYPE_FAQTITLE_FAQID => sprintf('ORDER BY fcr.category_id, fd.thema %s', $sortOrder),
+            self::SORTING_TYPE_DATE_FAQID => sprintf('ORDER BY fcr.category_id, fd.updated %s', $sortOrder),
             default => '',
         };
 
@@ -1583,7 +1576,7 @@ class Faq
      * Retrieve faq records according to the constraints provided.
      */
     public function get(
-        string $queryType = FAQ_QUERY_TYPE_DEFAULT,
+        string $queryType = self::QUERY_TYPE_DEFAULT,
         int $categoryId = 0,
         bool $downwards = true,
         string $lang = '',

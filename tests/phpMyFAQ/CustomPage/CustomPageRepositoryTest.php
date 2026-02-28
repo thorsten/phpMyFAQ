@@ -18,14 +18,24 @@ class CustomPageRepositoryTest extends TestCase
 {
     private Configuration $configuration;
     private CustomPageRepository $repository;
+    private string $databaseFile;
 
     protected function setUp(): void
     {
         Strings::init();
+        $this->databaseFile = tempnam(sys_get_temp_dir(), 'phpmyfaq-custom-page-test-');
+        copy(PMF_TEST_DIR . '/test.db', $this->databaseFile);
         $db = new Sqlite3();
-        $db->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $db->connect($this->databaseFile, '', '');
         $this->configuration = new Configuration($db);
         $this->repository = new CustomPageRepository($this->configuration);
+    }
+
+    protected function tearDown(): void
+    {
+        if (isset($this->databaseFile) && file_exists($this->databaseFile)) {
+            @unlink($this->databaseFile);
+        }
     }
 
     public function testInsertAndFetchById(): void
@@ -193,11 +203,12 @@ class CustomPageRepositoryTest extends TestCase
 
     public function testSlugExists(): void
     {
+        $slug = 'unique-slug-test-' . bin2hex(random_bytes(4));
         $page = new CustomPageEntity();
         $page
             ->setLanguage('en')
             ->setPageTitle('Slug Exists Test')
-            ->setSlug('unique-slug-test')
+            ->setSlug($slug)
             ->setContent('<p>Test content</p>')
             ->setAuthorName('Test')
             ->setAuthorEmail('test@example.com')
@@ -206,11 +217,11 @@ class CustomPageRepositoryTest extends TestCase
 
         $pageId = $this->repository->insert($page);
 
-        $this->assertTrue($this->repository->slugExists('unique-slug-test', 'en'));
+        $this->assertTrue($this->repository->slugExists($slug, 'en'));
         $this->assertFalse($this->repository->slugExists('non-existent-slug', 'en'));
 
         // Test with excludeId
-        $this->assertFalse($this->repository->slugExists('unique-slug-test', 'en', $pageId));
+        $this->assertFalse($this->repository->slugExists($slug, 'en', $pageId));
     }
 
     public function testMultiLanguageSupport(): void

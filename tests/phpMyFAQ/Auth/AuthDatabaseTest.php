@@ -4,6 +4,7 @@ namespace phpMyFAQ\Auth;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
@@ -11,10 +12,18 @@ use PHPUnit\Framework\TestCase;
 class AuthDatabaseTest extends TestCase
 {
     private AuthDatabase $authDatabase;
+    private string $databaseFile;
 
     protected function setUp(): void
     {
-        $this->authDatabase = new AuthDatabase(Configuration::getConfigurationInstance());
+        $this->databaseFile = tempnam(sys_get_temp_dir(), 'phpmyfaq-auth-database-test-');
+        copy(PMF_TEST_DIR . '/test.db', $this->databaseFile);
+
+        $dbHandle = new Sqlite3();
+        $dbHandle->connect($this->databaseFile, '', '');
+        $configuration = new Configuration($dbHandle);
+
+        $this->authDatabase = new AuthDatabase($configuration);
         $this->authDatabase->getEncryptionContainer('sha1');
 
         // Clean up leftover users from previous runs
@@ -35,6 +44,10 @@ class AuthDatabaseTest extends TestCase
             } catch (Exception) {
                 // Ignore — user may not exist
             }
+        }
+
+        if (isset($this->databaseFile) && file_exists($this->databaseFile)) {
+            @unlink($this->databaseFile);
         }
     }
 

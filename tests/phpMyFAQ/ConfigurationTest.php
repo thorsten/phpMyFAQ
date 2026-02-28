@@ -19,6 +19,7 @@ class ConfigurationTest extends TestCase
 {
     /** @var Configuration */
     private Configuration $configuration;
+    private string $databaseFile;
 
     /**
      * Prepares the environment before running a test.
@@ -29,8 +30,11 @@ class ConfigurationTest extends TestCase
 
         Strings::init();
 
+        $this->databaseFile = tempnam(sys_get_temp_dir(), 'phpmyfaq-config-test-');
+        copy(PMF_TEST_DIR . '/test.db', $this->databaseFile);
+
         $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle->connect($this->databaseFile, '', '');
         $this->configuration = new Configuration($dbHandle);
 
         // Initialize the configuration table structure if needed
@@ -77,6 +81,10 @@ class ConfigurationTest extends TestCase
     protected function tearDown(): void
     {
         parent::tearDown();
+
+        if (isset($this->databaseFile) && file_exists($this->databaseFile)) {
+            @unlink($this->databaseFile);
+        }
     }
 
     public function testGetConfigurationInstance(): void
@@ -113,7 +121,7 @@ class ConfigurationTest extends TestCase
 
     public function testAdd(): void
     {
-        $key = 'test.add';
+        $key = 'test.add.' . bin2hex(random_bytes(4));
 
         $result = $this->configuration->add($key, 'foo');
 

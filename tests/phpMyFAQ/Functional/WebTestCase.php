@@ -25,6 +25,8 @@ namespace phpMyFAQ\Functional;
 use phpMyFAQ\Kernel;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\BrowserKit\AbstractBrowser;
+use Symfony\Component\BrowserKit\Request as BrowserKitRequest;
+use Symfony\Component\BrowserKit\Response as BrowserKitResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -44,17 +46,15 @@ abstract class WebTestCase extends TestCase
         return static::$client;
     }
 
-    protected static function assertResponseStatusCodeSame(int $expectedStatusCode, ?Response $response = null): void
+    protected static function assertResponseStatusCodeSame(int $expectedStatusCode, ?object $response = null): void
     {
-        $response ??= static::$client?->getResponse();
-        static::assertNotNull($response, 'No response available. Did you make a request?');
+        $response = self::resolveResponse($response);
         static::assertSame($expectedStatusCode, $response->getStatusCode());
     }
 
-    protected static function assertResponseIsSuccessful(?Response $response = null): void
+    protected static function assertResponseIsSuccessful(?object $response = null): void
     {
-        $response ??= static::$client?->getResponse();
-        static::assertNotNull($response, 'No response available. Did you make a request?');
+        $response = self::resolveResponse($response);
         static::assertTrue($response->isSuccessful(), sprintf(
             'Expected successful response, got %d',
             $response->getStatusCode(),
@@ -64,11 +64,18 @@ abstract class WebTestCase extends TestCase
     protected static function assertResponseHeaderSame(
         string $headerName,
         string $expectedValue,
-        ?Response $response = null,
+        ?object $response = null,
     ): void {
-        $response ??= static::$client?->getResponse();
-        static::assertNotNull($response, 'No response available.');
+        $response = self::resolveResponse($response);
         static::assertSame($expectedValue, $response->headers->get($headerName));
+    }
+
+    private static function resolveResponse(?object $response = null): Response
+    {
+        $response ??= static::$client?->getResponse();
+        static::assertInstanceOf(Response::class, $response, 'No Symfony response available. Did you make a request?');
+
+        return $response;
     }
 
     protected function tearDown(): void
@@ -84,8 +91,6 @@ abstract class WebTestCase extends TestCase
  */
 class HttpKernelBrowser extends AbstractBrowser
 {
-    private ?Response $response = null;
-
     public function __construct(
         private readonly HttpKernelInterface $kernel,
         array $server = [],
@@ -95,19 +100,35 @@ class HttpKernelBrowser extends AbstractBrowser
         parent::__construct($server, $history, $cookieJar);
     }
 
-    protected function doRequest(object $request): Response
+    protected function doRequest(object $request): object
     {
-        if (!$request instanceof Request) {
-            throw new \InvalidArgumentException('Expected a Symfony Request object.');
+        if (!$request instanceof BrowserKitRequest) {
+            throw new \InvalidArgumentException('Expected a Symfony BrowserKit request object.');
         }
 
-        $this->response = $this->kernel->handle($request);
+        $kernelRequest = Request::create(
+            $request->getUri(),
+            $request->getMethod(),
+            $request->getParameters(),
+            $request->getCookies(),
+            $request->getFiles(),
+            $request->getServer(),
+            $request->getContent(),
+        );
 
-        return $this->response;
+        return $this->kernel->handle($kernelRequest);
     }
 
-    public function getResponse(): ?Response
+    protected function filterResponse(object $response): BrowserKitResponse
     {
-        return $this->response;
+        if (!$response instanceof Response) {
+            throw new \InvalidArgumentException('Expected a Symfony HttpFoundation response object.');
+        }
+
+        return new BrowserKitResponse(
+            (string) $response->getContent(),
+            $response->getStatusCode(),
+            $response->headers->allPreserveCaseWithoutCookies(),
+        );
     }
 }

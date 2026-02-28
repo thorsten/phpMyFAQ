@@ -102,8 +102,9 @@ class SystemTest extends TestCase
 
     public function testGetSystemUri(): void
     {
-        $configuration = Configuration::getConfigurationInstance();
-        $configuration->set('main.referenceURL', 'https://example.com');
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDefaultUrl')->willReturn('https://example.com');
+
         $system = new System();
         $result = $system->getSystemUri($configuration);
 

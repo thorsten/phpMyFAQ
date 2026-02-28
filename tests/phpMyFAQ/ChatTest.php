@@ -3,17 +3,20 @@
 namespace phpMyFAQ;
 
 use DateTimeImmutable;
-use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\Entity\ChatMessage;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
 class ChatTest extends TestCase
 {
     private Configuration $configuration;
+    private PdoSqlite $dbHandle;
+    private string $databaseFile;
 
     /**
      * @throws Core\Exception
@@ -31,14 +34,25 @@ class ChatTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $this->configuration = new Configuration($dbHandle);
+        $this->databaseFile = tempnam(sys_get_temp_dir(), 'phpmyfaq-chat-test-');
+        copy(PMF_TEST_DIR . '/test.db', $this->databaseFile);
+
+        $this->dbHandle = new PdoSqlite();
+        $this->dbHandle->connect($this->databaseFile, '', '');
+        $this->configuration = new Configuration($this->dbHandle);
         $this->configuration->set('main.referenceURL', 'https://example.com');
 
         $language = new Language($this->configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');
         $this->configuration->setLanguage($language);
+    }
+
+    protected function tearDown(): void
+    {
+        $this->dbHandle->close();
+        @unlink($this->databaseFile);
+
+        parent::tearDown();
     }
 
     public function testSendEmptyMessageReturnsNull(): void
@@ -161,7 +175,7 @@ class ChatTest extends TestCase
     {
         $chat = new Chat($this->configuration);
 
-        // For a non-existent user, unread count should be 0
+        // For a non-existent user, the unread count should be 0
         $count = $chat->getUnreadCount(99999);
         $this->assertIsInt($count);
         $this->assertEquals(0, $count);
@@ -171,7 +185,7 @@ class ChatTest extends TestCase
     {
         $chat = new Chat($this->configuration);
 
-        // For a non-existent user, conversation list should be empty
+        // For a non-existent user, a conversation list should be empty
         $conversations = $chat->getConversationList(99999);
         $this->assertIsArray($conversations);
     }
@@ -226,7 +240,7 @@ class ChatTest extends TestCase
     public function testChatClassIsReadonly(): void
     {
         $chat = new Chat($this->configuration);
-        $reflection = new \ReflectionClass($chat);
+        $reflection = new ReflectionClass($chat);
 
         $this->assertTrue($reflection->isReadOnly());
     }

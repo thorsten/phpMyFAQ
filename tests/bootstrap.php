@@ -71,15 +71,41 @@ require PMF_TRANSLATION_DIR . '/language_en.php';
 //
 $loader = new ClassLoader();
 $loader->add('phpMyFAQ', PMF_SRC_DIR);
+$loader->add('phpMyFAQ', PMF_TEST_DIR);
 $loader->register();
+
+/**
+ * Reuses the prepared SQLite test database across bootstrap invocations when possible.
+ * This avoids reinstall races in PHPUnit separate-process tests and coverage subprocesses.
+ */
+function canReusePreparedTestDatabase(string $databasePath, string $databaseConfigPath): bool
+{
+    if (!file_exists($databasePath) || !file_exists($databaseConfigPath)) {
+        return false;
+    }
+
+    try {
+        $pdo = new \PDO('sqlite:' . $databasePath);
+        $statement = $pdo->query(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name IN ('faqconfig', 'faqadminlog')",
+        );
+
+        if ($statement === false) {
+            return false;
+        }
+
+        $tables = $statement->fetchAll(\PDO::FETCH_COLUMN);
+        return in_array('faqconfig', $tables, true) && in_array('faqadminlog', $tables, true);
+    } catch (\PDOException) {
+        return false;
+    }
+}
 
 //
 // Use tests/test.db as stable SQLite test database expected by tests.
 //
 $testDbAlias = PMF_TEST_DIR . '/test.db';
-if (file_exists($testDbAlias) && !is_dir($testDbAlias)) {
-    @unlink($testDbAlias);
-}
+$databaseConfigFile = PMF_TEST_DIR . '/content/core/config/database.php';
 
 //
 // Create database credentials for SQLite
@@ -100,19 +126,25 @@ Strings::init();
 
 Request::setTrustedHosts(['^.*$']); // Trust all hosts for testing
 
-try {
-    $installer = new Installer(new System());
-    $installer->startInstall($setup);
-} catch (Exception $exception) {
-    throw new RuntimeException(
-        'PHPUnit bootstrap failed during test database installation: ' . $exception->getMessage(),
-        0,
-        $exception,
-    );
+if (!canReusePreparedTestDatabase($testDbAlias, $databaseConfigFile)) {
+    if (file_exists($testDbAlias) && !is_dir($testDbAlias)) {
+        @unlink($testDbAlias);
+    }
+
+    try {
+        $installer = new Installer(new System());
+        $installer->startInstall($setup);
+    } catch (Exception $exception) {
+        throw new RuntimeException(
+            'PHPUnit bootstrap failed during test database installation: ' . $exception->getMessage(),
+            0,
+            $exception,
+        );
+    }
 }
 
-if (!file_exists(PMF_TEST_DIR . '/content/core/config/database.php')) {
+if (!file_exists($databaseConfigFile)) {
     throw new RuntimeException('PHPUnit bootstrap failed: tests/content/core/config/database.php was not generated.');
 }
 
-require PMF_TEST_DIR . '/content/core/config/database.php';
+require $databaseConfigFile;

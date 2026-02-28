@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Attachment;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Enums\AttachmentStorageType;
 use phpMyFAQ\Language;
@@ -31,6 +32,15 @@ class AttachmentFactoryTest extends TestCase
         $this->mockConfiguration = $this->createStub(Configuration::class);
         $this->mockDb = $this->createMock(DatabaseDriver::class);
         $this->mockConfiguration->method('getDb')->willReturn($this->mockDb);
+
+        $databaseReflection = new ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $this->mockDb);
+
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'pdo_sqlite');
+
+        Database::setTablePrefix('');
 
         // Set default Language for tests
         Language::$language = 'en';

@@ -4,6 +4,7 @@ namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Administration\Backup\BackupExportResult;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Database\Sqlite3;
@@ -43,6 +44,8 @@ class BackupTest extends TestCase
     {
         parent::setUp();
 
+        Database::setTablePrefix('');
+
         // Mock Configuration class
         $this->mockConfiguration = $this->createStub(Configuration::class);
 
@@ -68,12 +71,18 @@ class BackupTest extends TestCase
         $tableNames = 'faqconfig faqinstances';
         $backupQueries = $this->backup->generateBackupQueries($tableNames);
         $dataBackup = $this->backup->createBackup(BackupType::BACKUP_TYPE_DATA->value, $backupQueries);
-        $this->assertMatchesRegularExpression('/^phpmyfaq-data\.\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}\.sql$/', $dataBackup);
+        $this->assertMatchesRegularExpression(
+            '/^phpmyfaq-data\.\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}\.sql$/',
+            $dataBackup,
+        );
 
         $tableNames = 'faqadminlog faqsessions';
         $backupQueries = $this->backup->generateBackupQueries($tableNames);
         $logsBackup = $this->backup->createBackup(BackupType::BACKUP_TYPE_LOGS->value, $backupQueries);
-        $this->assertMatchesRegularExpression('/^phpmyfaq-logs\.\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}\.sql$/', $logsBackup);
+        $this->assertMatchesRegularExpression(
+            '/^phpmyfaq-logs\.\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}\.sql$/',
+            $logsBackup,
+        );
     }
 
     /**

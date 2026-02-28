@@ -1,0 +1,26 @@
+<?php
+
+declare(strict_types=1);
+
+namespace phpMyFAQ\Controller\Api;
+
+use phpMyFAQ\Functional\ControllerWebTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
+
+#[CoversClass(TagController::class)]
+#[UsesNamespace('phpMyFAQ')]
+#[UsesClass(AbstractApiController::class)]
+#[UsesClass(PaginatedResponseOptions::class)]
+final class TagControllerWebTest extends ControllerWebTestCase
+{
+    public function testTagEndpointReturnsJson(): void
+    {
+        $response = $this->requestApi('GET', '/api/v3.2/tags');
+
+        self::assertResponseIsSuccessful($response);
+        self::assertSame('application/json', $response->headers->get('Content-Type'));
+        self::assertJson((string) $response->getContent());
+    }
+}

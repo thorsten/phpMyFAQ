@@ -4,8 +4,8 @@ namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
-use phpMyFAQ\Database\Sqlite3;
-use phpMyFAQ\System;
+use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Database\PdoSqlite;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
@@ -15,18 +15,34 @@ class ChangelogTest extends TestCase
     protected Configuration $configuration;
 
     protected Changelog $changelog;
+    private DatabaseDriver $dbHandle;
+    private string $dbPath;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $tempFile = tempnam(sys_get_temp_dir(), 'pmf-changelog-');
+        $this->assertNotFalse($tempFile);
+        $this->dbPath = $tempFile;
+        $this->assertTrue(copy(PMF_TEST_DIR . '/test.db', $this->dbPath));
 
-        $this->configuration = new Configuration($dbHandle);
-        $this->configuration->set('main.currentVersion', System::getVersion());
+        $this->dbHandle = new PdoSqlite();
+        $this->dbHandle->connect($this->dbPath, '', '');
+
+        $this->configuration = new Configuration($this->dbHandle);
 
         $this->changelog = new Changelog($this->configuration);
+    }
+
+    protected function tearDown(): void
+    {
+        $this->dbHandle->close();
+        if (isset($this->dbPath) && is_file($this->dbPath)) {
+            unlink($this->dbPath);
+        }
+
+        parent::tearDown();
     }
 
     public function testAdd(): void

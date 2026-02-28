@@ -558,7 +558,7 @@ final class FaqController extends AbstractApiController
 
         // Get all FAQs (this populates $this->faq->faqRecords)
         $this->faq->getAllFaqs(
-            FAQ_SORTING_TYPE_CATID_FAQID,
+            Faq::SORTING_TYPE_CATID_FAQID,
             [
                 'lang' => $this->configuration->getLanguage()->getLanguage(),
                 'fcr.category_id' => $ignoreOrphanedFaqs ? 'IS NOT NULL' : null,
