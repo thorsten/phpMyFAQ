@@ -53,6 +53,8 @@ final class VersionControllerWebTest extends ControllerWebTestCase
 {
     public function testVersionEndpointReturnsJson(): void
     {
+        $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');
+
         $response = $this->requestApi('GET', '/v3.2/version');
 
         self::assertResponseIsSuccessful($response);

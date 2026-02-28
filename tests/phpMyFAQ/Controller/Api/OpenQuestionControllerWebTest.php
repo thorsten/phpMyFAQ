@@ -17,6 +17,8 @@ final class OpenQuestionControllerWebTest extends ControllerWebTestCase
 {
     public function testOpenQuestionsEndpointReturnsJson(): void
     {
+        $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');
+
         $response = $this->requestApi('GET', '/v3.2/open-questions');
 
         self::assertResponseIsSuccessful($response);

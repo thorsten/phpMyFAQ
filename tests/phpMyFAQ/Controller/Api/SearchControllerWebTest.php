@@ -17,6 +17,12 @@ final class SearchControllerWebTest extends ControllerWebTestCase
 {
     public function testSearchEndpointReturnsJsonForQuery(): void
     {
+        $this->overrideConfigurationValues([
+            'api.enableAccess' => true,
+            'search.enableElasticsearch' => false,
+            'search.enableOpenSearch' => false,
+        ], 'api');
+
         $response = $this->requestApi('GET', '/v3.2/search?q=test');
 
         self::assertResponseIsSuccessful($response);
@@ -26,6 +32,12 @@ final class SearchControllerWebTest extends ControllerWebTestCase
 
     public function testPopularSearchEndpointReturnsJson(): void
     {
+        $this->overrideConfigurationValues([
+            'api.enableAccess' => true,
+            'search.enableElasticsearch' => false,
+            'search.enableOpenSearch' => false,
+        ], 'api');
+
         $response = $this->requestApi('GET', '/v3.2/searches/popular');
 
         self::assertContains($response->getStatusCode(), [200, 404]);
