@@ -19,6 +19,9 @@ class RatingDataTest extends TestCase
 
     protected function setUp(): void
     {
+        Database::factory('pdo_sqlite');
+        Database::setTablePrefix('');
+
         // Mock Configuration class
         $this->mockConfiguration = $this->createStub(Configuration::class);
 

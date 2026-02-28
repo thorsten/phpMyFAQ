@@ -4,11 +4,13 @@ namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\ReleaseType;
+use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
@@ -20,6 +22,7 @@ class HelperTest extends TestCase
 {
     /** @var Helper */
     protected Helper $instance;
+    private string $databaseFile;
 
     /**
      * @throws Exception
@@ -30,6 +33,13 @@ class HelperTest extends TestCase
 
         Strings::init();
 
+        $this->databaseFile = tempnam(sys_get_temp_dir(), 'phpmyfaq-helper-test-');
+        copy(PMF_TEST_DIR . '/test.db', $this->databaseFile);
+
+        $dbHandle = new Sqlite3();
+        $dbHandle->connect($this->databaseFile, '', '');
+        new Configuration($dbHandle);
+
         Translation::create()
             ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
@@ -37,6 +47,46 @@ class HelperTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->instance = new Helper();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        if (isset($this->databaseFile) && file_exists($this->databaseFile)) {
+            @unlink($this->databaseFile);
+        }
+    }
+
+    private function createUserWithRights(array $rights): User
+    {
+        $permission = new class ($rights) implements PermissionInterface {
+            public function __construct(private readonly array $rights)
+            {
+            }
+
+            public function hasPermission(int $userId, mixed $right): bool
+            {
+                return in_array((string) $right, array_column($this->rights, 'name'), true);
+            }
+
+            public function getAllRightsData(): array
+            {
+                return $this->rights;
+            }
+
+            public function getAllUserRights(int $userId): array
+            {
+                return array_column($this->rights, 'right_id');
+            }
+        };
+
+        $user = $this->createMock(User::class);
+        $user->perm = $permission;
+        $user->method('getUserId')->willReturn(1);
+        $user->method('isSuperAdmin')->willReturn(false);
+
+        return $user;
     }
 
     public function testAddMenuEntryWithRouteWithoutPermission(): void
@@ -60,32 +110,24 @@ class HelperTest extends TestCase
      */
     public function testAddMenuEntryWithProperPermissionAndActive(): void
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
-
-        $user = new CurrentUser(Configuration::getConfigurationInstance());
-        $user->login('admin', 'password');
-        $user->setLoggedIn(true);
+        $user = $this->createUserWithRights([
+            ['name' => PermissionType::FAQ_ADD->value, 'right_id' => 1],
+        ]);
 
         $this->instance->setUser($user);
         $expected = '<a class="nav-link" href="./faq/add">Add new FAQ</a>' . "\n";
         $actual = $this->instance->addMenuEntry(PermissionType::FAQ_ADD->value, 'msgAddFAQ', 'faq/add');
 
         $this->assertEquals($expected, $actual);
-
-        session_destroy();
     }
 
     public function testAddMenuEntryWithProperPermissionAndMultipleRestrictions(): void
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
-
-        $user = new CurrentUser(Configuration::getConfigurationInstance());
-        $user->login('admin', 'password');
-        $user->setLoggedIn(true);
+        $user = $this->createUserWithRights([
+            ['name' => 'add_user', 'right_id' => 1],
+            ['name' => 'edit_user', 'right_id' => 2],
+            ['name' => 'delete_user', 'right_id' => 3],
+        ]);
 
         $this->instance->setUser($user);
         $expected = '<a class="nav-link" href="./user">Users</a>' . "\n";
@@ -96,8 +138,6 @@ class HelperTest extends TestCase
         );
 
         $this->assertEquals($expected, $actual);
-
-        session_destroy();
     }
 
     public function testRenderMetaRobotsDropdown(): void

@@ -1,0 +1,26 @@
+<?php
+
+declare(strict_types=1);
+
+namespace phpMyFAQ\Controller\Api;
+
+use phpMyFAQ\Functional\ControllerWebTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
+
+#[CoversClass(NewsController::class)]
+#[UsesNamespace('phpMyFAQ')]
+#[UsesClass(AbstractApiController::class)]
+#[UsesClass(PaginatedResponseOptions::class)]
+final class NewsControllerWebTest extends ControllerWebTestCase
+{
+    public function testNewsEndpointReturnsJson(): void
+    {
+        $response = $this->requestApi('GET', '/api/v3.2/news');
+
+        self::assertResponseIsSuccessful($response);
+        self::assertSame('application/json', $response->headers->get('Content-Type'));
+        self::assertJson((string) $response->getContent());
+    }
+}

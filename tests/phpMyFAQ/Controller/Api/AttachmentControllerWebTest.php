@@ -1,0 +1,26 @@
+<?php
+
+declare(strict_types=1);
+
+namespace phpMyFAQ\Controller\Api;
+
+use phpMyFAQ\Functional\ControllerWebTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
+
+#[CoversClass(AttachmentController::class)]
+#[UsesNamespace('phpMyFAQ')]
+#[UsesClass(AbstractApiController::class)]
+#[UsesClass(PaginatedResponseOptions::class)]
+final class AttachmentControllerWebTest extends ControllerWebTestCase
+{
+    public function testAttachmentsEndpointReturnsJson(): void
+    {
+        $response = $this->requestApi('GET', '/v3.2/attachments/1');
+
+        self::assertResponseIsSuccessful($response);
+        self::assertSame('application/json', $response->headers->get('Content-Type'));
+        self::assertJson((string) $response->getContent());
+    }
+}

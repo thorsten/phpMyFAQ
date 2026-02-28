@@ -85,13 +85,16 @@ trait CurrentUserSessionLookupTrait
     {
         $sessionWrapper = new SessionWrapper();
         // there is no valid user object in the session
-        if (!$sessionWrapper->has(SESSION_CURRENT_USER) || !$sessionWrapper->has(SESSION_ID_TIMESTAMP)) {
+        if (
+            !$sessionWrapper->has(CurrentUser::SESSION_CURRENT_USER)
+            || !$sessionWrapper->has(CurrentUser::SESSION_ID_TIMESTAMP)
+        ) {
             return null;
         }
 
         // create a new CurrentUser object
         $user = new self($configuration);
-        $user->getUserById($sessionWrapper->get(SESSION_CURRENT_USER));
+        $user->getUserById($sessionWrapper->get(CurrentUser::SESSION_CURRENT_USER));
 
         // user object is timed out
         if ($user->sessionIsTimedOut()) {

@@ -35,10 +35,6 @@ use phpMyFAQ\User;
 use SensitiveParameter;
 use Symfony\Component\HttpFoundation\Request;
 
-/* user defined constants */
-define(constant_name: 'SESSION_CURRENT_USER', value: 'CURRENT_USER');
-define(constant_name: 'SESSION_ID_TIMESTAMP', value: 'SESSION_TIMESTAMP');
-
 /**
  * Class CurrentUser
  *
@@ -54,6 +50,9 @@ class CurrentUser extends User
 {
     use CurrentUserAccountStateTrait;
     use CurrentUserSessionLookupTrait;
+
+    public const string SESSION_CURRENT_USER = 'CURRENT_USER';
+    public const string SESSION_ID_TIMESTAMP = 'SESSION_TIMESTAMP';
 
     private const int PMF_REMEMBER_ME_EXPIRED_TIME = 1_209_600; // 2 weeks
 
@@ -277,12 +276,12 @@ class CurrentUser extends User
      */
     public function sessionAge(): float
     {
-        if (!$this->sessionWrapper->has(SESSION_ID_TIMESTAMP)) {
+        if (!$this->sessionWrapper->has(self::SESSION_ID_TIMESTAMP)) {
             return 0;
         }
 
         $requestTime = Request::createFromGlobals()->server->get('REQUEST_TIME');
-        $sessionTimestamp = $this->sessionWrapper->get(SESSION_ID_TIMESTAMP);
+        $sessionTimestamp = $this->sessionWrapper->get(self::SESSION_ID_TIMESTAMP);
         return ($requestTime - $sessionTimestamp) / 60;
     }
 
@@ -340,7 +339,10 @@ class CurrentUser extends User
         }
 
         // store session-ID age
-        $this->sessionWrapper->set(SESSION_ID_TIMESTAMP, Request::createFromGlobals()->server->get('REQUEST_TIME'));
+        $this->sessionWrapper->set(
+            self::SESSION_ID_TIMESTAMP,
+            Request::createFromGlobals()->server->get('REQUEST_TIME'),
+        );
 
         $requestTime = Request::createFromGlobals()->server->get('REQUEST_TIME');
 
@@ -380,7 +382,7 @@ class CurrentUser extends User
      */
     public function saveToSession(): void
     {
-        $this->sessionWrapper->set(SESSION_CURRENT_USER, $this->getUserId());
+        $this->sessionWrapper->set(self::SESSION_CURRENT_USER, $this->getUserId());
     }
 
     /**
@@ -390,7 +392,7 @@ class CurrentUser extends User
     public function deleteFromSession(bool $deleteCookie = false): bool
     {
         // delete CurrentUser object from session
-        $this->sessionWrapper->remove(SESSION_CURRENT_USER);
+        $this->sessionWrapper->remove(self::SESSION_CURRENT_USER);
 
         // log CurrentUser out
         $this->setLoggedIn(false);

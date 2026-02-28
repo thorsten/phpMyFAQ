@@ -94,7 +94,7 @@ class FaqHelper extends AbstractHelper
     {
         $category->transform(0);
 
-        $faq->getAllFaqs(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $language, 'active' => 'yes']);
+        $faq->getAllFaqs(Faq::SORTING_TYPE_CATID_FAQID, ['lang' => $language, 'active' => 'yes']);
 
         return $faq->faqRecords;
     }

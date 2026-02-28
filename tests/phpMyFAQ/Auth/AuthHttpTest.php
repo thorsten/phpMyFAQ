@@ -4,6 +4,7 @@ namespace phpMyFAQ\Auth;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
@@ -11,11 +12,35 @@ use PHPUnit\Framework\TestCase;
 class AuthHttpTest extends TestCase
 {
     private AuthHttp $authHttp;
+    private string $login;
+    private string $password;
+    private string $databaseFile;
 
     protected function setUp(): void
     {
-        $this->authHttp = new AuthHttp(Configuration::getConfigurationInstance());
+        $this->databaseFile = tempnam(sys_get_temp_dir(), 'phpmyfaq-auth-http-test-');
+        copy(PMF_TEST_DIR . '/test.db', $this->databaseFile);
+
+        $dbHandle = new Sqlite3();
+        $dbHandle->connect($this->databaseFile, '', '');
+        $configuration = new Configuration($dbHandle);
+
+        $this->login = 'testUserHttp_' . bin2hex(random_bytes(4));
+        $this->password = 'testPassword';
+        $_SERVER['PHP_AUTH_USER'] = $this->login;
+        $_SERVER['PHP_AUTH_PW'] = $this->password;
+
+        $this->authHttp = new AuthHttp($configuration);
         $this->authHttp->getEncryptionContainer('sha1');
+    }
+
+    protected function tearDown(): void
+    {
+        unset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
+
+        if (isset($this->databaseFile) && file_exists($this->databaseFile)) {
+            @unlink($this->databaseFile);
+        }
     }
 
     /**
@@ -23,37 +48,26 @@ class AuthHttpTest extends TestCase
      */
     public function testCreate(): void
     {
-        $login = 'testUser';
-        $password = 'testPassword';
-
-        $this->assertTrue($this->authHttp->create($login, $password));
+        $this->assertTrue($this->authHttp->create($this->login, $this->password));
     }
 
     public function testUpdate(): void
     {
-        $login = 'testUser';
-        $password = 'newTestPassword';
-        $this->assertTrue($this->authHttp->update($login, $password));
+        $this->assertTrue($this->authHttp->update($this->login, 'newTestPassword'));
     }
 
     public function testDelete(): void
     {
-        $login = 'testUser';
-        $this->assertTrue($this->authHttp->delete($login));
+        $this->assertTrue($this->authHttp->delete($this->login));
     }
 
     public function testCheckCredentials(): void
     {
-        $login = 'testUser';
-        $password = 'testPassword';
-
-        $this->assertTrue($this->authHttp->checkCredentials($login, $password));
+        $this->assertTrue($this->authHttp->checkCredentials($this->login, $this->password));
     }
 
     public function testIsValidLogin(): void
     {
-        $login = 'testUser';
-
-        $this->assertEquals(1, $this->authHttp->isValidLogin($login));
+        $this->assertEquals(1, $this->authHttp->isValidLogin($this->login));
     }
 }
