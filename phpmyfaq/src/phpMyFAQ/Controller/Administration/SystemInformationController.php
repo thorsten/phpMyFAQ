@@ -85,8 +85,11 @@ final class SystemInformationController extends AbstractAdministrationController
                 $databaseStore = new DatabaseConfigurationStore($this->configuration->getDb());
                 $settingsResolver = new ConfigurationStorageSettingsResolver($databaseStore);
                 $settings = $settingsResolver->resolve();
-                $redisStore = new RedisConfigurationStore($settings);
-                $redisInformation = $redisStore->getInstalledRedisVersion();
+
+                if ($settings->enabled) {
+                    $redisStore = new RedisConfigurationStore($settings);
+                    $redisInformation = $redisStore->getInstalledRedisVersion();
+                }
             } catch (\Throwable $throwable) {
                 $redisInformation = 'n/a (' . $throwable->getMessage() . ')';
             }

@@ -30,10 +30,6 @@ use phpMyFAQ\User\UserData;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-if (!defined('PMF_ENCRYPTION_TYPE')) {
-    define(constant_name: 'PMF_ENCRYPTION_TYPE', value: 'hash');
-}
-
 /**
  * Class User
  *
@@ -41,6 +37,8 @@ if (!defined('PMF_ENCRYPTION_TYPE')) {
  */
 class User
 {
+    final public const string DEFAULT_ENCRYPTION_TYPE = 'hash';
+
     final public const string ERROR_USER_ADD = 'Account could not be created. ';
 
     final public const string ERROR_USER_CANNOT_CREATE_USER = 'User account could not be created. ';
@@ -113,7 +111,7 @@ class User
             'name' => 'database',
             'type' => 'local',
         ],
-        'encType' => PMF_ENCRYPTION_TYPE,
+        'encType' => self::DEFAULT_ENCRYPTION_TYPE,
         'readOnly' => false,
     ];
 

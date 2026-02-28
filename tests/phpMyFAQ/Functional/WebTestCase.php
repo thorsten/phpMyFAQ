@@ -22,8 +22,12 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Functional;
 
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Database;
 use phpMyFAQ\Kernel;
+use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Symfony\Component\BrowserKit\AbstractBrowser;
 use Symfony\Component\BrowserKit\Request as BrowserKitRequest;
 use Symfony\Component\BrowserKit\Response as BrowserKitResponse;
@@ -39,6 +43,11 @@ abstract class WebTestCase extends TestCase
 
     protected static function createClient(string $routingContext = 'public'): HttpKernelBrowser
     {
+        $dbHandle = new Sqlite3();
+        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        new Configuration($dbHandle);
+        self::initializeDatabaseStatics($dbHandle);
+
         static::$kernel = new PhpMyFaqTestKernel($routingContext);
         static::$kernel->boot();
         static::$client = new HttpKernelBrowser(static::$kernel);
@@ -82,6 +91,19 @@ abstract class WebTestCase extends TestCase
     {
         static::$kernel = null;
         static::$client = null;
+    }
+
+    private static function initializeDatabaseStatics(Sqlite3 $dbHandle): void
+    {
+        $databaseReflection = new ReflectionClass(Database::class);
+
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $dbHandle);
+
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlite3');
+
+        Database::setTablePrefix('');
     }
 }
 
