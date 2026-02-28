@@ -16,6 +16,8 @@ final class TitleControllerWebTest extends ControllerWebTestCase
 {
     public function testTitleEndpointReturnsJson(): void
     {
+        $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');
+
         $response = $this->requestApi('GET', '/v3.2/title');
 
         self::assertResponseIsSuccessful($response);

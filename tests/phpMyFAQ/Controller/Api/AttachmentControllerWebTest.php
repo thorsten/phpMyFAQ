@@ -17,6 +17,8 @@ final class AttachmentControllerWebTest extends ControllerWebTestCase
 {
     public function testAttachmentsEndpointReturnsJson(): void
     {
+        $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');
+
         $response = $this->requestApi('GET', '/v3.2/attachments/1');
 
         self::assertResponseIsSuccessful($response);

@@ -17,6 +17,8 @@ final class TagControllerWebTest extends ControllerWebTestCase
 {
     public function testTagEndpointReturnsJson(): void
     {
+        $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');
+
         $response = $this->requestApi('GET', '/api/v3.2/tags');
 
         self::assertResponseIsSuccessful($response);

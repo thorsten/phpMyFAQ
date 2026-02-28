@@ -28,6 +28,8 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
 
     public function testCategoriesEndpointReturnsJson(): void
     {
+        $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');
+
         $response = $this->requestApi('GET', '/v3.2/categories');
 
         self::assertResponseIsSuccessful($response);

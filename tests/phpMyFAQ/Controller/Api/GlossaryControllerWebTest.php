@@ -17,6 +17,8 @@ final class GlossaryControllerWebTest extends ControllerWebTestCase
 {
     public function testGlossaryEndpointReturnsJson(): void
     {
+        $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');
+
         $response = $this->requestApi('GET', '/v3.2/glossary');
 
         self::assertResponseIsSuccessful($response);

@@ -16,6 +16,8 @@ final class LanguageControllerWebTest extends ControllerWebTestCase
 {
     public function testLanguageEndpointReturnsJson(): void
     {
+        $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');
+
         $response = $this->requestApi('GET', '/v3.2/language');
 
         self::assertResponseIsSuccessful($response);

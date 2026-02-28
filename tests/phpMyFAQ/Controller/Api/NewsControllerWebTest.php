@@ -17,6 +17,8 @@ final class NewsControllerWebTest extends ControllerWebTestCase
 {
     public function testNewsEndpointReturnsJson(): void
     {
+        $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');
+
         $response = $this->requestApi('GET', '/api/v3.2/news');
 
         self::assertResponseIsSuccessful($response);
