@@ -7,6 +7,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -34,7 +35,16 @@ class CommentControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->configuration = Configuration::getConfigurationInstance();
+        $configuration = null;
+        try {
+            $configuration = Configuration::getConfigurationInstance();
+        } catch (\TypeError) {
+            $dbHandle = new Sqlite3();
+            $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+            $configuration = new Configuration($dbHandle);
+        }
+
+        $this->configuration = $configuration;
         $this->comments = $this->createStub(Comments::class);
     }
 

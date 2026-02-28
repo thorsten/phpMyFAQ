@@ -8,6 +8,7 @@ use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use stdClass;
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -15,13 +16,22 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class RelationTest extends TestCase
 {
     private PdoSqlite $db;
+    private string $databaseFile;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->databaseFile = tempnam(sys_get_temp_dir(), 'phpmyfaq-relation-test-');
+        copy(PMF_TEST_DIR . '/test.db', $this->databaseFile);
+    }
 
     protected function tearDown(): void
     {
-        parent::tearDown();
+        $this->db->close();
+        @unlink($this->databaseFile);
 
-        $this->db->query('DELETE FROM faqdata WHERE id = 1');
-        $this->db->query('DELETE FROM faqcategoryrelations WHERE category_id = 1');
+        parent::tearDown();
     }
 
     /**
@@ -30,16 +40,18 @@ class RelationTest extends TestCase
      */
     public function testGetAllRelatedByQuestion(): void
     {
+        $faqId = 999901;
+        $categoryId = 999902;
+
         $dbConfig = new DatabaseConfiguration(PMF_TEST_DIR . '/content/core/config/database.php');
         Database::setTablePrefix($dbConfig->getPrefix());
-        $this->db = Database::factory($dbConfig->getType());
-        $this->db->connect(
-            $dbConfig->getServer(),
-            $dbConfig->getUser(),
-            $dbConfig->getPassword(),
-            $dbConfig->getDatabase(),
-            $dbConfig->getPort(),
-        );
+        $this->db = new PdoSqlite();
+        $this->db->connect($this->databaseFile, '', '');
+        $databaseReflection = new ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $this->db);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'pdo_sqlite');
         $configuration = new Configuration($this->db);
         $configuration->set('search.enableRelevance', false);
 
@@ -50,10 +62,17 @@ class RelationTest extends TestCase
         $this->db->query(
             'INSERT INTO faqdata '
             . '(id, lang, solution_id, sticky, thema, content, keywords, active, author, email, updated) VALUES '
-            . '(1, \'en\', 1000, \'yes\', \'sample question\', \'sample answer\', \'sample keywords\', \'yes\', \'Author\', \'test@example.org\', \'date\')',
+            . sprintf(
+                '(%d, \'en\', 1000, \'yes\', \'sample question\', \'sample answer\', \'sample keywords\', \'yes\', \'Author\', \'test@example.org\', \'date\')',
+                $faqId,
+            ),
         );
         $this->db->query(
-            'INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES (1, \'en\', 1, \'en\')',
+            sprintf(
+                'INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES (%d, \'en\', %d, \'en\')',
+                $categoryId,
+                $faqId,
+            ),
         );
 
         $relation = new Relation($configuration);
@@ -61,9 +80,9 @@ class RelationTest extends TestCase
         $relatedArticles = $relation->getAllRelatedByQuestion('sample question', 'sample keywords');
 
         $expected = new stdClass();
-        $expected->id = 1;
+        $expected->id = $faqId;
         $expected->lang = 'en';
-        $expected->category_id = 1;
+        $expected->category_id = $categoryId;
         $expected->question = 'sample question';
         $expected->answer = 'sample answer';
         $expected->keywords = 'sample keywords';

@@ -67,4 +67,5 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
         self::assertResponseContains('<h2 class="mb-4 border-bottom">Categories</h2>', $response);
         self::assertResponseContains('<h4 class="fst-italic">All categories</h4>', $response);
     }
+
 }

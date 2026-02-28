@@ -19,7 +19,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend\Api;
 
-use phpMyFAQ\Captcha\Captcha;
+use phpMyFAQ\Captcha\BuiltinCaptcha;
+use phpMyFAQ\Captcha\CaptchaInterface;
 use phpMyFAQ\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -27,7 +28,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class CaptchaController extends AbstractController
 {
     public function __construct(
-        private readonly Captcha $captcha,
+        private readonly CaptchaInterface $captcha,
     ) {
         parent::__construct();
     }
@@ -38,6 +39,10 @@ final class CaptchaController extends AbstractController
     #[Route(path: 'captcha', name: 'api.private.captcha', methods: ['GET'])]
     public function renderImage(): Response
     {
+        if (!$this->captcha instanceof BuiltinCaptcha) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
+
         $response = new Response();
         $response->setStatusCode(Response::HTTP_OK);
         $response->headers->set('Content-Type', 'image/jpeg');

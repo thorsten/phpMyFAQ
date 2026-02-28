@@ -4,11 +4,13 @@ namespace phpMyFAQ\Faq;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Language;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -16,6 +18,9 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class ImportTest extends TestCase
 {
     private Import $faqImport;
+    private string $databasePath;
+    private Sqlite3 $dbHandle;
+    private ?Configuration $previousConfiguration = null;
 
     /**
      * @throws Exception
@@ -24,20 +29,48 @@ class ImportTest extends TestCase
     {
         parent::setUp();
 
+        $configurationReflection = new ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $this->previousConfiguration = $configurationProperty->getValue();
+
         Translation::create()
             ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $configuration = new Configuration($dbHandle);
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-faq-import-');
+        self::assertNotFalse($databasePath);
+        self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
+        $this->databasePath = $databasePath;
+
+        $this->dbHandle = new Sqlite3();
+        $this->dbHandle->connect($this->databasePath, '', '');
+        $this->initializeDatabaseStatics($this->dbHandle);
+
+        $configuration = new Configuration($this->dbHandle);
         $language = new Language($configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');
         $configuration->setLanguage($language);
 
         $this->faqImport = new Import($configuration);
+    }
+
+    protected function tearDown(): void
+    {
+        $configurationReflection = new ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, $this->previousConfiguration);
+
+        if (isset($this->dbHandle)) {
+            $this->dbHandle->close();
+        }
+
+        if (isset($this->databasePath) && is_file($this->databasePath)) {
+            unlink($this->databasePath);
+        }
+
+        parent::tearDown();
     }
 
     public function testParseCSV(): void
@@ -729,5 +762,18 @@ class ImportTest extends TestCase
 
         $result = $this->faqImport->import($recordWithQuotes);
         $this->assertTrue($result);
+    }
+
+    private function initializeDatabaseStatics(Sqlite3 $dbHandle): void
+    {
+        $databaseReflection = new ReflectionClass(Database::class);
+
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $dbHandle);
+
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlite3');
+
+        Database::setTablePrefix('');
     }
 }

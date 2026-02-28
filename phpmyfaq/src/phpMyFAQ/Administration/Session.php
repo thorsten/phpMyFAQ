@@ -122,7 +122,7 @@ readonly class Session
     {
         $stats = [];
         $completeData = [];
-        $startDate = strtotime(datetime: '-1 month');
+        $startDate = strtotime('-1 month', $endDate);
 
         $visits = $this->sessionRepository->getSessionTimestamps($startDate, $endDate);
 

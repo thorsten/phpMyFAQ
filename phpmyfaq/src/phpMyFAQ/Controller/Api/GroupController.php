@@ -23,6 +23,7 @@ use OpenApi\Attributes as OA;
 use phpMyFAQ\Permission\MediumPermission;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class GroupController extends AbstractApiController
 {

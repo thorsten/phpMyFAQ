@@ -20,7 +20,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
-use phpMyFAQ\Captcha\Captcha;
+use phpMyFAQ\Captcha\CaptchaInterface;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Core\Exception;
@@ -29,7 +29,7 @@ use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Mail;
 use phpMyFAQ\News\NewsService;
-use phpMyFAQ\Services\Gravatar;
+use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -43,7 +43,7 @@ final class NewsController extends AbstractFrontController
 {
     public function __construct(
         private readonly UserSession $faqSession,
-        private readonly Captcha $captcha,
+        private readonly CaptchaInterface $captcha,
         private readonly Date $date,
         private readonly Mail $mail,
         private readonly Gravatar $gravatar,
@@ -81,6 +81,15 @@ final class NewsController extends AbstractFrontController
 
         $newsService = new NewsService($this->configuration, $this->currentUser);
         $news = $newsService->getProcessedNews($newsId);
+
+        if ($news === []) {
+            $response = $this->render('404.twig', [
+                ...$this->getHeader($request),
+            ]);
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
+
+            return $response;
+        }
 
         $captchaHelper = CaptchaHelper::getInstance($this->configuration);
 

@@ -4,6 +4,7 @@ namespace phpMyFAQ\Command;
 
 use DateTime;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\System;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -26,6 +27,10 @@ class UpdateCommandTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        $dbHandle = new Sqlite3();
+        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        new Configuration($dbHandle);
 
         $this->command = new UpdateCommand();
         $this->commandTester = new CommandTester($this->command);

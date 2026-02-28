@@ -57,6 +57,9 @@ final class NewsService
     public function getProcessedNews(int $newsId): array
     {
         $news = $this->news->get($newsId);
+        if ($news === []) {
+            return [];
+        }
 
         // Process content with glossary
         $news['processedContent'] = $this->processContent($news['content'] ?? '');
