@@ -2,6 +2,8 @@
 
 namespace phpMyFAQ\Controller;
 
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Seo\SitemapXmlService;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -31,6 +33,10 @@ class SitemapControllerTest extends TestCase
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
+
+        $dbHandle = new Sqlite3();
+        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        new Configuration($dbHandle);
 
         $this->sitemapXmlService = $this->createStub(SitemapXmlService::class);
         $this->controller = new SitemapController($this->sitemapXmlService);

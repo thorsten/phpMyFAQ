@@ -2,7 +2,7 @@
 
 namespace phpMyFAQ\Controller\Api;
 
-use phpMyFAQ\System;
+use phpMyFAQ\Configuration;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -12,7 +12,7 @@ class VersionControllerTest extends TestCase
 {
     public function testIndex(): void
     {
-        $versionNumber = System::getVersion();
+        $versionNumber = Configuration::getConfigurationInstance()->getVersion();
 
         $versionController = new VersionController();
 
