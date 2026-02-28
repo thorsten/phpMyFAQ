@@ -19,6 +19,7 @@ final class SystemInformationControllerWebTest extends ControllerWebTestCase
         $this->overrideConfigurationValues([
             'search.enableElasticsearch' => false,
             'search.enableOpenSearch' => false,
+            'storage.useRedisForConfiguration' => false,
         ], 'admin');
 
         $response = $this->requestAdmin('GET', '/system');

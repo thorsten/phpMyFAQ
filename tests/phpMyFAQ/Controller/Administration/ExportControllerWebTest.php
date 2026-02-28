@@ -19,6 +19,7 @@ final class ExportControllerWebTest extends ControllerWebTestCase
         $response = $this->requestAdmin('GET', '/export');
 
         self::assertResponseIsSuccessful($response);
-        self::assertResponseContains('No FAQs available.', $response);
+        self::assertResponseContains('<h1 class="h2">', $response);
+        self::assertResponseContains('FAQ Export', $response);
     }
 }
