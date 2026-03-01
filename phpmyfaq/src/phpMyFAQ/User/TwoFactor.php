@@ -86,13 +86,18 @@ class TwoFactor
      */
     public function validateToken(#[\SensitiveParameter] string $token, int $userId): bool
     {
-        if (strlen($token) !== 6) {
+        if (strlen($token) !== 6 || $userId <= 0) {
             return false;
         }
 
         $this->currentUser->getUserById($userId);
 
-        return $this->twoFactorAuth->verifyCode($this->currentUser->getUserData('secret'), $token);
+        $secret = $this->currentUser->getUserData('secret');
+        if (!is_string($secret) || $secret === '') {
+            return false;
+        }
+
+        return $this->twoFactorAuth->verifyCode($secret, $token);
     }
 
     /**

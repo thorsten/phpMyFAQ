@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace phpMyFAQ\Functional;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Session\SessionWrapper;
+use phpMyFAQ\User\CurrentUser;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -110,6 +112,7 @@ abstract class ControllerWebTestCase extends WebTestCase
     ): Response {
         $client = $this->ensureClientForContext($context);
         $client->followRedirects(false);
+        $this->clearAuthenticationSession();
         $serverParameters = array_merge([
             'HTTP_HOST' => 'localhost',
             'SERVER_NAME' => 'localhost',
@@ -134,6 +137,13 @@ abstract class ControllerWebTestCase extends WebTestCase
         self::assertInstanceOf(Response::class, $response, 'No Symfony response available after request.');
 
         return $response;
+    }
+
+    private function clearAuthenticationSession(): void
+    {
+        $sessionWrapper = new SessionWrapper();
+        $sessionWrapper->remove(CurrentUser::SESSION_CURRENT_USER);
+        $sessionWrapper->remove(CurrentUser::SESSION_ID_TIMESTAMP);
     }
 
     private function ensureClientForContext(string $context): HttpKernelBrowser

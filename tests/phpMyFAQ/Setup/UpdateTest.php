@@ -4,29 +4,60 @@ namespace phpMyFAQ\Setup;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\System;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Random\RandomException;
+use ReflectionClass;
 
 #[AllowMockObjectsWithoutExpectations]
 class UpdateTest extends TestCase
 {
     private Sqlite3 $dbHandle;
     private Update $update;
+    private string $databasePath;
+    private ?Configuration $previousConfiguration = null;
 
     protected function setUp(): void
     {
         parent::setUp();
 
+        $configurationReflection = new ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $this->previousConfiguration = $configurationProperty->getValue();
+
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-setup-update-');
+        self::assertNotFalse($databasePath);
+        self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
+        $this->databasePath = $databasePath;
+
         $this->dbHandle = new Sqlite3();
-        $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $this->dbHandle->connect($this->databasePath, '', '');
+        $this->initializeDatabaseStatics($this->dbHandle);
         $configuration = new Configuration($this->dbHandle);
         $configuration->set('main.currentVersion', '4.0.0');
         $configuration->getAll();
 
         $this->update = new Update(new System(), Configuration::getConfigurationInstance());
+    }
+
+    protected function tearDown(): void
+    {
+        $configurationReflection = new ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, $this->previousConfiguration);
+
+        if (isset($this->dbHandle)) {
+            $this->dbHandle->close();
+        }
+
+        if (isset($this->databasePath) && is_file($this->databasePath)) {
+            unlink($this->databasePath);
+        }
+
+        parent::tearDown();
     }
 
     /**
@@ -105,5 +136,15 @@ class UpdateTest extends TestCase
 
         $this->update->dryRun = false;
         $this->assertFalse($property->getValue($this->update));
+    }
+
+    private function initializeDatabaseStatics(Sqlite3 $dbHandle): void
+    {
+        $databaseReflection = new ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $dbHandle);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlite3');
+        Database::setTablePrefix('');
     }
 }
