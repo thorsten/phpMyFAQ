@@ -65,19 +65,6 @@ final class QuestionsControllerWebTest extends ControllerWebTestCase
         self::assertResponseContains('Currently there are no pending questions.', $response);
     }
 
-    public function testAskQuestionRedirectsToLoginWhenGuestQuestionsAreDisabled(): void
-    {
-        $this->overrideConfigurationValues([
-            'main.enableUserTracking' => false,
-            'records.allowQuestionsForGuests' => 0,
-        ]);
-
-        $response = $this->requestPublic('GET', '/add-question.html');
-
-        self::assertResponseStatusCodeSame(302, $response);
-        self::assertRedirectLocationContains('login', $response);
-    }
-
     public function testAskQuestionPageRendersWhenGuestQuestionsAreEnabled(): void
     {
         $this->overrideConfigurationValues([

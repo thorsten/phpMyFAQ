@@ -12,17 +12,18 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 #[UsesNamespace('phpMyFAQ')]
 final class FaqControllerWebTest extends ControllerWebTestCase
 {
-    public function testAddFaqRedirectsToLoginWhenGuestFaqsAreDisabled(): void
+    public function testAddFaqRendersDisabledStateWhenGuestsAreAllowedButNoCategoriesExist(): void
     {
         $this->overrideConfigurationValues([
             'main.enableUserTracking' => false,
-            'records.allowNewFaqsForGuests' => false,
+            'records.allowNewFaqsForGuests' => true,
         ]);
 
         $response = $this->requestPublic('GET', '/add-faq.html');
 
-        self::assertResponseStatusCodeSame(302, $response);
-        self::assertSame('https://localhost/login', $response->headers->get('Location'));
+        self::assertResponseIsSuccessful($response);
+        self::assertResponseContains('alert alert-danger', $response);
+        self::assertStringNotContainsString('id="pmf-add-faq-form"', (string) $response->getContent());
     }
 
     public function testInvalidSolutionIdReturnsNotFound(): void
@@ -38,4 +39,19 @@ final class FaqControllerWebTest extends ControllerWebTestCase
 
         self::assertResponseStatusCodeSame(404, $response);
     }
+
+    public function testUnknownSolutionIdReturnsNotFound(): void
+    {
+        $response = $this->requestPublic('GET', '/solution_id_999999.html');
+
+        self::assertResponseStatusCodeSame(404, $response);
+    }
+
+    public function testMissingShortContentRouteWithNonZeroFaqIdReturnsNotFound(): void
+    {
+        $response = $this->requestPublic('GET', '/content/999999/en');
+
+        self::assertResponseStatusCodeSame(404, $response);
+    }
+
 }

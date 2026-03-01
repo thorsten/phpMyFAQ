@@ -3,16 +3,20 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\Vote;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
 class RatingTest extends TestCase
 {
     private Sqlite3 $dbHandle;
+    private string $databasePath;
+    private ?Configuration $previousConfiguration = null;
 
     private Rating $rating;
 
@@ -31,8 +35,18 @@ class RatingTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
+        $configurationReflection = new ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $this->previousConfiguration = $configurationProperty->getValue();
+
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-rating-test-');
+        self::assertNotFalse($databasePath);
+        self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
+        $this->databasePath = $databasePath;
+
         $this->dbHandle = new Sqlite3();
-        $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $this->dbHandle->connect($this->databasePath, '', '');
+        $this->initializeDatabaseStatics($this->dbHandle);
         $configuration = new Configuration($this->dbHandle);
         $language = new Language($configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');
@@ -46,7 +60,15 @@ class RatingTest extends TestCase
 
     protected function tearDown(): void
     {
+        $configurationReflection = new ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, $this->previousConfiguration);
+
         $this->dbHandle->query('DELETE FROM faqvoting');
+        $this->dbHandle->close();
+        @unlink($this->databasePath);
+
+        parent::tearDown();
     }
 
     public function testCreate(): void
@@ -119,5 +141,15 @@ class RatingTest extends TestCase
 
         $this->assertTrue($this->rating->deleteAll());
         $this->assertEquals(' <span data-rating="0">0</span> (0 Votes)', $this->rating->get(1));
+    }
+
+    private function initializeDatabaseStatics(Sqlite3 $dbHandle): void
+    {
+        $databaseReflection = new ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $dbHandle);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlite3');
+        Database::setTablePrefix('');
     }
 }

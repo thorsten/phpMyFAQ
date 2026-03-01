@@ -2,18 +2,23 @@
 
 namespace phpMyFAQ;
 
-use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Database;
+use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\Entity\Tag;
 use phpMyFAQ\Plugin\PluginException;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
 class TagsTest extends TestCase
 {
     private Tags $tags;
+    private PdoSqlite $dbHandle;
+    private string $databaseFile;
+    private ?Configuration $previousConfiguration = null;
 
     /**
      * @throws Exception
@@ -24,10 +29,24 @@ class TagsTest extends TestCase
 
         $_SERVER['HTTP_HOST'] = 'example.com';
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $configuration = new Configuration($dbHandle);
+        $this->databaseFile = tempnam(sys_get_temp_dir(), 'phpmyfaq-tags-test-');
+        copy(PMF_TEST_DIR . '/test.db', $this->databaseFile);
+
+        $configurationReflection = new ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $this->previousConfiguration = $configurationProperty->getValue();
+
+        $this->dbHandle = new PdoSqlite();
+        $this->dbHandle->connect($this->databaseFile, '', '');
+        $configuration = new Configuration($this->dbHandle);
         $configuration->set('main.referenceURL', 'http://example.com');
+
+        $databaseReflection = new ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $this->dbHandle);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlite');
+        Database::setTablePrefix('');
 
         $language = new Language($configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');
@@ -38,10 +57,14 @@ class TagsTest extends TestCase
 
     protected function tearDown(): void
     {
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $dbHandle->query('DELETE FROM faqdata_tags');
-        $dbHandle->query('DELETE FROM faqtags');
+        $configurationReflection = new ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, $this->previousConfiguration);
+
+        $this->dbHandle->close();
+        @unlink($this->databaseFile);
+
+        parent::tearDown();
     }
 
     public function testCreate(): void

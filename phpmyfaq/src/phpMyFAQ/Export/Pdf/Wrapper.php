@@ -29,174 +29,6 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use TCPDF;
 
-if (!defined(constant_name: 'PMF_ROOT_DIR')) {
-    define(constant_name: 'PMF_ROOT_DIR', value: __DIR__ . '/../../../');
-}
-
-if (!defined(constant_name: 'PMF_SRC_DIR')) {
-    define(constant_name: 'PMF_SRC_DIR', value: __DIR__ . '/../../');
-}
-
-define(constant_name: 'K_TCPDF_EXTERNAL_CONFIG', value: true);
-
-define(constant_name: 'K_PATH_URL', value: '');
-
-/*
- * path to TCPDF
- *
- */
-define(constant_name: 'K_PATH_MAIN', value: PMF_SRC_DIR . '/libs/tecnickcom/tcpdf/');
-
-/*
- * path for PDF fonts
- */
-define(constant_name: 'K_PATH_FONTS', value: PMF_SRC_DIR . '/fonts/');
-
-/*
- * cache directory for temporary files (full path)
- */
-define(constant_name: 'K_PATH_CACHE', value: PMF_ROOT_DIR . '/content/user/images/');
-
-/*
- * cache directory for temporary files (url path)
- */
-define(constant_name: 'K_PATH_URL_CACHE', value: K_PATH_CACHE);
-
-/*
- * images directory
- */
-define(constant_name: 'K_PATH_IMAGES', value: PMF_ROOT_DIR . '/content/user/images/');
-
-/*
- * blank image
- */
-define(constant_name: 'K_BLANK_IMAGE', value: K_PATH_IMAGES . '_blank.png');
-
-/*
- * page format
- */
-define(constant_name: 'PDF_PAGE_FORMAT', value: 'A4');
-
-/*
- * page orientation (P=portrait, L=landscape)
- */
-define(constant_name: 'PDF_PAGE_ORIENTATION', value: 'P');
-
-/*
- * document creator
- */
-define(constant_name: 'PDF_CREATOR', value: 'TCPDF');
-
-/*
- * document author
- */
-define(constant_name: 'PDF_AUTHOR', value: 'TCPDF');
-
-/*
- * header title
- */
-define(constant_name: 'PDF_HEADER_TITLE', value: 'phpMyFAQ');
-
-/*
- * header description string
- */
-define(constant_name: 'PDF_HEADER_STRING', value: 'by phpMyFAQ - www.phpmyfaq.de');
-
-/*
- * image logo
- */
-define(constant_name: 'PDF_HEADER_LOGO', value: 'tcpdf_logo.jpg');
-
-/*
- * header logo image width [mm]
- */
-define(constant_name: 'PDF_HEADER_LOGO_WIDTH', value: 30);
-
-/*
- * document unit of measure [pt=point, mm=millimeter, cm=centimeter, in=inch]
- */
-define(constant_name: 'PDF_UNIT', value: 'mm');
-
-/*
- * header margin
- */
-define(constant_name: 'PDF_MARGIN_HEADER', value: 5);
-
-/*
- * footer margin
- */
-define(constant_name: 'PDF_MARGIN_FOOTER', value: 10);
-
-/*
- * top margin
- */
-define(constant_name: 'PDF_MARGIN_TOP', value: 27);
-
-/*
- * bottom margin
- */
-define(constant_name: 'PDF_MARGIN_BOTTOM', value: 25);
-
-/*
- * left margin
- */
-define(constant_name: 'PDF_MARGIN_LEFT', value: 15);
-
-/*
- * right margin
- */
-define(constant_name: 'PDF_MARGIN_RIGHT', value: 15);
-
-/*
- * default main font name
- */
-define(constant_name: 'PDF_FONT_NAME_MAIN', value: 'arialunicid0');
-
-/*
- * default main font size
- */
-define(constant_name: 'PDF_FONT_SIZE_MAIN', value: 10);
-
-/*
- * default data font name
- */
-define(constant_name: 'PDF_FONT_NAME_DATA', value: 'arialunicid0');
-
-/*
- * default data font size
- */
-define(constant_name: 'PDF_FONT_SIZE_DATA', value: 8);
-
-/*
- * default monospaced font name
- */
-define(constant_name: 'PDF_FONT_MONOSPACED', value: 'DejaVuSansMono');
-
-/*
- * ratio used to adjust the conversion of pixels to user units
- */
-define(constant_name: 'PDF_IMAGE_SCALE_RATIO', value: 1);
-
-/*
- * magnification factor for titles
- */
-define(constant_name: 'HEAD_MAGNIFICATION', value: 1.1);
-
-/*
- * height of cell respect font height
- */
-define(constant_name: 'K_CELL_HEIGHT_RATIO', value: 1.25);
-
-/*
- * title magnification respect main font size
- */
-define(constant_name: 'K_TITLE_MAGNIFICATION', value: 1.3);
-
-/*
- * reduction factor for a small font
- */
-define(constant_name: 'K_SMALL_RATIO', value: 2 / 3);
-
 /**
  * Class Wrapper
  *
@@ -269,6 +101,8 @@ class Wrapper extends TCPDF
      */
     public function __construct()
     {
+        self::defineTcpdfConstants();
+
         parent::__construct(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT);
 
         $this->setFontSubsetting(enable: false);
@@ -288,6 +122,53 @@ class Wrapper extends TCPDF
         $metaLanguage = (string) (Translation::get(key: 'metaLanguage') ?? '');
         if ($metaLanguage !== '' && array_key_exists($metaLanguage, $this->fontFiles)) {
             $this->currentFont = (string) $this->fontFiles[$metaLanguage];
+        }
+    }
+
+    private static function defineTcpdfConstants(): void
+    {
+        $pmfRootDir = defined('PMF_ROOT_DIR') ? PMF_ROOT_DIR : __DIR__ . '/../../../';
+        $pmfSrcDir = defined('PMF_SRC_DIR') ? PMF_SRC_DIR : __DIR__ . '/../../';
+
+        self::defineIfMissing('K_TCPDF_EXTERNAL_CONFIG', true);
+        self::defineIfMissing('K_PATH_URL', '');
+        self::defineIfMissing('K_PATH_MAIN', $pmfSrcDir . '/libs/tecnickcom/tcpdf/');
+        self::defineIfMissing('K_PATH_FONTS', $pmfSrcDir . '/fonts/');
+        self::defineIfMissing('K_PATH_CACHE', $pmfRootDir . '/content/user/images/');
+        self::defineIfMissing('K_PATH_URL_CACHE', K_PATH_CACHE);
+        self::defineIfMissing('K_PATH_IMAGES', $pmfRootDir . '/content/user/images/');
+        self::defineIfMissing('K_BLANK_IMAGE', K_PATH_IMAGES . '_blank.png');
+        self::defineIfMissing('PDF_PAGE_FORMAT', 'A4');
+        self::defineIfMissing('PDF_PAGE_ORIENTATION', 'P');
+        self::defineIfMissing('PDF_CREATOR', 'TCPDF');
+        self::defineIfMissing('PDF_AUTHOR', 'TCPDF');
+        self::defineIfMissing('PDF_HEADER_TITLE', 'phpMyFAQ');
+        self::defineIfMissing('PDF_HEADER_STRING', 'by phpMyFAQ - www.phpmyfaq.de');
+        self::defineIfMissing('PDF_HEADER_LOGO', 'tcpdf_logo.jpg');
+        self::defineIfMissing('PDF_HEADER_LOGO_WIDTH', 30);
+        self::defineIfMissing('PDF_UNIT', 'mm');
+        self::defineIfMissing('PDF_MARGIN_HEADER', 5);
+        self::defineIfMissing('PDF_MARGIN_FOOTER', 10);
+        self::defineIfMissing('PDF_MARGIN_TOP', 27);
+        self::defineIfMissing('PDF_MARGIN_BOTTOM', 25);
+        self::defineIfMissing('PDF_MARGIN_LEFT', 15);
+        self::defineIfMissing('PDF_MARGIN_RIGHT', 15);
+        self::defineIfMissing('PDF_FONT_NAME_MAIN', 'arialunicid0');
+        self::defineIfMissing('PDF_FONT_SIZE_MAIN', 10);
+        self::defineIfMissing('PDF_FONT_NAME_DATA', 'arialunicid0');
+        self::defineIfMissing('PDF_FONT_SIZE_DATA', 8);
+        self::defineIfMissing('PDF_FONT_MONOSPACED', 'DejaVuSansMono');
+        self::defineIfMissing('PDF_IMAGE_SCALE_RATIO', 1);
+        self::defineIfMissing('HEAD_MAGNIFICATION', 1.1);
+        self::defineIfMissing('K_CELL_HEIGHT_RATIO', 1.25);
+        self::defineIfMissing('K_TITLE_MAGNIFICATION', 1.3);
+        self::defineIfMissing('K_SMALL_RATIO', 2 / 3);
+    }
+
+    private static function defineIfMissing(string $name, mixed $value): void
+    {
+        if (!defined($name)) {
+            define($name, $value);
         }
     }
 

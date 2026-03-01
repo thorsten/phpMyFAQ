@@ -111,7 +111,10 @@ final class SetupController
     #[Route(path: '/update', name: 'public.update.index', methods: ['GET'])]
     public function update(Request $request): Response
     {
-        $currentStep = (int) Filter::filterVar($request->query->get('step') ?? 1, FILTER_VALIDATE_INT);
+        $currentStep = Filter::filterVar($request->query->get('step') ?? 1, FILTER_VALIDATE_INT);
+        if ($currentStep === false || $currentStep < 1 || $currentStep > 3) {
+            $currentStep = 1;
+        }
 
         $configuration = Configuration::getConfigurationInstance();
 

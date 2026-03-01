@@ -65,6 +65,21 @@ final class UserControllerWebTest extends ControllerWebTestCase
         self::assertResponseContains('When registering with Passkeys', $response);
     }
 
+    public function testRegisterPageHidesPasskeySectionWhenWebAuthnIsDisabled(): void
+    {
+        $this->overrideConfigurationValues([
+            'main.enableUserTracking' => false,
+            'security.enableRegistration' => true,
+            'security.enableWebAuthnSupport' => false,
+        ]);
+
+        $response = $this->requestPublic('GET', '/user/register');
+
+        self::assertResponseIsSuccessful($response);
+        self::assertResponseContains('Registration', $response);
+        self::assertStringNotContainsString('When registering with Passkeys', $response->getContent());
+    }
+
     public function testUcpRedirectsHomeForAnonymousUser(): void
     {
         $response = $this->requestPublic('GET', '/user/ucp');

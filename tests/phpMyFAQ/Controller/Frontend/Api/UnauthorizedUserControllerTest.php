@@ -6,6 +6,8 @@ namespace phpMyFAQ\Controller\Frontend\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
+use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -18,6 +20,9 @@ use Symfony\Component\HttpFoundation\Response;
 class UnauthorizedUserControllerTest extends TestCase
 {
     private Configuration $configuration;
+    private Sqlite3 $dbHandle;
+    private string $databasePath;
+    private ?Configuration $previousConfiguration = null;
 
     /**
      * @throws Exception
@@ -34,7 +39,38 @@ class UnauthorizedUserControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->configuration = Configuration::getConfigurationInstance();
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $this->previousConfiguration = $configurationProperty->getValue();
+        $configurationProperty->setValue(null, null);
+
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-unauthorized-user-controller-');
+        self::assertNotFalse($databasePath);
+        self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
+        $this->databasePath = $databasePath;
+
+        $this->dbHandle = new Sqlite3();
+        $this->dbHandle->connect($this->databasePath, '', '');
+        $this->configuration = new Configuration($this->dbHandle);
+
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $this->dbHandle);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlite3');
+        Database::setTablePrefix('');
+    }
+
+    protected function tearDown(): void
+    {
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, $this->previousConfiguration);
+
+        $this->dbHandle->close();
+        @unlink($this->databasePath);
+
+        parent::tearDown();
     }
 
     /**
@@ -91,6 +127,23 @@ class UnauthorizedUserControllerTest extends TestCase
         $requestData = json_encode([
             'username' => 'testuser',
             'email' => 'invalid-email',
+        ]);
+
+        $request = new Request([], [], [], [], [], [], $requestData);
+        $controller = new UnauthorizedUserController();
+        $response = $controller->updatePassword($request);
+
+        $this->assertEquals(Response::HTTP_CONFLICT, $response->getStatusCode());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testUpdatePasswordWithEmptyUsernameReturnsConflict(): void
+    {
+        $requestData = json_encode([
+            'username' => '',
+            'email' => 'test@example.com',
         ]);
 
         $request = new Request([], [], [], [], [], [], $requestData);

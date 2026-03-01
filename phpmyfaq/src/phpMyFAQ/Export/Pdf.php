@@ -180,7 +180,7 @@ class Pdf extends Export
         $this->wrapper->setPrintHeader(val: false);
         $this->wrapper->addFaqToc();
 
-        return $this->wrapper->Output($filename);
+        return $this->wrapper->Output($filename, 'S');
     }
 
     /**
@@ -259,6 +259,6 @@ class Pdf extends Export
             txt: Translation::get(key: 'msgLastUpdateArticle') . $date->format($faqData['date']),
         );
 
-        return $this->wrapper->Output($filename);
+        return $this->wrapper->Output($filename, 'S');
     }
 }

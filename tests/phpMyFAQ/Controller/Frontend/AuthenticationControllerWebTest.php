@@ -56,12 +56,93 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 #[UsesClass(\phpMyFAQ\User\UserSession::class)]
 final class AuthenticationControllerWebTest extends ControllerWebTestCase
 {
+    public function testLoginPageShowsRegistrationAndPasskeyActionsWhenEnabled(): void
+    {
+        $this->getConfiguration()->getAll();
+        $this->overrideConfigurationValues([
+            'main.enableUserTracking' => false,
+            'security.enableRegistration' => true,
+            'security.enableWebAuthnSupport' => true,
+        ]);
+
+        $response = $this->requestPublic('GET', '/login');
+
+        self::assertResponseIsSuccessful($response);
+        self::assertResponseContains('href="user/register"', $response);
+        self::assertResponseContains('./services/webauthn', $response);
+    }
+
+    public function testLoginRedirectsToAuthenticateWhenSsoUserIsPresent(): void
+    {
+        $this->getConfiguration()->getAll();
+        $this->overrideConfigurationValues([
+            'main.enableUserTracking' => false,
+            'security.ssoSupport' => true,
+        ]);
+
+        $response = $this->requestPublic('GET', '/login', [], ['REMOTE_USER' => 'test-user']);
+
+        self::assertResponseStatusCodeSame(302, $response);
+        self::assertSame('./authenticate', $response->headers->get('Location'));
+    }
+
+    public function testLoginPageHidesRegistrationAndPasskeyActionsWhenDisabled(): void
+    {
+        $this->getConfiguration()->getAll();
+        $this->overrideConfigurationValues([
+            'main.enableUserTracking' => false,
+            'security.enableRegistration' => false,
+            'security.enableWebAuthnSupport' => false,
+        ]);
+
+        $response = $this->requestPublic('GET', '/login');
+
+        self::assertResponseIsSuccessful($response);
+        self::assertStringNotContainsString('href="user/register"', $response->getContent());
+        self::assertStringNotContainsString('./services/webauthn', $response->getContent());
+    }
+
     public function testAuthenticateWithoutCredentialsRedirectsToLogin(): void
     {
         $response = $this->requestPublic('POST', '/authenticate');
 
         self::assertResponseStatusCodeSame(302, $response);
         self::assertRedirectLocationContains('login', $response);
+    }
+
+    public function testForgotPasswordPageRenders(): void
+    {
+        $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
+
+        $response = $this->requestPublic('GET', '/forgot-password');
+
+        self::assertResponseIsSuccessful($response);
+        self::assertResponseContains('id="pmf-password-form"', $response);
+        self::assertResponseContains('id="username"', $response);
+    }
+
+    public function testTwoFactorPageRendersWithUserIdFromQuery(): void
+    {
+        $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
+
+        $response = $this->requestPublic('GET', '/token', ['user-id' => '42']);
+
+        self::assertResponseIsSuccessful($response);
+        self::assertResponseContains('id="user-id" name="user-id" value="42"', $response);
+        self::assertResponseContains('id="btnLogin"', $response);
+    }
+
+    public function testInvalidTwoFactorTokenRedirectsBackToTokenPage(): void
+    {
+        $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
+
+        $response = $this->requestPublic('POST', '/check', [
+            'token' => '123456',
+            'user-id' => '0',
+        ]);
+
+        self::assertResponseStatusCodeSame(302, $response);
+        self::assertSame('./token?user-id=0', $response->headers->get('Location'));
     }
 
     public function testLogoutWithInvalidCsrfRedirectsHome(): void

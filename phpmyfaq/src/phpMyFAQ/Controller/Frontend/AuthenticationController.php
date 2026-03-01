@@ -253,6 +253,11 @@ final class AuthenticationController extends AbstractFrontController
         $token = Filter::filterVar($request->request->get(key: 'token'), FILTER_SANITIZE_SPECIAL_CHARS);
         $userId = (int) Filter::filterVar($request->request->get(key: 'user-id'), FILTER_VALIDATE_INT);
 
+        if ($userId <= 0) {
+            $this->session->getFlashBag()->add('error', Translation::get('msgTwofactorErrorToken'));
+            return new RedirectResponse('./token?user-id=' . $userId);
+        }
+
         $this->currentUserService->getUserById($userId);
 
         if (strlen((string) $token) === 6) {

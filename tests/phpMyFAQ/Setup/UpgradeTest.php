@@ -5,6 +5,7 @@ namespace phpMyFAQ\Setup;
 use Monolog\Logger;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\DownloadHostType;
 use phpMyFAQ\System;
@@ -22,14 +23,27 @@ class UpgradeTest extends TestCase
     private Upgrade $upgrade;
     private HttpClientInterface $httpClientMock;
     private string $testDir;
+    private Sqlite3 $dbHandle;
+    private string $databasePath;
+    private ?Configuration $previousConfiguration = null;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $configuration = new Configuration($dbHandle);
+        $configurationReflection = new ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $this->previousConfiguration = $configurationProperty->getValue();
+
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-setup-upgrade-');
+        self::assertNotFalse($databasePath);
+        self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
+        $this->databasePath = $databasePath;
+
+        $this->dbHandle = new Sqlite3();
+        $this->dbHandle->connect($this->databasePath, '', '');
+        $this->initializeDatabaseStatics($this->dbHandle);
+        $configuration = new Configuration($this->dbHandle);
 
         $this->httpClientMock = $this->createMock(HttpClientInterface::class);
         $this->upgrade = new Upgrade(new System(), $configuration, $this->httpClientMock);
@@ -43,12 +57,34 @@ class UpgradeTest extends TestCase
 
     protected function tearDown(): void
     {
+        $configurationReflection = new ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, $this->previousConfiguration);
+
+        if (isset($this->dbHandle)) {
+            $this->dbHandle->close();
+        }
+
+        if (isset($this->databasePath) && is_file($this->databasePath)) {
+            unlink($this->databasePath);
+        }
+
         parent::tearDown();
 
         // Clean up test files
         if (is_dir($this->testDir)) {
             $this->recursiveDelete($this->testDir);
         }
+    }
+
+    private function initializeDatabaseStatics(Sqlite3 $dbHandle): void
+    {
+        $databaseReflection = new ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $dbHandle);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlite3');
+        Database::setTablePrefix('');
     }
 
     private function recursiveDelete(string $dir): void

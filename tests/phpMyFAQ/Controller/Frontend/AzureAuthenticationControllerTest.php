@@ -8,7 +8,9 @@ use Exception;
 use phpMyFAQ\Auth\AuthEntraId;
 use phpMyFAQ\Auth\EntraId\EntraIdSession;
 use phpMyFAQ\Auth\EntraId\OAuth;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception as CoreException;
+use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -22,6 +24,8 @@ use Symfony\Component\HttpFoundation\Response;
 #[AllowMockObjectsWithoutExpectations]
 class AzureAuthenticationControllerTest extends TestCase
 {
+    private Configuration $configuration;
+
     /**
      * @throws CoreException
      */
@@ -35,6 +39,14 @@ class AzureAuthenticationControllerTest extends TestCase
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
+
+        try {
+            $this->configuration = Configuration::getConfigurationInstance();
+        } catch (\TypeError) {
+            $dbHandle = new Sqlite3();
+            $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+            $this->configuration = new Configuration($dbHandle);
+        }
     }
 
     public function testAuthorizeReturnsRedirectResponse(): void
@@ -58,6 +70,21 @@ class AzureAuthenticationControllerTest extends TestCase
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame('https://login.microsoftonline.com/test', $response->headers->get('Location'));
+    }
+
+    public function testAuthorizeFallsBackToDefaultRedirectOnException(): void
+    {
+        $controller = new AzureAuthenticationController(
+            authContextFactory: static function (): array {
+                throw new Exception('Authorization failed');
+            },
+            azureConfigLoader: static fn(): null => null,
+        );
+
+        $response = $controller->authorize();
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
     }
 
     public function testLogoutReturnsRedirectResponse(): void
@@ -176,5 +203,73 @@ class AzureAuthenticationControllerTest extends TestCase
         $response = $controller->callback(new Request(['code' => 'test-code']));
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testCallbackReturnsResponseWhenLoginIsNotValid(): void
+    {
+        $token = new stdClass();
+        $token->access_token = 'access';
+        $token->refresh_token = 'refresh';
+
+        $oauth = $this->createMock(OAuth::class);
+        $oauth->expects($this->once())->method('getOAuthToken')->with('test-code')->willReturn($token);
+        $oauth->expects($this->once())->method('setToken')->with($token)->willReturnSelf();
+        $oauth->expects($this->once())->method('setAccessToken')->with('access')->willReturnSelf();
+        $oauth->expects($this->once())->method('setRefreshToken')->with('refresh')->willReturnSelf();
+        $oauth->expects($this->once())->method('getMail')->willReturn('john@example.com');
+
+        $auth = $this->createMock(AuthEntraId::class);
+        $auth->expects($this->once())->method('isValidLogin')->with('john@example.com')->willReturn(0);
+        $auth->expects($this->never())->method('checkCredentials');
+
+        $entraIdSession = $this->createMock(EntraIdSession::class);
+        $entraIdSession->expects($this->once())->method('getCurrentSessionKey')->willReturn('session-key');
+
+        $controller = new AzureAuthenticationController(
+            authContextFactory: fn(): array => [$auth, $oauth, $entraIdSession],
+            azureConfigLoader: static fn(): null => null,
+        );
+
+        $response = $controller->callback(new Request(['code' => 'test-code']));
+
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertSame('Login not valid.', $response->getContent());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testCallbackReturnsResponseWhenCredentialsAreNotValid(): void
+    {
+        $token = new stdClass();
+        $token->access_token = 'access';
+        $token->refresh_token = 'refresh';
+
+        $oauth = $this->createMock(OAuth::class);
+        $oauth->expects($this->once())->method('getOAuthToken')->with('test-code')->willReturn($token);
+        $oauth->expects($this->once())->method('setToken')->with($token)->willReturnSelf();
+        $oauth->expects($this->once())->method('setAccessToken')->with('access')->willReturnSelf();
+        $oauth->expects($this->once())->method('setRefreshToken')->with('refresh')->willReturnSelf();
+        $oauth->expects($this->exactly(2))->method('getMail')->willReturn('john@example.com');
+
+        $auth = $this->createMock(AuthEntraId::class);
+        $auth->expects($this->once())->method('isValidLogin')->with('john@example.com')->willReturn(1);
+        $auth->expects($this->once())->method('checkCredentials')->with('john@example.com', '')->willReturn(false);
+
+        $entraIdSession = $this->createMock(EntraIdSession::class);
+        $entraIdSession->expects($this->once())->method('getCurrentSessionKey')->willReturn('session-key');
+
+        $controller = new AzureAuthenticationController(
+            authContextFactory: fn(): array => [$auth, $oauth, $entraIdSession],
+            azureConfigLoader: static fn(): null => null,
+        );
+
+        $response = $controller->callback(new Request(['code' => 'test-code']));
+
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertSame('Credentials not valid.', $response->getContent());
     }
 }
