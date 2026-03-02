@@ -150,43 +150,34 @@ final class FaqControllerRedirectTest extends TestCase
         string $language,
         string $question,
     ): void {
-        $this->configuration->getDb()->query(
-            sprintf(
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
                 "INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
                  VALUES (%d, '%s', 0, 'Test Category', '', 1, -1, 1, '', 0)",
                 $categoryId,
                 $language,
-            ),
-        );
+            ));
 
-        $this->configuration->getDb()->query(
-            sprintf(
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
                 "INSERT INTO faqdata (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
                  VALUES (%d, '%s', %d, 0, 'yes', 0, '', '%s', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
                 $faqId,
                 $language,
                 $solutionId,
                 \SQLite3::escapeString($question),
-            ),
-        );
+            ));
 
-        $this->configuration->getDb()->query(
-            sprintf(
-                "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
-                 VALUES (%d, '%s', %d, '%s')",
-                $categoryId,
-                $language,
-                $faqId,
-                $language,
-            ),
-        );
+        $this->configuration
+            ->getDb()
+            ->query(sprintf("INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
+                 VALUES (%d, '%s', %d, '%s')", $categoryId, $language, $faqId, $language));
 
-        $this->configuration->getDb()->query(
-            sprintf(
-                'INSERT INTO faqdata_user (record_id, user_id) VALUES (%d, -1)',
-                $faqId,
-            ),
-        );
+        $this->configuration
+            ->getDb()
+            ->query(sprintf('INSERT INTO faqdata_user (record_id, user_id) VALUES (%d, -1)', $faqId));
     }
 
     private function initializeDatabaseStatics(Sqlite3 $dbHandle): void

@@ -2,15 +2,17 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Controller\Administration\Api;
+namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Administration\Api;
+use phpMyFAQ\Administration\Backup;
+use phpMyFAQ\Administration\Faq as AdminFaq;
+use phpMyFAQ\Administration\LatestUsers;
+use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\CustomPage;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
-use phpMyFAQ\Faq;
-use phpMyFAQ\Instance\Search\Elasticsearch;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -18,13 +20,15 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 #[AllowMockObjectsWithoutExpectations]
-#[CoversClass(ElasticsearchController::class)]
+#[CoversClass(DashboardController::class)]
 #[UsesNamespace('phpMyFAQ')]
-final class ElasticsearchControllerTest extends TestCase
+final class DashboardControllerTest extends TestCase
 {
     private Configuration $configuration;
     private Sqlite3 $dbHandle;
@@ -51,7 +55,7 @@ final class ElasticsearchControllerTest extends TestCase
         $this->previousConfiguration = $configurationProperty->getValue();
         $configurationProperty->setValue(null, null);
 
-        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-admin-elasticsearch-controller-');
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-admin-dashboard-page-controller-');
         self::assertNotFalse($databasePath);
         self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
         $this->databasePath = $databasePath;
@@ -84,67 +88,26 @@ final class ElasticsearchControllerTest extends TestCase
         parent::tearDown();
     }
 
-    private function createController(): ElasticsearchController
+    private function createController(): DashboardController
     {
-        return new ElasticsearchController(
-            $this->createStub(Elasticsearch::class),
-            $this->createStub(Faq::class),
-            $this->createStub(CustomPage::class),
+        return new DashboardController(
+            $this->createStub(AdminSession::class),
+            $this->createStub(AdminFaq::class),
+            $this->createStub(Backup::class),
+            new LatestUsers($this->configuration),
+            $this->createStub(Api::class),
         );
     }
 
     /**
      * @throws \Exception
      */
-    public function testCreateRequiresAuthentication(): void
+    public function testIndexRequiresAuthentication(): void
     {
+        $request = new Request();
         $controller = $this->createController();
 
-        $this->expectException(\Exception::class);
-        $controller->create();
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testDropRequiresAuthentication(): void
-    {
-        $controller = $this->createController();
-
-        $this->expectException(\Exception::class);
-        $controller->drop();
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testImportRequiresAuthentication(): void
-    {
-        $controller = $this->createController();
-
-        $this->expectException(\Exception::class);
-        $controller->import();
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testStatisticsRequiresAuthentication(): void
-    {
-        $controller = $this->createController();
-
-        $this->expectException(\Exception::class);
-        $controller->statistics();
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testHealthcheckRequiresAuthentication(): void
-    {
-        $controller = $this->createController();
-
-        $this->expectException(\Exception::class);
-        $controller->healthcheck();
+        $this->expectException(UnauthorizedHttpException::class);
+        $controller->index($request);
     }
 }

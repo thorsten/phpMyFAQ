@@ -26,10 +26,10 @@ use phpMyFAQ\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
-class ControllerContainerListener
+readonly class ControllerContainerListener
 {
     public function __construct(
-        private readonly ContainerInterface $container,
+        private ContainerInterface $container,
     ) {
     }
 
@@ -37,7 +37,6 @@ class ControllerContainerListener
     {
         $controller = $event->getController();
 
-        // Handle array-style callables [object, method]
         if (is_array($controller)) {
             $controller = $controller[0];
         }

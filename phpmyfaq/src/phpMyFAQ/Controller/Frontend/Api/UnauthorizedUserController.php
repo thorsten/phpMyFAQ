@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend\Api;
 
+use Closure;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
@@ -38,9 +39,14 @@ final class UnauthorizedUserController
 
     /**
      * Check if the FAQ should be secured.
+     *
+     * @param ?Closure(Configuration): CurrentUser $currentUserFactory
+     * @param ?Closure(Configuration): Mail $mailFactory
      */
-    public function __construct()
-    {
+    public function __construct(
+        private readonly ?Closure $currentUserFactory = null,
+        private readonly ?Closure $mailFactory = null,
+    ) {
         $this->configuration = Configuration::getConfigurationInstance();
     }
 
@@ -68,7 +74,10 @@ final class UnauthorizedUserController
         $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
 
         if ($username !== '' && $username !== '0' && ($email !== '' && $email !== '0')) {
-            $user = CurrentUser::getCurrentUser($this->configuration);
+            $user = ($this->currentUserFactory
+            ?? static fn(Configuration $configuration): CurrentUser => CurrentUser::getCurrentUser(
+                $configuration,
+            ))($this->configuration);
             $loginExist = $user->getUserByLogin($username);
 
             if ($loginExist && $email === $user->getUserData('email')) {
@@ -93,7 +102,8 @@ final class UnauthorizedUserController
                     . '<br><br>'
                     . Translation::get(key: 'lostpwd_text_2');
 
-                $mail = new Mail($this->configuration);
+                $mail = ($this->mailFactory
+                ?? static fn(Configuration $configuration): Mail => new Mail($configuration))($this->configuration);
                 try {
                     $mail->addTo($email);
                 } catch (Exception $exception) {

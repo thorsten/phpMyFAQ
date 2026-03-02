@@ -176,7 +176,9 @@ final class FaqController extends AbstractController
             $this->faq->create($faqEntity);
             $recordId = $faqEntity->getId();
 
-            $openQuestionId = Filter::filterVar($data->openQuestionID, FILTER_VALIDATE_INT);
+            $openQuestionId = property_exists($data, 'openQuestionID')
+                ? Filter::filterVar($data->openQuestionID, FILTER_VALIDATE_INT)
+                : false;
             if ($openQuestionId) {
                 if ($this->configuration->get(item: 'records.enableDeleteQuestion')) {
                     $this->question->delete($openQuestionId);
@@ -218,7 +220,7 @@ final class FaqController extends AbstractController
             $link = [];
             if ($this->configuration->get(item: 'records.defaultActivation')) {
                 $link = [
-                    'link' => $this->faqHelper->createFaqUrl($faqEntity, $categories[0]),
+                    'link' => $this->faqHelper->createFaqUrl($faqEntity, (int) $categories[0]),
                     'info' => Translation::get(key: 'msgRedirect'),
                 ];
             }

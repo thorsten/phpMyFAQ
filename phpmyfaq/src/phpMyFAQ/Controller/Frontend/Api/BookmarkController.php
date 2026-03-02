@@ -50,6 +50,10 @@ final class BookmarkController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
+        if ($bookmarkId === false || $bookmarkId < 1) {
+            return $this->json(['error' => Translation::get(key: 'msgError')], Response::HTTP_BAD_REQUEST);
+        }
+
         $bookmark = new Bookmark($this->configuration, $this->currentUser);
 
         if ($bookmark->add($bookmarkId)) {
@@ -78,6 +82,10 @@ final class BookmarkController extends AbstractController
 
         if (!Token::getInstance($this->session)->verifyToken('delete-bookmark', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if ($bookmarkId === false || $bookmarkId < 1) {
+            return $this->json(['error' => Translation::get(key: 'msgError')], Response::HTTP_BAD_REQUEST);
         }
 
         $bookmark = new Bookmark($this->configuration, $this->currentUser);

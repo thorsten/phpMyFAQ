@@ -48,10 +48,17 @@ abstract class ControllerWebTestCase extends WebTestCase
 
     protected function requestApiJson(string $method, string $uri, array $payload, array $server = []): Response
     {
-        return $this->requestWithContext('api', $method, $uri, [], array_merge([
-            'CONTENT_TYPE' => 'application/json',
-            'HTTP_ACCEPT' => 'application/json',
-        ], $server), json_encode($payload, JSON_THROW_ON_ERROR));
+        return $this->requestWithContext(
+            'api',
+            $method,
+            $uri,
+            [],
+            array_merge([
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_ACCEPT' => 'application/json',
+            ], $server),
+            json_encode($payload, JSON_THROW_ON_ERROR),
+        );
     }
 
     protected function overrideConfigurationValues(array $values, string $context = 'public'): void

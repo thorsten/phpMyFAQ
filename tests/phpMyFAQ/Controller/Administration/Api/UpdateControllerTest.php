@@ -7,23 +7,31 @@ namespace phpMyFAQ\Controller\Administration\Api;
 use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
+use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Language;
 use phpMyFAQ\Setup\EnvironmentConfigurator;
 use phpMyFAQ\Setup\Update;
 use phpMyFAQ\Setup\Upgrade;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 #[AllowMockObjectsWithoutExpectations]
-class UpdateControllerTest extends TestCase
+#[CoversClass(UpdateController::class)]
+#[UsesNamespace('phpMyFAQ')]
+final class UpdateControllerTest extends TestCase
 {
     private Configuration $configuration;
-    private Upgrade $upgrade;
-    private Api $adminApi;
-    private Update $update;
-    private EnvironmentConfigurator $configurator;
+    private Sqlite3 $dbHandle;
+    private string $databasePath;
+    private ?Configuration $previousConfiguration = null;
 
     /**
      * @throws Exception
@@ -40,11 +48,52 @@ class UpdateControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->configuration = Configuration::getConfigurationInstance();
-        $this->upgrade = $this->createStub(Upgrade::class);
-        $this->adminApi = $this->createStub(Api::class);
-        $this->update = $this->createStub(Update::class);
-        $this->configurator = $this->createStub(EnvironmentConfigurator::class);
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $this->previousConfiguration = $configurationProperty->getValue();
+        $configurationProperty->setValue(null, null);
+
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-admin-update-controller-');
+        self::assertNotFalse($databasePath);
+        self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
+        $this->databasePath = $databasePath;
+
+        $this->dbHandle = new Sqlite3();
+        $this->dbHandle->connect($this->databasePath, '', '');
+        $this->configuration = new Configuration($this->dbHandle);
+
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $this->dbHandle);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlite3');
+        Database::setTablePrefix('');
+
+        $language = new Language($this->configuration, new Session(new MockArraySessionStorage()));
+        $language->setLanguageFromConfiguration('en');
+        $this->configuration->setLanguage($language);
+    }
+
+    protected function tearDown(): void
+    {
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, $this->previousConfiguration);
+
+        $this->dbHandle->close();
+        @unlink($this->databasePath);
+
+        parent::tearDown();
+    }
+
+    private function createController(): UpdateController
+    {
+        return new UpdateController(
+            $this->createStub(Upgrade::class),
+            $this->createStub(Api::class),
+            $this->createStub(Update::class),
+            $this->createStub(EnvironmentConfigurator::class),
+        );
     }
 
     /**
@@ -52,7 +101,7 @@ class UpdateControllerTest extends TestCase
      */
     public function testHealthCheckRequiresAuthentication(): void
     {
-        $controller = new UpdateController($this->upgrade, $this->adminApi, $this->update, $this->configurator);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->healthCheck();
@@ -63,7 +112,7 @@ class UpdateControllerTest extends TestCase
      */
     public function testVersionsRequiresAuthentication(): void
     {
-        $controller = new UpdateController($this->upgrade, $this->adminApi, $this->update, $this->configurator);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->versions();
@@ -74,7 +123,7 @@ class UpdateControllerTest extends TestCase
      */
     public function testUpdateCheckRequiresAuthentication(): void
     {
-        $controller = new UpdateController($this->upgrade, $this->adminApi, $this->update, $this->configurator);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->updateCheck();
@@ -85,8 +134,8 @@ class UpdateControllerTest extends TestCase
      */
     public function testDownloadPackageRequiresAuthentication(): void
     {
-        $request = new Request();
-        $controller = new UpdateController($this->upgrade, $this->adminApi, $this->update, $this->configurator);
+        $request = new Request([], [], ['versionNumber' => '4.0.0']);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->downloadPackage($request);
@@ -97,7 +146,7 @@ class UpdateControllerTest extends TestCase
      */
     public function testExtractPackageRequiresAuthentication(): void
     {
-        $controller = new UpdateController($this->upgrade, $this->adminApi, $this->update, $this->configurator);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->extractPackage();
@@ -108,7 +157,7 @@ class UpdateControllerTest extends TestCase
      */
     public function testCreateTemporaryBackupRequiresAuthentication(): void
     {
-        $controller = new UpdateController($this->upgrade, $this->adminApi, $this->update, $this->configurator);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->createTemporaryBackup();
@@ -119,7 +168,7 @@ class UpdateControllerTest extends TestCase
      */
     public function testInstallPackageRequiresAuthentication(): void
     {
-        $controller = new UpdateController($this->upgrade, $this->adminApi, $this->update, $this->configurator);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->installPackage();
@@ -130,7 +179,7 @@ class UpdateControllerTest extends TestCase
      */
     public function testUpdateDatabaseRequiresAuthentication(): void
     {
-        $controller = new UpdateController($this->upgrade, $this->adminApi, $this->update, $this->configurator);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->updateDatabase();
@@ -141,7 +190,7 @@ class UpdateControllerTest extends TestCase
      */
     public function testCleanUpRequiresAuthentication(): void
     {
-        $controller = new UpdateController($this->upgrade, $this->adminApi, $this->update, $this->configurator);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->cleanUp();

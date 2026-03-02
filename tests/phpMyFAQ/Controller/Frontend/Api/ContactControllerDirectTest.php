@@ -81,9 +81,7 @@ final class ContactControllerDirectTest extends ApiControllerTestCase
         $mailer = $this->createMock(Mail::class);
         $mailer->expects($this->once())->method('setReplyTo')->with('test@example.com', 'Test User');
         $mailer->expects($this->once())->method('addTo')->with('admin@example.com');
-        $mailer->expects($this->once())
-            ->method('send')
-            ->willThrowException(new Exception('SMTP failed'));
+        $mailer->expects($this->once())->method('send')->willThrowException(new Exception('SMTP failed'));
 
         $controller = new ContactController($stopWords, $mailer);
         $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());

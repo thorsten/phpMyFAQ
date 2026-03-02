@@ -24,8 +24,8 @@ namespace phpMyFAQ\Functional;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
-use phpMyFAQ\Kernel;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Kernel;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\BrowserKit\AbstractBrowser;

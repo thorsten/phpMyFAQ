@@ -7,9 +7,9 @@ namespace phpMyFAQ\Controller\Frontend;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Mail;
+use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Utils;
-use phpMyFAQ\Service\Gravatar;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
@@ -26,19 +26,18 @@ final class NewsControllerTest extends TestCase
         $controller = $this->createControllerWithoutConstructor();
 
         $date = $this->createMock(Date::class);
-        $date->expects($this->once())
-            ->method('format')
-            ->with('2026-03-01 12:00:00')
-            ->willReturn('Mar 1, 2026');
+        $date->expects($this->once())->method('format')->with('2026-03-01 12:00:00')->willReturn('Mar 1, 2026');
 
         $mail = $this->createMock(Mail::class);
-        $mail->expects($this->once())
+        $mail
+            ->expects($this->once())
             ->method('safeEmail')
             ->with('john@example.com')
             ->willReturn('john [at] example.com');
 
         $gravatar = $this->createMock(Gravatar::class);
-        $gravatar->expects($this->once())
+        $gravatar
+            ->expects($this->once())
             ->method('getImage')
             ->with('john@example.com', ['class' => 'img-thumbnail'])
             ->willReturn('<img src="avatar.jpg">');
@@ -47,7 +46,7 @@ final class NewsControllerTest extends TestCase
         $this->setProperty($controller, 'mail', $mail);
         $this->setProperty($controller, 'gravatar', $gravatar);
 
-        $comment = (new Comment())
+        $comment = new Comment()
             ->setId(42)
             ->setUsername('John Doe')
             ->setEmail('john@example.com')
@@ -66,7 +65,7 @@ final class NewsControllerTest extends TestCase
 
     private function createControllerWithoutConstructor(): NewsController
     {
-        return (new ReflectionClass(NewsController::class))->newInstanceWithoutConstructor();
+        return new ReflectionClass(NewsController::class)->newInstanceWithoutConstructor();
     }
 
     private function invokePrepareCommentsData(NewsController $controller, array $comments): array

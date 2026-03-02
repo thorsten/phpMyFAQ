@@ -26,11 +26,13 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Environment;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Throwable;
 
 readonly class ApiExceptionListener
 {
@@ -88,9 +90,9 @@ readonly class ApiExceptionListener
     }
 
     private function createProblemDetailsResponse(
-        \Symfony\Component\HttpFoundation\Request $request,
+        Request $request,
         int $status,
-        \Throwable $throwable,
+        Throwable $throwable,
         string $defaultDetail,
     ): Response {
         $baseUrl = '';

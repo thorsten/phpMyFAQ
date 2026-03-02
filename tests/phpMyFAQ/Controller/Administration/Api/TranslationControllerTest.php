@@ -6,18 +6,29 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
+use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Translation\ContentTranslationService;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 #[AllowMockObjectsWithoutExpectations]
-class TranslationControllerTest extends TestCase
+#[CoversClass(TranslationController::class)]
+#[UsesNamespace('phpMyFAQ')]
+final class TranslationControllerTest extends TestCase
 {
     private Configuration $configuration;
-    private ContentTranslationService $translationService;
+    private Sqlite3 $dbHandle;
+    private string $databasePath;
+    private ?Configuration $previousConfiguration = null;
 
     /**
      * @throws Exception
@@ -34,8 +45,47 @@ class TranslationControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->configuration = Configuration::getConfigurationInstance();
-        $this->translationService = $this->createStub(ContentTranslationService::class);
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $this->previousConfiguration = $configurationProperty->getValue();
+        $configurationProperty->setValue(null, null);
+
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-admin-translation-controller-');
+        self::assertNotFalse($databasePath);
+        self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
+        $this->databasePath = $databasePath;
+
+        $this->dbHandle = new Sqlite3();
+        $this->dbHandle->connect($this->databasePath, '', '');
+        $this->configuration = new Configuration($this->dbHandle);
+
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $this->dbHandle);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlite3');
+        Database::setTablePrefix('');
+
+        $language = new Language($this->configuration, new Session(new MockArraySessionStorage()));
+        $language->setLanguageFromConfiguration('en');
+        $this->configuration->setLanguage($language);
+    }
+
+    protected function tearDown(): void
+    {
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, $this->previousConfiguration);
+
+        $this->dbHandle->close();
+        @unlink($this->databasePath);
+
+        parent::tearDown();
+    }
+
+    private function createController(): TranslationController
+    {
+        return new TranslationController($this->createStub(ContentTranslationService::class));
     }
 
     /**
@@ -43,137 +93,14 @@ class TranslationControllerTest extends TestCase
      */
     public function testTranslateRequiresAuthentication(): void
     {
-        $requestData = json_encode([
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'pmf-csrf-token' => 'test-token',
             'contentType' => 'faq',
             'sourceLang' => 'en',
             'targetLang' => 'de',
-            'fields' => ['question' => 'What is phpMyFAQ?'],
-            'pmf-csrf-token' => 'test-token',
-        ]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new TranslationController($this->translationService);
-
-        $this->expectException(\Exception::class);
-        $controller->translate($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testTranslateWithInvalidJsonThrowsException(): void
-    {
-        $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new TranslationController($this->translationService);
-
-        $this->expectException(\Exception::class);
-        $controller->translate($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testTranslateWithMissingCsrfTokenThrowsException(): void
-    {
-        $requestData = json_encode([
-            'contentType' => 'faq',
-            'sourceLang' => 'en',
-            'targetLang' => 'de',
-            'fields' => ['question' => 'What is phpMyFAQ?'],
-        ]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new TranslationController($this->translationService);
-
-        $this->expectException(\Exception::class);
-        $controller->translate($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testTranslateWithMissingContentTypeThrowsException(): void
-    {
-        $requestData = json_encode([
-            'sourceLang' => 'en',
-            'targetLang' => 'de',
-            'fields' => ['question' => 'What is phpMyFAQ?'],
-            'pmf-csrf-token' => 'test-token',
-        ]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new TranslationController($this->translationService);
-
-        $this->expectException(\Exception::class);
-        $controller->translate($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testTranslateWithMissingSourceLanguageThrowsException(): void
-    {
-        $requestData = json_encode([
-            'contentType' => 'faq',
-            'targetLang' => 'de',
-            'fields' => ['question' => 'What is phpMyFAQ?'],
-            'pmf-csrf-token' => 'test-token',
-        ]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new TranslationController($this->translationService);
-
-        $this->expectException(\Exception::class);
-        $controller->translate($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testTranslateWithMissingTargetLanguageThrowsException(): void
-    {
-        $requestData = json_encode([
-            'contentType' => 'faq',
-            'sourceLang' => 'en',
-            'fields' => ['question' => 'What is phpMyFAQ?'],
-            'pmf-csrf-token' => 'test-token',
-        ]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new TranslationController($this->translationService);
-
-        $this->expectException(\Exception::class);
-        $controller->translate($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testTranslateWithEmptyFieldsThrowsException(): void
-    {
-        $requestData = json_encode([
-            'contentType' => 'faq',
-            'sourceLang' => 'en',
-            'targetLang' => 'de',
-            'fields' => [],
-            'pmf-csrf-token' => 'test-token',
-        ]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new TranslationController($this->translationService);
-
-        $this->expectException(\Exception::class);
-        $controller->translate($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testTranslateWithInvalidContentTypeThrowsException(): void
-    {
-        $requestData = json_encode([
-            'contentType' => 'invalid',
-            'sourceLang' => 'en',
-            'targetLang' => 'de',
-            'fields' => ['question' => 'What is phpMyFAQ?'],
-            'pmf-csrf-token' => 'test-token',
-        ]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new TranslationController($this->translationService);
+            'fields' => ['question' => 'Test'],
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->translate($request);

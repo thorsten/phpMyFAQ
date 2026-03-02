@@ -41,12 +41,18 @@ final class WebAuthnController extends AbstractController
 
     private readonly User $user;
 
-    public function __construct()
-    {
+    private readonly ?CurrentUser $loginCurrentUser;
+
+    public function __construct(
+        ?AuthWebAuthn $authWebAuthn = null,
+        ?User $user = null,
+        ?CurrentUser $loginCurrentUser = null,
+    ) {
         parent::__construct();
 
-        $this->authWebAuthn = new AuthWebAuthn($this->configuration);
-        $this->user = new User($this->configuration);
+        $this->authWebAuthn = $authWebAuthn ?? new AuthWebAuthn($this->configuration);
+        $this->user = $user ?? new User($this->configuration);
+        $this->loginCurrentUser = $loginCurrentUser;
     }
 
     /**
@@ -212,7 +218,7 @@ final class WebAuthnController extends AbstractController
         $webAuthnKeys = $this->user->getWebAuthnKeys();
 
         if ($this->authWebAuthn->authenticate($loginData, $webAuthnKeys)) {
-            $currentUser = new CurrentUser($this->configuration);
+            $currentUser = $this->loginCurrentUser ?? new CurrentUser($this->configuration);
             $currentUser->getUserByLogin($login);
 
             if ($currentUser->isBlocked()) {

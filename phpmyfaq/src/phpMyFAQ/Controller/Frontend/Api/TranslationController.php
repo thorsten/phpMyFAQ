@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend\Api;
 
+use Closure;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
@@ -31,6 +32,17 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class TranslationController extends AbstractController
 {
+    /**
+     * @param ?Closure(string): void $setCurrentLanguage
+     * @param ?Closure(): array<mixed> $getTranslations
+     */
+    public function __construct(
+        private readonly ?Closure $setCurrentLanguage = null,
+        private readonly ?Closure $getTranslations = null,
+    ) {
+        parent::__construct();
+    }
+
     #[Route(path: 'translations/{language}', name: 'api.private.translations', methods: ['GET'])]
     public function translations(Request $request): JsonResponse
     {
@@ -41,8 +53,11 @@ final class TranslationController extends AbstractController
         }
 
         try {
-            Translation::getInstance()->setCurrentLanguage($language);
-            return $this->json(Translation::getAll());
+            ($this->setCurrentLanguage ?? static function (string $language): void {
+                Translation::getInstance()->setCurrentLanguage($language);
+            })($language);
+
+            return $this->json(($this->getTranslations ?? static fn(): array => Translation::getAll())());
         } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

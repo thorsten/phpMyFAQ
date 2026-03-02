@@ -39,25 +39,15 @@ final class AutoCompleteControllerDirectTest extends ApiControllerTestCase
     public function testSearchReturnsHelperResultForValidQuery(): void
     {
         $faqSearch = $this->createMock(Search::class);
-        $faqSearch->expects($this->once())
-            ->method('setCategory');
-        $faqSearch->expects($this->once())
-            ->method('autoComplete')
-            ->with('test')
-            ->willReturn([]);
+        $faqSearch->expects($this->once())->method('setCategory');
+        $faqSearch->expects($this->once())->method('autoComplete')->with('test')->willReturn([]);
 
         $searchHelper = $this->createMock(SearchHelper::class);
-        $searchHelper->expects($this->once())
-            ->method('setSearchTerm')
-            ->with('test')
-            ->willReturnSelf();
-        $searchHelper->expects($this->once())
-            ->method('setCategory')
-            ->willReturnSelf();
-        $searchHelper->expects($this->once())
-            ->method('setPlurals')
-            ->willReturnSelf();
-        $searchHelper->expects($this->once())
+        $searchHelper->expects($this->once())->method('setSearchTerm')->with('test')->willReturnSelf();
+        $searchHelper->expects($this->once())->method('setCategory')->willReturnSelf();
+        $searchHelper->expects($this->once())->method('setPlurals')->willReturnSelf();
+        $searchHelper
+            ->expects($this->once())
             ->method('createAutoCompleteResult')
             ->willReturn([['title' => 'Test FAQ', 'url' => 'https://localhost/test']]);
 

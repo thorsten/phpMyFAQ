@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend\Api;
 
+use Closure;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -33,6 +34,15 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class SetupController extends AbstractController
 {
+    /**
+     * @param ?Closure(System, \phpMyFAQ\Configuration): Update $updateFactory
+     */
+    public function __construct(
+        private readonly ?Closure $updateFactory = null,
+    ) {
+        parent::__construct();
+    }
+
     #[Route(path: 'setup/check', name: 'api.private.setup.check', methods: ['POST'])]
     public function check(Request $request): JsonResponse
     {
@@ -44,8 +54,7 @@ final class SetupController extends AbstractController
 
         $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $update = new Update(new System(), $this->configuration);
-        $update->version = $installedVersion;
+        $update = $this->createUpdate($installedVersion);
 
         if (!$update->checkMaintenanceMode()) {
             return $this->json([
@@ -80,8 +89,7 @@ final class SetupController extends AbstractController
             return $this->json(['message' => 'No version given.'], Response::HTTP_BAD_REQUEST);
         }
 
-        $update = new Update(new System(), $this->configuration);
-        $update->version = $this->configuration->getVersion();
+        $update = $this->createUpdate($this->configuration->getVersion());
 
         $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -110,8 +118,7 @@ final class SetupController extends AbstractController
 
         $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $update = new Update(new System(), $this->configuration);
-        $update->version = $installedVersion;
+        $update = $this->createUpdate($installedVersion);
 
         try {
             if ($update->applyUpdates()) {
@@ -125,5 +132,18 @@ final class SetupController extends AbstractController
                 'error' => 'Update database failed: ' . $exception->getMessage(),
             ], Response::HTTP_BAD_GATEWAY);
         }
+    }
+
+    private function createUpdate(string $version): Update
+    {
+        $system = new System();
+        $update = ($this->updateFactory
+        ?? static fn(System $system, \phpMyFAQ\Configuration $configuration): Update => new Update(
+            $system,
+            $configuration,
+        ))($system, $this->configuration);
+        $update->version = $version;
+
+        return $update;
     }
 }

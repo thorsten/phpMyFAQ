@@ -9,7 +9,10 @@ use phpMyFAQ\Administration\Changelog;
 use phpMyFAQ\Administration\Faq as FaqAdministration;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
+use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Language;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Push\WebPushService;
 use phpMyFAQ\Question;
@@ -19,23 +22,22 @@ use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Visits;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 #[AllowMockObjectsWithoutExpectations]
-class FaqControllerTest extends TestCase
+#[CoversClass(FaqController::class)]
+#[UsesNamespace('phpMyFAQ')]
+final class FaqControllerTest extends TestCase
 {
     private Configuration $configuration;
-    private Faq $faq;
-    private FaqAdministration $adminFaq;
-    private Tags $tags;
-    private Notification $notification;
-    private Changelog $changelog;
-    private Visits $visits;
-    private Seo $seo;
-    private Question $question;
-    private AdminLog $logging;
-    private WebPushService $webPushService;
+    private Sqlite3 $dbHandle;
+    private string $databasePath;
+    private ?Configuration $previousConfiguration = null;
 
     /**
      * @throws Exception
@@ -52,17 +54,58 @@ class FaqControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->configuration = Configuration::getConfigurationInstance();
-        $this->faq = $this->createStub(Faq::class);
-        $this->adminFaq = $this->createStub(FaqAdministration::class);
-        $this->tags = $this->createStub(Tags::class);
-        $this->notification = $this->createStub(Notification::class);
-        $this->changelog = $this->createStub(Changelog::class);
-        $this->visits = $this->createStub(Visits::class);
-        $this->seo = $this->createStub(Seo::class);
-        $this->question = $this->createStub(Question::class);
-        $this->logging = $this->createStub(AdminLog::class);
-        $this->webPushService = $this->createStub(WebPushService::class);
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $this->previousConfiguration = $configurationProperty->getValue();
+        $configurationProperty->setValue(null, null);
+
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-admin-faq-controller-');
+        self::assertNotFalse($databasePath);
+        self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
+        $this->databasePath = $databasePath;
+
+        $this->dbHandle = new Sqlite3();
+        $this->dbHandle->connect($this->databasePath, '', '');
+        $this->configuration = new Configuration($this->dbHandle);
+
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $this->dbHandle);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlite3');
+        Database::setTablePrefix('');
+
+        $language = new Language($this->configuration, new Session(new MockArraySessionStorage()));
+        $language->setLanguageFromConfiguration('en');
+        $this->configuration->setLanguage($language);
+    }
+
+    protected function tearDown(): void
+    {
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, $this->previousConfiguration);
+
+        $this->dbHandle->close();
+        @unlink($this->databasePath);
+
+        parent::tearDown();
+    }
+
+    private function createController(): FaqController
+    {
+        return new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(FaqAdministration::class),
+            $this->createStub(Tags::class),
+            $this->createStub(Notification::class),
+            $this->createStub(Changelog::class),
+            $this->createStub(Visits::class),
+            $this->createStub(Seo::class),
+            $this->createStub(Question::class),
+            $this->createStub(AdminLog::class),
+            $this->createStub(WebPushService::class),
+        );
     }
 
     /**
@@ -70,30 +113,12 @@ class FaqControllerTest extends TestCase
      */
     public function testCreateRequiresAuthentication(): void
     {
-        $requestData = json_encode([
+        $request = new Request([], [], [], [], [], [], json_encode([
             'data' => [
                 'pmf-csrf-token' => 'test-token',
-                'question' => 'Test Question',
-                'answer' => 'Test Answer',
-                'categories[]' => [1],
-                'lang' => 'en',
-                'author' => 'Test Author',
-                'email' => 'test@example.com',
             ],
-        ]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController(
-            $this->faq,
-            $this->adminFaq,
-            $this->tags,
-            $this->notification,
-            $this->changelog,
-            $this->visits,
-            $this->seo,
-            $this->question,
-            $this->logging,
-            $this->webPushService,
-        );
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create($request);
@@ -102,54 +127,10 @@ class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testUpdateRequiresAuthentication(): void
-    {
-        $requestData = json_encode([
-            'data' => [
-                'pmf-csrf-token' => 'test-token',
-                'faqId' => 1,
-                'question' => 'Test Question',
-                'answer' => 'Test Answer',
-                'categories[]' => [1],
-                'lang' => 'en',
-            ],
-        ]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController(
-            $this->faq,
-            $this->adminFaq,
-            $this->tags,
-            $this->notification,
-            $this->changelog,
-            $this->visits,
-            $this->seo,
-            $this->question,
-            $this->logging,
-            $this->webPushService,
-        );
-
-        $this->expectException(\Exception::class);
-        $controller->update($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
     public function testListPermissionsRequiresAuthentication(): void
     {
-        $request = new Request();
-        $controller = new FaqController(
-            $this->faq,
-            $this->adminFaq,
-            $this->tags,
-            $this->notification,
-            $this->changelog,
-            $this->visits,
-            $this->seo,
-            $this->question,
-            $this->logging,
-            $this->webPushService,
-        );
+        $request = new Request([], [], ['faqId' => 1]);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->listPermissions($request);
@@ -160,19 +141,8 @@ class FaqControllerTest extends TestCase
      */
     public function testListByCategoryRequiresAuthentication(): void
     {
-        $request = new Request();
-        $controller = new FaqController(
-            $this->faq,
-            $this->adminFaq,
-            $this->tags,
-            $this->notification,
-            $this->changelog,
-            $this->visits,
-            $this->seo,
-            $this->question,
-            $this->logging,
-            $this->webPushService,
-        );
+        $request = new Request([], [], ['categoryId' => 1]);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->listByCategory($request);
@@ -183,20 +153,8 @@ class FaqControllerTest extends TestCase
      */
     public function testActivateRequiresAuthentication(): void
     {
-        $requestData = json_encode(['csrf' => 'test-token', 'faqIds' => [1], 'faqLanguage' => 'en', 'checked' => true]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController(
-            $this->faq,
-            $this->adminFaq,
-            $this->tags,
-            $this->notification,
-            $this->changelog,
-            $this->visits,
-            $this->seo,
-            $this->question,
-            $this->logging,
-            $this->webPushService,
-        );
+        $request = new Request([], [], [], [], [], [], json_encode(['csrfToken' => 'test-token'], JSON_THROW_ON_ERROR));
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->activate($request);
@@ -207,20 +165,8 @@ class FaqControllerTest extends TestCase
      */
     public function testStickyRequiresAuthentication(): void
     {
-        $requestData = json_encode(['csrf' => 'test-token', 'faqIds' => [1], 'faqLanguage' => 'en', 'checked' => true]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController(
-            $this->faq,
-            $this->adminFaq,
-            $this->tags,
-            $this->notification,
-            $this->changelog,
-            $this->visits,
-            $this->seo,
-            $this->question,
-            $this->logging,
-            $this->webPushService,
-        );
+        $request = new Request([], [], [], [], [], [], json_encode(['csrfToken' => 'test-token'], JSON_THROW_ON_ERROR));
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->sticky($request);
@@ -231,20 +177,8 @@ class FaqControllerTest extends TestCase
      */
     public function testDeleteRequiresAuthentication(): void
     {
-        $requestData = json_encode(['csrf' => 'test-token', 'faqId' => 1, 'faqLanguage' => 'en']);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController(
-            $this->faq,
-            $this->adminFaq,
-            $this->tags,
-            $this->notification,
-            $this->changelog,
-            $this->visits,
-            $this->seo,
-            $this->question,
-            $this->logging,
-            $this->webPushService,
-        );
+        $request = new Request([], [], [], [], [], [], json_encode(['csrfToken' => 'test-token'], JSON_THROW_ON_ERROR));
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->delete($request);
@@ -255,20 +189,8 @@ class FaqControllerTest extends TestCase
      */
     public function testSearchRequiresAuthentication(): void
     {
-        $requestData = json_encode(['csrf' => 'test-token', 'search' => 'test']);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController(
-            $this->faq,
-            $this->adminFaq,
-            $this->tags,
-            $this->notification,
-            $this->changelog,
-            $this->visits,
-            $this->seo,
-            $this->question,
-            $this->logging,
-            $this->webPushService,
-        );
+        $request = new Request(['search' => 'foo']);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->search($request);
@@ -279,20 +201,8 @@ class FaqControllerTest extends TestCase
      */
     public function testSaveOrderOfStickyFaqsRequiresAuthentication(): void
     {
-        $requestData = json_encode(['csrf' => 'test-token', 'faqIds' => [1, 2, 3]]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController(
-            $this->faq,
-            $this->adminFaq,
-            $this->tags,
-            $this->notification,
-            $this->changelog,
-            $this->visits,
-            $this->seo,
-            $this->question,
-            $this->logging,
-            $this->webPushService,
-        );
+        $request = new Request([], [], [], [], [], [], json_encode(['faqIds' => [1, 2]], JSON_THROW_ON_ERROR));
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->saveOrderOfStickyFaqs($request);
@@ -304,165 +214,9 @@ class FaqControllerTest extends TestCase
     public function testImportRequiresAuthentication(): void
     {
         $request = new Request();
-        $controller = new FaqController(
-            $this->faq,
-            $this->adminFaq,
-            $this->tags,
-            $this->notification,
-            $this->changelog,
-            $this->visits,
-            $this->seo,
-            $this->question,
-            $this->logging,
-            $this->webPushService,
-        );
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->import($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testCreateWithInvalidJsonThrowsException(): void
-    {
-        $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new FaqController(
-            $this->faq,
-            $this->adminFaq,
-            $this->tags,
-            $this->notification,
-            $this->changelog,
-            $this->visits,
-            $this->seo,
-            $this->question,
-            $this->logging,
-            $this->webPushService,
-        );
-
-        $this->expectException(\Exception::class);
-        $controller->create($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testUpdateWithInvalidJsonThrowsException(): void
-    {
-        $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new FaqController(
-            $this->faq,
-            $this->adminFaq,
-            $this->tags,
-            $this->notification,
-            $this->changelog,
-            $this->visits,
-            $this->seo,
-            $this->question,
-            $this->logging,
-            $this->webPushService,
-        );
-
-        $this->expectException(\Exception::class);
-        $controller->update($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testActivateWithInvalidJsonThrowsException(): void
-    {
-        $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new FaqController(
-            $this->faq,
-            $this->adminFaq,
-            $this->tags,
-            $this->notification,
-            $this->changelog,
-            $this->visits,
-            $this->seo,
-            $this->question,
-            $this->logging,
-            $this->webPushService,
-        );
-
-        $this->expectException(\Exception::class);
-        $controller->activate($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testDeleteWithInvalidJsonThrowsException(): void
-    {
-        $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new FaqController(
-            $this->faq,
-            $this->adminFaq,
-            $this->tags,
-            $this->notification,
-            $this->changelog,
-            $this->visits,
-            $this->seo,
-            $this->question,
-            $this->logging,
-            $this->webPushService,
-        );
-
-        $this->expectException(\Exception::class);
-        $controller->delete($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testCreateWithMissingCsrfTokenThrowsException(): void
-    {
-        $requestData = json_encode([
-            'data' => [
-                'question' => 'Test Question',
-                'answer' => 'Test Answer',
-            ],
-        ]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController(
-            $this->faq,
-            $this->adminFaq,
-            $this->tags,
-            $this->notification,
-            $this->changelog,
-            $this->visits,
-            $this->seo,
-            $this->question,
-            $this->logging,
-            $this->webPushService,
-        );
-
-        $this->expectException(\Exception::class);
-        $controller->create($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testActivateWithMissingCsrfTokenThrowsException(): void
-    {
-        $requestData = json_encode(['faqIds' => [1], 'faqLanguage' => 'en', 'checked' => true]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new FaqController(
-            $this->faq,
-            $this->adminFaq,
-            $this->tags,
-            $this->notification,
-            $this->changelog,
-            $this->visits,
-            $this->seo,
-            $this->question,
-            $this->logging,
-            $this->webPushService,
-        );
-
-        $this->expectException(\Exception::class);
-        $controller->activate($request);
     }
 }

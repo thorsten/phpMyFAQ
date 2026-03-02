@@ -37,10 +37,10 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
 
-class WebExceptionListener
+readonly class WebExceptionListener
 {
     public function __construct(
-        private readonly ?ContainerInterface $container = null,
+        private ?ContainerInterface $container = null,
     ) {
     }
 

@@ -4,37 +4,25 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend\Api;
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Strings;
-use phpMyFAQ\Translation;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-#[AllowMockObjectsWithoutExpectations]
-class TranslationControllerTest extends TestCase
+#[CoversClass(TranslationController::class)]
+#[UsesNamespace('phpMyFAQ')]
+final class TranslationControllerTest extends ApiControllerTestCase
 {
-    private Configuration $configuration;
+    private function createController(
+        ?\Closure $setCurrentLanguage = null,
+        ?\Closure $getTranslations = null,
+    ): TranslationController {
+        $controller = new TranslationController($setCurrentLanguage, $getTranslations);
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
 
-    /**
-     * @throws Exception
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        Strings::init();
-
-        Translation::create()
-            ->setTranslationsDir(PMF_TRANSLATION_DIR)
-            ->setDefaultLanguage('en')
-            ->setCurrentLanguage('en')
-            ->setMultiByteLanguage();
-
-        $this->configuration = Configuration::getConfigurationInstance();
+        return $controller;
     }
 
     public function testTranslationsWithSupportedLanguageReturnsJsonResponse(): void
@@ -42,10 +30,9 @@ class TranslationControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('language', 'en');
 
-        $controller = new TranslationController();
-        $response = $controller->translations($request);
+        $response = $this->createController()->translations($request);
 
-        $this->assertInstanceOf(JsonResponse::class, $response);
+        self::assertInstanceOf(JsonResponse::class, $response);
     }
 
     public function testTranslationsWithSupportedLanguageReturnsOk(): void
@@ -53,10 +40,9 @@ class TranslationControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('language', 'en');
 
-        $controller = new TranslationController();
-        $response = $controller->translations($request);
+        $response = $this->createController()->translations($request);
 
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
     public function testTranslationsWithUnsupportedLanguageReturnsBadRequest(): void
@@ -64,10 +50,9 @@ class TranslationControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('language', 'xyz');
 
-        $controller = new TranslationController();
-        $response = $controller->translations($request);
+        $response = $this->createController()->translations($request);
 
-        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
 
     public function testTranslationsWithUnsupportedLanguageReturnsError(): void
@@ -75,11 +60,10 @@ class TranslationControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('language', 'invalid');
 
-        $controller = new TranslationController();
-        $response = $controller->translations($request);
+        $response = $this->createController()->translations($request);
+        $data = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
-        $data = json_decode($response->getContent(), true);
-        $this->assertArrayHasKey('error', $data);
+        self::assertArrayHasKey('error', $data);
     }
 
     public function testTranslationsReturnsValidJsonContent(): void
@@ -87,10 +71,9 @@ class TranslationControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('language', 'en');
 
-        $controller = new TranslationController();
-        $response = $controller->translations($request);
+        $response = $this->createController()->translations($request);
 
-        $this->assertJson($response->getContent());
+        self::assertJson((string) $response->getContent());
     }
 
     public function testTranslationsReturnsArrayData(): void
@@ -98,11 +81,10 @@ class TranslationControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('language', 'en');
 
-        $controller = new TranslationController();
-        $response = $controller->translations($request);
+        $response = $this->createController()->translations($request);
+        $data = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
-        $data = json_decode($response->getContent(), true);
-        $this->assertIsArray($data);
+        self::assertIsArray($data);
     }
 
     public function testTranslationsResponseHasCorrectContentType(): void
@@ -110,26 +92,22 @@ class TranslationControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('language', 'en');
 
-        $controller = new TranslationController();
-        $response = $controller->translations($request);
+        $response = $this->createController()->translations($request);
 
-        $this->assertTrue($response->headers->has('Content-Type'));
-        $this->assertStringContainsString('application/json', $response->headers->get('Content-Type'));
+        self::assertTrue($response->headers->has('Content-Type'));
+        self::assertStringContainsString('application/json', (string) $response->headers->get('Content-Type'));
     }
 
     public function testTranslationsWithMultipleSupportedLanguages(): void
     {
-        $languages = ['en', 'de', 'fr', 'es'];
-
-        foreach ($languages as $lang) {
+        foreach (['en', 'de', 'fr', 'es'] as $lang) {
             $request = new Request();
             $request->attributes->set('language', $lang);
 
-            $controller = new TranslationController();
-            $response = $controller->translations($request);
+            $response = $this->createController()->translations($request);
 
-            $this->assertInstanceOf(JsonResponse::class, $response);
-            $this->assertContains($response->getStatusCode(), [Response::HTTP_OK, Response::HTTP_BAD_REQUEST]);
+            self::assertInstanceOf(JsonResponse::class, $response);
+            self::assertContains($response->getStatusCode(), [Response::HTTP_OK, Response::HTTP_BAD_REQUEST]);
         }
     }
 
@@ -138,11 +116,38 @@ class TranslationControllerTest extends TestCase
         $request = new Request();
         $request->attributes->set('language', 'en');
 
-        $controller = new TranslationController();
-        $response = $controller->translations($request);
+        $response = $this->createController()->translations($request);
 
-        $content = $response->getContent();
-        $this->assertNotEmpty($content);
-        $this->assertIsString($content);
+        self::assertNotEmpty((string) $response->getContent());
+    }
+
+    public function testTranslationsReturnsInternalServerErrorWhenTranslationLoaderFails(): void
+    {
+        $request = new Request();
+        $request->attributes->set('language', 'en');
+
+        $response = $this->createController(static function (string $language): void {
+            throw new Exception('translation backend failed');
+        })->translations($request);
+        $data = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        self::assertSame('translation backend failed', $data['error']);
+    }
+
+    public function testTranslationsUsesInjectedTranslationCallbacks(): void
+    {
+        $request = new Request();
+        $request->attributes->set('language', 'en');
+
+        $currentLanguage = null;
+        $response = $this->createController(static function (string $language) use (&$currentLanguage): void {
+            $currentLanguage = $language;
+        }, static fn(): array => ['hello' => 'world'])->translations($request);
+        $data = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame('en', $currentLanguage);
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(['hello' => 'world'], $data);
     }
 }

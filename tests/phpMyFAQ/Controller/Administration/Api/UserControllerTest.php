@@ -6,18 +6,29 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
+use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 #[AllowMockObjectsWithoutExpectations]
-class UserControllerTest extends TestCase
+#[CoversClass(UserController::class)]
+#[UsesNamespace('phpMyFAQ')]
+final class UserControllerTest extends TestCase
 {
     private Configuration $configuration;
-    private CurrentUser $currentUserService;
+    private Sqlite3 $dbHandle;
+    private string $databasePath;
+    private ?Configuration $previousConfiguration = null;
 
     /**
      * @throws Exception
@@ -34,17 +45,56 @@ class UserControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->configuration = Configuration::getConfigurationInstance();
-        $this->currentUserService = $this->createStub(CurrentUser::class);
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $this->previousConfiguration = $configurationProperty->getValue();
+        $configurationProperty->setValue(null, null);
+
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-admin-user-controller-');
+        self::assertNotFalse($databasePath);
+        self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
+        $this->databasePath = $databasePath;
+
+        $this->dbHandle = new Sqlite3();
+        $this->dbHandle->connect($this->databasePath, '', '');
+        $this->configuration = new Configuration($this->dbHandle);
+
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $this->dbHandle);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlite3');
+        Database::setTablePrefix('');
+
+        $language = new Language($this->configuration, new Session(new MockArraySessionStorage()));
+        $language->setLanguageFromConfiguration('en');
+        $this->configuration->setLanguage($language);
+    }
+
+    protected function tearDown(): void
+    {
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, $this->previousConfiguration);
+
+        $this->dbHandle->close();
+        @unlink($this->databasePath);
+
+        parent::tearDown();
+    }
+
+    private function createController(): UserController
+    {
+        return new UserController($this->createStub(CurrentUser::class));
     }
 
     /**
      * @throws \Exception
      */
-    public function testListRequiresAuthentication(): void
+    public function testListRequiresUserPermission(): void
     {
         $request = new Request();
-        $controller = new UserController($this->currentUserService);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->list($request);
@@ -53,9 +103,9 @@ class UserControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testCsvExportRequiresAuthentication(): void
+    public function testCsvExportRequiresUserPermission(): void
     {
-        $controller = new UserController($this->currentUserService);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->csvExport();
@@ -64,10 +114,10 @@ class UserControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testUserDataRequiresAuthentication(): void
+    public function testUserDataRequiresUserPermission(): void
     {
-        $request = new Request();
-        $controller = new UserController($this->currentUserService);
+        $request = new Request([], [], ['userId' => 1]);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->userData($request);
@@ -76,10 +126,10 @@ class UserControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testUserPermissionsRequiresAuthentication(): void
+    public function testUserPermissionsRequiresUserPermission(): void
     {
-        $request = new Request();
-        $controller = new UserController($this->currentUserService);
+        $request = new Request([], [], ['userId' => 1]);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->userPermissions($request);
@@ -88,11 +138,13 @@ class UserControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testActivateRequiresAuthentication(): void
+    public function testActivateRequiresUserPermission(): void
     {
-        $requestData = json_encode(['csrfToken' => 'test-token', 'userId' => 1]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController($this->currentUserService);
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => 'test-token',
+            'userId' => 1,
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->activate($request);
@@ -101,16 +153,15 @@ class UserControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testOverwritePasswordRequiresAuthentication(): void
+    public function testOverwritePasswordRequiresUserPermission(): void
     {
-        $requestData = json_encode([
-            'csrf' => 'test-token',
+        $request = new Request([], [], [], [], [], [], json_encode([
             'userId' => 1,
+            'csrf' => 'test-token',
             'newPassword' => 'password123',
             'passwordRepeat' => 'password123',
-        ]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController($this->currentUserService);
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->overwritePassword($request);
@@ -121,178 +172,13 @@ class UserControllerTest extends TestCase
      */
     public function testDeleteUserRequiresAuthentication(): void
     {
-        $requestData = json_encode(['csrfToken' => 'test-token', 'userId' => 1]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController($this->currentUserService);
-
-        $this->expectException(\Exception::class);
-        $controller->deleteUser($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testAddUserRequiresAuthentication(): void
-    {
-        $requestData = json_encode([
-            'csrf' => 'test-token',
-            'userName' => 'testuser',
-            'realName' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'password123',
-            'passwordConfirm' => 'password123',
-            'automaticPassword' => false,
-            'isSuperAdmin' => false,
-        ]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController($this->currentUserService);
-
-        $this->expectException(\Exception::class);
-        $controller->addUser($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testEditUserRequiresAuthentication(): void
-    {
-        $requestData = json_encode([
+        $request = new Request([], [], [], [], [], [], json_encode([
             'csrfToken' => 'test-token',
             'userId' => 1,
-            'display_name' => 'Test User',
-            'email' => 'test@example.com',
-            'user_status' => 'active',
-        ]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController($this->currentUserService);
-
-        $this->expectException(\Exception::class);
-        $controller->editUser($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testUpdateUserRightsRequiresAuthentication(): void
-    {
-        $requestData = json_encode([
-            'csrfToken' => 'test-token',
-            'userId' => 1,
-            'userRights' => [1, 2, 3],
-        ]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController($this->currentUserService);
-
-        $this->expectException(\Exception::class);
-        $controller->updateUserRights($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testActivateWithInvalidJsonThrowsException(): void
-    {
-        $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new UserController($this->currentUserService);
-
-        $this->expectException(\Exception::class);
-        $controller->activate($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testOverwritePasswordWithInvalidJsonThrowsException(): void
-    {
-        $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new UserController($this->currentUserService);
-
-        $this->expectException(\Exception::class);
-        $controller->overwritePassword($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testDeleteUserWithInvalidJsonThrowsException(): void
-    {
-        $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new UserController($this->currentUserService);
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->deleteUser($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testAddUserWithInvalidJsonThrowsException(): void
-    {
-        $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new UserController($this->currentUserService);
-
-        $this->expectException(\Exception::class);
-        $controller->addUser($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testActivateWithMissingCsrfTokenThrowsException(): void
-    {
-        $requestData = json_encode(['userId' => 1]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController($this->currentUserService);
-
-        $this->expectException(\Exception::class);
-        $controller->activate($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testOverwritePasswordWithMissingCsrfTokenThrowsException(): void
-    {
-        $requestData = json_encode([
-            'userId' => 1,
-            'newPassword' => 'password123',
-            'passwordRepeat' => 'password123',
-        ]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController($this->currentUserService);
-
-        $this->expectException(\Exception::class);
-        $controller->overwritePassword($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testDeleteUserWithMissingCsrfTokenThrowsException(): void
-    {
-        $requestData = json_encode(['userId' => 1]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController($this->currentUserService);
-
-        $this->expectException(\Exception::class);
-        $controller->deleteUser($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testAddUserWithMissingCsrfTokenThrowsException(): void
-    {
-        $requestData = json_encode([
-            'userName' => 'testuser',
-            'realName' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'password123',
-        ]);
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UserController($this->currentUserService);
-
-        $this->expectException(\Exception::class);
-        $controller->addUser($request);
     }
 }

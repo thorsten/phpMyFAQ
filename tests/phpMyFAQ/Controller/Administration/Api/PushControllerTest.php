@@ -6,25 +6,21 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\CustomPage;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
-use phpMyFAQ\Faq;
-use phpMyFAQ\Instance\Search\Elasticsearch;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
-#[AllowMockObjectsWithoutExpectations]
-#[CoversClass(ElasticsearchController::class)]
+#[CoversClass(PushController::class)]
 #[UsesNamespace('phpMyFAQ')]
-final class ElasticsearchControllerTest extends TestCase
+final class PushControllerTest extends TestCase
 {
     private Configuration $configuration;
     private Sqlite3 $dbHandle;
@@ -51,7 +47,7 @@ final class ElasticsearchControllerTest extends TestCase
         $this->previousConfiguration = $configurationProperty->getValue();
         $configurationProperty->setValue(null, null);
 
-        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-admin-elasticsearch-controller-');
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-admin-push-controller-');
         self::assertNotFalse($databasePath);
         self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
         $this->databasePath = $databasePath;
@@ -84,67 +80,15 @@ final class ElasticsearchControllerTest extends TestCase
         parent::tearDown();
     }
 
-    private function createController(): ElasticsearchController
-    {
-        return new ElasticsearchController(
-            $this->createStub(Elasticsearch::class),
-            $this->createStub(Faq::class),
-            $this->createStub(CustomPage::class),
-        );
-    }
-
     /**
      * @throws \Exception
      */
-    public function testCreateRequiresAuthentication(): void
+    public function testGenerateVapidKeysRequiresAuthentication(): void
     {
-        $controller = $this->createController();
+        $request = new Request([], [], [], [], [], [], json_encode(['csrf' => 'test-token'], JSON_THROW_ON_ERROR));
+        $controller = new PushController();
 
         $this->expectException(\Exception::class);
-        $controller->create();
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testDropRequiresAuthentication(): void
-    {
-        $controller = $this->createController();
-
-        $this->expectException(\Exception::class);
-        $controller->drop();
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testImportRequiresAuthentication(): void
-    {
-        $controller = $this->createController();
-
-        $this->expectException(\Exception::class);
-        $controller->import();
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testStatisticsRequiresAuthentication(): void
-    {
-        $controller = $this->createController();
-
-        $this->expectException(\Exception::class);
-        $controller->statistics();
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testHealthcheckRequiresAuthentication(): void
-    {
-        $controller = $this->createController();
-
-        $this->expectException(\Exception::class);
-        $controller->healthcheck();
+        $controller->generateVapidKeys($request);
     }
 }
