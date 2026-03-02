@@ -8,16 +8,23 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
+use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
+#[AllowMockObjectsWithoutExpectations]
 #[CoversClass(MediaBrowserController::class)]
 #[UsesNamespace('phpMyFAQ')]
 final class MediaBrowserControllerTest extends TestCase
@@ -25,6 +32,7 @@ final class MediaBrowserControllerTest extends TestCase
     private Configuration $configuration;
     private Sqlite3 $dbHandle;
     private string $databasePath;
+    private string $createdMediaFile = '';
     private ?Configuration $previousConfiguration = null;
 
     /**
@@ -74,7 +82,16 @@ final class MediaBrowserControllerTest extends TestCase
         $configurationProperty = $configurationReflection->getProperty('configuration');
         $configurationProperty->setValue(null, $this->previousConfiguration);
 
+        if ($this->createdMediaFile !== '' && is_file($this->createdMediaFile)) {
+            unlink($this->createdMediaFile);
+        }
+
         $this->dbHandle->close();
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, null);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, '');
         @unlink($this->databasePath);
 
         parent::tearDown();
@@ -90,5 +107,110 @@ final class MediaBrowserControllerTest extends TestCase
 
         $this->expectException(\Exception::class);
         $controller->index($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexReturnsFilesForAuthenticatedBrowseRequest(): void
+    {
+        $fileName = 'pmf-media-browser-test.jpg';
+        $this->createdMediaFile = PMF_CONTENT_DIR . '/user/images/' . $fileName;
+        file_put_contents($this->createdMediaFile, 'fake-image');
+
+        $controller = new MediaBrowserController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $request = new Request([], [], [], [], [], [], json_encode(['action' => 'browse'], JSON_THROW_ON_ERROR));
+
+        $response = $controller->index($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $fileNames = array_column($payload['data']['sources'][0]['files'], 'file');
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['success']);
+        self::assertContains($fileName, $fileNames);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexIgnoresFilesWithUnsupportedExtension(): void
+    {
+        $fileName = 'pmf-media-browser-test.txt';
+        $this->createdMediaFile = PMF_CONTENT_DIR . '/user/images/' . $fileName;
+        file_put_contents($this->createdMediaFile, 'not-an-image');
+
+        $controller = new MediaBrowserController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $request = new Request([], [], [], [], [], [], json_encode(['action' => 'browse'], JSON_THROW_ON_ERROR));
+
+        $response = $controller->index($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $fileNames = array_column($payload['data']['sources'][0]['files'], 'file');
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertNotContains($fileName, $fileNames);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexRemovesFileWhenFileRemoveActionIsRequested(): void
+    {
+        $fileName = 'pmf-media-browser-delete.jpg';
+        $this->createdMediaFile = PMF_CONTENT_DIR . '/user/images/' . $fileName;
+        file_put_contents($this->createdMediaFile, 'fake-image');
+
+        $controller = new MediaBrowserController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'action' => 'fileRemove',
+            'name' => $fileName,
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->index($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['success']);
+        self::assertFalse(is_file($this->createdMediaFile));
+        $this->createdMediaFile = '';
+    }
+
+    private function createAuthenticatedContainer(): ContainerInterface
+    {
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => (
+                    $userId === 42
+                    && $right === PermissionType::FAQ_EDIT->value
+                ),
+            );
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(42);
+
+        $session = new Session(new MockArraySessionStorage());
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    default => null,
+                };
+            });
+
+        return $container;
     }
 }

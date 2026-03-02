@@ -90,7 +90,6 @@ final class TagController extends AbstractController
             $tags = $this->tags->getAllTags(
                 strtolower(trim((string) $autoCompleteValue)),
                 PMF_TAGS_CLOUD_RESULT_SET_SIZE,
-                strict: true,
             );
         }
 

@@ -8,13 +8,19 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
+use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
@@ -33,6 +39,7 @@ final class PushControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Token::resetInstanceForTests();
 
         Strings::init();
 
@@ -70,14 +77,54 @@ final class PushControllerTest extends TestCase
 
     protected function tearDown(): void
     {
+        Token::resetInstanceForTests();
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
         $configurationProperty->setValue(null, $this->previousConfiguration);
 
         $this->dbHandle->close();
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, null);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, '');
         @unlink($this->databasePath);
 
         parent::tearDown();
+    }
+
+    private function createAuthenticatedContainer(): ContainerInterface
+    {
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => (
+                    $userId === 42
+                    && $right === PermissionType::CONFIGURATION_EDIT->value
+                ),
+            );
+
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(42);
+
+        $session = new Session(new MockArraySessionStorage());
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    default => null,
+                };
+            });
+
+        return $container;
     }
 
     /**
@@ -90,5 +137,39 @@ final class PushControllerTest extends TestCase
 
         $this->expectException(\Exception::class);
         $controller->generateVapidKeys($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testGenerateVapidKeysReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    {
+        $request = new Request([], [], [], [], [], [], json_encode(['csrf' => 'invalid-token'], JSON_THROW_ON_ERROR));
+        $controller = new PushController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->generateVapidKeys($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertFalse($payload['success']);
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testGenerateVapidKeysReturnsUnauthorizedForMissingCsrfWhenAuthenticated(): void
+    {
+        $request = new Request([], [], [], [], [], [], json_encode([], JSON_THROW_ON_ERROR));
+        $controller = new PushController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->generateVapidKeys($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertFalse($payload['success']);
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
     }
 }

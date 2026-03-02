@@ -114,7 +114,7 @@ final class CategoryController extends AbstractAdministrationApiController
             $categories = explode(',', (string) $categoryData);
         }
 
-        if (!in_array(true, filter_var_array($categories, FILTER_VALIDATE_INT), strict: true)) {
+        if (in_array(false, filter_var_array($categories, FILTER_VALIDATE_INT), strict: true)) {
             return $this->json(['error' => 'Only integer values are valid.'], Response::HTTP_BAD_REQUEST);
         }
 

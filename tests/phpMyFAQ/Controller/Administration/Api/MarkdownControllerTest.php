@@ -75,6 +75,11 @@ final class MarkdownControllerTest extends TestCase
         $configurationProperty->setValue(null, $this->previousConfiguration);
 
         $this->dbHandle->close();
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, null);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, '');
         @unlink($this->databasePath);
 
         parent::tearDown();
@@ -134,5 +139,20 @@ final class MarkdownControllerTest extends TestCase
 
         $this->expectException(\Exception::class);
         $controller->renderMarkdown($request);
+    }
+
+    /**
+     * @throws \League\CommonMark\Exception\CommonMarkException
+     */
+    public function testRenderMarkdownReturnsParagraphForPlainText(): void
+    {
+        $request = new Request([], [], [], [], [], [], json_encode(['text' => 'Plain text'], JSON_THROW_ON_ERROR));
+        $controller = new MarkdownController();
+
+        $response = $controller->renderMarkdown($request);
+        $payload = json_decode((string) $response->getContent(), associative: true, flags: JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('<p>Plain text</p>', $payload['success']);
     }
 }

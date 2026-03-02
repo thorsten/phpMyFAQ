@@ -4,19 +4,25 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
+use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Language;
+use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
@@ -78,6 +84,11 @@ final class InstanceControllerTest extends TestCase
         $configurationProperty->setValue(null, $this->previousConfiguration);
 
         $this->dbHandle->close();
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, null);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, '');
         @unlink($this->databasePath);
 
         parent::tearDown();
@@ -122,5 +133,81 @@ final class InstanceControllerTest extends TestCase
 
         $this->expectException(\Exception::class);
         $controller->add($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAddReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->add(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => 'invalid-token',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->delete(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => 'invalid-token',
+            'instanceId' => 2,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    private function createAuthenticatedContainer(): ContainerInterface
+    {
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(static function (int $userId, mixed $right): bool {
+                return $userId === 42
+                && in_array(
+                    $right,
+                    [
+                        PermissionType::INSTANCE_ADD->value,
+                        PermissionType::INSTANCE_DELETE->value,
+                    ],
+                    true,
+                );
+            });
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(42);
+
+        $session = new Session(new MockArraySessionStorage());
+        $adminLog = $this->createStub(AdminLog::class);
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $adminLog, $session) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    default => null,
+                };
+            });
+
+        return $container;
     }
 }

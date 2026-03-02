@@ -4,19 +4,26 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
+use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
+use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Translation\ContentTranslationService;
+use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
@@ -36,6 +43,8 @@ final class TranslationControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        Token::resetInstanceForTests();
 
         Strings::init();
 
@@ -73,11 +82,19 @@ final class TranslationControllerTest extends TestCase
 
     protected function tearDown(): void
     {
+        Token::resetInstanceForTests();
+        $_COOKIE = [];
+
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
         $configurationProperty->setValue(null, $this->previousConfiguration);
 
         $this->dbHandle->close();
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, null);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, '');
         @unlink($this->databasePath);
 
         parent::tearDown();
@@ -86,6 +103,59 @@ final class TranslationControllerTest extends TestCase
     private function createController(): TranslationController
     {
         return new TranslationController($this->createStub(ContentTranslationService::class));
+    }
+
+    private function createControllerWithService(ContentTranslationService $translationService): TranslationController
+    {
+        return new TranslationController($translationService);
+    }
+
+    private function createAuthenticatedContainer(?Session $session = null): ContainerInterface
+    {
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => (
+                    $userId === 42
+                    && $right === PermissionType::FAQ_TRANSLATE->value
+                ),
+            );
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(42);
+
+        $session ??= new Session(new MockArraySessionStorage());
+        $adminLog = $this->createStub(AdminLog::class);
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    default => null,
+                };
+            });
+
+        return $container;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function createValidCsrfToken(Session $session, string $page): string
+    {
+        Token::resetInstanceForTests();
+        $token = Token::getInstance($session)->getTokenString($page);
+        $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;
+
+        return $token;
     }
 
     /**
@@ -104,5 +174,80 @@ final class TranslationControllerTest extends TestCase
 
         $this->expectException(\Exception::class);
         $controller->translate($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testTranslateReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    {
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'pmf-csrf-token' => 'invalid-token',
+            'contentType' => 'faq',
+            'sourceLang' => 'en',
+            'targetLang' => 'de',
+            'fields' => ['question' => 'Test'],
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->translate($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertFalse($payload['success']);
+        self::assertSame('CSRF - ' . Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testTranslateReturnsBadRequestForMissingParametersWhenAuthenticated(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $token = $this->createValidCsrfToken($session, 'translate');
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'pmf-csrf-token' => $token,
+            'contentType' => '',
+            'sourceLang' => 'en',
+            'targetLang' => 'de',
+            'fields' => [],
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->translate($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertFalse($payload['success']);
+        self::assertSame('Missing required parameters', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testTranslateReturnsBadRequestForInvalidContentTypeWhenAuthenticated(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $token = $this->createValidCsrfToken($session, 'translate');
+
+        $controller = $this->createControllerWithService($this->createStub(ContentTranslationService::class));
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'pmf-csrf-token' => $token,
+            'contentType' => 'invalid',
+            'sourceLang' => 'en',
+            'targetLang' => 'de',
+            'fields' => ['question' => 'Test'],
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->translate($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertFalse($payload['success']);
+        self::assertSame('Invalid content type', $payload['error']);
     }
 }

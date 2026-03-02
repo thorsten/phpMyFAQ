@@ -9,14 +9,20 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
+use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
+use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
@@ -36,6 +42,7 @@ final class SessionControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Token::resetInstanceForTests();
 
         Strings::init();
 
@@ -73,19 +80,68 @@ final class SessionControllerTest extends TestCase
 
     protected function tearDown(): void
     {
+        Token::resetInstanceForTests();
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('export-sessions'), 0, 10)]);
+
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
         $configurationProperty->setValue(null, $this->previousConfiguration);
 
         $this->dbHandle->close();
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, null);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, '');
         @unlink($this->databasePath);
 
         parent::tearDown();
     }
 
-    private function createController(): SessionController
+    private function createController(?AdminSession $adminSession = null): SessionController
     {
-        return new SessionController($this->createStub(AdminSession::class));
+        return new SessionController($adminSession ?? $this->createStub(AdminSession::class));
+    }
+
+    private function createAuthenticatedContainer(): ContainerInterface
+    {
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturnCallback(
+            static fn (int $userId, mixed $right): bool => $userId === 42 && $right === PermissionType::STATISTICS_VIEWLOGS->value
+        );
+
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(42);
+
+        $session = new Session(new MockArraySessionStorage());
+        $adminLog = $this->createStub(\phpMyFAQ\Administration\AdminLog::class);
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container->method('get')->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
+            return match ($id) {
+                'phpmyfaq.configuration' => $this->configuration,
+                'phpmyfaq.user.current_user' => $currentUser,
+                'session' => $session,
+                'phpmyfaq.admin.admin-log' => $adminLog,
+                default => null,
+            };
+        });
+
+        return $container;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function createValidCsrfToken(Session $session, string $page): string
+    {
+        Token::resetInstanceForTests();
+        $token = Token::getInstance($session)->getTokenString($page);
+        $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;
+
+        return $token;
     }
 
     /**
@@ -114,5 +170,56 @@ final class SessionControllerTest extends TestCase
 
         $this->expectException(\Exception::class);
         $controller->export($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExportReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    {
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => 'invalid-token',
+            'firstHour' => '2026-03-01 00:00:00',
+            'lastHour' => '2026-03-02 00:00:00',
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->export($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExportReturnsCsvResponseForValidCsrfWhenAuthenticated(): void
+    {
+        $adminSession = $this->createMock(AdminSession::class);
+        $adminSession->expects($this->once())
+            ->method('getSessionsByDate')
+            ->willReturn([
+                ['ip' => '127.0.0.1', 'time' => '2026-03-01 00:00:00'],
+            ]);
+
+        $controller = $this->createController($adminSession);
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'export-sessions');
+        $controller->setContainer($container);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'firstHour' => '2026-03-01 00:00:00',
+            'lastHour' => '2026-03-02 00:00:00',
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->export($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('text/csv', $response->headers->get('Content-Type'));
     }
 }
