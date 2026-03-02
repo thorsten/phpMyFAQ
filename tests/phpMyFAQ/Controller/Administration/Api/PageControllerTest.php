@@ -85,6 +85,8 @@ final class PageControllerTest extends TestCase
         Token::resetInstanceForTests();
         unset($_COOKIE['pmf-csrf-token-' . substr(md5('save-page'), 0, 10)]);
         unset($_COOKIE['pmf-csrf-token-' . substr(md5('delete-page'), 0, 10)]);
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('update-page'), 0, 10)]);
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('activate-page'), 0, 10)]);
 
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
@@ -227,6 +229,67 @@ final class PageControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testUpdateReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->update(new Request([], [], [], [], [], [], json_encode([
+            'id' => 1,
+            'pageTitle' => 'Updated title',
+            'slug' => 'updated-title',
+            'authorName' => 'Author',
+            'authorEmail' => 'author@example.com',
+            'lang' => 'en',
+            'csrfToken' => 'invalid-token',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testActivateReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->activate(new Request([], [], [], [], [], [], json_encode([
+            'id' => 1,
+            'status' => true,
+            'csrfToken' => 'invalid-token',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCheckSlugReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->checkSlug(new Request([], [], [], [], [], [], json_encode([
+            'slug' => 'test-page',
+            'lang' => 'en',
+            'csrfToken' => 'invalid-token',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testListReturnsPaginatedPayloadWhenAuthenticated(): void
     {
         $controller = $this->createController();
@@ -288,6 +351,101 @@ final class PageControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertSame('Missing required fields: id, lang', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateReturnsBadRequestForMissingRequiredFieldWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-page');
+        $controller->setContainer($container);
+
+        $response = $controller->update(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'id' => 1,
+            'pageTitle' => 'Updated title',
+            'slug' => 'updated-title',
+            'authorName' => 'Author',
+            'authorEmail' => '',
+            'lang' => 'en',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Missing required field: authorEmail', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testActivateReturnsBadRequestForMissingRequiredFieldsWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'activate-page');
+        $controller->setContainer($container);
+
+        $response = $controller->activate(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'id' => 1,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Missing required fields: id, status', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCheckSlugReturnsBadRequestForMissingFieldsWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'save-page');
+        $controller->setContainer($container);
+
+        $response = $controller->checkSlug(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'slug' => 'test-page',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Missing required fields: slug, lang', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCheckSlugReturnsAvailabilityWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'save-page');
+        $controller->setContainer($container);
+
+        $response = $controller->checkSlug(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'slug' => 'fresh-page-slug',
+            'lang' => 'en',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['available']);
+        self::assertSame('fresh-page-slug', $payload['slug']);
     }
 
     /**

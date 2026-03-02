@@ -290,6 +290,105 @@ final class ApiKeyControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testDeleteReturnsBadRequestForMissingIdWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'api-key-delete');
+        $controller->setContainer($container);
+
+        $response = $controller->delete(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('API key ID is required.', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateReturnsBadRequestForInvalidExpiresAtWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'api-key-create');
+        $controller->setContainer($container);
+
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'name' => 'Generated key',
+            'scopes' => ['faq.read'],
+            'expiresAt' => 'not-a-date',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Invalid expiresAt value.', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateReturnsBadRequestForMissingNameWhenAuthenticated(): void
+    {
+        $this->seedApiKeyRow();
+
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'api-key-update');
+        $controller->setContainer($container);
+
+        $response = $controller->update(new Request([], [], ['id' => 1], [], [], [], json_encode([
+            'csrf' => $token,
+            'name' => '',
+            'scopes' => ['faq.read'],
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('API key name is required.', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateReturnsUpdatedApiKeyWhenAuthenticated(): void
+    {
+        $this->seedApiKeyRow();
+
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'api-key-update');
+        $controller->setContainer($container);
+
+        $response = $controller->update(new Request([], [], ['id' => 1], [], [], [], json_encode([
+            'csrf' => $token,
+            'name' => 'Updated key',
+            'scopes' => ['faq.read', 'faq.write'],
+            'expiresAt' => '2026-04-01 12:00:00',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(1, $payload['id']);
+        self::assertSame('Updated key', $payload['name']);
+        self::assertSame(['faq.read', 'faq.write'], $payload['scopes']);
+        self::assertSame('2026-04-01 12:00:00', $payload['expiresAt']);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testDeleteReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
     {
         $controller = $this->createController();

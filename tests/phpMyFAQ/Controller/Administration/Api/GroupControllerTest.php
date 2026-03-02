@@ -166,6 +166,13 @@ final class GroupControllerTest extends TestCase
 
     private function seedGroupFixtures(): void
     {
+        $this->dbHandle->query(
+            "UPDATE faquser SET login = 'testUser', account_status = 'active' WHERE user_id = 2",
+        );
+        $this->dbHandle->query(
+            "INSERT OR REPLACE INTO faquserdata (user_id, last_modified, display_name, email, is_visible, twofactor_enabled, secret)
+             VALUES (2, '20260302120000', 'testUser', '', 1, 0, '')",
+        );
         $this->dbHandle->query(sprintf(
             "INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (%d, 'Editors', 'Editorial team', 0)",
             self::TEST_GROUP_ID,
