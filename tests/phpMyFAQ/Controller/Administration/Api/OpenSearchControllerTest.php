@@ -7,21 +7,29 @@ namespace phpMyFAQ\Controller\Administration\Api;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\CustomPage;
+use phpMyFAQ\Database;
+use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Instance\Search\OpenSearch;
+use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 #[AllowMockObjectsWithoutExpectations]
-class OpenSearchControllerTest extends TestCase
+#[CoversClass(OpenSearchController::class)]
+#[UsesNamespace('phpMyFAQ')]
+final class OpenSearchControllerTest extends TestCase
 {
     private Configuration $configuration;
-    private OpenSearch $openSearch;
-    private Faq $faq;
-    private CustomPage $customPage;
+    private Sqlite3 $dbHandle;
+    private string $databasePath;
+    private ?Configuration $previousConfiguration = null;
 
     /**
      * @throws Exception
@@ -38,10 +46,51 @@ class OpenSearchControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->configuration = Configuration::getConfigurationInstance();
-        $this->openSearch = $this->createStub(OpenSearch::class);
-        $this->faq = $this->createStub(Faq::class);
-        $this->customPage = $this->createStub(CustomPage::class);
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $this->previousConfiguration = $configurationProperty->getValue();
+        $configurationProperty->setValue(null, null);
+
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-admin-opensearch-controller-');
+        self::assertNotFalse($databasePath);
+        self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
+        $this->databasePath = $databasePath;
+
+        $this->dbHandle = new Sqlite3();
+        $this->dbHandle->connect($this->databasePath, '', '');
+        $this->configuration = new Configuration($this->dbHandle);
+
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $this->dbHandle);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlite3');
+        Database::setTablePrefix('');
+
+        $language = new Language($this->configuration, new Session(new MockArraySessionStorage()));
+        $language->setLanguageFromConfiguration('en');
+        $this->configuration->setLanguage($language);
+    }
+
+    protected function tearDown(): void
+    {
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, $this->previousConfiguration);
+
+        $this->dbHandle->close();
+        @unlink($this->databasePath);
+
+        parent::tearDown();
+    }
+
+    private function createController(): OpenSearchController
+    {
+        return new OpenSearchController(
+            $this->createStub(OpenSearch::class),
+            $this->createStub(Faq::class),
+            $this->createStub(CustomPage::class),
+        );
     }
 
     /**
@@ -49,7 +98,7 @@ class OpenSearchControllerTest extends TestCase
      */
     public function testCreateRequiresAuthentication(): void
     {
-        $controller = new OpenSearchController($this->openSearch, $this->faq, $this->customPage);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->create();
@@ -60,7 +109,7 @@ class OpenSearchControllerTest extends TestCase
      */
     public function testDropRequiresAuthentication(): void
     {
-        $controller = new OpenSearchController($this->openSearch, $this->faq, $this->customPage);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->drop();
@@ -71,7 +120,7 @@ class OpenSearchControllerTest extends TestCase
      */
     public function testImportRequiresAuthentication(): void
     {
-        $controller = new OpenSearchController($this->openSearch, $this->faq, $this->customPage);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->import();
@@ -82,7 +131,7 @@ class OpenSearchControllerTest extends TestCase
      */
     public function testStatisticsRequiresAuthentication(): void
     {
-        $controller = new OpenSearchController($this->openSearch, $this->faq, $this->customPage);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->statistics();
@@ -93,7 +142,7 @@ class OpenSearchControllerTest extends TestCase
      */
     public function testHealthcheckRequiresAuthentication(): void
     {
-        $controller = new OpenSearchController($this->openSearch, $this->faq, $this->customPage);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->healthcheck();

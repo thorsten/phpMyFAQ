@@ -143,12 +143,7 @@ final class UserControllerTest extends TestCase
         $captchaHelper = $this->createMock(CaptchaHelperInterface::class);
         $gravatar = $this->createMock(Gravatar::class);
 
-        return new UserController(
-            new UserSession($this->configuration),
-            $captcha,
-            $captchaHelper,
-            $gravatar,
-        );
+        return new UserController(new UserSession($this->configuration), $captcha, $captchaHelper, $gravatar);
     }
 
     private function createLoggedInCurrentUser(): CurrentUser

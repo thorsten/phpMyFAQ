@@ -61,19 +61,17 @@ class RelationTest extends TestCase
 
         $this->db->query(
             'INSERT INTO faqdata '
-            . '(id, lang, solution_id, sticky, thema, content, keywords, active, author, email, updated) VALUES '
-            . sprintf(
-                '(%d, \'en\', 1000, \'yes\', \'sample question\', \'sample answer\', \'sample keywords\', \'yes\', \'Author\', \'test@example.org\', \'date\')',
-                $faqId,
-            ),
+                . '(id, lang, solution_id, sticky, thema, content, keywords, active, author, email, updated) VALUES '
+                . sprintf(
+                    '(%d, \'en\', 1000, \'yes\', \'sample question\', \'sample answer\', \'sample keywords\', \'yes\', \'Author\', \'test@example.org\', \'date\')',
+                    $faqId,
+                ),
         );
-        $this->db->query(
-            sprintf(
-                'INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES (%d, \'en\', %d, \'en\')',
-                $categoryId,
-                $faqId,
-            ),
-        );
+        $this->db->query(sprintf(
+            'INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES (%d, \'en\', %d, \'en\')',
+            $categoryId,
+            $faqId,
+        ));
 
         $relation = new Relation($configuration);
 

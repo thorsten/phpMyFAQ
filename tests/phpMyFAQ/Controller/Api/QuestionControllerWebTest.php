@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
+use phpMyFAQ\Functional\ControllerWebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
-use phpMyFAQ\Functional\ControllerWebTestCase;
 
 #[CoversClass(QuestionController::class)]
 #[UsesNamespace('phpMyFAQ')]

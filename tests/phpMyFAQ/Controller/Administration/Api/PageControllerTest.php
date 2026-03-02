@@ -6,11 +6,10 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\CustomPage;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
-use phpMyFAQ\Faq;
 use phpMyFAQ\Instance\Search\Elasticsearch;
+use phpMyFAQ\Instance\Search\OpenSearch;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -18,13 +17,14 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 #[AllowMockObjectsWithoutExpectations]
-#[CoversClass(ElasticsearchController::class)]
+#[CoversClass(PageController::class)]
 #[UsesNamespace('phpMyFAQ')]
-final class ElasticsearchControllerTest extends TestCase
+final class PageControllerTest extends TestCase
 {
     private Configuration $configuration;
     private Sqlite3 $dbHandle;
@@ -51,7 +51,7 @@ final class ElasticsearchControllerTest extends TestCase
         $this->previousConfiguration = $configurationProperty->getValue();
         $configurationProperty->setValue(null, null);
 
-        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-admin-elasticsearch-controller-');
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-admin-page-controller-');
         self::assertNotFalse($databasePath);
         self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
         $this->databasePath = $databasePath;
@@ -84,13 +84,9 @@ final class ElasticsearchControllerTest extends TestCase
         parent::tearDown();
     }
 
-    private function createController(): ElasticsearchController
+    private function createController(): PageController
     {
-        return new ElasticsearchController(
-            $this->createStub(Elasticsearch::class),
-            $this->createStub(Faq::class),
-            $this->createStub(CustomPage::class),
-        );
+        return new PageController($this->createStub(Elasticsearch::class), $this->createStub(OpenSearch::class));
     }
 
     /**
@@ -98,53 +94,82 @@ final class ElasticsearchControllerTest extends TestCase
      */
     public function testCreateRequiresAuthentication(): void
     {
+        $request = new Request([], [], [], [], [], [], json_encode(['csrfToken' => 'test-token'], JSON_THROW_ON_ERROR));
         $controller = $this->createController();
 
         $this->expectException(\Exception::class);
-        $controller->create();
+        $controller->create($request);
     }
 
     /**
      * @throws \Exception
      */
-    public function testDropRequiresAuthentication(): void
+    public function testDeleteRequiresAuthentication(): void
     {
+        $request = new Request([], [], [], [], [], [], json_encode(['csrfToken' => 'test-token'], JSON_THROW_ON_ERROR));
         $controller = $this->createController();
 
         $this->expectException(\Exception::class);
-        $controller->drop();
+        $controller->delete($request);
     }
 
     /**
      * @throws \Exception
      */
-    public function testImportRequiresAuthentication(): void
+    public function testUpdateRequiresAuthentication(): void
     {
+        $request = new Request([], [], [], [], [], [], json_encode(['csrfToken' => 'test-token'], JSON_THROW_ON_ERROR));
         $controller = $this->createController();
 
         $this->expectException(\Exception::class);
-        $controller->import();
+        $controller->update($request);
     }
 
     /**
      * @throws \Exception
      */
-    public function testStatisticsRequiresAuthentication(): void
+    public function testActivateRequiresAuthentication(): void
     {
+        $request = new Request([], [], [], [], [], [], json_encode(['csrfToken' => 'test-token'], JSON_THROW_ON_ERROR));
         $controller = $this->createController();
 
         $this->expectException(\Exception::class);
-        $controller->statistics();
+        $controller->activate($request);
     }
 
     /**
      * @throws \Exception
      */
-    public function testHealthcheckRequiresAuthentication(): void
+    public function testCheckSlugRequiresAuthentication(): void
     {
+        $request = new Request([], [], [], [], [], [], json_encode(['csrfToken' => 'test-token'], JSON_THROW_ON_ERROR));
         $controller = $this->createController();
 
         $this->expectException(\Exception::class);
-        $controller->healthcheck();
+        $controller->checkSlug($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testListRequiresAuthentication(): void
+    {
+        $request = new Request();
+        $controller = $this->createController();
+
+        $this->expectException(\Exception::class);
+        $controller->list($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateWithInvalidJsonStillRequiresAuthenticationFirst(): void
+    {
+        $request = new Request([], [], [], [], [], [], 'invalid json');
+        $controller = $this->createController();
+
+        $this->expectException(\Exception::class);
+        $controller->create($request);
     }
 }

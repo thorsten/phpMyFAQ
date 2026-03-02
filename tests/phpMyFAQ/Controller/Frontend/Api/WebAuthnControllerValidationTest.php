@@ -35,5 +35,4 @@ final class WebAuthnControllerValidationTest extends ApiControllerTestCase
         self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
         self::assertArrayHasKey('error', $payload);
     }
-
 }

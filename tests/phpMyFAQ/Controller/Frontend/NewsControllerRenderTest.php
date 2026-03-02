@@ -90,13 +90,13 @@ final class NewsControllerRenderTest extends TestCase
     {
         $language = $this->configuration->getLanguage()->getLanguage();
 
-        $this->configuration->getDb()->query(
-            sprintf(
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
                 "INSERT INTO faqnews (id, lang, header, artikel, datum, author_name, author_email, active, comment, link, linktitel, target)
                  VALUES (1, '%s', 'Test News Header', 'Test News Content', '20260301120000', 'Admin', 'admin@example.com', 'y', 'n', '', '', '_self')",
                 $language,
-            ),
-        );
+            ));
 
         $controller = new NewsController(
             new UserSession($this->configuration),

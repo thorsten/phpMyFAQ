@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
+use phpMyFAQ\Functional\ControllerWebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
-use phpMyFAQ\Functional\ControllerWebTestCase;
 
 #[CoversClass(RegistrationController::class)]
 #[UsesNamespace('phpMyFAQ')]
@@ -19,14 +19,19 @@ final class RegistrationControllerWebTest extends ControllerWebTestCase
             'api.apiClientToken' => 'test-token',
         ], 'api');
 
-        $response = $this->requestApiJson('POST', '/v3.2/register', [
-            'username' => '',
-            'fullname' => '',
-            'email' => '',
-            'is-visible' => false,
-        ], [
-            'HTTP_X_PMF_TOKEN' => 'test-token',
-        ]);
+        $response = $this->requestApiJson(
+            'POST',
+            '/v3.2/register',
+            [
+                'username' => '',
+                'fullname' => '',
+                'email' => '',
+                'is-visible' => false,
+            ],
+            [
+                'HTTP_X_PMF_TOKEN' => 'test-token',
+            ],
+        );
 
         self::assertResponseStatusCodeSame(400, $response);
         self::assertStringContainsString('json', (string) $response->headers->get('Content-Type'));
@@ -42,14 +47,19 @@ final class RegistrationControllerWebTest extends ControllerWebTestCase
             'security.domainWhiteListForRegistrations' => 'allowed.example',
         ], 'api');
 
-        $response = $this->requestApiJson('POST', '/v3.2/register', [
-            'username' => 'ada',
-            'fullname' => 'Ada Lovelace',
-            'email' => 'ada@example.com',
-            'is-visible' => false,
-        ], [
-            'HTTP_X_PMF_TOKEN' => 'test-token',
-        ]);
+        $response = $this->requestApiJson(
+            'POST',
+            '/v3.2/register',
+            [
+                'username' => 'ada',
+                'fullname' => 'Ada Lovelace',
+                'email' => 'ada@example.com',
+                'is-visible' => false,
+            ],
+            [
+                'HTTP_X_PMF_TOKEN' => 'test-token',
+            ],
+        );
 
         self::assertResponseStatusCodeSame(409, $response);
         self::assertStringContainsString('json', (string) $response->headers->get('Content-Type'));

@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend\Api;
 
+use Closure;
 use Exception;
 use phpMyFAQ\Chat;
 use phpMyFAQ\Controller\AbstractController;
@@ -29,6 +30,31 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ChatSseController extends AbstractController
 {
+    /**
+     * @param ?Closure(): Chat $chatFactory
+     * @param ?Closure(int): void $sleep
+     * @param ?Closure(): int $timeProvider
+     * @param ?Closure(): bool $connectionAborted
+     * @param ?Closure(string): void $headerEmitter
+     * @param ?Closure(): void $bufferCleaner
+     * @param ?Closure(): void $flusher
+     * @param ?Closure(string): void $outputEmitter
+     */
+    public function __construct(
+        private readonly ?Closure $chatFactory = null,
+        private readonly ?Closure $sleep = null,
+        private readonly ?Closure $timeProvider = null,
+        private readonly ?Closure $connectionAborted = null,
+        private readonly ?Closure $headerEmitter = null,
+        private readonly ?Closure $bufferCleaner = null,
+        private readonly ?Closure $flusher = null,
+        private readonly ?Closure $outputEmitter = null,
+        private readonly int $heartbeatInterval = 15,
+        private readonly int $maxRuntime = 30,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * SSE endpoint for real-time message delivery.
      *
@@ -42,63 +68,88 @@ final class ChatSseController extends AbstractController
         $userId = $this->currentUser->getUserId();
         $lastIdValue = Filter::filterVar($request->query->get('lastId', 0), FILTER_VALIDATE_INT);
         $lastId = $lastIdValue === false ? 0 : (int) $lastIdValue;
-        $chat = new Chat($this->configuration);
+        $chat = ($this->chatFactory ?? fn(): Chat => new Chat($this->configuration))();
 
         $this->session->save();
 
         return new StreamedResponse(
-            static function () use ($userId, $lastId, $chat) {
+            function () use ($userId, $lastId, $chat) {
                 if (ob_get_level() > 0) {
-                    ob_end_clean();
+                    ($this->bufferCleaner ?? static function (): void {
+                        ob_end_clean();
+                    })();
                 }
 
-                header('Content-Type: text/event-stream');
-                header('Cache-Control: no-cache');
-                header('Connection: keep-alive');
-                header('X-Accel-Buffering: no');
+                ($this->headerEmitter ?? static function (string $header): void {
+                    header($header);
+                })('Content-Type: text/event-stream');
+                ($this->headerEmitter ?? static function (string $header): void {
+                    header($header);
+                })('Cache-Control: no-cache');
+                ($this->headerEmitter ?? static function (string $header): void {
+                    header($header);
+                })('Connection: keep-alive');
+                ($this->headerEmitter ?? static function (string $header): void {
+                    header($header);
+                })('X-Accel-Buffering: no');
 
                 $currentLastId = $lastId;
-                $heartbeatInterval = 15;
-                $lastHeartbeat = time();
-                $maxRuntime = 30; // Maximum runtime in seconds (for PHP timeout)
-                $startTime = time();
+                $lastHeartbeat = ($this->timeProvider ?? static fn(): int => time())();
+                $startTime = ($this->timeProvider ?? static fn(): int => time())();
 
                 while (true) {
                     $messages = $chat->getNewMessages($userId, $currentLastId);
 
                     if ($messages !== []) {
                         $messageData = $chat->messagesToArray($messages);
-                        echo 'data: ' . json_encode($messageData) . "\n\n";
+                        ($this->outputEmitter ?? static function (string $chunk): void {
+                            echo $chunk;
+                        })('data: ' . json_encode($messageData) . "\n\n");
 
                         $lastMessage = end($messages);
                         $currentLastId = $lastMessage->getId();
                     }
 
-                    if ((time() - $lastHeartbeat) >= $heartbeatInterval) {
-                        echo ": heartbeat\n\n";
-                        $lastHeartbeat = time();
+                    if (
+                        (($this->timeProvider ?? static fn(): int => time())() - $lastHeartbeat)
+                        >= $this->heartbeatInterval
+                    ) {
+                        ($this->outputEmitter ?? static function (string $chunk): void {
+                            echo $chunk;
+                        })(": heartbeat\n\n");
+                        $lastHeartbeat = ($this->timeProvider ?? static fn(): int => time())();
                     }
 
                     if (ob_get_level() > 0) {
                         ob_flush();
                     }
-                    flush();
+                    ($this->flusher ?? static function (): void {
+                        flush();
+                    })();
 
-                    if (connection_aborted()) {
+                    if (($this->connectionAborted ?? static fn(): bool => connection_aborted())()) {
                         break;
                     }
 
-                    if ((time() - $startTime) >= $maxRuntime) {
-                        echo "event: reconnect\n";
-                        echo "data: {\"lastId\": {$currentLastId}}\n\n";
+                    if ((($this->timeProvider ?? static fn(): int => time())() - $startTime) >= $this->maxRuntime) {
+                        ($this->outputEmitter ?? static function (string $chunk): void {
+                            echo $chunk;
+                        })("event: reconnect\n");
+                        ($this->outputEmitter ?? static function (string $chunk): void {
+                            echo $chunk;
+                        })("data: {\"lastId\": {$currentLastId}}\n\n");
                         if (ob_get_level() > 0) {
                             ob_flush();
                         }
-                        flush();
+                        ($this->flusher ?? static function (): void {
+                            flush();
+                        })();
                         break;
                     }
 
-                    sleep(2);
+                    ($this->sleep ?? static function (int $seconds): void {
+                        sleep($seconds);
+                    })(2);
                 }
             },
             200,

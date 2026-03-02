@@ -52,7 +52,7 @@ abstract class AbstractSetup
      */
     public function checkMaintenanceMode(): bool
     {
-        return Configuration::getConfigurationInstance()->get(item: 'main.maintenanceMode');
+        return (bool) Configuration::getConfigurationInstance()->get(item: 'main.maintenanceMode');
     }
 
     /**
@@ -63,10 +63,7 @@ abstract class AbstractSetup
     {
         $database = null;
         if (!$this->checkMinimumPhpVersion()) {
-            throw new Exception(sprintf(
-                format: 'Sorry, but you need PHP %s or later!',
-                values: System::VERSION_MINIMUM_PHP,
-            ));
+            throw new Exception(sprintf('Sorry, but you need PHP %s or later!', System::VERSION_MINIMUM_PHP));
         }
 
         if (
@@ -90,10 +87,7 @@ abstract class AbstractSetup
             }
 
             if (!$databaseFound) {
-                throw new Exception(sprintf(
-                    format: 'Sorry, but the database %s is not supported!',
-                    values: ucfirst((string) $database),
-                ));
+                throw new Exception(sprintf('Sorry, but the database %s is not supported!', ucfirst($databaseType)));
             }
         }
     }

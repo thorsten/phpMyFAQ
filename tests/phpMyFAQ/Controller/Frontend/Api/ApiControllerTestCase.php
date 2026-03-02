@@ -97,14 +97,16 @@ abstract class ApiControllerTestCase extends TestCase
         $currentUser->method('getUserAuthSource')->willReturn('local');
         $currentUser->method('getUserById')->willReturn(true);
         $currentUser->method('getLogin')->willReturn('testuser');
-        $currentUser->method('getUserData')->willReturnMap([
-            ['email', 'test@example.com'],
-            ['display_name', 'Test User'],
-            ['last_modified', '20260301120000'],
-            ['is_visible', 1],
-            ['twofactor_enabled', 0],
-            ['secret', ''],
-        ]);
+        $currentUser
+            ->method('getUserData')
+            ->willReturnMap([
+                ['email',             'test@example.com'],
+                ['display_name',      'Test User'],
+                ['last_modified',     '20260301120000'],
+                ['is_visible',        1],
+                ['twofactor_enabled', 0],
+                ['secret',            ''],
+            ]);
 
         return $currentUser;
     }

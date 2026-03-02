@@ -65,19 +65,24 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
             'api.apiClientToken' => 'test-token',
         ], 'api');
 
-        $response = $this->requestApiJson('POST', '/v3.2/category', [
-            'language' => 'en',
-            'parent-id' => 0,
-            'parent-category-name' => 'definitely-missing-parent-category',
-            'category-name' => 'Test Category',
-            'description' => 'Test Description',
-            'user-id' => 1,
-            'group-id' => -1,
-            'is-active' => true,
-            'show-on-homepage' => false,
-        ], [
-            'HTTP_X_PMF_TOKEN' => 'test-token',
-        ]);
+        $response = $this->requestApiJson(
+            'POST',
+            '/v3.2/category',
+            [
+                'language' => 'en',
+                'parent-id' => 0,
+                'parent-category-name' => 'definitely-missing-parent-category',
+                'category-name' => 'Test Category',
+                'description' => 'Test Description',
+                'user-id' => 1,
+                'group-id' => -1,
+                'is-active' => true,
+                'show-on-homepage' => false,
+            ],
+            [
+                'HTTP_X_PMF_TOKEN' => 'test-token',
+            ],
+        );
 
         self::assertResponseStatusCodeSame(409, $response);
         self::assertStringContainsString('json', (string) $response->headers->get('Content-Type'));

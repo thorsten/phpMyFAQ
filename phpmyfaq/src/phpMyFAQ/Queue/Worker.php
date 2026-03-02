@@ -124,10 +124,9 @@ class Worker
         }
 
         if (!is_subclass_of($messageClass, QueueMessageInterface::class)) {
-            throw new RuntimeException('Queue message class '
-            . $messageClass
-            . ' does not implement '
-            . QueueMessageInterface::class);
+            throw new RuntimeException(
+                'Queue message class ' . $messageClass . ' does not implement ' . QueueMessageInterface::class,
+            );
         }
 
         /** @var class-string<QueueMessageInterface> $messageClass */

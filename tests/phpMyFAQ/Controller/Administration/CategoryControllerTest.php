@@ -2,29 +2,34 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Controller\Administration\Api;
+namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Administration\Category as AdminCategory;
+use phpMyFAQ\Category\Image;
+use phpMyFAQ\Category\Order;
+use phpMyFAQ\Category\Permission as CategoryPermission;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\CustomPage;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
-use phpMyFAQ\Faq;
-use phpMyFAQ\Instance\Search\Elasticsearch;
+use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Language;
+use phpMyFAQ\Seo;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 #[AllowMockObjectsWithoutExpectations]
-#[CoversClass(ElasticsearchController::class)]
+#[CoversClass(CategoryController::class)]
 #[UsesNamespace('phpMyFAQ')]
-final class ElasticsearchControllerTest extends TestCase
+final class CategoryControllerTest extends TestCase
 {
     private Configuration $configuration;
     private Sqlite3 $dbHandle;
@@ -51,7 +56,7 @@ final class ElasticsearchControllerTest extends TestCase
         $this->previousConfiguration = $configurationProperty->getValue();
         $configurationProperty->setValue(null, null);
 
-        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-admin-elasticsearch-controller-');
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-admin-category-page-controller-');
         self::assertNotFalse($databasePath);
         self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
         $this->databasePath = $databasePath;
@@ -84,13 +89,44 @@ final class ElasticsearchControllerTest extends TestCase
         parent::tearDown();
     }
 
-    private function createController(): ElasticsearchController
+    private function createController(): CategoryController
     {
-        return new ElasticsearchController(
-            $this->createStub(Elasticsearch::class),
-            $this->createStub(Faq::class),
-            $this->createStub(CustomPage::class),
+        return new CategoryController(
+            $this->createStub(AdminCategory::class),
+            $this->createStub(Order::class),
+            $this->createStub(CategoryPermission::class),
+            $this->createStub(Image::class),
+            $this->createStub(Seo::class),
+            $this->createStub(UserHelper::class),
         );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexRequiresAuthentication(): void
+    {
+        $request = new Request();
+        $controller = $this->createController();
+
+        $response = $controller->index($request);
+
+        self::assertInstanceOf(Response::class, $response);
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAddRequiresAuthentication(): void
+    {
+        $request = new Request();
+        $controller = $this->createController();
+
+        $response = $controller->add($request);
+
+        self::assertInstanceOf(Response::class, $response);
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
     /**
@@ -98,53 +134,10 @@ final class ElasticsearchControllerTest extends TestCase
      */
     public function testCreateRequiresAuthentication(): void
     {
+        $request = new Request([], ['pmf-csrf-token' => 'test-token']);
         $controller = $this->createController();
 
         $this->expectException(\Exception::class);
-        $controller->create();
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testDropRequiresAuthentication(): void
-    {
-        $controller = $this->createController();
-
-        $this->expectException(\Exception::class);
-        $controller->drop();
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testImportRequiresAuthentication(): void
-    {
-        $controller = $this->createController();
-
-        $this->expectException(\Exception::class);
-        $controller->import();
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testStatisticsRequiresAuthentication(): void
-    {
-        $controller = $this->createController();
-
-        $this->expectException(\Exception::class);
-        $controller->statistics();
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testHealthcheckRequiresAuthentication(): void
-    {
-        $controller = $this->createController();
-
-        $this->expectException(\Exception::class);
-        $controller->healthcheck();
+        $controller->create($request);
     }
 }

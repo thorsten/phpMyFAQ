@@ -53,5 +53,4 @@ final class FaqControllerWebTest extends ControllerWebTestCase
 
         self::assertResponseStatusCodeSame(404, $response);
     }
-
 }

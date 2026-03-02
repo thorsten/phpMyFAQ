@@ -30,10 +30,10 @@ use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 
-class RouterListener
+readonly class RouterListener
 {
     public function __construct(
-        private readonly RouteCollection $routes,
+        private RouteCollection $routes,
     ) {
     }
 

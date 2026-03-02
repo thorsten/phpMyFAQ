@@ -60,9 +60,10 @@ class HelperTest extends TestCase
 
     private function createUserWithRights(array $rights): User
     {
-        $permission = new class ($rights) implements PermissionInterface {
-            public function __construct(private readonly array $rights)
-            {
+        $permission = new class($rights) implements PermissionInterface {
+            public function __construct(
+                private readonly array $rights,
+            ) {
             }
 
             public function hasPermission(int $userId, mixed $right): bool

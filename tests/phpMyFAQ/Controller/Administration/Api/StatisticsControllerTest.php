@@ -6,22 +6,31 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
+use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Helper\StatisticsHelper;
+use phpMyFAQ\Language;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Search;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 #[AllowMockObjectsWithoutExpectations]
-class StatisticsControllerTest extends TestCase
+#[CoversClass(StatisticsController::class)]
+#[UsesNamespace('phpMyFAQ')]
+final class StatisticsControllerTest extends TestCase
 {
     private Configuration $configuration;
-    private StatisticsHelper $statisticsHelper;
-    private Search $search;
-    private Rating $rating;
+    private Sqlite3 $dbHandle;
+    private string $databasePath;
+    private ?Configuration $previousConfiguration = null;
 
     /**
      * @throws Exception
@@ -38,64 +47,72 @@ class StatisticsControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->configuration = Configuration::getConfigurationInstance();
-        $this->statisticsHelper = $this->createStub(StatisticsHelper::class);
-        $this->search = $this->createStub(Search::class);
-        $this->rating = $this->createStub(Rating::class);
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $this->previousConfiguration = $configurationProperty->getValue();
+        $configurationProperty->setValue(null, null);
+
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-admin-statistics-controller-');
+        self::assertNotFalse($databasePath);
+        self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
+        $this->databasePath = $databasePath;
+
+        $this->dbHandle = new Sqlite3();
+        $this->dbHandle->connect($this->databasePath, '', '');
+        $this->configuration = new Configuration($this->dbHandle);
+
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $this->dbHandle);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlite3');
+        Database::setTablePrefix('');
+
+        $language = new Language($this->configuration, new Session(new MockArraySessionStorage()));
+        $language->setLanguageFromConfiguration('en');
+        $this->configuration->setLanguage($language);
+    }
+
+    protected function tearDown(): void
+    {
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, $this->previousConfiguration);
+
+        $this->dbHandle->close();
+        @unlink($this->databasePath);
+
+        parent::tearDown();
+    }
+
+    private function createController(): StatisticsController
+    {
+        return new StatisticsController(
+            $this->createStub(StatisticsHelper::class),
+            $this->createStub(Search::class),
+            $this->createStub(Rating::class),
+        );
     }
 
     /**
-     * @throws Exception|\JsonException
+     * @throws \Exception
      */
     public function testTruncateSessionsRequiresAuthentication(): void
     {
-        $requestData = json_encode([
-            'csrfToken' => 'test-token',
-            'month' => '2024-01',
-        ]);
-
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new StatisticsController($this->statisticsHelper, $this->search, $this->rating);
+        $request = new Request([], [], [], [], [], [], json_encode(['csrfToken' => 'test-token'], JSON_THROW_ON_ERROR));
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->truncateSessions($request);
     }
 
     /**
-     * @throws Exception|\JsonException
-     */
-    public function testTruncateSessionsWithInvalidJsonThrowsException(): void
-    {
-        $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new StatisticsController($this->statisticsHelper, $this->search, $this->rating);
-
-        $this->expectException(\Exception::class);
-        $controller->truncateSessions($request);
-    }
-
-    /**
-     * @throws Exception|\JsonException
+     * @throws \Exception
      */
     public function testTruncateSearchTermsRequiresAuthentication(): void
     {
-        $requestData = json_encode([
-            'csrfToken' => 'test-token',
-        ]);
-
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new StatisticsController($this->statisticsHelper, $this->search, $this->rating);
-
-        $this->expectException(\Exception::class);
-        $controller->truncateSearchTerms($request);
-    }
-
-    /**
-     * @throws Exception|\JsonException
-     */
-    public function testTruncateSearchTermsWithInvalidJsonThrowsException(): void
-    {
-        $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new StatisticsController($this->statisticsHelper, $this->search, $this->rating);
+        $request = new Request([], [], [], [], [], [], json_encode(['csrfToken' => 'test-token'], JSON_THROW_ON_ERROR));
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->truncateSearchTerms($request);
@@ -106,24 +123,8 @@ class StatisticsControllerTest extends TestCase
      */
     public function testClearRatingsRequiresAuthentication(): void
     {
-        $requestData = json_encode([
-            'csrfToken' => 'test-token',
-        ]);
-
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new StatisticsController($this->statisticsHelper, $this->search, $this->rating);
-
-        $this->expectException(\Exception::class);
-        $controller->clearRatings($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testClearRatingsWithInvalidJsonThrowsException(): void
-    {
-        $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new StatisticsController($this->statisticsHelper, $this->search, $this->rating);
+        $request = new Request([], [], [], [], [], [], json_encode(['csrfToken' => 'test-token'], JSON_THROW_ON_ERROR));
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->clearRatings($request);
@@ -134,12 +135,8 @@ class StatisticsControllerTest extends TestCase
      */
     public function testClearVisitsRequiresAuthentication(): void
     {
-        $requestData = json_encode([
-            'csrfToken' => 'test-token',
-        ]);
-
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new StatisticsController($this->statisticsHelper, $this->search, $this->rating);
+        $request = new Request([], [], [], [], [], [], json_encode(['csrfToken' => 'test-token'], JSON_THROW_ON_ERROR));
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
         $controller->clearVisits($request);
@@ -148,12 +145,12 @@ class StatisticsControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testClearVisitsWithInvalidJsonThrowsException(): void
+    public function testTruncateSessionsWithInvalidJsonStillRequiresAuthenticationFirst(): void
     {
         $request = new Request([], [], [], [], [], [], 'invalid json');
-        $controller = new StatisticsController($this->statisticsHelper, $this->search, $this->rating);
+        $controller = $this->createController();
 
         $this->expectException(\Exception::class);
-        $controller->clearVisits($request);
+        $controller->truncateSessions($request);
     }
 }
