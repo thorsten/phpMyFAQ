@@ -84,6 +84,8 @@ final class StatisticsControllerTest extends TestCase
     {
         Token::resetInstanceForTests();
         unset($_COOKIE['pmf-csrf-token-' . substr(md5('sessions'), 0, 10)]);
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('truncate-search-terms'), 0, 10)]);
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('clear-statistics'), 0, 10)]);
         unset($_COOKIE['pmf-csrf-token-' . substr(md5('clear-visits'), 0, 10)]);
 
         $configurationReflection = new \ReflectionClass(Configuration::class);
@@ -312,5 +314,53 @@ final class StatisticsControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(Translation::get('msgDeleteAllVotings'), $payload['success']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testTruncateSearchTermsReturnsBadRequestWhenDeleteFails(): void
+    {
+        $search = $this->createMock(Search::class);
+        $search->expects($this->once())->method('deleteAllSearchTerms')->willReturn(false);
+
+        $controller = $this->createController(search: $search);
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'truncate-search-terms');
+        $controller->setContainer($container);
+
+        $response = $controller->truncateSearchTerms(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_searchterm_del_err'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testClearRatingsReturnsBadRequestWhenDeleteFails(): void
+    {
+        $rating = $this->createMock(Rating::class);
+        $rating->expects($this->once())->method('deleteAll')->willReturn(false);
+
+        $controller = $this->createController(rating: $rating);
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'clear-statistics');
+        $controller->setContainer($container);
+
+        $response = $controller->clearRatings(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('msgDeleteAllVotings'), $payload['error']);
     }
 }

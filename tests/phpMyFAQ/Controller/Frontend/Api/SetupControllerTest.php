@@ -78,10 +78,25 @@ final class SetupControllerTest extends ApiControllerTestCase
 
     public function testCheckReturnsSuccessWhenEnvironmentIsReady(): void
     {
-        $this->configuration->getAll();
-        $this->overrideConfigurationValues(['main.maintenanceMode' => '1']);
+        $controller = new SetupController(static fn(System $system, Configuration $configuration): Update => new class(
+            $system,
+            $configuration,
+        ) extends Update {
+            public function checkMaintenanceMode(): bool
+            {
+                return true;
+            }
 
-        $controller = $this->createAuthenticatedController();
+            public function checkMinimumUpdateVersion(string $version): bool
+            {
+                return true;
+            }
+
+            public function checkPreUpgrade(string $databaseType): void
+            {
+            }
+        });
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock());
 
         $response = $controller->check(new Request([], [], [], [], [], [], '4.1.0'));
 
@@ -94,21 +109,28 @@ final class SetupControllerTest extends ApiControllerTestCase
 
     public function testCheckReturnsBadRequestWhenDatabaseTypeIsUnsupported(): void
     {
-        $this->configuration->getAll();
-        $this->overrideConfigurationValues(['main.maintenanceMode' => '1']);
+        $controller = new SetupController(static fn(System $system, Configuration $configuration): Update => new class(
+            $system,
+            $configuration,
+        ) extends Update {
+            public function checkMaintenanceMode(): bool
+            {
+                return true;
+            }
 
-        $databaseReflection = new \ReflectionClass(Database::class);
-        $dbTypeProperty = $databaseReflection->getProperty('dbType');
-        $originalType = $dbTypeProperty->getValue();
-        $dbTypeProperty->setValue(null, 'unsupported');
+            public function checkMinimumUpdateVersion(string $version): bool
+            {
+                return true;
+            }
 
-        try {
-            $controller = $this->createAuthenticatedController();
+            public function checkPreUpgrade(string $databaseType): void
+            {
+                throw new \phpMyFAQ\Core\Exception('Sorry, but the database Unsupported is not supported!');
+            }
+        });
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock());
 
-            $response = $controller->check(new Request([], [], [], [], [], [], '4.1.0'));
-        } finally {
-            $dbTypeProperty->setValue(null, $originalType);
-        }
+        $response = $controller->check(new Request([], [], [], [], [], [], '4.1.0'));
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertStringContainsString('database Unsupported is not supported', (string) $response->getContent());

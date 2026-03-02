@@ -41,12 +41,21 @@ abstract class WebTestCase extends TestCase
 
     protected static ?HttpKernelBrowser $client = null;
 
+    private static ?Sqlite3 $dbHandle = null;
+
+    private static ?string $databasePath = null;
+
     protected static function createClient(string $routingContext = 'public'): HttpKernelBrowser
     {
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        new Configuration($dbHandle);
-        self::initializeDatabaseStatics($dbHandle);
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-functional-webtest-');
+        self::assertNotFalse($databasePath);
+        self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
+        self::$databasePath = $databasePath;
+
+        self::$dbHandle = new Sqlite3();
+        self::$dbHandle->connect($databasePath, '', '');
+        new Configuration(self::$dbHandle);
+        self::initializeDatabaseStatics(self::$dbHandle);
 
         static::$kernel = new PhpMyFaqTestKernel($routingContext);
         static::$kernel->boot();
@@ -89,6 +98,22 @@ abstract class WebTestCase extends TestCase
 
     protected function tearDown(): void
     {
+        static::$kernel = null;
+        static::$client = null;
+    }
+
+    public static function tearDownAfterClass(): void
+    {
+        if (self::$dbHandle instanceof Sqlite3) {
+            self::$dbHandle->close();
+        }
+
+        if (self::$databasePath !== null) {
+            @unlink(self::$databasePath);
+        }
+
+        self::$dbHandle = null;
+        self::$databasePath = null;
         static::$kernel = null;
         static::$client = null;
     }
