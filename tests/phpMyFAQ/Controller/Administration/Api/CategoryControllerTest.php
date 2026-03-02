@@ -11,14 +11,19 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
+use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
+use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
@@ -80,6 +85,11 @@ final class CategoryControllerTest extends TestCase
         $configurationProperty->setValue(null, $this->previousConfiguration);
 
         $this->dbHandle->close();
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, null);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, '');
         @unlink($this->databasePath);
 
         parent::tearDown();
@@ -92,6 +102,51 @@ final class CategoryControllerTest extends TestCase
             $this->createStub(Order::class),
             $this->createStub(Permission::class),
         );
+    }
+
+    private function createControllerWithPermissionStub(Permission $categoryPermission): CategoryController
+    {
+        return new CategoryController(
+            $this->createStub(Image::class),
+            $this->createStub(Order::class),
+            $categoryPermission,
+        );
+    }
+
+    private function createAuthenticatedContainer(): ContainerInterface
+    {
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturnCallback(
+            static fn (int $userId, mixed $right): bool => $userId === 42 && in_array(
+                $right,
+                [
+                    PermissionType::CATEGORY_DELETE->value,
+                    PermissionType::CATEGORY_EDIT->value,
+                ],
+                true
+            )
+        );
+
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(42);
+
+        $session = new Session(new MockArraySessionStorage());
+        $adminLog = $this->createStub(\phpMyFAQ\Administration\AdminLog::class);
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container->method('get')->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
+            return match ($id) {
+                'phpmyfaq.configuration' => $this->configuration,
+                'phpmyfaq.user.current_user' => $currentUser,
+                'session' => $session,
+                'phpmyfaq.admin.admin-log' => $adminLog,
+                default => null,
+            };
+        });
+
+        return $container;
     }
 
     /**
@@ -148,5 +203,68 @@ final class CategoryControllerTest extends TestCase
 
         $this->expectException(\Exception::class);
         $controller->updateOrder($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testPermissionsReturnsBadRequestForNonIntegerCategoriesWhenAuthenticated(): void
+    {
+        $request = new Request([], [], ['categories' => 'foo,bar']);
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->permissions($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Only integer values are valid.', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateOrderReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    {
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => 'invalid-token',
+            'categoryTree' => [],
+            'categoryId' => 1,
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->updateOrder($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testPermissionsReturnsUserAndGroupPermissionsWhenAuthenticated(): void
+    {
+        $categoryPermission = $this->createMock(Permission::class);
+        $categoryPermission->expects($this->exactly(2))
+            ->method('get')
+            ->willReturnCallback(static function (string $type, array $categories): array {
+                if ($type === Permission::USER) {
+                    return ['user' => $categories];
+                }
+
+                return ['group' => $categories];
+            });
+
+        $controller = $this->createControllerWithPermissionStub($categoryPermission);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->permissions(new Request([], [], ['categories' => '1']));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(['user' => ['1']], $payload['user']);
+        self::assertSame(['group' => ['1']], $payload['group']);
     }
 }

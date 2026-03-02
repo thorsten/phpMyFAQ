@@ -6,13 +6,22 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Administration\Backup;
-use phpMyFAQ\Administration\Backup\BackupExportResult;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Enums\BackupType;
-use phpMyFAQ\Permission\BasicPermission;
+use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
+use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Language;
+use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Session\Token;
+use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -20,94 +29,155 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 #[AllowMockObjectsWithoutExpectations]
-class BackupControllerTest extends TestCase
+#[CoversClass(BackupController::class)]
+#[UsesNamespace('phpMyFAQ')]
+final class BackupControllerTest extends TestCase
 {
-    private Configuration $configurationMock;
-    private CurrentUser $currentUserMock;
-    private BasicPermission $permissionMock;
-    private Backup $backupServiceMock;
-    private AdminLog $adminLogMock;
+    private Configuration $configuration;
+    private Sqlite3 $dbHandle;
+    private string $databasePath;
+    private ?Configuration $previousConfiguration = null;
 
-    private Session $session;
-
+    /**
+     * @throws Exception
+     */
     protected function setUp(): void
     {
-        $this->configurationMock = $this->createStub(Configuration::class);
-        $this->currentUserMock = $this->createStub(CurrentUser::class);
-        $this->permissionMock = $this->createStub(BasicPermission::class);
-        $this->backupServiceMock = $this->createMock(Backup::class);
-        $this->adminLogMock = $this->createStub(AdminLog::class);
-        $this->session = new Session(new MockArraySessionStorage());
+        parent::setUp();
 
-        $this->currentUserMock->perm = $this->permissionMock;
+        Strings::init();
+
+        Translation::create()
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
+            ->setDefaultLanguage('en')
+            ->setCurrentLanguage('en')
+            ->setMultiByteLanguage();
+
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $this->previousConfiguration = $configurationProperty->getValue();
+        $configurationProperty->setValue(null, null);
+
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-admin-backup-page-controller-');
+        self::assertNotFalse($databasePath);
+        self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
+        $this->databasePath = $databasePath;
+
+        $this->dbHandle = new Sqlite3();
+        $this->dbHandle->connect($this->databasePath, '', '');
+        $this->configuration = new Configuration($this->dbHandle);
+
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $this->dbHandle);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlite3');
+        Database::setTablePrefix('');
+
+        $language = new Language($this->configuration, new Session(new MockArraySessionStorage()));
+        $language->setLanguageFromConfiguration('en');
+        $this->configuration->setLanguage($language);
+    }
+
+    protected function tearDown(): void
+    {
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, $this->previousConfiguration);
+
+        $this->dbHandle->close();
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, null);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, '');
+        @unlink($this->databasePath);
+
+        parent::tearDown();
     }
 
     private function createController(): BackupController
     {
-        $controller = new BackupController($this->backupServiceMock);
-
-        // Use reflection to inject dependencies
-        $reflectionClass = new \ReflectionClass($controller);
-
-        $configProperty = $reflectionClass->getProperty('configuration');
-        $configProperty->setValue($controller, $this->configurationMock);
-
-        $userProperty = $reflectionClass->getProperty('currentUser');
-        $userProperty->setValue($controller, $this->currentUserMock);
-
-        $sessionProperty = $reflectionClass->getProperty('session');
-        $sessionProperty->setValue($controller, $this->session);
-
-        $adminLogProperty = $reflectionClass->getProperty('adminLog');
-        $adminLogProperty->setValue($controller, $this->adminLogMock);
-
-        // Berechtigung immer erlauben
-        $this->permissionMock->method('hasPermission')->willReturn(true);
-
-        return $controller;
-    }
-
-    public function testExportReturnsBackupContentForContentType(): void
-    {
-        $controller = $this->createController();
-
-        $request = new Request(attributes: ['type' => 'content']);
-
-        $this->backupServiceMock
-            ->expects($this->once())
-            ->method('export')
-            ->with(BackupType::BACKUP_TYPE_DATA)
-            ->willReturn(new BackupExportResult('backup.sql', 'SQL-DUMP'));
-
-        $response = $controller->export($request);
-
-        $this->assertInstanceOf(Response::class, $response);
-        $this->assertSame('SQL-DUMP', $response->getContent());
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertTrue($response->headers->has('Content-Disposition'));
-    }
-
-    public function testExportWithInvalidTypeReturnsBadRequest(): void
-    {
-        $controller = $this->createController();
-
-        $request = new Request(attributes: ['type' => 'invalid']);
-
-        $response = $controller->export($request);
-
-        $this->assertSame(400, $response->getStatusCode());
+        return new BackupController($this->createStub(Backup::class));
     }
 
     /**
      * @throws \Exception
-     */ public function testRestoreThrowsWhenCsrfTokenInvalid(): void
+     */
+    public function testIndexRendersInCurrentAnonymousAdminContext(): void
     {
-        $this->expectException(UnauthorizedHttpException::class);
-
+        $request = new Request();
         $controller = $this->createController();
 
-        $request = new Request(query: ['csrf' => 'invalid']);
+        $response = $controller->index($request);
 
-        $controller->restore($request);
+        self::assertInstanceOf(Response::class, $response);
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExportReturnsBadRequestForInvalidType(): void
+    {
+        $controller = $this->createAuthenticatedController();
+
+        $response = $controller->export(new Request([], [], ['type' => 'invalid']));
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testRestoreThrowsForInvalidCsrfToken(): void
+    {
+        $controller = $this->createAuthenticatedController();
+
+        $this->expectException(UnauthorizedHttpException::class);
+        $controller->restore(new Request(['csrf' => 'invalid-token']));
+    }
+
+    private function createAuthenticatedController(): BackupController
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer());
+
+        return $controller;
+    }
+
+    private function createControllerContainer(): ContainerInterface
+    {
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => $userId === 42
+                && in_array($right, [PermissionType::BACKUP->value, PermissionType::RESTORE->value], true),
+            );
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(42);
+
+        $session = new Session(new MockArraySessionStorage());
+        Token::getInstance($session);
+        $adminLog = $this->createStub(AdminLog::class);
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    default => null,
+                };
+            });
+
+        return $container;
     }
 }

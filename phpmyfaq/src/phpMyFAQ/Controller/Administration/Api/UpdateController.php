@@ -249,7 +249,7 @@ final class UpdateController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $this->update->setVersion(System::getVersion());
+        $this->update->version = System::getVersion();
 
         try {
             if ($this->update->applyUpdates()) {

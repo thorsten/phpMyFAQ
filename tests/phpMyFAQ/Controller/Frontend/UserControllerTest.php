@@ -76,6 +76,11 @@ final class UserControllerTest extends TestCase
 
         if (isset($this->dbHandle)) {
             $this->dbHandle->close();
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, null);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, '');
         }
 
         if (isset($this->databasePath) && is_file($this->databasePath)) {

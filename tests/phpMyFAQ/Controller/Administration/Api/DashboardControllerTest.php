@@ -9,14 +9,19 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
+use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
+use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
@@ -78,6 +83,11 @@ final class DashboardControllerTest extends TestCase
         $configurationProperty->setValue(null, $this->previousConfiguration);
 
         $this->dbHandle->close();
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, null);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, '');
         @unlink($this->databasePath);
 
         parent::tearDown();
@@ -86,6 +96,39 @@ final class DashboardControllerTest extends TestCase
     private function createController(): DashboardController
     {
         return new DashboardController($this->createStub(AdminSession::class));
+    }
+
+    private function createControllerWithSession(AdminSession $adminSession): DashboardController
+    {
+        return new DashboardController($adminSession);
+    }
+
+    private function createAuthenticatedContainer(): ContainerInterface
+    {
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturnCallback(
+            static fn (int $userId, mixed $right): bool => $userId === 42
+                && in_array($right, [PermissionType::STATISTICS_VIEWLOGS, PermissionType::STATISTICS_VIEWLOGS->value], true)
+        );
+
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(42);
+
+        $session = new Session(new MockArraySessionStorage());
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container->method('get')->willReturnCallback(function (string $id) use ($currentUser, $session) {
+            return match ($id) {
+                'phpmyfaq.configuration' => $this->configuration,
+                'phpmyfaq.user.current_user' => $currentUser,
+                'session' => $session,
+                default => null,
+            };
+        });
+
+        return $container;
     }
 
     /**
@@ -132,5 +175,40 @@ final class DashboardControllerTest extends TestCase
 
         $this->expectException(\Exception::class);
         $controller->topTen();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testVisitsReturnsBadRequestWhenUserTrackingIsDisabled(): void
+    {
+        $this->configuration->set('main.enableUserTracking', 'false');
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->visits(new Request(server: ['REQUEST_TIME' => time()]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('User tracking is disabled.', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testVisitsReturnsDataWhenUserTrackingIsEnabled(): void
+    {
+        $this->configuration->set('main.enableUserTracking', 'true');
+        $adminSession = $this->createMock(AdminSession::class);
+        $adminSession->expects($this->once())->method('getLast30DaysVisits')->with(1234567890)->willReturn(['visits' => 5]);
+
+        $controller = $this->createControllerWithSession($adminSession);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->visits(new Request(server: ['REQUEST_TIME' => 1234567890]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(['visits' => 5], $payload);
     }
 }

@@ -50,6 +50,10 @@ final class SearchController extends AbstractController
 
         $searchId = Filter::filterVar($deleteData->searchTermId, FILTER_VALIDATE_INT);
 
+        if (!is_int($searchId)) {
+            return $this->json(['error' => false], Response::HTTP_BAD_REQUEST);
+        }
+
         if ($search->deleteSearchTermById($searchId)) {
             return $this->json(['deleted' => $searchId], Response::HTTP_OK);
         }

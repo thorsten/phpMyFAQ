@@ -4,20 +4,29 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
+use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
+use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
+#[AllowMockObjectsWithoutExpectations]
 #[CoversClass(ApiKeyController::class)]
 #[UsesNamespace('phpMyFAQ')]
 final class ApiKeyControllerTest extends TestCase
@@ -33,6 +42,7 @@ final class ApiKeyControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Token::resetInstanceForTests();
 
         Strings::init();
 
@@ -70,11 +80,21 @@ final class ApiKeyControllerTest extends TestCase
 
     protected function tearDown(): void
     {
+        Token::resetInstanceForTests();
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('api-key-create'), 0, 10)]);
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('api-key-update'), 0, 10)]);
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('api-key-delete'), 0, 10)]);
+
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
         $configurationProperty->setValue(null, $this->previousConfiguration);
 
         $this->dbHandle->close();
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, null);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, '');
         @unlink($this->databasePath);
 
         parent::tearDown();
@@ -144,5 +164,200 @@ final class ApiKeyControllerTest extends TestCase
 
         $this->expectException(\Exception::class);
         $controller->create($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testListReturnsApiKeysForAuthenticatedUser(): void
+    {
+        $this->seedApiKeyRow();
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->list();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertCount(1, $payload);
+        self::assertSame('Test key', $payload[0]['name']);
+        self::assertSame(['faq.read'], $payload[0]['scopes']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateReturnsBadRequestForInvalidJsonWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $this->expectException(\JsonException::class);
+        $controller->create(new Request([], [], [], [], [], [], 'invalid json'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->update(new Request([], [], ['id' => 1], [], [], [], json_encode([
+            'csrf' => 'invalid-token',
+            'name' => 'New name',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateReturnsCreatedApiKeyWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'api-key-create');
+        $controller->setContainer($container);
+
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'name' => 'Generated key',
+            'scopes' => ['faq.read', 'faq.write'],
+            'expiresAt' => '2026-03-31 00:00:00',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_CREATED, $response->getStatusCode());
+        self::assertSame('Generated key', $payload['name']);
+        self::assertSame(['faq.read', 'faq.write'], $payload['scopes']);
+        self::assertMatchesRegularExpression('/^pmf_[a-f0-9]{40}$/', $payload['apiKey']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateReturnsNotFoundForUnknownApiKeyWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'api-key-update');
+        $controller->setContainer($container);
+
+        $response = $controller->update(new Request([], [], ['id' => 999], [], [], [], json_encode([
+            'csrf' => $token,
+            'name' => 'Updated key',
+            'scopes' => ['faq.read'],
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        self::assertSame('API key not found.', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsSuccessWhenAuthenticated(): void
+    {
+        $this->seedApiKeyRow();
+
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'api-key-delete');
+        $controller->setContainer($container);
+
+        $response = $controller->delete(new Request([], [], ['id' => 1], [], [], [], json_encode([
+            'csrf' => $token,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['success']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->delete(new Request([], [], ['id' => 1], [], [], [], json_encode([
+            'csrf' => 'invalid-token',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    private function seedApiKeyRow(): void
+    {
+        $this->dbHandle->query('DELETE FROM faqapi_keys');
+        $this->dbHandle->query(
+            "INSERT INTO faqapi_keys (id, user_id, api_key, name, scopes, last_used_at, expires_at, created)
+             VALUES (1, 42, 'hash', 'Test key', '[\"faq.read\"]', NULL, NULL, '2026-03-01 12:00:00')",
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function createValidCsrfToken(Session $session, string $page): string
+    {
+        Token::resetInstanceForTests();
+        $token = Token::getInstance($session)->getTokenString($page);
+        $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;
+
+        return $token;
+    }
+
+    private function createAuthenticatedContainer(): ContainerInterface
+    {
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => (
+                    $userId === 42
+                    && $right === PermissionType::USER_EDIT->value
+                ),
+            );
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(42);
+
+        $session = new Session(new MockArraySessionStorage());
+        $adminLog = $this->createStub(AdminLog::class);
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    default => null,
+                };
+            });
+
+        return $container;
     }
 }

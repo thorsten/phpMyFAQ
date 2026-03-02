@@ -62,7 +62,7 @@ final class ConfigurationController extends AbstractAdministrationApiController
             $result = $this->mail->send();
 
             return $this->json(['success' => $result], Response::HTTP_OK);
-        } catch (Exception|TransportExceptionInterface $e) {
+        } catch (Exception|TransportExceptionInterface|\Throwable $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }

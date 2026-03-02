@@ -4,83 +4,179 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
+use phpMyFAQ\Bookmark;
+use phpMyFAQ\Captcha\CaptchaInterface;
+use phpMyFAQ\Captcha\Helper\CaptchaHelperInterface;
+use phpMyFAQ\Category;
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
+use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\Comment;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Language;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Strings;
-use phpMyFAQ\Utils;
+use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\UserSession;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
+#[AllowMockObjectsWithoutExpectations]
 #[CoversClass(FaqController::class)]
-#[UsesClass(Comment::class)]
-#[UsesClass(Strings::class)]
-#[UsesClass(Utils::class)]
+#[UsesNamespace('phpMyFAQ')]
 final class FaqControllerTest extends TestCase
 {
-    public function testPrepareCommentsDataFormatsCommentPayload(): void
-    {
-        $controller = $this->createControllerWithoutConstructor();
+    private Configuration $configuration;
+    private Sqlite3 $dbHandle;
+    private string $databasePath;
+    private ?Configuration $previousConfiguration = null;
 
+    /**
+     * @throws Exception
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Strings::init('en');
+        Translation::create()
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
+            ->setDefaultLanguage('en')
+            ->setCurrentLanguage('en')
+            ->setMultiByteLanguage();
+
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $this->previousConfiguration = $configurationProperty->getValue();
+
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-faq-controller-');
+        self::assertNotFalse($databasePath);
+        self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
+        $this->databasePath = $databasePath;
+
+        $this->dbHandle = new Sqlite3();
+        $this->dbHandle->connect($this->databasePath, '', '');
+        $this->configuration = new Configuration($this->dbHandle);
+        $this->initializeDatabaseStatics($this->dbHandle);
+
+        $language = new Language($this->configuration, new Session(new MockArraySessionStorage()));
+        $language->setLanguageFromConfiguration('en');
+        $this->configuration->setLanguage($language);
+    }
+
+    protected function tearDown(): void
+    {
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, $this->previousConfiguration);
+
+        if (isset($this->dbHandle)) {
+            $this->dbHandle->close();
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, null);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, '');
+        }
+
+        if (isset($this->databasePath) && is_file($this->databasePath)) {
+            unlink($this->databasePath);
+        }
+
+        parent::tearDown();
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
+    public function testPrepareCommentsDataFormatsAndEscapesCommentData(): void
+    {
         $date = $this->createMock(Date::class);
-        $date->expects($this->once())->method('format')->with('2026-03-01 12:00:00')->willReturn('Mar 1, 2026');
+        $date->expects(self::once())->method('format')->with('20260301120000')->willReturn('2026-03-01');
 
         $mail = $this->createMock(Mail::class);
         $mail
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('safeEmail')
             ->with('john@example.com')
             ->willReturn('john [at] example.com');
 
         $gravatar = $this->createMock(Gravatar::class);
         $gravatar
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getImage')
             ->with('john@example.com', ['class' => 'img-thumbnail'])
-            ->willReturn('<img src="avatar.jpg">');
+            ->willReturn('<img src="avatar.png">');
 
-        $this->setProperty($controller, 'date', $date);
-        $this->setProperty($controller, 'mail', $mail);
-        $this->setProperty($controller, 'gravatar', $gravatar);
+        $controller = $this->createController($date, $mail, $gravatar);
 
         $comment = new Comment()
-            ->setId(42)
-            ->setUsername('John Doe')
+            ->setId(7)
             ->setEmail('john@example.com')
-            ->setDate('2026-03-01 12:00:00')
+            ->setUsername('<John>')
+            ->setDate('20260301120000')
             ->setComment('Visit https://example.com');
 
-        $result = $this->invokePrepareCommentsData($controller, [$comment]);
+        $result = $this->invokePrivateMethod($controller, 'prepareCommentsData', [[$comment]]);
 
-        self::assertSame(42, $result['comments'][0]['id']);
-        self::assertSame('John Doe', $result['comments'][0]['username']);
+        self::assertSame(7, $result['comments'][0]['id']);
+        self::assertSame('&lt;John&gt;', $result['comments'][0]['username']);
         self::assertSame('Visit example.com', $result['comments'][0]['comment']);
-        self::assertSame('<img src="avatar.jpg">', $result['gravatarImages'][42]);
-        self::assertSame('john [at] example.com', $result['safeEmails'][42]);
-        self::assertSame('Mar 1, 2026', $result['formattedDates'][42]);
+        self::assertSame('<img src="avatar.png">', $result['gravatarImages'][7]);
+        self::assertSame('john [at] example.com', $result['safeEmails'][7]);
+        self::assertSame('2026-03-01', $result['formattedDates'][7]);
     }
 
-    private function createControllerWithoutConstructor(): FaqController
+    private function createController(Date $date, Mail $mail, Gravatar $gravatar): FaqController
     {
-        return new ReflectionClass(FaqController::class)->newInstanceWithoutConstructor();
+        $currentUser = new CurrentUser($this->configuration);
+        $category = new Category($this->configuration, [-1]);
+        $category->setLanguage('en');
+
+        $controller = new FaqController(
+            new UserSession($this->configuration),
+            $this->createMock(CaptchaInterface::class),
+            $this->createMock(CaptchaHelperInterface::class),
+            new Faq($this->configuration),
+            $category,
+            new Bookmark($this->configuration, $currentUser),
+            $date,
+            $mail,
+            $gravatar,
+        );
+
+        $configurationProperty = new \ReflectionProperty($controller, 'configuration');
+        $configurationProperty->setValue($controller, $this->configuration);
+
+        return $controller;
     }
 
-    private function invokePrepareCommentsData(FaqController $controller, array $comments): array
+    /**
+     * @throws \ReflectionException
+     */
+    private function invokePrivateMethod(object $object, string $methodName, array $arguments): mixed
     {
-        $method = new \ReflectionMethod(FaqController::class, 'prepareCommentsData');
+        $reflectionMethod = new \ReflectionMethod($object, $methodName);
 
-        /** @var array<string, array<int|string, mixed>> $result */
-        $result = $method->invoke($controller, $comments);
-
-        return $result;
+        return $reflectionMethod->invokeArgs($object, $arguments);
     }
 
-    private function setProperty(object $object, string $property, mixed $value): void
+    private function initializeDatabaseStatics(Sqlite3 $dbHandle): void
     {
-        $reflectionProperty = new \ReflectionProperty($object, $property);
-        $reflectionProperty->setValue($object, $value);
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $dbHandle);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlite3');
+        Database::setTablePrefix('');
     }
 }
