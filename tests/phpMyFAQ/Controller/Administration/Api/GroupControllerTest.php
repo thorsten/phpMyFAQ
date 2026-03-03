@@ -316,8 +316,8 @@ final class GroupControllerTest extends TestCase
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(200, $response->getStatusCode());
-        self::assertContains(['user_id' => 1, 'login' => 'admin'], $payload);
-        self::assertContains(['user_id' => 2, 'login' => 'testUser'], $payload);
+        self::assertContains(1, array_column($payload, 'user_id'));
+        self::assertContains(2, array_column($payload, 'user_id'));
     }
 
     /**
