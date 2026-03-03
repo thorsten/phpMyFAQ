@@ -167,7 +167,10 @@ final class GroupControllerTest extends TestCase
     private function seedGroupFixtures(): void
     {
         $this->dbHandle->query(
-            "UPDATE faquser SET login = 'testUser', account_status = 'active' WHERE user_id = 2",
+            "INSERT OR REPLACE INTO faquser
+                (user_id, login, session_id, session_timestamp, ip, account_status, last_login, auth_source, member_since, remember_me, success, is_superadmin, login_attempts, refresh_token, access_token, code_verifier, jwt, webauthnkeys)
+             VALUES
+                (2, 'testUser', NULL, NULL, NULL, 'active', NULL, 'local', NULL, NULL, 1, 0, 0, NULL, NULL, NULL, NULL, NULL)",
         );
         $this->dbHandle->query(
             "INSERT OR REPLACE INTO faquserdata (user_id, last_modified, display_name, email, is_visible, twofactor_enabled, secret)
