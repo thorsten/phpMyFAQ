@@ -168,6 +168,8 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
         'cookie_samesite' => 'Strict',
         'cookie_httponly' => true,
         'cookie_secure' => $request->isSecure(),
+        'gc_maxlifetime' => PMF_AUTH_TIMEOUT * 60,
+        'cookie_lifetime' => 0,
     ];
 
     // Start the PHP session
