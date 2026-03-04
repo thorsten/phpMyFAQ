@@ -170,6 +170,8 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     ini_set('session.cookie_httponly', 'true');
     ini_set('session.cookie_secure', $request->isSecure());
     ini_set('url_rewriter.tags', '');
+    ini_set('session.gc_maxlifetime', PMF_AUTH_TIMEOUT * 60);
+    ini_set('session.cookie_lifetime', 0);
 
     //
     // Start the PHP session
@@ -182,7 +184,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 //
-// Connect to LDAP server, when LDAP support is enabled
+// Connect to the LDAP server when LDAP support is enabled
 //
 if ($faqConfig->isLdapActive() && file_exists(PMF_CONFIG_DIR . '/ldap.php') && extension_loaded('ldap')) {
     $ldapConfig = new LdapConfiguration(PMF_CONFIG_DIR . '/ldap.php');

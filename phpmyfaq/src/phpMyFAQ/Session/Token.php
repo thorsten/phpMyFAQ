@@ -25,7 +25,7 @@ class Token
 {
     final public const PMF_SESSION_NAME = 'pmf-csrf-token';
 
-    private const PMF_SESSION_EXPIRY = 1800;
+    private const PMF_SESSION_EXPIRY = PMF_AUTH_TIMEOUT * 60;
 
     private string $page;
 
