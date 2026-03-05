@@ -14,13 +14,14 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,6 +44,7 @@ final class CategoryControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Token::resetInstanceForTests();
 
         Strings::init();
 
@@ -80,6 +82,7 @@ final class CategoryControllerTest extends TestCase
 
     protected function tearDown(): void
     {
+        Token::resetInstanceForTests();
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
         $configurationProperty->setValue(null, $this->previousConfiguration);
@@ -113,38 +116,52 @@ final class CategoryControllerTest extends TestCase
         );
     }
 
-    private function createAuthenticatedContainer(): ContainerInterface
+    private function createControllerWithOrderStub(Order $categoryOrder): CategoryController
+    {
+        return new CategoryController(
+            $this->createStub(Image::class),
+            $categoryOrder,
+            $this->createStub(Permission::class),
+        );
+    }
+
+    private function createAuthenticatedContainer(?Session $session = null): ContainerInterface
     {
         $permission = $this->createStub(PermissionInterface::class);
-        $permission->method('hasPermission')->willReturnCallback(
-            static fn (int $userId, mixed $right): bool => $userId === 42 && in_array(
-                $right,
-                [
-                    PermissionType::CATEGORY_DELETE->value,
-                    PermissionType::CATEGORY_EDIT->value,
-                ],
-                true
-            )
-        );
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => $userId === 42
+                && in_array(
+                    $right,
+                    [
+                        PermissionType::CATEGORY_DELETE->value,
+                        PermissionType::CATEGORY_EDIT->value,
+                    ],
+                    true,
+                ),
+            );
 
         $currentUser = $this->createStub(CurrentUser::class);
         $currentUser->perm = $permission;
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(42);
 
-        $session = new Session(new MockArraySessionStorage());
+        $session ??= new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(\phpMyFAQ\Administration\AdminLog::class);
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('get')->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
-            return match ($id) {
-                'phpmyfaq.configuration' => $this->configuration,
-                'phpmyfaq.user.current_user' => $currentUser,
-                'session' => $session,
-                'phpmyfaq.admin.admin-log' => $adminLog,
-                default => null,
-            };
-        });
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    default => null,
+                };
+            });
 
         return $container;
     }
@@ -247,7 +264,8 @@ final class CategoryControllerTest extends TestCase
     public function testPermissionsReturnsUserAndGroupPermissionsWhenAuthenticated(): void
     {
         $categoryPermission = $this->createMock(Permission::class);
-        $categoryPermission->expects($this->exactly(2))
+        $categoryPermission
+            ->expects($this->exactly(2))
             ->method('get')
             ->willReturnCallback(static function (string $type, array $categories): array {
                 if ($type === Permission::USER) {
@@ -266,5 +284,90 @@ final class CategoryControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(['user' => ['1']], $payload['user']);
         self::assertSame(['group' => ['1']], $payload['group']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testPermissionsUsesDefaultAllCategoriesWhenAttributeMissing(): void
+    {
+        $categoryPermission = $this->createMock(Permission::class);
+        $categoryPermission
+            ->expects($this->exactly(2))
+            ->method('get')
+            ->willReturnCallback(static function (string $type, array $categories): array {
+                return match ($type) {
+                    Permission::USER => ['user' => $categories],
+                    Permission::GROUP => ['group' => $categories],
+                };
+            });
+
+        $controller = $this->createControllerWithPermissionStub($categoryPermission);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->permissions(new Request());
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(['user' => [-1]], $payload['user']);
+        self::assertSame(['group' => [-1]], $payload['group']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testTranslationsReturnsArrayWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->translations(new Request([], [], ['categoryId' => 1]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertIsArray($payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateOrderReturnsSuccessForValidCsrfWhenAuthenticated(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('category');
+        $this->setCsrfCookie('category', $csrfToken);
+
+        $categoryOrder = $this->createMock(Order::class);
+        $categoryOrder
+            ->expects($this->once())
+            ->method('setCategoryTree')
+            ->with($this->callback(static function (array $tree): bool {
+                return isset($tree[0]) && is_object($tree[0]) && $tree[0]->id === 1;
+            }));
+        $categoryOrder->expects($this->once())->method('getParentId')->willReturn(0);
+
+        $controller = $this->createControllerWithOrderStub($categoryOrder);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->updateOrder(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $csrfToken,
+            'categoryTree' => [['id' => 1, 'children' => []]],
+            'categoryId' => 1,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+        $this->removeCsrfCookie('category');
+    }
+
+    private function setCsrfCookie(string $page, string $token): void
+    {
+        $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;
+    }
+
+    private function removeCsrfCookie(string $page): void
+    {
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)]);
     }
 }

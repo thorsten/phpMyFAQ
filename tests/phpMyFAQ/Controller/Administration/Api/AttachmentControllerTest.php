@@ -12,6 +12,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -20,6 +21,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -41,6 +43,7 @@ final class AttachmentControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Token::resetInstanceForTests();
 
         Strings::init();
 
@@ -78,6 +81,10 @@ final class AttachmentControllerTest extends TestCase
 
     protected function tearDown(): void
     {
+        Token::resetInstanceForTests();
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('delete-attachment'), 0, 10)]);
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('refresh-attachment'), 0, 10)]);
+
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
         $configurationProperty->setValue(null, $this->previousConfiguration);
@@ -184,6 +191,60 @@ final class AttachmentControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertSame(Translation::get('msgNoImagesForUpload'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsSuccessWithValidCsrf(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-attachment');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        $response = $controller->delete(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'attId' => 1,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('msgAttachmentsDeleted'), $payload['success']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadReturnsBadRequestWhenUploadedFileIsInvalid(): void
+    {
+        $invalidFile = $this->createMock(UploadedFile::class);
+        $invalidFile->method('isValid')->willReturn(false);
+
+        $controller = new AttachmentController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $request = new Request([], [], [], [], ['filesToUpload' => [$invalidFile]]);
+        $response = $controller->upload($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('msgImageTooLarge'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function createValidCsrfToken(Session $session, string $page): string
+    {
+        Token::resetInstanceForTests();
+        $token = Token::getInstance($session)->getTokenString($page);
+        $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;
+
+        return $token;
     }
 
     private function createAuthenticatedContainer(): ContainerInterface

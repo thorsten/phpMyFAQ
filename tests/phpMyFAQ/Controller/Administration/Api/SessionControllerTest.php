@@ -15,11 +15,11 @@ use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -106,9 +106,14 @@ final class SessionControllerTest extends TestCase
     private function createAuthenticatedContainer(): ContainerInterface
     {
         $permission = $this->createStub(PermissionInterface::class);
-        $permission->method('hasPermission')->willReturnCallback(
-            static fn (int $userId, mixed $right): bool => $userId === 42 && $right === PermissionType::STATISTICS_VIEWLOGS->value
-        );
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => (
+                    $userId === 42
+                    && $right === PermissionType::STATISTICS_VIEWLOGS->value
+                ),
+            );
 
         $currentUser = $this->createStub(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -119,15 +124,17 @@ final class SessionControllerTest extends TestCase
         $adminLog = $this->createStub(\phpMyFAQ\Administration\AdminLog::class);
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('get')->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
-            return match ($id) {
-                'phpmyfaq.configuration' => $this->configuration,
-                'phpmyfaq.user.current_user' => $currentUser,
-                'session' => $session,
-                'phpmyfaq.admin.admin-log' => $adminLog,
-                default => null,
-            };
-        });
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    default => null,
+                };
+            });
 
         return $container;
     }
@@ -198,7 +205,8 @@ final class SessionControllerTest extends TestCase
     public function testExportReturnsCsvResponseForValidCsrfWhenAuthenticated(): void
     {
         $adminSession = $this->createMock(AdminSession::class);
-        $adminSession->expects($this->once())
+        $adminSession
+            ->expects($this->once())
             ->method('getSessionsByDate')
             ->willReturn([
                 ['ip' => '127.0.0.1', 'time' => '2026-03-01 00:00:00'],

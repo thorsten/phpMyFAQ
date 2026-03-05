@@ -69,6 +69,10 @@ final class DashboardController extends AbstractController
 
         try {
             $versions = $api->getVersions();
+            if (!isset($versions['installed']) || !isset($versions[$releaseEnvironment])) {
+                throw new Exception('Version lookup failed for release environment "' . $releaseEnvironment . '".');
+            }
+
             $info = [];
             if (version_compare($versions['installed'], $versions[$releaseEnvironment]) < 0) {
                 $info = ['warning' => Translation::get(key: 'ad_you_should_update')];
@@ -76,7 +80,8 @@ final class DashboardController extends AbstractController
 
             if (version_compare($versions['installed'], $versions[$releaseEnvironment]) >= 0) {
                 $info = [
-                    'success' => Translation::get(key: 'ad_xmlrpc_latest') . ': phpMyFAQ ' . $versions['stable'],
+                    'success' =>
+                        Translation::get(key: 'ad_xmlrpc_latest') . ': phpMyFAQ ' . ($versions['stable'] ?? ''),
                 ];
             }
 

@@ -4,34 +4,28 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
-use phpMyFAQ\Administration\AdminLog;
-use phpMyFAQ\Administration\Helper;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
-use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-#[AllowMockObjectsWithoutExpectations]
-#[CoversClass(GroupController::class)]
+#[CoversClass(LdapController::class)]
 #[UsesNamespace('phpMyFAQ')]
-final class GroupControllerTest extends TestCase
+final class LdapControllerTest extends TestCase
 {
     private Configuration $configuration;
     private Sqlite3 $dbHandle;
@@ -58,7 +52,7 @@ final class GroupControllerTest extends TestCase
         $this->previousConfiguration = $configurationProperty->getValue();
         $configurationProperty->setValue(null, null);
 
-        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-admin-group-page-controller-');
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-admin-ldap-controller-');
         self::assertNotFalse($databasePath);
         self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
         $this->databasePath = $databasePath;
@@ -81,10 +75,6 @@ final class GroupControllerTest extends TestCase
 
     protected function tearDown(): void
     {
-        Token::resetInstanceForTests();
-        unset($_COOKIE['pmf-csrf-token-' . substr(md5('add-group'), 0, 10)]);
-        unset($_COOKIE['pmf-csrf-token-' . substr(md5('delete-group'), 0, 10)]);
-
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
         $configurationProperty->setValue(null, $this->previousConfiguration);
@@ -100,109 +90,48 @@ final class GroupControllerTest extends TestCase
         parent::tearDown();
     }
 
-    private function createController(): GroupController
-    {
-        return new GroupController(new User($this->configuration));
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testIndexRendersInCurrentAnonymousAdminContext(): void
-    {
-        $request = new Request();
-        $controller = $this->createController();
-
-        $response = $controller->index($request);
-
-        self::assertInstanceOf(Response::class, $response);
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testAddRendersInCurrentAnonymousAdminContext(): void
-    {
-        $request = new Request();
-        $controller = $this->createController();
-
-        $response = $controller->add($request);
-
-        self::assertInstanceOf(Response::class, $response);
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testCreateThrowsForInvalidCsrfWhenAuthenticated(): void
-    {
-        $controller = $this->createController();
-        $controller->setContainer($this->createAuthenticatedContainer());
-
-        $request = new Request([], [], ['csrf' => 'invalid-token'], [], [], [], '');
-
-        $this->expectException(UnauthorizedHttpException::class);
-        $controller->create($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testDeleteThrowsForInvalidCsrfWhenAuthenticated(): void
-    {
-        $controller = $this->createController();
-        $controller->setContainer($this->createAuthenticatedContainer());
-
-        $request = new Request([], [
-            'group_id' => 1,
-            'pmf-csrf-token' => 'invalid-token',
-        ]);
-
-        $this->expectException(UnauthorizedHttpException::class);
-        $controller->delete($request);
-    }
-
     private function createAuthenticatedContainer(): ContainerInterface
     {
         $permission = $this->createStub(PermissionInterface::class);
-        $permission->method('hasPermission')->willReturn(true);
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => $userId === 42
+                && in_array(
+                    $right,
+                    [PermissionType::CONFIGURATION_EDIT, PermissionType::CONFIGURATION_EDIT->value],
+                    true,
+                ),
+            );
 
         $currentUser = $this->createStub(CurrentUser::class);
         $currentUser->perm = $permission;
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(42);
-        $currentUser->method('isSuperAdmin')->willReturn(false);
-        $currentUser
-            ->method('getUserData')
-            ->willReturnMap([
-                ['display_name', 'Test User'],
-                ['email',        'test@example.com'],
-            ]);
 
         $session = new Session(new MockArraySessionStorage());
-        Token::resetInstanceForTests();
-        Token::getInstance($session);
-        $adminLog = $this->createStub(AdminLog::class);
-        $adminHelper = $this->createStub(Helper::class);
-        $adminHelper->method('canAccessContent')->willReturn(true);
-        $adminHelper->method('addMenuEntry')->willReturn('');
 
         $container = $this->createStub(ContainerInterface::class);
         $container
             ->method('get')
-            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog, $adminHelper) {
+            ->willReturnCallback(function (string $id) use ($currentUser, $session) {
                 return match ($id) {
                     'phpmyfaq.configuration' => $this->configuration,
                     'phpmyfaq.user.current_user' => $currentUser,
                     'session' => $session,
-                    'phpmyfaq.admin.admin-log' => $adminLog,
-                    'phpmyfaq.admin.helper' => $adminHelper,
                     default => null,
                 };
             });
 
         return $container;
+    }
+
+    public function testIndexThrowsUnauthorizedWhenLdapDisabled(): void
+    {
+        $controller = new LdapController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $this->expectException(UnauthorizedHttpException::class);
+        $controller->index(Request::create('/admin/ldap'));
     }
 }

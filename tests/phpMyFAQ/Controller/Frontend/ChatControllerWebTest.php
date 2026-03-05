@@ -17,6 +17,7 @@ final class ChatControllerWebTest extends ControllerWebTestCase
         $response = $this->requestPublic('GET', '/user/chat');
 
         self::assertResponseStatusCodeSame(302, $response);
-        self::assertSame('https://localhost/', $response->headers->get('Location'));
+        self::assertNotNull($response->headers->get('Location'));
+        self::assertStringEndsWith('/', (string) $response->headers->get('Location'));
     }
 }

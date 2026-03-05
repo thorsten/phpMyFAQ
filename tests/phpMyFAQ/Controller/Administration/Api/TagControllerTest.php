@@ -15,11 +15,11 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -107,10 +107,12 @@ final class TagControllerTest extends TestCase
     private function createAuthenticatedContainer(): ContainerInterface
     {
         $permission = $this->createStub(PermissionInterface::class);
-        $permission->method('hasPermission')->willReturnCallback(
-            static fn (int $userId, mixed $right): bool => $userId === 42
-                && in_array($right, [PermissionType::FAQ_EDIT, PermissionType::FAQ_EDIT->value], true)
-        );
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => $userId === 42
+                && in_array($right, [PermissionType::FAQ_EDIT, PermissionType::FAQ_EDIT->value], true),
+            );
 
         $currentUser = $this->createStub(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -120,14 +122,16 @@ final class TagControllerTest extends TestCase
         $session = new Session(new MockArraySessionStorage());
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('get')->willReturnCallback(function (string $id) use ($currentUser, $session) {
-            return match ($id) {
-                'phpmyfaq.configuration' => $this->configuration,
-                'phpmyfaq.user.current_user' => $currentUser,
-                'session' => $session,
-                default => null,
-            };
-        });
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    default => null,
+                };
+            });
 
         return $container;
     }
@@ -219,14 +223,16 @@ final class TagControllerTest extends TestCase
 
         $session = new Session(new MockArraySessionStorage());
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('get')->willReturnCallback(function (string $id) use ($currentUser, $session) {
-            return match ($id) {
-                'phpmyfaq.configuration' => $this->configuration,
-                'phpmyfaq.user.current_user' => $currentUser,
-                'session' => $session,
-                default => null,
-            };
-        });
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    default => null,
+                };
+            });
 
         $controller = $this->createController();
         $controller->setContainer($container);
@@ -272,10 +278,14 @@ final class TagControllerTest extends TestCase
     public function testSearchReturnsTagSuggestionsWhenAuthenticatedUserCanEditFaqs(): void
     {
         $tags = $this->createMock(Tags::class);
-        $tags->expects($this->once())->method('getAllTags')->with('foo', PMF_TAGS_CLOUD_RESULT_SET_SIZE)->willReturn([
-            'foo',
-            'foobar',
-        ]);
+        $tags
+            ->expects($this->once())
+            ->method('getAllTags')
+            ->with('foo', PMF_TAGS_CLOUD_RESULT_SET_SIZE)
+            ->willReturn([
+                'foo',
+                'foobar',
+            ]);
 
         $controller = $this->createController($tags);
         $controller->setContainer($this->createAuthenticatedContainer());

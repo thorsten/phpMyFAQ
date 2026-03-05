@@ -79,9 +79,6 @@ class AccessTokenEntityTest extends TestCase
 
     public function testImplementsAccessTokenEntityInterface(): void
     {
-        $this->assertInstanceOf(
-            \League\OAuth2\Server\Entities\AccessTokenEntityInterface::class,
-            $this->entity
-        );
+        $this->assertInstanceOf(\League\OAuth2\Server\Entities\AccessTokenEntityInterface::class, $this->entity);
     }
 }

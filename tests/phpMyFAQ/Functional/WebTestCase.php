@@ -24,6 +24,7 @@ namespace phpMyFAQ\Functional;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Kernel;
 use PHPUnit\Framework\TestCase;
@@ -45,8 +46,20 @@ abstract class WebTestCase extends TestCase
 
     private static ?string $databasePath = null;
 
+    private static ?Configuration $previousConfiguration = null;
+
+    private static ?DatabaseDriver $previousDatabaseDriver = null;
+
+    private static ?string $previousDatabaseType = null;
+
+    private static ?string $previousTablePrefix = null;
+
+    private static bool $hasBackedUpGlobalState = false;
+
     protected static function createClient(string $routingContext = 'public'): HttpKernelBrowser
     {
+        self::backupGlobalState();
+
         $databasePath = tempnam(sys_get_temp_dir(), 'pmf-functional-webtest-');
         self::assertNotFalse($databasePath);
         self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
@@ -54,6 +67,7 @@ abstract class WebTestCase extends TestCase
 
         self::$dbHandle = new Sqlite3();
         self::$dbHandle->connect($databasePath, '', '');
+        self::resetConfigurationSingleton();
         new Configuration(self::$dbHandle);
         self::initializeDatabaseStatics(self::$dbHandle);
 
@@ -116,6 +130,7 @@ abstract class WebTestCase extends TestCase
         self::$databasePath = null;
         static::$kernel = null;
         static::$client = null;
+        self::restoreGlobalState();
     }
 
     private static function initializeDatabaseStatics(Sqlite3 $dbHandle): void
@@ -129,6 +144,65 @@ abstract class WebTestCase extends TestCase
         $dbTypeProperty->setValue(null, 'sqlite3');
 
         Database::setTablePrefix('');
+    }
+
+    private static function resetConfigurationSingleton(): void
+    {
+        $configurationReflection = new ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, null);
+    }
+
+    private static function backupGlobalState(): void
+    {
+        if (self::$hasBackedUpGlobalState) {
+            return;
+        }
+
+        $configurationReflection = new ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        self::$previousConfiguration = $configurationProperty->getValue();
+
+        $databaseReflection = new ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        self::$previousDatabaseDriver = $databaseDriverProperty->getValue();
+
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        self::$previousDatabaseType = $dbTypeProperty->isInitialized() ? $dbTypeProperty->getValue() : null;
+
+        $tablePrefixProperty = $databaseReflection->getProperty('tablePrefix');
+        self::$previousTablePrefix = $tablePrefixProperty->getValue();
+
+        self::$hasBackedUpGlobalState = true;
+    }
+
+    private static function restoreGlobalState(): void
+    {
+        if (!self::$hasBackedUpGlobalState) {
+            return;
+        }
+
+        $configurationReflection = new ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, self::$previousConfiguration);
+
+        $databaseReflection = new ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, self::$previousDatabaseDriver);
+
+        if (self::$previousDatabaseType !== null) {
+            $dbTypeProperty = $databaseReflection->getProperty('dbType');
+            $dbTypeProperty->setValue(null, self::$previousDatabaseType);
+        }
+
+        $tablePrefixProperty = $databaseReflection->getProperty('tablePrefix');
+        $tablePrefixProperty->setValue(null, self::$previousTablePrefix);
+
+        self::$previousConfiguration = null;
+        self::$previousDatabaseDriver = null;
+        self::$previousDatabaseType = null;
+        self::$previousTablePrefix = null;
+        self::$hasBackedUpGlobalState = false;
     }
 }
 

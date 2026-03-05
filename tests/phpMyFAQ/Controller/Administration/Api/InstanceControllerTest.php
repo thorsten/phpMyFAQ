@@ -170,6 +170,99 @@ final class InstanceControllerTest extends TestCase
         self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsBadRequestWhenInstanceIdIsMissing(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-instance');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->delete(
+            new Request(content: json_encode([
+                'csrf' => $token,
+                'instanceId' => null,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertArrayHasKey('error', $payload);
+        self::assertNull($payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAddReturnsBadRequestWhenRequiredFieldsAreMissing(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'add-instance');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->add(new Request(server: ['HTTP_HOST' => 'localhost'], content: json_encode([
+            'csrf' => $token,
+            'url' => '',
+            'instance' => '',
+            'comment' => '',
+            'email' => '',
+            'admin' => '',
+            'password' => '',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Cannot create instance.', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAddReturnsBadRequestForWrongUrl(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'add-instance');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->add(new Request(server: ['HTTP_HOST' => 'localhost'], content: json_encode([
+            'csrf' => $token,
+            'url' => 'invalid host',
+            'instance' => 'Unit Test Instance',
+            'comment' => 'Unit Test Comment',
+            'email' => 'admin@example.com',
+            'admin' => 'admin',
+            'password' => 'password',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Cannot create instance: wrong URL', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function createValidCsrfToken(Session $session, string $page): string
+    {
+        $token = \phpMyFAQ\Session\Token::getInstance($session)->getTokenString($page);
+        $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;
+
+        return $token;
+    }
+
     private function createAuthenticatedContainer(): ContainerInterface
     {
         $permission = $this->createMock(PermissionInterface::class);

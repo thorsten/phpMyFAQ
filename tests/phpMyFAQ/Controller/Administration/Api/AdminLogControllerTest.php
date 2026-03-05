@@ -12,6 +12,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -41,6 +42,7 @@ final class AdminLogControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Token::resetInstanceForTests();
 
         Strings::init();
 
@@ -78,6 +80,7 @@ final class AdminLogControllerTest extends TestCase
 
     protected function tearDown(): void
     {
+        Token::resetInstanceForTests();
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
         $configurationProperty->setValue(null, $this->previousConfiguration);
@@ -178,7 +181,184 @@ final class AdminLogControllerTest extends TestCase
         self::assertSame('Invalid CSRF token', $payload['error']);
     }
 
-    private function createAuthenticatedContainer(AdminLog $adminLog): ContainerInterface
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsSuccessWhenLogDeletionSucceeds(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('delete-adminlog');
+        $this->setCsrfCookie('delete-adminlog', $csrfToken);
+
+        $adminLog = $this->createMock(AdminLog::class);
+        $adminLog->expects($this->once())->method('delete')->willReturn(true);
+
+        $controller = new AdminLogController();
+        $controller->setContainer($this->createAuthenticatedContainer($adminLog, $session));
+
+        $response = $controller->delete(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $csrfToken,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+        $this->removeCsrfCookie('delete-adminlog');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsBadRequestWhenLogDeletionFails(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('delete-adminlog');
+        $this->setCsrfCookie('delete-adminlog', $csrfToken);
+
+        $adminLog = $this->createMock(AdminLog::class);
+        $adminLog->expects($this->once())->method('delete')->willReturn(false);
+
+        $controller = new AdminLogController();
+        $controller->setContainer($this->createAuthenticatedContainer($adminLog, $session));
+
+        $response = $controller->delete(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $csrfToken,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertArrayHasKey('error', $payload);
+        $this->removeCsrfCookie('delete-adminlog');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExportReturnsCsvWhenCsrfIsValid(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('export-adminlog');
+        $this->setCsrfCookie('export-adminlog', $csrfToken);
+
+        $adminLog = $this->createMock(AdminLog::class);
+        $adminLog->expects($this->once())->method('getAll')->willReturn([]);
+        $adminLog->expects($this->once())->method('log');
+
+        $controller = new AdminLogController();
+        $controller->setContainer($this->createAuthenticatedContainer($adminLog, $session));
+
+        $response = $controller->export(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+        ], JSON_THROW_ON_ERROR)));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('text/csv', $response->headers->get('Content-Type'));
+        self::assertStringContainsString('"User ID"', (string) $response->getContent());
+        self::assertStringContainsString('"IP Address"', (string) $response->getContent());
+        $this->removeCsrfCookie('export-adminlog');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testVerifyReturnsSuccessWhenChainIsValid(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('admin-log-verify');
+        $this->setCsrfCookie('admin-log-verify', $csrfToken);
+
+        $adminLog = $this->createMock(AdminLog::class);
+        $adminLog
+            ->expects($this->once())
+            ->method('verifyChainIntegrity')
+            ->willReturn([
+                'valid' => true,
+                'total' => 3,
+                'verified' => 3,
+                'errors' => [],
+            ]);
+
+        $controller = new AdminLogController();
+        $controller->setContainer($this->createAuthenticatedContainer($adminLog, $session));
+
+        $response = $controller->verify(new Request(['csrf' => $csrfToken]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['success']);
+        self::assertTrue($payload['verification']['valid']);
+        self::assertSame(0, $payload['verification']['failed']);
+        $this->removeCsrfCookie('admin-log-verify');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testVerifyReturnsConflictWhenChainIsInvalid(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('admin-log-verify');
+        $this->setCsrfCookie('admin-log-verify', $csrfToken);
+
+        $adminLog = $this->createMock(AdminLog::class);
+        $adminLog
+            ->expects($this->once())
+            ->method('verifyChainIntegrity')
+            ->willReturn([
+                'valid' => false,
+                'total' => 3,
+                'verified' => 2,
+                'errors' => ['Invalid hash at entry #3'],
+            ]);
+
+        $controller = new AdminLogController();
+        $controller->setContainer($this->createAuthenticatedContainer($adminLog, $session));
+
+        $response = $controller->verify(new Request(['csrf' => $csrfToken]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_CONFLICT, $response->getStatusCode());
+        self::assertTrue($payload['success']);
+        self::assertFalse($payload['verification']['valid']);
+        self::assertSame(1, $payload['verification']['failed']);
+        $this->removeCsrfCookie('admin-log-verify');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testVerifyReturnsInternalServerErrorWhenVerificationThrows(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('admin-log-verify');
+        $this->setCsrfCookie('admin-log-verify', $csrfToken);
+
+        $adminLog = $this->createMock(AdminLog::class);
+        $adminLog->expects($this->once())->method('verifyChainIntegrity')->willThrowException(new \Exception('boom'));
+
+        $controller = new AdminLogController();
+        $controller->setContainer($this->createAuthenticatedContainer($adminLog, $session));
+
+        $response = $controller->verify(new Request(['csrf' => $csrfToken]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        self::assertFalse($payload['success']);
+        self::assertSame('boom', $payload['error']);
+        $this->removeCsrfCookie('admin-log-verify');
+    }
+
+    private function setCsrfCookie(string $page, string $token): void
+    {
+        $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;
+    }
+
+    private function removeCsrfCookie(string $page): void
+    {
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)]);
+    }
+
+    private function createAuthenticatedContainer(AdminLog $adminLog, ?Session $session = null): ContainerInterface
     {
         $permission = $this->createMock(PermissionInterface::class);
         $permission
@@ -200,7 +380,7 @@ final class AdminLogControllerTest extends TestCase
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(42);
 
-        $session = new Session(new MockArraySessionStorage());
+        $session ??= new Session(new MockArraySessionStorage());
 
         $container = $this->createStub(ContainerInterface::class);
         $container

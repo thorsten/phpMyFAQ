@@ -8,6 +8,7 @@ export * from './forms';
 export * from './glossary';
 export * from './group';
 export * from './instance';
+export * from './ldap';
 export * from './markdown';
 export * from './media-browser';
 export * from './news';

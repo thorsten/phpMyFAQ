@@ -15,11 +15,11 @@ use phpMyFAQ\Question;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -105,19 +105,45 @@ final class QuestionControllerTest extends TestCase
         return new QuestionController($question ?? $this->createStub(Question::class));
     }
 
+    private function seedOpenQuestion(int $id, string $visibility = 'N'): void
+    {
+        $query = sprintf(
+            'INSERT INTO %sfaqquestions (id, username, email, category_id, question, created, lang, is_visible) '
+            . "VALUES (%d, 'Unit Tester', 'unit@example.com', 1, 'How to test?', '2026-03-05 10:00:00', 'en', '%s')",
+            Database::getTablePrefix(),
+            $id,
+            $this->dbHandle->escape($visibility),
+        );
+        $this->dbHandle->query($query);
+    }
+
+    private function questionExists(int $id): bool
+    {
+        $result = $this->dbHandle->query(sprintf(
+            "SELECT id FROM %sfaqquestions WHERE id = %d AND lang = 'en'",
+            Database::getTablePrefix(),
+            $id,
+        ));
+
+        return $this->dbHandle->numRows($result) > 0;
+    }
+
     private function createAuthenticatedContainer(): ContainerInterface
     {
         $permission = $this->createStub(PermissionInterface::class);
-        $permission->method('hasPermission')->willReturnCallback(
-            static fn (int $userId, mixed $right): bool => $userId === 42 && in_array(
-                $right,
-                [
-                    PermissionType::QUESTION_ADD->value,
-                    PermissionType::QUESTION_DELETE->value,
-                ],
-                true
-            )
-        );
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => $userId === 42
+                && in_array(
+                    $right,
+                    [
+                        PermissionType::QUESTION_ADD->value,
+                        PermissionType::QUESTION_DELETE->value,
+                    ],
+                    true,
+                ),
+            );
 
         $currentUser = $this->createStub(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -127,14 +153,16 @@ final class QuestionControllerTest extends TestCase
         $session = new Session(new MockArraySessionStorage());
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('get')->willReturnCallback(function (string $id) use ($currentUser, $session) {
-            return match ($id) {
-                'phpmyfaq.configuration' => $this->configuration,
-                'phpmyfaq.user.current_user' => $currentUser,
-                'session' => $session,
-                default => null,
-            };
-        });
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    default => null,
+                };
+            });
 
         return $container;
     }
@@ -275,5 +303,63 @@ final class QuestionControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(Translation::get('ad_gen_yes'), $payload['success']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsSuccessForValidCsrfAndSingleQuestionId(): void
+    {
+        $this->seedOpenQuestion(991, 'N');
+        self::assertTrue($this->questionExists(991));
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-questions');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $token,
+                'questions[]' => 991,
+            ],
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->delete($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_open_question_deleted'), $payload['success']);
+        self::assertFalse($this->questionExists(991));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testToggleReturnsSuccessWhenAuthenticatedAndQuestionBecomesHidden(): void
+    {
+        $question = $this->createMock(Question::class);
+        $question->expects($this->once())->method('getVisibility')->with(4)->willReturn('Y');
+        $question->expects($this->once())->method('setVisibility')->with(4, 'N');
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'toggle-question-visibility');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'questionId' => 4,
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController($question);
+        $controller->setContainer($container);
+
+        $response = $controller->toggle($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_gen_no'), $payload['success']);
     }
 }

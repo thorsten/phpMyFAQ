@@ -106,6 +106,15 @@ final class UpdateControllerTest extends TestCase
         );
     }
 
+    private function createControllerWithDependencies(
+        Upgrade $upgrade,
+        Api $adminApi,
+        Update $update,
+        EnvironmentConfigurator $configurator,
+    ): UpdateController {
+        return new UpdateController($upgrade, $adminApi, $update, $configurator);
+    }
+
     private function createAuthenticatedContainer(): ContainerInterface
     {
         $permission = $this->createMock(PermissionInterface::class);
@@ -360,5 +369,184 @@ final class UpdateControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame('Cleanup successful.', $payload['message']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateCheckReturnsConflictWhenInstalledIsNewerThanAvailable(): void
+    {
+        $this->configuration->set('upgrade.releaseEnvironment', 'stable');
+
+        $adminApi = $this->createMock(Api::class);
+        $adminApi
+            ->method('getVersions')
+            ->willReturn([
+                'installed' => '4.2.0',
+                'stable' => '4.1.0',
+            ]);
+
+        $controller = $this->createControllerWithDependencies(
+            $this->createStub(Upgrade::class),
+            $adminApi,
+            $this->createStub(Update::class),
+            $this->createStub(EnvironmentConfigurator::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->updateCheck();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_CONFLICT, $response->getStatusCode());
+        self::assertSame(Translation::get('msgInstalledNewerThanAvailable'), $payload['message']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateCheckReturnsUpToDateWhenVersionsMatch(): void
+    {
+        $this->configuration->set('upgrade.releaseEnvironment', 'stable');
+
+        $adminApi = $this->createMock(Api::class);
+        $adminApi
+            ->method('getVersions')
+            ->willReturn([
+                'installed' => '4.1.0',
+                'stable' => '4.1.0',
+            ]);
+
+        $controller = $this->createControllerWithDependencies(
+            $this->createStub(Upgrade::class),
+            $adminApi,
+            $this->createStub(Update::class),
+            $this->createStub(EnvironmentConfigurator::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->updateCheck();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('versionIsUpToDate'), $payload['message']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDownloadPackageReturnsBadRequestWhenDownloadThrowsException(): void
+    {
+        $upgrade = $this->createMock(Upgrade::class);
+        $upgrade->method('downloadPackage')->willThrowException(new Exception('download failed'));
+
+        $controller = $this->createControllerWithDependencies(
+            $upgrade,
+            $this->createStub(Api::class),
+            $this->createStub(Update::class),
+            $this->createStub(EnvironmentConfigurator::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->downloadPackage(new Request([], [], ['versionNumber' => '4.1.0']));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertArrayHasKey('error', $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDownloadPackageReturnsBadGatewayWhenVerificationFails(): void
+    {
+        $upgrade = $this->createMock(Upgrade::class);
+        $upgrade->method('downloadPackage')->willReturn('/tmp/phpmyfaq.zip');
+        $upgrade->method('isNightly')->willReturn(false);
+        $upgrade->method('verifyPackage')->willReturn(false);
+
+        $controller = $this->createControllerWithDependencies(
+            $upgrade,
+            $this->createStub(Api::class),
+            $this->createStub(Update::class),
+            $this->createStub(EnvironmentConfigurator::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->downloadPackage(new Request([], [], ['versionNumber' => '4.1.0']));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_GATEWAY, $response->getStatusCode());
+        self::assertArrayHasKey('error', $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDownloadPackageReturnsSuccessForNightlyPackageWithoutVerification(): void
+    {
+        $upgrade = $this->createMock(Upgrade::class);
+        $upgrade->expects(self::once())->method('downloadPackage')->willReturn('/tmp/phpmyfaq-nightly.zip');
+        $upgrade->method('isNightly')->willReturn(true);
+        $upgrade->expects(self::never())->method('verifyPackage');
+
+        $controller = $this->createControllerWithDependencies(
+            $upgrade,
+            $this->createStub(Api::class),
+            $this->createStub(Update::class),
+            $this->createStub(EnvironmentConfigurator::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->downloadPackage(new Request([], [], ['versionNumber' => 'nightly']));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateDatabaseReturnsSuccessWhenUpdatesApplied(): void
+    {
+        $update = $this->createMock(Update::class);
+        $update->method('applyUpdates')->willReturn(true);
+
+        $controller = $this->createControllerWithDependencies(
+            $this->createStub(Upgrade::class),
+            $this->createStub(Api::class),
+            $update,
+            $this->createStub(EnvironmentConfigurator::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->updateDatabase();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('Database successfully updated.', $payload['success']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateDatabaseReturnsBadGatewayWhenExceptionIsThrown(): void
+    {
+        $update = $this->createMock(Update::class);
+        $update->method('applyUpdates')->willThrowException(new Exception('broken update'));
+
+        $controller = $this->createControllerWithDependencies(
+            $this->createStub(Upgrade::class),
+            $this->createStub(Api::class),
+            $update,
+            $this->createStub(EnvironmentConfigurator::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->updateDatabase();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_GATEWAY, $response->getStatusCode());
+        self::assertStringContainsString('broken update', $payload['error']);
     }
 }

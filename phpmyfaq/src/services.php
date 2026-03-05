@@ -57,6 +57,7 @@ use phpMyFAQ\Controller\Administration\Api\ExportController as AdminApiExportCon
 use phpMyFAQ\Controller\Administration\Api\FaqController as AdminApiFaqController;
 use phpMyFAQ\Controller\Administration\Api\GlossaryController as AdminApiGlossaryController;
 use phpMyFAQ\Controller\Administration\Api\InstanceController as AdminApiInstanceController;
+use phpMyFAQ\Controller\Administration\Api\LdapController as AdminApiLdapController;
 use phpMyFAQ\Controller\Administration\Api\OpenSearchController as AdminApiOpenSearchController;
 use phpMyFAQ\Controller\Administration\Api\PageController as AdminApiPageController;
 use phpMyFAQ\Controller\Administration\Api\QuestionController as AdminApiQuestionController;
@@ -150,6 +151,7 @@ use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Search\Elasticsearch;
 use phpMyFAQ\Instance\Search\OpenSearch;
+use phpMyFAQ\Ldap;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Mail;
@@ -504,6 +506,10 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.configuration'),
     ]);
 
+    $services->set('phpmyfaq.ldap', Ldap::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+
     $services->set('phpmyfaq.language', Language::class)->args([
         service('phpmyfaq.configuration'),
         service('session'),
@@ -808,6 +814,9 @@ return static function (ContainerConfigurator $container): void {
     ]);
     $services->set(AdminApiInstanceController::class, AdminApiInstanceController::class)->args([
         service('phpmyfaq.instance'),
+    ]);
+    $services->set(AdminApiLdapController::class, AdminApiLdapController::class)->args([
+        service('phpmyfaq.ldap'),
     ]);
     $services->set(AdminApiOpenSearchController::class, AdminApiOpenSearchController::class)->args([
         service('phpmyfaq.instance.opensearch'),

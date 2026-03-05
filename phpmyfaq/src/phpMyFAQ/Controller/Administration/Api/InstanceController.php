@@ -177,9 +177,9 @@ final class InstanceController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $instanceId = Filter::filterVar($data->instanceId, FILTER_SANITIZE_SPECIAL_CHARS);
+        $instanceId = Filter::filterVar($data->instanceId ?? null, FILTER_VALIDATE_INT);
 
-        if (null !== $instanceId) {
+        if ($instanceId !== false && null !== $instanceId) {
             $client = new Client($this->configuration);
             $client->setFileSystem(new Filesystem());
             $clientData = $client->getById($instanceId);

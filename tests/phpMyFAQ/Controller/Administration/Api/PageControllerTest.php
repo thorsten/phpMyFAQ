@@ -108,6 +108,13 @@ final class PageControllerTest extends TestCase
         return new PageController($this->createStub(Elasticsearch::class), $this->createStub(OpenSearch::class));
     }
 
+    private function createControllerWithSearchDependencies(
+        Elasticsearch $elasticsearch,
+        OpenSearch $openSearch,
+    ): PageController {
+        return new PageController($elasticsearch, $openSearch);
+    }
+
     /**
      * @throws \Exception
      */
@@ -458,6 +465,180 @@ final class PageControllerTest extends TestCase
         $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;
 
         return $token;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateReturnsSuccessAndIndexesWhenSearchIsEnabled(): void
+    {
+        $this->configuration->set('search.enableElasticsearch', true);
+        $this->configuration->set('search.enableOpenSearch', true);
+
+        $elasticsearch = $this->createMock(Elasticsearch::class);
+        $elasticsearch->expects($this->once())->method('indexCustomPage');
+
+        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch->expects($this->once())->method('indexCustomPage');
+
+        $controller = $this->createControllerWithSearchDependencies($elasticsearch, $openSearch);
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'save-page');
+        $controller->setContainer($container);
+
+        $slug = 'unit-test-create-' . bin2hex(random_bytes(4));
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'pageTitle' => 'Unit Test Page',
+            'slug' => $slug,
+            'content' => 'Some content',
+            'authorName' => 'Test Author',
+            'authorEmail' => 'test@example.com',
+            'active' => true,
+            'lang' => 'en',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('id', $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateReturnsSuccessAndUpdatesIndexesWhenSearchIsEnabled(): void
+    {
+        $this->configuration->set('search.enableElasticsearch', true);
+        $this->configuration->set('search.enableOpenSearch', true);
+
+        $pageId = $this->createPageViaController('unit-test-update-' . bin2hex(random_bytes(4)));
+
+        $elasticsearch = $this->createMock(Elasticsearch::class);
+        $elasticsearch->expects($this->once())->method('updateCustomPage');
+
+        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch->expects($this->once())->method('updateCustomPage');
+
+        $controller = $this->createControllerWithSearchDependencies($elasticsearch, $openSearch);
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-page');
+        $controller->setContainer($container);
+
+        $response = $controller->update(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'id' => $pageId,
+            'pageTitle' => 'Updated Unit Test Page',
+            'slug' => 'updated-unit-test-' . $pageId,
+            'content' => 'Updated content',
+            'authorName' => 'Test Author',
+            'authorEmail' => 'test@example.com',
+            'active' => true,
+            'lang' => 'en',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testActivateReturnsSuccessAndUpdatesIndexesWhenSearchIsEnabled(): void
+    {
+        $this->configuration->set('search.enableElasticsearch', true);
+        $this->configuration->set('search.enableOpenSearch', true);
+
+        $pageId = $this->createPageViaController('unit-test-activate-' . bin2hex(random_bytes(4)));
+
+        $elasticsearch = $this->createMock(Elasticsearch::class);
+        $elasticsearch->expects($this->once())->method('updateCustomPage');
+
+        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch->expects($this->once())->method('updateCustomPage');
+
+        $controller = $this->createControllerWithSearchDependencies($elasticsearch, $openSearch);
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'activate-page');
+        $controller->setContainer($container);
+
+        $response = $controller->activate(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'id' => $pageId,
+            'status' => false,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsSuccessAndDeletesFromIndexesWhenSearchIsEnabled(): void
+    {
+        $this->configuration->set('search.enableElasticsearch', true);
+        $this->configuration->set('search.enableOpenSearch', true);
+
+        $pageId = $this->createPageViaController('unit-test-delete-' . bin2hex(random_bytes(4)));
+
+        $elasticsearch = $this->createMock(Elasticsearch::class);
+        $elasticsearch->expects($this->once())->method('deleteCustomPage')->with($pageId, 'en');
+
+        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch->expects($this->once())->method('deleteCustomPage')->with($pageId, 'en');
+
+        $controller = $this->createControllerWithSearchDependencies($elasticsearch, $openSearch);
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-page');
+        $controller->setContainer($container);
+
+        $response = $controller->delete(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'id' => $pageId,
+            'lang' => 'en',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function createPageViaController(string $slug): int
+    {
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'save-page');
+        $controller->setContainer($container);
+
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'pageTitle' => 'Seed page',
+            'slug' => $slug,
+            'content' => 'Seed content',
+            'authorName' => 'Seeder',
+            'authorEmail' => 'seed@example.com',
+            'active' => true,
+            'lang' => 'en',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        return (int) $payload['id'];
     }
 
     private function createAuthenticatedContainer(): ContainerInterface

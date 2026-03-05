@@ -249,6 +249,14 @@ abstract class AbstractAdministrationController extends AbstractController
             );
         }
 
+        if ($this->configuration->isLdapActive()) {
+            $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
+                PermissionType::CONFIGURATION_EDIT->value,
+                'msgAdminHeaderLdap',
+                'ldap',
+            );
+        }
+
         if ($this->configuration->get(item: 'search.enableOpenSearch')) {
             $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
                 PermissionType::CONFIGURATION_EDIT->value,
@@ -341,6 +349,7 @@ abstract class AbstractAdministrationController extends AbstractController
                 break;
             case 'admin.configuration':
             case 'admin.elasticsearch':
+            case 'admin.ldap':
             case 'admin.opensearch':
             case 'admin.forms':
             case 'admin.instance.edit':

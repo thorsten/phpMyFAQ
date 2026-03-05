@@ -172,10 +172,8 @@ final class GroupControllerTest extends TestCase
              VALUES
                 (2, 'testUser', NULL, NULL, NULL, 'active', NULL, 'local', NULL, NULL, 1, 0, 0, NULL, NULL, NULL, NULL, NULL)",
         );
-        $this->dbHandle->query(
-            "INSERT OR REPLACE INTO faquserdata (user_id, last_modified, display_name, email, is_visible, twofactor_enabled, secret)
-             VALUES (2, '20260302120000', 'testUser', '', 1, 0, '')",
-        );
+        $this->dbHandle->query("INSERT OR REPLACE INTO faquserdata (user_id, last_modified, display_name, email, is_visible, twofactor_enabled, secret)
+             VALUES (2, '20260302120000', 'testUser', '', 1, 0, '')");
         $this->dbHandle->query(sprintf(
             "INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (%d, 'Editors', 'Editorial team', 0)",
             self::TEST_GROUP_ID,

@@ -108,6 +108,22 @@ final class VotingControllerFlowTest extends ApiControllerTestCase
         ], JSON_THROW_ON_ERROR)));
     }
 
+    public function testCreateThrowsExceptionWhenVoteValueIsNotAnInteger(): void
+    {
+        $controller = new VotingController($this->createStub(Rating::class), $this->createStub(UserSession::class));
+        $currentUser = $this->createAuthenticatedUserMock();
+        $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
+        $this->injectControllerState($controller, $currentUser);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Invalid vote value');
+
+        $controller->create(Request::create('/api/voting', 'POST', content: json_encode([
+            'id' => 42,
+            'value' => 'not-an-integer',
+        ], JSON_THROW_ON_ERROR)));
+    }
+
     public function testCreateReturnsBadRequestWhenVotingIsNotAllowed(): void
     {
         $rating = $this->createMock(Rating::class);

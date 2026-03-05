@@ -2,6 +2,8 @@
 
 namespace phpMyFAQ\Controller\Api;
 
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,6 +28,21 @@ class TestApiConstructorController extends AbstractApiController
 #[AllowMockObjectsWithoutExpectations]
 class AttachmentControllerTest extends TestCase
 {
+    private ?Sqlite3 $dbHandle = null;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, null);
+
+        $this->dbHandle = new Sqlite3();
+        $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        new Configuration($this->dbHandle);
+    }
+
     public function testConstructorWithApiEnabled(): void
     {
         $controller = new TestApiConstructorController(true);

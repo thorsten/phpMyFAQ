@@ -33,6 +33,7 @@ import {
   handleStopWords,
   handleElasticsearch,
   handleCheckForUpdates,
+  handleLdap,
   handleSaveConfiguration,
   handleFormEdit,
   handleFormTranslations,
@@ -177,8 +178,9 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   // Configuration → Online Update
   handleCheckForUpdates();
 
-  // Configuration → Elasticsearch / OpenSearch configuration
+  // Configuration → Elasticsearch / OpenSearch / LDAP configuration
   await handleElasticsearch();
+  await handleLdap();
   await handleOpenSearch();
 
   // Import & Export → Import Records

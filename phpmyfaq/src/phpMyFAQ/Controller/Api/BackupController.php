@@ -124,7 +124,7 @@ final class BackupController extends AbstractController
             $response->setStatusCode(Response::HTTP_OK);
             // Remove temporary ZipArchive
             unlink($backupFile);
-            return $response->send();
+            return $response;
         }
 
         $tableNames = $backup->getBackupTableNames($backupType);
@@ -143,7 +143,7 @@ final class BackupController extends AbstractController
             $response->headers->set(key: 'Content-Type', values: 'application/octet-stream');
             $response->headers->set(key: 'Content-Disposition', values: $disposition);
             $response->setStatusCode(Response::HTTP_OK);
-            return $response->send();
+            return $response;
         } catch (SodiumException) {
             return new Response(
                 content: 'An error occurred while creating the backup.',

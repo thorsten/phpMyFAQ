@@ -14,11 +14,11 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -106,10 +106,16 @@ final class DashboardControllerTest extends TestCase
     private function createAuthenticatedContainer(): ContainerInterface
     {
         $permission = $this->createStub(PermissionInterface::class);
-        $permission->method('hasPermission')->willReturnCallback(
-            static fn (int $userId, mixed $right): bool => $userId === 42
-                && in_array($right, [PermissionType::STATISTICS_VIEWLOGS, PermissionType::STATISTICS_VIEWLOGS->value], true)
-        );
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => $userId === 42
+                && in_array(
+                    $right,
+                    [PermissionType::STATISTICS_VIEWLOGS, PermissionType::STATISTICS_VIEWLOGS->value],
+                    true,
+                ),
+            );
 
         $currentUser = $this->createStub(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -119,14 +125,16 @@ final class DashboardControllerTest extends TestCase
         $session = new Session(new MockArraySessionStorage());
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('get')->willReturnCallback(function (string $id) use ($currentUser, $session) {
-            return match ($id) {
-                'phpmyfaq.configuration' => $this->configuration,
-                'phpmyfaq.user.current_user' => $currentUser,
-                'session' => $session,
-                default => null,
-            };
-        });
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    default => null,
+                };
+            });
 
         return $container;
     }
@@ -200,7 +208,11 @@ final class DashboardControllerTest extends TestCase
     {
         $this->configuration->set('main.enableUserTracking', 'true');
         $adminSession = $this->createMock(AdminSession::class);
-        $adminSession->expects($this->once())->method('getLast30DaysVisits')->with(1234567890)->willReturn(['visits' => 5]);
+        $adminSession
+            ->expects($this->once())
+            ->method('getLast30DaysVisits')
+            ->with(1234567890)
+            ->willReturn(['visits' => 5]);
 
         $controller = $this->createControllerWithSession($adminSession);
         $controller->setContainer($this->createAuthenticatedContainer());
@@ -210,5 +222,52 @@ final class DashboardControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(['visits' => 5], $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testTopTenReturnsBadRequestWhenUserTrackingIsDisabled(): void
+    {
+        $this->configuration->set('main.enableUserTracking', 'false');
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->topTen();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('User tracking is disabled.', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testTopTenReturnsDataWhenUserTrackingIsEnabled(): void
+    {
+        $this->configuration->set('main.enableUserTracking', 'true');
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->topTen();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertIsArray($payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testVersionsReturnsBadRequestWhenVersionLookupFails(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->versions();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertArrayHasKey('error', $payload);
     }
 }

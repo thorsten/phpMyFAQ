@@ -29,9 +29,7 @@ class ClientRepositoryTest extends TestCase
         Database::setTablePrefix('');
 
         $this->db = $this->createMock(DatabaseDriver::class);
-        $this->db->method('escape')->willReturnCallback(
-            static fn(string $value): string => $value
-        );
+        $this->db->method('escape')->willReturnCallback(static fn(string $value): string => $value);
 
         $configuration = $this->createStub(Configuration::class);
         $configuration->method('getDb')->willReturn($this->db);
