@@ -12,6 +12,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Template\ThemeManager;
@@ -43,6 +44,7 @@ final class ConfigurationTabControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Token::resetInstanceForTests();
 
         Strings::init();
 
@@ -51,6 +53,10 @@ final class ConfigurationTabControllerTest extends TestCase
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
+
+        if (!defined('PMF_LANGUAGE_DIR')) {
+            define('PMF_LANGUAGE_DIR', PMF_TRANSLATION_DIR);
+        }
 
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
@@ -80,6 +86,7 @@ final class ConfigurationTabControllerTest extends TestCase
 
     protected function tearDown(): void
     {
+        Token::resetInstanceForTests();
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
         $configurationProperty->setValue(null, $this->previousConfiguration);
@@ -233,7 +240,7 @@ final class ConfigurationTabControllerTest extends TestCase
         self::assertStringContainsString('<option', (string) $response->getContent());
     }
 
-    private function createAuthenticatedContainer(): ContainerInterface
+    private function createAuthenticatedContainer(?Session $session = null): ContainerInterface
     {
         $permission = $this->createMock(PermissionInterface::class);
         $permission
@@ -250,7 +257,7 @@ final class ConfigurationTabControllerTest extends TestCase
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(42);
 
-        $session = new Session(new MockArraySessionStorage());
+        $session ??= new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);
 
         $container = $this->createStub(ContainerInterface::class);
@@ -267,5 +274,62 @@ final class ConfigurationTabControllerTest extends TestCase
             });
 
         return $container;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadThemeReturnsBadRequestForMissingFileWithValidCsrf(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('theme-manager');
+        $this->setCsrfCookie('theme-manager', $csrfToken);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $request = new Request([], ['pmf-csrf-token' => $csrfToken]);
+        $response = $controller->uploadTheme($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('No valid ZIP file uploaded.', $payload['error']);
+        $this->removeCsrfCookie('theme-manager');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveReturnsSuccessWithValidCsrfAndMinimalPayload(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('configuration');
+        $this->setCsrfCookie('configuration', $csrfToken);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $request = new Request([], [
+            'pmf-csrf-token' => $csrfToken,
+            'availableFields' => json_encode([], JSON_THROW_ON_ERROR),
+            'edit' => [],
+        ]);
+
+        $response = $controller->save($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+        $this->removeCsrfCookie('configuration');
+    }
+
+    private function setCsrfCookie(string $page, string $token): void
+    {
+        $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;
+    }
+
+    private function removeCsrfCookie(string $page): void
+    {
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)]);
     }
 }

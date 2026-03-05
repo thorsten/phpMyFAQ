@@ -32,9 +32,7 @@ class RefreshTokenRepositoryTest extends TestCase
         Database::setTablePrefix('');
 
         $this->db = $this->createMock(DatabaseDriver::class);
-        $this->db->method('escape')->willReturnCallback(
-            static fn(string $value): string => $value
-        );
+        $this->db->method('escape')->willReturnCallback(static fn(string $value): string => $value);
 
         $configuration = $this->createStub(Configuration::class);
         $configuration->method('getDb')->willReturn($this->db);
@@ -56,7 +54,10 @@ class RefreshTokenRepositoryTest extends TestCase
     public function testPersistNewRefreshTokenInsertsRow(): void
     {
         $this->db->method('now')->willReturn('NOW()');
-        $this->db->expects($this->once())->method('query')->willReturn(true);
+        $this->db
+            ->expects($this->once())
+            ->method('query')
+            ->willReturn(true);
 
         $accessToken = $this->createStub(AccessTokenEntityInterface::class);
         $accessToken->method('getIdentifier')->willReturn('access-token-1');
@@ -88,7 +89,9 @@ class RefreshTokenRepositoryTest extends TestCase
 
     public function testRevokeRefreshTokenExecutesUpdate(): void
     {
-        $this->db->expects($this->once())->method('query')
+        $this->db
+            ->expects($this->once())
+            ->method('query')
             ->with($this->stringContains('UPDATE'));
 
         $this->repository->revokeRefreshToken('refresh-to-revoke');

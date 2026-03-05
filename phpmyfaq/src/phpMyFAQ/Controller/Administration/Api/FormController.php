@@ -83,8 +83,8 @@ final class FormController extends AbstractController
         $this->userHasPermission(PermissionType::FORMS_EDIT);
         $data = json_decode($request->getContent());
         $label = Filter::filterVar($data->label, FILTER_SANITIZE_SPECIAL_CHARS);
-        $formId = Filter::filterVar($data->formId, FILTER_SANITIZE_NUMBER_INT);
-        $inputId = Filter::filterVar($data->inputId, FILTER_SANITIZE_NUMBER_INT);
+        $formId = (int) Filter::filterVar($data->formId, FILTER_VALIDATE_INT);
+        $inputId = (int) Filter::filterVar($data->inputId, FILTER_VALIDATE_INT);
         $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $forms = new Forms($this->configuration);
@@ -114,8 +114,8 @@ final class FormController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
         $data = json_decode($request->getContent());
-        $formId = Filter::filterVar($data->formId, FILTER_SANITIZE_NUMBER_INT);
-        $inputId = Filter::filterVar($data->inputId, FILTER_SANITIZE_NUMBER_INT);
+        $formId = (int) Filter::filterVar($data->formId, FILTER_VALIDATE_INT);
+        $inputId = (int) Filter::filterVar($data->inputId, FILTER_VALIDATE_INT);
         $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $forms = new Forms($this->configuration);
@@ -140,8 +140,8 @@ final class FormController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        $formId = Filter::filterVar($data->formId, FILTER_SANITIZE_NUMBER_INT);
-        $inputId = Filter::filterVar($data->inputId, FILTER_SANITIZE_NUMBER_INT);
+        $formId = (int) Filter::filterVar($data->formId, FILTER_VALIDATE_INT);
+        $inputId = (int) Filter::filterVar($data->inputId, FILTER_VALIDATE_INT);
         $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
         $translation = Filter::filterVar($data->translation, FILTER_SANITIZE_SPECIAL_CHARS);
 

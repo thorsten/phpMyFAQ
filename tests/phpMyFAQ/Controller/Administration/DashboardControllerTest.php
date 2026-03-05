@@ -4,23 +4,30 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Administration\Faq as AdminFaq;
+use phpMyFAQ\Administration\Helper;
 use phpMyFAQ\Administration\LatestUsers;
 use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
+use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -114,5 +121,140 @@ final class DashboardControllerTest extends TestCase
 
         $this->expectException(UnauthorizedHttpException::class);
         $controller->index($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexRendersDashboardForAuthenticatedUser(): void
+    {
+        $adminSession = $this->createStub(AdminSession::class);
+        $adminSession->method('getNumberOfSessions')->willReturn(3);
+        $adminSession->method('getNumberOfOnlineUsers')->willReturn(1);
+
+        $adminFaq = $this->createStub(AdminFaq::class);
+        $adminFaq->method('getInactiveFaqsData')->willReturn([]);
+
+        $backup = $this->createStub(Backup::class);
+        $backup
+            ->method('getLastBackupInfo')
+            ->willReturn([
+                'lastBackupDate' => '2026-03-01',
+                'isBackupOlderThan30Days' => false,
+            ]);
+
+        $controller = new DashboardController(
+            $adminSession,
+            $adminFaq,
+            $backup,
+            new LatestUsers($this->configuration),
+            $this->createStub(Api::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $request = new Request();
+        $request->attributes->set('_route', 'admin.dashboard');
+        $response = $controller->index($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('Dashboard', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexRendersVersionCheckErrorWhenApiThrows(): void
+    {
+        $this->overrideConfigurationValues(['main.enableAutoUpdateHint' => false]);
+
+        $adminSession = $this->createStub(AdminSession::class);
+        $adminSession->method('getNumberOfSessions')->willReturn(3);
+        $adminSession->method('getNumberOfOnlineUsers')->willReturn(1);
+
+        $adminFaq = $this->createStub(AdminFaq::class);
+        $adminFaq->method('getInactiveFaqsData')->willReturn([]);
+
+        $backup = $this->createStub(Backup::class);
+        $backup
+            ->method('getLastBackupInfo')
+            ->willReturn([
+                'lastBackupDate' => '2026-03-01',
+                'isBackupOlderThan30Days' => false,
+            ]);
+
+        $adminApi = $this->createStub(Api::class);
+        $adminApi->method('getVersions')->willThrowException(new Exception('Version check failed'));
+
+        $controller = new DashboardController(
+            $adminSession,
+            $adminFaq,
+            $backup,
+            new LatestUsers($this->configuration),
+            $adminApi,
+        );
+        $controller->setContainer($this->createAuthenticatedContainer(allowConfigEdit: true));
+
+        $request = new Request();
+        $request->attributes->set('_route', 'admin.dashboard');
+        $request->attributes->set('param', 'version');
+        $response = $controller->index($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('id="phpmyfaq-latest-version"', (string) $response->getContent());
+    }
+
+    private function createAuthenticatedContainer(bool $allowConfigEdit = false): ContainerInterface
+    {
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => (
+                    $userId === 42
+                    && ($right !== PermissionType::CONFIGURATION_EDIT->value || $allowConfigEdit)
+                ),
+            );
+
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(42);
+        $currentUser
+            ->method('getUserData')
+            ->willReturnMap([
+                ['display_name', 'Test User'],
+                ['email',        'test@example.com'],
+            ]);
+
+        $session = new Session(new MockArraySessionStorage());
+        $adminLog = $this->createStub(AdminLog::class);
+        $adminHelper = $this->createStub(Helper::class);
+        $adminHelper->method('canAccessContent')->willReturn(true);
+        $adminHelper->method('addMenuEntry')->willReturn('');
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog, $adminHelper) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    'phpmyfaq.admin.helper' => $adminHelper,
+                    default => null,
+                };
+            });
+
+        return $container;
+    }
+
+    private function overrideConfigurationValues(array $values): void
+    {
+        $reflection = new \ReflectionClass(Configuration::class);
+        $configProperty = $reflection->getProperty('config');
+        $config = $configProperty->getValue($this->configuration);
+        self::assertIsArray($config);
+        $configProperty->setValue($this->configuration, array_merge($config, $values));
     }
 }

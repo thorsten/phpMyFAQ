@@ -172,6 +172,28 @@ final class CategoryControllerTest extends TestCase
         $controller->create($request);
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateThrowsForInvalidCsrfWhenAuthenticated(): void
+    {
+        $controller = new CategoryController(
+            new AdminCategory($this->configuration),
+            $this->createStub(Order::class),
+            $this->createStub(CategoryPermission::class),
+            $this->createStub(Image::class),
+            $this->createStub(Seo::class),
+            $this->createStub(UserHelper::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $request = new Request([], ['pmf-csrf-token' => 'invalid-token']);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid CSRF token');
+        $controller->update($request);
+    }
+
     private function createAuthenticatedContainer(): ContainerInterface
     {
         $permission = $this->createMock(PermissionInterface::class);

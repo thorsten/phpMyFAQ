@@ -19,6 +19,7 @@ use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Push\WebPushService;
 use phpMyFAQ\Question;
 use phpMyFAQ\Seo;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
@@ -29,6 +30,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -50,6 +52,7 @@ final class FaqControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Token::resetInstanceForTests();
 
         Strings::init();
 
@@ -87,6 +90,7 @@ final class FaqControllerTest extends TestCase
 
     protected function tearDown(): void
     {
+        Token::resetInstanceForTests();
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
         $configurationProperty->setValue(null, $this->previousConfiguration);
@@ -118,7 +122,23 @@ final class FaqControllerTest extends TestCase
         );
     }
 
-    private function createAuthenticatedContainer(): ContainerInterface
+    private function createControllerWithAdminFaq(FaqAdministration $adminFaq): FaqController
+    {
+        return new FaqController(
+            $this->createStub(Faq::class),
+            $adminFaq,
+            $this->createStub(Tags::class),
+            $this->createStub(Notification::class),
+            $this->createStub(Changelog::class),
+            $this->createStub(Visits::class),
+            $this->createStub(Seo::class),
+            $this->createStub(Question::class),
+            $this->createStub(AdminLog::class),
+            $this->createStub(WebPushService::class),
+        );
+    }
+
+    private function createAuthenticatedContainer(?Session $session = null): ContainerInterface
     {
         $permission = $this->createMock(PermissionInterface::class);
         $permission
@@ -143,7 +163,7 @@ final class FaqControllerTest extends TestCase
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(42);
 
-        $session = new Session(new MockArraySessionStorage());
+        $session ??= new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);
 
         $container = $this->createStub(ContainerInterface::class);
@@ -413,5 +433,238 @@ final class FaqControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
         self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testActivateReturnsBadRequestWhenFaqIdsAreMissingWithValidCsrf(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [],
+            'faqLanguage' => 'en',
+            'checked' => true,
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->activate($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('No FAQ IDs provided.', $payload['error']);
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testStickyReturnsBadRequestWhenFaqIdsAreMissingWithValidCsrf(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [],
+            'faqLanguage' => 'en',
+            'checked' => true,
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->sticky($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('No FAQ IDs provided.', $payload['error']);
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testActivateReturnsBadRequestWhenLanguageIsUnsupportedWithValidCsrf(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'zz',
+            'checked' => true,
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->activate($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_entry_savedfail'), $payload['error']);
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testStickyReturnsBadRequestWhenLanguageIsUnsupportedWithValidCsrf(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'zz',
+            'checked' => true,
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->sticky($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_entry_savedfail'), $payload['error']);
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSearchReturnsSuccessWhenSearchStringIsNullWithValidCsrf(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'search' => null,
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->search($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveOrderOfStickyFaqsReturnsSuccessWithValidCsrf(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('order-stickyfaqs');
+        $this->setCsrfCookie('order-stickyfaqs', $csrfToken);
+
+        $adminFaq = $this->createMock(FaqAdministration::class);
+        $adminFaq->expects($this->once())->method('setStickyFaqOrder')->with([5, 3, 1]);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [5, 3, 1],
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createControllerWithAdminFaq($adminFaq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->saveOrderOfStickyFaqs($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+        $this->removeCsrfCookie('order-stickyfaqs');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testImportReturnsBadRequestWhenNoFileSubmittedForAuthenticatedUser(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->import(new Request());
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Bad request: There is no file submitted.', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testImportReturnsUnauthorizedForInvalidCsrfWithSubmittedFile(): void
+    {
+        $tempFile = tempnam(sys_get_temp_dir(), 'pmf-faq-import-');
+        self::assertNotFalse($tempFile);
+        file_put_contents($tempFile, "question,answer\nQ,A\n");
+        $uploadedFile = new UploadedFile($tempFile, 'faq.csv', null, null, true);
+
+        $request = new Request([], [], ['csrf' => 'invalid-token'], [], ['file' => $uploadedFile]);
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->import($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testImportReturnsBadRequestWhenSubmittedFileIsNotCsv(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('importfaqs');
+        $this->setCsrfCookie('importfaqs', $csrfToken);
+
+        $tempFile = tempnam(sys_get_temp_dir(), 'pmf-faq-import-');
+        self::assertNotFalse($tempFile);
+        file_put_contents($tempFile, 'not a csv import');
+        $uploadedFile = new UploadedFile($tempFile, 'faq.txt', null, null, true);
+
+        $request = new Request([], [], ['csrf' => $csrfToken], [], ['file' => $uploadedFile]);
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->import($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Bad request: The file is not a CSV file.', $payload['error']);
+        $this->removeCsrfCookie('importfaqs');
+    }
+
+    private function setCsrfCookie(string $page, string $token): void
+    {
+        $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;
+    }
+
+    private function removeCsrfCookie(string $page): void
+    {
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)]);
     }
 }

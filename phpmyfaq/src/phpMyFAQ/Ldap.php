@@ -213,7 +213,7 @@ class Ldap
 
         if (!$entryId) {
             $this->errno = ldap_errno($this->ds);
-            $this->error = sprintf(format: 'Cannot get the value(s). Error: %s', values: ldap_error($this->ds));
+            $this->error = sprintf('Cannot get the value(s). Error: %s', ldap_error($this->ds));
 
             return false;
         }

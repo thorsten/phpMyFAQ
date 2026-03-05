@@ -16,11 +16,11 @@ use phpMyFAQ\Session\RedisSessionHandler;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -106,9 +106,14 @@ class ConfigurationControllerTest extends TestCase
     private function createAuthenticatedContainer(): ContainerInterface
     {
         $permission = $this->createStub(PermissionInterface::class);
-        $permission->method('hasPermission')->willReturnCallback(
-            static fn (int $userId, mixed $right): bool => $userId === 42 && $right === PermissionType::CONFIGURATION_EDIT->value
-        );
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => (
+                    $userId === 42
+                    && $right === PermissionType::CONFIGURATION_EDIT->value
+                ),
+            );
 
         $currentUser = $this->createStub(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -119,15 +124,17 @@ class ConfigurationControllerTest extends TestCase
         $adminLog = $this->createStub(\phpMyFAQ\Administration\AdminLog::class);
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('get')->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
-            return match ($id) {
-                'phpmyfaq.configuration' => $this->configuration,
-                'phpmyfaq.user.current_user' => $currentUser,
-                'session' => $session,
-                'phpmyfaq.admin.admin-log' => $adminLog,
-                default => null,
-            };
-        });
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    default => null,
+                };
+            });
 
         return $container;
     }
@@ -367,7 +374,10 @@ class ConfigurationControllerTest extends TestCase
         $mail = $this->createMock(Mail::class);
         $mail->expects($this->once())->method('addTo');
         $mail->expects($this->once())->method('setReplyTo');
-        $mail->expects($this->once())->method('send')->willThrowException(new \RuntimeException('Mail transport failed.'));
+        $mail
+            ->expects($this->once())
+            ->method('send')
+            ->willThrowException(new \RuntimeException('Mail transport failed.'));
 
         $controller = new ConfigurationController($mail);
         $container = $this->createAuthenticatedContainer();
@@ -405,9 +415,6 @@ class ConfigurationControllerTest extends TestCase
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        self::assertSame(
-            'Unsupported Redis DSN scheme "invalid" for sessions.',
-            $payload['error'],
-        );
+        self::assertSame('Unsupported Redis DSN scheme "invalid" for sessions.', $payload['error']);
     }
 }

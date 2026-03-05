@@ -19,10 +19,7 @@ final class CustomPageControllerWebTest extends ControllerWebTestCase
         self::assertInstanceOf(Configuration::class, $configuration);
 
         $db = $configuration->getDb();
-        $db->query(sprintf(
-            "DELETE FROM faqcustompages WHERE id = %d AND lang = 'en'",
-            $id,
-        ));
+        $db->query(sprintf("DELETE FROM faqcustompages WHERE id = %d AND lang = 'en'", $id));
         $db->query(sprintf(
             "INSERT INTO faqcustompages
                 (id, lang, page_title, slug, content, author_name, author_email, active, created, seo_robots)

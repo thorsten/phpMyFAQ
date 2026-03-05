@@ -11,6 +11,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -40,6 +41,7 @@ class FormControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Token::resetInstanceForTests();
 
         Strings::init();
 
@@ -77,6 +79,13 @@ class FormControllerTest extends TestCase
 
     protected function tearDown(): void
     {
+        Token::resetInstanceForTests();
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('activate-input'), 0, 10)]);
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('require-input'), 0, 10)]);
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('edit-translation'), 0, 10)]);
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('delete-translation'), 0, 10)]);
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('add-translation'), 0, 10)]);
+
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
         $configurationProperty->setValue(null, $this->previousConfiguration);
@@ -95,9 +104,14 @@ class FormControllerTest extends TestCase
     private function createAuthenticatedContainer(): ContainerInterface
     {
         $permission = $this->createStub(PermissionInterface::class);
-        $permission->method('hasPermission')->willReturnCallback(
-            static fn (int $userId, mixed $right): bool => $userId === 42 && $right === PermissionType::FORMS_EDIT->value
-        );
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => (
+                    $userId === 42
+                    && $right === PermissionType::FORMS_EDIT->value
+                ),
+            );
 
         $currentUser = $this->createStub(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -107,16 +121,30 @@ class FormControllerTest extends TestCase
         $session = new Session(new MockArraySessionStorage());
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('get')->willReturnCallback(function (string $id) use ($currentUser, $session) {
-            return match ($id) {
-                'phpmyfaq.configuration' => $this->configuration,
-                'phpmyfaq.user.current_user' => $currentUser,
-                'session' => $session,
-                default => null,
-            };
-        });
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    default => null,
+                };
+            });
 
         return $container;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function createValidCsrfToken(Session $session, string $page): string
+    {
+        Token::resetInstanceForTests();
+        $token = Token::getInstance($session)->getTokenString($page);
+        $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;
+
+        return $token;
     }
 
     /**
@@ -326,5 +354,137 @@ class FormControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
         self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testActivateInputReturnsSuccessForValidCsrfWhenAuthenticated(): void
+    {
+        $controller = new FormController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'activate-input');
+        $controller->setContainer($container);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'formid' => 1,
+            'inputid' => 1,
+            'checked' => 1,
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->activateInput($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('msgEditFormsSuccessful'), $payload['success']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSetInputAsRequiredReturnsSuccessForValidCsrfWhenAuthenticated(): void
+    {
+        $controller = new FormController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'require-input');
+        $controller->setContainer($container);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'formid' => 1,
+            'inputid' => 1,
+            'checked' => 1,
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->setInputAsRequired($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('msgEditFormsSuccessful'), $payload['success']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testEditTranslationReturnsSuccessForValidCsrfWhenAuthenticated(): void
+    {
+        $controller = new FormController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'edit-translation');
+        $controller->setContainer($container);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'formId' => 1,
+            'inputId' => 1,
+            'lang' => 'en',
+            'label' => 'Updated label',
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->editTranslation($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('msgFormsEditTranslationSuccessful'), $payload['success']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteTranslationReturnsSuccessForValidCsrfWhenAuthenticated(): void
+    {
+        $controller = new FormController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-translation');
+        $controller->setContainer($container);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'formId' => 1,
+            'inputId' => 1,
+            'lang' => 'de',
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->deleteTranslation($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('msgFormsDeleteTranslationSuccessful'), $payload['success']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAddTranslationReturnsSuccessForValidCsrfWhenAuthenticated(): void
+    {
+        $controller = new FormController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'add-translation');
+        $controller->setContainer($container);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'formId' => 1,
+            'inputId' => 1,
+            'lang' => 'Deutsch',
+            'translation' => 'Beispiel',
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->addTranslation($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('msgFormsAddTranslationSuccessful'), $payload['success']);
     }
 }

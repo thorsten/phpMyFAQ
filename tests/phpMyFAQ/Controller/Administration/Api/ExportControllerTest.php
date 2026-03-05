@@ -234,4 +234,64 @@ final class ExportControllerTest extends TestCase
         self::assertSame('text/csv', $response->headers->get('Content-Type'));
         self::assertStringContainsString('ID', (string) $response->getContent());
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExportFileOutputsErrorMessageForUnsupportedExportType(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $request = new Request([], [
+            'categoryId' => 1,
+            'downwards' => 'false',
+            'disposition' => 'inline',
+            'export-type' => 'unsupported-format',
+        ]);
+
+        ob_start();
+        $controller->exportFile($request);
+        $output = (string) ob_get_clean();
+
+        self::assertStringContainsString('Export not implemented!', $output);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExportReportIncludesUrlAndVisitsWhenRequested(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $token = Token::getInstance($session)->getTokenString('create-report');
+        $_COOKIE['pmf-csrf-token-' . substr(md5('create-report'), 0, 10)] = $token;
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $token,
+                'category' => true,
+                'sub_category' => true,
+                'translations' => true,
+                'language' => true,
+                'id' => true,
+                'sticky' => true,
+                'title' => true,
+                'creation_date' => true,
+                'owner' => true,
+                'last_modified_person' => true,
+                'url' => true,
+                'visits' => true,
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->exportReport($request);
+        $content = (string) $response->getContent();
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('text/csv', $response->headers->get('Content-Type'));
+        self::assertStringContainsString('URL,Visits', $content);
+    }
 }

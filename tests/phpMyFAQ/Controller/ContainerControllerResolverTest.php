@@ -58,6 +58,35 @@ final class ContainerControllerResolverTest extends TestCase
 
         self::assertFalse($resolver->getController(new Request()));
     }
+
+    public function testGetControllerThrowsForUnknownControllerClass(): void
+    {
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects($this->never())->method('has');
+        $container->expects($this->never())->method('get');
+
+        $resolver = new ContainerControllerResolver($container);
+        $request = new Request();
+        $request->attributes->set('_controller', 'phpMyFAQ\\Tests\\MissingController::index');
+
+        $this->expectException(\Error::class);
+
+        $resolver->getController($request);
+    }
+
+    public function testGetControllerBypassesContainerForCallableController(): void
+    {
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects($this->never())->method('has');
+        $container->expects($this->never())->method('get');
+
+        $resolver = new ContainerControllerResolver($container);
+        $request = new Request();
+        $callable = static fn(): string => 'ok';
+        $request->attributes->set('_controller', $callable);
+
+        self::assertSame($callable, $resolver->getController($request));
+    }
 }
 
 final class ResolverServiceController

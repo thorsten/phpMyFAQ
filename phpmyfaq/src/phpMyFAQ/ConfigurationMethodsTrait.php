@@ -28,6 +28,7 @@ use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Configuration\LdapConfiguration;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Plugin\PluginConfigurationInterface;
 use phpMyFAQ\Plugin\PluginException;
 use phpMyFAQ\Plugin\PluginManager;
 use phpMyFAQ\Translation\TranslationProviderFactory;
@@ -523,7 +524,7 @@ trait ConfigurationMethodsTrait
         $this->pluginManager->triggerEvent($eventName, $data);
     }
 
-    public function getPluginConfig(string $pluginName): array
+    public function getPluginConfig(string $pluginName): ?PluginConfigurationInterface
     {
         return $this->pluginManager->getPluginConfig($pluginName);
     }

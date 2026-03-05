@@ -66,6 +66,7 @@ final class StaticPageControllerWebTest extends ControllerWebTestCase
         array $configOverride,
         string $expectedTarget,
     ): void {
+        $this->getConfiguration()->getAll();
         $this->overrideConfigurationValues($configOverride);
 
         $response = $this->requestPublic('GET', $path);

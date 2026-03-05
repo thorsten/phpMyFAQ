@@ -23,6 +23,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added theme manager with support for multiple themes and theme switching (Thorsten)
 - added Symfony Kernel for better application structure and extensibility (Thorsten)
 - added optional Redis support for configuration caching (Thorsten)
+- added LDAP configuration frontend (Thorsten)
 - added experimental support for API key authentication via OAuth2 (Thorsten)
 - added experimental per-tenant quota enforcement, and API request rate limits (Thorsten)
 - improved audit and activity log with comprehensive security event tracking (Thorsten)

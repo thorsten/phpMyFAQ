@@ -93,7 +93,7 @@ final class PushControllerTest extends TestCase
         parent::tearDown();
     }
 
-    private function createAuthenticatedContainer(): ContainerInterface
+    private function createAuthenticatedContainer(?Session $session = null): ContainerInterface
     {
         $permission = $this->createStub(PermissionInterface::class);
         $permission
@@ -110,7 +110,7 @@ final class PushControllerTest extends TestCase
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(42);
 
-        $session = new Session(new MockArraySessionStorage());
+        $session ??= new Session(new MockArraySessionStorage());
 
         $container = $this->createStub(ContainerInterface::class);
         $container
@@ -171,5 +171,48 @@ final class PushControllerTest extends TestCase
         self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
         self::assertFalse($payload['success']);
         self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testGenerateVapidKeysProcessesRequestWithValidCsrfWhenAuthenticated(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode(['csrf' => $csrfToken], JSON_THROW_ON_ERROR));
+        $controller = new PushController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        set_error_handler(static function (int $severity, string $message): bool {
+            return $severity === E_WARNING && str_contains($message, 'openssl_pkey_new()');
+        });
+        $response = $controller->generateVapidKeys($request);
+        restore_error_handler();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertContains($response->getStatusCode(), [Response::HTTP_OK, Response::HTTP_INTERNAL_SERVER_ERROR]);
+        self::assertArrayHasKey('success', $payload);
+        if ($response->getStatusCode() === Response::HTTP_OK) {
+            self::assertTrue($payload['success']);
+            self::assertArrayHasKey('publicKey', $payload);
+        } else {
+            self::assertFalse($payload['success']);
+            self::assertArrayHasKey('error', $payload);
+        }
+
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    private function setCsrfCookie(string $page, string $token): void
+    {
+        $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;
+    }
+
+    private function removeCsrfCookie(string $page): void
+    {
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)]);
     }
 }

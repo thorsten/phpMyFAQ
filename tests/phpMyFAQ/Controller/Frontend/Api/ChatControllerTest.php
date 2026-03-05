@@ -37,12 +37,14 @@ final class ChatControllerTest extends ApiControllerTestCase
     private function upsertUserData(int $userId, string $displayName, string $email): void
     {
         $login = strtolower(str_replace(' ', '', $displayName));
-        $this->configuration->getDb()->query(sprintf(
-            "INSERT OR REPLACE INTO faquser (user_id, login, account_status, auth_source, success, is_superadmin, login_attempts)
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                "INSERT OR REPLACE INTO faquser (user_id, login, account_status, auth_source, success, is_superadmin, login_attempts)
              VALUES (%d, '%s', 'active', 'local', 1, 0, 0)",
-            $userId,
-            $this->configuration->getDb()->escape($login),
-        ));
+                $userId,
+                $this->configuration->getDb()->escape($login),
+            ));
 
         $query = sprintf(
             "INSERT OR REPLACE INTO faquserdata (user_id, last_modified, display_name, email, twofactor_enabled, secret, is_visible)

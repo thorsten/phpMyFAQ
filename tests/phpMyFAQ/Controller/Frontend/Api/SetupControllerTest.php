@@ -92,9 +92,7 @@ final class SetupControllerTest extends ApiControllerTestCase
                 return true;
             }
 
-            public function checkPreUpgrade(string $databaseType): void
-            {
-            }
+            public function checkPreUpgrade(string $databaseType): void {}
         });
         $this->injectControllerState($controller, $this->createAuthenticatedUserMock());
 

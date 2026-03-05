@@ -11,15 +11,15 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
+use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
-use phpMyFAQ\Permission\PermissionInterface;
-use phpMyFAQ\Session\Token;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -105,9 +105,14 @@ class CommentControllerTest extends TestCase
     private function createAuthenticatedContainer(): ContainerInterface
     {
         $permission = $this->createStub(PermissionInterface::class);
-        $permission->method('hasPermission')->willReturnCallback(
-            static fn (int $userId, mixed $right): bool => $userId === 42 && $right === PermissionType::COMMENT_DELETE->value
-        );
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => (
+                    $userId === 42
+                    && $right === PermissionType::COMMENT_DELETE->value
+                ),
+            );
 
         $currentUser = $this->createStub(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -118,15 +123,17 @@ class CommentControllerTest extends TestCase
         $adminLog = $this->createStub(\phpMyFAQ\Administration\AdminLog::class);
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('get')->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
-            return match ($id) {
-                'phpmyfaq.configuration' => $this->configuration,
-                'phpmyfaq.user.current_user' => $currentUser,
-                'session' => $session,
-                'phpmyfaq.admin.admin-log' => $adminLog,
-                default => null,
-            };
-        });
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    default => null,
+                };
+            });
 
         return $container;
     }
@@ -258,6 +265,36 @@ class CommentControllerTest extends TestCase
             'data' => [
                 'pmf-csrf-token' => $token,
                 'comments[]' => [1],
+            ],
+            'type' => 'faq',
+        ], JSON_THROW_ON_ERROR));
+        $controller = new CommentController($comments);
+        $controller->setContainer($sessionContainer);
+
+        $response = $controller->delete($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['success']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteAcceptsSingleCommentIdValue(): void
+    {
+        $comments = $this->createMock(Comments::class);
+        $comments->expects($this->once())->method('delete')->with('faq', 5)->willReturn(true);
+
+        $sessionContainer = $this->createAuthenticatedContainer();
+        $session = $sessionContainer->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-comment');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $token,
+                'comments[]' => 5,
             ],
             'type' => 'faq',
         ], JSON_THROW_ON_ERROR));

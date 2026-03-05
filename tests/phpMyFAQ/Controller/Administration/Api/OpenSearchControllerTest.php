@@ -16,11 +16,11 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -112,13 +112,27 @@ final class OpenSearchControllerTest extends TestCase
         );
     }
 
+    private function createControllerWithDependencies(
+        OpenSearch $openSearch,
+        Faq $faq,
+        CustomPage $customPage,
+    ): OpenSearchController {
+        return new OpenSearchController($openSearch, $faq, $customPage);
+    }
+
     private function createAuthenticatedContainer(): ContainerInterface
     {
         $permission = $this->createStub(PermissionInterface::class);
-        $permission->method('hasPermission')->willReturnCallback(
-            static fn (int $userId, mixed $right): bool => $userId === 42
-                && in_array($right, [PermissionType::CONFIGURATION_EDIT, PermissionType::CONFIGURATION_EDIT->value], true)
-        );
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => $userId === 42
+                && in_array(
+                    $right,
+                    [PermissionType::CONFIGURATION_EDIT, PermissionType::CONFIGURATION_EDIT->value],
+                    true,
+                ),
+            );
 
         $currentUser = $this->createStub(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -128,14 +142,16 @@ final class OpenSearchControllerTest extends TestCase
         $session = new Session(new MockArraySessionStorage());
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('get')->willReturnCallback(function (string $id) use ($currentUser, $session) {
-            return match ($id) {
-                'phpmyfaq.configuration' => $this->configuration,
-                'phpmyfaq.user.current_user' => $currentUser,
-                'session' => $session,
-                default => null,
-            };
-        });
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    default => null,
+                };
+            });
 
         return $container;
     }
@@ -212,5 +228,108 @@ final class OpenSearchControllerTest extends TestCase
         self::assertSame(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());
         self::assertFalse($payload['available']);
         self::assertSame('unavailable', $payload['status']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateReturnsSuccessForAuthenticatedUser(): void
+    {
+        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch->expects($this->once())->method('createIndex');
+
+        $controller = $this->createControllerWithDependencies(
+            $openSearch,
+            $this->createStub(Faq::class),
+            $this->createStub(CustomPage::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->create();
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateReturnsConflictWhenIndexCreationFails(): void
+    {
+        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch->expects($this->once())->method('createIndex')->willThrowException(new Exception('boom'));
+
+        $controller = $this->createControllerWithDependencies(
+            $openSearch,
+            $this->createStub(Faq::class),
+            $this->createStub(CustomPage::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->create();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_CONFLICT, $response->getStatusCode());
+        self::assertSame('boom', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDropReturnsSuccessForAuthenticatedUser(): void
+    {
+        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch->expects($this->once())->method('dropIndex');
+
+        $controller = $this->createControllerWithDependencies(
+            $openSearch,
+            $this->createStub(Faq::class),
+            $this->createStub(CustomPage::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->drop();
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDropReturnsConflictWhenIndexDeletionFails(): void
+    {
+        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch->expects($this->once())->method('dropIndex')->willThrowException(new Exception('boom'));
+
+        $controller = $this->createControllerWithDependencies(
+            $openSearch,
+            $this->createStub(Faq::class),
+            $this->createStub(CustomPage::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->drop();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_CONFLICT, $response->getStatusCode());
+        self::assertSame('boom', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testHealthcheckReturnsOkWhenOpenSearchIsAvailable(): void
+    {
+        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch->expects($this->once())->method('isAvailable')->willReturn(true);
+
+        $controller = $this->createControllerWithOpenSearch($openSearch);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->healthcheck();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['available']);
+        self::assertSame('healthy', $payload['status']);
     }
 }

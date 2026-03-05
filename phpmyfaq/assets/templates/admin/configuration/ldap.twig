@@ -1,0 +1,81 @@
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-diagram-3"></i>
+      {{ 'msgAdminHeaderLdap' | translate }}
+    </h1>
+  </div>
+
+  <div class="row mb-2">
+    <div class="col-12">
+      <div id="pmf-ldap-healthcheck-alert" class="alert alert-info" role="alert" style="display: none;">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <strong>{{ 'msgAdminLdapHealthCheck' | translate }}:</strong>
+        <span class="alert-message"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-lg-6 mb-3">
+      <div class="card shadow">
+        <h5 class="card-header">
+          {{ 'msgAdminLdapServers' | translate }}
+        </h5>
+        <div class="card-body">
+          <div id="pmf-ldap-servers"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 mb-3">
+      <div class="card shadow">
+        <h5 class="card-header">
+          {{ 'msgAdminLdapMapping' | translate }}
+        </h5>
+        <div class="card-body">
+          <div id="pmf-ldap-mapping"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-lg-6 mb-3">
+      <div class="card shadow">
+        <h5 class="card-header">
+          {{ 'msgAdminLdapOptions' | translate }}
+        </h5>
+        <div class="card-body">
+          <div id="pmf-ldap-options"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 mb-3">
+      <div class="card shadow">
+        <h5 class="card-header">
+          {{ 'msgAdminLdapGroupSettings' | translate }}
+        </h5>
+        <div class="card-body">
+          <div id="pmf-ldap-group-settings"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-lg-6 mb-3">
+      <div class="card shadow">
+        <h5 class="card-header">
+          {{ 'msgAdminLdapSettings' | translate }}
+        </h5>
+        <div class="card-body">
+          <div id="pmf-ldap-general-settings"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

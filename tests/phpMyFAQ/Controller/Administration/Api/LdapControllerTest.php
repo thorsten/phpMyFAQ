@@ -2,38 +2,39 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Controller\Api;
+namespace phpMyFAQ\Controller\Administration\Api;
 
-use Exception;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
+use phpMyFAQ\Ldap;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
-#[AllowMockObjectsWithoutExpectations]
-#[CoversClass(BackupController::class)]
+#[CoversClass(LdapController::class)]
 #[UsesNamespace('phpMyFAQ')]
-class BackupControllerTest extends TestCase
+final class LdapControllerTest extends TestCase
 {
     private Configuration $configuration;
     private Sqlite3 $dbHandle;
     private string $databasePath;
     private ?Configuration $previousConfiguration = null;
 
+    /**
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -51,7 +52,7 @@ class BackupControllerTest extends TestCase
         $this->previousConfiguration = $configurationProperty->getValue();
         $configurationProperty->setValue(null, null);
 
-        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-api-backup-controller-');
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-admin-ldap-api-controller-');
         self::assertNotFalse($databasePath);
         self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
         $this->databasePath = $databasePath;
@@ -89,15 +90,22 @@ class BackupControllerTest extends TestCase
         parent::tearDown();
     }
 
+    private function createController(?Ldap $ldap = null): LdapController
+    {
+        return new LdapController($ldap ?? $this->createStub(Ldap::class));
+    }
+
     private function createAuthenticatedContainer(): ContainerInterface
     {
         $permission = $this->createStub(PermissionInterface::class);
         $permission
             ->method('hasPermission')
             ->willReturnCallback(
-                static fn(int $userId, mixed $right): bool => (
-                    $userId === 42
-                    && $right === PermissionType::BACKUP->value
+                static fn(int $userId, mixed $right): bool => $userId === 42
+                && in_array(
+                    $right,
+                    [PermissionType::CONFIGURATION_EDIT, PermissionType::CONFIGURATION_EDIT->value],
+                    true,
                 ),
             );
 
@@ -123,104 +131,60 @@ class BackupControllerTest extends TestCase
         return $container;
     }
 
-    public function testDownloadRequiresAuthentication(): void
+    public function testConfigurationRequiresAuthentication(): void
     {
-        $request = new Request();
-        $request->attributes->set('type', 'data');
+        $controller = $this->createController();
 
-        $controller = new BackupController();
-
-        $this->expectException(Exception::class);
-        $controller->download($request);
+        $this->expectException(\Exception::class);
+        $controller->configuration();
     }
 
-    public function testDownloadWithInvalidBackupType(): void
+    public function testHealthcheckRequiresAuthentication(): void
     {
-        $request = new Request();
-        $request->attributes->set('type', 'invalid');
+        $controller = $this->createController();
 
-        $controller = new BackupController();
-
-        $this->expectException(Exception::class);
-        $controller->download($request);
+        $this->expectException(\Exception::class);
+        $controller->healthcheck();
     }
 
-    public function testDownloadWithDataType(): void
+    public function testConfigurationStripsPasswords(): void
     {
-        $request = new Request();
-        $request->attributes->set('type', 'data');
-
-        $controller = new BackupController();
-
-        $this->expectException(Exception::class);
-        $controller->download($request);
-    }
-
-    public function testDownloadWithLogsType(): void
-    {
-        $request = new Request();
-        $request->attributes->set('type', 'logs');
-
-        $controller = new BackupController();
-
-        $this->expectException(Exception::class);
-        $controller->download($request);
-    }
-
-    public function testDownloadWithContentType(): void
-    {
-        $request = new Request();
-        $request->attributes->set('type', 'content');
-
-        $controller = new BackupController();
-
-        $this->expectException(Exception::class);
-        $controller->download($request);
-    }
-
-    public function testDownloadReturnsBadRequestForInvalidBackupTypeWhenAuthenticated(): void
-    {
-        $request = new Request();
-        $request->attributes->set('type', 'invalid');
-
-        $controller = new BackupController();
+        $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer());
 
-        $response = $controller->download($request);
-
-        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        self::assertSame('Invalid backup type.', (string) $response->getContent());
-    }
-
-    public function testDownloadReturnsBackupDataWhenAuthenticated(): void
-    {
-        $request = new Request();
-        $request->attributes->set('type', 'data');
-
-        $controller = new BackupController();
-        $controller->setContainer($this->createAuthenticatedContainer());
-
-        $response = $controller->download($request);
+        $response = $controller->configuration();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertSame('application/octet-stream', $response->headers->get('Content-Type'));
-        self::assertStringContainsString('attachment;', (string) $response->headers->get('Content-Disposition'));
-        self::assertNotEmpty((string) $response->getContent());
+        self::assertArrayHasKey('servers', $payload);
+        self::assertArrayHasKey('mapping', $payload);
+        self::assertArrayHasKey('options', $payload);
+        self::assertArrayHasKey('groupConfig', $payload);
+        self::assertArrayHasKey('generalSettings', $payload);
+
+        // Verify passwords are stripped
+        foreach ($payload['servers'] as $server) {
+            self::assertSame('********', $server['ldap_password']);
+        }
     }
 
-    public function testDownloadReturnsBackupLogsWhenAuthenticated(): void
+    public function testHealthcheckReturnsUnavailableWhenExtensionMissing(): void
     {
-        $request = new Request();
-        $request->attributes->set('type', 'logs');
+        if (extension_loaded('ldap')) {
+            self::markTestSkipped('LDAP extension is loaded; cannot test missing extension path.');
+        }
 
-        $controller = new BackupController();
+        $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer());
 
-        $response = $controller->download($request);
+        $response = $controller->healthcheck();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertSame('application/octet-stream', $response->headers->get('Content-Type'));
-        self::assertStringContainsString('attachment;', (string) $response->headers->get('Content-Disposition'));
-        self::assertNotEmpty((string) $response->getContent());
+        self::assertSame(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());
+        self::assertFalse($payload['available']);
+        self::assertSame('unavailable', $payload['status']);
+        self::assertStringContainsString('LDAP extension', $payload['error']);
+        self::assertArrayHasKey('servers', $payload);
+        self::assertSame([], $payload['servers']);
     }
 }

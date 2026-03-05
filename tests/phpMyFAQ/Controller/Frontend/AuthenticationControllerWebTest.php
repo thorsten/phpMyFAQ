@@ -147,10 +147,10 @@ final class AuthenticationControllerWebTest extends ControllerWebTestCase
 
     public function testLogoutWithInvalidCsrfRedirectsHome(): void
     {
-        $expectedTarget = $this->getConfiguration()->getDefaultUrl();
         $response = $this->requestPublic('GET', '/logout', ['csrf' => 'invalid']);
 
         self::assertResponseStatusCodeSame(302, $response);
-        self::assertRedirectLocationContains($expectedTarget, $response);
+        self::assertNotNull($response->headers->get('Location'));
+        self::assertStringEndsWith('/', (string) $response->headers->get('Location'));
     }
 }

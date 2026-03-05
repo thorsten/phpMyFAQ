@@ -6,6 +6,8 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Administration\Backup;
+use phpMyFAQ\Administration\Backup\BackupExportResult;
+use phpMyFAQ\Administration\Helper;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -81,6 +83,9 @@ final class BackupControllerTest extends TestCase
 
     protected function tearDown(): void
     {
+        Token::resetInstanceForTests();
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('restore'), 0, 10)]);
+
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
         $configurationProperty->setValue(null, $this->previousConfiguration);
@@ -130,6 +135,43 @@ final class BackupControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testExportReturnsAttachmentForValidContentType(): void
+    {
+        $backup = $this->createMock(Backup::class);
+        $backup
+            ->expects($this->once())
+            ->method('export')
+            ->willReturn(new BackupExportResult('backup.zip', 'backup-content'));
+
+        $controller = $this->createAuthenticatedController($backup);
+
+        $response = $controller->export(new Request([], [], ['type' => 'content']));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('backup-content', $response->getContent());
+        self::assertSame('application/octet-stream; charset=UTF-8', $response->headers->get('Content-Type'));
+        self::assertStringContainsString('attachment;', (string) $response->headers->get('Content-Disposition'));
+        self::assertStringContainsString('backup.zip', (string) $response->headers->get('Content-Disposition'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExportReturnsInternalServerErrorWhenBackupExportFails(): void
+    {
+        $backup = $this->createMock(Backup::class);
+        $backup->expects($this->once())->method('export')->willThrowException(new \SodiumException('export failed'));
+
+        $controller = $this->createAuthenticatedController($backup);
+
+        $response = $controller->export(new Request([], [], ['type' => 'content']));
+
+        self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testRestoreThrowsForInvalidCsrfToken(): void
     {
         $controller = $this->createAuthenticatedController();
@@ -138,12 +180,40 @@ final class BackupControllerTest extends TestCase
         $controller->restore(new Request(['csrf' => 'invalid-token']));
     }
 
-    private function createAuthenticatedController(): BackupController
+    /**
+     * @throws \Exception
+     */
+    public function testRestoreReturnsErrorWhenNoFileWasUploaded(): void
     {
-        $controller = $this->createController();
+        $container = $this->createControllerContainer();
+        $controller = new BackupController($this->createStub(Backup::class));
+        $controller->setContainer($container);
+
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $csrfToken = $this->createValidCsrfToken($session, 'restore');
+
+        $response = $controller->restore(new Request(['csrf' => $csrfToken]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('No file was uploaded', (string) $response->getContent());
+    }
+
+    private function createAuthenticatedController(?Backup $backup = null): BackupController
+    {
+        $controller = new BackupController($backup ?? $this->createStub(Backup::class));
         $controller->setContainer($this->createControllerContainer());
 
         return $controller;
+    }
+
+    private function createValidCsrfToken(Session $session, string $page): string
+    {
+        Token::resetInstanceForTests();
+        $token = Token::getInstance($session)->getTokenString($page);
+        $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;
+
+        return $token;
     }
 
     private function createControllerContainer(): ContainerInterface
@@ -160,20 +230,30 @@ final class BackupControllerTest extends TestCase
         $currentUser->perm = $permission;
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(42);
+        $currentUser
+            ->method('getUserData')
+            ->willReturnMap([
+                ['display_name', 'Test User'],
+                ['email',        'test@example.com'],
+            ]);
 
         $session = new Session(new MockArraySessionStorage());
         Token::getInstance($session);
         $adminLog = $this->createStub(AdminLog::class);
+        $adminHelper = $this->createStub(Helper::class);
+        $adminHelper->method('canAccessContent')->willReturn(true);
+        $adminHelper->method('addMenuEntry')->willReturn('');
 
         $container = $this->createStub(ContainerInterface::class);
         $container
             ->method('get')
-            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog, $adminHelper) {
                 return match ($id) {
                     'phpmyfaq.configuration' => $this->configuration,
                     'phpmyfaq.user.current_user' => $currentUser,
                     'session' => $session,
                     'phpmyfaq.admin.admin-log' => $adminLog,
+                    'phpmyfaq.admin.helper' => $adminHelper,
                     default => null,
                 };
             });
