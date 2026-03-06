@@ -261,6 +261,7 @@ final class DashboardControllerTest extends TestCase
      */
     public function testVersionsReturnsBadRequestWhenVersionLookupFails(): void
     {
+        $this->configuration->set('upgrade.releaseEnvironment', 'non-existent-release-channel');
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer());
 
@@ -269,6 +270,8 @@ final class DashboardControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertArrayHasKey('error', $payload);
+        self::assertIsString($payload['error']);
+        self::assertNotSame('', trim($payload['error']));
     }
 
     /**
