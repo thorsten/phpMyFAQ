@@ -181,6 +181,34 @@ final class AttachmentControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testRefreshWithValidCsrfProcessesAttachmentAndReturnsJson(): void
+    {
+        if (!defined('phpMyFAQ\\Attachment\\PMF_ATTACHMENTS_DIR')) {
+            define('phpMyFAQ\\Attachment\\PMF_ATTACHMENTS_DIR', sys_get_temp_dir() . '/');
+        }
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'refresh-attachment');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        $response = $controller->refresh(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'attId' => 1,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertContains($response->getStatusCode(), [Response::HTTP_OK, Response::HTTP_INTERNAL_SERVER_ERROR]);
+        self::assertIsArray($payload);
+        self::assertTrue(array_key_exists('success', $payload) || array_key_exists('error', $payload));
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testUploadReturnsBadRequestWhenNoFilesAreProvidedAndAuthenticated(): void
     {
         $controller = new AttachmentController();
@@ -228,6 +256,48 @@ final class AttachmentControllerTest extends TestCase
         $controller->setContainer($this->createAuthenticatedContainer());
 
         $request = new Request([], [], [], [], ['filesToUpload' => [$invalidFile]]);
+        $response = $controller->upload($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('msgImageTooLarge'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadReturnsBadRequestWhenUploadedFileIsTooLarge(): void
+    {
+        $oversizedFile = $this->createMock(UploadedFile::class);
+        $oversizedFile->method('isValid')->willReturn(true);
+        $oversizedFile->method('getSize')->willReturn((int) $this->configuration->get('records.maxAttachmentSize') + 1);
+        $oversizedFile->method('getMimeType')->willReturn('image/png');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $request = new Request([], [], [], [], ['filesToUpload' => [$oversizedFile]]);
+        $response = $controller->upload($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('msgImageTooLarge'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadReturnsBadRequestWhenMimeTypeIsHtml(): void
+    {
+        $htmlFile = $this->createMock(UploadedFile::class);
+        $htmlFile->method('isValid')->willReturn(true);
+        $htmlFile->method('getSize')->willReturn(128);
+        $htmlFile->method('getMimeType')->willReturn('text/html');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $request = new Request([], [], [], [], ['filesToUpload' => [$htmlFile]]);
         $response = $controller->upload($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 

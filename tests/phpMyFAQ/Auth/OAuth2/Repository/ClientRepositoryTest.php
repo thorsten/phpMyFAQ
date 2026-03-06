@@ -9,6 +9,7 @@ use phpMyFAQ\Auth\OAuth2\Entity\ClientEntity;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Database\PdoSqlite;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -19,6 +20,7 @@ use PHPUnit\Framework\TestCase;
 #[AllowMockObjectsWithoutExpectations]
 #[UsesClass(Database::class)]
 #[UsesClass(ClientEntity::class)]
+#[UsesClass(PdoSqlite::class)]
 class ClientRepositoryTest extends TestCase
 {
     private DatabaseDriver&MockObject $db;

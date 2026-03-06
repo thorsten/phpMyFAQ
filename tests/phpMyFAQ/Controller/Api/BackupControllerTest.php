@@ -223,4 +223,20 @@ class BackupControllerTest extends TestCase
         self::assertStringContainsString('attachment;', (string) $response->headers->get('Content-Disposition'));
         self::assertNotEmpty((string) $response->getContent());
     }
+
+    public function testDownloadReturnsContentZipWhenAuthenticated(): void
+    {
+        $request = new Request();
+        $request->attributes->set('type', 'content');
+
+        $controller = new BackupController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->download($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('application/zip', $response->headers->get('Content-Type'));
+        self::assertStringContainsString('attachment;', (string) $response->headers->get('Content-Disposition'));
+        self::assertNotEmpty((string) $response->getContent());
+    }
 }

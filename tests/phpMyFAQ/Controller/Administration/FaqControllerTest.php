@@ -112,6 +112,33 @@ final class FaqControllerTest extends TestCase
         );
     }
 
+    private function createControllerWithPreparedFaqRecord(): FaqController
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecord = [
+            'id' => 1,
+            'lang' => 'en',
+            'title' => 'Prepared FAQ',
+            'revision_id' => 0,
+            'active' => 'yes',
+            'author' => 'Test Author',
+            'email' => 'test@example.com',
+        ];
+        $faq->method('getNextSolutionId')->willReturn(1001);
+
+        return new FaqController(
+            $this->createStub(Comments::class),
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(Seo::class),
+            $this->createStub(CategoryHelper::class),
+            $this->createStub(UserHelper::class),
+            new FaqPermission($this->configuration),
+            $this->createStub(Changelog::class),
+            $this->createStub(Question::class),
+        );
+    }
+
     /**
      * @throws \Exception
      */
@@ -135,6 +162,72 @@ final class FaqControllerTest extends TestCase
         $controller = $this->createController();
 
         $response = $controller->add($request);
+
+        self::assertInstanceOf(Response::class, $response);
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAddInCategoryRendersInCurrentAnonymousAdminContext(): void
+    {
+        $request = new Request();
+        $request->attributes->set('categoryId', '1');
+        $request->attributes->set('categoryLanguage', 'en');
+
+        $controller = $this->createController();
+        $response = $controller->addInCategory($request);
+
+        self::assertInstanceOf(Response::class, $response);
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCopyRendersWithPreparedFaqRecord(): void
+    {
+        $request = new Request();
+        $request->attributes->set('faqId', '1');
+        $request->attributes->set('faqLanguage', 'en');
+
+        $controller = $this->createControllerWithPreparedFaqRecord();
+        $response = $controller->copy($request);
+
+        self::assertInstanceOf(Response::class, $response);
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('Copy of Prepared FAQ', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testTranslateRendersWithPreparedFaqRecord(): void
+    {
+        $request = new Request();
+        $request->attributes->set('faqId', '1');
+        $request->attributes->set('faqLanguage', 'en');
+
+        $controller = $this->createControllerWithPreparedFaqRecord();
+        $response = $controller->translate($request);
+
+        self::assertInstanceOf(Response::class, $response);
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('Translation of Prepared FAQ', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAnswerRendersInCurrentAnonymousAdminContext(): void
+    {
+        $request = new Request();
+        $request->attributes->set('questionId', '1');
+        $request->attributes->set('faqLanguage', 'en');
+
+        $controller = $this->createControllerWithPreparedFaqRecord();
+        $response = $controller->answer($request);
 
         self::assertInstanceOf(Response::class, $response);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
