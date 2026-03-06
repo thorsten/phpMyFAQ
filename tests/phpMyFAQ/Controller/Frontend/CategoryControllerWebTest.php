@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Functional\ControllerWebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -57,6 +58,57 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 #[UsesClass(\phpMyFAQ\User\UserSession::class)]
 final class CategoryControllerWebTest extends ControllerWebTestCase
 {
+    private function seedCategory(int $id, string $name, int $parentId = 0): void
+    {
+        $configuration = $this->getConfiguration('public');
+        self::assertInstanceOf(Configuration::class, $configuration);
+
+        $db = $configuration->getDb();
+        $db->query(sprintf("DELETE FROM faqcategories WHERE id = %d AND lang = 'en'", $id));
+        $db->query(sprintf(
+            "INSERT INTO faqcategories
+                (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
+             VALUES
+                (%d, 'en', %d, '%s', '%s', 1, -1, 1, '', 1)",
+            $id,
+            $parentId,
+            $db->escape($name),
+            $db->escape($name . ' description'),
+        ));
+    }
+
+    private function seedFaqForCategory(int $faqId, int $categoryId, string $question): void
+    {
+        $configuration = $this->getConfiguration('public');
+        self::assertInstanceOf(Configuration::class, $configuration);
+
+        $db = $configuration->getDb();
+        $db->query(sprintf("DELETE FROM faqdata WHERE id = %d AND lang = 'en'", $faqId));
+        $db->query(sprintf("DELETE FROM faqvisits WHERE id = %d AND lang = 'en'", $faqId));
+        $db->query(sprintf(
+            "DELETE FROM faqcategoryrelations WHERE category_id = %d AND category_lang = 'en' AND record_id = %d AND record_lang = 'en'",
+            $categoryId,
+            $faqId,
+        ));
+
+        $db->query(sprintf(
+            "INSERT INTO faqdata
+                (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end, created, notes, sticky_order)
+             VALUES
+                (%d, 'en', 2000, 0, 'yes', 0, 'test', '%s', 'Answer for %s', 'Unit Test', 'test@example.com', 'y', '20260305120000', '00000000000000', '99991231235959', '2026-03-05 12:00:00', '', 0)",
+            $faqId,
+            $db->escape($question),
+            $db->escape($question),
+        ));
+        $db->query(sprintf(
+            "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
+             VALUES (%d, 'en', %d, 'en')",
+            $categoryId,
+            $faqId,
+        ));
+        $db->query(sprintf("INSERT INTO faqvisits (id, lang, visits, last_visit) VALUES (%d, 'en', 0, 0)", $faqId));
+    }
+
     public function testShowAllCategoriesPageIsReachable(): void
     {
         $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
@@ -66,5 +118,46 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
         self::assertResponseIsSuccessful($response);
         self::assertResponseContains('<h2 class="mb-4 border-bottom">Categories</h2>', $response);
         self::assertResponseContains('<h4 class="fst-italic">All categories</h4>', $response);
+    }
+
+    public function testShowCategoryPageShowsNoFaqMessageForSeededRootCategory(): void
+    {
+        $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
+        $this->seedCategory(801, 'Root Category');
+        $this->seedCategory(802, 'Child Category', 801);
+        $this->seedFaqForCategory(9801, 801, 'Root test question');
+
+        $response = $this->requestPublic('GET', '/category/801/root-category.html');
+
+        self::assertResponseIsSuccessful($response);
+        self::assertResponseContains('Root Category', $response);
+        self::assertResponseContains('No FAQs available.', $response);
+        self::assertResponseContains('show-categories.html', $response);
+    }
+
+    public function testShowCategoryPageShowsNoRecordsMessageWhenFaqsAreMissing(): void
+    {
+        $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
+        $this->seedCategory(811, 'Empty Parent');
+        $this->seedCategory(812, 'Empty Child', 811);
+
+        $response = $this->requestPublic('GET', '/category/811/empty-parent.html');
+
+        self::assertResponseIsSuccessful($response);
+        self::assertResponseContains('No FAQs available.', $response);
+        self::assertResponseContains('Empty Parent', $response);
+    }
+
+    public function testShowCategoryPageContainsLinkToParentCategory(): void
+    {
+        $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
+        $this->seedCategory(821, 'Parent Category');
+        $this->seedCategory(822, 'Child Category', 821);
+
+        $response = $this->requestPublic('GET', '/category/822/child-category.html');
+
+        self::assertResponseIsSuccessful($response);
+        self::assertResponseContains('one category up', $response);
+        self::assertResponseContains('/category/821/.html', $response);
     }
 }

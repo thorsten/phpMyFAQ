@@ -110,6 +110,15 @@ final class AuthenticationControllerWebTest extends ControllerWebTestCase
         self::assertRedirectLocationContains('login', $response);
     }
 
+    public function testFailedAuthenticateShowsErrorOnNextLoginPage(): void
+    {
+        $this->requestPublic('POST', '/authenticate');
+        $response = $this->requestPublic('GET', '/login');
+
+        self::assertResponseIsSuccessful($response);
+        self::assertResponseContains('Wrong username or password.', $response);
+    }
+
     public function testForgotPasswordPageRenders(): void
     {
         $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
@@ -143,6 +152,19 @@ final class AuthenticationControllerWebTest extends ControllerWebTestCase
 
         self::assertResponseStatusCodeSame(302, $response);
         self::assertSame('./token?user-id=0', $response->headers->get('Location'));
+    }
+
+    public function testTwoFactorCheckWithUnknownTokenRedirectsBackToTokenPage(): void
+    {
+        $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
+
+        $response = $this->requestPublic('POST', '/check', [
+            'token' => '123456',
+            'user-id' => '1',
+        ]);
+
+        self::assertResponseStatusCodeSame(302, $response);
+        self::assertSame('./token?user-id=1', $response->headers->get('Location'));
     }
 
     public function testLogoutWithInvalidCsrfRedirectsHome(): void

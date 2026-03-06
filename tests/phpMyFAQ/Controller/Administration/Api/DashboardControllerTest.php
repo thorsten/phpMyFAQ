@@ -270,4 +270,20 @@ final class DashboardControllerTest extends TestCase
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertArrayHasKey('error', $payload);
     }
+
+    /**
+     * @throws \Exception
+     * @throws \JsonException
+     */
+    public function testVerifyReturnsJsonForAuthenticatedUser(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->verify(new Request([], [], [], [], [], [], '{}'));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertIsArray($payload);
+    }
 }

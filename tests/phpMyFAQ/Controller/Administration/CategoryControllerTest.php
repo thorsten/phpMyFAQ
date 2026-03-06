@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Administration\AdminLog;
+use phpMyFAQ\Administration\Helper;
 use phpMyFAQ\Administration\Category as AdminCategory;
 use phpMyFAQ\Category\Image;
 use phpMyFAQ\Category\Order;
@@ -194,6 +195,47 @@ final class CategoryControllerTest extends TestCase
         $controller->update($request);
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function testHierarchyRendersInCurrentAnonymousAdminContext(): void
+    {
+        $request = new Request();
+        $controller = $this->createController();
+
+        $response = $controller->hierarchy($request);
+
+        self::assertInstanceOf(Response::class, $response);
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testTranslateRendersWithConfiguredPermissions(): void
+    {
+        $categoryPermission = $this->createMock(CategoryPermission::class);
+        $categoryPermission->method('get')->willReturn([-1]);
+
+        $controller = new CategoryController(
+            new AdminCategory($this->configuration),
+            $this->createStub(Order::class),
+            $categoryPermission,
+            $this->createStub(Image::class),
+            $this->createStub(Seo::class),
+            $this->createStub(UserHelper::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $request = new Request(['translateTo' => 'de']);
+        $request->attributes->set('categoryId', '1');
+
+        $response = $controller->translate($request);
+
+        self::assertInstanceOf(Response::class, $response);
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
     private function createAuthenticatedContainer(): ContainerInterface
     {
         $permission = $this->createMock(PermissionInterface::class);
@@ -208,16 +250,20 @@ final class CategoryControllerTest extends TestCase
 
         $session = new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);
+        $adminHelper = $this->createStub(Helper::class);
+        $adminHelper->method('canAccessContent')->willReturn(true);
+        $adminHelper->method('addMenuEntry')->willReturn('');
 
         $container = $this->createStub(ContainerInterface::class);
         $container
             ->method('get')
-            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog, $adminHelper) {
                 return match ($id) {
                     'phpmyfaq.configuration' => $this->configuration,
                     'phpmyfaq.user.current_user' => $currentUser,
                     'session' => $session,
                     'phpmyfaq.admin.admin-log' => $adminLog,
+                    'phpmyfaq.admin.helper' => $adminHelper,
                     default => null,
                 };
             });
