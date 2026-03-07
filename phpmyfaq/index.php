@@ -183,6 +183,7 @@ if ($token !== '' && !is_null($userId)) {
             $user->twoFactorSuccess();
             $redirect = new RedirectResponse($faqConfig->getDefaultUrl());
             $redirect->send();
+            exit();
         }
     } else {
         $error = Translation::get(key: 'msgTwofactorErrorToken');
@@ -225,21 +226,23 @@ if (isset($userAuth) && $userAuth instanceof UserAuthentication && $userAuth->ha
 //
 if ($csrfChecked && 'logout' === $action && $user->isLoggedIn()) {
     $user->deleteFromSession(true);
-    $action = 'main';
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
 
     if ($faqConfig->get('security.ssoSupport') && !empty($ssoLogout)) {
         $redirect = new RedirectResponse($ssoLogout);
         $redirect->send();
+        exit();
     }
 
     if ($faqConfig->isSignInWithMicrosoftActive() && $user->getUserAuthSource() === 'azure') {
         $redirect = new RedirectResponse($faqConfig->getDefaultUrl() . 'services/azure/logout.php');
         $redirect->send();
+        exit();
     }
 
     $redirect = new RedirectResponse($faqConfig->getDefaultUrl());
     $redirect->send();
+    exit();
 }
 
 //
@@ -470,6 +473,7 @@ if (
 ) {
     $redirect = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . 'login');
     $redirect->send();
+    exit();
 }
 
 $categoryRelation = new Relation($faqConfig, $category);

@@ -51,5 +51,6 @@ if ($user->isLoggedIn()) {
 }
 
 // Redirect to log in
-$response = new RedirectResponse($faqConfig->getDefaultUrl());
-$response->send();
+$redirect = new RedirectResponse($faqConfig->getDefaultUrl());
+$redirect->send();
+exit();

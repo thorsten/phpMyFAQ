@@ -40,8 +40,9 @@ $faqSession->setCurrentUser($user);
 
 // Check user permissions
 if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowQuestionsForGuests'))) {
-    $response = new RedirectResponse($faqConfig->getDefaultUrl() . 'login');
-    $response->send();
+    $redirect = new RedirectResponse($faqConfig->getDefaultUrl() . 'login');
+    $redirect->send();
+    exit();
 }
 
 $captcha = $container->get('phpmyfaq.captcha');

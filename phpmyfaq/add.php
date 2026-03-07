@@ -45,14 +45,16 @@ $faqSession->setCurrentUser($user);
 
 // Check user permissions
 if (-1 === $user->getUserId() && !$faqConfig->get('records.allowNewFaqsForGuests')) {
-    $response = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . 'login');
-    $response->send();
+    $redirect = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . 'login');
+    $redirect->send();
+    exit();
 }
 
 // Check permission to add new faqs
 if (-1 !== $user->getUserId() && !$user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD->value)) {
-    $response = new RedirectResponse($faqSystem->getSystemUri($faqConfig));
-    $response->send();
+    $redirect = new RedirectResponse($faqSystem->getSystemUri($faqConfig));
+    $redirect->send();
+    exit();
 }
 
 $captcha = $container->get('phpmyfaq.captcha');
