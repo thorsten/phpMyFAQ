@@ -31,6 +31,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\FormatDateTwigExtension;
 use phpMyFAQ\Twig\Extensions\IsoDateTwigExtension;
 use phpMyFAQ\Twig\Extensions\LanguageCodeTwigExtension;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -142,7 +143,7 @@ final class PageController extends AbstractAdministrationController
 
         if ($availableLanguages === []) {
             // All languages already have translations - redirect back to list
-            return $this->redirect('./pages');
+            return new RedirectResponse('./pages');
         }
 
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
@@ -245,6 +246,7 @@ final class PageController extends AbstractAdministrationController
             'msgLanguage' => Translation::get(key: 'msgLanguage'),
             'ad_page_insertfail' => Translation::get(key: 'ad_page_insertfail'),
             'msgPages' => Translation::get(key: 'msgPages'),
+            'msgCancel' => Translation::get(key: 'msgCancel'),
             'ad_page_del' => Translation::get(key: 'ad_page_del'),
             'ad_page_nodelete' => Translation::get(key: 'ad_page_nodelete'),
             'ad_page_yesdelete' => Translation::get(key: 'ad_page_yesdelete'),

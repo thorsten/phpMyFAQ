@@ -6,19 +6,19 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Administration\Helper;
-use phpMyFAQ\Auth;
-use phpMyFAQ\Auth\AuthDatabase;
+use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
-use phpMyFAQ\Encryption;
+use phpMyFAQ\Date;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
-use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\Visits;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
@@ -30,14 +30,15 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 #[AllowMockObjectsWithoutExpectations]
-#[CoversClass(PasswordChangeController::class)]
+#[CoversClass(StatisticsSessionsController::class)]
 #[UsesNamespace('phpMyFAQ')]
-final class PasswordChangeControllerTest extends TestCase
+final class StatisticsSessionsControllerTest extends TestCase
 {
     private Configuration $configuration;
     private Sqlite3 $dbHandle;
     private string $databasePath;
     private ?Configuration $previousConfiguration = null;
+    private string $trackingFile;
 
     /**
      * @throws Exception
@@ -45,7 +46,6 @@ final class PasswordChangeControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Token::resetInstanceForTests();
 
         Strings::init();
 
@@ -60,7 +60,7 @@ final class PasswordChangeControllerTest extends TestCase
         $this->previousConfiguration = $configurationProperty->getValue();
         $configurationProperty->setValue(null, null);
 
-        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-admin-password-controller-');
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-admin-statistics-sessions-controller-');
         self::assertNotFalse($databasePath);
         self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
         $this->databasePath = $databasePath;
@@ -79,12 +79,19 @@ final class PasswordChangeControllerTest extends TestCase
         $language = new Language($this->configuration, new Session(new MockArraySessionStorage()));
         $language->setLanguageFromConfiguration('en');
         $this->configuration->setLanguage($language);
+
+        $_SERVER['REQUEST_TIME'] = 1_735_689_600;
+        $this->trackingFile = PMF_CONTENT_DIR . '/core/data/tracking01012025';
+        file_put_contents(
+            $this->trackingFile,
+            "123;/faq;FAQ Title;127.0.0.1;x;https://ref.example.test/path?foo=bar;Firefox/1.0;1735689600\n",
+        );
     }
 
     protected function tearDown(): void
     {
-        Token::resetInstanceForTests();
-        unset($_COOKIE['pmf-csrf-token-' . substr(md5('password'), 0, 10)]);
+        @unlink($this->trackingFile);
+        unset($_SERVER['REQUEST_TIME']);
 
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
@@ -101,141 +108,113 @@ final class PasswordChangeControllerTest extends TestCase
         parent::tearDown();
     }
 
-    private function createController(?Auth $auth = null): PasswordChangeController
-    {
-        return new PasswordChangeController($auth ?? $this->createStub(Auth::class));
-    }
-
     /**
      * @throws \Exception
      */
-    public function testIndexRendersInCurrentAnonymousAdminContext(): void
+    public function testViewDayRendersSessionsForPayloadDay(): void
     {
-        $response = $this->createController()->index(new Request());
+        $adminSession = $this->createMock(AdminSession::class);
+        $adminSession
+            ->expects($this->once())
+            ->method('getSessionsByDate')
+            ->willReturn([
+                123 => [
+                    'ip' => '127.0.0.1',
+                    'time' => 1_735_689_600,
+                ],
+            ]);
 
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testUpdateThrowsForInvalidCsrfWhenAuthenticated(): void
-    {
-        $controller = $this->createController($this->createStub(Auth::class));
-        $controller->setContainer($this->createAuthenticatedContainer());
-
-        $request = new Request([], ['pmf-csrf-token' => 'invalid-token']);
-
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Invalid CSRF token');
-        $controller->update($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testUpdateReturnsErrorForTooShortPassword(): void
-    {
-        $authSource = $this->createMock(AuthDatabase::class);
-        $authSource->method('getEncryptionContainer')->willReturn($this->createStub(Encryption::class));
-        $authSource->method('disableReadOnly');
-        $authSource->method('checkCredentials')->willReturn(true);
-
-        $auth = $this->createMock(Auth::class);
-        $auth->method('selectAuth')->willReturn($authSource);
-
-        $controller = $this->createController($auth);
-        $container = $this->createAuthenticatedContainer();
-        $controller->setContainer($container);
-
-        $session = $container->get('session');
-        self::assertInstanceOf(Session::class, $session);
-        $token = $this->createValidCsrfToken($session, 'password');
-
-        $response = $controller->update(
-            new Request([], [
-                'pmf-csrf-token' => $token,
-                'faqpassword_old' => 'old-password',
-                'faqpassword' => 'short',
-                'faqpassword_confirm' => 'short',
-            ]),
+        $controller = new StatisticsSessionsController(
+            $adminSession,
+            new Date($this->configuration),
+            $this->createStub(Visits::class),
         );
+        $controller->setContainer($this->createControllerContainer());
+
+        $response = $controller->viewDay(new Request([], ['day' => '1735689600']));
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertStringContainsString(Translation::get('ad_passwd_fail'), (string) $response->getContent());
+        self::assertStringContainsString('127.0.0.1', (string) $response->getContent());
+        self::assertStringContainsString('./statistics/session/123', (string) $response->getContent());
     }
 
     /**
      * @throws \Exception
      */
-    public function testUpdateReturnsSuccessWhenPasswordChangeSucceeds(): void
+    public function testViewDayFallsBackToDateAttributeWhenPayloadDayIsMissing(): void
     {
-        $authSource = $this->createMock(AuthDatabase::class);
-        $authSource->method('getEncryptionContainer')->willReturn($this->createStub(Encryption::class));
-        $authSource->method('disableReadOnly');
-        $authSource->method('checkCredentials')->willReturn(true);
+        $adminSession = $this->createMock(AdminSession::class);
+        $adminSession
+            ->expects($this->once())
+            ->method('getSessionsByDate')
+            ->willReturn([
+                456 => [
+                    'ip' => '10.0.0.2',
+                    'time' => 1_735_689_600,
+                ],
+            ]);
 
-        $auth = $this->createMock(Auth::class);
-        $auth->method('selectAuth')->willReturn($authSource);
-
-        $controller = $this->createController($auth);
-        $container = $this->createAuthenticatedContainer(changePasswordResult: true);
-        $controller->setContainer($container);
-
-        $session = $container->get('session');
-        self::assertInstanceOf(Session::class, $session);
-        $token = $this->createValidCsrfToken($session, 'password');
-
-        $response = $controller->update(
-            new Request([], [
-                'pmf-csrf-token' => $token,
-                'faqpassword_old' => 'old-password',
-                'faqpassword' => 'new-password-123',
-                'faqpassword_confirm' => 'new-password-123',
-            ]),
+        $controller = new StatisticsSessionsController(
+            $adminSession,
+            new Date($this->configuration),
+            $this->createStub(Visits::class),
         );
+        $controller->setContainer($this->createControllerContainer());
+
+        $response = $controller->viewDay(new Request([], [], ['date' => '2024-12-28']));
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertStringContainsString(Translation::get('ad_passwdsuc'), (string) $response->getContent());
+        self::assertStringContainsString('10.0.0.2', (string) $response->getContent());
+        self::assertStringContainsString('2024-12-28', (string) $response->getContent());
     }
 
     /**
      * @throws \Exception
      */
-    private function createValidCsrfToken(Session $session, string $page): string
+    public function testViewSessionRendersTrackingDetails(): void
     {
-        Token::resetInstanceForTests();
-        $token = Token::getInstance($session)->getTokenString($page);
-        $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;
+        $adminSession = $this->createMock(AdminSession::class);
+        $adminSession->expects($this->once())->method('getTimeFromSessionId')->with(123)->willReturn(1_735_689_600);
 
-        return $token;
+        $controller = new StatisticsSessionsController(
+            $adminSession,
+            new Date($this->configuration),
+            $this->createStub(Visits::class),
+        );
+        $controller->setContainer($this->createControllerContainer());
+
+        $response = $controller->viewSession(new Request([], [], ['sessionId' => '123']));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('Firefox/1.0', (string) $response->getContent());
+        self::assertStringContainsString('127.0.0.1', (string) $response->getContent());
+        self::assertStringContainsString('https://ref.example.test/path? foo=bar', (string) $response->getContent());
     }
 
-    private function createAuthenticatedContainer(bool $changePasswordResult = false): ContainerInterface
+    private function createControllerContainer(): ContainerInterface
     {
-        $permission = $this->createStub(PermissionInterface::class);
-        $permission->method('hasPermission')->willReturn(true);
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => $userId === 42
+                && in_array(
+                    $right,
+                    [PermissionType::STATISTICS_VIEWLOGS, PermissionType::STATISTICS_VIEWLOGS->value],
+                    true,
+                ),
+            );
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(42);
-        $currentUser->method('isSuperAdmin')->willReturn(false);
         $currentUser
             ->method('getUserData')
             ->willReturnMap([
                 ['display_name', 'Test User'],
                 ['email',        'test@example.com'],
             ]);
-        $currentUser->method('getAuthSource')->with('name')->willReturn('database');
-        $currentUser
-            ->method('getAuthData')
-            ->willReturnMap([
-                ['encType',  'password_hash'],
-                ['readOnly', false],
-            ]);
-        $currentUser->method('getLogin')->willReturn('test-user');
-        $currentUser->method('changePassword')->willReturn($changePasswordResult);
 
         $session = new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);

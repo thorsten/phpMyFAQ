@@ -647,15 +647,10 @@ final class CategoryController extends AbstractAdministrationController
                     ->setSeoType(SeoType::CATEGORY)
                     ->setReferenceId($categoryEntity->getId())
                     ->setReferenceLanguage($categoryEntity->getLang())
-                    ->setTitle(Filter::filterInput(
-                        INPUT_POST,
-                        variableName: 'serpTitle',
-                        filter: FILTER_SANITIZE_SPECIAL_CHARS,
-                    ))
-                    ->setDescription(Filter::filterInput(
-                        INPUT_POST,
-                        variableName: 'serpDescription',
-                        filter: FILTER_SANITIZE_SPECIAL_CHARS,
+                    ->setTitle(Filter::filterVar($request->request->get('serpTitle'), FILTER_SANITIZE_SPECIAL_CHARS))
+                    ->setDescription(Filter::filterVar(
+                        $request->request->get('serpDescription'),
+                        FILTER_SANITIZE_SPECIAL_CHARS,
                     ));
 
                 if ($this->seo->get($seoEntity)->getId() === null) {
@@ -708,15 +703,10 @@ final class CategoryController extends AbstractAdministrationController
                 ->setSeoType(SeoType::CATEGORY)
                 ->setReferenceId($categoryId)
                 ->setReferenceLanguage($categoryLang)
-                ->setTitle(Filter::filterInput(
-                    INPUT_POST,
-                    variableName: 'serpTitle',
-                    filter: FILTER_SANITIZE_SPECIAL_CHARS,
-                ))
-                ->setDescription(Filter::filterInput(
-                    INPUT_POST,
-                    variableName: 'serpDescription',
-                    filter: FILTER_SANITIZE_SPECIAL_CHARS,
+                ->setTitle(Filter::filterVar($request->request->get('serpTitle'), FILTER_SANITIZE_SPECIAL_CHARS))
+                ->setDescription(Filter::filterVar(
+                    $request->request->get('serpDescription'),
+                    FILTER_SANITIZE_SPECIAL_CHARS,
                 ));
 
             if ($this->seo->get($seoEntity)->getId() === null) {

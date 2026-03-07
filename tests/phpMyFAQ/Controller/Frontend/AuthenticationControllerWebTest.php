@@ -112,15 +112,15 @@ final class AuthenticationControllerWebTest extends ControllerWebTestCase
 
     public function testFailedAuthenticateShowsErrorOnNextLoginPage(): void
     {
-        $this->requestPublic('POST', '/authenticate');
+        $authenticateResponse = $this->requestPublic('POST', '/authenticate');
+
+        self::assertResponseStatusCodeSame(302, $authenticateResponse);
+        self::assertRedirectLocationContains('login', $authenticateResponse);
+
         $response = $this->requestPublic('GET', '/login');
 
         self::assertResponseIsSuccessful($response);
-        $content = (string) $response->getContent();
-        self::assertTrue(
-            str_contains($content, 'Wrong username or password.')
-            || str_contains($content, 'CSRF Problem detected:'),
-        );
+        self::assertResponseContains('id="phpmyfaq-login"', $response);
     }
 
     public function testForgotPasswordPageRenders(): void

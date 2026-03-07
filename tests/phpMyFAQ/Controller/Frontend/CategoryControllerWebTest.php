@@ -100,12 +100,8 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
             $db->escape($question),
             $db->escape($question),
         ));
-        $db->query(sprintf(
-            "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
-             VALUES (%d, 'en', %d, 'en')",
-            $categoryId,
-            $faqId,
-        ));
+        $db->query(sprintf("INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
+             VALUES (%d, 'en', %d, 'en')", $categoryId, $faqId));
         $db->query(sprintf("INSERT INTO faqvisits (id, lang, visits, last_visit) VALUES (%d, 'en', 0, 0)", $faqId));
     }
 
