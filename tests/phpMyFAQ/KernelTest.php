@@ -4,6 +4,7 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\ContainerControllerResolver;
+use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\EventListener\ApiExceptionListener;
 use phpMyFAQ\EventListener\ControllerContainerListener;
 use phpMyFAQ\EventListener\LanguageListener;
@@ -40,6 +41,7 @@ use Symfony\Component\Routing\RouteCollection;
 #[UsesClass(AttributeRouteLoader::class)]
 #[UsesClass(RouteCacheManager::class)]
 #[UsesClass(RouteCollectionBuilder::class)]
+#[UsesClass(PdoSqlite::class)]
 #[AllowMockObjectsWithoutExpectations]
 class KernelTest extends TestCase
 {
