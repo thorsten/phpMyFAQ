@@ -10,6 +10,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Permission as FaqPermission;
 use phpMyFAQ\Helper\CategoryHelper;
@@ -181,6 +182,7 @@ final class FaqControllerTest extends TestCase
 
         self::assertInstanceOf(Response::class, $response);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('name="lang" id="lang" value="en"', (string) $response->getContent());
     }
 
     /**
@@ -231,5 +233,101 @@ final class FaqControllerTest extends TestCase
 
         self::assertInstanceOf(Response::class, $response);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testEditRendersTagsAndSeoData(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecord = [
+            'id' => 1,
+            'lang' => 'en',
+            'title' => 'Prepared FAQ',
+            'revision_id' => 0,
+            'active' => 'yes',
+            'author' => 'Test Author',
+            'email' => 'test@example.com',
+        ];
+        $faq->method('getNextSolutionId')->willReturn(1001);
+
+        $tags = $this->createMock(Tags::class);
+        $tags->method('getAllTagsById')->with(1)->willReturn(['tag-one', 'tag-two']);
+
+        $seoData = new SeoEntity();
+        $seoData->setTitle('SEO title')->setDescription('SEO description');
+
+        $seo = $this->createMock(Seo::class);
+        $seo->method('get')->willReturn($seoData);
+
+        $faqPermission = $this->createMock(FaqPermission::class);
+        $faqPermission->method('get')->willReturn([]);
+
+        $controller = new FaqController(
+            $this->createStub(Comments::class),
+            $faq,
+            $tags,
+            $seo,
+            $this->createStub(CategoryHelper::class),
+            $this->createStub(UserHelper::class),
+            $faqPermission,
+            $this->createStub(Changelog::class),
+            $this->createStub(Question::class),
+        );
+
+        $request = new Request([], [], ['faqId' => '1', 'faqLanguage' => 'en']);
+        $response = $controller->edit($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('tag-one, tag-two', (string) $response->getContent());
+        self::assertStringContainsString('SEO title', (string) $response->getContent());
+        self::assertStringContainsString('SEO description', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAnswerPrefillsQuestionNotificationFields(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->method('getNextSolutionId')->willReturn(1001);
+
+        $question = $this->createMock(Question::class);
+        $question
+            ->method('get')
+            ->with(1)
+            ->willReturn([
+                'question' => 'How do I reset my password?',
+                'username' => 'Jane Doe',
+                'email' => 'jane@example.com',
+                'category_id' => 1,
+            ]);
+
+        $controller = new FaqController(
+            $this->createStub(Comments::class),
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(Seo::class),
+            $this->createStub(CategoryHelper::class),
+            $this->createStub(UserHelper::class),
+            new FaqPermission($this->configuration),
+            $this->createStub(Changelog::class),
+            $question,
+        );
+
+        $request = new Request([], [], ['questionId' => '1', 'faqLanguage' => 'en']);
+        $response = $controller->answer($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('How do I reset my password?', (string) $response->getContent());
+        self::assertStringContainsString(
+            'name="notifyUser" id="notifyUser" value="Jane Doe"',
+            (string) $response->getContent(),
+        );
+        self::assertStringContainsString(
+            'name="notifyEmail" id="notifyEmail" value="jane@example.com"',
+            (string) $response->getContent(),
+        );
     }
 }

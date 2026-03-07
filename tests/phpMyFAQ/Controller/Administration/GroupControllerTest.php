@@ -181,11 +181,13 @@ final class GroupControllerTest extends TestCase
         $controller = $this->createController();
         $controller->setContainer($container);
 
-        $response = $controller->create(new Request(
-            [],
-            ['group_name' => 'Unit Test Group', 'group_description' => 'Test', 'group_auto_join' => 'n'],
-            ['csrf' => $token],
-        ));
+        $response = $controller->create(
+            new Request(
+                [],
+                ['group_name' => 'Unit Test Group', 'group_description' => 'Test', 'group_auto_join' => 'n'],
+                ['csrf' => $token],
+            ),
+        );
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
@@ -203,10 +205,12 @@ final class GroupControllerTest extends TestCase
         $controller = $this->createController();
         $controller->setContainer($container);
 
-        $response = $controller->delete(new Request([], [
-            'group_id' => 1,
-            'pmf-csrf-token' => $token,
-        ]));
+        $response = $controller->delete(
+            new Request([], [
+                'group_id' => 1,
+                'pmf-csrf-token' => $token,
+            ]),
+        );
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
@@ -219,12 +223,14 @@ final class GroupControllerTest extends TestCase
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer());
 
-        $response = $controller->update(new Request([], [
-            'group_id' => 1,
-            'name' => 'Updated Group',
-            'description' => 'Updated Description',
-            'auto_join' => 'n',
-        ]));
+        $response = $controller->update(
+            new Request([], [
+                'group_id' => 1,
+                'name' => 'Updated Group',
+                'description' => 'Updated Description',
+                'auto_join' => 'n',
+            ]),
+        );
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
@@ -237,10 +243,12 @@ final class GroupControllerTest extends TestCase
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer());
 
-        $response = $controller->updateMembers(new Request([], [
-            'group_id' => 1,
-            'group_members' => [1, 2],
-        ]));
+        $response = $controller->updateMembers(
+            new Request([], [
+                'group_id' => 1,
+                'group_members' => [1, 2],
+            ]),
+        );
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
@@ -253,10 +261,12 @@ final class GroupControllerTest extends TestCase
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer());
 
-        $response = $controller->updatePermissions(new Request([], [
-            'group_id' => 1,
-            'group_rights' => [1, 2],
-        ]));
+        $response = $controller->updatePermissions(
+            new Request([], [
+                'group_id' => 1,
+                'group_rights' => [1, 2],
+            ]),
+        );
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
@@ -276,9 +286,7 @@ final class GroupControllerTest extends TestCase
     private function createAuthenticatedContainer(): ContainerInterface
     {
         /** @var MediumPermission&PermissionInterface $permission */
-        $permission = $this->getMockBuilder(MediumPermission::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $permission = $this->getMockBuilder(MediumPermission::class)->disableOriginalConstructor()->getMock();
         $permission->method('hasPermission')->willReturn(true);
         $permission->method('deleteGroup')->willReturn(false);
 

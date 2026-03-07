@@ -6,7 +6,9 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Administration\Backup;
+use phpMyFAQ\Administration\Backup\BackupExecuteResult;
 use phpMyFAQ\Administration\Backup\BackupExportResult;
+use phpMyFAQ\Administration\Backup\BackupParseResult;
 use phpMyFAQ\Administration\Helper;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
@@ -24,6 +26,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -199,12 +202,183 @@ final class BackupControllerTest extends TestCase
         self::assertStringContainsString('No file was uploaded', (string) $response->getContent());
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function testRestoreReturnsErrorWhenUploadedFileIsInvalid(): void
+    {
+        $controller = $this->createAuthenticatedController();
+        $request = $this->createRestoreRequestWithFile($this->createUploadedFile('backup', error: UPLOAD_ERR_PARTIAL));
+
+        $response = $controller->restore($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('only partially uploaded', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testRestoreReturnsErrorWhenBackupVerificationFails(): void
+    {
+        $backup = $this->createMock(Backup::class);
+        $backup->expects($this->once())->method('verifyBackup')->willReturn(false);
+        $backup->expects($this->never())->method('parseBackupFile');
+
+        $controller = $this->createAuthenticatedController($backup);
+        $request = $this->createRestoreRequestWithFile($this->createUploadedFile('backup-data'));
+
+        $response = $controller->restore($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('This file is not a verified backup file.', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testRestoreReturnsErrorWhenBackupVerificationThrows(): void
+    {
+        $backup = $this->createMock(Backup::class);
+        $backup
+            ->expects($this->once())
+            ->method('verifyBackup')
+            ->willThrowException(new \SodiumException('verify failed'));
+        $backup->expects($this->never())->method('parseBackupFile');
+
+        $controller = $this->createAuthenticatedController($backup);
+        $request = $this->createRestoreRequestWithFile($this->createUploadedFile('backup-data'));
+
+        $response = $controller->restore($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('This file cannot be verified.', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testRestoreReturnsErrorWhenBackupParsingFails(): void
+    {
+        $backup = $this->createMock(Backup::class);
+        $backup->expects($this->once())->method('verifyBackup')->willReturn(true);
+        $backup->expects($this->once())->method('parseBackupFile')->willThrowException(new Exception('Parse failed'));
+
+        $controller = $this->createAuthenticatedController($backup);
+        $request = $this->createRestoreRequestWithFile($this->createUploadedFile('backup-data'));
+
+        $response = $controller->restore($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('Parse failed', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testRestoreReturnsErrorWhenBackupVersionDoesNotMatch(): void
+    {
+        $backup = $this->createMock(Backup::class);
+        $backup->expects($this->once())->method('verifyBackup')->willReturn(true);
+        $backup
+            ->expects($this->once())
+            ->method('parseBackupFile')
+            ->willReturn(new BackupParseResult(false, '4.1.0', '4.2.0', [], ''));
+        $backup->expects($this->never())->method('executeBackupQueries');
+
+        $controller = $this->createAuthenticatedController($backup);
+        $request = $this->createRestoreRequestWithFile($this->createUploadedFile('backup-data'));
+
+        $response = $controller->restore($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString(
+            'Version check failure: &quot;4.1.0&quot; found, &quot;4.2.0&quot; expected',
+            (string) $response->getContent(),
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testRestoreReturnsErrorWhenExecutingQueriesFails(): void
+    {
+        $backup = $this->createMock(Backup::class);
+        $backup->expects($this->once())->method('verifyBackup')->willReturn(true);
+        $backup
+            ->expects($this->once())
+            ->method('parseBackupFile')
+            ->willReturn(new BackupParseResult(true, '4.2.0', '4.2.0', ['SELECT 1'], ''));
+        $backup
+            ->expects($this->once())
+            ->method('executeBackupQueries')
+            ->with(['SELECT 1'], '')
+            ->willReturn(new BackupExecuteResult(0, 1, 'SELECT <bad>', 'syntax error'));
+
+        $controller = $this->createAuthenticatedController($backup);
+        $request = $this->createRestoreRequestWithFile($this->createUploadedFile('backup-data'));
+
+        $response = $controller->restore($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('SELECT &lt;bad&gt;', (string) $response->getContent());
+        self::assertStringContainsString('syntax error', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testRestoreReturnsSuccessWhenBackupIsImported(): void
+    {
+        $backup = $this->createMock(Backup::class);
+        $backup->expects($this->once())->method('verifyBackup')->willReturn(true);
+        $backup
+            ->expects($this->once())
+            ->method('parseBackupFile')
+            ->willReturn(new BackupParseResult(true, '4.2.0', '4.2.0', ['SELECT 1', 'SELECT 2'], ''));
+        $backup
+            ->expects($this->once())
+            ->method('executeBackupQueries')
+            ->with(['SELECT 1', 'SELECT 2'], '')
+            ->willReturn(new BackupExecuteResult(2, 0));
+
+        $controller = $this->createAuthenticatedController($backup);
+        $request = $this->createRestoreRequestWithFile($this->createUploadedFile('backup-data'));
+
+        $response = $controller->restore($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('alert-success', (string) $response->getContent());
+    }
+
     private function createAuthenticatedController(?Backup $backup = null): BackupController
     {
         $controller = new BackupController($backup ?? $this->createStub(Backup::class));
         $controller->setContainer($this->createControllerContainer());
 
         return $controller;
+    }
+
+    private function createRestoreRequestWithFile(UploadedFile $file): Request
+    {
+        $container = $this->createControllerContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $csrfToken = $this->createValidCsrfToken($session, 'restore');
+
+        return new Request(['csrf' => $csrfToken], [], [], [], ['userfile' => $file]);
+    }
+
+    private function createUploadedFile(
+        string $content,
+        string $originalName = 'backup.sql',
+        int $error = UPLOAD_ERR_OK,
+    ): UploadedFile {
+        $filePath = tempnam(sys_get_temp_dir(), 'pmf-backup-upload-');
+        self::assertNotFalse($filePath);
+        file_put_contents($filePath, $content);
+
+        return new UploadedFile($filePath, $originalName, 'application/sql', $error, true);
     }
 
     private function createValidCsrfToken(Session $session, string $page): string

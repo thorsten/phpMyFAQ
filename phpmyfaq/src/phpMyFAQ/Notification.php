@@ -47,10 +47,13 @@ readonly class Notification
     public function __construct(
         private Configuration $configuration,
         private ?WebPushService $webPushService = null,
+        ?Mail $mail = null,
+        ?Faq $faq = null,
+        ?Category $category = null,
     ) {
-        $this->mail = new Mail($this->configuration);
-        $this->faq = new Faq($this->configuration);
-        $this->category = new Category($this->configuration);
+        $this->mail = $mail ?? new Mail($this->configuration);
+        $this->faq = $faq ?? new Faq($this->configuration);
+        $this->category = $category ?? new Category($this->configuration);
         $this->mail->setReplyTo($this->configuration->getNoReplyEmail(), $this->configuration->getTitle());
     }
 
@@ -224,7 +227,7 @@ readonly class Notification
         $title = $newsData['header'];
 
         $newsUrl = sprintf(
-            '%news/%d/%s/%s.html',
+            '%snews/%d/%s/%s.html',
             $this->configuration->getDefaultUrl(),
             $newsData['id'],
             $newsData['lang'],
@@ -280,6 +283,9 @@ readonly class Notification
             $oUser = new User($this->configuration);
             $oUser->getUserById($userId);
             $userEmail = $oUser->getUserData(field: 'email');
+            if (!is_string($userEmail) || $userEmail === '') {
+                $userEmail = null;
+            }
         } catch (Exception $exception) {
             $this->configuration->getLogger()->error('Error getting user data: ' . $exception->getMessage());
             $userEmail = null;
@@ -288,19 +294,17 @@ readonly class Notification
         $mainAdminEmail = $this->configuration->getAdminEmail();
 
         try {
-            $mail = new Mail($this->configuration);
-            $mail->setReplyTo($questionEntity->getEmail(), $questionEntity->getUsername());
-            $mail->addTo($mainAdminEmail);
+            $this->mail->setReplyTo($questionEntity->getEmail(), $questionEntity->getUsername());
+            $this->mail->addTo($mainAdminEmail);
 
             // Let the category owner get a copy of the message
             if ($userEmail !== null && $mainAdminEmail !== $userEmail) {
-                $mail->addCc($userEmail);
+                $this->mail->addCc($userEmail);
             }
 
-            $mail->subject = $this->configuration->getTitle() . ': New Question was added.';
-            $mail->message = $questionMail;
-            $mail->send();
-            unset($mail);
+            $this->mail->subject = $this->configuration->getTitle() . ': New Question was added.';
+            $this->mail->message = $questionMail;
+            $this->mail->send();
         } catch (Exception|TransportExceptionInterface $exception) {
             $this->configuration->getLogger()->error('Error sending mail: ' . $exception->getMessage());
         }

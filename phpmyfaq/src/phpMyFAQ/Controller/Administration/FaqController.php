@@ -358,7 +358,7 @@ final class FaqController extends AbstractAdministrationController
                 : '',
             'allUsers' => $allUsers,
             'restrictedUsers' => $restrictedUsers,
-            'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
+            'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => $this->changelog->getByFaqId($faqId),
             'hasPermissionForApprove' => $this->currentUser?->perm->hasPermission(
                 $this->currentUser->getUserId(),
