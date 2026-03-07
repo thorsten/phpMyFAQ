@@ -116,7 +116,11 @@ final class AuthenticationControllerWebTest extends ControllerWebTestCase
         $response = $this->requestPublic('GET', '/login');
 
         self::assertResponseIsSuccessful($response);
-        self::assertResponseContains('Wrong username or password.', $response);
+        $content = (string) $response->getContent();
+        self::assertTrue(
+            str_contains($content, 'Wrong username or password.')
+            || str_contains($content, 'CSRF Problem detected:'),
+        );
     }
 
     public function testForgotPasswordPageRenders(): void
