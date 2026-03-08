@@ -341,6 +341,71 @@ final class PageControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testCreateReturnsConflictWhenSlugAlreadyExists(): void
+    {
+        $existingSlug = 'existing-page-' . bin2hex(random_bytes(4));
+        $pageId = $this->createPageViaController($existingSlug);
+        self::assertGreaterThan(0, $pageId);
+
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'save-page');
+        $controller->setContainer($container);
+
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'pageTitle' => 'Duplicate slug page',
+            'slug' => $existingSlug,
+            'content' => 'Some content',
+            'authorName' => 'Author',
+            'authorEmail' => 'author@example.com',
+            'active' => true,
+            'lang' => 'en',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_CONFLICT, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_page_slug_exists'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateReturnsConflictWhenTranslationLanguageAlreadyExists(): void
+    {
+        $existingSlug = 'existing-translation-page-' . bin2hex(random_bytes(4));
+        $pageId = $this->createPageViaController($existingSlug);
+        self::assertGreaterThan(0, $pageId);
+
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'save-page');
+        $controller->setContainer($container);
+
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'pageId' => $pageId,
+            'pageTitle' => 'Duplicate translation',
+            'slug' => 'duplicate-translation-' . bin2hex(random_bytes(3)),
+            'content' => 'Translated content',
+            'authorName' => 'Author',
+            'authorEmail' => 'author@example.com',
+            'active' => true,
+            'lang' => 'en',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_CONFLICT, $response->getStatusCode());
+        self::assertSame('Translation for this language already exists', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testDeleteReturnsBadRequestForMissingRequiredFieldsWhenAuthenticated(): void
     {
         $controller = $this->createController();
@@ -453,6 +518,34 @@ final class PageControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertTrue($payload['available']);
         self::assertSame('fresh-page-slug', $payload['slug']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCheckSlugReturnsUnavailableForExistingSlug(): void
+    {
+        $existingSlug = 'existing-check-slug-' . bin2hex(random_bytes(4));
+        $pageId = $this->createPageViaController($existingSlug);
+        self::assertGreaterThan(0, $pageId);
+
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'save-page');
+        $controller->setContainer($container);
+
+        $response = $controller->checkSlug(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'slug' => $existingSlug,
+            'lang' => 'en',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertFalse($payload['available']);
+        self::assertSame($existingSlug, $payload['slug']);
     }
 
     /**
@@ -594,6 +687,120 @@ final class PageControllerTest extends TestCase
 
         $openSearch = $this->createMock(OpenSearch::class);
         $openSearch->expects($this->once())->method('deleteCustomPage')->with($pageId, 'en');
+
+        $controller = $this->createControllerWithSearchDependencies($elasticsearch, $openSearch);
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-page');
+        $controller->setContainer($container);
+
+        $response = $controller->delete(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'id' => $pageId,
+            'lang' => 'en',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateStillSucceedsWhenSearchIndexingThrows(): void
+    {
+        $this->configuration->set('search.enableElasticsearch', true);
+        $this->configuration->set('search.enableOpenSearch', true);
+
+        $elasticsearch = $this->createMock(Elasticsearch::class);
+        $elasticsearch->expects($this->once())->method('indexCustomPage')->willThrowException(new \Exception('ES down'));
+
+        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch->expects($this->once())->method('indexCustomPage')->willThrowException(new \Exception('OS down'));
+
+        $controller = $this->createControllerWithSearchDependencies($elasticsearch, $openSearch);
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'save-page');
+        $controller->setContainer($container);
+
+        $slug = 'unit-test-create-error-' . bin2hex(random_bytes(4));
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'pageTitle' => 'Unit Test Page With Search Errors',
+            'slug' => $slug,
+            'content' => 'Some content',
+            'authorName' => 'Test Author',
+            'authorEmail' => 'test@example.com',
+            'active' => true,
+            'lang' => 'en',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('id', $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateStillSucceedsWhenSearchUpdatesThrow(): void
+    {
+        $this->configuration->set('search.enableElasticsearch', true);
+        $this->configuration->set('search.enableOpenSearch', true);
+
+        $pageId = $this->createPageViaController('unit-test-update-error-' . bin2hex(random_bytes(4)));
+
+        $elasticsearch = $this->createMock(Elasticsearch::class);
+        $elasticsearch->expects($this->once())->method('updateCustomPage')->willThrowException(new \Exception('ES down'));
+
+        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch->expects($this->once())->method('updateCustomPage')->willThrowException(new \Exception('OS down'));
+
+        $controller = $this->createControllerWithSearchDependencies($elasticsearch, $openSearch);
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-page');
+        $controller->setContainer($container);
+
+        $response = $controller->update(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'id' => $pageId,
+            'pageTitle' => 'Updated Unit Test Page With Search Errors',
+            'slug' => 'updated-unit-test-error-' . $pageId,
+            'content' => 'Updated content',
+            'authorName' => 'Test Author',
+            'authorEmail' => 'test@example.com',
+            'active' => true,
+            'lang' => 'en',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteStillSucceedsWhenSearchDeletesThrow(): void
+    {
+        $this->configuration->set('search.enableElasticsearch', true);
+        $this->configuration->set('search.enableOpenSearch', true);
+
+        $pageId = $this->createPageViaController('unit-test-delete-error-' . bin2hex(random_bytes(4)));
+
+        $elasticsearch = $this->createMock(Elasticsearch::class);
+        $elasticsearch->expects($this->once())->method('deleteCustomPage')->with($pageId, 'en')
+            ->willThrowException(new \Exception('ES down'));
+
+        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch->expects($this->once())->method('deleteCustomPage')->with($pageId, 'en')
+            ->willThrowException(new \Exception('OS down'));
 
         $controller = $this->createControllerWithSearchDependencies($elasticsearch, $openSearch);
         $container = $this->createAuthenticatedContainer();

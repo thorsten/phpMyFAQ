@@ -50,6 +50,9 @@ jobs:
       #    mago lint --reporting-format=github
       #    mago analyze --reporting-format=github
 
+      - name: Check version consistency
+        run: php scripts/check-version.php
+
       - name: Test with PHPUnit
         run: phpmyfaq/src/libs/bin/phpunit --coverage-text
 

@@ -68,7 +68,7 @@ final class ImageController extends AbstractController
                 $request->server->get('HTTP_ORIGIN') !== null
                 && $request->server->get('HTTP_ORIGIN') . '/' === $this->configuration->getDefaultUrl()
             ) {
-                $headers = ['Access-Control-Allow-Origin', $request->server->get('HTTP_ORIGIN')];
+                $headers = ['Access-Control-Allow-Origin' => $request->server->get('HTTP_ORIGIN')];
             }
 
             // Sanitize input
@@ -168,6 +168,6 @@ final class ImageController extends AbstractController
             ],
         ];
 
-        return $this->json($response, Response::HTTP_OK);
+        return $this->json($response, Response::HTTP_OK, $headers);
     }
 }

@@ -15,7 +15,7 @@
 # @since     2019-11-09
 
 # phpMyFAQ Version
-. scripts/version.sh
+: "${PMF_VERSION:=$(php scripts/get-version.php)}"
 
 # Build docker image
 docker build -t phpmyfaq/phpmyfaq:${PMF_VERSION} .

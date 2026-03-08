@@ -213,6 +213,163 @@ final class NewsControllerTest extends TestCase
         self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
     }
 
+    /**
+     * @throws \Exception
+     */
+    private function createValidCsrfToken(Session $session, string $page): string
+    {
+        $token = \phpMyFAQ\Session\Token::getInstance($session)->getTokenString($page);
+        $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;
+
+        return $token;
+    }
+
+    private function getLatestNewsId(): int
+    {
+        $result = $this->dbHandle->query('SELECT MAX(id) AS latest_id FROM faqnews');
+        $row = $this->dbHandle->fetchObject($result);
+
+        return (int) $row->latest_id;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateReturnsSuccessWithValidCsrf(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'save-news');
+
+        $controller = new NewsController();
+        $controller->setContainer($container);
+
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'newsHeader' => 'Unit Test News',
+            'news' => 'Unit Test Content',
+            'authorName' => 'Tester',
+            'authorEmail' => 'tester@example.com',
+            'active' => '1',
+            'comment' => '1',
+            'link' => 'https://example.com',
+            'linkTitle' => 'Example',
+            'langTo' => 'en',
+            'target' => '_blank',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_news_updatesuc'), $payload['success']);
+        self::assertGreaterThan(0, $this->getLatestNewsId());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateReturnsSuccessWithValidCsrf(): void
+    {
+        $this->dbHandle->query(
+            "INSERT INTO faqnews (id, lang, active, author_name, author_email, comment, datum, header, artikel, link, linktitel, target)
+             VALUES (101, 'en', 'y', 'Tester', 'tester@example.com', 'y', '20260308120000', 'Old Header', 'Old Content', '', '', '')"
+        );
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-news');
+
+        $controller = new NewsController();
+        $controller->setContainer($container);
+
+        $response = $controller->update(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'id' => 101,
+            'newsHeader' => 'Updated Header',
+            'news' => 'Updated Content',
+            'authorName' => 'Tester',
+            'authorEmail' => 'tester@example.com',
+            'active' => '1',
+            'comment' => '1',
+            'link' => 'https://example.com/updated',
+            'linkTitle' => 'Updated',
+            'langTo' => 'en',
+            'target' => '_self',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_news_updatesuc'), $payload['success']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testActivateReturnsSuccessWithValidCsrfForBothStates(): void
+    {
+        $this->dbHandle->query(
+            "INSERT INTO faqnews (id, lang, active, author_name, author_email, comment, datum, header, artikel, link, linktitel, target)
+             VALUES (102, 'en', 'n', 'Tester', 'tester@example.com', 'y', '20260308120000', 'Header', 'Content', '', '', '')"
+        );
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'activate-news');
+
+        $controller = new NewsController();
+        $controller->setContainer($container);
+
+        $activateResponse = $controller->activate(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'id' => 102,
+            'status' => true,
+        ], JSON_THROW_ON_ERROR)));
+        $activatePayload = json_decode((string) $activateResponse->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $activateResponse->getStatusCode());
+        self::assertSame(Translation::get('ad_news_updatesuc'), $activatePayload['success']);
+
+        $deactivateResponse = $controller->activate(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'id' => 102,
+            'status' => false,
+        ], JSON_THROW_ON_ERROR)));
+        $deactivatePayload = json_decode((string) $deactivateResponse->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $deactivateResponse->getStatusCode());
+        self::assertSame(Translation::get('ad_news_updatesuc'), $deactivatePayload['success']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsSuccessWithValidCsrf(): void
+    {
+        $this->dbHandle->query(
+            "INSERT INTO faqnews (id, lang, active, author_name, author_email, comment, datum, header, artikel, link, linktitel, target)
+             VALUES (103, 'en', 'y', 'Tester', 'tester@example.com', 'y', '20260308120000', 'Delete Header', 'Delete Content', '', '', '')"
+        );
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-news');
+
+        $controller = new NewsController();
+        $controller->setContainer($container);
+
+        $response = $controller->delete(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'id' => 103,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_news_delsuc'), $payload['success']);
+    }
+
     private function createAuthenticatedContainer(): ContainerInterface
     {
         $permission = $this->createMock(PermissionInterface::class);

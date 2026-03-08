@@ -93,8 +93,14 @@ final class UserControllerTest extends TestCase
     {
         $_SESSION = [];
         if (session_status() === PHP_SESSION_ACTIVE) {
+            session_write_close();
+            session_id($this->sessionId);
+            session_start();
+            $_SESSION = [];
             session_destroy();
         }
+        session_id('');
+        Token::resetInstanceForTests();
 
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
@@ -118,6 +124,11 @@ final class UserControllerTest extends TestCase
 
     private function createAuthenticatedContainer(): ContainerInterface
     {
+        return $this->createAuthenticatedContainerWithAdminLog($this->createStub(AdminLog::class));
+    }
+
+    private function createAuthenticatedContainerWithAdminLog(AdminLog $adminLog): ContainerInterface
+    {
         $permission = $this->createMock(PermissionInterface::class);
         $permission
             ->method('hasPermission')
@@ -140,7 +151,6 @@ final class UserControllerTest extends TestCase
         $currentUser->method('getUserId')->willReturn(1);
 
         $session = new Session(new MockArraySessionStorage());
-        $adminLog = $this->createStub(AdminLog::class);
 
         $container = $this->createStub(ContainerInterface::class);
         $container
@@ -274,6 +284,27 @@ final class UserControllerTest extends TestCase
 
         $this->expectException(\Exception::class);
         $controller->deleteUser($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAddUserRequiresUserPermission(): void
+    {
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => 'test-token',
+            'userName' => 'new-user',
+            'realName' => 'New User',
+            'email' => 'new-user@example.com',
+            'automaticPassword' => true,
+            'password' => '',
+            'passwordConfirm' => '',
+            'isSuperAdmin' => false,
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController();
+
+        $this->expectException(\Exception::class);
+        $controller->addUser($request);
     }
 
     /**
@@ -485,6 +516,353 @@ final class UserControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testActivateReturnsBadRequestForAlreadyActiveUserWithValidCsrf(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'activate-user');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'userId' => 2,
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->activate($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('active', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testOverwritePasswordReturnsBadRequestForMismatchedPasswordsWithValidCsrf(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'overwrite-password');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'userId' => 1,
+            'csrf' => $token,
+            'newPassword' => 'password123',
+            'passwordRepeat' => 'password124',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->overwritePassword($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('msgPasswordsMustBeEqual'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAddUserReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => 'invalid-token',
+            'userName' => 'new-user',
+            'realName' => 'New User',
+            'email' => 'new-user@example.com',
+            'automaticPassword' => true,
+            'password' => '',
+            'passwordConfirm' => '',
+            'isSuperAdmin' => false,
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->addUser($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAddUserReturnsValidationErrorsWithValidCsrf(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'add-user');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'userName' => '***',
+            'realName' => '',
+            'email' => 'invalid-email',
+            'automaticPassword' => false,
+            'password' => 'short',
+            'passwordConfirm' => 'tiny',
+            'isSuperAdmin' => false,
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->addUser($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertContains(Translation::get('ad_user_error_loginInvalid'), $payload);
+        self::assertContains(Translation::get('ad_user_error_noRealName'), $payload);
+        self::assertContains(Translation::get('ad_user_error_noEmail'), $payload);
+        self::assertContains(Translation::get('ad_passwd_fail'), $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testOverwritePasswordReturnsSuccessWithValidCsrf(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'overwrite-password');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'userId' => 1,
+            'csrf' => $token,
+            'newPassword' => 'updatedPassword123',
+            'passwordRepeat' => 'updatedPassword123',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->overwritePassword($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_passwdsuc'), $payload['success']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testEditUserReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => 'invalid-token',
+            'userId' => 2,
+            'display_name' => 'Editor User',
+            'email' => 'editor@example.com',
+            'last_modified' => '20260101010101',
+            'user_status' => 'active',
+            'is_superadmin' => false,
+            'overwrite_twofactor' => 'off',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->editUser($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testEditUserReturnsBadRequestForMissingUserIdWithValidCsrf(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-user-data');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'userId' => 0,
+            'display_name' => 'Editor User',
+            'email' => 'editor@example.com',
+            'last_modified' => '20260101010101',
+            'user_status' => 'active',
+            'is_superadmin' => false,
+            'overwrite_twofactor' => 'off',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->editUser($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_user_error_noId'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testEditUserReturnsSuccessWithValidCsrf(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-user-data');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'userId' => 2,
+            'display_name' => 'Edited Test User',
+            'email' => 'edited-test-user@example.com',
+            'last_modified' => '20260101010101',
+            'user_status' => 'active',
+            'is_superadmin' => false,
+            'overwrite_twofactor' => 'off',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->editUser($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+        self::assertStringContainsString('testUser', $payload['success']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testEditUserResetsTwoFactorAndLogsPrivilegeChanges(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $adminLog = $this->createMock(AdminLog::class);
+        $adminLog
+            ->expects($this->exactly(4))
+            ->method('log')
+            ->with(
+                $this->anything(),
+                $this->callback(static function (string $message): bool {
+                    static $expectedFragments = [
+                        'auth-2fa-reset:2',
+                        'user-status-changed:2 (active -> protected)',
+                        'user-superadmin-granted:2',
+                        'user-edit:2',
+                    ];
+
+                    $expectedFragment = array_shift($expectedFragments);
+                    return $expectedFragment !== null && str_contains($message, $expectedFragment);
+                }),
+            );
+
+        $container = $this->createAuthenticatedContainerWithAdminLog($adminLog);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-user-data');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'userId' => 2,
+            'display_name' => 'Privileged Test User',
+            'email' => 'privileged-test-user@example.com',
+            'last_modified' => '20260228093848',
+            'user_status' => 'protected',
+            'is_superadmin' => true,
+            'overwrite_twofactor' => 'on',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->editUser($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateUserRightsReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => 'invalid-token',
+            'userId' => 2,
+            'userRights' => [1, 2],
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->updateUserRights($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateUserRightsReturnsBadRequestForMissingUserIdWithValidCsrf(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-user-rights');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'userId' => 0,
+            'userRights' => [1, 2],
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->updateUserRights($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_user_error_noId'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testDeleteUserReturnsBadRequestForProtectedUserWithValidCsrf(): void
     {
         $this->seedCurrentUserSession();
@@ -508,4 +886,66 @@ final class UserControllerTest extends TestCase
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertSame(Translation::get('ad_user_error_protectedAccount'), $payload['error']);
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAddUserReturnsDuplicateLoginErrorWithValidCsrf(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'add-user');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'userName' => 'admin',
+            'realName' => 'Admin Duplicate',
+            'email' => 'duplicate-admin@example.com',
+            'automaticPassword' => false,
+            'password' => 'password123',
+            'passwordConfirm' => 'password123',
+            'isSuperAdmin' => false,
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->addUser($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertContains(Translation::get('ad_adus_exerr'), $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateUserRightsReturnsSuccessWithValidCsrf(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-user-rights');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'userId' => 2,
+            'userRights' => [1, 2],
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->updateUserRights($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+    }
+
 }

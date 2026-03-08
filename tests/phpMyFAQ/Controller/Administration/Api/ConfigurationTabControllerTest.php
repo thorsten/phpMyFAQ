@@ -24,6 +24,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -109,6 +110,15 @@ final class ConfigurationTabControllerTest extends TestCase
             $this->createStub(Language::class),
             $this->createStub(System::class),
             $this->createStub(ThemeManager::class),
+        );
+    }
+
+    private function createControllerWithThemeManager(ThemeManager $themeManager): ConfigurationTabController
+    {
+        return new ConfigurationTabController(
+            $this->createStub(Language::class),
+            $this->createStub(System::class),
+            $themeManager,
         );
     }
 
@@ -308,6 +318,14 @@ final class ConfigurationTabControllerTest extends TestCase
 
     private function createAuthenticatedContainer(?Session $session = null): ContainerInterface
     {
+        return $this->createAuthenticatedContainerWithAdminLog($this->createStub(AdminLog::class), $session);
+    }
+
+    private function createAuthenticatedContainerWithAdminLog(
+        AdminLog $adminLog,
+        ?Session $session = null
+    ): ContainerInterface
+    {
         $permission = $this->createMock(PermissionInterface::class);
         $permission
             ->method('hasPermission')
@@ -324,7 +342,6 @@ final class ConfigurationTabControllerTest extends TestCase
         $currentUser->method('getUserId')->willReturn(42);
 
         $session ??= new Session(new MockArraySessionStorage());
-        $adminLog = $this->createStub(AdminLog::class);
 
         $container = $this->createStub(ContainerInterface::class);
         $container
@@ -366,6 +383,81 @@ final class ConfigurationTabControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testUploadThemeReturnsSuccessForValidZipUpload(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('theme-manager');
+        $this->setCsrfCookie('theme-manager', $csrfToken);
+
+        $archive = tempnam(sys_get_temp_dir(), 'pmf-theme-');
+        self::assertNotFalse($archive);
+        file_put_contents($archive, 'zip-placeholder');
+        $uploadedFile = new UploadedFile($archive, 'my-theme.zip', 'application/zip', null, true);
+
+        $themeManager = $this->createMock(ThemeManager::class);
+        $themeManager->expects($this->once())
+            ->method('uploadTheme')
+            ->with('custom-theme', $uploadedFile->getPathname())
+            ->willReturn(5);
+
+        $controller = $this->createControllerWithThemeManager($themeManager);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $request = new Request(
+            [],
+            ['pmf-csrf-token' => $csrfToken, 'themeName' => 'custom-theme'],
+            [],
+            [],
+            ['themeArchive' => $uploadedFile],
+        );
+        $response = $controller->uploadTheme($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('Theme "custom-theme" uploaded (5 files).', $payload['success']);
+        $this->removeCsrfCookie('theme-manager');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadThemeReturnsBadRequestWhenThemeManagerThrows(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('theme-manager');
+        $this->setCsrfCookie('theme-manager', $csrfToken);
+
+        $archive = tempnam(sys_get_temp_dir(), 'pmf-theme-');
+        self::assertNotFalse($archive);
+        file_put_contents($archive, 'zip-placeholder');
+        $uploadedFile = new UploadedFile($archive, 'broken-theme.zip', 'application/zip', null, true);
+
+        $themeManager = $this->createMock(ThemeManager::class);
+        $themeManager->expects($this->once())
+            ->method('uploadTheme')
+            ->willThrowException(new \RuntimeException('Theme archive invalid.'));
+
+        $controller = $this->createControllerWithThemeManager($themeManager);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $request = new Request(
+            [],
+            ['pmf-csrf-token' => $csrfToken, 'themeName' => 'broken-theme'],
+            [],
+            [],
+            ['themeArchive' => $uploadedFile],
+        );
+        $response = $controller->uploadTheme($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Theme archive invalid.', $payload['error']);
+        $this->removeCsrfCookie('theme-manager');
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testSaveReturnsSuccessWithValidCsrfAndMinimalPayload(): void
     {
         $session = new Session(new MockArraySessionStorage());
@@ -379,6 +471,105 @@ final class ConfigurationTabControllerTest extends TestCase
             'pmf-csrf-token' => $csrfToken,
             'availableFields' => json_encode([], JSON_THROW_ON_ERROR),
             'edit' => [],
+        ]);
+
+        $response = $controller->save($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+        $this->removeCsrfCookie('configuration');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSavePersistsCheckboxAndSecurityConfigurationChanges(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('configuration');
+        $this->setCsrfCookie('configuration', $csrfToken);
+
+        $adminLog = $this->createMock(AdminLog::class);
+        $adminLog
+            ->expects($this->exactly(5))
+            ->method('log')
+            ->with(
+                $this->anything(),
+                $this->callback(static function (string $message): bool {
+                    static $expectedFragments = [
+                        'config-change',
+                        'system-maintenance-mode-enabled',
+                        'config-security-changed',
+                        'config-ldap-changed',
+                        'config-sso-changed',
+                    ];
+
+                    $expectedFragment = array_shift($expectedFragments);
+                    return $expectedFragment !== null && str_contains($message, $expectedFragment);
+                }),
+            );
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainerWithAdminLog($adminLog, $session));
+
+        $originalReferenceUrl = (string) $this->configuration->get('main.referenceURL');
+
+        $request = new Request([], [
+            'pmf-csrf-token' => $csrfToken,
+            'availableFields' => json_encode([
+                'security.enableRegistration',
+                'main.enableMarkdownEditor',
+                'main.enableWysiwygEditor',
+                'main.referenceURL',
+                'main.maintenanceMode',
+                'security.enableLoginOnly',
+                'ldap.ldapSupport',
+                'security.ssoSupport',
+            ], JSON_THROW_ON_ERROR),
+            'edit' => [
+                'main.enableMarkdownEditor' => '1',
+                'main.enableWysiwygEditor' => 'true',
+                'main.referenceURL' => 'not-a-valid-url',
+                'main.maintenanceMode' => 'true',
+                'security.enableLoginOnly' => 'true',
+                'ldap.ldapSupport' => 'true',
+                'security.ssoSupport' => 'true',
+            ],
+        ]);
+
+        $response = $controller->save($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+        self::assertSame('1', $this->configuration->get('main.enableMarkdownEditor'));
+        self::assertSame('', $this->configuration->get('main.enableWysiwygEditor'));
+        self::assertSame($originalReferenceUrl, $this->configuration->get('main.referenceURL'));
+        self::assertFalse((bool) $this->configuration->get('security.enableRegistration'));
+        self::assertTrue((bool) $this->configuration->get('main.maintenanceMode'));
+        self::assertTrue((bool) $this->configuration->get('security.enableLoginOnly'));
+        self::assertTrue((bool) $this->configuration->get('ldap.ldapSupport'));
+        self::assertTrue((bool) $this->configuration->get('security.ssoSupport'));
+        $this->removeCsrfCookie('configuration');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveIgnoresInvalidAvailableFieldsJsonAndStillSucceeds(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('configuration');
+        $this->setCsrfCookie('configuration', $csrfToken);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $request = new Request([], [
+            'pmf-csrf-token' => $csrfToken,
+            'availableFields' => '{invalid-json',
+            'edit' => ['main.currentVersion' => '9.9.9'],
         ]);
 
         $response = $controller->save($request);

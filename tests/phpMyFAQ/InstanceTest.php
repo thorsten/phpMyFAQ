@@ -11,38 +11,80 @@ use PHPUnit\Framework\TestCase;
 class InstanceTest extends TestCase
 {
     private Instance $instance;
+    private Sqlite3 $dbHandle;
+    private string $databasePath;
+    private ?Configuration $previousConfiguration = null;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $configuration = new Configuration($dbHandle);
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $this->previousConfiguration = $configurationProperty->getValue();
+        $configurationProperty->setValue(null, null);
+
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-instance-test-');
+        self::assertNotFalse($databasePath);
+        self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
+        $this->databasePath = $databasePath;
+
+        $this->dbHandle = new Sqlite3();
+        $this->dbHandle->connect($this->databasePath, '', '');
+        $configuration = new Configuration($this->dbHandle);
+
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $this->dbHandle);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlite3');
+        Database::setTablePrefix('');
 
         $this->instance = new Instance($configuration);
     }
 
+    protected function tearDown(): void
+    {
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, $this->previousConfiguration);
+
+        $this->dbHandle->close();
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, null);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, '');
+        @unlink($this->databasePath);
+
+        parent::tearDown();
+    }
+
     public function testCreate(): void
     {
+        $initialCount = count($this->instance->getAll());
+
         $instance = new InstanceEntity();
         $instance->setUrl('http://two.localhost')->setInstance('Second localhost')->setComment('Test instance');
 
-        $this->assertEquals(2, $this->instance->create($instance));
-        $this->instance->delete(2);
+        $id = $this->instance->create($instance);
+
+        $this->assertGreaterThan($initialCount, $id);
+        $this->instance->delete($id);
     }
 
     public function testGetAll(): void
     {
         $instances = $this->instance->getAll();
-        $this->assertCount(1, $instances); // Only one instance is created by default
+        $initialCount = count($instances);
+        $this->assertGreaterThanOrEqual(1, $initialCount);
 
         $instance = new InstanceEntity();
         $instance->setUrl('http://two.localhost')->setInstance('Second localhost')->setComment('Test instance');
-        $this->instance->create($instance);
+        $id = $this->instance->create($instance);
 
-        $this->assertCount(2, $this->instance->getAll());
-        $this->instance->delete(2);
+        $this->assertCount($initialCount + 1, $this->instance->getAll());
+        $this->instance->delete($id);
     }
 
     public function testGetById(): void

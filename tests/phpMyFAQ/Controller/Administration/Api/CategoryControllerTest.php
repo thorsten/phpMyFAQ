@@ -125,6 +125,14 @@ final class CategoryControllerTest extends TestCase
         );
     }
 
+    private function createControllerWithDependencies(
+        Image $categoryImage,
+        Order $categoryOrder,
+        Permission $categoryPermission
+    ): CategoryController {
+        return new CategoryController($categoryImage, $categoryOrder, $categoryPermission);
+    }
+
     private function createAuthenticatedContainer(?Session $session = null): ContainerInterface
     {
         $permission = $this->createStub(PermissionInterface::class);
@@ -261,6 +269,26 @@ final class CategoryControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testDeleteReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    {
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => 'invalid-token',
+            'categoryId' => 1,
+            'language' => 'en',
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->delete($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testPermissionsReturnsUserAndGroupPermissionsWhenAuthenticated(): void
     {
         $categoryPermission = $this->createMock(Permission::class);
@@ -358,6 +386,47 @@ final class CategoryControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertArrayHasKey('success', $payload);
+        $this->removeCsrfCookie('category');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsSuccessForValidCsrfWhenAuthenticated(): void
+    {
+        $this->configuration->getDb()->query(
+            "INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
+             VALUES (99, 'en', 0, 'Delete Me', '', 1, -1, 1, '', 0)"
+        );
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('category');
+        $this->setCsrfCookie('category', $csrfToken);
+
+        $categoryImage = $this->createMock(Image::class);
+        $categoryImage->expects($this->once())->method('setFileName')->with('');
+        $categoryImage->expects($this->once())->method('delete');
+
+        $categoryOrder = $this->createMock(Order::class);
+        $categoryOrder->expects($this->once())->method('remove')->with(99);
+
+        $categoryPermission = $this->createMock(Permission::class);
+        $categoryPermission->expects($this->exactly(2))
+            ->method('delete')
+            ->willReturn(true);
+
+        $controller = $this->createControllerWithDependencies($categoryImage, $categoryOrder, $categoryPermission);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->delete(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $csrfToken,
+            'categoryId' => 99,
+            'language' => 'en',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_categ_deleted'), $payload['success']);
         $this->removeCsrfCookie('category');
     }
 
