@@ -163,19 +163,22 @@ class Permission
     {
         $permissions = [];
 
-        $data = json_decode(Request::createFromGlobals()->getContent())->data;
+        $payload = json_decode(Request::createFromGlobals()->getContent());
+        $data = is_object($payload) && isset($payload->data) && is_object($payload->data)
+            ? $payload->data
+            : (object) [];
 
         $restrictedUsers = [];
-        if ('all' === Filter::filterVar($data->userpermission, FILTER_SANITIZE_SPECIAL_CHARS)) {
+        if ('all' === Filter::filterVar($data->userpermission ?? null, FILTER_SANITIZE_SPECIAL_CHARS)) {
             $restrictedUsers = [-1];
         }
 
         if ($restrictedUsers === []) {
-            if (is_string($data->restricted_users)) {
+            if (is_string($data->restricted_users ?? null)) {
                 $restrictedUsers = [Filter::filterVar($data->restricted_users, FILTER_VALIDATE_INT)];
             }
 
-            if (is_array($data->restricted_users)) {
+            if (is_array($data->restricted_users ?? null)) {
                 $restrictedUsers = Filter::filterArray($data->restricted_users, FILTER_VALIDATE_INT);
             }
         }
@@ -185,16 +188,16 @@ class Permission
         ];
 
         $restrictedGroups = [];
-        if ('all' === Filter::filterVar($data->grouppermission, FILTER_SANITIZE_SPECIAL_CHARS)) {
+        if ('all' === Filter::filterVar($data->grouppermission ?? null, FILTER_SANITIZE_SPECIAL_CHARS)) {
             $restrictedGroups = [-1];
         }
 
         if ($restrictedGroups === []) {
-            if (is_string($data->restricted_groups)) {
+            if (is_string($data->restricted_groups ?? null)) {
                 $restrictedGroups = [Filter::filterVar($data->restricted_groups, FILTER_VALIDATE_INT)];
             }
 
-            if (is_array($data->restricted_groups)) {
+            if (is_array($data->restricted_groups ?? null)) {
                 $restrictedGroups = Filter::filterArray($data->restricted_groups, FILTER_VALIDATE_INT);
             }
         }

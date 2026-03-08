@@ -332,4 +332,88 @@ final class OpenSearchControllerTest extends TestCase
         self::assertTrue($payload['available']);
         self::assertSame('healthy', $payload['status']);
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testImportReturnsBadRequestWhenFaqBulkIndexFails(): void
+    {
+        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch->expects($this->once())->method('bulkIndex')->with([])->willReturn(['failure' => 'boom']);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecords = [];
+        $faq->expects($this->once())->method('getAllFaqs');
+
+        $controller = $this->createControllerWithDependencies(
+            $openSearch,
+            $faq,
+            $this->createStub(CustomPage::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->import();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(['failure' => 'boom'], $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testImportReturnsBadRequestWhenCustomPageBulkIndexFails(): void
+    {
+        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch->expects($this->once())->method('bulkIndex')->with([])->willReturn(['success' => true]);
+        $openSearch->expects($this->once())
+            ->method('bulkIndexCustomPages')
+            ->with([['id' => 7, 'title' => 'Page']])
+            ->willReturn(['failure' => 'pages']);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecords = [];
+        $faq->expects($this->once())->method('getAllFaqs');
+
+        $customPage = $this->createMock(CustomPage::class);
+        $customPage->expects($this->once())->method('getAllPages')->willReturn([['id' => 7, 'title' => 'Page']]);
+
+        $controller = $this->createControllerWithDependencies($openSearch, $faq, $customPage);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->import();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertStringContainsString('FAQs indexed but custom pages failed', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testImportReturnsSuccessWhenFaqsAndCustomPagesAreIndexed(): void
+    {
+        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch->expects($this->once())->method('bulkIndex')->with([])->willReturn(['success' => true]);
+        $openSearch->expects($this->once())
+            ->method('bulkIndexCustomPages')
+            ->with([['id' => 7, 'title' => 'Page']])
+            ->willReturn(['success' => true]);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecords = [];
+        $faq->expects($this->once())->method('getAllFaqs');
+
+        $customPage = $this->createMock(CustomPage::class);
+        $customPage->expects($this->once())->method('getAllPages')->willReturn([['id' => 7, 'title' => 'Page']]);
+
+        $controller = $this->createControllerWithDependencies($openSearch, $faq, $customPage);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->import();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_os_create_import_success'), $payload['success']);
+    }
 }

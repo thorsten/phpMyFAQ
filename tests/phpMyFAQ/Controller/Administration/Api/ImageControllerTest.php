@@ -20,6 +20,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -195,5 +196,99 @@ final class ImageControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertTrue($payload['success']);
         self::assertSame([], $payload['data']['files']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadReturnsBadRequestForInvalidCharactersInFilename(): void
+    {
+        $controller = new ImageController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'pmf-csrf-token');
+        $controller->setContainer($container);
+
+        $file = $this->createMock(UploadedFile::class);
+        $file->method('isValid')->willReturn(true);
+        $file->method('getClientOriginalName')->willReturn('../bad.png');
+        $file->method('getClientOriginalExtension')->willReturn('png');
+
+        $request = new Request(['csrf' => $token]);
+        $request->files->set('files', [$file]);
+
+        $response = $controller->upload($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertFalse($payload['success']);
+        self::assertSame(['Data contains invalid characters'], $payload['messages']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadReturnsBadRequestForDisallowedExtension(): void
+    {
+        $controller = new ImageController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'pmf-csrf-token');
+        $controller->setContainer($container);
+
+        $file = $this->createMock(UploadedFile::class);
+        $file->method('isValid')->willReturn(true);
+        $file->method('getClientOriginalName')->willReturn('payload.exe');
+        $file->method('getClientOriginalExtension')->willReturn('exe');
+
+        $request = new Request(['csrf' => $token]);
+        $request->files->set('files', [$file]);
+
+        $response = $controller->upload($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertFalse($payload['success']);
+        self::assertSame(['File extension not allowed'], $payload['messages']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadReturnsUploadedFileUrlsAndCorsHeader(): void
+    {
+        $controller = new ImageController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'pmf-csrf-token');
+        $controller->setContainer($container);
+
+        $file = $this->createMock(UploadedFile::class);
+        $file->method('isValid')->willReturn(true);
+        $file->method('getClientOriginalName')->willReturn('hero image.png');
+        $file->method('getClientOriginalExtension')->willReturn('png');
+        $file->expects($this->once())
+            ->method('move')
+            ->with(PMF_CONTENT_DIR . '/user/images/', $this->matchesRegularExpression('/^\d+_hero_image\.png$/'));
+
+        $request = new Request(['csrf' => $token], [], [], [], ['files' => [$file]], [
+            'HTTP_ORIGIN' => rtrim($this->configuration->getDefaultUrl(), '/'),
+        ]);
+
+        $response = $controller->upload($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['success']);
+        self::assertCount(1, $payload['data']['files']);
+        self::assertMatchesRegularExpression(
+            '#^' . preg_quote($this->configuration->getDefaultUrl(), '#') . 'content/user/images/\d+_hero_image\.png$#',
+            $payload['data']['files'][0]
+        );
+        self::assertSame([true], $payload['data']['isImages']);
+        self::assertSame(rtrim($this->configuration->getDefaultUrl(), '/'), $response->headers->get('Access-Control-Allow-Origin'));
     }
 }

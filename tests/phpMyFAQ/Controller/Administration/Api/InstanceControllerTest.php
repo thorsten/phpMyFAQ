@@ -199,6 +199,90 @@ final class InstanceControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testDeleteReturnsBadRequestForProtectedMasterInstance(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-instance');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->delete(
+            new Request(content: json_encode([
+                'csrf' => $token,
+                'instanceId' => 1,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(1, $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsBadRequestWhenClientFolderDeletionFails(): void
+    {
+        $instanceId = $this->insertInstance('https://missing-delete.localhost', 'Delete failure', 'Missing folder');
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-instance');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->delete(
+            new Request(content: json_encode([
+                'csrf' => $token,
+                'instanceId' => $instanceId,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame($instanceId, $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsSuccessWhenClientFolderAndDatabaseRowAreRemoved(): void
+    {
+        $instanceId = $this->insertInstance('https://delete-success.localhost', 'Delete success', 'Folder exists');
+        $clientFolder = PMF_ROOT_DIR . '/multisite/delete-success.localhost';
+        self::assertDirectoryDoesNotExist($clientFolder);
+        self::assertTrue(mkdir($clientFolder, 0777, true));
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-instance');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->delete(
+            new Request(content: json_encode([
+                'csrf' => $token,
+                'instanceId' => $instanceId,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame($instanceId, $payload['deleted']);
+        self::assertDirectoryDoesNotExist($clientFolder);
+        self::assertNull($this->fetchInstanceById($instanceId));
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testAddReturnsBadRequestWhenRequiredFieldsAreMissing(): void
     {
         $container = $this->createAuthenticatedContainer();
@@ -302,5 +386,31 @@ final class InstanceControllerTest extends TestCase
             });
 
         return $container;
+    }
+
+    private function insertInstance(string $url, string $instance, string $comment): int
+    {
+        $nextId = (int) $this->dbHandle->nextId('faqinstances', 'id');
+        $query = sprintf(
+            "INSERT INTO faqinstances VALUES (%d, '%s', '%s', '%s', %s, %s)",
+            $nextId,
+            $this->dbHandle->escape($url),
+            $this->dbHandle->escape($instance),
+            $this->dbHandle->escape($comment),
+            $this->dbHandle->now(),
+            $this->dbHandle->now(),
+        );
+        self::assertNotFalse($this->dbHandle->query($query));
+
+        return $nextId;
+    }
+
+    private function fetchInstanceById(int $instanceId): ?object
+    {
+        $result = $this->dbHandle->query(sprintf('SELECT * FROM faqinstances WHERE id = %d', $instanceId));
+        self::assertNotFalse($result);
+        $instance = $this->dbHandle->fetchObject($result);
+
+        return $instance === false ? null : $instance;
     }
 }

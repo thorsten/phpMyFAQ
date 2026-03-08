@@ -149,6 +149,18 @@ final class LdapControllerTest extends TestCase
 
     public function testConfigurationStripsPasswords(): void
     {
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configProperty = $configurationReflection->getProperty('config');
+        $config = $configProperty->getValue($this->configuration);
+        $config['core.ldapServer'] = [[
+            'ldap_server' => 'ldap.example.com',
+            'ldap_port' => '389',
+            'ldap_base' => 'dc=example,dc=com',
+            'ldap_user' => 'cn=admin,dc=example,dc=com',
+            'ldap_password' => 'secret-password',
+        ]];
+        $configProperty->setValue($this->configuration, $config);
+
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer());
 
@@ -166,6 +178,12 @@ final class LdapControllerTest extends TestCase
         foreach ($payload['servers'] as $server) {
             self::assertSame('********', $server['ldap_password']);
         }
+        self::assertTrue($payload['generalSettings']['domainPrefix']);
+        self::assertFalse($payload['generalSettings']['sasl']);
+        self::assertFalse($payload['generalSettings']['anonymousLogin']);
+        self::assertFalse($payload['generalSettings']['dynamicLogin']);
+        self::assertSame('uid', $payload['generalSettings']['dynamicLoginAttribute']);
+        self::assertFalse($payload['generalSettings']['multipleServers']);
     }
 
     public function testHealthcheckReturnsUnavailableWhenExtensionMissing(): void
@@ -185,6 +203,31 @@ final class LdapControllerTest extends TestCase
         self::assertSame('unavailable', $payload['status']);
         self::assertStringContainsString('LDAP extension', $payload['error']);
         self::assertArrayHasKey('servers', $payload);
+        self::assertSame([], $payload['servers']);
+    }
+
+    public function testHealthcheckReturnsUnavailableWhenNoServerIsConfigured(): void
+    {
+        if (!extension_loaded('ldap')) {
+            self::markTestSkipped('LDAP extension is not loaded; covered by missing extension path.');
+        }
+
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configProperty = $configurationReflection->getProperty('config');
+        $config = $configProperty->getValue($this->configuration);
+        $config['core.ldapServer'] = [];
+        $configProperty->setValue($this->configuration, $config);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->healthcheck();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());
+        self::assertFalse($payload['available']);
+        self::assertSame('unavailable', $payload['status']);
+        self::assertSame('No LDAP server configured.', $payload['error']);
         self::assertSame([], $payload['servers']);
     }
 }

@@ -130,13 +130,15 @@ final class FaqControllerRedirectTest extends TestCase
     {
         $currentUser = new CurrentUser($this->configuration);
         $category = new Category($this->configuration, [-1]);
-        $category->setLanguage('en');
+        $category->setLanguage('en')->setUser(-1)->setGroups([-1]);
+        $faq = new Faq($this->configuration);
+        $faq->setUser(-1)->setGroups([-1]);
 
         $controller = new FaqController(
             new UserSession($this->configuration),
             $this->createMock(CaptchaInterface::class),
             $this->createMock(CaptchaHelperInterface::class),
-            new Faq($this->configuration),
+            $faq,
             $category,
             new Bookmark($this->configuration, $currentUser),
             new Date($this->configuration),

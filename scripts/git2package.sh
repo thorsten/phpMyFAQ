@@ -39,7 +39,7 @@ REPO_ROOT=$(CDPATH= cd -- "${SCRIPT_DIR}/.." && pwd)
 ORIGINAL_DIR=$(pwd)
 cd "${REPO_ROOT}" || exit 1
 
-. "${REPO_ROOT}/scripts/version.sh"
+: "${PMF_VERSION:=$(php "${REPO_ROOT}/scripts/get-version.php")}"
 : "${PMF_PACKAGE_FOLDER:=phpmyfaq-${PMF_VERSION}}"
 : "${PHP_BIN:=php}"
 

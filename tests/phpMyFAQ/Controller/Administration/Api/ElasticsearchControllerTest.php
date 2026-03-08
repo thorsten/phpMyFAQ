@@ -332,4 +332,88 @@ final class ElasticsearchControllerTest extends TestCase
         self::assertTrue($payload['available']);
         self::assertSame('healthy', $payload['status']);
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testImportReturnsBadRequestWhenFaqBulkIndexFails(): void
+    {
+        $elasticsearch = $this->createMock(Elasticsearch::class);
+        $elasticsearch->expects($this->once())->method('bulkIndex')->with([])->willReturn(['failure' => 'boom']);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecords = [];
+        $faq->expects($this->once())->method('getAllFaqs');
+
+        $controller = $this->createControllerWithDependencies(
+            $elasticsearch,
+            $faq,
+            $this->createStub(CustomPage::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->import();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(['failure' => 'boom'], $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testImportReturnsBadRequestWhenCustomPageBulkIndexFails(): void
+    {
+        $elasticsearch = $this->createMock(Elasticsearch::class);
+        $elasticsearch->expects($this->once())->method('bulkIndex')->with([])->willReturn(['success' => true]);
+        $elasticsearch->expects($this->once())
+            ->method('bulkIndexCustomPages')
+            ->with([['id' => 7, 'title' => 'Page']])
+            ->willReturn(['failure' => 'pages']);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecords = [];
+        $faq->expects($this->once())->method('getAllFaqs');
+
+        $customPage = $this->createMock(CustomPage::class);
+        $customPage->expects($this->once())->method('getAllPages')->willReturn([['id' => 7, 'title' => 'Page']]);
+
+        $controller = $this->createControllerWithDependencies($elasticsearch, $faq, $customPage);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->import();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertStringContainsString('FAQs indexed but custom pages failed', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testImportReturnsSuccessWhenFaqsAndCustomPagesAreIndexed(): void
+    {
+        $elasticsearch = $this->createMock(Elasticsearch::class);
+        $elasticsearch->expects($this->once())->method('bulkIndex')->with([])->willReturn(['success' => true]);
+        $elasticsearch->expects($this->once())
+            ->method('bulkIndexCustomPages')
+            ->with([['id' => 7, 'title' => 'Page']])
+            ->willReturn(['success' => true]);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecords = [];
+        $faq->expects($this->once())->method('getAllFaqs');
+
+        $customPage = $this->createMock(CustomPage::class);
+        $customPage->expects($this->once())->method('getAllPages')->willReturn([['id' => 7, 'title' => 'Page']]);
+
+        $controller = $this->createControllerWithDependencies($elasticsearch, $faq, $customPage);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->import();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_es_create_import_success'), $payload['success']);
+    }
 }

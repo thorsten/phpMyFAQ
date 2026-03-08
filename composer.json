@@ -114,7 +114,10 @@
     "refactor:dryrun": "./phpmyfaq/src/libs/bin/rector --dry-run",
     "test": "./phpmyfaq/src/libs/bin/phpunit --no-coverage",
     "test:coverage": "./phpmyfaq/src/libs/bin/phpunit --coverage-text",
-    "test:coverage-html": "./phpmyfaq/src/libs/bin/phpunit --coverage-html coverage"
+    "test:coverage-html": "./phpmyfaq/src/libs/bin/phpunit --coverage-html coverage",
+    "version:get": "php scripts/get-version.php",
+    "version:sync": "pnpm version $(php scripts/get-version.php) --no-git-tag-version --allow-same-version",
+    "version:check": "php scripts/check-version.php"
   },
   "support": {
     "docs": "https://phpmyfaq.readthedocs.io/",

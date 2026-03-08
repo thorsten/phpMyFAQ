@@ -281,7 +281,6 @@ final class ExportControllerTest extends TestCase
                 'title' => true,
                 'creation_date' => true,
                 'owner' => true,
-                'last_modified_person' => true,
                 'url' => true,
                 'visits' => true,
             ],

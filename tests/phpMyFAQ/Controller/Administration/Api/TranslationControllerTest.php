@@ -16,6 +16,7 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Translation\ContentTranslationService;
+use phpMyFAQ\Translation\DTO\TranslationResult;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -112,6 +113,14 @@ final class TranslationControllerTest extends TestCase
 
     private function createAuthenticatedContainer(?Session $session = null): ContainerInterface
     {
+        return $this->createAuthenticatedContainerWithAdminLog($this->createStub(AdminLog::class), $session);
+    }
+
+    private function createAuthenticatedContainerWithAdminLog(
+        AdminLog $adminLog,
+        ?Session $session = null
+    ): ContainerInterface
+    {
         $permission = $this->createMock(PermissionInterface::class);
         $permission
             ->method('hasPermission')
@@ -128,7 +137,6 @@ final class TranslationControllerTest extends TestCase
         $currentUser->method('getUserId')->willReturn(42);
 
         $session ??= new Session(new MockArraySessionStorage());
-        $adminLog = $this->createStub(AdminLog::class);
 
         $container = $this->createStub(ContainerInterface::class);
         $container
@@ -249,5 +257,75 @@ final class TranslationControllerTest extends TestCase
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertFalse($payload['success']);
         self::assertSame('Invalid content type', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testTranslateReturnsTranslatedFieldsForSuccessfulFaqTranslation(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $token = $this->createValidCsrfToken($session, 'translate');
+
+        $translationService = $this->createMock(ContentTranslationService::class);
+        $translationService
+            ->expects($this->once())
+            ->method('translateFaq')
+            ->willReturn(new TranslationResult(['question' => 'Frage'], true));
+
+        $adminLog = $this->createMock(AdminLog::class);
+        $adminLog
+            ->expects($this->once())
+            ->method('log')
+            ->with($this->anything(), 'faq-translate:en->de');
+
+        $controller = $this->createControllerWithService($translationService);
+        $controller->setContainer($this->createAuthenticatedContainerWithAdminLog($adminLog, $session));
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'pmf-csrf-token' => $token,
+            'contentType' => 'faq',
+            'sourceLang' => 'en',
+            'targetLang' => 'de',
+            'fields' => ['question' => 'Question'],
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->translate($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['success']);
+        self::assertSame(['question' => 'Frage'], $payload['translatedFields']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testTranslateReturnsInternalServerErrorWhenTranslationResultFails(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $token = $this->createValidCsrfToken($session, 'translate');
+
+        $translationService = $this->createMock(ContentTranslationService::class);
+        $translationService
+            ->expects($this->once())
+            ->method('translateNews')
+            ->willReturn(new TranslationResult([], false, 'Provider unavailable'));
+
+        $controller = $this->createControllerWithService($translationService);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'pmf-csrf-token' => $token,
+            'contentType' => 'news',
+            'sourceLang' => 'en',
+            'targetLang' => 'de',
+            'fields' => ['title' => 'News title'],
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->translate($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        self::assertFalse($payload['success']);
+        self::assertSame('Provider unavailable', $payload['error']);
     }
 }
