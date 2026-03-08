@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Configuration;
 
+use RuntimeException;
+
 readonly class DatabaseConfiguration
 {
     private string $server;
@@ -39,6 +41,10 @@ readonly class DatabaseConfiguration
 
     public function __construct(string $filename)
     {
+        if (!is_readable($filename)) {
+            throw new RuntimeException(sprintf('Database configuration file "%s" is not readable.', $filename));
+        }
+
         $DB = [
             'server' => '',
             'port' => '',

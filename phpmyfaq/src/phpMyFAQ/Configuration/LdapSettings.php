@@ -120,6 +120,6 @@ readonly class LdapSettings
 
     public function isActive(): bool
     {
-        return (bool) $this->coreConfiguration->get(item: 'ldap.ldapSupport');
+        return filter_var($this->coreConfiguration->get(item: 'ldap.ldapSupport'), FILTER_VALIDATE_BOOLEAN);
     }
 }

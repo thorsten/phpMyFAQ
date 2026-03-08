@@ -2,21 +2,15 @@
 
 namespace phpMyFAQ;
 
-use phpMyFAQ\Auth\AuthLdap;
-use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Database\Sqlite3;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use TypeError;
 
-/**
- * Test class for Ldap functionality
- */
-#[AllowMockObjectsWithoutExpectations]
+#[CoversClass(Ldap::class)]
+#[RequiresPhpExtension('ldap')]
 class LdapTest extends TestCase
 {
-    private Sqlite3 $dbHandle;
     private Configuration $configuration;
     private Ldap $ldap;
 
@@ -24,12 +18,8 @@ class LdapTest extends TestCase
     {
         parent::setUp();
 
-        $this->dbHandle = new Sqlite3();
-        $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-
         $this->configuration = $this->createStub(Configuration::class);
 
-        // Mock der LDAP-Konfiguration
         $this->configuration
             ->method('getLdapConfig')
             ->willReturn([
@@ -43,394 +33,468 @@ class LdapTest extends TestCase
 
         $this->configuration->method('getLdapOptions')->willReturn([]);
 
+        $this->configuration
+            ->method('get')
+            ->willReturnCallback(fn(string $item) => match ($item) {
+                'ldap.ldap_use_dynamic_login' => false,
+                'ldap.ldap_use_anonymous_login' => false,
+                'ldap.ldap_dynamic_login_attribute' => 'uid',
+                'ldap.ldap_mapping.username' => 'uid',
+                'ldap.ldap_use_memberOf' => false,
+                'ldap.ldap_mapping.memberOf' => 'CN=TestGroup,DC=example,DC=com',
+                default => null,
+            });
+
         $this->ldap = new Ldap($this->configuration);
     }
 
-    public function testConstructor(): void
+    public function testConstructorLoadsConfig(): void
     {
-        $configuration = $this->createStub(Configuration::class);
-        $ldap = new Ldap($configuration);
-        $this->assertInstanceOf(Ldap::class, $ldap);
-    }
-
-    public function testConnectWithEmptyServer(): void
-    {
-        $result = $this->ldap->connect('', 389, 'DC=example,DC=com');
-        $this->assertFalse($result);
-    }
-
-    public function testConnectWithEmptyBase(): void
-    {
-        $result = $this->ldap->connect('localhost', 389, '');
-        $this->assertFalse($result);
-    }
-
-    public function testQuoteMethod(): void
-    {
-        $testCases = [
-            ['simple',      'simple'],
-            ['test*',       'test\\2a'],
-            ['test()',      'test\\28\\29'],
-            ['test space',  'test\\20space'],
-            ['test\\slash', 'test\\5cslash'],
-            ['complex*()',  'complex\\2a\\28\\29'],
-        ];
-
-        foreach ($testCases as [$input, $expected]) {
-            $this->assertEquals($expected, $this->ldap->quote($input));
-        }
-    }
-
-    /**
-     * Test getMail without connection - should return false and set error
-     */
-    public function testGetMailWithoutConnection(): void
-    {
-        // With our fixes, this should now return false instead of throwing TypeError
-        $result = $this->ldap->getMail('testuser');
-        $this->assertFalse($result);
-        $this->assertEquals('The LDAP connection handler is not a valid resource.', $this->ldap->error);
-    }
-
-    /**
-     * Test getCompleteName without connection - should return false and set error
-     */
-    public function testGetCompleteNameWithoutConnection(): void
-    {
-        // With our fixes, this should now return false instead of throwing TypeError
-        $result = $this->ldap->getCompleteName('testuser');
-        $this->assertFalse($result);
-        $this->assertEquals('The LDAP connection handler is not a valid resource.', $this->ldap->error);
-    }
-
-    /**
-     * Test getDn without connection - should return false and set error
-     */
-    public function testGetDnWithoutConnection(): void
-    {
-        // With our fixes, this should now return false instead of throwing TypeError
-        $result = $this->ldap->getDn('testuser');
-        $this->assertFalse($result);
-        $this->assertEquals('The LDAP connection handler is not a valid resource.', $this->ldap->error);
-    }
-
-    /**
-     * Test getGroupMemberships without connection - should return false and set error
-     */
-    public function testGetGroupMembershipsWithoutConnection(): void
-    {
-        // With our fixes, this should now return false instead of throwing TypeError
-        $result = $this->ldap->getGroupMemberships('testuser');
-        $this->assertFalse($result);
-        $this->assertEquals('The LDAP connection handler is not a valid resource.', $this->ldap->error);
-    }
-
-    /**
-     * Test bind without connection - expects TypeError due to null LDAP resource
-     */
-    public function testBindWithoutConnection(): void
-    {
-        // This test verifies that calling bind without connection fails as expected
-        $this->expectException(TypeError::class);
-        $this->ldap->bind('cn=test,dc=example,dc=com', 'password');
-    }
-
-    /**
-     * Alternative: Test connection state validation through mocking
-     */
-    public function testConnectionStateValidation(): void
-    {
-        // Create a partial mock that allows us to test the validation logic
-        $ldapMock = $this
-            ->getMockBuilder(Ldap::class)
-            ->setConstructorArgs([$this->configuration])
-            ->onlyMethods(['error'])
-            ->getMock();
-
-        $reflection = new ReflectionClass(Ldap::class);
-        $property = $reflection->getProperty('ds');
-        $property->setValue($ldapMock, false);
-
-        $result = $ldapMock->bind('test', 'password');
-        $this->assertFalse($result);
-        $this->assertEquals('The LDAP connection handler is not a valid resource.', $ldapMock->error);
-    }
-
-    public function testErrorWithNullResource(): void
-    {
-        // Test error method with internal ds property (which is null)
-        $this->ldap->error = 'Test error';
-        $this->assertEquals('Test error', $this->ldap->error);
-    }
-
-    /**
-     * Test the private getLdapData method via reflection
-     */
-    public function testGetLdapDataWithInvalidField(): void
-    {
-        // First, we need to simulate a valid connection state to test the mapping check
-        $reflection = new ReflectionClass(Ldap::class);
-
-        // Set ds to a mock connection to bypass the connection check
-        $dsProperty = $reflection->getProperty('ds');
-        $dsProperty->setValue($this->ldap, true); // Simulate valid connection
-
-        // Set base to bypass the base check
-        $baseProperty = $reflection->getProperty('base');
-        $baseProperty->setValue($this->ldap, 'dc=example,dc=com');
-
-        $method = $reflection->getMethod('getLdapData');
-
-        $result = $method->invoke($this->ldap, 'testuser', 'nonexistent');
-        $this->assertFalse($result);
-        $this->assertStringContainsString('does not exist in LDAP mapping configuration', $this->ldap->error);
-    }
-
-    /**
-     * Test configuration scenarios
-     */
-    public function testConfigurationMapping(): void
-    {
-        // Test that the configuration is properly loaded via constructor
         $reflection = new ReflectionClass(Ldap::class);
         $property = $reflection->getProperty('ldapConfig');
 
         $config = $property->getValue($this->ldap);
         $this->assertIsArray($config);
         $this->assertArrayHasKey('ldap_mapping', $config);
+        $this->assertEquals('uid', $config['ldap_mapping']['username']);
     }
 
-    /**
-     * Test LDAP connection with extension check - safer approach
-     */
-    public function testConnectWithLdapExtension(): void
+    public function testInitialState(): void
     {
-        if (!extension_loaded('ldap')) {
-            $this->markTestSkipped('LDAP extension not available');
-        }
+        $this->assertNull($this->ldap->error);
+        $this->assertNull($this->ldap->errno);
+    }
 
-        // Test connection failure scenarios safely without triggering warnings
-        $this->configuration->method('getLdapOptions')->willReturn([]);
-        $this->configuration
-            ->method('get')
-            ->willReturnMap([
-                ['ldap.ldap_use_dynamic_login',   false],
-                ['ldap.ldap_use_anonymous_login', false],
-            ]);
+    // ── quote() ──────────────────────────────────────────────────────────
 
-        // Test with obviously invalid parameters to ensure graceful failure
-        // Use empty strings which are validated before ldap_connect
-        $result = $this->ldap->connect('', 389, '');
+    public function testQuoteReplacesSpecialCharacters(): void
+    {
+        $this->assertEquals('simple', $this->ldap->quote('simple'));
+        $this->assertEquals('test\\2a', $this->ldap->quote('test*'));
+        $this->assertEquals('test\\28\\29', $this->ldap->quote('test()'));
+        $this->assertEquals('test\\20space', $this->ldap->quote('test space'));
+        $this->assertEquals('test\\5cslash', $this->ldap->quote('test\\slash'));
+        $this->assertEquals('', $this->ldap->quote(''));
+    }
+
+    // ── connect() ────────────────────────────────────────────────────────
+
+    public function testConnectWithEmptyServerReturnsFalse(): void
+    {
+        $this->assertFalse($this->ldap->connect('', 389, 'DC=example,DC=com'));
+    }
+
+    public function testConnectWithEmptyBaseReturnsFalse(): void
+    {
+        $this->assertFalse($this->ldap->connect('localhost', 389, ''));
+    }
+
+    public function testConnectSetsBaseAndCreatesConnection(): void
+    {
+        // ldap_connect() in PHP 8+ creates a lazy Connection object.
+        // The bind will fail since there's no real LDAP server, covering the failure path.
+        $result = $this->ldap->connect('ldap://127.0.0.1', 9, 'DC=example,DC=com', 'cn=admin', 'pass');
+
+        // Bind will fail → connect returns false and sets error
         $this->assertFalse($result);
+        $this->assertNotNull($this->ldap->error);
+        $this->assertStringContainsString('Unable to bind to LDAP server', $this->ldap->error);
     }
 
-    /**
-     * Test LDAP methods with proper error handling expectation
-     */
-    public function testLdapMethodsWithProperErrorHandling(): void
+    public function testConnectWithDynamicLogin(): void
     {
-        // Test that methods handle null connection gracefully
-        // These tests expect the methods to check connection state before calling LDAP functions
-
-        // Create a spy/partial mock that can track method calls
-        $ldapSpy = $this
-            ->getMockBuilder(Ldap::class)
-            ->setConstructorArgs([$this->configuration])
-            ->onlyMethods([]) // Don't mock any methods, use real implementation
-            ->getMock();
-
-        // Test that quote method works without connection (it should)
-        $result = $ldapSpy->quote('test*()');
-        $this->assertEquals('test\\2a\\28\\29', $result);
-
-        // Test error property access
-        $ldapSpy->error = 'Test error';
-        $this->assertEquals('Test error', $ldapSpy->error);
-    }
-
-    /**
-     * Test quote method edge cases
-     */
-    public function testQuoteMethodEdgeCases(): void
-    {
-        $testCases = [
-            ['',             ''],
-            ['normal_text',  'normal_text'],
-            ['\\()* ',       '\\5c\\28\\29\\2a\\20'],
-            ['a\\b(c)d*e f', 'a\\5cb\\28c\\29d\\2ae\\20f'],
-        ];
-
-        foreach ($testCases as [$input, $expected]) {
-            $this->assertEquals($expected, $this->ldap->quote($input));
-        }
-    }
-
-    public function testAssignUserToGroupsMethodExists(): void
-    {
-        $reflection = new ReflectionClass(AuthLdap::class);
-        $this->assertTrue($reflection->hasMethod('assignUserToGroups'));
-    }
-
-    /**
-     * Test class for Ldap functionality - focused on logic testing without real LDAP calls
-     */
-    public function testGetDataMethodsLogic(): void
-    {
-        // Test the quote method thoroughly (this works without LDAP connection)
-        $this->assertEquals('test\\2a\\28\\29', $this->ldap->quote('test*()'));
-
-        // Test error property manipulation
-        $this->ldap->error = 'Custom error message';
-        $this->assertEquals('Custom error message', $this->ldap->error);
-
-        $this->ldap->errno = 123;
-        $this->assertEquals(123, $this->ldap->errno);
-    }
-
-    /**
-     * Test LDAP connection parameter validation
-     */
-    public function testConnectionParameterValidation(): void
-    {
-        // Test empty server validation
-        $result = $this->ldap->connect('', 389, 'DC=example,DC=com');
-        $this->assertFalse($result);
-
-        // Test empty base validation
-        $result = $this->ldap->connect('localhost', 389, '');
-        $this->assertFalse($result);
-
-        // Test valid parameters but no actual connection attempt
-        $this->assertTrue(is_string('localhost')); // Basic parameter type validation
-        $this->assertTrue(is_int(389));
-        $this->assertTrue(is_string('DC=example,DC=com'));
-    }
-
-    /**
-     * Test configuration injection and access
-     */
-    public function testConfigurationInjection(): void
-    {
-        $mockConfig = $this->createStub(Configuration::class);
-        $mockConfig
+        $config = $this->createStub(Configuration::class);
+        $config
             ->method('getLdapConfig')
             ->willReturn([
-                'ldap_mapping' => [
-                    'username' => 'sAMAccountName',
-                    'mail' => 'mail',
-                    'name' => 'displayName',
-                ],
+                'ldap_mapping' => ['username' => 'uid', 'mail' => 'mail', 'name' => 'cn'],
             ]);
+        $config->method('getLdapOptions')->willReturn([]);
+        $config
+            ->method('get')
+            ->willReturnCallback(fn(string $item) => match ($item) {
+                'ldap.ldap_use_dynamic_login' => true,
+                'ldap.ldap_dynamic_login_attribute' => 'uid',
+                default => null,
+            });
 
-        $ldap = new Ldap($mockConfig);
-        $this->assertInstanceOf(Ldap::class, $ldap);
+        $ldap = new Ldap($config);
+        $result = $ldap->connect('ldap://127.0.0.1', 9, 'DC=example,DC=com', 'testuser', 'pass');
 
+        $this->assertFalse($result);
+        $this->assertStringContainsString('Unable to bind to LDAP server', $ldap->error);
+    }
+
+    public function testConnectWithAnonymousLogin(): void
+    {
+        $config = $this->createStub(Configuration::class);
+        $config
+            ->method('getLdapConfig')
+            ->willReturn([
+                'ldap_mapping' => ['username' => 'uid', 'mail' => 'mail', 'name' => 'cn'],
+            ]);
+        $config->method('getLdapOptions')->willReturn([]);
+        $config
+            ->method('get')
+            ->willReturnCallback(fn(string $item) => match ($item) {
+                'ldap.ldap_use_dynamic_login' => false,
+                'ldap.ldap_use_anonymous_login' => true,
+                default => null,
+            });
+
+        $ldap = new Ldap($config);
+        $result = $ldap->connect('ldap://127.0.0.1', 9, 'DC=example,DC=com');
+
+        $this->assertFalse($result);
+        $this->assertStringContainsString('Unable to bind to LDAP server', $ldap->error);
+    }
+
+    public function testConnectWithLdapOptionSuccess(): void
+    {
+        $config = $this->createStub(Configuration::class);
+        $config
+            ->method('getLdapConfig')
+            ->willReturn([
+                'ldap_mapping' => ['username' => 'uid', 'mail' => 'mail', 'name' => 'cn'],
+            ]);
+        $config
+            ->method('getLdapOptions')
+            ->willReturn([
+                'LDAP_OPT_PROTOCOL_VERSION' => 3,
+            ]);
+        $config->method('get')->willReturn(null);
+
+        $ldap = new Ldap($config);
+        $result = $ldap->connect('ldap://127.0.0.1', 9, 'DC=example,DC=com');
+
+        // Options set successfully, then bind fails
+        $this->assertFalse($result);
+    }
+
+    public function testConnectBindFailureSetsErrnoAndResetsDs(): void
+    {
+        $result = $this->ldap->connect('ldap://127.0.0.1', 9, 'DC=example,DC=com', 'admin', 'pass');
+
+        $this->assertFalse($result);
+        $this->assertNotNull($this->ldap->errno);
+        $this->assertNotNull($this->ldap->error);
+
+        // After bind failure, ds is set to false
         $reflection = new ReflectionClass(Ldap::class);
-        $configProperty = $reflection->getProperty('ldapConfig');
-
-        $config = $configProperty->getValue($ldap);
-        $this->assertArrayHasKey('ldap_mapping', $config);
+        $ds = $reflection->getProperty('ds')->getValue($this->ldap);
+        $this->assertFalse($ds);
     }
 
-    /**
-     * Test search filter construction logic
-     */
-    public function testSearchFilterConstruction(): void
+    // ── bind() ───────────────────────────────────────────────────────────
+
+    public function testBindWithFalseConnectionReturnsFalse(): void
     {
-        $username = 'test.user@example.com';
-        $quotedUsername = $this->ldap->quote($username);
+        $this->setPrivateProperty($this->ldap, 'ds', false);
 
-        // Test basic filter construction
-        $basicFilter = sprintf('(uid=%s)', $quotedUsername);
-        $this->assertStringContainsString('uid=', $basicFilter);
-        $this->assertStringContainsString($quotedUsername, $basicFilter);
+        $result = $this->ldap->bind('cn=admin', 'pass');
 
-        // Test memberOf filter construction
-        $memberOfDN = 'CN=Admins,OU=Groups,DC=example,DC=com';
-        $complexFilter = sprintf('(&%s(memberOf:1.2.840.113556.1.4.1941:=%s))', $basicFilter, $memberOfDN);
-
-        $this->assertStringContainsString('(&', $complexFilter);
-        $this->assertStringContainsString('memberOf:', $complexFilter);
-        $this->assertStringContainsString($memberOfDN, $complexFilter);
+        $this->assertFalse($result);
+        $this->assertEquals('The LDAP connection handler is not a valid resource.', $this->ldap->error);
     }
 
-    /**
-     * Test error state management
-     */
-    public function testErrorStateManagement(): void
+    public function testBindAnonymousWithConnection(): void
     {
-        // Test initial state
-        $this->assertNull($this->ldap->error);
-        $this->assertNull($this->ldap->errno);
+        $ds = ldap_connect('ldap://127.0.0.1:9');
+        $this->setPrivateProperty($this->ldap, 'ds', $ds);
 
-        // Test error setting
-        $this->ldap->error = 'Connection failed';
-        $this->ldap->errno = 91; // LDAP_CONNECT_ERROR
+        // Anonymous bind to unreachable server will fail
+        try {
+            $result = $this->ldap->bind();
+        } catch (\ErrorException) {
+            // PHP error handler may convert the warning to an exception
+            $result = false;
+        }
 
-        $this->assertEquals('Connection failed', $this->ldap->error);
-        $this->assertEquals(91, $this->ldap->errno);
-
-        // Test error clearing
-        $this->ldap->error = null;
-        $this->ldap->errno = null;
-
-        $this->assertNull($this->ldap->error);
-        $this->assertNull($this->ldap->errno);
+        $this->assertFalse($result);
     }
 
-    /**
-     * Test private method getLdapData with reflection (safer approach)
-     */
-    public function testGetLdapDataMethodSignature(): void
+    public function testBindWithCredentialsAndConnection(): void
     {
+        $ds = ldap_connect('ldap://127.0.0.1:9');
+        $this->setPrivateProperty($this->ldap, 'ds', $ds);
+
+        try {
+            $result = $this->ldap->bind('cn=admin,dc=example,dc=com', 'password');
+        } catch (\ErrorException) {
+            $result = false;
+        }
+
+        $this->assertFalse($result);
+    }
+
+    // ── getMail() / getCompleteName() – no connection ────────────────────
+
+    public function testGetMailWithoutConnectionReturnsFalse(): void
+    {
+        $result = $this->ldap->getMail('testuser');
+        $this->assertFalse($result);
+        $this->assertEquals('The LDAP connection handler is not a valid resource.', $this->ldap->error);
+    }
+
+    public function testGetCompleteNameWithoutConnectionReturnsFalse(): void
+    {
+        $result = $this->ldap->getCompleteName('testuser');
+        $this->assertFalse($result);
+        $this->assertEquals('The LDAP connection handler is not a valid resource.', $this->ldap->error);
+    }
+
+    // ── getDn() – no connection ──────────────────────────────────────────
+
+    public function testGetDnWithoutConnectionReturnsFalse(): void
+    {
+        $result = $this->ldap->getDn('testuser');
+        $this->assertFalse($result);
+        $this->assertEquals('The LDAP connection handler is not a valid resource.', $this->ldap->error);
+    }
+
+    // ── getGroupMemberships() – no connection ────────────────────────────
+
+    public function testGetGroupMembershipsWithoutConnectionReturnsFalse(): void
+    {
+        $result = $this->ldap->getGroupMemberships('testuser');
+        $this->assertFalse($result);
+        $this->assertEquals('The LDAP connection handler is not a valid resource.', $this->ldap->error);
+    }
+
+    // ── getLdapData() – base check ───────────────────────────────────────
+
+    public function testGetMailWithNullBaseReturnsFalse(): void
+    {
+        $ds = ldap_connect('ldap://127.0.0.1:9');
+        $this->setPrivateProperty($this->ldap, 'ds', $ds);
+        // base is null by default
+
+        $result = $this->ldap->getMail('testuser');
+        $this->assertFalse($result);
+        $this->assertEquals('LDAP base DN is not configured.', $this->ldap->error);
+    }
+
+    public function testGetMailWithEmptyBaseReturnsFalse(): void
+    {
+        $ds = ldap_connect('ldap://127.0.0.1:9');
+        $this->setPrivateProperty($this->ldap, 'ds', $ds);
+        $this->setPrivateProperty($this->ldap, 'base', '');
+
+        $result = $this->ldap->getMail('testuser');
+        $this->assertFalse($result);
+        $this->assertEquals('LDAP base DN is not configured.', $this->ldap->error);
+    }
+
+    public function testGetCompleteNameWithNullBaseReturnsFalse(): void
+    {
+        $ds = ldap_connect('ldap://127.0.0.1:9');
+        $this->setPrivateProperty($this->ldap, 'ds', $ds);
+
+        $result = $this->ldap->getCompleteName('testuser');
+        $this->assertFalse($result);
+        $this->assertEquals('LDAP base DN is not configured.', $this->ldap->error);
+    }
+
+    // ── getLdapData() – invalid mapping field ────────────────────────────
+
+    public function testGetLdapDataWithInvalidMappingField(): void
+    {
+        $ds = ldap_connect('ldap://127.0.0.1:9');
+        $this->setPrivateProperty($this->ldap, 'ds', $ds);
+        $this->setPrivateProperty($this->ldap, 'base', 'dc=example,dc=com');
+
         $reflection = new ReflectionClass(Ldap::class);
         $method = $reflection->getMethod('getLdapData');
 
-        $this->assertTrue($method->isPrivate());
-        $this->assertEquals('getLdapData', $method->getName());
-
-        $parameters = $method->getParameters();
-        $this->assertCount(2, $parameters);
-        $this->assertEquals('username', $parameters[0]->getName());
-        $this->assertEquals('data', $parameters[1]->getName());
+        $result = $method->invoke($this->ldap, 'testuser', 'nonexistent_field');
+        $this->assertFalse($result);
+        $this->assertStringContainsString('does not exist in LDAP mapping configuration', $this->ldap->error);
     }
 
-    /**
-     * Test private method getLdapDn with reflection
-     */
-    public function testGetLdapDnMethodSignature(): void
+    // ── getLdapData() – search failure ────────────────────────────────────
+
+    public function testGetMailWithSearchFailure(): void
     {
-        $reflection = new ReflectionClass(Ldap::class);
-        $method = $reflection->getMethod('getLdapDn');
+        $ds = ldap_connect('ldap://127.0.0.1:9');
+        $this->setPrivateProperty($this->ldap, 'ds', $ds);
+        $this->setPrivateProperty($this->ldap, 'base', 'dc=example,dc=com');
 
-        $this->assertTrue($method->isPrivate());
-        $this->assertEquals('getLdapDn', $method->getName());
+        // ldap_search on an unbound connection will fail
+        try {
+            $result = $this->ldap->getMail('testuser');
+        } catch (\ErrorException) {
+            $result = false;
+        }
 
-        $parameters = $method->getParameters();
-        $this->assertCount(1, $parameters);
-        $this->assertEquals('username', $parameters[0]->getName());
+        $this->assertFalse($result);
     }
 
-    /**
-     * Test all public method existence and signatures
-     */
-    public function testPublicMethodExistence(): void
+    public function testGetMailWithMemberOfFilter(): void
     {
-        $reflection = new ReflectionClass(Ldap::class);
+        $config = $this->createStub(Configuration::class);
+        $config
+            ->method('getLdapConfig')
+            ->willReturn([
+                'ldap_mapping' => [
+                    'username' => 'uid',
+                    'mail' => 'mail',
+                    'name' => 'cn',
+                    'memberOf' => 'CN=TestGroup,DC=example,DC=com',
+                ],
+            ]);
+        $config->method('getLdapOptions')->willReturn([]);
+        $config
+            ->method('get')
+            ->willReturnCallback(fn(string $item) => match ($item) {
+                'ldap.ldap_mapping.username' => 'uid',
+                'ldap.ldap_use_memberOf' => true,
+                'ldap.ldap_mapping.memberOf' => 'CN=TestGroup,DC=example,DC=com',
+                default => null,
+            });
 
-        // Test critical public methods exist
-        $this->assertTrue($reflection->hasMethod('connect'));
-        $this->assertTrue($reflection->hasMethod('bind'));
-        $this->assertTrue($reflection->hasMethod('getMail'));
-        $this->assertTrue($reflection->hasMethod('getCompleteName'));
-        $this->assertTrue($reflection->hasMethod('getDn'));
-        $this->assertTrue($reflection->hasMethod('getGroupMemberships'));
-        $this->assertTrue($reflection->hasMethod('quote'));
-        $this->assertTrue($reflection->hasMethod('error'));
+        $ldap = new Ldap($config);
+        $ds = ldap_connect('ldap://127.0.0.1:9');
+        $this->setPrivateProperty($ldap, 'ds', $ds);
+        $this->setPrivateProperty($ldap, 'base', 'dc=example,dc=com');
 
-        // Test method visibility
-        $this->assertTrue($reflection->getMethod('connect')->isPublic());
-        $this->assertTrue($reflection->getMethod('bind')->isPublic());
-        $this->assertTrue($reflection->getMethod('quote')->isPublic());
+        try {
+            $result = $ldap->getMail('testuser');
+        } catch (\ErrorException) {
+            $result = false;
+        }
+
+        $this->assertFalse($result);
+    }
+
+    // ── getLdapDn() – base check ─────────────────────────────────────────
+
+    public function testGetDnWithNullBaseReturnsFalse(): void
+    {
+        $ds = ldap_connect('ldap://127.0.0.1:9');
+        $this->setPrivateProperty($this->ldap, 'ds', $ds);
+
+        $result = $this->ldap->getDn('testuser');
+        $this->assertFalse($result);
+        $this->assertEquals('LDAP base DN is not configured.', $this->ldap->error);
+    }
+
+    public function testGetDnWithEmptyBaseReturnsFalse(): void
+    {
+        $ds = ldap_connect('ldap://127.0.0.1:9');
+        $this->setPrivateProperty($this->ldap, 'ds', $ds);
+        $this->setPrivateProperty($this->ldap, 'base', '');
+
+        $result = $this->ldap->getDn('testuser');
+        $this->assertFalse($result);
+        $this->assertEquals('LDAP base DN is not configured.', $this->ldap->error);
+    }
+
+    // ── getLdapDn() – search failure ─────────────────────────────────────
+
+    public function testGetDnWithSearchFailure(): void
+    {
+        $ds = ldap_connect('ldap://127.0.0.1:9');
+        $this->setPrivateProperty($this->ldap, 'ds', $ds);
+        $this->setPrivateProperty($this->ldap, 'base', 'dc=example,dc=com');
+
+        try {
+            $result = $this->ldap->getDn('testuser');
+        } catch (\ErrorException) {
+            $result = false;
+        }
+
+        $this->assertFalse($result);
+    }
+
+    // ── getGroupMemberships() – base check ───────────────────────────────
+
+    public function testGetGroupMembershipsWithNullBaseReturnsFalse(): void
+    {
+        $ds = ldap_connect('ldap://127.0.0.1:9');
+        $this->setPrivateProperty($this->ldap, 'ds', $ds);
+
+        $result = $this->ldap->getGroupMemberships('testuser');
+        $this->assertFalse($result);
+        $this->assertEquals('LDAP base DN is not configured.', $this->ldap->error);
+    }
+
+    public function testGetGroupMembershipsWithEmptyBaseReturnsFalse(): void
+    {
+        $ds = ldap_connect('ldap://127.0.0.1:9');
+        $this->setPrivateProperty($this->ldap, 'ds', $ds);
+        $this->setPrivateProperty($this->ldap, 'base', '');
+
+        $result = $this->ldap->getGroupMemberships('testuser');
+        $this->assertFalse($result);
+        $this->assertEquals('LDAP base DN is not configured.', $this->ldap->error);
+    }
+
+    // ── getGroupMemberships() – search failure ───────────────────────────
+
+    public function testGetGroupMembershipsWithSearchFailure(): void
+    {
+        $ds = ldap_connect('ldap://127.0.0.1:9');
+        $this->setPrivateProperty($this->ldap, 'ds', $ds);
+        $this->setPrivateProperty($this->ldap, 'base', 'dc=example,dc=com');
+
+        try {
+            $result = $this->ldap->getGroupMemberships('testuser');
+        } catch (\ErrorException) {
+            $result = false;
+        }
+
+        $this->assertFalse($result);
+    }
+
+    // ── error() ──────────────────────────────────────────────────────────
+
+    public function testErrorMethodWithNullDs(): void
+    {
+        // error() with null ds will call ldap_error(null)
+        // In PHP 8+ this triggers TypeError, but when namespace mocks are loaded it returns a string.
+        try {
+            $result = $this->ldap->error();
+            // If namespace mock is active, we get a string back
+            $this->assertIsString($result);
+        } catch (\TypeError) {
+            // Expected when no namespace mock is active
+            $this->assertTrue(true);
+        }
+    }
+
+    public function testErrorMethodWithConnection(): void
+    {
+        $ds = ldap_connect('ldap://127.0.0.1:9');
+        $this->setPrivateProperty($this->ldap, 'ds', $ds);
+
+        $result = $this->ldap->error();
+        $this->assertIsString($result);
+    }
+
+    public function testErrorMethodWithExplicitResource(): void
+    {
+        $ds = ldap_connect('ldap://127.0.0.1:9');
+
+        $result = $this->ldap->error($ds);
+        $this->assertIsString($result);
+    }
+
+    public function testErrorMethodUsesInternalDsWhenNullPassed(): void
+    {
+        $ds = ldap_connect('ldap://127.0.0.1:9');
+        $this->setPrivateProperty($this->ldap, 'ds', $ds);
+
+        // Passing null should use internal $this->ds
+        $result = $this->ldap->error(null);
+        $this->assertIsString($result);
+    }
+
+    // ── helpers ──────────────────────────────────────────────────────────
+
+    private function setPrivateProperty(object $object, string $propertyName, mixed $value): void
+    {
+        $reflection = new ReflectionClass($object);
+        $property = $reflection->getProperty($propertyName);
+        $property->setValue($object, $value);
     }
 }

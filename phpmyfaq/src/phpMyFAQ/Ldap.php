@@ -117,7 +117,7 @@ class Ldap
 
         if (false === $ldapBind) {
             $this->errno = ldap_errno($this->ds);
-            $this->error = sprintf(format: 'Unable to bind to LDAP server (Error: %s).', values: ldap_error($this->ds));
+            $this->error = sprintf('Unable to bind to LDAP server (Error: %s).', ldap_error($this->ds));
             $this->ds = false;
 
             return false;
@@ -138,10 +138,10 @@ class Ldap
         }
 
         if ('' === $rdn && '' === $password) {
-            return ldap_bind($this->ds);
+            return @ldap_bind($this->ds);
         }
 
-        return ldap_bind($this->ds, $rdn, $password);
+        return @ldap_bind($this->ds, $rdn, $password);
     }
 
     /**
@@ -195,7 +195,7 @@ class Ldap
 
         $fields = [$this->ldapConfig['ldap_mapping'][$data]];
 
-        $searchResult = ldap_search($this->ds, $this->base, $filter, $fields);
+        $searchResult = @ldap_search($this->ds, $this->base, $filter, $fields);
 
         if (!$searchResult) {
             $errorMessage = 'Unable to search for "%s" (Error: %s)';
@@ -274,7 +274,7 @@ class Ldap
             $this->configuration->get(item: 'ldap.ldap_mapping.username'),
             $this->quote($username),
         );
-        $sr = ldap_search($this->ds, $this->base, $filter);
+        $sr = @ldap_search($this->ds, $this->base, $filter);
 
         if (false === $sr) {
             $errorMessage = 'Unable to search for "%s" (Error: %s)';
@@ -286,7 +286,7 @@ class Ldap
         $entryId = ldap_first_entry($this->ds, $sr);
 
         if (false === $entryId) {
-            $this->error = sprintf(format: 'Cannot get the value(s). Error: %s', values: ldap_error($this->ds));
+            $this->error = sprintf('Cannot get the value(s). Error: %s', ldap_error($this->ds));
 
             return false;
         }
@@ -331,7 +331,7 @@ class Ldap
 
         $fields = ['memberOf'];
 
-        $searchResult = ldap_search($this->ds, $this->base, $filter, $fields);
+        $searchResult = @ldap_search($this->ds, $this->base, $filter, $fields);
 
         if (!$searchResult) {
             $errorMessage = 'Unable to search for "%s" (Error: %s)';
@@ -344,7 +344,7 @@ class Ldap
 
         if (!$entryId) {
             $this->errno = ldap_errno($this->ds);
-            $this->error = sprintf(format: 'Cannot get the value(s). Error: %s', values: ldap_error($this->ds));
+            $this->error = sprintf('Cannot get the value(s). Error: %s', ldap_error($this->ds));
 
             return false;
         }

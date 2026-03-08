@@ -32,7 +32,7 @@ class Database
     private static ?DatabaseDriver $databaseDriver = null;
 
     /** @var string Database type. */
-    private static string $dbType;
+    private static string $dbType = '';
 
     /** @var string|null Table prefix */
     private static ?string $tablePrefix = null;

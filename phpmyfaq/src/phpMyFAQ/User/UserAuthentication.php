@@ -28,7 +28,6 @@ use phpMyFAQ\Auth\AuthException;
 use phpMyFAQ\Auth\AuthLdap;
 use phpMyFAQ\Auth\AuthSso;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Translation;
 use SensitiveParameter;
 
@@ -108,16 +107,23 @@ class UserAuthentication
 
     private function authenticateLdap(): void
     {
-        if ($this->configuration->isLdapActive() && function_exists('ldap_connect')) {
-            try {
-                $authLdap = new AuthLdap($this->configuration);
-                $this->currentUser->addAuth($authLdap, 'ldap');
-            } catch (Exception $exception) {
-                // LDAP initialization failed - log error and continue with local auth fallback
-                $this->configuration
-                    ->getLogger()
-                    ->error('LDAP authentication initialization failed: ' . $exception->getMessage());
-            }
+        $ldapEnabled = filter_var($this->configuration->get('ldap.ldapSupport'), FILTER_VALIDATE_BOOLEAN);
+        if (!$ldapEnabled || !function_exists('ldap_connect')) {
+            return;
+        }
+
+        if ($this->configuration->getLdapServer() === [] || $this->configuration->getLdapConfig() === []) {
+            return;
+        }
+
+        try {
+            $authLdap = new AuthLdap($this->configuration);
+            $this->currentUser->addAuth($authLdap, 'ldap');
+        } catch (\Throwable $exception) {
+            // LDAP initialization failed (e.g. server unreachable) - log and continue with local auth
+            $this->configuration
+                ->getLogger()
+                ->error('LDAP authentication initialization failed: ' . $exception->getMessage());
         }
     }
 

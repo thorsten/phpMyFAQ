@@ -97,12 +97,7 @@ class CategoryHelper extends AbstractHelper
 
             $name = Strings::htmlentities($node['name']);
             if ($categoryNumbers[$categoryId]['faqs'] > 0) {
-                $url = sprintf(
-                    '%sindex.php?%saction=show&cat=%d',
-                    $this->configuration->getDefaultUrl(),
-                    $sids,
-                    $node['id'],
-                );
+                $url = sprintf('%sindex.php?action=show&cat=%d', $this->configuration->getDefaultUrl(), $node['id']);
 
                 $link = new Link($url, $this->configuration);
                 $link->setTitle(Strings::htmlentities($node['name']));

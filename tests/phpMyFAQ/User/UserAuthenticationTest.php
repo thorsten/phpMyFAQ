@@ -80,4 +80,36 @@ class UserAuthenticationTest extends TestCase
         $this->expectException(UserException::class);
         $this->userAuth->authenticate('username', 'password');
     }
+
+    /**
+     * @throws UserException
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testAuthenticateDoesNotInitializeLdapWhenSupportIsStringFalse(): void
+    {
+        $dbHandle = new Sqlite3();
+        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $configuration = $this->createMock(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnCallback(static function (string $item): mixed {
+                return match ($item) {
+                    'ldap.ldapSupport' => 'false',
+                    'security.ssoSupport' => false,
+                    default => null,
+                };
+            });
+        $configuration->method('getLdapServer')->willReturn([['ldap_server' => 'ldap.example.com']]);
+        $configuration->method('getLdapConfig')->willReturn(['ldap_mapping' => []]);
+        $configuration->method('getLogger')->willReturn(new \Monolog\Logger('test'));
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->expects($this->never())->method('addAuth')->with($this->anything(), 'ldap');
+        $currentUser->method('login')->willReturn(false);
+
+        $userAuth = new UserAuthentication($configuration, $currentUser);
+
+        $this->expectException(UserException::class);
+        $userAuth->authenticate('username', 'password');
+    }
 }
