@@ -64,12 +64,12 @@ final class ChatController extends AbstractController
 
         $partnerId = Filter::filterVar($request->attributes->get('userId'), FILTER_VALIDATE_INT);
         $limit = Filter::filterVar($request->query->get('limit', 50), FILTER_VALIDATE_INT);
-        if ($limit === false) {
+        if (!is_int($limit)) {
             $limit = 50;
         }
 
         $offset = Filter::filterVar($request->query->get('offset', 0), FILTER_VALIDATE_INT);
-        if ($offset === false) {
+        if (!is_int($offset)) {
             $offset = 0;
         }
 

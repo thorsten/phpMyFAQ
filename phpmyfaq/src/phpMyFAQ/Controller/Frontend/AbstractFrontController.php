@@ -277,6 +277,6 @@ abstract class AbstractFrontController extends AbstractController
         // If no URL configured and no fallback, return 404
         $response = new Response();
         $response->setStatusCode(Response::HTTP_NOT_FOUND);
-        return $this->render('error/404.twig', [], $response);
+        return $this->render('404.twig', [], $response);
     }
 }

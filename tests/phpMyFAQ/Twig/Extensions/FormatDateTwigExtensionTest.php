@@ -1,191 +1,81 @@
 <?php
 
+/**
+ * Test class for FormatDateTwigExtension.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2024-2026 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2024-04-27
+ */
+
 namespace phpMyFAQ\Twig\Extensions;
 
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Language;
+use phpMyFAQ\Strings;
+use phpMyFAQ\System;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Twig\Extension\AbstractExtension;
 
-/**
- * Test class for FormatDateTwigExtension
- */
-#[AllowMockObjectsWithoutExpectations]
 class FormatDateTwigExtensionTest extends TestCase
 {
-    private FormatDateTwigExtension $extension;
-
     protected function setUp(): void
     {
         parent::setUp();
-        $this->extension = new FormatDateTwigExtension();
+        Strings::init();
+        $this->ensureConfiguration();
+    }
+
+    private function ensureConfiguration(): void
+    {
+        $reflection = new ReflectionClass(Configuration::class);
+        $prop = $reflection->getProperty('configuration');
+        if ($prop->getValue() !== null) {
+            return;
+        }
+
+        $dbHandle = new Sqlite3();
+        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $configuration = new Configuration($dbHandle);
+        $configuration->set('main.currentVersion', System::getVersion());
+
+        $language = new Language($configuration, $this->createStub(Session::class));
+        $language->setLanguageFromConfiguration('en');
+        $configuration->setLanguage($language);
     }
 
     public function testExtendsAbstractExtension(): void
     {
-        $this->assertInstanceOf(AbstractExtension::class, $this->extension);
+        $this->assertInstanceOf(AbstractExtension::class, new FormatDateTwigExtension());
     }
 
-    public function testClassUsesCorrectNamespace(): void
+    public function testFormatDateReturnsFormattedString(): void
     {
-        $reflection = new ReflectionClass($this->extension);
-        $this->assertEquals('phpMyFAQ\Twig\Extensions', $reflection->getNamespaceName());
+        $result = FormatDateTwigExtension::formatDate('2025-04-01 12:30:00');
+        $this->assertIsString($result);
+        $this->assertNotEmpty($result);
     }
 
-    public function testFormatDateMethodExists(): void
+    public function testFormatDateWithIsoDateString(): void
     {
-        $this->assertTrue(method_exists(FormatDateTwigExtension::class, 'formatDate'));
-
-        $reflection = new ReflectionClass(FormatDateTwigExtension::class);
-        $method = $reflection->getMethod('formatDate');
-
-        $this->assertTrue($method->isStatic());
-        $this->assertTrue($method->isPublic());
+        $result = FormatDateTwigExtension::formatDate('2025-01-15T10:00:00+00:00');
+        $this->assertIsString($result);
+        $this->assertNotEmpty($result);
     }
 
-    public function testFormatDateMethodSignature(): void
+    public function testFormatDateWithInvalidDateReturnsEmptyString(): void
     {
-        $reflection = new ReflectionClass(FormatDateTwigExtension::class);
-        $method = $reflection->getMethod('formatDate');
-
-        $parameters = $method->getParameters();
-        $this->assertCount(1, $parameters);
-
-        $stringParam = $parameters[0];
-        $this->assertEquals('string', $stringParam->getName());
-        $this->assertEquals('string', $stringParam->getType()->getName());
-
-        $returnType = $method->getReturnType();
-        $this->assertNotNull($returnType);
-        $this->assertEquals('string', $returnType->getName());
-    }
-
-    public function testHasTwigFilterAttribute(): void
-    {
-        $reflection = new ReflectionClass(FormatDateTwigExtension::class);
-        $method = $reflection->getMethod('formatDate');
-
-        $attributes = $method->getAttributes();
-        $this->assertNotEmpty($attributes);
-
-        $filterAttribute = null;
-        foreach ($attributes as $attribute) {
-            if ($attribute->getName() === 'Twig\Attribute\AsTwigFilter') {
-                $filterAttribute = $attribute;
-                break;
-            }
-        }
-
-        $this->assertNotNull($filterAttribute, 'Method should have AsTwigFilter attribute');
-
-        $arguments = array_values($filterAttribute->getArguments());
-        $this->assertContains('formatDate', $arguments);
-    }
-
-    public function testClassHasCorrectImports(): void
-    {
-        $filename = new ReflectionClass(FormatDateTwigExtension::class)->getFileName();
-        $source = file_get_contents($filename);
-
-        $expectedImports = [
-            'use phpMyFAQ\Configuration;',
-            'use phpMyFAQ\Date;',
-            'use Twig\Attribute\AsTwigFilter;',
-            'use Twig\Extension\AbstractExtension;',
-        ];
-
-        foreach ($expectedImports as $import) {
-            $this->assertStringContainsString($import, $source);
-        }
-    }
-
-    public function testMethodUsesConfigurationInstance(): void
-    {
-        $filename = new ReflectionClass(FormatDateTwigExtension::class)->getFileName();
-        $source = file_get_contents($filename);
-
-        $this->assertStringContainsString('Configuration::getConfigurationInstance()', $source);
-        $this->assertStringContainsString('new Date', $source);
-    }
-
-    public function testMethodImplementsDateFormatting(): void
-    {
-        $filename = new ReflectionClass(FormatDateTwigExtension::class)->getFileName();
-        $source = file_get_contents($filename);
-
-        $this->assertStringContainsString('$date->format($string)', $source);
-    }
-
-    public function testMethodIsStaticForTwigCompatibility(): void
-    {
-        $reflection = new ReflectionClass(FormatDateTwigExtension::class);
-        $method = $reflection->getMethod('formatDate');
-
-        $this->assertTrue($method->isStatic(), 'formatDate should be static for Twig performance');
-    }
-
-    public function testExtensionStructure(): void
-    {
-        $this->assertInstanceOf(AbstractExtension::class, $this->extension);
-
-        $reflection = new ReflectionClass($this->extension);
-        $this->assertTrue($reflection->hasMethod('formatDate'));
-    }
-
-    public function testParameterTypeEnforcement(): void
-    {
-        $reflection = new ReflectionClass(FormatDateTwigExtension::class);
-        $method = $reflection->getMethod('formatDate');
-
-        $parameters = $method->getParameters();
-        $stringParam = $parameters[0];
-
-        $this->assertTrue($stringParam->hasType());
-        $this->assertEquals('string', $stringParam->getType()->getName());
-        $this->assertFalse($stringParam->allowsNull());
-    }
-
-    public function testReturnTypeEnforcement(): void
-    {
-        $reflection = new ReflectionClass(FormatDateTwigExtension::class);
-        $method = $reflection->getMethod('formatDate');
-
-        $returnType = $method->getReturnType();
-        $this->assertNotNull($returnType);
-        $this->assertEquals('string', $returnType->getName());
-        $this->assertFalse($returnType->allowsNull());
-    }
-
-    public function testFilterNameIsCorrect(): void
-    {
-        $reflection = new ReflectionClass(FormatDateTwigExtension::class);
-        $method = $reflection->getMethod('formatDate');
-
-        $attributes = $method->getAttributes();
-        foreach ($attributes as $attribute) {
-            if ($attribute->getName() === 'Twig\\Attribute\\AsTwigFilter') {
-                $arguments = array_values($attribute->getArguments());
-                $this->assertContains('formatDate', $arguments);
-                break;
-            }
-        }
-    }
-
-    public function testMethodCreatesDateInstance(): void
-    {
-        $filename = new ReflectionClass(FormatDateTwigExtension::class)->getFileName();
-        $source = file_get_contents($filename);
-
-        $this->assertStringContainsString('$date = new Date($configuration)', $source);
-    }
-
-    public function testDocumentationExists(): void
-    {
-        $filename = new ReflectionClass(FormatDateTwigExtension::class)->getFileName();
-        $source = file_get_contents($filename);
-
-        $this->assertStringContainsString('/**', $source);
-        $this->assertStringContainsString('Twig extension to format the date', $source);
-        $this->assertStringContainsString('@package   phpMyFAQ\Template', $source);
+        $result = FormatDateTwigExtension::formatDate('not-a-date');
+        $this->assertSame('', $result);
     }
 }

@@ -124,13 +124,28 @@ final class CategoryControllerTest extends TestCase
      */
     public function testIndexRequiresAuthentication(): void
     {
+        $this->insertTestCategory();
+
+        $order = $this->createMock(Order::class);
+        $order->method('getAllCategories')->willReturn([]);
+        $order->method('getCategoryTree')->with([])->willReturn([]);
+
+        $controller = new CategoryController(
+            $this->createStub(AdminCategory::class),
+            $order,
+            $this->createStub(CategoryPermission::class),
+            $this->createStub(Image::class),
+            $this->createStub(Seo::class),
+            $this->createStub(UserHelper::class),
+        );
         $request = new Request();
-        $controller = $this->createController();
 
         $response = $controller->index($request);
 
         self::assertInstanceOf(Response::class, $response);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('pmf-category-tree', (string) $response->getContent());
+        self::assertStringContainsString('Parent Category', (string) $response->getContent());
     }
 
     /**
@@ -138,13 +153,31 @@ final class CategoryControllerTest extends TestCase
      */
     public function testAddRequiresAuthentication(): void
     {
+        $userHelper = $this->createMock(UserHelper::class);
+        $userHelper->method('getAllUsersForTemplate')->willReturn([[
+            'id' => 42,
+            'selected' => true,
+            'displayName' => 'Test User',
+            'login' => 'testuser',
+        ]]);
+
+        $controller = new CategoryController(
+            $this->createStub(AdminCategory::class),
+            $this->createStub(Order::class),
+            $this->createStub(CategoryPermission::class),
+            $this->createStub(Image::class),
+            $this->createStub(Seo::class),
+            $userHelper,
+        );
         $request = new Request();
-        $controller = $this->createController();
 
         $response = $controller->add($request);
 
         self::assertInstanceOf(Response::class, $response);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('action="./category/create"', (string) $response->getContent());
+        self::assertStringContainsString('name="user_id"', (string) $response->getContent());
+        self::assertStringContainsString('name="serpTitle"', (string) $response->getContent());
     }
 
     /**
@@ -412,6 +445,138 @@ final class CategoryControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringContainsString('alert alert-success', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateRendersSuccessForNewCategory(): void
+    {
+        $context = $this->createAuthenticatedContext();
+
+        $createdCategoryId = null;
+        $order = $this->createMock(Order::class);
+        $order->expects($this->once())->method('add')->willReturnCallback(
+            static function (int $categoryId, int $parentId) use (&$createdCategoryId): bool {
+                self::assertSame(0, $parentId);
+                $createdCategoryId = $categoryId;
+                return true;
+            }
+        );
+
+        $seo = $this->createMock(Seo::class);
+        $seo->expects($this->once())->method('create');
+
+        $userHelper = $this->createMock(UserHelper::class);
+        $userHelper->method('getAllUsersForTemplate')->willReturn([[
+            'id' => 42,
+            'selected' => true,
+            'displayName' => 'Test User',
+            'login' => 'testuser',
+        ]]);
+
+        $controller = new CategoryController(
+            new AdminCategory($this->configuration),
+            $order,
+            $this->createStub(CategoryPermission::class),
+            $this->createStub(Image::class),
+            $seo,
+            $userHelper,
+        );
+        $controller->setContainer($context['container']);
+
+        $csrfToken = $this->createCsrfToken($context['session'], 'save-category');
+        $request = new Request([], [
+            'pmf-csrf-token' => $csrfToken,
+            'parent_id' => '0',
+            'lang' => 'en',
+            'name' => 'Created Category',
+            'description' => 'Created description',
+            'user_id' => '42',
+            'group_id' => '-1',
+            'active' => '1',
+            'show_home' => '1',
+            'userpermission' => 'all',
+            'grouppermission' => 'all',
+            'serpTitle' => 'Created SEO title',
+            'serpDescription' => 'Created SEO description',
+        ]);
+
+        $response = $controller->create($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('alert alert-success', (string) $response->getContent());
+        self::assertStringContainsString('window.location = \'./category\'', (string) $response->getContent());
+
+        self::assertIsInt($createdCategoryId);
+        $result = $this->configuration->getDb()->query(
+            sprintf(
+                "SELECT name, description FROM faqcategories WHERE id = %d AND lang = 'en'",
+                $createdCategoryId,
+            ),
+        );
+        $row = $this->configuration->getDb()->fetchObject($result);
+
+        self::assertNotFalse($row);
+        self::assertSame('Created Category', $row->name);
+        self::assertSame('Created description', $row->description);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateRendersTranslatedSuccessForNewLanguage(): void
+    {
+        $this->insertTestCategory();
+        $context = $this->createAuthenticatedContext();
+
+        $seo = $this->createMock(Seo::class);
+        $seo->expects($this->once())->method('get')->willReturn(new \phpMyFAQ\Entity\SeoEntity());
+        $seo->expects($this->once())->method('create');
+        $seo->expects($this->never())->method('update');
+
+        $controller = new CategoryController(
+            new AdminCategory($this->configuration),
+            $this->createStub(Order::class),
+            $this->createStub(CategoryPermission::class),
+            $this->createStub(Image::class),
+            $seo,
+            $this->createStub(UserHelper::class),
+        );
+        $controller->setContainer($context['container']);
+
+        $csrfToken = $this->createCsrfToken($context['session'], 'update-category');
+        $request = new Request([], [
+            'pmf-csrf-token' => $csrfToken,
+            'id' => '1',
+            'parent_id' => '0',
+            'catlang' => 'de',
+            'name' => 'Uebersetzte Kategorie',
+            'description' => 'Beschreibung',
+            'user_id' => '42',
+            'group_id' => '-1',
+            'active' => '1',
+            'show_home' => '1',
+            'existing_image' => '',
+            'userpermission' => 'all',
+            'grouppermission' => 'all',
+            'serpTitle' => 'SEO DE',
+            'serpDescription' => 'SEO Beschreibung DE',
+        ]);
+
+        $response = $controller->update($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('alert alert-success', (string) $response->getContent());
+        self::assertStringContainsString('The category has been translated.', (string) $response->getContent());
+
+        $result = $this->configuration->getDb()->query(
+            "SELECT name, description FROM faqcategories WHERE id = 1 AND lang = 'de'"
+        );
+        $row = $this->configuration->getDb()->fetchObject($result);
+
+        self::assertNotFalse($row);
+        self::assertSame('Uebersetzte Kategorie', $row->name);
     }
 
     private function insertTestCategory(): void

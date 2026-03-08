@@ -57,6 +57,7 @@ final class FaqControllerRedirectTest extends TestCase
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
         $this->previousConfiguration = $configurationProperty->getValue();
+        $configurationProperty->setValue(null, null);
 
         $databasePath = tempnam(sys_get_temp_dir(), 'pmf-faq-redirect-controller-');
         self::assertNotFalse($databasePath);
@@ -66,6 +67,7 @@ final class FaqControllerRedirectTest extends TestCase
         $this->dbHandle = new Sqlite3();
         $this->dbHandle->connect($this->databasePath, '', '');
         $this->configuration = new Configuration($this->dbHandle);
+        $configurationProperty->setValue(null, $this->configuration);
         $this->initializeDatabaseStatics($this->dbHandle);
 
         $language = new Language($this->configuration, new Session(new MockArraySessionStorage()));
