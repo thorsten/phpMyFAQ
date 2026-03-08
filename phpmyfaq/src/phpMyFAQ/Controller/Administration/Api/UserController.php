@@ -209,7 +209,10 @@ final class UserController extends AbstractAdministrationApiController
 
         $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT);
 
-        $currentUser->getUserById((int) $userId, allowBlockedUsers: true);
+        if (!$currentUser->getUserById((int) $userId, allowBlockedUsers: true)) {
+            return $this->json(['error' => Translation::get(key: 'ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
+        }
+
         try {
             if ($currentUser->activateUser()) {
                 $this->adminLog->log($this->currentUser, AdminLogType::USER_EDIT->value . ' (activated):' . $userId);
@@ -423,7 +426,9 @@ final class UserController extends AbstractAdministrationApiController
         $deleteTwoFactor = $deleteTwoFactor === 'on';
 
         $user = new User($this->configuration);
-        $user->getUserById($userId, allowBlockedUsers: true);
+        if (!$user->getUserById($userId, allowBlockedUsers: true)) {
+            return $this->json(['error' => Translation::get(key: 'ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
+        }
 
         $stats = $user->getStatus();
         $wasSuperAdmin = $user->isSuperAdmin();

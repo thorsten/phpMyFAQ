@@ -1015,6 +1015,63 @@ final class FaqControllerTest extends TestCase
         $this->removeCsrfCookie('importfaqs');
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function testImportReturnsBadRequestWhenCsvValidationFails(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('importfaqs');
+        $this->setCsrfCookie('importfaqs', $csrfToken);
+
+        $tempFile = tempnam(sys_get_temp_dir(), 'pmf-faq-import-');
+        self::assertNotFalse($tempFile);
+        file_put_contents($tempFile, "1,Question,Answer,keywords,en,Author,author@example.com,true\n");
+        $uploadedFile = new UploadedFile($tempFile, 'faq.csv', null, null, true);
+
+        $request = new Request([], [], ['csrf' => $csrfToken], [], ['file' => $uploadedFile]);
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->import($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertFalse($payload['storedAll']);
+        self::assertSame(Translation::get('msgCSVFileNotValidated'), $payload['error']);
+        $this->removeCsrfCookie('importfaqs');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testImportReturnsSuccessForValidCsvFile(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('importfaqs');
+        $this->setCsrfCookie('importfaqs', $csrfToken);
+
+        $tempFile = tempnam(sys_get_temp_dir(), 'pmf-faq-import-');
+        self::assertNotFalse($tempFile);
+        file_put_contents(
+            $tempFile,
+            "1,Imported question,Imported answer,keywords,en,Author,author@example.com,true,false\n",
+        );
+        $uploadedFile = new UploadedFile($tempFile, 'faq.csv', null, null, true);
+
+        $request = new Request([], [], ['csrf' => $csrfToken], [], ['file' => $uploadedFile]);
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->import($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['storedAll']);
+        self::assertSame(Translation::get('msgImportSuccessful'), $payload['success']);
+        $this->removeCsrfCookie('importfaqs');
+    }
+
     private function setCsrfCookie(string $page, string $token): void
     {
         $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;
