@@ -232,9 +232,9 @@ class UserData
             date(format: 'YmdHis', timestamp: Request::createFromGlobals()->server->get('REQUEST_TIME')),
             $this->configuration->getDb()->escape((string) ($this->data['display_name'] ?? '')),
             $this->configuration->getDb()->escape((string) ($this->data['email'] ?? '')),
-            $this->data['is_visible'],
-            $this->data['twofactor_enabled'],
-            $this->data['secret'],
+            $this->data['is_visible'] ?? 0,
+            $this->data['twofactor_enabled'] ?? 0,
+            $this->data['secret'] ?? '',
             $this->userId,
         );
 

@@ -293,4 +293,58 @@ final class ExportControllerTest extends TestCase
         self::assertSame('text/csv', $response->headers->get('Content-Type'));
         self::assertStringContainsString('URL,Visits', $content);
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExportReportIncludesSubCategoryColumnWhenRequested(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $token = Token::getInstance($session)->getTokenString('create-report');
+        $_COOKIE['pmf-csrf-token-' . substr(md5('create-report'), 0, 10)] = $token;
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $token,
+                'sub_category' => true,
+                'title' => true,
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->exportReport($request);
+        $content = (string) $response->getContent();
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('Subcategory,Question', $content);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExportReportIncludesLastModifiedPersonColumnWhenRequested(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $token = Token::getInstance($session)->getTokenString('create-report');
+        $_COOKIE['pmf-csrf-token-' . substr(md5('create-report'), 0, 10)] = $token;
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $token,
+                'id' => true,
+                'last_modified_person' => true,
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->exportReport($request);
+        $content = (string) $response->getContent();
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('"FAQ ID","Last author"', $content);
+    }
 }
