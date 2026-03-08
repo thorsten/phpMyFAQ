@@ -112,7 +112,7 @@ final class QuestionController extends AbstractController
         $storeNow = Filter::filterVar($data->store ?? 'not', FILTER_SANITIZE_SPECIAL_CHARS);
 
         // If smart answering is disabled, save the question immediately
-        if (false === $this->configuration->get(item: 'main.enableSmartAnswering')) {
+        if (!filter_var($this->configuration->get(item: 'main.enableSmartAnswering'), FILTER_VALIDATE_BOOLEAN)) {
             $save = true;
         }
 

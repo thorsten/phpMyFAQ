@@ -292,8 +292,10 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
         $this->overrideConfigurationValues([
             'records.allowQuestionsForGuests' => '1',
             'main.enableSmartAnswering' => '1',
+            'security.permLevel' => 'basic',
         ]);
         $this->seedCategory();
+        $this->seedFaqUserPermission(1, 1);
         $this->seedFaqUserPermission();
 
         $stopWords = $this->createMock(StopWords::class);
@@ -362,6 +364,7 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
         $this->overrideConfigurationValues([
             'records.allowQuestionsForGuests' => '1',
             'main.enableSmartAnswering' => '1',
+            'security.permLevel' => 'basic',
         ]);
         $this->seedCategory();
 

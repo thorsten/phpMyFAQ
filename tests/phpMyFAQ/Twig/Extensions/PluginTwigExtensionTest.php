@@ -1,237 +1,79 @@
 <?php
 
+/**
+ * Test class for PluginTwigExtension.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2024-2026 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2024-04-26
+ */
+
 namespace phpMyFAQ\Twig\Extensions;
 
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Language;
+use phpMyFAQ\Strings;
+use phpMyFAQ\System;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Twig\Extension\AbstractExtension;
 
-/**
- * Test class for PluginTwigExtension
- */
-#[AllowMockObjectsWithoutExpectations]
 class PluginTwigExtensionTest extends TestCase
 {
-    private PluginTwigExtension $extension;
-
     protected function setUp(): void
     {
         parent::setUp();
-        $this->extension = new PluginTwigExtension();
+        Strings::init();
+        $this->ensureConfiguration();
+    }
+
+    private function ensureConfiguration(): void
+    {
+        $reflection = new ReflectionClass(Configuration::class);
+        $prop = $reflection->getProperty('configuration');
+        if ($prop->getValue() !== null) {
+            return;
+        }
+
+        $dbHandle = new Sqlite3();
+        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $configuration = new Configuration($dbHandle);
+        $configuration->set('main.currentVersion', System::getVersion());
+
+        $language = new Language($configuration, $this->createStub(Session::class));
+        $language->setLanguageFromConfiguration('en');
+        $configuration->setLanguage($language);
     }
 
     public function testExtendsAbstractExtension(): void
     {
-        $this->assertInstanceOf(AbstractExtension::class, $this->extension);
+        $this->assertInstanceOf(AbstractExtension::class, new PluginTwigExtension());
     }
 
-    public function testClassUsesCorrectNamespace(): void
+    public function testTriggerPluginEventReturnsString(): void
     {
-        $reflection = new ReflectionClass($this->extension);
-        $this->assertEquals('phpMyFAQ\Twig\Extensions', $reflection->getNamespaceName());
+        $result = PluginTwigExtension::triggerPluginEvent('test.event');
+        $this->assertIsString($result);
     }
 
-    public function testTriggerPluginEventMethodExists(): void
+    public function testTriggerPluginEventWithDataReturnsString(): void
     {
-        $this->assertTrue(method_exists(PluginTwigExtension::class, 'triggerPluginEvent'));
-
-        $reflection = new ReflectionClass(PluginTwigExtension::class);
-        $method = $reflection->getMethod('triggerPluginEvent');
-
-        $this->assertTrue($method->isStatic());
-        $this->assertTrue($method->isPublic());
+        $result = PluginTwigExtension::triggerPluginEvent('test.event', ['key' => 'value']);
+        $this->assertIsString($result);
     }
 
-    public function testTriggerPluginEventMethodSignature(): void
+    public function testTriggerPluginEventWithNullDataReturnsString(): void
     {
-        $reflection = new ReflectionClass(PluginTwigExtension::class);
-        $method = $reflection->getMethod('triggerPluginEvent');
-
-        $parameters = $method->getParameters();
-        $this->assertCount(2, $parameters);
-
-        $eventNameParam = $parameters[0];
-        $this->assertEquals('eventName', $eventNameParam->getName());
-        $this->assertEquals('string', $eventNameParam->getType()->getName());
-
-        $dataParam = $parameters[1];
-        $this->assertEquals('data', $dataParam->getName());
-        $this->assertEquals('mixed', $dataParam->getType()->getName());
-        $this->assertTrue($dataParam->isDefaultValueAvailable());
-        $this->assertNull($dataParam->getDefaultValue());
-
-        $returnType = $method->getReturnType();
-        $this->assertNotNull($returnType);
-        $this->assertEquals('string', $returnType->getName());
-    }
-
-    public function testHasTwigFunctionAttribute(): void
-    {
-        $reflection = new ReflectionClass(PluginTwigExtension::class);
-        $method = $reflection->getMethod('triggerPluginEvent');
-
-        $attributes = $method->getAttributes();
-        $this->assertNotEmpty($attributes);
-
-        $functionAttribute = null;
-        foreach ($attributes as $attribute) {
-            if ($attribute->getName() === 'Twig\Attribute\AsTwigFunction') {
-                $functionAttribute = $attribute;
-                break;
-            }
-        }
-
-        $this->assertNotNull($functionAttribute, 'Method should have AsTwigFunction attribute');
-
-        $arguments = array_values($functionAttribute->getArguments());
-        $this->assertContains('phpMyFAQPlugin', $arguments);
-    }
-
-    public function testClassHasCorrectImports(): void
-    {
-        $filename = new ReflectionClass(PluginTwigExtension::class)->getFileName();
-        $source = file_get_contents($filename);
-
-        $expectedImports = [
-            'use phpMyFAQ\Configuration;',
-            'use Twig\Attribute\AsTwigFunction;',
-            'use Twig\Extension\AbstractExtension;',
-        ];
-
-        foreach ($expectedImports as $import) {
-            $this->assertStringContainsString($import, $source);
-        }
-    }
-
-    public function testMethodUsesConfigurationInstance(): void
-    {
-        $filename = new ReflectionClass(PluginTwigExtension::class)->getFileName();
-        $source = file_get_contents($filename);
-
-        $this->assertStringContainsString('Configuration::getConfigurationInstance()', $source);
-    }
-
-    public function testMethodImplementsPluginManagerCall(): void
-    {
-        $filename = new ReflectionClass(PluginTwigExtension::class)->getFileName();
-        $source = file_get_contents($filename);
-
-        $this->assertStringContainsString('->getPluginManager()->triggerEvent($eventName, $data)', $source);
-    }
-
-    public function testMethodIsStaticForTwigCompatibility(): void
-    {
-        $reflection = new ReflectionClass(PluginTwigExtension::class);
-        $method = $reflection->getMethod('triggerPluginEvent');
-
-        $this->assertTrue($method->isStatic(), 'triggerPluginEvent should be static for Twig performance');
-    }
-
-    public function testExtensionStructure(): void
-    {
-        $this->assertInstanceOf(AbstractExtension::class, $this->extension);
-
-        $reflection = new ReflectionClass($this->extension);
-        $this->assertTrue($reflection->hasMethod('triggerPluginEvent'));
-    }
-
-    public function testParameterTypeEnforcement(): void
-    {
-        $reflection = new ReflectionClass(PluginTwigExtension::class);
-        $method = $reflection->getMethod('triggerPluginEvent');
-
-        $parameters = $method->getParameters();
-
-        // Test eventName parameter
-        $eventNameParam = $parameters[0];
-        $this->assertTrue($eventNameParam->hasType());
-        $this->assertEquals('string', $eventNameParam->getType()->getName());
-        $this->assertFalse($eventNameParam->allowsNull());
-
-        // Test data parameter
-        $dataParam = $parameters[1];
-        $this->assertTrue($dataParam->hasType());
-        $this->assertEquals('mixed', $dataParam->getType()->getName());
-        $this->assertTrue($dataParam->allowsNull());
-    }
-
-    public function testReturnTypeEnforcement(): void
-    {
-        $reflection = new ReflectionClass(PluginTwigExtension::class);
-        $method = $reflection->getMethod('triggerPluginEvent');
-
-        $returnType = $method->getReturnType();
-        $this->assertNotNull($returnType);
-        $this->assertEquals('string', $returnType->getName());
-        $this->assertFalse($returnType->allowsNull());
-    }
-
-    public function testFunctionNameIsCorrect(): void
-    {
-        $reflection = new ReflectionClass(PluginTwigExtension::class);
-        $method = $reflection->getMethod('triggerPluginEvent');
-
-        $attributes = $method->getAttributes();
-        foreach ($attributes as $attribute) {
-            if ($attribute->getName() === 'Twig\\Attribute\\AsTwigFunction') {
-                $arguments = array_values($attribute->getArguments());
-                $this->assertContains('phpMyFAQPlugin', $arguments);
-                break;
-            }
-        }
-    }
-
-    public function testDeclareStrictTypes(): void
-    {
-        $filename = new ReflectionClass(PluginTwigExtension::class)->getFileName();
-        $source = file_get_contents($filename);
-
-        $this->assertStringContainsString('declare(strict_types=1);', $source);
-    }
-
-    public function testMethodChaining(): void
-    {
-        $filename = new ReflectionClass(PluginTwigExtension::class)->getFileName();
-        $source = file_get_contents($filename);
-
-        // Should chain getConfigurationInstance -> getPluginManager -> triggerEvent
-        $this->assertStringContainsString('->getPluginManager()', $source);
-        $this->assertStringContainsString('->triggerEvent(', $source);
-    }
-
-    public function testDocumentationExists(): void
-    {
-        $filename = new ReflectionClass(PluginTwigExtension::class)->getFileName();
-        $source = file_get_contents($filename);
-
-        $this->assertStringContainsString('/**', $source);
-        $this->assertStringContainsString('Twig extension to trigger plugin events', $source);
-        $this->assertStringContainsString('@package   phpMyFAQ\Template', $source);
-    }
-
-    public function testOptionalDataParameter(): void
-    {
-        $reflection = new ReflectionClass(PluginTwigExtension::class);
-        $method = $reflection->getMethod('triggerPluginEvent');
-
-        $parameters = $method->getParameters();
-        $dataParam = $parameters[1];
-
-        $this->assertTrue($dataParam->isOptional());
-        $this->assertTrue($dataParam->isDefaultValueAvailable());
-        $this->assertNull($dataParam->getDefaultValue());
-    }
-
-    public function testMixedTypeUsage(): void
-    {
-        // Test that method correctly uses mixed type for flexible data parameter
-        $reflection = new ReflectionClass(PluginTwigExtension::class);
-        $method = $reflection->getMethod('triggerPluginEvent');
-
-        $parameters = $method->getParameters();
-        $dataParam = $parameters[1];
-
-        $this->assertEquals('mixed', $dataParam->getType()->getName());
+        $result = PluginTwigExtension::triggerPluginEvent('test.event', null);
+        $this->assertIsString($result);
     }
 }

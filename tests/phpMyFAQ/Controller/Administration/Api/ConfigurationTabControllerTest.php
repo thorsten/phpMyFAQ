@@ -20,6 +20,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -111,6 +112,15 @@ final class ConfigurationTabControllerTest extends TestCase
         );
     }
 
+    private function createControllerWithLanguage(?Language $language = null): ConfigurationTabController
+    {
+        return new ConfigurationTabController(
+            $language ?? $this->createStub(Language::class),
+            $this->createStub(System::class),
+            $this->createStub(ThemeManager::class),
+        );
+    }
+
     /**
      * @throws \Exception
      */
@@ -187,6 +197,25 @@ final class ConfigurationTabControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testListReturnsRenderedConfigurationTabForAuthenticatedUser(): void
+    {
+        $language = $this->createStub(Language::class);
+        $language->method('setLanguageByAcceptLanguage')->willReturn('en');
+
+        $controller = $this->createControllerWithLanguage($language);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $request = new Request([], [], ['mode' => 'security']);
+        $response = $controller->list($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('security.enableLoginOnly', (string) $response->getContent());
+        self::assertStringContainsString('data-config-key="security.permLevel"', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testSaveReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
     {
         $controller = $this->createController();
@@ -238,6 +267,43 @@ final class ConfigurationTabControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringContainsString('<option', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[DataProvider('helperEndpointProvider')]
+    public function testHelperEndpointsReturnRenderedOptionMarkup(
+        string $method,
+        string $currentValue,
+        string $expectedContent
+    ): void {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->$method(new Request([], [], ['current' => $currentValue]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString($expectedContent, (string) $response->getContent());
+    }
+
+    public static function helperEndpointProvider(): array
+    {
+        return [
+            'faqs sorting key' => ['faqsSortingKey', 'visits', 'value="visits" selected'],
+            'faqs sorting order' => ['faqsSortingOrder', 'DESC', 'value="DESC" selected'],
+            'faqs sorting popular' => ['faqsSortingPopular', 'visits', 'value="visits"'],
+            'permission level' => ['permLevel', 'medium', 'value="medium" selected'],
+            'release environment' => ['releaseEnvironment', 'nightly', 'value="nightly" selected'],
+            'search relevance' => [
+                'searchRelevance',
+                'thema,content,keywords',
+                'value="thema,content,keywords"',
+            ],
+            'seo metatags' => ['seoMetaTags', 'index, follow', '<option selected>index, follow</option>'],
+            'translation provider' => ['translationProvider', 'google', 'value="google"'],
+            'mail provider' => ['mailProvider', 'smtp', 'value="smtp" selected'],
+        ];
     }
 
     private function createAuthenticatedContainer(?Session $session = null): ContainerInterface

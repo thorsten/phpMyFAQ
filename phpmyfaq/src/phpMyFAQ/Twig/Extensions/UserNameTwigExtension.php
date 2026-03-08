@@ -46,6 +46,6 @@ class UserNameTwigExtension extends AbstractExtension
     {
         $user = new User(Configuration::getConfigurationInstance());
         $user->getUserById($userId);
-        return $user->getUserData(field: 'display_name');
+        return (string) $user->getUserData(field: 'display_name');
     }
 }

@@ -366,4 +366,69 @@ class UnauthorizedUserControllerTest extends TestCase
         $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         $this->assertSame('SMTP failed', $payload['error']);
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testUpdatePasswordReturnsConflictWhenEmailDoesNotMatchUser(): void
+    {
+        $user = $this->createMock(CurrentUser::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('testuser')->willReturn(true);
+        $user->expects($this->once())->method('getUserData')->with('email')->willReturn('other@example.com');
+        $user->expects($this->never())->method('createPassword');
+
+        $controller = new UnauthorizedUserController(static fn(Configuration $configuration): CurrentUser => $user);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'username' => 'testuser',
+            'email' => 'test@example.com',
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->updatePassword($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertSame(Response::HTTP_CONFLICT, $response->getStatusCode());
+        $this->assertSame(Translation::get('lostpwd_err_1'), $payload['error']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testUpdatePasswordReturnsBadRequestWhenRecipientAddressCannotBeAdded(): void
+    {
+        $this->configuration->getAll();
+        $configReflection = new \ReflectionClass(Configuration::class);
+        $configProperty = $configReflection->getProperty('config');
+        $currentConfig = $configProperty->getValue($this->configuration);
+        $configProperty->setValue($this->configuration, array_merge($currentConfig, [
+            'main.titleFAQ' => 'phpMyFAQ Test',
+        ]));
+
+        $user = $this->createMock(CurrentUser::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('testuser')->willReturn(true);
+        $user->expects($this->once())->method('getUserData')->with('email')->willReturn('test@example.com');
+        $user->expects($this->once())->method('createPassword')->willReturn('NewPass123');
+        $user->expects($this->once())->method('changePassword')->with('NewPass123')->willReturn(true);
+
+        $mail = $this->createMock(Mail::class);
+        $mail->expects($this->once())->method('addTo')->with('test@example.com')
+            ->willThrowException(new \phpMyFAQ\Core\Exception('Invalid recipient'));
+        $mail->expects($this->never())->method('send');
+
+        $controller = new UnauthorizedUserController(
+            static fn(Configuration $configuration): CurrentUser => $user,
+            static fn(Configuration $configuration): Mail => $mail,
+        );
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'username' => 'testuser',
+            'email' => 'test@example.com',
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->updatePassword($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->assertSame('Invalid recipient', $payload['error']);
+    }
 }

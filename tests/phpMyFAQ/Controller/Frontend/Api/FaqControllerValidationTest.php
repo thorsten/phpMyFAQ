@@ -456,4 +456,148 @@ final class FaqControllerValidationTest extends ApiControllerTestCase
         self::assertArrayNotHasKey('link', $payload);
         self::assertArrayNotHasKey('info', $payload);
     }
+
+    public function testCreateDeletesOpenQuestionWhenDeleteQuestionIsEnabled(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues([
+            'records.allowNewFaqsForGuests' => '1',
+            'records.defaultActivation' => false,
+            'records.enableDeleteQuestion' => true,
+            'security.permLevel' => 'basic',
+        ]);
+        $this->seedCategory();
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('create')->willReturnCallback(static function ($entity) {
+            $entity->setId(125);
+            return $entity;
+        });
+
+        $question = $this->createMock(Question::class);
+        $question->expects($this->once())->method('delete')->with(55);
+        $question->expects($this->never())->method('updateQuestionAnswer');
+
+        $stopWords = $this->createStub(StopWords::class);
+        $stopWords->method('checkBannedWord')->willReturn(true);
+
+        $userSession = $this->createMock(UserSession::class);
+        $userSession->expects($this->once())->method('setCurrentUser')->willReturnSelf();
+        $userSession->expects($this->once())->method('userTracking')->with('save_new_entry', 0);
+
+        $categoryHelper = $this->createMock(CategoryHelper::class);
+        $categoryHelper->expects($this->once())->method('setCategory')->willReturnSelf();
+        $categoryHelper->expects($this->once())->method('setConfiguration')->willReturnSelf();
+        $categoryHelper->expects($this->once())->method('getModerators')->with([1])->willReturn([]);
+
+        $notification = $this->createMock(Notification::class);
+        $notification->expects($this->once())->method('sendNewFaqAdded')->with([], $this->anything());
+
+        $language = $this->createStub(Language::class);
+        $language->method('setLanguageFromConfiguration')->willReturn('en');
+        $language->method('setLanguageWithDetection')->willReturn('en');
+
+        $controller = new FaqController(
+            $faq,
+            $this->createStub(FaqHelper::class),
+            $question,
+            $stopWords,
+            $userSession,
+            $language,
+            $categoryHelper,
+            $notification,
+        );
+        $currentUser = $this->createAuthenticatedUserMock();
+        $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
+        $this->injectControllerState($controller, $currentUser, $this->createSession());
+
+        $request = Request::create('/api/faq/create', 'POST', content: json_encode([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'question' => 'Question from open item?',
+            'answer' => 'Answer',
+            'keywords' => 'test',
+            'rubrik' => [1],
+            'openQuestionID' => 55,
+            'captcha' => 'ignored-for-logged-in-user',
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->create($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+    }
+
+    public function testCreateUpdatesOpenQuestionWhenDeleteQuestionIsDisabled(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues([
+            'records.allowNewFaqsForGuests' => '1',
+            'records.defaultActivation' => false,
+            'records.enableDeleteQuestion' => false,
+            'security.permLevel' => 'basic',
+        ]);
+        $this->seedCategory();
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('create')->willReturnCallback(static function ($entity) {
+            $entity->setId(126);
+            return $entity;
+        });
+
+        $question = $this->createMock(Question::class);
+        $question->expects($this->never())->method('delete');
+        $question->expects($this->once())->method('updateQuestionAnswer')->with(77, 126, 1);
+
+        $stopWords = $this->createStub(StopWords::class);
+        $stopWords->method('checkBannedWord')->willReturn(true);
+
+        $userSession = $this->createMock(UserSession::class);
+        $userSession->expects($this->once())->method('setCurrentUser')->willReturnSelf();
+        $userSession->expects($this->once())->method('userTracking')->with('save_new_entry', 0);
+
+        $categoryHelper = $this->createMock(CategoryHelper::class);
+        $categoryHelper->expects($this->once())->method('setCategory')->willReturnSelf();
+        $categoryHelper->expects($this->once())->method('setConfiguration')->willReturnSelf();
+        $categoryHelper->expects($this->once())->method('getModerators')->with([1])->willReturn([]);
+
+        $notification = $this->createMock(Notification::class);
+        $notification->expects($this->once())->method('sendNewFaqAdded')->with([], $this->anything());
+
+        $language = $this->createStub(Language::class);
+        $language->method('setLanguageFromConfiguration')->willReturn('en');
+        $language->method('setLanguageWithDetection')->willReturn('en');
+
+        $controller = new FaqController(
+            $faq,
+            $this->createStub(FaqHelper::class),
+            $question,
+            $stopWords,
+            $userSession,
+            $language,
+            $categoryHelper,
+            $notification,
+        );
+        $currentUser = $this->createAuthenticatedUserMock();
+        $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
+        $this->injectControllerState($controller, $currentUser, $this->createSession());
+
+        $request = Request::create('/api/faq/create', 'POST', content: json_encode([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'question' => 'Question from open item?',
+            'answer' => 'Answer',
+            'keywords' => 'test',
+            'rubrik' => [1],
+            'openQuestionID' => 77,
+            'captcha' => 'ignored-for-logged-in-user',
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->create($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+    }
 }
