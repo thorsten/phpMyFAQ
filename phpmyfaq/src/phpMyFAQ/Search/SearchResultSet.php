@@ -82,7 +82,11 @@ class SearchResultSet
         $duplicateResults = [];
         $currentGroupIds = [-1];
 
-        if ('basic' !== $this->configuration->get(item: 'security.permLevel')) {
+        if (
+            'basic' !== $this->configuration->get(item: 'security.permLevel')
+            && isset($this->currentUser->perm)
+            && method_exists($this->currentUser->perm, 'getUserGroups')
+        ) {
             $currentGroupIds = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
         }
 

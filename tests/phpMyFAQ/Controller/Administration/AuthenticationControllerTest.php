@@ -161,6 +161,20 @@ final class AuthenticationControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testTokenRedirectsToDashboardWhenUserIsAlreadyLoggedIn(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(currentUser: $this->createLoggedInCurrentUser(), configurationValues: []));
+
+        $response = $controller->token(new Request(['user-id' => '1']));
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertSame('./', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testLoginRedirectsToAuthenticateWhenSsoUserIsPresent(): void
     {
         $controller = $this->createController();
@@ -196,6 +210,30 @@ final class AuthenticationControllerTest extends TestCase
 
         self::assertInstanceOf(RedirectResponse::class, $response);
         self::assertSame('./token?user-id=42', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCheckRedirectsToDashboardWhenTwoFactorTokenIsValid(): void
+    {
+        $currentUserService = $this->createMock(CurrentUser::class);
+        $currentUserService->method('getUserById')->with(42);
+        $currentUserService->expects(self::once())->method('twoFactorSuccess');
+        $currentUserService->method('getLogin')->willReturn('admin');
+
+        $twoFactor = $this->createMock(TwoFactor::class);
+        $twoFactor->expects(self::once())->method('validateToken')->with('123456', 42)->willReturn(true);
+
+        $controller = new AuthenticationController($currentUserService, $twoFactor);
+        $controller->setContainer($this->createControllerContainer(currentUser: $this->createLoggedOutCurrentUser(), configurationValues: []));
+
+        $request = new Request([], ['token' => '123456', 'user-id' => '42']);
+
+        $response = $controller->check($request);
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertSame('./', $response->getTargetUrl());
     }
 
     private function createControllerContainer(CurrentUser $currentUser, array $configurationValues): ContainerInterface
@@ -240,6 +278,21 @@ final class AuthenticationControllerTest extends TestCase
         $currentUser->method('getUserId')->willReturn(0);
         $currentUser->method('getUserData')->willReturn('');
         $currentUser->method('getLogin')->willReturn('');
+
+        return $currentUser;
+    }
+
+    private function createLoggedInCurrentUser(): CurrentUser
+    {
+        $permission = $this->createMock(PermissionInterface::class);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('isSuperAdmin')->willReturn(false);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('getUserData')->willReturn('');
+        $currentUser->method('getLogin')->willReturn('admin');
 
         return $currentUser;
     }

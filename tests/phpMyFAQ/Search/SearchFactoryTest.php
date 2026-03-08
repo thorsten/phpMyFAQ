@@ -58,4 +58,11 @@ class SearchFactoryTest extends TestCase
 
         $this->assertInstanceOf('phpMyFAQ\Search\Database\PdoSqlite', $search);
     }
+
+    public function testCreateFallsBackToConfigurationDatabaseTypeWhenHandlerIsEmpty(): void
+    {
+        $search = SearchFactory::create($this->configuration, ['database' => '']);
+
+        $this->assertInstanceOf('phpMyFAQ\Search\Database\PdoSqlite', $search);
+    }
 }
