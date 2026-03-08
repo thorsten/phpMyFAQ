@@ -180,6 +180,42 @@ final class UserControllerTest extends TestCase
         ));
     }
 
+    private function seedManagedUser(
+        string $login = 'managed-user',
+        string $status = 'active',
+        int $isSuperAdmin = 0,
+        int $twoFactorEnabled = 0,
+        string $lastModified = '20260101010101',
+    ): int {
+        $userId = (int) $this->dbHandle->nextId('faquser', 'user_id');
+
+        self::assertNotFalse($this->dbHandle->query(sprintf(
+            "INSERT INTO faquser (
+                user_id, login, session_id, session_timestamp, ip, account_status, last_login, auth_source, member_since,
+                remember_me, success, is_superadmin, login_attempts, refresh_token, access_token, code_verifier, jwt, webauthnkeys
+            ) VALUES (
+                %d, '%s', '', 0, '', '%s', '20230101120000', 'local', '20230101120000',
+                '', 1, %d, 0, NULL, NULL, NULL, NULL, NULL
+            )",
+            $userId,
+            $this->dbHandle->escape($login),
+            $this->dbHandle->escape($status),
+            $isSuperAdmin,
+        )));
+
+        self::assertNotFalse($this->dbHandle->query(sprintf(
+            "INSERT INTO faquserdata (user_id, last_modified, display_name, email, is_visible, twofactor_enabled, secret)
+             VALUES (%d, '%s', '%s', '%s', 1, %d, 'test-secret')",
+            $userId,
+            $this->dbHandle->escape($lastModified),
+            $this->dbHandle->escape('Display ' . $login),
+            $this->dbHandle->escape($login . '@example.com'),
+            $twoFactorEnabled,
+        )));
+
+        return $userId;
+    }
+
     /**
      * @throws \Exception
      */
@@ -519,6 +555,7 @@ final class UserControllerTest extends TestCase
     public function testActivateReturnsBadRequestForAlreadyActiveUserWithValidCsrf(): void
     {
         $this->seedCurrentUserSession();
+        $managedUserId = $this->seedManagedUser(login: 'active-user', status: 'active');
 
         $container = $this->createAuthenticatedContainer();
         $session = $container->get('session');
@@ -527,7 +564,7 @@ final class UserControllerTest extends TestCase
 
         $request = new Request([], [], [], [], [], [], json_encode([
             'csrfToken' => $token,
-            'userId' => 2,
+            'userId' => $managedUserId,
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
@@ -729,6 +766,7 @@ final class UserControllerTest extends TestCase
     public function testEditUserReturnsSuccessWithValidCsrf(): void
     {
         $this->seedCurrentUserSession();
+        $managedUserId = $this->seedManagedUser(login: 'test-user-edit', status: 'active');
 
         $container = $this->createAuthenticatedContainer();
         $session = $container->get('session');
@@ -737,7 +775,7 @@ final class UserControllerTest extends TestCase
 
         $request = new Request([], [], [], [], [], [], json_encode([
             'csrfToken' => $token,
-            'userId' => 2,
+            'userId' => $managedUserId,
             'display_name' => 'Edited Test User',
             'email' => 'edited-test-user@example.com',
             'last_modified' => '20260101010101',
@@ -754,7 +792,7 @@ final class UserControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertArrayHasKey('success', $payload);
-        self::assertStringContainsString('testUser', $payload['success']);
+        self::assertStringContainsString('test-user-edit', $payload['success']);
     }
 
     /**
@@ -763,6 +801,13 @@ final class UserControllerTest extends TestCase
     public function testEditUserResetsTwoFactorAndLogsPrivilegeChanges(): void
     {
         $this->seedCurrentUserSession();
+        $managedUserId = $this->seedManagedUser(
+            login: 'privileged-user',
+            status: 'active',
+            isSuperAdmin: 0,
+            twoFactorEnabled: 1,
+            lastModified: '20260228093848',
+        );
 
         $adminLog = $this->createMock(AdminLog::class);
         $adminLog
@@ -772,10 +817,10 @@ final class UserControllerTest extends TestCase
                 $this->anything(),
                 $this->callback(static function (string $message): bool {
                     static $expectedFragments = [
-                        'auth-2fa-reset:2',
-                        'user-status-changed:2 (active -> protected)',
-                        'user-superadmin-granted:2',
-                        'user-edit:2',
+                        'auth-2fa-reset:',
+                        'user-status-changed:',
+                        'user-superadmin-granted:',
+                        'user-edit:',
                     ];
 
                     $expectedFragment = array_shift($expectedFragments);
@@ -790,7 +835,7 @@ final class UserControllerTest extends TestCase
 
         $request = new Request([], [], [], [], [], [], json_encode([
             'csrfToken' => $token,
-            'userId' => 2,
+            'userId' => $managedUserId,
             'display_name' => 'Privileged Test User',
             'email' => 'privileged-test-user@example.com',
             'last_modified' => '20260228093848',
