@@ -72,6 +72,8 @@ services:
   nginx:
     image: nginx:latest
     restart: always
+    depends_on:
+      - php-fpm
     links:
       - php-fpm
     volumes:
@@ -111,6 +113,7 @@ services:
     volumes:
       - ./phpmyfaq:/var/www/html
     depends_on:
+      - mariadb
       - pnpm
 
   frankenphp:
@@ -175,6 +178,7 @@ services:
     restart: always
     stdin_open: true
     environment:
+      PMA_HOST: db
       UPLOAD_LIMIT: 100M
     links:
       - mariadb:db
@@ -182,6 +186,8 @@ services:
       - '8000:80'
     volumes:
       - ./volumes/sessions:/sessions
+    depends_on:
+      - mariadb
 
   pgadmin:
     image: dpage/pgadmin4
