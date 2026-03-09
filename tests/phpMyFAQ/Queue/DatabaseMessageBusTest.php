@@ -42,4 +42,35 @@ class DatabaseMessageBusTest extends TestCase
 
         $this->assertSame(1001, $id);
     }
+
+    public function testDispatchSerializesPlainObjectPayload(): void
+    {
+        $transport = $this->createMock(DatabaseTransport::class);
+        $transport
+            ->expects($this->once())
+            ->method('enqueue')
+            ->with(
+                $this->callback(static function (string $body): bool {
+                    $decoded = json_decode($body, true);
+
+                    return (
+                        is_array($decoded)
+                        && ($decoded['class'] ?? '')
+                        === \stdClass::class
+                        && ($decoded['payload']['foo'] ?? '')
+                        === 'bar'
+                    );
+                }),
+                [],
+                'default',
+            )
+            ->willReturn(1002);
+
+        $message = new \stdClass();
+        $message->foo = 'bar';
+
+        $bus = new DatabaseMessageBus($transport);
+
+        $this->assertSame(1002, $bus->dispatch($message));
+    }
 }

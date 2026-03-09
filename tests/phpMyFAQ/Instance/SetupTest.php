@@ -114,6 +114,171 @@ class SetupTest extends TestCase
         $this->setup->createDatabaseFile($data);
     }
 
+    public function testCreateDatabaseFileThrowsWhenFolderNotWritable(): void
+    {
+        // Create folder and make it non-writable
+        $readonlyDir = $this->tmpRootDir . '/readonly';
+        mkdir($readonlyDir, 0777, true);
+        chmod($readonlyDir, 0444);
+
+        $this->setup->setRootDir($this->tmpRootDir);
+
+        $data = [
+            'dbServer' => 'localhost',
+            'dbPort' => '3306',
+            'dbUser' => 'root',
+            'dbPassword' => 'pass',
+            'dbDatabaseName' => 'phpmyfaq',
+            'dbPrefix' => '',
+            'dbType' => 'mysql',
+        ];
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('is not writable');
+
+        try {
+            $this->setup->createDatabaseFile($data, '/readonly');
+        } finally {
+            chmod($readonlyDir, 0777);
+        }
+    }
+
+    public function testCreateDatabaseFileWithEmptySchema(): void
+    {
+        mkdir($this->tmpRootDir . '/content/core/config', 0777, true);
+        $this->setup->setRootDir($this->tmpRootDir);
+
+        $data = [
+            'dbServer' => 'localhost',
+            'dbPort' => '3306',
+            'dbUser' => 'root',
+            'dbPassword' => 'pass',
+            'dbDatabaseName' => 'phpmyfaq',
+            'dbPrefix' => 'pmf_',
+            'dbType' => 'mysql',
+            'dbSchema' => '',
+        ];
+
+        $result = $this->setup->createDatabaseFile($data);
+        $this->assertIsInt($result);
+
+        $content = file_get_contents($this->tmpRootDir . '/content/core/config/database.php');
+        $this->assertStringContainsString("\$DB['schema'] = '';", $content);
+        $this->assertStringContainsString("\$DB['prefix'] = 'pmf_';", $content);
+    }
+
+    public function testCreateDatabaseFileWithMissingKeys(): void
+    {
+        mkdir($this->tmpRootDir . '/content/core/config', 0777, true);
+        $this->setup->setRootDir($this->tmpRootDir);
+
+        // All keys missing - should use empty defaults
+        $result = $this->setup->createDatabaseFile([]);
+        $this->assertIsInt($result);
+
+        $content = file_get_contents($this->tmpRootDir . '/content/core/config/database.php');
+        $this->assertStringContainsString("\$DB['server'] = '';", $content);
+        $this->assertStringContainsString("\$DB['type'] = '';", $content);
+    }
+
+    public function testCheckDirsWithExistingWritableDir(): void
+    {
+        mkdir($this->tmpRootDir . '/setup', 0777, true);
+        file_put_contents($this->tmpRootDir . '/setup/index.html', '<html></html>');
+        mkdir($this->tmpRootDir . '/existing-dir', 0777, true);
+        $this->setup->setRootDir($this->tmpRootDir);
+
+        $result = $this->setup->checkDirs(['/existing-dir']);
+        $this->assertEmpty($result);
+    }
+
+    public function testCheckDirsCreatesNewDir(): void
+    {
+        @mkdir($this->tmpRootDir . '/setup', 0777, true);
+        file_put_contents($this->tmpRootDir . '/setup/index.html', '<html></html>');
+        $this->setup->setRootDir($this->tmpRootDir);
+
+        $result = $this->setup->checkDirs(['/new-dir']);
+        $this->assertEmpty($result);
+        $this->assertDirectoryExists($this->tmpRootDir . '/new-dir');
+    }
+
+    public function testCheckDirsReportsNonWritableDir(): void
+    {
+        mkdir($this->tmpRootDir . '/nowrite', 0777, true);
+        chmod($this->tmpRootDir . '/nowrite', 0444);
+        $this->setup->setRootDir($this->tmpRootDir);
+
+        $result = $this->setup->checkDirs(['/nowrite']);
+        $this->assertNotEmpty($result);
+        $this->assertStringContainsString('not writable', $result[0]);
+
+        chmod($this->tmpRootDir . '/nowrite', 0777);
+    }
+
+    public function testCreateLdapFile(): void
+    {
+        mkdir($this->tmpRootDir . '/content/core/config/config', 0777, true);
+        $this->setup->setRootDir($this->tmpRootDir);
+
+        $data = [
+            'ldapServer' => 'ldap.example.com',
+            'ldapPort' => '389',
+            'ldapUser' => 'cn=admin,dc=example,dc=com',
+            'ldapPassword' => 'secret',
+            'ldapBase' => 'dc=example,dc=com',
+        ];
+
+        $result = $this->setup->createLdapFile($data, '/content/core');
+        $this->assertIsInt($result);
+
+        $content = file_get_contents($this->tmpRootDir . '/content/core/config/ldap.php');
+        $this->assertStringContainsString("\$PMF_LDAP['ldap_server'] = 'ldap.example.com'", $content);
+        $this->assertStringContainsString("\$PMF_LDAP['ldap_port'] = '389'", $content);
+        $this->assertStringContainsString("\$PMF_LDAP['ldap_user'] = 'cn=admin,dc=example,dc=com'", $content);
+        $this->assertStringContainsString("\$PMF_LDAP['ldap_password'] = 'secret'", $content);
+        $this->assertStringContainsString("\$PMF_LDAP['ldap_base'] = 'dc=example,dc=com'", $content);
+    }
+
+    public function testCreateElasticsearchFile(): void
+    {
+        mkdir($this->tmpRootDir . '/content/core/config/config', 0777, true);
+        $this->setup->setRootDir($this->tmpRootDir);
+
+        $data = [
+            'hosts' => ['localhost:9200', 'localhost:9201'],
+            'index' => 'phpmyfaq',
+        ];
+
+        $result = $this->setup->createElasticsearchFile($data, '/content/core');
+        $this->assertIsInt($result);
+
+        $content = file_get_contents($this->tmpRootDir . '/content/core/config/elasticsearch.php');
+        $this->assertStringContainsString("\$PMF_ES['hosts']", $content);
+        $this->assertStringContainsString('localhost:9200', $content);
+        $this->assertStringContainsString('localhost:9201', $content);
+        $this->assertStringContainsString("\$PMF_ES['index'] = 'phpmyfaq'", $content);
+    }
+
+    public function testCreateOpenSearchFile(): void
+    {
+        mkdir($this->tmpRootDir . '/content/core/config/config', 0777, true);
+        $this->setup->setRootDir($this->tmpRootDir);
+
+        $data = [
+            'hosts' => ['localhost:9200'],
+            'index' => 'phpmyfaq_os',
+        ];
+
+        $result = $this->setup->createOpenSearchFile($data, '/content/core');
+        $this->assertIsInt($result);
+
+        $content = file_get_contents($this->tmpRootDir . '/content/core/config/opensearch.php');
+        $this->assertStringContainsString("\$PMF_OS['hosts']", $content);
+        $this->assertStringContainsString('localhost:9200', $content);
+        $this->assertStringContainsString("\$PMF_OS['index'] = 'phpmyfaq_os'", $content);
+    }
+
     private function removeDirectory(string $directory): void
     {
         $entries = scandir($directory);

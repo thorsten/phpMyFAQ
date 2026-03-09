@@ -35,7 +35,7 @@ use stdClass;
  */
 class Elasticsearch extends AbstractSearch implements SearchInterface
 {
-    private readonly Client $client;
+    private readonly object $client;
 
     private readonly ElasticsearchConfiguration $elasticsearchConfiguration;
 
@@ -47,12 +47,16 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
     /**
      * Constructor.
      */
-    public function __construct(Configuration $configuration)
-    {
+    public function __construct(
+        Configuration $configuration,
+        ?object $client = null,
+        ?ElasticsearchConfiguration $elasticsearchConfiguration = null,
+    ) {
         parent::__construct($configuration);
 
-        $this->client = $this->configuration->getElasticsearch();
-        $this->elasticsearchConfiguration = $this->configuration->getElasticsearchConfig();
+        $this->client = $client ?? $this->configuration->getElasticsearch();
+        $this->elasticsearchConfiguration =
+            $elasticsearchConfiguration ?? $this->configuration->getElasticsearchConfig();
     }
 
     /**

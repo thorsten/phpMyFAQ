@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Queue\Handler;
 
+use Closure;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Queue\Message\SendMailMessage;
@@ -27,12 +28,13 @@ final readonly class SendMailHandler
 {
     public function __construct(
         private Configuration $configuration,
+        private ?Closure $mailFactory = null,
     ) {
     }
 
     public function __invoke(SendMailMessage $message): void
     {
-        $mail = new Mail($this->configuration);
+        $mail = $this->mailFactory instanceof Closure ? ($this->mailFactory)() : new Mail($this->configuration);
 
         $envelope = $message->metadata['envelope'] ?? null;
         if (

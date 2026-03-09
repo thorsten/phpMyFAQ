@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Queue\Handler;
 
+use Closure;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
@@ -30,6 +31,9 @@ final readonly class IndexFaqHandler
 {
     public function __construct(
         private Configuration $configuration,
+        private ?Closure $faqFactory = null,
+        private ?Closure $categoryFactory = null,
+        private ?Closure $elasticsearchFactory = null,
     ) {
     }
 
@@ -39,7 +43,7 @@ final readonly class IndexFaqHandler
             throw new RuntimeException('Elasticsearch is not configured');
         }
 
-        $faq = new Faq($this->configuration);
+        $faq = $this->faqFactory instanceof Closure ? ($this->faqFactory)() : new Faq($this->configuration);
         $faq->getFaq($message->faqId);
 
         if (
@@ -47,10 +51,14 @@ final readonly class IndexFaqHandler
             && $faq->faqRecord['active'] === 'yes'
             && $faq->faqRecord['content'] !== ''
         ) {
-            $category = new Category($this->configuration);
+            $category = $this->categoryFactory instanceof Closure
+                ? ($this->categoryFactory)()
+                : new Category($this->configuration);
             $categoryId = $category->getCategoryIdFromFaq($message->faqId);
 
-            $elasticsearch = new Elasticsearch($this->configuration);
+            $elasticsearch = $this->elasticsearchFactory instanceof Closure
+                ? ($this->elasticsearchFactory)()
+                : new Elasticsearch($this->configuration);
             $elasticsearch->index([
                 'id' => $faq->faqRecord['id'],
                 'lang' => $message->language !== '' ? $message->language : $faq->faqRecord['lang'],

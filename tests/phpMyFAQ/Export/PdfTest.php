@@ -105,8 +105,9 @@ final class PdfTest extends TestCase
         $this->configuration->method('getTitle')->willReturn('Test FAQ');
         $this->configuration->method('getDefaultUrl')->willReturn('https://example.com/');
         $this->configuration->method('getAdminEmail')->willReturn('admin@example.com');
-        $this->configuration->method('get')->willReturnCallback(
-            static fn(string $key) => match ($key) {
+        $this->configuration
+            ->method('get')
+            ->willReturnCallback(static fn(string $key) => match ($key) {
                 'main.enableMarkdownEditor' => false,
                 'main.customPdfHeader' => '',
                 'main.customPdfFooter' => '',
@@ -114,8 +115,7 @@ final class PdfTest extends TestCase
                 'main.dateFormat' => 'Y-m-d H:i',
                 'spam.mailAddressInExport' => false,
                 default => null,
-            }
-        );
+            });
 
         $this->faq = $this->createMock(Faq::class);
         $this->category = $this->createMock(Category::class);
@@ -145,16 +145,18 @@ final class PdfTest extends TestCase
         $this->category->method('getCategoryName')->willReturn('Test Category');
         $this->category->method('getLevelOf')->willReturn(1);
 
-        $this->faq->method('get')->willReturn([
-            [
-                'id' => 1,
-                'category_id' => 1,
-                'topic' => 'Test Question',
-                'content' => '<p>Test Answer</p>',
-                'keywords' => 'test, faq',
-                'lastmodified' => '2026-01-01',
-            ],
-        ]);
+        $this->faq
+            ->method('get')
+            ->willReturn([
+                [
+                    'id' => 1,
+                    'category_id' => 1,
+                    'topic' => 'Test Question',
+                    'content' => '<p>Test Answer</p>',
+                    'keywords' => 'test, faq',
+                    'lastmodified' => '2026-01-01',
+                ],
+            ]);
 
         $pdf = new Pdf($this->faq, $this->category, $this->configuration);
         $result = $pdf->generate();
@@ -167,24 +169,26 @@ final class PdfTest extends TestCase
         $this->category->method('getCategoryName')->willReturn('Category');
         $this->category->method('getLevelOf')->willReturn(1);
 
-        $this->faq->method('get')->willReturn([
-            [
-                'id' => 1,
-                'category_id' => 1,
-                'topic' => 'First FAQ',
-                'content' => 'First answer',
-                'keywords' => 'first',
-                'lastmodified' => '2026-01-01',
-            ],
-            [
-                'id' => 2,
-                'category_id' => 2,
-                'topic' => 'Second FAQ',
-                'content' => 'Second answer',
-                'keywords' => 'second',
-                'lastmodified' => '2026-01-02',
-            ],
-        ]);
+        $this->faq
+            ->method('get')
+            ->willReturn([
+                [
+                    'id' => 1,
+                    'category_id' => 1,
+                    'topic' => 'First FAQ',
+                    'content' => 'First answer',
+                    'keywords' => 'first',
+                    'lastmodified' => '2026-01-01',
+                ],
+                [
+                    'id' => 2,
+                    'category_id' => 2,
+                    'topic' => 'Second FAQ',
+                    'content' => 'Second answer',
+                    'keywords' => 'second',
+                    'lastmodified' => '2026-01-02',
+                ],
+            ]);
 
         $pdf = new Pdf($this->faq, $this->category, $this->configuration);
         $result = $pdf->generate();
@@ -198,8 +202,9 @@ final class PdfTest extends TestCase
         $config->method('getTitle')->willReturn('Test FAQ');
         $config->method('getDefaultUrl')->willReturn('https://example.com/');
         $config->method('getAdminEmail')->willReturn('admin@example.com');
-        $config->method('get')->willReturnCallback(
-            static fn(string $key) => match ($key) {
+        $config
+            ->method('get')
+            ->willReturnCallback(static fn(string $key) => match ($key) {
                 'main.enableMarkdownEditor' => true,
                 'main.customPdfHeader' => '',
                 'main.customPdfFooter' => '',
@@ -207,22 +212,23 @@ final class PdfTest extends TestCase
                 'main.dateFormat' => 'Y-m-d H:i',
                 'spam.mailAddressInExport' => false,
                 default => null,
-            }
-        );
+            });
 
         $this->category->method('getCategoryName')->willReturn('Category');
         $this->category->method('getLevelOf')->willReturn(1);
 
-        $this->faq->method('get')->willReturn([
-            [
-                'id' => 1,
-                'category_id' => 1,
-                'topic' => 'Markdown FAQ',
-                'content' => '**Bold** and *italic* text',
-                'keywords' => 'markdown',
-                'lastmodified' => '2026-01-01',
-            ],
-        ]);
+        $this->faq
+            ->method('get')
+            ->willReturn([
+                [
+                    'id' => 1,
+                    'category_id' => 1,
+                    'topic' => 'Markdown FAQ',
+                    'content' => '**Bold** and *italic* text',
+                    'keywords' => 'markdown',
+                    'lastmodified' => '2026-01-01',
+                ],
+            ]);
 
         $pdf = new Pdf($this->faq, $this->category, $config);
         $result = $pdf->generate();
