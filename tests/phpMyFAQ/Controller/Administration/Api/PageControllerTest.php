@@ -715,7 +715,10 @@ final class PageControllerTest extends TestCase
         $this->configuration->set('search.enableOpenSearch', true);
 
         $elasticsearch = $this->createMock(Elasticsearch::class);
-        $elasticsearch->expects($this->once())->method('indexCustomPage')->willThrowException(new \Exception('ES down'));
+        $elasticsearch
+            ->expects($this->once())
+            ->method('indexCustomPage')
+            ->willThrowException(new \Exception('ES down'));
 
         $openSearch = $this->createMock(OpenSearch::class);
         $openSearch->expects($this->once())->method('indexCustomPage')->willThrowException(new \Exception('OS down'));
@@ -755,7 +758,10 @@ final class PageControllerTest extends TestCase
         $pageId = $this->createPageViaController('unit-test-update-error-' . bin2hex(random_bytes(4)));
 
         $elasticsearch = $this->createMock(Elasticsearch::class);
-        $elasticsearch->expects($this->once())->method('updateCustomPage')->willThrowException(new \Exception('ES down'));
+        $elasticsearch
+            ->expects($this->once())
+            ->method('updateCustomPage')
+            ->willThrowException(new \Exception('ES down'));
 
         $openSearch = $this->createMock(OpenSearch::class);
         $openSearch->expects($this->once())->method('updateCustomPage')->willThrowException(new \Exception('OS down'));
@@ -795,11 +801,17 @@ final class PageControllerTest extends TestCase
         $pageId = $this->createPageViaController('unit-test-delete-error-' . bin2hex(random_bytes(4)));
 
         $elasticsearch = $this->createMock(Elasticsearch::class);
-        $elasticsearch->expects($this->once())->method('deleteCustomPage')->with($pageId, 'en')
+        $elasticsearch
+            ->expects($this->once())
+            ->method('deleteCustomPage')
+            ->with($pageId, 'en')
             ->willThrowException(new \Exception('ES down'));
 
         $openSearch = $this->createMock(OpenSearch::class);
-        $openSearch->expects($this->once())->method('deleteCustomPage')->with($pageId, 'en')
+        $openSearch
+            ->expects($this->once())
+            ->method('deleteCustomPage')
+            ->with($pageId, 'en')
             ->willThrowException(new \Exception('OS down'));
 
         $controller = $this->createControllerWithSearchDependencies($elasticsearch, $openSearch);

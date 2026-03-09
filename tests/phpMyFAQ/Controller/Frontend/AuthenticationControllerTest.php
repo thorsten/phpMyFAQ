@@ -126,9 +126,10 @@ final class AuthenticationControllerTest extends TestCase
     public function testAuthenticateRedirectsHomeWhenUserIsAlreadyLoggedIn(): void
     {
         $controller = $this->createController();
-        $controller->setContainer(
-            $this->createControllerContainer(new Session(new MockArraySessionStorage()), $this->createLoggedInCurrentUser())
-        );
+        $controller->setContainer($this->createControllerContainer(
+            new Session(new MockArraySessionStorage()),
+            $this->createLoggedInCurrentUser(),
+        ));
 
         $response = $controller->authenticate(new Request([], ['faqusername' => 'admin', 'faqpassword' => 'secret']));
 
@@ -149,10 +150,7 @@ final class AuthenticationControllerTest extends TestCase
         $response = $controller->logout(new Request(['csrf' => 'invalid-token']));
 
         self::assertSame($this->configuration->getDefaultUrl(), $response->getTargetUrl());
-        self::assertSame(
-            ['CSRF Problem detected: invalid-token'],
-            $session->getFlashBag()->get('error')
-        );
+        self::assertSame(['CSRF Problem detected: invalid-token'], $session->getFlashBag()->get('error'));
     }
 
     /**
@@ -170,20 +168,13 @@ final class AuthenticationControllerTest extends TestCase
         $currentUser->expects(self::once())->method('deleteFromSession')->with(true);
 
         $controller = $this->createController();
-        $controller->setContainer(
-            $this->createControllerContainer(
-                $session,
-                $currentUser,
-                ['security.enableSignInWithMicrosoft' => true]
-            )
-        );
+        $controller->setContainer($this->createControllerContainer($session, $currentUser, [
+            'security.enableSignInWithMicrosoft' => true,
+        ]));
 
         $response = $controller->logout(new Request(['csrf' => $token]));
 
-        self::assertSame(
-            $this->configuration->getDefaultUrl() . 'auth/azure/logout',
-            $response->getTargetUrl()
-        );
+        self::assertSame($this->configuration->getDefaultUrl() . 'auth/azure/logout', $response->getTargetUrl());
         self::assertNotEmpty($session->getFlashBag()->get('success'));
     }
 
@@ -218,7 +209,11 @@ final class AuthenticationControllerTest extends TestCase
         $twoFactor = $this->createMock(TwoFactor::class);
         $twoFactor->expects(self::once())->method('validateToken')->with('123456', 42)->willReturn(true);
 
-        $controller = new AuthenticationController($this->createStub(UserSession::class), $currentUserService, $twoFactor);
+        $controller = new AuthenticationController(
+            $this->createStub(UserSession::class),
+            $currentUserService,
+            $twoFactor,
+        );
         $controller->setContainer($this->createControllerContainer($session, $this->createLoggedOutCurrentUser()));
 
         $response = $controller->check(new Request([], ['token' => '123456', 'user-id' => '42']));
@@ -235,14 +230,14 @@ final class AuthenticationControllerTest extends TestCase
         return new AuthenticationController(
             $this->createStub(UserSession::class),
             new CurrentUser($this->configuration),
-            $this->createStub(TwoFactor::class)
+            $this->createStub(TwoFactor::class),
         );
     }
 
     private function createControllerContainer(
         SessionInterface $session,
         CurrentUser $currentUser,
-        array $configurationValues = []
+        array $configurationValues = [],
     ): ContainerInterface {
         $this->configuration->getAll();
 
@@ -255,16 +250,18 @@ final class AuthenticationControllerTest extends TestCase
         $property->setValue($this->configuration, $config);
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('get')->willReturnCallback(function (string $id) use ($currentUser, $session): mixed {
-            return match ($id) {
-                'phpmyfaq.configuration' => $this->configuration,
-                'phpmyfaq.user.current_user' => $currentUser,
-                'session' => $session,
-                'phpmyfaq.system' => new System(),
-                'phpmyfaq.seo' => new Seo($this->configuration),
-                default => null,
-            };
-        });
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session): mixed {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.system' => new System(),
+                    'phpmyfaq.seo' => new Seo($this->configuration),
+                    default => null,
+                };
+            });
 
         return $container;
     }
@@ -297,10 +294,12 @@ final class AuthenticationControllerTest extends TestCase
         $currentUser->method('getUserId')->willReturn(1);
         $currentUser->method('getLogin')->willReturn('admin');
         $currentUser->method('getUserAuthSource')->willReturn($authSource);
-        $currentUser->method('getUserData')->willReturnMap([
-            ['display_name', 'Admin User'],
-            ['email', 'admin@example.com'],
-        ]);
+        $currentUser
+            ->method('getUserData')
+            ->willReturnMap([
+                ['display_name', 'Admin User'],
+                ['email',        'admin@example.com'],
+            ]);
 
         return $currentUser;
     }

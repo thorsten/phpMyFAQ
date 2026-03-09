@@ -324,9 +324,15 @@ final class AttachmentControllerTest extends TestCase
         $controller = new AttachmentController();
         $controller->setContainer($this->createAuthenticatedContainer());
 
-        $request = new Request([], [], ['record_id' => 1, 'record_lang' => 'en'], [], [
-            'filesToUpload' => [$missingFile],
-        ]);
+        $request = new Request(
+            [],
+            [],
+            ['record_id' => 1, 'record_lang' => 'en'],
+            [],
+            [
+                'filesToUpload' => [$missingFile],
+            ],
+        );
         $response = $controller->upload($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 

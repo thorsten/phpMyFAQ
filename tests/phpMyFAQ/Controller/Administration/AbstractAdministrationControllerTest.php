@@ -169,6 +169,63 @@ final class AbstractAdministrationControllerTest extends TestCase
         self::assertSame('', $header['gravatarImage']);
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function testHeaderMarksExportsPageAndBuildsGravatarWhenEnabled(): void
+    {
+        $controller = new AbstractAdministrationControllerTestStub();
+        $controller->setContainer($this->createControllerContainer(configurationValues: [
+            'main.enableGravatarSupport' => true,
+        ]));
+
+        $header = $controller->fetchHeader(new Request(attributes: ['_route' => 'admin.export']));
+
+        self::assertFalse($header['userPage']);
+        self::assertFalse($header['contentPage']);
+        self::assertFalse($header['statisticsPage']);
+        self::assertTrue($header['exportsPage']);
+        self::assertFalse($header['backupPage']);
+        self::assertFalse($header['configurationPage']);
+        self::assertStringContainsString('gravatar.com', $header['gravatarImage']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testHeaderMarksBackupPage(): void
+    {
+        $controller = new AbstractAdministrationControllerTestStub();
+        $controller->setContainer($this->createControllerContainer());
+
+        $header = $controller->fetchHeader(new Request(attributes: ['_route' => 'admin.backup.restore']));
+
+        self::assertFalse($header['userPage']);
+        self::assertFalse($header['contentPage']);
+        self::assertFalse($header['statisticsPage']);
+        self::assertFalse($header['exportsPage']);
+        self::assertTrue($header['backupPage']);
+        self::assertFalse($header['configurationPage']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testHeaderMarksConfigurationPage(): void
+    {
+        $controller = new AbstractAdministrationControllerTestStub();
+        $controller->setContainer($this->createControllerContainer());
+
+        $header = $controller->fetchHeader(new Request(attributes: ['_route' => 'admin.system']));
+
+        self::assertFalse($header['userPage']);
+        self::assertFalse($header['contentPage']);
+        self::assertFalse($header['statisticsPage']);
+        self::assertFalse($header['exportsPage']);
+        self::assertFalse($header['backupPage']);
+        self::assertTrue($header['configurationPage']);
+    }
+
     public function testFooterReturnsExpectedSharedValues(): void
     {
         $controller = new AbstractAdministrationControllerTestStub();
@@ -198,14 +255,14 @@ final class AbstractAdministrationControllerTest extends TestCase
         self::assertStringContainsString('Error 403', (string) $response->getContent());
         self::assertStringContainsString(
             'You are authenticated, but you do not have permission to access this resource.',
-            (string) $response->getContent()
+            (string) $response->getContent(),
         );
     }
 
     private function createControllerContainer(
         ?AdminLog $adminLog = null,
         array $configurationValues = [],
-        bool $ldapActive = false
+        bool $ldapActive = false,
     ): ContainerInterface {
         $this->overrideConfigurationValues($configurationValues);
 
@@ -222,27 +279,40 @@ final class AbstractAdministrationControllerTest extends TestCase
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('isSuperAdmin')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(1);
-        $currentUser->method('getUserData')->willReturnMap([
-            ['display_name', 'Admin User'],
-            ['email', 'admin@example.com'],
-        ]);
+        $currentUser
+            ->method('getUserData')
+            ->willReturnMap([
+                ['display_name', 'Admin User'],
+                ['email',        'admin@example.com'],
+            ]);
 
         $session = new Session(new MockArraySessionStorage());
         $adminLog ??= $this->createStub(AdminLog::class);
         $adminHelper = $this->createMock(Helper::class);
         $adminHelper->method('setUser')->with($currentUser)->willReturnSelf();
         $adminHelper->method('canAccessContent')->with($currentUser)->willReturn(true);
-        $adminHelper->method('addMenuEntry')->willReturnCallback(
-            static fn(string $permissionName, string $label, string $route): string => '[' . $route . ']'
-        );
+        $adminHelper
+            ->method('addMenuEntry')
+            ->willReturnCallback(
+                static fn(string $permissionName, string $label, string $route): string => '[' . $route . ']',
+            );
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('get')->willReturnCallback(
-            function (string $id) use ($currentUser, $session, $adminLog, $adminHelper, $ldapActive): mixed {
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use (
+                $currentUser,
+                $session,
+                $adminLog,
+                $adminHelper,
+                $ldapActive,
+            ): mixed {
                 return match ($id) {
-                    'phpmyfaq.configuration' => new class ($this->configuration, $ldapActive) extends Configuration {
-                        public function __construct(private readonly Configuration $inner, private readonly bool $ldapActive)
-                        {
+                    'phpmyfaq.configuration' => new class($this->configuration, $ldapActive) extends Configuration {
+                        public function __construct(
+                            private readonly Configuration $inner,
+                            private readonly bool $ldapActive,
+                        ) {
                         }
 
                         public function __call(string $name, array $arguments): mixed
@@ -291,8 +361,7 @@ final class AbstractAdministrationControllerTest extends TestCase
                     'phpmyfaq.admin.helper' => $adminHelper,
                     default => null,
                 };
-            }
-        );
+            });
 
         return $container;
     }

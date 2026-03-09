@@ -188,7 +188,7 @@ class Sqlite3 implements DatabaseDriver
             $query .= sprintf(' LIMIT %d,%d', $offset, $rowcount);
         }
 
-        $result = $this->conn->query($query);
+        $result = @$this->conn->query($query);
 
         if (!$result) {
             $this->sqlLog .= $this->error();

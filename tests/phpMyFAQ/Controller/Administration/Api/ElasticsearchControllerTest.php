@@ -366,7 +366,8 @@ final class ElasticsearchControllerTest extends TestCase
     {
         $elasticsearch = $this->createMock(Elasticsearch::class);
         $elasticsearch->expects($this->once())->method('bulkIndex')->with([])->willReturn(['success' => true]);
-        $elasticsearch->expects($this->once())
+        $elasticsearch
+            ->expects($this->once())
             ->method('bulkIndexCustomPages')
             ->with([['id' => 7, 'title' => 'Page']])
             ->willReturn(['failure' => 'pages']);
@@ -395,7 +396,8 @@ final class ElasticsearchControllerTest extends TestCase
     {
         $elasticsearch = $this->createMock(Elasticsearch::class);
         $elasticsearch->expects($this->once())->method('bulkIndex')->with([])->willReturn(['success' => true]);
-        $elasticsearch->expects($this->once())
+        $elasticsearch
+            ->expects($this->once())
             ->method('bulkIndexCustomPages')
             ->with([['id' => 7, 'title' => 'Page']])
             ->willReturn(['success' => true]);

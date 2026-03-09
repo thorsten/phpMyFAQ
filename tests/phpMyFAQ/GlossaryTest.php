@@ -13,8 +13,9 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class GlossaryTest extends TestCase
 {
     private Configuration $configuration;
-
+    private string $databasePath;
     private Glossary $glossary;
+    private array $createdIds = [];
 
     /**
      * @throws Exception
@@ -25,8 +26,13 @@ class GlossaryTest extends TestCase
 
         Strings::init();
 
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-glossary-test-');
+        self::assertNotFalse($databasePath);
+        self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
+        $this->databasePath = $databasePath;
+
         $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle->connect($this->databasePath, '', '');
         $this->configuration = new Configuration($dbHandle);
         $language = new Language($this->configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');
@@ -38,7 +44,11 @@ class GlossaryTest extends TestCase
 
     protected function tearDown(): void
     {
-        $this->glossary->delete(1);
+        foreach ($this->createdIds as $id) {
+            $this->glossary->delete($id);
+        }
+
+        @unlink($this->databasePath);
     }
 
     public function testCreate(): void
@@ -47,7 +57,7 @@ class GlossaryTest extends TestCase
 
         $this->assertTrue($result);
 
-        $result = $this->glossary->fetch(1);
+        $result = $this->glossary->fetch($this->rememberCreatedId('testItem'));
 
         $this->assertEquals('testItem', $result['item']);
     }
@@ -55,12 +65,13 @@ class GlossaryTest extends TestCase
     public function testUpdate(): void
     {
         $this->glossary->create('testItem', 'testDefinition');
+        $id = $this->rememberCreatedId('testItem');
 
-        $result = $this->glossary->update(1, 'testItem2', 'testDefinition2');
+        $result = $this->glossary->update($id, 'testItem2', 'testDefinition2');
 
         $this->assertTrue($result);
 
-        $result = $this->glossary->fetch(1);
+        $result = $this->glossary->fetch($id);
 
         $this->assertEquals('testItem2', $result['item']);
     }
@@ -68,12 +79,13 @@ class GlossaryTest extends TestCase
     public function testDelete(): void
     {
         $this->glossary->create('testItem', 'testDefinition');
+        $id = $this->rememberCreatedId('testItem');
 
-        $result = $this->glossary->delete(1);
+        $result = $this->glossary->delete($id);
 
         $this->assertTrue($result);
 
-        $result = $this->glossary->fetch(1);
+        $result = $this->glossary->fetch($id);
 
         $this->assertEmpty($result);
     }
@@ -86,6 +98,22 @@ class GlossaryTest extends TestCase
 
         $this->assertNotEmpty($result);
         $this->assertIsArray($result);
+    }
+
+    private function rememberCreatedId(string $item): int
+    {
+        foreach ($this->glossary->fetchAll() as $entry) {
+            if (($entry['item'] ?? null) !== $item) {
+                continue;
+            }
+
+            $id = (int) $entry['id'];
+            $this->createdIds[] = $id;
+
+            return $id;
+        }
+
+        self::fail('Could not find created glossary item: ' . $item);
     }
 
     public function testInsertItemsIntoContent(): void
@@ -137,14 +165,16 @@ class GlossaryTest extends TestCase
     public function testCacheInvalidationOnCreateUpdateDelete(): void
     {
         $this->glossary->create('cItem', 'cDef');
+        $id = $this->rememberCreatedId('cItem');
         $firstFetch = $this->glossary->fetchAll();
         $this->assertNotEmpty($firstFetch);
-        $this->glossary->update($firstFetch[0]['id'], 'cItemUpdated', 'cDefUpdated');
+        $this->glossary->update($id, 'cItemUpdated', 'cDefUpdated');
         $secondFetch = $this->glossary->fetchAll();
-        $this->assertNotSame($firstFetch[0]['item'], $secondFetch[0]['item']);
-        $this->glossary->delete($secondFetch[0]['id']);
+        $updatedItems = array_column($secondFetch, 'item');
+        $this->assertContains('cItemUpdated', $updatedItems);
+        $this->glossary->delete($id);
         $thirdFetch = $this->glossary->fetchAll();
-        $this->assertEmpty($thirdFetch);
+        $this->assertNotContains('cItemUpdated', array_column($thirdFetch, 'item'));
     }
 
     public function testRepositoryErrorHandling(): void

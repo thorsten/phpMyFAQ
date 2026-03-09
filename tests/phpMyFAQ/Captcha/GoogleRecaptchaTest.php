@@ -212,4 +212,112 @@ class GoogleRecaptchaTest extends TestCase
             $this->assertTrue($this->googleRecaptcha->checkCaptchaCode($input));
         }
     }
+
+    /**
+     * Test checkCaptchaCode returns false when API returns non-success JSON.
+     */
+    public function testCheckCaptchaCodeReturnsFalseForFailedVerification(): void
+    {
+        $recaptcha = new class($this->configuration) extends GoogleRecaptcha {
+            protected function fetchUrl(string $url): string|false
+            {
+                return json_encode(['success' => false]);
+            }
+        };
+        $recaptcha->setUserIsLoggedIn(false);
+
+        $this->configuration->method('get')->willReturn('test-secret');
+
+        self::assertFalse($recaptcha->checkCaptchaCode('invalid-token'));
+    }
+
+    /**
+     * Test checkCaptchaCode returns true for successful verification.
+     */
+    public function testCheckCaptchaCodeReturnsTrueForSuccessfulVerification(): void
+    {
+        $recaptcha = new class($this->configuration) extends GoogleRecaptcha {
+            protected function fetchUrl(string $url): string|false
+            {
+                return json_encode(['success' => true]);
+            }
+        };
+        $recaptcha->setUserIsLoggedIn(false);
+
+        $this->configuration->method('get')->willReturn('test-secret');
+
+        self::assertTrue($recaptcha->checkCaptchaCode('valid-token'));
+    }
+
+    /**
+     * Test checkCaptchaCode returns false for malformed JSON response.
+     */
+    public function testCheckCaptchaCodeReturnsFalseForMalformedJson(): void
+    {
+        $recaptcha = new class($this->configuration) extends GoogleRecaptcha {
+            protected function fetchUrl(string $url): string|false
+            {
+                return 'not valid json {{{';
+            }
+        };
+        $recaptcha->setUserIsLoggedIn(false);
+
+        $this->configuration->method('get')->willReturn('test-secret');
+
+        self::assertFalse($recaptcha->checkCaptchaCode('some-token'));
+    }
+
+    /**
+     * Test checkCaptchaCode returns false for empty string response.
+     */
+    public function testCheckCaptchaCodeReturnsFalseForEmptyStringResponse(): void
+    {
+        $recaptcha = new class($this->configuration) extends GoogleRecaptcha {
+            protected function fetchUrl(string $url): string|false
+            {
+                return '';
+            }
+        };
+        $recaptcha->setUserIsLoggedIn(false);
+
+        $this->configuration->method('get')->willReturn('test-secret');
+
+        self::assertFalse($recaptcha->checkCaptchaCode('some-token'));
+    }
+
+    /**
+     * Test checkCaptchaCode returns false when fetchUrl returns false.
+     */
+    public function testCheckCaptchaCodeReturnsFalseWhenFetchFails(): void
+    {
+        $recaptcha = new class($this->configuration) extends GoogleRecaptcha {
+            protected function fetchUrl(string $url): string|false
+            {
+                return false;
+            }
+        };
+        $recaptcha->setUserIsLoggedIn(false);
+
+        $this->configuration->method('get')->willReturn('test-secret');
+
+        self::assertFalse($recaptcha->checkCaptchaCode('some-token'));
+    }
+
+    /**
+     * Test checkCaptchaCode returns false when JSON has no success field.
+     */
+    public function testCheckCaptchaCodeReturnsFalseWhenSuccessFieldMissing(): void
+    {
+        $recaptcha = new class($this->configuration) extends GoogleRecaptcha {
+            protected function fetchUrl(string $url): string|false
+            {
+                return json_encode(['error' => 'something went wrong']);
+            }
+        };
+        $recaptcha->setUserIsLoggedIn(false);
+
+        $this->configuration->method('get')->willReturn('test-secret');
+
+        self::assertFalse($recaptcha->checkCaptchaCode('some-token'));
+    }
 }

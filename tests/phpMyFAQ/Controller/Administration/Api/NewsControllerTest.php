@@ -272,7 +272,7 @@ final class NewsControllerTest extends TestCase
     {
         $this->dbHandle->query(
             "INSERT INTO faqnews (id, lang, active, author_name, author_email, comment, datum, header, artikel, link, linktitel, target)
-             VALUES (101, 'en', 'y', 'Tester', 'tester@example.com', 'y', '20260308120000', 'Old Header', 'Old Content', '', '', '')"
+             VALUES (101, 'en', 'y', 'Tester', 'tester@example.com', 'y', '20260308120000', 'Old Header', 'Old Content', '', '', '')",
         );
 
         $container = $this->createAuthenticatedContainer();
@@ -310,7 +310,7 @@ final class NewsControllerTest extends TestCase
     {
         $this->dbHandle->query(
             "INSERT INTO faqnews (id, lang, active, author_name, author_email, comment, datum, header, artikel, link, linktitel, target)
-             VALUES (102, 'en', 'n', 'Tester', 'tester@example.com', 'y', '20260308120000', 'Header', 'Content', '', '', '')"
+             VALUES (102, 'en', 'n', 'Tester', 'tester@example.com', 'y', '20260308120000', 'Header', 'Content', '', '', '')",
         );
 
         $container = $this->createAuthenticatedContainer();
@@ -349,7 +349,7 @@ final class NewsControllerTest extends TestCase
     {
         $this->dbHandle->query(
             "INSERT INTO faqnews (id, lang, active, author_name, author_email, comment, datum, header, artikel, link, linktitel, target)
-             VALUES (103, 'en', 'y', 'Tester', 'tester@example.com', 'y', '20260308120000', 'Delete Header', 'Delete Content', '', '', '')"
+             VALUES (103, 'en', 'y', 'Tester', 'tester@example.com', 'y', '20260308120000', 'Delete Header', 'Delete Content', '', '', '')",
         );
 
         $container = $this->createAuthenticatedContainer();

@@ -411,7 +411,10 @@ class UnauthorizedUserControllerTest extends TestCase
         $user->expects($this->once())->method('changePassword')->with('NewPass123')->willReturn(true);
 
         $mail = $this->createMock(Mail::class);
-        $mail->expects($this->once())->method('addTo')->with('test@example.com')
+        $mail
+            ->expects($this->once())
+            ->method('addTo')
+            ->with('test@example.com')
             ->willThrowException(new \phpMyFAQ\Core\Exception('Invalid recipient'));
         $mail->expects($this->never())->method('send');
 

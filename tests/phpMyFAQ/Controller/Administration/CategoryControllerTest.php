@@ -154,12 +154,14 @@ final class CategoryControllerTest extends TestCase
     public function testAddRequiresAuthentication(): void
     {
         $userHelper = $this->createMock(UserHelper::class);
-        $userHelper->method('getAllUsersForTemplate')->willReturn([[
-            'id' => 42,
-            'selected' => true,
-            'displayName' => 'Test User',
-            'login' => 'testuser',
-        ]]);
+        $userHelper
+            ->method('getAllUsersForTemplate')
+            ->willReturn([[
+                'id' => 42,
+                'selected' => true,
+                'displayName' => 'Test User',
+                'login' => 'testuser',
+            ]]);
 
         $controller = new CategoryController(
             $this->createStub(AdminCategory::class),
@@ -456,24 +458,27 @@ final class CategoryControllerTest extends TestCase
 
         $createdCategoryId = null;
         $order = $this->createMock(Order::class);
-        $order->expects($this->once())->method('add')->willReturnCallback(
-            static function (int $categoryId, int $parentId) use (&$createdCategoryId): bool {
+        $order
+            ->expects($this->once())
+            ->method('add')
+            ->willReturnCallback(static function (int $categoryId, int $parentId) use (&$createdCategoryId): bool {
                 self::assertSame(0, $parentId);
                 $createdCategoryId = $categoryId;
                 return true;
-            }
-        );
+            });
 
         $seo = $this->createMock(Seo::class);
         $seo->expects($this->once())->method('create');
 
         $userHelper = $this->createMock(UserHelper::class);
-        $userHelper->method('getAllUsersForTemplate')->willReturn([[
-            'id' => 42,
-            'selected' => true,
-            'displayName' => 'Test User',
-            'login' => 'testuser',
-        ]]);
+        $userHelper
+            ->method('getAllUsersForTemplate')
+            ->willReturn([[
+                'id' => 42,
+                'selected' => true,
+                'displayName' => 'Test User',
+                'login' => 'testuser',
+            ]]);
 
         $controller = new CategoryController(
             new AdminCategory($this->configuration),
@@ -509,12 +514,12 @@ final class CategoryControllerTest extends TestCase
         self::assertStringContainsString('window.location = \'./category\'', (string) $response->getContent());
 
         self::assertIsInt($createdCategoryId);
-        $result = $this->configuration->getDb()->query(
-            sprintf(
+        $result = $this->configuration
+            ->getDb()
+            ->query(sprintf(
                 "SELECT name, description FROM faqcategories WHERE id = %d AND lang = 'en'",
                 $createdCategoryId,
-            ),
-        );
+            ));
         $row = $this->configuration->getDb()->fetchObject($result);
 
         self::assertNotFalse($row);
@@ -570,9 +575,9 @@ final class CategoryControllerTest extends TestCase
         self::assertStringContainsString('alert alert-success', (string) $response->getContent());
         self::assertStringContainsString('The category has been translated.', (string) $response->getContent());
 
-        $result = $this->configuration->getDb()->query(
-            "SELECT name, description FROM faqcategories WHERE id = 1 AND lang = 'de'"
-        );
+        $result = $this->configuration
+            ->getDb()
+            ->query("SELECT name, description FROM faqcategories WHERE id = 1 AND lang = 'de'");
         $row = $this->configuration->getDb()->fetchObject($result);
 
         self::assertNotFalse($row);

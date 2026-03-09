@@ -469,10 +469,13 @@ final class FaqControllerValidationTest extends ApiControllerTestCase
         $this->seedCategory();
 
         $faq = $this->createMock(Faq::class);
-        $faq->expects($this->once())->method('create')->willReturnCallback(static function ($entity) {
-            $entity->setId(125);
-            return $entity;
-        });
+        $faq
+            ->expects($this->once())
+            ->method('create')
+            ->willReturnCallback(static function ($entity) {
+                $entity->setId(125);
+                return $entity;
+            });
 
         $question = $this->createMock(Question::class);
         $question->expects($this->once())->method('delete')->with(55);
@@ -541,10 +544,13 @@ final class FaqControllerValidationTest extends ApiControllerTestCase
         $this->seedCategory();
 
         $faq = $this->createMock(Faq::class);
-        $faq->expects($this->once())->method('create')->willReturnCallback(static function ($entity) {
-            $entity->setId(126);
-            return $entity;
-        });
+        $faq
+            ->expects($this->once())
+            ->method('create')
+            ->willReturnCallback(static function ($entity) {
+                $entity->setId(126);
+                return $entity;
+            });
 
         $question = $this->createMock(Question::class);
         $question->expects($this->never())->method('delete');

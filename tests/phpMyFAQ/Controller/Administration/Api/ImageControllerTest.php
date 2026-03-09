@@ -270,13 +270,21 @@ final class ImageControllerTest extends TestCase
         $file->method('isValid')->willReturn(true);
         $file->method('getClientOriginalName')->willReturn('hero image.png');
         $file->method('getClientOriginalExtension')->willReturn('png');
-        $file->expects($this->once())
+        $file
+            ->expects($this->once())
             ->method('move')
             ->with(PMF_CONTENT_DIR . '/user/images/', $this->matchesRegularExpression('/^\d+_hero_image\.png$/'));
 
-        $request = new Request(['csrf' => $token], [], [], [], ['files' => [$file]], [
-            'HTTP_ORIGIN' => rtrim($this->configuration->getDefaultUrl(), '/'),
-        ]);
+        $request = new Request(
+            ['csrf' => $token],
+            [],
+            [],
+            [],
+            ['files' => [$file]],
+            [
+                'HTTP_ORIGIN' => rtrim($this->configuration->getDefaultUrl(), '/'),
+            ],
+        );
 
         $response = $controller->upload($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
@@ -286,9 +294,12 @@ final class ImageControllerTest extends TestCase
         self::assertCount(1, $payload['data']['files']);
         self::assertMatchesRegularExpression(
             '#^' . preg_quote($this->configuration->getDefaultUrl(), '#') . 'content/user/images/\d+_hero_image\.png$#',
-            $payload['data']['files'][0]
+            $payload['data']['files'][0],
         );
         self::assertSame([true], $payload['data']['isImages']);
-        self::assertSame(rtrim($this->configuration->getDefaultUrl(), '/'), $response->headers->get('Access-Control-Allow-Origin'));
+        self::assertSame(
+            rtrim($this->configuration->getDefaultUrl(), '/'),
+            $response->headers->get('Access-Control-Allow-Origin'),
+        );
     }
 }

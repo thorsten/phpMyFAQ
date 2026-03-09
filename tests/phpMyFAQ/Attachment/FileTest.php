@@ -7,7 +7,9 @@ use org\bovigo\vfs\vfsStreamDirectory;
 use phpMyFAQ\Attachment\Filesystem\AbstractFile as FilesystemFile;
 use phpMyFAQ\Attachment\Filesystem\File\EncryptedFile;
 use phpMyFAQ\Attachment\Filesystem\File\VanillaFile;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Storage\StorageInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -26,6 +28,10 @@ class FileTest extends TestCase
 
     protected function setUp(): void
     {
+        if (!defined('PMF_ATTACHMENTS_DIR')) {
+            define('PMF_ATTACHMENTS_DIR', '/tmp/attachments');
+        }
+
         // Setup virtual file system
         $this->vfsRoot = vfsStream::setup('attachments', 0777);
 
@@ -36,7 +42,6 @@ class FileTest extends TestCase
         $this->file = new class($this->mockDb) extends File {
             public function __construct(DatabaseDriver $mockDb, mixed $attachmentId = null)
             {
-                parent::__construct();
                 $this->databaseDriver = $mockDb;
                 if (null !== $attachmentId) {
                     $this->id = $attachmentId;
@@ -239,5 +244,177 @@ class FileTest extends TestCase
         $storagePath = $method->invoke($this->file);
 
         $this->assertEquals('abcde/fghij/klmno/pqrstuvwxyz123456', $storagePath);
+    }
+
+    public function testIsStorageOkReturnsTrueForCloudStorage(): void
+    {
+        $mockConfig = $this->createMock(Configuration::class);
+        $mockConfig
+            ->method('get')
+            ->willReturnCallback(static fn(string $key) => match ($key) {
+                'storage.type' => 's3',
+                default => null,
+            });
+
+        $configRef = new ReflectionClass(Configuration::class);
+        $configProp = $configRef->getProperty('configuration');
+        $previousConfig = $configProp->getValue(null);
+        $configProp->setValue(null, $mockConfig);
+
+        try {
+            $reflection = new ReflectionClass($this->file);
+            $reflection->getProperty('encrypted')->setValue($this->file, false);
+            $reflection->getProperty('realHash')->setValue($this->file, 'abcdefghijklmnopqrstuvwxyz123456');
+
+            self::assertTrue($this->file->isStorageOk());
+        } finally {
+            $configProp->setValue(null, $previousConfig);
+        }
+    }
+
+    public function testIsStorageOkReturnsFalseWhenDirMissing(): void
+    {
+        $mockConfig = $this->createMock(Configuration::class);
+        $mockConfig->method('get')->willReturn('filesystem');
+
+        $configRef = new ReflectionClass(Configuration::class);
+        $configProp = $configRef->getProperty('configuration');
+        $previousConfig = $configProp->getValue(null);
+        $configProp->setValue(null, $mockConfig);
+
+        try {
+            $reflection = new ReflectionClass($this->file);
+            $reflection->getProperty('encrypted')->setValue($this->file, false);
+            $reflection->getProperty('realHash')->setValue($this->file, 'abcdefghijklmnopqrstuvwxyz123456');
+
+            self::assertFalse($this->file->isStorageOk());
+        } finally {
+            $configProp->setValue(null, $previousConfig);
+        }
+    }
+
+    public function testDeleteWithNoLinkedRecordsUnencrypted(): void
+    {
+        $mockStorage = $this->createMock(StorageInterface::class);
+        $mockStorage->method('delete')->willReturn(true);
+
+        $mockConfig = $this->createMock(Configuration::class);
+        $mockConfig->method('get')->willReturn('filesystem');
+
+        $configRef = new ReflectionClass(Configuration::class);
+        $configProp = $configRef->getProperty('configuration');
+        $previousConfig = $configProp->getValue(null);
+        $configProp->setValue(null, $mockConfig);
+
+        try {
+            $reflection = new ReflectionClass($this->file);
+            $reflection->getProperty('encrypted')->setValue($this->file, false);
+            $reflection->getProperty('realHash')->setValue($this->file, 'abcdefghijklmnopqrstuvwxyz123456');
+            $reflection->getProperty('id')->setValue($this->file, 1);
+
+            $storageProp = new ReflectionClass(File::class)->getProperty('storage');
+            $storageProp->setValue($this->file, $mockStorage);
+
+            $this->mockDb->method('fetchArray')->willReturn(['count' => 0]);
+            $this->mockDb->method('query')->willReturn(true);
+
+            $result = $this->file->delete();
+
+            self::assertTrue($result);
+        } finally {
+            $configProp->setValue(null, $previousConfig);
+        }
+    }
+
+    public function testSaveWithCustomFilename(): void
+    {
+        $testContent = 'save test content';
+        $filePath = vfsStream::url('attachments/upload.txt');
+        file_put_contents($filePath, $testContent);
+
+        $reflection = new ReflectionClass($this->file);
+        $reflection->getProperty('encrypted')->setValue($this->file, false);
+
+        $mockStorage = $this->createMock(StorageInterface::class);
+        $mockStorage->method('put')->willReturn(true);
+
+        $storageProp = new ReflectionClass(File::class)->getProperty('storage');
+        $storageProp->setValue($this->file, $mockStorage);
+
+        $this->mockDb->method('query')->willReturn(true);
+        $this->mockDb->method('fetchArray')->willReturn(['count' => 0]);
+
+        $result = $this->file->save($filePath, 'custom-name.txt');
+
+        self::assertTrue($result);
+        self::assertSame('custom-name.txt', $reflection->getProperty('filename')->getValue($this->file));
+    }
+
+    public function testSaveUsesBasenameWhenNoCustomFilename(): void
+    {
+        $filePath = vfsStream::url('attachments/original.txt');
+        file_put_contents($filePath, 'content');
+
+        $reflection = new ReflectionClass($this->file);
+        $reflection->getProperty('encrypted')->setValue($this->file, false);
+
+        $mockStorage = $this->createMock(StorageInterface::class);
+        $mockStorage->method('put')->willReturn(true);
+        $storageProp = new ReflectionClass(File::class)->getProperty('storage');
+        $storageProp->setValue($this->file, $mockStorage);
+
+        $this->mockDb->method('query')->willReturn(true);
+        $this->mockDb->method('fetchArray')->willReturn(['count' => 0]);
+
+        $result = $this->file->save($filePath);
+
+        self::assertTrue($result);
+        self::assertSame('original.txt', $reflection->getProperty('filename')->getValue($this->file));
+    }
+
+    public function testGetRetrievesContentFromStorage(): void
+    {
+        $mockStorage = $this->createMock(StorageInterface::class);
+        $mockStorage->method('get')->willReturn('stored content');
+
+        $mockConfig = $this->createMock(Configuration::class);
+        $mockConfig->method('get')->willReturn('filesystem');
+
+        $configRef = new ReflectionClass(Configuration::class);
+        $configProp = $configRef->getProperty('configuration');
+        $previousConfig = $configProp->getValue(null);
+        $configProp->setValue(null, $mockConfig);
+
+        try {
+            $reflection = new ReflectionClass($this->file);
+            $reflection->getProperty('encrypted')->setValue($this->file, false);
+            $reflection->getProperty('realHash')->setValue($this->file, 'abcdefghijklmnopqrstuvwxyz123456');
+
+            $storageProp = new ReflectionClass(File::class)->getProperty('storage');
+            $storageProp->setValue($this->file, $mockStorage);
+
+            $content = $this->file->get();
+
+            self::assertSame('stored content', $content);
+        } finally {
+            $configProp->setValue(null, $previousConfig);
+        }
+    }
+
+    public function testSaveWithLinkedRecordsSkipsFileWrite(): void
+    {
+        $filePath = vfsStream::url('attachments/linked.txt');
+        file_put_contents($filePath, 'linked content');
+
+        $reflection = new ReflectionClass($this->file);
+        $reflection->getProperty('encrypted')->setValue($this->file, false);
+        $reflection->getProperty('realHash')->setValue($this->file, 'abcdefghijklmnopqrstuvwxyz123456');
+
+        $this->mockDb->method('query')->willReturn(true);
+        $this->mockDb->method('fetchArray')->willReturn(['count' => 2]);
+
+        $result = $this->file->save($filePath);
+
+        self::assertTrue($result);
     }
 }
