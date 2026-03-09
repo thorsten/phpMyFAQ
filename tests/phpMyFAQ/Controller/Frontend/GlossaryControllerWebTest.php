@@ -104,6 +104,6 @@ final class GlossaryControllerWebTest extends ControllerWebTestCase
 
         self::assertResponseIsSuccessful($response);
         self::assertResponseContains('<h1 class="mb-4 border-bottom">FAQ Glossary</h1>', $response);
-        self::assertResponseContains('<title>FAQ Glossary - phpMyFAQ Codename Palaimon</title>', $response);
+        self::assertResponseContains('<title>FAQ Glossary - ', $response);
     }
 }

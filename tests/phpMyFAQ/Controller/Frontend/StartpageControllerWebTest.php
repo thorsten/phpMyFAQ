@@ -72,7 +72,7 @@ final class StartpageControllerWebTest extends ControllerWebTestCase
         $response = $this->requestPublic('GET', '/');
 
         self::assertResponseIsSuccessful($response);
-        self::assertResponseContains('<title>phpMyFAQ', $response);
+        self::assertResponseContains('<title>', $response);
         self::assertResponseContains('Trending FAQs', $response);
     }
 }

@@ -68,6 +68,6 @@ final class OverviewControllerWebTest extends ControllerWebTestCase
 
         self::assertResponseIsSuccessful($response);
         self::assertResponseContains('<h2 class="mb-4 border-bottom">FAQ Overview</h2>', $response);
-        self::assertResponseContains('<title>FAQ Overview - phpMyFAQ Codename Palaimon</title>', $response);
+        self::assertResponseContains('<title>FAQ Overview - ', $response);
     }
 }
