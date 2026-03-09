@@ -440,8 +440,7 @@ class StatisticsTest extends TestCase
         $this->dbMock->method('escape')->willReturn('en');
 
         $row = $this->createFaqRow(1, 'en', 1, 'Test Question', 'Answer', '20260101120000', 42);
-        $this->dbMock->method('fetchObject')
-            ->willReturnOnConsecutiveCalls($row, null);
+        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row, null);
 
         $result = $statistics->getLatestData(10, 'en');
 
@@ -465,8 +464,7 @@ class StatisticsTest extends TestCase
         $row1 = $this->createFaqRow(1, 'en', 1, 'Q1', 'A1', '20260101', 10);
         $row2 = $this->createFaqRow(2, 'en', 1, 'Q2', 'A2', '20260102', 20);
         $row3 = $this->createFaqRow(3, 'en', 1, 'Q3', 'A3', '20260103', 30);
-        $this->dbMock->method('fetchObject')
-            ->willReturnOnConsecutiveCalls($row1, $row2, $row3, null);
+        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row1, $row2, $row3, null);
 
         $result = $statistics->getLatestData(2, 'en');
 
@@ -511,8 +509,7 @@ class StatisticsTest extends TestCase
 
         // Row with user_id=99 should be skipped (user is 5, not -1 or 5)
         $row = $this->createFaqRow(1, 'en', 1, 'Q', 'A', '20260101', 1, -1, 99);
-        $this->dbMock->method('fetchObject')
-            ->willReturnOnConsecutiveCalls($row, null);
+        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row, null);
 
         $result = $statistics->getLatestData(10);
 
@@ -541,8 +538,7 @@ class StatisticsTest extends TestCase
         $rowBadGroup = $this->createFaqRow(1, 'en', 1, 'Q1', 'A1', '20260101', 1, 99, 5);
         // Row with matching user and group
         $rowGood = $this->createFaqRow(2, 'en', 1, 'Q2', 'A2', '20260102', 2, 10, 5);
-        $this->dbMock->method('fetchObject')
-            ->willReturnOnConsecutiveCalls($rowBadGroup, $rowGood, null);
+        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($rowBadGroup, $rowGood, null);
 
         $result = $statistics->getLatestData(10, 'en');
 
@@ -570,8 +566,7 @@ class StatisticsTest extends TestCase
 
         // Row with wrong user_id (not -1 and not 5)
         $row = $this->createFaqRow(1, 'en', 1, 'Q', 'A', '20260101', 1, 10, 99);
-        $this->dbMock->method('fetchObject')
-            ->willReturnOnConsecutiveCalls($row, null);
+        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row, null);
 
         $result = $statistics->getLatestData(10);
 
@@ -592,8 +587,7 @@ class StatisticsTest extends TestCase
         $this->dbMock->method('escape')->willReturn('en');
 
         $row = $this->createFaqRow(1, 'en', 1, 'Popular FAQ', 'Answer', '20260101120000', 100);
-        $this->dbMock->method('fetchObject')
-            ->willReturnOnConsecutiveCalls($row, null);
+        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row, null);
 
         $result = $statistics->getTopTenData(10, 0, 'en');
 
@@ -611,7 +605,8 @@ class StatisticsTest extends TestCase
         $statistics = new Statistics($configMock);
 
         $resultMock = $this->createStub(\SQLite3Result::class);
-        $this->dbMock->method('query')
+        $this->dbMock
+            ->method('query')
             ->with($this->stringContains("fcr.category_id = '5'"))
             ->willReturn($resultMock);
         $this->dbMock->method('escape')->willReturn('en');
@@ -633,8 +628,7 @@ class StatisticsTest extends TestCase
         $row1 = $this->createFaqRow(1, 'en', 1, 'Q1', 'A1', '20260101', 100);
         $row2 = $this->createFaqRow(2, 'en', 1, 'Q2', 'A2', '20260102', 90);
         $row3 = $this->createFaqRow(3, 'en', 1, 'Q3', 'A3', '20260103', 80);
-        $this->dbMock->method('fetchObject')
-            ->willReturnOnConsecutiveCalls($row1, $row2, $row3, null);
+        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row1, $row2, $row3, null);
 
         $result = $statistics->getTopTenData(2);
 
@@ -667,8 +661,7 @@ class StatisticsTest extends TestCase
         $this->dbMock->method('escape')->willReturn('en');
 
         $row = $this->createFaqRow(1, 'en', 1, 'Trending FAQ', 'Content', '20260301', 500);
-        $this->dbMock->method('fetchObject')
-            ->willReturnOnConsecutiveCalls($row, null);
+        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row, null);
 
         $result = $statistics->getTrendingData(10, 'en');
 
@@ -709,8 +702,7 @@ class StatisticsTest extends TestCase
         $this->dbMock->method('query')->willReturn($resultMock);
 
         $row = $this->createFaqRow(1, 'en', 1, 'Q', 'A', '20260101', 50, -1, -1);
-        $this->dbMock->method('fetchObject')
-            ->willReturnOnConsecutiveCalls($row, null);
+        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row, null);
 
         $result = $statistics->getTrendingData(10);
 
@@ -733,8 +725,7 @@ class StatisticsTest extends TestCase
         $row = $this->createFaqRow(1, 'en', 1, 'Voted FAQ', 'Content', '20260101', 0);
         $row->avg = 4.7;
         $row->user = 15;
-        $this->dbMock->method('fetchObject')
-            ->willReturnOnConsecutiveCalls($row, null);
+        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row, null);
 
         $result = $statistics->getTopVotedData(10, 'en');
 
@@ -756,8 +747,7 @@ class StatisticsTest extends TestCase
         $row1 = $this->createFaqRow(1, 'en', 1, 'Q1', 'A1', '20260101', 0);
         $row1dup = $this->createFaqRow(1, 'en', 1, 'Q1', 'A1', '20260101', 0);
         $row2 = $this->createFaqRow(2, 'en', 1, 'Q2', 'A2', '20260102', 0);
-        $this->dbMock->method('fetchObject')
-            ->willReturnOnConsecutiveCalls($row1, $row1dup, $row2, null);
+        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row1, $row1dup, $row2, null);
 
         $result = $statistics->getTopVotedData(10);
 
@@ -775,8 +765,7 @@ class StatisticsTest extends TestCase
         $row1 = $this->createFaqRow(1, 'en', 1, 'Q1', 'A1', '20260101', 0);
         $row2 = $this->createFaqRow(2, 'en', 1, 'Q2', 'A2', '20260102', 0);
         $row3 = $this->createFaqRow(3, 'en', 1, 'Q3', 'A3', '20260103', 0);
-        $this->dbMock->method('fetchObject')
-            ->willReturnOnConsecutiveCalls($row1, $row2, $row3, null);
+        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row1, $row2, $row3, null);
 
         $result = $statistics->getTopVotedData(2);
 
@@ -797,8 +786,7 @@ class StatisticsTest extends TestCase
         $this->dbMock->method('escape')->willReturn('en');
 
         $row = $this->createFaqRow(1, 'en', 1, 'Latest FAQ Question', 'Content', '20260301120000', 5);
-        $this->dbMock->method('fetchObject')
-            ->willReturnOnConsecutiveCalls($row, null);
+        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row, null);
 
         $result = $statistics->getLatest();
 
@@ -839,8 +827,7 @@ class StatisticsTest extends TestCase
         // Both call fetchObject, so we need results for both calls
         $votedRow = $this->createFaqRow(1, 'en', 1, 'Voted FAQ', 'A', '20260101', 0);
         $visitsRow = $this->createFaqRow(2, 'en', 1, 'Top FAQ', 'Answer', '20260101', 100);
-        $this->dbMock->method('fetchObject')
-            ->willReturnOnConsecutiveCalls($votedRow, null, $visitsRow, null);
+        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($votedRow, null, $visitsRow, null);
 
         $result = $statistics->getTopTen('visits');
 
@@ -861,8 +848,7 @@ class StatisticsTest extends TestCase
         $row = $this->createFaqRow(1, 'en', 1, 'Voted FAQ', 'Answer', '20260101', 0);
         $row->avg = 4.5;
         $row->user = 10;
-        $this->dbMock->method('fetchObject')
-            ->willReturnOnConsecutiveCalls($row, null);
+        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row, null);
 
         $result = $statistics->getTopTen('voted');
 
@@ -885,8 +871,7 @@ class StatisticsTest extends TestCase
         $this->dbMock->method('escape')->willReturn('en');
 
         $row = $this->createFaqRow(1, 'en', 1, 'Trending FAQ', 'Content', '20260301', 200);
-        $this->dbMock->method('fetchObject')
-            ->willReturnOnConsecutiveCalls($row, null);
+        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row, null);
 
         $result = $statistics->getTrending();
 

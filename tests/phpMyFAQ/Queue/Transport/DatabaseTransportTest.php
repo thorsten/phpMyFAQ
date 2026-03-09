@@ -6,10 +6,12 @@ use DateTimeImmutable;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 #[CoversClass(DatabaseTransport::class)]
 #[UsesClass(Database::class)]
 class DatabaseTransportTest extends TestCase
@@ -98,5 +100,150 @@ class DatabaseTransportTest extends TestCase
 
         $transport = new DatabaseTransport($configuration);
         $this->assertTrue($transport->acknowledge(99));
+    }
+
+    public function testEnqueueThrowsWhenInsertFails(): void
+    {
+        Database::setTablePrefix('pmf_');
+
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnArgument(0);
+        $db->method('now')->willReturn('CURRENT_TIMESTAMP');
+        $db->method('error')->willReturn('insert failed');
+        $db->method('query')->willReturn(false);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        $transport = new DatabaseTransport($configuration);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Unable to enqueue job: insert failed');
+        $transport->enqueue('body');
+    }
+
+    public function testReserveThrowsWhenSelectFails(): void
+    {
+        Database::setTablePrefix('pmf_');
+
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnArgument(0);
+        $db->method('error')->willReturn('select failed');
+        $db->method('query')->willReturn(false);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        $transport = new DatabaseTransport($configuration);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Unable to fetch queued jobs: select failed');
+        $transport->reserve('default');
+    }
+
+    public function testReserveSkipsJobsThatCannotBeMarkedDelivered(): void
+    {
+        Database::setTablePrefix('pmf_');
+
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnArgument(0);
+        $db->method('now')->willReturn('CURRENT_TIMESTAMP');
+        $db->method('query')->willReturnCallback(static function (string $query): mixed {
+            if (str_starts_with($query, 'SELECT')) {
+                return 'result-set';
+            }
+
+            if (str_starts_with($query, 'UPDATE') && str_contains($query, 'id = 1')) {
+                return false;
+            }
+
+            if (str_starts_with($query, 'UPDATE') && str_contains($query, 'id = 2')) {
+                return true;
+            }
+
+            return false;
+        });
+        $db->method('affectedRows')->willReturn(1);
+        $db->method('fetchArray')->willReturnOnConsecutiveCalls(
+            ['id' => 1, 'queue' => 'default', 'body' => 'body-1', 'headers' => ''],
+            ['id' => 2, 'queue' => 'default', 'body' => 'body-2', 'headers' => 'not-json'],
+            false,
+        );
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        $transport = new DatabaseTransport($configuration);
+        $job = $transport->reserve('default');
+
+        $this->assertNotNull($job);
+        $this->assertSame(2, $job['id']);
+        $this->assertSame([], $job['headers']);
+    }
+
+    public function testReserveSkipsJobsWithAffectedRowsMismatch(): void
+    {
+        Database::setTablePrefix('pmf_');
+
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnArgument(0);
+        $db->method('now')->willReturn('CURRENT_TIMESTAMP');
+        $db->method('query')->willReturn(true);
+        $db->method('affectedRows')->willReturnOnConsecutiveCalls(0, 1);
+        $db->method('fetchArray')->willReturnOnConsecutiveCalls(
+            ['id' => 3, 'queue' => 'default', 'body' => 'body-3', 'headers' => '{"a":1}'],
+            ['id' => 4, 'queue' => 'default', 'body' => 'body-4', 'headers' => '{"b":2}'],
+            false,
+        );
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        $transport = new DatabaseTransport($configuration);
+        $job = $transport->reserve('default');
+
+        $this->assertNotNull($job);
+        $this->assertSame(4, $job['id']);
+        $this->assertSame(['b' => 2], $job['headers']);
+    }
+
+    public function testReleaseUpdatesJobWithoutHeaders(): void
+    {
+        Database::setTablePrefix('pmf_');
+
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnArgument(0);
+        $db
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->callback(static fn(string $query): bool => !str_contains($query, 'headers =')))
+            ->willReturn(true);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        $transport = new DatabaseTransport($configuration);
+
+        $this->assertTrue($transport->release(12, new DateTimeImmutable('2026-03-09 12:00:00')));
+    }
+
+    public function testReleaseUpdatesJobWithHeaders(): void
+    {
+        Database::setTablePrefix('pmf_');
+
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnArgument(0);
+        $db
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->callback(static fn(string $query): bool => str_contains($query, 'headers =')))
+            ->willReturn(true);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        $transport = new DatabaseTransport($configuration);
+
+        $this->assertTrue($transport->release(13, new DateTimeImmutable('2026-03-09 12:00:00'), ['attempts' => 2]));
     }
 }

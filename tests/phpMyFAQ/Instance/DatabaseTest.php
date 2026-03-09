@@ -96,4 +96,47 @@ class DatabaseTest extends TestCase
 
         $this->assertTrue($result);
     }
+
+    public function testCreateTenantDatabaseReturnsTrueWhenPgsqlDatabaseAlreadyExists(): void
+    {
+        $dbMock = $this->createMock(DatabaseDriver::class);
+        $this->configuration->method('getDb')->willReturn($dbMock);
+
+        $dbMock->method('escape')->willReturnArgument(0);
+        $dbMock
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->stringContains('SELECT 1 FROM pg_database'))
+            ->willReturn(new \stdClass());
+        $dbMock->expects($this->once())->method('numRows')->willReturn(1);
+
+        $result = Database::createTenantDatabase($this->configuration, 'pgsql', 'existingdb');
+
+        $this->assertTrue($result);
+    }
+
+    public function testCreateTenantDatabaseThrowsForUnsupportedDriver(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Database-per-tenant isolation is not supported for driver "mysqli"');
+
+        Database::createTenantDatabase($this->configuration, 'mysqli', 'tenantdb');
+    }
+
+    public function testFactoryWithDifferentValidTypes(): void
+    {
+        $types = ['pdo_pgsql', 'pdo_mysql', 'pdo_sqlite', 'pdo_sqlsrv'];
+
+        foreach ($types as $type) {
+            $driver = Database::factory($this->configuration, $type);
+            $this->assertInstanceOf(Database\DriverInterface::class, $driver);
+        }
+    }
+
+    public function testGetInstanceReturnsSameDriverAfterFactory(): void
+    {
+        $driver = Database::factory($this->configuration, 'mysqli');
+        $instance = Database::getInstance();
+        $this->assertSame($driver, $instance);
+    }
 }

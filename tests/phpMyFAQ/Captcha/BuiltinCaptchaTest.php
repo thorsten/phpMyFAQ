@@ -340,7 +340,7 @@ class BuiltinCaptchaTest extends TestCase
     public function testGetCaptchaImageReturnsJpegData(): void
     {
         // Clean up any leftover captcha codes first
-        $this->configuration->getDb()->query("DELETE FROM faqcaptcha");
+        $this->configuration->getDb()->query('DELETE FROM faqcaptcha');
 
         try {
             $imageData = $this->captcha->getCaptchaImage();
@@ -362,7 +362,7 @@ class BuiltinCaptchaTest extends TestCase
      */
     public function testGetCaptchaImageStoresCaptchaInDatabase(): void
     {
-        $this->configuration->getDb()->query("DELETE FROM faqcaptcha");
+        $this->configuration->getDb()->query('DELETE FROM faqcaptcha');
 
         try {
             $this->captcha->getCaptchaImage();
@@ -370,7 +370,7 @@ class BuiltinCaptchaTest extends TestCase
             // imagecolorallocate can return false on palette images when colors are exhausted
         }
 
-        $result = $this->configuration->getDb()->query("SELECT COUNT(*) AS cnt FROM faqcaptcha");
+        $result = $this->configuration->getDb()->query('SELECT COUNT(*) AS cnt FROM faqcaptcha');
         $row = $this->configuration->getDb()->fetchArray($result);
 
         self::assertGreaterThanOrEqual(1, (int) $row['cnt']);
@@ -382,23 +382,23 @@ class BuiltinCaptchaTest extends TestCase
     public function testValidateCaptchaCodeWithValidCodeInDatabase(): void
     {
         $code = 'ABC123';
-        $this->configuration->getDb()->query("DELETE FROM faqcaptcha");
-        $this->configuration->getDb()->query(
-            sprintf(
+        $this->configuration->getDb()->query('DELETE FROM faqcaptcha');
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
                 "INSERT INTO faqcaptcha (id, useragent, language, ip, captcha_time) VALUES ('%s', 'test', 'en', '::1', %d)",
                 $code,
                 time(),
-            )
-        );
+            ));
 
         $result = $this->captcha->validateCaptchaCode($code);
 
         self::assertTrue($result);
 
         // Code should be removed after successful validation
-        $check = $this->configuration->getDb()->query(
-            sprintf("SELECT COUNT(*) AS cnt FROM faqcaptcha WHERE id = '%s'", $code)
-        );
+        $check = $this->configuration
+            ->getDb()
+            ->query(sprintf("SELECT COUNT(*) AS cnt FROM faqcaptcha WHERE id = '%s'", $code));
         $row = $this->configuration->getDb()->fetchArray($check);
         self::assertEquals(0, (int) $row['cnt']);
     }
@@ -411,14 +411,14 @@ class BuiltinCaptchaTest extends TestCase
         $codeInDb = 'A1B2CO';
         $codeTyped = 'A1B2C0'; // User types '0' instead of 'O'
 
-        $this->configuration->getDb()->query("DELETE FROM faqcaptcha");
-        $this->configuration->getDb()->query(
-            sprintf(
+        $this->configuration->getDb()->query('DELETE FROM faqcaptcha');
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
                 "INSERT INTO faqcaptcha (id, useragent, language, ip, captcha_time) VALUES ('%s', 'test', 'en', '::1', %d)",
                 $codeInDb,
                 time(),
-            )
-        );
+            ));
 
         self::assertTrue($this->captcha->validateCaptchaCode($codeTyped));
     }
@@ -437,7 +437,7 @@ class BuiltinCaptchaTest extends TestCase
      */
     public function testValidateCaptchaCodeReturnsFalseWhenCodeNotInDb(): void
     {
-        $this->configuration->getDb()->query("DELETE FROM faqcaptcha");
+        $this->configuration->getDb()->query('DELETE FROM faqcaptcha');
 
         self::assertFalse($this->captcha->validateCaptchaCode('ABCDEF'));
     }
@@ -448,14 +448,14 @@ class BuiltinCaptchaTest extends TestCase
     public function testCheckCaptchaCodeWithCaptchaEnabledAndValidCode(): void
     {
         $code = 'XYZ789';
-        $this->configuration->getDb()->query("DELETE FROM faqcaptcha");
-        $this->configuration->getDb()->query(
-            sprintf(
+        $this->configuration->getDb()->query('DELETE FROM faqcaptcha');
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
                 "INSERT INTO faqcaptcha (id, useragent, language, ip, captcha_time) VALUES ('%s', 'test', 'en', '::1', %d)",
                 $code,
                 time(),
-            )
-        );
+            ));
 
         $this->captcha->setUserIsLoggedIn(false);
 
@@ -479,9 +479,9 @@ class BuiltinCaptchaTest extends TestCase
     public function testCheckCaptchaCodeReturnsTrueWhenCaptchaDisabled(): void
     {
         // Temporarily disable captcha in DB
-        $this->configuration->getDb()->query(
-            "UPDATE faqconfig SET config_value = 'false' WHERE config_name = 'spam.enableCaptchaCode'"
-        );
+        $this->configuration
+            ->getDb()
+            ->query("UPDATE faqconfig SET config_value = 'false' WHERE config_name = 'spam.enableCaptchaCode'");
 
         // Create fresh Configuration to pick up the changed value
         $dbHandle = new Sqlite3();
@@ -498,9 +498,9 @@ class BuiltinCaptchaTest extends TestCase
             self::assertTrue($captcha->checkCaptchaCode('anything'));
         } finally {
             // Restore the config
-            $this->configuration->getDb()->query(
-                "UPDATE faqconfig SET config_value = 'true' WHERE config_name = 'spam.enableCaptchaCode'"
-            );
+            $this->configuration
+                ->getDb()
+                ->query("UPDATE faqconfig SET config_value = 'true' WHERE config_name = 'spam.enableCaptchaCode'");
         }
     }
 
@@ -515,16 +515,16 @@ class BuiltinCaptchaTest extends TestCase
         $_SERVER['REQUEST_TIME'] = time();
         $captcha = new BuiltinCaptcha($this->configuration);
 
-        $this->configuration->getDb()->query("DELETE FROM faqcaptcha");
+        $this->configuration->getDb()->query('DELETE FROM faqcaptcha');
 
         // Insert an old captcha record (older than 1 week = 604800 seconds)
         $oldTime = time() - 700_000;
-        $this->configuration->getDb()->query(
-            sprintf(
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
                 "INSERT INTO faqcaptcha (id, useragent, language, ip, captcha_time) VALUES ('OLD123', 'old-agent', 'de', '192.168.1.1', %d)",
                 $oldTime,
-            )
-        );
+            ));
 
         // getCaptchaImage triggers garbageCollector which deletes old records
         try {
@@ -548,21 +548,21 @@ class BuiltinCaptchaTest extends TestCase
     public function testRemoveCaptchaWithNullFallsBackToInternalCode(): void
     {
         $code = 'TEST12';
-        $this->configuration->getDb()->query("DELETE FROM faqcaptcha");
-        $this->configuration->getDb()->query(
-            sprintf(
+        $this->configuration->getDb()->query('DELETE FROM faqcaptcha');
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
                 "INSERT INTO faqcaptcha (id, useragent, language, ip, captcha_time) VALUES ('%s', 'test', 'en', '::1', %d)",
                 $code,
                 time(),
-            )
-        );
+            ));
 
         // validateCaptchaCode sets internal code and calls removeCaptcha
         $this->captcha->validateCaptchaCode($code);
 
-        $result = $this->configuration->getDb()->query(
-            sprintf("SELECT COUNT(*) AS cnt FROM faqcaptcha WHERE id = '%s'", $code)
-        );
+        $result = $this->configuration
+            ->getDb()
+            ->query(sprintf("SELECT COUNT(*) AS cnt FROM faqcaptcha WHERE id = '%s'", $code));
         $row = $this->configuration->getDb()->fetchArray($result);
         self::assertEquals(0, (int) $row['cnt']);
     }
@@ -573,14 +573,14 @@ class BuiltinCaptchaTest extends TestCase
     public function testValidateCaptchaCodeConvertsToUppercase(): void
     {
         $code = 'ABCDEF';
-        $this->configuration->getDb()->query("DELETE FROM faqcaptcha");
-        $this->configuration->getDb()->query(
-            sprintf(
+        $this->configuration->getDb()->query('DELETE FROM faqcaptcha');
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
                 "INSERT INTO faqcaptcha (id, useragent, language, ip, captcha_time) VALUES ('%s', 'test', 'en', '::1', %d)",
                 $code,
                 time(),
-            )
-        );
+            ));
 
         // User types lowercase
         self::assertTrue($this->captcha->validateCaptchaCode('abcdef'));
@@ -593,7 +593,7 @@ class BuiltinCaptchaTest extends TestCase
      */
     public function testGetCaptchaImageCreatesDbRecord(): void
     {
-        $this->configuration->getDb()->query("DELETE FROM faqcaptcha");
+        $this->configuration->getDb()->query('DELETE FROM faqcaptcha');
 
         try {
             $this->captcha->getCaptchaImage();
@@ -601,7 +601,7 @@ class BuiltinCaptchaTest extends TestCase
             // imagecolorallocate can return false on palette images when colors are exhausted
         }
 
-        $result = $this->configuration->getDb()->query("SELECT COUNT(*) AS cnt FROM faqcaptcha");
+        $result = $this->configuration->getDb()->query('SELECT COUNT(*) AS cnt FROM faqcaptcha');
         $row = $this->configuration->getDb()->fetchArray($result);
         self::assertGreaterThanOrEqual(1, (int) $row['cnt']);
     }

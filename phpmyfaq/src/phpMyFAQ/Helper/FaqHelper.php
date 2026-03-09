@@ -122,13 +122,14 @@ class FaqHelper extends AbstractHelper
         $contentLength = strlen($content);
         $allowedHosts = $this->configuration->getAllowedMediaHosts();
         $allowedHosts[] = Request::createFromGlobals()->getHost();
+        $forceHttpsUrls = filter_var($this->configuration->get(item: 'security.useSslOnly'), FILTER_VALIDATE_BOOLEAN);
         $htmlSanitizer = new HtmlSanitizer(new HtmlSanitizerConfig()
             ->withMaxInputLength($contentLength + 1)
             ->allowSafeElements()
             ->allowRelativeLinks()
             ->allowStaticElements()
             ->allowRelativeMedias()
-            ->forceHttpsUrls($this->configuration->get(item: 'security.useSslOnly'))
+            ->forceHttpsUrls($forceHttpsUrls)
             ->allowElement('iframe', ['title', 'src', 'width', 'height', 'allow', 'allowfullscreen'])
             ->allowMediaSchemes(['https', 'http', 'mailto', 'data'])
             ->allowMediaHosts($allowedHosts)

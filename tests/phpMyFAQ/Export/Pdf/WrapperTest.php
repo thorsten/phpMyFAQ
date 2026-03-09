@@ -458,16 +458,16 @@ class WrapperTest extends TestCase
 
     public function testHeaderWithCategoryTitle(): void
     {
-        $this->mockConfig->method('get')->willReturnCallback(
-            static fn(string $key) => match ($key) {
+        $this->mockConfig
+            ->method('get')
+            ->willReturnCallback(static fn(string $key) => match ($key) {
                 'main.customPdfHeader' => '',
                 'main.customPdfFooter' => '',
                 'main.metaPublisher' => 'Test',
                 'main.dateFormat' => 'Y-m-d H:i',
                 'spam.mailAddressInExport' => false,
                 default => null,
-            }
-        );
+            });
         $this->mockConfig->method('getAdminEmail')->willReturn('admin@test.com');
         $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
 
@@ -484,16 +484,16 @@ class WrapperTest extends TestCase
 
     public function testHeaderWithCustomHeader(): void
     {
-        $this->mockConfig->method('get')->willReturnCallback(
-            static fn(string $key) => match ($key) {
+        $this->mockConfig
+            ->method('get')
+            ->willReturnCallback(static fn(string $key) => match ($key) {
                 'main.customPdfHeader' => '<b>Custom Header</b>',
                 'main.customPdfFooter' => '',
                 'main.metaPublisher' => 'Test',
                 'main.dateFormat' => 'Y-m-d H:i',
                 'spam.mailAddressInExport' => false,
                 default => null,
-            }
-        );
+            });
         $this->mockConfig->method('getAdminEmail')->willReturn('admin@test.com');
         $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
 
@@ -510,16 +510,16 @@ class WrapperTest extends TestCase
 
     public function testFooterWithBookmarksDisabled(): void
     {
-        $this->mockConfig->method('get')->willReturnCallback(
-            static fn(string $key) => match ($key) {
+        $this->mockConfig
+            ->method('get')
+            ->willReturnCallback(static fn(string $key) => match ($key) {
                 'main.customPdfHeader' => '',
                 'main.customPdfFooter' => '',
                 'main.metaPublisher' => 'Publisher',
                 'main.dateFormat' => 'Y-m-d H:i',
                 'spam.mailAddressInExport' => false,
                 default => null,
-            }
-        );
+            });
         $this->mockConfig->method('getAdminEmail')->willReturn('admin@test.com');
         $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
 
@@ -539,16 +539,16 @@ class WrapperTest extends TestCase
 
     public function testFooterWithMailAddressInExport(): void
     {
-        $this->mockConfig->method('get')->willReturnCallback(
-            static fn(string $key) => match ($key) {
+        $this->mockConfig
+            ->method('get')
+            ->willReturnCallback(static fn(string $key) => match ($key) {
                 'main.customPdfHeader' => '',
                 'main.customPdfFooter' => '',
                 'main.metaPublisher' => 'Publisher',
                 'main.dateFormat' => 'Y-m-d H:i',
                 'spam.mailAddressInExport' => true,
                 default => null,
-            }
-        );
+            });
         $this->mockConfig->method('getAdminEmail')->willReturn('admin@test.com');
         $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
 
@@ -565,16 +565,16 @@ class WrapperTest extends TestCase
 
     public function testFooterWithCustomFooter(): void
     {
-        $this->mockConfig->method('get')->willReturnCallback(
-            static fn(string $key) => match ($key) {
+        $this->mockConfig
+            ->method('get')
+            ->willReturnCallback(static fn(string $key) => match ($key) {
                 'main.customPdfHeader' => '',
                 'main.customPdfFooter' => '<i>Custom Footer Content</i>',
                 'main.metaPublisher' => 'Publisher',
                 'main.dateFormat' => 'Y-m-d H:i',
                 'spam.mailAddressInExport' => false,
                 default => null,
-            }
-        );
+            });
         $this->mockConfig->method('getAdminEmail')->willReturn('admin@test.com');
         $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
 
@@ -591,16 +591,16 @@ class WrapperTest extends TestCase
 
     public function testAddFaqToc(): void
     {
-        $this->mockConfig->method('get')->willReturnCallback(
-            static fn(string $key) => match ($key) {
+        $this->mockConfig
+            ->method('get')
+            ->willReturnCallback(static fn(string $key) => match ($key) {
                 'main.customPdfHeader' => '',
                 'main.customPdfFooter' => '',
                 'main.metaPublisher' => 'Test',
                 'main.dateFormat' => 'Y-m-d H:i',
                 'spam.mailAddressInExport' => false,
                 default => null,
-            }
-        );
+            });
         $this->mockConfig->method('getAdminEmail')->willReturn('admin@test.com');
         $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
         $this->mockConfig->method('getTitle')->willReturn('FAQ Title');
@@ -622,16 +622,16 @@ class WrapperTest extends TestCase
 
     public function testWriteHtmlCallsConvertExternalImages(): void
     {
-        $this->mockConfig->method('get')->willReturnCallback(
-            static fn(string $key) => match ($key) {
+        $this->mockConfig
+            ->method('get')
+            ->willReturnCallback(static fn(string $key) => match ($key) {
                 'main.customPdfHeader' => '',
                 'main.customPdfFooter' => '',
                 'main.metaPublisher' => 'Test',
                 'main.dateFormat' => 'Y-m-d H:i',
                 'spam.mailAddressInExport' => false,
                 default => null,
-            }
-        );
+            });
         $this->mockConfig->method('getAdminEmail')->willReturn('admin@test.com');
         $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
         $this->mockConfig->method('getAllowedMediaHosts')->willReturn([]);
@@ -685,7 +685,7 @@ class WrapperTest extends TestCase
 
     public function testValidateImageDataWithGifData(): void
     {
-        $gifData = "GIF89a" . str_repeat("\x00", 20);
+        $gifData = 'GIF89a' . str_repeat("\x00", 20);
         $reflection = new ReflectionClass($this->wrapper);
         $method = $reflection->getMethod('validateImageData');
 
@@ -694,7 +694,7 @@ class WrapperTest extends TestCase
 
     public function testValidateImageDataWithGif87aData(): void
     {
-        $gifData = "GIF87a" . str_repeat("\x00", 20);
+        $gifData = 'GIF87a' . str_repeat("\x00", 20);
         $reflection = new ReflectionClass($this->wrapper);
         $method = $reflection->getMethod('validateImageData');
 
@@ -703,7 +703,7 @@ class WrapperTest extends TestCase
 
     public function testValidateImageDataWithWebpData(): void
     {
-        $webpData = "RIFF" . str_repeat("\x00", 20);
+        $webpData = 'RIFF' . str_repeat("\x00", 20);
         $reflection = new ReflectionClass($this->wrapper);
         $method = $reflection->getMethod('validateImageData');
 
@@ -712,7 +712,7 @@ class WrapperTest extends TestCase
 
     public function testValidateImageDataWithBmpData(): void
     {
-        $bmpData = "BM" . str_repeat("\x00", 20);
+        $bmpData = 'BM' . str_repeat("\x00", 20);
         $reflection = new ReflectionClass($this->wrapper);
         $method = $reflection->getMethod('validateImageData');
 
@@ -780,16 +780,16 @@ class WrapperTest extends TestCase
 
     public function testFooterWithEmptyFaqAndNoBookmarks(): void
     {
-        $this->mockConfig->method('get')->willReturnCallback(
-            static fn(string $key) => match ($key) {
+        $this->mockConfig
+            ->method('get')
+            ->willReturnCallback(static fn(string $key) => match ($key) {
                 'main.customPdfHeader' => '',
                 'main.customPdfFooter' => '',
                 'main.metaPublisher' => 'Publisher',
                 'main.dateFormat' => 'Y-m-d H:i',
                 'spam.mailAddressInExport' => false,
                 default => null,
-            }
-        );
+            });
         $this->mockConfig->method('getAdminEmail')->willReturn('admin@test.com');
         $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
 
@@ -817,16 +817,16 @@ class WrapperTest extends TestCase
 
     public function testFooterWithBookmarksEnabled(): void
     {
-        $this->mockConfig->method('get')->willReturnCallback(
-            static fn(string $key) => match ($key) {
+        $this->mockConfig
+            ->method('get')
+            ->willReturnCallback(static fn(string $key) => match ($key) {
                 'main.customPdfHeader' => '',
                 'main.customPdfFooter' => '',
                 'main.metaPublisher' => 'Pub',
                 'main.dateFormat' => 'Y-m-d',
                 'spam.mailAddressInExport' => false,
                 default => null,
-            }
-        );
+            });
         $this->mockConfig->method('getAdminEmail')->willReturn('a@b.com');
         $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
 

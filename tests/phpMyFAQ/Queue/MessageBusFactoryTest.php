@@ -37,4 +37,30 @@ class MessageBusFactoryTest extends TestCase
         $this->expectException(RuntimeException::class);
         $factory->create();
     }
+
+    public function testCreateThrowsForRedisTransportNotImplementedYet(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('get')->with('queue.transport')->willReturn('redis');
+
+        $transport = $this->createStub(DatabaseTransport::class);
+        $factory = new MessageBusFactory($configuration, $transport);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Queue transport "redis" is not implemented yet.');
+        $factory->create();
+    }
+
+    public function testCreateThrowsForAmqpTransportNotImplementedYet(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('get')->with('queue.transport')->willReturn('amqp');
+
+        $transport = $this->createStub(DatabaseTransport::class);
+        $factory = new MessageBusFactory($configuration, $transport);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Queue transport "amqp" is not implemented yet.');
+        $factory->create();
+    }
 }

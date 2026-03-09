@@ -45,12 +45,15 @@ class OpenSearch extends AbstractSearch implements SearchInterface
     /**
      * Constructor.
      */
-    public function __construct(Configuration $configuration)
-    {
+    public function __construct(
+        Configuration $configuration,
+        ?Client $client = null,
+        ?OpenSearchConfiguration $openSearchConfiguration = null,
+    ) {
         parent::__construct($configuration);
 
-        $this->client = $this->configuration->getOpenSearch();
-        $this->openSearchConfiguration = $this->configuration->getOpenSearchConfig();
+        $this->client = $client ?? $this->configuration->getOpenSearch();
+        $this->openSearchConfiguration = $openSearchConfiguration ?? $this->configuration->getOpenSearchConfig();
     }
 
     /**

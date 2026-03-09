@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Queue\Handler;
 
+use Closure;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\PermissionType;
@@ -33,12 +34,17 @@ final readonly class ExportHandler
 {
     public function __construct(
         private Configuration $configuration,
+        private ?Closure $userFactory = null,
+        private ?Closure $faqFactory = null,
+        private ?Closure $categoryFactory = null,
+        private ?Closure $exportFactory = null,
+        private ?Closure $mailFactory = null,
     ) {
     }
 
     public function __invoke(ExportMessage $message): void
     {
-        $user = new User($this->configuration);
+        $user = $this->userFactory instanceof Closure ? ($this->userFactory)() : new User($this->configuration);
         if (!$user->getUserById($message->userId)) {
             throw new RuntimeException(sprintf('Export requested by unknown user ID %d', $message->userId));
         }
@@ -47,10 +53,14 @@ final readonly class ExportHandler
             throw new RuntimeException(sprintf('User ID %d does not have export permission', $message->userId));
         }
 
-        $faq = new Faq($this->configuration);
-        $category = new Category($this->configuration);
+        $faq = $this->faqFactory instanceof Closure ? ($this->faqFactory)() : new Faq($this->configuration);
+        $category = $this->categoryFactory instanceof Closure
+            ? ($this->categoryFactory)()
+            : new Category($this->configuration);
 
-        $exporter = Export::create($faq, $category, $this->configuration, $message->format);
+        $exporter = $this->exportFactory instanceof Closure
+            ? ($this->exportFactory)($faq, $category, $message->format)
+            : Export::create($faq, $category, $this->configuration, $message->format);
         $content = $exporter->generate(
             categoryId: (int) ($message->options['categoryId'] ?? 0),
             downwards: (bool) ($message->options['downwards'] ?? true),
@@ -81,7 +91,7 @@ final readonly class ExportHandler
         $email = $user->getUserData('email');
         if (is_string($email) && $email !== '') {
             try {
-                $mail = new Mail($this->configuration);
+                $mail = $this->mailFactory instanceof Closure ? ($this->mailFactory)() : new Mail($this->configuration);
                 $mail->addTo($email);
                 $mail->subject = 'Your phpMyFAQ export is ready';
                 $mail->message = sprintf(

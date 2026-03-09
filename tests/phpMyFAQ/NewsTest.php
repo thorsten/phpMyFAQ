@@ -9,6 +9,7 @@ use phpMyFAQ\News\NewsRepositoryInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 use stdClass;
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -35,8 +36,11 @@ class NewsTest extends TestCase
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $this->configuration = new Configuration($dbHandle);
-        $this->configuration->set('main.language', 'en');
-        $this->configuration->set('main.referenceURL', 'https://example.org/');
+        $this->primeConfiguration([
+            'main.language' => 'en',
+            'main.referenceURL' => 'https://example.org/',
+            'records.numberOfShownNewsEntries' => '5',
+        ]);
 
         Language::$language = 'en';
         $language = new Language($this->configuration, $this->createStub(Session::class));
@@ -247,8 +251,6 @@ class NewsTest extends TestCase
             ->with('en', true, null)
             ->willReturn([]);
 
-        $this->configuration->set('records.numberOfShownNewsEntries', '5');
-
         $result = $this->news->getLatestData(true);
 
         $this->assertEmpty($result);
@@ -261,8 +263,9 @@ class NewsTest extends TestCase
             ->method('getLatest')
             ->with('en', true, 10)
             ->willReturn([]);
-
-        $this->configuration->set('records.numberOfShownNewsEntries', '10');
+        $this->primeConfiguration([
+            'records.numberOfShownNewsEntries' => '10',
+        ]);
 
         $result = $this->news->getLatestData(false, true, true);
 
@@ -439,5 +442,12 @@ class NewsTest extends TestCase
 
         $this->assertTrue($result['active']);
         $this->assertFalse($result['allowComments']);
+    }
+
+    private function primeConfiguration(array $values): void
+    {
+        $reflection = new ReflectionProperty($this->configuration, 'config');
+        $config = $reflection->getValue($this->configuration);
+        $reflection->setValue($this->configuration, array_merge($config, $values));
     }
 }
