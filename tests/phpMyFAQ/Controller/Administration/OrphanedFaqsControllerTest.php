@@ -103,14 +103,16 @@ final class OrphanedFaqsControllerTest extends TestCase
     public function testIndexRendersOrphanedFaqsTable(): void
     {
         $adminFaq = $this->createMock(AdminFaq::class);
-        $adminFaq->method('getOrphanedFaqs')->willReturn([
-            [
-                'faqId' => 23,
-                'language' => 'en',
-                'question' => 'Orphaned entry',
-                'url' => 'https://localhost/admin/faq/edit/23',
-            ],
-        ]);
+        $adminFaq
+            ->method('getOrphanedFaqs')
+            ->willReturn([
+                [
+                    'faqId' => 23,
+                    'language' => 'en',
+                    'question' => 'Orphaned entry',
+                    'url' => 'https://localhost/admin/faq/edit/23',
+                ],
+            ]);
 
         $controller = new OrphanedFaqsController($adminFaq);
         $controller->setContainer($this->createControllerContainer());
@@ -120,7 +122,10 @@ final class OrphanedFaqsControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringContainsString('Orphaned entry', (string) $response->getContent());
         self::assertStringContainsString('https://localhost/admin/faq/edit/23', (string) $response->getContent());
-        self::assertStringContainsString('These FAQs are not assigned to any category.', (string) $response->getContent());
+        self::assertStringContainsString(
+            'These FAQs are not assigned to any category.',
+            (string) $response->getContent(),
+        );
     }
 
     private function createControllerContainer(): ContainerInterface
@@ -137,7 +142,7 @@ final class OrphanedFaqsControllerTest extends TestCase
             ->method('getUserData')
             ->willReturnMap([
                 ['display_name', 'Admin User'],
-                ['email', 'admin@example.com'],
+                ['email',        'admin@example.com'],
             ]);
 
         $session = new Session(new MockArraySessionStorage());
@@ -148,16 +153,18 @@ final class OrphanedFaqsControllerTest extends TestCase
         $adminHelper->method('setUser')->willReturnSelf();
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('get')->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog, $adminHelper) {
-            return match ($id) {
-                'phpmyfaq.configuration' => $this->configuration,
-                'phpmyfaq.user.current_user' => $currentUser,
-                'session' => $session,
-                'phpmyfaq.admin.admin-log' => $adminLog,
-                'phpmyfaq.admin.helper' => $adminHelper,
-                default => null,
-            };
-        });
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog, $adminHelper) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    'phpmyfaq.admin.helper' => $adminHelper,
+                    default => null,
+                };
+            });
 
         return $container;
     }

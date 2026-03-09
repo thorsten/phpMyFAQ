@@ -98,7 +98,7 @@ final class InstanceController extends AbstractController
 
         $faqInstanceClient = new Client($this->configuration);
         $faqInstanceClient->createClient($this->instance);
-        $faqInstanceClient->setFileSystem(new Filesystem());
+        $faqInstanceClient->setFileSystem(new Filesystem(PMF_ROOT_DIR));
 
         $urlParts = parse_url($data->getUrl());
         $hostname = $urlParts['host'];
@@ -107,13 +107,6 @@ final class InstanceController extends AbstractController
             $clientDir = PMF_ROOT_DIR . '/multisite/' . $hostname;
             $clientSetup = new Setup();
             $clientSetup->setRootDir($clientDir);
-
-            try {
-                $faqInstanceClient->copyConstantsFile($clientDir . '/constants.php');
-            } catch (Exception $e) {
-                return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
-            }
-
             $databaseConfiguration = new DatabaseConfiguration(PMF_CONFIG_DIR . '/database.php');
             $dbSetup = [
                 'dbServer' => $databaseConfiguration->getServer(),
@@ -124,31 +117,36 @@ final class InstanceController extends AbstractController
                 'dbPrefix' => substr($hostname, offset: 0, length: strpos($hostname, needle: '.')),
                 'dbType' => $databaseConfiguration->getType(),
             ];
-            $clientSetup->createDatabaseFile($dbSetup, '');
 
-            $faqInstanceClient->setClientUrl('https://' . $hostname);
-            $faqInstanceClient->createClientTables($dbSetup['dbPrefix']);
-
-            Database::setTablePrefix($dbSetup['dbPrefix']);
-
-            // add an admin account and rights
-            $user = new User($this->configuration);
-            $user->createUser($admin, $password, '', 1);
-            $user->setStatus('protected');
-            $instanceAdminData = [
-                'display_name' => '',
-                'email' => $email,
-            ];
-            $user->setUserData($instanceAdminData);
-
-            // Add an anonymous user account
             try {
-                $clientSetup->createAnonymousUser($this->configuration);
-            } catch (Exception $e) {
-                return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
-            }
+                $faqInstanceClient->copyConstantsFile($clientDir . '/constants.php');
+                $clientSetup->createDatabaseFile($dbSetup, '');
 
-            Database::setTablePrefix($databaseConfiguration->getPrefix());
+                $faqInstanceClient->setClientUrl('https://' . $hostname);
+                $faqInstanceClient->createClientTables($dbSetup['dbPrefix']);
+
+                Database::setTablePrefix($dbSetup['dbPrefix']);
+
+                // add an admin account and rights
+                $user = new User($this->configuration);
+                $user->createUser($admin, $password, '', 1);
+                $user->setStatus('protected');
+                $instanceAdminData = [
+                    'display_name' => '',
+                    'email' => $email,
+                ];
+                $user->setUserData($instanceAdminData);
+
+                // Add an anonymous user account
+                $clientSetup->createAnonymousUser($this->configuration);
+            } catch (\Throwable $e) {
+                $this->instance->delete($instanceId);
+                $faqInstanceClient->deleteClientFolder('https://' . $hostname);
+
+                return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+            } finally {
+                Database::setTablePrefix($databaseConfiguration->getPrefix());
+            }
         }
 
         if (!$faqInstanceClient->createClientFolder($hostname)) {

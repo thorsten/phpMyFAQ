@@ -104,20 +104,25 @@ final class AbstractFrontControllerRenderTest extends TestCase
         $session = new Session(new MockArraySessionStorage());
         $session->getFlashBag()->add('success', 'Saved');
         $session->getFlashBag()->add('error', 'Failed');
-        $controller->setContainer($this->createControllerContainer($session, [
-            'main.maintenanceMode' => true,
-            'security.enableLoginOnly' => true,
-            'seo.enableRichSnippets' => true,
-            'layout.enableCookieConsent' => true,
-            'security.enableRegistration' => true,
-            'main.enableAskQuestions' => true,
-            'layout.enablePrivacyLink' => true,
-            'main.termsURL' => 'https://example.com/terms',
-            'main.imprintURL' => 'https://example.com/imprint',
-            'main.accessibilityStatementURL' => 'https://example.com/a11y',
-            'push.enableWebPush' => 'true',
-            'push.vapidPublicKey' => 'public-key',
-        ], true, true));
+        $controller->setContainer($this->createControllerContainer(
+            $session,
+            [
+                'main.maintenanceMode' => true,
+                'security.enableLoginOnly' => true,
+                'seo.enableRichSnippets' => true,
+                'layout.enableCookieConsent' => true,
+                'security.enableRegistration' => true,
+                'main.enableAskQuestions' => true,
+                'layout.enablePrivacyLink' => true,
+                'main.termsURL' => 'https://example.com/terms',
+                'main.imprintURL' => 'https://example.com/imprint',
+                'main.accessibilityStatementURL' => 'https://example.com/a11y',
+                'push.enableWebPush' => 'true',
+                'push.vapidPublicKey' => 'public-key',
+            ],
+            true,
+            true,
+        ));
 
         $request = Request::create('https://localhost/index.php?action=show');
         $header = $controller->fetchHeader($request);
@@ -149,10 +154,15 @@ final class AbstractFrontControllerRenderTest extends TestCase
     public function testHeaderOmitsUserDropdownForGuests(): void
     {
         $controller = new AbstractFrontControllerRenderTestStub();
-        $controller->setContainer($this->createControllerContainer(new Session(new MockArraySessionStorage()), [
-            'push.enableWebPush' => false,
-            'push.vapidPublicKey' => '',
-        ], false, false));
+        $controller->setContainer($this->createControllerContainer(
+            new Session(new MockArraySessionStorage()),
+            [
+                'push.enableWebPush' => false,
+                'push.vapidPublicKey' => '',
+            ],
+            false,
+            false,
+        ));
 
         $request = Request::create('https://localhost/index.php?action=index');
         $header = $controller->fetchHeader($request);
@@ -175,7 +185,7 @@ final class AbstractFrontControllerRenderTest extends TestCase
             new Session(new MockArraySessionStorage()),
             ['main.privacyURL' => 'https://example.com/privacy'],
             false,
-            false
+            false,
         ));
 
         $response = $controller->redirectStaticPage('main.privacyURL');
@@ -194,7 +204,7 @@ final class AbstractFrontControllerRenderTest extends TestCase
             new Session(new MockArraySessionStorage()),
             ['main.privacyURL' => ''],
             false,
-            false
+            false,
         ));
 
         $response = $controller->redirectStaticPage('main.privacyURL');
@@ -207,7 +217,7 @@ final class AbstractFrontControllerRenderTest extends TestCase
         Session $session,
         array $configurationValues,
         bool $isLoggedIn,
-        bool $hasAdminPermission
+        bool $hasAdminPermission,
     ): ContainerInterface {
         $this->overrideConfigurationValues($configurationValues);
 
@@ -225,17 +235,20 @@ final class AbstractFrontControllerRenderTest extends TestCase
         $currentUser->method('isSuperAdmin')->willReturn(false);
         $currentUser->method('getUserId')->willReturn($isLoggedIn ? 1 : -1);
         $currentUser->method('getLogin')->willReturn('testuser');
-        $currentUser->method('getUserData')->willReturnMap([
-            ['display_name', $isLoggedIn ? 'Test User' : ''],
-            ['email', 'test@example.com'],
-        ]);
+        $currentUser
+            ->method('getUserData')
+            ->willReturnMap([
+                ['display_name', $isLoggedIn ? 'Test User' : ''],
+                ['email', 'test@example.com'],
+            ]);
 
         $system = new System();
         $seo = new Seo($this->configuration);
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('get')->willReturnCallback(
-            function (string $id) use ($currentUser, $session, $system, $seo): mixed {
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $system, $seo): mixed {
                 return match ($id) {
                     'phpmyfaq.configuration' => $this->configuration,
                     'phpmyfaq.user.current_user' => $currentUser,
@@ -244,8 +257,7 @@ final class AbstractFrontControllerRenderTest extends TestCase
                     'phpmyfaq.seo' => $seo,
                     default => null,
                 };
-            }
-        );
+            });
 
         return $container;
     }

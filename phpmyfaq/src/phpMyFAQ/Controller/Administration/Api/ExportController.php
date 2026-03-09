@@ -149,7 +149,7 @@ final class ExportController extends AbstractController
         foreach ($report->getReportingData() as $reportData) {
             $i = $reportData['faq_id'];
             if ($hasDataField(payload: $data, field: 'category') && array_key_exists('category_name', $reportData)) {
-                $text[$i][] = Report::sanitize($report->convertEncoding($reportData['category_name']));
+                $text[$i][] = Report::sanitize($report->convertEncoding((string) ($reportData['category_name'] ?? '')));
                 if (0 !== $reportData['category_parent']) {
                     $text[$i][] = Report::sanitize($reportData['category_parent']);
                 }
@@ -158,7 +158,9 @@ final class ExportController extends AbstractController
             if ($hasDataField(payload: $data, field: 'sub_category')) {
                 $text[$i][] = 'n/a';
                 if (0 !== $reportData['category_parent']) {
-                    $text[$i][] = Report::sanitize($report->convertEncoding($reportData['category_name']));
+                    $text[$i][] = Report::sanitize($report->convertEncoding(
+                        (string) ($reportData['category_name'] ?? ''),
+                    ));
                 }
             }
 

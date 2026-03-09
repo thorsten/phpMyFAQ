@@ -274,7 +274,7 @@ final class InstanceControllerTest extends TestCase
         );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode(), json_encode($payload, JSON_THROW_ON_ERROR));
         self::assertSame($instanceId, $payload['deleted']);
         self::assertDirectoryDoesNotExist($clientFolder);
         self::assertNull($this->fetchInstanceById($instanceId));
@@ -334,6 +334,43 @@ final class InstanceControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertSame('Cannot create instance: wrong URL', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAddReturnsBadRequestWhenTenantProvisioningFails(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'add-instance');
+
+        $tenantPrefix = 'codexinst' . substr(md5((string) microtime(true)), 0, 6);
+        $tenantHost = $tenantPrefix . '.localhost';
+        $tenantDir = PMF_ROOT_DIR . '/multisite/' . $tenantHost;
+        if (is_dir($tenantDir)) {
+            $this->removeDirectory($tenantDir);
+        }
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->add(new Request(server: ['HTTP_HOST' => 'localhost'], content: json_encode([
+            'csrf' => $token,
+            'url' => $tenantPrefix,
+            'instance' => 'Unit Test Instance',
+            'comment' => 'Unit Test Comment',
+            'email' => 'admin@example.com',
+            'admin' => 'admin',
+            'password' => 'password',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertArrayHasKey('error', $payload);
+        self::assertNotSame('', (string) $payload['error']);
+        self::assertDirectoryDoesNotExist($tenantDir);
     }
 
     /**
@@ -412,5 +449,28 @@ final class InstanceControllerTest extends TestCase
         $instance = $this->dbHandle->fetchObject($result);
 
         return $instance === false ? null : $instance;
+    }
+
+    private function removeDirectory(string $directory): void
+    {
+        if (!is_dir($directory)) {
+            return;
+        }
+
+        $entries = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($directory, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST,
+        );
+
+        foreach ($entries as $entry) {
+            if ($entry->isDir()) {
+                rmdir($entry->getPathname());
+                continue;
+            }
+
+            unlink($entry->getPathname());
+        }
+
+        rmdir($directory);
     }
 }

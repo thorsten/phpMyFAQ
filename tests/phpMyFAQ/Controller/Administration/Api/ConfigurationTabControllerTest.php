@@ -286,7 +286,7 @@ final class ConfigurationTabControllerTest extends TestCase
     public function testHelperEndpointsReturnRenderedOptionMarkup(
         string $method,
         string $currentValue,
-        string $expectedContent
+        string $expectedContent,
     ): void {
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer());
@@ -323,9 +323,8 @@ final class ConfigurationTabControllerTest extends TestCase
 
     private function createAuthenticatedContainerWithAdminLog(
         AdminLog $adminLog,
-        ?Session $session = null
-    ): ContainerInterface
-    {
+        ?Session $session = null,
+    ): ContainerInterface {
         $permission = $this->createMock(PermissionInterface::class);
         $permission
             ->method('hasPermission')
@@ -395,7 +394,8 @@ final class ConfigurationTabControllerTest extends TestCase
         $uploadedFile = new UploadedFile($archive, 'my-theme.zip', 'application/zip', null, true);
 
         $themeManager = $this->createMock(ThemeManager::class);
-        $themeManager->expects($this->once())
+        $themeManager
+            ->expects($this->once())
             ->method('uploadTheme')
             ->with('custom-theme', $uploadedFile->getPathname())
             ->willReturn(5);
@@ -433,7 +433,8 @@ final class ConfigurationTabControllerTest extends TestCase
         $uploadedFile = new UploadedFile($archive, 'broken-theme.zip', 'application/zip', null, true);
 
         $themeManager = $this->createMock(ThemeManager::class);
-        $themeManager->expects($this->once())
+        $themeManager
+            ->expects($this->once())
             ->method('uploadTheme')
             ->willThrowException(new \RuntimeException('Theme archive invalid.'));
 
@@ -494,21 +495,18 @@ final class ConfigurationTabControllerTest extends TestCase
         $adminLog
             ->expects($this->exactly(5))
             ->method('log')
-            ->with(
-                $this->anything(),
-                $this->callback(static function (string $message): bool {
-                    static $expectedFragments = [
-                        'config-change',
-                        'system-maintenance-mode-enabled',
-                        'config-security-changed',
-                        'config-ldap-changed',
-                        'config-sso-changed',
-                    ];
+            ->with($this->anything(), $this->callback(static function (string $message): bool {
+                static $expectedFragments = [
+                    'config-change',
+                    'system-maintenance-mode-enabled',
+                    'config-security-changed',
+                    'config-ldap-changed',
+                    'config-sso-changed',
+                ];
 
-                    $expectedFragment = array_shift($expectedFragments);
-                    return $expectedFragment !== null && str_contains($message, $expectedFragment);
-                }),
-            );
+                $expectedFragment = array_shift($expectedFragments);
+                return $expectedFragment !== null && str_contains($message, $expectedFragment);
+            }));
 
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainerWithAdminLog($adminLog, $session));

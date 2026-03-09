@@ -128,7 +128,7 @@ final class CategoryControllerTest extends TestCase
     private function createControllerWithDependencies(
         Image $categoryImage,
         Order $categoryOrder,
-        Permission $categoryPermission
+        Permission $categoryPermission,
     ): CategoryController {
         return new CategoryController($categoryImage, $categoryOrder, $categoryPermission);
     }
@@ -394,10 +394,8 @@ final class CategoryControllerTest extends TestCase
      */
     public function testDeleteReturnsSuccessForValidCsrfWhenAuthenticated(): void
     {
-        $this->configuration->getDb()->query(
-            "INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
-             VALUES (99, 'en', 0, 'Delete Me', '', 1, -1, 1, '', 0)"
-        );
+        $this->configuration->getDb()->query("INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
+             VALUES (99, 'en', 0, 'Delete Me', '', 1, -1, 1, '', 0)");
 
         $session = new Session(new MockArraySessionStorage());
         $csrfToken = Token::getInstance($session)->getTokenString('category');
@@ -411,9 +409,7 @@ final class CategoryControllerTest extends TestCase
         $categoryOrder->expects($this->once())->method('remove')->with(99);
 
         $categoryPermission = $this->createMock(Permission::class);
-        $categoryPermission->expects($this->exactly(2))
-            ->method('delete')
-            ->willReturn(true);
+        $categoryPermission->expects($this->exactly(2))->method('delete')->willReturn(true);
 
         $controller = $this->createControllerWithDependencies($categoryImage, $categoryOrder, $categoryPermission);
         $controller->setContainer($this->createAuthenticatedContainer($session));

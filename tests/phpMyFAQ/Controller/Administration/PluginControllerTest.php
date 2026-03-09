@@ -103,15 +103,24 @@ final class PluginControllerTest extends TestCase
     {
         $pluginManager = $this->createMock(PluginManager::class);
         $pluginManager->expects($this->once())->method('loadPlugins');
-        $pluginManager->method('getPlugins')->willReturn([
-            ['name' => 'Example Plugin', 'version' => '1.0.0', 'author' => 'Team', 'description' => 'Active plugin'],
-        ]);
-        $pluginManager->method('getIncompatiblePlugins')->willReturn([
-            'broken' => [
-                'plugin' => ['name' => 'Broken Plugin', 'version' => '0.1.0', 'author' => 'Legacy'],
-                'reason' => 'Requires older API',
-            ],
-        ]);
+        $pluginManager
+            ->method('getPlugins')
+            ->willReturn([
+                [
+                    'name' => 'Example Plugin',
+                    'version' => '1.0.0',
+                    'author' => 'Team',
+                    'description' => 'Active plugin',
+                ],
+            ]);
+        $pluginManager
+            ->method('getIncompatiblePlugins')
+            ->willReturn([
+                'broken' => [
+                    'plugin' => ['name' => 'Broken Plugin', 'version' => '0.1.0', 'author' => 'Legacy'],
+                    'reason' => 'Requires older API',
+                ],
+            ]);
 
         $controller = new PluginController($pluginManager);
         $controller->setContainer($this->createControllerContainer());
@@ -136,10 +145,12 @@ final class PluginControllerTest extends TestCase
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('isSuperAdmin')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(99);
-        $currentUser->method('getUserData')->willReturnMap([
-            ['display_name', 'Admin User'],
-            ['email', 'admin@example.com'],
-        ]);
+        $currentUser
+            ->method('getUserData')
+            ->willReturnMap([
+                ['display_name', 'Admin User'],
+                ['email',        'admin@example.com'],
+            ]);
 
         $session = new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);
@@ -149,16 +160,18 @@ final class PluginControllerTest extends TestCase
         $adminHelper->method('setUser')->willReturnSelf();
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('get')->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog, $adminHelper) {
-            return match ($id) {
-                'phpmyfaq.configuration' => $this->configuration,
-                'phpmyfaq.user.current_user' => $currentUser,
-                'session' => $session,
-                'phpmyfaq.admin.admin-log' => $adminLog,
-                'phpmyfaq.admin.helper' => $adminHelper,
-                default => null,
-            };
-        });
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog, $adminHelper) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    'phpmyfaq.admin.helper' => $adminHelper,
+                    default => null,
+                };
+            });
 
         return $container;
     }

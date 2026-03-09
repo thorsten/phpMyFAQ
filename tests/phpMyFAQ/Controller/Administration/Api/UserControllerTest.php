@@ -813,20 +813,17 @@ final class UserControllerTest extends TestCase
         $adminLog
             ->expects($this->exactly(4))
             ->method('log')
-            ->with(
-                $this->anything(),
-                $this->callback(static function (string $message): bool {
-                    static $expectedFragments = [
-                        'auth-2fa-reset:',
-                        'user-status-changed:',
-                        'user-superadmin-granted:',
-                        'user-edit:',
-                    ];
+            ->with($this->anything(), $this->callback(static function (string $message): bool {
+                static $expectedFragments = [
+                    'auth-2fa-reset:',
+                    'user-status-changed:',
+                    'user-superadmin-granted:',
+                    'user-edit:',
+                ];
 
-                    $expectedFragment = array_shift($expectedFragments);
-                    return $expectedFragment !== null && str_contains($message, $expectedFragment);
-                }),
-            );
+                $expectedFragment = array_shift($expectedFragments);
+                return $expectedFragment !== null && str_contains($message, $expectedFragment);
+            }));
 
         $container = $this->createAuthenticatedContainerWithAdminLog($adminLog);
         $session = $container->get('session');
@@ -992,5 +989,4 @@ final class UserControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertArrayHasKey('success', $payload);
     }
-
 }

@@ -42,7 +42,7 @@ final readonly class AttachmentService
      *
      * @throws AttachmentException
      */
-    public function getAttachment(int $attachmentId): \phpMyFAQ\Attachment\File
+    public function getAttachment(int $attachmentId): File
     {
         return AttachmentFactory::create($attachmentId);
     }

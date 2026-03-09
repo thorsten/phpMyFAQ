@@ -132,10 +132,12 @@ final class SystemInformationControllerTest extends TestCase
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('isSuperAdmin')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(99);
-        $currentUser->method('getUserData')->willReturnMap([
-            ['display_name', 'Admin User'],
-            ['email', 'admin@example.com'],
-        ]);
+        $currentUser
+            ->method('getUserData')
+            ->willReturnMap([
+                ['display_name', 'Admin User'],
+                ['email',        'admin@example.com'],
+            ]);
 
         $session = new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);
@@ -145,16 +147,18 @@ final class SystemInformationControllerTest extends TestCase
         $adminHelper->method('setUser')->willReturnSelf();
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('get')->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog, $adminHelper) {
-            return match ($id) {
-                'phpmyfaq.configuration' => $this->configuration,
-                'phpmyfaq.user.current_user' => $currentUser,
-                'session' => $session,
-                'phpmyfaq.admin.admin-log' => $adminLog,
-                'phpmyfaq.admin.helper' => $adminHelper,
-                default => null,
-            };
-        });
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog, $adminHelper) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    'phpmyfaq.admin.helper' => $adminHelper,
+                    default => null,
+                };
+            });
 
         return $container;
     }

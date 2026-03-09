@@ -40,6 +40,9 @@ class MediumPermissionTest extends TestCase
         $this->dbHandle->connect($this->databasePath, '', '');
         $this->initializeDatabaseStatics($this->dbHandle);
         $this->configuration = new Configuration($this->dbHandle);
+        $this->dbHandle->query('DELETE FROM faqgroup_right');
+        $this->dbHandle->query('DELETE FROM faquser_group');
+        $this->dbHandle->query('DELETE FROM faqgroup');
 
         $this->mediumPermission = new MediumPermission($this->configuration);
     }

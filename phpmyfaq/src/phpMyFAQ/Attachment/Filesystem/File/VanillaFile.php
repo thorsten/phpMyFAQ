@@ -36,7 +36,7 @@ class VanillaFile extends AbstractFile
     /**
      * @inheritdoc
      */
-    public function putChunk(string $chunk): bool
+    public function putChunk(string $chunk): int|bool
     {
         return fwrite($this->handle, $chunk);
     }

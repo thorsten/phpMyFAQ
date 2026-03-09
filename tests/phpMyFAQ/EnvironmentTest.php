@@ -45,7 +45,7 @@ class EnvironmentTest extends TestCase
     private function withHandlerCleanup(callable $fn): void
     {
         // Capture current handler count by setting temporary handlers
-        $origError = set_error_handler(static fn () => false);
+        $origError = set_error_handler(static fn() => false);
         restore_error_handler();
         $origException = set_exception_handler(null);
         restore_exception_handler();
@@ -55,7 +55,7 @@ class EnvironmentTest extends TestCase
         // Remove handlers added by setupDebugMode by restoring until we get back to the original
         // Pop error handlers until we get back to original
         while (true) {
-            $current = set_error_handler(static fn () => false);
+            $current = set_error_handler(static fn() => false);
             restore_error_handler();
             if ($current === $origError) {
                 break;

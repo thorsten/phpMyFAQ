@@ -103,17 +103,19 @@ final class RatingControllerTest extends TestCase
     public function testIndexRendersRatingsAndCategories(): void
     {
         $ratingData = $this->createMock(RatingData::class);
-        $ratingData->method('getAll')->willReturn([
-            [
-                'id' => 5,
-                'lang' => 'en',
-                'url' => 'https://localhost/faq/5',
-                'question' => 'First rated FAQ',
-                'user' => 12,
-                'number' => 4,
-                'category_id' => 1,
-            ],
-        ]);
+        $ratingData
+            ->method('getAll')
+            ->willReturn([
+                [
+                    'id' => 5,
+                    'lang' => 'en',
+                    'url' => 'https://localhost/faq/5',
+                    'question' => 'First rated FAQ',
+                    'user' => 12,
+                    'number' => 4,
+                    'category_id' => 1,
+                ],
+            ]);
 
         $controller = new RatingController($ratingData);
         $controller->setContainer($this->createControllerContainer());
@@ -154,10 +156,12 @@ final class RatingControllerTest extends TestCase
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('isSuperAdmin')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(1);
-        $currentUser->method('getUserData')->willReturnMap([
-            ['display_name', 'Admin User'],
-            ['email', 'admin@example.com'],
-        ]);
+        $currentUser
+            ->method('getUserData')
+            ->willReturnMap([
+                ['display_name', 'Admin User'],
+                ['email',        'admin@example.com'],
+            ]);
 
         $session = new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);
@@ -167,16 +171,18 @@ final class RatingControllerTest extends TestCase
         $adminHelper->method('setUser')->willReturnSelf();
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('get')->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog, $adminHelper) {
-            return match ($id) {
-                'phpmyfaq.configuration' => $this->configuration,
-                'phpmyfaq.user.current_user' => $currentUser,
-                'session' => $session,
-                'phpmyfaq.admin.admin-log' => $adminLog,
-                'phpmyfaq.admin.helper' => $adminHelper,
-                default => null,
-            };
-        });
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog, $adminHelper) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    'phpmyfaq.admin.helper' => $adminHelper,
+                    default => null,
+                };
+            });
 
         return $container;
     }

@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Attachment\Filesystem\File;
 
-use phpMyFAQ\Attachment\File;
 use phpMyFAQ\Attachment\Filesystem\AbstractFile;
 use phpseclib3\Crypt\AES;
 
@@ -28,7 +27,7 @@ use phpseclib3\Crypt\AES;
  *
  * @package phpMyFAQ\Attachment\Filesystem\File
  */
-class EncryptedFile extends File
+class EncryptedFile extends AbstractFile
 {
     /**
      * Chunk delimiter.
@@ -40,18 +39,13 @@ class EncryptedFile extends File
      */
     protected AES $aes;
 
-    /** @var resource */
-    private $handle;
-
-    /**
-     * @param string $filepath
-     */
-    public function __construct(mixed $filepath, string $mode, string $key)
+    public function __construct(string $filepath, string $mode, string $key)
     {
-        $this->aes = new AES($mode);
+        $this->aes = new AES('cbc');
         $this->aes->setKey($key);
+        $this->aes->setIV(substr(hash('sha256', $key, true), 0, 16));
 
-        parent::__construct($filepath);
+        parent::__construct($filepath, $mode);
     }
 
     public function putChunk(string $chunk): int|false
@@ -64,15 +58,13 @@ class EncryptedFile extends File
     /**
      * @throws FileException
      */
-    public function copyTo(string $target): bool
+    public function copyTo(object|string $target): bool
     {
         $return = false;
 
         if (is_string($target)) {
             $target = new VanillaFile($target, AbstractFile::MODE_WRITE);
-        }
-
-        if (!is_string($target)) {
+        } else {
             $target->setMode(AbstractFile::MODE_WRITE);
         }
 

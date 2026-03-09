@@ -45,7 +45,7 @@ class File extends AbstractAttachment implements AttachmentInterface
     protected function buildFilePath(): string
     {
         $storagePath = $this->buildStoragePath();
-        $attachmentPath = PMF_ATTACHMENTS_DIR;
+        $attachmentPath = defined('PMF_ATTACHMENTS_DIR') ? PMF_ATTACHMENTS_DIR : sys_get_temp_dir();
 
         return $attachmentPath . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $storagePath);
     }
@@ -96,12 +96,15 @@ class File extends AbstractAttachment implements AttachmentInterface
             return true;
         }
 
+        if (!defined('PMF_ATTACHMENTS_DIR')) {
+            return false;
+        }
+
         clearstatcache();
         $attachmentDir = dirname($this->buildFilePath());
 
         return (
-            false !== PMF_ATTACHMENTS_DIR
-            && file_exists(PMF_ATTACHMENTS_DIR)
+            file_exists(PMF_ATTACHMENTS_DIR)
             && is_dir(PMF_ATTACHMENTS_DIR)
             && file_exists($attachmentDir)
             && is_dir($attachmentDir)
@@ -262,9 +265,6 @@ class File extends AbstractAttachment implements AttachmentInterface
         }
 
         $configuration = Configuration::getConfigurationInstance();
-        if ($configuration === null) {
-            throw new AttachmentException('Storage cannot be initialized without configuration.');
-        }
 
         $this->storage = new StorageFactory($configuration)->create();
 

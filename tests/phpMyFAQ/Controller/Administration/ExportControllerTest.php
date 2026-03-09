@@ -101,18 +101,16 @@ final class ExportControllerTest extends TestCase
      */
     public function testIndexRendersExportFormWhenFaqsAndCategoriesExist(): void
     {
-        $this->configuration->getDb()->query(
-            "INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
-             VALUES (1, 'en', 0, 'Export Category', '', 1, -1, 1, '', 0)"
-        );
-        $this->configuration->getDb()->query(
-            "INSERT INTO faqdata (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
-             VALUES (1, 'en', 1000, 0, 'yes', 0, '', 'Export FAQ', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')"
-        );
-        $this->configuration->getDb()->query(
-            "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
-             VALUES (1, 'en', 1, 'en')"
-        );
+        $this->configuration->getDb()->query("INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
+             VALUES (1, 'en', 0, 'Export Category', '', 1, -1, 1, '', 0)");
+        $this->configuration
+            ->getDb()
+            ->query(
+                "INSERT INTO faqdata (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
+             VALUES (1, 'en', 1000, 0, 'yes', 0, '', 'Export FAQ', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
+            );
+        $this->configuration->getDb()->query("INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
+             VALUES (1, 'en', 1, 'en')");
 
         $categoryHelper = $this->createMock(CategoryHelper::class);
         $categoryHelper->expects($this->once())->method('setCategory');
@@ -141,10 +139,12 @@ final class ExportControllerTest extends TestCase
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('isSuperAdmin')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(99);
-        $currentUser->method('getUserData')->willReturnMap([
-            ['display_name', 'Admin User'],
-            ['email', 'admin@example.com'],
-        ]);
+        $currentUser
+            ->method('getUserData')
+            ->willReturnMap([
+                ['display_name', 'Admin User'],
+                ['email',        'admin@example.com'],
+            ]);
 
         $session = new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);
@@ -154,16 +154,18 @@ final class ExportControllerTest extends TestCase
         $adminHelper->method('setUser')->willReturnSelf();
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('get')->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog, $adminHelper) {
-            return match ($id) {
-                'phpmyfaq.configuration' => $this->configuration,
-                'phpmyfaq.user.current_user' => $currentUser,
-                'session' => $session,
-                'phpmyfaq.admin.admin-log' => $adminLog,
-                'phpmyfaq.admin.helper' => $adminHelper,
-                default => null,
-            };
-        });
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog, $adminHelper) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    'phpmyfaq.admin.helper' => $adminHelper,
+                    default => null,
+                };
+            });
 
         return $container;
     }

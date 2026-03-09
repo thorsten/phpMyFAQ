@@ -45,13 +45,7 @@ class GoogleRecaptcha implements CaptchaInterface
             $code,
         );
 
-        $response = false;
-        set_error_handler(static fn() => true);
-        try {
-            $response = file_get_contents($url);
-        } finally {
-            restore_error_handler();
-        }
+        $response = $this->fetchUrl($url);
 
         if (!is_string($response) || $response === '') {
             return false;
@@ -64,6 +58,22 @@ class GoogleRecaptcha implements CaptchaInterface
         }
 
         return is_array($decoded) && ($decoded['success'] ?? false) === true;
+    }
+
+    /**
+     * Fetch the contents of a URL.
+     */
+    protected function fetchUrl(string $url): string|false
+    {
+        $response = false;
+        set_error_handler(static fn() => true);
+        try {
+            $response = file_get_contents($url);
+        } finally {
+            restore_error_handler();
+        }
+
+        return $response;
     }
 
     public function isUserIsLoggedIn(): bool

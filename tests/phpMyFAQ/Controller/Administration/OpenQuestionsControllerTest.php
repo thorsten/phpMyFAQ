@@ -103,18 +103,28 @@ final class OpenQuestionsControllerTest extends TestCase
     public function testIndexRendersCurrentAndOtherLanguageQuestions(): void
     {
         $question = $this->createMock(Question::class);
-        $question->method('getAll')->willReturnCallback(function (bool $all = false): array {
-            if ($all) {
+        $question
+            ->method('getAll')
+            ->willReturnCallback(function (bool $all = false): array {
+                if ($all) {
+                    return [
+                        $this->createQuestionEntity(
+                            1,
+                            'en',
+                            'Question in English',
+                            'John',
+                            'john@example.com',
+                            true,
+                            0,
+                        ),
+                        $this->createQuestionEntity(2, 'de', 'Frage auf Deutsch', 'Anna', 'anna@example.com', false, 5),
+                    ];
+                }
+
                 return [
                     $this->createQuestionEntity(1, 'en', 'Question in English', 'John', 'john@example.com', true, 0),
-                    $this->createQuestionEntity(2, 'de', 'Frage auf Deutsch', 'Anna', 'anna@example.com', false, 5),
                 ];
-            }
-
-            return [
-                $this->createQuestionEntity(1, 'en', 'Question in English', 'John', 'john@example.com', true, 0),
-            ];
-        });
+            });
 
         $controller = new OpenQuestionsController($question);
         $controller->setContainer($this->createControllerContainer());
@@ -140,10 +150,12 @@ final class OpenQuestionsControllerTest extends TestCase
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('isSuperAdmin')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(99);
-        $currentUser->method('getUserData')->willReturnMap([
-            ['display_name', 'Admin User'],
-            ['email', 'admin@example.com'],
-        ]);
+        $currentUser
+            ->method('getUserData')
+            ->willReturnMap([
+                ['display_name', 'Admin User'],
+                ['email',        'admin@example.com'],
+            ]);
 
         $session = new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);
@@ -153,16 +165,18 @@ final class OpenQuestionsControllerTest extends TestCase
         $adminHelper->method('setUser')->willReturnSelf();
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('get')->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog, $adminHelper) {
-            return match ($id) {
-                'phpmyfaq.configuration' => $this->configuration,
-                'phpmyfaq.user.current_user' => $currentUser,
-                'session' => $session,
-                'phpmyfaq.admin.admin-log' => $adminLog,
-                'phpmyfaq.admin.helper' => $adminHelper,
-                default => null,
-            };
-        });
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog, $adminHelper) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    'phpmyfaq.admin.helper' => $adminHelper,
+                    default => null,
+                };
+            });
 
         return $container;
     }

@@ -345,11 +345,7 @@ final class OpenSearchControllerTest extends TestCase
         $faq->faqRecords = [];
         $faq->expects($this->once())->method('getAllFaqs');
 
-        $controller = $this->createControllerWithDependencies(
-            $openSearch,
-            $faq,
-            $this->createStub(CustomPage::class),
-        );
+        $controller = $this->createControllerWithDependencies($openSearch, $faq, $this->createStub(CustomPage::class));
         $controller->setContainer($this->createAuthenticatedContainer());
 
         $response = $controller->import();
@@ -366,7 +362,8 @@ final class OpenSearchControllerTest extends TestCase
     {
         $openSearch = $this->createMock(OpenSearch::class);
         $openSearch->expects($this->once())->method('bulkIndex')->with([])->willReturn(['success' => true]);
-        $openSearch->expects($this->once())
+        $openSearch
+            ->expects($this->once())
             ->method('bulkIndexCustomPages')
             ->with([['id' => 7, 'title' => 'Page']])
             ->willReturn(['failure' => 'pages']);
@@ -395,7 +392,8 @@ final class OpenSearchControllerTest extends TestCase
     {
         $openSearch = $this->createMock(OpenSearch::class);
         $openSearch->expects($this->once())->method('bulkIndex')->with([])->willReturn(['success' => true]);
-        $openSearch->expects($this->once())
+        $openSearch
+            ->expects($this->once())
             ->method('bulkIndexCustomPages')
             ->with([['id' => 7, 'title' => 'Page']])
             ->willReturn(['success' => true]);

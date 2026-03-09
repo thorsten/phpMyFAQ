@@ -11,6 +11,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -43,6 +44,7 @@ final class AuthenticationControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Token::resetInstanceForTests();
 
         Strings::init();
 
@@ -80,6 +82,10 @@ final class AuthenticationControllerTest extends TestCase
 
     protected function tearDown(): void
     {
+        Token::resetInstanceForTests();
+        $_COOKIE = [];
+        $_SERVER['SCRIPT_NAME'] = '/admin/index.php';
+
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
         $configurationProperty->setValue(null, $this->previousConfiguration);
@@ -121,6 +127,34 @@ final class AuthenticationControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testAuthenticateRedirectsToDashboardWhenUserIsAlreadyLoggedIn(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(currentUser: $this->createLoggedInCurrentUser(), configurationValues: []));
+
+        $response = $controller->authenticate(new Request([], ['faqusername' => 'admin', 'faqpassword' => 'secret']));
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertSame('./', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAuthenticateRedirectsToLoginWhenAuthenticationFails(): void
+    {
+        $request = new Request([], ['faqusername' => 'missing-user', 'faqpassword' => 'wrong-password']);
+        $controller = $this->createController();
+
+        $response = $controller->authenticate($request);
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertSame('./login', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testLoginReturnsResponse(): void
     {
         $request = new Request();
@@ -142,6 +176,61 @@ final class AuthenticationControllerTest extends TestCase
 
         $this->expectException(UnauthorizedHttpException::class);
         $controller->logout($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testLogoutRedirectsToAdminLoginWhenCsrfIsValid(): void
+    {
+        $currentUser = $this->createLoggedInCurrentUser();
+        $currentUser->expects(self::once())->method('deleteFromSession')->with(true);
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = $this->seedAdminLogoutToken($session);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(
+            currentUser: $currentUser,
+            configurationValues: [],
+            session: $session,
+        ));
+
+        ob_start();
+        $response = $controller->logout(new Request(['csrf' => $csrfToken]));
+        ob_end_clean();
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertSame($this->configuration->getDefaultUrl() . 'admin/login', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testLogoutUsesSsoRedirectWhenConfigured(): void
+    {
+        $currentUser = $this->createLoggedInCurrentUser();
+        $currentUser->expects(self::once())->method('deleteFromSession')->with(true);
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = $this->seedAdminLogoutToken($session);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(
+            currentUser: $currentUser,
+            configurationValues: [
+                'security.ssoSupport' => true,
+                'security.ssoLogoutRedirect' => 'https://idp.example.test/logout',
+            ],
+            session: $session,
+        ));
+
+        ob_start();
+        $response = $controller->logout(new Request(['csrf' => $csrfToken]));
+        ob_end_clean();
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertSame($this->configuration->getDefaultUrl() . 'admin/login', $response->getTargetUrl());
     }
 
     /**
@@ -236,8 +325,33 @@ final class AuthenticationControllerTest extends TestCase
         self::assertSame('./', $response->getTargetUrl());
     }
 
-    private function createControllerContainer(CurrentUser $currentUser, array $configurationValues): ContainerInterface
+    /**
+     * @throws \Exception
+     */
+    public function testCheckRedirectsBackToTokenWhenTwoFactorTokenIsInvalid(): void
     {
+        $currentUserService = $this->createMock(CurrentUser::class);
+        $currentUserService->expects(self::once())->method('getUserById')->with(42);
+        $currentUserService->expects(self::never())->method('twoFactorSuccess');
+        $currentUserService->method('getLogin')->willReturn('admin');
+
+        $twoFactor = $this->createMock(TwoFactor::class);
+        $twoFactor->expects(self::once())->method('validateToken')->with('123456', 42)->willReturn(false);
+
+        $controller = new AuthenticationController($currentUserService, $twoFactor);
+        $controller->setContainer($this->createControllerContainer(currentUser: $this->createLoggedOutCurrentUser(), configurationValues: []));
+
+        $response = $controller->check(new Request([], ['token' => '123456', 'user-id' => '42']));
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertSame('./token?user-id=42', $response->getTargetUrl());
+    }
+
+    private function createControllerContainer(
+        CurrentUser $currentUser,
+        array $configurationValues,
+        ?Session $session = null,
+    ): ContainerInterface {
         $this->configuration->getAll();
 
         $reflection = new \ReflectionClass(Configuration::class);
@@ -248,7 +362,7 @@ final class AuthenticationControllerTest extends TestCase
         }
         $property->setValue($this->configuration, $config);
 
-        $session = new Session(new MockArraySessionStorage());
+        $session ??= new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);
 
         $container = $this->createStub(ContainerInterface::class);
@@ -265,6 +379,27 @@ final class AuthenticationControllerTest extends TestCase
             });
 
         return $container;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function seedAdminLogoutToken(Session $session): string
+    {
+        $_SERVER['SCRIPT_NAME'] = '/admin/index.php';
+
+        $tokenValue = 'test-admin-logout-token';
+        $token = new \ReflectionClass(Token::class)->newInstanceWithoutConstructor();
+        $token
+            ->setPage('admin-logout')
+            ->setExpiry(time() + 600)
+            ->setSessionToken($tokenValue)
+            ->setCookieToken($tokenValue);
+
+        $session->set(Token::PMF_SESSION_NAME . '.admin-logout', $token);
+        $_COOKIE[Token::PMF_SESSION_NAME . '-' . substr(md5('admin-logout'), 0, 10)] = $tokenValue;
+
+        return $tokenValue;
     }
 
     private function createLoggedOutCurrentUser(): CurrentUser
