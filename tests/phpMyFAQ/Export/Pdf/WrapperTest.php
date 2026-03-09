@@ -455,4 +455,390 @@ class WrapperTest extends TestCase
         $this->wrapper->categories = $categories;
         $this->assertEquals($categories, $this->wrapper->categories);
     }
+
+    public function testHeaderWithCategoryTitle(): void
+    {
+        $this->mockConfig->method('get')->willReturnCallback(
+            static fn(string $key) => match ($key) {
+                'main.customPdfHeader' => '',
+                'main.customPdfFooter' => '',
+                'main.metaPublisher' => 'Test',
+                'main.dateFormat' => 'Y-m-d H:i',
+                'spam.mailAddressInExport' => false,
+                default => null,
+            }
+        );
+        $this->mockConfig->method('getAdminEmail')->willReturn('admin@test.com');
+        $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
+
+        $this->wrapper->setConfig($this->mockConfig);
+        $this->wrapper->setCategories([1 => ['id' => 1, 'name' => 'Test Category']]);
+        $this->wrapper->setCategory(1);
+
+        $this->wrapper->Open();
+        $this->wrapper->AddPage();
+        $output = $this->wrapper->Output('test.pdf', 'S');
+
+        $this->assertStringStartsWith('%PDF', $output);
+    }
+
+    public function testHeaderWithCustomHeader(): void
+    {
+        $this->mockConfig->method('get')->willReturnCallback(
+            static fn(string $key) => match ($key) {
+                'main.customPdfHeader' => '<b>Custom Header</b>',
+                'main.customPdfFooter' => '',
+                'main.metaPublisher' => 'Test',
+                'main.dateFormat' => 'Y-m-d H:i',
+                'spam.mailAddressInExport' => false,
+                default => null,
+            }
+        );
+        $this->mockConfig->method('getAdminEmail')->willReturn('admin@test.com');
+        $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
+
+        $this->wrapper->setConfig($this->mockConfig);
+        $this->wrapper->setCategories([1 => ['id' => 1, 'name' => 'Category']]);
+        $this->wrapper->setCategory(1);
+
+        $this->wrapper->Open();
+        $this->wrapper->AddPage();
+        $output = $this->wrapper->Output('test.pdf', 'S');
+
+        $this->assertStringStartsWith('%PDF', $output);
+    }
+
+    public function testFooterWithBookmarksDisabled(): void
+    {
+        $this->mockConfig->method('get')->willReturnCallback(
+            static fn(string $key) => match ($key) {
+                'main.customPdfHeader' => '',
+                'main.customPdfFooter' => '',
+                'main.metaPublisher' => 'Publisher',
+                'main.dateFormat' => 'Y-m-d H:i',
+                'spam.mailAddressInExport' => false,
+                default => null,
+            }
+        );
+        $this->mockConfig->method('getAdminEmail')->willReturn('admin@test.com');
+        $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
+
+        $this->wrapper->setConfig($this->mockConfig);
+        $this->wrapper->enableBookmarks = false;
+        $this->wrapper->setFaq(['id' => 1, 'lang' => 'en']);
+        $this->wrapper->setQuestion('Test question');
+        $this->wrapper->setCategories([1 => ['id' => 1, 'name' => 'Cat']]);
+        $this->wrapper->setCategory(1);
+
+        $this->wrapper->Open();
+        $this->wrapper->AddPage();
+        $output = $this->wrapper->Output('test.pdf', 'S');
+
+        $this->assertStringStartsWith('%PDF', $output);
+    }
+
+    public function testFooterWithMailAddressInExport(): void
+    {
+        $this->mockConfig->method('get')->willReturnCallback(
+            static fn(string $key) => match ($key) {
+                'main.customPdfHeader' => '',
+                'main.customPdfFooter' => '',
+                'main.metaPublisher' => 'Publisher',
+                'main.dateFormat' => 'Y-m-d H:i',
+                'spam.mailAddressInExport' => true,
+                default => null,
+            }
+        );
+        $this->mockConfig->method('getAdminEmail')->willReturn('admin@test.com');
+        $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
+
+        $this->wrapper->setConfig($this->mockConfig);
+        $this->wrapper->setCategories([]);
+        $this->wrapper->setCategory(0);
+
+        $this->wrapper->Open();
+        $this->wrapper->AddPage();
+        $output = $this->wrapper->Output('test.pdf', 'S');
+
+        $this->assertStringStartsWith('%PDF', $output);
+    }
+
+    public function testFooterWithCustomFooter(): void
+    {
+        $this->mockConfig->method('get')->willReturnCallback(
+            static fn(string $key) => match ($key) {
+                'main.customPdfHeader' => '',
+                'main.customPdfFooter' => '<i>Custom Footer Content</i>',
+                'main.metaPublisher' => 'Publisher',
+                'main.dateFormat' => 'Y-m-d H:i',
+                'spam.mailAddressInExport' => false,
+                default => null,
+            }
+        );
+        $this->mockConfig->method('getAdminEmail')->willReturn('admin@test.com');
+        $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
+
+        $this->wrapper->setConfig($this->mockConfig);
+        $this->wrapper->setCategories([]);
+        $this->wrapper->setCategory(0);
+
+        $this->wrapper->Open();
+        $this->wrapper->AddPage();
+        $output = $this->wrapper->Output('test.pdf', 'S');
+
+        $this->assertStringStartsWith('%PDF', $output);
+    }
+
+    public function testAddFaqToc(): void
+    {
+        $this->mockConfig->method('get')->willReturnCallback(
+            static fn(string $key) => match ($key) {
+                'main.customPdfHeader' => '',
+                'main.customPdfFooter' => '',
+                'main.metaPublisher' => 'Test',
+                'main.dateFormat' => 'Y-m-d H:i',
+                'spam.mailAddressInExport' => false,
+                default => null,
+            }
+        );
+        $this->mockConfig->method('getAdminEmail')->willReturn('admin@test.com');
+        $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
+        $this->mockConfig->method('getTitle')->willReturn('FAQ Title');
+
+        $this->wrapper->setConfig($this->mockConfig);
+        $this->wrapper->enableBookmarks = true;
+        $this->wrapper->setCategories([]);
+        $this->wrapper->setCategory(0);
+
+        $this->wrapper->Open();
+        $this->wrapper->AddPage();
+        $this->wrapper->Bookmark('Test Bookmark', 0, 0);
+        $this->wrapper->setPrintHeader(false);
+        $this->wrapper->addFaqToc();
+
+        $output = $this->wrapper->Output('test.pdf', 'S');
+        $this->assertStringStartsWith('%PDF', $output);
+    }
+
+    public function testWriteHtmlCallsConvertExternalImages(): void
+    {
+        $this->mockConfig->method('get')->willReturnCallback(
+            static fn(string $key) => match ($key) {
+                'main.customPdfHeader' => '',
+                'main.customPdfFooter' => '',
+                'main.metaPublisher' => 'Test',
+                'main.dateFormat' => 'Y-m-d H:i',
+                'spam.mailAddressInExport' => false,
+                default => null,
+            }
+        );
+        $this->mockConfig->method('getAdminEmail')->willReturn('admin@test.com');
+        $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
+        $this->mockConfig->method('getAllowedMediaHosts')->willReturn([]);
+
+        $this->wrapper->setConfig($this->mockConfig);
+        $this->wrapper->setCategories([]);
+        $this->wrapper->setCategory(0);
+
+        $this->wrapper->Open();
+        $this->wrapper->AddPage();
+        $this->wrapper->WriteHTML('<p>Simple HTML content</p>');
+
+        $output = $this->wrapper->Output('test.pdf', 'S');
+        $this->assertStringStartsWith('%PDF', $output);
+    }
+
+    public function testGetImageMimeTypeWithJpegData(): void
+    {
+        $jpegData = "\xFF\xD8\xFF\xE0" . str_repeat("\x00", 20);
+        $reflection = new ReflectionClass($this->wrapper);
+        $method = $reflection->getMethod('getImageMimeType');
+
+        $result = $method->invoke($this->wrapper, $jpegData);
+        $this->assertEquals('image/jpeg', $result);
+    }
+
+    public function testGetImageMimeTypeWithPngData(): void
+    {
+        // Create a real 1x1 PNG image
+        $img = imagecreatetruecolor(1, 1);
+        ob_start();
+        imagepng($img);
+        $pngData = ob_get_clean();
+
+        $reflection = new ReflectionClass($this->wrapper);
+        $method = $reflection->getMethod('getImageMimeType');
+
+        $result = $method->invoke($this->wrapper, $pngData);
+        $this->assertEquals('image/png', $result);
+    }
+
+    public function testGetImageMimeTypeWithNonImageData(): void
+    {
+        $textData = 'This is plain text, not an image';
+        $reflection = new ReflectionClass($this->wrapper);
+        $method = $reflection->getMethod('getImageMimeType');
+
+        $result = $method->invoke($this->wrapper, $textData);
+        $this->assertFalse($result);
+    }
+
+    public function testValidateImageDataWithGifData(): void
+    {
+        $gifData = "GIF89a" . str_repeat("\x00", 20);
+        $reflection = new ReflectionClass($this->wrapper);
+        $method = $reflection->getMethod('validateImageData');
+
+        $this->assertTrue($method->invoke($this->wrapper, $gifData));
+    }
+
+    public function testValidateImageDataWithGif87aData(): void
+    {
+        $gifData = "GIF87a" . str_repeat("\x00", 20);
+        $reflection = new ReflectionClass($this->wrapper);
+        $method = $reflection->getMethod('validateImageData');
+
+        $this->assertTrue($method->invoke($this->wrapper, $gifData));
+    }
+
+    public function testValidateImageDataWithWebpData(): void
+    {
+        $webpData = "RIFF" . str_repeat("\x00", 20);
+        $reflection = new ReflectionClass($this->wrapper);
+        $method = $reflection->getMethod('validateImageData');
+
+        $this->assertTrue($method->invoke($this->wrapper, $webpData));
+    }
+
+    public function testValidateImageDataWithBmpData(): void
+    {
+        $bmpData = "BM" . str_repeat("\x00", 20);
+        $reflection = new ReflectionClass($this->wrapper);
+        $method = $reflection->getMethod('validateImageData');
+
+        $this->assertTrue($method->invoke($this->wrapper, $bmpData));
+    }
+
+    public function testConvertExternalImagesToBase64WithSubdomainMatch(): void
+    {
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['example.com']);
+        $this->wrapper->setConfig($config);
+
+        // Subdomain should match but fetch will fail, returning original HTML
+        $html = '<img src="https://images.example.com/photo.jpg" alt="test">';
+
+        set_error_handler(static fn(): bool => true);
+        try {
+            $result = $this->wrapper->convertExternalImagesToBase64($html);
+            // Fetch fails, so original HTML is returned
+            $this->assertEquals($html, $result);
+        } finally {
+            restore_error_handler();
+        }
+    }
+
+    public function testConvertExternalImagesToBase64WithEmptyAndZeroHosts(): void
+    {
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['', '0', 'example.com']);
+        $this->wrapper->setConfig($config);
+
+        $html = '<img src="https://example.com/image.jpg" alt="test">';
+
+        set_error_handler(static fn(): bool => true);
+        try {
+            $result = $this->wrapper->convertExternalImagesToBase64($html);
+            // Fetch fails (404), returns original
+            $this->assertEquals($html, $result);
+        } finally {
+            restore_error_handler();
+        }
+    }
+
+    public function testConvertExternalImagesToBase64WithEmptyHostList(): void
+    {
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn([]);
+        $this->wrapper->setConfig($config);
+
+        $html = '<img src="https://example.com/image.jpg" alt="test">';
+        $result = $this->wrapper->convertExternalImagesToBase64($html);
+        $this->assertEquals($html, $result);
+    }
+
+    public function testConvertExternalImagesToBase64WithNoImgTags(): void
+    {
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['example.com']);
+        $this->wrapper->setConfig($config);
+
+        $html = '<p>No images here</p>';
+        $result = $this->wrapper->convertExternalImagesToBase64($html);
+        $this->assertEquals($html, $result);
+    }
+
+    public function testFooterWithEmptyFaqAndNoBookmarks(): void
+    {
+        $this->mockConfig->method('get')->willReturnCallback(
+            static fn(string $key) => match ($key) {
+                'main.customPdfHeader' => '',
+                'main.customPdfFooter' => '',
+                'main.metaPublisher' => 'Publisher',
+                'main.dateFormat' => 'Y-m-d H:i',
+                'spam.mailAddressInExport' => false,
+                default => null,
+            }
+        );
+        $this->mockConfig->method('getAdminEmail')->willReturn('admin@test.com');
+        $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
+
+        $this->wrapper->setConfig($this->mockConfig);
+        $this->wrapper->enableBookmarks = false;
+        $this->wrapper->setFaq([]);
+        $this->wrapper->setQuestion('');
+        $this->wrapper->setCategories([]);
+        $this->wrapper->setCategory(0);
+
+        $this->wrapper->Open();
+        $this->wrapper->AddPage();
+        $output = $this->wrapper->Output('test.pdf', 'S');
+
+        $this->assertStringStartsWith('%PDF', $output);
+    }
+
+    public function testCheckBase64ImageWithInvalidData(): void
+    {
+        $reflection = new ReflectionClass($this->wrapper);
+        $method = $reflection->getMethod('checkBase64Image');
+
+        $this->assertFalse($method->invoke($this->wrapper, 'not an image'));
+    }
+
+    public function testFooterWithBookmarksEnabled(): void
+    {
+        $this->mockConfig->method('get')->willReturnCallback(
+            static fn(string $key) => match ($key) {
+                'main.customPdfHeader' => '',
+                'main.customPdfFooter' => '',
+                'main.metaPublisher' => 'Pub',
+                'main.dateFormat' => 'Y-m-d',
+                'spam.mailAddressInExport' => false,
+                default => null,
+            }
+        );
+        $this->mockConfig->method('getAdminEmail')->willReturn('a@b.com');
+        $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
+
+        $this->wrapper->setConfig($this->mockConfig);
+        $this->wrapper->enableBookmarks = true;
+        $this->wrapper->setCategories([]);
+        $this->wrapper->setCategory(0);
+
+        $this->wrapper->Open();
+        $this->wrapper->AddPage();
+        $output = $this->wrapper->Output('test.pdf', 'S');
+
+        $this->assertStringStartsWith('%PDF', $output);
+    }
 }

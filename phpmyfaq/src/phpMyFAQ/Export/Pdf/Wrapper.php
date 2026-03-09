@@ -483,7 +483,7 @@ class Wrapper extends TCPDF
 
     private function checkBase64Image(string $base64): bool
     {
-        $img = imagecreatefromstring($base64);
+        $img = @imagecreatefromstring($base64);
         if (!$img) {
             return false;
         }
@@ -689,7 +689,6 @@ class Wrapper extends TCPDF
         }
 
         $mimeType = finfo_buffer($finfo, $data);
-        finfo_close($finfo);
 
         // Ensure it's actually an image MIME type
         if ($mimeType && str_starts_with($mimeType, 'image/')) {

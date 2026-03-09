@@ -4,12 +4,15 @@ namespace phpMyFAQ\Faq;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use stdClass;
 
 /**
  * Class StatisticsTest
@@ -373,5 +376,536 @@ class StatisticsTest extends TestCase
         $this->dbMock->method('numRows')->willReturn(0);
 
         $statistics->totalFaqs($maliciousLanguage);
+    }
+
+    // =============================================
+    // getLatestData() Tests
+    // =============================================
+
+    private function createConfigWithLanguage(): Configuration&MockObject
+    {
+        Strings::init();
+
+        $configMock = $this->createMock(Configuration::class);
+        $configMock->method('getDb')->willReturn($this->dbMock);
+        $configMock->method('get')->willReturn('basic');
+        $configMock->method('getDefaultUrl')->willReturn('https://example.com/');
+
+        $langMock = $this->createMock(Language::class);
+        $langMock->method('getLanguage')->willReturn('en');
+        $configMock->method('getLanguage')->willReturn($langMock);
+
+        return $configMock;
+    }
+
+    private function createFaqRow(
+        int $id,
+        string $lang,
+        int $categoryId,
+        string $question,
+        string $content,
+        string $updated,
+        int $visits,
+        int $groupId = -1,
+        int $userId = -1,
+    ): stdClass {
+        $row = new stdClass();
+        $row->id = $id;
+        $row->lang = $lang;
+        $row->language = $lang;
+        $row->category_id = $categoryId;
+        $row->question = $question;
+        $row->content = $content;
+        $row->updated = $updated;
+        $row->created = $updated;
+        $row->visits = $visits;
+        $row->last_visit = time();
+        $row->group_id = $groupId;
+        $row->user_id = $userId;
+        // For getTopVotedData
+        $row->thema = $question;
+        $row->avg = 4.5;
+        $row->user = 10;
+        $row->answer = $content;
+        return $row;
+    }
+
+    public function testGetLatestDataWithResults(): void
+    {
+        $configMock = $this->createConfigWithLanguage();
+        $statistics = new Statistics($configMock);
+
+        $resultMock = $this->createStub(\SQLite3Result::class);
+        $this->dbMock->method('query')->willReturn($resultMock);
+        $this->dbMock->method('escape')->willReturn('en');
+
+        $row = $this->createFaqRow(1, 'en', 1, 'Test Question', 'Answer', '20260101120000', 42);
+        $this->dbMock->method('fetchObject')
+            ->willReturnOnConsecutiveCalls($row, null);
+
+        $result = $statistics->getLatestData(10, 'en');
+
+        self::assertCount(1, $result);
+        self::assertArrayHasKey(1, $result);
+        self::assertEquals('Test Question', $result[1]['question']);
+        self::assertArrayHasKey('url', $result[1]);
+        self::assertArrayHasKey('date', $result[1]);
+        self::assertEquals(42, $result[1]['visits']);
+    }
+
+    public function testGetLatestDataRespectsCountLimit(): void
+    {
+        $configMock = $this->createConfigWithLanguage();
+        $statistics = new Statistics($configMock);
+
+        $resultMock = $this->createStub(\SQLite3Result::class);
+        $this->dbMock->method('query')->willReturn($resultMock);
+        $this->dbMock->method('escape')->willReturn('en');
+
+        $row1 = $this->createFaqRow(1, 'en', 1, 'Q1', 'A1', '20260101', 10);
+        $row2 = $this->createFaqRow(2, 'en', 1, 'Q2', 'A2', '20260102', 20);
+        $row3 = $this->createFaqRow(3, 'en', 1, 'Q3', 'A3', '20260103', 30);
+        $this->dbMock->method('fetchObject')
+            ->willReturnOnConsecutiveCalls($row1, $row2, $row3, null);
+
+        $result = $statistics->getLatestData(2, 'en');
+
+        self::assertCount(2, $result);
+    }
+
+    public function testGetLatestDataWithNoResults(): void
+    {
+        $configMock = $this->createConfigWithLanguage();
+        $statistics = new Statistics($configMock);
+
+        $resultMock = $this->createStub(\SQLite3Result::class);
+        $this->dbMock->method('query')->willReturn($resultMock);
+
+        $this->dbMock->method('fetchObject')->willReturn(null);
+
+        $result = $statistics->getLatestData(10);
+
+        self::assertEmpty($result);
+    }
+
+    public function testGetLatestDataWithFailedQuery(): void
+    {
+        $configMock = $this->createConfigWithLanguage();
+        $statistics = new Statistics($configMock);
+
+        $this->dbMock->method('query')->willReturn(false);
+
+        $result = $statistics->getLatestData(10);
+
+        self::assertEmpty($result);
+    }
+
+    public function testGetLatestDataSkipsUnauthorizedUserWithBasicPerm(): void
+    {
+        $configMock = $this->createConfigWithLanguage();
+        $statistics = new Statistics($configMock);
+        $statistics->setUser(5);
+
+        $resultMock = $this->createStub(\SQLite3Result::class);
+        $this->dbMock->method('query')->willReturn($resultMock);
+
+        // Row with user_id=99 should be skipped (user is 5, not -1 or 5)
+        $row = $this->createFaqRow(1, 'en', 1, 'Q', 'A', '20260101', 1, -1, 99);
+        $this->dbMock->method('fetchObject')
+            ->willReturnOnConsecutiveCalls($row, null);
+
+        $result = $statistics->getLatestData(10);
+
+        self::assertEmpty($result);
+    }
+
+    public function testGetLatestDataWithGroupSupport(): void
+    {
+        $configMock = $this->createMock(Configuration::class);
+        $configMock->method('getDb')->willReturn($this->dbMock);
+        $configMock->method('get')->willReturn('medium'); // enables group support
+        $configMock->method('getDefaultUrl')->willReturn('https://example.com/');
+        $langMock = $this->createMock(Language::class);
+        $langMock->method('getLanguage')->willReturn('en');
+        $configMock->method('getLanguage')->willReturn($langMock);
+
+        Strings::init();
+        $statistics = new Statistics($configMock);
+        $statistics->setUser(5)->setGroups([10, 20]);
+
+        $resultMock = $this->createStub(\SQLite3Result::class);
+        $this->dbMock->method('query')->willReturn($resultMock);
+        $this->dbMock->method('escape')->willReturn('en');
+
+        // Row with matching user but wrong group
+        $rowBadGroup = $this->createFaqRow(1, 'en', 1, 'Q1', 'A1', '20260101', 1, 99, 5);
+        // Row with matching user and group
+        $rowGood = $this->createFaqRow(2, 'en', 1, 'Q2', 'A2', '20260102', 2, 10, 5);
+        $this->dbMock->method('fetchObject')
+            ->willReturnOnConsecutiveCalls($rowBadGroup, $rowGood, null);
+
+        $result = $statistics->getLatestData(10, 'en');
+
+        // Only the row with matching group should be included
+        self::assertCount(1, $result);
+        self::assertArrayHasKey(2, $result);
+    }
+
+    public function testGetLatestDataWithGroupSupportSkipsBadUser(): void
+    {
+        $configMock = $this->createMock(Configuration::class);
+        $configMock->method('getDb')->willReturn($this->dbMock);
+        $configMock->method('get')->willReturn('medium');
+        $configMock->method('getDefaultUrl')->willReturn('https://example.com/');
+        $langMock = $this->createMock(Language::class);
+        $langMock->method('getLanguage')->willReturn('en');
+        $configMock->method('getLanguage')->willReturn($langMock);
+
+        Strings::init();
+        $statistics = new Statistics($configMock);
+        $statistics->setUser(5)->setGroups([10]);
+
+        $resultMock = $this->createStub(\SQLite3Result::class);
+        $this->dbMock->method('query')->willReturn($resultMock);
+
+        // Row with wrong user_id (not -1 and not 5)
+        $row = $this->createFaqRow(1, 'en', 1, 'Q', 'A', '20260101', 1, 10, 99);
+        $this->dbMock->method('fetchObject')
+            ->willReturnOnConsecutiveCalls($row, null);
+
+        $result = $statistics->getLatestData(10);
+
+        self::assertEmpty($result);
+    }
+
+    // =============================================
+    // getTopTenData() Tests
+    // =============================================
+
+    public function testGetTopTenDataWithResults(): void
+    {
+        $configMock = $this->createConfigWithLanguage();
+        $statistics = new Statistics($configMock);
+
+        $resultMock = $this->createStub(\SQLite3Result::class);
+        $this->dbMock->method('query')->willReturn($resultMock);
+        $this->dbMock->method('escape')->willReturn('en');
+
+        $row = $this->createFaqRow(1, 'en', 1, 'Popular FAQ', 'Answer', '20260101120000', 100);
+        $this->dbMock->method('fetchObject')
+            ->willReturnOnConsecutiveCalls($row, null);
+
+        $result = $statistics->getTopTenData(10, 0, 'en');
+
+        self::assertCount(1, $result);
+        $first = reset($result);
+        self::assertEquals(100, $first['visits']);
+        self::assertEquals('Popular FAQ', $first['question']);
+        self::assertArrayHasKey('url', $first);
+        self::assertArrayHasKey('last_visit', $first);
+    }
+
+    public function testGetTopTenDataWithCategoryFilter(): void
+    {
+        $configMock = $this->createConfigWithLanguage();
+        $statistics = new Statistics($configMock);
+
+        $resultMock = $this->createStub(\SQLite3Result::class);
+        $this->dbMock->method('query')
+            ->with($this->stringContains("fcr.category_id = '5'"))
+            ->willReturn($resultMock);
+        $this->dbMock->method('escape')->willReturn('en');
+        $this->dbMock->method('fetchObject')->willReturn(null);
+
+        $result = $statistics->getTopTenData(10, 5, 'en');
+
+        self::assertEmpty($result);
+    }
+
+    public function testGetTopTenDataRespectsCountLimit(): void
+    {
+        $configMock = $this->createConfigWithLanguage();
+        $statistics = new Statistics($configMock);
+
+        $resultMock = $this->createStub(\SQLite3Result::class);
+        $this->dbMock->method('query')->willReturn($resultMock);
+
+        $row1 = $this->createFaqRow(1, 'en', 1, 'Q1', 'A1', '20260101', 100);
+        $row2 = $this->createFaqRow(2, 'en', 1, 'Q2', 'A2', '20260102', 90);
+        $row3 = $this->createFaqRow(3, 'en', 1, 'Q3', 'A3', '20260103', 80);
+        $this->dbMock->method('fetchObject')
+            ->willReturnOnConsecutiveCalls($row1, $row2, $row3, null);
+
+        $result = $statistics->getTopTenData(2);
+
+        self::assertCount(2, $result);
+    }
+
+    public function testGetTopTenDataWithFailedQuery(): void
+    {
+        $configMock = $this->createConfigWithLanguage();
+        $statistics = new Statistics($configMock);
+
+        $this->dbMock->method('query')->willReturn(false);
+
+        $result = $statistics->getTopTenData(10);
+
+        self::assertEmpty($result);
+    }
+
+    // =============================================
+    // getTrendingData() Tests
+    // =============================================
+
+    public function testGetTrendingDataWithResults(): void
+    {
+        $configMock = $this->createConfigWithLanguage();
+        $statistics = new Statistics($configMock);
+
+        $resultMock = $this->createStub(\SQLite3Result::class);
+        $this->dbMock->method('query')->willReturn($resultMock);
+        $this->dbMock->method('escape')->willReturn('en');
+
+        $row = $this->createFaqRow(1, 'en', 1, 'Trending FAQ', 'Content', '20260301', 500);
+        $this->dbMock->method('fetchObject')
+            ->willReturnOnConsecutiveCalls($row, null);
+
+        $result = $statistics->getTrendingData(10, 'en');
+
+        self::assertCount(1, $result);
+        self::assertArrayHasKey(1, $result);
+        self::assertEquals('Trending FAQ', $result[1]['question']);
+        self::assertEquals(500, $result[1]['visits']);
+        self::assertArrayHasKey('url', $result[1]);
+    }
+
+    public function testGetTrendingDataWithNoResults(): void
+    {
+        $configMock = $this->createConfigWithLanguage();
+        $statistics = new Statistics($configMock);
+
+        $this->dbMock->method('query')->willReturn(false);
+
+        $result = $statistics->getTrendingData(10);
+
+        self::assertEmpty($result);
+    }
+
+    public function testGetTrendingDataWithGroupSupport(): void
+    {
+        $configMock = $this->createMock(Configuration::class);
+        $configMock->method('getDb')->willReturn($this->dbMock);
+        $configMock->method('get')->willReturn('medium');
+        $configMock->method('getDefaultUrl')->willReturn('https://example.com/');
+        $langMock = $this->createMock(Language::class);
+        $langMock->method('getLanguage')->willReturn('en');
+        $configMock->method('getLanguage')->willReturn($langMock);
+
+        Strings::init();
+        $statistics = new Statistics($configMock);
+        $statistics->setUser(-1)->setGroups([-1]);
+
+        $resultMock = $this->createStub(\SQLite3Result::class);
+        $this->dbMock->method('query')->willReturn($resultMock);
+
+        $row = $this->createFaqRow(1, 'en', 1, 'Q', 'A', '20260101', 50, -1, -1);
+        $this->dbMock->method('fetchObject')
+            ->willReturnOnConsecutiveCalls($row, null);
+
+        $result = $statistics->getTrendingData(10);
+
+        self::assertCount(1, $result);
+    }
+
+    // =============================================
+    // getTopVotedData() Tests
+    // =============================================
+
+    public function testGetTopVotedDataWithResults(): void
+    {
+        $configMock = $this->createConfigWithLanguage();
+        $statistics = new Statistics($configMock);
+
+        $resultMock = $this->createStub(\SQLite3Result::class);
+        $this->dbMock->method('query')->willReturn($resultMock);
+        $this->dbMock->method('escape')->willReturn('en');
+
+        $row = $this->createFaqRow(1, 'en', 1, 'Voted FAQ', 'Content', '20260101', 0);
+        $row->avg = 4.7;
+        $row->user = 15;
+        $this->dbMock->method('fetchObject')
+            ->willReturnOnConsecutiveCalls($row, null);
+
+        $result = $statistics->getTopVotedData(10, 'en');
+
+        self::assertCount(1, $result);
+        self::assertEquals(4.7, $result[0]['avg']);
+        self::assertEquals('Voted FAQ', $result[0]['question']);
+        self::assertEquals(15, $result[0]['user']);
+        self::assertArrayHasKey('url', $result[0]);
+    }
+
+    public function testGetTopVotedDataSkipsDuplicateIds(): void
+    {
+        $configMock = $this->createConfigWithLanguage();
+        $statistics = new Statistics($configMock);
+
+        $resultMock = $this->createStub(\SQLite3Result::class);
+        $this->dbMock->method('query')->willReturn($resultMock);
+
+        $row1 = $this->createFaqRow(1, 'en', 1, 'Q1', 'A1', '20260101', 0);
+        $row1dup = $this->createFaqRow(1, 'en', 1, 'Q1', 'A1', '20260101', 0);
+        $row2 = $this->createFaqRow(2, 'en', 1, 'Q2', 'A2', '20260102', 0);
+        $this->dbMock->method('fetchObject')
+            ->willReturnOnConsecutiveCalls($row1, $row1dup, $row2, null);
+
+        $result = $statistics->getTopVotedData(10);
+
+        self::assertCount(2, $result);
+    }
+
+    public function testGetTopVotedDataRespectsCountLimit(): void
+    {
+        $configMock = $this->createConfigWithLanguage();
+        $statistics = new Statistics($configMock);
+
+        $resultMock = $this->createStub(\SQLite3Result::class);
+        $this->dbMock->method('query')->willReturn($resultMock);
+
+        $row1 = $this->createFaqRow(1, 'en', 1, 'Q1', 'A1', '20260101', 0);
+        $row2 = $this->createFaqRow(2, 'en', 1, 'Q2', 'A2', '20260102', 0);
+        $row3 = $this->createFaqRow(3, 'en', 1, 'Q3', 'A3', '20260103', 0);
+        $this->dbMock->method('fetchObject')
+            ->willReturnOnConsecutiveCalls($row1, $row2, $row3, null);
+
+        $result = $statistics->getTopVotedData(2);
+
+        self::assertCount(2, $result);
+    }
+
+    // =============================================
+    // getLatest() Tests
+    // =============================================
+
+    public function testGetLatestReturnsFormattedOutput(): void
+    {
+        $configMock = $this->createConfigWithLanguage();
+        $statistics = new Statistics($configMock);
+
+        $resultMock = $this->createStub(\SQLite3Result::class);
+        $this->dbMock->method('query')->willReturn($resultMock);
+        $this->dbMock->method('escape')->willReturn('en');
+
+        $row = $this->createFaqRow(1, 'en', 1, 'Latest FAQ Question', 'Content', '20260301120000', 5);
+        $this->dbMock->method('fetchObject')
+            ->willReturnOnConsecutiveCalls($row, null);
+
+        $result = $statistics->getLatest();
+
+        self::assertCount(1, $result);
+        self::assertIsObject($result[0]);
+        self::assertObjectHasProperty('url', $result[0]);
+        self::assertObjectHasProperty('title', $result[0]);
+        self::assertObjectHasProperty('preview', $result[0]);
+        self::assertObjectHasProperty('date', $result[0]);
+    }
+
+    public function testGetLatestReturnsEmptyForNoData(): void
+    {
+        $configMock = $this->createConfigWithLanguage();
+        $statistics = new Statistics($configMock);
+
+        $this->dbMock->method('query')->willReturn(false);
+
+        $result = $statistics->getLatest();
+
+        self::assertEmpty($result);
+    }
+
+    // =============================================
+    // getTopTen() Tests
+    // =============================================
+
+    public function testGetTopTenWithVisitsType(): void
+    {
+        $configMock = $this->createConfigWithLanguage();
+        $statistics = new Statistics($configMock);
+
+        $resultMock = $this->createStub(\SQLite3Result::class);
+        $this->dbMock->method('query')->willReturn($resultMock);
+        $this->dbMock->method('escape')->willReturn('en');
+
+        // getTopTen('visits') calls getTopVotedData first, then getTopTenData
+        // Both call fetchObject, so we need results for both calls
+        $votedRow = $this->createFaqRow(1, 'en', 1, 'Voted FAQ', 'A', '20260101', 0);
+        $visitsRow = $this->createFaqRow(2, 'en', 1, 'Top FAQ', 'Answer', '20260101', 100);
+        $this->dbMock->method('fetchObject')
+            ->willReturnOnConsecutiveCalls($votedRow, null, $visitsRow, null);
+
+        $result = $statistics->getTopTen('visits');
+
+        self::assertCount(1, $result);
+        self::assertObjectHasProperty('visits', $result[0]);
+        self::assertObjectHasProperty('title', $result[0]);
+        self::assertObjectHasProperty('url', $result[0]);
+    }
+
+    public function testGetTopTenWithVotedType(): void
+    {
+        $configMock = $this->createConfigWithLanguage();
+        $statistics = new Statistics($configMock);
+
+        $resultMock = $this->createStub(\SQLite3Result::class);
+        $this->dbMock->method('query')->willReturn($resultMock);
+
+        $row = $this->createFaqRow(1, 'en', 1, 'Voted FAQ', 'Answer', '20260101', 0);
+        $row->avg = 4.5;
+        $row->user = 10;
+        $this->dbMock->method('fetchObject')
+            ->willReturnOnConsecutiveCalls($row, null);
+
+        $result = $statistics->getTopTen('voted');
+
+        self::assertCount(1, $result);
+        self::assertObjectHasProperty('voted', $result[0]);
+        self::assertStringContainsString('4.5', $result[0]->voted);
+    }
+
+    // =============================================
+    // getTrending() Tests
+    // =============================================
+
+    public function testGetTrendingReturnsFormattedOutput(): void
+    {
+        $configMock = $this->createConfigWithLanguage();
+        $statistics = new Statistics($configMock);
+
+        $resultMock = $this->createStub(\SQLite3Result::class);
+        $this->dbMock->method('query')->willReturn($resultMock);
+        $this->dbMock->method('escape')->willReturn('en');
+
+        $row = $this->createFaqRow(1, 'en', 1, 'Trending FAQ', 'Content', '20260301', 200);
+        $this->dbMock->method('fetchObject')
+            ->willReturnOnConsecutiveCalls($row, null);
+
+        $result = $statistics->getTrending();
+
+        self::assertCount(1, $result);
+        self::assertObjectHasProperty('url', $result[0]);
+        self::assertObjectHasProperty('title', $result[0]);
+        self::assertObjectHasProperty('visits', $result[0]);
+        self::assertObjectHasProperty('date', $result[0]);
+    }
+
+    public function testGetTrendingReturnsEmptyForNoData(): void
+    {
+        $configMock = $this->createConfigWithLanguage();
+        $statistics = new Statistics($configMock);
+
+        $this->dbMock->method('query')->willReturn(false);
+
+        $result = $statistics->getTrending();
+
+        self::assertEmpty($result);
     }
 }

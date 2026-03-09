@@ -441,4 +441,73 @@ class PermissionTest extends TestCase
         $result = $this->permission->add('GROUP', 123, [456]);
         $this->assertFalse($result);
     }
+
+    // ===========================================
+    // add() - Additional branch coverage
+    // ===========================================
+
+    public function testAddSkipsWhenPermissionAlreadyExists(): void
+    {
+        $resultMock = $this->createMock(\SQLite3Result::class);
+        // Only 1 query: the SELECT check (no INSERT since permission exists)
+        $this->dbMock
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->stringContains('SELECT 1'))
+            ->willReturn($resultMock);
+
+        $this->dbMock
+            ->expects($this->once())
+            ->method('numRows')
+            ->willReturn(1); // Permission already exists
+
+        $result = $this->permission->add(Permission::USER, 123, [456]);
+        $this->assertTrue($result);
+    }
+
+    public function testAddContinuesWhenCheckQueryFails(): void
+    {
+        // SELECT returns false => skip this permission
+        $this->dbMock
+            ->expects($this->once())
+            ->method('query')
+            ->willReturn(false);
+
+        $this->dbMock->expects($this->never())->method('numRows');
+
+        $result = $this->permission->add(Permission::USER, 123, [456]);
+        $this->assertTrue($result);
+    }
+
+    public function testAddContinuesWhenInsertFails(): void
+    {
+        $resultMock = $this->createMock(\SQLite3Result::class);
+        $this->dbMock
+            ->expects($this->exactly(2))
+            ->method('query')
+            ->willReturnOnConsecutiveCalls($resultMock, false); // SELECT ok, INSERT fails
+
+        $this->dbMock
+            ->expects($this->once())
+            ->method('numRows')
+            ->willReturn(0); // Permission doesn't exist
+
+        $result = $this->permission->add(Permission::USER, 123, [456]);
+        $this->assertTrue($result);
+    }
+
+    // ===========================================
+    // createPermissionArray() Tests
+    // ===========================================
+
+    public function testCreatePermissionArrayWithEmptyPayload(): void
+    {
+        // Request::createFromGlobals() with no content => empty payload
+        $result = $this->permission->createPermissionArray();
+
+        $this->assertArrayHasKey('restricted_user', $result);
+        $this->assertArrayHasKey('restricted_groups', $result);
+        $this->assertEquals([], $result['restricted_user']);
+        $this->assertEquals([], $result['restricted_groups']);
+    }
 }
