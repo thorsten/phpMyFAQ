@@ -66,6 +66,19 @@ class AuthHttpTest extends TestCase
         $this->assertTrue($this->authHttp->checkCredentials($this->login, $this->password));
     }
 
+    public function testCheckCredentialsReturnsFalseWhenUsernameIsMissing(): void
+    {
+        unset($_SERVER['PHP_AUTH_USER']);
+        $_SERVER['PHP_AUTH_PW'] = $this->password;
+
+        $dbHandle = new Sqlite3();
+        $dbHandle->connect($this->databaseFile, '', '');
+        $configuration = new Configuration($dbHandle);
+        $authHttp = new AuthHttp($configuration);
+
+        $this->assertFalse($authHttp->checkCredentials($this->login, $this->password));
+    }
+
     public function testIsValidLogin(): void
     {
         $this->assertEquals(1, $this->authHttp->isValidLogin($this->login));

@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\User;
 
+use Closure;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -45,6 +46,8 @@ class Tracking
         private readonly Configuration $configuration,
         private readonly Request $request,
         private readonly ?UserSession $userSession = null,
+        private readonly ?Closure $networkFactory = null,
+        private readonly ?string $trackingDirectory = null,
     ) {
     }
 
@@ -52,9 +55,11 @@ class Tracking
         Configuration $configuration,
         Request $request,
         UserSession $userSession,
+        ?Closure $networkFactory = null,
+        ?string $trackingDirectory = null,
     ): Tracking {
         if (!self::$tracking instanceof Tracking) {
-            self::$tracking = new self($configuration, $request, $userSession);
+            self::$tracking = new self($configuration, $request, $userSession, $networkFactory, $trackingDirectory);
         }
 
         return self::$tracking;
@@ -93,8 +98,12 @@ class Tracking
 
     private function initializeSessionId(): void
     {
-        $sessionId = $this->request->query->get(UserSession::KEY_NAME_SESSION_ID);
-        if ($sessionId) {
+        $sessionId = Filter::filterVar(
+            $this->request->query->get(UserSession::KEY_NAME_SESSION_ID),
+            FILTER_VALIDATE_INT,
+        );
+
+        if ($sessionId !== false) {
             $this->currentSessionId = $sessionId;
         }
     }
@@ -135,7 +144,7 @@ class Tracking
 
     private function isBanned(string $remoteAddress): bool
     {
-        $network = new Network($this->configuration);
+        $network = $this->createNetwork();
         return $network->isBanned(IpUtils::anonymize($remoteAddress));
     }
 
@@ -149,6 +158,7 @@ class Tracking
                 Database::getTablePrefix() . 'faqsessions',
                 'sid',
             );
+            $this->userSession->setCurrentSessionId($this->currentSessionId);
 
             if (!is_null($cookieId) && !$cookieId !== $this->userSession->getCurrentSessionId()) {
                 $this->userSession->setCookie(
@@ -196,7 +206,7 @@ class Tracking
             . $this->request->server->get('REQUEST_TIME')
             . ";\n";
 
-        $file = PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY');
+        $file = $this->getTrackingDirectory() . '/tracking' . date(format: 'dmY');
 
         if (!is_file($file)) {
             touch($file);
@@ -221,5 +231,19 @@ class Tracking
     private function getRequestHeaders(): HeaderBag
     {
         return $this->request->headers;
+    }
+
+    private function createNetwork(): Network
+    {
+        if ($this->networkFactory instanceof Closure) {
+            return ($this->networkFactory)();
+        }
+
+        return new Network($this->configuration);
+    }
+
+    private function getTrackingDirectory(): string
+    {
+        return $this->trackingDirectory ?? PMF_ROOT_DIR . '/content/core/data';
     }
 }

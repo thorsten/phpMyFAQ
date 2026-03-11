@@ -426,4 +426,41 @@ class Sqlite3Test extends TestCase
         $this->assertEquals(0, $reflection->getParameters()[1]->getDefaultValue());
         $this->assertEquals(0, $reflection->getParameters()[2]->getDefaultValue());
     }
+
+    public function testGetTableStatusReturnsRowCountsForRealSqliteTables(): void
+    {
+        $databaseFile = tempnam(sys_get_temp_dir(), 'pmf-sqlite3-test-');
+        $this->sqlite3->connect($databaseFile, '', '');
+        $this->sqlite3->query('CREATE TABLE alpha (id INTEGER PRIMARY KEY, name TEXT)');
+        $this->sqlite3->query('CREATE TABLE beta (id INTEGER PRIMARY KEY, name TEXT)');
+        $this->sqlite3->query("INSERT INTO alpha (name) VALUES ('one'), ('two')");
+        $this->sqlite3->query("INSERT INTO beta (name) VALUES ('three')");
+
+        $status = $this->sqlite3->getTableStatus();
+
+        $this->assertSame(2, $status['alpha']);
+        $this->assertSame(1, $status['beta']);
+        $this->sqlite3->close();
+        @unlink($databaseFile);
+    }
+
+    public function testNextIdAffectedRowsAndLastInsertIdUseRealSqliteConnection(): void
+    {
+        $databaseFile = tempnam(sys_get_temp_dir(), 'pmf-sqlite3-test-');
+        $this->sqlite3->connect($databaseFile, '', '');
+        $this->sqlite3->query('CREATE TABLE items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)');
+        $this->sqlite3->query("INSERT INTO items (name) VALUES ('one')");
+        $this->sqlite3->query("INSERT INTO items (name) VALUES ('two')");
+
+        $this->assertSame(3, $this->sqlite3->nextId('items', 'id'));
+
+        $this->sqlite3->query("UPDATE items SET name = 'updated'");
+
+        $this->assertSame(2, $this->sqlite3->affectedRows());
+        $this->assertSame(2, $this->sqlite3->lastInsertId());
+        $this->assertNotSame('', $this->sqlite3->clientVersion());
+        $this->assertSame($this->sqlite3->clientVersion(), $this->sqlite3->serverVersion());
+        $this->assertTrue($this->sqlite3->close());
+        @unlink($databaseFile);
+    }
 }

@@ -39,7 +39,8 @@ interface DatabaseDriver
     public function connect(
         string $host,
         string $user,
-        #[\SensitiveParameter] string $password,
+        #[\SensitiveParameter]
+        string $password,
         string $database = '',
         ?int $port = null,
     ): ?bool;

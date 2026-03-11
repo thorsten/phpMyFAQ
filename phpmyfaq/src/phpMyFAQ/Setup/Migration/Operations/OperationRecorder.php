@@ -127,7 +127,8 @@ class OperationRecorder
      */
     public function createUser(
         string $loginName,
-        #[\SensitiveParameter] string $password,
+        #[\SensitiveParameter]
+        string $password,
         string $displayName,
         string $email,
         int $userId,

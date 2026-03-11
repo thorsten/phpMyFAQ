@@ -8,6 +8,7 @@ use phpMyFAQ\Core\Exception;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
+use ReflectionProperty;
 use stdClass;
 
 /**
@@ -471,5 +472,68 @@ class PdoSqlsrvTest extends TestCase
         // Gets populated by getTableNames
         $this->pdoSqlsrv->getTableNames('test_');
         $this->assertNotEmpty($this->pdoSqlsrv->tableNames);
+    }
+
+    public function testGetTableNamesPopulatesPrefixedTableList(): void
+    {
+        $tableNames = $this->pdoSqlsrv->getTableNames('pmf_');
+
+        $this->assertCount(43, $tableNames);
+        $this->assertSame('pmf_faqadminlog', $tableNames[0]);
+        $this->assertSame('pmf_faqvoting', $tableNames[42]);
+    }
+
+    public function testQueryPrepareExecuteAndVersionsWorkWithInjectedPdo(): void
+    {
+        $pdo = new PDO('sqlite::memory:');
+        $pdo->exec('CREATE TABLE items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)');
+        $pdo->exec("INSERT INTO items (name) VALUES ('one'), ('two')");
+        $this->setPdo($pdo);
+
+        $statement = $this->pdoSqlsrv->query('SELECT id, name FROM items');
+        $prepared = $this->pdoSqlsrv->prepare('INSERT INTO items (name) VALUES (?)');
+        $executed = $this->pdoSqlsrv->execute($prepared, ['three']);
+        $this->pdoSqlsrv->query("UPDATE items SET name = 'updated'");
+
+        $this->assertInstanceOf(PDOStatement::class, $statement);
+        $this->assertTrue($executed);
+        $this->assertSame(3, $this->pdoSqlsrv->affectedRows());
+        $this->assertNotSame('', $this->pdoSqlsrv->clientVersion());
+        $this->assertNotSame('', $this->pdoSqlsrv->serverVersion());
+        $this->assertSame(3, $this->pdoSqlsrv->lastInsertId());
+    }
+
+    public function testNextIdReturnsIncrementedMaximumId(): void
+    {
+        $pdo = new PDO('sqlite::memory:');
+        $pdo->exec('CREATE TABLE items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)');
+        $pdo->exec("INSERT INTO items (name) VALUES ('one'), ('two')");
+        $this->setPdo($pdo);
+
+        $this->assertSame(3, $this->pdoSqlsrv->nextId('items', 'id'));
+    }
+
+    public function testGetTableStatusUsesGetOneForEveryKnownTable(): void
+    {
+        $pdo = $this->createMock(PDO::class);
+        $statement = $this->createMock(PDOStatement::class);
+        $tableCount = count($this->pdoSqlsrv->getTableNames('pmf_'));
+
+        $pdo->expects($this->exactly($tableCount))->method('prepare')->willReturn($statement);
+        $statement->expects($this->exactly($tableCount))->method('execute')->willReturn(true);
+        $statement->expects($this->exactly($tableCount))->method('fetch')->with(PDO::FETCH_NUM)->willReturn(['9']);
+        $this->setPdo($pdo);
+
+        $status = $this->pdoSqlsrv->getTableStatus('pmf_');
+
+        $this->assertCount($tableCount, $status);
+        $this->assertSame('9', $status['pmf_faqadminlog']);
+        $this->assertSame('9', $status['pmf_faqvoting']);
+    }
+
+    private function setPdo(PDO $pdo): void
+    {
+        $reflection = new ReflectionProperty($this->pdoSqlsrv, 'pdo');
+        $reflection->setValue($this->pdoSqlsrv, $pdo);
     }
 }

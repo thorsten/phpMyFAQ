@@ -9,6 +9,7 @@ use phpMyFAQ\Core\Exception;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
+use ReflectionProperty;
 use stdClass;
 
 /**
@@ -295,5 +296,96 @@ class PdoMysqlTest extends TestCase
         $this->assertTrue($parameters[4]->isOptional());
         $this->assertEquals('', $parameters[3]->getDefaultValue());
         $this->assertNull($parameters[4]->getDefaultValue());
+    }
+
+    public function testGetTableNamesPopulatesPrefixedTableList(): void
+    {
+        $tableNames = $this->pdoMysql->getTableNames('pmf_');
+
+        $this->assertCount(43, $tableNames);
+        $this->assertSame('pmf_faqadminlog', $tableNames[0]);
+        $this->assertSame('pmf_faqvoting', $tableNames[42]);
+        $this->assertSame($tableNames, $this->pdoMysql->tableNames);
+    }
+
+    public function testQueryPrepareAndExecuteWorkWithInjectedPdo(): void
+    {
+        $pdo = new PDO('sqlite::memory:');
+        $pdo->exec('CREATE TABLE items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)');
+        $pdo->exec("INSERT INTO items (name) VALUES ('one'), ('two')");
+        $this->setPdo($this->pdoMysql, $pdo);
+
+        $statement = $this->pdoMysql->query('SELECT id, name FROM items', 0, 1);
+        $prepared = $this->pdoMysql->prepare('INSERT INTO items (name) VALUES (?)');
+        $executed = $this->pdoMysql->execute($prepared, ['three']);
+
+        $this->assertInstanceOf(PDOStatement::class, $statement);
+        $this->assertTrue($executed);
+        $this->assertSame(3, $this->pdoMysql->lastInsertId());
+        $this->assertStringContainsString('SELECT id, name FROM items', $this->pdoMysql->log());
+    }
+
+    public function testQueryStoresAffectedRowsAndReportsVersions(): void
+    {
+        $pdo = new PDO('sqlite::memory:');
+        $pdo->exec('CREATE TABLE items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)');
+        $pdo->exec("INSERT INTO items (name) VALUES ('one'), ('two')");
+        $this->setPdo($this->pdoMysql, $pdo);
+
+        $this->pdoMysql->query("UPDATE items SET name = 'updated'");
+
+        $this->assertSame(2, $this->pdoMysql->affectedRows());
+        $this->assertNotSame('', $this->pdoMysql->clientVersion());
+        $this->assertNotSame('', $this->pdoMysql->serverVersion());
+        $this->assertSame('NOW()', $this->pdoMysql->now());
+    }
+
+    public function testNextIdReturnsIncrementedMaximumId(): void
+    {
+        $pdo = new PDO('sqlite::memory:');
+        $pdo->exec('CREATE TABLE items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)');
+        $pdo->exec("INSERT INTO items (name) VALUES ('one'), ('two')");
+        $this->setPdo($this->pdoMysql, $pdo);
+
+        $this->assertSame(3, $this->pdoMysql->nextId('items', 'id'));
+    }
+
+    public function testQueryAppendsErrorInformationWhenPdoReturnsFalse(): void
+    {
+        $pdo = $this->createMock(PDO::class);
+        $pdo->expects($this->once())->method('query')->with('SELECT broken')->willReturn(false);
+        $pdo->expects($this->once())->method('errorCode')->willReturn('HY000');
+        $pdo->expects($this->once())->method('errorInfo')->willReturn(['HY000', 0, 'syntax error']);
+        $this->setPdo($this->pdoMysql, $pdo);
+
+        $result = $this->pdoMysql->query('SELECT broken');
+
+        $this->assertFalse($result);
+        $this->assertStringContainsString('HY000: syntax error in query: SELECT broken', $this->pdoMysql->log());
+        $this->assertSame(0, $this->pdoMysql->affectedRows());
+    }
+
+    public function testGetTableStatusUsesGetOneForEveryKnownTable(): void
+    {
+        $pdo = $this->createMock(PDO::class);
+        $statement = $this->createMock(PDOStatement::class);
+        $tableCount = count($this->pdoMysql->getTableNames('pmf_'));
+
+        $pdo->expects($this->exactly($tableCount))->method('prepare')->willReturn($statement);
+        $statement->expects($this->exactly($tableCount))->method('execute')->willReturn(true);
+        $statement->expects($this->exactly($tableCount))->method('fetch')->with(PDO::FETCH_NUM)->willReturn(['5']);
+        $this->setPdo($this->pdoMysql, $pdo);
+
+        $status = $this->pdoMysql->getTableStatus('pmf_');
+
+        $this->assertCount($tableCount, $status);
+        $this->assertSame('5', $status['pmf_faqadminlog']);
+        $this->assertSame('5', $status['pmf_faqvoting']);
+    }
+
+    private function setPdo(PdoMysql $driver, PDO $pdo): void
+    {
+        $reflection = new ReflectionProperty($driver, 'pdo');
+        $reflection->setValue($driver, $pdo);
     }
 }

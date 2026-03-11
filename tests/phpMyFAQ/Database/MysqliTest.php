@@ -6,6 +6,7 @@ use mysqli_result;
 use phpMyFAQ\Core\Exception;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 use stdClass;
 
 /**
@@ -212,5 +213,78 @@ class MysqliTest extends TestCase
     {
         $result = $this->mysqli->log();
         $this->assertEquals('', $result);
+    }
+
+    public function testGetTableNamesPopulatesPrefixedTableList(): void
+    {
+        $tableNames = $this->mysqli->getTableNames('pmf_');
+
+        $this->assertCount(43, $tableNames);
+        $this->assertSame('pmf_faqadminlog', $tableNames[0]);
+        $this->assertSame('pmf_faqvoting', $tableNames[42]);
+        $this->assertSame($tableNames, $this->mysqli->tableNames);
+    }
+
+    public function testQueryAndNextIdUseInjectedConnection(): void
+    {
+        $conn = $this->createMock(\mysqli::class);
+        $result = $this->createMock(mysqli_result::class);
+        $result->expects($this->once())->method('fetch_row')->willReturn([2]);
+        $conn
+            ->expects($this->exactly(2))
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use ($result) {
+                if (str_contains($query, 'LIMIT 5,10')) {
+                    return $result;
+                }
+
+                return $result;
+            });
+        $this->setConnection($conn);
+
+        $queryResult = $this->mysqli->query('SELECT * FROM faqdata', 5, 10);
+        $nextId = $this->mysqli->nextId('faqdata', 'id');
+
+        $this->assertSame($result, $queryResult);
+        $this->assertSame(3, $nextId);
+        $this->assertStringContainsString('SELECT * FROM faqdata', $this->mysqli->log());
+    }
+
+    public function testGetTableStatusUsesGetOneForEveryKnownTable(): void
+    {
+        $result = $this->createMock(mysqli_result::class);
+        $tableCount = count($this->mysqli->getTableNames('pmf_'));
+
+        $conn = new class($result) extends \mysqli {
+            public function __construct(
+                private mysqli_result $result,
+            ) {
+            }
+
+            public function query(string $query, int $resultMode = MYSQLI_STORE_RESULT): mysqli_result|bool
+            {
+                return $this->result;
+            }
+
+            public function close(): true
+            {
+                return true;
+            }
+        };
+
+        $result->expects($this->exactly($tableCount))->method('fetch_row')->willReturn(['6']);
+        $this->setConnection($conn);
+
+        $status = $this->mysqli->getTableStatus('pmf_');
+
+        $this->assertCount($tableCount, $status);
+        $this->assertSame('6', $status['pmf_faqadminlog']);
+        $this->assertSame('6', $status['pmf_faqvoting']);
+    }
+
+    private function setConnection(\mysqli $connection): void
+    {
+        $reflection = new ReflectionProperty($this->mysqli, 'conn');
+        $reflection->setValue($this->mysqli, $connection);
     }
 }

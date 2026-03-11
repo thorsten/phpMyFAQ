@@ -9,6 +9,7 @@ use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\Plugin\PluginException;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
@@ -282,5 +283,175 @@ class AuthWebAuthnTest extends TestCase
         // Should use the configured URL from setUp (example.com)
         $this->assertEquals('example.com', $result['publicKey']['rp']['name']);
         $this->assertEquals('example.com', $result['publicKey']['rp']['id']);
+    }
+
+    public function testRegisterThrowsWhenAttestationObjectIsMissing(): void
+    {
+        $info = json_encode([
+            'response' => [],
+            'rawId' => [1, 2, 3],
+        ]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('no attestationObject in info');
+
+        $this->authWebAuthn->register($info, '');
+    }
+
+    public function testRegisterThrowsWhenRawIdIsMissing(): void
+    {
+        $info = json_encode([
+            'response' => ['attestationObject' => [1, 2, 3]],
+        ]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('no rawId in info');
+
+        $this->authWebAuthn->register($info, '');
+    }
+
+    public function testAuthenticateThrowsWhenNoMatchingKeyExists(): void
+    {
+        $info = $this->createAuthenticationInfo();
+        $userWebAuthn = json_encode([
+            (object) [
+                'id' => [9, 9, 9],
+                'key' => 'unused',
+                'challenge' => '',
+            ],
+        ]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('No key with ID 1,2,3');
+
+        $this->authWebAuthn->authenticate($info, $userWebAuthn);
+    }
+
+    public function testAuthenticateThrowsWhenChallengeDoesNotMatch(): void
+    {
+        $info = $this->createAuthenticationInfo();
+        $info->response->clientData->challenge = 'wrong-challenge';
+        $userWebAuthn = json_encode([
+            (object) [
+                'id' => [1, 2, 3],
+                'key' => 'unused',
+                'challenge' => '',
+            ],
+        ]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Challenge mismatch');
+
+        $this->authWebAuthn->authenticate($info, $userWebAuthn);
+    }
+
+    public function testAuthenticateThrowsOnReplayChallenge(): void
+    {
+        $info = $this->createAuthenticationInfo();
+        $expectedChallenge = rtrim(strtr(base64_encode(chr(4) . chr(5) . chr(6)), '+/', '-_'), '=');
+        $info->response->clientData->challenge = $expectedChallenge;
+        $userWebAuthn = json_encode([
+            (object) [
+                'id' => [1, 2, 3],
+                'key' => 'unused',
+                'challenge' => 'stored-previous-challenge',
+            ],
+        ]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('You cannot use the same login more than once');
+
+        $this->authWebAuthn->authenticate($info, $userWebAuthn);
+    }
+
+    public function testAuthenticateThrowsWhenOriginDoesNotMatch(): void
+    {
+        $info = $this->createAuthenticationInfo();
+        $expectedChallenge = rtrim(strtr(base64_encode(chr(4) . chr(5) . chr(6)), '+/', '-_'), '=');
+        $info->response->clientData->challenge = $expectedChallenge;
+        $userWebAuthn = json_encode([
+            (object) [
+                'id' => [1, 2, 3],
+                'key' => 'unused',
+                'challenge' => $expectedChallenge,
+            ],
+        ]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Origin mismatch for 'https://evil.example'");
+
+        $this->authWebAuthn->authenticate($info, $userWebAuthn);
+    }
+
+    public function testAuthenticateThrowsWhenTypeDoesNotMatch(): void
+    {
+        $info = $this->createAuthenticationInfo();
+        $expectedChallenge = rtrim(strtr(base64_encode(chr(4) . chr(5) . chr(6)), '+/', '-_'), '=');
+        $info->response->clientData->challenge = $expectedChallenge;
+        $info->response->clientData->origin = 'https://example.com';
+        $userWebAuthn = json_encode([
+            (object) [
+                'id' => [1, 2, 3],
+                'key' => 'unused',
+                'challenge' => $expectedChallenge,
+            ],
+        ]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Type mismatch for 'webauthn.create'");
+
+        $this->authWebAuthn->authenticate($info, $userWebAuthn);
+    }
+
+    public function testAuthenticateThrowsWhenSignatureIsTooShort(): void
+    {
+        $info = $this->createAuthenticationInfo();
+        $expectedChallenge = rtrim(strtr(base64_encode(chr(4) . chr(5) . chr(6)), '+/', '-_'), '=');
+        $info->response->clientData->challenge = $expectedChallenge;
+        $info->response->clientData->origin = 'https://example.com';
+        $info->response->clientData->type = 'webauthn.get';
+        $info->response->authenticatorData = array_merge(array_fill(0, 32, 0), [0x01], [0, 0, 0, 1]);
+        $info->response->signature = [1, 2, 3];
+        $userWebAuthn = json_encode([
+            (object) [
+                'id' => [1, 2, 3],
+                'key' => 'unused',
+                'challenge' => $expectedChallenge,
+            ],
+        ]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot decode key response for RP ID hash');
+
+        $this->authWebAuthn->authenticate($info, $userWebAuthn);
+    }
+
+    public function testArrayStringConversionHelpers(): void
+    {
+        $reflection = new ReflectionClass($this->authWebAuthn);
+
+        $arrayToString = $reflection->getMethod('arrayToString');
+        $stringToArray = $reflection->getMethod('stringToArray');
+
+        $binary = $arrayToString->invoke($this->authWebAuthn, [65, 66, 67]);
+        $this->assertSame('ABC', $binary);
+        $this->assertSame([65, 66, 67], $stringToArray->invoke($this->authWebAuthn, 'ABC'));
+    }
+
+    private function createAuthenticationInfo(): \stdClass
+    {
+        $info = new \stdClass();
+        $info->rawId = [1, 2, 3];
+        $info->originalChallenge = [4, 5, 6];
+        $info->response = new \stdClass();
+        $info->response->clientData = new \stdClass();
+        $info->response->clientData->challenge = 'unused';
+        $info->response->clientData->origin = 'https://evil.example';
+        $info->response->clientData->type = 'webauthn.create';
+        $info->response->authenticatorData = [];
+        $info->response->clientDataJSONarray = [123];
+        $info->response->signature = [];
+
+        return $info;
     }
 }

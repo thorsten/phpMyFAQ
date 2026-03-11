@@ -6,12 +6,15 @@ namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
 class PdfControllerTest extends TestCase
@@ -33,7 +36,22 @@ class PdfControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->configuration = Configuration::getConfigurationInstance();
+        $this->configuration = $this->createConfiguration();
+        $language = new Language($this->configuration, $this->createStub(Session::class));
+        $language->setLanguageFromConfiguration('en');
+        $this->configuration->setLanguage($language);
+    }
+
+    private function createConfiguration(): Configuration
+    {
+        try {
+            return Configuration::getConfigurationInstance();
+        } catch (\TypeError) {
+            $db = new Sqlite3();
+            $db->connect(PMF_TEST_DIR . '/test.db', '', '');
+
+            return new Configuration($db);
+        }
     }
 
     /**

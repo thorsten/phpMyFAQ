@@ -7,6 +7,7 @@ use PDOStatement;
 use phpMyFAQ\Core\Exception;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 use stdClass;
 
 /**
@@ -353,6 +354,73 @@ class PdoSqliteTest extends TestCase
         // The first parameter (host) is used as the database file path in SQLite
         $this->assertEquals('host', $parameters[0]->getName());
         $this->assertFalse($parameters[0]->isOptional());
+    }
+
+    public function testGetTableStatusUsesGetOneForEveryKnownTable(): void
+    {
+        $pdo = $this->createMock(PDO::class);
+        $statement = $this->createMock(PDOStatement::class);
+        $tableCount = count($this->pdoSqlite->getTableNames('pmf_'));
+
+        $pdo->expects($this->exactly($tableCount))->method('prepare')->willReturn($statement);
+        $statement->expects($this->exactly($tableCount))->method('execute')->willReturn(true);
+        $statement->expects($this->exactly($tableCount))->method('fetch')->with(PDO::FETCH_NUM)->willReturn(['11']);
+        $this->setPdo($pdo);
+
+        $status = $this->pdoSqlite->getTableStatus('pmf_');
+
+        $this->assertCount($tableCount, $status);
+        $this->assertSame('11', $status['pmf_faqadminlog']);
+        $this->assertSame('11', $status['pmf_faqvoting']);
+    }
+
+    public function testPrepareExecuteAndMetadataWorkWithInjectedPdo(): void
+    {
+        $pdo = new PDO('sqlite::memory:');
+        $pdo->exec('CREATE TABLE items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)');
+        $pdo->exec("INSERT INTO items (name) VALUES ('one'), ('two')");
+        $this->setPdo($pdo);
+
+        $prepared = $this->pdoSqlite->prepare('INSERT INTO items (name) VALUES (?)');
+        $executed = $this->pdoSqlite->execute($prepared, ['three']);
+        $this->pdoSqlite->query("UPDATE items SET name = 'updated'");
+
+        $this->assertTrue($executed);
+        $this->assertSame(3, $this->pdoSqlite->affectedRows());
+        $this->assertNotSame('', $this->pdoSqlite->clientVersion());
+        $this->assertNotSame('', $this->pdoSqlite->serverVersion());
+        $this->assertSame(3, $this->pdoSqlite->lastInsertId());
+        $this->assertSame('CURRENT_TIMESTAMP', $this->pdoSqlite->now());
+    }
+
+    public function testEscapeAndNextIdUseInjectedPdo(): void
+    {
+        $pdo = new PDO('sqlite::memory:');
+        $pdo->exec('CREATE TABLE items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)');
+        $pdo->exec("INSERT INTO items (name) VALUES ('one'), ('two')");
+        $this->setPdo($pdo);
+
+        $this->assertSame("O''Reilly", $this->pdoSqlite->escape("O'Reilly"));
+        $this->assertSame(3, $this->pdoSqlite->nextId('items', 'id'));
+    }
+
+    public function testNumRowsCountsSelectResultsViaFallbackCountQuery(): void
+    {
+        $pdo = new PDO('sqlite::memory:');
+        $pdo->exec('CREATE TABLE items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)');
+        $pdo->exec("INSERT INTO items (name) VALUES ('one'), ('two'), ('three')");
+        $this->setPdo($pdo);
+
+        $statement = $pdo->query('SELECT id, name FROM items');
+
+        $this->assertInstanceOf(PDOStatement::class, $statement);
+        $this->assertSame(3, $this->pdoSqlite->numRows($statement));
+    }
+
+    private function setPdo(PDO $pdo): void
+    {
+        $reflection = new ReflectionProperty($this->pdoSqlite, 'pdo');
+        $reflection->setValue($this->pdoSqlite, $pdo);
     }
 
     protected function tearDown(): void
