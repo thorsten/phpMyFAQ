@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\User;
 
+use Closure;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\SessionActionType;
@@ -50,6 +51,10 @@ class UserSession
 
     public function __construct(
         private readonly Configuration $configuration,
+        private readonly ?Request $request = null,
+        private readonly ?Closure $networkFactory = null,
+        private readonly ?Closure $cookieSetter = null,
+        private readonly ?string $trackingDirectory = null,
     ) {
     }
 
@@ -87,12 +92,13 @@ class UserSession
      */
     public function checkSessionId(int $sessionIdToCheck, string $ipAddress): void
     {
+        $request = $this->getRequest();
         $query = sprintf(
             "SELECT sid FROM %sfaqsessions WHERE sid = %d AND ip = '%s' AND time > %d",
             Database::getTablePrefix(),
             $sessionIdToCheck,
             $ipAddress,
-            Request::createFromGlobals()->server->get('REQUEST_TIME') - 86_400,
+            $request->server->get('REQUEST_TIME') - 86_400,
         );
         $result = $this->configuration->getDb()->query($query);
 
@@ -107,7 +113,7 @@ class UserSession
         $query = sprintf(
             "UPDATE %sfaqsessions SET time = %d, user_id = %d WHERE sid = %d AND ip = '%s'",
             Database::getTablePrefix(),
-            Request::createFromGlobals()->server->get('REQUEST_TIME'),
+            $request->server->get('REQUEST_TIME'),
             $this->currentUser->getUserId(),
             $sessionIdToCheck,
             $ipAddress,
@@ -134,7 +140,7 @@ class UserSession
             return;
         }
 
-        $request = Request::createFromGlobals();
+        $request = $this->getRequest();
         $bots = 0;
         $banned = false;
         $this->currentSessionId = Filter::filterVar(
@@ -161,7 +167,7 @@ class UserSession
         }
 
         // if we're running behind a reverse proxy like nginx/varnish, fix the client IP
-        $remoteAddress = Request::createFromGlobals()->getClientIp();
+        $remoteAddress = $request->getClientIp();
         $localAddresses = ['127.0.0.1', '::1'];
 
         if (in_array($remoteAddress, $localAddresses, strict: true) && $request->headers->has('X-Forwarded-For')) {
@@ -182,7 +188,7 @@ class UserSession
         // Anonymize IP address
         $remoteAddress = IpUtils::anonymize($remoteAddress);
 
-        $network = new Network($this->configuration);
+        $network = $this->createNetwork();
         if ($network->isBanned($remoteAddress)) {
             $banned = true;
         }
@@ -232,7 +238,7 @@ class UserSession
                 . $request->server->get('REQUEST_TIME')
                 . ";\n";
 
-            $file = PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY');
+            $file = $this->getTrackingDirectory() . '/tracking' . date(format: 'dmY');
 
             if (!is_file($file)) {
                 touch($file);
@@ -256,15 +262,39 @@ class UserSession
      */
     public function setCookie(string $name, int|string|null $sessionId, int $timeout = 3600, bool $strict = true): void
     {
-        $request = Request::createFromGlobals();
+        $request = $this->getRequest();
 
-        setcookie($name, (string) $sessionId ?? '', [
+        $options = [
             'expires' => $request->server->get('REQUEST_TIME') + $timeout,
             'path' => dirname((string) $request->server->get('SCRIPT_NAME')),
             'domain' => parse_url($this->configuration->getDefaultUrl(), PHP_URL_HOST),
             'secure' => $request->isSecure(),
             'httponly' => true,
             'samesite' => $strict ? 'strict' : '',
-        ]);
+        ];
+
+        if ($this->cookieSetter instanceof Closure) {
+            ($this->cookieSetter)($name, (string) $sessionId ?? '', $options);
+            return;
+        }
+
+        setcookie($name, (string) $sessionId ?? '', $options);
+    }
+
+    private function getRequest(): Request
+    {
+        return $this->request ?? Request::createFromGlobals();
+    }
+
+    private function createNetwork(): Network
+    {
+        return $this->networkFactory instanceof Closure
+            ? ($this->networkFactory)($this->configuration)
+            : new Network($this->configuration);
+    }
+
+    private function getTrackingDirectory(): string
+    {
+        return $this->trackingDirectory ?? PMF_ROOT_DIR . '/content/core/data';
     }
 }

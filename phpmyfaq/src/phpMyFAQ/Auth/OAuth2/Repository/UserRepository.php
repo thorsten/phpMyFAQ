@@ -29,7 +29,8 @@ final class UserRepository extends AbstractRepository implements UserRepositoryI
 {
     public function getUserEntityByUserCredentials(
         string $username,
-        #[\SensitiveParameter] string $password,
+        #[\SensitiveParameter]
+        string $password,
         string $grantType,
         ClientEntityInterface $clientEntity,
     ): ?UserEntityInterface {

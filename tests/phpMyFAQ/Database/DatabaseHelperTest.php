@@ -58,4 +58,31 @@ class DatabaseHelperTest extends TestCase
 
         $this->assertEquals($expected, $queries);
     }
+
+    public function testAlignTablePrefixRewritesDeleteStatements(): void
+    {
+        $query = 'DELETE FROM old_faqdata WHERE id = 1';
+
+        $result = DatabaseHelper::alignTablePrefix($query, 'old_', 'new_');
+
+        $this->assertSame('DELETE FROM new_faqdata WHERE id = 1', $result);
+    }
+
+    public function testAlignTablePrefixRewritesInsertStatements(): void
+    {
+        $query = "INSERT INTO old_faqconfig (name) VALUES ('main')";
+
+        $result = DatabaseHelper::alignTablePrefix($query, 'old_', 'new_');
+
+        $this->assertSame("INSERT INTO new_faqconfig (name) VALUES ('main')", $result);
+    }
+
+    public function testAlignTablePrefixLeavesOtherStatementsUntouched(): void
+    {
+        $query = 'SELECT * FROM old_faqdata';
+
+        $result = DatabaseHelper::alignTablePrefix($query, 'old_', 'new_');
+
+        $this->assertSame($query, $result);
+    }
 }

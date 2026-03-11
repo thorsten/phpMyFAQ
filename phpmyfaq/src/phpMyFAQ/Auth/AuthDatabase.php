@@ -148,7 +148,8 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      */
     public function checkCredentials(
         string $login,
-        #[\SensitiveParameter] string $password,
+        #[\SensitiveParameter]
+        string $password,
         ?array $optionalData = null,
     ): bool {
         $check = sprintf(

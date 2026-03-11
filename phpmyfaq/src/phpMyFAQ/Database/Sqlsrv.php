@@ -62,8 +62,10 @@ class Sqlsrv implements DatabaseDriver
      */
     public function connect(
         string $host,
-        #[SensitiveParameter] string $user,
-        #[SensitiveParameter] string $password,
+        #[SensitiveParameter]
+        string $user,
+        #[SensitiveParameter]
+        string $password,
         string $database = '',
         ?int $port = null,
     ): ?bool {
@@ -394,12 +396,12 @@ class Sqlsrv implements DatabaseDriver
     private function formatErrors(array $errors): string
     {
         $error = '<h3>SQL Error:</h3>MS SQL Error information: <br/>';
-        foreach ($errors as $error) {
+        foreach ($errors as $entry) {
             $error .= sprintf(
                 'SQLSTATE: %s<br/>Code: %s<br/>Message: %s<br/>',
-                $error['SQLSTATE'],
-                $error['code'],
-                $error['message'],
+                $entry['SQLSTATE'],
+                $entry['code'],
+                $entry['message'],
             );
         }
 

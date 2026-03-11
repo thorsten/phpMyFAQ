@@ -5,6 +5,7 @@ namespace phpMyFAQ\Bootstrap;
 use phpMyFAQ\Configuration;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -67,6 +68,21 @@ class PhpConfiguratorTest extends TestCase
 
         $this->assertEquals('100000000', ini_get('pcre.backtrack_limit'));
         $this->assertEquals('100000000', ini_get('pcre.recursion_limit'));
+    }
+
+    #[RunInSeparateProcess]
+    public function testRegisterErrorHandlersRegistersPhpMyFaqHandlers(): void
+    {
+        PhpConfigurator::registerErrorHandlers();
+
+        $previousErrorHandler = set_error_handler(static fn(): bool => true);
+        restore_error_handler();
+
+        $previousExceptionHandler = set_exception_handler(static function (): void {});
+        restore_exception_handler();
+
+        $this->assertSame('\\phpMyFAQ\\Core\\Error::errorHandler', $previousErrorHandler);
+        $this->assertSame('\\phpMyFAQ\\Core\\Error::exceptionHandler', $previousExceptionHandler);
     }
 
     public function testConfigureSessionDefaultsToFilesHandler(): void

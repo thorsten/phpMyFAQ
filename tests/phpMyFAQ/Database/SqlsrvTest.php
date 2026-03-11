@@ -7,6 +7,84 @@ use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use ReflectionProperty;
 
+if (!defined(__NAMESPACE__ . '\SQLSRV_FETCH_ASSOC')) {
+    define(__NAMESPACE__ . '\SQLSRV_FETCH_ASSOC', 2);
+}
+
+if (!defined(__NAMESPACE__ . '\SQLSRV_CURSOR_KEYSET')) {
+    define(__NAMESPACE__ . '\SQLSRV_CURSOR_KEYSET', 1);
+}
+
+function sqlsrv_connect(string $serverName, array $connectionInfo): mixed
+{
+    $GLOBALS['pmfSqlsrvTestState']['connected_to'] = $serverName;
+    $GLOBALS['pmfSqlsrvTestState']['connection_info'] = $connectionInfo;
+
+    return $GLOBALS['pmfSqlsrvTestState']['connect_result'] ?? false;
+}
+
+function sqlsrv_errors(): ?array
+{
+    return $GLOBALS['pmfSqlsrvTestState']['errors'] ?? null;
+}
+
+function sqlsrv_fetch_array(mixed $result, int $fetchType): mixed
+{
+    return array_shift($GLOBALS['pmfSqlsrvTestState']['fetch_array_rows']);
+}
+
+function sqlsrv_fetch_object(mixed $result): mixed
+{
+    return array_shift($GLOBALS['pmfSqlsrvTestState']['fetch_object_rows']);
+}
+
+function sqlsrv_num_rows(mixed $result): int
+{
+    return $GLOBALS['pmfSqlsrvTestState']['num_rows'] ?? 0;
+}
+
+function sqlsrv_query(mixed $conn, string $query, array $params = [], array $options = []): mixed
+{
+    $GLOBALS['pmfSqlsrvTestState']['last_query'] = $query;
+    $GLOBALS['pmfSqlsrvTestState']['last_query_options'] = $options;
+
+    return $GLOBALS['pmfSqlsrvTestState']['query_result'] ?? false;
+}
+
+function sqlsrv_rows_affected(mixed $result): int|false
+{
+    return $GLOBALS['pmfSqlsrvTestState']['rows_affected'] ?? 0;
+}
+
+function sqlsrv_fetch(mixed $result): bool
+{
+    $GLOBALS['pmfSqlsrvTestState']['fetch_called'] = true;
+
+    return true;
+}
+
+function sqlsrv_get_field(mixed $result, int $fieldIndex): mixed
+{
+    return $GLOBALS['pmfSqlsrvTestState']['field_value'] ?? 0;
+}
+
+function sqlsrv_client_info(mixed $conn): array
+{
+    return $GLOBALS['pmfSqlsrvTestState']['client_info'] ?? ['DriverODBCVer' => '18.3', 'DriverVer' => '5.12'];
+}
+
+function sqlsrv_server_info(mixed $conn): array
+{
+    return $GLOBALS['pmfSqlsrvTestState']['server_info'] ?? ['SQLServerVersion' => '16.0.1000.6'];
+}
+
+function sqlsrv_close(mixed $conn): bool
+{
+    $GLOBALS['pmfSqlsrvTestState']['closed'] = true;
+
+    return true;
+}
+
 /**
  * Class SqlsrvTest
  */
@@ -18,6 +96,20 @@ class SqlsrvTest extends TestCase
     protected function setUp(): void
     {
         $this->sqlsrv = new Sqlsrv();
+        $GLOBALS['pmfSqlsrvTestState'] = [
+            'connect_result' => 'sqlsrv-connection',
+            'errors' => null,
+            'fetch_array_rows' => [],
+            'fetch_object_rows' => [],
+            'num_rows' => 0,
+            'query_result' => false,
+            'rows_affected' => 0,
+            'field_value' => 0,
+            'client_info' => ['DriverODBCVer' => '18.3', 'DriverVer' => '5.12'],
+            'server_info' => ['SQLServerVersion' => '16.0.1000.6'],
+            'closed' => false,
+            'fetch_called' => false,
+        ];
     }
 
     public function testImplementsDatabaseDriver(): void
@@ -426,5 +518,93 @@ class SqlsrvTest extends TestCase
 
         $this->assertEquals(0, $reflection->getParameters()[1]->getDefaultValue());
         $this->assertEquals(0, $reflection->getParameters()[2]->getDefaultValue());
+    }
+
+    public function testConnectStoresExpectedServerStringAndOptions(): void
+    {
+        $result = $this->sqlsrv->connect('localhost', 'alice', 'secret', 'faqdb', 1433);
+
+        $this->assertTrue($result);
+        $this->assertSame('localhost, 1433', $GLOBALS['pmfSqlsrvTestState']['connected_to']);
+        $this->assertSame('alice', $GLOBALS['pmfSqlsrvTestState']['connection_info']['UID']);
+        $this->assertSame('faqdb', $GLOBALS['pmfSqlsrvTestState']['connection_info']['Database']);
+    }
+
+    public function testQueryAffectedRowsAndErrorUseSqlsrvShims(): void
+    {
+        $this->setConnectionProperty('sqlsrv-connection');
+        $GLOBALS['pmfSqlsrvTestState']['query_result'] = 'sqlsrv-result';
+        $GLOBALS['pmfSqlsrvTestState']['rows_affected'] = 4;
+        $GLOBALS['pmfSqlsrvTestState']['errors'] = [['SQLSTATE' => '42000', 'message' => 'broken']];
+
+        $result = $this->sqlsrv->query('SELECT * FROM faqdata', 5, 10);
+
+        $this->assertSame('sqlsrv-result', $result);
+        $this->assertStringContainsString(
+            'OFFSET 5 ROWS FETCH NEXT 10 ROWS ONLY',
+            $GLOBALS['pmfSqlsrvTestState']['last_query'],
+        );
+        $this->assertSame(4, $this->sqlsrv->affectedRows());
+        $this->assertSame('42000: broken', $this->sqlsrv->error());
+    }
+
+    public function testFetchMethodsAndNumRowsUseSqlsrvShims(): void
+    {
+        $GLOBALS['pmfSqlsrvTestState']['fetch_array_rows'] = [['id' => 1], false];
+        $GLOBALS['pmfSqlsrvTestState']['fetch_object_rows'] = [(object) ['id' => 2], false];
+        $GLOBALS['pmfSqlsrvTestState']['num_rows'] = 6;
+
+        $this->assertSame(['id' => 1], $this->sqlsrv->fetchArray('result'));
+        $this->assertSame([], $this->sqlsrv->fetchArray('result'));
+        $this->assertEquals((object) ['id' => 2], $this->sqlsrv->fetchObject('result'));
+        $this->assertFalse($this->sqlsrv->fetchObject('result'));
+        $this->assertSame(6, $this->sqlsrv->numRows('result'));
+    }
+
+    public function testNextIdVersionsLastInsertIdAndCloseUseSqlsrvShims(): void
+    {
+        $this->setConnectionProperty('sqlsrv-connection');
+        $GLOBALS['pmfSqlsrvTestState']['query_result'] = 'sqlsrv-result';
+        $GLOBALS['pmfSqlsrvTestState']['field_value'] = 8;
+
+        $this->assertSame(9, $this->sqlsrv->nextId('faqdata', 'id'));
+        $this->assertTrue($GLOBALS['pmfSqlsrvTestState']['fetch_called']);
+        $this->assertSame('18.3 5.12', $this->sqlsrv->clientVersion());
+        $this->assertSame('16.0.1000.6', $this->sqlsrv->serverVersion());
+        $this->assertSame(8, $this->sqlsrv->lastInsertId());
+
+        $this->sqlsrv->close();
+
+        $this->assertTrue($GLOBALS['pmfSqlsrvTestState']['closed']);
+    }
+
+    public function testPrivateHelpersFormatErrorsAndConnectionOptions(): void
+    {
+        $setConnectionOptions = new ReflectionMethod($this->sqlsrv, 'setConnectionOptions');
+        $setConnectionOptions->invoke($this->sqlsrv, 'bob', 'secret', 'faqdb');
+
+        $options = new ReflectionProperty($this->sqlsrv, 'connectionOptions');
+        $connectionOptions = $options->getValue($this->sqlsrv);
+
+        $this->assertSame('bob', $connectionOptions['UID']);
+        $this->assertSame('faqdb', $connectionOptions['Database']);
+        $this->assertTrue($connectionOptions['TrustServerCertificate']);
+
+        $formatErrors = new ReflectionMethod($this->sqlsrv, 'formatErrors');
+        $errorHtml = $formatErrors->invoke($this->sqlsrv, [[
+            'SQLSTATE' => '42S02',
+            'code' => 208,
+            'message' => 'Invalid object name',
+        ]]);
+
+        $this->assertStringContainsString('42S02', $errorHtml);
+        $this->assertStringContainsString('208', $errorHtml);
+        $this->assertStringContainsString('Invalid object name', $errorHtml);
+    }
+
+    private function setConnectionProperty(mixed $connection): void
+    {
+        $reflection = new ReflectionProperty($this->sqlsrv, 'conn');
+        $reflection->setValue($this->sqlsrv, $connection);
     }
 }

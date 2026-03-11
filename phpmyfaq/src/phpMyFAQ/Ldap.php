@@ -73,7 +73,8 @@ class Ldap
         int $ldapPort,
         string $ldapBase,
         string $ldapUser = '',
-        #[SensitiveParameter] string $ldapPassword = '',
+        #[SensitiveParameter]
+        string $ldapPassword = '',
     ): bool {
         // Sanity checks
         if ('' === $ldapServer || '' === $ldapBase) {

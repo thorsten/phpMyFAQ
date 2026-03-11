@@ -91,7 +91,8 @@ class AuthSso extends Auth implements AuthDriverInterface
      */
     public function checkCredentials(
         string $login,
-        #[SensitiveParameter] string $password,
+        #[SensitiveParameter]
+        string $password,
         ?array $optionalData = null,
     ): bool {
         if ($this->request->server->get('REMOTE_USER') === null) {

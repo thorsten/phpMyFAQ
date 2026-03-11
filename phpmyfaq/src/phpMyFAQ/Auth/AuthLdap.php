@@ -21,6 +21,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Auth;
 
+use Closure;
 use phpMyFAQ\Auth;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
@@ -38,6 +39,8 @@ use SensitiveParameter;
 class AuthLdap extends Auth implements AuthDriverInterface
 {
     private ?LdapCore $ldapCore = null;
+    private readonly ?Closure $userFactory;
+    private readonly ?Closure $mediumPermissionFactory;
 
     /** @var string[] Array of LDAP servers */
     private readonly array $ldapServer;
@@ -52,11 +55,18 @@ class AuthLdap extends Auth implements AuthDriverInterface
      * @inheritDoc
      * @throws Exception
      */
-    public function __construct(Configuration $configuration)
-    {
+    public function __construct(
+        Configuration $configuration,
+        ?LdapCore $ldapCore = null,
+        ?Closure $userFactory = null,
+        ?Closure $mediumPermissionFactory = null,
+    ) {
         $this->configuration = $configuration;
         $this->ldapServer = $this->configuration->getLdapServer();
         $this->multipleServers = $this->configuration->get(item: 'ldap.ldap_use_multiple_servers');
+        $this->ldapCore = $ldapCore;
+        $this->userFactory = $userFactory;
+        $this->mediumPermissionFactory = $mediumPermissionFactory;
 
         parent::__construct($this->configuration);
 
@@ -64,7 +74,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
             throw new AuthException('An error occurred while contacting LDAP: No configuration found.');
         }
 
-        $this->ldapCore = new LdapCore($this->configuration);
+        $this->ldapCore ??= new LdapCore($this->configuration);
         $this->connect($this->activeServer);
     }
 
@@ -75,7 +85,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
     public function create(string $login, #[SensitiveParameter] string $password, string $domain = ''): bool
     {
         $result = false;
-        $user = new User($this->configuration);
+        $user = $this->createUser();
 
         try {
             $result = $user->createUser($login, '', $domain);
@@ -119,7 +129,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
             return;
         }
 
-        $mediumPermission = new MediumPermission($this->configuration);
+        $mediumPermission = $this->createMediumPermission();
         $groupMapping = $ldapGroupConfig['group_mapping'];
 
         foreach ($userGroups as $userGroup) {
@@ -179,7 +189,8 @@ class AuthLdap extends Auth implements AuthDriverInterface
      */
     public function checkCredentials(
         string $login,
-        #[SensitiveParameter] string $password,
+        #[SensitiveParameter]
+        string $password,
         ?array $optionalData = null,
     ): bool {
         if ('' === trim($password)) {
@@ -209,7 +220,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
         }
 
         // Check user in LDAP
-        $this->ldapCore = new LdapCore($this->configuration);
+        $this->ldapCore ??= new LdapCore($this->configuration);
         $this->ldapCore->connect(
             $this->ldapServer[$this->activeServer]['ldap_server'],
             $this->ldapServer[$this->activeServer]['ldap_port'],
@@ -288,5 +299,23 @@ class AuthLdap extends Auth implements AuthDriverInterface
             $this->configuration->getLogger()->error($this->ldapCore->error);
             $this->errors[] = $this->ldapCore->error;
         }
+    }
+
+    private function createUser(): User
+    {
+        if ($this->userFactory instanceof Closure) {
+            return ($this->userFactory)();
+        }
+
+        return new User($this->configuration);
+    }
+
+    private function createMediumPermission(): MediumPermission
+    {
+        if ($this->mediumPermissionFactory instanceof Closure) {
+            return ($this->mediumPermissionFactory)();
+        }
+
+        return new MediumPermission($this->configuration);
     }
 }

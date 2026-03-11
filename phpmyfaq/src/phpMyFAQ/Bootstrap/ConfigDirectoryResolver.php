@@ -119,6 +119,10 @@ class ConfigDirectoryResolver
     public static function computeAttachmentsPath(string $confAttachmentsPath, string $rootDir): string|false
     {
         $confAttachmentsPath = trim($confAttachmentsPath);
+        if ($confAttachmentsPath === '') {
+            return $rootDir . DIRECTORY_SEPARATOR;
+        }
+
         if ($confAttachmentsPath[0] === '/' || preg_match('%^[a-z]:[\\\\/]%i', $confAttachmentsPath)) {
             return $confAttachmentsPath;
         }
