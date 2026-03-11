@@ -111,6 +111,7 @@ class Pgsql implements DatabaseDriver
 
         if (!$result) {
             $this->sqlLog .= $this->error();
+            return false;
         }
 
         if (pg_result_status($result) === PGSQL_COMMAND_OK) {
