@@ -119,6 +119,7 @@ class Pgsql implements DatabaseDriver
 
         if (!$result) {
             $this->sqlLog .= $this->error();
+            return false;
         }
 
         $this->lastResult = $result;
