@@ -683,7 +683,7 @@ class User
 
         $users = [];
         if ($this->configuration->getDb()->numRows($result) === 0) {
-            return $result;
+            return [];
         }
 
         while (true) {

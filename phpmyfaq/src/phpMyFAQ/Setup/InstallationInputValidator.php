@@ -113,12 +113,14 @@ class InstallationInputValidator
             throw new Exception(sprintf('Installation Error: Invalid server type "%s"', $dbSetup['dbType']));
         }
 
-        $dbSetup['dbServer'] = Filter::filterInput(INPUT_POST, 'sql_server', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $dbSetup['dbServer'] = $setup === null || !array_key_exists('dbServer', $setup)
+            ? Filter::filterInput(INPUT_POST, 'sql_server', FILTER_SANITIZE_SPECIAL_CHARS, '')
+            : $setup['dbServer'];
         if (trim((string) $dbSetup['dbServer']) === '' && !System::isSqlite($dbSetup['dbType'])) {
             throw new Exception('Installation Error: Please add a database server.');
         }
 
-        $dbSetup['dbPort'] = $setup === null || !array_key_exists('dbType', $setup)
+        $dbSetup['dbPort'] = $setup === null || !array_key_exists('dbPort', $setup)
             ? Filter::filterInput(INPUT_POST, 'sql_port', FILTER_VALIDATE_INT)
             : $setup['dbPort'];
 
@@ -126,17 +128,21 @@ class InstallationInputValidator
             throw new Exception('Installation Error: Please add a valid database port.');
         }
 
-        $dbSetup['dbUser'] = Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $dbSetup['dbUser'] = $setup === null || !array_key_exists('dbUser', $setup)
+            ? Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_SPECIAL_CHARS, '')
+            : $setup['dbUser'];
         if (trim((string) $dbSetup['dbUser']) === '' && !System::isSqlite($dbSetup['dbType'])) {
             throw new Exception('Installation Error: Please add a database username.');
         }
 
-        $dbSetup['dbPassword'] = Filter::filterInput(INPUT_POST, 'sql_password', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $dbSetup['dbPassword'] = $setup === null || !array_key_exists('dbPassword', $setup)
+            ? Filter::filterInput(INPUT_POST, 'sql_password', FILTER_SANITIZE_SPECIAL_CHARS, '')
+            : $setup['dbPassword'];
         if (is_null($dbSetup['dbPassword']) && !System::isSqlite($dbSetup['dbType'])) {
             $dbSetup['dbPassword'] = '';
         }
 
-        $dbSetup['dbDatabaseName'] = $setup === null || !array_key_exists('dbType', $setup)
+        $dbSetup['dbDatabaseName'] = $setup === null || !array_key_exists('dbDatabaseName', $setup)
             ? Filter::filterInput(INPUT_POST, 'sql_db', FILTER_SANITIZE_SPECIAL_CHARS)
             : $setup['dbDatabaseName'];
 

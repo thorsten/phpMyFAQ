@@ -3,7 +3,9 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Form\FormsRepositoryInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -12,6 +14,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class FormsTest extends TestCase
 {
     private Forms $forms;
+    private Sqlite3 $dbHandle;
+    private string $databasePath;
 
     /**
      * @throws Exception
@@ -27,14 +31,34 @@ class FormsTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $configuration = new Configuration($dbHandle);
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-forms-test-');
+        self::assertNotFalse($databasePath);
+        self::assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
+        $this->databasePath = $databasePath;
+
+        $this->dbHandle = new Sqlite3();
+        $this->dbHandle->connect($this->databasePath, '', '');
+        $this->initializeDatabaseStatics($this->dbHandle);
+
+        $configuration = new Configuration($this->dbHandle);
         $language = new Language($configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');
         $configuration->setLanguage($language);
 
         $this->forms = new Forms($configuration);
+    }
+
+    protected function tearDown(): void
+    {
+        if (isset($this->dbHandle)) {
+            $this->dbHandle->close();
+        }
+
+        if (isset($this->databasePath) && is_file($this->databasePath)) {
+            unlink($this->databasePath);
+        }
+
+        parent::tearDown();
     }
 
     public function testSaveActivateInputStatus(): void
@@ -270,6 +294,94 @@ class FormsTest extends TestCase
     {
         // Verify that Forms can be instantiated
         $this->assertInstanceOf(Forms::class, $this->forms);
+    }
+
+    public function testDeleteTranslationDelegatesToRepository(): void
+    {
+        $repository = $this->createMock(FormsRepositoryInterface::class);
+        $repository->expects($this->once())
+            ->method('deleteTranslation')
+            ->with(1, 2, 'en')
+            ->willReturn(true);
+
+        $forms = new Forms($this->createStub(Configuration::class), $repository);
+
+        $this->assertTrue($forms->deleteTranslation(1, 2, 'en'));
+    }
+
+    public function testAddTranslationReturnsFalseWhenDefaultInputDoesNotExist(): void
+    {
+        $repository = $this->createMock(FormsRepositoryInterface::class);
+        $repository->expects($this->once())
+            ->method('fetchDefaultInputData')
+            ->with(1, 2)
+            ->willReturn(null);
+        $repository->expects($this->never())->method('insertTranslationRow');
+
+        $forms = new Forms($this->createStub(Configuration::class), $repository);
+
+        $this->assertFalse($forms->addTranslation(1, 2, 'English', 'Translated label'));
+    }
+
+    public function testAddTranslationInsertsResolvedLanguageCode(): void
+    {
+        $inputData = (object) [
+            'input_type' => 'text',
+            'input_active' => 1,
+            'input_required' => 0,
+        ];
+
+        $repository = $this->createMock(FormsRepositoryInterface::class);
+        $repository->expects($this->once())
+            ->method('fetchDefaultInputData')
+            ->with(1, 2)
+            ->willReturn($inputData);
+        $repository->expects($this->once())
+            ->method('insertTranslationRow')
+            ->with(1, 2, 'text', 'Translated label', 1, 0, 'en')
+            ->willReturn(true);
+
+        $forms = new Forms($this->createStub(Configuration::class), $repository);
+
+        $this->assertTrue($forms->addTranslation(1, 2, 'English', 'Translated label'));
+    }
+
+    public function testInsertInputIntoDatabaseDelegatesToRepository(): void
+    {
+        $input = ['input_id' => 99, 'input_type' => 'text'];
+        $repository = $this->createMock(FormsRepositoryInterface::class);
+        $repository->expects($this->once())
+            ->method('insertInput')
+            ->with($input)
+            ->willReturn(true);
+
+        $forms = new Forms($this->createStub(Configuration::class), $repository);
+
+        $this->assertTrue($forms->insertInputIntoDatabase($input));
+    }
+
+    public function testGetInsertQueriesDelegatesToRepository(): void
+    {
+        $input = ['input_id' => 99, 'input_type' => 'text'];
+        $repository = $this->createMock(FormsRepositoryInterface::class);
+        $repository->expects($this->once())
+            ->method('buildInsertQuery')
+            ->with($input)
+            ->willReturn('INSERT INTO faqforms (...) VALUES (...)');
+
+        $forms = new Forms($this->createStub(Configuration::class), $repository);
+
+        $this->assertSame('INSERT INTO faqforms (...) VALUES (...)', $forms->getInsertQueries($input));
+    }
+
+    private function initializeDatabaseStatics(Sqlite3 $dbHandle): void
+    {
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $dbHandle);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlite3');
+        Database::setTablePrefix('');
     }
 
     /**

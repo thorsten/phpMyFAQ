@@ -3,13 +3,16 @@
 namespace phpMyFAQ;
 
 use Exception;
+use phpMyFAQ\Auth\AuthDatabase;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Tenant\QuotaExceededException;
 use phpMyFAQ\User\UserData;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use ReflectionProperty;
 
 #[AllowMockObjectsWithoutExpectations]
 class UserTest extends TestCase
@@ -138,5 +141,443 @@ class UserTest extends TestCase
 
         $this->expectException(QuotaExceededException::class);
         $this->user->createUser('new_user');
+    }
+
+    public function testGetUserAuthSourceReturnsCurrentAuthSource(): void
+    {
+        $this->setPrivateProperty('authSource', 'ldap');
+
+        $this->assertSame('ldap', $this->user->getUserAuthSource());
+    }
+
+    public function testGetUserByCookieReturnsFalseWhenRecordIsMissing(): void
+    {
+        $this->database->method('escape')->willReturn('cookie-token');
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('numRows')->willReturn(0);
+
+        $this->assertFalse($this->user->getUserByCookie('cookie-token'));
+        $this->assertContains(User::ERROR_USER_INCORRECT_LOGIN, $this->user->errors);
+    }
+
+    public function testGetUserByCookieReturnsFalseForAnonymousUser(): void
+    {
+        $this->database->method('escape')->willReturn('cookie-token');
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('numRows')->willReturn(1);
+        $this->database->method('fetchArray')->willReturn([
+            'user_id' => -1,
+            'login' => 'anonymous',
+            'account_status' => 'active',
+        ]);
+
+        $this->assertFalse($this->user->getUserByCookie('cookie-token'));
+    }
+
+    public function testGetUserByCookieLoadsUserDataForRegularUser(): void
+    {
+        $this->database->method('escape')->willReturn('cookie-token');
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('numRows')->willReturn(1);
+        $this->database->method('fetchArray')->willReturn([
+            'user_id' => 42,
+            'login' => 'cookie-user',
+            'account_status' => 'active',
+        ]);
+        $this->userData->expects($this->once())->method('load')->with(42);
+
+        $this->assertTrue($this->user->getUserByCookie('cookie-token'));
+        $this->assertSame(42, $this->user->getUserId());
+    }
+
+    public function testGetUserIdAddsErrorWhenUnset(): void
+    {
+        $this->setPrivateProperty('userId', 0);
+
+        $this->assertSame(-1, $this->user->getUserId());
+        $this->assertContains(User::ERROR_USER_NO_USERID, $this->user->errors);
+    }
+
+    public function testCheckDisplayNameAndMailAddressDelegateToUserData(): void
+    {
+        $this->userData->expects($this->exactly(2))
+            ->method('fetch')
+            ->willReturnMap([
+                ['display_name', 'Thorsten', 'Thorsten'],
+                ['email', 'thorsten@example.com', 'thorsten@example.com'],
+            ]);
+
+        $this->assertTrue($this->user->checkDisplayName('Thorsten'));
+        $this->assertTrue($this->user->checkMailAddress('thorsten@example.com'));
+    }
+
+    public function testSearchUsersReturnsEmptyArrayWhenQueryFails(): void
+    {
+        $this->database->method('escape')->willReturn('thor%');
+        $this->database->method('query')->willReturn(false);
+
+        $this->assertSame([], $this->user->searchUsers('thor'));
+    }
+
+    public function testSearchUsersReturnsMappedRows(): void
+    {
+        $this->database->method('escape')->willReturn('thor%');
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('fetchArray')->willReturnOnConsecutiveCalls(
+            ['login' => 'thorsten', 'user_id' => 1, 'account_status' => 'active'],
+            ['login' => 'thorben', 'user_id' => 2, 'account_status' => 'blocked'],
+            null,
+        );
+
+        $users = $this->user->searchUsers('thor');
+
+        $this->assertCount(2, $users);
+        $this->assertSame('thorsten', $users[0]['login']);
+    }
+
+    public function testIsValidLoginRejectsTooShortAndAcceptsValidLogin(): void
+    {
+        $this->assertFalse($this->user->isValidLogin('a'));
+        $this->assertContains(User::ERROR_USER_LOGIN_INVALID, $this->user->errors);
+        $this->assertTrue($this->user->isValidLogin('valid_user'));
+    }
+
+    public function testGetUserByLoginReturnsFalseWithoutErrorWhenDisabled(): void
+    {
+        $this->database->method('escape')->willReturn('missing');
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('numRows')->willReturn(0);
+
+        $this->assertFalse($this->user->getUserByLogin('missing', false));
+        $this->assertSame([], $this->user->errors);
+    }
+
+    public function testGetUserByLoginLoadsUserDataOnSuccess(): void
+    {
+        $this->database->method('escape')->willReturn('existing');
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('numRows')->willReturn(1);
+        $this->database->method('fetchArray')->willReturn([
+            'user_id' => 7,
+            'login' => 'existing',
+            'account_status' => 'active',
+            'is_superadmin' => 1,
+            'auth_source' => 'local',
+        ]);
+        $this->userData->expects($this->once())->method('load')->with(7);
+
+        $this->assertTrue($this->user->getUserByLogin('existing'));
+        $this->assertSame('existing', $this->user->getLogin());
+        $this->assertTrue($this->user->isSuperAdmin());
+    }
+
+    public function testCreatePasswordGeneratesExpectedLengthAndAllowedCharacters(): void
+    {
+        $password = $this->user->createPassword(12, true);
+
+        $this->assertSame(12, strlen($password));
+        $this->assertMatchesRegularExpression('/^[A-Za-z2-9_]+$/', $password);
+    }
+
+    public function testDeleteUserFailsWhenUserIdIsMissing(): void
+    {
+        $this->setPrivateProperty('userId', 0);
+
+        $this->assertFalse($this->user->deleteUser());
+        $this->assertContains(User::ERROR_USER_NO_USERID, $this->user->errors);
+    }
+
+    public function testDeleteUserFailsWhenLoginIsMissing(): void
+    {
+        $this->setPrivateProperty('userId', 5);
+        $this->setPrivateProperty('login', '');
+
+        $this->assertFalse($this->user->deleteUser());
+        $this->assertContains(User::ERROR_USER_LOGIN_INVALID, $this->user->errors);
+    }
+
+    public function testDeleteUserFailsForProtectedStatus(): void
+    {
+        $this->setPrivateProperty('userId', 5);
+        $this->setPrivateProperty('login', 'protected-user');
+        $this->setPrivateProperty('status', 'protected');
+
+        $this->assertFalse($this->user->deleteUser());
+        $this->assertStringContainsString(User::STATUS_USER_PROTECTED, $this->user->errors[0]);
+    }
+
+    public function testDeleteUserFailsWhenNoWritableAuthExists(): void
+    {
+        $this->setPrivateProperty('userId', 5);
+        $this->setPrivateProperty('login', 'readonly-user');
+        $this->setPrivateProperty('status', 'active');
+        $this->setProtectedProperty('authContainer', []);
+
+        $permission = $this->createMock(MediumPermission::class);
+        $permission->expects($this->once())->method('refuseAllUserRights')->with(5);
+        $this->user->perm = $permission;
+
+        $this->database->method('query')->willReturn(true);
+        $this->userData->method('delete')->willReturn(true);
+
+        $auth = $this->createMock(AuthDatabase::class);
+        $auth->expects($this->once())->method('disableReadOnly')->willReturn(true);
+        $this->user->addAuth($auth, 'readonly');
+
+        $this->assertFalse($this->user->deleteUser());
+        $this->assertContains(User::ERROR_USER_NO_AUTH_WRITABLE, $this->user->errors);
+    }
+
+    public function testDeleteUserSucceedsWhenAuthDeleteReturnsTrue(): void
+    {
+        $this->setPrivateProperty('userId', 6);
+        $this->setPrivateProperty('login', 'deletable');
+        $this->setPrivateProperty('status', 'active');
+        $this->setProtectedProperty('authContainer', []);
+
+        $permission = $this->createMock(MediumPermission::class);
+        $permission->expects($this->once())->method('refuseAllUserRights')->with(6);
+        $this->user->perm = $permission;
+
+        $this->database->method('query')->willReturn(true);
+        $this->userData->method('delete')->with(6)->willReturn(true);
+
+        $auth = $this->createMock(AuthDatabase::class);
+        $auth->expects($this->once())->method('disableReadOnly')->willReturn(false);
+        $auth->expects($this->once())->method('delete')->with('deletable')->willReturn(true);
+        $this->user->addAuth($auth, 'writable');
+
+        $this->assertTrue($this->user->deleteUser());
+    }
+
+    public function testErrorReturnsHtmlSeparatedMessagesAndClearsErrors(): void
+    {
+        $this->user->errors = ['first error', 'second error'];
+
+        $message = $this->user->error();
+
+        $this->assertSame("first error<br>\nsecond error<br>\n", $message);
+        $this->assertSame([], $this->user->errors);
+    }
+
+    public function testGetAuthContainerReturnsAddedAuthDrivers(): void
+    {
+        $auth = $this->createMock(AuthDatabase::class);
+        $this->user->addAuth($auth, 'api');
+
+        $container = $this->user->getAuthContainer();
+
+        $this->assertArrayHasKey('api', $container);
+        $this->assertSame($auth, $container['api']);
+    }
+
+    public function testGetAllUsersHandlesFailureEmptyAndSuccessCases(): void
+    {
+        $this->database->method('query')->willReturnOnConsecutiveCalls(false, true, true);
+        $this->database->method('numRows')->willReturnOnConsecutiveCalls(0, 2);
+        $this->database->method('fetchArray')->willReturnOnConsecutiveCalls(
+            ['user_id' => 3],
+            ['user_id' => 5],
+            null,
+        );
+
+        $this->assertSame([], $this->user->getAllUsers());
+        $this->assertSame([], $this->user->getAllUsers());
+        $this->assertSame([3, 5], $this->user->getAllUsers(false, false));
+    }
+
+    public function testGetUserByIdReturnsFalseWhenNotFoundOrMissingLoginData(): void
+    {
+        $this->setPrivateProperty('authData', [
+            'authSource' => [
+                'name' => 'db',
+                'type' => 'local',
+            ],
+            'encType' => User::DEFAULT_ENCRYPTION_TYPE,
+            'readOnly' => false,
+        ]);
+        $this->database->method('query')->willReturnOnConsecutiveCalls(true, true, true);
+        $this->database->method('numRows')->willReturnOnConsecutiveCalls(0, 1, 0);
+        $this->database->method('fetchArray')->willReturn([
+            'user_id' => 8,
+            'login' => 'db-user',
+            'account_status' => 'active',
+            'is_superadmin' => 0,
+            'auth_source' => 'local',
+        ]);
+        $this->database->method('error')->willReturn('db error');
+
+        $this->assertFalse($this->user->getUserById(99));
+        $this->assertFalse($this->user->getUserById(8));
+    }
+
+    public function testGetUserDataSetUserDataAndEmailHelpersDelegateToUserData(): void
+    {
+        $this->setPrivateProperty('userId', 11);
+        $this->userData->expects($this->once())->method('get')->with('display_name')->willReturn('Thorsten');
+        $this->userData->expects($this->once())->method('load')->with(11);
+        $this->userData->expects($this->once())->method('set')->with(['display_name'], ['Thorsten'])->willReturn(true);
+        $this->userData->expects($this->exactly(2))->method('fetchAll')->willReturnOnConsecutiveCalls(
+            ['user_id' => 11, 'is_visible' => true],
+            ['user_id' => 12],
+        );
+
+        $this->assertSame('Thorsten', $this->user->getUserData('display_name'));
+        $this->assertTrue($this->user->setUserData(['display_name' => 'Thorsten']));
+        $this->assertSame(11, $this->user->getUserIdByEmail('thorsten@example.com'));
+        $this->assertTrue($this->user->getUserVisibilityByEmail('anonymous@example.com'));
+    }
+
+    public function testActivateUserReturnsFalseForNonBlockedStatus(): void
+    {
+        $user = $this->getMockBuilder(User::class)
+            ->setConstructorArgs([$this->configuration])
+            ->onlyMethods(['getStatus'])
+            ->getMock();
+
+        $user->method('getStatus')->willReturn('active');
+
+        $this->assertFalse($user->activateUser());
+    }
+
+    public function testActivateUserChangesStatusWhenMailWasSent(): void
+    {
+        $user = $this->getMockBuilder(User::class)
+            ->setConstructorArgs([$this->configuration])
+            ->onlyMethods(['getStatus', 'createPassword', 'changePassword', 'getUserData', 'getLogin', 'mailUser', 'setStatus'])
+            ->getMock();
+
+        $user->method('getStatus')->willReturn('blocked');
+        $user->method('createPassword')->willReturn('Abcd2345');
+        $user->expects($this->once())->method('changePassword')->with('Abcd2345')->willReturn(true);
+        $user->method('getUserData')->with('display_name')->willReturn('Blocked User');
+        $user->method('getLogin')->willReturn('blocked-user');
+        $user->expects($this->once())->method('mailUser')->willReturn(1);
+        $user->expects($this->once())->method('setStatus')->with('active')->willReturn(true);
+
+        $this->assertTrue($user->activateUser());
+    }
+
+    public function testActivateUserReturnsTrueWhenMailSendingFails(): void
+    {
+        $user = $this->getMockBuilder(User::class)
+            ->setConstructorArgs([$this->configuration])
+            ->onlyMethods(['getStatus', 'createPassword', 'changePassword', 'getUserData', 'getLogin', 'mailUser'])
+            ->getMock();
+
+        $user->method('getStatus')->willReturn('blocked');
+        $user->method('createPassword')->willReturn('Abcd2345');
+        $user->expects($this->once())->method('changePassword')->with('Abcd2345')->willReturn(true);
+        $user->method('getUserData')->willReturn('Blocked User');
+        $user->method('getLogin')->willReturn('blocked-user');
+        $user->expects($this->once())->method('mailUser')->willReturn(0);
+
+        $this->assertTrue($user->activateUser());
+    }
+
+    public function testGetStatusReturnsEmptyForUnsetStatus(): void
+    {
+        $this->setPrivateProperty('status', '');
+
+        $this->assertSame('', $this->user->getStatus());
+    }
+
+    public function testSetStatusRejectsInvalidAndPersistsValidStatus(): void
+    {
+        $this->setPrivateProperty('userId', 13);
+        $this->database->method('escape')->willReturnArgument(0);
+        $this->database->method('query')->willReturn(true);
+
+        $this->assertFalse($this->user->setStatus('unknown'));
+        $this->assertContains(User::ERROR_USER_INVALID_STATUS, $this->user->errors);
+        $this->assertTrue($this->user->setStatus('active'));
+        $this->assertSame('active', $this->user->getStatus());
+    }
+
+    public function testSetAuthSourceAndChangePassword(): void
+    {
+        $this->setPrivateProperty('userId', 14);
+        $this->setPrivateProperty('login', 'api-user');
+        $this->setProtectedProperty('authContainer', []);
+        $this->database->method('escape')->willReturnArgument(0);
+        $this->database->method('query')->willReturn(true);
+
+        $readonly = $this->createMock(AuthDatabase::class);
+        $readonly->expects($this->once())->method('disableReadOnly')->willReturn(true);
+        $writable = $this->createMock(AuthDatabase::class);
+        $writable->expects($this->once())->method('disableReadOnly')->willReturn(false);
+        $writable->expects($this->once())->method('update')->with('api-user', 'Secret123')->willReturn(true);
+        $this->user->addAuth($readonly, 'readonly');
+        $this->user->addAuth($writable, 'writable');
+
+        $this->assertTrue($this->user->setAuthSource('ldap'));
+        $this->assertTrue($this->user->changePassword('Secret123'));
+    }
+
+    public function testSetSuperAdminTerminateSessionAndWebAuthnKeys(): void
+    {
+        $this->setPrivateProperty('userId', 15);
+        $this->database->method('escape')->willReturnArgument(0);
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('numRows')->willReturn(1);
+        $this->database->method('fetchArray')->willReturn(['webauthnkeys' => '{"id":"key-1"}']);
+
+        $this->assertTrue($this->user->setSuperAdmin(true));
+        $this->assertTrue($this->user->isSuperAdmin());
+        $this->assertTrue($this->user->terminateSessionId());
+        $this->assertTrue($this->user->setWebAuthnKeys('{"id":"key-1"}'));
+        $this->assertSame('{"id":"key-1"}', $this->user->getWebAuthnKeys());
+    }
+
+    public function testGetWebAuthnKeysReturnsEmptyStringWhenMissing(): void
+    {
+        $this->setPrivateProperty('userId', 16);
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('numRows')->willReturn(0);
+
+        $this->assertSame('', $this->user->getWebAuthnKeys());
+    }
+
+    public function testGetSuperAdminIdsAndExtractUserFromResult(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $database = $this->createMock(Sqlite3::class);
+        $configuration->method('getDb')->willReturn($database);
+
+        $database->method('query')->willReturn(true);
+        $database->method('fetchObject')->willReturnOnConsecutiveCalls(
+            (object) ['user_id' => 2],
+            (object) ['user_id' => 5],
+            null,
+        );
+
+        $this->assertSame([2, 5], User::getSuperAdminIds($configuration));
+        $this->database->method('fetchArray')->willReturn([
+            'user_id' => 99,
+            'login' => 'extract-user',
+            'account_status' => 'blocked',
+            'is_superadmin' => 1,
+            'auth_source' => 'sso',
+        ]);
+
+        $this->user->extractUserFromResult(true);
+
+        $this->assertSame(99, $this->user->getUserId());
+        $this->assertSame('extract-user', $this->user->getLogin());
+        $this->assertSame('blocked', $this->user->getStatus());
+        $this->assertSame('sso', $this->user->getUserAuthSource());
+        $this->assertTrue($this->user->isSuperAdmin());
+    }
+
+    private function setPrivateProperty(string $name, mixed $value): void
+    {
+        $reflectionProperty = new ReflectionProperty(User::class, $name);
+        $reflectionProperty->setValue($this->user, $value);
+    }
+
+    private function setProtectedProperty(string $name, mixed $value): void
+    {
+        $reflectionProperty = new ReflectionProperty(User::class, $name);
+        $reflectionProperty->setValue($this->user, $value);
     }
 }
