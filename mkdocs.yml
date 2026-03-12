@@ -12,7 +12,7 @@ nav:
   - 5. Updating phpMyFAQ: '5-update.md'
   - 6. Use phpMyFAQ: '6-usage.md'
   - 7. Manage phpMyFAQ: '7-administration.md'
-    8. phpMyFAQ configuration reference: '8-configuration.md'
+  - 8. phpMyFAQ configuration reference: '8-configuration.md'
   - 9. AI-Assisted Translation feature: '8-ai-translation.md'
   - 10. Developer documentation: '9-development.md'
   - 11. Plugins: '10-plugins.md'
