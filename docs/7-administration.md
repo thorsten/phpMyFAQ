@@ -481,8 +481,7 @@ Navigate to the **Configuration → Translation** tab to configure your translat
 - **Amazon**: AWS Access Key ID, Secret Access Key, and region
 - **LibreTranslate**: Server URL and optional API key
 
-For detailed setup instructions for each provider, see the [AI Translation Guide](ai-translation.md) and
-[Quick Start Guide](ai-translation-quickstart.md).
+For detailed setup instructions for each provider, see the [AI Translation Guide](9-ai-translation.md).
 
 #### 5.2.13.3 Translating Content
 
@@ -579,8 +578,7 @@ The AI will translate:
 - Re-translate if formatting is broken
 
 For comprehensive documentation, see:
-- [Complete AI Translation Guide](ai-translation.md) - Full documentation
-- [Quick Start Guide](ai-translation-quickstart.md) - Get started in 5 minutes
+- [Complete AI Translation Guide](9-ai-translation.md) - Full documentation
 
 ## 5.3 Statistics
 
