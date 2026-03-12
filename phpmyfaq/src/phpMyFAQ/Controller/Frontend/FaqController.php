@@ -317,7 +317,7 @@ final class FaqController extends AbstractFrontController
         $relatedFaqs = $faqDisplayService->getRelatedFaqs($faqId);
         $numComments = $faqDisplayService->getNumberOfComments();
         $comments = $faqDisplayService->getCommentsData($faqId);
-        $availableLanguages = $faqDisplayService->getAvailableLanguages($faq->faqRecord['id']);
+        $availableLanguages = $faqDisplayService->getAvailableLanguages((int) $faq->faqRecord['id']);
         $tagsHtml = $faqDisplayService->getTagsHtml($faqId);
 
         // Generate language URLs with SEO slugs
@@ -370,7 +370,7 @@ final class FaqController extends AbstractFrontController
         $seoEntity = new SeoEntity();
         $seoEntity
             ->setSeoType(SeoType::FAQ)
-            ->setReferenceId($faq->faqRecord['id'])
+            ->setReferenceId((int) $faq->faqRecord['id'])
             ->setReferenceLanguage($faq->faqRecord['lang']);
         $seoData = $seo->get($seoEntity);
 
