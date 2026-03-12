@@ -1,4 +1,4 @@
-# 8. phpMyFAQ configuration reference
+# 8. Configuration reference
 
 This document lists all configuration keys used by phpMyFAQ, their default values, and a description of what
 each setting controls. These values are set during installation and can be changed in the admin panel under
