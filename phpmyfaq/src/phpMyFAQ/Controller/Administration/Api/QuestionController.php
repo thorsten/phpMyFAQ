@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 use Exception;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Filter;
 use phpMyFAQ\Question;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
@@ -61,7 +62,12 @@ final class QuestionController extends AbstractController
             }
 
             foreach ($questionIds as $questionId) {
-                $question->delete((int) $questionId);
+                $questionId = Filter::filterVar($questionId, FILTER_VALIDATE_INT);
+                if (!$questionId) {
+                    continue;
+                }
+
+                $question->delete($questionId);
             }
 
             return $this->json(['success' => Translation::get(key: 'ad_open_question_deleted')], Response::HTTP_OK);

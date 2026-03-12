@@ -45,11 +45,7 @@ final class QueryBuilderTest extends TestCase
     {
         $builder = new QueryBuilder(new MysqlDialect());
 
-        $sql = $builder
-            ->createTable('content')
-            ->integer('id', false)
-            ->primaryKey('id')
-            ->build();
+        $sql = $builder->createTable('content')->integer('id', false)->primaryKey('id')->build();
 
         $this->assertInstanceOf(TableBuilder::class, $builder->createTable('content'));
         $this->assertStringContainsString('CREATE TABLE faq_content', $sql);
@@ -59,11 +55,7 @@ final class QueryBuilderTest extends TestCase
     {
         $builder = new QueryBuilder(new MysqlDialect());
 
-        $sql = $builder
-            ->createTable('content', false)
-            ->integer('id', false)
-            ->primaryKey('id')
-            ->build();
+        $sql = $builder->createTable('content', false)->integer('id', false)->primaryKey('id')->build();
 
         $this->assertStringContainsString('CREATE TABLE content', $sql);
         $this->assertStringNotContainsString('CREATE TABLE faq_content', $sql);
@@ -73,11 +65,7 @@ final class QueryBuilderTest extends TestCase
     {
         $builder = new QueryBuilder(new MysqlDialect());
 
-        $sql = $builder
-            ->createTableIfNotExists('logs')
-            ->integer('id', false)
-            ->primaryKey('id')
-            ->build();
+        $sql = $builder->createTableIfNotExists('logs')->integer('id', false)->primaryKey('id')->build();
 
         $this->assertStringContainsString('CREATE TABLE IF NOT EXISTS faq_logs', $sql);
     }
@@ -86,10 +74,7 @@ final class QueryBuilderTest extends TestCase
     {
         $builder = new QueryBuilder(new MysqlDialect());
 
-        $statements = $builder
-            ->alterTable('content')
-            ->addInteger('views', false, 0)
-            ->build();
+        $statements = $builder->alterTable('content')->addInteger('views', false, 0)->build();
 
         $this->assertInstanceOf(AlterTableBuilder::class, $builder->alterTable('content'));
         $this->assertSame(['ALTER TABLE faq_content ADD COLUMN views INT NOT NULL DEFAULT 0'], $statements);
@@ -99,10 +84,7 @@ final class QueryBuilderTest extends TestCase
     {
         $builder = new QueryBuilder(new SqliteDialect());
 
-        $statements = $builder
-            ->alterTable('content', false)
-            ->addText('notes')
-            ->build();
+        $statements = $builder->alterTable('content', false)->addText('notes')->build();
 
         $this->assertSame(['ALTER TABLE content ADD COLUMN notes TEXT NULL'], $statements);
     }
@@ -146,10 +128,11 @@ final class QueryBuilderTest extends TestCase
 
         $builder = new QueryBuilder($dialect);
 
-        $this->assertSame(
-            'CREATE INDEX idx_title ON faq_articles (title, slug)',
-            $builder->createIndex('idx_title', 'articles', ['title', 'slug']),
-        );
+        $this->assertSame('CREATE INDEX idx_title ON faq_articles (title, slug)', $builder->createIndex(
+            'idx_title',
+            'articles',
+            ['title', 'slug'],
+        ));
     }
 
     public function testCreateIndexIfNotExistsDelegatesToDialectWithoutPrefixWhenRequested(): void
@@ -163,10 +146,12 @@ final class QueryBuilderTest extends TestCase
 
         $builder = new QueryBuilder($dialect);
 
-        $this->assertSame(
-            'CREATE INDEX IF NOT EXISTS idx_title ON articles (title)',
-            $builder->createIndexIfNotExists('idx_title', 'articles', 'title', false),
-        );
+        $this->assertSame('CREATE INDEX IF NOT EXISTS idx_title ON articles (title)', $builder->createIndexIfNotExists(
+            'idx_title',
+            'articles',
+            'title',
+            false,
+        ));
     }
 
     public function testDropIndexDelegatesToDialectWithPrefixedTable(): void

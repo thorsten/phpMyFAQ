@@ -6,7 +6,9 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Language;
+use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
@@ -78,9 +80,36 @@ class CategoryHelperTest extends TestCase
      */
     public function testBuildCategoryList(): void
     {
-        // This is a complex method that requires global state and many dependencies
-        // For now, we test that the method exists
-        $this->assertTrue(method_exists($this->categoryHelper, 'buildCategoryList'));
+        $categoryHelper = new CategoryHelper();
+
+        $reflection = new ReflectionClass($categoryHelper);
+        $configProperty = $reflection->getProperty('configuration');
+        $configProperty->setValue($categoryHelper, $this->mockConfiguration);
+
+        $pluralsProperty = $reflection->getProperty('plurals');
+        $pluralsProperty->setValue($categoryHelper, new Plurals());
+
+        $this->mockConfiguration->method('getDefaultUrl')->willReturn('http://localhost/');
+
+        $categoryTree = [
+            1 => ['id' => 1, 'parent_id' => 0, 'name' => 'Root', 'description' => 'Root description'],
+            2 => ['id' => 2, 'parent_id' => 1, 'name' => 'Child', 'description' => 'Child description'],
+        ];
+        $aggregatedNumbers = [1 => 2, 2 => 0];
+        $categoryNumbers = [
+            1 => ['faqs' => 2],
+            2 => ['faqs' => 0],
+        ];
+
+        $result = $categoryHelper->buildCategoryList($categoryTree, 0, $aggregatedNumbers, $categoryNumbers);
+
+        $this->assertStringContainsString('data-category-id="1"', $result);
+        $this->assertStringContainsString('category/1/root.html', $result);
+        $this->assertStringContainsString('Root description', $result);
+        $this->assertStringContainsString('data-category-id="2"', $result);
+        $this->assertStringContainsString('Child description', $result);
+        $this->assertStringContainsString('2 FAQs', $result);
+        $this->assertStringContainsString('0 FAQs', $result);
     }
 
     /**
@@ -184,5 +213,61 @@ class CategoryHelperTest extends TestCase
 
         $result = $categoryHelper->renderAvailableTranslationsOptions(1);
         $this->assertIsString($result);
+    }
+
+    public function testRenderCategoryTreeWithCategories(): void
+    {
+        $databaseFile = tempnam(sys_get_temp_dir(), 'pmf-category-helper-');
+        copy(PMF_TEST_DIR . '/test.db', $databaseFile);
+
+        $db = new Sqlite3();
+        $db->connect($databaseFile, '', '');
+
+        $configuration = new Configuration($db);
+        $configuration->set('main.referenceURL', 'http://localhost/');
+        $configuration->set('security.permLevel', 'basic');
+        $language = new Language(
+            $configuration,
+            $this->createStub(\Symfony\Component\HttpFoundation\Session\Session::class),
+        );
+        $language->setLanguageFromConfiguration('en');
+        $configuration->setLanguage($language);
+
+        $db->query("INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
+             VALUES (9001, 'en', 0, 'Rendered Root', 'Rendered description', -1, -1, 1, NULL, 1)");
+        $db->query(
+            "INSERT INTO faqdata (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end, notes, sticky_order)
+             VALUES (9001, 'en', 99001, 0, 'yes', 0, '', 'Rendered FAQ', 'Content', 'Author', 'author@example.com', 'y', '20260101000000', '00000000000000', '99991231235959', '', NULL)",
+        );
+        $db->query("INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
+             VALUES (9001, 'en', 9001, 'en')");
+
+        $category = $this->createStub(Category::class);
+        $category->method('getGroups')->willReturn([-1]);
+        $category
+            ->method('getOrderedCategories')
+            ->willReturn([
+                9001 => [
+                    'id' => 9001,
+                    'parent_id' => 0,
+                    'name' => 'Rendered Root',
+                    'description' => 'Rendered description',
+                ],
+            ]);
+
+        $categoryHelper = new CategoryHelper();
+        $reflection = new ReflectionClass($categoryHelper);
+        $reflection->getProperty('configuration')->setValue($categoryHelper, $configuration);
+        $reflection->getProperty('Category')->setValue($categoryHelper, $category);
+        $reflection->getProperty('plurals')->setValue($categoryHelper, new Plurals());
+
+        $result = $categoryHelper->renderCategoryTree();
+
+        $this->assertStringContainsString('<ul class="pmf-category-overview">', $result);
+        $this->assertStringContainsString('Rendered Root', $result);
+        $this->assertStringContainsString('Rendered description', $result);
+        $this->assertStringContainsString('1 FAQ', $result);
+
+        unlink($databaseFile);
     }
 }

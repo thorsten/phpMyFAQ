@@ -57,7 +57,7 @@
                   type="text"
                   name="name"
                   id="name"
-                  value="{{ realname|raw }}"
+                  value="{{ realname | e('html_attr') }}"
                   class="form-control"
                   required
                 />

@@ -24,6 +24,7 @@ use Exception;
 use phpMyFAQ\Administration\Session;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -55,10 +56,10 @@ final class SessionController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $data = $this->adminSession->getSessionsByDate(
-            strtotime((string) $requestData->firstHour),
-            strtotime((string) $requestData->lastHour),
-        );
+        $firstHour = Filter::filterVar($requestData->firstHour, FILTER_SANITIZE_SPECIAL_CHARS);
+        $lastHour = Filter::filterVar($requestData->lastHour, FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $data = $this->adminSession->getSessionsByDate(strtotime((string) $firstHour), strtotime((string) $lastHour));
         $filePath = tempnam(sys_get_temp_dir(), prefix: 'csv_');
         $file = fopen($filePath, mode: 'w');
         if ($file) {

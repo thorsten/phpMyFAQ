@@ -11,6 +11,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Helper\QuestionHelper;
 use phpMyFAQ\Language;
+use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -126,5 +127,28 @@ class QuestionHelperTest extends TestCase
         $this->assertObjectHasProperty('categoryName', $question);
         $this->assertObjectHasProperty('question', $question);
         $this->assertObjectHasProperty('answerId', $question);
+    }
+
+    public function testGenerateSmartAnswerBuildsFaqLinksAndPreview(): void
+    {
+        $this->configuration->set('main.enableMarkdownEditor', false);
+        $searchResultSet = $this->createMock(SearchResultSet::class);
+
+        $result = new \stdClass();
+        $result->category_id = 1;
+        $result->id = 123;
+        $result->lang = 'en';
+        $result->question = 'How can I use phpMyFAQ effectively?';
+        $result->answer = '<p>Use categories and search.</p>';
+
+        $searchResultSet->method('getNumberOfResults')->willReturn(1);
+        $searchResultSet->method('getResultSet')->willReturn([$result]);
+
+        $smartAnswer = $this->questionHelper->generateSmartAnswer($searchResultSet);
+
+        $this->assertStringContainsString('<h5>', $smartAnswer);
+        $this->assertStringContainsString('content/1/123/en/how-can-i-use-phpmyfaq-effectively.html', $smartAnswer);
+        $this->assertStringContainsString('How can I use', $smartAnswer);
+        $this->assertStringContainsString('Use categories and search.', $smartAnswer);
     }
 }

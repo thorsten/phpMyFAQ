@@ -4,12 +4,17 @@ namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Language;
 use phpMyFAQ\Search\SearchResultSet;
+use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
 class SearchHelperTest extends TestCase
@@ -121,6 +126,27 @@ class SearchHelperTest extends TestCase
         $this->assertCount(3, $result);
     }
 
+    public function testCreateAutoCompleteResultSupportsCustomPages(): void
+    {
+        $this->configurationMock->method('get')->willReturn(10);
+        $this->configurationMock->method('getDefaultUrl')->willReturn('https://example.com/');
+
+        $mockResult = new stdClass();
+        $mockResult->content_type = 'page';
+        $mockResult->slug = 'unit-test-page';
+        $mockResult->question = 'Unit Test Page';
+
+        $this->searchResultSetMock->method('getNumberOfResults')->willReturn(1);
+        $this->searchResultSetMock->method('getResultSet')->willReturn([$mockResult]);
+
+        $result = $this->searchHelper->createAutoCompleteResult($this->searchResultSetMock);
+
+        $this->assertCount(1, $result);
+        $this->assertSame('', $result[0]->category);
+        $this->assertStringContainsString('page/unit-test-page.html', $result[0]->url);
+        $this->assertStringContainsString('Unit Test Page', $result[0]->question);
+    }
+
     public function testRenderAdminSuggestionResultWithNoResults(): void
     {
         $this->searchResultSetMock->method('getNumberOfResults')->willReturn(0);
@@ -159,6 +185,82 @@ class SearchHelperTest extends TestCase
         $this->assertEquals('Test question', $firstResult['question']);
         $this->assertStringContainsString('solution_id_456.html', $firstResult['url']);
         $this->assertStringContainsString('admin/faq/edit/123/en', $firstResult['adminUrl']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testRenderAdminSuggestionResultResolvesMissingSolutionIdFromFaqData(): void
+    {
+        Translation::create()
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
+            ->setDefaultLanguage('en')
+            ->setCurrentLanguage('en')
+            ->setMultiByteLanguage();
+
+        $databaseFile = tempnam(sys_get_temp_dir(), 'pmf-search-helper-');
+        copy(PMF_TEST_DIR . '/test.db', $databaseFile);
+
+        $db = new Sqlite3();
+        $db->connect($databaseFile, '', '');
+        $configuration = new Configuration($db);
+        $configuration->set('main.referenceURL', 'https://example.com/');
+        $language = new Language($configuration, $this->createStub(Session::class));
+        $language->setLanguageFromConfiguration('en');
+        $configuration->setLanguage($language);
+
+        $db->query(
+            "INSERT INTO faqdata (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end, notes, sticky_order)
+             VALUES (9001, 'en', 777001, 0, 'yes', 0, '', 'Helper FAQ', 'Content', 'Author', 'author@example.com', 'y', '20260101000000', '00000000000000', '99991231235959', '', NULL)",
+        );
+
+        $helper = new SearchHelper($configuration);
+        $resultSet = $this->createMock(SearchResultSet::class);
+
+        $mockResult = new stdClass();
+        $mockResult->id = 9001;
+        $mockResult->lang = 'en';
+        $mockResult->question = 'Resolved solution id';
+
+        $resultSet->method('getNumberOfResults')->willReturn(1);
+        $resultSet->method('getResultSet')->willReturn([$mockResult]);
+
+        $result = $helper->renderAdminSuggestionResult($resultSet);
+
+        $this->assertCount(1, $result);
+        $this->assertStringContainsString('solution_id_777001.html', $result[0]['url']);
+
+        unlink($databaseFile);
+    }
+
+    public function testRenderAdminSuggestionResultSkipsResultsPastConfiguredLimit(): void
+    {
+        $this->configurationMock
+            ->method('get')
+            ->with('records.numberOfRecordsPerPage')
+            ->willReturn(0);
+
+        $this->configurationMock->method('getDefaultUrl')->willReturn('https://example.com/');
+
+        $first = new stdClass();
+        $first->id = 1;
+        $first->lang = 'en';
+        $first->question = 'First';
+        $first->solution_id = 1001;
+
+        $second = new stdClass();
+        $second->id = 2;
+        $second->lang = 'en';
+        $second->question = 'Second';
+        $second->solution_id = 1002;
+
+        $this->searchResultSetMock->method('getNumberOfResults')->willReturn(2);
+        $this->searchResultSetMock->method('getResultSet')->willReturn([$first, $second]);
+
+        $result = $this->searchHelper->renderAdminSuggestionResult($this->searchResultSetMock);
+
+        $this->assertCount(1, $result);
+        $this->assertSame('First', $result[0]['question']);
     }
 
     public function testGetSearchResultWithNoResults(): void

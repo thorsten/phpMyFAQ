@@ -64,7 +64,7 @@ final class UserController extends AbstractController
 
         $userId = Filter::filterVar($data->userid, FILTER_VALIDATE_INT);
         $userName = trim(strip_tags((string) $data->name));
-        $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL);
+        $email = Filter::filterEmail($data->email);
         $isVisible = Filter::filterVar($data->{'is_visible'}, FILTER_SANITIZE_SPECIAL_CHARS);
         $password = trim((string) Filter::filterVar($data->faqpassword, FILTER_SANITIZE_SPECIAL_CHARS));
         $confirm = trim((string) Filter::filterVar($data->faqpassword_confirm, FILTER_SANITIZE_SPECIAL_CHARS));
@@ -221,7 +221,7 @@ final class UserController extends AbstractController
         $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT);
         $author = trim((string) Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS));
         $loginName = trim((string) Filter::filterVar($data->loginname, FILTER_SANITIZE_SPECIAL_CHARS));
-        $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
+        $email = trim((string) Filter::filterEmail($data->email));
         $question = trim((string) Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS));
 
         // Validate User ID, Username and email

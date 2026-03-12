@@ -208,8 +208,7 @@ class CategoryTest extends TestCase
         string $lang = 'en',
         ?string $name = null,
         ?string $description = null,
-    ): CategoryEntity
-    {
+    ): CategoryEntity {
         $name ??= 'Category ' . $id;
         $description ??= 'Description ' . $id;
         $category = new CategoryEntity();
@@ -439,9 +438,11 @@ class CategoryTest extends TestCase
     public function testFaqRelationLookupsAndCategoryLinkChecks(): void
     {
         $this->category->create($this->createCategory(501));
-        $this->configuration->getDb()->query(
-            "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES (501, 'en', 9001, 'en')",
-        );
+        $this->configuration
+            ->getDb()
+            ->query(
+                "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES (501, 'en', 9001, 'en')",
+            );
 
         $categories = $this->category->getCategoriesFromFaq(9001);
 
@@ -451,9 +452,11 @@ class CategoryTest extends TestCase
         $this->assertTrue($this->category->categoryHasLinkToFaq(9001, 501));
         $this->assertFalse($this->category->categoryHasLinkToFaq(9002, 501));
 
-        $this->configuration->getDb()->query(
-            "DELETE FROM faqcategoryrelations WHERE category_id = 501 AND record_id = 9001 AND category_lang = 'en'",
-        );
+        $this->configuration
+            ->getDb()
+            ->query(
+                "DELETE FROM faqcategoryrelations WHERE category_id = 501 AND record_id = 9001 AND category_lang = 'en'",
+            );
         $this->category->delete(501, 'en');
     }
 

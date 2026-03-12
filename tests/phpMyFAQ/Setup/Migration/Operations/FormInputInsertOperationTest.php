@@ -17,8 +17,8 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\Environment;
-use phpMyFAQ\Forms;
 use phpMyFAQ\Form\FormsRepository;
+use phpMyFAQ\Forms;
 use phpMyFAQ\Plugin\PluginManager;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
@@ -85,10 +85,7 @@ final class FormInputInsertOperationTest extends TestCase
     {
         $operation = new FormInputInsertOperation($this->configuration, $this->createFormInput());
 
-        $this->assertSame(
-            'Insert form input: form=7, input=3, label=msgContactName',
-            $operation->getDescription(),
-        );
+        $this->assertSame('Insert form input: form=7, input=3, label=msgContactName', $operation->getDescription());
     }
 
     public function testExecuteInsertsFormInput(): void
@@ -97,11 +94,9 @@ final class FormInputInsertOperationTest extends TestCase
 
         $this->assertTrue($operation->execute());
 
-        $result = $this->configuration->getDb()->query(
-            "SELECT input_type, input_label, input_lang, input_active, input_required
+        $result = $this->configuration->getDb()->query('SELECT input_type, input_label, input_lang, input_active, input_required
              FROM faqforms
-             WHERE form_id = 7 AND input_id = 3",
-        );
+             WHERE form_id = 7 AND input_id = 3');
         $row = $this->configuration->getDb()->fetchArray($result);
 
         $this->assertIsArray($row);
@@ -116,9 +111,7 @@ final class FormInputInsertOperationTest extends TestCase
     {
         $configuration = $this->createMock(Configuration::class);
         $database = $this->createMock(DatabaseDriver::class);
-        $database
-            ->method('escape')
-            ->willThrowException(new \RuntimeException('broken database driver'));
+        $database->method('escape')->willThrowException(new \RuntimeException('broken database driver'));
         $configuration->method('getDb')->willReturn($database);
 
         $operation = new FormInputInsertOperation($configuration, $this->createFormInput());

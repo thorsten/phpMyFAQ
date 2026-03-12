@@ -53,7 +53,7 @@ final class NewsController extends AbstractAdministrationApiController
         $header = Filter::filterVar($data->newsHeader, FILTER_SANITIZE_SPECIAL_CHARS);
         $content = Filter::filterVar($data->news, FILTER_SANITIZE_SPECIAL_CHARS);
         $author = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterVar($data->authorEmail, FILTER_VALIDATE_EMAIL);
+        $email = Filter::filterEmail($data->authorEmail);
         $active = Filter::filterVar($data->active, FILTER_SANITIZE_SPECIAL_CHARS);
         $comment = Filter::filterVar($data->comment, FILTER_SANITIZE_SPECIAL_CHARS);
         $link = Filter::filterVar($data->link, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -131,7 +131,7 @@ final class NewsController extends AbstractAdministrationApiController
         $header = Filter::filterVar($data->newsHeader, FILTER_SANITIZE_SPECIAL_CHARS);
         $content = Filter::filterVar($data->news, FILTER_SANITIZE_SPECIAL_CHARS);
         $author = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterVar($data->authorEmail, FILTER_VALIDATE_EMAIL);
+        $email = Filter::filterEmail($data->authorEmail);
         $active = Filter::filterVar($data->active, FILTER_SANITIZE_SPECIAL_CHARS);
         $comment = Filter::filterVar($data->comment, FILTER_SANITIZE_SPECIAL_CHARS);
         $link = Filter::filterVar($data->link, FILTER_SANITIZE_SPECIAL_CHARS);

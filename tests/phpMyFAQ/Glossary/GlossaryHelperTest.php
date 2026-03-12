@@ -61,6 +61,33 @@ class GlossaryHelperTest extends TestCase
         $this->assertSame('', $postfix);
     }
 
+    public function testExtractLegacyItemAndPostfixPattern(): void
+    {
+        $matches = array_fill(0, 9, '');
+        $matches[7] = 'word';
+        $matches[8] = '!';
+
+        [$prefix, $item, $postfix] = $this->helper->extractMatchParts($matches);
+
+        $this->assertSame('', $prefix);
+        $this->assertSame('word', $item);
+        $this->assertSame('!', $postfix);
+    }
+
+    public function testExtractLegacyPrefixItemAndPostfixPattern(): void
+    {
+        $matches = array_fill(0, 7, '');
+        $matches[4] = '(';
+        $matches[5] = 'phrase';
+        $matches[6] = ')';
+
+        [$prefix, $item, $postfix] = $this->helper->extractMatchParts($matches);
+
+        $this->assertSame('(', $prefix);
+        $this->assertSame('phrase', $item);
+        $this->assertSame(')', $postfix);
+    }
+
     public function testFormatTooltip(): void
     {
         $html = $this->helper->formatTooltip('def', 'item', '(', ')');

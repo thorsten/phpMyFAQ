@@ -52,7 +52,7 @@
             {{ user.email | e('html') }}
           </a>
         </td>
-        <td>{{ user.login|raw }}</td>
+        <td>{{ user.login }}</td>
 
         <td class="text-center"><i class="fa
     {% if user.status == 'active' %}

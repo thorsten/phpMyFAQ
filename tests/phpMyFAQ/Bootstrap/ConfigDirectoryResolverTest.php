@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Bootstrap;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 
@@ -37,6 +38,13 @@ class ConfigDirectoryResolverTest extends TestCase
         $this->assertSame('/app' . DIRECTORY_SEPARATOR, $result);
     }
 
+    public function testComputeAttachmentsPathReturnsFalseForTraversalOutsideRoot(): void
+    {
+        $result = ConfigDirectoryResolver::computeAttachmentsPath('../outside', '/app/root');
+
+        $this->assertFalse($result);
+    }
+
     public function testResolveUsesExistingBootstrapDirectories(): void
     {
         ConfigDirectoryResolver::resolve();
@@ -69,6 +77,28 @@ class ConfigDirectoryResolverTest extends TestCase
     }
 
     #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
+    public function testResolveDatabaseFileFallsBackToLegacyConfigPath(): void
+    {
+        $databaseFile = PMF_CONFIG_DIR . '/database.php';
+        $backupFile = PMF_CONFIG_DIR . '/database.php.bak';
+        $legacyDir = sys_get_temp_dir() . '/pmf-legacy-config-' . uniqid('', true);
+        mkdir($legacyDir, 0777, true);
+        file_put_contents($legacyDir . '/database.php', "<?php\nreturn [];\n");
+        define('PMF_LEGACY_CONFIG_DIR', $legacyDir);
+        $_SERVER['REQUEST_URI'] = '/';
+        rename($databaseFile, $backupFile);
+
+        try {
+            $this->assertSame($legacyDir . '/database.php', ConfigDirectoryResolver::resolveDatabaseFile());
+        } finally {
+            rename($backupFile, $databaseFile);
+            @unlink($legacyDir . '/database.php');
+            @rmdir($legacyDir);
+        }
+    }
+
+    #[RunInSeparateProcess]
     public function testLoadConfigConstantsLoadsModernConstantsFile(): void
     {
         $constantsFile = PMF_CONFIG_DIR . '/constants.php';
@@ -82,6 +112,24 @@ class ConfigDirectoryResolverTest extends TestCase
 
         $this->assertTrue(defined('PMF_BOOTSTRAP_TEST_CONSTANT'));
         $this->assertSame('modern', PMF_BOOTSTRAP_TEST_CONSTANT);
+    }
+
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
+    public function testLoadConfigConstantsLoadsLegacyConstantsFileWhenModernFileIsMissing(): void
+    {
+        $legacyDir = sys_get_temp_dir() . '/pmf-legacy-constants-' . uniqid('', true);
+        mkdir($legacyDir, 0777, true);
+        file_put_contents($legacyDir . '/constants.php', "<?php define('PMF_BOOTSTRAP_LEGACY_CONSTANT', 'legacy');");
+        define('PMF_LEGACY_CONFIG_DIR', $legacyDir);
+
+        ConfigDirectoryResolver::loadConfigConstants();
+
+        $this->assertTrue(defined('PMF_BOOTSTRAP_LEGACY_CONSTANT'));
+        $this->assertSame('legacy', PMF_BOOTSTRAP_LEGACY_CONSTANT);
+
+        @unlink($legacyDir . '/constants.php');
+        @rmdir($legacyDir);
     }
 
     #[RunInSeparateProcess]

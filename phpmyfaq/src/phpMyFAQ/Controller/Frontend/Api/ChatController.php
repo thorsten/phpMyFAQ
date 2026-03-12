@@ -103,7 +103,7 @@ final class ChatController extends AbstractController
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
         $recipientId = Filter::filterVar($data->recipientId ?? 0, FILTER_VALIDATE_INT);
-        $message = trim($data->message ?? '');
+        $message = trim((string) Filter::filterVar($data->message ?? '', FILTER_SANITIZE_SPECIAL_CHARS));
         $csrfToken = trim($data->csrfToken ?? '');
 
         if (!$this->verifySessionCsrfToken('send-chat-message', $csrfToken)) {

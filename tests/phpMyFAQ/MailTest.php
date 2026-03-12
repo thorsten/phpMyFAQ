@@ -370,7 +370,9 @@ class MailTest extends TestCase
         $method = new \ReflectionMethod(Mail::class, 'setEmailTo');
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("Too many e-mail addresses, first@example.com, have been already added as 'From'!");
+        $this->expectExceptionMessage(
+            "Too many e-mail addresses, first@example.com, have been already added as 'From'!",
+        );
 
         $method->invokeArgs($this->mail, [&$target, 'From', 'new@example.com', 'New User']);
     }
@@ -498,8 +500,10 @@ class MailTest extends TestCase
             public array $capturedHeaders = [];
             public string $capturedBody = '';
 
-            public function __construct(Configuration $configuration, private readonly int $returnValue)
-            {
+            public function __construct(
+                Configuration $configuration,
+                private readonly int $returnValue,
+            ) {
                 parent::__construct($configuration);
             }
 

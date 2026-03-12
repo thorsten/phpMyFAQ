@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ\Bootstrap;
 
+use Elastic\Elasticsearch\Exception\AuthenticationException;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\ConfigurationRepository;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
@@ -24,6 +25,7 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
@@ -118,6 +120,18 @@ class SearchClientFactoryTest extends TestCase
         $this->assertEquals(1, $httpClient->getRequestsCount());
     }
 
+    public function testWaitForHealthySwallowsClientFactoryExceptions(): void
+    {
+        SearchClientFactory::waitForHealthy(
+            'http://localhost:9200',
+            1,
+            null,
+            static fn() => throw new \RuntimeException('factory failed'),
+        );
+
+        $this->assertTrue(true);
+    }
+
     public function testConfigureElasticsearchAttachesClientAndConfigUsingEnvironmentBaseUri(): void
     {
         $configDir = $this->createSearchConfigDirectory('elasticsearch');
@@ -134,6 +148,31 @@ class SearchClientFactoryTest extends TestCase
         $this->assertSame('pmf', $configuration->getElasticsearchConfig()->getIndex());
         $this->assertInstanceOf(\Elastic\Elasticsearch\Client::class, $configuration->getElasticsearch());
         $this->assertSame(1, $httpClient->getRequestsCount());
+    }
+
+    public function testConfigureElasticsearchSwallowsAuthenticationExceptions(): void
+    {
+        $configDir = $this->createSearchConfigDirectory('elasticsearch');
+        $_ENV['ELASTICSEARCH_BASE_URI'] = 'http://env-elastic:9200';
+        $_ENV['SEARCH_WAIT_TIMEOUT'] = '1';
+
+        $response = new MockResponse('{"status":"green"}', ['http_code' => 200]);
+        $httpClient = new MockHttpClient([$response]);
+        $configuration = $this->createConfiguration();
+
+        SearchClientFactory::configureElasticsearch(
+            $configuration,
+            $configDir,
+            $httpClient,
+            static fn() => throw new AuthenticationException('denied'),
+        );
+
+        $reflection = new ReflectionClass($configuration);
+        $configProperty = $reflection->getProperty('config');
+        $config = $configProperty->getValue($configuration);
+
+        $this->assertArrayNotHasKey('core.elasticsearch', $config);
+        $this->assertArrayNotHasKey('core.elasticsearchConfig', $config);
     }
 
     public function testConfigureOpenSearchAttachesClientAndConfigUsingEnvironmentBaseUri(): void
