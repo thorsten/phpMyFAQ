@@ -467,7 +467,7 @@ The AI translation feature integrates with leading translation services:
 
 #### 5.2.13.2 Configuration
 
-Navigate to **Configuration → Translation** tab to configure your translation provider:
+Navigate to the **Configuration → Translation** tab to configure your translation provider:
 
 1. Select your preferred **Translation Provider** from the dropdown
 2. Enter the required API credentials for your chosen provider
@@ -775,26 +775,7 @@ To back up the whole data located on your web server, you can run our simple bac
 Here you can edit the general, FAQ specific, search, spam protection, spam control center, SEO related, layout
 settings, Mail setup for SMTP, API settings, online update settings, and if enabled, LDAP configuration of phpMyFAQ.
 
-Mail delivery supports multiple providers:
-
-- `smtp` (default; supports per-tenant SMTP settings)
-- `sendgrid`
-- `ses`
-
-Configuration keys:
-
-- `mail.provider`
-- `mail.useQueue`
-- `mail.sendgridApiKey`
-- `mail.sesAccessKeyId`
-- `mail.sesSecretAccessKey`
-- `mail.sesRegion`
-
-Outgoing emails are queued by default (queue `mail`) and delivered by the background worker:
-
-```bash
-php bin/worker.php
-```
+You can find a detailed description of all settings in the [Configuration key reference](8-configuration.md).
 
 ### 5.6.2 FAQ Multi-sites
 
