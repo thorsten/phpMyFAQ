@@ -24,6 +24,7 @@ use phpMyFAQ\Environment;
 use phpMyFAQ\Permission;
 use phpMyFAQ\Permission\BasicPermissionRepository;
 use phpMyFAQ\Permission\MediumPermission;
+use phpMyFAQ\Permission\MediumPermissionRepository;
 use phpMyFAQ\Plugin\PluginManager;
 use phpMyFAQ\Setup\Migration\Operations\UserCreateOperation;
 use phpMyFAQ\System;
@@ -64,6 +65,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(Permission::class)]
 #[UsesClass(BasicPermissionRepository::class)]
 #[UsesClass(MediumPermission::class)]
+#[UsesClass(MediumPermissionRepository::class)]
 #[UsesClass(PluginManager::class)]
 #[UsesClass(System::class)]
 #[UsesClass(TenantContext::class)]

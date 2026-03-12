@@ -69,6 +69,8 @@ final class FaqControllerRedirectTest extends TestCase
         $this->configuration = new Configuration($this->dbHandle);
         $configurationProperty->setValue(null, $this->configuration);
         $this->initializeDatabaseStatics($this->dbHandle);
+        $this->configuration->set('security.permLevel', 'basic');
+        $this->configuration->set('main.referenceURL', 'https://localhost/');
 
         $language = new Language($this->configuration, new Session(new MockArraySessionStorage()));
         $language->setLanguageFromConfiguration('en');

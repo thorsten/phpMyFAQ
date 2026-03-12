@@ -17,6 +17,8 @@ class CommentsTest extends TestCase
     private Comments $comments;
 
     private Configuration $configuration;
+    private Sqlite3 $dbHandle;
+    private string $databaseFile;
 
     /**
      * @throws Exception
@@ -25,9 +27,12 @@ class CommentsTest extends TestCase
     {
         parent::setUp();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $this->configuration = new Configuration($dbHandle);
+        $this->databaseFile = tempnam(sys_get_temp_dir(), 'phpmyfaq-comments-test-');
+        copy(PMF_TEST_DIR . '/test.db', $this->databaseFile);
+
+        $this->dbHandle = new Sqlite3();
+        $this->dbHandle->connect($this->databaseFile, '', '');
+        $this->configuration = new Configuration($this->dbHandle);
         $language = new Language($this->configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');
         $this->configuration->setLanguage($language);
@@ -43,14 +48,17 @@ class CommentsTest extends TestCase
 
     protected function tearDown(): void
     {
-        parent::tearDown();
-
         $this->comments->delete(CommentType::FAQ, 1);
         // Cleanup any category relations created for this record during tests
         $category = new Category($this->configuration);
         $category->setLanguage('en');
         $relation = new Relation($this->configuration, $category);
         $relation->deleteByFAQ(1, 'en');
+
+        $this->dbHandle->close();
+        @unlink($this->databaseFile);
+
+        parent::tearDown();
     }
 
     public function testCreate(): void
@@ -82,6 +90,44 @@ class CommentsTest extends TestCase
         $this->comments->create($comment);
 
         $this->assertSame([1 => 1], $this->comments->getNumberOfComments());
+    }
+
+    public function testGetCommentsDataPaginatedReturnsSortedSlice(): void
+    {
+        $this->createCommentWithData(1, 'Alpha comment', 'alpha@example.org', 'alphaUser', 100);
+        $this->createCommentWithData(1, 'Beta comment', 'beta@example.org', 'betaUser', 200);
+        $this->createCommentWithData(1, 'Gamma comment', 'gamma@example.org', 'gammaUser', 300);
+
+        $comments = $this->comments->getCommentsDataPaginated(1, CommentType::FAQ, 2, 1, 'datum', 'DESC');
+
+        $this->assertCount(2, $comments);
+        $this->assertSame('Beta comment', $comments[0]->getComment());
+        $this->assertSame('Alpha comment', $comments[1]->getComment());
+        $this->assertSame('faq', $comments[0]->getType());
+    }
+
+    public function testGetCommentsDataPaginatedFallsBackToSafeSortOptions(): void
+    {
+        $this->createCommentWithData(1, 'First comment', 'first@example.org', 'firstUser', 100);
+        $this->createCommentWithData(1, 'Second comment', 'second@example.org', 'secondUser', 200);
+
+        $comments = $this->comments->getCommentsDataPaginated(1, CommentType::FAQ, 10, 0, 'invalid_field', 'sideways');
+
+        $this->assertCount(2, $comments);
+        $this->assertSame('First comment', $comments[0]->getComment());
+        $this->assertSame('Second comment', $comments[1]->getComment());
+    }
+
+    public function testCountCommentsReturnsTotalForReferenceAndType(): void
+    {
+        $this->createCommentWithData(1, 'FAQ comment', 'faq@example.org', 'faqUser', 100, CommentType::FAQ);
+        $this->createCommentWithData(1, 'News comment', 'news@example.org', 'newsUser', 200, CommentType::NEWS);
+        $this->createCommentWithData(2, 'Other FAQ comment', 'other@example.org', 'otherUser', 300, CommentType::FAQ);
+
+        $this->assertSame(1, $this->comments->countComments(1, CommentType::FAQ));
+        $this->assertSame(1, $this->comments->countComments(1, CommentType::NEWS));
+        $this->assertSame(1, $this->comments->countComments(2, CommentType::FAQ));
+        $this->assertSame(0, $this->comments->countComments(999, CommentType::FAQ));
     }
 
     public function testGetNumberOfCommentsByCategory(): void
@@ -121,5 +167,26 @@ class CommentsTest extends TestCase
             ->setHelped(true);
 
         return $comment;
+    }
+
+    private function createCommentWithData(
+        int $recordId,
+        string $commentText,
+        string $email,
+        string $username,
+        int $date,
+        string $type = CommentType::FAQ,
+    ): void {
+        $comment = new Comment();
+        $comment
+            ->setRecordId($recordId)
+            ->setType($type)
+            ->setUsername($username)
+            ->setEmail($email)
+            ->setComment($commentText)
+            ->setDate($date)
+            ->setHelped(true);
+
+        $this->assertTrue($this->comments->create($comment));
     }
 }

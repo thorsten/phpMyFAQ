@@ -51,6 +51,20 @@ class DateTest extends TestCase
         $this->assertStringContainsString('2023-12-25', $result);
     }
 
+    public function testCreateIsoDateFromUnixTimestampWithIntegerTimestamp(): void
+    {
+        $result = Date::createIsoDateFromUnixTimestamp(1703514600, 'Y-m-d H:i');
+
+        $this->assertSame('2023-12-25 15:30', $result);
+    }
+
+    public function testCreateIsoDateFromUnixTimestampWithDateString(): void
+    {
+        $result = Date::createIsoDateFromUnixTimestamp('2024-02-29 12:34:00', 'Y-m-d H:i');
+
+        $this->assertSame('2024-02-29 12:34', $result);
+    }
+
     public function testCreateIsoDateWithDifferentFormats(): void
     {
         $pmfDate = '20240101120000'; // 2024-01-01 12:00:00
@@ -148,5 +162,33 @@ class DateTest extends TestCase
         // Verify the configuration is properly set through constructor
         $reflection = new \ReflectionClass($this->dateInstance);
         $this->assertTrue($reflection->isReadOnly());
+    }
+
+    public function testGetTrackingFileDateStartReturnsTimestampForValidFilename(): void
+    {
+        $result = $this->dateInstance->getTrackingFileDateStart('tracking25012026');
+
+        $this->assertSame(gmmktime(0, 0, 0, 1, 25, 2026), $result);
+    }
+
+    public function testGetTrackingFileDateStartReturnsMinusOneForShortFilename(): void
+    {
+        $result = $this->dateInstance->getTrackingFileDateStart('tracking');
+
+        $this->assertSame(-1, $result);
+    }
+
+    public function testGetTrackingFileDateEndReturnsTimestampForValidFilename(): void
+    {
+        $result = $this->dateInstance->getTrackingFileDateEnd('tracking25012026');
+
+        $this->assertSame(gmmktime(23, 59, 59, 1, 25, 2026), $result);
+    }
+
+    public function testGetTrackingFileDateEndReturnsMinusOneForShortFilename(): void
+    {
+        $result = $this->dateInstance->getTrackingFileDateEnd('tracking');
+
+        $this->assertSame(-1, $result);
     }
 }

@@ -7,6 +7,10 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Plugin\PluginException;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
+use ReflectionProperty;
+use stdClass;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use ReflectionClass;
 
 #[AllowMockObjectsWithoutExpectations]
@@ -28,10 +32,14 @@ class SearchTest extends TestCase
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
+        Language::$language = 'en';
 
         $this->dbHandle = new Sqlite3();
         $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $this->configuration = new Configuration($this->dbHandle);
+        $this->configuration->setLanguage(
+            new Language($this->configuration, $this->createMock(SessionInterface::class)),
+        );
         $this->search = new Search($this->configuration);
 
         // Clean up any existing search terms to ensure test isolation
@@ -53,6 +61,19 @@ class SearchTest extends TestCase
         $config = $property->getValue($this->configuration);
         $config[$key] = $value;
         $property->setValue($this->configuration, $config);
+    }
+
+    private function invokePrivateMethod(object $object, string $method, mixed ...$arguments): mixed
+    {
+        $reflectionMethod = new ReflectionMethod($object, $method);
+
+        return $reflectionMethod->invoke($object, ...$arguments);
+    }
+
+    private function setDatabaseType(string $databaseType): void
+    {
+        $reflectionProperty = new ReflectionProperty(Database::class, 'dbType');
+        $reflectionProperty->setValue(null, $databaseType);
     }
 
     public function testSetCategoryId(): void
@@ -258,5 +279,148 @@ class SearchTest extends TestCase
         $this->search->setCategory($categoryMock);
 
         $this->assertEquals($categoryMock, $this->search->getCategory());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testAutoCompleteFallsBackToDatabaseSearch(): void
+    {
+        $this->setConfigValue('search.enableElasticsearch', false);
+        $this->setConfigValue('search.enableOpenSearch', false);
+
+        $search = $this
+            ->getMockBuilder(Search::class)
+            ->setConstructorArgs([$this->configuration])
+            ->onlyMethods(['searchDatabase'])
+            ->getMock();
+
+        $search
+            ->expects($this->once())
+            ->method('searchDatabase')
+            ->with('foo', false)
+            ->willReturn([['question' => 'foo']]);
+
+        $this->assertSame([['question' => 'foo']], $search->autoComplete('foo'));
+    }
+
+    public function testResolveSearchDatabaseTypeMapsKnownDrivers(): void
+    {
+        $driverMap = [
+            [new \phpMyFAQ\Database\PdoMysql(), 'pdo_mysql'],
+            [new \phpMyFAQ\Database\PdoPgsql(), 'pdo_pgsql'],
+            [new \phpMyFAQ\Database\PdoSqlite(), 'pdo_sqlite'],
+            [new \phpMyFAQ\Database\PdoSqlsrv(), 'pdo_sqlsrv'],
+            [new \phpMyFAQ\Database\Sqlite3(), 'sqlite3'],
+        ];
+
+        foreach ($driverMap as [$driver, $expectedType]) {
+            $config = $this->createMock(Configuration::class);
+            $config->method('getDb')->willReturn($driver);
+            $search = new Search($config);
+
+            $this->assertSame(
+                $expectedType,
+                $this->invokePrivateMethod($search, 'resolveSearchDatabaseType'),
+            );
+        }
+    }
+
+    public function testSearchCustomPagesReturnsEmptyArrayForShortSearchWordsOnly(): void
+    {
+        $this->assertSame([], $this->invokePrivateMethod($this->search, 'searchCustomPages', 'an of', false));
+    }
+
+    public function testSearchCustomPagesReturnsLanguageScopedCustomPageResults(): void
+    {
+        $this->dbHandle->query(
+            "INSERT INTO faqcustompages (id, lang, page_title, slug, content, author_name, author_email, active, created, updated) VALUES " .
+            "(501, 'en', 'Search Page', 'search-page', 'Search body content', 'Unit Test', 'test@example.org', 'y', '2024-01-01 00:00:00', '2024-01-01 00:00:00')," .
+            "(502, 'de', 'Deutsche Suche', 'deutsche-suche', 'Search body content', 'Unit Test', 'test@example.org', 'y', '2024-01-01 00:00:00', '2024-01-01 00:00:00')",
+        );
+
+        $result = $this->invokePrivateMethod($this->search, 'searchCustomPages', 'Search body', false);
+
+        $this->assertCount(1, $result);
+        $this->assertSame('Search Page', $result[0]->question);
+        $this->assertSame('search-page', $result[0]->slug);
+        $this->assertSame('page', $result[0]->content_type);
+    }
+
+    public function testGetMostPopularSearchesBuildsPgsqlTimeWindowClause(): void
+    {
+        $db = $this->createMock(Sqlite3::class);
+        $db->expects($this->once())
+            ->method('query')
+            ->with($this->stringContains("NOW() - INTERVAL '7 days'"))
+            ->willReturn(false);
+        $db->expects($this->never())->method('fetchObject');
+
+        $config = $this->createMock(Configuration::class);
+        $config->method('getDb')->willReturn($db);
+
+        $search = new Search($config);
+        $this->setDatabaseType('pdo_pgsql');
+
+        $this->assertSame([], $search->getMostPopularSearches(5, false, 7));
+    }
+
+    public function testGetMostPopularSearchesBuildsSqliteTimeWindowClause(): void
+    {
+        $db = $this->createMock(Sqlite3::class);
+        $db->expects($this->once())
+            ->method('query')
+            ->with($this->stringContains("datetime('now', '-3 days')"))
+            ->willReturn(false);
+        $db->expects($this->never())->method('fetchObject');
+
+        $config = $this->createMock(Configuration::class);
+        $config->method('getDb')->willReturn($db);
+
+        $search = new Search($config);
+        $this->setDatabaseType('pdo_sqlite');
+
+        $this->assertSame([], $search->getMostPopularSearches(5, false, 3));
+    }
+
+    public function testGetMostPopularSearchesBuildsSqlsrvClauses(): void
+    {
+        $db = $this->createMock(Sqlite3::class);
+        $db->expects($this->once())
+            ->method('query')
+            ->with(
+                $this->logicalAnd(
+                    $this->stringContains('DATEADD(day, -4, GETDATE())'),
+                    $this->stringContains('OFFSET 0 ROWS FETCH NEXT 2 ROWS ONLY'),
+                ),
+            )
+            ->willReturn(false);
+        $db->expects($this->never())->method('fetchObject');
+
+        $config = $this->createMock(Configuration::class);
+        $config->method('getDb')->willReturn($db);
+
+        $search = new Search($config);
+        $this->setDatabaseType('pdo_sqlsrv');
+
+        $this->assertSame([], $search->getMostPopularSearches(2, false, 4));
+    }
+
+    public function testGetMostPopularSearchesBuildsDefaultTimeWindowClause(): void
+    {
+        $db = $this->createMock(Sqlite3::class);
+        $db->expects($this->once())
+            ->method('query')
+            ->with($this->stringContains('DATE_SUB(NOW(), INTERVAL 9 DAY)'))
+            ->willReturn(false);
+        $db->expects($this->never())->method('fetchObject');
+
+        $config = $this->createMock(Configuration::class);
+        $config->method('getDb')->willReturn($db);
+
+        $search = new Search($config);
+        $this->setDatabaseType('mysqli');
+
+        $this->assertSame([], $search->getMostPopularSearches(5, false, 9));
     }
 }
