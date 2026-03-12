@@ -3,14 +3,17 @@
 namespace phpMyFAQ\Bootstrap;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Session\RedisSessionHandler;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(PhpConfigurator::class)]
+#[UsesClass(RedisSessionHandler::class)]
 class PhpConfiguratorTest extends TestCase
 {
     /** @var array<string, string|false> */
