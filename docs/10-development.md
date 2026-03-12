@@ -1,6 +1,6 @@
-# 9. Developer documentation
+# 10. Developer documentation
 
-## 9.1 Customizing phpMyFAQ
+## 10.1 Customizing phpMyFAQ
 
 phpMyFAQ users have even more customization opportunities. The key feature is the user-selectable template sets, there
 is a templates/default directory where the default layouts get shipped.
@@ -8,7 +8,7 @@ is a templates/default directory where the default layouts get shipped.
 In phpMyFAQ code and layout are separated. The layout is based on several template files, that you can modify to suit
 your own needs. All files for phpMyFAQ's default layout can be found in the directory _assets/templates/default/_.
 
-### 9.1.1 Creating a custom layout
+### 10.1.1 Creating a custom layout
 
 Follow these steps to create a custom template set:
 
@@ -20,7 +20,7 @@ Follow these steps to create a custom template set:
 **Note:** There is a magic variable _{{ tplSetName }}_ containing the name of the actual layout available in each
 template file.
 
-### 9.1.2 Debug Configuration
+### 10.1.2 Debug Configuration
 
 phpMyFAQ 4.1 and later uses environment variables for the application configuration.
 
@@ -62,7 +62,7 @@ Create a `.env` file in the project root based on `.env.example`:
 
     cp .env.example .env
 
-### 9.1.3 Adding new language strings and translations
+### 10.1.3 Adding new language strings and translations
 
 Please add at least the English translation for your new language string, the translation files are located in the folder **phpmyfaq/translations**.
 
@@ -88,16 +88,16 @@ $PMF_LANG['direction'] = 'ltr';      // Text direction, 'ltr' for left-to-right,
 $PMF_LANG['nplurals'] = '2';         // Number of plural forms, e.g., '2' for English
 ```
 
-## 9.2 Templating
+## 10.2 Templating
 
-### 9.2.1 Introduction
+### 10.2.1 Introduction
 
 phpMyFAQ v4 and later uses Twig, a modern template engine for PHP. It is fast, secure, and flexible.
 This documentation provides an overview of how to use Twig in phpMyFAQ.
 
 The default layout of phpMyFAQ is saved in the **assets/templates/default/index.twig** file.
 
-### 9.2.2 Template files
+### 10.2.2 Template files
 
 #### Variables
 
@@ -160,13 +160,13 @@ You can then use the `dump` function in your templates.
 
 For more detailed information, visit the [Twig documentation](https://twig.symfony.com/doc/).
 
-### 9.2.3 Admin backend templates
+### 10.2.3 Admin backend templates
 
 The admin backend templates are located in the **assets/templates/admin** directory.
 Usually, you don't need to modify these templates, but if you want to, you can do so.
 Please be aware that changes to the admin backend templates can break the functionality of phpMyFAQ.
 
-### 9.2.4 Dynamic template set and theme upload
+### 10.2.4 Dynamic template set and theme upload
 
 phpMyFAQ v4.2 introduced dynamic template set loading and a storage-backed `ThemeManager`.
 
@@ -209,7 +209,7 @@ Security checks:
 - Requires `CONFIGURATION_EDIT` permission
 - CSRF token (`theme-manager`) is required for upload/activation
 
-## 9.3 Themes
+## 10.3 Themes
 
 The default CSS theme is located in the **assets/templates/default** directory and is stored in the file **theme.css**.
 You can create your own CSS theme by copying the default theme and modifying it to suit your needs.
@@ -253,14 +253,14 @@ phpMyFAQ uses Bootstrap’s color mode architecture. You can target specific mod
 
 For more information, check out the documentation on [Bootstrap](https://getbootstrap.com/docs/5.3/customize/css-variables/).
 
-## 9.4 Custom CSS
+## 10.4 Custom CSS
 
 You can add custom CSS to your phpMyFAQ installation by adding the CSS code in the admin configuration in the layout
 tab.
 This way, you can customize the look and feel of your phpMyFAQ installation, and you don't want to modify the SCSS
 files.
 
-## 9.5 REST APIs
+## 10.5 REST APIs
 
 phpMyFAQ offers interfaces to access phpMyFAQ installations with other clients like the iPhone App. phpMyFAQ includes a
 REST API and offers APIs for various services like fetching the phpMyFAQ version or doing a search against the
@@ -268,7 +268,7 @@ phpMyFAQ installation.
 
 The API documentation can be found at [https://api-docs.phpmyfaq.de/](https://api-docs.phpmyfaq.de/).
 
-## 9.6 phpMyFAQ development
+## 10.6 phpMyFAQ development
 
 Since phpMyFAQ is an Open Source project, we encourage developers to contribute patches and code for us to include in
 the main package of phpMyFAQ.
@@ -282,17 +282,17 @@ These basic rules make it possible for us to earn a living of the phpMyFAQ proje
 remains Open Source and under the MPL 2.0 license.
 All contributions will be added to the changelog and on the phpMyFAQ website.
 
-### 9.6.1 How to contribute?
+### 10.6.1 How to contribute?
 
 Contributing to phpMyFAQ is quite easy: just fork the [project on GitHub](https://github.com/thorsten/phpMyFAQ),
 work on your copy and send pull requests.
 
-### 9.6.2 Setup a local phpMyFAQ development environment
+### 10.6.2 Setup a local phpMyFAQ development environment
 
 Before working on phpMyFAQ, set up a local environment with the following software:
 
 - Git
-- PHP 9.4 up to 9.6
+- PHP 10.4 up to 10.6
 - PHPUnit 12.x
 - Composer
 - Node.js 24+
@@ -300,7 +300,7 @@ Before working on phpMyFAQ, set up a local environment with the following softwa
 - PNPM
 - Docker
 
-### 9.6.3 Configure your Git installation
+### 10.6.3 Configure your Git installation
 
 Set up your user information with your real name and a working e-mail address:
 
@@ -308,7 +308,7 @@ Set up your user information with your real name and a working e-mail address:
     $ git config --global user.email you@example.com
     $ git config core.autocrlf # if you're on Windows
 
-### 9.6.4 Background jobs during development
+### 10.6.4 Background jobs during development
 
 phpMyFAQ uses the internal queue for asynchronous tasks such as mail delivery.
 Run the worker locally while testing features that send email:
@@ -324,7 +324,7 @@ php bin/worker.php 10
 ```
     $ git config core.autocrlf # if you're on Windows
 
-### 9.6.5 How to get the phpMyFAQ source code?
+### 10.6.5 How to get the phpMyFAQ source code?
 
 Clone your forked phpMyFAQ repository locally:
 
@@ -338,7 +338,7 @@ Add the upstream repository as remote:
 Please check our [coding standards](https://www.phpmyfaq.de/docs/standards) before sending patches or pull requests.
 Every PR on GitHub will check the coding standards and tests as well.
 
-### 9.6.6 Run Docker Compose
+### 10.6.6 Run Docker Compose
 
 The Dockerfile provided in the phpMyFAQ repository only builds an environment
 to run any release for development purposes.
@@ -365,16 +365,16 @@ _Running using named volumes:_
 - **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
 - **opensearch**: OpenSearch image (it means it does not have XPack installed)
 
-_Running apache web server with PHP 9.5 support:_
+_Running apache web server with PHP 10.5 support:_
 
 - **apache**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
 
-_Running nginx web server with PHP 9.5 support:_
+_Running nginx web server with PHP 10.5 support:_
 
 - **nginx**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
-- **php-fpm**: PHP-FPM image with PHP 9.5 support
+- **php-fpm**: PHP-FPM image with PHP 10.5 support
 
-_Running FrankenPHP with PHP 9.5 support:_
+_Running FrankenPHP with PHP 10.5 support:_
 
 - **frankenphp**: mounts the `phpmyfaq` folder in place of `/var/www/html`. Modern PHP application server built on Caddy with worker mode for better performance.
 
@@ -385,7 +385,7 @@ Then services will be available at the following addresses:
 - phpMyAdmin: (http://localhost:8000)
 - pgAdmin: (http://localhost:8008)
 
-### 9.6.7 Fetch third party libraries and install phpMyFAQ
+### 10.6.7 Fetch third party libraries and install phpMyFAQ
 
 After cloning your forked repository, you have to fetch the 3rd party libraries used in phpMyFAQ:
 
@@ -421,14 +421,14 @@ To run the Vitest-based tests, you can use the following command:
 
     $ pnpm test
 
-### 9.6.8 Coding standards
+### 10.6.8 Coding standards
 
 The following coding standards are used in phpMyFAQ:
 
 - PHP: [PER Coding Style 3.0](https://www.php-fig.org/per/coding-style/)
 - TypeScript with ESLint recommendations
 
-### 9.6.9 Rebase your Patch
+### 10.6.9 Rebase your Patch
 
 Before submitting your patch, please update your local branch:
 
@@ -438,11 +438,11 @@ Before submitting your patch, please update your local branch:
     $ git checkout YOUR_BRANCH_NAME
     $ git rebase main
 
-### 9.6.10 Make a Pull Request
+### 10.6.10 Make a Pull Request
 
 You can now make a pull request on the phpMyFAQ GitHub repository.
 
-## 9.7 Builtin Twig Extensions
+## 10.7 Builtin Twig Extensions
 
 phpMyFAQ v4 and later use the Twig template engine for the frontend and the backend.
 We have added some custom extensions to Twig to make it easier to work with phpMyFAQ.
@@ -539,9 +539,9 @@ Example:
 
     {{ userId | userName }}
 
-## 9.8 Working with the Docker containers
+## 10.8 Working with the Docker containers
 
-### 9.9.1 Create a new SSL certificate
+### 10.10.1 Create a new SSL certificate
 
 To create a new SSL certificate, you can use the following command:
 
@@ -549,7 +549,7 @@ To create a new SSL certificate, you can use the following command:
 
 For more information, please visit the [mkcert](https://github.com/FiloSottile/mkcert) website.
 
-### 9.9.2 Using an OpenLDAP docker container for testing
+### 10.10.2 Using an OpenLDAP docker container for testing
 
 To test phpMyFAQ during development with an OpenLDAP docker container, you can use the following test setup:
 
