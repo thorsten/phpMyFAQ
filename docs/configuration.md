@@ -77,7 +77,7 @@ each setting controls. These values are set during installation and can be chang
 | `records.orderStickyFaqsCustom` | Custom ordering of sticky records | `false` | When enabled, sticky (pinned) FAQ entries can be manually reordered in the admin panel. |
 | `records.allowedMediaHosts` | Allowed external hosts for media content | `www.youtube.com` | A comma-separated list of external hostnames allowed for embedded media content (e.g. videos). |
 
-## 8.1.3 Search settings
+### 8.1.3 Search settings
 
 | Key | Label | Default | Description |
 |-----|-------|---------|-------------|
@@ -108,7 +108,7 @@ each setting controls. These values are set during installation and can be chang
 
 ## 8.2 Security
 
-## 8.2.1 Security settings
+### 8.2.1 Security settings
 
 | Key | Label | Default | Description |
 |-----|-------|---------|-------------|
@@ -143,7 +143,7 @@ each setting controls. These values are set during installation and can be chang
 
 ## 8.3 Layout
 
-## 8.2.1 Layout settings
+### 8.2.1 Layout settings
 
 | Key | Label | Default | Description |
 |-----|-------|---------|-------------|
@@ -171,7 +171,7 @@ each setting controls. These values are set during installation and can be chang
 
 ## 8.4 Communication
 
-## 8.4.1 Mail settings
+### 8.4.1 Mail settings
 
 | Key | Label | Default | Description |
 |-----|-------|---------|-------------|
