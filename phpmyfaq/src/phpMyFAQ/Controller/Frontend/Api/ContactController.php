@@ -72,6 +72,8 @@ final class ContactController extends AbstractController
             throw new Exception('Invalid email address');
         }
 
+        $email = Filter::filterVar($email, FILTER_SANITIZE_SPECIAL_CHARS);
+
         if ($question === '' || $question === '0') {
             throw new Exception('Empty question');
         }
