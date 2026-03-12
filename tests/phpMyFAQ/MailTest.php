@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 class MailTest extends TestCase
 {
     private Mail $mail;
+    private Configuration $configuration;
 
     protected function setUp(): void
     {
@@ -28,6 +29,7 @@ class MailTest extends TestCase
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $configuration = new Configuration($dbHandle);
+        $this->configuration = $configuration;
 
         $this->mail = new Mail($configuration);
     }
@@ -124,6 +126,25 @@ class MailTest extends TestCase
         $this->assertFalse($this->mail->addTo('invalid-email'));
     }
 
+    public function testAddToRejectsDuplicateAddress(): void
+    {
+        $logger = $this->createMock(\Monolog\Logger::class);
+        $logger->expects($this->once())->method('error')->with($this->stringContains('already added in To'));
+
+        $configuration = $this->createConfiguredMock(Configuration::class, [
+            'get' => false,
+            'getVersion' => '4.2.0-alpha',
+            'getAdminEmail' => 'admin@example.com',
+            'getTitle' => 'phpMyFAQ',
+            'getLogger' => $logger,
+        ]);
+
+        $mail = new Mail($configuration);
+
+        $this->assertTrue($mail->addTo('duplicate@example.com', 'Jane Doe'));
+        $this->assertFalse($mail->addTo('duplicate@example.com', 'Jane Doe'));
+    }
+
     public function testGetDateWithValidTimestamp(): void
     {
         $timestamp = strtotime('2023-01-01 12:00:00');
@@ -191,6 +212,25 @@ class MailTest extends TestCase
         $this->assertInstanceOf(Smtp::class, $result);
     }
 
+    public function testConstructorUsesSmtpAgentWhenRemoteSmtpIsEnabled(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
+                'mail.remoteSMTP' => true,
+                default => null,
+            });
+        $configuration->method('getVersion')->willReturn('4.2.0-alpha');
+        $configuration->method('getAdminEmail')->willReturn('invalid-email');
+        $configuration->method('getTitle')->willReturn('phpMyFAQ');
+        $configuration->method('getLogger')->willReturn($this->createStub(\Monolog\Logger::class));
+
+        $mail = new Mail($configuration);
+
+        $this->assertSame('smtp', $mail->agent);
+    }
+
     /**
      * @throws Exception
      */
@@ -203,6 +243,98 @@ class MailTest extends TestCase
     public function testSetReplyToWithInvalidAddress(): void
     {
         $this->assertFalse($this->mail->setReplyTo('invalid-email'));
+    }
+
+    public function testSendThrowsWhenNoRecipientsAreConfigured(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('You need at least to set one recipient among TO, CC and BCC!');
+
+        $mail = $this->createCapturingMail($this->configuration, 7);
+        $mail->message = 'No recipients here';
+        $mail->send();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSendUsesUndisclosedRecipientWhenOnlyBccIsPresent(): void
+    {
+        $mail = $this->createCapturingMail($this->configuration, 3);
+        $mail->subject = 'CC only subject';
+        $mail->message = 'CC only body';
+        $mail->setFrom('admin@example.com', 'Admin User');
+
+        $bccProperty = new \ReflectionProperty(Mail::class, 'bcc');
+        $bccProperty->setValue($mail, ['bcc@example.com' => 'Blind Copy']);
+
+        $this->assertSame(3, $mail->send(true));
+        $this->assertSame('<Undisclosed-Recipient:;>', $mail->capturedRecipients);
+        $this->assertStringContainsString('Blind Copy', (string) $mail->capturedHeaders['BCC']);
+        $this->assertStringContainsString('CC only body', $mail->capturedBody);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSendBuildsMultipartBodyWithAlternativeAndAttachment(): void
+    {
+        $attachmentPath = tempnam(sys_get_temp_dir(), 'phpmyfaq-mail-attachment-');
+        file_put_contents($attachmentPath, 'attachment-content');
+
+        $mail = $this->createCapturingMail($this->configuration, 9);
+        $mail->subject = 'Multipart subject';
+        $mail->message = '<p>Main HTML body</p>';
+        $mail->messageAlt = 'Plain text body';
+        $mail->setFrom('admin@example.com', 'Admin User');
+        $mail->attachments[] = [
+            'name' => 'example.txt',
+            'path' => $attachmentPath,
+            'mimetype' => 'text/plain',
+            'disposition' => 'attachment',
+            'cid' => null,
+        ];
+        $mail->addTo('user@example.com', 'User Name');
+
+        try {
+            $this->assertSame(9, $mail->send(true));
+            $this->assertStringContainsString('multipart/mixed', (string) $mail->capturedHeaders['Content-Type']);
+            $this->assertStringContainsString('multipart/alternative', $mail->capturedBody);
+            $this->assertStringContainsString('Plain text body', $mail->capturedBody);
+            $this->assertStringContainsString('<p>Main HTML body</p>', $mail->capturedBody);
+            $this->assertStringContainsString('filename="example.txt"', $mail->capturedBody);
+        } finally {
+            @unlink($attachmentPath);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSendFallsBackToSynchronousDeliveryWhenQueueContainerIsInvalid(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnCallback(static function (string $item): mixed {
+                return match ($item) {
+                    'mail.remoteSMTP' => false,
+                    'mail.useQueue' => true,
+                    'core.container' => 'not-a-container',
+                    default => null,
+                };
+            });
+        $configuration->method('getVersion')->willReturn('4.2.0-alpha');
+        $configuration->method('getAdminEmail')->willReturn('admin@example.com');
+        $configuration->method('getTitle')->willReturn('phpMyFAQ');
+        $configuration->method('getLogger')->willReturn($this->createStub(\Monolog\Logger::class));
+
+        $mail = $this->createCapturingMail($configuration, 5);
+        $mail->subject = 'Fallback subject';
+        $mail->message = 'Fallback message';
+        $mail->addTo('user@example.com');
+
+        $this->assertSame(5, $mail->send());
     }
 
     public function testSafeEmailWithSafeEmailEnabled(): void
@@ -225,6 +357,40 @@ class MailTest extends TestCase
 
         $result = $instance->safeEmail('test@example.com');
         $this->assertSame('test@example.com', $result);
+    }
+
+    public function testPrivateSetEmailToThrowsWhenMoreThanTwoAddressesAlreadyExist(): void
+    {
+        $target = [
+            'first@example.com' => null,
+            'second@example.com' => null,
+            'third@example.com' => null,
+        ];
+
+        $method = new \ReflectionMethod(Mail::class, 'setEmailTo');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Too many e-mail addresses, first@example.com, have been already added as 'From'!");
+
+        $method->invokeArgs($this->mail, [&$target, 'From', 'new@example.com', 'New User']);
+    }
+
+    public function testPrivateCreateProviderThrowsForUnsupportedProvider(): void
+    {
+        $method = new \ReflectionMethod(Mail::class, 'createProvider');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Unsupported mail provider: invalid');
+
+        $method->invoke($this->mail, 'invalid');
+    }
+
+    public function testGetMuaThrowsErrorForUnknownAgentClass(): void
+    {
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Class "phpMyFAQ\\Mail\\Invalidagent" not found');
+
+        Mail::getMUA('invalid-agent');
     }
 
     /**
@@ -322,5 +488,29 @@ class MailTest extends TestCase
         $mail->message = 'Direct message';
 
         $this->assertSame(7, $mail->send());
+    }
+
+    private function createCapturingMail(Configuration $configuration, int $returnValue): Mail
+    {
+        return new class($configuration, $returnValue) extends Mail {
+            public string $capturedRecipients = '';
+            /** @var array<string, string|int> */
+            public array $capturedHeaders = [];
+            public string $capturedBody = '';
+
+            public function __construct(Configuration $configuration, private readonly int $returnValue)
+            {
+                parent::__construct($configuration);
+            }
+
+            public function sendPreparedEnvelope(string $recipients, array $headers, string $body): int
+            {
+                $this->capturedRecipients = $recipients;
+                $this->capturedHeaders = $headers;
+                $this->capturedBody = $body;
+
+                return $this->returnValue;
+            }
+        };
     }
 }
