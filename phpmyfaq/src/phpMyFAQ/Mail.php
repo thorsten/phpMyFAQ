@@ -236,7 +236,7 @@ class Mail
     {
         $request = Request::createFromGlobals();
         $host = $request->getHost();
-        return $host !== '' && $host !== null ? $host : 'localhost.localdomain';
+        return $host !== '' ? $host : 'localhost.localdomain';
     }
 
     /**

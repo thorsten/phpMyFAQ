@@ -71,4 +71,25 @@ class InstallerTest extends TestCase
             $this->assertFalse($this->installer->hasElasticsearchSupport());
         }
     }
+
+    public function testCheckBasicStuffSucceedsWhenEnvironmentIsValid(): void
+    {
+        $this->system->method('checkDatabase')->willReturn(true);
+        $this->system->method('checkRequiredExtensions')->willReturn(true);
+        $this->system->method('checkInstallation')->willReturn(true);
+
+        $this->installer->checkBasicStuff();
+
+        $this->addToAssertionCount(1);
+    }
+
+    public function testGetFormInputsReturnsSeederData(): void
+    {
+        $formInputs = $this->installer->getFormInputs();
+
+        $this->assertIsArray($formInputs);
+        $this->assertNotEmpty($formInputs);
+        $this->assertArrayHasKey('input_id', $formInputs[0]);
+        $this->assertArrayHasKey('input_type', $formInputs[0]);
+    }
 }

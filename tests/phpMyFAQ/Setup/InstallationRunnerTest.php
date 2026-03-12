@@ -99,4 +99,36 @@ class InstallationRunnerTest extends TestCase
             $lastPos = $pos;
         }
     }
+
+    public function testBuildOpenSearchClientOptionsUsesDefaults(): void
+    {
+        $system = $this->createStub(System::class);
+        $runner = new InstallationRunner($system);
+        $reflectionMethod = new \ReflectionMethod(InstallationRunner::class, 'buildOpenSearchClientOptions');
+
+        $options = $reflectionMethod->invoke($runner, 'https://opensearch.example');
+
+        $this->assertSame([
+            'base_uri' => 'https://opensearch.example',
+            'verify_peer' => true,
+        ], $options);
+    }
+
+    public function testBuildOpenSearchClientOptionsAppliesTlsOverrides(): void
+    {
+        $system = $this->createStub(System::class);
+        $runner = new InstallationRunner($system);
+        $reflectionMethod = new \ReflectionMethod(InstallationRunner::class, 'buildOpenSearchClientOptions');
+
+        $options = $reflectionMethod->invoke($runner, 'https://opensearch.example', [
+            'verify_peer' => 'false',
+            'cafile' => '/tmp/ca.pem',
+            'capath' => '/tmp/certs',
+        ]);
+
+        $this->assertSame('https://opensearch.example', $options['base_uri']);
+        $this->assertFalse($options['verify_peer']);
+        $this->assertSame('/tmp/ca.pem', $options['cafile']);
+        $this->assertSame('/tmp/certs', $options['capath']);
+    }
 }

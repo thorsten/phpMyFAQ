@@ -30,6 +30,8 @@ use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Permission;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Permission\BasicPermissionRepository;
+use phpMyFAQ\Permission\MediumPermission;
+use phpMyFAQ\Permission\MediumPermissionRepository;
 use phpMyFAQ\Plugin\PluginManager;
 use phpMyFAQ\Session\SessionWrapper;
 use phpMyFAQ\Strings;
@@ -73,6 +75,8 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(Permission::class)]
 #[UsesClass(BasicPermission::class)]
 #[UsesClass(BasicPermissionRepository::class)]
+#[UsesClass(MediumPermission::class)]
+#[UsesClass(MediumPermissionRepository::class)]
 #[UsesClass(PluginManager::class)]
 #[UsesClass(SessionWrapper::class)]
 #[UsesClass(Strings::class)]
