@@ -36,7 +36,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated codebase using PHP 8.4 language features (Thorsten)
 - migrated routes using PHP 8+ #[Route] attributes (Thorsten)
 
-### phpMyFAQ v4.1.0-RC.7 - 2026-02-27
+### phpMyFAQ v4.1.0 - 2026-03-12
 
 - changed PHP requirement to PHP 8.3 or later (Thorsten)
 - added configuration to edit robots.txt (Thorsten)
@@ -71,6 +71,11 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated from JavaScript to TypeScript (Thorsten)
 - migrated from Webpack to Vite v7 (Thorsten)
 - migrated from Jest to Vitest v4 (Thorsten)
+
+### phpMyFAQ v4.0.19 - 2026-03-12
+
+- updated third party dependencies (Thorsten)
+- fixed bugs (Thorsten)
 
 ### phpMyFAQ v4.0.18 - 2026-02-27
 
