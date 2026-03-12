@@ -45,7 +45,8 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 ## Testing
 
 - Always write tests for new features and bug fixes.
-- Always run tests before committing code. All tests must pass. 
+- Always run tests before committing code. All tests must pass. No warnings or errors are allowed.
+- Linting and code formatting issues must be fixed before committing code.
 - PHP code: composer test
 - PHP code with coverage: composer test:coverage
 - PHP linting: composer lint
