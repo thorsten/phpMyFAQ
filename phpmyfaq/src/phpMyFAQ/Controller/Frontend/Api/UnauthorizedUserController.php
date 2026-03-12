@@ -71,7 +71,7 @@ final class UnauthorizedUserController
         }
 
         $username = trim((string) Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS));
-        $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
+        $email = trim((string) Filter::filterEmail($data->email));
 
         if ($username !== '' && $username !== '0' && ($email !== '' && $email !== '0')) {
             $user = ($this->currentUserFactory

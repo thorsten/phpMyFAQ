@@ -174,7 +174,7 @@ final class PageController extends AbstractAdministrationApiController
         $slug = Filter::filterVar($data->slug, FILTER_SANITIZE_SPECIAL_CHARS);
         $content = Filter::filterVar($data->content ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         $authorName = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS);
-        $authorEmail = Filter::filterVar($data->authorEmail, FILTER_VALIDATE_EMAIL);
+        $authorEmail = Filter::filterEmail($data->authorEmail);
         $active = Filter::filterVar($data->active ?? false, FILTER_SANITIZE_SPECIAL_CHARS);
         $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
         $seoTitle = Filter::filterVar($data->seoTitle ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -334,7 +334,7 @@ final class PageController extends AbstractAdministrationApiController
         $slug = Filter::filterVar($data->slug, FILTER_SANITIZE_SPECIAL_CHARS);
         $content = Filter::filterVar($data->content ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         $authorName = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS);
-        $authorEmail = Filter::filterVar($data->authorEmail, FILTER_VALIDATE_EMAIL);
+        $authorEmail = Filter::filterEmail($data->authorEmail);
         $active = Filter::filterVar($data->active ?? false, FILTER_SANITIZE_SPECIAL_CHARS);
         $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
         $seoTitle = Filter::filterVar($data->seoTitle ?? null, FILTER_SANITIZE_SPECIAL_CHARS);

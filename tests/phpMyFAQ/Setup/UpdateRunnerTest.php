@@ -166,14 +166,16 @@ class UpdateRunnerTest extends TestCase
         $result->addOperationResult($operation, true);
         $result->addOperationResult($operation, true);
 
-        $style->expects($this->once())
+        $style
+            ->expects($this->once())
             ->method('table')
-            ->with(
-                ['Version', 'Description', 'Operations', 'Time', 'Status'],
-                $this->callback(static fn(array $rows): bool => $rows[0][0] === '4.2.0-alpha'
-                    && $rows[0][1] === 'Example migration'
-                    && $rows[0][2] === 3),
-            );
+            ->with([
+                'Version',
+                'Description',
+                'Operations',
+                'Time',
+                'Status',
+            ], $this->callback(static fn(array $rows): bool => $rows[0][0] === '4.2.0-alpha' && $rows[0][1] === 'Example migration' && $rows[0][2] === 3));
 
         $method->invoke($runner, $style, [$result]);
     }

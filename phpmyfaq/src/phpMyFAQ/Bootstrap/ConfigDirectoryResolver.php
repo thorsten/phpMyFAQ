@@ -127,6 +127,13 @@ class ConfigDirectoryResolver
             return $confAttachmentsPath;
         }
 
+        $pathSegments = preg_split('%[\\\\/]%', $confAttachmentsPath) ?: [];
+        foreach ($pathSegments as $pathSegment) {
+            if ($pathSegment === '..') {
+                return false;
+            }
+        }
+
         $tmp = $rootDir . DIRECTORY_SEPARATOR . $confAttachmentsPath;
 
         if (str_starts_with($tmp, $rootDir)) {

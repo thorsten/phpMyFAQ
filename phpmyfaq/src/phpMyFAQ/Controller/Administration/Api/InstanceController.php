@@ -64,7 +64,7 @@ final class InstanceController extends AbstractController
         $url = Filter::filterVar($data->url, FILTER_SANITIZE_SPECIAL_CHARS);
         $instance = Filter::filterVar($data->instance, FILTER_SANITIZE_SPECIAL_CHARS);
         $comment = Filter::filterVar($data->comment, FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL);
+        $email = Filter::filterEmail($data->email);
         $admin = Filter::filterVar($data->admin, FILTER_SANITIZE_SPECIAL_CHARS);
         $password = Filter::filterVar($data->password, FILTER_SANITIZE_SPECIAL_CHARS);
 

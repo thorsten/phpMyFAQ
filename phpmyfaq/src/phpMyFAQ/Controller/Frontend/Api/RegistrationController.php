@@ -64,7 +64,7 @@ final class RegistrationController extends AbstractController
 
         $fullName = trim(strip_tags((string) $data->realname));
         $userName = trim((string) Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS));
-        $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
+        $email = trim((string) Filter::filterEmail($data->email));
 
         if (!$email) {
             throw new Exception('Invalid email address');

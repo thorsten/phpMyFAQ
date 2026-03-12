@@ -78,6 +78,19 @@ class Filter
     }
 
     /**
+     * Validates an email address and sanitizes it for safe output.
+     */
+    public static function filterEmail(mixed $variable, mixed $default = null): mixed
+    {
+        $validated = self::filterVar($variable, FILTER_VALIDATE_EMAIL, $default);
+        if ($validated !== null && $validated !== false && $validated !== $default) {
+            return self::filterVar($validated, FILTER_SANITIZE_SPECIAL_CHARS);
+        }
+
+        return $validated;
+    }
+
+    /**
      * Static wrapper method for filter_var_array().
      */
     public static function filterArray(array $array, array|int $options = FILTER_UNSAFE_RAW): bool|array|null

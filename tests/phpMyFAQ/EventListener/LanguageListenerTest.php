@@ -56,10 +56,12 @@ final class LanguageListenerTest extends TestCase
     public function testOnKernelRequestFallsBackToEnglishWhenServicesAreMissing(): void
     {
         $container = $this->createMock(ContainerInterface::class);
-        $container->method('has')->willReturnMap([
-            ['phpmyfaq.configuration', false],
-            ['phpmyfaq.language', false],
-        ]);
+        $container
+            ->method('has')
+            ->willReturnMap([
+                ['phpmyfaq.configuration', false],
+                ['phpmyfaq.language',      false],
+            ]);
 
         $listener = new LanguageListener($container);
         $listener->onKernelRequest($this->createEvent());
@@ -73,28 +75,30 @@ final class LanguageListenerTest extends TestCase
         $configuration = $this->createMock(Configuration::class);
         $language = $this->createMock(Language::class);
 
-        $container->method('has')->willReturnMap([
-            ['phpmyfaq.configuration', true],
-            ['phpmyfaq.language', true],
-        ]);
-        $container->method('get')->willReturnMap([
-            ['phpmyfaq.configuration', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $configuration],
-            ['phpmyfaq.language', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $language],
-        ]);
+        $container
+            ->method('has')
+            ->willReturnMap([
+                ['phpmyfaq.configuration', true],
+                ['phpmyfaq.language',      true],
+            ]);
+        $container
+            ->method('get')
+            ->willReturnMap([
+                ['phpmyfaq.configuration', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $configuration],
+                ['phpmyfaq.language',      ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $language],
+            ]);
 
         $configuration->expects($this->once())->method('setContainer')->with($container);
-        $configuration->expects($this->exactly(2))
+        $configuration
+            ->expects($this->exactly(2))
             ->method('get')
             ->willReturnMap([
                 ['main.languageDetection', true],
-                ['main.language', 'de'],
+                ['main.language',          'de'],
             ]);
         $configuration->expects($this->once())->method('setLanguage')->with($language);
 
-        $language->expects($this->once())
-            ->method('setLanguageWithDetection')
-            ->with('de')
-            ->willReturn('de');
+        $language->expects($this->once())->method('setLanguageWithDetection')->with('de')->willReturn('de');
         $language->expects($this->never())->method('setLanguageFromConfiguration');
 
         $listener = new LanguageListener($container);
@@ -109,28 +113,30 @@ final class LanguageListenerTest extends TestCase
         $configuration = $this->createMock(Configuration::class);
         $language = $this->createMock(Language::class);
 
-        $container->method('has')->willReturnMap([
-            ['phpmyfaq.configuration', true],
-            ['phpmyfaq.language', true],
-        ]);
-        $container->method('get')->willReturnMap([
-            ['phpmyfaq.configuration', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $configuration],
-            ['phpmyfaq.language', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $language],
-        ]);
+        $container
+            ->method('has')
+            ->willReturnMap([
+                ['phpmyfaq.configuration', true],
+                ['phpmyfaq.language',      true],
+            ]);
+        $container
+            ->method('get')
+            ->willReturnMap([
+                ['phpmyfaq.configuration', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $configuration],
+                ['phpmyfaq.language',      ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $language],
+            ]);
 
         $configuration->expects($this->once())->method('setContainer')->with($container);
-        $configuration->expects($this->exactly(2))
+        $configuration
+            ->expects($this->exactly(2))
             ->method('get')
             ->willReturnMap([
                 ['main.languageDetection', false],
-                ['main.language', 'fr'],
+                ['main.language',          'fr'],
             ]);
         $configuration->expects($this->once())->method('setLanguage')->with($language);
 
-        $language->expects($this->once())
-            ->method('setLanguageFromConfiguration')
-            ->with('fr')
-            ->willReturn('fr');
+        $language->expects($this->once())->method('setLanguageFromConfiguration')->with('fr')->willReturn('fr');
         $language->expects($this->never())->method('setLanguageWithDetection');
 
         $listener = new LanguageListener($container);
@@ -142,10 +148,6 @@ final class LanguageListenerTest extends TestCase
 
     private function createEvent(int $requestType = HttpKernelInterface::MAIN_REQUEST): RequestEvent
     {
-        return new RequestEvent(
-            $this->createMock(HttpKernelInterface::class),
-            Request::create('/'),
-            $requestType,
-        );
+        return new RequestEvent($this->createMock(HttpKernelInterface::class), Request::create('/'), $requestType);
     }
 }

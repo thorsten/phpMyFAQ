@@ -38,9 +38,12 @@ class SearchClientFactory
         string $baseUri,
         int $timeoutSeconds = 15,
         ?HttpClientInterface $httpClient = null,
+        ?callable $httpClientFactory = null,
     ): void {
         try {
-            $http = $httpClient ?? HttpClient::create(['verify_peer' => false]);
+            $http =
+                $httpClient
+                ?? ($httpClientFactory !== null ? $httpClientFactory() : HttpClient::create(['verify_peer' => false]));
             $deadline = time() + $timeoutSeconds;
             do {
                 try {
@@ -66,6 +69,7 @@ class SearchClientFactory
         Configuration $faqConfig,
         string $configDir,
         ?HttpClientInterface $httpClient = null,
+        ?callable $clientFactory = null,
     ): void {
         require $configDir . '/constants_elasticsearch.php';
         $esConfig = new ElasticsearchConfiguration($configDir . '/elasticsearch.php');
@@ -75,7 +79,9 @@ class SearchClientFactory
         self::waitForHealthy($esBaseUri, (int) ($_ENV['SEARCH_WAIT_TIMEOUT'] ?? 15), $httpClient);
 
         try {
-            $esClient = ClientBuilder::create()->setHosts([$esBaseUri])->build();
+            $esClient = $clientFactory !== null
+                ? $clientFactory($esBaseUri)
+                : ClientBuilder::create()->setHosts([$esBaseUri])->build();
             $faqConfig->setElasticsearch($esClient);
             $faqConfig->setElasticsearchConfig($esConfig);
         } catch (AuthenticationException $exception) {

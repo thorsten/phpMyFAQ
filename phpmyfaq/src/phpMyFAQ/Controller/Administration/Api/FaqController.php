@@ -120,7 +120,7 @@ final class FaqController extends AbstractAdministrationApiController
         $content = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
         $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
         $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL, default: '');
+        $email = Filter::filterEmail($data->email, default: '');
         $comment = Filter::filterVar($data->comment ?? 'n', FILTER_SANITIZE_SPECIAL_CHARS);
         $changed = Filter::filterVar($data->changed, FILTER_SANITIZE_SPECIAL_CHARS);
         $notes = Filter::filterVar($data->notes, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -349,7 +349,7 @@ final class FaqController extends AbstractAdministrationApiController
         $content = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
         $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
         $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL, default: '');
+        $email = Filter::filterEmail($data->email, default: '');
         $comment = Filter::filterVar($data->comment ?? 'n', FILTER_SANITIZE_SPECIAL_CHARS);
         $changed = Filter::filterVar($data->changed, FILTER_SANITIZE_SPECIAL_CHARS);
         $date = Filter::filterVar($data->date, FILTER_SANITIZE_SPECIAL_CHARS);

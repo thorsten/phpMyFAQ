@@ -25,6 +25,7 @@ use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
@@ -49,12 +50,14 @@ final class AttachmentController extends AbstractAdministrationApiController
                 return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
             }
 
-            $attachment = AttachmentFactory::create($deleteData->attId);
+            $attId = Filter::filterVar($deleteData->attId, FILTER_VALIDATE_INT);
+            if (!$attId) {
+                return $this->json(['error' => 'Invalid attachment ID'], Response::HTTP_BAD_REQUEST);
+            }
+
+            $attachment = AttachmentFactory::create($attId);
             if ($attachment->delete()) {
-                $this->adminLog->log(
-                    $this->currentUser,
-                    AdminLogType::ATTACHMENT_DELETE->value . ':' . $deleteData->attId,
-                );
+                $this->adminLog->log($this->currentUser, AdminLogType::ATTACHMENT_DELETE->value . ':' . $attId);
 
                 return $this->json(['success' => Translation::get(key: 'msgAttachmentsDeleted')], Response::HTTP_OK);
             }
@@ -84,7 +87,12 @@ final class AttachmentController extends AbstractAdministrationApiController
                 return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
             }
 
-            $attachment = AttachmentFactory::create($dataToCheck->attId);
+            $attId = Filter::filterVar($dataToCheck->attId, FILTER_VALIDATE_INT);
+            if (!$attId) {
+                return $this->json(['error' => 'Invalid attachment ID'], Response::HTTP_BAD_REQUEST);
+            }
+
+            $attachment = AttachmentFactory::create($attId);
             $result = [
                 'success' => Translation::get(key: 'msgAdminAttachmentRefreshed'),
                 'delete' => false,
@@ -130,8 +138,11 @@ final class AttachmentController extends AbstractAdministrationApiController
             }
 
             $attachment = AttachmentFactory::create();
-            $attachment->setRecordId($request->attributes->get('record_id'));
-            $attachment->setRecordLang($request->attributes->get('record_lang'));
+            $attachment->setRecordId(Filter::filterVar($request->attributes->get('record_id'), FILTER_VALIDATE_INT));
+            $attachment->setRecordLang(Filter::filterVar(
+                $request->attributes->get('record_lang'),
+                FILTER_SANITIZE_SPECIAL_CHARS,
+            ));
             try {
                 if (!$attachment->save($file->getPathname(), $file->getClientOriginalName())) {
                     return $this->json(['error' => Translation::get(

@@ -69,16 +69,14 @@ class AbstractSetupTest extends TestCase
 
     public function testCheckMinimumPhpVersionReturnsTrue(): void
     {
-        $setup = new class (new System()) extends AbstractSetup {
-        };
+        $setup = new class(new System()) extends AbstractSetup {};
 
         $this->assertTrue($setup->checkMinimumPhpVersion());
     }
 
     public function testCheckMinimumUpdateVersionRejectsTooOldVersion(): void
     {
-        $setup = new class ($this->createStub(System::class)) extends AbstractSetup {
-        };
+        $setup = new class($this->createStub(System::class)) extends AbstractSetup {};
 
         $this->assertFalse($setup->checkMinimumUpdateVersion('3.1.0'));
         $this->assertTrue($setup->checkMinimumUpdateVersion('3.2.0'));
@@ -86,8 +84,7 @@ class AbstractSetupTest extends TestCase
 
     public function testCheckMaintenanceModeReadsConfigurationSingleton(): void
     {
-        $setup = new class ($this->createStub(System::class)) extends AbstractSetup {
-        };
+        $setup = new class($this->createStub(System::class)) extends AbstractSetup {};
 
         $this->assertTrue($setup->checkMaintenanceMode());
     }
@@ -95,13 +92,14 @@ class AbstractSetupTest extends TestCase
     public function testCheckPreUpgradeRejectsUnsupportedDatabase(): void
     {
         $system = $this->createStub(System::class);
-        $system->method('getSupportedDatabases')->willReturn([
-            'mysqli' => 'MySQL',
-            'sqlite3' => 'SQLite',
-        ]);
+        $system
+            ->method('getSupportedDatabases')
+            ->willReturn([
+                'mysqli' => 'MySQL',
+                'sqlite3' => 'SQLite',
+            ]);
 
-        $setup = new class ($system) extends AbstractSetup {
-        };
+        $setup = new class($system) extends AbstractSetup {};
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Sorry, but the database Unsupported is not supported!');
@@ -112,13 +110,14 @@ class AbstractSetupTest extends TestCase
     public function testCheckPreUpgradeAcceptsSupportedDatabase(): void
     {
         $system = $this->createStub(System::class);
-        $system->method('getSupportedDatabases')->willReturn([
-            'mysqli' => 'MySQL',
-            'sqlite3' => 'SQLite',
-        ]);
+        $system
+            ->method('getSupportedDatabases')
+            ->willReturn([
+                'mysqli' => 'MySQL',
+                'sqlite3' => 'SQLite',
+            ]);
 
-        $setup = new class ($system) extends AbstractSetup {
-        };
+        $setup = new class($system) extends AbstractSetup {};
 
         $setup->checkPreUpgrade('sqlite3');
 

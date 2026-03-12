@@ -240,6 +240,14 @@ class SvgSanitizerTest extends TestCase
         $this->assertFalse($this->sanitizer->isSafe($this->testDir . '/nonexistent.svg'));
     }
 
+    public function testSanitizeReturnsFalseForNonSvgContent(): void
+    {
+        $filePath = $this->testDir . '/plain.txt';
+        file_put_contents($filePath, 'plain text content');
+
+        $this->assertFalse($this->sanitizer->sanitize($filePath));
+    }
+
     public function testSanitizeRemovesCSSExpressions(): void
     {
         $maliciousSvg = <<<SVG

@@ -173,11 +173,7 @@ final class UserCreateOperationTest extends TestCase
 
     public function testExecuteReturnsFalseWhenStatusIsInvalid(): void
     {
-        $operation = $this->createOperation(
-            loginName: 'invalid_status_user',
-            userId: 8105,
-            status: 'unknown',
-        );
+        $operation = $this->createOperation(loginName: 'invalid_status_user', userId: 8105, status: 'unknown');
 
         $this->assertFalse($operation->execute());
     }
@@ -191,11 +187,7 @@ final class UserCreateOperationTest extends TestCase
 
     public function testToArray(): void
     {
-        $operation = $this->createOperation(
-            loginName: 'migration_superadmin',
-            userId: 8107,
-            isSuperAdmin: true,
-        );
+        $operation = $this->createOperation(loginName: 'migration_superadmin', userId: 8107, isSuperAdmin: true);
 
         $this->assertSame(
             [
@@ -235,12 +227,10 @@ final class UserCreateOperationTest extends TestCase
      */
     private function fetchUserRow(int $userId): array
     {
-        $result = $this->database->query(
-            sprintf(
-                'SELECT login, account_status, is_superadmin FROM faquser WHERE user_id = %d',
-                $userId,
-            ),
-        );
+        $result = $this->database->query(sprintf(
+            'SELECT login, account_status, is_superadmin FROM faquser WHERE user_id = %d',
+            $userId,
+        ));
 
         return $this->database->fetchArray($result);
     }
@@ -250,12 +240,10 @@ final class UserCreateOperationTest extends TestCase
      */
     private function fetchUserDataRow(int $userId): array
     {
-        $result = $this->database->query(
-            sprintf(
-                'SELECT display_name, email FROM faquserdata WHERE user_id = %d',
-                $userId,
-            ),
-        );
+        $result = $this->database->query(sprintf(
+            'SELECT display_name, email FROM faquserdata WHERE user_id = %d',
+            $userId,
+        ));
 
         return $this->database->fetchArray($result);
     }
@@ -265,12 +253,10 @@ final class UserCreateOperationTest extends TestCase
      */
     private function fetchUserLoginRow(string $loginName): array
     {
-        $result = $this->database->query(
-            sprintf(
-                "SELECT pass FROM faquserlogin WHERE login = '%s'",
-                $this->database->escape($loginName),
-            ),
-        );
+        $result = $this->database->query(sprintf(
+            "SELECT pass FROM faquserlogin WHERE login = '%s'",
+            $this->database->escape($loginName),
+        ));
 
         return $this->database->fetchArray($result);
     }

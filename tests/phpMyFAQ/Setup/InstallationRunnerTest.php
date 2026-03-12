@@ -108,10 +108,13 @@ class InstallationRunnerTest extends TestCase
 
         $options = $reflectionMethod->invoke($runner, 'https://opensearch.example');
 
-        $this->assertSame([
-            'base_uri' => 'https://opensearch.example',
-            'verify_peer' => true,
-        ], $options);
+        $this->assertSame(
+            [
+                'base_uri' => 'https://opensearch.example',
+                'verify_peer' => true,
+            ],
+            $options,
+        );
     }
 
     public function testBuildOpenSearchClientOptionsAppliesTlsOverrides(): void

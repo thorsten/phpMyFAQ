@@ -21,7 +21,6 @@ namespace phpMyFAQ\Glossary;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
-use phpMyFAQ\Strings;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -98,10 +97,9 @@ readonly class GlossaryRepository implements GlossaryRepositoryInterface
         $escapedLanguage = $databaseDriver->escape($language);
 
         $id = $databaseDriver->nextId(Database::getTablePrefix() . 'faqglossary', column: 'id');
-        $safeItem = Strings::htmlspecialchars(substr(string: $escapedItem, offset: 0, length: 254));
-        $safeDef = Strings::htmlspecialchars($escapedDefinition);
+        $safeItem = substr(string: $escapedItem, offset: 0, length: 254);
         $sql = "INSERT INTO %sfaqglossary (id, lang, item, definition) VALUES (%d, '%s', '%s', '%s')";
-        $query = sprintf($sql, Database::getTablePrefix(), $id, $escapedLanguage, $safeItem, $safeDef);
+        $query = sprintf($sql, Database::getTablePrefix(), $id, $escapedLanguage, $safeItem, $escapedDefinition);
 
         $ok = (bool) $databaseDriver->query($query);
         if (!$ok) {
@@ -122,10 +120,9 @@ readonly class GlossaryRepository implements GlossaryRepositoryInterface
         $escapedDefinition = $databaseDriver->escape($definition);
         $escapedLanguage = $databaseDriver->escape($language);
 
-        $safeItem = Strings::htmlspecialchars(substr(string: $escapedItem, offset: 0, length: 254));
-        $safeDef = Strings::htmlspecialchars($escapedDefinition);
+        $safeItem = substr(string: $escapedItem, offset: 0, length: 254);
         $sql = "UPDATE %sfaqglossary SET item = '%s', definition = '%s' WHERE id = %d AND lang = '%s'";
-        $query = sprintf($sql, Database::getTablePrefix(), $safeItem, $safeDef, $id, $escapedLanguage);
+        $query = sprintf($sql, Database::getTablePrefix(), $safeItem, $escapedDefinition, $id, $escapedLanguage);
 
         $ok = (bool) $databaseDriver->query($query);
         if (!$ok) {

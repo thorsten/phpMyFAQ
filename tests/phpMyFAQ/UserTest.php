@@ -165,11 +165,13 @@ class UserTest extends TestCase
         $this->database->method('escape')->willReturn('cookie-token');
         $this->database->method('query')->willReturn(true);
         $this->database->method('numRows')->willReturn(1);
-        $this->database->method('fetchArray')->willReturn([
-            'user_id' => -1,
-            'login' => 'anonymous',
-            'account_status' => 'active',
-        ]);
+        $this->database
+            ->method('fetchArray')
+            ->willReturn([
+                'user_id' => -1,
+                'login' => 'anonymous',
+                'account_status' => 'active',
+            ]);
 
         $this->assertFalse($this->user->getUserByCookie('cookie-token'));
     }
@@ -179,12 +181,17 @@ class UserTest extends TestCase
         $this->database->method('escape')->willReturn('cookie-token');
         $this->database->method('query')->willReturn(true);
         $this->database->method('numRows')->willReturn(1);
-        $this->database->method('fetchArray')->willReturn([
-            'user_id' => 42,
-            'login' => 'cookie-user',
-            'account_status' => 'active',
-        ]);
-        $this->userData->expects($this->once())->method('load')->with(42);
+        $this->database
+            ->method('fetchArray')
+            ->willReturn([
+                'user_id' => 42,
+                'login' => 'cookie-user',
+                'account_status' => 'active',
+            ]);
+        $this->userData
+            ->expects($this->once())
+            ->method('load')
+            ->with(42);
 
         $this->assertTrue($this->user->getUserByCookie('cookie-token'));
         $this->assertSame(42, $this->user->getUserId());
@@ -200,11 +207,12 @@ class UserTest extends TestCase
 
     public function testCheckDisplayNameAndMailAddressDelegateToUserData(): void
     {
-        $this->userData->expects($this->exactly(2))
+        $this->userData
+            ->expects($this->exactly(2))
             ->method('fetch')
             ->willReturnMap([
-                ['display_name', 'Thorsten', 'Thorsten'],
-                ['email', 'thorsten@example.com', 'thorsten@example.com'],
+                ['display_name', 'Thorsten',             'Thorsten'],
+                ['email',        'thorsten@example.com', 'thorsten@example.com'],
             ]);
 
         $this->assertTrue($this->user->checkDisplayName('Thorsten'));
@@ -257,14 +265,19 @@ class UserTest extends TestCase
         $this->database->method('escape')->willReturn('existing');
         $this->database->method('query')->willReturn(true);
         $this->database->method('numRows')->willReturn(1);
-        $this->database->method('fetchArray')->willReturn([
-            'user_id' => 7,
-            'login' => 'existing',
-            'account_status' => 'active',
-            'is_superadmin' => 1,
-            'auth_source' => 'local',
-        ]);
-        $this->userData->expects($this->once())->method('load')->with(7);
+        $this->database
+            ->method('fetchArray')
+            ->willReturn([
+                'user_id' => 7,
+                'login' => 'existing',
+                'account_status' => 'active',
+                'is_superadmin' => 1,
+                'auth_source' => 'local',
+            ]);
+        $this->userData
+            ->expects($this->once())
+            ->method('load')
+            ->with(7);
 
         $this->assertTrue($this->user->getUserByLogin('existing'));
         $this->assertSame('existing', $this->user->getLogin());
@@ -340,7 +353,10 @@ class UserTest extends TestCase
         $this->user->perm = $permission;
 
         $this->database->method('query')->willReturn(true);
-        $this->userData->method('delete')->with(6)->willReturn(true);
+        $this->userData
+            ->method('delete')
+            ->with(6)
+            ->willReturn(true);
 
         $auth = $this->createMock(AuthDatabase::class);
         $auth->expects($this->once())->method('disableReadOnly')->willReturn(false);
@@ -375,11 +391,7 @@ class UserTest extends TestCase
     {
         $this->database->method('query')->willReturnOnConsecutiveCalls(false, true, true);
         $this->database->method('numRows')->willReturnOnConsecutiveCalls(0, 2);
-        $this->database->method('fetchArray')->willReturnOnConsecutiveCalls(
-            ['user_id' => 3],
-            ['user_id' => 5],
-            null,
-        );
+        $this->database->method('fetchArray')->willReturnOnConsecutiveCalls(['user_id' => 3], ['user_id' => 5], null);
 
         $this->assertSame([], $this->user->getAllUsers());
         $this->assertSame([], $this->user->getAllUsers());
@@ -398,13 +410,15 @@ class UserTest extends TestCase
         ]);
         $this->database->method('query')->willReturnOnConsecutiveCalls(true, true, true);
         $this->database->method('numRows')->willReturnOnConsecutiveCalls(0, 1, 0);
-        $this->database->method('fetchArray')->willReturn([
-            'user_id' => 8,
-            'login' => 'db-user',
-            'account_status' => 'active',
-            'is_superadmin' => 0,
-            'auth_source' => 'local',
-        ]);
+        $this->database
+            ->method('fetchArray')
+            ->willReturn([
+                'user_id' => 8,
+                'login' => 'db-user',
+                'account_status' => 'active',
+                'is_superadmin' => 0,
+                'auth_source' => 'local',
+            ]);
         $this->database->method('error')->willReturn('db error');
 
         $this->assertFalse($this->user->getUserById(99));
@@ -414,13 +428,24 @@ class UserTest extends TestCase
     public function testGetUserDataSetUserDataAndEmailHelpersDelegateToUserData(): void
     {
         $this->setPrivateProperty('userId', 11);
-        $this->userData->expects($this->once())->method('get')->with('display_name')->willReturn('Thorsten');
-        $this->userData->expects($this->once())->method('load')->with(11);
-        $this->userData->expects($this->once())->method('set')->with(['display_name'], ['Thorsten'])->willReturn(true);
-        $this->userData->expects($this->exactly(2))->method('fetchAll')->willReturnOnConsecutiveCalls(
-            ['user_id' => 11, 'is_visible' => true],
-            ['user_id' => 12],
-        );
+        $this->userData
+            ->expects($this->once())
+            ->method('get')
+            ->with('display_name')
+            ->willReturn('Thorsten');
+        $this->userData
+            ->expects($this->once())
+            ->method('load')
+            ->with(11);
+        $this->userData
+            ->expects($this->once())
+            ->method('set')
+            ->with(['display_name'], ['Thorsten'])
+            ->willReturn(true);
+        $this->userData
+            ->expects($this->exactly(2))
+            ->method('fetchAll')
+            ->willReturnOnConsecutiveCalls(['user_id' => 11, 'is_visible' => true], ['user_id' => 12]);
 
         $this->assertSame('Thorsten', $this->user->getUserData('display_name'));
         $this->assertTrue($this->user->setUserData(['display_name' => 'Thorsten']));
@@ -430,7 +455,8 @@ class UserTest extends TestCase
 
     public function testActivateUserReturnsFalseForNonBlockedStatus(): void
     {
-        $user = $this->getMockBuilder(User::class)
+        $user = $this
+            ->getMockBuilder(User::class)
             ->setConstructorArgs([$this->configuration])
             ->onlyMethods(['getStatus'])
             ->getMock();
@@ -442,9 +468,18 @@ class UserTest extends TestCase
 
     public function testActivateUserChangesStatusWhenMailWasSent(): void
     {
-        $user = $this->getMockBuilder(User::class)
+        $user = $this
+            ->getMockBuilder(User::class)
             ->setConstructorArgs([$this->configuration])
-            ->onlyMethods(['getStatus', 'createPassword', 'changePassword', 'getUserData', 'getLogin', 'mailUser', 'setStatus'])
+            ->onlyMethods([
+                'getStatus',
+                'createPassword',
+                'changePassword',
+                'getUserData',
+                'getLogin',
+                'mailUser',
+                'setStatus',
+            ])
             ->getMock();
 
         $user->method('getStatus')->willReturn('blocked');
@@ -460,7 +495,8 @@ class UserTest extends TestCase
 
     public function testActivateUserReturnsTrueWhenMailSendingFails(): void
     {
-        $user = $this->getMockBuilder(User::class)
+        $user = $this
+            ->getMockBuilder(User::class)
             ->setConstructorArgs([$this->configuration])
             ->onlyMethods(['getStatus', 'createPassword', 'changePassword', 'getUserData', 'getLogin', 'mailUser'])
             ->getMock();
@@ -552,13 +588,15 @@ class UserTest extends TestCase
         );
 
         $this->assertSame([2, 5], User::getSuperAdminIds($configuration));
-        $this->database->method('fetchArray')->willReturn([
-            'user_id' => 99,
-            'login' => 'extract-user',
-            'account_status' => 'blocked',
-            'is_superadmin' => 1,
-            'auth_source' => 'sso',
-        ]);
+        $this->database
+            ->method('fetchArray')
+            ->willReturn([
+                'user_id' => 99,
+                'login' => 'extract-user',
+                'account_status' => 'blocked',
+                'is_superadmin' => 1,
+                'auth_source' => 'sso',
+            ]);
 
         $this->user->extractUserFromResult(true);
 

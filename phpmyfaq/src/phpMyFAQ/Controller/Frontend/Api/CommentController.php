@@ -110,7 +110,7 @@ final class CommentController extends AbstractController
         $faqId = Filter::filterVar($data->id ?? null, FILTER_VALIDATE_INT, default: 0);
         $newsId = Filter::filterVar($data->newsId ?? null, FILTER_VALIDATE_INT);
         $username = Filter::filterVar($data->user, FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterVar($data->mail, FILTER_VALIDATE_EMAIL);
+        $email = Filter::filterEmail($data->mail);
 
         if (!$email) {
             throw new Exception('Invalid email address');

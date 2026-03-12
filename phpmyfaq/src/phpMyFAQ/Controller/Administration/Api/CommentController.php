@@ -23,6 +23,7 @@ use Exception;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -61,6 +62,11 @@ final class CommentController extends AbstractAdministrationApiController
             }
 
             foreach ($commentIds as $commentId) {
+                $commentId = Filter::filterVar($commentId, FILTER_VALIDATE_INT);
+                if (!$commentId) {
+                    continue;
+                }
+
                 $result = $this->comments->delete($data->type, $commentId);
             }
 

@@ -263,7 +263,13 @@ class FaqTest extends TestCase
 
     public function testGetFaqsByIdsAndGetFaqByIdAndCategoryIdReturnMappedData(): void
     {
-        $this->seedFaqRecord(id: 5007, solutionId: 7007, categoryId: 77, question: 'Mapped FAQ', answer: 'Mapped answer');
+        $this->seedFaqRecord(
+            id: 5007,
+            solutionId: 7007,
+            categoryId: 77,
+            question: 'Mapped FAQ',
+            answer: 'Mapped answer',
+        );
 
         $records = $this->faq->getFaqsByIds([5007]);
         $record = $this->faq->getFaqByIdAndCategoryId(5007, 77);
@@ -279,7 +285,13 @@ class FaqTest extends TestCase
 
     public function testGetAllAvailableFaqsByCategoryIdReturnsPreviewAndFullData(): void
     {
-        $this->seedFaqRecord(id: 5008, solutionId: 7008, categoryId: 88, question: 'Preview FAQ', answer: 'A long answer for previews');
+        $this->seedFaqRecord(
+            id: 5008,
+            solutionId: 7008,
+            categoryId: 88,
+            question: 'Preview FAQ',
+            answer: 'A long answer for previews',
+        );
 
         $previewData = $this->faq->getAllAvailableFaqsByCategoryId(88);
         $fullData = $this->faq->getAllAvailableFaqsByCategoryId(88, 'visits', 'DESC', false);
@@ -297,10 +309,18 @@ class FaqTest extends TestCase
 
     public function testRenderFaqsByFaqIdsReturnsDistinctResultsWithoutPagination(): void
     {
-        $this->seedFaqRecord(id: 5009, solutionId: 7009, categoryId: 91, question: 'Duplicate FAQ', answer: 'Duplicated once');
-        $this->configuration->getDb()->query(
-            "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES (92, 'en', 5009, 'en')",
+        $this->seedFaqRecord(
+            id: 5009,
+            solutionId: 7009,
+            categoryId: 91,
+            question: 'Duplicate FAQ',
+            answer: 'Duplicated once',
         );
+        $this->configuration
+            ->getDb()
+            ->query(
+                "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES (92, 'en', 5009, 'en')",
+            );
 
         $results = $this->faq->renderFaqsByFaqIds([5009], usePagination: false);
 
@@ -312,7 +332,13 @@ class FaqTest extends TestCase
 
     public function testGetReturnsMappedFaqRows(): void
     {
-        $this->seedFaqRecord(id: 5010, solutionId: 7010, categoryId: 93, question: 'Mapped row', answer: 'Mapped content');
+        $this->seedFaqRecord(
+            id: 5010,
+            solutionId: 7010,
+            categoryId: 93,
+            question: 'Mapped row',
+            answer: 'Mapped content',
+        );
 
         $rows = $this->faq->get(categoryId: 93, lang: 'en');
 
@@ -327,11 +353,29 @@ class FaqTest extends TestCase
     {
         $this->configuration->set('records.orderStickyFaqsCustom', 'true');
         $this->setConfigurationValue('records.orderStickyFaqsCustom', 'true');
-        $this->seedFaqRecord(id: 5011, solutionId: 7011, categoryId: 101, question: 'Second sticky', sticky: 1, stickyOrder: 2, visits: 10);
-        $this->seedFaqRecord(id: 5012, solutionId: 7012, categoryId: 102, question: 'First sticky', sticky: 1, stickyOrder: 1, visits: 5);
-        $this->configuration->getDb()->query(
-            "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES (103, 'en', 5012, 'en')",
+        $this->seedFaqRecord(
+            id: 5011,
+            solutionId: 7011,
+            categoryId: 101,
+            question: 'Second sticky',
+            sticky: 1,
+            stickyOrder: 2,
+            visits: 10,
         );
+        $this->seedFaqRecord(
+            id: 5012,
+            solutionId: 7012,
+            categoryId: 102,
+            question: 'First sticky',
+            sticky: 1,
+            stickyOrder: 1,
+            visits: 5,
+        );
+        $this->configuration
+            ->getDb()
+            ->query(
+                "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES (103, 'en', 5012, 'en')",
+            );
 
         $sticky = $this->faq->getStickyFaqsData();
 
@@ -343,9 +387,30 @@ class FaqTest extends TestCase
 
     public function testGetAllFaqsBuildsRecordsAndReplacesInactiveAndExpiredContent(): void
     {
-        $this->seedFaqRecord(id: 5013, solutionId: 7013, categoryId: 111, question: 'Inactive FAQ', answer: 'Should be hidden', active: 'no');
-        $this->seedFaqRecord(id: 5014, solutionId: 7014, categoryId: 112, question: 'Expired FAQ', answer: 'Should expire', dateEnd: '20000101000000');
-        $this->seedFaqRecord(id: 5015, solutionId: 7015, categoryId: 113, question: 'Visible FAQ', answer: 'Visible answer', notes: 'some note');
+        $this->seedFaqRecord(
+            id: 5013,
+            solutionId: 7013,
+            categoryId: 111,
+            question: 'Inactive FAQ',
+            answer: 'Should be hidden',
+            active: 'no',
+        );
+        $this->seedFaqRecord(
+            id: 5014,
+            solutionId: 7014,
+            categoryId: 112,
+            question: 'Expired FAQ',
+            answer: 'Should expire',
+            dateEnd: '20000101000000',
+        );
+        $this->seedFaqRecord(
+            id: 5015,
+            solutionId: 7015,
+            categoryId: 113,
+            question: 'Visible FAQ',
+            answer: 'Visible answer',
+            notes: 'some note',
+        );
 
         $this->faq->getAllFaqs(Faq::SORTING_TYPE_FAQID, ['fd.id' => ['5015']], 'ASC');
 
@@ -369,10 +434,12 @@ class FaqTest extends TestCase
 
     public function testIsActiveHandlesNewsAndMissingRecords(): void
     {
-        $this->configuration->getDb()->query(
-            "INSERT INTO faqnews (id, lang, header, artikel, datum, author_name, author_email, active, comment, link, linktitel, target)
+        $this->configuration
+            ->getDb()
+            ->query(
+                "INSERT INTO faqnews (id, lang, header, artikel, datum, author_name, author_email, active, comment, link, linktitel, target)
              VALUES (6001, 'en', 'News header', 'News article', '20260301000000', 'Author', 'author@example.com', 'n', 'n', '', '', '_self')",
-        );
+            );
 
         $this->assertFalse($this->faq->isActive(6001, 'en', 'news'));
         $this->assertFalse($this->faq->isActive(999997, 'en'));
@@ -412,15 +479,16 @@ class FaqTest extends TestCase
         string $dateEnd = '99991231235959',
         int $visits = 1,
         ?int $userId = -1,
-        string $notes = ''
+        string $notes = '',
     ): void {
         $question = $this->configuration->getDb()->escape($question);
         $answer = $this->configuration->getDb()->escape($answer);
         $keywords = $this->configuration->getDb()->escape($keywords);
         $notes = $this->configuration->getDb()->escape($notes);
 
-        $this->configuration->getDb()->query(
-            sprintf(
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
                 "INSERT INTO faqdata (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end, created, notes, sticky_order)
                  VALUES (%d, '%s', %d, 0, '%s', %d, '%s', '%s', '%s', 'Author', 'author@example.com', 'y', '20260301010101', '00000000000000', '%s', '2026-03-01 01:01:01', '%s', %d)",
                 $id,
@@ -434,34 +502,29 @@ class FaqTest extends TestCase
                 $dateEnd,
                 $notes,
                 $stickyOrder,
-            ),
-        );
-        $this->configuration->getDb()->query(
-            sprintf(
+            ));
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
                 "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES (%d, '%s', %d, '%s')",
                 $categoryId,
                 $lang,
                 $id,
                 $lang,
-            ),
-        );
-        $this->configuration->getDb()->query(
-            sprintf(
+            ));
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
                 "INSERT INTO faqvisits (id, lang, visits, last_visit) VALUES (%d, '%s', %d, 20260301010101)",
                 $id,
                 $lang,
                 $visits,
-            ),
-        );
+            ));
 
         if ($userId !== null) {
-            $this->configuration->getDb()->query(
-                sprintf(
-                    'INSERT INTO faqdata_user (record_id, user_id) VALUES (%d, %d)',
-                    $id,
-                    $userId,
-                ),
-            );
+            $this->configuration
+                ->getDb()
+                ->query(sprintf('INSERT INTO faqdata_user (record_id, user_id) VALUES (%d, %d)', $id, $userId));
         }
     }
 

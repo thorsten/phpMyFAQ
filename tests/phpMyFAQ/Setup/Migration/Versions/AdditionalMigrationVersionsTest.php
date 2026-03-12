@@ -58,7 +58,7 @@ class AdditionalMigrationVersionsTest extends TestCase
         $this->setDatabaseState('sqlite3', 'pmf_');
 
         $recorder = new OperationRecorder($this->createStub(Configuration::class));
-        (new Migration320Beta($this->createStub(Configuration::class)))->up($recorder);
+        new Migration320Beta($this->createStub(Configuration::class))->up($recorder);
 
         $counts = $recorder->getOperationCounts();
 
@@ -74,7 +74,7 @@ class AdditionalMigrationVersionsTest extends TestCase
         $this->setDatabaseState('pgsql', 'pmf_');
 
         $recorder = new OperationRecorder($this->createStub(Configuration::class));
-        (new Migration323($this->createStub(Configuration::class)))->up($recorder);
+        new Migration323($this->createStub(Configuration::class))->up($recorder);
 
         $queries = $recorder->getSqlQueries();
 
@@ -87,7 +87,7 @@ class AdditionalMigrationVersionsTest extends TestCase
         $this->setDatabaseState('sqlite3');
 
         $recorder = new OperationRecorder($this->createStub(Configuration::class));
-        (new Migration400Alpha($this->createStub(Configuration::class)))->up($recorder);
+        new Migration400Alpha($this->createStub(Configuration::class))->up($recorder);
 
         $counts = $recorder->getOperationCounts();
         $payload = $recorder->toArray();
@@ -105,7 +105,7 @@ class AdditionalMigrationVersionsTest extends TestCase
         $this->setDatabaseState('pgsql');
 
         $recorder = new OperationRecorder($this->createStub(Configuration::class));
-        (new Migration400Alpha3($this->createStub(Configuration::class)))->up($recorder);
+        new Migration400Alpha3($this->createStub(Configuration::class))->up($recorder);
 
         $counts = $recorder->getOperationCounts();
         $payload = json_encode($recorder->toArray(), JSON_THROW_ON_ERROR);
@@ -124,7 +124,7 @@ class AdditionalMigrationVersionsTest extends TestCase
         $this->setDatabaseState('sqlite3', 'pmf_');
 
         $recorder = new OperationRecorder($this->createStub(Configuration::class));
-        (new Migration405($this->createStub(Configuration::class)))->up($recorder);
+        new Migration405($this->createStub(Configuration::class))->up($recorder);
 
         $queries = implode("\n", $recorder->getSqlQueries());
 
@@ -138,13 +138,13 @@ class AdditionalMigrationVersionsTest extends TestCase
         $this->setDatabaseState('sqlite3', 'pmf_');
 
         $recorder = new OperationRecorder($this->createStub(Configuration::class));
-        (new Migration407($this->createStub(Configuration::class)))->up($recorder);
+        new Migration407($this->createStub(Configuration::class))->up($recorder);
 
         $queries = $recorder->getSqlQueries();
 
         $this->assertCount(28, $queries);
         $this->assertStringContainsString("SET lang='fr_ca' WHERE lang='fr-ca'", $queries[2]);
-        $this->assertStringContainsString("language_pt_br.php", $queries[27]);
+        $this->assertStringContainsString('language_pt_br.php', $queries[27]);
     }
 
     public function testMigration409OnlyAddsPostgresSequenceOperations(): void
@@ -152,13 +152,13 @@ class AdditionalMigrationVersionsTest extends TestCase
         $this->setDatabaseState('pgsql', 'pmf_');
 
         $postgresRecorder = new OperationRecorder($this->createStub(Configuration::class));
-        (new Migration409($this->createStub(Configuration::class)))->up($postgresRecorder);
+        new Migration409($this->createStub(Configuration::class))->up($postgresRecorder);
         $this->assertCount(4, $postgresRecorder->getSqlQueries());
 
         $this->setDatabaseState('sqlite3', 'pmf_');
 
         $sqliteRecorder = new OperationRecorder($this->createStub(Configuration::class));
-        (new Migration409($this->createStub(Configuration::class)))->up($sqliteRecorder);
+        new Migration409($this->createStub(Configuration::class))->up($sqliteRecorder);
         $this->assertCount(0, $sqliteRecorder->getSqlQueries());
     }
 
@@ -167,7 +167,7 @@ class AdditionalMigrationVersionsTest extends TestCase
         $this->setDatabaseState('sqlite3');
 
         $recorder = new OperationRecorder($this->createStub(Configuration::class));
-        (new Migration410Alpha3($this->createStub(Configuration::class)))->up($recorder);
+        new Migration410Alpha3($this->createStub(Configuration::class))->up($recorder);
 
         $counts = $recorder->getOperationCounts();
         $payload = json_encode($recorder->toArray(), JSON_THROW_ON_ERROR);

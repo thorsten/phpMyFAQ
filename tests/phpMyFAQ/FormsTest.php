@@ -299,10 +299,7 @@ class FormsTest extends TestCase
     public function testDeleteTranslationDelegatesToRepository(): void
     {
         $repository = $this->createMock(FormsRepositoryInterface::class);
-        $repository->expects($this->once())
-            ->method('deleteTranslation')
-            ->with(1, 2, 'en')
-            ->willReturn(true);
+        $repository->expects($this->once())->method('deleteTranslation')->with(1, 2, 'en')->willReturn(true);
 
         $forms = new Forms($this->createStub(Configuration::class), $repository);
 
@@ -312,10 +309,7 @@ class FormsTest extends TestCase
     public function testAddTranslationReturnsFalseWhenDefaultInputDoesNotExist(): void
     {
         $repository = $this->createMock(FormsRepositoryInterface::class);
-        $repository->expects($this->once())
-            ->method('fetchDefaultInputData')
-            ->with(1, 2)
-            ->willReturn(null);
+        $repository->expects($this->once())->method('fetchDefaultInputData')->with(1, 2)->willReturn(null);
         $repository->expects($this->never())->method('insertTranslationRow');
 
         $forms = new Forms($this->createStub(Configuration::class), $repository);
@@ -332,11 +326,9 @@ class FormsTest extends TestCase
         ];
 
         $repository = $this->createMock(FormsRepositoryInterface::class);
-        $repository->expects($this->once())
-            ->method('fetchDefaultInputData')
-            ->with(1, 2)
-            ->willReturn($inputData);
-        $repository->expects($this->once())
+        $repository->expects($this->once())->method('fetchDefaultInputData')->with(1, 2)->willReturn($inputData);
+        $repository
+            ->expects($this->once())
             ->method('insertTranslationRow')
             ->with(1, 2, 'text', 'Translated label', 1, 0, 'en')
             ->willReturn(true);
@@ -350,10 +342,7 @@ class FormsTest extends TestCase
     {
         $input = ['input_id' => 99, 'input_type' => 'text'];
         $repository = $this->createMock(FormsRepositoryInterface::class);
-        $repository->expects($this->once())
-            ->method('insertInput')
-            ->with($input)
-            ->willReturn(true);
+        $repository->expects($this->once())->method('insertInput')->with($input)->willReturn(true);
 
         $forms = new Forms($this->createStub(Configuration::class), $repository);
 
@@ -364,7 +353,8 @@ class FormsTest extends TestCase
     {
         $input = ['input_id' => 99, 'input_type' => 'text'];
         $repository = $this->createMock(FormsRepositoryInterface::class);
-        $repository->expects($this->once())
+        $repository
+            ->expects($this->once())
             ->method('buildInsertQuery')
             ->with($input)
             ->willReturn('INSERT INTO faqforms (...) VALUES (...)');

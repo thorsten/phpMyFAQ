@@ -62,10 +62,7 @@ final class BreadcrumbsHtmlRendererTest extends TestCase
         self::assertStringContainsString('rel="index"', $html);
         self::assertStringContainsString('title="Main &lt;page&gt;"', $html);
         self::assertStringContainsString('Home &amp; Start', $html);
-        self::assertStringContainsString(
-            'href="https://localhost/category/12/category-&amp;ltone&amp;gt.html"',
-            $html,
-        );
+        self::assertStringContainsString('href="https://localhost/category/12/category-&amp;ltone&amp;gt.html"', $html);
         self::assertStringContainsString('Category &lt;One&gt;', $html);
         self::assertStringContainsString('title="Desc &amp; more"', $html);
         self::assertStringEndsWith('</ol>', $html);
@@ -77,19 +74,20 @@ final class BreadcrumbsHtmlRendererTest extends TestCase
         $configuration->method('getDefaultUrl')->willReturn('https://localhost/faq/');
 
         $renderer = new BreadcrumbsHtmlRenderer();
-        $html = $renderer->render($configuration, [
+        $html = $renderer->render(
+            $configuration,
             [
-                'id' => 99,
-                'name' => 'Only Segment',
-                'description' => '',
+                [
+                    'id' => 99,
+                    'name' => 'Only Segment',
+                    'description' => '',
+                ],
             ],
-        ], 'breadcrumb breadcrumb-lg');
+            'breadcrumb breadcrumb-lg',
+        );
 
         self::assertStringStartsWith('<ol class="breadcrumb breadcrumb-lg">', $html);
-        self::assertStringContainsString(
-            'href="https://localhost/faq/category/99/only-segment.html"',
-            $html,
-        );
+        self::assertStringContainsString('href="https://localhost/faq/category/99/only-segment.html"', $html);
         self::assertStringContainsString('rel="index"', $html);
         self::assertSame(1, substr_count($html, '<li class="breadcrumb-item">'));
     }

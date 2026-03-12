@@ -45,9 +45,13 @@ final class MailHelperTest extends TestCase
                 $this->callback(static function (string $payload): bool {
                     $decoded = json_decode($payload, true);
 
-                    return is_array($decoded)
-                        && ($decoded['class'] ?? null) === SendMailMessage::class
-                        && ($decoded['payload']['recipient'] ?? null) === 'new.user@example.com';
+                    return (
+                        is_array($decoded)
+                        && ($decoded['class'] ?? null)
+                        === SendMailMessage::class
+                        && ($decoded['payload']['recipient'] ?? null)
+                        === 'new.user@example.com'
+                    );
                 }),
                 $this->isArray(),
                 'mail',
@@ -78,15 +82,13 @@ final class MailHelperTest extends TestCase
 
         $user = $this->createMock(User::class);
         $user->method('getLogin')->willReturn('new-user');
-        $user
-            ->method('getUserData')
-            ->willReturnCallback(static function (string $key): string {
-                return match ($key) {
-                    'display_name' => 'New User',
-                    'email' => 'new.user@example.com',
-                    default => '',
-                };
-            });
+        $user->method('getUserData')->willReturnCallback(static function (string $key): string {
+            return match ($key) {
+                'display_name' => 'New User',
+                'email' => 'new.user@example.com',
+                default => '',
+            };
+        });
 
         $helper = new MailHelper($configuration);
 

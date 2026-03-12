@@ -81,7 +81,7 @@ class ChatTest extends TestCase
         $this->assertFalse($message->isRead());
 
         $result = $this->dbHandle->query(
-            "SELECT sender_id, recipient_id, message, is_read FROM faqchat_messages WHERE sender_id = 101 AND recipient_id = 102",
+            'SELECT sender_id, recipient_id, message, is_read FROM faqchat_messages WHERE sender_id = 101 AND recipient_id = 102',
         );
         $row = $this->dbHandle->fetchArray($result);
 
@@ -379,23 +379,19 @@ class ChatTest extends TestCase
         string $email,
         string $status = 'active',
     ): void {
-        $this->dbHandle->query(
-            sprintf(
-                "INSERT INTO faquser (user_id, login, account_status, member_since) VALUES (%d, '%s', '%s', '20260101000000')",
-                $userId,
-                $this->dbHandle->escape($login),
-                $this->dbHandle->escape($status),
-            ),
-        );
+        $this->dbHandle->query(sprintf(
+            "INSERT INTO faquser (user_id, login, account_status, member_since) VALUES (%d, '%s', '%s', '20260101000000')",
+            $userId,
+            $this->dbHandle->escape($login),
+            $this->dbHandle->escape($status),
+        ));
 
-        $this->dbHandle->query(
-            sprintf(
-                "INSERT INTO faquserdata (user_id, display_name, email) VALUES (%d, '%s', '%s')",
-                $userId,
-                $this->dbHandle->escape($displayName),
-                $this->dbHandle->escape($email),
-            ),
-        );
+        $this->dbHandle->query(sprintf(
+            "INSERT INTO faquserdata (user_id, display_name, email) VALUES (%d, '%s', '%s')",
+            $userId,
+            $this->dbHandle->escape($displayName),
+            $this->dbHandle->escape($email),
+        ));
     }
 
     private function seedChatMessage(
@@ -406,17 +402,15 @@ class ChatTest extends TestCase
         int $isRead,
         string $createdAt,
     ): void {
-        $this->dbHandle->query(
-            sprintf(
-                "INSERT INTO faqchat_messages (id, sender_id, recipient_id, message, is_read, created_at)
+        $this->dbHandle->query(sprintf(
+            "INSERT INTO faqchat_messages (id, sender_id, recipient_id, message, is_read, created_at)
                  VALUES (%d, %d, %d, '%s', %d, '%s')",
-                $id,
-                $senderId,
-                $recipientId,
-                $this->dbHandle->escape($message),
-                $isRead,
-                $this->dbHandle->escape($createdAt),
-            ),
-        );
+            $id,
+            $senderId,
+            $recipientId,
+            $this->dbHandle->escape($message),
+            $isRead,
+            $this->dbHandle->escape($createdAt),
+        ));
     }
 }

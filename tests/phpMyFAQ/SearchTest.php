@@ -7,11 +7,11 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Plugin\PluginException;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
 use stdClass;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use ReflectionClass;
 
 #[AllowMockObjectsWithoutExpectations]
 class SearchTest extends TestCase
@@ -319,10 +319,7 @@ class SearchTest extends TestCase
             $config->method('getDb')->willReturn($driver);
             $search = new Search($config);
 
-            $this->assertSame(
-                $expectedType,
-                $this->invokePrivateMethod($search, 'resolveSearchDatabaseType'),
-            );
+            $this->assertSame($expectedType, $this->invokePrivateMethod($search, 'resolveSearchDatabaseType'));
         }
     }
 
@@ -334,9 +331,9 @@ class SearchTest extends TestCase
     public function testSearchCustomPagesReturnsLanguageScopedCustomPageResults(): void
     {
         $this->dbHandle->query(
-            "INSERT INTO faqcustompages (id, lang, page_title, slug, content, author_name, author_email, active, created, updated) VALUES " .
-            "(501, 'en', 'Search Page', 'search-page', 'Search body content', 'Unit Test', 'test@example.org', 'y', '2024-01-01 00:00:00', '2024-01-01 00:00:00')," .
-            "(502, 'de', 'Deutsche Suche', 'deutsche-suche', 'Search body content', 'Unit Test', 'test@example.org', 'y', '2024-01-01 00:00:00', '2024-01-01 00:00:00')",
+            'INSERT INTO faqcustompages (id, lang, page_title, slug, content, author_name, author_email, active, created, updated) VALUES '
+            . "(501, 'en', 'Search Page', 'search-page', 'Search body content', 'Unit Test', 'test@example.org', 'y', '2024-01-01 00:00:00', '2024-01-01 00:00:00'),"
+            . "(502, 'de', 'Deutsche Suche', 'deutsche-suche', 'Search body content', 'Unit Test', 'test@example.org', 'y', '2024-01-01 00:00:00', '2024-01-01 00:00:00')",
         );
 
         $result = $this->invokePrivateMethod($this->search, 'searchCustomPages', 'Search body', false);
@@ -350,7 +347,8 @@ class SearchTest extends TestCase
     public function testGetMostPopularSearchesBuildsPgsqlTimeWindowClause(): void
     {
         $db = $this->createMock(Sqlite3::class);
-        $db->expects($this->once())
+        $db
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains("NOW() - INTERVAL '7 days'"))
             ->willReturn(false);
@@ -368,7 +366,8 @@ class SearchTest extends TestCase
     public function testGetMostPopularSearchesBuildsSqliteTimeWindowClause(): void
     {
         $db = $this->createMock(Sqlite3::class);
-        $db->expects($this->once())
+        $db
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains("datetime('now', '-3 days')"))
             ->willReturn(false);
@@ -386,14 +385,13 @@ class SearchTest extends TestCase
     public function testGetMostPopularSearchesBuildsSqlsrvClauses(): void
     {
         $db = $this->createMock(Sqlite3::class);
-        $db->expects($this->once())
+        $db
+            ->expects($this->once())
             ->method('query')
-            ->with(
-                $this->logicalAnd(
-                    $this->stringContains('DATEADD(day, -4, GETDATE())'),
-                    $this->stringContains('OFFSET 0 ROWS FETCH NEXT 2 ROWS ONLY'),
-                ),
-            )
+            ->with($this->logicalAnd(
+                $this->stringContains('DATEADD(day, -4, GETDATE())'),
+                $this->stringContains('OFFSET 0 ROWS FETCH NEXT 2 ROWS ONLY'),
+            ))
             ->willReturn(false);
         $db->expects($this->never())->method('fetchObject');
 
@@ -409,7 +407,8 @@ class SearchTest extends TestCase
     public function testGetMostPopularSearchesBuildsDefaultTimeWindowClause(): void
     {
         $db = $this->createMock(Sqlite3::class);
-        $db->expects($this->once())
+        $db
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('DATE_SUB(NOW(), INTERVAL 9 DAY)'))
             ->willReturn(false);

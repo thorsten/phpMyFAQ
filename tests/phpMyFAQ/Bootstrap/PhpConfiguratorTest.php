@@ -56,10 +56,17 @@ class PhpConfiguratorTest extends TestCase
 
     public function testFixIncludePathEnsuresDotIsPresent(): void
     {
+        $originalIncludePath = get_include_path();
+        set_include_path('/tmp');
+
         PhpConfigurator::fixIncludePath();
 
-        $paths = explode(PATH_SEPARATOR, ini_get('include_path'));
-        $this->assertContains('.', $paths);
+        try {
+            $paths = explode(PATH_SEPARATOR, ini_get('include_path'));
+            $this->assertContains('.', $paths);
+        } finally {
+            set_include_path($originalIncludePath);
+        }
     }
 
     public function testConfigurePcreSetsLimits(): void
@@ -129,6 +136,26 @@ class PhpConfiguratorTest extends TestCase
         $this->expectExceptionMessage('Unsupported session handler');
 
         PhpConfigurator::configureSession($configuration);
+    }
+
+    public function testConfigureSessionUsesRedisHandlerWhenConfigured(): void
+    {
+        if (!extension_loaded('redis')) {
+            $this->markTestSkipped('Redis extension is not loaded in this environment.');
+        }
+
+        $configuration = $this->createMock(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['session.handler',  'redis'],
+                ['session.redisDsn', 'tcp://127.0.0.1:6379?database=1'],
+            ]);
+
+        PhpConfigurator::configureSession($configuration);
+
+        $this->assertSame('redis', ini_get('session.save_handler'));
+        $this->assertSame('tcp://127.0.0.1:6379?database=1', ini_get('session.save_path'));
     }
 
     public function testConfigureSessionPersistsDataWithFilesHandler(): void
