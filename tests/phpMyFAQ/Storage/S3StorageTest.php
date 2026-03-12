@@ -76,6 +76,62 @@ class S3StorageTest extends TestCase
         $this->expectException(StorageException::class);
         $storage->put('foo//bar.txt', 'x');
     }
+
+    public function testPutStreamThrowsForInvalidStream(): void
+    {
+        $client = new FakeS3Client();
+        $storage = new S3Storage($client, 'pmf-bucket');
+
+        $this->expectException(StorageException::class);
+        $storage->putStream('stream.txt', 'not-a-stream');
+    }
+
+    public function testGetThrowsWhenResponseBodyIsMissing(): void
+    {
+        $storage = new S3Storage(new MissingBodyS3Client(), 'pmf-bucket');
+
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage('Invalid S3 response while reading object');
+        $storage->get('missing-body.txt');
+    }
+
+    public function testUrlUsesClientUrlWhenNoPublicBaseUrlIsConfigured(): void
+    {
+        $client = new FakeS3Client();
+        $storage = new S3Storage($client, 'pmf-bucket', 'tenant/attachments');
+
+        $this->assertSame(
+            'https://pmf-bucket.s3.local/tenant/attachments/docs/readme.txt',
+            $storage->url('docs/readme.txt'),
+        );
+    }
+
+    public function testSizeThrowsWhenContentLengthIsMissing(): void
+    {
+        $storage = new S3Storage(new MissingContentLengthS3Client(), 'pmf-bucket');
+
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage('Invalid S3 response while reading object size');
+        $storage->size('missing-length.txt');
+    }
+
+    public function testRunWrapsClientExceptions(): void
+    {
+        $storage = new S3Storage(new ThrowingS3Client(), 'pmf-bucket');
+
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage('boom');
+        $storage->delete('docs/readme.txt');
+    }
+
+    public function testEmptyPathThrowsException(): void
+    {
+        $client = new FakeS3Client();
+        $storage = new S3Storage($client, 'pmf-bucket');
+
+        $this->expectException(StorageException::class);
+        $storage->url('');
+    }
 }
 
 final class FakeS3Client
@@ -200,5 +256,29 @@ final class ArrayAccessResult implements \ArrayAccess
     public function offsetUnset(mixed $offset): void
     {
         unset($this->data[$offset]);
+    }
+}
+
+final class MissingBodyS3Client
+{
+    public function getObject(array $args): array
+    {
+        return [];
+    }
+}
+
+final class MissingContentLengthS3Client
+{
+    public function headObject(array $args): array
+    {
+        return [];
+    }
+}
+
+final class ThrowingS3Client
+{
+    public function deleteObject(array $args): void
+    {
+        throw new \RuntimeException('boom');
     }
 }

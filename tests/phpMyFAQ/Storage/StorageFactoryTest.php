@@ -195,6 +195,55 @@ class StorageFactoryTest extends TestCase
         $factory->create();
     }
 
+    public function testCreateThrowsWhenRequiredS3BucketIsMissing(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['storage.type',             's3'],
+                ['storage.s3.bucket',        '   '],
+                ['storage.s3.prefix',        null],
+                ['storage.s3.publicBaseUrl', null],
+                ['storage.s3.region',        null],
+                ['storage.s3.endpoint',      null],
+                ['storage.s3.key',           null],
+                ['storage.s3.secret',        null],
+                ['storage.s3.usePathStyle',  null],
+            ]);
+
+        $factory = new StorageFactory($configuration, $this->createTenantContext(11));
+
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage('Missing required storage configuration key: storage.s3.bucket');
+        $factory->create();
+    }
+
+    public function testCreateThrowsWhenFilesystemRootPointsToRegularFile(): void
+    {
+        $tmpFile = tempnam(sys_get_temp_dir(), 'phpmyfaq-storage-file-');
+        $this->assertNotFalse($tmpFile);
+
+        try {
+            $configuration = $this->createStub(Configuration::class);
+            $configuration
+                ->method('get')
+                ->willReturnMap([
+                    ['storage.type', 'filesystem'],
+                    ['storage.filesystem.root', $tmpFile],
+                    ['storage.filesystem.publicBaseUrl', null],
+                ]);
+
+            $factory = new StorageFactory($configuration, $this->createTenantContext(10));
+
+            $this->expectException(StorageException::class);
+            $this->expectExceptionMessage('Storage root directory could not be created');
+            $factory->create();
+        } finally {
+            @unlink($tmpFile);
+        }
+    }
+
     public function testCreatePrefixesFilesystemPathsWithTenantPath(): void
     {
         $tmpDir = sys_get_temp_dir() . '/phpmyfaq-factory-prefix-' . uniqid('', true);

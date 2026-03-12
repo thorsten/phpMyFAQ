@@ -121,6 +121,80 @@ class FilesystemStorageTest extends TestCase
         $storage->put('foo//bar.txt', 'invalid');
     }
 
+    public function testPutThrowsWhenDirectoryCannotBeCreated(): void
+    {
+        $blockingFile = $this->tmpDir . '/blocked';
+        file_put_contents($blockingFile, 'x');
+        $storage = new FilesystemStorage($blockingFile);
+
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage('Unable to create directory for storage path');
+
+        $this->withoutFilesystemWarnings(fn() => $storage->put('nested/file.txt', 'data'));
+    }
+
+    public function testPutStreamThrowsWhenTargetCannotBeOpened(): void
+    {
+        $storage = new FilesystemStorage($this->tmpDir);
+        mkdir($this->tmpDir . '/existing-dir', 0777, true);
+        $stream = fopen('php://memory', 'rb+');
+        $this->assertIsResource($stream);
+
+        try {
+            fwrite($stream, 'data');
+            rewind($stream);
+
+            $this->expectException(StorageException::class);
+            $this->expectExceptionMessage('Unable to open file for writing');
+            $this->withoutFilesystemWarnings(fn() => $storage->putStream('existing-dir', $stream));
+        } finally {
+            fclose($stream);
+        }
+    }
+
+    public function testGetThrowsWhenFileCannotBeRead(): void
+    {
+        $storage = new FilesystemStorage($this->tmpDir);
+
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage('Unable to read file from storage path');
+        $this->withoutFilesystemWarnings(fn() => $storage->get('missing.txt'));
+    }
+
+    public function testDeleteReturnsFalseForMissingFile(): void
+    {
+        $storage = new FilesystemStorage($this->tmpDir);
+
+        $this->assertFalse($storage->delete('missing.txt'));
+    }
+
+    public function testDeleteThrowsWhenPathPointsToDirectory(): void
+    {
+        $storage = new FilesystemStorage($this->tmpDir);
+        mkdir($this->tmpDir . '/delete-me', 0777, true);
+
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage('Unable to delete file from storage path');
+        $this->withoutFilesystemWarnings(fn() => $storage->delete('delete-me'));
+    }
+
+    public function testSizeThrowsWhenFileDoesNotExist(): void
+    {
+        $storage = new FilesystemStorage($this->tmpDir);
+
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage('Unable to fetch file size for storage path');
+        $this->withoutFilesystemWarnings(fn() => $storage->size('missing.txt'));
+    }
+
+    public function testUrlThrowsForEmptyPath(): void
+    {
+        $storage = new FilesystemStorage($this->tmpDir, 'https://cdn.example.com/files');
+
+        $this->expectException(StorageException::class);
+        $storage->url('');
+    }
+
     private function removeDirectory(string $directory): void
     {
         if (!is_dir($directory)) {
@@ -147,5 +221,16 @@ class FilesystemStorageTest extends TestCase
         }
 
         rmdir($directory);
+    }
+
+    private function withoutFilesystemWarnings(callable $callback): mixed
+    {
+        set_error_handler(static fn() => true);
+
+        try {
+            return $callback();
+        } finally {
+            restore_error_handler();
+        }
     }
 }
