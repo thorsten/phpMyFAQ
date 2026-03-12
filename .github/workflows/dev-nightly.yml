@@ -91,9 +91,7 @@ jobs:
         run: pnpm build
 
       - name: Create release artifact
-        uses: montudor/action-zip@v1.0.0
-        with:
-          args: zip -X -r phpMyFAQ-${{ env.release_name }}.zip phpmyfaq -x "phpmyfaq/src/libs/tecnickcom/tcpdf/fonts/*"
+        run: zip -X -r phpMyFAQ-${{ env.release_name }}.zip phpmyfaq -x "phpmyfaq/src/libs/tecnickcom/tcpdf/fonts/*"
 
       - name: Update nightly release
         uses: softprops/action-gh-release@v2
