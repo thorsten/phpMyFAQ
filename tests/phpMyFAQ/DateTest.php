@@ -17,9 +17,7 @@ class DateTest extends TestCase
         parent::setUp();
 
         $this->mockConfiguration = $this->createStub(Configuration::class);
-        $this->mockConfiguration
-            ->method('get')
-            ->willReturn('Y-m-d H:i:s');
+        $this->mockConfiguration->method('get')->willReturn('Y-m-d H:i:s');
 
         $this->dateInstance = new Date($this->mockConfiguration);
     }

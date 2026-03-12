@@ -37,7 +37,8 @@ class Smtp implements MailUserAgentInterface
     public function setAuthConfig(
         string $server,
         string $user = '',
-        #[\SensitiveParameter] string $password = '',
+        #[\SensitiveParameter]
+        string $password = '',
         int $port = 25,
         bool $disableTlsPeerVerification = false,
     ): void {

@@ -28,10 +28,13 @@ class CreateHashesCommandTest extends TestCase
         $system = $this->createMock(System::class);
         $filesystem = new Filesystem();
 
-        $system->expects($this->once())->method('createHashes')->willReturn(json_encode([
-            'created' => '2025-01-01T00:00:00Z',
-            '/foo.php' => 'abc123',
-        ], JSON_THROW_ON_ERROR));
+        $system
+            ->expects($this->once())
+            ->method('createHashes')
+            ->willReturn(json_encode([
+                'created' => '2025-01-01T00:00:00Z',
+                '/foo.php' => 'abc123',
+            ], JSON_THROW_ON_ERROR));
 
         $command = new CreateHashesCommand($system, $filesystem);
 

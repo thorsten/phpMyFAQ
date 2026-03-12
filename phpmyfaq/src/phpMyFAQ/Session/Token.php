@@ -131,8 +131,10 @@ class Token
 
     public function verifyToken(
         string $page,
-        #[\SensitiveParameter] ?string $requestToken = null,
-        #[\SensitiveParameter] bool $removeToken = false,
+        #[\SensitiveParameter]
+        ?string $requestToken = null,
+        #[\SensitiveParameter]
+        bool $removeToken = false,
     ): bool {
         $requestToken ??= Request::createFromGlobals()->request->get(self::PMF_SESSION_NAME) ?? null;
 

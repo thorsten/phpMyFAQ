@@ -46,9 +46,7 @@ class NetworkTest extends TestCase
 
     public function testIsBannedReturnsFalseForAllowedIp(): void
     {
-        $this->config
-            ->method('get')
-            ->willReturn('192.168.1.100 10.0.0.1');
+        $this->config->method('get')->willReturn('192.168.1.100 10.0.0.1');
 
         $result = $this->network->isBanned('192.168.1.50');
 
@@ -60,9 +58,7 @@ class NetworkTest extends TestCase
      */
     public function testIsBannedReturnsTrueForBannedIpv4(): void
     {
-        $this->config
-            ->method('get')
-            ->willReturn('192.168.1.100 10.0.0.1 172.16.0.1');
+        $this->config->method('get')->willReturn('192.168.1.100 10.0.0.1 172.16.0.1');
 
         $result = $this->network->isBanned('192.168.1.100');
 
@@ -74,9 +70,7 @@ class NetworkTest extends TestCase
      */
     public function testIsBannedWithIpv6Addresses(): void
     {
-        $this->config
-            ->method('get')
-            ->willReturn('2001:db8::1 fe80::1 ::1');
+        $this->config->method('get')->willReturn('2001:db8::1 fe80::1 ::1');
 
         // Test banned IPv6
         $this->assertTrue($this->network->isBanned('2001:db8::1'));
@@ -90,9 +84,7 @@ class NetworkTest extends TestCase
      */
     public function testIsBannedWithIpv4CidrNotation(): void
     {
-        $this->config
-            ->method('get')
-            ->willReturn('192.168.1.0/24 10.0.0.0/8');
+        $this->config->method('get')->willReturn('192.168.1.0/24 10.0.0.0/8');
 
         // Test IP within banned CIDR range
         $this->assertTrue($this->network->isBanned('192.168.1.50'));
@@ -109,9 +101,7 @@ class NetworkTest extends TestCase
      */
     public function testIsBannedWithIpv6CidrNotation(): void
     {
-        $this->config
-            ->method('get')
-            ->willReturn('2001:db8::/32 fe80::/10');
+        $this->config->method('get')->willReturn('2001:db8::/32 fe80::/10');
 
         // Test IPv6 within banned CIDR range
         $this->assertTrue($this->network->isBanned('2001:db8::1'));
@@ -128,9 +118,7 @@ class NetworkTest extends TestCase
      */
     public function testIsBannedWithEmptyBannedList(): void
     {
-        $this->config
-            ->method('get')
-            ->willReturn('');
+        $this->config->method('get')->willReturn('');
 
         $this->assertFalse($this->network->isBanned('192.168.1.1'));
         $this->assertFalse($this->network->isBanned('2001:db8::1'));
@@ -141,9 +129,7 @@ class NetworkTest extends TestCase
      */
     public function testIsBannedWithNullConfiguration(): void
     {
-        $this->config
-            ->method('get')
-            ->willReturn(null);
+        $this->config->method('get')->willReturn(null);
 
         $this->assertFalse($this->network->isBanned('192.168.1.1'));
     }
@@ -153,9 +139,7 @@ class NetworkTest extends TestCase
      */
     public function testIsBannedWithLocalhostAddresses(): void
     {
-        $this->config
-            ->method('get')
-            ->willReturn('127.0.0.1 ::1');
+        $this->config->method('get')->willReturn('127.0.0.1 ::1');
 
         // Test IPv4 localhost
         $this->assertTrue($this->network->isBanned('127.0.0.1'));
@@ -172,9 +156,7 @@ class NetworkTest extends TestCase
      */
     public function testIsBannedWithPrivateIpRanges(): void
     {
-        $this->config
-            ->method('get')
-            ->willReturn('10.0.0.0/8 172.16.0.0/12 192.168.0.0/16');
+        $this->config->method('get')->willReturn('10.0.0.0/8 172.16.0.0/12 192.168.0.0/16');
 
         // Test Class A private range
         $this->assertTrue($this->network->isBanned('10.1.2.3'));
@@ -196,9 +178,7 @@ class NetworkTest extends TestCase
      */
     public function testIsBannedWithMalformedIpAddresses(): void
     {
-        $this->config
-            ->method('get')
-            ->willReturn('192.168.1.1');
+        $this->config->method('get')->willReturn('192.168.1.1');
 
         // Test invalid IPv4
         $this->assertFalse($this->network->isBanned('192.168.1.256'));
@@ -215,9 +195,7 @@ class NetworkTest extends TestCase
      */
     public function testIsBannedWithMixedIpVersions(): void
     {
-        $this->config
-            ->method('get')
-            ->willReturn('192.168.1.1 2001:db8::1 10.0.0.0/24 fe80::/64');
+        $this->config->method('get')->willReturn('192.168.1.1 2001:db8::1 10.0.0.0/24 fe80::/64');
 
         // Test IPv4 addresses
         $this->assertTrue($this->network->isBanned('192.168.1.1'));
@@ -235,9 +213,7 @@ class NetworkTest extends TestCase
      */
     public function testIsBannedWithEdgeCaseIpAddresses(): void
     {
-        $this->config
-            ->method('get')
-            ->willReturn('0.0.0.0 255.255.255.255 :: ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff');
+        $this->config->method('get')->willReturn('0.0.0.0 255.255.255.255 :: ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff');
 
         // Test edge IPv4 addresses
         $this->assertTrue($this->network->isBanned('0.0.0.0'));
@@ -258,9 +234,7 @@ class NetworkTest extends TestCase
         $this->assertInstanceOf(Network::class, $network);
 
         // Verify that the network instance works correctly
-        $this->config
-            ->method('get')
-            ->willReturn('127.0.0.1');
+        $this->config->method('get')->willReturn('127.0.0.1');
 
         $result = $network->isBanned('127.0.0.1');
         $this->assertTrue($result);
@@ -277,9 +251,7 @@ class NetworkTest extends TestCase
             $bannedIps[] = "192.168.1.$i";
         }
 
-        $this->config
-            ->method('get')
-            ->willReturn(implode(' ', $bannedIps));
+        $this->config->method('get')->willReturn(implode(' ', $bannedIps));
 
         // Test some IPs from the list
         $this->assertTrue($this->network->isBanned('192.168.1.50'));
@@ -295,9 +267,7 @@ class NetworkTest extends TestCase
      */
     public function testIsBannedWithComplexCidrRanges(): void
     {
-        $this->config
-            ->method('get')
-            ->willReturn('192.168.0.0/16 10.0.0.0/8 172.16.0.0/12 169.254.0.0/16');
+        $this->config->method('get')->willReturn('192.168.0.0/16 10.0.0.0/8 172.16.0.0/12 169.254.0.0/16');
 
         // Test multiple IPs efficiently
         $testCases = [

@@ -58,8 +58,10 @@ class Sqlsrv implements DatabaseDriver
      */
     public function connect(
         string $host,
-        #[\SensitiveParameter] string $user,
-        #[\SensitiveParameter] string $password,
+        #[\SensitiveParameter]
+        string $user,
+        #[\SensitiveParameter]
+        string $password,
         string $database = '',
         ?int $port = null,
     ): ?bool {

@@ -71,9 +71,7 @@ class TwoFactorTest extends TestCase
      */
     public function testValidateToken(): void
     {
-        $this->configuration
-            ->method('get')
-            ->willReturn('basic');
+        $this->configuration->method('get')->willReturn('basic');
 
         $this->currentUser
             ->method('getUserData')

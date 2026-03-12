@@ -68,9 +68,7 @@ class SearchHelperTest extends TestCase
     {
         $this->searchHelper->setSearchTerm('php test');
 
-        $this->configurationMock
-            ->method('get')
-            ->willReturn(10);
+        $this->configurationMock->method('get')->willReturn(10);
 
         $this->configurationMock->method('getDefaultUrl')->willReturn('https://example.com/');
 
@@ -83,9 +81,7 @@ class SearchHelperTest extends TestCase
         $this->searchResultSetMock->method('getNumberOfResults')->willReturn(1);
         $this->searchResultSetMock->method('getResultSet')->willReturn([$mockResult]);
 
-        $this->categoryMock
-            ->method('getPath')
-            ->willReturn('Programming/PHP');
+        $this->categoryMock->method('getPath')->willReturn('Programming/PHP');
 
         $result = $this->searchHelper->createAutoCompleteResult($this->searchResultSetMock);
 
@@ -100,9 +96,7 @@ class SearchHelperTest extends TestCase
 
     public function testCreateAutoCompleteResultLimitsResults(): void
     {
-        $this->configurationMock
-            ->method('get')
-            ->willReturn(2);
+        $this->configurationMock->method('get')->willReturn(2);
 
         $this->configurationMock->method('getDefaultUrl')->willReturn('https://example.com/');
 
@@ -139,9 +133,7 @@ class SearchHelperTest extends TestCase
 
     public function testRenderAdminSuggestionResultWithResults(): void
     {
-        $this->configurationMock
-            ->method('get')
-            ->willReturn(10);
+        $this->configurationMock->method('get')->willReturn(10);
 
         $this->configurationMock->method('getDefaultUrl')->willReturn('https://example.com/');
 
@@ -204,12 +196,8 @@ class SearchHelperTest extends TestCase
         $this->searchResultSetMock->method('getResultSet')->willReturn([$mockResult]);
 
         $this->categoryMock->method('setLanguage');
-        $this->categoryMock
-            ->method('getCategoriesFromFaq')
-            ->willReturn([1 => ['id' => 1, 'name' => 'Programming']]);
-        $this->categoryMock
-            ->method('getPath')
-            ->willReturn('Programming/PHP');
+        $this->categoryMock->method('getCategoriesFromFaq')->willReturn([1 => ['id' => 1, 'name' => 'Programming']]);
+        $this->categoryMock->method('getPath')->willReturn('Programming/PHP');
 
         $result = $this->searchHelper->getSearchResult($this->searchResultSetMock, 1);
 

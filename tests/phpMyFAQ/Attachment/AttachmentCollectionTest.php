@@ -69,9 +69,7 @@ class AttachmentCollectionTest extends TestCase
         $this->mockDatabase->method('query')->willReturn('mock_result');
 
         // Mock fetchAll to return the expected result
-        $this->mockDatabase
-            ->method('fetchAll')
-            ->willReturn($expectedResult);
+        $this->mockDatabase->method('fetchAll')->willReturn($expectedResult);
 
         // Call the method being tested
         $result = $this->attachmentCollection->getBreadcrumbs();
