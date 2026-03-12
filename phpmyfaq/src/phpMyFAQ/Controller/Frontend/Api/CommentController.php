@@ -116,6 +116,8 @@ final class CommentController extends AbstractController
             throw new Exception('Invalid email address');
         }
 
+        $email = Filter::filterVar($email, FILTER_SANITIZE_SPECIAL_CHARS);
+
         if (!$this->captchaCodeIsValid($request)) {
             return $this->json(['error' => Translation::get(key: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
         }

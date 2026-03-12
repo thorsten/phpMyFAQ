@@ -71,7 +71,7 @@
                   type="email"
                   name="email"
                   id="email"
-                  value="{{ email|raw }}"
+                  value="{{ email | e('html_attr') }}"
                   class="form-control"
                   required
                   {{ readonly }}
