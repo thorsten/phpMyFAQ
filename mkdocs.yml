@@ -5,7 +5,7 @@ theme:
 plugins:
   - search
 nav:
-  - 1. Introduction: '1-index.md'
+  - 1. Introduction: 'index.md'
   - 2. Installation: '2-installation.md'
   - 3. Production Deployment: '3-deployment.md'
   - 4. Docker Cheat Sheet: '4-docker-cheatsheet.md'

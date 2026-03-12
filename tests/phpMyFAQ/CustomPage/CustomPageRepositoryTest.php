@@ -29,6 +29,7 @@ class CustomPageRepositoryTest extends TestCase
         $db->connect($this->databaseFile, '', '');
         $this->configuration = new Configuration($db);
         $this->repository = new CustomPageRepository($this->configuration);
+        $this->configuration->getDb()->query('DELETE FROM faqcustompages');
     }
 
     protected function tearDown(): void
@@ -297,6 +298,43 @@ class CustomPageRepositoryTest extends TestCase
         $this->assertIsArray($pages);
     }
 
+    public function testGetAllLanguagesPaginated(): void
+    {
+        $this->createPage(
+            title: 'Zulu Page',
+            slug: 'zulu-page',
+            language: 'en',
+            active: true,
+        );
+        $this->createPage(
+            title: 'Alpha Seite',
+            slug: 'alpha-seite',
+            language: 'de',
+            active: true,
+        );
+        $this->createPage(
+            title: 'Inactive French Page',
+            slug: 'inactive-french-page',
+            language: 'fr',
+            active: false,
+        );
+
+        $pages = iterator_to_array($this->repository->getAllLanguagesPaginated(false, 2, 0, 'lang', 'ASC'));
+        $this->assertCount(2, $pages);
+        $this->assertSame('de', $pages[0]->lang);
+        $this->assertSame('en', $pages[1]->lang);
+
+        $offsetPages = iterator_to_array($this->repository->getAllLanguagesPaginated(false, 2, 2, 'lang', 'ASC'));
+        $this->assertNotEmpty($offsetPages);
+        $this->assertSame('fr', $offsetPages[0]->lang);
+
+        $activePages = iterator_to_array($this->repository->getAllLanguagesPaginated(true, 10, 0, 'invalid', 'invalid'));
+        $this->assertNotEmpty($activePages);
+        foreach ($activePages as $page) {
+            $this->assertSame('y', $page->active);
+        }
+    }
+
     public function testInsertAndFetchWithSeoFields(): void
     {
         $page = new CustomPageEntity();
@@ -351,5 +389,109 @@ class CustomPageRepositoryTest extends TestCase
         $this->assertEquals('Updated SEO Title', $fetched->seo_title);
         $this->assertEquals('Updated SEO Description', $fetched->seo_description);
         $this->assertEquals('index,nofollow', $fetched->seo_robots);
+    }
+
+    public function testCountAllLanguages(): void
+    {
+        $beforeTotal = $this->repository->countAllLanguages();
+        $beforeActive = $this->repository->countAllLanguages(true);
+
+        $this->createPage(
+            title: 'Count EN',
+            slug: 'count-en',
+            language: 'en',
+            active: true,
+        );
+        $this->createPage(
+            title: 'Count DE',
+            slug: 'count-de',
+            language: 'de',
+            active: false,
+        );
+
+        $this->assertSame($beforeTotal + 2, $this->repository->countAllLanguages());
+        $this->assertSame($beforeActive + 1, $this->repository->countAllLanguages(true));
+    }
+
+    public function testGetExistingLanguagesReturnsSortedLanguageCodes(): void
+    {
+        $pageId = $this->createPage(
+            title: 'Base Page',
+            slug: 'base-page',
+            language: 'en',
+            active: true,
+        );
+
+        $deTranslation = $this->createEntity(
+            title: 'Deutsche Seite',
+            slug: 'base-page',
+            language: 'de',
+            active: true,
+        );
+        $frTranslation = $this->createEntity(
+            title: 'Page Francaise',
+            slug: 'base-page',
+            language: 'fr',
+            active: false,
+        );
+
+        $this->assertTrue($this->repository->insertTranslation($deTranslation, $pageId));
+        $this->assertTrue($this->repository->insertTranslation($frTranslation, $pageId));
+
+        $this->assertSame(['de', 'en', 'fr'], $this->repository->getExistingLanguages($pageId));
+    }
+
+    public function testInsertTranslationStoresTranslationWithSharedId(): void
+    {
+        $pageId = $this->createPage(
+            title: 'Original Page',
+            slug: 'shared-page',
+            language: 'en',
+            active: true,
+        );
+
+        $translation = $this->createEntity(
+            title: 'Gemeinsame Seite',
+            slug: 'shared-page',
+            language: 'de',
+            active: false,
+        );
+        $translation
+            ->setSeoTitle('SEO DE')
+            ->setSeoDescription('SEO Beschreibung')
+            ->setSeoRobots('noindex,nofollow');
+
+        $this->assertTrue($this->repository->insertTranslation($translation, $pageId));
+        $this->assertSame($pageId, $translation->getId());
+
+        $fetched = $this->repository->getById($pageId, 'de');
+        $this->assertNotNull($fetched);
+        $this->assertSame('Gemeinsame Seite', $fetched->page_title);
+        $this->assertSame('shared-page', $fetched->slug);
+        $this->assertSame('n', $fetched->active);
+        $this->assertSame('SEO DE', $fetched->seo_title);
+        $this->assertSame('SEO Beschreibung', $fetched->seo_description);
+        $this->assertSame('noindex,nofollow', $fetched->seo_robots);
+    }
+
+    private function createPage(string $title, string $slug, string $language, bool $active): int
+    {
+        return $this->repository->insert($this->createEntity($title, $slug, $language, $active));
+    }
+
+    private function createEntity(string $title, string $slug, string $language, bool $active): CustomPageEntity
+    {
+        $page = new CustomPageEntity();
+        $page
+            ->setLanguage($language)
+            ->setPageTitle($title)
+            ->setSlug($slug)
+            ->setContent(sprintf('<p>%s content</p>', $title))
+            ->setAuthorName('Test Author')
+            ->setAuthorEmail('test@example.com')
+            ->setActive($active)
+            ->setCreated(new DateTime());
+
+        return $page;
     }
 }
