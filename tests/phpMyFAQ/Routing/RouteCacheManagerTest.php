@@ -133,6 +133,22 @@ class RouteCacheManagerTest extends TestCase
         $this->assertFalse($this->cacheManager->hasCache('admin'));
     }
 
+    public function testClearSkipsBrokenSymlinkEntries(): void
+    {
+        if (!function_exists('symlink')) {
+            $this->markTestSkipped('Symlinks are not available in this environment.');
+        }
+
+        $brokenLink = $this->cacheDir . '/routes_broken.php';
+        if (!@symlink($this->cacheDir . '/definitely-missing.php', $brokenLink)) {
+            $this->markTestSkipped('Failed to create a broken symlink in this environment.');
+        }
+
+        $this->cacheManager->clear();
+
+        $this->assertTrue(is_link($brokenLink));
+    }
+
     public function testClearContextRemovesSpecificCache(): void
     {
         $routes = new RouteCollection();

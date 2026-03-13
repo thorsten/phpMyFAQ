@@ -13,16 +13,26 @@ class BasicPermissionRepositoryTest extends TestCase
     private Sqlite3 $dbHandle;
     private Configuration $configuration;
     private BasicPermissionRepository $repository;
+    private string $databaseFile;
 
     protected function setUp(): void
     {
         parent::setUp();
 
+        $this->databaseFile = PMF_TEST_DIR . '/basic-permission-repository-' . uniqid('', true) . '.db';
+        copy(PMF_TEST_DIR . '/test.db', $this->databaseFile);
+
         $this->dbHandle = new Sqlite3();
-        $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $this->dbHandle->connect($this->databaseFile, '', '');
         $this->configuration = new Configuration($this->dbHandle);
 
         $this->repository = new BasicPermissionRepository($this->configuration);
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        @unlink($this->databaseFile);
     }
 
     public function testGrantUserRight(): void

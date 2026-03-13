@@ -23,6 +23,7 @@ class QuestionServiceTest extends TestCase
     private CurrentUser|MockObject $currentUser;
     private array $currentGroups;
     private QuestionService $questionService;
+    private string $databaseFile;
 
     /**
      * @throws Exception
@@ -40,9 +41,12 @@ class QuestionServiceTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
+        $this->databaseFile = PMF_TEST_DIR . '/question-service-' . uniqid('', true) . '.db';
+        copy(PMF_TEST_DIR . '/test.db', $this->databaseFile);
+
         // Create configuration with real database
         $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle->connect($this->databaseFile, '', '');
         $this->configuration = new Configuration($dbHandle);
 
         $language = new Language($this->configuration, $this->createStub(Session::class));
@@ -58,6 +62,12 @@ class QuestionServiceTest extends TestCase
         $this->currentGroups = [1];
 
         $this->questionService = new QuestionService($this->configuration, $this->currentUser, $this->currentGroups);
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        @unlink($this->databaseFile);
     }
 
     /**

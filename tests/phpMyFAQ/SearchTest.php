@@ -36,6 +36,7 @@ class SearchTest extends TestCase
 
         $this->dbHandle = new Sqlite3();
         $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $this->setDatabaseType('sqlite3');
         $this->configuration = new Configuration($this->dbHandle);
         $this->configuration->setLanguage(
             new Language($this->configuration, $this->createMock(SessionInterface::class)),

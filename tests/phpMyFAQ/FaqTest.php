@@ -81,6 +81,17 @@ class FaqTest extends TestCase
         $this->assertInstanceOf(Faq::class, $this->faq->setGroups([-1]));
     }
 
+    public function testConstructorEnablesGroupSupportForNonBasicPermissionLevel(): void
+    {
+        $this->configuration->set('security.permLevel', 'medium');
+        $this->setConfigurationValue('security.permLevel', 'medium');
+
+        $faq = new Faq($this->configuration);
+
+        $property = new ReflectionProperty(Faq::class, 'groupSupport');
+        $this->assertTrue($property->getValue($faq));
+    }
+
     public function testSetUser(): void
     {
         $this->assertInstanceOf(Faq::class, $this->faq->setUser(-1));
@@ -198,6 +209,43 @@ class FaqTest extends TestCase
         $this->assertEquals(42, (int) $this->faq->faqRecord['solution_id']);
     }
 
+    public function testRenderFaqsByCategoryIdRendersFaqListAndPagination(): void
+    {
+        $this->configuration->set('records.numberOfRecordsPerPage', 1);
+        $this->setConfigurationValue('records.numberOfRecordsPerPage', 1);
+
+        $this->seedFaqRecord(
+            id: 5020,
+            solutionId: 7020,
+            categoryId: 1,
+            question: 'Rendered FAQ One',
+            answer: 'Rendered answer one',
+            visits: 11,
+        );
+        $this->seedFaqRecord(
+            id: 5021,
+            solutionId: 7021,
+            categoryId: 1,
+            question: 'Rendered FAQ Two',
+            answer: 'Rendered answer two',
+            visits: 12,
+        );
+
+        $_GET['seite'] = '1';
+
+        try {
+            $output = $this->faq->renderFaqsByCategoryId(1);
+        } finally {
+            unset($_GET['seite']);
+        }
+
+        $this->assertStringContainsString('<ul class="list-group list-group-flush mb-4">', $output);
+        $this->assertStringContainsString('Rendered FAQ One', $output);
+        $this->assertStringContainsString('/content/1/5020/en/rendered-faq-one.html', $output);
+        $this->assertStringContainsString('list-group-item', $output);
+        $this->assertStringContainsString((string) Translation::get(key: 'msgPage'), $output);
+    }
+
     public function testGetFaqReturnsInactiveMessageForFrontendAndRawContentForAdmin(): void
     {
         $this->seedFaqRecord(id: 5001, solutionId: 7001, active: 'no', answer: 'Inactive answer');
@@ -240,6 +288,23 @@ class FaqTest extends TestCase
         $this->assertSame('Fallback question', strip_tags((string) $this->faq->faqRecord['title']));
     }
 
+    public function testGetFaqBySolutionIdReturnsExpiredMessageForInactiveExpiredFaq(): void
+    {
+        $this->seedFaqRecord(
+            id: 50041,
+            solutionId: 70041,
+            active: 'no',
+            dateEnd: '20000101000000',
+            answer: 'Should not be visible',
+        );
+
+        $this->faq->getFaqBySolutionId(70041);
+
+        $this->assertSame(50041, (int) $this->faq->faqRecord['id']);
+        $this->assertSame(70041, (int) $this->faq->faqRecord['solution_id']);
+        $this->assertSame(Translation::get(key: 'err_expiredArticle'), $this->faq->faqRecord['content']);
+    }
+
     public function testGetQuestionAndKeywordsUseCachedRecordWhenAvailable(): void
     {
         $this->faq->faqRecord = [
@@ -259,6 +324,11 @@ class FaqTest extends TestCase
         $this->assertSame('Database Question', $this->faq->getQuestion(5006));
         $this->assertSame('alpha &amp; beta', $this->faq->getKeywords(5006));
         $this->assertSame(Translation::get(key: 'no_cats'), $this->faq->getQuestion(999999));
+    }
+
+    public function testGetKeywordsReturnsEmptyStringWhenFaqDoesNotExist(): void
+    {
+        $this->assertSame('', $this->faq->getKeywords(999996));
     }
 
     public function testGetFaqsByIdsAndGetFaqByIdAndCategoryIdReturnMappedData(): void
@@ -281,6 +351,18 @@ class FaqTest extends TestCase
         $this->assertSame(77, $record['category_id']);
         $this->assertStringContainsString('/content/77/5007/en/mapped-faq.html', $record['link']);
         $this->assertSame([], $this->faq->getIdFromSolutionId(999999));
+    }
+
+    public function testGetFaqByIdAndCategoryIdReturnsEmptyArrayWhenRecordDoesNotExist(): void
+    {
+        $this->assertSame([], $this->faq->getFaqByIdAndCategoryId(999995, 999994));
+    }
+
+    public function testGetFaqBySolutionIdKeepsRequestedSolutionIdWhenRecordDoesNotExist(): void
+    {
+        $this->faq->getFaqBySolutionId(999993);
+
+        $this->assertSame(['solution_id' => 999993], $this->faq->faqRecord);
     }
 
     public function testGetAllAvailableFaqsByCategoryIdReturnsPreviewAndFullData(): void

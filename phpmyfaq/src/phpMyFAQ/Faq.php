@@ -436,11 +436,13 @@ class Faq
                 $link->getSEOTitle($title),
             );
 
+            $category = new Category($this->configuration);
+
             $baseUrl = sprintf(
-                '%sindex.php?%saction=show&cat=%d&seite=%d',
+                '%scategory/%d/%s.html?seite=%d',
                 $this->configuration->getDefaultUrl(),
-                $sids === '' || $sids === '0' ? '' : $sids,
                 $categoryId,
+                TitleSlugifier::slug($category->getCategoryName($categoryId)),
                 $page,
             );
 

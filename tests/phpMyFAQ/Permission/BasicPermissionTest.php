@@ -17,16 +17,26 @@ class BasicPermissionTest extends TestCase
 
     private Configuration $configuration;
     private BasicPermission $basicPermission;
+    private string $databaseFile;
 
     protected function setUp(): void
     {
         parent::setUp();
 
+        $this->databaseFile = PMF_TEST_DIR . '/basic-permission-' . uniqid('', true) . '.db';
+        copy(PMF_TEST_DIR . '/test.db', $this->databaseFile);
+
         $this->dbHandle = new Sqlite3();
-        $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $this->dbHandle->connect($this->databaseFile, '', '');
         $this->configuration = new Configuration($this->dbHandle);
 
         $this->basicPermission = new BasicPermission($this->configuration);
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        @unlink($this->databaseFile);
     }
 
     public function testGrantUserRight(): void

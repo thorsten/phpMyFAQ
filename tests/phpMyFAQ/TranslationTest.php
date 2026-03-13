@@ -28,12 +28,25 @@ class TranslationTest extends TestCase
 
         file_put_contents(
             $translationsDir . '/language_en.php',
-            "<?php\n\nreturn [\n" . "    'test.key' => 'Default Label',\n" . "];\n",
+            "<?php\n\n"
+            . "\$LANG_CONF['main.dateFormat'] = ['select', 'English date format', 'Date format help'];\n"
+            . "\$LANG_CONF['main.maintenanceMode'] = ['checkbox', 'Maintenance mode', 'Maintenance help'];\n"
+            . "\$LANG_CONF['records.maxAttachmentSize'] = ['text', 'Maximum attachment size: %s', 'Attachment help'];\n\n"
+            . "return [\n"
+            . "    'test.key' => 'Default Label',\n"
+            . "];\n",
         );
 
         file_put_contents(
             $translationsDir . '/language_de.php',
-            "<?php\n\nreturn [\n" . "    'test.key' => '',\n" . "    'test.zero' => '0',\n" . "];\n",
+            "<?php\n\n"
+            . "\$LANG_CONF['main.dateFormat'] = ['select', 'Deutsches Datumsformat', 'Datumsformat Hilfe'];\n"
+            . "\$LANG_CONF['main.maintenanceMode'] = ['checkbox', 'Wartungsmodus', 'Wartungsmodus Hilfe'];\n"
+            . "\$LANG_CONF['records.maxAttachmentSize'] = ['text', 'Maximale Anhangsgr\u00f6\u00dfe: %s', 'Anhang Hilfe'];\n\n"
+            . "return [\n"
+            . "    'test.key' => '',\n"
+            . "    'test.zero' => '0',\n"
+            . "];\n",
         );
 
         Translation::resetInstance();
@@ -108,6 +121,41 @@ class TranslationTest extends TestCase
             Translation::has('unknown.key'),
             'has() should return false for keys that are not defined in any language.',
         );
+    }
+
+    public function testGetDefaultLanguageReturnsConfiguredLanguage(): void
+    {
+        $this->assertSame('en', Translation::getInstance()->getDefaultLanguage());
+    }
+
+    public function testGetConfigurationItemsFormatsAndReordersConfigurationKeys(): void
+    {
+        $configurationItems = Translation::getConfigurationItems();
+
+        $this->assertSame('main.maintenanceMode', array_key_first($configurationItems));
+        $this->assertSame('checkbox', $configurationItems['main.maintenanceMode']['element']);
+        $this->assertSame('Wartungsmodus', $configurationItems['main.maintenanceMode']['label']);
+
+        $this->assertStringContainsString(
+            'https://www.php.net/manual/en/function.date.php',
+            $configurationItems['main.dateFormat']['label'],
+        );
+        $this->assertStringContainsString('Deutsches Datumsformat', $configurationItems['main.dateFormat']['label']);
+
+        $this->assertStringContainsString(
+            (string) ini_get('upload_max_filesize'),
+            $configurationItems['records.maxAttachmentSize']['label'],
+        );
+    }
+
+    public function testGetConfigurationItemsFiltersBySection(): void
+    {
+        $configurationItems = Translation::getConfigurationItems('main.');
+
+        $this->assertCount(2, $configurationItems);
+        $this->assertArrayHasKey('main.maintenanceMode', $configurationItems);
+        $this->assertArrayHasKey('main.dateFormat', $configurationItems);
+        $this->assertArrayNotHasKey('records.maxAttachmentSize', $configurationItems);
     }
 
     /**

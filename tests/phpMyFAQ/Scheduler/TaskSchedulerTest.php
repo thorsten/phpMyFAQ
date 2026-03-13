@@ -80,6 +80,59 @@ class TaskSchedulerTest extends TestCase
         $this->assertTrue($result['backupCreation']['success']);
     }
 
+    public function testRunCatchesThrownTaskExceptionsAndReturnsNullResults(): void
+    {
+        $configuration = $this->createConfigurationStub([]);
+
+        $logger = $this->createMock(Logger::class);
+        $logger
+            ->expects($this->exactly(4))
+            ->method('error')
+            ->with(
+                $this->callback(
+                    static fn(string $message): bool => str_contains($message, 'Scheduled ')
+                        && str_contains($message, 'threw an exception'),
+                ),
+                $this->callback(
+                    static fn(array $context): bool => isset($context['message'], $context['trace']),
+                ),
+            );
+        $configuration->method('getLogger')->willReturn($logger);
+
+        $session = $this->createStub(Session::class);
+        $backup = $this->createStub(Backup::class);
+        $statistics = $this->createStub(Statistics::class);
+
+        $scheduler = new class ($configuration, $session, $backup, $statistics) extends TaskScheduler {
+            public function cleanupSessions(): array
+            {
+                throw new RuntimeException('cleanup boom');
+            }
+
+            public function optimizeSearchIndex(): array
+            {
+                throw new RuntimeException('optimize boom');
+            }
+
+            public function aggregateStatistics(): array
+            {
+                throw new RuntimeException('aggregate boom');
+            }
+
+            public function createBackup(): array
+            {
+                throw new RuntimeException('backup boom');
+            }
+        };
+
+        $result = $scheduler->run();
+
+        $this->assertNull($result['sessionCleanup']);
+        $this->assertNull($result['searchOptimization']);
+        $this->assertNull($result['statisticsAggregation']);
+        $this->assertNull($result['backupCreation']);
+    }
+
     public function testCleanupSessionsReturnsFailureWhenDeleteSessionsThrows(): void
     {
         $configuration = $this->createConfigurationStub([

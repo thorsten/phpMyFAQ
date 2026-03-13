@@ -6,6 +6,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Storage\StorageInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
 use RuntimeException;
 use ZipArchive;
 
@@ -158,6 +159,53 @@ class ThemeManagerTest extends TestCase
         $manager->uploadTheme('../invalid', '/tmp/nonexistent.zip');
     }
 
+    public function testGetThemeRootPathTrimsLeadingAndTrailingSlashes(): void
+    {
+        $manager = new ThemeManager($this->createStub(Configuration::class), new InMemoryStorage(), '/themes/custom/');
+
+        $this->assertSame('themes/custom', $manager->getThemeRootPath());
+    }
+
+    public function testThemeStoragePathReturnsBasePathWhenRelativePathIsEmpty(): void
+    {
+        $manager = new ThemeManager($this->createStub(Configuration::class), new InMemoryStorage(), '/themes/');
+
+        $this->assertSame('themes/tenant-theme', $this->invokeThemeStoragePath($manager, 'tenant-theme'));
+    }
+
+    public function testNormalizeArchivePathReturnsEmptyStringForDirectoryOnlyEntries(): void
+    {
+        $manager = new ThemeManager($this->createStub(Configuration::class), new InMemoryStorage(), 'themes');
+
+        $this->assertSame('', $this->invokeNormalizeArchivePath($manager, '/', 'tenant-theme'));
+    }
+
+    public function testAssertArchiveIsReadableAcceptsExistingReadableFile(): void
+    {
+        $manager = new ThemeManager($this->createStub(Configuration::class), new InMemoryStorage(), 'themes');
+        $archivePath = tempnam(sys_get_temp_dir(), 'pmf-theme-readable-');
+        if ($archivePath === false) {
+            $this->fail('Failed to create readable temp archive file.');
+        }
+
+        try {
+            $this->invokeAssertArchiveIsReadable($manager, $archivePath);
+            $this->addToAssertionCount(1);
+        } finally {
+            @unlink($archivePath);
+        }
+    }
+
+    public function testAssertArchiveIsReadableRejectsMissingFile(): void
+    {
+        $manager = new ThemeManager($this->createStub(Configuration::class), new InMemoryStorage(), 'themes');
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Theme archive file is missing or not readable.');
+
+        $this->invokeAssertArchiveIsReadable($manager, sys_get_temp_dir() . '/definitely-missing-theme.zip');
+    }
+
     /**
      * @param array<string, string> $entries
      */
@@ -180,6 +228,30 @@ class ThemeManagerTest extends TestCase
 
         $zip->close();
         return $archivePath;
+    }
+
+    private function invokeThemeStoragePath(ThemeManager $manager, string $themeName, string $relativePath = ''): string
+    {
+        $method = new ReflectionMethod($manager, 'themeStoragePath');
+
+        /** @var string $path */
+        $path = $method->invoke($manager, $themeName, $relativePath);
+        return $path;
+    }
+
+    private function invokeNormalizeArchivePath(ThemeManager $manager, string $entryName, string $themeName): string
+    {
+        $method = new ReflectionMethod($manager, 'normalizeArchivePath');
+
+        /** @var string $path */
+        $path = $method->invoke($manager, $entryName, $themeName);
+        return $path;
+    }
+
+    private function invokeAssertArchiveIsReadable(ThemeManager $manager, string $archivePath): void
+    {
+        $method = new ReflectionMethod($manager, 'assertArchiveIsReadable');
+        $method->invoke($manager, $archivePath);
     }
 }
 
