@@ -781,6 +781,7 @@ $LANG_CONF['records.defaultAllowComments'] = ['checkbox', "Allow comments for ne
 $PMF_LANG['msgAllCatArticles'] = 'Records in this category';
 $PMF_LANG['msgTagSearch'] = 'Tagged entries';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
+$PMF_LANG['ad_pmf_news'] = 'phpMyFAQ News';
 $PMF_LANG['msgOnlineVersionCheck'] = 'Online version check';
 $PMF_LANG['ad_system_info'] = 'System Information';
 
@@ -1623,6 +1624,7 @@ $PMF_LANG['msgConfirmAction'] = "Confirm Action";
 
 $PMF_LANG["msgCommentEditorHint"] = "You can use the text editor to format your comment with bold, italic, lists, and links.";
 $LANG_CONF['main.enableCommentEditor'] = ["checkbox", "Enable WYSIWYG editor for comments (logged-in users only)"];
+$LANG_CONF['main.enableRecentNews'] = ['checkbox', 'Enable recent phpMyFAQ news on dashboard'];
 $PMF_LANG["msgToggleSidebar"] = "Toggle sidebar";
 $PMF_LANG['msgFleschReadingEase'] = 'Readability Score';
 $PMF_LANG['msgFleschTooltip'] = 'The Flesch Reading Ease score measures how easy your text is to read. Higher scores mean easier reading. Aim for 60-70 for general audiences.';

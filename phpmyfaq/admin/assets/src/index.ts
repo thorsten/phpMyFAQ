@@ -13,7 +13,13 @@
  * @since     2019-12-20
  */
 
-import { getLatestVersion, renderVisitorCharts, renderTopTenCharts, handleVerificationModal } from './dashboard';
+import {
+  fetchRecentNews,
+  getLatestVersion,
+  renderVisitorCharts,
+  renderTopTenCharts,
+  handleVerificationModal,
+} from './dashboard';
 import {
   handleClearRatings,
   handleClearVisits,
@@ -101,6 +107,7 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   await renderTopTenCharts();
   await getLatestVersion();
   await handleVerificationModal();
+  await fetchRecentNews();
 
   // User → User Management
   await handleUsers();

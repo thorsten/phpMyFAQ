@@ -400,6 +400,101 @@ export const getLatestVersion = async (): Promise<void> => {
   }
 };
 
+export const parseNewsMarkdown = (markdown: string): string => {
+  const baseUrl = 'https://www.phpmyfaq.de';
+
+  let html = markdown
+    // Escape HTML entities first to prevent XSS
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+
+  // Parse markdown links [text](url) — resolve relative URLs against base
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match: string, text: string, url: string) => {
+    const resolvedUrl =
+      url.startsWith('http://') || url.startsWith('https://')
+        ? url
+        : `${baseUrl}${url.startsWith('/') ? '' : '/'}${url}`;
+    return `<a href="${resolvedUrl}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+  });
+
+  // Bold **text**
+  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+  // Italic *text*
+  html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+
+  return html;
+};
+
+export const fetchRecentNews = async (): Promise<void> => {
+  const container = document.getElementById('pmf-recent-news') as HTMLDivElement | null;
+  const loader = document.getElementById('pmf-news-loader') as HTMLDivElement | null;
+
+  if (!container) {
+    return;
+  }
+
+  if (loader) {
+    loader.classList.remove('d-none');
+  }
+
+  try {
+    const response = await fetch('./api/dashboard/news', {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+
+    if (loader) {
+      loader.classList.add('d-none');
+    }
+
+    if (response.ok) {
+      const data: { news?: { date: string; content: string }[] } = await response.json();
+      const news = (data.news ?? []).slice(0, 5);
+
+      if (news.length === 0) {
+        container.innerHTML = '<p class="text-muted mb-0">No recent news available.</p>';
+        return;
+      }
+
+      const list = document.createElement('ul');
+      list.className = 'list-unstyled';
+
+      for (const item of news) {
+        const li = document.createElement('li');
+        li.className = 'mb-2';
+
+        const dateSpan = document.createElement('small');
+        dateSpan.className = 'text-muted d-block border-bottom mb-2';
+        dateSpan.textContent = item.date;
+
+        const contentSpan = document.createElement('span');
+        contentSpan.innerHTML = parseNewsMarkdown(item.content);
+
+        li.appendChild(dateSpan);
+        li.appendChild(contentSpan);
+        list.appendChild(li);
+      }
+
+      container.appendChild(list);
+    } else {
+      container.innerHTML = '<p class="text-muted mb-0">Could not load news.</p>';
+    }
+  } catch {
+    if (loader) {
+      loader.classList.add('d-none');
+    }
+    container.innerHTML = '<p class="text-muted mb-0">Could not load news.</p>';
+  }
+};
+
 export const handleVerificationModal = async (): Promise<void> => {
   const verificationModal = document.getElementById('verificationModal') as HTMLDivElement;
   const Translator = new TranslationService();

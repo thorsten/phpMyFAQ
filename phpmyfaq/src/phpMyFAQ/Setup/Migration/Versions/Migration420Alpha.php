@@ -851,6 +851,9 @@ readonly class Migration420Alpha extends AbstractMigration
         $recorder->addConfig('oauth2.refreshTokenTTL', 'P1M');
         $recorder->addConfig('oauth2.authCodeTTL', 'PT10M');
 
+        // Recent news widget
+        $recorder->addConfig('main.enableRecentNews', 'true');
+
         // OAuth2 storage tables
         if ($this->isMySql()) {
             $recorder->addSql(sprintf(
