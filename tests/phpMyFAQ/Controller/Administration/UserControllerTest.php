@@ -136,12 +136,13 @@ final class UserControllerTest extends TestCase
         $controller->setContainer($this->createControllerContainer());
 
         $response = $controller->list(new Request());
+        $content = (string) $response->getContent();
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertStringContainsString('User 1', (string) $response->getContent());
-        self::assertStringContainsString('user10@example.com', (string) $response->getContent());
-        self::assertStringContainsString('admin/user/list?page=2', (string) $response->getContent());
-        self::assertStringNotContainsString('user11@example.com', (string) $response->getContent());
+        self::assertStringContainsString('<td>User 1</td>', $content);
+        self::assertStringContainsString('<td>User 10</td>', $content);
+        self::assertStringContainsString('admin/user/list?page=2', $content);
+        self::assertStringNotContainsString('<td>User 11</td>', $content);
     }
 
     /**
@@ -153,10 +154,11 @@ final class UserControllerTest extends TestCase
         $controller->setContainer($this->createControllerContainer());
 
         $response = $controller->list(new Request(['page' => '2']));
+        $content = (string) $response->getContent();
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertStringContainsString('user11@example.com', (string) $response->getContent());
-        self::assertStringNotContainsString('user10@example.com', (string) $response->getContent());
+        self::assertStringContainsString('<td>User 11</td>', $content);
+        self::assertStringNotContainsString('<td>User 10</td>', $content);
     }
 
     /**
