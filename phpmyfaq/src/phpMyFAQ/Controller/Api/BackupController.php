@@ -110,7 +110,7 @@ final class BackupController extends AbstractController
             $backupFile = $backup->createContentFolderBackup();
             $response = new Response(file_get_contents($backupFile));
 
-            $backupFileName = sprintf(format: 'content_%s.zip', values: date(format: 'dmY_H-i'));
+            $backupFileName = sprintf('content_%s.zip', date('dmY_H-i'));
 
             $disposition = HeaderUtils::makeDisposition(
                 HeaderUtils::DISPOSITION_ATTACHMENT,

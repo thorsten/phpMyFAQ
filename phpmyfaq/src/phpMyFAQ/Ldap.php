@@ -118,7 +118,7 @@ class Ldap
 
         if (false === $ldapBind) {
             $this->errno = ldap_errno($this->ds);
-            $this->error = sprintf(format: 'Unable to bind to LDAP server (Error: %s).', values: ldap_error($this->ds));
+            $this->error = sprintf('Unable to bind to LDAP server (Error: %s).', ldap_error($this->ds));
             $this->ds = false;
 
             return false;
@@ -209,7 +209,7 @@ class Ldap
 
         if (!$entryId) {
             $this->errno = ldap_errno($this->ds);
-            $this->error = sprintf(format: 'Cannot get the value(s). Error: %s', values: ldap_error($this->ds));
+            $this->error = sprintf('Cannot get the value(s). Error: %s', ldap_error($this->ds));
 
             return false;
         }
@@ -281,7 +281,7 @@ class Ldap
         $entryId = ldap_first_entry($this->ds, $sr);
 
         if (false === $entryId) {
-            $this->error = sprintf(format: 'Cannot get the value(s). Error: %s', values: ldap_error($this->ds));
+            $this->error = sprintf('Cannot get the value(s). Error: %s', ldap_error($this->ds));
 
             return false;
         }
@@ -339,7 +339,7 @@ class Ldap
 
         if (!$entryId) {
             $this->errno = ldap_errno($this->ds);
-            $this->error = sprintf(format: 'Cannot get the value(s). Error: %s', values: ldap_error($this->ds));
+            $this->error = sprintf('Cannot get the value(s). Error: %s', ldap_error($this->ds));
 
             return false;
         }
