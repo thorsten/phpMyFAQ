@@ -27,6 +27,7 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Faq;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -121,5 +122,36 @@ final class DashboardController extends AbstractController
         }
 
         return $this->json(['error' => 'User tracking is disabled.'], 400);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Route(path: 'dashboard/news', name: 'admin.api.dashboard.news', methods: ['GET'])]
+    public function news(): JsonResponse
+    {
+        $this->userIsAuthenticated();
+
+        if (!$this->configuration->get(item: 'main.enableRecentNews')) {
+            return $this->json(['error' => 'Recent news is disabled.'], Response::HTTP_FORBIDDEN);
+        }
+
+        try {
+            $httpClient = HttpClient::create(['max_redirects' => 2, 'timeout' => 10]);
+            $response = $httpClient->request('GET', 'https://www.phpmyfaq.de/api/news/recent');
+
+            if ($response->getStatusCode() === Response::HTTP_OK) {
+                $data = $response->toArray(throw: false);
+                if (isset($data['news']) && is_array($data['news'])) {
+                    $data['news'] = array_slice($data['news'], 0, 5);
+                }
+
+                return $this->json($data);
+            }
+
+            return $this->json(['error' => 'Failed to fetch news.'], Response::HTTP_BAD_GATEWAY);
+        } catch (TransportExceptionInterface $exception) {
+            return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_GATEWAY);
+        }
     }
 }

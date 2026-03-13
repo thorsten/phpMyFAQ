@@ -96,6 +96,7 @@ final class DashboardController extends AbstractAdministrationController
             'lastBackupDate' => $backupInfo['lastBackupDate'],
             'isBackupOlderThan30Days' => $backupInfo['isBackupOlderThan30Days'],
             'adminDashboardLatestUsers' => $this->latestUsers->getList(limit: 5),
+            'hasRecentNews' => $this->configuration->get(item: 'main.enableRecentNews'),
         ];
 
         if (version_compare($this->configuration->getVersion(), System::getVersion(), operator: '<')) {

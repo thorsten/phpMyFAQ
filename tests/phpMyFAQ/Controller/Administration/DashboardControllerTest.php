@@ -203,6 +203,84 @@ final class DashboardControllerTest extends TestCase
         self::assertStringContainsString('id="phpmyfaq-latest-version"', (string) $response->getContent());
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function testIndexPassesRecentNewsConfigToTemplate(): void
+    {
+        $this->overrideConfigurationValues(['main.enableRecentNews' => true]);
+
+        $adminSession = $this->createStub(AdminSession::class);
+        $adminSession->method('getNumberOfSessions')->willReturn(3);
+        $adminSession->method('getNumberOfOnlineUsers')->willReturn(1);
+
+        $adminFaq = $this->createStub(AdminFaq::class);
+        $adminFaq->method('getInactiveFaqsData')->willReturn([]);
+
+        $backup = $this->createStub(Backup::class);
+        $backup
+            ->method('getLastBackupInfo')
+            ->willReturn([
+                'lastBackupDate' => '2026-03-01',
+                'isBackupOlderThan30Days' => false,
+            ]);
+
+        $controller = new DashboardController(
+            $adminSession,
+            $adminFaq,
+            $backup,
+            new LatestUsers($this->configuration),
+            $this->createStub(Api::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $request = new Request();
+        $request->attributes->set('_route', 'admin.dashboard');
+        $response = $controller->index($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('pmf-recent-news', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexHidesRecentNewsWhenDisabled(): void
+    {
+        $this->overrideConfigurationValues(['main.enableRecentNews' => false]);
+
+        $adminSession = $this->createStub(AdminSession::class);
+        $adminSession->method('getNumberOfSessions')->willReturn(3);
+        $adminSession->method('getNumberOfOnlineUsers')->willReturn(1);
+
+        $adminFaq = $this->createStub(AdminFaq::class);
+        $adminFaq->method('getInactiveFaqsData')->willReturn([]);
+
+        $backup = $this->createStub(Backup::class);
+        $backup
+            ->method('getLastBackupInfo')
+            ->willReturn([
+                'lastBackupDate' => '2026-03-01',
+                'isBackupOlderThan30Days' => false,
+            ]);
+
+        $controller = new DashboardController(
+            $adminSession,
+            $adminFaq,
+            $backup,
+            new LatestUsers($this->configuration),
+            $this->createStub(Api::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $request = new Request();
+        $request->attributes->set('_route', 'admin.dashboard');
+        $response = $controller->index($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringNotContainsString('pmf-recent-news', (string) $response->getContent());
+    }
+
     private function createAuthenticatedContainer(bool $allowConfigEdit = false): ContainerInterface
     {
         $permission = $this->createStub(PermissionInterface::class);

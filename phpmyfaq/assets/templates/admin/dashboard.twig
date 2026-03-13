@@ -394,6 +394,26 @@
 
   </section>
 
+  {% if hasRecentNews %}
+    <section class="row mb-4">
+      <div class="col-12">
+        <div class="card shadow">
+          <h5 class="card-header py-3">
+            <i aria-hidden="true" class="bi bi-newspaper"></i> {{ 'ad_pmf_news' | translate }}
+          </h5>
+          <div class="card-body">
+            <div class="d-flex justify-content-center d-none" id="pmf-news-loader">
+              <div class="spinner-border text-secondary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+            <div id="pmf-recent-news"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
   <!-- Verification Modal -->
   <div class="modal fade" id="verificationModal" tabindex="-1" aria-labelledby="verificationModalLabel"
        data-pmf-current-version="{{ currentVersionApp }}" aria-hidden="true">

@@ -289,4 +289,31 @@ final class DashboardControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertIsArray($payload);
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testNewsRequiresAuthentication(): void
+    {
+        $controller = $this->createController();
+
+        $this->expectException(\Exception::class);
+        $controller->news();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testNewsReturnsForbiddenWhenDisabled(): void
+    {
+        $this->configuration->set('main.enableRecentNews', 'false');
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->news();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame('Recent news is disabled.', $payload['error']);
+    }
 }
