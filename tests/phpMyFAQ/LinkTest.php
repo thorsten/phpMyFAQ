@@ -3,6 +3,8 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Link\Strategy\StrategyInterface;
+use phpMyFAQ\Link\Strategy\StrategyRegistry;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -57,6 +59,9 @@ class LinkTest extends TestCase
 
         $this->link = new Link('#foobar', $this->configuration);
         $this->assertTrue($method->invokeArgs($this->link, array()));
+
+        $this->link = new Link('/my-test-faq/index.php', $this->configuration);
+        $this->assertTrue($method->invokeArgs($this->link, array()));
     }
 
     /**
@@ -69,6 +74,12 @@ class LinkTest extends TestCase
 
         $this->link = new Link('https://example.com/my-test-faq/', $this->configuration);
         $this->assertTrue($method->invokeArgs($this->link, array()));
+
+        $this->link = new Link('/my-test-faq/index.php', $this->configuration);
+        $this->assertTrue($method->invokeArgs($this->link, array()));
+
+        $this->link = new Link('https://external.example.org/faq', $this->configuration);
+        $this->assertFalse($method->invokeArgs($this->link, array()));
     }
 
     /**
@@ -142,6 +153,9 @@ class LinkTest extends TestCase
         $this->configuration->set('security.useSslOnly', 'true');
         $this->link = new Link('https://example.com/my-test-faq/', $this->configuration);
         $this->assertEquals('https://', $method->invokeArgs($this->link, []));
+
+        $this->link = new Link('https://external.example.org/my-test-faq/', $this->configuration);
+        $this->assertEquals('https://', $method->invokeArgs($this->link, []));
     }
 
     /**
@@ -202,6 +216,9 @@ class LinkTest extends TestCase
             sprintf('<a class="pmf-foo" id="pmf-id" href="%s">Foo FAQ</a>', $url),
             $this->link->toHtmlAnchor(),
         );
+
+        $this->link->setRelation('noopener');
+        $this->assertStringContainsString('rel="noopener"', $this->link->toHtmlAnchor());
     }
 
     /**
@@ -215,6 +232,11 @@ class LinkTest extends TestCase
         $this->link = new Link('http://example.com/my-test-faq/', $this->configuration);
         $actual = $method->invokeArgs($this->link, array('http://example.com/my-test-faq/', 4711));
         $expected = 'http://example.com/my-test-faq/?sid=4711';
+
+        $this->assertEquals($expected, $actual);
+
+        $actual = $method->invokeArgs($this->link, array('http://example.com/my-test-faq/?foo=bar', 4711));
+        $expected = 'http://example.com/my-test-faq/?foo=bar&amp;sid=4711';
 
         $this->assertEquals($expected, $actual);
     }
@@ -240,6 +262,18 @@ class LinkTest extends TestCase
         );
         $this->link->setTitle('HD Ready');
         $this->assertEquals('http://example.com/my-test-faq/content/1/36/de/hd-ready.html', $this->link->toString());
+
+        $this->link = new Link(
+            'http://example.com/my-test-faq/index.php?action=show&cat=1#section-a',
+            $this->configuration,
+        );
+        $this->assertEquals('http://example.com/my-test-faq/category/1/.html#section-a', $this->link->toString());
+
+        $this->link = new Link(
+            'http://example.com/my-test-faq/index.php?action=unknown&sid=4711',
+            $this->configuration,
+        );
+        $this->assertEquals('http://example.com/my-test-faq/?sid=4711', $this->link->toString());
     }
 
     /**
@@ -263,5 +297,64 @@ class LinkTest extends TestCase
             'https://example.com/my-test-faq/content/1/36/de/foobar.html',
             $this->link->toStringWithoutSession(),
         );
+    }
+
+    public function testToUriAddsDefaultSchemeForExternalUrlWithoutScheme(): void
+    {
+        $this->link = new Link('external.example.org/my-test-faq/', $this->configuration);
+
+        $this->assertEquals('https://external.example.org/my-test-faq/', $this->link->toUri());
+    }
+
+    public function testToUriKeepsEmptyAndInternalReferenceUrlsUntouched(): void
+    {
+        $this->link = new Link('', $this->configuration);
+        $this->assertSame('', $this->link->toUri());
+
+        $this->link = new Link('0', $this->configuration);
+        $this->assertSame('0', $this->link->toUri());
+
+        $this->link = new Link('#section-a', $this->configuration);
+        $this->assertSame('#section-a', $this->link->toUri());
+    }
+
+    public function testBuildActionUrlReturnsBuiltPathOrNull(): void
+    {
+        $strategy = new class() implements StrategyInterface {
+            public function build(array $parameters, Link $link): string
+            {
+                return 'custom-path.html';
+            }
+        };
+
+        $registry = new StrategyRegistry([
+            'custom' => $strategy,
+        ]);
+
+        $link = new Link('http://example.com/my-test-faq/index.php?action=custom', $this->configuration, $registry);
+        $class = new ReflectionClass(Link::class);
+        $method = $class->getMethod('buildActionUrl');
+
+        $this->assertSame('custom-path.html', $method->invokeArgs($link, ['custom', ['action' => 'custom']]));
+        $this->assertNull($method->invokeArgs($link, ['missing', ['action' => 'missing']]));
+    }
+
+    public function testGetStrategyRegistryAndRegisterStrategy(): void
+    {
+        $link = new Link('http://example.com/my-test-faq/index.php?action=custom', $this->configuration);
+        $strategy = new class() implements StrategyInterface {
+            public function build(array $parameters, Link $link): string
+            {
+                return 'registered-path.html';
+            }
+        };
+
+        $this->assertInstanceOf(StrategyRegistry::class, $link->getStrategyRegistry());
+
+        $link->registerStrategy('custom', $strategy);
+
+        $class = new ReflectionClass(Link::class);
+        $method = $class->getMethod('buildActionUrl');
+        $this->assertSame('registered-path.html', $method->invokeArgs($link, ['custom', ['action' => 'custom']]));
     }
 }

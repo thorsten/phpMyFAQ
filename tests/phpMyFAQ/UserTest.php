@@ -219,6 +219,35 @@ class UserTest extends TestCase
         $this->assertTrue($this->user->checkMailAddress('thorsten@example.com'));
     }
 
+    public function testCheckDisplayNameAndMailAddressReturnFalseForDifferentValues(): void
+    {
+        $this->userData
+            ->expects($this->exactly(2))
+            ->method('fetch')
+            ->willReturnMap([
+                ['display_name', 'Thorsten', 'Another User'],
+                ['email', 'thorsten@example.com', 'another@example.com'],
+            ]);
+
+        $this->assertFalse($this->user->checkDisplayName('Thorsten'));
+        $this->assertFalse($this->user->checkMailAddress('thorsten@example.com'));
+    }
+
+    public function testCheckDisplayNameAndMailAddressCreateUserDataWhenUnset(): void
+    {
+        $this->user->userdata = null;
+        $this->database->method('escape')->willReturnCallback(static fn (string $value): string => $value);
+        $this->database->expects($this->exactly(2))->method('query')->willReturn(true);
+        $this->database->expects($this->exactly(2))->method('numRows')->with(true)->willReturn(1);
+        $this->database->expects($this->exactly(2))->method('fetchObject')->willReturnOnConsecutiveCalls(
+            (object) ['display_name' => 'Thorsten'],
+            (object) ['email' => 'thorsten@example.com'],
+        );
+
+        $this->assertTrue($this->user->checkDisplayName('Thorsten'));
+        $this->assertTrue($this->user->checkMailAddress('thorsten@example.com'));
+    }
+
     public function testSearchUsersReturnsEmptyArrayWhenQueryFails(): void
     {
         $this->database->method('escape')->willReturn('thor%');
@@ -260,6 +289,16 @@ class UserTest extends TestCase
         $this->assertSame([], $this->user->errors);
     }
 
+    public function testGetUserByLoginAddsErrorWhenMissingAndRaiseErrorEnabled(): void
+    {
+        $this->database->method('escape')->willReturn('missing');
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('numRows')->willReturn(0);
+
+        $this->assertFalse($this->user->getUserByLogin('missing'));
+        $this->assertContains(User::ERROR_USER_INCORRECT_LOGIN, $this->user->errors);
+    }
+
     public function testGetUserByLoginLoadsUserDataOnSuccess(): void
     {
         $this->database->method('escape')->willReturn('existing');
@@ -284,12 +323,80 @@ class UserTest extends TestCase
         $this->assertTrue($this->user->isSuperAdmin());
     }
 
+    public function testGetUserByLoginCreatesUserDataWhenUnset(): void
+    {
+        $this->user->userdata = null;
+        $this->database->method('escape')->willReturn('existing');
+        $this->database->expects($this->exactly(2))->method('query')->willReturn(true);
+        $this->database->expects($this->exactly(2))->method('numRows')->with(true)->willReturn(1);
+        $this->database->expects($this->exactly(2))->method('fetchArray')->with(true)->willReturnOnConsecutiveCalls(
+            [
+                'user_id' => 21,
+                'login' => 'existing',
+                'account_status' => 'active',
+                'is_superadmin' => 0,
+                'auth_source' => 'local',
+            ],
+            [
+                'last_modified' => '20240101000000',
+                'display_name' => 'Existing User',
+                'email' => 'existing@example.com',
+                'is_visible' => 1,
+                'twofactor_enabled' => 0,
+                'secret' => '',
+            ],
+        );
+
+        $this->assertTrue($this->user->getUserByLogin('existing'));
+        $this->assertSame('existing', $this->user->getLogin());
+    }
+
+    public function testCreateUserSucceedsWithWritableAuthDriver(): void
+    {
+        $user = $this
+            ->getMockBuilder(User::class)
+            ->setConstructorArgs([$this->configuration])
+            ->onlyMethods(['getUserByLogin'])
+            ->getMock();
+
+        $userData = $this->createMock(UserData::class);
+        $user->userdata = $userData;
+        $user->perm = $this->createMock(MediumPermission::class);
+
+        $this->database->method('escape')->willReturnCallback(static fn (string $value): string => $value);
+        $this->database->expects($this->once())->method('nextId')->with('faquser', 'user_id')->willReturn(20);
+        $this->database->expects($this->once())->method('query')->willReturn(true);
+        $userData->expects($this->once())->method('add')->with(20)->willReturn(true);
+
+        $auth = $this->createMock(AuthDatabase::class);
+        $auth->expects($this->once())->method('disableReadOnly')->willReturn(false);
+        $auth->expects($this->once())->method('create')->with('new_user', $this->isString(), '')->willReturn(true);
+
+        $user->expects($this->exactly(2))
+            ->method('getUserByLogin')
+            ->with('new_user', false)
+            ->willReturnOnConsecutiveCalls(false, true);
+
+        $user->addAuth($auth, 'local');
+
+        $this->assertTrue($user->createUser('new_user'));
+    }
+
     public function testCreatePasswordGeneratesExpectedLengthAndAllowedCharacters(): void
     {
         $password = $this->user->createPassword(12, true);
 
         $this->assertSame(12, strlen($password));
         $this->assertMatchesRegularExpression('/^[A-Za-z2-9_]+$/', $password);
+    }
+
+    public function testCreatePasswordOmitsUnderscoreWhenDisabled(): void
+    {
+        $password = $this->user->createPassword(12, false);
+
+        $this->assertSame(12, strlen($password));
+        $this->assertMatchesRegularExpression('/^[A-Za-z2-9]+$/', $password);
+        $this->assertStringNotContainsString('_', $password);
     }
 
     public function testDeleteUserFailsWhenUserIdIsMissing(): void
@@ -425,6 +532,57 @@ class UserTest extends TestCase
         $this->assertFalse($this->user->getUserById(8));
     }
 
+    public function testGetUserByIdLoadsUserDataOnSuccess(): void
+    {
+        $this->setPrivateProperty('authData', [
+            'authSource' => [
+                'name' => 'local',
+                'type' => 'local',
+            ],
+            'encType' => User::DEFAULT_ENCRYPTION_TYPE,
+            'readOnly' => false,
+        ]);
+        $this->database->expects($this->once())->method('query')->willReturn(true);
+        $this->database->expects($this->once())->method('numRows')->with(true)->willReturn(1);
+        $this->database->expects($this->once())->method('fetchArray')->with(true)->willReturn([
+            'user_id' => 18,
+            'login' => 'found-user',
+            'account_status' => 'active',
+            'is_superadmin' => 0,
+            'auth_source' => 'local',
+        ]);
+        $this->userData->expects($this->once())->method('load')->with(18);
+
+        $this->assertTrue($this->user->getUserById(18));
+        $this->assertSame('found-user', $this->user->getLogin());
+    }
+
+    public function testGetUserByCookieCreatesUserDataWhenUnset(): void
+    {
+        $this->user->userdata = null;
+        $this->database->method('escape')->willReturn('cookie-token');
+        $this->database->expects($this->exactly(2))->method('query')->willReturn(true);
+        $this->database->expects($this->exactly(2))->method('numRows')->with(true)->willReturn(1);
+        $this->database->expects($this->exactly(2))->method('fetchArray')->with(true)->willReturnOnConsecutiveCalls(
+            [
+                'user_id' => 42,
+                'login' => 'cookie-user',
+                'account_status' => 'active',
+            ],
+            [
+                'last_modified' => '20240101000000',
+                'display_name' => 'Cookie User',
+                'email' => 'cookie@example.com',
+                'is_visible' => 1,
+                'twofactor_enabled' => 0,
+                'secret' => '',
+            ],
+        );
+
+        $this->assertTrue($this->user->getUserByCookie('cookie-token'));
+        $this->assertSame(42, $this->user->getUserId());
+    }
+
     public function testGetUserDataSetUserDataAndEmailHelpersDelegateToUserData(): void
     {
         $this->setPrivateProperty('userId', 11);
@@ -451,6 +609,85 @@ class UserTest extends TestCase
         $this->assertTrue($this->user->setUserData(['display_name' => 'Thorsten']));
         $this->assertSame(11, $this->user->getUserIdByEmail('thorsten@example.com'));
         $this->assertTrue($this->user->getUserVisibilityByEmail('anonymous@example.com'));
+    }
+
+    public function testGetUserDataCreatesUserDataWhenUnset(): void
+    {
+        $this->user->userdata = null;
+        $this->setPrivateProperty('userId', 7);
+
+        $this->database->expects($this->once())->method('query')->willReturn(true);
+        $this->database->expects($this->once())->method('numRows')->with(true)->willReturn(1);
+        $this->database->expects($this->once())->method('fetchArray')->with(true)->willReturn([
+            'display_name' => 'Loaded User',
+        ]);
+
+        $this->assertSame('Loaded User', $this->user->getUserData('display_name'));
+    }
+
+    public function testSetUserDataCreatesUserDataWhenUnset(): void
+    {
+        $this->user->userdata = null;
+        $this->setPrivateProperty('userId', 13);
+
+        $this->database->expects($this->exactly(2))->method('query')->willReturn(true);
+        $this->database->expects($this->once())->method('numRows')->with(true)->willReturn(1);
+        $this->database->expects($this->once())->method('fetchArray')->with(true)->willReturn([
+            'last_modified' => '20240101000000',
+            'display_name' => 'Existing User',
+            'email' => 'existing@example.com',
+            'is_visible' => 1,
+            'twofactor_enabled' => 0,
+            'secret' => '',
+        ]);
+        $this->database->method('escape')->willReturnCallback(static fn (string $value): string => $value);
+
+        $this->assertTrue($this->user->setUserData(['display_name' => 'Updated User']));
+    }
+
+    public function testGetUserIdByEmailCreatesUserDataWhenUnset(): void
+    {
+        $this->user->userdata = null;
+        $this->database->method('escape')->willReturnCallback(static fn (string $value): string => $value);
+        $this->database->expects($this->once())->method('query')->willReturn(true);
+        $this->database->expects($this->once())->method('numRows')->with(true)->willReturn(1);
+        $this->database->expects($this->once())->method('fetchArray')->with(true)->willReturn([
+            'user_id' => 77,
+            'email' => 'lookup@example.com',
+            'is_visible' => 1,
+        ]);
+
+        $this->assertSame(77, $this->user->getUserIdByEmail('lookup@example.com'));
+    }
+
+    public function testGetUserVisibilityByEmailReturnsFalseForInvisibleUser(): void
+    {
+        $this->userData
+            ->expects($this->once())
+            ->method('fetchAll')
+            ->with('email', 'hidden@example.com')
+            ->willReturn(['user_id' => 5, 'is_visible' => false]);
+
+        $this->assertFalse($this->user->getUserVisibilityByEmail('hidden@example.com'));
+    }
+
+    public function testGetUserVisibilityByEmailCreatesUserDataWhenUnset(): void
+    {
+        $this->user->userdata = null;
+        $this->database->method('escape')->willReturnCallback(static fn (string $value): string => $value);
+        $this->database->expects($this->once())->method('query')->willReturn(true);
+        $this->database->expects($this->once())->method('numRows')->with(true)->willReturn(1);
+        $this->database->expects($this->once())->method('fetchArray')->with(true)->willReturn([
+            'user_id' => 17,
+            'email' => 'visible@example.com',
+            'is_visible' => 1,
+            'display_name' => 'Visible User',
+            'last_modified' => '20240101000000',
+            'twofactor_enabled' => 0,
+            'secret' => '',
+        ]);
+
+        $this->assertTrue($this->user->getUserVisibilityByEmail('visible@example.com'));
     }
 
     public function testActivateUserReturnsFalseForNonBlockedStatus(): void
@@ -518,6 +755,13 @@ class UserTest extends TestCase
         $this->assertSame('', $this->user->getStatus());
     }
 
+    public function testGetStatusReturnsAssignedStatus(): void
+    {
+        $this->setPrivateProperty('status', 'active');
+
+        $this->assertSame('active', $this->user->getStatus());
+    }
+
     public function testSetStatusRejectsInvalidAndPersistsValidStatus(): void
     {
         $this->setPrivateProperty('userId', 13);
@@ -548,6 +792,25 @@ class UserTest extends TestCase
 
         $this->assertTrue($this->user->setAuthSource('ldap'));
         $this->assertTrue($this->user->changePassword('Secret123'));
+    }
+
+    public function testChangePasswordReturnsFalseWhenAllDriversSkipOrFail(): void
+    {
+        $this->setPrivateProperty('login', 'api-user');
+        $this->setProtectedProperty('authContainer', []);
+
+        $readonly = $this->createMock(AuthDatabase::class);
+        $readonly->expects($this->once())->method('disableReadOnly')->willReturn(true);
+        $readonly->expects($this->never())->method('update');
+
+        $failing = $this->createMock(AuthDatabase::class);
+        $failing->expects($this->once())->method('disableReadOnly')->willReturn(false);
+        $failing->expects($this->once())->method('update')->with('api-user', 'Secret123')->willReturn(false);
+
+        $this->user->addAuth($readonly, 'readonly');
+        $this->user->addAuth($failing, 'failing');
+
+        $this->assertFalse($this->user->changePassword('Secret123'));
     }
 
     public function testSetSuperAdminTerminateSessionAndWebAuthnKeys(): void
@@ -605,6 +868,16 @@ class UserTest extends TestCase
         $this->assertSame('blocked', $this->user->getStatus());
         $this->assertSame('sso', $this->user->getUserAuthSource());
         $this->assertTrue($this->user->isSuperAdmin());
+    }
+
+    public function testGetSuperAdminIdsReturnsEmptyArrayWhenQueryFails(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $database = $this->createMock(Sqlite3::class);
+        $configuration->method('getDb')->willReturn($database);
+        $database->expects($this->once())->method('query')->willReturn(false);
+
+        $this->assertSame([], User::getSuperAdminIds($configuration));
     }
 
     private function setPrivateProperty(string $name, mixed $value): void

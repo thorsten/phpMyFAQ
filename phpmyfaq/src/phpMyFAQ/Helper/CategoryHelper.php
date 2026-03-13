@@ -25,6 +25,7 @@ use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Link;
+use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
@@ -95,14 +96,19 @@ class CategoryHelper extends AbstractHelper
                 break;
             }
 
-            $name = Strings::htmlentities($node['name']);
+            $name = $node['name'];
             if ($categoryNumbers[$categoryId]['faqs'] > 0) {
-                $url = sprintf('%sindex.php?action=show&cat=%d', $this->configuration->getDefaultUrl(), $node['id']);
+                $url = sprintf(
+                    '%scategory/%d/%s.html',
+                    $this->configuration->getDefaultUrl(),
+                    $node['id'],
+                    TitleSlugifier::slug($name),
+                );
 
                 $link = new Link($url, $this->configuration);
-                $link->setTitle(Strings::htmlentities($node['name']));
-                $link->text = Strings::htmlentities($node['name']);
-                $link->tooltip = is_null($node['description']) ? '' : Strings::htmlentities($node['description']);
+                $link->setTitle($node['name']);
+                $link->text = $node['name'];
+                $link->tooltip = is_null($node['description']) ? '' : $node['description'];
                 $name = $link->toHtmlAnchor();
             }
 

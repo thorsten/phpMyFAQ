@@ -1,27 +1,31 @@
 # 7. Manage phpMyFAQ
 
-The administration of phpMyFAQ is completely browser-based. The admin area can be found under this URL:
+The phpMyFAQ administration area is fully browser-based. You can access it at:
 
-`http://www.example.com/faq/admin/index.php`
+`https://www.example.com/faq/admin/index.php`
 
-You can also log in the public frontend, and after the successful login you'll see a link to administration backend,
-too.
+You can also log in through the public frontend. After a successful login, a link to the administration backend will be 
+available there as well.
 
-If you've lost your password, you can reset it. A new random password will be generated and sent to you via email.
-Please change it after your successful login with the generated password.
+If you have lost your password, you can reset it. phpMyFAQ will generate a new random password and send it to you by 
+email. After logging in with the generated password, you should change it immediately.
 
-After entering your username and password, you can log into the system. On the dashboard page you can see the following
-cards:
+Once you enter your username and password, you can log in to the system. The dashboard provides several useful cards, 
+including:
 
-- some statistics about visits, entries, news, and comments
-- the latest current number fetched from phpmyfaq.de
-- a nice diagram with the number of visitors of the last 30 days
-- a list on inactive FAQs
-- a button to verify the integrity of the phpMyFAQ installation. Then clicking on the button phpMyFAQ calculates a
-  SHA-1 hash for all files and checks it against a web service provided on phpmyfaq.de. With this service, it's possible
-  to see if someone changed files.
+* statistics about visits, entries, news, and comments
+* the latest current version number fetched from phpmyfaq.de
+* a chart showing the number of visitors over the last 30 days
+* a list of inactive FAQs
+* a list of the latest user registrations
+* information about the date of the most recently verified backup
+* a button to verify the integrity of the phpMyFAQ installation
 
-You can switch the current language in the administration backend, and you have an info box about the session timeout.
+When you click the integrity check button, phpMyFAQ calculates a SHA-1 hash for all files and compares it with a web 
+service provided by phpmyfaq.de. This makes it possible to detect whether any files have been modified.
+
+You can also switch the current language in the administration backend. In addition, an information box can display the 
+session timeout if this feature is enabled.
 
 ## 5.1 Users and Groups
 
@@ -81,7 +85,9 @@ To do this, enter the same file name for each entry in your **database, "faqcate
 
 ### 5.2.2 Add a new FAQ
 
-You can create a completely new FAQ by using the 'Add new FAQ' option. When doing so, it is essential to select the desired category within the 'FAQ metadata' tab to ensure the entry is correctly indexed and visible to users. For a detailed explanation of all available settings and metadata options, please refer to section 5.2.3.
+You can create a completely new FAQ by using the 'Add new FAQ' option. When doing so, it is essential to select the 
+desired category within the 'FAQ metadata' tab to ensure the entry is correctly indexed and visible to users. For a 
+detailed explanation of all available settings and metadata options, please refer to section 5.2.3.
 
 ### 5.2.3 FAQ Administration
 
@@ -188,17 +194,24 @@ Only the status will be changed - the FAQ will not be deleted from the database.
 
 ### 5.2.5 Orphaned FAQs
 
-Orphaned FAQs are records that are no longer assigned to any category. This typically happens when categories are deleted without moving the associated FAQs, or through incomplete data imports. As they lack a category assignment, these entries are hidden from users in the public frontend.
+Orphaned FAQs are records that are no longer assigned to any category. This typically happens when categories are 
+deleted without moving the associated FAQs, or through incomplete data imports. As they lack a category assignment, 
+these entries are hidden from users in the public frontend.
 
 Cross-Language Management
-Administrators can manage orphaned FAQs across all installed languages, without needing to switch their backend interface language. The list displays all orphaned entries in the system, including the full language name, and allows direct editing within the correct linguistic context.
+Administrators can manage orphaned FAQs across all installed languages, without needing to switch their backend 
+interface language. The list displays all orphaned entries in the system, including the full language name, and allows 
+direct editing within the correct linguistic context.
 
 How to Resolve Orphaned FAQs:
 To correct an orphaned FAQ entry, you must assign it to a valid category in the corresponding language:
 
-1. Open the FAQ: The orphaned FAQ list displays entries from all languages. Click on the desired entry to open the FAQ editor, which will automatically be set to the FAQ's language.
+1. Open the FAQ: The orphaned FAQ list displays entries from all languages. Click on the desired entry to open the FAQ 
+editor, which will automatically be set to the FAQ's language.
 
-2. Assign Category: Navigate to the "FAQ metadata" tab within the editor. The available categories in the dropdown list will automatically match the language of the FAQ you are editing, ensuring you can only select a category appropriate for that language.
+2. Assign Category: Navigate to the "FAQ metadata" tab within the editor. The available categories in the dropdown list 
+will automatically match the language of the FAQ you are editing, ensuring you can only select a category appropriate 
+for that language.
 
 3. Save Changes: Select a valid category and save the FAQ.
 
@@ -206,13 +219,18 @@ Once saved, the entry will be visible in its new category and will automatically
 
 ### 5.2.6 Open Questions
 
-On the "Open Questions" page, you can see all open questions that visitors have posted in the currently selected administration language. 
-You can answer open questions directly or, if they are not visible in the public area due to visibility settings, you can activate them. 
+On the "Open Questions" page, you can see all open questions that visitors have posted in the currently selected 
+administration language. 
+You can answer open questions directly or, if they are not visible in the public area due to visibility settings, you 
+can activate them. 
 Additionally, you can delete them.
 
 Please note:
-Questions awaiting moderation in other languages are not automatically shown here. If questions exist in other active languages, a warning alert will be displayed at the bottom of the page indicating which languages have pending items and the respective counts.
-To process these other questions, you must change your current administration language using the language selector in the top menu.
+Questions awaiting moderation in other languages are not automatically shown here. If questions exist in other active 
+languages, a warning alert will be displayed at the bottom of the page indicating which languages have pending items 
+and the respective counts.
+To process these other questions, you must change your current administration language using the language selector in 
+the top menu.
 
 ### 5.2.7 Comment Administration
 
@@ -850,7 +868,8 @@ This page is only available if OpenSearch is enabled.
 ### 5.6.8 System information
 
 On this page, phpMyFAQ displays some relevant system information like PHP version, database version, or session path.
-Please use this information when reporting bugs.
+Please use this information when reporting bugs. Additionally, you can check the status of all translation files and see 
+if there are any missing translations.
 
 ## 5.7 Using Microsoft Entra ID
 

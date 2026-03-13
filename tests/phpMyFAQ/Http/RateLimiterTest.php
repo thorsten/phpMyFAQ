@@ -170,4 +170,33 @@ class RateLimiterTest extends TestCase
         $this->assertSame(0, $headers['X-RateLimit-Remaining']);
         $this->assertArrayHasKey('Retry-After', $headers);
     }
+
+    public function testGetHeadersReturnsStoredHeaders(): void
+    {
+        $this->db->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $this->db->method('now')->willReturn('CURRENT_TIMESTAMP');
+        $this->db
+            ->method('query')
+            ->willReturnCallback(static function (string $query): mixed {
+                if (str_starts_with($query, 'INSERT')) {
+                    return true;
+                }
+
+                if (str_starts_with($query, 'SELECT')) {
+                    return 'select-result';
+                }
+
+                return true;
+            });
+        $this->db
+            ->method('fetchObject')
+            ->with('select-result')
+            ->willReturn((object) ['requests' => 1]);
+
+        $limiter = new RateLimiter($this->configuration);
+        $limiter->check('header-key', 3, 60);
+
+        $this->assertSame($limiter->headers, $limiter->getHeaders());
+        $this->assertSame(3, $limiter->getHeaders()['X-RateLimit-Limit']);
+    }
 }

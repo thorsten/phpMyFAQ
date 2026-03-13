@@ -40,6 +40,7 @@ class TagsTest extends TestCase
         $this->dbHandle->connect($this->databaseFile, '', '');
         $configuration = new Configuration($this->dbHandle);
         $configuration->set('main.referenceURL', 'http://example.com');
+        $configuration->set('security.permLevel', 'basic');
 
         $databaseReflection = new ReflectionClass(Database::class);
         $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
@@ -136,6 +137,21 @@ class TagsTest extends TestCase
         $this->assertCount(1, $this->tags->getFaqsByTagId(1));
     }
 
+    public function testGetFaqsByIntersectionTags(): void
+    {
+        $this->seedFaqRecord(1);
+        $this->seedFaqRecord(2);
+
+        $this->assertEmpty($this->tags->getFaqsByIntersectionTags(['Unknown']));
+
+        $this->tags->create(1, ['Shared', 'OnlyOne']);
+        $this->tags->create(2, ['Shared', 'Other']);
+
+        $intersection = $this->tags->getFaqsByIntersectionTags(['Shared', 'OnlyOne']);
+
+        $this->assertSame([1], $intersection);
+    }
+
     public function testSetUserAndGroups(): void
     {
         $this->tags->setUser(42);
@@ -162,6 +178,24 @@ class TagsTest extends TestCase
         $this->assertIsArray($popularTags);
     }
 
+    public function testGetPopularTagsAsArray(): void
+    {
+        $this->seedFaqRecord(1);
+        $this->seedFaqRecord(2);
+        $this->dbHandle->query('INSERT OR REPLACE INTO faqdata_user (record_id, user_id) VALUES (1, -1)');
+        $this->dbHandle->query('INSERT OR REPLACE INTO faqdata_user (record_id, user_id) VALUES (2, -1)');
+
+        $this->tags->create(1, ['Foo', 'Bar']);
+        $this->tags->create(2, ['Foo']);
+
+        $popularTags = $this->tags->getPopularTagsAsArray(2);
+
+        $this->assertNotEmpty($popularTags);
+        $this->assertSame('Foo', $popularTags[0]['tagName']);
+        $this->assertSame(2, $popularTags[0]['tagFrequency']);
+        $this->assertArrayHasKey('tagId', $popularTags[0]);
+    }
+
     public function testGetAllTagsWithPermissions(): void
     {
         // Set up tags for a record
@@ -175,5 +209,26 @@ class TagsTest extends TestCase
         // Should return tags (with proper database setup)
         $allTags = $this->tags->getAllTags();
         $this->assertIsArray($allTags);
+    }
+
+    private function seedFaqRecord(int $id, string $lang = 'en', string $active = 'yes'): void
+    {
+        $query = sprintf(
+            "INSERT OR REPLACE INTO faqdata (
+                id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email,
+                comment, updated, date_start, date_end, created, notes, sticky_order
+            ) VALUES (
+                %d, '%s', %d, 0, '%s', 0, '', 'Test question %d', 'Test answer %d', 'Tester', 'test@example.com',
+                'y', '20260101000000', '00000000000000', '99991231235959', CURRENT_TIMESTAMP, '', NULL
+            )",
+            $id,
+            $lang,
+            $id,
+            $active,
+            $id,
+            $id,
+        );
+
+        $this->dbHandle->query($query);
     }
 }

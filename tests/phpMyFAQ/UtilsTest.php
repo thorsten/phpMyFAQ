@@ -141,4 +141,19 @@ class UtilsTest extends TestCase
 
         $this->assertEquals('Unknown %unknown% marker', $result);
     }
+
+    public function testParseUrlStripsProtocolsFromRawUrls(): void
+    {
+        $input = 'Visit http://example.com and https://phpmyfaq.de for details.';
+
+        $result = Utils::parseUrl($input);
+
+        $this->assertSame('Visit example.com and phpmyfaq.de for details.', $result);
+    }
+
+    public function testGetHostFromUrlReturnsHostOrNull(): void
+    {
+        $this->assertSame('www.example.com', Utils::getHostFromUrl('https://www.example.com/path?foo=bar'));
+        $this->assertNull(Utils::getHostFromUrl('not-a-valid-url'));
+    }
 }

@@ -4,8 +4,12 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Mail\BuiltinTestState;
 use phpMyFAQ\Mail\Builtin;
 use phpMyFAQ\Mail\Smtp;
+use phpMyFAQ\Mail\Provider\MailgunProvider;
+use phpMyFAQ\Mail\Provider\SendGridProvider;
+use phpMyFAQ\Mail\Provider\SesProvider;
 use phpMyFAQ\Queue\DatabaseMessageBus;
 use phpMyFAQ\Queue\Message\SendMailMessage;
 use phpMyFAQ\Queue\Transport\DatabaseTransport;
@@ -23,6 +27,9 @@ class MailTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        require_once __DIR__ . '/Mail/BuiltinTest.php';
+        BuiltinTestState::reset();
 
         Request::setTrustedHosts(['^.*$']); // Trust all hosts for testing
 
@@ -231,6 +238,28 @@ class MailTest extends TestCase
         $this->assertSame('smtp', $mail->agent);
     }
 
+    public function testConstructorLogsWarningWhenDefaultSenderInitializationThrows(): void
+    {
+        $logger = $this->createMock(\Monolog\Logger::class);
+        $logger->expects($this->once())->method('warning')->with($this->stringContains('Unable to initialize mail sender defaults'));
+
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('get')->willReturn(false);
+        $configuration->method('getVersion')->willReturn('4.2.0-alpha');
+        $configuration->method('getAdminEmail')->willReturn('admin@example.com');
+        $configuration->method('getTitle')->willReturn('phpMyFAQ');
+        $configuration->method('getLogger')->willReturn($logger);
+
+        new class($configuration) extends Mail {
+            public function setFrom(string $address, ?string $name = null): bool
+            {
+                throw new Exception('boom');
+            }
+        };
+
+        $this->addToAssertionCount(1);
+    }
+
     /**
      * @throws Exception
      */
@@ -387,12 +416,190 @@ class MailTest extends TestCase
         $method->invoke($this->mail, 'invalid');
     }
 
+    public function testPrivateCreateProviderReturnsSupportedProviders(): void
+    {
+        $method = new \ReflectionMethod(Mail::class, 'createProvider');
+
+        $this->assertInstanceOf(SendGridProvider::class, $method->invoke($this->mail, 'sendgrid'));
+        $this->assertInstanceOf(SesProvider::class, $method->invoke($this->mail, 'ses'));
+        $this->assertInstanceOf(MailgunProvider::class, $method->invoke($this->mail, 'mailgun'));
+    }
+
+    public function testPrivateIsQueueDeliveryEnabledHandlesNullFalseAndTrue(): void
+    {
+        $method = new \ReflectionMethod(Mail::class, 'isQueueDeliveryEnabled');
+
+        $nullConfig = $this->createConfiguredMock(Configuration::class, [
+            'get' => null,
+            'getVersion' => '4.2.0-alpha',
+            'getAdminEmail' => 'admin@example.com',
+            'getTitle' => 'phpMyFAQ',
+            'getLogger' => $this->createStub(\Monolog\Logger::class),
+        ]);
+        $nullMail = new Mail($nullConfig);
+        $this->assertFalse($method->invoke($nullMail));
+
+        $falseConfig = $this->createConfiguredMock(Configuration::class, [
+            'get' => false,
+            'getVersion' => '4.2.0-alpha',
+            'getAdminEmail' => 'admin@example.com',
+            'getTitle' => 'phpMyFAQ',
+            'getLogger' => $this->createStub(\Monolog\Logger::class),
+        ]);
+        $falseMail = new Mail($falseConfig);
+        $this->assertFalse($method->invoke($falseMail));
+
+        $trueConfig = $this->createMock(Configuration::class);
+        $trueConfig->method('get')
+            ->willReturnCallback(static fn (string $item): mixed => match ($item) {
+                'mail.useQueue' => true,
+                'mail.remoteSMTP' => false,
+                default => null,
+            });
+        $trueConfig->method('getVersion')->willReturn('4.2.0-alpha');
+        $trueConfig->method('getAdminEmail')->willReturn('admin@example.com');
+        $trueConfig->method('getTitle')->willReturn('phpMyFAQ');
+        $trueConfig->method('getLogger')->willReturn($this->createStub(\Monolog\Logger::class));
+        $trueMail = new Mail($trueConfig);
+        $this->assertTrue($method->invoke($trueMail));
+    }
+
+    public function testSendPreparedEnvelopeUsesBuiltinTransportForSmtpAndDefaultProvider(): void
+    {
+        BuiltinTestState::reset();
+
+        $smtpConfig = $this->createMock(Configuration::class);
+        $smtpConfig->method('get')
+            ->willReturnCallback(static fn (string $item): mixed => match ($item) {
+                'mail.remoteSMTP' => false,
+                default => null,
+            });
+        $smtpConfig->method('getVersion')->willReturn('4.2.0-alpha');
+        $smtpConfig->method('getAdminEmail')->willReturn('admin@example.com');
+        $smtpConfig->method('getTitle')->willReturn('phpMyFAQ');
+        $smtpConfig->method('getMailProvider')->willReturn('smtp');
+        $smtpConfig->method('getLogger')->willReturn($this->createStub(\Monolog\Logger::class));
+
+        $mail = new Mail($smtpConfig);
+        $this->assertSame(1, $mail->sendPreparedEnvelope('user@example.com', [
+            'Subject' => 'Test subject',
+            'From' => 'sender@example.com',
+        ], 'Mail body'));
+
+        $defaultConfig = $this->createMock(Configuration::class);
+        $defaultConfig->method('get')
+            ->willReturnCallback(static fn (string $item): mixed => match ($item) {
+                'mail.remoteSMTP' => false,
+                default => null,
+            });
+        $defaultConfig->method('getVersion')->willReturn('4.2.0-alpha');
+        $defaultConfig->method('getAdminEmail')->willReturn('admin@example.com');
+        $defaultConfig->method('getTitle')->willReturn('phpMyFAQ');
+        $defaultConfig->method('getMailProvider')->willReturn('other');
+        $defaultConfig->method('getLogger')->willReturn($this->createStub(\Monolog\Logger::class));
+
+        $mail = new Mail($defaultConfig);
+        $this->assertSame(1, $mail->sendPreparedEnvelope('user@example.com', [
+            'Subject' => 'Test subject',
+            'From' => 'sender@example.com',
+        ], 'Mail body'));
+    }
+
+    public function testSendPreparedEnvelopeCoversApiProviderBranches(): void
+    {
+        $headers = [
+            'Subject' => 'Provider subject',
+            'From' => 'Sender <sender@example.com>',
+        ];
+
+        foreach (
+            [
+                'sendgrid' => 'SendGrid API key is not configured.',
+                'ses' => 'SES mail delivery failed: SES credentials are not configured.',
+                'mailgun' => 'Mailgun API key is not configured.',
+            ] as $provider => $expectedMessage
+        ) {
+            $configuration = $this->createMock(Configuration::class);
+            $configuration->method('get')
+                ->willReturnCallback(static fn(string $item): mixed => match ($item) {
+                    'mail.remoteSMTP' => false,
+                    default => null,
+                });
+            $configuration->method('getVersion')->willReturn('4.2.0-alpha');
+            $configuration->method('getAdminEmail')->willReturn('admin@example.com');
+            $configuration->method('getTitle')->willReturn('phpMyFAQ');
+            $configuration->method('getMailProvider')->willReturn($provider);
+            $configuration->method('getLogger')->willReturn($this->createStub(\Monolog\Logger::class));
+
+            $mail = new Mail($configuration);
+
+            try {
+                $mail->sendPreparedEnvelope('user@example.com', $headers, 'Body');
+                $this->fail('Expected provider exception was not thrown.');
+            } catch (Exception $exception) {
+                $this->assertSame($expectedMessage, $exception->getMessage());
+            }
+        }
+    }
+
     public function testGetMuaThrowsErrorForUnknownAgentClass(): void
     {
         $this->expectException(\Error::class);
         $this->expectExceptionMessage('Class "phpMyFAQ\\Mail\\Invalidagent" not found');
 
         Mail::getMUA('invalid-agent');
+    }
+
+    public function testPrivateSendViaSmtpAgentCoversBuiltinSmtpAndDefaultBranches(): void
+    {
+        $method = new \ReflectionMethod(Mail::class, 'sendViaSmtpAgent');
+        $headers = [
+            'Subject' => 'SMTP subject',
+            'From' => 'sender@example.com',
+        ];
+
+        $builtinConfiguration = $this->createConfiguredMock(Configuration::class, [
+            'get' => false,
+            'getVersion' => '4.2.0-alpha',
+            'getAdminEmail' => 'admin@example.com',
+            'getTitle' => 'phpMyFAQ',
+            'getLogger' => $this->createStub(\Monolog\Logger::class),
+        ]);
+        $builtinMail = new Mail($builtinConfiguration);
+        $this->assertSame(1, $method->invoke($builtinMail, 'user@example.com', $headers, 'Body'));
+
+        $smtpConfiguration = $this->createMock(Configuration::class);
+        $smtpConfiguration->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
+                'mail.remoteSMTP' => true,
+                'mail.remoteSMTPServer' => '127.0.0.1',
+                'mail.remoteSMTPUsername' => 'smtp-user@example.com',
+                'mail.remoteSMTPPassword' => 'smtp-password',
+                'mail.remoteSMTPPort' => 1,
+                'mail.remoteSMTPDisableTLSPeerVerification' => true,
+                default => null,
+            });
+        $smtpConfiguration->method('getVersion')->willReturn('4.2.0-alpha');
+        $smtpConfiguration->method('getAdminEmail')->willReturn('admin@example.com');
+        $smtpConfiguration->method('getTitle')->willReturn('phpMyFAQ');
+        $smtpConfiguration->method('getLogger')->willReturn($this->createStub(\Monolog\Logger::class));
+
+        $smtpMail = new Mail($smtpConfiguration);
+
+        try {
+            $method->invoke($smtpMail, 'user@example.com', $headers, 'Body');
+            $this->fail('Expected SMTP transport exception was not thrown.');
+        } catch (\Throwable $throwable) {
+            $this->assertStringContainsString('Connection', $throwable->getMessage());
+        }
+
+        $builtinAliasMail = new Mail($builtinConfiguration);
+        $builtinAliasMail->agent = 'builtin';
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('<strong>Mail Class</strong>: builtin has no implementation!');
+
+        $method->invoke($builtinAliasMail, 'user@example.com', $headers, 'Body');
     }
 
     /**
@@ -450,6 +657,126 @@ class MailTest extends TestCase
         $mail->message = 'Queued message';
 
         $this->assertSame(1, $mail->send());
+    }
+
+    public function testPrivateEnqueueForDeliveryCoversEarlyReturnSuccessAndFallbackBranches(): void
+    {
+        $method = new \ReflectionMethod(Mail::class, 'enqueueForDelivery');
+        $headers = ['Subject' => 'Queued subject'];
+
+        $invalidContainerConfiguration = $this->createMock(Configuration::class);
+        $invalidContainerConfiguration->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
+                'mail.remoteSMTP' => false,
+                'core.container' => 'not-a-container',
+                default => null,
+            });
+        $invalidContainerConfiguration->method('getVersion')->willReturn('4.2.0-alpha');
+        $invalidContainerConfiguration->method('getAdminEmail')->willReturn('admin@example.com');
+        $invalidContainerConfiguration->method('getTitle')->willReturn('phpMyFAQ');
+        $invalidContainerConfiguration->method('getLogger')->willReturn($this->createStub(\Monolog\Logger::class));
+        $invalidContainerMail = new Mail($invalidContainerConfiguration);
+        $this->assertFalse($method->invoke($invalidContainerMail, 'user@example.com', $headers, 'Body'));
+
+        $missingBusContainer = $this->createMock(ContainerInterface::class);
+        $missingBusContainer->method('has')->with('phpmyfaq.queue.message-bus')->willReturn(false);
+        $missingBusContainer->expects($this->never())->method('get');
+
+        $missingBusConfiguration = $this->createMock(Configuration::class);
+        $missingBusConfiguration->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
+                'mail.remoteSMTP' => false,
+                'core.container' => $missingBusContainer,
+                default => null,
+            });
+        $missingBusConfiguration->method('getVersion')->willReturn('4.2.0-alpha');
+        $missingBusConfiguration->method('getAdminEmail')->willReturn('admin@example.com');
+        $missingBusConfiguration->method('getTitle')->willReturn('phpMyFAQ');
+        $missingBusConfiguration->method('getLogger')->willReturn($this->createStub(\Monolog\Logger::class));
+        $missingBusMail = new Mail($missingBusConfiguration);
+        $this->assertFalse($method->invoke($missingBusMail, 'user@example.com', $headers, 'Body'));
+
+        $wrongBusContainer = $this->createMock(ContainerInterface::class);
+        $wrongBusContainer->method('has')->with('phpmyfaq.queue.message-bus')->willReturn(true);
+        $wrongBusContainer->method('get')->with('phpmyfaq.queue.message-bus')->willReturn(new \stdClass());
+
+        $wrongBusConfiguration = $this->createMock(Configuration::class);
+        $wrongBusConfiguration->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
+                'mail.remoteSMTP' => false,
+                'core.container' => $wrongBusContainer,
+                default => null,
+            });
+        $wrongBusConfiguration->method('getVersion')->willReturn('4.2.0-alpha');
+        $wrongBusConfiguration->method('getAdminEmail')->willReturn('admin@example.com');
+        $wrongBusConfiguration->method('getTitle')->willReturn('phpMyFAQ');
+        $wrongBusConfiguration->method('getLogger')->willReturn($this->createStub(\Monolog\Logger::class));
+        $wrongBusMail = new Mail($wrongBusConfiguration);
+        $this->assertFalse($method->invoke($wrongBusMail, 'user@example.com', $headers, 'Body'));
+
+        $transport = $this->createMock(DatabaseTransport::class);
+        $transport->expects($this->once())->method('enqueue')->willReturn(1);
+        $messageBus = new DatabaseMessageBus($transport);
+
+        $successContainer = $this->createMock(ContainerInterface::class);
+        $successContainer->method('has')->with('phpmyfaq.queue.message-bus')->willReturn(true);
+        $successContainer->method('get')->with('phpmyfaq.queue.message-bus')->willReturn($messageBus);
+
+        $successConfiguration = $this->createMock(Configuration::class);
+        $successConfiguration->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
+                'mail.remoteSMTP' => false,
+                'core.container' => $successContainer,
+                default => null,
+            });
+        $successConfiguration->method('getVersion')->willReturn('4.2.0-alpha');
+        $successConfiguration->method('getAdminEmail')->willReturn('admin@example.com');
+        $successConfiguration->method('getTitle')->willReturn('phpMyFAQ');
+        $successConfiguration->method('getLogger')->willReturn($this->createStub(\Monolog\Logger::class));
+        $successMail = new Mail($successConfiguration);
+        $successMail->subject = 'Queued subject';
+        $successMail->message = 'Queued body';
+        $successMail->addTo('user@example.com');
+        $this->assertTrue($method->invoke($successMail, 'user@example.com', $headers, 'Envelope body'));
+
+        $noRecipientConfiguration = $this->createMock(Configuration::class);
+        $noRecipientConfiguration->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
+                'mail.remoteSMTP' => false,
+                'core.container' => $successContainer,
+                default => null,
+            });
+        $noRecipientConfiguration->method('getVersion')->willReturn('4.2.0-alpha');
+        $noRecipientConfiguration->method('getAdminEmail')->willReturn('admin@example.com');
+        $noRecipientConfiguration->method('getTitle')->willReturn('phpMyFAQ');
+        $noRecipientConfiguration->method('getLogger')->willReturn($this->createStub(\Monolog\Logger::class));
+        $noRecipientMail = new Mail($noRecipientConfiguration);
+        $this->assertFalse($method->invoke($noRecipientMail, 'user@example.com', $headers, 'Envelope body'));
+
+        $logger = $this->createMock(\Monolog\Logger::class);
+        $logger->expects($this->once())->method('error')->with(
+            $this->stringContains('Queueing mail failed'),
+            $this->isArray(),
+        );
+
+        $throwingContainer = $this->createMock(ContainerInterface::class);
+        $throwingContainer->method('has')->with('phpmyfaq.queue.message-bus')->willReturn(true);
+        $throwingContainer->method('get')->willThrowException(new \RuntimeException('queue exploded'));
+
+        $throwingConfiguration = $this->createMock(Configuration::class);
+        $throwingConfiguration->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
+                'mail.remoteSMTP' => false,
+                'core.container' => $throwingContainer,
+                default => null,
+            });
+        $throwingConfiguration->method('getVersion')->willReturn('4.2.0-alpha');
+        $throwingConfiguration->method('getAdminEmail')->willReturn('admin@example.com');
+        $throwingConfiguration->method('getTitle')->willReturn('phpMyFAQ');
+        $throwingConfiguration->method('getLogger')->willReturn($logger);
+        $throwingMail = new Mail($throwingConfiguration);
+        $throwingMail->addTo('user@example.com');
+        $this->assertFalse($method->invoke($throwingMail, 'user@example.com', $headers, 'Envelope body'));
     }
 
     /**

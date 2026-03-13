@@ -2,16 +2,23 @@
 
 namespace phpMyFAQ\Strings;
 
+use phpMyFAQ\Language;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
+#[CoversClass(Mbstring::class)]
+#[UsesClass(Language::class)]
+#[UsesClass(\phpMyFAQ\Language\LanguageCodes::class)]
 class MbstringTest extends TestCase
 {
     private Mbstring $mbString;
 
     protected function setUp(): void
     {
+        $this->resetMbstringSingleton();
         $this->mbString = Mbstring::getInstance();
     }
 
@@ -82,5 +89,77 @@ class MbstringTest extends TestCase
     public function testPregReplace(): void
     {
         $this->assertEquals('h*ll*', $this->mbString->preg_replace('/[aeiou]/', '*', 'hello'));
+    }
+
+    public function testGetInstanceFallsBackToDefaultLanguageForUnsupportedLanguage(): void
+    {
+        $this->resetMbstringSingleton();
+
+        $instance = Mbstring::getInstance('unsupported-language');
+
+        self::assertSame(AbstractString::DEFAULT_LANGUAGE, $this->readLanguage($instance));
+        self::assertSame(AbstractString::DEFAULT_ENCODING, $this->readEncoding($instance));
+    }
+
+    public function testGetInstanceReturnsSameSingletonInstance(): void
+    {
+        $this->resetMbstringSingleton();
+
+        $first = Mbstring::getInstance('en');
+        $second = Mbstring::getInstance('de');
+
+        self::assertSame($first, $second);
+        self::assertSame('en', $this->readLanguage($second));
+    }
+
+    public function testPregReplaceCallbackHandlesPatternArrays(): void
+    {
+        $count = 0;
+        $result = $this->mbString->preg_replace_callback(
+            ['/ä/', '/ö/'],
+            static fn(array $matches): string => '[' . $matches[0] . ']',
+            'färöer',
+            count: $count,
+        );
+
+        self::assertSame('f[ä]r[ö]er', $result);
+        self::assertSame(2, $count);
+    }
+
+    public function testPregReplaceHandlesPatternArrays(): void
+    {
+        $count = 0;
+        $result = $this->mbString->preg_replace(
+            ['/ä/', '/ö/'],
+            ['ae', 'oe'],
+            'färöer',
+            count: $count,
+        );
+
+        self::assertSame('faeroeer', $result);
+        self::assertSame(2, $count);
+    }
+
+    private function resetMbstringSingleton(): void
+    {
+        $reflection = new \ReflectionClass(Mbstring::class);
+        $property = $reflection->getProperty('mbstring');
+        $property->setValue(null, null);
+    }
+
+    private function readLanguage(Mbstring $instance): string
+    {
+        $reflection = new \ReflectionClass(AbstractString::class);
+        $property = $reflection->getProperty('language');
+
+        return (string) $property->getValue($instance);
+    }
+
+    private function readEncoding(Mbstring $instance): string
+    {
+        $reflection = new \ReflectionClass(AbstractString::class);
+        $property = $reflection->getProperty('encoding');
+
+        return (string) $property->getValue($instance);
     }
 }

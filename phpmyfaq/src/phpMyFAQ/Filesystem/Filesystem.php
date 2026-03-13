@@ -150,7 +150,7 @@ class Filesystem
 
         if (copy($sourceFileName, $destinationFileName) === false) {
             $error = error_get_last();
-            throw new Exception($error['message']);
+            throw new Exception($error['message'] ?? 'Copy operation failed.');
         }
 
         return true;

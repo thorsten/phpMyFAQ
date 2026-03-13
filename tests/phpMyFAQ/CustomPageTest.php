@@ -273,6 +273,58 @@ class CustomPageTest extends TestCase
         $this->assertEquals(5, $count);
     }
 
+    public function testGetAllLanguagesPaginated(): void
+    {
+        $mockData = new stdClass();
+        $mockData->id = 10;
+        $mockData->lang = 'de';
+        $mockData->page_title = 'All Languages Page';
+        $mockData->slug = 'all-languages-page';
+        $mockData->content = '<p>Paginated content</p>';
+        $mockData->author_name = 'Author';
+        $mockData->author_email = 'author@example.org';
+        $mockData->active = 'y';
+        $mockData->created = '2026-01-12 12:00:00';
+        $mockData->updated = null;
+        $mockData->seo_title = null;
+        $mockData->seo_description = null;
+        $mockData->seo_robots = 'index,follow';
+
+        $this->mockRepository
+            ->expects($this->once())
+            ->method('getAllLanguagesPaginated')
+            ->with(false, 25, 0, 'created', 'DESC')
+            ->willReturn([$mockData]);
+
+        $result = $this->customPage->getAllLanguagesPaginated();
+
+        $this->assertCount(1, $result);
+        $this->assertSame('All Languages Page', $result[0]['page_title']);
+        $this->assertSame('de', $result[0]['lang']);
+    }
+
+    public function testCountAllLanguages(): void
+    {
+        $this->mockRepository
+            ->expects($this->once())
+            ->method('countAllLanguages')
+            ->with(true)
+            ->willReturn(3);
+
+        $this->assertSame(3, $this->customPage->countAllLanguages(true));
+    }
+
+    public function testGetExistingLanguages(): void
+    {
+        $this->mockRepository
+            ->expects($this->once())
+            ->method('getExistingLanguages')
+            ->with(23)
+            ->willReturn(['de', 'en', 'fr']);
+
+        $this->assertSame(['de', 'en', 'fr'], $this->customPage->getExistingLanguages(23));
+    }
+
     public function testSlugExists(): void
     {
         $this->mockRepository
@@ -326,6 +378,28 @@ class CustomPageTest extends TestCase
         $this->assertEquals('test-slug', $uniqueSlug);
     }
 
+    public function testCreateTranslation(): void
+    {
+        $page = new CustomPageEntity();
+        $page
+            ->setLanguage('de')
+            ->setPageTitle('Translated Page')
+            ->setSlug('translated-page')
+            ->setContent('<p>Translated content</p>')
+            ->setAuthorName('Test Author')
+            ->setAuthorEmail('test@example.org')
+            ->setActive(true)
+            ->setCreated(new DateTime());
+
+        $this->mockRepository
+            ->expects($this->once())
+            ->method('insertTranslation')
+            ->with($page, 11)
+            ->willReturn(true);
+
+        $this->assertTrue($this->customPage->createTranslation($page, 11));
+    }
+
     public function testGetByIdWithSeoFields(): void
     {
         $mockData = new stdClass();
@@ -354,5 +428,35 @@ class CustomPageTest extends TestCase
         $this->assertEquals('SEO Test Title', $result->getSeoTitle());
         $this->assertEquals('SEO Test Description', $result->getSeoDescription());
         $this->assertEquals('noindex,nofollow', $result->getSeoRobots());
+    }
+
+    public function testGetByIdMapsUpdatedTimestamp(): void
+    {
+        $mockData = new stdClass();
+        $mockData->id = 2;
+        $mockData->lang = 'en';
+        $mockData->page_title = 'Updated Page';
+        $mockData->slug = 'updated-page';
+        $mockData->content = '<p>Updated content</p>';
+        $mockData->author_name = 'Test Author';
+        $mockData->author_email = 'test@example.org';
+        $mockData->active = 'y';
+        $mockData->created = '2026-01-12 12:00:00';
+        $mockData->updated = '2026-01-13 09:30:00';
+        $mockData->seo_title = null;
+        $mockData->seo_description = null;
+        $mockData->seo_robots = 'index,follow';
+
+        $this->mockRepository
+            ->expects($this->once())
+            ->method('getById')
+            ->with(2, 'en')
+            ->willReturn($mockData);
+
+        $result = $this->customPage->getById(2);
+
+        $this->assertInstanceOf(CustomPageEntity::class, $result);
+        $this->assertNotNull($result->getUpdated());
+        $this->assertSame('2026-01-13 09:30:00', $result->getUpdated()?->format('Y-m-d H:i:s'));
     }
 }

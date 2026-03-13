@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ\Filesystem;
 
+use phpMyFAQ\Core\Exception;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
@@ -84,6 +85,64 @@ class FilesystemTest extends TestCase
 
         $actual = $this->filesystem->deleteDirectory($testDirectory);
         $this->assertTrue($actual);
+    }
+
+    public function testRecursiveCopyReturnsFalseWhenSourceIsNotDirectory(): void
+    {
+        $actual = $this->filesystem->recursiveCopy(PMF_TEST_DIR . '/path/foo.bar', PMF_CONTENT_DIR . '/recursive-copy-missing');
+
+        $this->assertFalse($actual);
+    }
+
+    public function testCopyThrowsExceptionWhenSourceIsNotReadable(): void
+    {
+        $this->filesystem->createDirectory(PMF_CONTENT_DIR . '/copy-test-invalid');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Source not readable or destination directory not writeable.');
+
+        try {
+            $this->filesystem->copy(
+                PMF_TEST_DIR . '/path/does-not-exist.bar',
+                PMF_CONTENT_DIR . '/copy-test-invalid/foo.bar',
+            );
+        } finally {
+            $this->filesystem->deleteDirectory(PMF_CONTENT_DIR . '/copy-test-invalid');
+        }
+    }
+
+    public function testCopyThrowsExceptionWhenCopyOperationFails(): void
+    {
+        $targetDirectory = PMF_CONTENT_DIR . '/copy-test-target-directory';
+        $this->filesystem->createDirectory($targetDirectory);
+
+        $this->expectException(Exception::class);
+
+        set_error_handler(static fn (): bool => true);
+
+        try {
+            $this->filesystem->copy(PMF_TEST_DIR . '/path/foo.bar', $targetDirectory);
+        } finally {
+            restore_error_handler();
+            $this->filesystem->deleteDirectory($targetDirectory);
+        }
+    }
+
+    public function testDeleteDirectoryReturnsFalseWhenDirectoryCannotBeRead(): void
+    {
+        $directory = PMF_CONTENT_DIR . '/delete-no-permission-directory';
+        $this->filesystem->createDirectory($directory);
+        chmod($directory, 0o000);
+
+        set_error_handler(static fn (): bool => true);
+
+        try {
+            $this->assertFalse($this->filesystem->deleteDirectory($directory));
+        } finally {
+            restore_error_handler();
+            chmod($directory, 0o700);
+            $this->filesystem->deleteDirectory($directory);
+        }
     }
 
     public function testGetRootPath(): void

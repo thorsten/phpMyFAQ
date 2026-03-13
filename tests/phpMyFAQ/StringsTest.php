@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Strings\StringBasic;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
@@ -10,7 +11,15 @@ class StringsTest extends TestCase
 {
     protected function setUp(): void
     {
+        $this->resetStringsInstance();
         Strings::init();
+    }
+
+    protected function tearDown(): void
+    {
+        $this->resetStringsInstance();
+        Strings::init();
+        parent::tearDown();
     }
 
     public function testStrlen(): void
@@ -80,6 +89,17 @@ class StringsTest extends TestCase
     public function testHtmlentities(): void
     {
         $this->assertEquals('&lt;div&gt;', Strings::htmlentities('<div>'));
+    }
+
+    public function testPrivateConstructorCanBeInvokedViaReflection(): void
+    {
+        $reflection = new \ReflectionClass(Strings::class);
+        $instance = $reflection->newInstanceWithoutConstructor();
+        $constructor = $reflection->getConstructor();
+
+        $constructor?->invoke($instance);
+
+        $this->assertInstanceOf(Strings::class, $instance);
     }
 
     /**
@@ -256,6 +276,17 @@ class StringsTest extends TestCase
         $this->assertEquals(7, Strings::strlen('Bonjour')); // French
     }
 
+    public function testInitReturnsEarlyWhenAlreadyInitialized(): void
+    {
+        $expected = StringBasic::getStringBasic('en');
+        $property = new \ReflectionProperty(Strings::class, 'instance');
+        $property->setValue(null, $expected);
+
+        Strings::init('de');
+
+        $this->assertSame($expected, $property->getValue());
+    }
+
     /**
      * Test htmlentities vs htmlspecialchars differences
      */
@@ -372,5 +403,11 @@ class StringsTest extends TestCase
         // Test HTML encoding with null bytes
         $encoded = Strings::htmlspecialchars($stringWithNull);
         $this->assertIsString($encoded);
+    }
+
+    private function resetStringsInstance(): void
+    {
+        $property = new \ReflectionProperty(Strings::class, 'instance');
+        $property->setValue(null, null);
     }
 }

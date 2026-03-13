@@ -3,10 +3,12 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Language\LanguageDetector;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 #[AllowMockObjectsWithoutExpectations]
 class LanguageTest extends TestCase
@@ -41,6 +43,7 @@ class LanguageTest extends TestCase
     {
         // Ensure cleanup after each test
         $this->dbHandle->query('DELETE FROM faqdata WHERE id IN (1, 999)');
+        Language::$language = '';
         parent::tearDown();
     }
 
@@ -111,5 +114,74 @@ class LanguageTest extends TestCase
     {
         $language = $this->language->setLanguageWithDetection('invalid_language.php');
         $this->assertEquals('en', $language);
+    }
+
+    public function testSetLanguageFromConfigurationReturnsDetectedConfigurationLanguage(): void
+    {
+        $language = $this->language->setLanguageFromConfiguration('language_en.php');
+
+        $this->assertEquals('en', $language);
+    }
+
+    public function testSetLanguageByAcceptLanguageUsesDetectorValue(): void
+    {
+        $session = $this->createStub(SessionInterface::class);
+        $configuration = $this->createMock(Configuration::class);
+        $language = new Language($configuration, $session);
+
+        $detector = $this->createMock(LanguageDetector::class);
+        $detector->expects($this->once())->method('detectAllWithBrowser')->with('')->willReturn([]);
+        $detector->expects($this->once())->method('getAcceptLanguage')->willReturn('de');
+
+        $property = new \ReflectionProperty(Language::class, 'languageDetector');
+        $property->setValue($language, $detector);
+
+        Language::$language = '';
+
+        $this->assertSame('de', $language->setLanguageByAcceptLanguage());
+    }
+
+    public function testGetLanguageReturnsSupportedSessionLanguageWhenUnset(): void
+    {
+        $session = $this->createMock(SessionInterface::class);
+        $session->expects($this->once())->method('get')->with('lang')->willReturn('de');
+
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->expects($this->never())->method('getDefaultLanguage');
+
+        $language = new Language($configuration, $session);
+        Language::$language = '';
+
+        $this->assertSame('de', $language->getLanguage());
+    }
+
+    public function testGetLanguageFallsBackToConfiguredDefaultWhenSessionLanguageIsInvalid(): void
+    {
+        $session = $this->createMock(SessionInterface::class);
+        $session->expects($this->once())->method('get')->with('lang')->willReturn('invalid');
+
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->expects($this->once())->method('getDefaultLanguage')->willReturn('fr');
+
+        $language = new Language($configuration, $session);
+        Language::$language = '';
+
+        $this->assertSame('fr', $language->getLanguage());
+    }
+
+    public function testGetLanguageFallsBackToEnglishWhenConfigurationThrows(): void
+    {
+        $session = $this->createMock(SessionInterface::class);
+        $session->expects($this->once())->method('get')->with('lang')->willReturn(null);
+
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->expects($this->once())->method('getDefaultLanguage')->willThrowException(
+            new \RuntimeException('configuration unavailable'),
+        );
+
+        $language = new Language($configuration, $session);
+        Language::$language = '';
+
+        $this->assertSame('en', $language->getLanguage());
     }
 }
