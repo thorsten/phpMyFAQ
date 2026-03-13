@@ -49,10 +49,10 @@
         <td>{{ user.display_name }}</td>
         <td>
           <a href="mailto:{{ user.email|raw }}">
-            {{ user.email|raw }}
+            {{ user.email | e('html_attr') }}
           </a>
         </td>
-        <td>{{ user.login|raw }}</td>
+        <td>{{ user.login | e('html_attr') }}</td>
 
         <td class="text-center"><i class="fa
     {% if user.status == 'active' %}

@@ -65,6 +65,7 @@ final class FaqController extends AbstractController
 
         $author = trim((string) Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS));
         $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
+        $email = Filter::filterVar($email, FILTER_SANITIZE_SPECIAL_CHARS);
         $questionText = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
         $questionText = trim(strip_tags((string) $questionText));
 

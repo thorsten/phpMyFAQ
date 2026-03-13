@@ -274,7 +274,7 @@
               <div class="row mb-2">
                 <label class="col-lg-2 col-form-label" for="email">{{ 'msgEmail' | translate }}</label>
                 <div class="col-lg-10">
-                  <input type="email" name="email" id="email" value="{{ faqData['email'] | raw }}" class="form-control">
+                  <input type="email" name="email" id="email" value="{{ faqData['email'] | e('html_attr') }}" class="form-control">
                 </div>
               </div>
 

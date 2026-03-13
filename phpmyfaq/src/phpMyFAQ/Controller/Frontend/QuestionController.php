@@ -57,6 +57,7 @@ final class QuestionController extends AbstractController
 
         $author = trim((string) Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS));
         $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
+        $email = Filter::filterVar($email, FILTER_SANITIZE_SPECIAL_CHARS);
         $selectedCategory = isset($data->category) ? Filter::filterVar($data->category, FILTER_VALIDATE_INT) : false;
         $language = trim((string) Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS));
         $userQuestion = trim(strip_tags((string) $data->question));
