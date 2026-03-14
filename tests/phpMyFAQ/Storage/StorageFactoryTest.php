@@ -229,8 +229,8 @@ class StorageFactoryTest extends TestCase
             $configuration
                 ->method('get')
                 ->willReturnMap([
-                    ['storage.type', 'filesystem'],
-                    ['storage.filesystem.root', $tmpFile],
+                    ['storage.type',                     'filesystem'],
+                    ['storage.filesystem.root',          $tmpFile],
                     ['storage.filesystem.publicBaseUrl', null],
                 ]);
 

@@ -12,6 +12,23 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 #[UsesNamespace('phpMyFAQ')]
 final class RegistrationControllerWebTest extends ControllerWebTestCase
 {
+    public function testCreateReturnsUnauthorizedProblemWhenApiIsDisabled(): void
+    {
+        $this->getConfiguration('api')->getAll();
+        $this->overrideConfigurationValues(['api.enableAccess' => false], 'api');
+
+        $response = $this->requestApiJson('POST', '/v3.2/register', [
+            'username' => 'ada',
+            'fullname' => 'Ada Lovelace',
+            'email' => 'ada@example.com',
+            'is-visible' => false,
+        ]);
+
+        self::assertResponseStatusCodeSame(401, $response);
+        self::assertStringContainsString('problem+json', (string) $response->headers->get('Content-Type'));
+        self::assertJson((string) $response->getContent());
+    }
+
     public function testCreateWithMissingFieldsReturnsBadRequestJson(): void
     {
         $configuration = $this->getConfiguration('api');

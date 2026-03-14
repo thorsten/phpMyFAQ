@@ -175,9 +175,10 @@ class LanguageTest extends TestCase
         $session->expects($this->once())->method('get')->with('lang')->willReturn(null);
 
         $configuration = $this->createMock(Configuration::class);
-        $configuration->expects($this->once())->method('getDefaultLanguage')->willThrowException(
-            new \RuntimeException('configuration unavailable'),
-        );
+        $configuration
+            ->expects($this->once())
+            ->method('getDefaultLanguage')
+            ->willThrowException(new \RuntimeException('configuration unavailable'));
 
         $language = new Language($configuration, $session);
         Language::$language = '';

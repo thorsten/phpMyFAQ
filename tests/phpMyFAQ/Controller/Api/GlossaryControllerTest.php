@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Language;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -23,18 +24,42 @@ class GlossaryControllerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configuration = Configuration::getConfigurationInstance();
+        $this->configuration = $this->createConfiguration();
         $language = new Language($this->configuration, $this->createStub(Session::class));
         $language->setLanguageWithDetection('language_en.php');
         $this->configuration->setLanguage($language);
     }
 
+    private function createConfiguration(): Configuration
+    {
+        try {
+            return Configuration::getConfigurationInstance();
+        } catch (\TypeError) {
+            $db = new Sqlite3();
+            $db->connect(PMF_TEST_DIR . '/test.db', '', '');
+            $configuration = new Configuration($db);
+
+            $configurationReflection = new \ReflectionClass(Configuration::class);
+            $configurationProperty = $configurationReflection->getProperty('configuration');
+            $configurationProperty->setValue(null, $configuration);
+
+            return $configuration;
+        }
+    }
+
     public function testListReturnsGlossaryItems(): void
     {
-        $glossaryController = new GlossaryController(
-            $this->createStub(Glossary::class),
-            $this->createStub(Language::class),
-        );
+        $glossary = $this->createStub(Glossary::class);
+        $glossary
+            ->method('fetchAll')
+            ->willReturn([
+                ['id' => 2, 'item' => 'Zulu', 'definition' => 'Last'],
+                ['id' => 1, 'item' => 'Alpha', 'definition' => 'First'],
+            ]);
+        $language = $this->createStub(Language::class);
+        $language->method('setLanguageByAcceptLanguage')->willReturn('en');
+
+        $glossaryController = new GlossaryController($glossary, $language);
 
         $request = Request::create(
             '/api/v3.2/glossary',
@@ -55,6 +80,11 @@ class GlossaryControllerTest extends TestCase
 
         $content = json_decode($response->getContent(), true);
         $this->assertIsArray($content);
+        $this->assertTrue($content['success']);
+        $this->assertSame('Alpha', $content['data'][0]['item']);
+        $this->assertSame(2, $content['meta']['pagination']['total']);
+        $this->assertSame('item', $content['meta']['sorting']['field']);
+        $this->assertSame('asc', $content['meta']['sorting']['order']);
     }
 
     public function testListHandlesAcceptLanguageHeader(): void
@@ -126,10 +156,12 @@ class GlossaryControllerTest extends TestCase
 
     public function testListReturnsEmptyArrayOn404(): void
     {
-        $glossaryController = new GlossaryController(
-            $this->createStub(Glossary::class),
-            $this->createStub(Language::class),
-        );
+        $glossary = $this->createStub(Glossary::class);
+        $glossary->method('fetchAll')->willReturn([]);
+        $language = $this->createStub(Language::class);
+        $language->method('setLanguageByAcceptLanguage')->willReturn('');
+
+        $glossaryController = new GlossaryController($glossary, $language);
 
         $request = Request::create('/api/v3.2/glossary', 'GET');
 
@@ -144,5 +176,39 @@ class GlossaryControllerTest extends TestCase
 
         // Data can be empty array if no glossary items exist
         $this->assertIsArray($data['data']);
+    }
+
+    public function testListAppliesDescendingPaginationSorting(): void
+    {
+        $glossary = $this->createMock(Glossary::class);
+        $glossary->expects($this->once())->method('setLanguage')->with('de');
+        $glossary
+            ->method('fetchAll')
+            ->willReturn([
+                ['id' => 1, 'item' => 'Alpha', 'definition' => 'One'],
+                ['id' => 3, 'item' => 'Gamma', 'definition' => 'Three'],
+                ['id' => 2, 'item' => 'Beta', 'definition' => 'Two'],
+            ]);
+
+        $language = $this->createStub(Language::class);
+        $language->method('setLanguageByAcceptLanguage')->willReturn('de');
+
+        $glossaryController = new GlossaryController($glossary, $language);
+
+        $request = Request::create('/api/v3.2/glossary', 'GET', [
+            'limit' => 1,
+            'offset' => 1,
+            'sort' => 'id',
+            'order' => 'desc',
+        ]);
+
+        $response = $glossaryController->list($request);
+
+        $data = json_decode((string) $response->getContent(), true);
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertCount(1, $data['data']);
+        $this->assertSame(2, $data['data'][0]['id']);
+        $this->assertSame('id', $data['meta']['sorting']['field']);
+        $this->assertSame('desc', $data['meta']['sorting']['order']);
     }
 }

@@ -14,6 +14,18 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 #[UsesClass(\phpMyFAQ\Controller\AbstractController::class)]
 final class TitleControllerWebTest extends ControllerWebTestCase
 {
+    public function testTitleEndpointReturnsUnauthorizedProblemWhenApiIsDisabled(): void
+    {
+        $this->getConfiguration('api')->getAll();
+        $this->overrideConfigurationValues(['api.enableAccess' => false], 'api');
+
+        $response = $this->requestApi('GET', '/v3.2/title');
+
+        self::assertResponseStatusCodeSame(401, $response);
+        self::assertStringContainsString('problem+json', (string) $response->headers->get('Content-Type'));
+        self::assertJson((string) $response->getContent());
+    }
+
     public function testTitleEndpointReturnsJson(): void
     {
         $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');

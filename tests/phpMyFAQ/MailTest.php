@@ -4,12 +4,12 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
-use phpMyFAQ\Mail\BuiltinTestState;
 use phpMyFAQ\Mail\Builtin;
-use phpMyFAQ\Mail\Smtp;
+use phpMyFAQ\Mail\BuiltinTestState;
 use phpMyFAQ\Mail\Provider\MailgunProvider;
 use phpMyFAQ\Mail\Provider\SendGridProvider;
 use phpMyFAQ\Mail\Provider\SesProvider;
+use phpMyFAQ\Mail\Smtp;
 use phpMyFAQ\Queue\DatabaseMessageBus;
 use phpMyFAQ\Queue\Message\SendMailMessage;
 use phpMyFAQ\Queue\Transport\DatabaseTransport;
@@ -241,7 +241,10 @@ class MailTest extends TestCase
     public function testConstructorLogsWarningWhenDefaultSenderInitializationThrows(): void
     {
         $logger = $this->createMock(\Monolog\Logger::class);
-        $logger->expects($this->once())->method('warning')->with($this->stringContains('Unable to initialize mail sender defaults'));
+        $logger
+            ->expects($this->once())
+            ->method('warning')
+            ->with($this->stringContains('Unable to initialize mail sender defaults'));
 
         $configuration = $this->createMock(Configuration::class);
         $configuration->method('get')->willReturn(false);
@@ -450,8 +453,9 @@ class MailTest extends TestCase
         $this->assertFalse($method->invoke($falseMail));
 
         $trueConfig = $this->createMock(Configuration::class);
-        $trueConfig->method('get')
-            ->willReturnCallback(static fn (string $item): mixed => match ($item) {
+        $trueConfig
+            ->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
                 'mail.useQueue' => true,
                 'mail.remoteSMTP' => false,
                 default => null,
@@ -469,8 +473,9 @@ class MailTest extends TestCase
         BuiltinTestState::reset();
 
         $smtpConfig = $this->createMock(Configuration::class);
-        $smtpConfig->method('get')
-            ->willReturnCallback(static fn (string $item): mixed => match ($item) {
+        $smtpConfig
+            ->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
                 'mail.remoteSMTP' => false,
                 default => null,
             });
@@ -481,14 +486,19 @@ class MailTest extends TestCase
         $smtpConfig->method('getLogger')->willReturn($this->createStub(\Monolog\Logger::class));
 
         $mail = new Mail($smtpConfig);
-        $this->assertSame(1, $mail->sendPreparedEnvelope('user@example.com', [
-            'Subject' => 'Test subject',
-            'From' => 'sender@example.com',
-        ], 'Mail body'));
+        $this->assertSame(1, $mail->sendPreparedEnvelope(
+            'user@example.com',
+            [
+                'Subject' => 'Test subject',
+                'From' => 'sender@example.com',
+            ],
+            'Mail body',
+        ));
 
         $defaultConfig = $this->createMock(Configuration::class);
-        $defaultConfig->method('get')
-            ->willReturnCallback(static fn (string $item): mixed => match ($item) {
+        $defaultConfig
+            ->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
                 'mail.remoteSMTP' => false,
                 default => null,
             });
@@ -499,10 +509,14 @@ class MailTest extends TestCase
         $defaultConfig->method('getLogger')->willReturn($this->createStub(\Monolog\Logger::class));
 
         $mail = new Mail($defaultConfig);
-        $this->assertSame(1, $mail->sendPreparedEnvelope('user@example.com', [
-            'Subject' => 'Test subject',
-            'From' => 'sender@example.com',
-        ], 'Mail body'));
+        $this->assertSame(1, $mail->sendPreparedEnvelope(
+            'user@example.com',
+            [
+                'Subject' => 'Test subject',
+                'From' => 'sender@example.com',
+            ],
+            'Mail body',
+        ));
     }
 
     public function testSendPreparedEnvelopeCoversApiProviderBranches(): void
@@ -512,15 +526,14 @@ class MailTest extends TestCase
             'From' => 'Sender <sender@example.com>',
         ];
 
-        foreach (
-            [
-                'sendgrid' => 'SendGrid API key is not configured.',
-                'ses' => 'SES mail delivery failed: SES credentials are not configured.',
-                'mailgun' => 'Mailgun API key is not configured.',
-            ] as $provider => $expectedMessage
-        ) {
+        foreach ([
+            'sendgrid' => 'SendGrid API key is not configured.',
+            'ses' => 'SES mail delivery failed: SES credentials are not configured.',
+            'mailgun' => 'Mailgun API key is not configured.',
+        ] as $provider => $expectedMessage) {
             $configuration = $this->createMock(Configuration::class);
-            $configuration->method('get')
+            $configuration
+                ->method('get')
                 ->willReturnCallback(static fn(string $item): mixed => match ($item) {
                     'mail.remoteSMTP' => false,
                     default => null,
@@ -569,7 +582,8 @@ class MailTest extends TestCase
         $this->assertSame(1, $method->invoke($builtinMail, 'user@example.com', $headers, 'Body'));
 
         $smtpConfiguration = $this->createMock(Configuration::class);
-        $smtpConfiguration->method('get')
+        $smtpConfiguration
+            ->method('get')
             ->willReturnCallback(static fn(string $item): mixed => match ($item) {
                 'mail.remoteSMTP' => true,
                 'mail.remoteSMTPServer' => '127.0.0.1',
@@ -665,7 +679,8 @@ class MailTest extends TestCase
         $headers = ['Subject' => 'Queued subject'];
 
         $invalidContainerConfiguration = $this->createMock(Configuration::class);
-        $invalidContainerConfiguration->method('get')
+        $invalidContainerConfiguration
+            ->method('get')
             ->willReturnCallback(static fn(string $item): mixed => match ($item) {
                 'mail.remoteSMTP' => false,
                 'core.container' => 'not-a-container',
@@ -683,7 +698,8 @@ class MailTest extends TestCase
         $missingBusContainer->expects($this->never())->method('get');
 
         $missingBusConfiguration = $this->createMock(Configuration::class);
-        $missingBusConfiguration->method('get')
+        $missingBusConfiguration
+            ->method('get')
             ->willReturnCallback(static fn(string $item): mixed => match ($item) {
                 'mail.remoteSMTP' => false,
                 'core.container' => $missingBusContainer,
@@ -701,7 +717,8 @@ class MailTest extends TestCase
         $wrongBusContainer->method('get')->with('phpmyfaq.queue.message-bus')->willReturn(new \stdClass());
 
         $wrongBusConfiguration = $this->createMock(Configuration::class);
-        $wrongBusConfiguration->method('get')
+        $wrongBusConfiguration
+            ->method('get')
             ->willReturnCallback(static fn(string $item): mixed => match ($item) {
                 'mail.remoteSMTP' => false,
                 'core.container' => $wrongBusContainer,
@@ -723,7 +740,8 @@ class MailTest extends TestCase
         $successContainer->method('get')->with('phpmyfaq.queue.message-bus')->willReturn($messageBus);
 
         $successConfiguration = $this->createMock(Configuration::class);
-        $successConfiguration->method('get')
+        $successConfiguration
+            ->method('get')
             ->willReturnCallback(static fn(string $item): mixed => match ($item) {
                 'mail.remoteSMTP' => false,
                 'core.container' => $successContainer,
@@ -740,7 +758,8 @@ class MailTest extends TestCase
         $this->assertTrue($method->invoke($successMail, 'user@example.com', $headers, 'Envelope body'));
 
         $noRecipientConfiguration = $this->createMock(Configuration::class);
-        $noRecipientConfiguration->method('get')
+        $noRecipientConfiguration
+            ->method('get')
             ->willReturnCallback(static fn(string $item): mixed => match ($item) {
                 'mail.remoteSMTP' => false,
                 'core.container' => $successContainer,
@@ -754,17 +773,18 @@ class MailTest extends TestCase
         $this->assertFalse($method->invoke($noRecipientMail, 'user@example.com', $headers, 'Envelope body'));
 
         $logger = $this->createMock(\Monolog\Logger::class);
-        $logger->expects($this->once())->method('error')->with(
-            $this->stringContains('Queueing mail failed'),
-            $this->isArray(),
-        );
+        $logger
+            ->expects($this->once())
+            ->method('error')
+            ->with($this->stringContains('Queueing mail failed'), $this->isArray());
 
         $throwingContainer = $this->createMock(ContainerInterface::class);
         $throwingContainer->method('has')->with('phpmyfaq.queue.message-bus')->willReturn(true);
         $throwingContainer->method('get')->willThrowException(new \RuntimeException('queue exploded'));
 
         $throwingConfiguration = $this->createMock(Configuration::class);
-        $throwingConfiguration->method('get')
+        $throwingConfiguration
+            ->method('get')
             ->willReturnCallback(static fn(string $item): mixed => match ($item) {
                 'mail.remoteSMTP' => false,
                 'core.container' => $throwingContainer,

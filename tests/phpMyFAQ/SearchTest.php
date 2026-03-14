@@ -3,12 +3,12 @@
 namespace phpMyFAQ;
 
 use Exception;
+use OpenSearch\Client as OpenSearchClient;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Plugin\PluginException;
 use phpMyFAQ\Search\Search\Elasticsearch;
-use OpenSearch\Client as OpenSearchClient;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
@@ -374,16 +374,14 @@ class SearchTest extends TestCase
         );
         $config
             ->method('get')
-            ->willReturnCallback(static fn (string $item): mixed => match ($item) {
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
                 'search.enableElasticsearch' => false,
                 'search.enableOpenSearch' => true,
                 default => null,
             });
         $config->method('getLanguage')->willReturn($language);
         $config->method('getOpenSearch')->willReturn($client);
-        $config
-            ->method('getOpenSearchConfig')
-            ->willReturn(new OpenSearchConfiguration($openSearchConfigFile));
+        $config->method('getOpenSearchConfig')->willReturn(new OpenSearchConfiguration($openSearchConfigFile));
 
         $search = new Search($config);
         $search->setCategory($category);
@@ -417,7 +415,11 @@ class SearchTest extends TestCase
             ->expects($this->once())
             ->method('search')
             ->with($this->callback(static function (array $params): bool {
-                return $params['body']['query']['bool']['should'][0]['bool']['filter']['terms']['category_id'] === [2, 4, 5];
+                return $params['body']['query']['bool']['should'][0]['bool']['filter']['terms']['category_id'] === [
+                    2,
+                    4,
+                    5,
+                ];
             }))
             ->willReturn([
                 'hits' => [
@@ -446,9 +448,7 @@ class SearchTest extends TestCase
         );
         $config->method('getLanguage')->willReturn($language);
         $config->method('getOpenSearch')->willReturn($client);
-        $config
-            ->method('getOpenSearchConfig')
-            ->willReturn(new OpenSearchConfiguration($openSearchConfigFile));
+        $config->method('getOpenSearchConfig')->willReturn(new OpenSearchConfiguration($openSearchConfigFile));
 
         $search = new Search($config);
         $search->setCategory($category);

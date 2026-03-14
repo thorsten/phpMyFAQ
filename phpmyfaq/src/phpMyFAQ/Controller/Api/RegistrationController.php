@@ -34,6 +34,9 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class RegistrationController extends AbstractController
 {
+    /** @var null|callable(Configuration): RegistrationHelper */
+    private $registrationHelperFactory = null;
+
     public function __construct()
     {
         parent::__construct();
@@ -41,6 +44,11 @@ final class RegistrationController extends AbstractController
         if (!$this->isApiEnabled()) {
             throw new UnauthorizedHttpException(challenge: 'API is not enabled');
         }
+    }
+
+    public function setRegistrationHelperFactory(callable $registrationHelperFactory): void
+    {
+        $this->registrationHelperFactory = $registrationHelperFactory;
     }
 
     /**
@@ -108,7 +116,9 @@ final class RegistrationController extends AbstractController
     {
         $this->hasValidToken();
 
-        $registrationHelper = new RegistrationHelper($this->configuration);
+        $registrationHelper = is_callable($this->registrationHelperFactory)
+            ? ($this->registrationHelperFactory)($this->configuration)
+            : new RegistrationHelper($this->configuration);
 
         $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 

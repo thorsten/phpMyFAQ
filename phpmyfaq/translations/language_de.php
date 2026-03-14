@@ -784,6 +784,7 @@ $LANG_CONF['records.defaultAllowComments'] = ['checkbox', "Kommentare bei FAQs e
 $PMF_LANG['msgAllCatArticles'] = "FAQs in dieser Kategorie";
 $PMF_LANG['msgTagSearch'] = "FAQs mit gleichen Tags";
 $PMF_LANG['ad_pmf_info'] = "phpMyFAQ Information";
+$PMF_LANG['ad_pmf_news'] = 'phpMyFAQ Nachrichten';
 $PMF_LANG['msgOnlineVersionCheck'] = "Online Versionsüberprüfung";
 $PMF_LANG['ad_system_info'] = "System Information";
 
@@ -1664,6 +1665,7 @@ $PMF_LANG['msgPushNewFaq'] = 'Neuer FAQ-Eintrag veröffentlicht';
 $PMF_LANG['msgPushNewQuestion'] = 'Neue offene Frage eingereicht';
 $PMF_LANG['msgPushNotificationsDescription'] = 'Erhalten Sie Browser-Benachrichtigungen, wenn neue FAQs veröffentlicht oder Fragen eingereicht werden.';
 $PMF_LANG['pushControlCenter'] = 'Push';
+$PMF_LANG['storageControlCenter'] = 'Speicher-Backend';
 $PMF_LANG['msgGenerateVapidKeys'] = 'VAPID-Schlüssel generieren';
 $PMF_LANG['msgVapidKeysGenerated'] = 'VAPID-Schlüssel wurden erfolgreich generiert.';
 $PMF_LANG['msgVapidKeysError'] = 'VAPID-Schlüssel konnten nicht generiert werden.';
@@ -1680,5 +1682,16 @@ $LANG_CONF['mail.mailgunApiKey'] = ['password', 'Mailgun API-Schlüssel'];
 $LANG_CONF['mail.mailgunDomain'] = ['input', 'Mailgun-Domain'];
 $LANG_CONF['mail.mailgunRegion'] = ['input', 'Mailgun Region', 'z.B. us, eu'];
 $LANG_CONF['mail.useQueue'] = ['checkbox', 'Hintergrund-Worker-Warteschlange für die E-Mail-Zustellung verwenden'];
+
+$LANG_CONF['storage.testRedisConnection'] = ['button', 'Teste die Verbindung zu Redis'];
+$PMF_LANG['storage.testRedisConnection'] = 'Teste die Verbindung zu Redis';
+
+$PMF_LANG['msgAdminHeaderLdap'] = 'LDAP Konfiguration';
+$PMF_LANG['msgAdminLdapHealthCheck'] = 'LDAP Health Check';
+$PMF_LANG['msgAdminLdapServers'] = 'LDAP Server';
+$PMF_LANG['msgAdminLdapMapping'] = 'LDAP Attribute Mapping';
+$PMF_LANG['msgAdminLdapOptions'] = 'LDAP Optionen';
+$PMF_LANG['msgAdminLdapGroupSettings'] = 'LDAP Gruppeneinstellungen';
+$PMF_LANG['msgAdminLdapSettings'] = 'Allgemeine LDAP-Einstellungen';
 
 return $PMF_LANG;
