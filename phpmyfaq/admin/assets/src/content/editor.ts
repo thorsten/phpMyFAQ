@@ -93,7 +93,7 @@ export const renderEditor = () => {
     useSplitMode: false,
     askBeforePasteFromWord: true,
     processPasteFromWord: true,
-    defaultActionOnPasteFromWord: 'insert_clear_html',
+    defaultActionOnPasteFromWord: Jodit.constants.INSERT_AS_TEXT,
     colors: {
       greyscale: [
         '#000000',
