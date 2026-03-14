@@ -93,7 +93,7 @@ export const renderEditor = () => {
     useSplitMode: false,
     askBeforePasteFromWord: true,
     processPasteFromWord: true,
-    defaultActionOnPasteFromWord: 'insert_clear_html',
+    defaultActionOnPasteFromWord: Jodit.constants.INSERT_AS_TEXT,
     colors: {
       greyscale: [
         '#000000',
@@ -244,7 +244,7 @@ export const renderEditor = () => {
     events: {},
     textIcons: false,
     uploader: {
-      url: '/admin/api/content/images?csrf=' + (document.getElementById('pmf-csrf-token') as HTMLInputElement).value,
+      url: './api/content/images?csrf=' + (document.getElementById('pmf-csrf-token') as HTMLInputElement).value,
       format: 'json',
       isSuccess: (response: UploaderResponse) => {
         return !response.error && response.success === true;
@@ -264,7 +264,7 @@ export const renderEditor = () => {
     },
     filebrowser: {
       ajax: {
-        url: '/admin/api/media-browser',
+        url: './api/media-browser',
         contentType: 'application/json; charset=UTF-8',
       },
       createNewFolder: false,
