@@ -53,6 +53,9 @@ const mockEditorInstance = {
 vi.mock('jodit', () => ({
   Jodit: {
     make: vi.fn(() => mockEditorInstance),
+    constants: {
+      INSERT_AS_TEXT: 'insert_as_text',
+    },
   },
 }));
 

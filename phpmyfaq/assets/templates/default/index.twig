@@ -84,11 +84,11 @@
           <ul class="dropdown-menu dropdown-menu-end">
             {% if not isUserLoggedIn %}
               {% if isUserRegistrationEnabled %}
-                <li><a class="dropdown-item" href="./user/register">{{ msgRegisterUser }}</a></li>
+                <li><a class="dropdown-item" href="./user/register">{{ 'msgRegisterUser' | translate }}</a></li>
               {% endif %}
               <li><a class="dropdown-item" href="./login">{{ msgLoginUser }}</a></li>
             {% else %}
-              <li><a class="dropdown-item" href="./user/ucp">{{ msgUserControlDropDown }}</a></li>
+              <li><a class="dropdown-item" href="./user/ucp">{{ msgUserControlDropDown }}</a></li>run
               <li><a class="dropdown-item" href="./user/bookmarks">{{ msgBookmarks }}</a></li>
               <li>
                 <a class="dropdown-item d-flex align-items-center" href="./user/chat">
@@ -98,10 +98,11 @@
                   {% endif %}
                 </a>
               </li>
+              <li><a class="dropdown-item" href="./user/request-removal">{{ msgUserRemoval }}</a></li>
+              <li><hr class="dropdown-divider"></li>
               {% if isUserHasAdminRights %}
                 <li><a class="dropdown-item" href="./admin">{{ msgAdmin }}</a></li>
               {% endif %}
-              <li><a class="dropdown-item" href="./user/request-removal">{{ msgUserRemoval }}</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="./logout?csrf={{ csrfLogout }}">{{ msgLogoutUser }}</a></li>
             {% endif %}
