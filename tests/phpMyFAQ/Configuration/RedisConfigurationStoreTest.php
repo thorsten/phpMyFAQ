@@ -106,6 +106,7 @@ namespace phpMyFAQ\Configuration\Storage {
 namespace phpMyFAQ\Configuration {
     use phpMyFAQ\Configuration\Storage\ConfigurationStorageSettings;
     use phpMyFAQ\Configuration\Storage\RedisConfigurationStore;
+    use phpMyFAQ\Database\PdoSqlite;
     use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
     use PHPUnit\Framework\Attributes\CoversClass;
     use PHPUnit\Framework\Attributes\UsesClass;
@@ -118,6 +119,7 @@ namespace phpMyFAQ\Configuration {
     #[AllowMockObjectsWithoutExpectations]
     #[CoversClass(RedisConfigurationStore::class)]
     #[UsesClass(ConfigurationStorageSettings::class)]
+    #[UsesClass(PdoSqlite::class)]
     class RedisConfigurationStoreTest extends TestCase
     {
         private ConfigurationStorageSettings $settings;
