@@ -205,7 +205,7 @@ final class CategoryController extends AbstractAdministrationController
             ->setActive((bool) Filter::filterVar($request->request->get(key: 'active'), FILTER_VALIDATE_INT))
             ->setImage($hasUploadedImage ? $categoryImage->getFileName($categoryId, $categoryLang) : '')
             ->setParentId($parentId)
-            ->setShowHome(Filter::filterVar($request->request->get(key: 'show_home'), FILTER_VALIDATE_INT));
+            ->setShowHome((bool) Filter::filterVar($request->request->get(key: 'show_home'), FILTER_VALIDATE_INT));
 
         $permissions = [];
         if ('all' === Filter::filterVar($request->request->get(key: 'userpermission'), FILTER_SANITIZE_SPECIAL_CHARS)) {
