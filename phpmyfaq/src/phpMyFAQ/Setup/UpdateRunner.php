@@ -449,12 +449,14 @@ final class UpdateRunner
                 return Command::SUCCESS;
             }
 
+            $this->configuration->set(key: 'main.maintenanceMode', value: 'false');
             $this->displayMigrationResults($symfonyStyle, $update->migrationResults);
             $symfonyStyle->error(message: 'Update database failed.');
             return Command::FAILURE;
-        } catch (Exception $exception) {
+        } catch (Exception|\Exception $exception) {
             $progressBar->finish();
             $symfonyStyle->newLine(count: 2);
+            $this->configuration->set(key: 'main.maintenanceMode', value: 'false');
             $symfonyStyle->error(message: 'Update database failed: ' . $exception->getMessage());
             return Command::FAILURE;
         }
