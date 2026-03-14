@@ -92,6 +92,16 @@ class BookmarkTest extends TestCase
         $this->bookmark->remove(1);
     }
 
+    public function testGetAllReturnsCachedBookmarksWithoutRepositoryLookup(): void
+    {
+        $reflection = new ReflectionClass(Bookmark::class);
+        $property = $reflection->getProperty('bookmarkCache');
+        $cachedBookmarks = [(object) ['faqid' => 42]];
+        $property->setValue($this->bookmark, $cachedBookmarks);
+
+        $this->assertSame($cachedBookmarks, $this->bookmark->getAll());
+    }
+
     public function testRemove(): void
     {
         $this->bookmark->add(1);
@@ -121,6 +131,15 @@ class BookmarkTest extends TestCase
     {
         $this->assertFalse($this->bookmark->isFaqBookmark(0));
         $this->assertFalse($this->bookmark->isFaqBookmark(-10));
+    }
+
+    public function testIsFaqBookmarkIgnoresBookmarksWithoutFaqIdProperty(): void
+    {
+        $reflection = new ReflectionClass(Bookmark::class);
+        $property = $reflection->getProperty('bookmarkCache');
+        $property->setValue($this->bookmark, [(object) ['bookmark' => 1]]);
+
+        $this->assertFalse($this->bookmark->isFaqBookmark(1));
     }
 
     public function testRemoveInvalidId(): void
