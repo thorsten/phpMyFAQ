@@ -3,9 +3,14 @@
 namespace phpMyFAQ;
 
 use Exception;
+use phpMyFAQ\Configuration\ElasticsearchConfiguration;
+use phpMyFAQ\Configuration\OpenSearchConfiguration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Plugin\PluginException;
+use phpMyFAQ\Search\Search\Elasticsearch;
+use OpenSearch\Client as OpenSearchClient;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionMethod;
@@ -14,6 +19,9 @@ use stdClass;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 #[AllowMockObjectsWithoutExpectations]
+#[UsesClass(Elasticsearch::class)]
+#[UsesClass(ElasticsearchConfiguration::class)]
+#[UsesClass(OpenSearchConfiguration::class)]
 class SearchTest extends TestCase
 {
     private Configuration $configuration;
@@ -303,6 +311,155 @@ class SearchTest extends TestCase
             ->willReturn([['question' => 'foo']]);
 
         $this->assertSame([['question' => 'foo']], $search->autoComplete('foo'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testLogSearchTermReturnsEarlyForEmptyString(): void
+    {
+        $this->assertSame(0, $this->search->getSearchesCount());
+
+        $this->search->logSearchTerm('');
+
+        $this->assertSame(0, $this->search->getSearchesCount());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testAutoCompleteUsesOpenSearchWhenConfigured(): void
+    {
+        $language = $this->createMock(Language::class);
+        $language->method('getLanguage')->willReturn('en');
+
+        $category = $this->createMock(Category::class);
+        $category->method('getAllCategoryIds')->willReturn([1, 2, 3]);
+
+        $client = $this
+            ->getMockBuilder(OpenSearchClient::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['search'])
+            ->getMock();
+        $client
+            ->expects($this->once())
+            ->method('search')
+            ->with($this->callback(static function (array $params): bool {
+                return $params['body']['query']['bool']['filter']['term']['lang'] === 'en';
+            }))
+            ->willReturn([
+                'hits' => [
+                    'total' => ['value' => 1],
+                    'hits' => [
+                        [
+                            '_source' => [
+                                'id' => 42,
+                                'lang' => 'en',
+                                'question' => 'elastic result',
+                                'answer' => 'answer',
+                                'keywords' => 'phpmyfaq',
+                                'category_id' => 1,
+                            ],
+                            '_score' => 1.0,
+                        ],
+                    ],
+                ],
+            ]);
+
+        $config = $this->createMock(Configuration::class);
+        $openSearchConfigFile = tempnam(sys_get_temp_dir(), 'pmf-opensearch-');
+        file_put_contents(
+            $openSearchConfigFile,
+            "<?php\n\$PMF_OS = ['hosts' => ['http://localhost:9200'], 'index' => 'faq-index'];\n",
+        );
+        $config
+            ->method('get')
+            ->willReturnCallback(static fn (string $item): mixed => match ($item) {
+                'search.enableElasticsearch' => false,
+                'search.enableOpenSearch' => true,
+                default => null,
+            });
+        $config->method('getLanguage')->willReturn($language);
+        $config->method('getOpenSearch')->willReturn($client);
+        $config
+            ->method('getOpenSearchConfig')
+            ->willReturn(new OpenSearchConfiguration($openSearchConfigFile));
+
+        $search = new Search($config);
+        $search->setCategory($category);
+
+        $results = $search->autoComplete('elastic');
+
+        $this->assertCount(1, $results);
+        $this->assertSame('elastic result', $results[0]->question);
+
+        unlink($openSearchConfigFile);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSearchOpenSearchUsesCategoryAndLanguageFilters(): void
+    {
+        $language = $this->createMock(Language::class);
+        $language->method('getLanguage')->willReturn('en');
+
+        $category = $this->createMock(Category::class);
+        $category->method('getAllCategoryIds')->willReturn([1, 2, 3]);
+        $category->method('getChildNodes')->with(2)->willReturn([4, 5]);
+
+        $client = $this
+            ->getMockBuilder(OpenSearchClient::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['search'])
+            ->getMock();
+        $client
+            ->expects($this->once())
+            ->method('search')
+            ->with($this->callback(static function (array $params): bool {
+                return $params['body']['query']['bool']['should'][0]['bool']['filter']['terms']['category_id'] === [2, 4, 5];
+            }))
+            ->willReturn([
+                'hits' => [
+                    'total' => ['value' => 1],
+                    'hits' => [
+                        [
+                            '_source' => [
+                                'id' => 84,
+                                'lang' => 'en',
+                                'question' => 'open search result',
+                                'answer' => 'answer',
+                                'keywords' => 'phpmyfaq',
+                                'category_id' => 2,
+                            ],
+                            '_score' => 1.5,
+                        ],
+                    ],
+                ],
+            ]);
+
+        $config = $this->createMock(Configuration::class);
+        $openSearchConfigFile = tempnam(sys_get_temp_dir(), 'pmf-opensearch-');
+        file_put_contents(
+            $openSearchConfigFile,
+            "<?php\n\$PMF_OS = ['hosts' => ['http://localhost:9200'], 'index' => 'faq-index'];\n",
+        );
+        $config->method('getLanguage')->willReturn($language);
+        $config->method('getOpenSearch')->willReturn($client);
+        $config
+            ->method('getOpenSearchConfig')
+            ->willReturn(new OpenSearchConfiguration($openSearchConfigFile));
+
+        $search = new Search($config);
+        $search->setCategory($category);
+        $search->setCategoryId(2);
+
+        $results = $search->searchOpenSearch('elastic', false);
+
+        $this->assertCount(1, $results);
+        $this->assertSame('open search result', $results[0]->question);
+
+        unlink($openSearchConfigFile);
     }
 
     public function testResolveSearchDatabaseTypeMapsKnownDrivers(): void
