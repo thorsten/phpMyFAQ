@@ -2,9 +2,14 @@
 
 namespace phpMyFAQ\Controller\Api;
 
+use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Language;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +31,10 @@ class TestApiConstructorController extends AbstractApiController
 }
 
 #[AllowMockObjectsWithoutExpectations]
+#[CoversClass(AttachmentController::class)]
+#[UsesNamespace('phpMyFAQ')]
+#[UsesClass(AbstractApiController::class)]
+#[UsesClass(PaginatedResponseOptions::class)]
 class AttachmentControllerTest extends TestCase
 {
     private ?Sqlite3 $dbHandle = null;
@@ -41,6 +50,40 @@ class AttachmentControllerTest extends TestCase
         $this->dbHandle = new Sqlite3();
         $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         new Configuration($this->dbHandle);
+
+        Language::$language = 'en';
+        $this->setAttachmentFactoryStorageType(0);
+    }
+
+    protected function tearDown(): void
+    {
+        $this->setAttachmentFactoryStorageType(0);
+
+        parent::tearDown();
+    }
+
+    private function setAttachmentFactoryStorageType(?int $storageType): void
+    {
+        $reflection = new \ReflectionClass(AttachmentFactory::class);
+        $property = $reflection->getProperty('storageType');
+        $property->setValue(null, $storageType);
+    }
+
+    private function insertAttachmentFixture(int $id, int $recordId): void
+    {
+        $query = sprintf(
+            "INSERT INTO faqattachment (id, record_id, record_lang, real_hash, virtual_hash, password_hash, filename, filesize, encrypted, mime_type) VALUES (%d, %d, 'en', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', NULL, 'fixture-%d.txt', 123, 0, 'text/plain')",
+            $id,
+            $recordId,
+            $id,
+        );
+
+        $this->dbHandle?->query($query);
+    }
+
+    private function deleteAttachmentFixture(int $id): void
+    {
+        $this->dbHandle?->query(sprintf('DELETE FROM faqattachment WHERE id = %d', $id));
     }
 
     public function testConstructorWithApiEnabled(): void
@@ -254,5 +297,26 @@ class AttachmentControllerTest extends TestCase
                 $this->assertArrayHasKey('url', $attachment);
             }
         }
+    }
+
+    public function testListReturnsInternalServerErrorWhenAttachmentFactoryThrows(): void
+    {
+        $fixtureId = 990001;
+        $this->insertAttachmentFixture($fixtureId, 1);
+        $this->setAttachmentFactoryStorageType(999);
+
+        $request = new Request();
+        $request->attributes->set('faqId', '1');
+
+        $controller = new AttachmentController();
+        $response = $controller->list($request);
+        $payload = json_decode($response->getContent(), true);
+
+        $this->deleteAttachmentFixture($fixtureId);
+
+        $this->assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        $this->assertFalse($payload['success']);
+        $this->assertSame('Failed to fetch attachments', $payload['error']['message']);
+        $this->assertSame('ATTACHMENT_ERROR', $payload['error']['code']);
     }
 }

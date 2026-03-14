@@ -13,6 +13,21 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 #[UsesNamespace('phpMyFAQ')]
 final class LoginControllerWebTest extends ControllerWebTestCase
 {
+    public function testLoginReturnsUnauthorizedProblemWhenApiIsDisabled(): void
+    {
+        $this->getConfiguration('api')->getAll();
+        $this->overrideConfigurationValues(['api.enableAccess' => false], 'api');
+
+        $response = $this->requestApiJson('POST', '/v3.2/login', [
+            'username' => 'invalid-user',
+            'password' => 'invalid-password',
+        ]);
+
+        self::assertResponseStatusCodeSame(401, $response);
+        self::assertStringContainsString('problem+json', (string) $response->headers->get('Content-Type'));
+        self::assertJson((string) $response->getContent());
+    }
+
     public function testLoginWithInvalidCredentialsReturnsBadRequestJson(): void
     {
         $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');

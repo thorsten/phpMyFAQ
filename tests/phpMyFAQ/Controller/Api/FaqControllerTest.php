@@ -6,6 +6,8 @@ namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\MetaData as FaqMetaData;
 use phpMyFAQ\Faq\Statistics as FaqStatistics;
@@ -40,10 +42,51 @@ class FaqControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->configuration = Configuration::getConfigurationInstance();
+        $this->configuration = $this->createConfiguration();
         $language = new Language($this->configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');
         $this->configuration->setLanguage($language);
+    }
+
+    protected function tearDown(): void
+    {
+        unset($_SERVER['HTTP_X_PMF_TOKEN']);
+
+        parent::tearDown();
+    }
+
+    private function createConfiguration(): Configuration
+    {
+        try {
+            return Configuration::getConfigurationInstance();
+        } catch (\TypeError) {
+            $db = new Sqlite3();
+            $db->connect(PMF_TEST_DIR . '/test.db', '', '');
+            $configuration = new Configuration($db);
+
+            $configurationReflection = new \ReflectionClass(Configuration::class);
+            $configurationProperty = $configurationReflection->getProperty('configuration');
+            $configurationProperty->setValue(null, $configuration);
+
+            return $configuration;
+        }
+    }
+
+    private function forceConfigurationValue(string $key, mixed $value): void
+    {
+        $this->configuration->getAll();
+        $reflection = new \ReflectionClass(Configuration::class);
+        $property = $reflection->getProperty('config');
+        $config = $property->getValue($this->configuration);
+        $config[$key] = $value;
+        $property->setValue($this->configuration, $config);
+    }
+
+    private function authenticateApiToken(?string $token = null): void
+    {
+        $token ??= 'test-token';
+        $this->forceConfigurationValue('api.apiClientToken', $token);
+        $_SERVER['HTTP_X_PMF_TOKEN'] = $token;
     }
 
     /**
@@ -741,5 +784,469 @@ class FaqControllerTest extends TestCase
 
         $data = json_decode($content, true);
         $this->assertThat($data, $this->logicalOr($this->isNull(), $this->isArray()));
+    }
+
+    /**
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testGetByCategoryIdReturnsFaqsForExistingCategory(): void
+    {
+        $request = new Request();
+        $request->attributes->set('categoryId', '7');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('setUser')->with(-1);
+        $faq->expects($this->once())->method('setGroups')->with([-1]);
+        $faq
+            ->expects($this->once())
+            ->method('getAllAvailableFaqsByCategoryId')
+            ->with(7)
+            ->willReturn([
+                ['record_id' => 1, 'record_title' => 'Question'],
+            ]);
+
+        $controller = new FaqController(
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
+
+        $response = $controller->getByCategoryId($request);
+        $payload = json_decode((string) $response->getContent(), true);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('Question', $payload[0]['record_title']);
+    }
+
+    /**
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testGetByCategoryIdReturnsInternalServerErrorWhenFaqLookupFails(): void
+    {
+        $request = new Request();
+        $request->attributes->set('categoryId', '7');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('setUser')->with(-1);
+        $faq->expects($this->once())->method('setGroups')->with([-1]);
+        $faq
+            ->expects($this->once())
+            ->method('getAllAvailableFaqsByCategoryId')
+            ->with(7)
+            ->willThrowException(new \Exception('lookup failed'));
+
+        $controller = new FaqController(
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
+
+        $response = $controller->getByCategoryId($request);
+
+        $this->assertSame(500, $response->getStatusCode());
+        $this->assertStringContainsString('lookup failed', (string) $response->getContent());
+    }
+
+    /**
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testGetByTagIdReturnsFaqsForExistingTag(): void
+    {
+        $request = new Request();
+        $request->attributes->set('tagId', '3');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('setUser')->with(-1);
+        $faq->expects($this->once())->method('setGroups')->with([-1]);
+        $faq
+            ->expects($this->once())
+            ->method('getFaqsByIds')
+            ->with([5, 8])
+            ->willReturn([
+                ['id' => 5, 'question' => 'Tagged FAQ'],
+            ]);
+
+        $tags = $this->createMock(Tags::class);
+        $tags->expects($this->once())->method('getFaqsByTagId')->with(3)->willReturn([5, 8]);
+
+        $controller = new FaqController(
+            $faq,
+            $tags,
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
+
+        $response = $controller->getByTagId($request);
+        $payload = json_decode((string) $response->getContent(), true);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('Tagged FAQ', $payload[0]['question']);
+    }
+
+    /**
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testGetByTagIdReturnsInternalServerErrorWhenFaqLookupFails(): void
+    {
+        $request = new Request();
+        $request->attributes->set('tagId', '3');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('setUser')->with(-1);
+        $faq->expects($this->once())->method('setGroups')->with([-1]);
+        $faq
+            ->expects($this->once())
+            ->method('getFaqsByIds')
+            ->with([5, 8])
+            ->willThrowException(new \Exception('tag lookup failed'));
+
+        $tags = $this->createMock(Tags::class);
+        $tags->expects($this->once())->method('getFaqsByTagId')->with(3)->willReturn([5, 8]);
+
+        $controller = new FaqController(
+            $faq,
+            $tags,
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
+
+        $response = $controller->getByTagId($request);
+
+        $this->assertSame(500, $response->getStatusCode());
+        $this->assertStringContainsString('tag lookup failed', (string) $response->getContent());
+    }
+
+    /**
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testGetByIdReturnsFaqWhenRecordIsActive(): void
+    {
+        $this->forceConfigurationValue('api.onlyActiveFaqs', false);
+
+        $request = new Request();
+        $request->attributes->set('faqId', '9');
+        $request->attributes->set('categoryId', '4');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('setUser')->with(-1);
+        $faq->expects($this->once())->method('setGroups')->with([-1]);
+        $faq
+            ->expects($this->once())
+            ->method('getFaqByIdAndCategoryId')
+            ->with(9, 4)
+            ->willReturn([
+                'solution_id' => 123,
+                'active' => 'yes',
+                'question' => 'Active FAQ',
+            ]);
+
+        $controller = new FaqController(
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
+
+        $response = $controller->getById($request);
+        $payload = json_decode((string) $response->getContent(), true);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('Active FAQ', $payload['question']);
+    }
+
+    /**
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testGetByIdReturnsNotFoundWhenOnlyActiveFaqsAreEnabled(): void
+    {
+        $this->forceConfigurationValue('api.onlyActiveFaqs', true);
+
+        $request = new Request();
+        $request->attributes->set('faqId', '9');
+        $request->attributes->set('categoryId', '4');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('setUser')->with(-1);
+        $faq->expects($this->once())->method('setGroups')->with([-1]);
+        $faq
+            ->expects($this->once())
+            ->method('getFaqByIdAndCategoryId')
+            ->with(9, 4)
+            ->willReturn([
+                'solution_id' => 123,
+                'active' => 'no',
+            ]);
+
+        $controller = new FaqController(
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
+
+        $response = $controller->getById($request);
+
+        $this->assertSame(404, $response->getStatusCode());
+        $this->assertSame('{}', (string) $response->getContent());
+    }
+
+    /**
+     * @throws Exception
+     * @throws \JsonException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testCreateReturnsCreatedWhenPayloadIsValid(): void
+    {
+        $this->authenticateApiToken();
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'language' => 'en',
+            'category-id' => 1,
+            'question' => 'Created via API?',
+            'answer' => 'Yes.',
+            'keywords' => 'api, faq',
+            'author' => 'API Author',
+            'email' => 'api@example.com',
+            'is-active' => true,
+            'is-sticky' => true,
+        ], JSON_THROW_ON_ERROR));
+
+        $storedEntity = new FaqEntity()->setId(123);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('setUser')->with(-1);
+        $faq->expects($this->once())->method('setGroups')->with([-1]);
+        $faq->expects($this->once())->method('hasTitleAHash')->with('Created via API?')->willReturn(false);
+        $faq
+            ->expects($this->once())
+            ->method('create')
+            ->with($this->callback(static function (FaqEntity $entity): bool {
+                return (
+                    $entity->getLanguage() === 'en'
+                    && $entity->getQuestion() === 'Created via API?'
+                    && $entity->getAnswer() === 'Yes.'
+                    && $entity->getKeywords() === 'api, faq'
+                    && $entity->getAuthor() === 'API Author'
+                    && $entity->getEmail() === 'api@example.com'
+                    && $entity->isActive() === true
+                    && $entity->isSticky() === true
+                );
+            }))
+            ->willReturn($storedEntity);
+
+        $faqMetaData = $this->createMock(FaqMetaData::class);
+        $faqMetaData->expects($this->once())->method('setFaqId')->with(123)->willReturnSelf();
+        $faqMetaData->expects($this->once())->method('setFaqLanguage')->with('en')->willReturnSelf();
+        $faqMetaData->expects($this->once())->method('setCategories')->with([1])->willReturnSelf();
+        $faqMetaData->expects($this->once())->method('save');
+
+        $controller = new FaqController(
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $faqMetaData,
+        );
+
+        $response = $controller->create($request);
+
+        $this->assertSame(201, $response->getStatusCode());
+        $this->assertSame('{"stored":true}', (string) $response->getContent());
+    }
+
+    /**
+     * @throws Exception
+     * @throws \JsonException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testCreateReturnsConflictWhenCategoryNameCannotBeMapped(): void
+    {
+        $this->authenticateApiToken();
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'language' => 'en',
+            'category-id' => 1,
+            'category-name' => 'Definitely Missing Category Name',
+            'question' => 'Created via API?',
+            'answer' => 'Yes.',
+            'keywords' => 'api, faq',
+            'author' => 'API Author',
+            'email' => 'api@example.com',
+            'is-active' => true,
+            'is-sticky' => false,
+        ], JSON_THROW_ON_ERROR));
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('setUser')->with(-1);
+        $faq->expects($this->once())->method('setGroups')->with([-1]);
+        $faq->expects($this->never())->method('hasTitleAHash');
+        $faq->expects($this->never())->method('create');
+
+        $controller = new FaqController(
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
+
+        $response = $controller->create($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertSame(409, $response->getStatusCode());
+        $this->assertSame(['stored' => false, 'error' => 'The given category name was not found.'], $payload);
+    }
+
+    /**
+     * @throws Exception
+     * @throws \JsonException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testCreateReturnsBadRequestWhenTitleContainsHash(): void
+    {
+        $this->authenticateApiToken();
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'language' => 'en',
+            'category-id' => 1,
+            'question' => 'Bad # title?',
+            'answer' => 'No.',
+            'keywords' => 'api, faq',
+            'author' => 'API Author',
+            'email' => 'api@example.com',
+            'is-active' => true,
+            'is-sticky' => false,
+        ], JSON_THROW_ON_ERROR));
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('setUser')->with(-1);
+        $faq->expects($this->once())->method('setGroups')->with([-1]);
+        $faq->expects($this->once())->method('hasTitleAHash')->with('Bad # title?')->willReturn(true);
+        $faq->expects($this->never())->method('create');
+
+        $controller = new FaqController(
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
+
+        $response = $controller->create($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertSame(400, $response->getStatusCode());
+        $this->assertSame(
+            ['stored' => false, 'error' => 'It is not allowed, that the question title contains a hash.'],
+            $payload,
+        );
+    }
+
+    /**
+     * @throws Exception
+     * @throws \JsonException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testUpdateReturnsSuccessWhenPayloadIsValid(): void
+    {
+        $this->authenticateApiToken();
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'faq-id' => 7,
+            'language' => 'en',
+            'category-id' => 1,
+            'question' => 'Updated via API?',
+            'answer' => 'Still yes.',
+            'keywords' => 'update, faq',
+            'author' => 'API Updater',
+            'email' => 'update@example.com',
+            'is-active' => true,
+            'is-sticky' => true,
+        ], JSON_THROW_ON_ERROR));
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('setUser')->with(-1);
+        $faq->expects($this->once())->method('setGroups')->with([-1]);
+        $faq->expects($this->once())->method('hasTitleAHash')->with('Updated via API?')->willReturn(false);
+        $faq
+            ->expects($this->once())
+            ->method('update')
+            ->with($this->callback(static function (FaqEntity $entity): bool {
+                return (
+                    $entity->getId() === 7
+                    && $entity->getRevisionId() === 0
+                    && $entity->getLanguage() === 'en'
+                    && $entity->getQuestion() === 'Updated via API?'
+                    && $entity->getAnswer() === 'Still yes.'
+                    && $entity->getKeywords() === 'update, faq'
+                    && $entity->getAuthor() === 'API Updater'
+                    && $entity->getEmail() === 'update@example.com'
+                    && $entity->isActive() === true
+                    && $entity->isSticky() === true
+                );
+            }))
+            ->willReturn(new FaqEntity()->setId(7));
+
+        $controller = new FaqController(
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
+
+        $response = $controller->update($request);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('{"stored":true}', (string) $response->getContent());
+    }
+
+    /**
+     * @throws Exception
+     * @throws \JsonException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testUpdateReturnsBadRequestWhenTitleContainsHash(): void
+    {
+        $this->authenticateApiToken();
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'faq-id' => 7,
+            'language' => 'en',
+            'category-id' => 1,
+            'question' => 'Updated # bad?',
+            'answer' => 'Still no.',
+            'keywords' => 'update, faq',
+            'author' => 'API Updater',
+            'email' => 'update@example.com',
+            'is-active' => true,
+            'is-sticky' => false,
+        ], JSON_THROW_ON_ERROR));
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('setUser')->with(-1);
+        $faq->expects($this->once())->method('setGroups')->with([-1]);
+        $faq->expects($this->once())->method('hasTitleAHash')->with('Updated # bad?')->willReturn(true);
+        $faq->expects($this->never())->method('update');
+
+        $controller = new FaqController(
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+        );
+
+        $response = $controller->update($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertSame(400, $response->getStatusCode());
+        $this->assertSame(
+            ['stored' => false, 'error' => 'It is not allowed, that the question title contains a hash.'],
+            $payload,
+        );
     }
 }

@@ -91,14 +91,10 @@ class LanguageListener
     {
         Strings::init($currentLanguage);
 
-        try {
-            Translation::create()
-                ->setTranslationsDir(PMF_TRANSLATION_DIR)
-                ->setDefaultLanguage(defaultLanguage: 'en')
-                ->setCurrentLanguage($currentLanguage)
-                ->setMultiByteLanguage();
-        } catch (Exception $exception) {
-            throw $exception;
-        }
+        Translation::create()
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
+            ->setDefaultLanguage(defaultLanguage: 'en')
+            ->setCurrentLanguage($currentLanguage)
+            ->setMultiByteLanguage();
     }
 }

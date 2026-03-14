@@ -6,6 +6,8 @@ namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -13,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
 class LoginControllerTest extends TestCase
@@ -34,7 +37,27 @@ class LoginControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->configuration = Configuration::getConfigurationInstance();
+        $this->configuration = $this->createConfiguration();
+        $language = new Language($this->configuration, $this->createStub(Session::class));
+        $language->setLanguageFromConfiguration('en');
+        $this->configuration->setLanguage($language);
+    }
+
+    private function createConfiguration(): Configuration
+    {
+        try {
+            return Configuration::getConfigurationInstance();
+        } catch (\TypeError) {
+            $db = new Sqlite3();
+            $db->connect(PMF_TEST_DIR . '/test.db', '', '');
+            $configuration = new Configuration($db);
+
+            $configurationReflection = new \ReflectionClass(Configuration::class);
+            $configurationProperty = $configurationReflection->getProperty('configuration');
+            $configurationProperty->setValue(null, $configuration);
+
+            return $configuration;
+        }
     }
 
     /**
@@ -193,5 +216,25 @@ class LoginControllerTest extends TestCase
 
         $this->assertInstanceOf(JsonResponse::class, $response);
         $this->assertContains($response->getStatusCode(), [200, 400]);
+    }
+
+    /**
+     * @throws Exception
+     * @throws \JsonException
+     */
+    public function testLoginSucceedsWithValidCredentials(): void
+    {
+        $requestData = json_encode([
+            'username' => 'admin',
+            'password' => 'password',
+        ]);
+
+        $request = new Request([], [], [], [], [], [], $requestData);
+        $controller = new LoginController();
+        $response = $controller->login($request);
+
+        $content = json_decode((string) $response->getContent(), true);
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertSame(['loggedin' => true], $content);
     }
 }

@@ -1706,7 +1706,6 @@ $LANG_CONF['storage.redisConnectTimeout'] = [
 $LANG_CONF['storage.testRedisConnection'] = ['button', 'Test Redis connection'];
 $PMF_LANG['storage.testRedisConnection'] = 'Test Redis connection';
 
-// added v4.1.0 - 2026-03-05 by Thorsten
 $PMF_LANG['msgAdminHeaderLdap'] = 'LDAP Configuration';
 $PMF_LANG['msgAdminLdapHealthCheck'] = 'LDAP Health Check';
 $PMF_LANG['msgAdminLdapServers'] = 'LDAP Servers';

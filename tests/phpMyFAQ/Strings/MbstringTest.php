@@ -3,9 +3,9 @@
 namespace phpMyFAQ\Strings;
 
 use phpMyFAQ\Language;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
@@ -129,12 +129,7 @@ class MbstringTest extends TestCase
     public function testPregReplaceHandlesPatternArrays(): void
     {
         $count = 0;
-        $result = $this->mbString->preg_replace(
-            ['/ä/', '/ö/'],
-            ['ae', 'oe'],
-            'färöer',
-            count: $count,
-        );
+        $result = $this->mbString->preg_replace(['/ä/', '/ö/'], ['ae', 'oe'], 'färöer', count: $count);
 
         self::assertSame('faeroeer', $result);
         self::assertSame(2, $count);

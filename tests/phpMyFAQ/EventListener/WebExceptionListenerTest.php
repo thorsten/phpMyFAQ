@@ -3,8 +3,11 @@
 namespace phpMyFAQ\EventListener;
 
 use phpMyFAQ\Controller\Exception\ForbiddenException;
+use phpMyFAQ\Environment;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
+use ReflectionProperty;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,16 +20,36 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class WebExceptionListenerTest extends TestCase
 {
     private WebExceptionListener $listener;
+    private bool $originalDebugMode;
 
     protected function setUp(): void
     {
         $this->listener = new WebExceptionListener();
+        $this->originalDebugMode = Environment::isDebugMode();
+    }
+
+    protected function tearDown(): void
+    {
+        $this->setDebugMode($this->originalDebugMode);
     }
 
     private function createEvent(Request $request, \Throwable $exception): ExceptionEvent
     {
         $kernel = $this->createMock(HttpKernelInterface::class);
         return new ExceptionEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, $exception);
+    }
+
+    private function invokePrivateMethod(string $method, mixed ...$arguments): mixed
+    {
+        $reflectionMethod = new ReflectionMethod($this->listener, $method);
+
+        return $reflectionMethod->invoke($this->listener, ...$arguments);
+    }
+
+    private function setDebugMode(bool $enabled): void
+    {
+        $reflectionProperty = new ReflectionProperty(Environment::class, 'debugMode');
+        $reflectionProperty->setValue(null, $enabled);
     }
 
     public function testIgnoresApiRequests(): void
@@ -116,5 +139,58 @@ class WebExceptionListenerTest extends TestCase
         $response = $event->getResponse();
         $this->assertNotNull($response);
         $this->assertEquals(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+    }
+
+    public function testHandleErrorResponseReturnsFallbackMessageOutsideDebugMode(): void
+    {
+        $this->setDebugMode(false);
+
+        $response = $this->invokePrivateMethod(
+            'handleErrorResponse',
+            'Internal Server Error: :message at line :line at :file',
+            'Internal Server Error',
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            new \RuntimeException('Server error'),
+        );
+
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        $this->assertSame('Internal Server Error', $response->getContent());
+    }
+
+    public function testHandleErrorResponseReturnsFormattedMessageInDebugMode(): void
+    {
+        $this->setDebugMode(true);
+        $exception = new \RuntimeException('Visible error');
+
+        $response = $this->invokePrivateMethod(
+            'handleErrorResponse',
+            'Internal Server Error: :message at line :line at :file',
+            'Internal Server Error',
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            $exception,
+        );
+
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        $this->assertStringContainsString('Internal Server Error: Visible error', (string) $response->getContent());
+        $this->assertStringContainsString((string) $exception->getLine(), (string) $response->getContent());
+        $this->assertStringContainsString($exception->getFile(), (string) $response->getContent());
+    }
+
+    public function testFormatExceptionMessageReplacesPlaceholders(): void
+    {
+        $exception = new \RuntimeException('Formatted error');
+
+        $message = $this->invokePrivateMethod(
+            'formatExceptionMessage',
+            'Oops: :message at :file line :line',
+            $exception,
+        );
+
+        $this->assertSame(
+            sprintf('Oops: %s at %s line %d', $exception->getMessage(), $exception->getFile(), $exception->getLine()),
+            $message,
+        );
     }
 }

@@ -89,7 +89,10 @@ class FilesystemTest extends TestCase
 
     public function testRecursiveCopyReturnsFalseWhenSourceIsNotDirectory(): void
     {
-        $actual = $this->filesystem->recursiveCopy(PMF_TEST_DIR . '/path/foo.bar', PMF_CONTENT_DIR . '/recursive-copy-missing');
+        $actual = $this->filesystem->recursiveCopy(
+            PMF_TEST_DIR . '/path/foo.bar',
+            PMF_CONTENT_DIR . '/recursive-copy-missing',
+        );
 
         $this->assertFalse($actual);
     }
@@ -118,7 +121,7 @@ class FilesystemTest extends TestCase
 
         $this->expectException(Exception::class);
 
-        set_error_handler(static fn (): bool => true);
+        set_error_handler(static fn(): bool => true);
 
         try {
             $this->filesystem->copy(PMF_TEST_DIR . '/path/foo.bar', $targetDirectory);
@@ -134,7 +137,7 @@ class FilesystemTest extends TestCase
         $this->filesystem->createDirectory($directory);
         chmod($directory, 0o000);
 
-        set_error_handler(static fn (): bool => true);
+        set_error_handler(static fn(): bool => true);
 
         try {
             $this->assertFalse($this->filesystem->deleteDirectory($directory));

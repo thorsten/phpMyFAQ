@@ -191,6 +191,147 @@ class OAuth2ControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testAuthorizePostReturnsRedirectWhenLocationHeaderExists(): void
+    {
+        $controller = new OAuth2Controller(new OAuth2AuthorizationServer($this->configuration));
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('oauth2-authorize');
+        $this->injectAuthenticatedContext($controller, $session);
+
+        $authorizationServer = new OAuth2AuthorizationServer($this->configuration);
+        $authorizationServer->setAuthorizationCompleter(static fn(): array => [
+            'body' => '',
+            'status' => Response::HTTP_FOUND,
+            'headers' => ['Location' => 'https://client.example/callback?code=abc'],
+        ]);
+        $controller->setAuthorizationServer($authorizationServer);
+
+        $request = Request::create('/oauth/authorize', 'POST', [
+            'csrf' => $csrfToken,
+            'approve' => 'true',
+        ]);
+
+        $response = $controller->authorize($request);
+
+        $this->assertSame(Response::HTTP_FOUND, $response->getStatusCode());
+        $this->assertSame('https://client.example/callback?code=abc', $response->headers->get('Location'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAuthorizePostReturnsJsonWhenAuthorizationServerReturnsJsonContent(): void
+    {
+        $controller = new OAuth2Controller(new OAuth2AuthorizationServer($this->configuration));
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('oauth2-authorize');
+        $this->injectAuthenticatedContext($controller, $session);
+
+        $authorizationServer = new OAuth2AuthorizationServer($this->configuration);
+        $authorizationServer->setAuthorizationCompleter(static fn(): array => [
+            'body' => json_encode(['authorized' => true], JSON_THROW_ON_ERROR),
+            'status' => Response::HTTP_OK,
+            'headers' => ['Content-Type' => 'application/json'],
+        ]);
+        $controller->setAuthorizationServer($authorizationServer);
+
+        $request = Request::create('/oauth/authorize', 'POST', [
+            'csrf' => $csrfToken,
+            'approve' => 'true',
+        ]);
+
+        $response = $controller->authorize($request);
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertStringContainsString('authorized', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAuthorizePostReturnsRawBodyWhenAuthorizationServerReturnsNonJsonContent(): void
+    {
+        $controller = new OAuth2Controller(new OAuth2AuthorizationServer($this->configuration));
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('oauth2-authorize');
+        $this->injectAuthenticatedContext($controller, $session);
+
+        $authorizationServer = new OAuth2AuthorizationServer($this->configuration);
+        $authorizationServer->setAuthorizationCompleter(static fn(): array => [
+            'body' => 'approved',
+            'status' => Response::HTTP_ACCEPTED,
+            'headers' => ['Content-Type' => 'text/plain'],
+        ]);
+        $controller->setAuthorizationServer($authorizationServer);
+
+        $request = Request::create('/oauth/authorize', 'POST', [
+            'csrf' => $csrfToken,
+            'approve' => 'false',
+        ]);
+
+        $response = $controller->authorize($request);
+
+        $this->assertSame(Response::HTTP_ACCEPTED, $response->getStatusCode());
+        $this->assertSame('approved', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAuthorizePostReturnsClientErrorPayloadForRuntimeException(): void
+    {
+        $controller = new OAuth2Controller(new OAuth2AuthorizationServer($this->configuration));
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('oauth2-authorize');
+        $this->injectAuthenticatedContext($controller, $session);
+
+        $authorizationServer = new OAuth2AuthorizationServer($this->configuration);
+        $authorizationServer->setAuthorizationCompleter(static function (): array {
+            throw new \RuntimeException('Consent denied', 400);
+        });
+        $controller->setAuthorizationServer($authorizationServer);
+
+        $request = Request::create('/oauth/authorize', 'POST', [
+            'csrf' => $csrfToken,
+            'approve' => 'false',
+        ]);
+
+        $response = $controller->authorize($request);
+
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->assertStringContainsString('Consent denied', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAuthorizePostReturnsInternalServerErrorPayloadForRuntimeException(): void
+    {
+        $controller = new OAuth2Controller(new OAuth2AuthorizationServer($this->configuration));
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('oauth2-authorize');
+        $this->injectAuthenticatedContext($controller, $session);
+
+        $authorizationServer = new OAuth2AuthorizationServer($this->configuration);
+        $authorizationServer->setAuthorizationCompleter(static function (): array {
+            throw new \RuntimeException('provider offline', 503);
+        });
+        $controller->setAuthorizationServer($authorizationServer);
+
+        $request = Request::create('/oauth/authorize', 'POST', [
+            'csrf' => $csrfToken,
+            'approve' => 'true',
+        ]);
+
+        $response = $controller->authorize($request);
+
+        $this->assertSame(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());
+        $this->assertStringContainsString('Internal server error', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testTokenReturnsRuntimeStatusCodeForClientErrors(): void
     {
         $controller = new OAuth2Controller(new OAuth2AuthorizationServer($this->configuration));

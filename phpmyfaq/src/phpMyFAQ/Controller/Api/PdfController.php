@@ -35,6 +35,11 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class PdfController extends AbstractController
 {
+    /** @var null|callable(\phpMyFAQ\Configuration): Faq */
+    private $faqFactory = null;
+    /** @var null|callable(\phpMyFAQ\Configuration): Services */
+    private $servicesFactory = null;
+
     public function __construct()
     {
         parent::__construct();
@@ -42,6 +47,16 @@ final class PdfController extends AbstractController
         if (!$this->isApiEnabled()) {
             throw new UnauthorizedHttpException(challenge: 'API is not enabled');
         }
+    }
+
+    public function setFaqFactory(callable $faqFactory): void
+    {
+        $this->faqFactory = $faqFactory;
+    }
+
+    public function setServicesFactory(callable $servicesFactory): void
+    {
+        $this->servicesFactory = $servicesFactory;
     }
 
     /**
@@ -88,7 +103,9 @@ final class PdfController extends AbstractController
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faq = new Faq($this->configuration);
+        $faq = is_callable($this->faqFactory)
+            ? ($this->faqFactory)($this->configuration)
+            : new Faq($this->configuration);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
@@ -103,7 +120,9 @@ final class PdfController extends AbstractController
             return $this->json($result, Response::HTTP_NOT_FOUND);
         }
 
-        $services = new Services($this->configuration);
+        $services = is_callable($this->servicesFactory)
+            ? ($this->servicesFactory)($this->configuration)
+            : new Services($this->configuration);
         $services->setFaqId($faqId);
         $services->setLanguage($this->configuration->getLanguage()->getLanguage());
         $services->setCategoryId($categoryId);

@@ -104,11 +104,10 @@ class AttributeRouteLoaderTest extends TestCase
 
     public function testGetClassFromFileReturnsNullWhenNamespaceOrClassIsMissing(): void
     {
-        $this->assertNull(
-            $this->withoutWarnings(
-                fn(): mixed => $this->invokeLoaderMethod('getClassFromFile', $this->fixturesDir . '/MissingFile.php'),
-            ),
-        );
+        $this->assertNull($this->withoutWarnings(fn(): mixed => $this->invokeLoaderMethod(
+            'getClassFromFile',
+            $this->fixturesDir . '/MissingFile.php',
+        )));
 
         $file = $this->fixturesDir . '/PlainFile.php';
         file_put_contents($file, "<?php\n\nreturn true;\n");

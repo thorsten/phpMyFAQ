@@ -225,8 +225,8 @@ class UserTest extends TestCase
             ->expects($this->exactly(2))
             ->method('fetch')
             ->willReturnMap([
-                ['display_name', 'Thorsten', 'Another User'],
-                ['email', 'thorsten@example.com', 'another@example.com'],
+                ['display_name', 'Thorsten',             'Another User'],
+                ['email',        'thorsten@example.com', 'another@example.com'],
             ]);
 
         $this->assertFalse($this->user->checkDisplayName('Thorsten'));
@@ -236,13 +236,22 @@ class UserTest extends TestCase
     public function testCheckDisplayNameAndMailAddressCreateUserDataWhenUnset(): void
     {
         $this->user->userdata = null;
-        $this->database->method('escape')->willReturnCallback(static fn (string $value): string => $value);
-        $this->database->expects($this->exactly(2))->method('query')->willReturn(true);
-        $this->database->expects($this->exactly(2))->method('numRows')->with(true)->willReturn(1);
-        $this->database->expects($this->exactly(2))->method('fetchObject')->willReturnOnConsecutiveCalls(
-            (object) ['display_name' => 'Thorsten'],
-            (object) ['email' => 'thorsten@example.com'],
-        );
+        $this->database->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $this->database
+            ->expects($this->exactly(2))
+            ->method('query')
+            ->willReturn(true);
+        $this->database
+            ->expects($this->exactly(2))
+            ->method('numRows')
+            ->with(true)
+            ->willReturn(1);
+        $this->database
+            ->expects($this->exactly(2))
+            ->method('fetchObject')
+            ->willReturnOnConsecutiveCalls((object) ['display_name' => 'Thorsten'], (object) [
+                'email' => 'thorsten@example.com',
+            ]);
 
         $this->assertTrue($this->user->checkDisplayName('Thorsten'));
         $this->assertTrue($this->user->checkMailAddress('thorsten@example.com'));
@@ -327,25 +336,33 @@ class UserTest extends TestCase
     {
         $this->user->userdata = null;
         $this->database->method('escape')->willReturn('existing');
-        $this->database->expects($this->exactly(2))->method('query')->willReturn(true);
-        $this->database->expects($this->exactly(2))->method('numRows')->with(true)->willReturn(1);
-        $this->database->expects($this->exactly(2))->method('fetchArray')->with(true)->willReturnOnConsecutiveCalls(
-            [
+        $this->database
+            ->expects($this->exactly(2))
+            ->method('query')
+            ->willReturn(true);
+        $this->database
+            ->expects($this->exactly(2))
+            ->method('numRows')
+            ->with(true)
+            ->willReturn(1);
+        $this->database
+            ->expects($this->exactly(2))
+            ->method('fetchArray')
+            ->with(true)
+            ->willReturnOnConsecutiveCalls([
                 'user_id' => 21,
                 'login' => 'existing',
                 'account_status' => 'active',
                 'is_superadmin' => 0,
                 'auth_source' => 'local',
-            ],
-            [
+            ], [
                 'last_modified' => '20240101000000',
                 'display_name' => 'Existing User',
                 'email' => 'existing@example.com',
                 'is_visible' => 1,
                 'twofactor_enabled' => 0,
                 'secret' => '',
-            ],
-        );
+            ]);
 
         $this->assertTrue($this->user->getUserByLogin('existing'));
         $this->assertSame('existing', $this->user->getLogin());
@@ -363,16 +380,24 @@ class UserTest extends TestCase
         $user->userdata = $userData;
         $user->perm = $this->createMock(MediumPermission::class);
 
-        $this->database->method('escape')->willReturnCallback(static fn (string $value): string => $value);
-        $this->database->expects($this->once())->method('nextId')->with('faquser', 'user_id')->willReturn(20);
-        $this->database->expects($this->once())->method('query')->willReturn(true);
+        $this->database->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $this->database
+            ->expects($this->once())
+            ->method('nextId')
+            ->with('faquser', 'user_id')
+            ->willReturn(20);
+        $this->database
+            ->expects($this->once())
+            ->method('query')
+            ->willReturn(true);
         $userData->expects($this->once())->method('add')->with(20)->willReturn(true);
 
         $auth = $this->createMock(AuthDatabase::class);
         $auth->expects($this->once())->method('disableReadOnly')->willReturn(false);
         $auth->expects($this->once())->method('create')->with('new_user', $this->isString(), '')->willReturn(true);
 
-        $user->expects($this->exactly(2))
+        $user
+            ->expects($this->exactly(2))
             ->method('getUserByLogin')
             ->with('new_user', false)
             ->willReturnOnConsecutiveCalls(false, true);
@@ -542,16 +567,30 @@ class UserTest extends TestCase
             'encType' => User::DEFAULT_ENCRYPTION_TYPE,
             'readOnly' => false,
         ]);
-        $this->database->expects($this->once())->method('query')->willReturn(true);
-        $this->database->expects($this->once())->method('numRows')->with(true)->willReturn(1);
-        $this->database->expects($this->once())->method('fetchArray')->with(true)->willReturn([
-            'user_id' => 18,
-            'login' => 'found-user',
-            'account_status' => 'active',
-            'is_superadmin' => 0,
-            'auth_source' => 'local',
-        ]);
-        $this->userData->expects($this->once())->method('load')->with(18);
+        $this->database
+            ->expects($this->once())
+            ->method('query')
+            ->willReturn(true);
+        $this->database
+            ->expects($this->once())
+            ->method('numRows')
+            ->with(true)
+            ->willReturn(1);
+        $this->database
+            ->expects($this->once())
+            ->method('fetchArray')
+            ->with(true)
+            ->willReturn([
+                'user_id' => 18,
+                'login' => 'found-user',
+                'account_status' => 'active',
+                'is_superadmin' => 0,
+                'auth_source' => 'local',
+            ]);
+        $this->userData
+            ->expects($this->once())
+            ->method('load')
+            ->with(18);
 
         $this->assertTrue($this->user->getUserById(18));
         $this->assertSame('found-user', $this->user->getLogin());
@@ -561,23 +600,31 @@ class UserTest extends TestCase
     {
         $this->user->userdata = null;
         $this->database->method('escape')->willReturn('cookie-token');
-        $this->database->expects($this->exactly(2))->method('query')->willReturn(true);
-        $this->database->expects($this->exactly(2))->method('numRows')->with(true)->willReturn(1);
-        $this->database->expects($this->exactly(2))->method('fetchArray')->with(true)->willReturnOnConsecutiveCalls(
-            [
+        $this->database
+            ->expects($this->exactly(2))
+            ->method('query')
+            ->willReturn(true);
+        $this->database
+            ->expects($this->exactly(2))
+            ->method('numRows')
+            ->with(true)
+            ->willReturn(1);
+        $this->database
+            ->expects($this->exactly(2))
+            ->method('fetchArray')
+            ->with(true)
+            ->willReturnOnConsecutiveCalls([
                 'user_id' => 42,
                 'login' => 'cookie-user',
                 'account_status' => 'active',
-            ],
-            [
+            ], [
                 'last_modified' => '20240101000000',
                 'display_name' => 'Cookie User',
                 'email' => 'cookie@example.com',
                 'is_visible' => 1,
                 'twofactor_enabled' => 0,
                 'secret' => '',
-            ],
-        );
+            ]);
 
         $this->assertTrue($this->user->getUserByCookie('cookie-token'));
         $this->assertSame(42, $this->user->getUserId());
@@ -616,11 +663,22 @@ class UserTest extends TestCase
         $this->user->userdata = null;
         $this->setPrivateProperty('userId', 7);
 
-        $this->database->expects($this->once())->method('query')->willReturn(true);
-        $this->database->expects($this->once())->method('numRows')->with(true)->willReturn(1);
-        $this->database->expects($this->once())->method('fetchArray')->with(true)->willReturn([
-            'display_name' => 'Loaded User',
-        ]);
+        $this->database
+            ->expects($this->once())
+            ->method('query')
+            ->willReturn(true);
+        $this->database
+            ->expects($this->once())
+            ->method('numRows')
+            ->with(true)
+            ->willReturn(1);
+        $this->database
+            ->expects($this->once())
+            ->method('fetchArray')
+            ->with(true)
+            ->willReturn([
+                'display_name' => 'Loaded User',
+            ]);
 
         $this->assertSame('Loaded User', $this->user->getUserData('display_name'));
     }
@@ -630,17 +688,28 @@ class UserTest extends TestCase
         $this->user->userdata = null;
         $this->setPrivateProperty('userId', 13);
 
-        $this->database->expects($this->exactly(2))->method('query')->willReturn(true);
-        $this->database->expects($this->once())->method('numRows')->with(true)->willReturn(1);
-        $this->database->expects($this->once())->method('fetchArray')->with(true)->willReturn([
-            'last_modified' => '20240101000000',
-            'display_name' => 'Existing User',
-            'email' => 'existing@example.com',
-            'is_visible' => 1,
-            'twofactor_enabled' => 0,
-            'secret' => '',
-        ]);
-        $this->database->method('escape')->willReturnCallback(static fn (string $value): string => $value);
+        $this->database
+            ->expects($this->exactly(2))
+            ->method('query')
+            ->willReturn(true);
+        $this->database
+            ->expects($this->once())
+            ->method('numRows')
+            ->with(true)
+            ->willReturn(1);
+        $this->database
+            ->expects($this->once())
+            ->method('fetchArray')
+            ->with(true)
+            ->willReturn([
+                'last_modified' => '20240101000000',
+                'display_name' => 'Existing User',
+                'email' => 'existing@example.com',
+                'is_visible' => 1,
+                'twofactor_enabled' => 0,
+                'secret' => '',
+            ]);
+        $this->database->method('escape')->willReturnCallback(static fn(string $value): string => $value);
 
         $this->assertTrue($this->user->setUserData(['display_name' => 'Updated User']));
     }
@@ -648,14 +717,25 @@ class UserTest extends TestCase
     public function testGetUserIdByEmailCreatesUserDataWhenUnset(): void
     {
         $this->user->userdata = null;
-        $this->database->method('escape')->willReturnCallback(static fn (string $value): string => $value);
-        $this->database->expects($this->once())->method('query')->willReturn(true);
-        $this->database->expects($this->once())->method('numRows')->with(true)->willReturn(1);
-        $this->database->expects($this->once())->method('fetchArray')->with(true)->willReturn([
-            'user_id' => 77,
-            'email' => 'lookup@example.com',
-            'is_visible' => 1,
-        ]);
+        $this->database->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $this->database
+            ->expects($this->once())
+            ->method('query')
+            ->willReturn(true);
+        $this->database
+            ->expects($this->once())
+            ->method('numRows')
+            ->with(true)
+            ->willReturn(1);
+        $this->database
+            ->expects($this->once())
+            ->method('fetchArray')
+            ->with(true)
+            ->willReturn([
+                'user_id' => 77,
+                'email' => 'lookup@example.com',
+                'is_visible' => 1,
+            ]);
 
         $this->assertSame(77, $this->user->getUserIdByEmail('lookup@example.com'));
     }
@@ -674,18 +754,29 @@ class UserTest extends TestCase
     public function testGetUserVisibilityByEmailCreatesUserDataWhenUnset(): void
     {
         $this->user->userdata = null;
-        $this->database->method('escape')->willReturnCallback(static fn (string $value): string => $value);
-        $this->database->expects($this->once())->method('query')->willReturn(true);
-        $this->database->expects($this->once())->method('numRows')->with(true)->willReturn(1);
-        $this->database->expects($this->once())->method('fetchArray')->with(true)->willReturn([
-            'user_id' => 17,
-            'email' => 'visible@example.com',
-            'is_visible' => 1,
-            'display_name' => 'Visible User',
-            'last_modified' => '20240101000000',
-            'twofactor_enabled' => 0,
-            'secret' => '',
-        ]);
+        $this->database->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $this->database
+            ->expects($this->once())
+            ->method('query')
+            ->willReturn(true);
+        $this->database
+            ->expects($this->once())
+            ->method('numRows')
+            ->with(true)
+            ->willReturn(1);
+        $this->database
+            ->expects($this->once())
+            ->method('fetchArray')
+            ->with(true)
+            ->willReturn([
+                'user_id' => 17,
+                'email' => 'visible@example.com',
+                'is_visible' => 1,
+                'display_name' => 'Visible User',
+                'last_modified' => '20240101000000',
+                'twofactor_enabled' => 0,
+                'secret' => '',
+            ]);
 
         $this->assertTrue($this->user->getUserVisibilityByEmail('visible@example.com'));
     }

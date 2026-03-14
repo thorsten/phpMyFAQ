@@ -12,6 +12,18 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 #[UsesNamespace('phpMyFAQ')]
 final class BackupControllerWebTest extends ControllerWebTestCase
 {
+    public function testBackupEndpointReturnsUnauthorizedProblemWhenApiIsDisabled(): void
+    {
+        $this->getConfiguration('api')->getAll();
+        $this->overrideConfigurationValues(['api.enableAccess' => false], 'api');
+
+        $response = $this->requestApi('GET', '/v3.2/backup/data');
+
+        self::assertResponseStatusCodeSame(401, $response);
+        self::assertStringContainsString('problem+json', (string) $response->headers->get('Content-Type'));
+        self::assertJson((string) $response->getContent());
+    }
+
     public function testBackupEndpointReturnsUnauthorizedWhenAnonymous(): void
     {
         $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');

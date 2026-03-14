@@ -35,10 +35,34 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class CategoryController extends AbstractApiController
 {
+    /** @var null|callable */
+    private $categoryFactory = null;
+
+    /** @var null|callable */
+    private $categoryPermissionFactory = null;
+
+    /** @var null|callable */
+    private $orderFactory = null;
+
     public function __construct(
         private readonly Language $language,
     ) {
         parent::__construct();
+    }
+
+    public function setCategoryFactory(callable $categoryFactory): void
+    {
+        $this->categoryFactory = $categoryFactory;
+    }
+
+    public function setCategoryPermissionFactory(callable $categoryPermissionFactory): void
+    {
+        $this->categoryPermissionFactory = $categoryPermissionFactory;
+    }
+
+    public function setOrderFactory(callable $orderFactory): void
+    {
+        $this->orderFactory = $orderFactory;
     }
 
     /**
@@ -139,7 +163,7 @@ final class CategoryController extends AbstractApiController
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $category = new Category($this->configuration, $currentGroups, withPermission: true);
+        $category = $this->createCategory($currentGroups);
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
@@ -265,12 +289,12 @@ final class CategoryController extends AbstractApiController
 
         $currentLanguage = $this->configuration->getLanguage()->getLanguage();
 
-        $category = new Category($this->configuration, $currentGroups, withPermission: true);
+        $category = $this->createCategory($currentGroups);
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
 
-        $categoryPermission = new CategoryPermission($this->configuration);
+        $categoryPermission = $this->createCategoryPermission();
 
         $languageCode = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS);
         $parentId = Filter::filterVar($data->{'parent-id'}, FILTER_VALIDATE_INT);
@@ -320,7 +344,7 @@ final class CategoryController extends AbstractApiController
         $categoryId = $category->create($categoryEntity);
 
         // Category Order entry
-        $categoryOrder = new Order($this->configuration);
+        $categoryOrder = $this->createOrder();
         $categoryOrder->add($categoryId, $parentId);
 
         if ($categoryId) {
@@ -338,5 +362,32 @@ final class CategoryController extends AbstractApiController
             'error' => 'Cannot add category',
         ];
         return $this->json($result, Response::HTTP_BAD_REQUEST);
+    }
+
+    private function createCategory(array $currentGroups): Category
+    {
+        if (is_callable($this->categoryFactory)) {
+            return ($this->categoryFactory)($currentGroups);
+        }
+
+        return new Category($this->configuration, $currentGroups, withPermission: true);
+    }
+
+    private function createCategoryPermission(): CategoryPermission
+    {
+        if (is_callable($this->categoryPermissionFactory)) {
+            return ($this->categoryPermissionFactory)();
+        }
+
+        return new CategoryPermission($this->configuration);
+    }
+
+    private function createOrder(): Order
+    {
+        if (is_callable($this->orderFactory)) {
+            return ($this->orderFactory)();
+        }
+
+        return new Order($this->configuration);
     }
 }

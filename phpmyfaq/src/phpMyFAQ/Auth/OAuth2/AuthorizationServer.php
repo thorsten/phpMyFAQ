@@ -42,6 +42,8 @@ final class AuthorizationServer
 {
     /** @var callable(Request): array{body: array<string, mixed>, status: int, headers?: array<string, string>}|null */
     private $tokenIssuer = null;
+    /** @var callable(Request, string, bool): array{body: mixed, status: int, headers?: array<string, string>}|null */
+    private $authorizationCompleter = null;
 
     public function __construct(
         private readonly Configuration $configuration,
@@ -56,6 +58,16 @@ final class AuthorizationServer
     public function setTokenIssuer(callable $issuer): void
     {
         $this->tokenIssuer = $issuer;
+    }
+
+    /**
+     * Allows integration code to provide an authorization completer implementation.
+     *
+     * @param callable(Request, string, bool): array{body: mixed, status: int, headers?: array<string, string>} $completer
+     */
+    public function setAuthorizationCompleter(callable $completer): void
+    {
+        $this->authorizationCompleter = $completer;
     }
 
     /**
@@ -160,6 +172,10 @@ final class AuthorizationServer
 
     public function completeAuthorization(Request $request, string $userId, bool $approved): array
     {
+        if (is_callable($this->authorizationCompleter)) {
+            return ($this->authorizationCompleter)($request, $userId, $approved);
+        }
+
         try {
             $psrRequest = $this->toPsr7Request($request);
             $server = $this->buildLeagueAuthorizationServer();

@@ -90,12 +90,11 @@ class TaskSchedulerTest extends TestCase
             ->method('error')
             ->with(
                 $this->callback(
-                    static fn(string $message): bool => str_contains($message, 'Scheduled ')
-                        && str_contains($message, 'threw an exception'),
+                    static fn(string $message): bool => (
+                        str_contains($message, 'Scheduled ') && str_contains($message, 'threw an exception')
+                    ),
                 ),
-                $this->callback(
-                    static fn(array $context): bool => isset($context['message'], $context['trace']),
-                ),
+                $this->callback(static fn(array $context): bool => isset($context['message'], $context['trace'])),
             );
         $configuration->method('getLogger')->willReturn($logger);
 
@@ -103,7 +102,7 @@ class TaskSchedulerTest extends TestCase
         $backup = $this->createStub(Backup::class);
         $statistics = $this->createStub(Statistics::class);
 
-        $scheduler = new class ($configuration, $session, $backup, $statistics) extends TaskScheduler {
+        $scheduler = new class($configuration, $session, $backup, $statistics) extends TaskScheduler {
             public function cleanupSessions(): array
             {
                 throw new RuntimeException('cleanup boom');
