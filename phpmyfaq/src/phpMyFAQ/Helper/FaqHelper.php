@@ -168,7 +168,14 @@ class FaqHelper extends AbstractHelper
             ->allowMediaHosts($allowedHosts)
             ->allowLinkSchemes(['https', 'http', 'mailto', 'data']));
 
-        $sanitizedContent = $htmlSanitizer->sanitize($content);
+        // Suppress HTML parser warnings during sanitization, as Dom\HTMLDocument::createFromString()
+        // emits tokenizer warnings for slightly malformed user-generated HTML content
+        $previousErrorReporting = error_reporting(E_ALL & ~E_WARNING);
+        try {
+            $sanitizedContent = $htmlSanitizer->sanitize($content);
+        } finally {
+            error_reporting($previousErrorReporting);
+        }
 
         $sanitizedContent = preg_replace('/<iframe\b(?:(?!src)[^>])*>\s*<\/iframe>/i', '', $sanitizedContent);
 
