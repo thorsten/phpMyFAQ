@@ -121,7 +121,6 @@ abstract class AbstractFrontController extends AbstractController
             'isUserRegistrationEnabled' => $this->configuration->get('security.enableRegistration'),
             'pluginStylesheets' => $this->configuration->getPluginManager()->getAllPluginStylesheets(),
             'pluginScripts' => $this->configuration->getPluginManager()->getAllPluginScripts(),
-            'msgRegisterUser' => Translation::get(key: 'msgRegisterUser'),
             'msgFullName' => Translation::getString(key: 'ad_user_loggedin') . $this->currentUser->getLogin(),
             'msgLoginName' => $this->currentUser->getUserData('display_name'),
             'loginHeader' => Translation::get(key: 'msgLoginUser'),

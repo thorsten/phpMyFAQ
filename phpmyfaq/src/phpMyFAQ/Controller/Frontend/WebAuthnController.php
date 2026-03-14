@@ -29,7 +29,7 @@ use Twig\Error\LoaderError;
 final class WebAuthnController extends AbstractFrontController
 {
     /**
-     * @throws Exception|LoaderError
+     * @throws Exception|LoaderError|\Exception
      */
     #[Route(path: '/services/webauthn', name: 'public.webauthn.index', methods: ['GET'])]
     public function index(Request $request): Response
@@ -40,7 +40,6 @@ final class WebAuthnController extends AbstractFrontController
             'title' => Translation::get(key: 'msgLoginUser'),
             'faqHome' => $this->configuration->getDefaultUrl(),
             'isUserRegistrationEnabled' => $this->configuration->get(item: 'security.enableRegistration'),
-            'msgRegisterUser' => Translation::get(key: 'msgRegisterUser'),
         ]);
     }
 }
