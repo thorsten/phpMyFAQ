@@ -204,7 +204,7 @@ final class UpdateRunner
     private function taskUpdateDatabase(SymfonyStyle $io): int
     {
         $update = new Update($this->system, $this->configuration);
-        $update->setVersion(System::getVersion());
+        $update->setVersion($this->configuration->get('main.currentVersion'));
 
         $progressBar = $io->createProgressBar(max: 100);
         $progressBar->start();
@@ -220,11 +220,13 @@ final class UpdateRunner
                 return Command::SUCCESS;
             }
 
+            $this->configuration->set(key: 'main.maintenanceMode', value: 'false');
             $io->error(message: 'Update database failed.');
             return Command::FAILURE;
-        } catch (Exception $exception) {
+        } catch (Exception|\Exception $exception) {
             $progressBar->finish();
             $io->newLine(count: 2);
+            $this->configuration->set(key: 'main.maintenanceMode', value: 'false');
             $io->error(message: 'Update database failed: ' . $exception->getMessage());
             return Command::FAILURE;
         }

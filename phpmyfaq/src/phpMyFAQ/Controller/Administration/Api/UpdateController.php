@@ -245,7 +245,7 @@ final class UpdateController extends AbstractController
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $update = $this->container->get(id: 'phpmyfaq.setup.update');
-        $update->setVersion(System::getVersion());
+        $update->setVersion($this->configuration->get('main.currentVersion'));
 
         try {
             if ($update->applyUpdates()) {
@@ -253,8 +253,10 @@ final class UpdateController extends AbstractController
                 return new JsonResponse(['success' => 'Database successfully updated.'], Response::HTTP_OK);
             }
 
+            $this->configuration->set('main.maintenanceMode', 'false');
             return new JsonResponse(['error' => 'Update database failed.'], Response::HTTP_BAD_GATEWAY);
-        } catch (Exception $exception) {
+        } catch (Exception|\Exception $exception) {
+            $this->configuration->set('main.maintenanceMode', 'false');
             return new JsonResponse([
                 'error' => 'Update database failed: ' . $exception->getMessage(),
             ], Response::HTTP_BAD_GATEWAY);
