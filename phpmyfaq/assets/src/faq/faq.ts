@@ -64,10 +64,13 @@ export const handleShowFaq = () => {
     bookmarkToggle.addEventListener('click', async (event) => {
       event.preventDefault();
       event.stopPropagation();
-      const csrfToken = bookmarkToggle.getAttribute('data-pmf-csrf') as string;
-      const id = bookmarkToggle.getAttribute('data-pmf-id') as string;
+      const csrfToken = bookmarkToggle.getAttribute('data-pmf-csrf');
+      const id = bookmarkToggle.getAttribute('data-pmf-id');
+      if (!csrfToken || !id) {
+        return;
+      }
       if (bookmarkToggle.getAttribute('data-pmf-action') === 'remove') {
-        const response = await deleteBookmark(id as string, csrfToken);
+        const response = await deleteBookmark(id, csrfToken);
         if (response.success) {
           pushNotification(response.success);
           const bookmarkIcon = document.getElementById('pmf-bookmark-icon');
@@ -75,11 +78,11 @@ export const handleShowFaq = () => {
             bookmarkIcon.classList.remove('bi-bookmark-fill');
             bookmarkIcon.classList.add('bi-bookmark');
           }
-          bookmarkToggle.innerText = response.linkText;
+          bookmarkToggle.innerText = response.linkText ?? '';
           bookmarkToggle.setAttribute('data-pmf-action', 'add');
-          bookmarkToggle.setAttribute('data-pmf-csrf', response.csrfToken);
+          bookmarkToggle.setAttribute('data-pmf-csrf', response.csrfToken ?? '');
         } else {
-          pushErrorNotification(response.error);
+          pushErrorNotification(response.error ?? 'Unknown error');
         }
       } else {
         const response = await createBookmark(id, csrfToken);
@@ -90,11 +93,11 @@ export const handleShowFaq = () => {
             bookmarkIcon.classList.remove('bi-bookmark');
             bookmarkIcon.classList.add('bi-bookmark-fill');
           }
-          bookmarkToggle.innerText = response.linkText;
+          bookmarkToggle.innerText = response.linkText ?? '';
           bookmarkToggle.setAttribute('data-pmf-action', 'remove');
-          bookmarkToggle.setAttribute('data-pmf-csrf', response.csrfToken);
+          bookmarkToggle.setAttribute('data-pmf-csrf', response.csrfToken ?? '');
         } else {
-          pushErrorNotification(response.error);
+          pushErrorNotification(response.error ?? 'Unknown error');
         }
       }
     });

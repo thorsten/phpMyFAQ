@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import { activateUser, deleteUser, overwritePassword, postUserData } from '../api';
 
 global.fetch = vi.fn();
@@ -10,7 +10,7 @@ describe('User API', () => {
 
   it('should overwrite password', async () => {
     const mockResponse = { success: true };
-    (fetch as vi.Mock).mockResolvedValue({
+    (fetch as Mock).mockResolvedValue({
       json: vi.fn().mockResolvedValue(mockResponse),
     });
 
@@ -21,7 +21,7 @@ describe('User API', () => {
 
   it('should post user data', async () => {
     const mockResponse = { success: true };
-    (fetch as vi.Mock).mockResolvedValue({
+    (fetch as Mock).mockResolvedValue({
       json: vi.fn().mockResolvedValue(mockResponse),
     });
 
@@ -32,7 +32,7 @@ describe('User API', () => {
 
   it('should activate user', async () => {
     const mockResponse = { success: true };
-    (fetch as vi.Mock).mockResolvedValue({
+    (fetch as Mock).mockResolvedValue({
       json: vi.fn().mockResolvedValue(mockResponse),
     });
 
@@ -43,7 +43,7 @@ describe('User API', () => {
 
   it('should delete user', async () => {
     const mockResponse = { success: true };
-    (fetch as vi.Mock).mockResolvedValue({
+    (fetch as Mock).mockResolvedValue({
       json: vi.fn().mockResolvedValue(mockResponse),
     });
 

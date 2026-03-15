@@ -110,7 +110,7 @@ export class Translator {
       if (response.success) {
         this.populateTranslatedFields(response.translatedFields);
         this.showSuccess();
-        this.onTranslationSuccess?.();
+        this.onTranslationSuccess?.(response.translatedFields);
       } else {
         this.showError(response.error);
         this.onTranslationError?.(response.error);

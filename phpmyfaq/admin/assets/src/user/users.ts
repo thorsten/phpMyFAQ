@@ -79,8 +79,8 @@ const setUserData = async (userId: string): Promise<void> => {
 
 const setUserRights = async (userId: string): Promise<void> => {
   clearUserRights();
-  const userRights = await fetchUserRights(userId);
-  userRights.forEach((right) => {
+  const userRights = (await fetchUserRights(userId)) as string[];
+  userRights.forEach((right: string) => {
     const checkbox = document.getElementById(`user_right_${right}`) as HTMLInputElement;
     checkbox.setAttribute('checked', 'checked');
   });

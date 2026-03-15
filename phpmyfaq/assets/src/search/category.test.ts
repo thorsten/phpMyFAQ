@@ -11,9 +11,10 @@ vi.mock('choices.js', () => ({
 // Mock TranslationService
 vi.mock('../utils', () => ({
   TranslationService: vi.fn(function () {
-    this.translations = new Map();
-    this.loadTranslations = vi.fn().mockResolvedValue(undefined);
-    this.translate = vi.fn().mockImplementation((key: string) => `translated_${key}`);
+    return {
+      loadTranslations: vi.fn().mockResolvedValue(undefined),
+      translate: vi.fn().mockImplementation((key: string) => `translated_${key}`),
+    };
   }),
 }));
 
@@ -62,14 +63,11 @@ describe('handleCategorySelection', () => {
 
   it('should load translations with correct language', async (): Promise<void> => {
     const mockInstance = {
-      translations: new Map(),
       loadTranslations: vi.fn().mockResolvedValue(undefined),
       translate: vi.fn().mockReturnValue('translated'),
     };
     mockTranslationService.mockImplementation(function () {
-      this.translations = mockInstance.translations;
-      this.loadTranslations = mockInstance.loadTranslations;
-      this.translate = mockInstance.translate;
+      return mockInstance as unknown as TranslationService;
     });
 
     await handleCategorySelection();

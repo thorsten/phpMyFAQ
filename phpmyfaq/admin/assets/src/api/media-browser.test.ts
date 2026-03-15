@@ -6,12 +6,18 @@ describe('fetchMediaBrowserContent', () => {
   it('should fetch media browser content successfully', async (): Promise<void> => {
     const mockResponse: MediaBrowserApiResponse = {
       success: true,
+      time: '0.01',
       data: {
+        code: 200,
         sources: [
           {
             baseurl: 'http://example.com',
+            name: 'Images',
             path: 'images',
-            files: [{ file: 'image1.jpg' }, { file: 'image2.jpg' }],
+            files: [
+              { file: 'image1.jpg', size: '10 KB', isImage: true, thumb: 'thumb1.jpg', changed: '2026-01-01' },
+              { file: 'image2.jpg', size: '20 KB', isImage: true, thumb: 'thumb2.jpg', changed: '2026-01-02' },
+            ],
           },
         ],
       },

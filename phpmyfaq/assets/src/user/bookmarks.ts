@@ -32,7 +32,7 @@ export const handleDeleteBookmarks = (): void => {
           pushNotification(response.success);
           bookmarkToDelete?.remove();
         } else {
-          pushErrorNotification(response.error);
+          pushErrorNotification(response.error ?? 'Unknown error');
         }
       });
     });
@@ -55,7 +55,7 @@ export const handleRemoveAllBookmarks = (): void => {
         pushNotification(response.success);
         bookmarksToDelete?.remove();
       } else {
-        pushErrorNotification(response.error);
+        pushErrorNotification(response.error ?? 'Unknown error');
       }
     });
   }

@@ -27,6 +27,7 @@
     "lint:fix": "prettier --write .",
     "prepare": "husky",
     "pretty-quick": "pretty-quick",
+    "tsc": "tsc --noEmit",
     "test": "vitest --run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"

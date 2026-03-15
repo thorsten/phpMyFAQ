@@ -1,4 +1,4 @@
-import { describe, expect, test, vi, beforeEach } from 'vitest';
+import { describe, expect, test, vi, beforeEach, Mock } from 'vitest';
 import autocomplete from 'autocompleter';
 import { updateUser } from './users';
 import { fetchUsers } from '../api';
@@ -31,7 +31,7 @@ describe('User Autocomplete', () => {
 
   test('should initialize autocomplete on DOMContentLoaded', () => {
     const mockAutocomplete = vi.fn();
-    (autocomplete as unknown as vi.Mock).mockImplementation(mockAutocomplete);
+    (autocomplete as unknown as Mock).mockImplementation(mockAutocomplete);
 
     document.dispatchEvent(new Event('DOMContentLoaded'));
 
@@ -42,7 +42,7 @@ describe('User Autocomplete', () => {
     const mockItem = { label: 'John Doe', value: '1' };
     const input = document.getElementById('pmf-user-list-autocomplete') as HTMLInputElement;
 
-    const onSelect = (autocomplete as unknown as vi.Mock).mock.calls[0][0].onSelect;
+    const onSelect = (autocomplete as unknown as Mock).mock.calls[0][0].onSelect;
     await onSelect(mockItem, input);
 
     expect(updateUser).toHaveBeenCalledWith('1');
@@ -50,9 +50,9 @@ describe('User Autocomplete', () => {
 
   test('should fetch and filter users', async () => {
     const mockUsers = [{ label: 'John Doe', value: '1' }];
-    (fetchUsers as unknown as vi.Mock).mockResolvedValue(mockUsers);
+    (fetchUsers as unknown as Mock).mockResolvedValue(mockUsers);
 
-    const fetch = (autocomplete as unknown as vi.Mock).mock.calls[0][0].fetch;
+    const fetch = (autocomplete as unknown as Mock).mock.calls[0][0].fetch;
     const callback = vi.fn();
     await fetch('john', callback);
 
@@ -62,7 +62,7 @@ describe('User Autocomplete', () => {
 
   test('should render user suggestions', () => {
     const mockItem = { label: 'John Doe', value: '1' };
-    const render = (autocomplete as unknown as vi.Mock).mock.calls[0][0].render;
+    const render = (autocomplete as unknown as Mock).mock.calls[0][0].render;
     const result = render(mockItem, 'john');
 
     expect(addElement).toHaveBeenCalledWith('div', {
