@@ -1783,4 +1783,7 @@ $PMF_LANG['ad_layout_mode_highContrast'] = 'High contrast';
 
 $PMF_LANG['msgThemeUploadNoZip'] = 'Please select a ZIP file to upload.';
 
+$PMF_LANG['ad_group_category_restrictions'] = 'Category Restrictions';
+$PMF_LANG['ad_group_category_restrictions_help'] = 'Select a group to manage category restrictions for its permissions.';
+
 return $PMF_LANG;
