@@ -211,7 +211,8 @@
         </h5>
         <div class="card-body" id="categoryRestrictionsBody"
              data-msg-empty="{{ 'ad_group_no_permissions' | translate }}"
-             data-msg-help="{{ 'ad_group_category_restrictions_select' | translate }}">
+             data-msg-help="{{ 'ad_group_category_restrictions_select' | translate }}"
+             data-csrf-token="{{ csrfTokenCategoryRestrictions }}">
           <p class="text-muted">{{ 'ad_group_category_restrictions_help' | translate }}</p>
         </div>
         <div class="card-footer">

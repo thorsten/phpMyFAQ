@@ -399,6 +399,7 @@ export const handleCategoryRestrictionsSave = async (): Promise<void> => {
     return;
   }
 
+  const csrfToken = container.dataset.csrfToken || '';
   const selects = container.querySelectorAll<HTMLSelectElement>('select[data-right-id]');
 
   for (const select of selects) {
@@ -411,6 +412,6 @@ export const handleCategoryRestrictionsSave = async (): Promise<void> => {
       .filter((option: HTMLOptionElement): boolean => option.selected)
       .map((option: HTMLOptionElement): number => parseInt(option.value));
 
-    await saveGroupCategoryRestrictions(groupId, rightId, selectedCategoryIds);
+    await saveGroupCategoryRestrictions(groupId, rightId, selectedCategoryIds, csrfToken);
   }
 };
