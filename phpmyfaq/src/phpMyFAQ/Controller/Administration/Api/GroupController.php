@@ -145,10 +145,13 @@ final class GroupController extends AbstractAdministrationApiController
         $groupId = (int) $request->attributes->get('groupId');
 
         if (!$currentUser->perm instanceof MediumPermission) {
-            return $this->json([], Response::HTTP_OK);
+            return $this->json(new \stdClass(), Response::HTTP_OK);
         }
 
-        return $this->json($currentUser->perm->getAllCategoryRestrictions($groupId), Response::HTTP_OK);
+        return $this->json(
+            $currentUser->perm->getAllCategoryRestrictions($groupId) ?: new \stdClass(),
+            Response::HTTP_OK,
+        );
     }
 
     /**
