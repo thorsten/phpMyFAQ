@@ -338,7 +338,8 @@ const renderCategoryRestrictions = (container: HTMLElement): void => {
   container.innerHTML = '';
 
   if (checkedRights.length === 0) {
-    container.innerHTML = '<p class="text-muted">No permissions assigned to this group.</p>';
+    const emptyMsg = container.dataset.msgEmpty || 'No permissions assigned to this group.';
+    container.innerHTML = `<p class="text-muted">${emptyMsg}</p>`;
     return;
   }
 
@@ -373,7 +374,9 @@ const renderCategoryRestrictions = (container: HTMLElement): void => {
 
     const helpText = document.createElement('div');
     helpText.className = 'form-text';
-    helpText.textContent = 'Select categories to restrict this permission. Leave empty for unrestricted access.';
+    helpText.textContent =
+      container.dataset.msgHelp ||
+      'Select categories to restrict this permission. Leave empty for unrestricted access.';
     wrapper.appendChild(helpText);
 
     container.appendChild(wrapper);

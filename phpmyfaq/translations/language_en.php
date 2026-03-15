@@ -1785,5 +1785,7 @@ $PMF_LANG['msgThemeUploadNoZip'] = 'Please select a ZIP file to upload.';
 
 $PMF_LANG['ad_group_category_restrictions'] = 'Category Restrictions';
 $PMF_LANG['ad_group_category_restrictions_help'] = 'Select a group to manage category restrictions for its permissions.';
+$PMF_LANG['ad_group_no_permissions'] = 'No permissions assigned to this group.';
+$PMF_LANG['ad_group_category_restrictions_select'] = 'Select categories to restrict this permission. Leave empty for unrestricted access.';
 
 return $PMF_LANG;
