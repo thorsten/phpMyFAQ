@@ -14,7 +14,7 @@
  */
 import { webauthnRegister } from './register';
 import { webauthnAuthenticate } from './authenticate';
-import { AuthenticatorResponse } from '../interfaces';
+import { Callback } from '../interfaces';
 
 export const handleWebAuthn = (): void => {
   const registerForm = document.getElementById('pmf-webauthn-form') as HTMLFormElement | null;
@@ -42,38 +42,35 @@ export const handleWebAuthn = (): void => {
         if (response.ok) {
           const jsonResponse = await response.json();
 
-          await webauthnRegister(
-            jsonResponse.challenge,
-            async (success: boolean, info: string | AuthenticatorResponse) => {
-              if (success) {
-                try {
-                  const response = await fetch('./api/webauthn/register', {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ register: info }),
-                  });
+          await webauthnRegister(jsonResponse.challenge, async (success: boolean, info: Parameters<Callback>[1]) => {
+            if (success) {
+              try {
+                const response = await fetch('./api/webauthn/register', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ register: info }),
+                });
 
-                  const jsonResponse = await response.json();
-                  if (jsonResponse.success === 'ok') {
-                    successMessage.classList.remove('d-none');
-                    successMessage.textContent = jsonResponse.message;
-                    errorMessage.classList.add('d-none');
-                  } else {
-                    errorMessage.textContent = 'Registration failed.';
-                    errorMessage.classList.remove('d-none');
-                  }
-                } catch (error: unknown) {
-                  errorMessage.textContent = `Registration failed: ${error instanceof Error ? error.message : String(error)}`;
+                const jsonResponse = await response.json();
+                if (jsonResponse.success === 'ok') {
+                  successMessage.classList.remove('d-none');
+                  successMessage.textContent = jsonResponse.message;
+                  errorMessage.classList.add('d-none');
+                } else {
+                  errorMessage.textContent = 'Registration failed.';
                   errorMessage.classList.remove('d-none');
                 }
-              } else {
-                errorMessage.textContent = info as string;
+              } catch (error: unknown) {
+                errorMessage.textContent = `Registration failed: ${error instanceof Error ? error.message : String(error)}`;
                 errorMessage.classList.remove('d-none');
               }
+            } else {
+              errorMessage.textContent = info as string;
+              errorMessage.classList.remove('d-none');
             }
-          );
+          });
         } else {
           errorMessage.textContent = "Couldn't initiate registration.";
           errorMessage.classList.remove('d-none');
@@ -105,7 +102,7 @@ export const handleWebAuthn = (): void => {
         if (response.ok) {
           const jsonResponse = await response.json();
 
-          await webauthnAuthenticate(jsonResponse, async (success: boolean, info: string | AuthenticatorResponse) => {
+          await webauthnAuthenticate(jsonResponse, async (success: boolean, info: Parameters<Callback>[1]) => {
             if (success) {
               try {
                 const response = await fetch('./api/webauthn/login', {

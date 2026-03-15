@@ -97,6 +97,7 @@ export const handleCategorySelection = async (): Promise<void> => {
         addChoice: ['choices__item--selectable', 'add-choice'],
         noResults: ['has-no-results'],
         noChoices: ['has-no-choices'],
+        invalidState: ['is-invalid'],
       },
       fuseOptions: {
         includeScore: true,

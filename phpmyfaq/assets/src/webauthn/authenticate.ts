@@ -1,4 +1,5 @@
 import { TranslationService } from '../utils';
+import { AuthenticatorResponse, Callback } from '../interfaces';
 
 /**
  * WebAuthn authentication
@@ -18,20 +19,6 @@ interface WebAuthnKey extends Omit<PublicKeyCredentialRequestOptions, 'challenge
   challenge: number[];
   allowCredentials: { id: number[] }[];
 }
-
-interface AuthenticatorResponse {
-  type: string;
-  originalChallenge: number[];
-  rawId: number[];
-  response: {
-    authenticatorData: number[];
-    clientData: string[];
-    clientDataJSONarray: number[];
-    signature: number[];
-  };
-}
-
-type Callback = (success: boolean, info: AuthenticatorResponse | string) => void;
 
 const arrayBufferToArray = (buffer: ArrayBuffer): number[] => Array.from(new Uint8Array(buffer));
 
@@ -64,7 +51,9 @@ export const webauthnAuthenticate = async (webAuthnKey: WebAuthnKey, callback: C
       type,
     } = assertion as PublicKeyCredential & { response: AuthenticatorAssertionResponse };
 
-    const clientDataJSON = JSON.parse(new TextDecoder().decode(clientDataJSONBuffer));
+    const clientDataJSON = JSON.parse(
+      new TextDecoder().decode(clientDataJSONBuffer)
+    ) as AuthenticatorResponse['response']['clientData'];
 
     const rawIdArray: number[] = arrayBufferToArray(rawId);
     const clientDataJSONArray: number[] = arrayBufferToArray(clientDataJSONBuffer);

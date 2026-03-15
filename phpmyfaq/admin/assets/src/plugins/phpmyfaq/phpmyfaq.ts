@@ -15,8 +15,16 @@
 
 import { Jodit } from 'jodit';
 import { fetchFaqsByAutocomplete } from '../../api';
-import { Response } from '../../interfaces';
 import phpmyfaq from './phpmyfaq.svg.js';
+
+interface FaqAutocompleteResult {
+  url: string;
+  question: string;
+}
+
+interface FaqAutocompleteResponse {
+  success: FaqAutocompleteResult[];
+}
 
 Jodit.modules.Icon.set('phpmyfaq', phpmyfaq);
 
@@ -59,10 +67,10 @@ Jodit.plugins.add('phpMyFAQ', (editor: Jodit): void => {
       const query = searchInput.value;
       if (query.length > 0) {
         try {
-          const response: Response = await fetchFaqsByAutocomplete(query, csrfToken);
+          const response = (await fetchFaqsByAutocomplete(query, csrfToken)) as FaqAutocompleteResponse;
 
           resultsContainer.innerHTML = '';
-          response.success.forEach((result) => {
+          response.success.forEach((result: FaqAutocompleteResult) => {
             resultsContainer.innerHTML += `<label class="form-check-label">
             <input class="form-check-input" type="radio" name="faqURL" value="${result.url}">
             ${result.question}
