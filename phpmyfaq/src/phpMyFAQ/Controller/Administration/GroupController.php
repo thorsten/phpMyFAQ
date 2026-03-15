@@ -361,6 +361,9 @@ final class GroupController extends AbstractAdministrationController
             'csrfTokenUpdateGroupPermissions' => Token::getInstance($this->session)->getTokenString(
                 'update-group-permissions',
             ),
+            'csrfTokenCategoryRestrictions' => Token::getInstance($this->session)->getTokenString(
+                'save-category-restrictions',
+            ),
         ];
     }
 }

@@ -91,7 +91,8 @@ export const fetchGroupCategoryRestrictions = async (groupId: string): Promise<C
 export const saveGroupCategoryRestrictions = async (
   groupId: string,
   rightId: string,
-  categoryIds: number[]
+  categoryIds: number[],
+  csrfToken: string
 ): Promise<Response> => {
   return await fetchWrapper('./api/group/category-restrictions', {
     method: 'POST',
@@ -99,7 +100,7 @@ export const saveGroupCategoryRestrictions = async (
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ groupId: parseInt(groupId), rightId: parseInt(rightId), categoryIds }),
+    body: JSON.stringify({ groupId: parseInt(groupId), rightId: parseInt(rightId), categoryIds, csrfToken }),
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   });

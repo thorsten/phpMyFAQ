@@ -215,7 +215,7 @@ describe('saveGroupCategoryRestrictions', () => {
     const mockResponse = { ok: true, status: 200 } as Response;
     vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponse);
 
-    const result = await saveGroupCategoryRestrictions('5', '1', [10, 20]);
+    const result = await saveGroupCategoryRestrictions('5', '1', [10, 20], 'test-csrf-token');
 
     expect(result).toEqual(mockResponse);
     expect(fetchWrapperModule.fetchWrapper).toHaveBeenCalledWith('./api/group/category-restrictions', {
@@ -224,7 +224,7 @@ describe('saveGroupCategoryRestrictions', () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ groupId: 5, rightId: 1, categoryIds: [10, 20] }),
+      body: JSON.stringify({ groupId: 5, rightId: 1, categoryIds: [10, 20], csrfToken: 'test-csrf-token' }),
       redirect: 'follow',
       referrerPolicy: 'no-referrer',
     });

@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 use phpMyFAQ\Administration\Category;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Permission\MediumPermission;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -171,6 +172,10 @@ final class GroupController extends AbstractAdministrationApiController
         $data = json_decode($request->getContent(), true);
         if (!is_array($data)) {
             return $this->json(['error' => 'Invalid JSON payload.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (!Token::getInstance($this->session)->verifyToken('save-category-restrictions', $data['csrfToken'] ?? '')) {
+            return $this->json(['error' => 'Invalid CSRF token.'], Response::HTTP_FORBIDDEN);
         }
 
         $groupId = (int) ($data['groupId'] ?? 0);
