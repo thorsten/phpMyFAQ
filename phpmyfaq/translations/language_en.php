@@ -1717,5 +1717,7 @@ $PMF_LANG['msgAdminLdapSettings'] = 'LDAP General Settings';
 // added v4.2.0-alpha.2 - 2026-03-15 by Thorsten
 $PMF_LANG['ad_group_category_restrictions'] = 'Category Restrictions';
 $PMF_LANG['ad_group_category_restrictions_help'] = 'Select a group to manage category restrictions for its permissions.';
+$PMF_LANG['ad_group_no_permissions'] = 'No permissions assigned to this group.';
+$PMF_LANG['ad_group_category_restrictions_select'] = 'Select categories to restrict this permission. Leave empty for unrestricted access.';
 
 return $PMF_LANG;

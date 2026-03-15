@@ -209,7 +209,9 @@
         <h5 class="card-header py-3">
           <i aria-hidden="true" class="bi bi-folder-check"></i> {{ 'ad_group_category_restrictions' | translate }}
         </h5>
-        <div class="card-body" id="categoryRestrictionsBody">
+        <div class="card-body" id="categoryRestrictionsBody"
+             data-msg-empty="{{ 'ad_group_no_permissions' | translate }}"
+             data-msg-help="{{ 'ad_group_category_restrictions_select' | translate }}">
           <p class="text-muted">{{ 'ad_group_category_restrictions_help' | translate }}</p>
         </div>
         <div class="card-footer">
