@@ -9,12 +9,16 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 #[AllowMockObjectsWithoutExpectations]
+#[CoversClass(WebAuthnController::class)]
+#[UsesNamespace('phpMyFAQ')]
 class WebAuthnControllerTest extends TestCase
 {
     private Configuration $configuration;

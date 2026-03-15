@@ -13,6 +13,8 @@ use phpMyFAQ\Search;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,6 +24,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 #[AllowMockObjectsWithoutExpectations]
+#[CoversClass(SearchController::class)]
+#[UsesNamespace('phpMyFAQ')]
 class SearchControllerTest extends TestCase
 {
     private Configuration $configuration;

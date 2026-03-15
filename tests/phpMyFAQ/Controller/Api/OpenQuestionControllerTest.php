@@ -9,12 +9,16 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Question;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 #[AllowMockObjectsWithoutExpectations]
+#[CoversClass(OpenQuestionController::class)]
+#[UsesNamespace('phpMyFAQ')]
 class OpenQuestionControllerTest extends TestCase
 {
     private Configuration $configuration;

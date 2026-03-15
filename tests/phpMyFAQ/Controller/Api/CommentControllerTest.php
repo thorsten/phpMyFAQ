@@ -7,12 +7,16 @@ namespace phpMyFAQ\Controller\Api;
 use Exception;
 use phpMyFAQ\Comments;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 #[AllowMockObjectsWithoutExpectations]
+#[CoversClass(CommentController::class)]
+#[UsesNamespace('phpMyFAQ')]
 class CommentControllerTest extends TestCase
 {
     /**

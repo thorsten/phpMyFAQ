@@ -17,11 +17,15 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\UserSession;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
 #[AllowMockObjectsWithoutExpectations]
+#[CoversClass(FaqController::class)]
+#[UsesNamespace('phpMyFAQ')]
 class FaqControllerTest extends TestCase
 {
     private Configuration $configuration;

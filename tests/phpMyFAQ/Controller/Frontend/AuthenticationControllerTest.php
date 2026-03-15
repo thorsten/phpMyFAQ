@@ -15,6 +15,7 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\UserException;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\User\UserSession;
@@ -181,6 +182,177 @@ final class AuthenticationControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testLogoutReturnsDefaultRedirectWhenUserIsLoggedOutWithValidCsrf(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        Token::resetInstanceForTests();
+        $token = Token::getInstance($session)->getTokenString('logout');
+        $_COOKIE['pmf-csrf-token-' . substr(md5('logout'), 0, 10)] = $token;
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer($session, $this->createLoggedOutCurrentUser()));
+
+        $response = $controller->logout(new Request(['csrf' => $token]));
+
+        self::assertSame($this->configuration->getDefaultUrl(), $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testLogoutReturnsDefaultRedirectForLoggedInLocalUser(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        Token::resetInstanceForTests();
+        $token = Token::getInstance($session)->getTokenString('logout');
+        $_COOKIE['pmf-csrf-token-' . substr(md5('logout'), 0, 10)] = $token;
+
+        $currentUser = $this->createLoggedInCurrentUser('local');
+        $currentUser->expects(self::once())->method('deleteFromSession')->with(true);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer($session, $currentUser));
+
+        $response = $controller->logout(new Request(['csrf' => $token]));
+
+        self::assertSame($this->configuration->getDefaultUrl(), $response->getTargetUrl());
+        self::assertNotEmpty($session->getFlashBag()->get('success'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testLogoutReturnsDefaultRedirectWhenSsoLogoutIsConfigured(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        Token::resetInstanceForTests();
+        $token = Token::getInstance($session)->getTokenString('logout');
+        $_COOKIE['pmf-csrf-token-' . substr(md5('logout'), 0, 10)] = $token;
+
+        $currentUser = $this->createLoggedInCurrentUser('sso');
+        $currentUser->expects(self::once())->method('deleteFromSession')->with(true);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer($session, $currentUser, [
+            'security.ssoSupport' => true,
+            'security.ssoLogoutRedirect' => 'https://sso.example/logout',
+        ]));
+
+        $response = $controller->logout(new Request(['csrf' => $token]));
+
+        self::assertSame($this->configuration->getDefaultUrl(), $response->getTargetUrl());
+        self::assertNotEmpty($session->getFlashBag()->get('success'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAuthenticateRedirectsHomeWhenCredentialsAreValid(): void
+    {
+        $currentUser = $this->createAuthenticationCurrentUser(twoFactorEnabled: false, loginResult: true, userId: 7);
+        $controller = $this->createAuthenticationController($currentUser);
+
+        $response = $controller->authenticate(new Request([], [
+            'faqusername' => 'admin',
+            'faqpassword' => 'secret',
+            'faqrememberme' => '1',
+        ]));
+
+        self::assertSame('./', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAuthenticateRedirectsToTokenWhenTwoFactorIsEnabled(): void
+    {
+        $currentUser = $this->createAuthenticationCurrentUser(twoFactorEnabled: true, loginResult: true, userId: 42);
+        $controller = $this->createAuthenticationController($currentUser);
+
+        $response = $controller->authenticate(new Request([], [
+            'faqusername' => 'admin',
+            'faqpassword' => 'secret',
+        ]));
+
+        self::assertSame('./token?user-id=42', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAuthenticateRedirectsToLoginWhenAuthenticationFails(): void
+    {
+        $currentUser = $this->createAuthenticationCurrentUser(twoFactorEnabled: false, loginResult: false, userId: -1);
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+
+        $controller = new AuthenticationController(
+            $this->createStub(UserSession::class),
+            $currentUser,
+            $this->createStub(TwoFactor::class),
+        );
+        $controller->setContainer($this->createControllerContainer($session, $currentUser));
+
+        $response = $controller->authenticate(new Request([], [
+            'faqusername' => 'admin',
+            'faqpassword' => 'wrong',
+        ]));
+
+        self::assertSame('./login', $response->getTargetUrl());
+        self::assertNotEmpty($session->getFlashBag()->get('error'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAuthenticateUsesRemoteUserWhenSsoSupportIsEnabled(): void
+    {
+        $currentUser = $this->createAuthenticationCurrentUser(twoFactorEnabled: false, loginResult: true, userId: 9);
+        $currentUser
+            ->expects(self::once())
+            ->method('login')
+            ->with('remote-user', '')
+            ->willReturn(true);
+
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+
+        $controller = new AuthenticationController(
+            $this->createStub(UserSession::class),
+            $currentUser,
+            $this->createStub(TwoFactor::class),
+        );
+        $controller->setContainer($this->createControllerContainer($session, $currentUser, [
+            'security.ssoSupport' => true,
+        ]));
+
+        $response = $controller->authenticate(new Request([], [], [], [], [], ['REMOTE_USER' => 'remote-user']));
+
+        self::assertSame('./', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testTokenRedirectsHomeWhenUserIsAlreadyLoggedIn(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(
+            new Session(new MockArraySessionStorage()),
+            $this->createLoggedInCurrentUser(),
+        ));
+
+        $response = $controller->token(new Request(['user-id' => '42']));
+
+        self::assertSame('./', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testCheckRedirectsBackWhenUserIdIsInvalid(): void
     {
         $session = new Session(new MockArraySessionStorage());
@@ -222,6 +394,22 @@ final class AuthenticationControllerTest extends TestCase
     }
 
     /**
+     * @throws \Exception
+     */
+    public function testCheckRedirectsHomeWhenUserIsAlreadyLoggedIn(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(
+            new Session(new MockArraySessionStorage()),
+            $this->createLoggedInCurrentUser(),
+        ));
+
+        $response = $controller->check(new Request([], ['token' => '123456', 'user-id' => '42']));
+
+        self::assertSame('./', $response->getTargetUrl());
+    }
+
+    /**
      * @throws Exception
      * @throws \Exception
      */
@@ -232,6 +420,21 @@ final class AuthenticationControllerTest extends TestCase
             new CurrentUser($this->configuration),
             $this->createStub(TwoFactor::class),
         );
+    }
+
+    private function createAuthenticationController(CurrentUser $currentUser): AuthenticationController
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+
+        $controller = new AuthenticationController(
+            $this->createStub(UserSession::class),
+            $currentUser,
+            $this->createStub(TwoFactor::class),
+        );
+        $controller->setContainer($this->createControllerContainer($session, $currentUser));
+
+        return $controller;
     }
 
     private function createControllerContainer(
@@ -300,6 +503,32 @@ final class AuthenticationControllerTest extends TestCase
                 ['display_name', 'Admin User'],
                 ['email',        'admin@example.com'],
             ]);
+
+        return $currentUser;
+    }
+
+    private function createAuthenticationCurrentUser(bool $twoFactorEnabled, bool $loginResult, int $userId): CurrentUser
+    {
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(false);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(false);
+        $currentUser->method('isSuperAdmin')->willReturn(false);
+        $currentUser->method('getUserId')->willReturn($userId);
+        $currentUser->method('getLogin')->willReturn('admin');
+        $currentUser->method('enableRememberMe');
+        $currentUser->method('setLoggedIn');
+        $currentUser->method('getStatus')->willReturn('active');
+        $currentUser
+            ->method('getUserData')
+            ->willReturnMap([
+                ['twofactor_enabled', $twoFactorEnabled],
+                ['display_name', 'Admin User'],
+                ['email', 'admin@example.com'],
+            ]);
+        $currentUser->method('login')->willReturn($loginResult);
 
         return $currentUser;
     }

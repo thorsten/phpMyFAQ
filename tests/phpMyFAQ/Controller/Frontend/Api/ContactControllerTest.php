@@ -11,10 +11,14 @@ use phpMyFAQ\StopWords;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 #[AllowMockObjectsWithoutExpectations]
+#[CoversClass(ContactController::class)]
+#[UsesNamespace('phpMyFAQ')]
 class ContactControllerTest extends TestCase
 {
     private Configuration $configuration;

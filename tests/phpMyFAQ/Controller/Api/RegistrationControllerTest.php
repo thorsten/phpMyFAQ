@@ -12,12 +12,16 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 #[AllowMockObjectsWithoutExpectations]
+#[CoversClass(RegistrationController::class)]
+#[UsesNamespace('phpMyFAQ')]
 class RegistrationControllerTest extends TestCase
 {
     private Configuration $configuration;

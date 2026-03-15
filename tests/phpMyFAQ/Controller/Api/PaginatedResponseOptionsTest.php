@@ -5,9 +5,13 @@ namespace phpMyFAQ\Controller\Api;
 use phpMyFAQ\Api\Filtering\FilterRequest;
 use phpMyFAQ\Api\Sorting\SortRequest;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+#[CoversClass(PaginatedResponseOptions::class)]
+#[UsesNamespace('phpMyFAQ')]
 class PaginatedResponseOptionsTest extends TestCase
 {
     public function testDefaults(): void

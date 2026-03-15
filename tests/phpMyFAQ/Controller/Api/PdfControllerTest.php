@@ -12,12 +12,16 @@ use phpMyFAQ\Services;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
+#[CoversClass(PdfController::class)]
+#[UsesNamespace('phpMyFAQ')]
 class PdfControllerTest extends TestCase
 {
     private Configuration $configuration;

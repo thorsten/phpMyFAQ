@@ -5,12 +5,16 @@ namespace phpMyFAQ\Controller\Api;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Language;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
+#[CoversClass(LanguageController::class)]
+#[UsesNamespace('phpMyFAQ')]
 class LanguageControllerTest extends TestCase
 {
     /**

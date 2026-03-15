@@ -15,6 +15,10 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -22,6 +26,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 #[AllowMockObjectsWithoutExpectations]
+#[CoversClass(AzureAuthenticationController::class)]
+#[UsesNamespace('phpMyFAQ')]
 class AzureAuthenticationControllerTest extends TestCase
 {
     private Configuration $configuration;
@@ -271,5 +277,81 @@ class AzureAuthenticationControllerTest extends TestCase
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertSame('Credentials not valid.', $response->getContent());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testCallbackReturnsFailureResponseWhenOAuthTokenExchangeThrows(): void
+    {
+        $oauth = $this->createMock(OAuth::class);
+        $oauth
+            ->expects($this->once())
+            ->method('getOAuthToken')
+            ->with('test-code')
+            ->willThrowException(new Exception('Token exchange failed'));
+
+        $entraIdSession = $this->createMock(EntraIdSession::class);
+        $entraIdSession->expects($this->once())->method('getCurrentSessionKey')->willReturn('session-key');
+
+        $controller = new AzureAuthenticationController(
+            authContextFactory: fn(): array => [
+                $this->createMock(AuthEntraId::class),
+                $oauth,
+                $entraIdSession,
+            ],
+            azureConfigLoader: static fn(): null => null,
+        );
+
+        $response = $controller->callback(new Request(['code' => 'test-code']));
+
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertStringContainsString('Entra ID Login failed: Token exchange failed', (string) $response->getContent());
+    }
+
+    public function testBuildAuthContextReturnsDefaultServices(): void
+    {
+        $controller = new AzureAuthenticationController();
+
+        $reflectionMethod = new \ReflectionMethod(AzureAuthenticationController::class, 'buildAuthContext');
+        $result = $reflectionMethod->invoke($controller);
+
+        $this->assertIsArray($result);
+        $this->assertInstanceOf(AuthEntraId::class, $result[0]);
+        $this->assertInstanceOf(OAuth::class, $result[1]);
+        $this->assertInstanceOf(EntraIdSession::class, $result[2]);
+    }
+
+    public function testGetCurrentUserServiceReturnsCurrentUserFromContainer(): void
+    {
+        $controller = new AzureAuthenticationController();
+
+        $reflectionMethod = new \ReflectionMethod(AzureAuthenticationController::class, 'getCurrentUserService');
+        $currentUser = $reflectionMethod->invoke($controller);
+
+        $this->assertInstanceOf(CurrentUser::class, $currentUser);
+    }
+
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
+    public function testLoadAzureConfigurationLoadsConfigFileAndSkipsWhenConstantsAlreadyExist(): void
+    {
+        $azureConfigFile = PMF_CONFIG_DIR . '/azure.php';
+        file_put_contents($azureConfigFile, <<<'PHP'
+<?php
+define('AAD_OAUTH_CLIENTID', 'test-client-id');
+PHP);
+
+        $controller = new AzureAuthenticationController();
+        $reflectionMethod = new \ReflectionMethod(AzureAuthenticationController::class, 'loadAzureConfiguration');
+
+        $reflectionMethod->invoke($controller);
+        $this->assertTrue(defined('AAD_OAUTH_CLIENTID'));
+        $this->assertSame('test-client-id', AAD_OAUTH_CLIENTID);
+
+        $reflectionMethod->invoke($controller);
+        $this->assertTrue(defined('AAD_OAUTH_CLIENTID'));
+
+        @unlink($azureConfigFile);
     }
 }

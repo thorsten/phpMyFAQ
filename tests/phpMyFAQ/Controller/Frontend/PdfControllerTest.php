@@ -27,6 +27,9 @@ final class PdfControllerTest extends TestCase
     private string $databasePath;
     private Sqlite3 $dbHandle;
     private ?Configuration $previousConfiguration = null;
+    private mixed $previousAttachmentStorageType = null;
+    private mixed $previousAttachmentEncryptionEnabled = null;
+    private mixed $previousAttachmentDefaultKey = null;
 
     protected function setUp(): void
     {
@@ -63,6 +66,14 @@ final class PdfControllerTest extends TestCase
         $language = new Language($configuration, new Session(new MockArraySessionStorage()));
         $language->setLanguageFromConfiguration('en');
         $configuration->setLanguage($language);
+
+        $attachmentFactoryReflection = new \ReflectionClass(\phpMyFAQ\Attachment\AttachmentFactory::class);
+        $storageTypeProperty = $attachmentFactoryReflection->getProperty('storageType');
+        $encryptionEnabledProperty = $attachmentFactoryReflection->getProperty('encryptionEnabled');
+        $defaultKeyProperty = $attachmentFactoryReflection->getProperty('defaultKey');
+        $this->previousAttachmentStorageType = $storageTypeProperty->getValue();
+        $this->previousAttachmentEncryptionEnabled = $encryptionEnabledProperty->getValue();
+        $this->previousAttachmentDefaultKey = $defaultKeyProperty->getValue();
     }
 
     protected function tearDown(): void
@@ -78,6 +89,14 @@ final class PdfControllerTest extends TestCase
         $dbTypeProperty = $databaseReflection->getProperty('dbType');
         $dbTypeProperty->setValue(null, '');
         Database::setTablePrefix('');
+
+        $attachmentFactoryReflection = new \ReflectionClass(\phpMyFAQ\Attachment\AttachmentFactory::class);
+        $storageTypeProperty = $attachmentFactoryReflection->getProperty('storageType');
+        $encryptionEnabledProperty = $attachmentFactoryReflection->getProperty('encryptionEnabled');
+        $defaultKeyProperty = $attachmentFactoryReflection->getProperty('defaultKey');
+        $storageTypeProperty->setValue(null, $this->previousAttachmentStorageType);
+        $encryptionEnabledProperty->setValue(null, $this->previousAttachmentEncryptionEnabled);
+        $defaultKeyProperty->setValue(null, $this->previousAttachmentDefaultKey);
 
         if (is_file($this->databasePath)) {
             unlink($this->databasePath);
@@ -113,5 +132,110 @@ final class PdfControllerTest extends TestCase
             Configuration::getConfigurationInstance()->getDefaultUrl(),
             $response->headers->get('Location'),
         );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexReturnsPdfResponseForValidFaq(): void
+    {
+        $configuration = Configuration::getConfigurationInstance();
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configProperty = $configurationReflection->getProperty('config');
+        $config = $configProperty->getValue($configuration);
+        self::assertIsArray($config);
+        $config['records.disableAttachments'] = true;
+        $configProperty->setValue($configuration, $config);
+
+        $controller = new PdfController(
+            new Faq($configuration),
+            new Tags($configuration),
+        );
+
+        $response = $controller->index(new Request([], [], [
+            'categoryId' => '1',
+            'faqId' => '1',
+            'faqLanguage' => 'en',
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('application/pdf', $response->headers->get('Content-Type'));
+        self::assertStringStartsWith('%PDF', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexReturnsPdfResponseWhenAttachmentLookupIsEnabled(): void
+    {
+        $configuration = Configuration::getConfigurationInstance();
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configProperty = $configurationReflection->getProperty('config');
+        $config = $configProperty->getValue($configuration);
+        self::assertIsArray($config);
+        $config['records.disableAttachments'] = false;
+        $configProperty->setValue($configuration, $config);
+
+        $controller = new PdfController(
+            new Faq($configuration),
+            new Tags($configuration),
+        );
+
+        $response = $controller->index(new Request([], [], [
+            'categoryId' => '1',
+            'faqId' => '1',
+            'faqLanguage' => 'en',
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('application/pdf', $response->headers->get('Content-Type'));
+        self::assertStringStartsWith('%PDF', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexReturnsPdfResponseWhenAttachmentLookupThrowsException(): void
+    {
+        $configuration = Configuration::getConfigurationInstance();
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configProperty = $configurationReflection->getProperty('config');
+        $config = $configProperty->getValue($configuration);
+        self::assertIsArray($config);
+        $config['records.disableAttachments'] = false;
+        $configProperty->setValue($configuration, $config);
+
+        $this->seedAttachmentRow(990001);
+
+        $attachmentFactoryReflection = new \ReflectionClass(\phpMyFAQ\Attachment\AttachmentFactory::class);
+        $storageTypeProperty = $attachmentFactoryReflection->getProperty('storageType');
+        $storageTypeProperty->setValue(null, 999);
+
+        $controller = new PdfController(
+            new Faq($configuration),
+            new Tags($configuration),
+        );
+
+        $response = $controller->index(new Request([], [], [
+            'categoryId' => '1',
+            'faqId' => '1',
+            'faqLanguage' => 'en',
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('application/pdf', $response->headers->get('Content-Type'));
+        self::assertStringStartsWith('%PDF', (string) $response->getContent());
+    }
+
+    private function seedAttachmentRow(int $attachmentId): void
+    {
+        $this->dbHandle->query(sprintf('DELETE FROM faqattachment WHERE id = %d', $attachmentId));
+        $this->dbHandle->query(sprintf(
+            "INSERT INTO faqattachment
+                (id, record_id, record_lang, real_hash, virtual_hash, password_hash, filename, filesize, encrypted, mime_type)
+             VALUES
+                (%d, 1, 'en', '11111111111111111111111111111111', '22222222222222222222222222222222', NULL, 'manual.pdf', 16, 0, 'application/pdf')",
+            $attachmentId,
+        ));
     }
 }
