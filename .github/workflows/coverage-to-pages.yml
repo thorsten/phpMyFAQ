@@ -52,7 +52,7 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          php -dxdebug.mode=coverage vendor/bin/phpunit \
+          php -dxdebug.mode=coverage phpmyfaq/src/libs/bin/phpunit \
             --coverage-html build/coverage \
             --coverage-clover build/coverage/clover.xml
 
