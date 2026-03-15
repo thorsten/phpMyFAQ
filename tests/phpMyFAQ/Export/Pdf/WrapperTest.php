@@ -448,7 +448,7 @@ class WrapperTest extends TestCase
 
     public function testImageMethodWithValidPath(): void
     {
-        $fixture = '/Users/thorsten/htdocs/phpMyFAQ/tests/content/user/images/image with spaces.jpg';
+        $fixture = PMF_CONTENT_DIR . '/user/images/image with spaces.jpg';
         $targetFile = PMF_ROOT_DIR . '/content/user/images/wrapper image test.jpg';
         try {
             self::assertTrue(copy($fixture, $targetFile));

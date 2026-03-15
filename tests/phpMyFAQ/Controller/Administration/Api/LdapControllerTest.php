@@ -4,6 +4,20 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
+final class LdapControllerTestRuntime
+{
+    public static ?bool $ldapExtensionLoaded = null;
+}
+
+function extension_loaded(string $extension): bool
+{
+    if ($extension === 'ldap' && LdapControllerTestRuntime::$ldapExtensionLoaded !== null) {
+        return LdapControllerTestRuntime::$ldapExtensionLoaded;
+    }
+
+    return \extension_loaded($extension);
+}
+
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -38,6 +52,7 @@ final class LdapControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        LdapControllerTestRuntime::$ldapExtensionLoaded = null;
 
         Strings::init();
 
@@ -75,6 +90,8 @@ final class LdapControllerTest extends TestCase
 
     protected function tearDown(): void
     {
+        LdapControllerTestRuntime::$ldapExtensionLoaded = null;
+
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
         $configurationProperty->setValue(null, $this->previousConfiguration);
@@ -188,9 +205,7 @@ final class LdapControllerTest extends TestCase
 
     public function testHealthcheckReturnsUnavailableWhenExtensionMissing(): void
     {
-        if (extension_loaded('ldap')) {
-            self::markTestSkipped('LDAP extension is loaded; cannot test missing extension path.');
-        }
+        LdapControllerTestRuntime::$ldapExtensionLoaded = false;
 
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer());
