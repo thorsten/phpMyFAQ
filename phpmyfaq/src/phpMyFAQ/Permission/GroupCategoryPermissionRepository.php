@@ -119,8 +119,20 @@ readonly class GroupCategoryPermissionRepository
             return false;
         }
 
+        $db = $this->configuration->getDb();
+
+        $db->query('BEGIN');
+
         // Remove existing restrictions
-        if (!$this->deleteCategoryRestrictions($groupId, $rightId)) {
+        $delete = sprintf(
+            'DELETE FROM %sfaqgroup_right_category WHERE group_id = %d AND right_id = %d',
+            Database::getTablePrefix(),
+            $groupId,
+            $rightId,
+        );
+
+        if (!$db->query($delete)) {
+            $db->query('ROLLBACK');
             return false;
         }
 
@@ -139,10 +151,13 @@ readonly class GroupCategoryPermissionRepository
                 $categoryId,
             );
 
-            if (!$this->configuration->getDb()->query($insert)) {
+            if (!$db->query($insert)) {
+                $db->query('ROLLBACK');
                 return false;
             }
         }
+
+        $db->query('COMMIT');
 
         return true;
     }
