@@ -489,12 +489,19 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      * @param int   $userId     User ID
      * @param mixed $right      Right ID, name, or PermissionType enum
      * @param int   $categoryId Category ID
+     * @param CurrentUser|null $currentUser Optional pre-loaded user to avoid repeated instantiation
      * @throws Exception
      */
-    public function hasPermissionForCategory(int $userId, mixed $right, int $categoryId): bool
-    {
-        $currentUser = new CurrentUser($this->configuration);
-        $currentUser->getUserById($userId);
+    public function hasPermissionForCategory(
+        int $userId,
+        mixed $right,
+        int $categoryId,
+        ?CurrentUser $currentUser = null,
+    ): bool {
+        if ($currentUser === null) {
+            $currentUser = new CurrentUser($this->configuration);
+            $currentUser->getUserById($userId);
+        }
 
         if ($currentUser->isSuperAdmin()) {
             return true;
