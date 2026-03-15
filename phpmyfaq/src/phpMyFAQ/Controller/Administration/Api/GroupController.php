@@ -166,13 +166,26 @@ final class GroupController extends AbstractAdministrationApiController
         }
 
         $data = json_decode($request->getContent(), true);
+        if (!is_array($data)) {
+            return $this->json(['error' => 'Invalid JSON payload.'], Response::HTTP_BAD_REQUEST);
+        }
+
         $groupId = (int) ($data['groupId'] ?? 0);
         $rightId = (int) ($data['rightId'] ?? 0);
-        $categoryIds = array_map('intval', $data['categoryIds'] ?? []);
 
         if ($groupId <= 0 || $rightId <= 0) {
             return $this->json(['error' => 'Invalid group or right ID.'], Response::HTTP_BAD_REQUEST);
         }
+
+        $rawCategoryIds = $data['categoryIds'] ?? [];
+        if (!is_array($rawCategoryIds)) {
+            return $this->json(['error' => 'categoryIds must be an array.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $categoryIds = array_values(array_filter(
+            array_map('intval', $rawCategoryIds),
+            static fn(int $id): bool => $id > 0,
+        ));
 
         $success = $currentUser->perm->setCategoryRestrictions($groupId, $rightId, $categoryIds);
 
