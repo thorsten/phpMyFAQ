@@ -45,6 +45,13 @@ class ConfigDirectoryResolverTest extends TestCase
         $this->assertFalse($result);
     }
 
+    public function testComputeAttachmentsPathSupportsNestedRelativeSegments(): void
+    {
+        $result = ConfigDirectoryResolver::computeAttachmentsPath('attachments/images', '/app/root');
+
+        $this->assertSame('/app/root' . DIRECTORY_SEPARATOR . 'attachments/images', $result);
+    }
+
     public function testResolveUsesExistingBootstrapDirectories(): void
     {
         ConfigDirectoryResolver::resolve();

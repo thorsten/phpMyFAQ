@@ -2,16 +2,23 @@
 
 namespace phpMyFAQ\Auth;
 
+use Closure;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\AuthenticationSourceType;
+use phpMyFAQ\User;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 #[AllowMockObjectsWithoutExpectations]
 class AuthSsoTest extends TestCase
 {
     private Configuration $configurationMock;
+
+    protected function tearDown(): void
+    {
+        unset($_SERVER['REMOTE_USER'], $_SERVER['PHP_AUTH_USER']);
+    }
 
     protected function setUp(): void
     {
@@ -28,39 +35,44 @@ class AuthSsoTest extends TestCase
 
     public function testCreateWithLdapActive(): void
     {
-        $login = 'testuser';
-        $password = 'password';
-        $domain = 'example.com';
-
         $this->configurationMock
             ->expects($this->once())
             ->method('isLdapActive')
             ->willReturn(true);
 
-        $authSso = new AuthSso($this->configurationMock);
+        $ldapAuth = $this->createMock(AuthLdap::class);
+        $ldapAuth->expects($this->once())->method('create')->with('testuser', '', 'example.com')->willReturn(true);
 
-        // Since LDAP integration would create AuthLdap instance,
-        // we expect this to potentially throw an exception in test environment
-        $this->expectException(\Exception::class);
-        $authSso->create($login, $password, $domain);
+        $authSso = new AuthSso(
+            $this->configurationMock,
+            Request::create('/'),
+            Closure::fromCallable(fn(): AuthLdap => $ldapAuth),
+        );
+
+        $this->assertTrue($authSso->create('testuser', 'password', 'example.com'));
     }
 
     public function testCreateWithoutLdap(): void
     {
-        $login = 'testuser';
-        $password = 'password';
-        $domain = 'example.com';
-
         $this->configurationMock
             ->expects($this->once())
             ->method('isLdapActive')
             ->willReturn(false);
 
-        $authSso = new AuthSso($this->configurationMock);
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('createUser')->with('testuser', '', 'example.com')->willReturn(true);
+        $user->expects($this->once())->method('setStatus')->with('active');
+        $user->expects($this->once())->method('setAuthSource')->with(AuthenticationSourceType::AUTH_SSO->value);
+        $user->expects($this->once())->method('setUserData')->with(['display_name' => 'testuser']);
 
-        // User creation will fail in test environment, expect TypeError from Permission
-        $this->expectException(\TypeError::class);
-        $authSso->create($login, $password, $domain);
+        $authSso = new AuthSso(
+            $this->configurationMock,
+            Request::create('/'),
+            null,
+            Closure::fromCallable(fn(): User => $user),
+        );
+
+        $this->assertTrue($authSso->create('testuser', 'password', 'example.com'));
     }
 
     public function testUpdate(): void

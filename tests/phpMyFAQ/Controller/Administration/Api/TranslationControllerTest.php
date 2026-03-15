@@ -267,9 +267,12 @@ final class TranslationControllerTest extends TestCase
         $token = $this->createValidCsrfToken($session, 'translate');
 
         $translationService = $this->createMock(ContentTranslationService::class);
-        $translationService->expects($this->once())->method('translateFaq')->willReturn(new TranslationResult([
-            'question' => 'Frage',
-        ], true));
+        $translationService
+            ->expects($this->once())
+            ->method('translateFaq')
+            ->willReturn(new TranslationResult([
+                'question' => 'Frage',
+            ], true));
 
         $adminLog = $this->createMock(AdminLog::class);
         $adminLog->expects($this->once())->method('log')->with($this->anything(), 'faq-translate:en->de');

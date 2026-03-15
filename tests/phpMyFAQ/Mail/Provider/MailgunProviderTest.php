@@ -113,4 +113,66 @@ class MailgunProviderTest extends TestCase
 
         $this->assertSame(1, $result);
     }
+
+    public function testSendThrowsWhenFromHeaderIsInvalid(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnCallback(static fn(string $key): mixed => match ($key) {
+                'mail.mailgunApiKey' => 'secret-key',
+                'mail.mailgunDomain' => 'mg.example.com',
+                default => null,
+            });
+
+        $provider = new MailgunProvider($configuration, $this->createStub(HttpClientInterface::class));
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing valid From header for Mailgun provider.');
+        $provider->send('user@example.com', ['From' => '', 'Subject' => 'Test'], 'Body');
+    }
+
+    public function testSendThrowsWhenNoValidRecipientsExist(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnCallback(static fn(string $key): mixed => match ($key) {
+                'mail.mailgunApiKey' => 'secret-key',
+                'mail.mailgunDomain' => 'mg.example.com',
+                default => null,
+            });
+
+        $provider = new MailgunProvider($configuration, $this->createStub(HttpClientInterface::class));
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('No valid recipients for Mailgun provider.');
+        $provider->send(' , ', ['From' => 'sender@example.com', 'Subject' => 'Test'], 'Body');
+    }
+
+    public function testSendThrowsWhenApiReturnsNonSuccessfulStatus(): void
+    {
+        $response = $this->createStub(ResponseInterface::class);
+        $response->method('getStatusCode')->willReturn(500);
+        $response->method('getContent')->willReturn('provider failure');
+
+        $httpClient = $this->createMock(HttpClientInterface::class);
+        $httpClient->expects($this->once())->method('request')->willReturn($response);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnCallback(static fn(string $key): mixed => match ($key) {
+                'mail.mailgunApiKey' => 'secret-key',
+                'mail.mailgunDomain' => 'mg.example.com',
+                'mail.mailgunRegion' => 'us',
+                default => null,
+            });
+
+        $provider = new MailgunProvider($configuration, $httpClient);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Mailgun request failed with status 500: provider failure');
+        $provider->send('user@example.com', ['From' => 'sender@example.com', 'Subject' => 'Test'], 'Body');
+    }
 }

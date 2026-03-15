@@ -163,7 +163,10 @@ final class BackupControllerTest extends TestCase
     public function testExportReturnsInternalServerErrorWhenBackupExportFails(): void
     {
         $backup = $this->createMock(Backup::class);
-        $backup->expects($this->once())->method('export')->willThrowException(new \SodiumException('export failed'));
+        $backup
+            ->expects($this->once())
+            ->method('export')
+            ->willThrowException(new \SodiumException('export failed'));
 
         $controller = $this->createAuthenticatedController($backup);
 

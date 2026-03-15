@@ -150,6 +150,39 @@ class AuthLdapTest extends TestCase
     /**
      * @throws \phpMyFAQ\Core\Exception
      */
+    public function testCreateLogsInfoWhenUserCreationThrows(): void
+    {
+        $user = $this->createMock(User::class);
+        $user
+            ->expects($this->once())
+            ->method('createUser')
+            ->with('alice', '', '')
+            ->willThrowException(new \Exception('cannot create ldap user'));
+        $user->expects($this->once())->method('setStatus')->with('active');
+        $user->expects($this->once())->method('setAuthSource')->with(AuthenticationSourceType::AUTH_LDAP->value);
+        $user
+            ->expects($this->once())
+            ->method('setUserData')
+            ->with([
+                'display_name' => '',
+                'email' => '',
+            ]);
+
+        $this->ldapCore->method('getCompleteName')->willReturn(false);
+        $this->ldapCore->method('getMail')->willReturn(false);
+        $this->logger
+            ->expects($this->once())
+            ->method('info')
+            ->with('cannot create ldap user');
+
+        $auth = $this->createAuthLdap(fn(): User => $user);
+
+        $this->assertFalse($auth->create('alice', 'secret'));
+    }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
     public function testCreateAssignsMappedGroupsWhenAutoAssignIsEnabled(): void
     {
         $user = $this->createMock(User::class);
@@ -203,6 +236,26 @@ class AuthLdapTest extends TestCase
         $this->expectExceptionMessage(User::ERROR_USER_INCORRECT_PASSWORD);
 
         $auth->checkCredentials('alice', '');
+    }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testUpdateReturnsTrue(): void
+    {
+        $auth = $this->createAuthLdap();
+
+        $this->assertTrue($auth->update('alice', 'secret'));
+    }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testDeleteReturnsTrue(): void
+    {
+        $auth = $this->createAuthLdap();
+
+        $this->assertTrue($auth->delete('alice'));
     }
 
     /**
@@ -298,6 +351,51 @@ class AuthLdapTest extends TestCase
         $method = $reflection->getMethod('extractGroupNameFromDn');
         $this->assertSame('Domain Admins', $method->invoke($auth, 'CN=Domain Admins,CN=Users,DC=example,DC=com'));
         $this->assertSame('plain-group', $method->invoke($auth, 'plain-group'));
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testPrivateCreateUserUsesInjectedFactory(): void
+    {
+        $user = $this->createMock(User::class);
+        $auth = $this->createAuthLdap(fn(): User => $user);
+
+        $reflection = new ReflectionClass($auth);
+        $method = $reflection->getMethod('createUser');
+
+        $this->assertSame($user, $method->invoke($auth));
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testPrivateCreateUserFallsBackToConcreteUser(): void
+    {
+        $auth = $this->createAuthLdap();
+
+        $reflection = new ReflectionClass($auth);
+        $method = $reflection->getMethod('createUser');
+        $createdUser = $method->invoke($auth);
+
+        $this->assertInstanceOf(User::class, $createdUser);
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testPrivateCreateMediumPermissionUsesInjectedFactory(): void
+    {
+        $permission = $this->createMock(MediumPermission::class);
+        $auth = $this->createAuthLdap(null, fn(): MediumPermission => $permission);
+
+        $reflection = new ReflectionClass($auth);
+        $method = $reflection->getMethod('createMediumPermission');
+
+        $this->assertSame($permission, $method->invoke($auth));
     }
 
     /**

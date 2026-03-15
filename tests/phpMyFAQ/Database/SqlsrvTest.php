@@ -561,6 +561,29 @@ class SqlsrvTest extends TestCase
         $this->assertSame(6, $this->sqlsrv->numRows('result'));
     }
 
+    public function testFetchRowReturnsFirstColumnFromArrayShim(): void
+    {
+        $GLOBALS['pmfSqlsrvTestState']['fetch_array_rows'] = [[0 => 'first-column', 'name' => 'faqdata']];
+
+        $this->assertSame('first-column', $this->sqlsrv->fetchRow('result'));
+    }
+
+    public function testGetTableStatusBuildsRowsByTableName(): void
+    {
+        $this->setConnectionProperty('sqlsrv-connection');
+        $GLOBALS['pmfSqlsrvTestState']['query_result'] = 'sqlsrv-result';
+        $GLOBALS['pmfSqlsrvTestState']['fetch_object_rows'] = [
+            (object) ['table_name' => 'faqdata', 'table_rows' => 11],
+            (object) ['table_name' => 'faqcategories', 'table_rows' => 4],
+            false,
+        ];
+
+        $status = $this->sqlsrv->getTableStatus();
+
+        $this->assertSame(['faqdata' => 11, 'faqcategories' => 4], $status);
+        $this->assertStringContainsString('sysobjects', $GLOBALS['pmfSqlsrvTestState']['last_query']);
+    }
+
     public function testNextIdVersionsLastInsertIdAndCloseUseSqlsrvShims(): void
     {
         $this->setConnectionProperty('sqlsrv-connection');

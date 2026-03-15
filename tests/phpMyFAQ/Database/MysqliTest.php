@@ -215,6 +215,15 @@ class MysqliTest extends TestCase
         $this->assertEquals('', $result);
     }
 
+    public function testEscapeDelegatesToRealEscapeString(): void
+    {
+        $connection = $this->createMock(\mysqli::class);
+        $connection->expects($this->once())->method('real_escape_string')->with("faq'value")->willReturn("faq\\'value");
+        $this->setConnection($connection);
+
+        $this->assertSame("faq\\'value", $this->mysqli->escape("faq'value"));
+    }
+
     public function testGetTableNamesPopulatesPrefixedTableList(): void
     {
         $tableNames = $this->mysqli->getTableNames('pmf_');

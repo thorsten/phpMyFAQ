@@ -257,7 +257,10 @@ class AbstractMigrationTest extends TestCase
     public function testUpdateLanguageCodeEscapesValues(): void
     {
         $db = $this->createMock(DatabaseDriver::class);
-        $db->expects($this->exactly(2))->method('escape')->willReturnCallback(fn($value) => addslashes($value));
+        $db
+            ->expects($this->exactly(2))
+            ->method('escape')
+            ->willReturnCallback(fn($value) => addslashes($value));
 
         $this->configuration->method('getDb')->willReturn($db);
 
@@ -289,7 +292,10 @@ class AbstractMigrationTest extends TestCase
     public function testIndexExistsEscapesValues(): void
     {
         $db = $this->createMock(DatabaseDriver::class);
-        $db->expects($this->exactly(2))->method('escape')->willReturnCallback(fn($value) => addslashes($value));
+        $db
+            ->expects($this->exactly(2))
+            ->method('escape')
+            ->willReturnCallback(fn($value) => addslashes($value));
 
         $this->configuration->method('getDb')->willReturn($db);
 

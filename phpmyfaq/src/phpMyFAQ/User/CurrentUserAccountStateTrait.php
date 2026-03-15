@@ -48,8 +48,8 @@ trait CurrentUserAccountStateTrait
         );
 
         $result = $this->configuration->getDb()->query($query);
-        $row = $this->configuration->getDb()->fetchRow($result);
+        $row = $this->configuration->getDb()->fetchArray($result);
 
-        return $row === 'blocked';
+        return ($row['account_status'] ?? null) === 'blocked';
     }
 }

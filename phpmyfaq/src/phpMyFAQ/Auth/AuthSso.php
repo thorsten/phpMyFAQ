@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Auth;
 
+use Closure;
 use phpMyFAQ\Auth;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
@@ -35,15 +36,23 @@ use Symfony\Component\HttpFoundation\Request;
 class AuthSso extends Auth implements AuthDriverInterface
 {
     private readonly Request $request;
+    private readonly ?Closure $ldapFactory;
+    private readonly ?Closure $userFactory;
 
     /**
      * @inheritDoc
      */
-    public function __construct(Configuration $configuration)
-    {
+    public function __construct(
+        Configuration $configuration,
+        ?Request $request = null,
+        ?Closure $ldapFactory = null,
+        ?Closure $userFactory = null,
+    ) {
         parent::__construct($configuration);
 
-        $this->request = Request::createFromGlobals();
+        $this->request = $request ?? Request::createFromGlobals();
+        $this->ldapFactory = $ldapFactory;
+        $this->userFactory = $userFactory;
     }
 
     /**
@@ -54,12 +63,12 @@ class AuthSso extends Auth implements AuthDriverInterface
     {
         if ($this->configuration->isLdapActive()) {
             // LDAP/AD + SSO
-            $authLdap = new AuthLdap($this->configuration);
+            $authLdap = $this->createLdapAuth();
             return $authLdap->create($login, '', $domain);
         }
 
         // SSO without LDAP/AD
-        $user = new User($this->configuration);
+        $user = $this->createUser();
         $result = $user->createUser($login, '', $domain);
         $user->setStatus('active');
         $user->setAuthSource(AuthenticationSourceType::AUTH_SSO->value);
@@ -120,5 +129,23 @@ class AuthSso extends Auth implements AuthDriverInterface
     public function isValidLogin(string $login, ?array $optionalData = null): int
     {
         return $this->request->server->get('PHP_AUTH_USER') !== null ? 1 : 0;
+    }
+
+    private function createLdapAuth(): AuthLdap
+    {
+        if ($this->ldapFactory instanceof Closure) {
+            return ($this->ldapFactory)();
+        }
+
+        return new AuthLdap($this->configuration);
+    }
+
+    private function createUser(): User
+    {
+        if ($this->userFactory instanceof Closure) {
+            return ($this->userFactory)();
+        }
+
+        return new User($this->configuration);
     }
 }

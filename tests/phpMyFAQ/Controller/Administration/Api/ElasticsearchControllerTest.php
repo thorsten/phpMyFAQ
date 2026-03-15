@@ -377,7 +377,10 @@ final class ElasticsearchControllerTest extends TestCase
         $faq->expects($this->once())->method('getAllFaqs');
 
         $customPage = $this->createMock(CustomPage::class);
-        $customPage->expects($this->once())->method('getAllPages')->willReturn([['id' => 7, 'title' => 'Page']]);
+        $customPage
+            ->expects($this->once())
+            ->method('getAllPages')
+            ->willReturn([['id' => 7, 'title' => 'Page']]);
 
         $controller = $this->createControllerWithDependencies($elasticsearch, $faq, $customPage);
         $controller->setContainer($this->createAuthenticatedContainer());
@@ -407,7 +410,10 @@ final class ElasticsearchControllerTest extends TestCase
         $faq->expects($this->once())->method('getAllFaqs');
 
         $customPage = $this->createMock(CustomPage::class);
-        $customPage->expects($this->once())->method('getAllPages')->willReturn([['id' => 7, 'title' => 'Page']]);
+        $customPage
+            ->expects($this->once())
+            ->method('getAllPages')
+            ->willReturn([['id' => 7, 'title' => 'Page']]);
 
         $controller = $this->createControllerWithDependencies($elasticsearch, $faq, $customPage);
         $controller->setContainer($this->createAuthenticatedContainer());

@@ -111,6 +111,67 @@ class OAuthTest extends TestCase
         $this->assertEquals('new_refresh_token', $result->refresh_token);
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws Exception
+     */
+    public function testGetOAuthTokenThrowsRuntimeExceptionForJsonErrorResponse(): void
+    {
+        $mockResponse = $this->createStub(ResponseInterface::class);
+        $mockResponse
+            ->method('getContent')
+            ->willReturn(json_encode([
+                'error' => 'invalid_grant',
+                'error_description' => 'Authorization code expired',
+            ], JSON_THROW_ON_ERROR));
+        $mockResponse->method('getStatusCode')->willReturn(400);
+
+        $this->mockSession->method('getCookie')->willReturn('cookie-verifier');
+        $this->mockSession->method('get')->willReturn('');
+
+        $this->mockClient
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($mockResponse);
+
+        $reflection = new ReflectionClass($this->oAuth);
+        $clientProperty = $reflection->getProperty('httpClient');
+        $clientProperty->setValue($this->oAuth, $this->mockClient);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('OAuth token exchange failed (invalid_grant): Authorization code expired');
+
+        $this->oAuth->getOAuthToken('authorization_code');
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws Exception
+     */
+    public function testGetOAuthTokenThrowsRuntimeExceptionForNonJsonErrorResponse(): void
+    {
+        $mockResponse = $this->createStub(ResponseInterface::class);
+        $mockResponse->method('getContent')->willReturn('gateway timeout');
+        $mockResponse->method('getStatusCode')->willReturn(504);
+
+        $this->mockSession->method('getCookie')->willReturn('cookie-verifier');
+        $this->mockSession->method('get')->willReturn('');
+
+        $this->mockClient
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($mockResponse);
+
+        $reflection = new ReflectionClass($this->oAuth);
+        $clientProperty = $reflection->getProperty('httpClient');
+        $clientProperty->setValue($this->oAuth, $this->mockClient);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('OAuth token exchange failed: gateway timeout');
+
+        $this->oAuth->getOAuthToken('authorization_code');
+    }
+
     public function testSetToken(): void
     {
         $header = base64_encode(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));
@@ -142,6 +203,50 @@ class OAuthTest extends TestCase
         $property = $reflection->getProperty('refreshToken');
 
         $this->assertEquals($refreshToken, $property->getValue($this->oAuth));
+    }
+
+    public function testErrorMessageReturnsInput(): void
+    {
+        $this->assertSame('entra-id failed', $this->oAuth->errorMessage('entra-id failed'));
+    }
+
+    public function testGetTokenReturnsPreviouslySetDecodedToken(): void
+    {
+        $header = base64_encode(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));
+        $payload = base64_encode(json_encode(['name' => 'Token User', 'preferred_username' => 'token@example.com']));
+        $signature = 'dummy_signature';
+        $token = new stdClass();
+        $token->id_token = $header . '.' . $payload . '.' . $signature;
+
+        $this->mockSession
+            ->expects($this->once())
+            ->method('set')
+            ->with(EntraIdSession::ENTRA_ID_JWT, $this->stringContains('Token User'));
+
+        $this->oAuth->setToken($token);
+
+        $this->assertInstanceOf(stdClass::class, $this->oAuth->getToken());
+        $this->assertSame('Token User', $this->oAuth->getToken()->name);
+    }
+
+    public function testGetEntraIdSessionReturnsInjectedSession(): void
+    {
+        $this->assertSame($this->mockSession, $this->oAuth->getEntraIdSession());
+    }
+
+    public function testGetRefreshTokenReturnsPreviouslySetValue(): void
+    {
+        $this->oAuth->setRefreshToken('refresh-token-value');
+
+        $this->assertSame('refresh-token-value', $this->oAuth->getRefreshToken());
+    }
+
+    public function testSetAndGetAccessToken(): void
+    {
+        $result = $this->oAuth->setAccessToken('access-token-value');
+
+        $this->assertSame($this->oAuth, $result);
+        $this->assertSame('access-token-value', $this->oAuth->getAccessToken());
     }
 
     public function testGetName(): void

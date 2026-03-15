@@ -45,15 +45,16 @@ class Migration420AlphaTest extends TestCase
         $recorder = $this->createMock(OperationRecorder::class);
         $foundApiKeysTable = false;
 
-        $recorder->expects($this->atLeastOnce())->method('addSql')->with($this->callback(function (string $sql) use (
-            &$foundApiKeysTable,
-        ): bool {
-            if (str_contains($sql, 'faqapi_keys')) {
-                $foundApiKeysTable = true;
-            }
+        $recorder
+            ->expects($this->atLeastOnce())
+            ->method('addSql')
+            ->with($this->callback(function (string $sql) use (&$foundApiKeysTable): bool {
+                if (str_contains($sql, 'faqapi_keys')) {
+                    $foundApiKeysTable = true;
+                }
 
-            return true;
-        }), $this->anything());
+                return true;
+            }), $this->anything());
 
         $this->migration->up($recorder);
 
@@ -65,15 +66,16 @@ class Migration420AlphaTest extends TestCase
         $recorder = $this->createMock(OperationRecorder::class);
         $foundOauthTable = false;
 
-        $recorder->expects($this->atLeastOnce())->method('addSql')->with($this->callback(function (string $sql) use (
-            &$foundOauthTable,
-        ): bool {
-            if (str_contains($sql, 'faqoauth_clients')) {
-                $foundOauthTable = true;
-            }
+        $recorder
+            ->expects($this->atLeastOnce())
+            ->method('addSql')
+            ->with($this->callback(function (string $sql) use (&$foundOauthTable): bool {
+                if (str_contains($sql, 'faqoauth_clients')) {
+                    $foundOauthTable = true;
+                }
 
-            return true;
-        }), $this->anything());
+                return true;
+            }), $this->anything());
 
         $this->migration->up($recorder);
 

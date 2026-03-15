@@ -334,7 +334,10 @@ final class AdminLogControllerTest extends TestCase
         $this->setCsrfCookie('admin-log-verify', $csrfToken);
 
         $adminLog = $this->createMock(AdminLog::class);
-        $adminLog->expects($this->once())->method('verifyChainIntegrity')->willThrowException(new \Exception('boom'));
+        $adminLog
+            ->expects($this->once())
+            ->method('verifyChainIntegrity')
+            ->willThrowException(new \Exception('boom'));
 
         $controller = new AdminLogController();
         $controller->setContainer($this->createAuthenticatedContainer($adminLog, $session));

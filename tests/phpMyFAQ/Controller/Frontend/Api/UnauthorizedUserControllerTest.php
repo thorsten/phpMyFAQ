@@ -348,7 +348,10 @@ class UnauthorizedUserControllerTest extends TestCase
 
         $mail = $this->createMock(Mail::class);
         $mail->expects($this->once())->method('addTo')->with('test@example.com');
-        $mail->expects($this->once())->method('send')->willThrowException(new \phpMyFAQ\Core\Exception('SMTP failed'));
+        $mail
+            ->expects($this->once())
+            ->method('send')
+            ->willThrowException(new \phpMyFAQ\Core\Exception('SMTP failed'));
 
         $controller = new UnauthorizedUserController(
             static fn(Configuration $configuration): CurrentUser => $user,

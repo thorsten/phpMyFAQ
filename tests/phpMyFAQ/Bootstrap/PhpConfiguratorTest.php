@@ -6,9 +6,11 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Session\RedisSessionHandler;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use RuntimeException;
 
 #[AllowMockObjectsWithoutExpectations]
@@ -18,10 +20,12 @@ class PhpConfiguratorTest extends TestCase
 {
     /** @var array<string, string|false> */
     private array $iniBackup = [];
+    private ReflectionClass $reflection;
 
     protected function setUp(): void
     {
         parent::setUp();
+        $this->reflection = new ReflectionClass(PhpConfigurator::class);
 
         if (session_status() === PHP_SESSION_ACTIVE) {
             session_write_close();
@@ -44,6 +48,8 @@ class PhpConfiguratorTest extends TestCase
             session_write_close();
         }
 
+        $this->setRedisConfigurator(null);
+
         foreach ($this->iniBackup as $name => $value) {
             if ($name === 'session.save_handler') {
                 continue;
@@ -55,6 +61,12 @@ class PhpConfiguratorTest extends TestCase
         }
 
         parent::tearDown();
+    }
+
+    private function setRedisConfigurator(?callable $redisConfigurator): void
+    {
+        $property = $this->reflection->getProperty('redisConfigurator');
+        $property->setValue(null, $redisConfigurator ?? [RedisSessionHandler::class, 'configure']);
     }
 
     public function testFixIncludePathEnsuresDotIsPresent(): void
@@ -103,6 +115,7 @@ class PhpConfiguratorTest extends TestCase
             ->willReturnMap([
                 ['session.handler',  'files'],
                 ['session.redisDsn', ''],
+                ['session.savePath', ''],
             ]);
 
         PhpConfigurator::configureSession($configuration);
@@ -118,6 +131,7 @@ class PhpConfiguratorTest extends TestCase
             ->willReturnMap([
                 ['session.handler',  'files'],
                 ['session.redisDsn', ''],
+                ['session.savePath', ''],
             ]);
 
         PhpConfigurator::configureSession($configuration);
@@ -133,6 +147,7 @@ class PhpConfiguratorTest extends TestCase
             ->willReturnMap([
                 ['session.handler',  'invalid'],
                 ['session.redisDsn', ''],
+                ['session.savePath', ''],
             ]);
 
         $this->expectException(RuntimeException::class);
@@ -143,22 +158,41 @@ class PhpConfiguratorTest extends TestCase
 
     public function testConfigureSessionUsesRedisHandlerWhenConfigured(): void
     {
-        if (!extension_loaded('redis')) {
-            $this->markTestSkipped('Redis extension is not loaded in this environment.');
-        }
-
         $configuration = $this->createMock(Configuration::class);
         $configuration
             ->method('get')
             ->willReturnMap([
                 ['session.handler',  'redis'],
                 ['session.redisDsn', 'tcp://127.0.0.1:6379?database=1'],
+                ['session.savePath', ''],
+            ]);
+
+        unset($GLOBALS['__pmf_test_redis_dsn']);
+        $this->setRedisConfigurator(static function (string $dsn): void {
+            $GLOBALS['__pmf_test_redis_dsn'] = $dsn;
+        });
+
+        PhpConfigurator::configureSession($configuration);
+
+        $this->assertSame('tcp://127.0.0.1:6379?database=1', $GLOBALS['__pmf_test_redis_dsn'] ?? null);
+    }
+
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
+    public function testConfigureSessionUsesConfiguredSavePath(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['session.handler', 'files'],
+                ['session.redisDsn', ''],
+                ['session.savePath', sys_get_temp_dir() . '/pmf-session-configured-path'],
             ]);
 
         PhpConfigurator::configureSession($configuration);
 
-        $this->assertSame('redis', ini_get('session.save_handler'));
-        $this->assertSame('tcp://127.0.0.1:6379?database=1', ini_get('session.save_path'));
+        $this->assertSame(sys_get_temp_dir() . '/pmf-session-configured-path', ini_get('session.save_path'));
     }
 
     public function testConfigureSessionPersistsDataWithFilesHandler(): void
@@ -173,6 +207,7 @@ class PhpConfiguratorTest extends TestCase
             ->willReturnMap([
                 ['session.handler',  'files'],
                 ['session.redisDsn', ''],
+                ['session.savePath', ''],
             ]);
 
         PhpConfigurator::configureSession($configuration);

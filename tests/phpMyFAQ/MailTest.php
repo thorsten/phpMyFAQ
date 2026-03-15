@@ -714,7 +714,10 @@ class MailTest extends TestCase
 
         $wrongBusContainer = $this->createMock(ContainerInterface::class);
         $wrongBusContainer->method('has')->with('phpmyfaq.queue.message-bus')->willReturn(true);
-        $wrongBusContainer->method('get')->with('phpmyfaq.queue.message-bus')->willReturn(new \stdClass());
+        $wrongBusContainer
+            ->method('get')
+            ->with('phpmyfaq.queue.message-bus')
+            ->willReturn(new \stdClass());
 
         $wrongBusConfiguration = $this->createMock(Configuration::class);
         $wrongBusConfiguration

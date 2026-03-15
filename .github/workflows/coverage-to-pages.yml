@@ -1,0 +1,90 @@
+name: Code Coverage → GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  # Optional: Manuelles Triggern über die GitHub UI
+  workflow_dispatch:
+
+# Sicherstellen, dass immer nur ein Deployment gleichzeitig läuft
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  coverage:
+    name: Generate Coverage & Deploy
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: mbstring, xml, dom
+          coverage: pcov
+
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Run tests with coverage
+        run: |
+          php -dxdebug.mode=coverage vendor/bin/phpunit \
+            --coverage-html build/coverage \
+            --coverage-clover build/coverage/clover.xml
+
+      # Optional: Coverage-Zusammenfassung in der GitHub Actions Summary anzeigen
+      - name: Coverage Summary
+        if: always()
+        run: |
+          if [ -f build/coverage/clover.xml ]; then
+            echo "## Code Coverage Report" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+
+            # Gesamtabdeckung aus clover.xml extrahieren
+            COVERED=$(grep -oP 'coveredstatements="\K[0-9]+' build/coverage/clover.xml | tail -1)
+            TOTAL=$(grep -oP 'statements="\K[0-9]+' build/coverage/clover.xml | tail -1)
+
+            if [ -n "$COVERED" ] && [ -n "$TOTAL" ] && [ "$TOTAL" -gt 0 ]; then
+              PERCENT=$(awk "BEGIN { printf \"%.1f\", ($COVERED/$TOTAL)*100 }")
+              echo "**Gesamtabdeckung: ${PERCENT}%** (${COVERED}/${TOTAL} Statements)" >> $GITHUB_STEP_SUMMARY
+            fi
+
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "📊 [Vollständiger Report](${{ steps.deployment.outputs.page_url }})" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/coverage
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

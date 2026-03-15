@@ -72,4 +72,28 @@ class VanillaFileTest extends TestCase
         // After deletion, the file should no longer exist in the virtual file system
         $this->assertFalse($this->root->hasChild('file.txt'));
     }
+
+    public function testCopyToSimpleTargetReturnsTrue(): void
+    {
+        $source = new VanillaFile(vfsStream::url('root/file.txt'));
+        $targetPath = vfsStream::url('root/copied.txt');
+
+        $result = $source->copyTo($targetPath);
+
+        $this->assertTrue($result);
+        $this->assertSame('test file content', file_get_contents($targetPath));
+    }
+
+    public function testCopyToVanillaFileTargetReturnsTrue(): void
+    {
+        file_put_contents(vfsStream::url('root/target.txt'), '');
+
+        $source = new VanillaFile(vfsStream::url('root/file.txt'));
+        $target = new VanillaFile(vfsStream::url('root/target.txt'), VanillaFile::MODE_WRITE);
+
+        $result = $source->copyTo($target);
+
+        $this->assertTrue($result);
+        $this->assertSame('test file content', file_get_contents(vfsStream::url('root/target.txt')));
+    }
 }

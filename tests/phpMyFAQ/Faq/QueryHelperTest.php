@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ\Faq;
 
+use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -10,11 +11,14 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
 class QueryHelperTest extends TestCase
 {
+    private ?Configuration $previousConfiguration = null;
+
     /**
      * @throws Exception
      * @throws \PHPUnit\Framework\MockObject\Exception
@@ -29,11 +33,31 @@ class QueryHelperTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $configuration = Configuration::getConfigurationInstance();
+        $dbHandle = new Sqlite3();
+        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        Database::setTablePrefix('');
+
+        $configuration = new Configuration($dbHandle);
+        $configuration->getAll();
+
+        $reflection = new ReflectionClass(Configuration::class);
+        $property = $reflection->getProperty('configuration');
+        $this->previousConfiguration = $property->getValue();
+        $property->setValue(null, $configuration);
+
         $language = new Language($configuration, $this->createStub(Session::class));
         $language->setLanguageWithDetection('language_en.php');
 
         $configuration->setLanguage($language);
+    }
+
+    protected function tearDown(): void
+    {
+        $reflection = new ReflectionClass(Configuration::class);
+        $property = $reflection->getProperty('configuration');
+        $property->setValue(null, $this->previousConfiguration);
+
+        parent::tearDown();
     }
 
     public function testQueryPermissionWithoutGroupSupport(): void
@@ -135,5 +159,28 @@ ORDER BY fcr.category_id, fd.id";
 
         // Perform the assertion
         $this->assertSame($expectedQuery, $result);
+    }
+
+    public function testGetCategoryIdWhereSequenceRecursesIntoChildren(): void
+    {
+        $queryHelper = new QueryHelper(-1, [1, 2, 3]);
+
+        $category = $this->createMock(Category::class);
+        $category
+            ->method('getChildren')
+            ->willReturnCallback(static function (int $categoryId): array {
+                return match ($categoryId) {
+                    1 => [2, 3],
+                    2 => [4],
+                    3, 4 => [],
+                    default => [],
+                };
+            });
+
+        $reflectionMethod = new \ReflectionMethod(QueryHelper::class, 'getCategoryIdWhereSequence');
+
+        $result = $reflectionMethod->invoke($queryHelper, 1, $category);
+
+        $this->assertSame(' OR fcr.category_id = 2 OR fcr.category_id = 4 OR fcr.category_id = 3', $result);
     }
 }

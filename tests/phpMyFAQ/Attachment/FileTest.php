@@ -13,6 +13,7 @@ use phpMyFAQ\Storage\StorageInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use ReflectionMethod;
 
 /**
  * Class FileTest
@@ -285,7 +286,7 @@ class FileTest extends TestCase
         try {
             $reflection = new ReflectionClass($this->file);
             $reflection->getProperty('encrypted')->setValue($this->file, false);
-            $reflection->getProperty('realHash')->setValue($this->file, 'abcdefghijklmnopqrstuvwxyz123456');
+            $reflection->getProperty('realHash')->setValue($this->file, 'missing-storage-hash-987654321');
 
             self::assertFalse($this->file->isStorageOk());
         } finally {
@@ -399,6 +400,123 @@ class FileTest extends TestCase
         } finally {
             $configProp->setValue(null, $previousConfig);
         }
+    }
+
+    public function testRawOutOutputsUnencryptedStorageContent(): void
+    {
+        $mockStorage = $this->createMock(StorageInterface::class);
+        $mockStorage->method('get')->willReturn('raw attachment content');
+
+        $mockConfig = $this->createMock(Configuration::class);
+        $mockConfig->method('get')->willReturn('filesystem');
+
+        $configRef = new ReflectionClass(Configuration::class);
+        $configProp = $configRef->getProperty('configuration');
+        $previousConfig = $configProp->getValue(null);
+        $configProp->setValue(null, $mockConfig);
+
+        try {
+            $reflection = new ReflectionClass($this->file);
+            $reflection->getProperty('encrypted')->setValue($this->file, false);
+            $reflection->getProperty('realHash')->setValue($this->file, 'abcdefghijklmnopqrstuvwxyz123456');
+
+            $storageProp = new ReflectionClass(File::class)->getProperty('storage');
+            $storageProp->setValue($this->file, $mockStorage);
+
+            ob_start();
+            $this->file->rawOut();
+            $output = ob_get_clean();
+
+            self::assertSame('raw attachment content', $output);
+        } finally {
+            $configProp->setValue(null, $previousConfig);
+        }
+    }
+
+    public function testGetStorageReturnsInjectedStorageInstance(): void
+    {
+        $mockStorage = $this->createMock(StorageInterface::class);
+        $storageProp = new ReflectionClass(File::class)->getProperty('storage');
+        $storageProp->setValue($this->file, $mockStorage);
+
+        $method = new ReflectionMethod(File::class, 'getStorage');
+        $storage = $method->invoke($this->file);
+
+        self::assertSame($mockStorage, $storage);
+    }
+
+    public function testUsesCloudStorageReturnsFalseForFilesystemConfiguration(): void
+    {
+        $mockConfig = $this->createMock(Configuration::class);
+        $mockConfig->method('get')->with('storage.type')->willReturn('filesystem');
+
+        $configRef = new ReflectionClass(Configuration::class);
+        $configProp = $configRef->getProperty('configuration');
+        $previousConfig = $configProp->getValue(null);
+        $configProp->setValue(null, $mockConfig);
+
+        try {
+            $method = new ReflectionMethod(File::class, 'usesCloudStorage');
+            $result = $method->invoke($this->file);
+
+            self::assertFalse($result);
+        } finally {
+            $configProp->setValue(null, $previousConfig);
+        }
+    }
+
+    public function testUsesCloudStorageReturnsTrueForS3Configuration(): void
+    {
+        $mockConfig = $this->createMock(Configuration::class);
+        $mockConfig->method('get')->with('storage.type')->willReturn('S3');
+
+        $configRef = new ReflectionClass(Configuration::class);
+        $configProp = $configRef->getProperty('configuration');
+        $previousConfig = $configProp->getValue(null);
+        $configProp->setValue(null, $mockConfig);
+
+        try {
+            $method = new ReflectionMethod(File::class, 'usesCloudStorage');
+            $result = $method->invoke($this->file);
+
+            self::assertTrue($result);
+        } finally {
+            $configProp->setValue(null, $previousConfig);
+        }
+    }
+
+    public function testGetFileReturnsVanillaFileForUnencryptedAttachment(): void
+    {
+        $reflection = new ReflectionClass($this->file);
+        $reflection->getProperty('encrypted')->setValue($this->file, false);
+        $reflection->getProperty('realHash')->setValue($this->file, 'abcdefghijklmnopqrstuvwxyz123456');
+
+        $path = $this->file->testBuildFilePath();
+        @mkdir(dirname($path), 0777, true);
+        file_put_contents($path, 'vanilla');
+
+        $file = $this->file->testGetFile();
+
+        self::assertInstanceOf(VanillaFile::class, $file);
+    }
+
+    public function testGetFileReturnsEncryptedFileForEncryptedAttachment(): void
+    {
+        $reflection = new ReflectionClass($this->file);
+        $reflection->getProperty('encrypted')->setValue($this->file, true);
+        $reflection->getProperty('id')->setValue($this->file, 1);
+        $reflection->getProperty('recordId')->setValue($this->file, 99);
+        $reflection->getProperty('realHash')->setValue($this->file, 'abcdefghijklmnopqrstuvwxyz123456');
+        $reflection->getProperty('filename')->setValue($this->file, 'encrypted.txt');
+        $reflection->getProperty('key')->setValue($this->file, '12345678901234567890123456789012');
+
+        $path = $this->file->testBuildFilePath();
+        @mkdir(dirname($path), 0777, true);
+        file_put_contents($path, 'encrypted');
+
+        $file = $this->file->testGetFile(FilesystemFile::MODE_WRITE);
+
+        self::assertInstanceOf(EncryptedFile::class, $file);
     }
 
     public function testSaveWithLinkedRecordsSkipsFileWrite(): void
