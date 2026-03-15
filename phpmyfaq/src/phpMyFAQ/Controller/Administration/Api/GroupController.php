@@ -136,7 +136,11 @@ final class GroupController extends AbstractAdministrationApiController
     /**
      * @throws Exception
      */
-    #[Route(path: 'group/category-restrictions', name: 'admin.api.group.category-restrictions', methods: ['GET'])]
+    #[Route(
+        path: 'group/category-restrictions/{groupId}',
+        name: 'admin.api.group.category-restrictions',
+        methods: ['GET'],
+    )]
     public function listCategoryRestrictions(Request $request): JsonResponse
     {
         $this->userHasGroupPermission();
