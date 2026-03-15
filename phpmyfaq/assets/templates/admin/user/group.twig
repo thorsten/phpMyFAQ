@@ -204,6 +204,22 @@
           </div>
         </form>
       </div>
+
+      <div id="groupCategoryRestrictions" class="card shadow mb-4">
+        <h5 class="card-header py-3">
+          <i aria-hidden="true" class="bi bi-folder-check"></i> {{ 'ad_group_category_restrictions' | translate }}
+        </h5>
+        <div class="card-body" id="categoryRestrictionsBody">
+          <p class="text-muted">{{ 'ad_group_category_restrictions_help' | translate }}</p>
+        </div>
+        <div class="card-footer">
+          <div class="card-button text-end">
+            <button id="saveCategoryRestrictions" class="btn btn-primary" type="button" disabled>
+              {{ 'ad_gen_save' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 {% endblock %}
