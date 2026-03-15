@@ -8,6 +8,8 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -20,6 +22,8 @@ use Twig\Extension\ExtensionInterface;
 use Twig\TwigFilter;
 
 #[AllowMockObjectsWithoutExpectations]
+#[CoversClass(AbstractController::class)]
+#[UsesNamespace('phpMyFAQ')]
 class AbstractControllerTest extends TestCase
 {
     private AbstractController $abstractController;

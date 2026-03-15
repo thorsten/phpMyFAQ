@@ -7,6 +7,8 @@ namespace phpMyFAQ\Controller\Api;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Language;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\MockObject\Exception as MockException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,6 +17,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
+#[CoversClass(NewsController::class)]
+#[UsesNamespace('phpMyFAQ')]
 class NewsControllerTest extends TestCase
 {
     private Configuration $configuration;

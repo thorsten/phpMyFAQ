@@ -17,6 +17,8 @@ use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Language;
 use phpMyFAQ\Mail;
+use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -171,14 +173,126 @@ final class FaqControllerTest extends TestCase
         self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND, $response->getStatusCode());
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function testAddRedirectsGuestsToLoginWhenGuestFaqsAreDisabled(): void
+    {
+        $this->configuration->getAll();
+        $this->setConfigurationValue('records.allowNewFaqsForGuests', 'false');
+
+        $guestUser = $this->createCurrentUserStub(-1, false);
+        $controller = $this->createController(
+            $this->createMock(Date::class),
+            $this->createMock(Mail::class),
+            $this->createMock(Gravatar::class),
+            currentUser: $guestUser,
+        );
+
+        $response = $controller->add(new \Symfony\Component\HttpFoundation\Request());
+
+        self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_FOUND, $response->getStatusCode());
+        self::assertSame($this->configuration->getDefaultUrl() . 'login', $response->headers->get('Location'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAddRedirectsLoggedInUsersHomeWhenFaqAddPermissionIsMissing(): void
+    {
+        $loggedInUser = $this->createCurrentUserStub(42, false);
+        $controller = $this->createController(
+            $this->createMock(Date::class),
+            $this->createMock(Mail::class),
+            $this->createMock(Gravatar::class),
+            currentUser: $loggedInUser,
+        );
+
+        $response = $controller->add(new \Symfony\Component\HttpFoundation\Request());
+
+        self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_FOUND, $response->getStatusCode());
+        self::assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testContentRedirectReturnsNotFoundWhenFaqRowCannotBeFetched(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->expects(self::once())->method('getFaqResult')->with(42, 'en')->willReturn('faq-result');
+
+        $databaseDriver = $this
+            ->createMock(DatabaseDriver::class);
+        $databaseDriver->expects(self::once())->method('numRows')->with('faq-result')->willReturn(1);
+        $databaseDriver->expects(self::once())->method('fetchObject')->with('faq-result')->willReturn(false);
+
+        $this->setDatabaseDriver($databaseDriver);
+
+        $controller = $this->createController(
+            $this->createMock(Date::class),
+            $this->createMock(Mail::class),
+            $this->createMock(Gravatar::class),
+            faq: $faq,
+        );
+
+        $response = $controller->contentRedirect(
+            new \Symfony\Component\HttpFoundation\Request([], [], ['faqId' => '42', 'faqLang' => 'en']),
+        );
+
+        self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testContentRedirectReturnsNotFoundWhenFaqHasNoLinkedCategory(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->expects(self::once())->method('getFaqResult')->with(42, 'en')->willReturn('faq-result');
+
+        $databaseDriver = $this
+            ->createMock(DatabaseDriver::class);
+        $databaseDriver->expects(self::once())->method('numRows')->with('faq-result')->willReturn(1);
+        $databaseDriver
+            ->expects(self::once())
+            ->method('fetchObject')
+            ->with('faq-result')
+            ->willReturn((object) ['thema' => 'Linked question']);
+
+        $this->setDatabaseDriver($databaseDriver);
+
+        $category = $this
+            ->getMockBuilder(Category::class)
+            ->setConstructorArgs([$this->configuration, [-1]])
+            ->onlyMethods(['getCategoryIdFromFaq'])
+            ->getMock();
+        $category->expects(self::once())->method('getCategoryIdFromFaq')->with(42)->willReturn(0);
+
+        $controller = $this->createController(
+            $this->createMock(Date::class),
+            $this->createMock(Mail::class),
+            $this->createMock(Gravatar::class),
+            faq: $faq,
+            category: $category,
+        );
+
+        $response = $controller->contentRedirect(
+            new \Symfony\Component\HttpFoundation\Request([], [], ['faqId' => '42', 'faqLang' => 'en']),
+        );
+
+        self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND, $response->getStatusCode());
+    }
+
     private function createController(
         Date $date,
         Mail $mail,
         Gravatar $gravatar,
         ?Faq $faq = null,
         ?Category $category = null,
+        ?CurrentUser $currentUser = null,
     ): FaqController {
-        $currentUser = new CurrentUser($this->configuration);
+        $currentUser ??= new CurrentUser($this->configuration);
         $faq ??= new Faq($this->configuration);
         $category ??= new Category($this->configuration, [-1]);
         $category->setLanguage('en');
@@ -197,6 +311,9 @@ final class FaqControllerTest extends TestCase
 
         $configurationProperty = new \ReflectionProperty($controller, 'configuration');
         $configurationProperty->setValue($controller, $this->configuration);
+
+        $currentUserProperty = new \ReflectionProperty($controller, 'currentUser');
+        $currentUserProperty->setValue($controller, $currentUser);
 
         return $controller;
     }
@@ -219,5 +336,40 @@ final class FaqControllerTest extends TestCase
         $dbTypeProperty = $databaseReflection->getProperty('dbType');
         $dbTypeProperty->setValue(null, 'sqlite3');
         Database::setTablePrefix('');
+    }
+
+    private function setDatabaseDriver(\phpMyFAQ\Database\DatabaseDriver $databaseDriver): void
+    {
+        $reflection = new \ReflectionClass(Configuration::class);
+        $configProperty = $reflection->getProperty('config');
+        $config = $configProperty->getValue($this->configuration);
+        self::assertIsArray($config);
+        $config['core.database'] = $databaseDriver;
+        $configProperty->setValue($this->configuration, $config);
+    }
+
+    private function setConfigurationValue(string $key, mixed $value): void
+    {
+        $reflection = new \ReflectionClass(Configuration::class);
+        $configProperty = $reflection->getProperty('config');
+        $config = $configProperty->getValue($this->configuration);
+        self::assertIsArray($config);
+        $config[$key] = $value;
+        $configProperty->setValue($this->configuration, $config);
+    }
+
+    private function createCurrentUserStub(int $userId, bool $canAddFaq): CurrentUser
+    {
+        $permission = $this->createMock(BasicPermission::class);
+        $permission->method('hasPermission')->willReturn($canAddFaq);
+        $permission->method('getUserGroups')->with($userId)->willReturn([-1]);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('getUserId')->willReturn($userId);
+        $currentUser->method('isLoggedIn')->willReturn($userId > 0);
+        $currentUser->method('getUserData')->willReturn('');
+
+        return $currentUser;
     }
 }

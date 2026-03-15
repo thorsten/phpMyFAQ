@@ -16,12 +16,16 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
+#[CoversClass(FaqController::class)]
+#[UsesNamespace('phpMyFAQ')]
 class FaqControllerTest extends TestCase
 {
     private Configuration $configuration;

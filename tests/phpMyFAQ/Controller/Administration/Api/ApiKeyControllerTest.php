@@ -8,6 +8,7 @@ use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
@@ -335,6 +336,76 @@ final class ApiKeyControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testCreateReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => 'invalid-token',
+            'name' => 'Generated key',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateReturnsBadRequestForMissingNameWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'api-key-create');
+        $controller->setContainer($container);
+
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'name' => '',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('API key name is required.', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateReturnsInternalServerErrorWhenInsertFails(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $db->method('nextId')->willReturn(5);
+        $db->method('now')->willReturn("'2026-03-15 12:00:00'");
+        $db->method('query')->willReturn(false);
+        $db->method('error')->willReturn('insert failed');
+
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainerWithDb($db);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'api-key-create');
+        $controller->setContainer($container);
+
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'name' => 'Generated key',
+            'scopes' => ['faq.read'],
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        self::assertSame('insert failed', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testUpdateReturnsBadRequestForMissingNameWhenAuthenticated(): void
     {
         $this->seedApiKeyRow();
@@ -389,6 +460,85 @@ final class ApiKeyControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testUpdateReturnsBadRequestForMissingIdWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'api-key-update');
+        $controller->setContainer($container);
+
+        $response = $controller->update(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'name' => 'Updated key',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('API key ID is required.', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateReturnsBadRequestForInvalidExpiresAtWhenAuthenticated(): void
+    {
+        $this->seedApiKeyRow();
+
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'api-key-update');
+        $controller->setContainer($container);
+
+        $response = $controller->update(new Request([], [], ['id' => 1], [], [], [], json_encode([
+            'csrf' => $token,
+            'name' => 'Updated key',
+            'expiresAt' => 'not-a-date',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Invalid expiresAt value.', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateReturnsInternalServerErrorWhenUpdateFails(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $db->method('query')->willReturnMap([
+            [$this->stringContains('SELECT id FROM faqapi_keys'), 0, 0, new \stdClass()],
+            [$this->stringContains('UPDATE faqapi_keys'), 0, 0, false],
+        ]);
+        $db->method('numRows')->willReturn(1);
+        $db->method('error')->willReturn('update failed');
+
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainerWithDb($db);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'api-key-update');
+        $controller->setContainer($container);
+
+        $response = $controller->update(new Request([], [], ['id' => 1], [], [], [], json_encode([
+            'csrf' => $token,
+            'name' => 'Updated key',
+            'scopes' => ['faq.read'],
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        self::assertSame('update failed', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testDeleteReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
     {
         $controller = $this->createController();
@@ -401,6 +551,31 @@ final class ApiKeyControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
         self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsInternalServerErrorWhenDeleteFails(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('query')->willReturn(false);
+        $db->method('error')->willReturn('delete failed');
+
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainerWithDb($db);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'api-key-delete');
+        $controller->setContainer($container);
+
+        $response = $controller->delete(new Request([], [], ['id' => 1], [], [], [], json_encode([
+            'csrf' => $token,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        self::assertSame('delete failed', $payload['error']);
     }
 
     private function seedApiKeyRow(): void
@@ -426,6 +601,11 @@ final class ApiKeyControllerTest extends TestCase
 
     private function createAuthenticatedContainer(): ContainerInterface
     {
+        return $this->createAuthenticatedContainerWithDb($this->configuration->getDb());
+    }
+
+    private function createAuthenticatedContainerWithDb(DatabaseDriver $db): ContainerInterface
+    {
         $permission = $this->createMock(PermissionInterface::class);
         $permission
             ->method('hasPermission')
@@ -443,13 +623,17 @@ final class ApiKeyControllerTest extends TestCase
 
         $session = new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+        $configuration->method('get')->willReturn(false);
+        $configuration->method('getTemplateSet')->willReturn('default');
 
         $container = $this->createStub(ContainerInterface::class);
         $container
             ->method('get')
-            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog, $configuration) {
                 return match ($id) {
-                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.configuration' => $configuration,
                     'phpmyfaq.user.current_user' => $currentUser,
                     'session' => $session,
                     'phpmyfaq.admin.admin-log' => $adminLog,

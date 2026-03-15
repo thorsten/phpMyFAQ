@@ -8,11 +8,15 @@ use phpMyFAQ\Seo\SitemapXmlService;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 #[AllowMockObjectsWithoutExpectations]
+#[CoversClass(SitemapController::class)]
+#[UsesNamespace('phpMyFAQ')]
 class SitemapControllerTest extends TestCase
 {
     private SitemapXmlService $sitemapXmlService;

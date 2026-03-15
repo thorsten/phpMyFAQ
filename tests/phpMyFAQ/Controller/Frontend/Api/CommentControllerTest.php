@@ -18,10 +18,14 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\UserSession;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 #[AllowMockObjectsWithoutExpectations]
+#[CoversClass(CommentController::class)]
+#[UsesNamespace('phpMyFAQ')]
 class CommentControllerTest extends TestCase
 {
     private Configuration $configuration;

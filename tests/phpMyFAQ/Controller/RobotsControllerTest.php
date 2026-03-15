@@ -5,12 +5,16 @@ namespace phpMyFAQ\Controller;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
 #[AllowMockObjectsWithoutExpectations]
+#[CoversClass(RobotsController::class)]
+#[UsesNamespace('phpMyFAQ')]
 class RobotsControllerTest extends TestCase
 {
     private Environment $twig;

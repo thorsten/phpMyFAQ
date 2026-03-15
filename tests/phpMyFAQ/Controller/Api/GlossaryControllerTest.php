@@ -7,6 +7,8 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Language;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,6 +17,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
+#[CoversClass(GlossaryController::class)]
+#[UsesNamespace('phpMyFAQ')]
 class GlossaryControllerTest extends TestCase
 {
     private Configuration $configuration;

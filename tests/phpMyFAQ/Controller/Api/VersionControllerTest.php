@@ -4,10 +4,14 @@ namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[AllowMockObjectsWithoutExpectations]
+#[CoversClass(VersionController::class)]
+#[UsesNamespace('phpMyFAQ')]
 class VersionControllerTest extends TestCase
 {
     public function testIndex(): void

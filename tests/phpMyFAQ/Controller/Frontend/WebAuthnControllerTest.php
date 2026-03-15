@@ -10,6 +10,8 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +22,8 @@ use Twig\Error\LoaderError;
  * Class WebAuthnControllerTest
  */
 #[AllowMockObjectsWithoutExpectations]
+#[CoversClass(WebAuthnController::class)]
+#[UsesNamespace('phpMyFAQ')]
 class WebAuthnControllerTest extends TestCase
 {
     private WebAuthnController $controller;
