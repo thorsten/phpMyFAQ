@@ -150,6 +150,27 @@ class CommentsRepositoryTest extends TestCase
         $relation->delete(1, 'en');
     }
 
+    public function testFetchAllWithCategoriesForNewsComments(): void
+    {
+        $comment = new CommentEntity();
+        $comment
+            ->setRecordId(2)
+            ->setType(CommentType::NEWS)
+            ->setUsername('newsUser')
+            ->setEmail('news@example.org')
+            ->setComment('This is a news comment')
+            ->setDate((string) time());
+
+        $this->assertTrue($this->repository->insert($comment));
+
+        $rows = $this->repository->fetchAllWithCategories(CommentType::NEWS);
+        $this->assertNotEmpty($rows);
+        $row = $rows[0];
+        $this->assertSame(2, (int) $row->record_id);
+        $this->assertSame('newsUser', $row->username);
+        $this->assertObjectNotHasProperty('category_id', $row);
+    }
+
     public function testIsCommentAllowed(): void
     {
         $prefix = Database::getTablePrefix();

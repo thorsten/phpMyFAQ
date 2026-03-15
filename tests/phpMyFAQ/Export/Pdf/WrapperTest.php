@@ -9,6 +9,35 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
+final class WrapperTestFunctionState
+{
+    public static bool $useFinfoStub = false;
+    public static bool $finfoOpenReturnsFalse = false;
+    public static string|false $finfoBufferResult = false;
+}
+
+function finfo_open(int $flags, ?string $magic_database = null): mixed
+{
+    if (!WrapperTestFunctionState::$useFinfoStub) {
+        return \finfo_open($flags, $magic_database);
+    }
+
+    if (WrapperTestFunctionState::$finfoOpenReturnsFalse) {
+        return false;
+    }
+
+    return fopen('php://memory', 'rb');
+}
+
+function finfo_buffer(mixed $finfo, string $string, int $flags = FILEINFO_NONE, $context = null): string|false
+{
+    if (!WrapperTestFunctionState::$useFinfoStub) {
+        return \finfo_buffer($finfo, $string, $flags);
+    }
+
+    return WrapperTestFunctionState::$finfoBufferResult;
+}
+
 #[AllowMockObjectsWithoutExpectations]
 class WrapperTest extends TestCase
 {
@@ -18,6 +47,10 @@ class WrapperTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        WrapperTestFunctionState::$useFinfoStub = false;
+        WrapperTestFunctionState::$finfoOpenReturnsFalse = false;
+        WrapperTestFunctionState::$finfoBufferResult = false;
 
         Translation::create()
             ->setTranslationsDir(PMF_TRANSLATION_DIR)
@@ -415,15 +448,78 @@ class WrapperTest extends TestCase
 
     public function testImageMethodWithValidPath(): void
     {
-        $testFile = '/content/user/images/test%20image.jpg';
+        $fixture = '/Users/thorsten/htdocs/phpMyFAQ/tests/content/user/images/image with spaces.jpg';
+        $targetFile = PMF_ROOT_DIR . '/content/user/images/wrapper image test.jpg';
+        try {
+            self::assertTrue(copy($fixture, $targetFile));
+            $this->mockConfig
+                ->method('get')
+                ->willReturnCallback(static fn(string $key) => match ($key) {
+                    'main.customPdfHeader' => '',
+                    'main.customPdfFooter' => '',
+                    'main.metaPublisher' => 'Test',
+                    'main.dateFormat' => 'Y-m-d H:i',
+                    'spam.mailAddressInExport' => false,
+                    default => null,
+                });
+            $this->mockConfig->method('getAdminEmail')->willReturn('admin@test.com');
+            $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
+
+            $this->wrapper->setConfig($this->mockConfig);
+            $this->wrapper->setCategories([]);
+            $this->wrapper->setCategory(0);
+
+            $this->wrapper->Open();
+            $this->wrapper->AddPage();
+            $this->wrapper->Image('/content/user/images/wrapper%20image%20test.jpg', 10, 10, 10, 10);
+
+            $output = $this->wrapper->Output('test-image.pdf', 'S');
+            $this->assertStringStartsWith('%PDF', $output);
+        } finally {
+            if (is_file($targetFile)) {
+                unlink($targetFile);
+            }
+        }
+    }
+
+    public function testImageMethodEmbedsBase64ConvertibleImageData(): void
+    {
+        $jpegData = base64_decode(
+            '/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwDX4A=',
+        );
+        self::assertNotFalse($jpegData);
+
+        $targetFile = PMF_ROOT_DIR . '/content/user/images/wrapper-inline-image.jpg';
 
         try {
-            $this->assertTrue(method_exists($this->wrapper, 'Image'));
+            self::assertNotFalse(file_put_contents($targetFile, $jpegData));
+            $this->mockConfig
+                ->method('get')
+                ->willReturnCallback(static fn(string $key) => match ($key) {
+                    'main.customPdfHeader' => '',
+                    'main.customPdfFooter' => '',
+                    'main.metaPublisher' => 'Test',
+                    'main.dateFormat' => 'Y-m-d H:i',
+                    'spam.mailAddressInExport' => false,
+                    default => null,
+                });
+            $this->mockConfig->method('getAdminEmail')->willReturn('admin@test.com');
+            $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
 
-            $decoded = urldecode($testFile);
-            $this->assertEquals('/content/user/images/test image.jpg', $decoded);
-        } catch (Exception) {
-            $this->assertTrue(true);
+            $this->wrapper->setConfig($this->mockConfig);
+            $this->wrapper->setCategories([]);
+            $this->wrapper->setCategory(0);
+
+            $this->wrapper->Open();
+            $this->wrapper->AddPage();
+            $this->wrapper->Image('/content/user/images/wrapper-inline-image.jpg', 10, 10, 10, 10);
+
+            $output = $this->wrapper->Output('test-inline-image.pdf', 'S');
+            $this->assertStringStartsWith('%PDF', $output);
+        } finally {
+            if (is_file($targetFile)) {
+                unlink($targetFile);
+            }
         }
     }
 
@@ -681,6 +777,32 @@ class WrapperTest extends TestCase
 
         $result = $method->invoke($this->wrapper, $textData);
         $this->assertFalse($result);
+    }
+
+    public function testGetImageMimeTypeFallsBackWhenFinfoIsUnavailable(): void
+    {
+        WrapperTestFunctionState::$useFinfoStub = true;
+        WrapperTestFunctionState::$finfoOpenReturnsFalse = true;
+
+        $reflection = new ReflectionClass($this->wrapper);
+        $method = $reflection->getMethod('getImageMimeType');
+
+        $this->assertSame('image/gif', $method->invoke($this->wrapper, 'GIF89a' . str_repeat("\x00", 20)));
+        $this->assertSame('image/webp', $method->invoke($this->wrapper, 'RIFF' . str_repeat("\x00", 20)));
+        $this->assertSame('image/bmp', $method->invoke($this->wrapper, 'BM' . str_repeat("\x00", 20)));
+        $this->assertFalse($method->invoke($this->wrapper, 'not-an-image'));
+    }
+
+    public function testDefineIfMissingDefinesUnknownConstant(): void
+    {
+        $constantName = 'PMF_WRAPPER_TEST_CONST_' . uniqid('', true);
+
+        $reflection = new ReflectionClass(Wrapper::class);
+        $method = $reflection->getMethod('defineIfMissing');
+        $method->invoke(null, $constantName, 'wrapper-test-value');
+
+        $this->assertTrue(defined($constantName));
+        $this->assertSame('wrapper-test-value', constant($constantName));
     }
 
     public function testValidateImageDataWithGifData(): void

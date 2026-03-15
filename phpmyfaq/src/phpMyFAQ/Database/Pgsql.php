@@ -230,7 +230,7 @@ class Pgsql implements DatabaseDriver
         $result = $this->query($select);
         while (true) {
             $row = $this->fetchArray($result);
-            if (!is_array($row)) {
+            if (!is_array($row) || !isset($row['relname'])) {
                 break;
             }
 

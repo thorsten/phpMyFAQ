@@ -36,6 +36,16 @@ class UserDataTest extends TestCase
         $this->assertEquals('value', $result);
     }
 
+    public function testGetReturnsFalseWhenNoRowExists(): void
+    {
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('numRows')->willReturn(0);
+
+        $this->userData->load(1);
+
+        $this->assertFalse($this->userData->get('field'));
+    }
+
     public function testFetch(): void
     {
         $this->database->method('query')->willReturn(true);
@@ -44,6 +54,14 @@ class UserDataTest extends TestCase
 
         $result = $this->userData->fetch('key', 'value');
         $this->assertEquals('value', $result);
+    }
+
+    public function testFetchReturnsNullWhenNoResultExists(): void
+    {
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('numRows')->willReturn(0);
+
+        $this->assertNull($this->userData->fetch('key', 'value'));
     }
 
     public function testFetchAll(): void
@@ -56,6 +74,14 @@ class UserDataTest extends TestCase
         $this->assertEquals(['user_id' => 1], $result);
     }
 
+    public function testFetchAllReturnsDefaultArrayWhenNoResultExists(): void
+    {
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('numRows')->willReturn(0);
+
+        $this->assertSame(['user_id' => -1], $this->userData->fetchAll('key', 'value'));
+    }
+
     public function testLoad(): void
     {
         $this->database->method('query')->willReturn(true);
@@ -64,6 +90,11 @@ class UserDataTest extends TestCase
 
         $result = $this->userData->load(1);
         $this->assertTrue($result);
+    }
+
+    public function testLoadReturnsFalseForInvalidUserId(): void
+    {
+        $this->assertFalse($this->userData->load(0));
     }
 
     public function testSave(): void
@@ -81,6 +112,21 @@ class UserDataTest extends TestCase
         $this->assertTrue($result);
     }
 
+    public function testSetReturnsFalseWhenFieldAndValueCountsDoNotMatch(): void
+    {
+        $this->assertFalse($this->userData->set(['display_name', 'email'], ['value']));
+    }
+
+    public function testSetAcceptsScalarFieldAndValue(): void
+    {
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('numRows')->willReturn(1);
+        $this->database->method('fetchArray')->willReturn(['display_name' => 'Old value']);
+
+        $this->assertTrue($this->userData->load(1));
+        $this->assertTrue($this->userData->set('display_name', 'New value'));
+    }
+
     public function testAdd(): void
     {
         $this->database->method('query')->willReturn(true);
@@ -89,12 +135,29 @@ class UserDataTest extends TestCase
         $this->assertTrue($result);
     }
 
+    public function testAddReturnsFalseForInvalidUserId(): void
+    {
+        $this->assertFalse($this->userData->add(0));
+    }
+
     public function testDelete(): void
     {
         $this->database->method('query')->willReturn(true);
 
         $result = $this->userData->delete(1);
         $this->assertTrue($result);
+    }
+
+    public function testDeleteReturnsFalseForInvalidUserId(): void
+    {
+        $this->assertFalse($this->userData->delete(0));
+    }
+
+    public function testDeleteReturnsFalseWhenQueryFails(): void
+    {
+        $this->database->method('query')->willReturn(false);
+
+        $this->assertFalse($this->userData->delete(1));
     }
 
     public function testEmailExistsReturnsTrueWhenEmailExists(): void

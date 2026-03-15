@@ -59,4 +59,56 @@ class SendGridProviderTest extends TestCase
 
         $this->assertSame(2, $result);
     }
+
+    public function testSendThrowsWhenFromHeaderIsInvalid(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('get')->willReturnCallback(static fn(string $key): mixed => $key
+        === 'mail.sendgridApiKey'
+            ? 'secret-key'
+            : null);
+
+        $provider = new SendGridProvider($configuration, $this->createStub(HttpClientInterface::class));
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing valid From header for SendGrid provider.');
+        $provider->send('user@example.com', ['From' => '', 'Subject' => 'Test'], 'Body');
+    }
+
+    public function testSendThrowsWhenNoValidRecipientsExist(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('get')->willReturnCallback(static fn(string $key): mixed => $key
+        === 'mail.sendgridApiKey'
+            ? 'secret-key'
+            : null);
+
+        $provider = new SendGridProvider($configuration, $this->createStub(HttpClientInterface::class));
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('No valid recipients for SendGrid provider.');
+        $provider->send(' , ', ['From' => 'sender@example.com', 'Subject' => 'Test'], 'Body');
+    }
+
+    public function testSendThrowsWhenApiReturnsNonSuccessfulStatus(): void
+    {
+        $response = $this->createStub(ResponseInterface::class);
+        $response->method('getStatusCode')->willReturn(500);
+        $response->method('getContent')->willReturn('provider failure');
+
+        $httpClient = $this->createMock(HttpClientInterface::class);
+        $httpClient->expects($this->once())->method('request')->willReturn($response);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('get')->willReturnCallback(static fn(string $key): mixed => $key
+        === 'mail.sendgridApiKey'
+            ? 'secret-key'
+            : null);
+
+        $provider = new SendGridProvider($configuration, $httpClient);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('SendGrid request failed with status 500: provider failure');
+        $provider->send('user@example.com', ['From' => 'sender@example.com', 'Subject' => 'Test'], 'Body');
+    }
 }

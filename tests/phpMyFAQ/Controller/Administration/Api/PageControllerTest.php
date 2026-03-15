@@ -721,7 +721,10 @@ final class PageControllerTest extends TestCase
             ->willThrowException(new \Exception('ES down'));
 
         $openSearch = $this->createMock(OpenSearch::class);
-        $openSearch->expects($this->once())->method('indexCustomPage')->willThrowException(new \Exception('OS down'));
+        $openSearch
+            ->expects($this->once())
+            ->method('indexCustomPage')
+            ->willThrowException(new \Exception('OS down'));
 
         $controller = $this->createControllerWithSearchDependencies($elasticsearch, $openSearch);
         $container = $this->createAuthenticatedContainer();
@@ -764,7 +767,10 @@ final class PageControllerTest extends TestCase
             ->willThrowException(new \Exception('ES down'));
 
         $openSearch = $this->createMock(OpenSearch::class);
-        $openSearch->expects($this->once())->method('updateCustomPage')->willThrowException(new \Exception('OS down'));
+        $openSearch
+            ->expects($this->once())
+            ->method('updateCustomPage')
+            ->willThrowException(new \Exception('OS down'));
 
         $controller = $this->createControllerWithSearchDependencies($elasticsearch, $openSearch);
         $container = $this->createAuthenticatedContainer();

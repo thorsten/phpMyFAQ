@@ -7,6 +7,7 @@ namespace phpMyFAQ\Attachment;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Permission\PermissionInterface;
@@ -23,6 +24,7 @@ use ReflectionClass;
 #[UsesClass(AttachmentFactory::class)]
 #[UsesClass(Database::class)]
 #[UsesClass(File::class)]
+#[UsesClass(PdoSqlite::class)]
 #[UsesClass(Translation::class)]
 final class AttachmentServiceTest extends TestCase
 {

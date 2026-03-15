@@ -411,7 +411,10 @@ final class CategoryControllerTest extends TestCase
         $context = $this->createAuthenticatedContext();
 
         $seo = $this->createMock(Seo::class);
-        $seo->expects($this->once())->method('get')->willReturn(new \phpMyFAQ\Entity\SeoEntity());
+        $seo
+            ->expects($this->once())
+            ->method('get')
+            ->willReturn(new \phpMyFAQ\Entity\SeoEntity());
         $seo->expects($this->once())->method('create');
 
         $controller = new CategoryController(
@@ -536,7 +539,10 @@ final class CategoryControllerTest extends TestCase
         $context = $this->createAuthenticatedContext();
 
         $seo = $this->createMock(Seo::class);
-        $seo->expects($this->once())->method('get')->willReturn(new \phpMyFAQ\Entity\SeoEntity());
+        $seo
+            ->expects($this->once())
+            ->method('get')
+            ->willReturn(new \phpMyFAQ\Entity\SeoEntity());
         $seo->expects($this->once())->method('create');
         $seo->expects($this->never())->method('update');
 

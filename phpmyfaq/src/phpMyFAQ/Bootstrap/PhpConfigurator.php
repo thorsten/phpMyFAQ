@@ -25,6 +25,9 @@ use RuntimeException;
 
 class PhpConfigurator
 {
+    /** @var null|callable(string): void */
+    private static $redisConfigurator = [RedisSessionHandler::class, 'configure'];
+
     /**
      * Ensures '.' is in the PHP include path.
      */
@@ -41,8 +44,8 @@ class PhpConfigurator
      */
     public static function configurePcre(): void
     {
-        self::setIniOption('pcre.backtrack_limit', '100000000');
-        self::setIniOption('pcre.recursion_limit', '100000000');
+        ini_set('pcre.backtrack_limit', '100000000');
+        ini_set('pcre.recursion_limit', '100000000');
     }
 
     /**
@@ -60,14 +63,16 @@ class PhpConfigurator
     public static function configureSession(?Configuration $configuration = null): void
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
-            self::setIniOption('session.use_only_cookies', '1');
-            self::setIniOption('session.use_trans_sid', '0');
-            self::setIniOption('session.cookie_samesite', 'Strict');
-            self::setIniOption('session.cookie_httponly', '1');
-            self::setIniOption('session.cookie_secure', '1');
+            ini_set('session.use_only_cookies', '1');
+            ini_set('session.use_trans_sid', '0');
+            ini_set('session.cookie_samesite', 'Strict');
+            ini_set('session.cookie_httponly', '1');
+            ini_set('session.cookie_secure', '1');
 
-            if (defined('PMF_SESSION_SAVE_PATH') && PMF_SESSION_SAVE_PATH !== '') {
-                self::setIniOption('session.save_path', PMF_SESSION_SAVE_PATH);
+            $sessionSavePath = trim((string) ($configuration?->get('session.savePath') ?? ''));
+
+            if ($sessionSavePath !== '') {
+                ini_set('session.save_path', $sessionSavePath);
             }
 
             $sessionHandler = strtolower((string) ($configuration?->get('session.handler') ?? 'files'));
@@ -75,10 +80,10 @@ class PhpConfigurator
 
             switch ($sessionHandler) {
                 case 'files':
-                    self::setIniOption('session.save_handler', 'files');
+                    ini_set('session.save_handler', 'files');
                     break;
                 case 'redis':
-                    RedisSessionHandler::configure($redisDsn);
+                    call_user_func(self::$redisConfigurator, $redisDsn);
                     break;
                 default:
                     throw new RuntimeException(sprintf(
@@ -87,15 +92,5 @@ class PhpConfigurator
                     ));
             }
         }
-    }
-
-    private static function setIniOption(string $option, string $value): void
-    {
-        $setter = 'ini_set';
-        if (!function_exists($setter)) {
-            return;
-        }
-
-        $setter($option, $value);
     }
 }

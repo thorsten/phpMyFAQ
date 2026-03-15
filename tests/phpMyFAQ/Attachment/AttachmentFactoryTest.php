@@ -282,6 +282,118 @@ class AttachmentFactoryTest extends TestCase
         AttachmentFactory::fetchByRecordId($this->mockConfiguration, 789);
     }
 
+    public function testFetchByRecordIdPaginatedReturnsMappedAttachmentData(): void
+    {
+        $this->setStorageType(AttachmentStorageType::FILESYSTEM->value);
+
+        $this->mockConfiguration->method('getDefaultUrl')->willReturn('https://example.org/');
+        $this->mockDb->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+
+        $queryCalls = 0;
+        $this->mockDb
+            ->method('query')
+            ->willReturnCallback(function (string $query) use (&$queryCalls) {
+                ++$queryCalls;
+
+                if ($queryCalls === 1) {
+                    TestCase::assertStringContainsString('ORDER BY filename DESC LIMIT 10 OFFSET 5', $query);
+                } else {
+                    TestCase::assertStringContainsString('WHERE ', $query);
+                    TestCase::assertStringContainsString('id = 17', $query);
+                }
+
+                return true;
+            });
+
+        $this->mockDb->method('fetchAll')->willReturn([(object) ['id' => 17]]);
+
+        $this->mockDb
+            ->method('fetchArray')
+            ->willReturn([
+                'record_id' => 123,
+                'record_lang' => 'en',
+                'real_hash' => 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+                'virtual_hash' => 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+                'password_hash' => '',
+                'filename' => 'manual.pdf',
+                'filesize' => 2048,
+                'encrypted' => 0,
+                'mime_type' => 'application/pdf',
+            ]);
+
+        $attachments = AttachmentFactory::fetchByRecordIdPaginated(
+            $this->mockConfiguration,
+            123,
+            10,
+            5,
+            'filename',
+            'DESC',
+        );
+
+        $this->assertSame(
+            [
+                [
+                    'filename' => 'manual.pdf',
+                    'url' => 'https://example.org/attachment/17',
+                ],
+            ],
+            $attachments,
+        );
+    }
+
+    public function testFetchByRecordIdPaginatedFallsBackToSafeSortingDefaults(): void
+    {
+        $this->setStorageType(AttachmentStorageType::FILESYSTEM->value);
+
+        $this->mockDb->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $this->mockDb
+            ->expects($this->once())
+            ->method('query')
+            ->willReturnCallback(function (string $query) {
+                $this->assertStringContainsString('ORDER BY id ASC LIMIT 3 OFFSET 1', $query);
+
+                return true;
+            });
+        $this->mockDb->method('fetchAll')->willReturn([]);
+
+        $attachments = AttachmentFactory::fetchByRecordIdPaginated(
+            $this->mockConfiguration,
+            123,
+            3,
+            1,
+            'totally_invalid',
+            'sideways',
+        );
+
+        $this->assertSame([], $attachments);
+    }
+
+    public function testCountByRecordIdReturnsCountFromDatabase(): void
+    {
+        $this->mockDb->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $this->mockDb
+            ->expects($this->once())
+            ->method('query')
+            ->willReturnCallback(function (string $query) {
+                $this->assertStringContainsString('COUNT(*) as total', $query);
+                $this->assertStringContainsString('record_id = 321', $query);
+
+                return true;
+            });
+        $this->mockDb->method('fetchObject')->willReturn((object) ['total' => 4]);
+
+        $this->assertSame(4, AttachmentFactory::countByRecordId($this->mockConfiguration, 321));
+    }
+
+    public function testCountByRecordIdReturnsZeroWhenDatabaseReturnsNoTotal(): void
+    {
+        $this->mockDb->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $this->mockDb->method('query')->willReturn(true);
+        $this->mockDb->method('fetchObject')->willReturn((object) []);
+
+        $this->assertSame(0, AttachmentFactory::countByRecordId($this->mockConfiguration, 321));
+    }
+
     public function testCreateIntegrationWithInit(): void
     {
         $this->setStorageType(AttachmentStorageType::FILESYSTEM->value);

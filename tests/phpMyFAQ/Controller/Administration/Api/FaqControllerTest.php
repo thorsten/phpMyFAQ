@@ -493,7 +493,10 @@ final class FaqControllerTest extends TestCase
         $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
 
         $faq = $this->createMock(Faq::class);
-        $faq->expects($this->once())->method('create')->willReturn(new \phpMyFAQ\Entity\FaqEntity());
+        $faq
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn(new \phpMyFAQ\Entity\FaqEntity());
 
         $request = new Request([], [], [], [], [], [], json_encode([
             'data' => [

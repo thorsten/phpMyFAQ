@@ -61,4 +61,17 @@ final class ErrorControllerTest extends TestCase
         self::assertStringContainsString('500', (string) $response->getContent());
         self::assertStringContainsString('Test internal failure', (string) $response->getContent());
     }
+
+    public function testRenderMinimalErrorReturnsHtml500Response(): void
+    {
+        $controller = new ErrorController();
+        $method = new \ReflectionMethod($controller, 'renderMinimalError');
+
+        $response = $method->invoke($controller, 'Minimal failure');
+
+        self::assertInstanceOf(Response::class, $response);
+        self::assertSame(500, $response->getStatusCode());
+        self::assertSame('text/html; charset=utf-8', $response->headers->get('Content-Type'));
+        self::assertStringContainsString('Minimal failure', (string) $response->getContent());
+    }
 }

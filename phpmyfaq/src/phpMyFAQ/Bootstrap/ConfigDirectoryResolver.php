@@ -134,12 +134,6 @@ class ConfigDirectoryResolver
             }
         }
 
-        $tmp = $rootDir . DIRECTORY_SEPARATOR . $confAttachmentsPath;
-
-        if (str_starts_with($tmp, $rootDir)) {
-            return $tmp;
-        }
-
-        return false;
+        return $rootDir . DIRECTORY_SEPARATOR . $confAttachmentsPath;
     }
 }

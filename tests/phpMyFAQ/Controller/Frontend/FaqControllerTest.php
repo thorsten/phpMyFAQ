@@ -65,6 +65,7 @@ final class FaqControllerTest extends TestCase
         $this->dbHandle = new Sqlite3();
         $this->dbHandle->connect($this->databasePath, '', '');
         $this->configuration = new Configuration($this->dbHandle);
+        $configurationProperty->setValue(null, $this->configuration);
         $this->initializeDatabaseStatics($this->dbHandle);
 
         $language = new Language($this->configuration, new Session(new MockArraySessionStorage()));
@@ -136,17 +137,57 @@ final class FaqControllerTest extends TestCase
         self::assertSame('2026-03-01', $result['formattedDates'][7]);
     }
 
-    private function createController(Date $date, Mail $mail, Gravatar $gravatar): FaqController
+    /**
+     * @throws \Exception
+     */
+    public function testShowReturnsNotFoundWhenFaqIsNotLinkedToCategory(): void
     {
+        $faq = new Faq($this->configuration);
+        $faq->getFaq(1);
+
+        $category = $this
+            ->getMockBuilder(Category::class)
+            ->setConstructorArgs([$this->configuration, [-1]])
+            ->onlyMethods(['categoryHasLinkToFaq'])
+            ->getMock();
+        $category->expects(self::once())->method('categoryHasLinkToFaq')->with(1, 999)->willReturn(false);
+
+        $controller = $this->createController(
+            $this->createMock(Date::class),
+            $this->createMock(Mail::class),
+            $this->createMock(Gravatar::class),
+            $faq,
+            $category,
+        );
+
+        $response = $controller->show(
+            new \Symfony\Component\HttpFoundation\Request(
+                [],
+                [],
+                ['categoryId' => '999', 'faqId' => '1', 'faqLang' => 'en', 'slug' => 'faq-title'],
+            ),
+        );
+
+        self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND, $response->getStatusCode());
+    }
+
+    private function createController(
+        Date $date,
+        Mail $mail,
+        Gravatar $gravatar,
+        ?Faq $faq = null,
+        ?Category $category = null,
+    ): FaqController {
         $currentUser = new CurrentUser($this->configuration);
-        $category = new Category($this->configuration, [-1]);
+        $faq ??= new Faq($this->configuration);
+        $category ??= new Category($this->configuration, [-1]);
         $category->setLanguage('en');
 
         $controller = new FaqController(
             new UserSession($this->configuration),
             $this->createMock(CaptchaInterface::class),
             $this->createMock(CaptchaHelperInterface::class),
-            new Faq($this->configuration),
+            $faq,
             $category,
             new Bookmark($this->configuration, $currentUser),
             $date,
