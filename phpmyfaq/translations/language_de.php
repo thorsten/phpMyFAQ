@@ -1686,7 +1686,7 @@ $LANG_CONF['mail.useQueue'] = ['checkbox', 'Hintergrund-Worker-Warteschlange fü
 $LANG_CONF['storage.useRedisForConfiguration'] = [
     'checkbox',
     'Aktiviere Redis für die Konfiguration',
-    'If disabled, phpMyFAQ uses the database only',
+    'Wenn deaktiviert, verwendet phpMyFAQ nur die Datenbank',
 ];
 $LANG_CONF['storage.redisDsn'] = [
     'input',
@@ -1713,22 +1713,22 @@ $LANG_CONF['storage.cacheAdapter'] = [
 $LANG_CONF['storage.cacheRedisDsn'] = [
     'input',
     'Redis DSN für den Cache',
-    'Examples: tcp://127.0.0.1:6379?database=2, tcp://redis:6379?database=2',
+    'Beispiele: tcp://127.0.0.1:6379?database=2, tcp://redis:6379?database=2',
 ];
 $LANG_CONF['storage.cacheRedisPrefix'] = [
     'input',
-    'Redis key prefix for cache',
-    'Use different prefixes for multiple phpMyFAQ instances sharing one Redis server',
+    'Redis-Schlüsselpräfix für den Cache',
+    'Verwenden Sie unterschiedliche Präfixe für mehrere phpMyFAQ-Instanzen, die sich einen Redis-Server teilen',
 ];
 $LANG_CONF['storage.cacheRedisConnectTimeout'] = [
     'input',
-    'Redis connection timeout for cache in seconds',
-    'Default: 1.0',
+    'Zeitlimit für die Redis-Verbindung zum Cache in Sekunden',
+    'Standard: 1.0',
 ];
 $LANG_CONF['storage.cacheDefaultTtl'] = [
     'input',
-    'Default cache TTL in seconds',
-    'Default: 3600 (1 hour)',
+    'Standard-Cache-TTL in Sekunden',
+    'Standard: 3600 (1 Stunde)',
 ];
 
 $PMF_LANG['msgAdminHeaderLdap'] = 'LDAP Konfiguration';

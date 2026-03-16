@@ -4,6 +4,8 @@ namespace phpMyFAQ\Captcha;
 
 use Exception;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
@@ -25,26 +27,58 @@ class BuiltinCaptchaTest extends TestCase
     /** @var Configuration */
     protected Configuration $configuration;
 
+    private ?Sqlite3 $dbHandle = null;
+    private ?string $databasePath = null;
+    private ?Configuration $previousConfiguration = null;
+    private ?DatabaseDriver $previousDatabaseDriver = null;
+    private ?string $previousDatabaseType = null;
+    private ?string $previousTablePrefix = null;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         Strings::init();
+        $this->backupGlobalState();
+        $this->resetConfigurationSingleton();
 
         $_SERVER['HTTP_USER_AGENT'] = 'AwesomeBrowser';
         $_SERVER['REMOTE_ADDR'] = '::1';
         $_SERVER['REQUEST_TIME'] = 1;
         $_SERVER['SCRIPT_NAME'] = 'test-me.php';
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $this->configuration = new Configuration($dbHandle);
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-builtin-captcha-');
+        $this->assertNotFalse($databasePath);
+        $this->assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
+        $this->databasePath = $databasePath;
+
+        $this->dbHandle = new Sqlite3();
+        $this->dbHandle->connect($databasePath, '', '');
+        $this->configuration = new Configuration($this->dbHandle);
+        $this->initializeDatabaseStatics($this->dbHandle);
 
         $language = $this->createMock(Language::class);
         $language->method('getLanguage')->willReturn('en');
         $this->configuration->setLanguage($language);
 
         $this->captcha = new BuiltinCaptcha($this->configuration);
+    }
+
+    protected function tearDown(): void
+    {
+        if ($this->dbHandle instanceof Sqlite3) {
+            $this->dbHandle->close();
+        }
+        $this->dbHandle = null;
+
+        if ($this->databasePath !== null) {
+            @unlink($this->databasePath);
+        }
+        $this->databasePath = null;
+
+        $this->restoreGlobalState();
+
+        parent::tearDown();
     }
 
     /**
@@ -292,6 +326,60 @@ class BuiltinCaptchaTest extends TestCase
         return $property->getValue($object);
     }
 
+    private function resetConfigurationSingleton(): void
+    {
+        $configurationReflection = new ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, null);
+    }
+
+    private function backupGlobalState(): void
+    {
+        $configurationReflection = new ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $this->previousConfiguration = $configurationProperty->getValue();
+
+        $databaseReflection = new ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $this->previousDatabaseDriver = $databaseDriverProperty->getValue();
+
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $this->previousDatabaseType = $dbTypeProperty->isInitialized() ? $dbTypeProperty->getValue() : null;
+
+        $tablePrefixProperty = $databaseReflection->getProperty('tablePrefix');
+        $this->previousTablePrefix = $tablePrefixProperty->getValue();
+    }
+
+    private function restoreGlobalState(): void
+    {
+        $configurationReflection = new ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, $this->previousConfiguration);
+
+        $databaseReflection = new ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $this->previousDatabaseDriver);
+
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, $this->previousDatabaseType);
+
+        $tablePrefixProperty = $databaseReflection->getProperty('tablePrefix');
+        $tablePrefixProperty->setValue(null, $this->previousTablePrefix);
+    }
+
+    private function initializeDatabaseStatics(Sqlite3 $dbHandle): void
+    {
+        $databaseReflection = new ReflectionClass(Database::class);
+
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $dbHandle);
+
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlite3');
+
+        Database::setTablePrefix('');
+    }
+
     /**
      * Test captcha with missing server variables
      */
@@ -485,7 +573,7 @@ class BuiltinCaptchaTest extends TestCase
 
         // Create fresh Configuration to pick up the changed value
         $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle->connect($this->databasePath ?? PMF_TEST_DIR . '/test.db', '', '');
         $config = new Configuration($dbHandle);
         $language = $this->createMock(Language::class);
         $language->method('getLanguage')->willReturn('en');
