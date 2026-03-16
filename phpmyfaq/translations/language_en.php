@@ -1705,6 +1705,31 @@ $LANG_CONF['storage.redisConnectTimeout'] = [
 ];
 $LANG_CONF['storage.testRedisConnection'] = ['button', 'Test Redis connection'];
 $PMF_LANG['storage.testRedisConnection'] = 'Test Redis connection';
+$LANG_CONF['storage.cacheAdapter'] = [
+    'select',
+    'Cache adapter',
+    'filesystem = file-based (default), redis = Redis server',
+];
+$LANG_CONF['storage.cacheRedisDsn'] = [
+    'input',
+    'Redis DSN for cache',
+    'Examples: tcp://127.0.0.1:6379?database=2, tcp://redis:6379?database=2',
+];
+$LANG_CONF['storage.cacheRedisPrefix'] = [
+    'input',
+    'Redis key prefix for cache',
+    'Use different prefixes for multiple phpMyFAQ instances sharing one Redis server',
+];
+$LANG_CONF['storage.cacheRedisConnectTimeout'] = [
+    'input',
+    'Redis connection timeout for cache in seconds',
+    'Default: 1.0',
+];
+$LANG_CONF['storage.cacheDefaultTtl'] = [
+    'input',
+    'Default cache TTL in seconds',
+    'Default: 3600 (1 hour)',
+];
 
 $PMF_LANG['msgAdminHeaderLdap'] = 'LDAP Configuration';
 $PMF_LANG['msgAdminLdapHealthCheck'] = 'LDAP Health Check';

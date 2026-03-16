@@ -19,8 +19,9 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Http;
 
-use phpMyFAQ\Configuration;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
+use Symfony\Component\RateLimiter\Storage\CacheStorage;
 use Symfony\Component\RateLimiter\Storage\InMemoryStorage;
 use Symfony\Component\RateLimiter\Storage\StorageInterface;
 
@@ -36,11 +37,9 @@ final class RateLimiter
 
     private readonly StorageInterface $storage;
 
-    public function __construct(
-        private readonly Configuration $configuration,
-        ?StorageInterface $storage = null,
-    ) {
-        $this->storage = $storage ?? new InMemoryStorage();
+    public function __construct(?CacheItemPoolInterface $cache = null, ?StorageInterface $storage = null)
+    {
+        $this->storage = $storage ?? ($cache !== null ? new CacheStorage($cache) : new InMemoryStorage());
     }
 
     /**
