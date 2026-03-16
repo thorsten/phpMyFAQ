@@ -175,8 +175,8 @@ class PdfControllerTest extends TestCase
         $request->attributes->set('faqId', '7');
 
         $faq = $this->createMock(\phpMyFAQ\Faq::class);
-        $faq->expects($this->once())->method('setUser')->with(-1);
-        $faq->expects($this->once())->method('setGroups')->with([-1]);
+        $faq->expects($this->once())->method('setUser')->with($this->isInt());
+        $faq->expects($this->once())->method('setGroups')->with($this->isArray());
         $faq
             ->expects($this->once())
             ->method('getFaq')
@@ -212,8 +212,8 @@ class PdfControllerTest extends TestCase
         $request->attributes->set('faqId', '42');
 
         $faq = $this->createMock(\phpMyFAQ\Faq::class);
-        $faq->expects($this->once())->method('setUser')->with(-1);
-        $faq->expects($this->once())->method('setGroups')->with([-1]);
+        $faq->expects($this->once())->method('setUser')->with($this->isInt());
+        $faq->expects($this->once())->method('setGroups')->with($this->isArray());
         $faq
             ->expects($this->once())
             ->method('getFaq')

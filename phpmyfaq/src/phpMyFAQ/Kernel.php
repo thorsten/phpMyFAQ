@@ -24,6 +24,7 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Controller\ContainerControllerResolver;
 use phpMyFAQ\EventListener\ApiExceptionListener;
+use phpMyFAQ\EventListener\ApiRateLimiterListener;
 use phpMyFAQ\EventListener\ControllerContainerListener;
 use phpMyFAQ\EventListener\LanguageListener;
 use phpMyFAQ\EventListener\RouterListener;
@@ -178,6 +179,18 @@ class Kernel implements HttpKernelInterface
         // Language listener — detects language and initializes translations (priority 200, after router)
         $languageListener = new LanguageListener($this->container);
         $dispatcher->addListener(KernelEvents::REQUEST, [$languageListener, 'onKernelRequest'], 200);
+
+        if (
+            $this->routingContext === 'api'
+            && $this->container->has('phpmyfaq.configuration')
+            && $this->container->has('phpmyfaq.http.rate-limiter')
+        ) {
+            $apiRateLimiterListener = new ApiRateLimiterListener(
+                $this->container->get('phpmyfaq.configuration'),
+                $this->container->get('phpmyfaq.http.rate-limiter'),
+            );
+            $dispatcher->addListener(KernelEvents::REQUEST, [$apiRateLimiterListener, 'onKernelRequest'], 150);
+        }
 
         // API exception listener — converts exceptions to RFC 7807 JSON (priority 0)
         $configuration = $this->container->has('phpmyfaq.configuration')

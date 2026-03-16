@@ -120,13 +120,15 @@ final class CustomPageControllerTest extends TestCase
      */
     public function testShowUsesStoredSeoMetadataWhenAvailable(): void
     {
-        $this->dbHandle->query("DELETE FROM faqseo WHERE type = 'page' AND reference_id = 501 AND reference_language = 'en'");
+        $this->dbHandle->query(
+            "DELETE FROM faqseo WHERE type = 'page' AND reference_id = 501 AND reference_language = 'en'",
+        );
         $this->dbHandle->query(
             "INSERT INTO faqseo (id, type, reference_id, reference_language, title, description, slug, created)
-             VALUES (501, 'page', 501, 'en', 'SEO Title', 'SEO Description', 'seo-page', '2026-03-15 10:00:00')"
+             VALUES (501, 'page', 501, 'en', 'SEO Title', 'SEO Description', 'seo-page', '2026-03-15 10:00:00')",
         );
 
-        $pageEntity = (new CustomPageEntity())
+        $pageEntity = new CustomPageEntity()
             ->setId(501)
             ->setPageTitle('Rendered Page')
             ->setContent('<p>Page content</p>')
@@ -136,11 +138,7 @@ final class CustomPageControllerTest extends TestCase
             ->setCreated(new DateTime('2026-03-15 10:00:00'));
 
         $customPage = $this->createMock(CustomPage::class);
-        $customPage
-            ->expects(self::once())
-            ->method('getBySlug')
-            ->with('seo-page', 'en')
-            ->willReturn($pageEntity);
+        $customPage->expects(self::once())->method('getBySlug')->with('seo-page', 'en')->willReturn($pageEntity);
 
         $controller = new CustomPageController($customPage);
         $controller->setContainer($this->createControllerContainer(
@@ -160,9 +158,11 @@ final class CustomPageControllerTest extends TestCase
      */
     public function testShowFallsBackToPageDefaultsWhenSeoDataAreMissing(): void
     {
-        $this->dbHandle->query("DELETE FROM faqseo WHERE type = 'page' AND reference_id = 502 AND reference_language = 'en'");
+        $this->dbHandle->query(
+            "DELETE FROM faqseo WHERE type = 'page' AND reference_id = 502 AND reference_language = 'en'",
+        );
 
-        $pageEntity = (new CustomPageEntity())
+        $pageEntity = new CustomPageEntity()
             ->setId(502)
             ->setPageTitle('Fallback Page')
             ->setContent('<p>Fallback content</p>')
@@ -172,11 +172,7 @@ final class CustomPageControllerTest extends TestCase
             ->setCreated(new DateTime('2026-03-15 10:00:00'));
 
         $customPage = $this->createMock(CustomPage::class);
-        $customPage
-            ->expects(self::once())
-            ->method('getBySlug')
-            ->with('fallback-page', 'en')
-            ->willReturn($pageEntity);
+        $customPage->expects(self::once())->method('getBySlug')->with('fallback-page', 'en')->willReturn($pageEntity);
 
         $controller = new CustomPageController($customPage);
         $controller->setContainer($this->createControllerContainer(
@@ -191,10 +187,8 @@ final class CustomPageControllerTest extends TestCase
         self::assertStringNotContainsString('SEO Description', (string) $response->getContent());
     }
 
-    private function createControllerContainer(
-        SessionInterface $session,
-        CurrentUser $currentUser,
-    ): ContainerInterface {
+    private function createControllerContainer(SessionInterface $session, CurrentUser $currentUser): ContainerInterface
+    {
         $container = $this->createStub(ContainerInterface::class);
         $container
             ->method('get')

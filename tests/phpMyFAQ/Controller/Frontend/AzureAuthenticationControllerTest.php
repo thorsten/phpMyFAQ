@@ -306,7 +306,10 @@ class AzureAuthenticationControllerTest extends TestCase
         $response = $controller->callback(new Request(['code' => 'test-code']));
 
         $this->assertInstanceOf(Response::class, $response);
-        $this->assertStringContainsString('Entra ID Login failed: Token exchange failed', (string) $response->getContent());
+        $this->assertStringContainsString(
+            'Entra ID Login failed: Token exchange failed',
+            (string) $response->getContent(),
+        );
     }
 
     public function testBuildAuthContextReturnsDefaultServices(): void
@@ -338,9 +341,9 @@ class AzureAuthenticationControllerTest extends TestCase
     {
         $azureConfigFile = PMF_CONFIG_DIR . '/azure.php';
         file_put_contents($azureConfigFile, <<<'PHP'
-<?php
-define('AAD_OAUTH_CLIENTID', 'test-client-id');
-PHP);
+            <?php
+            define('AAD_OAUTH_CLIENTID', 'test-client-id');
+            PHP);
 
         $controller = new AzureAuthenticationController();
         $reflectionMethod = new \ReflectionMethod(AzureAuthenticationController::class, 'loadAzureConfiguration');

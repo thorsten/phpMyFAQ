@@ -6,11 +6,13 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\ContainerControllerResolver;
 use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\EventListener\ApiExceptionListener;
+use phpMyFAQ\EventListener\ApiRateLimiterListener;
 use phpMyFAQ\EventListener\ControllerContainerListener;
 use phpMyFAQ\EventListener\LanguageListener;
 use phpMyFAQ\EventListener\RouterListener;
 use phpMyFAQ\EventListener\WebExceptionListener;
 use phpMyFAQ\Form\FormsServiceProvider;
+use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Routing\AttributeRouteLoader;
 use phpMyFAQ\Routing\RouteCacheManager;
 use phpMyFAQ\Routing\RouteCollectionBuilder;
@@ -27,11 +29,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\RateLimiter\Storage\InMemoryStorage;
 use Symfony\Component\Routing\RouteCollection;
 
 #[CoversClass(Kernel::class)]
 #[UsesClass(ContainerControllerResolver::class)]
 #[UsesClass(ApiExceptionListener::class)]
+#[UsesClass(ApiRateLimiterListener::class)]
 #[UsesClass(ControllerContainerListener::class)]
 #[UsesClass(LanguageListener::class)]
 #[UsesClass(RouterListener::class)]
@@ -42,6 +46,7 @@ use Symfony\Component\Routing\RouteCollection;
 #[UsesClass(RouteCacheManager::class)]
 #[UsesClass(RouteCollectionBuilder::class)]
 #[UsesClass(PdoSqlite::class)]
+#[UsesClass(RateLimiter::class)]
 #[AllowMockObjectsWithoutExpectations]
 class KernelTest extends TestCase
 {
@@ -457,16 +462,24 @@ class KernelTest extends TestCase
     public function testRegisterEventListenersUsesConfigurationForApiListener(): void
     {
         $configMock = $this->createMock(Configuration::class);
+        $rateLimiter = new RateLimiter(storage: new InMemoryStorage());
         $container = $this->createMock(ContainerBuilder::class);
-        $container->method('has')->willReturnCallback(static fn(string $id) => $id === 'phpmyfaq.configuration');
+        $container
+            ->method('has')
+            ->willReturnCallback(static fn(string $id) => in_array(
+                $id,
+                ['phpmyfaq.configuration', 'phpmyfaq.http.rate-limiter'],
+                true,
+            ));
         $container
             ->method('get')
             ->willReturnCallback(static fn(string $id) => match ($id) {
                 'phpmyfaq.configuration' => $configMock,
+                'phpmyfaq.http.rate-limiter' => $rateLimiter,
                 default => null,
             });
 
-        $kernel = new Kernel(routingContext: 'public', debug: true);
+        $kernel = new Kernel(routingContext: 'api', debug: true);
         $reflection = new ReflectionClass(Kernel::class);
 
         $containerProp = $reflection->getProperty('container');
@@ -479,8 +492,47 @@ class KernelTest extends TestCase
         $registerMethod = $reflection->getMethod('registerEventListeners');
         $registerMethod->invoke($kernel, $dispatcher);
 
+        $requestListeners = $dispatcher->getListeners('kernel.request');
         $exceptionListeners = $dispatcher->getListeners('kernel.exception');
+        $this->assertCount(3, $requestListeners);
         $this->assertCount(2, $exceptionListeners);
+    }
+
+    public function testRegisterEventListenersDoesNotAddApiRateLimiterForAdminApi(): void
+    {
+        $configMock = $this->createMock(Configuration::class);
+        $rateLimiter = new RateLimiter(storage: new InMemoryStorage());
+        $container = $this->createMock(ContainerBuilder::class);
+        $container
+            ->method('has')
+            ->willReturnCallback(static fn(string $id) => in_array(
+                $id,
+                ['phpmyfaq.configuration', 'phpmyfaq.http.rate-limiter'],
+                true,
+            ));
+        $container
+            ->method('get')
+            ->willReturnCallback(static fn(string $id) => match ($id) {
+                'phpmyfaq.configuration' => $configMock,
+                'phpmyfaq.http.rate-limiter' => $rateLimiter,
+                default => null,
+            });
+
+        $kernel = new Kernel(routingContext: 'admin-api', debug: true);
+        $reflection = new ReflectionClass(Kernel::class);
+
+        $containerProp = $reflection->getProperty('container');
+        $containerProp->setValue($kernel, $container);
+
+        $routesProp = $reflection->getProperty('routes');
+        $routesProp->setValue($kernel, new RouteCollection());
+
+        $dispatcher = new EventDispatcher();
+        $registerMethod = $reflection->getMethod('registerEventListeners');
+        $registerMethod->invoke($kernel, $dispatcher);
+
+        $requestListeners = $dispatcher->getListeners('kernel.request');
+        $this->assertCount(2, $requestListeners);
     }
 
     public function testRegisterEventListenersWithoutConfiguration(): void

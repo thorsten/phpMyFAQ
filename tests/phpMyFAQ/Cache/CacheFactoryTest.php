@@ -22,7 +22,7 @@ class CacheFactoryTest extends TestCase
         $db = $this->createMock(DatabaseDriver::class);
         $db->method('escape')->willReturnCallback(static fn(string $v): string => $v);
         $db->method('query')->willReturn(false);
-        $db->method('fetchObject')->willReturn(false);
+        $db->method('fetchAll')->willReturn([]);
 
         $this->configuration = $this->createMock(Configuration::class);
         $this->configuration->method('getDb')->willReturn($db);
@@ -48,8 +48,9 @@ class CacheFactoryTest extends TestCase
         $db = $this->createMock(DatabaseDriver::class);
         $db->method('escape')->willReturnCallback(static fn(string $v): string => $v);
         $db->method('query')->willReturn('result');
-        $db->method('numRows')->willReturn(1);
-        $db->method('fetchObject')->willReturn((object) ['config_value' => 'memcached']);
+        $db->method('fetchAll')->willReturn([
+            (object) ['config_name' => 'storage.cacheAdapter', 'config_value' => 'memcached'],
+        ]);
 
         $config = $this->createMock(Configuration::class);
         $config->method('getDb')->willReturn($db);

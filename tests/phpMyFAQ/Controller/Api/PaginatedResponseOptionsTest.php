@@ -4,9 +4,9 @@ namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Api\Filtering\FilterRequest;
 use phpMyFAQ\Api\Sorting\SortRequest;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

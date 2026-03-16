@@ -15,9 +15,9 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\UserException;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
+use phpMyFAQ\User\UserException;
 use phpMyFAQ\User\UserSession;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -255,11 +255,13 @@ final class AuthenticationControllerTest extends TestCase
         $currentUser = $this->createAuthenticationCurrentUser(twoFactorEnabled: false, loginResult: true, userId: 7);
         $controller = $this->createAuthenticationController($currentUser);
 
-        $response = $controller->authenticate(new Request([], [
-            'faqusername' => 'admin',
-            'faqpassword' => 'secret',
-            'faqrememberme' => '1',
-        ]));
+        $response = $controller->authenticate(
+            new Request([], [
+                'faqusername' => 'admin',
+                'faqpassword' => 'secret',
+                'faqrememberme' => '1',
+            ]),
+        );
 
         self::assertSame('./', $response->getTargetUrl());
     }
@@ -272,10 +274,12 @@ final class AuthenticationControllerTest extends TestCase
         $currentUser = $this->createAuthenticationCurrentUser(twoFactorEnabled: true, loginResult: true, userId: 42);
         $controller = $this->createAuthenticationController($currentUser);
 
-        $response = $controller->authenticate(new Request([], [
-            'faqusername' => 'admin',
-            'faqpassword' => 'secret',
-        ]));
+        $response = $controller->authenticate(
+            new Request([], [
+                'faqusername' => 'admin',
+                'faqpassword' => 'secret',
+            ]),
+        );
 
         self::assertSame('./token?user-id=42', $response->getTargetUrl());
     }
@@ -296,10 +300,12 @@ final class AuthenticationControllerTest extends TestCase
         );
         $controller->setContainer($this->createControllerContainer($session, $currentUser));
 
-        $response = $controller->authenticate(new Request([], [
-            'faqusername' => 'admin',
-            'faqpassword' => 'wrong',
-        ]));
+        $response = $controller->authenticate(
+            new Request([], [
+                'faqusername' => 'admin',
+                'faqpassword' => 'wrong',
+            ]),
+        );
 
         self::assertSame('./login', $response->getTargetUrl());
         self::assertNotEmpty($session->getFlashBag()->get('error'));
@@ -311,11 +317,7 @@ final class AuthenticationControllerTest extends TestCase
     public function testAuthenticateUsesRemoteUserWhenSsoSupportIsEnabled(): void
     {
         $currentUser = $this->createAuthenticationCurrentUser(twoFactorEnabled: false, loginResult: true, userId: 9);
-        $currentUser
-            ->expects(self::once())
-            ->method('login')
-            ->with('remote-user', '')
-            ->willReturn(true);
+        $currentUser->expects(self::once())->method('login')->with('remote-user', '')->willReturn(true);
 
         $session = new Session(new MockArraySessionStorage());
         $session->start();
@@ -507,8 +509,11 @@ final class AuthenticationControllerTest extends TestCase
         return $currentUser;
     }
 
-    private function createAuthenticationCurrentUser(bool $twoFactorEnabled, bool $loginResult, int $userId): CurrentUser
-    {
+    private function createAuthenticationCurrentUser(
+        bool $twoFactorEnabled,
+        bool $loginResult,
+        int $userId,
+    ): CurrentUser {
         $permission = $this->createMock(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn(false);
 
@@ -525,8 +530,8 @@ final class AuthenticationControllerTest extends TestCase
             ->method('getUserData')
             ->willReturnMap([
                 ['twofactor_enabled', $twoFactorEnabled],
-                ['display_name', 'Admin User'],
-                ['email', 'admin@example.com'],
+                ['display_name',      'Admin User'],
+                ['email',             'admin@example.com'],
             ]);
         $currentUser->method('login')->willReturn($loginResult);
 

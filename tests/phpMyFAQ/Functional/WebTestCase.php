@@ -227,13 +227,20 @@ class HttpKernelBrowser extends AbstractBrowser
             throw new \InvalidArgumentException('Expected a Symfony BrowserKit request object.');
         }
 
+        $server = $request->getServer();
+        if (!isset($server['REMOTE_ADDR']) || $server['REMOTE_ADDR'] === '') {
+            static $requestCounter = 0;
+            $requestCounter++;
+            $server['REMOTE_ADDR'] = '2001:db8::' . dechex($requestCounter);
+        }
+
         $kernelRequest = Request::create(
             $request->getUri(),
             $request->getMethod(),
             $request->getParameters(),
             $request->getCookies(),
             $request->getFiles(),
-            $request->getServer(),
+            $server,
             $request->getContent(),
         );
 
