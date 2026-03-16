@@ -124,10 +124,8 @@ final class ContactControllerTest extends TestCase
         self::assertStringContainsString('Admin User', (string) $response->getContent());
     }
 
-    private function createControllerContainer(
-        SessionInterface $session,
-        CurrentUser $currentUser,
-    ): ContainerInterface {
+    private function createControllerContainer(SessionInterface $session, CurrentUser $currentUser): ContainerInterface
+    {
         $container = $this->createStub(ContainerInterface::class);
         $container
             ->method('get')
@@ -160,7 +158,7 @@ final class ContactControllerTest extends TestCase
             ->method('getUserData')
             ->willReturnMap([
                 ['display_name', 'Admin User'],
-                ['email', 'admin@example.com'],
+                ['email',        'admin@example.com'],
             ]);
 
         return $currentUser;

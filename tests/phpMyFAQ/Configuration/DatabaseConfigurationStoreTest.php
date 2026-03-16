@@ -75,4 +75,25 @@ class DatabaseConfigurationStoreTest extends TestCase
     {
         $this->assertNull($this->store->fetchValue('does.not.exist'));
     }
+
+    public function testFetchValuesReturnsRequestedKeysWithNullForMissingEntries(): void
+    {
+        $this->assertTrue($this->store->insert(' storage.cacheAdapter ', ' redis '));
+        $this->assertTrue($this->store->insert(' storage.cacheDefaultTtl ', ' 1800 '));
+
+        $values = $this->store->fetchValues([
+            ' storage.cacheAdapter ',
+            'storage.cacheDefaultTtl',
+            'storage.cacheRedisPrefix',
+        ]);
+
+        $this->assertSame(
+            [
+                'storage.cacheAdapter' => 'redis',
+                'storage.cacheDefaultTtl' => '1800',
+                'storage.cacheRedisPrefix' => null,
+            ],
+            $values,
+        );
+    }
 }
