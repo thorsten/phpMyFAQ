@@ -46,7 +46,7 @@ readonly class CacheSettingsResolver
             $redisDsn = self::DEFAULT_REDIS_DSN;
         }
 
-        $redisPrefix = $this->databaseConfigurationStore->fetchValue('storage.cacheRedisPrefix') ?? '';
+        $redisPrefix = trim($this->databaseConfigurationStore->fetchValue('storage.cacheRedisPrefix') ?? '');
         if ($redisPrefix === '') {
             $redisPrefix = self::DEFAULT_REDIS_PREFIX;
         }

@@ -203,6 +203,7 @@ use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\User\UserSession;
 use phpMyFAQ\Visits;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -421,9 +422,9 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('phpmyfaq.cache.factory', CacheFactory::class)->args([
         service('phpmyfaq.configuration'),
-        PMF_ROOT_DIR . '/cache/app',
+        PMF_ROOT_DIR . '/content/core/cache',
     ]);
-    $services->set('phpmyfaq.cache', \Psr\Cache\CacheItemPoolInterface::class)->factory([
+    $services->set('phpmyfaq.cache', CacheItemPoolInterface::class)->factory([
         service('phpmyfaq.cache.factory'),
         'create',
     ]);
