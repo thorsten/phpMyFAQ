@@ -4,6 +4,8 @@ namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Language;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -38,18 +40,31 @@ class TestApiConstructorController extends AbstractApiController
 class AttachmentControllerTest extends TestCase
 {
     private ?Sqlite3 $dbHandle = null;
+    private ?string $databasePath = null;
+    private ?Configuration $previousConfiguration = null;
+    private ?DatabaseDriver $previousDatabaseDriver = null;
+    private ?string $previousDatabaseType = null;
+    private ?string $previousTablePrefix = null;
 
     protected function setUp(): void
     {
         parent::setUp();
 
+        $this->backupGlobalState();
+
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
         $configurationProperty->setValue(null, null);
 
+        $databasePath = tempnam(sys_get_temp_dir(), 'pmf-attachment-controller-');
+        $this->assertNotFalse($databasePath);
+        $this->assertTrue(copy(PMF_TEST_DIR . '/test.db', $databasePath));
+        $this->databasePath = $databasePath;
+
         $this->dbHandle = new Sqlite3();
-        $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $this->dbHandle->connect($databasePath, '', '');
         new Configuration($this->dbHandle);
+        $this->initializeDatabaseStatics($this->dbHandle);
 
         Language::$language = 'en';
         $this->setAttachmentFactoryStorageType(0);
@@ -58,8 +73,65 @@ class AttachmentControllerTest extends TestCase
     protected function tearDown(): void
     {
         $this->setAttachmentFactoryStorageType(0);
+        if ($this->dbHandle instanceof Sqlite3) {
+            $this->dbHandle->close();
+        }
+        $this->dbHandle = null;
+
+        if ($this->databasePath !== null) {
+            @unlink($this->databasePath);
+        }
+        $this->databasePath = null;
+        $this->restoreGlobalState();
 
         parent::tearDown();
+    }
+
+    private function backupGlobalState(): void
+    {
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $this->previousConfiguration = $configurationProperty->getValue();
+
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $this->previousDatabaseDriver = $databaseDriverProperty->getValue();
+
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $this->previousDatabaseType = $dbTypeProperty->isInitialized() ? $dbTypeProperty->getValue() : null;
+
+        $tablePrefixProperty = $databaseReflection->getProperty('tablePrefix');
+        $this->previousTablePrefix = $tablePrefixProperty->getValue();
+    }
+
+    private function restoreGlobalState(): void
+    {
+        $configurationReflection = new \ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, $this->previousConfiguration);
+
+        $databaseReflection = new \ReflectionClass(Database::class);
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $this->previousDatabaseDriver);
+
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, $this->previousDatabaseType);
+
+        $tablePrefixProperty = $databaseReflection->getProperty('tablePrefix');
+        $tablePrefixProperty->setValue(null, $this->previousTablePrefix);
+    }
+
+    private function initializeDatabaseStatics(Sqlite3 $dbHandle): void
+    {
+        $databaseReflection = new \ReflectionClass(Database::class);
+
+        $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');
+        $databaseDriverProperty->setValue(null, $dbHandle);
+
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlite3');
+
+        Database::setTablePrefix('');
     }
 
     private function setAttachmentFactoryStorageType(?int $storageType): void
