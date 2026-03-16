@@ -340,6 +340,9 @@ final class GroupController extends AbstractAdministrationController
     {
         return [
             'rightData' => $this->user->perm->getAllRightsData(),
+            'csrfTokenCategoryRestrictions' => Token::getInstance($this->session)->getTokenString(
+                'save-category-restrictions',
+            ),
         ];
     }
 }

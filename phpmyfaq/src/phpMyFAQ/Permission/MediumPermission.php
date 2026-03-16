@@ -33,11 +33,14 @@ class MediumPermission extends BasicPermission implements PermissionInterface
 {
     protected MediumPermissionRepository $mediumRepository;
 
+    protected GroupCategoryPermissionRepository $categoryPermissionRepository;
+
     public function __construct(
         protected Configuration $configuration,
     ) {
         parent::__construct($configuration);
         $this->mediumRepository = new MediumPermissionRepository($configuration);
+        $this->categoryPermissionRepository = new GroupCategoryPermissionRepository($configuration);
     }
 
     /**
@@ -221,6 +224,8 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         if (!$this->mediumRepository->deleteGroupMemberships($groupId)) {
             return false;
         }
+
+        $this->categoryPermissionRepository->deleteAllForGroup($groupId);
 
         return $this->mediumRepository->deleteGroupRights($groupId);
     }
@@ -471,5 +476,88 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         ];
 
         return $this->addGroup($groupData);
+    }
+
+    /**
+     * Returns true if the user has the specified right for the given category,
+     * taking into account group-level category restrictions.
+     *
+     * If the user's group has no category restrictions for a right, the right
+     * applies globally. If restrictions exist, the right only applies to
+     * the specified categories.
+     *
+     * @param int   $userId     User ID
+     * @param mixed $right      Right ID, name, or PermissionType enum
+     * @param int   $categoryId Category ID
+     * @param CurrentUser|null $currentUser Optional pre-loaded user to avoid repeated instantiation
+     * @throws Exception
+     */
+    public function hasPermissionForCategory(
+        int $userId,
+        mixed $right,
+        int $categoryId,
+        ?CurrentUser $currentUser = null,
+    ): bool {
+        if ($currentUser === null) {
+            $currentUser = new CurrentUser($this->configuration);
+            $currentUser->getUserById($userId);
+        }
+
+        if ($currentUser->isSuperAdmin()) {
+            return true;
+        }
+
+        // Resolve right to ID
+        if (!is_numeric($right) && is_string($right)) {
+            $right = $this->getRightId($right);
+        }
+
+        if ($right instanceof PermissionType) {
+            $right = $this->getRightId($right->value);
+        }
+
+        // Check direct user right (always global, no category restriction)
+        if ($this->checkUserRight($userId, $right)) {
+            return true;
+        }
+
+        // Check group right with category restrictions
+        return $this->categoryPermissionRepository->checkUserGroupRightForCategory($userId, $right, $categoryId);
+    }
+
+    /**
+     * Returns the category IDs that a group's right is restricted to.
+     * An empty array means the right is unrestricted (applies globally).
+     *
+     * @param int $groupId Group ID
+     * @param int $rightId Right ID
+     * @return array<int>
+     */
+    public function getCategoryRestrictions(int $groupId, int $rightId): array
+    {
+        return $this->categoryPermissionRepository->getCategoryRestrictions($groupId, $rightId);
+    }
+
+    /**
+     * Returns all category restrictions for a group, keyed by right ID.
+     *
+     * @param int $groupId Group ID
+     * @return array<int, array<int>> Map of right_id => [category_ids]
+     */
+    public function getAllCategoryRestrictions(int $groupId): array
+    {
+        return $this->categoryPermissionRepository->getAllCategoryRestrictions($groupId);
+    }
+
+    /**
+     * Sets category restrictions for a group's right.
+     *
+     * @param int $groupId Group ID
+     * @param int $rightId Right ID
+     * @param array<int> $categoryIds Category IDs to restrict to (empty = unrestricted)
+     */
+    public function setCategoryRestrictions(int $groupId, int $rightId, array $categoryIds): bool
+    {
+        return $this->categoryPermissionRepository->setCategoryRestrictions($groupId, $rightId, $categoryIds);
     }
 }

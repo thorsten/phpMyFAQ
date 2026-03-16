@@ -40,6 +40,7 @@ class MediumPermissionTest extends TestCase
         $this->dbHandle->connect($this->databasePath, '', '');
         $this->initializeDatabaseStatics($this->dbHandle);
         $this->configuration = new Configuration($this->dbHandle);
+        $this->dbHandle->query('DELETE FROM faqgroup_right_category');
         $this->dbHandle->query('DELETE FROM faqgroup_right');
         $this->dbHandle->query('DELETE FROM faquser_group');
         $this->dbHandle->query('DELETE FROM faqgroup');
@@ -491,6 +492,115 @@ class MediumPermissionTest extends TestCase
         // Cleanup
         $this->mediumPermission->deleteGroup($groupId);
         $this->mediumPermission->deleteGroup($groupId2);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testHasPermissionForCategoryWithUnrestrictedGroupRight(): void
+    {
+        $groupData = [
+            'name' => 'TestGroup',
+            'description' => 'TestDescription',
+            'auto_join' => false,
+        ];
+        $this->mediumPermission->addGroup($groupData);
+        $this->mediumPermission->addToGroup(1, 1);
+        $this->mediumPermission->grantGroupRight(1, 1);
+
+        // No category restrictions -> should have access to any category
+        $this->assertTrue($this->mediumPermission->hasPermissionForCategory(1, 1, 99));
+
+        // Cleanup
+        $this->mediumPermission->deleteGroup(1);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testHasPermissionForCategoryWithRestrictedGroupRight(): void
+    {
+        // Make user 1 non-superadmin and remove direct user right so only group right applies
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
+
+        $groupData = [
+            'name' => 'TestGroup',
+            'description' => 'TestDescription',
+            'auto_join' => false,
+        ];
+        $this->mediumPermission->addGroup($groupData);
+        $this->mediumPermission->addToGroup(1, 1);
+        $this->mediumPermission->grantGroupRight(1, 1);
+
+        // Restrict right 1 to category 10
+        $this->mediumPermission->setCategoryRestrictions(1, 1, [10]);
+
+        // Should have access to category 10
+        $this->assertTrue($this->mediumPermission->hasPermissionForCategory(1, 1, 10));
+        // Should NOT have access to category 20
+        $this->assertFalse($this->mediumPermission->hasPermissionForCategory(1, 1, 20));
+
+        // Cleanup
+        $this->mediumPermission->deleteGroup(1);
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 1 WHERE user_id = 1');
+        $this->configuration->getDb()->query('INSERT INTO faquser_right (user_id, right_id) VALUES (1, 1)');
+    }
+
+    public function testGetAndSetCategoryRestrictions(): void
+    {
+        $groupData = [
+            'name' => 'TestGroup',
+            'description' => 'TestDescription',
+            'auto_join' => false,
+        ];
+        $this->mediumPermission->addGroup($groupData);
+
+        $this->assertEmpty($this->mediumPermission->getCategoryRestrictions(1, 1));
+
+        $this->assertTrue($this->mediumPermission->setCategoryRestrictions(1, 1, [10, 20]));
+        $restrictions = $this->mediumPermission->getCategoryRestrictions(1, 1);
+        $this->assertCount(2, $restrictions);
+        $this->assertContains(10, $restrictions);
+        $this->assertContains(20, $restrictions);
+
+        // Cleanup
+        $this->mediumPermission->deleteGroup(1);
+    }
+
+    public function testGetAllCategoryRestrictions(): void
+    {
+        $groupData = [
+            'name' => 'TestGroup',
+            'description' => 'TestDescription',
+            'auto_join' => false,
+        ];
+        $this->mediumPermission->addGroup($groupData);
+
+        $this->mediumPermission->setCategoryRestrictions(1, 1, [10]);
+        $this->mediumPermission->setCategoryRestrictions(1, 2, [20, 30]);
+
+        $all = $this->mediumPermission->getAllCategoryRestrictions(1);
+        $this->assertCount(2, $all);
+        $this->assertArrayHasKey(1, $all);
+        $this->assertArrayHasKey(2, $all);
+
+        // Cleanup
+        $this->mediumPermission->deleteGroup(1);
+    }
+
+    public function testDeleteGroupCleansCategoryRestrictions(): void
+    {
+        $groupData = [
+            'name' => 'TestGroup',
+            'description' => 'TestDescription',
+            'auto_join' => false,
+        ];
+        $this->mediumPermission->addGroup($groupData);
+        $this->mediumPermission->setCategoryRestrictions(1, 1, [10, 20]);
+
+        $this->assertTrue($this->mediumPermission->deleteGroup(1));
+        $this->assertEmpty($this->mediumPermission->getAllCategoryRestrictions(1));
     }
 
     private function initializeDatabaseStatics(Sqlite3 $dbHandle): void

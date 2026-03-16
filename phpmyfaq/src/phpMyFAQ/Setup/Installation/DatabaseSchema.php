@@ -64,6 +64,7 @@ class DatabaseSchema
             'faqglossary' => $this->faqglossary(),
             'faqgroup' => $this->faqgroup(),
             'faqgroup_right' => $this->faqgroupRight(),
+            'faqgroup_right_category' => $this->faqgroupRightCategory(),
             'faqapi_keys' => $this->faqapiKeys(),
             'faqoauth_clients' => $this->faqoauthClients(),
             'faqoauth_scopes' => $this->faqoauthScopes(),
@@ -402,6 +403,16 @@ class DatabaseSchema
             ->integer('group_id', false)
             ->integer('right_id', false)
             ->primaryKey(['group_id', 'right_id']);
+    }
+
+    public function faqgroupRightCategory(): TableBuilder
+    {
+        return new TableBuilder($this->dialect)
+            ->table('faqgroup_right_category')
+            ->integer('group_id', false)
+            ->integer('right_id', false)
+            ->integer('category_id', false)
+            ->primaryKey(['group_id', 'right_id', 'category_id']);
     }
 
     public function faqinstances(): TableBuilder
