@@ -36,6 +36,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - improved and redesigned searchable admin configuration frontend (Thorsten)
 - migrated codebase using PHP 8.4 language features (Thorsten)
 - migrated routes using PHP 8+ #[Route] attributes (Thorsten)
+- migrated to Vite v8 (Thorsten)
 
 ### phpMyFAQ v4.1.1 - unreleased
 

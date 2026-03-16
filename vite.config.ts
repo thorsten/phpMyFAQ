@@ -8,7 +8,7 @@ import { ViteMinifyPlugin } from 'vite-plugin-minify';
 
 export default defineConfig({
   build: {
-    rollupOptions: {
+    rolldownOptions: {
       input: {
         backend: path.resolve(__dirname, 'phpmyfaq/admin/assets/src/index.ts'),
         frontend: path.resolve(__dirname, 'phpmyfaq/assets/src/frontend.ts'),
@@ -27,10 +27,10 @@ export default defineConfig({
         assetFileNames: '[name].[ext]',
         preserveModules: false,
         exports: 'named',
-        manualChunks: {
-          bootstrap: ['bootstrap'],
-          chart: ['chart.js'],
-          jodit: ['jodit'],
+        manualChunks: (id: string) => {
+          if (id.includes('node_modules/bootstrap/')) return 'bootstrap';
+          if (id.includes('node_modules/chart.js/')) return 'chart';
+          if (id.includes('node_modules/jodit/')) return 'jodit';
         },
       },
       preserveEntrySignatures: 'exports-only',
