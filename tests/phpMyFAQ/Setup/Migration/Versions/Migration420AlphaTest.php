@@ -110,31 +110,6 @@ class Migration420AlphaTest extends TestCase
         $this->assertContains('session.redisDsn', $addedConfigKeys);
     }
 
-    public function testUpAddsFaqrateLimitsTableSql(): void
-    {
-        $recorder = $this->createMock(OperationRecorder::class);
-        $foundRateLimitSql = false;
-
-        $recorder
-            ->method('addSql')
-            ->willReturnCallback(static function (string $sql, string $description) use (
-                &$foundRateLimitSql,
-                $recorder,
-            ): OperationRecorder {
-                if (str_contains($sql, 'faqrate_limits')) {
-                    $foundRateLimitSql = true;
-                }
-
-                return $recorder;
-            });
-        $recorder->method('addConfig')->willReturn($recorder);
-        $recorder->method('grantPermission')->willReturn($recorder);
-
-        $this->migration->up($recorder);
-
-        $this->assertTrue($foundRateLimitSql, 'Expected migration SQL creating faqrate_limits table.');
-    }
-
     public function testUpAddsFaqjobsTableSql(): void
     {
         $recorder = $this->createMock(OperationRecorder::class);

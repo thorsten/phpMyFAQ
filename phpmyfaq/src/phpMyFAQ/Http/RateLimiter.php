@@ -1,7 +1,7 @@
 <?php
 
 /**
- * API rate limiter.
+ * API rate limiter using symfony/rate-limiter.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -20,7 +20,9 @@ declare(strict_types=1);
 namespace phpMyFAQ\Http;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Database;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
+use Symfony\Component\RateLimiter\Storage\InMemoryStorage;
+use Symfony\Component\RateLimiter\Storage\StorageInterface;
 
 final class RateLimiter
 {
@@ -32,9 +34,13 @@ final class RateLimiter
         get => $this->headersStorage;
     }
 
+    private readonly StorageInterface $storage;
+
     public function __construct(
         private readonly Configuration $configuration,
+        ?StorageInterface $storage = null,
     ) {
+        $this->storage = $storage ?? new InMemoryStorage();
     }
 
     /**
@@ -45,87 +51,36 @@ final class RateLimiter
         $limit = max(1, $limit);
         $intervalSeconds = max(1, $intervalSeconds);
 
-        $db = $this->configuration->getDb();
-        $escapedKey = $db->escape($key);
-        $table = Database::getTablePrefix() . 'faqrate_limits';
+        $factory = new RateLimiterFactory(config: [
+            'id' => 'api',
+            'policy' => 'fixed_window',
+            'limit' => $limit,
+            'interval' => $intervalSeconds . ' seconds',
+        ], storage: $this->storage);
 
-        $now = time();
-        $windowStart = (int) (floor($now / $intervalSeconds) * $intervalSeconds);
-        $windowReset = $windowStart + $intervalSeconds;
+        $limiter = $factory->create($key);
+        $rateLimit = $limiter->consume(1);
 
-        // Attempt INSERT for a new window (atomic — either succeeds or fails on duplicate key)
-        $insertQuery = sprintf(
-            "INSERT INTO %s (rate_key, window_start, requests, created) VALUES ('%s', %d, 1, %s)",
-            $table,
-            $escapedKey,
-            $windowStart,
-            $db->now(),
-        );
+        $resetTime = $rateLimit->getRetryAfter()->getTimestamp();
 
-        if ($db->query($insertQuery) === false) {
-            // Row already exists — atomically increment using the DB's current value
-            $updateQuery = sprintf(
-                "UPDATE %s SET requests = requests + 1 WHERE rate_key = '%s' AND window_start = %d",
-                $table,
-                $escapedKey,
-                $windowStart,
-            );
-
-            if ($db->query($updateQuery) === false) {
-                // DB write failed — deny the request (fail-closed)
-                $this->headersStorage = [
-                    'X-RateLimit-Limit' => $limit,
-                    'X-RateLimit-Remaining' => 0,
-                    'X-RateLimit-Reset' => $windowReset,
-                    'Retry-After' => max(1, $windowReset - $now),
-                ];
-
-                return false;
-            }
-        }
-
-        // Read the authoritative post-increment count
-        $selectQuery = sprintf(
-            "SELECT requests FROM %s WHERE rate_key = '%s' AND window_start = %d",
-            $table,
-            $escapedKey,
-            $windowStart,
-        );
-        $result = $db->query($selectQuery);
-        $row = $result !== false ? $db->fetchObject($result) : false;
-
-        if (!is_object($row) || !property_exists($row, 'requests')) {
-            // Cannot read authoritative count — deny the request (fail-closed)
+        if ($rateLimit->isAccepted()) {
             $this->headersStorage = [
                 'X-RateLimit-Limit' => $limit,
-                'X-RateLimit-Remaining' => 0,
-                'X-RateLimit-Reset' => $windowReset,
-                'Retry-After' => max(1, $windowReset - $now),
+                'X-RateLimit-Remaining' => $rateLimit->getRemainingTokens(),
+                'X-RateLimit-Reset' => $resetTime,
             ];
 
-            return false;
-        }
-
-        $currentRequests = (int) $row->requests;
-
-        if ($currentRequests > $limit) {
-            $this->headersStorage = [
-                'X-RateLimit-Limit' => $limit,
-                'X-RateLimit-Remaining' => 0,
-                'X-RateLimit-Reset' => $windowReset,
-                'Retry-After' => max(1, $windowReset - $now),
-            ];
-
-            return false;
+            return true;
         }
 
         $this->headersStorage = [
             'X-RateLimit-Limit' => $limit,
-            'X-RateLimit-Remaining' => max(0, $limit - $currentRequests),
-            'X-RateLimit-Reset' => $windowReset,
+            'X-RateLimit-Remaining' => 0,
+            'X-RateLimit-Reset' => $resetTime,
+            'Retry-After' => max(1, $resetTime - time()),
         ];
 
-        return true;
+        return false;
     }
 
     /**
