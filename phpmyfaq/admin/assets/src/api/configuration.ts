@@ -120,6 +120,16 @@ export const fetchMailProvider = async (currentValue: string): Promise<string> =
   return await response.text();
 };
 
+export const fetchCacheAdapter = async (currentValue: string): Promise<string> => {
+  const response = await fetchWrapper(`./api/configuration/cache-adapter/${currentValue}`);
+
+  if (!response.ok) {
+    return '';
+  }
+
+  return await response.text();
+};
+
 export const fetchTemplates = async (): Promise<string> => {
   const response = await fetchWrapper(`./api/configuration/templates`);
 

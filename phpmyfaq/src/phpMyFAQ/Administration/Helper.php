@@ -289,6 +289,26 @@ class Helper
         return $output;
     }
 
+    public static function renderCacheAdapterOptions(string $current): string
+    {
+        $adapters = [
+            'filesystem' => 'Filesystem (default)',
+            'redis' => 'Redis',
+        ];
+        $output = '';
+
+        foreach ($adapters as $value => $label) {
+            $output .= sprintf(
+                '<option value="%s"%s>%s</option>',
+                $value,
+                $value === $current ? ' selected' : '',
+                $label,
+            );
+        }
+
+        return $output;
+    }
+
     /**
      * Checks if the current user can access the content.
      */

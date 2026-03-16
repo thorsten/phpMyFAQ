@@ -496,6 +496,18 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         return new Response(Helper::renderMailProviderOptions($request->attributes->get(key: 'current')));
     }
 
+    #[Route(
+        path: 'configuration/cache-adapter/{current}',
+        name: 'admin.api.configuration.cache-adapter',
+        methods: ['GET'],
+    )]
+    public function cacheAdapter(Request $request): Response
+    {
+        $this->userIsAuthenticated();
+
+        return new Response(Helper::renderCacheAdapterOptions($request->attributes->get(key: 'current')));
+    }
+
     /**
      * Converts a value to string safely, handling objects and null values
      */
