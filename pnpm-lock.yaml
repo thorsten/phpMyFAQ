@@ -59,8 +59,8 @@ devDependencies:
     specifier: ^20.5.0
     version: 20.5.0(@types/node@25.5.0)(typescript@5.9.3)
   '@commitlint/config-conventional':
-    specifier: ^20.4.4
-    version: 20.4.4
+    specifier: ^20.5.0
+    version: 20.5.0
   '@eslint/js':
     specifier: ^9.39.4
     version: 9.39.4
@@ -1256,11 +1256,11 @@ packages:
       - typescript
     dev: true
 
-  /@commitlint/config-conventional@20.4.4:
-    resolution: {integrity: sha512-Usg+XXbPNG2GtFWTgRURNWCge1iH1y6jQIvvklOdAbyn2t8ajfVwZCnf5t5X4gUsy17BOiY+myszGsSMIvhOVA==}
+  /@commitlint/config-conventional@20.5.0:
+    resolution: {integrity: sha512-t3Ni88rFw1XMa4nZHgOKJ8fIAT9M2j5TnKyTqJzsxea7FUetlNdYFus9dz+MhIRZmc16P0PPyEfh6X2d/qw8SA==}
     engines: {node: '>=v18'}
     dependencies:
-      '@commitlint/types': 20.4.4
+      '@commitlint/types': 20.5.0
       conventional-changelog-conventionalcommits: 9.3.0
     dev: true
 
@@ -1393,14 +1393,6 @@ packages:
     engines: {node: '>=v18'}
     dependencies:
       escalade: 3.2.0
-    dev: true
-
-  /@commitlint/types@20.4.4:
-    resolution: {integrity: sha512-dwTGzyAblFXHJNBOgrTuO5Ee48ioXpS5XPRLLatxhQu149DFAHUcB3f0Q5eea3RM4USSsP1+WVT2dBtLVod4fg==}
-    engines: {node: '>=v18'}
-    dependencies:
-      conventional-commits-parser: 6.3.0
-      picocolors: 1.1.1
     dev: true
 
   /@commitlint/types@20.5.0:
