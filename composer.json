@@ -52,6 +52,7 @@
     "symfony/http-kernel": "^8.0",
     "symfony/mailer": "^8.0",
     "symfony/mcp-sdk": "dev-main",
+    "symfony/rate-limiter": "^8.0",
     "symfony/routing": "^8.0",
     "symfony/uid": "^8.0",
     "tecnickcom/tcpdf": "~6.0",
