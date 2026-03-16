@@ -24,6 +24,7 @@ import {
   fetchReleaseEnvironment,
   fetchSearchRelevance,
   fetchSeoMetaTags,
+  fetchCacheAdapter,
   fetchMailProvider,
   fetchTemplates,
   fetchTranslations,
@@ -144,6 +145,7 @@ export const handleConfiguration = async (): Promise<void> => {
             await registerConfigurationActionButtons();
             break;
           case '#storage':
+            await handleCacheAdapter();
             await registerConfigurationActionButtons();
             setupRedisTestButtonState();
             break;
@@ -440,6 +442,17 @@ export const handleMailProvider = async (): Promise<void> => {
     const currentValue = (mailProviderSelectBox[0].dataset.pmfConfigurationCurrentValue as string) || 'smtp';
     const options = await fetchMailProvider(currentValue);
     mailProviderSelectBox[0].insertAdjacentHTML('beforeend', options);
+  }
+};
+
+export const handleCacheAdapter = async (): Promise<void> => {
+  const cacheAdapterSelectBox = document.getElementsByName(
+    'edit[storage.cacheAdapter]'
+  ) as NodeListOf<HTMLSelectElement>;
+  if (cacheAdapterSelectBox !== null && cacheAdapterSelectBox[0]) {
+    const currentValue = (cacheAdapterSelectBox[0].dataset.pmfConfigurationCurrentValue as string) || 'filesystem';
+    const options = await fetchCacheAdapter(currentValue);
+    cacheAdapterSelectBox[0].insertAdjacentHTML('beforeend', options);
   }
 };
 
