@@ -1,5 +1,35 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { handleStreamingProgress } from './upgrade';
+import { handleStreamingProgress, handleCheckForUpdates } from './upgrade';
+
+vi.mock('../../../../assets/src/utils', () => ({
+  addElement: vi.fn((tag: string, props: Record<string, string>) => {
+    const el = document.createElement(tag);
+    if (props.id) el.id = props.id;
+    if (props.innerText) el.innerText = props.innerText;
+    return el;
+  }),
+  versionCompare: vi.fn(),
+}));
+
+vi.mock('../api', () => ({
+  fetchHealthCheck: vi.fn(),
+  activateMaintenanceMode: vi.fn(),
+  checkForUpdates: vi.fn(),
+  downloadPackage: vi.fn(),
+  extractPackage: vi.fn(),
+  startTemporaryBackup: vi.fn(),
+  startInstallation: vi.fn(),
+  startDatabaseUpdate: vi.fn(),
+}));
+
+import {
+  fetchHealthCheck,
+  activateMaintenanceMode,
+  checkForUpdates as checkForUpdatesApi,
+  downloadPackage,
+  extractPackage,
+} from '../api';
+import { versionCompare } from '../../../../assets/src/utils';
 
 /**
  * Helper to create a mock readable stream with progress updates
@@ -262,5 +292,351 @@ describe('Progress bar integration scenarios', () => {
     expect(progressBar.style.width).toBe('100%');
     expect(progressBar.innerText).toBe('100%');
     expect(progressBar.classList.contains('bg-success')).toBe(true);
+  });
+});
+
+describe('handleCheckForUpdates - Health Check', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    document.body.innerHTML = `
+      <button id="pmf-button-check-health">Check</button>
+      <p id="result-check-health">Pending</p>
+      <div id="pmf-update-step-health-check"></div>
+      <button id="pmf-button-activate-maintenance-mode" class="d-none" data-pmf-csrf="csrf123"></button>
+      <button id="pmf-button-check-updates">Check Updates</button>
+      <button id="pmf-button-download-now">Download</button>
+      <button id="pmf-button-extract-package">Extract</button>
+      <button id="pmf-button-install-package">Install</button>
+    `;
+  });
+
+  it('should show success on healthy check', async () => {
+    vi.mocked(fetchHealthCheck).mockResolvedValue({ success: 'System is healthy' });
+
+    handleCheckForUpdates();
+
+    const button = document.getElementById('pmf-button-check-health') as HTMLButtonElement;
+    button.click();
+
+    await vi.waitFor(() => {
+      expect(fetchHealthCheck).toHaveBeenCalled();
+    });
+
+    const card = document.getElementById('pmf-update-step-health-check') as HTMLElement;
+    expect(card.classList.contains('text-bg-success')).toBe(true);
+  });
+
+  it('should show warning and activate button on warning response', async () => {
+    vi.mocked(fetchHealthCheck).mockResolvedValue({ warning: 'Maintenance mode not active' });
+
+    handleCheckForUpdates();
+
+    const button = document.getElementById('pmf-button-check-health') as HTMLButtonElement;
+    button.click();
+
+    await vi.waitFor(() => {
+      expect(fetchHealthCheck).toHaveBeenCalled();
+    });
+
+    const card = document.getElementById('pmf-update-step-health-check') as HTMLElement;
+    expect(card.classList.contains('text-bg-warning')).toBe(true);
+
+    const activateBtn = document.getElementById('pmf-button-activate-maintenance-mode') as HTMLElement;
+    expect(activateBtn.classList.contains('d-none')).toBe(false);
+  });
+
+  it('should show error on error response', async () => {
+    vi.mocked(fetchHealthCheck).mockResolvedValue({ error: 'Critical issue found' });
+
+    handleCheckForUpdates();
+
+    const button = document.getElementById('pmf-button-check-health') as HTMLButtonElement;
+    button.click();
+
+    await vi.waitFor(() => {
+      expect(fetchHealthCheck).toHaveBeenCalled();
+    });
+
+    const card = document.getElementById('pmf-update-step-health-check') as HTMLElement;
+    expect(card.classList.contains('text-bg-danger')).toBe(true);
+  });
+
+  it('should handle fetch error gracefully', async () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.mocked(fetchHealthCheck).mockRejectedValue(new Error('Network error'));
+
+    handleCheckForUpdates();
+
+    const button = document.getElementById('pmf-button-check-health') as HTMLButtonElement;
+    button.click();
+
+    await vi.waitFor(() => {
+      expect(consoleSpy).toHaveBeenCalled();
+    });
+
+    consoleSpy.mockRestore();
+  });
+});
+
+describe('handleCheckForUpdates - Activate Maintenance Mode', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    document.body.innerHTML = `
+      <button id="pmf-button-check-health">Check</button>
+      <p id="result-check-health">Pending</p>
+      <div id="pmf-update-step-health-check" class="text-bg-warning"></div>
+      <button id="pmf-button-activate-maintenance-mode" data-pmf-csrf="csrf-token-123"></button>
+      <button id="pmf-button-check-updates">Check Updates</button>
+      <button id="pmf-button-download-now">Download</button>
+      <button id="pmf-button-extract-package">Extract</button>
+      <button id="pmf-button-install-package">Install</button>
+    `;
+  });
+
+  it('should activate maintenance mode and update UI', async () => {
+    vi.mocked(activateMaintenanceMode).mockResolvedValue({ success: 'Maintenance mode activated' });
+
+    handleCheckForUpdates();
+
+    const button = document.getElementById('pmf-button-activate-maintenance-mode') as HTMLButtonElement;
+    button.click();
+
+    await vi.waitFor(() => {
+      expect(activateMaintenanceMode).toHaveBeenCalledWith('csrf-token-123');
+    });
+
+    const card = document.getElementById('pmf-update-step-health-check') as HTMLElement;
+    expect(card.classList.contains('text-bg-success')).toBe(true);
+    expect(card.classList.contains('text-bg-warning')).toBe(false);
+
+    expect(button.classList.contains('d-none')).toBe(true);
+  });
+});
+
+describe('handleCheckForUpdates - Check Updates', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    document.body.innerHTML = `
+      <button id="pmf-button-check-health">Check</button>
+      <button id="pmf-button-activate-maintenance-mode" class="d-none"></button>
+      <p id="result-check-health"></p>
+      <div id="pmf-update-step-health-check"></div>
+      <button id="pmf-button-check-updates">Check Updates</button>
+      <div id="spinner-check-versions" class="d-none"></div>
+      <div id="dateLastChecked"></div>
+      <div id="versionCurrent">4.1.0</div>
+      <div id="versionLastChecked"></div>
+      <p id="result-check-versions">Pending</p>
+      <div id="pmf-update-step-check-versions"></div>
+      <button id="pmf-button-download-now">Download</button>
+      <button id="pmf-button-extract-package">Extract</button>
+      <button id="pmf-button-install-package">Install</button>
+    `;
+  });
+
+  it('should show newer version available with success styling', async () => {
+    // Set innerText explicitly for jsdom compatibility
+    (document.getElementById('versionCurrent') as HTMLElement).innerText = '4.1.0';
+
+    vi.mocked(checkForUpdatesApi).mockResolvedValue({
+      dateLastChecked: '2026-03-16T12:00:00Z',
+      version: '4.2.0',
+      message: 'New version available',
+    });
+    vi.mocked(versionCompare).mockReturnValue(true);
+
+    handleCheckForUpdates();
+
+    const button = document.getElementById('pmf-button-check-updates') as HTMLButtonElement;
+    button.click();
+
+    await vi.waitFor(() => {
+      expect(checkForUpdatesApi).toHaveBeenCalled();
+    });
+
+    const card = document.getElementById('pmf-update-step-check-versions') as HTMLElement;
+    expect(card.classList.contains('text-bg-success')).toBe(true);
+
+    const spinner = document.getElementById('spinner-check-versions') as HTMLElement;
+    expect(spinner.classList.contains('d-none')).toBe(true);
+
+    expect(button.disabled).toBe(true);
+
+    const versionLastChecked = document.getElementById('versionLastChecked') as HTMLElement;
+    expect(versionLastChecked.innerText).toBe('4.2.0');
+  });
+
+  it('should show danger and disable download when version is older', async () => {
+    (document.getElementById('versionCurrent') as HTMLElement).innerText = '4.1.0';
+
+    vi.mocked(checkForUpdatesApi).mockResolvedValue({
+      version: '4.0.0',
+      message: 'You are up to date',
+    });
+    vi.mocked(versionCompare).mockReturnValue(false);
+
+    handleCheckForUpdates();
+
+    const button = document.getElementById('pmf-button-check-updates') as HTMLButtonElement;
+    button.click();
+
+    await vi.waitFor(() => {
+      expect(checkForUpdatesApi).toHaveBeenCalled();
+    });
+
+    const card = document.getElementById('pmf-update-step-check-versions') as HTMLElement;
+    expect(card.classList.contains('text-bg-danger')).toBe(true);
+
+    const downloadButton = document.getElementById('pmf-button-download-now') as HTMLButtonElement;
+    expect(downloadButton.disabled).toBe(true);
+  });
+
+  it('should show error when no version is returned', async () => {
+    vi.mocked(checkForUpdatesApi).mockResolvedValue({
+      message: 'Could not check for updates',
+    });
+
+    handleCheckForUpdates();
+
+    const button = document.getElementById('pmf-button-check-updates') as HTMLButtonElement;
+    button.click();
+
+    await vi.waitFor(() => {
+      expect(checkForUpdatesApi).toHaveBeenCalled();
+    });
+
+    const card = document.getElementById('pmf-update-step-check-versions') as HTMLElement;
+    expect(card.classList.contains('text-bg-danger')).toBe(true);
+  });
+});
+
+describe('handleCheckForUpdates - Download Package', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    document.body.innerHTML = `
+      <button id="pmf-button-check-health">Check</button>
+      <button id="pmf-button-activate-maintenance-mode" class="d-none"></button>
+      <p id="result-check-health"></p>
+      <div id="pmf-update-step-health-check"></div>
+      <button id="pmf-button-check-updates">Check Updates</button>
+      <button id="pmf-button-download-now">Download</button>
+      <div id="versionLastChecked">4.2.0</div>
+      <div id="releaseEnvironment">stable</div>
+      <div id="spinner-download-new-version" class="d-none"></div>
+      <p id="result-download-new-version">Pending</p>
+      <div id="pmf-update-step-download"></div>
+      <div id="pmf-update-step-extract-package" class="d-none"></div>
+      <button id="pmf-button-extract-package">Extract</button>
+      <button id="pmf-button-install-package">Install</button>
+    `;
+  });
+
+  it('should download package and show extract step on success', async () => {
+    (document.getElementById('versionLastChecked') as HTMLElement).innerText = '4.2.0';
+    (document.getElementById('releaseEnvironment') as HTMLElement).innerText = 'stable';
+
+    vi.mocked(downloadPackage).mockResolvedValue({ success: 'Package downloaded' });
+
+    handleCheckForUpdates();
+
+    const button = document.getElementById('pmf-button-download-now') as HTMLButtonElement;
+    button.click();
+
+    await vi.waitFor(() => {
+      expect(downloadPackage).toHaveBeenCalledWith('4.2.0');
+    });
+
+    const card = document.getElementById('pmf-update-step-download') as HTMLElement;
+    expect(card.classList.contains('text-bg-success')).toBe(true);
+
+    const extractStep = document.getElementById('pmf-update-step-extract-package') as HTMLElement;
+    expect(extractStep.classList.contains('d-none')).toBe(false);
+
+    expect(button.disabled).toBe(true);
+  });
+
+  it('should use nightly version when release environment is nightly', async () => {
+    (document.getElementById('versionLastChecked') as HTMLElement).innerText = '4.2.0';
+    const releaseEnv = document.getElementById('releaseEnvironment') as HTMLElement;
+    releaseEnv.innerText = 'nightly';
+
+    vi.mocked(downloadPackage).mockResolvedValue({ success: 'Downloaded' });
+
+    handleCheckForUpdates();
+
+    const button = document.getElementById('pmf-button-download-now') as HTMLButtonElement;
+    button.click();
+
+    await vi.waitFor(() => {
+      expect(downloadPackage).toHaveBeenCalledWith('nightly');
+    });
+  });
+
+  it('should show error on download failure', async () => {
+    (document.getElementById('versionLastChecked') as HTMLElement).innerText = '4.2.0';
+    (document.getElementById('releaseEnvironment') as HTMLElement).innerText = 'stable';
+
+    vi.mocked(downloadPackage).mockResolvedValue({ error: 'Download failed' });
+
+    handleCheckForUpdates();
+
+    const button = document.getElementById('pmf-button-download-now') as HTMLButtonElement;
+    button.click();
+
+    await vi.waitFor(() => {
+      expect(downloadPackage).toHaveBeenCalled();
+    });
+
+    const card = document.getElementById('pmf-update-step-download') as HTMLElement;
+    expect(card.classList.contains('text-bg-danger')).toBe(true);
+  });
+});
+
+describe('handleCheckForUpdates - Extract Package', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    document.body.innerHTML = `
+      <button id="pmf-button-check-health">Check</button>
+      <button id="pmf-button-activate-maintenance-mode" class="d-none"></button>
+      <p id="result-check-health"></p>
+      <div id="pmf-update-step-health-check"></div>
+      <button id="pmf-button-check-updates">Check Updates</button>
+      <button id="pmf-button-download-now">Download</button>
+      <button id="pmf-button-extract-package">Extract</button>
+      <div id="spinner-extract-package" class="d-none"></div>
+      <p id="result-extract-package">Pending</p>
+      <div id="pmf-update-step-extract-package"></div>
+      <div id="pmf-update-step-install-package" class="d-none"></div>
+      <button id="pmf-button-install-package">Install</button>
+    `;
+  });
+
+  it('should extract package and show install step on success', async () => {
+    vi.mocked(extractPackage).mockResolvedValue({ message: 'Package extracted' });
+
+    handleCheckForUpdates();
+
+    const button = document.getElementById('pmf-button-extract-package') as HTMLButtonElement;
+    button.click();
+
+    await vi.waitFor(() => {
+      expect(extractPackage).toHaveBeenCalled();
+    });
+
+    const card = document.getElementById('pmf-update-step-extract-package') as HTMLElement;
+    expect(card.classList.contains('text-bg-success')).toBe(true);
+
+    const installStep = document.getElementById('pmf-update-step-install-package') as HTMLElement;
+    expect(installStep.classList.contains('d-none')).toBe(false);
+
+    expect(button.disabled).toBe(true);
+  });
+});
+
+describe('handleCheckForUpdates - no buttons', () => {
+  it('should not throw when no buttons exist', () => {
+    document.body.innerHTML = '<div></div>';
+
+    expect(() => handleCheckForUpdates()).not.toThrow();
   });
 });
