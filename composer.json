@@ -40,6 +40,7 @@
     "opensearch-project/opensearch-php": "^2.4",
     "phpseclib/phpseclib": "~3.0",
     "robthree/twofactorauth": "^3.0.0",
+    "symfony/cache": "^8.0",
     "symfony/config": "^8.0",
     "symfony/console": "^8.0",
     "symfony/dependency-injection": "^8.0",

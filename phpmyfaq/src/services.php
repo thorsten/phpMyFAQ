@@ -139,6 +139,7 @@ use phpMyFAQ\Date;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\MetaData;
 use phpMyFAQ\Faq\Statistics;
+use phpMyFAQ\Cache\CacheFactory;
 use phpMyFAQ\Forms;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Http\RateLimiter;
@@ -418,8 +419,17 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.configuration'),
     ]);
 
-    $services->set('phpmyfaq.http.rate-limiter', RateLimiter::class)->args([
+    $services->set('phpmyfaq.cache.factory', CacheFactory::class)->args([
         service('phpmyfaq.configuration'),
+        PMF_ROOT_DIR . '/cache/app',
+    ]);
+    $services->set('phpmyfaq.cache', \Psr\Cache\CacheItemPoolInterface::class)->factory([
+        service('phpmyfaq.cache.factory'),
+        'create',
+    ]);
+
+    $services->set('phpmyfaq.http.rate-limiter', RateLimiter::class)->args([
+        service('phpmyfaq.cache'),
     ]);
 
     $services->set('phpmyfaq.queue.transport.database', DatabaseTransport::class)->args([
