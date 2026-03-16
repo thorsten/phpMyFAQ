@@ -47,6 +47,13 @@ class DefaultDataSeederTest extends TestCase
         $this->assertMatchesRegularExpression('/^[a-f0-9]{32}$/', $config['main.phpMyFAQToken']);
     }
 
+    public function testGetMainConfigSeedsSymfonySafeCachePrefix(): void
+    {
+        $config = $this->seeder->getMainConfig();
+
+        $this->assertSame('pmf_cache_', $config['storage.cacheRedisPrefix']);
+    }
+
     public function testApplyPersonalSettings(): void
     {
         $this->seeder->applyPersonalSettings('John Doe', 'john@example.com', 'de', 'medium');

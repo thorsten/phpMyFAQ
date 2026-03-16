@@ -125,4 +125,42 @@ readonly class DatabaseConfigurationStore implements ConfigurationStoreInterface
 
         return is_object($row) && property_exists($row, 'config_value') ? (string) $row->config_value : null;
     }
+
+    /**
+     * @param array<int, string> $names
+     * @return array<string, ?string>
+     */
+    public function fetchValues(array $names): array
+    {
+        if ($names === []) {
+            return [];
+        }
+
+        $trimmedNames = array_values(array_unique(array_map(static fn(string $name): string => trim($name), $names)));
+        $quotedNames = array_map(
+            fn(string $name): string => "'" . $this->databaseDriver->escape($name) . "'",
+            $trimmedNames,
+        );
+
+        $sql = <<<'SQL'
+                SELECT config_name, config_value FROM %s%s WHERE config_name IN (%s)
+            SQL;
+        $query = sprintf($sql, Database::getTablePrefix(), $this->tableName, implode(', ', $quotedNames));
+
+        $result = $this->databaseDriver->query($query);
+        $rows = $this->databaseDriver->fetchAll($result);
+
+        $values = array_fill_keys($trimmedNames, null);
+        if (!is_array($rows)) {
+            return $values;
+        }
+
+        foreach ($rows as $row) {
+            if (is_object($row) && property_exists($row, 'config_name') && property_exists($row, 'config_value')) {
+                $values[(string) $row->config_name] = (string) $row->config_value;
+            }
+        }
+
+        return $values;
+    }
 }

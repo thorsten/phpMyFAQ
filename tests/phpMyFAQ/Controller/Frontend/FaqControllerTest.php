@@ -11,13 +11,13 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Language;
 use phpMyFAQ\Mail;
-use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Strings;
@@ -222,8 +222,7 @@ final class FaqControllerTest extends TestCase
         $faq = $this->createMock(Faq::class);
         $faq->expects(self::once())->method('getFaqResult')->with(42, 'en')->willReturn('faq-result');
 
-        $databaseDriver = $this
-            ->createMock(DatabaseDriver::class);
+        $databaseDriver = $this->createMock(DatabaseDriver::class);
         $databaseDriver->expects(self::once())->method('numRows')->with('faq-result')->willReturn(1);
         $databaseDriver->expects(self::once())->method('fetchObject')->with('faq-result')->willReturn(false);
 
@@ -251,8 +250,7 @@ final class FaqControllerTest extends TestCase
         $faq = $this->createMock(Faq::class);
         $faq->expects(self::once())->method('getFaqResult')->with(42, 'en')->willReturn('faq-result');
 
-        $databaseDriver = $this
-            ->createMock(DatabaseDriver::class);
+        $databaseDriver = $this->createMock(DatabaseDriver::class);
         $databaseDriver->expects(self::once())->method('numRows')->with('faq-result')->willReturn(1);
         $databaseDriver
             ->expects(self::once())

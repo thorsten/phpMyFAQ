@@ -147,16 +147,19 @@ final class PdfControllerTest extends TestCase
         $config['records.disableAttachments'] = true;
         $configProperty->setValue($configuration, $config);
 
-        $controller = new PdfController(
-            new Faq($configuration),
-            new Tags($configuration),
-        );
+        $controller = new PdfController(new Faq($configuration), new Tags($configuration));
 
-        $response = $controller->index(new Request([], [], [
-            'categoryId' => '1',
-            'faqId' => '1',
-            'faqLanguage' => 'en',
-        ]));
+        $response = $controller->index(
+            new Request(
+                [],
+                [],
+                [
+                    'categoryId' => '1',
+                    'faqId' => '1',
+                    'faqLanguage' => 'en',
+                ],
+            ),
+        );
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame('application/pdf', $response->headers->get('Content-Type'));
@@ -176,16 +179,19 @@ final class PdfControllerTest extends TestCase
         $config['records.disableAttachments'] = false;
         $configProperty->setValue($configuration, $config);
 
-        $controller = new PdfController(
-            new Faq($configuration),
-            new Tags($configuration),
-        );
+        $controller = new PdfController(new Faq($configuration), new Tags($configuration));
 
-        $response = $controller->index(new Request([], [], [
-            'categoryId' => '1',
-            'faqId' => '1',
-            'faqLanguage' => 'en',
-        ]));
+        $response = $controller->index(
+            new Request(
+                [],
+                [],
+                [
+                    'categoryId' => '1',
+                    'faqId' => '1',
+                    'faqLanguage' => 'en',
+                ],
+            ),
+        );
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame('application/pdf', $response->headers->get('Content-Type'));
@@ -211,16 +217,19 @@ final class PdfControllerTest extends TestCase
         $storageTypeProperty = $attachmentFactoryReflection->getProperty('storageType');
         $storageTypeProperty->setValue(null, 999);
 
-        $controller = new PdfController(
-            new Faq($configuration),
-            new Tags($configuration),
-        );
+        $controller = new PdfController(new Faq($configuration), new Tags($configuration));
 
-        $response = $controller->index(new Request([], [], [
-            'categoryId' => '1',
-            'faqId' => '1',
-            'faqLanguage' => 'en',
-        ]));
+        $response = $controller->index(
+            new Request(
+                [],
+                [],
+                [
+                    'categoryId' => '1',
+                    'faqId' => '1',
+                    'faqLanguage' => 'en',
+                ],
+            ),
+        );
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame('application/pdf', $response->headers->get('Content-Type'));

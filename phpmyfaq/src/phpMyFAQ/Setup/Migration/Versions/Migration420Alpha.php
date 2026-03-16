@@ -253,8 +253,8 @@ readonly class Migration420Alpha extends AbstractMigration
         $recorder->addConfig('storage.redisPrefix', 'pmf:config:');
         $recorder->addConfig('storage.redisConnectTimeout', '1.0');
         $recorder->addConfig('storage.cacheAdapter', 'filesystem');
-        $recorder->addConfig('storage.cacheRedisDsn', 'tcp://redis:6379?database=2');
-        $recorder->addConfig('storage.cacheRedisPrefix', 'pmf:cache:');
+        $recorder->addConfig('storage.cacheRedisDsn', 'redis://redis:6379/2');
+        $recorder->addConfig('storage.cacheRedisPrefix', 'pmf_cache_');
         $recorder->addConfig('storage.cacheRedisConnectTimeout', '1.0');
         $recorder->addConfig('storage.cacheDefaultTtl', '3600');
 

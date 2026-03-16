@@ -175,12 +175,7 @@ final class AttachmentControllerTest extends TestCase
      */
     public function testIndexStreamsPdfAttachmentInline(): void
     {
-        $attachmentId = $this->seedAttachment(
-            900001,
-            'manual.pdf',
-            'application/pdf',
-            '%PDF-test attachment',
-        );
+        $attachmentId = $this->seedAttachment(900001, 'manual.pdf', 'application/pdf', '%PDF-test attachment');
         $this->enableGuestDownloads();
         $attachmentService = new AttachmentService(
             $this->configuration,
@@ -210,12 +205,7 @@ final class AttachmentControllerTest extends TestCase
      */
     public function testIndexStreamsNonPdfAttachmentAsDownload(): void
     {
-        $attachmentId = $this->seedAttachment(
-            900002,
-            'notes.txt',
-            'text/plain',
-            'plain-text attachment',
-        );
+        $attachmentId = $this->seedAttachment(900002, 'notes.txt', 'text/plain', 'plain-text attachment');
         $this->enableGuestDownloads();
         $attachmentService = new AttachmentService(
             $this->configuration,
@@ -262,9 +252,7 @@ final class AttachmentControllerTest extends TestCase
         $this->dbHandle->query(
             "UPDATE faqconfig SET config_value = 'false' WHERE config_name = 'security.enableLoginOnly'",
         );
-        $this->dbHandle->query(
-            "UPDATE faqconfig SET config_value = 'filesystem' WHERE config_name = 'storage.type'",
-        );
+        $this->dbHandle->query("UPDATE faqconfig SET config_value = 'filesystem' WHERE config_name = 'storage.type'");
 
         $this->overrideConfigurationValues([
             'records.allowDownloadsForGuests' => 'true',

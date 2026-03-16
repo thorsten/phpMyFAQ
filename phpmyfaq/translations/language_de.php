@@ -1683,8 +1683,53 @@ $LANG_CONF['mail.mailgunDomain'] = ['input', 'Mailgun-Domain'];
 $LANG_CONF['mail.mailgunRegion'] = ['input', 'Mailgun Region', 'z.B. us, eu'];
 $LANG_CONF['mail.useQueue'] = ['checkbox', 'Hintergrund-Worker-Warteschlange für die E-Mail-Zustellung verwenden'];
 
+$LANG_CONF['storage.useRedisForConfiguration'] = [
+    'checkbox',
+    'Aktiviere Redis für die Konfiguration',
+    'If disabled, phpMyFAQ uses the database only',
+];
+$LANG_CONF['storage.redisDsn'] = [
+    'input',
+    'Redis DSN für die Konfiguration',
+    'Beispiele: tcp://127.0.0.1:6379?database=1, tcp://redis:6379?database=1 (verwende den Hostnamen des Dienstes)',
+];
+$LANG_CONF['storage.redisPrefix'] = [
+    'input',
+    'Redis Schlüsselpräfix für die Konfiguration',
+    'Verwenden Sie unterschiedliche Präfixe für mehrere phpMyFAQ-Instanzen, die sich einen Redis-Server teilen',
+];
+$LANG_CONF['storage.redisConnectTimeout'] = [
+    'input',
+    'Zeitlimit für die Redis-Verbindung in Sekunden',
+    'Standard: 1.0',
+];
 $LANG_CONF['storage.testRedisConnection'] = ['button', 'Teste die Verbindung zu Redis'];
 $PMF_LANG['storage.testRedisConnection'] = 'Teste die Verbindung zu Redis';
+$LANG_CONF['storage.cacheAdapter'] = [
+    'select',
+    'Cache-Adapter',
+    'filesystem = Dateisystem (Standard), redis = Redis Server',
+];
+$LANG_CONF['storage.cacheRedisDsn'] = [
+    'input',
+    'Redis DSN für den Cache',
+    'Examples: tcp://127.0.0.1:6379?database=2, tcp://redis:6379?database=2',
+];
+$LANG_CONF['storage.cacheRedisPrefix'] = [
+    'input',
+    'Redis key prefix for cache',
+    'Use different prefixes for multiple phpMyFAQ instances sharing one Redis server',
+];
+$LANG_CONF['storage.cacheRedisConnectTimeout'] = [
+    'input',
+    'Redis connection timeout for cache in seconds',
+    'Default: 1.0',
+];
+$LANG_CONF['storage.cacheDefaultTtl'] = [
+    'input',
+    'Default cache TTL in seconds',
+    'Default: 3600 (1 hour)',
+];
 
 $PMF_LANG['msgAdminHeaderLdap'] = 'LDAP Konfiguration';
 $PMF_LANG['msgAdminLdapHealthCheck'] = 'LDAP Health Check';
