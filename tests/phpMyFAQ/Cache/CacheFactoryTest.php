@@ -45,12 +45,21 @@ class CacheFactoryTest extends TestCase
 
     public function testCreateReturnsFilesystemAdapterForInvalidAdapterValue(): void
     {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnCallback(static fn(string $v): string => $v);
+        $db->method('query')->willReturn('result');
+        $db->method('numRows')->willReturn(1);
+        $db->method('fetchObject')->willReturn((object) ['config_value' => 'memcached']);
+
+        $config = $this->createMock(Configuration::class);
+        $config->method('getDb')->willReturn($db);
+
         $cacheDir = sys_get_temp_dir() . '/pmf-cache-test-' . uniqid();
 
-        $factory = new CacheFactory($this->configuration, $cacheDir);
+        $factory = new CacheFactory($config, $cacheDir);
         $cache = $factory->create();
 
-        // Since DB returns no config values, resolver defaults to 'filesystem'
+        // 'memcached' is not a valid adapter, should fall back to filesystem
         $this->assertInstanceOf(FilesystemAdapter::class, $cache);
 
         if (is_dir($cacheDir)) {
