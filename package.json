@@ -22,7 +22,7 @@
     "build": "vite build",
     "build:watch": "vite build --watch",
     "build:prod": "vite build",
-    "eslint": "eslint .",
+    "eslint": "eslint phpmyfaq/assets/src phpmyfaq/admin/assets/src",
     "lint": "prettier --check .",
     "lint:fix": "prettier --write .",
     "prepare": "husky",

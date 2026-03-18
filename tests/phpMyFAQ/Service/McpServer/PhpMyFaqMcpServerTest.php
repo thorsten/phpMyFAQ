@@ -87,4 +87,56 @@ class PhpMyFaqMcpServerTest extends TestCase
 
         $this->server->runConsole($input, $output);
     }
+
+    public function testConstructorWithLanguageDetectionDisabled(): void
+    {
+        $configMock = $this->createMock(Configuration::class);
+        $languageMock = $this->createMock(Language::class);
+        $searchMock = $this->createMock(Search::class);
+        $faqMock = $this->createMock(Faq::class);
+        $runtimeMock = $this->createMock(McpServerRuntimeInterface::class);
+
+        $configMock->method('getLogger')->willReturn($this->createMock(Logger::class));
+        $configMock->method('setLanguage');
+        $configMock->method('get')->willReturnMap([
+            ['main.languageDetection', false],
+            ['main.language', 'de'],
+        ]);
+
+        $languageMock->expects($this->once())
+            ->method('setLanguageFromConfiguration')
+            ->with('de');
+        $languageMock->expects($this->never())
+            ->method('setLanguageWithDetection');
+
+        $server = new PhpMyFaqMcpServer($configMock, $languageMock, $searchMock, $faqMock, $runtimeMock);
+
+        $this->assertInstanceOf(McpServerRuntimeInterface::class, $server);
+    }
+
+    public function testConstructorWithLanguageDetectionEnabled(): void
+    {
+        $configMock = $this->createMock(Configuration::class);
+        $languageMock = $this->createMock(Language::class);
+        $searchMock = $this->createMock(Search::class);
+        $faqMock = $this->createMock(Faq::class);
+        $runtimeMock = $this->createMock(McpServerRuntimeInterface::class);
+
+        $configMock->method('getLogger')->willReturn($this->createMock(Logger::class));
+        $configMock->method('setLanguage');
+        $configMock->method('get')->willReturnMap([
+            ['main.languageDetection', true],
+            ['main.language', 'en'],
+        ]);
+
+        $languageMock->expects($this->once())
+            ->method('setLanguageWithDetection')
+            ->with('en');
+        $languageMock->expects($this->never())
+            ->method('setLanguageFromConfiguration');
+
+        $server = new PhpMyFaqMcpServer($configMock, $languageMock, $searchMock, $faqMock, $runtimeMock);
+
+        $this->assertInstanceOf(McpServerRuntimeInterface::class, $server);
+    }
 }

@@ -109,6 +109,88 @@ class McpSdkRuntimeTest extends TestCase
         $this->assertInstanceOf(OutputInterface::class, $this->createMock(OutputInterface::class));
     }
 
+    public function testImplementsMcpServerRuntimeInterface(): void
+    {
+        $runtime = new McpSdkRuntime(
+            $this->createConfigurationMock(),
+            new FaqSearchTool(
+                $this->createConfigurationMock(),
+                $this->createMock(Search::class),
+                $this->createMock(Faq::class),
+            ),
+            [],
+        );
+
+        $this->assertInstanceOf(McpServerRuntimeInterface::class, $runtime);
+    }
+
+    public function testGetServerInfoReturnsFullPayload(): void
+    {
+        $serverInfo = [
+            'name' => 'phpMyFAQ MCP Server',
+            'version' => '0.1.0-dev',
+            'description' => 'Model Context Protocol server for phpMyFAQ installations',
+            'capabilities' => ['tools' => true],
+            'tools' => [['name' => 'faq_search', 'description' => 'Search through phpMyFAQ installations']],
+        ];
+
+        $runtime = new McpSdkRuntime(
+            $this->createConfigurationMock(),
+            new FaqSearchTool(
+                $this->createConfigurationMock(),
+                $this->createMock(Search::class),
+                $this->createMock(Faq::class),
+            ),
+            $serverInfo,
+        );
+
+        $this->assertSame($serverInfo, $runtime->getServerInfo());
+    }
+
+    public function testFaqSearchReturnsStringOnNonJsonContent(): void
+    {
+        $configuration = $this->createConfigurationMock();
+        $search = $this->createMock(Search::class);
+        $faq = $this->createMock(Faq::class);
+
+        $search->method('search')->willThrowException(new \Exception('DB error'));
+
+        $runtime = new McpSdkRuntime($configuration, new FaqSearchTool($configuration, $search, $faq), [
+            'name' => 'phpMyFAQ MCP Server',
+            'version' => '0.1.0-dev',
+        ]);
+
+        $result = $runtime->faqSearch('test');
+
+        $this->assertIsString($result);
+        $this->assertStringContainsString('Error searching FAQ database', $result);
+    }
+
+    public function testFaqSearchPassesParametersToTool(): void
+    {
+        $configuration = $this->createConfigurationMock();
+        $search = $this->createMock(Search::class);
+        $faq = $this->createMock(Faq::class);
+
+        $search->expects($this->once())
+            ->method('setCategoryId')
+            ->with(3);
+        $search->expects($this->once())
+            ->method('search')
+            ->with('install', true)
+            ->willReturn([]);
+
+        $runtime = new McpSdkRuntime($configuration, new FaqSearchTool($configuration, $search, $faq), [
+            'name' => 'phpMyFAQ MCP Server',
+            'version' => '0.1.0-dev',
+        ]);
+
+        $result = $runtime->faqSearch('install', category_id: 3, limit: 5, all_languages: true);
+
+        $this->assertIsArray($result);
+        $this->assertSame(0, $result['total_found']);
+    }
+
     private function createConfigurationMock(): Configuration
     {
         $configuration = $this->createMock(Configuration::class);
