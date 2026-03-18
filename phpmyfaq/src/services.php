@@ -707,7 +707,7 @@ return static function (ContainerConfigurator $container): void {
         ],
     ]);
 
-    $services->alias(McpServerRuntimeInterface::class, 'phpmyfaq.service.mcp-server.runtime');
+    $services->alias(McpServerRuntimeInterface::class, 'phpmyfaq.service.mcp-server');
 
     $services->set('phpmyfaq.service.mcp-server', PhpMyFaqMcpServer::class)->args([
         service('phpmyfaq.configuration'),

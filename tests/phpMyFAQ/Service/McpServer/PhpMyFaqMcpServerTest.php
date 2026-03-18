@@ -98,16 +98,15 @@ class PhpMyFaqMcpServerTest extends TestCase
 
         $configMock->method('getLogger')->willReturn($this->createMock(Logger::class));
         $configMock->method('setLanguage');
-        $configMock->method('get')->willReturnMap([
-            ['main.languageDetection', false],
-            ['main.language', 'de'],
-        ]);
+        $configMock
+            ->method('get')
+            ->willReturnMap([
+                ['main.languageDetection', false],
+                ['main.language',          'de'],
+            ]);
 
-        $languageMock->expects($this->once())
-            ->method('setLanguageFromConfiguration')
-            ->with('de');
-        $languageMock->expects($this->never())
-            ->method('setLanguageWithDetection');
+        $languageMock->expects($this->once())->method('setLanguageFromConfiguration')->with('de');
+        $languageMock->expects($this->never())->method('setLanguageWithDetection');
 
         $server = new PhpMyFaqMcpServer($configMock, $languageMock, $searchMock, $faqMock, $runtimeMock);
 
@@ -124,16 +123,15 @@ class PhpMyFaqMcpServerTest extends TestCase
 
         $configMock->method('getLogger')->willReturn($this->createMock(Logger::class));
         $configMock->method('setLanguage');
-        $configMock->method('get')->willReturnMap([
-            ['main.languageDetection', true],
-            ['main.language', 'en'],
-        ]);
+        $configMock
+            ->method('get')
+            ->willReturnMap([
+                ['main.languageDetection', true],
+                ['main.language',          'en'],
+            ]);
 
-        $languageMock->expects($this->once())
-            ->method('setLanguageWithDetection')
-            ->with('en');
-        $languageMock->expects($this->never())
-            ->method('setLanguageFromConfiguration');
+        $languageMock->expects($this->once())->method('setLanguageWithDetection')->with('en');
+        $languageMock->expects($this->never())->method('setLanguageFromConfiguration');
 
         $server = new PhpMyFaqMcpServer($configMock, $languageMock, $searchMock, $faqMock, $runtimeMock);
 

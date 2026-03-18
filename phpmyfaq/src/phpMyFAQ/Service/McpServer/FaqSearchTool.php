@@ -115,8 +115,6 @@ readonly class FaqSearchTool implements McpToolExecutorInterface
 
             $validResults = [];
             foreach ($searchResults as $searchResult) {
-                $this->configuration->getLogger()->info(var_export($searchResult, return: true));
-
                 $validResults[] = [
                     'id' => $searchResult->id,
                     'language' => $searchResult->lang,

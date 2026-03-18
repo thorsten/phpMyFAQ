@@ -172,13 +172,8 @@ class McpSdkRuntimeTest extends TestCase
         $search = $this->createMock(Search::class);
         $faq = $this->createMock(Faq::class);
 
-        $search->expects($this->once())
-            ->method('setCategoryId')
-            ->with(3);
-        $search->expects($this->once())
-            ->method('search')
-            ->with('install', true)
-            ->willReturn([]);
+        $search->expects($this->once())->method('setCategoryId')->with(3);
+        $search->expects($this->once())->method('search')->with('install', true)->willReturn([]);
 
         $runtime = new McpSdkRuntime($configuration, new FaqSearchTool($configuration, $search, $faq), [
             'name' => 'phpMyFAQ MCP Server',

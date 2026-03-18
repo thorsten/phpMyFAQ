@@ -67,6 +67,11 @@ class System
     private const string PLUGIN_VERSION = '0.2.0';
 
     /**
+     * MCP Server version
+     */
+    private const string MCP_SERVER_VERSION = '0.1.0';
+
+    /**
      * Minimum required PHP version.
      */
     final public const string VERSION_MINIMUM_PHP = '8.4.0';
@@ -187,6 +192,14 @@ class System
     public static function getPluginVersion(): string
     {
         return self::PLUGIN_VERSION;
+    }
+
+    /**
+     * Returns the current MCP Server version of phpMyFAQ
+     */
+    public static function getMcpServerVersion(): string
+    {
+        return self::MCP_SERVER_VERSION;
     }
 
     public static function getPoweredByString(): string

@@ -46,12 +46,7 @@ class McpToolDefinitionTest extends TestCase
 
     public function testIsReadonly(): void
     {
-        $definition = new McpToolDefinition(
-            name: 'tool',
-            description: 'desc',
-            title: null,
-            inputSchema: [],
-        );
+        $definition = new McpToolDefinition(name: 'tool', description: 'desc', title: null, inputSchema: []);
 
         $reflection = new \ReflectionClass($definition);
         $this->assertTrue($reflection->isReadOnly());

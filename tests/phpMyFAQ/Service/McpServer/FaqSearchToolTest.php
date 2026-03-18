@@ -157,9 +157,7 @@ class FaqSearchToolTest extends TestCase
 
     public function testExecuteWithoutCategoryIdDoesNotSetCategoryId(): void
     {
-        $this->searchMock
-            ->expects($this->never())
-            ->method('setCategoryId');
+        $this->searchMock->expects($this->never())->method('setCategoryId');
         $this->searchMock->method('search')->willReturn([]);
 
         $this->tool->execute(['query' => 'test']);
@@ -203,9 +201,7 @@ class FaqSearchToolTest extends TestCase
 
     public function testExecuteHandlesExceptionGracefully(): void
     {
-        $this->searchMock
-            ->method('search')
-            ->willThrowException(new Exception('Database connection failed'));
+        $this->searchMock->method('search')->willThrowException(new Exception('Database connection failed'));
 
         $result = $this->tool->execute(['query' => 'test']);
 

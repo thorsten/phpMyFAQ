@@ -107,6 +107,7 @@ final class SystemInformationController extends AbstractAdministrationController
                 'phpMyFAQ Version' => $faqSystem->getVersion(),
                 'phpMyFAQ API Version' => $faqSystem->getApiVersion(),
                 'phpMyFAQ Plugin API Version' => $faqSystem->getPluginVersion(),
+                'phpMyFAQ MCP Server Version' => $faqSystem->getMcpServerVersion(),
                 'phpMyFAQ Installation Path' => dirname((string) $request->server->get('SCRIPT_FILENAME'), levels: 2),
                 'Web server software' => $request->server->get('SERVER_SOFTWARE'),
                 'Web server document root' => $request->server->get('DOCUMENT_ROOT'),

@@ -23,6 +23,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Language;
 use phpMyFAQ\Search;
+use phpMyFAQ\System;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -38,8 +39,6 @@ class PhpMyFaqMcpServer implements McpServerRuntimeInterface
     private McpServerRuntimeInterface $runtime;
 
     private const string MCP_SERVER_NAME = 'phpMyFAQ MCP Server';
-
-    private const string MCP_SERVER_VERSION = '0.1.0-dev';
 
     public function __construct(
         private readonly Configuration $configuration,
@@ -95,7 +94,7 @@ class PhpMyFaqMcpServer implements McpServerRuntimeInterface
     {
         return [
             'name' => self::MCP_SERVER_NAME,
-            'version' => self::MCP_SERVER_VERSION,
+            'version' => System::getMcpServerVersion(),
             'description' => 'Model Context Protocol server for phpMyFAQ installations',
             'capabilities' => [
                 'tools' => true,
