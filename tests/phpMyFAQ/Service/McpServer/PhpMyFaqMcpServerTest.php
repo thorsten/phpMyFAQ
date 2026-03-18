@@ -2,7 +2,6 @@
 
 namespace phpMyFAQ\Service\McpServer;
 
-use Exception;
 use Monolog\Logger;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
@@ -10,30 +9,28 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Search;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
-use Symfony\AI\McpSdk\Capability\Tool\ToolCall;
-use Symfony\AI\McpSdk\Server\JsonRpcHandler;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 #[AllowMockObjectsWithoutExpectations]
 class PhpMyFaqMcpServerTest extends TestCase
 {
     private PhpMyFaqMcpServer $server;
     private Configuration $configMock;
-    private Search $searchMock;
-    private Faq $faqMock;
+    private McpServerRuntimeInterface $runtimeMock;
 
     protected function setUp(): void
     {
         $this->configMock = $this->createMock(Configuration::class);
         $languageMock = $this->createMock(Language::class);
-        $this->searchMock = $this->createMock(Search::class);
-        $this->faqMock = $this->createMock(Faq::class);
+        $searchMock = $this->createMock(Search::class);
+        $faqMock = $this->createMock(Faq::class);
+        $this->runtimeMock = $this->createMock(McpServerRuntimeInterface::class);
 
         $loggerMock = $this->createMock(Logger::class);
         $this->configMock->method('getLogger')->willReturn($loggerMock);
         $this->configMock->method('setLanguage');
-        $this->configMock->method('getDefaultUrl')->willReturn('https://example.com');
 
-        // Mock the configuration values needed by Language::setLanguage()
         $this->configMock
             ->method('get')
             ->willReturnMap([
@@ -41,17 +38,33 @@ class PhpMyFaqMcpServerTest extends TestCase
                 ['main.language',          'en'],
             ]);
 
-        $this->server = new PhpMyFaqMcpServer($this->configMock, $languageMock, $this->searchMock, $this->faqMock);
+        $this->server = new PhpMyFaqMcpServer(
+            $this->configMock,
+            $languageMock,
+            $searchMock,
+            $faqMock,
+            $this->runtimeMock,
+        );
     }
 
-    public function testJsonRpcHandlerIsInitialized(): void
+    public function testServerImplementsRuntimeInterface(): void
     {
-        $handler = $this->server->getJsonRpcHandler();
-        $this->assertInstanceOf(JsonRpcHandler::class, $handler);
+        $this->assertInstanceOf(McpServerRuntimeInterface::class, $this->server);
     }
 
     public function testGetServerInfoReturnsExpectedArray(): void
     {
+        $this->runtimeMock
+            ->expects($this->once())
+            ->method('getServerInfo')
+            ->willReturn([
+                'name' => 'phpMyFAQ MCP Server',
+                'version' => '0.1.0-dev',
+                'description' => 'Model Context Protocol server for phpMyFAQ installations',
+                'capabilities' => ['tools' => true],
+                'tools' => [['name' => 'faq_search', 'description' => 'Search through phpMyFAQ installations']],
+            ]);
+
         $info = $this->server->getServerInfo();
         $this->assertIsArray($info);
         $this->assertSame('phpMyFAQ MCP Server', $info['name']);
@@ -62,68 +75,16 @@ class PhpMyFaqMcpServerTest extends TestCase
         $this->assertSame('faq_search', $info['tools'][0]['name']);
     }
 
-    /**
-     * @throws Exception
-     */
-    public function testFaqSearchToolExecutorReturnsValidJsonFormat(): void
+    public function testRunConsoleDelegatesToRuntime(): void
     {
-        $executor = new FaqSearchToolExecutor($this->configMock, $this->searchMock, $this->faqMock);
+        $input = $this->createMock(InputInterface::class);
+        $output = $this->createMock(OutputInterface::class);
 
-        // Mock search results
-        $searchResults = [
-            (object) [
-                'id' => 1,
-                'lang' => 'en',
-                'question' => 'Test question?',
-                'answer' => 'Test answer',
-                'category_id' => 1,
-                'score' => 0.95,
-            ],
-        ];
+        $this->runtimeMock
+            ->expects($this->once())
+            ->method('runConsole')
+            ->with($input, $output);
 
-        $this->searchMock->method('search')->willReturn($searchResults);
-        $this->searchMock->expects($this->once())->method('setCategory');
-
-        $toolCall = new ToolCall('test-id', 'faq_search', ['query' => 'test']);
-        $result = $executor->call($toolCall);
-
-        $this->assertSame('application/json', $result->mimeType);
-
-        $jsonData = json_decode($result->result, true);
-        $this->assertIsArray($jsonData);
-        $this->assertArrayHasKey('results', $jsonData);
-        $this->assertArrayHasKey('total_found', $jsonData);
-        $this->assertIsArray($jsonData['results']);
-        $this->assertIsInt($jsonData['total_found']);
-    }
-
-    public function testFaqSearchToolExecutorHandlesEmptyQuery(): void
-    {
-        $executor = new FaqSearchToolExecutor($this->configMock, $this->searchMock, $this->faqMock);
-
-        $toolCall = new ToolCall('test-id', 'faq_search', ['query' => '']);
-        $result = $executor->call($toolCall);
-
-        $this->assertSame('application/json', $result->mimeType);
-        $this->assertStringContainsString('Search query cannot be empty', $result->result);
-    }
-
-    public function testFaqSearchToolExecutorHandlesNoResults(): void
-    {
-        $executor = new FaqSearchToolExecutor($this->configMock, $this->searchMock, $this->faqMock);
-
-        $this->searchMock->method('search')->willReturn([]);
-        $this->searchMock->expects($this->once())->method('setCategory');
-
-        $toolCall = new ToolCall('test-id', 'faq_search', ['query' => 'nonexistent']);
-        $result = $executor->call($toolCall);
-
-        $this->assertSame('application/json', $result->mimeType);
-
-        $jsonData = json_decode($result->result, true);
-        $this->assertArrayHasKey('results', $jsonData);
-        $this->assertArrayHasKey('total_found', $jsonData);
-        $this->assertEmpty($jsonData['results']);
-        $this->assertSame(0, $jsonData['total_found']);
+        $this->server->runConsole($input, $output);
     }
 }

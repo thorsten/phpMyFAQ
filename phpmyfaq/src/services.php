@@ -179,6 +179,9 @@ use phpMyFAQ\Seo;
 use phpMyFAQ\Seo\SeoRepository;
 use phpMyFAQ\Seo\SitemapXmlService;
 use phpMyFAQ\Service\Gravatar;
+use phpMyFAQ\Service\McpServer\FaqSearchTool;
+use phpMyFAQ\Service\McpServer\McpServerRuntimeInterface;
+use phpMyFAQ\Service\McpServer\McpSdkRuntime;
 use phpMyFAQ\Service\McpServer\PhpMyFaqMcpServer;
 use phpMyFAQ\Session\SessionWrapper;
 use phpMyFAQ\Session\Token;
@@ -681,11 +684,37 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.configuration'),
     ]);
 
+    $services->set('phpmyfaq.service.mcp-server.faq-search-tool', FaqSearchTool::class)->args([
+        service('phpmyfaq.configuration'),
+        service('phpmyfaq.search'),
+        service('phpmyfaq.faq'),
+    ]);
+
+    $services->set('phpmyfaq.service.mcp-server.runtime', McpSdkRuntime::class)->args([
+        service('phpmyfaq.configuration'),
+        service('phpmyfaq.service.mcp-server.faq-search-tool'),
+        [
+            'name' => 'phpMyFAQ MCP Server',
+            'version' => '0.1.0-dev',
+            'description' => 'Model Context Protocol server for phpMyFAQ installations',
+            'capabilities' => ['tools' => true],
+            'tools' => [
+                [
+                    'name' => 'faq_search',
+                    'description' => 'Search through phpMyFAQ installations',
+                ],
+            ],
+        ],
+    ]);
+
+    $services->alias(McpServerRuntimeInterface::class, 'phpmyfaq.service.mcp-server.runtime');
+
     $services->set('phpmyfaq.service.mcp-server', PhpMyFaqMcpServer::class)->args([
         service('phpmyfaq.configuration'),
         service('phpmyfaq.language'),
         service('phpmyfaq.search'),
         service('phpmyfaq.faq'),
+        service('phpmyfaq.service.mcp-server.runtime'),
     ]);
 
     $services->set(CreateHashesCommand::class, CreateHashesCommand::class)->args([
