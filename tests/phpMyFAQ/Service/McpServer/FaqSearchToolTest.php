@@ -155,9 +155,9 @@ class FaqSearchToolTest extends TestCase
         $this->tool->execute(['query' => 'test', 'category_id' => 7]);
     }
 
-    public function testExecuteWithoutCategoryIdDoesNotSetCategoryId(): void
+    public function testExecuteWithoutCategoryIdResetsCategoryId(): void
     {
-        $this->searchMock->expects($this->never())->method('setCategoryId');
+        $this->searchMock->expects($this->once())->method('setCategoryId')->with(null);
         $this->searchMock->method('search')->willReturn([]);
 
         $this->tool->execute(['query' => 'test']);
@@ -170,8 +170,8 @@ class FaqSearchToolTest extends TestCase
             $obj = new stdClass();
             $obj->id = $i;
             $obj->lang = 'en';
-            $obj->question = "Question $i";
-            $obj->answer = "Answer $i";
+            $obj->question = 'Question ' . $i;
+            $obj->answer = 'Answer ' . $i;
             $obj->category_id = 1;
             $obj->score = 1.0 - ($i * 0.1);
             $results[] = $obj;
@@ -240,8 +240,8 @@ class FaqSearchToolTest extends TestCase
             $obj = new stdClass();
             $obj->id = $i;
             $obj->lang = 'en';
-            $obj->question = "Q$i";
-            $obj->answer = "A$i";
+            $obj->question = 'Q' . $i;
+            $obj->answer = 'A' . $i;
             $obj->category_id = 1;
             $obj->score = 0.5;
             $results[] = $obj;

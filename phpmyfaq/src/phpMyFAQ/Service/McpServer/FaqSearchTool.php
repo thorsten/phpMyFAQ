@@ -103,9 +103,7 @@ readonly class FaqSearchTool implements McpToolExecutorInterface
             $category->setUser(-1);
             $this->search->setCategory($category);
 
-            if ($categoryId !== null) {
-                $this->search->setCategoryId((int) $categoryId);
-            }
+            $this->search->setCategoryId($categoryId !== null ? (int) $categoryId : null);
 
             $searchResults = $this->search->search($query, (bool) $allLanguages);
 

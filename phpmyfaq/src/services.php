@@ -695,7 +695,7 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.service.mcp-server.faq-search-tool'),
         [
             'name' => 'phpMyFAQ MCP Server',
-            'version' => '0.1.0-dev',
+            'version' => System::getMcpServerVersion(),
             'description' => 'Model Context Protocol server for phpMyFAQ installations',
             'capabilities' => ['tools' => true],
             'tools' => [

@@ -56,7 +56,7 @@ class Search
      *
      * @param int $categoryId Entity ID
      */
-    public function setCategoryId(int $categoryId): void
+    public function setCategoryId(?int $categoryId): void
     {
         $this->categoryId = $categoryId;
     }
