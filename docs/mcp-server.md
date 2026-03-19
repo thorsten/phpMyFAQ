@@ -4,8 +4,10 @@ This document describes the Model Context Protocol (MCP) server implementation f
 
 ## 12.1 Overview
 
-The phpMyFAQ MCP Server allows Large Language Models (LLMs) to query the phpMyFAQ installation through the Model 
+The phpMyFAQ MCP Server allows Large Language Models (LLMs) to query the phpMyFAQ installation through the Model
 Context Protocol. This enables AI assistants to provide contextually relevant answers based on your FAQ.
+
+The current implementation uses the official PHP package `mcp/sdk` and exposes the server over STDIO.
 
 ## 12.2 Usage
 
@@ -18,6 +20,8 @@ php bin/console phpmyfaq:mcp:server --info
 # Start the MCP server
 php bin/console phpmyfaq:mcp:server
 ```
+
+The command starts a STDIO MCP server. It is intended to be launched by an MCP-capable client or by the MCP Inspector.
 
 ### 12.2.2 Available Tools
 
@@ -44,15 +48,34 @@ Search through the phpMyFAQ knowledge base to find relevant FAQ entries.
 ```
 
 **Response Format:**
-The tool returns formatted text with FAQ entries including:
+The tool returns JSON with:
 - Question and answer content
 - FAQ ID and language
 - Relevance score
 - Direct URL to the FAQ entry
 
+Example result shape:
+
+```json
+{
+  "results": [
+    {
+      "id": 42,
+      "language": "en",
+      "question": "How do I reset my password?",
+      "answer": "Use the password reset form on the login page.",
+      "category_id": 1,
+      "relevance_score": 0.95,
+      "url": "https://example.com/content/42/en"
+    }
+  ],
+  "total_found": 1
+}
+```
+
 ## 12.3 Integration with LLM Clients
 
-Once the MCP server is running, LLM clients can connect to it and use the `faq_search` tool to query your phpMyFAQ 
+Once the MCP server is running, LLM clients can connect to it and use the `faq_search` tool to query your phpMyFAQ
 database. The server follows the MCP specification and provides:
 
 - Tool discovery via `tools/list`
@@ -84,7 +107,23 @@ You can then access the MCP Inspector at the provided URL to interact with the s
 
 ## 12.4 Configuration
 
-No additional configuration is required beyond having a working phpMyFAQ installation.
+No additional MCP-specific configuration is required beyond having a working phpMyFAQ installation.
+
+The MCP server uses the same phpMyFAQ runtime configuration as the rest of the application, including:
+
+- database configuration
+- language configuration
+- URL configuration used for generated FAQ links
+- the standard logger
+
+## 12.4.1 Dependency Notes
+
+The server runtime depends on:
+
+- `mcp/sdk`
+- `symfony/console`
+
+If you update dependencies, make sure `mcp/sdk` remains installable with the project Composer constraints.
 
 ## 12.5 Error Handling
 
@@ -103,4 +142,17 @@ The server includes comprehensive error handling:
 
 ### 12.7.1 Debugging
 
-Enable debug logging by checking the Monolog output when running the server. The logger outputs to stdout by default.
+Enable debug logging by checking the Monolog output when running the server.
+
+### 12.7.2 Runtime Issues
+
+If the server does not start:
+
+- verify Composer dependencies are installed
+- verify `mcp/sdk` is present in the installed packages
+- run `php bin/console phpmyfaq:mcp:server --info` to confirm the command is wired correctly
+- test the server with MCP Inspector before connecting a custom client
+
+### 12.7.3 Transport Notes
+
+The phpMyFAQ MCP server currently uses STDIO only. It is not exposed as HTTP transport by default.

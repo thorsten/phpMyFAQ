@@ -23,14 +23,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Language;
 use phpMyFAQ\Search;
-use Symfony\AI\McpSdk\Capability\ToolChain;
-use Symfony\AI\McpSdk\Message\Factory;
-use Symfony\AI\McpSdk\Server;
-use Symfony\AI\McpSdk\Server\JsonRpcHandler;
-use Symfony\AI\McpSdk\Server\RequestHandler\InitializeHandler;
-use Symfony\AI\McpSdk\Server\RequestHandler\ToolCallHandler;
-use Symfony\AI\McpSdk\Server\RequestHandler\ToolListHandler;
-use Symfony\AI\McpSdk\Server\Transport\Stdio\SymfonyConsoleTransport;
+use phpMyFAQ\System;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -41,57 +34,40 @@ use Symfony\Component\Console\Output\OutputInterface;
  * with FAQ search capabilities. This allows LLM models to query the phpMyFAQ knowledge base
  * through the MCP protocol.
  */
-class PhpMyFaqMcpServer
+class PhpMyFaqMcpServer implements McpServerRuntimeInterface
 {
-    private JsonRpcHandler $jsonRpcHandler;
+    private McpServerRuntimeInterface $runtime;
 
     private const string MCP_SERVER_NAME = 'phpMyFAQ MCP Server';
-
-    private const string MCP_SERVER_VERSION = '0.1.0-dev';
 
     public function __construct(
         private readonly Configuration $configuration,
         Language $language,
         private readonly Search $search,
         private readonly Faq $faq,
+        ?McpServerRuntimeInterface $runtime = null,
     ) {
         $detectionEnabled = (bool) $this->configuration->get(item: 'main.languageDetection');
         $configLang = (string) $this->configuration->get(item: 'main.language');
         if ($detectionEnabled) {
             $language->setLanguageWithDetection($configLang);
             $this->configuration->setLanguage($language);
-            $this->initializeServer();
+            $this->initializeServer($runtime);
             return;
         }
 
         $language->setLanguageFromConfiguration($configLang);
         $this->configuration->setLanguage($language);
 
-        $this->initializeServer();
+        $this->initializeServer($runtime);
     }
 
-    private function initializeServer(): void
+    private function initializeServer(?McpServerRuntimeInterface $runtime = null): void
     {
-        $toolChain = new ToolChain([
-            new FaqSearchToolMetadata(),
-            new FaqSearchToolExecutor($this->configuration, $this->search, $this->faq),
-        ]);
-
-        $messageFactory = new Factory();
-
-        $requestHandlers = [
-            new InitializeHandler(self::MCP_SERVER_NAME, self::MCP_SERVER_VERSION),
-            new ToolListHandler($toolChain),
-            new ToolCallHandler($toolChain),
-        ];
-
-        $notificationHandlers = [];
-
-        $this->jsonRpcHandler = new JsonRpcHandler(
-            $messageFactory,
-            $requestHandlers,
-            $notificationHandlers,
-            $this->configuration->getLogger(),
+        $this->runtime = $runtime ?? new McpSdkRuntime(
+            $this->configuration,
+            new FaqSearchTool($this->configuration, $this->search, $this->faq),
+            $this->createServerInfo(),
         );
     }
 
@@ -100,17 +76,7 @@ class PhpMyFaqMcpServer
      */
     public function runConsole(InputInterface $input, OutputInterface $output): void
     {
-        $symfonyConsoleTransport = new SymfonyConsoleTransport($input, $output);
-        $server = new Server($this->jsonRpcHandler, $this->configuration->getLogger());
-        $server->connect($symfonyConsoleTransport);
-    }
-
-    /**
-     * Get the configured JSON-RPC handler
-     */
-    public function getJsonRpcHandler(): JsonRpcHandler
-    {
-        return $this->jsonRpcHandler;
+        $this->runtime->runConsole($input, $output);
     }
 
     /**
@@ -118,9 +84,17 @@ class PhpMyFaqMcpServer
      */
     public function getServerInfo(): array
     {
+        return $this->runtime->getServerInfo();
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function createServerInfo(): array
+    {
         return [
             'name' => self::MCP_SERVER_NAME,
-            'version' => self::MCP_SERVER_VERSION,
+            'version' => System::getMcpServerVersion(),
             'description' => 'Model Context Protocol server for phpMyFAQ installations',
             'capabilities' => [
                 'tools' => true,
