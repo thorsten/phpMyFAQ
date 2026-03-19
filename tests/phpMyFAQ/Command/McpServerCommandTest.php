@@ -2,7 +2,7 @@
 
 namespace phpMyFAQ\Command;
 
-use phpMyFAQ\Service\McpServer\PhpMyFaqMcpServer;
+use phpMyFAQ\Service\McpServer\McpServerRuntimeInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -12,12 +12,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AllowMockObjectsWithoutExpectations]
 class McpServerCommandTest extends TestCase
 {
-    private PhpMyFaqMcpServer $serverMock;
+    private McpServerRuntimeInterface $serverMock;
     private McpServerCommand $command;
 
     protected function setUp(): void
     {
-        $this->serverMock = $this->createMock(PhpMyFaqMcpServer::class);
+        $this->serverMock = $this->createMock(McpServerRuntimeInterface::class);
         $this->command = new McpServerCommand($this->serverMock);
     }
 

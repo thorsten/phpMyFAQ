@@ -16,6 +16,7 @@ use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Routing\AttributeRouteLoader;
 use phpMyFAQ\Routing\RouteCacheManager;
 use phpMyFAQ\Routing\RouteCollectionBuilder;
+use phpMyFAQ\System;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -47,6 +48,7 @@ use Symfony\Component\Routing\RouteCollection;
 #[UsesClass(RouteCollectionBuilder::class)]
 #[UsesClass(PdoSqlite::class)]
 #[UsesClass(RateLimiter::class)]
+#[UsesClass(System::class)]
 #[AllowMockObjectsWithoutExpectations]
 class KernelTest extends TestCase
 {
