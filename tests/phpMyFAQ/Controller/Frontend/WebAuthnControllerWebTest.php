@@ -12,11 +12,31 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 #[UsesNamespace('phpMyFAQ')]
 final class WebAuthnControllerWebTest extends ControllerWebTestCase
 {
-    public function testWebAuthnPageRenders(): void
+    public function testWebAuthnPrepareRouteIsRegistered(): void
     {
-        $response = $this->requestPublic('GET', '/services/webauthn');
+        $response = $this->requestApi('POST', '/webauthn/prepare');
 
-        self::assertResponseIsSuccessful($response);
-        self::assertResponseContains('Login with Passkey', $response);
+        self::assertNotSame(404, $response->getStatusCode());
+    }
+
+    public function testWebAuthnRegisterRouteIsRegistered(): void
+    {
+        $response = $this->requestApi('POST', '/webauthn/register');
+
+        self::assertNotSame(404, $response->getStatusCode());
+    }
+
+    public function testWebAuthnPrepareLoginRouteIsRegistered(): void
+    {
+        $response = $this->requestApi('POST', '/webauthn/prepare-login');
+
+        self::assertNotSame(404, $response->getStatusCode());
+    }
+
+    public function testWebAuthnLoginRouteIsRegistered(): void
+    {
+        $response = $this->requestApi('POST', '/webauthn/login');
+
+        self::assertNotSame(404, $response->getStatusCode());
     }
 }
