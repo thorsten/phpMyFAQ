@@ -157,7 +157,10 @@ class FaqSearchToolTest extends TestCase
 
     public function testExecuteWithoutCategoryIdResetsCategoryId(): void
     {
-        $this->searchMock->expects($this->once())->method('setCategoryId')->with(null);
+        $this->searchMock
+            ->expects($this->once())
+            ->method('setCategoryId')
+            ->with(null);
         $this->searchMock->method('search')->willReturn([]);
 
         $this->tool->execute(['query' => 'test']);
