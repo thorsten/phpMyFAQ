@@ -63,6 +63,6 @@ final class GlossaryHelper
     public function formatTooltip(string $definition, string $item, string $prefix = '', string $postfix = ''): string
     {
         $fmt = '%s<abbr data-bs-toggle="tooltip" data-bs-placement="bottom" title="%s" class="initialism">%s</abbr>%s';
-        return sprintf($fmt, $prefix, $definition, $item, $postfix);
+        return sprintf($fmt, $prefix, htmlspecialchars($definition, ENT_QUOTES | ENT_HTML5, 'UTF-8'), $item, $postfix);
     }
 }

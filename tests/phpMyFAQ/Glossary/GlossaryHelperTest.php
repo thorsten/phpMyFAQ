@@ -70,4 +70,17 @@ class GlossaryHelperTest extends TestCase
         $this->assertStringContainsString('</abbr>', $html);
         $this->assertStringEndsWith(')', rtrim($html));
     }
+
+    public function testFormatTooltipEscapesDoubleQuotes(): void
+    {
+        $html = $this->helper->formatTooltip('a "quoted" definition', 'item');
+        $this->assertStringContainsString('title="a &quot;quoted&quot; definition"', $html);
+        $this->assertStringContainsString('>item<', $html);
+    }
+
+    public function testFormatTooltipEscapesSpecialCharacters(): void
+    {
+        $html = $this->helper->formatTooltip("it's <b>bold</b> & \"fancy\"", 'item');
+        $this->assertStringContainsString('title="it&apos;s &lt;b&gt;bold&lt;/b&gt; &amp; &quot;fancy&quot;"', $html);
+    }
 }

@@ -88,7 +88,10 @@ final class WebAuthnController extends AbstractController
         }
 
         $webAuthnUser = new WebAuthnUser();
-        $webAuthnUser->setName($username)->setId((string) $this->user->getUserId())->setWebAuthnKeys(webAuthnKeys: '');
+        $webAuthnUser
+            ->setName($username)
+            ->setId((string) $this->user->getUserId())
+            ->setWebAuthnKeys(webAuthnKeys: '');
 
         $this->authWebAuthn->storeUserInSession($webAuthnUser);
 
