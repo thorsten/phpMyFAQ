@@ -8059,16 +8059,16 @@
     "packages-dev": [
         {
             "name": "carthage-software/mago",
-            "version": "1.14.1",
+            "version": "1.15.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/carthage-software/mago.git",
-                "reference": "00957008352c130f7672bcaab754a278a0a4950b"
+                "reference": "6caa9a633f012dd484bb5a394e97c01a451b129a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/carthage-software/mago/zipball/00957008352c130f7672bcaab754a278a0a4950b",
-                "reference": "00957008352c130f7672bcaab754a278a0a4950b",
+                "url": "https://api.github.com/repos/carthage-software/mago/zipball/6caa9a633f012dd484bb5a394e97c01a451b129a",
+                "reference": "6caa9a633f012dd484bb5a394e97c01a451b129a",
                 "shasum": ""
             },
             "require": {
@@ -8103,7 +8103,7 @@
             ],
             "support": {
                 "issues": "https://github.com/carthage-software/mago/issues",
-                "source": "https://github.com/carthage-software/mago/tree/1.14.1"
+                "source": "https://github.com/carthage-software/mago/tree/1.15.2"
             },
             "funding": [
                 {
@@ -8111,7 +8111,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-03-14T00:50:47+00:00"
+            "time": "2026-03-19T02:27:43+00:00"
         },
         {
             "name": "doctrine/instantiator",
