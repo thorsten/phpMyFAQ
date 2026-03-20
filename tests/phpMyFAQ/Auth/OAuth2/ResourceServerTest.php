@@ -45,7 +45,7 @@ class ResourceServerTest extends TestCase
     public function testAuthenticateReturnsNullWhenOauth2IsDisabled(): void
     {
         $configuration = $this->createMock(Configuration::class);
-        $configuration->method('get')->with('oauth2.enable')->willReturn('false');
+        $configuration->expects($this->once())->method('get')->with('oauth2.enable')->willReturn('false');
         $server = new ResourceServer($configuration);
 
         $request = new Request(server: ['HTTP_AUTHORIZATION' => 'Bearer oauth-access-token']);

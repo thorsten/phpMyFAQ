@@ -489,7 +489,7 @@ final class UserControllerValidationTest extends ApiControllerTestCase
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method('isLoggedIn')->willReturn(true);
-        $currentUser->method('getUserById')->with(1)->willReturn(true);
+        $currentUser->expects($this->once())->method('getUserById')->with(1)->willReturn(true);
         $currentUser->method('getUserId')->willReturn(1);
         $currentUser->method('getLogin')->willReturn('testuser');
         $currentUser
@@ -571,7 +571,7 @@ final class UserControllerValidationTest extends ApiControllerTestCase
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method('isLoggedIn')->willReturn(true);
-        $currentUser->method('getUserById')->with(1)->willReturn(false);
+        $currentUser->expects($this->once())->method('getUserById')->with(1)->willReturn(false);
         $currentUser->method('getUserId')->willReturn(1);
         $currentUser->method('getLogin')->willReturn('testuser');
         $currentUser
@@ -609,7 +609,7 @@ final class UserControllerValidationTest extends ApiControllerTestCase
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method('isLoggedIn')->willReturn(true);
-        $currentUser->method('getUserById')->with(1)->willReturn(true);
+        $currentUser->expects($this->once())->method('getUserById')->with(1)->willReturn(true);
         $currentUser->method('getUserId')->willReturn(1);
         $currentUser->method('getLogin')->willReturn('testuser');
         $currentUser
@@ -658,7 +658,7 @@ final class UserControllerValidationTest extends ApiControllerTestCase
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method('isLoggedIn')->willReturn(true);
-        $currentUser->method('getUserById')->with(1)->willReturn(true);
+        $currentUser->expects($this->once())->method('getUserById')->with(1)->willReturn(true);
         $currentUser->method('getUserId')->willReturn(1);
         $currentUser->method('getLogin')->willReturn('testuser');
         $currentUser

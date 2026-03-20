@@ -307,7 +307,7 @@ final class AuthenticationControllerTest extends TestCase
     public function testCheckRedirectsToDashboardWhenTwoFactorTokenIsValid(): void
     {
         $currentUserService = $this->createMock(CurrentUser::class);
-        $currentUserService->method('getUserById')->with(42);
+        $currentUserService->expects(self::once())->method('getUserById')->with(42);
         $currentUserService->expects(self::once())->method('twoFactorSuccess');
         $currentUserService->method('getLogin')->willReturn('admin');
 

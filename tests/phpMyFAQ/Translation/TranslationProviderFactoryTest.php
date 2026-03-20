@@ -27,6 +27,7 @@ class TranslationProviderFactoryTest extends TestCase
     public function testCreateGoogleProvider(): void
     {
         $this->configuration
+            ->expects($this->once())
             ->method('get')
             ->with('translation.provider')
             ->willReturn('google');
@@ -39,6 +40,7 @@ class TranslationProviderFactoryTest extends TestCase
     public function testCreateDeepLProvider(): void
     {
         $this->configuration
+            ->expects($this->once())
             ->method('get')
             ->with('translation.provider')
             ->willReturn('deepl');
@@ -51,6 +53,7 @@ class TranslationProviderFactoryTest extends TestCase
     public function testCreateAzureProvider(): void
     {
         $this->configuration
+            ->expects($this->once())
             ->method('get')
             ->with('translation.provider')
             ->willReturn('azure');
@@ -63,6 +66,7 @@ class TranslationProviderFactoryTest extends TestCase
     public function testCreateAmazonProvider(): void
     {
         $this->configuration
+            ->expects($this->once())
             ->method('get')
             ->with('translation.provider')
             ->willReturn('amazon');
@@ -75,6 +79,7 @@ class TranslationProviderFactoryTest extends TestCase
     public function testCreateLibreTranslateProvider(): void
     {
         $this->configuration
+            ->expects($this->once())
             ->method('get')
             ->with('translation.provider')
             ->willReturn('libretranslate');
@@ -87,6 +92,7 @@ class TranslationProviderFactoryTest extends TestCase
     public function testCreateWithNoProvider(): void
     {
         $this->configuration
+            ->expects($this->once())
             ->method('get')
             ->with('translation.provider')
             ->willReturn('none');
@@ -99,6 +105,7 @@ class TranslationProviderFactoryTest extends TestCase
     public function testCreateWithEmptyProvider(): void
     {
         $this->configuration
+            ->expects($this->once())
             ->method('get')
             ->with('translation.provider')
             ->willReturn('');
@@ -111,6 +118,7 @@ class TranslationProviderFactoryTest extends TestCase
     public function testCreateWithInvalidProvider(): void
     {
         $this->configuration
+            ->expects($this->once())
             ->method('get')
             ->with('translation.provider')
             ->willReturn('invalid-provider');

@@ -289,8 +289,8 @@ final class AbstractAdministrationControllerTest extends TestCase
         $session = new Session(new MockArraySessionStorage());
         $adminLog ??= $this->createStub(AdminLog::class);
         $adminHelper = $this->createMock(Helper::class);
-        $adminHelper->method('setUser')->with($currentUser)->willReturnSelf();
-        $adminHelper->method('canAccessContent')->with($currentUser)->willReturn(true);
+        $adminHelper->method('setUser')->willReturnSelf();
+        $adminHelper->method('canAccessContent')->willReturn(true);
         $adminHelper
             ->method('addMenuEntry')
             ->willReturnCallback(

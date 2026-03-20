@@ -21,12 +21,8 @@ class OrderTest extends TestCase
     protected function setUp(): void
     {
         $this->databaseMock = $this->createMock(DatabaseDriver::class);
-        $this->configurationMock = $this->createMock(Configuration::class);
-
-        $this->configurationMock
-            ->expects($this->any())
-            ->method('getDb')
-            ->willReturn($this->databaseMock);
+        $this->configurationMock = $this->createStub(Configuration::class);
+        $this->configurationMock->method('getDb')->willReturn($this->databaseMock);
 
         $this->order = new Order($this->configurationMock);
     }

@@ -404,7 +404,7 @@ class SearchTest extends TestCase
 
         $category = $this->createMock(Category::class);
         $category->method('getAllCategoryIds')->willReturn([1, 2, 3]);
-        $category->method('getChildNodes')->with(2)->willReturn([4, 5]);
+        $category->expects($this->once())->method('getChildNodes')->with(2)->willReturn([4, 5]);
 
         $client = $this
             ->getMockBuilder(OpenSearchClient::class)

@@ -360,7 +360,7 @@ final class FaqControllerTest extends TestCase
     {
         $permission = $this->createMock(BasicPermission::class);
         $permission->method('hasPermission')->willReturn($canAddFaq);
-        $permission->method('getUserGroups')->with($userId)->willReturn([-1]);
+        $permission->expects($this->atLeastOnce())->method('getUserGroups')->with($userId)->willReturn([-1]);
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;

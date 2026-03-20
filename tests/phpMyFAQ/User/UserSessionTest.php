@@ -53,7 +53,7 @@ class UserSessionTest extends TestCase
     {
         $db = $this->createMock(DatabaseDriver::class);
         $db->method('query')->willReturn('result');
-        $db->method('numRows')->with('result')->willReturn(0);
+        $db->expects($this->once())->method('numRows')->with('result')->willReturn(0);
 
         $configuration = $this->createConfiguration($db);
         $request = Request::create('/', 'GET', [], [], [], ['REQUEST_TIME' => 2000]);

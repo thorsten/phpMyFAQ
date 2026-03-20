@@ -236,6 +236,7 @@ class SearchHelperTest extends TestCase
     public function testRenderAdminSuggestionResultSkipsResultsPastConfiguredLimit(): void
     {
         $this->configurationMock
+            ->expects($this->once())
             ->method('get')
             ->with('records.numberOfRecordsPerPage')
             ->willReturn(0);

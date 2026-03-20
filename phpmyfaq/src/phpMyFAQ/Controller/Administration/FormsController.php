@@ -80,8 +80,9 @@ final class FormsController extends AbstractAdministrationController
 
         // Get supported languages for adding new translations
         $languages = [];
+        $translatedLanguages = $this->forms->getTranslatedLanguages($formId, $inputId);
         foreach (LanguageCodes::getAllSupported() as $code => $language) {
-            if (in_array($code, $this->forms->getTranslatedLanguages($formId, $inputId), strict: true)) {
+            if (in_array($code, $translatedLanguages, strict: true)) {
                 continue;
             }
 

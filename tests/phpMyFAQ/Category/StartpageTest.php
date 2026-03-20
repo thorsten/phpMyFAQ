@@ -22,11 +22,7 @@ class StartpageTest extends TestCase
     {
         $this->databaseMock = $this->createMock(DatabaseDriver::class);
         $this->configurationMock = $this->createMock(Configuration::class);
-
-        $this->configurationMock
-            ->expects($this->any())
-            ->method('getDb')
-            ->willReturn($this->databaseMock);
+        $this->configurationMock->method('getDb')->willReturn($this->databaseMock);
 
         $this->startpage = new Startpage($this->configurationMock);
     }
@@ -270,10 +266,7 @@ class StartpageTest extends TestCase
             ->setGroups([2, 3])
             ->setLanguage('es');
 
-        $this->configurationMock
-            ->expects($this->any())
-            ->method('getDefaultUrl')
-            ->willReturn('https://demo.com/');
+        $this->configurationMock->method('getDefaultUrl')->willReturn('https://demo.com/');
 
         $this->databaseMock
             ->expects($this->once())

@@ -6,6 +6,7 @@ use Elastic\Elasticsearch\ClientBuilder;
 use Monolog\Logger;
 use phpMyFAQ\ConfigurationMethodsTrait;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\Environment;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Language;
@@ -20,6 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 #[CoversTrait(ConfigurationMethodsTrait::class)]
 #[UsesClass(Environment::class)]
+#[UsesClass(PdoSqlite::class)]
 #[AllowMockObjectsWithoutExpectations]
 class ConfigurationMethodsTraitTest extends TestCase
 {
@@ -328,6 +330,7 @@ class ConfigurationMethodsTraitTest extends TestCase
         $config = ['base_dn' => 'dc=example,dc=com'];
 
         $this->ldapSettings
+            ->expects($this->once())
             ->method('buildServers')
             ->with($ldapConfig)
             ->willReturn($servers);
@@ -471,7 +474,7 @@ class ConfigurationMethodsTraitTest extends TestCase
             ]);
 
         $container = $this->createMock(ContainerInterface::class);
-        $container->method('has')->with('phpmyfaq.http-client')->willReturn(false);
+        $container->expects($this->once())->method('has')->with('phpmyfaq.http-client')->willReturn(false);
         $this->subject->config['core.container'] = $container;
 
         $this->assertNull($this->subject->getTranslationProvider());
@@ -682,7 +685,11 @@ class ConfigurationMethodsTraitTest extends TestCase
     {
         $pluginManager = $this->createMock(PluginManager::class);
         $pluginConfiguration = $this->createMock(PluginConfigurationInterface::class);
-        $pluginManager->method('getPluginConfig')->with('myPlugin')->willReturn($pluginConfiguration);
+        $pluginManager
+            ->expects($this->once())
+            ->method('getPluginConfig')
+            ->with('myPlugin')
+            ->willReturn($pluginConfiguration);
 
         $this->subject->pluginManager = $pluginManager;
         $this->assertSame($pluginConfiguration, $this->subject->getPluginConfig('myPlugin'));

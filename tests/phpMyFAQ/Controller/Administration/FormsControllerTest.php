@@ -140,7 +140,7 @@ final class FormsControllerTest extends TestCase
     public function testTranslateRendersTranslationsAndAvailableLanguages(): void
     {
         $forms = $this->createMock(Forms::class);
-        $forms->method('getTranslatedLanguages')->with(1, 10)->willReturn(['en', 'default']);
+        $forms->expects($this->once())->method('getTranslatedLanguages')->with(1, 10)->willReturn(['en', 'default']);
         $forms
             ->expects($this->once())
             ->method('getTranslations')

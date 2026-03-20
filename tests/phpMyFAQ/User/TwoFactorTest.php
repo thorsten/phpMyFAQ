@@ -57,6 +57,7 @@ class TwoFactorTest extends TestCase
     public function testGetSecret(): void
     {
         $this->currentUser
+            ->expects($this->once())
             ->method('getUserData')
             ->with('secret')
             ->willReturn('testsecret');
@@ -71,23 +72,25 @@ class TwoFactorTest extends TestCase
      */
     public function testValidateToken(): void
     {
-        $this->configuration
-            ->method('get')
-            ->with('security.permLevel')
-            ->willReturn('basic');
+        $this->configuration->method('get')->willReturnCallback(static fn(string $key): ?string => $key
+        === 'security.permLevel'
+            ? 'basic'
+            : null);
 
         $this->currentUser
+            ->expects($this->once())
             ->method('getUserData')
             ->with('secret')
             ->willReturn('testsecret');
 
         $this->currentUser
+            ->expects($this->once())
             ->method('getUserById')
             ->with(1)
             ->willReturn(true);
 
         $twoFactorAuth = $this->createMock(TwoFactorAuth::class);
-        $twoFactorAuth->method('verifyCode')->with('testsecret', '123456')->willReturn(true);
+        $twoFactorAuth->expects($this->once())->method('verifyCode')->with('testsecret', '123456')->willReturn(true);
 
         $reflection = new ReflectionClass($this->twoFactor);
         $property = $reflection->getProperty('twoFactorAuth');
@@ -107,6 +110,7 @@ class TwoFactorTest extends TestCase
     {
         $this->configuration->method('getTitle')->willReturn('phpMyFAQ');
         $this->currentUser
+            ->expects($this->once())
             ->method('getUserData')
             ->with('email')
             ->willReturn('user@example.com');

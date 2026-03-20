@@ -141,7 +141,7 @@ Then open http://www.example.org/phpmyfaq/setup/ in your browser.
 
 ### PHP
 
-To run our unit tests via PHPUnit v12.x, execute this command on your CLI
+To run our unit tests via PHPUnit v13.x, execute this command on your CLI
 
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install

@@ -46,7 +46,7 @@ class AuthorizationServerTest extends TestCase
     public function testIssueTokenThrowsWhenOauth2IsDisabled(): void
     {
         $configuration = $this->createMock(Configuration::class);
-        $configuration->method('get')->with('oauth2.enable')->willReturn('false');
+        $configuration->expects($this->once())->method('get')->with('oauth2.enable')->willReturn('false');
         $server = new AuthorizationServer($configuration);
 
         $this->expectException(\RuntimeException::class);

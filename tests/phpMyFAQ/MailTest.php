@@ -694,7 +694,11 @@ class MailTest extends TestCase
         $this->assertFalse($method->invoke($invalidContainerMail, 'user@example.com', $headers, 'Body'));
 
         $missingBusContainer = $this->createMock(ContainerInterface::class);
-        $missingBusContainer->method('has')->with('phpmyfaq.queue.message-bus')->willReturn(false);
+        $missingBusContainer
+            ->expects($this->once())
+            ->method('has')
+            ->with('phpmyfaq.queue.message-bus')
+            ->willReturn(false);
         $missingBusContainer->expects($this->never())->method('get');
 
         $missingBusConfiguration = $this->createMock(Configuration::class);
@@ -713,8 +717,9 @@ class MailTest extends TestCase
         $this->assertFalse($method->invoke($missingBusMail, 'user@example.com', $headers, 'Body'));
 
         $wrongBusContainer = $this->createMock(ContainerInterface::class);
-        $wrongBusContainer->method('has')->with('phpmyfaq.queue.message-bus')->willReturn(true);
+        $wrongBusContainer->expects($this->once())->method('has')->with('phpmyfaq.queue.message-bus')->willReturn(true);
         $wrongBusContainer
+            ->expects($this->once())
             ->method('get')
             ->with('phpmyfaq.queue.message-bus')
             ->willReturn(new \stdClass());
@@ -739,8 +744,16 @@ class MailTest extends TestCase
         $messageBus = new DatabaseMessageBus($transport);
 
         $successContainer = $this->createMock(ContainerInterface::class);
-        $successContainer->method('has')->with('phpmyfaq.queue.message-bus')->willReturn(true);
-        $successContainer->method('get')->with('phpmyfaq.queue.message-bus')->willReturn($messageBus);
+        $successContainer
+            ->expects($this->exactly(2))
+            ->method('has')
+            ->with('phpmyfaq.queue.message-bus')
+            ->willReturn(true);
+        $successContainer
+            ->expects($this->exactly(2))
+            ->method('get')
+            ->with('phpmyfaq.queue.message-bus')
+            ->willReturn($messageBus);
 
         $successConfiguration = $this->createMock(Configuration::class);
         $successConfiguration
@@ -782,8 +795,12 @@ class MailTest extends TestCase
             ->with($this->stringContains('Queueing mail failed'), $this->isArray());
 
         $throwingContainer = $this->createMock(ContainerInterface::class);
-        $throwingContainer->method('has')->with('phpmyfaq.queue.message-bus')->willReturn(true);
-        $throwingContainer->method('get')->willThrowException(new \RuntimeException('queue exploded'));
+        $throwingContainer->expects($this->once())->method('has')->with('phpmyfaq.queue.message-bus')->willReturn(true);
+        $throwingContainer
+            ->expects($this->once())
+            ->method('get')
+            ->with('phpmyfaq.queue.message-bus')
+            ->willThrowException(new \RuntimeException('queue exploded'));
 
         $throwingConfiguration = $this->createMock(Configuration::class);
         $throwingConfiguration

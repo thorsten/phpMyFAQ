@@ -387,6 +387,7 @@ final class UserControllerTest extends TestCase
         $userService = $this->createMock(CurrentUser::class);
         $userData = $this->createMock(UserData::class);
         $userData
+            ->expects($this->once())
             ->method('get')
             ->with('*')
             ->willReturn([

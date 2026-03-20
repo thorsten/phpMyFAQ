@@ -293,7 +293,7 @@ Before working on phpMyFAQ, set up a local environment with the following softwa
 
 - Git
 - PHP 10.4 up to 10.6
-- PHPUnit 12.x
+- PHPUnit 13.x
 - Composer
 - Node.js 24+
 - TypeScript 5.x

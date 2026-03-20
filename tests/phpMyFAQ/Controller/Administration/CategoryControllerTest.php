@@ -128,7 +128,7 @@ final class CategoryControllerTest extends TestCase
 
         $order = $this->createMock(Order::class);
         $order->method('getAllCategories')->willReturn([]);
-        $order->method('getCategoryTree')->with([])->willReturn([]);
+        $order->expects($this->once())->method('getCategoryTree')->with([])->willReturn([]);
 
         $controller = new CategoryController(
             $this->createStub(AdminCategory::class),

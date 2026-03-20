@@ -486,6 +486,7 @@ class UserTest extends TestCase
 
         $this->database->method('query')->willReturn(true);
         $this->userData
+            ->expects($this->once())
             ->method('delete')
             ->with(6)
             ->willReturn(true);
@@ -813,7 +814,7 @@ class UserTest extends TestCase
         $user->method('getStatus')->willReturn('blocked');
         $user->method('createPassword')->willReturn('Abcd2345');
         $user->expects($this->once())->method('changePassword')->with('Abcd2345')->willReturn(true);
-        $user->method('getUserData')->with('display_name')->willReturn('Blocked User');
+        $user->expects($this->once())->method('getUserData')->with('display_name')->willReturn('Blocked User');
         $user->method('getLogin')->willReturn('blocked-user');
         $user->expects($this->once())->method('mailUser')->willReturn(1);
         $user->expects($this->once())->method('setStatus')->with('active')->willReturn(true);

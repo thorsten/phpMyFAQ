@@ -53,6 +53,7 @@ final class AttachmentServiceTest extends TestCase
     public function testCanDownloadAttachmentAllowsGuestDownload(): void
     {
         $this->configuration
+            ->expects($this->once())
             ->method('get')
             ->with('records.allowDownloadsForGuests')
             ->willReturn(true);

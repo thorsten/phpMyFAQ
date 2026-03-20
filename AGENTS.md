@@ -12,7 +12,7 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 - `/phpmyfaq/docs`: Contains the documentation for the project.
 - `/phpmyfaq/assets`: Contains the TypeScript and SCSS source files for the frontend.
 - `/phpmyfaq/src/phpMyFAQ`: Contains the source code for the PHP backend.
-- `/tests`: Contains PHPUnit v12 based unittests.
+- `/tests`: Contains PHPUnit v13 based unittests.
 
 ## Development Setup
 
@@ -37,7 +37,7 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 - It uses PNPM as the package manager for JavaScript/TypeScript dependencies.
 - It uses Composer as the package manager for PHP dependencies.
 - Twig as the templating engine.
-- PHPUnit v12 for PHP-based unit testing, vitest for TypeScript-based unit testing.
+- PHPUnit v13 for PHP-based unit testing, vitest for TypeScript-based unit testing.
 - Docker for containerization.
 - GitHub Actions for CI/CD.
 - Mago for code quality and static analysis.
