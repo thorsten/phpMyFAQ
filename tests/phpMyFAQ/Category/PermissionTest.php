@@ -23,11 +23,7 @@ class PermissionTest extends TestCase
     {
         $this->databaseMock = $this->createMock(DatabaseDriver::class);
         $this->configurationMock = $this->createMock(Configuration::class);
-
-        $this->configurationMock
-            ->expects($this->any())
-            ->method('getDb')
-            ->willReturn($this->databaseMock);
+        $this->configurationMock->method('getDb')->willReturn($this->databaseMock);
 
         $this->permission = new Permission($this->configurationMock);
     }
@@ -172,7 +168,7 @@ class PermissionTest extends TestCase
         $userRow->permission = 10;
 
         $this->databaseMock
-            ->expects($this->any())
+            ->expects($this->exactly(3))
             ->method('fetchObject')
             ->willReturnOnConsecutiveCalls($userRow, false, false);
 
@@ -197,7 +193,7 @@ class PermissionTest extends TestCase
         $groupRow->permission = 5;
 
         $this->databaseMock
-            ->expects($this->any())
+            ->expects($this->exactly(3))
             ->method('fetchObject')
             ->willReturnOnConsecutiveCalls(false, $groupRow, false);
 

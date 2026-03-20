@@ -187,6 +187,7 @@ class NotificationTest extends TestCase
         $faqEntity->setLanguage('en');
 
         $this->faq
+            ->expects($this->exactly(2))
             ->method('getQuestion')
             ->with(42)
             ->willReturn('How to test?');
@@ -354,6 +355,7 @@ class NotificationTest extends TestCase
         $categories = [5 => ['name' => 'User Account']];
 
         $this->category
+            ->expects($this->once())
             ->method('getOwner')
             ->with(5)
             ->willReturn(0);
@@ -388,6 +390,7 @@ class NotificationTest extends TestCase
         $categories = [5 => ['name' => 'User Account']];
 
         $this->category
+            ->expects($this->once())
             ->method('getOwner')
             ->with(5)
             ->willReturn(10);
@@ -439,6 +442,7 @@ class NotificationTest extends TestCase
         $categories = [5 => ['name' => 'User Account']];
 
         $this->category
+            ->expects($this->once())
             ->method('getOwner')
             ->with(5)
             ->willReturn(0);

@@ -60,8 +60,8 @@ final class MailHelperTest extends TestCase
         $messageBus = new DatabaseMessageBus($transport);
 
         $container = $this->createMock(ContainerInterface::class);
-        $container->method('has')->with('phpmyfaq.queue.message-bus')->willReturn(true);
-        $container->method('get')->with('phpmyfaq.queue.message-bus')->willReturn($messageBus);
+        $container->expects($this->once())->method('has')->with('phpmyfaq.queue.message-bus')->willReturn(true);
+        $container->expects($this->once())->method('get')->with('phpmyfaq.queue.message-bus')->willReturn($messageBus);
 
         $configuration = $this->createMock(Configuration::class);
         $configuration

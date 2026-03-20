@@ -71,7 +71,11 @@ class AuthLdapTest extends TestCase
     {
         $configuration = $this->createMock(Configuration::class);
         $configuration->method('getLdapServer')->willReturn([]);
-        $configuration->method('get')->with('ldap.ldap_use_multiple_servers')->willReturn(false);
+        $configuration
+            ->expects($this->once())
+            ->method('get')
+            ->with('ldap.ldap_use_multiple_servers')
+            ->willReturn(false);
 
         $this->expectException(AuthException::class);
         $this->expectExceptionMessage('An error occurred while contacting LDAP: No configuration found.');
@@ -98,10 +102,12 @@ class AuthLdapTest extends TestCase
 
         $this->ldapCore->expects($this->exactly(2))->method('connect');
         $this->ldapCore
+            ->expects($this->once())
             ->method('getCompleteName')
             ->with('alice')
             ->willReturn('Alice Example');
         $this->ldapCore
+            ->expects($this->once())
             ->method('getMail')
             ->with('alice')
             ->willReturn('alice@example.com');
@@ -131,6 +137,7 @@ class AuthLdapTest extends TestCase
         $this->ldapCore->method('getCompleteName')->willReturn(false);
         $this->ldapCore->method('getMail')->willReturn(false);
         $this->ldapCore
+            ->expects($this->once())
             ->method('getGroupMemberships')
             ->with('alice')
             ->willReturn(false);
@@ -200,6 +207,7 @@ class AuthLdapTest extends TestCase
         $this->ldapCore->method('getCompleteName')->willReturn('Alice');
         $this->ldapCore->method('getMail')->willReturn('alice@example.com');
         $this->ldapCore
+            ->expects($this->once())
             ->method('getGroupMemberships')
             ->with('alice')
             ->willReturn([
@@ -296,6 +304,7 @@ class AuthLdapTest extends TestCase
 
         $this->ldapCore->method('bind')->willReturn(true);
         $this->ldapCore
+            ->expects($this->once())
             ->method('getGroupMemberships')
             ->with('alice')
             ->willReturn([
@@ -318,6 +327,7 @@ class AuthLdapTest extends TestCase
         $this->configValues['ldap.ldap_use_domain_prefix'] = false;
 
         $this->ldapCore
+            ->expects($this->once())
             ->method('getDn')
             ->with('alice')
             ->willReturn('cn=alice,dc=example,dc=com');
@@ -339,6 +349,7 @@ class AuthLdapTest extends TestCase
     public function testIsValidLoginReturnsLengthOfCompleteName(): void
     {
         $this->ldapCore
+            ->expects($this->once())
             ->method('getCompleteName')
             ->with('alice')
             ->willReturn('Alice Example');

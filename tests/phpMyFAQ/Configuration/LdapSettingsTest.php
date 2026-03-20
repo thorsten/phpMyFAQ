@@ -29,7 +29,7 @@ final class LdapSettingsTest extends TestCase
     public function testIsActiveReturnsFalseForStringFalse(): void
     {
         $configuration = $this->createMock(Configuration::class);
-        $configuration->method('get')->with('ldap.ldapSupport')->willReturn('false');
+        $configuration->expects($this->once())->method('get')->with('ldap.ldapSupport')->willReturn('false');
 
         $settings = new LdapSettings($configuration);
 
@@ -39,7 +39,7 @@ final class LdapSettingsTest extends TestCase
     public function testIsActiveReturnsTrueForStringTrue(): void
     {
         $configuration = $this->createMock(Configuration::class);
-        $configuration->method('get')->with('ldap.ldapSupport')->willReturn('true');
+        $configuration->expects($this->once())->method('get')->with('ldap.ldapSupport')->willReturn('true');
 
         $settings = new LdapSettings($configuration);
 

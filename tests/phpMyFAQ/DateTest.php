@@ -17,10 +17,7 @@ class DateTest extends TestCase
         parent::setUp();
 
         $this->mockConfiguration = $this->createMock(Configuration::class);
-        $this->mockConfiguration
-            ->method('get')
-            ->with('main.dateFormat')
-            ->willReturn('Y-m-d H:i:s');
+        $this->mockConfiguration->method('get')->willReturn('Y-m-d H:i:s');
 
         $this->dateInstance = new Date($this->mockConfiguration);
     }
@@ -92,7 +89,7 @@ class DateTest extends TestCase
     {
         // Test with different configuration formats
         $mockConfig = $this->createMock(Configuration::class);
-        $mockConfig->method('get')->with('main.dateFormat')->willReturn('d.m.Y H:i');
+        $mockConfig->expects($this->once())->method('get')->with('main.dateFormat')->willReturn('d.m.Y H:i');
 
         $dateInstance = new Date($mockConfig);
         $inputDate = '2023-12-25 14:30:00';

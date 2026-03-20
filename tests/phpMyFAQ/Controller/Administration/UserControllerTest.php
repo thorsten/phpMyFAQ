@@ -176,7 +176,7 @@ final class UserControllerTest extends TestCase
         $currentUserId = 0;
         $user = $this->createMock(User::class);
         $user->perm = $permission;
-        $user->method('getAllUsers')->with(false)->willReturn($userIds);
+        $user->method('getAllUsers')->willReturn($userIds);
         $user->method('getUserById')->willReturnCallback(function (int $userId) use (&$currentUserId): bool {
             $currentUserId = $userId;
 

@@ -253,7 +253,7 @@ final class FaqControllerTest extends TestCase
         $faq->method('getNextSolutionId')->willReturn(1001);
 
         $tags = $this->createMock(Tags::class);
-        $tags->method('getAllTagsById')->with(1)->willReturn(['tag-one', 'tag-two']);
+        $tags->expects($this->once())->method('getAllTagsById')->with(1)->willReturn(['tag-one', 'tag-two']);
 
         $seoData = new SeoEntity();
         $seoData->setTitle('SEO title')->setDescription('SEO description');
@@ -295,6 +295,7 @@ final class FaqControllerTest extends TestCase
 
         $question = $this->createMock(Question::class);
         $question
+            ->expects($this->once())
             ->method('get')
             ->with(1)
             ->willReturn([

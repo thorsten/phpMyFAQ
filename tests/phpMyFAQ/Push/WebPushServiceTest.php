@@ -80,6 +80,7 @@ class WebPushServiceTest extends TestCase
     public function testGetVapidPublicKey(): void
     {
         $this->configuration
+            ->expects($this->once())
             ->method('get')
             ->with('push.vapidPublicKey')
             ->willReturn('BNcR...publicKey');
@@ -90,6 +91,7 @@ class WebPushServiceTest extends TestCase
     public function testGetVapidPublicKeyReturnsEmptyStringWhenNull(): void
     {
         $this->configuration
+            ->expects($this->once())
             ->method('get')
             ->with('push.vapidPublicKey')
             ->willReturn(null);

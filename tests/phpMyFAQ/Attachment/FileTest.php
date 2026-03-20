@@ -448,7 +448,7 @@ class FileTest extends TestCase
     public function testUsesCloudStorageReturnsFalseForFilesystemConfiguration(): void
     {
         $mockConfig = $this->createMock(Configuration::class);
-        $mockConfig->method('get')->with('storage.type')->willReturn('filesystem');
+        $mockConfig->expects($this->once())->method('get')->with('storage.type')->willReturn('filesystem');
 
         $configRef = new ReflectionClass(Configuration::class);
         $configProp = $configRef->getProperty('configuration');
@@ -468,7 +468,7 @@ class FileTest extends TestCase
     public function testUsesCloudStorageReturnsTrueForS3Configuration(): void
     {
         $mockConfig = $this->createMock(Configuration::class);
-        $mockConfig->method('get')->with('storage.type')->willReturn('S3');
+        $mockConfig->expects($this->once())->method('get')->with('storage.type')->willReturn('S3');
 
         $configRef = new ReflectionClass(Configuration::class);
         $configProp = $configRef->getProperty('configuration');

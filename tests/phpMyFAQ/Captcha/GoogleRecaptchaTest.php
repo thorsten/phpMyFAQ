@@ -87,20 +87,24 @@ class GoogleRecaptchaTest extends TestCase
 
     /**
      * Test checkCaptchaCode when user is not logged in
-     * Note: This test requires mocking file_get_contents or using a test HTTP client
      */
     public function testCheckCaptchaCodeWhenNotLoggedIn(): void
     {
-        $this->googleRecaptcha->setUserIsLoggedIn(false);
+        $recaptcha = new class($this->configuration) extends GoogleRecaptcha {
+            protected function fetchUrl(string $url): string|false
+            {
+                return json_encode(['success' => true]);
+            }
+        };
+        $recaptcha->setUserIsLoggedIn(false);
 
         $this->configuration
+            ->expects($this->once())
             ->method('get')
             ->with('security.googleReCaptchaV2SecretKey')
             ->willReturn('test-secret-key');
 
-        // Test that the method attempts to make external API call when not logged in
-        // We verify configuration is accessed correctly
-        $this->expectNotToPerformAssertions(); // Will attempt HTTP call
+        self::assertTrue($recaptcha->checkCaptchaCode('valid-token'));
     }
 
     /**
@@ -164,6 +168,7 @@ class GoogleRecaptchaTest extends TestCase
         $this->googleRecaptcha->setUserIsLoggedIn(false);
 
         $this->configuration
+            ->expects($this->once())
             ->method('get')
             ->with('security.googleReCaptchaV2SecretKey')
             ->willReturn('test-secret');

@@ -133,7 +133,7 @@ final class InstanceControllerTest extends TestCase
         $instance = $this->createMock(Instance::class);
         $instance->method('getAll')->willReturn([$this->createSite(1, 'https://old.example.com', 'demo', 'Demo')]);
         $instance->method('getInstanceConfig')->willReturn(['isMaster' => false]);
-        $instance->method('getConfig')->with('isMaster')->willReturn(false);
+        $instance->expects($this->once())->method('getConfig')->with('isMaster')->willReturn(false);
         $instance->expects($this->once())->method('setId')->with(1);
 
         $client = new TestInstanceClient($this->configuration);
@@ -175,7 +175,7 @@ final class InstanceControllerTest extends TestCase
         $instance = $this->createMock(Instance::class);
         $instance->method('getAll')->willReturn([$this->createSite(1, 'https://old.example.com', 'demo', 'Demo')]);
         $instance->method('getInstanceConfig')->willReturn(['isMaster' => false]);
-        $instance->method('getConfig')->with('isMaster')->willReturn(false);
+        $instance->expects($this->once())->method('getConfig')->with('isMaster')->willReturn(false);
         $instance->expects($this->once())->method('setId')->with(1);
 
         $client = new TestInstanceClient($this->configuration);

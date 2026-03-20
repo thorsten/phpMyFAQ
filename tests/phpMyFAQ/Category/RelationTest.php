@@ -30,15 +30,8 @@ class RelationTest extends TestCase
         $this->categoryMock = $this->createMock(Category::class);
         $this->languageMock = $this->createMock(Language::class);
 
-        $this->configurationMock
-            ->expects($this->any())
-            ->method('getDb')
-            ->willReturn($this->databaseMock);
-
-        $this->configurationMock
-            ->expects($this->any())
-            ->method('getLanguage')
-            ->willReturn($this->languageMock);
+        $this->configurationMock->method('getDb')->willReturn($this->databaseMock);
+        $this->configurationMock->method('getLanguage')->willReturn($this->languageMock);
 
         $this->relation = new Relation($this->configurationMock, $this->categoryMock);
     }
@@ -174,10 +167,7 @@ class RelationTest extends TestCase
             ->with('security.permLevel')
             ->willReturn('basic');
 
-        $this->languageMock
-            ->expects($this->any())
-            ->method('getLanguage')
-            ->willReturn('en');
+        $this->languageMock->method('getLanguage')->willReturn('en');
 
         $this->databaseMock
             ->expects($this->once())
@@ -230,20 +220,9 @@ class RelationTest extends TestCase
             ->with('security.permLevel')
             ->willReturn('medium');
 
-        $this->categoryMock
-            ->expects($this->any())
-            ->method('getUser')
-            ->willReturn(42);
-
-        $this->categoryMock
-            ->expects($this->any())
-            ->method('getGroups')
-            ->willReturn([1, 2, 3]);
-
-        $this->languageMock
-            ->expects($this->any())
-            ->method('getLanguage')
-            ->willReturn('de');
+        $this->categoryMock->method('getUser')->willReturn(42);
+        $this->categoryMock->method('getGroups')->willReturn([1, 2, 3]);
+        $this->languageMock->method('getLanguage')->willReturn('de');
 
         $this->databaseMock
             ->expects($this->once())
@@ -270,20 +249,11 @@ class RelationTest extends TestCase
             ->with('security.permLevel')
             ->willReturn('medium');
 
-        $this->categoryMock
-            ->expects($this->any())
-            ->method('getUser')
-            ->willReturn(-1);
+        $this->categoryMock->method('getUser')->willReturn(-1);
 
-        $this->categoryMock
-            ->expects($this->any())
-            ->method('getGroups')
-            ->willReturn([1, 2]);
+        $this->categoryMock->method('getGroups')->willReturn([1, 2]);
 
-        $this->languageMock
-            ->expects($this->any())
-            ->method('getLanguage')
-            ->willReturn('');
+        $this->languageMock->method('getLanguage')->willReturn('');
 
         $this->databaseMock
             ->expects($this->once())
@@ -304,10 +274,7 @@ class RelationTest extends TestCase
     {
         Database::setTablePrefix('test_');
 
-        $this->languageMock
-            ->expects($this->any())
-            ->method('getLanguage')
-            ->willReturn('en');
+        $this->languageMock->method('getLanguage')->willReturn('en');
 
         $this->databaseMock
             ->expects($this->once())
@@ -342,10 +309,7 @@ class RelationTest extends TestCase
         // Set groups first
         $this->relation->setGroups([5]);
 
-        $this->languageMock
-            ->expects($this->any())
-            ->method('getLanguage')
-            ->willReturn('de');
+        $this->languageMock->method('getLanguage')->willReturn('de');
 
         $this->databaseMock
             ->expects($this->once())
@@ -408,10 +372,7 @@ class RelationTest extends TestCase
         // Set groups first
         $this->relation->setGroups([3]);
 
-        $this->languageMock
-            ->expects($this->any())
-            ->method('getLanguage')
-            ->willReturn('fr');
+        $this->languageMock->method('getLanguage')->willReturn('fr');
 
         $this->databaseMock
             ->expects($this->once())
@@ -435,10 +396,7 @@ class RelationTest extends TestCase
     {
         Database::setTablePrefix('test_');
 
-        $this->languageMock
-            ->expects($this->any())
-            ->method('getLanguage')
-            ->willReturn('');
+        $this->languageMock->method('getLanguage')->willReturn('');
 
         $this->databaseMock
             ->expects($this->once())

@@ -25,6 +25,7 @@ class StatisticsTest extends TestCase
     private Statistics $statistics;
     private Configuration $configurationMock;
     private Sqlite3 $dbMock;
+    private ?Configuration $previousConfiguration = null;
 
     protected function setUp(): void
     {
@@ -44,10 +45,21 @@ class StatisticsTest extends TestCase
         $this->configurationMock->method('getDb')->willReturn($this->dbMock);
 
         // Default to basic security level
-        $this->configurationMock
-            ->method('get')
-            ->with('security.permLevel')
-            ->willReturn('basic');
+        $this->configurationMock->method('get')->willReturn('basic');
+
+        $configurationReflection = new ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $this->previousConfiguration = $configurationProperty->getValue();
+        $configurationProperty->setValue(null, $this->configurationMock);
+    }
+
+    protected function tearDown(): void
+    {
+        $configurationReflection = new ReflectionClass(Configuration::class);
+        $configurationProperty = $configurationReflection->getProperty('configuration');
+        $configurationProperty->setValue(null, $this->previousConfiguration);
+
+        parent::tearDown();
     }
 
     public function testConstructorWithBasicSecurityLevel(): void
@@ -606,6 +618,7 @@ class StatisticsTest extends TestCase
 
         $resultMock = $this->createStub(\SQLite3Result::class);
         $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains("fcr.category_id = '5'"))
             ->willReturn($resultMock);

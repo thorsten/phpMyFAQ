@@ -91,7 +91,7 @@ class CurrentUserTraitsTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['getUserGroups'])
             ->getMock();
-        $permission->method('getUserGroups')->with(1)->willReturn([]);
+        $permission->expects($this->once())->method('getUserGroups')->with(1)->willReturn([]);
         $user->perm = $permission;
 
         $this->assertSame([1, [-1]], CurrentUser::getCurrentUserGroupId($user));

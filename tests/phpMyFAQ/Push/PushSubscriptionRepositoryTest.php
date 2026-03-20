@@ -107,6 +107,7 @@ class PushSubscriptionRepositoryTest extends TestCase
 
         $this->dbDriver->method('escape')->willReturnArgument(0);
         $this->dbDriver
+            ->expects($this->once())
             ->method('nextId')
             ->with('faqpush_subscriptions', 'id')
             ->willReturn(11);

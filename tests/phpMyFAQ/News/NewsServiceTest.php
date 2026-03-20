@@ -56,7 +56,7 @@ class NewsServiceTest extends TestCase
     public function testGetProcessedNewsReturnsEmptyArrayForMissingRecord(): void
     {
         $news = $this->createMock(News::class);
-        $news->method('get')->with(123)->willReturn([]);
+        $news->expects($this->once())->method('get')->with(123)->willReturn([]);
 
         $this->setProperty($this->newsService, 'news', $news);
 
@@ -70,6 +70,7 @@ class NewsServiceTest extends TestCase
         $faqHelper = $this->createMock(FaqHelper::class);
 
         $news
+            ->expects($this->once())
             ->method('get')
             ->with(55)
             ->willReturn([
@@ -109,6 +110,7 @@ class NewsServiceTest extends TestCase
         $faqHelper = $this->createMock(FaqHelper::class);
 
         $news
+            ->expects($this->once())
             ->method('get')
             ->with(77)
             ->willReturn([

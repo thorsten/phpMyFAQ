@@ -216,6 +216,7 @@ class FaqCreationServiceTest extends TestCase
     public function testGetDefaultUserEmailForLoggedInUser(): void
     {
         $this->currentUser
+            ->expects($this->once())
             ->method('getUserData')
             ->with('email')
             ->willReturn('test@example.com');
@@ -246,6 +247,7 @@ class FaqCreationServiceTest extends TestCase
     public function testGetDefaultUserNameForLoggedInUser(): void
     {
         $this->currentUser
+            ->expects($this->once())
             ->method('getUserData')
             ->with('display_name')
             ->willReturn('John Doe');
@@ -342,7 +344,7 @@ class FaqCreationServiceTest extends TestCase
     {
         $userMock = $this->createMock(CurrentUser::class);
         $userMock->method('getUserId')->willReturn(1);
-        $userMock->method('getUserData')->with('email')->willReturn('test@example.com');
+        $userMock->expects($this->once())->method('getUserData')->with('email')->willReturn('test@example.com');
 
         $service = new FaqCreationService($this->configuration, $userMock, $this->currentGroups);
 
@@ -358,7 +360,7 @@ class FaqCreationServiceTest extends TestCase
     {
         $userMock = $this->createMock(CurrentUser::class);
         $userMock->method('getUserId')->willReturn(1);
-        $userMock->method('getUserData')->with('display_name')->willReturn('John Doe');
+        $userMock->expects($this->once())->method('getUserData')->with('display_name')->willReturn('John Doe');
 
         $service = new FaqCreationService($this->configuration, $userMock, $this->currentGroups);
 

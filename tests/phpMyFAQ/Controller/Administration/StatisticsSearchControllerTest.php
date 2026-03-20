@@ -105,6 +105,7 @@ final class StatisticsSearchControllerTest extends TestCase
         $search = $this->createMock(Search::class);
         $search->method('getSearchesCount')->willReturn(12);
         $search
+            ->expects($this->once())
             ->method('getMostPopularSearches')
             ->with(13, true)
             ->willReturn([

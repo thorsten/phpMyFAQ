@@ -103,6 +103,7 @@ class RegistrationHelperTest extends TestCase
         $whitelist = 'example.com, allowed.org, trusted.edu';
 
         $this->configurationMock
+            ->expects($this->atLeastOnce())
             ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn($whitelist);
@@ -193,6 +194,7 @@ class RegistrationHelperTest extends TestCase
     public function testMethodReturnTypes(): void
     {
         $this->configurationMock
+            ->expects($this->once())
             ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn('example.com');
@@ -204,6 +206,7 @@ class RegistrationHelperTest extends TestCase
     public function testIsDomainAllowedEdgeCases(): void
     {
         $this->configurationMock
+            ->expects($this->exactly(3))
             ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn('example.com');
@@ -227,6 +230,7 @@ class RegistrationHelperTest extends TestCase
         ];
 
         $this->configurationMock
+            ->expects($this->exactly(3))
             ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn('domain.com,sub.domain.org,example.co.uk');
@@ -268,6 +272,7 @@ class RegistrationHelperTest extends TestCase
     {
         // Test single character domain
         $this->configurationMock
+            ->expects($this->exactly(2))
             ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn('a.b');
@@ -282,6 +287,7 @@ class RegistrationHelperTest extends TestCase
     public function testIsDomainAllowedWithoutAtSignReturnsFalse(): void
     {
         $this->configurationMock
+            ->expects($this->once())
             ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn('example.com');
@@ -292,6 +298,7 @@ class RegistrationHelperTest extends TestCase
     public function testIsDomainAllowedWithMultipleAtSignsReturnsFalse(): void
     {
         $this->configurationMock
+            ->expects($this->once())
             ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn('example.com');
@@ -302,6 +309,7 @@ class RegistrationHelperTest extends TestCase
     public function testIsDomainAllowedWithEmptyEmailReturnsFalse(): void
     {
         $this->configurationMock
+            ->expects($this->once())
             ->method('get')
             ->with('security.domainWhiteListForRegistrations')
             ->willReturn('example.com');

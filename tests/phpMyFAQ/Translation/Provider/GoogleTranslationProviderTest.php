@@ -30,6 +30,7 @@ class GoogleTranslationProviderTest extends TestCase
     public function testTranslateSuccess(): void
     {
         $this->configuration
+            ->expects($this->once())
             ->method('get')
             ->with('translation.googleApiKey')
             ->willReturn('test-api-key');
@@ -53,6 +54,7 @@ class GoogleTranslationProviderTest extends TestCase
     public function testTranslateWithHtmlPreservation(): void
     {
         $this->configuration
+            ->expects($this->once())
             ->method('get')
             ->with('translation.googleApiKey')
             ->willReturn('test-api-key');
@@ -76,6 +78,7 @@ class GoogleTranslationProviderTest extends TestCase
     public function testTranslateBatchSuccess(): void
     {
         $this->configuration
+            ->expects($this->once())
             ->method('get')
             ->with('translation.googleApiKey')
             ->willReturn('test-api-key');
@@ -110,6 +113,7 @@ class GoogleTranslationProviderTest extends TestCase
     public function testTranslateWithoutApiKey(): void
     {
         $this->configuration
+            ->expects($this->once())
             ->method('get')
             ->with('translation.googleApiKey')
             ->willReturn('');
@@ -126,6 +130,7 @@ class GoogleTranslationProviderTest extends TestCase
     public function testTranslateApiError(): void
     {
         $this->configuration
+            ->expects($this->once())
             ->method('get')
             ->with('translation.googleApiKey')
             ->willReturn('test-api-key');
@@ -167,6 +172,7 @@ class GoogleTranslationProviderTest extends TestCase
     public function testLanguageCodeMapping(): void
     {
         $this->configuration
+            ->expects($this->once())
             ->method('get')
             ->with('translation.googleApiKey')
             ->willReturn('test-api-key');

@@ -68,6 +68,7 @@ class DatabaseTransportTest extends TestCase
         });
         $db->method('affectedRows')->willReturn(1);
         $db
+            ->expects($this->atLeastOnce())
             ->method('fetchArray')
             ->with('result-set')
             ->willReturnOnConsecutiveCalls([

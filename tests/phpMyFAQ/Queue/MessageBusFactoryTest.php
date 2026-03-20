@@ -16,7 +16,7 @@ class MessageBusFactoryTest extends TestCase
     public function testCreateReturnsDatabaseMessageBusForDatabaseTransport(): void
     {
         $configuration = $this->createMock(Configuration::class);
-        $configuration->method('get')->with('queue.transport')->willReturn('database');
+        $configuration->expects($this->once())->method('get')->with('queue.transport')->willReturn('database');
 
         $transport = $this->createStub(DatabaseTransport::class);
         $factory = new MessageBusFactory($configuration, $transport);
@@ -29,7 +29,7 @@ class MessageBusFactoryTest extends TestCase
     public function testCreateThrowsForUnsupportedTransport(): void
     {
         $configuration = $this->createMock(Configuration::class);
-        $configuration->method('get')->with('queue.transport')->willReturn('sqs');
+        $configuration->expects($this->once())->method('get')->with('queue.transport')->willReturn('sqs');
 
         $transport = $this->createStub(DatabaseTransport::class);
         $factory = new MessageBusFactory($configuration, $transport);
@@ -41,7 +41,7 @@ class MessageBusFactoryTest extends TestCase
     public function testCreateThrowsForRedisTransportNotImplementedYet(): void
     {
         $configuration = $this->createMock(Configuration::class);
-        $configuration->method('get')->with('queue.transport')->willReturn('redis');
+        $configuration->expects($this->once())->method('get')->with('queue.transport')->willReturn('redis');
 
         $transport = $this->createStub(DatabaseTransport::class);
         $factory = new MessageBusFactory($configuration, $transport);
@@ -54,7 +54,7 @@ class MessageBusFactoryTest extends TestCase
     public function testCreateThrowsForAmqpTransportNotImplementedYet(): void
     {
         $configuration = $this->createMock(Configuration::class);
-        $configuration->method('get')->with('queue.transport')->willReturn('amqp');
+        $configuration->expects($this->once())->method('get')->with('queue.transport')->willReturn('amqp');
 
         $transport = $this->createStub(DatabaseTransport::class);
         $factory = new MessageBusFactory($configuration, $transport);

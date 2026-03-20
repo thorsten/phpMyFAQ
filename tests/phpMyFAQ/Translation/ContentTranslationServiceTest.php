@@ -69,6 +69,7 @@ class ContentTranslationServiceTest extends TestCase
         ];
 
         $this->provider
+            ->expects($this->once())
             ->method('translate')
             ->with('What is phpMyFAQ?', 'en', 'de', false)
             ->willReturn('Was ist phpMyFAQ?');

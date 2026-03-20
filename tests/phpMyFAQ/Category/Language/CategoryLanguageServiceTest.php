@@ -33,6 +33,7 @@ final class CategoryLanguageServiceTest extends TestCase
     public function testGetLanguagesInUseReturnsCodes(): void
     {
         $this->language
+            ->expects($this->once())
             ->method('isLanguageAvailable')
             ->with(0, 'faqcategories')
             ->willReturn(['en', 'de']);
@@ -47,6 +48,7 @@ final class CategoryLanguageServiceTest extends TestCase
     public function testGetExistingTranslationsKeysMatchExisting(): void
     {
         $this->language
+            ->expects($this->once())
             ->method('isLanguageAvailable')
             ->with(123, 'faqcategories')
             ->willReturn(['en', 'de']);
@@ -61,6 +63,7 @@ final class CategoryLanguageServiceTest extends TestCase
     public function testGetLanguagesToTranslateExcludesExisting(): void
     {
         $this->language
+            ->expects($this->once())
             ->method('isLanguageAvailable')
             ->with(456, 'faqcategories')
             ->willReturn(['en']);
