@@ -99,6 +99,10 @@ class CacheFactoryTest extends TestCase
     #[RequiresPhpExtension('redis')]
     public function testCreateReturnsRedisAdapterWhenExtensionLoaded(): void
     {
+        if (!$this->isRedisServerAvailable('127.0.0.1', 6379)) {
+            $this->markTestSkipped('Redis extension is loaded, but no Redis server is reachable on 127.0.0.1:6379.');
+        }
+
         $db = $this->createMock(DatabaseDriver::class);
         $db->method('escape')->willReturnCallback(static fn(string $v): string => $v);
         $db->method('query')->willReturn('result');
@@ -119,6 +123,19 @@ class CacheFactoryTest extends TestCase
         $cache = $factory->create();
 
         $this->assertInstanceOf(RedisAdapter::class, $cache);
+    }
+
+    private function isRedisServerAvailable(string $host, int $port): bool
+    {
+        $socket = @fsockopen($host, $port, $errorCode, $errorMessage, 0.2);
+
+        if ($socket === false) {
+            return false;
+        }
+
+        fclose($socket);
+
+        return true;
     }
 
     private function removeDirectory(string $dir): void
