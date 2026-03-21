@@ -30,7 +30,8 @@ export const handleUpdateNextStepButton = (): void => {
 };
 
 export const handleUpdateInformation = async (): Promise<void> => {
-  if (window.location.href.endsWith('/update') || window.location.href.endsWith('/update/')) {
+  const path = window.location.pathname;
+  if (path.endsWith('/update') || path.endsWith('/update/') || path.endsWith('/update/index.php')) {
     const installedVersion = document.getElementById('phpmyfaq-update-installed-version') as HTMLInputElement | null;
 
     if (!installedVersion) return;
@@ -46,13 +47,26 @@ export const handleUpdateInformation = async (): Promise<void> => {
       });
 
       if (!response.ok) {
-        const errorMessage = await response.json();
+        let errorText: string;
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+          const errorMessage = await response.json();
+          errorText = errorMessage.message || errorMessage.error || 'Update check failed';
+        } else {
+          errorText = await response.text();
+          if (!errorText || errorText === 'Not Found') {
+            errorText =
+              'The requested resource was not found on the server. ' +
+              'Please check your server configuration, if you use Apache, the RewriteBase in your .htaccess ' +
+              'configuration. If you use nginx, please check your nginx rewrite configuration.';
+          }
+        }
         const alert = document.getElementById('phpmyfaq-update-check-alert') as HTMLElement | null;
         const alertResult = document.getElementById('phpmyfaq-update-check-result') as HTMLElement | null;
 
         if (alert && alertResult) {
           alert.classList.remove('d-none');
-          alertResult.innerText = errorMessage.message || 'Update check failed';
+          alertResult.innerText = errorText;
         }
         return;
       }
@@ -65,16 +79,11 @@ export const handleUpdateInformation = async (): Promise<void> => {
         button.classList.remove('disabled');
         button.disabled = false;
       }
-    } catch (error: unknown) {
-      let errorMessage: string;
-      if (error instanceof SyntaxError) {
-        errorMessage =
-          'The requested resource was not found on the server. ' +
-          'Please check your server configuration, if you use Apache, the RewriteBase in your .htaccess ' +
-          'configuration. If you use nginx, please check your nginx rewrite configuration.';
-      } else {
-        errorMessage = error instanceof Error ? error.message : String(error);
-      }
+    } catch {
+      const errorMessage =
+        'Could not connect to the update API. Please check your server configuration: ' +
+        'if you use Apache, verify the RewriteBase in your .htaccess matches your installation path. ' +
+        'If you use nginx, check your rewrite configuration.';
       const alert = document.getElementById('phpmyfaq-update-check-alert') as HTMLElement | null;
       const alertResult = document.getElementById('phpmyfaq-update-check-result') as HTMLElement | null;
 
@@ -87,7 +96,8 @@ export const handleUpdateInformation = async (): Promise<void> => {
 };
 
 export const handleConfigBackup = async (): Promise<void> => {
-  if (window.location.href.endsWith('/update?step=2') || window.location.href.endsWith('/update/?step=2')) {
+  const href = window.location.href;
+  if (href.includes('/update') && href.includes('step=2')) {
     const installedVersion = document.getElementById('phpmyfaq-update-installed-version') as HTMLInputElement | null;
 
     if (!installedVersion) return;
@@ -115,7 +125,8 @@ export const handleConfigBackup = async (): Promise<void> => {
 };
 
 export const handleDatabaseUpdate = async (): Promise<void> => {
-  if (window.location.href.endsWith('/update?step=3') || window.location.href.endsWith('/update/?step=3')) {
+  const href = window.location.href;
+  if (href.includes('/update') && href.includes('step=3')) {
     const installedVersion = document.getElementById('phpmyfaq-update-installed-version') as HTMLInputElement | null;
 
     if (!installedVersion) return;
