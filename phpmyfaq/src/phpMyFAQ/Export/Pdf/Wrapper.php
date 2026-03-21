@@ -700,8 +700,7 @@ class Wrapper extends TCPDF
                 return $fullMatch;
             },
             $html,
-        )
-        ?? '';
+        ) ?? '';
     }
 
     /**
