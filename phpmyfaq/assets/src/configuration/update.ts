@@ -46,13 +46,26 @@ export const handleUpdateInformation = async (): Promise<void> => {
       });
 
       if (!response.ok) {
-        const errorMessage = await response.json();
+        let errorText: string;
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+          const errorMessage = await response.json();
+          errorText = errorMessage.message || errorMessage.error || 'Update check failed';
+        } else {
+          errorText = await response.text();
+          if (!errorText || errorText === 'Not Found') {
+            errorText =
+              'The requested resource was not found on the server. ' +
+              'Please check your server configuration, if you use Apache, the RewriteBase in your .htaccess ' +
+              'configuration. If you use nginx, please check your nginx rewrite configuration.';
+          }
+        }
         const alert = document.getElementById('phpmyfaq-update-check-alert') as HTMLElement | null;
         const alertResult = document.getElementById('phpmyfaq-update-check-result') as HTMLElement | null;
 
         if (alert && alertResult) {
           alert.classList.remove('d-none');
-          alertResult.innerText = errorMessage.message || 'Update check failed';
+          alertResult.innerText = errorText;
         }
         return;
       }

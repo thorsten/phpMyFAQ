@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -329,5 +330,88 @@ class ApplicationTest extends TestCase
         $output = ob_get_clean();
 
         $this->assertTrue(true);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testHandleRequestResourceNotFoundExceptionForApi(): void
+    {
+        $routeCollection = new RouteCollection();
+        $request = Request::create('/api/nonexistent');
+        $requestContext = new RequestContext();
+        $requestContext->fromRequest($request);
+        $requestContext->setBaseUrl('/api');
+
+        $reflection = new ReflectionClass(Application::class);
+        $method = $reflection->getMethod('handleRequest');
+
+        ob_start();
+        $method->invoke($this->application, $routeCollection, $request, $requestContext);
+        $output = ob_get_clean();
+
+        $decoded = json_decode($output, true);
+        $this->assertNotNull($decoded, 'API 404 response should be valid JSON');
+        $this->assertArrayHasKey('error', $decoded);
+        $this->assertEquals('Not Found', $decoded['error']);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testHandleRequestForbiddenExceptionForApi(): void
+    {
+        $routeCollection = new RouteCollection();
+        $routeCollection->add('api_forbidden', new Route('/api/forbidden', [
+            '_controller' => function () {
+                throw new ForbiddenException('Forbidden');
+            },
+        ]));
+
+        $request = Request::create('/api/forbidden');
+        $requestContext = new RequestContext();
+        $requestContext->fromRequest($request);
+        $requestContext->setBaseUrl('/api');
+
+        $reflection = new ReflectionClass(Application::class);
+        $method = $reflection->getMethod('handleRequest');
+
+        ob_start();
+        $method->invoke($this->application, $routeCollection, $request, $requestContext);
+        $output = ob_get_clean();
+
+        $decoded = json_decode($output, true);
+        $this->assertNotNull($decoded, 'API 403 response should be valid JSON');
+        $this->assertArrayHasKey('error', $decoded);
+        $this->assertEquals('Forbidden', $decoded['error']);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testHandleRequestBadRequestExceptionForApi(): void
+    {
+        $routeCollection = new RouteCollection();
+        $routeCollection->add('api_bad', new Route('/api/bad', [
+            '_controller' => function () {
+                throw new BadRequestException('Bad request');
+            },
+        ]));
+
+        $request = Request::create('/api/bad');
+        $requestContext = new RequestContext();
+        $requestContext->fromRequest($request);
+        $requestContext->setBaseUrl('/api');
+
+        $reflection = new ReflectionClass(Application::class);
+        $method = $reflection->getMethod('handleRequest');
+
+        ob_start();
+        $method->invoke($this->application, $routeCollection, $request, $requestContext);
+        $output = ob_get_clean();
+
+        $decoded = json_decode($output, true);
+        $this->assertNotNull($decoded, 'API 400 response should be valid JSON');
+        $this->assertArrayHasKey('error', $decoded);
     }
 }

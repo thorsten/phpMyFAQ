@@ -132,17 +132,25 @@ class Application
             $response->setStatusCode(Response::HTTP_OK);
             $response = call_user_func_array($controller, $arguments);
         } catch (ResourceNotFoundException $exception) {
-            $message = Environment::isDebugMode()
-                ? $this->formatExceptionMessage(
-                    template: 'Not Found: :message at line :line at :file',
-                    exception: $exception,
-                )
-                : 'Not Found';
+            if ($this->isApiRequest($urlMatcher)) {
+                $response = new Response(
+                    content: json_encode(value: ['error' => 'Not Found']),
+                    status: Response::HTTP_NOT_FOUND,
+                    headers: ['Content-Type' => 'application/json'],
+                );
+            } else {
+                $message = Environment::isDebugMode()
+                    ? $this->formatExceptionMessage(
+                        template: 'Not Found: :message at line :line at :file',
+                        exception: $exception,
+                    )
+                    : 'Not Found';
 
-            $response = new Response(content: $message, status: Response::HTTP_NOT_FOUND);
+                $response = new Response(content: $message, status: Response::HTTP_NOT_FOUND);
+            }
         } catch (UnauthorizedHttpException) {
             $response = new RedirectResponse(url: './login');
-            if (str_contains(haystack: $urlMatcher->getContext()->getBaseUrl(), needle: '/api')) {
+            if ($this->isApiRequest($urlMatcher)) {
                 $response = new Response(
                     content: json_encode(value: ['error' => 'Unauthorized access']),
                     status: Response::HTTP_UNAUTHORIZED,
@@ -150,21 +158,39 @@ class Application
                 );
             }
         } catch (ForbiddenException $exception) {
-            $message = Environment::isDebugMode()
-                ? $this->formatExceptionMessage(
-                    template: 'An error occurred: :message at line :line at :file',
-                    exception: $exception,
-                )
-                : 'Bad Request';
-            $response = new Response(content: $message, status: Response::HTTP_FORBIDDEN);
+            if ($this->isApiRequest($urlMatcher)) {
+                $response = new Response(
+                    content: json_encode(value: ['error' => 'Forbidden']),
+                    status: Response::HTTP_FORBIDDEN,
+                    headers: ['Content-Type' => 'application/json'],
+                );
+            } else {
+                $message = Environment::isDebugMode()
+                    ? $this->formatExceptionMessage(
+                        template: 'An error occurred: :message at line :line at :file',
+                        exception: $exception,
+                    )
+                    : 'Bad Request';
+                $response = new Response(content: $message, status: Response::HTTP_FORBIDDEN);
+            }
         } catch (BadRequestException $exception) {
-            $message = Environment::isDebugMode()
-                ? $this->formatExceptionMessage(
-                    template: 'An error occurred: :message at line :line at :file',
-                    exception: $exception,
-                )
-                : 'Bad Request';
-            $response = new Response(content: $message, status: Response::HTTP_BAD_REQUEST);
+            if ($this->isApiRequest($urlMatcher)) {
+                $response = new Response(
+                    content: json_encode(value: [
+                        'error' => Environment::isDebugMode() ? $exception->getMessage() : 'Bad Request',
+                    ]),
+                    status: Response::HTTP_BAD_REQUEST,
+                    headers: ['Content-Type' => 'application/json'],
+                );
+            } else {
+                $message = Environment::isDebugMode()
+                    ? $this->formatExceptionMessage(
+                        template: 'An error occurred: :message at line :line at :file',
+                        exception: $exception,
+                    )
+                    : 'Bad Request';
+                $response = new Response(content: $message, status: Response::HTTP_BAD_REQUEST);
+            }
         }
 
         $response->send();
@@ -180,5 +206,13 @@ class Application
             ':line' => (string) $exception->getLine(),
             ':file' => $exception->getFile(),
         ]);
+    }
+
+    /**
+     * Checks if the current request targets an API endpoint.
+     */
+    private function isApiRequest(UrlMatcher $urlMatcher): bool
+    {
+        return str_contains(haystack: $urlMatcher->getContext()->getBaseUrl(), needle: '/api');
     }
 }
