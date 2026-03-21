@@ -92,7 +92,7 @@ describe('handleUpdateInformation', () => {
 
   it('should do nothing when URL does not end with /update', async () => {
     Object.defineProperty(window, 'location', {
-      value: { href: 'http://localhost/admin' },
+      value: { href: 'http://localhost/admin', pathname: '/admin' },
       writable: true,
     });
 
@@ -105,7 +105,7 @@ describe('handleUpdateInformation', () => {
 
   it('should do nothing when installed version input is missing', async () => {
     Object.defineProperty(window, 'location', {
-      value: { href: 'http://localhost/update' },
+      value: { href: 'http://localhost/update', pathname: '/update' },
       writable: true,
     });
 
@@ -119,7 +119,7 @@ describe('handleUpdateInformation', () => {
 
   it('should show success alert and enable button on successful check', async () => {
     Object.defineProperty(window, 'location', {
-      value: { href: 'http://localhost/update' },
+      value: { href: 'http://localhost/update', pathname: '/update' },
       writable: true,
     });
 
@@ -153,9 +153,9 @@ describe('handleUpdateInformation', () => {
     expect(button.disabled).toBe(false);
   });
 
-  it('should show error alert on failed check response', async () => {
+  it('should show error alert on failed check response with JSON content type', async () => {
     Object.defineProperty(window, 'location', {
-      value: { href: 'http://localhost/update' },
+      value: { href: 'http://localhost/update', pathname: '/update' },
       writable: true,
     });
 
@@ -167,6 +167,7 @@ describe('handleUpdateInformation', () => {
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: false,
+      headers: { get: (name: string) => (name === 'content-type' ? 'application/json' : null) },
       json: () => Promise.resolve({ message: 'Version mismatch' }),
     });
 
@@ -179,9 +180,9 @@ describe('handleUpdateInformation', () => {
     expect(result?.innerText).toBe('Version mismatch');
   });
 
-  it('should show default error message when response has no message', async () => {
+  it('should show default error message when JSON response has no message', async () => {
     Object.defineProperty(window, 'location', {
-      value: { href: 'http://localhost/update' },
+      value: { href: 'http://localhost/update', pathname: '/update' },
       writable: true,
     });
 
@@ -193,6 +194,7 @@ describe('handleUpdateInformation', () => {
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: false,
+      headers: { get: (name: string) => (name === 'content-type' ? 'application/json' : null) },
       json: () => Promise.resolve({}),
     });
 
@@ -202,9 +204,9 @@ describe('handleUpdateInformation', () => {
     expect(result?.innerText).toBe('Update check failed');
   });
 
-  it('should show server config error on SyntaxError', async () => {
+  it('should show server config error on non-JSON Not Found response', async () => {
     Object.defineProperty(window, 'location', {
-      value: { href: 'http://localhost/update' },
+      value: { href: 'http://localhost/update', pathname: '/update' },
       writable: true,
     });
 
@@ -214,7 +216,11 @@ describe('handleUpdateInformation', () => {
       <div id="phpmyfaq-update-check-result"></div>
     `;
 
-    global.fetch = vi.fn().mockRejectedValue(new SyntaxError('Unexpected token'));
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: false,
+      headers: { get: () => 'text/html' },
+      text: () => Promise.resolve('Not Found'),
+    });
 
     await handleUpdateInformation();
 
@@ -223,9 +229,9 @@ describe('handleUpdateInformation', () => {
     expect(result?.innerText).toContain('RewriteBase');
   });
 
-  it('should show generic error message on other errors', async () => {
+  it('should show connection error message on network failure', async () => {
     Object.defineProperty(window, 'location', {
-      value: { href: 'http://localhost/update' },
+      value: { href: 'http://localhost/update', pathname: '/update' },
       writable: true,
     });
 
@@ -240,12 +246,12 @@ describe('handleUpdateInformation', () => {
     await handleUpdateInformation();
 
     const result = document.getElementById('phpmyfaq-update-check-result');
-    expect(result?.innerText).toBe('Network failure');
+    expect(result?.innerText).toContain('Could not connect to the update API');
   });
 
   it('should work with URL ending in /update/', async () => {
     Object.defineProperty(window, 'location', {
-      value: { href: 'http://localhost/update/' },
+      value: { href: 'http://localhost/update/', pathname: '/update/' },
       writable: true,
     });
 
