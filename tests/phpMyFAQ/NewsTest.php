@@ -46,7 +46,6 @@ class NewsTest extends TestCase
         $language = new Language($this->configuration, $this->createStub(Session::class));
         $this->configuration->setLanguage($language);
 
-        // Create a mock repository
         $this->mockRepository = $this->createMock(NewsRepositoryInterface::class);
 
         $this->news = new News($this->configuration, $this->mockRepository);
@@ -270,6 +269,59 @@ class NewsTest extends TestCase
         $result = $this->news->getLatestData(false, true, true);
 
         $this->assertEmpty($result);
+    }
+
+    public function testGetLatestDataPaginated(): void
+    {
+        $mockRow = new stdClass();
+        $mockRow->id = 7;
+        $mockRow->lang = 'en';
+        $mockRow->header = 'Paginated News';
+        $mockRow->artikel = 'Paginated content';
+        $mockRow->datum = '20251222100000';
+        $mockRow->author_name = 'Paged Author';
+        $mockRow->author_email = 'paged@example.org';
+        $mockRow->active = 'n';
+        $mockRow->comment = 'n';
+        $mockRow->link = 'https://example.org/paginated';
+        $mockRow->linktitel = 'Paged link';
+        $mockRow->target = '_self';
+
+        $this->mockRepository
+            ->expects($this->once())
+            ->method('getLatestPaginated')
+            ->with('en', false, 10, 5, 'header', 'ASC')
+            ->willReturn([$mockRow]);
+
+        $result = $this->news->getLatestDataPaginated(false, 10, 5, 'header', 'ASC');
+
+        $this->assertCount(1, $result);
+        $this->assertSame(7, $result[0]['id']);
+        $this->assertSame('Paginated News', $result[0]['header']);
+        $this->assertSame('Paginated content', $result[0]['content']);
+        $this->assertSame('Paged Author', $result[0]['authorName']);
+        $this->assertSame('paged@example.org', $result[0]['authorEmail']);
+        $this->assertFalse($result[0]['active']);
+        $this->assertFalse($result[0]['allowComments']);
+        $this->assertSame('https://example.org/paginated', $result[0]['link']);
+        $this->assertSame('Paged link', $result[0]['linkTitle']);
+        $this->assertSame('_self', $result[0]['target']);
+        $this->assertStringContainsString('/news/7/en/paginated-news.html', $result[0]['url']);
+    }
+
+    public function testCountLatestData(): void
+    {
+        $this->mockRepository
+            ->expects($this->exactly(2))
+            ->method('countLatest')
+            ->with('en', $this->logicalOr(true, false))
+            ->willReturnMap([
+                ['en', true, 4],
+                ['en', false, 9],
+            ]);
+
+        $this->assertSame(4, $this->news->countLatestData());
+        $this->assertSame(9, $this->news->countLatestData(false));
     }
 
     public function testGetHeader(): void

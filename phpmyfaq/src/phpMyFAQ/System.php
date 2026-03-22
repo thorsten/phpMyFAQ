@@ -432,11 +432,11 @@ class System
                     continue;
                 }
 
-                if (str_contains((string) $file->getPath(), needle: '/multisites/')) {
+                if (str_contains((string) $file->getPath(), needle: '/multisite/')) {
                     continue;
                 }
 
-                if (str_contains((string) $file->getPath(), needle: '/upgrades/')) {
+                if (str_contains((string) $file->getPath(), needle: '/upgrade/')) {
                     continue;
                 }
 

@@ -31,7 +31,9 @@ class SystemTest extends TestCase
     public function testIsSqlite(): void
     {
         $this->assertTrue(System::isSqlite('sqlite3'));
+        $this->assertTrue(System::isSqlite('pdo_sqlite'));
         $this->assertFalse(System::isSqlite(''));
+        $this->assertFalse(System::isSqlite('pdo_mysql'));
     }
 
     public function testSetDatabase(): void
@@ -64,6 +66,30 @@ class SystemTest extends TestCase
         $result = $system->checkRequiredExtensions();
 
         $this->assertTrue($result);
+    }
+
+    public function testGetApiVersion(): void
+    {
+        $result = System::getApiVersion();
+
+        $this->assertIsString($result);
+        $this->assertNotEmpty($result);
+    }
+
+    public function testGetPluginVersion(): void
+    {
+        $result = System::getPluginVersion();
+
+        $this->assertIsString($result);
+        $this->assertNotEmpty($result);
+    }
+
+    public function testGetMcpServerVersion(): void
+    {
+        $result = System::getMcpServerVersion();
+
+        $this->assertIsString($result);
+        $this->assertNotEmpty($result);
     }
 
     public function testGetDocumentationUrl(): void
@@ -121,12 +147,89 @@ class SystemTest extends TestCase
         $this->assertTrue($result);
     }
 
+    public function testCheckInstallation(): void
+    {
+        $system = new System();
+        $result = $system->checkInstallation();
+
+        $this->assertIsBool($result);
+    }
+
     public function testGetMissingExtensions(): void
     {
         $system = new System();
         $result = $system->getMissingExtensions();
 
         $this->assertEquals([], $result);
+    }
+
+    public function testGetSystemUriWithHttpUrl(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDefaultUrl')->willReturn('http://example.com');
+
+        $system = new System();
+        $result = $system->getSystemUri($configuration);
+
+        $this->assertIsString($result);
+        $this->assertStringEndsWith('/', $result);
+    }
+
+    public function testGetSystemUriConvertsHttpToHttpsWhenSecure(): void
+    {
+        $_SERVER['HTTPS'] = 'on';
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDefaultUrl')->willReturn('http://example.com');
+
+        $system = new System();
+        $result = $system->getSystemUri($configuration);
+
+        $this->assertStringStartsWith('https://', $result);
+        $this->assertStringEndsWith('/', $result);
+
+        unset($_SERVER['HTTPS']);
+    }
+
+    public function testGetSystemUriWithTrailingSlash(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDefaultUrl')->willReturn('https://example.com/');
+
+        $system = new System();
+        $result = $system->getSystemUri($configuration);
+
+        $this->assertEquals('https://example.com/', $result);
+    }
+
+    public function testGetVersion(): void
+    {
+        $version = System::getVersion();
+
+        $this->assertIsString($version);
+        $this->assertMatchesRegularExpression('/^\d+\.\d+\.\d+(-\w+)?$/', $version);
+    }
+
+    public function testGetMajorVersion(): void
+    {
+        $majorVersion = System::getMajorVersion();
+
+        $this->assertIsString($majorVersion);
+        $this->assertMatchesRegularExpression('/^\d+\.\d+$/', $majorVersion);
+    }
+
+    public function testIsDevelopmentVersion(): void
+    {
+        $result = System::isDevelopmentVersion();
+
+        $this->assertIsBool($result);
+    }
+
+    public function testGetDatabaseReturnsNullByDefault(): void
+    {
+        $system = new System();
+
+        $this->assertNull($system->getDatabase());
     }
 
     /**
@@ -140,5 +243,34 @@ class SystemTest extends TestCase
         $this->assertIsString($result);
         $this->assertNotEmpty($result);
         $this->assertStringContainsString('created', $result);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateHashesExcludesMultisiteAndUpgrade(): void
+    {
+        $multisiteDir = PMF_ROOT_DIR . '/multisite/sub';
+        $upgradeDir = PMF_ROOT_DIR . '/upgrade/sub';
+
+        @mkdir($multisiteDir, 0755, true);
+        @mkdir($upgradeDir, 0755, true);
+
+        file_put_contents($multisiteDir . '/test.php', '<?php // test');
+        file_put_contents($upgradeDir . '/test.php', '<?php // test');
+
+        $system = new System();
+        $result = $system->createHashes();
+        $decoded = json_decode($result, true);
+
+        $this->assertArrayNotHasKey('/multisite/sub/test.php', $decoded);
+        $this->assertArrayNotHasKey('/upgrade/sub/test.php', $decoded);
+
+        @unlink($multisiteDir . '/test.php');
+        @unlink($upgradeDir . '/test.php');
+        @rmdir($multisiteDir);
+        @rmdir(PMF_ROOT_DIR . '/multisite');
+        @rmdir($upgradeDir);
+        @rmdir(PMF_ROOT_DIR . '/upgrade');
     }
 }

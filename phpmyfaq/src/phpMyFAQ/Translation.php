@@ -95,8 +95,7 @@ class Translation
                 }
             }
 
-            $currentLanguageTranslations = self::$translation->loadedLanguages[self::$translation->currentLanguage]
-            ?? [];
+            $currentLanguageTranslations = self::$translation->loadedLanguages[self::$translation->currentLanguage];
             if (array_key_exists($key, $currentLanguageTranslations) && $currentLanguageTranslations[$key] !== '') {
                 return $currentLanguageTranslations[$key];
             }
@@ -151,14 +150,12 @@ class Translation
             }
 
             // Original core logic
-            $currentLanguageTranslations = self::$translation->loadedLanguages[self::$translation->currentLanguage]
-            ?? [];
+            $currentLanguageTranslations = self::$translation->loadedLanguages[self::$translation->currentLanguage];
             if (array_key_exists($key, $currentLanguageTranslations)) {
                 return true;
             }
 
-            $defaultLanguageTranslations = self::$translation->loadedLanguages[self::$translation->defaultLanguage]
-            ?? [];
+            $defaultLanguageTranslations = self::$translation->loadedLanguages[self::$translation->defaultLanguage];
             if (array_key_exists($key, $defaultLanguageTranslations)) {
                 return true;
             }
