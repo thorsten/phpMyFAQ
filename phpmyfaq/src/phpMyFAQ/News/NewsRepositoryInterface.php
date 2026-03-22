@@ -35,6 +35,20 @@ interface NewsRepositoryInterface
     /**
      * @return iterable<stdClass>
      */
+    public function getLatestPaginated(
+        string $language,
+        bool $active = true,
+        int $limit = 25,
+        int $offset = 0,
+        string $sortField = 'datum',
+        string $sortOrder = 'DESC',
+    ): iterable;
+
+    public function countLatest(string $language, bool $active = true): int;
+
+    /**
+     * @return iterable<stdClass>
+     */
     public function getHeaders(string $language): iterable;
 
     public function getById(int $newsId, string $language): ?stdClass;

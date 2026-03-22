@@ -275,4 +275,369 @@ class TranslationTest extends TestCase
         $pluginValue = Translation::get('plugin.TestPlugin.test.key');
         $this->assertNull($pluginValue, 'Plugin namespace should be isolated from core');
     }
+
+    public function testGetStringReturnsStringValue(): void
+    {
+        $value = Translation::getString('test.key');
+
+        $this->assertSame('Default Label', $value);
+    }
+
+    public function testGetStringReturnsEmptyStringForUnknownKey(): void
+    {
+        $value = Translation::getString('unknown.key');
+
+        $this->assertSame('', $value);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetAllReturnsCurrentLanguageTranslations(): void
+    {
+        $all = Translation::getAll();
+
+        $this->assertIsArray($all);
+        $this->assertArrayHasKey('test.key', $all);
+    }
+
+    public function testSetMultiByteLanguage(): void
+    {
+        $translation = Translation::getInstance();
+        $translation->setMultiByteLanguage();
+
+        $this->assertSame('UTF-8', mb_internal_encoding());
+    }
+
+    public function testGetCurrentLanguage(): void
+    {
+        $language = Translation::getInstance()->getCurrentLanguage();
+
+        $this->assertSame('de', $language);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSetTranslationsDirWithInvalidDirectoryThrowsException(): void
+    {
+        $this->expectException(Exception::class);
+
+        Translation::getInstance()->setTranslationsDir('/nonexistent/directory');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSetDefaultLanguageWithInvalidLanguageThrowsException(): void
+    {
+        $this->expectException(Exception::class);
+
+        Translation::getInstance()->setDefaultLanguage('xx');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testHasReturnsTrueForKeyOnlyInDefaultLanguage(): void
+    {
+        // 'test.key' in de is '' (empty), but in en is 'Default Label'
+        // has() checks array_key_exists, so it will find it in current language first
+        // We need a key that only exists in the default language
+        $translationsDir = __DIR__ . '/_translations';
+
+        file_put_contents(
+            $translationsDir . '/language_en.php',
+            "<?php\n\n"
+            . "\$LANG_CONF['main.dateFormat'] = ['select', 'English date format', 'Date format help'];\n"
+            . "\$LANG_CONF['main.maintenanceMode'] = ['checkbox', 'Maintenance mode', 'Maintenance help'];\n"
+            . "\$LANG_CONF['records.maxAttachmentSize'] = ['text', 'Maximum attachment size: %s', 'Attachment help'];\n\n"
+            . "return [\n"
+            . "    'test.key' => 'Default Label',\n"
+            . "    'english.only' => 'Only in English',\n"
+            . "];\n",
+        );
+
+        Translation::resetInstance();
+        Translation::create()
+            ->setTranslationsDir($translationsDir)
+            ->setDefaultLanguage('en')
+            ->setCurrentLanguage('de');
+
+        $this->assertTrue(
+            Translation::has('english.only'),
+            'has() should return true for keys that exist only in the default language.',
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testPluginHasReturnsTrueForKeyInDefaultLanguageOnly(): void
+    {
+        $pluginTranslationsDir = __DIR__ . '/_translations/DefaultOnlyPlugin';
+        if (!is_dir($pluginTranslationsDir)) {
+            mkdir($pluginTranslationsDir, 0777, true);
+        }
+
+        file_put_contents(
+            $pluginTranslationsDir . '/language_en.php',
+            "<?php\n\n\$PMF_LANG['defaultKey'] = 'English value';\n",
+        );
+
+        Translation::getInstance()->registerPluginTranslations('DefaultOnlyPlugin', $pluginTranslationsDir);
+
+        $this->assertTrue(
+            Translation::has('plugin.DefaultOnlyPlugin.defaultKey'),
+            'has() should return true for plugin keys existing only in default language',
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testRegisterPluginTranslationsSkipsInvalidFilenames(): void
+    {
+        $pluginTranslationsDir = __DIR__ . '/_translations/InvalidPlugin';
+        if (!is_dir($pluginTranslationsDir)) {
+            mkdir($pluginTranslationsDir, 0777, true);
+        }
+
+        // File matches the glob pattern (language_*) but not the regex for valid language codes
+        file_put_contents(
+            $pluginTranslationsDir . '/language_!!!.php',
+            "<?php\n\n\$PMF_LANG['key'] = 'value';\n",
+        );
+
+        Translation::getInstance()->registerPluginTranslations('InvalidPlugin', $pluginTranslationsDir);
+
+        $this->assertNull(
+            Translation::get('plugin.InvalidPlugin.key'),
+            'Should not register translations from files not matching the language code pattern',
+        );
+    }
+
+    public function testHasReturnsTrueForKeyInCurrentLanguage(): void
+    {
+        // 'test.zero' exists in de with value '0', so has() should find it in current language
+        $this->assertTrue(
+            Translation::has('test.zero'),
+            'has() should return true for keys that exist in the current language.',
+        );
+    }
+
+    public function testHasReturnsTrueForKeyInDefaultLanguageOnly(): void
+    {
+        // 'english.only' only exists in en (default), not in de (current)
+        $translationsDir = __DIR__ . '/_translations';
+
+        file_put_contents(
+            $translationsDir . '/language_en.php',
+            "<?php\n\n"
+            . "\$LANG_CONF['main.dateFormat'] = ['select', 'English date format', 'Date format help'];\n"
+            . "\$LANG_CONF['main.maintenanceMode'] = ['checkbox', 'Maintenance mode', 'Maintenance help'];\n"
+            . "\$LANG_CONF['records.maxAttachmentSize'] = ['text', 'Maximum attachment size: %s', 'Attachment help'];\n\n"
+            . "return [\n"
+            . "    'test.key' => 'Default Label',\n"
+            . "    'default.only' => 'Only in default',\n"
+            . "];\n",
+        );
+
+        Translation::resetInstance();
+        Translation::create()
+            ->setTranslationsDir($translationsDir)
+            ->setDefaultLanguage('en')
+            ->setCurrentLanguage('de');
+
+        // 'default.only' does not exist in de, but exists in en
+        $this->assertTrue(
+            Translation::has('default.only'),
+            'has() should return true for keys only in default language.',
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testPluginHasReturnsTrueForKeyInCurrentLanguage(): void
+    {
+        $pluginTranslationsDir = __DIR__ . '/_translations/CurrentLangPlugin';
+        if (!is_dir($pluginTranslationsDir)) {
+            mkdir($pluginTranslationsDir, 0777, true);
+        }
+
+        file_put_contents(
+            $pluginTranslationsDir . '/language_de.php',
+            "<?php\n\n\$PMF_LANG['currentKey'] = 'German value';\n",
+        );
+
+        Translation::getInstance()->registerPluginTranslations('CurrentLangPlugin', $pluginTranslationsDir);
+
+        $this->assertTrue(
+            Translation::has('plugin.CurrentLangPlugin.currentKey'),
+            'has() should return true for plugin keys existing in current language',
+        );
+    }
+
+    public function testGetReturnsValueFromCurrentLanguageWhenNotEmpty(): void
+    {
+        // 'test.zero' is '0' in de which is not empty string
+        $value = Translation::get('test.zero');
+
+        $this->assertSame('0', $value);
+    }
+
+    public function testGetReturnsFallbackFromDefaultLanguage(): void
+    {
+        // 'test.key' in de is '' (empty), should fall back to en's 'Default Label'
+        $value = Translation::get('test.key');
+
+        $this->assertSame('Default Label', $value);
+    }
+
+    public function testCreateReturnsSameInstance(): void
+    {
+        $instance1 = Translation::create();
+        $instance2 = Translation::create();
+
+        $this->assertSame($instance1, $instance2);
+    }
+
+    public function testGetFallsBackWhenCurrentLanguageNotInLoadedLanguages(): void
+    {
+        $instance = Translation::getInstance();
+
+        // Set current language to something that has no translations loaded
+        // but whose file would be the same as default (so checkCurrentLanguage falls back)
+        // Instead, we set it to a language code that doesn't have a file
+        // checkLanguageLoaded -> ensureLanguageLoaded -> checkCurrentLanguage resets to default
+        // Then the ?? [] at line 99 won't trigger because it falls back to default.
+
+        // Alternative: set currentLanguage to a value that IS loaded (en) but different from default
+        // by manipulating the loaded languages to have 'fr' with no 'test.key'
+        $loadedRef = new \ReflectionProperty(Translation::class, 'loadedLanguages');
+        $loaded = $loadedRef->getValue($instance);
+        $loaded['fr'] = ['other.key' => 'French other'];
+        $loadedRef->setValue($instance, $loaded);
+
+        $currentRef = new \ReflectionProperty(Translation::class, 'currentLanguage');
+        $currentRef->setValue($instance, 'fr');
+
+        // get('test.key') — 'fr' is loaded but doesn't have 'test.key'
+        // so it falls through to default language
+        $value = Translation::get('test.key');
+        $this->assertSame('Default Label', $value);
+
+        // Restore
+        $currentRef->setValue($instance, 'de');
+        unset($loaded['fr']);
+        $loadedRef->setValue($instance, $loaded);
+    }
+
+    public function testHasChecksDefaultLanguageWhenKeyNotInCurrentLanguage(): void
+    {
+        $instance = Translation::getInstance();
+
+        // Set current language to 'fr' which has a loaded but different set of keys
+        $loadedRef = new \ReflectionProperty(Translation::class, 'loadedLanguages');
+        $loaded = $loadedRef->getValue($instance);
+        $loaded['fr'] = ['other.key' => 'French other'];
+        $loadedRef->setValue($instance, $loaded);
+
+        $currentRef = new \ReflectionProperty(Translation::class, 'currentLanguage');
+        $currentRef->setValue($instance, 'fr');
+
+        // has('test.key') — not in 'fr', but exists in 'en' (default)
+        $result = Translation::has('test.key');
+        $this->assertTrue($result);
+
+        // Restore
+        $currentRef->setValue($instance, 'de');
+        unset($loaded['fr']);
+        $loadedRef->setValue($instance, $loaded);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetInstanceCreatesNewInstanceWhenNull(): void
+    {
+        Translation::resetInstance();
+
+        $instance = Translation::getInstance();
+
+        $this->assertInstanceOf(Translation::class, $instance);
+
+        // Re-initialize for other tests
+        $translationsDir = __DIR__ . '/_translations';
+        $instance
+            ->setTranslationsDir($translationsDir)
+            ->setDefaultLanguage('en')
+            ->setCurrentLanguage('de');
+    }
+
+    public function testGetReturnsNullWhenNotInitialized(): void
+    {
+        // Save the current Configuration instance
+        $configRef = new \ReflectionProperty(Configuration::class, 'configuration');
+        $savedConfig = $configRef->getValue();
+
+        // Set up a mock Configuration with a logger
+        $logger = $this->createMock(\Monolog\Logger::class);
+        $logger->method('error');
+
+        $mockConfig = $this->createStub(Configuration::class);
+        $mockConfig->method('getLogger')->willReturn($logger);
+        $configRef->setValue(null, $mockConfig);
+
+        Translation::resetInstance();
+
+        $instance = Translation::create();
+
+        $reflection = new \ReflectionProperty(Translation::class, 'translationsDir');
+        $reflection->setValue($instance, '/nonexistent/path');
+
+        $reflectionReady = new \ReflectionProperty(Translation::class, 'isReady');
+        $reflectionReady->setValue($instance, false);
+
+        $value = Translation::get('test.key');
+
+        $this->assertNull($value, 'get() should return null when initialization fails');
+
+        // Restore the original Configuration
+        $configRef->setValue(null, $savedConfig);
+
+        // Re-initialize for other tests
+        $translationsDir = __DIR__ . '/_translations';
+        Translation::resetInstance();
+        Translation::create()
+            ->setTranslationsDir($translationsDir)
+            ->setDefaultLanguage('en')
+            ->setCurrentLanguage('de');
+    }
+
+    public function testHasReturnsFalseWhenNotInitialized(): void
+    {
+        Translation::resetInstance();
+
+        $instance = Translation::create();
+
+        $reflection = new \ReflectionProperty(Translation::class, 'translationsDir');
+        $reflection->setValue($instance, '/nonexistent/path');
+
+        $reflectionReady = new \ReflectionProperty(Translation::class, 'isReady');
+        $reflectionReady->setValue($instance, false);
+
+        $result = Translation::has('test.key');
+
+        $this->assertFalse($result, 'has() should return false when initialization fails');
+
+        // Re-initialize for other tests
+        $translationsDir = __DIR__ . '/_translations';
+        Translation::resetInstance();
+        Translation::create()
+            ->setTranslationsDir($translationsDir)
+            ->setDefaultLanguage('en')
+            ->setCurrentLanguage('de');
+    }
 }

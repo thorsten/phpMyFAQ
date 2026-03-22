@@ -24,7 +24,7 @@ class NewsRepositoryTest extends TestCase
     private ?Configuration $previousConfiguration = null;
     private mixed $previousDatabaseDriver = null;
     private mixed $previousDbType = null;
-    private string $previousTablePrefix = '';
+    private ?string $previousTablePrefix = null;
 
     protected function setUp(): void
     {
@@ -60,7 +60,7 @@ class NewsRepositoryTest extends TestCase
         $databaseDriverProperty->setValue(null, $this->previousDatabaseDriver);
         $dbTypeProperty = $databaseReflection->getProperty('dbType');
         $dbTypeProperty->setValue(null, $this->previousDbType);
-        Database::setTablePrefix($this->previousTablePrefix);
+        Database::setTablePrefix($this->previousTablePrefix ?? '');
 
         if (isset($this->dbHandle)) {
             $this->dbHandle->close();
