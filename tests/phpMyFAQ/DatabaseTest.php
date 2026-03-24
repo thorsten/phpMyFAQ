@@ -4,6 +4,7 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -12,19 +13,34 @@ use PHPUnit\Framework\TestCase;
 class DatabaseTest extends TestCase
 {
     private string $sqliteTestFile;
+    private mixed $originalDatabaseDriver;
+    private string $originalDbType;
+    private ?string $originalTablePrefix;
 
     protected function setUp(): void
     {
         parent::setUp();
 
+        $this->originalDatabaseDriver = $this->getStaticPropertyValue('databaseDriver');
+        $this->originalDbType = $this->getStaticPropertyValue('dbType');
+        $this->originalTablePrefix = $this->getStaticPropertyValue('tablePrefix');
+
         $this->sqliteTestFile = tempnam(sys_get_temp_dir(), 'pmf-db-test-');
         if ($this->sqliteTestFile === false) {
             $this->fail('Could not create temporary SQLite test file.');
         }
+
+        $this->setStaticPropertyValue('databaseDriver', null);
+        $this->setStaticPropertyValue('dbType', '');
+        $this->setStaticPropertyValue('tablePrefix', null);
     }
 
     protected function tearDown(): void
     {
+        $this->setStaticPropertyValue('databaseDriver', $this->originalDatabaseDriver);
+        $this->setStaticPropertyValue('dbType', $this->originalDbType);
+        $this->setStaticPropertyValue('tablePrefix', $this->originalTablePrefix);
+
         parent::tearDown();
 
         if (isset($this->sqliteTestFile) && is_file($this->sqliteTestFile)) {
@@ -42,12 +58,41 @@ class DatabaseTest extends TestCase
         $this->assertInstanceOf(Sqlite3::class, $driver);
     }
 
+    /**
+     * @throws Exception
+     */
+    public function testFactoryReturnsPdoDriverForPdoType(): void
+    {
+        $driver = Database::factory('pdo_sqlite');
+
+        $this->assertInstanceOf(PdoSqlite::class, $driver);
+    }
+
+    public function testFactoryThrowsExceptionForInvalidType(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid Database Type: invalid');
+
+        Database::factory('invalid');
+    }
+
     public function testGetInstance(): void
     {
         $instance = Database::getInstance();
 
         $this->assertInstanceOf(Sqlite3::class, $instance);
         $this->assertSame($instance, Database::getInstance());
+    }
+
+    public function testGetInstanceCreatesDriverWhenNoneExists(): void
+    {
+        $this->setStaticPropertyValue('databaseDriver', null);
+        $this->setStaticPropertyValue('dbType', '');
+
+        $instance = Database::getInstance();
+
+        $this->assertInstanceOf(Sqlite3::class, $instance);
+        $this->assertSame('sqlite3', Database::getType());
     }
 
     public function testGetType(): void
@@ -259,5 +304,18 @@ class DatabaseTest extends TestCase
         $checkResult = $db->query("SELECT COUNT(*) as count FROM test_cleanup WHERE temp_data = 'temp'");
         $row = $db->fetchObject($checkResult);
         $this->assertEquals(0, $row->count);
+    }
+
+    private function getStaticPropertyValue(string $property): mixed
+    {
+        $reflection = new \ReflectionProperty(Database::class, $property);
+
+        return $reflection->getValue(null);
+    }
+
+    private function setStaticPropertyValue(string $property, mixed $value): void
+    {
+        $reflection = new \ReflectionProperty(Database::class, $property);
+        $reflection->setValue(null, $value);
     }
 }

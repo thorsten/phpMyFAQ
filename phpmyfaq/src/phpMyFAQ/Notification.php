@@ -148,7 +148,7 @@ readonly class Notification
      */
     public function sendFaqCommentNotification(Faq $faq, Comment $comment): void
     {
-        $category = new Category($this->configuration);
+        $category = $this->createCategory();
         $emailTo = $this->configuration->getAdminEmail();
 
         if ($faq->faqRecord['email'] !== '') {
@@ -194,11 +194,11 @@ readonly class Notification
         $send[$this->configuration->getAdminEmail()] = 1;
 
         // Let the category owner of a FAQ get a copy of the message
-        $category = new Category($this->configuration);
+        $category = $this->createCategory();
         $categories = $category->getCategoryIdsFromFaq((int) $faq->faqRecord['id']);
         foreach ($categories as $_category) {
             $userId = $category->getOwner($_category);
-            $catUser = new User($this->configuration);
+            $catUser = $this->createUser();
             $catUser->getUserById($userId);
             $catOwnerEmail = $catUser->getUserData(field: 'email');
 
@@ -280,7 +280,7 @@ readonly class Notification
 
         $userId = $this->category->getOwner($questionEntity->getCategoryId());
         try {
-            $oUser = new User($this->configuration);
+            $oUser = $this->createUser();
             $oUser->getUserById($userId);
             $userEmail = $oUser->getUserData(field: 'email');
             if (!is_string($userEmail) || $userEmail === '') {
@@ -349,5 +349,18 @@ readonly class Notification
         } catch (\Throwable $exception) {
             $this->configuration->getLogger()->error('Web Push notification failed: ' . $exception->getMessage());
         }
+    }
+
+    protected function createCategory(): Category
+    {
+        return new Category($this->configuration);
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function createUser(): User
+    {
+        return new User($this->configuration);
     }
 }

@@ -4,6 +4,7 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\InstanceEntity;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
@@ -73,6 +74,24 @@ class InstanceTest extends TestCase
         $this->instance->delete($id);
     }
 
+    public function testCreateReturnsZeroWhenInsertFails(): void
+    {
+        $db = $this->createMock(Database\Sqlite3::class);
+        $db->method('nextId')->willReturn(99);
+        $db->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $db->method('now')->willReturn('20260323000000');
+        $db->method('query')->willReturn(false);
+
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        $instance = new Instance($configuration);
+        $entity = new InstanceEntity();
+        $entity->setUrl('https://example.com')->setInstance('Failure')->setComment('Failure path');
+
+        $this->assertSame(0, $instance->create($entity));
+    }
+
     public function testGetAll(): void
     {
         $instances = $this->instance->getAll();
@@ -126,6 +145,36 @@ class InstanceTest extends TestCase
 
         $this->instance->addConfig('foo', 'bar');
         $this->assertEquals('bar', $this->instance->getConfig('foo'));
+
+        $this->instance->delete($id);
+    }
+
+    public function testDeleteReturnsFalseWhenOneDeleteQueryFails(): void
+    {
+        $db = $this->createMock(Database\Sqlite3::class);
+        $db->expects($this->exactly(2))
+            ->method('query')
+            ->willReturnOnConsecutiveCalls(true, false);
+
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        $instance = new Instance($configuration);
+
+        $this->assertFalse($instance->delete(123));
+    }
+
+    public function testGetConfigConvertsStringBooleans(): void
+    {
+        $instance = new InstanceEntity();
+        $instance->setUrl('http://two.localhost')->setInstance('Second localhost')->setComment('Test instance');
+        $id = $this->instance->create($instance);
+
+        $this->instance->addConfig('feature_enabled', 'true');
+        $this->instance->addConfig('feature_disabled', 'false');
+
+        $this->assertTrue($this->instance->getConfig('feature_enabled'));
+        $this->assertFalse($this->instance->getConfig('feature_disabled'));
 
         $this->instance->delete($id);
     }

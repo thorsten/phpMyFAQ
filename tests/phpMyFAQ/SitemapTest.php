@@ -14,7 +14,10 @@ use phpMyFAQ\Configuration\Storage\ConfigurationStorageSettingsResolver;
 use phpMyFAQ\Configuration\Storage\DatabaseConfigurationStore;
 use phpMyFAQ\Configuration\Storage\HybridConfigurationStore;
 use phpMyFAQ\Configuration\UrlSettings;
+use phpMyFAQ\Database\PdoMysql;
+use phpMyFAQ\Database\PdoPgsql;
 use phpMyFAQ\Database\PdoSqlite;
+use phpMyFAQ\Database\PdoSqlsrv;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Language\LanguageDetector;
 use phpMyFAQ\Link\Strategy\GenericPathStrategy;
@@ -45,7 +48,10 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[UsesClass(HybridConfigurationStore::class)]
 #[UsesClass(UrlSettings::class)]
 #[UsesClass(Database::class)]
+#[UsesClass(PdoMysql::class)]
+#[UsesClass(PdoPgsql::class)]
 #[UsesClass(PdoSqlite::class)]
+#[UsesClass(PdoSqlsrv::class)]
 #[UsesClass(Environment::class)]
 #[UsesClass(Filter::class)]
 #[UsesClass(Language::class)]
