@@ -246,7 +246,13 @@ class Search
                 continue;
             }
 
-            $searchConditions[] = sprintf("(page_title LIKE '%%%s%%' OR content LIKE '%%%s%%')", $word, $word);
+            // Escape LIKE metacharacters (%, _) to prevent wildcard injection
+            $escapedWord = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $word);
+            $searchConditions[] = sprintf(
+                "(page_title LIKE '%%%s%%' ESCAPE '\\' OR content LIKE '%%%s%%' ESCAPE '\\')",
+                $escapedWord,
+                $escapedWord,
+            );
         }
 
         if ($searchConditions === []) {

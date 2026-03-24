@@ -85,7 +85,7 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
                 ? ", plainto_tsquery('" . $this->configuration->getDb()->escape($searchTerm) . "') query "
                 : '',
             $this->getMatchingColumns(),
-            $this->configuration->getDb()->escape($searchTerm),
+            self::escapeLikeWildcards($this->configuration->getDb()->escape($searchTerm)),
             $this->getConditions(),
             $orderBy,
         );

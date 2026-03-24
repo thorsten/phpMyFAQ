@@ -74,7 +74,7 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
                 FROM
                     %s %s %s %s
                 WHERE
-                    (%s) ILIKE ('%%%s%%')
+                    (%s) ILIKE ('%%%s%%') ESCAPE '\\'
                     %s
                     %s",
             $columns,
@@ -85,7 +85,7 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
                 ? ", plainto_tsquery('" . $this->configuration->getDb()->escape($searchTerm) . "') query "
                 : '',
             $this->getMatchingColumns(),
-            $this->configuration->getDb()->escape($searchTerm),
+            self::escapeLikeWildcards($this->configuration->getDb()->escape($searchTerm)),
             $this->getConditions(),
             $orderBy,
         );

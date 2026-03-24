@@ -148,7 +148,7 @@ class SearchDatabaseTest extends TestCase
     public function testGetMatchClause()
     {
         $this->searchDatabase->setMatchingColumns(['faqdata.author']);
-        $this->assertEquals(" (faqdata.author LIKE '%Thorsten%')", $this->searchDatabase->getMatchClause('Thorsten'));
+        $this->assertEquals(" (faqdata.author LIKE '%Thorsten%' ESCAPE '\\')", $this->searchDatabase->getMatchClause('Thorsten'));
         $this->assertIsString($this->searchDatabase->getMatchClause('Thorsten'));
     }
 
@@ -156,7 +156,7 @@ class SearchDatabaseTest extends TestCase
     {
         $this->searchDatabase->setMatchingColumns(['faqdata.author']);
         $this->assertEquals(
-            " (faqdata.author LIKE '%Thorsten%') OR (faqdata.author LIKE '%Rinne%')",
+            " (faqdata.author LIKE '%Thorsten%' ESCAPE '\\') OR (faqdata.author LIKE '%Rinne%' ESCAPE '\\')",
             $this->searchDatabase->getMatchClause('Thorsten Rinne'),
         );
         $this->assertIsString($this->searchDatabase->getMatchClause('Thorsten'));
@@ -166,7 +166,7 @@ class SearchDatabaseTest extends TestCase
     {
         $this->searchDatabase->setMatchingColumns(['faqdata.author', 'faqdata.thema']);
         $this->assertEquals(
-            " (faqdata.author LIKE '%Thorsten%' OR faqdata.thema LIKE '%Thorsten%')",
+            " (faqdata.author LIKE '%Thorsten%' ESCAPE '\\' OR faqdata.thema LIKE '%Thorsten%' ESCAPE '\\')",
             $this->searchDatabase->getMatchClause('Thorsten'),
         );
         $this->assertIsString($this->searchDatabase->getMatchClause('Thorsten'));
