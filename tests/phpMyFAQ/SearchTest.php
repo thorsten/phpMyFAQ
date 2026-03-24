@@ -580,4 +580,186 @@ class SearchTest extends TestCase
 
         $this->assertSame([], $search->getMostPopularSearches(5, false, 9));
     }
+
+    // =========================================================================
+    // LIKE wildcard injection tests for searchCustomPages()
+    // =========================================================================
+
+    /**
+     * Helper to insert test custom pages and clean up after test.
+     */
+    private function insertCustomPages(): void
+    {
+        $this->dbHandle->query(
+            'INSERT INTO faqcustompages (id, lang, page_title, slug, content, author_name, author_email, active, created, updated) VALUES '
+            . "(601, 'en', 'FAQ Setup Guide', 'faq-setup', 'How to configure your FAQ system', 'Test', 'test@example.org', 'y', '2024-01-01 00:00:00', '2024-01-01 00:00:00'),"
+            . "(602, 'en', 'API Documentation', 'api-docs', 'REST API endpoints and authentication', 'Test', 'test@example.org', 'y', '2024-01-01 00:00:00', '2024-01-01 00:00:00'),"
+            . "(603, 'en', 'Internal Credentials Page', 'internal-creds', 'Database password: secret_value_123', 'Test', 'test@example.org', 'y', '2024-01-01 00:00:00', '2024-01-01 00:00:00'),"
+            . "(604, 'en', 'Release Notes v4.1', 'release-notes', 'Bug fixes and improvements for version 4.1', 'Test', 'test@example.org', 'y', '2024-01-01 00:00:00', '2024-01-01 00:00:00'),"
+            . "(605, 'de', 'Deutsche Seite', 'de-page', 'Inhalt auf Deutsch', 'Test', 'test@example.org', 'y', '2024-01-01 00:00:00', '2024-01-01 00:00:00')",
+        );
+    }
+
+    private function deleteCustomPages(): void
+    {
+        $this->dbHandle->query('DELETE FROM faqcustompages WHERE id IN (601, 602, 603, 604, 605)');
+    }
+
+    public function testSearchCustomPagesDoesNotMatchAllRecordsWithPercentWildcard(): void
+    {
+        $this->insertCustomPages();
+
+        // "_%_" is 3 chars, passes the strlen > 2 filter.
+        // Without the fix, this would generate LIKE '%_%_%' matching virtually all rows.
+        $result = $this->invokePrivateMethod($this->search, 'searchCustomPages', '_%_', true);
+
+        // The literal string "_%_" does not appear in any of our test pages,
+        // so the result should be empty.
+        $this->assertCount(0, $result);
+
+        $this->deleteCustomPages();
+    }
+
+    public function testSearchCustomPagesDoesNotMatchWithPercentOnlyTerm(): void
+    {
+        $this->insertCustomPages();
+
+        // "%%%" is 3 chars. Without fix, LIKE '%%%%%' matches everything.
+        $result = $this->invokePrivateMethod($this->search, 'searchCustomPages', '%%%', true);
+
+        $this->assertCount(0, $result);
+
+        $this->deleteCustomPages();
+    }
+
+    public function testSearchCustomPagesDoesNotMatchWithUnderscoreWildcard(): void
+    {
+        $this->insertCustomPages();
+
+        // "F_Q" should NOT match "FAQ" because _ must be treated as literal.
+        $result = $this->invokePrivateMethod($this->search, 'searchCustomPages', 'F_Q', true);
+
+        $this->assertCount(0, $result);
+
+        $this->deleteCustomPages();
+    }
+
+    public function testSearchCustomPagesMatchesExactTermWithPercent(): void
+    {
+        // Insert a page that literally contains "100% complete" in the content
+        $this->dbHandle->query(
+            'INSERT INTO faqcustompages (id, lang, page_title, slug, content, author_name, author_email, active, created, updated) VALUES '
+            . "(610, 'en', 'Progress Report', 'progress', 'The migration is 100% complete now', 'Test', 'test@example.org', 'y', '2024-01-01 00:00:00', '2024-01-01 00:00:00')",
+        );
+
+        // Searching for "100%" should still find this page (the % is literal in the content)
+        $result = $this->invokePrivateMethod($this->search, 'searchCustomPages', '100%', true);
+
+        $this->assertCount(1, $result);
+        $this->assertSame('Progress Report', $result[0]->question);
+
+        $this->dbHandle->query('DELETE FROM faqcustompages WHERE id = 610');
+    }
+
+    public function testSearchCustomPagesMatchesExactTermWithUnderscore(): void
+    {
+        // Insert a page that literally contains "my_variable" in the content
+        $this->dbHandle->query(
+            'INSERT INTO faqcustompages (id, lang, page_title, slug, content, author_name, author_email, active, created, updated) VALUES '
+            . "(611, 'en', 'Code Docs', 'code-docs', 'Use my_variable to store the value', 'Test', 'test@example.org', 'y', '2024-01-01 00:00:00', '2024-01-01 00:00:00')",
+        );
+
+        // Searching for "my_variable" should find the page (literal underscore match)
+        $result = $this->invokePrivateMethod($this->search, 'searchCustomPages', 'my_variable', true);
+
+        $this->assertCount(1, $result);
+        $this->assertSame('Code Docs', $result[0]->question);
+
+        $this->dbHandle->query('DELETE FROM faqcustompages WHERE id = 611');
+    }
+
+    public function testSearchCustomPagesLiteralSearchStillWorks(): void
+    {
+        $this->insertCustomPages();
+
+        // Normal search should still find matching pages
+        $result = $this->invokePrivateMethod($this->search, 'searchCustomPages', 'FAQ Setup', true);
+
+        $this->assertCount(1, $result);
+        $this->assertSame('FAQ Setup Guide', $result[0]->question);
+
+        $this->deleteCustomPages();
+    }
+
+    public function testSearchCustomPagesDoesNotMatchWithMixedWildcards(): void
+    {
+        $this->insertCustomPages();
+
+        // "a%b_c" contains both wildcards, should be treated literally
+        $result = $this->invokePrivateMethod($this->search, 'searchCustomPages', 'a%b_c', true);
+
+        $this->assertCount(0, $result);
+
+        $this->deleteCustomPages();
+    }
+
+    public function testSearchCustomPagesWildcardDoesNotDumpAllPages(): void
+    {
+        $this->insertCustomPages();
+
+        // "___" (three underscores) would match any 3-char substring without fix.
+        // With fix, it searches for literal "___" which appears nowhere.
+        $result = $this->invokePrivateMethod($this->search, 'searchCustomPages', '___', true);
+
+        $this->assertCount(0, $result);
+
+        $this->deleteCustomPages();
+    }
+
+    public function testSearchCustomPagesWildcardPercentUnderscoreCombo(): void
+    {
+        $this->insertCustomPages();
+
+        // "%_%_%_%" is 7 chars, passes filter. Without fix, matches almost everything.
+        $result = $this->invokePrivateMethod($this->search, 'searchCustomPages', '%_%_%_%', true);
+
+        $this->assertCount(0, $result);
+
+        $this->deleteCustomPages();
+    }
+
+    public function testSearchCustomPagesMultipleWordsWithWildcards(): void
+    {
+        $this->insertCustomPages();
+
+        // "FAQ _%_" — "FAQ" is a real match, but "_%_" should not broaden it
+        $result = $this->invokePrivateMethod($this->search, 'searchCustomPages', 'FAQ _%_', true);
+
+        // Should find pages matching "FAQ" literally, but not everything
+        foreach ($result as $row) {
+            $this->assertTrue(
+                str_contains($row->question, 'FAQ') || str_contains($row->answer, 'FAQ'),
+                'All results should contain the literal word "FAQ"',
+            );
+        }
+
+        $this->deleteCustomPages();
+    }
+
+    public function testSearchCustomPagesBackslashInSearchTerm(): void
+    {
+        // Insert a page with a literal backslash in content
+        $this->dbHandle->query(
+            'INSERT INTO faqcustompages (id, lang, page_title, slug, content, author_name, author_email, active, created, updated) VALUES '
+            . "(612, 'en', 'Windows Paths', 'win-paths', 'Use C:\\\\Users\\\\path for Windows', 'Test', 'test@example.org', 'y', '2024-01-01 00:00:00', '2024-01-01 00:00:00')",
+        );
+
+        // Search with a backslash should not cause SQL errors
+        $result = $this->invokePrivateMethod($this->search, 'searchCustomPages', 'C:\\Users', true);
+
+        // Whether it matches depends on escape handling, but it must not error out
+        $this->assertIsArray($result);
+
+        $this->dbHandle->query('DELETE FROM faqcustompages WHERE id = 612');
+    }
 }
