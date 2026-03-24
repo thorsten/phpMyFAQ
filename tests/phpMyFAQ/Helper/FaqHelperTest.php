@@ -23,6 +23,8 @@ class FaqHelperTest extends TestCase
     /** @var FaqHelper*/
     private FaqHelper $faqHelper;
 
+    private string $sqliteTestFile;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -35,8 +37,15 @@ class FaqHelperTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
+        $this->sqliteTestFile = tempnam(sys_get_temp_dir(), 'pmf-faq-helper-');
+        if ($this->sqliteTestFile === false) {
+            $this->fail('Could not create temporary SQLite test file.');
+        }
+
+        copy(PMF_TEST_DIR . '/test.db', $this->sqliteTestFile);
+
         $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle->connect($this->sqliteTestFile, '', '');
         $this->configuration = new Configuration($dbHandle);
         $this->configuration->set('main.currentVersion', System::getVersion());
         $this->configuration->set('main.referenceURL', 'https://localhost:443/');
@@ -48,6 +57,15 @@ class FaqHelperTest extends TestCase
         $this->configuration->setLanguage($language);
 
         $this->faqHelper = new FaqHelper($this->configuration);
+    }
+
+    protected function tearDown(): void
+    {
+        if (isset($this->sqliteTestFile) && is_file($this->sqliteTestFile)) {
+            @unlink($this->sqliteTestFile);
+        }
+
+        parent::tearDown();
     }
 
     public function testRewriteUrlFragments(): void

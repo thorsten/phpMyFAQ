@@ -66,8 +66,7 @@ class Database
     public static function getInstance(): ?DatabaseDriver
     {
         if (null === self::$databaseDriver) {
-            $className = self::class;
-            self::$databaseDriver = new $className();
+            self::$databaseDriver = self::factory(self::$dbType !== '' ? self::$dbType : 'sqlite3');
         }
 
         return self::$databaseDriver;

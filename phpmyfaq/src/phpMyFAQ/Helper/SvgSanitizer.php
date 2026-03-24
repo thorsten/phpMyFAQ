@@ -5,7 +5,7 @@
  * Alternative implementation without ext-dom dependency
  *
  * Decodes all HTML/XML entities before pattern matching to prevent
- * encoding-based bypasses (e.g. &#106;&#97;&#118;&#97;... → javascript:).
+ * encoding-based bypasses (e.g., &#106;&#97;&#118;&#97;... → javascript:).
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can

@@ -2,9 +2,13 @@
 
 namespace phpMyFAQ;
 
+use Monolog\Handler\TestHandler;
+use Monolog\Level;
+use Monolog\Logger;
 use phpMyFAQ\Configuration\LdapConfiguration;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Plugin\PluginException;
 use phpMyFAQ\Plugin\PluginManager;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
@@ -20,6 +24,7 @@ class ConfigurationTest extends TestCase
     /** @var Configuration */
     private Configuration $configuration;
     private string $databaseFile;
+    private ?Configuration $originalConfigurationInstance = null;
 
     /**
      * Prepares the environment before running a test.
@@ -27,6 +32,9 @@ class ConfigurationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->originalConfigurationInstance = $this->getStaticConfigurationInstance();
+        $this->setStaticConfigurationInstance(null);
 
         Strings::init();
 
@@ -80,6 +88,8 @@ class ConfigurationTest extends TestCase
      */
     protected function tearDown(): void
     {
+        $this->setStaticConfigurationInstance($this->originalConfigurationInstance);
+
         parent::tearDown();
 
         if (isset($this->databaseFile) && file_exists($this->databaseFile)) {
@@ -312,5 +322,63 @@ class ConfigurationTest extends TestCase
 
         $this->assertSame($instance1, $instance2);
         $this->assertInstanceOf(Configuration::class, $instance1);
+    }
+
+    public function testConstructorLogsPluginManagerException(): void
+    {
+        $testHandler = new TestHandler(Level::Error);
+        $dbHandle = new Sqlite3();
+        $dbHandle->connect($this->databaseFile, '', '');
+
+        $configuration = new class ($dbHandle, $testHandler) extends Configuration {
+            public function __construct(
+                DatabaseDriver $databaseDriver,
+                private readonly TestHandler $testHandler,
+            ) {
+                parent::__construct($databaseDriver);
+            }
+
+            public function setLogger(): void
+            {
+                $logger = new Logger('phpmyfaq-test');
+                $logger->pushHandler($this->testHandler);
+
+                $reflection = new \ReflectionProperty(Configuration::class, 'logger');
+                $reflection->setValue($this, $logger);
+            }
+
+            public function setPluginManager(): Configuration
+            {
+                throw new PluginException('Plugin setup failed');
+            }
+        };
+
+        $this->assertInstanceOf(Configuration::class, $configuration);
+        $this->assertTrue($testHandler->hasErrorThatContains('Plugin setup failed'));
+    }
+
+    public function testConstructorDoesNotOverwriteExistingSingletonInstance(): void
+    {
+        $firstInstance = $this->configuration;
+
+        $dbHandle = new Sqlite3();
+        $dbHandle->connect($this->databaseFile, '', '');
+        $secondInstance = new Configuration($dbHandle);
+
+        $this->assertNotSame($firstInstance, $secondInstance);
+        $this->assertSame($firstInstance, Configuration::getConfigurationInstance());
+    }
+
+    private function getStaticConfigurationInstance(): ?Configuration
+    {
+        $reflection = new \ReflectionProperty(Configuration::class, 'configuration');
+
+        return $reflection->getValue(null);
+    }
+
+    private function setStaticConfigurationInstance(?Configuration $configuration): void
+    {
+        $reflection = new \ReflectionProperty(Configuration::class, 'configuration');
+        $reflection->setValue(null, $configuration);
     }
 }

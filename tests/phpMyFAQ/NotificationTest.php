@@ -29,6 +29,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(Notification::class)]
@@ -344,6 +345,38 @@ class NotificationTest extends TestCase
         $this->notification->sendFaqCommentNotification($faq, $comment);
     }
 
+    public function testSendFaqCommentNotificationAddsCcForCategoryOwner(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecord = [
+            'id' => 11,
+            'email' => 'faqauthor@example.com',
+            'title' => 'Test FAQ Title',
+            'lang' => 'en',
+        ];
+
+        $comment = new Comment();
+        $comment->setUsername('Commenter');
+        $comment->setEmail('commenter@example.com');
+        $comment->setComment('This is a test comment on the FAQ.');
+
+        $category = $this->createMock(Category::class);
+        $category->expects($this->once())->method('getCategoryIdFromFaq')->with(11)->willReturn(5);
+        $category->expects($this->once())->method('getCategoryIdsFromFaq')->with(11)->willReturn([5]);
+        $category->expects($this->once())->method('getOwner')->with(5)->willReturn(77);
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserById')->with(77)->willReturn(true);
+        $user->expects($this->once())->method('getUserData')->with('email')->willReturn('owner@example.com');
+
+        $this->mail->expects($this->once())->method('addTo')->with('faqauthor@example.com');
+        $this->mail->expects($this->once())->method('addCc')->with('owner@example.com');
+        $this->mail->expects($this->once())->method('send');
+
+        $notification = $this->createNotificationWithFactories($category, $user);
+        $notification->sendFaqCommentNotification($faq, $comment);
+    }
+
     public function testSendQuestionSuccessMailWithWebPushDisabled(): void
     {
         $questionEntity = new QuestionEntity();
@@ -395,6 +428,102 @@ class NotificationTest extends TestCase
             ->with(5)
             ->willReturn(10);
 
+        $notification->sendQuestionSuccessMail($questionEntity, $categories);
+    }
+
+    public function testSendQuestionSuccessMailAddsCcForCategoryOwnerEmail(): void
+    {
+        $questionEntity = new QuestionEntity();
+        $questionEntity->setUsername('Jane');
+        $questionEntity->setEmail('jane@example.com');
+        $questionEntity->setCategoryId(5);
+        $questionEntity->setQuestion('How do I reset my password?');
+
+        $categories = [5 => ['name' => 'User Account']];
+
+        $this->category->expects($this->once())->method('getOwner')->with(5)->willReturn(77);
+        $this->mail->expects($this->once())->method('addTo')->with('admin@example.com');
+        $this->mail->expects($this->once())->method('addCc')->with('owner@example.com');
+        $this->mail->expects($this->once())->method('send');
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserById')->with(77)->willReturn(true);
+        $user->expects($this->once())->method('getUserData')->with('email')->willReturn('owner@example.com');
+
+        $notification = $this->createNotificationWithFactories($this->category, $user);
+        $notification->sendQuestionSuccessMail($questionEntity, $categories);
+    }
+
+    public function testSendQuestionSuccessMailLogsLookupException(): void
+    {
+        $configuration = $this->createBaseConfigurationMock();
+        $logger = $this->createMock(Logger::class);
+        $logger->expects($this->once())
+            ->method('error')
+            ->with($this->stringContains('Error getting user data: lookup failed'));
+        $configuration->method('getLogger')->willReturn($logger);
+
+        $questionEntity = new QuestionEntity();
+        $questionEntity->setUsername('Jane');
+        $questionEntity->setEmail('jane@example.com');
+        $questionEntity->setCategoryId(5);
+        $questionEntity->setQuestion('How do I reset my password?');
+
+        $categories = [5 => ['name' => 'User Account']];
+
+        $this->category->expects($this->once())->method('getOwner')->with(5)->willReturn(77);
+        $this->mail->expects($this->once())->method('addTo')->with('admin@example.com');
+        $this->mail->expects($this->never())->method('addCc');
+        $this->mail->expects($this->once())->method('send');
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())
+            ->method('getUserById')
+            ->with(77)
+            ->willThrowException(new Exception('lookup failed'));
+
+        $notification = $this->createNotificationWithFactories($this->category, $user, $configuration);
+        $notification->sendQuestionSuccessMail($questionEntity, $categories);
+    }
+
+    public function testSendQuestionSuccessMailLogsMailException(): void
+    {
+        $configuration = $this->createBaseConfigurationMock();
+        $logger = $this->createMock(Logger::class);
+        $logger->expects($this->once())
+            ->method('error')
+            ->with($this->stringContains('Error sending mail: send failed'));
+        $configuration->method('getLogger')->willReturn($logger);
+
+        $questionEntity = new QuestionEntity();
+        $questionEntity->setUsername('Jane');
+        $questionEntity->setEmail('jane@example.com');
+        $questionEntity->setCategoryId(5);
+        $questionEntity->setQuestion('How do I reset my password?');
+
+        $categories = [5 => ['name' => 'User Account']];
+
+        $this->category->expects($this->once())->method('getOwner')->with(5)->willReturn(77);
+        $this->mail->expects($this->once())->method('addTo')->with('admin@example.com');
+        $this->mail->expects($this->never())->method('addCc');
+        $this->mail->expects($this->once())
+            ->method('send')
+            ->willThrowException(new class('send failed') extends \RuntimeException implements TransportExceptionInterface {
+                public function appendDebug(string $debug): void
+                {
+                }
+
+                public function getDebug(): string
+                {
+                    return '';
+                }
+            });
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserById')->with(77)->willReturn(true);
+        $user->expects($this->once())->method('getUserData')->with('email')->willReturn('');
+
+        $notification = $this->createNotificationWithFactories($this->category, $user, $configuration);
         $notification->sendQuestionSuccessMail($questionEntity, $categories);
     }
 
@@ -457,5 +586,75 @@ class NotificationTest extends TestCase
         $logger->pushHandler(new NullHandler());
 
         return $logger;
+    }
+
+    private function createNotificationWithFactories(
+        Category $category,
+        User $user,
+        ?Configuration $configuration = null,
+    ): Notification
+    {
+        return new readonly class (
+            $configuration ?? $this->configuration,
+            null,
+            $this->mail,
+            $this->faq,
+            $this->category,
+            $category,
+            $user,
+        )
+            extends Notification {
+            public function __construct(
+                Configuration $configuration,
+                ?WebPushService $webPushService,
+                Mail $mail,
+                Faq $faq,
+                Category $defaultCategory,
+                private readonly Category $factoryCategory,
+                private readonly User $factoryUser,
+            ) {
+                parent::__construct($configuration, $webPushService, $mail, $faq, $defaultCategory);
+            }
+
+            protected function createCategory(): Category
+            {
+                return $this->factoryCategory;
+            }
+
+            protected function createUser(): User
+            {
+                return $this->factoryUser;
+            }
+        };
+    }
+
+    private function createBaseConfigurationMock(): Configuration&MockObject
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('getNoReplyEmail')->willReturn('noreply@example.com');
+        $configuration->method('getTitle')->willReturn('phpMyFAQ Test');
+        $configuration->method('getAdminEmail')->willReturn('admin@example.com');
+        $configuration->method('getDefaultUrl')->willReturn('https://example.com/');
+        $configuration
+            ->method('get')
+            ->willReturnCallback(function (string $item) {
+                return match ($item) {
+                    'main.administrationMail' => 'admin@example.com',
+                    'main.languageDetection' => true,
+                    'main.enableNotifications' => true,
+                    'mail.remoteSMTP' => false,
+                    'security.permLevel' => 'basic',
+                    'security.loginWithEmailAddress' => false,
+                    'mail.noReplySenderAddress' => 'noreply@example.com',
+                    default => null,
+                };
+            });
+
+        $dbDriver = $this->createMock(DatabaseDriver::class);
+        $dbDriver->method('query')->willReturn(false);
+        $dbDriver->method('fetchObject')->willReturn(null);
+        $configuration->method('getDb')->willReturn($dbDriver);
+
+        return $configuration;
     }
 }

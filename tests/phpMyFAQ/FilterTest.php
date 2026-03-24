@@ -68,6 +68,27 @@ class FilterTest extends TestCase
         $this->assertStringContainsString('alert', $result);
     }
 
+    public function testFilterEmailWithValidEmail(): void
+    {
+        $result = Filter::filterEmail('test@example.com');
+
+        $this->assertSame('test@example.com', $result);
+    }
+
+    public function testFilterEmailWithInvalidEmailReturnsDefault(): void
+    {
+        $result = Filter::filterEmail('invalid-email', 'fallback@example.com');
+
+        $this->assertSame('fallback@example.com', $result);
+    }
+
+    public function testFilterEmailWithInvalidEmailWithoutDefaultReturnsNull(): void
+    {
+        $result = Filter::filterEmail('invalid-email');
+
+        $this->assertNull($result);
+    }
+
     public function testFilterArray(): void
     {
         $testArray = [
@@ -113,6 +134,32 @@ class FilterTest extends TestCase
         $this->assertIsString($result);
         $this->assertStringNotContainsString('<script>', $result);
         $this->assertStringNotContainsString('<img', $result);
+    }
+
+    public function testGetFilteredQueryStringReturnsEmptyStringWhenQueryStringIsMissing(): void
+    {
+        unset($_SERVER['QUERY_STRING']);
+
+        $result = Filter::getFilteredQueryString();
+
+        $this->assertSame('', $result);
+    }
+
+    public function testGetFilteredQueryStringSanitizesArrayValues(): void
+    {
+        $_SERVER['QUERY_STRING'] = 'tags[0]=<b>first</b>&tags[1]=<script>second</script>&plain=<i>value</i>';
+
+        $result = Filter::getFilteredQueryString();
+
+        parse_str($result, $parsedResult);
+
+        $this->assertSame(
+            [
+                'plain' => 'value',
+                'tags' => ['first', 'second'],
+            ],
+            $parsedResult,
+        );
     }
 
     public function testFilterSanitizeString(): void
