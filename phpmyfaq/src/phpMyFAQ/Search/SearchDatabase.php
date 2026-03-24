@@ -263,10 +263,10 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
                 }
 
                 $where = sprintf(
-                    "%s%s LIKE '%%%s%%'",
+                    "%s%s LIKE '%%%s%%' ESCAPE '\\'",
                     $where,
                     $this->matchingColumns[$j],
-                    $this->configuration->getDb()->escape($keys[$i]),
+                    self::escapeLikeWildcards($this->configuration->getDb()->escape($keys[$i])),
                 );
             }
 
@@ -283,5 +283,14 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     public function disableRelevance(): void
     {
         $this->relevanceSupport = false;
+    }
+
+    /**
+     * Escapes LIKE wildcard metacharacters (%, _) in a search term
+     * to prevent LIKE wildcard injection.
+     */
+    protected static function escapeLikeWildcards(string $term): string
+    {
+        return str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $term);
     }
 }
