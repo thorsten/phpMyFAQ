@@ -35,6 +35,7 @@
     "build": "vite build",
     "build:watch": "vite build --watch",
     "build:prod": "vite build",
+    "release:artifacts": "./scripts/prepare-release-artifacts.sh",
     "eslint": "eslint .",
     "lint": "prettier --check .",
     "lint:fix": "prettier --write .",
