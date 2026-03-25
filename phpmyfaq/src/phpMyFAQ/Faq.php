@@ -1521,7 +1521,7 @@ class Faq
             return $this->faqRecord['title'];
         }
 
-        $question = Translation::get(key: 'no_cats');
+        $question = Translation::get(key: 'no_cats') ?? '';
 
         $query = sprintf(
             "SELECT thema AS question FROM %sfaqdata WHERE id = %d AND lang = '%s'",
