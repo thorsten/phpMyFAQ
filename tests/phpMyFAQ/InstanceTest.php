@@ -4,8 +4,8 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\InstanceEntity;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
@@ -152,9 +152,7 @@ class InstanceTest extends TestCase
     public function testDeleteReturnsFalseWhenOneDeleteQueryFails(): void
     {
         $db = $this->createMock(Database\Sqlite3::class);
-        $db->expects($this->exactly(2))
-            ->method('query')
-            ->willReturnOnConsecutiveCalls(true, false);
+        $db->expects($this->exactly(2))->method('query')->willReturnOnConsecutiveCalls(true, false);
 
         $configuration = $this->createMock(Configuration::class);
         $configuration->method('getDb')->willReturn($db);

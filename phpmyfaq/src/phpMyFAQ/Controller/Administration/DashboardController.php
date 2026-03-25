@@ -19,10 +19,10 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
-use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Administration\Faq as AdminFaq;
-use phpMyFAQ\Administration\LatestUsers;
+use phpMyFAQ\Administration\RecentUsers;
+use phpMyFAQ\Administration\RemoteApiClient;
 use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -44,8 +44,8 @@ final class DashboardController extends AbstractAdministrationController
         private readonly AdminSession $adminSession,
         private readonly AdminFaq $adminFaq,
         private readonly Backup $backup,
-        private readonly LatestUsers $latestUsers,
-        private readonly Api $adminApi,
+        private readonly RecentUsers $recentUsers,
+        private readonly RemoteApiClient $adminApi,
     ) {
         parent::__construct();
     }
@@ -95,7 +95,7 @@ final class DashboardController extends AbstractAdministrationController
             'documentationUrl' => System::getDocumentationUrl(),
             'lastBackupDate' => $backupInfo['lastBackupDate'],
             'isBackupOlderThan30Days' => $backupInfo['isBackupOlderThan30Days'],
-            'adminDashboardLatestUsers' => $this->latestUsers->getList(limit: 5),
+            'adminDashboardRecentUsers' => $this->recentUsers->getList(limit: 5),
             'hasRecentNews' => $this->configuration->get(item: 'main.enableRecentNews'),
         ];
 

@@ -330,7 +330,7 @@ class ConfigurationTest extends TestCase
         $dbHandle = new Sqlite3();
         $dbHandle->connect($this->databaseFile, '', '');
 
-        $configuration = new class ($dbHandle, $testHandler) extends Configuration {
+        $configuration = new class($dbHandle, $testHandler) extends Configuration {
             public function __construct(
                 DatabaseDriver $databaseDriver,
                 private readonly TestHandler $testHandler,

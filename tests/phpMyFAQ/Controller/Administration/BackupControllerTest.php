@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Administration\AdminLog;
+use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Administration\Backup\BackupExecuteResult;
 use phpMyFAQ\Administration\Backup\BackupExportResult;
 use phpMyFAQ\Administration\Backup\BackupParseResult;
-use phpMyFAQ\Administration\Helper;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -417,7 +417,7 @@ final class BackupControllerTest extends TestCase
         $session = new Session(new MockArraySessionStorage());
         Token::getInstance($session);
         $adminLog = $this->createStub(AdminLog::class);
-        $adminHelper = $this->createStub(Helper::class);
+        $adminHelper = $this->createStub(AdminMenuBuilder::class);
         $adminHelper->method('canAccessContent')->willReturn(true);
         $adminHelper->method('addMenuEntry')->willReturn('');
 

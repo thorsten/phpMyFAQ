@@ -21,7 +21,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use Exception;
 use phpMyFAQ\Administration\AdminLog;
-use phpMyFAQ\Administration\Helper;
+use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Enums\PermissionType;
@@ -97,7 +97,7 @@ abstract class AbstractAdministrationController extends AbstractController
         ] + $pageFlags;
     }
 
-    private function getSecondLevelEntries(Helper $adminHelper): array
+    private function getSecondLevelEntries(AdminMenuBuilder $adminHelper): array
     {
         $secLevelEntries = [];
 

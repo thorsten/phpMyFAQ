@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Simple HTTP Streamer based on Symfony HttpFoundation.
+ * Simple FileDownloader class based on Symfony HttpFoundation.
  * This class manages the stream of a generic content
  * taking into account the correct http headers settings
  *
@@ -34,11 +34,11 @@ use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class HttpStreamer
+ * Class FileDownloader
  *
  * @package phpMyFAQ
  */
-class HttpStreamer
+class FileDownloader
 {
     /** HTTP Content Disposition. */
     private string $disposition = HeaderUtils::DISPOSITION_INLINE;

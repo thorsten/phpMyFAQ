@@ -18,14 +18,14 @@
 declare(strict_types=1);
 
 use phpMyFAQ\Administration\AdminLog;
-use phpMyFAQ\Administration\Api;
+use phpMyFAQ\Administration\RemoteApiClient;
 use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Administration\Category;
 use phpMyFAQ\Administration\Changelog;
 use phpMyFAQ\Administration\Faq as AdminFaq;
-use phpMyFAQ\Administration\Helper;
-use phpMyFAQ\Administration\LatestUsers;
-use phpMyFAQ\Administration\RatingData;
+use phpMyFAQ\Administration\AdminMenuBuilder;
+use phpMyFAQ\Administration\RecentUsers;
+use phpMyFAQ\Administration\RatingStatistics;
 use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Attachment\AttachmentCollection;
 use phpMyFAQ\Auth as LegacyAuth;
@@ -236,7 +236,7 @@ return static function (ContainerConfigurator $container): void {
     $services->alias(SessionInterface::class, 'session');
 
     // ========== phpMyFAQ services ==========
-    $services->set('phpmyfaq.admin.api', Api::class)->args([
+    $services->set('phpmyfaq.admin.api', RemoteApiClient::class)->args([
         service('phpmyfaq.configuration'),
         service('phpmyfaq.system'),
     ]);
@@ -258,17 +258,17 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.configuration'),
     ]);
 
-    $services->set('phpmyfaq.admin.helper', Helper::class);
+    $services->set('phpmyfaq.admin.helper', AdminMenuBuilder::class);
 
     $services->set('phpmyfaq.admin.faq', AdminFaq::class)->args([
         service('phpmyfaq.configuration'),
     ]);
 
-    $services->set('phpmyfaq.admin.latest-users', LatestUsers::class)->args([
+    $services->set('phpmyfaq.admin.recent-users', RecentUsers::class)->args([
         service('phpmyfaq.configuration'),
     ]);
 
-    $services->set('phpmyfaq.admin.rating-data', RatingData::class)->args([
+    $services->set('phpmyfaq.admin.rating-statistics', RatingStatistics::class)->args([
         service('phpmyfaq.configuration'),
     ]);
 
@@ -1006,7 +1006,7 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.admin.session'),
         service('phpmyfaq.admin.faq'),
         service('phpmyfaq.admin.backup'),
-        service('phpmyfaq.admin.latest-users'),
+        service('phpmyfaq.admin.recent-users'),
         service('phpmyfaq.admin.api'),
     ]);
     $services->set(AdminExportController::class, AdminExportController::class)->args([
@@ -1056,7 +1056,7 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.plugin.plugin-manager'),
     ]);
     $services->set(AdminRatingController::class, AdminRatingController::class)->args([
-        service('phpmyfaq.admin.rating-data'),
+        service('phpmyfaq.admin.rating-statistics'),
     ]);
     $services->set(AdminStatisticsSearchController::class, AdminStatisticsSearchController::class)->args([
         service('phpmyfaq.search'),
