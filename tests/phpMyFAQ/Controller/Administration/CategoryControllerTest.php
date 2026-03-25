@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Administration\AdminLog;
+use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Administration\Category as AdminCategory;
-use phpMyFAQ\Administration\Helper;
 use phpMyFAQ\Category\Image;
 use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission as CategoryPermission;
@@ -626,7 +626,7 @@ final class CategoryControllerTest extends TestCase
 
         $session = new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);
-        $adminHelper = $this->createStub(Helper::class);
+        $adminHelper = $this->createStub(AdminMenuBuilder::class);
         $adminHelper->method('canAccessContent')->willReturn(true);
         $adminHelper->method('addMenuEntry')->willReturn('');
 

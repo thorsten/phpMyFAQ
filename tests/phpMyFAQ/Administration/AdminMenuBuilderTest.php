@@ -14,14 +14,11 @@ use phpMyFAQ\User;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class HelperTest
- */
 #[AllowMockObjectsWithoutExpectations]
-class HelperTest extends TestCase
+class AdminMenuBuilderTest extends TestCase
 {
-    /** @var Helper */
-    protected Helper $instance;
+    protected AdminMenuBuilder $instance;
+
     private string $databaseFile;
 
     /**
@@ -46,7 +43,7 @@ class HelperTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->instance = new Helper();
+        $this->instance = new AdminMenuBuilder();
     }
 
     protected function tearDown(): void
@@ -157,7 +154,7 @@ class HelperTest extends TestCase
             '<option value="id" selected>ID (default)</option><option value="thema">Title</option>'
             . '<option value="visits">Number of visitors</option><option value="updated">Date</option>'
             . '<option value="author">Author</option>';
-        $actual = Helper::sortingKeyOptions('id');
+        $actual = AdminMenuBuilder::sortingKeyOptions('id');
 
         $this->assertEquals($expected, $actual);
     }
@@ -165,7 +162,7 @@ class HelperTest extends TestCase
     public function testSortingOrderOptions(): void
     {
         $expected = '<option value="ASC" selected>ascending</option><option value="DESC">descending</option>';
-        $actual = Helper::sortingOrderOptions('ASC');
+        $actual = AdminMenuBuilder::sortingOrderOptions('ASC');
 
         $this->assertEquals($expected, $actual);
     }
@@ -175,7 +172,7 @@ class HelperTest extends TestCase
         $expected =
             '<option value="visits" selected>list most visited entries</option>'
             . '<option value="voting">list most voted entries</option>';
-        $actual = Helper::sortingPopularFaqsOptions('visits');
+        $actual = AdminMenuBuilder::sortingPopularFaqsOptions('visits');
 
         $this->assertEquals($expected, $actual);
     }
@@ -189,16 +186,16 @@ class HelperTest extends TestCase
             . '<option value="content,keywords,thema">Answer - Keywords - Question</option>'
             . '<option value="keywords,content,thema">Keywords - Answer - Question</option>'
             . '<option value="keywords,thema,content">Keywords - Question - Answer</option>';
-        $actual = Helper::searchRelevanceOptions(0);
+        $actual = AdminMenuBuilder::searchRelevanceOptions(0);
 
         $this->assertEquals($expected, $actual);
     }
 
     public function testRenderReleaseTypeOptions(): void
     {
-        $optionsDevelopment = Helper::renderReleaseTypeOptions(ReleaseType::DEVELOPMENT->value);
-        $optionsStable = Helper::renderReleaseTypeOptions(ReleaseType::STABLE->value);
-        $optionsNightly = Helper::renderReleaseTypeOptions(ReleaseType::NIGHTLY->value);
+        $optionsDevelopment = AdminMenuBuilder::renderReleaseTypeOptions(ReleaseType::DEVELOPMENT->value);
+        $optionsStable = AdminMenuBuilder::renderReleaseTypeOptions(ReleaseType::STABLE->value);
+        $optionsNightly = AdminMenuBuilder::renderReleaseTypeOptions(ReleaseType::NIGHTLY->value);
 
         // Assert the HTML output for each release type
         $expectedDevelopment =

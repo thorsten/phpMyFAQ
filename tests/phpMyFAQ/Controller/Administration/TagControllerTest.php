@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Administration\AdminLog;
-use phpMyFAQ\Administration\Helper;
+use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -148,7 +148,7 @@ final class TagControllerTest extends TestCase
 
         $session = new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);
-        $adminHelper = $this->createStub(Helper::class);
+        $adminHelper = $this->createStub(AdminMenuBuilder::class);
         $adminHelper->method('canAccessContent')->willReturn(true);
         $adminHelper->method('addMenuEntry')->willReturn('');
 

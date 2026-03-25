@@ -21,7 +21,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use DateTime;
 use DateTimeInterface;
-use phpMyFAQ\Administration\Api;
+use phpMyFAQ\Administration\RemoteApiClient;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
@@ -47,7 +47,7 @@ final class UpdateController extends AbstractController
 {
     public function __construct(
         private readonly Upgrade $upgrade,
-        private readonly Api $adminApi,
+        private readonly RemoteApiClient $adminApi,
         private readonly Update $update,
         private readonly EnvironmentConfigurator $configurator,
     ) {

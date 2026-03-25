@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
-use phpMyFAQ\Administration\Api;
+use phpMyFAQ\Administration\RemoteApiClient;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -100,7 +100,7 @@ final class UpdateControllerTest extends TestCase
     {
         return new UpdateController(
             $this->createStub(Upgrade::class),
-            $this->createStub(Api::class),
+            $this->createStub(RemoteApiClient::class),
             $this->createStub(Update::class),
             $this->createStub(EnvironmentConfigurator::class),
         );
@@ -108,7 +108,7 @@ final class UpdateControllerTest extends TestCase
 
     private function createControllerWithDependencies(
         Upgrade $upgrade,
-        Api $adminApi,
+        RemoteApiClient $adminApi,
         Update $update,
         EnvironmentConfigurator $configurator,
     ): UpdateController {
@@ -259,7 +259,7 @@ final class UpdateControllerTest extends TestCase
 
         $controller = new UpdateController(
             $upgrade,
-            $this->createStub(Api::class),
+            $this->createStub(RemoteApiClient::class),
             $this->createStub(Update::class),
             $this->createStub(EnvironmentConfigurator::class),
         );
@@ -282,7 +282,7 @@ final class UpdateControllerTest extends TestCase
 
         $controller = new UpdateController(
             $upgrade,
-            $this->createStub(Api::class),
+            $this->createStub(RemoteApiClient::class),
             $this->createStub(Update::class),
             $this->createStub(EnvironmentConfigurator::class),
         );
@@ -302,7 +302,7 @@ final class UpdateControllerTest extends TestCase
     {
         $this->configuration->set('upgrade.releaseEnvironment', 'stable');
 
-        $adminApi = $this->createMock(Api::class);
+        $adminApi = $this->createMock(RemoteApiClient::class);
         $adminApi
             ->method('getVersions')
             ->willReturn([
@@ -335,7 +335,7 @@ final class UpdateControllerTest extends TestCase
 
         $controller = new UpdateController(
             $this->createStub(Upgrade::class),
-            $this->createStub(Api::class),
+            $this->createStub(RemoteApiClient::class),
             $update,
             $this->createStub(EnvironmentConfigurator::class),
         );
@@ -358,7 +358,7 @@ final class UpdateControllerTest extends TestCase
 
         $controller = new UpdateController(
             $upgrade,
-            $this->createStub(Api::class),
+            $this->createStub(RemoteApiClient::class),
             $this->createStub(Update::class),
             $this->createStub(EnvironmentConfigurator::class),
         );
@@ -378,7 +378,7 @@ final class UpdateControllerTest extends TestCase
     {
         $this->configuration->set('upgrade.releaseEnvironment', 'stable');
 
-        $adminApi = $this->createMock(Api::class);
+        $adminApi = $this->createMock(RemoteApiClient::class);
         $adminApi
             ->method('getVersions')
             ->willReturn([
@@ -408,7 +408,7 @@ final class UpdateControllerTest extends TestCase
     {
         $this->configuration->set('upgrade.releaseEnvironment', 'stable');
 
-        $adminApi = $this->createMock(Api::class);
+        $adminApi = $this->createMock(RemoteApiClient::class);
         $adminApi
             ->method('getVersions')
             ->willReturn([
@@ -441,7 +441,7 @@ final class UpdateControllerTest extends TestCase
 
         $controller = $this->createControllerWithDependencies(
             $upgrade,
-            $this->createStub(Api::class),
+            $this->createStub(RemoteApiClient::class),
             $this->createStub(Update::class),
             $this->createStub(EnvironmentConfigurator::class),
         );
@@ -466,7 +466,7 @@ final class UpdateControllerTest extends TestCase
 
         $controller = $this->createControllerWithDependencies(
             $upgrade,
-            $this->createStub(Api::class),
+            $this->createStub(RemoteApiClient::class),
             $this->createStub(Update::class),
             $this->createStub(EnvironmentConfigurator::class),
         );
@@ -491,7 +491,7 @@ final class UpdateControllerTest extends TestCase
 
         $controller = $this->createControllerWithDependencies(
             $upgrade,
-            $this->createStub(Api::class),
+            $this->createStub(RemoteApiClient::class),
             $this->createStub(Update::class),
             $this->createStub(EnvironmentConfigurator::class),
         );
@@ -514,7 +514,7 @@ final class UpdateControllerTest extends TestCase
 
         $controller = $this->createControllerWithDependencies(
             $this->createStub(Upgrade::class),
-            $this->createStub(Api::class),
+            $this->createStub(RemoteApiClient::class),
             $update,
             $this->createStub(EnvironmentConfigurator::class),
         );
@@ -537,7 +537,7 @@ final class UpdateControllerTest extends TestCase
 
         $controller = $this->createControllerWithDependencies(
             $this->createStub(Upgrade::class),
-            $this->createStub(Api::class),
+            $this->createStub(RemoteApiClient::class),
             $update,
             $this->createStub(EnvironmentConfigurator::class),
         );

@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
-use phpMyFAQ\Administration\Helper;
+use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
@@ -401,7 +401,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userIsAuthenticated();
 
-        return new Response(Helper::sortingKeyOptions($request->attributes->get(key: 'current')));
+        return new Response(AdminMenuBuilder::sortingKeyOptions($request->attributes->get(key: 'current')));
     }
 
     #[Route(
@@ -413,7 +413,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userIsAuthenticated();
 
-        return new Response(Helper::sortingOrderOptions($request->attributes->get(key: 'current')));
+        return new Response(AdminMenuBuilder::sortingOrderOptions($request->attributes->get(key: 'current')));
     }
 
     #[Route(
@@ -425,7 +425,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userIsAuthenticated();
 
-        return new Response(Helper::sortingPopularFaqsOptions($request->attributes->get(key: 'current')));
+        return new Response(AdminMenuBuilder::sortingPopularFaqsOptions($request->attributes->get(key: 'current')));
     }
 
     #[Route(path: 'configuration/perm-level/{current}', name: 'admin.api.configuration.permLevel', methods: ['GET'])]
@@ -445,7 +445,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userIsAuthenticated();
 
-        return new Response(Helper::renderReleaseTypeOptions($request->attributes->get(key: 'current')));
+        return new Response(AdminMenuBuilder::renderReleaseTypeOptions($request->attributes->get(key: 'current')));
     }
 
     #[Route(
@@ -457,7 +457,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userIsAuthenticated();
 
-        return new Response(Helper::searchRelevanceOptions($request->attributes->get(key: 'current')));
+        return new Response(AdminMenuBuilder::searchRelevanceOptions($request->attributes->get(key: 'current')));
     }
 
     #[Route(
@@ -469,7 +469,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userIsAuthenticated();
 
-        return new Response(Helper::renderMetaRobotsDropdown($request->attributes->get(key: 'current')));
+        return new Response(AdminMenuBuilder::renderMetaRobotsDropdown($request->attributes->get(key: 'current')));
     }
 
     #[Route(
@@ -481,7 +481,9 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userIsAuthenticated();
 
-        return new Response(Helper::renderTranslationProviderOptions($request->attributes->get(key: 'current')));
+        return new Response(AdminMenuBuilder::renderTranslationProviderOptions($request->attributes->get(
+            key: 'current',
+        )));
     }
 
     #[Route(
@@ -493,7 +495,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userIsAuthenticated();
 
-        return new Response(Helper::renderMailProviderOptions($request->attributes->get(key: 'current')));
+        return new Response(AdminMenuBuilder::renderMailProviderOptions($request->attributes->get(key: 'current')));
     }
 
     #[Route(
@@ -505,7 +507,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userIsAuthenticated();
 
-        return new Response(Helper::renderCacheAdapterOptions($request->attributes->get(key: 'current')));
+        return new Response(AdminMenuBuilder::renderCacheAdapterOptions($request->attributes->get(key: 'current')));
     }
 
     /**

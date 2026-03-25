@@ -11,9 +11,9 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 #[AllowMockObjectsWithoutExpectations]
-class RatingDataTest extends TestCase
+class RatingStatisticsTest extends TestCase
 {
-    private RatingData $ratingData;
+    private RatingStatistics $ratingStatistics;
     private Configuration $mockConfiguration;
     private DatabaseDriver $mockDb;
 
@@ -31,8 +31,8 @@ class RatingDataTest extends TestCase
         // Stub the getDb method of Configuration to return the mockDb object
         $this->mockConfiguration->method('getDb')->willReturn($this->mockDb);
 
-        // Create the RatingData instance with the mocked configuration
-        $this->ratingData = new RatingData($this->mockConfiguration);
+        // Create the RatingStatistics instance with the mocked configuration
+        $this->ratingStatistics = new RatingStatistics($this->mockConfiguration);
     }
 
     public function testGetAllReturnsEmptyArrayWhenNoResults(): void
@@ -40,7 +40,7 @@ class RatingDataTest extends TestCase
         $this->mockDb->method('query')->willReturn(true);
         $this->mockDb->method('fetchObject')->willReturn(false);
 
-        $result = $this->ratingData->getAll();
+        $result = $this->ratingStatistics->getAll();
 
         $this->assertEmpty($result);
     }
@@ -62,7 +62,7 @@ class RatingDataTest extends TestCase
         $this->mockDb->method('query')->willReturn(true);
         $this->mockDb->method('fetchObject')->willReturn($mockResult, false);
 
-        $result = $this->ratingData->getAll();
+        $result = $this->ratingStatistics->getAll();
 
         $this->assertCount(1, $result);
         $this->assertEquals(1, $result[0]['id']);
@@ -99,7 +99,7 @@ class RatingDataTest extends TestCase
         $this->mockDb->method('query')->willReturn(true);
         $this->mockDb->method('fetchObject')->willReturn($mockResult1, $mockResult2, false);
 
-        $result = $this->ratingData->getAll();
+        $result = $this->ratingStatistics->getAll();
 
         $this->assertCount(2, $result);
 
@@ -129,7 +129,7 @@ class RatingDataTest extends TestCase
         $this->mockDb->method('query')->willReturn(true);
         $this->mockDb->method('fetchObject')->willReturn($mockResult, false);
 
-        $result = $this->ratingData->getAll();
+        $result = $this->ratingStatistics->getAll();
 
         $this->assertCount(1, $result);
         // Corrected expectation based on actual escaping behavior
@@ -153,7 +153,7 @@ class RatingDataTest extends TestCase
         $this->mockDb->method('query')->willReturn(true);
         $this->mockDb->method('fetchObject')->willReturn($mockResult, false);
 
-        $result = $this->ratingData->getAll();
+        $result = $this->ratingStatistics->getAll();
 
         $this->assertCount(1, $result);
         $this->assertEquals('Test Question with whitespace', $result[0]['question']);
@@ -176,7 +176,7 @@ class RatingDataTest extends TestCase
         $this->mockDb->method('query')->willReturn(true);
         $this->mockDb->method('fetchObject')->willReturn($mockResult, false);
 
-        $result = $this->ratingData->getAll();
+        $result = $this->ratingStatistics->getAll();
 
         $this->assertCount(1, $result);
         $expectedUrl = 'https://faq.example.com/content/15/42/de/german-question.html';
@@ -204,7 +204,7 @@ class RatingDataTest extends TestCase
 
         $this->mockDb->method('fetchObject')->willReturn(false);
 
-        $result = $this->ratingData->getAll();
+        $result = $this->ratingStatistics->getAll();
 
         $this->assertEmpty($result);
     }
@@ -226,7 +226,7 @@ class RatingDataTest extends TestCase
         $this->mockDb->method('query')->willReturn(true);
         $this->mockDb->method('fetchObject')->willReturn($mockResult, false);
 
-        $result = $this->ratingData->getAll();
+        $result = $this->ratingStatistics->getAll();
 
         $this->assertCount(1, $result);
         $this->assertIsFloat($result[0]['number']);

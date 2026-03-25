@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Administration\AdminLog;
-use phpMyFAQ\Administration\Api;
+use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Administration\Faq as AdminFaq;
-use phpMyFAQ\Administration\Helper;
-use phpMyFAQ\Administration\LatestUsers;
+use phpMyFAQ\Administration\RecentUsers;
+use phpMyFAQ\Administration\RemoteApiClient;
 use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
@@ -106,8 +106,8 @@ final class DashboardControllerTest extends TestCase
             $this->createStub(AdminSession::class),
             $this->createStub(AdminFaq::class),
             $this->createStub(Backup::class),
-            new LatestUsers($this->configuration),
-            $this->createStub(Api::class),
+            new RecentUsers($this->configuration),
+            $this->createStub(RemoteApiClient::class),
         );
     }
 
@@ -147,8 +147,8 @@ final class DashboardControllerTest extends TestCase
             $adminSession,
             $adminFaq,
             $backup,
-            new LatestUsers($this->configuration),
-            $this->createStub(Api::class),
+            new RecentUsers($this->configuration),
+            $this->createStub(RemoteApiClient::class),
         );
         $controller->setContainer($this->createAuthenticatedContainer());
 
@@ -182,14 +182,14 @@ final class DashboardControllerTest extends TestCase
                 'isBackupOlderThan30Days' => false,
             ]);
 
-        $adminApi = $this->createStub(Api::class);
+        $adminApi = $this->createStub(RemoteApiClient::class);
         $adminApi->method('getVersions')->willThrowException(new Exception('Version check failed'));
 
         $controller = new DashboardController(
             $adminSession,
             $adminFaq,
             $backup,
-            new LatestUsers($this->configuration),
+            new RecentUsers($this->configuration),
             $adminApi,
         );
         $controller->setContainer($this->createAuthenticatedContainer(allowConfigEdit: true));
@@ -229,8 +229,8 @@ final class DashboardControllerTest extends TestCase
             $adminSession,
             $adminFaq,
             $backup,
-            new LatestUsers($this->configuration),
-            $this->createStub(Api::class),
+            new RecentUsers($this->configuration),
+            $this->createStub(RemoteApiClient::class),
         );
         $controller->setContainer($this->createAuthenticatedContainer());
 
@@ -268,8 +268,8 @@ final class DashboardControllerTest extends TestCase
             $adminSession,
             $adminFaq,
             $backup,
-            new LatestUsers($this->configuration),
-            $this->createStub(Api::class),
+            new RecentUsers($this->configuration),
+            $this->createStub(RemoteApiClient::class),
         );
         $controller->setContainer($this->createAuthenticatedContainer());
 
@@ -306,7 +306,7 @@ final class DashboardControllerTest extends TestCase
 
         $session = new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);
-        $adminHelper = $this->createStub(Helper::class);
+        $adminHelper = $this->createStub(AdminMenuBuilder::class);
         $adminHelper->method('canAccessContent')->willReturn(true);
         $adminHelper->method('addMenuEntry')->willReturn('');
 

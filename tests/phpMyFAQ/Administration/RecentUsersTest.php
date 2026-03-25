@@ -6,13 +6,12 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Date;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
-class LatestUsersTest extends TestCase
+class RecentUsersTest extends TestCase
 {
-    private LatestUsers $latestUsers;
+    private RecentUsers $recentUsers;
     private Configuration $configurationMock;
     private DatabaseDriver $databaseMock;
 
@@ -24,7 +23,7 @@ class LatestUsersTest extends TestCase
         $this->configurationMock = $this->createStub(Configuration::class);
         $this->configurationMock->method('getDb')->willReturn($this->databaseMock);
 
-        $this->latestUsers = new LatestUsers($this->configurationMock);
+        $this->recentUsers = new RecentUsers($this->configurationMock);
     }
 
     public function testGetListReturnsEmptyArrayWhenNoUsersFound(): void
@@ -45,7 +44,7 @@ class LatestUsersTest extends TestCase
                 return false;
             });
 
-        $result = $this->latestUsers->getList();
+        $result = $this->recentUsers->getList();
 
         $this->assertIsArray($result);
         $this->assertEmpty($result);
@@ -84,7 +83,7 @@ class LatestUsersTest extends TestCase
                 return false;
             });
 
-        $result = $this->latestUsers->getList($limit);
+        $result = $this->recentUsers->getList($limit);
 
         $this->assertCount(1, $result);
         $this->assertSame(42, $result[0]['id']);
@@ -139,7 +138,7 @@ class LatestUsersTest extends TestCase
                 return false;
             });
 
-        $result = $this->latestUsers->getList();
+        $result = $this->recentUsers->getList();
 
         $this->assertCount(2, $result);
         $this->assertSame(1, $result[0]['id']);
@@ -181,7 +180,7 @@ class LatestUsersTest extends TestCase
                 return false;
             });
 
-        $result = $this->latestUsers->getList($limit);
+        $result = $this->recentUsers->getList($limit);
 
         $this->assertCount(1, $result);
     }
@@ -218,7 +217,7 @@ class LatestUsersTest extends TestCase
                 return false;
             });
 
-        $result = $this->latestUsers->getList();
+        $result = $this->recentUsers->getList();
 
         $this->assertCount(1, $result);
         $this->assertSame('', $result[0]['member_since_iso']);

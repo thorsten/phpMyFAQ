@@ -404,10 +404,7 @@ class TranslationTest extends TestCase
         }
 
         // File matches the glob pattern (language_*) but not the regex for valid language codes
-        file_put_contents(
-            $pluginTranslationsDir . '/language_!!!.php',
-            "<?php\n\n\$PMF_LANG['key'] = 'value';\n",
-        );
+        file_put_contents($pluginTranslationsDir . '/language_!!!.php', "<?php\n\n\$PMF_LANG['key'] = 'value';\n");
 
         Translation::getInstance()->registerPluginTranslations('InvalidPlugin', $pluginTranslationsDir);
 
@@ -570,10 +567,7 @@ class TranslationTest extends TestCase
 
         // Re-initialize for other tests
         $translationsDir = __DIR__ . '/_translations';
-        $instance
-            ->setTranslationsDir($translationsDir)
-            ->setDefaultLanguage('en')
-            ->setCurrentLanguage('de');
+        $instance->setTranslationsDir($translationsDir)->setDefaultLanguage('en')->setCurrentLanguage('de');
     }
 
     public function testGetReturnsNullWhenNotInitialized(): void

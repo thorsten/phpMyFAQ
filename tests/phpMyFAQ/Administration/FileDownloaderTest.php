@@ -9,11 +9,11 @@ use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Response;
 
 #[AllowMockObjectsWithoutExpectations]
-class HttpStreamerTest extends TestCase
+class FileDownloaderTest extends TestCase
 {
     public function testSend(): void
     {
-        $export = new HttpStreamer('pdf', 'test content');
+        $export = new FileDownloader('pdf', 'test content');
 
         $this->expectOutputString('test content');
 

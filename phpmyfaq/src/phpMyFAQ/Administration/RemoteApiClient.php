@@ -1,7 +1,7 @@
 <?php
 
 /**
- * API handler class.
+ * Remote API client handler class.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -33,11 +33,11 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
- * Class Api
+ * Class RemoteApiClient
  *
  * @package phpMyFAQ
  */
-class Api
+class RemoteApiClient
 {
     private string $apiUrl = 'https://api.phpmyfaq.de/';
 
@@ -147,7 +147,7 @@ class Api
         $this->httpClient = $httpClient;
     }
 
-    public function setRemoteHashes(?string $remoteHashes): Api
+    public function setRemoteHashes(?string $remoteHashes): RemoteApiClient
     {
         $this->remoteHashes = $remoteHashes;
         return $this;

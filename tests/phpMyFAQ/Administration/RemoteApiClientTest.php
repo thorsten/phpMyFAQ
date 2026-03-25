@@ -18,9 +18,9 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 #[AllowMockObjectsWithoutExpectations]
-class ApiTest extends TestCase
+class RemoteApiClientTest extends TestCase
 {
-    private Api $api;
+    private RemoteApiClient $api;
     private Configuration $configuration;
     private System $system;
     private HttpClientInterface $httpClient;
@@ -34,7 +34,7 @@ class ApiTest extends TestCase
         $this->system = $this->createStub(System::class);
         $this->httpClient = $this->createMock(HttpClientInterface::class);
 
-        $this->api = new Api($this->configuration, $this->system);
+        $this->api = new RemoteApiClient($this->configuration, $this->system);
         $this->api->setHttpClient($this->httpClient);
     }
 
@@ -143,7 +143,7 @@ class ApiTest extends TestCase
                 'hash3' => 'ghi789',
             ]));
 
-        $api = new Api($this->configuration, $mockSystem);
+        $api = new RemoteApiClient($this->configuration, $mockSystem);
 
         $api->setRemoteHashes(json_encode([
             'hash1' => 'abc123',
@@ -344,7 +344,7 @@ class ApiTest extends TestCase
     {
         $result = $this->api->setRemoteHashes('{"test": "hash"}');
 
-        $this->assertInstanceOf(Api::class, $result);
+        $this->assertInstanceOf(RemoteApiClient::class, $result);
         $this->assertSame($this->api, $result);
     }
 
@@ -352,13 +352,13 @@ class ApiTest extends TestCase
     {
         $result = $this->api->setRemoteHashes(null);
 
-        $this->assertInstanceOf(Api::class, $result);
+        $this->assertInstanceOf(RemoteApiClient::class, $result);
     }
 
     public function testConstructorInitializesHttpClient(): void
     {
         // Test that constructor creates HttpClient with correct configuration
-        $api = new Api($this->configuration, $this->system);
+        $api = new RemoteApiClient($this->configuration, $this->system);
 
         // Use reflection to verify the HttpClient is properly initialized
         $reflection = new ReflectionClass($api);

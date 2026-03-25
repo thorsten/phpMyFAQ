@@ -21,7 +21,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use Exception;
 use JsonException;
-use phpMyFAQ\Administration\Api;
+use phpMyFAQ\Administration\RemoteApiClient;
 use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Faq;
@@ -52,7 +52,7 @@ final class DashboardController extends AbstractController
         $this->userIsAuthenticated();
 
         $data = $request->getContent();
-        $api = new Api($this->configuration, new System());
+        $api = new RemoteApiClient($this->configuration, new System());
 
         return $this->json($api->setRemoteHashes($data)->getVerificationIssues());
     }
@@ -65,7 +65,7 @@ final class DashboardController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $api = new Api($this->configuration, new System());
+        $api = new RemoteApiClient($this->configuration, new System());
         $releaseEnvironment = $this->configuration->get(item: 'upgrade.releaseEnvironment');
 
         try {

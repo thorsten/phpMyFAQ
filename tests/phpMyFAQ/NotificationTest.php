@@ -369,8 +369,14 @@ class NotificationTest extends TestCase
         $user->expects($this->once())->method('getUserById')->with(77)->willReturn(true);
         $user->expects($this->once())->method('getUserData')->with('email')->willReturn('owner@example.com');
 
-        $this->mail->expects($this->once())->method('addTo')->with('faqauthor@example.com');
-        $this->mail->expects($this->once())->method('addCc')->with('owner@example.com');
+        $this->mail
+            ->expects($this->once())
+            ->method('addTo')
+            ->with('faqauthor@example.com');
+        $this->mail
+            ->expects($this->once())
+            ->method('addCc')
+            ->with('owner@example.com');
         $this->mail->expects($this->once())->method('send');
 
         $notification = $this->createNotificationWithFactories($category, $user);
@@ -441,9 +447,19 @@ class NotificationTest extends TestCase
 
         $categories = [5 => ['name' => 'User Account']];
 
-        $this->category->expects($this->once())->method('getOwner')->with(5)->willReturn(77);
-        $this->mail->expects($this->once())->method('addTo')->with('admin@example.com');
-        $this->mail->expects($this->once())->method('addCc')->with('owner@example.com');
+        $this->category
+            ->expects($this->once())
+            ->method('getOwner')
+            ->with(5)
+            ->willReturn(77);
+        $this->mail
+            ->expects($this->once())
+            ->method('addTo')
+            ->with('admin@example.com');
+        $this->mail
+            ->expects($this->once())
+            ->method('addCc')
+            ->with('owner@example.com');
         $this->mail->expects($this->once())->method('send');
 
         $user = $this->createMock(User::class);
@@ -458,7 +474,8 @@ class NotificationTest extends TestCase
     {
         $configuration = $this->createBaseConfigurationMock();
         $logger = $this->createMock(Logger::class);
-        $logger->expects($this->once())
+        $logger
+            ->expects($this->once())
             ->method('error')
             ->with($this->stringContains('Error getting user data: lookup failed'));
         $configuration->method('getLogger')->willReturn($logger);
@@ -471,13 +488,21 @@ class NotificationTest extends TestCase
 
         $categories = [5 => ['name' => 'User Account']];
 
-        $this->category->expects($this->once())->method('getOwner')->with(5)->willReturn(77);
-        $this->mail->expects($this->once())->method('addTo')->with('admin@example.com');
+        $this->category
+            ->expects($this->once())
+            ->method('getOwner')
+            ->with(5)
+            ->willReturn(77);
+        $this->mail
+            ->expects($this->once())
+            ->method('addTo')
+            ->with('admin@example.com');
         $this->mail->expects($this->never())->method('addCc');
         $this->mail->expects($this->once())->method('send');
 
         $user = $this->createMock(User::class);
-        $user->expects($this->once())
+        $user
+            ->expects($this->once())
             ->method('getUserById')
             ->with(77)
             ->willThrowException(new Exception('lookup failed'));
@@ -490,7 +515,8 @@ class NotificationTest extends TestCase
     {
         $configuration = $this->createBaseConfigurationMock();
         $logger = $this->createMock(Logger::class);
-        $logger->expects($this->once())
+        $logger
+            ->expects($this->once())
             ->method('error')
             ->with($this->stringContains('Error sending mail: send failed'));
         $configuration->method('getLogger')->willReturn($logger);
@@ -503,15 +529,22 @@ class NotificationTest extends TestCase
 
         $categories = [5 => ['name' => 'User Account']];
 
-        $this->category->expects($this->once())->method('getOwner')->with(5)->willReturn(77);
-        $this->mail->expects($this->once())->method('addTo')->with('admin@example.com');
+        $this->category
+            ->expects($this->once())
+            ->method('getOwner')
+            ->with(5)
+            ->willReturn(77);
+        $this->mail
+            ->expects($this->once())
+            ->method('addTo')
+            ->with('admin@example.com');
         $this->mail->expects($this->never())->method('addCc');
-        $this->mail->expects($this->once())
+        $this->mail
+            ->expects($this->once())
             ->method('send')
-            ->willThrowException(new class('send failed') extends \RuntimeException implements TransportExceptionInterface {
-                public function appendDebug(string $debug): void
-                {
-                }
+            ->willThrowException(new class('send failed') extends \RuntimeException implements
+                TransportExceptionInterface {
+                public function appendDebug(string $debug): void {}
 
                 public function getDebug(): string
                 {
@@ -592,9 +625,8 @@ class NotificationTest extends TestCase
         Category $category,
         User $user,
         ?Configuration $configuration = null,
-    ): Notification
-    {
-        return new readonly class (
+    ): Notification {
+        return new readonly class(
             $configuration ?? $this->configuration,
             null,
             $this->mail,
@@ -602,8 +634,7 @@ class NotificationTest extends TestCase
             $this->category,
             $category,
             $user,
-        )
-            extends Notification {
+        ) extends Notification {
             public function __construct(
                 Configuration $configuration,
                 ?WebPushService $webPushService,

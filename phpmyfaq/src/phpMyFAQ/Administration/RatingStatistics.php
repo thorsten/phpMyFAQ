@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Rating data class for the administration.
+ * The Rating statistics class for the administration.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -24,7 +24,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Strings;
 
-readonly class RatingData
+readonly class RatingStatistics
 {
     public function __construct(
         private Configuration $configuration,

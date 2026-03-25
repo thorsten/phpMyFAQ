@@ -22,7 +22,7 @@ namespace phpMyFAQ\Setup;
 use DateTime;
 use DateTimeInterface;
 use Exception;
-use phpMyFAQ\Administration\Api;
+use phpMyFAQ\Administration\RemoteApiClient;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Setup\Migration\MigrationResult;
 use phpMyFAQ\System;
@@ -300,7 +300,7 @@ final class UpdateRunner
         $branch = $this->configuration->get(item: 'upgrade.releaseEnvironment');
 
         try {
-            $api = new Api($this->configuration, $this->system);
+            $api = new RemoteApiClient($this->configuration, $this->system);
             $versions = $api->getVersions();
             $this->configuration->set(key: 'upgrade.dateLastChecked', value: $dateLastChecked);
 

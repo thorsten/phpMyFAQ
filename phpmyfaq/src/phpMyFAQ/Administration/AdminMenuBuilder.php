@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Helper class for Administration backend.
+ * Helper class for the administration menu.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -28,9 +28,9 @@ use phpMyFAQ\User\CurrentUser;
 /**
  * Class Administration
  *
- * @package phpMyFAQ\Helper
+ * @package phpMyFAQ\AdminMenuBuilder
  */
-class Helper
+class AdminMenuBuilder
 {
     /**
      * Array with permissions.
@@ -157,7 +157,7 @@ class Helper
         $output = '';
 
         foreach ($options as $option) {
-            $output .= Helper::generateOption($current, $option, 'ad_conf_order_' . $option);
+            $output .= AdminMenuBuilder::generateOption($current, $option, 'ad_conf_order_' . $option);
         }
 
         return $output;
@@ -172,7 +172,7 @@ class Helper
         $output = '';
 
         foreach ($options as $option) {
-            $output .= Helper::generateOption($current, $option, 'ad_conf_' . strtolower($option));
+            $output .= AdminMenuBuilder::generateOption($current, $option, 'ad_conf_' . strtolower($option));
         }
 
         return $output;
@@ -184,7 +184,7 @@ class Helper
         $output = '';
 
         foreach ($options as $option) {
-            $output .= Helper::generateOption($current, $option, 'records.orderingPopularFaqs.' . $option);
+            $output .= AdminMenuBuilder::generateOption($current, $option, 'records.orderingPopularFaqs.' . $option);
         }
 
         return $output;
@@ -193,34 +193,38 @@ class Helper
     public static function searchRelevanceOptions(string $current): string
     {
         $output = '';
-        $output .= Helper::generateOption(
+        $output .= AdminMenuBuilder::generateOption(
             $current,
             'thema,content,keywords',
             'search.relevance.thema-content-keywords',
         );
-        $output .= Helper::generateOption(
+        $output .= AdminMenuBuilder::generateOption(
             $current,
             'thema,keywords,content',
             'search.relevance.thema-keywords-content',
         );
-        $output .= Helper::generateOption(
+        $output .= AdminMenuBuilder::generateOption(
             $current,
             'content,thema,keywords',
             'search.relevance.content-thema-keywords',
         );
-        $output .= Helper::generateOption(
+        $output .= AdminMenuBuilder::generateOption(
             $current,
             'content,keywords,thema',
             'search.relevance.content-keywords-thema',
         );
-        $output .= Helper::generateOption(
+        $output .= AdminMenuBuilder::generateOption(
             $current,
             'keywords,content,thema',
             'search.relevance.keywords-content-thema',
         );
 
         return $output
-        . Helper::generateOption($current, 'keywords,thema,content', 'search.relevance.keywords-thema-content');
+        . AdminMenuBuilder::generateOption(
+            $current,
+            'keywords,thema,content',
+            'search.relevance.keywords-thema-content',
+        );
     }
 
     public static function renderReleaseTypeOptions(string $current): string

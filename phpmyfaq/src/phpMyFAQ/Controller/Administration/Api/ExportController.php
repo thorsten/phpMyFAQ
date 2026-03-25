@@ -21,7 +21,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use JsonException;
 use League\CommonMark\Exception\CommonMarkException;
-use phpMyFAQ\Administration\HttpStreamer;
+use phpMyFAQ\Administration\FileDownloader;
 use phpMyFAQ\Administration\Report;
 use phpMyFAQ\Category;
 use phpMyFAQ\Controller\AbstractController;
@@ -68,7 +68,7 @@ final class ExportController extends AbstractController
             $content = $export->generate($categoryId, $downwards, $this->configuration->getLanguage()->getLanguage());
 
             // Stream the file content
-            $httpStreamer = new HttpStreamer($type, $content);
+            $httpStreamer = new FileDownloader($type, $content);
             $disposition = 'inline' === $inlineDisposition
                 ? HeaderUtils::DISPOSITION_INLINE
                 : HeaderUtils::DISPOSITION_ATTACHMENT;

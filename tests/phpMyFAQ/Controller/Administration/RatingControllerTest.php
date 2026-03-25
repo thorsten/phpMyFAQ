@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Administration\AdminLog;
-use phpMyFAQ\Administration\Helper;
-use phpMyFAQ\Administration\RatingData;
+use phpMyFAQ\Administration\AdminMenuBuilder;
+use phpMyFAQ\Administration\RatingStatistics;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -102,8 +102,8 @@ final class RatingControllerTest extends TestCase
      */
     public function testIndexRendersRatingsAndCategories(): void
     {
-        $ratingData = $this->createMock(RatingData::class);
-        $ratingData
+        $ratingStatistics = $this->createMock(RatingStatistics::class);
+        $ratingStatistics
             ->method('getAll')
             ->willReturn([
                 [
@@ -117,7 +117,7 @@ final class RatingControllerTest extends TestCase
                 ],
             ]);
 
-        $controller = new RatingController($ratingData);
+        $controller = new RatingController($ratingStatistics);
         $controller->setContainer($this->createControllerContainer());
 
         $response = $controller->index(Request::create('https://localhost/admin/statistics/ratings'));
@@ -134,10 +134,10 @@ final class RatingControllerTest extends TestCase
      */
     public function testIndexShowsNoRatingsMessageForEmptyData(): void
     {
-        $ratingData = $this->createMock(RatingData::class);
-        $ratingData->method('getAll')->willReturn([]);
+        $ratingStatistics = $this->createMock(RatingStatistics::class);
+        $ratingStatistics->method('getAll')->willReturn([]);
 
-        $controller = new RatingController($ratingData);
+        $controller = new RatingController($ratingStatistics);
         $controller->setContainer($this->createControllerContainer());
 
         $response = $controller->index(Request::create('https://localhost/admin/statistics/ratings'));
@@ -165,7 +165,7 @@ final class RatingControllerTest extends TestCase
 
         $session = new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);
-        $adminHelper = $this->createStub(Helper::class);
+        $adminHelper = $this->createStub(AdminMenuBuilder::class);
         $adminHelper->method('canAccessContent')->willReturn(true);
         $adminHelper->method('addMenuEntry')->willReturn('');
         $adminHelper->method('setUser')->willReturnSelf();

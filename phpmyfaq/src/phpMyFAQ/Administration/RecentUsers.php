@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Service to fetch the latest users for admin dashboard widgets.
+ * Service to fetch the recent registered users for admin dashboard widgets.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -23,7 +23,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Date;
 
-final readonly class LatestUsers
+final readonly class RecentUsers
 {
     public function __construct(
         private Configuration $configuration,
@@ -31,7 +31,7 @@ final readonly class LatestUsers
     }
 
     /**
-     * Returns latest users for the admin dashboard.
+     * Returns recent users for the admin dashboard.
      *
      * @return array<int, array<string, mixed>>
      */

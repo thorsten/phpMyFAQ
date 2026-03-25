@@ -241,12 +241,12 @@
     <div class="col-sm-6 col-md-4 col-lg-3 mb-4 mb-4">
       <div class="card shadow mb-4">
         <h5 class="card-header py-3">
-          <i aria-hidden="true" class="bi bi-people"></i> {{ 'msgNewestUsers' | translate | default('Newest users') }}
+          <i aria-hidden="true" class="bi bi-people"></i> {{ 'msgNewestUsers' | translate | default('Recent registered users') }}
         </h5>
         <div class="card-body">
           <ul class="list-unstyled">
-            {% if adminDashboardLatestUsers and adminDashboardLatestUsers|length > 0 %}
-              {% for u in adminDashboardLatestUsers %}
+            {% if adminDashboardRecentUsers and adminDashboardRecentUsers|length > 0 %}
+              {% for u in adminDashboardRecentUsers %}
                 <li class="mb-2">
                   <i class="bi bi-person-circle"></i>
                   <a href="./user/edit/{{ u.id }}">{{ u.display_name|default(u.login) }}</a>
