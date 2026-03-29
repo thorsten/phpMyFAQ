@@ -46,14 +46,17 @@ export default defineConfig({
         {
           src: path.resolve(__dirname, 'phpmyfaq/assets/fonts/*'),
           dest: '../phpmyfaq/assets/public/fonts',
+          rename: { stripBase: true },
         },
         {
           src: path.resolve(__dirname, 'node_modules/bootstrap-icons/font/bootstrap-icons.css'),
           dest: '../phpmyfaq/assets/public',
+          rename: { stripBase: true },
         },
         {
           src: path.resolve(__dirname, 'node_modules/bootstrap-icons/font/fonts/*'),
           dest: '../phpmyfaq/assets/public/fonts',
+          rename: { stripBase: true },
         },
       ],
     }),
