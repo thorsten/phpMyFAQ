@@ -103,7 +103,79 @@ This mode creates:
 
 It does not create detached signatures.
 
-## 13.8 Notes
+## 13.8 Public key location
+
+The public release-signing key should be published at:
+
+```text
+docs/keys/phpmyfaq-release-public-key.asc
+```
+
+The repository currently reserves that location but does not ship a fake placeholder key.
+Add the real armored public key there once the dedicated release-signing key is created.
+
+## 13.9 Verification
+
+After downloading a release, users should have these files:
+
+- `phpMyFAQ-<version>.zip`
+- `phpMyFAQ-<version>.tar.gz`
+- `SHA256SUMS`
+- `SHA256SUMS.asc`
+- `phpmyfaq-release-public-key.asc`
+
+Import the release key:
+
+```bash
+gpg --import phpmyfaq-release-public-key.asc
+```
+
+Verify the checksum manifest signature:
+
+```bash
+gpg --verify SHA256SUMS.asc SHA256SUMS
+```
+
+Verify the package checksums:
+
+```bash
+sha256sum -c SHA256SUMS
+```
+
+Optional detached signature verification:
+
+```bash
+gpg --verify phpMyFAQ-<version>.zip.asc phpMyFAQ-<version>.zip
+gpg --verify phpMyFAQ-<version>.tar.gz.asc phpMyFAQ-<version>.tar.gz
+```
+
+## 13.10 Fingerprint publication
+
+When the real release key is available, publish the full fingerprint in:
+
+- this document
+- the GitHub release notes
+- the project website release page
+
+Use one exact fingerprint value everywhere. Do not publish shortened or inconsistent variants.
+
+## 13.11 Release publication checklist
+
+Publish these files with each release:
+
+- `phpMyFAQ-<version>.zip`
+- `phpMyFAQ-<version>.tar.gz`
+- `SHA256SUMS`
+- `SHA256SUMS.asc`
+- optional detached signatures for each archive
+
+The release notes should also include:
+
+- the release key fingerprint
+- a link to the verification instructions
+- a link to the public key location
+
+## 13.12 Notes
 
 - The package payload is the `phpmyfaq/` directory prepared from a clean git checkout.
 - The helper installs production dependencies and runs the frontend production build before packaging.

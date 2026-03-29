@@ -185,6 +185,9 @@ services:
     restart: 'no'
     command: sh -c "corepack enable && corepack prepare pnpm@latest --activate && pnpm install && pnpm build"
     working_dir: /app
+    environment:
+      - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+      - CI=true
     stdin_open: true
     tty: true
     volumes:
