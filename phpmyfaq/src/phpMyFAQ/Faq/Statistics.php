@@ -488,9 +488,7 @@ class Statistics
                 AND fd.active = \'yes\'';
 
         if ($categoryId != 0) {
-            $query .= '
-            AND
-                fcr.category_id = \'' . $categoryId . "'";
+            $query .= sprintf(' AND fcr.category_id = %d', $categoryId);
         }
 
         if (isset($language) && Language::isASupportedLanguage($language)) {

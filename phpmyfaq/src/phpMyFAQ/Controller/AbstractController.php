@@ -261,7 +261,7 @@ abstract class AbstractController
         try {
             $phpFileLoader->load(resource: '../../services.php');
         } catch (\Exception $exception) {
-            echo $exception->getMessage();
+            error_log($exception->getMessage());
         }
 
         // Register Forms services
