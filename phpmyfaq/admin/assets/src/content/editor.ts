@@ -266,6 +266,9 @@ export const renderEditor = () => {
       ajax: {
         url: './api/media-browser',
         contentType: 'application/json; charset=UTF-8',
+        data: {
+          csrfToken: (document.getElementById('pmf-csrf-token') as HTMLInputElement).value,
+        },
       },
       createNewFolder: false,
       deleteFolder: false,
