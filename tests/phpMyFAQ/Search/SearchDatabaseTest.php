@@ -148,7 +148,10 @@ class SearchDatabaseTest extends TestCase
     public function testGetMatchClause()
     {
         $this->searchDatabase->setMatchingColumns(['faqdata.author']);
-        $this->assertEquals(" (faqdata.author LIKE '%Thorsten%' ESCAPE '\\')", $this->searchDatabase->getMatchClause('Thorsten'));
+        $this->assertEquals(
+            " (faqdata.author LIKE '%Thorsten%' ESCAPE '\\')",
+            $this->searchDatabase->getMatchClause('Thorsten'),
+        );
         $this->assertIsString($this->searchDatabase->getMatchClause('Thorsten'));
     }
 
