@@ -29,7 +29,6 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Setup\EnvironmentConfigurator;
 use phpMyFAQ\Setup\Update;
 use phpMyFAQ\Setup\Upgrade;
-use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\JsonResponse;

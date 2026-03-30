@@ -19,26 +19,28 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Service\McpServer;
 
+use Mcp\Server;
+use Mcp\Server\Transport\StdioTransport;
 use phpMyFAQ\Configuration;
 use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class McpSdkRuntime implements McpServerRuntimeInterface
+final readonly class McpSdkRuntime implements McpServerRuntimeInterface
 {
     /**
      * @param array<string, mixed> $serverInfo
      */
     public function __construct(
-        private readonly Configuration $configuration,
-        private readonly FaqSearchTool $faqSearchTool,
-        private readonly array $serverInfo,
+        private Configuration $configuration,
+        private FaqSearchTool $faqSearchTool,
+        private array $serverInfo,
     ) {
     }
 
     public function runConsole(InputInterface $input, OutputInterface $output): void
     {
-        $this->buildServer()->run(new \Mcp\Server\Transport\StdioTransport());
+        $this->buildServer()->run(new StdioTransport());
     }
 
     public function getServerInfo(): array
@@ -67,14 +69,14 @@ final class McpSdkRuntime implements McpServerRuntimeInterface
             'all_languages' => $all_languages,
         ]);
 
-        $decoded = json_decode($result['content'], true);
+        $decoded = json_decode($result['content'], associative: true);
 
         return json_last_error() === JSON_ERROR_NONE ? $decoded : $result['content'];
     }
 
-    private function buildServer(): \Mcp\Server
+    private function buildServer(): Server
     {
-        if (!class_exists(\Mcp\Server::class) || !class_exists(\Mcp\Server\Transport\StdioTransport::class)) {
+        if (!class_exists(Server::class) || !class_exists(StdioTransport::class)) {
             throw new RuntimeException(
                 'The mcp/sdk package is not installed or does not expose the expected server classes.',
             );
@@ -82,19 +84,14 @@ final class McpSdkRuntime implements McpServerRuntimeInterface
 
         $definition = $this->faqSearchTool->getDefinition();
 
-        return \Mcp\Server::builder()
+        return Server::builder()
             ->setServerInfo(
                 (string) $this->serverInfo['name'],
                 (string) $this->serverInfo['version'],
                 (string) ($this->serverInfo['description'] ?? null),
             )
             ->addTool(
-                fn(
-                    string $query,
-                    ?int $category_id = null,
-                    int $limit = 10,
-                    bool $all_languages = false,
-                ): array|string => $this->faqSearch($query, $category_id, $limit, $all_languages),
+                $this->faqSearch(...),
                 $definition->name,
                 $definition->description,
                 null,

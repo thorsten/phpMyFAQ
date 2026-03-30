@@ -74,10 +74,7 @@ final class UnauthorizedUserController
         $email = trim((string) Filter::filterEmail($data->email));
 
         if ($username !== '' && $username !== '0' && ($email !== '' && $email !== '0')) {
-            $user = ($this->currentUserFactory
-            ?? static fn(Configuration $configuration): CurrentUser => CurrentUser::getCurrentUser(
-                $configuration,
-            ))($this->configuration);
+            $user = ($this->currentUserFactory ?? CurrentUser::getCurrentUser(...))($this->configuration);
             $loginExist = $user->getUserByLogin($username);
 
             if ($loginExist && $email === $user->getUserData('email')) {

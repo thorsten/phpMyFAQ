@@ -34,7 +34,8 @@ final class TranslationController extends AbstractController
 {
     /**
      * @param ?Closure(string): void $setCurrentLanguage
-     * @param ?Closure(): array<mixed> $getTranslations
+     * @param ?Closure(): array      $getTranslations
+     * @throws \Exception
      */
     public function __construct(
         private readonly ?Closure $setCurrentLanguage = null,
@@ -57,7 +58,7 @@ final class TranslationController extends AbstractController
                 Translation::getInstance()->setCurrentLanguage($language);
             })($language);
 
-            return $this->json(($this->getTranslations ?? static fn(): array => Translation::getAll())());
+            return $this->json(($this->getTranslations ?? Translation::getAll(...))());
         } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

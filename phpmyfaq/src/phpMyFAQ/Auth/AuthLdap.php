@@ -100,8 +100,8 @@ class AuthLdap extends Auth implements AuthDriverInterface
 
         // Set user information from LDAP
         $user->setUserData([
-            'display_name' => $this->ldapCore->getCompleteName($login) ?: '',
-            'email' => $this->ldapCore->getMail($login) ?: '',
+            'display_name' => $this->ldapCore->getCompleteName($login) ?? '',
+            'email' => $this->ldapCore->getMail($login) ?? '',
         ]);
 
         // Handle group assignments if enabled

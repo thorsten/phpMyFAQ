@@ -89,8 +89,8 @@ class AuthHttp extends Auth implements AuthDriverInterface
         }
 
         return (
-            $this->request->server->get('PHP_AUTH_USER') === $login
-            && $this->request->server->get('PHP_AUTH_PW') === $password
+            hash_equals($login, (string) $this->request->server->get('PHP_AUTH_USER'))
+            && hash_equals($password, (string) $this->request->server->get('PHP_AUTH_PW'))
         );
     }
 
