@@ -150,7 +150,7 @@ readonly class DatabaseConfigurationStore implements ConfigurationStoreInterface
         $result = $this->databaseDriver->query($query);
         $rows = $this->databaseDriver->fetchAll($result);
 
-        $values = array_fill_keys($trimmedNames, null);
+        $values = array_fill_keys($trimmedNames, value: null);
         if (!is_array($rows)) {
             return $values;
         }
