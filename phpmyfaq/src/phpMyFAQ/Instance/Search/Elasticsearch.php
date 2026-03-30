@@ -302,6 +302,7 @@ class Elasticsearch
             return $this->client->index($params)->asObject();
         } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
             $this->configuration->getLogger()->error('Index error.', [$e->getMessage()]);
+            return null;
         }
     }
 

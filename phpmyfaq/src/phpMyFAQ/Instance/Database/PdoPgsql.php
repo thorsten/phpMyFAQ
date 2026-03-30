@@ -406,7 +406,12 @@ class PdoPgsql extends Database implements DriverInterface
         }
 
         foreach ($this->createTableStatements as $key => $stmt) {
-            if ($key === 'idx_records' || $key === 'faqsessions_idx') {
+            if (
+                $key === 'idx_records'
+                || $key === 'faqsessions_idx'
+                || str_starts_with($key, 'faqsearches_')
+                || str_starts_with($key, 'faqchat_messages_idx_')
+            ) {
                 $result = $this->configuration->getDb()->query(sprintf($stmt, $prefix, $prefix));
                 if (!$result) {
                     return false;
