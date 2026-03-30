@@ -171,10 +171,16 @@ class Filter
         // remove broken stuff
         $html = str_replace(search: '&#13;', replace: '', subject: $html);
 
-        preg_match_all(pattern: '/[a-z]+=".+"/iU', subject: $html, matches: $attributes);
+        // Match attributes with double quotes, single quotes, or no quotes
+        preg_match_all(
+            pattern: '/[a-z]+\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/iU',
+            subject: $html,
+            matches: $attributes,
+        );
 
         foreach ($attributes[0] as $attribute) {
             $attributeName = stristr($attribute, needle: '=', before_needle: true);
+            $attributeName = trim($attributeName);
             if (!self::isAttribute($attributeName)) {
                 continue;
             }

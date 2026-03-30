@@ -24,6 +24,7 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;
 use RecursiveDirectoryIterator;
@@ -58,11 +59,23 @@ final class MediaBrowserController extends AbstractController
         $action = Filter::filterVar($data->action, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if ($action === 'fileRemove') {
-            $file = Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS);
-            $file = PMF_CONTENT_DIR . '/user/images/' . $file;
+            if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+                'media-browser',
+                $data->csrfToken,
+            )) {
+                return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            }
 
-            if (file_exists($file)) {
-                unlink($file);
+            $file = basename(Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS));
+            $allowedDir = realpath(PMF_CONTENT_DIR . '/user/images');
+            $targetPath = realpath(PMF_CONTENT_DIR . '/user/images/' . $file);
+
+            if ($targetPath === false || !str_starts_with($targetPath, $allowedDir . DIRECTORY_SEPARATOR)) {
+                return $this->json(['error' => 'Invalid file path'], Response::HTTP_BAD_REQUEST);
+            }
+
+            if (file_exists($targetPath)) {
+                unlink($targetPath);
             }
 
             $response = [

@@ -297,6 +297,40 @@ class FilterTest extends TestCase
         $this->assertStringNotContainsString('onmouseover', $result);
     }
 
+    public function testRemoveAttributesWithUnquotedValues(): void
+    {
+        $html = '<img src=x onerror=alert(1)>';
+        $result = Filter::removeAttributes($html);
+
+        $this->assertStringNotContainsString('onerror', $result);
+    }
+
+    public function testRemoveAttributesWithSingleQuotedValues(): void
+    {
+        $html = "<img src='x' onerror='alert(1)'>";
+        $result = Filter::removeAttributes($html);
+
+        $this->assertStringNotContainsString('onerror', $result);
+    }
+
+    public function testRemoveAttributesWithSvgOnload(): void
+    {
+        $html = '<svg onload=alert(1)>';
+        $result = Filter::removeAttributes($html);
+
+        $this->assertStringNotContainsString('onload', $result);
+    }
+
+    public function testRemoveAttributesWithMixedQuoteStyles(): void
+    {
+        $html = '<div class="safe" onclick=alert(1) style=\'color:red\' onmouseover="steal()">';
+        $result = Filter::removeAttributes($html);
+
+        $this->assertStringContainsString('class="safe"', $result);
+        $this->assertStringNotContainsString('onclick', $result);
+        $this->assertStringNotContainsString('onmouseover', $result);
+    }
+
     protected function tearDown(): void
     {
         unset($_GET['test_var'], $_GET['special_test'], $_POST['name'], $_POST['email']);
