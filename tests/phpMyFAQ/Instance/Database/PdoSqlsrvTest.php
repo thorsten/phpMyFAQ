@@ -187,7 +187,10 @@ class PdoSqlsrvTest extends TestCase
 
         $this->pdoSqlsrv->createTables('test_');
 
-        $indexQueries = array_filter($executedQueries, fn($q) => str_contains($q, 'CREATE INDEX') || str_contains($q, 'CREATE UNIQUE INDEX'));
+        $indexQueries = array_filter(
+            $executedQueries,
+            fn($q) => str_contains($q, 'CREATE INDEX') || str_contains($q, 'CREATE UNIQUE INDEX'),
+        );
         $this->assertNotEmpty($indexQueries);
 
         foreach ($indexQueries as $query) {

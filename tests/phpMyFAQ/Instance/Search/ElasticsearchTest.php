@@ -106,7 +106,7 @@ class ElasticsearchTest extends TestCase
                 'Content-Type' => 'application/json',
                 'X-Elastic-Product' => 'Elasticsearch',
             ],
-            json_encode($body)
+            json_encode($body),
         );
     }
 
@@ -324,10 +324,12 @@ class ElasticsearchTest extends TestCase
             ->method('sendRequest')
             ->with($this->callback(function ($request) {
                 $body = json_decode((string) $request->getBody(), true);
-                return str_contains($request->getUri()->getPath(), '/_doc/42')
+                return (
+                    str_contains($request->getUri()->getPath(), '/_doc/42')
                     && $body['question'] === 'What is phpMyFAQ?'
                     && $body['answer'] === 'A FAQ tool'
-                    && $body['content_type'] === 'faq';
+                    && $body['content_type'] === 'faq'
+                );
             }))
             ->willReturn($this->createElasticsearchResponse(200, ['result' => 'created']));
 
@@ -378,9 +380,11 @@ class ElasticsearchTest extends TestCase
             ->method('sendRequest')
             ->with($this->callback(function ($request) {
                 $body = json_decode((string) $request->getBody(), true);
-                return str_contains($request->getUri()->getPath(), '/_update/42')
+                return (
+                    str_contains($request->getUri()->getPath(), '/_update/42')
                     && $body['doc']['answer'] === 'Updated answer'
-                    && $body['doc']['content_type'] === 'faq';
+                    && $body['doc']['content_type'] === 'faq'
+                );
             }))
             ->willReturn($this->createElasticsearchResponse(200, ['result' => 'updated']));
 
@@ -418,7 +422,7 @@ class ElasticsearchTest extends TestCase
             ->method('sendRequest')
             ->with($this->callback(function ($request) {
                 return $request->getMethod() === 'DELETE'
-                    && str_contains($request->getUri()->getPath(), '/phpmyfaq_test/_doc/42');
+                && str_contains($request->getUri()->getPath(), '/phpmyfaq_test/_doc/42');
             }))
             ->willReturn($this->createElasticsearchResponse(200, ['result' => 'deleted']));
 
@@ -441,9 +445,7 @@ class ElasticsearchTest extends TestCase
 
     public function testIsAvailableReturnsTrueOnPing(): void
     {
-        $this->httpClientMock
-            ->method('sendRequest')
-            ->willReturn($this->createElasticsearchResponse(200, []));
+        $this->httpClientMock->method('sendRequest')->willReturn($this->createElasticsearchResponse(200, []));
 
         $this->assertTrue($this->elasticsearch->isAvailable());
     }
@@ -493,8 +495,7 @@ class ElasticsearchTest extends TestCase
             ->with($this->callback(function ($request) {
                 $body = (string) $request->getBody();
                 // NDJSON: should only contain solution_id 2, not 1
-                return str_contains($body, '"_id":"2"')
-                    && !str_contains($body, '"_id":"1"');
+                return str_contains($body, '"_id":"2"') && !str_contains($body, '"_id":"1"');
             }))
             ->willReturn($this->createElasticsearchResponse(200, ['errors' => false, 'items' => []]));
 
@@ -569,10 +570,12 @@ class ElasticsearchTest extends TestCase
             ->method('sendRequest')
             ->with($this->callback(function ($request) {
                 $body = json_decode((string) $request->getBody(), true);
-                return str_contains($request->getUri()->getPath(), '/_doc/page_1_en')
+                return (
+                    str_contains($request->getUri()->getPath(), '/_doc/page_1_en')
                     && $body['content_type'] === 'page'
                     && $body['slug'] === 'about-us'
-                    && $body['answer'] === 'AboutInfo';
+                    && $body['answer'] === 'AboutInfo'
+                );
             }))
             ->willReturn($this->createElasticsearchResponse(200, ['result' => 'created']));
 
@@ -597,7 +600,7 @@ class ElasticsearchTest extends TestCase
             ->method('sendRequest')
             ->with($this->callback(function ($request) {
                 return $request->getMethod() === 'DELETE'
-                    && str_contains($request->getUri()->getPath(), '/_doc/page_1_en');
+                && str_contains($request->getUri()->getPath(), '/_doc/page_1_en');
             }))
             ->willReturn($this->createElasticsearchResponse(200, ['result' => 'deleted']));
 
@@ -645,9 +648,11 @@ class ElasticsearchTest extends TestCase
             ->method('sendRequest')
             ->with($this->callback(function ($request) {
                 $body = json_decode((string) $request->getBody(), true);
-                return str_contains($request->getUri()->getPath(), '/_update/page_6_de')
+                return (
+                    str_contains($request->getUri()->getPath(), '/_update/page_6_de')
                     && $body['doc']['content_type'] === 'page'
-                    && $body['doc']['answer'] === 'Updated content';
+                    && $body['doc']['answer'] === 'Updated content'
+                );
             }))
             ->willReturn($this->createElasticsearchResponse(200, ['result' => 'updated']));
 
@@ -673,7 +678,7 @@ class ElasticsearchTest extends TestCase
             ->method('sendRequest')
             ->with($this->callback(function ($request) {
                 return $request->getMethod() === 'DELETE'
-                    && str_contains($request->getUri()->getPath(), '/_doc/page_3_en');
+                && str_contains($request->getUri()->getPath(), '/_doc/page_3_en');
             }))
             ->willReturn($this->createElasticsearchResponse(200, ['result' => 'deleted']));
 
@@ -698,10 +703,9 @@ class ElasticsearchTest extends TestCase
                 $callCount++;
                 if ($callCount === 1) {
                     // First call (update) returns 404 with document_missing_exception
-                    return $this->createElasticsearchResponse(
-                        404,
-                        ['error' => ['type' => 'document_missing_exception']]
-                    );
+                    return $this->createElasticsearchResponse(404, ['error' => [
+                        'type' => 'document_missing_exception',
+                    ]]);
                 }
                 // Second call (index fallback) returns 200
                 return $this->createElasticsearchResponse(200, ['result' => 'created']);
@@ -743,7 +747,7 @@ class ElasticsearchTest extends TestCase
             ->method('sendRequest')
             ->with($this->callback(function ($request) {
                 return $request->getMethod() === 'DELETE'
-                    && str_contains($request->getUri()->getPath(), '/_doc/page_5_de');
+                && str_contains($request->getUri()->getPath(), '/_doc/page_5_de');
             }))
             ->willReturn($this->createElasticsearchResponse(200, ['result' => 'deleted']));
 
@@ -790,8 +794,7 @@ class ElasticsearchTest extends TestCase
             ->method('sendRequest')
             ->with($this->callback(function ($request) {
                 $body = (string) $request->getBody();
-                return str_contains($body, 'page_1_en')
-                    && !str_contains($body, 'page_2_en');
+                return str_contains($body, 'page_1_en') && !str_contains($body, 'page_2_en');
             }))
             ->willReturn($this->createElasticsearchResponse(200, ['errors' => false]));
 
