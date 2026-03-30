@@ -620,7 +620,7 @@ class StatisticsTest extends TestCase
         $this->dbMock
             ->expects($this->once())
             ->method('query')
-            ->with($this->stringContains("fcr.category_id = '5'"))
+            ->with($this->stringContains("fcr.category_id = 5"))
             ->willReturn($resultMock);
         $this->dbMock->method('escape')->willReturn('en');
         $this->dbMock->method('fetchObject')->willReturn(null);
