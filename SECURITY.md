@@ -9,9 +9,9 @@ The following branches are supported for security fixes:
 
 | Version | Status                 | Notes                         |
 |---------|------------------------|-------------------------------|
-| 4.1.x   | Active support         | Features and security fixes   |
-| 4.0.x   | Security fixes only    | No new features               |
-| < 4.0   | End of life (EOL)      | No fixes, please upgrade      |
+| 4.2.x   | Active support         | Features and security fixes   |
+| 4.1.x   | Security fixes only    | No new features               |
+| < 4.1   | End of life (EOL)      | No fixes, please upgrade      |
 
 We may backport critical fixes at our discretion. Users should keep up to date with the latest minor/patch releases.
 
