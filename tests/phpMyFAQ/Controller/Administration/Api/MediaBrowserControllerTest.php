@@ -11,6 +11,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -163,12 +164,32 @@ final class MediaBrowserControllerTest extends TestCase
         $this->createdMediaFile = PMF_CONTENT_DIR . '/user/images/' . $fileName;
         file_put_contents($this->createdMediaFile, 'fake-image');
 
+        $session = new Session(new MockArraySessionStorage());
+
+        // Set up a valid CSRF token in the session
+        Token::resetInstanceForTests();
+        $csrfToken = md5(base64_encode(random_bytes(32)));
+        $tokenObj = Token::getInstance($session);
+        $tokenPage = 'media-browser';
+        $sessionKey = sprintf('%s.%s', Token::PMF_SESSION_NAME, $tokenPage);
+
+        // Use reflection to create a Token object for session storage
+        $tokenReflection = new \ReflectionClass(Token::class);
+        $storedToken = $tokenReflection->newInstanceWithoutConstructor();
+        $storedToken->setPage($tokenPage);
+        $storedToken->setExpiry(time() + 3600);
+        $storedToken->setSessionToken($csrfToken);
+        $storedToken->setCookieToken('');
+
+        $session->set($sessionKey, $storedToken);
+
         $controller = new MediaBrowserController();
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $controller->setContainer($this->createAuthenticatedContainer($session));
 
         $request = new Request([], [], [], [], [], [], json_encode([
             'action' => 'fileRemove',
             'name' => $fileName,
+            'csrfToken' => $csrfToken,
         ], JSON_THROW_ON_ERROR));
 
         $response = $controller->index($request);
@@ -180,7 +201,7 @@ final class MediaBrowserControllerTest extends TestCase
         $this->createdMediaFile = '';
     }
 
-    private function createAuthenticatedContainer(): ContainerInterface
+    private function createAuthenticatedContainer(?Session $session = null): ContainerInterface
     {
         $permission = $this->createMock(PermissionInterface::class);
         $permission
@@ -197,7 +218,7 @@ final class MediaBrowserControllerTest extends TestCase
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(42);
 
-        $session = new Session(new MockArraySessionStorage());
+        $session ??= new Session(new MockArraySessionStorage());
 
         $container = $this->createStub(ContainerInterface::class);
         $container
