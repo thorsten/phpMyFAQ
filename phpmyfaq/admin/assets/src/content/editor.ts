@@ -42,6 +42,7 @@ import 'jodit/esm/modules/uploader/uploader.js';
 import 'jodit/esm/plugins/video/video.js';
 import '../plugins/phpmyfaq/phpmyfaq.js';
 import '../plugins/code-snippet/code-snippet.js';
+import '../plugins/show-blocks/show-blocks.js';
 import hljs from 'highlight.js';
 
 interface UploaderResponse {
@@ -187,7 +188,7 @@ export const renderEditor = () => {
     imageProcessor: { replaceDataURIToBlobIdInView: false },
     removeButtons: [],
     disablePlugins: [],
-    extraPlugins: ['phpMyFAQ', 'codeSnippet'],
+    extraPlugins: ['phpMyFAQ', 'codeSnippet', 'showBlocks'],
     extraButtons: [],
     buttons: [
       'source',
@@ -240,6 +241,7 @@ export const renderEditor = () => {
       '|',
       'phpMyFAQ',
       'codeSnippet',
+      'showBlocks',
     ],
     events: {},
     textIcons: false,
