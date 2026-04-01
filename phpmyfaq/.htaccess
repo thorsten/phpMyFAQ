@@ -153,6 +153,7 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteCond %{REQUEST_URI} ^(.*/)setup/
     RewriteRule ^(.*/)?setup/(.*) $1setup/index.php [L,QSA]
     RewriteRule ^update$ update/index.php [L,QSA]
+    RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^update/(.*) update/index.php [L,QSA]
     # Administration API
     RewriteRule ^admin/api/(.*) admin/api/index.php [L,QSA]
