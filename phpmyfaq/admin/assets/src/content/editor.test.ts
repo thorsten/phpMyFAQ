@@ -92,6 +92,7 @@ vi.mock('jodit/esm/modules/uploader/uploader.js', () => ({}));
 vi.mock('jodit/esm/plugins/video/video.js', () => ({}));
 vi.mock('../plugins/phpmyfaq/phpmyfaq.js', () => ({}));
 vi.mock('../plugins/code-snippet/code-snippet.js', () => ({}));
+vi.mock('../plugins/show-blocks/show-blocks.js', () => ({}));
 
 import { getJoditEditor, renderEditor, renderPageEditor } from './editor';
 import { Jodit } from 'jodit';
