@@ -1143,6 +1143,30 @@ class Update extends AbstractSetup
             $tablePrefix = Database::getTablePrefix();
 
             switch ($dbType) {
+                case 'mysqli':
+                case 'pdo_mysql':
+                    // MySQL: CREATE INDEX IF NOT EXISTS requires 8.0.24+, so create indexes
+                    // directly and silently ignore "Duplicate key name" errors (error 1061)
+                    $indexStatements = [
+                        'idx_faqsearches_searchterm' => '(searchterm)',
+                        'idx_faqsearches_date_term' => '(searchdate, searchterm)',
+                        'idx_faqsearches_date_term_lang' => '(searchdate, searchterm, lang)',
+                    ];
+                    foreach ($indexStatements as $indexName => $columns) {
+                        try {
+                            $this->configuration
+                                ->getDb()
+                                ->query(sprintf(
+                                    'CREATE INDEX %s ON %sfaqsearches %s',
+                                    $indexName,
+                                    $tablePrefix,
+                                    $columns,
+                                ));
+                        } catch (Exception) {
+                            // Index already exists, ignore
+                        }
+                    }
+                    break;
                 case 'sqlsrv':
                 case 'pdo_sqlsrv':
                     // SQL Server: Check if the index exists before creating
@@ -1165,7 +1189,7 @@ class Update extends AbstractSetup
                         . '(searchdate, searchterm, lang)';
                     break;
                 default:
-                    // MySQL, PostgreSQL, SQLite: Use IF NOT EXISTS
+                    // PostgreSQL, SQLite: Use IF NOT EXISTS
                     $this->queries[] = sprintf(
                         'CREATE INDEX IF NOT EXISTS idx_faqsearches_searchterm ON %sfaqsearches (searchterm)',
                         $tablePrefix,

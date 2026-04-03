@@ -2,7 +2,8 @@
 
 [data-bs-theme='light'] {
   #cc-main {
-    .cm, .pm {
+    .cm,
+    .pm {
       border: 2px solid var(--cc-secondary-color);
       box-shadow: 5px 5px 15px var(--cc-secondary-color);
     }
@@ -50,7 +51,8 @@
   --cc-footer-border-color: #060809;
 
   #cc-main {
-    .cm, .pm {
+    .cm,
+    .pm {
       border: 2px solid var(--cc-separator-border-color);
       box-shadow: 5px 5px 15px var(--cc-separator-border-color);
     }
@@ -91,7 +93,9 @@
   --cc-modal-transition-duration: 0s;
 
   #cc-main {
-    &, .cm, .pm {
+    &,
+    .cm,
+    .pm {
       font-size: 1.3rem !important;
       font-weight: 800 !important;
       border: none !important;
@@ -99,7 +103,8 @@
       padding: 5px !important;
     }
 
-    .pm__body, .cm__body {
+    .pm__body,
+    .cm__body {
       background-color: var(--bs-dark) !important;
       color: var(--bs-light) !important;
     }
@@ -108,7 +113,8 @@
       outline-offset: -3px;
     }
 
-    .cm__desc, .pm__section-desc {
+    .cm__desc,
+    .pm__section-desc {
       color: var(--bs-light) !important;
     }
 
@@ -131,7 +137,8 @@
     }
   }
 
-  .pm__footer, .pm__header {
+  .pm__footer,
+  .pm__header {
     background-color: var(--bs-primary) !important;
     color: var(--bs-dark) !important;
     border: 2px solid var(--bs-primary) !important;
@@ -139,7 +146,8 @@
     text-decoration: none !important;
   }
 
-  .cm__btn, .pm__btn {
+  .cm__btn,
+  .pm__btn {
     font-weight: 800 !important;
     border-width: 2px !important;
     text-transform: uppercase;
@@ -155,7 +163,8 @@
 
   @media screen and (max-width: 768px) {
     #cc-main {
-      .cm, .pm {
+      .cm,
+      .pm {
         padding: 2px !important;
       }
     }
@@ -165,14 +174,16 @@
       flex-direction: column !important;
     }
 
-    .cm__btn, .pm__btn {
+    .cm__btn,
+    .pm__btn {
       width: 100% !important;
       margin-right: 0 !important;
       margin-bottom: 12px !important;
       padding: 1rem !important;
     }
 
-    .cm__title, .pm__title {
+    .cm__title,
+    .pm__title {
       word-break: break-word !important;
     }
   }
