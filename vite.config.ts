@@ -87,5 +87,6 @@ export default defineConfig({
     },
     globals: true,
     include: ['**/phpmyfaq/assets/**/*.test.ts', '**/phpmyfaq/admin/assets/**/*.test.ts'],
+    exclude: ['**/node_modules/**', '.claude/**'],
   },
 });
