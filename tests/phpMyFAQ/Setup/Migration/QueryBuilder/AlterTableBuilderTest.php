@@ -23,10 +23,7 @@ class AlterTableBuilderTest extends TestCase
 
     public function testAddInteger(): void
     {
-        $statements = $this->mysqlBuilder
-            ->table('test', false)
-            ->addInteger('new_col', true)
-            ->build();
+        $statements = $this->mysqlBuilder->table('test', false)->addInteger('new_col', true)->build();
 
         $this->assertCount(1, $statements);
         $this->assertStringContainsString('ALTER TABLE test', $statements[0]);
@@ -55,50 +52,35 @@ class AlterTableBuilderTest extends TestCase
 
     public function testAddVarchar(): void
     {
-        $statements = $this->mysqlBuilder
-            ->table('test', false)
-            ->addVarchar('name', 255, false)
-            ->build();
+        $statements = $this->mysqlBuilder->table('test', false)->addVarchar('name', 255, false)->build();
 
         $this->assertStringContainsString('ADD COLUMN name VARCHAR(255) NOT NULL', $statements[0]);
     }
 
     public function testAddVarcharWithDefault(): void
     {
-        $statements = $this->mysqlBuilder
-            ->table('test', false)
-            ->addVarchar('status', 50, true, 'pending')
-            ->build();
+        $statements = $this->mysqlBuilder->table('test', false)->addVarchar('status', 50, true, 'pending')->build();
 
         $this->assertStringContainsString("DEFAULT 'pending'", $statements[0]);
     }
 
     public function testAddText(): void
     {
-        $statements = $this->mysqlBuilder
-            ->table('test', false)
-            ->addText('description', true)
-            ->build();
+        $statements = $this->mysqlBuilder->table('test', false)->addText('description', true)->build();
 
         $this->assertStringContainsString('ADD COLUMN description TEXT NULL', $statements[0]);
     }
 
     public function testAddBoolean(): void
     {
-        $statements = $this->mysqlBuilder
-            ->table('test', false)
-            ->addBoolean('is_active', false, true)
-            ->build();
+        $statements = $this->mysqlBuilder->table('test', false)->addBoolean('is_active', false, true)->build();
 
         $this->assertStringContainsString('ADD COLUMN is_active TINYINT(1) NOT NULL DEFAULT 1', $statements[0]);
     }
 
     public function testAddTimestamp(): void
     {
-        $statements = $this->mysqlBuilder
-            ->table('test', false)
-            ->addTimestamp('created_at', false, true)
-            ->build();
+        $statements = $this->mysqlBuilder->table('test', false)->addTimestamp('created_at', false, true)->build();
 
         $this->assertStringContainsString('ADD COLUMN created_at TIMESTAMP', $statements[0]);
         $this->assertStringContainsString('DEFAULT CURRENT_TIMESTAMP', $statements[0]);
@@ -106,10 +88,7 @@ class AlterTableBuilderTest extends TestCase
 
     public function testModifyColumn(): void
     {
-        $statements = $this->mysqlBuilder
-            ->table('test', false)
-            ->modifyColumn('description', 'TEXT')
-            ->build();
+        $statements = $this->mysqlBuilder->table('test', false)->modifyColumn('description', 'TEXT')->build();
 
         $this->assertCount(1, $statements);
         $this->assertStringContainsString('ALTER TABLE test MODIFY description TEXT', $statements[0]);
@@ -117,20 +96,14 @@ class AlterTableBuilderTest extends TestCase
 
     public function testModifyColumnPostgres(): void
     {
-        $statements = $this->pgsqlBuilder
-            ->table('test', false)
-            ->modifyColumn('description', 'TEXT')
-            ->build();
+        $statements = $this->pgsqlBuilder->table('test', false)->modifyColumn('description', 'TEXT')->build();
 
         $this->assertStringContainsString('ALTER COLUMN description TYPE TEXT', $statements[0]);
     }
 
     public function testDropColumn(): void
     {
-        $statements = $this->mysqlBuilder
-            ->table('test', false)
-            ->dropColumn('old_col')
-            ->build();
+        $statements = $this->mysqlBuilder->table('test', false)->dropColumn('old_col')->build();
 
         $this->assertCount(1, $statements);
         $this->assertStringContainsString('ALTER TABLE test DROP COLUMN old_col', $statements[0]);
@@ -175,10 +148,7 @@ class AlterTableBuilderTest extends TestCase
 
     public function testAddIntegerWithDefault(): void
     {
-        $statements = $this->mysqlBuilder
-            ->table('test', false)
-            ->addInteger('count', true, 0)
-            ->build();
+        $statements = $this->mysqlBuilder->table('test', false)->addInteger('count', true, 0)->build();
 
         $this->assertStringContainsString('DEFAULT 0', $statements[0]);
     }

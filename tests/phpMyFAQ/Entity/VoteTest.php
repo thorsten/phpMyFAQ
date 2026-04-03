@@ -250,11 +250,7 @@ class VoteTest extends TestCase
      */
     public function testZeroValues(): void
     {
-        $this->vote
-            ->setId(0)
-            ->setFaqId(0)
-            ->setVote(0)
-            ->setUsers(0);
+        $this->vote->setId(0)->setFaqId(0)->setVote(0)->setUsers(0);
 
         $this->assertEquals(0, $this->vote->getId());
         $this->assertEquals(0, $this->vote->getFaqId());

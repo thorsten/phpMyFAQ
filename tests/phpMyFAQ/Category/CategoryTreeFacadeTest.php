@@ -97,11 +97,7 @@ class CategoryTreeFacadeTest extends TestCase
         ];
         $expected = [1, 2];
 
-        $this->treeBuilder
-            ->expects($this->once())
-            ->method('getChildren')
-            ->with($childrenMap, 0)
-            ->willReturn($expected);
+        $this->treeBuilder->expects($this->once())->method('getChildren')->with($childrenMap, 0)->willReturn($expected);
 
         $result = $this->facade->getChildren($childrenMap, 0);
         $this->assertSame($expected, $result);
@@ -133,11 +129,7 @@ class CategoryTreeFacadeTest extends TestCase
             3 => ['id' => 3, 'parent_id' => 2],
         ];
 
-        $this->treeBuilder
-            ->expects($this->once())
-            ->method('computeLevel')
-            ->with($categoryNames, 3)
-            ->willReturn(2);
+        $this->treeBuilder->expects($this->once())->method('computeLevel')->with($categoryNames, 3)->willReturn(2);
 
         $result = $this->facade->getLevelOf($categoryNames, 3);
         $this->assertSame(2, $result);
@@ -152,11 +144,7 @@ class CategoryTreeFacadeTest extends TestCase
         ];
         $expected = [1, 2, 3];
 
-        $this->treeBuilder
-            ->expects($this->once())
-            ->method('getNodes')
-            ->with($categoryNames, 3)
-            ->willReturn($expected);
+        $this->treeBuilder->expects($this->once())->method('getNodes')->with($categoryNames, 3)->willReturn($expected);
 
         $result = $this->facade->getNodes($categoryNames, 3);
         $this->assertSame($expected, $result);

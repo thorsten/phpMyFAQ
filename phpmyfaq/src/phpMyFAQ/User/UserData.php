@@ -111,10 +111,7 @@ class UserData
             return null;
         }
 
-        return $this->configuration
-            ->getDb()
-            ->fetchObject($res)
-            ->$key;
+        return $this->configuration->getDb()->fetchObject($res)->$key;
     }
 
     /**

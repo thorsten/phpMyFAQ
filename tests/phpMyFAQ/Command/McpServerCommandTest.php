@@ -57,10 +57,7 @@ class McpServerCommandTest extends TestCase
 
         $input->method('getOption')->willReturn(false);
 
-        $this->serverMock
-            ->expects($this->once())
-            ->method('runConsole')
-            ->with($input, $output);
+        $this->serverMock->expects($this->once())->method('runConsole')->with($input, $output);
 
         $result = $this->callExecute($input, $output);
         $this->assertSame(0, $result);

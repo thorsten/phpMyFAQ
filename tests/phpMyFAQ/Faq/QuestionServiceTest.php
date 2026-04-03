@@ -216,11 +216,7 @@ class QuestionServiceTest extends TestCase
      */
     public function testGetDefaultUserNameForLoggedInUser(): void
     {
-        $this->currentUser
-            ->expects($this->once())
-            ->method('getUserData')
-            ->with('display_name')
-            ->willReturn('John Doe');
+        $this->currentUser->expects($this->once())->method('getUserData')->with('display_name')->willReturn('John Doe');
 
         $result = $this->questionService->getDefaultUserName();
 

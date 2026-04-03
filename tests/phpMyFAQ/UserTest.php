@@ -126,17 +126,10 @@ class UserTest extends TestCase
     {
         putenv('PMF_TENANT_QUOTA_MAX_USERS=0');
 
-        $this->database
-            ->expects($this->exactly(2))
-            ->method('query')
-            ->willReturnOnConsecutiveCalls(true, true);
+        $this->database->expects($this->exactly(2))->method('query')->willReturnOnConsecutiveCalls(true, true);
         $this->database->method('escape')->willReturnArgument(0);
         $this->database->method('numRows')->willReturn(0);
-        $this->database
-            ->expects($this->once())
-            ->method('fetchArray')
-            ->with(true)
-            ->willReturn(['amount' => 0]);
+        $this->database->expects($this->once())->method('fetchArray')->with(true)->willReturn(['amount' => 0]);
         $this->database->expects($this->never())->method('nextId');
 
         $this->expectException(QuotaExceededException::class);
@@ -188,10 +181,7 @@ class UserTest extends TestCase
                 'login' => 'cookie-user',
                 'account_status' => 'active',
             ]);
-        $this->userData
-            ->expects($this->once())
-            ->method('load')
-            ->with(42);
+        $this->userData->expects($this->once())->method('load')->with(42);
 
         $this->assertTrue($this->user->getUserByCookie('cookie-token'));
         $this->assertSame(42, $this->user->getUserId());
@@ -237,15 +227,8 @@ class UserTest extends TestCase
     {
         $this->user->userdata = null;
         $this->database->method('escape')->willReturnCallback(static fn(string $value): string => $value);
-        $this->database
-            ->expects($this->exactly(2))
-            ->method('query')
-            ->willReturn(true);
-        $this->database
-            ->expects($this->exactly(2))
-            ->method('numRows')
-            ->with(true)
-            ->willReturn(1);
+        $this->database->expects($this->exactly(2))->method('query')->willReturn(true);
+        $this->database->expects($this->exactly(2))->method('numRows')->with(true)->willReturn(1);
         $this->database
             ->expects($this->exactly(2))
             ->method('fetchObject')
@@ -322,10 +305,7 @@ class UserTest extends TestCase
                 'is_superadmin' => 1,
                 'auth_source' => 'local',
             ]);
-        $this->userData
-            ->expects($this->once())
-            ->method('load')
-            ->with(7);
+        $this->userData->expects($this->once())->method('load')->with(7);
 
         $this->assertTrue($this->user->getUserByLogin('existing'));
         $this->assertSame('existing', $this->user->getLogin());
@@ -336,15 +316,8 @@ class UserTest extends TestCase
     {
         $this->user->userdata = null;
         $this->database->method('escape')->willReturn('existing');
-        $this->database
-            ->expects($this->exactly(2))
-            ->method('query')
-            ->willReturn(true);
-        $this->database
-            ->expects($this->exactly(2))
-            ->method('numRows')
-            ->with(true)
-            ->willReturn(1);
+        $this->database->expects($this->exactly(2))->method('query')->willReturn(true);
+        $this->database->expects($this->exactly(2))->method('numRows')->with(true)->willReturn(1);
         $this->database
             ->expects($this->exactly(2))
             ->method('fetchArray')
@@ -381,15 +354,8 @@ class UserTest extends TestCase
         $user->perm = $this->createMock(MediumPermission::class);
 
         $this->database->method('escape')->willReturnCallback(static fn(string $value): string => $value);
-        $this->database
-            ->expects($this->once())
-            ->method('nextId')
-            ->with('faquser', 'user_id')
-            ->willReturn(20);
-        $this->database
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn(true);
+        $this->database->expects($this->once())->method('nextId')->with('faquser', 'user_id')->willReturn(20);
+        $this->database->expects($this->once())->method('query')->willReturn(true);
         $userData->expects($this->once())->method('add')->with(20)->willReturn(true);
 
         $auth = $this->createMock(AuthDatabase::class);
@@ -485,11 +451,7 @@ class UserTest extends TestCase
         $this->user->perm = $permission;
 
         $this->database->method('query')->willReturn(true);
-        $this->userData
-            ->expects($this->once())
-            ->method('delete')
-            ->with(6)
-            ->willReturn(true);
+        $this->userData->expects($this->once())->method('delete')->with(6)->willReturn(true);
 
         $auth = $this->createMock(AuthDatabase::class);
         $auth->expects($this->once())->method('disableReadOnly')->willReturn(false);
@@ -568,15 +530,8 @@ class UserTest extends TestCase
             'encType' => User::DEFAULT_ENCRYPTION_TYPE,
             'readOnly' => false,
         ]);
-        $this->database
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn(true);
-        $this->database
-            ->expects($this->once())
-            ->method('numRows')
-            ->with(true)
-            ->willReturn(1);
+        $this->database->expects($this->once())->method('query')->willReturn(true);
+        $this->database->expects($this->once())->method('numRows')->with(true)->willReturn(1);
         $this->database
             ->expects($this->once())
             ->method('fetchArray')
@@ -588,10 +543,7 @@ class UserTest extends TestCase
                 'is_superadmin' => 0,
                 'auth_source' => 'local',
             ]);
-        $this->userData
-            ->expects($this->once())
-            ->method('load')
-            ->with(18);
+        $this->userData->expects($this->once())->method('load')->with(18);
 
         $this->assertTrue($this->user->getUserById(18));
         $this->assertSame('found-user', $this->user->getLogin());
@@ -601,15 +553,8 @@ class UserTest extends TestCase
     {
         $this->user->userdata = null;
         $this->database->method('escape')->willReturn('cookie-token');
-        $this->database
-            ->expects($this->exactly(2))
-            ->method('query')
-            ->willReturn(true);
-        $this->database
-            ->expects($this->exactly(2))
-            ->method('numRows')
-            ->with(true)
-            ->willReturn(1);
+        $this->database->expects($this->exactly(2))->method('query')->willReturn(true);
+        $this->database->expects($this->exactly(2))->method('numRows')->with(true)->willReturn(1);
         $this->database
             ->expects($this->exactly(2))
             ->method('fetchArray')
@@ -634,20 +579,9 @@ class UserTest extends TestCase
     public function testGetUserDataSetUserDataAndEmailHelpersDelegateToUserData(): void
     {
         $this->setPrivateProperty('userId', 11);
-        $this->userData
-            ->expects($this->once())
-            ->method('get')
-            ->with('display_name')
-            ->willReturn('Thorsten');
-        $this->userData
-            ->expects($this->once())
-            ->method('load')
-            ->with(11);
-        $this->userData
-            ->expects($this->once())
-            ->method('set')
-            ->with(['display_name'], ['Thorsten'])
-            ->willReturn(true);
+        $this->userData->expects($this->once())->method('get')->with('display_name')->willReturn('Thorsten');
+        $this->userData->expects($this->once())->method('load')->with(11);
+        $this->userData->expects($this->once())->method('set')->with(['display_name'], ['Thorsten'])->willReturn(true);
         $this->userData
             ->expects($this->exactly(2))
             ->method('fetchAll')
@@ -664,15 +598,8 @@ class UserTest extends TestCase
         $this->user->userdata = null;
         $this->setPrivateProperty('userId', 7);
 
-        $this->database
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn(true);
-        $this->database
-            ->expects($this->once())
-            ->method('numRows')
-            ->with(true)
-            ->willReturn(1);
+        $this->database->expects($this->once())->method('query')->willReturn(true);
+        $this->database->expects($this->once())->method('numRows')->with(true)->willReturn(1);
         $this->database
             ->expects($this->once())
             ->method('fetchArray')
@@ -689,15 +616,8 @@ class UserTest extends TestCase
         $this->user->userdata = null;
         $this->setPrivateProperty('userId', 13);
 
-        $this->database
-            ->expects($this->exactly(2))
-            ->method('query')
-            ->willReturn(true);
-        $this->database
-            ->expects($this->once())
-            ->method('numRows')
-            ->with(true)
-            ->willReturn(1);
+        $this->database->expects($this->exactly(2))->method('query')->willReturn(true);
+        $this->database->expects($this->once())->method('numRows')->with(true)->willReturn(1);
         $this->database
             ->expects($this->once())
             ->method('fetchArray')
@@ -719,15 +639,8 @@ class UserTest extends TestCase
     {
         $this->user->userdata = null;
         $this->database->method('escape')->willReturnCallback(static fn(string $value): string => $value);
-        $this->database
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn(true);
-        $this->database
-            ->expects($this->once())
-            ->method('numRows')
-            ->with(true)
-            ->willReturn(1);
+        $this->database->expects($this->once())->method('query')->willReturn(true);
+        $this->database->expects($this->once())->method('numRows')->with(true)->willReturn(1);
         $this->database
             ->expects($this->once())
             ->method('fetchArray')
@@ -756,15 +669,8 @@ class UserTest extends TestCase
     {
         $this->user->userdata = null;
         $this->database->method('escape')->willReturnCallback(static fn(string $value): string => $value);
-        $this->database
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn(true);
-        $this->database
-            ->expects($this->once())
-            ->method('numRows')
-            ->with(true)
-            ->willReturn(1);
+        $this->database->expects($this->once())->method('query')->willReturn(true);
+        $this->database->expects($this->once())->method('numRows')->with(true)->willReturn(1);
         $this->database
             ->expects($this->once())
             ->method('fetchArray')

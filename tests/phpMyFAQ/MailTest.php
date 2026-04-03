@@ -633,8 +633,7 @@ class MailTest extends TestCase
 
                     return (
                         is_array($decoded)
-                        && ($decoded['class'] ?? null)
-                        === SendMailMessage::class
+                        && ($decoded['class'] ?? null) === SendMailMessage::class
                         && isset($decoded['payload']['metadata']['envelope'])
                     );
                 }),

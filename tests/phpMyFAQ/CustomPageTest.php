@@ -64,11 +64,7 @@ class CustomPageTest extends TestCase
             ->setActive(true)
             ->setCreated(new DateTime());
 
-        $this->mockRepository
-            ->expects($this->once())
-            ->method('insert')
-            ->with($page)
-            ->willReturn(1);
+        $this->mockRepository->expects($this->once())->method('insert')->with($page)->willReturn(1);
 
         $this->assertEquals(1, $this->customPage->create($page));
     }
@@ -87,11 +83,7 @@ class CustomPageTest extends TestCase
             ->setActive(true)
             ->setCreated(new DateTime());
 
-        $this->mockRepository
-            ->expects($this->once())
-            ->method('update')
-            ->with($page)
-            ->willReturn(true);
+        $this->mockRepository->expects($this->once())->method('update')->with($page)->willReturn(true);
 
         $this->assertTrue($this->customPage->update($page));
         $this->assertNotNull($page->getUpdated());
@@ -114,11 +106,7 @@ class CustomPageTest extends TestCase
         $mockData->seo_description = null;
         $mockData->seo_robots = 'index,follow';
 
-        $this->mockRepository
-            ->expects($this->once())
-            ->method('getById')
-            ->with(1, 'en')
-            ->willReturn($mockData);
+        $this->mockRepository->expects($this->once())->method('getById')->with(1, 'en')->willReturn($mockData);
 
         $result = $this->customPage->getById(1);
         $this->assertInstanceOf(CustomPageEntity::class, $result);
@@ -128,11 +116,7 @@ class CustomPageTest extends TestCase
 
     public function testGetByIdReturnsNull(): void
     {
-        $this->mockRepository
-            ->expects($this->once())
-            ->method('getById')
-            ->with(999, 'en')
-            ->willReturn(null);
+        $this->mockRepository->expects($this->once())->method('getById')->with(999, 'en')->willReturn(null);
 
         $result = $this->customPage->getById(999);
         $this->assertNull($result);
@@ -168,22 +152,14 @@ class CustomPageTest extends TestCase
 
     public function testDelete(): void
     {
-        $this->mockRepository
-            ->expects($this->once())
-            ->method('delete')
-            ->with(1, 'en')
-            ->willReturn(true);
+        $this->mockRepository->expects($this->once())->method('delete')->with(1, 'en')->willReturn(true);
 
         $this->assertTrue($this->customPage->delete(1));
     }
 
     public function testActivate(): void
     {
-        $this->mockRepository
-            ->expects($this->once())
-            ->method('activate')
-            ->with(1, true)
-            ->willReturn(true);
+        $this->mockRepository->expects($this->once())->method('activate')->with(1, true)->willReturn(true);
 
         $this->assertTrue($this->customPage->activate(1, true));
     }
@@ -263,11 +239,7 @@ class CustomPageTest extends TestCase
 
     public function testCountPages(): void
     {
-        $this->mockRepository
-            ->expects($this->once())
-            ->method('countAll')
-            ->with('en', false)
-            ->willReturn(5);
+        $this->mockRepository->expects($this->once())->method('countAll')->with('en', false)->willReturn(5);
 
         $count = $this->customPage->countPages(false);
         $this->assertEquals(5, $count);
@@ -305,11 +277,7 @@ class CustomPageTest extends TestCase
 
     public function testCountAllLanguages(): void
     {
-        $this->mockRepository
-            ->expects($this->once())
-            ->method('countAllLanguages')
-            ->with(true)
-            ->willReturn(3);
+        $this->mockRepository->expects($this->once())->method('countAllLanguages')->with(true)->willReturn(3);
 
         $this->assertSame(3, $this->customPage->countAllLanguages(true));
     }
@@ -391,11 +359,7 @@ class CustomPageTest extends TestCase
             ->setActive(true)
             ->setCreated(new DateTime());
 
-        $this->mockRepository
-            ->expects($this->once())
-            ->method('insertTranslation')
-            ->with($page, 11)
-            ->willReturn(true);
+        $this->mockRepository->expects($this->once())->method('insertTranslation')->with($page, 11)->willReturn(true);
 
         $this->assertTrue($this->customPage->createTranslation($page, 11));
     }
@@ -417,11 +381,7 @@ class CustomPageTest extends TestCase
         $mockData->seo_description = 'SEO Test Description';
         $mockData->seo_robots = 'noindex,nofollow';
 
-        $this->mockRepository
-            ->expects($this->once())
-            ->method('getById')
-            ->with(1, 'en')
-            ->willReturn($mockData);
+        $this->mockRepository->expects($this->once())->method('getById')->with(1, 'en')->willReturn($mockData);
 
         $result = $this->customPage->getById(1);
         $this->assertInstanceOf(CustomPageEntity::class, $result);
@@ -447,11 +407,7 @@ class CustomPageTest extends TestCase
         $mockData->seo_description = null;
         $mockData->seo_robots = 'index,follow';
 
-        $this->mockRepository
-            ->expects($this->once())
-            ->method('getById')
-            ->with(2, 'en')
-            ->willReturn($mockData);
+        $this->mockRepository->expects($this->once())->method('getById')->with(2, 'en')->willReturn($mockData);
 
         $result = $this->customPage->getById(2);
 

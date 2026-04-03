@@ -84,10 +84,7 @@ class AccessTokenRepositoryTest extends TestCase
     public function testPersistNewAccessTokenInsertsRow(): void
     {
         $this->db->method('now')->willReturn('NOW()');
-        $this->db
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn(true);
+        $this->db->expects($this->once())->method('query')->willReturn(true);
 
         $token = $this->createTokenEntity('token-abc', 'client-1', 'user-1');
 
@@ -97,10 +94,7 @@ class AccessTokenRepositoryTest extends TestCase
     public function testPersistNewAccessTokenWithNullUserIdentifier(): void
     {
         $this->db->method('now')->willReturn('NOW()');
-        $this->db
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn(true);
+        $this->db->expects($this->once())->method('query')->willReturn(true);
 
         $token = $this->createTokenEntity('token-xyz', 'client-1', null);
 
@@ -134,10 +128,7 @@ class AccessTokenRepositoryTest extends TestCase
 
     public function testRevokeAccessTokenExecutesUpdate(): void
     {
-        $this->db
-            ->expects($this->once())
-            ->method('query')
-            ->with($this->stringContains('UPDATE'));
+        $this->db->expects($this->once())->method('query')->with($this->stringContains('UPDATE'));
 
         $this->repository->revokeAccessToken('token-to-revoke');
     }

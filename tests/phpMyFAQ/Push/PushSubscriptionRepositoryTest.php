@@ -106,16 +106,9 @@ class PushSubscriptionRepositoryTest extends TestCase
         $entity = $this->createEntity(endpoint: 'https://example.com/1', contentEncoding: null);
 
         $this->dbDriver->method('escape')->willReturnArgument(0);
-        $this->dbDriver
-            ->expects($this->once())
-            ->method('nextId')
-            ->with('faqpush_subscriptions', 'id')
-            ->willReturn(11);
+        $this->dbDriver->expects($this->once())->method('nextId')->with('faqpush_subscriptions', 'id')->willReturn(11);
         $this->dbDriver->method('now')->willReturn('CURRENT_TIMESTAMP');
-        $this->dbDriver
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn(true);
+        $this->dbDriver->expects($this->once())->method('query')->willReturn(true);
 
         $repository = new PushSubscriptionRepository($this->configuration);
 
@@ -129,10 +122,7 @@ class PushSubscriptionRepositoryTest extends TestCase
         $this->dbDriver->method('escape')->willReturnArgument(0);
         $this->dbDriver->method('nextId')->willReturn(12);
         $this->dbDriver->method('now')->willReturn('CURRENT_TIMESTAMP');
-        $this->dbDriver
-            ->expects($this->exactly(2))
-            ->method('query')
-            ->willReturnOnConsecutiveCalls(false, true);
+        $this->dbDriver->expects($this->exactly(2))->method('query')->willReturnOnConsecutiveCalls(false, true);
 
         $repository = new PushSubscriptionRepository($this->configuration);
 

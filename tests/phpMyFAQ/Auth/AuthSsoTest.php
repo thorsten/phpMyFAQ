@@ -35,10 +35,7 @@ class AuthSsoTest extends TestCase
 
     public function testCreateWithLdapActive(): void
     {
-        $this->configurationMock
-            ->expects($this->once())
-            ->method('isLdapActive')
-            ->willReturn(true);
+        $this->configurationMock->expects($this->once())->method('isLdapActive')->willReturn(true);
 
         $ldapAuth = $this->createMock(AuthLdap::class);
         $ldapAuth->expects($this->once())->method('create')->with('testuser', '', 'example.com')->willReturn(true);
@@ -54,10 +51,7 @@ class AuthSsoTest extends TestCase
 
     public function testCreateWithoutLdap(): void
     {
-        $this->configurationMock
-            ->expects($this->once())
-            ->method('isLdapActive')
-            ->willReturn(false);
+        $this->configurationMock->expects($this->once())->method('isLdapActive')->willReturn(false);
 
         $user = $this->createMock(User::class);
         $user->expects($this->once())->method('createUser')->with('testuser', '', 'example.com')->willReturn(true);

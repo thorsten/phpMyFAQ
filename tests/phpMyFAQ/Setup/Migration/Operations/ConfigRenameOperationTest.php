@@ -48,11 +48,7 @@ class ConfigRenameOperationTest extends TestCase
 
     public function testExecute(): void
     {
-        $this->configuration
-            ->expects($this->once())
-            ->method('rename')
-            ->with('old.key', 'new.key')
-            ->willReturn(true);
+        $this->configuration->expects($this->once())->method('rename')->with('old.key', 'new.key')->willReturn(true);
 
         $operation = new ConfigRenameOperation($this->configuration, 'old.key', 'new.key');
         $result = $operation->execute();
@@ -62,11 +58,7 @@ class ConfigRenameOperationTest extends TestCase
 
     public function testExecuteReturnsFalseOnFailure(): void
     {
-        $this->configuration
-            ->expects($this->once())
-            ->method('rename')
-            ->with('old.key', 'new.key')
-            ->willReturn(false);
+        $this->configuration->expects($this->once())->method('rename')->with('old.key', 'new.key')->willReturn(false);
 
         $operation = new ConfigRenameOperation($this->configuration, 'old.key', 'new.key');
         $result = $operation->execute();

@@ -52,10 +52,7 @@ class TranslationTest extends TestCase
         Translation::resetInstance();
 
         // Now create and configure the instance so that init() sees our test directory
-        Translation::create()
-            ->setTranslationsDir($translationsDir)
-            ->setDefaultLanguage('en')
-            ->setCurrentLanguage('de');
+        Translation::create()->setTranslationsDir($translationsDir)->setDefaultLanguage('en')->setCurrentLanguage('de');
     }
 
     public static function tearDownAfterClass(): void
@@ -359,10 +356,7 @@ class TranslationTest extends TestCase
         );
 
         Translation::resetInstance();
-        Translation::create()
-            ->setTranslationsDir($translationsDir)
-            ->setDefaultLanguage('en')
-            ->setCurrentLanguage('de');
+        Translation::create()->setTranslationsDir($translationsDir)->setDefaultLanguage('en')->setCurrentLanguage('de');
 
         $this->assertTrue(
             Translation::has('english.only'),
@@ -441,10 +435,7 @@ class TranslationTest extends TestCase
         );
 
         Translation::resetInstance();
-        Translation::create()
-            ->setTranslationsDir($translationsDir)
-            ->setDefaultLanguage('en')
-            ->setCurrentLanguage('de');
+        Translation::create()->setTranslationsDir($translationsDir)->setDefaultLanguage('en')->setCurrentLanguage('de');
 
         // 'default.only' does not exist in de, but exists in en
         $this->assertTrue(
@@ -604,10 +595,7 @@ class TranslationTest extends TestCase
         // Re-initialize for other tests
         $translationsDir = __DIR__ . '/_translations';
         Translation::resetInstance();
-        Translation::create()
-            ->setTranslationsDir($translationsDir)
-            ->setDefaultLanguage('en')
-            ->setCurrentLanguage('de');
+        Translation::create()->setTranslationsDir($translationsDir)->setDefaultLanguage('en')->setCurrentLanguage('de');
     }
 
     public function testHasReturnsFalseWhenNotInitialized(): void
@@ -629,9 +617,6 @@ class TranslationTest extends TestCase
         // Re-initialize for other tests
         $translationsDir = __DIR__ . '/_translations';
         Translation::resetInstance();
-        Translation::create()
-            ->setTranslationsDir($translationsDir)
-            ->setDefaultLanguage('en')
-            ->setCurrentLanguage('de');
+        Translation::create()->setTranslationsDir($translationsDir)->setDefaultLanguage('en')->setCurrentLanguage('de');
     }
 }

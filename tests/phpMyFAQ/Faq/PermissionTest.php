@@ -59,15 +59,9 @@ class PermissionTest extends TestCase
     {
         // First call: SELECT check, second call: INSERT
         $resultMock = $this->createMock(\SQLite3Result::class);
-        $this->dbMock
-            ->expects($this->exactly(2))
-            ->method('query')
-            ->willReturn($resultMock);
+        $this->dbMock->expects($this->exactly(2))->method('query')->willReturn($resultMock);
 
-        $this->dbMock
-            ->expects($this->once())
-            ->method('numRows')
-            ->willReturn(0); // Permission doesn't exist yet
+        $this->dbMock->expects($this->once())->method('numRows')->willReturn(0); // Permission doesn't exist yet
 
         $result = $this->permission->add(Permission::USER, 123, [456]);
         $this->assertTrue($result);
@@ -77,15 +71,9 @@ class PermissionTest extends TestCase
     {
         // First call: SELECT check, second call: INSERT
         $resultMock = $this->createMock(\SQLite3Result::class);
-        $this->dbMock
-            ->expects($this->exactly(2))
-            ->method('query')
-            ->willReturn($resultMock);
+        $this->dbMock->expects($this->exactly(2))->method('query')->willReturn($resultMock);
 
-        $this->dbMock
-            ->expects($this->once())
-            ->method('numRows')
-            ->willReturn(0); // Permission doesn't exist yet
+        $this->dbMock->expects($this->once())->method('numRows')->willReturn(0); // Permission doesn't exist yet
 
         $result = $this->permission->add(Permission::GROUP, 123, [789]);
         $this->assertTrue($result);
@@ -95,15 +83,9 @@ class PermissionTest extends TestCase
     {
         // 3 IDs: each needs a SELECT check + INSERT = 6 queries total
         $resultMock = $this->createMock(\SQLite3Result::class);
-        $this->dbMock
-            ->expects($this->exactly(6))
-            ->method('query')
-            ->willReturn($resultMock);
+        $this->dbMock->expects($this->exactly(6))->method('query')->willReturn($resultMock);
 
-        $this->dbMock
-            ->expects($this->exactly(3))
-            ->method('numRows')
-            ->willReturn(0); // Permissions don't exist yet
+        $this->dbMock->expects($this->exactly(3))->method('numRows')->willReturn(0); // Permissions don't exist yet
 
         $result = $this->permission->add(Permission::USER, 123, [456, 789, 101]);
         $this->assertTrue($result);
@@ -213,10 +195,7 @@ class PermissionTest extends TestCase
 
     public function testDeleteWithDatabaseErrorReturnsFalse(): void
     {
-        $this->dbMock
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn(false);
+        $this->dbMock->expects($this->once())->method('query')->willReturn(false);
 
         $result = $this->permission->delete(Permission::USER, 123);
         $this->assertFalse($result);
@@ -237,11 +216,7 @@ class PermissionTest extends TestCase
             ->with($this->stringContains('SELECT user_id'))
             ->willReturn($resultMock);
 
-        $this->dbMock
-            ->expects($this->once())
-            ->method('numRows')
-            ->with($resultMock)
-            ->willReturn(2);
+        $this->dbMock->expects($this->once())->method('numRows')->with($resultMock)->willReturn(2);
 
         $permission1 = new \stdClass();
         $permission1->permission = '456';
@@ -270,11 +245,7 @@ class PermissionTest extends TestCase
             ->with($this->stringContains('SELECT group_id'))
             ->willReturn($resultMock);
 
-        $this->dbMock
-            ->expects($this->once())
-            ->method('numRows')
-            ->with($resultMock)
-            ->willReturn(1);
+        $this->dbMock->expects($this->once())->method('numRows')->with($resultMock)->willReturn(1);
 
         $permission = new \stdClass();
         $permission->permission = '789';
@@ -310,16 +281,9 @@ class PermissionTest extends TestCase
     {
         $resultMock = $this->createStub(\SQLite3Result::class);
 
-        $this->dbMock
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn($resultMock);
+        $this->dbMock->expects($this->once())->method('query')->willReturn($resultMock);
 
-        $this->dbMock
-            ->expects($this->once())
-            ->method('numRows')
-            ->with($resultMock)
-            ->willReturn(0);
+        $this->dbMock->expects($this->once())->method('numRows')->with($resultMock)->willReturn(0);
 
         $this->dbMock->expects($this->never())->method('fetchObject');
 
@@ -364,10 +328,7 @@ class PermissionTest extends TestCase
     public function testAddWithNegativeFaqIdIsHandled(): void
     {
         $resultMock = $this->createMock(\SQLite3Result::class);
-        $this->dbMock
-            ->expects($this->exactly(2))
-            ->method('query')
-            ->willReturn($resultMock);
+        $this->dbMock->expects($this->exactly(2))->method('query')->willReturn($resultMock);
 
         $this->dbMock->method('numRows')->willReturn(0);
 
@@ -413,10 +374,7 @@ class PermissionTest extends TestCase
 
         $resultMock = $this->createMock(\SQLite3Result::class);
         // 100 IDs: each needs a SELECT check + INSERT = 200 queries total
-        $this->dbMock
-            ->expects($this->exactly(200))
-            ->method('query')
-            ->willReturn($resultMock);
+        $this->dbMock->expects($this->exactly(200))->method('query')->willReturn($resultMock);
 
         $this->dbMock->method('numRows')->willReturn(0);
 
@@ -456,10 +414,7 @@ class PermissionTest extends TestCase
             ->with($this->stringContains('SELECT 1'))
             ->willReturn($resultMock);
 
-        $this->dbMock
-            ->expects($this->once())
-            ->method('numRows')
-            ->willReturn(1); // Permission already exists
+        $this->dbMock->expects($this->once())->method('numRows')->willReturn(1); // Permission already exists
 
         $result = $this->permission->add(Permission::USER, 123, [456]);
         $this->assertTrue($result);
@@ -468,10 +423,7 @@ class PermissionTest extends TestCase
     public function testAddContinuesWhenCheckQueryFails(): void
     {
         // SELECT returns false => skip this permission
-        $this->dbMock
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn(false);
+        $this->dbMock->expects($this->once())->method('query')->willReturn(false);
 
         $this->dbMock->expects($this->never())->method('numRows');
 
@@ -482,15 +434,9 @@ class PermissionTest extends TestCase
     public function testAddContinuesWhenInsertFails(): void
     {
         $resultMock = $this->createMock(\SQLite3Result::class);
-        $this->dbMock
-            ->expects($this->exactly(2))
-            ->method('query')
-            ->willReturnOnConsecutiveCalls($resultMock, false); // SELECT ok, INSERT fails
+        $this->dbMock->expects($this->exactly(2))->method('query')->willReturnOnConsecutiveCalls($resultMock, false); // SELECT ok, INSERT fails
 
-        $this->dbMock
-            ->expects($this->once())
-            ->method('numRows')
-            ->willReturn(0); // Permission doesn't exist
+        $this->dbMock->expects($this->once())->method('numRows')->willReturn(0); // Permission doesn't exist
 
         $result = $this->permission->add(Permission::USER, 123, [456]);
         $this->assertTrue($result);

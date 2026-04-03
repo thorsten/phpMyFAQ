@@ -26,11 +26,7 @@ class TranslationProviderFactoryTest extends TestCase
 
     public function testCreateGoogleProvider(): void
     {
-        $this->configuration
-            ->expects($this->once())
-            ->method('get')
-            ->with('translation.provider')
-            ->willReturn('google');
+        $this->configuration->expects($this->once())->method('get')->with('translation.provider')->willReturn('google');
 
         $provider = TranslationProviderFactory::create($this->configuration, $this->httpClient);
 
@@ -39,11 +35,7 @@ class TranslationProviderFactoryTest extends TestCase
 
     public function testCreateDeepLProvider(): void
     {
-        $this->configuration
-            ->expects($this->once())
-            ->method('get')
-            ->with('translation.provider')
-            ->willReturn('deepl');
+        $this->configuration->expects($this->once())->method('get')->with('translation.provider')->willReturn('deepl');
 
         $provider = TranslationProviderFactory::create($this->configuration, $this->httpClient);
 
@@ -52,11 +44,7 @@ class TranslationProviderFactoryTest extends TestCase
 
     public function testCreateAzureProvider(): void
     {
-        $this->configuration
-            ->expects($this->once())
-            ->method('get')
-            ->with('translation.provider')
-            ->willReturn('azure');
+        $this->configuration->expects($this->once())->method('get')->with('translation.provider')->willReturn('azure');
 
         $provider = TranslationProviderFactory::create($this->configuration, $this->httpClient);
 
@@ -65,11 +53,7 @@ class TranslationProviderFactoryTest extends TestCase
 
     public function testCreateAmazonProvider(): void
     {
-        $this->configuration
-            ->expects($this->once())
-            ->method('get')
-            ->with('translation.provider')
-            ->willReturn('amazon');
+        $this->configuration->expects($this->once())->method('get')->with('translation.provider')->willReturn('amazon');
 
         $provider = TranslationProviderFactory::create($this->configuration, $this->httpClient);
 
@@ -91,11 +75,7 @@ class TranslationProviderFactoryTest extends TestCase
 
     public function testCreateWithNoProvider(): void
     {
-        $this->configuration
-            ->expects($this->once())
-            ->method('get')
-            ->with('translation.provider')
-            ->willReturn('none');
+        $this->configuration->expects($this->once())->method('get')->with('translation.provider')->willReturn('none');
 
         $provider = TranslationProviderFactory::create($this->configuration, $this->httpClient);
 
@@ -104,11 +84,7 @@ class TranslationProviderFactoryTest extends TestCase
 
     public function testCreateWithEmptyProvider(): void
     {
-        $this->configuration
-            ->expects($this->once())
-            ->method('get')
-            ->with('translation.provider')
-            ->willReturn('');
+        $this->configuration->expects($this->once())->method('get')->with('translation.provider')->willReturn('');
 
         $provider = TranslationProviderFactory::create($this->configuration, $this->httpClient);
 

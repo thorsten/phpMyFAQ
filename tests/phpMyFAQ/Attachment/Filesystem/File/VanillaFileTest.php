@@ -36,11 +36,7 @@ class VanillaFileTest extends TestCase
         $data = 'test chunk data';
 
         // Write data to the virtual file
-        $this->mockFile
-            ->expects($this->once())
-            ->method('putChunk')
-            ->with($data)
-            ->willReturn(true);
+        $this->mockFile->expects($this->once())->method('putChunk')->with($data)->willReturn(true);
 
         // Write the chunk and assert it's written correctly
         $this->assertTrue($this->mockFile->putChunk($data));
@@ -49,10 +45,7 @@ class VanillaFileTest extends TestCase
     public function testGetChunkReadsData(): void
     {
         // Mocking the getChunk behavior to return content from the virtual file
-        $this->mockFile
-            ->expects($this->once())
-            ->method('getChunk')
-            ->willReturn('test file content');
+        $this->mockFile->expects($this->once())->method('getChunk')->willReturn('test file content');
 
         $this->assertEquals('test file content', $this->mockFile->getChunk());
     }

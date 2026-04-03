@@ -140,10 +140,7 @@ class PluginIntegrationTest extends TestCase
         file_put_contents($translationsDir . '/language_de.php', "<?php\n\nreturn ['core.key' => 'Kernwert'];\n");
 
         Translation::resetInstance();
-        Translation::create()
-            ->setTranslationsDir($translationsDir)
-            ->setDefaultLanguage('en')
-            ->setCurrentLanguage('en');
+        Translation::create()->setTranslationsDir($translationsDir)->setDefaultLanguage('en')->setCurrentLanguage('en');
 
         $this->pluginManager = new PluginManager();
     }

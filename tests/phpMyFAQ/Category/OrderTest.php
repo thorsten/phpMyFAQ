@@ -66,10 +66,7 @@ class OrderTest extends TestCase
             ->with('faqcategory_order', 'position')
             ->willReturn($nextId);
 
-        $this->databaseMock
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn(false);
+        $this->databaseMock->expects($this->once())->method('query')->willReturn(false);
 
         $result = $this->order->add($categoryId, $parentId);
         $this->assertFalse($result);
@@ -93,10 +90,7 @@ class OrderTest extends TestCase
     {
         $categoryId = 123;
 
-        $this->databaseMock
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn(false);
+        $this->databaseMock->expects($this->once())->method('query')->willReturn(false);
 
         $result = $this->order->remove($categoryId);
         $this->assertFalse($result);
@@ -333,11 +327,7 @@ class OrderTest extends TestCase
             ))
             ->willReturn('mock_result');
 
-        $this->databaseMock
-            ->expects($this->exactly(1))
-            ->method('fetchArray')
-            ->with('mock_result')
-            ->willReturn(false);
+        $this->databaseMock->expects($this->exactly(1))->method('fetchArray')->with('mock_result')->willReturn(false);
 
         $result = $this->order->getAllCategories();
         $this->assertEquals([], $result);
@@ -350,10 +340,7 @@ class OrderTest extends TestCase
             ['category_id' => '2', 'parent_id' => '1', 'position' => '2'],
         ];
 
-        $this->databaseMock
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn('mock_result');
+        $this->databaseMock->expects($this->once())->method('query')->willReturn('mock_result');
 
         $this->databaseMock
             ->expects($this->exactly(3))

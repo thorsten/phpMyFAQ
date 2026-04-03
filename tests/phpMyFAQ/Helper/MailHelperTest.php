@@ -47,10 +47,8 @@ final class MailHelperTest extends TestCase
 
                     return (
                         is_array($decoded)
-                        && ($decoded['class'] ?? null)
-                        === SendMailMessage::class
-                        && ($decoded['payload']['recipient'] ?? null)
-                        === 'new.user@example.com'
+                        && ($decoded['class'] ?? null) === SendMailMessage::class
+                        && ($decoded['payload']['recipient'] ?? null) === 'new.user@example.com'
                     );
                 }),
                 $this->isArray(),

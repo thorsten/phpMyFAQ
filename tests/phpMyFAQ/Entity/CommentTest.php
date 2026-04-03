@@ -287,10 +287,7 @@ class CommentTest extends TestCase
      */
     public function testZeroAndNegativeValues(): void
     {
-        $this->comment
-            ->setId(0)
-            ->setRecordId(-1)
-            ->setCategoryId(0);
+        $this->comment->setId(0)->setRecordId(-1)->setCategoryId(0);
 
         $this->assertEquals(0, $this->comment->getId());
         $this->assertEquals(-1, $this->comment->getRecordId());

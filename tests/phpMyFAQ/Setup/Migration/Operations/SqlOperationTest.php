@@ -111,11 +111,7 @@ class SqlOperationTest extends TestCase
 
     public function testExecuteSuccess(): void
     {
-        $this->database
-            ->expects($this->once())
-            ->method('query')
-            ->with('SELECT 1')
-            ->willReturn(true);
+        $this->database->expects($this->once())->method('query')->with('SELECT 1')->willReturn(true);
 
         $operation = new SqlOperation($this->configuration, 'SELECT 1');
         $result = $operation->execute();
@@ -125,10 +121,7 @@ class SqlOperationTest extends TestCase
 
     public function testExecuteFailure(): void
     {
-        $this->database
-            ->expects($this->once())
-            ->method('query')
-            ->willThrowException(new Exception('Query failed'));
+        $this->database->expects($this->once())->method('query')->willThrowException(new Exception('Query failed'));
 
         $operation = new SqlOperation($this->configuration, 'INVALID SQL');
         $result = $operation->execute();

@@ -75,11 +75,7 @@ class RevisionTest extends TestCase
         $this->mockDb->method('escape')->willReturn($escapedInput);
         $this->mockDb->method('query')->willReturn(true);
 
-        $this->mockDb
-            ->expects($this->once())
-            ->method('escape')
-            ->with($dangerousInput)
-            ->willReturn($escapedInput);
+        $this->mockDb->expects($this->once())->method('escape')->with($dangerousInput)->willReturn($escapedInput);
 
         $result = $this->revision->create(456, $dangerousInput);
 
@@ -215,11 +211,7 @@ class RevisionTest extends TestCase
         $this->mockDb->method('query')->willReturn(true);
         $this->mockDb->method('numRows')->willReturn(0);
 
-        $this->mockDb
-            ->expects($this->once())
-            ->method('escape')
-            ->with($dangerousInput)
-            ->willReturn($escapedInput);
+        $this->mockDb->expects($this->once())->method('escape')->with($dangerousInput)->willReturn($escapedInput);
 
         $result = $this->revision->get(123, $dangerousInput, 'Author');
 
@@ -277,11 +269,7 @@ class RevisionTest extends TestCase
         $this->mockDb->method('escape')->willReturn($escapedInput);
         $this->mockDb->method('query')->willReturn(true);
 
-        $this->mockDb
-            ->expects($this->once())
-            ->method('escape')
-            ->with($dangerousInput)
-            ->willReturn($escapedInput);
+        $this->mockDb->expects($this->once())->method('escape')->with($dangerousInput)->willReturn($escapedInput);
 
         $result = $this->revision->delete(789, $dangerousInput);
 

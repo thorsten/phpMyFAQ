@@ -429,11 +429,7 @@ class Translation
     protected function filename(string $language): string
     {
         return (
-            self::$translation?->translationsDir
-            . DIRECTORY_SEPARATOR
-            . 'language_'
-            . strtolower($language)
-            . '.php'
+            self::$translation?->translationsDir . DIRECTORY_SEPARATOR . 'language_' . strtolower($language) . '.php'
         );
     }
 

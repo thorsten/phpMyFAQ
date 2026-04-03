@@ -122,11 +122,7 @@ class FaqTest extends TestCase
     {
         // Expect one database query
         $expectedQuery = 'UPDATE faqdata SET sticky_order=1 WHERE id=123';
-        $this->mockDb
-            ->expects($this->once())
-            ->method('query')
-            ->with($expectedQuery)
-            ->willReturn(true);
+        $this->mockDb->expects($this->once())->method('query')->with($expectedQuery)->willReturn(true);
 
         $result = $this->faq->setStickyFaqOrder([123]);
 
@@ -174,11 +170,7 @@ class FaqTest extends TestCase
                     id = 123 
                 AND 
                     lang = 'en'";
-        $this->mockDb
-            ->expects($this->once())
-            ->method('query')
-            ->with($expectedQuery)
-            ->willReturn(true);
+        $this->mockDb->expects($this->once())->method('query')->with($expectedQuery)->willReturn(true);
 
         $result = $this->faq->updateRecordFlag(123, 'en', true, 'sticky');
 
@@ -199,11 +191,7 @@ class FaqTest extends TestCase
                     id = 456 
                 AND 
                     lang = 'de'";
-        $this->mockDb
-            ->expects($this->once())
-            ->method('query')
-            ->with($expectedQuery)
-            ->willReturn(true);
+        $this->mockDb->expects($this->once())->method('query')->with($expectedQuery)->willReturn(true);
 
         $result = $this->faq->updateRecordFlag(456, 'de', false, 'active');
 

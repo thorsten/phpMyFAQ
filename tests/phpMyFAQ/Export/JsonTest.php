@@ -75,10 +75,7 @@ class JsonTest extends TestCase
             ],
         ];
 
-        $this->categoryMock
-            ->expects($this->once())
-            ->method('transform')
-            ->with(0);
+        $this->categoryMock->expects($this->once())->method('transform')->with(0);
 
         $this->faqMock
             ->expects($this->once())
@@ -86,11 +83,7 @@ class JsonTest extends TestCase
             ->with('faq_export_json', 0, true, '')
             ->willReturn($mockFaqData);
 
-        $this->categoryMock
-            ->expects($this->once())
-            ->method('getPath')
-            ->with(1, ' >> ')
-            ->willReturn('General');
+        $this->categoryMock->expects($this->once())->method('getPath')->with(1, ' >> ')->willReturn('General');
 
         $result = $this->jsonExport->generate();
 
@@ -194,10 +187,7 @@ class JsonTest extends TestCase
         $downwards = false;
         $language = 'fr';
 
-        $this->categoryMock
-            ->expects($this->once())
-            ->method('transform')
-            ->with($categoryId);
+        $this->categoryMock->expects($this->once())->method('transform')->with($categoryId);
 
         $this->faqMock
             ->expects($this->once())

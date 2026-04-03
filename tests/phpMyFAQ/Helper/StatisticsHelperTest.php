@@ -165,10 +165,7 @@ class StatisticsHelperTest extends TestCase
                 return 0;
             });
 
-        $this->sessionMock
-            ->expects($this->once())
-            ->method('deleteSessions')
-            ->willReturn(true);
+        $this->sessionMock->expects($this->once())->method('deleteSessions')->willReturn(true);
 
         $result = $this->statisticsHelper->deleteTrackingFiles($month);
 
@@ -179,10 +176,7 @@ class StatisticsHelperTest extends TestCase
     {
         $this->visitsMock->expects($this->once())->method('resetAll');
 
-        $this->sessionMock
-            ->expects($this->once())
-            ->method('deleteAllSessions')
-            ->willReturn(true);
+        $this->sessionMock->expects($this->once())->method('deleteAllSessions')->willReturn(true);
 
         $result = $this->statisticsHelper->clearAllVisits();
 

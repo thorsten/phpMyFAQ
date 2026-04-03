@@ -82,15 +82,9 @@ class CategoryTest extends TestCase
 
     public function testLoadCategoriesWithoutLanguage(): void
     {
-        $this->databaseMock
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn(true);
+        $this->databaseMock->expects($this->once())->method('query')->willReturn(true);
 
-        $this->databaseMock
-            ->expects($this->once())
-            ->method('fetchArray')
-            ->willReturn(null);
+        $this->databaseMock->expects($this->once())->method('fetchArray')->willReturn(null);
 
         $result = $this->category->loadCategories();
         $this->assertIsArray($result);
@@ -101,21 +95,11 @@ class CategoryTest extends TestCase
     {
         $this->category->setLanguage('de');
 
-        $this->databaseMock
-            ->expects($this->once())
-            ->method('escape')
-            ->with('de')
-            ->willReturn('de');
+        $this->databaseMock->expects($this->once())->method('escape')->with('de')->willReturn('de');
 
-        $this->databaseMock
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn(true);
+        $this->databaseMock->expects($this->once())->method('query')->willReturn(true);
 
-        $this->databaseMock
-            ->expects($this->once())
-            ->method('fetchArray')
-            ->willReturn(null);
+        $this->databaseMock->expects($this->once())->method('fetchArray')->willReturn(null);
 
         $result = $this->category->loadCategories();
         $this->assertIsArray($result);
@@ -136,10 +120,7 @@ class CategoryTest extends TestCase
             'image' => 'test.png',
         ];
 
-        $this->databaseMock
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn(true);
+        $this->databaseMock->expects($this->once())->method('query')->willReturn(true);
 
         $this->databaseMock
             ->expects($this->exactly(2))
@@ -159,15 +140,9 @@ class CategoryTest extends TestCase
     {
         $this->category->setLanguage('invalid_lang_123');
 
-        $this->databaseMock
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn(true);
+        $this->databaseMock->expects($this->once())->method('query')->willReturn(true);
 
-        $this->databaseMock
-            ->expects($this->once())
-            ->method('fetchArray')
-            ->willReturn(null);
+        $this->databaseMock->expects($this->once())->method('fetchArray')->willReturn(null);
 
         $result = $this->category->loadCategories();
         $this->assertIsArray($result);
@@ -214,10 +189,7 @@ class CategoryTest extends TestCase
 
     public function testFluentInterface(): void
     {
-        $result = $this->category
-            ->setLanguage('de')
-            ->setUser(42)
-            ->setGroups([1, 2, 3]);
+        $result = $this->category->setLanguage('de')->setUser(42)->setGroups([1, 2, 3]);
 
         $this->assertInstanceOf(Category::class, $result);
         $this->assertEquals('de', $this->category->getLanguage());
@@ -240,10 +212,7 @@ class CategoryTest extends TestCase
             'image' => 'test.png',
         ];
 
-        $this->databaseMock
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn(true);
+        $this->databaseMock->expects($this->once())->method('query')->willReturn(true);
 
         $this->databaseMock
             ->expects($this->exactly(2))

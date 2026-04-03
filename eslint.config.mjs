@@ -4,6 +4,7 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 
 const ignoresConfig = globalIgnores([
+  '.claude/*',
   'babel.config.cjs',
   'commitlint.config.cjs',
   'coverage/*',
@@ -18,6 +19,11 @@ const ignoresConfig = globalIgnores([
 export default defineConfig([
   {
     extends: [ignoresConfig, eslint.configs.recommended, tseslint.configs.strict],
+    languageOptions: {
+      parserOptions: {
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
     rules: {
       '@typescript-eslint/no-unused-vars': [
         'error',

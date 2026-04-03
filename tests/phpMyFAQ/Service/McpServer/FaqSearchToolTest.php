@@ -146,10 +146,7 @@ class FaqSearchToolTest extends TestCase
 
     public function testExecuteWithCategoryIdSetsCategoryOnSearch(): void
     {
-        $this->searchMock
-            ->expects($this->once())
-            ->method('setCategoryId')
-            ->with(7);
+        $this->searchMock->expects($this->once())->method('setCategoryId')->with(7);
         $this->searchMock->method('search')->willReturn([]);
 
         $this->tool->execute(['query' => 'test', 'category_id' => 7]);
@@ -157,10 +154,7 @@ class FaqSearchToolTest extends TestCase
 
     public function testExecuteWithoutCategoryIdResetsCategoryId(): void
     {
-        $this->searchMock
-            ->expects($this->once())
-            ->method('setCategoryId')
-            ->with(null);
+        $this->searchMock->expects($this->once())->method('setCategoryId')->with(null);
         $this->searchMock->method('search')->willReturn([]);
 
         $this->tool->execute(['query' => 'test']);
@@ -193,11 +187,7 @@ class FaqSearchToolTest extends TestCase
 
     public function testExecutePassesAllLanguagesFlag(): void
     {
-        $this->searchMock
-            ->expects($this->once())
-            ->method('search')
-            ->with('test', true)
-            ->willReturn([]);
+        $this->searchMock->expects($this->once())->method('search')->with('test', true)->willReturn([]);
 
         $this->tool->execute(['query' => 'test', 'all_languages' => true]);
     }

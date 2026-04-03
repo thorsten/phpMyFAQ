@@ -56,11 +56,7 @@ class TwoFactorTest extends TestCase
 
     public function testGetSecret(): void
     {
-        $this->currentUser
-            ->expects($this->once())
-            ->method('getUserData')
-            ->with('secret')
-            ->willReturn('testsecret');
+        $this->currentUser->expects($this->once())->method('getUserData')->with('secret')->willReturn('testsecret');
 
         $secret = $this->twoFactor->getSecret($this->currentUser);
         $this->assertEquals('testsecret', $secret);
@@ -77,17 +73,9 @@ class TwoFactorTest extends TestCase
             ? 'basic'
             : null);
 
-        $this->currentUser
-            ->expects($this->once())
-            ->method('getUserData')
-            ->with('secret')
-            ->willReturn('testsecret');
+        $this->currentUser->expects($this->once())->method('getUserData')->with('secret')->willReturn('testsecret');
 
-        $this->currentUser
-            ->expects($this->once())
-            ->method('getUserById')
-            ->with(1)
-            ->willReturn(true);
+        $this->currentUser->expects($this->once())->method('getUserById')->with(1)->willReturn(true);
 
         $twoFactorAuth = $this->createMock(TwoFactorAuth::class);
         $twoFactorAuth->expects($this->once())->method('verifyCode')->with('testsecret', '123456')->willReturn(true);

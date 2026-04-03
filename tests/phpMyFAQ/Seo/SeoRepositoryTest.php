@@ -47,10 +47,7 @@ class SeoRepositoryTest extends TestCase
             ->with($this->stringContains('faqseo'), 'id')
             ->willReturn(1);
 
-        $this->database
-            ->expects($this->atLeastOnce())
-            ->method('escape')
-            ->willReturnArgument(0);
+        $this->database->expects($this->atLeastOnce())->method('escape')->willReturnArgument(0);
 
         $this->database
             ->expects($this->once())
@@ -70,10 +67,7 @@ class SeoRepositoryTest extends TestCase
             ->setTitle('Updated Title')
             ->setDescription('Updated Description');
 
-        $this->database
-            ->expects($this->atLeastOnce())
-            ->method('escape')
-            ->willReturnArgument(0);
+        $this->database->expects($this->atLeastOnce())->method('escape')->willReturnArgument(0);
 
         $this->database
             ->expects($this->once())
@@ -93,10 +87,7 @@ class SeoRepositoryTest extends TestCase
             ->setTitle('Title')
             ->setDescription('Description');
 
-        $this->database
-            ->expects($this->atLeastOnce())
-            ->method('escape')
-            ->willReturnArgument(0);
+        $this->database->expects($this->atLeastOnce())->method('escape')->willReturnArgument(0);
 
         $this->database
             ->expects($this->once())
@@ -116,10 +107,7 @@ class SeoRepositoryTest extends TestCase
 
         $result = new class {};
 
-        $this->database
-            ->expects($this->atLeastOnce())
-            ->method('escape')
-            ->willReturnArgument(0);
+        $this->database->expects($this->atLeastOnce())->method('escape')->willReturnArgument(0);
 
         $this->database
             ->expects($this->once())
@@ -127,11 +115,7 @@ class SeoRepositoryTest extends TestCase
             ->with($this->stringContains('SELECT * FROM'))
             ->willReturn($result);
 
-        $this->database
-            ->expects($this->once())
-            ->method('numRows')
-            ->with($result)
-            ->willReturn(1);
+        $this->database->expects($this->once())->method('numRows')->with($result)->willReturn(1);
 
         $this->database
             ->expects($this->exactly(2))
