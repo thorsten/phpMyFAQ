@@ -203,10 +203,7 @@ class BackupRepositoryTest extends TestCase
     public function testAddEscapesAllInputs(): void
     {
         $this->mockDb->method('nextId')->willReturn(1);
-        $this->mockDb
-            ->expects($this->exactly(4))
-            ->method('escape')
-            ->willReturnArgument(0);
+        $this->mockDb->expects($this->exactly(4))->method('escape')->willReturnArgument(0);
         $this->mockDb->method('query')->willReturn(true);
 
         $this->repository->add('backup.sql', 'authkey123', 'authcode456', '2025-12-22 10:00:00');

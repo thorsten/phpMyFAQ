@@ -342,10 +342,7 @@ class Search
 
         $result = $this->configuration->getDb()->query($sql);
 
-        return (int) $this->configuration
-            ->getDb()
-            ->fetchObject($result)
-            ->count;
+        return (int) $this->configuration->getDb()->fetchObject($result)->count;
     }
 
     public function setCategory(Category $category): void

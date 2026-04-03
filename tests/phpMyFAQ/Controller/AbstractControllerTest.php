@@ -129,11 +129,7 @@ class AbstractControllerTest extends TestCase
 
     public function testIsApiEnabledReturnsTrueWhenEnabled(): void
     {
-        $this->configurationMock
-            ->expects($this->once())
-            ->method('get')
-            ->with('api.enableAccess')
-            ->willReturn('1');
+        $this->configurationMock->expects($this->once())->method('get')->with('api.enableAccess')->willReturn('1');
 
         $result = $this->abstractController->isApiEnabled();
 
@@ -142,11 +138,7 @@ class AbstractControllerTest extends TestCase
 
     public function testIsApiEnabledReturnsFalseWhenDisabled(): void
     {
-        $this->configurationMock
-            ->expects($this->once())
-            ->method('get')
-            ->with('api.enableAccess')
-            ->willReturn('0');
+        $this->configurationMock->expects($this->once())->method('get')->with('api.enableAccess')->willReturn('0');
 
         $result = $this->abstractController->isApiEnabled();
 
@@ -155,11 +147,7 @@ class AbstractControllerTest extends TestCase
 
     public function testIsApiEnabledWithNullValue(): void
     {
-        $this->configurationMock
-            ->expects($this->once())
-            ->method('get')
-            ->with('api.enableAccess')
-            ->willReturn(null);
+        $this->configurationMock->expects($this->once())->method('get')->with('api.enableAccess')->willReturn(null);
 
         $result = $this->abstractController->isApiEnabled();
 
@@ -168,11 +156,7 @@ class AbstractControllerTest extends TestCase
 
     public function testIsApiEnabledWithNumericValues(): void
     {
-        $this->configurationMock
-            ->expects($this->once())
-            ->method('get')
-            ->with('api.enableAccess')
-            ->willReturn(1);
+        $this->configurationMock->expects($this->once())->method('get')->with('api.enableAccess')->willReturn(1);
 
         $result = $this->abstractController->isApiEnabled();
         $this->assertTrue($result);
@@ -200,10 +184,7 @@ class AbstractControllerTest extends TestCase
 
     public function testUserIsAuthenticatedThrowsExceptionWhenNotLoggedIn(): void
     {
-        $this->currentUserMock
-            ->expects($this->once())
-            ->method('isLoggedIn')
-            ->willReturn(false);
+        $this->currentUserMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
 
         $this->expectException(UnauthorizedHttpException::class);
 
@@ -212,10 +193,7 @@ class AbstractControllerTest extends TestCase
 
     public function testUserIsAuthenticatedSucceedsWhenLoggedIn(): void
     {
-        $this->currentUserMock
-            ->expects($this->once())
-            ->method('isLoggedIn')
-            ->willReturn(true);
+        $this->currentUserMock->expects($this->once())->method('isLoggedIn')->willReturn(true);
 
         $this->abstractController->userIsAuthenticatedPublic();
         $this->assertTrue(true);
@@ -223,10 +201,7 @@ class AbstractControllerTest extends TestCase
 
     public function testUserIsSuperAdminThrowsExceptionWhenNotSuperAdmin(): void
     {
-        $this->currentUserMock
-            ->expects($this->once())
-            ->method('isSuperAdmin')
-            ->willReturn(false);
+        $this->currentUserMock->expects($this->once())->method('isSuperAdmin')->willReturn(false);
 
         $this->expectException(UnauthorizedHttpException::class);
 
@@ -235,10 +210,7 @@ class AbstractControllerTest extends TestCase
 
     public function testUserIsSuperAdminSucceedsWhenSuperAdmin(): void
     {
-        $this->currentUserMock
-            ->expects($this->once())
-            ->method('isSuperAdmin')
-            ->willReturn(true);
+        $this->currentUserMock->expects($this->once())->method('isSuperAdmin')->willReturn(true);
 
         $this->abstractController->userIsSuperAdminPublic();
         $this->assertTrue(true);
@@ -246,10 +218,7 @@ class AbstractControllerTest extends TestCase
 
     public function testUserHasGroupPermissionThrowsExceptionWhenMissingPermissions(): void
     {
-        $this->currentUserMock
-            ->expects($this->once()) // Only called once since the exception is thrown on the first check
-            ->method('getUserId')
-            ->willReturn(1);
+        $this->currentUserMock->expects($this->once())->method('getUserId')->willReturn(1); // Only called once since the exception is thrown on the first check
 
         // Mock that the user lacks the first required permission (USER_ADD)
         $this->permissionMock
@@ -265,10 +234,7 @@ class AbstractControllerTest extends TestCase
 
     public function testUserHasGroupPermissionSucceedsWhenAllPermissionsPresent(): void
     {
-        $this->currentUserMock
-            ->expects($this->exactly(4))
-            ->method('getUserId')
-            ->willReturn(1);
+        $this->currentUserMock->expects($this->exactly(4))->method('getUserId')->willReturn(1);
 
         // Mock that user has all required permissions
         $this->permissionMock
@@ -291,10 +257,7 @@ class AbstractControllerTest extends TestCase
 
     public function testUserHasUserPermissionThrowsExceptionWhenMissingPermissions(): void
     {
-        $this->currentUserMock
-            ->expects($this->once()) // Only called once since exception is thrown on first check
-            ->method('getUserId')
-            ->willReturn(1);
+        $this->currentUserMock->expects($this->once())->method('getUserId')->willReturn(1); // Only called once since exception is thrown on first check
 
         // Mock that user lacks the first required permission (USER_ADD)
         $this->permissionMock
@@ -310,10 +273,7 @@ class AbstractControllerTest extends TestCase
 
     public function testUserHasUserPermissionSucceedsWhenAllPermissionsPresent(): void
     {
-        $this->currentUserMock
-            ->expects($this->exactly(3))
-            ->method('getUserId')
-            ->willReturn(1);
+        $this->currentUserMock->expects($this->exactly(3))->method('getUserId')->willReturn(1);
 
         // Mock that user has all required permissions
         $this->permissionMock
@@ -336,10 +296,7 @@ class AbstractControllerTest extends TestCase
     public function testUserHasPermissionThrowsExceptionWhenMissingPermission(): void
     {
         $permissionType = PermissionType::FAQ_ADD;
-        $this->currentUserMock
-            ->expects($this->once())
-            ->method('getUserId')
-            ->willReturn(1);
+        $this->currentUserMock->expects($this->once())->method('getUserId')->willReturn(1);
 
         $this->permissionMock
             ->expects($this->once())
@@ -355,10 +312,7 @@ class AbstractControllerTest extends TestCase
     public function testUserHasPermissionSucceedsWhenPermissionPresent(): void
     {
         $permissionType = PermissionType::FAQ_ADD;
-        $this->currentUserMock
-            ->expects($this->once())
-            ->method('getUserId')
-            ->willReturn(1);
+        $this->currentUserMock->expects($this->once())->method('getUserId')->willReturn(1);
 
         $this->permissionMock
             ->expects($this->once())
@@ -372,10 +326,7 @@ class AbstractControllerTest extends TestCase
 
     public function testIsSecuredThrowsExceptionWhenNotLoggedInAndLoginRequired(): void
     {
-        $this->currentUserMock
-            ->expects($this->once())
-            ->method('isLoggedIn')
-            ->willReturn(false);
+        $this->currentUserMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
 
         $this->configurationMock
             ->expects($this->once())
@@ -390,10 +341,7 @@ class AbstractControllerTest extends TestCase
 
     public function testIsSecuredSucceedsWhenLoggedIn(): void
     {
-        $this->currentUserMock
-            ->expects($this->once())
-            ->method('isLoggedIn')
-            ->willReturn(true);
+        $this->currentUserMock->expects($this->once())->method('isLoggedIn')->willReturn(true);
 
         $this->abstractController->isSecuredPublic();
         $this->assertTrue(true);
@@ -401,10 +349,7 @@ class AbstractControllerTest extends TestCase
 
     public function testIsSecuredSucceedsWhenLoginNotRequired(): void
     {
-        $this->currentUserMock
-            ->expects($this->once())
-            ->method('isLoggedIn')
-            ->willReturn(false);
+        $this->currentUserMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
 
         $this->configurationMock
             ->expects($this->once())
@@ -512,10 +457,7 @@ class AbstractControllerTest extends TestCase
     #[DataProvider('permissionDataProvider')]
     public function testUserHasPermissionWithDifferentPermissionTypes(PermissionType $permissionType): void
     {
-        $this->currentUserMock
-            ->expects($this->once())
-            ->method('getUserId')
-            ->willReturn(1);
+        $this->currentUserMock->expects($this->once())->method('getUserId')->willReturn(1);
 
         $this->permissionMock
             ->expects($this->once())

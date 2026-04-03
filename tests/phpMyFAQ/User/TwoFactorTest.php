@@ -56,10 +56,7 @@ class TwoFactorTest extends TestCase
 
     public function testGetSecret(): void
     {
-        $this->currentUser
-            ->method('getUserData')
-            ->with('secret')
-            ->willReturn('testsecret');
+        $this->currentUser->method('getUserData')->with('secret')->willReturn('testsecret');
 
         $secret = $this->twoFactor->getSecret($this->currentUser);
         $this->assertEquals('testsecret', $secret);
@@ -73,15 +70,9 @@ class TwoFactorTest extends TestCase
     {
         $this->configuration->method('get')->willReturn('basic');
 
-        $this->currentUser
-            ->method('getUserData')
-            ->with('secret')
-            ->willReturn('testsecret');
+        $this->currentUser->method('getUserData')->with('secret')->willReturn('testsecret');
 
-        $this->currentUser
-            ->method('getUserById')
-            ->with(1)
-            ->willReturn(true);
+        $this->currentUser->method('getUserById')->with(1)->willReturn(true);
 
         $twoFactorAuth = $this->createStub(TwoFactorAuth::class);
         $twoFactorAuth->method('verifyCode')->willReturn(true);
@@ -103,10 +94,7 @@ class TwoFactorTest extends TestCase
     public function testGetQrCode(): void
     {
         $this->configuration->method('getTitle')->willReturn('phpMyFAQ');
-        $this->currentUser
-            ->method('getUserData')
-            ->with('email')
-            ->willReturn('user@example.com');
+        $this->currentUser->method('getUserData')->with('email')->willReturn('user@example.com');
         $this->configuration->method('getDefaultUrl')->willReturn('https://example.com/');
 
         $qrCodeProvider = $this->createStub(EndroidQrCodeProvider::class);

@@ -32,10 +32,7 @@ class AuthSsoTest extends TestCase
         $password = 'password';
         $domain = 'example.com';
 
-        $this->configurationMock
-            ->expects($this->once())
-            ->method('isLdapActive')
-            ->willReturn(true);
+        $this->configurationMock->expects($this->once())->method('isLdapActive')->willReturn(true);
 
         $authSso = new AuthSso($this->configurationMock);
 
@@ -51,10 +48,7 @@ class AuthSsoTest extends TestCase
         $password = 'password';
         $domain = 'example.com';
 
-        $this->configurationMock
-            ->expects($this->once())
-            ->method('isLdapActive')
-            ->willReturn(false);
+        $this->configurationMock->expects($this->once())->method('isLdapActive')->willReturn(false);
 
         $authSso = new AuthSso($this->configurationMock);
 

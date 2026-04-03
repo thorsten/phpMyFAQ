@@ -418,11 +418,7 @@ class AbstractAttachmentTest extends TestCase
         }
 
         $this->mockDb->method('escape')->willReturnArgument(0);
-        $this->mockDb
-            ->expects($this->once())
-            ->method('query')
-            ->with($this->stringContains('UPDATE'))
-            ->willReturn(true);
+        $this->mockDb->expects($this->once())->method('query')->with($this->stringContains('UPDATE'))->willReturn(true);
 
         $this->attachment->testPostUpdateMeta();
 

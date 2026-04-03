@@ -39,10 +39,7 @@ class TranslationTest extends TestCase
         Translation::resetInstance();
 
         // Now create and configure the instance so that init() sees our test directory
-        Translation::create()
-            ->setTranslationsDir($translationsDir)
-            ->setDefaultLanguage('en')
-            ->setCurrentLanguage('de');
+        Translation::create()->setTranslationsDir($translationsDir)->setDefaultLanguage('en')->setCurrentLanguage('de');
     }
 
     public static function tearDownAfterClass(): void

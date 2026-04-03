@@ -111,10 +111,7 @@ class WebAuthnControllerTest extends TestCase
             });
 
         $sessionMock = $this->createMock(\Symfony\Component\HttpFoundation\Session\SessionInterface::class);
-        $this->containerMock
-            ->method('get')
-            ->with('session')
-            ->willReturn($sessionMock);
+        $this->containerMock->method('get')->with('session')->willReturn($sessionMock);
 
         $request = Request::create('/api/webauthn/prepare', 'POST', [], [], [], [], json_encode([
             'username' => 'attacker',
@@ -154,10 +151,7 @@ class WebAuthnControllerTest extends TestCase
             });
 
         $sessionMock = $this->createMock(\Symfony\Component\HttpFoundation\Session\SessionInterface::class);
-        $this->containerMock
-            ->method('get')
-            ->with('session')
-            ->willReturn($sessionMock);
+        $this->containerMock->method('get')->with('session')->willReturn($sessionMock);
 
         $request = Request::create('/api/webauthn/register', 'POST', [], [], [], [], json_encode([
             'register' => 'some-data',

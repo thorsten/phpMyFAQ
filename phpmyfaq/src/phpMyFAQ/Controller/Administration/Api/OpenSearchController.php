@@ -110,10 +110,7 @@ final class OpenSearchController extends AbstractController
 
         return $this->json([
             'index' => $indexName,
-            'stats' => $this->configuration
-                ->getOpenSearch()
-                ->indices()
-                ->stats(['index' => $indexName]),
+            'stats' => $this->configuration->getOpenSearch()->indices()->stats(['index' => $indexName]),
         ], Response::HTTP_OK);
     }
 

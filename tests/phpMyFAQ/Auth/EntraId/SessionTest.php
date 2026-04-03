@@ -81,10 +81,7 @@ class SessionTest extends TestCase
 
     public function testSetCookieWithDefaults(): void
     {
-        $this->configurationMock
-            ->expects($this->once())
-            ->method('getDefaultUrl')
-            ->willReturn('https://example.com');
+        $this->configurationMock->expects($this->once())->method('getDefaultUrl')->willReturn('https://example.com');
 
         $this->session->setCookie('test-cookie', 'test-value');
         $this->assertTrue(true);
@@ -92,10 +89,7 @@ class SessionTest extends TestCase
 
     public function testSetCookieWithCustomTimeout(): void
     {
-        $this->configurationMock
-            ->expects($this->once())
-            ->method('getDefaultUrl')
-            ->willReturn('https://example.com');
+        $this->configurationMock->expects($this->once())->method('getDefaultUrl')->willReturn('https://example.com');
 
         $this->session->setCookie('test-cookie', 'test-value', 7200, false);
         $this->assertTrue(true);
@@ -103,10 +97,7 @@ class SessionTest extends TestCase
 
     public function testSetCookieWithNullSessionId(): void
     {
-        $this->configurationMock
-            ->expects($this->once())
-            ->method('getDefaultUrl')
-            ->willReturn('https://example.com');
+        $this->configurationMock->expects($this->once())->method('getDefaultUrl')->willReturn('https://example.com');
 
         $this->session->setCookie('test-cookie', null);
         $this->assertTrue(true);

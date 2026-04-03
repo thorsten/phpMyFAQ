@@ -231,10 +231,7 @@ class PermissionTest extends TestCase
 
     public function testDeleteWithDatabaseErrorReturnsFalse(): void
     {
-        $this->dbMock
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn(false);
+        $this->dbMock->expects($this->once())->method('query')->willReturn(false);
 
         $result = $this->permission->delete(Permission::USER, 123);
         $this->assertFalse($result);
@@ -255,11 +252,7 @@ class PermissionTest extends TestCase
             ->with($this->stringContains('SELECT user_id'))
             ->willReturn($resultMock);
 
-        $this->dbMock
-            ->expects($this->once())
-            ->method('numRows')
-            ->with($resultMock)
-            ->willReturn(2);
+        $this->dbMock->expects($this->once())->method('numRows')->with($resultMock)->willReturn(2);
 
         $permission1 = new \stdClass();
         $permission1->permission = '456';
@@ -288,11 +281,7 @@ class PermissionTest extends TestCase
             ->with($this->stringContains('SELECT group_id'))
             ->willReturn($resultMock);
 
-        $this->dbMock
-            ->expects($this->once())
-            ->method('numRows')
-            ->with($resultMock)
-            ->willReturn(1);
+        $this->dbMock->expects($this->once())->method('numRows')->with($resultMock)->willReturn(1);
 
         $permission = new \stdClass();
         $permission->permission = '789';
@@ -328,16 +317,9 @@ class PermissionTest extends TestCase
     {
         $resultMock = $this->createStub(\SQLite3Result::class);
 
-        $this->dbMock
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn($resultMock);
+        $this->dbMock->expects($this->once())->method('query')->willReturn($resultMock);
 
-        $this->dbMock
-            ->expects($this->once())
-            ->method('numRows')
-            ->with($resultMock)
-            ->willReturn(0);
+        $this->dbMock->expects($this->once())->method('numRows')->with($resultMock)->willReturn(0);
 
         $this->dbMock->expects($this->never())->method('fetchObject');
 

@@ -62,10 +62,7 @@ class UpgradeTest extends TestCase
         $response = $this->createStub(ResponseInterface::class);
         $response->method('getStatusCode')->willReturn(404);
 
-        $this->httpClientMock
-            ->expects($this->once())
-            ->method('request')
-            ->willReturn($response);
+        $this->httpClientMock->expects($this->once())->method('request')->willReturn($response);
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Cannot download package (HTTP Status: 404).');

@@ -62,11 +62,7 @@ class SessionWrapperTest extends TestCase
         $key = 'test_key';
         $expectedValue = 'test_value';
 
-        $this->sessionMock
-            ->expects($this->once())
-            ->method('get')
-            ->with($key, null)
-            ->willReturn($expectedValue);
+        $this->sessionMock->expects($this->once())->method('get')->with($key, null)->willReturn($expectedValue);
 
         $result = $this->sessionWrapper->get($key);
         $this->assertEquals($expectedValue, $result);
@@ -77,10 +73,7 @@ class SessionWrapperTest extends TestCase
         $key = 'test_key';
         $value = 'test_value';
 
-        $this->sessionMock
-            ->expects($this->once())
-            ->method('set')
-            ->with($key, $value);
+        $this->sessionMock->expects($this->once())->method('set')->with($key, $value);
 
         $this->sessionWrapper->set($key, $value);
     }
@@ -89,11 +82,7 @@ class SessionWrapperTest extends TestCase
     {
         $key = 'test_key';
 
-        $this->sessionMock
-            ->expects($this->once())
-            ->method('has')
-            ->with($key)
-            ->willReturn(true);
+        $this->sessionMock->expects($this->once())->method('has')->with($key)->willReturn(true);
 
         $result = $this->sessionWrapper->has($key);
         $this->assertTrue($result);
@@ -103,11 +92,7 @@ class SessionWrapperTest extends TestCase
     {
         $key = 'nonexistent_key';
 
-        $this->sessionMock
-            ->expects($this->once())
-            ->method('has')
-            ->with($key)
-            ->willReturn(false);
+        $this->sessionMock->expects($this->once())->method('has')->with($key)->willReturn(false);
 
         $result = $this->sessionWrapper->has($key);
         $this->assertFalse($result);
@@ -118,11 +103,7 @@ class SessionWrapperTest extends TestCase
         $key = 'test_key';
         $expectedValue = 'removed_value';
 
-        $this->sessionMock
-            ->expects($this->once())
-            ->method('remove')
-            ->with($key)
-            ->willReturn($expectedValue);
+        $this->sessionMock->expects($this->once())->method('remove')->with($key)->willReturn($expectedValue);
 
         $result = $this->sessionWrapper->remove($key);
         $this->assertEquals($expectedValue, $result);
@@ -140,17 +121,10 @@ class SessionWrapperTest extends TestCase
         $value = 'test_value';
 
         // First, mock the set operation
-        $this->sessionMock
-            ->expects($this->once())
-            ->method('set')
-            ->with($key, $value);
+        $this->sessionMock->expects($this->once())->method('set')->with($key, $value);
 
         // Then, mock the get operation to return the same value
-        $this->sessionMock
-            ->expects($this->once())
-            ->method('get')
-            ->with($key, null)
-            ->willReturn($value);
+        $this->sessionMock->expects($this->once())->method('get')->with($key, null)->willReturn($value);
 
         // Test the workflow
         $this->sessionWrapper->set($key, $value);
@@ -163,11 +137,7 @@ class SessionWrapperTest extends TestCase
     {
         $key = 'nonexistent_key';
 
-        $this->sessionMock
-            ->expects($this->once())
-            ->method('remove')
-            ->with($key)
-            ->willReturn(null);
+        $this->sessionMock->expects($this->once())->method('remove')->with($key)->willReturn(null);
 
         $result = $this->sessionWrapper->remove($key);
         $this->assertNull($result);

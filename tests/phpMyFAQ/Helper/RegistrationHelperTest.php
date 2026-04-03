@@ -267,10 +267,7 @@ class RegistrationHelperTest extends TestCase
     public function testIsDomainAllowedBoundaryConditions(): void
     {
         // Test single character domain
-        $this->configurationMock
-            ->method('get')
-            ->with('security.domainWhiteListForRegistrations')
-            ->willReturn('a.b');
+        $this->configurationMock->method('get')->with('security.domainWhiteListForRegistrations')->willReturn('a.b');
 
         $result = $this->registrationHelper->isDomainAllowed('test@a.b');
         $this->assertTrue($result);

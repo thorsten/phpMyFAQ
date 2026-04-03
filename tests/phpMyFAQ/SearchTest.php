@@ -77,11 +77,7 @@ class SearchTest extends TestCase
             ->onlyMethods(['searchDatabase'])
             ->getMock();
 
-        $this->search
-            ->expects($this->once())
-            ->method('searchDatabase')
-            ->with('123', true)
-            ->willReturn([]);
+        $this->search->expects($this->once())->method('searchDatabase')->with('123', true)->willReturn([]);
 
         $this->assertEquals([], $this->search->search('123'));
     }
@@ -107,11 +103,7 @@ class SearchTest extends TestCase
             ->onlyMethods(['searchDatabase'])
             ->getMock();
 
-        $this->search
-            ->expects($this->once())
-            ->method('searchDatabase')
-            ->with('123', true)
-            ->willReturn([]);
+        $this->search->expects($this->once())->method('searchDatabase')->with('123', true)->willReturn([]);
 
         $this->assertEquals([], $this->search->search('123'));
     }
@@ -130,11 +122,7 @@ class SearchTest extends TestCase
             ->onlyMethods(['searchElasticsearch'])
             ->getMock();
 
-        $this->search
-            ->expects($this->once())
-            ->method('searchElasticsearch')
-            ->with('123', true)
-            ->willReturn([]);
+        $this->search->expects($this->once())->method('searchElasticsearch')->with('123', true)->willReturn([]);
 
         $this->assertEquals([], $this->search->search('123'));
     }
@@ -154,11 +142,7 @@ class SearchTest extends TestCase
             ->onlyMethods(['searchOpenSearch'])
             ->getMock();
 
-        $this->search
-            ->expects($this->once())
-            ->method('searchOpenSearch')
-            ->with('123', true)
-            ->willReturn([]);
+        $this->search->expects($this->once())->method('searchOpenSearch')->with('123', true)->willReturn([]);
 
         $this->assertEquals([], $this->search->search('123'));
     }
@@ -174,11 +158,7 @@ class SearchTest extends TestCase
             ->onlyMethods(['searchDatabase'])
             ->getMock();
 
-        $this->search
-            ->expects($this->once())
-            ->method('searchDatabase')
-            ->with('test', true)
-            ->willReturn([]);
+        $this->search->expects($this->once())->method('searchDatabase')->with('test', true)->willReturn([]);
 
         $this->assertEquals([], $this->search->search('test'));
     }

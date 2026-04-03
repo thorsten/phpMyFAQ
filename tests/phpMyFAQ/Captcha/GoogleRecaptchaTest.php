@@ -93,10 +93,7 @@ class GoogleRecaptchaTest extends TestCase
     {
         $this->googleRecaptcha->setUserIsLoggedIn(false);
 
-        $this->configuration
-            ->method('get')
-            ->with('security.googleReCaptchaV2SecretKey')
-            ->willReturn('test-secret-key');
+        $this->configuration->method('get')->with('security.googleReCaptchaV2SecretKey')->willReturn('test-secret-key');
 
         // Test that the method attempts to make external API call when not logged in
         // We verify configuration is accessed correctly
@@ -159,10 +156,7 @@ class GoogleRecaptchaTest extends TestCase
     {
         $this->googleRecaptcha->setUserIsLoggedIn(false);
 
-        $this->configuration
-            ->method('get')
-            ->with('security.googleReCaptchaV2SecretKey')
-            ->willReturn('test-secret');
+        $this->configuration->method('get')->with('security.googleReCaptchaV2SecretKey')->willReturn('test-secret');
 
         // Should attempt verification even with empty token
         $this->expectNotToPerformAssertions(); // Will attempt HTTP call

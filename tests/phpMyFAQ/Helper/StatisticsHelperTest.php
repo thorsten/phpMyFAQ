@@ -48,10 +48,7 @@ class StatisticsHelperTest extends TestCase
 
     public function testGetTrackingFilesStatisticsStructure(): void
     {
-        $this->dateMock
-            ->expects($this->any())
-            ->method('getTrackingFileDateStart')
-            ->willReturn(0);
+        $this->dateMock->expects($this->any())->method('getTrackingFileDateStart')->willReturn(0);
 
         $result = $this->statisticsHelper->getTrackingFilesStatistics();
 
@@ -132,10 +129,7 @@ class StatisticsHelperTest extends TestCase
                 return 0;
             });
 
-        $this->sessionMock
-            ->expects($this->once())
-            ->method('deleteSessions')
-            ->willReturn(true);
+        $this->sessionMock->expects($this->once())->method('deleteSessions')->willReturn(true);
 
         $result = $this->statisticsHelper->deleteTrackingFiles($month);
 
@@ -146,10 +140,7 @@ class StatisticsHelperTest extends TestCase
     {
         $this->visitsMock->expects($this->once())->method('resetAll');
 
-        $this->sessionMock
-            ->expects($this->once())
-            ->method('deleteAllSessions')
-            ->willReturn(true);
+        $this->sessionMock->expects($this->once())->method('deleteAllSessions')->willReturn(true);
 
         $result = $this->statisticsHelper->clearAllVisits();
 
@@ -159,10 +150,7 @@ class StatisticsHelperTest extends TestCase
     public function testRenderMonthSelectorStructure(): void
     {
         // This test remains unchanged as it relies on getAllTrackingDates
-        $this->dateMock
-            ->expects($this->any())
-            ->method('getTrackingFileDateStart')
-            ->willReturn(1704067200);
+        $this->dateMock->expects($this->any())->method('getTrackingFileDateStart')->willReturn(1704067200);
 
         $result = $this->statisticsHelper->renderMonthSelector();
         $this->assertIsString($result);
@@ -170,10 +158,7 @@ class StatisticsHelperTest extends TestCase
 
     public function testRenderDaySelectorStructure(): void
     {
-        $this->dateMock
-            ->expects($this->any())
-            ->method('getTrackingFileDateStart')
-            ->willReturn(1704067200);
+        $this->dateMock->expects($this->any())->method('getTrackingFileDateStart')->willReturn(1704067200);
 
         $result = $this->statisticsHelper->renderDaySelector();
 
@@ -211,25 +196,13 @@ class StatisticsHelperTest extends TestCase
      */
     public function testMethodReturnTypes(): void
     {
-        $this->dateMock
-            ->expects($this->any())
-            ->method('getTrackingFileDateStart')
-            ->willReturn(1704067200);
+        $this->dateMock->expects($this->any())->method('getTrackingFileDateStart')->willReturn(1704067200);
 
-        $this->dateMock
-            ->expects($this->any())
-            ->method('format')
-            ->willReturn('2024-01-01 12:00');
+        $this->dateMock->expects($this->any())->method('format')->willReturn('2024-01-01 12:00');
 
-        $this->sessionMock
-            ->expects($this->any())
-            ->method('deleteSessions')
-            ->willReturn(true);
+        $this->sessionMock->expects($this->any())->method('deleteSessions')->willReturn(true);
 
-        $this->sessionMock
-            ->expects($this->any())
-            ->method('deleteAllSessions')
-            ->willReturn(true);
+        $this->sessionMock->expects($this->any())->method('deleteAllSessions')->willReturn(true);
 
         $_SERVER['REQUEST_TIME'] = time();
 
@@ -254,10 +227,7 @@ class StatisticsHelperTest extends TestCase
      */
     public function testEdgeCaseHandling(): void
     {
-        $this->dateMock
-            ->expects($this->any())
-            ->method('getTrackingFileDateStart')
-            ->willReturn(0);
+        $this->dateMock->expects($this->any())->method('getTrackingFileDateStart')->willReturn(0);
 
         $result = $this->statisticsHelper->getTrackingFilesStatistics();
         $this->assertInstanceOf(stdClass::class, $result);
