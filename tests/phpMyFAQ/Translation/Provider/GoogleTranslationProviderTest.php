@@ -112,11 +112,7 @@ class GoogleTranslationProviderTest extends TestCase
 
     public function testTranslateWithoutApiKey(): void
     {
-        $this->configuration
-            ->expects($this->once())
-            ->method('get')
-            ->with('translation.googleApiKey')
-            ->willReturn('');
+        $this->configuration->expects($this->once())->method('get')->with('translation.googleApiKey')->willReturn('');
 
         $httpClient = new MockHttpClient();
         $provider = new GoogleTranslationProvider($this->configuration, $httpClient);

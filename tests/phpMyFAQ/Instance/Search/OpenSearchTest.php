@@ -164,10 +164,7 @@ class OpenSearchTest extends TestCase
             ->with(['index' => 'phpmyfaq_os_test'])
             ->willReturn(false);
 
-        $this->indicesMock
-            ->expects($this->once())
-            ->method('create')
-            ->with($this->isArray());
+        $this->indicesMock->expects($this->once())->method('create')->with($this->isArray());
 
         // Mock getMapping for putMapping
         $this->indicesMock
@@ -510,10 +507,7 @@ class OpenSearchTest extends TestCase
         $this->clientMock->method('update')->willThrowException(new \Exception('document_missing_exception'));
 
         // Should fall back to indexCustomPage which calls index()
-        $this->clientMock
-            ->expects($this->once())
-            ->method('index')
-            ->willReturn(['result' => 'created']);
+        $this->clientMock->expects($this->once())->method('index')->willReturn(['result' => 'created']);
 
         $result = $this->openSearch->updateCustomPage($page);
 

@@ -26,11 +26,7 @@ class UserHelperTest extends TestCase
     {
         $userIds = [1, 2, 3];
 
-        $this->userMock
-            ->expects($this->once())
-            ->method('getAllUsers')
-            ->with(true, false)
-            ->willReturn($userIds);
+        $this->userMock->expects($this->once())->method('getAllUsers')->with(true, false)->willReturn($userIds);
 
         $this->userMock
             ->expects($this->exactly(3))
@@ -68,11 +64,7 @@ class UserHelperTest extends TestCase
         $userIds = [1, 2, 3];
         $selectedId = 2;
 
-        $this->userMock
-            ->expects($this->once())
-            ->method('getAllUsers')
-            ->with(true, false)
-            ->willReturn($userIds);
+        $this->userMock->expects($this->once())->method('getAllUsers')->with(true, false)->willReturn($userIds);
 
         $this->userMock->expects($this->exactly(3))->method('getUserById');
 
@@ -97,11 +89,7 @@ class UserHelperTest extends TestCase
     {
         $userIds = [1, 2];
 
-        $this->userMock
-            ->expects($this->once())
-            ->method('getAllUsers')
-            ->with(true, true)
-            ->willReturn($userIds);
+        $this->userMock->expects($this->once())->method('getAllUsers')->with(true, true)->willReturn($userIds);
 
         $this->userMock->expects($this->exactly(2))->method('getUserById');
 
@@ -124,10 +112,7 @@ class UserHelperTest extends TestCase
     {
         $userIds = [1, -1, 2];
 
-        $this->userMock
-            ->expects($this->once())
-            ->method('getAllUsers')
-            ->willReturn($userIds);
+        $this->userMock->expects($this->once())->method('getAllUsers')->willReturn($userIds);
 
         $this->userMock
             ->expects($this->exactly(2))
@@ -143,10 +128,7 @@ class UserHelperTest extends TestCase
             ->method('getUserData')
             ->willReturnOnConsecutiveCalls('User One', 'User Two');
 
-        $this->userMock
-            ->expects($this->exactly(2))
-            ->method('getLogin')
-            ->willReturnOnConsecutiveCalls('user1', 'user2');
+        $this->userMock->expects($this->exactly(2))->method('getLogin')->willReturnOnConsecutiveCalls('user1', 'user2');
 
         $result = $this->userHelper->getAllUsersForTemplate();
 
@@ -157,10 +139,7 @@ class UserHelperTest extends TestCase
 
     public function testGetAllUsersForTemplateWithEmptyUserList(): void
     {
-        $this->userMock
-            ->expects($this->once())
-            ->method('getAllUsers')
-            ->willReturn([]);
+        $this->userMock->expects($this->once())->method('getAllUsers')->willReturn([]);
 
         $result = $this->userHelper->getAllUsersForTemplate();
 

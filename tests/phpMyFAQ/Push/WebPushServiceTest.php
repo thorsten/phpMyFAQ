@@ -90,11 +90,7 @@ class WebPushServiceTest extends TestCase
 
     public function testGetVapidPublicKeyReturnsEmptyStringWhenNull(): void
     {
-        $this->configuration
-            ->expects($this->once())
-            ->method('get')
-            ->with('push.vapidPublicKey')
-            ->willReturn(null);
+        $this->configuration->expects($this->once())->method('get')->with('push.vapidPublicKey')->willReturn(null);
 
         $this->assertEquals('', $this->service->getVapidPublicKey());
     }
@@ -182,11 +178,7 @@ class WebPushServiceTest extends TestCase
                 ['push.vapidPrivateKey', 'private'],
             ]);
 
-        $this->repository
-            ->expects($this->once())
-            ->method('getByUserId')
-            ->with(7)
-            ->willReturn([]);
+        $this->repository->expects($this->once())->method('getByUserId')->with(7)->willReturn([]);
 
         $this->service->sendToUser(7, 'Test', 'Body');
         $this->assertTrue(true);
@@ -209,11 +201,7 @@ class WebPushServiceTest extends TestCase
                 ['push.vapidPrivateKey', 'private'],
             ]);
 
-        $this->repository
-            ->expects($this->once())
-            ->method('getByUserIds')
-            ->with([1, 2])
-            ->willReturn([]);
+        $this->repository->expects($this->once())->method('getByUserIds')->with([1, 2])->willReturn([]);
 
         $this->service->sendToUsers([1, 2], 'Test', 'Body');
         $this->assertTrue(true);
@@ -249,10 +237,7 @@ class WebPushServiceTest extends TestCase
         $this->configuration->method('getDefaultUrl')->willReturn('https://localhost/');
         $this->configuration->method('getLogger')->willReturn($logger);
 
-        $this->repository
-            ->expects($this->once())
-            ->method('getAll')
-            ->willReturn([$subscription]);
+        $this->repository->expects($this->once())->method('getAll')->willReturn([$subscription]);
 
         $this->service->sendToAll("\xB1\x31", 'Body', '/faq', 'tag');
     }
@@ -287,11 +272,7 @@ class WebPushServiceTest extends TestCase
         $this->configuration->method('getDefaultUrl')->willReturn('https://localhost/');
         $this->configuration->method('getLogger')->willReturn($logger);
 
-        $this->repository
-            ->expects($this->once())
-            ->method('getByUserId')
-            ->with(9)
-            ->willReturn([$subscription]);
+        $this->repository->expects($this->once())->method('getByUserId')->with(9)->willReturn([$subscription]);
 
         $this->service->sendToUser(9, "\xB1\x31", 'Body');
     }
@@ -326,11 +307,7 @@ class WebPushServiceTest extends TestCase
         $this->configuration->method('getDefaultUrl')->willReturn('https://localhost/');
         $this->configuration->method('getLogger')->willReturn($logger);
 
-        $this->repository
-            ->expects($this->once())
-            ->method('getByUserIds')
-            ->with([10, 11])
-            ->willReturn([$subscription]);
+        $this->repository->expects($this->once())->method('getByUserIds')->with([10, 11])->willReturn([$subscription]);
 
         $this->service->sendToUsers([10, 11], "\xB1\x31", 'Body');
     }

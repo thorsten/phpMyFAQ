@@ -132,10 +132,7 @@ class NotificationTest extends TestCase
 
     public function testSendOpenQuestionAnsweredWithNotificationsEnabled(): void
     {
-        $this->mail
-            ->expects($this->once())
-            ->method('addTo')
-            ->with('user@example.com', 'Test User');
+        $this->mail->expects($this->once())->method('addTo')->with('user@example.com', 'Test User');
         $this->mail->expects($this->once())->method('send');
 
         $this->notification->sendOpenQuestionAnswered(
@@ -187,21 +184,11 @@ class NotificationTest extends TestCase
         $faqEntity->setId(42);
         $faqEntity->setLanguage('en');
 
-        $this->faq
-            ->expects($this->exactly(2))
-            ->method('getQuestion')
-            ->with(42)
-            ->willReturn('How to test?');
-        $this->faq
-            ->expects($this->once())
-            ->method('getFaq')
-            ->with(42, null, true);
+        $this->faq->expects($this->exactly(2))->method('getQuestion')->with(42)->willReturn('How to test?');
+        $this->faq->expects($this->once())->method('getFaq')->with(42, null, true);
         $this->faq->faqRecord = ['content' => 'Test content'];
 
-        $this->mail
-            ->expects($this->once())
-            ->method('addTo')
-            ->with('admin@example.com');
+        $this->mail->expects($this->once())->method('addTo')->with('admin@example.com');
         $this->mail->expects($this->once())->method('send');
 
         $this->notification->sendNewFaqAdded(['extra@example.com'], $faqEntity);
@@ -255,14 +242,8 @@ class NotificationTest extends TestCase
             'authorEmail' => 'author@example.com',
         ];
 
-        $this->mail
-            ->expects($this->once())
-            ->method('addTo')
-            ->with('author@example.com');
-        $this->mail
-            ->expects($this->once())
-            ->method('setReplyTo')
-            ->with('john@example.com', 'John');
+        $this->mail->expects($this->once())->method('addTo')->with('author@example.com');
+        $this->mail->expects($this->once())->method('setReplyTo')->with('john@example.com', 'John');
         $this->mail->expects($this->once())->method('send');
 
         $this->notification->sendNewsCommentNotification($newsData, $comment);
@@ -306,14 +287,8 @@ class NotificationTest extends TestCase
         $comment->setEmail('commenter@example.com');
         $comment->setComment('This is a test comment on the FAQ.');
 
-        $this->mail
-            ->expects($this->once())
-            ->method('setReplyTo')
-            ->with('commenter@example.com', 'Commenter');
-        $this->mail
-            ->expects($this->once())
-            ->method('addTo')
-            ->with('faqauthor@example.com');
+        $this->mail->expects($this->once())->method('setReplyTo')->with('commenter@example.com', 'Commenter');
+        $this->mail->expects($this->once())->method('addTo')->with('faqauthor@example.com');
         $this->mail->expects($this->once())->method('send');
 
         $this->notification->sendFaqCommentNotification($faq, $comment);
@@ -336,10 +311,7 @@ class NotificationTest extends TestCase
         $comment->setEmail('commenter@example.com');
         $comment->setComment('This is a test comment.');
 
-        $this->mail
-            ->expects($this->once())
-            ->method('addTo')
-            ->with('admin@example.com');
+        $this->mail->expects($this->once())->method('addTo')->with('admin@example.com');
         $this->mail->expects($this->once())->method('send');
 
         $this->notification->sendFaqCommentNotification($faq, $comment);
@@ -369,14 +341,8 @@ class NotificationTest extends TestCase
         $user->expects($this->once())->method('getUserById')->with(77)->willReturn(true);
         $user->expects($this->once())->method('getUserData')->with('email')->willReturn('owner@example.com');
 
-        $this->mail
-            ->expects($this->once())
-            ->method('addTo')
-            ->with('faqauthor@example.com');
-        $this->mail
-            ->expects($this->once())
-            ->method('addCc')
-            ->with('owner@example.com');
+        $this->mail->expects($this->once())->method('addTo')->with('faqauthor@example.com');
+        $this->mail->expects($this->once())->method('addCc')->with('owner@example.com');
         $this->mail->expects($this->once())->method('send');
 
         $notification = $this->createNotificationWithFactories($category, $user);
@@ -393,11 +359,7 @@ class NotificationTest extends TestCase
 
         $categories = [5 => ['name' => 'User Account']];
 
-        $this->category
-            ->expects($this->once())
-            ->method('getOwner')
-            ->with(5)
-            ->willReturn(0);
+        $this->category->expects($this->once())->method('getOwner')->with(5)->willReturn(0);
 
         // With null webPushService, push should be skipped silently
         $this->notification->sendQuestionSuccessMail($questionEntity, $categories);
@@ -428,11 +390,7 @@ class NotificationTest extends TestCase
 
         $categories = [5 => ['name' => 'User Account']];
 
-        $this->category
-            ->expects($this->once())
-            ->method('getOwner')
-            ->with(5)
-            ->willReturn(10);
+        $this->category->expects($this->once())->method('getOwner')->with(5)->willReturn(10);
 
         $notification->sendQuestionSuccessMail($questionEntity, $categories);
     }
@@ -447,19 +405,9 @@ class NotificationTest extends TestCase
 
         $categories = [5 => ['name' => 'User Account']];
 
-        $this->category
-            ->expects($this->once())
-            ->method('getOwner')
-            ->with(5)
-            ->willReturn(77);
-        $this->mail
-            ->expects($this->once())
-            ->method('addTo')
-            ->with('admin@example.com');
-        $this->mail
-            ->expects($this->once())
-            ->method('addCc')
-            ->with('owner@example.com');
+        $this->category->expects($this->once())->method('getOwner')->with(5)->willReturn(77);
+        $this->mail->expects($this->once())->method('addTo')->with('admin@example.com');
+        $this->mail->expects($this->once())->method('addCc')->with('owner@example.com');
         $this->mail->expects($this->once())->method('send');
 
         $user = $this->createMock(User::class);
@@ -488,15 +436,8 @@ class NotificationTest extends TestCase
 
         $categories = [5 => ['name' => 'User Account']];
 
-        $this->category
-            ->expects($this->once())
-            ->method('getOwner')
-            ->with(5)
-            ->willReturn(77);
-        $this->mail
-            ->expects($this->once())
-            ->method('addTo')
-            ->with('admin@example.com');
+        $this->category->expects($this->once())->method('getOwner')->with(5)->willReturn(77);
+        $this->mail->expects($this->once())->method('addTo')->with('admin@example.com');
         $this->mail->expects($this->never())->method('addCc');
         $this->mail->expects($this->once())->method('send');
 
@@ -529,15 +470,8 @@ class NotificationTest extends TestCase
 
         $categories = [5 => ['name' => 'User Account']];
 
-        $this->category
-            ->expects($this->once())
-            ->method('getOwner')
-            ->with(5)
-            ->willReturn(77);
-        $this->mail
-            ->expects($this->once())
-            ->method('addTo')
-            ->with('admin@example.com');
+        $this->category->expects($this->once())->method('getOwner')->with(5)->willReturn(77);
+        $this->mail->expects($this->once())->method('addTo')->with('admin@example.com');
         $this->mail->expects($this->never())->method('addCc');
         $this->mail
             ->expects($this->once())
@@ -603,11 +537,7 @@ class NotificationTest extends TestCase
 
         $categories = [5 => ['name' => 'User Account']];
 
-        $this->category
-            ->expects($this->once())
-            ->method('getOwner')
-            ->with(5)
-            ->willReturn(0);
+        $this->category->expects($this->once())->method('getOwner')->with(5)->willReturn(0);
 
         // Should not throw - exception is logged
         $notification->sendQuestionSuccessMail($questionEntity, $categories);

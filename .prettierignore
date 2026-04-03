@@ -1,4 +1,5 @@
 # Ignore 3rd party code
+.claude/
 phpmyfaq/admin/assets/js/editor/
 phpmyfaq/src/libs/
 

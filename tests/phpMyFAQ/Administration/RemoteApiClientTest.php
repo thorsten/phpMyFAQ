@@ -85,10 +85,7 @@ class RemoteApiClientTest extends TestCase
         $response->method('getContent')->willReturn('{"hash1": "abc", "hash2": "def"}');
         $response->method('getStatusCode')->willReturn(Response::HTTP_OK);
 
-        $this->httpClient
-            ->expects($this->once())
-            ->method('request')
-            ->willReturn($response);
+        $this->httpClient->expects($this->once())->method('request')->willReturn($response);
 
         $this->assertTrue($this->api->isVerified());
     }
@@ -102,10 +99,7 @@ class RemoteApiClientTest extends TestCase
         $response = $this->createStub(ResponseInterface::class);
         $response->method('getStatusCode')->willReturn(Response::HTTP_INTERNAL_SERVER_ERROR);
 
-        $this->httpClient
-            ->expects($this->once())
-            ->method('request')
-            ->willReturn($response);
+        $this->httpClient->expects($this->once())->method('request')->willReturn($response);
 
         $this->expectException('JsonException');
         $this->api->isVerified();
@@ -117,10 +111,7 @@ class RemoteApiClientTest extends TestCase
      */
     public function testIsVerifiedTransportException(): void
     {
-        $this->httpClient
-            ->expects($this->once())
-            ->method('request')
-            ->willThrowException(new TransportException());
+        $this->httpClient->expects($this->once())->method('request')->willThrowException(new TransportException());
 
         $this->expectException('Symfony\Component\HttpClient\Exception\TransportException');
         $this->api->isVerified();
@@ -192,10 +183,7 @@ class RemoteApiClientTest extends TestCase
     {
         $transportException = new TransportException('Network error');
 
-        $this->httpClient
-            ->expects($this->once())
-            ->method('request')
-            ->willThrowException($transportException);
+        $this->httpClient->expects($this->once())->method('request')->willThrowException($transportException);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Network error');
@@ -212,10 +200,7 @@ class RemoteApiClientTest extends TestCase
         $response = $this->createStub(ResponseInterface::class);
         $response->method('getContent')->willReturn('invalid json content');
 
-        $this->httpClient
-            ->expects($this->once())
-            ->method('request')
-            ->willReturn($response);
+        $this->httpClient->expects($this->once())->method('request')->willReturn($response);
 
         $this->expectException(\JsonException::class);
         $this->api->isVerified();
@@ -230,10 +215,7 @@ class RemoteApiClientTest extends TestCase
         $response = $this->createStub(ResponseInterface::class);
         $response->method('getContent')->willReturn('');
 
-        $this->httpClient
-            ->expects($this->once())
-            ->method('request')
-            ->willReturn($response);
+        $this->httpClient->expects($this->once())->method('request')->willReturn($response);
 
         $this->expectException(\JsonException::class);
         $this->api->isVerified();
@@ -244,10 +226,7 @@ class RemoteApiClientTest extends TestCase
         $response = $this->createStub(ResponseInterface::class);
         $response->method('getContent')->willReturn('"just a string"');
 
-        $this->httpClient
-            ->expects($this->once())
-            ->method('request')
-            ->willReturn($response);
+        $this->httpClient->expects($this->once())->method('request')->willReturn($response);
 
         $result = $this->api->isVerified();
 
@@ -259,10 +238,7 @@ class RemoteApiClientTest extends TestCase
         $response = $this->createStub(ResponseInterface::class);
         $response->method('getContent')->willThrowException($this->createMock(ServerExceptionInterface::class));
 
-        $this->httpClient
-            ->expects($this->once())
-            ->method('request')
-            ->willReturn($response);
+        $this->httpClient->expects($this->once())->method('request')->willReturn($response);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('phpMyFAQ Verification API is not available:');
@@ -390,10 +366,7 @@ class RemoteApiClientTest extends TestCase
         $response = $this->createStub(ResponseInterface::class);
         $response->method('getContent')->willReturn($expectedHashes);
 
-        $this->httpClient
-            ->expects($this->once())
-            ->method('request')
-            ->willReturn($response);
+        $this->httpClient->expects($this->once())->method('request')->willReturn($response);
 
         $this->api->isVerified();
 

@@ -129,10 +129,7 @@ class OAuthTest extends TestCase
         $this->mockSession->method('getCookie')->willReturn('cookie-verifier');
         $this->mockSession->method('get')->willReturn('');
 
-        $this->mockClient
-            ->expects($this->once())
-            ->method('request')
-            ->willReturn($mockResponse);
+        $this->mockClient->expects($this->once())->method('request')->willReturn($mockResponse);
 
         $reflection = new ReflectionClass($this->oAuth);
         $clientProperty = $reflection->getProperty('httpClient');
@@ -157,10 +154,7 @@ class OAuthTest extends TestCase
         $this->mockSession->method('getCookie')->willReturn('cookie-verifier');
         $this->mockSession->method('get')->willReturn('');
 
-        $this->mockClient
-            ->expects($this->once())
-            ->method('request')
-            ->willReturn($mockResponse);
+        $this->mockClient->expects($this->once())->method('request')->willReturn($mockResponse);
 
         $reflection = new ReflectionClass($this->oAuth);
         $clientProperty = $reflection->getProperty('httpClient');
@@ -292,10 +286,7 @@ class OAuthTest extends TestCase
         $token = new stdClass();
         $token->id_token = 'invalid-jwt';
 
-        $this->mockSession
-            ->expects($this->once())
-            ->method('set')
-            ->with(EntraIdSession::ENTRA_ID_JWT, '{}');
+        $this->mockSession->expects($this->once())->method('set')->with(EntraIdSession::ENTRA_ID_JWT, '{}');
 
         $this->oAuth->setToken($token);
         $this->assertEquals('', $this->oAuth->getName());
@@ -307,10 +298,7 @@ class OAuthTest extends TestCase
         $token = new stdClass();
         $token->id_token = 'header.payload'; // Missing signature part
 
-        $this->mockSession
-            ->expects($this->once())
-            ->method('set')
-            ->with(EntraIdSession::ENTRA_ID_JWT, '{}');
+        $this->mockSession->expects($this->once())->method('set')->with(EntraIdSession::ENTRA_ID_JWT, '{}');
 
         $this->oAuth->setToken($token);
         $this->assertEquals('', $this->oAuth->getName());
@@ -322,10 +310,7 @@ class OAuthTest extends TestCase
         $token = new stdClass();
         $token->id_token = 'header.invalid-base64!!!.signature';
 
-        $this->mockSession
-            ->expects($this->once())
-            ->method('set')
-            ->with(EntraIdSession::ENTRA_ID_JWT, '{}');
+        $this->mockSession->expects($this->once())->method('set')->with(EntraIdSession::ENTRA_ID_JWT, '{}');
 
         $this->oAuth->setToken($token);
         $this->assertEquals('', $this->oAuth->getName());
@@ -340,10 +325,7 @@ class OAuthTest extends TestCase
         $token = new stdClass();
         $token->id_token = $header . '.' . $payload . '.' . $signature;
 
-        $this->mockSession
-            ->expects($this->once())
-            ->method('set')
-            ->with(EntraIdSession::ENTRA_ID_JWT, '{}');
+        $this->mockSession->expects($this->once())->method('set')->with(EntraIdSession::ENTRA_ID_JWT, '{}');
 
         $this->oAuth->setToken($token);
         $this->assertEquals('', $this->oAuth->getName());

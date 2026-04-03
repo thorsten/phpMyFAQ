@@ -111,10 +111,7 @@ class AuthEntraIdTest extends TestCase
     {
         $login = 'test@example.com';
 
-        $this->oAuthMock
-            ->expects($this->once())
-            ->method('getMail')
-            ->willReturn('test@example.com');
+        $this->oAuthMock->expects($this->once())->method('getMail')->willReturn('test@example.com');
 
         $result = $this->authEntraId->isValidLogin($login);
         $this->assertEquals(1, $result);
@@ -124,10 +121,7 @@ class AuthEntraIdTest extends TestCase
     {
         $login = 'test@example.com';
 
-        $this->oAuthMock
-            ->expects($this->once())
-            ->method('getMail')
-            ->willReturn('different@example.com');
+        $this->oAuthMock->expects($this->once())->method('getMail')->willReturn('different@example.com');
 
         $result = $this->authEntraId->isValidLogin($login);
         $this->assertEquals(0, $result);
@@ -137,10 +131,7 @@ class AuthEntraIdTest extends TestCase
     {
         $defaultUrl = 'https://example.com/';
 
-        $this->configurationMock
-            ->expects($this->once())
-            ->method('getDefaultUrl')
-            ->willReturn($defaultUrl);
+        $this->configurationMock->expects($this->once())->method('getDefaultUrl')->willReturn($defaultUrl);
 
         $this->sessionMock->expects($this->once())->method('setCurrentSessionKey');
 

@@ -101,16 +101,8 @@ class AuthLdapTest extends TestCase
             ]);
 
         $this->ldapCore->expects($this->exactly(2))->method('connect');
-        $this->ldapCore
-            ->expects($this->once())
-            ->method('getCompleteName')
-            ->with('alice')
-            ->willReturn('Alice Example');
-        $this->ldapCore
-            ->expects($this->once())
-            ->method('getMail')
-            ->with('alice')
-            ->willReturn('alice@example.com');
+        $this->ldapCore->expects($this->once())->method('getCompleteName')->with('alice')->willReturn('Alice Example');
+        $this->ldapCore->expects($this->once())->method('getMail')->with('alice')->willReturn('alice@example.com');
 
         $auth = $this->createAuthLdap(fn(): User => $user);
 
@@ -136,11 +128,7 @@ class AuthLdapTest extends TestCase
 
         $this->ldapCore->method('getCompleteName')->willReturn(false);
         $this->ldapCore->method('getMail')->willReturn(false);
-        $this->ldapCore
-            ->expects($this->once())
-            ->method('getGroupMemberships')
-            ->with('alice')
-            ->willReturn(false);
+        $this->ldapCore->expects($this->once())->method('getGroupMemberships')->with('alice')->willReturn(false);
         $this->logger
             ->expects($this->once())
             ->method('warning')
@@ -177,10 +165,7 @@ class AuthLdapTest extends TestCase
 
         $this->ldapCore->method('getCompleteName')->willReturn(false);
         $this->ldapCore->method('getMail')->willReturn(false);
-        $this->logger
-            ->expects($this->once())
-            ->method('info')
-            ->with('cannot create ldap user');
+        $this->logger->expects($this->once())->method('info')->with('cannot create ldap user');
 
         $auth = $this->createAuthLdap(fn(): User => $user);
 
@@ -273,11 +258,7 @@ class AuthLdapTest extends TestCase
     {
         $this->configValues['ldap.ldap_use_domain_prefix'] = true;
 
-        $this->ldapCore
-            ->expects($this->once())
-            ->method('bind')
-            ->with('EXAMPLE\\alice', 'secret')
-            ->willReturn(true);
+        $this->ldapCore->expects($this->once())->method('bind')->with('EXAMPLE\\alice', 'secret')->willReturn(true);
 
         $auth = $this
             ->getMockBuilder(AuthLdap::class)
@@ -348,11 +329,7 @@ class AuthLdapTest extends TestCase
      */
     public function testIsValidLoginReturnsLengthOfCompleteName(): void
     {
-        $this->ldapCore
-            ->expects($this->once())
-            ->method('getCompleteName')
-            ->with('alice')
-            ->willReturn('Alice Example');
+        $this->ldapCore->expects($this->once())->method('getCompleteName')->with('alice')->willReturn('Alice Example');
 
         $auth = $this->createAuthLdap();
 

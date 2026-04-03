@@ -370,10 +370,7 @@ class BackupTest extends TestCase
             'INSERT INTO faqconfig (meta_key, meta_value) VALUES ("main.currentVersion", "4.0.0");',
         ];
 
-        $this->mockDatabaseHelper
-            ->expects($this->exactly(2))
-            ->method('buildInsertQueries')
-            ->willReturn($mockQueries);
+        $this->mockDatabaseHelper->expects($this->exactly(2))->method('buildInsertQueries')->willReturn($mockQueries);
 
         $result = $this->backup->generateBackupQueries('table1 table2');
 

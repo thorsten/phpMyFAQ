@@ -54,10 +54,7 @@ class AuthCodeRepositoryTest extends TestCase
     public function testPersistNewAuthCodeInsertsRow(): void
     {
         $this->db->method('now')->willReturn('NOW()');
-        $this->db
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn(true);
+        $this->db->expects($this->once())->method('query')->willReturn(true);
 
         $authCode = $this->createAuthCodeEntity('code-abc', 'client-1', 'user-1', 'https://example.com/cb');
 
@@ -67,10 +64,7 @@ class AuthCodeRepositoryTest extends TestCase
     public function testPersistNewAuthCodeWithNullUserAndRedirectUri(): void
     {
         $this->db->method('now')->willReturn('NOW()');
-        $this->db
-            ->expects($this->once())
-            ->method('query')
-            ->willReturn(true);
+        $this->db->expects($this->once())->method('query')->willReturn(true);
 
         $authCode = $this->createAuthCodeEntity('code-xyz', 'client-1', null, null);
 
@@ -90,10 +84,7 @@ class AuthCodeRepositoryTest extends TestCase
 
     public function testRevokeAuthCodeExecutesUpdate(): void
     {
-        $this->db
-            ->expects($this->once())
-            ->method('query')
-            ->with($this->stringContains('UPDATE'));
+        $this->db->expects($this->once())->method('query')->with($this->stringContains('UPDATE'));
 
         $this->repository->revokeAuthCode('code-to-revoke');
     }

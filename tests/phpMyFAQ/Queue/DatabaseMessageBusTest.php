@@ -24,10 +24,8 @@ class DatabaseMessageBusTest extends TestCase
 
                     return (
                         is_array($decoded)
-                        && ($decoded['class'] ?? '')
-                        === SendMailMessage::class
-                        && ($decoded['payload']['recipient'] ?? '')
-                        === 'team@example.org'
+                        && ($decoded['class'] ?? '') === SendMailMessage::class
+                        && ($decoded['payload']['recipient'] ?? '') === 'team@example.org'
                     );
                 }),
                 ['x-request-id' => 'abc'],
@@ -55,10 +53,8 @@ class DatabaseMessageBusTest extends TestCase
 
                     return (
                         is_array($decoded)
-                        && ($decoded['class'] ?? '')
-                        === \stdClass::class
-                        && ($decoded['payload']['foo'] ?? '')
-                        === 'bar'
+                        && ($decoded['class'] ?? '') === \stdClass::class
+                        && ($decoded['payload']['foo'] ?? '') === 'bar'
                     );
                 }),
                 [],

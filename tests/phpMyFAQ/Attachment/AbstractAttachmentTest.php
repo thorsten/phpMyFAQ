@@ -329,11 +329,7 @@ class AbstractAttachmentTest extends TestCase
             ->method('query')
             ->with($this->stringContains('SELECT COALESCE(SUM(filesize), 0)'))
             ->willReturn(true);
-        $this->mockDb
-            ->expects($this->once())
-            ->method('fetchArray')
-            ->with(true)
-            ->willReturn(['amount' => 0]);
+        $this->mockDb->expects($this->once())->method('fetchArray')->with(true)->willReturn(['amount' => 0]);
         $this->mockDb->expects($this->never())->method('nextId');
 
         $this->expectException(QuotaExceededException::class);
@@ -464,11 +460,7 @@ class AbstractAttachmentTest extends TestCase
         }
 
         $this->mockDb->method('escape')->willReturnArgument(0);
-        $this->mockDb
-            ->expects($this->once())
-            ->method('query')
-            ->with($this->stringContains('UPDATE'))
-            ->willReturn(true);
+        $this->mockDb->expects($this->once())->method('query')->with($this->stringContains('UPDATE'))->willReturn(true);
 
         $this->attachment->testPostUpdateMeta();
 

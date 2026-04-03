@@ -21,11 +21,7 @@ class TableBuilderTest extends TestCase
 
     public function testTableSetsTableName(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->integer('id', false)
-            ->primaryKey('id')
-            ->build();
+        $sql = $this->builder->table('test', false)->integer('id', false)->primaryKey('id')->build();
 
         $this->assertStringContainsString('CREATE TABLE test', $sql);
     }
@@ -44,81 +40,56 @@ class TableBuilderTest extends TestCase
 
     public function testIntegerColumn(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->integer('id', false)
-            ->primaryKey('id')
-            ->build();
+        $sql = $this->builder->table('test', false)->integer('id', false)->primaryKey('id')->build();
 
         $this->assertStringContainsString('id INT NOT NULL', $sql);
     }
 
     public function testIntegerColumnNullable(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->integer('nullable_col', true)
-            ->build();
+        $sql = $this->builder->table('test', false)->integer('nullable_col', true)->build();
 
         $this->assertStringContainsString('nullable_col INT NULL', $sql);
     }
 
     public function testIntegerColumnWithDefault(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->integer('with_default', true, 0)
-            ->build();
+        $sql = $this->builder->table('test', false)->integer('with_default', true, 0)->build();
 
         $this->assertStringContainsString('DEFAULT 0', $sql);
     }
 
     public function testVarcharColumn(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->varchar('name', 255, false)
-            ->build();
+        $sql = $this->builder->table('test', false)->varchar('name', 255, false)->build();
 
         $this->assertStringContainsString('name VARCHAR(255) NOT NULL', $sql);
     }
 
     public function testVarcharColumnWithDefault(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->varchar('status', 50, true, 'active')
-            ->build();
+        $sql = $this->builder->table('test', false)->varchar('status', 50, true, 'active')->build();
 
         $this->assertStringContainsString("DEFAULT 'active'", $sql);
     }
 
     public function testTextColumn(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->text('content', true)
-            ->build();
+        $sql = $this->builder->table('test', false)->text('content', true)->build();
 
         $this->assertStringContainsString('content TEXT NULL', $sql);
     }
 
     public function testBooleanColumn(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->boolean('is_active', false, true)
-            ->build();
+        $sql = $this->builder->table('test', false)->boolean('is_active', false, true)->build();
 
         $this->assertStringContainsString('is_active TINYINT(1) NOT NULL DEFAULT 1', $sql);
     }
 
     public function testTimestampColumn(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->timestamp('created_at', false, true)
-            ->build();
+        $sql = $this->builder->table('test', false)->timestamp('created_at', false, true)->build();
 
         $this->assertStringContainsString('created_at TIMESTAMP', $sql);
         $this->assertStringContainsString('DEFAULT CURRENT_TIMESTAMP', $sql);
@@ -126,41 +97,28 @@ class TableBuilderTest extends TestCase
 
     public function testDateColumn(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->date('birth_date', true)
-            ->build();
+        $sql = $this->builder->table('test', false)->date('birth_date', true)->build();
 
         $this->assertStringContainsString('birth_date DATE NULL', $sql);
     }
 
     public function testCharColumn(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->char('flag', 1, false, 'Y')
-            ->build();
+        $sql = $this->builder->table('test', false)->char('flag', 1, false, 'Y')->build();
 
         $this->assertStringContainsString("flag CHAR(1) NOT NULL DEFAULT 'Y'", $sql);
     }
 
     public function testAutoIncrementColumn(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->autoIncrement('id')
-            ->build();
+        $sql = $this->builder->table('test', false)->autoIncrement('id')->build();
 
         $this->assertStringContainsString('id INT NOT NULL PRIMARY KEY AUTO_INCREMENT', $sql);
     }
 
     public function testPrimaryKey(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->integer('id', false)
-            ->primaryKey('id')
-            ->build();
+        $sql = $this->builder->table('test', false)->integer('id', false)->primaryKey('id')->build();
 
         $this->assertStringContainsString('PRIMARY KEY (id)', $sql);
     }
@@ -179,11 +137,7 @@ class TableBuilderTest extends TestCase
 
     public function testIndex(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->varchar('email', 255)
-            ->index('idx_email', 'email')
-            ->build();
+        $sql = $this->builder->table('test', false)->varchar('email', 255)->index('idx_email', 'email')->build();
 
         $this->assertStringContainsString('INDEX idx_email (email)', $sql);
     }
@@ -202,11 +156,7 @@ class TableBuilderTest extends TestCase
 
     public function testUniqueIndex(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->varchar('slug', 255)
-            ->uniqueIndex('idx_slug', 'slug')
-            ->build();
+        $sql = $this->builder->table('test', false)->varchar('slug', 255)->uniqueIndex('idx_slug', 'slug')->build();
 
         $this->assertStringContainsString('UNIQUE INDEX idx_slug (slug)', $sql);
     }
@@ -226,10 +176,7 @@ class TableBuilderTest extends TestCase
     public function testBuildIndexStatementsForMySqlReturnsEmpty(): void
     {
         // MySQL should return empty array since indexes are inlined in CREATE TABLE
-        $this->builder
-            ->table('test', false)
-            ->varchar('email', 255)
-            ->index('idx_email', 'email');
+        $this->builder->table('test', false)->varchar('email', 255)->index('idx_email', 'email');
 
         $statements = $this->builder->buildIndexStatements();
 
@@ -238,30 +185,21 @@ class TableBuilderTest extends TestCase
 
     public function testBigIntegerColumn(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->bigInteger('big_id', false)
-            ->build();
+        $sql = $this->builder->table('test', false)->bigInteger('big_id', false)->build();
 
         $this->assertStringContainsString('big_id BIGINT NOT NULL', $sql);
     }
 
     public function testSmallIntegerColumn(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->smallInteger('small_val', true)
-            ->build();
+        $sql = $this->builder->table('test', false)->smallInteger('small_val', true)->build();
 
         $this->assertStringContainsString('small_val SMALLINT NULL', $sql);
     }
 
     public function testCreateTableSuffix(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->integer('id', false)
-            ->build();
+        $sql = $this->builder->table('test', false)->integer('id', false)->build();
 
         $this->assertStringContainsString('ENGINE = InnoDB', $sql);
         $this->assertStringContainsString('utf8mb4', $sql);
@@ -315,10 +253,7 @@ class TableBuilderTest extends TestCase
 
     public function testVarcharWithQuotesInDefault(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->varchar('author', 100, true, "O'Reilly")
-            ->build();
+        $sql = $this->builder->table('test', false)->varchar('author', 100, true, "O'Reilly")->build();
 
         // Single quotes should be escaped as ''
         $this->assertStringContainsString("DEFAULT 'O''Reilly'", $sql);
@@ -326,10 +261,7 @@ class TableBuilderTest extends TestCase
 
     public function testCharWithQuotesInDefault(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->char('flag', 1, true, "Y'all")
-            ->build();
+        $sql = $this->builder->table('test', false)->char('flag', 1, true, "Y'all")->build();
 
         // Single quotes should be escaped as ''
         $this->assertStringContainsString("DEFAULT 'Y''all'", $sql);
@@ -366,10 +298,7 @@ class TableBuilderTest extends TestCase
 
     public function testLongTextColumnMysql(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->longText('content', true)
-            ->build();
+        $sql = $this->builder->table('test', false)->longText('content', true)->build();
 
         $this->assertStringContainsString('content LONGTEXT NULL', $sql);
     }
@@ -384,10 +313,7 @@ class TableBuilderTest extends TestCase
 
     public function testBlobColumnMysql(): void
     {
-        $sql = $this->builder
-            ->table('test', false)
-            ->blob('data', false)
-            ->build();
+        $sql = $this->builder->table('test', false)->blob('data', false)->build();
 
         $this->assertStringContainsString('data BLOB NOT NULL', $sql);
     }

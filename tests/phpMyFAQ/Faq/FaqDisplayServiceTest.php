@@ -114,10 +114,7 @@ class FaqDisplayServiceTest extends TestCase
      */
     public function testLoadFaqById(): void
     {
-        $this->faq
-            ->expects(static::once())
-            ->method('getFaq')
-            ->with(42);
+        $this->faq->expects(static::once())->method('getFaq')->with(42);
 
         $result = $this->service->loadFaq(42, null);
 
@@ -129,10 +126,7 @@ class FaqDisplayServiceTest extends TestCase
      */
     public function testLoadFaqByIdWithZeroSolutionId(): void
     {
-        $this->faq
-            ->expects(static::once())
-            ->method('getFaq')
-            ->with(42);
+        $this->faq->expects(static::once())->method('getFaq')->with(42);
 
         $result = $this->service->loadFaq(42, 0);
 
@@ -144,10 +138,7 @@ class FaqDisplayServiceTest extends TestCase
      */
     public function testLoadFaqBySolutionId(): void
     {
-        $this->faq
-            ->expects(static::once())
-            ->method('getFaqBySolutionId')
-            ->with(1000);
+        $this->faq->expects(static::once())->method('getFaqBySolutionId')->with(1000);
 
         $result = $this->service->loadFaq(0, 1000);
 
@@ -434,10 +425,7 @@ class FaqDisplayServiceTest extends TestCase
      */
     public function testLoadFaqReturnsInteger(): void
     {
-        $this->faq
-            ->expects(static::once())
-            ->method('getFaq')
-            ->with(42);
+        $this->faq->expects(static::once())->method('getFaq')->with(42);
 
         $result = $this->service->loadFaq(42, null);
 

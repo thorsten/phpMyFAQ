@@ -80,10 +80,7 @@ class PhpMyFaqMcpServerTest extends TestCase
         $input = $this->createMock(InputInterface::class);
         $output = $this->createMock(OutputInterface::class);
 
-        $this->runtimeMock
-            ->expects($this->once())
-            ->method('runConsole')
-            ->with($input, $output);
+        $this->runtimeMock->expects($this->once())->method('runConsole')->with($input, $output);
 
         $this->server->runConsole($input, $output);
     }

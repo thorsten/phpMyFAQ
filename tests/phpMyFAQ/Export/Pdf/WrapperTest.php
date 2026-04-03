@@ -397,11 +397,7 @@ class WrapperTest extends TestCase
         $htmlHeader = '&lt;h1&gt;Header &amp; Footer&lt;/h1&gt;';
         $expectedHeader = '<h1>Header & Footer</h1>';
 
-        $this->mockConfig
-            ->expects($this->once())
-            ->method('get')
-            ->with('main.customPdfHeader')
-            ->willReturn($htmlHeader);
+        $this->mockConfig->expects($this->once())->method('get')->with('main.customPdfHeader')->willReturn($htmlHeader);
 
         $this->wrapper->setConfig($this->mockConfig);
         $this->wrapper->setCustomHeader();

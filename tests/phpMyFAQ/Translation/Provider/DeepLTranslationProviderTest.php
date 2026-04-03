@@ -131,11 +131,7 @@ class DeepLTranslationProviderTest extends TestCase
 
     public function testTranslateWithoutApiKey(): void
     {
-        $this->configuration
-            ->expects($this->once())
-            ->method('get')
-            ->with('translation.deeplApiKey')
-            ->willReturn('');
+        $this->configuration->expects($this->once())->method('get')->with('translation.deeplApiKey')->willReturn('');
 
         $httpClient = new MockHttpClient();
         $provider = new DeepLTranslationProvider($this->configuration, $httpClient);

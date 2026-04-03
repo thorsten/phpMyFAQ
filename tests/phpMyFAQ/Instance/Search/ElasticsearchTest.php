@@ -214,10 +214,7 @@ class ElasticsearchTest extends TestCase
 
     public function testCreateIndexCallsClientIndicesCreate(): void
     {
-        $this->indicesMock
-            ->expects($this->once())
-            ->method('create')
-            ->with($this->isArray());
+        $this->indicesMock->expects($this->once())->method('create')->with($this->isArray());
 
         $responseMock = $this->createStub(ElasticsearchResponse::class);
         $responseMock->method('offsetExists')->willReturn(true);
@@ -250,10 +247,7 @@ class ElasticsearchTest extends TestCase
 
         $this->indicesMock->method('getMapping')->willReturn($responseMock);
 
-        $this->indicesMock
-            ->expects($this->once())
-            ->method('putMapping')
-            ->willReturn(['acknowledged' => true]);
+        $this->indicesMock->expects($this->once())->method('putMapping')->willReturn(['acknowledged' => true]);
 
         $result = $this->elasticsearch->putMapping();
 

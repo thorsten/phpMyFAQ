@@ -329,11 +329,7 @@ class ConfigurationMethodsTraitTest extends TestCase
         $servers = [['host' => 'ldap.example.com']];
         $config = ['base_dn' => 'dc=example,dc=com'];
 
-        $this->ldapSettings
-            ->expects($this->once())
-            ->method('buildServers')
-            ->with($ldapConfig)
-            ->willReturn($servers);
+        $this->ldapSettings->expects($this->once())->method('buildServers')->with($ldapConfig)->willReturn($servers);
         $this->ldapSettings->method('buildConfig')->willReturn($config);
 
         $this->subject->setLdapConfig($ldapConfig);
@@ -528,11 +524,7 @@ class ConfigurationMethodsTraitTest extends TestCase
 
     public function testDelete(): void
     {
-        $this->configurationRepository
-            ->expects($this->once())
-            ->method('delete')
-            ->with('some.key')
-            ->willReturn(true);
+        $this->configurationRepository->expects($this->once())->method('delete')->with('some.key')->willReturn(true);
 
         $this->assertTrue($this->subject->delete('some.key'));
     }
@@ -604,10 +596,7 @@ class ConfigurationMethodsTraitTest extends TestCase
 
     public function testUpdateHandlesNullValue(): void
     {
-        $this->configurationRepository
-            ->expects($this->once())
-            ->method('updateConfigValue')
-            ->with('main.titleFAQ', '');
+        $this->configurationRepository->expects($this->once())->method('updateConfigValue')->with('main.titleFAQ', '');
 
         $this->assertTrue($this->subject->update(['main.titleFAQ' => null]));
     }
