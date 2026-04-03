@@ -40,8 +40,13 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated to Vite v8 (Thorsten)
 - migrated experimental MCP Server to mcp/sdk (Thorsten)
 
-### phpMyFAQ v4.1.1 - unreleased
+### phpMyFAQ v4.1.2 – unreleased
 
+- fixed bugs (Thorsten)
+
+### phpMyFAQ v4.1.1 - 2026-03-31
+
+- fixed security vulnerabilities (Thorsten)
 - updated third party dependencies (Thorsten)
 - fixed bugs (Thorsten)
 
