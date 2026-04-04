@@ -75,7 +75,7 @@ readonly class CacheSettingsResolver
 
     private function normalizeRedisPrefix(string $redisPrefix): string
     {
-        $normalizedPrefix = preg_replace('/[^-+_.A-Za-z0-9]/', '_', subject: $redisPrefix) ?? '';
+        $normalizedPrefix = preg_replace('/[^-+_.A-Za-z0-9]/', replacement: '_', subject: $redisPrefix) ?? '';
 
         return trim($normalizedPrefix, characters: '_') !== '' ? $normalizedPrefix : self::DEFAULT_REDIS_PREFIX;
     }

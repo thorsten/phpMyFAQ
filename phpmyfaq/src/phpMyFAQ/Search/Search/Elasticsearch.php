@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Search\Search;
 
-use Elastic\Elasticsearch\Client;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
 use phpMyFAQ\Configuration;

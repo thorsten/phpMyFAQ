@@ -143,7 +143,7 @@ final class DashboardController extends AbstractController
             if ($response->getStatusCode() === Response::HTTP_OK) {
                 $data = $response->toArray(throw: false);
                 if (isset($data['news']) && is_array($data['news'])) {
-                    $data['news'] = array_slice($data['news'], 0, 5);
+                    $data['news'] = array_slice($data['news'], offset: 0, length: 5);
                 }
 
                 return $this->json($data);

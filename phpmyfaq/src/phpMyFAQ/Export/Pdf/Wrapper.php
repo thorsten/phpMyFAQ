@@ -710,7 +710,6 @@ class Wrapper extends TCPDF
      * @param string $align Allows centering or align the image on the current line
      */
     #[\Override]
-    /* @mago-ignore lint:excessive-parameter-list */
     public function WriteHTML(
         // phpcs:ignore
         $html,

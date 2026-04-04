@@ -124,7 +124,7 @@ readonly class FaqSearchTool implements McpToolExecutorInterface
                 ];
             }
 
-            $limitedResults = array_slice($validResults, 0, (int) $limit);
+            $limitedResults = array_slice($validResults, offset: 0, length: (int) $limit);
 
             if ($limitedResults === []) {
                 return $this->createResult('No accessible FAQ entries found for the given query.');

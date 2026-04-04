@@ -55,7 +55,7 @@ In scope examples:
 - Cross-site scripting (XSS) and request forgery (CSRF) with meaningful impact
 - Sensitive information exposure (e.g., secrets, private data)
 
-Out of scope examples (non-exhaustive):
+Out-of-scope examples (non-exhaustive):
 - Denial of service without a clear, reproducible, and product-side fix
 - Third‑party service issues outside this repository
 - Clickjacking on non-sensitive pages, missing SPF/DMARC, best‑practice recommendations only
