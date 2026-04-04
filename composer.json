@@ -135,8 +135,6 @@
     "test:coverage": "./phpmyfaq/src/libs/bin/phpunit --coverage-text",
     "test:coverage-html": "./phpmyfaq/src/libs/bin/phpunit --coverage-html coverage",
     "bench": "./phpmyfaq/src/libs/bin/phpbench run tests/Benchmarks --report=aggregate",
-    "bench:tree": "./phpmyfaq/src/libs/bin/phpbench run tests/Benchmarks/CategoryTreeBench.php --report=aggregate",
-    "bench:svg": "./phpmyfaq/src/libs/bin/phpbench run tests/Benchmarks/SvgSanitizerBench.php --report=aggregate",
     "version:get": "php scripts/get-version.php",
     "version:sync": "pnpm version $(php scripts/get-version.php) --no-git-tag-version --allow-same-version",
     "version:check": "php scripts/check-version.php"
