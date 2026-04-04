@@ -43,7 +43,7 @@ class EncryptedFile extends AbstractFile
     {
         $this->aes = new AES('cbc');
         $this->aes->setKey($key);
-        $this->aes->setIV(substr(hash('sha256', $key, true), 0, 16));
+        $this->aes->setIV(substr(hash('sha256', $key, binary: true), offset: 0, length: 16));
 
         parent::__construct($filepath, $mode);
     }

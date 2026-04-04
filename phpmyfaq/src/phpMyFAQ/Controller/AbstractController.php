@@ -217,7 +217,7 @@ abstract class AbstractController
         }
 
         $request = Request::createFromGlobals();
-        $pathInfo = rtrim($request->getPathInfo(), '/');
+        $pathInfo = rtrim($request->getPathInfo(), characters: '/');
         $pathInfo = $pathInfo === '' ? '/' : $pathInfo;
 
         if ($this->isPublicAuthenticationPath($pathInfo)) {
@@ -249,7 +249,7 @@ abstract class AbstractController
             '/api/webauthn/login',
         ];
 
-        return in_array($pathInfo, $publicAuthenticationPaths, true);
+        return in_array($pathInfo, $publicAuthenticationPaths, strict: true);
     }
 
     /**
