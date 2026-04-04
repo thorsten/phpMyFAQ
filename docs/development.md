@@ -216,7 +216,8 @@ You can create your own CSS theme by copying the default theme and modifying it 
 The CSS theme is based on Bootstrap’s CSS custom properties for fast and forward-looking design and development.
 phpMyFAQ officially supports three modes in the default theme: **Light**, **Dark**, and **High Contrast**.
 **Accessibility Guidelines:**
-The High Contrast mode is specifically engineered for users with visual impairments and features the __Atkinson Hyperlegible Next__ font to maximize character recognition.
+The High Contrast mode is specifically engineered for users with visual impairments and features the __Atkinson 
+Hyperlegible Next__ font to maximize character recognition.
 
 *   **Prioritize Legibility:** When customizing this mode, avoid "visual noise" such as text-shadows, transitions, or decorative gradients that could interfere with assistive technologies.
 *   **Contrast Standards:** Customizations **must** adhere to the [WCAG 2.2 Contrast Guidelines](https://www.w3.org/TR/WCAG22/). For the High Contrast theme, we aim for **Level AAA**, requiring a contrast ratio of at least **7:1** for normal text and **4.5:1** for large text.
@@ -285,7 +286,7 @@ All contributions will be added to the changelog and on the phpMyFAQ website.
 ### 10.6.1 How to contribute?
 
 Contributing to phpMyFAQ is quite easy: just fork the [project on GitHub](https://github.com/thorsten/phpMyFAQ),
-work on your copy and send pull requests.
+work on your copy, and send pull requests.
 
 ### 10.6.2 Setup a local phpMyFAQ development environment
 
@@ -421,14 +422,59 @@ To run the Vitest-based tests, you can use the following command:
 
     $ pnpm test
 
-### 10.6.8 Coding standards
+### 10.6.8 Composer scripts
+
+phpMyFAQ provides a set of Composer scripts to simplify common development tasks. Run them with `composer <script>`.
+
+#### Code quality
+
+| Script         | Description                                      |
+|----------------|--------------------------------------------------|
+| `lint`         | Run Mago linter to check for code issues         |
+| `lint:fix`     | Run Mago linter and automatically fix issues     |
+| `format`       | Check PHP code formatting with Mago              |
+| `format:fix`   | Automatically fix PHP code formatting with Mago  |
+| `analyze`      | Run Mago static analysis                         |
+
+#### Testing
+
+| Script              | Description                                     |
+|---------------------|-------------------------------------------------|
+| `test`              | Run PHPUnit tests without coverage              |
+| `test:coverage`     | Run PHPUnit tests with text coverage output     |
+| `test:coverage-html` | Run PHPUnit tests with HTML coverage report    |
+| `bench`             | Run PHPBench benchmarks with aggregate report   |
+
+#### API documentation
+
+| Script         | Description                                      |
+|----------------|--------------------------------------------------|
+| `openapi:json` | Generate OpenAPI specification in JSON format    |
+| `openapi:yaml` | Generate OpenAPI specification in YAML format    |
+
+#### Refactoring
+
+| Script            | Description                                   |
+|-------------------|-----------------------------------------------|
+| `refactor`        | Run Rector automated refactoring              |
+| `refactor:dryrun` | Preview Rector refactoring without applying   |
+
+#### Version management
+
+| Script          | Description                                     |
+|-----------------|-------------------------------------------------|
+| `version:get`   | Print the current phpMyFAQ version              |
+| `version:sync`  | Sync the version from PHP to package.json       |
+| `version:check` | Verify that PHP and package.json versions match |
+
+### 10.6.9 Coding standards
 
 The following coding standards are used in phpMyFAQ:
 
 - PHP: [PER Coding Style 3.0](https://www.php-fig.org/per/coding-style/)
 - TypeScript with ESLint recommendations
 
-### 10.6.9 Rebase your Patch
+### 10.6.10 Rebase your Patch
 
 Before submitting your patch, please update your local branch:
 
@@ -438,7 +484,7 @@ Before submitting your patch, please update your local branch:
     $ git checkout YOUR_BRANCH_NAME
     $ git rebase main
 
-### 10.6.10 Make a Pull Request
+### 10.6.11 Make a Pull Request
 
 You can now make a pull request on the phpMyFAQ GitHub repository.
 
