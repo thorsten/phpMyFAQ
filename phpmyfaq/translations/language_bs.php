@@ -940,7 +940,7 @@ $PMF_LANG['msgEditFaqDate'] = 'uredi';
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF['search.relevance'] = ['select', 'Sortiraj po relevantnosti'];
-$LANG_CONF["search.enableRelevance"] = ["checkbox", "Aktiviraj podršku za relevantnost?"];
+$LANG_CONF["search.enableRelevance"] = ["checkbox", "Aktiviraj podršku za relevantnost"];
 $PMF_LANG['searchControlCenter'] = 'Pretraga';
 $PMF_LANG['search.relevance.thema-content-keywords'] = 'Pitanje - Odgovor - Ključne riječi';
 $PMF_LANG['search.relevance.thema-keywords-content'] = 'Pitanje - Ključne riječi - Odgovor';

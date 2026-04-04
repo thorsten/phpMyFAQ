@@ -941,7 +941,7 @@ $PMF_LANG['msgEditFaqDate'] = 'golygu';
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF['search.relevance'] = ['select', 'Trefnu yn ôl perthnasedd'];
-$LANG_CONF["search.enableRelevance"] = ["checkbox", "Actifadu cymorth perthnasedd?"];
+$LANG_CONF["search.enableRelevance"] = ["checkbox", "Actifadu cymorth perthnasedd"];
 $PMF_LANG['searchControlCenter'] = 'Chwilio';
 $PMF_LANG['search.relevance.thema-content-keywords'] = 'Cwestiwn - Ateb - Geiriau Allweddol';
 $PMF_LANG['search.relevance.thema-keywords-content'] = 'Cwestiwn - Geiriau Allweddol - Ateb';

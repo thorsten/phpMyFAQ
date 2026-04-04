@@ -939,7 +939,7 @@ $PMF_LANG['msgEditFaqDate'] = "ändern";
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF['search.relevance'] = ['select', "Sortierung nach Relevanz"];
-$LANG_CONF['search.enableRelevance'] = ['checkbox', "Support für Relevanz? "];
+$LANG_CONF['search.enableRelevance'] = ['checkbox', "Aktiviere Support für Relevanz"];
 $PMF_LANG['searchControlCenter'] = "Suche";
 $PMF_LANG['search.relevance.thema-content-keywords'] = "Frage - Antwort - Schlüsselwörter";
 $PMF_LANG['search.relevance.thema-keywords-content'] = "Frage - Schlüsselwörter - Antwort";

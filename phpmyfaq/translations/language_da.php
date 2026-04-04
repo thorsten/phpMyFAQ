@@ -935,7 +935,7 @@ $PMF_LANG['msgEditFaqDate'] = 'rediger';
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF['search.relevance'] = ['select', 'Sorter efter relevans'];
-$LANG_CONF["search.enableRelevance"] = ["checkbox", "Aktiver relevansunderstøttelse?"];
+$LANG_CONF["search.enableRelevance"] = ["checkbox", "Aktiver relevansunderstøttelse"];
 $PMF_LANG['searchControlCenter'] = 'Søg';
 $PMF_LANG['search.relevance.thema-content-keywords'] = 'Spørgsmål - Svar - Nøgleord';
 $PMF_LANG['search.relevance.thema-keywords-content'] = 'Spørgsmål - Nøgleord - Svar';
