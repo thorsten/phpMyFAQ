@@ -77,6 +77,7 @@
     "carthage-software/mago": "~1.18.1",
     "doctrine/instantiator": "~2.1.0",
     "mikey179/vfsstream": "~1.6.12",
+    "phpbench/phpbench": "^1.6",
     "phpdocumentor/reflection-docblock": "~5.6.7",
     "phpunit/phpunit": "~13.0.5",
     "rector/rector": "~2.3.9",
@@ -114,6 +115,11 @@
       "phpMyFAQ\\": "./phpmyfaq/src/phpMyFAQ"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "phpMyFAQ\\Benchmarks\\": "./tests/Benchmarks"
+    }
+  },
   "minimum-stability": "stable",
   "scripts": {
     "analyze": "./phpmyfaq/src/libs/bin/mago analyze",
@@ -128,6 +134,9 @@
     "test": "./phpmyfaq/src/libs/bin/phpunit --no-coverage",
     "test:coverage": "./phpmyfaq/src/libs/bin/phpunit --coverage-text",
     "test:coverage-html": "./phpmyfaq/src/libs/bin/phpunit --coverage-html coverage",
+    "bench": "./phpmyfaq/src/libs/bin/phpbench run tests/Benchmarks --report=aggregate",
+    "bench:tree": "./phpmyfaq/src/libs/bin/phpbench run tests/Benchmarks/CategoryTreeBench.php --report=aggregate",
+    "bench:svg": "./phpmyfaq/src/libs/bin/phpbench run tests/Benchmarks/SvgSanitizerBench.php --report=aggregate",
     "version:get": "php scripts/get-version.php",
     "version:sync": "pnpm version $(php scripts/get-version.php) --no-git-tag-version --allow-same-version",
     "version:check": "php scripts/check-version.php"

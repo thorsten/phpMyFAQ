@@ -1,0 +1,5 @@
+{
+  "$schema": "https://raw.githubusercontent.com/phpbench/phpbench/master/phpbench.schema.json",
+  "runner.bootstrap": "tests/bench-bootstrap.php",
+  "runner.path": "tests/Benchmarks"
+}
