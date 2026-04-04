@@ -940,7 +940,7 @@ $PMF_LANG['msgEditFaqDate'] = 'editatu';
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF['search.relevance'] = ['select', 'Ordenatu garrantziaren arabera'];
-$LANG_CONF["search.enableRelevance"] = ["checkbox", "Aktibatu garrantziaren euskarria?"];
+$LANG_CONF["search.enableRelevance"] = ["checkbox", "Aktibatu garrantziaren euskarria"];
 $PMF_LANG['searchControlCenter'] = 'Bilaketa';
 $PMF_LANG['search.relevance.thema-content-keywords'] = 'Galdera - Erantzuna - Gako-hitzak';
 $PMF_LANG['search.relevance.thema-keywords-content'] = 'Galdera - Gako-hitzak - Erantzuna';
