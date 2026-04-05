@@ -40,6 +40,8 @@ use Symfony\Component\Routing\RouteCollection;
 #[UsesClass(ControllerContainerListener::class)]
 #[UsesClass(LanguageListener::class)]
 #[UsesClass(RouterListener::class)]
+#[UsesClass(Strings::class)]
+#[UsesClass(Translation::class)]
 #[UsesClass(WebExceptionListener::class)]
 #[UsesClass(Environment::class)]
 #[UsesClass(FormsServiceProvider::class)]
