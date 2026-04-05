@@ -18,16 +18,27 @@ DirectoryIndex index.php
     Options +FollowSymlinks -MultiViews -Indexes
 </IfModule>
 # Increase upload limits for PHP (adjust as needed)
-php_value upload_max_filesize 100M
-php_value post_max_size 100M
-php_value max_execution_time 300
-php_value max_input_time 300
+# Note: php_value only works with mod_php; for PHP-FPM, set these in php.ini or .user.ini
+<IfModule mod_php.c>
+    php_value upload_max_filesize 100M
+    php_value post_max_size 100M
+    php_value max_execution_time 300
+    php_value max_input_time 300
+</IfModule>
+<IfModule mod_php8.c>
+    php_value upload_max_filesize 100M
+    php_value post_max_size 100M
+    php_value max_execution_time 300
+    php_value max_input_time 300
+</IfModule>
 # X-Frame-Options to prevent clickjacking
-Header always append X-Frame-Options SAMEORIGIN
-# CORS
-Header set Access-Control-Allow-Origin "*"
-Header set Access-Control-Allow-Methods "GET,PUT,POST,DELETE"
-Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+<IfModule mod_headers.c>
+    Header always append X-Frame-Options SAMEORIGIN
+    # CORS
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET,PUT,POST,DELETE"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+</IfModule>
 # Set cache control
 <filesMatch ".(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
     Header set Cache-Control "max-age=84600, no-store"
