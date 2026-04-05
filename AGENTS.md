@@ -8,11 +8,11 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 - `/docs`: Contains documentation for the project, including API specifications and user guides.
 - `/phpmyfaq/`: Contains the source code for the frontend.
 - `/phpmyfaq/admin`: Contains the source code for the admin.
-- `/phpmyfaq/admin/assets`: Contains the TypeScript and SCSS source files for the admin frontend.
+- `/phpmyfaq/admin/assets`: Contains the TypeScript and SCSS source files for the admin frontend. The tests are located in the same directory as the source files to ensure they are always updated together.
 - `/phpmyfaq/docs`: Contains the documentation for the project.
-- `/phpmyfaq/assets`: Contains the TypeScript and SCSS source files for the frontend.
+- `/phpmyfaq/assets`: Contains the TypeScript and SCSS source files for the frontend. The tests are located in the same directory as the source files to ensure they are always updated together.
 - `/phpmyfaq/src/phpMyFAQ`: Contains the source code for the PHP backend.
-- `/tests`: Contains PHPUnit v13 based unittests.
+- `/tests`: Contains PHPUnit v13 based unit and integration tests.
 
 ## Development Setup
 
@@ -72,6 +72,36 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 - Use single quotes for strings.
 - Use arrow functions for callbacks.
 
+## Agent Workflow
+
+When implementing changes:
+
+1. Read existing code before modifying it.
+2. Run `composer lint` / `pnpm lint` after PHP/TypeScript changes.
+3. Run `composer test` / `pnpm test` — all tests must pass before finishing.
+4. Never commit with `--no-verify`.
+5. Clear route cache (`rm -rf phpmyfaq/cache/routes`) after adding or modifying routes.
+
+## Dependency Injection
+
+Services are registered in `phpmyfaq/src/phpMyFAQ/services.php`.
+Add new services there when creating classes that need constructor injection.
+
+## Templates
+
+- Frontend templates: `phpmyfaq/assets/templates/default/`
+- Admin templates: `phpmyfaq/assets/templates/admin/`
+- Setup / Update templates: `phpmyfaq/assets/templates/setup/`
+- Fatal error templates: `phpmyfaq/assets/templates/error/`
+- All templates use Twig syntax. Never use raw PHP for HTML output.
+
+## Do Not
+
+- Do not add inline SQL — use the existing DB abstraction layer.
+- Do not hard-code strings — use the translation system.
+- Do not bypass CSRF protection on form handlers.
+- Do not add new npm/composer dependencies without checking for existing alternatives.
+
 ## Routing System
 
 The application uses Symfony Router with PHP 8+ Route attributes for modern, controller-based routing.
@@ -82,6 +112,7 @@ The application uses Symfony Router with PHP 8+ Route attributes for modern, con
    - `phpmyfaq/index.php`: Frontend entry point
    - `phpmyfaq/admin/index.php`: Admin panel entry point
    - `phpmyfaq/api/index.php`: API entry point
+   - `phpmyfaq/admin/api/index.php`: Admin API entry point
 2. **AttributeRouteLoader**: Automatically discovers routes from controller #[Route] attributes
 3. **RouteCollectionBuilder**: Builds route collections for different contexts (public, admin, api, admin-api)
 4. **RouteCacheManager**: Caches compiled routes for production performance
