@@ -41,6 +41,18 @@ class EnvironmentConfiguratorTest extends TestCase
     }
 
     /**
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testGetServerPathWithDefaultUrlWithoutTrailingSlash(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getRootPath')->willReturn(dirname(__DIR__, 2));
+        $configuration->method('getDefaultUrl')->willReturn('https://localhost');
+        $configurator = new EnvironmentConfigurator($configuration);
+        $this->assertEquals('/', $configurator->getServerPath());
+    }
+
+    /**
      * @throws Exception
      */
     public function testGetRewriteBase(): void
@@ -115,7 +127,7 @@ class EnvironmentConfiguratorTest extends TestCase
 
         // Read the .htaccess file and verify ErrorDocument 404 is set correctly
         $htaccessContent = file_get_contents($htaccessPath);
-        $this->assertStringContainsString('ErrorDocument 404 /404.html', $htaccessContent);
+        $this->assertStringContainsString('ErrorDocument 404 /index.php?action=404', $htaccessContent);
     }
 
     /**
@@ -143,6 +155,38 @@ class EnvironmentConfiguratorTest extends TestCase
 
         // Read the .htaccess file and verify ErrorDocument 404 is set correctly
         $htaccessContent = file_get_contents($htaccessPath);
-        $this->assertStringContainsString('ErrorDocument 404 /faq/404.html', $htaccessContent);
+        $this->assertStringContainsString('ErrorDocument 404 /faq/index.php?action=404', $htaccessContent);
+    }
+
+    /**
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testAdjustRewriteBaseHtaccessOnlyTouches404ErrorDocument(): void
+    {
+        // Set up a .htaccess file with multiple ErrorDocument directives
+        $htaccessPath = dirname(__DIR__, 2) . '/.htaccess';
+        $htaccessContent = <<<'HTACCESS'
+            <IfModule mod_rewrite.c>
+                RewriteEngine On
+                RewriteBase /
+                ErrorDocument 403 /forbidden.html
+                ErrorDocument 404 /index.php?action=404
+                ErrorDocument 500 /server-error.html
+            </IfModule>
+            HTACCESS;
+        file_put_contents($htaccessPath, $htaccessContent);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getRootPath')->willReturn(dirname(__DIR__, 2));
+        $configuration->method('getDefaultUrl')->willReturn('https://localhost/faq/');
+        $configurator = new EnvironmentConfigurator($configuration);
+        $this->assertTrue($configurator->adjustRewriteBaseHtaccess());
+
+        $htaccessContent = file_get_contents($htaccessPath);
+        // Only the 404 directive should be rewritten
+        $this->assertStringContainsString('ErrorDocument 403 /forbidden.html', $htaccessContent);
+        $this->assertStringContainsString('ErrorDocument 404 /faq/index.php?action=404', $htaccessContent);
+        $this->assertStringContainsString('ErrorDocument 500 /server-error.html', $htaccessContent);
     }
 }
