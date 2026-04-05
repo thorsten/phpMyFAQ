@@ -22,6 +22,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\EventListener;
 
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Controller\ContainerControllerResolver;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Controller\Frontend\PageNotFoundController;
 use phpMyFAQ\Environment;
@@ -30,7 +31,6 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
-use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -87,17 +87,17 @@ readonly class WebExceptionListener
         $throwable = $event->getThrowable();
 
         try {
+            if (!$this->container instanceof ContainerInterface) {
+                throw new \RuntimeException('Container is required to render the styled 404 page.');
+            }
+
             $request->attributes->set('_route', 'public.404');
             $request->attributes->set('_controller', PageNotFoundController::class . '::index');
-            $controllerResolver = new ControllerResolver();
+            $controllerResolver = new ContainerControllerResolver($this->container);
             $argumentResolver = new ArgumentResolver();
             $controller = $controllerResolver->getController($request);
 
             if (is_array($controller) && $controller[0] instanceof AbstractController) {
-                if (!$this->container instanceof ContainerInterface) {
-                    throw new \RuntimeException('Container is required to render the styled 404 page.');
-                }
-
                 $controller[0]->setContainer($this->container);
             }
 

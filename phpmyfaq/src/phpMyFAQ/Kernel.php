@@ -172,13 +172,14 @@ class Kernel implements HttpKernelInterface
 
     private function registerEventListeners(EventDispatcher $dispatcher): void
     {
-        // Router listener — matches request to route (priority 256, runs early)
+        // Language listener — initializes Strings and translations (priority 300, runs before router
+        // so that the 404/error pages rendered from an exception still have translations available)
+        $languageListener = new LanguageListener($this->container);
+        $dispatcher->addListener(KernelEvents::REQUEST, [$languageListener, 'onKernelRequest'], 300);
+
+        // Router listener — matches request to route (priority 256)
         $routerListener = new RouterListener($this->routes);
         $dispatcher->addListener(KernelEvents::REQUEST, [$routerListener, 'onKernelRequest'], 256);
-
-        // Language listener — detects language and initializes translations (priority 200, after router)
-        $languageListener = new LanguageListener($this->container);
-        $dispatcher->addListener(KernelEvents::REQUEST, [$languageListener, 'onKernelRequest'], 200);
 
         if (
             $this->routingContext === 'api'
