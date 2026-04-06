@@ -134,8 +134,8 @@ devDependencies:
     specifier: 2.1.0
     version: 2.1.0(vite@8.0.3)
   vite-plugin-static-copy:
-    specifier: 4.0.0
-    version: 4.0.0(vite@8.0.3)
+    specifier: 4.0.1
+    version: 4.0.1(vite@8.0.3)
   vitest:
     specifier: 4.1.0
     version: 4.1.0(@types/node@25.5.0)(jsdom@29.0.1)(vite@8.0.3)
@@ -4451,8 +4451,8 @@ packages:
       vite: 8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.0)(sass@1.99.0)
     dev: true
 
-  /vite-plugin-static-copy@4.0.0(vite@8.0.3):
-    resolution: {integrity: sha512-TTf6cVTV4M2pH2Wfr3zhevdRsIQezfm2ltDkSfkjqvvdryJHYQyNoPISvuytX3r9jFZV0yVeMYyGTsAvAH2XLw==}
+  /vite-plugin-static-copy@4.0.1(vite@8.0.3):
+    resolution: {integrity: sha512-r3kQUrrimduikhyRm58ayemoxsgB8lZdn/JULLL4wpXHAZlYejtyZx7E/id7dwRtIOSYWu/tWvFjdEOTzso2MA==}
     engines: {node: ^22.0.0 || >=24.0.0}
     peerDependencies:
       vite: ^6.0.0 || ^7.0.0 || ^8.0.0
