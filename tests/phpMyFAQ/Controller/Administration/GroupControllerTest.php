@@ -116,6 +116,7 @@ final class GroupControllerTest extends TestCase
     {
         $request = new Request();
         $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
 
         $response = $controller->index($request);
 
@@ -130,6 +131,7 @@ final class GroupControllerTest extends TestCase
     {
         $request = new Request();
         $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
 
         $response = $controller->add($request);
 

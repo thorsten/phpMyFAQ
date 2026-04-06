@@ -352,7 +352,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     #[Route(path: 'configuration/translations', name: 'admin.api.configuration.translations', methods: ['GET'])]
     public function translations(): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $response = new Response();
 
@@ -378,7 +378,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     #[Route(path: 'configuration/templates', name: 'admin.api.configuration.templates', methods: ['GET'])]
     public function templates(): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $response = new Response();
         $templates = $this->faqSystem->getAvailableTemplates();
@@ -399,7 +399,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     )]
     public function faqsSortingKey(Request $request): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         return new Response(AdminMenuBuilder::sortingKeyOptions($request->attributes->get(key: 'current')));
     }
@@ -411,7 +411,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     )]
     public function faqsSortingOrder(Request $request): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         return new Response(AdminMenuBuilder::sortingOrderOptions($request->attributes->get(key: 'current')));
     }
@@ -423,7 +423,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     )]
     public function faqsSortingPopular(Request $request): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         return new Response(AdminMenuBuilder::sortingPopularFaqsOptions($request->attributes->get(key: 'current')));
     }
@@ -431,7 +431,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     #[Route(path: 'configuration/perm-level/{current}', name: 'admin.api.configuration.permLevel', methods: ['GET'])]
     public function permLevel(Request $request): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         return new Response(PermissionHelper::permOptions($request->attributes->get(key: 'current')));
     }
@@ -443,7 +443,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     )]
     public function releaseEnvironment(Request $request): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         return new Response(AdminMenuBuilder::renderReleaseTypeOptions($request->attributes->get(key: 'current')));
     }
@@ -455,7 +455,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     )]
     public function searchRelevance(Request $request): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         return new Response(AdminMenuBuilder::searchRelevanceOptions($request->attributes->get(key: 'current')));
     }
@@ -467,7 +467,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     )]
     public function seoMetaTags(Request $request): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         return new Response(AdminMenuBuilder::renderMetaRobotsDropdown($request->attributes->get(key: 'current')));
     }

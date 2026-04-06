@@ -16,7 +16,7 @@ final class SessionKeepAliveControllerWebTest extends ControllerWebTestCase
 {
     public function testUnauthenticatedKeepAliveRedirectsToLogin(): void
     {
-        $response = $this->requestAdmin('GET', '/session-keep-alive');
+        $response = $this->requestAdminGuest('GET', '/session-keep-alive');
 
         self::assertResponseStatusCodeSame(302, $response);
         self::assertRedirectLocationContains('/login', $response);

@@ -111,7 +111,10 @@ final class PasswordChangeControllerTest extends TestCase
      */
     public function testIndexRendersInCurrentAnonymousAdminContext(): void
     {
-        $response = $this->createController()->index(new Request());
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->index(new Request());
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }

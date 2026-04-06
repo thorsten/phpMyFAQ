@@ -11,20 +11,25 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\SeoEntity;
+use phpMyFAQ\Administration\AdminLog;
+use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Permission as FaqPermission;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Language;
+use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Question;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -147,6 +152,7 @@ final class FaqControllerTest extends TestCase
     {
         $request = new Request();
         $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
 
         $response = $controller->index($request);
 
@@ -161,6 +167,7 @@ final class FaqControllerTest extends TestCase
     {
         $request = new Request();
         $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
 
         $response = $controller->add($request);
 
@@ -178,11 +185,12 @@ final class FaqControllerTest extends TestCase
         $request->attributes->set('categoryLanguage', 'en');
 
         $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
         $response = $controller->addInCategory($request);
 
         self::assertInstanceOf(Response::class, $response);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertStringContainsString('name="lang" id="lang" value="en"', (string) $response->getContent());
+        self::assertStringContainsString('<option value="en" selected>English</option>', (string) $response->getContent());
     }
 
     /**
@@ -195,6 +203,7 @@ final class FaqControllerTest extends TestCase
         $request->attributes->set('faqLanguage', 'en');
 
         $controller = $this->createControllerWithPreparedFaqRecord();
+        $controller->setContainer($this->createAuthenticatedContainer());
         $response = $controller->copy($request);
 
         self::assertInstanceOf(Response::class, $response);
@@ -212,6 +221,7 @@ final class FaqControllerTest extends TestCase
         $request->attributes->set('faqLanguage', 'en');
 
         $controller = $this->createControllerWithPreparedFaqRecord();
+        $controller->setContainer($this->createAuthenticatedContainer());
         $response = $controller->translate($request);
 
         self::assertInstanceOf(Response::class, $response);
@@ -229,6 +239,7 @@ final class FaqControllerTest extends TestCase
         $request->attributes->set('faqLanguage', 'en');
 
         $controller = $this->createControllerWithPreparedFaqRecord();
+        $controller->setContainer($this->createAuthenticatedContainer());
         $response = $controller->answer($request);
 
         self::assertInstanceOf(Response::class, $response);
@@ -277,6 +288,7 @@ final class FaqControllerTest extends TestCase
         );
 
         $request = new Request([], [], ['faqId' => '1', 'faqLanguage' => 'en']);
+        $controller->setContainer($this->createAuthenticatedContainer());
         $response = $controller->edit($request);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -318,6 +330,7 @@ final class FaqControllerTest extends TestCase
         );
 
         $request = new Request([], [], ['questionId' => '1', 'faqLanguage' => 'en']);
+        $controller->setContainer($this->createAuthenticatedContainer());
         $response = $controller->answer($request);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -330,5 +343,46 @@ final class FaqControllerTest extends TestCase
             'name="notifyEmail" id="notifyEmail" value="jane@example.com"',
             (string) $response->getContent(),
         );
+    }
+
+    private function createAuthenticatedContainer(): ContainerInterface
+    {
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(true);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(42);
+        $currentUser->method('isSuperAdmin')->willReturn(false);
+        $currentUser
+            ->method('getUserData')
+            ->willReturnMap([
+                ['display_name', 'Test User'],
+                ['email', 'test@example.com'],
+            ]);
+
+        $session = new Session(new MockArraySessionStorage());
+        $adminLog = $this->createStub(AdminLog::class);
+        $adminHelper = $this->createStub(AdminMenuBuilder::class);
+        $adminHelper->method('setUser')->willReturnSelf();
+        $adminHelper->method('canAccessContent')->willReturn(true);
+        $adminHelper->method('addMenuEntry')->willReturn('');
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog, $adminHelper): mixed {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    'phpmyfaq.admin.helper' => $adminHelper,
+                    default => null,
+                };
+            });
+
+        return $container;
     }
 }

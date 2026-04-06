@@ -139,6 +139,7 @@ final class CategoryControllerTest extends TestCase
             $this->createStub(UserHelper::class),
         );
         $request = new Request();
+        $controller->setContainer($this->createAuthenticatedContainer());
 
         $response = $controller->index($request);
 
@@ -172,6 +173,7 @@ final class CategoryControllerTest extends TestCase
             $userHelper,
         );
         $request = new Request();
+        $controller->setContainer($this->createAuthenticatedContainer());
 
         $response = $controller->add($request);
 
@@ -245,6 +247,7 @@ final class CategoryControllerTest extends TestCase
     {
         $request = new Request();
         $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
 
         $response = $controller->hierarchy($request);
 

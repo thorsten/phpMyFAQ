@@ -286,9 +286,15 @@ class Utils
         $string = str_replace(search: 'www.', replace: 'https://www.', subject: $string);
 
         $pattern = '/(https?:\/\/[^\s]+)/i';
-        $replacement = '<a href="$1">$1</a>';
 
-        return preg_replace($pattern, $replacement, $string);
+        return preg_replace_callback(
+            $pattern,
+            static function (array $matches): string {
+                $url = htmlspecialchars($matches[1], ENT_QUOTES, 'UTF-8');
+                return '<a href="' . $url . '">' . $url . '</a>';
+            },
+            $string,
+        );
     }
 
     /**
