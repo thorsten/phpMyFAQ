@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ;
 
+use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -132,192 +134,32 @@ class Filter
     }
 
     /**
-     * Removes a lot of HTML attributes.
+     * Sanitizes HTML by allowing safe elements and attributes via Symfony's HtmlSanitizer.
      */
     public static function removeAttributes(string $html = ''): string
     {
-        $keep = [
-            'href',
-            'src',
-            'title',
-            'alt',
-            'class',
-            'style',
-            'id',
-            'name',
-            'size',
-            'dir',
-            'rel',
-            'rev',
-            'target',
-            'width',
-            'height',
-            'controls',
-        ];
-
         // remove broken stuff
         $html = str_replace(search: '&#13;', replace: '', subject: $html);
 
-        // Match attributes with double quotes, single quotes, or no quotes
-        preg_match_all(
-            pattern: '/[a-z]+\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/iU',
-            subject: $html,
-            matches: $attributes,
-        );
+        $config = (new HtmlSanitizerConfig())
+            ->allowSafeElements()
+            ->allowRelativeLinks()
+            ->allowRelativeMedias()
+            ->allowAttribute('class', allowedElements: '*')
+            ->allowAttribute('style', allowedElements: '*')
+            ->allowAttribute('id', allowedElements: '*')
+            ->allowAttribute('dir', allowedElements: '*')
+            ->allowAttribute('name', allowedElements: '*')
+            ->allowAttribute('target', allowedElements: 'a')
+            ->allowAttribute('controls', allowedElements: ['audio', 'video'])
+            ->blockElement('form')
+            ->blockElement('input')
+            ->blockElement('textarea')
+            ->blockElement('select')
+            ->blockElement('button');
 
-        foreach ($attributes[0] as $attribute) {
-            $attributeName = stristr($attribute, needle: '=', before_needle: true);
-            $attributeName = trim($attributeName);
-            if (!self::isAttribute($attributeName)) {
-                continue;
-            }
+        $sanitizer = new HtmlSanitizer($config);
 
-            if (in_array($attributeName, $keep, strict: true)) {
-                continue;
-            }
-
-            $html = str_replace(' ' . $attribute, replace: '', subject: $html);
-        }
-
-        return $html;
-    }
-
-    private static function isAttribute(string $attribute): bool
-    {
-        $globalAttributes = [
-            'autocomplete',
-            'autofocus',
-            'disabled',
-            'list',
-            'name',
-            'readonly',
-            'required',
-            'tabindex',
-            'type',
-            'value',
-            'accesskey',
-            'class',
-            'contenteditable',
-            'contextmenu',
-            'dir',
-            'draggable',
-            'dropzone',
-            'id',
-            'lang',
-            'style',
-            'tabindex',
-            'title',
-            'inputmode',
-            'is',
-            'itemid',
-            'itemprop',
-            'itemref',
-            'itemscope',
-            'itemtype',
-            'lang',
-            'slot',
-            'spellcheck',
-            'translate',
-            'autofocus',
-            'disabled',
-            'form',
-            'multiple',
-            'name',
-            'required',
-            'size',
-            'autocapitalize',
-            'autocomplete',
-            'autofocus',
-            'cols',
-            'disabled',
-            'form',
-            'maxlength',
-            'minlength',
-            'name',
-            'placeholder',
-            'readonly',
-            'required',
-            'rows',
-            'spellcheck',
-            'wrap',
-            'onmouseenter',
-            'onmouseleave',
-            'onafterprint',
-            'onbeforeprint',
-            'onbeforeunload',
-            'onhashchange',
-            'onmessage',
-            'onoffline',
-            'ononline',
-            'onpopstate',
-            'onpagehide',
-            'onpageshow',
-            'onresize',
-            'onunload',
-            'ondevicemotion',
-            'preload',
-            'ondeviceorientation',
-            'onabort',
-            'onblur',
-            'oncanplay',
-            'oncanplaythrough',
-            'onchange',
-            'onclick',
-            'oncontextmenu',
-            'ondblclick',
-            'ondrag',
-            'ondragend',
-            'ondragenter',
-            'ondragleave',
-            'ondragover',
-            'ondragstart',
-            'ondrop',
-            'ondurationchange',
-            'onemptied',
-            'onended',
-            'onerror',
-            'onfocus',
-            'oninput',
-            'oninvalid',
-            'onkeydown',
-            'onkeypress',
-            'onkeyup',
-            'onload',
-            'onloadeddata',
-            'onloadedmetadata',
-            'onloadstart',
-            'onmousedown',
-            'onmousemove',
-            'onmouseout',
-            'onmouseover',
-            'onmouseup',
-            'controls',
-            'onmozfullscreenchange',
-            'onmozfullscreenerror',
-            'onpause',
-            'onplay',
-            'onplaying',
-            'onprogress',
-            'onratechange',
-            'onreset',
-            'onscroll',
-            'onseeked',
-            'onseeking',
-            'onselect',
-            'onshow',
-            'onstalled',
-            'onsubmit',
-            'onsuspend',
-            'ontimeupdate',
-            'onvolumechange',
-            'onwaiting',
-            'oncopy',
-            'oncut',
-            'onpaste',
-            'onbeforescriptexecute',
-            'onafterscriptexecute',
-        ];
-
-        return in_array($attribute, $globalAttributes, strict: true);
+        return $sanitizer->sanitize($html);
     }
 }
