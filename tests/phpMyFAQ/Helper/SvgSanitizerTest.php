@@ -1773,7 +1773,8 @@ class SvgSanitizerTest extends TestCase
     {
         // 5 levels of &amp; nesting around numeric entities for "javascript"
         // Previously bypassed decodeAllEntities() which was limited to 5 iterations
-        $maliciousSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">'
+        $maliciousSvg =
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">'
             . '<a href="&amp;amp;amp;amp;amp;#106;&amp;amp;amp;amp;amp;#97;&amp;amp;amp;amp;amp;#118;'
             . '&amp;amp;amp;amp;amp;#97;&amp;amp;amp;amp;amp;#115;&amp;amp;amp;amp;amp;#99;'
             . '&amp;amp;amp;amp;amp;#114;&amp;amp;amp;amp;amp;#105;&amp;amp;amp;amp;amp;#112;'
@@ -1788,7 +1789,8 @@ class SvgSanitizerTest extends TestCase
 
     public function testSanitizeRemovesDeeplyNestedAmpEntityEncodedJavascriptHref(): void
     {
-        $maliciousSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">'
+        $maliciousSvg =
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">'
             . '<a href="&amp;amp;amp;amp;amp;#106;&amp;amp;amp;amp;amp;#97;&amp;amp;amp;amp;amp;#118;'
             . '&amp;amp;amp;amp;amp;#97;&amp;amp;amp;amp;amp;#115;&amp;amp;amp;amp;amp;#99;'
             . '&amp;amp;amp;amp;amp;#114;&amp;amp;amp;amp;amp;#105;&amp;amp;amp;amp;amp;#112;'

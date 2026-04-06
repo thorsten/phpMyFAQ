@@ -320,6 +320,8 @@ class Category
             $sortField,
             $sortOrder,
             $activeOnly,
+            $this->getGroups(),
+            $this->getUser(),
         );
         foreach ($rows as $id => $row) {
             $categories[$id] = $row
@@ -339,7 +341,12 @@ class Category
      */
     public function countCategories(bool $activeOnly = false): int
     {
-        return $this->getCategoryRepository()->countCategories($this->language, $activeOnly);
+        return $this->getCategoryRepository()->countCategories(
+            $this->language,
+            $activeOnly,
+            $this->getGroups(),
+            $this->getUser(),
+        );
     }
 
     /**

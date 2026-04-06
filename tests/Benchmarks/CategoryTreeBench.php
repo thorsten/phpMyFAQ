@@ -38,9 +38,9 @@ use phpMyFAQ\Category\Tree\TreeBuilder;
 class CategoryTreeBench
 {
     /** Flat category list keyed by id — mirrors a real DB result set. */
-    private array $smallTree;   // 10 categories, 3 levels deep
-    private array $mediumTree;  // 100 categories, 4 levels deep
-    private array $largeTree;   // 500 categories, 5 levels deep
+    private array $smallTree; // 10 categories, 3 levels deep
+    private array $mediumTree; // 100 categories, 4 levels deep
+    private array $largeTree; // 500 categories, 5 levels deep
 
     private TreeBuilder $builder;
 
@@ -141,14 +141,14 @@ class CategoryTreeBench
             $parentId = $possibleParents[array_rand($possibleParents)];
 
             $categories[$id] = [
-                'id'          => $id,
-                'parent_id'   => $parentId,
-                'name'        => 'Category ' . $id,
+                'id' => $id,
+                'parent_id' => $parentId,
+                'name' => 'Category ' . $id,
                 'description' => 'Description for category ' . $id,
-                'lang'        => 'en',
-                'active'      => 1,
-                'image'       => '',
-                'show_home'   => 0,
+                'lang' => 'en',
+                'active' => 1,
+                'image' => '',
+                'show_home' => 0,
             ];
 
             $byLevel[$level][] = $id;

@@ -204,6 +204,8 @@ class CategoryRepository implements CategoryRepositoryInterface
         string $sortField = 'id',
         string $sortOrder = 'ASC',
         bool $activeOnly = false,
+        array $groups = [-1],
+        int $userId = -1,
     ): array {
         $categories = [];
 
@@ -213,26 +215,38 @@ class CategoryRepository implements CategoryRepositoryInterface
             $sortField = 'id';
         }
 
+        $prefix = Database::getTablePrefix();
+
+        $categoryPermissionService = new CategoryPermissionService();
+        $permissionWhere = $activeOnly
+            ? $categoryPermissionService->buildWhereClause($groups, $userId)
+            : $categoryPermissionService->buildWhereClauseWithInactive($groups, $userId);
+
         $query = sprintf(
-            'SELECT id, lang, parent_id, name, description, user_id, group_id, active, show_home, image FROM %sfaqcategories',
-            Database::getTablePrefix(),
+            'SELECT fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id, fc.group_id, fc.active, fc.show_home, fc.image FROM %sfaqcategories fc LEFT JOIN %sfaqcategory_group fg ON fc.id = fg.category_id LEFT JOIN %sfaqcategory_user fu ON fc.id = fu.category_id %s',
+            $prefix,
+            $prefix,
+            $prefix,
+            $permissionWhere,
         );
 
-        $whereConditions = [];
+        $additionalConditions = [];
 
         if ($language !== null && preg_match(pattern: '/^[a-z\-]{2,}$/', subject: $language)) {
-            $whereConditions[] = "lang = '" . $this->configuration->getDb()->escape($language) . "'";
+            $additionalConditions[] = "fc.lang = '" . $this->configuration->getDb()->escape($language) . "'";
         }
 
-        if ($activeOnly) {
-            $whereConditions[] = 'active = 1';
+        if ($additionalConditions !== []) {
+            $query .= ' AND ' . implode(' AND ', $additionalConditions);
         }
 
-        if ($whereConditions !== []) {
-            $query .= ' WHERE ' . implode(' AND ', $whereConditions);
-        }
-
-        $query .= sprintf(' ORDER BY %s %s LIMIT %d OFFSET %d', $sortField, $sortOrder, $limit, $offset);
+        $query .= sprintf(
+            ' GROUP BY fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id, fc.group_id, fc.active, fc.show_home, fc.image ORDER BY fc.%s %s LIMIT %d OFFSET %d',
+            $sortField,
+            $sortOrder,
+            $limit,
+            $offset,
+        );
 
         $result = $this->configuration->getDb()->query($query);
 
@@ -258,22 +272,29 @@ class CategoryRepository implements CategoryRepositoryInterface
      * @param bool $activeOnly Only count active categories
      * @return int Total count
      */
-    public function countCategories(?string $language = null, bool $activeOnly = false): int
-    {
-        $query = sprintf('SELECT COUNT(*) as total FROM %sfaqcategories', Database::getTablePrefix());
+    public function countCategories(
+        ?string $language = null,
+        bool $activeOnly = false,
+        array $groups = [-1],
+        int $userId = -1,
+    ): int {
+        $prefix = Database::getTablePrefix();
 
-        $whereConditions = [];
+        $categoryPermissionService = new CategoryPermissionService();
+        $permissionWhere = $activeOnly
+            ? $categoryPermissionService->buildWhereClause($groups, $userId)
+            : $categoryPermissionService->buildWhereClauseWithInactive($groups, $userId);
+
+        $query = sprintf(
+            'SELECT COUNT(DISTINCT fc.id) as total FROM %sfaqcategories fc LEFT JOIN %sfaqcategory_group fg ON fc.id = fg.category_id LEFT JOIN %sfaqcategory_user fu ON fc.id = fu.category_id %s',
+            $prefix,
+            $prefix,
+            $prefix,
+            $permissionWhere,
+        );
 
         if ($language !== null && preg_match(pattern: '/^[a-z\-]{2,}$/', subject: $language)) {
-            $whereConditions[] = "lang = '" . $this->configuration->getDb()->escape($language) . "'";
-        }
-
-        if ($activeOnly) {
-            $whereConditions[] = 'active = 1';
-        }
-
-        if ($whereConditions !== []) {
-            $query .= ' WHERE ' . implode(' AND ', $whereConditions);
+            $query .= " AND fc.lang = '" . $this->configuration->getDb()->escape($language) . "'";
         }
 
         $result = $this->configuration->getDb()->query($query);

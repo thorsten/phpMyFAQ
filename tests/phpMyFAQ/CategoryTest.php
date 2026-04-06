@@ -353,6 +353,24 @@ class CategoryTest extends TestCase
         $inactiveCategory->setActive(false);
         $this->category->create($inactiveCategory);
 
+        // Insert permission records for all categories
+        $prefix = \phpMyFAQ\Database::getTablePrefix();
+        foreach ([101, 102, 103, 104] as $catId) {
+            $this->dbHandle->query(sprintf(
+                'INSERT INTO %sfaqcategory_group (category_id, group_id) VALUES (%d, -1)',
+                $prefix,
+                $catId,
+            ));
+            $this->dbHandle->query(sprintf(
+                'INSERT INTO %sfaqcategory_user (category_id, user_id) VALUES (%d, -1)',
+                $prefix,
+                $catId,
+            ));
+        }
+
+        $this->category->setUser(-1);
+        $this->category->setGroups([-1]);
+
         $this->category->getOrderedCategories(false, true);
 
         $paginatedCategories = $this->category->getCategoriesPaginated(2, 0, 'id', 'DESC', true);
@@ -360,6 +378,12 @@ class CategoryTest extends TestCase
         $this->assertSame([103, 102], array_keys($paginatedCategories));
         $this->assertSame(0, $paginatedCategories[103]['level']);
         $this->assertSame(1, $paginatedCategories[102]['level']);
+
+        // Cleanup permission records
+        foreach ([101, 102, 103, 104] as $catId) {
+            $this->dbHandle->query(sprintf('DELETE FROM %sfaqcategory_group WHERE category_id = %d', $prefix, $catId));
+            $this->dbHandle->query(sprintf('DELETE FROM %sfaqcategory_user WHERE category_id = %d', $prefix, $catId));
+        }
 
         $this->deleteCategories(101, 102, 103, 104);
     }
