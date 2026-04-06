@@ -154,6 +154,7 @@ abstract class ControllerWebTestCase extends WebTestCase
 
     private function prepareAuthenticationSession(string $context, string $uri, bool $authenticateAdmin): void
     {
+        $this->ensureNativeSession();
         $this->clearAuthenticationSession();
 
         if (
@@ -170,6 +171,13 @@ abstract class ControllerWebTestCase extends WebTestCase
         $currentUser->setLoggedIn(true);
         $currentUser->updateSessionId();
         $currentUser->saveToSession();
+    }
+
+    private function ensureNativeSession(): void
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
     }
 
     private function clearAuthenticationSession(): void
