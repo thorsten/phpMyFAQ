@@ -224,7 +224,7 @@ class SvgSanitizer
     {
         $previous = '';
         $decoded = $content;
-        $maxIterations = 5;
+        $maxIterations = 10;
 
         while ($decoded !== $previous && $maxIterations-- > 0) {
             $previous = $decoded;
@@ -243,6 +243,19 @@ class SvgSanitizer
             // Decode named HTML entities (&amp; → &, &lt; → <, etc.)
             $decoded = html_entity_decode($decoded, ENT_QUOTES | ENT_HTML5, encoding: 'UTF-8');
         }
+
+        // Safety net: if the loop exited due to iteration limit, do a final
+        // numeric/hex entity decode pass to catch any remaining entities
+        $decoded = preg_replace_callback(
+            '/&#(\d+);/',
+            static fn(array $matches): string => mb_chr((int) $matches[1], encoding: 'UTF-8'),
+            $decoded,
+        );
+        $decoded = preg_replace_callback(
+            '/&#x([0-9a-fA-F]+);/',
+            static fn(array $matches): string => mb_chr(hexdec($matches[1]), encoding: 'UTF-8'),
+            $decoded,
+        );
 
         // Strip null bytes and control characters that could break regex matching
         return preg_replace('/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/', replacement: '', subject: $decoded);

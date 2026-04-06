@@ -1768,4 +1768,40 @@ class SvgSanitizerTest extends TestCase
         $this->assertStringContainsString('rect', $sanitizedContent);
         $this->assertStringContainsString('text', $sanitizedContent);
     }
+
+    public function testIsSafeDetectsDeeplyNestedAmpEntityEncodedJavascriptHref(): void
+    {
+        // 5 levels of &amp; nesting around numeric entities for "javascript"
+        // Previously bypassed decodeAllEntities() which was limited to 5 iterations
+        $maliciousSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">'
+            . '<a href="&amp;amp;amp;amp;amp;#106;&amp;amp;amp;amp;amp;#97;&amp;amp;amp;amp;amp;#118;'
+            . '&amp;amp;amp;amp;amp;#97;&amp;amp;amp;amp;amp;#115;&amp;amp;amp;amp;amp;#99;'
+            . '&amp;amp;amp;amp;amp;#114;&amp;amp;amp;amp;amp;#105;&amp;amp;amp;amp;amp;#112;'
+            . '&amp;amp;amp;amp;amp;#116;:alert(document.domain)">'
+            . '<circle cx="100" cy="100" r="80" fill="red"/></a></svg>';
+
+        $filePath = $this->testDir . '/deeply_nested_entity_bypass.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertFalse($this->sanitizer->isSafe($filePath));
+    }
+
+    public function testSanitizeRemovesDeeplyNestedAmpEntityEncodedJavascriptHref(): void
+    {
+        $maliciousSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">'
+            . '<a href="&amp;amp;amp;amp;amp;#106;&amp;amp;amp;amp;amp;#97;&amp;amp;amp;amp;amp;#118;'
+            . '&amp;amp;amp;amp;amp;#97;&amp;amp;amp;amp;amp;#115;&amp;amp;amp;amp;amp;#99;'
+            . '&amp;amp;amp;amp;amp;#114;&amp;amp;amp;amp;amp;#105;&amp;amp;amp;amp;amp;#112;'
+            . '&amp;amp;amp;amp;amp;#116;:alert(document.domain)">'
+            . '<circle cx="100" cy="100" r="80" fill="red"/></a></svg>';
+
+        $filePath = $this->testDir . '/deeply_nested_entity_sanitize.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertTrue($this->sanitizer->sanitize($filePath));
+
+        $sanitizedContent = file_get_contents($filePath);
+        $this->assertStringNotContainsString('javascript', $sanitizedContent);
+        $this->assertStringContainsString('<svg', $sanitizedContent);
+    }
 }
