@@ -114,7 +114,7 @@ final class TagController extends AbstractController
     #[Route(path: 'admin/api/content/tag/:tagId')]
     public function delete(Request $request): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::FAQ_EDIT);
 
         $tagId = (int) Filter::filterVar($request->attributes->get('tagId'), FILTER_VALIDATE_INT);
 
