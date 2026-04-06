@@ -16,7 +16,7 @@ final class TagControllerWebTest extends ControllerWebTestCase
 {
     public function testTagsPageRenders(): void
     {
-        $response = $this->requestAdmin('GET', '/tags');
+        $response = $this->requestAdminGuest('GET', '/tags');
 
         self::assertResponseStatusCodeSame(302, $response);
         self::assertRedirectLocationContains('/login', $response);

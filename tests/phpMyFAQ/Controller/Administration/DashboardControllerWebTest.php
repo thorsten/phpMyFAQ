@@ -16,7 +16,7 @@ final class DashboardControllerWebTest extends ControllerWebTestCase
 {
     public function testUnauthenticatedDashboardRedirectsToLogin(): void
     {
-        $response = $this->requestAdmin('GET', '/');
+        $response = $this->requestAdminGuest('GET', '/');
 
         self::assertResponseStatusCodeSame(302, $response);
         self::assertRedirectLocationContains('/login', $response);

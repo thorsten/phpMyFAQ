@@ -42,7 +42,7 @@ final class ImageController extends AbstractController
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
         $uploadDir = PMF_CONTENT_DIR . '/user/images/';
-        $validFileExtensions = ['gif', 'jpg', 'jpeg', 'png', 'webp', 'svg', 'mov', 'mp4', 'webm'];
+        $validFileExtensions = ['gif', 'jpg', 'jpeg', 'png', 'webp', 'mov', 'mp4', 'svg', 'webm'];
         $timestamp = time();
 
         if (!Token::getInstance($this->session)->verifyToken('pmf-csrf-token', $request->query->get('csrf'))) {

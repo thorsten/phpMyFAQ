@@ -241,24 +241,6 @@ final class AbstractAdministrationControllerTest extends TestCase
         self::assertNotSame('', $footer['documentationUrl']);
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function testForbiddenPageRendersMessage(): void
-    {
-        $controller = new AbstractAdministrationControllerTestStub();
-        $controller->setContainer($this->createControllerContainer());
-
-        $response = $controller->fetchForbiddenPage('Forbidden for test');
-
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertStringContainsString('Error 403', (string) $response->getContent());
-        self::assertStringContainsString(
-            'You are authenticated, but you do not have permission to access this resource.',
-            (string) $response->getContent(),
-        );
-    }
-
     private function createControllerContainer(
         ?AdminLog $adminLog = null,
         array $configurationValues = [],
@@ -419,11 +401,4 @@ final class AbstractAdministrationControllerTestStub extends AbstractAdministrat
         return $this->getFooter();
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function fetchForbiddenPage(string $message = ''): Response
-    {
-        return $this->getForbiddenPage($message);
-    }
 }

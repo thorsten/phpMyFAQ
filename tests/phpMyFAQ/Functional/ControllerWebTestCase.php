@@ -24,7 +24,12 @@ abstract class ControllerWebTestCase extends WebTestCase
 
     protected function requestAdmin(string $method, string $uri, array $parameters = [], array $server = []): Response
     {
-        return $this->requestWithContext('admin', $method, $uri, $parameters, $server);
+        return $this->requestWithContext('admin', $method, $uri, $parameters, $server, null, true);
+    }
+
+    protected function requestAdminGuest(string $method, string $uri, array $parameters = [], array $server = []): Response
+    {
+        return $this->requestWithContext('admin', $method, $uri, $parameters, $server, null, false);
     }
 
     protected function requestApi(string $method, string $uri, array $parameters = [], array $server = []): Response
@@ -116,10 +121,11 @@ abstract class ControllerWebTestCase extends WebTestCase
         array $parameters = [],
         array $server = [],
         ?string $content = null,
+        bool $authenticateAdmin = false,
     ): Response {
         $client = $this->ensureClientForContext($context);
         $client->followRedirects(false);
-        $this->clearAuthenticationSession();
+        $this->prepareAuthenticationSession($context, $uri, $authenticateAdmin);
         $serverParameters = array_merge([
             'HTTP_HOST' => 'localhost',
             'SERVER_NAME' => 'localhost',
@@ -144,6 +150,26 @@ abstract class ControllerWebTestCase extends WebTestCase
         self::assertInstanceOf(Response::class, $response, 'No Symfony response available after request.');
 
         return $response;
+    }
+
+    private function prepareAuthenticationSession(string $context, string $uri, bool $authenticateAdmin): void
+    {
+        $this->clearAuthenticationSession();
+
+        if (
+            !$authenticateAdmin
+            || $context !== 'admin'
+            || in_array($uri, ['/login', '/authenticate'], true)
+        ) {
+            return;
+        }
+
+        $configuration = $this->getConfiguration($context);
+        $currentUser = new CurrentUser($configuration);
+        $currentUser->getUserById(1);
+        $currentUser->setLoggedIn(true);
+        $currentUser->updateSessionId();
+        $currentUser->saveToSession();
     }
 
     private function clearAuthenticationSession(): void

@@ -117,10 +117,8 @@ final class BackupControllerTest extends TestCase
         $request = new Request();
         $controller = $this->createController();
 
-        $response = $controller->index($request);
-
-        self::assertInstanceOf(Response::class, $response);
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->expectException(UnauthorizedHttpException::class);
+        $controller->index($request);
     }
 
     /**

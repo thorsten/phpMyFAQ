@@ -25,7 +25,6 @@ use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Enums\PermissionType;
-use phpMyFAQ\Environment;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Session\Token;
@@ -33,7 +32,6 @@ use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\TwigWrapper;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractAdministrationController extends AbstractController
 {
@@ -386,30 +384,12 @@ abstract class AbstractAdministrationController extends AbstractController
         return '';
     }
 
-    #[\Override]
+    /**
+     * @throws ForbiddenException
+     */
     protected function userHasPermission(PermissionType $permissionType): void
     {
-        try {
-            parent::userHasPermission($permissionType);
-        } catch (ForbiddenException $exception) {
-            $response = $this->getForbiddenPage($exception->getMessage());
-            $response->send();
-        } catch (Exception $exception) {
-            $this->configuration->getLogger()->error($exception->getMessage());
-        }
-    }
-
-    /**
-     * @throws Exception
-     */
-    protected function getForbiddenPage(string $message = ''): Response
-    {
-        return $this->render(file: '@admin/error/forbidden.twig', context: [
-            ...$this->getHeader(Request::createFromGlobals()),
-            ...$this->getFooter(),
-            'debugMode' => Environment::isDebugMode(),
-            'errorMessage' => $message,
-        ]);
+        parent::userHasPermission($permissionType);
     }
 
     /**
