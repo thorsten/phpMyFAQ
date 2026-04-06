@@ -141,4 +141,31 @@ class UtilsTest extends TestCase
 
         $this->assertEquals('Unknown %unknown% marker', $result);
     }
+
+    public function testParseUrlWithSimpleUrl(): void
+    {
+        $result = Utils::parseUrl('Visit https://www.example.com for info');
+        $this->assertStringContainsString('<a href="https://www.example.com">https://www.example.com</a>', $result);
+    }
+
+    public function testParseUrlEscapesDoubleQuotesInUrl(): void
+    {
+        $result = Utils::parseUrl('https://www.evil.com/"onmouseover="alert(1)');
+        $this->assertStringNotContainsString('" onmouseover="', $result);
+        $this->assertStringContainsString('&quot;', $result);
+    }
+
+    public function testParseUrlEscapesHtmlInUrl(): void
+    {
+        $result = Utils::parseUrl('https://www.evil.com/<script>alert(1)</script>');
+        $this->assertStringNotContainsString('<script>', $result);
+        $this->assertStringContainsString('&lt;script&gt;', $result);
+    }
+
+    public function testParseUrlEscapesSingleQuotesInUrl(): void
+    {
+        $result = Utils::parseUrl("https://www.evil.com/'onmouseover='alert(1)");
+        $this->assertStringNotContainsString("' onmouseover='", $result);
+        $this->assertStringContainsString('&#039;', $result);
+    }
 }
