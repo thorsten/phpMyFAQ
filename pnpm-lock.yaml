@@ -122,23 +122,23 @@ devDependencies:
     specifier: 8.58.0
     version: 8.58.0(eslint@10.2.0)(typescript@6.0.2)
   vite:
-    specifier: 8.0.3
-    version: 8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(sass@1.99.0)
+    specifier: 8.0.5
+    version: 8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(sass@1.99.0)
   vite-plugin-compression:
     specifier: 0.5.1
-    version: 0.5.1(vite@8.0.3)
+    version: 0.5.1(vite@8.0.5)
   vite-plugin-html:
     specifier: 3.2.2
-    version: 3.2.2(vite@8.0.3)
+    version: 3.2.2(vite@8.0.5)
   vite-plugin-minify:
     specifier: 2.1.0
-    version: 2.1.0(vite@8.0.3)
+    version: 2.1.0(vite@8.0.5)
   vite-plugin-static-copy:
     specifier: 4.0.1
-    version: 4.0.1(vite@8.0.3)
+    version: 4.0.1(vite@8.0.5)
   vitest:
     specifier: 4.1.0
-    version: 4.1.0(@types/node@25.5.2)(jsdom@29.0.1)(vite@8.0.3)
+    version: 4.1.0(@types/node@25.5.2)(jsdom@29.0.1)(vite@8.0.5)
   vitest-fetch-mock:
     specifier: 0.4.5
     version: 0.4.5(vitest@4.1.0)
@@ -2222,7 +2222,7 @@ packages:
       magicast: 0.5.2
       obug: 2.1.1
       tinyrainbow: 3.1.0
-      vitest: 4.1.0(@types/node@25.5.2)(jsdom@29.0.1)(vite@8.0.3)
+      vitest: 4.1.0(@types/node@25.5.2)(jsdom@29.0.1)(vite@8.0.5)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -2246,7 +2246,7 @@ packages:
       obug: 2.1.1
       std-env: 4.0.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.0(@types/node@25.5.2)(jsdom@29.0.1)(vite@8.0.3)
+      vitest: 4.1.0(@types/node@25.5.2)(jsdom@29.0.1)(vite@8.0.5)
     dev: true
 
   /@vitest/expect@4.1.0:
@@ -2260,7 +2260,7 @@ packages:
       tinyrainbow: 3.1.0
     dev: true
 
-  /@vitest/mocker@4.1.0(vite@8.0.3):
+  /@vitest/mocker@4.1.0(vite@8.0.5):
     resolution: {integrity: sha512-evxREh+Hork43+Y4IOhTo+h5lGmVRyjqI739Rz4RlUPqwrkFFDF6EMvOOYjTx4E8Tl6gyCLRL8Mu7Ry12a13Tw==}
     peerDependencies:
       msw: ^2.4.9
@@ -2274,7 +2274,7 @@ packages:
       '@vitest/spy': 4.1.0
       estree-walker: 3.0.3
       magic-string: 0.30.21
-      vite: 8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(sass@1.99.0)
+      vite: 8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(sass@1.99.0)
     dev: true
 
   /@vitest/pretty-format@4.1.0:
@@ -4401,7 +4401,7 @@ packages:
     resolution: {integrity: sha512-/McNRtm/3IXzb9dhqMIcbquoU45SzbN2VB+To4jxEPqMmp7uVniP6BhGLjU8MC7ZCDsNQVOp27fhQTM/ruIXAA==}
     dev: false
 
-  /vite-plugin-compression@0.5.1(vite@8.0.3):
+  /vite-plugin-compression@0.5.1(vite@8.0.5):
     resolution: {integrity: sha512-5QJKBDc+gNYVqL/skgFAP81Yuzo9R+EAf19d+EtsMF/i8kFUpNi3J/H01QD3Oo8zBQn+NzoCIFkpPLynoOzaJg==}
     peerDependencies:
       vite: '>=2.0.0'
@@ -4409,12 +4409,12 @@ packages:
       chalk: 4.1.2
       debug: 4.4.3
       fs-extra: 10.1.0
-      vite: 8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(sass@1.99.0)
+      vite: 8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(sass@1.99.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /vite-plugin-html@3.2.2(vite@8.0.3):
+  /vite-plugin-html@3.2.2(vite@8.0.5):
     resolution: {integrity: sha512-vb9C9kcdzcIo/Oc3CLZVS03dL5pDlOFuhGlZYDCJ840BhWl/0nGeZWf3Qy7NlOayscY4Cm/QRgULCQkEZige5Q==}
     peerDependencies:
       vite: '>=2.0.0'
@@ -4431,20 +4431,20 @@ packages:
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
       pathe: 0.2.0
-      vite: 8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(sass@1.99.0)
+      vite: 8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(sass@1.99.0)
     dev: true
 
-  /vite-plugin-minify@2.1.0(vite@8.0.3):
+  /vite-plugin-minify@2.1.0(vite@8.0.5):
     resolution: {integrity: sha512-h+Ae0WX0mvrWM4GhE6JX2NmxlDuZRv4AgcTHFqfbSyPwS+OdlOM692AQrK0eO8lDEh7gYLjG3EHovKvtrNQDvA==}
     peerDependencies:
       vite: '>=5'
     dependencies:
       '@types/html-minifier-terser': 7.0.2
       html-minifier-terser: 7.2.0
-      vite: 8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(sass@1.99.0)
+      vite: 8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(sass@1.99.0)
     dev: true
 
-  /vite-plugin-static-copy@4.0.1(vite@8.0.3):
+  /vite-plugin-static-copy@4.0.1(vite@8.0.5):
     resolution: {integrity: sha512-r3kQUrrimduikhyRm58ayemoxsgB8lZdn/JULLL4wpXHAZlYejtyZx7E/id7dwRtIOSYWu/tWvFjdEOTzso2MA==}
     engines: {node: ^22.0.0 || >=24.0.0}
     peerDependencies:
@@ -4454,17 +4454,17 @@ packages:
       p-map: 7.0.4
       picocolors: 1.1.1
       tinyglobby: 0.2.15
-      vite: 8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(sass@1.99.0)
+      vite: 8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(sass@1.99.0)
     dev: true
 
-  /vite@8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(sass@1.99.0):
-    resolution: {integrity: sha512-B9ifbFudT1TFhfltfaIPgjo9Z3mDynBTJSUYxTjOQruf/zHH+ezCQKcoqO+h7a9Pw9Nm/OtlXAiGT1axBgwqrQ==}
+  /vite@8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(sass@1.99.0):
+    resolution: {integrity: sha512-nmu43Qvq9UopTRfMx2jOYW5l16pb3iDC1JH6yMuPkpVbzK0k+L7dfsEDH4jRgYFmsg0sTAqkojoZgzLMlwHsCQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
       '@types/node': ^20.19.0 || >=22.12.0
       '@vitejs/devtools': ^0.1.0
-      esbuild: ^0.27.0
+      esbuild: ^0.27.0 || ^0.28.0
       jiti: '>=1.21.0'
       less: ^4.0.0
       sass: ^1.70.0
@@ -4520,10 +4520,10 @@ packages:
     peerDependencies:
       vitest: '>=2.0.0'
     dependencies:
-      vitest: 4.1.0(@types/node@25.5.2)(jsdom@29.0.1)(vite@8.0.3)
+      vitest: 4.1.0(@types/node@25.5.2)(jsdom@29.0.1)(vite@8.0.5)
     dev: true
 
-  /vitest@4.1.0(@types/node@25.5.2)(jsdom@29.0.1)(vite@8.0.3):
+  /vitest@4.1.0(@types/node@25.5.2)(jsdom@29.0.1)(vite@8.0.5):
     resolution: {integrity: sha512-YbDrMF9jM2Lqc++2530UourxZHmkKLxrs4+mYhEwqWS97WJ7wOYEkcr+QfRgJ3PW9wz3odRijLZjHEaRLTNbqw==}
     engines: {node: ^20.0.0 || ^22.0.0 || >=24.0.0}
     hasBin: true
@@ -4560,7 +4560,7 @@ packages:
     dependencies:
       '@types/node': 25.5.2
       '@vitest/expect': 4.1.0
-      '@vitest/mocker': 4.1.0(vite@8.0.3)
+      '@vitest/mocker': 4.1.0(vite@8.0.5)
       '@vitest/pretty-format': 4.1.0
       '@vitest/runner': 4.1.0
       '@vitest/snapshot': 4.1.0
@@ -4578,7 +4578,7 @@ packages:
       tinyexec: 1.0.4
       tinyglobby: 0.2.15
       tinyrainbow: 3.1.0
-      vite: 8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(sass@1.99.0)
+      vite: 8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(sass@1.99.0)
       why-is-node-running: 2.3.0
     transitivePeerDependencies:
       - msw
