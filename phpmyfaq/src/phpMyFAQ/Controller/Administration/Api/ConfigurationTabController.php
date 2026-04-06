@@ -206,7 +206,7 @@ final class ConfigurationTabController extends AbstractController
     )]
     public function translations(): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $response = new Response();
 
@@ -232,7 +232,7 @@ final class ConfigurationTabController extends AbstractController
     #[Route(path: 'admin/api/configuration/templates', name: 'admin.api.configuration.templates', methods: ['GET'])]
     public function templates(): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $response = new Response();
         $faqSystem = $this->container->get(id: 'phpmyfaq.system');
@@ -254,7 +254,7 @@ final class ConfigurationTabController extends AbstractController
     )]
     public function faqsSortingKey(Request $request): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         return new Response(Helper::sortingKeyOptions($request->attributes->get(key: 'current')));
     }
@@ -266,7 +266,7 @@ final class ConfigurationTabController extends AbstractController
     )]
     public function faqsSortingOrder(Request $request): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         return new Response(Helper::sortingOrderOptions($request->attributes->get(key: 'current')));
     }
@@ -278,7 +278,7 @@ final class ConfigurationTabController extends AbstractController
     )]
     public function faqsSortingPopular(Request $request): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         return new Response(Helper::sortingPopularFaqsOptions($request->attributes->get(key: 'current')));
     }
@@ -286,7 +286,7 @@ final class ConfigurationTabController extends AbstractController
     #[Route(path: 'admin/api/configuration/perm-level', name: 'admin.api.configuration.perm-level', methods: ['GET'])]
     public function permLevel(Request $request): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         return new Response(PermissionHelper::permOptions($request->attributes->get(key: 'current')));
     }
@@ -298,7 +298,7 @@ final class ConfigurationTabController extends AbstractController
     )]
     public function releaseEnvironment(Request $request): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         return new Response(Helper::renderReleaseTypeOptions($request->attributes->get(key: 'current')));
     }
@@ -310,7 +310,7 @@ final class ConfigurationTabController extends AbstractController
     )]
     public function searchRelevance(Request $request): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         return new Response(Helper::searchRelevanceOptions($request->attributes->get(key: 'current')));
     }
@@ -322,7 +322,7 @@ final class ConfigurationTabController extends AbstractController
     )]
     public function seoMetaTags(Request $request): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         return new Response(Helper::renderMetaRobotsDropdown($request->attributes->get(key: 'current')));
     }
