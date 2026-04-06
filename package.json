@@ -92,7 +92,7 @@
     "vite-plugin-compression": "0.5.1",
     "vite-plugin-html": "3.2.2",
     "vite-plugin-minify": "2.1.0",
-    "vite-plugin-static-copy": "4.0.0",
+    "vite-plugin-static-copy": "4.0.1",
     "vitest": "4.1.0",
     "vitest-fetch-mock": "0.4.5"
   },
