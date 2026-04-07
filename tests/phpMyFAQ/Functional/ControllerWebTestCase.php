@@ -27,8 +27,12 @@ abstract class ControllerWebTestCase extends WebTestCase
         return $this->requestWithContext('admin', $method, $uri, $parameters, $server, null, true);
     }
 
-    protected function requestAdminGuest(string $method, string $uri, array $parameters = [], array $server = []): Response
-    {
+    protected function requestAdminGuest(
+        string $method,
+        string $uri,
+        array $parameters = [],
+        array $server = [],
+    ): Response {
         return $this->requestWithContext('admin', $method, $uri, $parameters, $server, null, false);
     }
 
@@ -157,11 +161,7 @@ abstract class ControllerWebTestCase extends WebTestCase
         $this->ensureNativeSession();
         $this->clearAuthenticationSession();
 
-        if (
-            !$authenticateAdmin
-            || $context !== 'admin'
-            || in_array($uri, ['/login', '/authenticate'], true)
-        ) {
+        if (!$authenticateAdmin || $context !== 'admin' || in_array($uri, ['/login', '/authenticate'], true)) {
             return;
         }
 

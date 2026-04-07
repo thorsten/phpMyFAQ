@@ -249,11 +249,7 @@ class TokenTest extends TestCase
         $page = 'full-verify';
         $tokenString = $this->token->getTokenString($page);
 
-        $cookieName = sprintf(
-            '%s-%s',
-            Token::PMF_SESSION_NAME,
-            substr(string: md5($page), offset: 0, length: 10),
-        );
+        $cookieName = sprintf('%s-%s', Token::PMF_SESSION_NAME, substr(string: md5($page), offset: 0, length: 10));
         $_COOKIE[$cookieName] = $tokenString;
 
         try {
@@ -271,11 +267,7 @@ class TokenTest extends TestCase
         $page = 'remove-test';
         $tokenString = $this->token->getTokenString($page);
 
-        $cookieName = sprintf(
-            '%s-%s',
-            Token::PMF_SESSION_NAME,
-            substr(string: md5($page), offset: 0, length: 10),
-        );
+        $cookieName = sprintf('%s-%s', Token::PMF_SESSION_NAME, substr(string: md5($page), offset: 0, length: 10));
         $_COOKIE[$cookieName] = $tokenString;
 
         try {
@@ -296,11 +288,7 @@ class TokenTest extends TestCase
         $page = 'wrong-token-page';
         $this->token->getTokenString($page);
 
-        $cookieName = sprintf(
-            '%s-%s',
-            Token::PMF_SESSION_NAME,
-            substr(string: md5($page), offset: 0, length: 10),
-        );
+        $cookieName = sprintf('%s-%s', Token::PMF_SESSION_NAME, substr(string: md5($page), offset: 0, length: 10));
         $_COOKIE[$cookieName] = 'wrong-cookie';
 
         try {

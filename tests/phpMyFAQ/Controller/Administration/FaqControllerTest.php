@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Administration\AdminLog;
+use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Administration\Changelog;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
@@ -11,8 +13,6 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\SeoEntity;
-use phpMyFAQ\Administration\AdminLog;
-use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Permission as FaqPermission;
 use phpMyFAQ\Helper\CategoryHelper;
@@ -190,7 +190,10 @@ final class FaqControllerTest extends TestCase
 
         self::assertInstanceOf(Response::class, $response);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertStringContainsString('<option value="en" selected>English</option>', (string) $response->getContent());
+        self::assertStringContainsString(
+            '<option value="en" selected>English</option>',
+            (string) $response->getContent(),
+        );
     }
 
     /**
@@ -359,7 +362,7 @@ final class FaqControllerTest extends TestCase
             ->method('getUserData')
             ->willReturnMap([
                 ['display_name', 'Test User'],
-                ['email', 'test@example.com'],
+                ['email',        'test@example.com'],
             ]);
 
         $session = new Session(new MockArraySessionStorage());
