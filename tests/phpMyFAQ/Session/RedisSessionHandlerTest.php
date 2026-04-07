@@ -29,12 +29,10 @@ class RedisSessionHandlerTest extends TestCase
             static::markTestSkipped('Test requires the redis extension.');
         }
 
-        $sessionWasActive = session_status() === PHP_SESSION_ACTIVE;
-        if ($sessionWasActive) {
+        if (session_status() === PHP_SESSION_ACTIVE) {
             session_write_close();
         }
 
-        $originalHandler = ini_get('session.save_handler');
         $originalPath = ini_get('session.save_path');
 
         try {
@@ -43,11 +41,10 @@ class RedisSessionHandlerTest extends TestCase
             static::assertSame('redis', ini_get('session.save_handler'));
             static::assertSame('tcp://127.0.0.1:6379', ini_get('session.save_path'));
         } finally {
-            ini_set('session.save_handler', $originalHandler);
+            // The original 'user' handler cannot be restored via ini_set;
+            // reset to 'files' to avoid poisoning subsequent tests
+            ini_set('session.save_handler', 'files');
             ini_set('session.save_path', $originalPath);
-            if ($sessionWasActive) {
-                session_start();
-            }
         }
     }
 
@@ -57,12 +54,10 @@ class RedisSessionHandlerTest extends TestCase
             static::markTestSkipped('Test requires the redis extension.');
         }
 
-        $sessionWasActive = session_status() === PHP_SESSION_ACTIVE;
-        if ($sessionWasActive) {
+        if (session_status() === PHP_SESSION_ACTIVE) {
             session_write_close();
         }
 
-        $originalHandler = ini_get('session.save_handler');
         $originalPath = ini_get('session.save_path');
 
         try {
@@ -71,11 +66,10 @@ class RedisSessionHandlerTest extends TestCase
             static::assertSame('redis', ini_get('session.save_handler'));
             static::assertSame(RedisSessionHandler::DEFAULT_DSN, ini_get('session.save_path'));
         } finally {
-            ini_set('session.save_handler', $originalHandler);
+            // The original 'user' handler cannot be restored via ini_set;
+            // reset to 'files' to avoid poisoning subsequent tests
+            ini_set('session.save_handler', 'files');
             ini_set('session.save_path', $originalPath);
-            if ($sessionWasActive) {
-                session_start();
-            }
         }
     }
 
