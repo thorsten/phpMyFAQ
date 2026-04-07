@@ -144,7 +144,9 @@ class Update extends AbstractSetup
     public function checkInitialRewriteBasePath(Request $request): bool
     {
         $basePath = $request->getBasePath();
-        $basePath = rtrim($basePath, 'update');
+        if (str_ends_with($basePath, 'update')) {
+            $basePath = substr($basePath, 0, -strlen('update'));
+        }
 
         $htaccessPath = PMF_ROOT_DIR . '/.htaccess';
 

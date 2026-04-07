@@ -714,7 +714,9 @@ class Installer extends Setup
     public function checkInitialRewriteBasePath(Request $request): bool
     {
         $basePath = $request->getBasePath();
-        $basePath = rtrim($basePath, 'setup');
+        if (str_ends_with($basePath, 'setup')) {
+            $basePath = substr($basePath, 0, -strlen('setup'));
+        }
 
         $htaccessPath = PMF_ROOT_DIR . '/.htaccess';
 

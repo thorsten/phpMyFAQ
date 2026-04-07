@@ -85,7 +85,7 @@ final class SetupController extends AbstractController
         $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $configPath = PMF_ROOT_DIR . '/content/core/config';
-        if (!version_compare(version1: $installedVersion, version2: '4.0.0-alpha') < 0) {
+        if (version_compare(version1: $installedVersion, version2: '4.0.0-alpha', operator: '<')) {
             $configPath = PMF_ROOT_DIR . '/config';
         }
 
