@@ -95,9 +95,21 @@ class InstallerTest extends TestCase
 
     public function testStartInstallThrowsExceptionForAlreadyInstalledTargetRoot(): void
     {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('phpMyFAQ is already installed! Please use the <a href="../update">update</a>.');
+        $tempDir = sys_get_temp_dir() . '/pmf-installer-test-' . uniqid();
+        mkdir($tempDir . '/content/core/config', 0777, true);
+        touch($tempDir . '/content/core/config/database.php');
 
-        $this->installer->startInstall([]);
+        try {
+            $this->expectException(Exception::class);
+            $this->expectExceptionMessage('phpMyFAQ is already installed!');
+
+            $this->installer->startInstall(['rootDir' => $tempDir]);
+        } finally {
+            @unlink($tempDir . '/content/core/config/database.php');
+            @rmdir($tempDir . '/content/core/config');
+            @rmdir($tempDir . '/content/core');
+            @rmdir($tempDir . '/content');
+            @rmdir($tempDir);
+        }
     }
 }

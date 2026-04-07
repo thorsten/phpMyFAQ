@@ -400,5 +400,4 @@ final class AbstractAdministrationControllerTestStub extends AbstractAdministrat
     {
         return $this->getFooter();
     }
-
 }

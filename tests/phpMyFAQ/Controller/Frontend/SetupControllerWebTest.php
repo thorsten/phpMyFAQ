@@ -115,6 +115,7 @@ final class SetupControllerWebTest extends ControllerWebTestCase
 
     public function testSetupPageReturnsForbiddenWhenAlreadyInstalled(): void
     {
+        $this->createDatabaseConfig();
         $response = $this->requestPublic('GET', '/setup');
 
         self::assertResponseStatusCodeSame(403, $response);
@@ -123,11 +124,14 @@ final class SetupControllerWebTest extends ControllerWebTestCase
 
     public function testSetupInstallPageReturnsForbiddenWhenAlreadyInstalled(): void
     {
+        $this->createDatabaseConfig();
         $response = $this->requestPublic('GET', '/setup/install');
 
         self::assertResponseStatusCodeSame(403, $response);
         self::assertResponseContains('phpMyFAQ is already installed.', $response);
     }
+
+    private bool $databaseConfigCreated = false;
 
     private function hideDatabaseConfig(): void
     {
@@ -139,13 +143,31 @@ final class SetupControllerWebTest extends ControllerWebTestCase
         $this->databaseConfigHidden = true;
     }
 
-    private function restoreDatabaseConfig(): void
+    private function createDatabaseConfig(): void
     {
-        if (!$this->databaseConfigHidden || !is_file($this->databaseConfigBackup)) {
+        if (is_file($this->databaseConfigFile)) {
             return;
         }
 
-        rename($this->databaseConfigBackup, $this->databaseConfigFile);
-        $this->databaseConfigHidden = false;
+        $dir = dirname($this->databaseConfigFile);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+        }
+
+        file_put_contents($this->databaseConfigFile, "<?php\n// test stub\n");
+        $this->databaseConfigCreated = true;
+    }
+
+    private function restoreDatabaseConfig(): void
+    {
+        if ($this->databaseConfigCreated && is_file($this->databaseConfigFile)) {
+            unlink($this->databaseConfigFile);
+            $this->databaseConfigCreated = false;
+        }
+
+        if ($this->databaseConfigHidden && is_file($this->databaseConfigBackup)) {
+            rename($this->databaseConfigBackup, $this->databaseConfigFile);
+            $this->databaseConfigHidden = false;
+        }
     }
 }

@@ -26,41 +26,28 @@ class AbstractSessionTest extends TestCase
 
     public function testGetDelegatesToSession(): void
     {
-        $this->sessionMock
-            ->expects($this->once())
-            ->method('get')
-            ->with('test-key')
-            ->willReturn('test-value');
+        $this->sessionMock->expects($this->once())->method('get')->with('test-key')->willReturn('test-value');
 
         static::assertSame('test-value', $this->abstractSession->get('test-key'));
     }
 
     public function testGetReturnsNullForMissingKey(): void
     {
-        $this->sessionMock
-            ->expects($this->once())
-            ->method('get')
-            ->with('missing')
-            ->willReturn(null);
+        $this->sessionMock->expects($this->once())->method('get')->with('missing')->willReturn(null);
 
         static::assertNull($this->abstractSession->get('missing'));
     }
 
     public function testSetDelegatesToSession(): void
     {
-        $this->sessionMock
-            ->expects($this->once())
-            ->method('set')
-            ->with('key', 'value');
+        $this->sessionMock->expects($this->once())->method('set')->with('key', 'value');
 
         $this->abstractSession->set('key', 'value');
     }
 
     public function testSetAcceptsVariousTypes(): void
     {
-        $this->sessionMock
-            ->expects($this->exactly(3))
-            ->method('set');
+        $this->sessionMock->expects($this->exactly(3))->method('set');
 
         $this->abstractSession->set('int', 42);
         $this->abstractSession->set('array', ['a', 'b']);

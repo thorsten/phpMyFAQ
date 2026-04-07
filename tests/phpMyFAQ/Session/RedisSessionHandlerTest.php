@@ -29,6 +29,11 @@ class RedisSessionHandlerTest extends TestCase
             static::markTestSkipped('Test requires the redis extension.');
         }
 
+        $sessionWasActive = session_status() === PHP_SESSION_ACTIVE;
+        if ($sessionWasActive) {
+            session_write_close();
+        }
+
         $originalHandler = ini_get('session.save_handler');
         $originalPath = ini_get('session.save_path');
 
@@ -40,6 +45,9 @@ class RedisSessionHandlerTest extends TestCase
         } finally {
             ini_set('session.save_handler', $originalHandler);
             ini_set('session.save_path', $originalPath);
+            if ($sessionWasActive) {
+                session_start();
+            }
         }
     }
 
@@ -47,6 +55,11 @@ class RedisSessionHandlerTest extends TestCase
     {
         if (!extension_loaded('redis')) {
             static::markTestSkipped('Test requires the redis extension.');
+        }
+
+        $sessionWasActive = session_status() === PHP_SESSION_ACTIVE;
+        if ($sessionWasActive) {
+            session_write_close();
         }
 
         $originalHandler = ini_get('session.save_handler');
@@ -60,6 +73,9 @@ class RedisSessionHandlerTest extends TestCase
         } finally {
             ini_set('session.save_handler', $originalHandler);
             ini_set('session.save_path', $originalPath);
+            if ($sessionWasActive) {
+                session_start();
+            }
         }
     }
 
