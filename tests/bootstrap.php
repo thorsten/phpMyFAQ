@@ -74,9 +74,10 @@ $loader->add('phpMyFAQ', PMF_SRC_DIR);
 $loader->register();
 
 //
-// Delete a possible SQLite file first
+// Delete possible leftover files from previous test runs
 //
 @unlink(PMF_TEST_DIR . '/test.db');
+@unlink(PMF_TEST_DIR . '/content/core/config/database.php');
 
 //
 // Create database credentials for SQLite

@@ -732,6 +732,11 @@ class Installer extends Setup
      */
     public function startInstall(?array $setup = null): void
     {
+        $rootDir = $setup['rootDir'] ?? PMF_ROOT_DIR;
+        if (is_file($rootDir . '/content/core/config/database.php')) {
+            throw new Exception('phpMyFAQ is already installed. Please use the update.');
+        }
+
         $ldapSetup = [];
         $query = [];
         $uninstall = [];
