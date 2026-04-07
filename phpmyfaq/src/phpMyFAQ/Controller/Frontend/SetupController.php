@@ -44,6 +44,11 @@ final class SetupController
     public function index(Request $request): Response
     {
         $system = new System();
+
+        if (!$system->checkInstallation()) {
+            return new Response('phpMyFAQ is already installed.', Response::HTTP_FORBIDDEN);
+        }
+
         $installer = new Installer($system);
 
         $checkBasicError = '';
@@ -84,6 +89,11 @@ final class SetupController
     public function install(): Response
     {
         $system = new System();
+
+        if (!$system->checkInstallation()) {
+            return new Response('phpMyFAQ is already installed.', Response::HTTP_FORBIDDEN);
+        }
+
         $installer = new Installer($system);
 
         $installationError = '';

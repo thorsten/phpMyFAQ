@@ -29,6 +29,9 @@ class SetupControllerTest extends TestCase
     private Sqlite3 $dbHandle;
     private string $databasePath;
     private ?Configuration $previousConfiguration = null;
+    private string $databaseConfigFile;
+    private string $databaseConfigBackup;
+    private bool $databaseConfigHidden = false;
 
     /**
      * @throws Exception
@@ -76,10 +79,24 @@ class SetupControllerTest extends TestCase
         self::assertIsArray($config);
         $config['main.currentVersion'] ??= '4.0.0';
         $configProperty->setValue($this->configuration, $config);
+
+        // Hide database.php so System::checkInstallation() returns true
+        $this->databaseConfigFile = PMF_ROOT_DIR . '/content/core/config/database.php';
+        $this->databaseConfigBackup = $this->databaseConfigFile . '.bak';
+        if (is_file($this->databaseConfigFile)) {
+            rename($this->databaseConfigFile, $this->databaseConfigBackup);
+            $this->databaseConfigHidden = true;
+        }
     }
 
     protected function tearDown(): void
     {
+        // Restore database.php
+        if ($this->databaseConfigHidden && is_file($this->databaseConfigBackup)) {
+            rename($this->databaseConfigBackup, $this->databaseConfigFile);
+            $this->databaseConfigHidden = false;
+        }
+
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
         $configurationProperty->setValue(null, $this->previousConfiguration);
