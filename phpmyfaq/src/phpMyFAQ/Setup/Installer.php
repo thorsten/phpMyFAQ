@@ -190,7 +190,9 @@ class Installer extends Setup
     public function checkInitialRewriteBasePath(Request $request): bool
     {
         $basePath = $request->getBasePath();
-        $basePath = rtrim($basePath, characters: 'setup');
+        if (str_ends_with($basePath, 'setup')) {
+            $basePath = substr($basePath, 0, -strlen('setup'));
+        }
 
         $htaccessPath = PMF_ROOT_DIR . '/.htaccess';
 
@@ -210,6 +212,13 @@ class Installer extends Setup
      */
     public function startInstall(?array $setup = null): void
     {
+        $rootDir = $setup['rootDir'] ?? PMF_ROOT_DIR;
+        if ($this->isAlreadyInstalled((string) $rootDir)) {
+            throw new Exception(
+                'Looks like phpMyFAQ is already installed! Please use the <a href="../update">update</a>.',
+            );
+        }
+
         $validator = new InstallationInputValidator();
         $input = $validator->validate($setup);
 
@@ -246,5 +255,10 @@ class Installer extends Setup
     {
         $seeder = new DefaultDataSeeder();
         return $seeder->getFormInputs();
+    }
+
+    private function isAlreadyInstalled(string $rootDir): bool
+    {
+        return is_file(rtrim($rootDir, DIRECTORY_SEPARATOR) . '/content/core/config/database.php');
     }
 }

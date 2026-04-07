@@ -92,4 +92,12 @@ class InstallerTest extends TestCase
         $this->assertArrayHasKey('input_id', $formInputs[0]);
         $this->assertArrayHasKey('input_type', $formInputs[0]);
     }
+
+    public function testStartInstallThrowsExceptionForAlreadyInstalledTargetRoot(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('phpMyFAQ is already installed! Please use the <a href="../update">update</a>.');
+
+        $this->installer->startInstall([]);
+    }
 }
