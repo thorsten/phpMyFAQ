@@ -123,8 +123,10 @@ final class ConfigurationController extends AbstractAdministrationApiController
                 'success' => true,
                 'message' => 'Redis connection successful.',
             ], Response::HTTP_OK);
-        } catch (\Throwable $throwable) {
-            return $this->json(['error' => $throwable->getMessage()], Response::HTTP_BAD_REQUEST);
+        } catch (\Throwable) {
+            return $this->json([
+                'error' => 'Redis connection failed. Please verify the DSN and ensure the server is running.',
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 }

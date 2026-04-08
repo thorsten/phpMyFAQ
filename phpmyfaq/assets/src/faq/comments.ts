@@ -140,7 +140,6 @@ const addCommentToDOM = (commentData: CommentData): void => {
   };
 
   const escapedUsername = escapeHtml(commentData.username);
-  const escapedEmail = escapeHtml(commentData.email);
 
   const commentHtml = `
     <div class="row mt-2 mb-2">
@@ -152,7 +151,7 @@ const addCommentToDOM = (commentData: CommentData): void => {
       <div class="col-sm-11">
         <div class="card">
           <div class="card-header card-header-comments">
-            <strong><a href="mailto:${escapedEmail}">${escapedUsername}</a></strong>
+            <strong>${escapedUsername}</strong>
             <span class="text-muted">(${formattedDate})</span>
           </div>
           <div class="card-body">${commentData.comment}</div>

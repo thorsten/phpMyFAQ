@@ -129,8 +129,8 @@ final class CommentController extends AbstractController
         // Sanitize comment text based on user status and configuration
         $commentText = Filter::filterVar($data->comment_text, FILTER_SANITIZE_SPECIAL_CHARS);
         if ($enableCommentEditor && $isLoggedIn) {
-            // Allow HTML for logged-in users when editor is enabled
-            $commentText = $this->sanitizeHtmlComment($data->comment_text);
+            // Allow HTML for logged-in users when editor is enabled, using Symfony HtmlSanitizer
+            $commentText = Filter::removeAttributes($data->comment_text);
         }
 
         $commentId = match ($type) {
@@ -193,7 +193,6 @@ final class CommentController extends AbstractController
                     'success' => Translation::get(key: 'msgCommentThanks'),
                     'commentData' => [
                         'username' => $commentEntity->getUsername(),
-                        'email' => $commentEntity->getEmail(),
                         'comment' => $commentEntity->getComment(),
                         'date' => $commentEntity->getDate(),
                         'gravatarUrl' => $gravatarUrl,
@@ -218,72 +217,6 @@ final class CommentController extends AbstractController
         return !(
             !$this->configuration->get(item: 'records.allowCommentsForGuests')
             && !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::COMMENT_ADD->value)
-        );
-    }
-
-    /**
-     * Sanitizes HTML comment text, allowing only safe tags and attributes
-     *
-     * @param string $html Raw HTML content from editor
-     * @return string Sanitized HTML with only allowed tags
-     */
-    private function sanitizeHtmlComment(string $html): string
-    {
-        // Allowed HTML tags for comments
-        $allowedTags = '<p><br><strong><em><u><s><a><ul><ol><li>';
-
-        // Strip all tags except allowed ones
-        $sanitized = strip_tags($html, $allowedTags);
-
-        // Additional sanitization for <a> tags - only allow specific attributes
-        $sanitized = preg_replace_callback(
-            '/<a\s+([^>]*)>/i',
-            static function ($matches) {
-                $attributes = $matches[1];
-                $allowedAttrs = [];
-
-                // Extract and validate href
-                if (preg_match(
-                    pattern: '/href\s*=\s*["\']([^"\']*)["\']/',
-                    subject: $attributes,
-                    matches: $hrefMatch,
-                )) {
-                    $href = htmlspecialchars(string: $hrefMatch[1], flags: ENT_QUOTES, encoding: 'UTF-8');
-                    // Only allow http, https, and mailto protocols
-                    if (preg_match('/^(https?:\/\/|mailto:)/i', $href) || preg_match('/^\/[^\/]/', $href)) {
-                        $allowedAttrs[] = 'href="' . $href . '"';
-                    }
-                }
-
-                // Extract and validate title
-                if (preg_match(
-                    pattern: '/title\s*=\s*["\']([^"\']*)["\']/',
-                    subject: $attributes,
-                    matches: $titleMatch,
-                )) {
-                    $title = htmlspecialchars(string: $titleMatch[1], flags: ENT_QUOTES, encoding: 'UTF-8');
-                    $allowedAttrs[] = 'title="' . $title . '"';
-                }
-
-                // Extract and validate target
-                if (preg_match('/target\s*=\s*["\']([^"\']*)["\']/', $attributes, $targetMatch)) {
-                    $target = $targetMatch[1];
-                    if (in_array($target, ['_blank', '_self', '_parent', '_top'], strict: true)) {
-                        $allowedAttrs[] =
-                            'target="' . htmlspecialchars(string: $target, flags: ENT_QUOTES, encoding: 'UTF-8') . '"';
-                    }
-                }
-
-                return $allowedAttrs === [] ? '<a>' : '<a ' . implode(' ', $allowedAttrs) . '>';
-            },
-            $sanitized,
-        );
-
-        // Remove any remaining dangerous attributes from other tags
-        return preg_replace(
-            pattern: '/<(\w+)\s+[^>]*?(on\w+|style|class|id)\s*=\s*[^>]*>/i',
-            replacement: '<$1>',
-            subject: $sanitized,
         );
     }
 }

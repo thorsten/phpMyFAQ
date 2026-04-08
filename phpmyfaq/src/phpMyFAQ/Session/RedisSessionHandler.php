@@ -41,8 +41,12 @@ class RedisSessionHandler
         ini_set('session.save_path', value: $redisDsn);
     }
 
+    private const float MAX_TIMEOUT_SECONDS = 3.0;
+
     public static function validateConnection(string $dsn, float $timeoutSeconds = 1.0): void
     {
+        $timeoutSeconds = min(max($timeoutSeconds, 0.1), self::MAX_TIMEOUT_SECONDS);
+
         [$socketTarget, $displayTarget] = self::buildSocketTarget($dsn);
 
         $errno = 0;
@@ -56,14 +60,18 @@ class RedisSessionHandler
         );
 
         if ($connection === false) {
-            throw new RuntimeException(sprintf(
-                'Redis session handler is configured but unreachable (%s): %s',
-                $displayTarget,
-                $errorString !== '' ? $errorString : 'connection failed',
-            ));
+            throw new RuntimeException(sprintf('Redis connection failed for %s.', $displayTarget));
         }
 
+        // Verify the service speaks Redis by sending PING and checking for +PONG
+        fwrite($connection, "PING\r\n");
+        stream_set_timeout($connection, (int) ceil($timeoutSeconds));
+        $response = fgets($connection, 128);
         fclose($connection);
+
+        if ($response === false || !str_starts_with(trim($response), '+PONG')) {
+            throw new RuntimeException(sprintf('Redis connection failed for %s.', $displayTarget));
+        }
     }
 
     /**

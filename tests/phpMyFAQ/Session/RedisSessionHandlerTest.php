@@ -84,7 +84,7 @@ class RedisSessionHandlerTest extends TestCase
     public function testValidateConnectionThrowsForUnreachableTarget(): void
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Redis session handler is configured but unreachable');
+        $this->expectExceptionMessage('Redis connection failed');
 
         RedisSessionHandler::validateConnection(dsn: 'tcp://127.0.0.1:1', timeoutSeconds: 0.1);
     }
@@ -109,7 +109,7 @@ class RedisSessionHandlerTest extends TestCase
     public function testValidateConnectionUsesRedisScheme(): void
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Redis session handler is configured but unreachable');
+        $this->expectExceptionMessage('Redis connection failed');
 
         RedisSessionHandler::validateConnection(dsn: 'redis://127.0.0.1:1', timeoutSeconds: 0.1);
     }
@@ -117,7 +117,7 @@ class RedisSessionHandlerTest extends TestCase
     public function testValidateConnectionUsesUnixSchemeWithUnreachableSocket(): void
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Redis session handler is configured but unreachable');
+        $this->expectExceptionMessage('Redis connection failed');
 
         // unix:/path is parsed by parse_url as scheme=unix, path=/path
         RedisSessionHandler::validateConnection(dsn: 'unix:/tmp/nonexistent-redis.sock', timeoutSeconds: 0.1);

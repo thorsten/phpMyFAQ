@@ -121,7 +121,6 @@ final class AuthenticationController extends AbstractAdministrationController
             'isLogout' => $request->query->get(key: 'action') === 'logout',
             'logoutMessage' => Translation::get(key: 'ad_logout'),
             'loginUrl' => $this->configuration->getDefaultUrl() . 'admin/authenticate',
-            'redirectAction' => $request->query->get(key: 'action') ?? '',
             'msgUsername' => Translation::get(key: 'ad_auth_user'),
             'msgPassword' => Translation::get(key: 'ad_auth_passwd'),
             'msgRememberMe' => Translation::get(key: 'rememberMe'),

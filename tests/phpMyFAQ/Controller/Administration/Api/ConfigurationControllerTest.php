@@ -415,6 +415,9 @@ class ConfigurationControllerTest extends TestCase
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        self::assertSame('Unsupported Redis DSN scheme "invalid" for sessions.', $payload['error']);
+        self::assertSame(
+            'Redis connection failed. Please verify the DSN and ensure the server is running.',
+            $payload['error'],
+        );
     }
 }
