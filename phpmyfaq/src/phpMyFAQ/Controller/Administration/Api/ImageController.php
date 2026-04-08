@@ -32,6 +32,17 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class ImageController extends AbstractController
 {
+    private const array ALLOWED_MIME_TYPES = [
+        'gif' => 'image/gif',
+        'jpg' => 'image/jpeg',
+        'jpeg' => 'image/jpeg',
+        'png' => 'image/png',
+        'webp' => 'image/webp',
+        'mov' => 'video/quicktime',
+        'mp4' => 'video/mp4',
+        'webm' => 'video/webm',
+    ];
+
     /**
      * @throws Exception|\Exception
      */
@@ -43,7 +54,7 @@ final class ImageController extends AbstractController
         $session = $this->container->get(id: 'session');
 
         $uploadDir = PMF_CONTENT_DIR . '/user/images/';
-        $validFileExtensions = ['gif', 'jpg', 'jpeg', 'png', 'webp', 'mov', 'mp4', 'webm'];
+        $validFileExtensions = array_keys(self::ALLOWED_MIME_TYPES);
         $timestamp = time();
 
         if (!Token::getInstance($session)->verifyToken('pmf-csrf-token', $request->query->get('csrf'))) {
@@ -93,10 +104,33 @@ final class ImageController extends AbstractController
                     );
                 }
 
-                // Accept upload if there was no origin, or if it is an accepted origin
+                // Accept upload if there was no origin or if it is an accepted origin
                 $fileName = $timestamp . '_' . $file->getClientOriginalName();
                 $fileName = str_replace(' ', '_', $fileName);
                 $file->move($uploadDir, $fileName);
+
+                $filePath = $uploadDir . $fileName;
+                $fileExtension = strtolower((string) $file->getClientOriginalExtension());
+
+                // Validate actual MIME type matches the claimed extension
+                $detectedMime = mime_content_type($filePath);
+                $expectedMime = self::ALLOWED_MIME_TYPES[$fileExtension] ?? null;
+
+                if ($detectedMime === false || $expectedMime === null || $detectedMime !== $expectedMime) {
+                    if (file_exists($filePath)) {
+                        unlink($filePath);
+                    }
+
+                    return $this->json(
+                        [
+                            'success' => false,
+                            'data' => ['code' => Response::HTTP_BAD_REQUEST],
+                            'messages' => ['File content does not match the file extension'],
+                        ],
+                        Response::HTTP_BAD_REQUEST,
+                        $headers,
+                    );
+                }
 
                 // Add to the list of uploaded files
                 $uploadedFiles[] = $fileName;
