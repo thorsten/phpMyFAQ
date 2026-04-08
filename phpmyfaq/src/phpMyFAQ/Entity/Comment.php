@@ -23,7 +23,7 @@ namespace phpMyFAQ\Entity;
  * Class Comment
  * @package phpMyFAQ\Entity
  */
-class Comment
+class Comment implements \JsonSerializable
 {
     public int $id;
 
@@ -140,5 +140,19 @@ class Comment
     {
         $this->helped = $helped;
         return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'recordId' => $this->recordId,
+            'categoryId' => $this->categoryId ?? null,
+            'type' => $this->type,
+            'username' => $this->username,
+            'comment' => $this->comment,
+            'date' => $this->date,
+            'helped' => $this->helped,
+        ];
     }
 }

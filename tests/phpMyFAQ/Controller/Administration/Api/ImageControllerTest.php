@@ -259,6 +259,11 @@ final class ImageControllerTest extends TestCase
      */
     public function testUploadReturnsUploadedFileUrlsAndCorsHeader(): void
     {
+        $uploadDir = PMF_CONTENT_DIR . '/user/images/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0o755, true);
+        }
+
         $controller = new ImageController();
         $container = $this->createAuthenticatedContainer();
         $session = $container->get('session');
@@ -266,14 +271,14 @@ final class ImageControllerTest extends TestCase
         $token = $this->createValidCsrfToken($session, 'pmf-csrf-token');
         $controller->setContainer($container);
 
-        $file = $this->createMock(UploadedFile::class);
-        $file->method('isValid')->willReturn(true);
-        $file->method('getClientOriginalName')->willReturn('hero image.png');
-        $file->method('getClientOriginalExtension')->willReturn('png');
-        $file
-            ->expects($this->once())
-            ->method('move')
-            ->with(PMF_CONTENT_DIR . '/user/images/', $this->matchesRegularExpression('/^\d+_hero_image\.png$/'));
+        // Create a real PNG file for MIME validation
+        $tmpFile = tempnam(sys_get_temp_dir(), 'pmf-test-img-');
+        self::assertNotFalse($tmpFile);
+        $img = imagecreatetruecolor(1, 1);
+        imagepng($img, $tmpFile);
+        unset($img);
+
+        $file = new UploadedFile($tmpFile, 'hero image.png', 'image/png', null, true);
 
         $request = new Request(
             ['csrf' => $token],
@@ -289,6 +294,12 @@ final class ImageControllerTest extends TestCase
         $response = $controller->upload($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
+        // Clean up uploaded file
+        $uploadedFiles = glob($uploadDir . '*_hero_image.png');
+        foreach ($uploadedFiles as $uploadedFile) {
+            @unlink($uploadedFile);
+        }
+
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertTrue($payload['success']);
         self::assertCount(1, $payload['data']['files']);
@@ -301,5 +312,44 @@ final class ImageControllerTest extends TestCase
             rtrim($this->configuration->getDefaultUrl(), '/'),
             $response->headers->get('Access-Control-Allow-Origin'),
         );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadRejectsMismatchedMimeType(): void
+    {
+        $uploadDir = PMF_CONTENT_DIR . '/user/images/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0o755, true);
+        }
+
+        $controller = new ImageController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'pmf-csrf-token');
+        $controller->setContainer($container);
+
+        // Create an HTML file disguised as .jpg
+        $tmpFile = tempnam(sys_get_temp_dir(), 'pmf-test-fake-');
+        self::assertNotFalse($tmpFile);
+        file_put_contents($tmpFile, '<html><body>XSS</body></html>');
+
+        $file = new UploadedFile($tmpFile, 'evil.jpg', 'image/jpeg', null, true);
+
+        $request = new Request(['csrf' => $token]);
+        $request->files->set('files', [$file]);
+
+        $response = $controller->upload($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertFalse($payload['success']);
+        self::assertSame(['File content does not match the file extension'], $payload['messages']);
+
+        // Verify the file was deleted
+        $remainingFiles = glob($uploadDir . '*_evil.jpg');
+        self::assertEmpty($remainingFiles);
     }
 }

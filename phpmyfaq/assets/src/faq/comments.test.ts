@@ -146,7 +146,6 @@ describe('handleSaveComment', () => {
       commentData: {
         date: '1700000000',
         username: 'John Doe',
-        email: 'john@example.com',
         gravatarUrl: 'https://gravatar.com/avatar/test',
         comment: '<p>This is a test comment</p>',
       },
@@ -163,7 +162,7 @@ describe('handleSaveComment', () => {
 
     const commentsContainer = document.getElementById('comments') as HTMLElement;
     expect(commentsContainer.innerHTML).toContain('John Doe');
-    expect(commentsContainer.innerHTML).toContain('john@example.com');
+    expect(commentsContainer.innerHTML).not.toContain('john@example.com');
     expect(commentsContainer.innerHTML).toContain('This is a test comment');
     expect(commentsContainer.innerHTML).toContain('https://gravatar.com/avatar/test');
   });

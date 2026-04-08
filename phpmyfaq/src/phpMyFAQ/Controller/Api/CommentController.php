@@ -88,7 +88,7 @@ final class CommentController extends AbstractApiController
     #[OA\Parameter(name: 'sort', description: 'Field to sort by', in: 'query', required: false, schema: new OA\Schema(
         type: 'string',
         default: 'id_comment',
-        enum: ['id_comment', 'id', 'usr', 'email', 'datum'],
+        enum: ['id_comment', 'id', 'usr', 'datum'],
     ))]
     #[OA\Parameter(
         name: 'order',
@@ -107,7 +107,6 @@ final class CommentController extends AbstractApiController
                     "categoryId": null,
                     "type": "faq",
                     "username": "phpMyFAQ User",
-                    "email": "user@example.org",
                     "comment": "Foo! Bar?",
                     "date": "2019-12-24T12:24:57+0100",
                     "helped": null
@@ -143,7 +142,7 @@ final class CommentController extends AbstractApiController
         $pagination = $this->getPaginationRequest($request);
         $sort = $this->getSortRequest(
             $request,
-            allowedFields: ['id_comment', 'id', 'usr', 'email', 'datum'],
+            allowedFields: ['id_comment', 'id', 'usr', 'datum'],
             defaultField: 'id_comment',
             defaultOrder: 'asc',
         );
