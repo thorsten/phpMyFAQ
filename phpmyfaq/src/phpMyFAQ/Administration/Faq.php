@@ -290,8 +290,16 @@ class Faq
      *
      * @param array $faqIds Order of record id's
      */
-    public function setStickyFaqOrder(array $faqIds): bool
+    public function setStickyFaqOrder(array $faqIds, int $currentUserId = -1, array $currentGroups = [-1]): bool
     {
+        $faqIds = $this->sanitizeFaqIds($faqIds);
+
+        foreach ($faqIds as $faqId) {
+            if (!$this->userCanEditFaq($faqId, $currentUserId, $currentGroups)) {
+                return false;
+            }
+        }
+
         $count = 1;
         $counter = count($faqIds);
         for ($i = 0; $i < $counter; ++$i) {
@@ -317,5 +325,83 @@ class Faq
     public function getLanguage(): ?string
     {
         return $this->language;
+    }
+
+    /**
+     * @param int[] $currentGroups
+     */
+    private function userCanEditFaq(int $faqId, int $currentUserId, array $currentGroups): bool
+    {
+        $query = $this->configuration->get(item: 'security.permLevel') !== 'basic'
+            ? $this->buildGroupAwareFaqAccessQuery($faqId, $currentUserId, $currentGroups)
+            : $this->buildBasicFaqAccessQuery($faqId, $currentUserId);
+
+        $result = $this->configuration->getDb()->query($query);
+        $row = $this->configuration->getDb()->fetchObject($result);
+
+        return is_object($row);
+    }
+
+    /**
+     * @param int[] $currentGroups
+     */
+    private function buildGroupAwareFaqAccessQuery(int $faqId, int $currentUserId, array $currentGroups): string
+    {
+        $groupIds = $this->sanitizePermissionIds($currentGroups);
+
+        return sprintf('SELECT id FROM %1$sfaqdata fd WHERE fd.id = %2$d AND (
+                EXISTS (
+                    SELECT 1 FROM %1$sfaqdata_user fdu
+                    WHERE fdu.record_id = fd.id AND fdu.user_id IN (-1, %3$d)
+                )
+                OR EXISTS (
+                    SELECT 1 FROM %1$sfaqdata_group fdg
+                    WHERE fdg.record_id = fd.id AND fdg.group_id IN (%4$s)
+                )
+                OR (
+                    NOT EXISTS (SELECT 1 FROM %1$sfaqdata_user fdu_all WHERE fdu_all.record_id = fd.id)
+                    AND NOT EXISTS (SELECT 1 FROM %1$sfaqdata_group fdg_all WHERE fdg_all.record_id = fd.id)
+                )
+            )', Database::getTablePrefix(), $faqId, $currentUserId, implode(', ', $groupIds));
+    }
+
+    private function buildBasicFaqAccessQuery(int $faqId, int $currentUserId): string
+    {
+        return sprintf('SELECT id FROM %1$sfaqdata fd WHERE fd.id = %2$d AND (
+                EXISTS (
+                    SELECT 1 FROM %1$sfaqdata_user fdu
+                    WHERE fdu.record_id = fd.id AND fdu.user_id IN (-1, %3$d)
+                )
+                OR NOT EXISTS (
+                    SELECT 1 FROM %1$sfaqdata_user fdu_all WHERE fdu_all.record_id = fd.id
+                )
+            )', Database::getTablePrefix(), $faqId, $currentUserId);
+    }
+
+    /**
+     * @param array<int|string> $faqIds
+     * @return int[]
+     */
+    private function sanitizeFaqIds(array $faqIds): array
+    {
+        $sanitizedFaqIds = array_map(static fn(int|string $faqId): int => (int) $faqId, $faqIds);
+        $sanitizedFaqIds = array_filter($sanitizedFaqIds, static fn(int $faqId): bool => $faqId > 0);
+
+        return array_values(array_unique($sanitizedFaqIds));
+    }
+
+    /**
+     * @param array<int|string> $permissionIds
+     * @return int[]
+     */
+    private function sanitizePermissionIds(array $permissionIds): array
+    {
+        $sanitizedPermissionIds = array_map(
+            static fn(int|string $permissionId): int => (int) $permissionId,
+            $permissionIds,
+        );
+        $sanitizedPermissionIds = array_values(array_unique($sanitizedPermissionIds));
+
+        return $sanitizedPermissionIds === [] ? [-1] : $sanitizedPermissionIds;
     }
 }

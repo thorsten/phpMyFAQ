@@ -722,13 +722,17 @@ final class FaqController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance($this->session)->verifyToken(page: 'order-stickyfaqs', requestToken: $data->csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $this->adminFaq->setStickyFaqOrder($data->faqIds);
+        if (!$this->adminFaq->setStickyFaqOrder($data->faqIds, $currentUser, $currentGroups)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
 
         return $this->json(['success' => Translation::get(key: 'ad_categ_save_order')], Response::HTTP_OK);
     }
