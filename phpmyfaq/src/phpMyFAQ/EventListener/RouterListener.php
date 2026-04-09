@@ -55,7 +55,8 @@ readonly class RouterListener
 
         $urlMatcher = new UrlMatcher($this->routes, $requestContext);
         try {
-            $parameters = $urlMatcher->match($request->getPathInfo());
+            $pathInfo = $this->normalizePath($request->getPathInfo());
+            $parameters = $urlMatcher->match($pathInfo);
         } catch (ResourceNotFoundException $exception) {
             throw new NotFoundHttpException($exception->getMessage(), $exception);
         } catch (MethodNotAllowedException $exception) {
@@ -67,5 +68,23 @@ readonly class RouterListener
         }
 
         $request->attributes->add($parameters);
+    }
+
+    /**
+     * Normalizes the path by removing trailing slashes and /index.php suffix.
+     */
+    private function normalizePath(string $path): string
+    {
+        // Strip /index.php suffix (e.g. /update/index.php → /update)
+        if (str_ends_with($path, '/index.php')) {
+            $path = substr($path, 0, -10);
+        }
+
+        // Remove trailing slash, but keep root path as /
+        if ($path !== '/' && str_ends_with($path, '/')) {
+            $path = rtrim($path, '/');
+        }
+
+        return $path === '' ? '/' : $path;
     }
 }

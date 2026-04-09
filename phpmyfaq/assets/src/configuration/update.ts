@@ -13,6 +13,26 @@
  * @since     2023-10-22
  */
 
+const getBasePath = (): string => {
+  const path = window.location.pathname;
+  let basePath: string;
+  if (path.endsWith('/update/index.php')) {
+    basePath = path.slice(0, -'/update/index.php'.length);
+  } else if (path.endsWith('/update/')) {
+    basePath = path.slice(0, -'/update/'.length);
+  } else if (path.endsWith('/update')) {
+    basePath = path.slice(0, -'/update'.length);
+  } else {
+    basePath = path;
+  }
+
+  if (!basePath.endsWith('/')) {
+    basePath += '/';
+  }
+
+  return basePath;
+};
+
 export const handleUpdateNextStepButton = (): void => {
   const nextStepButton = document.getElementById('phpmyfaq-update-next-step-button') as HTMLButtonElement | null;
   const nextStep = document.getElementById('phpmyfaq-update-next-step') as HTMLInputElement | null;
@@ -36,8 +56,10 @@ export const handleUpdateInformation = async (): Promise<void> => {
 
     if (!installedVersion) return;
 
+    const basePath = getBasePath();
+
     try {
-      const response = await fetch('../api/setup/check', {
+      const response = await fetch(`${basePath}api/setup/check`, {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',
@@ -53,12 +75,15 @@ export const handleUpdateInformation = async (): Promise<void> => {
           const errorMessage = await response.json();
           errorText = errorMessage.message || errorMessage.error || 'Update check failed';
         } else {
-          errorText = await response.text();
-          if (!errorText || errorText === 'Not Found') {
+          const rawText = await response.text();
+          if (!rawText || rawText === 'Not Found' || rawText.trimStart().startsWith('<')) {
             errorText =
-              'The requested resource was not found on the server. ' +
-              'Please check your server configuration, if you use Apache, the RewriteBase in your .htaccess ' +
-              'configuration. If you use nginx, please check your nginx rewrite configuration.';
+              'The server returned an error (HTTP ' +
+              response.status +
+              '). Please check your server configuration: if you use Apache, verify the RewriteBase in your ' +
+              '.htaccess matches your installation path. If you use nginx, check your rewrite configuration.';
+          } else {
+            errorText = rawText;
           }
         }
         const alert = document.getElementById('phpmyfaq-update-check-alert') as HTMLElement | null;
@@ -102,8 +127,10 @@ export const handleConfigBackup = async (): Promise<void> => {
 
     if (!installedVersion) return;
 
+    const basePath = getBasePath();
+
     try {
-      const response = await fetch('../api/setup/backup', {
+      const response = await fetch(`${basePath}api/setup/backup`, {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',
@@ -131,8 +158,10 @@ export const handleDatabaseUpdate = async (): Promise<void> => {
 
     if (!installedVersion) return;
 
+    const basePath = getBasePath();
+
     try {
-      const response = await fetch('../api/setup/update-database', {
+      const response = await fetch(`${basePath}api/setup/update-database`, {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',
