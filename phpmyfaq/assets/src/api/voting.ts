@@ -13,7 +13,12 @@
  * @since     2024-03-09
  */
 
-export const saveVoting = async (votingId: string, votingLanguage: string, selectedIndex: number) => {
+export const saveVoting = async (
+  votingId: string,
+  votingLanguage: string,
+  selectedIndex: number,
+  csrfToken: string
+) => {
   try {
     const response: Response = await fetch('api/voting', {
       method: 'POST',
@@ -25,6 +30,7 @@ export const saveVoting = async (votingId: string, votingLanguage: string, selec
         id: votingId,
         lang: votingLanguage,
         value: selectedIndex,
+        csrfToken: csrfToken,
       }),
       redirect: 'follow',
       referrerPolicy: 'no-referrer',
