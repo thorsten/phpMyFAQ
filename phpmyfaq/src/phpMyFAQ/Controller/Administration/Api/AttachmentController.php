@@ -120,6 +120,11 @@ final class AttachmentController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::ATTACHMENT_ADD);
 
+        $csrfToken = Filter::filterVar($request->request->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
+        if (!Token::getInstance($this->session)->verifyToken('upload-attachment', $csrfToken)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
+
         $files = $request->files->get('filesToUpload');
 
         if (!$files) {

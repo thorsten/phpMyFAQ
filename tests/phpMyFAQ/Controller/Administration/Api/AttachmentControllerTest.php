@@ -84,6 +84,7 @@ final class AttachmentControllerTest extends TestCase
         Token::resetInstanceForTests();
         unset($_COOKIE['pmf-csrf-token-' . substr(md5('delete-attachment'), 0, 10)]);
         unset($_COOKIE['pmf-csrf-token-' . substr(md5('refresh-attachment'), 0, 10)]);
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('upload-attachment'), 0, 10)]);
 
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
@@ -211,14 +212,34 @@ final class AttachmentControllerTest extends TestCase
      */
     public function testUploadReturnsBadRequestWhenNoFilesAreProvidedAndAuthenticated(): void
     {
-        $controller = new AttachmentController();
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'upload-attachment');
 
-        $response = $controller->upload(new Request());
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        $response = $controller->upload(new Request([], ['pmf-csrf-token' => $token]));
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertSame(Translation::get('msgNoImagesForUpload'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    {
+        $controller = new AttachmentController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->upload(new Request([], ['pmf-csrf-token' => 'invalid-token']));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
     }
 
     /**
@@ -252,10 +273,15 @@ final class AttachmentControllerTest extends TestCase
         $invalidFile = $this->createMock(UploadedFile::class);
         $invalidFile->method('isValid')->willReturn(false);
 
-        $controller = new AttachmentController();
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'upload-attachment');
 
-        $request = new Request([], [], [], [], ['filesToUpload' => [$invalidFile]]);
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        $request = new Request([], ['pmf-csrf-token' => $token], [], [], ['filesToUpload' => [$invalidFile]]);
         $response = $controller->upload($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
@@ -273,10 +299,15 @@ final class AttachmentControllerTest extends TestCase
         $oversizedFile->method('getSize')->willReturn((int) $this->configuration->get('records.maxAttachmentSize') + 1);
         $oversizedFile->method('getMimeType')->willReturn('image/png');
 
-        $controller = new AttachmentController();
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'upload-attachment');
 
-        $request = new Request([], [], [], [], ['filesToUpload' => [$oversizedFile]]);
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        $request = new Request([], ['pmf-csrf-token' => $token], [], [], ['filesToUpload' => [$oversizedFile]]);
         $response = $controller->upload($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
@@ -294,10 +325,15 @@ final class AttachmentControllerTest extends TestCase
         $htmlFile->method('getSize')->willReturn(128);
         $htmlFile->method('getMimeType')->willReturn('text/html');
 
-        $controller = new AttachmentController();
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'upload-attachment');
 
-        $request = new Request([], [], [], [], ['filesToUpload' => [$htmlFile]]);
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        $request = new Request([], ['pmf-csrf-token' => $token], [], [], ['filesToUpload' => [$htmlFile]]);
         $response = $controller->upload($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
@@ -321,12 +357,17 @@ final class AttachmentControllerTest extends TestCase
         $missingFile->method('getPathname')->willReturn(sys_get_temp_dir() . '/pmf-missing-upload.png');
         $missingFile->method('getClientOriginalName')->willReturn('upload.png');
 
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'upload-attachment');
+
         $controller = new AttachmentController();
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $controller->setContainer($container);
 
         $request = new Request(
             [],
-            [],
+            ['pmf-csrf-token' => $token],
             ['record_id' => 1, 'record_lang' => 'en'],
             [],
             [
