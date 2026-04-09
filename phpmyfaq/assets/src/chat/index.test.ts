@@ -330,8 +330,8 @@ describe('Chat UI', () => {
       const mockResponse: ChatUsersResponse = {
         success: true,
         users: [
-          { userId: 5, displayName: 'Alice', email: 'alice@example.com' },
-          { userId: 6, displayName: 'Alex', email: 'alex@example.com' },
+          { userId: 5, displayName: 'Alice' },
+          { userId: 6, displayName: 'Alex' },
         ],
       };
       vi.mocked(searchUsers).mockResolvedValue(mockResponse);

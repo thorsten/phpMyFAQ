@@ -361,7 +361,7 @@ class ChatTest extends TestCase
         $this->assertCount(1, $users);
         $this->assertSame(402, $users[0]['userId']);
         $this->assertSame('Alphabet Soup', $users[0]['displayName']);
-        $this->assertSame('alphabet@example.com', $users[0]['email']);
+        $this->assertArrayNotHasKey('email', $users[0]);
     }
 
     public function testChatClassIsReadonly(): void

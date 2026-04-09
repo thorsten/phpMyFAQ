@@ -34,7 +34,6 @@ export interface ChatConversation {
 export interface ChatUser {
   userId: number;
   displayName: string;
-  email: string;
 }
 
 export interface ChatConversationsResponse {
