@@ -75,12 +75,15 @@ export const handleUpdateInformation = async (): Promise<void> => {
           const errorMessage = await response.json();
           errorText = errorMessage.message || errorMessage.error || 'Update check failed';
         } else {
-          errorText = await response.text();
-          if (!errorText || errorText === 'Not Found') {
+          const rawText = await response.text();
+          if (!rawText || rawText === 'Not Found' || rawText.trimStart().startsWith('<')) {
             errorText =
-              'The requested resource was not found on the server. ' +
-              'Please check your server configuration, if you use Apache, the RewriteBase in your .htaccess ' +
-              'configuration. If you use nginx, please check your nginx rewrite configuration.';
+              'The server returned an error (HTTP ' +
+              response.status +
+              '). Please check your server configuration: if you use Apache, verify the RewriteBase in your ' +
+              '.htaccess matches your installation path. If you use nginx, check your rewrite configuration.';
+          } else {
+            errorText = rawText;
           }
         }
         const alert = document.getElementById('phpmyfaq-update-check-alert') as HTMLElement | null;
