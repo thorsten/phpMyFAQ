@@ -220,11 +220,12 @@ final class GroupController extends AbstractAdministrationController
         $changeResult = $this->user->perm->changeGroup($groupId, $groupData);
         $message = '';
         if (!$changeResult) {
-            $message = sprintf(
-                '<div class="alert alert-danger">%s %s</div>',
-                Translation::get(key: 'ad_msg_mysqlerr'),
-                $this->configuration->getDb()->error(),
-            );
+            $this->configuration->getLogger()->error('Failed to update group', [
+                'groupId' => $groupId,
+                'sqlError' => $this->configuration->getDb()->error(),
+            ]);
+
+            $message = sprintf('<div class="alert alert-danger">%s</div>', Translation::get(key: 'ad_msg_mysqlerr'));
         }
 
         if ($changeResult) {

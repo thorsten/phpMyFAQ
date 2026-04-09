@@ -94,8 +94,13 @@ final class CategoryController extends AbstractAdministrationApiController
             return $this->json(['success' => Translation::get(key: 'ad_categ_deleted')], Response::HTTP_OK);
         }
 
+        $this->configuration->getLogger()->error('Failed to delete category', [
+            'categoryId' => $data->categoryId,
+            'sqlError' => $this->configuration->getDb()->error(),
+        ]);
+
         return $this->json([
-            'error' => Translation::get(key: 'ad_adus_dberr') . $this->configuration->getDb()->error(),
+            'error' => Translation::get(key: 'ad_adus_dberr'),
         ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 

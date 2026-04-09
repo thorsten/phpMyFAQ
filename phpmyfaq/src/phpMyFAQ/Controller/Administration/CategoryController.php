@@ -299,10 +299,14 @@ final class CategoryController extends AbstractAdministrationController
                 'successMessage' => Translation::get(key: 'ad_categ_added'),
             ];
         } else {
+            $this->configuration->getLogger()->error('Failed to add category', [
+                'sqlError' => $this->configuration->getDb()->error(),
+            ]);
+
             $templateVars = [
                 ...$templateVars,
                 'isError' => true,
-                'errorMessage' => $this->configuration->getDb()->error(),
+                'errorMessage' => Translation::get(key: 'ad_msg_mysqlerr'),
             ];
         }
 
@@ -668,8 +672,13 @@ final class CategoryController extends AbstractAdministrationController
                 $templateVars = [
                     ...$templateVars,
                     'isError' => true,
-                    'errorMessage' => $this->configuration->getDb()->error(),
+                    'errorMessage' => Translation::get(key: 'ad_msg_mysqlerr'),
                 ];
+
+                $this->configuration->getLogger()->error('Failed to translate category', [
+                    'categoryId' => $categoryId,
+                    'sqlError' => $this->configuration->getDb()->error(),
+                ]);
             }
         } elseif ($category->update($categoryEntity)) {
             $categoryPermission->delete(CategoryPermission::USER, [$categoryEntity->getId()]);
@@ -724,10 +733,15 @@ final class CategoryController extends AbstractAdministrationController
                 'successMessage' => Translation::get(key: 'ad_categ_updated'),
             ];
         } else {
+            $this->configuration->getLogger()->error('Failed to update category', [
+                'categoryId' => $categoryId,
+                'sqlError' => $this->configuration->getDb()->error(),
+            ]);
+
             $templateVars = [
                 ...$templateVars,
                 'isError' => true,
-                'errorMessage' => $this->configuration->getDb()->error(),
+                'errorMessage' => Translation::get(key: 'ad_msg_mysqlerr'),
             ];
         }
 

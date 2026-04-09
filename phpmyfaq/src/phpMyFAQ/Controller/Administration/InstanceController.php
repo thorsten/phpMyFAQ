@@ -130,7 +130,12 @@ final class InstanceController extends AbstractAdministrationController
 
         $result = [];
         if (is_null($instanceEntity->getUrl())) {
-            $result = ['updateError' => $this->configuration->getDb()->error()];
+            $this->configuration->getLogger()->error('Instance URL is null during update', [
+                'instanceId' => $instanceId,
+                'sqlError' => $this->configuration->getDb()->error(),
+            ]);
+
+            $result = ['updateError' => Translation::get(key: 'ad_msg_mysqlerr')];
         }
 
         if ($updatedClient->update($instanceId, $instanceEntity)) {
@@ -143,7 +148,12 @@ final class InstanceController extends AbstractAdministrationController
         }
 
         if (!$updatedClient->update($instanceId, $instanceEntity)) {
-            $result = ['updateError' => $this->configuration->getDb()->error()];
+            $this->configuration->getLogger()->error('Failed to update instance', [
+                'instanceId' => $instanceId,
+                'sqlError' => $this->configuration->getDb()->error(),
+            ]);
+
+            $result = ['updateError' => Translation::get(key: 'ad_msg_mysqlerr')];
         }
 
         return $this->render('@admin/configuration/instances.twig', [
