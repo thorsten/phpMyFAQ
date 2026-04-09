@@ -30,7 +30,11 @@ use phpMyFAQ\User\CurrentUser;
  */
 final class QuestionService
 {
-    private Category $category;
+    public Category $category {
+        get {
+            return $this->category;
+        }
+    }
 
     private Forms $forms;
 
@@ -96,13 +100,5 @@ final class QuestionService
     public function getDefaultUserName(): string
     {
         return $this->currentUser->getUserId() > 0 ? (string) $this->currentUser->getUserData('display_name') : '';
-    }
-
-    /**
-     * Gets the category object
-     */
-    public function getCategory(): Category
-    {
-        return $this->category;
     }
 }

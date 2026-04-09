@@ -273,9 +273,7 @@ class FaqCreationServiceTest extends TestCase
      */
     public function testGetCategory(): void
     {
-        $result = $this->faqService->getCategory();
-
-        static::assertInstanceOf(\phpMyFAQ\Category::class, $result);
+        static::assertInstanceOf(\phpMyFAQ\Category::class, $this->faqService->category);
     }
 
     /**
