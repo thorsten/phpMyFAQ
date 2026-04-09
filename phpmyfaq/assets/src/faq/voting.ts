@@ -70,8 +70,9 @@ export const handleUserVoting = (): void => {
         // Save to backend
         const votingId: string = (document.getElementById('voting-id') as HTMLInputElement).value;
         const votingLanguage: string = (document.getElementById('voting-language') as HTMLInputElement).value;
+        const csrfToken: string = (document.getElementById('csrf-token-voting') as HTMLInputElement).value;
 
-        const response = await saveVoting(votingId, votingLanguage, selectedIndex);
+        const response = await saveVoting(votingId, votingLanguage, selectedIndex, csrfToken);
 
         if (response.success) {
           pushNotification(response.success);

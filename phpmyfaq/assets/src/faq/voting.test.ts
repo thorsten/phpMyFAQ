@@ -88,6 +88,7 @@ describe('handleUserVoting', () => {
         <button class="pmf-voting-star star" data-star="5" type="submit">★</button>
         <input type="hidden" id="voting-id" value="42" />
         <input type="hidden" id="voting-language" value="en" />
+        <input type="hidden" id="csrf-token-voting" value="test-csrf-token" />
       </form>
     `;
 
@@ -103,7 +104,7 @@ describe('handleUserVoting', () => {
     form.dispatchEvent(new Event('submit'));
 
     await vi.waitFor(() => {
-      expect(saveVoting).toHaveBeenCalledWith('42', 'en', 4);
+      expect(saveVoting).toHaveBeenCalledWith('42', 'en', 4, 'test-csrf-token');
     });
 
     expect(pushNotification).toHaveBeenCalledWith('Thanks for your vote!');
@@ -116,6 +117,7 @@ describe('handleUserVoting', () => {
         <button class="pmf-voting-star star" data-star="2" type="submit">★</button>
         <input type="hidden" id="voting-id" value="42" />
         <input type="hidden" id="voting-language" value="en" />
+        <input type="hidden" id="csrf-token-voting" value="test-csrf-token" />
       </form>
     `;
 
@@ -130,7 +132,7 @@ describe('handleUserVoting', () => {
     form.dispatchEvent(new Event('submit'));
 
     await vi.waitFor(() => {
-      expect(saveVoting).toHaveBeenCalledWith('42', 'en', 1);
+      expect(saveVoting).toHaveBeenCalledWith('42', 'en', 1, 'test-csrf-token');
     });
 
     expect(pushErrorNotification).toHaveBeenCalledWith('You already voted');
@@ -144,6 +146,7 @@ describe('handleUserVoting', () => {
         <button class="pmf-voting-star star" data-star="3" type="submit">★</button>
         <input type="hidden" id="voting-id" value="42" />
         <input type="hidden" id="voting-language" value="en" />
+        <input type="hidden" id="csrf-token-voting" value="test-csrf-token" />
       </form>
     `;
 
@@ -175,6 +178,7 @@ describe('handleUserVoting', () => {
         <button class="pmf-voting-star star" data-star="3" type="submit">★</button>
         <input type="hidden" id="voting-id" value="42" />
         <input type="hidden" id="voting-language" value="en" />
+        <input type="hidden" id="csrf-token-voting" value="test-csrf-token" />
       </form>
     `;
 

@@ -131,6 +131,7 @@
           <form action="#" method="post" class="form-inline pmf-voting-form">
             <input type="hidden" name="voting-id" id="voting-id" value="{{ id }}">
             <input type="hidden" name="voting-language" id="voting-language" value="{{ lang }}">
+            <input type="hidden" name="csrf-token-voting" id="csrf-token-voting" value="{{ csrfTokenVoting }}">
             <div class="pmf-stars text-center">
               <button type="submit" class="pmf-voting-star" data-star="1">
                 &#9733;

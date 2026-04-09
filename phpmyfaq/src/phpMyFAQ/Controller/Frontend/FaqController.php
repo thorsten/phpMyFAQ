@@ -400,6 +400,7 @@ final class FaqController extends AbstractFrontController
             'linkToPdf' => $faqServices->getPdfLink(),
             'msgAverageVote' => Translation::get(key: 'msgAverageVote'),
             'renderVotingResult' => $faqDisplayService->getRating($faqId),
+            'csrfTokenVoting' => Token::getInstance($this->session)->getTokenString('voting'),
             'languageUrls' => $languageUrls,
             'currentLanguage' => $faq->faqRecord['lang'],
             'msgVoteBad' => Translation::get(key: 'msgVoteBad'),

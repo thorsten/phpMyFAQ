@@ -43,7 +43,7 @@ final class VotingController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route(path: 'voting', name: 'public.voting.create', methods: ['POST'])]
+    #[Route(path: 'voting', name: 'api.public.voting.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $this->userSession->setCurrentUser($this->currentUser);
@@ -52,6 +52,12 @@ final class VotingController extends AbstractController
 
         if (!$data) {
             throw new Exception('Invalid JSON data');
+        }
+
+        $csrfToken = Filter::filterVar($data->csrfToken ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        if (!$this->verifySessionCsrfToken('voting', $csrfToken)) {
+            return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
         if (!property_exists($data, 'value')) {

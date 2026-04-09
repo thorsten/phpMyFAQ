@@ -7,6 +7,7 @@ namespace phpMyFAQ\Controller\Frontend\Api;
 use phpMyFAQ\Entity\Vote;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Rating;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\User\UserSession;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
@@ -17,6 +18,34 @@ use Symfony\Component\HttpFoundation\Response;
 #[UsesNamespace('phpMyFAQ')]
 final class VotingControllerFlowTest extends ApiControllerTestCase
 {
+    /**
+     * @return array{0: \Symfony\Component\HttpFoundation\Session\Session, 1: string}
+     */
+    private function createValidCsrfSession(): array
+    {
+        $session = $this->createSession();
+        $csrfToken = Token::getInstance($session)->getTokenString('voting');
+
+        return [$session, $csrfToken];
+    }
+
+    public function testCreateReturnsUnauthorizedForInvalidCsrfToken(): void
+    {
+        $controller = new VotingController($this->createStub(Rating::class), $this->createStub(UserSession::class));
+        $currentUser = $this->createAuthenticatedUserMock();
+        $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
+        $session = $this->createSession();
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $response = $controller->create(Request::create('/api/voting', 'POST', content: json_encode([
+            'id' => 42,
+            'value' => 3,
+            'csrfToken' => 'invalid-token',
+        ], JSON_THROW_ON_ERROR)));
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
     public function testCreateThrowsExceptionForInvalidJson(): void
     {
         $controller = new VotingController($this->createStub(Rating::class), $this->createStub(UserSession::class));
@@ -32,40 +61,48 @@ final class VotingControllerFlowTest extends ApiControllerTestCase
 
     public function testCreateThrowsExceptionWhenVoteValueIsMissing(): void
     {
+        [$session, $csrfToken] = $this->createValidCsrfSession();
+
         $controller = new VotingController($this->createStub(Rating::class), $this->createStub(UserSession::class));
         $currentUser = $this->createAuthenticatedUserMock();
         $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
-        $this->injectControllerState($controller, $currentUser);
+        $this->injectControllerState($controller, $currentUser, $session);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Missing vote value');
 
         $controller->create(Request::create('/api/voting', 'POST', content: json_encode([
             'id' => 42,
+            'csrfToken' => $csrfToken,
         ], JSON_THROW_ON_ERROR)));
     }
 
     public function testCreateThrowsExceptionWhenFaqIdIsMissing(): void
     {
+        [$session, $csrfToken] = $this->createValidCsrfSession();
+
         $controller = new VotingController($this->createStub(Rating::class), $this->createStub(UserSession::class));
         $currentUser = $this->createAuthenticatedUserMock();
         $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
-        $this->injectControllerState($controller, $currentUser);
+        $this->injectControllerState($controller, $currentUser, $session);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Missing FAQ ID');
 
         $controller->create(Request::create('/api/voting', 'POST', content: json_encode([
             'value' => 3,
+            'csrfToken' => $csrfToken,
         ], JSON_THROW_ON_ERROR)));
     }
 
     public function testCreateThrowsExceptionWhenFaqIdIsInvalid(): void
     {
+        [$session, $csrfToken] = $this->createValidCsrfSession();
+
         $controller = new VotingController($this->createStub(Rating::class), $this->createStub(UserSession::class));
         $currentUser = $this->createAuthenticatedUserMock();
         $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
-        $this->injectControllerState($controller, $currentUser);
+        $this->injectControllerState($controller, $currentUser, $session);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Missing FAQ ID');
@@ -73,15 +110,18 @@ final class VotingControllerFlowTest extends ApiControllerTestCase
         $controller->create(Request::create('/api/voting', 'POST', content: json_encode([
             'id' => 0,
             'value' => 3,
+            'csrfToken' => $csrfToken,
         ], JSON_THROW_ON_ERROR)));
     }
 
     public function testCreateThrowsExceptionWhenVoteValueIsTooLow(): void
     {
+        [$session, $csrfToken] = $this->createValidCsrfSession();
+
         $controller = new VotingController($this->createStub(Rating::class), $this->createStub(UserSession::class));
         $currentUser = $this->createAuthenticatedUserMock();
         $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
-        $this->injectControllerState($controller, $currentUser);
+        $this->injectControllerState($controller, $currentUser, $session);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Invalid vote value');
@@ -89,15 +129,18 @@ final class VotingControllerFlowTest extends ApiControllerTestCase
         $controller->create(Request::create('/api/voting', 'POST', content: json_encode([
             'id' => 42,
             'value' => 0,
+            'csrfToken' => $csrfToken,
         ], JSON_THROW_ON_ERROR)));
     }
 
     public function testCreateThrowsExceptionWhenVoteValueIsTooHigh(): void
     {
+        [$session, $csrfToken] = $this->createValidCsrfSession();
+
         $controller = new VotingController($this->createStub(Rating::class), $this->createStub(UserSession::class));
         $currentUser = $this->createAuthenticatedUserMock();
         $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
-        $this->injectControllerState($controller, $currentUser);
+        $this->injectControllerState($controller, $currentUser, $session);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Invalid vote value');
@@ -105,15 +148,18 @@ final class VotingControllerFlowTest extends ApiControllerTestCase
         $controller->create(Request::create('/api/voting', 'POST', content: json_encode([
             'id' => 42,
             'value' => 6,
+            'csrfToken' => $csrfToken,
         ], JSON_THROW_ON_ERROR)));
     }
 
     public function testCreateThrowsExceptionWhenVoteValueIsNotAnInteger(): void
     {
+        [$session, $csrfToken] = $this->createValidCsrfSession();
+
         $controller = new VotingController($this->createStub(Rating::class), $this->createStub(UserSession::class));
         $currentUser = $this->createAuthenticatedUserMock();
         $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
-        $this->injectControllerState($controller, $currentUser);
+        $this->injectControllerState($controller, $currentUser, $session);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Invalid vote value');
@@ -121,11 +167,14 @@ final class VotingControllerFlowTest extends ApiControllerTestCase
         $controller->create(Request::create('/api/voting', 'POST', content: json_encode([
             'id' => 42,
             'value' => 'not-an-integer',
+            'csrfToken' => $csrfToken,
         ], JSON_THROW_ON_ERROR)));
     }
 
     public function testCreateReturnsBadRequestWhenVotingIsNotAllowed(): void
     {
+        [$session, $csrfToken] = $this->createValidCsrfSession();
+
         $rating = $this->createMock(Rating::class);
         $rating->expects($this->once())->method('check')->with(42, '127.0.0.1')->willReturn(false);
 
@@ -136,11 +185,12 @@ final class VotingControllerFlowTest extends ApiControllerTestCase
         $controller = new VotingController($rating, $userSession);
         $currentUser = $this->createAuthenticatedUserMock();
         $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
-        $this->injectControllerState($controller, $currentUser);
+        $this->injectControllerState($controller, $currentUser, $session);
 
         $request = Request::create('/api/voting', 'POST', server: ['REMOTE_ADDR' => '127.0.0.1'], content: json_encode([
             'id' => 42,
             'value' => 5,
+            'csrfToken' => $csrfToken,
         ], JSON_THROW_ON_ERROR));
 
         $response = $controller->create($request);
@@ -151,6 +201,8 @@ final class VotingControllerFlowTest extends ApiControllerTestCase
 
     public function testCreateCreatesInitialVoteWhenNoVotesExist(): void
     {
+        [$session, $csrfToken] = $this->createValidCsrfSession();
+
         $rating = $this->createMock(Rating::class);
         $rating->expects($this->once())->method('check')->with(42, '127.0.0.1')->willReturn(true);
         $rating->expects($this->once())->method('getNumberOfVotings')->with(42)->willReturn(0);
@@ -171,11 +223,12 @@ final class VotingControllerFlowTest extends ApiControllerTestCase
         $controller = new VotingController($rating, $userSession);
         $currentUser = $this->createAuthenticatedUserMock();
         $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
-        $this->injectControllerState($controller, $currentUser);
+        $this->injectControllerState($controller, $currentUser, $session);
 
         $request = Request::create('/api/voting', 'POST', server: ['REMOTE_ADDR' => '127.0.0.1'], content: json_encode([
             'id' => 42,
             'value' => 4,
+            'csrfToken' => $csrfToken,
         ], JSON_THROW_ON_ERROR));
 
         $response = $controller->create($request);
@@ -188,6 +241,8 @@ final class VotingControllerFlowTest extends ApiControllerTestCase
 
     public function testCreateUpdatesVoteWhenVotesAlreadyExist(): void
     {
+        [$session, $csrfToken] = $this->createValidCsrfSession();
+
         $rating = $this->createMock(Rating::class);
         $rating->expects($this->once())->method('check')->with(42, '127.0.0.1')->willReturn(true);
         $rating->expects($this->once())->method('getNumberOfVotings')->with(42)->willReturn(3);
@@ -208,11 +263,12 @@ final class VotingControllerFlowTest extends ApiControllerTestCase
         $controller = new VotingController($rating, $userSession);
         $currentUser = $this->createAuthenticatedUserMock();
         $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
-        $this->injectControllerState($controller, $currentUser);
+        $this->injectControllerState($controller, $currentUser, $session);
 
         $request = Request::create('/api/voting', 'POST', server: ['REMOTE_ADDR' => '127.0.0.1'], content: json_encode([
             'id' => 42,
             'value' => 2,
+            'csrfToken' => $csrfToken,
         ], JSON_THROW_ON_ERROR));
 
         $response = $controller->create($request);
