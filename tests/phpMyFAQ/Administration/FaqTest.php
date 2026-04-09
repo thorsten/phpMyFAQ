@@ -20,9 +20,10 @@ class FaqTest extends TestCase
     {
         // Mock Configuration class
         $this->mockConfiguration = $this->createMock(Configuration::class);
-        $this->mockConfiguration
-            ->method('get')
-            ->willReturnCallback(static fn(string $key): ?string => $key === 'security.permLevel' ? 'basic' : null);
+        $this->mockConfiguration->method('get')->willReturnCallback(static fn(string $key): ?string => $key
+        === 'security.permLevel'
+            ? 'basic'
+            : null);
 
         // Mock Database class
         $this->mockDb = $this->createMock(DatabaseDriver::class);
@@ -138,7 +139,11 @@ class FaqTest extends TestCase
                 $this->assertSame('UPDATE faqdata SET sticky_order=1 WHERE id=123', $query);
                 return true;
             });
-        $this->mockDb->expects($this->once())->method('fetchObject')->with('permission-result')->willReturn((object) ['id' => 123]);
+        $this->mockDb
+            ->expects($this->once())
+            ->method('fetchObject')
+            ->with('permission-result')
+            ->willReturn((object) ['id' => 123]);
 
         $result = $this->faq->setStickyFaqOrder([123], 42);
 
@@ -164,7 +169,11 @@ class FaqTest extends TestCase
         $this->mockDb
             ->expects($this->exactly(6))
             ->method('query')
-            ->willReturnCallback(function (string $query) use (&$callCount, $expectedPermissionQueries, $expectedUpdateQueries) {
+            ->willReturnCallback(function (string $query) use (
+                &$callCount,
+                $expectedPermissionQueries,
+                $expectedUpdateQueries,
+            ) {
                 if ($callCount < 3) {
                     $this->assertStringContainsString($expectedPermissionQueries[$callCount], $query);
                     $callCount++;

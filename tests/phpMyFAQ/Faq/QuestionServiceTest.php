@@ -243,9 +243,7 @@ class QuestionServiceTest extends TestCase
      */
     public function testGetCategory(): void
     {
-        $result = $this->questionService->getCategory();
-
-        static::assertInstanceOf(\phpMyFAQ\Category::class, $result);
+        static::assertInstanceOf(\phpMyFAQ\Category::class, $this->questionService->category);
     }
 
     /**
