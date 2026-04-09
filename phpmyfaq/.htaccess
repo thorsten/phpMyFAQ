@@ -163,7 +163,7 @@ DirectoryIndex index.php
     # Setup and update pages
     RewriteCond %{REQUEST_URI} ^(.*/)setup/
     RewriteRule ^(.*/)?setup/(.*) $1setup/index.php [L,QSA]
-    RewriteRule ^update$ update/index.php [L,QSA]
+    RewriteRule ^update$ update/ [R=301,L]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^update/(.*) update/index.php [L,QSA]
     # Administration API

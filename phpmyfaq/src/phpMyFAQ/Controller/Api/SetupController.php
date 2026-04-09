@@ -31,6 +31,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class SetupController extends AbstractController
 {
+    /**
+     * Setup endpoints must be accessible without authentication,
+     * so we override the security check from AbstractController.
+     */
+    protected function isSecured(): void
+    {
+        // No-op: setup/update API endpoints do not require login
+    }
+
     public function check(Request $request): JsonResponse
     {
         if (trim($request->getContent()) === '') {
