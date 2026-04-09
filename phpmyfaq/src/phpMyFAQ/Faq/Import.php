@@ -58,7 +58,7 @@ readonly class Import
         $keywords = Filter::filterVar($record[3], FILTER_SANITIZE_SPECIAL_CHARS);
         $languageCode = Filter::filterVar($record[4], FILTER_SANITIZE_SPECIAL_CHARS);
         $author = Filter::filterVar($record[5], FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterVar($record[6], FILTER_SANITIZE_EMAIL);
+        $email = Filter::filterEmail($record[6]);
         $isActive = Filter::filterVar($record[7], FILTER_VALIDATE_BOOLEAN);
         $isSticky = Filter::filterVar($record[8], FILTER_VALIDATE_BOOLEAN);
 
