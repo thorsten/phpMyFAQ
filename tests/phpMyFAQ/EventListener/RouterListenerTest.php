@@ -86,6 +86,60 @@ class RouterListenerTest extends TestCase
         }
     }
 
+    public function testMatchesRouteWithTrailingSlash(): void
+    {
+        $routes = new RouteCollection();
+        $routes->add('test_route', new Route('/update', [
+            '_controller' => function () {
+                return new Response('OK');
+            },
+        ]));
+
+        $listener = new RouterListener($routes);
+        $request = Request::create('/update/');
+        $event = $this->createEvent($request);
+
+        $listener->onKernelRequest($event);
+
+        $this->assertEquals('test_route', $request->attributes->get('_route'));
+    }
+
+    public function testMatchesRouteWithIndexPhpSuffix(): void
+    {
+        $routes = new RouteCollection();
+        $routes->add('test_route', new Route('/update', [
+            '_controller' => function () {
+                return new Response('OK');
+            },
+        ]));
+
+        $listener = new RouterListener($routes);
+        $request = Request::create('/update/index.php');
+        $event = $this->createEvent($request);
+
+        $listener->onKernelRequest($event);
+
+        $this->assertEquals('test_route', $request->attributes->get('_route'));
+    }
+
+    public function testRootPathIsNotStripped(): void
+    {
+        $routes = new RouteCollection();
+        $routes->add('root_route', new Route('/', [
+            '_controller' => function () {
+                return new Response('OK');
+            },
+        ]));
+
+        $listener = new RouterListener($routes);
+        $request = Request::create('/');
+        $event = $this->createEvent($request);
+
+        $listener->onKernelRequest($event);
+
+        $this->assertEquals('root_route', $request->attributes->get('_route'));
+    }
+
     public function testThrowsMethodNotAllowedHttpExceptionWhenMethodIsNotAllowed(): void
     {
         $routes = new RouteCollection();

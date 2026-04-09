@@ -136,7 +136,7 @@ describe('handleUpdateInformation', () => {
 
     await handleUpdateInformation();
 
-    expect(fetch).toHaveBeenCalledWith('../api/setup/check', {
+    expect(fetch).toHaveBeenCalledWith('/api/setup/check', {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -218,6 +218,7 @@ describe('handleUpdateInformation', () => {
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: false,
+      status: 404,
       headers: { get: () => 'text/html' },
       text: () => Promise.resolve('Not Found'),
     });
@@ -225,7 +226,7 @@ describe('handleUpdateInformation', () => {
     await handleUpdateInformation();
 
     const result = document.getElementById('phpmyfaq-update-check-result');
-    expect(result?.innerText).toContain('The requested resource was not found');
+    expect(result?.innerText).toContain('The server returned an error (HTTP 404)');
     expect(result?.innerText).toContain('RewriteBase');
   });
 
@@ -280,7 +281,7 @@ describe('handleConfigBackup', () => {
 
   it('should do nothing when URL does not match step 2', async () => {
     Object.defineProperty(window, 'location', {
-      value: { href: 'http://localhost/update?step=1' },
+      value: { href: 'http://localhost/update?step=1', pathname: '/update' },
       writable: true,
     });
 
@@ -293,7 +294,7 @@ describe('handleConfigBackup', () => {
 
   it('should do nothing when installed version input is missing', async () => {
     Object.defineProperty(window, 'location', {
-      value: { href: 'http://localhost/update?step=2' },
+      value: { href: 'http://localhost/update?step=2', pathname: '/update' },
       writable: true,
     });
 
@@ -307,7 +308,7 @@ describe('handleConfigBackup', () => {
 
   it('should call backup API on step 2', async () => {
     Object.defineProperty(window, 'location', {
-      value: { href: 'http://localhost/update?step=2' },
+      value: { href: 'http://localhost/update?step=2', pathname: '/update' },
       writable: true,
     });
 
@@ -320,7 +321,7 @@ describe('handleConfigBackup', () => {
 
     await handleConfigBackup();
 
-    expect(fetch).toHaveBeenCalledWith('../api/setup/backup', {
+    expect(fetch).toHaveBeenCalledWith('/api/setup/backup', {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -332,7 +333,7 @@ describe('handleConfigBackup', () => {
 
   it('should log error on failed backup response', async () => {
     Object.defineProperty(window, 'location', {
-      value: { href: 'http://localhost/update?step=2' },
+      value: { href: 'http://localhost/update?step=2', pathname: '/update' },
       writable: true,
     });
 
@@ -351,7 +352,7 @@ describe('handleConfigBackup', () => {
 
   it('should log error on network failure', async () => {
     Object.defineProperty(window, 'location', {
-      value: { href: 'http://localhost/update?step=2' },
+      value: { href: 'http://localhost/update?step=2', pathname: '/update' },
       writable: true,
     });
 
@@ -375,7 +376,7 @@ describe('handleDatabaseUpdate', () => {
 
   it('should do nothing when URL does not match step 3', async () => {
     Object.defineProperty(window, 'location', {
-      value: { href: 'http://localhost/update?step=1' },
+      value: { href: 'http://localhost/update?step=1', pathname: '/update' },
       writable: true,
     });
 
@@ -388,7 +389,7 @@ describe('handleDatabaseUpdate', () => {
 
   it('should do nothing when installed version input is missing', async () => {
     Object.defineProperty(window, 'location', {
-      value: { href: 'http://localhost/update?step=3' },
+      value: { href: 'http://localhost/update?step=3', pathname: '/update' },
       writable: true,
     });
 
@@ -402,7 +403,7 @@ describe('handleDatabaseUpdate', () => {
 
   it('should show success on successful database update', async () => {
     Object.defineProperty(window, 'location', {
-      value: { href: 'http://localhost/update?step=3' },
+      value: { href: 'http://localhost/update?step=3', pathname: '/update' },
       writable: true,
     });
 
@@ -419,7 +420,7 @@ describe('handleDatabaseUpdate', () => {
 
     await handleDatabaseUpdate();
 
-    expect(fetch).toHaveBeenCalledWith('../api/setup/update-database', {
+    expect(fetch).toHaveBeenCalledWith('/api/setup/update-database', {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -440,7 +441,7 @@ describe('handleDatabaseUpdate', () => {
 
   it('should show error on failed database update response', async () => {
     Object.defineProperty(window, 'location', {
-      value: { href: 'http://localhost/update?step=3' },
+      value: { href: 'http://localhost/update?step=3', pathname: '/update' },
       writable: true,
     });
 
@@ -471,7 +472,7 @@ describe('handleDatabaseUpdate', () => {
 
   it('should show error alert on network failure', async () => {
     Object.defineProperty(window, 'location', {
-      value: { href: 'http://localhost/update?step=3' },
+      value: { href: 'http://localhost/update?step=3', pathname: '/update' },
       writable: true,
     });
 
@@ -494,7 +495,7 @@ describe('handleDatabaseUpdate', () => {
 
   it('should work with URL ending in /update/?step=3', async () => {
     Object.defineProperty(window, 'location', {
-      value: { href: 'http://localhost/update/?step=3' },
+      value: { href: 'http://localhost/update/?step=3', pathname: '/update/' },
       writable: true,
     });
 

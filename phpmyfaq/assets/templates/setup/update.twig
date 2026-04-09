@@ -54,13 +54,13 @@
             <span class="stepIndicator">Database updates</span>
           </div>
 
-          {{ include('@setup/update/step' ~ currentStep ~ '.twig') }}
-
           {% if checkBasicError %}
-            <div class="alert alert-danger my-5" role="alert">
+            <div class="alert alert-danger my-3" role="alert">
               {{ checkBasicError | raw }}
             </div>
           {% endif %}
+
+          {{ include('@setup/update/step' ~ currentStep ~ '.twig') }}
 
         </div>
         </section>

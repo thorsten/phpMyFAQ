@@ -659,6 +659,8 @@ your-domain.com {
     rewrite /setup /setup/index.php
     rewrite /admin /admin/index.php
     rewrite /api/* /api/index.php
+    rewrite /update /index.php
+    rewrite /update/* /index.php
     
     # Security headers
     header {
