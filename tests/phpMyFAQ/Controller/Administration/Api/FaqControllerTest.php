@@ -1230,7 +1230,7 @@ final class FaqControllerTest extends TestCase
         $this->setCsrfCookie('order-stickyfaqs', $csrfToken);
 
         $adminFaq = $this->createMock(FaqAdministration::class);
-        $adminFaq->expects($this->once())->method('setStickyFaqOrder')->with([5, 3, 1]);
+        $adminFaq->expects($this->once())->method('setStickyFaqOrder')->with([5, 3, 1], 42, [-1])->willReturn(true);
 
         $request = new Request([], [], [], [], [], [], json_encode([
             'csrf' => $csrfToken,
@@ -1245,6 +1245,34 @@ final class FaqControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertArrayHasKey('success', $payload);
+        $this->removeCsrfCookie('order-stickyfaqs');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveOrderOfStickyFaqsReturnsUnauthorizedForInaccessibleFaqs(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('order-stickyfaqs');
+        $this->setCsrfCookie('order-stickyfaqs', $csrfToken);
+
+        $adminFaq = $this->createMock(FaqAdministration::class);
+        $adminFaq->expects($this->once())->method('setStickyFaqOrder')->with([5, 3, 1], 42, [-1])->willReturn(false);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [5, 3, 1],
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createControllerWithAdminFaq($adminFaq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->saveOrderOfStickyFaqs($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
         $this->removeCsrfCookie('order-stickyfaqs');
     }
 

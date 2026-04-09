@@ -19,7 +19,10 @@ class FaqTest extends TestCase
     protected function setUp(): void
     {
         // Mock Configuration class
-        $this->mockConfiguration = $this->createStub(Configuration::class);
+        $this->mockConfiguration = $this->createMock(Configuration::class);
+        $this->mockConfiguration
+            ->method('get')
+            ->willReturnCallback(static fn(string $key): ?string => $key === 'security.permLevel' ? 'basic' : null);
 
         // Mock Database class
         $this->mockDb = $this->createMock(DatabaseDriver::class);
@@ -120,11 +123,24 @@ class FaqTest extends TestCase
 
     public function testSetStickyFaqOrderWithSingleFaq(): void
     {
-        // Expect one database query
-        $expectedQuery = 'UPDATE faqdata SET sticky_order=1 WHERE id=123';
-        $this->mockDb->expects($this->once())->method('query')->with($expectedQuery)->willReturn(true);
+        $this->mockDb
+            ->expects($this->exactly(2))
+            ->method('query')
+            ->willReturnCallback(function (string $query) {
+                static $callCount = 0;
 
-        $result = $this->faq->setStickyFaqOrder([123]);
+                if ($callCount === 0) {
+                    $this->assertStringContainsString('SELECT id FROM faqdata fd WHERE fd.id = 123', $query);
+                    $callCount++;
+                    return 'permission-result';
+                }
+
+                $this->assertSame('UPDATE faqdata SET sticky_order=1 WHERE id=123', $query);
+                return true;
+            });
+        $this->mockDb->expects($this->once())->method('fetchObject')->with('permission-result')->willReturn((object) ['id' => 123]);
+
+        $result = $this->faq->setStickyFaqOrder([123], 42);
 
         $this->assertTrue($result);
     }
@@ -133,27 +149,56 @@ class FaqTest extends TestCase
     {
         $faqIds = [456, 789, 123];
 
-        // Create a matcher to track query calls
-        $callCount = 0;
-        $expectedQueries = [
+        $expectedPermissionQueries = [
+            'SELECT id FROM faqdata fd WHERE fd.id = 456',
+            'SELECT id FROM faqdata fd WHERE fd.id = 789',
+            'SELECT id FROM faqdata fd WHERE fd.id = 123',
+        ];
+        $expectedUpdateQueries = [
             'UPDATE faqdata SET sticky_order=1 WHERE id=456',
             'UPDATE faqdata SET sticky_order=2 WHERE id=789',
             'UPDATE faqdata SET sticky_order=3 WHERE id=123',
         ];
+        $callCount = 0;
 
-        // Expect three database queries in sequence
         $this->mockDb
-            ->expects($this->exactly(3))
+            ->expects($this->exactly(6))
             ->method('query')
-            ->willReturnCallback(function ($query) use (&$callCount, $expectedQueries) {
-                $this->assertEquals($expectedQueries[$callCount], $query);
+            ->willReturnCallback(function (string $query) use (&$callCount, $expectedPermissionQueries, $expectedUpdateQueries) {
+                if ($callCount < 3) {
+                    $this->assertStringContainsString($expectedPermissionQueries[$callCount], $query);
+                    $callCount++;
+                    return 'permission-result-' . $callCount;
+                }
+
+                $this->assertEquals($expectedUpdateQueries[$callCount - 3], $query);
                 $callCount++;
                 return true;
             });
+        $this->mockDb
+            ->expects($this->exactly(3))
+            ->method('fetchObject')
+            ->willReturn((object) ['id' => 456], (object) ['id' => 789], (object) ['id' => 123]);
 
-        $result = $this->faq->setStickyFaqOrder($faqIds);
+        $result = $this->faq->setStickyFaqOrder($faqIds, 42);
 
         $this->assertTrue($result);
+    }
+
+    public function testSetStickyFaqOrderReturnsFalseWhenUserCannotEditFaq(): void
+    {
+        $this->mockDb
+            ->expects($this->once())
+            ->method('query')
+            ->willReturnCallback(function (string $query) {
+                $this->assertStringContainsString('SELECT id FROM faqdata fd WHERE fd.id = 999', $query);
+                return 'permission-result';
+            });
+        $this->mockDb->expects($this->once())->method('fetchObject')->with('permission-result')->willReturn(false);
+
+        $result = $this->faq->setStickyFaqOrder([999], 42);
+
+        $this->assertFalse($result);
     }
 
     public function testUpdateRecordFlagForStickyType(): void
