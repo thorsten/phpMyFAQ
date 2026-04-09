@@ -117,10 +117,9 @@ final class MarkdownControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertIsArray($payload);
         self::assertStringNotContainsString('<script>', $payload['success']);
-        self::assertStringContainsString(
-            '&lt;script&gt;alert(1)&lt;/script&gt;<strong>ok</strong>',
-            $payload['success'],
-        );
+        self::assertStringNotContainsString('&lt;script&gt;', $payload['success']);
+        self::assertStringContainsString('alert(1)', $payload['success']);
+        self::assertStringContainsString('<strong>ok</strong>', $payload['success']);
     }
 
     public function testRenderMarkdownWithInvalidJsonThrowsException(): void

@@ -40,11 +40,11 @@ class Filter
      */
     public static function filterInput(int $type, string $variableName, int $filter, mixed $default = null): mixed
     {
-        $return = filter_input($type, $variableName, $filter);
-
         if ($filter === FILTER_SANITIZE_SPECIAL_CHARS) {
             $return = filter_input($type, $variableName, FILTER_CALLBACK, ['options' =>
                 new Filter()->filterSanitizeString(...)]);
+        } else {
+            $return = filter_input($type, $variableName, $filter);
         }
 
         return is_null($return) || $return === false ? $default : $return;
@@ -70,13 +70,13 @@ class Filter
      */
     public static function filterVar(mixed $variable, int $filter, mixed $default = null): mixed
     {
-        $return = filter_var($variable, $filter);
-
         if ($filter === FILTER_SANITIZE_SPECIAL_CHARS) {
             $return = filter_var($variable, FILTER_CALLBACK, ['options' => new Filter()->filterSanitizeString(...)]);
+        } else {
+            $return = filter_var($variable, $filter);
         }
 
-        return $return === false ? $default : $return;
+        return $return === false || $return === null ? $default : $return;
     }
 
     /**
@@ -119,16 +119,22 @@ class Filter
 
         foreach ($urlData as $key => $urlPart) {
             $cleanKey = strip_tags($key);
-            if (is_array($urlPart)) {
-                // sanitize one level deep; http_build_query will handle arrays
-                $cleanUrlData[$cleanKey] = array_map(static fn($v): string => strip_tags((string) $v), $urlPart);
-                continue;
-            }
-
-            $cleanUrlData[$cleanKey] = strip_tags($urlPart);
+            $cleanUrlData[$cleanKey] = self::sanitizeQueryValue($urlPart);
         }
 
         return http_build_query($cleanUrlData, arg_separator: '&', encoding_type: PHP_QUERY_RFC3986);
+    }
+
+    /**
+     * Recursively sanitizes query string values by stripping tags.
+     */
+    private static function sanitizeQueryValue(mixed $value): string|array
+    {
+        if (is_array($value)) {
+            return array_map(static fn($v): string|array => self::sanitizeQueryValue($v), $value);
+        }
+
+        return strip_tags((string) $value);
     }
 
     /**
@@ -136,14 +142,9 @@ class Filter
      */
     public function filterSanitizeString(string $string): string
     {
-        $string = htmlspecialchars(
-            string: $string,
-            flags: ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401,
-            encoding: 'UTF-8',
-            double_encode: true,
-        );
-        $string = preg_replace(pattern: '/\x00|<[^>]*>?/', replacement: '', subject: $string);
-        return str_replace(["'", '"'], ['&#39;', '&#34;'], (string) $string);
+        $string = str_replace("\x00", '', $string);
+        $string = strip_tags($string);
+        return str_replace(["'", '"'], ['&apos;', '&quot;'], $string);
     }
 
     /**
@@ -159,7 +160,6 @@ class Filter
             ->allowRelativeLinks()
             ->allowRelativeMedias()
             ->allowAttribute('class', allowedElements: '*')
-            ->allowAttribute('style', allowedElements: '*')
             ->allowAttribute('id', allowedElements: '*')
             ->allowAttribute('dir', allowedElements: '*')
             ->allowAttribute('name', allowedElements: '*')
