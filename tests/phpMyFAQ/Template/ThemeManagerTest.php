@@ -89,6 +89,55 @@ class ThemeManagerTest extends TestCase
         }
     }
 
+    public function testUploadThemeRejectsAdditionalTwigTemplates(): void
+    {
+        if (!class_exists(ZipArchive::class)) {
+            $this->markTestSkipped('ZipArchive is not available in this environment.');
+        }
+
+        $archivePath = $this->createThemeArchive([
+            'tenant-theme/index.twig' => '<h1>Hello</h1>',
+            'tenant-theme/partials/footer.twig' => '<footer>Footer</footer>',
+        ]);
+
+        try {
+            $configuration = $this->createStub(Configuration::class);
+            $storage = new InMemoryStorage();
+            $manager = new ThemeManager($configuration, $storage, 'themes');
+
+            $this->expectException(RuntimeException::class);
+            $this->expectExceptionMessage('Only a static "index.twig" file is allowed');
+
+            $manager->uploadTheme('tenant-theme', $archivePath);
+        } finally {
+            @unlink($archivePath);
+        }
+    }
+
+    public function testUploadThemeRejectsTwigSyntaxInIndexTemplate(): void
+    {
+        if (!class_exists(ZipArchive::class)) {
+            $this->markTestSkipped('ZipArchive is not available in this environment.');
+        }
+
+        $archivePath = $this->createThemeArchive([
+            'tenant-theme/index.twig' => '{{ system(\'id\') }}',
+        ]);
+
+        try {
+            $configuration = $this->createStub(Configuration::class);
+            $storage = new InMemoryStorage();
+            $manager = new ThemeManager($configuration, $storage, 'themes');
+
+            $this->expectException(RuntimeException::class);
+            $this->expectExceptionMessage('must not contain Twig syntax');
+
+            $manager->uploadTheme('tenant-theme', $archivePath);
+        } finally {
+            @unlink($archivePath);
+        }
+    }
+
     public function testActivateThemePersistsTemplateSetConfig(): void
     {
         $configuration = $this->createMock(Configuration::class);

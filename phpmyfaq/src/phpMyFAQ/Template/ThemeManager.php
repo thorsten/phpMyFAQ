@@ -76,6 +76,8 @@ readonly class ThemeManager
                     throw new RuntimeException(sprintf('Failed to read archive entry "%s".', $entryName));
                 }
 
+                $this->assertAllowedTwigTemplate($normalizedEntryPath, $contents);
+
                 if ($normalizedEntryPath === 'index.twig') {
                     $containsIndexTemplate = true;
                 }
@@ -191,8 +193,31 @@ readonly class ThemeManager
         }
     }
 
+    private function assertAllowedTwigTemplate(string $path, string $contents): void
+    {
+        if (!$this->isTwigTemplate($path)) {
+            return;
+        }
+
+        if ($path !== 'index.twig') {
+            throw new RuntimeException(sprintf(
+                'Only a static "index.twig" file is allowed in uploaded themes: %s',
+                $path,
+            ));
+        }
+
+        if (preg_match('/(\{\{|\{%|\{#)/', $contents) === 1) {
+            throw new RuntimeException('Uploaded theme templates must not contain Twig syntax.');
+        }
+    }
+
     private function isAllowedFileExtension(string $path): bool
     {
         return (bool) preg_match('/\.(twig|css|js|json|png|jpg|jpeg|svg|webp|gif|woff2?|ttf|otf)$/i', $path);
+    }
+
+    private function isTwigTemplate(string $path): bool
+    {
+        return str_ends_with(strtolower($path), '.twig');
     }
 }
