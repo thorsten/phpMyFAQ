@@ -298,7 +298,7 @@ readonly class Chat
     {
         $escapedTerm = $this->configuration->getDb()->escape(mb_strtolower($searchTerm));
         $query = sprintf(
-            "SELECT u.user_id, ud.display_name, ud.email
+            "SELECT u.user_id, ud.display_name
              FROM %sfaquser u
              LEFT JOIN %sfaquserdata ud ON u.user_id = ud.user_id
              WHERE u.user_id != %d
@@ -325,7 +325,6 @@ readonly class Chat
             $users[] = [
                 'userId' => (int) $row->user_id,
                 'displayName' => $row->display_name ?? 'Unknown',
-                'email' => $row->email ?? '',
             ];
         }
 

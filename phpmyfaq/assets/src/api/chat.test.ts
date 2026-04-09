@@ -204,8 +204,8 @@ describe('Chat API', (): void => {
     const mockResponse: ChatUsersResponse = {
       success: true,
       users: [
-        { userId: 2, displayName: 'John Doe', email: 'john@example.com' },
-        { userId: 3, displayName: 'Jane Smith', email: 'jane@example.com' },
+        { userId: 2, displayName: 'John Doe' },
+        { userId: 3, displayName: 'Jane Smith' },
       ],
     };
     fetchMocker.mockResponseOnce(JSON.stringify(mockResponse));
