@@ -48,6 +48,14 @@ fi
 : "${VERSION:=${1:-$(php "${REPO_ROOT}/scripts/get-version.php")}}"
 : "${PMF_PACKAGE_FOLDER:=phpmyfaq-${VERSION}}"
 
+if command -v md5sum >/dev/null 2>&1; then
+    : "${MD5BIN:=md5sum}"
+elif command -v md5 >/dev/null 2>&1; then
+    : "${MD5BIN:=md5 -r}"
+else
+    : "${MD5BIN:=}"
+fi
+
 BUILD_DIR="${REPO_ROOT}/build"
 CHECKOUT_DIR="${BUILD_DIR}/checkout/${PMF_PACKAGE_FOLDER}"
 PACKAGE_DIR="${BUILD_DIR}/package/${PMF_PACKAGE_FOLDER}"
@@ -154,6 +162,22 @@ create_packages() {
     (cd "${PACKAGE_DIR}" && zip -rq "${ARTIFACT_ZIP}" phpmyfaq)
 }
 
+write_checksums() {
+    log "Creating checksum files"
+    ${MD5BIN} "${ARTIFACT_TAR}" > "${ARTIFACT_TAR}.md5"
+    ${MD5BIN} "${ARTIFACT_ZIP}" > "${ARTIFACT_ZIP}.md5"
+
+    if command -v sha256sum >/dev/null 2>&1; then
+        sha256sum "${ARTIFACT_TAR}" > "${ARTIFACT_TAR}.sha256"
+        sha256sum "${ARTIFACT_ZIP}" > "${ARTIFACT_ZIP}.sha256"
+    elif command -v shasum >/dev/null 2>&1; then
+        shasum -a 256 "${ARTIFACT_TAR}" > "${ARTIFACT_TAR}.sha256"
+        shasum -a 256 "${ARTIFACT_ZIP}" > "${ARTIFACT_ZIP}.sha256"
+    else
+        warn "No SHA256 tool found; skipping .sha256 files"
+    fi
+}
+
 write_manifest() {
     cat > "${ARTIFACT_MANIFEST}" <<EOF
 Release artifact layout for phpMyFAQ ${VERSION}
@@ -185,6 +209,7 @@ main() {
     generate_hash_manifest
     stage_for_packaging
     create_packages
+    write_checksums
     write_manifest
 
     log "Prepared release artifacts:"
