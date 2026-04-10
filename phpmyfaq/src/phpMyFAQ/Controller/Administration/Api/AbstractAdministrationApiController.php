@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
+use Override;
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Controller\AbstractController;
 
@@ -26,7 +27,7 @@ class AbstractAdministrationApiController extends AbstractController
 {
     protected ?AdminLog $adminLog = null;
 
-    #[\Override]
+    #[Override]
     protected function initializeFromContainer(): void
     {
         parent::initializeFromContainer();
