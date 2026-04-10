@@ -73,8 +73,9 @@ export const handleTags = (): void => {
       element.addEventListener('click', async (event: Event) => {
         const target = event.target as HTMLElement;
         const tagId = target.getAttribute('data-pmf-id') as string;
+        const csrfToken = (document.querySelector('input[name=pmf-csrf-token]') as HTMLInputElement).value;
 
-        const response = (await deleteTag(tagId)) as DeleteTagResponse;
+        const response = (await deleteTag(tagId, csrfToken)) as DeleteTagResponse;
         if (response.success) {
           pushNotification(response.success);
           const row = document.getElementById(`pmf-row-tag-id-${tagId}`) as HTMLElement;

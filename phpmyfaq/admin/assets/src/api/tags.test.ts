@@ -55,7 +55,8 @@ describe('Tags API', () => {
       );
 
       const tagId = '1';
-      await deleteTag(tagId);
+      const csrfToken = 'test-csrf';
+      await deleteTag(tagId, csrfToken);
 
       expect(global.fetch).toHaveBeenCalledWith('./api/content/tags/1', {
         method: 'DELETE',
@@ -63,6 +64,7 @@ describe('Tags API', () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ csrfToken: 'test-csrf' }),
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
       });
@@ -73,8 +75,9 @@ describe('Tags API', () => {
       global.fetch = vi.fn(() => Promise.reject(mockError));
 
       const tagId = '1';
+      const csrfToken = 'test-csrf';
 
-      await expect(deleteTag(tagId)).rejects.toThrow(mockError);
+      await expect(deleteTag(tagId, csrfToken)).rejects.toThrow(mockError);
     });
   });
 });

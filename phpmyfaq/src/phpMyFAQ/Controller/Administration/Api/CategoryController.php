@@ -107,7 +107,7 @@ final class CategoryController extends AbstractAdministrationApiController
     #[Route(path: 'category/permissions', name: 'admin.api.category.permissions', methods: ['GET'])]
     public function permissions(Request $request): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CATEGORY_EDIT);
 
         $categoryData = $request->attributes->get('categories');
 
@@ -132,7 +132,7 @@ final class CategoryController extends AbstractAdministrationApiController
     #[Route(path: 'category/translations', name: 'admin.api.category.translations', methods: ['GET'])]
     public function translations(Request $request): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CATEGORY_EDIT);
 
         $category = new Category($this->configuration, [], false);
 

@@ -305,10 +305,16 @@ final class TagControllerTest extends TestCase
         $tags = $this->createMock(Tags::class);
         $tags->expects($this->once())->method('delete')->with(1)->willReturn(true);
 
-        $controller = $this->createController($tags);
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'tags');
 
-        $response = $controller->delete(new Request([], [], ['tagId' => 1]));
+        $controller = $this->createController($tags);
+        $controller->setContainer($container);
+
+        $request = new Request([], [], ['tagId' => 1], [], [], [], json_encode(['csrfToken' => $token]));
+        $response = $controller->delete($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());

@@ -16,6 +16,7 @@ use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Client;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -142,13 +143,20 @@ final class InstanceControllerTest extends TestCase
         $client->currentInstance = (object) ['url' => 'https://old.example.com'];
         $client->updateReturnValue = true;
 
+        $container = $this->createControllerContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-instance');
+
         $controller = new InstanceController($instance, $client);
-        $controller->setContainer($this->createControllerContainer());
+        $controller->setContainer($container);
 
         $response = $controller->update(
             new Request(
                 [],
-                [],
+                [
+                    'pmf-csrf-token' => $token,
+                ],
                 [
                     'id' => '1',
                     'url' => 'https://new.example.com',
@@ -184,13 +192,20 @@ final class InstanceControllerTest extends TestCase
         $client->currentInstance = (object) ['url' => 'https://old.example.com'];
         $client->updateReturnValue = false;
 
+        $container = $this->createControllerContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-instance');
+
         $controller = new InstanceController($instance, $client);
-        $controller->setContainer($this->createControllerContainer());
+        $controller->setContainer($container);
 
         $response = $controller->update(
             new Request(
                 [],
-                [],
+                [
+                    'pmf-csrf-token' => $token,
+                ],
                 [
                     'id' => '1',
                     'url' => 'https://stable.example.com',
@@ -202,6 +217,18 @@ final class InstanceControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringNotContainsString('alert-success', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function createValidCsrfToken(Session $session, string $page): string
+    {
+        Token::resetInstanceForTests();
+        $token = Token::getInstance($session)->getTokenString($page);
+        $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;
+
+        return $token;
     }
 
     private function createSite(int $id, string $url, string $instance, string $comment): object

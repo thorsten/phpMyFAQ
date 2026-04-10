@@ -92,6 +92,10 @@ final class UserController extends AbstractAdministrationController
     #[Route(path: '/user/list', name: 'admin.user.list', methods: ['GET'])]
     public function list(Request $request): Response
     {
+        $this->userHasPermission(PermissionType::USER_ADD);
+        $this->userHasPermission(PermissionType::USER_DELETE);
+        $this->userHasPermission(PermissionType::USER_EDIT);
+
         $allUsers = $this->user->getAllUsers(false);
         $numUsers = is_countable($allUsers) ? count($allUsers) : 0;
 

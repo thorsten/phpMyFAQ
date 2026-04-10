@@ -479,7 +479,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     )]
     public function translationProvider(Request $request): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         return new Response(AdminMenuBuilder::renderTranslationProviderOptions($request->attributes->get(
             key: 'current',
@@ -493,7 +493,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     )]
     public function mailProvider(Request $request): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         return new Response(AdminMenuBuilder::renderMailProviderOptions($request->attributes->get(key: 'current')));
     }
@@ -505,7 +505,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     )]
     public function cacheAdapter(Request $request): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         return new Response(AdminMenuBuilder::renderCacheAdapterOptions($request->attributes->get(key: 'current')));
     }

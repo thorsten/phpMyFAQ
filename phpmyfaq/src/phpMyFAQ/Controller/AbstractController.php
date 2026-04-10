@@ -255,7 +255,7 @@ abstract class AbstractController
     /**
      * @throws UnauthorizedHttpException
      */
-    protected function userIsAuthenticated(): void
+    public function userIsAuthenticated(): void
     {
         if (!$this->currentUser->isLoggedIn()) {
             throw new UnauthorizedHttpException(challenge: 'User is not authenticated.');
