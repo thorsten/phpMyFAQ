@@ -64,6 +64,9 @@ ARTIFACT_TAR="${RELEASE_DIR}/phpMyFAQ-${VERSION}.tar.gz"
 ARTIFACT_ZIP="${RELEASE_DIR}/phpMyFAQ-${VERSION}.zip"
 HASH_MANIFEST="${RELEASE_DIR}/hashes-${VERSION}.json"
 ARTIFACT_MANIFEST="${RELEASE_DIR}/ARTIFACTS.txt"
+SBOM_PHP="${RELEASE_DIR}/phpMyFAQ-${VERSION}.php.sbom.json"
+SBOM_JS="${RELEASE_DIR}/phpMyFAQ-${VERSION}.js.sbom.json"
+SBOM_COMBINED="${RELEASE_DIR}/phpMyFAQ-${VERSION}.sbom.json"
 TCPDF_PATH="${CHECKOUT_DIR}/phpmyfaq/src/libs/tecnickcom/tcpdf"
 
 log() {
@@ -162,6 +165,11 @@ create_packages() {
     (cd "${PACKAGE_DIR}" && zip -rq "${ARTIFACT_ZIP}" phpmyfaq)
 }
 
+generate_sboms() {
+    log "Generating CycloneDX SBOMs"
+    VERSION="${VERSION}" "${SCRIPT_DIR}/generate-sbom.sh" "${CHECKOUT_DIR}" "${RELEASE_DIR}"
+}
+
 write_checksums() {
     log "Creating checksum files"
     ${MD5BIN} "${ARTIFACT_TAR}" > "${ARTIFACT_TAR}.md5"
@@ -189,12 +197,18 @@ Artifacts:
 - $(basename "${ARTIFACT_ZIP}")
 - $(basename "${ARTIFACT_TAR}")
 - $(basename "${HASH_MANIFEST}")
+- $(basename "${SBOM_PHP}")
+- $(basename "${SBOM_JS}")
+- $(basename "${SBOM_COMBINED}")
 
 Reserved for signing phase:
 - SHA256SUMS
 - SHA256SUMS.asc
 - $(basename "${ARTIFACT_ZIP}").asc
 - $(basename "${ARTIFACT_TAR}").asc
+- $(basename "${SBOM_PHP}").asc
+- $(basename "${SBOM_JS}").asc
+- $(basename "${SBOM_COMBINED}").asc
 EOF
 }
 
@@ -209,11 +223,19 @@ main() {
     generate_hash_manifest
     stage_for_packaging
     create_packages
+    generate_sboms
     write_checksums
     write_manifest
 
     log "Prepared release artifacts:"
-    printf ' - %s\n' "${ARTIFACT_TAR}" "${ARTIFACT_ZIP}" "${HASH_MANIFEST}" "${ARTIFACT_MANIFEST}"
+    printf ' - %s\n' \
+        "${ARTIFACT_TAR}" \
+        "${ARTIFACT_ZIP}" \
+        "${HASH_MANIFEST}" \
+        "${SBOM_PHP}" \
+        "${SBOM_JS}" \
+        "${SBOM_COMBINED}" \
+        "${ARTIFACT_MANIFEST}"
 }
 
 main

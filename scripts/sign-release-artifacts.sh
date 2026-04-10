@@ -43,10 +43,16 @@ fi
 RELEASE_DIR="${REPO_ROOT}/build/release/${VERSION}"
 ZIP_FILE="${RELEASE_DIR}/phpMyFAQ-${VERSION}.zip"
 TAR_FILE="${RELEASE_DIR}/phpMyFAQ-${VERSION}.tar.gz"
+SBOM_PHP_FILE="${RELEASE_DIR}/phpMyFAQ-${VERSION}.php.sbom.json"
+SBOM_JS_FILE="${RELEASE_DIR}/phpMyFAQ-${VERSION}.js.sbom.json"
+SBOM_COMBINED_FILE="${RELEASE_DIR}/phpMyFAQ-${VERSION}.sbom.json"
 SHA256_FILE="${RELEASE_DIR}/SHA256SUMS"
 SHA256_ASC_FILE="${RELEASE_DIR}/SHA256SUMS.asc"
 ZIP_ASC_FILE="${ZIP_FILE}.asc"
 TAR_ASC_FILE="${TAR_FILE}.asc"
+SBOM_PHP_ASC_FILE="${SBOM_PHP_FILE}.asc"
+SBOM_JS_ASC_FILE="${SBOM_JS_FILE}.asc"
+SBOM_COMBINED_ASC_FILE="${SBOM_COMBINED_FILE}.asc"
 ARTIFACT_MANIFEST="${RELEASE_DIR}/ARTIFACTS.txt"
 
 log() {
@@ -83,6 +89,9 @@ check_prerequisites() {
     [ -d "${RELEASE_DIR}" ] || fail "Release directory ${RELEASE_DIR} does not exist"
     [ -f "${ZIP_FILE}" ] || fail "Missing artifact ${ZIP_FILE}"
     [ -f "${TAR_FILE}" ] || fail "Missing artifact ${TAR_FILE}"
+    [ -f "${SBOM_PHP_FILE}" ] || fail "Missing SBOM ${SBOM_PHP_FILE}"
+    [ -f "${SBOM_JS_FILE}" ] || fail "Missing SBOM ${SBOM_JS_FILE}"
+    [ -f "${SBOM_COMBINED_FILE}" ] || fail "Missing SBOM ${SBOM_COMBINED_FILE}"
 
     if [ "${SKIP_GPG:-0}" != "1" ]; then
         require_command gpg
@@ -97,6 +106,9 @@ generate_checksums() {
         cd "${RELEASE_DIR}"
         ${SHA256_CMD} "$(basename "${ZIP_FILE}")" > "${SHA256_FILE}"
         ${SHA256_CMD} "$(basename "${TAR_FILE}")" >> "${SHA256_FILE}"
+        ${SHA256_CMD} "$(basename "${SBOM_PHP_FILE}")" >> "${SHA256_FILE}"
+        ${SHA256_CMD} "$(basename "${SBOM_JS_FILE}")" >> "${SHA256_FILE}"
+        ${SHA256_CMD} "$(basename "${SBOM_COMBINED_FILE}")" >> "${SHA256_FILE}"
     )
 }
 
@@ -125,7 +137,13 @@ sign_artifacts() {
     fi
 
     log "Signing SHA256SUMS and release artifacts"
-    rm -f "${SHA256_ASC_FILE}" "${ZIP_ASC_FILE}" "${TAR_ASC_FILE}"
+    rm -f \
+        "${SHA256_ASC_FILE}" \
+        "${ZIP_ASC_FILE}" \
+        "${TAR_ASC_FILE}" \
+        "${SBOM_PHP_ASC_FILE}" \
+        "${SBOM_JS_ASC_FILE}" \
+        "${SBOM_COMBINED_ASC_FILE}"
 
     GPG_ARGS="$(gpg_base_args)"
     GPG_USER_ARGS="$(gpg_local_user_args)"
@@ -136,6 +154,12 @@ sign_artifacts() {
     gpg ${GPG_ARGS} ${GPG_USER_ARGS} --armor --detach-sign --output "${ZIP_ASC_FILE}" "${ZIP_FILE}"
     # shellcheck disable=SC2086
     gpg ${GPG_ARGS} ${GPG_USER_ARGS} --armor --detach-sign --output "${TAR_ASC_FILE}" "${TAR_FILE}"
+    # shellcheck disable=SC2086
+    gpg ${GPG_ARGS} ${GPG_USER_ARGS} --armor --detach-sign --output "${SBOM_PHP_ASC_FILE}" "${SBOM_PHP_FILE}"
+    # shellcheck disable=SC2086
+    gpg ${GPG_ARGS} ${GPG_USER_ARGS} --armor --detach-sign --output "${SBOM_JS_ASC_FILE}" "${SBOM_JS_FILE}"
+    # shellcheck disable=SC2086
+    gpg ${GPG_ARGS} ${GPG_USER_ARGS} --armor --detach-sign --output "${SBOM_COMBINED_ASC_FILE}" "${SBOM_COMBINED_FILE}"
 }
 
 verify_outputs() {
@@ -157,6 +181,9 @@ verify_outputs() {
     gpg --verify "${SHA256_ASC_FILE}" "${SHA256_FILE}"
     gpg --verify "${ZIP_ASC_FILE}" "${ZIP_FILE}"
     gpg --verify "${TAR_ASC_FILE}" "${TAR_FILE}"
+    gpg --verify "${SBOM_PHP_ASC_FILE}" "${SBOM_PHP_FILE}"
+    gpg --verify "${SBOM_JS_ASC_FILE}" "${SBOM_JS_FILE}"
+    gpg --verify "${SBOM_COMBINED_ASC_FILE}" "${SBOM_COMBINED_FILE}"
 }
 
 update_manifest() {
@@ -174,6 +201,9 @@ Artifacts:
 - $(basename "${ZIP_FILE}")
 - $(basename "${TAR_FILE}")
 - $(basename "${SHA256_FILE}")
+- $(basename "${SBOM_PHP_FILE}")
+- $(basename "${SBOM_JS_FILE}")
+- $(basename "${SBOM_COMBINED_FILE}")
 EOF
 
     if [ -f "${RELEASE_DIR}/hashes-${VERSION}.json" ]; then
@@ -189,6 +219,9 @@ EOF
 - $(basename "${SHA256_ASC_FILE}")
 - $(basename "${ZIP_ASC_FILE}")
 - $(basename "${TAR_ASC_FILE}")
+- $(basename "${SBOM_PHP_ASC_FILE}")
+- $(basename "${SBOM_JS_ASC_FILE}")
+- $(basename "${SBOM_COMBINED_ASC_FILE}")
 EOF
     fi
 }
@@ -204,7 +237,13 @@ main() {
     printf ' - %s\n' "${SHA256_FILE}"
 
     if [ "${SKIP_GPG:-0}" != "1" ]; then
-        printf ' - %s\n' "${SHA256_ASC_FILE}" "${ZIP_ASC_FILE}" "${TAR_ASC_FILE}"
+        printf ' - %s\n' \
+            "${SHA256_ASC_FILE}" \
+            "${ZIP_ASC_FILE}" \
+            "${TAR_ASC_FILE}" \
+            "${SBOM_PHP_ASC_FILE}" \
+            "${SBOM_JS_ASC_FILE}" \
+            "${SBOM_COMBINED_ASC_FILE}"
     fi
 }
 
