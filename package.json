@@ -37,6 +37,7 @@
     "build:prod": "vite build",
     "release:artifacts": "./scripts/prepare-release-artifacts.sh",
     "release:sign": "./scripts/sign-release-artifacts.sh",
+    "sbom": "./scripts/generate-sbom.sh",
     "eslint": "eslint .",
     "lint": "prettier --check .",
     "lint:fix": "prettier --write .",
