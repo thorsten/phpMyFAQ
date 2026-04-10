@@ -27,13 +27,14 @@ export const fetchTags = async (searchString: string): Promise<unknown> => {
   });
 };
 
-export const deleteTag = async (tagId: string): Promise<unknown> => {
+export const deleteTag = async (tagId: string, csrfToken: string): Promise<unknown> => {
   return await fetchJson(`./api/content/tags/${tagId}`, {
     method: 'DELETE',
     cache: 'no-cache',
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({ csrfToken: csrfToken }),
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   });

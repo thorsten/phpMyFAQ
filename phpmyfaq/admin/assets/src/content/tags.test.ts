@@ -85,6 +85,7 @@ describe('handleTags', () => {
   describe('delete button', () => {
     const setupDeleteDom = () => {
       document.body.innerHTML = `
+        <input name="pmf-csrf-token" value="test-csrf" />
         <table>
           <tbody>
             <tr id="pmf-row-tag-id-1">
@@ -112,7 +113,7 @@ describe('handleTags', () => {
 
       await new Promise((resolve) => setTimeout(resolve, 10));
 
-      expect(deleteTag).toHaveBeenCalledWith('1');
+      expect(deleteTag).toHaveBeenCalledWith('1', 'test-csrf');
       expect(pushNotification).toHaveBeenCalledWith('Tag deleted successfully');
 
       const row = document.getElementById('pmf-row-tag-id-1');
@@ -133,7 +134,7 @@ describe('handleTags', () => {
 
       await new Promise((resolve) => setTimeout(resolve, 10));
 
-      expect(deleteTag).toHaveBeenCalledWith('1');
+      expect(deleteTag).toHaveBeenCalledWith('1', 'test-csrf');
       expect(consoleErrorSpy).toHaveBeenCalledWith('Network response was not ok:', 'Tag deletion failed');
 
       // Row should still be present

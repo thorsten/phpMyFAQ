@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Plugin\PluginManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,6 +43,8 @@ final class PluginController extends AbstractAdministrationController
     #[Route(path: '/plugins', name: 'admin.configuration.plugins', methods: ['GET'])]
     public function index(Request $request): Response
     {
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+
         $pluginManager = $this->pluginManager;
         $pluginManager->loadPlugins();
 

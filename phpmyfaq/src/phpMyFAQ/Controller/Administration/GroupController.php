@@ -205,6 +205,11 @@ final class GroupController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::GROUP_EDIT);
 
+        $csrfToken = Filter::filterVar($request->request->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
+        if (!Token::getInstance($this->session)->verifyToken('update-group', $csrfToken)) {
+            throw new UnauthorizedHttpException('Invalid CSRF token');
+        }
+
         $groupId = (int) Filter::filterVar($request->request->get('group_id'), FILTER_VALIDATE_INT);
 
         $groupData = [];
@@ -257,6 +262,11 @@ final class GroupController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::GROUP_EDIT);
 
+        $csrfToken = Filter::filterVar($request->request->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
+        if (!Token::getInstance($this->session)->verifyToken('update-group-members', $csrfToken)) {
+            throw new UnauthorizedHttpException('Invalid CSRF token');
+        }
+
         $groupId = (int) Filter::filterVar($request->request->get('group_id'), FILTER_VALIDATE_INT);
         $groupMembers = $request->request->all()['group_members'];
 
@@ -300,6 +310,11 @@ final class GroupController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::GROUP_EDIT);
 
+        $csrfToken = Filter::filterVar($request->request->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
+        if (!Token::getInstance($this->session)->verifyToken('update-group-permissions', $csrfToken)) {
+            throw new UnauthorizedHttpException('Invalid CSRF token');
+        }
+
         $groupId = (int) Filter::filterVar($request->request->get('group_id'), FILTER_VALIDATE_INT);
         $groupPermissions = $request->request->all()['group_rights'];
 
@@ -341,6 +356,11 @@ final class GroupController extends AbstractAdministrationController
     {
         return [
             'rightData' => $this->user->perm->getAllRightsData(),
+            'csrfTokenUpdateGroup' => Token::getInstance($this->session)->getTokenString('update-group'),
+            'csrfTokenUpdateGroupMembers' => Token::getInstance($this->session)->getTokenString('update-group-members'),
+            'csrfTokenUpdateGroupPermissions' => Token::getInstance($this->session)->getTokenString(
+                'update-group-permissions',
+            ),
         ];
     }
 }

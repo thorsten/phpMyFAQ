@@ -117,7 +117,7 @@ final class NewsController extends AbstractAdministrationApiController
     #[Route(path: 'news/update', name: 'admin.api.news.update', methods: ['PUT'])]
     public function update(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::NEWS_DELETE);
+        $this->userHasPermission(PermissionType::NEWS_EDIT);
 
         $data = json_decode($request->getContent());
 

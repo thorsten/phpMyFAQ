@@ -222,8 +222,13 @@ final class GroupControllerTest extends TestCase
      */
     public function testUpdateReturnsResponse(): void
     {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-group');
+
         $controller = $this->createController();
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $controller->setContainer($container);
 
         $response = $controller->update(
             new Request([], [
@@ -231,6 +236,7 @@ final class GroupControllerTest extends TestCase
                 'name' => 'Updated Group',
                 'description' => 'Updated Description',
                 'auto_join' => 'n',
+                'pmf-csrf-token' => $token,
             ]),
         );
 
@@ -242,13 +248,19 @@ final class GroupControllerTest extends TestCase
      */
     public function testUpdateMembersReturnsResponse(): void
     {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-group-members');
+
         $controller = $this->createController();
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $controller->setContainer($container);
 
         $response = $controller->updateMembers(
             new Request([], [
                 'group_id' => 1,
                 'group_members' => [1, 2],
+                'pmf-csrf-token' => $token,
             ]),
         );
 
@@ -260,13 +272,19 @@ final class GroupControllerTest extends TestCase
      */
     public function testUpdatePermissionsReturnsResponse(): void
     {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-group-permissions');
+
         $controller = $this->createController();
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $controller->setContainer($container);
 
         $response = $controller->updatePermissions(
             new Request([], [
                 'group_id' => 1,
                 'group_rights' => [1, 2],
+                'pmf-csrf-token' => $token,
             ]),
         );
 

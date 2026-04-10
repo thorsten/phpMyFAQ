@@ -9,6 +9,7 @@
     </h1>
   </div>
   <form action="./instance/update" method="post" accept-charset="utf-8">
+    <input type="hidden" name="pmf-csrf-token" value="{{ csrfTokenUpdateInstance }}"/>
     <input type="hidden" name="id" value="{{ instance.id }}"/>
     <div class="row mb-2">
       <label for="url" class="col-lg-2 col-form-label">{{ ad_instance_url }}:</label>

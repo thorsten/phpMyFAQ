@@ -23,11 +23,14 @@ declare(strict_types=1);
 namespace phpMyFAQ\EventListener;
 
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Controller\Administration\SkipsAuthenticationCheck;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
 readonly class ControllerContainerListener
 {
+    private const string ADMIN_NAMESPACE_PREFIX = 'phpMyFAQ\\Controller\\Administration\\';
+
     public function __construct(
         private ContainerInterface $container,
     ) {
@@ -41,8 +44,29 @@ readonly class ControllerContainerListener
             $controller = $controller[0];
         }
 
-        if ($controller instanceof AbstractController) {
-            $controller->setContainer($this->container);
+        if (!$controller instanceof AbstractController) {
+            return;
         }
+
+        $controller->setContainer($this->container);
+
+        if ($this->requiresAdminAuthentication($controller)) {
+            $controller->userIsAuthenticated();
+        }
+    }
+
+    /**
+     * Defense-in-depth: every controller in the Administration namespace must
+     * have an authenticated user, except controllers that explicitly opt out by
+     * implementing SkipsAuthenticationCheck (e.g. AuthenticationController,
+     * which handles login/logout/token endpoints).
+     */
+    private function requiresAdminAuthentication(AbstractController $controller): bool
+    {
+        if ($controller instanceof SkipsAuthenticationCheck) {
+            return false;
+        }
+
+        return str_starts_with($controller::class, self::ADMIN_NAMESPACE_PREFIX);
     }
 }

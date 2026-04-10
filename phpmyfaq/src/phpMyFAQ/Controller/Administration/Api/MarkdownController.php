@@ -19,30 +19,34 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
+use Exception;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Exception\CommonMarkException;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
 use League\CommonMark\MarkdownConverter;
-use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class MarkdownController extends AbstractController
+final class MarkdownController extends AbstractAdministrationApiController
 {
     /**
      * @throws CommonMarkException
+     * @throws Exception
      */
     #[Route(path: 'content/markdown', name: 'admin.api.content.markdown', methods: ['POST'])]
     public function renderMarkdown(Request $request): JsonResponse
     {
+        $this->userHasPermission(PermissionType::FAQ_EDIT);
+
         $data = json_decode($request->getContent());
 
         if (!is_object($data) || !property_exists($data, 'text')) {
-            throw new \Exception('Invalid JSON data');
+            throw new Exception('Invalid JSON data');
         }
 
         $answer = Filter::filterVar($data->text, FILTER_SANITIZE_SPECIAL_CHARS);
