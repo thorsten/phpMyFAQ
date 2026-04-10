@@ -25,6 +25,7 @@ use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
 use League\CommonMark\MarkdownConverter;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,6 +40,8 @@ final class MarkdownController extends AbstractController
     #[Route(path: 'admin/api/content/markdown')]
     public function renderMarkdown(Request $request): JsonResponse
     {
+        $this->userHasPermission(PermissionType::FAQ_EDIT);
+
         $data = json_decode($request->getContent());
 
         $answer = Filter::filterVar($data->text, FILTER_SANITIZE_SPECIAL_CHARS);

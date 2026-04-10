@@ -116,6 +116,12 @@ final class TagController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
+        $data = json_decode($request->getContent());
+
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('tags', $data->csrfToken ?? '')) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
+
         $tagId = (int) Filter::filterVar($request->attributes->get('tagId'), FILTER_VALIDATE_INT);
 
         if ($this->container->get(id: 'phpmyfaq.tags')->delete($tagId)) {

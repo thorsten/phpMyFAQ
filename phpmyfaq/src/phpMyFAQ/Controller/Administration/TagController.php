@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,7 +38,7 @@ final class TagController extends AbstractAdministrationController
     #[Route(path: '/tags', name: 'admin.tags', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::FAQ_EDIT);
 
         $tagData = $this->container->get(id: 'phpmyfaq.tags')->getAllTags();
 

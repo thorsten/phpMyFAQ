@@ -94,7 +94,7 @@ final class CategoryController extends AbstractController
     #[Route(path: 'admin/api/category/permissions', name: 'admin.api.category.permissions', methods: ['GET'])]
     public function permissions(Request $request): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CATEGORY_EDIT);
 
         $categoryPermission = $this->container->get(id: 'phpmyfaq.category.permission');
 
@@ -119,7 +119,7 @@ final class CategoryController extends AbstractController
     #[Route(path: 'admin/api/category/translations', name: 'admin.api.category.translations', methods: ['GET'])]
     public function translations(Request $request): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CATEGORY_EDIT);
 
         $category = new Category($this->configuration, [], false);
 

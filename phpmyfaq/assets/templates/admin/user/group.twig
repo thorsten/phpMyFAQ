@@ -46,6 +46,7 @@
           <i class="bi bi-info-circle" aria-hidden="true"></i> {{ 'ad_group_details' | translate }}
         </h5>
         <form action="./group/update" method="post">
+          <input type="hidden" name="pmf-csrf-token" value="{{ csrfTokenUpdateGroup }}">
           <input id="update_group_id" type="hidden" name="group_id" value="0">
           <div class="card-body">
             <div class="row mb-2">
@@ -91,6 +92,7 @@
 
     <div class="col-lg-4" id="groupMemberships">
       <form id="group_membership" name="group_membership" method="post" action="./group/update/members">
+        <input type="hidden" name="pmf-csrf-token" value="{{ csrfTokenUpdateGroupMembers }}">
         <input id="update_member_group_id" type="hidden" name="group_id" value="0">
         <div class="card shadow mb-4">
           <h5 class="card-header py-3">
@@ -170,6 +172,7 @@
 
       <div id="groupRights" class="card shadow mb-4">
         <form id="rightsForm" action="./group/update/permissions" method="post">
+          <input type="hidden" name="pmf-csrf-token" value="{{ csrfTokenUpdateGroupPermissions }}">
           <input id="rights_group_id" type="hidden" name="group_id" value="0">
           <h5 class="card-header py-3" id="user_rights_legend">
             <i aria-hidden="true" class="bi bi-lock"></i> {{ 'ad_group_rights' | translate }}

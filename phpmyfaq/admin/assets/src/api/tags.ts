@@ -32,13 +32,14 @@ export const fetchTags = async (searchString: string): Promise<TagResponse[]> =>
   return await response.json();
 };
 
-export const deleteTag = async (tagId: string): Promise<{ success?: string; error?: string }> => {
+export const deleteTag = async (tagId: string, csrfToken: string): Promise<{ success?: string; error?: string }> => {
   const response = await fetch(`./api/content/tags/${tagId}`, {
     method: 'DELETE',
     cache: 'no-cache',
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({ csrfToken: csrfToken }),
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   });

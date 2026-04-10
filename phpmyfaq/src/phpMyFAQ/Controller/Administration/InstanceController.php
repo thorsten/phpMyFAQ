@@ -28,6 +28,7 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 
@@ -77,6 +78,9 @@ final class InstanceController extends AbstractAdministrationController
             'ad_instance_config' => Translation::get(key: 'ad_instance_config'),
             'ad_entry_back' => Translation::get(key: 'ad_entry_back'),
             'instance' => $instanceData,
+            'csrfTokenUpdateInstance' => Token::getInstance($this->container->get(id: 'session'))->getTokenString(
+                'update-instance',
+            ),
         ]);
     }
 
@@ -89,6 +93,11 @@ final class InstanceController extends AbstractAdministrationController
     public function update(Request $request): Response
     {
         $this->userHasPermission(PermissionType::INSTANCE_EDIT);
+
+        $csrfToken = Filter::filterVar($request->request->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('update-instance', $csrfToken)) {
+            throw new UnauthorizedHttpException('Invalid CSRF token');
+        }
 
         $instanceId = (int) Filter::filterVar($request->attributes->get('id'), FILTER_VALIDATE_INT);
 

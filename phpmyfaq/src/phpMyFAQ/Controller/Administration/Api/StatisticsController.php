@@ -40,7 +40,7 @@ final class StatisticsController extends AbstractController
     #[Route(path: './admin/api/statistics/admin-log', methods: ['DELETE'])]
     public function deleteAdminLog(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
+        $this->userHasPermission(PermissionType::STATISTICS_ADMINLOG);
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
