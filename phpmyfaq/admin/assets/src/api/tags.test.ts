@@ -12,7 +12,7 @@ describe('Tags API', () => {
         { id: '1', name: 'Tag1' },
         { id: '2', name: 'Tag2' },
       ];
-      global.fetch = vi.fn(() =>
+      globalThis.fetch = vi.fn(() =>
         Promise.resolve({
           ok: true,
           json: () => Promise.resolve(mockResponse),
@@ -23,7 +23,7 @@ describe('Tags API', () => {
       const result = await fetchTags(searchString);
 
       expect(result).toEqual(mockResponse);
-      expect(global.fetch).toHaveBeenCalledWith('./api/content/tags?search=Tag', {
+      expect(globalThis.fetch).toHaveBeenCalledWith('./api/content/tags?search=Tag', {
         method: 'GET',
         cache: 'no-cache',
         headers: {
@@ -36,7 +36,7 @@ describe('Tags API', () => {
 
     it('should throw an error if fetch fails', async () => {
       const mockError = new Error('Fetch failed');
-      global.fetch = vi.fn(() => Promise.reject(mockError));
+      globalThis.fetch = vi.fn(() => Promise.reject(mockError));
 
       const searchString = 'Tag';
 
@@ -47,7 +47,7 @@ describe('Tags API', () => {
   describe('deleteTag', () => {
     it('should delete tag and return JSON response if successful', async () => {
       const mockResponse = { success: true, message: 'Tag deleted' };
-      global.fetch = vi.fn(() =>
+      globalThis.fetch = vi.fn(() =>
         Promise.resolve({
           ok: true,
           json: () => Promise.resolve(mockResponse),
@@ -58,7 +58,7 @@ describe('Tags API', () => {
       const csrfToken = 'test-csrf';
       await deleteTag(tagId, csrfToken);
 
-      expect(global.fetch).toHaveBeenCalledWith('./api/content/tags/1', {
+      expect(globalThis.fetch).toHaveBeenCalledWith('./api/content/tags/1', {
         method: 'DELETE',
         cache: 'no-cache',
         headers: {
@@ -72,7 +72,7 @@ describe('Tags API', () => {
 
     it('should throw an error if fetch fails', async () => {
       const mockError = new Error('Fetch failed');
-      global.fetch = vi.fn(() => Promise.reject(mockError));
+      globalThis.fetch = vi.fn(() => Promise.reject(mockError));
 
       const tagId = '1';
       const csrfToken = 'test-csrf';
