@@ -27,6 +27,7 @@ use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Administration\RecentUsers;
 use phpMyFAQ\Administration\RatingStatistics;
 use phpMyFAQ\Administration\Session as AdminSession;
+use phpMyFAQ\Api\MetaService;
 use phpMyFAQ\Attachment\AttachmentCollection;
 use phpMyFAQ\Auth as LegacyAuth;
 use phpMyFAQ\Auth\ApiKeyAuthenticator;
@@ -93,6 +94,7 @@ use phpMyFAQ\Controller\Administration\SystemInformationController as AdminSyste
 use phpMyFAQ\Controller\Administration\TagController as AdminTagController;
 use phpMyFAQ\Controller\Administration\UserController as AdminUserController;
 use phpMyFAQ\Controller\Api\CategoryController as ApiCategoryController;
+use phpMyFAQ\Controller\Api\MetaController as ApiMetaController;
 use phpMyFAQ\Controller\Api\OAuth2Controller;
 use phpMyFAQ\Controller\Api\CommentController as ApiCommentController;
 use phpMyFAQ\Controller\Api\FaqController as ApiFaqController;
@@ -239,6 +241,10 @@ return static function (ContainerConfigurator $container): void {
     $services->set('phpmyfaq.admin.api', RemoteApiClient::class)->args([
         service('phpmyfaq.configuration'),
         service('phpmyfaq.system'),
+    ]);
+
+    $services->set('phpmyfaq.api.meta', MetaService::class)->args([
+        service('phpmyfaq.configuration'),
     ]);
 
     $services->set('phpmyfaq.admin.admin-log', AdminLog::class)->args([
@@ -740,6 +746,9 @@ return static function (ContainerConfigurator $container): void {
     $services->set(ApiGlossaryController::class, ApiGlossaryController::class)->args([
         service('phpmyfaq.glossary'),
         service('phpmyfaq.language'),
+    ]);
+    $services->set(ApiMetaController::class, ApiMetaController::class)->args([
+        service('phpmyfaq.api.meta'),
     ]);
     $services->set(ApiOpenQuestionController::class, ApiOpenQuestionController::class)->args([
         service('phpmyfaq.question'),
