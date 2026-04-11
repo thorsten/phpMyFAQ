@@ -378,7 +378,6 @@ paths:
               - id_comment
               - id
               - usr
-              - email
               - datum
         - name: order
           in: query
@@ -401,7 +400,7 @@ paths:
           content:
             application/json:
               schema: {}
-              example: "{\n            \"success\": true,\n            \"data\": [\n                {\n                    \"id\": 2,\n                    \"recordId\": 142,\n                    \"categoryId\": null,\n                    \"type\": \"faq\",\n                    \"username\": \"phpMyFAQ User\",\n                    \"email\": \"user@example.org\",\n                    \"comment\": \"Foo! Bar?\",\n                    \"date\": \"2019-12-24T12:24:57+0100\",\n                    \"helped\": null\n                }\n            ],\n            \"meta\": {\n                \"pagination\": {\n                    \"total\": 50,\n                    \"count\": 25,\n                    \"per_page\": 25,\n                    \"current_page\": 1,\n                    \"total_pages\": 2,\n                    \"links\": {\n                        \"first\": \"/api/v3.2/comments/142?page=1&per_page=25\",\n                        \"last\": \"/api/v3.2/comments/142?page=2&per_page=25\",\n                        \"prev\": null,\n                        \"next\": \"/api/v3.2/comments/142?page=2&per_page=25\"\n                    }\n                },\n                \"sorting\": {\n                    \"field\": \"id_comment\",\n                    \"order\": \"asc\"\n                }\n            }\n        }"
+              example: "{\n            \"success\": true,\n            \"data\": [\n                {\n                    \"id\": 2,\n                    \"recordId\": 142,\n                    \"categoryId\": null,\n                    \"type\": \"faq\",\n                    \"username\": \"phpMyFAQ User\",\n                    \"comment\": \"Foo! Bar?\",\n                    \"date\": \"2019-12-24T12:24:57+0100\",\n                    \"helped\": null\n                }\n            ],\n            \"meta\": {\n                \"pagination\": {\n                    \"total\": 50,\n                    \"count\": 25,\n                    \"per_page\": 25,\n                    \"current_page\": 1,\n                    \"total_pages\": 2,\n                    \"links\": {\n                        \"first\": \"/api/v3.2/comments/142?page=1&per_page=25\",\n                        \"last\": \"/api/v3.2/comments/142?page=2&per_page=25\",\n                        \"prev\": null,\n                        \"next\": \"/api/v3.2/comments/142?page=2&per_page=25\"\n                    }\n                },\n                \"sorting\": {\n                    \"field\": \"id_comment\",\n                    \"order\": \"asc\"\n                }\n            }\n        }"
   '/api/v3.2/faqs/{categoryId}':
     get:
       tags:
@@ -1087,6 +1086,26 @@ paths:
             application/json:
               schema: {}
               example: '{ "loggedin": false, "error": "Wrong username or password." }'
+  /api/v3.2/meta:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getMeta
+      responses:
+        '200':
+          description: 'Returns bootstrap metadata for the phpMyFAQ instance.'
+          content:
+            application/json:
+              schema:
+                properties:
+                  version: { type: string, example: 4.0.0 }
+                  title: { type: string, example: 'phpMyFAQ Codename Porus' }
+                  language: { type: string, example: en }
+                  availableLanguages: { type: object, example: { de: German, en: English } }
+                  enabledFeatures: { type: object }
+                  publicLogoUrl: { type: string, example: 'https://localhost/assets/images/logo-transparent.svg' }
+                  oauthDiscovery: { type: object }
+                type: object
   /api/v3.2/news:
     get:
       tags:

@@ -19,8 +19,8 @@ use phpMyFAQ\Configuration\Storage\ConfigurationStorageSettingsResolver;
 use phpMyFAQ\Configuration\Storage\DatabaseConfigurationStore;
 use phpMyFAQ\Configuration\Storage\HybridConfigurationStore;
 use phpMyFAQ\Configuration\UrlSettings;
-use phpMyFAQ\ConfigurationMethodsTrait;
 use phpMyFAQ\Database;
+use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Date;
 use phpMyFAQ\Encryption;
@@ -67,6 +67,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(HybridConfigurationStore::class)]
 #[UsesClass(UrlSettings::class)]
 #[UsesClass(Database::class)]
+#[UsesClass(PdoSqlite::class)]
 #[UsesClass(Sqlite3::class)]
 #[UsesClass(Date::class)]
 #[UsesClass(Encryption::class)]
