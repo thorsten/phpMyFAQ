@@ -113,6 +113,42 @@ final class AbstractApiControllerTest extends TestCase
         self::assertSame(5, $payload['meta']['pagination']['total']);
         self::assertSame('name', $payload['meta']['sorting']['field']);
         self::assertTrue($payload['meta']['filters']['active']);
+        self::assertStringContainsString('public', (string) $response->headers->get('Cache-Control'));
+        self::assertStringContainsString('max-age=0', (string) $response->headers->get('Cache-Control'));
+        self::assertStringContainsString('must-revalidate', (string) $response->headers->get('Cache-Control'));
+        self::assertSame('Accept-Language', (string) $response->headers->get('Vary'));
+        self::assertNotNull($response->headers->get('ETag'));
+    }
+
+    public function testPaginatedResponseReturnsNotModifiedForMatchingIfNoneMatch(): void
+    {
+        $controller = new AbstractApiControllerTestStub();
+        $request = new Request(['page' => '1', 'per_page' => '2'], [], [], [], [], ['REQUEST_URI' => '/api/items']);
+        $pagination = $controller->getPaginationRequestPublic($request);
+
+        $initialResponse = $controller->paginatedResponsePublic(
+            $request,
+            [['id' => 1], ['id' => 2]],
+            2,
+            $pagination,
+        );
+        $etag = $initialResponse->headers->get('ETag');
+
+        self::assertNotNull($etag);
+
+        $conditionalRequest = new Request(['page' => '1', 'per_page' => '2'], [], [], [], [], ['REQUEST_URI' => '/api/items']);
+        $conditionalRequest->headers->set('If-None-Match', $etag);
+
+        $response = $controller->paginatedResponsePublic(
+            $conditionalRequest,
+            [['id' => 1], ['id' => 2]],
+            2,
+            $pagination,
+        );
+
+        self::assertSame(Response::HTTP_NOT_MODIFIED, $response->getStatusCode());
+        self::assertSame('', (string) $response->getContent());
+        self::assertSame($etag, $response->headers->get('ETag'));
     }
 
     public function testApiResponseReturnsSuccessEnvelope(): void

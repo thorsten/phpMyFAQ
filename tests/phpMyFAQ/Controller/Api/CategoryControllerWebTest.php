@@ -40,6 +40,28 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
         self::assertResponseIsSuccessful($response);
         self::assertSame('application/json', $response->headers->get('Content-Type'));
         self::assertJson((string) $response->getContent());
+        self::assertNotNull($response->headers->get('ETag'));
+        self::assertSame('Accept-Language', (string) $response->headers->get('Vary'));
+    }
+
+    public function testCategoriesEndpointReturnsNotModifiedWhenEtagMatches(): void
+    {
+        $this->getConfiguration('api')->getAll();
+        $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');
+
+        $initialResponse = $this->requestApi('GET', '/v3.2/categories');
+        $etag = $initialResponse->headers->get('ETag');
+
+        self::assertResponseIsSuccessful($initialResponse);
+        self::assertNotNull($etag);
+
+        $response = $this->requestApi('GET', '/v3.2/categories', [], [
+            'HTTP_IF_NONE_MATCH' => $etag,
+        ]);
+
+        self::assertResponseStatusCodeSame(304, $response);
+        self::assertSame('', (string) $response->getContent());
+        self::assertSame($etag, $response->headers->get('ETag'));
     }
 
     public function testCreateWithoutTokenReturnsUnauthorizedJson(): void

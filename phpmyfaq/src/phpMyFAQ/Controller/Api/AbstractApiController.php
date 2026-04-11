@@ -154,7 +154,15 @@ abstract class AbstractApiController extends AbstractController
             filters: $options->filters,
         );
 
-        return new JsonResponse($responseData, $options->status);
+        $response = new JsonResponse($responseData, $options->status);
+        $response->setPublic();
+        $response->setMaxAge(0);
+        $response->headers->addCacheControlDirective('must-revalidate');
+        $response->setVary(['Accept-Language'], false);
+        $response->setEtag($this->createResponseEtag($responseData));
+        $response->isNotModified($request);
+
+        return $response;
     }
 
     /**
@@ -191,5 +199,16 @@ abstract class AbstractApiController extends AbstractController
         $responseData = ApiResponse::error(message: $message, code: $code, details: $details);
 
         return new JsonResponse($responseData, $status);
+    }
+
+    /**
+     * Creates a stable ETag for a JSON API response payload.
+     *
+     * @param array $responseData
+     * @return string
+     */
+    private function createResponseEtag(array $responseData): string
+    {
+        return hash('sha256', json_encode($responseData, JSON_THROW_ON_ERROR));
     }
 }
