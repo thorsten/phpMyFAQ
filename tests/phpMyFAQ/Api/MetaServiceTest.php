@@ -62,7 +62,7 @@ final class MetaServiceTest extends TestCase
 
     public function testGetPublicMetadataReturnsExpectedPayload(): void
     {
-        $service = new MetaService($this->configuration);
+        $service = new MetaService($this->configuration, new OAuthDiscoveryService($this->configuration));
         $payload = $service->getPublicMetadata();
 
         $this->assertSame('4.2.0', $payload['version']);

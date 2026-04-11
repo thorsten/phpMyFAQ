@@ -55,9 +55,14 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
         self::assertResponseIsSuccessful($initialResponse);
         self::assertNotNull($etag);
 
-        $response = $this->requestApi('GET', '/v3.2/categories', [], [
-            'HTTP_IF_NONE_MATCH' => $etag,
-        ]);
+        $response = $this->requestApi(
+            'GET',
+            '/v3.2/categories',
+            [],
+            [
+                'HTTP_IF_NONE_MATCH' => $etag,
+            ],
+        );
 
         self::assertResponseStatusCodeSame(304, $response);
         self::assertSame('', (string) $response->getContent());

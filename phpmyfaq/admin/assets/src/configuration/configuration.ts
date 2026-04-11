@@ -47,6 +47,7 @@ const TAB_TARGETS = [
   '#layout',
   '#mail',
   '#api',
+  '#oauth2',
   '#upgrade',
   '#translation',
   '#storage',

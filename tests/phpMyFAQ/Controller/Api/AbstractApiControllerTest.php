@@ -126,17 +126,19 @@ final class AbstractApiControllerTest extends TestCase
         $request = new Request(['page' => '1', 'per_page' => '2'], [], [], [], [], ['REQUEST_URI' => '/api/items']);
         $pagination = $controller->getPaginationRequestPublic($request);
 
-        $initialResponse = $controller->paginatedResponsePublic(
-            $request,
-            [['id' => 1], ['id' => 2]],
-            2,
-            $pagination,
-        );
+        $initialResponse = $controller->paginatedResponsePublic($request, [['id' => 1], ['id' => 2]], 2, $pagination);
         $etag = $initialResponse->headers->get('ETag');
 
         self::assertNotNull($etag);
 
-        $conditionalRequest = new Request(['page' => '1', 'per_page' => '2'], [], [], [], [], ['REQUEST_URI' => '/api/items']);
+        $conditionalRequest = new Request(
+            ['page' => '1', 'per_page' => '2'],
+            [],
+            [],
+            [],
+            [],
+            ['REQUEST_URI' => '/api/items'],
+        );
         $conditionalRequest->headers->set('If-None-Match', $etag);
 
         $response = $controller->paginatedResponsePublic(

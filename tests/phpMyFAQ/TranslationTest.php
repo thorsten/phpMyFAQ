@@ -32,6 +32,13 @@ class TranslationTest extends TestCase
             . "\$LANG_CONF['main.dateFormat'] = ['select', 'English date format', 'Date format help'];\n"
             . "\$LANG_CONF['main.maintenanceMode'] = ['checkbox', 'Maintenance mode', 'Maintenance help'];\n"
             . "\$LANG_CONF['records.maxAttachmentSize'] = ['text', 'Maximum attachment size: %s', 'Attachment help'];\n\n"
+            . "\$LANG_CONF['oauth2.enable'] = ['checkbox', 'Enable OAuth 2.0 authorization server'];\n"
+            . "\$LANG_CONF['oauth2.privateKeyPath'] = ['input', 'Private key path', 'Absolute path to the OAuth 2.0 private key'];\n"
+            . "\$LANG_CONF['oauth2.publicKeyPath'] = ['input', 'Public key path', 'Absolute path to the OAuth 2.0 public key'];\n"
+            . "\$LANG_CONF['oauth2.encryptionKey'] = ['password', 'Encryption key'];\n"
+            . "\$LANG_CONF['oauth2.accessTokenTTL'] = ['input', 'Access token TTL', 'ISO 8601 duration, e.g. PT1H'];\n"
+            . "\$LANG_CONF['oauth2.refreshTokenTTL'] = ['input', 'Refresh token TTL', 'ISO 8601 duration, e.g. P1M'];\n"
+            . "\$LANG_CONF['oauth2.authCodeTTL'] = ['input', 'Authorization code TTL', 'ISO 8601 duration, e.g. PT10M'];\n\n"
             . "return [\n"
             . "    'test.key' => 'Default Label',\n"
             . "];\n",
@@ -43,6 +50,13 @@ class TranslationTest extends TestCase
             . "\$LANG_CONF['main.dateFormat'] = ['select', 'Deutsches Datumsformat', 'Datumsformat Hilfe'];\n"
             . "\$LANG_CONF['main.maintenanceMode'] = ['checkbox', 'Wartungsmodus', 'Wartungsmodus Hilfe'];\n"
             . "\$LANG_CONF['records.maxAttachmentSize'] = ['text', 'Maximale Anhangsgr\u00f6\u00dfe: %s', 'Anhang Hilfe'];\n\n"
+            . "\$LANG_CONF['oauth2.enable'] = ['checkbox', 'OAuth-2.0-Autorisierungsserver aktivieren'];\n"
+            . "\$LANG_CONF['oauth2.privateKeyPath'] = ['input', 'Pfad zum privaten Schlüssel', 'Absoluter Pfad zum privaten OAuth-2.0-Schlüssel'];\n"
+            . "\$LANG_CONF['oauth2.publicKeyPath'] = ['input', 'Pfad zum öffentlichen Schlüssel', 'Absoluter Pfad zum öffentlichen OAuth-2.0-Schlüssel'];\n"
+            . "\$LANG_CONF['oauth2.encryptionKey'] = ['password', 'Verschlüsselungsschlüssel'];\n"
+            . "\$LANG_CONF['oauth2.accessTokenTTL'] = ['input', 'Access-Token-TTL', 'ISO-8601-Dauer, z.B. PT1H'];\n"
+            . "\$LANG_CONF['oauth2.refreshTokenTTL'] = ['input', 'Refresh-Token-TTL', 'ISO-8601-Dauer, z.B. P1M'];\n"
+            . "\$LANG_CONF['oauth2.authCodeTTL'] = ['input', 'Autorisierungscode-TTL', 'ISO-8601-Dauer, z.B. PT10M'];\n\n"
             . "return [\n"
             . "    'test.key' => '',\n"
             . "    'test.zero' => '0',\n"
@@ -57,6 +71,8 @@ class TranslationTest extends TestCase
 
     public static function tearDownAfterClass(): void
     {
+        Translation::resetInstance();
+
         $translationsDir = __DIR__ . '/_translations';
 
         if (!is_dir($translationsDir)) {
@@ -153,6 +169,21 @@ class TranslationTest extends TestCase
         $this->assertArrayHasKey('main.maintenanceMode', $configurationItems);
         $this->assertArrayHasKey('main.dateFormat', $configurationItems);
         $this->assertArrayNotHasKey('records.maxAttachmentSize', $configurationItems);
+    }
+
+    public function testGetConfigurationItemsReturnsOAuth2Section(): void
+    {
+        $configurationItems = Translation::getConfigurationItems('oauth2.');
+
+        $this->assertCount(7, $configurationItems);
+        $this->assertArrayHasKey('oauth2.enable', $configurationItems);
+        $this->assertSame('checkbox', $configurationItems['oauth2.enable']['element']);
+        $this->assertArrayHasKey('oauth2.privateKeyPath', $configurationItems);
+        $this->assertArrayHasKey('oauth2.publicKeyPath', $configurationItems);
+        $this->assertArrayHasKey('oauth2.encryptionKey', $configurationItems);
+        $this->assertArrayHasKey('oauth2.accessTokenTTL', $configurationItems);
+        $this->assertArrayHasKey('oauth2.refreshTokenTTL', $configurationItems);
+        $this->assertArrayHasKey('oauth2.authCodeTTL', $configurationItems);
     }
 
     /**
