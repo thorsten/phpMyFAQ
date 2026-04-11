@@ -3,6 +3,13 @@
 # Exit on error
 set -e
 
+#=== Provide backward-compatible project root for Composer PSR-4 paths ===
+# The generated autoloader expects /var/www/phpmyfaq while the development
+# stack mounts the application at /var/www/html.
+if [ ! -e "/var/www/phpmyfaq" ]; then
+  ln -s /var/www/html /var/www/phpmyfaq
+fi
+
 #=== Set folder permissions ===
 folders="content/core/config content/core/data content/core/logs content/user/attachments content/user/images"
 

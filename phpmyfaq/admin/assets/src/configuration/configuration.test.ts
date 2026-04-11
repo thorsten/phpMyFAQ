@@ -288,14 +288,18 @@ describe('Configuration Functions', () => {
             <li class="nav-item" data-config-group="core" data-config-label="Main">
               <a href="#main" data-bs-toggle="tab"></a>
             </li>
-            <li class="nav-item" data-config-group="appearance" data-config-label="Layout">
-              <a href="#layout" data-bs-toggle="tab"></a>
-            </li>
-          </ul>
+          <li class="nav-item" data-config-group="appearance" data-config-label="Layout">
+            <a href="#layout" data-bs-toggle="tab"></a>
+          </li>
+          <li class="nav-item" data-config-group="integrations" data-config-label="OAuth 2.0">
+            <a href="#oauth2" data-bs-toggle="tab"></a>
+          </li>
+        </ul>
         </form>
         <div id="pmf-configuration-result"></div>
         <input id="pmf-language" value="en">
         <div id="main"></div>
+        <div id="oauth2"></div>
       `;
 
       (fetchConfiguration as Mock).mockResolvedValue('Configuration content');
@@ -339,6 +343,10 @@ describe('Configuration Functions', () => {
           <div class="pmf-config-item" data-config-key="mail.remoteSMTPPassword">SMTP password</div>
         </div>
         <div id="api"></div>
+        <div id="oauth2">
+          <div class="pmf-config-item" data-config-key="oauth2.enable">Enable OAuth 2.0 authorization server</div>
+          <div class="pmf-config-item" data-config-key="oauth2.privateKeyPath">Private key path</div>
+        </div>
         <div id="upgrade">
           <div class="pmf-config-item" data-config-key="upgrade.releaseEnvironment">Release environment</div>
         </div>

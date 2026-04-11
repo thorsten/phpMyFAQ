@@ -1666,12 +1666,32 @@ $PMF_LANG['msgPushNewQuestion'] = 'Neue offene Frage eingereicht';
 $PMF_LANG['msgPushNotificationsDescription'] = 'Erhalten Sie Browser-Benachrichtigungen, wenn neue FAQs veröffentlicht oder Fragen eingereicht werden.';
 $PMF_LANG['pushControlCenter'] = 'Push';
 $PMF_LANG['storageControlCenter'] = 'Speicher-Backend';
+$PMF_LANG['oauthControlCenter'] = 'OAuth 2.0';
 $PMF_LANG['msgGenerateVapidKeys'] = 'VAPID-Schlüssel generieren';
 $PMF_LANG['msgVapidKeysGenerated'] = 'VAPID-Schlüssel wurden erfolgreich generiert.';
 $PMF_LANG['msgVapidKeysError'] = 'VAPID-Schlüssel konnten nicht generiert werden.';
 
 $LANG_CONF['api.rateLimit.requests'] = ['input', 'API-Ratenlimit', 'Standard: 100 Anfragen'];
 $LANG_CONF['api.rateLimit.interval'] = ['input', 'API-Ratenlimit-Intervall in Sekunden', 'Standard: 3600 Sekunden'];
+
+$LANG_CONF['oauth2.enable'] = ['checkbox', 'OAuth-2.0-Autorisierungsserver aktivieren'];
+$LANG_CONF['oauth2.privateKeyPath'] = [
+    'input',
+    'Pfad zum privaten Schlüssel',
+    'Absoluter Pfad zum privaten OAuth-2.0-Schlüssel',
+];
+$LANG_CONF['oauth2.publicKeyPath'] = [
+    'input',
+    'Pfad zum öffentlichen Schlüssel',
+    'Absoluter Pfad zum öffentlichen OAuth-2.0-Schlüssel',
+];
+$LANG_CONF['oauth2.encryptionKey'] = [
+    'password',
+    'Verschlüsselungsschlüssel',
+];
+$LANG_CONF['oauth2.accessTokenTTL'] = ['input', 'Access-Token-TTL', 'ISO-8601-Dauer, z.B. PT1H'];
+$LANG_CONF['oauth2.refreshTokenTTL'] = ['input', 'Refresh-Token-TTL', 'ISO-8601-Dauer, z.B. P1M'];
+$LANG_CONF['oauth2.authCodeTTL'] = ['input', 'Autorisierungscode-TTL', 'ISO-8601-Dauer, z.B. PT10M'];
 
 $LANG_CONF['mail.provider'] = ['select', 'E-Mail-Anbieter'];
 $LANG_CONF['mail.sendgridApiKey'] = ['password', 'SendGrid API-Schlüssel'];

@@ -1666,12 +1666,24 @@ $PMF_LANG['msgPushNewQuestion'] = 'New open question submitted';
 $PMF_LANG['msgPushNotificationsDescription'] = 'Receive browser notifications when new FAQs are published or questions are submitted.';
 $PMF_LANG['pushControlCenter'] = 'Push';
 $PMF_LANG['storageControlCenter'] = 'Storage';
+$PMF_LANG['oauthControlCenter'] = 'OAuth 2.0';
 $PMF_LANG['msgGenerateVapidKeys'] = 'Generate VAPID Keys';
 $PMF_LANG['msgVapidKeysGenerated'] = 'VAPID keys have been generated successfully.';
 $PMF_LANG['msgVapidKeysError'] = 'Failed to generate VAPID keys.';
 
 $LANG_CONF['api.rateLimit.requests'] = ['input', 'API rate limit', 'Standard: 100 requests'];
 $LANG_CONF['api.rateLimit.interval'] = ['input', 'API rate limit interval in seconds', 'Standard: 3600 seconds'];
+
+$LANG_CONF['oauth2.enable'] = ['checkbox', 'Enable OAuth 2.0 authorization server'];
+$LANG_CONF['oauth2.privateKeyPath'] = ['input', 'Private key path', 'Absolute path to the OAuth 2.0 private key'];
+$LANG_CONF['oauth2.publicKeyPath'] = ['input', 'Public key path', 'Absolute path to the OAuth 2.0 public key'];
+$LANG_CONF['oauth2.encryptionKey'] = [
+    'password',
+    'Encryption key',
+];
+$LANG_CONF['oauth2.accessTokenTTL'] = ['input', 'Access token TTL', 'ISO 8601 duration, e.g. PT1H'];
+$LANG_CONF['oauth2.refreshTokenTTL'] = ['input', 'Refresh token TTL', 'ISO 8601 duration, e.g. P1M'];
+$LANG_CONF['oauth2.authCodeTTL'] = ['input', 'Authorization code TTL', 'ISO 8601 duration, e.g. PT10M'];
 
 $LANG_CONF['mail.provider'] = ['select', 'Mail provider'];
 $LANG_CONF['mail.sendgridApiKey'] = ['password', 'SendGrid API key'];

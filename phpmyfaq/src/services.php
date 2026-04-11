@@ -28,6 +28,7 @@ use phpMyFAQ\Administration\RecentUsers;
 use phpMyFAQ\Administration\RatingStatistics;
 use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Api\MetaService;
+use phpMyFAQ\Api\OAuthDiscoveryService;
 use phpMyFAQ\Attachment\AttachmentCollection;
 use phpMyFAQ\Auth as LegacyAuth;
 use phpMyFAQ\Auth\ApiKeyAuthenticator;
@@ -113,6 +114,7 @@ use phpMyFAQ\Controller\Frontend\CustomPageController as FrontendCustomPageContr
 use phpMyFAQ\Controller\Frontend\FaqController as FrontendFaqController;
 use phpMyFAQ\Controller\Frontend\GlossaryController as FrontendGlossaryController;
 use phpMyFAQ\Controller\Frontend\NewsController as FrontendNewsController;
+use phpMyFAQ\Controller\Frontend\OAuthDiscoveryController as FrontendOAuthDiscoveryController;
 use phpMyFAQ\Controller\Frontend\OverviewController as FrontendOverviewController;
 use phpMyFAQ\Controller\Frontend\PageNotFoundController;
 use phpMyFAQ\Controller\Frontend\PdfController;
@@ -244,6 +246,11 @@ return static function (ContainerConfigurator $container): void {
     ]);
 
     $services->set('phpmyfaq.api.meta', MetaService::class)->args([
+        service('phpmyfaq.configuration'),
+        service('phpmyfaq.api.oauth-discovery'),
+    ]);
+
+    $services->set('phpmyfaq.api.oauth-discovery', OAuthDiscoveryService::class)->args([
         service('phpmyfaq.configuration'),
     ]);
 
@@ -1096,5 +1103,8 @@ return static function (ContainerConfigurator $container): void {
     // Batch 6: Root controllers
     $services->set(RootSitemapController::class, RootSitemapController::class)->args([
         service('phpmyfaq.seo.sitemap-xml'),
+    ]);
+    $services->set(FrontendOAuthDiscoveryController::class, FrontendOAuthDiscoveryController::class)->args([
+        service('phpmyfaq.api.oauth-discovery'),
     ]);
 };

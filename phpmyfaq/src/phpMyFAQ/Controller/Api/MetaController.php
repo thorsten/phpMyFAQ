@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Api\MetaService;
+use phpMyFAQ\Api\OAuthDiscoveryService;
 use phpMyFAQ\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -33,7 +34,10 @@ final class MetaController extends AbstractController
     public function __construct(?MetaService $metaService = null)
     {
         parent::__construct();
-        $this->metaService = $metaService ?? new MetaService($this->configuration);
+        $this->metaService = $metaService ?? new MetaService(
+            $this->configuration,
+            new OAuthDiscoveryService($this->configuration),
+        );
 
         if (!$this->isApiEnabled()) {
             throw new UnauthorizedHttpException(challenge: 'API is not enabled');

@@ -26,6 +26,7 @@ final readonly class MetaService
 {
     public function __construct(
         private Configuration $configuration,
+        private OAuthDiscoveryService $oAuthDiscoveryService,
     ) {
     }
 
@@ -49,7 +50,7 @@ final readonly class MetaService
             'availableLanguages' => LanguageHelper::getAvailableLanguages(),
             'enabledFeatures' => $this->buildEnabledFeatures(),
             'publicLogoUrl' => $this->buildPublicLogoUrl(),
-            'oauthDiscovery' => $this->buildOAuthDiscovery(),
+            'oauthDiscovery' => $this->oAuthDiscoveryService->getMetaDiscovery(),
         ];
     }
 
@@ -67,24 +68,6 @@ final readonly class MetaService
             'opensearch' => $this->toBool($this->configuration->get('search.enableOpenSearch')),
             'sso' => $this->toBool($this->configuration->get('security.ssoSupport')),
             'signInWithMicrosoft' => $this->configuration->isSignInWithMicrosoftActive(),
-        ];
-    }
-
-    /**
-     * @return array<string, bool|string|string[]>
-     */
-    private function buildOAuthDiscovery(): array
-    {
-        $apiBaseUrl = rtrim($this->configuration->getDefaultUrl(), characters: '/') . '/api';
-
-        return [
-            'enabled' => $this->toBool($this->configuration->get('oauth2.enable')),
-            'issuer' => $apiBaseUrl,
-            'authorizationEndpoint' => $apiBaseUrl . '/oauth/authorize',
-            'tokenEndpoint' => $apiBaseUrl . '/oauth/token',
-            'grantTypesSupported' => ['authorization_code', 'client_credentials', 'refresh_token'],
-            'responseTypesSupported' => ['code'],
-            'tokenEndpointAuthMethodsSupported' => ['client_secret_basic', 'client_secret_post', 'none'],
         ];
     }
 
