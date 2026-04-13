@@ -749,6 +749,7 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.tags'),
         service('phpmyfaq.faq.statistics'),
         service('phpmyfaq.faq.metadata'),
+        service('phpmyfaq.language'),
     ]);
     $services->set(ApiGlossaryController::class, ApiGlossaryController::class)->args([
         service('phpmyfaq.glossary'),

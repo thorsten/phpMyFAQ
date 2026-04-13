@@ -467,6 +467,25 @@ class FaqTest extends TestCase
         $this->assertStringContainsString('/content/102/5012/en/first-sticky.html', $sticky[0]['url']);
     }
 
+    public function testGetStickyFaqsDataReturnsStickyFaqWithoutVisitsRow(): void
+    {
+        $this->seedFaqRecord(
+            id: 5016,
+            solutionId: 7016,
+            categoryId: 104,
+            question: 'Sticky without visits',
+            sticky: 1,
+            insertVisits: false,
+        );
+
+        $sticky = $this->faq->getStickyFaqsData();
+
+        $this->assertCount(1, $sticky);
+        $this->assertSame(5016, $sticky[0]['id']);
+        $this->assertSame('Sticky without visits', $sticky[0]['question']);
+        $this->assertStringContainsString('/content/104/5016/en/sticky-without-visits.html', $sticky[0]['url']);
+    }
+
     public function testGetAllFaqsBuildsRecordsAndReplacesInactiveAndExpiredContent(): void
     {
         $this->seedFaqRecord(
@@ -560,6 +579,7 @@ class FaqTest extends TestCase
         string $keywords = 'Keywords',
         string $dateEnd = '99991231235959',
         int $visits = 1,
+        bool $insertVisits = true,
         ?int $userId = -1,
         string $notes = '',
     ): void {
@@ -594,14 +614,16 @@ class FaqTest extends TestCase
                 $id,
                 $lang,
             ));
-        $this->configuration
-            ->getDb()
-            ->query(sprintf(
-                "INSERT INTO faqvisits (id, lang, visits, last_visit) VALUES (%d, '%s', %d, 20260301010101)",
-                $id,
-                $lang,
-                $visits,
-            ));
+        if ($insertVisits) {
+            $this->configuration
+                ->getDb()
+                ->query(sprintf(
+                    "INSERT INTO faqvisits (id, lang, visits, last_visit) VALUES (%d, '%s', %d, 20260301010101)",
+                    $id,
+                    $lang,
+                    $visits,
+                ));
+        }
 
         if ($userId !== null) {
             $this->configuration
