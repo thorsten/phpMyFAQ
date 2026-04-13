@@ -63,7 +63,7 @@ jobs:
           package-manager-cache: false
           node-version: 24.x
 
-      - uses: pnpm/action-setup@v5
+      - uses: pnpm/action-setup@v6
         name: Install pnpm
         id: pnpm-install
         with:
