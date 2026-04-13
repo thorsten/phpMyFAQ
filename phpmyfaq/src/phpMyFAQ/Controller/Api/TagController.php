@@ -111,7 +111,7 @@ final class TagController extends AbstractApiController
             ],
         ],
     ]))]
-    #[Route('/api/v4.0/tags', name: 'api.tags.list', methods: ['GET'])]
+    #[Route(path: 'v4.0/tags', name: 'api.tags.list', methods: ['GET'])]
     public function list(?Request $request = null): JsonResponse
     {
         $request ??= Request::createFromGlobals();

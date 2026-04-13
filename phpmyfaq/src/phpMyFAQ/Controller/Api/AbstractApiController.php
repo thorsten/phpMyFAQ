@@ -79,12 +79,12 @@ abstract class AbstractApiController extends AbstractController
 
     /**
      * Parses sorting parameters from the request
-     *
      * Validates sort field against whitelist to prevent SQL injection.
      *
-     * @param array $allowedFields Whitelist of allowed sort fields
+     * @param Request     $request
+     * @param array       $allowedFields Whitelist of allowed sort fields
      * @param string|null $defaultField Default sort field if none specified
-     * @param string $defaultOrder Default sort order (asc or desc)
+     * @param string      $defaultOrder Default sort order (asc or desc)
      * @return SortRequest
      */
     protected function getSortRequest(

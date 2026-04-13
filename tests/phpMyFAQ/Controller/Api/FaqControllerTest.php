@@ -55,6 +55,11 @@ class FaqControllerTest extends TestCase
     protected function tearDown(): void
     {
         unset($_SERVER['HTTP_X_PMF_TOKEN']);
+        Language::$language = 'en';
+
+        $language = new Language($this->configuration, $this->createStub(Session::class));
+        $language->setLanguageFromConfiguration('en');
+        $this->configuration->setLanguage($language);
 
         parent::tearDown();
     }
@@ -105,6 +110,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
         $response = $controller->getByCategoryId($request);
 
@@ -124,6 +130,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
         $response = $controller->getById($request);
 
@@ -142,6 +149,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
         $response = $controller->getByTagId($request);
 
@@ -157,8 +165,16 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
-        $response = $controller->getPopular();
+        $response = $controller->getPopular(Request::create(
+            '/api/v4.0/faqs/popular',
+            'GET',
+            [],
+            [],
+            [],
+            ['HTTP_ACCEPT_LANGUAGE' => 'en'],
+        ));
 
         $this->assertInstanceOf(JsonResponse::class, $response);
     }
@@ -172,8 +188,16 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
-        $response = $controller->getLatest();
+        $response = $controller->getLatest(Request::create(
+            '/api/v4.0/faqs/latest',
+            'GET',
+            [],
+            [],
+            [],
+            ['HTTP_ACCEPT_LANGUAGE' => 'en'],
+        ));
 
         $this->assertInstanceOf(JsonResponse::class, $response);
     }
@@ -187,8 +211,16 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
-        $response = $controller->getTrending();
+        $response = $controller->getTrending(Request::create(
+            '/api/v4.0/faqs/trending',
+            'GET',
+            [],
+            [],
+            [],
+            ['HTTP_ACCEPT_LANGUAGE' => 'en'],
+        ));
 
         $this->assertInstanceOf(JsonResponse::class, $response);
     }
@@ -202,8 +234,16 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
-        $response = $controller->getSticky();
+        $response = $controller->getSticky(Request::create(
+            '/api/v4.0/faqs/sticky',
+            'GET',
+            [],
+            [],
+            [],
+            ['HTTP_ACCEPT_LANGUAGE' => 'en'],
+        ));
 
         $this->assertInstanceOf(JsonResponse::class, $response);
     }
@@ -217,6 +257,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
         $response = $controller->list();
 
@@ -246,6 +287,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
 
         $this->expectException(\Exception::class);
@@ -276,6 +318,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
 
         $this->expectException(\Exception::class);
@@ -295,6 +338,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
         $response = $controller->getByCategoryId($request);
 
@@ -315,6 +359,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
         $response = $controller->getById($request);
 
@@ -335,6 +380,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
         $response = $controller->getById($request);
 
@@ -354,6 +400,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
         $response = $controller->getByTagId($request);
 
@@ -370,8 +417,16 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
-        $response = $controller->getPopular();
+        $response = $controller->getPopular(Request::create(
+            '/api/v4.0/faqs/popular',
+            'GET',
+            [],
+            [],
+            [],
+            ['HTTP_ACCEPT_LANGUAGE' => 'en'],
+        ));
 
         $this->assertContains($response->getStatusCode(), [200, 404]);
     }
@@ -386,8 +441,16 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
-        $response = $controller->getLatest();
+        $response = $controller->getLatest(Request::create(
+            '/api/v4.0/faqs/latest',
+            'GET',
+            [],
+            [],
+            [],
+            ['HTTP_ACCEPT_LANGUAGE' => 'en'],
+        ));
 
         $this->assertContains($response->getStatusCode(), [200, 404]);
     }
@@ -402,8 +465,16 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
-        $response = $controller->getTrending();
+        $response = $controller->getTrending(Request::create(
+            '/api/v4.0/faqs/trending',
+            'GET',
+            [],
+            [],
+            [],
+            ['HTTP_ACCEPT_LANGUAGE' => 'en'],
+        ));
 
         $this->assertContains($response->getStatusCode(), [200, 404]);
     }
@@ -418,8 +489,16 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
-        $response = $controller->getSticky();
+        $response = $controller->getSticky(Request::create(
+            '/api/v4.0/faqs/sticky',
+            'GET',
+            [],
+            [],
+            [],
+            ['HTTP_ACCEPT_LANGUAGE' => 'en'],
+        ));
 
         $this->assertContains($response->getStatusCode(), [200, 404]);
     }
@@ -434,6 +513,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
         $response = $controller->list();
 
@@ -453,6 +533,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
         $response = $controller->getByCategoryId($request);
 
@@ -473,6 +554,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
         $response = $controller->getById($request);
 
@@ -489,6 +571,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
         $response = $controller->list();
 
@@ -510,6 +593,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
 
         $this->expectException(\Exception::class);
@@ -530,6 +614,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
 
         $this->expectException(\Exception::class);
@@ -549,6 +634,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
         $response = $controller->getByCategoryId($request);
 
@@ -570,6 +656,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
         $response = $controller->getById($request);
 
@@ -586,8 +673,16 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
-        $response = $controller->getPopular();
+        $response = $controller->getPopular(Request::create(
+            '/api/v4.0/faqs/popular',
+            'GET',
+            [],
+            [],
+            [],
+            ['HTTP_ACCEPT_LANGUAGE' => 'en'],
+        ));
 
         $content = $response->getContent();
         $this->assertNotEmpty($content);
@@ -604,8 +699,16 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
-        $response = $controller->getLatest();
+        $response = $controller->getLatest(Request::create(
+            '/api/v4.0/faqs/latest',
+            'GET',
+            [],
+            [],
+            [],
+            ['HTTP_ACCEPT_LANGUAGE' => 'en'],
+        ));
 
         $content = $response->getContent();
         $this->assertNotEmpty($content);
@@ -622,8 +725,16 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
-        $response = $controller->getTrending();
+        $response = $controller->getTrending(Request::create(
+            '/api/v4.0/faqs/trending',
+            'GET',
+            [],
+            [],
+            [],
+            ['HTTP_ACCEPT_LANGUAGE' => 'en'],
+        ));
 
         $content = $response->getContent();
         $this->assertNotEmpty($content);
@@ -640,8 +751,16 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
-        $response = $controller->getSticky();
+        $response = $controller->getSticky(Request::create(
+            '/api/v4.0/faqs/sticky',
+            'GET',
+            [],
+            [],
+            [],
+            ['HTTP_ACCEPT_LANGUAGE' => 'en'],
+        ));
 
         $content = $response->getContent();
         $this->assertNotEmpty($content);
@@ -658,6 +777,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
         $response = $controller->list();
 
@@ -682,6 +802,7 @@ class FaqControllerTest extends TestCase
                 $this->createStub(Tags::class),
                 $this->createStub(FaqStatistics::class),
                 $this->createStub(FaqMetaData::class),
+                $this->configuration->getLanguage(),
             );
             $response = $controller->getByCategoryId($request);
 
@@ -711,6 +832,7 @@ class FaqControllerTest extends TestCase
                 $this->createStub(Tags::class),
                 $this->createStub(FaqStatistics::class),
                 $this->createStub(FaqMetaData::class),
+                $this->configuration->getLanguage(),
             );
             $response = $controller->getById($request);
 
@@ -734,6 +856,7 @@ class FaqControllerTest extends TestCase
                 $this->createStub(Tags::class),
                 $this->createStub(FaqStatistics::class),
                 $this->createStub(FaqMetaData::class),
+                $this->configuration->getLanguage(),
             );
             $response = $controller->getByTagId($request);
 
@@ -755,6 +878,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
         $response = $controller->getByCategoryId($request);
 
@@ -780,6 +904,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
         $response = $controller->getById($request);
 
@@ -815,6 +940,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
 
         $response = $controller->getByCategoryId($request);
@@ -847,6 +973,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
 
         $response = $controller->getByCategoryId($request);
@@ -883,6 +1010,7 @@ class FaqControllerTest extends TestCase
             $tags,
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
 
         $response = $controller->getByTagId($request);
@@ -918,6 +1046,7 @@ class FaqControllerTest extends TestCase
             $tags,
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
 
         $response = $controller->getByTagId($request);
@@ -956,6 +1085,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
 
         $response = $controller->getById($request);
@@ -994,6 +1124,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
 
         $response = $controller->getById($request);
@@ -1057,12 +1188,88 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $faqMetaData,
+            $this->configuration->getLanguage(),
         );
 
         $response = $controller->create($request);
 
         $this->assertSame(201, $response->getStatusCode());
         $this->assertSame('{"stored":true}', (string) $response->getContent());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetStickyUsesAcceptLanguageForFaqLanguage(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('setUser')->with(-1)->willReturnSelf();
+        $faq->expects($this->once())->method('setGroups')->with([-1])->willReturnSelf();
+        $faq
+            ->expects($this->once())
+            ->method('getStickyFaqsData')
+            ->willReturnCallback(function (): array {
+                $this->assertSame('de', $this->configuration->getLanguage()->getLanguage());
+
+                return [[
+                    'question' => 'Sticky FAQ',
+                    'url' => 'https://localhost/content/1/1/de/sticky-faq.html',
+                    'id' => 1,
+                    'order' => 1,
+                ]];
+            });
+
+        $controller = new FaqController(
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
+        );
+
+        $request = Request::create('/api/v4.0/faqs/sticky', 'GET', [], [], [], ['HTTP_ACCEPT_LANGUAGE' => 'de-DE']);
+        $response = $controller->getSticky($request);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertJson((string) $response->getContent());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetPopularUsesAcceptLanguageForStatisticsLanguage(): void
+    {
+        $statistics = $this->createMock(FaqStatistics::class);
+        $statistics->expects($this->once())->method('setUser')->with(-1)->willReturnSelf();
+        $statistics->expects($this->once())->method('setGroups')->with([-1])->willReturnSelf();
+        $statistics
+            ->expects($this->once())
+            ->method('getTopTenData')
+            ->willReturnCallback(function (): array {
+                $this->assertSame('de', $this->configuration->getLanguage()->getLanguage());
+
+                return [[
+                    'question' => 'Popular FAQ',
+                    'answer' => 'A good answer',
+                    'visits' => 10,
+                    'date' => '2026-04-13T10:00:00+02:00',
+                    'url' => 'https://localhost/content/1/1/de/popular-faq.html',
+                ]];
+            });
+
+        $controller = new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $statistics,
+            $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
+        );
+
+        $request = Request::create('/api/v4.0/faqs/popular', 'GET', [], [], [], ['HTTP_ACCEPT_LANGUAGE' => 'de-DE']);
+        $response = $controller->getPopular($request);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertJson((string) $response->getContent());
     }
 
     /**
@@ -1098,6 +1305,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
 
         $response = $controller->create($request);
@@ -1139,6 +1347,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
 
         $response = $controller->create($request);
@@ -1201,6 +1410,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
 
         $response = $controller->update($request);
@@ -1242,6 +1452,7 @@ class FaqControllerTest extends TestCase
             $this->createStub(Tags::class),
             $this->createStub(FaqStatistics::class),
             $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
         );
 
         $response = $controller->update($request);

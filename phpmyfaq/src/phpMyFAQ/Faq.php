@@ -1641,8 +1641,13 @@ class Faq
                 fcr.category_id AS category_id,
                 fv.visits AS visits
             FROM
-                %sfaqvisits fv,
                 %sfaqdata fd
+            LEFT JOIN
+                %sfaqvisits fv
+            ON
+                fd.id = fv.id
+            AND
+                fd.lang = fv.lang
             LEFT JOIN
                 %sfaqcategoryrelations fcr
             ON
@@ -1663,10 +1668,6 @@ class Faq
                 fd.active = 'yes'
             AND 
                 fd.sticky = 1
-            AND
-                fd.id = fv.id
-            AND 
-                fd.lang = fv.lang
             %s
             GROUP BY
                 fd.id, fd.lang, fd.thema, fcr.category_id, fv.visits

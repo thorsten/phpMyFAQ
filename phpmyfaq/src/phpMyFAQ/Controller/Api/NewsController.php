@@ -114,7 +114,7 @@ final class NewsController extends AbstractApiController
             ],
         ]),
     )]
-    #[Route('/api/v4.0/news', name: 'api.news.list', methods: ['GET'])]
+    #[Route(path: 'v4.0/news', name: 'api.news.list', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
         // Get pagination and sorting parameters

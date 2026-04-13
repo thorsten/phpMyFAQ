@@ -28,6 +28,7 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\MetaData as FaqMetaData;
 use phpMyFAQ\Faq\Statistics as FaqStatistics;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Language;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
 use stdClass;
@@ -43,6 +44,7 @@ final class FaqController extends AbstractApiController
         private readonly Tags $tags,
         private readonly FaqStatistics $faqStatistics,
         private readonly FaqMetaData $faqMetaData,
+        private readonly Language $language,
     ) {
         parent::__construct();
     }
@@ -87,22 +89,29 @@ final class FaqController extends AbstractApiController
     #[OA\Response(response: 500, description: 'If fetching the FAQs fails.', content: new OA\JsonContent(example: [
         'error' => 'Error message',
     ]))]
-    #[Route(path: 'v4.0/faqs/{categoryId}', name: 'api.faqs.by-category-id', methods: ['GET'])]
+    #[Route(
+        path: 'v4.0/faqs/{categoryId}',
+        name: 'api.faqs.by-category-id',
+        requirements: ['categoryId' => '\d+'],
+        methods: ['GET'],
+    )]
     public function getByCategoryId(Request $request): JsonResponse
     {
-        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        return $this->withRequestLanguage($request, function () use ($request): JsonResponse {
+            [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $this->faq->setUser($currentUser);
-        $this->faq->setGroups($currentGroups);
+            $this->faq->setUser($currentUser);
+            $this->faq->setGroups($currentGroups);
 
-        $categoryId = (int) Filter::filterVar($request->attributes->get(key: 'categoryId'), FILTER_VALIDATE_INT);
+            $categoryId = (int) Filter::filterVar($request->attributes->get(key: 'categoryId'), FILTER_VALIDATE_INT);
 
-        try {
-            $result = $this->faq->getAllAvailableFaqsByCategoryId($categoryId);
-            return $this->json($result, Response::HTTP_OK);
-        } catch (Exception|CommonMarkException $exception) {
-            return $this->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+            try {
+                $result = $this->faq->getAllAvailableFaqsByCategoryId($categoryId);
+                return $this->json($result, Response::HTTP_OK);
+            } catch (Exception|CommonMarkException $exception) {
+                return $this->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        });
     }
 
     /**
@@ -162,27 +171,29 @@ final class FaqController extends AbstractApiController
     #[Route(path: 'v4.0/faq/{categoryId}/{faqId}', name: 'api.faq.by-id', methods: ['GET'])]
     public function getById(Request $request): JsonResponse
     {
-        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        return $this->withRequestLanguage($request, function () use ($request): JsonResponse {
+            [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $this->faq->setUser($currentUser);
-        $this->faq->setGroups($currentGroups);
+            $this->faq->setUser($currentUser);
+            $this->faq->setGroups($currentGroups);
 
-        $faqId = (int) Filter::filterVar($request->attributes->get(key: 'faqId'), FILTER_VALIDATE_INT);
-        $categoryId = (int) Filter::filterVar($request->attributes->get(key: 'categoryId'), FILTER_VALIDATE_INT);
-        $onlyActive = (bool) $this->configuration->get('api.onlyActiveFaqs');
+            $faqId = (int) Filter::filterVar($request->attributes->get(key: 'faqId'), FILTER_VALIDATE_INT);
+            $categoryId = (int) Filter::filterVar($request->attributes->get(key: 'categoryId'), FILTER_VALIDATE_INT);
+            $onlyActive = (bool) $this->configuration->get('api.onlyActiveFaqs');
 
-        $result = $this->faq->getFaqByIdAndCategoryId($faqId, $categoryId);
+            $result = $this->faq->getFaqByIdAndCategoryId($faqId, $categoryId);
 
-        if (
-            (is_countable($result) ? count($result) : 0) === 0
-            || $result['solution_id'] === 42
-            || $onlyActive && $result['active'] !== 'yes'
-        ) {
-            $result = new stdClass();
-            return $this->json($result, Response::HTTP_NOT_FOUND);
-        }
+            if (
+                (is_countable($result) ? count($result) : 0) === 0
+                || $result['solution_id'] === 42
+                || $onlyActive && $result['active'] !== 'yes'
+            ) {
+                $result = new stdClass();
+                return $this->json($result, Response::HTTP_NOT_FOUND);
+            }
 
-        return $this->json($result, Response::HTTP_OK);
+            return $this->json($result, Response::HTTP_OK);
+        });
     }
 
     /**
@@ -231,21 +242,23 @@ final class FaqController extends AbstractApiController
     #[Route(path: 'v4.0/faqs/tags/{tagId}', name: 'api.faqs.by-tag-id', methods: ['GET'])]
     public function getByTagId(Request $request): JsonResponse
     {
-        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        return $this->withRequestLanguage($request, function () use ($request): JsonResponse {
+            [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $this->faq->setUser($currentUser);
-        $this->faq->setGroups($currentGroups);
+            $this->faq->setUser($currentUser);
+            $this->faq->setGroups($currentGroups);
 
-        $tagId = (int) Filter::filterVar($request->attributes->get(key: 'tagId'), FILTER_VALIDATE_INT);
+            $tagId = (int) Filter::filterVar($request->attributes->get(key: 'tagId'), FILTER_VALIDATE_INT);
 
-        $recordIds = $this->tags->getFaqsByTagId($tagId);
+            $recordIds = $this->tags->getFaqsByTagId($tagId);
 
-        try {
-            $result = $this->faq->getFaqsByIds($recordIds);
-            return $this->json($result, Response::HTTP_OK);
-        } catch (Exception $exception) {
-            return $this->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+            try {
+                $result = $this->faq->getFaqsByIds($recordIds);
+                return $this->json($result, Response::HTTP_OK);
+            } catch (Exception $exception) {
+                return $this->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        });
     }
 
     /**
@@ -279,20 +292,22 @@ final class FaqController extends AbstractApiController
         content: new OA\JsonContent(example: []),
     )]
     #[Route(path: 'v4.0/faqs/popular', name: 'api.faqs.popular', methods: ['GET'])]
-    public function getPopular(): JsonResponse
+    public function getPopular(Request $request): JsonResponse
     {
-        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        return $this->withRequestLanguage($request, function (): JsonResponse {
+            [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $this->faqStatistics->setUser($currentUser);
-        $this->faqStatistics->setGroups($currentGroups);
+            $this->faqStatistics->setUser($currentUser);
+            $this->faqStatistics->setGroups($currentGroups);
 
-        $result = array_values($this->faqStatistics->getTopTenData());
+            $result = array_values($this->faqStatistics->getTopTenData());
 
-        if ((is_countable($result) ? count($result) : 0) === 0) {
-            $this->json($result, Response::HTTP_NOT_FOUND);
-        }
+            if ((is_countable($result) ? count($result) : 0) === 0) {
+                return $this->json($result, Response::HTTP_NOT_FOUND);
+            }
 
-        return $this->json($result, Response::HTTP_OK);
+            return $this->json($result, Response::HTTP_OK);
+        });
     }
 
     /**
@@ -300,7 +315,7 @@ final class FaqController extends AbstractApiController
      * @throws Exception
      */
     #[OA\Get(
-        path: '/api/v4.0/faqs/latest',
+        path: 'v4.0/faqs/latest',
         operationId: 'getLatest',
         description: 'This endpoint returns the latest FAQs for the given language provided by "Accept-Language".',
         tags: ['Public Endpoints'],
@@ -327,20 +342,22 @@ final class FaqController extends AbstractApiController
         content: new OA\JsonContent(example: []),
     )]
     #[Route(path: 'v4.0/faqs/latest', name: 'api.faqs.latest', methods: ['GET'])]
-    public function getLatest(): JsonResponse
+    public function getLatest(Request $request): JsonResponse
     {
-        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        return $this->withRequestLanguage($request, function (): JsonResponse {
+            [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $this->faqStatistics->setUser($currentUser);
-        $this->faqStatistics->setGroups($currentGroups);
+            $this->faqStatistics->setUser($currentUser);
+            $this->faqStatistics->setGroups($currentGroups);
 
-        $result = array_values($this->faqStatistics->getLatestData());
+            $result = array_values($this->faqStatistics->getLatestData());
 
-        if ((is_countable($result) ? count($result) : 0) === 0) {
-            return $this->json($result, Response::HTTP_NOT_FOUND);
-        }
+            if ((is_countable($result) ? count($result) : 0) === 0) {
+                return $this->json($result, Response::HTTP_NOT_FOUND);
+            }
 
-        return $this->json($result, Response::HTTP_OK);
+            return $this->json($result, Response::HTTP_OK);
+        });
     }
 
     /**
@@ -374,20 +391,22 @@ final class FaqController extends AbstractApiController
         content: new OA\JsonContent(example: []),
     )]
     #[Route(path: 'v4.0/faqs/trending', name: 'api.faqs.trending', methods: ['GET'])]
-    public function getTrending(): JsonResponse
+    public function getTrending(Request $request): JsonResponse
     {
-        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        return $this->withRequestLanguage($request, function (): JsonResponse {
+            [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $this->faqStatistics->setUser($currentUser);
-        $this->faqStatistics->setGroups($currentGroups);
+            $this->faqStatistics->setUser($currentUser);
+            $this->faqStatistics->setGroups($currentGroups);
 
-        $result = array_values($this->faqStatistics->getTrendingData());
+            $result = array_values($this->faqStatistics->getTrendingData());
 
-        if ((is_countable($result) ? count($result) : 0) === 0) {
-            $this->json($result, Response::HTTP_NOT_FOUND);
-        }
+            if ((is_countable($result) ? count($result) : 0) === 0) {
+                return $this->json($result, Response::HTTP_NOT_FOUND);
+            }
 
-        return $this->json($result, Response::HTTP_OK);
+            return $this->json($result, Response::HTTP_OK);
+        });
     }
 
     /**
@@ -428,20 +447,22 @@ final class FaqController extends AbstractApiController
         content: new OA\JsonContent(example: []),
     )]
     #[Route(path: 'v4.0/faqs/sticky', name: 'api.faqs.sticky', methods: ['GET'])]
-    public function getSticky(): JsonResponse
+    public function getSticky(Request $request): JsonResponse
     {
-        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        return $this->withRequestLanguage($request, function (): JsonResponse {
+            [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $this->faq->setUser($currentUser);
-        $this->faq->setGroups($currentGroups);
+            $this->faq->setUser($currentUser);
+            $this->faq->setGroups($currentGroups);
 
-        $result = array_values($this->faq->getStickyFaqsData());
+            $result = array_values($this->faq->getStickyFaqsData());
 
-        if ((is_countable($result) ? count($result) : 0) === 0) {
-            return $this->json($result, Response::HTTP_NOT_FOUND);
-        }
+            if ((is_countable($result) ? count($result) : 0) === 0) {
+                return $this->json($result, Response::HTTP_NOT_FOUND);
+            }
 
-        return $this->json($result, Response::HTTP_OK);
+            return $this->json($result, Response::HTTP_OK);
+        });
     }
 
     /**
@@ -543,58 +564,58 @@ final class FaqController extends AbstractApiController
     public function list(?Request $request = null): JsonResponse
     {
         $request ??= Request::createFromGlobals();
-        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        return $this->withRequestLanguage($request, function () use ($request): JsonResponse {
+            [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $this->faq->setUser($currentUser);
-        $this->faq->setGroups($currentGroups);
+            $this->faq->setUser($currentUser);
+            $this->faq->setGroups($currentGroups);
 
-        // Get pagination and sorting parameters
-        $pagination = $this->getPaginationRequest($request);
-        $sort = $this->getSortRequest(
-            $request,
-            allowedFields: ['id', 'title', 'author', 'updated', 'created'],
-            defaultField: 'id',
-            defaultOrder: 'asc',
-        );
+            // Get pagination and sorting parameters
+            $pagination = $this->getPaginationRequest($request);
+            $sort = $this->getSortRequest(
+                $request,
+                allowedFields: ['id', 'title', 'author', 'updated', 'created'],
+                defaultField: 'id',
+                defaultOrder: 'asc',
+            );
 
-        $onlyActive = (bool) $this->configuration->get('api.onlyActiveFaqs');
-        $ignoreOrphanedFaqs = (bool) $this->configuration->get('api.ignoreOrphanedFaqs');
+            $onlyActive = (bool) $this->configuration->get('api.onlyActiveFaqs');
+            $ignoreOrphanedFaqs = (bool) $this->configuration->get('api.ignoreOrphanedFaqs');
 
-        // Get all FAQs (this populates $this->faq->faqRecords)
-        $this->faq->getAllFaqs(
-            Faq::SORTING_TYPE_CATID_FAQID,
-            [
-                'lang' => $this->configuration->getLanguage()->getLanguage(),
-                'fcr.category_id' => $ignoreOrphanedFaqs ? 'IS NOT NULL' : null,
-                'fd.active' => $onlyActive ? 'yes' : null,
-            ],
-            $sort->getOrderSql(),
-        );
+            // Get all FAQs (this populates $this->faq->faqRecords)
+            $this->faq->getAllFaqs(
+                Faq::SORTING_TYPE_CATID_FAQID,
+                [
+                    'lang' => $this->configuration->getLanguage()->getLanguage(),
+                    'fcr.category_id' => $ignoreOrphanedFaqs ? 'IS NOT NULL' : null,
+                    'fd.active' => $onlyActive ? 'yes' : null,
+                ],
+                $sort->getOrderSql(),
+            );
 
-        $allFaqs = $this->faq->faqRecords;
-        $total = is_countable($allFaqs) ? count($allFaqs) : 0;
+            $allFaqs = $this->faq->faqRecords;
+            $total = is_countable($allFaqs) ? count($allFaqs) : 0;
 
-        // Apply sorting if needed (basic client-side sorting)
-        if ($sort->getField() && $sort->getField() !== 'id') {
-            usort($allFaqs, static function ($a, $b) use ($sort) {
-                $field = $sort->getField();
-                $aVal = $a[$field] ?? '';
-                $bVal = $b[$field] ?? '';
-                $result = $aVal <=> $bVal;
-                return $sort->getOrderSql() === 'DESC' ? -$result : $result;
-            });
-        }
+            if ($sort->getField() && $sort->getField() !== 'id') {
+                usort($allFaqs, static function ($a, $b) use ($sort) {
+                    $field = $sort->getField();
+                    $aVal = $a[$field] ?? '';
+                    $bVal = $b[$field] ?? '';
+                    $result = $aVal <=> $bVal;
+                    return $sort->getOrderSql() === 'DESC' ? -$result : $result;
+                });
+            }
 
-        // Apply pagination (client-side slicing)
-        $result = array_slice($allFaqs, $pagination->offset, $pagination->limit);
+            $result = array_slice($allFaqs, $pagination->offset, $pagination->limit);
 
-        return $this->paginatedResponse(
-            $request,
-            data: array_values($result),
-            total: $total,
-            pagination: $pagination,
-            options: new PaginatedResponseOptions(sort: $sort),
-        );
+            return $this->paginatedResponse(
+                $request,
+                data: array_values($result),
+                total: $total,
+                pagination: $pagination,
+                options: new PaginatedResponseOptions(sort: $sort),
+            );
+        });
     }
 
     /**
@@ -890,5 +911,45 @@ final class FaqController extends AbstractApiController
         $this->faq->update($faqEntity);
 
         return $this->json(['stored' => true], Response::HTTP_OK);
+    }
+
+    private function applyRequestLanguage(Request $request): void
+    {
+        $currentLanguage = $this->resolveRequestLanguage($request);
+        Language::$language = $currentLanguage;
+        $this->session->set(name: 'lang', value: $currentLanguage);
+        $this->configuration->setLanguage($this->language);
+    }
+
+    private function resolveRequestLanguage(Request $request): string
+    {
+        foreach ($request->getLanguages() as $language) {
+            if (Language::isASupportedLanguage(strtoupper($language))) {
+                return strtolower($language);
+            }
+
+            $shortLanguage = substr(string: $language, offset: 0, length: 2);
+            if (Language::isASupportedLanguage(strtoupper($shortLanguage))) {
+                return strtolower($shortLanguage);
+            }
+        }
+
+        return $this->configuration->getLanguage()->getLanguage();
+    }
+
+    /** @param callable(): JsonResponse $callback */
+    private function withRequestLanguage(Request $request, callable $callback): JsonResponse
+    {
+        $previousLanguage = $this->configuration->getLanguage()->getLanguage();
+        $previousStaticLanguage = Language::$language;
+
+        try {
+            $this->applyRequestLanguage($request);
+            return $callback();
+        } finally {
+            Language::$language = $previousStaticLanguage !== '' ? $previousStaticLanguage : $previousLanguage;
+            $this->session->set(name: 'lang', value: Language::$language);
+            $this->configuration->setLanguage($this->language);
+        }
     }
 }
