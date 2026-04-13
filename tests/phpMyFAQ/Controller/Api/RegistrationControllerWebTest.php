@@ -17,7 +17,7 @@ final class RegistrationControllerWebTest extends ControllerWebTestCase
         $this->getConfiguration('api')->getAll();
         $this->overrideConfigurationValues(['api.enableAccess' => false], 'api');
 
-        $response = $this->requestApiJson('POST', '/v3.2/register', [
+        $response = $this->requestApiJson('POST', '/v4.0/register', [
             'username' => 'ada',
             'fullname' => 'Ada Lovelace',
             'email' => 'ada@example.com',
@@ -38,7 +38,7 @@ final class RegistrationControllerWebTest extends ControllerWebTestCase
 
         $response = $this->requestApiJson(
             'POST',
-            '/v3.2/register',
+            '/v4.0/register',
             [
                 'username' => '',
                 'fullname' => '',
@@ -70,7 +70,7 @@ final class RegistrationControllerWebTest extends ControllerWebTestCase
 
         $response = $this->requestApiJson(
             'POST',
-            '/v3.2/register',
+            '/v4.0/register',
             [
                 'username' => 'ada',
                 'fullname' => 'Ada Lovelace',

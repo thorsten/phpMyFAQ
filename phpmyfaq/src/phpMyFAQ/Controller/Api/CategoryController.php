@@ -68,7 +68,7 @@ final class CategoryController extends AbstractApiController
     /**
      * @throws \Exception
      */
-    #[OA\Get(path: '/api/v3.2/categories', operationId: 'getCategories', tags: ['Public Endpoints'])]
+    #[OA\Get(path: '/api/v4.0/categories', operationId: 'getCategories', tags: ['Public Endpoints'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the categories.',
@@ -117,45 +117,43 @@ final class CategoryController extends AbstractApiController
     #[OA\Response(
         response: 200,
         description: 'Returns paginated categories for the given language provided by "Accept-Language".',
-        content: new OA\JsonContent(example: '{
-            "success": true,
-            "data": [
-                {
-                    "id": 1,
-                    "lang": "en",
-                    "parent_id": 0,
-                    "name": "Test",
-                    "description": "Hello, World! Hello, Tests!",
-                    "user_id": 1,
-                    "group_id": 1,
-                    "active": 1,
-                    "show_home": 1,
-                    "image": "category-1-en.png",
-                    "level": 1
-                }
+        content: new OA\JsonContent(example: [
+            'success' => true,
+            'data' => [[
+                'id' => 1,
+                'lang' => 'en',
+                'parent_id' => 0,
+                'name' => 'Test',
+                'description' => 'Hello, World! Hello, Tests!',
+                'user_id' => 1,
+                'group_id' => 1,
+                'active' => 1,
+                'show_home' => 1,
+                'image' => 'category-1-en.png',
+                'level' => 1,
+            ]],
+            'meta' => [
+                'pagination' => [
+                    'total' => 50,
+                    'count' => 25,
+                    'per_page' => 25,
+                    'current_page' => 1,
+                    'total_pages' => 2,
+                    'links' => [
+                        'first' => '/api/v4.0/categories?page=1&per_page=25',
+                        'last' => '/api/v4.0/categories?page=2&per_page=25',
+                        'prev' => null,
+                        'next' => '/api/v4.0/categories?page=2&per_page=25',
+                    ],
+                ],
+                'sorting' => [
+                    'field' => 'id',
+                    'order' => 'asc',
+                ],
             ],
-            "meta": {
-                "pagination": {
-                    "total": 50,
-                    "count": 25,
-                    "per_page": 25,
-                    "current_page": 1,
-                    "total_pages": 2,
-                    "links": {
-                        "first": "/api/v3.2/categories?page=1&per_page=25",
-                        "last": "/api/v3.2/categories?page=2&per_page=25",
-                        "prev": null,
-                        "next": "/api/v3.2/categories?page=2&per_page=25"
-                    }
-                },
-                "sorting": {
-                    "field": "id",
-                    "order": "asc"
-                }
-            }
-        }'),
+        ]),
     )]
-    #[Route(path: 'v3.2/categories', name: 'api.categories.list', methods: ['GET'])]
+    #[Route(path: 'v4.0/categories', name: 'api.categories.list', methods: ['GET'])]
     public function list(?Request $request = null): JsonResponse
     {
         $request ??= Request::createFromGlobals();
@@ -204,7 +202,7 @@ final class CategoryController extends AbstractApiController
      * @throws JsonException
      * @throws \Exception
      */
-    #[OA\Post(path: '/api/v3.2/category', operationId: 'createCategory', tags: ['Endpoints with Authentication'])]
+    #[OA\Post(path: '/api/v4.0/category', operationId: 'createCategory', tags: ['Endpoints with Authentication'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the login.',
@@ -260,25 +258,23 @@ final class CategoryController extends AbstractApiController
             }',
         ),
     )]
-    #[OA\Response(
-        response: 201,
-        description: 'If all posted data is correct.',
-        content: new OA\JsonContent(example: '{ "stored": true }'),
-    )]
-    #[OA\Response(
-        response: 400,
-        description: "If something didn't worked out.",
-        content: new OA\JsonContent(example: '{ "stored": false, "error": "Cannot add category" }'),
-    )]
+    #[OA\Response(response: 201, description: 'If all posted data is correct.', content: new OA\JsonContent(example: [
+        'stored' => true,
+    ]))]
+    #[OA\Response(response: 400, description: "If something didn't worked out.", content: new OA\JsonContent(example: [
+        'stored' => false,
+        'error' => 'Cannot add category',
+    ]))]
     #[OA\Response(
         response: 409,
         description: 'If the parent category name cannot be mapped.',
-        content: new OA\JsonContent(
-            example: '{ "stored": false, "error": "The given parent category name was not found." }',
-        ),
+        content: new OA\JsonContent(example: [
+            'stored' => false,
+            'error' => 'The given parent category name was not found.',
+        ]),
     )]
     #[OA\Response(response: 401, description: 'If the user is not authenticated.')]
-    #[Route(path: 'v3.2/category', name: 'api.category.create', methods: ['POST'])]
+    #[Route(path: 'v4.0/category', name: 'api.category.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $this->hasValidToken();

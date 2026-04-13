@@ -28,7 +28,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class GroupController extends AbstractApiController
 {
     #[OA\Get(
-        path: '/api/v3.2/groups',
+        path: '/api/v4.0/groups',
         operationId: 'getGroups',
         description: 'Returns paginated list of group IDs.',
         tags: ['Endpoints with Authentication'],
@@ -80,36 +80,38 @@ final class GroupController extends AbstractApiController
         required: false,
         schema: new OA\Schema(type: 'string', default: 'asc', enum: ['asc', 'desc']),
     )]
-    #[OA\Response(response: 200, description: 'Returns paginated list of group IDs.', content: new OA\JsonContent(
-        example: '{
-            "success": true,
-            "data": [
-                {"group-id": 1},
-                {"group-id": 2}
+    #[OA\Response(
+        response: 200,
+        description: 'Returns paginated list of group IDs.',
+        content: new OA\JsonContent(example: [
+            'success' => true,
+            'data' => [
+                ['group-id' => 1],
+                ['group-id' => 2],
             ],
-            "meta": {
-                "pagination": {
-                    "total": 50,
-                    "count": 25,
-                    "per_page": 25,
-                    "current_page": 1,
-                    "total_pages": 2,
-                    "links": {
-                        "first": "/api/v3.2/groups?page=1&per_page=25",
-                        "last": "/api/v3.2/groups?page=2&per_page=25",
-                        "prev": null,
-                        "next": "/api/v3.2/groups?page=2&per_page=25"
-                    }
-                },
-                "sorting": {
-                    "field": "group-id",
-                    "order": "asc"
-                }
-            }
-        }',
-    ))]
+            'meta' => [
+                'pagination' => [
+                    'total' => 50,
+                    'count' => 25,
+                    'per_page' => 25,
+                    'current_page' => 1,
+                    'total_pages' => 2,
+                    'links' => [
+                        'first' => '/api/v4.0/groups?page=1&per_page=25',
+                        'last' => '/api/v4.0/groups?page=2&per_page=25',
+                        'prev' => null,
+                        'next' => '/api/v4.0/groups?page=2&per_page=25',
+                    ],
+                ],
+                'sorting' => [
+                    'field' => 'group-id',
+                    'order' => 'asc',
+                ],
+            ],
+        ]),
+    )]
     #[OA\Response(response: 401, description: 'If the user is not authenticated.')]
-    #[Route(path: 'v3.2/groups', name: 'api.groups.list', methods: ['GET'])]
+    #[Route(path: 'v4.0/groups', name: 'api.groups.list', methods: ['GET'])]
     public function list(?Request $request = null): JsonResponse
     {
         $this->userIsAuthenticated();

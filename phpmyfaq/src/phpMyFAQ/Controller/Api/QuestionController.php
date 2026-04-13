@@ -44,7 +44,7 @@ final class QuestionController extends AbstractApiController
      * @throws \JsonException
      * @throws \Exception
      */
-    #[OA\Post(path: '/api/v3.2/question', operationId: 'createQuestion', tags: ['Endpoints with Authentication'])]
+    #[OA\Post(path: '/api/v4.0/question', operationId: 'createQuestion', tags: ['Endpoints with Authentication'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the question.',
@@ -82,10 +82,10 @@ final class QuestionController extends AbstractApiController
     #[OA\Response(
         response: 201,
         description: 'Used to add a new question in one existing category.',
-        content: new OA\JsonContent(example: '{ "stored": true }'),
+        content: new OA\JsonContent(example: ['stored' => true]),
     )]
     #[OA\Response(response: 401, description: 'If the user is not authenticated.')]
-    #[Route(path: 'v3.2/question', name: 'api.question.create', methods: ['POST'])]
+    #[Route(path: 'v4.0/question', name: 'api.question.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $this->hasValidToken();

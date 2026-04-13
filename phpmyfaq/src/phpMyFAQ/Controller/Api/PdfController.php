@@ -63,7 +63,7 @@ final class PdfController extends AbstractController
      * @throws Exception
      */
     #[OA\Get(
-        path: '/api/v3.2/pdf/{categoryId}/{faqId}',
+        path: '/api/v4.0/pdf/{categoryId}/{faqId}',
         operationId: 'getPdfById',
         description: 'This endpoint returns the URL to the PDF of FAQ for the given FAQ ID and the language provided '
         . 'by "Accept-Language".',
@@ -91,14 +91,14 @@ final class PdfController extends AbstractController
     #[OA\Response(
         response: 200,
         description: 'If the PDF of the FAQ exists.',
-        content: new OA\JsonContent(example: '"https://www.example.org/pdf.php?cat=3&id=142&artlang=de"'),
+        content: new OA\JsonContent(example: 'https://www.example.org/pdf.php?cat=3&id=142&artlang=de'),
     )]
     #[OA\Response(
         response: 404,
         description: "If there's no FAQ and PDF for the given FAQ ID.",
         content: new OA\JsonContent(example: []),
     )]
-    #[Route(path: 'v3.2/pdf/{categoryId}/{faqId}', name: 'api.pdf.getById', methods: ['GET'])]
+    #[Route(path: 'v4.0/pdf/{categoryId}/{faqId}', name: 'api.pdf.getById', methods: ['GET'])]
     public function getById(Request $request): JsonResponse
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);

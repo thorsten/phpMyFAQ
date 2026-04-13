@@ -144,7 +144,7 @@ class OpenQuestionControllerTest extends TestCase
         $controller = new OpenQuestionController($question);
         $this->configuration->set('api.onlyPublicQuestions', true);
 
-        $request = Request::create('/api/v3.2/open-questions', 'GET', [
+        $request = Request::create('/api/v4.0/open-questions', 'GET', [
             'limit' => 1,
             'offset' => 1,
             'sort' => 'id',

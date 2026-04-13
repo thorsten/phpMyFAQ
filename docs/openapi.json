@@ -11,7 +11,7 @@
       "name": "Mozilla Public Licence 2.0",
       "url": "https://www.mozilla.org/MPL/2.0/"
     },
-    "version": "3.2"
+    "version": "4.0"
   },
   "servers": [
     {
@@ -20,7 +20,7 @@
     }
   ],
   "paths": {
-    "/api/v3.2/attachments/{faqId}": {
+    "/api/v4.0/attachments/{faqId}": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "Returns a paginated list of attachments for a given FAQ record ID with optional sorting.",
@@ -117,12 +117,46 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{\n            \"success\": true,\n            \"data\": [\n                {\n                    \"filename\": \"attachment-1.pdf\",\n                    \"url\": \"https://www.example.org/attachment/1\"\n                },\n                {\n                    \"filename\": \"attachment-2.pdf\",\n                    \"url\": \"https://www.example.org/attachment/2\"\n                }\n            ],\n            \"meta\": {\n                \"pagination\": {\n                    \"total\": 2,\n                    \"count\": 2,\n                    \"per_page\": 25,\n                    \"current_page\": 1,\n                    \"total_pages\": 1,\n                    \"offset\": 0,\n                    \"has_more\": false,\n                    \"has_previous\": false,\n                    \"links\": {\n                        \"first\": \"/api/v3.2/attachments/1?page=1&per_page=25\",\n                        \"last\": \"/api/v3.2/attachments/1?page=1&per_page=25\",\n                        \"prev\": null,\n                        \"next\": null\n                    }\n                },\n                \"sorting\": {\n                    \"field\": \"filename\",\n                    \"order\": \"asc\"\n                }\n            }\n        }"
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "filename": "attachment-1.pdf",
+                      "url": "https://www.example.org/attachment/1"
+                    },
+                    {
+                      "filename": "attachment-2.pdf",
+                      "url": "https://www.example.org/attachment/2"
+                    }
+                  ],
+                  "meta": {
+                    "pagination": {
+                      "total": 2,
+                      "count": 2,
+                      "per_page": 25,
+                      "current_page": 1,
+                      "total_pages": 1,
+                      "offset": 0,
+                      "has_more": false,
+                      "has_previous": false,
+                      "links": {
+                        "first": "/api/v4.0/attachments/1?page=1&per_page=25",
+                        "last": "/api/v4.0/attachments/1?page=1&per_page=25",
+                        "prev": null,
+                        "next": null
+                      }
+                    },
+                    "sorting": {
+                      "field": "filename",
+                      "order": "asc"
+                    }
+                  }
+                }
               }
             }
           },
-          "404": {
-            "description": "If the FAQ has no attachments.",
+          "500": {
+            "description": "If the attachments cannot be fetched.",
             "headers": {
               "Accept-Language": {
                 "description": "The language code for the attachment.",
@@ -134,14 +168,20 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{\"success\": true, \"data\": [], \"meta\": {\"pagination\": {\"total\": 0}}}"
+                "example": {
+                  "success": false,
+                  "error": {
+                    "code": "ATTACHMENT_ERROR",
+                    "message": "Failed to fetch attachments"
+                  }
+                }
               }
             }
           }
         }
       }
     },
-    "/api/v3.2/backup/{type}": {
+    "/api/v4.0/backup/{type}": {
       "get": {
         "tags": ["Endpoints with Authentication"],
         "operationId": "createBackup",
@@ -225,7 +265,7 @@
         }
       }
     },
-    "/api/v3.2/categories": {
+    "/api/v4.0/categories": {
       "get": {
         "tags": ["Public Endpoints"],
         "operationId": "getCategories",
@@ -307,14 +347,50 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{\n            \"success\": true,\n            \"data\": [\n                {\n                    \"id\": 1,\n                    \"lang\": \"en\",\n                    \"parent_id\": 0,\n                    \"name\": \"Test\",\n                    \"description\": \"Hello, World! Hello, Tests!\",\n                    \"user_id\": 1,\n                    \"group_id\": 1,\n                    \"active\": 1,\n                    \"show_home\": 1,\n                    \"image\": \"category-1-en.png\",\n                    \"level\": 1\n                }\n            ],\n            \"meta\": {\n                \"pagination\": {\n                    \"total\": 50,\n                    \"count\": 25,\n                    \"per_page\": 25,\n                    \"current_page\": 1,\n                    \"total_pages\": 2,\n                    \"links\": {\n                        \"first\": \"/api/v3.2/categories?page=1&per_page=25\",\n                        \"last\": \"/api/v3.2/categories?page=2&per_page=25\",\n                        \"prev\": null,\n                        \"next\": \"/api/v3.2/categories?page=2&per_page=25\"\n                    }\n                },\n                \"sorting\": {\n                    \"field\": \"id\",\n                    \"order\": \"asc\"\n                }\n            }\n        }"
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "id": 1,
+                      "lang": "en",
+                      "parent_id": 0,
+                      "name": "Test",
+                      "description": "Hello, World! Hello, Tests!",
+                      "user_id": 1,
+                      "group_id": 1,
+                      "active": 1,
+                      "show_home": 1,
+                      "image": "category-1-en.png",
+                      "level": 1
+                    }
+                  ],
+                  "meta": {
+                    "pagination": {
+                      "total": 50,
+                      "count": 25,
+                      "per_page": 25,
+                      "current_page": 1,
+                      "total_pages": 2,
+                      "links": {
+                        "first": "/api/v4.0/categories?page=1&per_page=25",
+                        "last": "/api/v4.0/categories?page=2&per_page=25",
+                        "prev": null,
+                        "next": "/api/v4.0/categories?page=2&per_page=25"
+                      }
+                    },
+                    "sorting": {
+                      "field": "id",
+                      "order": "asc"
+                    }
+                  }
+                }
               }
             }
           }
         }
       }
     },
-    "/api/v3.2/category": {
+    "/api/v4.0/category": {
       "post": {
         "tags": ["Endpoints with Authentication"],
         "operationId": "createCategory",
@@ -390,7 +466,9 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{ \"stored\": true }"
+                "example": {
+                  "stored": true
+                }
               }
             }
           },
@@ -413,7 +491,10 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{ \"stored\": false, \"error\": \"Cannot add category\" }"
+                "example": {
+                  "stored": false,
+                  "error": "Cannot add category"
+                }
               }
             }
           },
@@ -436,7 +517,10 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{ \"stored\": false, \"error\": \"The given parent category name was not found.\" }"
+                "example": {
+                  "stored": false,
+                  "error": "The given parent category name was not found."
+                }
               }
             }
           },
@@ -460,7 +544,7 @@
         }
       }
     },
-    "/api/v3.2/comments/{faqId}": {
+    "/api/v4.0/comments/{faqId}": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "Returns a paginated list of comments for a given FAQ record ID.",
@@ -552,14 +636,47 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{\n            \"success\": true,\n            \"data\": [\n                {\n                    \"id\": 2,\n                    \"recordId\": 142,\n                    \"categoryId\": null,\n                    \"type\": \"faq\",\n                    \"username\": \"phpMyFAQ User\",\n                    \"comment\": \"Foo! Bar?\",\n                    \"date\": \"2019-12-24T12:24:57+0100\",\n                    \"helped\": null\n                }\n            ],\n            \"meta\": {\n                \"pagination\": {\n                    \"total\": 50,\n                    \"count\": 25,\n                    \"per_page\": 25,\n                    \"current_page\": 1,\n                    \"total_pages\": 2,\n                    \"links\": {\n                        \"first\": \"/api/v3.2/comments/142?page=1&per_page=25\",\n                        \"last\": \"/api/v3.2/comments/142?page=2&per_page=25\",\n                        \"prev\": null,\n                        \"next\": \"/api/v3.2/comments/142?page=2&per_page=25\"\n                    }\n                },\n                \"sorting\": {\n                    \"field\": \"id_comment\",\n                    \"order\": \"asc\"\n                }\n            }\n        }"
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "id": 2,
+                      "recordId": 142,
+                      "categoryId": null,
+                      "type": "faq",
+                      "username": "phpMyFAQ User",
+                      "comment": "Foo! Bar?",
+                      "date": "2019-12-24T12:24:57+0100",
+                      "helped": null
+                    }
+                  ],
+                  "meta": {
+                    "pagination": {
+                      "total": 50,
+                      "count": 25,
+                      "per_page": 25,
+                      "current_page": 1,
+                      "total_pages": 2,
+                      "links": {
+                        "first": "/api/v4.0/comments/142?page=1&per_page=25",
+                        "last": "/api/v4.0/comments/142?page=2&per_page=25",
+                        "prev": null,
+                        "next": "/api/v4.0/comments/142?page=2&per_page=25"
+                      }
+                    },
+                    "sorting": {
+                      "field": "id_comment",
+                      "order": "asc"
+                    }
+                  }
+                }
               }
             }
           }
         }
       }
     },
-    "/api/v3.2/faqs/{categoryId}": {
+    "/api/v4.0/faqs/{categoryId}": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns all the FAQs with a preview of the answer for the given category ID and the language provided by \"Accept-Language\".",
@@ -589,12 +706,24 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "[\n            {\n                \"record_id\": 1,\n                \"record_lang\": \"en\",\n                \"category_id\": 1,\n                \"record_title\": \"Is there life after death?\",\n                \"record_preview\": \"Maybe!\",\n                \"record_link\": \"/phpmyfaq//content/1/1/en/is-there-life-after-death.html\",\n                \"record_updated\": \"20191010175452\",\n                \"visits\": 3,\n                \"record_created\": \"2018-09-03T21:30:17+02:00\"\n            }\n        ]"
+                "example": [
+                  {
+                    "record_id": 1,
+                    "record_lang": "en",
+                    "category_id": 1,
+                    "record_title": "Is there life after death?",
+                    "record_preview": "Maybe!",
+                    "record_link": "/phpmyfaq/content/1/1/en/is-there-life-after-death.html",
+                    "record_updated": "20191010175452",
+                    "visits": 3,
+                    "record_created": "2018-09-03T21:30:17+02:00"
+                  }
+                ]
               }
             }
           },
-          "404": {
-            "description": "If the category has no FAQs.",
+          "500": {
+            "description": "If fetching the FAQs fails.",
             "headers": {
               "Accept-Language": {
                 "description": "The language code for the FAQ.",
@@ -606,14 +735,16 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": []
+                "example": {
+                  "error": "Error message"
+                }
               }
             }
           }
         }
       }
     },
-    "/api/v3.2/faq/{categoryId}/{faqId}": {
+    "/api/v4.0/faq/{categoryId}/{faqId}": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns the FAQ for the given FAQ ID and the language provided by \"Accept-Language\".",
@@ -652,7 +783,26 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{\n            \"id\": 1,\n            \"lang\": \"en\",\n            \"solution_id\": 1000,\n            \"revision_id\": 0,\n            \"active\": \"yes\",\n            \"sticky\": 0,\n            \"keywords\": \"\",\n            \"question\": \"Is there life after death?\",\n            \"answer\": \"Maybe!\",\n            \"author\": \"phpMyFAQ User\",\n            \"email\": \"user@example.org\",\n            \"comment\": \"y\",\n            \"updated\": \"2019-10-10 17:54\",\n            \"dateStart\": \"00000000000000\",\n            \"dateEnd\": \"99991231235959\",\n            \"created\": \"2019-09-03T21:30:17+02:00\",\n            \"category_id\": 1,\n            \"link\": \"https://localhost/content/1/1/en/is_there_life_after_death.html\"\n        }"
+                "example": {
+                  "id": 1,
+                  "lang": "en",
+                  "solution_id": 1000,
+                  "revision_id": 0,
+                  "active": "yes",
+                  "sticky": 0,
+                  "keywords": "",
+                  "question": "Is there life after death?",
+                  "answer": "Maybe!",
+                  "author": "phpMyFAQ User",
+                  "email": "user@example.org",
+                  "comment": "y",
+                  "updated": "2019-10-10 17:54",
+                  "dateStart": "00000000000000",
+                  "dateEnd": "99991231235959",
+                  "created": "2019-09-03T21:30:17+02:00",
+                  "category_id": 1,
+                  "link": "https://localhost/content/1/1/en/is_there_life_after_death.html"
+                }
               }
             }
           },
@@ -669,14 +819,14 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": []
+                "example": {}
               }
             }
           }
         }
       }
     },
-    "/api/v3.2/faqs/tags/{tagId}": {
+    "/api/v4.0/faqs/tags/{tagId}": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns all the FAQs for the given tag ID and the language provided by \n        \"Accept-Language\"",
@@ -706,12 +856,24 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "[\n            {\n                \"record_id\": 1,\n                \"record_lang\": \"en\",\n                \"category_id\": 1,\n                \"record_title\": \"Is there life after death?\",\n                \"record_preview\": \"Maybe!\",\n                \"record_link\": \"/phpmyfaq/content/1/1/en/is-there-life-after-death.html\",\n                \"record_updated\": \"20191010175452\",\n                \"visits\": 3,\n                \"record_created\": \"2018-09-03T21:30:17+02:00\"\n            }\n        ]"
+                "example": [
+                  {
+                    "record_id": 1,
+                    "record_lang": "en",
+                    "category_id": 1,
+                    "record_title": "Is there life after death?",
+                    "record_preview": "Maybe!",
+                    "record_link": "/phpmyfaq/content/1/1/en/is-there-life-after-death.html",
+                    "record_updated": "20191010175452",
+                    "visits": 3,
+                    "record_created": "2018-09-03T21:30:17+02:00"
+                  }
+                ]
               }
             }
           },
-          "404": {
-            "description": "If the tag ID has no FAQs.",
+          "500": {
+            "description": "If fetching the tagged FAQs fails.",
             "headers": {
               "Accept-Language": {
                 "description": "The language code for the FAQ.",
@@ -723,14 +885,16 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": []
+                "example": {
+                  "error": "Error message"
+                }
               }
             }
           }
         }
       }
     },
-    "/api/v3.2/faqs/popular": {
+    "/api/v4.0/faqs/popular": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns the popular FAQs for the given language provided by \"Accept-Language\".",
@@ -749,7 +913,15 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "[\n            {\n                \"date\": \"2019-07-13T11:28:00+0200\",\n                \"question\": \"How can I survive without phpMyFAQ?\",\n                \"answer\": \"A good question!\",\n                \"visits\": 10,\n                \"url\": \"https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html\"\n            }\n        ]"
+                "example": [
+                  {
+                    "date": "2019-07-13T11:28:00+0200",
+                    "question": "How can I survive without phpMyFAQ?",
+                    "answer": "A good question!",
+                    "visits": 10,
+                    "url": "https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html"
+                  }
+                ]
               }
             }
           },
@@ -773,7 +945,7 @@
         }
       }
     },
-    "/api/v3.2/faqs/latest": {
+    "/api/v4.0/faqs/latest": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns the latest FAQs for the given language provided by \"Accept-Language\".",
@@ -792,7 +964,15 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "[\n            {\n                \"date\": \"2019-07-13T11:28:00+0200\",\n                \"question\": \"How can I survive without phpMyFAQ?\",\n                \"answer\": \"A good question!\",\n                \"visits\": 10,\n                \"url\": \"https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html\"\n            }\n        ]"
+                "example": [
+                  {
+                    "date": "2019-07-13T11:28:00+0200",
+                    "question": "How can I survive without phpMyFAQ?",
+                    "answer": "A good question!",
+                    "visits": 10,
+                    "url": "https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html"
+                  }
+                ]
               }
             }
           },
@@ -816,7 +996,7 @@
         }
       }
     },
-    "/api/v3.2/faqs/trending": {
+    "/api/v4.0/faqs/trending": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns the trending FAQs for the given language provided by \"Accept-Language\".",
@@ -835,7 +1015,15 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "[\n            {\n                \"date\": \"2019-07-13T11:28:00+0200\",\n                \"question\": \"How can I survive without phpMyFAQ?\",\n                \"answer\": \"A good question!\",\n                \"visits\": 10,\n                \"url\": \"https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html\"\n            }\n        ]"
+                "example": [
+                  {
+                    "date": "2019-07-13T11:28:00+0200",
+                    "question": "How can I survive without phpMyFAQ?",
+                    "answer": "A good question!",
+                    "visits": 10,
+                    "url": "https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html"
+                  }
+                ]
               }
             }
           },
@@ -859,7 +1047,7 @@
         }
       }
     },
-    "/api/v3.2/faqs/sticky": {
+    "/api/v4.0/faqs/sticky": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns the sticky FAQs for the given language provided by \"Accept-Language\".",
@@ -878,7 +1066,20 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "[\n            {\n                \"question\": \"How can I survive without phpMyFAQ?\",\n                \"url\": \"https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html\",\n                \"id\": 8,\n                \"order\": 1\n            },\n            {\n                \"question\": \"Is there life after death?\",\n                \"url\": \"https://www.example.org/content/1/1/de/is-there-life-after-death.html\",\n                \"id\": 10,\n                \"order\": 2\n            }\n        ]"
+                "example": [
+                  {
+                    "question": "How can I survive without phpMyFAQ?",
+                    "url": "https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html",
+                    "id": 8,
+                    "order": 1
+                  },
+                  {
+                    "question": "Is there life after death?",
+                    "url": "https://www.example.org/content/1/1/de/is-there-life-after-death.html",
+                    "id": 10,
+                    "order": 2
+                  }
+                ]
               }
             }
           },
@@ -902,7 +1103,7 @@
         }
       }
     },
-    "/api/v3.2/faqs": {
+    "/api/v4.0/faqs": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns paginated FAQs for the given language provided by \"Accept-Language\".",
@@ -985,14 +1186,56 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{\n            \"success\": true,\n            \"data\": [\n                {\n                    \"id\": \"1\",\n                    \"lang\": \"en\",\n                    \"solution_id\": \"1000\",\n                    \"revision_id\": \"0\",\n                    \"active\": \"yes\",\n                    \"sticky\": \"0\",\n                    \"keywords\": \"\",\n                    \"title\": \"Is there life after death?\",\n                    \"content\": \"Maybe!\",\n                    \"author\": \"phpMyFAQ User\",\n                    \"email\": \"user@example.org\",\n                    \"comment\": \"y\",\n                    \"updated\": \"2009-10-10 17:54:00\",\n                    \"dateStart\": \"00000000000000\",\n                    \"dateEnd\": \"99991231235959\",\n                    \"created\": \"2008-09-03T21:30:17+02:00\",\n                    \"notes\": \"\"\n                }\n            ],\n            \"meta\": {\n                \"pagination\": {\n                    \"total\": 50,\n                    \"count\": 25,\n                    \"per_page\": 25,\n                    \"current_page\": 1,\n                    \"total_pages\": 2,\n                    \"links\": {\n                        \"first\": \"/api/v3.2/faqs?page=1&per_page=25\",\n                        \"last\": \"/api/v3.2/faqs?page=2&per_page=25\",\n                        \"prev\": null,\n                        \"next\": \"/api/v3.2/faqs?page=2&per_page=25\"\n                    }\n                },\n                \"sorting\": {\n                    \"field\": \"id\",\n                    \"order\": \"asc\"\n                }\n            }\n        }"
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "id": "1",
+                      "lang": "en",
+                      "solution_id": "1000",
+                      "revision_id": "0",
+                      "active": "yes",
+                      "sticky": "0",
+                      "keywords": "",
+                      "title": "Is there life after death?",
+                      "content": "Maybe!",
+                      "author": "phpMyFAQ User",
+                      "email": "user@example.org",
+                      "comment": "y",
+                      "updated": "2009-10-10 17:54:00",
+                      "dateStart": "00000000000000",
+                      "dateEnd": "99991231235959",
+                      "created": "2008-09-03T21:30:17+02:00",
+                      "notes": ""
+                    }
+                  ],
+                  "meta": {
+                    "pagination": {
+                      "total": 50,
+                      "count": 25,
+                      "per_page": 25,
+                      "current_page": 1,
+                      "total_pages": 2,
+                      "links": {
+                        "first": "/api/v4.0/faqs?page=1&per_page=25",
+                        "last": "/api/v4.0/faqs?page=2&per_page=25",
+                        "prev": null,
+                        "next": "/api/v4.0/faqs?page=2&per_page=25"
+                      }
+                    },
+                    "sorting": {
+                      "field": "id",
+                      "order": "asc"
+                    }
+                  }
+                }
               }
             }
           }
         }
       }
     },
-    "/api/v3.2/faq/create": {
+    "/api/v4.0/faq/create": {
       "post": {
         "tags": ["Endpoints with Authentication"],
         "operationId": "createFaq",
@@ -1072,7 +1315,9 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{ \"stored\": true }"
+                "example": {
+                  "stored": true
+                }
               }
             }
           },
@@ -1095,7 +1340,10 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{ \"stored\": false, \"error\": \"It is not allowed, that the question title contains a hash.\" }"
+                "example": {
+                  "stored": false,
+                  "error": "It is not allowed, that the question title contains a hash."
+                }
               }
             }
           },
@@ -1118,7 +1366,10 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{ \"stored\": false, \"error\": \"The given category name was not found\" }"
+                "example": {
+                  "stored": false,
+                  "error": "The given category name was not found"
+                }
               }
             }
           },
@@ -1142,7 +1393,7 @@
         }
       }
     },
-    "/api/v3.2/faq/update": {
+    "/api/v4.0/faq/update": {
       "put": {
         "tags": ["Endpoints with Authentication"],
         "description": "Used to update a FAQ in one existing category.",
@@ -1222,7 +1473,9 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{ \"stored\": true }"
+                "example": {
+                  "stored": true
+                }
               }
             }
           },
@@ -1245,7 +1498,10 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{ \"stored\": false, \"error\": \"It is not allowed, that the question title contains a hash.\" }"
+                "example": {
+                  "stored": false,
+                  "error": "It is not allowed, that the question title contains a hash."
+                }
               }
             }
           },
@@ -1269,7 +1525,7 @@
         }
       }
     },
-    "/api/v3.2/glossary": {
+    "/api/v4.0/glossary": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "Returns paginated glossary items.",
@@ -1352,14 +1608,49 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{\n            \"success\": true,\n            \"data\": [\n                {\"id\": 1, \"language\": \"en\", \"item\": \"API\", \"definition\": \"Application Programming Interface\"},\n                {\"id\": 2, \"language\": \"en\", \"item\": \"FAQ\", \"definition\": \"Frequently Asked Questions\"}\n            ],\n            \"meta\": {\n                \"pagination\": {\n                    \"total\": 50,\n                    \"count\": 25,\n                    \"per_page\": 25,\n                    \"current_page\": 1,\n                    \"total_pages\": 2,\n                    \"links\": {\n                        \"first\": \"/api/v3.2/glossary?page=1&per_page=25\",\n                        \"last\": \"/api/v3.2/glossary?page=2&per_page=25\",\n                        \"prev\": null,\n                        \"next\": \"/api/v3.2/glossary?page=2&per_page=25\"\n                    }\n                },\n                \"sorting\": {\n                    \"field\": \"item\",\n                    \"order\": \"asc\"\n                }\n            }\n        }"
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "id": 1,
+                      "language": "en",
+                      "item": "API",
+                      "definition": "Application Programming Interface"
+                    },
+                    {
+                      "id": 2,
+                      "language": "en",
+                      "item": "FAQ",
+                      "definition": "Frequently Asked Questions"
+                    }
+                  ],
+                  "meta": {
+                    "pagination": {
+                      "total": 50,
+                      "count": 25,
+                      "per_page": 25,
+                      "current_page": 1,
+                      "total_pages": 2,
+                      "links": {
+                        "first": "/api/v4.0/glossary?page=1&per_page=25",
+                        "last": "/api/v4.0/glossary?page=2&per_page=25",
+                        "prev": null,
+                        "next": "/api/v4.0/glossary?page=2&per_page=25"
+                      }
+                    },
+                    "sorting": {
+                      "field": "item",
+                      "order": "asc"
+                    }
+                  }
+                }
               }
             }
           }
         }
       }
     },
-    "/api/v3.2/groups": {
+    "/api/v4.0/groups": {
       "get": {
         "tags": ["Endpoints with Authentication"],
         "description": "Returns paginated list of group IDs.",
@@ -1442,7 +1733,36 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{\n            \"success\": true,\n            \"data\": [\n                {\"group-id\": 1},\n                {\"group-id\": 2}\n            ],\n            \"meta\": {\n                \"pagination\": {\n                    \"total\": 50,\n                    \"count\": 25,\n                    \"per_page\": 25,\n                    \"current_page\": 1,\n                    \"total_pages\": 2,\n                    \"links\": {\n                        \"first\": \"/api/v3.2/groups?page=1&per_page=25\",\n                        \"last\": \"/api/v3.2/groups?page=2&per_page=25\",\n                        \"prev\": null,\n                        \"next\": \"/api/v3.2/groups?page=2&per_page=25\"\n                    }\n                },\n                \"sorting\": {\n                    \"field\": \"group-id\",\n                    \"order\": \"asc\"\n                }\n            }\n        }"
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "group-id": 1
+                    },
+                    {
+                      "group-id": 2
+                    }
+                  ],
+                  "meta": {
+                    "pagination": {
+                      "total": 50,
+                      "count": 25,
+                      "per_page": 25,
+                      "current_page": 1,
+                      "total_pages": 2,
+                      "links": {
+                        "first": "/api/v4.0/groups?page=1&per_page=25",
+                        "last": "/api/v4.0/groups?page=2&per_page=25",
+                        "prev": null,
+                        "next": "/api/v4.0/groups?page=2&per_page=25"
+                      }
+                    },
+                    "sorting": {
+                      "field": "group-id",
+                      "order": "asc"
+                    }
+                  }
+                }
               }
             }
           },
@@ -1460,7 +1780,7 @@
         }
       }
     },
-    "/api/v3.2/language": {
+    "/api/v4.0/language": {
       "get": {
         "tags": ["Public Endpoints"],
         "operationId": "getLanguage",
@@ -1470,14 +1790,14 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "\"en\""
+                "example": "en"
               }
             }
           }
         }
       }
     },
-    "/api/v3.2/login": {
+    "/api/v4.0/login": {
       "post": {
         "tags": ["Public Endpoints"],
         "operationId": "login",
@@ -1515,7 +1835,9 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{ \"loggedin\": true }"
+                "example": {
+                  "loggedin": true
+                }
               }
             }
           },
@@ -1532,14 +1854,17 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{ \"loggedin\": false, \"error\": \"Wrong username or password.\" }"
+                "example": {
+                  "loggedin": false,
+                  "error": "Wrong username or password."
+                }
               }
             }
           }
         }
       }
     },
-    "/api/v3.2/meta": {
+    "/api/v4.0/meta": {
       "get": {
         "tags": ["Public Endpoints"],
         "operationId": "getMeta",
@@ -1588,7 +1913,7 @@
         }
       }
     },
-    "/api/v3.2/news": {
+    "/api/v4.0/news": {
       "get": {
         "tags": ["Public Endpoints"],
         "operationId": "getNews",
@@ -1670,14 +1995,52 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{\n            \"success\": true,\n            \"data\": [\n                {\n                    \"id\": 1,\n                    \"lang\": \"en\",\n                    \"date\": \"2019-08-23T20:43:00+0200\",\n                    \"header\": \"Hallo, World!\",\n                    \"content\": \"Hello, phpMyFAQ!\",\n                    \"authorName\": \"phpMyFAQ User\",\n                    \"authorEmail\": \"user@example.org\",\n                    \"active\": true,\n                    \"allowComments\": true,\n                    \"link\": \"\",\n                    \"linkTitle\": \"\",\n                    \"target\": \"\",\n                    \"url\": \"https://www.example.org/news/1/de/hallo-phpmyfaq.html\"\n                }\n            ],\n            \"meta\": {\n                \"pagination\": {\n                    \"total\": 50,\n                    \"count\": 25,\n                    \"per_page\": 25,\n                    \"current_page\": 1,\n                    \"total_pages\": 2,\n                    \"links\": {\n                        \"first\": \"/api/v3.2/news?page=1&per_page=25\",\n                        \"last\": \"/api/v3.2/news?page=2&per_page=25\",\n                        \"prev\": null,\n                        \"next\": \"/api/v3.2/news?page=2&per_page=25\"\n                    }\n                },\n                \"sorting\": {\n                    \"field\": \"datum\",\n                    \"order\": \"desc\"\n                }\n            }\n        }"
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "id": 1,
+                      "lang": "en",
+                      "date": "2019-08-23T20:43:00+0200",
+                      "header": "Hallo, World!",
+                      "content": "Hello, phpMyFAQ!",
+                      "authorName": "phpMyFAQ User",
+                      "authorEmail": "user@example.org",
+                      "active": true,
+                      "allowComments": true,
+                      "link": "",
+                      "linkTitle": "",
+                      "target": "",
+                      "url": "https://www.example.org/news/1/de/hallo-phpmyfaq.html"
+                    }
+                  ],
+                  "meta": {
+                    "pagination": {
+                      "total": 50,
+                      "count": 25,
+                      "per_page": 25,
+                      "current_page": 1,
+                      "total_pages": 2,
+                      "links": {
+                        "first": "/api/v4.0/news?page=1&per_page=25",
+                        "last": "/api/v4.0/news?page=2&per_page=25",
+                        "prev": null,
+                        "next": "/api/v4.0/news?page=2&per_page=25"
+                      }
+                    },
+                    "sorting": {
+                      "field": "datum",
+                      "order": "desc"
+                    }
+                  }
+                }
               }
             }
           }
         }
       }
     },
-    "/api/v3.2/open-questions": {
+    "/api/v4.0/open-questions": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "Returns paginated open questions.",
@@ -1760,14 +2123,48 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{\n            \"success\": true,\n            \"data\": [\n                {\n                    \"id\": 1,\n                    \"lang\": \"en\",\n                    \"username\": \"phpMyFAQ User\",\n                    \"email\": \"user@example.org\",\n                    \"categoryId\": 3,\n                    \"question\": \"Foo? Bar? Baz?\",\n                    \"created\": \"20190106180429\",\n                    \"answerId\": 0,\n                    \"isVisible\": \"N\"\n                }\n            ],\n            \"meta\": {\n                \"pagination\": {\n                    \"total\": 50,\n                    \"count\": 25,\n                    \"per_page\": 25,\n                    \"current_page\": 1,\n                    \"total_pages\": 2,\n                    \"links\": {\n                        \"first\": \"/api/v3.2/open-questions?page=1&per_page=25\",\n                        \"last\": \"/api/v3.2/open-questions?page=2&per_page=25\",\n                        \"prev\": null,\n                        \"next\": \"/api/v3.2/open-questions?page=2&per_page=25\"\n                    }\n                },\n                \"sorting\": {\n                    \"field\": \"id\",\n                    \"order\": \"asc\"\n                }\n            }\n        }"
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "id": 1,
+                      "lang": "en",
+                      "username": "phpMyFAQ User",
+                      "email": "user@example.org",
+                      "categoryId": 3,
+                      "question": "Foo? Bar? Baz?",
+                      "created": "20190106180429",
+                      "answerId": 0,
+                      "isVisible": "N"
+                    }
+                  ],
+                  "meta": {
+                    "pagination": {
+                      "total": 50,
+                      "count": 25,
+                      "per_page": 25,
+                      "current_page": 1,
+                      "total_pages": 2,
+                      "links": {
+                        "first": "/api/v4.0/open-questions?page=1&per_page=25",
+                        "last": "/api/v4.0/open-questions?page=2&per_page=25",
+                        "prev": null,
+                        "next": "/api/v4.0/open-questions?page=2&per_page=25"
+                      }
+                    },
+                    "sorting": {
+                      "field": "id",
+                      "order": "asc"
+                    }
+                  }
+                }
               }
             }
           }
         }
       }
     },
-    "/api/v3.2/pdf/{categoryId}/{faqId}": {
+    "/api/v4.0/pdf/{categoryId}/{faqId}": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns the URL to the PDF of FAQ for the given FAQ ID and the language provided by \"Accept-Language\".",
@@ -1806,7 +2203,7 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "\"https://www.example.org/pdf.php?cat=3&id=142&artlang=de\""
+                "example": "https://www.example.org/pdf.php?cat=3&id=142&artlang=de"
               }
             }
           },
@@ -1830,7 +2227,7 @@
         }
       }
     },
-    "/api/v3.2/question": {
+    "/api/v4.0/question": {
       "post": {
         "tags": ["Endpoints with Authentication"],
         "operationId": "createQuestion",
@@ -1880,7 +2277,9 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{ \"stored\": true }"
+                "example": {
+                  "stored": true
+                }
               }
             }
           },
@@ -1904,7 +2303,7 @@
         }
       }
     },
-    "/api/v3.2/register": {
+    "/api/v4.0/register": {
       "post": {
         "tags": ["Endpoints with Authentication"],
         "operationId": "createUser",
@@ -1954,7 +2353,10 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{ \"registered\": true, \"success\": \"User created.\"}"
+                "example": {
+                  "registered": true,
+                  "success": "User created."
+                }
               }
             }
           },
@@ -1977,7 +2379,10 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{ \"registered\": false, \"error\": \"Error message\"}"
+                "example": {
+                  "registered": false,
+                  "error": "Error message"
+                }
               }
             }
           },
@@ -2000,7 +2405,10 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{ \"registered\": false, \"error\": \"The domain is not allowed.\"}"
+                "example": {
+                  "registered": false,
+                  "error": "The domain is not allowed."
+                }
               }
             }
           },
@@ -2023,14 +2431,16 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{ \"registered\": false }"
+                "example": {
+                  "registered": false
+                }
               }
             }
           }
         }
       }
     },
-    "/api/v3.2/search": {
+    "/api/v4.0/search": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "Returns paginated search results.",
@@ -2114,14 +2524,45 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{\n            \"success\": true,\n            \"data\": [\n                {\n                    \"id\": \"1\",\n                    \"lang\": \"en\",\n                    \"category_id\": \"15\",\n                    \"question\": \"Why are you using phpMyFAQ?\",\n                    \"answer\": \"Because it is cool!\",\n                    \"link\": \"https://www.example.org/content/15/1/en/why-are-you-using-phpmyfaq.html\"\n                }\n            ],\n            \"meta\": {\n                \"pagination\": {\n                    \"total\": 50,\n                    \"count\": 25,\n                    \"per_page\": 25,\n                    \"current_page\": 1,\n                    \"total_pages\": 2,\n                    \"links\": {\n                        \"first\": \"/api/v3.2/search?q=test&page=1&per_page=25\",\n                        \"last\": \"/api/v3.2/search?q=test&page=2&per_page=25\",\n                        \"prev\": null,\n                        \"next\": \"/api/v3.2/search?q=test&page=2&per_page=25\"\n                    }\n                },\n                \"sorting\": {\n                    \"field\": \"id\",\n                    \"order\": \"asc\"\n                }\n            }\n        }"
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "id": "1",
+                      "lang": "en",
+                      "category_id": "15",
+                      "question": "Why are you using phpMyFAQ?",
+                      "answer": "Because it is cool!",
+                      "link": "https://www.example.org/content/15/1/en/why-are-you-using-phpmyfaq.html"
+                    }
+                  ],
+                  "meta": {
+                    "pagination": {
+                      "total": 50,
+                      "count": 25,
+                      "per_page": 25,
+                      "current_page": 1,
+                      "total_pages": 2,
+                      "links": {
+                        "first": "/api/v4.0/search?q=test&page=1&per_page=25",
+                        "last": "/api/v4.0/search?q=test&page=2&per_page=25",
+                        "prev": null,
+                        "next": "/api/v4.0/search?q=test&page=2&per_page=25"
+                      }
+                    },
+                    "sorting": {
+                      "field": "id",
+                      "order": "asc"
+                    }
+                  }
+                }
               }
             }
           }
         }
       }
     },
-    "/api/v3.2/searches/popular": {
+    "/api/v4.0/searches/popular": {
       "get": {
         "tags": ["Public Endpoints"],
         "operationId": "getPopularSearch",
@@ -2139,7 +2580,20 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "\n        [\n            {\n                \"id\": 3,\n                \"searchterm\": \"mac\",\n                \"number\": \"18\",\n                \"lang\": \"en\"\n            },\n            {\n                \"id\": 7,\n                \"searchterm\": \"test\",\n                \"number\": 9,\n                \"lang\": \"en\"\n            }\n        ]"
+                "example": [
+                  {
+                    "id": 3,
+                    "searchterm": "mac",
+                    "number": "18",
+                    "lang": "en"
+                  },
+                  {
+                    "id": 7,
+                    "searchterm": "test",
+                    "number": 9,
+                    "lang": "en"
+                  }
+                ]
               }
             }
           },
@@ -2163,7 +2617,7 @@
         }
       }
     },
-    "/api/v3.2/tags": {
+    "/api/v4.0/tags": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "Returns paginated tags.",
@@ -2238,14 +2692,47 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": "{\n            \"success\": true,\n            \"data\": [\n                {\"tagId\": 4, \"tagName\": \"phpMyFAQ\", \"tagFrequency\": 3},\n                {\"tagId\": 1, \"tagName\": \"PHP 8\", \"tagFrequency\": 2}\n            ],\n            \"meta\": {\n                \"pagination\": {\n                    \"total\": 50,\n                    \"count\": 25,\n                    \"per_page\": 25,\n                    \"current_page\": 1,\n                    \"total_pages\": 2,\n                    \"links\": {\n                        \"first\": \"/api/v3.2/tags?page=1&per_page=25\",\n                        \"last\": \"/api/v3.2/tags?page=2&per_page=25\",\n                        \"prev\": null,\n                        \"next\": \"/api/v3.2/tags?page=2&per_page=25\"\n                    }\n                },\n                \"sorting\": {\n                    \"field\": \"tagFrequency\",\n                    \"order\": \"desc\"\n                }\n            }\n        }"
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "tagId": 4,
+                      "tagName": "phpMyFAQ",
+                      "tagFrequency": 3
+                    },
+                    {
+                      "tagId": 1,
+                      "tagName": "PHP 8",
+                      "tagFrequency": 2
+                    }
+                  ],
+                  "meta": {
+                    "pagination": {
+                      "total": 50,
+                      "count": 25,
+                      "per_page": 25,
+                      "current_page": 1,
+                      "total_pages": 2,
+                      "links": {
+                        "first": "/api/v4.0/tags?page=1&per_page=25",
+                        "last": "/api/v4.0/tags?page=2&per_page=25",
+                        "prev": null,
+                        "next": "/api/v4.0/tags?page=2&per_page=25"
+                      }
+                    },
+                    "sorting": {
+                      "field": "tagFrequency",
+                      "order": "desc"
+                    }
+                  }
+                }
               }
             }
           }
         }
       }
     },
-    "/api/v3.2/title": {
+    "/api/v4.0/title": {
       "get": {
         "tags": ["Public Endpoints"],
         "operationId": "getTitle",
@@ -2262,7 +2749,7 @@
         }
       }
     },
-    "/api/v3.2/version": {
+    "/api/v4.0/version": {
       "get": {
         "tags": ["Public Endpoints"],
         "operationId": "getVersion",
@@ -2273,6 +2760,54 @@
               "application/json": {
                 "schema": {},
                 "example": "4.0.0"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/.well-known/oauth-authorization-server": {
+      "get": {
+        "tags": ["Public Endpoints"],
+        "operationId": "getOAuthAuthorizationServerMetadata",
+        "responses": {
+          "200": {
+            "description": "Returns OAuth 2.0 Authorization Server Metadata.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "issuer": {
+                      "type": "string",
+                      "example": "https://localhost/api"
+                    },
+                    "authorization_endpoint": {
+                      "type": "string"
+                    },
+                    "token_endpoint": {
+                      "type": "string"
+                    },
+                    "grant_types_supported": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "response_types_supported": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "token_endpoint_auth_methods_supported": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "type": "object"
+                }
               }
             }
           }

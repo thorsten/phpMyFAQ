@@ -36,13 +36,13 @@ final class TitleController extends AbstractController
         }
     }
 
-    #[OA\Get(path: '/api/v3.2/title', operationId: 'getTitle', tags: ['Public Endpoints'])]
+    #[OA\Get(path: '/api/v4.0/title', operationId: 'getTitle', tags: ['Public Endpoints'])]
     #[OA\Response(
         response: 200,
         description: 'Returns the title of the phpMyFAQ instance as a string.',
         content: new OA\JsonContent(example: 'phpMyFAQ Codename Porus'),
     )]
-    #[Route(path: 'v3.2/title', name: 'api.title', methods: ['GET'])]
+    #[Route(path: 'v4.0/title', name: 'api.title', methods: ['GET'])]
     public function index(): JsonResponse
     {
         return $this->json($this->configuration->getTitle());

@@ -51,7 +51,7 @@ final class FaqController extends AbstractApiController
      * @throws \phpMyFAQ\Core\Exception|Exception
      */
     #[OA\Get(
-        path: '/api/v3.2/faqs/{categoryId}',
+        path: '/api/v4.0/faqs/{categoryId}',
         operationId: 'getByCategoryId',
         description: 'This endpoint returns all the FAQs with a preview of the answer for the given category ID and '
         . 'the language provided by "Accept-Language".',
@@ -69,23 +69,25 @@ final class FaqController extends AbstractApiController
         required: true,
         schema: new OA\Schema(type: 'integer'),
     )]
-    #[OA\Response(response: 200, description: 'If the category returns at least one FAQ.', content: new OA\JsonContent(
-        example: '[
-            {
-                "record_id": 1,
-                "record_lang": "en",
-                "category_id": 1,
-                "record_title": "Is there life after death?",
-                "record_preview": "Maybe!",
-                "record_link": "/phpmyfaq//content/1/1/en/is-there-life-after-death.html",
-                "record_updated": "20191010175452",
-                "visits": 3,
-                "record_created": "2018-09-03T21:30:17+02:00"
-            }
-        ]',
-    ))]
-    #[OA\Response(response: 404, description: 'If the category has no FAQs.', content: new OA\JsonContent(example: []))]
-    #[Route(path: 'v3.2/faqs/{categoryId}', name: 'api.faqs.by-category-id', methods: ['GET'])]
+    #[OA\Response(
+        response: 200,
+        description: 'If the category returns at least one FAQ.',
+        content: new OA\JsonContent(example: [[
+            'record_id' => 1,
+            'record_lang' => 'en',
+            'category_id' => 1,
+            'record_title' => 'Is there life after death?',
+            'record_preview' => 'Maybe!',
+            'record_link' => '/phpmyfaq/content/1/1/en/is-there-life-after-death.html',
+            'record_updated' => '20191010175452',
+            'visits' => 3,
+            'record_created' => '2018-09-03T21:30:17+02:00',
+        ]]),
+    )]
+    #[OA\Response(response: 500, description: 'If fetching the FAQs fails.', content: new OA\JsonContent(example: [
+        'error' => 'Error message',
+    ]))]
+    #[Route(path: 'v4.0/faqs/{categoryId}', name: 'api.faqs.by-category-id', methods: ['GET'])]
     public function getByCategoryId(Request $request): JsonResponse
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -107,7 +109,7 @@ final class FaqController extends AbstractApiController
      * @throws \phpMyFAQ\Core\Exception|Exception
      */
     #[OA\Get(
-        path: '/api/v3.2/faq/{categoryId}/{faqId}',
+        path: '/api/v4.0/faq/{categoryId}/{faqId}',
         operationId: 'getFaqById',
         description: 'This endpoint returns the FAQ for the given FAQ ID and the language provided by '
         . '"Accept-Language".',
@@ -132,32 +134,32 @@ final class FaqController extends AbstractApiController
         required: true,
         schema: new OA\Schema(type: 'integer'),
     )]
-    #[OA\Response(response: 200, description: 'If the FAQ exists.', content: new OA\JsonContent(example: '{
-            "id": 1,
-            "lang": "en",
-            "solution_id": 1000,
-            "revision_id": 0,
-            "active": "yes",
-            "sticky": 0,
-            "keywords": "",
-            "question": "Is there life after death?",
-            "answer": "Maybe!",
-            "author": "phpMyFAQ User",
-            "email": "user@example.org",
-            "comment": "y",
-            "updated": "2019-10-10 17:54",
-            "dateStart": "00000000000000",
-            "dateEnd": "99991231235959",
-            "created": "2019-09-03T21:30:17+02:00",
-            "category_id": 1,
-            "link": "https://localhost/content/1/1/en/is_there_life_after_death.html"
-        }'))]
+    #[OA\Response(response: 200, description: 'If the FAQ exists.', content: new OA\JsonContent(example: [
+        'id' => 1,
+        'lang' => 'en',
+        'solution_id' => 1000,
+        'revision_id' => 0,
+        'active' => 'yes',
+        'sticky' => 0,
+        'keywords' => '',
+        'question' => 'Is there life after death?',
+        'answer' => 'Maybe!',
+        'author' => 'phpMyFAQ User',
+        'email' => 'user@example.org',
+        'comment' => 'y',
+        'updated' => '2019-10-10 17:54',
+        'dateStart' => '00000000000000',
+        'dateEnd' => '99991231235959',
+        'created' => '2019-09-03T21:30:17+02:00',
+        'category_id' => 1,
+        'link' => 'https://localhost/content/1/1/en/is_there_life_after_death.html',
+    ]))]
     #[OA\Response(
         response: 404,
         description: 'If there are no FAQs for the given FAQ ID.',
-        content: new OA\JsonContent(example: []),
+        content: new OA\JsonContent(example: new \stdClass()),
     )]
-    #[Route(path: 'v3.2/faq/{categoryId}/{faqId}', name: 'api.faq.by-id', methods: ['GET'])]
+    #[Route(path: 'v4.0/faq/{categoryId}/{faqId}', name: 'api.faq.by-id', methods: ['GET'])]
     public function getById(Request $request): JsonResponse
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -187,7 +189,7 @@ final class FaqController extends AbstractApiController
      * @throws Exception
      */
     #[OA\Get(
-        path: '/api/v3.2/faqs/tags/{tagId}',
+        path: '/api/v4.0/faqs/tags/{tagId}',
         operationId: 'getByTagId',
         description: 'This endpoint returns all the FAQs for the given tag ID and the language provided by '
         . '
@@ -206,23 +208,27 @@ final class FaqController extends AbstractApiController
         required: true,
         schema: new OA\Schema(type: 'integer'),
     )]
-    #[OA\Response(response: 200, description: 'If the tag ID returns at least one FAQ.', content: new OA\JsonContent(
-        example: '[
-            {
-                "record_id": 1,
-                "record_lang": "en",
-                "category_id": 1,
-                "record_title": "Is there life after death?",
-                "record_preview": "Maybe!",
-                "record_link": "/phpmyfaq/content/1/1/en/is-there-life-after-death.html",
-                "record_updated": "20191010175452",
-                "visits": 3,
-                "record_created": "2018-09-03T21:30:17+02:00"
-            }
-        ]',
-    ))]
-    #[OA\Response(response: 404, description: 'If the tag ID has no FAQs.', content: new OA\JsonContent(example: []))]
-    #[Route(path: 'v3.2/faqs/tags/{tagId}', name: 'api.faqs.by-tag-id', methods: ['GET'])]
+    #[OA\Response(
+        response: 200,
+        description: 'If the tag ID returns at least one FAQ.',
+        content: new OA\JsonContent(example: [[
+            'record_id' => 1,
+            'record_lang' => 'en',
+            'category_id' => 1,
+            'record_title' => 'Is there life after death?',
+            'record_preview' => 'Maybe!',
+            'record_link' => '/phpmyfaq/content/1/1/en/is-there-life-after-death.html',
+            'record_updated' => '20191010175452',
+            'visits' => 3,
+            'record_created' => '2018-09-03T21:30:17+02:00',
+        ]]),
+    )]
+    #[OA\Response(
+        response: 500,
+        description: 'If fetching the tagged FAQs fails.',
+        content: new OA\JsonContent(example: ['error' => 'Error message']),
+    )]
+    #[Route(path: 'v4.0/faqs/tags/{tagId}', name: 'api.faqs.by-tag-id', methods: ['GET'])]
     public function getByTagId(Request $request): JsonResponse
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -246,7 +252,7 @@ final class FaqController extends AbstractApiController
      * @throws \phpMyFAQ\Core\Exception|Exception
      */
     #[OA\Get(
-        path: '/api/v3.2/faqs/popular',
+        path: '/api/v4.0/faqs/popular',
         operationId: 'getPopular',
         description: 'This endpoint returns the popular FAQs for the given language provided by "Accept-Language".',
         tags: ['Public Endpoints'],
@@ -256,23 +262,23 @@ final class FaqController extends AbstractApiController
         description: 'The language code for the FAQ.',
         schema: new OA\Schema(type: 'string'),
     )]
-    #[OA\Response(response: 200, description: "If there's at least one popular FAQ.", content: new OA\JsonContent(
-        example: '[
-            {
-                "date": "2019-07-13T11:28:00+0200",
-                "question": "How can I survive without phpMyFAQ?",
-                "answer": "A good question!",
-                "visits": 10,
-                "url": "https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html"
-            }
-        ]',
-    ))]
+    #[OA\Response(
+        response: 200,
+        description: "If there's at least one popular FAQ.",
+        content: new OA\JsonContent(example: [[
+            'date' => '2019-07-13T11:28:00+0200',
+            'question' => 'How can I survive without phpMyFAQ?',
+            'answer' => 'A good question!',
+            'visits' => 10,
+            'url' => 'https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html',
+        ]]),
+    )]
     #[OA\Response(
         response: 404,
         description: "If there's not a single popular FAQ.",
         content: new OA\JsonContent(example: []),
     )]
-    #[Route(path: 'v3.2/faqs/popular', name: 'api.faqs.popular', methods: ['GET'])]
+    #[Route(path: 'v4.0/faqs/popular', name: 'api.faqs.popular', methods: ['GET'])]
     public function getPopular(): JsonResponse
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -294,7 +300,7 @@ final class FaqController extends AbstractApiController
      * @throws Exception
      */
     #[OA\Get(
-        path: '/api/v3.2/faqs/latest',
+        path: '/api/v4.0/faqs/latest',
         operationId: 'getLatest',
         description: 'This endpoint returns the latest FAQs for the given language provided by "Accept-Language".',
         tags: ['Public Endpoints'],
@@ -304,23 +310,23 @@ final class FaqController extends AbstractApiController
         description: 'The language code for the FAQ.',
         schema: new OA\Schema(type: 'string'),
     )]
-    #[OA\Response(response: 200, description: "If there's at least one latest FAQ.", content: new OA\JsonContent(
-        example: '[
-            {
-                "date": "2019-07-13T11:28:00+0200",
-                "question": "How can I survive without phpMyFAQ?",
-                "answer": "A good question!",
-                "visits": 10,
-                "url": "https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html"
-            }
-        ]',
-    ))]
+    #[OA\Response(
+        response: 200,
+        description: "If there's at least one latest FAQ.",
+        content: new OA\JsonContent(example: [[
+            'date' => '2019-07-13T11:28:00+0200',
+            'question' => 'How can I survive without phpMyFAQ?',
+            'answer' => 'A good question!',
+            'visits' => 10,
+            'url' => 'https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html',
+        ]]),
+    )]
     #[OA\Response(
         response: 404,
         description: "If there's not one latest FAQ.",
         content: new OA\JsonContent(example: []),
     )]
-    #[Route(path: 'v3.2/faqs/latest', name: 'api.faqs.latest', methods: ['GET'])]
+    #[Route(path: 'v4.0/faqs/latest', name: 'api.faqs.latest', methods: ['GET'])]
     public function getLatest(): JsonResponse
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -341,7 +347,7 @@ final class FaqController extends AbstractApiController
      * @throws \phpMyFAQ\Core\Exception|Exception
      */
     #[OA\Get(
-        path: '/api/v3.2/faqs/trending',
+        path: '/api/v4.0/faqs/trending',
         operationId: 'getTrending',
         description: 'This endpoint returns the trending FAQs for the given language provided by "Accept-Language".',
         tags: ['Public Endpoints'],
@@ -351,23 +357,23 @@ final class FaqController extends AbstractApiController
         description: 'The language code for the FAQ.',
         schema: new OA\Schema(type: 'string'),
     )]
-    #[OA\Response(response: 200, description: "If there's at least one trending FAQ.", content: new OA\JsonContent(
-        example: '[
-            {
-                "date": "2019-07-13T11:28:00+0200",
-                "question": "How can I survive without phpMyFAQ?",
-                "answer": "A good question!",
-                "visits": 10,
-                "url": "https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html"
-            }
-        ]',
-    ))]
+    #[OA\Response(
+        response: 200,
+        description: "If there's at least one trending FAQ.",
+        content: new OA\JsonContent(example: [[
+            'date' => '2019-07-13T11:28:00+0200',
+            'question' => 'How can I survive without phpMyFAQ?',
+            'answer' => 'A good question!',
+            'visits' => 10,
+            'url' => 'https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html',
+        ]]),
+    )]
     #[OA\Response(
         response: 404,
         description: "If there's not a single trending FAQ.",
         content: new OA\JsonContent(example: []),
     )]
-    #[Route(path: 'v3.2/faqs/trending', name: 'api.faqs.trending', methods: ['GET'])]
+    #[Route(path: 'v4.0/faqs/trending', name: 'api.faqs.trending', methods: ['GET'])]
     public function getTrending(): JsonResponse
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -388,7 +394,7 @@ final class FaqController extends AbstractApiController
      * @throws \phpMyFAQ\Core\Exception|Exception
      */
     #[OA\Get(
-        path: '/api/v3.2/faqs/sticky',
+        path: '/api/v4.0/faqs/sticky',
         operationId: 'getSticky',
         description: 'This endpoint returns the sticky FAQs for the given language provided by "Accept-Language".',
         tags: ['Public Endpoints'],
@@ -398,28 +404,30 @@ final class FaqController extends AbstractApiController
         description: 'The language code for the FAQ.',
         schema: new OA\Schema(type: 'string'),
     )]
-    #[OA\Response(response: 200, description: "If there's at least one sticky FAQ.", content: new OA\JsonContent(
-        example: '[
-            {
-                "question": "How can I survive without phpMyFAQ?",
-                "url": "https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html",
-                "id": 8,
-                "order": 1
-            },
-            {
-                "question": "Is there life after death?",
-                "url": "https://www.example.org/content/1/1/de/is-there-life-after-death.html",
-                "id": 10,
-                "order": 2
-            }
-        ]',
-    ))]
+    #[OA\Response(
+        response: 200,
+        description: "If there's at least one sticky FAQ.",
+        content: new OA\JsonContent(example: [
+            [
+                'question' => 'How can I survive without phpMyFAQ?',
+                'url' => 'https://www.example.org/content/1/36/de/how-can-i-survive-without-phpmyfaq.html',
+                'id' => 8,
+                'order' => 1,
+            ],
+            [
+                'question' => 'Is there life after death?',
+                'url' => 'https://www.example.org/content/1/1/de/is-there-life-after-death.html',
+                'id' => 10,
+                'order' => 2,
+            ],
+        ]),
+    )]
     #[OA\Response(
         response: 404,
         description: "If there's not one sticky FAQ.",
         content: new OA\JsonContent(example: []),
     )]
-    #[Route(path: 'v3.2/faqs/sticky', name: 'api.faqs.sticky', methods: ['GET'])]
+    #[Route(path: 'v4.0/faqs/sticky', name: 'api.faqs.sticky', methods: ['GET'])]
     public function getSticky(): JsonResponse
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -440,7 +448,7 @@ final class FaqController extends AbstractApiController
      * @throws \phpMyFAQ\Core\Exception|Exception
      */
     #[OA\Get(
-        path: '/api/v3.2/faqs',
+        path: '/api/v4.0/faqs',
         operationId: 'getAll',
         description: 'This endpoint returns paginated FAQs for the given language provided by "Accept-Language".',
         tags: ['Public Endpoints'],
@@ -490,52 +498,48 @@ final class FaqController extends AbstractApiController
         required: false,
         schema: new OA\Schema(type: 'string', default: 'asc', enum: ['asc', 'desc']),
     )]
-    #[OA\Response(response: 200, description: 'Returns paginated FAQs.', content: new OA\JsonContent(
-        example: '{
-            "success": true,
-            "data": [
-                {
-                    "id": "1",
-                    "lang": "en",
-                    "solution_id": "1000",
-                    "revision_id": "0",
-                    "active": "yes",
-                    "sticky": "0",
-                    "keywords": "",
-                    "title": "Is there life after death?",
-                    "content": "Maybe!",
-                    "author": "phpMyFAQ User",
-                    "email": "user@example.org",
-                    "comment": "y",
-                    "updated": "2009-10-10 17:54:00",
-                    "dateStart": "00000000000000",
-                    "dateEnd": "99991231235959",
-                    "created": "2008-09-03T21:30:17+02:00",
-                    "notes": ""
-                }
+    #[OA\Response(response: 200, description: 'Returns paginated FAQs.', content: new OA\JsonContent(example: [
+        'success' => true,
+        'data' => [[
+            'id' => '1',
+            'lang' => 'en',
+            'solution_id' => '1000',
+            'revision_id' => '0',
+            'active' => 'yes',
+            'sticky' => '0',
+            'keywords' => '',
+            'title' => 'Is there life after death?',
+            'content' => 'Maybe!',
+            'author' => 'phpMyFAQ User',
+            'email' => 'user@example.org',
+            'comment' => 'y',
+            'updated' => '2009-10-10 17:54:00',
+            'dateStart' => '00000000000000',
+            'dateEnd' => '99991231235959',
+            'created' => '2008-09-03T21:30:17+02:00',
+            'notes' => '',
+        ]],
+        'meta' => [
+            'pagination' => [
+                'total' => 50,
+                'count' => 25,
+                'per_page' => 25,
+                'current_page' => 1,
+                'total_pages' => 2,
+                'links' => [
+                    'first' => '/api/v4.0/faqs?page=1&per_page=25',
+                    'last' => '/api/v4.0/faqs?page=2&per_page=25',
+                    'prev' => null,
+                    'next' => '/api/v4.0/faqs?page=2&per_page=25',
+                ],
             ],
-            "meta": {
-                "pagination": {
-                    "total": 50,
-                    "count": 25,
-                    "per_page": 25,
-                    "current_page": 1,
-                    "total_pages": 2,
-                    "links": {
-                        "first": "/api/v3.2/faqs?page=1&per_page=25",
-                        "last": "/api/v3.2/faqs?page=2&per_page=25",
-                        "prev": null,
-                        "next": "/api/v3.2/faqs?page=2&per_page=25"
-                    }
-                },
-                "sorting": {
-                    "field": "id",
-                    "order": "asc"
-                }
-            }
-        }',
-    ))]
-    #[Route(path: 'v3.2/faqs', name: 'api.faqs.list', methods: ['GET'])]
+            'sorting' => [
+                'field' => 'id',
+                'order' => 'asc',
+            ],
+        ],
+    ]))]
+    #[Route(path: 'v4.0/faqs', name: 'api.faqs.list', methods: ['GET'])]
     public function list(?Request $request = null): JsonResponse
     {
         $request ??= Request::createFromGlobals();
@@ -596,7 +600,7 @@ final class FaqController extends AbstractApiController
     /**
      * @throws \phpMyFAQ\Core\Exception|\JsonException|Exception
      */
-    #[OA\Post(path: '/api/v3.2/faq/create', operationId: 'createFaq', tags: ['Endpoints with Authentication'])]
+    #[OA\Post(path: '/api/v4.0/faq/create', operationId: 'createFaq', tags: ['Endpoints with Authentication'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the login.',
@@ -656,25 +660,23 @@ final class FaqController extends AbstractApiController
             }',
         ),
     )]
-    #[OA\Response(
-        response: 201,
-        description: 'If all posted data is correct.',
-        content: new OA\JsonContent(example: '{ "stored": true }'),
-    )]
-    #[OA\Response(
-        response: 400,
-        description: "If something didn't worked out.",
-        content: new OA\JsonContent(
-            example: '{ "stored": false, "error": "It is not allowed, that the question title contains a hash." }',
-        ),
-    )]
+    #[OA\Response(response: 201, description: 'If all posted data is correct.', content: new OA\JsonContent(example: [
+        'stored' => true,
+    ]))]
+    #[OA\Response(response: 400, description: "If something didn't worked out.", content: new OA\JsonContent(example: [
+        'stored' => false,
+        'error' => 'It is not allowed, that the question title contains a hash.',
+    ]))]
     #[OA\Response(
         response: 409,
         description: 'If the parent category name cannot be mapped.',
-        content: new OA\JsonContent(example: '{ "stored": false, "error": "The given category name was not found" }'),
+        content: new OA\JsonContent(example: [
+            'stored' => false,
+            'error' => 'The given category name was not found',
+        ]),
     )]
     #[OA\Response(response: 401, description: 'If the user is not authenticated.')]
-    #[Route(path: 'v3.2/faq/create', name: 'api.faq.create', methods: ['POST'])]
+    #[Route(path: 'v4.0/faq/create', name: 'api.faq.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $this->hasValidToken();
@@ -764,7 +766,7 @@ final class FaqController extends AbstractApiController
      * @throws \phpMyFAQ\Core\Exception|\JsonException|Exception
      */
     #[OA\Put(
-        path: '/api/v3.2/faq/update',
+        path: '/api/v4.0/faq/update',
         operationId: 'updateFaq',
         description: 'Used to update a FAQ in one existing category.',
         tags: ['Endpoints with Authentication'],
@@ -822,20 +824,15 @@ final class FaqController extends AbstractApiController
                 "is-sticky": "false"
             }',
     ))]
-    #[OA\Response(
-        response: 200,
-        description: 'If all posted data is correct.',
-        content: new OA\JsonContent(example: '{ "stored": true }'),
-    )]
-    #[OA\Response(
-        response: 400,
-        description: "If something didn't worked out.",
-        content: new OA\JsonContent(
-            example: '{ "stored": false, "error": "It is not allowed, that the question title contains a hash." }',
-        ),
-    )]
+    #[OA\Response(response: 200, description: 'If all posted data is correct.', content: new OA\JsonContent(example: [
+        'stored' => true,
+    ]))]
+    #[OA\Response(response: 400, description: "If something didn't worked out.", content: new OA\JsonContent(example: [
+        'stored' => false,
+        'error' => 'It is not allowed, that the question title contains a hash.',
+    ]))]
     #[OA\Response(response: 401, description: 'If the user is not authenticated.')]
-    #[Route(path: 'v3.2/faq/update', name: 'api.faq.update', methods: ['PUT'])]
+    #[Route(path: 'v4.0/faq/update', name: 'api.faq.update', methods: ['PUT'])]
     public function update(Request $request): JsonResponse
     {
         $this->hasValidToken();

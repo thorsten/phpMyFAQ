@@ -36,13 +36,13 @@ final class LanguageController extends AbstractController
         }
     }
 
-    #[OA\Get(path: '/api/v3.2/language', operationId: 'getLanguage', tags: ['Public Endpoints'])]
+    #[OA\Get(path: '/api/v4.0/language', operationId: 'getLanguage', tags: ['Public Endpoints'])]
     #[OA\Response(
         response: 200,
         description: 'Returns the default language as language code.',
-        content: new OA\JsonContent(example: '"en"'),
+        content: new OA\JsonContent(example: 'en'),
     )]
-    #[Route(path: 'v3.2/language', name: 'api.language', methods: ['GET'])]
+    #[Route(path: 'v4.0/language', name: 'api.language', methods: ['GET'])]
     public function index(): JsonResponse
     {
         return new JsonResponse($this->configuration->getLanguage()->getLanguage());

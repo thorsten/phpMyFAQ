@@ -57,7 +57,7 @@ final class MetaControllerWebTest extends ControllerWebTestCase
         $this->getConfiguration('api')->getAll();
         $this->overrideConfigurationValues(['api.enableAccess' => false], 'api');
 
-        $response = $this->requestApi('GET', '/v3.2/meta');
+        $response = $this->requestApi('GET', '/v4.0/meta');
 
         self::assertResponseStatusCodeSame(401, $response);
         self::assertStringContainsString('problem+json', (string) $response->headers->get('Content-Type'));
@@ -71,7 +71,7 @@ final class MetaControllerWebTest extends ControllerWebTestCase
             'oauth2.enable' => true,
         ], 'api');
 
-        $response = $this->requestApi('GET', '/v3.2/meta');
+        $response = $this->requestApi('GET', '/v4.0/meta');
         $payload = json_decode((string) $response->getContent(), true);
 
         self::assertResponseIsSuccessful($response);

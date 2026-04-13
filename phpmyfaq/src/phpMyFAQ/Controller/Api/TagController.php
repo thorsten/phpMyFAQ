@@ -38,7 +38,7 @@ final class TagController extends AbstractApiController
      * @throws \Exception
      */
     #[OA\Get(
-        path: '/api/v3.2/tags',
+        path: '/api/v4.0/tags',
         operationId: 'getTags',
         description: 'Returns paginated tags.',
         tags: ['Public Endpoints'],
@@ -85,35 +85,33 @@ final class TagController extends AbstractApiController
         required: false,
         schema: new OA\Schema(type: 'string', default: 'desc', enum: ['asc', 'desc']),
     )]
-    #[OA\Response(response: 200, description: 'Returns paginated tags.', content: new OA\JsonContent(
-        example: '{
-            "success": true,
-            "data": [
-                {"tagId": 4, "tagName": "phpMyFAQ", "tagFrequency": 3},
-                {"tagId": 1, "tagName": "PHP 8", "tagFrequency": 2}
+    #[OA\Response(response: 200, description: 'Returns paginated tags.', content: new OA\JsonContent(example: [
+        'success' => true,
+        'data' => [
+            ['tagId' => 4, 'tagName' => 'phpMyFAQ', 'tagFrequency' => 3],
+            ['tagId' => 1, 'tagName' => 'PHP 8', 'tagFrequency' => 2],
+        ],
+        'meta' => [
+            'pagination' => [
+                'total' => 50,
+                'count' => 25,
+                'per_page' => 25,
+                'current_page' => 1,
+                'total_pages' => 2,
+                'links' => [
+                    'first' => '/api/v4.0/tags?page=1&per_page=25',
+                    'last' => '/api/v4.0/tags?page=2&per_page=25',
+                    'prev' => null,
+                    'next' => '/api/v4.0/tags?page=2&per_page=25',
+                ],
             ],
-            "meta": {
-                "pagination": {
-                    "total": 50,
-                    "count": 25,
-                    "per_page": 25,
-                    "current_page": 1,
-                    "total_pages": 2,
-                    "links": {
-                        "first": "/api/v3.2/tags?page=1&per_page=25",
-                        "last": "/api/v3.2/tags?page=2&per_page=25",
-                        "prev": null,
-                        "next": "/api/v3.2/tags?page=2&per_page=25"
-                    }
-                },
-                "sorting": {
-                    "field": "tagFrequency",
-                    "order": "desc"
-                }
-            }
-        }',
-    ))]
-    #[Route('/api/v3.2/tags', name: 'api.tags.list', methods: ['GET'])]
+            'sorting' => [
+                'field' => 'tagFrequency',
+                'order' => 'desc',
+            ],
+        ],
+    ]))]
+    #[Route('/api/v4.0/tags', name: 'api.tags.list', methods: ['GET'])]
     public function list(?Request $request = null): JsonResponse
     {
         $request ??= Request::createFromGlobals();

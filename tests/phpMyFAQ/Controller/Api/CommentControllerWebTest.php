@@ -19,7 +19,7 @@ final class CommentControllerWebTest extends ControllerWebTestCase
     {
         $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');
 
-        $response = $this->requestApi('GET', '/v3.2/comments/1');
+        $response = $this->requestApi('GET', '/v4.0/comments/1');
 
         self::assertResponseIsSuccessful($response);
         self::assertSame('application/json', $response->headers->get('Content-Type'));

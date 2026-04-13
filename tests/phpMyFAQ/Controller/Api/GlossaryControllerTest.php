@@ -66,7 +66,7 @@ class GlossaryControllerTest extends TestCase
         $glossaryController = new GlossaryController($glossary, $language);
 
         $request = Request::create(
-            '/api/v3.2/glossary',
+            '/api/v4.0/glossary',
             'GET',
             [],
             [],
@@ -99,7 +99,7 @@ class GlossaryControllerTest extends TestCase
         );
 
         $request = Request::create(
-            '/api/v3.2/glossary',
+            '/api/v4.0/glossary',
             'GET',
             [],
             [],
@@ -122,7 +122,7 @@ class GlossaryControllerTest extends TestCase
             $this->createStub(Language::class),
         );
 
-        $request = Request::create('/api/v3.2/glossary', 'GET');
+        $request = Request::create('/api/v4.0/glossary', 'GET');
 
         $response = $glossaryController->list($request);
 
@@ -137,7 +137,7 @@ class GlossaryControllerTest extends TestCase
             $this->createStub(Language::class),
         );
 
-        $request = Request::create('/api/v3.2/glossary', 'GET');
+        $request = Request::create('/api/v4.0/glossary', 'GET');
 
         $response = $glossaryController->list($request);
 
@@ -151,7 +151,7 @@ class GlossaryControllerTest extends TestCase
             $this->createStub(Language::class),
         );
 
-        $request = Request::create('/api/v3.2/glossary', 'GET');
+        $request = Request::create('/api/v4.0/glossary', 'GET');
 
         $response = $glossaryController->list($request);
 
@@ -167,7 +167,7 @@ class GlossaryControllerTest extends TestCase
 
         $glossaryController = new GlossaryController($glossary, $language);
 
-        $request = Request::create('/api/v3.2/glossary', 'GET');
+        $request = Request::create('/api/v4.0/glossary', 'GET');
 
         $response = $glossaryController->list($request);
 
@@ -199,7 +199,7 @@ class GlossaryControllerTest extends TestCase
 
         $glossaryController = new GlossaryController($glossary, $language);
 
-        $request = Request::create('/api/v3.2/glossary', 'GET', [
+        $request = Request::create('/api/v4.0/glossary', 'GET', [
             'limit' => 1,
             'offset' => 1,
             'sort' => 'id',

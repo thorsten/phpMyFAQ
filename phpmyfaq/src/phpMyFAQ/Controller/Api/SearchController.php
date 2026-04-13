@@ -45,7 +45,7 @@ final class SearchController extends AbstractApiController
      * @throws Exception
      */
     #[OA\Get(
-        path: '/api/v3.2/search',
+        path: '/api/v4.0/search',
         operationId: 'getSearch',
         description: 'Returns paginated search results.',
         tags: ['Public Endpoints'],
@@ -99,41 +99,41 @@ final class SearchController extends AbstractApiController
         required: false,
         schema: new OA\Schema(type: 'string', default: 'asc', enum: ['asc', 'desc']),
     )]
-    #[OA\Response(response: 200, description: 'Returns paginated search results.', content: new OA\JsonContent(
-        example: '{
-            "success": true,
-            "data": [
-                {
-                    "id": "1",
-                    "lang": "en",
-                    "category_id": "15",
-                    "question": "Why are you using phpMyFAQ?",
-                    "answer": "Because it is cool!",
-                    "link": "https://www.example.org/content/15/1/en/why-are-you-using-phpmyfaq.html"
-                }
+    #[OA\Response(
+        response: 200,
+        description: 'Returns paginated search results.',
+        content: new OA\JsonContent(example: [
+            'success' => true,
+            'data' => [[
+                'id' => '1',
+                'lang' => 'en',
+                'category_id' => '15',
+                'question' => 'Why are you using phpMyFAQ?',
+                'answer' => 'Because it is cool!',
+                'link' => 'https://www.example.org/content/15/1/en/why-are-you-using-phpmyfaq.html',
+            ]],
+            'meta' => [
+                'pagination' => [
+                    'total' => 50,
+                    'count' => 25,
+                    'per_page' => 25,
+                    'current_page' => 1,
+                    'total_pages' => 2,
+                    'links' => [
+                        'first' => '/api/v4.0/search?q=test&page=1&per_page=25',
+                        'last' => '/api/v4.0/search?q=test&page=2&per_page=25',
+                        'prev' => null,
+                        'next' => '/api/v4.0/search?q=test&page=2&per_page=25',
+                    ],
+                ],
+                'sorting' => [
+                    'field' => 'id',
+                    'order' => 'asc',
+                ],
             ],
-            "meta": {
-                "pagination": {
-                    "total": 50,
-                    "count": 25,
-                    "per_page": 25,
-                    "current_page": 1,
-                    "total_pages": 2,
-                    "links": {
-                        "first": "/api/v3.2/search?q=test&page=1&per_page=25",
-                        "last": "/api/v3.2/search?q=test&page=2&per_page=25",
-                        "prev": null,
-                        "next": "/api/v3.2/search?q=test&page=2&per_page=25"
-                    }
-                },
-                "sorting": {
-                    "field": "id",
-                    "order": "asc"
-                }
-            }
-        }',
-    ))]
-    #[Route(path: 'v3.2/search', name: 'api.search', methods: ['GET'])]
+        ]),
+    )]
+    #[Route(path: 'v4.0/search', name: 'api.search', methods: ['GET'])]
     public function search(Request $request): JsonResponse
     {
         $this->search->setCategory(new Category($this->configuration));
@@ -207,7 +207,7 @@ final class SearchController extends AbstractApiController
     /**
      * @throws Exception
      */
-    #[OA\Get(path: '/api/v3.2/searches/popular', operationId: 'getPopularSearch', tags: ['Public Endpoints'])]
+    #[OA\Get(path: '/api/v4.0/searches/popular', operationId: 'getPopularSearch', tags: ['Public Endpoints'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the login.',
@@ -216,28 +216,27 @@ final class SearchController extends AbstractApiController
     #[OA\Response(
         response: 200,
         description: 'Returns the popular search terms for the given language provided by "Accept-Language"',
-        content: new OA\JsonContent(example: '
-        [
-            {
-                "id": 3,
-                "searchterm": "mac",
-                "number": "18",
-                "lang": "en"
-            },
-            {
-                "id": 7,
-                "searchterm": "test",
-                "number": 9,
-                "lang": "en"
-            }
-        ]'),
+        content: new OA\JsonContent(example: [
+            [
+                'id' => 3,
+                'searchterm' => 'mac',
+                'number' => '18',
+                'lang' => 'en',
+            ],
+            [
+                'id' => 7,
+                'searchterm' => 'test',
+                'number' => 9,
+                'lang' => 'en',
+            ],
+        ]),
     )]
     #[OA\Response(
         response: 404,
         description: 'If the popular search returns no results.',
         content: new OA\JsonContent(example: []),
     )]
-    #[Route(path: 'v3.2/searches/popular', name: 'api.search.popular', methods: ['GET'])]
+    #[Route(path: 'v4.0/searches/popular', name: 'api.search.popular', methods: ['GET'])]
     public function popular(): JsonResponse
     {
         $result = $this->search->getMostPopularSearches(numResults: 7, withLang: true);

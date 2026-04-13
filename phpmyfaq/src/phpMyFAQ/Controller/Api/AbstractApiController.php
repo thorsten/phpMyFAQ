@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
+use Exception;
+use Override;
 use phpMyFAQ\Api\Filtering\FilterRequest;
 use phpMyFAQ\Api\Pagination\PaginationMetadata;
 use phpMyFAQ\Api\Pagination\PaginationRequest;
@@ -43,8 +45,10 @@ abstract class AbstractApiController extends AbstractController
 
     /**
      * Initializes API controller and verifies API access is enabled.
+     *
+     * @throws Exception
      */
-    #[\Override]
+    #[Override]
     protected function initializeFromContainer(): void
     {
         parent::initializeFromContainer();
@@ -56,10 +60,10 @@ abstract class AbstractApiController extends AbstractController
 
     /**
      * Parses pagination parameters from the request
-     *
      * Supports both page-based (page + per_page) and offset-based (limit + offset) pagination.
      *
-     * @param int $defaultPerPage Default items per page
+     * @param Request  $request
+     * @param int      $defaultPerPage Default items per page
      * @param int|null $maxPerPage Maximum items per page (uses class constant if null)
      * @return PaginationRequest
      */

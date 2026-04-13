@@ -19,7 +19,7 @@ final class TitleControllerWebTest extends ControllerWebTestCase
         $this->getConfiguration('api')->getAll();
         $this->overrideConfigurationValues(['api.enableAccess' => false], 'api');
 
-        $response = $this->requestApi('GET', '/v3.2/title');
+        $response = $this->requestApi('GET', '/v4.0/title');
 
         self::assertResponseStatusCodeSame(401, $response);
         self::assertStringContainsString('problem+json', (string) $response->headers->get('Content-Type'));
@@ -30,7 +30,7 @@ final class TitleControllerWebTest extends ControllerWebTestCase
     {
         $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');
 
-        $response = $this->requestApi('GET', '/v3.2/title');
+        $response = $this->requestApi('GET', '/v4.0/title');
 
         self::assertResponseIsSuccessful($response);
         self::assertSame('application/json', $response->headers->get('Content-Type'));
