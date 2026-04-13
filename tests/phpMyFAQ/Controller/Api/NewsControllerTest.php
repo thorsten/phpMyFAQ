@@ -36,7 +36,7 @@ class NewsControllerTest extends TestCase
 
     private function createRequest(): Request
     {
-        return Request::create('/api/v3.2/news', 'GET');
+        return Request::create('/api/v4.0/news', 'GET');
     }
 
     public function testListReturnsJsonResponse(): void

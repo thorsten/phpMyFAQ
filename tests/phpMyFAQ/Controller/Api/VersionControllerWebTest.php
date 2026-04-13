@@ -56,7 +56,7 @@ final class VersionControllerWebTest extends ControllerWebTestCase
         $this->getConfiguration('api')->getAll();
         $this->overrideConfigurationValues(['api.enableAccess' => false], 'api');
 
-        $response = $this->requestApi('GET', '/v3.2/version');
+        $response = $this->requestApi('GET', '/v4.0/version');
 
         self::assertResponseStatusCodeSame(401, $response);
         self::assertStringContainsString('problem+json', (string) $response->headers->get('Content-Type'));
@@ -67,7 +67,7 @@ final class VersionControllerWebTest extends ControllerWebTestCase
     {
         $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');
 
-        $response = $this->requestApi('GET', '/v3.2/version');
+        $response = $this->requestApi('GET', '/v4.0/version');
 
         self::assertResponseIsSuccessful($response);
         self::assertSame('application/json', $response->headers->get('Content-Type'));

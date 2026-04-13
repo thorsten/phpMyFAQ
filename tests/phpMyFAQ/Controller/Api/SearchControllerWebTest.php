@@ -23,7 +23,7 @@ final class SearchControllerWebTest extends ControllerWebTestCase
             'search.enableOpenSearch' => false,
         ], 'api');
 
-        $response = $this->requestApi('GET', '/v3.2/search?q=test');
+        $response = $this->requestApi('GET', '/v4.0/search?q=test');
 
         self::assertResponseIsSuccessful($response);
         self::assertSame('application/json', $response->headers->get('Content-Type'));
@@ -38,7 +38,7 @@ final class SearchControllerWebTest extends ControllerWebTestCase
             'search.enableOpenSearch' => false,
         ], 'api');
 
-        $response = $this->requestApi('GET', '/v3.2/searches/popular');
+        $response = $this->requestApi('GET', '/v4.0/searches/popular');
 
         self::assertContains($response->getStatusCode(), [200, 404]);
         self::assertStringContainsString('json', (string) $response->headers->get('Content-Type'));

@@ -37,7 +37,7 @@ final class OpenQuestionController extends AbstractApiController
      * @throws \Exception
      */
     #[OA\Get(
-        path: '/api/v3.2/open-questions',
+        path: '/api/v4.0/open-questions',
         operationId: 'getOpenQuestions',
         description: 'Returns paginated open questions.',
         tags: ['Public Endpoints'],
@@ -87,44 +87,44 @@ final class OpenQuestionController extends AbstractApiController
         required: false,
         schema: new OA\Schema(type: 'string', default: 'asc', enum: ['asc', 'desc']),
     )]
-    #[OA\Response(response: 200, description: 'Returns paginated open questions.', content: new OA\JsonContent(
-        example: '{
-            "success": true,
-            "data": [
-                {
-                    "id": 1,
-                    "lang": "en",
-                    "username": "phpMyFAQ User",
-                    "email": "user@example.org",
-                    "categoryId": 3,
-                    "question": "Foo? Bar? Baz?",
-                    "created": "20190106180429",
-                    "answerId": 0,
-                    "isVisible": "N"
-                }
+    #[OA\Response(
+        response: 200,
+        description: 'Returns paginated open questions.',
+        content: new OA\JsonContent(example: [
+            'success' => true,
+            'data' => [[
+                'id' => 1,
+                'lang' => 'en',
+                'username' => 'phpMyFAQ User',
+                'email' => 'user@example.org',
+                'categoryId' => 3,
+                'question' => 'Foo? Bar? Baz?',
+                'created' => '20190106180429',
+                'answerId' => 0,
+                'isVisible' => 'N',
+            ]],
+            'meta' => [
+                'pagination' => [
+                    'total' => 50,
+                    'count' => 25,
+                    'per_page' => 25,
+                    'current_page' => 1,
+                    'total_pages' => 2,
+                    'links' => [
+                        'first' => '/api/v4.0/open-questions?page=1&per_page=25',
+                        'last' => '/api/v4.0/open-questions?page=2&per_page=25',
+                        'prev' => null,
+                        'next' => '/api/v4.0/open-questions?page=2&per_page=25',
+                    ],
+                ],
+                'sorting' => [
+                    'field' => 'id',
+                    'order' => 'asc',
+                ],
             ],
-            "meta": {
-                "pagination": {
-                    "total": 50,
-                    "count": 25,
-                    "per_page": 25,
-                    "current_page": 1,
-                    "total_pages": 2,
-                    "links": {
-                        "first": "/api/v3.2/open-questions?page=1&per_page=25",
-                        "last": "/api/v3.2/open-questions?page=2&per_page=25",
-                        "prev": null,
-                        "next": "/api/v3.2/open-questions?page=2&per_page=25"
-                    }
-                },
-                "sorting": {
-                    "field": "id",
-                    "order": "asc"
-                }
-            }
-        }',
-    ))]
-    #[Route(path: 'v3.2/open-questions', name: 'api.open-questions.list', methods: ['GET'])]
+        ]),
+    )]
+    #[Route(path: 'v4.0/open-questions', name: 'api.open-questions.list', methods: ['GET'])]
     public function list(?Request $request = null): JsonResponse
     {
         $request ??= Request::createFromGlobals();

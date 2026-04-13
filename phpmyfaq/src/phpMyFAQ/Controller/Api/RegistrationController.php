@@ -56,7 +56,7 @@ final class RegistrationController extends AbstractController
      * @throws Exception
      * @throws \JsonException
      */
-    #[OA\Post(path: '/api/v3.2/register', operationId: 'createUser', tags: ['Endpoints with Authentication'])]
+    #[OA\Post(path: '/api/v4.0/register', operationId: 'createUser', tags: ['Endpoints with Authentication'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the question.',
@@ -94,24 +94,24 @@ final class RegistrationController extends AbstractController
     #[OA\Response(
         response: 201,
         description: 'If "username", "fullname", "email", and "is-visible" combination is correct.',
-        content: new OA\JsonContent(example: '{ "registered": true, "success": "User created."}'),
+        content: new OA\JsonContent(example: ['registered' => true, 'success' => 'User created.']),
     )]
     #[OA\Response(
         response: 400,
         description: 'If "username", "fullname", "email", and "is-visible" combination is not correct.',
-        content: new OA\JsonContent(example: '{ "registered": false, "error": "Error message"}'),
+        content: new OA\JsonContent(example: ['registered' => false, 'error' => 'Error message']),
     )]
     #[OA\Response(
         response: 409,
         description: 'If the domain of the email address is not allowed.',
-        content: new OA\JsonContent(example: '{ "registered": false, "error": "The domain is not allowed."}'),
+        content: new OA\JsonContent(example: ['registered' => false, 'error' => 'The domain is not allowed.']),
     )]
     #[OA\Response(
         response: 401,
         description: 'If the user is not authenticated.',
-        content: new OA\JsonContent(example: '{ "registered": false }'),
+        content: new OA\JsonContent(example: ['registered' => false]),
     )]
-    #[Route(path: 'v3.2/register', name: 'api.registration.create', methods: ['POST'])]
+    #[Route(path: 'v4.0/register', name: 'api.registration.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $this->hasValidToken();

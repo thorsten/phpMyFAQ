@@ -18,7 +18,7 @@ final class LoginControllerWebTest extends ControllerWebTestCase
         $this->getConfiguration('api')->getAll();
         $this->overrideConfigurationValues(['api.enableAccess' => false], 'api');
 
-        $response = $this->requestApiJson('POST', '/v3.2/login', [
+        $response = $this->requestApiJson('POST', '/v4.0/login', [
             'username' => 'invalid-user',
             'password' => 'invalid-password',
         ]);
@@ -32,7 +32,7 @@ final class LoginControllerWebTest extends ControllerWebTestCase
     {
         $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');
 
-        $response = $this->requestApiJson('POST', '/v3.2/login', [
+        $response = $this->requestApiJson('POST', '/v4.0/login', [
             'username' => 'invalid-user',
             'password' => 'invalid-password',
         ]);

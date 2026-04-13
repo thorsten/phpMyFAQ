@@ -40,7 +40,7 @@ final class GlossaryController extends AbstractApiController
      * @throws Exception
      */
     #[OA\Get(
-        path: '/api/v3.2/glossary',
+        path: '/api/v4.0/glossary',
         operationId: 'getGlossary',
         description: 'Returns paginated glossary items.',
         tags: ['Public Endpoints'],
@@ -92,35 +92,37 @@ final class GlossaryController extends AbstractApiController
         required: false,
         schema: new OA\Schema(type: 'string', default: 'asc', enum: ['asc', 'desc']),
     )]
-    #[OA\Response(response: 200, description: 'Returns paginated glossary items.', content: new OA\JsonContent(
-        example: '{
-            "success": true,
-            "data": [
-                {"id": 1, "language": "en", "item": "API", "definition": "Application Programming Interface"},
-                {"id": 2, "language": "en", "item": "FAQ", "definition": "Frequently Asked Questions"}
+    #[OA\Response(
+        response: 200,
+        description: 'Returns paginated glossary items.',
+        content: new OA\JsonContent(example: [
+            'success' => true,
+            'data' => [
+                ['id' => 1, 'language' => 'en', 'item' => 'API', 'definition' => 'Application Programming Interface'],
+                ['id' => 2, 'language' => 'en', 'item' => 'FAQ', 'definition' => 'Frequently Asked Questions'],
             ],
-            "meta": {
-                "pagination": {
-                    "total": 50,
-                    "count": 25,
-                    "per_page": 25,
-                    "current_page": 1,
-                    "total_pages": 2,
-                    "links": {
-                        "first": "/api/v3.2/glossary?page=1&per_page=25",
-                        "last": "/api/v3.2/glossary?page=2&per_page=25",
-                        "prev": null,
-                        "next": "/api/v3.2/glossary?page=2&per_page=25"
-                    }
-                },
-                "sorting": {
-                    "field": "item",
-                    "order": "asc"
-                }
-            }
-        }',
-    ))]
-    #[Route(path: 'v3.2/glossary', name: 'api.glossary.list', methods: ['GET'])]
+            'meta' => [
+                'pagination' => [
+                    'total' => 50,
+                    'count' => 25,
+                    'per_page' => 25,
+                    'current_page' => 1,
+                    'total_pages' => 2,
+                    'links' => [
+                        'first' => '/api/v4.0/glossary?page=1&per_page=25',
+                        'last' => '/api/v4.0/glossary?page=2&per_page=25',
+                        'prev' => null,
+                        'next' => '/api/v4.0/glossary?page=2&per_page=25',
+                    ],
+                ],
+                'sorting' => [
+                    'field' => 'item',
+                    'order' => 'asc',
+                ],
+            ],
+        ]),
+    )]
+    #[Route(path: 'v4.0/glossary', name: 'api.glossary.list', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
         $currentLanguage = $this->language->setLanguageByAcceptLanguage();

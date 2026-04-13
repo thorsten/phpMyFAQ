@@ -47,7 +47,7 @@ final class LoginController extends AbstractController
     /**
      * @throws JsonException|Exception
      */
-    #[OA\Post(path: '/api/v3.2/login', operationId: 'login', tags: ['Public Endpoints'])]
+    #[OA\Post(path: '/api/v4.0/login', operationId: 'login', tags: ['Public Endpoints'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the login.',
@@ -71,14 +71,14 @@ final class LoginController extends AbstractController
     #[OA\Response(
         response: 200,
         description: 'If "username" and "password" combination are correct.',
-        content: new OA\JsonContent(example: '{ "loggedin": true }'),
+        content: new OA\JsonContent(example: ['loggedin' => true]),
     )]
     #[OA\Response(
         response: 400,
         description: 'If "username" and "password" combination are wrong.',
-        content: new OA\JsonContent(example: '{ "loggedin": false, "error": "Wrong username or password." }'),
+        content: new OA\JsonContent(example: ['loggedin' => false, 'error' => 'Wrong username or password.']),
     )]
-    #[Route(path: 'v3.2/login', name: 'api.login', methods: ['POST'])]
+    #[Route(path: 'v4.0/login', name: 'api.login', methods: ['POST'])]
     public function login(Request $request): JsonResponse
     {
         $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);

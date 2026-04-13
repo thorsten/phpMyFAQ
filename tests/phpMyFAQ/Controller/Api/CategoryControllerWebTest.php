@@ -20,7 +20,7 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
         $this->getConfiguration('api')->getAll();
         $this->overrideConfigurationValues(['api.enableAccess' => false], 'api');
 
-        $response = $this->requestApi('GET', '/v3.2/categories');
+        $response = $this->requestApi('GET', '/v4.0/categories');
 
         self::assertContains($response->getStatusCode(), [200, 401]);
 
@@ -35,7 +35,7 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
         $this->getConfiguration('api')->getAll();
         $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');
 
-        $response = $this->requestApi('GET', '/v3.2/categories');
+        $response = $this->requestApi('GET', '/v4.0/categories');
 
         self::assertResponseIsSuccessful($response);
         self::assertSame('application/json', $response->headers->get('Content-Type'));
@@ -49,7 +49,7 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
         $this->getConfiguration('api')->getAll();
         $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');
 
-        $initialResponse = $this->requestApi('GET', '/v3.2/categories');
+        $initialResponse = $this->requestApi('GET', '/v4.0/categories');
         $etag = $initialResponse->headers->get('ETag');
 
         self::assertResponseIsSuccessful($initialResponse);
@@ -57,7 +57,7 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
 
         $response = $this->requestApi(
             'GET',
-            '/v3.2/categories',
+            '/v4.0/categories',
             [],
             [
                 'HTTP_IF_NONE_MATCH' => $etag,
@@ -74,7 +74,7 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
         $this->getConfiguration('api')->getAll();
         $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');
 
-        $response = $this->requestApiJson('POST', '/v3.2/category', [
+        $response = $this->requestApiJson('POST', '/v4.0/category', [
             'language' => 'en',
             'parent-id' => 0,
             'parent-category-name' => null,
@@ -100,7 +100,7 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
 
         $response = $this->requestApiJson(
             'POST',
-            '/v3.2/category',
+            '/v4.0/category',
             [
                 'language' => 'en',
                 'parent-id' => 0,

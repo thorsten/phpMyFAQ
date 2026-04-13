@@ -19,7 +19,7 @@ final class GroupControllerWebTest extends ControllerWebTestCase
     {
         $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');
 
-        $response = $this->requestApi('GET', '/v3.2/groups');
+        $response = $this->requestApi('GET', '/v4.0/groups');
 
         self::assertResponseStatusCodeSame(401, $response);
         self::assertStringContainsString('json', (string) $response->headers->get('Content-Type'));

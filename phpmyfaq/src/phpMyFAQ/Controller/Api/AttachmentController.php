@@ -31,7 +31,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class AttachmentController extends AbstractApiController
 {
     #[OA\Get(
-        path: '/api/v3.2/attachments/{faqId}',
+        path: '/api/v4.0/attachments/{faqId}',
         operationId: 'getAttachments',
         description: 'Returns a paginated list of attachments for a given FAQ record ID with optional sorting.',
         tags: ['Public Endpoints'],
@@ -93,48 +93,54 @@ final class AttachmentController extends AbstractApiController
     #[OA\Response(
         response: 200,
         description: 'Paginated list of attachments with metadata.',
-        content: new OA\JsonContent(example: '{
-            "success": true,
-            "data": [
-                {
-                    "filename": "attachment-1.pdf",
-                    "url": "https://www.example.org/attachment/1"
-                },
-                {
-                    "filename": "attachment-2.pdf",
-                    "url": "https://www.example.org/attachment/2"
-                }
+        content: new OA\JsonContent(example: [
+            'success' => true,
+            'data' => [
+                [
+                    'filename' => 'attachment-1.pdf',
+                    'url' => 'https://www.example.org/attachment/1',
+                ],
+                [
+                    'filename' => 'attachment-2.pdf',
+                    'url' => 'https://www.example.org/attachment/2',
+                ],
             ],
-            "meta": {
-                "pagination": {
-                    "total": 2,
-                    "count": 2,
-                    "per_page": 25,
-                    "current_page": 1,
-                    "total_pages": 1,
-                    "offset": 0,
-                    "has_more": false,
-                    "has_previous": false,
-                    "links": {
-                        "first": "/api/v3.2/attachments/1?page=1&per_page=25",
-                        "last": "/api/v3.2/attachments/1?page=1&per_page=25",
-                        "prev": null,
-                        "next": null
-                    }
-                },
-                "sorting": {
-                    "field": "filename",
-                    "order": "asc"
-                }
-            }
-        }'),
+            'meta' => [
+                'pagination' => [
+                    'total' => 2,
+                    'count' => 2,
+                    'per_page' => 25,
+                    'current_page' => 1,
+                    'total_pages' => 1,
+                    'offset' => 0,
+                    'has_more' => false,
+                    'has_previous' => false,
+                    'links' => [
+                        'first' => '/api/v4.0/attachments/1?page=1&per_page=25',
+                        'last' => '/api/v4.0/attachments/1?page=1&per_page=25',
+                        'prev' => null,
+                        'next' => null,
+                    ],
+                ],
+                'sorting' => [
+                    'field' => 'filename',
+                    'order' => 'asc',
+                ],
+            ],
+        ]),
     )]
     #[OA\Response(
-        response: 404,
-        description: 'If the FAQ has no attachments.',
-        content: new OA\JsonContent(example: '{"success": true, "data": [], "meta": {"pagination": {"total": 0}}}'),
+        response: 500,
+        description: 'If the attachments cannot be fetched.',
+        content: new OA\JsonContent(example: [
+            'success' => false,
+            'error' => [
+                'code' => 'ATTACHMENT_ERROR',
+                'message' => 'Failed to fetch attachments',
+            ],
+        ]),
     )]
-    #[Route(path: 'v3.2/attachments/{faqId}', name: 'api.attachments', methods: ['GET'])]
+    #[Route(path: 'v4.0/attachments/{faqId}', name: 'api.attachments', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
         $faqId = (int) Filter::filterVar($request->attributes->get(key: 'faqId'), FILTER_VALIDATE_INT);

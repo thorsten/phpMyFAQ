@@ -16,7 +16,7 @@ final class QuestionControllerWebTest extends ControllerWebTestCase
     {
         $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');
 
-        $response = $this->requestApiJson('POST', '/v3.2/question', [
+        $response = $this->requestApiJson('POST', '/v4.0/question', [
             'category-id' => 1,
             'question' => 'Test question',
             'author' => 'Test Author',

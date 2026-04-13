@@ -17,7 +17,7 @@ final class BackupControllerWebTest extends ControllerWebTestCase
         $this->getConfiguration('api')->getAll();
         $this->overrideConfigurationValues(['api.enableAccess' => false], 'api');
 
-        $response = $this->requestApi('GET', '/v3.2/backup/data');
+        $response = $this->requestApi('GET', '/v4.0/backup/data');
 
         self::assertResponseStatusCodeSame(401, $response);
         self::assertStringContainsString('problem+json', (string) $response->headers->get('Content-Type'));
@@ -28,7 +28,7 @@ final class BackupControllerWebTest extends ControllerWebTestCase
     {
         $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');
 
-        $response = $this->requestApi('GET', '/v3.2/backup/data');
+        $response = $this->requestApi('GET', '/v4.0/backup/data');
 
         self::assertResponseStatusCodeSame(401, $response);
         self::assertStringContainsString('json', (string) $response->headers->get('Content-Type'));

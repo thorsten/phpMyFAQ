@@ -48,7 +48,7 @@ final class BackupController extends AbstractController
     /**
      * @throws Exception
      */
-    #[OA\Get(path: '/api/v3.2/backup/{type}', operationId: 'createBackup', tags: ['Endpoints with Authentication'])]
+    #[OA\Get(path: '/api/v4.0/backup/{type}', operationId: 'createBackup', tags: ['Endpoints with Authentication'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the login.',
@@ -83,7 +83,7 @@ final class BackupController extends AbstractController
         response: 401,
         description: 'If the user is not authenticated and/or does not have sufficient permissions.',
     )]
-    #[Route(path: 'v3.2/backup/{type}', name: 'api.backup', methods: ['GET'])]
+    #[Route(path: 'v4.0/backup/{type}', name: 'api.backup', methods: ['GET'])]
     public function download(Request $request): Response
     {
         $this->userHasPermission(PermissionType::BACKUP);

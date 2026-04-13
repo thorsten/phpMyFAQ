@@ -44,7 +44,7 @@ final class MetaController extends AbstractController
         }
     }
 
-    #[OA\Get(path: '/api/v3.2/meta', operationId: 'getMeta', tags: ['Public Endpoints'])]
+    #[OA\Get(path: '/api/v4.0/meta', operationId: 'getMeta', tags: ['Public Endpoints'])]
     #[OA\Response(
         response: 200,
         description: 'Returns bootstrap metadata for the phpMyFAQ instance.',
@@ -65,7 +65,7 @@ final class MetaController extends AbstractController
             new OA\Property(property: 'oauthDiscovery', type: 'object'),
         ]),
     )]
-    #[Route(path: 'v3.2/meta', name: 'api.meta', methods: ['GET'])]
+    #[Route(path: 'v4.0/meta', name: 'api.meta', methods: ['GET'])]
     public function index(): JsonResponse
     {
         return $this->json($this->metaService->getPublicMetadata());

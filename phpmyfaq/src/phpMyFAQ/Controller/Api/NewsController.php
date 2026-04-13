@@ -27,7 +27,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class NewsController extends AbstractApiController
 {
-    #[OA\Get(path: '/api/v3.2/news', operationId: 'getNews', tags: ['Public Endpoints'])]
+    #[OA\Get(path: '/api/v4.0/news', operationId: 'getNews', tags: ['Public Endpoints'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the news.',
@@ -76,47 +76,45 @@ final class NewsController extends AbstractApiController
     #[OA\Response(
         response: 200,
         description: 'Returns paginated news for the given language provided by "Accept-Language".',
-        content: new OA\JsonContent(example: '{
-            "success": true,
-            "data": [
-                {
-                    "id": 1,
-                    "lang": "en",
-                    "date": "2019-08-23T20:43:00+0200",
-                    "header": "Hallo, World!",
-                    "content": "Hello, phpMyFAQ!",
-                    "authorName": "phpMyFAQ User",
-                    "authorEmail": "user@example.org",
-                    "active": true,
-                    "allowComments": true,
-                    "link": "",
-                    "linkTitle": "",
-                    "target": "",
-                    "url": "https://www.example.org/news/1/de/hallo-phpmyfaq.html"
-                }
+        content: new OA\JsonContent(example: [
+            'success' => true,
+            'data' => [[
+                'id' => 1,
+                'lang' => 'en',
+                'date' => '2019-08-23T20:43:00+0200',
+                'header' => 'Hallo, World!',
+                'content' => 'Hello, phpMyFAQ!',
+                'authorName' => 'phpMyFAQ User',
+                'authorEmail' => 'user@example.org',
+                'active' => true,
+                'allowComments' => true,
+                'link' => '',
+                'linkTitle' => '',
+                'target' => '',
+                'url' => 'https://www.example.org/news/1/de/hallo-phpmyfaq.html',
+            ]],
+            'meta' => [
+                'pagination' => [
+                    'total' => 50,
+                    'count' => 25,
+                    'per_page' => 25,
+                    'current_page' => 1,
+                    'total_pages' => 2,
+                    'links' => [
+                        'first' => '/api/v4.0/news?page=1&per_page=25',
+                        'last' => '/api/v4.0/news?page=2&per_page=25',
+                        'prev' => null,
+                        'next' => '/api/v4.0/news?page=2&per_page=25',
+                    ],
+                ],
+                'sorting' => [
+                    'field' => 'datum',
+                    'order' => 'desc',
+                ],
             ],
-            "meta": {
-                "pagination": {
-                    "total": 50,
-                    "count": 25,
-                    "per_page": 25,
-                    "current_page": 1,
-                    "total_pages": 2,
-                    "links": {
-                        "first": "/api/v3.2/news?page=1&per_page=25",
-                        "last": "/api/v3.2/news?page=2&per_page=25",
-                        "prev": null,
-                        "next": "/api/v3.2/news?page=2&per_page=25"
-                    }
-                },
-                "sorting": {
-                    "field": "datum",
-                    "order": "desc"
-                }
-            }
-        }'),
+        ]),
     )]
-    #[Route('/api/v3.2/news', name: 'api.news.list', methods: ['GET'])]
+    #[Route('/api/v4.0/news', name: 'api.news.list', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
         // Get pagination and sorting parameters

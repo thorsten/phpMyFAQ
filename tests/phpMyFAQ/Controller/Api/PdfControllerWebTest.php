@@ -19,7 +19,7 @@ final class PdfControllerWebTest extends ControllerWebTestCase
         $this->getConfiguration('api')->getAll();
         $this->overrideConfigurationValues(['api.enableAccess' => false], 'api');
 
-        $response = $this->requestApi('GET', '/v3.2/pdf/1/1');
+        $response = $this->requestApi('GET', '/v4.0/pdf/1/1');
 
         self::assertResponseStatusCodeSame(401, $response);
         self::assertStringContainsString('problem+json', (string) $response->headers->get('Content-Type'));
@@ -30,7 +30,7 @@ final class PdfControllerWebTest extends ControllerWebTestCase
     {
         $this->overrideConfigurationValues(['api.enableAccess' => true], 'api');
 
-        $response = $this->requestApi('GET', '/v3.2/pdf/1/999999');
+        $response = $this->requestApi('GET', '/v4.0/pdf/1/999999');
 
         self::assertResponseStatusCodeSame(404, $response);
         self::assertSame('application/json', $response->headers->get('Content-Type'));
