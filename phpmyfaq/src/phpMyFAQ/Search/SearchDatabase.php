@@ -264,7 +264,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
                 }
 
                 $where = sprintf(
-                    "%s%s LIKE '%%%s%%' ESCAPE '\\'",
+                    "%s%s LIKE '%%%s%%' ESCAPE '\\\\'",
                     $where,
                     $this->matchingColumns[$j],
                     self::escapeLikeWildcards($this->configuration->getDb()->escape($keys[$i])),

@@ -74,7 +74,7 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
                 FROM
                     %s %s %s %s
                 WHERE
-                    (%s) ILIKE ('%%%s%%') ESCAPE '\\'
+                    (%s) ILIKE ('%%%s%%') ESCAPE '\\\\'
                     %s
                     %s",
             $columns,
