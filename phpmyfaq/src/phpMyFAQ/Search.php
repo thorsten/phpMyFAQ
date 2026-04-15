@@ -247,9 +247,9 @@ class Search
             }
 
             // Escape LIKE metacharacters (%, _) to prevent wildcard injection
-            $escapedWord = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $word);
+            $escapedWord = str_replace(['|', '%', '_'], ['||', '|%', '|_'], $word);
             $searchConditions[] = sprintf(
-                "(page_title LIKE '%%%s%%' ESCAPE '\\\\' OR content LIKE '%%%s%%' ESCAPE '\\\\')",
+                "(page_title LIKE '%%%s%%' ESCAPE '|' OR content LIKE '%%%s%%' ESCAPE '|')",
                 $escapedWord,
                 $escapedWord,
             );
