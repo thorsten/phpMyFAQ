@@ -21,8 +21,8 @@ namespace phpMyFAQ\Setup;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
-use SplFileObject;
 use Tivie\HtaccessParser\Exception\SyntaxException;
+use Tivie\HtaccessParser\HtaccessContainer;
 use Tivie\HtaccessParser\Parser;
 use Tivie\HtaccessParser\Token\Block;
 use Tivie\HtaccessParser\Token\Directive;
@@ -56,15 +56,7 @@ readonly class EnvironmentConfigurator
      */
     public function getRewriteBase(): string
     {
-        $file = new SplFileObject($this->htaccessPath);
-        $parser = new Parser();
-        try {
-            $htaccess = $parser->parse($file);
-        } catch (SyntaxException $e) {
-            throw new Exception('Syntax error in .htaccess file: ' . $e->getMessage());
-        } catch (\Tivie\HtaccessParser\Exception\Exception $e) {
-            throw new Exception('Error parsing .htaccess file: ' . $e->getMessage());
-        }
+        $htaccess = $this->parseHtaccess();
 
         $rewriteBase = $htaccess->search('RewriteBase', TOKEN_DIRECTIVE);
 
@@ -88,15 +80,7 @@ readonly class EnvironmentConfigurator
             throw new Exception(sprintf('The %s/.htaccess file does not exist!', $this->getServerPath()));
         }
 
-        $file = new SplFileObject($this->htaccessPath);
-        $parser = new Parser();
-        try {
-            $htaccess = $parser->parse($file);
-        } catch (SyntaxException $e) {
-            throw new Exception('Syntax error in .htaccess file: ' . $e->getMessage());
-        } catch (\Tivie\HtaccessParser\Exception\Exception $e) {
-            throw new Exception('Error parsing .htaccess file: ' . $e->getMessage());
-        }
+        $htaccess = $this->parseHtaccess();
 
         // Adjust RewriteBase
         $rewriteBase = $htaccess->search('RewriteBase', TOKEN_DIRECTIVE);
@@ -122,6 +106,48 @@ readonly class EnvironmentConfigurator
 
         $output = (string) $htaccess;
         return (bool) file_put_contents($this->htaccessPath, $output);
+    }
+
+    /**
+     * Parses the .htaccess file using the Tivie parser.
+     *
+     * The content is normalized (line endings, trailing newline) and wrapped in an
+     * in-memory SplFileObject whose valid() method is aligned with eof(). This avoids
+     * a SplFileObject iterator/fgets desync that causes the parser to throw
+     * "Cannot read from file" under PHP 8.6 when the built-in iterator state does
+     * not match what getCurrentLine() (a thin fgets wrapper) expects.
+     *
+     * @throws Exception
+     */
+    private function parseHtaccess(): HtaccessContainer
+    {
+        if (!is_readable($this->htaccessPath)) {
+            throw new Exception(sprintf('Cannot read .htaccess file at %s', $this->htaccessPath));
+        }
+
+        $content = file_get_contents($this->htaccessPath);
+        if ($content === false) {
+            throw new Exception(sprintf('Cannot read .htaccess file at %s', $this->htaccessPath));
+        }
+
+        $content = str_replace(search: ["\r\n", "\r"], replace: "\n", subject: $content);
+        if ($content !== '' && !str_ends_with($content, needle: "\n")) {
+            $content .= "\n";
+        }
+
+        $file = new InMemoryHtaccessFile();
+        $file->fwrite($content);
+        $file->rewind();
+
+        $parser = new Parser();
+        try {
+            /** @var HtaccessContainer $htaccess */
+            return $parser->parse($file);
+        } catch (SyntaxException $e) {
+            throw new Exception('Syntax error in .htaccess file: ' . $e->getMessage());
+        } catch (\Tivie\HtaccessParser\Exception\Exception $e) {
+            throw new Exception('Error parsing .htaccess file: ' . $e->getMessage());
+        }
     }
 
     /**
