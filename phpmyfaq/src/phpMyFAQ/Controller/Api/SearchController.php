@@ -91,7 +91,7 @@ final class SearchController extends AbstractController
             $url = $this->configuration->getDefaultUrl() . 'index.php?action=faq&cat=%d&id=%d&artlang=%s';
             $result = [];
             foreach ($searchResultSet->getResultSet() as $data) {
-                $data->answer = html_entity_decode(strip_tags((string) $data->answer), ENT_COMPAT, encoding: 'utf-8');
+                $data->answer = strip_tags((string) $data->answer);
                 $data->answer = Utils::makeShorterText(string: $data->answer, characters: 12);
                 $url = sprintf($url, $data->category_id, $data->id, $data->lang);
                 $link = new Link($url, $this->configuration);
