@@ -262,7 +262,7 @@ class SearchHelper extends AbstractHelper
                 $categoryInfo = $this->Category->getCategoriesFromFaq((int) $resultSet->id);
                 $categoryInfo = array_values($categoryInfo); //Reset the array keys
                 $question = Utils::chopString(Strings::htmlentities($resultSet->question), 15);
-                $answerPreview = $faqHelper->renderAnswerPreview($resultSet->answer, 20);
+                $answerPreview = Strings::htmlentities($faqHelper->renderAnswerPreview($resultSet->answer, 20));
 
                 $searchTerm = str_replace(
                     search: ['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'],

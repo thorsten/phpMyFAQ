@@ -157,7 +157,7 @@ final class SearchController extends AbstractApiController
         if ($searchResultSet->getNumberOfResults() > 0) {
             $allResults = [];
             foreach ($searchResultSet->getResultSet() as $data) {
-                $data->answer = html_entity_decode(strip_tags((string) $data->answer), ENT_COMPAT, encoding: 'utf-8');
+                $data->answer = strip_tags((string) $data->answer);
                 $data->answer = Utils::makeShorterText(string: $data->answer, characters: 12);
                 $data->link = sprintf(
                     '%sfaq/%d/%d/%s/%s.html',

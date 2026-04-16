@@ -585,10 +585,10 @@ class Faq
                 $oLink->tooltip = $title;
 
                 $rowResult->renderedScore = 0;
-                $rowResult->question = Utils::chopString($title, 15);
+                $rowResult->question = Utils::chopString(Strings::htmlentities($title), 15);
                 $rowResult->path = '';
                 $rowResult->url = $oLink->toString();
-                $rowResult->answerPreview = $faqHelper->renderAnswerPreview($row->answer, 20);
+                $rowResult->answerPreview = Strings::htmlentities($faqHelper->renderAnswerPreview($row->answer, 20));
 
                 $lastFaqId = $row->id;
                 $searchResults[] = $rowResult;
