@@ -361,13 +361,15 @@ class Search
             return;
         }
 
+        $sanitizedSearchTerm = htmlspecialchars($searchTerm, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
         $dateTime = new DateTime();
         $query = sprintf(
             "INSERT INTO %s (id, lang, searchterm, searchdate) VALUES (%d, '%s', '%s', '%s')",
             $this->table,
             $this->configuration->getDb()->nextId($this->table, 'id'),
             $this->configuration->getLanguage()->getLanguage(),
-            $this->configuration->getDb()->escape($searchTerm),
+            $this->configuration->getDb()->escape($sanitizedSearchTerm),
             $dateTime->format('Y-m-d H:i:s'),
         );
 
