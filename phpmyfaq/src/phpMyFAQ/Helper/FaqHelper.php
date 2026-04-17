@@ -135,12 +135,28 @@ class FaqHelper extends AbstractHelper
             ->allowMediaHosts($allowedHosts)
             ->allowLinkSchemes(['https', 'http', 'mailto', 'data']));
 
-        // Suppress HTML parser warnings during sanitization, as Dom\HTMLDocument::createFromString()
-        // emits tokenizer warnings for slightly malformed user-generated HTML content
+        // Pre-encode whitespace in src/href attribute values, since Symfony HtmlSanitizer
+        // rejects URLs containing unencoded spaces and strips the attribute entirely.
+        $content = preg_replace_callback(
+            '/\b(src|href)\s*=\s*"([^"]*)"/i',
+            static fn(array $matches): string => sprintf(
+                '%s="%s"',
+                $matches[1],
+                str_replace([' ', "\t"], ['%20', '%09'], $matches[2]),
+            ),
+            $content,
+        );
+
+        // Suppress HTML parser warnings during sanitization. Dom\HTMLDocument::createFromString()
+        // emits tokenizer warnings for slightly malformed user-generated HTML content, and a
+        // registered error handler (e.g. Symfony ErrorHandler) may otherwise convert them to
+        // uncaught ErrorExceptions.
         $previousErrorReporting = error_reporting(E_ALL & ~E_WARNING);
+        set_error_handler(static fn(int $severity): bool => ($severity & E_WARNING) !== 0);
         try {
             $sanitizedContent = $htmlSanitizer->sanitize($content);
         } finally {
+            restore_error_handler();
             error_reporting($previousErrorReporting);
         }
 
