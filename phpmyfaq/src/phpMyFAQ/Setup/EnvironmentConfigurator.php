@@ -21,13 +21,6 @@ namespace phpMyFAQ\Setup;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
-use SplFileObject;
-use Tivie\HtaccessParser\Exception\SyntaxException;
-use Tivie\HtaccessParser\Parser;
-use Tivie\HtaccessParser\Token\Block;
-use Tivie\HtaccessParser\Token\Directive;
-
-use const Tivie\HtaccessParser\Token\TOKEN_DIRECTIVE;
 
 readonly class EnvironmentConfigurator
 {
@@ -56,19 +49,13 @@ readonly class EnvironmentConfigurator
      */
     public function getRewriteBase(): string
     {
-        $file = new SplFileObject($this->htaccessPath);
-        $parser = new Parser();
-        try {
-            $htaccess = $parser->parse($file);
-        } catch (SyntaxException $e) {
-            throw new Exception('Syntax error in .htaccess file: ' . $e->getMessage());
-        } catch (\Tivie\HtaccessParser\Exception\Exception $e) {
-            throw new Exception('Error parsing .htaccess file: ' . $e->getMessage());
+        $content = $this->readHtaccess();
+
+        if (preg_match('/^\s*RewriteBase\s+(\S+)/mi', $content, $matches) !== 1) {
+            throw new Exception('RewriteBase directive not found in .htaccess file');
         }
 
-        $rewriteBase = $htaccess->search('RewriteBase', TOKEN_DIRECTIVE);
-
-        return $rewriteBase->getArguments()[0];
+        return $matches[1];
     }
 
     /**
@@ -80,7 +67,7 @@ readonly class EnvironmentConfigurator
      * - ErrorDocument 404 is configured to route errors to the application's error handler (e.g., /faq/index.php?action=404)
      *
      * @return bool Returns true if the .htaccess file was successfully modified, false otherwise.
-     * @throws Exception If the .htaccess file does not exist or contains syntax errors during parsing.
+     * @throws Exception If the .htaccess file does not exist or cannot be read.
      */
     public function adjustRewriteBaseHtaccess(): bool
     {
@@ -88,65 +75,34 @@ readonly class EnvironmentConfigurator
             throw new Exception(sprintf('The %s/.htaccess file does not exist!', $this->getServerPath()));
         }
 
-        $file = new SplFileObject($this->htaccessPath);
-        $parser = new Parser();
-        try {
-            $htaccess = $parser->parse($file);
-        } catch (SyntaxException $e) {
-            throw new Exception('Syntax error in .htaccess file: ' . $e->getMessage());
-        } catch (\Tivie\HtaccessParser\Exception\Exception $e) {
-            throw new Exception('Error parsing .htaccess file: ' . $e->getMessage());
+        $content = $this->readHtaccess();
+
+        $serverPath = $this->getServerPath();
+        $new404Path = rtrim($serverPath, '/') . '/index.php?action=404';
+
+        $updated = preg_replace('/^(\s*RewriteBase\s+)\S+/mi', '${1}' . $serverPath, $content);
+        if ($updated === null) {
+            throw new Exception('Failed to update RewriteBase directive');
         }
 
-        // Adjust RewriteBase
-        $rewriteBase = $htaccess->search('RewriteBase', TOKEN_DIRECTIVE);
-        if ($rewriteBase) {
-            $currentArgs = $rewriteBase->getArguments();
-            foreach ($currentArgs as $arg) {
-                $rewriteBase->removeArgument($arg);
-            }
-            $rewriteBase->setArguments([$this->getServerPath()]);
+        $updated = preg_replace('/^(\s*ErrorDocument\s+404\s+)\S+/mi', '${1}' . $new404Path, $updated);
+        if ($updated === null) {
+            throw new Exception('Failed to update ErrorDocument 404 directive');
         }
 
-        // Adjust ErrorDocument 404 (filter by error code; user .htaccess may contain
-        // additional ErrorDocument directives for other codes such as 403 or 500)
-        $errorDocument404 = $this->findErrorDocument($htaccess, '404');
-        if ($errorDocument404 instanceof Directive) {
-            $currentArgs = $errorDocument404->getArguments();
-            foreach ($currentArgs as $arg) {
-                $errorDocument404->removeArgument($arg);
-            }
-            $new404Path = rtrim($this->getServerPath(), '/') . '/index.php?action=404';
-            $errorDocument404->setArguments(['404', $new404Path]);
-        }
-
-        $output = (string) $htaccess;
-        return (bool) file_put_contents($this->htaccessPath, $output);
+        return (bool) file_put_contents($this->htaccessPath, $updated);
     }
 
     /**
-     * Recursively searches the parsed .htaccess tree for an ErrorDocument directive
-     * whose first argument matches the given HTTP error code.
+     * @throws Exception
      */
-    private function findErrorDocument(iterable $container, string $errorCode): ?Directive
+    private function readHtaccess(): string
     {
-        foreach ($container as $token) {
-            if (
-                $token instanceof Directive
-                && $token->getName() === 'ErrorDocument'
-                && ($token->getArguments()[0] ?? null) === $errorCode
-            ) {
-                return $token;
-            }
-
-            if ($token instanceof Block && $token->hasChildren()) {
-                $found = $this->findErrorDocument($token, $errorCode);
-                if ($found instanceof Directive) {
-                    return $found;
-                }
-            }
+        $content = @file_get_contents($this->htaccessPath);
+        if ($content === false) {
+            throw new Exception(sprintf('Cannot read .htaccess file: %s', $this->htaccessPath));
         }
 
-        return null;
+        return $content;
     }
 }

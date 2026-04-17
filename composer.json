@@ -50,7 +50,6 @@
     "symfony/routing": "^7.3",
     "symfony/uid": "^7.3",
     "tecnickcom/tcpdf": "~6.0",
-    "tivie/htaccess-parser": "0.4.0",
     "twig/intl-extra": "^3.10",
     "twig/twig": "^3.10"
   },
