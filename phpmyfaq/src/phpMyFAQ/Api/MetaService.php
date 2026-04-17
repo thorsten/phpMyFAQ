@@ -38,6 +38,7 @@ final readonly class MetaService
      *     availableLanguages: array<string, string>,
      *     enabledFeatures: array<string, bool>,
      *     publicLogoUrl: string,
+     *     themeColors: array<string, array<string, string>>,
      *     oauthDiscovery: array<string, bool|string|string[]>
      * }
      */
@@ -50,6 +51,7 @@ final readonly class MetaService
             'availableLanguages' => LanguageHelper::getAvailableLanguages(),
             'enabledFeatures' => $this->buildEnabledFeatures(),
             'publicLogoUrl' => $this->buildPublicLogoUrl(),
+            'themeColors' => $this->buildThemeColors(),
             'oauthDiscovery' => $this->oAuthDiscoveryService->getMetaDiscovery(),
         ];
     }
@@ -74,6 +76,61 @@ final readonly class MetaService
     private function buildPublicLogoUrl(): string
     {
         return rtrim($this->configuration->getDefaultUrl(), characters: '/') . '/assets/images/logo-transparent.svg';
+    }
+
+    /**
+     * @return array<string, array<string, string>>
+     */
+    private function buildThemeColors(): array
+    {
+        $themeCssPath = PMF_ROOT_DIR . '/assets/templates/default/theme.css';
+        if (!is_readable($themeCssPath)) {
+            return [
+                'light' => [],
+                'dark' => [],
+                'highContrast' => [],
+            ];
+        }
+
+        $themeCss = file_get_contents($themeCssPath);
+        if ($themeCss === false) {
+            return [
+                'light' => [],
+                'dark' => [],
+                'highContrast' => [],
+            ];
+        }
+
+        return [
+            'light' => $this->extractThemeVariables($themeCss, ":root,\n[data-bs-theme='light']"),
+            'dark' => $this->extractThemeVariables($themeCss, "[data-bs-theme='dark']"),
+            'highContrast' => $this->extractThemeVariables($themeCss, "[data-bs-theme='high-contrast']"),
+        ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function extractThemeVariables(string $themeCss, string $selector): array
+    {
+        $pattern = sprintf('/%s\s*\{(?P<body>.*?)^\}/ms', preg_quote($selector, delimiter: '/'));
+        if (preg_match($pattern, $themeCss, $matches) !== 1) {
+            return [];
+        }
+
+        preg_match_all(
+            '/(?P<name>--[A-Za-z0-9\-]+)\s*:\s*(?P<value>[^;]+);/',
+            $matches['body'],
+            $variableMatches,
+            PREG_SET_ORDER,
+        );
+
+        $variables = [];
+        foreach ($variableMatches as $variableMatch) {
+            $variables[$variableMatch['name']] = trim($variableMatch['value']);
+        }
+
+        return $variables;
     }
 
     private function toBool(mixed $value): bool
