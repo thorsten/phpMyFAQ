@@ -102,7 +102,7 @@ try {
     $installer = new Installer(new System());
     $installer->startInstall($setup);
 } catch (Exception $exception) {
-    echo $exception->getMessage();
+    fwrite(STDERR, $exception->getMessage() . PHP_EOL);
 }
 
 require PMF_TEST_DIR . '/content/core/config/database.php';
