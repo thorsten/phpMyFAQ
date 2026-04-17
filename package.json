@@ -87,7 +87,7 @@
     "pretty-quick": "4.2.2",
     "sass": "1.99.0",
     "sigmund": "1.0.1",
-    "typescript": "6.0.2",
+    "typescript": "6.0.3",
     "typescript-eslint": "8.58.2",
     "vite": "8.0.8",
     "vite-plugin-compression": "0.5.1",
