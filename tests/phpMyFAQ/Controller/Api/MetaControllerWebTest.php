@@ -78,6 +78,8 @@ final class MetaControllerWebTest extends ControllerWebTestCase
         self::assertSame('application/json', $response->headers->get('Content-Type'));
         self::assertIsArray($payload);
         self::assertStringEndsWith('/assets/images/logo-transparent.svg', $payload['publicLogoUrl']);
+        self::assertSame('#083c83', $payload['themeColors']['light']['--bs-primary']);
+        self::assertSame('#000000', $payload['themeColors']['highContrast']['--bs-body-bg']);
         self::assertTrue($payload['enabledFeatures']['api']);
         self::assertTrue($payload['oauthDiscovery']['enabled']);
         self::assertStringEndsWith('/api/oauth/token', $payload['oauthDiscovery']['tokenEndpoint']);

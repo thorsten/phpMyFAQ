@@ -62,6 +62,20 @@ final class MetaController extends AbstractController
                 type: 'string',
                 example: 'https://localhost/assets/images/logo-transparent.svg',
             ),
+            new OA\Property(property: 'themeColors', type: 'object', example: [
+                'light' => [
+                    '--bs-primary' => '#083c83',
+                    '--bs-body-bg' => '#ffffff',
+                ],
+                'dark' => [
+                    '--bs-primary' => '#083c83',
+                    '--bs-body-bg' => 'var(--bs-dark)',
+                ],
+                'highContrast' => [
+                    '--bs-primary' => '#ffff00',
+                    '--bs-body-bg' => '#000000',
+                ],
+            ]),
             new OA\Property(property: 'oauthDiscovery', type: 'object'),
         ]),
     )]

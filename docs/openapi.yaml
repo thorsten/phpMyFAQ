@@ -681,7 +681,7 @@ paths:
             application/json:
               schema: {}
               example: []
-  /api/v4.0/faqs/latest:
+  v4.0/faqs/latest:
     get:
       tags:
         - 'Public Endpoints'
@@ -1350,6 +1350,16 @@ paths:
                   availableLanguages: { type: object, example: { de: German, en: English } }
                   enabledFeatures: { type: object }
                   publicLogoUrl: { type: string, example: 'https://localhost/assets/images/logo-transparent.svg' }
+                  themeColors:
+                    {
+                      type: object,
+                      example:
+                        {
+                          light: { '--bs-primary': '#083c83', '--bs-body-bg': '#ffffff' },
+                          dark: { '--bs-primary': '#083c83', '--bs-body-bg': var(--bs-dark) },
+                          highContrast: { '--bs-primary': '#ffff00', '--bs-body-bg': '#000000' },
+                        },
+                    }
                   oauthDiscovery: { type: object }
                 type: object
   /api/v4.0/news:
