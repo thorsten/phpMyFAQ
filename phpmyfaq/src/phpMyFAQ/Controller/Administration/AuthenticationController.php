@@ -129,7 +129,9 @@ final class AuthenticationController extends AbstractAdministrationController im
             'hasRegistrationEnabled' => $this->configuration->get(item: 'security.enableRegistration'),
             'msgRegistration' => Translation::get(key: 'msgRegistration'),
             'hasSignInWithMicrosoftActive' => $this->configuration->isSignInWithMicrosoftActive(),
+            'hasSignInWithKeycloakActive' => $this->configuration->isSignInWithKeycloakActive(),
             'msgSignInWithMicrosoft' => Translation::get(key: 'msgSignInWithMicrosoft'),
+            'msgSignInWithKeycloak' => Translation::get(key: 'msgSignInWithKeycloak'),
             'secureUrl' => preg_replace(pattern: '/^http:/', replacement: 'https:', subject: $request->getUri()),
             'msgNotSecure' => Translation::get(key: 'msgSecureSwitch'),
             'isWebAuthnEnabled' => $this->configuration->get(item: 'security.enableWebAuthnSupport'),
@@ -163,6 +165,13 @@ final class AuthenticationController extends AbstractAdministrationController im
         if ($this->configuration->get(item: 'security.ssoSupport') && (string) $ssoLogout !== '') {
             $redirectResponse->isRedirect($ssoLogout);
             $redirectResponse->send();
+        }
+
+        if (
+            $this->configuration->isSignInWithKeycloakActive()
+            && $this->currentUser->getUserAuthSource() === 'keycloak'
+        ) {
+            return new RedirectResponse($this->configuration->getDefaultUrl() . 'auth/keycloak/logout');
         }
 
         return $redirectResponse->send();

@@ -34,6 +34,7 @@ use phpMyFAQ\Auth as LegacyAuth;
 use phpMyFAQ\Auth\ApiKeyAuthenticator;
 use phpMyFAQ\Auth\AuthChain;
 use phpMyFAQ\Auth\Keycloak\KeycloakProviderConfigFactory;
+use phpMyFAQ\Auth\Oidc\OidcClient;
 use phpMyFAQ\Auth\Oidc\OidcDiscoveryService;
 use phpMyFAQ\Auth\Oidc\OidcPkceGenerator;
 use phpMyFAQ\Auth\Oidc\OidcProviderConfig;
@@ -118,6 +119,7 @@ use phpMyFAQ\Controller\Frontend\ContactController as FrontendContactController;
 use phpMyFAQ\Controller\Frontend\CustomPageController as FrontendCustomPageController;
 use phpMyFAQ\Controller\Frontend\FaqController as FrontendFaqController;
 use phpMyFAQ\Controller\Frontend\GlossaryController as FrontendGlossaryController;
+use phpMyFAQ\Controller\Frontend\KeycloakAuthenticationController as FrontendKeycloakAuthenticationController;
 use phpMyFAQ\Controller\Frontend\NewsController as FrontendNewsController;
 use phpMyFAQ\Controller\Frontend\OAuthDiscoveryController as FrontendOAuthDiscoveryController;
 use phpMyFAQ\Controller\Frontend\OverviewController as FrontendOverviewController;
@@ -303,6 +305,9 @@ return static function (ContainerConfigurator $container): void {
     ]);
     $services->set('phpmyfaq.auth.api-key-authenticator', ApiKeyAuthenticator::class)->args([
         service('phpmyfaq.configuration'),
+    ]);
+    $services->set('phpmyfaq.auth.oidc.client', OidcClient::class)->args([
+        service('phpmyfaq.http-client'),
     ]);
     $services->set('phpmyfaq.auth.oidc.discovery-service', OidcDiscoveryService::class)->args([
         service('phpmyfaq.http-client'),
@@ -940,6 +945,13 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.user.two-factor'),
     ]);
     $services->set(FrontendAzureAuthenticationController::class, FrontendAzureAuthenticationController::class);
+    $services->set(FrontendKeycloakAuthenticationController::class, FrontendKeycloakAuthenticationController::class)->args([
+        service('phpmyfaq.auth.keycloak.provider-config-factory'),
+        service('phpmyfaq.auth.oidc.discovery-service'),
+        service('phpmyfaq.auth.oidc.pkce-generator'),
+        service('phpmyfaq.auth.oidc.session'),
+        service('phpmyfaq.auth.oidc.client'),
+    ]);
     $services->set(FrontendCategoryController::class, FrontendCategoryController::class)->args([
         service('phpmyfaq.user.session'),
         service('phpmyfaq.category'),

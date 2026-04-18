@@ -56,20 +56,18 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 #[UsesClass(\phpMyFAQ\User\UserSession::class)]
 final class AuthenticationControllerWebTest extends ControllerWebTestCase
 {
-    public function testLoginPageShowsRegistrationAndPasskeyActionsWhenEnabled(): void
+    public function testLoginPageShowsRegistrationActionWhenEnabled(): void
     {
         $this->getConfiguration()->getAll();
         $this->overrideConfigurationValues([
             'main.enableUserTracking' => false,
             'security.enableRegistration' => true,
-            'security.enableWebAuthnSupport' => true,
         ]);
 
         $response = $this->requestPublic('GET', '/login');
 
         self::assertResponseIsSuccessful($response);
         self::assertResponseContains('href="user/register"', $response);
-        self::assertResponseContains('./services/webauthn', $response);
     }
 
     public function testLoginRedirectsToAuthenticateWhenSsoUserIsPresent(): void

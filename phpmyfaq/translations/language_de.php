@@ -1224,6 +1224,7 @@ $LANG_CONF['security.loginWithEmailAddress'] = ['checkbox', 'Login nur mit E-Mai
 
 // added v3.2.0-alpha - 2022-09-10 by Thorsten
 $PMF_LANG['msgSignInWithMicrosoft'] = 'Mit Microsoft anmelden';
+$PMF_LANG['msgSignInWithKeycloak'] = 'Mit Keycloak anmelden';
 $LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Aktiviere Anmeldung mit Microsoft Entra ID'];
 $PMF_LANG['keycloakControlCenter'] = 'Keycloak';
 $LANG_CONF['main.enableAskQuestions'] = ['checkbox', 'Aktiviere "Frage stellen"'];

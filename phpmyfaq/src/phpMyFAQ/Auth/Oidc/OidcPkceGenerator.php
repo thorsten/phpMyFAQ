@@ -19,10 +19,19 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Auth\Oidc;
 
+use InvalidArgumentException;
+
 final class OidcPkceGenerator
 {
     public function generateVerifier(int $length = 128): string
     {
+        if ($length < 43 || $length > 128) {
+            throw new InvalidArgumentException(sprintf(
+                'PKCE verifier length must be between 43 and 128, got %d',
+                $length,
+            ));
+        }
+
         $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-._~';
         $charLength = strlen($chars) - 1;
         $verifier = '';
@@ -36,6 +45,18 @@ final class OidcPkceGenerator
 
     public function generateChallenge(string $verifier): string
     {
+        $len = strlen($verifier);
+        if ($len < 43 || $len > 128) {
+            throw new InvalidArgumentException(sprintf(
+                'PKCE verifier length must be between 43 and 128, got %d',
+                $len,
+            ));
+        }
+
+        if (preg_match('/[^0-9a-zA-Z\-._~]/', $verifier) === 1) {
+            throw new InvalidArgumentException('PKCE verifier contains invalid characters');
+        }
+
         return rtrim(
             strtr(base64_encode(hash(algo: 'sha256', data: $verifier, binary: true)), from: '+/', to: '-_'),
             characters: '=',

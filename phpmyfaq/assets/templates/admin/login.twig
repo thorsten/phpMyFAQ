@@ -78,12 +78,18 @@
                         <i class="bi bi-windows" aria-hidden="true"></i>
                         {{ msgSignInWithMicrosoft }}
                       </a>
-                      {% if isWebAuthnEnabled %}
-                        <a class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" href="../services/webauthn">
-                          <i class="bi bi-key" aria-hidden="true"></i>
-                          {{ 'msgSignInWithPasskey' | translate }}
-                        </a>
-                      {% endif %}
+                    {% endif %}
+                    {% if hasSignInWithKeycloakActive %}
+                      <a class="w-100 py-2 mb-2 btn btn-outline-dark rounded-3" href="../auth/keycloak/authorize">
+                        <i class="bi bi-shield-lock" aria-hidden="true"></i>
+                        {{ msgSignInWithKeycloak }}
+                      </a>
+                    {% endif %}
+                    {% if isWebAuthnEnabled %}
+                      <a class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" href="../services/webauthn">
+                        <i class="bi bi-key" aria-hidden="true"></i>
+                        {{ 'msgSignInWithPasskey' | translate }}
+                      </a>
                     {% endif %}
                   </div>
                 </div>

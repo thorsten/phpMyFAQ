@@ -48,10 +48,16 @@ final readonly class OidcDiscoveryService
         }
 
         try {
-            /** @var array<string, mixed> $payload */
             $payload = json_decode($content, associative: true, depth: 512, flags: JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
             throw new RuntimeException('OIDC discovery response is not valid JSON', previous: $exception);
+        }
+
+        if (!is_array($payload)) {
+            throw new RuntimeException(sprintf(
+                'OIDC discovery response is not a JSON object/array, got %s',
+                gettype($payload),
+            ));
         }
 
         return OidcDiscoveryDocument::fromArray($payload);

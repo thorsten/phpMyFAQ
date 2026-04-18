@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Auth\Keycloak;
 
+use InvalidArgumentException;
 use phpMyFAQ\Auth\Oidc\OidcClientConfig;
 use phpMyFAQ\Auth\Oidc\OidcProviderConfig;
 use phpMyFAQ\Configuration;
@@ -40,17 +41,27 @@ final readonly class KeycloakProviderConfigFactory
             $scopes = [];
         }
 
+        $enabled = $this->toBool($this->configuration->get('keycloak.enable'));
+
+        if ($enabled && ($baseUrl === '' || $realm === '')) {
+            $missing = array_filter([
+                $baseUrl === '' ? 'baseUrl' : null,
+                $realm === '' ? 'realm' : null,
+            ]);
+            throw new InvalidArgumentException(sprintf('Keycloak enabled but missing: %s', implode(' and ', $missing)));
+        }
+
         if ($redirectUri === '') {
             $redirectUri = rtrim($this->configuration->getDefaultUrl(), characters: '/') . '/auth/keycloak/callback';
         }
 
         return new OidcProviderConfig(
             provider: 'keycloak',
-            enabled: $this->toBool($this->configuration->get('keycloak.enable')),
+            enabled: $enabled,
             discoveryUrl: $this->buildDiscoveryUrl($baseUrl, $realm),
             client: new OidcClientConfig(
                 clientId: trim((string) $this->configuration->get('keycloak.clientId')),
-                clientSecret: trim((string) $this->configuration->get('keycloak.clientSecret')),
+                clientSecret: (string) $this->configuration->get('keycloak.clientSecret'),
                 redirectUri: $redirectUri,
                 scopes: array_values(array_filter($scopes, static fn(string $scope): bool => $scope !== '')),
             ),
