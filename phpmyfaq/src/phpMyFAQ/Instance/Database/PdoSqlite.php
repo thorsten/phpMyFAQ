@@ -329,6 +329,7 @@ class PdoSqlite extends Database implements DriverInterface
             last_modified VARCHAR(14) NULL,
             display_name VARCHAR(128) NULL,
             email VARCHAR(128) NULL,
+            keycloak_sub VARCHAR(255) NULL,
             is_visible INT(1) NULL DEFAULT 0,
             twofactor_enabled INT(1) NULL DEFAULT 0,
             secret VARCHAR(128) NULL DEFAULT NULL)',

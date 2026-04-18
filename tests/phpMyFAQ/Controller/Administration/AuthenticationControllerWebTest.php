@@ -14,19 +14,35 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 #[UsesClass(AbstractAdministrationController::class)]
 final class AuthenticationControllerWebTest extends ControllerWebTestCase
 {
-    public function testAdminLoginPageIsReachable(): void
+    public function testLoginShowsKeycloakAffordanceWhenEnabled(): void
     {
-        $response = $this->requestAdmin('GET', '/login');
+        $this->overrideConfigurationValues([
+            'keycloak.enable' => true,
+        ], 'admin');
+
+        $response = $this->requestAdminGuest('GET', '/login');
 
         self::assertResponseIsSuccessful($response);
-        self::assertResponseContains('admin/authenticate', $response);
+        self::assertMatchesRegularExpression(
+            '/href="[^"]*auth\/keycloak\/authorize"/',
+            (string) $response->getContent(),
+        );
+        $this->assertResponseContains('Sign in with Keycloak', $response);
     }
 
-    public function testAdminAuthenticateWithoutCredentialsRedirectsToDashboard(): void
+    public function testLoginHidesKeycloakAffordanceWhenDisabled(): void
     {
-        $response = $this->requestAdmin('POST', '/authenticate');
+        $this->overrideConfigurationValues([
+            'keycloak.enable' => false,
+        ], 'admin');
 
-        self::assertResponseStatusCodeSame(302, $response);
-        self::assertRedirectLocationContains('./', $response);
+        $response = $this->requestAdminGuest('GET', '/login');
+
+        self::assertResponseIsSuccessful($response);
+        self::assertDoesNotMatchRegularExpression(
+            '/href="[^"]*auth\/keycloak\/authorize"/',
+            (string) $response->getContent(),
+        );
+        self::assertStringNotContainsString('Sign in with Keycloak', (string) $response->getContent());
     }
 }

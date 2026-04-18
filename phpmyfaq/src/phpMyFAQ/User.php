@@ -811,6 +811,24 @@ class User
     }
 
     /**
+     * Returns the user ID from the given Keycloak subject.
+     */
+    public function getUserIdByKeycloakSub(string $keycloakSub): int
+    {
+        if (!$this->userdata instanceof UserData) {
+            $this->userdata = new UserData($this->configuration);
+        }
+
+        $userData = $this->userdata->fetchAll('keycloak_sub', $keycloakSub);
+
+        if (!is_array($userData) || !isset($userData['user_id'])) {
+            return 0;
+        }
+
+        return (int) $userData['user_id'];
+    }
+
+    /**
      * Returns true or false for the visibility for the given email
      * address, if the user is not a registered user, the method
      * returns false for anonymous users

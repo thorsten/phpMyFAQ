@@ -87,6 +87,7 @@ final class AuthenticationController extends AbstractFrontController
             'enableRegistration' => $this->configuration->get('security.enableRegistration'),
             'registerUser' => Translation::get(key: 'msgRegistration'),
             'useSignInWithMicrosoft' => $this->configuration->isSignInWithMicrosoftActive(),
+            'useSignInWithKeycloak' => $this->configuration->isSignInWithKeycloakActive(),
             'isWebAuthnEnabled' => $this->configuration->get('security.enableWebAuthnSupport'),
         ]);
     }
@@ -147,6 +148,13 @@ final class AuthenticationController extends AbstractFrontController
             && $this->currentUser->getUserAuthSource() === 'azure'
         ) {
             return new RedirectResponse($this->configuration->getDefaultUrl() . 'auth/azure/logout');
+        }
+
+        if (
+            $this->configuration->isSignInWithKeycloakActive()
+            && $this->currentUser->getUserAuthSource() === 'keycloak'
+        ) {
+            return new RedirectResponse($this->configuration->getDefaultUrl() . 'auth/keycloak/logout');
         }
 
         return $redirectResponse;

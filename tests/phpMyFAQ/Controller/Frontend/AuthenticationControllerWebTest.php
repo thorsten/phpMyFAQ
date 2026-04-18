@@ -56,20 +56,48 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 #[UsesClass(\phpMyFAQ\User\UserSession::class)]
 final class AuthenticationControllerWebTest extends ControllerWebTestCase
 {
-    public function testLoginPageShowsRegistrationAndPasskeyActionsWhenEnabled(): void
+    public function testLoginPageShowsRegistrationActionWhenEnabled(): void
     {
         $this->getConfiguration()->getAll();
         $this->overrideConfigurationValues([
             'main.enableUserTracking' => false,
             'security.enableRegistration' => true,
-            'security.enableWebAuthnSupport' => true,
         ]);
 
         $response = $this->requestPublic('GET', '/login');
 
         self::assertResponseIsSuccessful($response);
         self::assertResponseContains('href="user/register"', $response);
-        self::assertResponseContains('./services/webauthn', $response);
+    }
+
+    public function testLoginPageShowsKeycloakSignInWhenEnabled(): void
+    {
+        $this->getConfiguration()->getAll();
+        $this->overrideConfigurationValues([
+            'main.enableUserTracking' => false,
+            'keycloak.enable' => true,
+        ]);
+
+        $response = $this->requestPublic('GET', '/login');
+
+        self::assertResponseIsSuccessful($response);
+        self::assertResponseContains('./auth/keycloak/authorize', $response);
+        self::assertResponseContains('Sign in with Keycloak', $response);
+    }
+
+    public function testLoginPageHidesKeycloakSignInWhenDisabled(): void
+    {
+        $this->getConfiguration()->getAll();
+        $this->overrideConfigurationValues([
+            'main.enableUserTracking' => false,
+            'keycloak.enable' => false,
+        ]);
+
+        $response = $this->requestPublic('GET', '/login');
+
+        self::assertResponseIsSuccessful($response);
+        self::assertStringNotContainsString('./auth/keycloak/authorize', $response->getContent());
+        self::assertStringNotContainsString('Sign in with Keycloak', $response->getContent());
     }
 
     public function testLoginRedirectsToAuthenticateWhenSsoUserIsPresent(): void

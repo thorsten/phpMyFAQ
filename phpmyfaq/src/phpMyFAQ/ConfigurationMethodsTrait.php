@@ -292,6 +292,11 @@ trait ConfigurationMethodsTrait
         return $this->securitySettings->isSignInWithMicrosoftActive();
     }
 
+    public function isSignInWithKeycloakActive(): bool
+    {
+        return $this->securitySettings->isSignInWithKeycloakActive();
+    }
+
     /**
      * Sets the Elasticsearch client instance.
      */

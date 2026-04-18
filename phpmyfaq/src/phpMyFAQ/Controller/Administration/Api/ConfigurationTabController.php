@@ -322,6 +322,18 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         $ssoKeys = [
             'security.ssoSupport',
             'security.ssoLogoutRedirect',
+            'keycloak.enable',
+            'keycloak.baseUrl',
+            'keycloak.realm',
+            'keycloak.clientId',
+            'keycloak.clientSecret',
+            'keycloak.redirectUri',
+            'keycloak.scopes',
+            'keycloak.autoProvision',
+            'keycloak.groupAutoAssign',
+            'keycloak.groupSyncOnLogin',
+            'keycloak.groupMapping',
+            'keycloak.logoutRedirectUrl',
         ];
 
         $ssoChanges = array_intersect($changedKeys, $ssoKeys);

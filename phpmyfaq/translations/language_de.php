@@ -1224,7 +1224,9 @@ $LANG_CONF['security.loginWithEmailAddress'] = ['checkbox', 'Login nur mit E-Mai
 
 // added v3.2.0-alpha - 2022-09-10 by Thorsten
 $PMF_LANG['msgSignInWithMicrosoft'] = 'Mit Microsoft anmelden';
+$PMF_LANG['msgSignInWithKeycloak'] = 'Mit Keycloak anmelden';
 $LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Aktiviere Anmeldung mit Microsoft Entra ID'];
+$PMF_LANG['keycloakControlCenter'] = 'Keycloak';
 $LANG_CONF['main.enableAskQuestions'] = ['checkbox', 'Aktiviere "Frage stellen"'];
 $LANG_CONF['main.enableNotifications'] = ['checkbox', 'Aktiviere Benachrichtigungen'];
 $LANG_CONF['mail.sendTestEmail'] = ['button', 'Test-E-Mail an den Administrator über SMTP'];
@@ -1692,6 +1694,18 @@ $LANG_CONF['oauth2.encryptionKey'] = [
 $LANG_CONF['oauth2.accessTokenTTL'] = ['input', 'Access-Token-TTL', 'ISO-8601-Dauer, z.B. PT1H'];
 $LANG_CONF['oauth2.refreshTokenTTL'] = ['input', 'Refresh-Token-TTL', 'ISO-8601-Dauer, z.B. P1M'];
 $LANG_CONF['oauth2.authCodeTTL'] = ['input', 'Autorisierungscode-TTL', 'ISO-8601-Dauer, z.B. PT10M'];
+$LANG_CONF['keycloak.enable'] = ['checkbox', 'Keycloak-Anmeldung aktivieren'];
+$LANG_CONF['keycloak.baseUrl'] = ['input', 'Keycloak-Basis-URL', 'Basis-URL des Keycloak-Servers, z.B. https://sso.example.com'];
+$LANG_CONF['keycloak.realm'] = ['input', 'Realm', 'Keycloak-Realm für die phpMyFAQ-Authentifizierung'];
+$LANG_CONF['keycloak.clientId'] = ['input', 'Client-ID', 'In Keycloak konfigurierte OIDC-Client-ID'];
+$LANG_CONF['keycloak.clientSecret'] = ['password', 'Client-Secret'];
+$LANG_CONF['keycloak.redirectUri'] = ['input', 'Redirect-URI', 'Im Keycloak-Client registrierte Callback-URL'];
+$LANG_CONF['keycloak.scopes'] = ['input', 'Scopes', 'Leerzeichengetrennte Scopes, z.B. openid profile email'];
+$LANG_CONF['keycloak.autoProvision'] = ['checkbox', 'phpMyFAQ-Benutzer beim ersten Keycloak-Login automatisch anlegen'];
+$LANG_CONF['keycloak.groupAutoAssign'] = ['checkbox', 'phpMyFAQ-Gruppen automatisch aus Keycloak-Rollen zuweisen'];
+$LANG_CONF['keycloak.groupSyncOnLogin'] = ['checkbox', 'Zugeordnete phpMyFAQ-Gruppen beim Login synchronisieren', 'Wenn aktiviert, entfernt phpMyFAQ beim Login veraltete Mitgliedschaften für Gruppen, die durch die Keycloak-Rollenzuordnung verwaltet werden'];
+$LANG_CONF['keycloak.groupMapping'] = ['input', 'Rollen-zu-Gruppen-Zuordnung', 'JSON-Objekt zur Abbildung von Keycloak-Rollen auf phpMyFAQ-Gruppennamen, z.B. {"admin":"Administratoren"}'];
+$LANG_CONF['keycloak.logoutRedirectUrl'] = ['input', 'Logout-Redirect-URL', 'URL für die Weiterleitung nach dem Keycloak-Logout'];
 
 $LANG_CONF['mail.provider'] = ['select', 'E-Mail-Anbieter'];
 $LANG_CONF['mail.sendgridApiKey'] = ['password', 'SendGrid API-Schlüssel'];

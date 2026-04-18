@@ -124,6 +124,18 @@ each setting controls. These values are set during installation and can be chang
 | `security.enableRegistration`               | Enable registration for visitors | `true` | Allows new users to register an account on the FAQ. |
 | `security.domainWhiteListForRegistrations`  | Allowed hosts for registrations | *(empty)* | A list of allowed email domains for new registrations. Leave empty to allow all domains. |
 | `security.enableSignInWithMicrosoft`        | Enable Sign in with Microsoft Entra ID | `false` | Enables authentication via Microsoft Entra ID (formerly Azure AD). |
+| `keycloak.enable`                           | Enable Keycloak sign-in | `false` | Enables OpenID Connect authentication via Keycloak for the frontend and admin login forms. |
+| `keycloak.baseUrl`                          | Keycloak base URL | *(empty)* | Base URL of the Keycloak server, for example `https://sso.example.com`. |
+| `keycloak.realm`                            | Realm | *(empty)* | Keycloak realm used for phpMyFAQ authentication. |
+| `keycloak.clientId`                         | Client ID | *(empty)* | OIDC client identifier configured in Keycloak. |
+| `keycloak.clientSecret`                     | Client secret | *(empty)* | Client secret configured for the Keycloak OIDC client. |
+| `keycloak.redirectUri`                      | Redirect URI | *(empty)* | Callback URL registered in the Keycloak client, usually `https://faq.example.com/auth/keycloak/callback`. |
+| `keycloak.scopes`                           | Scopes | `openid profile email` | Space-separated scopes requested during login. |
+| `keycloak.autoProvision`                    | Automatically create phpMyFAQ users on first Keycloak login | `false` | When enabled, phpMyFAQ creates a local user automatically if no matching account exists yet. |
+| `keycloak.groupAutoAssign`                  | Automatically assign phpMyFAQ groups from Keycloak roles | `false` | When enabled and permission level `medium` is active, phpMyFAQ assigns users to groups derived from Keycloak roles on login. |
+| `keycloak.groupSyncOnLogin`                 | Synchronize mapped phpMyFAQ groups on login | `false` | When enabled, phpMyFAQ also removes stale memberships for groups managed by the Keycloak role mapping during login. |
+| `keycloak.groupMapping`                     | Role to group mapping | *(empty)* | JSON object mapping Keycloak role names to phpMyFAQ group names, for example `{"admin":"Administrators","faq-editors":"Editors"}`. Only mapped roles are managed for assignment and synchronization. |
+| `keycloak.logoutRedirectUrl`                | Logout redirect URL | *(empty)* | URL users should be redirected to after logging out from Keycloak, for example `https://faq.example.com/`. |
 | `security.enableGoogleReCaptchaV2`          | Enable Invisible Google ReCAPTCHA v2 | `false` | Enables Google reCAPTCHA v2 to protect forms from spam and abuse. |
 | `security.googleReCaptchaV2SiteKey`         | Google ReCAPTCHA v2 site key | *(empty)* | The site key from your Google reCAPTCHA v2 registration. |
 | `security.googleReCaptchaV2SecretKey`       | Google ReCAPTCHA v2 secret key | *(empty)* | The secret key from your Google reCAPTCHA v2 registration. |

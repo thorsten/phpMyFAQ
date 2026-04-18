@@ -25,6 +25,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added optional Redis support for configuration caching (Thorsten)
 - added LDAP configuration frontend (Thorsten)
 - added phpMyFAQ recent news widget to the admin dashboard (Thorsten)
+- added experimental support for Keycloak (Thorsten)
 - added experimental support for API key authentication via OAuth2 (Thorsten)
 - added experimental per-tenant quota enforcement and API request rate limits (Thorsten)
 - added SBOM (Software Bill of Materials) generation (Thorsten)
