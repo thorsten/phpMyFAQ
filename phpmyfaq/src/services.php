@@ -33,6 +33,11 @@ use phpMyFAQ\Attachment\AttachmentCollection;
 use phpMyFAQ\Auth as LegacyAuth;
 use phpMyFAQ\Auth\ApiKeyAuthenticator;
 use phpMyFAQ\Auth\AuthChain;
+use phpMyFAQ\Auth\Keycloak\KeycloakProviderConfigFactory;
+use phpMyFAQ\Auth\Oidc\OidcDiscoveryService;
+use phpMyFAQ\Auth\Oidc\OidcPkceGenerator;
+use phpMyFAQ\Auth\Oidc\OidcProviderConfig;
+use phpMyFAQ\Auth\Oidc\OidcSession;
 use phpMyFAQ\Auth\OAuth2\Repository\AccessTokenRepository;
 use phpMyFAQ\Auth\OAuth2\Repository\AuthCodeRepository;
 use phpMyFAQ\Auth\OAuth2\Repository\ClientRepository;
@@ -298,6 +303,20 @@ return static function (ContainerConfigurator $container): void {
     ]);
     $services->set('phpmyfaq.auth.api-key-authenticator', ApiKeyAuthenticator::class)->args([
         service('phpmyfaq.configuration'),
+    ]);
+    $services->set('phpmyfaq.auth.oidc.discovery-service', OidcDiscoveryService::class)->args([
+        service('phpmyfaq.http-client'),
+    ]);
+    $services->set('phpmyfaq.auth.oidc.pkce-generator', OidcPkceGenerator::class);
+    $services->set('phpmyfaq.auth.oidc.session', OidcSession::class)->args([
+        service('session'),
+    ]);
+    $services->set('phpmyfaq.auth.keycloak.provider-config-factory', KeycloakProviderConfigFactory::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+    $services->set('phpmyfaq.auth.keycloak.provider-config', OidcProviderConfig::class)->factory([
+        service('phpmyfaq.auth.keycloak.provider-config-factory'),
+        'create',
     ]);
     $services->set('phpmyfaq.auth.chain', AuthChain::class)->args([
         service('phpmyfaq.user.current_user'),
