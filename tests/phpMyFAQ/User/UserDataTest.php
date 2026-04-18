@@ -71,7 +71,7 @@ class UserDataTest extends TestCase
         $this->database->method('fetchArray')->willReturn(['user_id' => 1]);
 
         $result = $this->userData->fetchAll('key', 'value');
-        $this->assertEquals(['user_id' => 1], $result);
+        $this->assertEquals(['user_id' => 1, 'keycloak_sub' => ''], $result);
     }
 
     public function testFetchAllReturnsDefaultArrayWhenNoResultExists(): void

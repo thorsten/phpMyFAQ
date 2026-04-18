@@ -59,4 +59,19 @@ final class OidcSession extends AbstractSession
         $this->set(self::OIDC_NONCE, '');
         $this->set(self::OIDC_PKCE_CODE, '');
     }
+
+    public function setIdToken(string $idToken): void
+    {
+        $this->set(self::OIDC_ID_ASSERTION, $idToken);
+    }
+
+    public function getIdToken(): string
+    {
+        return (string) $this->get(self::OIDC_ID_ASSERTION);
+    }
+
+    public function clearIdToken(): void
+    {
+        $this->set(self::OIDC_ID_ASSERTION, '');
+    }
 }

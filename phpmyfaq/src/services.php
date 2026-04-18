@@ -36,6 +36,7 @@ use phpMyFAQ\Auth\AuthChain;
 use phpMyFAQ\Auth\Keycloak\KeycloakProviderConfigFactory;
 use phpMyFAQ\Auth\Oidc\OidcClient;
 use phpMyFAQ\Auth\Oidc\OidcDiscoveryService;
+use phpMyFAQ\Auth\Oidc\OidcIdTokenValidator;
 use phpMyFAQ\Auth\Oidc\OidcPkceGenerator;
 use phpMyFAQ\Auth\Oidc\OidcProviderConfig;
 use phpMyFAQ\Auth\Oidc\OidcSession;
@@ -310,6 +311,9 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.http-client'),
     ]);
     $services->set('phpmyfaq.auth.oidc.discovery-service', OidcDiscoveryService::class)->args([
+        service('phpmyfaq.http-client'),
+    ]);
+    $services->set('phpmyfaq.auth.oidc.id-token-validator', OidcIdTokenValidator::class)->args([
         service('phpmyfaq.http-client'),
     ]);
     $services->set('phpmyfaq.auth.oidc.pkce-generator', OidcPkceGenerator::class);
@@ -951,6 +955,7 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.auth.oidc.pkce-generator'),
         service('phpmyfaq.auth.oidc.session'),
         service('phpmyfaq.auth.oidc.client'),
+        service('phpmyfaq.auth.oidc.id-token-validator'),
     ]);
     $services->set(FrontendCategoryController::class, FrontendCategoryController::class)->args([
         service('phpmyfaq.user.session'),

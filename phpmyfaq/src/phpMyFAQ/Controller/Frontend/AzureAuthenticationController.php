@@ -89,11 +89,12 @@ final class AzureAuthenticationController extends AbstractFrontController
 
         [$auth, $oAuth, $entraIdSession] = $this->buildAuthContext();
 
-        $code = Filter::filterVar($request->query->get('code'), FILTER_SANITIZE_SPECIAL_CHARS);
-        $error = Filter::filterVar($request->query->get('error_description'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $code = Filter::filterVar($request->query->get('code'), FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $error = Filter::filterVar($request->query->get('error_description'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if ($error !== '') {
-            return new Response($error);
+            $this->configuration->getLogger()->warning(sprintf('Azure callback error: %s', $error));
+            return new RedirectResponse($this->configuration->getDefaultUrl());
         }
 
         $redirect = new RedirectResponse($this->configuration->getDefaultUrl());

@@ -54,7 +54,14 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
         try {
             $result = $user->createUser($login, '', $domain);
         } catch (\Exception $exception) {
-            $this->configuration->getLogger()->info($exception->getMessage());
+            $this->configuration
+                ->getLogger()
+                ->error(sprintf('Keycloak user creation failed for "%s": %s', $login, $exception->getMessage()));
+            return false;
+        }
+
+        if (!$result) {
+            return false;
         }
 
         $user->setStatus('active');
@@ -62,6 +69,7 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
         $user->setUserData([
             'display_name' => $this->getDisplayName(),
             'email' => $this->getEmail(),
+            'keycloak_sub' => $this->getSubject(),
         ]);
 
         if ($this->shouldAssignGroups()) {
@@ -127,6 +135,11 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
         return trim((string) ($this->claims['email'] ?? ''));
     }
 
+    private function getSubject(): string
+    {
+        return trim((string) ($this->claims['sub'] ?? ''));
+    }
+
     private function userExists(string $login): bool
     {
         $user = $this->createUser();
@@ -156,7 +169,11 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
         $groupMapping = $this->getGroupMapping();
 
         foreach ($roleNames as $roleName) {
-            $faqGroupName = $groupMapping[$roleName] ?? $roleName;
+            if (!isset($groupMapping[$roleName])) {
+                continue;
+            }
+
+            $faqGroupName = $groupMapping[$roleName];
             $groupId = $mediumPermission->findOrCreateGroupByName($faqGroupName);
 
             if ($groupId <= 0) {
@@ -166,7 +183,7 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
             $mediumPermission->addToGroup($userId, $groupId);
             $this->configuration
                 ->getLogger()
-                ->info(sprintf('Added Keycloak user %s to group %s', $this->resolvedLogin, $faqGroupName));
+                ->info(sprintf('Added Keycloak user #%d to group %s', $userId, $faqGroupName));
         }
     }
 
@@ -188,20 +205,16 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
             }
         }
 
-        $resourceAccess = $this->claims['resource_access'] ?? [];
-        if (is_array($resourceAccess)) {
-            foreach ($resourceAccess as $resource) {
-                $resourceRoles = is_array($resource) ? $resource['roles'] ?? null : null;
-                if (!is_array($resourceRoles)) {
-                    continue;
-                }
-
-                foreach ($resourceRoles as $resourceRole) {
-                    if (!is_string($resourceRole) || $resourceRole === '') {
+        $clientId = trim((string) $this->configuration->get(item: 'keycloak.clientId'));
+        if ($clientId !== '') {
+            $clientRoles = $this->claims['resource_access'][$clientId]['roles'] ?? [];
+            if (is_array($clientRoles)) {
+                foreach ($clientRoles as $clientRole) {
+                    if (!is_string($clientRole) || $clientRole === '') {
                         continue;
                     }
 
-                    $roleNames[] = $resourceRole;
+                    $roleNames[] = $clientRole;
                 }
             }
         }

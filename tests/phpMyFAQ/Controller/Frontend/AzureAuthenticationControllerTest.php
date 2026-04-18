@@ -133,8 +133,8 @@ class AzureAuthenticationControllerTest extends TestCase
         $request = new Request(['error_description' => 'Denied by provider']);
         $response = $controller->callback($request);
 
-        $this->assertInstanceOf(Response::class, $response);
-        $this->assertSame('Denied by provider', $response->getContent());
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame('https://example.com/', $response->headers->get('Location'));
     }
 
     /**

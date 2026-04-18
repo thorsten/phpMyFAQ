@@ -77,6 +77,7 @@ final class AuthKeycloakTest extends TestCase
             ->with([
                 'display_name' => 'John Doe',
                 'email' => 'john@example.com',
+                'keycloak_sub' => 'subject-123',
             ]);
 
         $auth = new AuthKeycloak(
@@ -86,6 +87,7 @@ final class AuthKeycloakTest extends TestCase
                 'preferred_username' => 'john',
                 'name' => 'John Doe',
                 'email' => 'john@example.com',
+                'sub' => 'subject-123',
             ],
             'john',
             static fn(): User => $user,
@@ -101,7 +103,8 @@ final class AuthKeycloakTest extends TestCase
             ->method('get')
             ->willReturnCallback(static fn(string $item): mixed => match ($item) {
                 'keycloak.groupAutoAssign' => 'true',
-                'keycloak.groupMapping' => '{"manage-users":"Administrators"}',
+                'keycloak.groupMapping' => '{"manage-users":"Administrators","faq-editors":"faq-editors"}',
+                'keycloak.clientId' => 'phpmyfaq',
                 'security.permLevel' => 'medium',
                 default => null,
             });
@@ -117,6 +120,7 @@ final class AuthKeycloakTest extends TestCase
             ->with([
                 'display_name' => 'John Doe',
                 'email' => 'john@example.com',
+                'keycloak_sub' => 'subject-123',
             ]);
         $user->expects($this->once())->method('getUserId')->willReturn(42);
 
@@ -141,6 +145,7 @@ final class AuthKeycloakTest extends TestCase
                 'preferred_username' => 'john',
                 'name' => 'John Doe',
                 'email' => 'john@example.com',
+                'sub' => 'subject-123',
                 'realm_access' => [
                     'roles' => ['manage-users'],
                 ],
