@@ -146,7 +146,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
         $response = $controller->callback(new Request(['error_description' => 'Denied by provider']));
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
-        $this->assertSame('https://example.com/', $response->headers->get('Location'));
+        $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
     }
 
     public function testCallbackStoresUserSessionDataOnSuccessfulLogin(): void

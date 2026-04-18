@@ -134,7 +134,7 @@ class AzureAuthenticationControllerTest extends TestCase
         $response = $controller->callback($request);
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
-        $this->assertSame('https://example.com/', $response->headers->get('Location'));
+        $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
     }
 
     /**
