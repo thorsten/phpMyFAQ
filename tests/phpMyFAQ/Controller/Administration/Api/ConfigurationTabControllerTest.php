@@ -226,6 +226,25 @@ final class ConfigurationTabControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testListReturnsRenderedKeycloakConfigurationTabForAuthenticatedUser(): void
+    {
+        $language = $this->createStub(Language::class);
+        $language->method('setLanguageByAcceptLanguage')->willReturn('en');
+
+        $controller = $this->createControllerWithLanguage($language);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $request = new Request([], [], ['mode' => 'keycloak']);
+        $response = $controller->list($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('data-config-key="keycloak.enable"', (string) $response->getContent());
+        self::assertStringContainsString('data-config-key="keycloak.clientId"', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testSaveReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
     {
         $controller = $this->createController();

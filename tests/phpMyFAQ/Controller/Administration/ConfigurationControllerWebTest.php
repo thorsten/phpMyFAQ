@@ -21,5 +21,6 @@ final class ConfigurationControllerWebTest extends ControllerWebTestCase
         self::assertResponseIsSuccessful($response);
         self::assertResponseContains('id="save-configuration"', $response);
         self::assertResponseContains('href="#oauth2"', $response);
+        self::assertResponseContains('href="#keycloak"', $response);
     }
 }

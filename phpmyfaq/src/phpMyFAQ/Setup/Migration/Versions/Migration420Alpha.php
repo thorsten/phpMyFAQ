@@ -801,6 +801,17 @@ readonly class Migration420Alpha extends AbstractMigration
         $recorder->addConfig('oauth2.refreshTokenTTL', 'P1M');
         $recorder->addConfig('oauth2.authCodeTTL', 'PT10M');
 
+        // Keycloak configuration entries
+        $recorder->addConfig('keycloak.enable', 'false');
+        $recorder->addConfig('keycloak.baseUrl', '');
+        $recorder->addConfig('keycloak.realm', '');
+        $recorder->addConfig('keycloak.clientId', '');
+        $recorder->addConfig('keycloak.clientSecret', '');
+        $recorder->addConfig('keycloak.redirectUri', '');
+        $recorder->addConfig('keycloak.scopes', 'openid profile email');
+        $recorder->addConfig('keycloak.autoProvision', 'false');
+        $recorder->addConfig('keycloak.logoutRedirectUrl', '');
+
         // Recent news widget
         $recorder->addConfig('main.enableRecentNews', 'true');
 

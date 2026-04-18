@@ -1224,6 +1224,7 @@ $LANG_CONF['security.loginWithEmailAddress'] = ['checkbox', 'Login only with ema
 // added v3.2.0-alpha - 2022-09-10 by Thorsten
 $PMF_LANG['msgSignInWithMicrosoft'] = 'Sign in with Microsoft';
 $LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Enable Sign in with Microsoft Entra ID'];
+$PMF_LANG['keycloakControlCenter'] = 'Keycloak';
 $LANG_CONF['main.enableAskQuestions'] = ['checkbox', 'Enable "Ask question"'];
 $LANG_CONF['main.enableNotifications'] = ['checkbox', 'Enable notifications'];
 $LANG_CONF['mail.sendTestEmail'] = ['button', 'Send test email to the administrator via SMTP'];
@@ -1684,6 +1685,15 @@ $LANG_CONF['oauth2.encryptionKey'] = [
 $LANG_CONF['oauth2.accessTokenTTL'] = ['input', 'Access token TTL', 'ISO 8601 duration, e.g. PT1H'];
 $LANG_CONF['oauth2.refreshTokenTTL'] = ['input', 'Refresh token TTL', 'ISO 8601 duration, e.g. P1M'];
 $LANG_CONF['oauth2.authCodeTTL'] = ['input', 'Authorization code TTL', 'ISO 8601 duration, e.g. PT10M'];
+$LANG_CONF['keycloak.enable'] = ['checkbox', 'Enable Keycloak sign-in'];
+$LANG_CONF['keycloak.baseUrl'] = ['input', 'Keycloak base URL', 'Base URL of the Keycloak server, e.g. https://sso.example.com'];
+$LANG_CONF['keycloak.realm'] = ['input', 'Realm', 'Keycloak realm used for phpMyFAQ authentication'];
+$LANG_CONF['keycloak.clientId'] = ['input', 'Client ID', 'OIDC client identifier configured in Keycloak'];
+$LANG_CONF['keycloak.clientSecret'] = ['password', 'Client secret'];
+$LANG_CONF['keycloak.redirectUri'] = ['input', 'Redirect URI', 'Callback URL registered in the Keycloak client'];
+$LANG_CONF['keycloak.scopes'] = ['input', 'Scopes', 'Space-separated scopes, e.g. openid profile email'];
+$LANG_CONF['keycloak.autoProvision'] = ['checkbox', 'Automatically create phpMyFAQ users on first Keycloak login'];
+$LANG_CONF['keycloak.logoutRedirectUrl'] = ['input', 'Logout redirect URL', 'URL to redirect to after Keycloak logout'];
 
 $LANG_CONF['mail.provider'] = ['select', 'Mail provider'];
 $LANG_CONF['mail.sendgridApiKey'] = ['password', 'SendGrid API key'];
