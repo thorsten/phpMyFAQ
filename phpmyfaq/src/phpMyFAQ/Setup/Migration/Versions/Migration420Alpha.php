@@ -37,7 +37,7 @@ readonly class Migration420Alpha extends AbstractMigration
 
     public function getDescription(): string
     {
-        return 'Admin log hash columns, custom pages, chat messages, translation config, API rate limiting, queue jobs, mail provider config, API keys, OAuth2 tables';
+        return 'Admin log hash columns, custom pages, chat messages, translation config, API rate limiting, queue jobs, mail provider config, API keys, OAuth2 tables, Keycloak subject storage';
     }
 
     public function up(OperationRecorder $recorder): void
@@ -218,6 +218,19 @@ readonly class Migration420Alpha extends AbstractMigration
         $recorder->addConfig('api.onlyPublicQuestions', 'true');
         $recorder->addConfig('api.ignoreOrphanedFaqs', 'true');
         $recorder->addConfig('api.rateLimit.requests', '100');
+
+        // Add durable Keycloak subject storage to user data
+        $columnType = $this->isSqlServer() ? 'NVARCHAR(255) NULL' : 'VARCHAR(255) NULL';
+
+        $recorder->addSql(
+            $this->addColumn('faquserdata', 'keycloak_sub', $columnType),
+            'Add keycloak_sub column to faquserdata',
+        );
+
+        $recorder->addSql(
+            $this->createUniqueIndex('faquserdata', 'idx_faquserdata_keycloak_sub', 'keycloak_sub'),
+            'Create unique keycloak_sub index on faquserdata',
+        );
         $recorder->addConfig('api.rateLimit.interval', '3600');
         $recorder->addConfig('queue.transport', 'database');
         $recorder->addConfig('session.handler', 'files');
@@ -800,6 +813,20 @@ readonly class Migration420Alpha extends AbstractMigration
         $recorder->addConfig('oauth2.accessTokenTTL', 'PT1H');
         $recorder->addConfig('oauth2.refreshTokenTTL', 'P1M');
         $recorder->addConfig('oauth2.authCodeTTL', 'PT10M');
+
+        // Keycloak configuration entries
+        $recorder->addConfig('keycloak.enable', 'false');
+        $recorder->addConfig('keycloak.baseUrl', '');
+        $recorder->addConfig('keycloak.realm', '');
+        $recorder->addConfig('keycloak.clientId', '');
+        $recorder->addConfig('keycloak.clientSecret', '');
+        $recorder->addConfig('keycloak.redirectUri', '');
+        $recorder->addConfig('keycloak.scopes', 'openid profile email');
+        $recorder->addConfig('keycloak.autoProvision', 'false');
+        $recorder->addConfig('keycloak.groupAutoAssign', 'false');
+        $recorder->addConfig('keycloak.groupSyncOnLogin', 'false');
+        $recorder->addConfig('keycloak.groupMapping', '');
+        $recorder->addConfig('keycloak.logoutRedirectUrl', '');
 
         // Recent news widget
         $recorder->addConfig('main.enableRecentNews', 'true');

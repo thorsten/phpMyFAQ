@@ -331,6 +331,7 @@ class PdoPgsql extends Database implements DriverInterface
             last_modified VARCHAR(14) NULL,
             display_name VARCHAR(128) NULL,
             email VARCHAR(128) NULL,
+            keycloak_sub VARCHAR(255) NULL,
             is_visible SMALLINT NULL DEFAULT 0,
             twofactor_enabled SMALLINT NULL DEFAULT 0,
             secret VARCHAR(128) NULL DEFAULT NULL)',

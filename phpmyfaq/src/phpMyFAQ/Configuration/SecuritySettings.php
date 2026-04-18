@@ -32,4 +32,9 @@ readonly class SecuritySettings
     {
         return (bool) $this->coreConfiguration->get(item: 'security.enableSignInWithMicrosoft');
     }
+
+    public function isSignInWithKeycloakActive(): bool
+    {
+        return (bool) $this->coreConfiguration->get(item: 'keycloak.enable');
+    }
 }

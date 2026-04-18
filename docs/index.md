@@ -20,7 +20,7 @@ phpMyFAQ also supports two-factor authentication (2FA) for enhanced security.
 An AI-assisted translation feature helps translate content into multiple languages using Google Cloud Translation, DeepL,
 Azure Translator, Amazon Translate, or LibreTranslate.
 A REST API is available for integration with other systems.
-It also supports OpenLDAP, Microsoft Active Directory, Microsoft Entra ID, and an MCP Server for AI agents.
+It also supports OpenLDAP, Microsoft Active Directory, Microsoft Entra ID, Keycloak, and an MCP Server for AI agents.
 The system is easy to install, thanks to its user-friendly installation script.
 
 phpMyFAQ is versatile

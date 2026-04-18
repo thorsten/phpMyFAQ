@@ -23,6 +23,7 @@ enum AuthenticationSourceType: string
 {
     case AUTH_LOCAL = 'local';
     case AUTH_AZURE = 'azure';
+    case AUTH_KEYCLOAK = 'keycloak';
     case AUTH_LDAP = 'ldap';
     case AUTH_HTTP = 'http';
     case AUTH_SSO = 'sso';

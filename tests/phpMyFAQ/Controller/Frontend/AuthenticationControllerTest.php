@@ -124,6 +124,25 @@ final class AuthenticationControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testLoginRendersKeycloakSignInButtonWhenEnabled(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(
+            new Session(new MockArraySessionStorage()),
+            $this->createLoggedOutCurrentUser(),
+            ['keycloak.enable' => true],
+        ));
+
+        $response = $controller->login(new Request());
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('./auth/keycloak/authorize', (string) $response->getContent());
+        self::assertStringContainsString('Sign in with Keycloak', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testAuthenticateRedirectsHomeWhenUserIsAlreadyLoggedIn(): void
     {
         $controller = $this->createController();
@@ -196,6 +215,31 @@ final class AuthenticationControllerTest extends TestCase
         $response = $controller->logout(new Request(['csrf' => $token]));
 
         self::assertSame($this->configuration->getDefaultUrl(), $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testLogoutRedirectsToKeycloakLogoutWhenKeycloakUserLogsOut(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        Token::resetInstanceForTests();
+        $token = Token::getInstance($session)->getTokenString('logout');
+        $_COOKIE['pmf-csrf-token-' . substr(md5('logout'), 0, 10)] = $token;
+
+        $currentUser = $this->createLoggedInCurrentUser('keycloak');
+        $currentUser->expects(self::once())->method('deleteFromSession')->with(true);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer($session, $currentUser, [
+            'keycloak.enable' => true,
+        ]));
+
+        $response = $controller->logout(new Request(['csrf' => $token]));
+
+        self::assertSame($this->configuration->getDefaultUrl() . 'auth/keycloak/logout', $response->getTargetUrl());
+        self::assertNotEmpty($session->getFlashBag()->get('success'));
     }
 
     /**

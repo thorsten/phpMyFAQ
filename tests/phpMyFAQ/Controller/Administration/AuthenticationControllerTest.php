@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Administration\AdminLog;
+use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -169,6 +170,24 @@ final class AuthenticationControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testLoginRendersKeycloakSignInButtonWhenEnabled(): void
+    {
+        $request = new Request();
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(currentUser: $this->createLoggedOutCurrentUser(), configurationValues: [
+            'keycloak.enable' => true,
+        ]));
+
+        $response = $controller->login($request);
+
+        self::assertInstanceOf(Response::class, $response);
+        self::assertStringContainsString('../auth/keycloak/authorize', (string) $response->getContent());
+        self::assertStringContainsString('Sign in with Keycloak', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testLogoutRequiresAuthentication(): void
     {
         $request = new Request(['csrf' => 'test-token']);
@@ -222,6 +241,84 @@ final class AuthenticationControllerTest extends TestCase
                 'security.ssoSupport' => true,
                 'security.ssoLogoutRedirect' => 'https://idp.example.test/logout',
             ],
+            session: $session,
+        ));
+
+        ob_start();
+        $response = $controller->logout(new Request(['csrf' => $csrfToken]));
+        ob_end_clean();
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertSame($this->configuration->getDefaultUrl() . 'admin/login', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testLogoutRedirectsToKeycloakLogoutWhenKeycloakUserLogsOut(): void
+    {
+        $currentUser = $this->createLoggedInCurrentUser('keycloak');
+        $currentUser->expects(self::once())->method('deleteFromSession')->with(true);
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = $this->seedAdminLogoutToken($session);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(
+            currentUser: $currentUser,
+            configurationValues: ['keycloak.enable' => true],
+            session: $session,
+        ));
+
+        ob_start();
+        $response = $controller->logout(new Request(['csrf' => $csrfToken]));
+        ob_end_clean();
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertSame($this->configuration->getDefaultUrl() . 'auth/keycloak/logout', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testLogoutStaysLocalWhenKeycloakIsEnabledButUserUsesDifferentAuthSource(): void
+    {
+        $currentUser = $this->createLoggedInCurrentUser('local');
+        $currentUser->expects(self::once())->method('deleteFromSession')->with(true);
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = $this->seedAdminLogoutToken($session);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(
+            currentUser: $currentUser,
+            configurationValues: ['keycloak.enable' => true],
+            session: $session,
+        ));
+
+        ob_start();
+        $response = $controller->logout(new Request(['csrf' => $csrfToken]));
+        ob_end_clean();
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertSame($this->configuration->getDefaultUrl() . 'admin/login', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testLogoutStaysLocalWhenKeycloakUserLogsOutButKeycloakIsDisabled(): void
+    {
+        $currentUser = $this->createLoggedInCurrentUser('keycloak');
+        $currentUser->expects(self::once())->method('deleteFromSession')->with(true);
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = $this->seedAdminLogoutToken($session);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(
+            currentUser: $currentUser,
+            configurationValues: ['keycloak.enable' => false],
             session: $session,
         ));
 
@@ -364,16 +461,21 @@ final class AuthenticationControllerTest extends TestCase
 
         $session ??= new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);
+        $adminHelper = $this->createMock(AdminMenuBuilder::class);
+        $adminHelper->method('setUser');
+        $adminHelper->method('canAccessContent')->willReturn(false);
+        $adminHelper->method('addMenuEntry')->willReturn('');
 
         $container = $this->createStub(ContainerInterface::class);
         $container
             ->method('get')
-            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog, $adminHelper) {
                 return match ($id) {
                     'phpmyfaq.configuration' => $this->configuration,
                     'phpmyfaq.user.current_user' => $currentUser,
                     'session' => $session,
                     'phpmyfaq.admin.admin-log' => $adminLog,
+                    'phpmyfaq.admin.helper' => $adminHelper,
                     default => null,
                 };
             });
@@ -417,7 +519,7 @@ final class AuthenticationControllerTest extends TestCase
         return $currentUser;
     }
 
-    private function createLoggedInCurrentUser(): CurrentUser
+    private function createLoggedInCurrentUser(string $authSource = 'local'): CurrentUser
     {
         $permission = $this->createMock(PermissionInterface::class);
 
@@ -428,6 +530,7 @@ final class AuthenticationControllerTest extends TestCase
         $currentUser->method('getUserId')->willReturn(1);
         $currentUser->method('getUserData')->willReturn('');
         $currentUser->method('getLogin')->willReturn('admin');
+        $currentUser->method('getUserAuthSource')->willReturn($authSource);
 
         return $currentUser;
     }

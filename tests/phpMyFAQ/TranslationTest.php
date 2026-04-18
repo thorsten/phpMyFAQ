@@ -39,6 +39,18 @@ class TranslationTest extends TestCase
             . "\$LANG_CONF['oauth2.accessTokenTTL'] = ['input', 'Access token TTL', 'ISO 8601 duration, e.g. PT1H'];\n"
             . "\$LANG_CONF['oauth2.refreshTokenTTL'] = ['input', 'Refresh token TTL', 'ISO 8601 duration, e.g. P1M'];\n"
             . "\$LANG_CONF['oauth2.authCodeTTL'] = ['input', 'Authorization code TTL', 'ISO 8601 duration, e.g. PT10M'];\n\n"
+            . "\$LANG_CONF['keycloak.enable'] = ['checkbox', 'Enable Keycloak sign-in'];\n"
+            . "\$LANG_CONF['keycloak.baseUrl'] = ['input', 'Keycloak base URL'];\n"
+            . "\$LANG_CONF['keycloak.realm'] = ['input', 'Realm'];\n"
+            . "\$LANG_CONF['keycloak.clientId'] = ['input', 'Client ID'];\n"
+            . "\$LANG_CONF['keycloak.clientSecret'] = ['password', 'Client secret'];\n"
+            . "\$LANG_CONF['keycloak.redirectUri'] = ['input', 'Redirect URI'];\n"
+            . "\$LANG_CONF['keycloak.scopes'] = ['input', 'Scopes'];\n"
+            . "\$LANG_CONF['keycloak.autoProvision'] = ['checkbox', 'Auto provision'];\n"
+            . "\$LANG_CONF['keycloak.groupAutoAssign'] = ['checkbox', 'Auto assign groups'];\n"
+            . "\$LANG_CONF['keycloak.groupSyncOnLogin'] = ['checkbox', 'Synchronize groups on login'];\n"
+            . "\$LANG_CONF['keycloak.groupMapping'] = ['input', 'Role to group mapping'];\n"
+            . "\$LANG_CONF['keycloak.logoutRedirectUrl'] = ['input', 'Logout redirect URL'];\n\n"
             . "return [\n"
             . "    'test.key' => 'Default Label',\n"
             . "];\n",
@@ -57,6 +69,18 @@ class TranslationTest extends TestCase
             . "\$LANG_CONF['oauth2.accessTokenTTL'] = ['input', 'Access-Token-TTL', 'ISO-8601-Dauer, z.B. PT1H'];\n"
             . "\$LANG_CONF['oauth2.refreshTokenTTL'] = ['input', 'Refresh-Token-TTL', 'ISO-8601-Dauer, z.B. P1M'];\n"
             . "\$LANG_CONF['oauth2.authCodeTTL'] = ['input', 'Autorisierungscode-TTL', 'ISO-8601-Dauer, z.B. PT10M'];\n\n"
+            . "\$LANG_CONF['keycloak.enable'] = ['checkbox', 'Keycloak-Anmeldung aktivieren'];\n"
+            . "\$LANG_CONF['keycloak.baseUrl'] = ['input', 'Keycloak-Basis-URL'];\n"
+            . "\$LANG_CONF['keycloak.realm'] = ['input', 'Realm'];\n"
+            . "\$LANG_CONF['keycloak.clientId'] = ['input', 'Client-ID'];\n"
+            . "\$LANG_CONF['keycloak.clientSecret'] = ['password', 'Client-Secret'];\n"
+            . "\$LANG_CONF['keycloak.redirectUri'] = ['input', 'Redirect-URI'];\n"
+            . "\$LANG_CONF['keycloak.scopes'] = ['input', 'Scopes'];\n"
+            . "\$LANG_CONF['keycloak.autoProvision'] = ['checkbox', 'Automatisch anlegen'];\n"
+            . "\$LANG_CONF['keycloak.groupAutoAssign'] = ['checkbox', 'Gruppen automatisch zuweisen'];\n"
+            . "\$LANG_CONF['keycloak.groupSyncOnLogin'] = ['checkbox', 'Gruppen beim Login synchronisieren'];\n"
+            . "\$LANG_CONF['keycloak.groupMapping'] = ['input', 'Rollen-zu-Gruppen-Zuordnung'];\n"
+            . "\$LANG_CONF['keycloak.logoutRedirectUrl'] = ['input', 'Logout-Redirect-URL'];\n\n"
             . "return [\n"
             . "    'test.key' => '',\n"
             . "    'test.zero' => '0',\n"
@@ -184,6 +208,22 @@ class TranslationTest extends TestCase
         $this->assertArrayHasKey('oauth2.accessTokenTTL', $configurationItems);
         $this->assertArrayHasKey('oauth2.refreshTokenTTL', $configurationItems);
         $this->assertArrayHasKey('oauth2.authCodeTTL', $configurationItems);
+    }
+
+    public function testGetConfigurationItemsReturnsKeycloakSection(): void
+    {
+        $configurationItems = Translation::getConfigurationItems('keycloak.');
+
+        $this->assertCount(12, $configurationItems);
+        $this->assertArrayHasKey('keycloak.enable', $configurationItems);
+        $this->assertSame('checkbox', $configurationItems['keycloak.enable']['element']);
+        $this->assertArrayHasKey('keycloak.clientSecret', $configurationItems);
+        $this->assertSame('password', $configurationItems['keycloak.clientSecret']['element']);
+        $this->assertArrayHasKey('keycloak.autoProvision', $configurationItems);
+        $this->assertArrayHasKey('keycloak.groupAutoAssign', $configurationItems);
+        $this->assertArrayHasKey('keycloak.groupSyncOnLogin', $configurationItems);
+        $this->assertArrayHasKey('keycloak.groupMapping', $configurationItems);
+        $this->assertArrayHasKey('keycloak.logoutRedirectUrl', $configurationItems);
     }
 
     /**

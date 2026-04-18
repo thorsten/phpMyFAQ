@@ -583,14 +583,19 @@ class UserTest extends TestCase
         $this->userData->expects($this->once())->method('load')->with(11);
         $this->userData->expects($this->once())->method('set')->with(['display_name'], ['Thorsten'])->willReturn(true);
         $this->userData
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(3))
             ->method('fetchAll')
-            ->willReturnOnConsecutiveCalls(['user_id' => 11, 'is_visible' => true], ['user_id' => 12]);
+            ->willReturnOnConsecutiveCalls(
+                ['user_id' => 11, 'is_visible' => true],
+                ['user_id' => 12],
+                ['user_id' => 13],
+            );
 
         $this->assertSame('Thorsten', $this->user->getUserData('display_name'));
         $this->assertTrue($this->user->setUserData(['display_name' => 'Thorsten']));
         $this->assertSame(11, $this->user->getUserIdByEmail('thorsten@example.com'));
         $this->assertTrue($this->user->getUserVisibilityByEmail('anonymous@example.com'));
+        $this->assertSame(13, $this->user->getUserIdByKeycloakSub('keycloak-sub-123'));
     }
 
     public function testGetUserDataCreatesUserDataWhenUnset(): void

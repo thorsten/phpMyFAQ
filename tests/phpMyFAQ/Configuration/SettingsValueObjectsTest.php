@@ -55,6 +55,15 @@ class SettingsValueObjectsTest extends TestCase
         $this->assertTrue($settings->isSignInWithMicrosoftActive());
     }
 
+    public function testSecuritySettingsDetectsKeycloakSignInFlag(): void
+    {
+        $settings = new SecuritySettings($this->createConfigurationStub([
+            'keycloak.enable' => true,
+        ]));
+
+        $this->assertTrue($settings->isSignInWithKeycloakActive());
+    }
+
     public function testUrlSettingsNormalizeReferenceUrlAndAllowedMediaHosts(): void
     {
         $settings = new UrlSettings($this->createConfigurationStub([

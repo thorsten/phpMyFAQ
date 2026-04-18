@@ -434,6 +434,12 @@ class ConfigurationMethodsTraitTest extends TestCase
         $this->assertTrue($this->subject->isSignInWithMicrosoftActive());
     }
 
+    public function testIsSignInWithKeycloakActive(): void
+    {
+        $this->securitySettings->method('isSignInWithKeycloakActive')->willReturn(true);
+        $this->assertTrue($this->subject->isSignInWithKeycloakActive());
+    }
+
     // --- Translation Provider ---
 
     public function testSetAndGetTranslationProvider(): void

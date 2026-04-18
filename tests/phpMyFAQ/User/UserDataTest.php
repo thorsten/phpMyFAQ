@@ -71,7 +71,7 @@ class UserDataTest extends TestCase
         $this->database->method('fetchArray')->willReturn(['user_id' => 1]);
 
         $result = $this->userData->fetchAll('key', 'value');
-        $this->assertEquals(['user_id' => 1], $result);
+        $this->assertEquals(['user_id' => 1, 'keycloak_sub' => ''], $result);
     }
 
     public function testFetchAllReturnsDefaultArrayWhenNoResultExists(): void
@@ -110,6 +110,24 @@ class UserDataTest extends TestCase
 
         $result = $this->userData->save();
         $this->assertTrue($result);
+    }
+
+    public function testSaveDoesNotRunFallbackUpdateWhenKeycloakSubIsPresent(): void
+    {
+        $queryResults = [true, false];
+        $this->database
+            ->method('query')
+            ->willReturnCallback(static function () use (&$queryResults): bool {
+                return array_shift($queryResults) ?? true;
+            });
+        $this->database->method('numRows')->willReturn(1);
+        $this->database->method('fetchArray')->willReturn(['display_name' => 'Old']);
+        $this->database->method('escape')->willReturnArgument(0);
+
+        $this->userData->load(1);
+
+        $this->assertFalse($this->userData->set(['display_name', 'keycloak_sub'], ['Admin', 'subject-123']));
+        $this->assertSame([], $queryResults);
     }
 
     public function testSetReturnsFalseWhenFieldAndValueCountsDoNotMatch(): void

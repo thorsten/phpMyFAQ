@@ -17,7 +17,7 @@ pnpm-lock.yaml
 
 # Ignore artifacts
 phpmyfaq/assets/public/
+site/
 
 # Ignore PNPM Cache
 .pnpm-store
-

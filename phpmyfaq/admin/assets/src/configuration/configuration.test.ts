@@ -294,12 +294,16 @@ describe('Configuration Functions', () => {
           <li class="nav-item" data-config-group="integrations" data-config-label="OAuth 2.0">
             <a href="#oauth2" data-bs-toggle="tab"></a>
           </li>
+          <li class="nav-item" data-config-group="integrations" data-config-label="Keycloak">
+            <a href="#keycloak" data-bs-toggle="tab"></a>
+          </li>
         </ul>
         </form>
         <div id="pmf-configuration-result"></div>
         <input id="pmf-language" value="en">
         <div id="main"></div>
         <div id="oauth2"></div>
+        <div id="keycloak"></div>
       `;
 
       (fetchConfiguration as Mock).mockResolvedValue('Configuration content');
@@ -322,6 +326,13 @@ describe('Configuration Functions', () => {
           <li class="pmf-configuration-group" data-config-group="core"><span>Core</span></li>
           <li class="nav-item" data-config-group="core" data-config-label="Main">
             <a class="nav-link" href="#main"></a>
+          </li>
+          <li class="pmf-configuration-group" data-config-group="integrations"><span>Integrations</span></li>
+          <li class="nav-item" data-config-group="integrations" data-config-label="OAuth 2.0">
+            <a class="nav-link" href="#oauth2"></a>
+          </li>
+          <li class="nav-item" data-config-group="integrations" data-config-label="Keycloak">
+            <a class="nav-link" href="#keycloak"></a>
           </li>
           <li class="pmf-configuration-group" data-config-group="maintenance"><span>Maintenance</span></li>
           <li class="nav-item" data-config-group="maintenance" data-config-label="Upgrade">
@@ -346,6 +357,12 @@ describe('Configuration Functions', () => {
         <div id="oauth2">
           <div class="pmf-config-item" data-config-key="oauth2.enable">Enable OAuth 2.0 authorization server</div>
           <div class="pmf-config-item" data-config-key="oauth2.privateKeyPath">Private key path</div>
+        </div>
+        <div id="keycloak">
+          <div class="pmf-config-item" data-config-key="keycloak.enable">Enable Keycloak sign-in</div>
+          <div class="pmf-config-item" data-config-key="keycloak.clientId">Client ID</div>
+          <div class="pmf-config-item" data-config-key="keycloak.groupSyncOnLogin">Synchronize groups on login</div>
+          <div class="pmf-config-item" data-config-key="keycloak.groupMapping">Role to group mapping</div>
         </div>
         <div id="upgrade">
           <div class="pmf-config-item" data-config-key="upgrade.releaseEnvironment">Release environment</div>
@@ -423,6 +440,59 @@ describe('Configuration Functions', () => {
 
       expect(mainItem?.classList.contains('d-none')).toBe(true);
       expect(upgradeItem?.classList.contains('d-none')).toBe(true);
+
+      vi.useRealTimers();
+    });
+
+    it('should show Keycloak tab and items when filtering by "keycloak"', async () => {
+      vi.useFakeTimers();
+      buildFilterDOM();
+
+      (fetchConfiguration as Mock).mockResolvedValue('');
+
+      handleConfigurationTabFiltering();
+
+      await triggerFilterAndFlush('keycloak');
+
+      const keycloakTab = document.querySelector('li.nav-item[data-config-label="Keycloak"]');
+      const oauth2Tab = document.querySelector('li.nav-item[data-config-label="OAuth 2.0"]');
+      const mainTab = document.querySelector('li.nav-item[data-config-label="Main"]');
+      const upgradeTab = document.querySelector('li.nav-item[data-config-label="Upgrade"]');
+
+      expect(keycloakTab?.classList.contains('d-none')).toBe(false);
+      expect(oauth2Tab?.classList.contains('d-none')).toBe(true);
+      expect(mainTab?.classList.contains('d-none')).toBe(true);
+      expect(upgradeTab?.classList.contains('d-none')).toBe(true);
+
+      const keycloakEnable = document.querySelector('.pmf-config-item[data-config-key="keycloak.enable"]');
+      const keycloakClientId = document.querySelector('.pmf-config-item[data-config-key="keycloak.clientId"]');
+      const languageItem = document.querySelector('.pmf-config-item[data-config-key="main.language"]');
+
+      expect(keycloakEnable?.classList.contains('d-none')).toBe(false);
+      expect(keycloakClientId?.classList.contains('d-none')).toBe(false);
+      expect(languageItem?.classList.contains('d-none')).toBe(true);
+
+      vi.useRealTimers();
+    });
+
+    it('should show Keycloak tab when filtering by "client id"', async () => {
+      vi.useFakeTimers();
+      buildFilterDOM();
+
+      (fetchConfiguration as Mock).mockResolvedValue('');
+
+      handleConfigurationTabFiltering();
+
+      await triggerFilterAndFlush('client id');
+
+      const keycloakTab = document.querySelector('li.nav-item[data-config-label="Keycloak"]');
+      const mainTab = document.querySelector('li.nav-item[data-config-label="Main"]');
+
+      expect(keycloakTab?.classList.contains('d-none')).toBe(false);
+      expect(mainTab?.classList.contains('d-none')).toBe(true);
+
+      const clientIdItem = document.querySelector('.pmf-config-item[data-config-key="keycloak.clientId"]');
+      expect(clientIdItem?.classList.contains('d-none')).toBe(false);
 
       vi.useRealTimers();
     });

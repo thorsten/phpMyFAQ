@@ -78,6 +78,7 @@ export default defineConfig({
         '**/node_modules/**',
         '**/html-coverage/**',
         '**/libs/**',
+        '**/site/**',
         '**/bootstrap*.min.js',
         '**/popper*.min.js',
         '**/babel.config.cjs',
@@ -87,6 +88,6 @@ export default defineConfig({
     },
     globals: true,
     include: ['**/phpmyfaq/assets/**/*.test.ts', '**/phpmyfaq/admin/assets/**/*.test.ts'],
-    exclude: ['**/node_modules/**', '.claude/**'],
+    exclude: ['**/node_modules/**', '.claude/**', 'site/**'],
   },
 });

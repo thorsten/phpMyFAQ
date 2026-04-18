@@ -220,6 +220,13 @@ class MediumPermissionRepositoryTest extends TestCase
         $this->assertFalse($this->repository->removeFromAllGroups(-1));
     }
 
+    public function testRemoveFromGroup(): void
+    {
+        $this->assertFalse($this->repository->removeFromGroup(0, 1));
+        $this->assertFalse($this->repository->removeFromGroup(1, 0));
+        $this->assertFalse($this->repository->removeFromGroup(-1, -1));
+    }
+
     public function testRefuseAllGroupRights(): void
     {
         // Test with invalid group ID

@@ -691,6 +691,7 @@ class DatabaseSchema
             ->varchar('last_modified', 14)
             ->varchar('display_name', 128)
             ->varchar('email', 128)
+            ->varchar('keycloak_sub', 255)
             ->smallInteger('is_visible', true, 0)
             ->smallInteger('twofactor_enabled', true, 0)
             ->varchar('secret', 128);

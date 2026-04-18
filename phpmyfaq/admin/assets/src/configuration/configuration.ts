@@ -48,6 +48,7 @@ const TAB_TARGETS = [
   '#mail',
   '#api',
   '#oauth2',
+  '#keycloak',
   '#upgrade',
   '#translation',
   '#storage',

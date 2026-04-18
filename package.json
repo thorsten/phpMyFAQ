@@ -38,6 +38,7 @@
     "release:artifacts": "./scripts/prepare-release-artifacts.sh",
     "release:sign": "./scripts/sign-release-artifacts.sh",
     "sbom": "./scripts/generate-sbom.sh",
+    "docs:build": "mkdocs build --strict",
     "eslint": "eslint .",
     "lint": "prettier --check .",
     "lint:fix": "prettier --write .",
