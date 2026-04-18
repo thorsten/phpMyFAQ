@@ -47,6 +47,8 @@ class TranslationTest extends TestCase
             . "\$LANG_CONF['keycloak.redirectUri'] = ['input', 'Redirect URI'];\n"
             . "\$LANG_CONF['keycloak.scopes'] = ['input', 'Scopes'];\n"
             . "\$LANG_CONF['keycloak.autoProvision'] = ['checkbox', 'Auto provision'];\n"
+            . "\$LANG_CONF['keycloak.groupAutoAssign'] = ['checkbox', 'Auto assign groups'];\n"
+            . "\$LANG_CONF['keycloak.groupMapping'] = ['input', 'Role to group mapping'];\n"
             . "\$LANG_CONF['keycloak.logoutRedirectUrl'] = ['input', 'Logout redirect URL'];\n\n"
             . "return [\n"
             . "    'test.key' => 'Default Label',\n"
@@ -74,6 +76,8 @@ class TranslationTest extends TestCase
             . "\$LANG_CONF['keycloak.redirectUri'] = ['input', 'Redirect-URI'];\n"
             . "\$LANG_CONF['keycloak.scopes'] = ['input', 'Scopes'];\n"
             . "\$LANG_CONF['keycloak.autoProvision'] = ['checkbox', 'Automatisch anlegen'];\n"
+            . "\$LANG_CONF['keycloak.groupAutoAssign'] = ['checkbox', 'Gruppen automatisch zuweisen'];\n"
+            . "\$LANG_CONF['keycloak.groupMapping'] = ['input', 'Rollen-zu-Gruppen-Zuordnung'];\n"
             . "\$LANG_CONF['keycloak.logoutRedirectUrl'] = ['input', 'Logout-Redirect-URL'];\n\n"
             . "return [\n"
             . "    'test.key' => '',\n"
@@ -208,12 +212,14 @@ class TranslationTest extends TestCase
     {
         $configurationItems = Translation::getConfigurationItems('keycloak.');
 
-        $this->assertCount(9, $configurationItems);
+        $this->assertCount(11, $configurationItems);
         $this->assertArrayHasKey('keycloak.enable', $configurationItems);
         $this->assertSame('checkbox', $configurationItems['keycloak.enable']['element']);
         $this->assertArrayHasKey('keycloak.clientSecret', $configurationItems);
         $this->assertSame('password', $configurationItems['keycloak.clientSecret']['element']);
         $this->assertArrayHasKey('keycloak.autoProvision', $configurationItems);
+        $this->assertArrayHasKey('keycloak.groupAutoAssign', $configurationItems);
+        $this->assertArrayHasKey('keycloak.groupMapping', $configurationItems);
         $this->assertArrayHasKey('keycloak.logoutRedirectUrl', $configurationItems);
     }
 

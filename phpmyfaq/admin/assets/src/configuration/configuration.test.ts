@@ -354,6 +354,7 @@ describe('Configuration Functions', () => {
         <div id="keycloak">
           <div class="pmf-config-item" data-config-key="keycloak.enable">Enable Keycloak sign-in</div>
           <div class="pmf-config-item" data-config-key="keycloak.clientId">Client ID</div>
+          <div class="pmf-config-item" data-config-key="keycloak.groupMapping">Role to group mapping</div>
         </div>
         <div id="upgrade">
           <div class="pmf-config-item" data-config-key="upgrade.releaseEnvironment">Release environment</div>

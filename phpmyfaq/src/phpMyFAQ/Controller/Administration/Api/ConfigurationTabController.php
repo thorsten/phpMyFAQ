@@ -330,6 +330,8 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
             'keycloak.redirectUri',
             'keycloak.scopes',
             'keycloak.autoProvision',
+            'keycloak.groupAutoAssign',
+            'keycloak.groupMapping',
             'keycloak.logoutRedirectUrl',
         ];
 

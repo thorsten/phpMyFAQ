@@ -871,7 +871,55 @@ On this page, phpMyFAQ displays some relevant system information like PHP versio
 Please use this information when reporting bugs. Additionally, you can check the status of all translation files and see 
 if there are any missing translations.
 
-## 5.7 Using Microsoft Entra ID
+## 5.7 Using external identity providers
+
+phpMyFAQ can integrate with external identity providers for administrator and frontend logins.
+
+### 5.7.1 Using Keycloak
+
+Keycloak support uses OpenID Connect Authorization Code flow with PKCE.
+You can enable it in the administration under `Configuration` -> `Security` -> `Keycloak`.
+
+Recommended Keycloak client settings:
+
+- Client type: confidential
+- Standard flow enabled
+- Direct access grants disabled unless you need them for other tools
+- Valid redirect URI: `https://faq.example.com/auth/keycloak/callback`
+- Valid post logout redirect URI: `https://faq.example.com/`
+
+Minimum phpMyFAQ configuration:
+
+1. Enable `Keycloak sign-in`
+2. Set the `Keycloak base URL`, for example `https://sso.example.com`
+3. Set the `Realm`
+4. Set the `Client ID`
+5. Set the `Client secret`
+6. Set the `Redirect URI` to your phpMyFAQ callback URL
+7. Keep `Scopes` at least on `openid profile email`
+
+Optional settings:
+
+- Enable automatic provisioning if phpMyFAQ should create local users on first successful Keycloak login
+- Enable automatic group assignment if phpMyFAQ should assign local groups from Keycloak roles
+- Add a JSON role-to-group mapping if Keycloak role names should map to different phpMyFAQ group names
+- Set a logout redirect URL if users should return to a specific page after provider logout
+
+phpMyFAQ resolves users in this order:
+
+1. preferred username from Keycloak
+2. existing user by email address
+3. automatic provisioning if enabled
+
+If automatic provisioning is disabled, users must already exist in phpMyFAQ before they can sign in with Keycloak.
+
+Group assignment is additive in the current implementation:
+
+- mapped or unmapped Keycloak roles can create phpMyFAQ groups automatically
+- matched groups are added to the user on login
+- existing phpMyFAQ group memberships are not removed automatically
+
+### 5.7.2 Using Microsoft Entra ID
 
 You can use our experimental Microsoft Entra ID support for user authentication as well.
 App Registrations in Azure are used to integrate applications with Microsoft Azure services,

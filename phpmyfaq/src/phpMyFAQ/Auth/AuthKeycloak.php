@@ -25,6 +25,7 @@ use phpMyFAQ\Auth\Oidc\OidcProviderConfig;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AuthenticationSourceType;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User;
 use SensitiveParameter;
 
@@ -37,6 +38,7 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
         private readonly array $claims,
         private readonly string $resolvedLogin,
         private readonly ?Closure $userFactory = null,
+        private readonly ?Closure $mediumPermissionFactory = null,
     ) {
         parent::__construct($configuration);
     }
@@ -61,6 +63,10 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
             'display_name' => $this->getDisplayName(),
             'email' => $this->getEmail(),
         ]);
+
+        if ($this->shouldAssignGroups()) {
+            $this->assignUserToGroups($user->getUserId());
+        }
 
         return $result;
     }
@@ -127,6 +133,102 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
         return $user->getUserByLogin($login, false);
     }
 
+    private function shouldAssignGroups(): bool
+    {
+        return (
+            $this->toBool($this->configuration->get(item: 'keycloak.groupAutoAssign'))
+            && $this->configuration->get(item: 'security.permLevel') === 'medium'
+        );
+    }
+
+    private function assignUserToGroups(int $userId): void
+    {
+        if ($userId <= 0) {
+            return;
+        }
+
+        $roleNames = $this->extractRoleNames();
+        if ($roleNames === []) {
+            return;
+        }
+
+        $mediumPermission = $this->createMediumPermission();
+        $groupMapping = $this->getGroupMapping();
+
+        foreach ($roleNames as $roleName) {
+            $faqGroupName = $groupMapping[$roleName] ?? $roleName;
+            $groupId = $mediumPermission->findOrCreateGroupByName($faqGroupName);
+
+            if ($groupId <= 0) {
+                continue;
+            }
+
+            $mediumPermission->addToGroup($userId, $groupId);
+            $this->configuration
+                ->getLogger()
+                ->info(sprintf('Added Keycloak user %s to group %s', $this->resolvedLogin, $faqGroupName));
+        }
+    }
+
+    /**
+     * @return array<string>
+     */
+    private function extractRoleNames(): array
+    {
+        $roleNames = [];
+
+        $realmRoles = $this->claims['realm_access']['roles'] ?? [];
+        if (is_array($realmRoles)) {
+            foreach ($realmRoles as $realmRole) {
+                if (!is_string($realmRole) || $realmRole === '') {
+                    continue;
+                }
+
+                $roleNames[] = $realmRole;
+            }
+        }
+
+        $resourceAccess = $this->claims['resource_access'] ?? [];
+        if (is_array($resourceAccess)) {
+            foreach ($resourceAccess as $resource) {
+                $resourceRoles = is_array($resource) ? $resource['roles'] ?? null : null;
+                if (!is_array($resourceRoles)) {
+                    continue;
+                }
+
+                foreach ($resourceRoles as $resourceRole) {
+                    if (!is_string($resourceRole) || $resourceRole === '') {
+                        continue;
+                    }
+
+                    $roleNames[] = $resourceRole;
+                }
+            }
+        }
+
+        return array_values(array_unique($roleNames));
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function getGroupMapping(): array
+    {
+        $groupMapping = $this->configuration->get(item: 'keycloak.groupMapping');
+        if (!is_string($groupMapping) || trim($groupMapping) === '') {
+            return [];
+        }
+
+        $decoded = json_decode($groupMapping, associative: true);
+
+        return is_array($decoded) ? array_filter($decoded, is_string(...)) : [];
+    }
+
+    private function toBool(mixed $value): bool
+    {
+        return filter_var($value, FILTER_VALIDATE_BOOLEAN);
+    }
+
     private function createUser(): User
     {
         if ($this->userFactory instanceof Closure) {
@@ -134,5 +236,14 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
         }
 
         return new User($this->configuration);
+    }
+
+    private function createMediumPermission(): MediumPermission
+    {
+        if ($this->mediumPermissionFactory instanceof Closure) {
+            return ($this->mediumPermissionFactory)();
+        }
+
+        return new MediumPermission($this->configuration);
     }
 }

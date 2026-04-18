@@ -214,6 +214,8 @@ class DefaultDataSeeder
             'keycloak.redirectUri' => '',
             'keycloak.scopes' => 'openid profile email',
             'keycloak.autoProvision' => 'false',
+            'keycloak.groupAutoAssign' => 'false',
+            'keycloak.groupMapping' => '',
             'keycloak.logoutRedirectUrl' => '',
             'spam.checkBannedWords' => 'true',
             'spam.enableCaptchaCode' => null,

@@ -1694,6 +1694,8 @@ $LANG_CONF['keycloak.clientSecret'] = ['password', 'Client secret'];
 $LANG_CONF['keycloak.redirectUri'] = ['input', 'Redirect URI', 'Callback URL registered in the Keycloak client'];
 $LANG_CONF['keycloak.scopes'] = ['input', 'Scopes', 'Space-separated scopes, e.g. openid profile email'];
 $LANG_CONF['keycloak.autoProvision'] = ['checkbox', 'Automatically create phpMyFAQ users on first Keycloak login'];
+$LANG_CONF['keycloak.groupAutoAssign'] = ['checkbox', 'Automatically assign phpMyFAQ groups from Keycloak roles'];
+$LANG_CONF['keycloak.groupMapping'] = ['input', 'Role to group mapping', 'JSON object mapping Keycloak roles to phpMyFAQ group names, e.g. {"admin":"Administrators"}'];
 $LANG_CONF['keycloak.logoutRedirectUrl'] = ['input', 'Logout redirect URL', 'URL to redirect to after Keycloak logout'];
 
 $LANG_CONF['mail.provider'] = ['select', 'Mail provider'];
