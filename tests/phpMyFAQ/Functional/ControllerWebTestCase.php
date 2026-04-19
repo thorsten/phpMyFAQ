@@ -17,6 +17,9 @@ abstract class ControllerWebTestCase extends WebTestCase
     /** @var array<string, array{configuration: Configuration, values: array<string, mixed>}> */
     private array $originalConfigurations = [];
 
+    /** @var array<string, list<string>> */
+    private array $addedConfigurationKeys = [];
+
     protected function requestPublic(string $method, string $uri, array $parameters = [], array $server = []): Response
     {
         return $this->requestWithContext('public', $method, $uri, $parameters, $server);
@@ -88,7 +91,34 @@ abstract class ControllerWebTestCase extends WebTestCase
             ];
         }
 
-        $configProperty->setValue($configuration, array_merge($currentConfig, $values));
+        $this->addedConfigurationKeys[$context] ??= [];
+        foreach ($values as $name => $value) {
+            $storedValue = $this->normalizeConfigurationValue($value);
+            $existingValue = $configuration->get((string) $name);
+            if ($existingValue === null) {
+                $configuration->add((string) $name, $storedValue);
+                $this->addedConfigurationKeys[$context][] = (string) $name;
+            } else {
+                $configuration->update([(string) $name => $storedValue]);
+            }
+        }
+
+        $latestConfig = $configProperty->getValue($configuration);
+        self::assertIsArray($latestConfig);
+        $configProperty->setValue($configuration, array_merge($latestConfig, $values));
+    }
+
+    private function normalizeConfigurationValue(mixed $value): string
+    {
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+
+        if (is_array($value)) {
+            return (string) json_encode($value);
+        }
+
+        return (string) $value;
     }
 
     protected function getConfiguration(string $context = 'public'): Configuration
@@ -198,6 +228,8 @@ abstract class ControllerWebTestCase extends WebTestCase
             $configuration = $container->get('phpmyfaq.configuration');
             self::assertInstanceOf(Configuration::class, $configuration);
 
+            $configuration->update(['main.referenceURL' => 'https://localhost/']);
+
             $reflection = new ReflectionClass(Configuration::class);
             $configProperty = $reflection->getProperty('config');
             $currentConfig = $configProperty->getValue($configuration);
@@ -212,14 +244,33 @@ abstract class ControllerWebTestCase extends WebTestCase
 
     protected function tearDown(): void
     {
-        foreach ($this->originalConfigurations as $configurationSnapshot) {
+        foreach ($this->originalConfigurations as $context => $configurationSnapshot) {
             $configuration = $configurationSnapshot['configuration'];
+            $originalValues = $configurationSnapshot['values'];
             $reflection = new ReflectionClass(Configuration::class);
             $configProperty = $reflection->getProperty('config');
-            $configProperty->setValue($configuration, $configurationSnapshot['values']);
+
+            $addedKeys = $this->addedConfigurationKeys[$context] ?? [];
+            foreach ($addedKeys as $addedKey) {
+                $configuration->delete($addedKey);
+            }
+
+            $restore = [];
+            foreach ($originalValues as $name => $value) {
+                if (in_array($name, $addedKeys, true)) {
+                    continue;
+                }
+                $restore[$name] = $value;
+            }
+            if ($restore !== []) {
+                $configuration->update($restore);
+            }
+
+            $configProperty->setValue($configuration, $originalValues);
         }
 
         $this->originalConfigurations = [];
+        $this->addedConfigurationKeys = [];
         self::$activeContext = null;
         parent::tearDown();
     }
