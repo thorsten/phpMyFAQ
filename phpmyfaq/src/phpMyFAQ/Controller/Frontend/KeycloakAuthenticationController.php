@@ -191,6 +191,10 @@ final class KeycloakAuthenticationController extends AbstractFrontController
             }
 
             $login = $this->resolveLocalLogin($claims);
+            if ($login === '') {
+                $this->oidcSession->clearAuthorizationState();
+                return $redirect;
+            }
             $auth = new AuthKeycloak($this->configuration, $providerConfig, $claims, $login, $this->userFactory);
 
             if (!$auth->isValidLogin($login)) {
@@ -289,7 +293,13 @@ final class KeycloakAuthenticationController extends AbstractFrontController
             return $email;
         }
 
-        return $subject;
+        $this->configuration
+            ->getLogger()
+            ->warning(
+                'Keycloak login rejected: claims are missing both preferred_username and email; refusing to auto-provision the sub.',
+            );
+
+        return '';
     }
 
     private function maskLogin(string $login): string
@@ -299,7 +309,9 @@ final class KeycloakAuthenticationController extends AbstractFrontController
             return '<empty>';
         }
 
-        return 'sha256:' . substr(hash('sha256', $login), 0, 12);
+        $secret = (string) $this->configuration->get('security.salt');
+
+        return 'hmac:' . substr(hash_hmac('sha256', $login, $secret), 0, 12);
     }
 
     /** @param array<string, mixed> $claims */

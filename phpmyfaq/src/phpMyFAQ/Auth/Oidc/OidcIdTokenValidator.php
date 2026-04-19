@@ -151,12 +151,17 @@ final readonly class OidcIdTokenValidator
         if (!array_key_exists('exp', $claims) || !is_numeric($claims['exp'])) {
             throw new RuntimeException('OIDC id_token is missing the expiration claim');
         }
-        if ((int) $claims['exp'] < $now) {
+        if ($now >= (int) $claims['exp']) {
             throw new RuntimeException('OIDC id_token has expired');
         }
 
-        if (array_key_exists('nbf', $claims) && is_numeric($claims['nbf']) && (int) $claims['nbf'] > $now) {
-            throw new RuntimeException('OIDC id_token is not valid yet');
+        if (array_key_exists('nbf', $claims)) {
+            if (!is_numeric($claims['nbf'])) {
+                throw new RuntimeException('OIDC id_token has a non-numeric nbf claim');
+            }
+            if ($now < (int) $claims['nbf']) {
+                throw new RuntimeException('OIDC id_token is not valid yet');
+            }
         }
 
         if (!array_key_exists('iat', $claims) || !is_numeric($claims['iat'])) {

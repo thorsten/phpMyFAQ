@@ -47,6 +47,7 @@ final class AuthKeycloakTest extends TestCase
                 'keycloak.groupSyncOnLogin' => 'true',
                 'keycloak.groupMapping' => '{"manage-users":"Administrators","faq-editors":"faq-editors"}',
                 'keycloak.clientId' => 'phpmyfaq',
+                'security.permLevel' => 'medium',
                 default => null,
             });
         $configuration->method('getLogger')->willReturn($this->createMock(Logger::class));
@@ -125,7 +126,8 @@ final class AuthKeycloakTest extends TestCase
                 'display_name' => 'John Doe',
                 'email' => 'john@example.com',
                 'keycloak_sub' => 'subject-123',
-            ]);
+            ])
+            ->willReturn(true);
 
         $auth = new AuthKeycloak(
             $configuration,
@@ -169,7 +171,8 @@ final class AuthKeycloakTest extends TestCase
                 'display_name' => 'John Doe',
                 'email' => 'john@example.com',
                 'keycloak_sub' => 'subject-123',
-            ]);
+            ])
+            ->willReturn(true);
         $user->expects($this->once())->method('getUserId')->willReturn(42);
 
         $permission = $this->createMock(MediumPermission::class);
@@ -230,7 +233,7 @@ final class AuthKeycloakTest extends TestCase
         $user->expects($this->once())->method('createUser')->with('john', '', '')->willReturn(true);
         $user->expects($this->once())->method('setStatus')->with('active');
         $user->expects($this->once())->method('setAuthSource')->with(AuthenticationSourceType::AUTH_KEYCLOAK->value);
-        $user->expects($this->once())->method('setUserData');
+        $user->expects($this->once())->method('setUserData')->willReturn(true);
         $user->expects($this->once())->method('getUserId')->willReturn(42);
 
         $permission = $this->createMock(MediumPermission::class);

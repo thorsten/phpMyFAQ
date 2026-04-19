@@ -169,8 +169,10 @@ abstract readonly class AbstractMigration implements MigrationInterface
 
         if ($this->isSqlServer()) {
             return sprintf(
-                "IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = '%s') " . 'CREATE INDEX %s ON %s (%s)',
+                "IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = '%s' AND object_id = OBJECT_ID('%s')) "
+                . 'CREATE INDEX %s ON %s (%s)',
                 $indexName,
+                $tableName,
                 $indexName,
                 $tableName,
                 $columnList,
@@ -208,9 +210,10 @@ abstract readonly class AbstractMigration implements MigrationInterface
                 $col,
             ), $columns));
             return sprintf(
-                "IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = '%s') "
+                "IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = '%s' AND object_id = OBJECT_ID('%s')) "
                 . 'CREATE UNIQUE INDEX %s ON %s (%s) WHERE %s',
                 $indexName,
+                $tableName,
                 $indexName,
                 $tableName,
                 $columnList,

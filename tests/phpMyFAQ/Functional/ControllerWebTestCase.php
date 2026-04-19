@@ -118,7 +118,7 @@ abstract class ControllerWebTestCase extends WebTestCase
         }
 
         if (is_array($value)) {
-            return (string) json_encode($value);
+            return json_encode($value, JSON_THROW_ON_ERROR);
         }
 
         return (string) $value;

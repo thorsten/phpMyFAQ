@@ -67,13 +67,35 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
             return false;
         }
 
+        try {
+            $saved = $user->setUserData([
+                'display_name' => $this->getDisplayName(),
+                'email' => $this->getEmail(),
+                'keycloak_sub' => $this->getSubject(),
+            ]);
+        } catch (\Exception $exception) {
+            $this->configuration
+                ->getLogger()
+                ->error(sprintf(
+                    'Keycloak user data persistence failed for "%s": %s',
+                    $this->redactIdentifier($login),
+                    $exception->getMessage(),
+                ));
+            return false;
+        }
+
+        if (!$saved) {
+            $this->configuration
+                ->getLogger()
+                ->error(sprintf(
+                    'Keycloak user data persistence returned false for "%s"',
+                    $this->redactIdentifier($login),
+                ));
+            return false;
+        }
+
         $user->setStatus('active');
         $user->setAuthSource(AuthenticationSourceType::AUTH_KEYCLOAK->value);
-        $user->setUserData([
-            'display_name' => $this->getDisplayName(),
-            'email' => $this->getEmail(),
-            'keycloak_sub' => $this->getSubject(),
-        ]);
 
         if ($this->shouldAssignGroups()) {
             $this->assignUserToGroups($user->getUserId());
@@ -280,7 +302,10 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
 
     private function shouldSynchronizeGroupsOnLogin(): bool
     {
-        return $this->toBool($this->configuration->get(item: 'keycloak.groupSyncOnLogin'));
+        return (
+            $this->toBool($this->configuration->get(item: 'keycloak.groupSyncOnLogin'))
+            && $this->configuration->get(item: 'security.permLevel') === 'medium'
+        );
     }
 
     private function redactIdentifier(string $identifier): string

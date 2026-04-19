@@ -279,6 +279,11 @@ class UserData
      */
     public function save(): bool
     {
+        $keycloakSubRaw = $this->data['keycloak_sub'] ?? null;
+        $keycloakSubValue = is_string($keycloakSubRaw) && trim($keycloakSubRaw) !== ''
+            ? "'" . $this->configuration->getDb()->escape($keycloakSubRaw) . "'"
+            : 'NULL';
+
         $update = sprintf(
             "
             UPDATE
@@ -287,7 +292,7 @@ class UserData
                 last_modified = '%s',
                 display_name = '%s',
                 email = '%s',
-                keycloak_sub = '%s',
+                keycloak_sub = %s,
                 is_visible = %d,
                 twofactor_enabled = %d,
                 secret = '%s'
@@ -297,7 +302,7 @@ class UserData
             date(format: 'YmdHis', timestamp: Request::createFromGlobals()->server->get('REQUEST_TIME')),
             $this->configuration->getDb()->escape((string) ($this->data['display_name'] ?? '')),
             $this->configuration->getDb()->escape((string) ($this->data['email'] ?? '')),
-            $this->configuration->getDb()->escape((string) ($this->data['keycloak_sub'] ?? '')),
+            $keycloakSubValue,
             $this->data['is_visible'] ?? 0,
             $this->data['twofactor_enabled'] ?? 0,
             $this->data['secret'] ?? '',
