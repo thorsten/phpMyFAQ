@@ -16,6 +16,7 @@ use phpMyFAQ\Core\Exception as CoreException;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -228,7 +229,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
             ]);
         $currentUser->expects($this->once())->method('setSuccess')->with(true);
 
-        $authUser = $this->createMock(\phpMyFAQ\User::class);
+        $authUser = $this->createMock(User::class);
         $authUser->expects($this->exactly(2))->method('getUserByLogin')->with('john', false)->willReturn(true);
 
         $controller = $this->createController(
@@ -244,7 +245,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
             ],
             $oidcSession,
             static fn(): CurrentUser => $currentUser,
-            static fn(): \phpMyFAQ\User => $authUser,
+            static fn(): User => $authUser,
         );
 
         $response = $controller->callback(new Request([
@@ -273,7 +274,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
         $oidcSession = new OidcSession($session);
         $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
 
-        $resolverUser = $this->createMock(\phpMyFAQ\User::class);
+        $resolverUser = $this->createMock(User::class);
         $resolverUser->expects($this->once())->method('getUserIdByKeycloakSub')->with('subject-123')->willReturn(55);
         $resolverUser->expects($this->once())->method('getUserById')->with(55)->willReturn(true);
         $resolverUser->expects($this->once())->method('getLogin')->willReturn('linked-user');
@@ -303,7 +304,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
             ],
             $oidcSession,
             static fn(): CurrentUser => $currentUser,
-            static fn(): \phpMyFAQ\User => $resolverUser,
+            static fn(): User => $resolverUser,
         );
 
         $response = $controller->callback(new Request([
@@ -345,7 +346,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
         $currentUser->expects($this->never())->method('setTokenData');
         $currentUser->expects($this->never())->method('setSuccess');
 
-        $authUser = $this->createMock(\phpMyFAQ\User::class);
+        $authUser = $this->createMock(User::class);
         $authUser->expects($this->exactly(2))->method('getUserByLogin')->with('john', false)->willReturn(true);
 
         $controller = $this->createController(
@@ -361,7 +362,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
             ],
             $oidcSession,
             static fn(): CurrentUser => $currentUser,
-            static fn(): \phpMyFAQ\User => $authUser,
+            static fn(): User => $authUser,
         );
 
         $response = $controller->callback(new Request([

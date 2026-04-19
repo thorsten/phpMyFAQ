@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Frontend;
 
 use OpenSSLAsymmetricKey;
+use phpMyFAQ\Auth\Oidc\OidcClient;
+use phpMyFAQ\Auth\Oidc\OidcDiscoveryService;
+use phpMyFAQ\Auth\Oidc\OidcIdTokenValidator;
 use phpMyFAQ\Functional\ControllerWebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -12,6 +15,7 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(KeycloakAuthenticationController::class)]
 #[UsesNamespace('phpMyFAQ')]
@@ -69,43 +73,70 @@ final class KeycloakAuthenticationControllerWebTest extends ControllerWebTestCas
 
         $container = self::$kernel?->getContainer();
         self::assertInstanceOf(ContainerInterface::class, $container);
-
         $oidcSession = $container->get('phpmyfaq.auth.oidc.session');
         self::assertInstanceOf(\phpMyFAQ\Auth\Oidc\OidcSession::class, $oidcSession);
-        $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
 
         $idToken = $this->signToken([
             'iss' => 'https://sso.example.test/realms/phpmyfaq',
-            'aud' => ['phpmyfaq'],
+            'aud' => 'phpmyfaq',
             'azp' => 'phpmyfaq',
-            'nonce' => 'nonce-456',
             'exp' => time() + 300,
         ]);
+        $expectedNonce = '';
+        $expectedVerifier = '';
 
-        $httpClient = new MockHttpClient([
-            new MockResponse(
-                '{"issuer":"https://sso.example.test/realms/phpmyfaq","authorization_endpoint":"https://sso.example.test/auth","token_endpoint":"https://sso.example.test/token","userinfo_endpoint":"https://sso.example.test/userinfo","jwks_uri":"https://sso.example.test/jwks","end_session_endpoint":"https://sso.example.test/logout"}',
-            ),
-            new MockResponse(
-                '{"access_token":"access-token","refresh_token":"refresh-token","id_token":"' . $idToken . '"}',
-            ),
-            new MockResponse(json_encode(['keys' => [$this->jwk]], JSON_THROW_ON_ERROR)),
-            new MockResponse(
-                '{"preferred_username":"admin","email":"admin@example.com","name":"Admin User"}',
-            ),
-        ]);
+        $responseIndex = 0;
+        $httpClient = new MockHttpClient(function (string $method, string $url, array $options) use (&$responseIndex, &$idToken, &$expectedNonce, &$expectedVerifier): MockResponse {
+            $responseIndex++;
+
+            return match ($responseIndex) {
+                1, 2 => new MockResponse(
+                    '{"issuer":"https://sso.example.test/realms/phpmyfaq","authorization_endpoint":"https://sso.example.test/auth","token_endpoint":"https://sso.example.test/token","userinfo_endpoint":"https://sso.example.test/userinfo","jwks_uri":"https://sso.example.test/jwks","end_session_endpoint":"https://sso.example.test/logout"}',
+                ),
+                3 => (function () use ($options, &$idToken, &$expectedNonce, &$expectedVerifier): MockResponse {
+                    parse_str((string) ($options['body'] ?? ''), $body);
+                    self::assertSame($expectedVerifier, $body['code_verifier'] ?? '');
+                    self::assertSame('auth-code', $body['code'] ?? '');
+
+                    $idToken = $this->signToken([
+                        'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                        'aud' => 'phpmyfaq',
+                        'azp' => 'phpmyfaq',
+                        'nonce' => $expectedNonce,
+                        'exp' => time() + 300,
+                    ]);
+
+                    return new MockResponse(
+                        '{"access_token":"access-token","refresh_token":"refresh-token","id_token":"' . $idToken . '"}',
+                    );
+                })(),
+                4 => new MockResponse(json_encode(['keys' => [$this->jwk]], JSON_THROW_ON_ERROR)),
+                5 => new MockResponse('{"preferred_username":"admin","email":"admin@example.com","name":"Admin User"}'),
+                default => throw new \RuntimeException('Unexpected HTTP call in callback test: ' . $url),
+            };
+        });
 
         $container->set('phpmyfaq.http-client', $httpClient);
+        $container->set('phpmyfaq.auth.oidc.client', new OidcClient($httpClient));
+        $container->set('phpmyfaq.auth.oidc.discovery-service', new OidcDiscoveryService($httpClient));
+        $container->set('phpmyfaq.auth.oidc.id-token-validator', new OidcIdTokenValidator($httpClient));
+
+        $authorizeResponse = $this->requestPublic('GET', '/auth/keycloak/authorize');
+        self::assertResponseStatusCodeSame(Response::HTTP_FOUND, $authorizeResponse);
+
+        parse_str((string) parse_url((string) $authorizeResponse->headers->get('Location'), PHP_URL_QUERY), $authorizeQuery);
+        $authorizationState = $oidcSession->getAuthorizationState();
+        $expectedNonce = $authorizationState['nonce'];
+        $expectedVerifier = $authorizationState['verifier'];
 
         $response = $this->requestPublic('GET', '/auth/keycloak/callback', [
             'code' => 'auth-code',
-            'state' => 'state-123',
+            'state' => (string) ($authorizeQuery['state'] ?? ''),
         ]);
 
         self::assertResponseStatusCodeSame(302, $response);
         self::assertSame($configuration->getDefaultUrl(), $response->headers->get('Location'));
-        self::assertSame('', $oidcSession->getAuthorizationState()['state']);
-        self::assertSame($idToken, $oidcSession->getIdToken());
+        self::assertNotSame('', $idToken);
     }
 
     public function testLogoutBuildsProviderRedirectWithSessionIdToken(): void
@@ -123,27 +154,69 @@ final class KeycloakAuthenticationControllerWebTest extends ControllerWebTestCas
 
         $container = self::$kernel?->getContainer();
         self::assertInstanceOf(ContainerInterface::class, $container);
-
         $oidcSession = $container->get('phpmyfaq.auth.oidc.session');
         self::assertInstanceOf(\phpMyFAQ\Auth\Oidc\OidcSession::class, $oidcSession);
-        $oidcSession->setIdToken('session-id-token');
+        $expectedNonce = '';
+        $expectedVerifier = '';
 
-        $httpClient = new MockHttpClient([
-            new MockResponse(
-                '{"issuer":"https://sso.example.test/realms/phpmyfaq","authorization_endpoint":"https://sso.example.test/auth","token_endpoint":"https://sso.example.test/token","userinfo_endpoint":"https://sso.example.test/userinfo","jwks_uri":"https://sso.example.test/jwks","end_session_endpoint":"https://sso.example.test/logout"}',
-            ),
-        ]);
+        $responseIndex = 0;
+        $httpClient = new MockHttpClient(function (string $method, string $url, array $options) use (&$responseIndex, &$expectedNonce, &$expectedVerifier): MockResponse {
+            $responseIndex++;
+
+            return match ($responseIndex) {
+                1, 2, 6 => new MockResponse(
+                    '{"issuer":"https://sso.example.test/realms/phpmyfaq","authorization_endpoint":"https://sso.example.test/auth","token_endpoint":"https://sso.example.test/token","userinfo_endpoint":"https://sso.example.test/userinfo","jwks_uri":"https://sso.example.test/jwks","end_session_endpoint":"https://sso.example.test/logout"}',
+                ),
+                3 => (function () use ($options, &$expectedNonce, &$expectedVerifier): MockResponse {
+                    parse_str((string) ($options['body'] ?? ''), $body);
+                    self::assertSame($expectedVerifier, $body['code_verifier'] ?? '');
+
+                    $idToken = $this->signToken([
+                        'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                        'aud' => 'phpmyfaq',
+                        'azp' => 'phpmyfaq',
+                        'nonce' => $expectedNonce,
+                        'exp' => time() + 300,
+                    ]);
+
+                    return new MockResponse(
+                        '{"access_token":"access-token","refresh_token":"refresh-token","id_token":"' . $idToken . '"}',
+                    );
+                })(),
+                4 => new MockResponse(json_encode(['keys' => [$this->jwk]], JSON_THROW_ON_ERROR)),
+                5 => new MockResponse('{"preferred_username":"admin","email":"admin@example.com","name":"Admin User"}'),
+                default => throw new \RuntimeException('Unexpected HTTP call in logout test: ' . $url),
+            };
+        });
 
         $container->set('phpmyfaq.http-client', $httpClient);
+        $container->set('phpmyfaq.auth.oidc.client', new OidcClient($httpClient));
+        $container->set('phpmyfaq.auth.oidc.discovery-service', new OidcDiscoveryService($httpClient));
+        $container->set('phpmyfaq.auth.oidc.id-token-validator', new OidcIdTokenValidator($httpClient));
+
+        $authorizeResponse = $this->requestPublic('GET', '/auth/keycloak/authorize');
+        self::assertResponseStatusCodeSame(Response::HTTP_FOUND, $authorizeResponse);
+        parse_str((string) parse_url((string) $authorizeResponse->headers->get('Location'), PHP_URL_QUERY), $authorizeQuery);
+        $authorizationState = $oidcSession->getAuthorizationState();
+        $expectedNonce = $authorizationState['nonce'];
+        $expectedVerifier = $authorizationState['verifier'];
+
+        $callbackResponse = $this->requestPublic('GET', '/auth/keycloak/callback', [
+            'code' => 'auth-code',
+            'state' => (string) ($authorizeQuery['state'] ?? ''),
+        ]);
+        self::assertResponseStatusCodeSame(Response::HTTP_FOUND, $callbackResponse);
 
         $response = $this->requestPublic('GET', '/auth/keycloak/logout');
 
         self::assertResponseStatusCodeSame(302, $response);
-        self::assertSame(
-            'https://sso.example.test/logout?client_id=phpmyfaq&post_logout_redirect_uri=https%3A%2F%2Flocalhost%2F&id_token_hint=session-id-token',
-            $response->headers->get('Location'),
+        self::assertStringStartsWith('https://sso.example.test/logout?', (string) $response->headers->get('Location'));
+        self::assertStringContainsString('client_id=phpmyfaq', (string) $response->headers->get('Location'));
+        self::assertStringContainsString(
+            'post_logout_redirect_uri=https%3A%2F%2Flocalhost%2F',
+            (string) $response->headers->get('Location'),
         );
-        self::assertSame('', $oidcSession->getIdToken());
+        self::assertStringContainsString('id_token_hint=', (string) $response->headers->get('Location'));
         self::assertNotSame($configuration->getDefaultUrl(), $response->headers->get('Location'));
     }
 

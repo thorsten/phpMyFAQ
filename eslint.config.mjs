@@ -13,6 +13,7 @@ const ignoresConfig = globalIgnores([
   'phpmyfaq/assets/public/*',
   'phpmyfaq/content/upgrades/*',
   'phpmyfaq/src/libs/*',
+  'site/*',
   'volumes/*',
 ]);
 
