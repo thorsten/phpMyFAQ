@@ -188,6 +188,44 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
+     * Helper to create a UNIQUE index.
+     *
+     * On SQL Server, NULLs are treated as equal in unique indexes, so a filtered
+     * index is emitted to allow multiple NULL values. MySQL/MariaDB, PostgreSQL
+     * and SQLite already treat NULLs as distinct in unique indexes.
+     *
+     * @param string|string[] $columns
+     */
+    protected function createUniqueIndex(string $table, string $indexName, string|array $columns): string
+    {
+        $tableName = $this->table($table);
+        $columns = (array) $columns;
+        $columnList = implode(', ', $columns);
+
+        if ($this->isSqlServer()) {
+            $whereClause = implode(' AND ', array_map(static fn(string $col): string => sprintf(
+                '%s IS NOT NULL',
+                $col,
+            ), $columns));
+            return sprintf(
+                "IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = '%s') "
+                . 'CREATE UNIQUE INDEX %s ON %s (%s) WHERE %s',
+                $indexName,
+                $indexName,
+                $tableName,
+                $columnList,
+                $whereClause,
+            );
+        }
+
+        if ($this->isMySql()) {
+            return sprintf('CREATE UNIQUE INDEX %s ON %s (%s)', $indexName, $tableName, $columnList);
+        }
+
+        return sprintf('CREATE UNIQUE INDEX IF NOT EXISTS %s ON %s (%s)', $indexName, $tableName, $columnList);
+    }
+
+    /**
      * Helper to check if an index exists.
      * Returns a SQL query that checks for index existence.
      */

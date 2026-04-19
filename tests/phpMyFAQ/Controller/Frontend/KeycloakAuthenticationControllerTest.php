@@ -131,11 +131,15 @@ final class KeycloakAuthenticationControllerTest extends TestCase
         $currentUser->expects($this->never())->method('getUserData');
         $currentUser->expects($this->once())->method('deleteFromSession');
 
-        $controller = $this->createController([
-            new MockResponse(
-                '{"issuer":"https://sso.example.test/realms/phpmyfaq","authorization_endpoint":"https://sso.example.test/auth","token_endpoint":"https://sso.example.test/token","userinfo_endpoint":"https://sso.example.test/userinfo","jwks_uri":"https://sso.example.test/jwks","end_session_endpoint":"https://sso.example.test/logout"}',
-            ),
-        ], $oidcSession, static fn(): CurrentUser => $currentUser);
+        $controller = $this->createController(
+            [
+                new MockResponse(
+                    '{"issuer":"https://sso.example.test/realms/phpmyfaq","authorization_endpoint":"https://sso.example.test/auth","token_endpoint":"https://sso.example.test/token","userinfo_endpoint":"https://sso.example.test/userinfo","jwks_uri":"https://sso.example.test/jwks","end_session_endpoint":"https://sso.example.test/logout"}',
+                ),
+            ],
+            $oidcSession,
+            static fn(): CurrentUser => $currentUser,
+        );
 
         $response = $controller->logout();
 
@@ -147,6 +151,44 @@ final class KeycloakAuthenticationControllerTest extends TestCase
         $this->assertSame('', $oidcSession->getIdToken());
     }
 
+    public function testLogoutClearsLocalSessionWhenProviderIsDisabled(): void
+    {
+        $reflection = new \ReflectionClass(Configuration::class);
+        $property = $reflection->getProperty('config');
+        /** @var array<string, mixed> $config */
+        $config = $property->getValue($this->configuration);
+        $previousEnable = $config['keycloak.enable'] ?? null;
+        $config['keycloak.enable'] = 'false';
+        $property->setValue($this->configuration, $config);
+
+        try {
+            $session = new Session(new MockArraySessionStorage());
+            $session->start();
+            $oidcSession = new OidcSession($session);
+            $oidcSession->setIdToken('session-id-token');
+
+            $currentUser = $this->createMock(CurrentUser::class);
+            $currentUser->expects($this->once())->method('deleteFromSession');
+
+            $controller = $this->createController([], $oidcSession, static fn(): CurrentUser => $currentUser);
+
+            $response = $controller->logout();
+
+            $this->assertInstanceOf(RedirectResponse::class, $response);
+            $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
+            $this->assertSame('', $oidcSession->getIdToken());
+        } finally {
+            /** @var array<string, mixed> $restoredConfig */
+            $restoredConfig = $property->getValue($this->configuration);
+            if ($previousEnable === null) {
+                unset($restoredConfig['keycloak.enable']);
+            } else {
+                $restoredConfig['keycloak.enable'] = $previousEnable;
+            }
+            $property->setValue($this->configuration, $restoredConfig);
+        }
+    }
+
     public function testLogoutFallsBackToPersistedJwtIdToken(): void
     {
         $session = new Session(new MockArraySessionStorage());
@@ -154,16 +196,22 @@ final class KeycloakAuthenticationControllerTest extends TestCase
         $oidcSession = new OidcSession($session);
 
         $currentUser = $this->createMock(CurrentUser::class);
-        $currentUser->expects($this->once())->method('getUserData')->with('jwt')->willReturn(
-            '{"id_token":"persisted-id-token","userinfo":{"sub":"123"}}',
-        );
+        $currentUser
+            ->expects($this->once())
+            ->method('getUserData')
+            ->with('jwt')
+            ->willReturn('{"id_token":"persisted-id-token","userinfo":{"sub":"123"}}');
         $currentUser->expects($this->once())->method('deleteFromSession');
 
-        $controller = $this->createController([
-            new MockResponse(
-                '{"issuer":"https://sso.example.test/realms/phpmyfaq","authorization_endpoint":"https://sso.example.test/auth","token_endpoint":"https://sso.example.test/token","userinfo_endpoint":"https://sso.example.test/userinfo","jwks_uri":"https://sso.example.test/jwks","end_session_endpoint":"https://sso.example.test/logout"}',
-            ),
-        ], $oidcSession, static fn(): CurrentUser => $currentUser);
+        $controller = $this->createController(
+            [
+                new MockResponse(
+                    '{"issuer":"https://sso.example.test/realms/phpmyfaq","authorization_endpoint":"https://sso.example.test/auth","token_endpoint":"https://sso.example.test/token","userinfo_endpoint":"https://sso.example.test/userinfo","jwks_uri":"https://sso.example.test/jwks","end_session_endpoint":"https://sso.example.test/logout"}',
+                ),
+            ],
+            $oidcSession,
+            static fn(): CurrentUser => $currentUser,
+        );
 
         $response = $controller->logout();
 
@@ -191,9 +239,11 @@ final class KeycloakAuthenticationControllerTest extends TestCase
     {
         $idToken = $this->signToken([
             'iss' => 'https://sso.example.test/realms/phpmyfaq',
+            'sub' => '123',
             'aud' => ['phpmyfaq'],
             'azp' => 'phpmyfaq',
             'nonce' => 'nonce-456',
+            'iat' => time(),
             'exp' => time() + 300,
         ]);
 
@@ -263,9 +313,11 @@ final class KeycloakAuthenticationControllerTest extends TestCase
     {
         $idToken = $this->signToken([
             'iss' => 'https://sso.example.test/realms/phpmyfaq',
+            'sub' => 'subject-123',
             'aud' => ['phpmyfaq'],
             'azp' => 'phpmyfaq',
             'nonce' => 'nonce-456',
+            'iat' => time(),
             'exp' => time() + 300,
         ]);
 
@@ -320,9 +372,11 @@ final class KeycloakAuthenticationControllerTest extends TestCase
     {
         $idToken = $this->signToken([
             'iss' => 'https://sso.example.test/realms/phpmyfaq',
+            'sub' => 'subject-123',
             'aud' => ['phpmyfaq'],
             'azp' => 'phpmyfaq',
             'nonce' => 'nonce-456',
+            'iat' => time(),
             'exp' => time() + 300,
         ]);
 
@@ -364,6 +418,44 @@ final class KeycloakAuthenticationControllerTest extends TestCase
             static fn(): CurrentUser => $currentUser,
             static fn(): User => $authUser,
         );
+
+        $response = $controller->callback(new Request([
+            'code' => 'test-code',
+            'state' => 'state-123',
+        ]));
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
+        $this->assertSame('', $oidcSession->getAuthorizationState()['state']);
+    }
+
+    public function testCallbackReturnsFailureWhenIdTokenSubjectDoesNotMatchUserInfoSubject(): void
+    {
+        $idToken = $this->signToken([
+            'iss' => 'https://sso.example.test/realms/phpmyfaq',
+            'sub' => 'id-token-subject',
+            'aud' => ['phpmyfaq'],
+            'azp' => 'phpmyfaq',
+            'nonce' => 'nonce-456',
+            'iat' => time(),
+            'exp' => time() + 300,
+        ]);
+
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        $oidcSession = new OidcSession($session);
+        $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
+
+        $controller = $this->createController([
+            new MockResponse(
+                '{"issuer":"https://sso.example.test/realms/phpmyfaq","authorization_endpoint":"https://sso.example.test/auth","token_endpoint":"https://sso.example.test/token","userinfo_endpoint":"https://sso.example.test/userinfo","jwks_uri":"https://sso.example.test/jwks","end_session_endpoint":"https://sso.example.test/logout"}',
+            ),
+            new MockResponse('{"access_token":"access","refresh_token":"refresh","id_token":"' . $idToken . '"}'),
+            new MockResponse(json_encode(['keys' => [$this->jwk]], JSON_THROW_ON_ERROR)),
+            new MockResponse(
+                '{"sub":"userinfo-subject","preferred_username":"john","email":"john@example.com","name":"John Doe"}',
+            ),
+        ], $oidcSession);
 
         $response = $controller->callback(new Request([
             'code' => 'test-code',

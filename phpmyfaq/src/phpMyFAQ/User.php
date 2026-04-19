@@ -821,7 +821,11 @@ class User
 
         $userData = $this->userdata->fetchAll('keycloak_sub', $keycloakSub);
 
-        return $userData['user_id'];
+        if (!is_array($userData) || !isset($userData['user_id'])) {
+            return 0;
+        }
+
+        return (int) $userData['user_id'];
     }
 
     /**

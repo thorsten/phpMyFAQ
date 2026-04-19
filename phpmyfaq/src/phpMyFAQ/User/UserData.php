@@ -311,6 +311,10 @@ class UserData
         }
 
         if ($res === false) {
+            if (array_key_exists('keycloak_sub', $this->data)) {
+                return false;
+            }
+
             $update = sprintf(
                 "
             UPDATE

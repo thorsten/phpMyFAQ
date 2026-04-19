@@ -228,8 +228,8 @@ readonly class Migration420Alpha extends AbstractMigration
         );
 
         $recorder->addSql(
-            $this->createIndex('faquserdata', 'idx_faquserdata_keycloak_sub', 'keycloak_sub'),
-            'Create keycloak_sub index on faquserdata',
+            $this->createUniqueIndex('faquserdata', 'idx_faquserdata_keycloak_sub', 'keycloak_sub'),
+            'Create unique keycloak_sub index on faquserdata',
         );
         $recorder->addConfig('api.rateLimit.interval', '3600');
         $recorder->addConfig('queue.transport', 'database');

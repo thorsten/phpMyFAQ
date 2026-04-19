@@ -92,20 +92,23 @@ abstract class ControllerWebTestCase extends WebTestCase
         }
 
         $this->addedConfigurationKeys[$context] ??= [];
+        $normalizedValues = [];
         foreach ($values as $name => $value) {
+            $key = (string) $name;
             $storedValue = $this->normalizeConfigurationValue($value);
-            $existingValue = $configuration->get((string) $name);
+            $normalizedValues[$key] = $storedValue;
+            $existingValue = $configuration->get($key);
             if ($existingValue === null) {
-                $configuration->add((string) $name, $storedValue);
-                $this->addedConfigurationKeys[$context][] = (string) $name;
+                $configuration->add($key, $storedValue);
+                $this->addedConfigurationKeys[$context][] = $key;
             } else {
-                $configuration->update([(string) $name => $storedValue]);
+                $configuration->update([$key => $storedValue]);
             }
         }
 
         $latestConfig = $configProperty->getValue($configuration);
         self::assertIsArray($latestConfig);
-        $configProperty->setValue($configuration, array_merge($latestConfig, $values));
+        $configProperty->setValue($configuration, array_merge($latestConfig, $normalizedValues));
     }
 
     private function normalizeConfigurationValue(mixed $value): string

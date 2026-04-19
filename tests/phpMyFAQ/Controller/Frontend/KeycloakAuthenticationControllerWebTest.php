@@ -78,16 +78,29 @@ final class KeycloakAuthenticationControllerWebTest extends ControllerWebTestCas
 
         $idToken = $this->signToken([
             'iss' => 'https://sso.example.test/realms/phpmyfaq',
+            'sub' => 'subject-123',
             'aud' => 'phpmyfaq',
             'azp' => 'phpmyfaq',
+            'iat' => time(),
             'exp' => time() + 300,
         ]);
         $expectedNonce = '';
         $expectedVerifier = '';
 
         $responseIndex = 0;
-        $httpClient = new MockHttpClient(function (string $method, string $url, array $options) use (&$responseIndex, &$idToken, &$expectedNonce, &$expectedVerifier): MockResponse {
+        $httpClient = new MockHttpClient(function (string $method, string $url, array $options) use (
+            &$responseIndex,
+            &$idToken,
+            &$expectedNonce,
+            &$expectedVerifier,
+        ): MockResponse {
             $responseIndex++;
+
+            $expectedMethod = match ($responseIndex) {
+                3 => 'POST',
+                default => 'GET',
+            };
+            self::assertSame($expectedMethod, $method, sprintf('Unexpected HTTP method for call #%d', $responseIndex));
 
             return match ($responseIndex) {
                 1, 2 => new MockResponse(
@@ -100,9 +113,11 @@ final class KeycloakAuthenticationControllerWebTest extends ControllerWebTestCas
 
                     $idToken = $this->signToken([
                         'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                        'sub' => 'subject-123',
                         'aud' => 'phpmyfaq',
                         'azp' => 'phpmyfaq',
                         'nonce' => $expectedNonce,
+                        'iat' => time(),
                         'exp' => time() + 300,
                     ]);
 
@@ -111,7 +126,9 @@ final class KeycloakAuthenticationControllerWebTest extends ControllerWebTestCas
                     );
                 })(),
                 4 => new MockResponse(json_encode(['keys' => [$this->jwk]], JSON_THROW_ON_ERROR)),
-                5 => new MockResponse('{"preferred_username":"admin","email":"admin@example.com","name":"Admin User"}'),
+                5 => new MockResponse(
+                    '{"sub":"subject-123","preferred_username":"admin","email":"admin@example.com","name":"Admin User"}',
+                ),
                 default => throw new \RuntimeException('Unexpected HTTP call in callback test: ' . $url),
             };
         });
@@ -124,7 +141,10 @@ final class KeycloakAuthenticationControllerWebTest extends ControllerWebTestCas
         $authorizeResponse = $this->requestPublic('GET', '/auth/keycloak/authorize');
         self::assertResponseStatusCodeSame(Response::HTTP_FOUND, $authorizeResponse);
 
-        parse_str((string) parse_url((string) $authorizeResponse->headers->get('Location'), PHP_URL_QUERY), $authorizeQuery);
+        parse_str(
+            (string) parse_url((string) $authorizeResponse->headers->get('Location'), PHP_URL_QUERY),
+            $authorizeQuery,
+        );
         $authorizationState = $oidcSession->getAuthorizationState();
         $expectedNonce = $authorizationState['nonce'];
         $expectedVerifier = $authorizationState['verifier'];
@@ -160,8 +180,18 @@ final class KeycloakAuthenticationControllerWebTest extends ControllerWebTestCas
         $expectedVerifier = '';
 
         $responseIndex = 0;
-        $httpClient = new MockHttpClient(function (string $method, string $url, array $options) use (&$responseIndex, &$expectedNonce, &$expectedVerifier): MockResponse {
+        $httpClient = new MockHttpClient(function (string $method, string $url, array $options) use (
+            &$responseIndex,
+            &$expectedNonce,
+            &$expectedVerifier,
+        ): MockResponse {
             $responseIndex++;
+
+            $expectedMethod = match ($responseIndex) {
+                3 => 'POST',
+                default => 'GET',
+            };
+            self::assertSame($expectedMethod, $method, sprintf('Unexpected HTTP method for call #%d', $responseIndex));
 
             return match ($responseIndex) {
                 1, 2, 6 => new MockResponse(
@@ -173,9 +203,11 @@ final class KeycloakAuthenticationControllerWebTest extends ControllerWebTestCas
 
                     $idToken = $this->signToken([
                         'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                        'sub' => 'subject-123',
                         'aud' => 'phpmyfaq',
                         'azp' => 'phpmyfaq',
                         'nonce' => $expectedNonce,
+                        'iat' => time(),
                         'exp' => time() + 300,
                     ]);
 
@@ -184,7 +216,9 @@ final class KeycloakAuthenticationControllerWebTest extends ControllerWebTestCas
                     );
                 })(),
                 4 => new MockResponse(json_encode(['keys' => [$this->jwk]], JSON_THROW_ON_ERROR)),
-                5 => new MockResponse('{"preferred_username":"admin","email":"admin@example.com","name":"Admin User"}'),
+                5 => new MockResponse(
+                    '{"sub":"subject-123","preferred_username":"admin","email":"admin@example.com","name":"Admin User"}',
+                ),
                 default => throw new \RuntimeException('Unexpected HTTP call in logout test: ' . $url),
             };
         });
@@ -196,7 +230,10 @@ final class KeycloakAuthenticationControllerWebTest extends ControllerWebTestCas
 
         $authorizeResponse = $this->requestPublic('GET', '/auth/keycloak/authorize');
         self::assertResponseStatusCodeSame(Response::HTTP_FOUND, $authorizeResponse);
-        parse_str((string) parse_url((string) $authorizeResponse->headers->get('Location'), PHP_URL_QUERY), $authorizeQuery);
+        parse_str(
+            (string) parse_url((string) $authorizeResponse->headers->get('Location'), PHP_URL_QUERY),
+            $authorizeQuery,
+        );
         $authorizationState = $oidcSession->getAuthorizationState();
         $expectedNonce = $authorizationState['nonce'];
         $expectedVerifier = $authorizationState['verifier'];

@@ -48,7 +48,6 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
      */
     public function create(string $login, #[SensitiveParameter] string $password, string $domain = ''): bool
     {
-        $result = false;
         $user = $this->createUser();
 
         try {
@@ -56,7 +55,11 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
         } catch (\Exception $exception) {
             $this->configuration
                 ->getLogger()
-                ->error(sprintf('Keycloak user creation failed for "%s": %s', $login, $exception->getMessage()));
+                ->error(sprintf(
+                    'Keycloak user creation failed for "%s": %s',
+                    $this->redactIdentifier($login),
+                    $exception->getMessage(),
+                ));
             return false;
         }
 
@@ -76,7 +79,7 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
             $this->assignUserToGroups($user->getUserId());
         }
 
-        return $result;
+        return true;
     }
 
     public function update(string $login, #[SensitiveParameter] string $password): bool
@@ -89,6 +92,9 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
         return true;
     }
 
+    /**
+     * @throws Exception
+     */
     public function checkCredentials(
         string $login,
         #[SensitiveParameter]
@@ -99,7 +105,12 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
             return false;
         }
 
-        if ($this->userExists($login)) {
+        $existingUser = $this->findUser($login);
+        if ($existingUser instanceof User) {
+            if ($this->shouldSynchronizeGroupsOnLogin()) {
+                $this->assignUserToGroups($existingUser->getUserId());
+            }
+
             return true;
         }
 
@@ -140,10 +151,10 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
         return trim((string) ($this->claims['sub'] ?? ''));
     }
 
-    private function userExists(string $login): bool
+    private function findUser(string $login): ?User
     {
         $user = $this->createUser();
-        return $user->getUserByLogin($login, false);
+        return $user->getUserByLogin($login, false) ? $user : null;
     }
 
     private function shouldAssignGroups(): bool
@@ -272,6 +283,23 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
         return $this->toBool($this->configuration->get(item: 'keycloak.groupSyncOnLogin'));
     }
 
+    private function redactIdentifier(string $identifier): string
+    {
+        if (str_contains($identifier, '@')) {
+            [$local, $domain] = explode('@', $identifier, 2);
+            return $local[0] . '***@' . $domain;
+        }
+
+        if (mb_strlen($identifier) <= 3) {
+            return str_repeat('*', mb_strlen($identifier));
+        }
+
+        return mb_substr($identifier, 0, 3) . '…';
+    }
+
+    /**
+     * @throws Exception
+     */
     private function createUser(): User
     {
         if ($this->userFactory instanceof Closure) {

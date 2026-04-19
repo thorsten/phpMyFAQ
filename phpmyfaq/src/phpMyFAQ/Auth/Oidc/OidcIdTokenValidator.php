@@ -45,8 +45,8 @@ final readonly class OidcIdTokenValidator
         string $expectedAudience,
         string $expectedNonce,
     ): array {
-        if ($idToken === '') {
-            return [];
+        if (trim($idToken) === '') {
+            throw new RuntimeException('OIDC id_token is missing');
         }
 
         [$encodedHeader, $encodedPayload, $encodedSignature] = $this->splitToken($idToken);
@@ -106,13 +106,25 @@ final readonly class OidcIdTokenValidator
         string $expectedAudience,
         string $expectedNonce,
     ): void {
-        $issuer = trim((string) ($claims['iss'] ?? ''));
-        if ($issuer !== '' && $issuer !== $expectedIssuer) {
+        if (!array_key_exists('iss', $claims) || !is_string($claims['iss']) || trim($claims['iss']) === '') {
+            throw new RuntimeException('OIDC id_token is missing the issuer claim');
+        }
+        if (trim($claims['iss']) !== $expectedIssuer) {
             throw new RuntimeException('OIDC issuer mismatch in id_token');
         }
 
-        $audience = $claims['aud'] ?? null;
-        if ($audience !== null && !$this->audienceMatches($audience, $expectedAudience)) {
+        if (!array_key_exists('sub', $claims) || !is_string($claims['sub']) || trim($claims['sub']) === '') {
+            throw new RuntimeException('OIDC id_token is missing the subject claim');
+        }
+
+        if (!array_key_exists('aud', $claims)) {
+            throw new RuntimeException('OIDC id_token is missing the audience claim');
+        }
+        $audience = $claims['aud'];
+        if (!$this->isValidAudience($audience)) {
+            throw new RuntimeException('OIDC id_token audience claim is invalid');
+        }
+        if (!$this->audienceMatches($audience, $expectedAudience)) {
             throw new RuntimeException('OIDC audience mismatch in id_token');
         }
 
@@ -125,14 +137,21 @@ final readonly class OidcIdTokenValidator
             throw new RuntimeException('OIDC authorized party missing in id_token');
         }
 
-        $nonce = trim((string) ($claims['nonce'] ?? ''));
-        if ($expectedNonce !== '' && $nonce !== '' && !hash_equals($expectedNonce, $nonce)) {
-            throw new RuntimeException('OIDC nonce mismatch in id_token');
+        if ($expectedNonce !== '') {
+            if (!array_key_exists('nonce', $claims) || !is_string($claims['nonce']) || $claims['nonce'] === '') {
+                throw new RuntimeException('OIDC id_token is missing the nonce claim');
+            }
+            if (!hash_equals($expectedNonce, $claims['nonce'])) {
+                throw new RuntimeException('OIDC nonce mismatch in id_token');
+            }
         }
 
         $now = $this->getCurrentTimestamp();
 
-        if (array_key_exists('exp', $claims) && is_numeric($claims['exp']) && (int) $claims['exp'] < $now) {
+        if (!array_key_exists('exp', $claims) || !is_numeric($claims['exp'])) {
+            throw new RuntimeException('OIDC id_token is missing the expiration claim');
+        }
+        if ((int) $claims['exp'] < $now) {
             throw new RuntimeException('OIDC id_token has expired');
         }
 
@@ -140,9 +159,35 @@ final readonly class OidcIdTokenValidator
             throw new RuntimeException('OIDC id_token is not valid yet');
         }
 
-        if (array_key_exists('iat', $claims) && is_numeric($claims['iat']) && (int) $claims['iat'] > ($now + 60)) {
+        if (!array_key_exists('iat', $claims) || !is_numeric($claims['iat'])) {
+            throw new RuntimeException('OIDC id_token is missing the issued-at claim');
+        }
+        $issuedAt = (int) $claims['iat'];
+        if ($issuedAt > ($now + 60)) {
             throw new RuntimeException('OIDC id_token issued-at time is in the future');
         }
+        if ($issuedAt < ($now - 86400)) {
+            throw new RuntimeException('OIDC id_token issued-at time is too far in the past');
+        }
+    }
+
+    private function isValidAudience(mixed $audience): bool
+    {
+        if (is_string($audience)) {
+            return trim($audience) !== '';
+        }
+
+        if (!is_array($audience) || $audience === []) {
+            return false;
+        }
+
+        foreach ($audience as $entry) {
+            if (!is_string($entry) || trim($entry) === '') {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

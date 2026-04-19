@@ -27,7 +27,7 @@ final class AuthenticationControllerWebTest extends ControllerWebTestCase
             '/href="[^"]*auth\/keycloak\/authorize"/',
             (string) $response->getContent(),
         );
-        self::assertResponseContains('Sign in with Keycloak', $response);
+        $this->assertResponseContains('Sign in with Keycloak', $response);
     }
 
     public function testLoginHidesKeycloakAffordanceWhenDisabled(): void

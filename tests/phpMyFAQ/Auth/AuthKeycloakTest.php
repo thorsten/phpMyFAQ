@@ -38,6 +38,53 @@ final class AuthKeycloakTest extends TestCase
         $this->assertTrue($auth->checkCredentials('john', ''));
     }
 
+    public function testCheckCredentialsSynchronizesGroupsForExistingUserWhenEnabled(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
+                'keycloak.groupSyncOnLogin' => 'true',
+                'keycloak.groupMapping' => '{"manage-users":"Administrators","faq-editors":"faq-editors"}',
+                'keycloak.clientId' => 'phpmyfaq',
+                default => null,
+            });
+        $configuration->method('getLogger')->willReturn($this->createMock(Logger::class));
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('john', false)->willReturn(true);
+        $user->expects($this->once())->method('getUserId')->willReturn(42);
+
+        $permission = $this->createMock(MediumPermission::class);
+        $permission->expects($this->once())->method('getUserGroups')->with(42)->willReturn([11]);
+        $permission->expects($this->once())->method('findOrCreateGroupByName')->with('Administrators')->willReturn(10);
+        $permission
+            ->expects($this->exactly(2))
+            ->method('getGroupId')
+            ->willReturnCallback(static fn(string $groupName): int => match ($groupName) {
+                'Administrators' => 10,
+                'faq-editors' => 11,
+                default => 0,
+            });
+        $permission->expects($this->once())->method('addToGroup')->with(42, 10);
+        $permission->expects($this->once())->method('removeFromGroup')->with(42, 11);
+
+        $auth = new AuthKeycloak(
+            $configuration,
+            $this->createProviderConfig(autoProvision: false),
+            [
+                'preferred_username' => 'john',
+                'realm_access' => ['roles' => ['manage-users']],
+                'resource_access' => ['phpmyfaq' => ['roles' => []]],
+            ],
+            'john',
+            static fn(): User => $user,
+            static fn(): MediumPermission => $permission,
+        );
+
+        $this->assertTrue($auth->checkCredentials('john', ''));
+    }
+
     public function testCheckCredentialsReturnsFalseWhenAutoProvisionIsDisabled(): void
     {
         $user = $this->createMock(User::class);
@@ -188,11 +235,7 @@ final class AuthKeycloakTest extends TestCase
 
         $permission = $this->createMock(MediumPermission::class);
         $permission->expects($this->once())->method('getUserGroups')->with(42)->willReturn([10, 11]);
-        $permission
-            ->expects($this->once())
-            ->method('findOrCreateGroupByName')
-            ->with('Administrators')
-            ->willReturn(10);
+        $permission->expects($this->once())->method('findOrCreateGroupByName')->with('Administrators')->willReturn(10);
         $permission
             ->expects($this->exactly(2))
             ->method('getGroupId')

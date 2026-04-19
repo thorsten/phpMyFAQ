@@ -111,14 +111,14 @@ final class KeycloakAuthenticationController extends AbstractFrontController
 
         try {
             $providerConfig = $this->providerConfigFactory->create();
-            if (!$providerConfig->enabled || $providerConfig->discoveryUrl === '') {
-                return new RedirectResponse($this->configuration->getDefaultUrl());
-            }
-
             $idToken = $this->resolveLogoutIdToken($user);
 
             $user->deleteFromSession();
             $this->oidcSession->clearIdToken();
+
+            if (!$providerConfig->enabled || $providerConfig->discoveryUrl === '') {
+                return new RedirectResponse($this->configuration->getDefaultUrl());
+            }
 
             $discoveryDocument = $this->discoveryService->discover($providerConfig);
             $logoutUrl = $this->oidcClient->buildLogoutUrl($providerConfig, $discoveryDocument, $idToken);
@@ -126,6 +126,7 @@ final class KeycloakAuthenticationController extends AbstractFrontController
             return new RedirectResponse($logoutUrl ?? $this->configuration->getDefaultUrl());
         } catch (Exception) {
             $user->deleteFromSession();
+            $this->oidcSession->clearIdToken();
             return new RedirectResponse($this->configuration->getDefaultUrl());
         }
     }
@@ -171,18 +172,31 @@ final class KeycloakAuthenticationController extends AbstractFrontController
                 $code,
                 $authorizationState['verifier'],
             );
-            $this->idTokenValidator->validate(
+            $idTokenClaims = $this->idTokenValidator->validate(
                 (string) ($token['id_token'] ?? ''),
                 $discoveryDocument,
                 $providerConfig->client->clientId,
                 $authorizationState['nonce'],
             );
             $claims = $this->oidcClient->fetchUserInfo($discoveryDocument, (string) $token['access_token']);
+
+            $idTokenSub = (string) ($idTokenClaims['sub'] ?? '');
+            $userInfoSub = (string) ($claims['sub'] ?? '');
+            if ($idTokenSub === '' || $userInfoSub === '' || !hash_equals($idTokenSub, $userInfoSub)) {
+                $this->configuration
+                    ->getLogger()
+                    ->warning('Keycloak subject mismatch between ID token and UserInfo; aborting login.');
+                $this->oidcSession->clearAuthorizationState();
+                return $redirect;
+            }
+
             $login = $this->resolveLocalLogin($claims);
             $auth = new AuthKeycloak($this->configuration, $providerConfig, $claims, $login, $this->userFactory);
 
             if (!$auth->isValidLogin($login)) {
-                $this->configuration->getLogger()->warning(sprintf('Keycloak login not valid for user: %s', $login));
+                $this->configuration
+                    ->getLogger()
+                    ->warning(sprintf('Keycloak login not valid for user: %s', $this->maskLogin($login)));
                 $this->oidcSession->clearAuthorizationState();
                 return $redirect;
             }
@@ -190,7 +204,7 @@ final class KeycloakAuthenticationController extends AbstractFrontController
             if (!$auth->checkCredentials($login, '')) {
                 $this->configuration
                     ->getLogger()
-                    ->warning(sprintf('Keycloak credentials not valid for user: %s', $login));
+                    ->warning(sprintf('Keycloak credentials not valid for user: %s', $this->maskLogin($login)));
                 $this->oidcSession->clearAuthorizationState();
                 return $redirect;
             }
@@ -199,13 +213,15 @@ final class KeycloakAuthenticationController extends AbstractFrontController
             if (!$user->getUserByLogin($login)) {
                 $this->configuration
                     ->getLogger()
-                    ->warning(sprintf('Keycloak user lookup failed for login: %s', $login));
+                    ->warning(sprintf('Keycloak user lookup failed for login: %s', $this->maskLogin($login)));
                 $this->oidcSession->clearAuthorizationState();
                 return $redirect;
             }
 
             if (!$this->synchronizeKeycloakSubject($user, $claims)) {
-                $this->configuration->getLogger()->warning(sprintf('Keycloak subject mismatch for user: %s', $login));
+                $this->configuration
+                    ->getLogger()
+                    ->warning(sprintf('Keycloak subject mismatch for user: %s', $this->maskLogin($login)));
                 $this->oidcSession->clearAuthorizationState();
                 return $redirect;
             }
@@ -274,6 +290,16 @@ final class KeycloakAuthenticationController extends AbstractFrontController
         }
 
         return $subject;
+    }
+
+    private function maskLogin(string $login): string
+    {
+        $login = trim($login);
+        if ($login === '') {
+            return '<empty>';
+        }
+
+        return 'sha256:' . substr(hash('sha256', $login), 0, 12);
     }
 
     /** @param array<string, mixed> $claims */

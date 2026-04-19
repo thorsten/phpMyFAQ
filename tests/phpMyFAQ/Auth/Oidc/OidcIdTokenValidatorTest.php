@@ -59,6 +59,7 @@ final class OidcIdTokenValidatorTest extends TestCase
         $claims = $validator->validate(
             $this->signToken([
                 'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                'sub' => 'subject-123',
                 'aud' => ['phpmyfaq'],
                 'azp' => 'phpmyfaq',
                 'nonce' => 'nonce-123',
@@ -85,9 +86,11 @@ final class OidcIdTokenValidatorTest extends TestCase
         $validator->validate(
             $this->signToken([
                 'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                'sub' => 'subject-123',
                 'aud' => ['phpmyfaq'],
                 'azp' => 'phpmyfaq',
                 'nonce' => 'nonce-123',
+                'iat' => 1_699_999_900,
                 'exp' => 1_699_999_999,
             ]),
             $this->createDiscoveryDocument(),
@@ -107,9 +110,11 @@ final class OidcIdTokenValidatorTest extends TestCase
         $validator->validate(
             $this->signToken([
                 'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                'sub' => 'subject-123',
                 'aud' => ['phpmyfaq'],
                 'azp' => 'phpmyfaq',
                 'nonce' => 'nonce-123',
+                'iat' => 1_699_999_990,
                 'nbf' => 1_700_000_001,
                 'exp' => 1_700_000_060,
             ]),
@@ -130,6 +135,7 @@ final class OidcIdTokenValidatorTest extends TestCase
         $validator->validate(
             $this->signToken([
                 'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                'sub' => 'subject-123',
                 'aud' => ['phpmyfaq'],
                 'azp' => 'phpmyfaq',
                 'nonce' => 'nonce-123',
@@ -164,11 +170,107 @@ final class OidcIdTokenValidatorTest extends TestCase
         $validator->validate(
             $this->signToken([
                 'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                'sub' => 'subject-123',
+                'aud' => ['phpmyfaq'],
+                'azp' => 'phpmyfaq',
+                'nonce' => 'nonce-123',
+                'iat' => 1_699_999_990,
+                'exp' => 1_700_000_060,
+            ], $otherKey),
+            $this->createDiscoveryDocument(),
+            'phpmyfaq',
+            'nonce-123',
+        );
+    }
+
+    public function testValidateRejectsEmptyIdToken(): void
+    {
+        $validator = $this->createValidator(['keys' => [$this->jwk]], 1_700_000_000);
+
+        $this->expectExceptionObject(new \RuntimeException('OIDC id_token is missing'));
+
+        $validator->validate('', $this->createDiscoveryDocument(), 'phpmyfaq', 'nonce-123');
+    }
+
+    public function testValidateRejectsMissingSubjectClaim(): void
+    {
+        $validator = $this->createValidator(['keys' => [$this->jwk]], 1_700_000_000);
+
+        $this->expectExceptionObject(new \RuntimeException('OIDC id_token is missing the subject claim'));
+
+        $validator->validate(
+            $this->signToken([
+                'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                'aud' => ['phpmyfaq'],
+                'azp' => 'phpmyfaq',
+                'nonce' => 'nonce-123',
+                'iat' => 1_699_999_990,
+                'exp' => 1_700_000_060,
+            ]),
+            $this->createDiscoveryDocument(),
+            'phpmyfaq',
+            'nonce-123',
+        );
+    }
+
+    public function testValidateRejectsMissingNonceClaimWhenExpected(): void
+    {
+        $validator = $this->createValidator(['keys' => [$this->jwk]], 1_700_000_000);
+
+        $this->expectExceptionObject(new \RuntimeException('OIDC id_token is missing the nonce claim'));
+
+        $validator->validate(
+            $this->signToken([
+                'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                'sub' => 'subject-123',
+                'aud' => ['phpmyfaq'],
+                'azp' => 'phpmyfaq',
+                'iat' => 1_699_999_990,
+                'exp' => 1_700_000_060,
+            ]),
+            $this->createDiscoveryDocument(),
+            'phpmyfaq',
+            'nonce-123',
+        );
+    }
+
+    public function testValidateRejectsMissingIssuedAtClaim(): void
+    {
+        $validator = $this->createValidator(['keys' => [$this->jwk]], 1_700_000_000);
+
+        $this->expectExceptionObject(new \RuntimeException('OIDC id_token is missing the issued-at claim'));
+
+        $validator->validate(
+            $this->signToken([
+                'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                'sub' => 'subject-123',
                 'aud' => ['phpmyfaq'],
                 'azp' => 'phpmyfaq',
                 'nonce' => 'nonce-123',
                 'exp' => 1_700_000_060,
-            ], $otherKey),
+            ]),
+            $this->createDiscoveryDocument(),
+            'phpmyfaq',
+            'nonce-123',
+        );
+    }
+
+    public function testValidateRejectsIssuedAtTooFarInThePast(): void
+    {
+        $validator = $this->createValidator(['keys' => [$this->jwk]], 1_700_000_000);
+
+        $this->expectExceptionObject(new \RuntimeException('OIDC id_token issued-at time is too far in the past'));
+
+        $validator->validate(
+            $this->signToken([
+                'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                'sub' => 'subject-123',
+                'aud' => ['phpmyfaq'],
+                'azp' => 'phpmyfaq',
+                'nonce' => 'nonce-123',
+                'iat' => 1_700_000_000 - 86_401,
+                'exp' => 1_700_000_060,
+            ]),
             $this->createDiscoveryDocument(),
             'phpmyfaq',
             'nonce-123',
