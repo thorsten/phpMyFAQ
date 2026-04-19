@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Frontend;
 
 use OpenSSLAsymmetricKey;
-use phpMyFAQ\Auth\Oidc\OidcSession;
 use phpMyFAQ\Functional\ControllerWebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -13,7 +12,6 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 #[CoversClass(KeycloakAuthenticationController::class)]
 #[UsesNamespace('phpMyFAQ')]
@@ -72,10 +70,8 @@ final class KeycloakAuthenticationControllerWebTest extends ControllerWebTestCas
         $container = self::$kernel?->getContainer();
         self::assertInstanceOf(ContainerInterface::class, $container);
 
-        $session = $container->get('session');
-        self::assertInstanceOf(SessionInterface::class, $session);
-
-        $oidcSession = new OidcSession($session);
+        $oidcSession = $container->get('phpmyfaq.auth.oidc.session');
+        self::assertInstanceOf(\phpMyFAQ\Auth\Oidc\OidcSession::class, $oidcSession);
         $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
 
         $idToken = $this->signToken([
@@ -128,10 +124,8 @@ final class KeycloakAuthenticationControllerWebTest extends ControllerWebTestCas
         $container = self::$kernel?->getContainer();
         self::assertInstanceOf(ContainerInterface::class, $container);
 
-        $session = $container->get('session');
-        self::assertInstanceOf(SessionInterface::class, $session);
-
-        $oidcSession = new OidcSession($session);
+        $oidcSession = $container->get('phpmyfaq.auth.oidc.session');
+        self::assertInstanceOf(\phpMyFAQ\Auth\Oidc\OidcSession::class, $oidcSession);
         $oidcSession->setIdToken('session-id-token');
 
         $httpClient = new MockHttpClient([

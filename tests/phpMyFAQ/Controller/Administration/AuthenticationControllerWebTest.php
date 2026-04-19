@@ -23,7 +23,7 @@ final class AuthenticationControllerWebTest extends ControllerWebTestCase
         $response = $this->requestAdminGuest('GET', '/login');
 
         self::assertResponseIsSuccessful($response);
-        self::assertResponseContains('../auth/keycloak/authorize', $response);
+        self::assertResponseContains('auth/keycloak/authorize', $response);
         self::assertResponseContains('Sign in with Keycloak', $response);
     }
 
@@ -36,7 +36,7 @@ final class AuthenticationControllerWebTest extends ControllerWebTestCase
         $response = $this->requestAdminGuest('GET', '/login');
 
         self::assertResponseIsSuccessful($response);
-        self::assertStringNotContainsString('../auth/keycloak/authorize', (string) $response->getContent());
+        self::assertStringNotContainsString('auth/keycloak/authorize', (string) $response->getContent());
         self::assertStringNotContainsString('Sign in with Keycloak', (string) $response->getContent());
     }
 }
