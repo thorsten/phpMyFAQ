@@ -107,16 +107,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.379.1",
+            "version": "3.379.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "261bfa48bb4dc0d9a8d0dcb5af7c329d97de7acc"
+                "reference": "45c385619d43e54ede8daca211960c345d3ff3b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/261bfa48bb4dc0d9a8d0dcb5af7c329d97de7acc",
-                "reference": "261bfa48bb4dc0d9a8d0dcb5af7c329d97de7acc",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/45c385619d43e54ede8daca211960c345d3ff3b7",
+                "reference": "45c385619d43e54ede8daca211960c345d3ff3b7",
                 "shasum": ""
             },
             "require": {
@@ -198,9 +198,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.379.1"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.379.2"
             },
-            "time": "2026-04-16T18:06:02+00:00"
+            "time": "2026-04-17T18:05:27+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -8694,16 +8694,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "14.1.2",
+            "version": "14.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "c9023486f88a48dd870361591bd7caef6d2406c3"
+                "reference": "24dc6fcf9f2a983de5b3f1199fb01e88d68e7474"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/c9023486f88a48dd870361591bd7caef6d2406c3",
-                "reference": "c9023486f88a48dd870361591bd7caef6d2406c3",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/24dc6fcf9f2a983de5b3f1199fb01e88d68e7474",
+                "reference": "24dc6fcf9f2a983de5b3f1199fb01e88d68e7474",
                 "shasum": ""
             },
             "require": {
@@ -8759,7 +8759,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/14.1.2"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/14.1.3"
             },
             "funding": [
                 {
@@ -8779,7 +8779,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-04-15T08:27:13+00:00"
+            "time": "2026-04-18T05:41:54+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -9076,16 +9076,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "13.1.6",
+            "version": "13.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "c3c414ea438e5a37d00697eaea43e6e05e201a42"
+                "reference": "ddd6401641861cdef94b922ef10d484f436e8dcd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c3c414ea438e5a37d00697eaea43e6e05e201a42",
-                "reference": "c3c414ea438e5a37d00697eaea43e6e05e201a42",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ddd6401641861cdef94b922ef10d484f436e8dcd",
+                "reference": "ddd6401641861cdef94b922ef10d484f436e8dcd",
                 "shasum": ""
             },
             "require": {
@@ -9099,7 +9099,7 @@
                 "phar-io/manifest": "^2.0.4",
                 "phar-io/version": "^3.2.1",
                 "php": ">=8.4.1",
-                "phpunit/php-code-coverage": "^14.1.2",
+                "phpunit/php-code-coverage": "^14.1.3",
                 "phpunit/php-file-iterator": "^7.0.0",
                 "phpunit/php-invoker": "^7.0.0",
                 "phpunit/php-text-template": "^6.0.0",
@@ -9155,7 +9155,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/13.1.6"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/13.1.7"
             },
             "funding": [
                 {
@@ -9163,7 +9163,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2026-04-17T12:52:50+00:00"
+            "time": "2026-04-18T06:14:52+00:00"
         },
         {
             "name": "radebatz/type-info-extras",
@@ -10900,16 +10900,16 @@
         },
         {
             "name": "zircote/swagger-php",
-            "version": "6.1.0",
+            "version": "6.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zircote/swagger-php.git",
-                "reference": "6e60677567b684645048c908151c72047abef403"
+                "reference": "195a0884d43392baaa4f02334c8118d011144469"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/6e60677567b684645048c908151c72047abef403",
-                "reference": "6e60677567b684645048c908151c72047abef403",
+                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/195a0884d43392baaa4f02334c8118d011144469",
+                "reference": "195a0884d43392baaa4f02334c8118d011144469",
                 "shasum": ""
             },
             "require": {
@@ -10978,7 +10978,7 @@
             ],
             "support": {
                 "issues": "https://github.com/zircote/swagger-php/issues",
-                "source": "https://github.com/zircote/swagger-php/tree/6.1.0"
+                "source": "https://github.com/zircote/swagger-php/tree/6.1.1"
             },
             "funding": [
                 {
@@ -10986,7 +10986,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-04-06T21:46:06+00:00"
+            "time": "2026-04-18T08:41:40+00:00"
         }
     ],
     "aliases": [],
