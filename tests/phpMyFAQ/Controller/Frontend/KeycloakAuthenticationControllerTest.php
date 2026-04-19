@@ -121,17 +121,54 @@ final class KeycloakAuthenticationControllerTest extends TestCase
 
     public function testLogoutReturnsProviderLogoutResponse(): void
     {
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        $oidcSession = new OidcSession($session);
+        $oidcSession->setIdToken('session-id-token');
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->expects($this->never())->method('getUserData');
+        $currentUser->expects($this->once())->method('deleteFromSession');
+
         $controller = $this->createController([
             new MockResponse(
                 '{"issuer":"https://sso.example.test/realms/phpmyfaq","authorization_endpoint":"https://sso.example.test/auth","token_endpoint":"https://sso.example.test/token","userinfo_endpoint":"https://sso.example.test/userinfo","jwks_uri":"https://sso.example.test/jwks","end_session_endpoint":"https://sso.example.test/logout"}',
             ),
-        ]);
+        ], $oidcSession, static fn(): CurrentUser => $currentUser);
 
         $response = $controller->logout();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame(
-            'https://sso.example.test/logout?client_id=phpmyfaq&post_logout_redirect_uri=https%3A%2F%2Ffaq.example.test%2F',
+            'https://sso.example.test/logout?client_id=phpmyfaq&post_logout_redirect_uri=https%3A%2F%2Ffaq.example.test%2F&id_token_hint=session-id-token',
+            $response->headers->get('Location'),
+        );
+        $this->assertSame('', $oidcSession->getIdToken());
+    }
+
+    public function testLogoutFallsBackToPersistedJwtIdToken(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        $oidcSession = new OidcSession($session);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->expects($this->once())->method('getUserData')->with('jwt')->willReturn(
+            '{"id_token":"persisted-id-token","userinfo":{"sub":"123"}}',
+        );
+        $currentUser->expects($this->once())->method('deleteFromSession');
+
+        $controller = $this->createController([
+            new MockResponse(
+                '{"issuer":"https://sso.example.test/realms/phpmyfaq","authorization_endpoint":"https://sso.example.test/auth","token_endpoint":"https://sso.example.test/token","userinfo_endpoint":"https://sso.example.test/userinfo","jwks_uri":"https://sso.example.test/jwks","end_session_endpoint":"https://sso.example.test/logout"}',
+            ),
+        ], $oidcSession, static fn(): CurrentUser => $currentUser);
+
+        $response = $controller->logout();
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame(
+            'https://sso.example.test/logout?client_id=phpmyfaq&post_logout_redirect_uri=https%3A%2F%2Ffaq.example.test%2F&id_token_hint=persisted-id-token',
             $response->headers->get('Location'),
         );
     }
@@ -218,6 +255,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
         $this->assertSame('', $oidcSession->getAuthorizationState()['state']);
+        $this->assertSame($idToken, $oidcSession->getIdToken());
     }
 
     public function testCallbackResolvesLocalLoginFromStoredKeycloakSubject(): void

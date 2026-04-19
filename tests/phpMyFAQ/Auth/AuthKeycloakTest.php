@@ -103,6 +103,7 @@ final class AuthKeycloakTest extends TestCase
             ->method('get')
             ->willReturnCallback(static fn(string $item): mixed => match ($item) {
                 'keycloak.groupAutoAssign' => 'true',
+                'keycloak.groupSyncOnLogin' => 'false',
                 'keycloak.groupMapping' => '{"manage-users":"Administrators","faq-editors":"faq-editors"}',
                 'keycloak.clientId' => 'phpmyfaq',
                 'security.permLevel' => 'medium',
@@ -152,6 +153,71 @@ final class AuthKeycloakTest extends TestCase
                 'resource_access' => [
                     'phpmyfaq' => [
                         'roles' => ['faq-editors'],
+                    ],
+                ],
+            ],
+            'john',
+            static fn(): User => $user,
+            static fn(): MediumPermission => $permission,
+        );
+
+        $this->assertTrue($auth->create('john', ''));
+    }
+
+    public function testCreateSynchronizesMappedGroupsWhenEnabled(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
+                'keycloak.groupAutoAssign' => 'true',
+                'keycloak.groupSyncOnLogin' => 'true',
+                'keycloak.groupMapping' => '{"manage-users":"Administrators","faq-editors":"faq-editors"}',
+                'keycloak.clientId' => 'phpmyfaq',
+                'security.permLevel' => 'medium',
+                default => null,
+            });
+        $configuration->method('getLogger')->willReturn($this->createMock(Logger::class));
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('createUser')->with('john', '', '')->willReturn(true);
+        $user->expects($this->once())->method('setStatus')->with('active');
+        $user->expects($this->once())->method('setAuthSource')->with(AuthenticationSourceType::AUTH_KEYCLOAK->value);
+        $user->expects($this->once())->method('setUserData');
+        $user->expects($this->once())->method('getUserId')->willReturn(42);
+
+        $permission = $this->createMock(MediumPermission::class);
+        $permission->expects($this->once())->method('getUserGroups')->with(42)->willReturn([10, 11]);
+        $permission
+            ->expects($this->once())
+            ->method('findOrCreateGroupByName')
+            ->with('Administrators')
+            ->willReturn(10);
+        $permission
+            ->expects($this->exactly(2))
+            ->method('getGroupId')
+            ->willReturnCallback(static fn(string $groupName): int => match ($groupName) {
+                'Administrators' => 10,
+                'faq-editors' => 11,
+                default => 0,
+            });
+        $permission->expects($this->never())->method('addToGroup');
+        $permission->expects($this->once())->method('removeFromGroup')->with(42, 11);
+
+        $auth = new AuthKeycloak(
+            $configuration,
+            $this->createProviderConfig(autoProvision: true),
+            [
+                'preferred_username' => 'john',
+                'name' => 'John Doe',
+                'email' => 'john@example.com',
+                'sub' => 'subject-123',
+                'realm_access' => [
+                    'roles' => ['manage-users'],
+                ],
+                'resource_access' => [
+                    'phpmyfaq' => [
+                        'roles' => [],
                     ],
                 ],
             ],

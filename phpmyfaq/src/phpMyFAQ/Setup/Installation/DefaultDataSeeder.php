@@ -215,6 +215,7 @@ class DefaultDataSeeder
             'keycloak.scopes' => 'openid profile email',
             'keycloak.autoProvision' => 'false',
             'keycloak.groupAutoAssign' => 'false',
+            'keycloak.groupSyncOnLogin' => 'false',
             'keycloak.groupMapping' => '',
             'keycloak.logoutRedirectUrl' => '',
             'spam.checkBannedWords' => 'true',

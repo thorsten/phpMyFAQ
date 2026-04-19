@@ -160,23 +160,28 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
             return;
         }
 
-        $roleNames = $this->extractRoleNames();
-        if ($roleNames === []) {
+        $mediumPermission = $this->createMediumPermission();
+        $groupMapping = $this->getGroupMapping();
+        if ($groupMapping === []) {
             return;
         }
 
-        $mediumPermission = $this->createMediumPermission();
-        $groupMapping = $this->getGroupMapping();
+        $currentGroupIds = $mediumPermission->getUserGroups($userId);
+        $desiredGroupIds = [];
+        $roleNames = $this->extractRoleNames();
 
         foreach ($roleNames as $roleName) {
-            if (!isset($groupMapping[$roleName])) {
+            if (!array_key_exists($roleName, $groupMapping)) {
+                continue;
+            }
+            $faqGroupName = $groupMapping[$roleName];
+            $groupId = $mediumPermission->findOrCreateGroupByName($faqGroupName);
+            if ($groupId <= 0) {
                 continue;
             }
 
-            $faqGroupName = $groupMapping[$roleName];
-            $groupId = $mediumPermission->findOrCreateGroupByName($faqGroupName);
-
-            if ($groupId <= 0) {
+            $desiredGroupIds[] = $groupId;
+            if (in_array($groupId, $currentGroupIds, true)) {
                 continue;
             }
 
@@ -184,6 +189,26 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
             $this->configuration
                 ->getLogger()
                 ->info(sprintf('Added Keycloak user #%d to group %s', $userId, $faqGroupName));
+        }
+
+        if (!$this->shouldSynchronizeGroupsOnLogin()) {
+            return;
+        }
+
+        foreach (array_values(array_unique($groupMapping)) as $groupName) {
+            $groupId = $mediumPermission->getGroupId($groupName);
+            if ($groupId <= 0) {
+                continue;
+            }
+
+            if (!in_array($groupId, $currentGroupIds, true) || in_array($groupId, $desiredGroupIds, true)) {
+                continue;
+            }
+
+            $mediumPermission->removeFromGroup($userId, $groupId);
+            $this->configuration
+                ->getLogger()
+                ->info(sprintf('Removed Keycloak user #%d from group %s', $userId, $groupName));
         }
     }
 
@@ -240,6 +265,11 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
     private function toBool(mixed $value): bool
     {
         return filter_var($value, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    private function shouldSynchronizeGroupsOnLogin(): bool
+    {
+        return $this->toBool($this->configuration->get(item: 'keycloak.groupSyncOnLogin'));
     }
 
     private function createUser(): User

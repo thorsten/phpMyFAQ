@@ -281,6 +281,58 @@ final class AuthenticationControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testLogoutStaysLocalWhenKeycloakIsEnabledButUserUsesDifferentAuthSource(): void
+    {
+        $currentUser = $this->createLoggedInCurrentUser('local');
+        $currentUser->expects(self::once())->method('deleteFromSession')->with(true);
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = $this->seedAdminLogoutToken($session);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(
+            currentUser: $currentUser,
+            configurationValues: ['keycloak.enable' => true],
+            session: $session,
+        ));
+
+        ob_start();
+        $response = $controller->logout(new Request(['csrf' => $csrfToken]));
+        ob_end_clean();
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertSame($this->configuration->getDefaultUrl() . 'admin/login', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testLogoutStaysLocalWhenKeycloakUserLogsOutButKeycloakIsDisabled(): void
+    {
+        $currentUser = $this->createLoggedInCurrentUser('keycloak');
+        $currentUser->expects(self::once())->method('deleteFromSession')->with(true);
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = $this->seedAdminLogoutToken($session);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(
+            currentUser: $currentUser,
+            configurationValues: ['keycloak.enable' => false],
+            session: $session,
+        ));
+
+        ob_start();
+        $response = $controller->logout(new Request(['csrf' => $csrfToken]));
+        ob_end_clean();
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertSame($this->configuration->getDefaultUrl() . 'admin/login', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testTokenReturnsResponse(): void
     {
         $request = new Request(['user-id' => '1']);

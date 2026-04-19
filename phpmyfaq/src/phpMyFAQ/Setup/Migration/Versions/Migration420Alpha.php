@@ -824,6 +824,7 @@ readonly class Migration420Alpha extends AbstractMigration
         $recorder->addConfig('keycloak.scopes', 'openid profile email');
         $recorder->addConfig('keycloak.autoProvision', 'false');
         $recorder->addConfig('keycloak.groupAutoAssign', 'false');
+        $recorder->addConfig('keycloak.groupSyncOnLogin', 'false');
         $recorder->addConfig('keycloak.groupMapping', '');
         $recorder->addConfig('keycloak.logoutRedirectUrl', '');
 

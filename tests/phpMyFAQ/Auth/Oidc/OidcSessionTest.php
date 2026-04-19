@@ -37,4 +37,15 @@ final class OidcSessionTest extends TestCase
             $session->getAuthorizationState(),
         );
     }
+
+    public function testSetAndClearIdToken(): void
+    {
+        $session = new OidcSession(new Session(new MockArraySessionStorage()));
+
+        $session->setIdToken('id-token-123');
+        $this->assertSame('id-token-123', $session->getIdToken());
+
+        $session->clearIdToken();
+        $this->assertSame('', $session->getIdToken());
+    }
 }

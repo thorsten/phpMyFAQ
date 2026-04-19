@@ -508,6 +508,28 @@ readonly class MediumPermissionRepository
     }
 
     /**
+     * Removes a user from a single group.
+     *
+     * @param int $userId User ID
+     * @param int $groupId Group ID
+     */
+    public function removeFromGroup(int $userId, int $groupId): bool
+    {
+        if ($userId <= 0 || $groupId <= 0) {
+            return false;
+        }
+
+        $delete = sprintf(
+            'DELETE FROM %sfaquser_group WHERE user_id = %d AND group_id = %d',
+            Database::getTablePrefix(),
+            $userId,
+            $groupId,
+        );
+
+        return (bool) $this->configuration->getDb()->query($delete);
+    }
+
+    /**
      * Returns an associative array with the group-data of the group $groupId.
      *
      * @param int $groupId Group ID

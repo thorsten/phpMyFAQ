@@ -499,7 +499,7 @@ Navigate to the **Configuration → Translation** tab to configure your translat
 - **Amazon**: AWS Access Key ID, Secret Access Key, and region
 - **LibreTranslate**: Server URL and optional API key
 
-For detailed setup instructions for each provider, see the [AI Translation Guide](9-ai-translation.md).
+For detailed setup instructions for each provider, see the [AI Translation Guide](ai-translation.md).
 
 #### 5.2.13.3 Translating Content
 
@@ -596,7 +596,7 @@ The AI will translate:
 - Re-translate if formatting is broken
 
 For comprehensive documentation, see:
-- [Complete AI Translation Guide](9-ai-translation.md) - Full documentation
+- [Complete AI Translation Guide](ai-translation.md) - Full documentation
 
 ## 5.3 Statistics
 
@@ -791,7 +791,7 @@ To back up the whole data located on your web server, you can run our simple bac
 Here you can edit the general, FAQ specific, search, spam protection, spam control center, SEO related, layout
 settings, Mail setup for SMTP, API settings, online update settings, and if enabled, LDAP configuration of phpMyFAQ.
 
-You can find a detailed description of all settings in the [Configuration key reference](8-configuration.md).
+You can find a detailed description of all settings in the [Configuration key reference](configuration.md).
 
 ### 5.6.2 FAQ Multi-sites
 
@@ -879,14 +879,19 @@ phpMyFAQ can integrate with external identity providers for administrator and fr
 
 Keycloak support uses OpenID Connect Authorization Code flow with PKCE.
 You can enable it in the administration under `Configuration` -> `Security` -> `Keycloak`.
+For a worked configuration example, see the dedicated [Keycloak Integration guide](keycloak.md).
 
 Recommended Keycloak client settings:
 
 - Client type: confidential
 - Standard flow enabled
 - Direct access grants disabled unless you need them for other tools
+- PKCE code challenge method: `S256`
+- Root URL: `https://faq.example.com/`
+- Home URL: `https://faq.example.com/`
 - Valid redirect URI: `https://faq.example.com/auth/keycloak/callback`
 - Valid post logout redirect URI: `https://faq.example.com/`
+- Web origin: `https://faq.example.com`
 
 Minimum phpMyFAQ configuration:
 
@@ -897,27 +902,47 @@ Minimum phpMyFAQ configuration:
 5. Set the `Client secret`
 6. Set the `Redirect URI` to your phpMyFAQ callback URL
 7. Keep `Scopes` at least on `openid profile email`
+8. Optionally set `Logout redirect URL` to the page users should see after provider logout
+
+Example phpMyFAQ values for a production setup:
+
+- `keycloak.baseUrl`: `https://sso.example.com`
+- `keycloak.realm`: `faq`
+- `keycloak.clientId`: `phpmyfaq`
+- `keycloak.redirectUri`: `https://faq.example.com/auth/keycloak/callback`
+- `keycloak.scopes`: `openid profile email`
+- `keycloak.logoutRedirectUrl`: `https://faq.example.com/`
 
 Optional settings:
 
 - Enable automatic provisioning if phpMyFAQ should create local users on first successful Keycloak login
 - Enable automatic group assignment if phpMyFAQ should assign local groups from Keycloak roles
+- Enable group synchronization on login if phpMyFAQ should remove stale memberships for mapped Keycloak groups
 - Add a JSON role-to-group mapping if Keycloak role names should map to different phpMyFAQ group names
 - Set a logout redirect URL if users should return to a specific page after provider logout
+- Use a JSON mapping such as `{"admin":"Administrators","faq-editors":"Editors"}` if Keycloak role names and phpMyFAQ group names differ
 
 phpMyFAQ resolves users in this order:
 
-1. preferred username from Keycloak
-2. existing user by email address
-3. automatic provisioning if enabled
+1. existing user linked by stored Keycloak subject (`sub`)
+2. preferred username from Keycloak
+3. existing user by email address
+4. automatic provisioning if enabled
 
 If automatic provisioning is disabled, users must already exist in phpMyFAQ before they can sign in with Keycloak.
 
-Group assignment is additive in the current implementation:
+Group assignment behavior:
 
-- mapped or unmapped Keycloak roles can create phpMyFAQ groups automatically
+- only roles listed in the JSON mapping are managed by phpMyFAQ
 - matched groups are added to the user on login
-- existing phpMyFAQ group memberships are not removed automatically
+- if group synchronization on login is enabled, stale memberships for mapped groups are removed during login
+- phpMyFAQ groups outside the configured Keycloak mapping are left untouched
+
+Troubleshooting:
+
+- If login works but logout does not return to phpMyFAQ, verify `Valid post logout redirect URI` in Keycloak and `keycloak.logoutRedirectUrl` in phpMyFAQ
+- If users are created but not added to groups, make sure permission level `medium` is enabled and the Keycloak roles actually match your JSON mapping keys
+- If an existing user cannot log in, check whether the stored Keycloak subject (`sub`) is already linked to a different account
 
 ### 5.7.2 Using Microsoft Entra ID
 

@@ -427,6 +427,21 @@ class MediumPermission extends BasicPermission implements PermissionInterface
     }
 
     /**
+     * Removes a user from a single group.
+     *
+     * @param int $userId User ID
+     * @param int $groupId Group ID
+     */
+    public function removeFromGroup(int $userId, int $groupId): bool
+    {
+        if ($userId <= 0 || $groupId <= 0) {
+            return false;
+        }
+
+        return $this->mediumRepository->removeFromGroup($userId, $groupId);
+    }
+
+    /**
      * Refuses all group rights.
      * Returns true for success, otherwise false.
      *

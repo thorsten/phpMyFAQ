@@ -432,6 +432,24 @@ class MediumPermissionTest extends TestCase
         $this->mediumPermission->deleteGroup(1);
     }
 
+    public function testRemoveFromGroup(): void
+    {
+        $this->assertFalse($this->mediumPermission->removeFromGroup(0, 0));
+
+        $groupData = [
+            'name' => 'TestGroup',
+            'description' => 'TestDescription',
+            'auto_join' => true,
+        ];
+        $this->mediumPermission->addGroup($groupData);
+        $this->mediumPermission->addToGroup(1, 1);
+
+        $this->assertTrue($this->mediumPermission->removeFromGroup(1, 1));
+
+        // Cleanup
+        $this->mediumPermission->deleteGroup(1);
+    }
+
     public function testRefuseAllGroupRights(): void
     {
         $this->assertFalse($this->mediumPermission->refuseAllGroupRights(0));

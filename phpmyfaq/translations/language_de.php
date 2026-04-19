@@ -1703,6 +1703,7 @@ $LANG_CONF['keycloak.redirectUri'] = ['input', 'Redirect-URI', 'Im Keycloak-Clie
 $LANG_CONF['keycloak.scopes'] = ['input', 'Scopes', 'Leerzeichengetrennte Scopes, z.B. openid profile email'];
 $LANG_CONF['keycloak.autoProvision'] = ['checkbox', 'phpMyFAQ-Benutzer beim ersten Keycloak-Login automatisch anlegen'];
 $LANG_CONF['keycloak.groupAutoAssign'] = ['checkbox', 'phpMyFAQ-Gruppen automatisch aus Keycloak-Rollen zuweisen'];
+$LANG_CONF['keycloak.groupSyncOnLogin'] = ['checkbox', 'Zugeordnete phpMyFAQ-Gruppen beim Login synchronisieren', 'Wenn aktiviert, entfernt phpMyFAQ beim Login veraltete Mitgliedschaften für Gruppen, die durch die Keycloak-Rollenzuordnung verwaltet werden'];
 $LANG_CONF['keycloak.groupMapping'] = ['input', 'Rollen-zu-Gruppen-Zuordnung', 'JSON-Objekt zur Abbildung von Keycloak-Rollen auf phpMyFAQ-Gruppennamen, z.B. {"admin":"Administratoren"}'];
 $LANG_CONF['keycloak.logoutRedirectUrl'] = ['input', 'Logout-Redirect-URL', 'URL für die Weiterleitung nach dem Keycloak-Logout'];
 

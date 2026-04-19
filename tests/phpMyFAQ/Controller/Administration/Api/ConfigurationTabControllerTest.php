@@ -240,6 +240,7 @@ final class ConfigurationTabControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringContainsString('data-config-key="keycloak.enable"', (string) $response->getContent());
         self::assertStringContainsString('data-config-key="keycloak.clientId"', (string) $response->getContent());
+        self::assertStringContainsString('data-config-key="keycloak.groupSyncOnLogin"', (string) $response->getContent());
         self::assertStringContainsString('data-config-key="keycloak.groupMapping"', (string) $response->getContent());
     }
 

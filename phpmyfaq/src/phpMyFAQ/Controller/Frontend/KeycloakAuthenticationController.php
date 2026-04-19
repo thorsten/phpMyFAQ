@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Frontend;
 
 use Closure;
 use Exception;
+use JsonException;
 use phpMyFAQ\Auth\AuthKeycloak;
 use phpMyFAQ\Auth\Keycloak\KeycloakProviderConfigFactory;
 use phpMyFAQ\Auth\Oidc\OidcClient;
@@ -106,15 +107,17 @@ final class KeycloakAuthenticationController extends AbstractFrontController
     #[Route(path: '/auth/keycloak/logout', name: 'public.keycloak.logout', methods: ['GET'])]
     public function logout(): RedirectResponse
     {
+        $user = $this->getCurrentUserService();
+
         try {
             $providerConfig = $this->providerConfigFactory->create();
             if (!$providerConfig->enabled || $providerConfig->discoveryUrl === '') {
                 return new RedirectResponse($this->configuration->getDefaultUrl());
             }
 
-            $idToken = $this->oidcSession->getIdToken();
+            $idToken = $this->resolveLogoutIdToken($user);
 
-            $this->currentUser->deleteFromSession();
+            $user->deleteFromSession();
             $this->oidcSession->clearIdToken();
 
             $discoveryDocument = $this->discoveryService->discover($providerConfig);
@@ -122,7 +125,7 @@ final class KeycloakAuthenticationController extends AbstractFrontController
 
             return new RedirectResponse($logoutUrl ?? $this->configuration->getDefaultUrl());
         } catch (Exception) {
-            $this->currentUser->deleteFromSession();
+            $user->deleteFromSession();
             return new RedirectResponse($this->configuration->getDefaultUrl());
         }
     }
@@ -291,6 +294,31 @@ final class KeycloakAuthenticationController extends AbstractFrontController
         }
 
         return true;
+    }
+
+    private function resolveLogoutIdToken(CurrentUser $user): string
+    {
+        $idToken = trim($this->oidcSession->getIdToken());
+        if ($idToken !== '') {
+            return $idToken;
+        }
+
+        $jwtPayload = trim((string) $user->getUserData('jwt'));
+        if ($jwtPayload === '') {
+            return '';
+        }
+
+        try {
+            $jwt = json_decode($jwtPayload, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException) {
+            return '';
+        }
+
+        if (!is_array($jwt)) {
+            return '';
+        }
+
+        return trim((string) ($jwt['id_token'] ?? ''));
     }
 
     private function getCurrentUserService(): CurrentUser

@@ -70,6 +70,36 @@ final class AuthenticationControllerWebTest extends ControllerWebTestCase
         self::assertResponseContains('href="user/register"', $response);
     }
 
+    public function testLoginPageShowsKeycloakSignInWhenEnabled(): void
+    {
+        $this->getConfiguration()->getAll();
+        $this->overrideConfigurationValues([
+            'main.enableUserTracking' => false,
+            'keycloak.enable' => true,
+        ]);
+
+        $response = $this->requestPublic('GET', '/login');
+
+        self::assertResponseIsSuccessful($response);
+        self::assertResponseContains('./auth/keycloak/authorize', $response);
+        self::assertResponseContains('Sign in with Keycloak', $response);
+    }
+
+    public function testLoginPageHidesKeycloakSignInWhenDisabled(): void
+    {
+        $this->getConfiguration()->getAll();
+        $this->overrideConfigurationValues([
+            'main.enableUserTracking' => false,
+            'keycloak.enable' => false,
+        ]);
+
+        $response = $this->requestPublic('GET', '/login');
+
+        self::assertResponseIsSuccessful($response);
+        self::assertStringNotContainsString('./auth/keycloak/authorize', $response->getContent());
+        self::assertStringNotContainsString('Sign in with Keycloak', $response->getContent());
+    }
+
     public function testLoginRedirectsToAuthenticateWhenSsoUserIsPresent(): void
     {
         $this->getConfiguration()->getAll();
