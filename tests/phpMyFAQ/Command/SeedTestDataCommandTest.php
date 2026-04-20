@@ -7,6 +7,7 @@ namespace phpMyFAQ\Command;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Environment;
 use phpMyFAQ\Language;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -72,9 +73,18 @@ class SeedTestDataCommandTest extends TestCase
 
     private string $databasePath;
 
+    private string $previousEnvironment;
+
     protected function setUp(): void
     {
         parent::setUp();
+
+        // The command refuses to run outside APP_ENV=demo. Force demo for the
+        // duration of each test and restore the previous value in tearDown.
+        $environmentReflection = new ReflectionClass(Environment::class);
+        $environmentProperty = $environmentReflection->getProperty('environment');
+        $this->previousEnvironment = (string) $environmentProperty->getValue();
+        $environmentProperty->setValue(null, 'demo');
 
         // Work on a per-test copy of the shared SQLite fixture so that the
         // seed/purge cycles in these tests cannot pollute the database used
@@ -112,6 +122,11 @@ class SeedTestDataCommandTest extends TestCase
         $reflection = new ReflectionClass(Configuration::class);
         $property = $reflection->getProperty('configuration');
         $property->setValue(null, null);
+
+        // Restore the previous APP_ENV value.
+        $environmentReflection = new ReflectionClass(Environment::class);
+        $environmentProperty = $environmentReflection->getProperty('environment');
+        $environmentProperty->setValue(null, $this->previousEnvironment);
 
         parent::tearDown();
     }
@@ -198,6 +213,18 @@ class SeedTestDataCommandTest extends TestCase
         $secondTester->execute(['--fresh' => true]);
 
         $this->assertSame($firstCount, $this->countSeededFaqs());
+    }
+
+    public function testExecuteRejectsNonDemoEnvironment(): void
+    {
+        $environmentReflection = new ReflectionClass(Environment::class);
+        $environmentProperty = $environmentReflection->getProperty('environment');
+        $environmentProperty->setValue(null, 'production');
+
+        $exitCode = $this->commandTester->execute([]);
+
+        $this->assertSame(Command::FAILURE, $exitCode);
+        $this->assertStringContainsString('APP_ENV=demo', $this->commandTester->getDisplay());
     }
 
     public function testExecuteRejectsEmptyLocaleList(): void
