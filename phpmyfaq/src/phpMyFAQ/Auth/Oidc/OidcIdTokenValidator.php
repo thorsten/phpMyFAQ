@@ -171,7 +171,7 @@ final readonly class OidcIdTokenValidator
         if ($issuedAt > ($now + 60)) {
             throw new RuntimeException('OIDC id_token issued-at time is in the future');
         }
-        if ($issuedAt < ($now - 86400)) {
+        if ($issuedAt < ($now - 86_400)) {
             throw new RuntimeException('OIDC id_token issued-at time is too far in the past');
         }
     }

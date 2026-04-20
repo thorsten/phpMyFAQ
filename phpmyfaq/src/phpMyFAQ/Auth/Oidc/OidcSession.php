@@ -60,7 +60,7 @@ final class OidcSession extends AbstractSession
         $this->set(self::OIDC_PKCE_CODE, '');
     }
 
-    public function setIdToken(string $idToken): void
+    public function setIdToken(#[\SensitiveParameter] string $idToken): void
     {
         $this->set(self::OIDC_ID_ASSERTION, $idToken);
     }
