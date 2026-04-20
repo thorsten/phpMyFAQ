@@ -1,0 +1,242 @@
+[
+  {
+    "category": "getting-started",
+    "tags": ["installation", "php", "requirements"],
+    "translations": {
+      "en": {
+        "question": "Which PHP version is required for phpMyFAQ 4.2?",
+        "answer": "<p>phpMyFAQ 4.2 requires <strong>PHP 8.4</strong> or later. The application relies on modern language features such as readonly properties, enums, and constructor property promotion. Make sure your web server ships with a compatible PHP runtime before running the installer.</p>",
+        "keywords": "php, version, requirements, 8.4"
+      },
+      "de": {
+        "question": "Welche PHP-Version wird für phpMyFAQ 4.2 benötigt?",
+        "answer": "<p>phpMyFAQ 4.2 benötigt <strong>PHP 8.4</strong> oder neuer. Die Anwendung nutzt moderne Sprachfeatures wie readonly-Eigenschaften, Enums und Constructor Property Promotion. Stellen Sie vor dem Start des Installers sicher, dass Ihr Webserver eine kompatible PHP-Version bereitstellt.</p>",
+        "keywords": "php, version, anforderungen, 8.4"
+      }
+    }
+  },
+  {
+    "category": "getting-started",
+    "tags": ["installation", "mysql", "database"],
+    "translations": {
+      "en": {
+        "question": "Which databases does phpMyFAQ support?",
+        "answer": "<p>phpMyFAQ 4.2 supports <strong>MySQL/MariaDB, PostgreSQL, SQLite3, and MS SQL Server</strong>. The database type is chosen during installation and stored in <code>config/database.php</code>. All queries go through the built-in database abstraction layer, so the application code is portable across backends.</p>",
+        "keywords": "database, mysql, postgresql, sqlite, mssql"
+      },
+      "de": {
+        "question": "Welche Datenbanken unterstützt phpMyFAQ?",
+        "answer": "<p>phpMyFAQ 4.2 unterstützt <strong>MySQL/MariaDB, PostgreSQL, SQLite3 und MS SQL Server</strong>. Der Datenbanktyp wird während der Installation ausgewählt und in <code>config/database.php</code> gespeichert. Alle Abfragen laufen über die eingebaute Datenbankabstraktion, der Anwendungscode ist somit zwischen den Backends portabel.</p>",
+        "keywords": "datenbank, mysql, postgresql, sqlite, mssql"
+      }
+    }
+  },
+  {
+    "category": "getting-started",
+    "tags": ["upgrade", "migration"],
+    "translations": {
+      "en": {
+        "question": "How do I upgrade from phpMyFAQ 4.1 to 4.2?",
+        "answer": "<p>Back up your database and the <code>content/</code> folder first. Then replace the application files with the 4.2 release and run <code>php bin/console phpmyfaq:update</code> or open the web-based updater. The updater applies schema changes automatically. Clear the route cache afterwards with <code>rm -rf phpmyfaq/cache/routes</code>.</p>",
+        "keywords": "upgrade, update, migration, 4.1, 4.2"
+      },
+      "de": {
+        "question": "Wie aktualisiere ich von phpMyFAQ 4.1 auf 4.2?",
+        "answer": "<p>Sichern Sie zunächst Ihre Datenbank und den Ordner <code>content/</code>. Ersetzen Sie anschließend die Anwendungsdateien durch das 4.2-Release und führen Sie <code>php bin/console phpmyfaq:update</code> aus oder öffnen Sie den Web-Updater. Der Updater wendet Schemaänderungen automatisch an. Leeren Sie danach den Route-Cache mit <code>rm -rf phpmyfaq/cache/routes</code>.</p>",
+        "keywords": "upgrade, update, migration, 4.1, 4.2"
+      }
+    }
+  },
+  {
+    "category": "administration",
+    "tags": ["users", "groups", "permissions"],
+    "translations": {
+      "en": {
+        "question": "How do groups and permissions work in phpMyFAQ?",
+        "answer": "<p>phpMyFAQ uses a three-level model: <strong>users</strong> belong to <strong>groups</strong>, and groups hold <strong>rights</strong>. Categories and individual FAQs can also be restricted to specific users or groups via the permission tab in the admin backend. Guests see only content marked as public.</p>",
+        "keywords": "users, groups, permissions, rights, acl"
+      },
+      "de": {
+        "question": "Wie funktionieren Gruppen und Berechtigungen in phpMyFAQ?",
+        "answer": "<p>phpMyFAQ verwendet ein dreistufiges Modell: <strong>Benutzer</strong> gehören zu <strong>Gruppen</strong>, und Gruppen enthalten <strong>Rechte</strong>. Kategorien und einzelne FAQs können im Admin-Backend zusätzlich auf bestimmte Benutzer oder Gruppen beschränkt werden. Gäste sehen nur öffentliche Inhalte.</p>",
+        "keywords": "benutzer, gruppen, berechtigungen, rechte, acl"
+      }
+    }
+  },
+  {
+    "category": "administration",
+    "tags": ["ldap", "sso", "authentication"],
+    "translations": {
+      "en": {
+        "question": "Does phpMyFAQ support LDAP or single sign-on?",
+        "answer": "<p>Yes. phpMyFAQ ships with authentication sources for <strong>LDAP/Active Directory</strong>, <strong>Keycloak (OIDC)</strong>, <strong>Microsoft Entra / Azure AD</strong>, and <strong>SAML</strong>. The authentication chain tries each configured source in order and falls back to the local database.</p>",
+        "keywords": "ldap, sso, keycloak, azure, saml, oidc"
+      },
+      "de": {
+        "question": "Unterstützt phpMyFAQ LDAP oder Single Sign-On?",
+        "answer": "<p>Ja. phpMyFAQ liefert Authentifizierungsquellen für <strong>LDAP/Active Directory</strong>, <strong>Keycloak (OIDC)</strong>, <strong>Microsoft Entra / Azure AD</strong> und <strong>SAML</strong> mit. Die Authentifizierungs-Kette probiert die konfigurierten Quellen der Reihe nach und fällt auf die lokale Datenbank zurück.</p>",
+        "keywords": "ldap, sso, keycloak, azure, saml, oidc"
+      }
+    }
+  },
+  {
+    "category": "administration",
+    "tags": ["import", "csv"],
+    "translations": {
+      "en": {
+        "question": "How do I import FAQs from a CSV file?",
+        "answer": "<p>In the admin backend, go to <em>Content &rarr; Import</em> and upload a CSV with nine columns: <code>category_id, question, answer, keywords, lang, author, email, active, sticky</code>. The file must be UTF-8 encoded. Invalid rows are skipped and reported in the import log.</p>",
+        "keywords": "import, csv, bulk, migration"
+      },
+      "de": {
+        "question": "Wie importiere ich FAQs aus einer CSV-Datei?",
+        "answer": "<p>Gehen Sie im Admin-Backend zu <em>Inhalt &rarr; Import</em> und laden Sie eine CSV-Datei mit neun Spalten hoch: <code>category_id, question, answer, keywords, lang, author, email, active, sticky</code>. Die Datei muss UTF-8-kodiert sein. Ungültige Zeilen werden übersprungen und im Import-Log protokolliert.</p>",
+        "keywords": "import, csv, massen, migration"
+      }
+    }
+  },
+  {
+    "category": "features",
+    "tags": ["search", "elasticsearch", "opensearch"],
+    "translations": {
+      "en": {
+        "question": "How do I enable Elasticsearch or OpenSearch?",
+        "answer": "<p>In the admin backend, open <em>Configuration &rarr; Search Engine</em> and select either Elasticsearch or OpenSearch. Provide the host, port, and index name. Run the initial index build from the same page. phpMyFAQ will then use the external engine for full-text queries and fall back to the database index if the service is unreachable.</p>",
+        "keywords": "search, elasticsearch, opensearch, index"
+      },
+      "de": {
+        "question": "Wie aktiviere ich Elasticsearch oder OpenSearch?",
+        "answer": "<p>Öffnen Sie im Admin-Backend <em>Konfiguration &rarr; Suchmaschine</em> und wählen Sie entweder Elasticsearch oder OpenSearch aus. Geben Sie Host, Port und Indexname an. Bauen Sie den initialen Index über dieselbe Seite auf. phpMyFAQ nutzt die externe Engine anschließend für Volltextsuchen und fällt bei Nichterreichbarkeit auf den Datenbankindex zurück.</p>",
+        "keywords": "suche, elasticsearch, opensearch, index"
+      }
+    }
+  },
+  {
+    "category": "features",
+    "tags": ["api", "rest", "oauth"],
+    "translations": {
+      "en": {
+        "question": "Does phpMyFAQ provide a REST API?",
+        "answer": "<p>Yes. phpMyFAQ exposes a full REST API under <code>/api/v3.x/</code> for FAQs, categories, tags, search, comments, and open questions. Authentication is handled via API keys or OAuth2 bearer tokens. See the OpenAPI specification in the <code>docs/</code> directory for the full endpoint reference.</p>",
+        "keywords": "api, rest, json, openapi, oauth"
+      },
+      "de": {
+        "question": "Stellt phpMyFAQ eine REST-API bereit?",
+        "answer": "<p>Ja. phpMyFAQ stellt unter <code>/api/v3.x/</code> eine vollständige REST-API für FAQs, Kategorien, Tags, Suche, Kommentare und offene Fragen bereit. Die Authentifizierung erfolgt über API-Keys oder OAuth2-Bearer-Tokens. Die vollständige Endpunkt-Referenz finden Sie in der OpenAPI-Spezifikation im Verzeichnis <code>docs/</code>.</p>",
+        "keywords": "api, rest, json, openapi, oauth"
+      }
+    }
+  },
+  {
+    "category": "features",
+    "tags": ["multilingual", "i18n", "translation"],
+    "translations": {
+      "en": {
+        "question": "How does multi-language support work?",
+        "answer": "<p>Every FAQ and category exists as an independent row per language, identified by the composite key <code>(id, lang)</code>. You can translate an entry in the admin backend by opening it and choosing <em>Add translation</em>. phpMyFAQ currently ships with more than 40 UI translations stored in <code>phpmyfaq/translations/</code>.</p>",
+        "keywords": "multilingual, i18n, translation, language"
+      },
+      "de": {
+        "question": "Wie funktioniert die Mehrsprachigkeit?",
+        "answer": "<p>Jede FAQ und jede Kategorie existiert als eigene Zeile pro Sprache, identifiziert durch den zusammengesetzten Schlüssel <code>(id, lang)</code>. Eintragsübersetzungen legen Sie im Admin-Backend an, indem Sie den Eintrag öffnen und <em>Übersetzung hinzufügen</em> wählen. phpMyFAQ enthält derzeit mehr als 40 UI-Übersetzungen im Ordner <code>phpmyfaq/translations/</code>.</p>",
+        "keywords": "mehrsprachig, i18n, übersetzung, sprache"
+      }
+    }
+  },
+  {
+    "category": "features",
+    "tags": ["attachments", "files"],
+    "translations": {
+      "en": {
+        "question": "Can I attach files to an FAQ?",
+        "answer": "<p>Yes. Every FAQ supports file attachments. Uploads are stored either on the local filesystem or encrypted on disk, depending on the <em>Attachments</em> configuration. MIME-type checks and size limits are enforced server-side to prevent malicious uploads.</p>",
+        "keywords": "attachments, files, upload"
+      },
+      "de": {
+        "question": "Kann ich Dateien an eine FAQ anhängen?",
+        "answer": "<p>Ja. Jede FAQ unterstützt Dateianhänge. Uploads werden entweder im lokalen Dateisystem oder verschlüsselt auf der Platte abgelegt, abhängig von der <em>Anhänge</em>-Konfiguration. MIME-Typ-Prüfungen und Größenbeschränkungen werden serverseitig erzwungen, um schädliche Uploads zu verhindern.</p>",
+        "keywords": "anhänge, dateien, upload"
+      }
+    }
+  },
+  {
+    "category": "development",
+    "tags": ["routing", "symfony"],
+    "translations": {
+      "en": {
+        "question": "How does the routing system work?",
+        "answer": "<p>phpMyFAQ 4.2 uses the Symfony Router with PHP 8 <code>#[Route]</code> attributes on controller methods. Routes are discovered automatically by the <code>AttributeRouteLoader</code> and cached in production. To add a new route, create a controller extending <code>AbstractController</code> and annotate the method.</p>",
+        "keywords": "routing, symfony, controller, attributes"
+      },
+      "de": {
+        "question": "Wie funktioniert das Routing-System?",
+        "answer": "<p>phpMyFAQ 4.2 verwendet den Symfony-Router mit PHP-8-<code>#[Route]</code>-Attributen an Controller-Methoden. Routen werden vom <code>AttributeRouteLoader</code> automatisch erkannt und in der Produktion gecached. Um eine neue Route anzulegen, erstellen Sie einen Controller, der von <code>AbstractController</code> erbt, und annotieren die Methode.</p>",
+        "keywords": "routing, symfony, controller, attribute"
+      }
+    }
+  },
+  {
+    "category": "development",
+    "tags": ["twig", "templates"],
+    "translations": {
+      "en": {
+        "question": "Which templating engine does phpMyFAQ use?",
+        "answer": "<p>phpMyFAQ uses <strong>Twig</strong> for all HTML output. Frontend templates live in <code>phpmyfaq/assets/templates/default/</code>, admin templates in <code>phpmyfaq/assets/templates/admin/</code>. Raw PHP inside templates is not used; all logic belongs in controllers.</p>",
+        "keywords": "twig, templates, html"
+      },
+      "de": {
+        "question": "Welche Template-Engine verwendet phpMyFAQ?",
+        "answer": "<p>phpMyFAQ verwendet <strong>Twig</strong> für die gesamte HTML-Ausgabe. Frontend-Templates liegen unter <code>phpmyfaq/assets/templates/default/</code>, Admin-Templates unter <code>phpmyfaq/assets/templates/admin/</code>. Rohes PHP in Templates wird nicht verwendet; jegliche Logik gehört in Controller.</p>",
+        "keywords": "twig, templates, html"
+      }
+    }
+  },
+  {
+    "category": "development",
+    "tags": ["database", "abstraction"],
+    "translations": {
+      "en": {
+        "question": "How do I write database-agnostic queries?",
+        "answer": "<p>Always go through the database abstraction: <code>$this-&gt;configuration-&gt;getDb()</code>. Use <code>Database::getTablePrefix()</code> to prefix table names and <code>-&gt;escape()</code> for untrusted values. Never hard-code table names or concatenate user input into SQL.</p>",
+        "keywords": "database, abstraction, sql, prefix"
+      },
+      "de": {
+        "question": "Wie schreibe ich datenbankunabhängige Abfragen?",
+        "answer": "<p>Nutzen Sie immer die Datenbankabstraktion: <code>$this-&gt;configuration-&gt;getDb()</code>. Verwenden Sie <code>Database::getTablePrefix()</code> für Tabellennamen und <code>-&gt;escape()</code> für nicht vertrauenswürdige Werte. Hart kodieren Sie niemals Tabellennamen und verketten Sie keine Benutzereingaben in SQL.</p>",
+        "keywords": "datenbank, abstraktion, sql, prefix"
+      }
+    }
+  },
+  {
+    "category": "troubleshooting",
+    "tags": ["routing", "cache"],
+    "translations": {
+      "en": {
+        "question": "My new route returns a 404, what should I do?",
+        "answer": "<p>In production, routes are compiled into <code>phpmyfaq/cache/routes/</code>. After adding or modifying a route, delete that directory: <code>rm -rf phpmyfaq/cache/routes</code>. In development with <code>DEBUG=true</code>, routes are rebuilt on every request and no manual clearing is required.</p>",
+        "keywords": "404, route, cache, not found"
+      },
+      "de": {
+        "question": "Meine neue Route liefert 404 — was tun?",
+        "answer": "<p>In der Produktion werden Routen nach <code>phpmyfaq/cache/routes/</code> kompiliert. Nach dem Anlegen oder Ändern einer Route löschen Sie dieses Verzeichnis: <code>rm -rf phpmyfaq/cache/routes</code>. Im Entwicklungsmodus mit <code>DEBUG=true</code> werden Routen bei jedem Request neu erstellt, ein manuelles Leeren ist nicht nötig.</p>",
+        "keywords": "404, route, cache, nicht gefunden"
+      }
+    }
+  },
+  {
+    "category": "troubleshooting",
+    "tags": ["email", "smtp"],
+    "translations": {
+      "en": {
+        "question": "Why are notification emails not being sent?",
+        "answer": "<p>Check <em>Configuration &rarr; Mail</em> and ensure a valid SMTP host, port, username, and password are set. Use the <em>Send test mail</em> button to verify connectivity. Also confirm that your server can reach the SMTP host and that no firewall blocks the outbound port.</p>",
+        "keywords": "email, smtp, notification, mail"
+      },
+      "de": {
+        "question": "Warum werden Benachrichtigungs-E-Mails nicht versendet?",
+        "answer": "<p>Prüfen Sie <em>Konfiguration &rarr; Mail</em> und stellen Sie sicher, dass gültige SMTP-Daten (Host, Port, Benutzername, Passwort) hinterlegt sind. Nutzen Sie die Schaltfläche <em>Testmail senden</em> zum Prüfen der Verbindung. Stellen Sie außerdem sicher, dass Ihr Server den SMTP-Host erreicht und keine Firewall den ausgehenden Port blockiert.</p>",
+        "keywords": "email, smtp, benachrichtigung, mail"
+      }
+    }
+  }
+]

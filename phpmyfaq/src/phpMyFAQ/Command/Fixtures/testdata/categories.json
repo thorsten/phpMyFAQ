@@ -1,0 +1,72 @@
+[
+  {
+    "slug": "getting-started",
+    "parent": null,
+    "translations": {
+      "en": {
+        "name": "Getting Started",
+        "description": "First steps with phpMyFAQ: installation, configuration, and upgrade."
+      },
+      "de": {
+        "name": "Erste Schritte",
+        "description": "Die ersten Schritte mit phpMyFAQ: Installation, Konfiguration und Upgrade."
+      }
+    }
+  },
+  {
+    "slug": "administration",
+    "parent": null,
+    "translations": {
+      "en": {
+        "name": "Administration",
+        "description": "Managing users, groups, categories, and permissions in phpMyFAQ."
+      },
+      "de": {
+        "name": "Administration",
+        "description": "Verwaltung von Benutzern, Gruppen, Kategorien und Berechtigungen in phpMyFAQ."
+      }
+    }
+  },
+  {
+    "slug": "features",
+    "parent": null,
+    "translations": {
+      "en": {
+        "name": "Features",
+        "description": "Search, REST API, multi-language support, and attachments."
+      },
+      "de": {
+        "name": "Funktionen",
+        "description": "Suche, REST-API, Mehrsprachigkeit und Anhänge."
+      }
+    }
+  },
+  {
+    "slug": "development",
+    "parent": null,
+    "translations": {
+      "en": {
+        "name": "Development",
+        "description": "Routing, Twig templates, and the database abstraction layer."
+      },
+      "de": {
+        "name": "Entwicklung",
+        "description": "Routing, Twig-Templates und die Datenbankabstraktion."
+      }
+    }
+  },
+  {
+    "slug": "troubleshooting",
+    "parent": null,
+    "translations": {
+      "en": {
+        "name": "Troubleshooting",
+        "description": "Common problems and how to solve them."
+      },
+      "de": {
+        "name": "Fehlerbehebung",
+        "description": "Häufige Probleme und deren Lösungen."
+      }
+    }
+  }
+]

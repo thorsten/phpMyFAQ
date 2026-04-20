@@ -77,12 +77,12 @@ readonly class RouterListener
     {
         // Strip /index.php suffix (e.g. /update/index.php → /update)
         if (str_ends_with($path, '/index.php')) {
-            $path = substr($path, 0, -10);
+            $path = substr($path, offset: 0, length: -10);
         }
 
         // Remove trailing slash, but keep root path as /
         if ($path !== '/' && str_ends_with($path, '/')) {
-            $path = rtrim($path, '/');
+            $path = rtrim($path, characters: '/');
         }
 
         return $path === '' ? '/' : $path;

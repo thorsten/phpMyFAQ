@@ -22,6 +22,11 @@ class ChangelogTest extends TestCase
     {
         parent::setUp();
 
+        // Ensure REQUEST_TIME is defined — CLI/PHPUnit runs may not populate $_SERVER.
+        if (!isset($_SERVER['REQUEST_TIME'])) {
+            $_SERVER['REQUEST_TIME'] = time();
+        }
+
         $tempFile = tempnam(sys_get_temp_dir(), 'pmf-changelog-');
         $this->assertNotFalse($tempFile);
         $this->dbPath = $tempFile;

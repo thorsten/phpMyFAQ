@@ -1,0 +1,38 @@
+[
+  {
+    "translations": {
+      "en": {
+        "header": "phpMyFAQ 4.2 released",
+        "message": "<p>We are pleased to announce the release of phpMyFAQ 4.2. This version ships with an improved Symfony-based routing layer, OAuth2 support, and tighter integration with Elasticsearch and OpenSearch. See the changelog for the full list of changes.</p>"
+      },
+      "de": {
+        "header": "phpMyFAQ 4.2 veröffentlicht",
+        "message": "<p>Wir freuen uns, die Veröffentlichung von phpMyFAQ 4.2 bekanntzugeben. Diese Version bringt eine verbesserte Symfony-basierte Routing-Schicht, OAuth2-Unterstützung und eine engere Integration mit Elasticsearch und OpenSearch. Die vollständige Liste der Änderungen finden Sie im Changelog.</p>"
+      }
+    }
+  },
+  {
+    "translations": {
+      "en": {
+        "header": "Security advisory: update recommended",
+        "message": "<p>A security audit uncovered a low-severity information-disclosure issue in the admin backend. The issue is fixed in 4.2.1. We recommend updating all production installations. No known exploits have been observed in the wild.</p>"
+      },
+      "de": {
+        "header": "Sicherheitshinweis: Update empfohlen",
+        "message": "<p>Ein Sicherheits-Audit hat ein Informations-Offenlegungs-Problem geringer Schwere im Admin-Backend aufgedeckt. Das Problem ist in 4.2.1 behoben. Wir empfehlen, alle Produktivinstallationen zu aktualisieren. Ausnutzungen in freier Wildbahn sind nicht bekannt.</p>"
+      }
+    }
+  },
+  {
+    "translations": {
+      "en": {
+        "header": "New feature: Web Push notifications",
+        "message": "<p>Editors can now notify subscribed visitors about new or updated FAQs through standards-based Web Push. Subscriptions are managed in the visitor's browser; no third-party service is required.</p>"
+      },
+      "de": {
+        "header": "Neues Feature: Web-Push-Benachrichtigungen",
+        "message": "<p>Redakteure können abonnierte Besucher jetzt per standardbasiertem Web-Push über neue oder aktualisierte FAQs informieren. Abonnements werden im Browser des Besuchers verwaltet; ein Drittanbieterdienst ist nicht nötig.</p>"
+      }
+    }
+  }
+]

@@ -56,6 +56,7 @@ use phpMyFAQ\Category\Image;
 use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Command\CreateHashesCommand;
+use phpMyFAQ\Command\SeedTestDataCommand;
 use phpMyFAQ\Controller\Administration\Api\CategoryController as AdminApiCategoryController;
 use phpMyFAQ\Controller\Administration\Api\CommentController as AdminApiCommentController;
 use phpMyFAQ\Controller\Administration\Api\ConfigurationController as AdminApiConfigurationController;
@@ -762,6 +763,8 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.system'),
         service('filesystem'),
     ]);
+
+    $services->set(SeedTestDataCommand::class, SeedTestDataCommand::class);
 
     // ========== Controller services (constructor injection) ==========
 

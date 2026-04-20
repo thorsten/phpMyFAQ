@@ -178,7 +178,7 @@ class Update extends AbstractSetup
     {
         $basePath = $request->getBasePath();
         if (str_ends_with($basePath, 'update')) {
-            $basePath = substr($basePath, 0, -strlen('update'));
+            $basePath = substr($basePath, offset: 0, length: -strlen('update'));
         }
 
         $htaccessPath = PMF_ROOT_DIR . '/.htaccess';

@@ -214,7 +214,7 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
             }
 
             $desiredGroupIds[] = $groupId;
-            if (in_array($groupId, $currentGroupIds, true)) {
+            if (in_array($groupId, $currentGroupIds, strict: true)) {
                 continue;
             }
 
@@ -234,7 +234,10 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
                 continue;
             }
 
-            if (!in_array($groupId, $currentGroupIds, true) || in_array($groupId, $desiredGroupIds, true)) {
+            if (
+                !in_array($groupId, $currentGroupIds, strict: true)
+                || in_array($groupId, $desiredGroupIds, strict: true)
+            ) {
                 continue;
             }
 
@@ -311,7 +314,7 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
     private function redactIdentifier(string $identifier): string
     {
         if (str_contains($identifier, '@')) {
-            [$local, $domain] = explode('@', $identifier, 2);
+            [$local, $domain] = explode('@', string: $identifier, limit: 2);
             return $local[0] . '***@' . $domain;
         }
 
@@ -319,7 +322,7 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
             return str_repeat('*', mb_strlen($identifier));
         }
 
-        return mb_substr($identifier, 0, 3) . '…';
+        return mb_substr($identifier, start: 0, length: 3) . '…';
     }
 
     /**

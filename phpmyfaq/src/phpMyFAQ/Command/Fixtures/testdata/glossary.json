@@ -1,0 +1,74 @@
+[
+  {
+    "translations": {
+      "en": {
+        "item": "FAQ",
+        "definition": "Frequently Asked Questions — a curated list of questions and answers about a topic."
+      },
+      "de": {
+        "item": "FAQ",
+        "definition": "Frequently Asked Questions — eine kuratierte Liste häufig gestellter Fragen und Antworten zu einem Thema."
+      }
+    }
+  },
+  {
+    "translations": {
+      "en": {
+        "item": "CSRF",
+        "definition": "Cross-Site Request Forgery — an attack that forces an authenticated user to submit a request they did not intend. phpMyFAQ defends against it with per-form tokens."
+      },
+      "de": {
+        "item": "CSRF",
+        "definition": "Cross-Site Request Forgery — ein Angriff, bei dem ein authentifizierter Benutzer zur ungewollten Ausführung einer Anfrage verleitet wird. phpMyFAQ schützt sich dagegen mit Pro-Formular-Tokens."
+      }
+    }
+  },
+  {
+    "translations": {
+      "en": {
+        "item": "SEO",
+        "definition": "Search Engine Optimization — the practice of improving a site's visibility in search results. phpMyFAQ generates sitemaps and semantic metadata automatically."
+      },
+      "de": {
+        "item": "SEO",
+        "definition": "Search Engine Optimization — die Optimierung der Sichtbarkeit einer Seite in Suchergebnissen. phpMyFAQ erzeugt Sitemaps und semantische Metadaten automatisch."
+      }
+    }
+  },
+  {
+    "translations": {
+      "en": {
+        "item": "JWT",
+        "definition": "JSON Web Token — a compact, URL-safe token format used by the OAuth2 resource server to authenticate API requests."
+      },
+      "de": {
+        "item": "JWT",
+        "definition": "JSON Web Token — ein kompaktes, URL-sicheres Token-Format, das vom OAuth2-Resource-Server zur Authentifizierung von API-Anfragen genutzt wird."
+      }
+    }
+  },
+  {
+    "translations": {
+      "en": {
+        "item": "CAPTCHA",
+        "definition": "Completely Automated Public Turing test to tell Computers and Humans Apart. phpMyFAQ uses an image-based CAPTCHA on public forms to block automated abuse."
+      },
+      "de": {
+        "item": "CAPTCHA",
+        "definition": "Completely Automated Public Turing test to tell Computers and Humans Apart. phpMyFAQ verwendet ein bildbasiertes CAPTCHA in öffentlichen Formularen, um automatisierten Missbrauch zu verhindern."
+      }
+    }
+  },
+  {
+    "translations": {
+      "en": {
+        "item": "OAuth",
+        "definition": "An open authorization protocol. phpMyFAQ implements OAuth2 for API access with authorization-code, refresh-token, and client-credentials grants."
+      },
+      "de": {
+        "item": "OAuth",
+        "definition": "Ein offenes Autorisierungsprotokoll. phpMyFAQ implementiert OAuth2 für den API-Zugriff mit Authorization-Code-, Refresh-Token- und Client-Credentials-Grants."
+      }
+    }
+  }
+]
