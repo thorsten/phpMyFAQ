@@ -30,6 +30,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Entity\NewsMessage;
+use phpMyFAQ\Environment;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\News;
@@ -82,6 +83,13 @@ class SeedTestDataCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $io->title('phpMyFAQ Test Data Seeder');
+
+        if (Environment::getEnvironment() !== 'demo') {
+            $io->error(
+                'This command can only be run when APP_ENV=demo. Current environment: ' . Environment::getEnvironment(),
+            );
+            return Command::FAILURE;
+        }
 
         /** @var string $localeOption */
         $localeOption = $input->getOption('locale');
