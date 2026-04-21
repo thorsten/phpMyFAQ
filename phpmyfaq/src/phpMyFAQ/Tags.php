@@ -521,19 +521,16 @@ class Tags
     private function buildPermissionCheck(): string
     {
         $groupSupport = $this->configuration->get(item: 'security.permLevel') !== 'basic';
+        $groupList = $this->normalizePermissionGroups();
 
         if ($groupSupport) {
             if (-1 === $this->user) {
                 // Only group permissions apply (anonymous user)
-                return sprintf('AND fdg.group_id IN (%s)', implode(', ', $this->groups));
+                return sprintf('AND fdg.group_id IN (%s)', $groupList);
             }
 
             // Check both user and group permissions
-            return sprintf(
-                'AND ( fdu.user_id = %d OR fdg.group_id IN (%s) )',
-                (int) $this->user,
-                implode(', ', $this->groups),
-            );
+            return sprintf('AND ( fdu.user_id = %d OR fdg.group_id IN (%s) )', (int) $this->user, $groupList);
         }
 
         // Basic permission level - only user permissions
@@ -543,5 +540,12 @@ class Tags
 
         // Anonymous user with basic permission level
         return 'AND fdu.user_id = -1';
+    }
+
+    private function normalizePermissionGroups(): string
+    {
+        $normalizedGroups = array_map(static fn($group): int => (int) $group, $this->groups);
+
+        return $normalizedGroups === [] ? '-1' : implode(', ', $normalizedGroups);
     }
 }

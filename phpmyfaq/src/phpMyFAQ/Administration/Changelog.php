@@ -43,6 +43,7 @@ readonly class Changelog
      */
     public function add(int $id, int $userId, string $text, string $lang, int $revisionId = 0): bool
     {
+        $db = $this->configuration->getDb();
         $query = sprintf(
             "INSERT INTO
                 %sfaqchanges
@@ -50,16 +51,16 @@ readonly class Changelog
                 VALUES
             (%d, %d, '%s', %d, %d, %d, '%s')",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqchanges', 'id'),
+            $db->nextId(Database::getTablePrefix() . 'faqchanges', 'id'),
             $id,
-            $lang,
+            $db->escape($lang),
             $revisionId,
             $userId,
             Request::createFromGlobals()->server->get('REQUEST_TIME'),
-            $text,
+            $db->escape($text),
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool) $db->query($query);
     }
 
     /**

@@ -276,4 +276,24 @@ class QuestionRepositoryTest extends TestCase
         $this->assertIsArray($questions);
         $this->assertEmpty($questions);
     }
+
+    public function testDeleteEscapesLanguageValues(): void
+    {
+        $questionEntity = new QuestionEntity();
+        $questionEntity
+            ->setUsername('testuser')
+            ->setEmail('test@example.org')
+            ->setCategoryId(1)
+            ->setQuestion('Question that must survive')
+            ->setLanguage('en')
+            ->setIsVisible(true);
+
+        $this->repository->add($questionEntity);
+
+        $result = $this->repository->delete(1, "en' OR 1=1 -- ");
+
+        $this->assertTrue($result);
+        $this->assertStringContainsString("en'' OR 1=1 -- ", $this->dbHandle->log());
+        $this->assertNotEmpty($this->repository->getById(1, 'en'));
+    }
 }

@@ -130,8 +130,8 @@ class Faq
         bool $preview = true,
     ): array {
         $faqData = [];
-
-        $currentTable = $orderBy === 'visits' ? 'fv' : 'fd';
+        [$currentTable, $orderColumn] = $this->normalizeCategoryOrder($orderBy);
+        $sortDirection = $this->normalizeSortDirection($sortBy);
 
         $now = date(format: 'YmdHis');
         $queryHelper = new QueryHelper($this->user, $this->groups);
@@ -189,11 +189,11 @@ class Faq
             $now,
             $now,
             $categoryId,
-            $this->configuration->getLanguage()->getLanguage(),
+            $this->getEscapedCurrentLanguage(),
             $queryHelper->queryPermission($this->groupSupport),
             $currentTable,
-            $this->configuration->getDb()->escape($orderBy),
-            $this->configuration->getDb()->escape($sortBy),
+            $orderColumn,
+            $sortDirection,
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -271,19 +271,16 @@ class Faq
         $page = Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
         $output = '';
         $title = '';
+        [$currentTable, $orderColumn] = $this->normalizeCategoryOrder($orderBy);
+        $sortDirection = $this->normalizeSortDirection($sortBy);
 
-        $currentTable = $orderBy === 'visits' ? 'fv' : 'fd';
-
+        // If random FAQs are activated, we don't need an order
         $order = sprintf(
             'ORDER BY fd.sticky DESC, %s.%s %s',
             $currentTable,
-            $this->configuration->getDb()->escape($orderBy),
-            $this->configuration->getDb()->escape($sortBy),
+            $orderColumn,
+            $sortDirection
         );
-        // If random FAQs are activated, we don't need an order
-        if (true === $this->configuration->get(item: 'records.randomSort')) {
-            $order = '';
-        }
 
         $now = date(format: 'YmdHis');
         $queryHelper = new QueryHelper($this->user, $this->groups);
@@ -339,7 +336,7 @@ class Faq
             $now,
             $now,
             $categoryId,
-            $this->configuration->getLanguage()->getLanguage(),
+            $this->getEscapedCurrentLanguage(),
             $queryHelper->queryPermission($this->groupSupport),
             $order,
         );
@@ -474,7 +471,9 @@ class Faq
         string $sortBy = 'ASC',
         bool $usePagination = true,
     ): array {
-        $records = implode(', ', $faqIds);
+        $records = $this->normalizeFaqIds($faqIds);
+        $orderExpression = $this->normalizeFaqOrderBy($orderBy);
+        $sortDirection = $this->normalizeSortDirection($sortBy);
         $page = Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
 
         $now = date(format: 'YmdHis');
@@ -531,10 +530,10 @@ class Faq
             $now,
             $now,
             $records,
-            $this->configuration->getLanguage()->getLanguage(),
+            $this->getEscapedCurrentLanguage(),
             $queryHelper->queryPermission($this->groupSupport),
-            $this->configuration->getDb()->escape($orderBy),
-            $this->configuration->getDb()->escape($sortBy),
+            $orderExpression,
+            $sortDirection,
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -712,7 +711,7 @@ class Faq
             Database::getTablePrefix(),
             $faqId,
             $faqRevisionId !== null ? 'AND revision_id = ' . $faqRevisionId : '',
-            $faqLanguage,
+            $this->escapeSqlValue($faqLanguage),
             $isAdmin ? 'AND 1=1' : $queryHelper->queryPermission($this->groupSupport),
         );
 
@@ -728,6 +727,7 @@ class Faq
     public function getFaqsByIds(array $faqIds): array
     {
         $faqRecords = [];
+        $records = $this->normalizeFaqIds($faqIds);
 
         $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = sprintf(
@@ -772,8 +772,8 @@ class Faq
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            implode(',', $faqIds),
-            $this->configuration->getLanguage()->getLanguage(),
+            $records,
+            $this->getEscapedCurrentLanguage(),
             $queryHelper->queryPermission($this->groupSupport),
         );
 
@@ -878,7 +878,7 @@ class Faq
             Database::getTablePrefix(),
             $faqId,
             $categoryId,
-            $this->configuration->getLanguage()->getLanguage(),
+            $this->getEscapedCurrentLanguage(),
             $queryHelper->queryPermission($this->groupSupport),
         );
 
@@ -1527,7 +1527,7 @@ class Faq
             "SELECT thema AS question FROM %sfaqdata WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $faqId,
-            $this->configuration->getLanguage()->getLanguage(),
+            $this->getEscapedCurrentLanguage(),
         );
         $result = $this->configuration->getDb()->query($query);
 
@@ -1560,7 +1560,7 @@ class Faq
             "SELECT keywords FROM %sfaqdata WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $faqId,
-            $this->configuration->getLanguage()->getLanguage(),
+            $this->getEscapedCurrentLanguage(),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -1678,7 +1678,7 @@ class Faq
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $this->configuration->getLanguage()->getLanguage(),
+            $this->getEscapedCurrentLanguage(),
             $queryHelper->queryPermission($this->groupSupport),
         );
 
@@ -1734,6 +1734,58 @@ class Faq
     private function sortStickyArrayByOrder(array $first, array $second): int
     {
         return $first['order'] - $second['order'];
+    }
+
+    private function escapeSqlValue(string $value): string
+    {
+        return $this->configuration->getDb()->escape($value);
+    }
+
+    private function getEscapedCurrentLanguage(): string
+    {
+        return $this->escapeSqlValue($this->configuration->getLanguage()->getLanguage());
+    }
+
+    /**
+     * @return array{string, string}
+     */
+    private function normalizeCategoryOrder(string $orderBy): array
+    {
+        return match ($orderBy) {
+            'visits' => ['fv', 'visits'],
+            'updated' => ['fd', 'updated'],
+            'created' => ['fd', 'created'],
+            'thema', 'question' => ['fd', 'thema'],
+            'sticky' => ['fd', 'sticky'],
+            'sticky_order' => ['fd', 'sticky_order'],
+            default => ['fd', 'id'],
+        };
+    }
+
+    private function normalizeFaqOrderBy(string $orderBy): string
+    {
+        return match ($orderBy) {
+            'fv.visits', 'visits' => 'fv.visits',
+            'fd.updated', 'updated' => 'fd.updated',
+            'fd.created', 'created' => 'fd.created',
+            'fd.thema', 'thema', 'question' => 'fd.thema',
+            default => 'fd.id',
+        };
+    }
+
+    private function normalizeSortDirection(string $sortBy): string
+    {
+        return strtoupper($sortBy) === 'DESC' ? 'DESC' : 'ASC';
+    }
+
+    /**
+     * @param array<int|string> $faqIds
+     */
+    private function normalizeFaqIds(array $faqIds): string
+    {
+        $normalizedFaqIds = array_map(static fn($faqId): int => (int) $faqId, $faqIds);
+
+        return $normalizedFaqIds === [] ? '0' : implode(', ', $normalizedFaqIds);
     }
 
     public function hasTitleAHash(string $title): bool

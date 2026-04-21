@@ -112,7 +112,7 @@ class TagsTest extends TestCase
         $this->tags->create(1, $testData);
 
         $this->assertEquals(
-            '<a class="btn btn-outline-primary" title="Foo" href="http://example.com/./search.html?tagging_id=1">Foo</a>',
+            '<a class="btn btn-outline-primary" title="Foo" href="http://example.com/tags/1/foo.html">Foo</a>',
             $this->tags->getAllLinkTagsById(1),
         );
     }
@@ -209,6 +209,16 @@ class TagsTest extends TestCase
         // Should return tags (with proper database setup)
         $allTags = $this->tags->getAllTags();
         $this->assertIsArray($allTags);
+    }
+
+    public function testPermissionChecksNormalizeGroupIds(): void
+    {
+        $this->tags->setUser(-1);
+        $this->tags->setGroups(['-1) OR 1=1 -- ', '2']);
+
+        $this->assertIsArray($this->tags->getPopularTags());
+        $this->assertStringContainsString('fdg.group_id IN (-1, 2)', $this->dbHandle->log());
+        $this->assertStringNotContainsString('OR 1=1', $this->dbHandle->log());
     }
 
     private function seedFaqRecord(int $id, string $lang = 'en', string $active = 'yes'): void

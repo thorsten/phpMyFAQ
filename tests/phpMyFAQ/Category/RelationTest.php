@@ -153,6 +153,8 @@ class RelationTest extends TestCase
 
         $this->languageMock->method('getLanguage')->willReturn('en');
 
+        $this->databaseMock->expects($this->once())->method('escape')->with('en')->willReturn('en');
+
         $this->databaseMock
             ->expects($this->once())
             ->method('query')
@@ -245,6 +247,40 @@ class RelationTest extends TestCase
         $this->assertEquals([], $result);
     }
 
+    public function testGetCategoryWithFaqsEscapesLanguageAndNormalizesGroups(): void
+    {
+        Database::setTablePrefix('test_');
+
+        $this->configurationMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('security.permLevel')
+            ->willReturn('medium');
+
+        $this->categoryMock->expects($this->any())->method('getUser')->willReturn(-1);
+        $this->categoryMock->expects($this->any())->method('getGroups')->willReturn(['1) OR 1=1 -- ', '2']);
+        $this->languageMock->expects($this->any())->method('getLanguage')->willReturn("en' OR 1=1 -- ");
+
+        $this->databaseMock
+            ->expects($this->once())
+            ->method('escape')
+            ->with("en' OR 1=1 -- ")
+            ->willReturn("en'' OR 1=1 -- ");
+
+        $this->databaseMock
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->logicalAnd(
+                $this->stringContains('fdg.group_id IN (1, 2)'),
+                $this->stringContains("fd.lang = 'en'' OR 1=1 -- '"),
+            ))
+            ->willReturn('query_result');
+
+        $this->databaseMock->expects($this->once())->method('numRows')->willReturn(0);
+
+        $this->assertSame([], $this->relation->getCategoryWithFaqs());
+    }
+
     public function testGetNumberOfFaqsPerCategoryWithoutRestriction(): void
     {
         Database::setTablePrefix('test_');
@@ -314,7 +350,7 @@ class RelationTest extends TestCase
     {
         Database::setTablePrefix('test_');
 
-        $this->languageMock->expects($this->once())->method('getLanguage')->willReturn('');
+        $this->languageMock->expects($this->any())->method('getLanguage')->willReturn('');
 
         $this->databaseMock
             ->expects($this->once())
@@ -368,6 +404,25 @@ class RelationTest extends TestCase
 
         $result = $this->relation->getNumberOfFaqsPerCategory();
         $this->assertEquals([], $result);
+    }
+
+    public function testDeleteEscapesCategoryLanguage(): void
+    {
+        Database::setTablePrefix('test_');
+
+        $this->databaseMock
+            ->expects($this->once())
+            ->method('escape')
+            ->with("en' OR 1=1 -- ")
+            ->willReturn("en'' OR 1=1 -- ");
+
+        $this->databaseMock
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->stringContains("category_lang = 'en'' OR 1=1 -- '"))
+            ->willReturn(true);
+
+        $this->assertTrue($this->relation->delete(1, "en' OR 1=1 -- "));
     }
 
     public function testDeleteEscapesLanguageToPreventSqlInjection(): void

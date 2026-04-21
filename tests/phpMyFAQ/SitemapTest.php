@@ -79,6 +79,8 @@ class SitemapTest extends TestCase
 
     private PdoSqlite $db;
 
+    private Configuration $configuration;
+
     /**
      * @throws Exception
      * @throws Core\Exception
@@ -379,5 +381,17 @@ class SitemapTest extends TestCase
         $this->db->query(
             "DELETE FROM faqcategoryrelations WHERE record_id IN ($idList) AND category_id IN ($catIdList)",
         );
+    }
+
+    public function testGetAllFirstLettersNormalizesGroupIds(): void
+    {
+        $this->sitemap->setUser(-1);
+        $this->sitemap->setGroups(['-1) OR 1=1 -- ', '2']);
+
+        $letters = $this->sitemap->getAllFirstLetters();
+
+        $this->assertIsArray($letters);
+        $this->assertStringContainsString('fdg.group_id IN (-1, 2)', $this->db->log());
+        $this->assertStringNotContainsString('OR 1=1', $this->db->log());
     }
 }
