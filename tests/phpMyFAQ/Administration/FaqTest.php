@@ -338,4 +338,32 @@ class FaqTest extends TestCase
         $this->assertEquals('Orphaned FAQ Question', $result[0]->question);
         $this->assertEquals('http://example.com/admin/faq/edit/42/en', $result[0]->url);
     }
+
+    public function testGetInactiveFaqsDataEscapesLanguage(): void
+    {
+        $mockLanguage = $this->getMockBuilder(Language::class)->disableOriginalConstructor()->getMock();
+        $mockLanguage->method('getLanguage')->willReturn("en' OR 1=1 -- ");
+        $this->mockConfiguration->method('getLanguage')->willReturn($mockLanguage);
+
+        $this->mockDb->expects($this->once())->method('escape')->with("en' OR 1=1 -- ")->willReturn("en'' OR 1=1 -- ");
+        $this->mockDb
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->stringContains("fd.lang = 'en'' OR 1=1 -- '"))
+            ->willReturn(true);
+        $this->mockDb->method('fetchObject')->willReturn(false);
+
+        $this->assertSame([], $this->faq->getInactiveFaqsData());
+    }
+
+    public function testSetStickyFaqOrderNormalizesIds(): void
+    {
+        $this->mockDb
+            ->expects($this->once())
+            ->method('query')
+            ->with('UPDATE faqdata SET sticky_order=1 WHERE id=123')
+            ->willReturn(true);
+
+        $this->assertTrue($this->faq->setStickyFaqOrder(['123 OR 1=1']));
+    }
 }

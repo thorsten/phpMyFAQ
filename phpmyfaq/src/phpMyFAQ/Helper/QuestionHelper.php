@@ -76,15 +76,17 @@ class QuestionHelper extends AbstractHelper
     {
         $date = new Date($this->configuration);
         $mail = new Mail($this->configuration);
+        $db = $this->configuration->getDb();
+        $language = $db->escape($this->configuration->getLanguage()->getLanguage());
 
         $query = sprintf(
             "SELECT COUNT(id) AS num FROM %sfaqquestions WHERE lang = '%s' AND is_visible != 'Y'",
             Database::getTablePrefix(),
-            $this->configuration->getLanguage()->getLanguage(),
+            $language,
         );
 
-        $result = $this->configuration->getDb()->query($query);
-        $row = $this->configuration->getDb()->fetchObject($result);
+        $result = $db->query($query);
+        $row = $db->fetchObject($result);
 
         $openQuestions = new stdClass();
         $openQuestions->numberInvisibleQuestions = $row->num;
@@ -92,11 +94,14 @@ class QuestionHelper extends AbstractHelper
         $query = sprintf(
             "SELECT * FROM %sfaqquestions WHERE lang = '%s' AND is_visible = 'Y' ORDER BY created ASC",
             Database::getTablePrefix(),
-            $this->configuration->getLanguage()->getLanguage(),
+            $language,
         );
 
-        $result = $this->configuration->getDb()->query($query);
+        $result = $db->query($query);
 
+        if ($result && $db->numRows($result) > 0) {
+            $openQuestions->numberQuestions = $db->numRows($result);
+            while ($row = $db->fetchObject($result)) {
         if ($result && $this->configuration->getDb()->numRows($result) > 0) {
             $openQuestions->numberQuestions = $this->configuration->getDb()->numRows($result);
             while (true) {

@@ -50,16 +50,13 @@ readonly class QueryHelper
 
     public function queryPermission(bool $hasGroupSupport = false): string
     {
+        $groupList = $this->normalizeIdList($this->groups);
         if ($hasGroupSupport) {
             if (-1 === $this->user) {
-                return sprintf('AND fdg.group_id IN (%s)', implode(', ', $this->groups));
+                return sprintf('AND fdg.group_id IN (%s)', $groupList);
             }
 
-            return sprintf(
-                'AND ( fdu.user_id = %d OR fdg.group_id IN (%s) )',
-                $this->user,
-                implode(', ', $this->groups),
-            );
+            return sprintf('AND ( fdu.user_id = %d OR fdg.group_id IN (%s) )', $this->user, $groupList);
         }
 
         if (-1 !== $this->user) {
@@ -186,5 +183,15 @@ readonly class QueryHelper
         }
 
         return $sqlWhereFilter;
+    }
+
+    /**
+     * @param array<int|string> $ids
+     */
+    private function normalizeIdList(array $ids): string
+    {
+        $normalizedIds = array_map(static fn($id): int => (int) $id, $ids);
+
+        return $normalizedIds === [] ? '-1' : implode(', ', $normalizedIds);
     }
 }

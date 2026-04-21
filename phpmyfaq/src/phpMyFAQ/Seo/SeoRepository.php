@@ -40,21 +40,22 @@ class SeoRepository implements SeoRepositoryInterface
      */
     public function create(SeoEntity $seoEntity): bool
     {
-        $databaseDriver = $this->configuration->getDb();
+        $db = $this->configuration->getDb();
+        $seoType = $db->escape($seoEntity->getSeoType()->value);
 
         $query = sprintf(
             'INSERT INTO %sfaqseo (id, type, reference_id, reference_language, title, description) '
             . "VALUES (%d, '%s', %d, '%s', '%s', '%s')",
             Database::getTablePrefix(),
-            $databaseDriver->nextId(Database::getTablePrefix() . 'faqseo', 'id'),
-            $seoEntity->getSeoType()->value,
+            $db->nextId(Database::getTablePrefix() . 'faqseo', 'id'),
+            $seoType,
             $seoEntity->getReferenceId(),
-            $databaseDriver->escape($seoEntity->getReferenceLanguage()),
-            $databaseDriver->escape($seoEntity->getTitle()),
-            $databaseDriver->escape($seoEntity->getDescription()),
+            $db->escape($seoEntity->getReferenceLanguage()),
+            $db->escape($seoEntity->getTitle()),
+            $db->escape($seoEntity->getDescription()),
         );
 
-        return (bool) $databaseDriver->query($query);
+        return (bool) $db->query($query);
     }
 
     /**
@@ -62,21 +63,22 @@ class SeoRepository implements SeoRepositoryInterface
      */
     public function get(SeoEntity $seoEntity): SeoEntity
     {
-        $databaseDriver = $this->configuration->getDb();
+        $db = $this->configuration->getDb();
+        $seoType = $db->escape($seoEntity->getSeoType()->value);
 
         $query = sprintf(
             "SELECT * FROM %sfaqseo WHERE type = '%s' AND reference_id = %d AND reference_language = '%s'",
             Database::getTablePrefix(),
-            $seoEntity->getSeoType()->value,
+            $seoType,
             $seoEntity->getReferenceId(),
-            $databaseDriver->escape($seoEntity->getReferenceLanguage()),
+            $db->escape($seoEntity->getReferenceLanguage()),
         );
 
-        $result = $databaseDriver->query($query);
+        $result = $db->query($query);
 
-        if ($databaseDriver->numRows($result) > 0) {
+        if ($db->numRows($result) > 0) {
             while (true) {
-                $row = $databaseDriver->fetchObject($result);
+                $row = $db->fetchObject($result);
                 if ($row === false || $row === null || $row === []) {
                     break;
                 }
@@ -97,20 +99,21 @@ class SeoRepository implements SeoRepositoryInterface
      */
     public function update(SeoEntity $seoEntity): bool
     {
-        $databaseDriver = $this->configuration->getDb();
+        $db = $this->configuration->getDb();
+        $seoType = $db->escape($seoEntity->getSeoType()->value);
 
         $query = sprintf(
             "UPDATE %sfaqseo SET title = '%s', description = '%s' "
             . "WHERE type = '%s' AND reference_id = %d AND reference_language = '%s'",
             Database::getTablePrefix(),
-            $databaseDriver->escape($seoEntity->getTitle()),
-            $databaseDriver->escape($seoEntity->getDescription()),
-            $seoEntity->getSeoType()->value,
+            $db->escape($seoEntity->getTitle()),
+            $db->escape($seoEntity->getDescription()),
+            $seoType,
             $seoEntity->getReferenceId(),
-            $databaseDriver->escape($seoEntity->getReferenceLanguage()),
+            $db->escape($seoEntity->getReferenceLanguage()),
         );
 
-        return (bool) $databaseDriver->query($query);
+        return (bool) $db->query($query);
     }
 
     /**
@@ -118,16 +121,17 @@ class SeoRepository implements SeoRepositoryInterface
      */
     public function delete(SeoEntity $seoEntity): bool
     {
-        $databaseDriver = $this->configuration->getDb();
+        $db = $this->configuration->getDb();
+        $seoType = $db->escape($seoEntity->getSeoType()->value);
 
         $query = sprintf(
             "DELETE FROM %sfaqseo WHERE type = '%s' AND reference_id = %d AND reference_language = '%s'",
             Database::getTablePrefix(),
-            $seoEntity->getSeoType()->value,
+            $seoType,
             $seoEntity->getReferenceId(),
-            $databaseDriver->escape($seoEntity->getReferenceLanguage()),
+            $db->escape($seoEntity->getReferenceLanguage()),
         );
 
-        return (bool) $databaseDriver->query($query);
+        return (bool) $db->query($query);
     }
 }

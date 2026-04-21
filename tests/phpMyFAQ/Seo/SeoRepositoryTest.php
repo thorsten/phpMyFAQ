@@ -138,4 +138,26 @@ class SeoRepositoryTest extends TestCase
         $this->assertSame('Fetched Description', $fetched->getDescription());
         $this->assertInstanceOf(DateTime::class, $fetched->getCreated());
     }
+
+    public function testCreateEscapesSeoTypeValue(): void
+    {
+        $escapedValues = [];
+        $entity = (new SeoEntity())
+            ->setSeoType(SeoType::FAQ)
+            ->setReferenceId(42)
+            ->setReferenceLanguage('en')
+            ->setTitle('Title')
+            ->setDescription('Description');
+
+        $this->database->method('nextId')->willReturn(1);
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('escape')->willReturnCallback(function (string $value) use (&$escapedValues): string {
+            $escapedValues[] = $value;
+
+            return $value;
+        });
+
+        $this->assertTrue($this->repository->create($entity));
+        $this->assertContains(SeoType::FAQ->value, $escapedValues);
+    }
 }

@@ -140,12 +140,14 @@ class Permission
             return $permissions;
         }
 
+        $categoryList = $this->normalizeCategoryIds($categories);
+
         $query = sprintf(
             'SELECT %s_id AS permission FROM %sfaqcategory_%s WHERE category_id IN (%s)',
             $mode,
             Database::getTablePrefix(),
             $mode,
-            implode(', ', $categories),
+            $categoryList,
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -170,9 +172,10 @@ class Permission
     public function getAll(array $categories): array
     {
         $permissions = [];
+        $categoryList = $this->normalizeCategoryIds($categories);
 
         foreach ($categories as $category) {
-            $permissions[$category] = [
+            $permissions[(int) $category] = [
                 self::USER => [],
                 self::GROUP => [],
             ];
@@ -181,7 +184,7 @@ class Permission
         $query = sprintf(
             'SELECT category_id, user_id AS permission FROM %sfaqcategory_user WHERE category_id IN (%s)',
             Database::getTablePrefix(),
-            implode(', ', $categories),
+            $categoryList,
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -197,7 +200,7 @@ class Permission
         $query = sprintf(
             'SELECT category_id, group_id AS permission FROM %sfaqcategory_group WHERE category_id IN (%s)',
             Database::getTablePrefix(),
-            implode(', ', $categories),
+            $categoryList,
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -211,5 +214,15 @@ class Permission
         }
 
         return $permissions;
+    }
+
+    /**
+     * @param int[] $categories
+     */
+    private function normalizeCategoryIds(array $categories): string
+    {
+        $normalizedCategories = array_map(static fn($category): int => (int) $category, $categories);
+
+        return $normalizedCategories === [] ? '0' : implode(', ', $normalizedCategories);
     }
 }

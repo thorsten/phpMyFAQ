@@ -285,4 +285,54 @@ class MediumPermissionRepositoryTest extends TestCase
         // Cleanup
         $this->dbHandle->query('DELETE FROM faqgroup WHERE group_id = ' . $nextId);
     }
+
+    public function testChangeGroupRejectsInvalidColumnKeys(): void
+    {
+        $groupData = [
+            'name' => 'group_invalid_column_test',
+            'description' => 'Test group',
+            'auto_join' => 0,
+        ];
+
+        $nextId = $this->repository->nextGroupId();
+        $this->repository->addGroup($groupData, $nextId);
+
+        $result = $this->repository->changeGroup($nextId, [
+            "name = 'pwned' --" => 'ignored',
+        ]);
+
+        $this->assertFalse($result);
+        $this->assertStringNotContainsString("name = 'pwned' --", $this->dbHandle->log());
+
+        $storedGroup = $this->repository->getGroupData($nextId);
+        $this->assertSame('group_invalid_column_test', $storedGroup['name']);
+
+        $this->dbHandle->query('DELETE FROM faqgroup WHERE group_id = ' . $nextId);
+    }
+
+    public function testChangeGroupIgnoresInvalidKeysAndUpdatesAllowedColumns(): void
+    {
+        $groupData = [
+            'name' => 'group_mixed_update_test',
+            'description' => 'Original description',
+            'auto_join' => 0,
+        ];
+
+        $nextId = $this->repository->nextGroupId();
+        $this->repository->addGroup($groupData, $nextId);
+
+        $result = $this->repository->changeGroup($nextId, [
+            'description' => "Updated'; DROP TABLE faqgroup; --",
+            "name = 'pwned' --" => 'ignored',
+        ]);
+
+        $this->assertTrue($result);
+        $this->assertStringContainsString("Updated''; DROP TABLE faqgroup; --", $this->dbHandle->log());
+        $this->assertStringNotContainsString("name = 'pwned' --", $this->dbHandle->log());
+
+        $storedGroup = $this->repository->getGroupData($nextId);
+        $this->assertSame("Updated'; DROP TABLE faqgroup; --", $storedGroup['description']);
+
+        $this->dbHandle->query('DELETE FROM faqgroup WHERE group_id = ' . $nextId);
+    }
 }

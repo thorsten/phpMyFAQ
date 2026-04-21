@@ -65,14 +65,15 @@ readonly class QuestionRepository
      */
     public function delete(int $questionId, string $language): bool
     {
+        $db = $this->configuration->getDb();
         $delete = sprintf(
             "DELETE FROM %sfaqquestions WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $questionId,
-            $language,
+            $db->escape($language),
         );
 
-        return (bool) $this->configuration->getDb()->query($delete);
+        return (bool) $db->query($delete);
     }
 
     /**
@@ -85,6 +86,7 @@ readonly class QuestionRepository
     public function getById(int $questionId, string $language): array
     {
         $question = [];
+        $db = $this->configuration->getDb();
 
         $query = sprintf("
             SELECT
@@ -94,12 +96,9 @@ readonly class QuestionRepository
             WHERE
                 id = %d
             AND
-                lang = '%s'", Database::getTablePrefix(), $questionId, $language);
+                lang = '%s'", Database::getTablePrefix(), $questionId, $db->escape($language));
 
-        if (
-            ($result = $this->configuration->getDb()->query($query)) && ($row =
-                $this->configuration->getDb()->fetchObject($result))
-        ) {
+        if (($result = $db->query($query)) && ($row = $db->fetchObject($result))) {
             return [
                 'id' => $row->id,
                 'lang' => $row->lang,
@@ -125,8 +124,9 @@ readonly class QuestionRepository
     public function getAll(string $language, bool $showAll = true): array
     {
         $questions = [];
+        $db = $this->configuration->getDb();
         $langFilter = $language !== ''
-            ? sprintf("AND lang = '%s'", $this->configuration->getDb()->escape($language))
+            ? sprintf("AND lang = '%s'", $db->escape($language))
             : '';
 
         $query = sprintf(
@@ -177,16 +177,17 @@ readonly class QuestionRepository
      */
     public function getVisibility(int $questionId, string $language): string
     {
+        $db = $this->configuration->getDb();
         $query = sprintf(
             "SELECT is_visible FROM %sfaqquestions WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $questionId,
-            $language,
+            $db->escape($language),
         );
 
-        $result = $this->configuration->getDb()->query($query);
-        if ($this->configuration->getDb()->numRows($result) > 0) {
-            $row = $this->configuration->getDb()->fetchObject($result);
+        $result = $db->query($query);
+        if ($db->numRows($result) > 0) {
+            $row = $db->fetchObject($result);
 
             return $row->is_visible;
         }
@@ -203,15 +204,16 @@ readonly class QuestionRepository
      */
     public function setVisibility(int $questionId, string $isVisible, string $language): bool
     {
+        $db = $this->configuration->getDb();
         $query = sprintf(
             "UPDATE %sfaqquestions SET is_visible = '%s' WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($isVisible),
+            $db->escape($isVisible),
             $questionId,
-            $language,
+            $db->escape($language),
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool) $db->query($query);
     }
 
     /**

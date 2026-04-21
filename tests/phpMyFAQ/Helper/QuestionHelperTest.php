@@ -151,4 +151,14 @@ class QuestionHelperTest extends TestCase
         $this->assertStringContainsString('How can I use', $smartAnswer);
         $this->assertStringContainsString('Use categories and search.', $smartAnswer);
     }
+
+    public function testGetOpenQuestionsEscapesCurrentLanguage(): void
+    {
+        Language::$language = "en' OR 1=1 -- ";
+
+        $openQuestions = $this->questionHelper->getOpenQuestions();
+
+        $this->assertIsObject($openQuestions);
+        $this->assertStringContainsString("en'' or 1=1 -- ", $this->configuration->getDb()->log());
+    }
 }
