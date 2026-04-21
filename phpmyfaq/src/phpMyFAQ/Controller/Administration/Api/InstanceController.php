@@ -91,6 +91,12 @@ final class InstanceController extends AbstractController
             return $this->json(['error' => 'Cannot create instance: wrong URL'], Response::HTTP_BAD_REQUEST);
         }
 
+        $faqInstanceClient = new Client($configuration);
+        $faqInstanceClient->setFileSystem(new Filesystem());
+        if (!$faqInstanceClient->isValidClientUrl($url)) {
+            return $this->json(['error' => 'Cannot create instance: wrong URL'], Response::HTTP_BAD_REQUEST);
+        }
+
         $data = new InstanceEntity();
         $data->setUrl($url)->setInstance($instance)->setComment($comment);
 
@@ -181,6 +187,10 @@ final class InstanceController extends AbstractController
             $client = new Client($this->configuration);
             $client->setFileSystem(new Filesystem());
             $clientData = $client->getById($instanceId);
+            if (!$client->isValidClientUrl((string) $clientData->url)) {
+                return $this->json(['error' => $instanceId], Response::HTTP_BAD_REQUEST);
+            }
+
             if (1 !== $instanceId && $client->deleteClientFolder($clientData->url) && $client->delete($instanceId)) {
                 return $this->json(['deleted' => $instanceId], Response::HTTP_OK);
             }
