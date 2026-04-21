@@ -128,6 +128,17 @@ final class InstanceController extends AbstractAdministrationController
             FILTER_SANITIZE_SPECIAL_CHARS,
         ));
 
+        if (is_null($instanceEntity->getUrl()) || !$updatedClient->isValidClientUrl($instanceEntity->getUrl())) {
+            $result = ['updateError' => 'Invalid instance URL.'];
+
+            return $this->render('@admin/configuration/instances.twig', [
+                ...$result,
+                ...$this->getHeader($request),
+                ...$this->getFooter(),
+                ...$this->getBaseTemplateVars(),
+            ]);
+        }
+
         // Original data
         $originalData = $currentClient->getById($instanceId);
 
@@ -136,7 +147,7 @@ final class InstanceController extends AbstractAdministrationController
         }
 
         $result = [];
-        if (is_null($instanceEntity->getUrl())) {
+        if ($moveInstance && !$currentClient->isValidClientUrl((string) $originalData->url)) {
             $this->configuration->getLogger()->error('Instance URL is null during update', [
                 'instanceId' => $instanceId,
                 'sqlError' => $this->configuration->getDb()->error(),

@@ -25,7 +25,7 @@ class ClientTest extends TestCase
     private Configuration $configuration;
 
     /**
-     * @throws \PHPUnit\Framework\MockObject\Exception
+     * @throws Exception
      */
     protected function setUp(): void
     {
@@ -33,7 +33,12 @@ class ClientTest extends TestCase
 
         $this->filesystem = $this->createMock(Filesystem::class);
         $this->configuration = $this->createStub(Configuration::class);
-        $this->client = new Client($this->configuration);
+        $this->client = new class($this->configuration) extends Client {
+            public function isMultiSiteWriteable(): bool
+            {
+                return true;
+            }
+        };
         $this->client->setFileSystem($this->filesystem);
     }
 
@@ -47,7 +52,11 @@ class ClientTest extends TestCase
     public function testCreateClientFolder(): void
     {
         $hostname = 'example.com';
-        $this->filesystem->method('createDirectory')->willReturn(true);
+        $this->filesystem
+            ->expects($this->once())
+            ->method('createDirectory')
+            ->with($this->stringEndsWith('/multisite/example.com'))
+            ->willReturn(true);
 
         $result = $this->client->createClientFolder($hostname);
 
@@ -109,7 +118,14 @@ class ClientTest extends TestCase
     {
         $sourceUrl = 'https://source.com';
         $destinationUrl = 'https://destination.com';
-        $this->filesystem->method('moveDirectory')->willReturn(true);
+        $this->filesystem
+            ->expects($this->once())
+            ->method('moveDirectory')
+            ->with(
+                $this->stringEndsWith('/multisite/source.com'),
+                $this->stringEndsWith('/multisite/destination.com'),
+            )
+            ->willReturn(true);
 
         $result = $this->client->moveClientFolder($sourceUrl, $destinationUrl);
 
@@ -119,11 +135,50 @@ class ClientTest extends TestCase
     public function testDeleteClientFolder(): void
     {
         $sourceUrl = 'https://source.com';
-        $this->filesystem->method('deleteDirectory')->willReturn(true);
+        $this->filesystem
+            ->expects($this->once())
+            ->method('deleteDirectory')
+            ->with($this->stringEndsWith('/multisite/source.com'))
+            ->willReturn(true);
 
         $result = $this->client->deleteClientFolder($sourceUrl);
 
         $this->assertTrue($result);
+    }
+
+    public function testCreateClientFolderRejectsInvalidHostname(): void
+    {
+        $this->filesystem->expects($this->never())->method('createDirectory');
+
+        $this->assertFalse($this->client->createClientFolder('../../../tmp/poc'));
+    }
+
+    public function testMoveClientFolderRejectsTraversalSourceUrl(): void
+    {
+        $this->filesystem->expects($this->never())->method('moveDirectory');
+
+        $this->assertFalse($this->client->moveClientFolder('https://../../../tmp/poc', 'https://destination.com'));
+    }
+
+    public function testDeleteClientFolderRejectsTraversalSourceUrl(): void
+    {
+        $this->filesystem->expects($this->never())->method('deleteDirectory');
+
+        $this->assertFalse($this->client->deleteClientFolder('https://../../../tmp/poc'));
+    }
+
+    public function testIsValidClientUrlAcceptsValidHttpsUrl(): void
+    {
+        $this->assertTrue($this->client->isValidClientUrl('https://example.com'));
+        $this->assertTrue($this->client->isValidClientUrl('https://example.com/'));
+    }
+
+    public function testIsValidClientUrlRejectsInvalidOrDangerousUrls(): void
+    {
+        $this->assertFalse($this->client->isValidClientUrl('http://example.com'));
+        $this->assertFalse($this->client->isValidClientUrl('https://../../../tmp/poc'));
+        $this->assertFalse($this->client->isValidClientUrl('https://example.com/../../tmp/poc'));
+        $this->assertFalse($this->client->isValidClientUrl('https://example.com?foo=bar'));
     }
 
     public function testCreateClientDatabaseWithPrefixMode(): void
