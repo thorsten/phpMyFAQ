@@ -77,11 +77,11 @@ class Client extends Instance
      */
     public function createClientFolder(string $hostname): bool
     {
-        if (!$this->isMultiSiteWriteable()) {
+        if (!$this->isMultiSiteWriteable() || !$this->isValidClientHostname($hostname)) {
             return false;
         }
 
-        return $this->filesystem->createDirectory($this->clientFolder . $hostname);
+        return $this->filesystem->createDirectory($this->buildClientFolderPath($hostname));
     }
 
     /**
@@ -109,7 +109,7 @@ class Client extends Instance
                 ->query(sprintf(
                     "UPDATE %sfaqconfig SET config_value = '%s' WHERE config_name = 'main.referenceURL'",
                     $prefix,
-                    $this->clientUrl,
+                    $this->configuration->getDb()->escape($this->clientUrl),
                 ));
             $this->configuration
                 ->getDb()
@@ -168,12 +168,15 @@ class Client extends Instance
             return false;
         }
 
-        $sourcePath = str_replace('https://', '', $sourceUrl);
-        $destinationPath = str_replace('https://', '', $destinationUrl);
+        $sourceHost = $this->extractClientHostnameFromUrl($sourceUrl);
+        $destinationHost = $this->extractClientHostnameFromUrl($destinationUrl);
+        if ($sourceHost === null || $destinationHost === null) {
+            return false;
+        }
 
         return $this->filesystem->moveDirectory(
-            $this->clientFolder . $sourcePath,
-            $this->clientFolder . $destinationPath,
+            $this->buildClientFolderPath($sourceHost),
+            $this->buildClientFolderPath($destinationHost),
         );
     }
 
@@ -186,8 +189,26 @@ class Client extends Instance
             return false;
         }
 
-        $sourcePath = str_replace('https://', '', $sourceUrl);
-        return $this->filesystem->deleteDirectory($this->clientFolder . $sourcePath);
+        $sourceHost = $this->extractClientHostnameFromUrl($sourceUrl);
+        if ($sourceHost === null) {
+            return false;
+        }
+
+        return $this->filesystem->deleteDirectory($this->buildClientFolderPath($sourceHost));
+    }
+
+    public function isValidClientUrl(string $clientUrl): bool
+    {
+        return $this->extractClientHostnameFromUrl($clientUrl) !== null;
+    }
+
+    public function isValidClientHostname(string $hostname): bool
+    {
+        return (
+            $hostname !== ''
+            && preg_match('/^[a-z0-9][a-z0-9.-]*$/i', $hostname) === 1
+            && !str_contains($hostname, '..')
+        );
     }
 
     /**
@@ -196,5 +217,34 @@ class Client extends Instance
     public function isMultiSiteWriteable(): bool
     {
         return is_writable($this->clientFolder);
+    }
+
+    private function extractClientHostnameFromUrl(string $clientUrl): ?string
+    {
+        $parsedUrl = parse_url($clientUrl);
+        if (!is_array($parsedUrl) || ($parsedUrl['scheme'] ?? '') !== 'https' || !isset($parsedUrl['host'])) {
+            return null;
+        }
+
+        if (($parsedUrl['path'] ?? '') !== '' && ($parsedUrl['path'] ?? '') !== '/') {
+            return null;
+        }
+
+        if (
+            isset($parsedUrl['query'])
+            || isset($parsedUrl['fragment'])
+            || isset($parsedUrl['user'])
+            || isset($parsedUrl['pass'])
+            || isset($parsedUrl['port'])
+        ) {
+            return null;
+        }
+
+        return $this->isValidClientHostname($parsedUrl['host']) ? $parsedUrl['host'] : null;
+    }
+
+    private function buildClientFolderPath(string $hostname): string
+    {
+        return rtrim($this->clientFolder, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $hostname;
     }
 }

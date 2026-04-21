@@ -123,6 +123,17 @@ final class InstanceController extends AbstractAdministrationController
             FILTER_SANITIZE_SPECIAL_CHARS,
         ));
 
+        if (is_null($instanceEntity->getUrl()) || !$updatedClient->isValidClientUrl($instanceEntity->getUrl())) {
+            $result = ['updateError' => 'Invalid instance URL.'];
+
+            return $this->render('@admin/configuration/instances.twig', [
+                ...$result,
+                ...$this->getHeader($request),
+                ...$this->getFooter(),
+                ...$this->getBaseTemplateVars(),
+            ]);
+        }
+
         // Original data
         $originalData = $currentClient->getById($instanceId);
 
@@ -130,8 +141,8 @@ final class InstanceController extends AbstractAdministrationController
             $moveInstance = true;
         }
 
-        if (is_null($instanceEntity->getUrl())) {
-            $result = ['updateError' => $this->configuration->getDb()->error()];
+        if ($moveInstance && !$currentClient->isValidClientUrl((string) $originalData->url)) {
+            $result = ['updateError' => 'Invalid instance URL.'];
         } elseif ($updatedClient->update($instanceId, $instanceEntity)) {
             if ($moveInstance) {
                 $updatedClient->moveClientFolder($originalData->url, $instanceEntity->getUrl());
