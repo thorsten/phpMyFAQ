@@ -5,10 +5,14 @@ namespace phpMyFAQ\Captcha;
 use Exception;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use ReflectionMethod;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class CaptchaTest
@@ -24,11 +28,19 @@ class BuiltinCaptchaTest extends TestCase
     /** @var Configuration */
     protected Configuration $configuration;
 
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
     protected function setUp(): void
     {
         parent::setUp();
 
         Strings::init();
+        Translation::create()
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
+            ->setDefaultLanguage('en')
+            ->setCurrentLanguage('en')
+            ->setMultiByteLanguage();
 
         $_SERVER['HTTP_USER_AGENT'] = 'AwesomeBrowser';
         $_SERVER['REMOTE_ADDR'] = '::1';
@@ -38,6 +50,9 @@ class BuiltinCaptchaTest extends TestCase
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $this->configuration = new Configuration($dbHandle);
+        $language = new Language($this->configuration, $this->createStub(Session::class));
+        Language::$language = 'en';
+        $this->configuration->setLanguage($language);
         $this->captcha = new BuiltinCaptcha($this->configuration);
     }
 
@@ -324,5 +339,89 @@ class BuiltinCaptchaTest extends TestCase
         $output2 = $this->captcha->renderCaptchaImage();
 
         $this->assertEquals($output1, $output2);
+    }
+
+    public function testSaveCaptchaEscapesUserAgentAndIpValues(): void
+    {
+        $userAgent = "Browser' OR 1=1 -- ";
+        $ip = "127.0.0.1' OR 'x'='x";
+
+        $_SERVER['HTTP_USER_AGENT'] = $userAgent;
+        $_SERVER['REMOTE_ADDR'] = $ip;
+        $_SERVER['REQUEST_TIME'] = 42;
+
+        $captcha = new BuiltinCaptcha($this->configuration);
+        $this->configuration->getDb()->query('DELETE FROM faqcaptcha WHERE 1 = 1');
+        $this->setPrivateProperty($captcha, 'code', 'ABC123');
+
+        $result = $this->invokePrivateMethod($captcha, 'saveCaptcha');
+
+        $this->assertTrue($result);
+        $this->assertStringContainsString("Browser'' OR 1=1 -- ", $this->configuration->getDb()->log());
+        $this->assertStringContainsString("127.0.0.1'' OR ''x''=''x", $this->configuration->getDb()->log());
+
+        $storedCaptcha = $this->configuration->getDb()->query("SELECT id, useragent, ip FROM faqcaptcha WHERE id = 'ABC123'");
+
+        $this->assertNotFalse($storedCaptcha);
+        $storedRow = $this->configuration->getDb()->fetchAssoc($storedCaptcha);
+
+        $this->assertSame('ABC123', $storedRow['id']);
+        $this->assertSame($userAgent, $storedRow['useragent']);
+        $this->assertSame($ip, $storedRow['ip']);
+    }
+
+    public function testGarbageCollectorEscapesUserAgentAndIpValues(): void
+    {
+        $db = $this->configuration->getDb();
+        $userAgent = "Cleanup' OR 1=1 -- ";
+        $ip = "::1' OR '1'='1";
+        $language = $this->configuration->getLanguage()->getLanguage();
+
+        $_SERVER['HTTP_USER_AGENT'] = $userAgent;
+        $_SERVER['REMOTE_ADDR'] = $ip;
+        $_SERVER['REQUEST_TIME'] = 1;
+
+        $captcha = new BuiltinCaptcha($this->configuration);
+
+        $db->query('DELETE FROM faqcaptcha WHERE 1 = 1');
+        $db->query(sprintf(
+            "INSERT INTO faqcaptcha (id, useragent, language, ip, captcha_time) VALUES ('TARGET1', '%s', '%s', '%s', 1)",
+            $db->escape($userAgent),
+            $db->escape($language),
+            $db->escape($ip),
+        ));
+        $db->query(sprintf(
+            "INSERT INTO faqcaptcha (id, useragent, language, ip, captcha_time) VALUES ('SAFE001', 'safe-agent', '%s', '127.0.0.2', 1)",
+            $db->escape($language),
+        ));
+
+        $this->invokePrivateMethod($captcha, 'garbageCollector');
+
+        $this->assertStringContainsString("Cleanup'' OR 1=1 -- ", $db->log());
+        $this->assertStringContainsString("::1'' OR ''1''=''1", $db->log());
+
+        $deletedResult = $db->query("SELECT id FROM faqcaptcha WHERE id = 'TARGET1'");
+        $safeResult = $db->query("SELECT id FROM faqcaptcha WHERE id = 'SAFE001'");
+
+        $this->assertNotFalse($deletedResult);
+        $this->assertSame([], $db->fetchAssoc($deletedResult));
+
+        $this->assertNotFalse($safeResult);
+        $safeRow = $db->fetchAssoc($safeResult);
+        $this->assertSame('SAFE001', $safeRow['id']);
+    }
+
+    private function invokePrivateMethod(object $object, string $methodName, array $arguments = []): mixed
+    {
+        $reflectionMethod = new ReflectionMethod($object, $methodName);
+
+        return $reflectionMethod->invokeArgs($object, $arguments);
+    }
+
+    private function setPrivateProperty(object $object, string $propertyName, mixed $value): void
+    {
+        $reflection = new ReflectionClass($object);
+        $property = $reflection->getProperty($propertyName);
+        $property->setValue($object, $value);
     }
 }
