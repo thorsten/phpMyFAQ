@@ -297,6 +297,11 @@ class BuiltinCaptcha implements CaptchaInterface
      */
     private function garbageCollector(): void
     {
+        $db = $this->configuration->getDb();
+        $userAgent = $this->escapeQueryValue($this->userAgent);
+        $language = $this->escapeQueryValue($this->configuration->getLanguage()->getLanguage());
+        $ip = $this->escapeQueryValue($this->ip);
+
         $delete = sprintf(
             '
             DELETE FROM 
@@ -307,7 +312,7 @@ class BuiltinCaptcha implements CaptchaInterface
             Request::createFromGlobals()->server->get('REQUEST_TIME') - 604_800,
         );
 
-        $this->configuration->getDb()->query($delete);
+        $db->query($delete);
 
         $delete = sprintf(
             "
@@ -316,12 +321,12 @@ class BuiltinCaptcha implements CaptchaInterface
             WHERE
                 useragent = '%s' AND language = '%s' AND ip = '%s'",
             Database::getTablePrefix(),
-            $this->userAgent,
-            $this->configuration->getLanguage()->getLanguage(),
-            $this->ip,
+            $userAgent,
+            $language,
+            $ip,
         );
 
-        $this->configuration->getDb()->query($delete);
+        $db->query($delete);
     }
 
     /**
@@ -329,18 +334,24 @@ class BuiltinCaptcha implements CaptchaInterface
      */
     private function saveCaptcha(): bool
     {
+        $db = $this->configuration->getDb();
+        $code = $this->escapeQueryValue($this->code);
+        $userAgent = $this->escapeQueryValue($this->userAgent);
+        $language = $this->escapeQueryValue($this->configuration->getLanguage()->getLanguage());
+        $ip = $this->escapeQueryValue($this->ip);
+
         $select = sprintf("
            SELECT 
                id 
            FROM 
                %sfaqcaptcha 
            WHERE 
-               id = '%s'", Database::getTablePrefix(), $this->code);
+                id = '%s'", Database::getTablePrefix(), $code);
 
-        $result = $this->configuration->getDb()->query($select);
+        $result = $db->query($select);
 
         if ($result) {
-            $num = $this->configuration->getDb()->numRows($result);
+            $num = $db->numRows($result);
             if ($num > 0) {
                 return false;
             }
@@ -353,13 +364,13 @@ class BuiltinCaptcha implements CaptchaInterface
                         VALUES 
                     ('%s', '%s', '%s', '%s', %d)",
                 Database::getTablePrefix(),
-                $this->code,
-                $this->userAgent,
-                $this->configuration->getLanguage()->getLanguage(),
-                $this->ip,
+                $code,
+                $userAgent,
+                $language,
+                $ip,
                 $this->timestamp,
             );
-            $this->configuration->getDb()->query($insert);
+            $db->query($insert);
             return true;
         }
 
@@ -497,7 +508,16 @@ class BuiltinCaptcha implements CaptchaInterface
             $captchaCode = $this->code;
         }
 
-        $query = sprintf("DELETE FROM %sfaqcaptcha WHERE id = '%s'", Database::getTablePrefix(), $captchaCode);
+        $query = sprintf(
+            "DELETE FROM %sfaqcaptcha WHERE id = '%s'",
+            Database::getTablePrefix(),
+            $this->escapeQueryValue($captchaCode),
+        );
         $this->configuration->getDb()->query($query);
+    }
+
+    private function escapeQueryValue(mixed $value): string
+    {
+        return $this->configuration->getDb()->escape((string) ($value ?? ''));
     }
 }
