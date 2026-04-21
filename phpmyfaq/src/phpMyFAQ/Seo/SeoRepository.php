@@ -41,13 +41,14 @@ class SeoRepository implements SeoRepositoryInterface
     public function create(SeoEntity $seoEntity): bool
     {
         $db = $this->configuration->getDb();
+        $seoType = $db->escape($seoEntity->getSeoType()->value);
 
         $query = sprintf(
             'INSERT INTO %sfaqseo (id, type, reference_id, reference_language, title, description) '
             . "VALUES (%d, '%s', %d, '%s', '%s', '%s')",
             Database::getTablePrefix(),
             $db->nextId(Database::getTablePrefix() . 'faqseo', 'id'),
-            $seoEntity->getSeoType()->value,
+            $seoType,
             $seoEntity->getReferenceId(),
             $db->escape($seoEntity->getReferenceLanguage()),
             $db->escape($seoEntity->getTitle()),
@@ -63,11 +64,12 @@ class SeoRepository implements SeoRepositoryInterface
     public function get(SeoEntity $seoEntity): SeoEntity
     {
         $db = $this->configuration->getDb();
+        $seoType = $db->escape($seoEntity->getSeoType()->value);
 
         $query = sprintf(
             "SELECT * FROM %sfaqseo WHERE type = '%s' AND reference_id = %d AND reference_language = '%s'",
             Database::getTablePrefix(),
-            $seoEntity->getSeoType()->value,
+            $seoType,
             $seoEntity->getReferenceId(),
             $db->escape($seoEntity->getReferenceLanguage()),
         );
@@ -93,6 +95,7 @@ class SeoRepository implements SeoRepositoryInterface
     public function update(SeoEntity $seoEntity): bool
     {
         $db = $this->configuration->getDb();
+        $seoType = $db->escape($seoEntity->getSeoType()->value);
 
         $query = sprintf(
             "UPDATE %sfaqseo SET title = '%s', description = '%s' "
@@ -100,7 +103,7 @@ class SeoRepository implements SeoRepositoryInterface
             Database::getTablePrefix(),
             $db->escape($seoEntity->getTitle()),
             $db->escape($seoEntity->getDescription()),
-            $seoEntity->getSeoType()->value,
+            $seoType,
             $seoEntity->getReferenceId(),
             $db->escape($seoEntity->getReferenceLanguage()),
         );
@@ -114,11 +117,12 @@ class SeoRepository implements SeoRepositoryInterface
     public function delete(SeoEntity $seoEntity): bool
     {
         $db = $this->configuration->getDb();
+        $seoType = $db->escape($seoEntity->getSeoType()->value);
 
         $query = sprintf(
             "DELETE FROM %sfaqseo WHERE type = '%s' AND reference_id = %d AND reference_language = '%s'",
             Database::getTablePrefix(),
-            $seoEntity->getSeoType()->value,
+            $seoType,
             $seoEntity->getReferenceId(),
             $db->escape($seoEntity->getReferenceLanguage()),
         );

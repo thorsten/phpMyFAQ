@@ -90,6 +90,7 @@ class Relation
     public function getCategoryWithFaqs(): array
     {
         $categoryTree = [];
+        $groupList = $this->normalizeIdList($this->category->getGroups());
 
         $query = sprintf(
             '
@@ -120,25 +121,24 @@ class Relation
 
         if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
             if (-1 === $this->category->getUser()) {
-                $query .= sprintf(
-                    'AND fdg.group_id IN (%s) AND fcg.group_id IN (%s)',
-                    implode(', ', $this->category->getGroups()),
-                    implode(', ', $this->category->getGroups()),
-                );
+                $query .= sprintf('AND fdg.group_id IN (%s) AND fcg.group_id IN (%s)', $groupList, $groupList);
             } else {
                 $query .= sprintf(
                     'AND ( fdu.user_id = %d OR fdg.group_id IN (%s) )
                     AND ( fcu.user_id = %d OR fcg.group_id IN (%s) )',
                     $this->category->getUser(),
-                    implode(', ', $this->category->getGroups()),
+                    $groupList,
                     $this->category->getUser(),
-                    implode(', ', $this->category->getGroups()),
+                    $groupList,
                 );
             }
         }
 
         if (strlen($this->configuration->getLanguage()->getLanguage()) > 0) {
-            $query .= sprintf(" AND fd.lang = '%s'", $this->configuration->getLanguage()->getLanguage());
+            $query .= sprintf(
+                " AND fd.lang = '%s'",
+                $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
+            );
         }
 
         $query .= " AND fd.active = 'yes' GROUP BY fcr.category_id, fc.parent_id, fc.name, fc.description";
@@ -166,6 +166,7 @@ class Relation
     public function getNumberOfFaqsPerCategory(bool $categoryRestriction = false, bool $onlyActive = false): array
     {
         $numRecordsByCat = [];
+        $language = $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage());
         if ($categoryRestriction) {
             $query = sprintf(
                 '
@@ -190,7 +191,7 @@ class Relation
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
-                $this->groups[0],
+                (int) ($this->groups[0] ?? -1),
                 $onlyActive ? " AND fd.active = 'yes'" : '',
             );
         } else {
@@ -219,11 +220,7 @@ class Relation
         }
 
         if (strlen($this->configuration->getLanguage()->getLanguage()) > 0) {
-            $query .= sprintf(
-                " AND fd.lang = '%s' AND fc.lang = '%s'",
-                $this->configuration->getLanguage()->getLanguage(),
-                $this->configuration->getLanguage()->getLanguage(),
-            );
+            $query .= sprintf(" AND fd.lang = '%s' AND fc.lang = '%s'", $language, $language);
         }
 
         $query .= ' GROUP BY fcr.category_id, fc.parent_id';
@@ -312,6 +309,7 @@ class Relation
     public function getCategories(int $faqId, string $faqLang): array
     {
         $categories = [];
+        $faqLang = $this->configuration->getDb()->escape($faqLang);
 
         $query = sprintf("
             SELECT
@@ -391,10 +389,20 @@ class Relation
         );
 
         if (!$deleteForAllLanguages) {
-            $query .= sprintf(" AND category_lang = '%s'", $categoryLang);
+            $query .= sprintf(" AND category_lang = '%s'", $this->configuration->getDb()->escape($categoryLang));
         }
 
         return (bool) $this->configuration->getDb()->query($query);
+    }
+
+    /**
+     * @param array<int|string> $ids
+     */
+    private function normalizeIdList(array $ids): string
+    {
+        $normalizedIds = array_map(static fn($id): int => (int) $id, $ids);
+
+        return $normalizedIds === [] ? '-1' : implode(', ', $normalizedIds);
     }
 
     /**

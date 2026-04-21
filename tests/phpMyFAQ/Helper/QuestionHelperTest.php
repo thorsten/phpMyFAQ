@@ -127,4 +127,14 @@ class QuestionHelperTest extends TestCase
         $this->assertObjectHasProperty('question', $question);
         $this->assertObjectHasProperty('answerId', $question);
     }
+
+    public function testGetOpenQuestionsEscapesCurrentLanguage(): void
+    {
+        Language::$language = "en' OR 1=1 -- ";
+
+        $openQuestions = $this->questionHelper->getOpenQuestions();
+
+        $this->assertIsObject($openQuestions);
+        $this->assertStringContainsString("en'' or 1=1 -- ", $this->configuration->getDb()->log());
+    }
 }

@@ -147,4 +147,36 @@ class BasicPermissionRepositoryTest extends TestCase
         $this->assertIsInt($nextId);
         $this->assertGreaterThan(0, $nextId);
     }
+
+    public function testAddRightEscapesUserControlledValues(): void
+    {
+        $rightData = [
+            'name' => "audit_right' OR 1=1 -- ",
+            'description' => "description' OR 1=1 -- ",
+            'for_users' => 1,
+            'for_groups' => 1,
+            'for_sections' => 1,
+        ];
+
+        $nextId = $this->repository->nextRightId();
+
+        $this->assertTrue($this->repository->addRight($rightData, $nextId));
+        $this->assertStringContainsString("audit_right'' OR 1=1 -- ", $this->dbHandle->log());
+        $this->assertStringContainsString("description'' OR 1=1 -- ", $this->dbHandle->log());
+
+        $rightId = $this->repository->getRightId($rightData['name']);
+        $this->assertSame($nextId, $rightId);
+
+        $this->dbHandle->query('DELETE FROM faqright WHERE right_id = ' . $nextId);
+    }
+
+    public function testGetAllRightsDataWhitelistsSortDirection(): void
+    {
+        $result = $this->repository->getAllRightsData('DESC; DROP TABLE faqright; --');
+
+        $this->assertIsArray($result);
+        $this->assertStringNotContainsString('DROP TABLE', $this->dbHandle->log());
+        $this->assertStringContainsString('ORDER BY', $this->dbHandle->log());
+        $this->assertStringContainsString('right_id ASC', $this->dbHandle->log());
+    }
 }

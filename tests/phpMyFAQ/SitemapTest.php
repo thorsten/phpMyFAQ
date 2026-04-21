@@ -18,6 +18,8 @@ class SitemapTest extends TestCase
 
     private PdoSqlite $db;
 
+    private Configuration $configuration;
+
     /**
      * @throws Exception
      * @throws Core\Exception
@@ -38,14 +40,15 @@ class SitemapTest extends TestCase
             $dbConfig->getDatabase(),
             $dbConfig->getPort(),
         );
-        $configuration = new Configuration($this->db);
-        $configuration->set('main.referenceURL', 'https://example.com/');
+        $this->configuration = new Configuration($this->db);
+        $this->configuration->set('main.referenceURL', 'https://example.com/');
+        $this->configuration->set('security.permLevel', 'medium');
 
-        $language = new Language($configuration, $this->createStub(Session::class));
+        $language = new Language($this->configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');
-        $configuration->setLanguage($language);
+        $this->configuration->setLanguage($language);
 
-        $this->sitemap = new Sitemap($configuration);
+        $this->sitemap = new Sitemap($this->configuration);
 
         $this->db->query(
             'INSERT INTO faqdata '
@@ -71,5 +74,17 @@ class SitemapTest extends TestCase
         $expected->url = 'https://example.com/sitemap/S/en.html';
         $this->assertIsArray($letters);
         $this->assertEquals([$expected], $letters);
+    }
+
+    public function testGetAllFirstLettersNormalizesGroupIds(): void
+    {
+        $this->sitemap->setUser(-1);
+        $this->sitemap->setGroups(['-1) OR 1=1 -- ', '2']);
+
+        $letters = $this->sitemap->getAllFirstLetters();
+
+        $this->assertIsArray($letters);
+        $this->assertStringContainsString('fdg.group_id IN (-1, 2)', $this->db->log());
+        $this->assertStringNotContainsString('OR 1=1', $this->db->log());
     }
 }

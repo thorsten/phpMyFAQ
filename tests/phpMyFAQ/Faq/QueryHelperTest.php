@@ -136,4 +136,11 @@ ORDER BY fcr.category_id, fd.id";
         // Perform the assertion
         $this->assertSame($expectedQuery, $result);
     }
+
+    public function testQueryPermissionNormalizesGroupIds(): void
+    {
+        $queryHelper = new QueryHelper(-1, ['1) OR 1=1 -- ', '2']);
+
+        $this->assertSame('AND fdg.group_id IN (1, 2)', $queryHelper->queryPermission(true));
+    }
 }

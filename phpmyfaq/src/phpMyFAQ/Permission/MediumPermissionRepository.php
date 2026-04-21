@@ -185,12 +185,23 @@ readonly class MediumPermissionRepository
      */
     public function changeGroup(int $groupId, array $groupData): bool
     {
+        $db = $this->configuration->getDb();
+        $allowedColumns = ['name', 'description', 'auto_join'];
         $set = '';
         $comma = '';
 
         foreach (array_keys($groupData) as $key) {
-            $set .= $comma . $key . " = '" . $this->configuration->getDb()->escape((string) $groupData[$key]) . "'";
+            if (!in_array($key, $allowedColumns, true)) {
+                continue;
+            }
+
+            $value = $key === 'auto_join' ? (string) (int) $groupData[$key] : $db->escape((string) $groupData[$key]);
+            $set .= $comma . $key . " = '" . $value . "'";
             $comma = ",\n                ";
+        }
+
+        if ($set === '') {
+            return false;
         }
 
         $update = sprintf('
@@ -201,7 +212,7 @@ readonly class MediumPermissionRepository
             WHERE
                 group_id = %d', Database::getTablePrefix(), $set, $groupId);
 
-        return (bool) $this->configuration->getDb()->query($update);
+        return (bool) $db->query($update);
     }
 
     /**

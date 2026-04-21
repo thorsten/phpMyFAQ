@@ -168,8 +168,8 @@ class Faq
      */
     public function getInactiveFaqsData(): array
     {
-        $query = sprintf(
-            "
+        $language = $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage());
+        $query = sprintf("
             SELECT
                 fd.id AS id,
                 fd.lang AS lang,
@@ -183,10 +183,7 @@ class Faq
             GROUP BY
                 fd.id, fd.lang, fd.thema
             ORDER BY
-                fd.id DESC",
-            Database::getTablePrefix(),
-            $this->configuration->getLanguage()->getLanguage(),
-        );
+                fd.id DESC", Database::getTablePrefix(), $language);
 
         $result = $this->configuration->getDb()->query($query);
         $inactive = [];
@@ -218,6 +215,7 @@ class Faq
      */
     public function getOrphanedFaqs(): array
     {
+        $language = $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage());
         $query = sprintf(
             "
                 SELECT
@@ -244,7 +242,7 @@ class Faq
                 ORDER BY
                     fd.id DESC",
             Database::getTablePrefix(),
-            $this->configuration->getLanguage()->getLanguage(),
+            $language,
             Database::getTablePrefix(),
         );
 
@@ -280,14 +278,15 @@ class Faq
      */
     public function setStickyFaqOrder(array $faqIds): bool
     {
+        $normalizedFaqIds = array_map(static fn($faqId): int => (int) $faqId, $faqIds);
         $count = 1;
-        $counter = count($faqIds);
+        $counter = count($normalizedFaqIds);
         for ($i = 0; $i < $counter; ++$i) {
             $query = sprintf(
                 'UPDATE %sfaqdata SET sticky_order=%d WHERE id=%d',
                 Database::getTablePrefix(),
                 $count,
-                $faqIds[$i],
+                $normalizedFaqIds[$i],
             );
             $this->configuration->getDb()->query($query);
             ++$count;

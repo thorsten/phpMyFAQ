@@ -79,14 +79,15 @@ class Sitemap
      */
     public function getAllFirstLetters(): array
     {
+        $groupList = $this->normalizeIdList($this->groups);
         if ($this->groupSupport) {
             $permPart = sprintf(
                 '( fdg.group_id IN (%s)
             OR
                 (fdu.user_id = %d AND fdg.group_id IN (%s)))',
-                implode(', ', $this->groups),
+                $groupList,
                 $this->user,
-                implode(', ', $this->groups),
+                $groupList,
             );
         } else {
             $permPart = sprintf('( fdu.user_id = %d OR fdu.user_id = -1 )', $this->user);
@@ -156,14 +157,15 @@ class Sitemap
      */
     public function getFaqsFromLetter(string $letter = 'A'): array
     {
+        $groupList = $this->normalizeIdList($this->groups);
         if ($this->groupSupport) {
             $permPart = sprintf(
                 '( fdg.group_id IN (%s)
             OR
                 (fdu.user_id = %d AND fdg.group_id IN (%s)))',
-                implode(', ', $this->groups),
+                $groupList,
                 $this->user,
-                implode(', ', $this->groups),
+                $groupList,
             );
         } else {
             $permPart = sprintf('( fdu.user_id = %d OR fdu.user_id = -1 )', $this->user);
@@ -207,7 +209,7 @@ class Sitemap
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($letter),
-            $this->configuration->getLanguage()->getLanguage(),
+            $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
             $permPart,
         );
 
@@ -249,5 +251,15 @@ class Sitemap
         }
 
         return $faqs;
+    }
+
+    /**
+     * @param array<int|string> $ids
+     */
+    private function normalizeIdList(array $ids): string
+    {
+        $normalizedIds = array_map(static fn($id): int => (int) $id, $ids);
+
+        return $normalizedIds === [] ? '-1' : implode(', ', $normalizedIds);
     }
 }

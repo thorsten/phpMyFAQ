@@ -41,6 +41,7 @@ class FaqTest extends TestCase
         $this->configuration->set('main.currentVersion', System::getVersion());
 
         $language = new Language($this->configuration, $this->createStub(Session::class));
+        Language::$language = 'en';
         $this->configuration->setLanguage($language);
 
         $this->faq = new Faq($this->configuration);
@@ -170,6 +171,34 @@ class FaqTest extends TestCase
         $this->faq->getFaqBySolutionId(42);
         $this->assertArrayHasKey('solution_id', $this->faq->faqRecord);
         $this->assertEquals(42, (int) $this->faq->faqRecord['solution_id']);
+    }
+
+    public function testGetAllAvailableFaqsByCategoryIdSanitizesLanguageAndSorting(): void
+    {
+        Language::$language = "en' OR 1=1 -- ";
+
+        $result = $this->faq->getAllAvailableFaqsByCategoryId(
+            1,
+            'id DESC; DROP TABLE faqdata; --',
+            'DESC; DROP TABLE faqdata; --',
+        );
+
+        $this->assertSame([], $result);
+        $this->assertStringContainsString("en'' or 1=1 -- ", $this->configuration->getDb()->log());
+        $this->assertStringContainsString('ORDER BY', $this->configuration->getDb()->log());
+        $this->assertStringContainsString('fd.id ASC', $this->configuration->getDb()->log());
+        $this->assertStringNotContainsString('DROP TABLE', $this->configuration->getDb()->log());
+    }
+
+    public function testGetFaqsByIdsNormalizesIdLists(): void
+    {
+        Language::$language = 'en';
+
+        $result = $this->faq->getFaqsByIds(['1) OR 1=1 -- ', '2']);
+
+        $this->assertSame([], $result);
+        $this->assertStringContainsString('fd.id IN (1, 2)', $this->configuration->getDb()->log());
+        $this->assertStringNotContainsString('OR 1=1', $this->configuration->getDb()->log());
     }
 
     private function getFaqEntity(): FaqEntity

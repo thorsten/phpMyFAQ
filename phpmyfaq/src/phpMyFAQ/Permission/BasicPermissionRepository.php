@@ -193,6 +193,7 @@ readonly class BasicPermissionRepository
      */
     public function addRight(array $rightData, int $nextId): bool
     {
+        $db = $this->configuration->getDb();
         $insert = sprintf(
             "
             INSERT INTO
@@ -202,14 +203,14 @@ readonly class BasicPermissionRepository
             (%d, '%s', '%s', %d, %d, %d)",
             Database::getTablePrefix(),
             $nextId,
-            $rightData['name'],
-            $rightData['description'],
+            $db->escape((string) $rightData['name']),
+            $db->escape((string) $rightData['description']),
             $rightData['for_users'] ?? 1,
             $rightData['for_groups'] ?? 1,
             $rightData['for_sections'] ?? 1,
         );
 
-        return (bool) $this->configuration->getDb()->query($insert);
+        return (bool) $db->query($insert);
     }
 
     /**
@@ -220,15 +221,16 @@ readonly class BasicPermissionRepository
      */
     public function renameRight(int $rightId, string $newName): bool
     {
+        $db = $this->configuration->getDb();
         $update = sprintf('
             UPDATE
                 %sfaqright
             SET
                 name = \'%s\'
             WHERE
-                right_id = %d', Database::getTablePrefix(), $newName, $rightId);
+                right_id = %d', Database::getTablePrefix(), $db->escape($newName), $rightId);
 
-        return (bool) $this->configuration->getDb()->query($update);
+        return (bool) $db->query($update);
     }
 
     /**
@@ -239,6 +241,7 @@ readonly class BasicPermissionRepository
      */
     public function getAllRightsData(string $order = 'ASC'): array
     {
+        $order = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
         $select = sprintf('
             SELECT
                 right_id,

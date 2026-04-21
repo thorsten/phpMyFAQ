@@ -275,6 +275,22 @@ class PermissionTest extends TestCase
         $this->assertEquals([], $result);
     }
 
+    public function testGetNormalizesCategoryIds(): void
+    {
+        Database::setTablePrefix('test_');
+
+        $resultMock = 'query_result';
+        $this->databaseMock
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->stringContains('category_id IN (1, 2)'))
+            ->willReturn($resultMock);
+
+        $this->databaseMock->expects($this->once())->method('fetchObject')->with($resultMock)->willReturn(false);
+
+        $this->assertSame([], $this->permission->get(Permission::USER, ['1) OR 1=1 -- ', '2']));
+    }
+
     public function testGetAll(): void
     {
         Database::setTablePrefix('test_');
@@ -358,6 +374,26 @@ class PermissionTest extends TestCase
         ];
 
         $this->assertEquals($expected, $result);
+    }
+
+    public function testGetAllNormalizesCategoryIds(): void
+    {
+        Database::setTablePrefix('test_');
+
+        $this->databaseMock
+            ->expects($this->exactly(2))
+            ->method('query')
+            ->with($this->stringContains('category_id IN (1, 2)'))
+            ->willReturnOnConsecutiveCalls('user_result', 'group_result');
+
+        $this->databaseMock->expects($this->exactly(2))->method('fetchObject')->willReturn(false);
+
+        $result = $this->permission->getAll(['1) OR 1=1 -- ', '2']);
+
+        $this->assertSame([
+            1 => [Permission::USER => [], Permission::GROUP => []],
+            2 => [Permission::USER => [], Permission::GROUP => []],
+        ], $result);
     }
 
     protected function tearDown(): void

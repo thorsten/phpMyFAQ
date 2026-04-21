@@ -15,6 +15,10 @@ class TagsTest extends TestCase
 {
     private Tags $tags;
 
+    private Sqlite3 $dbHandle;
+
+    private Configuration $configuration;
+
     /**
      * @throws Exception
      */
@@ -24,24 +28,23 @@ class TagsTest extends TestCase
 
         $_SERVER['HTTP_HOST'] = 'example.com';
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $configuration = new Configuration($dbHandle);
-        $configuration->set('main.referenceURL', 'http://example.com');
+        $this->dbHandle = new Sqlite3();
+        $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $this->configuration = new Configuration($this->dbHandle);
+        $this->configuration->set('main.referenceURL', 'http://example.com');
+        $this->configuration->set('security.permLevel', 'medium');
 
-        $language = new Language($configuration, $this->createStub(Session::class));
+        $language = new Language($this->configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');
-        $configuration->setLanguage($language);
+        $this->configuration->setLanguage($language);
 
-        $this->tags = new Tags($configuration);
+        $this->tags = new Tags($this->configuration);
     }
 
     protected function tearDown(): void
     {
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $dbHandle->query('DELETE FROM faqdata_tags');
-        $dbHandle->query('DELETE FROM faqtags');
+        $this->dbHandle->query('DELETE FROM faqdata_tags');
+        $this->dbHandle->query('DELETE FROM faqtags');
     }
 
     public function testCreate(): void
@@ -152,5 +155,15 @@ class TagsTest extends TestCase
         // Should return tags (with proper database setup)
         $allTags = $this->tags->getAllTags();
         $this->assertIsArray($allTags);
+    }
+
+    public function testPermissionChecksNormalizeGroupIds(): void
+    {
+        $this->tags->setUser(-1);
+        $this->tags->setGroups(['-1) OR 1=1 -- ', '2']);
+
+        $this->assertIsArray($this->tags->getPopularTags());
+        $this->assertStringContainsString('fdg.group_id IN (-1, 2)', $this->dbHandle->log());
+        $this->assertStringNotContainsString('OR 1=1', $this->dbHandle->log());
     }
 }
