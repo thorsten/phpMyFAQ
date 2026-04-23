@@ -65,6 +65,9 @@ final class AuthenticationController extends AbstractAdministrationController im
             try {
                 $this->currentUser = $userAuthentication->authenticate($username, $password);
                 if ($userAuthentication->hasTwoFactorAuthentication()) {
+                    $session = $this->container->get(id: 'session');
+                    $session->set('2fa_pending_user_id', $this->currentUser->getUserId());
+                    $session->set('2fa_failed_attempts', 0);
                     return new RedirectResponse(url: './token?user-id=' . $this->currentUser->getUserId());
                 }
             } catch (Exception) {
@@ -192,6 +195,19 @@ final class AuthenticationController extends AbstractAdministrationController im
         $token = Filter::filterVar($request->request->get(key: 'token'), FILTER_SANITIZE_SPECIAL_CHARS);
         $userId = (int) Filter::filterVar($request->request->get(key: 'user-id'), FILTER_VALIDATE_INT);
 
+        $session = $this->container->get(id: 'session');
+        $pendingUserId = $session->get('2fa_pending_user_id');
+
+        if ($pendingUserId === null || (int) $pendingUserId !== $userId) {
+            return new RedirectResponse(url: './login');
+        }
+
+        if ($session->get('2fa_failed_attempts', 0) >= 5) {
+            $session->remove('2fa_pending_user_id');
+            $session->remove('2fa_failed_attempts');
+            return new RedirectResponse(url: './login');
+        }
+
         $user = $this->container->get(id: 'phpmyfaq.user.current_user');
         $user->getUserById($userId);
 
@@ -200,10 +216,14 @@ final class AuthenticationController extends AbstractAdministrationController im
             $result = $tfa->validateToken($token, $userId);
 
             if ($result) {
+                $session->remove('2fa_pending_user_id');
+                $session->remove('2fa_failed_attempts');
                 $user->twoFactorSuccess();
                 return new RedirectResponse(url: './');
             }
         }
+
+        $session->set('2fa_failed_attempts', $session->get('2fa_failed_attempts', 0) + 1);
 
         return new RedirectResponse('./token?user-id=' . $userId);
     }
