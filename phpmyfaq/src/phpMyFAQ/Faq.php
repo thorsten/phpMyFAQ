@@ -1311,6 +1311,7 @@ class Faq
      */
     public function getIdFromSolutionId(int $solutionId): array
     {
+        $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = sprintf(
             '
             SELECT
@@ -1328,10 +1329,12 @@ class Faq
             AND
                 fd.lang = fcr.record_lang
             WHERE
-                fd.solution_id = %d',
+                fd.solution_id = %d
+                %s',
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $solutionId,
+            $queryHelper->queryPermission($this->groupSupport),
         );
 
         $result = $this->configuration->getDb()->query($query);
