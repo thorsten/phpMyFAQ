@@ -1190,11 +1190,8 @@ class Faq
                 fd.*, COALESCE(fdg.group_id, -1) AS group_id, fdu.user_id
             FROM
                 %sfaqdata fd
-            LEFT JOIN (
-                SELECT record_id, group_id FROM %sfaqdata_group fdg WHERE fdg.group_id <> -1
-                UNION ALL
-                SELECT fd.id AS record_id, -1 AS group_id FROM %sfaqdata fd WHERE fd.solution_id = %d
-            ) AS fdg
+            LEFT JOIN
+                %sfaqdata_group fdg
             ON
                 fd.id = fdg.record_id
             LEFT JOIN
@@ -1208,25 +1205,12 @@ class Faq
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $solutionId,
-            Database::getTablePrefix(),
-            $solutionId,
             $queryHelper->queryPermission($this->groupSupport),
         );
 
         $result = $this->configuration->getDb()->query($query);
 
         $row = $this->configuration->getDb()->fetchObject($result);
-
-        if (false === $row || null === $row) {
-            // Fallback without permission filter to ensure retrieval in non-authenticated contexts (e.g., tests)
-            $fallbackQuery = sprintf(
-                'SELECT * FROM %sfaqdata fd WHERE fd.solution_id = %d LIMIT 1',
-                Database::getTablePrefix(),
-                $solutionId,
-            );
-            $fallbackResult = $this->configuration->getDb()->query($fallbackQuery);
-            $row = $this->configuration->getDb()->fetchObject($fallbackResult);
-        }
 
         if ($row) {
             $question = nl2br((string) $row->thema);
@@ -1261,10 +1245,7 @@ class Faq
                 'notes' => $row->notes,
             ];
         } else {
-            // Ensure faqRecord has at least the requested solution_id to keep API stable
-            $this->faqRecord = [
-                'solution_id' => $solutionId,
-            ];
+            $this->faqRecord = [];
         }
     }
 
@@ -1275,6 +1256,7 @@ class Faq
      */
     public function getIdFromSolutionId(int $solutionId): array
     {
+        $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = sprintf(
             '
             SELECT
@@ -1286,16 +1268,28 @@ class Faq
             FROM
                 %sfaqdata fd
             LEFT JOIN
+                %sfaqdata_group fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                %sfaqdata_user fdu
+            ON
+                fd.id = fdu.record_id
+            LEFT JOIN
                 %sfaqcategoryrelations fcr
             ON
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
             WHERE
-                fd.solution_id = %d',
+                fd.solution_id = %d
+                %s',
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $solutionId,
+            $queryHelper->queryPermission($this->groupSupport),
         );
 
         $result = $this->configuration->getDb()->query($query);
