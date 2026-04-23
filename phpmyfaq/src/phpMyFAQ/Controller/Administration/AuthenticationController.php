@@ -73,6 +73,9 @@ final class AuthenticationController extends AbstractAdministrationController im
             try {
                 $this->currentUser = $userAuthentication->authenticate($username, $password);
                 if ($userAuthentication->hasTwoFactorAuthentication()) {
+                    $session = $this->container->get(id: 'session');
+                    $session->set('2fa_pending_user_id', $this->currentUser->getUserId());
+                    $session->set('2fa_failed_attempts', 0);
                     $this->adminLog->log(
                         $this->currentUser,
                         AdminLogType::AUTH_LOGIN_SUCCESS->value . ' (2FA required):' . $username,
@@ -219,6 +222,20 @@ final class AuthenticationController extends AbstractAdministrationController im
         $userId = (int) Filter::filterVar($request->request->get(key: 'user-id'), FILTER_VALIDATE_INT);
 
         $user = $this->currentUserService;
+        $session = $this->container->get(id: 'session');
+        $pendingUserId = $session->get('2fa_pending_user_id');
+
+        if ($pendingUserId === null || (int) $pendingUserId !== $userId) {
+            return new RedirectResponse(url: './login');
+        }
+
+        if ($session->get('2fa_failed_attempts', 0) >= 5) {
+            $session->remove('2fa_pending_user_id');
+            $session->remove('2fa_failed_attempts');
+            return new RedirectResponse(url: './login');
+        }
+
+        $user = $this->container->get(id: 'phpmyfaq.user.current_user');
         $user->getUserById($userId);
 
         if (strlen((string) $token) === 6) {
@@ -226,6 +243,8 @@ final class AuthenticationController extends AbstractAdministrationController im
             $result = $tfa->validateToken($token, $userId);
 
             if ($result) {
+                $session->remove('2fa_pending_user_id');
+                $session->remove('2fa_failed_attempts');
                 $user->twoFactorSuccess();
                 $this->adminLog->log($user, AdminLogType::AUTH_2FA_SUCCESS->value . ':' . $user->getLogin());
                 return new RedirectResponse(url: './');
@@ -233,6 +252,8 @@ final class AuthenticationController extends AbstractAdministrationController im
 
             $this->adminLog->log($user, AdminLogType::AUTH_2FA_FAILED->value . ':' . $user->getLogin());
         }
+
+        $session->set('2fa_failed_attempts', $session->get('2fa_failed_attempts', 0) + 1);
 
         return new RedirectResponse('./token?user-id=' . $userId);
     }
