@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller\Frontend;
 use Exception;
 use phpMyFAQ\Auth\AuthEntraId;
 use phpMyFAQ\Auth\EntraId\EntraIdSession;
+use phpMyFAQ\Auth\EntraId\JwksProvider;
 use phpMyFAQ\Auth\EntraId\OAuth;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Filter;
@@ -162,7 +163,7 @@ final class AzureAuthenticationController extends AbstractFrontController
         }
 
         $entraIdSession = new EntraIdSession($this->configuration, $session);
-        $oAuth = new OAuth($this->configuration, $entraIdSession);
+        $oAuth = new OAuth($this->configuration, $entraIdSession, new JwksProvider());
         $auth = new AuthEntraId($this->configuration, $oAuth);
 
         return [$auth, $oAuth, $entraIdSession];
