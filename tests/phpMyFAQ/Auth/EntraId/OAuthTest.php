@@ -2,6 +2,8 @@
 
 namespace phpMyFAQ\Auth\EntraId;
 
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use phpMyFAQ\Configuration;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
@@ -25,7 +27,25 @@ class OAuthTest extends TestCase
 {
     private HttpClientInterface $mockClient;
     private EntraIdSession $mockSession;
+    private JwksProvider $mockJwksProvider;
     private OAuth $oAuth;
+
+    private static string $privateKey;
+    private static string $publicKey;
+    private const string KID = 'test-kid';
+
+    public static function setUpBeforeClass(): void
+    {
+        $resource = openssl_pkey_new([
+            'private_key_bits' => 2048,
+            'private_key_type' => OPENSSL_KEYTYPE_RSA,
+        ]);
+        openssl_pkey_export($resource, $privateKey);
+        $details = openssl_pkey_get_details($resource);
+
+        self::$privateKey = $privateKey;
+        self::$publicKey = $details['key'];
+    }
 
     /**
      * @throws Exception
@@ -34,9 +54,33 @@ class OAuthTest extends TestCase
     {
         $this->mockClient = $this->createMock(HttpClientInterface::class);
         $this->mockSession = $this->createMock(EntraIdSession::class);
+        $this->mockJwksProvider = $this->createMock(JwksProvider::class);
         $mockConfiguration = $this->createStub(Configuration::class);
 
-        $this->oAuth = new OAuth($mockConfiguration, $this->mockSession);
+        $this->mockJwksProvider
+            ->method('getKeys')
+            ->willReturn([self::KID => new Key(self::$publicKey, 'RS256')]);
+
+        $this->oAuth = new OAuth($mockConfiguration, $this->mockSession, $this->mockJwksProvider);
+    }
+
+    /**
+     * @param array<string, mixed> $overrides
+     */
+    private function signedIdToken(array $overrides = []): string
+    {
+        $payload = array_merge([
+            'iss' => 'https://login.microsoftonline.com/' . AAD_OAUTH_TENANTID . '/v2.0',
+            'aud' => AAD_OAUTH_CLIENTID,
+            'sub' => 'subject-id',
+            'iat' => time() - 60,
+            'nbf' => time() - 60,
+            'exp' => time() + 3600,
+            'name' => 'John Doe',
+            'preferred_username' => 'john@example.com',
+        ], $overrides);
+
+        return JWT::encode($payload, self::$privateKey, 'RS256', self::KID);
     }
 
     /**
@@ -168,13 +212,8 @@ class OAuthTest extends TestCase
 
     public function testSetToken(): void
     {
-        $header = base64_encode(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));
-        $payload = base64_encode(json_encode(['name' => 'John Doe', 'preferred_username' => 'john@example.com']));
-        $signature = 'dummy_signature'; // Signature is not used in this case
-        $idToken = $header . '.' . $payload . '.' . $signature;
-
         $token = new stdClass();
-        $token->id_token = $idToken;
+        $token->id_token = $this->signedIdToken();
 
         $this->mockSession
             ->expects($this->once())
@@ -187,12 +226,114 @@ class OAuthTest extends TestCase
         $this->assertEquals('john@example.com', $this->oAuth->getMail());
     }
 
+    public function testSetTokenRejectsUnsignedToken(): void
+    {
+        $header = rtrim(strtr(base64_encode(json_encode(['alg' => 'none', 'typ' => 'JWT'])), '+/', '-_'), '=');
+        $payload = rtrim(strtr(base64_encode(json_encode([
+            'iss' => 'https://login.microsoftonline.com/' . AAD_OAUTH_TENANTID . '/v2.0',
+            'aud' => AAD_OAUTH_CLIENTID,
+            'preferred_username' => 'attacker@example.com',
+            'exp' => time() + 3600,
+        ])), '+/', '-_'), '=');
+
+        $token = new stdClass();
+        $token->id_token = $header . '.' . $payload . '.';
+
+        $this->mockSession->expects($this->once())->method('set')->with(EntraIdSession::ENTRA_ID_JWT, '{}');
+
+        $this->oAuth->setToken($token);
+
+        $this->assertEquals('', $this->oAuth->getMail());
+    }
+
+    public function testSetTokenRejectsInvalidSignature(): void
+    {
+        $otherKey = openssl_pkey_new([
+            'private_key_bits' => 2048,
+            'private_key_type' => OPENSSL_KEYTYPE_RSA,
+        ]);
+        openssl_pkey_export($otherKey, $otherPrivate);
+
+        $payload = [
+            'iss' => 'https://login.microsoftonline.com/' . AAD_OAUTH_TENANTID . '/v2.0',
+            'aud' => AAD_OAUTH_CLIENTID,
+            'preferred_username' => 'attacker@example.com',
+            'exp' => time() + 3600,
+            'iat' => time() - 60,
+            'nbf' => time() - 60,
+        ];
+        $forged = JWT::encode($payload, $otherPrivate, 'RS256', self::KID);
+
+        $token = new stdClass();
+        $token->id_token = $forged;
+
+        $this->mockSession->expects($this->once())->method('set')->with(EntraIdSession::ENTRA_ID_JWT, '{}');
+
+        $this->oAuth->setToken($token);
+
+        $this->assertEquals('', $this->oAuth->getMail());
+    }
+
+    public function testSetTokenRejectsWrongAudience(): void
+    {
+        $token = new stdClass();
+        $token->id_token = $this->signedIdToken(['aud' => 'other-client-id']);
+
+        $this->mockSession->expects($this->once())->method('set')->with(EntraIdSession::ENTRA_ID_JWT, '{}');
+
+        $this->oAuth->setToken($token);
+
+        $this->assertEquals('', $this->oAuth->getMail());
+    }
+
+    public function testSetTokenRejectsWrongIssuer(): void
+    {
+        $token = new stdClass();
+        $token->id_token = $this->signedIdToken(['iss' => 'https://evil.example.com/']);
+
+        $this->mockSession->expects($this->once())->method('set')->with(EntraIdSession::ENTRA_ID_JWT, '{}');
+
+        $this->oAuth->setToken($token);
+
+        $this->assertEquals('', $this->oAuth->getMail());
+    }
+
+    public function testSetTokenRejectsExpiredToken(): void
+    {
+        $token = new stdClass();
+        $token->id_token = $this->signedIdToken([
+            'iat' => time() - 7200,
+            'nbf' => time() - 7200,
+            'exp' => time() - 3600,
+        ]);
+
+        $this->mockSession->expects($this->once())->method('set')->with(EntraIdSession::ENTRA_ID_JWT, '{}');
+
+        $this->oAuth->setToken($token);
+
+        $this->assertEquals('', $this->oAuth->getMail());
+    }
+
+    public function testSetTokenWithoutJwksProviderRejects(): void
+    {
+        $mockConfiguration = $this->createStub(Configuration::class);
+        $oAuth = new OAuth($mockConfiguration, $this->mockSession);
+
+        $token = new stdClass();
+        $token->id_token = $this->signedIdToken();
+
+        $this->mockSession->expects($this->once())->method('set')->with(EntraIdSession::ENTRA_ID_JWT, '{}');
+
+        $oAuth->setToken($token);
+
+        $this->assertEquals('', $oAuth->getMail());
+    }
+
     public function testSetRefreshToken(): void
     {
         $refreshToken = 'test_refresh_token';
         $this->oAuth->setRefreshToken($refreshToken);
 
-        // Use reflection to verify the token was set
         $reflection = new ReflectionClass($this->oAuth);
         $property = $reflection->getProperty('refreshToken');
 
@@ -206,11 +347,8 @@ class OAuthTest extends TestCase
 
     public function testGetTokenReturnsPreviouslySetDecodedToken(): void
     {
-        $header = base64_encode(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));
-        $payload = base64_encode(json_encode(['name' => 'Token User', 'preferred_username' => 'token@example.com']));
-        $signature = 'dummy_signature';
         $token = new stdClass();
-        $token->id_token = $header . '.' . $payload . '.' . $signature;
+        $token->id_token = $this->signedIdToken(['name' => 'Token User', 'preferred_username' => 'token@example.com']);
 
         $this->mockSession
             ->expects($this->once())
@@ -245,13 +383,8 @@ class OAuthTest extends TestCase
 
     public function testGetName(): void
     {
-        $header = base64_encode(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));
-        $payload = base64_encode(json_encode(['name' => 'Jane Doe', 'preferred_username' => 'jane@example.com']));
-        $signature = 'dummy_signature';
-        $idToken = $header . '.' . $payload . '.' . $signature;
-
         $token = new stdClass();
-        $token->id_token = $idToken;
+        $token->id_token = $this->signedIdToken(['name' => 'Jane Doe', 'preferred_username' => 'jane@example.com']);
 
         $this->mockSession
             ->expects($this->once())
@@ -264,13 +397,8 @@ class OAuthTest extends TestCase
 
     public function testGetMail(): void
     {
-        $header = base64_encode(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));
-        $payload = base64_encode(json_encode(['name' => 'Test User', 'preferred_username' => 'test@company.com']));
-        $signature = 'dummy_signature';
-        $idToken = $header . '.' . $payload . '.' . $signature;
-
         $token = new stdClass();
-        $token->id_token = $idToken;
+        $token->id_token = $this->signedIdToken(['name' => 'Test User', 'preferred_username' => 'test@company.com']);
 
         $this->mockSession
             ->expects($this->once())
@@ -296,7 +424,7 @@ class OAuthTest extends TestCase
     public function testSetTokenWithIncompleteJWTParts(): void
     {
         $token = new stdClass();
-        $token->id_token = 'header.payload'; // Missing signature part
+        $token->id_token = 'header.payload';
 
         $this->mockSession->expects($this->once())->method('set')->with(EntraIdSession::ENTRA_ID_JWT, '{}');
 
@@ -319,7 +447,7 @@ class OAuthTest extends TestCase
 
     public function testSetTokenWithMalformedJSON(): void
     {
-        $header = base64_encode('valid-header');
+        $header = base64_encode(json_encode(['alg' => 'RS256', 'typ' => 'JWT', 'kid' => self::KID]));
         $payload = base64_encode('invalid-json{malformed}');
         $signature = 'dummy_signature';
         $token = new stdClass();
@@ -366,13 +494,8 @@ class OAuthTest extends TestCase
 
     public function testSetTokenWithValidJWTButMissingFields(): void
     {
-        $header = base64_encode(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));
-        $payload = base64_encode(json_encode(['sub' => '12345'])); // Missing name and preferred_username
-        $signature = 'dummy_signature';
-        $idToken = $header . '.' . $payload . '.' . $signature;
-
         $token = new stdClass();
-        $token->id_token = $idToken;
+        $token->id_token = $this->signedIdToken(['name' => null, 'preferred_username' => null]);
 
         $this->mockSession
             ->expects($this->once())

@@ -19,12 +19,14 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Auth\EntraId;
 
+use Firebase\JWT\JWT;
 use JsonException;
 use phpMyFAQ\Configuration;
 use stdClass;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Throwable;
 
 /**
  * Class OAuth
@@ -42,14 +44,24 @@ class OAuth
 
     private ?string $accessToken = null;
 
+    private ?JwksProvider $jwksProvider;
+
     /**
      * Constructor.
      */
     public function __construct(
         private readonly Configuration $configuration,
         private readonly EntraIdSession $entraIdSession,
+        ?JwksProvider $jwksProvider = null,
     ) {
         $this->httpClient = HttpClient::create();
+        $this->jwksProvider = $jwksProvider;
+    }
+
+    public function setJwksProvider(?JwksProvider $jwksProvider): OAuth
+    {
+        $this->jwksProvider = $jwksProvider;
+        return $this;
     }
 
     /**
@@ -131,35 +143,52 @@ class OAuth
 
     public function setToken(#[\SensitiveParameter] stdClass $token): OAuth
     {
+        if ($this->jwksProvider === null) {
+            $this->clearToken();
+            return $this;
+        }
+
         try {
-            $parts = explode('.', (string) $token->id_token);
-            if (count($parts) !== 3) {
-                // Malformed JWT - set empty token
-                $this->token = new stdClass();
-                $this->entraIdSession->set(EntraIdSession::ENTRA_ID_JWT, '{}');
+            $idTokenString = (string) ($token->id_token ?? '');
+            if ($idTokenString === '' || substr_count($idTokenString, '.') !== 2) {
+                $this->clearToken();
                 return $this;
             }
 
-            $idToken = base64_decode(string: $parts[1], strict: true);
-            if ($idToken === false) {
-                // Invalid base64 - set empty token
-                $this->token = new stdClass();
-                $this->entraIdSession->set(EntraIdSession::ENTRA_ID_JWT, '{}');
+            $keys = $this->jwksProvider->getKeys(AAD_OAUTH_TENANTID);
+            $decoded = JWT::decode($idTokenString, $keys);
+
+            $expectedIssuers = [
+                'https://login.microsoftonline.com/' . AAD_OAUTH_TENANTID . '/v2.0',
+                'https://sts.windows.net/' . AAD_OAUTH_TENANTID . '/',
+            ];
+
+            if (!isset($decoded->aud) || $decoded->aud !== AAD_OAUTH_CLIENTID) {
+                $this->clearToken();
                 return $this;
             }
 
-            $this->token = json_decode(json: $idToken, associative: null, depth: 512, flags: JSON_THROW_ON_ERROR);
+            if (!isset($decoded->iss) || !in_array($decoded->iss, $expectedIssuers, true)) {
+                $this->clearToken();
+                return $this;
+            }
+
+            $this->token = $decoded;
             $this->entraIdSession->set(EntraIdSession::ENTRA_ID_JWT, json_encode(
                 value: $this->token,
                 flags: JSON_THROW_ON_ERROR,
             ));
-        } catch (JsonException) {
-            // Malformed JSON - set empty token
-            $this->token = new stdClass();
-            $this->entraIdSession->set(EntraIdSession::ENTRA_ID_JWT, '{}');
+        } catch (JsonException|Throwable) {
+            $this->clearToken();
         }
 
         return $this;
+    }
+
+    private function clearToken(): void
+    {
+        $this->token = new stdClass();
+        $this->entraIdSession->set(EntraIdSession::ENTRA_ID_JWT, '{}');
     }
 
     public function getEntraIdSession(): EntraIdSession
