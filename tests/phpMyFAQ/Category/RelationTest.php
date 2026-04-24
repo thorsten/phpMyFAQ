@@ -370,6 +370,73 @@ class RelationTest extends TestCase
         $this->assertEquals([], $result);
     }
 
+    public function testDeleteEscapesLanguageToPreventSqlInjection(): void
+    {
+        Database::setTablePrefix('test_');
+
+        $malicious = "en' AND SLEEP(1)-- -";
+        $escaped = "en\\' AND SLEEP(1)-- -";
+
+        $this->databaseMock
+            ->expects($this->once())
+            ->method('escape')
+            ->with($malicious)
+            ->willReturn($escaped);
+
+        $this->databaseMock
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->stringContains("category_lang = '" . $escaped . "'"))
+            ->willReturn(true);
+
+        $this->assertTrue($this->relation->delete(42, $malicious));
+    }
+
+    public function testDeleteForAllLanguagesDoesNotAppendLanguageClause(): void
+    {
+        Database::setTablePrefix('test_');
+
+        $this->databaseMock->expects($this->never())->method('escape');
+
+        $this->databaseMock
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->logicalAnd(
+                $this->stringContains('category_id = 42'),
+                $this->logicalNot($this->stringContains('category_lang')),
+            ))
+            ->willReturn(true);
+
+        $this->assertTrue($this->relation->delete(42, 'en', true));
+    }
+
+    public function testGetCategoriesEscapesLanguageToPreventSqlInjection(): void
+    {
+        Database::setTablePrefix('test_');
+
+        $malicious = "en' OR 1=1-- -";
+        $escaped = "en\\' OR 1=1-- -";
+
+        $this->databaseMock
+            ->expects($this->once())
+            ->method('escape')
+            ->with($malicious)
+            ->willReturn($escaped);
+
+        $this->databaseMock
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->stringContains("record_lang = '" . $escaped . "'"))
+            ->willReturn('query_result');
+
+        $this->databaseMock
+            ->expects($this->once())
+            ->method('fetchObject')
+            ->willReturn(false);
+
+        $this->assertSame([], $this->relation->getCategories(1, $malicious));
+    }
+
     protected function tearDown(): void
     {
         // Reset table prefix if needed
