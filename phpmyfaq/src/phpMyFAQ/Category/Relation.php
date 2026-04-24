@@ -331,7 +331,8 @@ class Relation
     {
         $categories = [];
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 category_id, category_lang
             FROM
@@ -339,7 +340,11 @@ class Relation
             WHERE
                 record_id = %d
             AND
-                record_lang = '%s'", Database::getTablePrefix(), $faqId, $faqLang);
+                record_lang = '%s'",
+            Database::getTablePrefix(),
+            $faqId,
+            $this->configuration->getDb()->escape($faqLang),
+        );
 
         $result = $this->configuration->getDb()->query($query);
         if ($result) {
@@ -416,7 +421,7 @@ class Relation
         );
 
         if (!$deleteForAllLanguages) {
-            $query .= sprintf(" AND category_lang = '%s'", $categoryLang);
+            $query .= sprintf(" AND category_lang = '%s'", $this->configuration->getDb()->escape($categoryLang));
         }
 
         return (bool) $this->configuration->getDb()->query($query);
