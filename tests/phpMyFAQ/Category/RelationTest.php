@@ -377,11 +377,7 @@ class RelationTest extends TestCase
         $malicious = "en' AND SLEEP(1)-- -";
         $escaped = "en\\' AND SLEEP(1)-- -";
 
-        $this->databaseMock
-            ->expects($this->once())
-            ->method('escape')
-            ->with($malicious)
-            ->willReturn($escaped);
+        $this->databaseMock->expects($this->once())->method('escape')->with($malicious)->willReturn($escaped);
 
         $this->databaseMock
             ->expects($this->once())
@@ -417,11 +413,7 @@ class RelationTest extends TestCase
         $malicious = "en' OR 1=1-- -";
         $escaped = "en\\' OR 1=1-- -";
 
-        $this->databaseMock
-            ->expects($this->once())
-            ->method('escape')
-            ->with($malicious)
-            ->willReturn($escaped);
+        $this->databaseMock->expects($this->once())->method('escape')->with($malicious)->willReturn($escaped);
 
         $this->databaseMock
             ->expects($this->once())
@@ -429,10 +421,7 @@ class RelationTest extends TestCase
             ->with($this->stringContains("record_lang = '" . $escaped . "'"))
             ->willReturn('query_result');
 
-        $this->databaseMock
-            ->expects($this->once())
-            ->method('fetchObject')
-            ->willReturn(false);
+        $this->databaseMock->expects($this->once())->method('fetchObject')->willReturn(false);
 
         $this->assertSame([], $this->relation->getCategories(1, $malicious));
     }

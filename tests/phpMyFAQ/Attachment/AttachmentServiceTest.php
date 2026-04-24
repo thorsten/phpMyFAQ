@@ -227,6 +227,62 @@ final class AttachmentServiceTest extends TestCase
         self::assertFalse($service->canDownloadAttachment($attachment));
     }
 
+    public function testCanDownloadAttachmentDeniedWhenGroupMatchesButUserAclDoesNot(): void
+    {
+        // Regression: previously ($group || $group && $user) collapsed to $group alone,
+        // letting anyone in a permitted group bypass the per-user ACL.
+        $this->configuration->method('get')->willReturn(false);
+
+        $permission = $this->createMock(MediumPermission::class);
+        $permission->method('getUserGroups')->willReturn([5]);
+        $permission->method('getAllRightsData')->willReturn([['right_id' => 1, 'name' => 'dlattachment']]);
+        $permission->method('getAllUserRights')->willReturn([1]);
+
+        $this->currentUser->perm = $permission;
+        $this->currentUser->method('isLoggedIn')->willReturn(true);
+        $this->currentUser->method('getUserId')->willReturn(42);
+
+        $attachment = $this->createMock(AbstractAttachment::class);
+        $attachment->method('getRecordId')->willReturn(1);
+
+        $this->faqPermission
+            ->method('get')
+            ->willReturnCallback(static function (string $mode) {
+                return match ($mode) {
+                    Permission::GROUP => [5],
+                    Permission::USER => [99],
+                    default => [],
+                };
+            });
+
+        $service = $this->createService();
+
+        self::assertFalse($service->canDownloadAttachment($attachment));
+    }
+
+    public function testCanDownloadAttachmentAllowedWhenFaqOpenToAllUsersAndGroups(): void
+    {
+        $this->configuration->method('get')->willReturn(false);
+
+        $permission = $this->createMock(MediumPermission::class);
+        $permission->method('getUserGroups')->willReturn([5]);
+        $permission->method('getAllRightsData')->willReturn([['right_id' => 1, 'name' => 'dlattachment']]);
+        $permission->method('getAllUserRights')->willReturn([1]);
+
+        $this->currentUser->perm = $permission;
+        $this->currentUser->method('isLoggedIn')->willReturn(true);
+        $this->currentUser->method('getUserId')->willReturn(42);
+
+        $attachment = $this->createMock(AbstractAttachment::class);
+        $attachment->method('getRecordId')->willReturn(1);
+
+        $this->faqPermission->method('get')->willReturnCallback(static fn(string $mode) => [-1]);
+
+        $service = $this->createService();
+
+        self::assertTrue($service->canDownloadAttachment($attachment));
+    }
+
     public function testGetAttachmentThrowsExceptionForInvalidStorageType(): void
     {
         // Set AttachmentFactory storage type to 1 (DATABASE) which hits the default/throw branch

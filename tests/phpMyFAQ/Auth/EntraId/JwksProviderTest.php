@@ -92,10 +92,7 @@ class JwksProviderTest extends TestCase
     public function testCachesJwksAcrossCalls(): void
     {
         $httpClient = $this->createMock(HttpClientInterface::class);
-        $httpClient
-            ->expects($this->once())
-            ->method('request')
-            ->willReturn($this->mockResponse($this->jwksJson()));
+        $httpClient->expects($this->once())->method('request')->willReturn($this->mockResponse($this->jwksJson()));
 
         $provider = new JwksProvider($httpClient, $this->cacheDir);
         $provider->getKeys('tenant-a');
@@ -107,10 +104,7 @@ class JwksProviderTest extends TestCase
     public function testCachePersistsAcrossInstances(): void
     {
         $httpClient1 = $this->createMock(HttpClientInterface::class);
-        $httpClient1
-            ->expects($this->once())
-            ->method('request')
-            ->willReturn($this->mockResponse($this->jwksJson()));
+        $httpClient1->expects($this->once())->method('request')->willReturn($this->mockResponse($this->jwksJson()));
 
         $provider1 = new JwksProvider($httpClient1, $this->cacheDir);
         $provider1->getKeys('tenant-a');
@@ -127,10 +121,7 @@ class JwksProviderTest extends TestCase
     public function testRefetchesWhenCacheExpired(): void
     {
         $httpClient = $this->createMock(HttpClientInterface::class);
-        $httpClient
-            ->expects($this->exactly(2))
-            ->method('request')
-            ->willReturn($this->mockResponse($this->jwksJson()));
+        $httpClient->expects($this->exactly(2))->method('request')->willReturn($this->mockResponse($this->jwksJson()));
 
         $provider = new JwksProvider($httpClient, $this->cacheDir);
         $provider->getKeys('tenant-a');
@@ -145,10 +136,7 @@ class JwksProviderTest extends TestCase
     public function testSeparateTenantsCachedSeparately(): void
     {
         $httpClient = $this->createMock(HttpClientInterface::class);
-        $httpClient
-            ->expects($this->exactly(2))
-            ->method('request')
-            ->willReturn($this->mockResponse($this->jwksJson()));
+        $httpClient->expects($this->exactly(2))->method('request')->willReturn($this->mockResponse($this->jwksJson()));
 
         $provider = new JwksProvider($httpClient, $this->cacheDir);
         $provider->getKeys('tenant-a');
@@ -171,9 +159,7 @@ class JwksProviderTest extends TestCase
     public function testThrowsOnNon200Response(): void
     {
         $httpClient = $this->createMock(HttpClientInterface::class);
-        $httpClient
-            ->method('request')
-            ->willReturn($this->mockResponse('Server Error', 503));
+        $httpClient->method('request')->willReturn($this->mockResponse('Server Error', 503));
 
         $provider = new JwksProvider($httpClient, $this->cacheDir);
 
@@ -185,9 +171,7 @@ class JwksProviderTest extends TestCase
     public function testThrowsOnMalformedJson(): void
     {
         $httpClient = $this->createMock(HttpClientInterface::class);
-        $httpClient
-            ->method('request')
-            ->willReturn($this->mockResponse('not-json'));
+        $httpClient->method('request')->willReturn($this->mockResponse('not-json'));
 
         $provider = new JwksProvider($httpClient, $this->cacheDir);
 
@@ -199,9 +183,7 @@ class JwksProviderTest extends TestCase
     public function testThrowsWhenKeysFieldMissing(): void
     {
         $httpClient = $this->createMock(HttpClientInterface::class);
-        $httpClient
-            ->method('request')
-            ->willReturn($this->mockResponse(json_encode(['foo' => 'bar'])));
+        $httpClient->method('request')->willReturn($this->mockResponse(json_encode(['foo' => 'bar'])));
 
         $provider = new JwksProvider($httpClient, $this->cacheDir);
 
@@ -217,10 +199,7 @@ class JwksProviderTest extends TestCase
         file_put_contents($cacheFile, 'not-json');
 
         $httpClient = $this->createMock(HttpClientInterface::class);
-        $httpClient
-            ->expects($this->once())
-            ->method('request')
-            ->willReturn($this->mockResponse($this->jwksJson()));
+        $httpClient->expects($this->once())->method('request')->willReturn($this->mockResponse($this->jwksJson()));
 
         $provider = new JwksProvider($httpClient, $this->cacheDir);
         $keys = $provider->getKeys('tenant-a');
