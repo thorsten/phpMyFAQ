@@ -16,6 +16,25 @@ class RelationTest extends TestCase
 {
     private PdoSqlite $db;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $dbConfig = new DatabaseConfiguration(PMF_TEST_DIR . '/content/core/config/database.php');
+        Database::setTablePrefix($dbConfig->getPrefix());
+        $this->db = Database::factory($dbConfig->getType());
+        $this->db->connect(
+            $dbConfig->getServer(),
+            $dbConfig->getUser(),
+            $dbConfig->getPassword(),
+            $dbConfig->getDatabase(),
+            $dbConfig->getPort(),
+        );
+
+        $this->db->query('DELETE FROM faqdata WHERE id = 1');
+        $this->db->query('DELETE FROM faqcategoryrelations WHERE category_id = 1');
+    }
+
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -30,16 +49,6 @@ class RelationTest extends TestCase
      */
     public function testGetAllRelatedByQuestion(): void
     {
-        $dbConfig = new DatabaseConfiguration(PMF_TEST_DIR . '/content/core/config/database.php');
-        Database::setTablePrefix($dbConfig->getPrefix());
-        $this->db = Database::factory($dbConfig->getType());
-        $this->db->connect(
-            $dbConfig->getServer(),
-            $dbConfig->getUser(),
-            $dbConfig->getPassword(),
-            $dbConfig->getDatabase(),
-            $dbConfig->getPort(),
-        );
         $configuration = new Configuration($this->db);
         $configuration->set('search.enableRelevance', false);
 
