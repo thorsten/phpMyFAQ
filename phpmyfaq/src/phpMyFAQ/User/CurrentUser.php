@@ -512,6 +512,7 @@ class CurrentUser extends User
      */
     public function setTokenData(#[\SensitiveParameter] array $token): bool
     {
+        $db = $this->configuration->getDb();
         $update = sprintf(
             "
             UPDATE
@@ -524,14 +525,14 @@ class CurrentUser extends User
             WHERE
                 user_id = %d",
             Database::getTablePrefix(),
-            $token['refresh_token'],
-            $token['access_token'],
-            $token['code_verifier'],
-            json_encode($token['jwt'], JSON_THROW_ON_ERROR),
+            $db->escape($token['refresh_token']),
+            $db->escape($token['access_token']),
+            $db->escape($token['code_verifier']),
+            $db->escape(json_encode($token['jwt'], JSON_THROW_ON_ERROR)),
             $this->getUserId(),
         );
 
-        return (bool) $this->configuration->getDb()->query($update);
+        return (bool) $db->query($update);
     }
 
     /**
