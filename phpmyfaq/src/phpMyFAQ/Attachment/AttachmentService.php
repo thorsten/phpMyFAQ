@@ -62,10 +62,7 @@ final readonly class AttachmentService
         $hasUserPermission = $this->checkUserPermission($attachment);
         $userRights = $this->getUserRights();
 
-        return (
-            ($hasGroupPermission || $hasGroupPermission && $hasUserPermission)
-            && ($userRights['dlattachment'] ?? false)
-        );
+        return $hasGroupPermission && $hasUserPermission && ($userRights['dlattachment'] ?? false);
     }
 
     /**
@@ -73,14 +70,19 @@ final readonly class AttachmentService
      */
     private function checkGroupPermission(AbstractAttachment $attachment): bool
     {
-        $groupPermission = $this->faqPermission->get(Permission::GROUP, $attachment->getRecordId());
-
         if (!$this->currentUser->perm instanceof MediumPermission) {
             return true;
         }
 
+        $groupPermission = $this->faqPermission->get(Permission::GROUP, $attachment->getRecordId());
+
         if ($groupPermission === []) {
             return false;
+        }
+
+        // -1 means "all groups"
+        if (in_array(-1, $groupPermission, strict: true)) {
+            return true;
         }
 
         foreach ($this->currentUser->perm->getUserGroups($this->currentUser->getUserId()) as $userGroup) {
@@ -100,6 +102,12 @@ final readonly class AttachmentService
     private function checkUserPermission(AbstractAttachment $attachment): bool
     {
         $userPermission = $this->faqPermission->get(Permission::USER, $attachment->getRecordId());
+
+        // -1 means "all users"
+        if (in_array(-1, $userPermission, strict: true)) {
+            return true;
+        }
+
         return in_array($this->currentUser->getUserId(), $userPermission, strict: true);
     }
 

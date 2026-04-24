@@ -9,7 +9,6 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Environment;
 use phpMyFAQ\Language;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -17,6 +16,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 #[CoversClass(SeedTestDataCommand::class)]
 #[UsesClass(\phpMyFAQ\Category::class)]

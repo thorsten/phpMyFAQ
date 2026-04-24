@@ -32,6 +32,7 @@ class OAuthTest extends TestCase
 
     private static string $privateKey;
     private static string $publicKey;
+
     private const string KID = 'test-kid';
 
     public static function setUpBeforeClass(): void
@@ -57,9 +58,7 @@ class OAuthTest extends TestCase
         $this->mockJwksProvider = $this->createMock(JwksProvider::class);
         $mockConfiguration = $this->createStub(Configuration::class);
 
-        $this->mockJwksProvider
-            ->method('getKeys')
-            ->willReturn([self::KID => new Key(self::$publicKey, 'RS256')]);
+        $this->mockJwksProvider->method('getKeys')->willReturn([self::KID => new Key(self::$publicKey, 'RS256')]);
 
         $this->oAuth = new OAuth($mockConfiguration, $this->mockSession, $this->mockJwksProvider);
     }
@@ -229,12 +228,19 @@ class OAuthTest extends TestCase
     public function testSetTokenRejectsUnsignedToken(): void
     {
         $header = rtrim(strtr(base64_encode(json_encode(['alg' => 'none', 'typ' => 'JWT'])), '+/', '-_'), '=');
-        $payload = rtrim(strtr(base64_encode(json_encode([
-            'iss' => 'https://login.microsoftonline.com/' . AAD_OAUTH_TENANTID . '/v2.0',
-            'aud' => AAD_OAUTH_CLIENTID,
-            'preferred_username' => 'attacker@example.com',
-            'exp' => time() + 3600,
-        ])), '+/', '-_'), '=');
+        $payload = rtrim(
+            strtr(
+                base64_encode(json_encode([
+                    'iss' => 'https://login.microsoftonline.com/' . AAD_OAUTH_TENANTID . '/v2.0',
+                    'aud' => AAD_OAUTH_CLIENTID,
+                    'preferred_username' => 'attacker@example.com',
+                    'exp' => time() + 3600,
+                ])),
+                '+/',
+                '-_',
+            ),
+            '=',
+        );
 
         $token = new stdClass();
         $token->id_token = $header . '.' . $payload . '.';
