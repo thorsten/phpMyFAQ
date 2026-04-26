@@ -41,8 +41,9 @@ class Filter
     public static function filterInput(int $type, string $variableName, int $filter, mixed $default = null): mixed
     {
         if ($filter === FILTER_SANITIZE_SPECIAL_CHARS) {
-            $return = filter_input($type, $variableName, FILTER_CALLBACK, ['options' =>
-                new Filter()->filterSanitizeString(...)]);
+            $return = filter_input($type, $variableName, FILTER_CALLBACK, [
+                'options' => new Filter()->filterSanitizeString(...),
+            ]);
         } else {
             $return = filter_input($type, $variableName, $filter);
         }
