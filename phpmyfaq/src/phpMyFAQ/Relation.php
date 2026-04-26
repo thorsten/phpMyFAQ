@@ -64,8 +64,8 @@ readonly class Relation
                 'fd.lang = fcr.record_lang',
             ])
             ->setConditions([
-                'fd.active' => "'yes'",
-                'fd.lang' => "'" . $this->configuration->getLanguage()->getLanguage() . "'",
+                'fd.active' => 'yes',
+                'fd.lang' => $this->configuration->getLanguage()->getLanguage(),
             ])
             ->setMatchingColumns(['fd.keywords', 'fd.thema', 'fd.content'])
             ->disableRelevance();
