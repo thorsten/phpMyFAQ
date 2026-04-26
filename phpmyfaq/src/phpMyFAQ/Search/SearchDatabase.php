@@ -215,12 +215,23 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     public function getConditions(): string
     {
         $conditions = '';
+        $db = $this->configuration->getDb();
 
         foreach ($this->conditions as $column => $value) {
+            if (!is_string($column) || !preg_match('/^[A-Za-z_][A-Za-z0-9_.]*$/', $column)) {
+                continue;
+            }
+
             if (is_array($value)) {
-                $conditions .= ' AND ' . $column . ' IN (' . implode(', ', $value) . ')';
-            } else {
+                $ids = array_map(static fn($v): int => (int) $v, $value);
+                if ($ids === []) {
+                    continue;
+                }
+                $conditions .= ' AND ' . $column . ' IN (' . implode(', ', $ids) . ')';
+            } elseif (is_int($value)) {
                 $conditions .= ' AND ' . $column . ' = ' . $value;
+            } else {
+                $conditions .= ' AND ' . $column . " = '" . $db->escape((string) $value) . "'";
             }
         }
 

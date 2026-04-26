@@ -134,7 +134,7 @@ class Search
     {
         $fdTable = Database::getTablePrefix() . 'faqdata AS fd';
         $fcrTable = Database::getTablePrefix() . 'faqcategoryrelations';
-        $condition = ['fd.active' => "'yes'"];
+        $condition = ['fd.active' => 'yes'];
         $searchDatabase = SearchFactory::create($this->configuration, ['database' => Database::getType()]);
 
         if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {
@@ -153,7 +153,7 @@ class Search
         }
 
         if (!$allLanguages && !is_numeric($searchTerm)) {
-            $selectedLanguage = ['fd.lang' => "'" . $this->configuration->getLanguage()->getLanguage() . "'"];
+            $selectedLanguage = ['fd.lang' => $this->configuration->getLanguage()->getLanguage()];
             $condition = [...$selectedLanguage, ...$condition];
         }
 

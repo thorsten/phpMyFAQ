@@ -127,7 +127,7 @@ class SearchDatabaseTest extends TestCase
     public function testSetAndGetConditions()
     {
         $conditions = [
-            'faqdata.active' => "'yes'",
+            'faqdata.active' => 'yes',
             'faqcategoryrelations.category_id' => 1,
         ];
 

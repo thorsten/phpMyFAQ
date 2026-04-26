@@ -163,7 +163,7 @@ class Tags
                         "INSERT INTO %sfaqtags (tagging_id, tagging_name) VALUES (%d, '%s')",
                         Database::getTablePrefix(),
                         $newTagId,
-                        $tag,
+                        $this->configuration->getDb()->escape($tag),
                     );
                     $this->configuration->getDb()->query($query);
 
@@ -256,7 +256,9 @@ class Tags
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $showInactive ? '' : "AND d.active = 'yes'",
-            isset($search) && $search !== '' ? 'AND tagging_name ' . $like . " '" . $search . "%'" : '',
+            isset($search) && $search !== ''
+                ? 'AND tagging_name ' . $like . " '" . $this->configuration->getDb()->escape($search) . "%'"
+                : '',
             $permissionCheck,
         );
 
@@ -298,7 +300,7 @@ class Tags
         $query = sprintf(
             "UPDATE %sfaqtags SET tagging_name = '%s' WHERE tagging_id = %d",
             Database::getTablePrefix(),
-            $tag->getName(),
+            $this->configuration->getDb()->escape($tag->getName()),
             $tag->getId(),
         );
 
@@ -327,6 +329,9 @@ class Tags
      */
     public function getFaqsByIntersectionTags(array $arrayOfTags): array
     {
+        $db = $this->configuration->getDb();
+        $escapedTags = array_map(static fn($tag): string => $db->escape((string) $tag), $arrayOfTags);
+
         $query = sprintf(
             "
             SELECT
@@ -348,8 +353,8 @@ class Tags
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            implode("', '", $arrayOfTags),
-            $this->configuration->getLanguage()->getLanguage(),
+            implode("', '", $escapedTags),
+            $db->escape($this->configuration->getLanguage()->getLanguage()),
             count($arrayOfTags),
         );
 
