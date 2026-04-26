@@ -1404,11 +1404,12 @@ class Faq
             }
         }
 
+        $sortDirection = $this->normalizeSortDirection((string) $sortOrder);
         $orderBy = match ($sortType) {
-            self::SORTING_TYPE_CATID_FAQID => sprintf('ORDER BY fcr.category_id, fd.id %s', $sortOrder),
-            self::SORTING_TYPE_FAQID => sprintf('ORDER BY fd.id %s', $sortOrder),
-            self::SORTING_TYPE_FAQTITLE_FAQID => sprintf('ORDER BY fcr.category_id, fd.thema %s', $sortOrder),
-            self::SORTING_TYPE_DATE_FAQID => sprintf('ORDER BY fcr.category_id, fd.updated %s', $sortOrder),
+            self::SORTING_TYPE_CATID_FAQID => sprintf('ORDER BY fcr.category_id, fd.id %s', $sortDirection),
+            self::SORTING_TYPE_FAQID => sprintf('ORDER BY fd.id %s', $sortDirection),
+            self::SORTING_TYPE_FAQTITLE_FAQID => sprintf('ORDER BY fcr.category_id, fd.thema %s', $sortDirection),
+            self::SORTING_TYPE_DATE_FAQID => sprintf('ORDER BY fcr.category_id, fd.updated %s', $sortDirection),
             default => '',
         };
 
