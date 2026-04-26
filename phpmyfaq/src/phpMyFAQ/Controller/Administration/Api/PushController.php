@@ -64,8 +64,9 @@ final class PushController extends AbstractAdministrationApiController
                 'publicKey' => $keys['publicKey'],
             ], Response::HTTP_OK);
         } catch (\Throwable $e) {
-            $this->configuration->getLogger()->error('VAPID key generation failed: ' . $e->getMessage(), ['exception' =>
-                $e->getTraceAsString()]);
+            $this->configuration->getLogger()->error('VAPID key generation failed: ' . $e->getMessage(), [
+                'exception' => $e->getTraceAsString(),
+            ]);
 
             return $this->json([
                 'success' => false,
