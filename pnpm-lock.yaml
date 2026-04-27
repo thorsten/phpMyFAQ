@@ -98,8 +98,8 @@ devDependencies:
     specifier: 9.1.7
     version: 9.1.7
   jsdom:
-    specifier: 29.0.2
-    version: 29.0.2
+    specifier: 29.1.0
+    version: 29.1.0
   postcss:
     specifier: 8.5.12
     version: 8.5.12
@@ -138,7 +138,7 @@ devDependencies:
     version: 4.1.0(vite@8.0.10)
   vitest:
     specifier: 4.1.0
-    version: 4.1.0(@types/node@25.6.0)(jsdom@29.0.2)(vite@8.0.10)
+    version: 4.1.0(@types/node@25.6.0)(jsdom@29.1.0)(vite@8.0.10)
   vitest-fetch-mock:
     specifier: 0.4.5
     version: 0.4.5(vitest@4.1.0)
@@ -2237,7 +2237,7 @@ packages:
       magicast: 0.5.2
       obug: 2.1.1
       tinyrainbow: 3.1.0
-      vitest: 4.1.0(@types/node@25.6.0)(jsdom@29.0.2)(vite@8.0.10)
+      vitest: 4.1.0(@types/node@25.6.0)(jsdom@29.1.0)(vite@8.0.10)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -2261,7 +2261,7 @@ packages:
       obug: 2.1.1
       std-env: 4.1.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.0(@types/node@25.6.0)(jsdom@29.0.2)(vite@8.0.10)
+      vitest: 4.1.0(@types/node@25.6.0)(jsdom@29.1.0)(vite@8.0.10)
     dev: true
 
   /@vitest/expect@4.1.0:
@@ -2888,6 +2888,11 @@ packages:
     engines: {node: '>=0.12'}
     dev: true
 
+  /entities@8.0.0:
+    resolution: {integrity: sha512-zwfzJecQ/Uej6tusMqwAqU/6KL2XaB2VZ2Jg54Je6ahNBGNH6Ek6g3jjNCF0fG9EWQKGZNddNjU5F1ZQn/sBnA==}
+    engines: {node: '>=20.19.0'}
+    dev: true
+
   /env-paths@2.2.1:
     resolution: {integrity: sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==}
     engines: {node: '>=6'}
@@ -3447,8 +3452,8 @@ packages:
       argparse: 2.0.1
     dev: true
 
-  /jsdom@29.0.2:
-    resolution: {integrity: sha512-9VnGEBosc/ZpwyOsJBCQ/3I5p7Q5ngOY14a9bf5btenAORmZfDse1ZEheMiWcJ3h81+Fv7HmJFdS0szo/waF2w==}
+  /jsdom@29.1.0:
+    resolution: {integrity: sha512-YNUc7fB9QuvSSQWfrH0xF+TyABkxUwx8sswgIDaCrw4Hol8BghdZDkITtZheRJeMtzWlnTfsM3bBBusRvpO1wg==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24.0.0}
     peerDependencies:
       canvas: ^3.0.0
@@ -3467,7 +3472,7 @@ packages:
       html-encoding-sniffer: 6.0.0
       is-potential-custom-element-name: 1.0.1
       lru-cache: 11.3.5
-      parse5: 8.0.0
+      parse5: 8.0.1
       saxes: 6.0.0
       symbol-tree: 3.2.4
       tough-cookie: 6.0.1
@@ -3908,10 +3913,10 @@ packages:
       entities: 6.0.1
     dev: true
 
-  /parse5@8.0.0:
-    resolution: {integrity: sha512-9m4m5GSgXjL4AjumKzq1Fgfp3Z8rsvjRNbnkVwfu2ImRqE5D0LnY2QfDen18FSY9C573YU5XxSapdHZTZ2WolA==}
+  /parse5@8.0.1:
+    resolution: {integrity: sha512-z1e/HMG90obSGeidlli3hj7cbocou0/wa5HacvI3ASx34PecNjNQeaHNo5WIZpWofN9kgkqV1q5YvXe3F0FoPw==}
     dependencies:
-      entities: 6.0.1
+      entities: 8.0.0
     dev: true
 
   /pascal-case@3.1.2:
@@ -4535,10 +4540,10 @@ packages:
     peerDependencies:
       vitest: '>=2.0.0'
     dependencies:
-      vitest: 4.1.0(@types/node@25.6.0)(jsdom@29.0.2)(vite@8.0.10)
+      vitest: 4.1.0(@types/node@25.6.0)(jsdom@29.1.0)(vite@8.0.10)
     dev: true
 
-  /vitest@4.1.0(@types/node@25.6.0)(jsdom@29.0.2)(vite@8.0.10):
+  /vitest@4.1.0(@types/node@25.6.0)(jsdom@29.1.0)(vite@8.0.10):
     resolution: {integrity: sha512-YbDrMF9jM2Lqc++2530UourxZHmkKLxrs4+mYhEwqWS97WJ7wOYEkcr+QfRgJ3PW9wz3odRijLZjHEaRLTNbqw==}
     engines: {node: ^20.0.0 || ^22.0.0 || >=24.0.0}
     hasBin: true
@@ -4583,7 +4588,7 @@ packages:
       '@vitest/utils': 4.1.0
       es-module-lexer: 2.0.0
       expect-type: 1.3.0
-      jsdom: 29.0.2
+      jsdom: 29.1.0
       magic-string: 0.30.21
       obug: 2.1.1
       pathe: 2.0.3
