@@ -93,6 +93,7 @@ final readonly class McpSdkRuntime implements McpServerRuntimeInterface
             ->addTool(
                 $this->faqSearch(...),
                 $definition->name,
+                null,
                 $definition->description,
                 null,
                 $definition->inputSchema,
