@@ -90,7 +90,7 @@ devDependencies:
     version: 4.1.0(vitest@4.1.0)
   autoprefixer:
     specifier: 10.5.0
-    version: 10.5.0(postcss@8.5.10)
+    version: 10.5.0(postcss@8.5.12)
   eslint:
     specifier: 10.2.1
     version: 10.2.1
@@ -101,8 +101,8 @@ devDependencies:
     specifier: 29.0.2
     version: 29.0.2
   postcss:
-    specifier: 8.5.10
-    version: 8.5.10
+    specifier: 8.5.12
+    version: 8.5.12
   prettier:
     specifier: 3.8.3
     version: 3.8.3
@@ -2412,7 +2412,7 @@ packages:
     resolution: {integrity: sha512-rLbf2TLGOD7y+gOS36ksrZdIsvoHa2KXc2A7503w+NBRPrcF73zzFeYBxEcV/iMPjaBH3jFhNIYObZ7zt1fkCQ==}
     dev: false
 
-  /autoprefixer@10.5.0(postcss@8.5.10):
+  /autoprefixer@10.5.0(postcss@8.5.12):
     resolution: {integrity: sha512-FMhOoZV4+qR6aTUALKX2rEqGG+oyATvwBt9IIzVR5rMa2HRWPkxf+P+PAJLD1I/H5/II+HuZcBJYEFBpq39ong==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
@@ -2423,7 +2423,7 @@ packages:
       caniuse-lite: 1.0.30001788
       fraction.js: 5.3.4
       picocolors: 1.1.1
-      postcss: 8.5.10
+      postcss: 8.5.12
       postcss-value-parser: 4.2.0
     dev: true
 
@@ -3961,8 +3961,8 @@ packages:
     resolution: {integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==}
     dev: true
 
-  /postcss@8.5.10:
-    resolution: {integrity: sha512-pMMHxBOZKFU6HgAZ4eyGnwXF/EvPGGqUr0MnZ5+99485wwW41kW91A4LOGxSHhgugZmSChL5AlElNdwlNgcnLQ==}
+  /postcss@8.5.12:
+    resolution: {integrity: sha512-W62t/Se6rA0Az3DfCL0AqJwXuKwBeYg6nOaIgzP+xZ7N5BFCI7DYi1qs6ygUYT6rvfi6t9k65UMLJC+PHZpDAA==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
       nanoid: 3.3.11
@@ -4521,7 +4521,7 @@ packages:
       '@types/node': 25.6.0
       lightningcss: 1.32.0
       picomatch: 4.0.4
-      postcss: 8.5.10
+      postcss: 8.5.12
       rolldown: 1.0.0-rc.17
       sass: 1.99.0
       tinyglobby: 0.2.16
