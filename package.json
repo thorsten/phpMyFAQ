@@ -83,7 +83,7 @@
     "eslint": "10.2.1",
     "husky": "9.1.7",
     "jsdom": "29.0.2",
-    "postcss": "8.5.10",
+    "postcss": "8.5.12",
     "prettier": "3.8.3",
     "pretty-quick": "4.2.2",
     "sass": "1.99.0",
