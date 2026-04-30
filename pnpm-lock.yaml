@@ -27,8 +27,8 @@ dependencies:
     specifier: 4.5.1
     version: 4.5.1
   choices.js:
-    specifier: 11.2.2
-    version: 11.2.2
+    specifier: 11.2.3
+    version: 11.2.3
   handlebars:
     specifier: 4.7.9
     version: 4.7.9
@@ -2598,8 +2598,8 @@ packages:
       '@kurkle/color': 0.3.4
     dev: false
 
-  /choices.js@11.2.2:
-    resolution: {integrity: sha512-fvG4GcRTXw13SEKYzxydxikmN54PSTagO9SQaZwthr5g/L3iM4iVER8Mmy+9Ei50Df/XAqHItSmqcjZHx7tfhA==}
+  /choices.js@11.2.3:
+    resolution: {integrity: sha512-K+HA8ShsWWNOVs4ahahjIOtzsvcC/cOFGTdU1BZgMZRhGi/uCQARlFd/80B0hlVVdRIjnrsW7QLDUnpJaW6N7A==}
     dependencies:
       fuse.js: 7.3.0
     dev: false
