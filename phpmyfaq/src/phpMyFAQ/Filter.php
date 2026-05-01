@@ -43,8 +43,12 @@ class Filter
         $return = filter_input($type, $variableName, $filter);
 
         if ($filter === FILTER_SANITIZE_SPECIAL_CHARS) {
-            $return = filter_input($type, $variableName, FILTER_CALLBACK, ['options' =>
-                (new Filter())->filterSanitizeString(...)]);
+            $return = filter_input(
+                $type,
+                $variableName,
+                FILTER_CALLBACK,
+                ['options' => (new Filter())->filterSanitizeString(...)],
+            );
         }
 
         return is_null($return) || $return === false ? $default : $return;

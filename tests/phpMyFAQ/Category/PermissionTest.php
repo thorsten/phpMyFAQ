@@ -390,10 +390,13 @@ class PermissionTest extends TestCase
 
         $result = $this->permission->getAll(['1) OR 1=1 -- ', '2']);
 
-        $this->assertSame([
-            1 => [Permission::USER => [], Permission::GROUP => []],
-            2 => [Permission::USER => [], Permission::GROUP => []],
-        ], $result);
+        $this->assertSame(
+            [
+                1 => [Permission::USER => [], Permission::GROUP => []],
+                2 => [Permission::USER => [], Permission::GROUP => []],
+            ],
+            $result,
+        );
     }
 
     protected function tearDown(): void

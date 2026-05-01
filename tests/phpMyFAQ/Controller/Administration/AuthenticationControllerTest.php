@@ -28,16 +28,16 @@ class AuthenticationControllerTest extends TestCase
         $sessionUser->method('isLoggedIn')->willReturn(false);
 
         $container = $this->createMock(ContainerBuilder::class);
-        $container->method('get')->willReturnCallback(
-            function (string $id) use ($session, $containerCurrentUser, $twoFactor) {
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($session, $containerCurrentUser, $twoFactor) {
                 return match ($id) {
                     'session' => $session,
                     'phpmyfaq.user.current_user' => $containerCurrentUser ?? $this->createMock(CurrentUser::class),
                     'phpmyfaq.user.two-factor' => $twoFactor ?? $this->createMock(TwoFactor::class),
                     default => null,
                 };
-            }
-        );
+            });
 
         $reflection = new ReflectionClass(AuthenticationController::class);
         $parent = $reflection->getParentClass()->getParentClass();

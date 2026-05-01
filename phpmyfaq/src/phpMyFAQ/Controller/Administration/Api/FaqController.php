@@ -678,8 +678,9 @@ final class FaqController extends AbstractController
             $searchHelper = new SearchHelper($this->configuration);
             $searchHelper->setSearchTerm($searchString);
 
-            return $this->json(['success' =>
-                $searchHelper->renderAdminSuggestionResult($searchResultSet)], Response::HTTP_OK);
+            return $this->json([
+                'success' => $searchHelper->renderAdminSuggestionResult($searchResultSet),
+            ], Response::HTTP_OK);
         }
 
         return $this->json(['error' => 'No search string provided.'], Response::HTTP_BAD_REQUEST);

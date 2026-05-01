@@ -321,13 +321,15 @@ class FaqTest extends TestCase
 
     private function addCategoryRelation(FaqEntity $faqEntity, int $categoryId = 1): void
     {
-        $this->configuration->getDb()->query(sprintf(
-            "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES (%d, '%s', %d, '%s')",
-            $categoryId,
-            $this->configuration->getDb()->escape($faqEntity->getLanguage()),
-            $faqEntity->getId(),
-            $this->configuration->getDb()->escape($faqEntity->getLanguage()),
-        ));
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES (%d, '%s', %d, '%s')",
+                $categoryId,
+                $this->configuration->getDb()->escape($faqEntity->getLanguage()),
+                $faqEntity->getId(),
+                $this->configuration->getDb()->escape($faqEntity->getLanguage()),
+            ));
     }
 
     private function grantPublicAccess(FaqEntity $faqEntity): void
@@ -337,19 +339,23 @@ class FaqTest extends TestCase
 
     private function grantUserAccess(FaqEntity $faqEntity, int $userId): void
     {
-        $this->configuration->getDb()->query(sprintf(
-            'INSERT INTO faqdata_user (record_id, user_id) VALUES (%d, %d)',
-            $faqEntity->getId(),
-            $userId,
-        ));
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                'INSERT INTO faqdata_user (record_id, user_id) VALUES (%d, %d)',
+                $faqEntity->getId(),
+                $userId,
+            ));
     }
 
     private function grantGroupAccess(FaqEntity $faqEntity, int $groupId): void
     {
-        $this->configuration->getDb()->query(sprintf(
-            'INSERT INTO faqdata_group (record_id, group_id) VALUES (%d, %d)',
-            $faqEntity->getId(),
-            $groupId,
-        ));
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                'INSERT INTO faqdata_group (record_id, group_id) VALUES (%d, %d)',
+                $faqEntity->getId(),
+                $groupId,
+            ));
     }
 }

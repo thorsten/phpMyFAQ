@@ -55,10 +55,11 @@ final class RegistrationController extends AbstractController
         }
 
         if (
-            $userName !== '' && $userName !== '0' && $email !== '' && $email !== '0' && (
-                $fullName !== ''
-                && $fullName !== '0'
-            )
+            $userName !== ''
+            && $userName !== '0'
+            && $email !== ''
+            && $email !== '0'
+            && ($fullName !== '' && $fullName !== '0')
         ) {
             try {
                 return $this->json(

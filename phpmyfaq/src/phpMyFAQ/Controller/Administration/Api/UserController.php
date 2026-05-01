@@ -291,9 +291,9 @@ final class UserController extends AbstractController
 
         $currentUser->getUserById($userId, allowBlockedUsers: true);
         if ($currentUser->getStatus() === 'protected' || $userId === 1) {
-            return $this->json(['error' => Translation::get(
-                key: 'ad_user_error_protectedAccount',
-            )], Response::HTTP_BAD_REQUEST);
+            return $this->json([
+                'error' => Translation::get(key: 'ad_user_error_protectedAccount'),
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         if (!$currentUser->deleteUser()) {

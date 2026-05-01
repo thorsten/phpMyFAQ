@@ -151,11 +151,13 @@ class SeoRepositoryTest extends TestCase
 
         $this->database->method('nextId')->willReturn(1);
         $this->database->method('query')->willReturn(true);
-        $this->database->method('escape')->willReturnCallback(function (string $value) use (&$escapedValues): string {
-            $escapedValues[] = $value;
+        $this->database
+            ->method('escape')
+            ->willReturnCallback(function (string $value) use (&$escapedValues): string {
+                $escapedValues[] = $value;
 
-            return $value;
-        });
+                return $value;
+            });
 
         $this->assertTrue($this->repository->create($entity));
         $this->assertContains(SeoType::FAQ->value, $escapedValues);

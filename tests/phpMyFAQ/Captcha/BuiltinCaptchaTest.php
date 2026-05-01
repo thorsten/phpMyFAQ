@@ -360,7 +360,9 @@ class BuiltinCaptchaTest extends TestCase
         $this->assertStringContainsString("Browser'' OR 1=1 -- ", $this->configuration->getDb()->log());
         $this->assertStringContainsString("127.0.0.1'' OR ''x''=''x", $this->configuration->getDb()->log());
 
-        $storedCaptcha = $this->configuration->getDb()->query("SELECT id, useragent, ip FROM faqcaptcha WHERE id = 'ABC123'");
+        $storedCaptcha = $this->configuration
+            ->getDb()
+            ->query("SELECT id, useragent, ip FROM faqcaptcha WHERE id = 'ABC123'");
 
         $this->assertNotFalse($storedCaptcha);
         $storedRow = $this->configuration->getDb()->fetchAssoc($storedCaptcha);

@@ -89,13 +89,12 @@ class ChangelogTest extends TestCase
 
         $this->assertTrue($result);
         $this->assertStringContainsString("en'' OR 1=1 -- ", $this->configuration->getDb()->log());
-        $this->assertStringContainsString("changed title''; DROP TABLE faqchanges; --", $this->configuration->getDb()->log());
-
-        $query = sprintf(
-            'SELECT lang, what FROM %sfaqchanges WHERE beitrag = %d',
-            Database::getTablePrefix(),
-            $id,
+        $this->assertStringContainsString(
+            "changed title''; DROP TABLE faqchanges; --",
+            $this->configuration->getDb()->log(),
         );
+
+        $query = sprintf('SELECT lang, what FROM %sfaqchanges WHERE beitrag = %d', Database::getTablePrefix(), $id);
         $dbResult = $this->configuration->getDb()->query($query);
         $row = $this->configuration->getDb()->fetchObject($dbResult);
 

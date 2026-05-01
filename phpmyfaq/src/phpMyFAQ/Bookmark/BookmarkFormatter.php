@@ -23,6 +23,7 @@ namespace phpMyFAQ\Bookmark;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Link;
 use phpMyFAQ\Strings;
 use phpMyFAQ\User\CurrentUser;
@@ -87,12 +88,14 @@ readonly class BookmarkFormatter
         $link->text = Strings::htmlentities($title);
         $link->setTitle($link->text);
         $link->tooltip = $link->text;
+        $faqHelper = new FaqHelper($this->configuration);
+        $answer = (string) ($faqData['content'] ?? '');
 
         return [
             'url' => $link->toString(),
             'title' => htmlspecialchars_decode($title),
             'id' => (int) $faqData['id'],
-            'answer' => (string) ($faqData['content'] ?? ''),
+            'answer' => $answer === '' ? '' : $faqHelper->cleanUpContent($answer),
         ];
     }
 }

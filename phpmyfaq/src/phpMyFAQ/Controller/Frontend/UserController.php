@@ -71,9 +71,9 @@ final class UserController extends AbstractController
 
         if (!$isAzureAdUser) {
             if ($password !== $confirm) {
-                return $this->json(['error' => Translation::get(
-                    'ad_user_error_passwordsDontMatch',
-                )], Response::HTTP_CONFLICT);
+                return $this->json([
+                    'error' => Translation::get('ad_user_error_passwordsDontMatch'),
+                ], Response::HTTP_CONFLICT);
             }
 
             if ((strlen($password) <= 7 || strlen($confirm) <= 7) && !$isWebAuthnUser) {
@@ -216,9 +216,9 @@ final class UserController extends AbstractController
             || $loginName !== $this->currentUser->getLogin()
             || $email !== $this->currentUser->getUserData('email')
         ) {
-            return $this->json(['error' => Translation::get(
-                key: 'ad_user_error_loginInvalid',
-            )], Response::HTTP_BAD_REQUEST);
+            return $this->json([
+                'error' => Translation::get(key: 'ad_user_error_loginInvalid'),
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         $stopWords = $this->container->get(id: 'phpmyfaq.stop-words');
@@ -279,9 +279,9 @@ final class UserController extends AbstractController
             $newSecret = $twoFactor->generateSecret();
 
             if ($this->currentUser->setUserData(['secret' => $newSecret, 'twofactor_enabled' => 0])) {
-                return $this->json(['success' => Translation::get(
-                    'msgRemoveTwofactorConfigSuccessful',
-                )], Response::HTTP_OK);
+                return $this->json([
+                    'success' => Translation::get('msgRemoveTwofactorConfigSuccessful'),
+                ], Response::HTTP_OK);
             }
 
             return $this->json(['error' => Translation::get(key: 'msgErrorOccurred')], Response::HTTP_BAD_REQUEST);

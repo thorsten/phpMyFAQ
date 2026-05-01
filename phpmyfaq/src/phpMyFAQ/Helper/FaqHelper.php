@@ -168,13 +168,28 @@ class FaqHelper extends AbstractHelper
             ->allowMediaHosts($allowedHosts)
             ->allowLinkSchemes(['https', 'http', 'mailto', 'data']));
 
-        // Suppress HTML parser warnings during sanitization, as Dom\HTMLDocument::createFromString()
-        // emits tokenizer warnings for slightly malformed user-generated HTML content
-        $previousErrorReporting = error_reporting(E_ALL & ~E_WARNING);
+        // Suppress tokenizer warnings from Dom\HTMLDocument::createFromString() for malformed legacy HTML.
+        // phpMyFAQ converts PHP warnings into exceptions globally, so we need a local handler here.
+        $previousErrorHandler = set_error_handler(static function (int $level, string $message) use (
+            &$previousErrorHandler,
+        ): bool {
+            if (
+                $level === E_WARNING
+                && str_starts_with($message, 'Dom\\HTMLDocument::createFromString(): tree error ')
+            ) {
+                return true;
+            }
+
+            if (is_callable($previousErrorHandler)) {
+                return (bool) $previousErrorHandler(...func_get_args());
+            }
+
+            return false;
+        }, E_WARNING);
         try {
             $sanitizedContent = $htmlSanitizer->sanitize($content);
         } finally {
-            error_reporting($previousErrorReporting);
+            restore_error_handler();
         }
 
         $sanitizedContent = preg_replace('/<iframe\b(?:(?!src)[^>])*>\s*<\/iframe>/i', '', $sanitizedContent);
