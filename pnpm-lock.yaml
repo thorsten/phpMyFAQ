@@ -59,8 +59,8 @@ devDependencies:
     specifier: 20.5.2
     version: 20.5.2(@types/node@25.6.0)(typescript@6.0.3)
   '@commitlint/config-conventional':
-    specifier: 20.5.0
-    version: 20.5.0
+    specifier: 20.5.3
+    version: 20.5.3
   '@eslint/js':
     specifier: 9.39.4
     version: 9.39.4
@@ -1280,8 +1280,8 @@ packages:
       - typescript
     dev: true
 
-  /@commitlint/config-conventional@20.5.0:
-    resolution: {integrity: sha512-t3Ni88rFw1XMa4nZHgOKJ8fIAT9M2j5TnKyTqJzsxea7FUetlNdYFus9dz+MhIRZmc16P0PPyEfh6X2d/qw8SA==}
+  /@commitlint/config-conventional@20.5.3:
+    resolution: {integrity: sha512-j34Qqeaa152chJgz2ysyk0BCpHenJn1lV0Rx0VXf8k3ccQcED+48EZrzMvo9jLmJUyBrrBwvu89I+2er4gW7QQ==}
     engines: {node: '>=v18'}
     dependencies:
       '@commitlint/types': 20.5.0
