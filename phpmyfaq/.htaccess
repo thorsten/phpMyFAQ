@@ -161,11 +161,12 @@ DirectoryIndex index.php
     # User pages
     RewriteRule ^user/(ucp|bookmarks|request-removal|logout|register) index.php?action=$1 [L,QSA]
     # Setup and update pages
+    RewriteRule ^(.*/)?setup/index\.php$ - [L]
     RewriteCond %{REQUEST_URI} ^(.*/)setup/
-    RewriteRule ^(.*/)?setup/(.*) $1setup/index.php [L,QSA]
+    RewriteRule ^(.*/)?setup/?$ $1setup/index.php [L,QSA]
     RewriteRule ^update$ update/ [R=301,L]
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^update/(.*) update/index.php [L,QSA]
+    RewriteRule ^update/index\.php$ - [L]
+    RewriteRule ^update/$ update/index.php [L,QSA]
     # Administration API
     RewriteRule ^admin/api/(.*) admin/api/index.php [L,QSA]
     # Administration pages
