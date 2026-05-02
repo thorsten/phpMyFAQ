@@ -75,7 +75,7 @@
     "twig/twig": "~3.24.0"
   },
   "require-dev": {
-    "carthage-software/mago": "~1.24.0",
+    "carthage-software/mago": "~1.25.0",
     "doctrine/instantiator": "~2.1.0",
     "mikey179/vfsstream": "~1.6.12",
     "phpbench/phpbench": "^1.6",
@@ -125,6 +125,7 @@
   "scripts": {
     "analyze": "./phpmyfaq/src/libs/bin/mago analyze",
     "format": "./phpmyfaq/src/libs/bin/mago format",
+    "format:dry-run": "./phpmyfaq/src/libs/bin/mago format --dry-run",
     "format:fix": "./phpmyfaq/src/libs/bin/mago format --fix",
     "lint": "./phpmyfaq/src/libs/bin/mago lint",
     "lint:fix": "./phpmyfaq/src/libs/bin/mago lint --fix",
