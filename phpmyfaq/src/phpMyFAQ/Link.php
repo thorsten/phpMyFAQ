@@ -455,10 +455,9 @@ class Link
         $parsed = parse_url($this->url);
 
         return (
-            is_array($parsed) && array_key_exists('scheme', $parsed) && (
-                $parsed['scheme'] !== ''
-                && $parsed['scheme'] !== '0'
-            )
+            is_array($parsed)
+            && array_key_exists('scheme', $parsed)
+            && ($parsed['scheme'] !== '' && $parsed['scheme'] !== '0')
         );
     }
 

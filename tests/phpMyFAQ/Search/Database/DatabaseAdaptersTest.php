@@ -274,7 +274,7 @@ class DatabaseAdaptersTest extends TestCase
             ])
             ->setMatchingColumns(['fd.thema', 'fd.content', 'fd.keywords'])
             ->setConditions([
-                'fd.active' => "'yes'",
+                'fd.active' => 'yes',
                 'fcr.category_id' => [1, 2],
             ]);
     }

@@ -221,7 +221,6 @@ final class AuthenticationController extends AbstractAdministrationController im
         $token = Filter::filterVar($request->request->get(key: 'token'), FILTER_SANITIZE_SPECIAL_CHARS);
         $userId = (int) Filter::filterVar($request->request->get(key: 'user-id'), FILTER_VALIDATE_INT);
 
-        $user = $this->currentUserService;
         $session = $this->container->get(id: 'session');
         $pendingUserId = $session->get('2fa_pending_user_id');
 
@@ -235,7 +234,7 @@ final class AuthenticationController extends AbstractAdministrationController im
             return new RedirectResponse(url: './login');
         }
 
-        $user = $this->container->get(id: 'phpmyfaq.user.current_user');
+        $user = $this->currentUserService;
         $user->getUserById($userId);
 
         if (strlen((string) $token) === 6) {

@@ -52,9 +52,9 @@ final class ElasticsearchController extends AbstractController
 
         try {
             $this->elasticsearch->createIndex();
-            return $this->json(['success' => Translation::get(
-                'msgAdminElasticsearchCreateIndex_success',
-            )], Response::HTTP_OK);
+            return $this->json([
+                'success' => Translation::get('msgAdminElasticsearchCreateIndex_success'),
+            ], Response::HTTP_OK);
         } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_CONFLICT);
         }
@@ -70,9 +70,9 @@ final class ElasticsearchController extends AbstractController
 
         try {
             $this->elasticsearch->dropIndex();
-            return $this->json(['success' => Translation::get(
-                'msgAdminElasticsearchDropIndex_success',
-            )], Response::HTTP_OK);
+            return $this->json([
+                'success' => Translation::get('msgAdminElasticsearchDropIndex_success'),
+            ], Response::HTTP_OK);
         } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_CONFLICT);
         }

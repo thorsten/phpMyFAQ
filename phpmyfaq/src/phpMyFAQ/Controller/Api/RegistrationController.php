@@ -137,10 +137,11 @@ final class RegistrationController extends AbstractController
         }
 
         if (
-            $userName !== '' && $userName !== '0' && $fullName !== '' && $fullName !== '0' && (
-                $email !== ''
-                && $email !== '0'
-            )
+            $userName !== ''
+            && $userName !== '0'
+            && $fullName !== ''
+            && $fullName !== '0'
+            && ($email !== '' && $email !== '0')
         ) {
             $result = $registrationHelper->createUser($userName, $fullName, $email, $isVisible);
 

@@ -79,8 +79,6 @@ class SitemapTest extends TestCase
 
     private PdoSqlite $db;
 
-    private Configuration $configuration;
-
     /**
      * @throws Exception
      * @throws Core\Exception
@@ -386,10 +384,12 @@ class SitemapTest extends TestCase
 
     public function testGetAllFirstLettersNormalizesGroupIds(): void
     {
-        $this->sitemap->setUser(-1);
-        $this->sitemap->setGroups(['-1) OR 1=1 -- ', '2']);
+        $this->configuration->set('security.permLevel', 'medium');
+        $sitemap = new Sitemap($this->configuration);
+        $sitemap->setUser(-1);
+        $sitemap->setGroups(['-1) OR 1=1 -- ', '2']);
 
-        $letters = $this->sitemap->getAllFirstLetters();
+        $letters = $sitemap->getAllFirstLetters();
 
         $this->assertIsArray($letters);
         $this->assertStringContainsString('fdg.group_id IN (-1, 2)', $this->db->log());

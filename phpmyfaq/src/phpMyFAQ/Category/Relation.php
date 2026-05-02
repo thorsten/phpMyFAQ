@@ -126,11 +126,7 @@ class Relation
 
         if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
             if (-1 === $this->category->getUser()) {
-                $query .= sprintf(
-                    'AND fdg.group_id IN (%s) AND fcg.group_id IN (%s)',
-                    $groupList,
-                    $groupList,
-                );
+                $query .= sprintf('AND fdg.group_id IN (%s) AND fcg.group_id IN (%s)', $groupList, $groupList);
             }
             if (-1 !== $this->category->getUser()) {
                 $query .= sprintf(
@@ -236,11 +232,7 @@ class Relation
         }
 
         if ($this->configuration->getLanguage()->getLanguage() !== '') {
-            $query .= sprintf(
-                " AND fd.lang = '%s' AND fc.lang = '%s'",
-                $language,
-                $language,
-            );
+            $query .= sprintf(" AND fd.lang = '%s' AND fc.lang = '%s'", $language, $language);
         }
 
         $query .= ' GROUP BY fcr.category_id, fc.parent_id';
@@ -337,8 +329,7 @@ class Relation
         $categories = [];
         $faqLang = $this->configuration->getDb()->escape($faqLang);
 
-        $query = sprintf(
-            "
+        $query = sprintf("
             SELECT
                 category_id, category_lang
             FROM
@@ -346,11 +337,7 @@ class Relation
             WHERE
                 record_id = %d
             AND
-                record_lang = '%s'",
-            Database::getTablePrefix(),
-            $faqId,
-            $this->configuration->getDb()->escape($faqLang),
-        );
+                record_lang = '%s'", Database::getTablePrefix(), $faqId, $faqLang);
 
         $result = $this->configuration->getDb()->query($query);
         if ($result) {

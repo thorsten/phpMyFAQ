@@ -173,9 +173,9 @@ final class UpdateController extends AbstractController
         if (!$this->upgrade->isNightly()) {
             $result = $this->upgrade->verifyPackage($pathToPackage, $versionNumber);
             if ($result === false) {
-                return $this->json(['error' => Translation::get(
-                    key: 'verificationFailure',
-                )], Response::HTTP_BAD_GATEWAY);
+                return $this->json([
+                    'error' => Translation::get(key: 'verificationFailure'),
+                ], Response::HTTP_BAD_GATEWAY);
             }
         }
 

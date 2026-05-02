@@ -16,9 +16,9 @@ class SendGridProviderTest extends TestCase
     {
         $configuration = $this->createStub(Configuration::class);
         $configuration->method('get')->willReturnCallback(static fn(string $key): mixed => $key
-        === 'mail.sendgridApiKey'
-            ? ''
-            : null);
+            === 'mail.sendgridApiKey'
+                ? ''
+                : null);
 
         $provider = new SendGridProvider($configuration, $this->createStub(HttpClientInterface::class));
 
@@ -64,9 +64,9 @@ class SendGridProviderTest extends TestCase
     {
         $configuration = $this->createStub(Configuration::class);
         $configuration->method('get')->willReturnCallback(static fn(string $key): mixed => $key
-        === 'mail.sendgridApiKey'
-            ? 'secret-key'
-            : null);
+            === 'mail.sendgridApiKey'
+                ? 'secret-key'
+                : null);
 
         $provider = new SendGridProvider($configuration, $this->createStub(HttpClientInterface::class));
 
@@ -79,9 +79,9 @@ class SendGridProviderTest extends TestCase
     {
         $configuration = $this->createStub(Configuration::class);
         $configuration->method('get')->willReturnCallback(static fn(string $key): mixed => $key
-        === 'mail.sendgridApiKey'
-            ? 'secret-key'
-            : null);
+            === 'mail.sendgridApiKey'
+                ? 'secret-key'
+                : null);
 
         $provider = new SendGridProvider($configuration, $this->createStub(HttpClientInterface::class));
 
@@ -101,9 +101,9 @@ class SendGridProviderTest extends TestCase
 
         $configuration = $this->createStub(Configuration::class);
         $configuration->method('get')->willReturnCallback(static fn(string $key): mixed => $key
-        === 'mail.sendgridApiKey'
-            ? 'secret-key'
-            : null);
+            === 'mail.sendgridApiKey'
+                ? 'secret-key'
+                : null);
 
         $provider = new SendGridProvider($configuration, $httpClient);
 

@@ -69,9 +69,9 @@ class TwoFactorTest extends TestCase
     public function testValidateToken(): void
     {
         $this->configuration->method('get')->willReturnCallback(static fn(string $key): ?string => $key
-        === 'security.permLevel'
-            ? 'basic'
-            : null);
+            === 'security.permLevel'
+                ? 'basic'
+                : null);
 
         $this->currentUser->expects($this->once())->method('getUserData')->with('secret')->willReturn('testsecret');
 

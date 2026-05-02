@@ -225,9 +225,7 @@ class Faq
      */
     public function getOrphanedFaqs(): array
     {
-        $language = $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage());
-        $query = sprintf(
-            "
+        $query = sprintf("
                 SELECT
                     fd.id AS id,
                     fd.lang AS lang,
@@ -248,11 +246,7 @@ class Faq
                 GROUP BY
                     fd.id, fd.lang, fd.thema
                 ORDER BY
-                    fd.id DESC",
-            Database::getTablePrefix(),
-            $language,
-            Database::getTablePrefix(),
-        );
+                    fd.id DESC", Database::getTablePrefix(), Database::getTablePrefix());
 
         $result = $this->configuration->getDb()->query($query);
         $orphaned = [];

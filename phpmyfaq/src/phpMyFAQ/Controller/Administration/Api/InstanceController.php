@@ -91,7 +91,7 @@ final class InstanceController extends AbstractController
             return $this->json(['error' => 'Cannot create instance: wrong URL'], Response::HTTP_BAD_REQUEST);
         }
 
-        $faqInstanceClient = new Client($configuration);
+        $faqInstanceClient = new Client($this->configuration);
         $faqInstanceClient->setFileSystem(new Filesystem());
         if (!$faqInstanceClient->isValidClientUrl($url)) {
             return $this->json(['error' => 'Cannot create instance: wrong URL'], Response::HTTP_BAD_REQUEST);

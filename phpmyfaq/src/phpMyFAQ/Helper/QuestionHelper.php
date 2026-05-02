@@ -99,9 +99,6 @@ class QuestionHelper extends AbstractHelper
 
         $result = $db->query($query);
 
-        if ($result && $db->numRows($result) > 0) {
-            $openQuestions->numberQuestions = $db->numRows($result);
-            while ($row = $db->fetchObject($result)) {
         if ($result && $this->configuration->getDb()->numRows($result) > 0) {
             $openQuestions->numberQuestions = $this->configuration->getDb()->numRows($result);
             while (true) {

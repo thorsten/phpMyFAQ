@@ -138,8 +138,9 @@ class Search
         $fdTable = Database::getTablePrefix() . 'faqdata AS fd';
         $fcrTable = Database::getTablePrefix() . 'faqcategoryrelations';
         $condition = ['fd.active' => 'yes'];
-        $searchDatabase = SearchFactory::create($this->configuration, ['database' =>
-            $this->resolveSearchDatabaseType()]);
+        $searchDatabase = SearchFactory::create($this->configuration, [
+            'database' => $this->resolveSearchDatabaseType(),
+        ]);
 
         if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {
             if ($this->getCategory() instanceof Category) {

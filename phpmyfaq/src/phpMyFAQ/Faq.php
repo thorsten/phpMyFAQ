@@ -275,12 +275,7 @@ class Faq
         $sortDirection = $this->normalizeSortDirection($sortBy);
 
         // If random FAQs are activated, we don't need an order
-        $order = sprintf(
-            'ORDER BY fd.sticky DESC, %s.%s %s',
-            $currentTable,
-            $orderColumn,
-            $sortDirection
-        );
+        $order = sprintf('ORDER BY fd.sticky DESC, %s.%s %s', $currentTable, $orderColumn, $sortDirection);
 
         $now = date(format: 'YmdHis');
         $queryHelper = new QueryHelper($this->user, $this->groups);
@@ -1254,14 +1249,25 @@ class Faq
         $row = $this->configuration->getDb()->fetchObject($result);
 
         if (false === $row || null === $row) {
-            // Fallback without permission filter to ensure retrieval in non-authenticated contexts (e.g., tests)
-            $fallbackQuery = sprintf(
-                'SELECT * FROM %sfaqdata fd WHERE fd.solution_id = %d LIMIT 1',
-                Database::getTablePrefix(),
-                $solutionId,
-            );
-            $fallbackResult = $this->configuration->getDb()->query($fallbackQuery);
-            $row = $this->configuration->getDb()->fetchObject($fallbackResult);
+            $restrictionQuery = sprintf('SELECT 1
+                FROM %1$sfaqdata fd
+                LEFT JOIN %1$sfaqdata_user fdu ON fd.id = fdu.record_id
+                LEFT JOIN %1$sfaqdata_group fdg ON fd.id = fdg.record_id
+                WHERE fd.solution_id = %2$d
+                AND (fdu.user_id IS NOT NULL OR fdg.group_id IS NOT NULL)
+                LIMIT 1', Database::getTablePrefix(), $solutionId);
+            $restrictionResult = $this->configuration->getDb()->query($restrictionQuery);
+            $hasRestriction = $restrictionResult && $this->configuration->getDb()->fetchObject($restrictionResult);
+
+            if (!$hasRestriction) {
+                $fallbackQuery = sprintf(
+                    'SELECT * FROM %sfaqdata fd WHERE fd.solution_id = %d LIMIT 1',
+                    Database::getTablePrefix(),
+                    $solutionId,
+                );
+                $fallbackResult = $this->configuration->getDb()->query($fallbackQuery);
+                $row = $this->configuration->getDb()->fetchObject($fallbackResult);
+            }
         }
 
         $this->faqRecord = [
@@ -1328,9 +1334,19 @@ class Faq
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
+            LEFT JOIN
+                %sfaqdata_group fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                %sfaqdata_user fdu
+            ON
+                fd.id = fdu.record_id
             WHERE
                 fd.solution_id = %d
                 %s',
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $solutionId,

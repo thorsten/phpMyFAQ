@@ -121,10 +121,7 @@ class ClientTest extends TestCase
         $this->filesystem
             ->expects($this->once())
             ->method('moveDirectory')
-            ->with(
-                $this->stringEndsWith('/multisite/source.com'),
-                $this->stringEndsWith('/multisite/destination.com'),
-            )
+            ->with($this->stringEndsWith('/multisite/source.com'), $this->stringEndsWith('/multisite/destination.com'))
             ->willReturn(true);
 
         $result = $this->client->moveClientFolder($sourceUrl, $destinationUrl);
