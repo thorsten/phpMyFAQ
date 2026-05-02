@@ -73,6 +73,7 @@ final class FaqControllerTest extends TestCase
         $this->dbHandle = new Sqlite3();
         $this->dbHandle->connect($this->databasePath, '', '');
         $this->configuration = new Configuration($this->dbHandle);
+        $this->configuration->set('security.permLevel', 'basic');
 
         $databaseReflection = new \ReflectionClass(Database::class);
         $databaseDriverProperty = $databaseReflection->getProperty('databaseDriver');

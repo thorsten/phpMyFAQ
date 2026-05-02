@@ -117,6 +117,7 @@ class SitemapTest extends TestCase
     protected function tearDown(): void
     {
         $this->cleanupTestData();
+        $_SERVER['HTTP_HOST'] = 'localhost';
     }
 
     private function createSitemap(): Sitemap
