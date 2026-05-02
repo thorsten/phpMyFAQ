@@ -21,6 +21,7 @@ namespace phpMyFAQ\Category\Navigation;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Link;
+use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Strings;
 
 final class BreadcrumbsHtmlRenderer
@@ -33,9 +34,10 @@ final class BreadcrumbsHtmlRenderer
         $items = [];
         foreach ($segments as $index => $segment) {
             // Handle startpage (ID -1) with homepage URL
-            $url = strtr('{base}index.php?action=show&cat={id}', [
+            $url = strtr('{base}category/{id}/{slug}.html', [
                 '{base}' => $configuration->getDefaultUrl(),
                 '{id}' => (string) $segment['id'],
+                '{slug}' => TitleSlugifier::slug(Strings::htmlentities($segment['name'])),
             ]);
             if ($segment['id'] === -1) {
                 $url = $configuration->getDefaultUrl();

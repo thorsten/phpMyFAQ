@@ -35,7 +35,7 @@ final class BreadcrumbsHtmlRendererTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Strings::init('en');
+        Strings::init();
     }
 
     public function testRenderUsesDefaultBreadcrumbClassAndEscapesOutput(): void
