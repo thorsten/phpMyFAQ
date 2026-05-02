@@ -90,6 +90,47 @@ class AuthorizationServerTest extends TestCase
         $server->completeAuthorization(Request::create('https://localhost/authorize', 'GET'), '123', true);
     }
 
+    public function testCompleteAuthorizationUsesConfiguredCompleter(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $server = new AuthorizationServer($configuration);
+
+        $server->setAuthorizationCompleter(static fn(Request $request, string $userId, bool $approved): array => [
+            'body' => ['code' => 'auth-code', 'user_id' => $userId, 'approved' => $approved],
+            'status' => 302,
+            'headers' => ['Location' => 'https://example.com/callback'],
+        ]);
+
+        $result = $server->completeAuthorization(Request::create('https://localhost/authorize', 'GET'), '42', true);
+
+        $this->assertSame(302, $result['status']);
+        $this->assertSame('auth-code', $result['body']['code']);
+        $this->assertSame('42', $result['body']['user_id']);
+        $this->assertTrue($result['body']['approved']);
+    }
+
+    public function testIsEnabledRecognizesTrueValues(): void
+    {
+        foreach ([true, 'true', 1, '1'] as $value) {
+            $configuration = $this->createMock(Configuration::class);
+            $configuration->method('get')->willReturn($value);
+            $server = new AuthorizationServer($configuration);
+
+            $this->assertTrue($server->isEnabled(), sprintf('Failed to recognize %s as enabled', var_export($value, true)));
+        }
+    }
+
+    public function testIsEnabledReturnsFalseForOtherValues(): void
+    {
+        foreach ([false, 'false', 0, '0', 'yes', null] as $value) {
+            $configuration = $this->createMock(Configuration::class);
+            $configuration->method('get')->willReturn($value);
+            $server = new AuthorizationServer($configuration);
+
+            $this->assertFalse($server->isEnabled(), sprintf('Wrongly recognized %s as enabled', var_export($value, true)));
+        }
+    }
+
     public function testPrivateHelpersHandleWhitespaceAndInvalidIntervals(): void
     {
         $configuration = $this->createMock(Configuration::class);

@@ -63,6 +63,54 @@ final class OidcDiscoveryServiceTest extends TestCase
         $this->assertStringContainsString('/logout', (string) $document->endSessionEndpoint);
     }
 
+    public function testDiscoverThrowsWhenStatusCodeIndicatesError(): void
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getStatusCode')->willReturn(503);
+        $response->method('getContent')->willReturn('');
+
+        $httpClient = $this->createStub(HttpClientInterface::class);
+        $httpClient->method('request')->willReturn($response);
+
+        $service = new OidcDiscoveryService($httpClient);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('OIDC discovery request failed for keycloak with status 503');
+
+        $service->discover(new OidcProviderConfig(
+            provider: 'keycloak',
+            enabled: true,
+            discoveryUrl: 'https://sso.example.com/realms/faq/.well-known/openid-configuration',
+            client: new OidcClientConfig('pmf-web', 'secret', 'https://faq.example.com/cb', ['openid']),
+            autoProvision: false,
+            logoutRedirectUrl: '',
+        ));
+    }
+
+    public function testDiscoverThrowsWhenPayloadIsNotAnArray(): void
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getStatusCode')->willReturn(200);
+        $response->method('getContent')->willReturn('"a-string"');
+
+        $httpClient = $this->createStub(HttpClientInterface::class);
+        $httpClient->method('request')->willReturn($response);
+
+        $service = new OidcDiscoveryService($httpClient);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('OIDC discovery response is not a JSON object/array');
+
+        $service->discover(new OidcProviderConfig(
+            provider: 'keycloak',
+            enabled: true,
+            discoveryUrl: 'https://sso.example.com/realms/faq/.well-known/openid-configuration',
+            client: new OidcClientConfig('pmf-web', 'secret', 'https://faq.example.com/cb', ['openid']),
+            autoProvision: false,
+            logoutRedirectUrl: '',
+        ));
+    }
+
     public function testDiscoverThrowsForInvalidJson(): void
     {
         $response = $this->createMock(ResponseInterface::class);

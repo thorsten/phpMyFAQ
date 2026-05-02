@@ -129,6 +129,15 @@ class AuthDatabaseTest extends TestCase
         $this->authDatabase->checkCredentials('nonExistingUser', 'password');
     }
 
+    public function testCheckCredentialsThrowsForIncorrectPassword(): void
+    {
+        $login = 'testUser';
+        $this->authDatabase->create($login, 'correctPassword');
+
+        $this->expectException(AuthException::class);
+        $this->authDatabase->checkCredentials($login, 'wrongPassword');
+    }
+
     /**
      * @throws Exception
      */

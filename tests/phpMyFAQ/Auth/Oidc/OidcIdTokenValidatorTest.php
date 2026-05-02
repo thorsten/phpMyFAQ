@@ -277,6 +277,247 @@ final class OidcIdTokenValidatorTest extends TestCase
         );
     }
 
+    public function testValidateRejectsMalformedToken(): void
+    {
+        $validator = $this->createValidator(['keys' => [$this->jwk]], 1_700_000_000);
+
+        $this->expectExceptionObject(new \RuntimeException('OIDC id_token is malformed'));
+
+        $validator->validate('not.a.valid.jwt.token', $this->createDiscoveryDocument(), 'phpmyfaq', '');
+    }
+
+    public function testValidateRejectsTokenWithInvalidJsonSegment(): void
+    {
+        $validator = $this->createValidator(['keys' => [$this->jwk]], 1_700_000_000);
+
+        $bogusToken = $this->base64UrlEncode('not-json') . '.' . $this->base64UrlEncode('{}') . '.sig';
+
+        $this->expectExceptionObject(new \RuntimeException('OIDC id_token header is not valid JSON'));
+
+        $validator->validate($bogusToken, $this->createDiscoveryDocument(), 'phpmyfaq', '');
+    }
+
+    public function testValidateRejectsMissingIssuer(): void
+    {
+        $validator = $this->createValidator(['keys' => [$this->jwk]], 1_700_000_000);
+
+        $this->expectExceptionObject(new \RuntimeException('OIDC id_token is missing the issuer claim'));
+
+        $validator->validate(
+            $this->signToken([
+                'sub' => 'subject-123',
+                'aud' => 'phpmyfaq',
+                'iat' => 1_700_000_000,
+                'exp' => 1_700_000_060,
+            ]),
+            $this->createDiscoveryDocument(),
+            'phpmyfaq',
+            '',
+        );
+    }
+
+    public function testValidateRejectsIssuerMismatch(): void
+    {
+        $validator = $this->createValidator(['keys' => [$this->jwk]], 1_700_000_000);
+
+        $this->expectExceptionObject(new \RuntimeException('OIDC issuer mismatch in id_token'));
+
+        $validator->validate(
+            $this->signToken([
+                'iss' => 'https://other.example.test',
+                'sub' => 'subject-123',
+                'aud' => 'phpmyfaq',
+                'iat' => 1_700_000_000,
+                'exp' => 1_700_000_060,
+            ]),
+            $this->createDiscoveryDocument(),
+            'phpmyfaq',
+            '',
+        );
+    }
+
+    public function testValidateRejectsAudienceMismatch(): void
+    {
+        $validator = $this->createValidator(['keys' => [$this->jwk]], 1_700_000_000);
+
+        $this->expectExceptionObject(new \RuntimeException('OIDC audience mismatch in id_token'));
+
+        $validator->validate(
+            $this->signToken([
+                'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                'sub' => 'subject-123',
+                'aud' => 'someone-else',
+                'iat' => 1_700_000_000,
+                'exp' => 1_700_000_060,
+            ]),
+            $this->createDiscoveryDocument(),
+            'phpmyfaq',
+            '',
+        );
+    }
+
+    public function testValidateRejectsMissingAudienceClaim(): void
+    {
+        $validator = $this->createValidator(['keys' => [$this->jwk]], 1_700_000_000);
+
+        $this->expectExceptionObject(new \RuntimeException('OIDC id_token is missing the audience claim'));
+
+        $validator->validate(
+            $this->signToken([
+                'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                'sub' => 'subject-123',
+                'iat' => 1_700_000_000,
+                'exp' => 1_700_000_060,
+            ]),
+            $this->createDiscoveryDocument(),
+            'phpmyfaq',
+            '',
+        );
+    }
+
+    public function testValidateRejectsAuthorizedPartyMismatch(): void
+    {
+        $validator = $this->createValidator(['keys' => [$this->jwk]], 1_700_000_000);
+
+        $this->expectExceptionObject(new \RuntimeException('OIDC authorized party mismatch in id_token'));
+
+        $validator->validate(
+            $this->signToken([
+                'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                'sub' => 'subject-123',
+                'aud' => 'phpmyfaq',
+                'azp' => 'someone-else',
+                'iat' => 1_700_000_000,
+                'exp' => 1_700_000_060,
+            ]),
+            $this->createDiscoveryDocument(),
+            'phpmyfaq',
+            '',
+        );
+    }
+
+    public function testValidateRejectsMultipleAudiencesWithoutAuthorizedParty(): void
+    {
+        $validator = $this->createValidator(['keys' => [$this->jwk]], 1_700_000_000);
+
+        $this->expectExceptionObject(new \RuntimeException('OIDC authorized party missing in id_token'));
+
+        $validator->validate(
+            $this->signToken([
+                'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                'sub' => 'subject-123',
+                'aud' => ['phpmyfaq', 'second-audience'],
+                'iat' => 1_700_000_000,
+                'exp' => 1_700_000_060,
+            ]),
+            $this->createDiscoveryDocument(),
+            'phpmyfaq',
+            '',
+        );
+    }
+
+    public function testValidateRejectsNonceMismatch(): void
+    {
+        $validator = $this->createValidator(['keys' => [$this->jwk]], 1_700_000_000);
+
+        $this->expectExceptionObject(new \RuntimeException('OIDC nonce mismatch in id_token'));
+
+        $validator->validate(
+            $this->signToken([
+                'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                'sub' => 'subject-123',
+                'aud' => 'phpmyfaq',
+                'nonce' => 'other-nonce',
+                'iat' => 1_700_000_000,
+                'exp' => 1_700_000_060,
+            ]),
+            $this->createDiscoveryDocument(),
+            'phpmyfaq',
+            'expected-nonce',
+        );
+    }
+
+    public function testValidateRejectsMissingExpirationClaim(): void
+    {
+        $validator = $this->createValidator(['keys' => [$this->jwk]], 1_700_000_000);
+
+        $this->expectExceptionObject(new \RuntimeException('OIDC id_token is missing the expiration claim'));
+
+        $validator->validate(
+            $this->signToken([
+                'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                'sub' => 'subject-123',
+                'aud' => 'phpmyfaq',
+                'iat' => 1_700_000_000,
+            ]),
+            $this->createDiscoveryDocument(),
+            'phpmyfaq',
+            '',
+        );
+    }
+
+    public function testValidateRejectsNonNumericNbfClaim(): void
+    {
+        $validator = $this->createValidator(['keys' => [$this->jwk]], 1_700_000_000);
+
+        $this->expectExceptionObject(new \RuntimeException('OIDC id_token has a non-numeric nbf claim'));
+
+        $validator->validate(
+            $this->signToken([
+                'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                'sub' => 'subject-123',
+                'aud' => 'phpmyfaq',
+                'nbf' => 'not-a-number',
+                'iat' => 1_700_000_000,
+                'exp' => 1_700_000_060,
+            ]),
+            $this->createDiscoveryDocument(),
+            'phpmyfaq',
+            '',
+        );
+    }
+
+    public function testValidateRejectsUnsupportedAlgorithm(): void
+    {
+        $validator = $this->createValidator(['keys' => [$this->jwk]], 1_700_000_000);
+
+        $header = ['alg' => 'HS256', 'typ' => 'JWT', 'kid' => 'test-key'];
+        $payload = [
+            'iss' => 'https://sso.example.test/realms/phpmyfaq',
+            'sub' => 'subject-123',
+            'aud' => 'phpmyfaq',
+            'iat' => 1_700_000_000,
+            'exp' => 1_700_000_060,
+        ];
+        $token = $this->base64UrlEncode(json_encode($header, JSON_THROW_ON_ERROR))
+            . '.' . $this->base64UrlEncode(json_encode($payload, JSON_THROW_ON_ERROR))
+            . '.signature';
+
+        $this->expectExceptionObject(new \RuntimeException('Unsupported OIDC id_token signing algorithm'));
+
+        $validator->validate($token, $this->createDiscoveryDocument(), 'phpmyfaq', '');
+    }
+
+    public function testValidateRejectsJwksWithoutKeys(): void
+    {
+        $validator = $this->createValidator(['keys' => []], 1_700_000_000);
+
+        $this->expectExceptionObject(new \RuntimeException('OIDC JWKS response does not contain any keys'));
+
+        $validator->validate(
+            $this->signToken([
+                'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                'sub' => 'subject-123',
+                'aud' => 'phpmyfaq',
+                'iat' => 1_700_000_000,
+                'exp' => 1_700_000_060,
+            ]),
+            $this->createDiscoveryDocument(),
+            'phpmyfaq',
+            '',
+        );
+    }
+
     private function createDiscoveryDocument(): OidcDiscoveryDocument
     {
         return new OidcDiscoveryDocument(
