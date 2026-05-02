@@ -275,6 +275,182 @@ final class AuthKeycloakTest extends TestCase
         $this->assertTrue($auth->create('john', ''));
     }
 
+    public function testCheckCredentialsReturnsFalseForLoginMismatch(): void
+    {
+        $auth = new AuthKeycloak(
+            $this->createStub(Configuration::class),
+            $this->createProviderConfig(autoProvision: true),
+            ['preferred_username' => 'john'],
+            'john',
+        );
+
+        $this->assertFalse($auth->checkCredentials('jane', ''));
+    }
+
+    public function testUpdateAndDeleteAreNoOps(): void
+    {
+        $auth = new AuthKeycloak(
+            $this->createStub(Configuration::class),
+            $this->createProviderConfig(autoProvision: true),
+            [],
+            'john',
+        );
+
+        $this->assertTrue($auth->update('john', ''));
+        $this->assertTrue($auth->delete('john'));
+    }
+
+    public function testCreateReturnsFalseWhenUserCreationThrows(): void
+    {
+        $logger = $this->createMock(Logger::class);
+        $logger->expects($this->once())->method('error');
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getLogger')->willReturn($logger);
+
+        $user = $this->createMock(User::class);
+        $user->method('createUser')->willThrowException(new \RuntimeException('boom'));
+
+        $auth = new AuthKeycloak(
+            $configuration,
+            $this->createProviderConfig(autoProvision: true),
+            ['preferred_username' => 'john'],
+            'john',
+            static fn(): User => $user,
+        );
+
+        $this->assertFalse($auth->create('john@example.com', ''));
+    }
+
+    public function testCreateReturnsFalseWhenUserCreationReturnsFalse(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getLogger')->willReturn($this->createStub(Logger::class));
+
+        $user = $this->createMock(User::class);
+        $user->method('createUser')->willReturn(false);
+
+        $auth = new AuthKeycloak(
+            $configuration,
+            $this->createProviderConfig(autoProvision: true),
+            ['preferred_username' => 'john'],
+            'john',
+            static fn(): User => $user,
+        );
+
+        $this->assertFalse($auth->create('john', ''));
+    }
+
+    public function testCreateReturnsFalseWhenSetUserDataThrows(): void
+    {
+        $logger = $this->createMock(Logger::class);
+        $logger->expects($this->once())->method('error');
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getLogger')->willReturn($logger);
+
+        $user = $this->createMock(User::class);
+        $user->method('createUser')->willReturn(true);
+        $user->method('setUserData')->willThrowException(new \RuntimeException('persist failed'));
+
+        $auth = new AuthKeycloak(
+            $configuration,
+            $this->createProviderConfig(autoProvision: true),
+            ['preferred_username' => 'john'],
+            'john',
+            static fn(): User => $user,
+        );
+
+        $this->assertFalse($auth->create('jo', ''));
+    }
+
+    public function testCreateReturnsFalseWhenSetUserDataReturnsFalse(): void
+    {
+        $logger = $this->createMock(Logger::class);
+        $logger->expects($this->once())->method('error');
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getLogger')->willReturn($logger);
+
+        $user = $this->createMock(User::class);
+        $user->method('createUser')->willReturn(true);
+        $user->method('setUserData')->willReturn(false);
+
+        $auth = new AuthKeycloak(
+            $configuration,
+            $this->createProviderConfig(autoProvision: true),
+            ['preferred_username' => 'long-username'],
+            'long-username',
+            static fn(): User => $user,
+        );
+
+        $this->assertFalse($auth->create('long-username', ''));
+    }
+
+    public function testCreateUsesPreferredUsernameWhenNameClaimMissing(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
+                'security.permLevel' => 'basic',
+                default => null,
+            });
+        $configuration->method('getLogger')->willReturn($this->createStub(Logger::class));
+
+        $user = $this->createMock(User::class);
+        $user->method('createUser')->willReturn(true);
+        $user
+            ->expects($this->once())
+            ->method('setUserData')
+            ->with([
+                'display_name' => 'preferred-john',
+                'email' => '',
+                'keycloak_sub' => '',
+            ])
+            ->willReturn(true);
+
+        $auth = new AuthKeycloak(
+            $configuration,
+            $this->createProviderConfig(autoProvision: true),
+            ['preferred_username' => 'preferred-john'],
+            'preferred-john',
+            static fn(): User => $user,
+        );
+
+        $this->assertTrue($auth->create('preferred-john', ''));
+    }
+
+    public function testCreateFallsBackToResolvedLoginForDisplayName(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
+                'security.permLevel' => 'basic',
+                default => null,
+            });
+        $configuration->method('getLogger')->willReturn($this->createStub(Logger::class));
+
+        $user = $this->createMock(User::class);
+        $user->method('createUser')->willReturn(true);
+        $user
+            ->expects($this->once())
+            ->method('setUserData')
+            ->with($this->callback(static fn(array $data): bool => $data['display_name'] === 'resolved-login'))
+            ->willReturn(true);
+
+        $auth = new AuthKeycloak(
+            $configuration,
+            $this->createProviderConfig(autoProvision: true),
+            [],
+            'resolved-login',
+            static fn(): User => $user,
+        );
+
+        $this->assertTrue($auth->create('resolved-login', ''));
+    }
+
     public function testIsValidLoginMatchesResolvedLogin(): void
     {
         $auth = new AuthKeycloak(

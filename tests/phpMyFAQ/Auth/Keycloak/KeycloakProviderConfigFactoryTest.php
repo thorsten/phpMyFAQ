@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Auth\Keycloak;
 
+use InvalidArgumentException;
 use phpMyFAQ\Auth\Oidc\OidcClientConfig;
 use phpMyFAQ\Auth\Oidc\OidcProviderConfig;
 use phpMyFAQ\Configuration;
@@ -71,5 +72,79 @@ final class KeycloakProviderConfigFactoryTest extends TestCase
 
         $this->assertFalse($config->enabled);
         $this->assertSame('https://faq.example.com/auth/keycloak/callback', $config->client->redirectUri);
+    }
+
+    public function testCreateThrowsWhenEnabledButBaseUrlMissing(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['keycloak.enable',            true],
+                ['keycloak.baseUrl',           ''],
+                ['keycloak.realm',             'faq'],
+                ['keycloak.clientId',          ''],
+                ['keycloak.clientSecret',      ''],
+                ['keycloak.redirectUri',       'https://faq.example.com/cb'],
+                ['keycloak.scopes',            ''],
+                ['keycloak.autoProvision',     1],
+                ['keycloak.logoutRedirectUrl', ''],
+            ]);
+
+        $factory = new KeycloakProviderConfigFactory($configuration);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Keycloak enabled but missing: baseUrl');
+
+        $factory->create();
+    }
+
+    public function testCreateThrowsWhenEnabledButBothBaseUrlAndRealmMissing(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['keycloak.enable',            true],
+                ['keycloak.baseUrl',           ''],
+                ['keycloak.realm',             ''],
+                ['keycloak.clientId',          ''],
+                ['keycloak.clientSecret',      ''],
+                ['keycloak.redirectUri',       'https://faq.example.com/cb'],
+                ['keycloak.scopes',            ''],
+                ['keycloak.autoProvision',     false],
+                ['keycloak.logoutRedirectUrl', ''],
+            ]);
+
+        $factory = new KeycloakProviderConfigFactory($configuration);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('baseUrl and realm');
+
+        $factory->create();
+    }
+
+    public function testCreateAcceptsBooleanTrueAndIntegerOneForBooleans(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['keycloak.enable',            1],
+                ['keycloak.baseUrl',           'https://sso.example.com'],
+                ['keycloak.realm',             'faq'],
+                ['keycloak.clientId',          'pmf-web'],
+                ['keycloak.clientSecret',      'secret'],
+                ['keycloak.redirectUri',       'https://faq.example.com/cb'],
+                ['keycloak.scopes',            'openid'],
+                ['keycloak.autoProvision',     true],
+                ['keycloak.logoutRedirectUrl', ''],
+            ]);
+
+        $factory = new KeycloakProviderConfigFactory($configuration);
+        $config = $factory->create();
+
+        $this->assertTrue($config->enabled);
+        $this->assertTrue($config->autoProvision);
     }
 }

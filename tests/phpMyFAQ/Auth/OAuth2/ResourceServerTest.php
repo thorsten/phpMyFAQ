@@ -107,6 +107,53 @@ class ResourceServerTest extends TestCase
         $this->assertSame('{"body":"value"}', (string) $psrRequest->getBody());
     }
 
+    public function testAuthenticateReturnsNullForEmptyAuthorizationHeader(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $server = new ResourceServer($configuration);
+
+        $request = new Request(server: ['HTTP_AUTHORIZATION' => '']);
+
+        $this->assertNull($server->authenticate($request));
+    }
+
+    public function testAuthenticateReturnsNullForBasicAuthHeader(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $server = new ResourceServer($configuration);
+
+        $request = new Request(server: ['HTTP_AUTHORIZATION' => 'Basic dXNlcjpwYXNz']);
+
+        $this->assertNull($server->authenticate($request));
+    }
+
+    public function testIsEnabledRecognizesAllTrueValues(): void
+    {
+        $reflection = new ReflectionClass(ResourceServer::class);
+        $isEnabled = $reflection->getMethod('isEnabled');
+
+        foreach ([true, 'true', 1, '1'] as $value) {
+            $configuration = $this->createMock(Configuration::class);
+            $configuration->method('get')->willReturn($value);
+
+            $server = new ResourceServer($configuration);
+
+            $this->assertTrue($isEnabled->invoke($server), sprintf('Failed for %s', var_export($value, true)));
+        }
+    }
+
+    public function testGetConfigStringReturnsEmptyForNonStringValues(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('get')->willReturn(123);
+
+        $server = new ResourceServer($configuration);
+        $reflection = new ReflectionClass($server);
+        $getConfigString = $reflection->getMethod('getConfigString');
+
+        $this->assertSame('', $getConfigString->invoke($server, 'oauth2.publicKeyPath'));
+    }
+
     public function testAuthenticateReturnsNullWhenValidationFailsWithConfiguredServer(): void
     {
         [, $publicKeyPath] = $this->getKeyPairPaths();

@@ -84,7 +84,7 @@ class SearchResultSet
 
         if (
             'basic' !== $this->configuration->get(item: 'security.permLevel')
-            && $this->currentUser->perm !== null
+            && isset($this->currentUser->perm) // @mago-expect lint:no-isset - typed property may be uninitialized
             && method_exists($this->currentUser->perm, 'getUserGroups')
         ) {
             $currentGroupIds = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());

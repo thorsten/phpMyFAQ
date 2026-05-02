@@ -145,7 +145,7 @@ To run our unit tests via PHPUnit v13.x, execute this command on your CLI
 
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
-    $ ./vendor/bin/phpunit
+    $ ./phpmyfaq/src/libs/bin/phpunit
 
 Please note that phpMyFAQ needs to be installed via Composer.
 
