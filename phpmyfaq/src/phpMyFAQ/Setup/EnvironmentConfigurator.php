@@ -78,7 +78,7 @@ readonly class EnvironmentConfigurator
         $content = $this->readHtaccess();
 
         $serverPath = $this->getServerPath();
-        $new404Path = rtrim($serverPath, '/') . '/index.php?action=404';
+        $new404Path = rtrim($serverPath, characters: '/') . '/index.php?action=404';
 
         $updated = preg_replace('/^(\s*RewriteBase\s+)\S+/mi', '${1}' . $serverPath, $content);
         if ($updated === null) {

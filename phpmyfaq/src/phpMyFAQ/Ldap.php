@@ -103,18 +103,18 @@ class Ldap
             return false;
         }
 
-        if ($this->configuration->get(item: 'ldap.ldap_use_dynamic_login')) {
-            // Dynamic user binding: construct RDN from login attribute
-            $loginAttribute = $this->configuration->get(item: 'ldap.ldap_dynamic_login_attribute');
-            $ldapRdn = $loginAttribute . '=' . $ldapUser . ',' . $ldapBase;
-            $ldapBind = $this->bind($ldapRdn, $ldapPassword);
-        } elseif ($this->configuration->get(item: 'ldap.ldap_use_anonymous_login')) {
-            // Anonymous binding
-            $ldapBind = $this->bind();
-        } else {
-            // Default: user binding without RDN
-            $ldapBind = $this->bind($ldapUser, $ldapPassword);
-        }
+        $ldapBind = match (true) {
+            (bool) $this->configuration->get(item: 'ldap.ldap_use_dynamic_login') => $this->bind(
+                $this->configuration->get(item: 'ldap.ldap_dynamic_login_attribute')
+                . '='
+                . $ldapUser
+                . ','
+                . $ldapBase,
+                $ldapPassword,
+            ),
+            (bool) $this->configuration->get(item: 'ldap.ldap_use_anonymous_login') => $this->bind(),
+            default => $this->bind($ldapUser, $ldapPassword),
+        };
 
         if (false === $ldapBind) {
             $this->errno = ldap_errno($this->ds);

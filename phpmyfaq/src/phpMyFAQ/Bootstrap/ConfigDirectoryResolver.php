@@ -127,7 +127,8 @@ class ConfigDirectoryResolver
             return $confAttachmentsPath;
         }
 
-        $pathSegments = preg_split('%[\\\\/]%', $confAttachmentsPath) ?: [];
+        $pathSegments = preg_split('%[\\\\/]%', $confAttachmentsPath);
+        $pathSegments = $pathSegments === false ? [] : $pathSegments;
         foreach ($pathSegments as $pathSegment) {
             if ($pathSegment === '..') {
                 return false;

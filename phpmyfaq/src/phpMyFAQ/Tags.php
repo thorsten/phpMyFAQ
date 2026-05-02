@@ -261,7 +261,7 @@ class Tags
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $showInactive ? '' : "AND d.active = 'yes'",
-            isset($search) && $search !== ''
+            $search !== null && $search !== ''
                 ? 'AND tagging_name ' . $like . " '" . $this->configuration->getDb()->escape($search) . "%'"
                 : '',
             $permissionCheck,

@@ -196,7 +196,7 @@ readonly class MediumPermissionRepository
         $comma = '';
 
         foreach (array_keys($groupData) as $key) {
-            if (!in_array($key, $allowedColumns, true)) {
+            if (!in_array($key, $allowedColumns, strict: true)) {
                 continue;
             }
 

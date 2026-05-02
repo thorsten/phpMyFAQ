@@ -62,8 +62,8 @@ class JwksProvider
         if (is_file($cacheFile) && (time() - filemtime($cacheFile)) < self::CACHE_TTL_SECONDS) {
             $cached = file_get_contents($cacheFile);
             if ($cached !== false) {
-                $decoded = json_decode($cached, true);
-                if (is_array($decoded) && isset($decoded['keys']) && is_array($decoded['keys'])) {
+                $decoded = json_decode($cached, associative: true);
+                if (is_array($decoded) && array_key_exists('keys', $decoded) && is_array($decoded['keys'])) {
                     return $decoded;
                 }
             }
@@ -80,8 +80,8 @@ class JwksProvider
         }
 
         $body = $response->getContent();
-        $decoded = json_decode($body, true);
-        if (!is_array($decoded) || !isset($decoded['keys']) || !is_array($decoded['keys'])) {
+        $decoded = json_decode($body, associative: true);
+        if (!is_array($decoded) || !array_key_exists('keys', $decoded) || !is_array($decoded['keys'])) {
             throw new RuntimeException('Malformed JWKS response from identity provider.');
         }
 
@@ -92,7 +92,7 @@ class JwksProvider
 
     private function cacheFile(string $tenantId): string
     {
-        return rtrim($this->cacheDir, '/') . '/jwks-' . sha1($tenantId) . '.json';
+        return rtrim($this->cacheDir, characters: '/') . '/jwks-' . sha1($tenantId) . '.json';
     }
 
     private function writeCache(string $file, string $body): void

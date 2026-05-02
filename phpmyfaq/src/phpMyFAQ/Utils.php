@@ -290,7 +290,7 @@ class Utils
         return preg_replace_callback(
             $pattern,
             static function (array $matches): string {
-                $url = htmlspecialchars($matches[1], ENT_QUOTES, 'UTF-8');
+                $url = htmlspecialchars($matches[1], ENT_QUOTES, encoding: 'UTF-8');
                 return '<a href="' . $url . '">' . $url . '</a>';
             },
             $string,

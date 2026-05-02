@@ -311,7 +311,7 @@ final class KeycloakAuthenticationController extends AbstractFrontController
 
         $secret = (string) $this->configuration->get('security.salt');
 
-        return 'hmac:' . substr(hash_hmac('sha256', $login, $secret), 0, 12);
+        return 'hmac:' . substr(hash_hmac('sha256', $login, $secret), offset: 0, length: 12);
     }
 
     /** @param array<string, mixed> $claims */
@@ -347,7 +347,7 @@ final class KeycloakAuthenticationController extends AbstractFrontController
         }
 
         try {
-            $jwt = json_decode($jwtPayload, true, 512, JSON_THROW_ON_ERROR);
+            $jwt = json_decode($jwtPayload, associative: true, depth: 512, flags: JSON_THROW_ON_ERROR);
         } catch (JsonException) {
             return '';
         }

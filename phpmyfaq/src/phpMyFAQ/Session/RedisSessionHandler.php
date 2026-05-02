@@ -64,9 +64,9 @@ class RedisSessionHandler
         }
 
         // Verify the service speaks Redis by sending PING and checking for +PONG
-        fwrite($connection, "PING\r\n");
+        fwrite($connection, data: "PING\r\n");
         stream_set_timeout($connection, (int) ceil($timeoutSeconds));
-        $response = fgets($connection, 128);
+        $response = fgets($connection, length: 128);
         fclose($connection);
 
         if ($response === false || !str_starts_with(trim($response), '+PONG')) {
