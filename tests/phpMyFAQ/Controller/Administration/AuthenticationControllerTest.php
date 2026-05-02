@@ -387,8 +387,15 @@ final class AuthenticationControllerTest extends TestCase
         $twoFactor = $this->createMock(TwoFactor::class);
         $twoFactor->expects(self::never())->method('validateToken');
 
+        $session = new Session(new MockArraySessionStorage());
+        $session->set('2fa_pending_user_id', 42);
+
         $controller = new AuthenticationController($currentUserService, $twoFactor);
-        $controller->setContainer($this->createControllerContainer(currentUser: $this->createLoggedOutCurrentUser(), configurationValues: []));
+        $controller->setContainer($this->createControllerContainer(
+            currentUser: $this->createLoggedOutCurrentUser(),
+            configurationValues: [],
+            session: $session,
+        ));
 
         $request = new Request([], ['token' => '123', 'user-id' => '42']);
 
@@ -411,8 +418,15 @@ final class AuthenticationControllerTest extends TestCase
         $twoFactor = $this->createMock(TwoFactor::class);
         $twoFactor->expects(self::once())->method('validateToken')->with('123456', 42)->willReturn(true);
 
+        $session = new Session(new MockArraySessionStorage());
+        $session->set('2fa_pending_user_id', 42);
+
         $controller = new AuthenticationController($currentUserService, $twoFactor);
-        $controller->setContainer($this->createControllerContainer(currentUser: $this->createLoggedOutCurrentUser(), configurationValues: []));
+        $controller->setContainer($this->createControllerContainer(
+            currentUser: $this->createLoggedOutCurrentUser(),
+            configurationValues: [],
+            session: $session,
+        ));
 
         $request = new Request([], ['token' => '123456', 'user-id' => '42']);
 
@@ -435,8 +449,15 @@ final class AuthenticationControllerTest extends TestCase
         $twoFactor = $this->createMock(TwoFactor::class);
         $twoFactor->expects(self::once())->method('validateToken')->with('123456', 42)->willReturn(false);
 
+        $session = new Session(new MockArraySessionStorage());
+        $session->set('2fa_pending_user_id', 42);
+
         $controller = new AuthenticationController($currentUserService, $twoFactor);
-        $controller->setContainer($this->createControllerContainer(currentUser: $this->createLoggedOutCurrentUser(), configurationValues: []));
+        $controller->setContainer($this->createControllerContainer(
+            currentUser: $this->createLoggedOutCurrentUser(),
+            configurationValues: [],
+            session: $session,
+        ));
 
         $response = $controller->check(new Request([], ['token' => '123456', 'user-id' => '42']));
 

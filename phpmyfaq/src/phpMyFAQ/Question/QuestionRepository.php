@@ -125,9 +125,7 @@ readonly class QuestionRepository
     {
         $questions = [];
         $db = $this->configuration->getDb();
-        $langFilter = $language !== ''
-            ? sprintf("AND lang = '%s'", $db->escape($language))
-            : '';
+        $langFilter = $language !== '' ? sprintf("AND lang = '%s'", $db->escape($language)) : '';
 
         $query = sprintf(
             '

@@ -21,9 +21,9 @@ class FaqTest extends TestCase
         // Mock Configuration class
         $this->mockConfiguration = $this->createMock(Configuration::class);
         $this->mockConfiguration->method('get')->willReturnCallback(static fn(string $key): ?string => $key
-        === 'security.permLevel'
-            ? 'basic'
-            : null);
+            === 'security.permLevel'
+                ? 'basic'
+                : null);
 
         // Mock Database class
         $this->mockDb = $this->createMock(DatabaseDriver::class);
@@ -358,11 +358,26 @@ class FaqTest extends TestCase
 
     public function testSetStickyFaqOrderNormalizesIds(): void
     {
+        $row = new stdClass();
+        $row->id = 123;
+
         $this->mockDb
-            ->expects($this->once())
+            ->method('fetchObject')
+            ->willReturn($row);
+
+        $this->mockDb
+            ->expects($this->exactly(2))
             ->method('query')
-            ->with('UPDATE faqdata SET sticky_order=1 WHERE id=123')
-            ->willReturn(true);
+            ->willReturnCallback(function (string $query): bool {
+                static $call = 0;
+                ++$call;
+                if ($call === 1) {
+                    $this->assertStringContainsString('SELECT id FROM faqdata fd WHERE fd.id = 123', $query);
+                } else {
+                    $this->assertSame('UPDATE faqdata SET sticky_order=1 WHERE id=123', $query);
+                }
+                return true;
+            });
 
         $this->assertTrue($this->faq->setStickyFaqOrder(['123 OR 1=1']));
     }

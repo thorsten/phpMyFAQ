@@ -150,9 +150,9 @@ final class AttachmentController extends AbstractAdministrationApiController
             ));
             try {
                 if (!$attachment->save($file->getPathname(), $file->getClientOriginalName())) {
-                    return $this->json(['error' => Translation::get(
-                        'msgImageCouldNotBeUploaded',
-                    )], Response::HTTP_INTERNAL_SERVER_ERROR);
+                    return $this->json([
+                        'error' => Translation::get('msgImageCouldNotBeUploaded'),
+                    ], Response::HTTP_INTERNAL_SERVER_ERROR);
                 }
             } catch (AttachmentException|FileNotFoundException $exception) {
                 return $this->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);

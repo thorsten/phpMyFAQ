@@ -50,9 +50,9 @@ final class OpenSearchController extends AbstractController
 
         try {
             $this->openSearch->createIndex();
-            return $this->json(['success' => Translation::get(
-                'msgAdminOpenSearchCreateIndex_success',
-            )], Response::HTTP_OK);
+            return $this->json([
+                'success' => Translation::get('msgAdminOpenSearchCreateIndex_success'),
+            ], Response::HTTP_OK);
         } catch (Exception|\Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_CONFLICT);
         }
@@ -68,9 +68,9 @@ final class OpenSearchController extends AbstractController
 
         try {
             $this->openSearch->dropIndex();
-            return $this->json(['success' => Translation::get(
-                'msgAdminOpenSearchDropIndex_success',
-            )], Response::HTTP_OK);
+            return $this->json([
+                'success' => Translation::get('msgAdminOpenSearchDropIndex_success'),
+            ], Response::HTTP_OK);
         } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_CONFLICT);
         }

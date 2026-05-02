@@ -257,9 +257,9 @@ class RelationTest extends TestCase
             ->with('security.permLevel')
             ->willReturn('medium');
 
-        $this->categoryMock->expects($this->any())->method('getUser')->willReturn(-1);
-        $this->categoryMock->expects($this->any())->method('getGroups')->willReturn(['1) OR 1=1 -- ', '2']);
-        $this->languageMock->expects($this->any())->method('getLanguage')->willReturn("en' OR 1=1 -- ");
+        $this->categoryMock->method('getUser')->willReturn(-1);
+        $this->categoryMock->method('getGroups')->willReturn(['1) OR 1=1 -- ', '2']);
+        $this->languageMock->method('getLanguage')->willReturn("en' OR 1=1 -- ");
 
         $this->databaseMock
             ->expects($this->once())
@@ -350,7 +350,7 @@ class RelationTest extends TestCase
     {
         Database::setTablePrefix('test_');
 
-        $this->languageMock->expects($this->any())->method('getLanguage')->willReturn('');
+        $this->languageMock->method('getLanguage')->willReturn('');
 
         $this->databaseMock
             ->expects($this->once())

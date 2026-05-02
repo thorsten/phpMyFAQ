@@ -18,6 +18,7 @@ class TagsTest extends TestCase
     private Tags $tags;
     private PdoSqlite $dbHandle;
     private string $databaseFile;
+    private Configuration $configuration;
     private ?Configuration $previousConfiguration = null;
 
     /**
@@ -53,6 +54,7 @@ class TagsTest extends TestCase
         $language->setLanguageFromConfiguration('en');
         $configuration->setLanguage($language);
 
+        $this->configuration = $configuration;
         $this->tags = new Tags($configuration);
     }
 
@@ -112,7 +114,7 @@ class TagsTest extends TestCase
         $this->tags->create(1, $testData);
 
         $this->assertEquals(
-            '<a class="btn btn-outline-primary" title="Foo" href="http://example.com/tags/1/foo.html">Foo</a>',
+            '<a class="btn btn-outline-primary" title="Foo" href="http://example.com/search.html?tagging_id=1">Foo</a>',
             $this->tags->getAllLinkTagsById(1),
         );
     }
@@ -213,6 +215,9 @@ class TagsTest extends TestCase
 
     public function testPermissionChecksNormalizeGroupIds(): void
     {
+        $this->configuration->set('security.permLevel', 'medium');
+        $this->tags = new Tags($this->configuration);
+
         $this->tags->setUser(-1);
         $this->tags->setGroups(['-1) OR 1=1 -- ', '2']);
 

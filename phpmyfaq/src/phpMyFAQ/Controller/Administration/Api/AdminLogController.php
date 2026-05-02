@@ -53,9 +53,9 @@ final class AdminLogController extends AbstractAdministrationApiController
             return $this->json(['success' => Translation::get(key: 'ad_adminlog_delete_success')], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get(
-            key: 'ad_adminlog_delete_failure',
-        )], Response::HTTP_BAD_REQUEST);
+        return $this->json([
+            'error' => Translation::get(key: 'ad_adminlog_delete_failure'),
+        ], Response::HTTP_BAD_REQUEST);
     }
 
     /**

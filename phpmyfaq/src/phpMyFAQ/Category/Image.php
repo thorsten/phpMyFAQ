@@ -135,9 +135,8 @@ class Image
 
             // Ensure destination directory exists
             if (
-                !is_dir(self::UPLOAD_DIR) && (
-                    !@mkdir(self::UPLOAD_DIR, permissions: 0o775, recursive: true) && !is_dir(self::UPLOAD_DIR)
-                )
+                !is_dir(self::UPLOAD_DIR)
+                && (!@mkdir(self::UPLOAD_DIR, permissions: 0o775, recursive: true) && !is_dir(self::UPLOAD_DIR))
             ) {
                 throw new Exception('Upload directory does not exist and could not be created: ' . self::UPLOAD_DIR);
             }

@@ -198,9 +198,9 @@ final class CommentsControllerTest extends TestCase
 
         $comments = $this->createMock(Comments::class);
         $comments->method('getAllComments')->willReturnCallback(static fn(string $type = CommentType::FAQ) => $type
-        === CommentType::NEWS
-            ? $newsComments
-            : $faqComments);
+            === CommentType::NEWS
+                ? $newsComments
+                : $faqComments);
 
         return $comments;
     }
