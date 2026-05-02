@@ -91,9 +91,10 @@ final class ExportController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $hasDataField = static function (object $payload, string $field): bool {
-            return property_exists($payload, $field) && $payload->{$field} !== null;
-        };
+        $hasDataField = static fn(object $payload, string $field): bool => (
+            property_exists($payload, $field)
+            && $payload->{$field} !== null
+        );
 
         $text = [];
         $text[0] = [];

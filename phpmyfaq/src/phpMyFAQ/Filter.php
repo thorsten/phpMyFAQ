@@ -40,13 +40,9 @@ class Filter
      */
     public static function filterInput(int $type, string $variableName, int $filter, mixed $default = null): mixed
     {
-        if ($filter === FILTER_SANITIZE_SPECIAL_CHARS) {
-            $return = filter_input($type, $variableName, FILTER_CALLBACK, [
+        $return = $filter === FILTER_SANITIZE_SPECIAL_CHARS ? filter_input($type, $variableName, FILTER_CALLBACK, [
                 'options' => new Filter()->filterSanitizeString(...),
-            ]);
-        } else {
-            $return = filter_input($type, $variableName, $filter);
-        }
+            ]) : filter_input($type, $variableName, $filter);
 
         return is_null($return) || $return === false ? $default : $return;
     }
@@ -71,11 +67,9 @@ class Filter
      */
     public static function filterVar(mixed $variable, int $filter, mixed $default = null): mixed
     {
-        if ($filter === FILTER_SANITIZE_SPECIAL_CHARS) {
-            $return = filter_var($variable, FILTER_CALLBACK, ['options' => new Filter()->filterSanitizeString(...)]);
-        } else {
-            $return = filter_var($variable, $filter);
-        }
+        $return = $filter === FILTER_SANITIZE_SPECIAL_CHARS
+            ? filter_var($variable, FILTER_CALLBACK, ['options' => new Filter()->filterSanitizeString(...)])
+            : filter_var($variable, $filter);
 
         return $return === false || $return === null ? $default : $return;
     }
@@ -132,7 +126,7 @@ class Filter
     private static function sanitizeQueryValue(mixed $value): string|array
     {
         if (is_array($value)) {
-            return array_map(static fn($v): string|array => self::sanitizeQueryValue($v), $value);
+            return array_map(self::sanitizeQueryValue(...), $value);
         }
 
         return strip_tags((string) $value);
@@ -143,7 +137,7 @@ class Filter
      */
     public function filterSanitizeString(string $string): string
     {
-        $string = str_replace("\x00", '', $string);
+        $string = str_replace("\x00", replace: '', subject: $string);
         $string = strip_tags($string);
         return str_replace(["'", '"'], ['&apos;', '&quot;'], $string);
     }

@@ -191,7 +191,7 @@ class Installer extends Setup
     {
         $basePath = $request->getBasePath();
         if (str_ends_with($basePath, 'setup')) {
-            $basePath = substr($basePath, 0, -strlen('setup'));
+            $basePath = substr($basePath, offset: 0, length: -strlen('setup'));
         }
 
         $htaccessPath = PMF_ROOT_DIR . '/.htaccess';

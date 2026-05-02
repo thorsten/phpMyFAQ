@@ -164,7 +164,7 @@ class Permission
         $permissions = [];
 
         $payload = json_decode(Request::createFromGlobals()->getContent());
-        $data = is_object($payload) && isset($payload->data) && is_object($payload->data)
+        $data = is_object($payload) && property_exists($payload, 'data') && is_object($payload->data)
             ? $payload->data
             : (object) [];
 

@@ -408,16 +408,15 @@ class Pgsql extends Database implements DriverInterface
         }
 
         foreach ($this->createTableStatements as $key => $stmt) {
-            if (
+            $needsTwoPrefixes =
                 $key === 'idx_records'
                 || $key === 'faqsessions_idx'
                 || str_starts_with($key, 'faqsearches_')
-                || str_starts_with($key, 'faqchat_messages_idx_')
-            ) {
-                $result = $this->configuration->getDb()->query(sprintf($stmt, $prefix, $prefix));
-            } else {
-                $result = $this->configuration->getDb()->query(sprintf($stmt, $prefix));
-            }
+                || str_starts_with($key, 'faqchat_messages_idx_');
+
+            $result = $needsTwoPrefixes
+                ? $this->configuration->getDb()->query(sprintf($stmt, $prefix, $prefix))
+                : $this->configuration->getDb()->query(sprintf($stmt, $prefix));
 
             if (!$result) {
                 return false;

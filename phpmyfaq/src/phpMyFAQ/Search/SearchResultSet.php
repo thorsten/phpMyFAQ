@@ -84,7 +84,7 @@ class SearchResultSet
 
         if (
             'basic' !== $this->configuration->get(item: 'security.permLevel')
-            && isset($this->currentUser->perm)
+            && $this->currentUser->perm !== null
             && method_exists($this->currentUser->perm, 'getUserGroups')
         ) {
             $currentGroupIds = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());

@@ -150,7 +150,7 @@ class OAuth
 
         try {
             $idTokenString = (string) ($token->id_token ?? '');
-            if ($idTokenString === '' || substr_count($idTokenString, '.') !== 2) {
+            if ($idTokenString === '' || substr_count($idTokenString, needle: '.') !== 2) {
                 $this->clearToken();
                 return $this;
             }
@@ -163,12 +163,12 @@ class OAuth
                 'https://sts.windows.net/' . AAD_OAUTH_TENANTID . '/',
             ];
 
-            if (!isset($decoded->aud) || $decoded->aud !== AAD_OAUTH_CLIENTID) {
+            if (!property_exists($decoded, 'aud') || $decoded->aud !== AAD_OAUTH_CLIENTID) {
                 $this->clearToken();
                 return $this;
             }
 
-            if (!isset($decoded->iss) || !in_array($decoded->iss, $expectedIssuers, true)) {
+            if (!property_exists($decoded, 'iss') || !in_array($decoded->iss, $expectedIssuers, strict: true)) {
                 $this->clearToken();
                 return $this;
             }

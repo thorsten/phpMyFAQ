@@ -44,8 +44,8 @@ class PhpConfigurator
      */
     public static function configurePcre(): void
     {
-        ini_set('pcre.backtrack_limit', '100000000');
-        ini_set('pcre.recursion_limit', '100000000');
+        ini_set('pcre.backtrack_limit', value: '100000000');
+        ini_set('pcre.recursion_limit', value: '100000000');
     }
 
     /**
@@ -63,11 +63,11 @@ class PhpConfigurator
     public static function configureSession(?Configuration $configuration = null): void
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
-            ini_set('session.use_only_cookies', '1');
-            ini_set('session.use_trans_sid', '0');
-            ini_set('session.cookie_samesite', 'Strict');
-            ini_set('session.cookie_httponly', '1');
-            ini_set('session.cookie_secure', '1');
+            ini_set('session.use_only_cookies', value: '1');
+            ini_set('session.use_trans_sid', value: '0');
+            ini_set('session.cookie_samesite', value: 'Strict');
+            ini_set('session.cookie_httponly', value: '1');
+            ini_set('session.cookie_secure', value: '1');
 
             $sessionSavePath = trim((string) ($configuration?->get('session.savePath') ?? ''));
 
@@ -80,7 +80,7 @@ class PhpConfigurator
 
             switch ($sessionHandler) {
                 case 'files':
-                    ini_set('session.save_handler', 'files');
+                    ini_set('session.save_handler', value: 'files');
                     break;
                 case 'redis':
                     call_user_func(self::$redisConfigurator, $redisDsn);

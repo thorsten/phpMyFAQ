@@ -70,7 +70,7 @@ final class DashboardController extends AbstractController
 
         try {
             $versions = $api->getVersions();
-            if (!isset($versions['installed']) || !isset($versions[$releaseEnvironment])) {
+            if (!array_key_exists('installed', $versions) || !array_key_exists($releaseEnvironment, $versions)) {
                 throw new Exception('Version lookup failed for release environment "' . $releaseEnvironment . '".');
             }
 
@@ -142,7 +142,7 @@ final class DashboardController extends AbstractController
 
             if ($response->getStatusCode() === Response::HTTP_OK) {
                 $data = $response->toArray(throw: false);
-                if (isset($data['news']) && is_array($data['news'])) {
+                if (array_key_exists('news', $data) && is_array($data['news'])) {
                     $data['news'] = array_slice($data['news'], offset: 0, length: 5);
                 }
 

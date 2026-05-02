@@ -622,7 +622,11 @@ class Client extends Instance
     private function extractClientHostnameFromUrl(string $clientUrl): ?string
     {
         $parsedUrl = parse_url($clientUrl);
-        if (!is_array($parsedUrl) || ($parsedUrl['scheme'] ?? '') !== 'https' || !isset($parsedUrl['host'])) {
+        if (
+            !is_array($parsedUrl)
+            || ($parsedUrl['scheme'] ?? '') !== 'https'
+            || !array_key_exists('host', $parsedUrl)
+        ) {
             return null;
         }
 
@@ -631,11 +635,11 @@ class Client extends Instance
         }
 
         if (
-            isset($parsedUrl['query'])
-            || isset($parsedUrl['fragment'])
-            || isset($parsedUrl['user'])
-            || isset($parsedUrl['pass'])
-            || isset($parsedUrl['port'])
+            array_key_exists('query', $parsedUrl)
+            || array_key_exists('fragment', $parsedUrl)
+            || array_key_exists('user', $parsedUrl)
+            || array_key_exists('pass', $parsedUrl)
+            || array_key_exists('port', $parsedUrl)
         ) {
             return null;
         }

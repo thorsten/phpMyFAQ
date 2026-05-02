@@ -222,20 +222,27 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
                 continue;
             }
 
-            if (is_array($value)) {
-                $ids = array_map(static fn($v): int => (int) $v, $value);
-                if ($ids === []) {
-                    continue;
-                }
-                $conditions .= ' AND ' . $column . ' IN (' . implode(', ', $ids) . ')';
-            } elseif (is_int($value)) {
-                $conditions .= ' AND ' . $column . ' = ' . $value;
-            } else {
-                $conditions .= ' AND ' . $column . " = '" . $db->escape((string) $value) . "'";
-            }
+            $conditions .= match (true) {
+                is_array($value) => $this->buildInClause($column, $value),
+                is_int($value) => ' AND ' . $column . ' = ' . $value,
+                default => ' AND ' . $column . " = '" . $db->escape((string) $value) . "'",
+            };
         }
 
         return $conditions;
+    }
+
+    /**
+     * @param array<int|string> $value
+     */
+    private function buildInClause(string $column, array $value): string
+    {
+        $ids = array_map(static fn($v): int => (int) $v, $value);
+        if ($ids === []) {
+            return '';
+        }
+
+        return ' AND ' . $column . ' IN (' . implode(', ', $ids) . ')';
     }
 
     /**

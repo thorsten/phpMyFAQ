@@ -362,7 +362,7 @@ class Search
             return;
         }
 
-        $sanitizedSearchTerm = htmlspecialchars($searchTerm, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $sanitizedSearchTerm = htmlspecialchars($searchTerm, ENT_QUOTES | ENT_HTML5, encoding: 'UTF-8');
 
         $dateTime = new DateTime();
         $query = sprintf(
