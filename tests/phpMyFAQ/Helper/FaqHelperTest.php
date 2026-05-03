@@ -109,6 +109,18 @@ class FaqHelperTest extends TestCase
         $this->assertEquals($expectedOutput, $actualOutput);
     }
 
+    public function testCleanUpContentWithLegacyDoctypeDoesNotThrow(): void
+    {
+        $content = '<p>Before</p><!DOCTYPE html><script>alert(1)</script><p>After</p>';
+
+        $actualOutput = $this->faqHelper->cleanUpContent($content);
+
+        $this->assertStringContainsString('<p>Before</p>', $actualOutput);
+        $this->assertStringContainsString('<p>After</p>', $actualOutput);
+        $this->assertStringNotContainsString('<!DOCTYPE', $actualOutput);
+        $this->assertStringNotContainsString('<script', $actualOutput);
+    }
+
     public function testCleanUpContentWithYoutubeContent(): void
     {
         $content = <<<'HTML'
