@@ -41,7 +41,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated routes using PHP 8+ #[Route] attributes (Thorsten)
 - migrated to Vite v8 (Thorsten)
 - migrated experimental MCP Server to mcp/sdk (Thorsten)
-
+- 
 ### phpMyFAQ v4.1.2 – 2026-04-28
 
 - fixed security vulnerabilities (Thorsten)
