@@ -65,7 +65,7 @@ final class OidcDiscoveryServiceTest extends TestCase
 
     public function testDiscoverThrowsWhenStatusCodeIndicatesError(): void
     {
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
         $response->method('getStatusCode')->willReturn(503);
         $response->method('getContent')->willReturn('');
 
@@ -89,7 +89,7 @@ final class OidcDiscoveryServiceTest extends TestCase
 
     public function testDiscoverThrowsWhenPayloadIsNotAnArray(): void
     {
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
         $response->method('getStatusCode')->willReturn(200);
         $response->method('getContent')->willReturn('"a-string"');
 
