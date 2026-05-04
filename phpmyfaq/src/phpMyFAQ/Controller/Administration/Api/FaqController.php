@@ -68,6 +68,7 @@ final class FaqController extends AbstractController
 
         $faq = $this->container->get(id: 'phpmyfaq.faq');
         $tagging = $this->container->get(id: 'phpmyfaq.tags');
+        $tagging->setBypassPermissionCheck();
         $notification = $this->container->get(id: 'phpmyfaq.notification');
         $logging = $this->container->get(id: 'phpmyfaq.admin.admin-log');
         $changelog = $this->container->get(id: 'phpmyfaq.admin.changelog');
@@ -277,6 +278,7 @@ final class FaqController extends AbstractController
 
         $faq = $this->container->get(id: 'phpmyfaq.faq');
         $tagging = $this->container->get(id: 'phpmyfaq.tags');
+        $tagging->setBypassPermissionCheck();
         $logging = $this->container->get(id: 'phpmyfaq.admin.admin-log');
         $changelog = $this->container->get(id: 'phpmyfaq.admin.changelog');
         $visits = $this->container->get(id: 'phpmyfaq.visits');

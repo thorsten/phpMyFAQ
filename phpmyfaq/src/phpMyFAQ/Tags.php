@@ -39,6 +39,8 @@ class Tags
     /** @var array<int> */
     private array $groups = [-1];
 
+    private bool $bypassPermissionCheck = false;
+
     /**
      * Constructor.
      */
@@ -65,6 +67,16 @@ class Tags
     {
         // Ensure all values are integers for security
         $this->groups = array_map('intval', $groups);
+        return $this;
+    }
+
+    /**
+     * Disables permission filtering. Use in admin contexts where the
+     * caller has already enforced authorization and must see all tags.
+     */
+    public function setBypassPermissionCheck(bool $bypass = true): Tags
+    {
+        $this->bypassPermissionCheck = $bypass;
         return $this;
     }
 
@@ -496,6 +508,10 @@ class Tags
      */
     private function buildPermissionCheck(): string
     {
+        if ($this->bypassPermissionCheck) {
+            return '';
+        }
+
         $groupSupport = $this->configuration->get(item: 'security.permLevel') !== 'basic';
         $groupList = $this->normalizePermissionGroups();
 

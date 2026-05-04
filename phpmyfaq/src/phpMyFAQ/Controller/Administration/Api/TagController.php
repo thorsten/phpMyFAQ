@@ -72,6 +72,7 @@ final class TagController extends AbstractController
         $this->userIsAuthenticated();
 
         $tag = $this->container->get(id: 'phpmyfaq.tags');
+        $tag->setBypassPermissionCheck();
 
         $autoCompleteValue = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
 

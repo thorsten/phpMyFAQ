@@ -40,7 +40,7 @@ final class TagController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $tagData = $this->container->get(id: 'phpmyfaq.tags')->getAllTags();
+        $tagData = $this->container->get(id: 'phpmyfaq.tags')->setBypassPermissionCheck()->getAllTags();
 
         return $this->render('@admin/content/tags.twig', [
             ...$this->getHeader($request),
