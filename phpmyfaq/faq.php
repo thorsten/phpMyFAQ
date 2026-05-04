@@ -189,7 +189,7 @@ if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['a
 // List all categories for this faq
 $renderedCategoryPath = '';
 $multiCategories = $category->getCategoriesFromFaq($faqId);
-if ((is_countable($multiCategories) ? count($multiCategories) : 0) > 1) {
+if ((is_countable($multiCategories) ? count($multiCategories) : 0) >= 1) {
     foreach ($multiCategories as $multiCategory) {
         $path = $category->getPath((int) $multiCategory['id'], ' &raquo; ', true, 'list-unstyled');
         if ('' === trim($path)) {
