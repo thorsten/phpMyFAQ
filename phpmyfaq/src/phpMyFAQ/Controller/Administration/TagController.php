@@ -47,6 +47,7 @@ final class TagController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
+        $this->tags->setBypassPermissionCheck();
         $tagData = $this->tags->getAllTags();
 
         return $this->render('@admin/content/tags.twig', [

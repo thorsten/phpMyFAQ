@@ -78,6 +78,8 @@ final class TagController extends AbstractController
     {
         $this->userIsAuthenticated();
 
+        $this->tags->setBypassPermissionCheck();
+
         $autoCompleteValue = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $tags = [];

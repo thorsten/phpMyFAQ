@@ -90,6 +90,7 @@ final class FaqController extends AbstractAdministrationApiController
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
+        $this->tags->setBypassPermissionCheck();
         $categoryPermission = new CategoryPermission($this->configuration);
         $faqPermission = new FaqPermission($this->configuration);
 
@@ -318,6 +319,7 @@ final class FaqController extends AbstractAdministrationApiController
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
+        $this->tags->setBypassPermissionCheck();
         $faqPermission = new FaqPermission($this->configuration);
 
         $category = new Category($this->configuration, [], withPermission: false);
