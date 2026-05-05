@@ -25,6 +25,7 @@ use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
@@ -119,9 +120,15 @@ final class AttachmentController extends AbstractController
         $this->userHasPermission(PermissionType::ATTACHMENT_ADD);
 
         $files = $request->files->get('filesToUpload');
+        $recordId = Filter::filterVar($request->request->get('record_id'), FILTER_VALIDATE_INT);
+        $recordLang = Filter::filterVar($request->request->get('record_lang'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!$files) {
             return $this->json(['error' => Translation::get(key: 'msgNoImagesForUpload')], Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($recordId === false || $recordId === null || $recordLang === null || $recordLang === '') {
+            return $this->json(['error' => Translation::get(key: 'msgAttachmentInvalid')], Response::HTTP_BAD_REQUEST);
         }
 
         $uploadedFiles = [];
@@ -133,8 +140,8 @@ final class AttachmentController extends AbstractController
                 && $file->getMimeType() !== 'text/html'
             ) {
                 $attachment = AttachmentFactory::create();
-                $attachment->setRecordId($request->attributes->get('record_id'));
-                $attachment->setRecordLang($request->attributes->get('record_lang'));
+                $attachment->setRecordId((int) $recordId);
+                $attachment->setRecordLang($recordLang);
                 try {
                     if (!$attachment->save($file->getPathname(), $file->getClientOriginalName())) {
                         return $this->json([
@@ -148,8 +155,8 @@ final class AttachmentController extends AbstractController
                 $uploadedFiles[] = [
                     'attachmentId' => $attachment->getId(),
                     'fileName' => $attachment->getFilename(),
-                    'faqId' => $request->attributes->get('record_id'),
-                    'faqLanguage' => $request->attributes->get('record_lang'),
+                    'faqId' => (int) $recordId,
+                    'faqLanguage' => $recordLang,
                 ];
             } else {
                 return $this->json(['error' => Translation::get(key: 'msgImageTooLarge')], Response::HTTP_BAD_REQUEST);
