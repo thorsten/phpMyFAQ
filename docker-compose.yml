@@ -3,7 +3,7 @@
 services:
 
   mariadb:
-    image: mariadb:latest
+    image: mariadb:11
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=iop
@@ -11,18 +11,34 @@ services:
       - MYSQL_USER=phpmyfaq
       - MYSQL_PASSWORD=phpmyfaq
       - MYSQL_ROOT_HOST=%
+    healthcheck:
+      test: ['CMD-SHELL', 'mariadb-admin ping -uroot -p"$$MYSQL_ROOT_PASSWORD" --silent']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      default:
+        aliases:
+          - db
     ports:
       - '3306:3306'
     volumes:
       - ./volumes/mariadb:/var/lib/mysql
 
   postgres:
-    image: postgres:latest
+    image: postgres:17
     restart: always
     environment:
       - POSTGRES_DB=phpmyfaq
       - POSTGRES_USER=phpmyfaq
       - POSTGRES_PASSWORD=phpmyfaq
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U phpmyfaq -d phpmyfaq']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     ports:
       - '5432:5432'
     volumes:
@@ -72,29 +88,29 @@ services:
       - OPENSEARCH_BASE_URI=http://opensearch:9201
       - ELASTICSEARCH_BASE_URI=http://elasticsearch:9200
       - SEARCH_WAIT_TIMEOUT=30
-    links:
-      - mariadb:db
-      - postgres
-      - redis
-      - elasticsearch
-      - opensearch
     ports:
       - '8080:80'
       - '443:443'
     volumes:
       - ./phpmyfaq:/var/www/html
     depends_on:
+      mariadb:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
       pnpm:
         condition: service_completed_successfully
-      redis:
-        condition: service_started
 
   nginx:
-    image: nginx:latest
+    image: nginx:1.27
     restart: always
     depends_on:
-      - php-fpm
-    links:
       - php-fpm
     volumes:
       - ./phpmyfaq:/var/www/html
@@ -125,19 +141,21 @@ services:
       - OPENSEARCH_BASE_URI=http://opensearch:9201
       - ELASTICSEARCH_BASE_URI=http://elasticsearch:9200
       - SEARCH_WAIT_TIMEOUT=30
-    links:
-      - mariadb:db
-      - postgres
-      - redis
-      - elasticsearch
-      - opensearch
     volumes:
       - ./phpmyfaq:/var/www/html
     depends_on:
+      mariadb:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
       pnpm:
         condition: service_completed_successfully
-      redis:
-        condition: service_started
 
   frankenphp:
     profiles: ['frankenphp']
@@ -158,12 +176,6 @@ services:
       - OPENSEARCH_BASE_URI=http://opensearch:9201
       - ELASTICSEARCH_BASE_URI=http://elasticsearch:9200
       - SEARCH_WAIT_TIMEOUT=30
-    links:
-      - mariadb:db
-      - postgres
-      - redis
-      - elasticsearch
-      - opensearch
     ports:
       - '80:80'
       - '443:443'
@@ -175,10 +187,18 @@ services:
       - ./volumes/caddy_data:/data
       - ./volumes/caddy_config:/config
     depends_on:
+      mariadb:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
       pnpm:
         condition: service_completed_successfully
-      redis:
-        condition: service_started
 
   pnpm:
     image: node:24-alpine
@@ -196,7 +216,7 @@ services:
       - composer
 
   composer:
-    image: composer:latest
+    image: composer:2
     restart: 'no'
     command: composer install --verbose --ignore-platform-reqs
     stdin_open: true
@@ -205,23 +225,21 @@ services:
       - .:/app
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin/phpmyadmin:5
     restart: always
-    stdin_open: true
     environment:
       PMA_HOST: db
       UPLOAD_LIMIT: 100M
-    links:
-      - mariadb:db
     ports:
       - '8000:80'
     volumes:
       - ./volumes/sessions:/sessions
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
 
   pgadmin:
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:8
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: postgres@phpmyfaq.de
@@ -234,7 +252,6 @@ services:
 
   elasticsearch:
     image: elasticsearch:8.16.5
-    container_name: phpmyfaq-42_elasticsearch-v8
     restart: always
     environment:
       - cluster.name=phpmyfaq-cluster
@@ -257,6 +274,12 @@ services:
         '-c',
         './bin/elasticsearch-plugin list | grep -q analysis-icu || ./bin/elasticsearch-plugin install analysis-icu && ./bin/elasticsearch',
       ]
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -fs http://localhost:9200/_cluster/health || exit 1']
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
     volumes:
       - ./volumes/esdata:/usr/share/elasticsearch/data
     ports:
@@ -265,7 +288,7 @@ services:
 
   opensearch:
     image: opensearchproject/opensearch:2.19.2
-    container_name: phpmyfaq-42_opensearch
+    restart: always
     environment:
       - cluster.name=phpmyfaq-cluster
       - node.name=phpmyfaq
@@ -281,6 +304,12 @@ services:
       memlock:
         soft: -1
         hard: -1
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -fs http://localhost:9201/_cluster/health || exit 1']
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
     volumes:
       - ./volumes/opensearchdata:/usr/share/opensearch/data
     ports:
