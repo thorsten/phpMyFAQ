@@ -36,11 +36,9 @@ foreach ($routesConfig as $name => $config) {
     $routes->add(
         $name,
         new Route(
-            $config['path'],
-            [
-                '_controller' => $config['controller'],
-                '_methods' => $config['methods']
-            ]
+            path: $config['path'],
+            defaults: ['_controller' => $config['controller']],
+            methods: [$config['methods']],
         )
     );
 }

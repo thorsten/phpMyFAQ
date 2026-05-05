@@ -29,6 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
@@ -131,6 +132,16 @@ class Application
             $arguments = $argumentResolver->getArguments($request, $controller);
             $response->setStatusCode(Response::HTTP_OK);
             $response = call_user_func_array($controller, $arguments);
+        } catch (MethodNotAllowedException) {
+            if ($this->isApiRequest($urlMatcher)) {
+                $response = new Response(
+                    content: json_encode(value: ['error' => 'Method Not Allowed']),
+                    status: Response::HTTP_METHOD_NOT_ALLOWED,
+                    headers: ['Content-Type' => 'application/json'],
+                );
+            } else {
+                $response = new Response(content: 'Method Not Allowed', status: Response::HTTP_METHOD_NOT_ALLOWED);
+            }
         } catch (ResourceNotFoundException $exception) {
             if ($this->isApiRequest($urlMatcher)) {
                 $response = new Response(

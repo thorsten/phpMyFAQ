@@ -269,7 +269,7 @@ final class FaqController extends AbstractController
      * @throws \phpMyFAQ\Core\Exception
      * @throws Exception
      */
-    #[Route(path: 'admin/api/faq/update', name: 'admin.api.faq.update', methods: ['POST'])]
+    #[Route(path: 'admin/api/faq/update', name: 'admin.api.faq.update', methods: ['PUT'])]
     public function update(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
