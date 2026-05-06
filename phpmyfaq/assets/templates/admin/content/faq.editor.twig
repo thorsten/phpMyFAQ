@@ -634,7 +634,8 @@
           <form action="./api/attachment" enctype="multipart/form-data" method="post" id="attachmentForm" novalidate>
             <fieldset>
               <input type="hidden" name="MAX_FILE_SIZE" value="{{ maxAttachmentSize }}">
-              <input type="hidden" name="record_id" id="attachment_record_id" value="{{ faqData['id'] }}">
+              <input type="hidden" name="record_id" id="attachment_record_id"
+                     value="{{ faqData['id'] > 0 ? faqData['id'] : nextFaqId }}">
               <input type="hidden" name="record_lang" id="attachment_record_lang" value="{{ faqData['lang'] }}">
               <input type="hidden" name="save" value="true">
               <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfTokenUploadAttachment }}">

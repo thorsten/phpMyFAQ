@@ -66,14 +66,6 @@ class Faq
                 fd.id = fv.id
             AND
                 fv.lang = fd.lang
-            LEFT JOIN
-                %sfaqdata_group AS fdg
-            ON
-                fd.id = fdg.record_id
-            LEFT JOIN
-                %sfaqdata_user AS fdu
-            ON
-                fd.id = fdu.record_id
             WHERE
                 fcr.category_id = %d
             AND
@@ -82,8 +74,6 @@ class Faq
             %s
             ORDER BY
                 fd.id ASC",
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
