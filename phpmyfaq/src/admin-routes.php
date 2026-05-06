@@ -310,7 +310,7 @@ $routesConfig = [
     'admin.news.edit' => [
         'path' => '/news/edit/{newsId}',
         'controller' => [NewsController::class, 'edit'],
-        'methods' => 'POST'
+        'methods' => 'GET'
     ],
     'admin.password.change' => [
         'path' => '/password/change',
