@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace phpMyFAQ\Session;
 
 use Exception;
-use phpMyFAQ\Configuration;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -198,7 +197,6 @@ class Token
         setcookie($token->getCookieName($page), (string) $token->getCookieToken(), [
             'expires' => $token->getExpiry(),
             'path' => dirname((string) $request->server->get('SCRIPT_NAME')),
-            'domain' => parse_url(Configuration::getConfigurationInstance()->getDefaultUrl(), PHP_URL_HOST),
             'samesite' => 'strict',
             'secure' => $request->isSecure(),
             'httponly' => true,
