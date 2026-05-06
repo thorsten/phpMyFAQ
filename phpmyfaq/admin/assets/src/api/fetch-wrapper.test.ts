@@ -102,8 +102,10 @@ describe('fetchWrapper', () => {
   });
 
   describe('401 Unauthorized handling', () => {
-    it('should store session timeout message in sessionStorage on 401', async () => {
-      const mockResponse = new Response('Unauthorized', { status: 401 });
+    const problemDetailsHeaders = { 'Content-Type': 'application/problem+json' };
+
+    it('should store session timeout message in sessionStorage on ProblemDetails 401', async () => {
+      const mockResponse = new Response('{"title":"Unauthorized"}', { status: 401, headers: problemDetailsHeaders });
       globalThis.fetch = vi.fn().mockResolvedValue(mockResponse);
 
       try {
@@ -117,8 +119,8 @@ describe('fetchWrapper', () => {
       expect(sessionStorageMock['loginMessage']).toBe('Your session has expired. Please log in again.');
     });
 
-    it('should redirect to login page on 401', async () => {
-      const mockResponse = new Response('Unauthorized', { status: 401 });
+    it('should redirect to login page on ProblemDetails 401', async () => {
+      const mockResponse = new Response('{"title":"Unauthorized"}', { status: 401, headers: problemDetailsHeaders });
       globalThis.fetch = vi.fn().mockResolvedValue(mockResponse);
 
       try {
@@ -129,15 +131,15 @@ describe('fetchWrapper', () => {
       }
     });
 
-    it('should throw error to stop further processing on 401', async () => {
-      const mockResponse = new Response('Unauthorized', { status: 401 });
+    it('should throw error to stop further processing on ProblemDetails 401', async () => {
+      const mockResponse = new Response('{"title":"Unauthorized"}', { status: 401, headers: problemDetailsHeaders });
       globalThis.fetch = vi.fn().mockResolvedValue(mockResponse);
 
       await expect(fetchWrapper('/test', { method: 'GET' })).rejects.toThrow('Session expired');
     });
 
-    it('should handle 401 from POST request', async () => {
-      const mockResponse = new Response('Unauthorized', { status: 401 });
+    it('should handle ProblemDetails 401 from POST request', async () => {
+      const mockResponse = new Response('{"title":"Unauthorized"}', { status: 401, headers: problemDetailsHeaders });
       globalThis.fetch = vi.fn().mockResolvedValue(mockResponse);
 
       const options = {
@@ -154,6 +156,32 @@ describe('fetchWrapper', () => {
         expect(sessionStorageMock['loginMessage']).toBe('Your session has expired. Please log in again.');
         expect(window.location.href).toBe('./login');
       }
+    });
+
+    it('should NOT redirect on plain JSON 401 (e.g. CSRF mismatch from controller)', async () => {
+      const mockResponse = new Response(JSON.stringify({ error: 'No permission for action.' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      });
+      globalThis.fetch = vi.fn().mockResolvedValue(mockResponse);
+
+      const response = await fetchWrapper('/api/configuration/test-redis-connection', { method: 'POST' });
+
+      expect(response.status).toBe(401);
+      expect(await response.json()).toEqual({ error: 'No permission for action.' });
+      expect(window.location.href).toBe('');
+      expect(sessionStorageMock['loginMessage']).toBeUndefined();
+    });
+
+    it('should NOT redirect on 401 without a content-type header', async () => {
+      const mockResponse = new Response('Unauthorized', { status: 401 });
+      globalThis.fetch = vi.fn().mockResolvedValue(mockResponse);
+
+      const response = await fetchWrapper('/test', { method: 'GET' });
+
+      expect(response.status).toBe(401);
+      expect(window.location.href).toBe('');
+      expect(sessionStorageMock['loginMessage']).toBeUndefined();
     });
   });
 
