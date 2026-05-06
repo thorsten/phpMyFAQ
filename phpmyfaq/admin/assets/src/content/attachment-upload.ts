@@ -12,7 +12,7 @@
  * @link      https://www.phpmyfaq.de
  * @since     2023-04-11
  */
-import { addElement } from '../../../../assets/src/utils';
+import { addElement, pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 import { uploadAttachments } from '../api';
 import { Attachment } from '../interfaces';
 
@@ -72,6 +72,7 @@ export const handleAttachmentUploads = (): void => {
 
       try {
         const response = (await uploadAttachments(formData)) as unknown as Attachment[];
+        pushNotification(`${response.length} file(s) uploaded.`);
         const modal = document.getElementById('attachmentModal') as HTMLElement | null;
         const modalBackdrop = document.querySelector('.modal-backdrop.fade.show') as HTMLElement | null;
         const attachmentList = document.querySelector('.adminAttachments') as HTMLElement | null;
@@ -128,6 +129,7 @@ export const handleAttachmentUploads = (): void => {
         }
       } catch (error) {
         console.error('An error occurred:', error);
+        pushErrorNotification(error instanceof Error ? error.message : 'Attachment upload failed.');
       }
     });
   }
