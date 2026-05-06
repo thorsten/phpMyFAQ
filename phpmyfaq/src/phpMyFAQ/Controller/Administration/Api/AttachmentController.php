@@ -127,7 +127,7 @@ final class AttachmentController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoImagesForUpload')], Response::HTTP_BAD_REQUEST);
         }
 
-        if ($recordId === false || $recordId === null || $recordLang === null || $recordLang === '') {
+        if ($recordId === false || $recordId === null || $recordId <= 0 || $recordLang === null || $recordLang === '') {
             return $this->json(['error' => Translation::get(key: 'msgAttachmentInvalid')], Response::HTTP_BAD_REQUEST);
         }
 

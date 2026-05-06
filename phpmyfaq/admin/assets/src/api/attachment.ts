@@ -48,5 +48,11 @@ export const uploadAttachments = async (formData: FormData): Promise<Response> =
     body: formData,
   });
 
-  return await response.json();
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error((data && (data.error as string)) || `Upload failed (HTTP ${response.status})`);
+  }
+
+  return data;
 };
