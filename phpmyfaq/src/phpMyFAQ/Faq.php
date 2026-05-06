@@ -1243,6 +1243,7 @@ class Faq
                 'dateStart' => $row->date_start,
                 'dateEnd' => $row->date_end,
                 'notes' => $row->notes,
+                'created' => $row->created,
             ];
         } else {
             $this->faqRecord = [];
