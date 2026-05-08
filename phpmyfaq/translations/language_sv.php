@@ -760,6 +760,11 @@ $PMF_LANG["lostpwd_err_2"] = "Fel: Felaktiga uppgifter!";
 $PMF_LANG["lostpwd_text_1"] = "Tack för att du begärt din kontoinformation.";
 $PMF_LANG["lostpwd_text_2"] = "Vänligen ange ett nytt personligt lösenord i administratörsdelen av din FAQ.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-post har skickats.";
+$PMF_LANG["resetpwd_title"] = "Ange ett nytt lösenord";
+$PMF_LANG["resetpwd_text_link"] = "Klicka på länken nedan för att ange ett nytt lösenord:";
+$PMF_LANG["resetpwd_text_expiry"] = "Denna länk är giltig i 1 timme och kan endast användas en gång.";
+$PMF_LANG["resetpwd_success"] = "Ditt lösenord har ändrats. Du kan nu logga in.";
+$PMF_LANG["resetpwd_err_invalid"] = "Denna länk för återställning av lösenord är ogiltig eller har upphört att gälla.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "Klicka för att kontrollera versionen av din phpMyFAQ-installation";
 $PMF_LANG["ad_xmlrpc_latest"] = "Senaste tillgängliga version";

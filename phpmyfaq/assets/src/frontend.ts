@@ -32,6 +32,7 @@ import {
   handleRequestRemoval,
   handleUserControlPanel,
   handleUserPassword,
+  handleResetUserPassword,
 } from './user';
 import { calculateReadingTime, handlePasswordStrength, handlePasswordToggle, handleReloadCaptcha } from './utils';
 import './utils/tooltip';
@@ -86,6 +87,7 @@ document.addEventListener('DOMContentLoaded', (): void => {
 
   // Handle user password
   handleUserPassword();
+  handleResetUserPassword();
 
   // Handle request removal
   handleRequestRemoval();

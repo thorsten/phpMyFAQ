@@ -543,6 +543,11 @@ $PMF_LANG["lostpwd_err_2"] = "Lỗi: Giá trị không hợp lệ!";
 $PMF_LANG["lostpwd_text_1"] = "Cảm ơn bạn đã yêu cầu thông tin tài khoản.";
 $PMF_LANG["lostpwd_text_2"] = "Vui lòng thay đổi mật khẩu trong phần quản trị tài khoản của bạn.";
 $PMF_LANG["lostpwd_mail_okay"] = "Email đã được gửi.";
+$PMF_LANG["resetpwd_title"] = "Đặt mật khẩu mới";
+$PMF_LANG["resetpwd_text_link"] = "Nhấp vào liên kết bên dưới để đặt mật khẩu mới:";
+$PMF_LANG["resetpwd_text_expiry"] = "Liên kết này có hiệu lực trong 1 giờ và chỉ có thể sử dụng một lần.";
+$PMF_LANG["resetpwd_success"] = "Mật khẩu của bạn đã được thay đổi. Bây giờ bạn có thể đăng nhập.";
+$PMF_LANG["resetpwd_err_invalid"] = "Liên kết đặt lại mật khẩu này không hợp lệ hoặc đã hết hạn.";
 $PMF_LANG["msgButtonFetchLatestVersion"] = "Truy cập phiên bản mới nhất của phpMyFAQ";
 $PMF_LANG['ad_xmlrpc_latest'] = 'Phiên bản mới nhất có tại';
 

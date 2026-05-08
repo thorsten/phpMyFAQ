@@ -547,6 +547,11 @@ $PMF_LANG["lostpwd_err_2"] = "Gwall: Cofnodion anghywir!";
 $PMF_LANG["lostpwd_text_1"] = "Diolch am ofyn am wybodaeth eich cyfrif.";
 $PMF_LANG["lostpwd_text_2"] = "Gosodwch gyfrinair personol newydd yn adran weinyddol eich Cwestiynau Cyffredin.";
 $PMF_LANG["lostpwd_mail_okay"] = "Anfonwyd yr e-bost.";
+$PMF_LANG["resetpwd_title"] = "Gosod cyfrinair newydd";
+$PMF_LANG["resetpwd_text_link"] = "Cliciwch y ddolen isod i osod cyfrinair newydd:";
+$PMF_LANG["resetpwd_text_expiry"] = "Mae'r ddolen hon yn ddilys am 1 awr a dim ond unwaith y gellir ei defnyddio.";
+$PMF_LANG["resetpwd_success"] = "Mae eich cyfrinair wedi'i newid. Gallwch fewngofnodi nawr.";
+$PMF_LANG["resetpwd_err_invalid"] = "Mae'r ddolen ailosod cyfrinair hon yn annilys neu wedi dod i ben.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "Cael rhif fersiwn phpMyFAQ diweddaraf drwy wasanaeth gwe";
 $PMF_LANG["ad_xmlrpc_latest"] = "Y fersiwn ddiweddaraf ar gael ar";

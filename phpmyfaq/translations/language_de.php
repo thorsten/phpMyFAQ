@@ -545,6 +545,11 @@ $PMF_LANG['lostpwd_err_2'] = "Fehler: Falsche Eingaben!";
 $PMF_LANG['lostpwd_text_1'] = "Vielen Dank für die Abfrage Ihrer Account-Informationen.";
 $PMF_LANG['lostpwd_text_2'] = "Bitte ein neues Passwort im Adminbereich der FAQ setzen.";
 $PMF_LANG['lostpwd_mail_okay'] = "E-Mail wurde gesendet.";
+$PMF_LANG["resetpwd_title"] = "Neues Passwort festlegen";
+$PMF_LANG["resetpwd_text_link"] = "Klicken Sie auf den unten stehenden Link, um ein neues Passwort festzulegen:";
+$PMF_LANG["resetpwd_text_expiry"] = "Dieser Link ist 1 Stunde gültig und kann nur einmal verwendet werden.";
+$PMF_LANG["resetpwd_success"] = "Ihr Passwort wurde geändert. Sie können sich jetzt anmelden.";
+$PMF_LANG["resetpwd_err_invalid"] = "Dieser Link zum Zurücksetzen des Passworts ist ungültig oder abgelaufen.";
 
 $PMF_LANG['msgButtonFetchLatestVersion'] = "Aktuelle phpMyFAQ Version online abfragen";
 $PMF_LANG['ad_xmlrpc_latest'] = "Aktuelle Version";

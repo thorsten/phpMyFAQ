@@ -542,6 +542,11 @@ $PMF_LANG['lostpwd_err_2'] = '¡Error: Entrada incorrecta!';
 $PMF_LANG['lostpwd_text_1'] = 'Gracias por solicitar la información de su cuenta.';
 $PMF_LANG['lostpwd_text_2'] = 'Por favor, elija una nueva contraseña en el área de administración de la FAQ.';
 $PMF_LANG['lostpwd_mail_okay'] = 'E-mail enviado.';
+$PMF_LANG["resetpwd_title"] = "Establecer una nueva contraseña";
+$PMF_LANG["resetpwd_text_link"] = "Haga clic en el siguiente enlace para establecer una nueva contraseña:";
+$PMF_LANG["resetpwd_text_expiry"] = "Este enlace es válido durante 1 hora y solo se puede usar una vez.";
+$PMF_LANG["resetpwd_success"] = "Su contraseña ha sido cambiada. Ahora puede iniciar sesión.";
+$PMF_LANG["resetpwd_err_invalid"] = "Este enlace de restablecimiento de contraseña no es válido o ha expirado.";
 
 $PMF_LANG['msgButtonFetchLatestVersion'] = 'Obtener la versión actual de phpMyFAQ en línea';
 $PMF_LANG['ad_xmlrpc_latest'] = 'Versión actual en';

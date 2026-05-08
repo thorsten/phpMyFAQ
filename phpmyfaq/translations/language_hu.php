@@ -541,6 +541,11 @@ $PMF_LANG["lostpwd_err_2"] = "Hiba: Hibás bejegyzések!";
 $PMF_LANG["lostpwd_text_1"] = "Köszönjük, hogy kérte fiókadatait.";
 $PMF_LANG["lostpwd_text_2"] = "Kérjük, állítson be új személyes jelszót a GYIK adminisztrációs részében.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-mail elküldve.";
+$PMF_LANG["resetpwd_title"] = "Új jelszó beállítása";
+$PMF_LANG["resetpwd_text_link"] = "Kattintson az alábbi linkre új jelszó beállításához:";
+$PMF_LANG["resetpwd_text_expiry"] = "Ez a link 1 órán át érvényes, és csak egyszer használható fel.";
+$PMF_LANG["resetpwd_success"] = "Jelszava módosult. Most bejelentkezhet.";
+$PMF_LANG["resetpwd_err_invalid"] = "Ez a jelszó-visszaállító link érvénytelen vagy lejárt.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "Kattintson a phpMyFAQ telepítésének verziójának ellenőrzéséhez";
 $PMF_LANG["ad_xmlrpc_latest"] = "Legújabb elérhető verzió";

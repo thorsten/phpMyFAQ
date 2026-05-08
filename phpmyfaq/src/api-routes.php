@@ -264,6 +264,11 @@ $routesConfig = [
         'controller' => [UnauthorizedUserController::class, 'updatePassword'],
         'methods' => 'PUT'
     ],
+    'api.private.user.password.reset' => [
+        'path' => 'user/password/reset',
+        'controller' => [UnauthorizedUserController::class, 'resetPassword'],
+        'methods' => 'POST'
+    ],
     'api.private.user.request-removal' => [
         'path' => 'user/request-removal',
         'controller' => [UserController::class, 'requestUserRemoval'],

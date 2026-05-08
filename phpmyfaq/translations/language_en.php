@@ -539,9 +539,14 @@ $PMF_LANG["ad_categ_change"] = "Change with";
 $PMF_LANG["lostPassword"] = "Forgot your password?";
 $PMF_LANG["lostpwd_err_1"] = "Error: Username and email address not found.";
 $PMF_LANG["lostpwd_err_2"] = "Error: Wrong entries!";
-$PMF_LANG["lostpwd_text_1"] = "Thank you for requesting your account information.";
+$PMF_LANG["lostpwd_text_1"] = "Thank you for requesting a password reset.";
 $PMF_LANG["lostpwd_text_2"] = "Please set a new personal password in the admin section of your FAQ.";
-$PMF_LANG["lostpwd_mail_okay"] = "Email has been sent.";
+$PMF_LANG["lostpwd_mail_okay"] = "If the account exists, a password reset email has been sent.";
+$PMF_LANG["resetpwd_title"] = "Set a new password";
+$PMF_LANG["resetpwd_text_link"] = "Click the link below to set a new password:";
+$PMF_LANG["resetpwd_text_expiry"] = "This link is valid for 1 hour and can only be used once.";
+$PMF_LANG["resetpwd_success"] = "Your password has been changed. You can now log in.";
+$PMF_LANG["resetpwd_err_invalid"] = "This password reset link is invalid or has expired.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "Click to check version of your phpMyFAQ installation";
 $PMF_LANG["ad_xmlrpc_latest"] = "Latest version available";

@@ -513,6 +513,11 @@ $PMF_LANG["lostpwd_err_2"] = "Błąd: Nieprawidłowe wpisy!";
 $PMF_LANG["lostpwd_text_1"] = "Dziękujemy za przesłanie informacji o koncie.";
 $PMF_LANG["lostpwd_text_2"] = "Proszę ustawić nowe hasło osobiste w sekcji administracyjnej swojego FAQ.";
 $PMF_LANG["lostpwd_mail_okay"] = "Email został wysłany.";
+$PMF_LANG["resetpwd_title"] = "Ustaw nowe hasło";
+$PMF_LANG["resetpwd_text_link"] = "Kliknij poniższy link, aby ustawić nowe hasło:";
+$PMF_LANG["resetpwd_text_expiry"] = "Ten link jest ważny przez 1 godzinę i może zostać użyty tylko raz.";
+$PMF_LANG["resetpwd_success"] = "Twoje hasło zostało zmienione. Możesz się teraz zalogować.";
+$PMF_LANG["resetpwd_err_invalid"] = "Ten link do resetowania hasła jest nieprawidłowy lub wygasł.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "Kliknij, aby sprawdzić wersję instalacji phpMyFAQ";
 $PMF_LANG["ad_xmlrpc_latest"] = "Najnowsza dostępna wersja";

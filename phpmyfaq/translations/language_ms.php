@@ -539,6 +539,11 @@ $PMF_LANG["lostpwd_err_2"] = "Ralat: Entri salah!";
 $PMF_LANG["lostpwd_text_1"] = "Terima kasih kerana meminta maklumat akaun anda.";
 $PMF_LANG["lostpwd_text_2"] = "Sila tetapkan kata laluan peribadi baharu di bahagian pentadbir Soalan Lazim anda.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-mel telah dihantar.";
+$PMF_LANG["resetpwd_title"] = "Tetapkan kata laluan baharu";
+$PMF_LANG["resetpwd_text_link"] = "Klik pautan di bawah untuk menetapkan kata laluan baharu:";
+$PMF_LANG["resetpwd_text_expiry"] = "Pautan ini sah selama 1 jam dan hanya boleh digunakan sekali.";
+$PMF_LANG["resetpwd_success"] = "Kata laluan anda telah ditukar. Anda kini boleh log masuk.";
+$PMF_LANG["resetpwd_err_invalid"] = "Pautan tetapan semula kata laluan ini tidak sah atau telah tamat tempoh.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "Klik untuk menyemak versi pemasangan phpMyFAQ anda";
 $PMF_LANG["ad_xmlrpc_latest"] = "Versi terkini tersedia";

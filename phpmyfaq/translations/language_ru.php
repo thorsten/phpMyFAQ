@@ -540,6 +540,11 @@ $PMF_LANG["lostpwd_err_2"] = "Ошибка: Неверные данные!";
 $PMF_LANG["lostpwd_text_1"] = "Спасибо за запрос информации о вашей учетной записи.";
 $PMF_LANG["lostpwd_text_2"] = "Пожалуйста, установите новый личный пароль в разделе администратора вашего FAQ.";
 $PMF_LANG["lostpwd_mail_okay"] = "Email был отправлен.";
+$PMF_LANG["resetpwd_title"] = "Установить новый пароль";
+$PMF_LANG["resetpwd_text_link"] = "Нажмите на ссылку ниже, чтобы установить новый пароль:";
+$PMF_LANG["resetpwd_text_expiry"] = "Эта ссылка действительна в течение 1 часа и может быть использована только один раз.";
+$PMF_LANG["resetpwd_success"] = "Ваш пароль был изменён. Теперь вы можете войти.";
+$PMF_LANG["resetpwd_err_invalid"] = "Эта ссылка для сброса пароля недействительна или истекла.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "Нажмите, чтобы проверить версию вашей установки phpMyFAQ";
 $PMF_LANG["ad_xmlrpc_latest"] = "Последняя доступная версия";

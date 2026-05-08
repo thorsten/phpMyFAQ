@@ -545,6 +545,11 @@ $PMF_LANG["lostpwd_err_2"] = "Error: Алдаатай оролдлого!";
 $PMF_LANG["lostpwd_text_1"] = "Бүртгэлийн мэдээллийн хүсэлт илгээсэнд баярлалаа.";
 $PMF_LANG["lostpwd_text_2"] = "FAQ -н удирдлагын хэсэгт шинэ нууц үг тохируулна уу.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-Mail илгээгдсэн.";
+$PMF_LANG["resetpwd_title"] = "Шинэ нууц үг тохируулах";
+$PMF_LANG["resetpwd_text_link"] = "Шинэ нууц үг тохируулахын тулд доорх холбоос дээр дарна уу:";
+$PMF_LANG["resetpwd_text_expiry"] = "Энэ холбоос 1 цагийн турш хүчинтэй бөгөөд зөвхөн нэг удаа ашиглах боломжтой.";
+$PMF_LANG["resetpwd_success"] = "Таны нууц үг өөрчлөгдсөн. Та одоо нэвтэрч болно.";
+$PMF_LANG["resetpwd_err_invalid"] = "Энэ нууц үг сэргээх холбоос буруу эсвэл хугацаа дууссан.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "Энд дарж PhpMyFAQ суулгацын хувилбарыг шалгана уу.";
 $PMF_LANG["ad_xmlrpc_latest"] = "Сүүлийн хувилбар";

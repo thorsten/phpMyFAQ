@@ -54,6 +54,25 @@ export const updateUserPassword = async (data: FormData): Promise<ApiResponse | 
   }
 };
 
+export const resetUserPassword = async (data: FormData): Promise<ApiResponse | undefined> => {
+  try {
+    const response: Response = await fetch('api/user/password/reset', {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(serialize(data)),
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const requestUserRemoval = async (data: FormData): Promise<ApiResponse | undefined> => {
   try {
     const response: Response = await fetch('api/user/request-removal', {

@@ -468,7 +468,7 @@ if ($action !== 'main') {
 //
 if (
     $faqConfig->get('security.enableLoginOnly') && (
-        !$user->isLoggedIn() && ($action !== 'login' && $action !== 'password')
+        !$user->isLoggedIn() && ($action !== 'login' && $action !== 'password' && $action !== 'resetpw')
     )
 ) {
     $redirect = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . 'login');

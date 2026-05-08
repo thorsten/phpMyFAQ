@@ -542,6 +542,11 @@ $PMF_LANG["lostpwd_err_2"] = "Fejl: Forkerte indtastninger!";
 $PMF_LANG["lostpwd_text_1"] = "Tak for anmodning om dine kontooplysninger.";
 $PMF_LANG["lostpwd_text_2"] = "Indstil venligst en ny personlig adgangskode i admin-sektionen af din FAQ.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-mail er blevet sendt.";
+$PMF_LANG["resetpwd_title"] = "Indstil en ny adgangskode";
+$PMF_LANG["resetpwd_text_link"] = "Klik på linket nedenfor for at indstille en ny adgangskode:";
+$PMF_LANG["resetpwd_text_expiry"] = "Dette link er gyldigt i 1 time og kan kun bruges én gang.";
+$PMF_LANG["resetpwd_success"] = "Din adgangskode er ændret. Du kan nu logge ind.";
+$PMF_LANG["resetpwd_err_invalid"] = "Dette link til nulstilling af adgangskode er ugyldigt eller udløbet.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "Klik for at kontrollere version af din phpMyFAQ installation";
 $PMF_LANG["ad_xmlrpc_latest"] = "Nyeste version tilgængelig";

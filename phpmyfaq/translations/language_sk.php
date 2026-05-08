@@ -549,6 +549,11 @@ $PMF_LANG["lostpwd_err_2"] = "Chyba: Zlé položky!";
 $PMF_LANG["lostpwd_text_1"] = "Ďakujeme za žiadosť o informáciu o Vašom účte.";
 $PMF_LANG["lostpwd_text_2"] = "Prosím nastavte nové heslo pre Vašu FAQ v sekcii admin.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-mail bol odoslaný.";
+$PMF_LANG["resetpwd_title"] = "Nastaviť nové heslo";
+$PMF_LANG["resetpwd_text_link"] = "Kliknite na odkaz nižšie a nastavte nové heslo:";
+$PMF_LANG["resetpwd_text_expiry"] = "Tento odkaz je platný 1 hodinu a môže sa použiť iba raz.";
+$PMF_LANG["resetpwd_success"] = "Vaše heslo bolo zmenené. Teraz sa môžete prihlásiť.";
+$PMF_LANG["resetpwd_err_invalid"] = "Tento odkaz na obnovenie hesla je neplatný alebo jeho platnosť vypršala.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "Obdržať najnovšiu phpMyFAQ verziu webovým servisom";
 $PMF_LANG["ad_xmlrpc_latest"] = "Najnovšia verzia dostupná na";

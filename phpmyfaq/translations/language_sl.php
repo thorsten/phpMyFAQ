@@ -548,6 +548,11 @@ $PMF_LANG["lostpwd_err_2"] = "Napaka: Napačni vnosi!";
 $PMF_LANG["lostpwd_text_1"] = "Hvala za zahtevo po informacijah o vašem računu.";
 $PMF_LANG["lostpwd_text_2"] = "Prosimo, nastavite novo osebno geslo v administratorskem delu vašega FAQ.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-pošta je bila poslana.";
+$PMF_LANG["resetpwd_title"] = "Nastavi novo geslo";
+$PMF_LANG["resetpwd_text_link"] = "Kliknite spodnjo povezavo, da nastavite novo geslo:";
+$PMF_LANG["resetpwd_text_expiry"] = "Ta povezava velja 1 uro in jo lahko uporabite samo enkrat.";
+$PMF_LANG["resetpwd_success"] = "Vaše geslo je bilo spremenjeno. Zdaj se lahko prijavite.";
+$PMF_LANG["resetpwd_err_invalid"] = "Ta povezava za ponastavitev gesla ni veljavna ali je potekla.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "Pridobi najnovejšo številko različice phpMyFAQ preko spletne storitve";
 $PMF_LANG["ad_xmlrpc_latest"] = "Najnovejša razpoložljiva različica";

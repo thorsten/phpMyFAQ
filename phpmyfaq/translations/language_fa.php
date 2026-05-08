@@ -543,6 +543,11 @@ $PMF_LANG["lostpwd_err_2"] = "خطا: ورودی‌های اشتباه!";
 $PMF_LANG["lostpwd_text_1"] = "از درخواست اطلاعات حساب خود سپاسگزاریم.";
 $PMF_LANG["lostpwd_text_2"] = "لطفاً یک رمز عبور شخصی جدید در بخش مدیریت پرسش و پاسخ خود تنظیم کنید.";
 $PMF_LANG["lostpwd_mail_okay"] = "ایمیل ارسال شد.";
+$PMF_LANG["resetpwd_title"] = "تنظیم رمز عبور جدید";
+$PMF_LANG["resetpwd_text_link"] = "برای تنظیم رمز عبور جدید روی پیوند زیر کلیک کنید:";
+$PMF_LANG["resetpwd_text_expiry"] = "این پیوند به مدت ۱ ساعت معتبر است و فقط یک بار قابل استفاده است.";
+$PMF_LANG["resetpwd_success"] = "رمز عبور شما تغییر کرد. اکنون می‌توانید وارد شوید.";
+$PMF_LANG["resetpwd_err_invalid"] = "این پیوند بازنشانی رمز عبور نامعتبر است یا منقضی شده است.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "کلیک کنید تا نسخه نصب phpMyFAQ خود را بررسی کنید";
 $PMF_LANG["ad_xmlrpc_latest"] = "آخرین نسخه موجود";

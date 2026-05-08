@@ -543,6 +543,11 @@ $PMF_LANG["lostpwd_err_2"] = "Error: Wrong entries!";
 $PMF_LANG["lostpwd_text_1"] = "Thank you for requesting your account information.";
 $PMF_LANG["lostpwd_text_2"] = "Please set a new personal password in the admin section of your FAQ.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-Mail was sent.";
+$PMF_LANG["resetpwd_title"] = "Iestatīt jaunu paroli";
+$PMF_LANG["resetpwd_text_link"] = "Noklikšķiniet uz tālāk esošās saites, lai iestatītu jaunu paroli:";
+$PMF_LANG["resetpwd_text_expiry"] = "Šī saite ir derīga 1 stundu un to var izmantot tikai vienu reizi.";
+$PMF_LANG["resetpwd_success"] = "Jūsu parole ir mainīta. Tagad varat pieteikties.";
+$PMF_LANG["resetpwd_err_invalid"] = "Šī paroles atiestatīšanas saite nav derīga vai tās termiņš ir beidzies.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "Get latest phpMyFAQ version number by web service";
 $PMF_LANG["ad_xmlrpc_latest"] = "Latest version available on";

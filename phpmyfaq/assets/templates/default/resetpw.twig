@@ -1,0 +1,59 @@
+{% extends 'index.twig' %}
+
+{% block content %}
+<section class="col-12">
+
+  <div class="row mb-2">
+    <div class="col">
+      <div class="spinner-border text-primary d-none" id="loader" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <div id="pmf-resetpw-response"></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-6 offset-3">
+      <div class="card shadow">
+        <div class="card-header">
+          <h4 class="card-title">{{ 'resetpwd_title' | translate }}</h4>
+        </div>
+        <div class="card-body">
+          <form id="pmf-resetpw-form" action="#" method="post" accept-charset="utf-8" class="needs-validation"
+                novalidate>
+            <input type="hidden" name="u" value="{{ resetUserId }}">
+            <input type="hidden" name="exp" value="{{ resetExpires }}">
+            <input type="hidden" name="sig" value="{{ resetSignature }}">
+
+            <div class="row mb-2">
+              <label class="col-3 form-control-label" for="password">{{ 'ad_passwd_new' | translate }}</label>
+              <div class="col-9">
+                <input class="form-control" type="password" name="password" id="password" required minlength="8"
+                       autocomplete="new-password" autofocus>
+              </div>
+            </div>
+
+            <div class="row mb-2">
+              <label class="col-3 form-control-label" for="password_repeat">{{ 'ad_passwd_con' | translate }}</label>
+              <div class="col-9">
+                <input class="form-control" type="password" name="password_repeat" id="password_repeat" required
+                       minlength="8" autocomplete="new-password">
+              </div>
+            </div>
+
+            <div class="row mb-2">
+              <div class="col-sm-12 text-end">
+                <button class="btn btn-primary" type="submit" id="pmf-submit-resetpw" data-pmf-form="reset-password">
+                  {{ 'msgNewContentSubmit' | translate }}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+{% endblock %}
