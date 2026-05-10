@@ -12,7 +12,7 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 #[UsesNamespace('phpMyFAQ')]
 final class UnauthorizedUserControllerWebTest extends ControllerWebTestCase
 {
-    public function testUpdatePasswordReturnsConflictWhenUsernameIsMissing(): void
+    public function testRequestResetReturnsGenericSuccessForUnknownUser(): void
     {
         $response = $this->requestWithContext(
             'api',
@@ -23,12 +23,34 @@ final class UnauthorizedUserControllerWebTest extends ControllerWebTestCase
                 'CONTENT_TYPE' => 'application/json',
                 'HTTP_ACCEPT' => 'application/json',
             ],
-            json_encode(['email' => 'user@example.org'], JSON_THROW_ON_ERROR),
+            json_encode(
+                ['username' => 'no-such-user', 'email' => 'no-such@example.org'],
+                JSON_THROW_ON_ERROR,
+            ),
         );
 
-        self::assertResponseStatusCodeSame(409, $response);
+        self::assertResponseStatusCodeSame(200, $response);
         self::assertStringContainsString('json', (string) $response->headers->get('Content-Type'));
         self::assertJson((string) $response->getContent());
-        self::assertResponseContains('Missing username', $response);
+    }
+
+    public function testResetEndpointRejectsRequestWithoutToken(): void
+    {
+        $response = $this->requestWithContext(
+            'api',
+            'POST',
+            '/user/password/reset',
+            [],
+            [
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_ACCEPT' => 'application/json',
+            ],
+            json_encode(
+                ['password' => 'NewSecret123', 'password_repeat' => 'NewSecret123'],
+                JSON_THROW_ON_ERROR,
+            ),
+        );
+
+        self::assertResponseStatusCodeSame(400, $response);
     }
 }

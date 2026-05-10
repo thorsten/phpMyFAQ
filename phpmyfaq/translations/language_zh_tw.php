@@ -545,6 +545,11 @@ $PMF_LANG["lostpwd_err_2"] = "錯誤:不正確的項目!";
 $PMF_LANG["lostpwd_text_1"] = "謝謝您提出您的帳號資訊需求。";
 $PMF_LANG["lostpwd_text_2"] = "請重設您的個人密碼於管理員區。";
 $PMF_LANG["lostpwd_mail_okay"] = "E-Mail 已寄出。";
+$PMF_LANG["resetpwd_title"] = "設定新密碼";
+$PMF_LANG["resetpwd_text_link"] = "點擊下方連結以設定新密碼：";
+$PMF_LANG["resetpwd_text_expiry"] = "此連結 1 小時內有效，且僅能使用一次。";
+$PMF_LANG["resetpwd_success"] = "您的密碼已變更。您現在可以登入。";
+$PMF_LANG["resetpwd_err_invalid"] = "此密碼重設連結無效或已過期。";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "點選這裡來檢查您的 phpMyFAQ 安裝的版本";
 $PMF_LANG["ad_xmlrpc_latest"] = "最新版本於";

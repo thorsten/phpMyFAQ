@@ -545,6 +545,11 @@ $PMF_LANG["lostpwd_err_2"] = "Gre&scaron;ka: Pogre&scaron;ni unosi!";
 $PMF_LANG["lostpwd_text_1"] = "Zahtev za detaljima Va&scaron;eg naloga je primljen.";
 $PMF_LANG["lostpwd_text_2"] = "Podesite novu lozinku u admin delu Va&scaron;eg FAQ.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-Mail je poslat.";
+$PMF_LANG["resetpwd_title"] = "Postavi novu lozinku";
+$PMF_LANG["resetpwd_text_link"] = "Kliknite na donji link da postavite novu lozinku:";
+$PMF_LANG["resetpwd_text_expiry"] = "Ovaj link vrijedi 1 sat i može se koristiti samo jednom.";
+$PMF_LANG["resetpwd_success"] = "Vaša lozinka je promijenjena. Sada se možete prijaviti.";
+$PMF_LANG["resetpwd_err_invalid"] = "Ovaj link za resetovanje lozinke je nevažeći ili je istekao.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "Pogledaj najnoviju phpMyFAQ verziju na internetu";
 $PMF_LANG["ad_xmlrpc_latest"] = "Najnovija dostupna verzija je";

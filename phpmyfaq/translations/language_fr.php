@@ -544,6 +544,11 @@ $PMF_LANG["lostpwd_err_2"] = "Erreur : Mauvaise saisie !";
 $PMF_LANG["lostpwd_text_1"] = "Merci d'avoir demandé des informations sur votre compte.";
 $PMF_LANG["lostpwd_text_2"] = "Merci de changer votre mot de passe personnel dans la section d'administration de votre FAQ.";
 $PMF_LANG["lostpwd_mail_okay"] = "L'e-mail a été envoyé.";
+$PMF_LANG["resetpwd_title"] = "Définir un nouveau mot de passe";
+$PMF_LANG["resetpwd_text_link"] = "Cliquez sur le lien ci-dessous pour définir un nouveau mot de passe :";
+$PMF_LANG["resetpwd_text_expiry"] = "Ce lien est valable 1 heure et ne peut être utilisé qu'une seule fois.";
+$PMF_LANG["resetpwd_success"] = "Votre mot de passe a été modifié. Vous pouvez maintenant vous connecter.";
+$PMF_LANG["resetpwd_err_invalid"] = "Ce lien de réinitialisation de mot de passe est invalide ou a expiré.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "Cliquez pour vérifier la version de votre installation phpMyFAQ";
 $PMF_LANG["ad_xmlrpc_latest"] = "Dernière version disponible sur";

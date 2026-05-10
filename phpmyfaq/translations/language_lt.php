@@ -549,6 +549,11 @@ $PMF_LANG["lostpwd_err_2"] = "Klaida: Neteisingi įrašai!";
 $PMF_LANG["lostpwd_text_1"] = "Ačiū, kad paprašėte savo paskyros informacijos.";
 $PMF_LANG["lostpwd_text_2"] = "Prašome nustatyti naują asmeninį slaptažodį DUK administravimo sekcijoje.";
 $PMF_LANG["lostpwd_mail_okay"] = "El. laiškas išsiųstas.";
+$PMF_LANG["resetpwd_title"] = "Nustatyti naują slaptažodį";
+$PMF_LANG["resetpwd_text_link"] = "Spustelėkite žemiau esančią nuorodą, kad nustatytumėte naują slaptažodį:";
+$PMF_LANG["resetpwd_text_expiry"] = "Ši nuoroda galioja 1 valandą ir gali būti panaudota tik vieną kartą.";
+$PMF_LANG["resetpwd_success"] = "Jūsų slaptažodis pakeistas. Dabar galite prisijungti.";
+$PMF_LANG["resetpwd_err_invalid"] = "Ši slaptažodžio atstatymo nuoroda negalioja arba pasibaigė jos galiojimas.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "Gauti naujausios phpMyFAQ versijos numerį per žiniatinklio tarnybą";
 $PMF_LANG["ad_xmlrpc_latest"] = "Naujausia versija prieinama";

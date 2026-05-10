@@ -551,6 +551,11 @@ $PMF_LANG["lostpwd_err_2"] = "Помилка: Неправильні дані!";
 $PMF_LANG["lostpwd_text_1"] = "Дякуємо за запит інформації про Ваш обліковий запис.";
 $PMF_LANG["lostpwd_text_2"] = "Будь ласка, встановіть новий особистий пароль в адміністративному розділі вашого FAQ.";
 $PMF_LANG["lostpwd_mail_okay"] = "Email відправлено.";
+$PMF_LANG["resetpwd_title"] = "Встановити новий пароль";
+$PMF_LANG["resetpwd_text_link"] = "Натисніть на посилання нижче, щоб встановити новий пароль:";
+$PMF_LANG["resetpwd_text_expiry"] = "Це посилання дійсне протягом 1 години і може бути використане лише один раз.";
+$PMF_LANG["resetpwd_success"] = "Ваш пароль було змінено. Тепер ви можете увійти.";
+$PMF_LANG["resetpwd_err_invalid"] = "Це посилання для скидання пароля недійсне або термін його дії минув.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "Отримати номер останньої версії phpMyFAQ через веб-сервіс";
 $PMF_LANG["ad_xmlrpc_latest"] = "Остання доступна версія";

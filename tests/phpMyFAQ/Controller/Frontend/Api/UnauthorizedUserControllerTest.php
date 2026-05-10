@@ -8,10 +8,12 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\PasswordResetTokenService;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
@@ -84,361 +86,342 @@ class UnauthorizedUserControllerTest extends TestCase
         parent::tearDown();
     }
 
-    /**
-     * @throws Exception
-     */
-    public function testUpdatePasswordWithInvalidJsonThrowsException(): void
-    {
-        $requestData = 'invalid json';
-
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UnauthorizedUserController();
-
-        $this->expectException(\Exception::class);
-        $controller->updatePassword($request);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testUpdatePasswordWithMissingUsernameReturnsConflict(): void
-    {
-        $requestData = json_encode([
-            'email' => 'test@example.com',
-        ]);
-
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UnauthorizedUserController();
-        $response = $controller->updatePassword($request);
-
-        $this->assertEquals(Response::HTTP_CONFLICT, $response->getStatusCode());
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testUpdatePasswordWithMissingEmailReturnsConflict(): void
-    {
-        $requestData = json_encode([
-            'username' => 'testuser',
-        ]);
-
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UnauthorizedUserController();
-        $response = $controller->updatePassword($request);
-
-        $this->assertEquals(Response::HTTP_CONFLICT, $response->getStatusCode());
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testUpdatePasswordWithInvalidEmailReturnsConflict(): void
-    {
-        $requestData = json_encode([
-            'username' => 'testuser',
-            'email' => 'invalid-email',
-        ]);
-
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UnauthorizedUserController();
-        $response = $controller->updatePassword($request);
-
-        $this->assertEquals(Response::HTTP_CONFLICT, $response->getStatusCode());
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testUpdatePasswordWithEmptyUsernameReturnsConflict(): void
-    {
-        $requestData = json_encode([
-            'username' => '',
-            'email' => 'test@example.com',
-        ]);
-
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UnauthorizedUserController();
-        $response = $controller->updatePassword($request);
-
-        $this->assertEquals(Response::HTTP_CONFLICT, $response->getStatusCode());
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testUpdatePasswordWithNonExistentUserReturnsConflict(): void
-    {
-        $requestData = json_encode([
-            'username' => 'nonexistentuser' . time(),
-            'email' => 'test@example.com',
-        ]);
-
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UnauthorizedUserController();
-        $response = $controller->updatePassword($request);
-
-        $this->assertEquals(Response::HTTP_CONFLICT, $response->getStatusCode());
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testUpdatePasswordReturnsJsonResponse(): void
-    {
-        $requestData = json_encode([
-            'username' => 'testuser',
-            'email' => 'test@example.com',
-        ]);
-
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UnauthorizedUserController();
-        $response = $controller->updatePassword($request);
-
-        $this->assertInstanceOf(JsonResponse::class, $response);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testUpdatePasswordResponseHasCorrectContentType(): void
-    {
-        $requestData = json_encode([
-            'username' => 'testuser',
-            'email' => 'test@example.com',
-        ]);
-
-        $request = new Request([], [], [], [], [], [], $requestData);
-        $controller = new UnauthorizedUserController();
-        $response = $controller->updatePassword($request);
-
-        $this->assertTrue($response->headers->has('Content-Type'));
-        $this->assertStringContainsString('application/json', $response->headers->get('Content-Type'));
-    }
-
-    public function testJsonReturnsJsonResponse(): void
-    {
-        $controller = new UnauthorizedUserController();
-        $response = $controller->json(['test' => 'data']);
-
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-    }
-
-    public function testJsonWithCustomStatusCode(): void
-    {
-        $controller = new UnauthorizedUserController();
-        $response = $controller->json(['error' => 'test'], Response::HTTP_BAD_REQUEST);
-
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testUpdatePasswordReturnsSuccessWhenPasswordResetMailIsSent(): void
-    {
-        $this->configuration->getAll();
-        $configReflection = new \ReflectionClass(Configuration::class);
-        $configProperty = $configReflection->getProperty('config');
-        $currentConfig = $configProperty->getValue($this->configuration);
-        $configProperty->setValue($this->configuration, array_merge($currentConfig, [
-            'main.titleFAQ' => 'phpMyFAQ Test',
-        ]));
-
-        $user = $this->createMock(CurrentUser::class);
-        $user->expects($this->once())->method('getUserByLogin')->with('testuser')->willReturn(true);
-        $user->expects($this->once())->method('getUserData')->with('email')->willReturn('test@example.com');
-        $user->expects($this->once())->method('createPassword')->willReturn('NewPass123');
-        $user->expects($this->once())->method('changePassword')->with('NewPass123')->willReturn(true);
-
-        $mail = $this->createMock(Mail::class);
-        $mail->expects($this->once())->method('addTo')->with('test@example.com');
-        $mail->expects($this->once())->method('send');
-
-        $controller = new UnauthorizedUserController(
-            static fn(Configuration $configuration): CurrentUser => $user,
-            static fn(Configuration $configuration): Mail => $mail,
+    private function makeController(
+        ?CurrentUser $user = null,
+        ?Mail $mail = null,
+        ?PasswordResetTokenService $tokenService = null,
+    ): UnauthorizedUserController {
+        return new UnauthorizedUserController(
+            $user === null ? null : static fn(Configuration $c): CurrentUser => $user,
+            $mail === null ? null : static fn(Configuration $c): Mail => $mail,
+            $tokenService,
+            new RateLimiter(),
+            $this->configuration,
         );
+    }
 
-        $request = new Request([], [], [], [], [], [], json_encode([
-            'username' => 'testuser',
-            'email' => 'test@example.com',
-        ], JSON_THROW_ON_ERROR));
+    private function jsonRequest(array $data): Request
+    {
+        return new Request([], [], [], [], [], [], json_encode($data, JSON_THROW_ON_ERROR));
+    }
 
-        $response = $controller->updatePassword($request);
-        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+    /**
+     * @throws Exception
+     */
+    public function testRequestResetReturnsGenericSuccessOnInvalidJson(): void
+    {
+        $controller = $this->makeController();
+        $response = $controller->requestReset(new Request([], [], [], [], [], [], 'invalid json'));
 
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
         $this->assertSame(Translation::get('lostpwd_mail_okay'), $payload['success']);
     }
 
     /**
      * @throws Exception
      */
-    public function testUpdatePasswordReturnsBadRequestWhenPasswordCreationFails(): void
+    public function testRequestResetReturnsGenericSuccessOnMissingFields(): void
     {
-        $user = $this->createMock(CurrentUser::class);
-        $user->expects($this->once())->method('getUserByLogin')->with('testuser')->willReturn(true);
-        $user->expects($this->once())->method('getUserData')->with('email')->willReturn('test@example.com');
-        $user
-            ->expects($this->once())
-            ->method('createPassword')
-            ->willThrowException(new \Exception('Cannot create password'));
-        $user->expects($this->never())->method('changePassword');
+        $controller = $this->makeController();
+        $response = $controller->requestReset($this->jsonRequest(['username' => '', 'email' => '']));
 
-        $controller = new UnauthorizedUserController(static fn(Configuration $configuration): CurrentUser => $user);
-
-        $request = new Request([], [], [], [], [], [], json_encode([
-            'username' => 'testuser',
-            'email' => 'test@example.com',
-        ], JSON_THROW_ON_ERROR));
-
-        $response = $controller->updatePassword($request);
-        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
-
-        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        $this->assertSame('Cannot create password', $payload['error']);
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
     /**
      * @throws Exception
      */
-    public function testUpdatePasswordReturnsBadRequestWhenPasswordChangeFails(): void
+    public function testRequestResetDoesNotLeakWhenUserMissing(): void
     {
         $user = $this->createMock(CurrentUser::class);
-        $user->expects($this->once())->method('getUserByLogin')->with('testuser')->willReturn(true);
-        $user->expects($this->once())->method('getUserData')->with('email')->willReturn('test@example.com');
-        $user->expects($this->once())->method('createPassword')->willReturn('NewPass123');
-        $user
-            ->expects($this->once())
-            ->method('changePassword')
-            ->with('NewPass123')
-            ->willThrowException(new \Exception('Cannot change password'));
+        $user->expects($this->once())->method('getUserByLogin')->willReturn(false);
+        $user->expects($this->never())->method('getEncryptedPassword');
 
-        $controller = new UnauthorizedUserController(static fn(Configuration $configuration): CurrentUser => $user);
-
-        $request = new Request([], [], [], [], [], [], json_encode([
-            'username' => 'testuser',
-            'email' => 'test@example.com',
-        ], JSON_THROW_ON_ERROR));
-
-        $response = $controller->updatePassword($request);
-        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
-
-        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        $this->assertSame('Cannot change password', $payload['error']);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testUpdatePasswordReturnsBadRequestWhenMailSendingFails(): void
-    {
-        $this->configuration->getAll();
-        $configReflection = new \ReflectionClass(Configuration::class);
-        $configProperty = $configReflection->getProperty('config');
-        $currentConfig = $configProperty->getValue($this->configuration);
-        $configProperty->setValue($this->configuration, array_merge($currentConfig, [
-            'main.titleFAQ' => 'phpMyFAQ Test',
+        $controller = $this->makeController($user);
+        $response = $controller->requestReset($this->jsonRequest([
+            'username' => 'ghost',
+            'email' => 'ghost@example.com',
         ]));
 
-        $user = $this->createMock(CurrentUser::class);
-        $user->expects($this->once())->method('getUserByLogin')->with('testuser')->willReturn(true);
-        $user->expects($this->once())->method('getUserData')->with('email')->willReturn('test@example.com');
-        $user->expects($this->once())->method('createPassword')->willReturn('NewPass123');
-        $user->expects($this->once())->method('changePassword')->with('NewPass123')->willReturn(true);
-
-        $mail = $this->createMock(Mail::class);
-        $mail->expects($this->once())->method('addTo')->with('test@example.com');
-        $mail
-            ->expects($this->once())
-            ->method('send')
-            ->willThrowException(new \phpMyFAQ\Core\Exception('SMTP failed'));
-
-        $controller = new UnauthorizedUserController(
-            static fn(Configuration $configuration): CurrentUser => $user,
-            static fn(Configuration $configuration): Mail => $mail,
-        );
-
-        $request = new Request([], [], [], [], [], [], json_encode([
-            'username' => 'testuser',
-            'email' => 'test@example.com',
-        ], JSON_THROW_ON_ERROR));
-
-        $response = $controller->updatePassword($request);
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
-
-        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        $this->assertSame('SMTP failed', $payload['error']);
+        $this->assertSame(Translation::get('lostpwd_mail_okay'), $payload['success']);
     }
 
     /**
      * @throws Exception
      */
-    public function testUpdatePasswordReturnsConflictWhenEmailDoesNotMatchUser(): void
+    public function testRequestResetDoesNotLeakWhenEmailMismatch(): void
     {
         $user = $this->createMock(CurrentUser::class);
-        $user->expects($this->once())->method('getUserByLogin')->with('testuser')->willReturn(true);
-        $user->expects($this->once())->method('getUserData')->with('email')->willReturn('other@example.com');
-        $user->expects($this->never())->method('createPassword');
+        $user->expects($this->once())->method('getUserByLogin')->willReturn(true);
+        $user->expects($this->once())->method('getUserData')->with('email')->willReturn('real@example.com');
+        $user->expects($this->never())->method('getEncryptedPassword');
 
-        $controller = new UnauthorizedUserController(static fn(Configuration $configuration): CurrentUser => $user);
-
-        $request = new Request([], [], [], [], [], [], json_encode([
-            'username' => 'testuser',
-            'email' => 'test@example.com',
-        ], JSON_THROW_ON_ERROR));
-
-        $response = $controller->updatePassword($request);
-        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
-
-        $this->assertSame(Response::HTTP_CONFLICT, $response->getStatusCode());
-        $this->assertSame(Translation::get('lostpwd_err_1'), $payload['error']);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testUpdatePasswordReturnsBadRequestWhenRecipientAddressCannotBeAdded(): void
-    {
-        $this->configuration->getAll();
-        $configReflection = new \ReflectionClass(Configuration::class);
-        $configProperty = $configReflection->getProperty('config');
-        $currentConfig = $configProperty->getValue($this->configuration);
-        $configProperty->setValue($this->configuration, array_merge($currentConfig, [
-            'main.titleFAQ' => 'phpMyFAQ Test',
+        $controller = $this->makeController($user);
+        $response = $controller->requestReset($this->jsonRequest([
+            'username' => 'someone',
+            'email' => 'attacker@example.com',
         ]));
 
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testRequestResetSilentlySkipsForNonDbAuthSource(): void
+    {
         $user = $this->createMock(CurrentUser::class);
-        $user->expects($this->once())->method('getUserByLogin')->with('testuser')->willReturn(true);
-        $user->expects($this->once())->method('getUserData')->with('email')->willReturn('test@example.com');
-        $user->expects($this->once())->method('createPassword')->willReturn('NewPass123');
-        $user->expects($this->once())->method('changePassword')->with('NewPass123')->willReturn(true);
+        $user->expects($this->once())->method('getUserByLogin')->willReturn(true);
+        $user->expects($this->once())->method('getUserData')->with('email')->willReturn('real@example.com');
+        $user->expects($this->once())->method('getEncryptedPassword')->willReturn('');
+        $user->expects($this->never())->method('getUserId');
 
         $mail = $this->createMock(Mail::class);
-        $mail
-            ->expects($this->once())
-            ->method('addTo')
-            ->with('test@example.com')
-            ->willThrowException(new \phpMyFAQ\Core\Exception('Invalid recipient'));
         $mail->expects($this->never())->method('send');
 
-        $controller = new UnauthorizedUserController(
-            static fn(Configuration $configuration): CurrentUser => $user,
-            static fn(Configuration $configuration): Mail => $mail,
+        $controller = $this->makeController($user, $mail);
+        $response = $controller->requestReset($this->jsonRequest([
+            'username' => 'ldap-user',
+            'email' => 'real@example.com',
+        ]));
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testRequestResetSendsSignedLinkEmail(): void
+    {
+        $configReflection = new \ReflectionClass(Configuration::class);
+        $configProperty = $configReflection->getProperty('config');
+        $configProperty->setValue($this->configuration, array_merge(
+            $configProperty->getValue($this->configuration) ?? [],
+            ['main.titleFAQ' => 'phpMyFAQ Test', 'main.referenceURL' => 'https://faq.test'],
+        ));
+
+        $user = $this->createMock(CurrentUser::class);
+        $user->expects($this->once())->method('getUserByLogin')->willReturn(true);
+        $user->expects($this->once())->method('getUserData')->with('email')->willReturn('real@example.com');
+        $user->expects($this->once())->method('getEncryptedPassword')->willReturn('hashed-pw-123');
+        $user->expects($this->once())->method('getUserId')->willReturn(42);
+        $user->expects($this->never())->method('changePassword');
+        $user->expects($this->never())->method('createPassword');
+
+        $capturedMessage = null;
+        $mail = $this->createMock(Mail::class);
+        $mail->expects($this->once())->method('addTo')->with('real@example.com');
+        $mail->expects($this->once())->method('send')->willReturnCallback(
+            function () use ($mail, &$capturedMessage): int {
+                $capturedMessage = $mail->message;
+                return 1;
+            },
         );
 
-        $request = new Request([], [], [], [], [], [], json_encode([
-            'username' => 'testuser',
-            'email' => 'test@example.com',
-        ], JSON_THROW_ON_ERROR));
+        $controller = $this->makeController($user, $mail);
+        $response = $controller->requestReset($this->jsonRequest([
+            'username' => 'realuser',
+            'email' => 'real@example.com',
+        ]));
 
-        $response = $controller->updatePassword($request);
-        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertNotNull($capturedMessage);
+        $this->assertStringContainsString('/user/reset-password?u=42&exp=', $capturedMessage);
+        $this->assertStringContainsString('&sig=', $capturedMessage);
+        $this->assertStringNotContainsString('hashed-pw-123', $capturedMessage);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testResetRejectsTamperedSignature(): void
+    {
+        $tokenService = new PasswordResetTokenService();
+        $token = $tokenService->issue(7, 'pw-key');
+
+        $user = $this->createMock(CurrentUser::class);
+        $user->expects($this->once())->method('getUserById')->with(7, true)->willReturn(true);
+        $user->expects($this->once())->method('getEncryptedPassword')->willReturn('pw-key');
+        $user->expects($this->never())->method('changePassword');
+
+        $controller = $this->makeController($user, null, $tokenService);
+        $response = $controller->reset($this->jsonRequest([
+            'u' => 7,
+            'exp' => $token['expires'],
+            'sig' => str_repeat('0', strlen($token['signature'])),
+            'password' => 'NewSecret123',
+            'password_repeat' => 'NewSecret123',
+        ]));
 
         $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        $this->assertSame('Invalid recipient', $payload['error']);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $this->assertSame(Translation::get('resetpwd_err_invalid'), $payload['error']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testResetRejectsExpiredToken(): void
+    {
+        $tokenService = new PasswordResetTokenService();
+        $expired = time() - 60;
+        $signature = hash_hmac('sha256', '7|' . $expired, 'pw-key');
+
+        $user = $this->createMock(CurrentUser::class);
+        $user->expects($this->once())->method('getUserById')->willReturn(true);
+        $user->expects($this->once())->method('getEncryptedPassword')->willReturn('pw-key');
+        $user->expects($this->never())->method('changePassword');
+
+        $controller = $this->makeController($user, null, $tokenService);
+        $response = $controller->reset($this->jsonRequest([
+            'u' => 7,
+            'exp' => $expired,
+            'sig' => $signature,
+            'password' => 'NewSecret123',
+            'password_repeat' => 'NewSecret123',
+        ]));
+
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testResetRejectsReplayAfterPasswordChange(): void
+    {
+        $tokenService = new PasswordResetTokenService();
+        $token = $tokenService->issue(7, 'old-key');
+
+        // Simulate the user having changed their password since issuance: signing key differs.
+        $user = $this->createMock(CurrentUser::class);
+        $user->expects($this->once())->method('getUserById')->willReturn(true);
+        $user->expects($this->once())->method('getEncryptedPassword')->willReturn('new-key');
+        $user->expects($this->never())->method('changePassword');
+
+        $controller = $this->makeController($user, null, $tokenService);
+        $response = $controller->reset($this->jsonRequest([
+            'u' => 7,
+            'exp' => $token['expires'],
+            'sig' => $token['signature'],
+            'password' => 'NewSecret123',
+            'password_repeat' => 'NewSecret123',
+        ]));
+
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testResetSucceedsWithValidToken(): void
+    {
+        $tokenService = new PasswordResetTokenService();
+        $token = $tokenService->issue(7, 'pw-key');
+
+        $user = $this->createMock(CurrentUser::class);
+        $user->expects($this->once())->method('getUserById')->with(7, true)->willReturn(true);
+        $user->expects($this->once())->method('getEncryptedPassword')->willReturn('pw-key');
+        $user->expects($this->once())->method('changePassword')->with('NewSecret123')->willReturn(true);
+
+        $controller = $this->makeController($user, null, $tokenService);
+        $response = $controller->reset($this->jsonRequest([
+            'u' => 7,
+            'exp' => $token['expires'],
+            'sig' => $token['signature'],
+            'password' => 'NewSecret123',
+            'password_repeat' => 'NewSecret123',
+        ]));
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $this->assertSame(Translation::get('resetpwd_success'), $payload['success']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testResetRejectsShortPassword(): void
+    {
+        $controller = $this->makeController();
+        $response = $controller->reset($this->jsonRequest([
+            'u' => 7,
+            'exp' => time() + 600,
+            'sig' => 'whatever',
+            'password' => 'short',
+            'password_repeat' => 'short',
+        ]));
+
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $this->assertSame(Translation::get('msgPasswordTooShort'), $payload['error']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testResetRejectsMismatchedPasswords(): void
+    {
+        $controller = $this->makeController();
+        $response = $controller->reset($this->jsonRequest([
+            'u' => 7,
+            'exp' => time() + 600,
+            'sig' => 'whatever',
+            'password' => 'LongEnough123',
+            'password_repeat' => 'OtherPassword456',
+        ]));
+
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $this->assertSame(Translation::get('ad_passwd_fail'), $payload['error']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testResetRejectsMissingTokenFields(): void
+    {
+        $controller = $this->makeController();
+        $response = $controller->reset($this->jsonRequest([
+            'password' => 'NewSecret123',
+            'password_repeat' => 'NewSecret123',
+        ]));
+
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testResetRejectsForUnknownUser(): void
+    {
+        $tokenService = new PasswordResetTokenService();
+        $token = $tokenService->issue(7, 'pw-key');
+
+        $user = $this->createMock(CurrentUser::class);
+        $user->expects($this->once())->method('getUserById')->willReturn(false);
+        $user->expects($this->never())->method('changePassword');
+
+        $controller = $this->makeController($user, null, $tokenService);
+        $response = $controller->reset($this->jsonRequest([
+            'u' => 7,
+            'exp' => $token['expires'],
+            'sig' => $token['signature'],
+            'password' => 'NewSecret123',
+            'password_repeat' => 'NewSecret123',
+        ]));
+
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+    }
+
+    public function testJsonReturnsJsonResponse(): void
+    {
+        $controller = $this->makeController();
+        $response = $controller->json(['test' => 'data']);
+
+        $this->assertInstanceOf(JsonResponse::class, $response);
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 }
