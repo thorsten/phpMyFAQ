@@ -302,7 +302,9 @@ class RegistrationControllerTest extends TestCase
      */
     public function testCreateReturnsCreatedWhenTokenAndPayloadAreValid(): void
     {
-        $_SERVER['HTTP_X_PMF_TOKEN'] = (string) $this->configuration->get('api.apiClientToken');
+        $token = bin2hex(random_bytes(16));
+        $this->configuration->set('api.apiClientToken', $token);
+        $_SERVER['HTTP_X_PMF_TOKEN'] = $token;
 
         $helper = $this->createMock(RegistrationHelper::class);
         $helper->expects($this->once())->method('isDomainAllowed')->with('grace@example.org')->willReturn(true);

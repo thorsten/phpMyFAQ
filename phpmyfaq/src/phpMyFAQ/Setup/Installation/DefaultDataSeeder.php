@@ -275,7 +275,7 @@ class DefaultDataSeeder
             'ldap.ldap_group_auto_assign' => 'false',
             'ldap.ldap_group_mapping' => '',
             'api.enableAccess' => 'true',
-            'api.apiClientToken' => '',
+            'api.apiClientToken' => bin2hex(random_bytes(32)),
             'api.onlyActiveFaqs' => 'true',
             'api.onlyActiveCategories' => 'true',
             'api.rateLimit.requests' => '100',

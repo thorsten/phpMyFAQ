@@ -63,7 +63,12 @@ trait ConfigurationMethodsTrait
      */
     public function set(string $key, mixed $value): bool
     {
-        return $this->configurationRepository->updateConfigValue($key, (string) $value);
+        $result = $this->configurationRepository->updateConfigValue($key, (string) $value);
+        if ($result) {
+            $this->config[$key] = (string) $value;
+        }
+
+        return $result;
     }
 
     /**
