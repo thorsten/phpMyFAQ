@@ -186,6 +186,7 @@ class Update extends AbstractSetup
         $this->applyUpdates410Alpha();
         $this->applyUpdates410Alpha2();
         $this->applyUpdates410Alpha3();
+        $this->applyUpdates413();
 
         // Optimize the tables
         $this->optimizeTables();
@@ -266,7 +267,7 @@ class Update extends AbstractSetup
 
             // Add API-related configuration
             $this->configuration->add('api.enableAccess', true);
-            $this->configuration->add('api.apiClientToken', '');
+            $this->configuration->add('api.apiClientToken', bin2hex(random_bytes(32)));
 
             // Add passlist for domains
             $this->configuration->add('security.domainWhiteListForRegistrations', '');
@@ -1208,6 +1209,14 @@ class Update extends AbstractSetup
                     );
                     break;
             }
+        }
+    }
+
+    private function applyUpdates413(): void
+    {
+        $currentToken = $this->configuration->get('api.apiClientToken');
+        if (empty($currentToken)) {
+            $this->configuration->update(['api.apiClientToken' => bin2hex(random_bytes(32))]);
         }
     }
 

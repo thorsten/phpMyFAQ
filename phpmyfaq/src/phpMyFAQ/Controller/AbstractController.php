@@ -142,8 +142,14 @@ abstract class AbstractController
      */
     protected function hasValidToken(): void
     {
+        $configuredToken = $this->configuration->get(item: 'api.apiClientToken');
+        if (empty($configuredToken)) {
+            throw new UnauthorizedHttpException(challenge: '"x-pmf-token" is not valid.');
+        }
+
         $request = Request::createFromGlobals();
-        if ($this->configuration->get(item: 'api.apiClientToken') !== $request->headers->get(key: 'x-pmf-token')) {
+        $providedToken = $request->headers->get(key: 'x-pmf-token');
+        if (!is_string($providedToken) || !hash_equals($configuredToken, $providedToken)) {
             throw new UnauthorizedHttpException(challenge: '"x-pmf-token" is not valid.');
         }
     }

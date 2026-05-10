@@ -1126,6 +1126,7 @@ class Installer extends Setup
         $this->mainConfig['main.administrationMail'] = $email;
         $this->mainConfig['main.language'] = $language;
         $this->mainConfig['security.permLevel'] = $permLevel;
+        $this->mainConfig['api.apiClientToken'] = bin2hex(random_bytes(32));
 
         foreach ($this->mainConfig as $name => $value) {
             $configuration->add($name, $value);
