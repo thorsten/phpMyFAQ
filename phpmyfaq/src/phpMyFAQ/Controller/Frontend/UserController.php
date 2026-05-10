@@ -24,9 +24,12 @@ use phpMyFAQ\Bookmark;
 use phpMyFAQ\Captcha\CaptchaInterface;
 use phpMyFAQ\Captcha\Helper\CaptchaHelperInterface;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Filter;
 use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\PasswordResetTokenService;
 use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\User\UserSession;
 use RobThree\Auth\TwoFactorAuthException;
@@ -139,6 +142,44 @@ final class UserController extends AbstractFrontController
                 Translation::getString(key: 'msgCaptcha'),
                 $this->currentUser->isLoggedIn(),
             ),
+        ]);
+    }
+
+    /**
+     * Displays the password reset form for a signed reset link. The signature
+     * is verified server-side before rendering the form so that an invalid or
+     * expired link cannot be used to attempt a reset.
+     *
+     * @throws Exception
+     * @throws \Exception
+     */
+    #[Route(path: '/user/reset-password', name: 'public.user.reset-password', methods: ['GET'])]
+    public function resetPassword(Request $request): Response
+    {
+        $this->faqSession->userTracking('reset_password', 0);
+
+        $userId = (int) Filter::filterVar($request->query->get('u'), FILTER_VALIDATE_INT);
+        $expires = (int) Filter::filterVar($request->query->get('exp'), FILTER_VALIDATE_INT);
+        $signature = (string) Filter::filterVar($request->query->get('sig'), FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $valid = false;
+        if ($userId > 0 && $expires > 0 && $signature !== '') {
+            $candidate = CurrentUser::getCurrentUser($this->configuration);
+            if ($candidate->getUserById($userId, true)) {
+                $passwordKey = $candidate->getEncryptedPassword();
+                if ($passwordKey !== '') {
+                    $valid = new PasswordResetTokenService()->verify($userId, $expires, $signature, $passwordKey);
+                }
+            }
+        }
+
+        return $this->render('resetpw.twig', [
+            ...$this->getHeader($request),
+            'lang' => $this->configuration->getLanguage()->getLanguage(),
+            'resetUserId' => $valid ? $userId : 0,
+            'resetExpires' => $valid ? $expires : 0,
+            'resetSignature' => $valid ? $signature : '',
+            'resetTokenValid' => $valid,
         ]);
     }
 

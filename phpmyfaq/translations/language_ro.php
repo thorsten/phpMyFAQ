@@ -539,6 +539,11 @@ $PMF_LANG["lostpwd_err_2"] = "Eroare: Intrări greșite!";
 $PMF_LANG["lostpwd_text_1"] = "Mulțumim pentru solicitarea informațiilor despre cont.";
 $PMF_LANG["lostpwd_text_2"] = "Vă rugăm să setați o nouă parolă personală în secțiunea de administrare a FAQ-ului dumneavoastră.";
 $PMF_LANG["lostpwd_mail_okay"] = "Emailul a fost trimis.";
+$PMF_LANG["resetpwd_title"] = "Setează o parolă nouă";
+$PMF_LANG["resetpwd_text_link"] = "Apasă pe linkul de mai jos pentru a seta o parolă nouă:";
+$PMF_LANG["resetpwd_text_expiry"] = "Acest link este valabil timp de 1 oră și poate fi folosit o singură dată.";
+$PMF_LANG["resetpwd_success"] = "Parola ta a fost schimbată. Acum te poți autentifica.";
+$PMF_LANG["resetpwd_err_invalid"] = "Acest link de resetare a parolei nu este valid sau a expirat.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "Faceți clic pentru a verifica versiunea instalării phpMyFAQ";
 $PMF_LANG["ad_xmlrpc_latest"] = "Ultima versiune disponibilă";

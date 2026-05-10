@@ -548,6 +548,11 @@ $PMF_LANG["lostpwd_err_2"] = "Error: entri tidak benar!";
 $PMF_LANG["lostpwd_text_1"] = "Terima kasih atas permintaan informasi akun anda.";
 $PMF_LANG["lostpwd_text_2"] = "Silakan buat kata sandi baru pada bagian admin.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-Mail sudah dikirim.";
+$PMF_LANG["resetpwd_title"] = "Atur kata sandi baru";
+$PMF_LANG["resetpwd_text_link"] = "Klik tautan di bawah ini untuk mengatur kata sandi baru:";
+$PMF_LANG["resetpwd_text_expiry"] = "Tautan ini berlaku selama 1 jam dan hanya dapat digunakan sekali.";
+$PMF_LANG["resetpwd_success"] = "Kata sandi Anda telah diubah. Anda sekarang dapat masuk.";
+$PMF_LANG["resetpwd_err_invalid"] = "Tautan reset kata sandi ini tidak valid atau telah kedaluwarsa.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "Lihat nomor versi phpMyFAQ terbaru lewat layanan web";
 $PMF_LANG["ad_xmlrpc_latest"] = "Versi terbaru sudah tersedia di";

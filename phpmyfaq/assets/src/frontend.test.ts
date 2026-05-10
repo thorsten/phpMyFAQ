@@ -56,6 +56,7 @@ const mockHandleRemoveAllBookmarks = vi.fn();
 const mockHandleRequestRemoval = vi.fn();
 const mockHandleUserControlPanel = vi.fn();
 const mockHandleUserPassword = vi.fn();
+const mockHandleResetUserPassword = vi.fn();
 
 vi.mock('./user', () => ({
   handleDeleteBookmarks: () => mockHandleDeleteBookmarks(),
@@ -64,6 +65,7 @@ vi.mock('./user', () => ({
   handleRequestRemoval: () => mockHandleRequestRemoval(),
   handleUserControlPanel: () => mockHandleUserControlPanel(),
   handleUserPassword: () => mockHandleUserPassword(),
+  handleResetUserPassword: () => mockHandleResetUserPassword(),
 }));
 
 const mockHandleWebAuthn = vi.fn();

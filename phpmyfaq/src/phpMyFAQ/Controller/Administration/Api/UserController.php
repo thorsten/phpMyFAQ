@@ -234,31 +234,52 @@ final class UserController extends AbstractAdministrationApiController
     {
         $this->userHasUserPermission();
 
-        $currentUser = CurrentUser::getCurrentUser($this->configuration);
-
         $data = json_decode($request->getContent());
 
-        $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT);
-        $csrfToken = Filter::filterVar($data->csrf, FILTER_SANITIZE_SPECIAL_CHARS);
-        $newPassword = Filter::filterVar($data->newPassword, FILTER_SANITIZE_SPECIAL_CHARS);
-        $retypedPassword = Filter::filterVar($data->passwordRepeat, FILTER_SANITIZE_SPECIAL_CHARS);
+        $userId = Filter::filterVar($data->userId ?? null, FILTER_VALIDATE_INT);
+        $csrfToken = Filter::filterVar($data->csrf ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
+        $newPassword = is_string($data->newPassword ?? null) ? $data->newPassword : '';
+        $retypedPassword = is_string($data->passwordRepeat ?? null) ? $data->passwordRepeat : '';
 
         if (!Token::getInstance($this->session)->verifyToken(page: 'overwrite-password', requestToken: $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if (strlen((string) $newPassword) <= 7 || strlen((string) $retypedPassword) <= 7) {
+        if ($userId === false || (int) $userId <= 0) {
+            return $this->json(['error' => Translation::get(key: 'ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (strlen($newPassword) <= 7 || strlen($retypedPassword) <= 7) {
             return $this->json(['error' => Translation::get(key: 'msgPasswordTooShort')], Response::HTTP_BAD_REQUEST);
         }
 
-        $currentUser->getUserById((int) $userId, allowBlockedUsers: true);
+        $isSelf = $this->currentUser->getUserId() === (int) $userId;
+        $actingIsSuperAdmin = $this->currentUser->isSuperAdmin();
+
+        // Only SuperAdmins may change other users' passwords. Self-service is always allowed.
+        if (!$isSelf && !$actingIsSuperAdmin) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
+
+        $targetUser = new User($this->configuration);
+        $targetUser->getUserById((int) $userId, allowBlockedUsers: true);
+
+        if ($targetUser->getUserId() <= 0) {
+            return $this->json(['error' => Translation::get(key: 'ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
+        }
+
+        // Defense in depth: a non-SuperAdmin must never be able to alter a SuperAdmin or protected account,
+        // even when isSelf would short-circuit the check above.
+        if (!$actingIsSuperAdmin && ($targetUser->isSuperAdmin() || $targetUser->getStatus() === 'protected')) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
 
         $auth = new Auth($this->configuration);
-        $authSource = $auth->selectAuth($currentUser->getAuthSource(key: 'name'));
-        $authSource->getEncryptionContainer($currentUser->getAuthData(key: 'encType'));
+        $authSource = $auth->selectAuth($targetUser->getAuthSource(key: 'name'));
+        $authSource->getEncryptionContainer($targetUser->getAuthData(key: 'encType'));
 
         if (hash_equals($newPassword, $retypedPassword)) {
-            if (!$currentUser->changePassword($newPassword)) {
+            if (!$targetUser->changePassword($newPassword)) {
                 return $this->json(['error' => Translation::get(key: 'ad_passwd_fail')], Response::HTTP_BAD_REQUEST);
             }
 

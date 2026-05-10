@@ -934,6 +934,44 @@ class User
     }
 
     /**
+     * Returns the encrypted password (hash) stored for the local "db" auth source.
+     *
+     * Used as the per-user signing key for password-reset tokens: the token is
+     * implicitly invalidated as soon as the password changes. Returns an empty
+     * string for non-local auth sources (LDAP, Keycloak, OAuth2, ...) since the
+     * password is not owned by phpMyFAQ in that case.
+     */
+    public function getEncryptedPassword(): string
+    {
+        if ($this->getAuthSource('name') !== 'db') {
+            return '';
+        }
+
+        $login = $this->getLogin();
+        if ($login === '') {
+            return '';
+        }
+
+        $select = sprintf(
+            "SELECT pass FROM %sfaquserlogin WHERE login = '%s'",
+            Database::getTablePrefix(),
+            $this->configuration->getDb()->escape($login),
+        );
+
+        $result = $this->configuration->getDb()->query($select);
+        if (!$result) {
+            return '';
+        }
+
+        $row = $this->configuration->getDb()->fetchArray($result);
+        if (!is_array($row) || !array_key_exists('pass', $row) || !is_string($row['pass'])) {
+            return '';
+        }
+
+        return $row['pass'];
+    }
+
+    /**
      * changes the user's password. If $pass is omitted, a new
      * password is generated using the createPassword() method.
      *

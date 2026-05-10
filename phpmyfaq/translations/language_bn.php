@@ -548,6 +548,11 @@ $PMF_LANG["lostpwd_err_2"] = "ভুল তথ্য!";
 $PMF_LANG["lostpwd_text_1"] = "তথ্য জানতে চাওয়ার জন্য ধন্যবাদ।";
 $PMF_LANG["lostpwd_text_2"] = "অনুগ্রহ করে প্রশাসকের বিভাগে একটি নতুন গোপন সংকেত প্রদান করুন।";
 $PMF_LANG["lostpwd_mail_okay"] = "ই-মেইল পাঠানো হয়েছে";
+$PMF_LANG["resetpwd_title"] = "একটি নতুন পাসওয়ার্ড সেট করুন";
+$PMF_LANG["resetpwd_text_link"] = "নতুন পাসওয়ার্ড সেট করতে নিচের লিঙ্কে ক্লিক করুন:";
+$PMF_LANG["resetpwd_text_expiry"] = "এই লিঙ্কটি ১ ঘন্টার জন্য বৈধ এবং শুধুমাত্র একবার ব্যবহার করা যাবে।";
+$PMF_LANG["resetpwd_success"] = "আপনার পাসওয়ার্ড পরিবর্তন করা হয়েছে। আপনি এখন লগ ইন করতে পারেন।";
+$PMF_LANG["resetpwd_err_invalid"] = "এই পাসওয়ার্ড রিসেট লিঙ্কটি অবৈধ বা মেয়াদ শেষ হয়ে গেছে।";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "ওয়েব সেবার মাধ্যমে সর্বশেষ phpMyFAQ সংস্করণ নম্বর পান";
 $PMF_LANG["ad_xmlrpc_latest"] = "সর্বশেষ সংস্করণ উপলব্ধ";

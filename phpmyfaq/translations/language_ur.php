@@ -541,6 +541,11 @@ $PMF_LANG["lostpwd_err_2"] = "خرابی: غلط اندراجات!";
 $PMF_LANG["lostpwd_text_1"] = "آپ کی اکاؤنٹ کی معلومات کی درخواست کرنے کا شکریہ۔";
 $PMF_LANG["lostpwd_text_2"] = "براہ کرم اپنے FAQ کے ایڈمن سیکشن میں نیا ذاتی پاس ورڈ سیٹ کریں۔";
 $PMF_LANG["lostpwd_mail_okay"] = "ای میل بھیج دی گئی ہے۔";
+$PMF_LANG["resetpwd_title"] = "نیا پاس ورڈ سیٹ کریں";
+$PMF_LANG["resetpwd_text_link"] = "نیا پاس ورڈ سیٹ کرنے کے لیے نیچے دیے گئے لنک پر کلک کریں:";
+$PMF_LANG["resetpwd_text_expiry"] = "یہ لنک 1 گھنٹے کے لیے درست ہے اور صرف ایک بار استعمال کیا جا سکتا ہے۔";
+$PMF_LANG["resetpwd_success"] = "آپ کا پاس ورڈ تبدیل کر دیا گیا ہے۔ اب آپ لاگ ان کر سکتے ہیں۔";
+$PMF_LANG["resetpwd_err_invalid"] = "یہ پاس ورڈ ری سیٹ لنک غلط ہے یا اس کی میعاد ختم ہو چکی ہے۔";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "اپنی phpMyFAQ انسٹالیشن کے ورژن کو چیک کرنے کے لیے کلک کریں";
 $PMF_LANG["ad_xmlrpc_latest"] = "دستیاب جدید ترین ورژن";

@@ -546,6 +546,11 @@ $PMF_LANG["lostpwd_err_2"] = "에러: ID 와 메일주소를 입력하여 주세
 $PMF_LANG["lostpwd_text_1"] = "사용자 정보를 요청하셨습니다.";
 $PMF_LANG["lostpwd_text_2"] = "관리자 페이지에서 새로운 비밀번호를 설정하시기 바랍니다.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-Mail을 보냈습니다.";
+$PMF_LANG["resetpwd_title"] = "새 비밀번호 설정";
+$PMF_LANG["resetpwd_text_link"] = "새 비밀번호를 설정하려면 아래 링크를 클릭하세요:";
+$PMF_LANG["resetpwd_text_expiry"] = "이 링크는 1시간 동안 유효하며 한 번만 사용할 수 있습니다.";
+$PMF_LANG["resetpwd_success"] = "비밀번호가 변경되었습니다. 이제 로그인할 수 있습니다.";
+$PMF_LANG["resetpwd_err_invalid"] = "이 비밀번호 재설정 링크는 유효하지 않거나 만료되었습니다.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "최신의 phpMyFAQ 버전을 확인하세요. ";
 $PMF_LANG["ad_xmlrpc_latest"] = "최신버전을 다음 사이트에서 이용하실 수 있습니다.";

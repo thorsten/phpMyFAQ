@@ -546,6 +546,11 @@ $PMF_LANG["lostpwd_err_2"] = "Errorea: Datu baliogabeak!";
 $PMF_LANG["lostpwd_text_1"] = "Eskerrik asko zure sarrera informazioa eskatzeagatik.";
 $PMF_LANG["lostpwd_text_2"] = "Mesedez, zure FAQaren administrazio sailean pasahitz berri bat ezarri.";
 $PMF_LANG["lostpwd_mail_okay"] = "Posta bidali da.";
+$PMF_LANG["resetpwd_title"] = "Ezarri pasahitz berria";
+$PMF_LANG["resetpwd_text_link"] = "Egin klik beheko estekan pasahitz berri bat ezartzeko:";
+$PMF_LANG["resetpwd_text_expiry"] = "Esteka hau 1 orduz baliodun da eta behin bakarrik erabili daiteke.";
+$PMF_LANG["resetpwd_success"] = "Zure pasahitza aldatu da. Saioa hasi dezakezu orain.";
+$PMF_LANG["resetpwd_err_invalid"] = "Pasahitza berrezartzeko esteka hau baliogabea da edo iraungi da.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "phpMyFAQ-en azken bertsioaren zenbakia lortu web-sevices erabiliz.";
 $PMF_LANG["ad_xmlrpc_latest"] = "Azken bertsioa ";

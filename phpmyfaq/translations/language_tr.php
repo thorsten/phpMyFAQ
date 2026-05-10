@@ -548,6 +548,11 @@ $PMF_LANG["lostpwd_err_2"] = "Hata: geçersiz girdi!";
 $PMF_LANG["lostpwd_text_1"] = "Talebiniz alındı.";
 $PMF_LANG["lostpwd_text_2"] = "Lütfen yönetici panelinden yeni bir kişisel şifre belirleyiniz.";
 $PMF_LANG["lostpwd_mail_okay"] = "Email gönderildi.";
+$PMF_LANG["resetpwd_title"] = "Yeni şifre belirle";
+$PMF_LANG["resetpwd_text_link"] = "Yeni şifre belirlemek için aşağıdaki bağlantıya tıklayın:";
+$PMF_LANG["resetpwd_text_expiry"] = "Bu bağlantı 1 saat geçerlidir ve yalnızca bir kez kullanılabilir.";
+$PMF_LANG["resetpwd_success"] = "Şifreniz değiştirildi. Şimdi giriş yapabilirsiniz.";
+$PMF_LANG["resetpwd_err_invalid"] = "Bu şifre sıfırlama bağlantısı geçersiz veya süresi dolmuş.";
 
 $PMF_LANG["msgButtonFetchLatestVersion"] = "Sistem sürümünü kontrol etmek için tıklayın";
 $PMF_LANG["ad_xmlrpc_latest"] = "Yeni sürüm kullanılabilir durumda";

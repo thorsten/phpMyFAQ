@@ -149,6 +149,7 @@ final class UserControllerTest extends TestCase
         $currentUser->perm = $permission;
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('isSuperAdmin')->willReturn(true);
 
         $session = new Session(new MockArraySessionStorage());
 
