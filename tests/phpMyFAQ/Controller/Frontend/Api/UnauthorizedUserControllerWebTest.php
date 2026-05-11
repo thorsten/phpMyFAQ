@@ -23,10 +23,7 @@ final class UnauthorizedUserControllerWebTest extends ControllerWebTestCase
                 'CONTENT_TYPE' => 'application/json',
                 'HTTP_ACCEPT' => 'application/json',
             ],
-            json_encode(
-                ['username' => 'no-such-user', 'email' => 'no-such@example.org'],
-                JSON_THROW_ON_ERROR,
-            ),
+            json_encode(['username' => 'no-such-user', 'email' => 'no-such@example.org'], JSON_THROW_ON_ERROR),
         );
 
         self::assertResponseStatusCodeSame(200, $response);
@@ -45,10 +42,7 @@ final class UnauthorizedUserControllerWebTest extends ControllerWebTestCase
                 'CONTENT_TYPE' => 'application/json',
                 'HTTP_ACCEPT' => 'application/json',
             ],
-            json_encode(
-                ['password' => 'NewSecret123', 'password_repeat' => 'NewSecret123'],
-                JSON_THROW_ON_ERROR,
-            ),
+            json_encode(['password' => 'NewSecret123', 'password_repeat' => 'NewSecret123'], JSON_THROW_ON_ERROR),
         );
 
         self::assertResponseStatusCodeSame(400, $response);

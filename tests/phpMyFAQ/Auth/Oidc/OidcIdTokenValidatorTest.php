@@ -489,8 +489,10 @@ final class OidcIdTokenValidatorTest extends TestCase
             'iat' => 1_700_000_000,
             'exp' => 1_700_000_060,
         ];
-        $token = $this->base64UrlEncode(json_encode($header, JSON_THROW_ON_ERROR))
-            . '.' . $this->base64UrlEncode(json_encode($payload, JSON_THROW_ON_ERROR))
+        $token =
+            $this->base64UrlEncode(json_encode($header, JSON_THROW_ON_ERROR))
+            . '.'
+            . $this->base64UrlEncode(json_encode($payload, JSON_THROW_ON_ERROR))
             . '.signature';
 
         $this->expectExceptionObject(new \RuntimeException('Unsupported OIDC id_token signing algorithm'));

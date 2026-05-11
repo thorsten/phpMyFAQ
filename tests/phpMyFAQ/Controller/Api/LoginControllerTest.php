@@ -67,7 +67,8 @@ class LoginControllerTest extends TestCase
     /**
      * @throws Exception
      * @throws \JsonException
-     */ public function testLoginReturnsJsonResponse(): void
+     */
+    public function testLoginReturnsJsonResponse(): void
     {
         $requestData = json_encode([
             'username' => 'testuser',
@@ -84,7 +85,8 @@ class LoginControllerTest extends TestCase
     /**
      * @throws Exception
      * @throws \JsonException
-     */ public function testLoginReturnsCorrectStatusCodeOnFailure(): void
+     */
+    public function testLoginReturnsCorrectStatusCodeOnFailure(): void
     {
         $requestData = json_encode([
             'username' => 'invaliduser',
@@ -101,7 +103,8 @@ class LoginControllerTest extends TestCase
     /**
      * @throws Exception
      * @throws \JsonException
-     */ public function testLoginResponseContainsLoggedInField(): void
+     */
+    public function testLoginResponseContainsLoggedInField(): void
     {
         $requestData = json_encode([
             'username' => 'testuser',
@@ -119,7 +122,8 @@ class LoginControllerTest extends TestCase
     /**
      * @throws Exception
      * @throws \JsonException
-     */ public function testLoginFailureContainsErrorField(): void
+     */
+    public function testLoginFailureContainsErrorField(): void
     {
         $requestData = json_encode([
             'username' => 'invaliduser',

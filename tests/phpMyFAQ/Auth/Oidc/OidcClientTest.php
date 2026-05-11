@@ -170,7 +170,10 @@ final class OidcClientTest extends TestCase
             'https://sso.example.test/logout',
         );
 
-        $this->assertSame('https://sso.example.test/logout?client_id=phpmyfaq', $client->buildLogoutUrl($config, $discoveryDocument));
+        $this->assertSame('https://sso.example.test/logout?client_id=phpmyfaq', $client->buildLogoutUrl(
+            $config,
+            $discoveryDocument,
+        ));
     }
 
     public function testExchangeAuthorizationCodeThrowsOnHttpError(): void

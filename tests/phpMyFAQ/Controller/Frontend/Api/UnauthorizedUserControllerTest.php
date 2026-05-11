@@ -214,12 +214,13 @@ class UnauthorizedUserControllerTest extends TestCase
         $capturedMessage = null;
         $mail = $this->createMock(Mail::class);
         $mail->expects($this->once())->method('addTo')->with('real@example.com');
-        $mail->expects($this->once())->method('send')->willReturnCallback(
-            function () use ($mail, &$capturedMessage): int {
+        $mail
+            ->expects($this->once())
+            ->method('send')
+            ->willReturnCallback(function () use ($mail, &$capturedMessage): int {
                 $capturedMessage = $mail->message;
                 return 1;
-            },
-        );
+            });
 
         $controller = $this->makeController($user, $mail);
         $response = $controller->requestReset($this->jsonRequest([

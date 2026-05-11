@@ -361,9 +361,7 @@ class FaqTest extends TestCase
         $row = new stdClass();
         $row->id = 123;
 
-        $this->mockDb
-            ->method('fetchObject')
-            ->willReturn($row);
+        $this->mockDb->method('fetchObject')->willReturn($row);
 
         $this->mockDb
             ->expects($this->exactly(2))

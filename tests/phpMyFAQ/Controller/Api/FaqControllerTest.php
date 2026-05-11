@@ -100,7 +100,8 @@ class FaqControllerTest extends TestCase
 
     /**
      * @throws Exception
-     */ public function testGetByCategoryIdReturnsJsonResponse(): void
+     */
+    public function testGetByCategoryIdReturnsJsonResponse(): void
     {
         $request = new Request();
         $request->attributes->set('categoryId', '1');
@@ -119,7 +120,8 @@ class FaqControllerTest extends TestCase
 
     /**
      * @throws Exception
-     */ public function testGetByIdReturnsJsonResponse(): void
+     */
+    public function testGetByIdReturnsJsonResponse(): void
     {
         $request = new Request();
         $request->attributes->set('faqId', '1');
@@ -139,7 +141,8 @@ class FaqControllerTest extends TestCase
 
     /**
      * @throws \Exception
-     */ public function testGetByTagIdReturnsJsonResponse(): void
+     */
+    public function testGetByTagIdReturnsJsonResponse(): void
     {
         $request = new Request();
         $request->attributes->set('tagId', '1');
@@ -158,7 +161,8 @@ class FaqControllerTest extends TestCase
 
     /**
      * @throws Exception
-     */ public function testGetPopularReturnsJsonResponse(): void
+     */
+    public function testGetPopularReturnsJsonResponse(): void
     {
         $controller = new FaqController(
             $this->createStub(Faq::class),
@@ -181,7 +185,8 @@ class FaqControllerTest extends TestCase
 
     /**
      * @throws Exception
-     */ public function testGetLatestReturnsJsonResponse(): void
+     */
+    public function testGetLatestReturnsJsonResponse(): void
     {
         $controller = new FaqController(
             $this->createStub(Faq::class),
@@ -204,7 +209,8 @@ class FaqControllerTest extends TestCase
 
     /**
      * @throws Exception
-     */ public function testGetTrendingReturnsJsonResponse(): void
+     */
+    public function testGetTrendingReturnsJsonResponse(): void
     {
         $controller = new FaqController(
             $this->createStub(Faq::class),
@@ -227,7 +233,8 @@ class FaqControllerTest extends TestCase
 
     /**
      * @throws Exception
-     */ public function testGetStickyReturnsJsonResponse(): void
+     */
+    public function testGetStickyReturnsJsonResponse(): void
     {
         $controller = new FaqController(
             $this->createStub(Faq::class),
@@ -250,7 +257,8 @@ class FaqControllerTest extends TestCase
 
     /**
      * @throws Exception
-     */ public function testListReturnsJsonResponse(): void
+     */
+    public function testListReturnsJsonResponse(): void
     {
         $controller = new FaqController(
             $this->createStub(Faq::class),
@@ -267,7 +275,8 @@ class FaqControllerTest extends TestCase
     /**
      * @throws Exception
      * @throws \JsonException
-     */ public function testCreateRequiresValidToken(): void
+     */
+    public function testCreateRequiresValidToken(): void
     {
         $requestData = json_encode([
             'language' => 'en',
@@ -297,7 +306,8 @@ class FaqControllerTest extends TestCase
     /**
      * @throws Exception
      * @throws \JsonException
-     */ public function testUpdateRequiresValidToken(): void
+     */
+    public function testUpdateRequiresValidToken(): void
     {
         $requestData = json_encode([
             'faq-id' => 1,

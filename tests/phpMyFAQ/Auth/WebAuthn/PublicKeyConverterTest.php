@@ -11,7 +11,8 @@ class PublicKeyConverterTest extends TestCase
 {
     /**
      * @throws Exception
-     */ public function testFromCoseToPkcsReturnsNullWhenAlgIsMissing(): void
+     */
+    public function testFromCoseToPkcsReturnsNullWhenAlgIsMissing(): void
     {
         $encoded = CBOREncoder::encode([]);
 
@@ -20,7 +21,8 @@ class PublicKeyConverterTest extends TestCase
 
     /**
      * @throws Exception
-     */ public function testFromCoseToPkcsReturnsNullForUnsupportedAlgorithm(): void
+     */
+    public function testFromCoseToPkcsReturnsNullForUnsupportedAlgorithm(): void
     {
         $encoded = CBOREncoder::encode([3 => 123456]);
 

@@ -23,7 +23,8 @@ class CreateHashesCommandTest extends TestCase
     /**
      * @throws ExceptionInterface
      * @throws \JsonException
-     */ public function testCommandWritesHashesToFile(): void
+     */
+    public function testCommandWritesHashesToFile(): void
     {
         $system = $this->createMock(System::class);
         $filesystem = new Filesystem();
@@ -55,7 +56,8 @@ class CreateHashesCommandTest extends TestCase
     /**
      * @throws ExceptionInterface
      * @throws \JsonException
-     */ public function testCommandOutputsHashesWhenNoOutOption(): void
+     */
+    public function testCommandOutputsHashesWhenNoOutOption(): void
     {
         $hashes = json_encode(['created' => '2025-01-02T00:00:00Z'], JSON_THROW_ON_ERROR);
 
@@ -76,7 +78,8 @@ class CreateHashesCommandTest extends TestCase
 
     /**
      * @throws ExceptionInterface
-     */ public function testCommandFailsWhenRootMissing(): void
+     */
+    public function testCommandFailsWhenRootMissing(): void
     {
         $system = $this->createMock(System::class);
         $system->expects($this->never())->method('createHashes');

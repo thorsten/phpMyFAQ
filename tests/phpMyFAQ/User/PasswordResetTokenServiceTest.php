@@ -19,9 +19,7 @@ class PasswordResetTokenServiceTest extends TestCase
         $this->assertGreaterThan(time(), $token['expires']);
         $this->assertNotSame('', $token['signature']);
 
-        $this->assertTrue(
-            $service->verify(42, $token['expires'], $token['signature'], 'secret-key'),
-        );
+        $this->assertTrue($service->verify(42, $token['expires'], $token['signature'], 'secret-key'));
     }
 
     public function testVerifyRejectsExpiredToken(): void
@@ -38,9 +36,7 @@ class PasswordResetTokenServiceTest extends TestCase
         $service = new PasswordResetTokenService();
         $token = $service->issue(42, 'secret-key');
 
-        $this->assertFalse(
-            $service->verify(43, $token['expires'], $token['signature'], 'secret-key'),
-        );
+        $this->assertFalse($service->verify(43, $token['expires'], $token['signature'], 'secret-key'));
     }
 
     public function testVerifyRejectsTamperedSignature(): void
@@ -48,9 +44,7 @@ class PasswordResetTokenServiceTest extends TestCase
         $service = new PasswordResetTokenService();
         $token = $service->issue(42, 'secret-key');
 
-        $this->assertFalse(
-            $service->verify(42, $token['expires'], 'deadbeef', 'secret-key'),
-        );
+        $this->assertFalse($service->verify(42, $token['expires'], 'deadbeef', 'secret-key'));
     }
 
     public function testVerifyRejectsAfterPasswordKeyChange(): void
@@ -58,9 +52,7 @@ class PasswordResetTokenServiceTest extends TestCase
         $service = new PasswordResetTokenService();
         $token = $service->issue(42, 'old-key');
 
-        $this->assertFalse(
-            $service->verify(42, $token['expires'], $token['signature'], 'new-key'),
-        );
+        $this->assertFalse($service->verify(42, $token['expires'], $token['signature'], 'new-key'));
     }
 
     public function testVerifyRejectsEmptyInputs(): void

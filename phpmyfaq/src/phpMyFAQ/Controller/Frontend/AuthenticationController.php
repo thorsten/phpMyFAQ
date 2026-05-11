@@ -48,7 +48,8 @@ final class AuthenticationController extends AbstractFrontController
      * @throws Exception
      * @throws LoaderError
      * @throws \Exception
-     */ #[Route(path: '/login', name: 'public.auth.login', methods: ['GET'])]
+     */
+    #[Route(path: '/login', name: 'public.auth.login', methods: ['GET'])]
     public function login(Request $request): Response
     {
         $this->userSession->setCurrentUser($this->currentUser);

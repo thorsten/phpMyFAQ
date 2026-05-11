@@ -135,7 +135,8 @@ class BackupTest extends TestCase
 
     /**
      * @throws SodiumException
-     */ public function testCreateBackupWithTablePrefix(): void
+     */
+    public function testCreateBackupWithTablePrefix(): void
     {
         $this->mockDb->method('nextId')->willReturn(1);
         $this->mockDb->method('escape')->willReturnArgument(0);
@@ -164,7 +165,8 @@ class BackupTest extends TestCase
 
     /**
      * @throws SodiumException
-     */ public function testCreateBackupEscapesInput(): void
+     */
+    public function testCreateBackupEscapesInput(): void
     {
         $this->mockDb->method('nextId')->willReturn(1);
         $this->mockDb
@@ -182,7 +184,8 @@ class BackupTest extends TestCase
 
     /**
      * @throws SodiumException
-     */ public function testVerifyBackupWithNonExistentFile(): void
+     */
+    public function testVerifyBackupWithNonExistentFile(): void
     {
         $this->mockDb->method('escape')->willReturnArgument(0);
         $this->mockDb->method('query')->willReturn(true);
@@ -195,7 +198,8 @@ class BackupTest extends TestCase
 
     /**
      * @throws SodiumException
-     */ public function testVerifyBackupWithValidData(): void
+     */
+    public function testVerifyBackupWithValidData(): void
     {
         // Create mock database result
         $mockResult = new stdClass();
@@ -254,7 +258,8 @@ class BackupTest extends TestCase
 
     /**
      * @throws \Exception
-     */ public function testGetBackupTableNamesForDataBackup(): void
+     */
+    public function testGetBackupTableNamesForDataBackup(): void
     {
         $mockTables = [
             'faqconfig',
@@ -277,7 +282,8 @@ class BackupTest extends TestCase
 
     /**
      * @throws \Exception
-     */ public function testGetBackupTableNamesForLogsBackup(): void
+     */
+    public function testGetBackupTableNamesForLogsBackup(): void
     {
         $mockTables = [
             'faqconfig',
@@ -300,7 +306,8 @@ class BackupTest extends TestCase
 
     /**
      * @throws \Exception
-     */ public function testGetBackupTableNamesWithEmptyTableList(): void
+     */
+    public function testGetBackupTableNamesWithEmptyTableList(): void
     {
         $this->mockDb->method('getTableNames')->willReturn([]);
 
@@ -311,7 +318,8 @@ class BackupTest extends TestCase
 
     /**
      * @throws \Exception
-     */ public function testGetBackupTableNamesWithWhitespaceInTableNames(): void
+     */
+    public function testGetBackupTableNamesWithWhitespaceInTableNames(): void
     {
         $mockTables = [
             '  faqconfig  ', // With whitespace
@@ -350,7 +358,8 @@ class BackupTest extends TestCase
 
     /**
      * @throws SodiumException
-     */ public function testCreateBackupDateFormat(): void
+     */
+    public function testCreateBackupDateFormat(): void
     {
         $this->mockDb->method('nextId')->willReturn(1);
         $this->mockDb->method('escape')->willReturnArgument(0);
@@ -666,7 +675,8 @@ class BackupTest extends TestCase
 
     /**
      * @throws SodiumException
-     */ public function testExportForDataBackup(): void
+     */
+    public function testExportForDataBackup(): void
     {
         $mockTables = ['faqconfig', 'faqdata'];
         $mockQueries = ['INSERT INTO faqconfig VALUES (1);'];
@@ -688,7 +698,8 @@ class BackupTest extends TestCase
 
     /**
      * @throws SodiumException
-     */ public function testExportForLogsBackup(): void
+     */
+    public function testExportForLogsBackup(): void
     {
         $mockTables = ['faqadminlog', 'faqsessions'];
         $mockQueries = ['INSERT INTO faqadminlog VALUES (1);'];
@@ -708,7 +719,8 @@ class BackupTest extends TestCase
 
     /**
      * @throws SodiumException
-     */ public function testExportForContentBackupThrowsException(): void
+     */
+    public function testExportForContentBackupThrowsException(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('To be implemented');
