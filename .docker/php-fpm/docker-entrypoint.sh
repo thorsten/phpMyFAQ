@@ -75,5 +75,16 @@ fi
   echo "opcache.fast_shutdown=0"
 } | tee $PHP_INI_DIR/conf.d/opcache-recommended.ini
 
+#=== Configure php-fpm pool ===
+{
+  echo "[www]"
+  echo "pm = dynamic"
+  echo "pm.max_children = 50"
+  echo "pm.start_servers = 5"
+  echo "pm.min_spare_servers = 5"
+  echo "pm.max_spare_servers = 15"
+  echo "pm.max_requests = 1000"
+} | tee /usr/local/etc/php-fpm.d/zz-pool.conf
+
 #=== Start php-fpm ===
 exec docker-php-entrypoint php-fpm
