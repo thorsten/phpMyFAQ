@@ -26,7 +26,8 @@ class ContentTranslationServiceTest extends TestCase
 
     /**
      * @throws TranslationException
-     */ public function testTranslateFaqWithAllFields(): void
+     */
+    public function testTranslateFaqWithAllFields(): void
     {
         $fields = [
             'question' => 'What is phpMyFAQ?',
@@ -62,7 +63,8 @@ class ContentTranslationServiceTest extends TestCase
 
     /**
      * @throws TranslationException
-     */ public function testTranslateFaqWithPartialFields(): void
+     */
+    public function testTranslateFaqWithPartialFields(): void
     {
         $fields = [
             'question' => 'What is phpMyFAQ?',
@@ -85,7 +87,8 @@ class ContentTranslationServiceTest extends TestCase
 
     /**
      * @throws TranslationException
-     */ public function testTranslateFaqWithEmptyFields(): void
+     */
+    public function testTranslateFaqWithEmptyFields(): void
     {
         $fields = [
             'question' => '',
@@ -115,7 +118,8 @@ class ContentTranslationServiceTest extends TestCase
 
     /**
      * @throws TranslationException
-     */ public function testTranslateCustomPageWithAllFields(): void
+     */
+    public function testTranslateCustomPageWithAllFields(): void
     {
         $fields = [
             'pageTitle' => 'About Us',
@@ -171,7 +175,8 @@ class ContentTranslationServiceTest extends TestCase
 
     /**
      * @throws TranslationException
-     */ public function testTranslateCategoryWithAllFields(): void
+     */
+    public function testTranslateCategoryWithAllFields(): void
     {
         $fields = [
             'name' => 'General Questions',
@@ -209,7 +214,8 @@ class ContentTranslationServiceTest extends TestCase
 
     /**
      * @throws TranslationException
-     */ public function testTranslateNewsWithAllFields(): void
+     */
+    public function testTranslateNewsWithAllFields(): void
     {
         $fields = [
             'header' => 'New Release Available',

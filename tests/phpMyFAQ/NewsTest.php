@@ -118,7 +118,8 @@ class NewsTest extends TestCase
 
     /**
      * @throws \Exception
-     */ public function testGetAll(): void
+     */
+    public function testGetAll(): void
     {
         $mockRow = new stdClass();
         $mockRow->id = 1;
@@ -141,7 +142,8 @@ class NewsTest extends TestCase
 
     /**
      * @throws \Exception
-     */ public function testGetAllShowArchive(): void
+     */
+    public function testGetAllShowArchive(): void
     {
         $mockRow = new stdClass();
         $mockRow->id = 1;

@@ -44,7 +44,8 @@ final class GlossaryController extends AbstractFrontController
      * @throws Exception
      * @throws LoaderError
      * @throws \Exception
-     */ #[Route(path: '/glossary.html', name: 'public.glossary', methods: ['GET'])]
+     */
+    #[Route(path: '/glossary.html', name: 'public.glossary', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->faqSession->setCurrentUser($this->currentUser);

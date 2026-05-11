@@ -332,7 +332,8 @@ final class UpdateRunner
      * @throws \phpMyFAQ\Core\Exception
      * @throws ClientExceptionInterface
      * @throws \JsonException
-     */ private function taskDownloadPackage(SymfonyStyle $symfonyStyle): int
+     */
+    private function taskDownloadPackage(SymfonyStyle $symfonyStyle): int
     {
         $upgrade = new Upgrade($this->system, $this->configuration);
         $pathToPackage = $upgrade->downloadPackage($this->version);

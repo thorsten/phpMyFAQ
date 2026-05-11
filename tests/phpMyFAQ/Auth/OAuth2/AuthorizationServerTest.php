@@ -116,7 +116,10 @@ class AuthorizationServerTest extends TestCase
             $configuration->method('get')->willReturn($value);
             $server = new AuthorizationServer($configuration);
 
-            $this->assertTrue($server->isEnabled(), sprintf('Failed to recognize %s as enabled', var_export($value, true)));
+            $this->assertTrue($server->isEnabled(), sprintf('Failed to recognize %s as enabled', var_export(
+                $value,
+                true,
+            )));
         }
     }
 
@@ -127,7 +130,10 @@ class AuthorizationServerTest extends TestCase
             $configuration->method('get')->willReturn($value);
             $server = new AuthorizationServer($configuration);
 
-            $this->assertFalse($server->isEnabled(), sprintf('Wrongly recognized %s as enabled', var_export($value, true)));
+            $this->assertFalse($server->isEnabled(), sprintf('Wrongly recognized %s as enabled', var_export(
+                $value,
+                true,
+            )));
         }
     }
 

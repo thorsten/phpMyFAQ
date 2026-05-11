@@ -74,7 +74,8 @@ class RegistrationControllerTest extends TestCase
      * @throws Exception
      * @throws TransportExceptionInterface
      * @throws \JsonException
-     */ public function testCreateReturnsJsonResponse(): void
+     */
+    public function testCreateReturnsJsonResponse(): void
     {
         $requestData = json_encode([
             'username' => 'testuser',
@@ -94,7 +95,8 @@ class RegistrationControllerTest extends TestCase
      * @throws Exception
      * @throws TransportExceptionInterface
      * @throws \JsonException
-     */ public function testCreateRequiresValidToken(): void
+     */
+    public function testCreateRequiresValidToken(): void
     {
         $requestData = json_encode([
             'username' => 'testuser',
@@ -114,7 +116,8 @@ class RegistrationControllerTest extends TestCase
      * @throws TransportExceptionInterface
      * @throws Exception
      * @throws \JsonException
-     */ public function testCreateRequiresAllRequiredFields(): void
+     */
+    public function testCreateRequiresAllRequiredFields(): void
     {
         $requestData = json_encode([
             'username' => 'testuser',
@@ -131,7 +134,8 @@ class RegistrationControllerTest extends TestCase
      * @throws TransportExceptionInterface
      * @throws Exception
      * @throws \JsonException
-     */ public function testCreateValidatesEmailFormat(): void
+     */
+    public function testCreateValidatesEmailFormat(): void
     {
         $requestData = json_encode([
             'username' => 'testuser',
@@ -151,7 +155,8 @@ class RegistrationControllerTest extends TestCase
      * @throws TransportExceptionInterface
      * @throws Exception
      * @throws \JsonException
-     */ public function testCreateWithInvalidJsonThrowsException(): void
+     */
+    public function testCreateWithInvalidJsonThrowsException(): void
     {
         $requestData = 'invalid json';
 
@@ -166,7 +171,8 @@ class RegistrationControllerTest extends TestCase
      * @throws Exception
      * @throws TransportExceptionInterface
      * @throws \JsonException
-     */ public function testCreateWithMissingUsername(): void
+     */
+    public function testCreateWithMissingUsername(): void
     {
         $requestData = json_encode([
             'fullname' => 'Test User',
@@ -185,7 +191,8 @@ class RegistrationControllerTest extends TestCase
      * @throws TransportExceptionInterface
      * @throws Exception
      * @throws \JsonException
-     */ public function testCreateWithMissingFullname(): void
+     */
+    public function testCreateWithMissingFullname(): void
     {
         $requestData = json_encode([
             'username' => 'testuser',
@@ -204,7 +211,8 @@ class RegistrationControllerTest extends TestCase
      * @throws Exception
      * @throws TransportExceptionInterface
      * @throws \JsonException
-     */ public function testCreateWithMissingEmail(): void
+     */
+    public function testCreateWithMissingEmail(): void
     {
         $requestData = json_encode([
             'username' => 'testuser',
@@ -238,7 +246,8 @@ class RegistrationControllerTest extends TestCase
      * @throws Exception
      * @throws TransportExceptionInterface
      * @throws \JsonException
-     */ public function testCreateWithEmptyUsername(): void
+     */
+    public function testCreateWithEmptyUsername(): void
     {
         $requestData = json_encode([
             'username' => '',
@@ -258,7 +267,8 @@ class RegistrationControllerTest extends TestCase
      * @throws Exception
      * @throws TransportExceptionInterface
      * @throws \JsonException
-     */ public function testCreateWithEmptyFullname(): void
+     */
+    public function testCreateWithEmptyFullname(): void
     {
         $requestData = json_encode([
             'username' => 'testuser',
@@ -278,7 +288,8 @@ class RegistrationControllerTest extends TestCase
      * @throws TransportExceptionInterface
      * @throws Exception
      * @throws \JsonException
-     */ public function testCreateWithEmptyEmail(): void
+     */
+    public function testCreateWithEmptyEmail(): void
     {
         $requestData = json_encode([
             'username' => 'testuser',
