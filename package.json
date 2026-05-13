@@ -73,7 +73,7 @@
     "@eslint/js": "9.39.4",
     "@types/bootstrap": "5.2.10",
     "@types/highlightjs": "9.12.6",
-    "@types/jsdom": "28.0.1",
+    "@types/jsdom": "28.0.3",
     "@types/masonry-layout": "4.2.8",
     "@types/node": "25.6.2",
     "@types/sortablejs": "1.15.9",
