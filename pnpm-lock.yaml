@@ -59,8 +59,8 @@ devDependencies:
     specifier: 21.0.1
     version: 21.0.1(@types/node@25.6.2)(typescript@6.0.3)
   '@commitlint/config-conventional':
-    specifier: 21.0.0
-    version: 21.0.0
+    specifier: 21.0.1
+    version: 21.0.1
   '@eslint/js':
     specifier: 9.39.4
     version: 9.39.4
@@ -1275,11 +1275,11 @@ packages:
       - typescript
     dev: true
 
-  /@commitlint/config-conventional@21.0.0:
-    resolution: {integrity: sha512-QJX/rPK4Yu3f5J4OCIBy5aXq2e0EEdwSDFZ3NQvFAXTm3gs12ipyZ+yjhZxm3hHn6DB8wuv3zhFTL1I2tYzUBA==}
+  /@commitlint/config-conventional@21.0.1:
+    resolution: {integrity: sha512-gRorrkfWOh/+V5X8GYWWbQvrzPczopGMS4CCNrQdHkK4xWElv82BDvIsDhJZWTlI7TazOlYea6VATufCsFs+sw==}
     engines: {node: '>=22.12.0'}
     dependencies:
-      '@commitlint/types': 21.0.0
+      '@commitlint/types': 21.0.1
       conventional-changelog-conventionalcommits: 9.3.1
     dev: true
 
@@ -1406,14 +1406,6 @@ packages:
     engines: {node: '>=22.12.0'}
     dependencies:
       escalade: 3.2.0
-    dev: true
-
-  /@commitlint/types@21.0.0:
-    resolution: {integrity: sha512-6nEz+M7I90iix4sviA8NLwskOuyt0M98KUU2aYgiKbn46jMSxUm1l2ACtzRd9ec+y38aKyJhW4Fp6NW0z35kJQ==}
-    engines: {node: '>=22.12.0'}
-    dependencies:
-      conventional-commits-parser: 6.4.0
-      picocolors: 1.1.1
     dev: true
 
   /@commitlint/types@21.0.1:
