@@ -42,8 +42,9 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated to Vite v8 (Thorsten)
 - migrated experimental MCP Server to mcp/sdk (Thorsten)
 
-### phpMyFAQ v4.1.3 – unreleased
+### phpMyFAQ v4.1.3 – 2026-05-14
 
+- fixed security vulnerabilities (Thorsten)
 - updated third party dependencies (Thorsten)
 - fixed bugs (Thorsten)
 
@@ -316,7 +317,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added verification of backup files (Thorsten)
 - added option to disable questions and notifications (Thorsten)
 - added new options for more flexibility (Jan Harms)
-- added a new mobile first, touch-friendly default layout (Thorsten)
+- added a new mobile-first, touch-friendly default layout (Thorsten)
 - added HTTPS support for local Docker development (Thorsten)
 - added Symfony HttpFoundation (Thorsten)
 - added Monolog v3 as logging solution (Thorsten)
