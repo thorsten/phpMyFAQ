@@ -206,7 +206,7 @@ $routesConfig = [
     'admin.api.media.browser' => [
         'path' => '/media-browser',
         'controller' => [MediaBrowserController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'POST'
     ],
     // Dashboard API
     'admin.api.dashboard.topten' => [
@@ -416,13 +416,13 @@ $routesConfig = [
     'admin.api.content.tags.id' => [
         'path' => '/content/tags/{tagId}',
         'controller' => [TagController::class, 'delete'],
-        'methods' => 'GET'
+        'methods' => 'DELETE'
     ],
     // Update API
     'admin.api.health-check' => [
         'path' => '/health-check',
         'controller' => [UpdateController::class, 'healthCheck'],
-        'methods' => 'POST'
+        'methods' => 'GET'
     ],
     'admin.api.versions' => [
         'path' => '/versions',

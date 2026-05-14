@@ -4,7 +4,6 @@ services:
 
   mariadb:
     image: mariadb:latest
-    restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=iop
       - MYSQL_DATABASE=phpmyfaq

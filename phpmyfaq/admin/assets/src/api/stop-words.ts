@@ -50,7 +50,7 @@ export const postStopWord = async (
 
 export const removeStopWord = async (csrf: string, stopWordId: number, stopWordLanguage: string): Promise<unknown> => {
   const response = await fetch('./api/stopword/delete', {
-    method: 'POST',
+    method: 'DELETE',
     headers: {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',

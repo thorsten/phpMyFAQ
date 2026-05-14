@@ -66,7 +66,7 @@ describe('Upgrade API', (): void => {
     const result = await checkForUpdates();
     expect(result).toEqual(mockResponse);
     expect(fetch).toHaveBeenCalledWith('./api/update-check', {
-      method: 'POST',
+      method: 'GET',
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',

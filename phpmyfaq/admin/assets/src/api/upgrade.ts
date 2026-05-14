@@ -51,7 +51,7 @@ export const activateMaintenanceMode = async (csrfToken: string): Promise<Respon
 
 export const checkForUpdates = async (): Promise<ResponseData> => {
   const response: Response = await fetch('./api/update-check', {
-    method: 'POST',
+    method: 'GET',
     headers: {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
