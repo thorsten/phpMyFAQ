@@ -11,6 +11,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -171,6 +172,130 @@ final class CategoryControllerTest extends TestCase
         $result = $this->invokePrivateMethod($controller, 'getCategoryImageUrl', [$entity]);
 
         self::assertStringEndsWith('/content/user/images/category.png', $result);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testGetSubCategoryContentReturnsNullWhenRecordsExistAndNoChildren(): void
+    {
+        $controller = $this->createController();
+        $category = $this->createMock(Category::class);
+        $category->expects(self::once())->method('getChildNodes')->with(5)->willReturn([]);
+
+        $records = '<p>existing faq list</p>';
+        $result = $this->invokePrivateMethod(
+            $controller,
+            'getSubCategoryContent',
+            [$category, 5, &$records],
+        );
+
+        self::assertNull($result);
+        self::assertSame('<p>existing faq list</p>', $records);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testGetSubCategoryContentPromotesCategoryTreeWhenRecordsEmptyAndChildrenExist(): void
+    {
+        $categoryHelper = $this->createMock(CategoryHelper::class);
+        $categoryHelper->expects(self::once())
+            ->method('renderCategoryTree')
+            ->with(5)
+            ->willReturn('<ul class="pmf-category-overview">tree</ul>');
+
+        $controller = $this->createTestableController($categoryHelper);
+
+        $category = $this->createMock(Category::class);
+        $category->expects(self::once())->method('getChildNodes')->with(5)->willReturn([10 => ['id' => 10]]);
+
+        $records = '';
+        $result = $this->invokePrivateMethod(
+            $controller,
+            'getSubCategoryContent',
+            [$category, 5, &$records],
+        );
+
+        self::assertNull($result);
+        self::assertSame('<ul class="pmf-category-overview">tree</ul>', $records);
+        self::assertStringNotContainsString('alert-info', $records);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testGetSubCategoryContentRendersAlertWhenRecordsEmptyAndNoChildren(): void
+    {
+        $categoryHelper = $this->createMock(CategoryHelper::class);
+        $categoryHelper->expects(self::never())->method('renderCategoryTree');
+
+        $controller = $this->createTestableController($categoryHelper);
+
+        $category = $this->createMock(Category::class);
+        $category->expects(self::once())->method('getChildNodes')->with(5)->willReturn([]);
+
+        $records = '';
+        $result = $this->invokePrivateMethod(
+            $controller,
+            'getSubCategoryContent',
+            [$category, 5, &$records],
+        );
+
+        self::assertNull($result);
+        self::assertStringContainsString('alert-info', $records);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testGetSubCategoryContentReturnsTreeWhenRecordsExistAndChildrenExist(): void
+    {
+        $categoryHelper = $this->createMock(CategoryHelper::class);
+        $categoryHelper->expects(self::once())
+            ->method('renderCategoryTree')
+            ->with(5)
+            ->willReturn('<ul>sidebar-tree</ul>');
+
+        $controller = $this->createTestableController($categoryHelper);
+
+        $category = $this->createMock(Category::class);
+        $category->expects(self::once())->method('getChildNodes')->with(5)->willReturn([10 => ['id' => 10]]);
+
+        $records = '<p>existing</p>';
+        $result = $this->invokePrivateMethod(
+            $controller,
+            'getSubCategoryContent',
+            [$category, 5, &$records],
+        );
+
+        self::assertSame('<ul>sidebar-tree</ul>', $result);
+        self::assertSame('<p>existing</p>', $records);
+    }
+
+    /**
+     * Creates a controller subclass that stubs the DB-touching sub-category
+     * preparation and exposes an injectable CategoryHelper for assertions.
+     *
+     * @throws \ReflectionException
+     */
+    private function createTestableController(CategoryHelper $categoryHelper): CategoryController
+    {
+        $controller = new class (
+            $this->createMock(UserSession::class),
+            $this->createMock(Category::class),
+            $this->createMock(Faq::class),
+        ) extends CategoryController {
+            protected function prepareSubCategoryHelper(int $selectedCategoryId): void
+            {
+            }
+        };
+
+        $reflection = new \ReflectionClass(CategoryController::class);
+        $helperProperty = $reflection->getProperty('categoryHelper');
+        $helperProperty->setValue($controller, $categoryHelper);
+
+        return $controller;
     }
 
     private function createController(): CategoryController
