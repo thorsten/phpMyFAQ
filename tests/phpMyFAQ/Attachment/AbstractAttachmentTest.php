@@ -246,7 +246,8 @@ class AbstractAttachmentTest extends TestCase
 
     /**
      * @throws \ReflectionException
-     */ public function testSaveMetaNewAttachment(): void
+     */
+    public function testSaveMetaNewAttachment(): void
     {
         // Setup properties
         $reflection = new ReflectionClass($this->attachment);

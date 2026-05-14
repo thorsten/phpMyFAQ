@@ -16,7 +16,8 @@ class TranslationTest extends TestCase
 {
     /**
      * @throws Exception
-     */ protected function setUp(): void
+     */
+    protected function setUp(): void
     {
         parent::setUp();
 

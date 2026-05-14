@@ -147,7 +147,8 @@ readonly class Backup
 
     /**
      * @throws \Exception
-     */ public function getBackupTableNames(BackupType $backupType): string
+     */
+    public function getBackupTableNames(BackupType $backupType): string
     {
         $tables = $this->configuration->getDb()->getTableNames(Database::getTablePrefix());
         $tableNames = '';

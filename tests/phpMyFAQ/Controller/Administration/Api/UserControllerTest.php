@@ -32,10 +32,8 @@ class UserControllerTest extends TestCase
         $_COOKIE = [];
     }
 
-    private function buildController(
-        Session $session,
-        CurrentUser $actingUser,
-    ): UserController {
+    private function buildController(Session $session, CurrentUser $actingUser): UserController
+    {
         $controller = (new ReflectionClass(UserController::class))->newInstanceWithoutConstructor();
 
         $container = $this->createMock(ContainerBuilder::class);

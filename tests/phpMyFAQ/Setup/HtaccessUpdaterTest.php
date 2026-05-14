@@ -34,7 +34,8 @@ class HtaccessUpdaterTest extends TestCase
 
     /**
      * @throws Exception
-     */ public function testCreateBackup(): void
+     */
+    public function testCreateBackup(): void
     {
         // Create a test .htaccess file
         $originalContent = "RewriteEngine On\nRewriteBase /\n";

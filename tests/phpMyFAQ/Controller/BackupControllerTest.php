@@ -103,7 +103,8 @@ class BackupControllerTest extends TestCase
 
     /**
      * @throws \Exception
-     */ public function testRestoreThrowsWhenCsrfTokenInvalid(): void
+     */
+    public function testRestoreThrowsWhenCsrfTokenInvalid(): void
     {
         $this->expectException(UnauthorizedHttpException::class);
 

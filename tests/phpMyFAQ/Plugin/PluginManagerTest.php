@@ -28,7 +28,8 @@ class PluginManagerTest extends TestCase
 
     /**
      * @throws ReflectionException
-     */ public function testLoadPlugins(): void
+     */
+    public function testLoadPlugins(): void
     {
         $mockPluginPath = __DIR__ . '/MockPlugin.php';
         file_put_contents($mockPluginPath, file_get_contents(__DIR__ . '/MockPlugin.php'));
