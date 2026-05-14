@@ -34,7 +34,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class CategoryController extends AbstractFrontController
+class CategoryController extends AbstractFrontController
 {
     private CategoryHelper $categoryHelper;
 
@@ -216,19 +216,27 @@ final class CategoryController extends AbstractFrontController
     }
 
     /**
-     * Gets subcategory content if available
+     * Gets subcategory content if available. When the category has no directly
+     * assigned FAQ entries but has child categories, the rendered category tree
+     * is promoted into $records so visitors land on a useful overview instead of
+     * an empty-state message.
      */
     private function getSubCategoryContent(Category $category, int $selectedCategoryId, string &$records): ?string
     {
-        if ($records !== '' && !$category->getChildNodes($selectedCategoryId)) {
+        $childNodes = $category->getChildNodes($selectedCategoryId);
+        $hasChildren = is_countable($childNodes) && $childNodes !== [];
+
+        if ($records !== '' && !$hasChildren) {
             return null;
         }
 
-        $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
-        $subCategory = new Category($this->configuration, $currentGroups, true);
-        $subCategory->setUser($this->currentUser->getUserId());
-        $subCategory->transform($selectedCategoryId);
-        $this->categoryHelper->setConfiguration($this->configuration)->setCategory($subCategory);
+        $this->prepareSubCategoryHelper($selectedCategoryId);
+
+        if ($records === '' && $hasChildren) {
+            $records = $this->categoryHelper->renderCategoryTree($selectedCategoryId);
+
+            return null;
+        }
 
         if ($records === '') {
             $records = sprintf(
@@ -237,10 +245,21 @@ final class CategoryController extends AbstractFrontController
             );
         }
 
-        $childNodes = $category->getChildNodes($selectedCategoryId);
-        $hasChildren = is_countable($childNodes) && $childNodes !== [];
-
         return $hasChildren ? $this->categoryHelper->renderCategoryTree($selectedCategoryId) : null;
+    }
+
+    /**
+     * Prepares the category helper with a sub-category scoped to the selected
+     * category id. Extracted from getSubCategoryContent to keep the branching
+     * logic free of direct database side effects.
+     */
+    protected function prepareSubCategoryHelper(int $selectedCategoryId): void
+    {
+        $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
+        $subCategory = new Category($this->configuration, $currentGroups, true);
+        $subCategory->setUser($this->currentUser->getUserId());
+        $subCategory->transform($selectedCategoryId);
+        $this->categoryHelper->setConfiguration($this->configuration)->setCategory($subCategory);
     }
 
     /**
