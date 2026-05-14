@@ -15,13 +15,10 @@
 
 export const fetchCaptchaImage = async (action: string, timestamp: number): Promise<Response | undefined> => {
   try {
-    const response: Response = await fetch('api/captcha', {
-      method: 'POST',
+    const params = new URLSearchParams({ action, timestamp: String(timestamp) });
+    const response: Response = await fetch(`api/captcha?${params.toString()}`, {
+      method: 'GET',
       cache: 'no-cache',
-      body: JSON.stringify({
-        action,
-        timestamp,
-      }),
       redirect: 'follow',
       referrerPolicy: 'no-referrer',
     });

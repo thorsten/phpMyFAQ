@@ -22,7 +22,7 @@ describe('Elasticsearch API', () => {
 
       expect(result).toEqual(mockResponse);
       expect(globalThis.fetch).toHaveBeenCalledWith('./api/elasticsearch/some-action', {
-        method: 'GET',
+        method: 'POST',
         cache: 'no-cache',
         headers: {
           'Content-Type': 'application/json',

@@ -39,10 +39,9 @@ describe('handleReloadCaptcha', () => {
 
     await Promise.resolve();
 
-    expect(fetch).toHaveBeenCalledWith('api/captcha', {
-      body: '{"action":"refresh","timestamp":' + date + '}',
+    expect(fetch).toHaveBeenCalledWith(`api/captcha?action=refresh&timestamp=${date}`, {
       cache: 'no-cache',
-      method: 'POST',
+      method: 'GET',
       redirect: 'follow',
       referrerPolicy: 'no-referrer',
     });

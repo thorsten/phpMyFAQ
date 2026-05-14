@@ -22,7 +22,7 @@ describe('OpenSearch API', () => {
 
       expect(result).toEqual(mockResponse);
       expect(globalThis.fetch).toHaveBeenCalledWith('./api/opensearch/index', {
-        method: 'GET',
+        method: 'POST',
         cache: 'no-cache',
         headers: {
           'Content-Type': 'application/json',

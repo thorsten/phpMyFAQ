@@ -17,7 +17,7 @@ import { ElasticsearchResponse, Response } from '../interfaces';
 
 export const fetchOpenSearchAction = async (action: string): Promise<Response> => {
   const response = await fetch(`./api/opensearch/${action}`, {
-    method: 'GET',
+    method: 'POST',
     cache: 'no-cache',
     headers: {
       'Content-Type': 'application/json',
