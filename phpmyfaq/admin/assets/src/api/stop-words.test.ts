@@ -51,7 +51,7 @@ describe('Stop Words API', () => {
 
     const result = await removeStopWord('csrfToken', 1, 'en');
     expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('./api/stopword/delete', {
-      method: 'POST',
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },

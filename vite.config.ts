@@ -71,6 +71,12 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
+    environmentOptions: {
+      jsdom: {
+        url: 'http://localhost/',
+      },
+    },
+    setupFiles: ['./tests/vitest.setup.ts'],
     coverage: {
       provider: 'istanbul',
       reporter: ['text', 'html'],
