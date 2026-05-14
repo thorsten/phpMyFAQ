@@ -116,7 +116,7 @@ $PMF_LANG['err_VoteTooMuch'] = 'Emme laske kuin yhden arvostelun. Klikkaa täst�
 $PMF_LANG['err_noVote'] = 'Et arvostellut kysymystä! <a href="nojavascript...history.back();">Ole hyvä ja klikkaa tästä</a>, arvostellaksesi.';
 $PMF_LANG['err_noMailAdress'] = 'Sähköpostiosoitteesi ei ole oikein. <a href="nojavascript...history.back();">takaisin</a>';
 $PMF_LANG['err_sendMail'] = 'Vaadittavat kentät ovat nimesi, sähköposti osoitteesi ja kysymyksesi!';
-$PMF_LANG['help_search'] = 'Etsi tietueita: Tietueella kuten sana1 sana2 voit tehdä asiaan kuuluvan laskevan haun kahdella tai useammalla hakukriteerillä.Huomaa: Haku kriteerisi tulee olla ainakin 4 merkkiä pitkä tai muuten hakusi hylätään.';
+$PMF_LANG['help_search'] = 'Etsi tietueita: Tietueella kuten sana1 sana2 voit tehdä asiaan kuuluvan laskevan haun kahdella tai useammalla hakukriteerillä.Huomaa: Haku kriteerisi tulee olla ainakin 3 merkkiä pitkä tai muuten hakusi hylätään.';
 $PMF_LANG['ad'] = 'Ylläpito';
 $PMF_LANG['ad_menu_user_administration'] = 'Käyttäjät';
 $PMF_LANG['ad_menu_entry_aprove'] = 'Hyväksy kysymys';

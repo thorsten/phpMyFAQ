@@ -136,7 +136,7 @@ $PMF_LANG["err_noMailAdress"] = "Votre adresse e-mail est incorecte.";
 $PMF_LANG["err_sendMail"] = "Les champs requis sont  votre nom, votre adresse e-mail, votre question et, si requis, le code <a href=\"https://fr.wikipedia.org/wiki/Captcha\" title=\"En savoir plus sur les Captcha sur Wikipedia\" target=\"_blank\">Captcha</a> !";
 
 // Search help
-$PMF_LANG["help_search"] = "Recherche d'enregistrements : Avec une saisie comme Terme1 Terme2 il est possible de chercher plusieurs termes. Note : Votre critère de recherche doit contenir au moins 4 lettres sinon votre requête sera rejetée.";
+$PMF_LANG["help_search"] = "Recherche d'enregistrements : Avec une saisie comme Terme1 Terme2 il est possible de chercher plusieurs termes. Note : Votre critère de recherche doit contenir au moins 3 lettres sinon votre requête sera rejetée.";
 
 // Menu
 $PMF_LANG["ad"] = "SECTION ADMIN";

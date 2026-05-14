@@ -135,7 +135,7 @@ $PMF_LANG["err_noMailAdress"] = "E-mail adresiniz geçersiz.";
 $PMF_LANG["err_sendMail"] = "Doldurulması zorunlu alanlar adınız, e-mail adresiniz, sorunuz ve, eğer isteniyorsa <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Wikipediada Captcha hakkında daha fazlasını oku\" target=\"_blank\">Captcha</a> kodu!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "Arama ipuçları: Şunun gibi kelimeler kelime1 kelime2 you can do a relevance descending search for two or more search criterion.Önemli: aranacak sözcük en az 4 karakter uzunluğunda olmalıdır.";
+$PMF_LANG["help_search"] = "Arama ipuçları: Şunun gibi kelimeler kelime1 kelime2 you can do a relevance descending search for two or more search criterion.Önemli: aranacak sözcük en az 3 karakter uzunluğunda olmalıdır.";
 
 // Menu
 $PMF_LANG["ad"] = "Yönetim";

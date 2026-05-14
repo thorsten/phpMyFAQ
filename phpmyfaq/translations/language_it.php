@@ -115,7 +115,7 @@ $PMF_LANG['err_VoteTooMuch'] = 'Attenzione, hai gi&agrave votato: non registriam
 $PMF_LANG['err_noVote'] = 'Non hai votato! <a href=\"javascript:history.back();\">Per cortesia clicca qui</a>, per votare.';
 $PMF_LANG['err_noMailAdress'] = 'Il tuo indirizzo email non &egrave; corretto. <a href=\"javascript:history.back();\">indietro</a>';
 $PMF_LANG['err_sendMail'] = 'I campi richiesti sono il tuo nome, il tuo indirizzo email, gli indirizzi dei destinatari e, quando richiesto, il codice <a href=\"https://it.wikipedia.org/wiki/Captcha\" title=\"Vai alla definizione di Wikipedia\" target=\"_blank\">captcha</a> corretto! Per favore controlla i dati immessi.';
-$PMF_LANG['help_search'] = 'Cerca nelle FAQ: usando un criterio come \"<strong style=\"font-style: italic; color: Red;\">parola1 parola2\" puoi fare una ricerca ordinata per importanza per due (o piu\') chiavi di ricerca.Nota: la tua chiave deve essere composta da almeno 4 caratteri altrimenti potrebbe non essere accettata.';
+$PMF_LANG['help_search'] = 'Cerca nelle FAQ: usando un criterio come \"parola1 parola2\" puoi fare una ricerca ordinata per importanza per due (o piu\') chiavi di ricerca.Nota: la tua chiave deve essere composta da almeno 3 caratteri altrimenti potrebbe non essere accettata.';
 $PMF_LANG['ad'] = 'SEZIONE AMMINISTRAZIONE';
 $PMF_LANG['ad_menu_user_administration'] = 'Amministrazione Utenti';
 $PMF_LANG['ad_menu_entry_aprove'] = 'Approva FAQ';

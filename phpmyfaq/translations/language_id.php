@@ -134,7 +134,7 @@ $PMF_LANG["err_noMailAdress"] = "Alamat email anda tidak benar. <a href=\"javasc
 $PMF_LANG["err_sendMail"] = "Bagian yang harus diisi adalah Nama Anda, Alamat Email, Pertanyaan Anda dan, jika diminta, kode <a href=\"https://id.wikipedia.org/wiki/CAPTCHA\" title=\"lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "Pencarian materi: Dengan entri seperti kata1 kata2 anda bisa melakukan pencarian menurut relevansi atas dua atau lebih kata.Perhatian: Kriteria pencarian anda minimal berisi 4 huruf.";
+$PMF_LANG["help_search"] = "Pencarian materi: Dengan entri seperti kata1 kata2 anda bisa melakukan pencarian menurut relevansi atas dua atau lebih kata.Perhatian: Kriteria pencarian anda minimal berisi 3 huruf.";
 
 // Men?
 $PMF_LANG["ad"] = "BAGIAN ADMIN";

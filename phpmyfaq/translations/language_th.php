@@ -113,7 +113,7 @@ $PMF_LANG['err_VoteTooMuch'] = 'คุณไม่สามารถให้ค
 $PMF_LANG['err_noVote'] = 'คุณไม่สามารถให้คะแนนได้ <a href="nojavascript...history.back();">คลิ๊กที่นี้</a>, เพื่อให้คะแนน.';
 $PMF_LANG['err_noMailAdress'] = 'อีเมล์ของคุณไม่ถูกต้อง <a href="nojavascript...history.back();">กลับ</a>';
 $PMF_LANG['err_sendMail'] = 'ข้อมูลที่จำเป็น ชื่อ, อีเมล์, คำถาม และ รหัสตัวอักษร <a href="https://en.wikipedia.org/wiki/Captcha" title="รายละเอียดเกี่ยวกับ Captcha ใน Wikipedia" target="_blank">Captcha</a>!';
-$PMF_LANG['help_search'] = 'ค้นหาข้อมูล: ที่ตรงกับ คำที่1 คำที่2 คุณสามารถหาข้อมูลที่ตรงความต้องการได้มากที่สุด หากระบุคำที่ต้องการมากว่า 2 คำขึ้นไปคำแนะนำ: คุณจะต้องระบุคำที่มีความยาวมากกว่า 4 ตัวอักษรเท่านั้น';
+$PMF_LANG['help_search'] = 'ค้นหาข้อมูล: ที่ตรงกับ คำที่1 คำที่2 คุณสามารถหาข้อมูลที่ตรงความต้องการได้มากที่สุด หากระบุคำที่ต้องการมากว่า 2 คำขึ้นไปคำแนะนำ: คุณจะต้องระบุคำที่มีความยาวมากกว่า 3 ตัวอักษรเท่านั้น';
 $PMF_LANG['ad'] = 'ส่วนข้องผู้ดูแลระบบ';
 $PMF_LANG['ad_menu_user_administration'] = 'ผู้ใช้งาน';
 $PMF_LANG['ad_menu_entry_aprove'] = 'อนุมัติรายการ FAQ';

@@ -113,7 +113,7 @@ $PMF_LANG['err_VoteTooMuch'] = 'Nous ne comptons pas les doubles votes. Cliquez 
 $PMF_LANG['err_noVote'] = 'Vous n\'avez pas voté!';
 $PMF_LANG['err_noMailAdress'] = 'Votre adresse courriel n\'est pas correcte.';
 $PMF_LANG['err_sendMail'] = 'Les champs requis sont votre nom, votre adresse courriel et votre question!';
-$PMF_LANG['help_search'] = 'Ainsi, vous trouverez un article : Avec l\'entrée <b style="color: Red;">Terme1 Terme2</b> on peut chercher plusieurs termes.Note : Votre mot-clef doit contenir au moins 4 lettres.';
+$PMF_LANG['help_search'] = 'Ainsi, vous trouverez un article : Avec l\'entrée Terme1 Terme2 on peut chercher plusieurs termes.Note : Votre mot-clef doit contenir au moins 3 lettres.';
 $PMF_LANG['ad'] = 'SECTION ADMIN';
 $PMF_LANG['ad_menu_user_administration'] = 'Administration des utilisateurs';
 $PMF_LANG['ad_menu_entry_aprove'] = 'Approuver un article';
