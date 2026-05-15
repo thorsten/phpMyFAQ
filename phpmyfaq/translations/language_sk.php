@@ -134,7 +134,7 @@ $PMF_LANG["err_noMailAdress"] = "Váš e-mail je nesprávny. <a href=\"javascrip
 $PMF_LANG["err_sendMail"] = "Povinné polia sú Vaše meno, Váš e-mail, your question a, na požiadanie, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "Hľadanie záznamu: So vstupnými údajmi slovo1 slovo2 môžete vyhľadávať aj vzostupne pre dve alebo viac hľadaných výrazov.Poznámka: Hľadané výrazy musia mať aspoň 4 písmená a preto bude Vaša požiadavka zrušená.";
+$PMF_LANG["help_search"] = "Hľadanie záznamu: So vstupnými údajmi slovo1 slovo2 môžete vyhľadávať aj vzostupne pre dve alebo viac hľadaných výrazov.Poznámka: Hľadané výrazy musia mať aspoň 3 písmená a preto bude Vaša požiadavka zrušená.";
 
 // Menï¿½
 $PMF_LANG["ad"] = "SEKCIA PRE ADMINISTRÁTORA";

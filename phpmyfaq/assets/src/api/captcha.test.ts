@@ -25,10 +25,6 @@ describe('fetchCaptchaImage function', () => {
   test('should fetch captcha image successfully', async () => {
     const action: string = 'someAction';
     const timestamp: number = Date.now();
-    const requestBody = {
-      action,
-      timestamp,
-    };
     const mockResponse = {
       ok: true,
       json: async () => ({
@@ -43,10 +39,9 @@ describe('fetchCaptchaImage function', () => {
     const response = await fetchCaptchaImage(action, timestamp);
 
     // Assertions
-    expect(fetchMock).toHaveBeenCalledWith('api/captcha', {
-      method: 'POST',
+    expect(fetchMock).toHaveBeenCalledWith(`api/captcha?action=${action}&timestamp=${timestamp}`, {
+      method: 'GET',
       cache: 'no-cache',
-      body: JSON.stringify(requestBody),
       redirect: 'follow',
       referrerPolicy: 'no-referrer',
     });
@@ -60,10 +55,6 @@ describe('fetchCaptchaImage function', () => {
   test('should handle fetch error', async () => {
     const action: string = 'someAction';
     const timestamp: number = Date.now();
-    const requestBody = {
-      action,
-      timestamp,
-    };
     const errorMessage = 'Network error';
 
     // Mock fetch function to return a rejected Promise
@@ -73,10 +64,9 @@ describe('fetchCaptchaImage function', () => {
     await expect(fetchCaptchaImage(action, timestamp)).resolves.toEqual(undefined);
 
     // Assertions
-    expect(fetchMock).toHaveBeenCalledWith('api/captcha', {
-      method: 'POST',
+    expect(fetchMock).toHaveBeenCalledWith(`api/captcha?action=${action}&timestamp=${timestamp}`, {
+      method: 'GET',
       cache: 'no-cache',
-      body: JSON.stringify(requestBody),
       redirect: 'follow',
       referrerPolicy: 'no-referrer',
     });

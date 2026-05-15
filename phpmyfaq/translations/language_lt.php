@@ -134,7 +134,7 @@ $PMF_LANG["err_noMailAdress"] = "Jūsų el. pašto adresas yra neteisingas. <a h
 $PMF_LANG["err_sendMail"] = "Būtini laukai yra jūsų vardas, jūsų el. pašto adresas, jūsų klausimas ir, kai prašoma, <a href=\"https://lt.wikipedia.org/wiki/CAPTCHA\" title=\"Sužinokite daugiau apie CAPTCHA Vikipedijoje\" target=\"_blank\">CAPTCHA</a> kodas!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "Ieškoti įrašų: Su tokia paieška žodis1 žodis2 jūs galite ieškoti svarbumo mažėjimo tvarka pagal du ar daugiau paieškos kriterijų.Pastaba: Jūsų paieškos kriterijus turi būti bent 4 raidžių ilgio, kitu atveju užklausa bus atmesta.";
+$PMF_LANG["help_search"] = "Ieškoti įrašų: Su tokia paieška žodis1 žodis2 jūs galite ieškoti svarbumo mažėjimo tvarka pagal du ar daugiau paieškos kriterijų.Pastaba: Jūsų paieškos kriterijus turi būti bent 3 raidžių ilgio, kitu atveju užklausa bus atmesta.";
 
 // Men�
 $PMF_LANG["ad"] = "ADMINISTRAVIMO SEKCIJA";

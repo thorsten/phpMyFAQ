@@ -252,6 +252,12 @@ class Category
             ];
         }
 
+        foreach ($this->categoryCache->getCategoryNames() as $id => $row) {
+            $parentId = (int) ($row['parent_id'] ?? 0);
+            $categoryRef = $row;
+            $this->categoryCache->addChild($parentId, (int) $id, $categoryRef);
+        }
+
         return $categories;
     }
 

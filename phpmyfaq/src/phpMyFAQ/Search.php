@@ -78,7 +78,11 @@ class Search
      */
     public function search(string $searchTerm, bool $allLanguages = true): array
     {
-        if (is_numeric($searchTerm) && $this->configuration->get(item: 'search.searchForSolutionId')) {
+        if (
+            is_numeric($searchTerm)
+            && (int) $searchTerm >= PMF_SOLUTION_ID_START_VALUE
+            && $this->configuration->get(item: 'search.searchForSolutionId')
+        ) {
             return $this->searchDatabase($searchTerm, $allLanguages);
         }
 
@@ -127,7 +131,7 @@ class Search
     }
 
     /**
-     * The search function for the database powered full text search.
+     * The search function for the database powered full-text search.
      *
      * @param string $searchTerm Text/Number (solution id)
      * @param bool   $allLanguages true to search over all languages

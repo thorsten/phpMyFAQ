@@ -136,7 +136,7 @@ $PMF_LANG["err_noMailAdress"] = "Twój adres e-mail jest nieprawidłowy.";
 $PMF_LANG["err_sendMail"] = "Wymagane pola to Twoje imię, Twój adres email, Twoje pytanie oraz, na żądanie, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Przeczytaj więcej o Captcha w Wikipedii\" target=\"_blank\">Captcha</a> code!";
 
 // Search help
-$PMF_LANG["help_search"] = "Szukaj wpisów: Z wpisem typu word1 word2 możesz przeprowadzić wyszukiwanie według trafności malejąco dla dwóch lub więcej kryteriów wyszukiwania.Uwaga Twoje kryterium wyszukiwania musi składać się z co najmniej 4 liter, w przeciwnym razie Twoje zapytanie zostanie odrzucone.";
+$PMF_LANG["help_search"] = "Szukaj wpisów: Z wpisem typu word1 word2 możesz przeprowadzić wyszukiwanie według trafności malejąco dla dwóch lub więcej kryteriów wyszukiwania.Uwaga Twoje kryterium wyszukiwania musi składać się z co najmniej 3 liter, w przeciwnym razie Twoje zapytanie zostanie odrzucone.";
 
 // Menu
 $PMF_LANG["ad"] = "Administracja";

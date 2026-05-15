@@ -21,7 +21,7 @@ describe('fetchTranslations', () => {
 
     expect(data).toEqual(mockTranslations);
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(fetch).toHaveBeenCalledWith(`/api/translations/${locale}`, {
+    expect(fetch).toHaveBeenCalledWith(`api/translations/${locale}`, {
       method: 'GET',
       cache: 'no-cache',
       headers: {
@@ -39,7 +39,7 @@ describe('fetchTranslations', () => {
 
     await expect(fetchTranslations(locale)).rejects.toThrow('Unexpected end of JSON input');
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(fetch).toHaveBeenCalledWith(`/api/translations/${locale}`, {
+    expect(fetch).toHaveBeenCalledWith(`api/translations/${locale}`, {
       method: 'GET',
       cache: 'no-cache',
       headers: {
