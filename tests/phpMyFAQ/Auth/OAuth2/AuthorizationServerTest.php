@@ -20,6 +20,7 @@ class AuthorizationServerTest extends TestCase
     {
         foreach ($this->temporaryFiles as $file) {
             if (is_file($file)) {
+                // nosemgrep: php.lang.security.unlink-use.unlink-use - test-created temp file path
                 @unlink($file);
             }
         }
@@ -268,8 +269,8 @@ class AuthorizationServerTest extends TestCase
     {
         $privateKeyPath = tempnam(sys_get_temp_dir(), 'pmf-oauth-private-');
         $publicKeyPath = tempnam(sys_get_temp_dir(), 'pmf-oauth-public-');
-        copy(__DIR__ . '/../../../../.docker/cert-key.pem', $privateKeyPath);
-        copy(__DIR__ . '/../../../../.docker/cert.pem', $publicKeyPath);
+        copy(__DIR__ . '/../../../fixtures/oauth2/private.key', $privateKeyPath);
+        copy(__DIR__ . '/../../../fixtures/oauth2/public.key', $publicKeyPath);
         chmod($privateKeyPath, 0600);
         chmod($publicKeyPath, 0600);
 
