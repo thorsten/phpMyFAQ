@@ -111,3 +111,7 @@ nbproject/
 /blob-report/
 /playwright/.cache/
 /tests/.phpunit-bootstrap.lock
+
+# Local development TLS certificates (generate with mkcert)
+/.docker/cert.pem
+/.docker/cert-key.pem

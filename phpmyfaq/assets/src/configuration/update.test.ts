@@ -467,7 +467,8 @@ describe('handleDatabaseUpdate', () => {
     expect(alert.classList.contains('d-none')).toBe(false);
 
     const errorMessages = document.getElementById('error-messages') as HTMLElement;
-    expect(errorMessages.innerHTML).toBe('<p>Migration failed</p>');
+    expect(errorMessages.textContent).toBe('<p>Migration failed</p>');
+    expect(errorMessages.innerHTML).toBe('&lt;p&gt;Migration failed&lt;/p&gt;');
   });
 
   it('should show error alert on network failure', async () => {

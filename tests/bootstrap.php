@@ -16,6 +16,8 @@
  */
 
 use Composer\Autoload\ClassLoader;
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Setup\Installer;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
@@ -23,6 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 date_default_timezone_set('Europe/Berlin');
 
+// nosemgrep: php.lang.security.search-active-debug.search-active-debug - PHPUnit bootstrap, never production
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL & ~E_DEPRECATED);
@@ -128,6 +131,7 @@ Request::setTrustedHosts(['^.*$']); // Trust all hosts for testing
 
 if (!canReusePreparedTestDatabase($testDbAlias, $databaseConfigFile)) {
     if (file_exists($testDbAlias) && !is_dir($testDbAlias)) {
+        // nosemgrep: php.lang.security.unlink-use.unlink-use - fixed test database path
         @unlink($testDbAlias);
     }
 
@@ -148,3 +152,13 @@ if (!file_exists($databaseConfigFile)) {
 }
 
 require $databaseConfigFile;
+
+//
+// Initialize the global Configuration singleton so that tests relying on
+// Configuration::getConfigurationInstance() get a deterministic, database-backed
+// instance regardless of test execution order. Tests that need their own
+// Configuration still create one explicitly and override the singleton.
+//
+$bootstrapDbHandle = new Sqlite3();
+$bootstrapDbHandle->connect($testDbAlias, '', '');
+new Configuration($bootstrapDbHandle);

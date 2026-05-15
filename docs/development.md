@@ -347,6 +347,16 @@ It does not contain any code as the phpmyfaq folder is meant to be mounted as th
 
 For development purposes, you can start a full stack to run your current phpMyFAQ source code from your local repository.
 
+Before the first start, generate the local TLS certificate used by the
+`apache`, `nginx` and `frankenphp` containers. The certificate files
+(`.docker/cert.pem` and `.docker/cert-key.pem`) are not committed to the
+repository. Generate them with [mkcert](https://github.com/FiloSottile/mkcert):
+
+    $ mkcert -install
+    $ mkcert -cert-file .docker/cert.pem -key-file .docker/cert-key.pem localhost 127.0.0.1 ::1
+
+Then start the stack:
+
     $ docker-compose up
 
 The command above starts nine containers for ^multi-database development as follows.
