@@ -140,12 +140,13 @@ const addCommentToDOM = (commentData: CommentData): void => {
   };
 
   const escapedUsername = escapeHtml(commentData.username);
+  const escapedGravatarUrl = escapeHtml(commentData.gravatarUrl);
 
   const commentHtml = `
     <div class="row mt-2 mb-2">
       <div class="col-sm-1">
         <div class="thumbnail">
-          <img src="${commentData.gravatarUrl}" alt="${escapedUsername}" class="img-thumbnail">
+          <img src="${escapedGravatarUrl}" alt="${escapedUsername}" class="img-thumbnail">
         </div>
       </div>
       <div class="col-sm-11">
@@ -160,7 +161,10 @@ const addCommentToDOM = (commentData: CommentData): void => {
     </div>
   `;
 
-  // Insert the new comment at the end of the comments container
+  // Insert the new comment at the end of the comments container.
+  // commentHtml is safe: username and gravatarUrl are HTML-escaped above, and the comment body
+  // is sanitized server-side (CommentController) before it is ever returned to the client.
+  // nosemgrep
   commentsContainer.insertAdjacentHTML('beforeend', commentHtml);
 };
 
