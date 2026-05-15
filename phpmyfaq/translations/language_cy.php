@@ -134,7 +134,7 @@ $PMF_LANG["err_noMailAdress"] = " nid yw eich cyfeiriad e-bost yn gywir. <a href
 $PMF_LANG["err_sendMail"] = " Y meysydd gofynnol yw  eich enw ,  eich cyfeiriad e-bost ,  eich cwestiwn a phan ofynnir amdano, Captcha Code!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = " chwilior cofnodion:  Gyda chofnod fel  gair1 gair2 gallwch wneud chwiliad yn ôl perthnasedd ar gyfer dau faen prawf chwilio neu fwy. Sylwer: rhaid ich maen prawf chwilio fod o leiaf 4 llythyren neu fel arall bydd eich cais yn cael ei wrthod.";
+$PMF_LANG["help_search"] = " chwilior cofnodion:  Gyda chofnod fel  gair1 gair2 gallwch wneud chwiliad yn ôl perthnasedd ar gyfer dau faen prawf chwilio neu fwy. Sylwer: rhaid ich maen prawf chwilio fod o leiaf 3 llythyren neu fel arall bydd eich cais yn cael ei wrthod.";
 
 // Menü
 $PMF_LANG["ad"] = "ADRAN WEINYDDOL";

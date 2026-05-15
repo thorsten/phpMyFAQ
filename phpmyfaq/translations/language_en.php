@@ -135,7 +135,7 @@ $PMF_LANG["err_noMailAdress"] = "Your email address is not correct.";
 $PMF_LANG["err_sendMail"] = "Required fields are your name, your email address, your question and, when requested, the <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!";
 
 // Search help
-$PMF_LANG["help_search"] = "Search for records: With an entry like word1 word2 you can do a relevance descending search for two or more search criterion.Notice: Your search criterion has to be at least four letters long otherwise your request will be rejected.";
+$PMF_LANG["help_search"] = "Search for records: With an entry like word1 word2 you can do a relevance descending search for two or more search criterion.Notice: Your search criterion has to be at least three letters long otherwise your request will be rejected.";
 
 // Menu
 $PMF_LANG["ad"] = "Administration";

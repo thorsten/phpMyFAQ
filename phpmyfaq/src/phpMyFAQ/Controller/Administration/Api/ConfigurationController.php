@@ -41,7 +41,7 @@ final class ConfigurationController extends AbstractAdministrationApiController
     }
 
     /**
-     * @throws Exception|\Exception
+     * @throws \Throwable
      */
     #[Route(path: 'configuration/send-test-mail', name: 'admin.api.configuration.send-test-mail', methods: ['POST'])]
     public function sendTestMail(Request $request): JsonResponse
@@ -62,7 +62,7 @@ final class ConfigurationController extends AbstractAdministrationApiController
             $result = $this->mail->send();
 
             return $this->json(['success' => $result], Response::HTTP_OK);
-        } catch (Exception|TransportExceptionInterface|\Throwable $e) {
+        } catch (\Throwable $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }

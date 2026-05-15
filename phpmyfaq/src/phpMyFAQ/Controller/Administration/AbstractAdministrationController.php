@@ -73,6 +73,8 @@ abstract class AbstractAdministrationController extends AbstractController
             'renderedLanguageSelection' => LanguageHelper::renderSelectLanguage(
                 $this->configuration->getLanguage()->getLanguage(),
                 true,
+                [],
+                'lang',
             ),
             'userName' => $this->currentUser->getUserData('display_name'),
             'hasGravatarSupport' => $this->configuration->get(item: 'main.enableGravatarSupport'),

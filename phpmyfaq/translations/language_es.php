@@ -136,7 +136,7 @@ $PMF_LANG['err_noMailAdress'] = "La dirección de e-mail proporcionada es incorr
 $PMF_LANG['err_sendMail'] = "¡Los campos obligatorios incluyen Nombre y e-mail!";
 
 // Ayuda para la búsqueda
-$PMF_LANG['help_search'] = "Encuentra la respuesta: Buscando Term1 Term2 permite buscar dos o más términos, en orden descendente de relevancia. Nota: el término de búsqueda debe tener al menos 4 caracteres, las consultas más cortas se rechazan automáticamente.";
+$PMF_LANG['help_search'] = "Encuentra la respuesta: Buscando Term1 Term2 permite buscar dos o más términos, en orden descendente de relevancia. Nota: el término de búsqueda debe tener al menos 3 caracteres, las consultas más cortas se rechazan automáticamente.";
 
 // Menú
 $PMF_LANG['ad'] = 'SECCIÓN ADMIN';
