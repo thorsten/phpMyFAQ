@@ -14,7 +14,7 @@
  */
 
 export const fetchTranslations = async (locale: string): Promise<Record<string, string>> => {
-  const response: Response = await fetch(`/api/translations/${locale}`, {
+  const response: Response = await fetch(`api/translations/${locale}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
