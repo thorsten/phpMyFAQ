@@ -33,7 +33,6 @@ use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 final class FaqController extends AbstractController
 {
@@ -163,7 +162,7 @@ final class FaqController extends AbstractController
             try {
                 $notification = $this->container->get(id: 'phpmyfaq.notification');
                 $notification->sendNewFaqAdded($moderators, $faqEntity);
-            } catch (Exception|TransportExceptionInterface $e) {
+            } catch (\Throwable $e) {
                 $this->configuration->getLogger()->info('Notification could not be sent: ', [$e->getMessage()]);
             }
 

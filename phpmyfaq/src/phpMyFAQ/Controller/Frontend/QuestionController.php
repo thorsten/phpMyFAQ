@@ -117,8 +117,13 @@ final class QuestionController extends AbstractController
 
             $question = $this->container->get(id: 'phpmyfaq.question');
             $question->add($questionEntity);
-            $notification = $this->container->get(id: 'phpmyfaq.notification');
-            $notification->sendQuestionSuccessMail($questionEntity, $categories);
+
+            try {
+                $notification = $this->container->get(id: 'phpmyfaq.notification');
+                $notification->sendQuestionSuccessMail($questionEntity, $categories);
+            } catch (\Throwable $e) {
+                $this->configuration->getLogger()->info('Notification could not be sent: ', [$e->getMessage()]);
+            }
 
             return $this->json(['success' => Translation::get(key: 'msgAskThx4Mail')], Response::HTTP_OK);
         }
