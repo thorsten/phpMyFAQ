@@ -61,10 +61,12 @@ class DatabaseTest extends TestCase
 
     public function testErrorPage(): void
     {
+        http_response_code(200);
         ob_start();
         Database::errorPage('Error message');
         $output = ob_get_clean();
 
+        $this->assertEquals(503, http_response_code());
         $this->assertStringContainsString('<title>Fatal phpMyFAQ Error</title>', $output);
         $this->assertStringContainsString(
             '<p class="alert alert-danger mt-5">The connection to the database server could not be established.</p>',

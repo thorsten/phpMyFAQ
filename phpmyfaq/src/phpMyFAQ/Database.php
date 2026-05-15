@@ -102,6 +102,10 @@ class Database
      */
     public static function errorPage(string $method): void
     {
+        if (!headers_sent()) {
+            http_response_code(503);
+            header('Retry-After: 60');
+        }
         echo
             '<!DOCTYPE html>
             <html lang="en" class="no-js">
