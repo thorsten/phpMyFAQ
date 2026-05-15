@@ -61,7 +61,6 @@ class DatabaseTest extends TestCase
 
     public function testErrorPage(): void
     {
-        http_response_code(200);
         ob_start();
         Database::errorPage('Error message');
         $output = ob_get_clean();
