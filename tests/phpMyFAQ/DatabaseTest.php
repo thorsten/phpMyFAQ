@@ -66,6 +66,8 @@ class DatabaseTest extends TestCase
         $output = ob_get_clean();
 
         $this->assertEquals(503, http_response_code());
+        $this->assertContains('Retry-After: 60', headers_list());
+        $this->assertStringContainsString('<title>Fatal phpMyFAQ Error</title>', $output);
         $this->assertStringContainsString('<title>Fatal phpMyFAQ Error</title>', $output);
         $this->assertStringContainsString(
             '<p class="alert alert-danger mt-5">The connection to the database server could not be established.</p>',
