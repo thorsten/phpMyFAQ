@@ -194,7 +194,7 @@ export const handleDatabaseUpdate = async (): Promise<void> => {
         const errorMessage = document.getElementById('error-messages') as HTMLElement | null;
         if (alert && errorMessage) {
           alert.classList.remove('d-none');
-          errorMessage.innerHTML = result.error;
+          errorMessage.textContent = result.error;
         }
       }
     } catch (error: unknown) {
