@@ -430,11 +430,14 @@ class Mail
 
         if (method_exists($mua, method: 'setAuthConfig')) {
             $mua->setAuthConfig(
-                $this->configuration->get(item: 'mail.remoteSMTPServer'),
-                $this->configuration->get(item: 'mail.remoteSMTPUsername'),
-                $this->configuration->get(item: 'mail.remoteSMTPPassword'),
+                (string) $this->configuration->get(item: 'mail.remoteSMTPServer'),
+                (string) $this->configuration->get(item: 'mail.remoteSMTPUsername'),
+                (string) $this->configuration->get(item: 'mail.remoteSMTPPassword'),
                 (int) $this->configuration->get(item: 'mail.remoteSMTPPort'),
-                $this->configuration->get(item: 'mail.remoteSMTPDisableTLSPeerVerification'),
+                filter_var(
+                    $this->configuration->get(item: 'mail.remoteSMTPDisableTLSPeerVerification'),
+                    FILTER_VALIDATE_BOOLEAN,
+                ),
             );
         }
 
