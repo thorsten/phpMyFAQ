@@ -20,20 +20,18 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Controller\AbstractController;
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 final class ConfigurationController extends AbstractController
 {
     /**
-     * @throws Exception|\Exception
+     * @throws \Throwable
      */
     #[Route(
         'admin/api/configuration/send-test-mail',
@@ -59,7 +57,7 @@ final class ConfigurationController extends AbstractController
             $result = $mail->send();
 
             return $this->json(['success' => $result], Response::HTTP_OK);
-        } catch (Exception|TransportExceptionInterface $e) {
+        } catch (\Throwable $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
