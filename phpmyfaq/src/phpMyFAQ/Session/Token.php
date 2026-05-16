@@ -172,7 +172,17 @@ class Token
 
     private function getSession(string $page): ?Token
     {
-        return $this->session->get(sprintf('%s.%s', self::PMF_SESSION_NAME, $page));
+        $token = $this->session->get(sprintf('%s.%s', self::PMF_SESSION_NAME, $page));
+
+        // Treat an expired token as absent so callers regenerate a fresh one
+        // instead of rendering a dead token that would fail verification.
+        if ($token instanceof self && time() > $token->getExpiry()) {
+            $this->removeToken($page);
+
+            return null;
+        }
+
+        return $token;
     }
 
     private function getCookie(string $page): string

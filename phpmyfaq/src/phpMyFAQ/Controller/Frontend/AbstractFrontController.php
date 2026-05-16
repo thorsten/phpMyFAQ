@@ -99,6 +99,10 @@ abstract class AbstractFrontController extends AbstractController
             'isUserHasAdminRights' => $isUserHasAdminRights || $this->currentUser->isSuperAdmin(),
             'baseHref' => $this->faqSystem->getSystemUri($this->configuration),
             'customCss' => $this->configuration->getCustomCss(),
+            'defaultLayoutMode' => (string) ($this->configuration->get('layout.defaultLayoutMode') ?? 'auto'),
+            'allowUserLayoutMode' =>
+                $this->configuration->get('layout.allowUserLayoutMode') === true
+                    || $this->configuration->get('layout.allowUserLayoutMode') === 'true',
             'version' => $this->configuration->getVersion(),
             'header' => str_replace(search: '"', replace: '', subject: $this->configuration->getTitle()),
             'metaDescription' => $this->configuration->get('seo.description'),

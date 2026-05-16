@@ -8,6 +8,7 @@ import {
   fetchSearchRelevance,
   fetchSeoMetaTags,
   fetchMailProvider,
+  fetchLayoutMode,
   fetchTemplates,
   fetchTranslations,
   saveConfiguration,
@@ -192,6 +193,38 @@ describe('fetchReleaseEnvironment', () => {
 
     const currentValue = 'someValue';
     const result = await fetchReleaseEnvironment(currentValue);
+
+    expect(result).toBe('');
+  });
+});
+
+describe('fetchLayoutMode', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should fetch layout mode options and return as text', async () => {
+    const mockResponse = '<option value="dark" selected>Dark</option>';
+    const mockResponseObj = {
+      ok: true,
+      text: () => Promise.resolve(mockResponse),
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
+
+    const currentValue = 'dark';
+    const result = await fetchLayoutMode(currentValue);
+
+    expect(result).toBe(mockResponse);
+    expect(fetchWrapperModule.fetchWrapper).toHaveBeenCalledWith(`./api/configuration/layout-mode/${currentValue}`);
+  });
+
+  it('should return an empty string if the network response is not ok', async () => {
+    const mockResponseObj = {
+      ok: false,
+    } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponseObj);
+
+    const result = await fetchLayoutMode('auto');
 
     expect(result).toBe('');
   });

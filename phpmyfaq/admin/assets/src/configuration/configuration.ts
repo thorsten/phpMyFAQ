@@ -14,7 +14,7 @@
  */
 
 import { Tab } from 'bootstrap';
-import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
+import { pushErrorNotification, pushNotification, TranslationService } from '../../../../assets/src/utils';
 import {
   fetchConfiguration,
   fetchFaqsSortingKeys,
@@ -25,6 +25,7 @@ import {
   fetchSearchRelevance,
   fetchSeoMetaTags,
   fetchCacheAdapter,
+  fetchLayoutMode,
   fetchMailProvider,
   fetchTemplates,
   fetchTranslations,
@@ -122,6 +123,7 @@ export const handleConfiguration = async (): Promise<void> => {
             break;
           case '#layout':
             await handleTemplates();
+            await handleLayoutMode();
             await handleThemes();
             break;
           case '#records':
@@ -351,6 +353,17 @@ export const handleTemplates = async (): Promise<void> => {
   }
 };
 
+export const handleLayoutMode = async (): Promise<void> => {
+  const layoutModeSelectBox = document.getElementsByName(
+    'edit[layout.defaultLayoutMode]'
+  ) as NodeListOf<HTMLSelectElement>;
+  if (layoutModeSelectBox !== null && layoutModeSelectBox[0]) {
+    const currentValue = (layoutModeSelectBox[0].dataset.pmfConfigurationCurrentValue as string) || 'auto';
+    const options = await fetchLayoutMode(currentValue);
+    layoutModeSelectBox[0].insertAdjacentHTML('beforeend', options);
+  }
+};
+
 export const handleFaqsSortingKeys = async (): Promise<void> => {
   const faqsOrderSelectBox = document.getElementsByName('edit[records.orderby]') as NodeListOf<HTMLSelectElement>;
   if (faqsOrderSelectBox !== null) {
@@ -459,13 +472,30 @@ export const handleCacheAdapter = async (): Promise<void> => {
 };
 
 export const handleThemes = async (): Promise<void> => {
-  const uploadForm = document.getElementById('theme-upload-form') as HTMLFormElement | null;
+  const uploadButton = document.getElementById('theme-upload-button') as HTMLButtonElement | null;
 
-  if (uploadForm) {
-    uploadForm.addEventListener('submit', async (event: Event): Promise<void> => {
+  if (uploadButton) {
+    uploadButton.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
 
-      const response = (await uploadThemeArchive(new FormData(uploadForm))) as unknown as Response;
+      const csrfInput = document.getElementById('theme-csrf-token') as HTMLInputElement | null;
+      const themeNameInput = document.getElementById('themeName') as HTMLInputElement | null;
+      const themeArchiveInput = document.getElementById('themeArchive') as HTMLInputElement | null;
+
+      const archiveFile = themeArchiveInput?.files?.[0];
+      if (!archiveFile) {
+        const translator = new TranslationService();
+        await translator.loadTranslations(document.documentElement.lang);
+        pushErrorNotification(translator.translate('msgThemeUploadNoZip'));
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('theme-csrf-token', csrfInput?.value ?? '');
+      formData.append('themeName', themeNameInput?.value ?? '');
+      formData.append('themeArchive', archiveFile);
+
+      const response = (await uploadThemeArchive(formData)) as unknown as Response;
       if (typeof response.success === 'string') {
         pushNotification(response.success);
         await handleConfigurationTab('#layout');
