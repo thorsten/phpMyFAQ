@@ -16,9 +16,12 @@
 export class ThemeSwitcher {
   private static readonly STORAGE_KEY = 'pmf-theme';
   private static readonly THEME_ATTRIBUTE = 'data-bs-theme';
+  private static readonly DEFAULT_THEME_ATTRIBUTE = 'data-pmf-default-theme';
+  private static readonly ALLOW_USER_ATTRIBUTE = 'data-pmf-allow-user-theme';
   private static readonly LIGHT_THEME = 'light';
   private static readonly DARK_THEME = 'dark';
   private static readonly HIGH_CONTRAST_THEME = 'high-contrast';
+  private static readonly AUTO_MODE = 'auto';
 
   private lightButton: HTMLButtonElement | null = null;
   private darkButton: HTMLButtonElement | null = null;
@@ -33,8 +36,34 @@ export class ThemeSwitcher {
    */
   private init(): void {
     this.setupEventListeners();
-    this.applyStoredTheme();
+    this.applyInitialTheme();
     this.updateButtonState();
+  }
+
+  /**
+   * Whether visitors are allowed to change the layout mode (admin configurable)
+   */
+  private isUserThemeAllowed(): boolean {
+    return document.documentElement.getAttribute(ThemeSwitcher.ALLOW_USER_ATTRIBUTE) !== 'false';
+  }
+
+  /**
+   * The admin-configured default layout mode ('auto', 'light', 'dark', 'high-contrast')
+   */
+  private getConfiguredDefaultMode(): string {
+    return document.documentElement.getAttribute(ThemeSwitcher.DEFAULT_THEME_ATTRIBUTE) || ThemeSwitcher.AUTO_MODE;
+  }
+
+  /**
+   * Resolve a layout mode to a concrete theme, expanding 'auto' to the system preference
+   */
+  private resolveMode(mode: string): string {
+    if (mode === ThemeSwitcher.AUTO_MODE) {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return prefersDark ? ThemeSwitcher.DARK_THEME : ThemeSwitcher.LIGHT_THEME;
+    }
+
+    return mode;
   }
 
   /**
@@ -65,11 +94,15 @@ export class ThemeSwitcher {
   }
 
   /**
-   * Set the theme
+   * Set the theme. The choice is only persisted when visitors are allowed to change the mode.
    */
   private setTheme(theme: string): void {
     document.documentElement.setAttribute(ThemeSwitcher.THEME_ATTRIBUTE, theme);
-    localStorage.setItem(ThemeSwitcher.STORAGE_KEY, theme);
+
+    if (this.isUserThemeAllowed()) {
+      localStorage.setItem(ThemeSwitcher.STORAGE_KEY, theme);
+    }
+
     this.updateButtonState();
   }
 
@@ -81,18 +114,24 @@ export class ThemeSwitcher {
   }
 
   /**
-   * Apply stored theme from localStorage
+   * Apply the initial theme based on the admin configuration and the visitor preference.
+   *
+   * When visitors may change the mode, a stored preference wins over the admin default.
+   * When they may not, the admin-configured default is enforced and any stored value is cleared.
    */
-  private applyStoredTheme(): void {
+  private applyInitialTheme(): void {
+    if (!this.isUserThemeAllowed()) {
+      localStorage.removeItem(ThemeSwitcher.STORAGE_KEY);
+      this.setTheme(this.resolveMode(this.getConfiguredDefaultMode()));
+      return;
+    }
+
     const storedTheme = localStorage.getItem(ThemeSwitcher.STORAGE_KEY);
 
     if (storedTheme) {
       this.setTheme(storedTheme);
     } else {
-      // Check for system preference
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const defaultTheme = prefersDark ? ThemeSwitcher.DARK_THEME : ThemeSwitcher.LIGHT_THEME;
-      this.setTheme(defaultTheme);
+      this.setTheme(this.resolveMode(this.getConfiguredDefaultMode()));
     }
   }
 
@@ -124,14 +163,24 @@ export class ThemeSwitcher {
   }
 
   /**
-   * Listen for system theme changes
+   * Listen for system theme changes.
+   *
+   * System changes are only applied while the effective mode is 'auto' and the visitor
+   * has not explicitly chosen a theme.
    */
   public watchSystemTheme(): void {
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event: MediaQueryListEvent): void => {
-      if (!localStorage.getItem(ThemeSwitcher.STORAGE_KEY)) {
-        const newTheme = event.matches ? ThemeSwitcher.DARK_THEME : ThemeSwitcher.LIGHT_THEME;
-        this.setTheme(newTheme);
+      if (this.getConfiguredDefaultMode() !== ThemeSwitcher.AUTO_MODE) {
+        return;
       }
+
+      if (this.isUserThemeAllowed() && localStorage.getItem(ThemeSwitcher.STORAGE_KEY)) {
+        return;
+      }
+
+      const newTheme = event.matches ? ThemeSwitcher.DARK_THEME : ThemeSwitcher.LIGHT_THEME;
+      document.documentElement.setAttribute(ThemeSwitcher.THEME_ATTRIBUTE, newTheme);
+      this.updateButtonState();
     });
   }
 }

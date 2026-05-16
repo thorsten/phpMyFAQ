@@ -6,6 +6,7 @@ import {
   handleSMTPPasswordToggle,
   handleTranslation,
   handleTemplates,
+  handleLayoutMode,
   handleFaqsSortingKeys,
   handleFaqsSortingOrder,
   handleFaqsSortingPopular,
@@ -28,6 +29,7 @@ import {
   fetchSearchRelevance,
   fetchSeoMetaTags,
   fetchMailProvider,
+  fetchLayoutMode,
   fetchTemplates,
   fetchTranslations,
   saveConfiguration,
@@ -103,6 +105,34 @@ describe('Configuration Functions', () => {
 
       const selectBox = document.querySelector('select[name="edit[layout.templateSet]"]');
       expect(selectBox?.innerHTML).toContain('<option value="default">Default</option>');
+    });
+  });
+
+  describe('handleLayoutMode', () => {
+    it('should fetch and insert layout mode options', async () => {
+      document.body.innerHTML = `
+        <select name="edit[layout.defaultLayoutMode]" data-pmf-configuration-current-value="dark"></select>
+      `;
+
+      (fetchLayoutMode as Mock).mockResolvedValue('<option value="dark" selected>Dark</option>');
+
+      await handleLayoutMode();
+
+      expect(fetchLayoutMode).toHaveBeenCalledWith('dark');
+      const selectBox = document.querySelector('select[name="edit[layout.defaultLayoutMode]"]');
+      expect(selectBox?.innerHTML).toContain('<option value="dark" selected="">Dark</option>');
+    });
+
+    it('should default to "auto" when no current value is set', async () => {
+      document.body.innerHTML = `
+        <select name="edit[layout.defaultLayoutMode]"></select>
+      `;
+
+      (fetchLayoutMode as Mock).mockResolvedValue('<option value="auto" selected>Automatic</option>');
+
+      await handleLayoutMode();
+
+      expect(fetchLayoutMode).toHaveBeenCalledWith('auto');
     });
   });
 

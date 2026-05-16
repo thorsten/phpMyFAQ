@@ -51,8 +51,8 @@ const mockMatchMedia = {
 interface MockDocument {
   getElementById: ReturnType<typeof vi.fn>;
   documentElement: {
-    setAttribute: ReturnType<typeof vi.fn>;
-    getAttribute: ReturnType<typeof vi.fn>;
+    setAttribute: ((attr: string, value: string) => void) & ReturnType<typeof vi.fn>;
+    getAttribute: ((attr: string) => string | null) & ReturnType<typeof vi.fn>;
   };
   addEventListener: ReturnType<typeof vi.fn>;
 }
@@ -80,23 +80,20 @@ describe('ThemeSwitcher', (): void => {
     vi.clearAllMocks();
 
     // Create a simple attribute store for realistic getAttribute/setAttribute behavior
-    let currentTheme: string | null = null;
+    const attributes: Record<string, string | null> = {
+      'data-bs-theme': null,
+      'data-pmf-default-theme': null,
+      'data-pmf-allow-user-theme': null,
+    };
 
     // Mock document with proper mock functions
     mockDocument = {
       getElementById: vi.fn(),
       documentElement: {
         setAttribute: vi.fn((attr: string, value: string) => {
-          if (attr === 'data-bs-theme') {
-            currentTheme = value;
-          }
+          attributes[attr] = value;
         }),
-        getAttribute: vi.fn((attr: string) => {
-          if (attr === 'data-bs-theme') {
-            return currentTheme;
-          }
-          return null;
-        }),
+        getAttribute: vi.fn((attr: string) => attributes[attr] ?? null),
       },
       addEventListener: vi.fn(),
     };
@@ -282,8 +279,41 @@ describe('ThemeSwitcher', (): void => {
     const changeHandler = vi.mocked(mockMatchMedia.addEventListener).mock.calls[0][1] as EventListener;
     changeHandler({ matches: true } as MediaQueryListEvent);
 
+    // System changes apply only while in 'auto' mode and must not be persisted
+    expect(mockDocument.documentElement.setAttribute).toHaveBeenCalledWith('data-bs-theme', 'dark');
+    expect(mockLocalStorage.setItem).not.toHaveBeenCalledWith('pmf-theme', 'dark');
+  });
+
+  test('should apply the admin-configured default mode when no stored preference', (): void => {
+    vi.mocked(mockLocalStorage.getItem).mockReturnValue(null);
+    mockDocument.documentElement.setAttribute('data-pmf-default-theme', 'dark');
+
+    themeSwitcher = new ThemeSwitcher();
+
     expect(mockDocument.documentElement.setAttribute).toHaveBeenCalledWith('data-bs-theme', 'dark');
     expect(mockLocalStorage.setItem).toHaveBeenCalledWith('pmf-theme', 'dark');
+    expect(mockDarkButton.classList.add).toHaveBeenCalledWith('active');
+  });
+
+  test('should let a stored visitor preference win over the admin default', (): void => {
+    vi.mocked(mockLocalStorage.getItem).mockReturnValue('light');
+    mockDocument.documentElement.setAttribute('data-pmf-default-theme', 'dark');
+
+    themeSwitcher = new ThemeSwitcher();
+
+    expect(mockDocument.documentElement.setAttribute).toHaveBeenCalledWith('data-bs-theme', 'light');
+  });
+
+  test('should enforce the admin default and clear stored value when user mode is disabled', (): void => {
+    vi.mocked(mockLocalStorage.getItem).mockReturnValue('dark');
+    mockDocument.documentElement.setAttribute('data-pmf-default-theme', 'high-contrast');
+    mockDocument.documentElement.setAttribute('data-pmf-allow-user-theme', 'false');
+
+    themeSwitcher = new ThemeSwitcher();
+
+    expect(mockLocalStorage.removeItem).toHaveBeenCalledWith('pmf-theme');
+    expect(mockDocument.documentElement.setAttribute).toHaveBeenCalledWith('data-bs-theme', 'high-contrast');
+    expect(mockLocalStorage.setItem).not.toHaveBeenCalled();
   });
 
   test('should not change theme on system change when user has stored preference', (): void => {

@@ -831,6 +831,10 @@ readonly class Migration420Alpha extends AbstractMigration
         // Recent news widget
         $recorder->addConfig('main.enableRecentNews', 'true');
 
+        // Layout mode configuration
+        $recorder->addConfig('layout.defaultLayoutMode', 'auto');
+        $recorder->addConfig('layout.allowUserLayoutMode', 'true');
+
         // OAuth2 storage tables
         if ($this->isMySql()) {
             $recorder->addSql(sprintf(

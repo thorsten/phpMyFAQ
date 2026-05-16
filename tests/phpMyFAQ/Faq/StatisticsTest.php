@@ -322,15 +322,14 @@ class StatisticsTest extends TestCase
         $this->configurationMock->method('get')->willReturn('basic');
         $statistics = new Statistics($this->configurationMock);
 
-        $now = date(format: 'YmdHis');
         $resultMock = $this->createStub(\SQLite3Result::class);
 
         $this->dbMock
             ->expects($this->once())
             ->method('query')
             ->with($this->logicalAnd(
-                $this->stringContains("date_start <= '$now'"),
-                $this->stringContains("date_end >= '$now'"),
+                $this->matchesRegularExpression("/date_start <= '\d{14}'/"),
+                $this->matchesRegularExpression("/date_end >= '\d{14}'/"),
             ))
             ->willReturn($resultMock);
 

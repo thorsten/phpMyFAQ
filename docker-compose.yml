@@ -108,7 +108,7 @@ services:
         condition: service_completed_successfully
 
   nginx:
-    image: nginx:1.27
+    image: nginx:1.31
     restart: always
     depends_on:
       - php-fpm

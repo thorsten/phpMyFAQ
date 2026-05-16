@@ -32,6 +32,7 @@ use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\TwigWrapper;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractAdministrationController extends AbstractController
 {
@@ -43,6 +44,25 @@ abstract class AbstractAdministrationController extends AbstractController
         parent::initializeFromContainer();
 
         $this->adminLog = $this->container->get(id: 'phpmyfaq.admin.admin-log');
+    }
+
+    /**
+     * Renders an administration template and marks the response as non-cacheable.
+     *
+     * Admin pages embed per-session CSRF tokens; a browser-cached copy would replay
+     * a stale token and the next form submission would fail with HTTP 401.
+     *
+     * @param string[] $context
+     * @throws Exception
+     */
+    #[\Override]
+    public function render(string $file, array $context = [], ?Response $response = null): Response
+    {
+        $response = parent::render($file, $context, $response);
+        $response->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+        $response->headers->set('Pragma', 'no-cache');
+
+        return $response;
     }
 
     /**
@@ -61,6 +81,10 @@ abstract class AbstractAdministrationController extends AbstractController
         return [
             'metaLanguage' => Translation::get(key: 'metaLanguage'),
             'layoutMode' => 'light',
+            'defaultLayoutMode' => (string) ($this->configuration->get('layout.defaultLayoutMode') ?? 'auto'),
+            'allowUserLayoutMode' =>
+                $this->configuration->get('layout.allowUserLayoutMode') === true
+                    || $this->configuration->get('layout.allowUserLayoutMode') === 'true',
             'pageTitle' => $this->configuration->getTitle() . ' - ' . System::getPoweredByPlainString(),
             'baseHref' => $this->configuration->getDefaultUrl() . 'admin/',
             'version' => System::getVersion(),

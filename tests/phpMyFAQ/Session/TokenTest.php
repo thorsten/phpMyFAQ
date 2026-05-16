@@ -203,6 +203,21 @@ class TokenTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testGetTokenStringRegeneratesExpiredToken(): void
+    {
+        $expired = $this->token->getTokenString(page: 'idle-page', expiry: -1);
+        $fresh = $this->token->getTokenString('idle-page');
+
+        static::assertNotSame($expired, $fresh, 'An expired token must not be reused.');
+        static::assertFalse(
+            $this->token->verifyToken('idle-page', $expired),
+            'The stale token must no longer verify.',
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testGetTokenStringDifferentPagesProduceDifferentTokens(): void
     {
         $str1 = $this->token->getTokenString('page-a');

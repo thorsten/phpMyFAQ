@@ -108,6 +108,8 @@ class Migration420AlphaTest extends TestCase
         $this->assertContains('queue.transport', $addedConfigKeys);
         $this->assertContains('session.handler', $addedConfigKeys);
         $this->assertContains('session.redisDsn', $addedConfigKeys);
+        $this->assertContains('layout.defaultLayoutMode', $addedConfigKeys);
+        $this->assertContains('layout.allowUserLayoutMode', $addedConfigKeys);
     }
 
     public function testUpAddsFaqjobsTableSql(): void
