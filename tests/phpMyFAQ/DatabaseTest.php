@@ -131,6 +131,10 @@ class DatabaseTest extends TestCase
         Database::errorPage('Error message');
         $output = ob_get_clean();
 
+        $this->assertEquals(503, http_response_code());
+        if (function_exists('xdebug_get_headers')) {
+            $this->assertContains('Retry-After: 60', xdebug_get_headers());
+        }
         $this->assertStringContainsString('<title>Fatal phpMyFAQ Error</title>', $output);
         $this->assertStringContainsString(
             '<p class="alert alert-danger mt-5">The connection to the database server could not be established.</p>',
