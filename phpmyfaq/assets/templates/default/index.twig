@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="{{ metaLanguage }}" data-bs-theme="light">
+<html lang="{{ metaLanguage }}" data-bs-theme="{{ defaultLayoutMode == 'auto' ? 'light' : defaultLayoutMode }}"
+      data-pmf-default-theme="{{ defaultLayoutMode|default('auto') }}"
+      data-pmf-allow-user-theme="{{ allowUserLayoutMode is defined and allowUserLayoutMode ? 'true' : 'false' }}">
 <head>
   <meta charset="utf-8">
 
@@ -60,6 +62,7 @@
       </ul>
 
       <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
+        {% if allowUserLayoutMode %}
         <li class="nav-item me-2">
           <div class="btn-group pmf-theme-switcher border" role="group" aria-label="{{ 'msgToggleTheme' | translate }}">
             <button type="button" class="btn btn-link nav-link py-2 px-2" id="theme-light"
@@ -76,6 +79,7 @@
             </button>
           </div>
         </li>
+        {% endif %}
         <li class="nav-item dropdown">
           <button type="button" class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle"
                   data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">

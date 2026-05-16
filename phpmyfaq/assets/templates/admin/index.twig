@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="{{ metaLanguage }}" data-bs-theme="{{ layoutMode }}">
+<html lang="{{ metaLanguage }}" data-bs-theme="{{ defaultLayoutMode == 'auto' ? layoutMode : defaultLayoutMode }}"
+      data-pmf-default-theme="{{ defaultLayoutMode|default('auto') }}"
+      data-pmf-allow-user-theme="{{ allowUserLayoutMode is defined and allowUserLayoutMode ? 'true' : 'false' }}">
 <head>
   <meta charset="utf-8">
 
@@ -44,6 +46,7 @@
   </form>
 
   <!-- Theme switcher -->
+  {% if allowUserLayoutMode is not defined or allowUserLayoutMode %}
   <div class="btn-group pmf-theme-switcher border me-2" role="group" aria-label="{{ 'msgToggleTheme' | translate }}">
     <button type="button" class="btn btn-link nav-link px-2" id="theme-light"
             aria-label="Light mode" title="Light mode">
@@ -58,6 +61,7 @@
       <i class="bi bi-circle-half"></i>
     </button>
   </div>
+  {% endif %}
 
   {% if userHasAccessPermission %}
   <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">

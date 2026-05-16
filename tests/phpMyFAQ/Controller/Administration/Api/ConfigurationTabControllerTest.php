@@ -337,6 +337,7 @@ final class ConfigurationTabControllerTest extends TestCase
             'seo metatags' => ['seoMetaTags', 'index, follow', '<option selected>index, follow</option>'],
             'translation provider' => ['translationProvider', 'google', 'value="google"'],
             'mail provider' => ['mailProvider', 'smtp', 'value="smtp" selected'],
+            'layout mode' => ['layoutMode', 'dark', 'value="dark" selected'],
         ];
     }
 
@@ -394,7 +395,7 @@ final class ConfigurationTabControllerTest extends TestCase
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $request = new Request([], ['pmf-csrf-token' => $csrfToken]);
+        $request = new Request([], ['theme-csrf-token' => $csrfToken]);
         $response = $controller->uploadTheme($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
@@ -429,7 +430,7 @@ final class ConfigurationTabControllerTest extends TestCase
 
         $request = new Request(
             [],
-            ['pmf-csrf-token' => $csrfToken, 'themeName' => 'custom-theme'],
+            ['theme-csrf-token' => $csrfToken, 'themeName' => 'custom-theme'],
             [],
             [],
             ['themeArchive' => $uploadedFile],
@@ -467,7 +468,7 @@ final class ConfigurationTabControllerTest extends TestCase
 
         $request = new Request(
             [],
-            ['pmf-csrf-token' => $csrfToken, 'themeName' => 'broken-theme'],
+            ['theme-csrf-token' => $csrfToken, 'themeName' => 'broken-theme'],
             [],
             [],
             ['themeArchive' => $uploadedFile],

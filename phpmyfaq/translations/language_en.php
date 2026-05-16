@@ -1593,6 +1593,9 @@ $PMF_LANG["ad_page_original_language"] = "Original Language";
 $PMF_LANG["ad_page_select_translation_language"] = "Select Translation Language";
 $PMF_LANG["ad_page_existing_translations"] = "Existing Translations";
 $PMF_LANG["ad_page_no_available_languages"] = "All available languages have translations for this page.";
+$PMF_LANG['permission::addpage'] = 'Add custom pages';
+$PMF_LANG['permission::editpage'] = 'Edit custom pages';
+$PMF_LANG['permission::delpage'] = 'Delete custom pages';
 $LANG_CONF['main.termsURL'] = ['input', 'URL for Terms of Service','use "page:slug" for custom page or full URL for external'];
 $LANG_CONF['main.imprintURL'] = ['input', 'URL for Imprint','use "page:slug" for custom page or full URL for external'];
 $LANG_CONF['main.cookiePolicyURL'] = ['input', 'URL for Cookie Policy','use "page:slug" for custom page or full URL for external'];
@@ -1769,5 +1772,13 @@ $PMF_LANG['msgAdminLdapMapping'] = 'LDAP Attribute Mapping';
 $PMF_LANG['msgAdminLdapOptions'] = 'LDAP Options';
 $PMF_LANG['msgAdminLdapGroupSettings'] = 'LDAP Group Settings';
 $PMF_LANG['msgAdminLdapSettings'] = 'LDAP General Settings';
+
+$LANG_CONF['layout.defaultLayoutMode'] = ['select', 'Default layout mode'];
+$LANG_CONF['layout.allowUserLayoutMode'] = ['checkbox', 'Allow visitors to change the layout mode'];
+
+$PMF_LANG['ad_layout_mode_auto'] = 'Automatic (follow visitor system preference)';
+$PMF_LANG['ad_layout_mode_light'] = 'Light';
+$PMF_LANG['ad_layout_mode_dark'] = 'Dark';
+$PMF_LANG['ad_layout_mode_highContrast'] = 'High contrast';
 
 return $PMF_LANG;

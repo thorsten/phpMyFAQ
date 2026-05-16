@@ -313,6 +313,28 @@ class AdminMenuBuilder
         return $output;
     }
 
+    public static function renderLayoutModeOptions(string $current): string
+    {
+        $modes = [
+            'auto' => Translation::get('ad_layout_mode_auto'),
+            'light' => Translation::get('ad_layout_mode_light'),
+            'dark' => Translation::get('ad_layout_mode_dark'),
+            'high-contrast' => Translation::get('ad_layout_mode_highContrast'),
+        ];
+        $output = '';
+
+        foreach ($modes as $value => $label) {
+            $output .= sprintf(
+                '<option value="%s"%s>%s</option>',
+                $value,
+                $value === $current ? ' selected' : '',
+                $label,
+            );
+        }
+
+        return $output;
+    }
+
     /**
      * Checks if the current user can access the content.
      */

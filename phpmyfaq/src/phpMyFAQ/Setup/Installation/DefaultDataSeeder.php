@@ -310,6 +310,8 @@ class DefaultDataSeeder
             'upgrade.onlineUpdateEnabled' => 'false',
             'upgrade.releaseEnvironment' => '__PHPMYFAQ_RELEASE__',
             'layout.templateSet' => 'default',
+            'layout.defaultLayoutMode' => 'auto',
+            'layout.allowUserLayoutMode' => 'true',
             'layout.enablePrivacyLink' => 'true',
             'layout.enableCookieConsent' => 'true',
             'layout.contactInformationHTML' => 'false',

@@ -522,6 +522,18 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         return new Response(AdminMenuBuilder::renderCacheAdapterOptions($request->attributes->get(key: 'current')));
     }
 
+    #[Route(
+        path: 'configuration/layout-mode/{current}',
+        name: 'admin.api.configuration.layout-mode',
+        methods: ['GET'],
+    )]
+    public function layoutMode(Request $request): Response
+    {
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+
+        return new Response(AdminMenuBuilder::renderLayoutModeOptions($request->attributes->get(key: 'current')));
+    }
+
     /**
      * Converts a value to string safely, handling objects and null values
      */
@@ -548,7 +560,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
 
     private function hasValidThemeCsrfToken(Request $request): bool
     {
-        $csrfToken = (string) $request->request->get('pmf-csrf-token', '');
+        $csrfToken = (string) $request->request->get('theme-csrf-token', '');
         return Token::getInstance($this->session)->verifyToken('theme-manager', $csrfToken);
     }
 }

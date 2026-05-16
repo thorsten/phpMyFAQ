@@ -1594,6 +1594,9 @@ $PMF_LANG["ad_page_original_language"] = "Ursprungssprache";
 $PMF_LANG["ad_page_select_translation_language"] = "Übersetzungssprache auswählen";
 $PMF_LANG["ad_page_existing_translations"] = "Vorhandene Übersetzungen";
 $PMF_LANG["ad_page_no_available_languages"] = "Für diese Seite sind Übersetzungen in allen verfügbaren Sprachen vorhanden.";
+$PMF_LANG['permission::addpage'] = 'Eigene Seiten hinzufügen';
+$PMF_LANG['permission::editpage'] = 'Eigene Seiten bearbeiten';
+$PMF_LANG['permission::delpage'] = 'Eigene Seiten löschen';
 $LANG_CONF['main.termsURL'] = ['input', 'URL für Nutzungsbedingungen','Verwenden Sie "page:slug" für eigene Seiten oder vollständige URL für externe Seiten'];
 $LANG_CONF['main.imprintURL'] = ['input', 'URL für Impressum','Verwenden Sie "page:slug" für eigene Seiten oder vollständige URL für externe Seiten'];
 $LANG_CONF['main.cookiePolicyURL'] = ['input', 'URL für Cookie-Richtlinie','Verwenden Sie "page:slug" für eigene Seiten oder vollständige URL für externe Seiten'];
@@ -1777,5 +1780,13 @@ $PMF_LANG['msgAdminLdapMapping'] = 'LDAP Attribute Mapping';
 $PMF_LANG['msgAdminLdapOptions'] = 'LDAP Optionen';
 $PMF_LANG['msgAdminLdapGroupSettings'] = 'LDAP Gruppeneinstellungen';
 $PMF_LANG['msgAdminLdapSettings'] = 'Allgemeine LDAP-Einstellungen';
+
+$LANG_CONF['layout.defaultLayoutMode'] = ['select', 'Standard Layout-Modus'];
+$LANG_CONF['layout.allowUserLayoutMode'] = ['checkbox', 'Besuchern ermöglichen, den Layoutmodus zu ändern'];
+
+$PMF_LANG['ad_layout_mode_auto'] = 'Automatisch (nach den System-Einstellungen des Nutzers)';
+$PMF_LANG['ad_layout_mode_light'] = 'Hell';
+$PMF_LANG['ad_layout_mode_dark'] = 'Dunkel';
+$PMF_LANG['ad_layout_mode_highContrast'] = 'Hoher Kontrast';
 
 return $PMF_LANG;
