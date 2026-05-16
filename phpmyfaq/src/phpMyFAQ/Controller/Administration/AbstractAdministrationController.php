@@ -82,7 +82,8 @@ abstract class AbstractAdministrationController extends AbstractController
             'metaLanguage' => Translation::get(key: 'metaLanguage'),
             'layoutMode' => 'light',
             'defaultLayoutMode' => (string) ($this->configuration->get('layout.defaultLayoutMode') ?? 'auto'),
-            'allowUserLayoutMode' => $this->configuration->get('layout.allowUserLayoutMode') !== 'false',
+            'allowUserLayoutMode' => $this->configuration->get('layout.allowUserLayoutMode') === true
+                || $this->configuration->get('layout.allowUserLayoutMode') === 'true',
             'pageTitle' => $this->configuration->getTitle() . ' - ' . System::getPoweredByPlainString(),
             'baseHref' => $this->configuration->getDefaultUrl() . 'admin/',
             'version' => System::getVersion(),
