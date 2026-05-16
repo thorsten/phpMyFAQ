@@ -100,6 +100,10 @@ class Database
      */
     public static function errorPage(string $method): void
     {
+        if (!headers_sent()) {
+            header('HTTP/1.1 503 Service Unavailable', true, 503);
+            header('Retry-After: 60');
+        }
         echo
             '<!DOCTYPE html>
             <html lang="en" class="no-js">
