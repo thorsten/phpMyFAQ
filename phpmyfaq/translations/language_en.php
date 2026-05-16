@@ -1781,4 +1781,6 @@ $PMF_LANG['ad_layout_mode_light'] = 'Light';
 $PMF_LANG['ad_layout_mode_dark'] = 'Dark';
 $PMF_LANG['ad_layout_mode_highContrast'] = 'High contrast';
 
+$PMF_LANG['msgThemeUploadNoZip'] = 'Please select a ZIP file to upload.';
+
 return $PMF_LANG;

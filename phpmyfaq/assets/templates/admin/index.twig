@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ metaLanguage }}" data-bs-theme="{{ defaultLayoutMode == 'auto' ? layoutMode : defaultLayoutMode }}"
       data-pmf-default-theme="{{ defaultLayoutMode|default('auto') }}"
-      data-pmf-allow-user-theme="{{ allowUserLayoutMode is defined and allowUserLayoutMode ? 'true' : 'false' }}">
+      data-pmf-allow-user-theme="{{ allowUserLayoutMode is not defined or allowUserLayoutMode ? 'true' : 'false' }}">
 <head>
   <meta charset="utf-8">
 

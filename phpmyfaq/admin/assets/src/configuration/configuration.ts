@@ -14,7 +14,7 @@
  */
 
 import { Tab } from 'bootstrap';
-import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
+import { pushErrorNotification, pushNotification, TranslationService } from '../../../../assets/src/utils';
 import {
   fetchConfiguration,
   fetchFaqsSortingKeys,
@@ -484,7 +484,9 @@ export const handleThemes = async (): Promise<void> => {
 
       const archiveFile = themeArchiveInput?.files?.[0];
       if (!archiveFile) {
-        pushErrorNotification('Please select a ZIP file to upload.');
+        const translator = new TranslationService();
+        await translator.loadTranslations(document.documentElement.lang);
+        pushErrorNotification(translator.translate('msgThemeUploadNoZip'));
         return;
       }
 
