@@ -522,11 +522,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         return new Response(AdminMenuBuilder::renderCacheAdapterOptions($request->attributes->get(key: 'current')));
     }
 
-    #[Route(
-        path: 'configuration/layout-mode/{current}',
-        name: 'admin.api.configuration.layout-mode',
-        methods: ['GET'],
-    )]
+    #[Route(path: 'configuration/layout-mode/{current}', name: 'admin.api.configuration.layout-mode', methods: ['GET'])]
     public function layoutMode(Request $request): Response
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
