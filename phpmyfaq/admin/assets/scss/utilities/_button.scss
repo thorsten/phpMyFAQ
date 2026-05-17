@@ -1,15 +1,19 @@
 //
 // Buttons
 //
+// Flat, modern buttons — no text shadow, subtle elevation on solid variants.
+//
 
 .btn {
-  text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.1);
-
-  &-link {
-    text-shadow: none;
-  }
-}
-
-[class*='btn-outline-'] {
   text-shadow: none;
+  box-shadow: none;
+  transition:
+    background-color var(--pmf-transition),
+    border-color var(--pmf-transition),
+    box-shadow var(--pmf-transition),
+    transform var(--pmf-transition);
+
+  &:active {
+    transform: translateY(1px);
+  }
 }
