@@ -1,10 +1,12 @@
 //
 // Configuration
 //
+// Token-driven so the three themes stay consistent.
+//
 
 #pmf-admin-configuration-container {
   .pmf-configuration-filter {
-    background: $body-bg;
+    background: var(--pmf-bg);
     position: sticky;
     top: 0;
     z-index: 2;
@@ -19,7 +21,7 @@
   }
 
   .pmf-configuration-group {
-    color: $secondary;
+    color: var(--pmf-text-muted);
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.04em;
@@ -73,21 +75,23 @@
   }
 
   a.nav-link.active {
-    background: $light-bg-subtle;
-    border-radius: var(--bs-border-radius-sm);
-    border: 1px solid var(--bs-gray-300);
+    background: var(--pmf-surface);
+    color: var(--pmf-accent);
+    border-radius: var(--pmf-radius-sm);
+    border: 1px solid var(--pmf-border);
   }
 
   .tab-content {
-    color: $black;
+    background: var(--pmf-surface);
+    color: var(--pmf-text);
     padding: 5px 15px;
-    border-bottom: 1px;
   }
 }
 
 .pmf-configuration-panel {
-  background: $light-bg-subtle;
-  border-left: 1px solid $border-color;
-  border-right: 1px solid $border-color;
-  border-bottom: 1px solid;
+  background: var(--pmf-surface);
+  color: var(--pmf-text);
+  border-left: 1px solid var(--pmf-border);
+  border-right: 1px solid var(--pmf-border);
+  border-bottom: 1px solid var(--pmf-border);
 }

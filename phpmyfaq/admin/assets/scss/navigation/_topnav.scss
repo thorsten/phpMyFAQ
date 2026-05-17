@@ -1,34 +1,84 @@
 //
 // Top navigation
 //
+// The top bar stays dark in every theme (see the --pmf-topnav-* tokens), so
+// all foreground colours are light-on-dark regardless of the active theme.
+//
 
 .pmf-admin-topnav {
   padding-left: 0;
-  height: $pmf-admin-topnav-base-height;
+  height: var(--pmf-topnav-height);
   z-index: $pmf-admin-zindex-topnav;
-  color: $white;
-  border-bottom: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color);
+  background-color: var(--pmf-topnav-bg);
+  color: var(--pmf-topnav-text);
+  border-bottom: 1px solid var(--pmf-topnav-border);
+  box-shadow: var(--pmf-shadow-sm);
 
   .navbar-brand {
     width: $pmf-admin-sidenav-base-width;
     padding-left: $navbar-padding-x;
     padding-right: $navbar-padding-x;
     margin: 0;
+    font-weight: 700;
+    color: var(--pmf-topnav-text);
   }
 
-  &.navbar-dark {
-    #sidebarToggle {
-      color: $pmf-admin-topnav-dark-toggler-color;
+  #sidebarToggle {
+    color: var(--pmf-topnav-muted);
+    border-radius: var(--pmf-radius-sm);
+    transition:
+      background-color var(--pmf-transition),
+      color var(--pmf-transition);
+
+    // The toggle icon carries an .h6 utility class — keep it on the bar colour.
+    .bi {
+      color: inherit;
     }
-  }
 
-  &.navbar-light {
-    #sidebarToggle {
-      color: $pmf-admin-topnav-light-toggler-color;
+    &:hover {
+      color: var(--pmf-topnav-text);
+      background-color: var(--pmf-sidenav-hover);
     }
   }
 
   .nav-link {
-    color: $white;
+    color: var(--pmf-topnav-text);
+
+    &:hover {
+      color: var(--pmf-sidenav-accent);
+    }
+  }
+
+  // Theme switcher (light / dark / high-contrast)
+  .pmf-theme-switcher {
+    border-color: var(--pmf-topnav-border) !important;
+
+    button {
+      color: var(--pmf-topnav-muted);
+      border: none;
+      background: transparent;
+      border-radius: var(--pmf-radius-sm);
+      transition:
+        color var(--pmf-transition),
+        background-color var(--pmf-transition);
+
+      i {
+        font-size: 1.1rem;
+      }
+
+      &:hover {
+        color: var(--pmf-topnav-text);
+        background: var(--pmf-sidenav-hover);
+      }
+
+      &:focus-visible {
+        box-shadow: 0 0 0 0.2rem var(--pmf-focus-ring);
+      }
+
+      &.active {
+        color: var(--pmf-sidenav-accent);
+        background: var(--pmf-sidenav-active-bg);
+      }
+    }
   }
 }

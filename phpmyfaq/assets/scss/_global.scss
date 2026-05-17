@@ -21,6 +21,7 @@ body {
 
   .nav-link {
     color: var(--bs-light);
+
     &:hover {
       color: var(--bs-light);
       text-decoration: underline;
@@ -39,6 +40,7 @@ body {
 .btn-outline-primary {
   color: var(--bs-primary);
   border-color: var(--bs-primary);
+
   &:hover {
     background-color: var(--bs-primary);
     color: var(--bs-light);

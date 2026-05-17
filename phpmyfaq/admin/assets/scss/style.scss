@@ -25,11 +25,15 @@
 @import '../../../../node_modules/bootstrap-icons/font/bootstrap-icons';
 
 // Highlight.js
-@import url('../../../../node_modules/highlight.js/styles/github.css') screen and (prefers-color-scheme: light);
-@import url('../../../../node_modules/highlight.js/styles/github-dark.css') screen and (prefers-color-scheme: dark);
+@import '../../../../node_modules/highlight.js/styles/github.css' screen and (prefers-color-scheme: light);
+@import '../../../../node_modules/highlight.js/styles/github-dark.css' screen and (prefers-color-scheme: dark);
 
 // Import Mixins
 @import 'mixins.scss';
+
+// Semantic design tokens — must come before the global admin styles so
+// component rules can consume the token values.
+@import './variables/tokens.scss';
 
 // Import global styles
 @import 'global.scss';
@@ -52,6 +56,3 @@
 @import 'navigation/nav.scss';
 @import 'navigation/sidenav';
 @import 'navigation/topnav.scss';
-
-// Theme Switcher
-@import '../../../assets/scss/layout/theme-switcher';

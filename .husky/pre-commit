@@ -1,1 +1,1 @@
-composer format && composer validate && composer test && pnpm pretty-quick --staged && pnpm run eslint && pnpm run tsc && pnpm test
+composer format && composer validate && composer test && pnpm pretty-quick --staged && pnpm run eslint && pnpm run stylelint && pnpm run tsc && pnpm test

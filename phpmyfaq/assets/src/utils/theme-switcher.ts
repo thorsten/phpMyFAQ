@@ -27,6 +27,9 @@ export class ThemeSwitcher {
   private darkButton: HTMLButtonElement | null = null;
   private highContrastButton: HTMLButtonElement | null = null;
 
+  /** Re-entrancy guard: blocks setTheme from recursing into itself synchronously. */
+  private isApplyingTheme = false;
+
   constructor() {
     this.init();
   }
@@ -97,13 +100,29 @@ export class ThemeSwitcher {
    * Set the theme. The choice is only persisted when visitors are allowed to change the mode.
    */
   private setTheme(theme: string): void {
-    document.documentElement.setAttribute(ThemeSwitcher.THEME_ATTRIBUTE, theme);
-
-    if (this.isUserThemeAllowed()) {
-      localStorage.setItem(ThemeSwitcher.STORAGE_KEY, theme);
+    // Guard against synchronous re-entrancy. Writing the data-bs-theme
+    // attribute can trigger listeners that end up calling setTheme again;
+    // without this guard that becomes infinite recursion (RangeError:
+    // Maximum call stack size exceeded).
+    if (this.isApplyingTheme) {
+      return;
     }
 
-    this.updateButtonState();
+    this.isApplyingTheme = true;
+
+    try {
+      if (document.documentElement.getAttribute(ThemeSwitcher.THEME_ATTRIBUTE) !== theme) {
+        document.documentElement.setAttribute(ThemeSwitcher.THEME_ATTRIBUTE, theme);
+      }
+
+      if (this.isUserThemeAllowed()) {
+        localStorage.setItem(ThemeSwitcher.STORAGE_KEY, theme);
+      }
+
+      this.updateButtonState();
+    } finally {
+      this.isApplyingTheme = false;
+    }
   }
 
   /**

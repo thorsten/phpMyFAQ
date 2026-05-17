@@ -88,5 +88,8 @@ jobs:
       - name: Run ESLint check
         run: pnpm eslint .
 
+      - name: Run Stylelint check
+        run: pnpm run stylelint
+
       - name: Run Vitest tests
         run: pnpm test

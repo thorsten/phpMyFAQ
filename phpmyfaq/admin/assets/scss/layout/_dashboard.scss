@@ -36,7 +36,7 @@
     }
 
     #pmf-admin-layout-sidenav_content {
-      &:before {
+      &::before {
         content: '';
         display: block;
         position: absolute;
@@ -75,7 +75,7 @@
         margin-left: -$pmf-admin-sidenav-base-width;
 
         // Removes the sidenav overlay on screens larger than the med breakpoint
-        &:before {
+        &::before {
           display: none;
         }
       }

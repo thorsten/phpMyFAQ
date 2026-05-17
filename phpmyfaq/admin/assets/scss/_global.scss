@@ -1,5 +1,9 @@
 //
-// Global definitions
+// Global admin styles
+//
+// Every rule here is driven by the semantic tokens from variables/_tokens.scss,
+// so the three themes (light, dark, high-contrast) are handled by swapping
+// token values rather than by stacking per-theme !important overrides.
 //
 
 html,
@@ -7,111 +11,355 @@ body {
   height: 100%;
 }
 
-.pmf-admin-footer-links {
-  a {
-    text-decoration: none;
-    &:hover {
-      text-decoration: underline;
+body {
+  background-color: var(--pmf-bg);
+  color: var(--pmf-text);
+  transition:
+    background-color var(--pmf-transition),
+    color var(--pmf-transition);
+}
+
+#content,
+.main-content,
+.content-wrapper {
+  background-color: var(--pmf-bg);
+  color: var(--pmf-text);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--pmf-text);
+}
+
+a {
+  color: var(--pmf-accent);
+
+  &:hover {
+    color: var(--pmf-accent-hover);
+  }
+}
+
+hr {
+  border-color: var(--pmf-border);
+}
+
+.text-muted {
+  color: var(--pmf-text-muted) !important;
+}
+
+// Footer ------------------------------------------------------------------
+footer.bg-light {
+  background-color: var(--pmf-surface) !important;
+  color: var(--pmf-text-muted);
+  border-top: 1px solid var(--pmf-border);
+}
+
+.pmf-admin-footer-links a {
+  color: var(--pmf-accent);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// Cards -------------------------------------------------------------------
+.card {
+  background-color: var(--pmf-surface);
+  border: 1px solid var(--pmf-border);
+  border-radius: var(--pmf-radius-lg);
+  box-shadow: var(--pmf-shadow-sm);
+  color: var(--pmf-text);
+
+  .card-header,
+  .card-footer {
+    background-color: transparent;
+    border-color: var(--pmf-border);
+    color: var(--pmf-text);
+  }
+}
+
+// Tables ------------------------------------------------------------------
+// Drive Bootstrap's own table CSS variables from tokens so striping and hover
+// stay theme-correct. The .table-light / .table-dark fixed variants are
+// neutralised — they would otherwise pin a light island inside dark mode.
+.table {
+  --bs-table-bg: var(--pmf-surface);
+  --bs-table-color: var(--pmf-text);
+  --bs-table-border-color: var(--pmf-border);
+  --bs-table-striped-bg: var(--pmf-surface-sunken);
+  --bs-table-striped-color: var(--pmf-text);
+  --bs-table-hover-bg: var(--pmf-surface-hover);
+  --bs-table-hover-color: var(--pmf-text);
+
+  color: var(--pmf-text);
+  border-color: var(--pmf-border);
+
+  &.table-light,
+  &.table-dark {
+    --bs-table-bg: var(--pmf-surface);
+    --bs-table-color: var(--pmf-text);
+    --bs-table-border-color: var(--pmf-border);
+    --bs-table-striped-bg: var(--pmf-surface-sunken);
+    --bs-table-striped-color: var(--pmf-text);
+    --bs-table-hover-bg: var(--pmf-surface-hover);
+    --bs-table-hover-color: var(--pmf-text);
+  }
+
+  > thead {
+    color: var(--pmf-text-muted);
+
+    th {
+      background-color: var(--pmf-surface-sunken);
+      border-color: var(--pmf-border);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
     }
   }
 }
 
-// Dark mode improvements for Admin UI
-[data-bs-theme='dark'] {
-  html,
-  body,
-  .container,
-  .main-content,
-  #content,
-  .content-wrapper {
-    //background-color: var(--bs-dark) !important;
-    color: var(--bs-light) !important;
+// List groups -------------------------------------------------------------
+// Used by the category overview tree. Bootstrap's dark theme would otherwise
+// pin these to a near-black body colour.
+.list-group {
+  --bs-list-group-bg: var(--pmf-surface);
+  --bs-list-group-color: var(--pmf-text);
+  --bs-list-group-border-color: var(--pmf-border);
+  --bs-list-group-action-color: var(--pmf-text);
+  --bs-list-group-action-hover-bg: var(--pmf-surface-hover);
+  --bs-list-group-action-hover-color: var(--pmf-text);
+  --bs-list-group-action-active-bg: var(--pmf-surface-sunken);
+  --bs-list-group-action-active-color: var(--pmf-text);
+  --bs-list-group-active-bg: var(--pmf-accent);
+  --bs-list-group-active-border-color: var(--pmf-accent);
+  --bs-list-group-active-color: var(--pmf-text-on-accent);
+}
+
+// Forms -------------------------------------------------------------------
+.form-control,
+.form-select {
+  background-color: var(--pmf-surface);
+  border-color: var(--pmf-border-strong);
+  border-radius: var(--pmf-radius-sm);
+  color: var(--pmf-text);
+  transition:
+    border-color var(--pmf-transition),
+    box-shadow var(--pmf-transition);
+
+  &:focus {
+    background-color: var(--pmf-surface);
+    border-color: var(--pmf-accent);
+    color: var(--pmf-text);
+    box-shadow: 0 0 0 0.2rem var(--pmf-focus-ring);
   }
 
-  // Admin footer overrides (template uses bg-light)
-  footer.bg-light {
-    background-color: var(--bs-gray-900) !important;
-    color: var(--bs-light) !important;
+  &::placeholder {
+    color: var(--pmf-text-muted);
+  }
+}
 
-    .text-muted {
-      color: var(--bs-gray-400) !important;
-    }
+.form-label,
+.col-form-label {
+  color: var(--pmf-text);
+  font-weight: 600;
+}
 
-    a {
-      color: var(--bs-info);
+.form-text {
+  color: var(--pmf-text-muted);
+}
 
-      &:hover {
-        opacity: 0.85;
-      }
-    }
+// Checkboxes, radios and switches
+.form-check-label,
+.form-switch .form-check-label {
+  color: var(--pmf-text);
+}
+
+.form-check-input {
+  background-color: var(--pmf-surface);
+  border-color: var(--pmf-border-strong);
+
+  &:checked {
+    background-color: var(--pmf-accent);
+    border-color: var(--pmf-accent);
   }
 
-  // Configuration screens
-  #pmf-admin-configuration-container {
-    a.nav-link.active {
-      background-color: var(--bs-gray-800) !important;
-      color: var(--bs-light) !important;
-    }
+  &:focus {
+    border-color: var(--pmf-accent);
+    box-shadow: 0 0 0 0.2rem var(--pmf-focus-ring);
+  }
+}
 
-    .tab-content {
-      background-color: var(--bs-gray-800);
-      color: var(--bs-light);
-      border-bottom: 1px solid var(--bs-gray-700);
-    }
+.input-group .input-group-text {
+  background-color: var(--pmf-surface-sunken);
+  border-color: var(--pmf-border-strong);
+  color: var(--pmf-text-muted);
+}
+
+.input-group:focus-within .input-group-text {
+  border-color: var(--pmf-accent);
+  color: var(--pmf-accent);
+}
+
+#faqpassword_toggle {
+  cursor: pointer;
+  color: var(--pmf-text-muted);
+
+  &:hover {
+    color: var(--pmf-accent);
+    background-color: var(--pmf-accent-subtle);
   }
 
-  .pmf-configuration-panel {
-    background-color: var(--bs-gray-800) !important;
-    border-left-color: var(--bs-gray-700) !important;
-    border-right-color: var(--bs-gray-700) !important;
-    border-bottom-color: var(--bs-gray-700) !important;
+  .bi {
+    color: currentcolor;
   }
+}
 
-  // Form elements readability in admin
-  .form-control,
-  .form-select {
-    background-color: var(--bs-gray-800);
-    border-color: var(--bs-gray-700);
-    color: var(--bs-light);
+.pmf-required-asterisk {
+  color: var(--pmf-danger);
+}
 
+// Buttons -----------------------------------------------------------------
+.btn {
+  border-radius: var(--pmf-radius-sm);
+  font-weight: 600;
+}
+
+.btn-primary {
+  background-color: var(--pmf-accent);
+  border-color: var(--pmf-accent);
+  color: var(--pmf-text-on-accent);
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: var(--pmf-accent-hover);
+    border-color: var(--pmf-accent-hover);
+    color: var(--pmf-text-on-accent);
+  }
+}
+
+.btn-outline-primary {
+  color: var(--pmf-accent);
+  border-color: var(--pmf-accent);
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: var(--pmf-accent);
+    border-color: var(--pmf-accent);
+    color: var(--pmf-text-on-accent);
+  }
+}
+
+.btn:focus-visible {
+  box-shadow: 0 0 0 0.2rem var(--pmf-focus-ring);
+}
+
+// Dropdowns ---------------------------------------------------------------
+.dropdown-menu {
+  background-color: var(--pmf-surface-raised);
+  border: 1px solid var(--pmf-border);
+  border-radius: var(--pmf-radius);
+  box-shadow: var(--pmf-shadow-md);
+
+  .dropdown-item {
+    color: var(--pmf-text);
+
+    &:hover,
     &:focus {
-      background-color: var(--bs-gray-800);
-      border-color: var(--bs-primary);
-      color: var(--bs-light);
-      box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+      background-color: var(--pmf-surface-hover);
+      color: var(--pmf-text);
     }
 
-    &::placeholder {
-      color: var(--bs-gray-400);
+    &.active {
+      background-color: var(--pmf-accent);
+      color: var(--pmf-text-on-accent);
     }
   }
 
-  // Improve visibility of input-group-text (e.g., password toggles)
-  .input-group .input-group-text {
-    background-color: var(--bs-gray-800);
-    border-color: var(--bs-gray-700);
-    color: var(--bs-light);
+  .dropdown-divider {
+    border-color: var(--pmf-border);
+  }
+}
+
+// Alerts ------------------------------------------------------------------
+.alert {
+  border-radius: var(--pmf-radius);
+  border: 1px solid transparent;
+
+  &.alert-info {
+    background-color: var(--pmf-accent-subtle);
+    border-color: var(--pmf-info);
+    color: var(--pmf-info);
   }
 
-  // Specific styling for password toggle in dark mode
-  #faqpassword_toggle {
-    cursor: pointer;
-    color: var(--bs-light);
+  &.alert-success {
+    background-color: rgb(31, 157, 107, 0.12);
+    border-color: var(--pmf-success);
+    color: var(--pmf-success);
+  }
+
+  &.alert-warning {
+    background-color: rgb(217, 148, 17, 0.12);
+    border-color: var(--pmf-warning);
+    color: var(--pmf-warning);
+  }
+
+  &.alert-danger {
+    background-color: rgb(214, 69, 63, 0.12);
+    border-color: var(--pmf-danger);
+    color: var(--pmf-danger);
+  }
+}
+
+// Breadcrumbs -------------------------------------------------------------
+.pmf-breadcrumbs,
+.breadcrumb {
+  background-color: transparent;
+  color: var(--pmf-text-muted);
+}
+
+// Borders & subtle backgrounds -------------------------------------------
+.border {
+  border-color: var(--pmf-border) !important;
+}
+
+.bg-light-subtle {
+  background-color: var(--pmf-surface-sunken) !important;
+  color: var(--pmf-text) !important;
+}
+
+// Configuration screens --------------------------------------------------
+#pmf-admin-configuration-container {
+  a.nav-link {
+    color: var(--pmf-text-muted);
 
     &:hover {
-      color: var(--bs-primary);
-      background-color: rgba(var(--bs-primary-rgb), 0.1);
+      color: var(--pmf-text);
     }
 
-    .bi {
-      color: currentColor;
+    &.active {
+      background-color: var(--pmf-surface);
+      color: var(--pmf-accent);
     }
   }
 
-  // Focus state when focusing inputs within the group
-  .input-group:focus-within .input-group-text {
-    border-color: var(--bs-primary);
-    color: var(--bs-primary);
-    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.15);
+  .tab-content {
+    background-color: var(--pmf-surface);
+    color: var(--pmf-text);
+    border: 1px solid var(--pmf-border);
+    border-top: 0;
   }
+}
+
+.pmf-configuration-panel {
+  background-color: var(--pmf-surface);
+  border-color: var(--pmf-border);
+  color: var(--pmf-text);
 }

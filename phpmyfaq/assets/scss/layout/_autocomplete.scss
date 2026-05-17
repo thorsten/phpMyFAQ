@@ -1,6 +1,6 @@
 .search {
   position: relative;
-  box-shadow: 0 0 40px rgba(51, 51, 51, 0.1);
+  box-shadow: 0 0 40px rgb(51, 51, 51, 0.1);
   background-color: transparent;
 
   input {
@@ -29,6 +29,7 @@
 
 .autocomplete {
   @extend .list-group;
+
   z-index: 1000;
 }
 
@@ -41,5 +42,6 @@
 .autocomplete > li:hover,
 .autocomplete > li.selected {
   @extend .list-group-item-info;
+
   cursor: pointer;
 }
