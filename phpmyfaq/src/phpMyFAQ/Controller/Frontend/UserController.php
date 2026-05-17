@@ -262,6 +262,7 @@ final class UserController extends AbstractFrontController
             'msgGravatarNotConnected' => Translation::get(key: 'msgGravatarNotConnected'),
             'webauthnSupportEnabled' => $this->configuration->get('security.enableWebAuthnSupport'),
             'csrfTokenWebAuthn' => Token::getInstance($this->session)->getTokenString('webauthn'),
+            'loginName' => $this->currentUser->getLogin(),
             'csrfExportUserData' => Token::getInstance($this->session)->getTokenInput('export-userdata'),
             'exportUserDataUrl' => 'api/user/data/export',
             'msgDownloadYourData' => Translation::get(key: 'msgDownloadYourData'),

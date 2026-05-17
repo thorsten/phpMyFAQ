@@ -89,10 +89,11 @@ final class WebAuthnController extends AbstractController
 
         // The account already exists: only its authenticated owner may (re-)register a passkey.
         // This prevents an unauthenticated attacker from overwriting an existing user's passkeys.
-        if (
-            $userExists
-            && (!$this->currentUser->isLoggedIn() || $this->currentUser->getUserId() !== $this->user->getUserId())
-        ) {
+        if ($userExists && !$this->currentUser->isLoggedIn()) {
+            return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if ($userExists && $this->currentUser->getUserId() !== $this->user->getUserId()) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
