@@ -26,8 +26,12 @@ use Twig\Extension\AbstractExtension;
 class TitleSlugifierTwigExtension extends AbstractExtension
 {
     #[AsTwigFilter(name: 'slugify')]
-    public static function slugify(string $title): string
+    public static function slugify(?string $title): string
     {
+        if ($title === null || $title === '') {
+            return '';
+        }
+
         return TitleSlugifier::slug($title);
     }
 }
