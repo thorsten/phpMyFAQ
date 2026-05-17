@@ -6,19 +6,19 @@
     <h2 class="mb-4 border-bottom">{{ pageHeader }}</h2>
 
     {% if isTagSearch == false %}
-    <div class="jumbotron justify-content-center col-12 border rounded p-2 mb-2 bg-light-subtle" id="searchBox">
+    <div class="col-12 border rounded p-3 mb-2 bg-light-subtle" id="searchBox">
       <form action="{{ formActionUrl }}" method="get">
 
-        <div class="row">
-          <div class="col-6">
-            <label class="sr-only" for="pmf-main-search">{{ msgSearch }}</label>
+        <div class="row g-2 align-items-end">
+          <div class="col-12 col-md-6">
+            <label class="visually-hidden" for="pmf-main-search">{{ msgSearch }}</label>
             <input id="pmf-main-search" type="search" name="search" maxlength="255" value="{{ searchString }}"
-                   class="form-control form-control-lg mb-2" placeholder="{{ msgSearch }}">
+                   class="form-control form-control-lg" placeholder="{{ msgSearch }}">
           </div>
 
-          <div class="col-4">
-            <label class="sr-only" for="pmf-search-category">{{ selectCategories }}</label>
-            <select class="form-select form-select-lg mb-2" name="pmf-search-category" id="pmf-search-category"
+          <div class="col-12 col-md-4">
+            <label class="visually-hidden" for="pmf-search-category">{{ selectCategories }}</label>
+            <select class="form-select form-select-lg" name="pmf-search-category" id="pmf-search-category"
                     data-placeholder="This is a placeholder">
               <option value="%" selected>{{ allCategories }}</option>
               {% for cat in categories %}
@@ -30,8 +30,8 @@
             </select>
           </div>
 
-          <div class="col-2">
-            <button type="submit" class="btn btn-lg btn-primary mt-4 mb-2" aria-label="{{ msgSearch }}">
+          <div class="col-12 col-md-2 d-grid">
+            <button type="submit" class="btn btn-lg btn-primary" aria-label="{{ msgSearch }}">
               <i class="bi bi-search"></i>
             </button>
           </div>
@@ -60,7 +60,7 @@
 
         <ul class="phpmyfaq-search-results list-unstyled">
         {% for result in searchResults %}
-          <li class="my-2">
+          <li class="pmf-search-result">
             {% if result.renderedScore > 0 %}
             {{ result.renderedScore | raw }}
             {% endif %}
@@ -84,9 +84,10 @@
         {% endif %}
 
       {% else %}
-        <p class="text-muted mt-5">
-          {{ 'help_search' | translate }}
-        </p>
+        <div class="pmf-search-empty">
+          <i class="bi bi-search d-block mb-3" aria-hidden="true"></i>
+          <p class="mb-0">{{ 'help_search' | translate }}</p>
+        </div>
       {% endif %}
     </section>
 

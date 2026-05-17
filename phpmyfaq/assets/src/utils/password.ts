@@ -20,13 +20,22 @@ export const handlePasswordToggle = (): void => {
     if (toggleId) {
       const toggle: HTMLElement | null = document.getElementById(toggleId);
       if (toggle) {
-        toggle.addEventListener('click', () => {
-          const type: string = field.getAttribute('type') === 'password' ? 'text' : 'password';
-          field.setAttribute('type', type);
+        const toggleVisibility = (): void => {
+          const isHidden: boolean = field.getAttribute('type') === 'password';
+          field.setAttribute('type', isHidden ? 'text' : 'password');
+          toggle.setAttribute('aria-pressed', isHidden ? 'true' : 'false');
           const icon: HTMLElement | null = document.getElementById(toggleId + '_icon');
           if (icon) {
             icon.classList.toggle('bi-eye');
             icon.classList.toggle('bi-eye-slash');
+          }
+        };
+
+        toggle.addEventListener('click', toggleVisibility);
+        toggle.addEventListener('keydown', (event: KeyboardEvent): void => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            toggleVisibility();
           }
         });
       }

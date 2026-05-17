@@ -47,16 +47,16 @@
 
           <div class="row mb-2">
             <div class="col">
-              <label class="sr-only" for="user">{{ msgNewContentName }}</label>
+              <label class="visually-hidden" for="user">{{ msgNewContentName }}</label>
               <input type="text" name="user" id="user" class="form-control" placeholder="{{ msgNewContentName }}"
-                     value="{{ defaultContentName }}" required>
+                     value="{{ defaultContentName }}" autocomplete="name" required>
             </div>
           </div>
           <div class="row mb-2">
             <div class="col">
-              <label class="sr-only" for="mail">{{ msgNewContentMail }}</label>
+              <label class="visually-hidden" for="mail">{{ msgNewContentMail }}</label>
               <input type="email" name="mail" id="mail" class="form-control" placeholder="{{ msgNewContentMail }}"
-                     value="{{ defaultContentMail }}" required>
+                     value="{{ defaultContentMail }}" autocomplete="email" required>
             </div>
           </div>
           <div class="row mb-2">

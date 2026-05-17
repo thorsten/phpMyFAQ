@@ -1,7 +1,30 @@
+//
+// Global frontend styles
+//
+// Token-driven (see _tokens.scss): one set of component rules covers light,
+// dark and high-contrast because the token values swap per theme. Only the
+// genuinely theme-specific extras live in layout/_theme-switcher.scss.
+//
+
 html,
 body {
   min-height: 100%;
-  background-color: var(--bs-body-bg);
+}
+
+body {
+  background-color: var(--pmf-bg);
+  color: var(--pmf-text);
+}
+
+//
+// Links
+//
+a {
+  color: var(--pmf-accent);
+
+  &:hover {
+    color: var(--pmf-accent);
+  }
 }
 
 //
@@ -30,20 +53,78 @@ body {
 }
 
 //
+// Surfaces — cards and panels
+//
+.card {
+  background-color: var(--pmf-surface);
+  border: 1px solid var(--pmf-border);
+  border-radius: var(--pmf-radius-lg);
+  box-shadow: var(--pmf-shadow-sm);
+  color: var(--pmf-text);
+
+  .card-header,
+  .card-footer {
+    background-color: transparent;
+    border-color: var(--pmf-border);
+    color: var(--pmf-text);
+  }
+}
+
+.bg-light-subtle {
+  background-color: var(--pmf-surface-sunken) !important;
+  color: var(--pmf-text) !important;
+}
+
+// List groups — drive Bootstrap's variables from tokens so they stay
+// theme-correct (Bootstrap's dark theme would otherwise pin them near-black).
+.list-group {
+  --bs-list-group-bg: var(--pmf-surface);
+  --bs-list-group-color: var(--pmf-text);
+  --bs-list-group-border-color: var(--pmf-border);
+  --bs-list-group-action-color: var(--pmf-text);
+  --bs-list-group-action-hover-bg: var(--pmf-surface-hover);
+  --bs-list-group-action-hover-color: var(--pmf-text);
+  --bs-list-group-action-active-bg: var(--pmf-surface-sunken);
+  --bs-list-group-action-active-color: var(--pmf-text);
+}
+
+//
 // Buttons
 //
+.btn {
+  border-radius: var(--pmf-radius-sm);
+  font-weight: 600;
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
 .btn-primary {
-  background-color: var(--bs-primary);
-  border-color: var(--bs-primary);
+  background-color: var(--pmf-accent);
+  border-color: var(--pmf-accent);
+  color: var(--pmf-text-on-accent);
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: var(--pmf-accent);
+    border-color: var(--pmf-accent);
+    color: var(--pmf-text-on-accent);
+    filter: brightness(1.08);
+  }
 }
 
 .btn-outline-primary {
-  color: var(--bs-primary);
-  border-color: var(--bs-primary);
+  color: var(--pmf-accent);
+  border-color: var(--pmf-accent);
 
-  &:hover {
-    background-color: var(--bs-primary);
-    color: var(--bs-light);
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: var(--pmf-accent);
+    border-color: var(--pmf-accent);
+    color: var(--pmf-text-on-accent);
   }
 }
 
@@ -72,7 +153,119 @@ body {
   border-color: var(--bs-info);
 }
 
+.btn:focus-visible {
+  box-shadow: 0 0 0 0.2rem var(--pmf-focus-ring);
+}
+
+//
+// Forms
+//
+.form-control,
+.form-select {
+  background-color: var(--pmf-surface);
+  border-color: var(--pmf-border-strong);
+  border-radius: var(--pmf-radius-sm);
+  color: var(--pmf-text);
+
+  &:focus {
+    background-color: var(--pmf-surface);
+    border-color: var(--pmf-accent);
+    color: var(--pmf-text);
+    box-shadow: 0 0 0 0.2rem var(--pmf-focus-ring);
+  }
+
+  &::placeholder {
+    color: var(--pmf-text-muted);
+  }
+}
+
+.form-check-input {
+  background-color: var(--pmf-surface);
+  border-color: var(--pmf-border-strong);
+
+  &:checked {
+    background-color: var(--pmf-accent);
+    border-color: var(--pmf-accent);
+  }
+
+  &:focus {
+    border-color: var(--pmf-accent);
+    box-shadow: 0 0 0 0.2rem var(--pmf-focus-ring);
+  }
+}
+
 // required-asterisk
 .pmf-required-asterisk {
   color: var(--bs-danger);
+}
+
+//
+// Dropdowns
+//
+.dropdown-menu {
+  background-color: var(--pmf-surface-raised);
+  border: 1px solid var(--pmf-border);
+  border-radius: var(--pmf-radius);
+  box-shadow: var(--pmf-shadow-md);
+
+  .dropdown-item {
+    color: var(--pmf-text);
+
+    &:hover,
+    &:focus {
+      background-color: var(--pmf-surface-hover);
+      color: var(--pmf-text);
+    }
+  }
+
+  .dropdown-divider {
+    border-color: var(--pmf-border);
+  }
+}
+
+//
+// Alerts
+//
+.alert {
+  border-radius: var(--pmf-radius);
+}
+
+//
+// Tables
+//
+.table {
+  --bs-table-bg: var(--pmf-surface);
+  --bs-table-color: var(--pmf-text);
+  --bs-table-border-color: var(--pmf-border);
+  --bs-table-striped-bg: var(--pmf-surface-sunken);
+  --bs-table-striped-color: var(--pmf-text);
+  --bs-table-hover-bg: var(--pmf-surface-hover);
+  --bs-table-hover-color: var(--pmf-text);
+
+  color: var(--pmf-text);
+  border-color: var(--pmf-border);
+}
+
+//
+// Breadcrumbs
+//
+.pmf-breadcrumbs {
+  background-color: var(--pmf-surface-sunken);
+  color: var(--pmf-text-muted);
+  border-radius: var(--pmf-radius);
+}
+
+//
+// Misc
+//
+.text-muted {
+  color: var(--pmf-text-muted) !important;
+}
+
+.border {
+  border-color: var(--pmf-border) !important;
+}
+
+hr {
+  border-color: var(--pmf-border);
 }

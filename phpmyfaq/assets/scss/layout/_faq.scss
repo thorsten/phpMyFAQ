@@ -117,6 +117,87 @@
   }
 }
 
+// FAQ answer body — comfortable reading typography.
+.pmf-faq-body {
+  line-height: 1.7;
+
+  h2,
+  h3,
+  h4 {
+    margin-top: 1.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--pmf-radius-sm);
+  }
+
+  blockquote {
+    margin: 1.25rem 0;
+    padding: 0.5rem 1.25rem;
+    border-left: 3px solid var(--pmf-accent);
+    background: var(--pmf-surface-sunken);
+    border-radius: 0 var(--pmf-radius-sm) var(--pmf-radius-sm) 0;
+    color: var(--pmf-text-muted);
+  }
+
+  :not(pre) > code {
+    padding: 0.15em 0.4em;
+    background: var(--pmf-surface-sunken);
+    border-radius: var(--pmf-radius-sm);
+    font-size: 0.9em;
+  }
+
+  pre {
+    padding: 1rem;
+    background: var(--pmf-surface-sunken);
+    border: 1px solid var(--pmf-border);
+    border-radius: var(--pmf-radius);
+    overflow-x: auto;
+  }
+
+  table {
+    border-collapse: collapse;
+    margin: 1.25rem 0;
+
+    th,
+    td {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--pmf-border);
+    }
+
+    th {
+      background: var(--pmf-surface-sunken);
+    }
+  }
+}
+
+// FAQ tag list — pill-shaped chips with comfortable spacing.
+.pmf-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  .btn {
+    padding: 0.3rem 0.85rem;
+    border-radius: 999px;
+    border-color: transparent;
+    background: var(--pmf-accent-subtle);
+    color: var(--pmf-accent);
+    font-size: 0.85rem;
+    font-weight: 600;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--pmf-accent);
+      border-color: var(--pmf-accent);
+      color: var(--pmf-text-on-accent);
+    }
+  }
+}
+
 .pmf-voting-star {
   background: none;
   border: none;

@@ -1,0 +1,83 @@
+//
+// Semantic design tokens for the phpMyFAQ public frontend
+//
+// Components reference these CSS custom properties instead of raw colours, so
+// switching theme (light / dark / high-contrast) is a matter of swapping token
+// values. Accent tokens defer to the Bootstrap brand variables defined in the
+// user-customisable theme.css, so installations keep their own brand colours.
+//
+
+:root {
+  --pmf-radius-sm: 0.375rem;
+  --pmf-radius: 0.625rem;
+  --pmf-radius-lg: 1rem;
+  --pmf-radius-xl: 1.5rem;
+  --pmf-transition: 0.18s ease;
+}
+
+// Light theme — the default.
+:root,
+[data-bs-theme='light'] {
+  --pmf-bg: #f4f6f9;
+  --pmf-surface: #fff;
+  --pmf-surface-raised: #fff;
+  --pmf-surface-sunken: #eef1f5;
+  --pmf-surface-hover: #f1f4f8;
+  --pmf-border: #e3e7ee;
+  --pmf-border-strong: #ccd3df;
+  --pmf-text: #1c2433;
+  --pmf-text-muted: #5f6b7e;
+  --pmf-text-on-accent: #fff;
+  --pmf-accent: var(--bs-primary);
+  --pmf-accent-2: var(--bs-secondary);
+  --pmf-accent-subtle: rgb(8, 60, 131, 0.09);
+  --pmf-focus-ring: rgb(8, 60, 131, 0.3);
+  --pmf-shadow-sm: 0 1px 2px rgb(16, 24, 40, 0.06), 0 1px 3px rgb(16, 24, 40, 0.08);
+  --pmf-shadow-md: 0 4px 14px rgb(16, 24, 40, 0.08), 0 2px 5px rgb(16, 24, 40, 0.06);
+  --pmf-shadow-lg: 0 12px 32px rgb(16, 24, 40, 0.12), 0 4px 10px rgb(16, 24, 40, 0.08);
+}
+
+// Dark theme — softened dark surfaces with elevation steps.
+[data-bs-theme='dark'] {
+  --pmf-bg: #14171d;
+  --pmf-surface: #1d212a;
+  --pmf-surface-raised: #252a35;
+  --pmf-surface-sunken: #14171d;
+  --pmf-surface-hover: #2a303c;
+  --pmf-border: #2e3440;
+  --pmf-border-strong: #3c4350;
+  --pmf-text: #e6e9ef;
+  --pmf-text-muted: #9aa3b2;
+  --pmf-text-on-accent: #fff;
+
+  // Navy is too dark on a dark surface — use a lightened brand blue, and the
+  // brand teal as the link/accent colour.
+  --pmf-accent: #5d8fd0;
+  --pmf-accent-2: var(--bs-info);
+  --pmf-accent-subtle: rgb(93, 143, 208, 0.16);
+  --pmf-focus-ring: rgb(93, 143, 208, 0.4);
+  --pmf-shadow-sm: 0 1px 2px rgb(0, 0, 0, 0.4), 0 1px 3px rgb(0, 0, 0, 0.5);
+  --pmf-shadow-md: 0 6px 18px rgb(0, 0, 0, 0.5), 0 2px 6px rgb(0, 0, 0, 0.4);
+  --pmf-shadow-lg: 0 14px 36px rgb(0, 0, 0, 0.6), 0 4px 12px rgb(0, 0, 0, 0.5);
+}
+
+// High-contrast theme — black / white / yellow, strong borders, no shadows.
+[data-bs-theme='high-contrast'] {
+  --pmf-bg: #000;
+  --pmf-surface: #000;
+  --pmf-surface-raised: #000;
+  --pmf-surface-sunken: #000;
+  --pmf-surface-hover: #1a1a1a;
+  --pmf-border: #fff;
+  --pmf-border-strong: #fff;
+  --pmf-text: #fff;
+  --pmf-text-muted: #e6e6e6;
+  --pmf-text-on-accent: #000;
+  --pmf-accent: var(--bs-primary);
+  --pmf-accent-2: var(--bs-info);
+  --pmf-accent-subtle: rgb(255, 255, 0, 0.2);
+  --pmf-focus-ring: rgb(255, 255, 0, 0.6);
+  --pmf-shadow-sm: none;
+  --pmf-shadow-md: none;
+  --pmf-shadow-lg: none;
+}

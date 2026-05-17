@@ -999,7 +999,7 @@ $PMF_LANG['ad_search_delsuc'] = 'Thuật ngữ tìm kiếm đã được xóa th
 $PMF_LANG['ad_search_delfail'] = 'Thuật ngữ tìm kiếm không được xóa.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'Về FAQ này';
+$PMF_LANG['msgAboutFAQ'] = 'Về FAQ này';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'FAQ chỉ với SSL'];
 $PMF_LANG['msgTableOfContent'] = 'Mục lục';
 

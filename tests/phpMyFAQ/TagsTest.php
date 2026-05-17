@@ -136,7 +136,7 @@ class TagsTest extends TestCase
         $testData = ['Foo', 'Bar', 'Baz'];
         $this->tags->create(1, $testData);
 
-        $this->assertCount(1, $this->tags->getFaqsByTagId(1));
+        $this->assertSame([1], $this->tags->getFaqsByTagId(1));
     }
 
     public function testGetFaqsByIntersectionTags(): void

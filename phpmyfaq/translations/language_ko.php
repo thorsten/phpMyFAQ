@@ -1004,7 +1004,7 @@ $PMF_LANG['ad_search_delsuc'] = '검색어가 성공적으로 삭제되었습니
 $PMF_LANG['ad_search_delfail'] = '검색어가 삭제되지 않았습니다.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = '이 FAQ 정보';
+$PMF_LANG['msgAboutFAQ'] = '이 FAQ 정보';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'SSL만 사용하는 FAQ'];
 $PMF_LANG['msgTableOfContent'] = '목차';
 

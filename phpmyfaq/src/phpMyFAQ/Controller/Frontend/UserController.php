@@ -261,6 +261,7 @@ final class UserController extends AbstractFrontController
             'csrfTokenRemoveTwofactor' => Token::getInstance($this->session)->getTokenString('remove-twofactor'),
             'msgGravatarNotConnected' => Translation::get(key: 'msgGravatarNotConnected'),
             'webauthnSupportEnabled' => $this->configuration->get('security.enableWebAuthnSupport'),
+            'csrfTokenWebAuthn' => Token::getInstance($this->session)->getTokenString('webauthn'),
             'csrfExportUserData' => Token::getInstance($this->session)->getTokenInput('export-userdata'),
             'exportUserDataUrl' => 'api/user/data/export',
             'msgDownloadYourData' => Translation::get(key: 'msgDownloadYourData'),

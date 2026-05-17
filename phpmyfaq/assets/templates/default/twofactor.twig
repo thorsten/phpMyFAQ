@@ -19,13 +19,14 @@
                     <input type="hidden" id="user-id" name="user-id" value="{{ userId }}">
                     <div class="row mb-2">
                       <label for="token">{{ msgEnterTwofactorToken }}</label>
-                      <div class="col-4 mx-auto my-2">
+                      <div class="col-12 col-sm-6 mx-auto my-2">
                         <input type="text" class="form-control form-control-lg text-center rounded-0" name="token"
-                               id="token" autocomplete="off" maxlength="6" autofocus required>
+                               id="token" autocomplete="one-time-code" inputmode="numeric" maxlength="6"
+                               autofocus required>
                       </div>
                     </div>
                     <div class="d-grid gap-2 col-6 mx-auto">
-                      <button type="submit" class="btn btn-success btn-lg float-right" id="btnLogin">
+                      <button type="submit" class="btn btn-success btn-lg" id="btnLogin">
                         {{ msgTwofactorCheck }}
                       </button>
                     </div>

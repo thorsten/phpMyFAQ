@@ -84,7 +84,7 @@ final class WebAuthnController extends AbstractController
         $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'} ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance($this->session)->verifyToken('webauthn', $csrfToken)) {
-            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgSessionExpired')], Response::HTTP_UNAUTHORIZED);
         }
 
         // The account already exists: only its authenticated owner may (re-)register a passkey.

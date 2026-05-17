@@ -961,7 +961,7 @@ $PMF_LANG['ad_search_delsuc'] = 'Wyszukiwane hasło zostało pomyślnie usunięt
 $PMF_LANG['ad_search_delfail'] = 'Wyszukiwane hasło nie zostało usunięte.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'O tym FAQ';
+$PMF_LANG['msgAboutFAQ'] = 'O tym FAQ';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'FAQ tylko z SSL'];
 $PMF_LANG['msgTableOfContent'] = 'Table of Content';
 

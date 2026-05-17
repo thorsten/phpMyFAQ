@@ -1009,7 +1009,7 @@ $PMF_LANG['ad_search_delsuc'] = 'Пошуковий термін було усп
 $PMF_LANG['ad_search_delfail'] = 'Пошуковий термін не було видалено.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'Про цей FAQ';
+$PMF_LANG['msgAboutFAQ'] = 'Про цей FAQ';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'FAQ лише з SSL'];
 $PMF_LANG['msgTableOfContent'] = 'Зміст';
 

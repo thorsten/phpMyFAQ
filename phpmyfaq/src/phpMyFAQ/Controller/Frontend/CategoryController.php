@@ -160,6 +160,7 @@ class CategoryController extends AbstractFrontController
                 $this->configuration->getTitle(),
             ),
             'categoryHeader' => $categoryHeader,
+            'isAllCategories' => false,
             'breadcrumb' => $category->getPathWithStartPage($selectedCategoryId, '/', true),
             'categoryFaqsHeader' => $categoryEntity->getName(),
             'categoryDescription' => $categoryEntity->getDescription() ?? '',
@@ -183,7 +184,7 @@ class CategoryController extends AbstractFrontController
 
         $this->categoryHelper->setConfiguration($this->configuration)->setCategory($category);
 
-        $categoryHeader = Translation::get(key: 'msgFullCategories');
+        $categoryHeader = Translation::get(key: 'msgShowAllCategories');
 
         return [
             ...$this->getHeader($request),
@@ -193,6 +194,7 @@ class CategoryController extends AbstractFrontController
                 $this->configuration->getTitle(),
             ),
             'categoryHeader' => $categoryHeader,
+            'isAllCategories' => true,
             'breadcrumb' => $category->getPathWithStartPage(0, '/', true),
             'categoryFaqsHeader' => Translation::get(key: 'msgShowAllCategories'),
             'categoryDescription' => Translation::get(key: 'msgCategoryDescription'),

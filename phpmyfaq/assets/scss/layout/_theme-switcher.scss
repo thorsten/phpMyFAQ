@@ -1,16 +1,24 @@
-// Theme switcher button group
+//
+// Theme switcher + theme-specific extras
+//
+// The bulk of light/dark theming now lives in the token layer (_tokens.scss)
+// consumed by _global.scss, so this file only carries the switcher control,
+// the dark-mode card-cover overlay and the high-contrast accessibility mode.
+//
+
+// Theme switcher button group ------------------------------------------------
 .pmf-theme-switcher {
   button {
-    color: var(--bs-light) !important;
+    color: var(--bs-light);
     border: none;
     background: transparent;
+    border-radius: var(--pmf-radius-sm);
     transition: all 0.3s ease;
     opacity: 0.6;
 
     &:hover {
-      color: var(--bs-warning) !important;
+      color: var(--bs-warning);
       background: rgb(255, 255, 255, 0.1);
-      border-radius: 0.375rem;
       opacity: 1;
     }
 
@@ -19,10 +27,9 @@
     }
 
     &.active {
-      color: var(--bs-warning) !important;
+      color: var(--bs-warning);
       opacity: 1;
       background: rgb(255, 255, 255, 0.15);
-      border-radius: 0.375rem;
     }
 
     i {
@@ -36,221 +43,36 @@
   }
 }
 
-// Dark mode specific styles
+// Dark mode ------------------------------------------------------------------
 [data-bs-theme='dark'] {
-  // Global background
-  html,
-  body {
-    background: var(--bs-gray-700) !important;
-    color: var(--bs-light);
-  }
-
-  // Navigation adjustments for dark mode
-  .text-bg-pmf-nav {
-    background-color: var(--bs-gray-900) !important;
-  }
-
-  // Search form dark mode
-  .search {
-    .form-control {
-      background-color: var(--bs-gray-800);
-      border-color: var(--bs-gray-700);
-      color: var(--bs-light);
-
-      &:focus {
-        background-color: var(--bs-gray-800);
-        border-color: var(--bs-primary);
-        color: var(--bs-light);
-        box-shadow: 0 0 0 0.25rem rgb(13, 110, 253, 0.25);
-      }
-
-      &::placeholder {
-        color: var(--bs-gray-400);
-      }
-    }
-
-    .bi-search {
-      color: var(--bs-gray-400);
-    }
-  }
-
-  // Cards and content areas
-  .card {
-    background-color: var(--bs-gray-800);
-    border-color: var(--bs-gray-700);
-    color: var(--bs-light);
-  }
-
-  // Startpage: card cover should be dark in dark mode
+  // Startpage cover cards may carry a background image — add a subtle dark
+  // overlay so the overlaid text stays readable.
   .card.card-cover {
-    background-color: var(--bs-gray-800) !important;
-    color: var(--bs-light) !important;
     position: relative;
-  }
+    background-color: var(--pmf-surface) !important;
+    color: var(--pmf-text) !important;
 
-  // If a background image is set, add a subtle dark overlay for readability
-  .card.card-cover::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgb(0, 0, 0, 0.35);
-    pointer-events: none;
-  }
-
-  // Ensure inner content sits above the overlay
-  .card.card-cover .d-flex {
-    position: relative;
-    z-index: 1;
-  }
-
-  // Explicitly override Bootstrap's text-bg-light on card-cover in dark mode
-  .card.card-cover.text-bg-light {
-    background-color: var(--bs-gray-800) !important;
-    color: var(--bs-light) !important;
-  }
-
-  // Footer dark mode
-  .text-bg-pmf-footer {
-    background-color: var(--bs-gray-900) !important;
-  }
-
-  // Links in dark mode
-  a {
-    color: var(--bs-info);
-
-    &:hover {
-      color: var(--bs-info);
-      opacity: 0.8;
+    &.text-bg-light {
+      background-color: var(--pmf-surface) !important;
+      color: var(--pmf-text) !important;
     }
 
-    &.btn {
-      color: var(--bs-light);
-    }
-  }
-
-  // Form elements
-  .form-control,
-  .form-select {
-    background-color: var(--bs-gray-800);
-    border-color: var(--bs-gray-700);
-    color: var(--bs-light);
-
-    &:focus {
-      background-color: var(--bs-gray-800);
-      border-color: var(--bs-primary);
-      color: var(--bs-light);
-    }
-  }
-  // required-asterisk
-  .pmf-required-asterisk {
-    color: var(--bs-danger);
-  }
-  // Dropdowns
-  .dropdown-menu {
-    background-color: var(--bs-gray-800);
-    border-color: var(--bs-gray-700);
-
-    .dropdown-item {
-      color: var(--bs-light);
-
-      &:hover,
-      &:focus {
-        background-color: var(--bs-gray-700);
-        color: var(--bs-light);
-      }
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgb(0, 0, 0, 0.35);
+      pointer-events: none;
     }
 
-    .dropdown-divider {
-      border-color: var(--bs-gray-700);
+    .d-flex {
+      position: relative;
+      z-index: 1;
     }
-  }
-
-  // Buttons
-  .btn-outline-primary {
-    color: var(--bs-info);
-    border-color: var(--bs-info);
-
-    &:hover {
-      background-color: var(--bs-info);
-      color: var(--bs-dark);
-    }
-  }
-
-  // Improve readability of info badges inside tag buttons
-  .badge.bg-info {
-    color: var(--bs-dark);
-  }
-
-  // Ensure badge remains readable when the tag button is hovered
-  .btn-outline-primary:hover .badge.bg-info {
-    background-color: var(--bs-light);
-    color: var(--bs-dark);
-  }
-
-  // Light subtle backgrounds should be dark in dark mode
-  .bg-light-subtle {
-    background-color: var(--bs-gray-800) !important;
-    color: var(--bs-light) !important;
-  }
-
-  // Alerts and notifications
-  .alert {
-    &.alert-info {
-      background-color: rgb(13, 202, 240, 0.1);
-      border-color: var(--bs-info);
-      color: var(--bs-info);
-    }
-
-    &.alert-warning {
-      background-color: rgb(255, 193, 7, 0.1);
-      border-color: var(--bs-warning);
-      color: var(--bs-warning);
-    }
-
-    &.alert-danger {
-      background-color: rgb(220, 53, 69, 0.1);
-      border-color: var(--bs-danger);
-      color: var(--bs-danger);
-    }
-
-    &.alert-success {
-      background-color: rgb(25, 135, 84, 0.1);
-      border-color: var(--bs-success);
-      color: var(--bs-success);
-    }
-  }
-
-  // Breadcrumbs
-  .pmf-breadcrumbs {
-    background-color: var(--bs-gray-800);
-    color: var(--bs-light);
-  }
-
-  // Tables
-  .table {
-    color: var(--bs-light);
-
-    &.table-striped > tbody > tr:nth-of-type(odd) > td {
-      background-color: rgb(255, 255, 255, 0.05);
-    }
-
-    &.table-hover > tbody > tr:hover > td {
-      background-color: rgb(255, 255, 255, 0.075);
-    }
-  }
-
-  // Borders
-  .border {
-    border-color: var(--bs-gray-700) !important;
-  }
-
-  // Text muted
-  .text-muted {
-    color: var(--bs-gray-400) !important;
   }
 }
 
-// High contrast mode specific styles
+// High contrast mode ---------------------------------------------------------
 [data-bs-theme='high-contrast'] {
   // Global background with maximum contrast
   html,
@@ -362,17 +184,15 @@
     background-color: #000 !important;
     color: #fff !important;
     border: 2px solid #fff !important;
-  }
 
-  // Remove overlay in high contrast mode for clarity
-  .card.card-cover::before {
-    display: none;
-  }
+    &::before {
+      display: none;
+    }
 
-  // Override text-bg-light on card-cover in high contrast mode
-  .card.card-cover.text-bg-light {
-    background-color: #000 !important;
-    color: #fff !important;
+    &.text-bg-light {
+      background-color: #000 !important;
+      color: #fff !important;
+    }
   }
 
   // Footer high contrast mode
@@ -423,11 +243,13 @@
       border-color: var(--bs-primary) !important;
     }
   }
+
   // Logo image - invert colors for high-contrast mode
   #phpmyfaq-logo img {
     filter: brightness(0) invert(1) saturate(2);
     width: 100%;
   }
+
   // Heading style exceptions
   h1.pmf-start-page,
   .pmf-start-page.h1 {
@@ -451,11 +273,13 @@
       color: var(--bs-light);
     }
   }
+
   // required-asterisk
   .pmf-required-asterisk {
     color: var(--bs-primary);
     font-weight: bold;
   }
+
   // Dropdowns
   .dropdown-menu {
     background-color: var(--bs-dark);
@@ -505,11 +329,6 @@
 
   .text-body {
     color: var(--bs-light) !important;
-  }
-
-  a:hover {
-    color: var(--bs-dark) !important;
-    background-color: var(--bs-primary) !important;
   }
 
   .js-unstick-button.sticky-toggle-btn {

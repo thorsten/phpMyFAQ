@@ -1008,7 +1008,7 @@ $PMF_LANG['ad_search_delsuc'] = 'खोज शब्द सफलतापूर
 $PMF_LANG['ad_search_delfail'] = 'खोज शब्द नहीं हटाया गया।';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'इस FAQ के बारे में';
+$PMF_LANG['msgAboutFAQ'] = 'इस FAQ के बारे में';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'केवल SSL के साथ FAQ'];
 $PMF_LANG['msgTableOfContent'] = 'विषय-सूची';
 

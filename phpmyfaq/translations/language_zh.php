@@ -739,7 +739,7 @@ $LANG_CONF['records.orderingPopularFaqs'] = ['select', '为顶级问答排序'];
 $PMF_LANG['securityControlCenter'] = '安全设置';
 $PMF_LANG['ad_search_delsuc'] = '搜索语句删除成功';
 $PMF_LANG['ad_search_delfail'] = '搜索语句未被删除。';
-$PMF_LANG['msg_about_faq'] = '关于问答集';
+$PMF_LANG['msgAboutFAQ'] = '关于问答集';
 $PMF_LANG['msgTableOfContent'] = '内容表';
 $PMF_LANG['msgExportAllFaqs'] = '以PDF输出打印';
 $PMF_LANG['ad_menu_instances'] = '问答集站群';
@@ -848,7 +848,7 @@ $PMF_LANG['ad_search_delsuc'] = '搜索词已成功删除。';
 $PMF_LANG['ad_search_delfail'] = '搜索词未删除。';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = '关于此 FAQ';
+$PMF_LANG['msgAboutFAQ'] = '关于此 FAQ';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'FAQ 仅使用 SSL'];
 $PMF_LANG['msgTableOfContent'] = '目录';
 

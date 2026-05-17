@@ -1027,7 +1027,7 @@ $PMF_LANG['ad_search_delsuc'] = 'Хайлт хийх журам устгагдс
 $PMF_LANG['ad_search_delfail'] = 'Хайлт хийх журам устгагдсангүй.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'Энэ FAQ -н тухай';
+$PMF_LANG['msgAboutFAQ'] = 'Энэ FAQ -н тухай';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'FAQ with SSL only (үндсэн: идэвхгүй)'];
 $PMF_LANG['msgTableOfContent'] = 'Агуулга';
 

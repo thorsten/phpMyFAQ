@@ -33,14 +33,17 @@ final class BreadcrumbsHtmlRenderer
     {
         $items = [];
         foreach ($segments as $index => $segment) {
-            // Handle startpage (ID -1) with homepage URL
             $url = strtr('{base}category/{id}/{slug}.html', [
                 '{base}' => $configuration->getDefaultUrl(),
                 '{id}' => (string) $segment['id'],
                 '{slug}' => TitleSlugifier::slug(Strings::htmlentities($segment['name'])),
             ]);
             if ($segment['id'] === -1) {
+                // Start page → homepage URL
                 $url = $configuration->getDefaultUrl();
+            } elseif ($segment['id'] === 0) {
+                // All-categories overview → dedicated route, not a category URL
+                $url = $configuration->getDefaultUrl() . 'show-categories.html';
             }
 
             $oLink = new Link($url, $configuration);

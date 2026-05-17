@@ -986,7 +986,7 @@ $PMF_LANG['ad_search_delsuc'] = 'تلاش کی اصطلاح کامیابی سے 
 $PMF_LANG['ad_search_delfail'] = 'تلاش کی اصطلاح حذف نہیں کی گئی۔';
 
 // شامل کیا گیا 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'اس عمومی سوالنامہ کے بارے میں';
+$PMF_LANG['msgAboutFAQ'] = 'اس عمومی سوالنامہ کے بارے میں';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'صرف SSL کے ساتھ عمومی سوالات'];
 $PMF_LANG['msgTableOfContent'] = 'فہرست مواد';
 

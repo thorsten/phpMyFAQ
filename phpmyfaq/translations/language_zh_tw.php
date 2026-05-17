@@ -1006,7 +1006,7 @@ $PMF_LANG['ad_search_delsuc'] = "搜尋 term 刪除成功。(The search term was
 $PMF_LANG['ad_search_delfail'] = "搜尋 term 沒有被刪除。 (The search term was not deleted.)";
 
 // added 2.7.1 - 2011-09-30 by Thorsten 開發者
-$PMF_LANG['msg_about_faq'] = "關於此 FAQ  About this FAQ";
+$PMF_LANG['msgAboutFAQ'] = "關於此 FAQ  About this FAQ";
 $LANG_CONF['security.useSslOnly'] = ['checkbox', "FAQ 只能使用 SSL 安全連線 (預設: 關閉不啟用) FAQ with SSL only (default: deactivated)"];
 $PMF_LANG['msgTableOfContent'] = "目錄 (Table of Content)";
 

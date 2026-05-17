@@ -1000,7 +1000,7 @@ $PMF_LANG['ad_search_delsuc'] = 'The search term was successfully deleted.';
 $PMF_LANG['ad_search_delfail'] = 'The search term was not deleted.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'About this FAQ';
+$PMF_LANG['msgAboutFAQ'] = 'About this FAQ';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'FAQ with SSL only'];
 $PMF_LANG['msgTableOfContent'] = 'Table of Contents';
 
@@ -1787,5 +1787,8 @@ $PMF_LANG['ad_group_category_restrictions'] = 'Category Restrictions';
 $PMF_LANG['ad_group_category_restrictions_help'] = 'Select a group to manage category restrictions for its permissions.';
 $PMF_LANG['ad_group_no_permissions'] = 'No permissions assigned to this group.';
 $PMF_LANG['ad_group_category_restrictions_select'] = 'Select categories to restrict this permission. Leave empty for unrestricted access.';
+$PMF_LANG['msgPasswordLeaveBlank'] = 'Leave the password fields blank to keep your current password.';
+$PMF_LANG['msgShowPassword'] = 'Show or hide password';
+$PMF_LANG['msgPasswordStrength'] = 'Password strength';
 
 return $PMF_LANG;

@@ -5,13 +5,13 @@
     <h2 class="mb-4 border-bottom">{{ 'headerUserControlPanel' | translate }}</h2>
 
 
-    <div class="col-4 pmf-personal-gravatar">
-      <div class="card shadow mb-4">
+    <div class="col-12 col-lg-4 pmf-personal-gravatar">
+      <div class="card shadow mb-4 position-sticky" style="top: 1rem">
         <div class="card-header py-3">
-          <h5 class="h6 m-0 font-weight-bold">
+          <h6 class="h6 m-0 fw-bold">
             <i aria-hidden="true" class="bi bi-person-circle"></i>
             {{ 'msgGravatar' | translate }}
-          </h5>
+          </h6>
         </div>
         <div class="card-body">
           <div class="text-center">{{ ucpGravatarImage | raw }}</div>
@@ -26,12 +26,12 @@
         </div>
       </div>
     </div>
-    <div class="col-8 pmf-personal-info">
+    <div class="col-12 col-lg-8 pmf-personal-info">
       <form id="pmf-user-control-panel-form" action="#" method="post" class="needs-validation">
 
         <div class="card shadow mb-4">
           <div class="card-header py-3">
-            <h6 class="h6 m-0 font-weight-bold">
+            <h6 class="h6 m-0 fw-bold">
               <i aria-hidden="true" class="bi bi-postcard"></i>
               {{ msgHeaderUserData }}
             </h6>
@@ -51,7 +51,9 @@
             <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
 
             <div class="row mb-2">
-              <label class="col-lg-4 col-form-label" for="name">{{ msgRealName }}: *</label>
+              <label class="col-lg-4 col-form-label" for="name">
+                {{ msgRealName }} <span class="pmf-required-asterisk" aria-hidden="true">*</span>
+              </label>
               <div class="col-lg-8 controls">
                 <input
                   type="text"
@@ -59,13 +61,16 @@
                   id="name"
                   value="{{ realname | e('html_attr') }}"
                   class="form-control"
+                  autocomplete="name"
                   required
                 />
               </div>
             </div>
 
             <div class="row mb-2">
-              <label class="col-lg-4 col-form-label" for="email">{{ msgEmail }}: *</label>
+              <label class="col-lg-4 col-form-label" for="email">
+                {{ msgEmail }} <span class="pmf-required-asterisk" aria-hidden="true">*</span>
+              </label>
               <div class="col-lg-8 controls">
                 <input
                   type="email"
@@ -73,55 +78,66 @@
                   id="email"
                   value="{{ email | e('html_attr') }}"
                   class="form-control"
+                  autocomplete="email"
                   required
                   {{ readonly }}
                 />
               </div>
             </div>
 
+            <div class="row mb-2 mt-2 pt-3 border-top">
+              <h6 class="h6 m-0 fw-bold">
+                <i aria-hidden="true" class="bi bi-key"></i>
+                {{ msgPassword }}
+              </h6>
+              <p class="small text-muted mt-1 mb-0">{{ 'msgPasswordLeaveBlank' | translate }}</p>
+            </div>
+
             <div class="row mb-2">
-              <label class="col-lg-4 col-form-label" for="faqpassword">{{ msgPassword }}: *</label>
+              <label class="col-lg-4 col-form-label" for="faqpassword">{{ msgPassword }}</label>
               <div class="col-lg-8">
                 <div class="input-group">
                   <input
                     type="password"
-                    autocomplete="off"
+                    autocomplete="new-password"
                     name="faqpassword"
                     id="faqpassword"
                     class="form-control"
                     data-pmf-toggle="faqpassword_toggle"
-                    required
                     {{ readonly }}
                   />
-                  <span class="input-group-text" id="faqpassword_toggle" role="button" tabindex="0">
-                  <i class="bi bi-eye-slash" id="faqpassword_toggle_icon"></i>
-                </span>
+                  <span class="input-group-text" id="faqpassword_toggle" role="button" tabindex="0"
+                        aria-label="{{ 'msgShowPassword' | translate }}" aria-pressed="false">
+                    <i class="bi bi-eye-slash" id="faqpassword_toggle_icon"></i>
+                  </span>
                 </div>
               </div>
-              <div class="offset-4 col-lg-8">
-                <div class="progress mt-2 w-100">
+              <div class="offset-lg-4 col-lg-8">
+                <div class="progress mt-2 w-100" role="progressbar"
+                     aria-label="{{ 'msgPasswordStrength' | translate }}"
+                     aria-valuemin="0" aria-valuemax="100">
                   <div class="progress-bar progress-bar-striped" id="strength"></div>
                 </div>
               </div>
             </div>
 
             <div class="row mb-4">
-              <label class="col-lg-4 col-form-label" for="faqpassword_confirm">{{ msgConfirm }}: *</label>
+              <label class="col-lg-4 col-form-label" for="faqpassword_confirm">{{ msgConfirm }}</label>
               <div class="col-lg-8">
                 <div class="input-group">
                   <input
                     type="password"
-                    autocomplete="off"
+                    autocomplete="new-password"
                     name="faqpassword_confirm"
                     id="faqpassword_confirm"
                     class="form-control"
                     data-pmf-toggle="faqpassword_confirm_toggle"
-                    required
                     {{ readonly }}
                   />
-                  <span class="input-group-text" id="faqpassword_confirm_toggle">
-                  <i class="bi bi-eye-slash" id="faqpassword_confirm_toggle_icon"></i>
-                </span>
+                  <span class="input-group-text" id="faqpassword_confirm_toggle" role="button" tabindex="0"
+                        aria-label="{{ 'msgShowPassword' | translate }}" aria-pressed="false">
+                    <i class="bi bi-eye-slash" id="faqpassword_confirm_toggle_icon"></i>
+                  </span>
                 </div>
               </div>
             </div>
@@ -136,8 +152,8 @@
             </div>
 
             <!-- 2FA -->
-            <div class="row mb-4">
-              <h6 class="h6 m-0 font-weight-bold">
+            <div class="row mb-3 mt-2 pt-3 border-top">
+              <h6 class="h6 m-0 fw-bold">
                 <i aria-hidden="true" class="bi bi-shield-check"></i>
                 {{ 'msgTwofactorConfig' | translate }}
               </h6>
@@ -257,7 +273,7 @@
       <!-- Passkey -->
       <div class="card shadow mb-4">
         <div class="card-header py-3">
-          <h6 class="h6 m-0 font-weight-bold">
+          <h6 class="h6 m-0 fw-bold">
             <i aria-hidden="true" class="bi bi-shield-check"></i>
             {{ 'msgSignInWithPasskey' | translate }}
           </h6>
@@ -273,7 +289,7 @@
 
           <form action="{{ loginUrl }}" method="post" accept-charset="utf-8" role="form" id="pmf-webauthn-form">
             <input type="hidden" name="lang" id="lang" value="{{ lang }}">
-            <input type="hidden" id="pmf-csrf-token-webauthn" value="{{ csrfTokenWebauthn }}">
+            <input type="hidden" name="pmf-csrf-token" id="pmf-csrf-token-webauthn" value="{{ csrfTokenWebAuthn }}">
 
             <div class="row mb-2">
               <label class="col-lg-4 col-form-label" for="webauthn">{{ msgEmail }}: *</label>
@@ -298,7 +314,7 @@
       <!-- Push Notifications -->
       <div class="card shadow mb-4">
         <div class="card-header py-3">
-          <h6 class="h6 m-0 font-weight-bold">
+          <h6 class="h6 m-0 fw-bold">
             <i aria-hidden="true" class="bi bi-bell"></i>
             {{ 'msgPushNotifications' | translate }}
           </h6>
@@ -335,7 +351,7 @@
       <!-- EU Data Act data export -->
       <div class="card shadow mb-4">
         <div class="card-header py-3">
-          <h6 class="h6 m-0 font-weight-bold">
+          <h6 class="h6 m-0 fw-bold">
             <i aria-hidden="true" class="bi bi-file-zip"></i>
             {{ msgDownloadYourData }}
           </h6>

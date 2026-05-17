@@ -1000,7 +1000,7 @@ $PMF_LANG['ad_search_delsuc'] = 'عبارت جستجو با موفقیت حذف 
 $PMF_LANG['ad_search_delfail'] = 'عبارت جستجو حذف نشد.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'درباره این پرسش و پاسخ';
+$PMF_LANG['msgAboutFAQ'] = 'درباره این پرسش و پاسخ';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'پرسش و پاسخ فقط با SSL'];
 $PMF_LANG['msgTableOfContent'] = 'فهرست مطالب';
 

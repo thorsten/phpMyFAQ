@@ -80,14 +80,20 @@ final class UserController extends AbstractController
 
         $success = false;
         if (!$isAzureAdUser) {
-            if (!hash_equals($password, $confirm)) {
-                return $this->json([
-                    'error' => Translation::get('ad_user_error_passwordsDontMatch'),
-                ], Response::HTTP_CONFLICT);
-            }
+            // The password is only changed when the user actually entered one;
+            // leaving both fields blank keeps the current password.
+            $changePassword = $password !== '' || $confirm !== '';
 
-            if ((strlen($password) <= 7 || strlen($confirm) <= 7) && !$isWebAuthnUser) {
-                return $this->json(['error' => Translation::get(key: 'ad_passwd_fail')], Response::HTTP_CONFLICT);
+            if ($changePassword) {
+                if (!hash_equals($password, $confirm)) {
+                    return $this->json([
+                        'error' => Translation::get('ad_user_error_passwordsDontMatch'),
+                    ], Response::HTTP_CONFLICT);
+                }
+
+                if ((strlen($password) <= 7 || strlen($confirm) <= 7) && !$isWebAuthnUser) {
+                    return $this->json(['error' => Translation::get(key: 'ad_passwd_fail')], Response::HTTP_CONFLICT);
+                }
             }
 
             $userData = [
@@ -101,16 +107,18 @@ final class UserController extends AbstractController
 
             $success = $this->currentUser->setUserData($userData);
 
-            foreach ($this->currentUser->getAuthContainer() as $authDriver) {
-                if ($authDriver->disableReadOnly()) {
-                    continue;
-                }
+            if ($changePassword) {
+                foreach ($this->currentUser->getAuthContainer() as $authDriver) {
+                    if ($authDriver->disableReadOnly()) {
+                        continue;
+                    }
 
-                if (!$authDriver->update($this->currentUser->getLogin(), $password)) {
-                    return $this->json(['error' => $authDriver->getErrors()], Response::HTTP_BAD_REQUEST);
-                }
+                    if (!$authDriver->update($this->currentUser->getLogin(), $password)) {
+                        return $this->json(['error' => $authDriver->getErrors()], Response::HTTP_BAD_REQUEST);
+                    }
 
-                $success = true;
+                    $success = true;
+                }
             }
         }
 

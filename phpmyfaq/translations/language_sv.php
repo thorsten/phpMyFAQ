@@ -1213,7 +1213,7 @@ $PMF_LANG['ad_search_delsuc'] = 'Söktermen har raderats.';
 $PMF_LANG['ad_search_delfail'] = 'Söktermen raderades inte.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'Om denna FAQ';
+$PMF_LANG['msgAboutFAQ'] = 'Om denna FAQ';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'FAQ endast med SSL'];
 $PMF_LANG['msgTableOfContent'] = 'Innehållsförteckning';
 

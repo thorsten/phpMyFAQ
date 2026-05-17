@@ -816,7 +816,7 @@ $PMF_LANG['ad_search_delsuc'] = 'Ο όρος αναζήτησης διαγράφ
 $PMF_LANG['ad_search_delfail'] = 'Ο όρος αναζήτησης δεν διαγράφηκε.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'Σχετικά με αυτό το FAQ';
+$PMF_LANG['msgAboutFAQ'] = 'Σχετικά με αυτό το FAQ';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'FAQ μόνο με SSL'];
 $PMF_LANG['msgTableOfContent'] = 'Πίνακας Περιεχομένων';
 
