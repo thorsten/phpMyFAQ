@@ -352,4 +352,154 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
         self::assertSame('ok', $payload['success']);
         self::assertSame('https://localhost/', $payload['redirect']);
     }
+
+    /**
+     * Regression test: an unauthenticated attacker must not be able to start a passkey
+     * registration for an account that already exists (pre-auth account takeover).
+     */
+    public function testPrepareRejectsExistingUserForUnauthenticatedRequest(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues([
+            'security.enableWebAuthnSupport' => '1',
+            'security.enableRegistration' => '1',
+        ]);
+
+        $session = $this->createSession();
+        $csrfToken = Token::getInstance($session)->getTokenString('webauthn');
+        $_COOKIE[sprintf('%s-%s', Token::PMF_SESSION_NAME, substr(md5('webauthn'), 0, 10))] = $csrfToken;
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('admin', false)->willReturn(true);
+        $user->method('getUserId')->willReturn(1);
+        $user->expects($this->never())->method('createUser');
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn->expects($this->never())->method('storeUserInSession');
+
+        $unauthenticatedUser = $this->createStub(CurrentUser::class);
+        $unauthenticatedUser->method('isLoggedIn')->willReturn(false);
+        $unauthenticatedUser->method('getUserId')->willReturn(-1);
+
+        $controller = new WebAuthnController($authWebAuthn, $user);
+        $this->injectControllerState($controller, $unauthenticatedUser, $session);
+
+        $request = Request::create('/api/webauthn/prepare', 'POST', content: json_encode([
+            'username' => 'admin',
+            'pmf-csrf-token' => $csrfToken,
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->prepare($request);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    /**
+     * Regression test: a logged-in user calling prepare for a different existing account
+     * must be rejected.
+     */
+    public function testPrepareRejectsExistingUserForNonOwner(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues([
+            'security.enableWebAuthnSupport' => '1',
+            'security.enableRegistration' => '1',
+        ]);
+
+        $session = $this->createSession();
+        $csrfToken = Token::getInstance($session)->getTokenString('webauthn');
+        $_COOKIE[sprintf('%s-%s', Token::PMF_SESSION_NAME, substr(md5('webauthn'), 0, 10))] = $csrfToken;
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('admin', false)->willReturn(true);
+        $user->method('getUserId')->willReturn(1);
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn->expects($this->never())->method('storeUserInSession');
+
+        $controller = new WebAuthnController($authWebAuthn, $user);
+        // Authenticated as user id 99, attempting to act on account id 1.
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(99), $session);
+
+        $request = Request::create('/api/webauthn/prepare', 'POST', content: json_encode([
+            'username' => 'admin',
+            'pmf-csrf-token' => $csrfToken,
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->prepare($request);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    /**
+     * The authenticated owner of an existing account may (re-)register a passkey.
+     */
+    public function testPrepareAllowsExistingUserForAuthenticatedOwner(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues([
+            'security.enableWebAuthnSupport' => '1',
+            'security.enableRegistration' => '1',
+        ]);
+
+        $session = $this->createSession();
+        $csrfToken = Token::getInstance($session)->getTokenString('webauthn');
+        $_COOKIE[sprintf('%s-%s', Token::PMF_SESSION_NAME, substr(md5('webauthn'), 0, 10))] = $csrfToken;
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('owner@example.com', false)->willReturn(true);
+        $user->method('getUserId')->willReturn(42);
+        $user->expects($this->never())->method('createUser');
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn->expects($this->once())->method('storeUserInSession');
+        $authWebAuthn
+            ->expects($this->once())
+            ->method('prepareChallengeForRegistration')
+            ->with('owner@example.com', '42')
+            ->willReturn(['publicKey' => ['challenge' => 'abc'], 'b64challenge' => 'def']);
+
+        $controller = new WebAuthnController($authWebAuthn, $user);
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(42), $session);
+
+        $request = Request::create('/api/webauthn/prepare', 'POST', content: json_encode([
+            'username' => 'owner@example.com',
+            'pmf-csrf-token' => $csrfToken,
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->prepare($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('def', $payload['challenge']['b64challenge']);
+    }
+
+    /**
+     * Regression test: a request for an existing account without a valid CSRF token is rejected.
+     */
+    public function testPrepareRejectsExistingUserWithoutCsrfToken(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues([
+            'security.enableWebAuthnSupport' => '1',
+            'security.enableRegistration' => '1',
+        ]);
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('admin', false)->willReturn(true);
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn->expects($this->never())->method('storeUserInSession');
+
+        $controller = new WebAuthnController($authWebAuthn, $user);
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
+
+        $request = Request::create('/api/webauthn/prepare', 'POST', content: json_encode([
+            'username' => 'admin',
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->prepare($request);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
 }
