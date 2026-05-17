@@ -1003,7 +1003,7 @@ $PMF_LANG['ad_search_delsuc'] = "Der Suchbegriff wurde erfolgreich gelöscht";
 $PMF_LANG['ad_search_delfail'] = "Der Suchbegriff konnte nicht gelöscht werden.";
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'Über diese FAQ';
+$PMF_LANG['msgAboutFAQ'] = 'Über diese FAQ';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'FAQ nur mit SSL/TLS nutzen '];
 $PMF_LANG['msgTableOfContent'] = 'Inhaltsverzeichnis';
 
@@ -1790,5 +1790,8 @@ $PMF_LANG['ad_layout_mode_dark'] = 'Dunkel';
 $PMF_LANG['ad_layout_mode_highContrast'] = 'Hoher Kontrast';
 
 $PMF_LANG['msgThemeUploadNoZip'] = 'Bitte wählen Sie eine ZIP-Datei zum Hochladen aus.';
+$PMF_LANG['msgPasswordLeaveBlank'] = 'Lass die Passwortfelder leer, um dein aktuelles Passwort zu behalten.';
+$PMF_LANG['msgShowPassword'] = 'Passwort anzeigen oder verbergen';
+$PMF_LANG['msgPasswordStrength'] = 'Passwortstärke';
 
 return $PMF_LANG;

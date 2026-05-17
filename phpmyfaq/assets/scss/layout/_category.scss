@@ -1,13 +1,131 @@
+//
+// Category pages
+//
+
+// Category tree (all-categories overview) — compact, divided rows.
 .pmf-category-overview {
   list-style: none;
   margin-left: 0;
+  padding-left: 0;
+
+  li {
+    padding: 0.3rem 0;
+    border-bottom: 1px solid var(--pmf-border);
+  }
+
+  > li:last-child {
+    border-bottom: 0;
+  }
+
+  a {
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  small {
+    display: inline-block;
+    margin-top: 0.1rem;
+    font-size: 0.8rem;
+    line-height: 1.35;
+    color: var(--pmf-text-muted);
+  }
+
+  // Nested sub-categories — indent with a guide line.
+  ul {
+    list-style: none;
+    margin-top: 0.25rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--pmf-border);
+  }
+}
+
+// Sidebar info cards (category info + sub-categories panels)
+.pmf-sidebar-card {
+  background: var(--pmf-surface);
+  border: 1px solid var(--pmf-border);
+  border-radius: var(--pmf-radius-lg);
+  box-shadow: var(--pmf-shadow-sm);
+}
+
+.pmf-sidebar-card-title {
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--pmf-border);
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-style: normal;
+  color: var(--pmf-text);
+
+  // A small accent tick before the title.
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 1em;
+    margin-right: 0.5rem;
+    vertical-align: -0.15em;
+    background: var(--pmf-accent);
+    border-radius: 2px;
+  }
 }
 
 // Category image styling to prevent overflow
-.bg-light-subtle .img-fluid.float-end {
+.pmf-sidebar-card .img-fluid.float-end {
   max-width: 140px !important;
   max-height: 140px !important;
   width: auto;
   height: auto;
   object-fit: cover;
+}
+
+// FAQ list within a single category — a compact card with divided rows.
+.pmf-category-faq-list {
+  background: var(--pmf-surface);
+  border: 1px solid var(--pmf-border);
+  border-radius: var(--pmf-radius);
+  overflow: hidden;
+
+  .list-group-item {
+    padding: 0.5rem 0.9rem;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--pmf-border);
+    border-radius: 0;
+    transition: background-color var(--pmf-transition);
+
+    &:last-child {
+      border-bottom: 0;
+    }
+
+    &:hover {
+      background: var(--pmf-surface-hover);
+    }
+
+    .fw-bold a {
+      color: var(--pmf-text);
+      text-decoration: none;
+
+      &:hover {
+        color: var(--pmf-accent);
+      }
+    }
+
+    .small {
+      color: var(--pmf-text-muted);
+    }
+  }
+
+  // Sticky entries — same row layout as normal entries, only marked with an
+  // accent leading edge and a subtle tint (the markup adds rounded/mb-3 that
+  // would otherwise detach them from the divided list).
+  .list-group-item-primary {
+    margin-bottom: 0 !important;
+    border-radius: 0 !important;
+    background: var(--pmf-accent-subtle);
+    box-shadow: inset 3px 0 0 var(--pmf-accent);
+  }
 }

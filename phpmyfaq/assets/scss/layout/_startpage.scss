@@ -1,11 +1,68 @@
+//
+// Startpage
+//
+
 h1.pmf-start-page {
-  font-size: 48px;
-  background: #083c83;
-  background: linear-gradient(to right, var(--bs-primary) 0%, var(--bs-danger) 100%);
+  font-size: clamp(2.25rem, 5vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: var(--bs-primary);
+  background: linear-gradient(110deg, var(--bs-primary) 0%, var(--bs-secondary) 100%);
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
+// Hero cover cards (top of the startpage)
+.card.card-cover {
+  position: relative;
+  border-radius: var(--pmf-radius-xl);
+  transition:
+    transform var(--pmf-transition),
+    box-shadow var(--pmf-transition);
+
+  // Scrim so the heading/button stay readable over a background image.
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(0, 0, 0, 0) 35%, rgb(0, 0, 0, 0.55) 100%);
+    pointer-events: none;
+    border-radius: inherit;
+  }
+
+  .d-flex {
+    position: relative;
+    z-index: 1;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    text-shadow: 0 1px 6px rgb(0, 0, 0, 0.35);
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--pmf-shadow-lg);
+  }
+}
+
 .masonry-grid {
   padding-bottom: map-get($spacers, 4); // equals .mb-4 (≈1.5rem)
+
+  // Info cards: accent top edge + hover lift for a more tactile feel.
+  .card {
+    border-top: 3px solid var(--pmf-accent);
+    transition:
+      transform var(--pmf-transition),
+      box-shadow var(--pmf-transition);
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--pmf-shadow-lg);
+    }
+
+    .card-title i {
+      color: var(--pmf-accent);
+    }
+  }
 }

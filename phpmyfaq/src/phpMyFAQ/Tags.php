@@ -388,7 +388,7 @@ class Tags
                     break;
                 }
 
-                $records[] = $row->record_id;
+                $records[] = (int) $row->record_id;
             }
         }
 
@@ -424,7 +424,7 @@ class Tags
                     break;
                 }
 
-                $records[] = $row->record_id;
+                $records[] = (int) $row->record_id;
             }
         }
 

@@ -112,12 +112,15 @@ class CategoryHelper extends AbstractHelper
                 $name = $link->toHtmlAnchor();
             }
 
+            $description = trim((string) ($node['description'] ?? ''));
+            $descriptionHtml = '' === $description ? '' : sprintf('<br><small>%s</small>', $description);
+
             $html .= sprintf(
-                '<li data-category-id="%d">%s <span class="badge text-bg-primary">%s</span><br><small>%s</small>',
+                '<li data-category-id="%d">%s <span class="badge text-bg-primary">%s</span>%s',
                 $node['id'],
                 $name,
                 $this->plurals->get(key: 'plmsgEntries', number: $number),
-                $node['description'],
+                $descriptionHtml,
             );
             $html .= sprintf('<ul>%s</ul>', $this->buildCategoryList(
                 $categoryTree,

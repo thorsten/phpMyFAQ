@@ -1006,7 +1006,7 @@ $PMF_LANG['ad_search_delsuc'] = 'Pojam za pretragu je uspešno obrisan.';
 $PMF_LANG['ad_search_delfail'] = 'Pojam za pretragu nije obrisan.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'O ovom FAQ-u';
+$PMF_LANG['msgAboutFAQ'] = 'O ovom FAQ-u';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'FAQ samo sa SSL'];
 $PMF_LANG['msgTableOfContent'] = 'Sadržaj';
 

@@ -430,7 +430,7 @@ final class FaqController extends AbstractFrontController
             ),
             'comments' => $this->prepareCommentsData($comments),
             'msgShowMore' => Translation::get(key: 'msgShowMore'),
-            'msg_about_faq' => Translation::get(key: 'msg_about_faq'),
+            'msgAboutFAQ' => Translation::get(key: 'msgAboutFAQ'),
             'userId' => $this->currentUser->getUserId(),
             'permissionEditFaq' => $this->currentUser->perm->hasPermission(
                 $this->currentUser->getUserId(),

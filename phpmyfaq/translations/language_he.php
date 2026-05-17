@@ -821,7 +821,7 @@ $PMF_LANG['ad_search_delsuc'] = 'מונח החיפוש נמחק בהצלחה.';
 $PMF_LANG['ad_search_delfail'] = 'מונח החיפוש לא נמחק.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'אודות שאלות נפוצות אלו';
+$PMF_LANG['msgAboutFAQ'] = 'אודות שאלות נפוצות אלו';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'שאלות נפוצות עם SSL בלבד'];
 $PMF_LANG['msgTableOfContent'] = 'תוכן עניינים';
 

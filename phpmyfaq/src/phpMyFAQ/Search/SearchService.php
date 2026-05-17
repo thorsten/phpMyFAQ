@@ -257,7 +257,7 @@ final class SearchService
         $relatedTags = [];
 
         foreach ($recordIds as $recordId) {
-            $resultTags = $this->tags->getAllTagsById($recordId);
+            $resultTags = $this->tags->getAllTagsById((int) $recordId);
             foreach (array_keys($resultTags) as $resultTagId) {
                 if (array_key_exists($resultTagId, $tags)) {
                     continue;

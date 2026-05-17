@@ -1005,7 +1005,7 @@ $PMF_LANG['ad_search_delsuc'] = 'Cafodd y term chwilio ei ddileu\'n llwyddiannus
 $PMF_LANG['ad_search_delfail'] = 'Ni chafodd y term chwilio ei ddileu.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'Ynghylch y FAQ hwn';
+$PMF_LANG['msgAboutFAQ'] = 'Ynghylch y FAQ hwn';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'FAQ gyda SSL yn unig'];
 $PMF_LANG['msgTableOfContent'] = 'Tabl Cynnwys';
 

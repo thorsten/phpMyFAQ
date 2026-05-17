@@ -1008,7 +1008,7 @@ $PMF_LANG['ad_search_delsuc'] = 'Vyhľadávací výraz bol úspešne odstránen�
 $PMF_LANG['ad_search_delfail'] = 'Vyhľadávací výraz nebol odstránený.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'O tomto FAQ';
+$PMF_LANG['msgAboutFAQ'] = 'O tomto FAQ';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'FAQ iba s SSL'];
 $PMF_LANG['msgTableOfContent'] = 'Obsah';
 

@@ -769,7 +769,7 @@ $LANG_CONF['main.enableGravatarSupport'] = array('checkbox', 'Gravatar Support (
 $PMF_LANG['securityControlCenter'] = 'Sikkerhetskonfigurasjon';
 $PMF_LANG['ad_search_delsuc'] = 'Søkebegrepet ble slettet.';
 $PMF_LANG['ad_search_delfail'] = 'Søkebegrepet ble ikke slettet.';
-$PMF_LANG['msg_about_faq'] = 'Om denne OSSen';
+$PMF_LANG['msgAboutFAQ'] = 'Om denne OSSen';
 $PMF_LANG['msgTableOfContent'] = 'Innholdsfortegnelse';
 $PMF_LANG['msgExportAllFaqs'] = 'Skriv ut alt til PDF';
 $PMF_LANG['msgOnlineVerificationCheck'] = 'Online verifiseringssjekk';
@@ -848,7 +848,7 @@ $PMF_LANG['ad_search_delsuc'] = 'The search term was successfully deleted.';
 $PMF_LANG['ad_search_delfail'] = 'The search term was not deleted.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'About this FAQ';
+$PMF_LANG['msgAboutFAQ'] = 'About this FAQ';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'FAQ with SSL only'];
 $PMF_LANG['msgTableOfContent'] = 'Table of Contents';
 

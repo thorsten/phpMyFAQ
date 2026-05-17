@@ -20,7 +20,7 @@
             <div class="col-lg-6">
               <div class="card shadow-lg border-1 rounded-lg mt-5">
                 <div class="card-header">
-                  <h2 class="text-center font-weight-light my-4">phpMyFAQ {{ version }} Login</h2>
+                  <h2 class="text-center fw-light my-4">phpMyFAQ {{ version }} Login</h2>
                 </div>
                 <div class="card-body">
                   <form action="./authenticate" method="post" accept-charset="utf-8" role="form">
@@ -30,7 +30,9 @@
                         id="faqusername"
                         name="faqusername"
                         type="text"
+                        autocomplete="username"
                         placeholder="{{ username }}"
+                        required
                       />
                       <label for="faqusername">{{ username }}</label>
                     </div>
@@ -41,13 +43,15 @@
                           id="faqpassword"
                           name="faqpassword"
                           type="password"
-                          autocomplete="off"
+                          autocomplete="current-password"
                           placeholder="{{ password }}"
                           data-pmf-toggle="faqpassword_toggle"
+                          required
                         />
                         <label for="faqpassword">{{ password }}</label>
                       </div>
-                      <span class="input-group-text" id="faqpassword_toggle" role="button" tabindex="0">
+                      <span class="input-group-text" id="faqpassword_toggle" role="button" tabindex="0"
+                            aria-label="{{ 'msgShowPassword' | translate }}" aria-pressed="false">
                         <i class="bi bi-eye-slash" id="faqpassword_toggle_icon"></i>
                       </span>
                     </div>

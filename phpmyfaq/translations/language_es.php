@@ -998,7 +998,7 @@ $PMF_LANG['ad_search_delsuc'] = 'El término de búsqueda se eliminó exitosamen
 $PMF_LANG['ad_search_delfail'] = 'El término de búsqueda no pudo ser eliminado.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'Acerca de esta FAQ';
+$PMF_LANG['msgAboutFAQ'] = 'Acerca de esta FAQ';
 $LANG_CONF['security.useSslOnly'] = array('checkbox', 'Usar FAQ solo con SSL');
 $PMF_LANG['msgTableOfContent'] = 'Tabla de Contenidos';
 

@@ -706,7 +706,7 @@ $LANG_CONF['records.attachmentsPath'] = array('input', 'Percorso dove verranno s
 $PMF_LANG['securityControlCenter'] = 'Configurazione di sicurezza';
 $PMF_LANG['ad_search_delsuc'] = 'Il termine cercato è stato eliminato correttamente.';
 $PMF_LANG['ad_search_delfail'] = 'Il termine cercato non è stato eliminato.';
-$PMF_LANG['msg_about_faq'] = 'Riguardo questa FAQ';
+$PMF_LANG['msgAboutFAQ'] = 'Riguardo questa FAQ';
 $PMF_LANG['msgTableOfContent'] = 'Tabella del Contenuto';
 $PMF_LANG['msgExportAllFaqs'] = 'Stampa tutto come PDF';
 $PMF_LANG['msgOnlineVerificationCheck'] = 'Verifica di controllo Online';
@@ -892,7 +892,7 @@ $PMF_LANG['ad_search_delsuc'] = 'Il termine di ricerca è stato eliminato con su
 $PMF_LANG['ad_search_delfail'] = 'Il termine di ricerca non è stato eliminato.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'Informazioni su questa FAQ';
+$PMF_LANG['msgAboutFAQ'] = 'Informazioni su questa FAQ';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'FAQ solo con SSL'];
 $PMF_LANG['msgTableOfContent'] = 'Indice dei contenuti';
 

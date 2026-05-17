@@ -58,13 +58,14 @@
   --bs-success: #0aa05c;
   --bs-warning: #e1ca0a;
   --bs-danger: #f01704;
-  --bs-pmf-nav: #2f3035;
-  --bs-pmf-footer: #142f48;
-  --bs-pmf-background: #9eb6c9;
+  --bs-pmf-nav: #1d212a;
+  --bs-pmf-footer: #1d212a;
+  --bs-pmf-background: #14171d;
 
-  /* Bootstrap body variables for dark mode */
-  --bs-body-bg: var(--bs-dark);
+  /* Bootstrap body variables for dark mode — softened from near-black */
+  --bs-body-bg: #14171d;
   --bs-body-color: var(--bs-light);
+  --bs-border-color: #2e3440;
 }
 
 [data-bs-theme='high-contrast'] {

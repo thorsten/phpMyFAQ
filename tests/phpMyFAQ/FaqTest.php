@@ -248,7 +248,7 @@ class FaqTest extends TestCase
             unset($_GET['seite']);
         }
 
-        $this->assertStringContainsString('<ul class="list-group list-group-flush mb-4">', $output);
+        $this->assertStringContainsString('<ul class="list-group list-group-flush mb-4 pmf-category-faq-list">', $output);
         $this->assertStringContainsString('Rendered FAQ One', $output);
         $this->assertStringContainsString('/content/1/5020/en/rendered-faq-one.html', $output);
         $this->assertStringContainsString('list-group-item', $output);

@@ -1008,7 +1008,7 @@ $PMF_LANG['ad_search_delsuc'] = "Arama terimi başarıyla silindi.";
 $PMF_LANG['ad_search_delfail'] = "Arama terimi silinemedi";
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = "hakkında";
+$PMF_LANG['msgAboutFAQ'] = "hakkında";
 $LANG_CONF['security.useSslOnly'] = array('checkbox', 'FAQ with SSL only');
 $PMF_LANG['msgTableOfContent'] = "İçindekiler";
 

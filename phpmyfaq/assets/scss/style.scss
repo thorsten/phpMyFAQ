@@ -19,6 +19,10 @@
 // Import Bootstrap
 @import '../../../node_modules/bootstrap/scss/bootstrap';
 
+// Semantic design tokens — must come before the global and layout styles so
+// component rules can consume the token values.
+@import 'tokens';
+
 // Import global styles
 @import 'global';
 
@@ -40,6 +44,7 @@
 @import 'layout/search';
 @import 'layout/setup';
 @import 'layout/startpage';
+@import 'layout/ucp';
 @import 'layout/theme-switcher';
 
 $enable-gradients: true;

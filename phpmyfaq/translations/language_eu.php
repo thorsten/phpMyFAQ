@@ -1004,7 +1004,7 @@ $PMF_LANG['ad_search_delsuc'] = 'Bilaketa terminoa behar bezala ezabatu da.';
 $PMF_LANG['ad_search_delfail'] = 'Bilaketa terminoa ez da ezabatu.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'FAQ honi buruz';
+$PMF_LANG['msgAboutFAQ'] = 'FAQ honi buruz';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'FAQ SSL-rekin bakarrik'];
 $PMF_LANG['msgTableOfContent'] = 'Edukien Taula';
 

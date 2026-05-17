@@ -1000,7 +1000,7 @@ $PMF_LANG['ad_search_delsuc'] = 'Meklēšanas termins tika veiksmīgi dzēsts.';
 $PMF_LANG['ad_search_delfail'] = 'Meklēšanas termins netika dzēsts.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'Par šo BUJ';
+$PMF_LANG['msgAboutFAQ'] = 'Par šo BUJ';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'BUJ tikai ar SSL'];
 $PMF_LANG['msgTableOfContent'] = 'Satura rādītājs';
 

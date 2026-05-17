@@ -1003,7 +1003,7 @@ $PMF_LANG['ad_search_delsuc'] = 'تم حذف مصطلح البحث بنجاح.';
 $PMF_LANG['ad_search_delfail'] = 'لم يتم حذف مصطلح البحث.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'حول هذه الأسئلة الشائعة';
+$PMF_LANG['msgAboutFAQ'] = 'حول هذه الأسئلة الشائعة';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'الأسئلة الشائعة مع SSL فقط'];
 $PMF_LANG['msgTableOfContent'] = 'جدول المحتويات';
 

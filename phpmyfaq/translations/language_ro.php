@@ -997,7 +997,7 @@ $PMF_LANG['ad_search_delsuc'] = 'Termenul de căutare a fost șters cu succes.';
 $PMF_LANG['ad_search_delfail'] = 'Termenul de căutare nu a fost șters.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'Despre acest FAQ';
+$PMF_LANG['msgAboutFAQ'] = 'Despre acest FAQ';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'FAQ doar cu SSL'];
 $PMF_LANG['msgTableOfContent'] = 'Cuprins';
 

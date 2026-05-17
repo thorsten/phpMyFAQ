@@ -78,7 +78,7 @@ final class MetaServiceTest extends TestCase
         $this->assertStringEndsWith('/assets/images/logo-transparent.svg', $payload['publicLogoUrl']);
         $this->assertSame('#083c83', $payload['themeColors']['light']['--bs-primary']);
         $this->assertSame('#ffffff', $payload['themeColors']['light']['--bs-body-bg']);
-        $this->assertSame('var(--bs-dark)', $payload['themeColors']['dark']['--bs-body-bg']);
+        $this->assertSame('#14171d', $payload['themeColors']['dark']['--bs-body-bg']);
         $this->assertSame('#ffff00', $payload['themeColors']['highContrast']['--bs-primary']);
         $this->assertTrue($payload['oauthDiscovery']['enabled']);
         $this->assertStringEndsWith('/api', $payload['oauthDiscovery']['issuer']);

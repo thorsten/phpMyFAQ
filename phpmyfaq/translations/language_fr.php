@@ -1002,7 +1002,7 @@ $PMF_LANG["ad_search_delsuc"] = "Le terme de recherche a été supprimé avec su
 $PMF_LANG["ad_search_delfail"] = "Le terme de recherche n'a pas été supprimé.";
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG["msg_about_faq"] = "À propos de cette FAQ";
+$PMF_LANG["msgAboutFAQ"] = "À propos de cette FAQ";
 $LANG_CONF["security.useSslOnly"] = ["checkbox", "FAQ avec SSL seulement"];
 $PMF_LANG["msgTableOfContent"] = "Table des matières";
 

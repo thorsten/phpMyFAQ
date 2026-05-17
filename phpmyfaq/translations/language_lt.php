@@ -1016,7 +1016,7 @@ $PMF_LANG['ad_search_delsuc'] = 'Paieškos terminas buvo sėkmingai ištrintas.'
 $PMF_LANG['ad_search_delfail'] = 'Paieškos terminas nebuvo ištrintas.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'Apie šį DUK';
+$PMF_LANG['msgAboutFAQ'] = 'Apie šį DUK';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'DUK tik su SSL'];
 $PMF_LANG['msgTableOfContent'] = 'Turinys';
 

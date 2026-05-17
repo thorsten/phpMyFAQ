@@ -112,8 +112,8 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
         $response = $this->requestPublic('GET', '/show-categories.html');
 
         self::assertResponseIsSuccessful($response);
-        self::assertResponseContains('<h2 class="mb-4 border-bottom">Categories</h2>', $response);
-        self::assertResponseContains('<h4 class="fst-italic">All categories</h4>', $response);
+        self::assertResponseContains('<h2 class="mb-4 border-bottom">All categories</h2>', $response);
+        self::assertResponseContains('<ul class="pmf-category-overview">', $response);
     }
 
     public function testShowCategoryPageShowsNoFaqMessageForSeededRootCategory(): void

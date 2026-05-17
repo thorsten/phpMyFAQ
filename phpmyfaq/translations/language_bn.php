@@ -1007,7 +1007,7 @@ $PMF_LANG['ad_search_delsuc'] = 'অনুসন্ধান শব্দটি 
 $PMF_LANG['ad_search_delfail'] = 'অনুসন্ধান শব্দটি মুছে ফেলা হয়নি।';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'এই FAQ সম্পর্কে';
+$PMF_LANG['msgAboutFAQ'] = 'এই FAQ সম্পর্কে';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'শুধুমাত্র SSL সহ FAQ'];
 $PMF_LANG['msgTableOfContent'] = 'বিষয়বস্তুর সারণি';
 

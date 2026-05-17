@@ -996,7 +996,7 @@ $PMF_LANG['ad_search_delsuc'] = 'Istilah carian berjaya dipadam.';
 $PMF_LANG['ad_search_delfail'] = 'Istilah carian tidak dipadam.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'Tentang FAQ ini';
+$PMF_LANG['msgAboutFAQ'] = 'Tentang FAQ ini';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'FAQ dengan SSL sahaja'];
 $PMF_LANG['msgTableOfContent'] = 'Jadual Kandungan';
 

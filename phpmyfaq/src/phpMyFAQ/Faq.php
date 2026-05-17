@@ -354,7 +354,7 @@ class Faq
                 );
             }
 
-            $output .= '<ul class="list-group list-group-flush mb-4">';
+            $output .= '<ul class="list-group list-group-flush mb-4 pmf-category-faq-list">';
 
             $counter = 0;
             $displayedCounter = 0;

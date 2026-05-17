@@ -14,12 +14,44 @@ $transition-speed: 0.15s;
   @extend .nav-link;
   @extend .px-2;
   @extend .text-white;
+
+  border-radius: var(--pmf-radius-sm);
+  transition:
+    background-color var(--pmf-transition),
+    color var(--pmf-transition);
+
+  &:hover,
+  &:focus-visible {
+    background-color: rgb(255, 255, 255, 0.12);
+  }
+
+  // Active item: an underline indicator rather than a filled background.
+  &.active {
+    font-weight: 600;
+    box-shadow: inset 0 -3px 0 currentcolor;
+  }
 }
 
 .pmf-nav-link-footer {
   @extend .nav-link;
   @extend .px-2;
   @extend .link-light;
+}
+
+// Public top navigation — give the sticky bar a subtle lift.
+.navbar.text-bg-pmf-nav {
+  box-shadow: var(--pmf-shadow-sm);
+}
+
+// Search hero — rounded, elevated input group.
+.search {
+  .form-control {
+    border-radius: var(--pmf-radius);
+  }
+
+  .btn {
+    border-radius: var(--pmf-radius);
+  }
 }
 
 // Side Navigation Layout

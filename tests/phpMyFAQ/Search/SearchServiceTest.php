@@ -6,8 +6,10 @@ namespace phpMyFAQ\Search;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -406,5 +408,45 @@ class SearchServiceTest extends TestCase
         );
 
         $this->assertEquals($searchTerm, $result['searchTerm']);
+    }
+
+    /**
+     * @throws Exception
+     * @throws \Exception
+     */
+    public function testProcessSearchHandlesStringRecordIdsInTagSearch(): void
+    {
+        $searchService = new SearchService($this->configuration, $this->currentUser, $this->currentGroups);
+
+        $tags = $this->createMock(Tags::class);
+        $tags->method('getTagNameById')->willReturnMap([
+            [13, 'Shared'],
+            [7, 'Related'],
+        ]);
+        $tags->method('getFaqsByIntersectionTags')->willReturn(['1']);
+        $tags->expects($this->once())->method('getAllTagsById')->with(1)->willReturn([13 => 'Shared', 7 => 'Related']);
+        $tags->method('getPopularTags')->willReturn([]);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('renderFaqsByFaqIds')->with([1], 'fd.id', 'ASC', false)->willReturn([]);
+
+        $reflection = new \ReflectionClass($searchService);
+        $tagsProperty = $reflection->getProperty('tags');
+        $tagsProperty->setValue($searchService, $tags);
+
+        $faqProperty = $reflection->getProperty('faq');
+        $faqProperty->setValue($searchService, $faq);
+
+        $result = $searchService->processSearch(
+            inputSearchTerm: '',
+            inputTag: '13',
+            inputCategory: 0,
+            allLanguages: false,
+            page: 1,
+        );
+
+        $this->assertTrue($result['tagSearch']);
+        $this->assertSame(1, $result['numberOfSearchResults']);
+        $this->assertStringContainsString('search.html?tagging_id=13,7', $result['relatedTags']);
     }
 }

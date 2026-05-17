@@ -1,1 +1,53 @@
 @import 'choices.js/src/styles/choices';
+
+//
+// Search results
+//
+.phpmyfaq-search-results {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pmf-search-result {
+  padding: 1rem 1.25rem;
+  background: var(--pmf-surface);
+  border: 1px solid var(--pmf-border);
+  border-radius: var(--pmf-radius);
+  box-shadow: var(--pmf-shadow-sm);
+  transition:
+    transform var(--pmf-transition),
+    box-shadow var(--pmf-transition);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--pmf-shadow-md);
+  }
+
+  // Category path shown above the result title.
+  > strong {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--pmf-text-muted);
+  }
+
+  a {
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+}
+
+// Empty / help state
+.pmf-search-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--pmf-text-muted);
+
+  i {
+    font-size: 2.5rem;
+    color: var(--pmf-border-strong);
+  }
+}

@@ -999,7 +999,7 @@ $PMF_LANG['ad_search_delsuc'] = 'Søgetermen blev slettet med succes.';
 $PMF_LANG['ad_search_delfail'] = 'Søgetermen blev ikke slettet.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'Om denne FAQ';
+$PMF_LANG['msgAboutFAQ'] = 'Om denne FAQ';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'FAQ kun med SSL'];
 $PMF_LANG['msgTableOfContent'] = 'Indholdsfortegnelse';
 
