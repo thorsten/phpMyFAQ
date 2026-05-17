@@ -91,7 +91,7 @@ final class NewsController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::NEWS_ADD);
 
-        $newsId = (int) Filter::filterVar($request->query->get('newsId'), FILTER_VALIDATE_INT);
+        $newsId = (int) Filter::filterVar($request->attributes->get('newsId'), FILTER_VALIDATE_INT);
 
         $news = $this->container->get(id: 'phpmyfaq.news');
         $comment = $this->container->get(id: 'phpmyfaq.comments');
