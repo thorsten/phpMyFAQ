@@ -21,7 +21,7 @@ class TitleSlugifierTwigExtensionTest extends TestCase
      * @throws LoaderError
      */
     #[DataProvider('slugifyProvider')]
-    public function testSlugifyFilter(string $input, string $expected): void
+    public function testSlugifyFilter(?string $input, string $expected): void
     {
         $loader = new ArrayLoader([
             'index' => '{{ title|slugify }}',
@@ -34,7 +34,7 @@ class TitleSlugifierTwigExtensionTest extends TestCase
     }
 
     /**
-     * @return array<string, array<string, string>>
+     * @return array<string, array{input: ?string, expected: string}>
      */
     public static function slugifyProvider(): array
     {
@@ -62,6 +62,14 @@ class TitleSlugifierTwigExtensionTest extends TestCase
             'title with dashes' => [
                 'input' => 'HD-Ready TV',
                 'expected' => 'hd_ready-tv',
+            ],
+            'null title' => [
+                'input' => null,
+                'expected' => '',
+            ],
+            'empty title' => [
+                'input' => '',
+                'expected' => '',
             ],
         ];
     }

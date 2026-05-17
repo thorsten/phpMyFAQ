@@ -160,6 +160,40 @@ final class CommentsControllerTest extends TestCase
         self::assertStringContainsString('News User 2', (string) $response->getContent());
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function testIndexRendersWhenNewsHeaderIsMissing(): void
+    {
+        $comments = $this->createCommentsMock();
+        $news = $this->createMock(News::class);
+        $news->method('getHeader')->willReturn([
+            1 => [
+                'id' => 1,
+                'lang' => 'en',
+                'header' => null,
+                'date' => '2025-02-01T08:30:00+00:00',
+                'active' => true,
+            ],
+            2 => [
+                'id' => 2,
+                'lang' => 'en',
+                'header' => 'Product Update',
+                'date' => '2025-02-02T09:30:00+00:00',
+                'active' => true,
+            ],
+        ]);
+
+        $controller = new CommentsController($comments, $news);
+        $controller->setContainer($this->createControllerContainer());
+
+        $response = $controller->index(Request::create('https://localhost/admin/comments'));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('pmf-button-delete-news-comments', (string) $response->getContent());
+        self::assertStringContainsString('Product Update', (string) $response->getContent());
+    }
+
     private function createCommentsMock(): Comments
     {
         $faqComments = [];
