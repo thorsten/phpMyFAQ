@@ -74,17 +74,29 @@ final class WebAuthnController extends AbstractController
 
         $username = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!$this->user->getUserByLogin($username, raiseError: false)) {
-            if (!$this->configuration->get('security.enableRegistration')) {
-                return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
-            }
+        $userExists = (bool) $this->user->getUserByLogin($username, raiseError: false);
 
-            $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'} ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        if (!$userExists && !$this->configuration->get('security.enableRegistration')) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
 
-            if (!Token::getInstance($this->session)->verifyToken('webauthn', $csrfToken)) {
-                return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
-            }
+        // Verify the CSRF token on every path, regardless of whether the user exists.
+        $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'} ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
 
+        if (!Token::getInstance($this->session)->verifyToken('webauthn', $csrfToken)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        // The account already exists: only its authenticated owner may (re-)register a passkey.
+        // This prevents an unauthenticated attacker from overwriting an existing user's passkeys.
+        if (
+            $userExists
+            && (!$this->currentUser->isLoggedIn() || $this->currentUser->getUserId() !== $this->user->getUserId())
+        ) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if (!$userExists) {
             if (!$this->captchaCodeIsValid($request)) {
                 return $this->json(['error' => Translation::get(key: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
             }
