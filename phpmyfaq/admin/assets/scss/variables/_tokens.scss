@@ -11,16 +11,13 @@
   --pmf-radius-sm: 0.375rem;
   --pmf-radius: 0.625rem;
   --pmf-radius-lg: 1rem;
-
   --pmf-space-1: 0.25rem;
   --pmf-space-2: 0.5rem;
   --pmf-space-3: 0.75rem;
   --pmf-space-4: 1rem;
   --pmf-space-5: 1.5rem;
   --pmf-space-6: 2rem;
-
   --pmf-transition: 0.18s ease;
-
   --pmf-sidenav-width: 248px;
   --pmf-topnav-height: 60px;
 }
@@ -29,46 +26,40 @@
 :root,
 [data-bs-theme='light'] {
   --pmf-bg: #f3f4f9;
-  --pmf-surface: #ffffff;
-  --pmf-surface-raised: #ffffff;
+  --pmf-surface: #fff;
+  --pmf-surface-raised: #fff;
   --pmf-surface-sunken: #eceef4;
   --pmf-surface-hover: #f1f2f8;
-
   --pmf-border: #e3e5ee;
   --pmf-border-strong: #cdd1de;
-
   --pmf-text: #1d2230;
   --pmf-text-muted: #6b7280;
-  --pmf-text-on-accent: #ffffff;
-
+  --pmf-text-on-accent: #fff;
   --pmf-accent: #4d5ee8;
   --pmf-accent-hover: #3f4fce;
-  --pmf-accent-subtle: rgba(77, 94, 232, 0.1);
-  --pmf-focus-ring: rgba(77, 94, 232, 0.35);
-
+  --pmf-accent-subtle: rgb(77, 94, 232, 0.1);
+  --pmf-focus-ring: rgb(77, 94, 232, 0.35);
   --pmf-success: #1f9d6b;
   --pmf-warning: #d99411;
   --pmf-danger: #d6453f;
   --pmf-info: #1591a8;
-
-  --pmf-shadow-sm: 0 1px 2px rgba(20, 24, 40, 0.06), 0 1px 3px rgba(20, 24, 40, 0.08);
-  --pmf-shadow-md: 0 4px 12px rgba(20, 24, 40, 0.08), 0 2px 4px rgba(20, 24, 40, 0.06);
-
+  --pmf-shadow-sm: 0 1px 2px rgb(20, 24, 40, 0.06), 0 1px 3px rgb(20, 24, 40, 0.08);
+  --pmf-shadow-md: 0 4px 12px rgb(20, 24, 40, 0.08), 0 2px 4px rgb(20, 24, 40, 0.06);
   --pmf-sidenav-bg: #1a1d2b;
   --pmf-sidenav-surface: #1a1d2b;
-  --pmf-sidenav-text: rgba(255, 255, 255, 0.82);
-  --pmf-sidenav-text-active: #ffffff;
-  --pmf-sidenav-icon: rgba(255, 255, 255, 0.92);
-  --pmf-sidenav-heading: rgba(255, 255, 255, 0.55);
-  --pmf-sidenav-hover: rgba(255, 255, 255, 0.09);
-  --pmf-sidenav-active-bg: rgba(124, 138, 255, 0.26);
+  --pmf-sidenav-text: rgb(255, 255, 255, 0.82);
+  --pmf-sidenav-text-active: #fff;
+  --pmf-sidenav-icon: rgb(255, 255, 255, 0.92);
+  --pmf-sidenav-heading: rgb(255, 255, 255, 0.55);
+  --pmf-sidenav-hover: rgb(255, 255, 255, 0.09);
+  --pmf-sidenav-active-bg: rgb(124, 138, 255, 0.26);
   --pmf-sidenav-accent: #9aa6ff;
 
   // The top bar stays dark in every theme to match the side navigation.
   --pmf-topnav-bg: #1a1d2b;
-  --pmf-topnav-text: rgba(255, 255, 255, 0.92);
-  --pmf-topnav-muted: rgba(255, 255, 255, 0.72);
-  --pmf-topnav-border: rgba(255, 255, 255, 0.08);
+  --pmf-topnav-text: rgb(255, 255, 255, 0.92);
+  --pmf-topnav-muted: rgb(255, 255, 255, 0.72);
+  --pmf-topnav-border: rgb(255, 255, 255, 0.08);
 }
 
 // Dark theme — true dark surfaces with elevation steps, softened accent.
@@ -78,83 +69,69 @@
   --pmf-surface-raised: #242838;
   --pmf-surface-sunken: #0f111a;
   --pmf-surface-hover: #2a2e41;
-
   --pmf-border: #2e3346;
   --pmf-border-strong: #3d435c;
-
   --pmf-text: #e6e8f2;
   --pmf-text-muted: #9aa1ba;
-  --pmf-text-on-accent: #ffffff;
-
+  --pmf-text-on-accent: #fff;
   --pmf-accent: #7c8aff;
   --pmf-accent-hover: #93a0ff;
-  --pmf-accent-subtle: rgba(124, 138, 255, 0.16);
-  --pmf-focus-ring: rgba(124, 138, 255, 0.4);
-
+  --pmf-accent-subtle: rgb(124, 138, 255, 0.16);
+  --pmf-focus-ring: rgb(124, 138, 255, 0.4);
   --pmf-success: #34c98a;
   --pmf-warning: #e7b04a;
   --pmf-danger: #f0635d;
   --pmf-info: #3bb6cc;
-
-  --pmf-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.5);
-  --pmf-shadow-md: 0 6px 18px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.4);
-
+  --pmf-shadow-sm: 0 1px 2px rgb(0, 0, 0, 0.4), 0 1px 3px rgb(0, 0, 0, 0.5);
+  --pmf-shadow-md: 0 6px 18px rgb(0, 0, 0, 0.5), 0 2px 6px rgb(0, 0, 0, 0.4);
   --pmf-sidenav-bg: #0f111a;
   --pmf-sidenav-surface: #0f111a;
-  --pmf-sidenav-text: rgba(255, 255, 255, 0.8);
-  --pmf-sidenav-text-active: #ffffff;
-  --pmf-sidenav-icon: rgba(255, 255, 255, 0.9);
-  --pmf-sidenav-heading: rgba(255, 255, 255, 0.5);
-  --pmf-sidenav-hover: rgba(255, 255, 255, 0.08);
-  --pmf-sidenav-active-bg: rgba(124, 138, 255, 0.24);
+  --pmf-sidenav-text: rgb(255, 255, 255, 0.8);
+  --pmf-sidenav-text-active: #fff;
+  --pmf-sidenav-icon: rgb(255, 255, 255, 0.9);
+  --pmf-sidenav-heading: rgb(255, 255, 255, 0.5);
+  --pmf-sidenav-hover: rgb(255, 255, 255, 0.08);
+  --pmf-sidenav-active-bg: rgb(124, 138, 255, 0.24);
   --pmf-sidenav-accent: #9aa6ff;
-
   --pmf-topnav-bg: #0f111a;
-  --pmf-topnav-text: rgba(255, 255, 255, 0.92);
-  --pmf-topnav-muted: rgba(255, 255, 255, 0.68);
-  --pmf-topnav-border: rgba(255, 255, 255, 0.07);
+  --pmf-topnav-text: rgb(255, 255, 255, 0.92);
+  --pmf-topnav-muted: rgb(255, 255, 255, 0.68);
+  --pmf-topnav-border: rgb(255, 255, 255, 0.07);
 }
 
 // High-contrast theme — pure black/white/yellow, AAA contrast, strong borders.
 [data-bs-theme='high-contrast'] {
-  --pmf-bg: #000000;
-  --pmf-surface: #000000;
-  --pmf-surface-raised: #000000;
-  --pmf-surface-sunken: #000000;
+  --pmf-bg: #000;
+  --pmf-surface: #000;
+  --pmf-surface-raised: #000;
+  --pmf-surface-sunken: #000;
   --pmf-surface-hover: #1a1a1a;
-
-  --pmf-border: #ffffff;
-  --pmf-border-strong: #ffffff;
-
-  --pmf-text: #ffffff;
+  --pmf-border: #fff;
+  --pmf-border-strong: #fff;
+  --pmf-text: #fff;
   --pmf-text-muted: #e6e6e6;
-  --pmf-text-on-accent: #000000;
-
-  --pmf-accent: #ffff00;
-  --pmf-accent-hover: #ffff66;
-  --pmf-accent-subtle: rgba(255, 255, 0, 0.18);
-  --pmf-focus-ring: rgba(255, 255, 0, 0.6);
-
-  --pmf-success: #00ff00;
-  --pmf-warning: #ffff00;
+  --pmf-text-on-accent: #000;
+  --pmf-accent: #ff0;
+  --pmf-accent-hover: #ff6;
+  --pmf-accent-subtle: rgb(255, 255, 0, 0.18);
+  --pmf-focus-ring: rgb(255, 255, 0, 0.6);
+  --pmf-success: #0f0;
+  --pmf-warning: #ff0;
   --pmf-danger: #ff3b3b;
-  --pmf-info: #00ffff;
-
+  --pmf-info: #0ff;
   --pmf-shadow-sm: none;
   --pmf-shadow-md: none;
-
-  --pmf-sidenav-bg: #000000;
-  --pmf-sidenav-surface: #000000;
-  --pmf-sidenav-text: #ffffff;
-  --pmf-sidenav-text-active: #ffff00;
-  --pmf-sidenav-icon: #ffffff;
-  --pmf-sidenav-heading: #ffff00;
+  --pmf-sidenav-bg: #000;
+  --pmf-sidenav-surface: #000;
+  --pmf-sidenav-text: #fff;
+  --pmf-sidenav-text-active: #ff0;
+  --pmf-sidenav-icon: #fff;
+  --pmf-sidenav-heading: #ff0;
   --pmf-sidenav-hover: #1a1a1a;
-  --pmf-sidenav-active-bg: #ffff00;
-  --pmf-sidenav-accent: #ffff00;
-
-  --pmf-topnav-bg: #000000;
-  --pmf-topnav-text: #ffffff;
-  --pmf-topnav-muted: #ffffff;
-  --pmf-topnav-border: #ffffff;
+  --pmf-sidenav-active-bg: #ff0;
+  --pmf-sidenav-accent: #ff0;
+  --pmf-topnav-bg: #000;
+  --pmf-topnav-text: #fff;
+  --pmf-topnav-muted: #fff;
+  --pmf-topnav-border: #fff;
 }

@@ -8,7 +8,7 @@
 
 .no-drag {
   cursor: default !important;
-  background-color: rgba(var(--bs-light-rgb), 0.1);
+  background-color: rgb(var(--bs-light-rgb), 0.1);
 }
 
 .js-unstick-button.sticky-toggle-btn {

@@ -62,11 +62,11 @@ $border-radius-xl: 1.25rem !default;
 
 // Cards
 $card-border-radius: 1rem !default;
-$card-border-color: rgba(0, 0, 0, 0.06) !default;
+$card-border-color: rgb(0, 0, 0, 0.06) !default;
 $card-cap-bg: transparent !default;
 
 // Tables
-$table-border-color: rgba(0, 0, 0, 0.08) !default;
+$table-border-color: rgb(0, 0, 0, 0.08) !default;
 $table-bg-scale: 0% !default;
 
 // Buttons
@@ -82,7 +82,7 @@ $btn-border-radius-lg: 0.75rem !default;
 $btn-border-radius-sm: 0.375rem !default;
 
 // Forms
-$input-border-color: rgba(0, 0, 0, 0.12) !default;
+$input-border-color: rgb(0, 0, 0, 0.12) !default;
 $input-group-addon-bg: $gray-100 !default;
 $input-focus-border-color: $blue !default;
 $input-btn-focus-color: rgba($blue, 0.3) !default;

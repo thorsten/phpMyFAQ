@@ -216,7 +216,7 @@ footer.bg-light {
   }
 
   .bi {
-    color: currentColor;
+    color: currentcolor;
   }
 }
 
@@ -300,19 +300,19 @@ footer.bg-light {
   }
 
   &.alert-success {
-    background-color: rgba(31, 157, 107, 0.12);
+    background-color: rgb(31, 157, 107, 0.12);
     border-color: var(--pmf-success);
     color: var(--pmf-success);
   }
 
   &.alert-warning {
-    background-color: rgba(217, 148, 17, 0.12);
+    background-color: rgb(217, 148, 17, 0.12);
     border-color: var(--pmf-warning);
     color: var(--pmf-warning);
   }
 
   &.alert-danger {
-    background-color: rgba(214, 69, 63, 0.12);
+    background-color: rgb(214, 69, 63, 0.12);
     border-color: var(--pmf-danger);
     color: var(--pmf-danger);
   }

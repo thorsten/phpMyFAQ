@@ -16,14 +16,14 @@
 #togglePassword {
   cursor: pointer;
 
-  &:before {
-    font-family: 'ForkAwesome';
+  &::before {
+    font-family: ForkAwesome, sans-serif;
     content: '\f070';
     font-style: normal;
   }
 
-  &.is-active:before {
-    font-family: 'ForkAwesome';
+  &.is-active::before {
+    font-family: ForkAwesome, sans-serif;
     content: '\f06e';
   }
 }

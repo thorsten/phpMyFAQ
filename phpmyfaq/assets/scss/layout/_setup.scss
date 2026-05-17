@@ -60,7 +60,7 @@
         background-color: #f3f3f3;
       }
 
-      &:last-child:after {
+      &:last-child::after {
         display: none;
       }
     }

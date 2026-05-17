@@ -36,7 +36,9 @@ $transition-speed: 0.15s;
 
   &_content {
     position: relative;
+
     @include flex-column;
+
     justify-content: space-between;
     min-width: 0;
     flex-grow: 1;
@@ -52,7 +54,7 @@ $transition-speed: 0.15s;
       transform: translateX(0);
     }
 
-    #pmf-admin-layout-sidenav_content:before {
+    #pmf-admin-layout-sidenav_content::before {
       content: '';
       display: block;
       position: absolute;
@@ -90,7 +92,7 @@ $transition-speed: 0.15s;
       &_content {
         margin-left: -$sidenav-width;
 
-        &:before {
+        &::before {
           display: none;
         }
       }
@@ -143,7 +145,7 @@ $transition-speed: 0.15s;
   }
 
   &.navbar-dark #sidebarToggle {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgb(255, 255, 255, 0.5);
   }
 
   &.navbar-light #sidebarToggle {
@@ -154,6 +156,7 @@ $transition-speed: 0.15s;
 // Admin Side Navigation
 .pmf-admin-sidenav {
   @include flex-column;
+
   height: 100%;
   flex-wrap: nowrap;
 
@@ -164,6 +167,7 @@ $transition-speed: 0.15s;
 
     .nav {
       @include flex-column;
+
       flex-wrap: nowrap;
 
       &-link {
