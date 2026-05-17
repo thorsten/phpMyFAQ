@@ -41,7 +41,7 @@ final class PushController extends AbstractController
     /**
      * Returns the VAPID public key and whether push is enabled.
      */
-    #[Route(path: 'push/vapid-public-key', name: 'api.public.push.vapid-public-key', methods: ['GET'])]
+    #[Route(path: 'push/vapid-public-key', name: 'api.private.push.vapid-public-key', methods: ['GET'])]
     public function getVapidPublicKey(): JsonResponse
     {
         return $this->json([

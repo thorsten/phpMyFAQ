@@ -36,6 +36,22 @@ final class ApiRateLimiterListenerTest extends TestCase
         $this->assertNull($event->getResponse());
     }
 
+    public function testOnKernelRequestSkipsPrivateApiRoutes(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $rateLimiter = new RateLimiter(storage: new InMemoryStorage());
+
+        $configuration->expects($this->never())->method('get');
+
+        $listener = new ApiRateLimiterListener($configuration, $rateLimiter);
+        $event = $this->createEvent();
+        $event->getRequest()->attributes->set('_route', 'api.private.webauthn.prepare');
+
+        $listener->onKernelRequest($event);
+
+        $this->assertNull($event->getResponse());
+    }
+
     public function testOnKernelRequestSkipsWhenRateLimitIsDisabled(): void
     {
         $configuration = $this->createMock(Configuration::class);
@@ -106,9 +122,10 @@ final class ApiRateLimiterListenerTest extends TestCase
         $this->assertStringContainsString('Too many requests.', (string) $response->getContent());
     }
 
-    private function createEvent(int $requestType = HttpKernelInterface::MAIN_REQUEST): RequestEvent
-    {
-        $request = Request::create('/api/v3.2/search');
+    private function createEvent(
+        int $requestType = HttpKernelInterface::MAIN_REQUEST,
+    ): RequestEvent {
+        $request = Request::create('/api/v4.0/search', 'POST');
         $request->server->set('REMOTE_ADDR', '127.0.0.1');
 
         return new RequestEvent($this->createMock(HttpKernelInterface::class), $request, $requestType);

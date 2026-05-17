@@ -39,6 +39,21 @@ readonly class ApiRateLimiterListener
             return;
         }
 
+        $request = $event->getRequest();
+
+        // Rate limiting curbs abusive, state-changing requests (login attempts,
+        // registration, comments, ...). It must not throttle:
+        //  - safe/idempotent reads (GET/HEAD/OPTIONS), e.g., config endpoints, or
+        //  - authenticated "private" API routes used by logged-in users.
+        if ($request->isMethodSafe()) {
+            return;
+        }
+
+        $route = (string) $request->attributes->get('_route', '');
+        if (str_starts_with($route, 'api.private.')) {
+            return;
+        }
+
         $requestLimit = (int) $this->configuration->get('api.rateLimit.requests');
         $interval = (int) $this->configuration->get('api.rateLimit.interval');
 
@@ -46,7 +61,6 @@ readonly class ApiRateLimiterListener
             return;
         }
 
-        $request = $event->getRequest();
         $clientIdentifier = $request->getClientIp() ?? 'anonymous';
 
         if ($this->rateLimiter->check($clientIdentifier, $requestLimit, $interval)) {
