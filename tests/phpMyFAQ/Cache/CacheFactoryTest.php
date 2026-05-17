@@ -125,6 +125,122 @@ class CacheFactoryTest extends TestCase
         $this->assertInstanceOf(RedisAdapter::class, $cache);
     }
 
+    public function testCreateReturnsFilesystemAdapterForExplicitFilesystemValue(): void
+    {
+        $cacheDir = sys_get_temp_dir() . '/pmf-cache-test-' . uniqid();
+
+        $factory = new CacheFactory($this->buildConfiguration([
+            (object) ['config_name' => 'storage.cacheAdapter', 'config_value' => 'filesystem'],
+        ]), $cacheDir);
+        $cache = $factory->create();
+
+        $this->assertInstanceOf(FilesystemAdapter::class, $cache);
+
+        if (is_dir($cacheDir)) {
+            $this->removeDirectory($cacheDir);
+        }
+    }
+
+    public function testCreateReturnsFilesystemAdapterForWhitespaceAdapterValue(): void
+    {
+        $cacheDir = sys_get_temp_dir() . '/pmf-cache-test-' . uniqid();
+
+        $factory = new CacheFactory($this->buildConfiguration([
+            (object) ['config_name' => 'storage.cacheAdapter', 'config_value' => '   '],
+        ]), $cacheDir);
+        $cache = $factory->create();
+
+        $this->assertInstanceOf(FilesystemAdapter::class, $cache);
+
+        if (is_dir($cacheDir)) {
+            $this->removeDirectory($cacheDir);
+        }
+    }
+
+    public function testCreateReturnsNewInstanceOnEachCall(): void
+    {
+        $cacheDir = sys_get_temp_dir() . '/pmf-cache-test-' . uniqid();
+
+        $factory = new CacheFactory($this->configuration, $cacheDir);
+
+        $this->assertNotSame($factory->create(), $factory->create());
+
+        if (is_dir($cacheDir)) {
+            $this->removeDirectory($cacheDir);
+        }
+    }
+
+    public function testCreatedFilesystemCacheStoresAndRetrievesValues(): void
+    {
+        $cacheDir = sys_get_temp_dir() . '/pmf-cache-test-' . uniqid();
+
+        $factory = new CacheFactory($this->configuration, $cacheDir);
+        $cache = $factory->create();
+
+        $value = $cache->get('pmf_test_key', static fn(): string => 'cached-value');
+
+        $this->assertSame('cached-value', $value);
+        // Second call must return the stored value without invoking the callback again.
+        $this->assertSame(
+            'cached-value',
+            $cache->get('pmf_test_key', static fn(): string => 'recomputed-value'),
+        );
+
+        if (is_dir($cacheDir)) {
+            $this->removeDirectory($cacheDir);
+        }
+    }
+
+    public function testCreatedFilesystemCacheWritesIntoProvidedDirectory(): void
+    {
+        $cacheDir = sys_get_temp_dir() . '/pmf-cache-test-' . uniqid();
+
+        $factory = new CacheFactory($this->configuration, $cacheDir);
+        $cache = $factory->create();
+        $cache->get('pmf_test_key', static fn(): string => 'cached-value');
+
+        $this->assertDirectoryExists($cacheDir);
+        $this->assertNotEmpty(
+            iterator_to_array(new \FilesystemIterator($cacheDir)),
+            'Expected the filesystem adapter to persist cache files in the provided directory.',
+        );
+
+        $this->removeDirectory($cacheDir);
+    }
+
+    public function testCreateThrowsRuntimeExceptionForRedisWithoutExtensionMentionsFallback(): void
+    {
+        if (extension_loaded('redis')) {
+            $this->markTestSkipped('Test requires the redis extension to NOT be loaded.');
+        }
+
+        $cacheDir = sys_get_temp_dir() . '/pmf-cache-test-' . uniqid();
+
+        $factory = new CacheFactory($this->buildConfiguration([
+            (object) ['config_name' => 'storage.cacheAdapter', 'config_value' => 'redis'],
+        ]), $cacheDir);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('change storage.cacheAdapter to "filesystem"');
+        $factory->create();
+    }
+
+    /**
+     * @param list<object> $rows
+     */
+    private function buildConfiguration(array $rows): Configuration
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnCallback(static fn(string $v): string => $v);
+        $db->method('query')->willReturn('result');
+        $db->method('fetchAll')->willReturn($rows);
+
+        $config = $this->createMock(Configuration::class);
+        $config->method('getDb')->willReturn($db);
+
+        return $config;
+    }
+
     private function isRedisServerAvailable(string $host, int $port): bool
     {
         $socket = @fsockopen($host, $port, $errorCode, $errorMessage, 0.2);
