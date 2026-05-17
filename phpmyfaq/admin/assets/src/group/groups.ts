@@ -15,9 +15,18 @@
  * @since     2023-01-04
  */
 
-import { fetchAllGroups, fetchAllMembers, fetchAllUsersForGroups, fetchGroup, fetchGroupRights } from '../api';
+import {
+  fetchAllGroups,
+  fetchAllMembers,
+  fetchAllUsersForGroups,
+  fetchCategoriesForRestrictions,
+  fetchGroup,
+  fetchGroupCategoryRestrictions,
+  fetchGroupRights,
+  saveGroupCategoryRestrictions,
+} from '../api';
 import { selectAll, unSelectAll } from '../utils';
-import { Group, Member, User } from '../interfaces';
+import { CategoryItem, CategoryRestrictions, Group, Member, User } from '../interfaces';
 
 export const handleGroups = async (): Promise<void> => {
   clearGroupList();
@@ -74,6 +83,27 @@ export const handleGroups = async (): Promise<void> => {
   unSelectAllMembers.addEventListener('click', (): void => {
     unSelectAll('group_member_list');
   });
+
+  // Category restrictions save button
+  const saveCategoryRestrictions = document.getElementById('saveCategoryRestrictions') as HTMLButtonElement;
+  if (saveCategoryRestrictions) {
+    saveCategoryRestrictions.addEventListener('click', async (event: Event): Promise<void> => {
+      event.preventDefault();
+      await handleCategoryRestrictionsSave();
+    });
+  }
+
+  // Update category restrictions panel when rights checkboxes change
+  document.getElementById('groupRights')?.addEventListener('change', (event: Event): void => {
+    const target = event.target as HTMLInputElement;
+    if (target.type === 'checkbox' && target.classList.contains('permission')) {
+      const container = document.getElementById('categoryRestrictionsBody');
+      if (container) {
+        captureCurrentRestrictions(container);
+        renderCategoryRestrictions(container);
+      }
+    }
+  });
 };
 
 const handleGroupSelect = async (event: Event): Promise<void> => {
@@ -88,6 +118,11 @@ const handleGroupSelect = async (event: Event): Promise<void> => {
     await getUserList();
     clearMemberList();
     await getMemberList(groupId);
+    try {
+      await loadCategoryRestrictions(groupId);
+    } catch (error) {
+      console.error('Failed to load category restrictions:', error);
+    }
 
     // Activate user inputs
     const saveGroupDetails = document.getElementById('saveGroupDetails') as HTMLButtonElement;
@@ -96,6 +131,7 @@ const handleGroupSelect = async (event: Event): Promise<void> => {
     const deleteGroup = document.getElementById('deleteGroup') as HTMLButtonElement;
     const groupAddMember = document.getElementById('groupAddMember') as HTMLButtonElement;
     const groupRemoveMember = document.getElementById('groupRemoveMember') as HTMLButtonElement;
+    const saveCategoryRestrictions = document.getElementById('saveCategoryRestrictions') as HTMLButtonElement;
 
     saveGroupDetails.disabled = false;
     saveMembersList.disabled = false;
@@ -103,6 +139,9 @@ const handleGroupSelect = async (event: Event): Promise<void> => {
     deleteGroup.disabled = false;
     groupAddMember.disabled = false;
     groupRemoveMember.disabled = false;
+    if (saveCategoryRestrictions) {
+      saveCategoryRestrictions.disabled = false;
+    }
 
     document.querySelectorAll<HTMLInputElement>('.permission').forEach((item: HTMLInputElement): void => {
       item.disabled = false;
@@ -277,5 +316,131 @@ const removeGroupMembers = (): void => {
     if (selectedMembers.includes(member.value)) {
       member.remove();
     }
+  }
+};
+
+let cachedCategories: CategoryItem[] = [];
+let currentRestrictions: CategoryRestrictions = {};
+
+const loadCategoryRestrictions = async (groupId: string): Promise<void> => {
+  const container = document.getElementById('categoryRestrictionsBody');
+  if (!container) {
+    return;
+  }
+
+  if (cachedCategories.length === 0) {
+    cachedCategories = await fetchCategoriesForRestrictions();
+  }
+
+  currentRestrictions = await fetchGroupCategoryRestrictions(groupId);
+
+  renderCategoryRestrictions(container);
+};
+
+const captureCurrentRestrictions = (container: HTMLElement): void => {
+  const selects = container.querySelectorAll<HTMLSelectElement>('select[data-right-id]');
+  selects.forEach((select: HTMLSelectElement): void => {
+    const rightId = select.dataset.rightId;
+    if (!rightId) {
+      return;
+    }
+    currentRestrictions[rightId] = [...select.options]
+      .filter((option: HTMLOptionElement): boolean => option.selected)
+      .map((option: HTMLOptionElement): number => parseInt(option.value));
+  });
+};
+
+const renderCategoryRestrictions = (container: HTMLElement): void => {
+  const checkedRights = document.querySelectorAll<HTMLInputElement>('#groupRights input[type=checkbox]:checked');
+
+  container.innerHTML = '';
+
+  if (checkedRights.length === 0) {
+    const emptyMsg = container.dataset.msgEmpty || 'No permissions assigned to this group.';
+    const emptyParagraph = document.createElement('p');
+    emptyParagraph.className = 'text-muted';
+    emptyParagraph.textContent = emptyMsg;
+    container.appendChild(emptyParagraph);
+    return;
+  }
+
+  checkedRights.forEach((checkbox: HTMLInputElement): void => {
+    const rightId = checkbox.value;
+    const label = checkbox.closest('.form-check')?.querySelector('label')?.textContent?.trim() || `Right ${rightId}`;
+    const restrictedCategoryIds = currentRestrictions[rightId] || [];
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'mb-3';
+
+    const labelElement = document.createElement('label');
+    labelElement.className = 'form-label fw-semibold';
+    labelElement.textContent = label;
+    wrapper.appendChild(labelElement);
+
+    const select = document.createElement('select');
+    select.className = 'form-select form-select-sm';
+    select.multiple = true;
+    select.size = 4;
+    select.dataset.rightId = rightId;
+
+    cachedCategories.forEach((cat: CategoryItem): void => {
+      const option = document.createElement('option');
+      option.value = String(cat.id);
+      option.textContent = cat.name;
+      option.selected = restrictedCategoryIds.includes(cat.id);
+      select.appendChild(option);
+    });
+
+    wrapper.appendChild(select);
+
+    const helpText = document.createElement('div');
+    helpText.className = 'form-text';
+    helpText.textContent =
+      container.dataset.msgHelp ||
+      'Select categories to restrict this permission. Leave empty for unrestricted access.';
+    wrapper.appendChild(helpText);
+
+    container.appendChild(wrapper);
+  });
+};
+
+export const handleCategoryRestrictionsSave = async (): Promise<void> => {
+  const groupListSelect = document.getElementById('group_list_select') as HTMLSelectElement;
+  if (!groupListSelect) {
+    return;
+  }
+
+  const groupId = groupListSelect.value;
+  if (!groupId) {
+    return;
+  }
+
+  const container = document.getElementById('categoryRestrictionsBody');
+  if (!container) {
+    return;
+  }
+
+  const csrfToken = container.dataset.csrfToken || '';
+
+  // Collect every right ID from the permission checkboxes so unticked
+  // permissions also get their stored restrictions cleared.
+  const rightIds = new Set<string>();
+  document
+    .querySelectorAll<HTMLInputElement>('#groupRights input[type=checkbox].permission')
+    .forEach((checkbox: HTMLInputElement): void => {
+      if (checkbox.value) {
+        rightIds.add(checkbox.value);
+      }
+    });
+
+  for (const rightId of rightIds) {
+    const select = container.querySelector<HTMLSelectElement>(`select[data-right-id="${rightId}"]`);
+    const selectedCategoryIds = select
+      ? [...select.options]
+          .filter((option: HTMLOptionElement): boolean => option.selected)
+          .map((option: HTMLOptionElement): number => parseInt(option.value))
+      : [];
+
+    await saveGroupCategoryRestrictions(groupId, rightId, selectedCategoryIds, csrfToken);
   }
 };
