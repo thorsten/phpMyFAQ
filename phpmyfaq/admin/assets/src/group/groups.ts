@@ -99,6 +99,7 @@ export const handleGroups = async (): Promise<void> => {
     if (target.type === 'checkbox' && target.classList.contains('permission')) {
       const container = document.getElementById('categoryRestrictionsBody');
       if (container) {
+        captureCurrentRestrictions(container);
         renderCategoryRestrictions(container);
       }
     }
@@ -117,7 +118,11 @@ const handleGroupSelect = async (event: Event): Promise<void> => {
     await getUserList();
     clearMemberList();
     await getMemberList(groupId);
-    await loadCategoryRestrictions(groupId);
+    try {
+      await loadCategoryRestrictions(groupId);
+    } catch (error) {
+      console.error('Failed to load category restrictions:', error);
+    }
 
     // Activate user inputs
     const saveGroupDetails = document.getElementById('saveGroupDetails') as HTMLButtonElement;
@@ -332,6 +337,19 @@ const loadCategoryRestrictions = async (groupId: string): Promise<void> => {
   renderCategoryRestrictions(container);
 };
 
+const captureCurrentRestrictions = (container: HTMLElement): void => {
+  const selects = container.querySelectorAll<HTMLSelectElement>('select[data-right-id]');
+  selects.forEach((select: HTMLSelectElement): void => {
+    const rightId = select.dataset.rightId;
+    if (!rightId) {
+      return;
+    }
+    currentRestrictions[rightId] = [...select.options]
+      .filter((option: HTMLOptionElement): boolean => option.selected)
+      .map((option: HTMLOptionElement): number => parseInt(option.value));
+  });
+};
+
 const renderCategoryRestrictions = (container: HTMLElement): void => {
   const checkedRights = document.querySelectorAll<HTMLInputElement>('#groupRights input[type=checkbox]:checked');
 
@@ -339,7 +357,10 @@ const renderCategoryRestrictions = (container: HTMLElement): void => {
 
   if (checkedRights.length === 0) {
     const emptyMsg = container.dataset.msgEmpty || 'No permissions assigned to this group.';
-    container.innerHTML = `<p class="text-muted">${emptyMsg}</p>`;
+    const emptyParagraph = document.createElement('p');
+    emptyParagraph.className = 'text-muted';
+    emptyParagraph.textContent = emptyMsg;
+    container.appendChild(emptyParagraph);
     return;
   }
 
@@ -400,17 +421,25 @@ export const handleCategoryRestrictionsSave = async (): Promise<void> => {
   }
 
   const csrfToken = container.dataset.csrfToken || '';
-  const selects = container.querySelectorAll<HTMLSelectElement>('select[data-right-id]');
 
-  for (const select of selects) {
-    const rightId = select.dataset.rightId;
-    if (!rightId) {
-      continue;
-    }
+  // Collect every right ID from the permission checkboxes so unticked
+  // permissions also get their stored restrictions cleared.
+  const rightIds = new Set<string>();
+  document
+    .querySelectorAll<HTMLInputElement>('#groupRights input[type=checkbox].permission')
+    .forEach((checkbox: HTMLInputElement): void => {
+      if (checkbox.value) {
+        rightIds.add(checkbox.value);
+      }
+    });
 
-    const selectedCategoryIds = [...select.options]
-      .filter((option: HTMLOptionElement): boolean => option.selected)
-      .map((option: HTMLOptionElement): number => parseInt(option.value));
+  for (const rightId of rightIds) {
+    const select = container.querySelector<HTMLSelectElement>(`select[data-right-id="${rightId}"]`);
+    const selectedCategoryIds = select
+      ? [...select.options]
+          .filter((option: HTMLOptionElement): boolean => option.selected)
+          .map((option: HTMLOptionElement): number => parseInt(option.value))
+      : [];
 
     await saveGroupCategoryRestrictions(groupId, rightId, selectedCategoryIds, csrfToken);
   }
