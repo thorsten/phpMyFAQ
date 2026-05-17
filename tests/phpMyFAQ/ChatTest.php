@@ -364,6 +364,22 @@ class ChatTest extends TestCase
         $this->assertArrayNotHasKey('email', $users[0]);
     }
 
+    public function testSearchUsersTreatsLikeWildcardsAsLiterals(): void
+    {
+        $this->seedChatUser(411, 'chat-user-411', 'Wildcard Tester', 'wildcard@example.com', 'active');
+
+        $chat = new Chat($this->configuration);
+
+        // '%%' and '__' must not act as LIKE wildcards and match every user
+        $this->assertSame([], $chat->searchUsers('%%', 99999));
+        $this->assertSame([], $chat->searchUsers('__', 99999));
+
+        // A literal match still works
+        $users = $chat->searchUsers('wildcard tester', 99999);
+        $this->assertCount(1, $users);
+        $this->assertSame(411, $users[0]['userId']);
+    }
+
     public function testChatClassIsReadonly(): void
     {
         $chat = new Chat($this->configuration);

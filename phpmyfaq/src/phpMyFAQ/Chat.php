@@ -297,13 +297,17 @@ readonly class Chat
     public function searchUsers(string $searchTerm, int $excludeUserId, int $limit = 10): array
     {
         $escapedTerm = $this->configuration->getDb()->escape(mb_strtolower($searchTerm));
+
+        // Escape LIKE metacharacters (%, _) to prevent wildcard injection
+        $escapedTerm = str_replace(['|', '%', '_'], ['||', '|%', '|_'], $escapedTerm);
+
         $query = sprintf(
             "SELECT u.user_id, ud.display_name
              FROM %sfaquser u
              LEFT JOIN %sfaquserdata ud ON u.user_id = ud.user_id
              WHERE u.user_id != %d
                AND u.user_id > 0
-               AND LOWER(ud.display_name) LIKE '%%%s%%'
+               AND LOWER(ud.display_name) LIKE '%%%s%%' ESCAPE '|'
                AND u.account_status = 'active'
              LIMIT %d",
             Database::getTablePrefix(),
