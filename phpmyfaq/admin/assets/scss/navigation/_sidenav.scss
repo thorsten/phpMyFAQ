@@ -1,10 +1,12 @@
 //
 // Side navigation
 //
+// Token-driven; the same rules cover light, dark and high-contrast.
+//
 
 .pmf-admin-sidenav {
-  background-color: $pmf-admin-sidenav-bg;
-  color: $pmf-admin-sidenav-color;
+  background-color: var(--pmf-sidenav-bg);
+  color: var(--pmf-sidenav-text);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -14,70 +16,133 @@
     flex: 1 1 auto;
     overflow-y: auto;
     min-height: 0;
+    padding: var(--pmf-space-2) var(--pmf-space-3);
 
     .nav {
       flex-direction: column;
       flex-wrap: nowrap;
+      gap: 2px;
 
       .pmf-admin-sidenav-menu-heading {
-        color: $pmf-admin-sidenav-heading-color;
-        padding: 1.75rem 1rem 0.75rem;
-        font-size: 0.75rem;
-        font-weight: bold;
+        color: var(--pmf-sidenav-heading);
+        padding: 1.5rem 0.75rem 0.5rem;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
       }
 
       .nav-link {
-        color: $pmf-admin-sidenav-link-color;
+        color: var(--pmf-sidenav-text);
         display: flex;
         align-items: center;
-        padding-top: 0.75rem;
-        padding-bottom: 0.75rem;
+        gap: 0.25rem;
+        padding: 0.6rem 0.75rem;
+        border-radius: var(--pmf-radius-sm);
+        font-size: 0.95rem;
+        font-weight: 500;
         position: relative;
+        transition:
+          background-color var(--pmf-transition),
+          color var(--pmf-transition);
 
         .pmf-admin-nav-link-icon {
-          color: $pmf-admin-sidenav-icon-color;
-          font-size: 0.9rem;
-          width: 18px;
+          color: var(--pmf-sidenav-icon);
+          font-size: 1rem;
+          width: 20px;
+          flex: 0 0 20px;
+          text-align: center;
+          transition: color var(--pmf-transition);
+
+          // Icons carry an .h6 utility class in the markup, which would pin
+          // them to the heading colour — inherit the icon-wrapper colour so
+          // the default / hover / active states drive them instead.
+          .bi {
+            color: inherit;
+            font-size: 1.05rem;
+            vertical-align: -0.05em;
+          }
         }
 
         .pmf-admin-sidenav-collapse-arrow {
-          color: $pmf-admin-sidenav-icon-color;
+          color: var(--pmf-sidenav-heading);
           display: inline-block;
           margin-left: auto;
-          transition: transform 0.15s ease;
+          transition: transform var(--pmf-transition);
         }
 
         &:hover {
-          color: $pmf-admin-sidenav-link-active-color;
+          color: var(--pmf-sidenav-text-active);
+          background-color: var(--pmf-sidenav-hover);
+
+          .pmf-admin-nav-link-icon {
+            color: var(--pmf-sidenav-text-active);
+          }
+        }
+
+        &:focus-visible {
+          outline: 2px solid var(--pmf-sidenav-accent);
+          outline-offset: -2px;
         }
 
         &.active {
-          color: $pmf-admin-sidenav-link-active-color;
+          color: var(--pmf-sidenav-text-active);
+          background-color: var(--pmf-sidenav-active-bg);
+          font-weight: 600;
 
           .pmf-admin-nav-link-icon {
-            color: $pmf-admin-sidenav-link-active-color;
+            color: var(--pmf-sidenav-accent);
+          }
+
+          // Accent bar on the leading edge of the active item
+          &::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 1.4rem;
+            border-radius: 0 3px 3px 0;
+            background-color: var(--pmf-sidenav-accent);
           }
         }
 
-        &.collapsed {
-          .pmf-admin-sidenav-collapse-arrow {
-            transform: rotate(-90deg);
-          }
+        &.collapsed .pmf-admin-sidenav-collapse-arrow {
+          transform: rotate(-90deg);
         }
       }
 
+      // Nested entries carry no icon, so align their text under the parent
+      // label and use a guide line where the parent icon sits.
       .pmf-admin-sidenav-menu-nested {
-        margin-left: 1.5rem;
+        margin: 2px 0 4px 1.35rem;
+        padding-left: 0.4rem;
+        border-left: 2px solid var(--pmf-sidenav-hover);
         flex-direction: column;
+        gap: 1px;
+
+        .nav-link {
+          padding: 0.45rem 0.75rem;
+          font-size: 0.9rem;
+          font-weight: 500;
+
+          &.active {
+            font-weight: 600;
+
+            &::before {
+              display: none;
+            }
+          }
+        }
       }
     }
   }
 }
 
 #pmf-admin-layout-sidenav {
-  overflow: scroll;
-  height: calc(100vh - 56px);
+  overflow-y: auto;
+  height: calc(100vh - var(--pmf-topnav-height));
 }
 
 #pmf-admin-layout-sidenav_nav {

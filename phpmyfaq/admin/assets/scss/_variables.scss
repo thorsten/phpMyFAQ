@@ -1,31 +1,31 @@
 //
-// phpMyFAQ 4.0 color variables
+// phpMyFAQ 4.x color variables
 //
 
 $theme: 'phpMyFAQ v4 Admin' !default;
 
 $white: #fff !default;
-$gray-100: #f8f9fa !default;
-$gray-200: #e9ecef !default;
-$gray-300: #ddd !default;
-$gray-400: #ced4da !default;
-$gray-500: #adb5bd !default;
-$gray-600: #868e96 !default;
-$gray-700: #495057 !default;
-$gray-800: #343a40 !default;
-$gray-900: #212529 !default;
+$gray-100: #f3f4f9 !default;
+$gray-200: #e3e5ee !default;
+$gray-300: #cdd1de !default;
+$gray-400: #aeb4c6 !default;
+$gray-500: #868ca1 !default;
+$gray-600: #6b7280 !default;
+$gray-700: #474d5e !default;
+$gray-800: #2a2e3d !default;
+$gray-900: #1a1d2b !default;
 $black: #000 !default;
 
-$blue: #4582ec !default;
-$indigo: #6610f2 !default;
+$blue: #4d5ee8 !default;
+$indigo: #4d5ee8 !default;
 $purple: #6f42c1 !default;
 $pink: #e83e8c !default;
-$red: #d9534f !default;
+$red: #d6453f !default;
 $orange: #fd7e14 !default;
-$yellow: #f0ad4e !default;
-$green: #02b875 !default;
+$yellow: #d99411 !default;
+$green: #1f9d6b !default;
 $teal: #20c997 !default;
-$cyan: #17a2b8 !default;
+$cyan: #1591a8 !default;
 
 $primary: $blue !default;
 $secondary: $gray-500 !default;
@@ -34,12 +34,13 @@ $info: $cyan !default;
 $warning: $yellow !default;
 $danger: $red !default;
 $light: $gray-100 !default;
-$dark: $gray-800 !default;
+$dark: $gray-900 !default;
 
-$min-contrast-ratio: 1.85 !default;
+$min-contrast-ratio: 2.4 !default;
 
 // Body
-$body-color: $gray-800 !default;
+$body-color: #1d2230 !default;
+$body-bg: #f3f4f9 !default;
 
 // Fonts
 // stylelint-disable value-keyword-case
@@ -49,11 +50,23 @@ $font-family-sans-serif:
 $font-family-serif: Georgia, Cambria, 'Times New Roman', Times, serif !default;
 // stylelint-enable
 
-$font-size-base: 1.1rem !default;
+$font-size-base: 1rem !default;
 $headings-font-weight: 700 !default;
+$headings-color: #1d2230 !default;
+
+// Global radius — modern, moderate rounding instead of pill-shaped controls
+$border-radius: 0.625rem !default;
+$border-radius-sm: 0.375rem !default;
+$border-radius-lg: 1rem !default;
+$border-radius-xl: 1.25rem !default;
+
+// Cards
+$card-border-radius: 1rem !default;
+$card-border-color: rgba(0, 0, 0, 0.06) !default;
+$card-cap-bg: transparent !default;
 
 // Tables
-$table-border-color: rgba(0, 0, 0, 0.1) !default;
+$table-border-color: rgba(0, 0, 0, 0.08) !default;
 $table-bg-scale: 0% !default;
 
 // Buttons
@@ -61,25 +74,28 @@ $input-btn-padding-y: 0.5rem !default;
 $input-btn-padding-x: 1.1rem !default;
 $btn-font-family: $font-family-sans-serif !default;
 $btn-font-size: 0.875rem !default;
-$btn-font-size-sm: 0.688rem !default;
+$btn-font-size-sm: 0.75rem !default;
+$btn-font-weight: 600 !default;
 
-$btn-border-radius: 1.078em !default;
-$btn-border-radius-lg: 2.688em !default;
-$btn-border-radius-sm: 0.844em !default;
+$btn-border-radius: 0.5rem !default;
+$btn-border-radius-lg: 0.75rem !default;
+$btn-border-radius-sm: 0.375rem !default;
 
 // Forms
-$input-border-color: rgba(0, 0, 0, 0.1) !default;
-$input-group-addon-bg: $gray-200 !default;
-
-// Navbar
+$input-border-color: rgba(0, 0, 0, 0.12) !default;
+$input-group-addon-bg: $gray-100 !default;
+$input-focus-border-color: $blue !default;
+$input-btn-focus-color: rgba($blue, 0.3) !default;
 
 // Tooltips
 $tooltip-font-size: 11px !default;
 
 // Badges
-$badge-font-weight: 400 !default;
-$badge-padding-y: 0.6em !default;
-$badge-padding-x: 1.2em !default;
+$badge-font-weight: 600 !default;
+$badge-padding-y: 0.45em !default;
+$badge-padding-x: 0.85em !default;
+$badge-border-radius: 0.5rem !default;
 
 // Alerts
-$alert-border-width: 0 !default;
+$alert-border-width: 1px !default;
+$alert-border-radius: 0.75rem !default;
