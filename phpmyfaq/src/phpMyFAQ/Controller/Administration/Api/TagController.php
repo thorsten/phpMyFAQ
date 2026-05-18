@@ -94,11 +94,12 @@ final class TagController extends AbstractController
         if ($this->currentUser->perm->hasPermission($this->currentUser->getUserId(), PermissionType::FAQ_EDIT)) {
             $numTags = 0;
             $tagNames = [];
-            foreach ($tags as $tag) {
+            foreach ($tags as $tagId => $tag) {
                 ++$numTags;
                 if ($numTags <= PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE) {
                     $currentTag = new stdClass();
-                    $currentTag->tagName = $tag;
+                    $currentTag->id = (string) $tagId;
+                    $currentTag->name = $tag;
                     $tagNames[] = $currentTag;
                 }
             }
