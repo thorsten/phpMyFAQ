@@ -294,7 +294,7 @@ final class TagControllerTest extends TestCase
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertSame([['tagName' => 'foo'], ['tagName' => 'foobar']], $payload);
+        self::assertSame([['id' => '0', 'name' => 'foo'], ['id' => '1', 'name' => 'foobar']], $payload);
     }
 
     /**
