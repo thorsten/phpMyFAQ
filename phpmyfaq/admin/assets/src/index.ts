@@ -107,7 +107,17 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   sidebarToggle();
 
   // Dashboard — run concurrently; allSettled so one failed remote call cannot block the rest
-  await Promise.allSettled([
+  const dashboardTasks = [
+    'renderVisitorCharts',
+    'renderTopTenCharts',
+    'getLatestVersion',
+    'handleVerificationModal',
+    'fetchRecentNews',
+    'fetchContentHealth',
+    'fetchPopularSearches',
+    'handleDashboardLayout',
+  ];
+  const dashboardResults = await Promise.allSettled([
     renderVisitorCharts(),
     renderTopTenCharts(),
     getLatestVersion(),
@@ -117,6 +127,12 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
     fetchPopularSearches(),
     handleDashboardLayout(),
   ]);
+  // Surface failures without blocking — each task is independent
+  dashboardResults.forEach((result, index) => {
+    if (result.status === 'rejected') {
+      console.error('Dashboard init task failed: ', dashboardTasks[index], result.reason);
+    }
+  });
 
   // User → User Management
   await handleUsers();

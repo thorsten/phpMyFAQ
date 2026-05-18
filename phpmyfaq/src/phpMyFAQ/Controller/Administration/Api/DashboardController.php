@@ -374,7 +374,9 @@ final class DashboardController extends AbstractController
         }
 
         $dashboardLayout = new DashboardLayout($this->configuration);
-        $dashboardLayout->reset($this->currentUser->getUserId());
+        if (!$dashboardLayout->reset($this->currentUser->getUserId())) {
+            return $this->json(['error' => 'Could not reset layout.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
 
         return $this->json(['success' => true]);
     }

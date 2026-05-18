@@ -77,7 +77,18 @@ readonly class DashboardLayout
         $prefix = Database::getTablePrefix();
         $encoded = $database->escape(json_encode($config, JSON_THROW_ON_ERROR));
 
-        $database->query(sprintf('DELETE FROM %sfaqadmindashboard WHERE user_id = %d', $prefix, $userId));
+        // Update an existing row in place rather than delete-then-insert: this avoids
+        // a window where a failing insert would leave the user without any layout.
+        if ($this->hasRow($userId)) {
+            $update = sprintf(
+                "UPDATE %sfaqadmindashboard SET config = '%s' WHERE user_id = %d",
+                $prefix,
+                $encoded,
+                $userId,
+            );
+
+            return $database->query($update) !== false;
+        }
 
         $insert = sprintf(
             "INSERT INTO %sfaqadmindashboard (user_id, config) VALUES (%d, '%s')",
@@ -87,6 +98,25 @@ readonly class DashboardLayout
         );
 
         return $database->query($insert) !== false;
+    }
+
+    /**
+     * Returns whether a layout row already exists for the given user.
+     */
+    private function hasRow(int $userId): bool
+    {
+        $query = sprintf(
+            'SELECT user_id FROM %sfaqadmindashboard WHERE user_id = %d',
+            Database::getTablePrefix(),
+            $userId,
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+        if ($result === false) {
+            return false;
+        }
+
+        return is_object($this->configuration->getDb()->fetchObject($result));
     }
 
     /**

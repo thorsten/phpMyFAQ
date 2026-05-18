@@ -182,7 +182,11 @@ export const renderVisitorCharts = async (): Promise<void> => {
 
     onThemeChange(applyVisitorTheme);
 
+    // Guards against out-of-order responses overwriting the chart with stale data
+    let requestId = 0;
+
     const getData = async (days: number): Promise<void> => {
+      const currentRequestId = ++requestId;
       try {
         const response = await fetch(`./api/dashboard/visits?days=${days}`, {
           method: 'GET',
@@ -196,6 +200,11 @@ export const renderVisitorCharts = async (): Promise<void> => {
 
         if (response.status === 200) {
           const visits: { date: string; number: number }[] = await response.json();
+
+          // A newer range request has been started — discard this stale response
+          if (currentRequestId !== requestId) {
+            return;
+          }
 
           visitorChart.data.labels = [];
           visitorChart.data.datasets[0].data = [];
@@ -214,13 +223,15 @@ export const renderVisitorCharts = async (): Promise<void> => {
 
     // Wire the 7 / 30 / 90 day range switcher
     const rangeGroup = document.getElementById('pmf-visits-range');
-    rangeGroup?.querySelectorAll<HTMLButtonElement>('button[data-pmf-range]').forEach((button) => {
-      button.addEventListener('click', async (): Promise<void> => {
-        rangeGroup.querySelectorAll('button').forEach((other) => other.classList.remove('active'));
-        button.classList.add('active');
-        await getData(Number(button.dataset.pmfRange ?? '30'));
+    if (rangeGroup) {
+      rangeGroup.querySelectorAll<HTMLButtonElement>('button[data-pmf-range]').forEach((button) => {
+        button.addEventListener('click', async (): Promise<void> => {
+          rangeGroup.querySelectorAll('button').forEach((other) => other.classList.remove('active'));
+          button.classList.add('active');
+          await getData(Number(button.dataset.pmfRange ?? '30'));
+        });
       });
-    });
+    }
 
     await getData(30);
     removeChartSkeleton('pmf-chart-visits-skeleton');

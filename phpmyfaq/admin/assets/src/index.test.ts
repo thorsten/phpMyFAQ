@@ -17,6 +17,11 @@ vi.mock('./dashboard', () => ({
   handleVerificationModal: vi.fn(async () => trackCall('handleVerificationModal')),
 }));
 
+// Mock dashboard layout
+vi.mock('./dashboard-layout', () => ({
+  handleDashboardLayout: vi.fn(async () => trackCall('handleDashboardLayout')),
+}));
+
 // Mock statistics
 vi.mock('./statistics', () => ({
   handleClearRatings: vi.fn(() => trackCall('handleClearRatings')),
@@ -141,6 +146,9 @@ describe('admin index.ts', () => {
     expect(calls).toContain('getLatestVersion');
     expect(calls).toContain('handleVerificationModal');
     expect(calls).toContain('fetchRecentNews');
+    expect(calls).toContain('fetchContentHealth');
+    expect(calls).toContain('fetchPopularSearches');
+    expect(calls).toContain('handleDashboardLayout');
 
     // Users & Groups
     expect(calls).toContain('handleUsers');

@@ -63,7 +63,10 @@ const applyStoredLayout = async (grid: Element): Promise<void> => {
 
     const widgetsByKey = new Map(getWidgets(grid).map((widget) => [widget.dataset.pmfWidget ?? '', widget]));
 
-    for (const entry of config) {
+    // Restore widgets in their stored position order, not the payload's array order
+    const ordered = [...config].sort((a, b) => (a.position ?? Infinity) - (b.position ?? Infinity));
+
+    for (const entry of ordered) {
       const widget = widgetsByKey.get(entry.key);
       if (!widget) {
         continue;

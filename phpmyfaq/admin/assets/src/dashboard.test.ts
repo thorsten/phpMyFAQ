@@ -418,6 +418,41 @@ describe('renderVisitorCharts', () => {
     expect(fetchMock).toHaveBeenCalledWith('./api/dashboard/visits?days=30', expect.any(Object));
   });
 
+  it('refetches with the selected range when a range button is clicked', async () => {
+    document.body.innerHTML = `
+      <canvas id="pmf-chart-visits"></canvas>
+      <div id="pmf-visits-range">
+        <button data-pmf-range="7"></button>
+        <button data-pmf-range="30" class="active"></button>
+        <button data-pmf-range="90"></button>
+      </div>
+    `;
+    const fetchMock = vi.fn().mockResolvedValue({
+      status: 200,
+      json: vi.fn().mockResolvedValue([]),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    await renderVisitorCharts();
+    fetchMock.mockClear();
+
+    const button7 = document.querySelector('button[data-pmf-range="7"]') as HTMLButtonElement;
+    button7.dispatchEvent(new Event('click'));
+    await vi.waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith('./api/dashboard/visits?days=7', expect.any(Object));
+    });
+    expect(button7.classList.contains('active')).toBe(true);
+
+    fetchMock.mockClear();
+    const button90 = document.querySelector('button[data-pmf-range="90"]') as HTMLButtonElement;
+    button90.dispatchEvent(new Event('click'));
+    await vi.waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith('./api/dashboard/visits?days=90', expect.any(Object));
+    });
+    expect(button90.classList.contains('active')).toBe(true);
+    expect(button7.classList.contains('active')).toBe(false);
+  });
+
   it('populates chart with visit data from API', async () => {
     document.body.innerHTML = '<canvas id="pmf-chart-visits"></canvas>';
     const visits = [

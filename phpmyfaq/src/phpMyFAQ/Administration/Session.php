@@ -133,7 +133,9 @@ readonly class Session
         $days = max(1, min($days, 365));
         $stats = [];
         $completeData = [];
-        $startDate = $endDate - ($days * 86_400);
+        // Inclusive range: the loop below counts both the start and end day,
+        // so subtract one day to yield exactly $days buckets.
+        $startDate = $endDate - (($days - 1) * 86_400);
 
         $visits = $this->sessionRepository->getSessionTimestamps($startDate, $endDate);
 

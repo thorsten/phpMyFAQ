@@ -72,6 +72,30 @@ describe('handleDashboardLayout', () => {
     expect(hidden.classList.contains('d-none')).toBe(true);
   });
 
+  it('orders widgets by their stored position regardless of payload order', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: vi.fn().mockResolvedValue({
+        config: [
+          { key: 'recent-users', position: 2, visible: true },
+          { key: 'content-health', position: 0, visible: true },
+          { key: 'inactive-faqs', position: 1, visible: false },
+        ],
+      }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    await handleDashboardLayout();
+
+    const order = Array.from(document.querySelectorAll('[data-pmf-widget]')).map(
+      (widget) => (widget as HTMLElement).dataset.pmfWidget
+    );
+    expect(order).toEqual(['content-health', 'inactive-faqs', 'recent-users']);
+
+    const hidden = document.querySelector('[data-pmf-widget="inactive-faqs"]') as HTMLElement;
+    expect(hidden.classList.contains('d-none')).toBe(true);
+  });
+
   it('shows per-widget controls when edit mode is enabled', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: vi.fn().mockResolvedValue({ config: [] }) }));
 

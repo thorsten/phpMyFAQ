@@ -17,10 +17,13 @@ class DashboardLayoutTest extends TestCase
 
     private DatabaseDriver $databaseMock;
 
+    private ?string $originalPrefix = null;
+
     protected function setUp(): void
     {
         parent::setUp();
 
+        $this->originalPrefix = Database::getTablePrefix();
         Database::setTablePrefix('');
 
         $this->databaseMock = $this->createMock(DatabaseDriver::class);
@@ -28,6 +31,13 @@ class DashboardLayoutTest extends TestCase
         $configurationMock->method('getDb')->willReturn($this->databaseMock);
 
         $this->dashboardLayout = new DashboardLayout($configurationMock);
+    }
+
+    protected function tearDown(): void
+    {
+        Database::setTablePrefix($this->originalPrefix ?? '');
+
+        parent::tearDown();
     }
 
     public function testGetReturnsEmptyArrayWhenNoRowExists(): void
@@ -64,9 +74,10 @@ class DashboardLayoutTest extends TestCase
         self::assertSame([], $this->dashboardLayout->get(42));
     }
 
-    public function testSavePerformsDeleteThenInsert(): void
+    public function testSaveInsertsWhenNoRowExists(): void
     {
         $this->databaseMock->method('escape')->willReturnArgument(0);
+        $this->databaseMock->method('fetchObject')->willReturn(null);
 
         $queries = [];
         $this->databaseMock
@@ -82,9 +93,35 @@ class DashboardLayoutTest extends TestCase
 
         self::assertTrue($result);
         self::assertCount(2, $queries);
-        self::assertStringStartsWith('DELETE FROM faqadmindashboard', $queries[0]);
+        self::assertStringStartsWith('SELECT user_id FROM faqadmindashboard', $queries[0]);
         self::assertStringStartsWith('INSERT INTO faqadmindashboard', $queries[1]);
         self::assertStringContainsString('"key":"support"', $queries[1]);
+    }
+
+    public function testSaveUpdatesInPlaceWhenRowExists(): void
+    {
+        $this->databaseMock->method('escape')->willReturnArgument(0);
+        $this->databaseMock->method('fetchObject')->willReturn((object) ['user_id' => 7]);
+
+        $queries = [];
+        $this->databaseMock
+            ->method('query')
+            ->willReturnCallback(function (string $query) use (&$queries): \stdClass {
+                $queries[] = $query;
+                return new \stdClass();
+            });
+
+        $result = $this->dashboardLayout->save(7, [
+            ['key' => 'support', 'position' => 0, 'visible' => false],
+        ]);
+
+        self::assertTrue($result);
+        self::assertCount(2, $queries);
+        self::assertStringStartsWith('SELECT user_id FROM faqadmindashboard', $queries[0]);
+        self::assertStringStartsWith('UPDATE faqadmindashboard', $queries[1]);
+        self::assertStringContainsString('"key":"support"', $queries[1]);
+        // No DELETE is issued — the existing row is replaced atomically by the UPDATE
+        self::assertStringNotContainsString('DELETE', $queries[1]);
     }
 
     public function testResetDeletesTheRow(): void
