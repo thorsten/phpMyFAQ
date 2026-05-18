@@ -169,6 +169,38 @@ class ImageTest extends TestCase
         }
     }
 
+    public function testUploadClearsConsumedFileFromGlobals(): void
+    {
+        // Simulate a PHP file upload whose temp file no longer exists after move()
+        $_FILES['image'] = [
+            'name' => 'icon.jpg',
+            'type' => 'image/jpeg',
+            'tmp_name' => '/tmp/phpDoesNotExist',
+            'error' => UPLOAD_ERR_OK,
+            'size' => 1024,
+        ];
+
+        $uploadedFileMock = $this->createMock(UploadedFile::class);
+        $uploadedFileMock->expects($this->atLeastOnce())->method('isValid')->willReturn(true);
+        $uploadedFileMock->expects($this->atLeastOnce())->method('getSize')->willReturn(1024);
+        $uploadedFileMock->expects($this->once())->method('getClientMimeType')->willReturn('image/jpeg');
+        $uploadedFileMock->expects($this->once())->method('move')->willReturnSelf();
+
+        $this->configurationMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('records.maxAttachmentSize')
+            ->willReturn(2048);
+
+        $this->image->setUploadedFile($uploadedFileMock);
+        $this->image->setFileName('category-test-globals.jpg');
+
+        $this->assertTrue($this->image->upload());
+
+        // Subsequent Request::createFromGlobals() must not rebuild a dead UploadedFile
+        $this->assertArrayNotHasKey('image', $_FILES);
+    }
+
     public function testUploadWithInvalidFile(): void
     {
         $uploadedFileMock = $this->createMock(UploadedFile::class);
