@@ -316,7 +316,10 @@ class UserData
         }
 
         if ($res === false) {
-            if (array_key_exists('keycloak_sub', $this->data)) {
+            // Only bail out if the user actually has a Keycloak subject to
+            // persist. An empty placeholder must not block the fallback UPDATE
+            // for schemas that lack the keycloak_sub column.
+            if (is_string($keycloakSubRaw) && trim($keycloakSubRaw) !== '') {
                 return false;
             }
 
