@@ -120,9 +120,20 @@ readonly class Session
      */
     public function getLast30DaysVisits(int $endDate): array
     {
+        return $this->getVisitsForDays($endDate, 30);
+    }
+
+    /**
+     * Calculates the number of visits per day for the given number of days.
+     *
+     * @return array<int, stdClass>
+     */
+    public function getVisitsForDays(int $endDate, int $days = 30): array
+    {
+        $days = max(1, min($days, 365));
         $stats = [];
         $completeData = [];
-        $startDate = strtotime('-1 month', $endDate);
+        $startDate = $endDate - ($days * 86_400);
 
         $visits = $this->sessionRepository->getSessionTimestamps($startDate, $endDate);
 
@@ -131,17 +142,18 @@ readonly class Session
         }
 
         foreach ($visits as $visitDate) {
-            if (!array_key_exists(date(format: 'Y-m-d', timestamp: $visitDate), $stats)) {
+            $key = date(format: 'Y-m-d', timestamp: $visitDate);
+            if (!array_key_exists($key, $stats)) {
                 continue;
             }
 
-            ++$stats[date(format: 'Y-m-d', timestamp: $visitDate)];
+            ++$stats[$key];
         }
 
-        foreach (array_keys($stats) as $date) {
+        foreach ($stats as $date => $number) {
             $visit = new stdClass();
             $visit->date = $date;
-            $visit->number = $stats[$date];
+            $visit->number = $number;
             $completeData[] = $visit;
         }
 

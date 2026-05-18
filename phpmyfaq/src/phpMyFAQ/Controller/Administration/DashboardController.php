@@ -29,6 +29,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Environment;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
@@ -97,6 +98,7 @@ final class DashboardController extends AbstractAdministrationController
             'isBackupOlderThan30Days' => $backupInfo['isBackupOlderThan30Days'],
             'adminDashboardRecentUsers' => $this->recentUsers->getList(limit: 5),
             'hasRecentNews' => $this->configuration->get(item: 'main.enableRecentNews'),
+            'dashboardCsrfToken' => Token::getInstance($this->session)->getTokenString(page: 'dashboard'),
         ];
 
         if (version_compare($this->configuration->getVersion(), System::getVersion(), operator: '<')) {

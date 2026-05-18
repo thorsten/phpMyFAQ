@@ -2,6 +2,8 @@ import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import {
   getLatestVersion,
   fetchRecentNews,
+  fetchContentHealth,
+  fetchPopularSearches,
   parseNewsMarkdown,
   renderVisitorCharts,
   renderTopTenCharts,
@@ -413,7 +415,7 @@ describe('renderVisitorCharts', () => {
 
     await renderVisitorCharts();
 
-    expect(fetchMock).toHaveBeenCalledWith('./api/dashboard/visits', expect.any(Object));
+    expect(fetchMock).toHaveBeenCalledWith('./api/dashboard/visits?days=30', expect.any(Object));
   });
 
   it('populates chart with visit data from API', async () => {
@@ -604,5 +606,102 @@ describe('handleVerificationModal', () => {
     });
 
     expect(spinnerVisibleDuringFetch).toBe(true);
+  });
+});
+
+describe('fetchContentHealth', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '<div id="pmf-content-health"></div>';
+  });
+
+  afterEach(() => {
+    document.body.innerHTML = '';
+    vi.unstubAllGlobals();
+    vi.clearAllMocks();
+  });
+
+  it('does nothing when container element is missing', async () => {
+    document.body.innerHTML = '';
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await fetchContentHealth();
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('renders orphaned and stale counters on successful response', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: vi.fn().mockResolvedValue({ orphaned: 3, stale: 0 }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    await fetchContentHealth();
+
+    const badges = document.querySelectorAll('#pmf-content-health .badge');
+    expect(badges.length).toBe(2);
+    expect(badges[0].textContent).toBe('3');
+    expect(badges[0].className).toContain('bg-warning');
+    expect(badges[1].textContent).toBe('0');
+    expect(badges[1].className).toContain('bg-success');
+  });
+
+  it('shows an error message when the response is not ok', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: false });
+    vi.stubGlobal('fetch', fetchMock);
+
+    await fetchContentHealth();
+
+    expect(document.getElementById('pmf-content-health')?.textContent).toContain('Could not load');
+  });
+});
+
+describe('fetchPopularSearches', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '<div id="pmf-popular-searches"></div>';
+  });
+
+  afterEach(() => {
+    document.body.innerHTML = '';
+    vi.unstubAllGlobals();
+    vi.clearAllMocks();
+  });
+
+  it('does nothing when container element is missing', async () => {
+    document.body.innerHTML = '';
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await fetchPopularSearches();
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('renders search terms as text content to prevent XSS', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: vi.fn().mockResolvedValue([{ searchterm: '<img src=x onerror=alert(1)>', number: 7 }]),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    await fetchPopularSearches();
+
+    const term = document.querySelector('#pmf-popular-searches li span');
+    expect(term?.textContent).toBe('<img src=x onerror=alert(1)>');
+    expect(term?.querySelector('img')).toBeNull();
+    expect(document.querySelector('#pmf-popular-searches .badge')?.textContent).toBe('7');
+  });
+
+  it('shows a placeholder when there are no searches', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: vi.fn().mockResolvedValue([]),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    await fetchPopularSearches();
+
+    expect(document.getElementById('pmf-popular-searches')?.textContent).toContain('No searches recorded');
   });
 });

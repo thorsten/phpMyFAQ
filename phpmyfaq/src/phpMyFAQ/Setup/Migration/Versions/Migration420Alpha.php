@@ -37,7 +37,7 @@ readonly class Migration420Alpha extends AbstractMigration
 
     public function getDescription(): string
     {
-        return 'Admin log hash columns, custom pages, chat messages, translation config, API rate limiting, queue jobs, mail provider config, API keys, OAuth2 tables, Keycloak subject storage';
+        return 'Admin log hash columns, custom pages, chat messages, translation config, API rate limiting, queue jobs, mail provider config, API keys, OAuth2 tables, Keycloak subject storage, granular group-based category permissions, per-admin dashboard layouts';
     }
 
     public function up(OperationRecorder $recorder): void
@@ -1240,6 +1240,130 @@ readonly class Migration420Alpha extends AbstractMigration
                     $this->tablePrefix,
                 ),
                 'Create OAuth2 auth code user index (SQL Server)',
+            );
+        }
+
+        // faqgroup_right_category table for granular group-based category permissions
+        $intType = $this->integerType();
+
+        if ($this->isMySql()) {
+            $recorder->addSql(
+                sprintf(
+                    'CREATE TABLE IF NOT EXISTS %sfaqgroup_right_category (
+                        group_id %s NOT NULL,
+                        right_id %s NOT NULL,
+                        category_id %s NOT NULL,
+                        PRIMARY KEY (group_id, right_id, category_id)
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci',
+                    $this->tablePrefix,
+                    $intType,
+                    $intType,
+                    $intType,
+                ),
+                'Create faqgroup_right_category table (MySQL)',
+            );
+        }
+
+        if ($this->isPostgreSql()) {
+            $recorder->addSql(
+                sprintf('CREATE TABLE IF NOT EXISTS %sfaqgroup_right_category (
+                        group_id %s NOT NULL,
+                        right_id %s NOT NULL,
+                        category_id %s NOT NULL,
+                        PRIMARY KEY (group_id, right_id, category_id)
+                    )', $this->tablePrefix, $intType, $intType, $intType),
+                'Create faqgroup_right_category table (PostgreSQL)',
+            );
+        }
+
+        if ($this->isSqlite()) {
+            $recorder->addSql(
+                sprintf('CREATE TABLE IF NOT EXISTS %sfaqgroup_right_category (
+                        group_id %s NOT NULL,
+                        right_id %s NOT NULL,
+                        category_id %s NOT NULL,
+                        PRIMARY KEY (group_id, right_id, category_id)
+                    )', $this->tablePrefix, $intType, $intType, $intType),
+                'Create faqgroup_right_category table (SQLite)',
+            );
+        }
+
+        if ($this->isSqlServer()) {
+            $recorder->addSql(
+                sprintf(
+                    'IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = \'%sfaqgroup_right_category\') '
+                    . 'CREATE TABLE %sfaqgroup_right_category (
+                        group_id %s NOT NULL,
+                        right_id %s NOT NULL,
+                        category_id %s NOT NULL,
+                        PRIMARY KEY (group_id, right_id, category_id)
+                    )',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                    $intType,
+                    $intType,
+                    $intType,
+                ),
+                'Create faqgroup_right_category table (SQL Server)',
+            );
+        }
+
+        // faqadmindashboard table for per-admin dashboard widget layouts
+        $textType = $this->textType();
+
+        if ($this->isMySql()) {
+            $recorder->addSql(
+                sprintf(
+                    'CREATE TABLE IF NOT EXISTS %sfaqadmindashboard (
+                        user_id %s NOT NULL,
+                        config %s,
+                        PRIMARY KEY (user_id)
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci',
+                    $this->tablePrefix,
+                    $intType,
+                    $textType,
+                ),
+                'Create faqadmindashboard table (MySQL)',
+            );
+        }
+
+        if ($this->isPostgreSql()) {
+            $recorder->addSql(
+                sprintf('CREATE TABLE IF NOT EXISTS %sfaqadmindashboard (
+                        user_id %s NOT NULL,
+                        config %s,
+                        PRIMARY KEY (user_id)
+                    )', $this->tablePrefix, $intType, $textType),
+                'Create faqadmindashboard table (PostgreSQL)',
+            );
+        }
+
+        if ($this->isSqlite()) {
+            $recorder->addSql(
+                sprintf('CREATE TABLE IF NOT EXISTS %sfaqadmindashboard (
+                        user_id %s NOT NULL,
+                        config %s,
+                        PRIMARY KEY (user_id)
+                    )', $this->tablePrefix, $intType, $textType),
+                'Create faqadmindashboard table (SQLite)',
+            );
+        }
+
+        if ($this->isSqlServer()) {
+            $recorder->addSql(
+                sprintf(
+                    'IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = \'%sfaqadmindashboard\') '
+                    . 'CREATE TABLE %sfaqadmindashboard (
+                        user_id %s NOT NULL,
+                        config %s,
+                        PRIMARY KEY (user_id)
+                    )',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                    $intType,
+                    $textType,
+                ),
+                'Create faqadmindashboard table (SQL Server)',
             );
         }
     }

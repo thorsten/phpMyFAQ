@@ -181,10 +181,7 @@ class CacheFactoryTest extends TestCase
 
         $this->assertSame('cached-value', $value);
         // Second call must return the stored value without invoking the callback again.
-        $this->assertSame(
-            'cached-value',
-            $cache->get('pmf_test_key', static fn(): string => 'recomputed-value'),
-        );
+        $this->assertSame('cached-value', $cache->get('pmf_test_key', static fn(): string => 'recomputed-value'));
 
         if (is_dir($cacheDir)) {
             $this->removeDirectory($cacheDir);
