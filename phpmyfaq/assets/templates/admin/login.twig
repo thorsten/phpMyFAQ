@@ -8,73 +8,94 @@
         <main>
           <div class="container">
             <div class="row justify-content-center">
-              <div class="col-lg-6">
-                <div class="card shadow-lg border-1 rounded-lg mt-5">
-                  <div class="card-header">
-                    <h3 class="text-center font-weight-light my-4">phpMyFAQ {{ version }} Login</h3>
-
+              <div class="col-md-8 col-lg-6 col-xl-5">
+                <div class="card shadow-lg border-0 rounded-3 mt-5">
+                  <div class="card-header bg-transparent border-0 pt-4">
+                    <h1 class="h3 text-center fw-light mb-0">{{ msgLoginUser }}</h1>
+                  </div>
+                  <div class="card-body p-4">
                     {% if isError %}
                       <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2" aria-hidden="true"></i>
                         {{ errorMessage }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                       </div>
-                    {% else %}
-                      <p>
-                        {{ loginMessage }}
-                      </p>
                     {% endif %}
 
                     {% if isLogout %}
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                      {{ logoutMessage }}
-                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
+                      <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="bi bi-check-circle-fill me-2" aria-hidden="true"></i>
+                        {{ logoutMessage }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>
                     {% endif %}
 
-                    <div id="session-timeout-message" class="alert alert-warning alert-dismissible fade show" role="alert" style="display: none;">
+                    <div id="session-timeout-message" class="alert alert-warning alert-dismissible fade show d-none"
+                         role="alert">
+                      <i class="bi bi-clock-history me-2" aria-hidden="true"></i>
                       <span id="session-timeout-text"></span>
                       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                  </div>
-                  <div class="card-body">
-                    <form action="{{ loginUrl }}" method="post" accept-charset="utf-8" role="form">
+
+                    {% if not isError and not isLogout %}
+                      <p class="text-muted text-center mb-4">{{ loginMessage }}</p>
+                    {% endif %}
+
+                    <form action="{{ loginUrl }}" method="post" accept-charset="utf-8" role="form"
+                          class="pmf-login-form">
                       <div class="form-floating mb-3">
                         <input class="form-control" id="faqusername" name="faqusername" type="text"
-                               placeholder="{{ msgUsername }}">
+                               autocomplete="username" placeholder="{{ msgUsername }}" autofocus required>
                         <label for="faqusername">{{ msgUsername }}</label>
                       </div>
-                      <div class="input-group mb-3">
+                      <div class="input-group">
                         <div class="form-floating">
                           <input class="form-control" id="faqpassword" name="faqpassword" type="password"
-                                 autocomplete="off"
-                                 placeholder="{{ msgPassword }}" data-pmf-toggle="faqpassword_toggle">
+                                 autocomplete="current-password" placeholder="{{ msgPassword }}"
+                                 data-pmf-toggle="faqpassword_toggle" required>
                           <label for="faqpassword">{{ msgPassword }}</label>
                         </div>
-                        <span class="input-group-text" id="faqpassword_toggle" role="button" tabindex="0">
+                        <span class="input-group-text" id="faqpassword_toggle" role="button" tabindex="0"
+                              aria-label="{{ 'msgShowPassword' | translate }}" aria-pressed="false">
                           <i class="bi bi-eye-slash" id="faqpassword_toggle_icon"></i>
                         </span>
                       </div>
-                      <div class="form-check mb-3">
+                      <div id="caps-lock-warning" class="form-text text-warning-emphasis d-none mb-2">
+                        <i class="bi bi-capslock-fill me-1" aria-hidden="true"></i>
+                        {{ 'msgCapsLockOn' | translate }}
+                      </div>
+                      <div class="form-check mt-3 mb-3">
                         <input class="form-check-input" id="faqrememberme" name="faqrememberme" type="checkbox"
                                value="rememberMe">
                         <label class="form-check-label" for="faqrememberme">{{ msgRememberMe }}</label>
                       </div>
-                      <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                        <a class="small" href="../forgot-password">{{ msgLostPassword }}</a>
-                        <button type="submit" class="btn btn-primary">
+                      <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg"
+                                data-pmf-loading-text="{{ 'msgSigningIn' | translate }}">
                           {{ msgLoginUser }}
                         </button>
                       </div>
+                      <div class="text-center mt-3">
+                        <a class="small" href="../forgot-password">{{ msgLostPassword }}</a>
+                      </div>
                     </form>
                   </div>
-                  <div class="card-footer text-center py-3">
+                  {% if hasRegistrationEnabled or hasSignInWithMicrosoftActive
+                        or hasSignInWithKeycloakActive or isWebAuthnEnabled %}
+                  <div class="card-footer bg-transparent border-0 text-center px-4 pb-4">
+                    <div class="d-flex align-items-center text-muted my-3">
+                      <hr class="flex-grow-1">
+                      <span class="px-2 small text-uppercase">{{ 'msgLoginOrDivider' | translate }}</span>
+                      <hr class="flex-grow-1">
+                    </div>
                     {% if hasRegistrationEnabled %}
                       <a class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" href="../user/register">
+                        <i class="bi bi-person-plus" aria-hidden="true"></i>
                         {{ msgRegistration }}
                       </a>
                     {% endif %}
                     {% if hasSignInWithMicrosoftActive %}
-                      <a class="w-100 py-2 mb-2 btn btn-outline-warning rounded-3" href="../auth/azure/authorize">
+                      <a class="w-100 py-2 mb-2 btn btn-outline-dark rounded-3" href="../auth/azure/authorize">
                         <i class="bi bi-windows" aria-hidden="true"></i>
                         {{ msgSignInWithMicrosoft }}
                       </a>
@@ -92,6 +113,7 @@
                       </a>
                     {% endif %}
                   </div>
+                  {% endif %}
                 </div>
               </div>
             </div>
@@ -104,22 +126,5 @@
       <a href="{{ secureUrl }}">{{ msgNotSecure }}</a>
     </p>
   {% endif %}
-
-  <script>
-    // Check for session timeout message from sessionStorage
-    (function() {
-      const loginMessage = sessionStorage.getItem('loginMessage');
-      if (loginMessage) {
-        const messageEl = document.getElementById('session-timeout-message');
-        const textEl = document.getElementById('session-timeout-text');
-        if (messageEl && textEl) {
-          textEl.textContent = loginMessage;
-          messageEl.style.display = 'block';
-        }
-        // Clear the message from sessionStorage so it doesn't show again
-        sessionStorage.removeItem('loginMessage');
-      }
-    })();
-  </script>
 
 {% endblock %}

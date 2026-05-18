@@ -84,17 +84,20 @@ final class AuthenticationController extends AbstractAdministrationController im
                 }
 
                 $this->adminLog->log($this->currentUser, AdminLogType::AUTH_LOGIN_SUCCESS->value . ':' . $username);
+                return new RedirectResponse(url: './');
             } catch (Exception) {
                 $this->adminLog->log(
                     $this->currentUser,
                     AdminLogType::AUTH_LOGIN_FAILED->value . ':' . $username . ' - '
                         . implode(separator: ', ', array: $this->currentUser?->errors),
                 );
+                $this->session->getFlashBag()->add('error', Translation::get('ad_auth_fail'));
                 return new RedirectResponse(url: './login');
             }
         }
 
-        return new RedirectResponse(url: './');
+        $this->session->getFlashBag()->add('error', Translation::get('ad_auth_fail'));
+        return new RedirectResponse(url: './login');
     }
 
     /**
@@ -112,14 +115,15 @@ final class AuthenticationController extends AbstractAdministrationController im
         ) {
             return new RedirectResponse(url: './authenticate');
         }
-        $error = $request->query->get(key: 'error');
+        $errorMessages = $this->session->getFlashBag()->get('error');
+        $errorMessage = count($errorMessages) > 0 ? $errorMessages[0] : null;
 
         return $this->render(file: '@admin/login.twig', context: [
             ...$this->getHeader($request),
             ...$this->getFooter(),
             'isSecure' => $request->isSecure() || !$this->configuration->get(item: 'security.useSslForLogins'),
-            'isError' => $error !== null && (string) $error !== '',
-            'errorMessage' => 'to be implemented',
+            'isError' => $errorMessage !== null,
+            'errorMessage' => $errorMessage,
             'loginMessage' => Translation::get(key: 'ad_auth_insert'),
             'isLogout' => $request->query->get(key: 'action') === 'logout',
             'logoutMessage' => Translation::get(key: 'ad_logout'),

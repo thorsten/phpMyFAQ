@@ -85,7 +85,7 @@ import {
 } from './content';
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
-import { handlePasswordStrength, handlePasswordToggle } from '../../../assets/src/utils';
+import { handleLoginForm, handlePasswordStrength, handlePasswordToggle } from '../../../assets/src/utils';
 import { handleSessionTimeout, initializeTooltips, sidebarToggle } from './utils';
 import '../../../assets/src/utils/theme-switcher';
 
@@ -98,6 +98,7 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   // Login
   handlePasswordToggle();
   handlePasswordStrength();
+  handleLoginForm();
 
   // Sidebar
   sidebarToggle();

@@ -35,7 +35,13 @@ import {
   handleUserPassword,
   handleResetUserPassword,
 } from './user';
-import { calculateReadingTime, handlePasswordStrength, handlePasswordToggle, handleReloadCaptcha } from './utils';
+import {
+  calculateReadingTime,
+  handleLoginForm,
+  handlePasswordStrength,
+  handlePasswordToggle,
+  handleReloadCaptcha,
+} from './utils';
 import './utils/tooltip';
 import { handleWebAuthn } from './webauthn/webauthn';
 import { handleChat } from './chat';
@@ -51,6 +57,9 @@ document.addEventListener('DOMContentLoaded', (): void => {
   // Password helpers
   handlePasswordToggle();
   handlePasswordStrength();
+
+  // Login form helpers
+  handleLoginForm();
 
   // Calculate reading time
   const faqBody: HTMLElement | null = document.querySelector('.pmf-faq-body');

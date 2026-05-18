@@ -13,17 +13,6 @@
   }
 }
 
-#togglePassword {
+#faqpassword_toggle {
   cursor: pointer;
-
-  &::before {
-    font-family: ForkAwesome, sans-serif;
-    content: '\f070';
-    font-style: normal;
-  }
-
-  &.is-active::before {
-    font-family: ForkAwesome, sans-serif;
-    content: '\f06e';
-  }
 }
