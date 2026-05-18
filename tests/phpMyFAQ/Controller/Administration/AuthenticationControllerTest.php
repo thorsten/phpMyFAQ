@@ -114,7 +114,7 @@ final class AuthenticationControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testAuthenticateRedirectsToDashboardWhenCredentialsAreMissing(): void
+    public function testAuthenticateRedirectsToLoginWhenCredentialsAreMissing(): void
     {
         $request = new Request([], ['faqusername' => '', 'faqpassword' => '']);
         $controller = $this->createController();
@@ -122,7 +122,7 @@ final class AuthenticationControllerTest extends TestCase
         $response = $controller->authenticate($request);
 
         self::assertInstanceOf(RedirectResponse::class, $response);
-        self::assertSame('./', $response->getTargetUrl());
+        self::assertSame('./login', $response->getTargetUrl());
     }
 
     /**

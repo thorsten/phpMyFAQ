@@ -1790,5 +1790,8 @@ $PMF_LANG['ad_group_category_restrictions_select'] = 'Select categories to restr
 $PMF_LANG['msgPasswordLeaveBlank'] = 'Leave the password fields blank to keep your current password.';
 $PMF_LANG['msgShowPassword'] = 'Show or hide password';
 $PMF_LANG['msgPasswordStrength'] = 'Password strength';
+$PMF_LANG['msgCapsLockOn'] = 'Caps Lock is on.';
+$PMF_LANG['msgSigningIn'] = 'Signing in…';
+$PMF_LANG['msgLoginOrDivider'] = 'or';
 
 return $PMF_LANG;

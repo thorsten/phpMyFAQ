@@ -4,12 +4,14 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 const mockHandleReloadCaptcha = vi.fn();
 const mockHandlePasswordToggle = vi.fn();
 const mockHandlePasswordStrength = vi.fn();
+const mockHandleLoginForm = vi.fn();
 const mockCalculateReadingTime = vi.fn();
 
 vi.mock('./utils', () => ({
   handleReloadCaptcha: (...args: unknown[]) => mockHandleReloadCaptcha(...args),
   handlePasswordToggle: () => mockHandlePasswordToggle(),
   handlePasswordStrength: () => mockHandlePasswordStrength(),
+  handleLoginForm: () => mockHandleLoginForm(),
   calculateReadingTime: () => mockCalculateReadingTime(),
 }));
 

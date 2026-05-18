@@ -99,6 +99,7 @@ vi.mock('./group', () => ({
 vi.mock('../../../assets/src/utils', () => ({
   handlePasswordStrength: vi.fn(() => trackCall('handlePasswordStrength')),
   handlePasswordToggle: vi.fn(() => trackCall('handlePasswordToggle')),
+  handleLoginForm: vi.fn(() => trackCall('handleLoginForm')),
 }));
 
 // Mock admin utils

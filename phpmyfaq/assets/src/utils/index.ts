@@ -1,5 +1,6 @@
 export * from './captcha';
 export * from './helper';
+export * from './login';
 export * from './notifications';
 export * from './password';
 export * from './reading-time';
