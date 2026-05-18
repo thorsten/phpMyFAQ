@@ -97,6 +97,10 @@ final class DashboardController extends AbstractController
             return null;
         }
 
+        if (!is_array($cached['payload'])) {
+            return null;
+        }
+
         return $cached['payload'];
     }
 
@@ -109,7 +113,7 @@ final class DashboardController extends AbstractController
     private function getStaleCache(string $key): ?array
     {
         $cached = $this->cache->getItem($key)->get();
-        if (is_array($cached) && array_key_exists('payload', $cached)) {
+        if (is_array($cached) && array_key_exists('payload', $cached) && is_array($cached['payload'])) {
             return $cached['payload'];
         }
 
@@ -202,7 +206,7 @@ final class DashboardController extends AbstractController
         $this->userIsAuthenticated();
 
         if ($this->configuration->get(item: 'main.enableUserTracking')) {
-            $endDate = (int) $request->server->get('REQUEST_TIME');
+            $endDate = (int) ($request->server->get('REQUEST_TIME') ?: time());
             $days = (int) $request->query->get('days', 30);
             $days = max(7, min($days, 365));
             return $this->json($this->adminSession->getVisitsForDays($endDate, $days));

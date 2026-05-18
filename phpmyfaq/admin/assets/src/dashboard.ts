@@ -523,6 +523,7 @@ export const fetchRecentNews = async (): Promise<void> => {
         list.appendChild(li);
       }
 
+      container.innerHTML = '';
       container.appendChild(list);
     } else {
       container.innerHTML = '<p class="text-muted mb-0">Could not load news.</p>';
