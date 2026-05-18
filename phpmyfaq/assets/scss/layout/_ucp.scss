@@ -1,0 +1,18 @@
+//
+// User control panel
+//
+
+.pmf-personal-gravatar,
+.pmf-personal-info {
+  // Accent the icons in the card headers.
+  .card-header i {
+    margin-right: 0.35rem;
+    color: var(--pmf-accent);
+  }
+}
+
+// Gravatar preview image
+.pmf-personal-gravatar .card-body img {
+  max-width: 100%;
+  border-radius: var(--pmf-radius);
+}
