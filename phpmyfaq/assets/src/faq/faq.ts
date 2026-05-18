@@ -33,7 +33,17 @@ export const handleAddFaq = () => {
         const form = document.querySelector('#pmf-add-faq-form') as HTMLFormElement;
         const loader = document.getElementById('loader') as HTMLElement;
         const formData = new FormData(form);
-        const response = (await createFaq(formData)) as ApiResponse;
+        const response = (await createFaq(formData)) as ApiResponse | undefined;
+
+        if (!response) {
+          loader.classList.add('d-none');
+          const message = document.getElementById('pmf-add-faq-response') as HTMLElement;
+          message.insertAdjacentElement(
+            'afterend',
+            addElement('div', { classList: 'alert alert-danger', innerText: 'An unexpected error occurred.' })
+          );
+          return;
+        }
 
         if (response.success) {
           loader.classList.add('d-none');

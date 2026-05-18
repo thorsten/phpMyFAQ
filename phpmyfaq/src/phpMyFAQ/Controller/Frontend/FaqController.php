@@ -128,51 +128,55 @@ final class FaqController extends AbstractController
             $faq->create($faqEntity);
             $recordId = $faqEntity->getId();
 
-            $openQuestionId = Filter::filterVar($data->openQuestionID, FILTER_VALIDATE_INT);
-            if ($openQuestionId) {
-                if ($this->configuration->get(item: 'records.enableDeleteQuestion')) {
-                    $question->delete($openQuestionId);
-                } else { // adds this faq record id to the related open question
-                    $question->updateQuestionAnswer((int) $openQuestionId, (int) $recordId, (int) $categories[0]);
-                }
-            }
-
-            $faqMetaData = new MetaData($this->configuration);
-            $faqMetaData
-                ->setFaqId($recordId)
-                ->setFaqLanguage($faqEntity->getLanguage())
-                ->setCategories($categories)
-                ->save();
-
-            // Let the admin and the category owners to be informed by email of this new entry
-            $categoryHelper = $this->container->get(id: 'phpmyfaq.helper.category-helper');
-            $categoryHelper->setCategory($category)->setConfiguration($this->configuration);
-
-            $moderators = $categoryHelper->getModerators($categories);
-
-            // Add user and group permissions
-            $permissions = $categoryPermission->getAll($categories);
-            foreach ($categories as $category) {
-                $faqPermission->add(FaqPermission::USER, $recordId, $permissions[$category]['user']);
-                if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
-                    $faqPermission->add(FaqPermission::GROUP, $recordId, $permissions[$category]['group']);
-                }
-            }
+            // The FAQ has been stored. Everything below is post-processing (metadata,
+            // permissions, notification mail, …) and must never prevent the user from
+            // receiving the confirmation. A failure here is logged but swallowed so the
+            // success response is always returned, closes #4282.
+            $link = [];
 
             try {
+                $openQuestionId = Filter::filterVar($data->openQuestionID, FILTER_VALIDATE_INT);
+                if ($openQuestionId) {
+                    if ($this->configuration->get(item: 'records.enableDeleteQuestion')) {
+                        $question->delete($openQuestionId);
+                    } else { // adds this faq record id to the related open question
+                        $question->updateQuestionAnswer((int) $openQuestionId, (int) $recordId, (int) $categories[0]);
+                    }
+                }
+
+                $faqMetaData = new MetaData($this->configuration);
+                $faqMetaData
+                    ->setFaqId($recordId)
+                    ->setFaqLanguage($faqEntity->getLanguage())
+                    ->setCategories($categories)
+                    ->save();
+
+                // Let the admin and the category owners to be informed by email of this new entry
+                $categoryHelper = $this->container->get(id: 'phpmyfaq.helper.category-helper');
+                $categoryHelper->setCategory($category)->setConfiguration($this->configuration);
+
+                $moderators = $categoryHelper->getModerators($categories);
+
+                // Add user and group permissions
+                $permissions = $categoryPermission->getAll($categories);
+                foreach ($categories as $category) {
+                    $faqPermission->add(FaqPermission::USER, $recordId, $permissions[$category]['user']);
+                    if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
+                        $faqPermission->add(FaqPermission::GROUP, $recordId, $permissions[$category]['group']);
+                    }
+                }
+
                 $notification = $this->container->get(id: 'phpmyfaq.notification');
                 $notification->sendNewFaqAdded($moderators, $faqEntity);
-            } catch (\Throwable $e) {
-                $this->configuration->getLogger()->info('Notification could not be sent: ', [$e->getMessage()]);
-            }
 
-            if ($this->configuration->get(item: 'records.defaultActivation')) {
-                $link = [
-                    'link' => $faqHelper->createFaqUrl($faqEntity, $categories[0]),
-                    'info' => Translation::get(key: 'msgRedirect'),
-                ];
-            } else {
-                $link = [];
+                if ($this->configuration->get(item: 'records.defaultActivation')) {
+                    $link = [
+                        'link' => $faqHelper->createFaqUrl($faqEntity, $categories[0]),
+                        'info' => Translation::get(key: 'msgRedirect'),
+                    ];
+                }
+            } catch (\Throwable $e) {
+                $this->configuration->getLogger()->info('Post-processing after FAQ creation failed: ', [$e->getMessage()]);
             }
 
             return $this->json([
