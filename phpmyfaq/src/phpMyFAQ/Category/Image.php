@@ -143,6 +143,15 @@ class Image
 
             $this->uploadedFile->move(self::UPLOAD_DIR, $this->fileName);
 
+            // move() has consumed the PHP upload temp file. phpMyFAQ rebuilds
+            // the request from globals in many places via
+            // Request::createFromGlobals(); each rebuild reconstructs an
+            // UploadedFile from $_FILES, and Symfony's File constructor throws
+            // FileNotFoundException once that temp file no longer exists.
+            // Drop the consumed entry so later rebuilds in this process stay
+            // valid.
+            unset($_FILES['image']);
+
             return true;
         }
 
