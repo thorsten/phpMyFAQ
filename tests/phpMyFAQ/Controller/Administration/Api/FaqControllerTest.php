@@ -1301,7 +1301,7 @@ final class FaqControllerTest extends TestCase
         file_put_contents($tempFile, "question,answer\nQ,A\n");
         $uploadedFile = new UploadedFile($tempFile, 'faq.csv', null, null, true);
 
-        $request = new Request([], [], ['csrf' => 'invalid-token'], [], ['file' => $uploadedFile]);
+        $request = new Request([], ['csrf' => 'invalid-token'], [], [], ['file' => $uploadedFile]);
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer());
 
@@ -1326,7 +1326,7 @@ final class FaqControllerTest extends TestCase
         file_put_contents($tempFile, 'not a csv import');
         $uploadedFile = new UploadedFile($tempFile, 'faq.txt', null, null, true);
 
-        $request = new Request([], [], ['csrf' => $csrfToken], [], ['file' => $uploadedFile]);
+        $request = new Request([], ['csrf' => $csrfToken], [], [], ['file' => $uploadedFile]);
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
@@ -1352,7 +1352,7 @@ final class FaqControllerTest extends TestCase
         file_put_contents($tempFile, "1,Question,Answer,keywords,en,Author,author@example.com,true\n");
         $uploadedFile = new UploadedFile($tempFile, 'faq.csv', null, null, true);
 
-        $request = new Request([], [], ['csrf' => $csrfToken], [], ['file' => $uploadedFile]);
+        $request = new Request([], ['csrf' => $csrfToken], [], [], ['file' => $uploadedFile]);
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
@@ -1382,7 +1382,7 @@ final class FaqControllerTest extends TestCase
         );
         $uploadedFile = new UploadedFile($tempFile, 'faq.csv', null, null, true);
 
-        $request = new Request([], [], ['csrf' => $csrfToken], [], ['file' => $uploadedFile]);
+        $request = new Request([], ['csrf' => $csrfToken], [], [], ['file' => $uploadedFile]);
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
