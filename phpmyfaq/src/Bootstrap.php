@@ -93,8 +93,15 @@ if (!defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
 // Check if config/database.php exist -> if not, redirect to the installer
 //
 if (!file_exists(PMF_CONFIG_DIR . '/database.php') && !file_exists(PMF_LEGACY_CONFIG_DIR . '/database.php')) {
-    $response = new RedirectResponse('./setup/');
-    $response->send();
+    // Build an absolute URL to the installer to avoid an infinite redirect
+    // loop when this redirect is reached from a path already below /setup/.
+    $request = Request::createFromGlobals();
+    $setupUrl = rtrim($request->getBasePath(), '/') . '/setup/';
+
+    if (!str_starts_with($request->getPathInfo(), '/setup/')) {
+        $response = new RedirectResponse($setupUrl);
+        $response->send();
+    }
     exit();
 } else {
     if (file_exists(PMF_CONFIG_DIR . '/database.php')) {
