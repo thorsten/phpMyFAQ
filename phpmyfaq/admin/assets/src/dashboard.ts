@@ -13,7 +13,6 @@
  * @since     2020-04-22
  */
 
-import Masonry from 'masonry-layout';
 import { Chart, registerables } from 'chart.js';
 import { getRemoteHashes, verifyHashes } from './api';
 import { addElement, TranslationService } from '../../../assets/src/utils';
@@ -28,6 +27,42 @@ const getThemeColors = () => {
   const gridColor: string = borderColorVar !== '' ? borderColorVar : `rgba(${bodyColorRgb}, 0.4)`;
   const tooltipBg: string = (styles.getPropertyValue('--bs-tertiary-bg') || `rgba(${bodyColorRgb}, 0.85)`).trim();
   return { primary, bodyColor, gridColor, tooltipBg } as const;
+};
+
+// Run the callback whenever the Bootstrap theme (light/dark) changes
+const onThemeChange = (callback: () => void): void => {
+  const observer = new MutationObserver((mutations) => {
+    if (mutations.some((m) => m.type === 'attributes' && m.attributeName === 'data-bs-theme')) {
+      callback();
+    }
+  });
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-bs-theme'] });
+};
+
+// Remove a chart's loading skeleton once the chart has rendered
+const removeChartSkeleton = (id: string): void => {
+  document.getElementById(id)?.remove();
+};
+
+// Theme-aware palette for chart bars — readable in both light and dark mode
+const getChartPalette = (): string[] => {
+  const styles: CSSStyleDeclaration = getComputedStyle(document.documentElement);
+  const read = (name: string, fallback: string): string => {
+    const value: string = styles.getPropertyValue(name).trim();
+    return value !== '' ? value : fallback;
+  };
+  return [
+    read('--bs-primary', '#0d6efd'),
+    read('--bs-success', '#198754'),
+    read('--bs-info', '#0dcaf0'),
+    read('--bs-warning', '#ffc107'),
+    read('--bs-danger', '#dc3545'),
+    read('--bs-purple', '#6f42c1'),
+    read('--bs-teal', '#20c997'),
+    read('--bs-orange', '#fd7e14'),
+    read('--bs-pink', '#d63384'),
+    read('--bs-indigo', '#6610f2'),
+  ];
 };
 
 export const renderVisitorCharts = async (): Promise<void> => {
@@ -145,18 +180,15 @@ export const renderVisitorCharts = async (): Promise<void> => {
       visitorChart.update('none');
     };
 
-    const themeObserver = new MutationObserver((mutations) => {
-      for (const m of mutations) {
-        if (m.type === 'attributes' && m.attributeName === 'data-bs-theme') {
-          applyVisitorTheme();
-        }
-      }
-    });
-    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-bs-theme'] });
+    onThemeChange(applyVisitorTheme);
 
-    const getData = async (): Promise<void> => {
+    // Guards against out-of-order responses overwriting the chart with stale data
+    let requestId = 0;
+
+    const getData = async (days: number): Promise<void> => {
+      const currentRequestId = ++requestId;
       try {
-        const response = await fetch('./api/dashboard/visits', {
+        const response = await fetch(`./api/dashboard/visits?days=${days}`, {
           method: 'GET',
           cache: 'no-cache',
           headers: {
@@ -169,10 +201,16 @@ export const renderVisitorCharts = async (): Promise<void> => {
         if (response.status === 200) {
           const visits: { date: string; number: number }[] = await response.json();
 
+          // A newer range request has been started — discard this stale response
+          if (currentRequestId !== requestId) {
+            return;
+          }
+
+          visitorChart.data.labels = [];
+          visitorChart.data.datasets[0].data = [];
+
           visits.forEach((visit) => {
-            if (visitorChart.data.labels) {
-              visitorChart.data.labels.push(visit.date);
-            }
+            visitorChart.data.labels?.push(visit.date);
             (visitorChart.data.datasets[0].data as number[]).push(visit.number);
           });
 
@@ -183,7 +221,20 @@ export const renderVisitorCharts = async (): Promise<void> => {
       }
     };
 
-    await getData();
+    // Wire the 7 / 30 / 90 day range switcher
+    const rangeGroup = document.getElementById('pmf-visits-range');
+    if (rangeGroup) {
+      rangeGroup.querySelectorAll<HTMLButtonElement>('button[data-pmf-range]').forEach((button) => {
+        button.addEventListener('click', async (): Promise<void> => {
+          rangeGroup.querySelectorAll('button').forEach((other) => other.classList.remove('active'));
+          button.classList.add('active');
+          await getData(Number(button.dataset.pmfRange ?? '30'));
+        });
+      });
+    }
+
+    await getData(30);
+    removeChartSkeleton('pmf-chart-visits-skeleton');
   }
 };
 
@@ -277,21 +328,9 @@ export const renderTopTenCharts = async (): Promise<void> => {
       doughnutChart.update('none');
     };
 
-    const themeObserver = new MutationObserver((mutations) => {
-      for (const m of mutations) {
-        if (m.type === 'attributes' && m.attributeName === 'data-bs-theme') {
-          applyBarTheme();
-        }
-      }
-    });
-    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-bs-theme'] });
+    onThemeChange(applyBarTheme);
 
-    const dynamicColors = (): string => {
-      const r: number = Math.floor(Math.random() * 255);
-      const g: number = Math.floor(Math.random() * 255);
-      const b: number = Math.floor(Math.random() * 255);
-      return 'rgb(' + r + ',' + g + ',' + b + ')';
-    };
+    const palette: string[] = getChartPalette();
 
     const getData = async (): Promise<void> => {
       try {
@@ -308,12 +347,12 @@ export const renderTopTenCharts = async (): Promise<void> => {
         if (response.status === 200) {
           const topTen: { question: string; visits: number }[] = await response.json();
 
-          topTen.forEach((faq: { question: string; visits: number }): void => {
+          topTen.forEach((faq: { question: string; visits: number }, index: number): void => {
             if (doughnutChart.data.labels) {
               doughnutChart.data.labels.push(faq.question);
             }
             (doughnutChart.data.datasets[0].data as number[]).push(faq.visits);
-            colors.push(dynamicColors());
+            colors.push(palette[index % palette.length]);
           });
 
           doughnutChart.update();
@@ -324,6 +363,7 @@ export const renderTopTenCharts = async (): Promise<void> => {
     };
 
     await getData();
+    removeChartSkeleton('pmf-chart-topten-skeleton');
   }
 };
 
@@ -483,6 +523,7 @@ export const fetchRecentNews = async (): Promise<void> => {
         list.appendChild(li);
       }
 
+      container.innerHTML = '';
       container.appendChild(list);
     } else {
       container.innerHTML = '<p class="text-muted mb-0">Could not load news.</p>';
@@ -530,9 +571,116 @@ export const handleVerificationModal = async (): Promise<void> => {
   }
 };
 
-window.onload = (): void => {
-  const masonryElement = document.querySelector('.masonry-grid') as HTMLElement;
-  if (masonryElement) {
-    new Masonry(masonryElement, { percentPosition: true });
+export const fetchContentHealth = async (): Promise<void> => {
+  const container = document.getElementById('pmf-content-health') as HTMLDivElement | null;
+
+  if (!container) {
+    return;
+  }
+
+  try {
+    const response = await fetch('./api/dashboard/content-health', {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+
+    if (!response.ok) {
+      container.innerHTML = '<p class="text-muted mb-0">Could not load content health.</p>';
+      return;
+    }
+
+    const data: { orphaned: number; stale: number } = await response.json();
+    const items: { icon: string; label: string; count: number }[] = [
+      { icon: 'bi-folder-x', label: 'FAQs without a category', count: data.orphaned },
+      { icon: 'bi-clock-history', label: 'FAQs not updated in 6 months', count: data.stale },
+    ];
+
+    const list = document.createElement('ul');
+    list.className = 'list-unstyled mb-0';
+
+    for (const item of items) {
+      const li = document.createElement('li');
+      li.className = 'd-flex justify-content-between align-items-center mb-2';
+
+      const label = document.createElement('span');
+      const icon = document.createElement('i');
+      icon.className = `bi ${item.icon} me-1`;
+      label.appendChild(icon);
+      label.appendChild(document.createTextNode(item.label));
+
+      const badge = document.createElement('span');
+      badge.className = item.count > 0 ? 'badge bg-warning text-dark' : 'badge bg-success';
+      badge.textContent = String(item.count);
+
+      li.appendChild(label);
+      li.appendChild(badge);
+      list.appendChild(li);
+    }
+
+    container.replaceChildren(list);
+  } catch {
+    container.innerHTML = '<p class="text-muted mb-0">Could not load content health.</p>';
+  }
+};
+
+export const fetchPopularSearches = async (): Promise<void> => {
+  const container = document.getElementById('pmf-popular-searches') as HTMLDivElement | null;
+
+  if (!container) {
+    return;
+  }
+
+  try {
+    const response = await fetch('./api/dashboard/searches', {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+
+    if (!response.ok) {
+      container.innerHTML = '<p class="text-muted mb-0">Could not load searches.</p>';
+      return;
+    }
+
+    const searches: { searchterm: string; number: number }[] = await response.json();
+
+    if (searches.length === 0) {
+      container.innerHTML = '<p class="text-muted mb-0">No searches recorded yet.</p>';
+      return;
+    }
+
+    const list = document.createElement('ul');
+    list.className = 'list-unstyled mb-0';
+
+    for (const search of searches) {
+      const li = document.createElement('li');
+      li.className = 'd-flex justify-content-between align-items-center mb-2';
+
+      const term = document.createElement('span');
+      term.className = 'text-truncate me-2';
+      // textContent — search terms are user input and must not be rendered as HTML
+      term.textContent = search.searchterm;
+
+      const badge = document.createElement('span');
+      badge.className = 'badge bg-secondary';
+      badge.textContent = String(search.number);
+
+      li.appendChild(term);
+      li.appendChild(badge);
+      list.appendChild(li);
+    }
+
+    container.replaceChildren(list);
+  } catch {
+    container.innerHTML = '<p class="text-muted mb-0">Could not load searches.</p>';
   }
 };
