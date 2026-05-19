@@ -943,7 +943,7 @@ class User
      */
     public function getEncryptedPassword(): string
     {
-        if ($this->getAuthSource('name') !== 'db') {
+        if ($this->getAuthSource('name') !== 'database') {
             return '';
         }
 
