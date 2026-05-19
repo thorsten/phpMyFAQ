@@ -755,7 +755,7 @@ final class FaqController extends AbstractAdministrationApiController
 
         if (!Token::getInstance($this->session)->verifyToken(
             page: 'importfaqs',
-            requestToken: $request->attributes->get(key: 'csrf'),
+            requestToken: $request->request->get(key: 'csrf'),
         )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
@@ -776,10 +776,13 @@ final class FaqController extends AbstractAdministrationApiController
                 return $this->json($result, Response::HTTP_BAD_REQUEST);
             }
 
-            foreach ($csvData as $record) {
-                $error = $faqImport->import($record);
-                if (!$error) {
-                    $errors[] = $error;
+            foreach ($csvData as $index => $record) {
+                try {
+                    if (!$faqImport->import($record)) {
+                        $errors[] = sprintf('Row %d: import failed.', $index + 1);
+                    }
+                } catch (\Throwable $throwable) {
+                    $errors[] = sprintf('Row %d: %s', $index + 1, $throwable->getMessage());
                 }
             }
 
