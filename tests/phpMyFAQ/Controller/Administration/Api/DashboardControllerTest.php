@@ -19,6 +19,8 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
+use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -93,14 +95,18 @@ final class DashboardControllerTest extends TestCase
         parent::tearDown();
     }
 
+    private CacheItemPoolInterface $cache;
+
     private function createController(): DashboardController
     {
-        return new DashboardController($this->createStub(AdminSession::class));
+        $this->cache = new ArrayAdapter();
+        return new DashboardController($this->createStub(AdminSession::class), $this->cache);
     }
 
     private function createControllerWithSession(AdminSession $adminSession): DashboardController
     {
-        return new DashboardController($adminSession);
+        $this->cache = new ArrayAdapter();
+        return new DashboardController($adminSession, $this->cache);
     }
 
     private function createAuthenticatedContainer(): ContainerInterface
@@ -210,8 +216,8 @@ final class DashboardControllerTest extends TestCase
         $adminSession = $this->createMock(AdminSession::class);
         $adminSession
             ->expects($this->once())
-            ->method('getLast30DaysVisits')
-            ->with(1234567890)
+            ->method('getVisitsForDays')
+            ->with(1234567890, 30)
             ->willReturn(['visits' => 5]);
 
         $controller = $this->createControllerWithSession($adminSession);
@@ -222,6 +228,79 @@ final class DashboardControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(['visits' => 5], $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testVisitsClampsAndForwardsTheRequestedRange(): void
+    {
+        $this->configuration->set('main.enableUserTracking', 'true');
+        $adminSession = $this->createMock(AdminSession::class);
+        // requested 9999 days is clamped to the 365-day maximum
+        $adminSession->expects($this->once())->method('getVisitsForDays')->with(1234567890, 365)->willReturn([]);
+
+        $controller = $this->createControllerWithSession($adminSession);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->visits(new Request(query: ['days' => '9999'], server: ['REQUEST_TIME' => 1234567890]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSearchesRequiresAuthentication(): void
+    {
+        $controller = $this->createController();
+
+        $this->expectException(\Exception::class);
+        $controller->searches();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSearchesReturnsArrayForAuthenticatedUser(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->searches();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertIsArray($payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testContentHealthRequiresAuthentication(): void
+    {
+        $controller = $this->createController();
+
+        $this->expectException(\Exception::class);
+        $controller->contentHealth();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testContentHealthReturnsCounters(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->contentHealth();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('orphaned', $payload);
+        self::assertArrayHasKey('stale', $payload);
+        self::assertIsInt($payload['orphaned']);
+        self::assertIsInt($payload['stale']);
     }
 
     /**
@@ -276,6 +355,51 @@ final class DashboardControllerTest extends TestCase
 
     /**
      * @throws \Exception
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testVersionsReturnsFreshCachedPayloadWithoutRemoteLookup(): void
+    {
+        $this->configuration->set('upgrade.releaseEnvironment', 'stable');
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $cachedPayload = ['success' => 'phpMyFAQ 4.2.0'];
+        $item = $this->cache->getItem('dashboard.versions.stable');
+        $item->set(['fetchedAt' => time(), 'payload' => $cachedPayload]);
+        $this->cache->save($item);
+
+        $response = $controller->versions();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame($cachedPayload, $payload);
+    }
+
+    /**
+     * @throws \Exception
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testVersionsServesStaleCacheWhenLookupFails(): void
+    {
+        $this->configuration->set('upgrade.releaseEnvironment', 'non-existent-release-channel');
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $stalePayload = ['success' => 'phpMyFAQ 4.1.0'];
+        $item = $this->cache->getItem('dashboard.versions.non-existent-release-channel');
+        // fetchedAt far in the past → stale, but still retained for fallback
+        $item->set(['fetchedAt' => time() - 100_000, 'payload' => $stalePayload]);
+        $this->cache->save($item);
+
+        $response = $controller->versions();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame($stalePayload, $payload);
+    }
+
+    /**
+     * @throws \Exception
      * @throws \JsonException
      */
     public function testVerifyReturnsJsonForAuthenticatedUser(): void
@@ -288,6 +412,73 @@ final class DashboardControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertIsArray($payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testGetLayoutRequiresAuthentication(): void
+    {
+        $controller = $this->createController();
+
+        $this->expectException(\Exception::class);
+        $controller->getLayout();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testGetLayoutReturnsConfigKey(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->getLayout();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('config', $payload);
+        self::assertIsArray($payload['config']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveLayoutRejectsMissingCsrfToken(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $request = new Request([], [], [], [], [], [], json_encode(['config' => []], JSON_THROW_ON_ERROR));
+        $response = $controller->saveLayout($request);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveLayoutRejectsInvalidBody(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->saveLayout(new Request([], [], [], [], [], [], 'not-json'));
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testResetLayoutRejectsMissingCsrfToken(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->resetLayout(new Request([], [], [], [], [], [], '{}'));
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 
     /**

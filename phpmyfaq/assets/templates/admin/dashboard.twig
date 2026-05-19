@@ -188,11 +188,22 @@
     <section class="row">
       <div class="col-8 mb-4">
         <div class="card shadow h-100 mb-4">
-          <h5 class="card-header py-3">
-            <i aria-hidden="true" class="bi bi-bar-chart"></i> {{ adminDashboardHeaderVisits }}
+          <h5 class="card-header py-3 d-flex justify-content-between align-items-center">
+            <span><i aria-hidden="true" class="bi bi-bar-chart"></i> {{ adminDashboardHeaderVisits }}</span>
+            <div
+              class="btn-group btn-group-sm"
+              role="group"
+              id="pmf-visits-range"
+              aria-label="{{ 'msgVisitsRange' | translate | default('Visitor date range') }}"
+            >
+              <button type="button" class="btn btn-outline-primary" data-pmf-range="7">7</button>
+              <button type="button" class="btn btn-outline-primary active" data-pmf-range="30">30</button>
+              <button type="button" class="btn btn-outline-primary" data-pmf-range="90">90</button>
+            </div>
           </h5>
           <div class="card-body">
             <div class="pmf-charts">
+              <div id="pmf-chart-visits-skeleton" class="pmf-chart-skeleton" aria-hidden="true"></div>
               <canvas id="pmf-chart-visits" width="200" height="150"></canvas>
             </div>
           </div>
@@ -206,6 +217,7 @@
           </h5>
           <div class="card-body">
             <div class="pmf-charts">
+              <div id="pmf-chart-topten-skeleton" class="pmf-chart-skeleton" aria-hidden="true"></div>
               <canvas id="pmf-chart-topten" width="400" height="300"></canvas>
             </div>
           </div>
@@ -214,9 +226,26 @@
     </section>
   {% endif %}
 
-  <section class="row masonry-grid">
+  <div class="d-flex justify-content-end gap-2 mb-2" id="pmf-dashboard-toolbar">
+    <button type="button" class="btn btn-sm btn-outline-danger d-none" id="pmf-dashboard-reset">
+      <i aria-hidden="true" class="bi bi-arrow-counterclockwise"></i>
+      {{ 'msgResetDashboard' | translate | default('Reset layout') }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-sm btn-outline-secondary"
+      id="pmf-dashboard-edit-toggle"
+      data-pmf-edit-label="{{ 'msgCustomizeDashboard' | translate | default('Customize') }}"
+      data-pmf-done-label="{{ 'msgDashboardDone' | translate | default('Done') }}"
+    >
+      <i aria-hidden="true" class="bi bi-grid-1x2"></i>
+      <span class="pmf-dashboard-edit-label">{{ 'msgCustomizeDashboard' | translate | default('Customize') }}</span>
+    </button>
+  </div>
 
-    <div class="col-sm-6 col-md-4 col-lg-3 mb-4 mb-4">
+  <section class="row masonry-grid" data-pmf-csrf-token="{{ dashboardCsrfToken }}">
+
+    <div class="col-sm-6 col-md-4 col-lg-3 mb-4 mb-4" data-pmf-widget="inactive-faqs">
       <div class="card shadow mb-4">
         <h5 class="card-header py-3">
           <i aria-hidden="true" class="bi bi-ban"></i> {{ adminDashboardHeaderInactiveFaqs }}
@@ -238,7 +267,7 @@
       </div>
     </div>
 
-    <div class="col-sm-6 col-md-4 col-lg-3 mb-4 mb-4">
+    <div class="col-sm-6 col-md-4 col-lg-3 mb-4 mb-4" data-pmf-widget="recent-users">
       <div class="card shadow mb-4">
         <h5 class="card-header py-3">
           <i aria-hidden="true" class="bi bi-people"></i> {{ 'msgNewestUsers' | translate | default('Recent registered users') }}
@@ -264,8 +293,40 @@
       </div>
     </div>
 
+    <div class="col-sm-6 col-md-4 col-lg-3 mb-4 mb-4" data-pmf-widget="content-health">
+      <div class="card shadow mb-4">
+        <h5 class="card-header py-3">
+          <i aria-hidden="true" class="bi bi-heart-pulse"></i>
+          {{ 'msgContentHealth' | translate | default('Content health') }}
+        </h5>
+        <div class="card-body" id="pmf-content-health">
+          <div class="text-center py-3" id="pmf-content-health-loader">
+            <div class="spinner-border spinner-border-sm" role="status">
+              <span class="visually-hidden">{{ 'msgLoading' | translate | default('Loading') }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-md-4 col-lg-3 mb-4 mb-4" data-pmf-widget="popular-searches">
+      <div class="card shadow mb-4">
+        <h5 class="card-header py-3">
+          <i aria-hidden="true" class="bi bi-search"></i>
+          {{ 'msgPopularSearches' | translate | default('Popular searches') }}
+        </h5>
+        <div class="card-body" id="pmf-popular-searches">
+          <div class="text-center py-3" id="pmf-popular-searches-loader">
+            <div class="spinner-border spinner-border-sm" role="status">
+              <span class="visually-hidden">{{ 'msgLoading' | translate | default('Loading') }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     {% if hasPermissionEditConfig %}
-      <div class="col-sm-6 col-md-4 col-lg-3 mb-4 mb-4">
+      <div class="col-sm-6 col-md-4 col-lg-3 mb-4 mb-4" data-pmf-widget="version-check">
         <div class="card shadow mb-4">
           <h5 class="card-header py-3">
             <i aria-hidden="true" class="bi bi-check"></i> {{ 'msgOnlineVersionCheck' | translate }}
@@ -304,7 +365,7 @@
         </div>
       </div>
 
-      <div class="col-sm-6 col-md-4 col-lg-3 mb-4 mb-4">
+      <div class="col-sm-6 col-md-4 col-lg-3 mb-4 mb-4" data-pmf-widget="verification-check">
         <div class="card shadow mb-4">
           <h5 class="card-header py-3">
             <i aria-hidden="true" class="bi bi-check bi-fw"></i> {{ 'msgOnlineVerificationCheck' | translate }}
@@ -319,7 +380,7 @@
       </div>
     {% endif %}
 
-    <div class="col-sm-6 col-md-4 col-lg-3 mb-4 mb-4">
+    <div class="col-sm-6 col-md-4 col-lg-3 mb-4 mb-4" data-pmf-widget="backup-status">
       <div class="card shadow mb-4">
         <h5 class="card-header py-3">
           <i aria-hidden="true" class="bi bi-hdd"></i> {{ 'msgBackup' | translate }}
@@ -345,7 +406,7 @@
       </div>
     </div>
 
-    <div class="col-sm-6 col-md-4 col-lg-3 mb-4 mb-4">
+    <div class="col-sm-6 col-md-4 col-lg-3 mb-4 mb-4" data-pmf-widget="sponsor">
       <div class="card shadow mb-4">
         <h5 class="card-header py-3">
           <i aria-hidden="true" class="bi bi-heart-fill"></i> {{ 'msgSupportUs' | translate }}
@@ -361,7 +422,7 @@
       </div>
     </div>
 
-    <div class="col-sm-6 col-md-4 col-lg-3 mb-4 mb-4">
+    <div class="col-sm-6 col-md-4 col-lg-3 mb-4 mb-4" data-pmf-widget="support">
       <div class="card shadow mb-4">
         <h5 class="card-header py-3">
           <i aria-hidden="true" class="bi bi-info-circle-fill"></i> Support

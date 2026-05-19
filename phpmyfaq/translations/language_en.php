@@ -1794,4 +1794,13 @@ $PMF_LANG['msgCapsLockOn'] = 'Caps Lock is on.';
 $PMF_LANG['msgSigningIn'] = 'Signing in…';
 $PMF_LANG['msgLoginOrDivider'] = 'or';
 
+// added v4.2.0-alpha - 2026-05-18 by Thorsten
+$PMF_LANG['msgContentHealth'] = 'Content health';
+$PMF_LANG['msgPopularSearches'] = 'Popular searches';
+$PMF_LANG['msgVisitsRange'] = 'Visitor date range';
+$PMF_LANG['msgLoading'] = 'Loading';
+$PMF_LANG['msgCustomizeDashboard'] = 'Customize';
+$PMF_LANG['msgDashboardDone'] = 'Done';
+$PMF_LANG['msgResetDashboard'] = 'Reset layout';
+
 return $PMF_LANG;

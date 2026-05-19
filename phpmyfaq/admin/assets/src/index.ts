@@ -14,12 +14,15 @@
  */
 
 import {
+  fetchContentHealth,
+  fetchPopularSearches,
   fetchRecentNews,
   getLatestVersion,
   renderVisitorCharts,
   renderTopTenCharts,
   handleVerificationModal,
 } from './dashboard';
+import { handleDashboardLayout } from './dashboard-layout';
 import {
   handleClearRatings,
   handleClearVisits,
@@ -103,12 +106,33 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   // Sidebar
   sidebarToggle();
 
-  // Dashboard
-  await renderVisitorCharts();
-  await renderTopTenCharts();
-  await getLatestVersion();
-  await handleVerificationModal();
-  await fetchRecentNews();
+  // Dashboard — run concurrently; allSettled so one failed remote call cannot block the rest
+  const dashboardTasks = [
+    'renderVisitorCharts',
+    'renderTopTenCharts',
+    'getLatestVersion',
+    'handleVerificationModal',
+    'fetchRecentNews',
+    'fetchContentHealth',
+    'fetchPopularSearches',
+    'handleDashboardLayout',
+  ];
+  const dashboardResults = await Promise.allSettled([
+    renderVisitorCharts(),
+    renderTopTenCharts(),
+    getLatestVersion(),
+    handleVerificationModal(),
+    fetchRecentNews(),
+    fetchContentHealth(),
+    fetchPopularSearches(),
+    handleDashboardLayout(),
+  ]);
+  // Surface failures without blocking — each task is independent
+  dashboardResults.forEach((result, index) => {
+    if (result.status === 'rejected') {
+      console.error('Dashboard init task failed: ', dashboardTasks[index], result.reason);
+    }
+  });
 
   // User → User Management
   await handleUsers();

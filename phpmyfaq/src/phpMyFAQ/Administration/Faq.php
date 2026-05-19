@@ -269,6 +269,58 @@ class Faq
     }
 
     /**
+     * Returns aggregated content health counters for the admin dashboard.
+     *
+     * - orphaned: active FAQs not assigned to any category
+     * - stale:    active FAQs not updated within the last $staleDays days
+     *
+     * @return array{orphaned: int, stale: int}
+     */
+    public function getContentHealthStatistics(int $staleDays = 180): array
+    {
+        $prefix = Database::getTablePrefix();
+
+        $orphanedQuery = sprintf(
+            "SELECT COUNT(*) AS num FROM %sfaqdata fd WHERE fd.active = 'yes' "
+            . 'AND fd.id NOT IN ('
+            . 'SELECT record_id FROM %sfaqcategoryrelations WHERE record_lang = fd.lang)',
+            $prefix,
+            $prefix,
+        );
+
+        // The "updated" column is stored as a YmdHis string, so a string comparison is valid.
+        $threshold = date('YmdHis', strtotime(sprintf('-%d days', $staleDays)));
+        $staleQuery = sprintf(
+            'SELECT COUNT(*) AS num FROM %sfaqdata fd '
+            . "WHERE fd.active = 'yes' AND fd.updated <> '' AND fd.updated < '%s'",
+            $prefix,
+            $threshold,
+        );
+
+        return [
+            'orphaned' => $this->countQuery($orphanedQuery),
+            'stale' => $this->countQuery($staleQuery),
+        ];
+    }
+
+    /**
+     * Runs a COUNT(*) query and returns the resulting integer.
+     */
+    private function countQuery(string $query): int
+    {
+        $database = $this->configuration->getDb();
+        $result = $database->query($query);
+
+        if ($result === false) {
+            return 0;
+        }
+
+        $row = $database->fetchObject($result);
+
+        return is_object($row) ? (int) $row->num : 0;
+    }
+
+    /**
      * Returns true if saving the order of the sticky faqs was successfully.
      *
      * @param array $faqIds Order of record id's

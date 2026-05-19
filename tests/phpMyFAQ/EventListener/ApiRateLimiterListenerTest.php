@@ -122,9 +122,8 @@ final class ApiRateLimiterListenerTest extends TestCase
         $this->assertStringContainsString('Too many requests.', (string) $response->getContent());
     }
 
-    private function createEvent(
-        int $requestType = HttpKernelInterface::MAIN_REQUEST,
-    ): RequestEvent {
+    private function createEvent(int $requestType = HttpKernelInterface::MAIN_REQUEST): RequestEvent
+    {
         $request = Request::create('/api/v4.0/search', 'POST');
         $request->server->set('REMOTE_ADDR', '127.0.0.1');
 

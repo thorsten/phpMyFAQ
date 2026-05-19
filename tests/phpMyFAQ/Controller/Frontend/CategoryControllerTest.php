@@ -184,11 +184,7 @@ final class CategoryControllerTest extends TestCase
         $category->expects(self::once())->method('getChildNodes')->with(5)->willReturn([]);
 
         $records = '<p>existing faq list</p>';
-        $result = $this->invokePrivateMethod(
-            $controller,
-            'getSubCategoryContent',
-            [$category, 5, &$records],
-        );
+        $result = $this->invokePrivateMethod($controller, 'getSubCategoryContent', [$category, 5, &$records]);
 
         self::assertNull($result);
         self::assertSame('<p>existing faq list</p>', $records);
@@ -200,7 +196,8 @@ final class CategoryControllerTest extends TestCase
     public function testGetSubCategoryContentPromotesCategoryTreeWhenRecordsEmptyAndChildrenExist(): void
     {
         $categoryHelper = $this->createMock(CategoryHelper::class);
-        $categoryHelper->expects(self::once())
+        $categoryHelper
+            ->expects(self::once())
             ->method('renderCategoryTree')
             ->with(5)
             ->willReturn('<ul class="pmf-category-overview">tree</ul>');
@@ -208,14 +205,14 @@ final class CategoryControllerTest extends TestCase
         $controller = $this->createTestableController($categoryHelper);
 
         $category = $this->createMock(Category::class);
-        $category->expects(self::once())->method('getChildNodes')->with(5)->willReturn([10 => ['id' => 10]]);
+        $category
+            ->expects(self::once())
+            ->method('getChildNodes')
+            ->with(5)
+            ->willReturn([10 => ['id' => 10]]);
 
         $records = '';
-        $result = $this->invokePrivateMethod(
-            $controller,
-            'getSubCategoryContent',
-            [$category, 5, &$records],
-        );
+        $result = $this->invokePrivateMethod($controller, 'getSubCategoryContent', [$category, 5, &$records]);
 
         self::assertNull($result);
         self::assertSame('<ul class="pmf-category-overview">tree</ul>', $records);
@@ -236,11 +233,7 @@ final class CategoryControllerTest extends TestCase
         $category->expects(self::once())->method('getChildNodes')->with(5)->willReturn([]);
 
         $records = '';
-        $result = $this->invokePrivateMethod(
-            $controller,
-            'getSubCategoryContent',
-            [$category, 5, &$records],
-        );
+        $result = $this->invokePrivateMethod($controller, 'getSubCategoryContent', [$category, 5, &$records]);
 
         self::assertNull($result);
         self::assertStringContainsString('alert-info', $records);
@@ -252,7 +245,8 @@ final class CategoryControllerTest extends TestCase
     public function testGetSubCategoryContentReturnsTreeWhenRecordsExistAndChildrenExist(): void
     {
         $categoryHelper = $this->createMock(CategoryHelper::class);
-        $categoryHelper->expects(self::once())
+        $categoryHelper
+            ->expects(self::once())
             ->method('renderCategoryTree')
             ->with(5)
             ->willReturn('<ul>sidebar-tree</ul>');
@@ -260,14 +254,14 @@ final class CategoryControllerTest extends TestCase
         $controller = $this->createTestableController($categoryHelper);
 
         $category = $this->createMock(Category::class);
-        $category->expects(self::once())->method('getChildNodes')->with(5)->willReturn([10 => ['id' => 10]]);
+        $category
+            ->expects(self::once())
+            ->method('getChildNodes')
+            ->with(5)
+            ->willReturn([10 => ['id' => 10]]);
 
         $records = '<p>existing</p>';
-        $result = $this->invokePrivateMethod(
-            $controller,
-            'getSubCategoryContent',
-            [$category, 5, &$records],
-        );
+        $result = $this->invokePrivateMethod($controller, 'getSubCategoryContent', [$category, 5, &$records]);
 
         self::assertSame('<ul>sidebar-tree</ul>', $result);
         self::assertSame('<p>existing</p>', $records);
@@ -281,14 +275,12 @@ final class CategoryControllerTest extends TestCase
      */
     private function createTestableController(CategoryHelper $categoryHelper): CategoryController
     {
-        $controller = new class (
+        $controller = new class(
             $this->createMock(UserSession::class),
             $this->createMock(Category::class),
             $this->createMock(Faq::class),
         ) extends CategoryController {
-            protected function prepareSubCategoryHelper(int $selectedCategoryId): void
-            {
-            }
+            protected function prepareSubCategoryHelper(int $selectedCategoryId): void {}
         };
 
         $reflection = new \ReflectionClass(CategoryController::class);

@@ -93,6 +93,7 @@ class DatabaseSchema
             'faqvoting' => $this->faqvoting(),
             'faqchat_messages' => $this->faqchatMessages(),
             'faqpush_subscriptions' => $this->faqpushSubscriptions(),
+            'faqadmindashboard' => $this->faqadmindashboard(),
         ];
     }
 
@@ -790,5 +791,14 @@ class DatabaseSchema
             ->timestamp('created_at', false, true)
             ->index('idx_push_user_id', 'user_id')
             ->uniqueIndex('idx_push_endpoint_hash', 'endpoint_hash');
+    }
+
+    public function faqadmindashboard(): TableBuilder
+    {
+        return new TableBuilder($this->dialect)
+            ->table('faqadmindashboard')
+            ->integer('user_id', false)
+            ->text('config')
+            ->primaryKey('user_id');
     }
 }

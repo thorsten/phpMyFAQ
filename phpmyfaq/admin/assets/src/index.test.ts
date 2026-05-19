@@ -9,10 +9,17 @@ const trackCall = (name: string) => {
 // Mock dashboard
 vi.mock('./dashboard', () => ({
   fetchRecentNews: vi.fn(async () => trackCall('fetchRecentNews')),
+  fetchContentHealth: vi.fn(async () => trackCall('fetchContentHealth')),
+  fetchPopularSearches: vi.fn(async () => trackCall('fetchPopularSearches')),
   getLatestVersion: vi.fn(async () => trackCall('getLatestVersion')),
   renderVisitorCharts: vi.fn(async () => trackCall('renderVisitorCharts')),
   renderTopTenCharts: vi.fn(async () => trackCall('renderTopTenCharts')),
   handleVerificationModal: vi.fn(async () => trackCall('handleVerificationModal')),
+}));
+
+// Mock dashboard layout
+vi.mock('./dashboard-layout', () => ({
+  handleDashboardLayout: vi.fn(async () => trackCall('handleDashboardLayout')),
 }));
 
 // Mock statistics
@@ -139,6 +146,9 @@ describe('admin index.ts', () => {
     expect(calls).toContain('getLatestVersion');
     expect(calls).toContain('handleVerificationModal');
     expect(calls).toContain('fetchRecentNews');
+    expect(calls).toContain('fetchContentHealth');
+    expect(calls).toContain('fetchPopularSearches');
+    expect(calls).toContain('handleDashboardLayout');
 
     // Users & Groups
     expect(calls).toContain('handleUsers');

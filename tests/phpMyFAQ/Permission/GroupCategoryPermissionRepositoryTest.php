@@ -166,7 +166,9 @@ class GroupCategoryPermissionRepositoryTest extends TestCase
     public function testCheckUserGroupRightForCategoryWithNoRestrictions(): void
     {
         // Set up: create group, add user, grant right
-        $this->dbHandle->query("INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (1, 'TestGroup', 'Test', 0)");
+        $this->dbHandle->query(
+            "INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (1, 'TestGroup', 'Test', 0)",
+        );
         $this->dbHandle->query('INSERT INTO faquser_group (user_id, group_id) VALUES (1, 1)');
         $this->dbHandle->query('INSERT INTO faqgroup_right (group_id, right_id) VALUES (1, 1)');
 
@@ -176,7 +178,9 @@ class GroupCategoryPermissionRepositoryTest extends TestCase
 
     public function testCheckUserGroupRightForCategoryWithMatchingRestriction(): void
     {
-        $this->dbHandle->query("INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (1, 'TestGroup', 'Test', 0)");
+        $this->dbHandle->query(
+            "INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (1, 'TestGroup', 'Test', 0)",
+        );
         $this->dbHandle->query('INSERT INTO faquser_group (user_id, group_id) VALUES (1, 1)');
         $this->dbHandle->query('INSERT INTO faqgroup_right (group_id, right_id) VALUES (1, 1)');
 
@@ -201,12 +205,16 @@ class GroupCategoryPermissionRepositoryTest extends TestCase
     public function testCheckUserGroupRightForCategoryWithMultipleGroups(): void
     {
         // Group 1: restricted to category 10
-        $this->dbHandle->query("INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (1, 'Group1', 'Test', 0)");
+        $this->dbHandle->query(
+            "INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (1, 'Group1', 'Test', 0)",
+        );
         $this->dbHandle->query('INSERT INTO faqgroup_right (group_id, right_id) VALUES (1, 1)');
         $this->repository->setCategoryRestrictions(1, 1, [10]);
 
         // Group 2: unrestricted (no category restrictions)
-        $this->dbHandle->query("INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (2, 'Group2', 'Test', 0)");
+        $this->dbHandle->query(
+            "INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (2, 'Group2', 'Test', 0)",
+        );
         $this->dbHandle->query('INSERT INTO faqgroup_right (group_id, right_id) VALUES (2, 1)');
 
         // User in both groups

@@ -209,10 +209,7 @@ class TokenTest extends TestCase
         $fresh = $this->token->getTokenString('idle-page');
 
         static::assertNotSame($expired, $fresh, 'An expired token must not be reused.');
-        static::assertFalse(
-            $this->token->verifyToken('idle-page', $expired),
-            'The stale token must no longer verify.',
-        );
+        static::assertFalse($this->token->verifyToken('idle-page', $expired), 'The stale token must no longer verify.');
     }
 
     /**

@@ -3,7 +3,34 @@
 //
 
 .pmf-charts {
+  position: relative;
   height: 20rem;
+}
+
+// Shimmer placeholder shown until a chart has finished rendering
+.pmf-chart-skeleton {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--bs-border-radius);
+  background: linear-gradient(90deg, var(--bs-tertiary-bg) 25%, var(--bs-secondary-bg) 37%, var(--bs-tertiary-bg) 63%);
+  background-size: 400% 100%;
+  animation: pmf-chart-skeleton-shimmer 1.4s ease infinite;
+}
+
+@keyframes pmf-chart-skeleton-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pmf-chart-skeleton {
+    animation: none;
+  }
 }
 
 #pmf-admin-layout-sidenav {
@@ -86,4 +113,26 @@
 // Ensure bottom spacing for Masonry grid so last row doesn't stick to the footer
 .masonry-grid {
   padding-bottom: map-get($spacers, 4); // equals .mb-4 (≈1.5rem)
+}
+
+// Dashboard layout customization (edit mode)
+.pmf-dashboard-editing {
+  .card {
+    position: relative;
+    outline: 2px dashed var(--bs-border-color);
+  }
+}
+
+// A widget marked hidden, shown dimmed while editing
+.pmf-widget-hidden {
+  opacity: 0.45;
+}
+
+// Per-widget edit toolbar, pinned to the top-right of the card
+.pmf-widget-controls {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 5;
+  box-shadow: var(--bs-box-shadow-sm);
 }

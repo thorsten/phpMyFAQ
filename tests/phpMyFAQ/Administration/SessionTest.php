@@ -127,8 +127,9 @@ class SessionTest extends TestCase
      */
     public function testGetLast30DaysVisits()
     {
-        $startDate = strtotime('-1 month');
         $endDate = time();
+        // 30 days is an inclusive range, so it spans exactly 30 daily buckets
+        $startDate = $endDate - (29 * 86400);
 
         $resultMock = $this->createStub(stdClass::class);
         $resultMock->time = $startDate + 86400; // Example timestamp within the range
@@ -137,6 +138,8 @@ class SessionTest extends TestCase
         $this->databaseMock->method('fetchObject')->willReturnOnConsecutiveCalls($resultMock, false);
 
         $actualVisits = $this->session->getLast30DaysVisits($endDate);
+
+        self::assertCount(30, $actualVisits);
 
         $expectedVisits = [];
         for ($date = $startDate; $date <= $endDate; $date += 86400) {
