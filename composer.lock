@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0d2493876b61f5980b45146af08b83c2",
+    "content-hash": "c7bb0619cb62dd3a60d127dd688a1648",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -8086,16 +8086,16 @@
     "packages-dev": [
         {
             "name": "carthage-software/mago",
-            "version": "1.27.1",
+            "version": "1.28.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/carthage-software/mago.git",
-                "reference": "f4c31bbcb871e6bcbb96323ce791e06288b39b2a"
+                "reference": "c3daa7199f83bd06c0077b997358c46e80a0bb06"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/carthage-software/mago/zipball/f4c31bbcb871e6bcbb96323ce791e06288b39b2a",
-                "reference": "f4c31bbcb871e6bcbb96323ce791e06288b39b2a",
+                "url": "https://api.github.com/repos/carthage-software/mago/zipball/c3daa7199f83bd06c0077b997358c46e80a0bb06",
+                "reference": "c3daa7199f83bd06c0077b997358c46e80a0bb06",
                 "shasum": ""
             },
             "require": {
@@ -8133,7 +8133,7 @@
             ],
             "support": {
                 "issues": "https://github.com/carthage-software/mago/issues",
-                "source": "https://github.com/carthage-software/mago/tree/1.27.1"
+                "source": "https://github.com/carthage-software/mago/tree/1.28.0"
             },
             "funding": [
                 {
@@ -8141,7 +8141,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-13T15:32:36+00:00"
+            "time": "2026-05-19T07:03:29+00:00"
         },
         {
             "name": "doctrine/annotations",
