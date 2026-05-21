@@ -204,37 +204,21 @@ class AbstractAttachmentTest extends TestCase
         $this->assertEquals('fr', $property->getValue($this->attachment));
     }
 
-    public function testSetKeyWithDefaultEncryption(): void
+    public function testSetKeyWithEncryption(): void
     {
-        $this->attachment->setKey('secret123', true);
+        $this->attachment->setKey('secret123');
 
         $reflection = new ReflectionClass($this->attachment);
         $keyProperty = $reflection->getProperty('key');
         $encryptedProperty = $reflection->getProperty('encrypted');
-        $passwordHashProperty = $reflection->getProperty('passwordHash');
 
         $this->assertEquals('secret123', $keyProperty->getValue($this->attachment));
         $this->assertTrue($encryptedProperty->getValue($this->attachment));
-        $this->assertEquals('', $passwordHashProperty->getValue($this->attachment));
-    }
-
-    public function testSetKeyWithCustomEncryption(): void
-    {
-        $this->attachment->setKey('custom456', false);
-
-        $reflection = new ReflectionClass($this->attachment);
-        $keyProperty = $reflection->getProperty('key');
-        $encryptedProperty = $reflection->getProperty('encrypted');
-        $passwordHashProperty = $reflection->getProperty('passwordHash');
-
-        $this->assertEquals('custom456', $keyProperty->getValue($this->attachment));
-        $this->assertTrue($encryptedProperty->getValue($this->attachment));
-        $this->assertEquals(sha1('custom456'), $passwordHashProperty->getValue($this->attachment));
     }
 
     public function testSetKeyWithNull(): void
     {
-        $this->attachment->setKey(null, true);
+        $this->attachment->setKey(null);
 
         $reflection = new ReflectionClass($this->attachment);
         $keyProperty = $reflection->getProperty('key');
@@ -256,7 +240,6 @@ class AbstractAttachmentTest extends TestCase
             'recordLang' => 'en',
             'realHash' => 'real123',
             'virtualHash' => 'virtual456',
-            'passwordHash' => 'pwd789',
             'filename' => 'test.pdf',
             'filesize' => 1024,
             'encrypted' => true,
