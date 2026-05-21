@@ -72,11 +72,6 @@ abstract class AbstractAttachment
     protected string $virtualHash = '';
 
     /**
-     * If this is set, the sh1 hashed key we got must equal to it.
-     */
-    protected string $passwordHash = '';
-
-    /**
      * Filesize in bytes.
      */
     protected int $filesize = 0;
@@ -95,6 +90,7 @@ abstract class AbstractAttachment
      * Attachment file mime type.
      */
     protected string $mimeType = '';
+
     private ?TenantQuotaEnforcer $tenantQuotaEnforcer = null;
 
     /**
@@ -120,12 +116,12 @@ abstract class AbstractAttachment
         $hasMeta = false;
 
         $sql = sprintf('
-            SELECT 
-                record_id, record_lang, real_hash, virtual_hash, password_hash,
+            SELECT
+                record_id, record_lang, real_hash, virtual_hash,
                 filename, filesize, encrypted, mime_type
             FROM
                 %sfaqattachment
-            WHERE 
+            WHERE
                 id = %d', Database::getTablePrefix(), $this->id);
 
         $result = $this->databaseDriver->query($sql);
@@ -137,7 +133,6 @@ abstract class AbstractAttachment
                 $this->recordLang = $assoc['record_lang'];
                 $this->realHash = $assoc['real_hash'];
                 $this->virtualHash = $assoc['virtual_hash'];
-                $this->passwordHash = $assoc['password_hash'];
                 $this->filename = $assoc['filename'];
                 $this->filesize = (int) $assoc['filesize'];
                 $this->encrypted = (bool) $assoc['encrypted'];
@@ -159,23 +154,11 @@ abstract class AbstractAttachment
      * Set the encryption key.
      *
      * @param string|null $key Encryption key
-     * @param bool        $default if the key is default system-wide
      */
-    public function setKey(?string $key, bool $default = true): void
+    public function setKey(?string $key): void
     {
         $this->key = $key;
         $this->encrypted = null !== $key;
-        // Not default means the key was set explicitly
-        // for this attachment, so let's hash it
-        if (!$this->encrypted) {
-            return;
-        }
-
-        if ($default) {
-            return;
-        }
-
-        $this->passwordHash = sha1((string) $key);
     }
 
     /**
@@ -239,19 +222,18 @@ abstract class AbstractAttachment
 
             $sql = sprintf(
                 "
-                INSERT INTO 
+                INSERT INTO
                     %s
                 (id, record_id, record_lang, real_hash, virtual_hash,
-                password_hash, filename, filesize, encrypted, mime_type)
+                filename, filesize, encrypted, mime_type)
                     VALUES
-                (%d, %d, '%s', '%s', '%s', '%s', '%s', %d, %d, '%s')",
+                (%d, %d, '%s', '%s', '%s', '%s', %d, %d, '%s')",
                 $attachmentTableName,
                 $this->id,
                 $this->recordId,
                 $this->databaseDriver->escape($this->recordLang),
                 $this->databaseDriver->escape($this->realHash),
                 $this->databaseDriver->escape($this->virtualHash),
-                $this->databaseDriver->escape($this->passwordHash),
                 $this->databaseDriver->escape($this->filename),
                 $this->filesize,
                 $this->encrypted ? 1 : 0,
@@ -290,7 +272,7 @@ abstract class AbstractAttachment
     }
 
     /**
-     * Update several meta things after it was saved.
+     * Update several meta-things after it was saved.
      */
     protected function postUpdateMeta(): void
     {
