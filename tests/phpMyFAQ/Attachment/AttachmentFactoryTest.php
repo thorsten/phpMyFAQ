@@ -298,7 +298,7 @@ class AttachmentFactoryTest extends TestCase
                 if ($queryCalls === 1) {
                     TestCase::assertStringContainsString('ORDER BY filename DESC LIMIT 10 OFFSET 5', $query);
                 } else {
-                    TestCase::assertStringContainsString('WHERE ', $query);
+                    TestCase::assertStringContainsString('WHERE', $query);
                     TestCase::assertStringContainsString('id = 17', $query);
                 }
 
