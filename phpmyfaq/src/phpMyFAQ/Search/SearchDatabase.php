@@ -274,7 +274,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
                 }
 
                 $where = sprintf(
-                    "%s%s LIKE '%%%s%%' ESCAPE '\\'",
+                    "%s%s LIKE '%%%s%%' ESCAPE '='",
                     $where,
                     $this->matchingColumns[$j],
                     self::escapeLikeWildcards($this->configuration->getDb()->escape($keys[$i])),
@@ -299,9 +299,16 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     /**
      * Escapes LIKE wildcard metacharacters (%, _) in a search term
      * to prevent LIKE wildcard injection.
+     *
+     * Uses '=' as the LIKE escape character (see the ESCAPE clauses in the
+     * driver queries). A backslash cannot be used here: in MySQL/MariaDB
+     * string literals a trailing backslash escapes the closing quote, which
+     * breaks the query, while SQLite rejects a doubled backslash as a
+     * multi-character ESCAPE. '=' is literal in every supported database and
+     * is not a LIKE metacharacter.
      */
     protected static function escapeLikeWildcards(string $term): string
     {
-        return str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $term);
+        return str_replace(['=', '%', '_'], ['==', '=%', '=_'], $term);
     }
 }
