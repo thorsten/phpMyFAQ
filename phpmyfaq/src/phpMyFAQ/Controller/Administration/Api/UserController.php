@@ -209,6 +209,15 @@ final class UserController extends AbstractController
         $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT);
 
         $currentUser->getUserById((int) $userId, allowBlockedUsers: true);
+
+        // A non-SuperAdmin must never be able to alter a SuperAdmin or protected account.
+        if (
+            !$this->currentUser->isSuperAdmin()
+            && ($currentUser->isSuperAdmin() || $currentUser->getStatus() === 'protected')
+        ) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
+
         try {
             if ($currentUser->activateUser()) {
                 return $this->json(['success' => $currentUser->getStatus()], Response::HTTP_OK);
@@ -444,8 +453,23 @@ final class UserController extends AbstractController
         $deleteTwoFactor = Filter::filterVar($data->overwrite_twofactor, FILTER_SANITIZE_SPECIAL_CHARS);
         $deleteTwoFactor = $deleteTwoFactor === 'on';
 
+        $actingIsSuperAdmin = $this->currentUser->isSuperAdmin();
+
+        // Only SuperAdmins may grant or revoke the SuperAdmin flag. Reject the request when a
+        // non-SuperAdmin attempts to set it, to prevent privilege escalation through
+        // mass-assignment of is_superadmin.
+        if (!$actingIsSuperAdmin && (bool) $isSuperAdmin) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
+
         $user = new User($this->configuration);
         $user->getUserById($userId, allowBlockedUsers: true);
+
+        // Defense in depth: a non-SuperAdmin must never be able to alter a SuperAdmin or
+        // protected account.
+        if (!$actingIsSuperAdmin && ($user->isSuperAdmin() || $user->getStatus() === 'protected')) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
 
         $stats = $user->getStatus();
 
@@ -459,8 +483,10 @@ final class UserController extends AbstractController
             $userStatus = 'invalid_status';
         }
 
-        // Set the super-admin flag
-        $user->setSuperAdmin((bool) $isSuperAdmin);
+        // Only SuperAdmins may change the super-admin flag.
+        if ($actingIsSuperAdmin) {
+            $user->setSuperAdmin((bool) $isSuperAdmin);
+        }
 
         if (!$user->userdata->set(array_keys($userData), array_values($userData)) || !$user->setStatus($userStatus)) {
             return $this->json(['error' => 'ad_msg_mysqlerr'], Response::HTTP_BAD_REQUEST);
@@ -499,10 +525,34 @@ final class UserController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
         }
 
+        $userRights = Filter::filterVar($data->userRights, FILTER_SANITIZE_SPECIAL_CHARS, []);
+        if (!is_array($userRights)) {
+            $userRights = [];
+        }
+
+        $actingIsSuperAdmin = $this->currentUser->isSuperAdmin();
+
+        // A non-SuperAdmin may only assign rights they hold themselves. This prevents an
+        // administrator with the delegable USER_EDIT right from granting privileges they do not
+        // possess (privilege escalation).
+        if (!$actingIsSuperAdmin) {
+            $actingUserId = $this->currentUser->getUserId();
+            foreach ($userRights as $userRight) {
+                if (!$this->currentUser->perm->hasPermission($actingUserId, (int) $userRight)) {
+                    return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+                }
+            }
+        }
+
         $user = new User($this->configuration);
         $user->getUserById($userId);
 
-        $userRights = Filter::filterVar($data->userRights, FILTER_SANITIZE_SPECIAL_CHARS, []);
+        // Defense in depth: a non-SuperAdmin must never be able to alter a SuperAdmin or
+        // protected account.
+        if (!$actingIsSuperAdmin && ($user->isSuperAdmin() || $user->getStatus() === 'protected')) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
+
         if (!$user->perm->refuseAllUserRights($userId)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_mysqlerr')], Response::HTTP_BAD_REQUEST);
         }

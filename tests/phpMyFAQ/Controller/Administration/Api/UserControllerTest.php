@@ -189,4 +189,58 @@ class UserControllerTest extends TestCase
 
         $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
+
+    public function testEditUserNonSuperAdminCannotGrantSuperAdminFlag(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        // Acting user holds USER_EDIT but is NOT a SuperAdmin.
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: false);
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-user-data');
+
+        $request = $this->jsonRequest([
+            'userId' => 5, // even self-service must not be able to escalate
+            'csrfToken' => $csrf,
+            'display_name' => 'Editor',
+            'email' => 'editor@example.com',
+            'last_modified' => '',
+            'user_status' => 'active',
+            'is_superadmin' => 'on', // privilege escalation attempt
+            'overwrite_twofactor' => '',
+        ]);
+
+        $response = $controller->editUser($request);
+
+        $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    public function testUpdateRightsNonSuperAdminCannotGrantRightTheyDoNotHold(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+
+        // Acting user holds the permission gates (string-keyed rights such as 'edit_user')
+        // but does NOT hold right id 42, which it tries to grant.
+        $perm = $this->createMock(PermissionInterface::class);
+        $perm->method('hasPermission')->willReturnCallback(
+            static fn(int $userId, mixed $right): bool => is_string($right),
+        );
+
+        $actingUser = $this->createMock(CurrentUser::class);
+        $actingUser->perm = $perm;
+        $actingUser->method('getUserId')->willReturn(5);
+        $actingUser->method('isSuperAdmin')->willReturn(false);
+
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-user-rights');
+
+        $request = $this->jsonRequest([
+            'userId' => 7,
+            'csrfToken' => $csrf,
+            'userRights' => [42], // a right the acting user does not hold
+        ]);
+
+        $response = $controller->updateUserRights($request);
+
+        $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
 }
