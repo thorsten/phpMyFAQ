@@ -69,14 +69,14 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
 
         $query = sprintf(
             "
-            SELECT
-                %s
-            FROM
-                %s %s %s %s
-            WHERE
-                (%s) ILIKE ('%%%s%%')
-                %s
-                %s",
+                SELECT
+                    %s
+                FROM
+                    %s %s %s %s
+                WHERE
+                    (%s) ILIKE ('%%%s%%') ESCAPE '='
+                    %s
+                    %s",
             $columns,
             $this->getTable(),
             $this->getJoinedTable(),

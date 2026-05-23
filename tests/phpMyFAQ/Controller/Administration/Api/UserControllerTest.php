@@ -230,6 +230,73 @@ final class UserControllerTest extends TestCase
     }
 
     /**
+     * Builds a non-SuperAdmin acting user that holds the USER_EDIT permission gate.
+     */
+    private function buildActingUser(int $userId, bool $isSuperAdmin): CurrentUser
+    {
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(true);
+
+        $actingUser = $this->createMock(CurrentUser::class);
+        $actingUser->perm = $permission;
+        $actingUser->method('isLoggedIn')->willReturn(true);
+        $actingUser->method('getUserId')->willReturn($userId);
+        $actingUser->method('isSuperAdmin')->willReturn($isSuperAdmin);
+
+        return $actingUser;
+    }
+
+    /**
+     * Builds a controller whose container exposes the given session and acting user.
+     *
+     * @throws \Exception
+     */
+    private function buildController(Session $session, CurrentUser $actingUser): UserController
+    {
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($actingUser, $session) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $actingUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $this->createStub(AdminLog::class),
+                    default => null,
+                };
+            });
+
+        $controller = new UserController($this->createStub(CurrentUser::class));
+        $controller->setContainer($container);
+
+        return $controller;
+    }
+
+    /**
+     * Primes a valid CSRF token for the given page in the supplied session.
+     *
+     * @throws \Exception
+     */
+    private function primeCsrf(Session $session, string $page): string
+    {
+        Token::resetInstanceForTests();
+        $token = Token::getInstance($session)->getTokenString($page);
+        $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;
+
+        return $token;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @throws \JsonException
+     */
+    private function jsonRequest(array $data): Request
+    {
+        return new Request([], [], [], [], [], [], json_encode($data, JSON_THROW_ON_ERROR));
+    }
+
+    /**
      * @throws \Exception
      */
     public function testListRequiresUserPermission(): void
@@ -990,5 +1057,60 @@ final class UserControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertArrayHasKey('success', $payload);
+    }
+
+    public function testEditUserNonSuperAdminCannotGrantSuperAdminFlag(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        // Acting user holds USER_EDIT but is NOT a SuperAdmin.
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: false);
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-user-data');
+
+        $request = $this->jsonRequest([
+            'userId' => 5, // even self-service must not be able to escalate
+            'csrfToken' => $csrf,
+            'display_name' => 'Editor',
+            'email' => 'editor@example.com',
+            'last_modified' => '',
+            'user_status' => 'active',
+            'is_superadmin' => 'on', // privilege escalation attempt
+            'overwrite_twofactor' => '',
+        ]);
+
+        $response = $controller->editUser($request);
+
+        $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    public function testUpdateRightsNonSuperAdminCannotGrantRightTheyDoNotHold(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+
+        // Acting user holds the permission gates (string-keyed rights such as 'edit_user')
+        // but does NOT hold right id 42, which it tries to grant.
+        $perm = $this->createMock(PermissionInterface::class);
+        $perm->method('hasPermission')->willReturnCallback(
+            static fn(int $userId, mixed $right): bool => is_string($right),
+        );
+
+        $actingUser = $this->createMock(CurrentUser::class);
+        $actingUser->perm = $perm;
+        $actingUser->method('isLoggedIn')->willReturn(true);
+        $actingUser->method('getUserId')->willReturn(5);
+        $actingUser->method('isSuperAdmin')->willReturn(false);
+
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-user-rights');
+
+        $request = $this->jsonRequest([
+            'userId' => 7,
+            'csrfToken' => $csrf,
+            'userRights' => [42], // a right the acting user does not hold
+        ]);
+
+        $response = $controller->updateUserRights($request);
+
+        $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 }
