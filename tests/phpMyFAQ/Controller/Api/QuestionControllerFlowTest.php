@@ -11,6 +11,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Language;
 use phpMyFAQ\Notification;
+use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -196,8 +197,13 @@ final class QuestionControllerFlowTest extends TestCase
 
     private function createContainer(): ContainerInterface
     {
+        $permission = $this->createStub(BasicPermission::class);
+        $permission->method('hasPermission')->willReturn(true);
+
         $currentUser = $this->createStub(CurrentUser::class);
-        $currentUser->method('isLoggedIn')->willReturn(false);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(-1);
 
         $session = new Session(new MockArraySessionStorage());
 

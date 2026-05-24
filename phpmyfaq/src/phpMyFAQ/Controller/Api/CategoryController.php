@@ -25,6 +25,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission as CategoryPermission;
 use phpMyFAQ\Entity\CategoryEntity;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
 use phpMyFAQ\User\CurrentUser;
@@ -278,6 +279,7 @@ final class CategoryController extends AbstractApiController
     public function create(Request $request): JsonResponse
     {
         $this->hasValidToken();
+        $this->userHasPermission(PermissionType::CATEGORY_ADD);
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
