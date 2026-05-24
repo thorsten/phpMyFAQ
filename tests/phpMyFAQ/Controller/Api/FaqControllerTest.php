@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\FaqEntity;
@@ -12,9 +13,11 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\MetaData as FaqMetaData;
 use phpMyFAQ\Faq\Statistics as FaqStatistics;
 use phpMyFAQ\Language;
+use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
@@ -96,6 +99,25 @@ class FaqControllerTest extends TestCase
         $token ??= 'test-token';
         $this->forceConfigurationValue('api.apiClientToken', $token);
         $_SERVER['HTTP_X_PMF_TOKEN'] = $token;
+    }
+
+    /**
+     * Injects a logged-in CurrentUser with all permissions into the controller so
+     * that the userHasPermission() authorization check passes.
+     *
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    private function authorizeCurrentUser(AbstractController $controller, int $userId = -1): void
+    {
+        $permission = $this->createMock(BasicPermission::class);
+        $permission->method('hasPermission')->willReturn(true);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn($userId);
+
+        (new \ReflectionProperty(AbstractController::class, 'currentUser'))->setValue($controller, $currentUser);
     }
 
     /**
@@ -1200,6 +1222,7 @@ class FaqControllerTest extends TestCase
             $faqMetaData,
             $this->configuration->getLanguage(),
         );
+        $this->authorizeCurrentUser($controller);
 
         $response = $controller->create($request);
 
@@ -1318,6 +1341,8 @@ class FaqControllerTest extends TestCase
             $this->configuration->getLanguage(),
         );
 
+        $this->authorizeCurrentUser($controller);
+
         $response = $controller->create($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
@@ -1359,6 +1384,8 @@ class FaqControllerTest extends TestCase
             $this->createStub(FaqMetaData::class),
             $this->configuration->getLanguage(),
         );
+
+        $this->authorizeCurrentUser($controller);
 
         $response = $controller->create($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
@@ -1423,6 +1450,8 @@ class FaqControllerTest extends TestCase
             $this->configuration->getLanguage(),
         );
 
+        $this->authorizeCurrentUser($controller);
+
         $response = $controller->update($request);
 
         $this->assertSame(200, $response->getStatusCode());
@@ -1464,6 +1493,8 @@ class FaqControllerTest extends TestCase
             $this->createStub(FaqMetaData::class),
             $this->configuration->getLanguage(),
         );
+
+        $this->authorizeCurrentUser($controller);
 
         $response = $controller->update($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);

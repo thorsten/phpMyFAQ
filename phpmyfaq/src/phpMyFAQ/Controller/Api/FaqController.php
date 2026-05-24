@@ -24,6 +24,7 @@ use League\CommonMark\Exception\CommonMarkException;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\MetaData as FaqMetaData;
 use phpMyFAQ\Faq\Statistics as FaqStatistics;
@@ -701,6 +702,7 @@ final class FaqController extends AbstractApiController
     public function create(Request $request): JsonResponse
     {
         $this->hasValidToken();
+        $this->userHasPermission(PermissionType::FAQ_ADD);
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
@@ -857,6 +859,7 @@ final class FaqController extends AbstractApiController
     public function update(Request $request): JsonResponse
     {
         $this->hasValidToken();
+        $this->userHasPermission(PermissionType::FAQ_EDIT);
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 

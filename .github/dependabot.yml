@@ -5,6 +5,8 @@ updates:
   schedule:
     interval: daily
     time: "04:00"
+  cooldown:
+    default-days: 7
   open-pull-requests-limit: 10
   ignore:
   - dependency-name: elasticsearch/elasticsearch
@@ -15,10 +17,14 @@ updates:
   schedule:
     interval: "daily"
     time: "04:00"
+  cooldown:
+    default-days: 7
   open-pull-requests-limit: 10
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
     interval: daily
     time: "04:00"
+  cooldown:
+    default-days: 7
   open-pull-requests-limit: 10
