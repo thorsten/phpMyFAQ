@@ -25,6 +25,7 @@ use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\User\CurrentUser;
 use stdClass;
@@ -575,6 +576,7 @@ final class FaqController extends AbstractController
     public function create(Request $request): JsonResponse
     {
         $this->hasValidToken();
+        $this->userHasPermission(PermissionType::FAQ_ADD);
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
@@ -733,6 +735,7 @@ final class FaqController extends AbstractController
     public function update(Request $request): JsonResponse
     {
         $this->hasValidToken();
+        $this->userHasPermission(PermissionType::FAQ_EDIT);
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 

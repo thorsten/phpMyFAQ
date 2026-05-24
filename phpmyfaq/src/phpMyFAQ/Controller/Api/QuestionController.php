@@ -24,6 +24,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\QuestionEntity;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Question;
@@ -92,6 +93,7 @@ final class QuestionController extends AbstractController
     public function create(Request $request): JsonResponse
     {
         $this->hasValidToken();
+        $this->userHasPermission(PermissionType::QUESTION_ADD);
 
         $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
         $categoryId = Filter::filterVar($data->{'category-id'}, FILTER_VALIDATE_INT);
