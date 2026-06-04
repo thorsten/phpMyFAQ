@@ -50,8 +50,8 @@ devDependencies:
     specifier: 7.29.7
     version: 7.29.7
   '@babel/preset-env':
-    specifier: 7.29.5
-    version: 7.29.5(@babel/core@7.29.7)
+    specifier: 7.29.7
+    version: 7.29.7(@babel/core@7.29.7)
   '@commitlint/cli':
     specifier: 21.0.1
     version: 21.0.1(@types/node@25.9.1)(typescript@6.0.3)
@@ -1122,8 +1122,8 @@ packages:
       '@babel/helper-plugin-utils': 7.29.7
     dev: true
 
-  /@babel/preset-env@7.29.5(@babel/core@7.29.7):
-    resolution: {integrity: sha512-/69t2aEzGKHD76DyLbHysF/QH2LJOB8iFnYO37unDTKBTubzcMRv0f3H5EiN1Q6ajOd/eB7dAInF0qdFVS06kA==}
+  /@babel/preset-env@7.29.7(@babel/core@7.29.7):
+    resolution: {integrity: sha512-GYzX36n1nsciIb0uyH0GHwxwtNwPQIcpxSeiVLDtG/B7jB5xXgchnmL1f/jCX5o+pwnaDBtO60ONSJhEBJfxYA==}
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
@@ -3406,8 +3406,8 @@ packages:
       hookified: 1.15.1
     dev: true
 
-  /hasown@2.0.3:
-    resolution: {integrity: sha512-ej4AhfhfL2Q2zpMmLo7U1Uv9+PyhIZpgQLGT1F9miIGmiCJIoCgSmczFdrc97mWT4kVY72KA+WnnhJ5pghSvSg==}
+  /hasown@2.0.4:
+    resolution: {integrity: sha512-T2UbfbBEF32wiepXIsMlTW9+dDYC6wMh/t/vYA4tuOMKqWz/n3vr1NFSxQiyP+zk2mXsoMA/i/7qV6LKut1t1A==}
     engines: {node: '>= 0.4'}
     dependencies:
       function-bind: 1.1.2
@@ -3538,7 +3538,7 @@ packages:
     resolution: {integrity: sha512-evOr8xfXKxE6qSR0hSXL2r3sd7ALj8+7jQEUvPYcm5sgZFdJ+AYzT6yNmJenvIYQBgIGwfwz08sL8zoL7yq2BA==}
     engines: {node: '>= 0.4'}
     dependencies:
-      hasown: 2.0.3
+      hasown: 2.0.4
     dev: true
 
   /is-extglob@2.1.1:
