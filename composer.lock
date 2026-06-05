@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "39584189167288877bf6570795c84d2e",
+    "content-hash": "2507ab9c5ed98c93f3d50675053fecc8",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -2141,16 +2141,16 @@
         },
         {
             "name": "minishlink/web-push",
-            "version": "v10.0.3",
+            "version": "v10.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/web-push-libs/web-push-php.git",
-                "reference": "547695eb42b062517fc604c85d6f7bb8174d31b0"
+                "reference": "c922021b4ed1a61e6604d8dc33a2e0378b4382e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/web-push-libs/web-push-php/zipball/547695eb42b062517fc604c85d6f7bb8174d31b0",
-                "reference": "547695eb42b062517fc604c85d6f7bb8174d31b0",
+                "url": "https://api.github.com/repos/web-push-libs/web-push-php/zipball/c922021b4ed1a61e6604d8dc33a2e0378b4382e3",
+                "reference": "c922021b4ed1a61e6604d8dc33a2e0378b4382e3",
                 "shasum": ""
             },
             "require": {
@@ -2160,6 +2160,7 @@
                 "ext-openssl": "*",
                 "guzzlehttp/guzzle": "^7.9.2",
                 "php": ">=8.2",
+                "psr/log": "^2.0|^3.0",
                 "spomky-labs/base64url": "^2.0.4",
                 "symfony/polyfill-php83": "^1.33",
                 "web-token/jwt-library": "^3.4.9|^4.0.6"
@@ -2205,9 +2206,9 @@
             ],
             "support": {
                 "issues": "https://github.com/web-push-libs/web-push-php/issues",
-                "source": "https://github.com/web-push-libs/web-push-php/tree/v10.0.3"
+                "source": "https://github.com/web-push-libs/web-push-php/tree/v10.1.0"
             },
-            "time": "2026-03-09T23:16:02+00:00"
+            "time": "2026-05-28T09:37:37+00:00"
         },
         {
             "name": "monolog/monolog",
