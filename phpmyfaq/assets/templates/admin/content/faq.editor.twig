@@ -124,7 +124,7 @@
                       <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
                       <textarea id="editor" name="answer" class="form-control" rows="7"
                                 placeholder="{{ 'msgAnswer' | translate }}"
-                      >{{ faqData['content'] | raw }}</textarea>
+                      >{{ faqData['content'] }}</textarea>
                     </div>
                   </div>
                 {% endif %}
@@ -161,7 +161,7 @@
                           <div class="row">
                             <div class="col-lg-12">
                               <textarea id="answer-markdown" name="answer" class="form-control" rows="7"
-                                        placeholder="{{ 'msgAnswer' | translate }}">{{ faqData['content'] | raw }}</textarea>
+                                        placeholder="{{ 'msgAnswer' | translate }}">{{ faqData['content'] }}</textarea>
                             </div>
                           </div>
                         </div>
@@ -177,7 +177,7 @@
                   <div class="row">
                     <div class="col-lg-12">
                       <textarea id="editor" name="answer" class="form-control" rows="7"
-                                placeholder="{{ 'msgAnswer' | translate }}">{{ faqData['content'] | raw }}</textarea>
+                                placeholder="{{ 'msgAnswer' | translate }}">{{ faqData['content'] }}</textarea>
                     </div>
                   </div>
                 {% endif %}
