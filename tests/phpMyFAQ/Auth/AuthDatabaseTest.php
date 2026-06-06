@@ -157,4 +157,54 @@ class AuthDatabaseTest extends TestCase
     {
         $this->assertEquals(0, $this->authDatabase->isValidLogin('nonExistingUser'));
     }
+
+    public function testCreateStoresBcryptHash(): void
+    {
+        $this->authDatabase->create('testUser', 'testPassword');
+
+        static::assertStringStartsWith('$2y$', $this->readStoredHash('testUser'));
+    }
+
+    public function testCheckCredentialsAcceptsLegacySha256AndRehashesToBcrypt(): void
+    {
+        $login = 'testUser';
+        $password = 'legacyPassword';
+
+        $reflection = new \ReflectionClass($this->authDatabase);
+        $driver = $reflection->getProperty('databaseDriver')->getValue($this->authDatabase);
+        $configuration = $reflection->getParentClass()->getProperty('configuration')->getValue($this->authDatabase);
+
+        // Seed a legacy SHA-256 hash directly, bypassing create() (which now writes bcrypt).
+        $salt = $configuration->get('security.salt') . $login;
+        $legacyHash = hash('sha256', $password . $salt);
+        $driver->query(
+            sprintf(
+                "INSERT INTO faquserlogin (login, pass, domain) VALUES ('%s', '%s', '')",
+                $driver->escape($login),
+                $driver->escape($legacyHash),
+            ),
+        );
+
+        // Legacy password is accepted...
+        static::assertTrue($this->authDatabase->checkCredentials($login, $password));
+
+        // ...and the stored hash has been transparently upgraded to bcrypt.
+        static::assertStringStartsWith('$2y$', $this->readStoredHash($login));
+
+        // ...and the same password still verifies against the new bcrypt hash.
+        static::assertTrue($this->authDatabase->checkCredentials($login, $password));
+    }
+
+    private function readStoredHash(string $login): string
+    {
+        $reflection = new \ReflectionClass($this->authDatabase);
+        $driver = $reflection->getProperty('databaseDriver')->getValue($this->authDatabase);
+
+        $result = $driver->query(
+            sprintf("SELECT pass FROM faquserlogin WHERE login = '%s'", $driver->escape($login)),
+        );
+        $row = $driver->fetchArray($result);
+
+        return $row['pass'];
+    }
 }

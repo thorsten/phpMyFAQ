@@ -196,7 +196,7 @@ class Token
     private function setSession(string $page, int $expiry): Token
     {
         $request = Request::createFromGlobals();
-        $randomToken = md5(base64_encode(random_bytes(32)));
+        $randomToken = bin2hex(random_bytes(32));
         $token = new self($this->session);
         $token
             ->setPage($page)

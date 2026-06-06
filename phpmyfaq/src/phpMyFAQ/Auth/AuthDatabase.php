@@ -36,6 +36,8 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 {
     private readonly DatabaseDriver $databaseDriver;
 
+    private readonly PasswordHasher $passwordHasher;
+
     /**
      * @inheritDoc
      */
@@ -44,6 +46,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         parent::__construct($configuration);
 
         $this->databaseDriver = $this->configuration->getDb();
+        $this->passwordHasher = new PasswordHasher($this->configuration);
     }
 
     /**
@@ -60,7 +63,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
             "INSERT INTO %sfaquserlogin (login, pass, domain) VALUES ('%s', '%s', '%s')",
             Database::getTablePrefix(),
             $this->databaseDriver->escape($login),
-            $this->databaseDriver->escape($this->encContainer->setSalt($login)->encrypt($password)),
+            $this->databaseDriver->escape($this->passwordHasher->hash($password)),
             $this->databaseDriver->escape($domain),
         );
 
@@ -92,7 +95,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         $change = sprintf(
             "UPDATE %sfaquserlogin SET pass = '%s' WHERE login = '%s'",
             Database::getTablePrefix(),
-            $this->databaseDriver->escape($this->encContainer->setSalt($login)->encrypt($password)),
+            $this->databaseDriver->escape($this->passwordHasher->hash($password)),
             $this->databaseDriver->escape($login),
         );
 
@@ -183,14 +186,33 @@ class AuthDatabase extends Auth implements AuthDriverInterface
                 break;
             }
 
-            if ($user['pass'] !== $this->encContainer->setSalt($user['login'])->encrypt($password)) {
+            if (!$this->passwordHasher->verify($user['login'], $password, $user['pass'])) {
                 continue;
+            }
+
+            if ($this->passwordHasher->needsRehash($user['pass'])) {
+                $this->rehash($user['login'], $password);
             }
 
             return true;
         }
 
         throw new AuthException(User::ERROR_USER_INCORRECT_PASSWORD);
+    }
+
+    /**
+     * Transparently upgrades a stored password hash to current bcrypt
+     * parameters after a successful login. Best-effort: a failed write must
+     * never block an otherwise valid login.
+     */
+    private function rehash(string $login, #[\SensitiveParameter] string $password): void
+    {
+        $this->databaseDriver->query(sprintf(
+            "UPDATE %sfaquserlogin SET pass = '%s' WHERE login = '%s'",
+            Database::getTablePrefix(),
+            $this->databaseDriver->escape($this->passwordHasher->hash($password)),
+            $this->databaseDriver->escape($login),
+        ));
     }
 
     /**

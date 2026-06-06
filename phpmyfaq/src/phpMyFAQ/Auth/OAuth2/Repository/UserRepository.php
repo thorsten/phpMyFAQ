@@ -36,7 +36,6 @@ final class UserRepository extends AbstractRepository implements UserRepositoryI
     ): ?UserEntityInterface {
         try {
             $authDatabase = new AuthDatabase($this->configuration);
-            $authDatabase->getEncryptionContainer('sha1');
             if (!$authDatabase->checkCredentials($username, $password)) {
                 return null;
             }

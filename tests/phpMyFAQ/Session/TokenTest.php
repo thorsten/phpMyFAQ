@@ -186,7 +186,7 @@ class TokenTest extends TestCase
 
         static::assertIsString($tokenString);
         static::assertNotEmpty($tokenString);
-        static::assertSame(32, strlen($tokenString)); // md5 hex length
+        static::assertSame(64, strlen($tokenString)); // bin2hex(random_bytes(32)) length
     }
 
     /**
