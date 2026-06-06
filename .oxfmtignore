@@ -1,0 +1,5 @@
+# oxfmt formats JavaScript/TypeScript only.
+#
+# Ignore rules live in .oxfmtrc.json ("ignorePatterns"). This file exists so that
+# oxfmt does NOT fall back to reading .prettierignore, which deliberately excludes
+# *.ts/*.js/*.scss — those JS/TS files are formatted by oxfmt, not prettier.

@@ -53,8 +53,10 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 - TypeScript code: pnpm test
 - TypeScript code with coverage: pnpm test:coverage
 - TypeScript code in watch mode: pnpm test:watch
-- TypeScript linting: pnpm lint
-- TypeScript code formatting: pnpm lint:fix
+- TypeScript linting: pnpm oxlint
+- TypeScript code formatting check: pnpm oxfmt
+- TypeScript code formatting auto-fix: pnpm oxfmt:fix
+- JSON/YAML formatting: pnpm lint (check) / pnpm lint:fix (auto-fix, prettier)
 - SCSS linting: pnpm stylelint
 - SCSS lint auto-fix: pnpm stylelint:fix
 - TypeScript errors have to be fixed before committing code.

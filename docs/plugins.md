@@ -309,7 +309,7 @@ public function getScripts(): array
 
 **Security notes:**
 - Always use strict mode (`'use strict'`)
-- Lint your code with ESLint, you can run `npx eslint phpmyfaq/content/plugins/YourPlugin//assets/` from the phpMyFAQ root
+- Lint your code with oxlint, you can run `npx oxlint phpmyfaq/content/plugins/YourPlugin//assets/` from the phpMyFAQ root
 - Wrap code in IIFE to avoid global namespace pollution
 - Validate and sanitize user input
 - Use DOM API safely

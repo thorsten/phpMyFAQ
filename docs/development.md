@@ -424,9 +424,9 @@ To run the PHPUnit-based tests, you can use the following command:
 
     $ composer test
 
-To run the ESLint-based checks, you can use the following command:
+To run the oxlint-based checks, you can use the following command:
 
-    $ pnpm eslint .
+    $ pnpm run oxlint
 
 To run the Vitest-based tests, you can use the following command:
 
@@ -482,7 +482,7 @@ phpMyFAQ provides a set of Composer scripts to simplify common development tasks
 The following coding standards are used in phpMyFAQ:
 
 - PHP: [PER Coding Style 3.0](https://www.php-fig.org/per/coding-style/)
-- TypeScript with ESLint recommendations
+- TypeScript with oxlint recommendations
 
 ### 10.6.10 Rebase your Patch
 
