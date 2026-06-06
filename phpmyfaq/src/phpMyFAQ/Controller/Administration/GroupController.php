@@ -256,7 +256,10 @@ final class GroupController extends AbstractAdministrationController
         }
 
         $groupId = (int) Filter::filterVar($request->request->get('group_id'), FILTER_VALIDATE_INT);
-        $groupMembers = $request->request->all()['group_members'];
+        $groupMembers = $request->request->all()['group_members'] ?? [];
+        if (!is_array($groupMembers)) {
+            $groupMembers = [];
+        }
 
         $user = $this->container->get(id: 'phpmyfaq.user');
         if (!$user->perm->removeAllUsersFromGroup($groupId)) {
