@@ -5,11 +5,46 @@ declare(strict_types=1);
 namespace phpMyFAQ\Auth;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Configuration\ConfigurationRepository;
+use phpMyFAQ\Configuration\LayoutSettings;
+use phpMyFAQ\Configuration\LdapSettings;
+use phpMyFAQ\Configuration\MailSettings;
+use phpMyFAQ\Configuration\SearchSettings;
+use phpMyFAQ\Configuration\SecuritySettings;
+use phpMyFAQ\Configuration\Storage\ConfigurationStorageSettings;
+use phpMyFAQ\Configuration\Storage\ConfigurationStorageSettingsResolver;
+use phpMyFAQ\Configuration\Storage\DatabaseConfigurationStore;
+use phpMyFAQ\Configuration\Storage\HybridConfigurationStore;
+use phpMyFAQ\Configuration\UrlSettings;
+use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Environment;
+use phpMyFAQ\Plugin\PluginManager;
+use phpMyFAQ\System;
+use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(PasswordHasher::class)]
+#[UsesClass(Configuration::class)]
+#[UsesClass(ConfigurationRepository::class)]
+#[UsesClass(LayoutSettings::class)]
+#[UsesClass(LdapSettings::class)]
+#[UsesClass(MailSettings::class)]
+#[UsesClass(SearchSettings::class)]
+#[UsesClass(SecuritySettings::class)]
+#[UsesClass(ConfigurationStorageSettings::class)]
+#[UsesClass(ConfigurationStorageSettingsResolver::class)]
+#[UsesClass(DatabaseConfigurationStore::class)]
+#[UsesClass(HybridConfigurationStore::class)]
+#[UsesClass(UrlSettings::class)]
+#[UsesClass(Database::class)]
+#[UsesClass(Sqlite3::class)]
+#[UsesClass(Environment::class)]
+#[UsesClass(PluginManager::class)]
+#[UsesClass(System::class)]
+#[UsesClass(Translation::class)]
 class PasswordHasherTest extends TestCase
 {
     private PasswordHasher $passwordHasher;

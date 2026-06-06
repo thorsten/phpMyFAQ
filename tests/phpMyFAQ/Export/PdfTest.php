@@ -6,6 +6,7 @@ namespace phpMyFAQ\Export;
 
 use phpMyFAQ\Auth;
 use phpMyFAQ\Auth\AuthDatabase;
+use phpMyFAQ\Auth\PasswordHasher;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\ConfigurationRepository;
@@ -54,6 +55,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(Translation::class)]
 #[UsesClass(Auth::class)]
 #[UsesClass(AuthDatabase::class)]
+#[UsesClass(PasswordHasher::class)]
 #[UsesClass(Configuration::class)]
 #[UsesClass(ConfigurationRepository::class)]
 #[UsesClass(LayoutSettings::class)]

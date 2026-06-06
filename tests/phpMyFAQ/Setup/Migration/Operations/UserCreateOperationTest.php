@@ -4,6 +4,7 @@ namespace phpMyFAQ\Setup\Migration\Operations;
 
 use phpMyFAQ\Auth;
 use phpMyFAQ\Auth\AuthDatabase;
+use phpMyFAQ\Auth\PasswordHasher;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\ConfigurationRepository;
 use phpMyFAQ\Configuration\LayoutSettings;
@@ -45,6 +46,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(User::class)]
 #[UsesClass(Auth::class)]
 #[UsesClass(AuthDatabase::class)]
+#[UsesClass(PasswordHasher::class)]
 #[UsesClass(Configuration::class)]
 #[UsesClass(ConfigurationRepository::class)]
 #[UsesClass(LayoutSettings::class)]

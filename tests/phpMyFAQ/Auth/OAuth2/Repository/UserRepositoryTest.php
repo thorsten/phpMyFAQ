@@ -9,6 +9,7 @@ use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 use phpMyFAQ\Auth;
 use phpMyFAQ\Auth\AuthDatabase;
 use phpMyFAQ\Auth\OAuth2\Entity\UserEntity;
+use phpMyFAQ\Auth\PasswordHasher;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
@@ -25,6 +26,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(UserEntity::class)]
 #[UsesClass(Auth::class)]
 #[UsesClass(AuthDatabase::class)]
+#[UsesClass(PasswordHasher::class)]
 #[UsesClass(Encryption::class)]
 class UserRepositoryTest extends TestCase
 {
