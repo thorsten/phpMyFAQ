@@ -108,7 +108,11 @@ final class FaqController extends AbstractController
 
         $answer = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
         if ($this->configuration->get(item: 'main.enableWysiwygEditorFrontend')) {
-            $answer = trim(html_entity_decode((string) $answer));
+            // html_entity_decode() turns surviving HTML entities back into executable
+            // markup, so the decoded result must be passed through the HTML sanitizer
+            // before it is stored. Otherwise it is rendered unescaped in the admin
+            // FAQ editor (faq.editor.twig uses the |raw filter), enabling stored XSS.
+            $answer = $this->faqHelper->cleanUpContent(trim(html_entity_decode((string) $answer)));
         }
 
         if (!$this->configuration->get(item: 'main.enableWysiwygEditorFrontend')) {

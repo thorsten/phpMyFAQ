@@ -99,6 +99,21 @@ class FaqHelperTest extends TestCase
         $this->assertEquals($expectedOutput, $actualOutput);
     }
 
+    public function testCleanUpContentStripsTextareaBreakoutEventHandler(): void
+    {
+        // Regression test for the stored XSS via the frontend FAQ submission API.
+        // A guest-submitted answer that decodes to a </textarea> breakout followed
+        // by an event-handler payload must have its script-execution vector removed,
+        // otherwise it runs when an admin opens the FAQ editor (faq.editor.twig).
+        // The remaining inert markup is additionally rendered escaped at the sink.
+        $content = '</textarea><img src=x onerror=alert(document.domain)><textarea>';
+
+        $actualOutput = $this->faqHelper->cleanUpContent($content);
+
+        $this->assertStringNotContainsString('onerror', $actualOutput);
+        $this->assertStringNotContainsString('alert(', $actualOutput);
+    }
+
     public function testCleanUpContentWithUmlauts(): void
     {
         $content = '<p>Hellö, wörld!</p>';
