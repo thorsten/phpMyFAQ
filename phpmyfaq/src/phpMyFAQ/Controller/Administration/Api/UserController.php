@@ -369,6 +369,13 @@ final class UserController extends AbstractAdministrationApiController
         $userPasswordConfirm = Filter::filterVar($data->passwordConfirm, FILTER_SANITIZE_SPECIAL_CHARS);
         $userIsSuperAdmin = Filter::filterVar($data->isSuperAdmin, FILTER_VALIDATE_BOOLEAN);
 
+        // Only SuperAdmins may grant the SuperAdmin flag. Reject the request when a
+        // non-SuperAdmin attempts to set it, to prevent privilege escalation through
+        // mass-assignment of is_superadmin on user creation.
+        if (!$this->currentUser->isSuperAdmin() && (bool) $userIsSuperAdmin) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
+
         $newUser = new User($this->configuration);
 
         if (!$newUser->isValidLogin($userName)) {

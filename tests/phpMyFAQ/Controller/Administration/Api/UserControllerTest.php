@@ -1113,4 +1113,28 @@ final class UserControllerTest extends TestCase
 
         $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
+
+    public function testAddUserNonSuperAdminCannotGrantSuperAdminFlag(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        // Acting user holds USER_ADD/EDIT/DELETE but is NOT a SuperAdmin.
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: false);
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'add-user');
+
+        $request = $this->jsonRequest([
+            'csrf' => $csrf,
+            'userName' => 'evil_superadmin',
+            'realName' => 'Evil SA',
+            'email' => 'evil@example.test',
+            'automaticPassword' => false,
+            'password' => 'Sup3rSecret!42',
+            'passwordConfirm' => 'Sup3rSecret!42',
+            'isSuperAdmin' => true, // privilege escalation attempt
+        ]);
+
+        $response = $controller->addUser($request);
+
+        $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
 }
