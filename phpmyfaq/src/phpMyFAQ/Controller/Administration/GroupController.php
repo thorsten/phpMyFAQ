@@ -268,7 +268,10 @@ final class GroupController extends AbstractAdministrationController
         }
 
         $groupId = (int) Filter::filterVar($request->request->get('group_id'), FILTER_VALIDATE_INT);
-        $groupMembers = $request->request->all()['group_members'];
+        $groupMembers = $request->request->all()['group_members'] ?? [];
+        if (!is_array($groupMembers)) {
+            $groupMembers = [];
+        }
 
         $removeResult = $this->user->perm->removeAllUsersFromGroup($groupId);
         $message = '';
@@ -316,7 +319,22 @@ final class GroupController extends AbstractAdministrationController
         }
 
         $groupId = (int) Filter::filterVar($request->request->get('group_id'), FILTER_VALIDATE_INT);
-        $groupPermissions = $request->request->all()['group_rights'];
+        $groupPermissions = $request->request->all()['group_rights'] ?? [];
+        if (!is_array($groupPermissions)) {
+            $groupPermissions = [];
+        }
+
+        // A non-SuperAdmin may only assign rights they hold themselves. This prevents an
+        // administrator with the delegable GROUP_EDIT right from granting privileges they do not
+        // possess to a group (privilege escalation via group membership inheritance).
+        if (!$this->currentUser->isSuperAdmin()) {
+            $actingUserId = $this->currentUser->getUserId();
+            foreach ($groupPermissions as $groupPermission) {
+                if (!$this->currentUser->perm->hasPermission($actingUserId, (int) $groupPermission)) {
+                    throw new UnauthorizedHttpException('Cannot grant a right you do not hold');
+                }
+            }
+        }
 
         $refuseResult = $this->user->perm->refuseAllGroupRights($groupId);
         $message = '';
