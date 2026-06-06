@@ -5,6 +5,7 @@ namespace phpMyFAQ;
 use Monolog\Handler\NullHandler;
 use Monolog\Logger;
 use phpMyFAQ\Auth\AuthDatabase;
+use phpMyFAQ\Auth\PasswordHasher;
 use phpMyFAQ\Category\CategoryCache;
 use phpMyFAQ\Category\CategoryPermissionContext;
 use phpMyFAQ\Category\CategoryRepository;
@@ -47,6 +48,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 #[UsesClass(User::class)]
 #[UsesClass(Auth::class)]
 #[UsesClass(AuthDatabase::class)]
+#[UsesClass(PasswordHasher::class)]
 #[UsesClass(Database::class)]
 #[UsesClass(Encryption::class)]
 #[UsesClass(Permission::class)]
