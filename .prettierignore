@@ -7,6 +7,18 @@ phpmyfaq/src/libs/
 *.php
 *.md
 
+# JavaScript/TypeScript are formatted by oxfmt (see .oxfmtrc.json)
+*.ts
+*.tsx
+*.js
+*.jsx
+*.mjs
+*.cjs
+
+# SCSS/CSS are handled by stylelint
+*.scss
+*.css
+
 # Ignore code for build
 .github
 composer.json

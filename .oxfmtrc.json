@@ -1,0 +1,26 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "semi": true,
+  "singleQuote": true,
+  "printWidth": 120,
+  "htmlWhitespaceSensitivity": "ignore",
+  "sortPackageJson": false,
+  "ignorePatterns": [
+    ".claude/",
+    "phpmyfaq/admin/assets/js/editor/",
+    "phpmyfaq/src/libs/",
+    "*.php",
+    "*.md",
+    ".github",
+    "composer.json",
+    "composer.lock",
+    "docker-compose.yml",
+    "package.json",
+    "pnpm-lock.yaml",
+    "phpmyfaq/assets/public/",
+    "site/",
+    ".pnpm-store"
+  ]
+}

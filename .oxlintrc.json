@@ -1,0 +1,38 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc"],
+  "categories": {
+    "correctness": "error"
+  },
+  "rules": {
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ]
+  },
+  "ignorePatterns": [
+    ".claude/*",
+    "babel.config.cjs",
+    "commitlint.config.cjs",
+    "coverage/*",
+    "html-coverage/*",
+    "node_modules/*",
+    "phpmyfaq/assets/public/*",
+    "phpmyfaq/content/upgrades/*",
+    "phpmyfaq/src/libs/*",
+    "site/*",
+    "volumes/*"
+  ],
+  "overrides": [
+    {
+      "files": ["phpmyfaq/sw.js"],
+      "env": {
+        "serviceworker": true
+      }
+    }
+  ]
+}

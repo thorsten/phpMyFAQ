@@ -312,7 +312,7 @@ const removeGroupMembers = (): void => {
     return;
   }
 
-  for (const member of [...document.querySelectorAll<HTMLSelectElement>('#group_member_list option')]) {
+  for (const member of document.querySelectorAll<HTMLSelectElement>('#group_member_list option')) {
     if (selectedMembers.includes(member.value)) {
       member.remove();
     }

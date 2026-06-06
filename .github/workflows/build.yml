@@ -85,8 +85,11 @@ jobs:
       - name: Install Node.js dependencies
         run: pnpm install
 
-      - name: Run ESLint check
-        run: pnpm eslint .
+      - name: Run oxfmt format check
+        run: pnpm run oxfmt
+
+      - name: Run oxlint check
+        run: pnpm run oxlint
 
       - name: Run Stylelint check
         run: pnpm run stylelint

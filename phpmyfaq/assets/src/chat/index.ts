@@ -60,7 +60,7 @@ const scrollToBottom = (): void => {
   }
 };
 
-const connectSSE = (userId: number): void => {
+const connectSSE = (): void => {
   if (eventSource) {
     eventSource.close();
   }
@@ -97,13 +97,13 @@ const connectSSE = (userId: number): void => {
     const data = JSON.parse(messageEvent.data);
     lastMessageId = data.lastId;
     // Reconnect after a short delay
-    setTimeout(() => connectSSE(userId), 1000);
+    setTimeout(() => connectSSE(), 1000);
   });
 
   eventSource.onerror = () => {
     eventSource?.close();
     // Attempt to reconnect after 5 seconds
-    setTimeout(() => connectSSE(userId), 5000);
+    setTimeout(() => connectSSE(), 5000);
   };
 };
 
@@ -341,7 +341,7 @@ export const handleChat = (): void => {
   csrfToken = config.csrfTokenSendMessage;
 
   // Initialize SSE connection
-  connectSSE(config.currentUserId);
+  connectSSE();
 
   // Handle form submission
   chatForm.addEventListener('submit', handleSendMessage);
