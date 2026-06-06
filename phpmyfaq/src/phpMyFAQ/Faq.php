@@ -715,10 +715,11 @@ class Faq
      * @param int[] $faqIds
      * @throws Exception
      */
-    public function getFaqsByIds(array $faqIds): array
+    public function getFaqsByIds(array $faqIds, bool $onlyActive = true): array
     {
         $faqRecords = [];
         $records = $this->normalizeFaqIds($faqIds);
+        $now = date(format: 'YmdHis');
 
         $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = sprintf(
@@ -757,6 +758,7 @@ class Faq
                 fd.id IN (%s)
             AND
                 fd.lang = '%s'
+                %s
                 %s",
             Database::getTablePrefix(),
             Database::getTablePrefix(),
@@ -765,6 +767,9 @@ class Faq
             Database::getTablePrefix(),
             $records,
             $this->getEscapedCurrentLanguage(),
+            $onlyActive
+                ? sprintf("AND fd.active = 'yes' AND fd.date_start <= '%s' AND fd.date_end >= '%s'", $now, $now)
+                : '',
             $queryHelper->queryPermission($this->groupSupport),
         );
 
@@ -810,9 +815,10 @@ class Faq
      * @return array<string, mixed>
      * @throws Exception
      */
-    public function getFaqByIdAndCategoryId(int $faqId, int $categoryId): array
+    public function getFaqByIdAndCategoryId(int $faqId, int $categoryId, bool $onlyActive = true): array
     {
         $queryHelper = new QueryHelper($this->user, $this->groups);
+        $now = date(format: 'YmdHis');
         $query = sprintf(
             "
             SELECT
@@ -855,6 +861,7 @@ class Faq
                 fcr.category_id = %d
             AND
                 fd.lang = '%s'
+                %s
                 %s",
             Database::getTablePrefix(),
             Database::getTablePrefix(),
@@ -863,6 +870,9 @@ class Faq
             $faqId,
             $categoryId,
             $this->getEscapedCurrentLanguage(),
+            $onlyActive
+                ? sprintf("AND fd.active = 'yes' AND fd.date_start <= '%s' AND fd.date_end >= '%s'", $now, $now)
+                : '',
             $queryHelper->queryPermission($this->groupSupport),
         );
 
