@@ -101,7 +101,7 @@ final class FaqController extends AbstractController
 
         $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
         $tags = Filter::filterVar($data->tags, FILTER_SANITIZE_SPECIAL_CHARS);
-        $active = Filter::filterVar($data->active, FILTER_SANITIZE_SPECIAL_CHARS);
+        $active = Filter::filterVar($data->active ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
         $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
         $content = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
         $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -127,7 +127,7 @@ final class FaqController extends AbstractController
         $faqData
             ->setLanguage($language)
             ->setActive($active === 'yes')
-            ->setSticky($sticky !== 'no' ? $sticky : false)
+            ->setSticky($sticky !== 'no')
             ->setQuestion(Filter::removeAttributes(html_entity_decode(
                 (string) $question,
                 ENT_QUOTES | ENT_HTML5,
@@ -311,7 +311,7 @@ final class FaqController extends AbstractController
 
         $faqLang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
         $tags = Filter::filterVar($data->tags, FILTER_SANITIZE_SPECIAL_CHARS);
-        $active = Filter::filterVar($data->active, FILTER_SANITIZE_SPECIAL_CHARS);
+        $active = Filter::filterVar($data->active ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
         $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
         $content = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
         $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
