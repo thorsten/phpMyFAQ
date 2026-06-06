@@ -567,13 +567,82 @@ class Wrapper extends TCPDF
         $alt = false,
         $alternateImages = [],
     ): void {
-        $file = parse_url($file, PHP_URL_PATH);
+        // Pass through raw image data ('@' prefix), non-embedded links ('*' prefix),
+        // and data URIs without filesystem lookup.
+        if (is_string($file) && $file !== '' && ($file[0] === '@' || $file[0] === '*')) {
+            parent::Image(
+                $file,
+                $x,
+                $y,
+                $w,
+                $h,
+                $type,
+                $link,
+                $align,
+                $resize,
+                $dpi,
+                $palign,
+                $ismask,
+                $imgmask,
+                $border,
+                $fitbox,
+                $hidden,
+                $fitonpage,
+                $alt,
+                $alternateImages,
+            );
+            return;
+        }
+
+        if (is_string($file) && str_starts_with($file, 'data:')) {
+            if (preg_match('#^data:[^;]+;base64,(.+)$#', $file, $matches)) {
+                $decoded = base64_decode($matches[1], strict: true);
+                if ($decoded !== false && $this->checkBase64Image($decoded)) {
+                    parent::Image(
+                        '@' . $decoded,
+                        $x,
+                        $y,
+                        $w,
+                        $h,
+                        $type,
+                        $link,
+                        $align,
+                        $resize,
+                        $dpi,
+                        $palign,
+                        $ismask,
+                        $imgmask,
+                        $border,
+                        $fitbox,
+                        $hidden,
+                        $fitonpage,
+                        $alt,
+                        $alternateImages,
+                    );
+                    return;
+                }
+            }
+            return;
+        }
+
+        $file = parse_url((string) $file, PHP_URL_PATH);
+        if ($file === false || $file === null || $file === '') {
+            return;
+        }
 
         // URL-decode the file path to handle filenames with spaces and other special characters
         $file = urldecode($file);
 
         $type = pathinfo($file, PATHINFO_EXTENSION);
-        $data = file_get_contents($this->concatenatePaths(PMF_ROOT_DIR, $file));
+        $resolvedPath = $this->concatenatePaths(PMF_ROOT_DIR, $file);
+        if (!is_file($resolvedPath) || !is_readable($resolvedPath)) {
+            return;
+        }
+
+        $data = file_get_contents($resolvedPath);
+        if ($data === false) {
+            return;
+        }
 
         if ($this->checkBase64Image($data)) {
             $file = '@' . $data;
