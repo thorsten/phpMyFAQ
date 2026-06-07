@@ -1,4 +1,4 @@
-name: phpMyFAQ Nightly Development Build
+name: "phpMyFAQ Nightly Development Build"
 
 on:
   workflow_dispatch:
