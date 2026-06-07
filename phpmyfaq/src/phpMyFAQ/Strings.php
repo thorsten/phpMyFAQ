@@ -37,7 +37,7 @@ class Strings
     /**
      * Instance.
      */
-    private static null|Mbstring|StringBasic $instance = null;
+    private static Mbstring|StringBasic|null $instance = null;
 
     /**
      * Constructor.
