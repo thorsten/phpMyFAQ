@@ -50,9 +50,10 @@ gated behind a [Compose profile](https://docs.docker.com/compose/profiles/), so 
 you need (one web server + the databases and search engines you want to test against).
 
 The easiest way is the `bin/dev` helper, which maps friendly names to profiles and adds guardrails (it refuses to
-start two web servers on the same port, auto-adds Redis, and installs dependencies on first run):
+start two web servers on the same port, auto-adds Redis, generates self-signed dev TLS certificates, and
+installs dependencies on first run):
 
-    $ bin/dev up nginx mariadb opensearch        # exactly these (Redis added automatically)
+    $ bin/dev up nginx mariadb opensearch         # exactly these (Redis added automatically)
     $ bin/dev up apache postgres elasticsearch --tools
     $ bin/dev preset default                      # nginx + mariadb + opensearch + redis
     $ bin/dev preset full                         # one web server + every backing service

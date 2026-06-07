@@ -94,6 +94,36 @@ run_build() {
   compose --profile build up --no-log-prefix --abort-on-container-exit composer pnpm
 }
 
+# Dev TLS certificates mounted into the nginx / frankenphp containers.
+CERT_FILE="$ROOT_DIR/.docker/cert.pem"
+CERT_KEY="$ROOT_DIR/.docker/cert-key.pem"
+
+# Ensure self-signed dev certs exist before starting a web server that mounts
+# them. A missing source path makes Docker silently create a *directory* at the
+# bind-mount location, which then cannot mount onto the container's cert file
+# ("not a directory" error). Detect that clobber, clean it up, and (re)generate.
+ensure_certs() {
+  for path in "$CERT_FILE" "$CERT_KEY"; do
+    if [ -d "$path" ]; then
+      rmdir "$path" 2>/dev/null \
+        || die "$path is a directory (Docker clobbered the cert mount). Remove it and retry."
+    fi
+  done
+
+  [ -f "$CERT_FILE" ] && [ -f "$CERT_KEY" ] && return 0
+
+  command -v openssl >/dev/null 2>&1 \
+    || die "Dev TLS certs are missing and 'openssl' was not found. Install openssl, or create $CERT_FILE and $CERT_KEY manually."
+
+  printf '%s\n' "==> Generating self-signed dev certificate for localhost..."
+  openssl req -x509 -newkey rsa:2048 -nodes \
+    -keyout "$CERT_KEY" -out "$CERT_FILE" -days 825 \
+    -subj "/CN=localhost" \
+    -addext "subjectAltName=DNS:localhost,DNS:*.localhost,IP:127.0.0.1" \
+    >/dev/null 2>&1 \
+    || die "Failed to generate the dev certificate with openssl."
+}
+
 usage() {
   cat <<EOF
 bin/dev — selectable phpMyFAQ development stacks
@@ -155,6 +185,11 @@ do_up() {
   set -- $profiles
   [ "$#" -gt 0 ] || die "No profiles given. Try 'bin/dev presets' or 'bin/dev help'."
   assert_single_web "$@"
+
+  # nginx and frankenphp mount TLS certs; make sure they exist first.
+  if contains "$profiles" nginx || contains "$profiles" frankenphp; then
+    ensure_certs
+  fi
 
   # Auto-add redis unless opted out.
   if [ "$no_redis" -eq 0 ] && ! contains "$profiles" redis; then
