@@ -26,7 +26,10 @@ test.describe('Admin backend', () => {
     await page.locator('#faqpassword').fill('definitely-the-wrong-password');
     await page.locator('button[type="submit"]').click();
 
-    // We must not end up on the authenticated dashboard.
-    await expect(page.locator('i.bi-speedometer')).toHaveCount(0);
+    // A rejected login redirects back to the login page and shows the error
+    // alert (admin UI language is English in this setup); it never reaches the
+    // dashboard.
+    await expect(page).toHaveURL(/\/admin\/login$/);
+    await expect(page.getByRole('alert').filter({ hasText: /Wrong username or password/ })).toBeVisible();
   });
 });
