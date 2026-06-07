@@ -19,6 +19,7 @@
 require __DIR__ . '/../phpmyfaq/src/Bootstrap.php';
 require __DIR__ . '/../phpmyfaq/src/libs/autoload.php';
 
+use phpMyFAQ\Bootstrap\ConfigDirectoryResolver;
 use phpMyFAQ\Command\CreateHashesCommand;
 use phpMyFAQ\Command\InstallCommand;
 use phpMyFAQ\Command\McpServerCommand;
@@ -61,7 +62,8 @@ try {
 // require a database connection (e.g., the MCP server resolves the Configuration
 // singleton), so they can only be registered once an instance exists. The
 // installer command itself must remain available before installation.
-$isInstalled = defined('PMF_CONFIG_DIR') && file_exists(PMF_CONFIG_DIR . '/database.php');
+// Use the resolver so both the current and legacy config directories are honored.
+$isInstalled = ConfigDirectoryResolver::resolveDatabaseFile() !== null;
 
 $application = new Application();
 $application->addCommand(new CreateHashesCommand($container->get('phpmyfaq.system'), $container->get('filesystem')));
