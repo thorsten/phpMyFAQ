@@ -3,6 +3,7 @@
 services:
 
   mariadb:
+    profiles: ['mariadb']
     image: mariadb:11
     restart: always
     environment:
@@ -27,6 +28,7 @@ services:
       - ./volumes/mariadb:/var/lib/mysql
 
   postgres:
+    profiles: ['postgres']
     image: postgres:17
     restart: always
     environment:
@@ -45,6 +47,7 @@ services:
       - ./volumes/postgres:/var/lib/postgresql/data
 
   redis:
+    profiles: ['redis']
     image: redis:8-alpine
     restart: always
     command: redis-server --appendonly yes
@@ -60,10 +63,11 @@ services:
       - ./volumes/redis:/data
 
   sqlserver:
+    profiles: ['mssql']
     # Azure SQL Edge runs natively on Apple Silicon (arm64) and x86_64
     image: mcr.microsoft.com/azure-sql-edge:1.0.7
     ports:
-      - 1433:1433
+      - '1433:1433'
     environment:
       MSSQL_SA_PASSWORD: 'phpMyFAQ-4.2  '
       ACCEPT_EULA: 'Y'
@@ -97,18 +101,25 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
+        required: false
       postgres:
         condition: service_healthy
+        required: false
       elasticsearch:
         condition: service_healthy
+        required: false
       opensearch:
         condition: service_healthy
+        required: false
       redis:
         condition: service_healthy
+        required: false
       pnpm:
         condition: service_completed_successfully
+        required: false
 
   nginx:
+    profiles: ['nginx']
     image: nginx:1.31
     restart: always
     depends_on:
@@ -123,6 +134,7 @@ services:
       - '443:443'
 
   php-fpm:
+    profiles: ['nginx']
     build: .docker/php-fpm
     restart: always
     stdin_open: true
@@ -147,16 +159,22 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
+        required: false
       postgres:
         condition: service_healthy
+        required: false
       elasticsearch:
         condition: service_healthy
+        required: false
       opensearch:
         condition: service_healthy
+        required: false
       redis:
         condition: service_healthy
+        required: false
       pnpm:
         condition: service_completed_successfully
+        required: false
 
   frankenphp:
     profiles: ['frankenphp']
@@ -190,18 +208,25 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
+        required: false
       postgres:
         condition: service_healthy
+        required: false
       elasticsearch:
         condition: service_healthy
+        required: false
       opensearch:
         condition: service_healthy
+        required: false
       redis:
         condition: service_healthy
+        required: false
       pnpm:
         condition: service_completed_successfully
+        required: false
 
   pnpm:
+    profiles: ['build']
     image: node:24-alpine
     restart: 'no'
     command: sh -c "corepack enable && corepack prepare pnpm@latest --activate && pnpm install && pnpm build"
@@ -217,6 +242,7 @@ services:
       - composer
 
   composer:
+    profiles: ['build']
     image: composer:2
     restart: 'no'
     command: composer install --verbose --ignore-platform-reqs
@@ -226,6 +252,7 @@ services:
       - .:/app
 
   phpmyadmin:
+    profiles: ['phpmyadmin', 'tools']
     image: phpmyadmin/phpmyadmin:5
     restart: always
     environment:
@@ -238,8 +265,10 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
+        required: false
 
   pgadmin:
+    profiles: ['pgadmin', 'tools']
     image: dpage/pgadmin4:8
     restart: always
     environment:
@@ -252,6 +281,7 @@ services:
       - '8008:80'
 
   elasticsearch:
+    profiles: ['elasticsearch']
     image: elasticsearch:8.16.5
     restart: always
     environment:
@@ -288,6 +318,7 @@ services:
       - '9300:9300'
 
   opensearch:
+    profiles: ['opensearch']
     image: opensearchproject/opensearch:2.19.2
     restart: always
     environment:

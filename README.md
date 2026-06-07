@@ -45,40 +45,60 @@ as the phpmyfaq folder is meant to be mounted as the `/var/www/html` folder in t
 
 #### docker-compose.yml
 
-For development purposes, you can start a full stack to run your current PhpMyFAQ source code from your local repo.
+For development purposes, you can run your current phpMyFAQ source code from your local repo. Every service is
+gated behind a [Compose profile](https://docs.docker.com/compose/profiles/), so you pick exactly the combination
+you need (one web server + the databases and search engines you want to test against).
 
-    $ docker compose up
+The easiest way is the `bin/dev` helper, which maps friendly names to profiles and adds guardrails (it refuses to
+start two web servers on the same port, auto-adds Redis, and installs dependencies on first run):
 
-The command above starts fourteen containers for multi-database development as follows.
+    $ bin/dev up nginx mariadb opensearch        # exactly these (Redis added automatically)
+    $ bin/dev up apache postgres elasticsearch --tools
+    $ bin/dev preset default                      # nginx + mariadb + opensearch + redis
+    $ bin/dev preset full                         # one web server + every backing service
+    $ bin/dev down                                # stop and remove the running stack
+    $ bin/dev ps | logs [service] | shell <service>
 
-_Specific images started at once to prepare the project:_
+Run `bin/dev help`, `bin/dev presets`, or `bin/dev profiles` for the full list. The same commands are available
+through pnpm: `pnpm dev:up`, `pnpm dev:down`, `pnpm dev:default`, `pnpm dev:full`, etc.
 
-- **composer**: update composer dependencies
-- **pnpm**: update pnpm dependencies
+If you prefer raw Compose, pass the profiles yourself — a bare `docker compose up` now starts nothing, because no
+service is in the default profile:
 
-_Running using named volumes:_
+    $ docker compose --profile nginx --profile mariadb --profile opensearch --profile redis up
 
-- **mariadb**: image with MariaDB database with xtrabackup support
-- **phpmyadmin**: a PHP tool to have a look at your MariaDB database.
-- **postgres**: image with PostgreSQL database
-- **pgadmin**: a PHP tool to have a look at your PostgreSQL database.
-- **sqlserver**: Azure SQL Edge image (runs natively on Apple Silicon and x86)
-- **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
-- **opensearch**: OpenSearch image (it means it does not have XPack installed)
-- **redis**: image with a Redis database
+The available services (grouped by their profile) are:
 
-_Running apache web server with PHP 8.5 support:_
+_Web servers — pick one (all bind `:443`), each with PHP 8.5 support:_
 
-- **apache**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
+- **nginx** (`nginx`): mounts `phpmyfaq` as `/var/www/html`, served via the **php-fpm** container.
+- **apache** (`apache`): mounts `phpmyfaq` as `/var/www/html`.
+- **frankenphp** (`frankenphp`): mounts `phpmyfaq` as `/var/www/html`, with HTTP/3 support.
 
-_Running nginx web server with PHP 8.5 support:_
+_Databases — pick any:_
 
-- **nginx**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
-- **php-fpm**: PHP-FPM image with PHP 8.5 support
+- **mariadb** (`mariadb`): MariaDB database (reachable under the `db` network alias).
+- **postgres** (`postgres`): PostgreSQL database.
+- **sqlserver** (`mssql`): Azure SQL Edge image (runs natively on Apple Silicon and x86).
 
-_Running FrankenPHP web server with PHP 8.5 support:_
+_Search engines — pick any:_
 
-- **frankenphp**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
+- **elasticsearch** (`elasticsearch`): Open Source Software image (no XPack installed).
+- **opensearch** (`opensearch`): OpenSearch image (no XPack installed).
+
+_Cache:_
+
+- **redis** (`redis`): Redis database (added automatically by `bin/dev` unless `--no-redis`).
+
+_Admin tools (`--tools`, or the `phpmyadmin` / `pgadmin` profiles):_
+
+- **phpmyadmin** (`phpmyadmin`): a PHP tool to inspect your MariaDB database.
+- **pgadmin** (`pgadmin`): a PHP tool to inspect your PostgreSQL database.
+
+_Dependency bootstrap (`build` profile, run once via `bin/dev build`):_
+
+- **composer**: installs the Composer (PHP) dependencies.
+- **pnpm**: installs the pnpm (TypeScript) dependencies and builds the assets.
 
 Then services will be available at the following addresses:
 
