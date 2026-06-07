@@ -57,7 +57,10 @@ class Strings
             return;
         }
 
-        if (extension_loaded('mbstring') && function_exists('mb_regex_encoding')) {
+        // Gate on a function the Mbstring implementation actually uses (mb_strlen).
+        // The previous check relied on mb_regex_encoding(), which is deprecated as
+        // of PHP 8.6 and would eventually be removed, wrongly forcing the fallback.
+        if (extension_loaded('mbstring') && function_exists('mb_strlen')) {
             self::$instance = Mbstring::getInstance($language);
             return;
         }
