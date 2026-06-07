@@ -36,15 +36,29 @@ log() { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
 err() { printf '\033[1;31mError:\033[0m %s\n' "$*" >&2; }
 die() { err "$*"; exit 1; }
 
+# Tracks whether this invocation created the backup, so restore_config only ever
+# restores a backup we are responsible for (an in-memory flag is per-invocation,
+# unlike a marker file which would itself leak across interrupted runs).
+BACKUP_OWNED=false
+
 backup_config() {
-  if [ -f "$CONFIG_FILE" ] && [ ! -f "$CONFIG_FILE.e2ebak" ]; then
+  # Recover an orphaned backup left by a previously interrupted run first: that
+  # .e2ebak is the genuine original, so restoring it now prevents it from being
+  # lost or overwritten by the e2e install artifact below.
+  if [ -f "$CONFIG_FILE.e2ebak" ]; then
+    mv -f "$CONFIG_FILE.e2ebak" "$CONFIG_FILE"
+    log "Recovered an orphaned database.php backup from a previous run"
+  fi
+
+  if [ -f "$CONFIG_FILE" ]; then
     cp "$CONFIG_FILE" "$CONFIG_FILE.e2ebak"
+    BACKUP_OWNED=true
     log "Backed up existing database.php"
   fi
 }
 
 restore_config() {
-  if [ -f "$CONFIG_FILE.e2ebak" ]; then
+  if [ "$BACKUP_OWNED" = true ] && [ -f "$CONFIG_FILE.e2ebak" ]; then
     mv -f "$CONFIG_FILE.e2ebak" "$CONFIG_FILE"
     log "Restored your previous database.php"
   fi
