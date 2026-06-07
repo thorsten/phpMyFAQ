@@ -1,0 +1,22 @@
+# Dedicated, ephemeral MariaDB for the end-to-end test suite (`bin/e2e docker`).
+#
+# This stack is intentionally separate from docker-compose.yml: it runs under its
+# own Compose project name, uses no named volume (so every run starts from an
+# empty database), and publishes MariaDB on an alternate host port to avoid
+# clashing with a running `bin/dev` development stack.
+services:
+  e2e-db:
+    image: mariadb:11
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=phpmyfaq
+      - MYSQL_USER=phpmyfaq
+      - MYSQL_PASSWORD=phpmyfaq
+    healthcheck:
+      test: ['CMD-SHELL', 'mariadb-admin ping -uroot -p"$$MYSQL_ROOT_PASSWORD" --silent']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    ports:
+      - '${E2E_DB_PORT:-13306}:3306'

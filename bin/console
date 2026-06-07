@@ -19,12 +19,15 @@
 require __DIR__ . '/../phpmyfaq/src/Bootstrap.php';
 require __DIR__ . '/../phpmyfaq/src/libs/autoload.php';
 
-use phpMyFAQ\Command\CreateHashesCommand;use phpMyFAQ\Command\McpServerCommand;
+use phpMyFAQ\Command\CreateHashesCommand;
+use phpMyFAQ\Command\InstallCommand;
+use phpMyFAQ\Command\McpServerCommand;
 use phpMyFAQ\Command\SeedTestDataCommand;
+use phpMyFAQ\Command\UpdateCommand;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Application;
-use phpMyFAQ\Command\UpdateCommand;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
@@ -38,6 +41,11 @@ try {
     echo $exception->getMessage();
 }
 
+// Initialize the multibyte string handler. In the web flow this is done by the
+// LanguageListener; console commands have no such listener, so any command that
+// touches Strings (e.g., Tags, Faq) would otherwise fail on a null handler.
+Strings::init();
+
 //
 // Service Containers
 //
@@ -49,9 +57,20 @@ try {
     echo $e->getMessage();
 }
 
+// Detect whether phpMyFAQ is installed. Some commands depend on services that
+// require a database connection (e.g., the MCP server resolves the Configuration
+// singleton), so they can only be registered once an instance exists. The
+// installer command itself must remain available before installation.
+$isInstalled = defined('PMF_CONFIG_DIR') && file_exists(PMF_CONFIG_DIR . '/database.php');
+
 $application = new Application();
 $application->addCommand(new CreateHashesCommand($container->get('phpmyfaq.system'), $container->get('filesystem')));
-$application->addCommand(new McpServerCommand($container->get('phpmyfaq.service.mcp-server')));
-$application->addCommand(new UpdateCommand());
-$application->addCommand(new SeedTestDataCommand());
+$application->addCommand(new InstallCommand($container->get('phpmyfaq.system')));
+
+if ($isInstalled) {
+    $application->addCommand(new UpdateCommand());
+    $application->addCommand(new McpServerCommand($container->get('phpmyfaq.service.mcp-server')));
+    $application->addCommand(new SeedTestDataCommand());
+}
+
 $application->run();

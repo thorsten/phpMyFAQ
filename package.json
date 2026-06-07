@@ -59,7 +59,13 @@
     "dev:logs": "./bin/dev logs",
     "dev:build": "./bin/dev build",
     "dev:default": "./bin/dev preset default",
-    "dev:full": "./bin/dev preset full"
+    "dev:full": "./bin/dev preset full",
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui",
+    "e2e:install": "playwright install --with-deps chromium",
+    "e2e:report": "playwright show-report",
+    "e2e:local": "./bin/e2e local",
+    "e2e:docker": "./bin/e2e docker"
   },
   "dependencies": {
     "@popperjs/core": "2.11.8",
@@ -77,10 +83,12 @@
     "vanilla-cookieconsent": "3.1.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.10.2",
     "@babel/core": "7.29.7",
     "@babel/preset-env": "7.29.7",
     "@commitlint/cli": "21.0.1",
     "@commitlint/config-conventional": "21.0.1",
+    "@playwright/test": "1.56.0",
     "@types/bootstrap": "5.2.10",
     "@types/highlightjs": "9.12.6",
     "@types/jsdom": "28.0.3",

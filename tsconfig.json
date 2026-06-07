@@ -19,5 +19,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["phpmyfaq/assets/src", "phpmyfaq/admin/assets/src"]
+  "include": ["phpmyfaq/assets/src", "phpmyfaq/admin/assets/src", "playwright.config.ts", "tests/e2e"]
 }

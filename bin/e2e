@@ -1,0 +1,148 @@
+#!/usr/bin/env sh
+#
+# bin/e2e — provision, serve, and run the phpMyFAQ Playwright end-to-end suite.
+#
+# Modes:
+#   bin/e2e local    Install + seed a throwaway SQLite instance, serve it with the
+#                    built-in PHP web server, run Playwright, then restore your
+#                    previous config. Fully isolated; also used by the nightly CI.
+#   bin/e2e docker   Same, but against a dedicated, ephemeral MariaDB container
+#                    (separate Compose project + no volume) for production-like
+#                    realism. Your bin/dev development database is never touched.
+#
+# Pass extra args through to Playwright after `--`, e.g.:
+#   bin/e2e local -- tests/e2e/search.spec.ts
+#
+set -eu
+
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+ROOT_DIR=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)
+cd "$ROOT_DIR"
+
+# --- configuration (override via environment) ------------------------------
+E2E_PORT=${E2E_PORT:-8765}
+E2E_HOST=${E2E_HOST:-127.0.0.1}
+E2E_BASE_URL=${E2E_BASE_URL:-http://$E2E_HOST:$E2E_PORT}
+E2E_ADMIN_USER=${E2E_ADMIN_USER:-admin}
+E2E_ADMIN_PASSWORD=${E2E_ADMIN_PASSWORD:-password1234}
+E2E_SQLITE=${E2E_SQLITE:-$ROOT_DIR/phpmyfaq/content/core/data/e2e.sqlite}
+E2E_DB_PORT=${E2E_DB_PORT:-13306}
+CONSOLE="php $ROOT_DIR/bin/console"
+CONFIG_FILE="$ROOT_DIR/phpmyfaq/content/core/config/database.php"
+
+export E2E_ADMIN_USER E2E_ADMIN_PASSWORD E2E_BASE_URL
+
+log() { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
+err() { printf '\033[1;31mError:\033[0m %s\n' "$*" >&2; }
+die() { err "$*"; exit 1; }
+
+backup_config() {
+  if [ -f "$CONFIG_FILE" ] && [ ! -f "$CONFIG_FILE.e2ebak" ]; then
+    cp "$CONFIG_FILE" "$CONFIG_FILE.e2ebak"
+    log "Backed up existing database.php"
+  fi
+}
+
+restore_config() {
+  if [ -f "$CONFIG_FILE.e2ebak" ]; then
+    mv -f "$CONFIG_FILE.e2ebak" "$CONFIG_FILE"
+    log "Restored your previous database.php"
+  fi
+}
+
+# provision <install-options...> : install + seed bilingual test data.
+provision() {
+  backup_config
+  log "Installing phpMyFAQ ..."
+  $CONSOLE phpmyfaq:install \
+    --admin-user="$E2E_ADMIN_USER" --admin-password="$E2E_ADMIN_PASSWORD" \
+    --base-url="$E2E_BASE_URL" --force "$@"
+
+  log "Seeding bilingual test data (de, en) ..."
+  APP_ENV=demo $CONSOLE phpmyfaq:seed-testdata --fresh --locale=de,en
+}
+
+wait_for_http() {
+  i=0
+  while [ "$i" -lt 60 ]; do
+    curl -ksSf -o /dev/null "$1" 2>/dev/null && return 0
+    i=$((i + 1))
+    sleep 1
+  done
+  return 1
+}
+
+start_php_server() {
+  log "Starting php -S on $E2E_HOST:$E2E_PORT ..."
+  php -d display_errors=0 -S "$E2E_HOST:$E2E_PORT" -t "$ROOT_DIR/phpmyfaq" \
+    "$ROOT_DIR/tests/e2e/router.php" >/tmp/phpmyfaq-e2e-server.log 2>&1 &
+  PHP_SERVER_PID=$!
+  if ! wait_for_http "$E2E_BASE_URL/"; then
+    err "App did not become reachable. Server log:"
+    cat /tmp/phpmyfaq-e2e-server.log >&2 || true
+    return 1
+  fi
+}
+
+run_playwright() {
+  log "Running Playwright against $E2E_BASE_URL"
+  [ -d "$ROOT_DIR/node_modules/@playwright/test" ] \
+    || die "Playwright is not installed. Run: pnpm install && pnpm e2e:install"
+  pnpm exec playwright test "$@"
+}
+
+# --- local mode (SQLite + php -S) ------------------------------------------
+
+cmd_local() {
+  PHP_SERVER_PID=""
+  cleanup() {
+    [ -n "${PHP_SERVER_PID:-}" ] && kill "$PHP_SERVER_PID" 2>/dev/null || true
+    restore_config
+    rm -f "$E2E_SQLITE"
+  }
+  trap cleanup EXIT INT TERM
+
+  rm -f "$E2E_SQLITE"
+  provision --db-type=sqlite3 --db-server="$E2E_SQLITE"
+  start_php_server
+  run_playwright "$@"
+}
+
+# --- docker mode (dedicated MariaDB container + php -S) ---------------------
+
+cmd_docker() {
+  compose_file="$ROOT_DIR/.docker/e2e/docker-compose.e2e.yml"
+  [ -f "$compose_file" ] || die "Missing $compose_file"
+  project="phpmyfaq-e2e"
+  compose() { E2E_DB_PORT="$E2E_DB_PORT" docker compose -p "$project" -f "$compose_file" "$@"; }
+
+  PHP_SERVER_PID=""
+  cleanup() {
+    [ -n "${PHP_SERVER_PID:-}" ] && kill "$PHP_SERVER_PID" 2>/dev/null || true
+    restore_config
+    log "Tearing down the e2e MariaDB container ..."
+    compose down -v --remove-orphans >/dev/null 2>&1 || true
+  }
+  trap cleanup EXIT INT TERM
+
+  log "Starting dedicated MariaDB container (project: $project, port: $E2E_DB_PORT) ..."
+  compose up -d --wait
+
+  provision \
+    --db-type=mysqli --db-server=127.0.0.1 --db-port="$E2E_DB_PORT" \
+    --db-user=phpmyfaq --db-password=phpmyfaq --db-name=phpmyfaq
+  start_php_server
+  run_playwright "$@"
+}
+
+# --- dispatch --------------------------------------------------------------
+
+mode=${1:-local}
+[ "$#" -gt 0 ] && shift || true
+[ "${1:-}" = "--" ] && shift || true
+
+case "$mode" in
+  local) cmd_local "$@" ;;
+  docker) cmd_docker "$@" ;;
+  *) die "Unknown mode '$mode'. Use: local | docker" ;;
+esac
