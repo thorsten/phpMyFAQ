@@ -23,6 +23,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 #[UsesClass(\phpMyFAQ\Category\CategoryCache::class)]
 #[UsesClass(\phpMyFAQ\Category\CategoryPermissionContext::class)]
 #[UsesClass(\phpMyFAQ\Category\CategoryRepository::class)]
+#[UsesClass(\phpMyFAQ\Category\Permission::class)]
 #[UsesClass(\phpMyFAQ\Category\Permission\CategoryPermissionService::class)]
 #[UsesClass(\phpMyFAQ\Configuration::class)]
 #[UsesClass(\phpMyFAQ\Configuration\ConfigurationRepository::class)]

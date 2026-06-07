@@ -19,11 +19,13 @@ namespace phpMyFAQ\Command;
 
 use phpMyFAQ\System;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 #[CoversClass(InstallCommand::class)]
+#[UsesClass(System::class)]
 class InstallCommandTest extends TestCase
 {
     private InstallCommand $command;
