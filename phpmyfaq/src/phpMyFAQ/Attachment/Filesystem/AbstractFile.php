@@ -22,7 +22,6 @@ namespace phpMyFAQ\Attachment\Filesystem;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class File.
@@ -104,9 +103,13 @@ abstract class AbstractFile extends AbstractEntry
             fclose($this->handle);
         }
 
-        $request = Request::createFromGlobals();
-        $uploadedFile = $request->files->get('userfile');
-        if ($uploadedFile && $this->path !== $uploadedFile->getPathname() && file_exists($this->path)) {
+        // Read the uploaded temp path directly from $_FILES instead of
+        // rebuilding a Symfony Request. Request::createFromGlobals() eagerly
+        // constructs an UploadedFile with path validation, which throws a
+        // FileNotFoundException here because move_uploaded_file() has already
+        // moved the temp file away during the preceding copyTo() call.
+        $uploadedTmpName = $_FILES['userfile']['tmp_name'] ?? null;
+        if (is_string($uploadedTmpName) && $this->path !== $uploadedTmpName && file_exists($this->path)) {
             return $this->deleteDir(dirname($this->path));
         }
 
