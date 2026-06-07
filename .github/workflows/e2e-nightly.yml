@@ -13,7 +13,11 @@ on:
 jobs:
   e2e:
     runs-on: ubuntu-latest
-    name: Playwright E2E (php -S + SQLite)
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: ['8.4', '8.5', '8.6']
+    name: Playwright E2E (PHP ${{ matrix.php-versions }}, php -S + SQLite)
 
     steps:
       - name: Checkout
@@ -22,7 +26,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: ${{ matrix.php-versions }}
           extensions: mbstring, curl, fileinfo, filter, gd, json, zip, xml, sqlite3, pdo_sqlite, intl
 
       - name: Get composer cache directory
@@ -67,7 +71,7 @@ jobs:
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-php${{ matrix.php-versions }}
           path: playwright-report/
           retention-days: 14
 
@@ -75,6 +79,6 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-test-results
+          name: playwright-test-results-php${{ matrix.php-versions }}
           path: test-results/
           retention-days: 14
