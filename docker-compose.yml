@@ -59,13 +59,14 @@ services:
     volumes:
       - ./volumes/redis:/data
 
-  #sqlserver:
-  #  image: mcr.microsoft.com/mssql/server:2022-latest
-  #  ports:
-  #    - 1433:1433
-  #  environment:
-  #    SA_PASSWORD: 'phpMyFAQ-4.0'
-  #    ACCEPT_EULA: 'Y'
+  sqlserver:
+    # Azure SQL Edge runs natively on Apple Silicon (arm64) and x86_64
+    image: mcr.microsoft.com/azure-sql-edge:1.0.7
+    ports:
+      - 1433:1433
+    environment:
+      MSSQL_SA_PASSWORD: 'phpMyFAQ-4.2  '
+      ACCEPT_EULA: 'Y'
 
   apache:
     profiles: ['apache']

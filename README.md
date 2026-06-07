@@ -22,7 +22,7 @@ Deploy it on traditional hosting or run it in the cloud via Docker.
 phpMyFAQ requires PHP 8.4 or higher and a supported database system.
 Supported databases include MySQL, MariaDB, Percona Server, PostgreSQL, Microsoft SQL Server, and SQLite3.
 
-For enhanced search capabilities using Elasticsearch or OpenSearch, Elasticsearch 6.x or later or OpenSearch 1.x or 
+For enhanced search capabilities using Elasticsearch or OpenSearch, Elasticsearch 8.x or later or OpenSearch 2.x or 
 later is required.
 
 For a complete and up-to-date list of system requirements, please refer to the official documentation at
@@ -47,9 +47,9 @@ as the phpmyfaq folder is meant to be mounted as the `/var/www/html` folder in t
 
 For development purposes, you can start a full stack to run your current PhpMyFAQ source code from your local repo.
 
-    $ docker-compose up
+    $ docker compose up
 
-The command above starts nine containers for multi-database development as follows.
+The command above starts fourteen containers for multi-database development as follows.
 
 _Specific images started at once to prepare the project:_
 
@@ -62,7 +62,7 @@ _Running using named volumes:_
 - **phpmyadmin**: a PHP tool to have a look at your MariaDB database.
 - **postgres**: image with PostgreSQL database
 - **pgadmin**: a PHP tool to have a look at your PostgreSQL database.
-- **sqlserver**: image with Microsoft SQL Server for Linux
+- **sqlserver**: Azure SQL Edge image (runs natively on Apple Silicon and x86)
 - **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
 - **opensearch**: OpenSearch image (it means it does not have XPack installed)
 - **redis**: image with a Redis database
@@ -105,22 +105,13 @@ The vm.max*map_count setting should be set permanently in */etc/sysctl.conf\_:
 
 To apply the setting on a live system type: `sysctl -w vm.max_map_count=262144`
 
-##### macOS with Docker for Mac
+##### macOS and Windows with Docker Desktop
 
-The vm.max_map_count setting must be set within the xhyve virtual machine:
+Docker Desktop runs containers inside a managed Linux VM. Open a shell in that VM and apply the setting there:
 
-    $ screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty
+    $ docker run --rm --privileged --pid=host alpine nsenter -t 1 -m -u -n -i sysctl -w vm.max_map_count=262144
 
-Log in with root and no password. Then configure the sysctl setting as you would for Linux:
-
-    $ sysctl -w vm.max_map_count=262144
-
-##### Windows and macOS with Docker Toolbox
-
-The vm.max_map_count setting must be set via docker-machine:
-
-    $ docker-machine ssh
-    $ sudo sysctl -w vm.max_map_count=262144
+This change is not persistent and must be reapplied after restarting Docker Desktop.
 
 ### phpMyFAQ local installation from Github
 
@@ -145,7 +136,7 @@ To run our unit tests via PHPUnit v13.x, execute this command on your CLI
 
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
-    $ ./phpmyfaq/src/libs/bin/phpunit
+    $ composer test
 
 Please note that phpMyFAQ needs to be installed via Composer.
 
