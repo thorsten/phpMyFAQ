@@ -51,7 +51,15 @@
     "tsc": "tsc --noEmit",
     "test": "vitest --run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "dev": "./bin/dev",
+    "dev:up": "./bin/dev up",
+    "dev:down": "./bin/dev down",
+    "dev:ps": "./bin/dev ps",
+    "dev:logs": "./bin/dev logs",
+    "dev:build": "./bin/dev build",
+    "dev:default": "./bin/dev preset default",
+    "dev:full": "./bin/dev preset full"
   },
   "dependencies": {
     "@popperjs/core": "2.11.8",

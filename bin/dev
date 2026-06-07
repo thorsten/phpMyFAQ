@@ -1,0 +1,251 @@
+#!/usr/bin/env sh
+#
+# bin/dev — start/stop selectable phpMyFAQ development stacks via Docker Compose.
+#
+# Every service in docker-compose.yml is gated behind a Compose profile, so you
+# pick exactly the combination you need, e.g. nginx + mariadb + opensearch.
+#
+# Usage:
+#   bin/dev up <profile...> [--tools] [--no-redis] [--no-build]
+#   bin/dev preset <name>
+#   bin/dev down | stop | ps | logs [service] | shell <service>
+#   bin/dev build | rebuild
+#   bin/dev presets | profiles | help
+#
+# Examples:
+#   bin/dev up nginx mariadb opensearch
+#   bin/dev up apache postgres elasticsearch --tools
+#   bin/dev preset default
+#   bin/dev logs php-fpm
+#
+set -eu
+
+# Resolve repo root (this script lives in <root>/bin/dev) and run from there.
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+ROOT_DIR=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)
+cd "$ROOT_DIR"
+
+# Known profiles, grouped.
+WEB_PROFILES="nginx apache frankenphp"
+DB_PROFILES="mariadb postgres mssql"
+SEARCH_PROFILES="elasticsearch opensearch"
+OTHER_PROFILES="redis phpmyadmin pgadmin build tools"
+ALL_PROFILES="$WEB_PROFILES $DB_PROFILES $SEARCH_PROFILES $OTHER_PROFILES"
+
+# Named presets: <name>="<space separated profiles>".
+preset_profiles() {
+  case "$1" in
+    default)    echo "nginx mariadb opensearch redis" ;;
+    mysql-es)   echo "nginx mariadb elasticsearch redis" ;;
+    postgres)   echo "nginx postgres opensearch redis" ;;
+    apache)     echo "apache mariadb opensearch redis" ;;
+    frankenphp) echo "frankenphp mariadb opensearch redis" ;;
+    full)       echo "nginx mariadb postgres mssql elasticsearch opensearch redis phpmyadmin pgadmin" ;;
+    *)          echo "" ;;
+  esac
+}
+
+PRESET_NAMES="default mysql-es postgres apache frankenphp full"
+
+# --- helpers ---------------------------------------------------------------
+
+err() { printf '%s\n' "Error: $*" >&2; }
+
+die() { err "$@"; exit 1; }
+
+contains() {
+  # contains "<haystack words>" "<needle>"
+  needle=$2
+  for w in $1; do [ "$w" = "$needle" ] && return 0; done
+  return 1
+}
+
+# Find the docker compose binary (v2 plugin or legacy v1).
+compose() {
+  if docker compose version >/dev/null 2>&1; then
+    docker compose "$@"
+  elif command -v docker-compose >/dev/null 2>&1; then
+    docker-compose "$@"
+  else
+    die "Docker Compose not found. Install Docker Desktop or the compose plugin."
+  fi
+}
+
+# Turn a profile list into repeated --profile flags, validating each name.
+profile_flags() {
+  flags=""
+  for p in "$@"; do
+    contains "$ALL_PROFILES" "$p" || die "Unknown profile '$p'. Valid: $ALL_PROFILES"
+    flags="$flags --profile $p"
+  done
+  printf '%s' "$flags"
+}
+
+# Reject more than one web server (they all bind :443).
+assert_single_web() {
+  count=0
+  for p in "$@"; do contains "$WEB_PROFILES" "$p" && count=$((count + 1)); done
+  [ "$count" -le 1 ] || die "Pick at most one web server ($WEB_PROFILES); they all bind :443."
+}
+
+# Run the one-off build profile (composer + pnpm) and wait for completion.
+run_build() {
+  printf '%s\n' "==> Building dependencies (composer + pnpm)..."
+  compose --profile build up --no-log-prefix --abort-on-container-exit composer pnpm
+}
+
+usage() {
+  cat <<EOF
+bin/dev — selectable phpMyFAQ development stacks
+
+Commands:
+  up <profile...>     Start the given profiles (web + db + search + ...)
+  preset <name>       Start a named preset ($PRESET_NAMES)
+  down                Stop and remove the running stack
+  stop                Stop containers without removing them
+  ps                  Show running services
+  logs [service]      Tail logs (all services, or one)
+  shell <service>     Open a shell in a running service
+  build               Install PHP + JS dependencies once (composer + pnpm)
+  rebuild             Rebuild images with --no-cache, then nothing else
+  presets             List named presets
+  profiles            List valid profiles
+  help                Show this help
+
+Flags (for 'up' / 'preset'):
+  --tools             Also start phpmyadmin (if mariadb) / pgadmin (if postgres)
+  --no-redis          Do not auto-add redis
+  --no-build          Skip the auto dependency build step
+
+Profiles:
+  web    : $WEB_PROFILES
+  db     : $DB_PROFILES
+  search : $SEARCH_PROFILES
+  other  : $OTHER_PROFILES
+
+Examples:
+  bin/dev up nginx mariadb opensearch
+  bin/dev up apache postgres elasticsearch --tools
+  bin/dev preset default
+  bin/dev logs php-fpm
+EOF
+}
+
+# --- 'up' core (shared by up + preset) -------------------------------------
+
+do_up() {
+  # Args: profile list, possibly with flags already split out by caller.
+  tools=0
+  no_redis=0
+  no_build=0
+  profiles=""
+
+  for arg in "$@"; do
+    case "$arg" in
+      --tools)    tools=1 ;;
+      --no-redis) no_redis=1 ;;
+      --no-build) no_build=1 ;;
+      -*)         die "Unknown flag '$arg'." ;;
+      *)          profiles="$profiles $arg" ;;
+    esac
+  done
+
+  # Trim and validate. Intentional word-splitting on the space-separated list.
+  # shellcheck disable=SC2086
+  set -- $profiles
+  [ "$#" -gt 0 ] || die "No profiles given. Try 'bin/dev presets' or 'bin/dev help'."
+  assert_single_web "$@"
+
+  # Auto-add redis unless opted out.
+  if [ "$no_redis" -eq 0 ] && ! contains "$profiles" redis; then
+    profiles="$profiles redis"
+  fi
+
+  # Resolve --tools to concrete tool profiles based on selected DBs.
+  if [ "$tools" -eq 1 ]; then
+    contains "$profiles" mariadb && profiles="$profiles phpmyadmin"
+    contains "$profiles" postgres && profiles="$profiles pgadmin"
+  fi
+
+  # Auto-build dependencies if missing (composer vendor / node_modules).
+  if [ "$no_build" -eq 0 ]; then
+    if [ ! -d "$ROOT_DIR/phpmyfaq/src/libs" ] || [ ! -d "$ROOT_DIR/node_modules" ]; then
+      run_build
+    fi
+  fi
+
+  # shellcheck disable=SC2086
+  set -- $profiles
+  flags=$(profile_flags "$@")
+  printf '%s\n' "==> Starting: $*"
+  # shellcheck disable=SC2086
+  compose $flags up -d
+  printf '%s\n' "==> Up. Use 'bin/dev ps' to check status, 'bin/dev logs' for output."
+}
+
+# --- command dispatch ------------------------------------------------------
+
+cmd=${1:-help}
+# shellcheck disable=SC2015
+[ "$#" -gt 0 ] && shift || true
+
+case "$cmd" in
+  up)
+    do_up "$@"
+    ;;
+  preset)
+    name=${1:-}
+    [ -n "$name" ] || die "Usage: bin/dev preset <name> ($PRESET_NAMES)"
+    shift || true
+    list=$(preset_profiles "$name")
+    [ -n "$list" ] || die "Unknown preset '$name'. Valid: $PRESET_NAMES"
+    # shellcheck disable=SC2086
+    do_up $list "$@"
+    ;;
+  down)
+    # 'down' operates on the whole project, so it tears down every profile's
+    # containers regardless of which were started.
+    compose down --remove-orphans "$@"
+    ;;
+  stop)
+    compose stop "$@"
+    ;;
+  ps)
+    compose ps "$@"
+    ;;
+  logs)
+    compose logs -f --tail=100 "$@"
+    ;;
+  shell)
+    svc=${1:-}
+    [ -n "$svc" ] || die "Usage: bin/dev shell <service>"
+    # shellcheck disable=SC2016
+    compose exec "$svc" sh -c 'exec "$(command -v bash || command -v sh)"'
+    ;;
+  build)
+    run_build
+    ;;
+  rebuild)
+    compose --profile "*" build --no-cache "$@"
+    ;;
+  presets)
+    printf '%s\n' "Available presets:"
+    for p in $PRESET_NAMES; do
+      printf '  %-12s %s\n' "$p" "$(preset_profiles "$p")"
+    done
+    ;;
+  profiles)
+    printf 'web    : %s\n' "$WEB_PROFILES"
+    printf 'db     : %s\n' "$DB_PROFILES"
+    printf 'search : %s\n' "$SEARCH_PROFILES"
+    printf 'other  : %s\n' "$OTHER_PROFILES"
+    ;;
+  help | -h | --help)
+    usage
+    ;;
+  *)
+    err "Unknown command '$cmd'."
+    usage
+    exit 1
+    ;;
+esac
