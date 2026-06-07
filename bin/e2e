@@ -29,6 +29,7 @@ E2E_SQLITE=${E2E_SQLITE:-$ROOT_DIR/phpmyfaq/content/core/data/e2e.sqlite}
 E2E_DB_PORT=${E2E_DB_PORT:-13306}
 CONSOLE="php $ROOT_DIR/bin/console"
 CONFIG_FILE="$ROOT_DIR/phpmyfaq/content/core/config/database.php"
+HTACCESS_FILE="$ROOT_DIR/phpmyfaq/.htaccess"
 
 export E2E_ADMIN_USER E2E_ADMIN_PASSWORD E2E_BASE_URL
 
@@ -41,26 +42,47 @@ die() { err "$*"; exit 1; }
 # unlike a marker file which would itself leak across interrupted runs).
 BACKUP_OWNED=false
 
-backup_config() {
+# backup_file <path> <label> : recover any orphaned backup, then snapshot <path>.
+# The installer rewrites both database.php and the version-controlled .htaccess
+# (RewriteBase + ErrorDocument 404) in place, so both must be restored afterwards.
+backup_file() {
+  file=$1
+  label=$2
+
   # Recover an orphaned backup left by a previously interrupted run first: that
   # .e2ebak is the genuine original, so restoring it now prevents it from being
   # lost or overwritten by the e2e install artifact below.
-  if [ -f "$CONFIG_FILE.e2ebak" ]; then
-    mv -f "$CONFIG_FILE.e2ebak" "$CONFIG_FILE"
-    log "Recovered an orphaned database.php backup from a previous run"
+  if [ -f "$file.e2ebak" ]; then
+    mv -f "$file.e2ebak" "$file"
+    log "Recovered an orphaned $label backup from a previous run"
   fi
 
-  if [ -f "$CONFIG_FILE" ]; then
-    cp "$CONFIG_FILE" "$CONFIG_FILE.e2ebak"
-    BACKUP_OWNED=true
-    log "Backed up existing database.php"
+  if [ -f "$file" ]; then
+    cp "$file" "$file.e2ebak"
+    log "Backed up existing $label"
   fi
 }
 
+restore_file() {
+  file=$1
+  label=$2
+
+  if [ -f "$file.e2ebak" ]; then
+    mv -f "$file.e2ebak" "$file"
+    log "Restored your previous $label"
+  fi
+}
+
+backup_config() {
+  backup_file "$CONFIG_FILE" "database.php"
+  backup_file "$HTACCESS_FILE" ".htaccess"
+  BACKUP_OWNED=true
+}
+
 restore_config() {
-  if [ "$BACKUP_OWNED" = true ] && [ -f "$CONFIG_FILE.e2ebak" ]; then
-    mv -f "$CONFIG_FILE.e2ebak" "$CONFIG_FILE"
-    log "Restored your previous database.php"
+  if [ "$BACKUP_OWNED" = true ]; then
+    restore_file "$CONFIG_FILE" "database.php"
+    restore_file "$HTACCESS_FILE" ".htaccess"
   fi
 }
 
