@@ -21,9 +21,15 @@
 declare(strict_types=1);
 
 $canonicalRoot = realpath(dirname(__DIR__, 2) . '/phpmyfaq');
+if ($canonicalRoot === false) {
+    // The document root must resolve; fail fast rather than fall back to a root
+    // of "/" that would defeat the containment check below.
+    http_response_code(500);
+    exit("e2e router: document root could not be resolved\n");
+}
 // Trailing separator so a sibling directory sharing the prefix (e.g.
 // ".../phpmyfaq-x") cannot pass the containment check below.
-$rootWithSep = rtrim((string) $canonicalRoot, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+$rootWithSep = rtrim($canonicalRoot, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 $path = (string) parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
 $candidate = realpath($canonicalRoot . $path);
 
