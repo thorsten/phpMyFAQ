@@ -1,4 +1,4 @@
-name: phpMyFAQ Build
+name: "phpMyFAQ Build"
 
 on:
   push:

@@ -1,4 +1,4 @@
-name: Code Coverage → GitHub Pages
+name: "phpMyFAQ Code Coverage → GitHub Pages"
 
 on:
   push:

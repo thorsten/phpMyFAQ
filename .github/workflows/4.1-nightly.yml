@@ -1,4 +1,4 @@
-name: phpMyFAQ Nightly 4.1 Build
+name: "phpMyFAQ Nightly 4.1 Build"
 
 on:
   workflow_dispatch:

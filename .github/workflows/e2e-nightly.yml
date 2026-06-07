@@ -1,4 +1,4 @@
-name: phpMyFAQ Nightly E2E Tests
+name: "phpMyFAQ Nightly E2E Tests"
 
 # Runs the Playwright end-to-end suite against a freshly installed and seeded
 # instance (bilingual DE + EN test data). Uses the lightweight php -S + SQLite
