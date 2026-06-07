@@ -109,7 +109,7 @@ class CategoryControllerTest extends TestCase
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn($userId);
 
-        (new \ReflectionProperty(AbstractController::class, 'currentUser'))->setValue($controller, $currentUser);
+        new \ReflectionProperty(AbstractController::class, 'currentUser')->setValue($controller, $currentUser);
     }
 
     /**
