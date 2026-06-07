@@ -20,25 +20,28 @@
 
 declare(strict_types=1);
 
-$root = dirname(__DIR__, 2) . '/phpmyfaq';
+$canonicalRoot = realpath(dirname(__DIR__, 2) . '/phpmyfaq');
+// Trailing separator so a sibling directory sharing the prefix (e.g.
+// ".../phpmyfaq-x") cannot pass the containment check below.
+$rootWithSep = rtrim((string) $canonicalRoot, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 $path = (string) parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
-$candidate = realpath($root . $path);
+$candidate = realpath($canonicalRoot . $path);
 
 // Serve existing static assets (css, js, images, fonts, ...) straight from disk.
 if (
     $candidate !== false
     && is_file($candidate)
-    && str_starts_with($candidate, $root)
+    && str_starts_with($candidate, $rootWithSep)
     && !str_ends_with($candidate, '.php')
 ) {
     return false;
 }
 
-$dispatch = static function (string $frontController) use ($root): void {
+$dispatch = static function (string $frontController) use ($canonicalRoot): void {
     $_SERVER['SCRIPT_NAME'] = $frontController;
     $_SERVER['PHP_SELF'] = $frontController;
-    $_SERVER['SCRIPT_FILENAME'] = $root . $frontController;
-    require $root . $frontController;
+    $_SERVER['SCRIPT_FILENAME'] = $canonicalRoot . $frontController;
+    require $canonicalRoot . $frontController;
 };
 
 if (str_starts_with($path, '/admin/api')) {
