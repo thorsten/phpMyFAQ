@@ -25,6 +25,7 @@ namespace phpMyFAQ\Command;
 
 use DateTime;
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\Permission as CategoryPermission;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\CategoryEntity;
@@ -32,6 +33,7 @@ use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Entity\NewsMessage;
 use phpMyFAQ\Environment;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Faq\Permission as FaqPermission;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\News;
 use phpMyFAQ\Tags;
@@ -53,15 +55,12 @@ class SeedTestDataCommand extends Command
 
     public const string EMAIL = 'test-seeder@phpmyfaq.local';
 
+    /** Sentinel id meaning "all users / guests" for FAQ and category permissions. */
+    private const int ALL_USERS = -1;
+
     private const string FIXTURE_DIR = __DIR__ . '/Fixtures/testdata';
 
     private Configuration $configuration;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->configuration = Configuration::getConfigurationInstance();
-    }
 
     protected function configure(): void
     {
@@ -83,6 +82,10 @@ class SeedTestDataCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $io->title('phpMyFAQ Test Data Seeder');
+
+        // Resolve the configuration lazily so the console application can still
+        // be constructed before phpMyFAQ is installed (no database connection yet).
+        $this->configuration = Configuration::getConfigurationInstance();
 
         if (Environment::getEnvironment() !== 'demo') {
             $io->error(
@@ -177,6 +180,7 @@ class SeedTestDataCommand extends Command
     private function seedCategories(array $categories, array $locales): array
     {
         $category = new Category($this->configuration);
+        $categoryPermission = new CategoryPermission($this->configuration);
         $slugToId = [];
 
         foreach ($categories as $definition) {
@@ -221,6 +225,11 @@ class SeedTestDataCommand extends Command
 
             if ($sharedId > 0) {
                 $slugToId[$slug] = $sharedId;
+                // Grant access to all users and groups (-1) so guests can browse
+                // the category. The category tree requires the group grant; the
+                // user grant keeps it consistent with the admin "save" path.
+                $categoryPermission->add(CategoryPermission::USER, [$sharedId], [self::ALL_USERS]);
+                $categoryPermission->add(CategoryPermission::GROUP, [$sharedId], [self::ALL_USERS]);
             }
         }
 
@@ -236,6 +245,7 @@ class SeedTestDataCommand extends Command
     {
         $faqService = new Faq($this->configuration);
         $tagsService = new Tags($this->configuration);
+        $faqPermission = new FaqPermission($this->configuration);
         $inserted = 0;
 
         foreach ($faqs as $definition) {
@@ -278,6 +288,9 @@ class SeedTestDataCommand extends Command
 
                 if ($sharedFaqId === 0) {
                     $sharedFaqId = $faqId;
+                    // Grant access to all users and groups (-1) so guests can read and find the FAQ.
+                    $faqPermission->add(FaqPermission::USER, $sharedFaqId, [self::ALL_USERS]);
+                    $faqPermission->add(FaqPermission::GROUP, $sharedFaqId, [self::ALL_USERS]);
                 }
 
                 $this->linkFaqToCategory($faqId, $locale, $categoryId);
@@ -415,6 +428,8 @@ class SeedTestDataCommand extends Command
                 $db->escape($faq['lang']),
             ));
             $db->query(sprintf('DELETE FROM %sfaqdata_tags WHERE record_id = %d', $prefix, $faq['id']));
+            $db->query(sprintf('DELETE FROM %sfaqdata_user WHERE record_id = %d', $prefix, $faq['id']));
+            $db->query(sprintf('DELETE FROM %sfaqdata_group WHERE record_id = %d', $prefix, $faq['id']));
             $db->query(sprintf(
                 "DELETE FROM %sfaqchanges WHERE beitrag = %d AND lang = '%s'",
                 $prefix,
@@ -444,6 +459,23 @@ class SeedTestDataCommand extends Command
         foreach ($categoryDefs as $definition) {
             foreach ($definition['translations'] ?? [] as $lang => $translation) {
                 $name = $db->escape((string) $translation['name']);
+
+                // Remove the public access rows for these categories first.
+                $idResult = $db->query(sprintf(
+                    "SELECT id FROM %sfaqcategories WHERE name = '%s' AND lang = '%s'",
+                    $prefix,
+                    $name,
+                    $db->escape((string) $lang),
+                ));
+                foreach ($db->fetchAll($idResult) ?? [] as $idRow) {
+                    $categoryId = (int) (is_array($idRow) ? $idRow['id'] ?? 0 : $idRow->id ?? 0);
+                    if ($categoryId === 0) {
+                        continue;
+                    }
+                    $db->query(sprintf('DELETE FROM %sfaqcategory_user WHERE category_id = %d', $prefix, $categoryId));
+                    $db->query(sprintf('DELETE FROM %sfaqcategory_group WHERE category_id = %d', $prefix, $categoryId));
+                }
+
                 $result = $db->query(sprintf(
                     "DELETE FROM %sfaqcategories WHERE name = '%s' AND lang = '%s'",
                     $prefix,

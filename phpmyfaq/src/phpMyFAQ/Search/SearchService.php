@@ -295,7 +295,10 @@ final class SearchService
         }
 
         foreach ($searchResults as $faqKey => $faqValue) {
-            $checkedFaq = $this->faq->getFaqResult($faqValue->id, $faqValue->lang);
+            // Database drivers differ in column typing: mysqli returns strings,
+            // SQLite returns ints. Cast so the strict int type hint on
+            // getFaqResult() does not break full-text search on MySQL/MariaDB.
+            $checkedFaq = $this->faq->getFaqResult((int) $faqValue->id, (string) $faqValue->lang);
             if (0 === $this->configuration->getDb()->numRows($checkedFaq)) {
                 unset($searchResults[$faqKey]);
             }
