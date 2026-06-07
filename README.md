@@ -169,6 +169,32 @@ To run our TypeScript tests via Vitest, execute this command on your CLI
     $ pnpm install
     $ pnpm test
 
+### End-to-end (Playwright)
+
+The end-to-end suite drives a real browser against a freshly installed instance
+that is seeded with bilingual (German + English) test data. Provisioning,
+serving, and teardown are fully automated by the `bin/e2e` helper, so no manual
+setup or existing installation is required — your local configuration is backed
+up and restored automatically.
+
+Install the browser once, then run the suite:
+
+    $ pnpm install
+    $ pnpm e2e:install                # downloads the Chromium browser
+    $ pnpm e2e:local                  # SQLite + built-in PHP server (fast)
+    $ pnpm e2e:docker                 # dedicated MariaDB container (production-like)
+
+`bin/e2e` installs phpMyFAQ headlessly via `php bin/console phpmyfaq:install`,
+seeds the test data with `php bin/console phpmyfaq:seed-testdata`, serves the
+app, and runs Playwright. Pass extra arguments through to Playwright after `--`,
+for example `./bin/e2e local -- tests/e2e/search.spec.ts`. The specs live in
+`tests/e2e/` and cover bilingual content, search, admin login, and basic
+accessibility.
+
+The suite also runs nightly in CI (`.github/workflows/e2e-nightly.yml`) using the
+SQLite path, uploading the Playwright HTML report and failure traces as build
+artifacts.
+
 ## Versioning
 
 For transparency and insight into our release cycle, and for striving to maintain backward compatibility, phpMyFAQ will

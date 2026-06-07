@@ -78,7 +78,11 @@ class Environment
 
         self::$debugMode = filter_var($_ENV['DEBUG'] ?? false, FILTER_VALIDATE_BOOLEAN);
         self::$debugLogQueries = filter_var($_ENV['DEBUG_LOG_QUERIES'] ?? false, FILTER_VALIDATE_BOOLEAN);
-        self::$environment = $_ENV['APP_ENV'] ?? 'production';
+        // Fall back to the process environment (getenv) so APP_ENV can be set via a
+        // real environment variable in CLI/CI/Docker, where variables_order often
+        // omits "E" and therefore does not populate $_ENV from the shell.
+        $appEnv = $_ENV['APP_ENV'] ?? getenv('APP_ENV');
+        self::$environment = is_string($appEnv) && $appEnv !== '' ? $appEnv : 'production';
 
         error_reporting(self::$debugMode ? E_ALL : E_ERROR | E_WARNING | E_PARSE);
 

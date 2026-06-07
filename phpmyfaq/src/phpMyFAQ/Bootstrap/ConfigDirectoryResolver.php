@@ -59,7 +59,8 @@ class ConfigDirectoryResolver
     {
         $requestUri = $_SERVER['REQUEST_URI'] ?? '';
         $isSetupContext =
-            str_contains($requestUri, '/setup/')
+            PHP_SAPI === 'cli'
+            || str_contains($requestUri, '/setup/')
             || str_contains($requestUri, '/api/setup/')
             || str_contains($requestUri, '/update')
             || str_contains($requestUri, '/update/');
