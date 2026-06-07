@@ -49,6 +49,7 @@ class Mbstring extends AbstractString
             self::$mbstring = new self();
             self::$mbstring->encoding = self::DEFAULT_ENCODING;
             self::$mbstring->language = Language::isASupportedLanguage($language) ? $language : self::DEFAULT_LANGUAGE;
+
             // Note: the regex helpers use PCRE (preg_* with the /u modifier), not the
             // mb_ereg* family, so mb_regex_encoding() is unnecessary here. It is also
             // deprecated as of PHP 8.6 (the underlying oniguruma library is unmaintained).

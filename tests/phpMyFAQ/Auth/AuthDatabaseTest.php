@@ -177,13 +177,11 @@ class AuthDatabaseTest extends TestCase
         // Seed a legacy SHA-256 hash directly, bypassing create() (which now writes bcrypt).
         $salt = $configuration->get('security.salt') . $login;
         $legacyHash = hash('sha256', $password . $salt);
-        $driver->query(
-            sprintf(
-                "INSERT INTO faquserlogin (login, pass, domain) VALUES ('%s', '%s', '')",
-                $driver->escape($login),
-                $driver->escape($legacyHash),
-            ),
-        );
+        $driver->query(sprintf(
+            "INSERT INTO faquserlogin (login, pass, domain) VALUES ('%s', '%s', '')",
+            $driver->escape($login),
+            $driver->escape($legacyHash),
+        ));
 
         // Legacy password is accepted...
         static::assertTrue($this->authDatabase->checkCredentials($login, $password));
@@ -200,9 +198,7 @@ class AuthDatabaseTest extends TestCase
         $reflection = new \ReflectionClass($this->authDatabase);
         $driver = $reflection->getProperty('databaseDriver')->getValue($this->authDatabase);
 
-        $result = $driver->query(
-            sprintf("SELECT pass FROM faquserlogin WHERE login = '%s'", $driver->escape($login)),
-        );
+        $result = $driver->query(sprintf("SELECT pass FROM faquserlogin WHERE login = '%s'", $driver->escape($login)));
         $row = $driver->fetchArray($result);
 
         return $row['pass'];
