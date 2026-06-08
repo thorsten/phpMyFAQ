@@ -104,7 +104,7 @@
                   {# Hidden fields for translation source content #}
                   <input type="hidden" id="originalFaqLang" value="{{ faqData['lang'] }}">
                   <input type="hidden" id="pmf-faq-question" value="{{ faqData['title'] }}">
-                  <input type="hidden" id="pmf-faq-answer" value="{{ faqData['content'] | raw }}">
+                  <input type="hidden" id="pmf-faq-answer" value="{{ faqData['content'] }}">
                   <input type="hidden" id="pmf-faq-keywords" value="{{ faqData['keywords'] }}">
                 {% endif %}
 
