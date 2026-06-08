@@ -60,7 +60,7 @@
     "symfony/dependency-injection": "~8.1.0",
     "symfony/dotenv": "~8.1.0",
     "symfony/error-handler": "~8.0.4",
-    "symfony/event-dispatcher": "~8.0.4",
+    "symfony/event-dispatcher": "~8.1.0",
     "symfony/html-sanitizer": "~8.1.0",
     "symfony/http-client": "~8.0.7",
     "symfony/http-foundation": "~8.1.0",
