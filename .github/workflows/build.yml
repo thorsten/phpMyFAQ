@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  checks: write
 
 jobs:
   run:
@@ -54,7 +55,16 @@ jobs:
         run: php scripts/check-version.php
 
       - name: Test with PHPUnit
-        run: phpmyfaq/src/libs/bin/phpunit --coverage-text
+        run: phpmyfaq/src/libs/bin/phpunit --coverage-text --log-junit junit.xml
+
+      - name: Publish PHPUnit test results
+        uses: mikepenz/action-junit-report@v5
+        if: always()
+        with:
+          report_paths: junit.xml
+          check_name: PHPUnit Test Results (PHP ${{ matrix.php-versions }})
+          detailed_summary: true
+          include_passed: true
 
       - name: Setup Node.js with pnpm
         uses: actions/setup-node@v6
