@@ -28,6 +28,7 @@ use phpMyFAQ\Configuration\OpenSearchConfiguration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Environment;
+use phpMyFAQ\System;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -165,6 +166,25 @@ try {
 //
 $faqConfig = new Configuration($db);
 $faqConfig->getAll();
+
+//
+// If the installed database is older than the current code base, the
+// installation must be updated first. Redirect any front-facing request to the
+// updater instead of running into fatal errors caused by an outdated schema
+// (e.g. tables or columns added by a later release are not yet present).
+// The updater itself, the installer and their REST endpoints are excluded to
+// avoid redirect loops and to keep the update process functional.
+//
+$scriptName = (string) $request->getScriptName();
+$isUpdateContext = str_contains($scriptName, '/update/')
+    || str_contains($scriptName, '/setup/')
+    || str_contains($scriptName, '/api/');
+
+if (!$isUpdateContext && System::isUpdateNecessary((string) $faqConfig->get('main.currentVersion'))) {
+    $response = new RedirectResponse((new System())->getSystemUri($faqConfig) . 'update/');
+    $response->send();
+    exit();
+}
 
 //
 // We always need a valid, secure session!
