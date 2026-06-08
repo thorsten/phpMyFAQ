@@ -65,7 +65,7 @@
     "symfony/http-client": "~8.0.7",
     "symfony/http-foundation": "~8.1.0",
     "symfony/http-kernel": "~8.0.7",
-    "symfony/mailer": "~8.0.6",
+    "symfony/mailer": "~8.1.0",
     "symfony/rate-limiter": "~8.0.7",
     "symfony/routing": "~8.0.6",
     "symfony/uid": "~8.1.0",
