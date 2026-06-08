@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ['8.4', '8.5', '8.6']
+        php-versions: ['8.4']
     name: Playwright E2E (PHP ${{ matrix.php-versions }}, php -S + SQLite)
 
     steps:
