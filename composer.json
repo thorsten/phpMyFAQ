@@ -67,7 +67,7 @@
     "symfony/http-kernel": "~8.0.7",
     "symfony/mailer": "~8.1.0",
     "symfony/rate-limiter": "~8.1.0",
-    "symfony/routing": "~8.0.6",
+    "symfony/routing": "~8.1.0",
     "symfony/uid": "~8.1.0",
     "tecnickcom/tcpdf": "~6.11.2",
     "tivie/htaccess-parser": "~0.4.0",
