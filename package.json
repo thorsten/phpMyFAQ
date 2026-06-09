@@ -89,7 +89,7 @@
     "@commitlint/cli": "21.0.2",
     "@commitlint/config-conventional": "21.0.2",
     "@playwright/test": "1.60.0",
-    "@types/bootstrap": "5.2.10",
+    "@types/bootstrap": "5.2.11",
     "@types/highlightjs": "9.12.6",
     "@types/jsdom": "28.0.3",
     "@types/masonry-layout": "4.2.8",
