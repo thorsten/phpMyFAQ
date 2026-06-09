@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3ebe07e7de3856d72c4719aeda478d39",
+    "content-hash": "071232c374b1d188302d98d4dfdc960e",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -5503,22 +5503,23 @@
         },
         {
             "name": "symfony/http-client",
-            "version": "v8.0.13",
+            "version": "v8.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "c7f40f9103233630167c25c9a4570acf805fdade"
+                "reference": "68a48e4c31f63fcd1bdff997a85a09e55efe8cdb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/c7f40f9103233630167c25c9a4570acf805fdade",
-                "reference": "c7f40f9103233630167c25c9a4570acf805fdade",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/68a48e4c31f63fcd1bdff997a85a09e55efe8cdb",
+                "reference": "68a48e4c31f63fcd1bdff997a85a09e55efe8cdb",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.4",
+                "php": ">=8.4.1",
                 "psr/log": "^1|^2|^3",
-                "symfony/http-client-contracts": "~3.4.4|^3.5.2",
+                "symfony/deprecation-contracts": "^2.5|^3.0",
+                "symfony/http-client-contracts": "^3.7",
                 "symfony/service-contracts": "^2.5|^3"
             },
             "conflict": {
@@ -5534,7 +5535,7 @@
             "require-dev": {
                 "amphp/http-client": "^5.3.2",
                 "amphp/http-tunnel": "^2.0",
-                "guzzlehttp/promises": "^1.4|^2.0",
+                "guzzlehttp/guzzle": "^7.10",
                 "nyholm/psr7": "^1.0",
                 "php-http/httplug": "^1.0|^2.0",
                 "psr/http-client": "^1.0",
@@ -5575,7 +5576,7 @@
                 "http"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client/tree/v8.0.13"
+                "source": "https://github.com/symfony/http-client/tree/v8.1.0"
             },
             "funding": [
                 {
@@ -5595,7 +5596,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-24T09:58:02+00:00"
+            "time": "2026-05-29T05:06:50+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
