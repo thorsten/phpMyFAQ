@@ -33,8 +33,8 @@ dependencies:
     specifier: 11.11.1
     version: 11.11.1
   jodit:
-    specifier: 4.12.3
-    version: 4.12.3
+    specifier: 4.12.4
+    version: 4.12.4
   masonry-layout:
     specifier: 4.2.2
     version: 4.2.2
@@ -3648,8 +3648,8 @@ packages:
     hasBin: true
     dev: true
 
-  /jodit@4.12.3:
-    resolution: {integrity: sha512-EuC7s2KdHfn1r2e/8W/ZVMw9cBVrJjuqxdKD/aw+0n9ykbDXmGrBgE2N7N/AhrqEgywkwI47F2ZIW30UOSXOBw==}
+  /jodit@4.12.4:
+    resolution: {integrity: sha512-G9s+JY0Kw8OZKBMXQrbVi/ae8F9P9Btw+4fOr/gXnknFgJL7sY5jUyi7n96bja58dnXR6xHK+zxt3GUCcNSVSQ==}
     dev: false
 
   /jquery@3.7.1:
