@@ -84,8 +84,6 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "4.11.3",
-    "@babel/core": "7.29.7",
-    "@babel/preset-env": "7.29.7",
     "@commitlint/cli": "21.0.2",
     "@commitlint/config-conventional": "21.0.2",
     "@playwright/test": "1.60.0",

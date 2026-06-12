@@ -87,7 +87,6 @@ export default defineConfig({
         '**/site/**',
         '**/bootstrap*.min.js',
         '**/popper*.min.js',
-        '**/babel.config.cjs',
         '**/commitlint.config.cjs',
       ],
       include: ['**/phpmyfaq/assets/**/*.ts', '**/phpmyfaq/admin/assets/**/*.ts'],
