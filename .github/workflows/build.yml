@@ -43,7 +43,7 @@ jobs:
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
       - name: Setup Mago CLI
-        uses: nhedger/setup-mago@v1
+        uses: nhedger/setup-mago@v2
 
       - name: Run Mago
         run: |
