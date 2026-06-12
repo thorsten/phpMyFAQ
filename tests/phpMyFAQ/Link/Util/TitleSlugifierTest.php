@@ -35,4 +35,15 @@ class TitleSlugifierTest extends TestCase
     {
         $this->assertSame('foo-bar-baz', TitleSlugifier::slug('foo   bar---baz'));
     }
+
+    public function testApostrophe(): void
+    {
+        $this->assertSame('l_intention-de-faire', TitleSlugifier::slug("L'intention de faire"));
+    }
+
+    public function testEncodedApostrophe(): void
+    {
+        $this->assertSame('l_intention-de-faire', TitleSlugifier::slug('L&#039;intention de faire'));
+        $this->assertSame('l_intention-de-faire', TitleSlugifier::slug('L&#39;intention de faire'));
+    }
 }

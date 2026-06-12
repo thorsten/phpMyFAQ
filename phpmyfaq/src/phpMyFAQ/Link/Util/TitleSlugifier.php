@@ -102,7 +102,7 @@ final class TitleSlugifier
         $itemTitle = trim($title);
         $itemTitle = Strings::strtolower($itemTitle);
         // replace apostrophe and slash with underscore
-        $itemTitle = str_replace(["'", '/', '&#39'], replace: '_', subject: $itemTitle);
+        $itemTitle = str_replace(["'", '/', '&#39;', '&#039;'], replace: '_', subject: $itemTitle);
         // collapse multiple dashes to a space (will become '-')
         $itemTitle = Strings::preg_replace(self::REGEX_MULTI_DASH, ' ', $itemTitle);
         // replace single inner dashes with underscores (legacy: HD-Ready => hd_ready)

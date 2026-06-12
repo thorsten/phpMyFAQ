@@ -170,6 +170,23 @@ class System
     }
 
     /**
+     * Returns true if the installed database version is older than the current
+     * code base and the installation therefore needs to be updated. An empty or
+     * unknown installed version is not treated as outdated to avoid redirecting
+     * brand-new or non-installed setups to the updater.
+     */
+    public static function isUpdateNecessary(?string $installedVersion): bool
+    {
+        $installedVersion = (string) $installedVersion;
+
+        if ('' === $installedVersion) {
+            return false;
+        }
+
+        return version_compare(version1: $installedVersion, version2: self::getVersion(), operator: '<');
+    }
+
+    /**
      * Returns the current major version of phpMyFAQ
      */
     public static function getMajorVersion(): string

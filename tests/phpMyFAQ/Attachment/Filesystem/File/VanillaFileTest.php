@@ -66,6 +66,41 @@ class VanillaFileTest extends TestCase
         $this->assertFalse($this->root->hasChild('file.txt'));
     }
 
+    /**
+     * Regression test for the attachment upload bug where uploading a file
+     * produced "The file '/tmp/...' does not exist".
+     *
+     * After moveTo() runs move_uploaded_file(), the temp file is gone. delete()
+     * must read the uploaded temp path from $_FILES without validating its
+     * existence (the old Request::createFromGlobals() approach threw a
+     * FileNotFoundException because Symfony's UploadedFile checks the path).
+     * When the file being deleted is the uploaded temp file itself, delete()
+     * must be a no-op that returns true.
+     */
+    public function testDeleteDoesNotThrowWhenUploadedTempFileWasMoved(): void
+    {
+        $filePath = vfsStream::url('root/file.txt');
+
+        $file = new VanillaFile($filePath);
+
+        // Simulate a PHP upload whose temp file has already been moved away.
+        $previousFiles = $_FILES;
+        $_FILES['userfile'] = [
+            'name' => 'JOSÉ FÉLIX.png',
+            'type' => 'image/png',
+            'tmp_name' => $filePath,
+            'error' => UPLOAD_ERR_OK,
+            'size' => 77716,
+        ];
+
+        try {
+            // $this->path === uploaded tmp_name, so delete() is a no-op no-throw.
+            $this->assertTrue($file->delete());
+        } finally {
+            $_FILES = $previousFiles;
+        }
+    }
+
     public function testCopyToSimpleTargetReturnsTrue(): void
     {
         $source = new VanillaFile(vfsStream::url('root/file.txt'));
