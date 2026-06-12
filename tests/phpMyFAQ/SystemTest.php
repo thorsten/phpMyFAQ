@@ -36,6 +36,22 @@ class SystemTest extends TestCase
         $this->assertFalse(System::isSqlite('pdo_mysql'));
     }
 
+    public function testIsUpdateNecessary(): void
+    {
+        // An outdated installed version requires an update
+        $this->assertTrue(System::isUpdateNecessary('1.0.0'));
+
+        // The current code base version is up to date
+        $this->assertFalse(System::isUpdateNecessary(System::getVersion()));
+
+        // A newer installed version is not treated as outdated
+        $this->assertFalse(System::isUpdateNecessary('999.0.0'));
+
+        // Empty or unknown versions must not trigger a redirect to the updater
+        $this->assertFalse(System::isUpdateNecessary(''));
+        $this->assertFalse(System::isUpdateNecessary(null));
+    }
+
     public function testSetDatabase(): void
     {
         // Create a mock DatabaseDriver object
