@@ -16,7 +16,6 @@
   },
   "ignorePatterns": [
     ".claude/*",
-    "babel.config.cjs",
     "commitlint.config.cjs",
     "coverage/*",
     "html-coverage/*",
