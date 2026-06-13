@@ -635,6 +635,10 @@ class Wrapper extends TCPDF
 
         $type = pathinfo($file, PATHINFO_EXTENSION);
         $resolvedPath = $this->concatenatePaths(PMF_ROOT_DIR, $file);
+        if ($resolvedPath === '' || !$this->isWithinRoot($resolvedPath)) {
+            return;
+        }
+
         if (!is_file($resolvedPath) || !is_readable($resolvedPath)) {
             return;
         }
@@ -686,12 +690,35 @@ class Wrapper extends TCPDF
     public function concatenatePaths(string $path, string $file): string
     {
         $trimmedPath = rtrim(str_replace(search: '\\', replace: '/', subject: $path), characters: '/');
-        $trimmedFile = ltrim($file, characters: '/');
+        $trimmedFile = ltrim(str_replace(search: '\\', replace: '/', subject: $file), characters: '/');
 
-        $pos = strpos($trimmedFile, needle: 'content');
-        $relativePath = substr($trimmedFile, (int) $pos);
+        // Local images served by phpMyFAQ always live under the "content" directory.
+        // If the path does not reference it, refuse to resolve it rather than letting
+        // an attacker-controlled path escape the web root.
+        $pos = strpos($trimmedFile, needle: 'content/');
+        if ($pos === false) {
+            return '';
+        }
+
+        $relativePath = substr($trimmedFile, $pos);
 
         return $trimmedPath . DIRECTORY_SEPARATOR . $relativePath;
+    }
+
+    /**
+     * Ensures a resolved filesystem path stays inside the phpMyFAQ web root,
+     * preventing path traversal (e.g. "../../../etc/passwd") in image sources.
+     */
+    private function isWithinRoot(string $resolvedPath): bool
+    {
+        $realPath = realpath($resolvedPath);
+        $realRoot = realpath(PMF_ROOT_DIR);
+
+        if ($realPath === false || $realRoot === false) {
+            return false;
+        }
+
+        return $realPath === $realRoot || str_starts_with($realPath, $realRoot . DIRECTORY_SEPARATOR);
     }
 
     /**

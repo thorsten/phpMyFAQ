@@ -65,6 +65,32 @@ class WrapperTest extends TestCase
         $this->assertEquals($expected, $this->wrapper->concatenatePaths($path, $file));
     }
 
+    public function testConcatenatePathsRejectsTraversalOutsideContent(): void
+    {
+        $path = '/var/www/phpmyfaq';
+
+        // Path traversal attempt without a "content" segment must not resolve.
+        $this->assertEquals('', $this->wrapper->concatenatePaths($path, '/../../../../etc/passwd'));
+        $this->assertEquals('', $this->wrapper->concatenatePaths($path, '../../../../etc/passwd'));
+    }
+
+    public function testConcatenatePathsRejectsBackslashTraversal(): void
+    {
+        $path = 'C:\\xampp\\htdocs\\phpmyfaq';
+
+        $this->assertEquals('', $this->wrapper->concatenatePaths($path, '..\\..\\..\\windows\\win.ini'));
+    }
+
+    public function testConcatenatePathsAnchorsAtContentSegment(): void
+    {
+        $path = '/var/www/phpmyfaq';
+
+        // Only the part starting at "content/" is kept, dropping any leading traversal.
+        $file = '/../../content/user/images/test.jpg';
+        $expected = '/var/www/phpmyfaq/content/user/images/test.jpg';
+        $this->assertEquals($expected, $this->wrapper->concatenatePaths($path, $file));
+    }
+
     public function testConvertExternalImagesToBase64WithNoConfig(): void
     {
         $html = '<img src="https://example.com/image.jpg" alt="test">';
