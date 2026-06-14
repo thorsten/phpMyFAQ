@@ -18,7 +18,9 @@
 use Composer\Autoload\ClassLoader;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Setup\Installation\DatabaseSchema;
 use phpMyFAQ\Setup\Installer;
+use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\SqliteDialect;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use Symfony\Component\HttpFoundation\Request;
@@ -80,6 +82,10 @@ $loader->register();
 /**
  * Reuses the prepared SQLite test database across bootstrap invocations when possible.
  * This avoids reinstall races in PHPUnit separate-process tests and coverage subprocesses.
+ *
+ * The expected table set is derived from the authoritative DatabaseSchema, so a test
+ * database that predates a schema change (a newly added table) is automatically
+ * detected as stale and rebuilt — instead of silently producing "no such table" errors.
  */
 function canReusePreparedTestDatabase(string $databasePath, string $databaseConfigPath): bool
 {
@@ -89,16 +95,19 @@ function canReusePreparedTestDatabase(string $databasePath, string $databaseConf
 
     try {
         $pdo = new \PDO('sqlite:' . $databasePath);
-        $statement = $pdo->query(
-            "SELECT name FROM sqlite_master WHERE type='table' AND name IN ('faqconfig', 'faqadminlog')",
-        );
+        $statement = $pdo->query("SELECT name FROM sqlite_master WHERE type='table'");
 
         if ($statement === false) {
             return false;
         }
 
-        $tables = $statement->fetchAll(\PDO::FETCH_COLUMN);
-        return in_array('faqconfig', $tables, true) && in_array('faqadminlog', $tables, true);
+        $existingTables = $statement->fetchAll(\PDO::FETCH_COLUMN);
+        $expectedTables = (new DatabaseSchema(new SqliteDialect()))->getTableNames();
+
+        // The prepared database is reusable only when every table the current schema
+        // defines is present. Any missing table means the schema has advanced since the
+        // database was built, so it must be rebuilt from scratch.
+        return array_diff($expectedTables, $existingTables) === [];
     } catch (\PDOException) {
         return false;
     }
@@ -133,6 +142,14 @@ if (!canReusePreparedTestDatabase($testDbAlias, $databaseConfigFile)) {
     if (file_exists($testDbAlias) && !is_dir($testDbAlias)) {
         // nosemgrep: php.lang.security.unlink-use.unlink-use - fixed test database path
         @unlink($testDbAlias);
+    }
+
+    // Remove the generated install marker as well. The Installer refuses to run while
+    // content/core/config/database.php exists ("phpMyFAQ is already installed!"), so a
+    // stale database could not be rebuilt without clearing it first.
+    if (file_exists($databaseConfigFile) && !is_dir($databaseConfigFile)) {
+        // nosemgrep: php.lang.security.unlink-use.unlink-use - fixed test config path
+        @unlink($databaseConfigFile);
     }
 
     try {

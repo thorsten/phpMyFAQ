@@ -6,6 +6,7 @@ use Exception;
 use OpenSearch\Client as OpenSearchClient;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Plugin\PluginException;
 use phpMyFAQ\Search\Search\Elasticsearch;
@@ -26,7 +27,7 @@ class SearchTest extends TestCase
 {
     private Configuration $configuration;
     private Search $search;
-    private Sqlite3 $dbHandle;
+    private DatabaseDriver $dbHandle;
 
     /**
      * @throws PluginException|Core\Exception
@@ -42,8 +43,12 @@ class SearchTest extends TestCase
             ->setMultiByteLanguage();
         Language::$language = 'en';
 
-        $this->dbHandle = new Sqlite3();
-        $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        // Reuse the shared database connection created during bootstrap instead of opening
+        // a second SQLite connection to the same file. A separate connection competes for
+        // SQLite's single-writer lock and fails with "database is locked" while another
+        // connection (e.g. the bootstrap installer's) is still open — which is exactly what
+        // happens on a fresh-install test run and broke this test's INSERT-based fixtures.
+        $this->dbHandle = Configuration::getConfigurationInstance()->getDb();
         $this->setDatabaseType('sqlite3');
         $this->configuration = new Configuration($this->dbHandle);
         $this->configuration->setLanguage(
