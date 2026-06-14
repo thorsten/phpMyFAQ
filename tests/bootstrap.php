@@ -162,6 +162,20 @@ if (!canReusePreparedTestDatabase($testDbAlias, $databaseConfigFile)) {
             $exception,
         );
     }
+
+    //
+    // The Installer constructs its own Configuration instances, and the first
+    // Configuration created in a process becomes the global singleton (see
+    // Configuration::__construct). That leaves the singleton — and, more importantly,
+    // the installer's database connection — alive for the rest of the process, holding
+    // an open lock on the SQLite file. Subsequent test writes from a separate connection
+    // then fail with "database is locked". Drop every reference to the installer and reset
+    // the singleton, then force a garbage-collection pass so the installer's connection is
+    // closed and its lock released before any test runs.
+    //
+    unset($installer);
+    (new ReflectionProperty(Configuration::class, 'configuration'))->setValue(null, null);
+    gc_collect_cycles();
 }
 
 if (!file_exists($databaseConfigFile)) {
