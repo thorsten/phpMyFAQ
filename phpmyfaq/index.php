@@ -557,28 +557,45 @@ $templateVars = [
     'cookieConsentEnabled' => $faqConfig->get('layout.enableCookieConsent'),
 ];
 
+// Only show navigation items the current user is actually allowed to access,
+// mirroring the access control enforced in add.php, ask.php and open-questions.php.
+$isGuest = -1 === $user->getUserId();
+
+$canAddFaq = $isGuest
+    ? (bool) $faqConfig->get('records.allowNewFaqsForGuests')
+    : $user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD->value);
+
+$canAskQuestion = (bool) $faqConfig->get('main.enableAskQuestions')
+    && (!$isGuest || (bool) $faqConfig->get('records.allowQuestionsForGuests'));
+
 $topNavigation = [
     [
         'name' => Translation::get(key: 'msgShowAllCategories'),
         'link' => './show-categories.html',
         'active' => 'show' === $action ? 'active' : '',
     ],
-    [
+];
+
+if ($canAddFaq) {
+    $topNavigation[] = [
         'name' => Translation::get(key: 'msgAddContent'),
         'link' => './add-faq.html',
         'active' => 'add' === $action ? 'active' : '',
-    ],
-    [
+    ];
+}
+
+if ($canAskQuestion) {
+    $topNavigation[] = [
         'name' => Translation::get(key: 'msgQuestion'),
         'link' => './add-question.html',
         'active' => 'ask' == $action ? 'active' : '',
-    ],
-    [
+    ];
+    $topNavigation[] = [
         'name' => Translation::get(key: 'msgOpenQuestions'),
         'link' => './open-questions.html',
         'active' => 'open-questions' == $action ? 'active' : '',
-    ],
-];
+    ];
+}
 
 $footerNavigation = [
     [
