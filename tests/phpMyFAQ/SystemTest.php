@@ -50,6 +50,41 @@ class SystemTest extends TestCase
         $this->assertFalse(System::isUpdateNecessary(null));
     }
 
+    public function testIsUpdateExemptRequestForUpdaterAndApiContexts(): void
+    {
+        // The standalone updater, installer and REST endpoints must never be
+        // redirected, otherwise the recovery process would loop or break.
+        $this->assertTrue(System::isUpdateExemptRequest('/update/index.php', '/'));
+        $this->assertTrue(System::isUpdateExemptRequest('/setup/index.php', '/'));
+        $this->assertTrue(System::isUpdateExemptRequest('/api/index.php', '/version'));
+        $this->assertTrue(System::isUpdateExemptRequest('/admin/api/index.php', '/update-database'));
+    }
+
+    public function testIsUpdateExemptRequestAllowsAdminRecoveryPages(): void
+    {
+        // Admin login and the upgrade UI must stay reachable during a pending
+        // update so the maintenance mode can be enabled and the update started.
+        $this->assertTrue(System::isUpdateExemptRequest('/admin/index.php', '/login'));
+        $this->assertTrue(System::isUpdateExemptRequest('/admin/index.php', '/authenticate'));
+        $this->assertTrue(System::isUpdateExemptRequest('/admin/index.php', '/check'));
+        $this->assertTrue(System::isUpdateExemptRequest('/admin/index.php', '/token'));
+        $this->assertTrue(System::isUpdateExemptRequest('/admin/index.php', '/update'));
+    }
+
+    public function testIsUpdateExemptRequestBlocksOtherAdminAndFrontendPages(): void
+    {
+        // Content-facing admin pages still hit the outdated schema and must be
+        // redirected to the updater.
+        $this->assertFalse(System::isUpdateExemptRequest('/admin/index.php', '/dashboard'));
+        $this->assertFalse(System::isUpdateExemptRequest('/admin/index.php', '/'));
+        $this->assertFalse(System::isUpdateExemptRequest('/admin/index.php', '/category'));
+
+        // The front-end must not be unlocked just because a path happens to look
+        // like an admin recovery route.
+        $this->assertFalse(System::isUpdateExemptRequest('/index.php', '/login'));
+        $this->assertFalse(System::isUpdateExemptRequest('/index.php', '/'));
+    }
+
     public function testSetDatabase(): void
     {
         // Create a mock DatabaseDriver object

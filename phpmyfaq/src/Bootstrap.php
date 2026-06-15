@@ -172,13 +172,14 @@ $faqConfig->getAll();
 // installation must be updated first. Redirect any front-facing request to the
 // updater instead of running into fatal errors caused by an outdated schema
 // (e.g. tables or columns added by a later release are not yet present).
-// The updater itself, the installer and their REST endpoints are excluded to
-// avoid redirect loops and to keep the update process functional.
+// The updater itself, the installer, all REST endpoints and the admin login
+// and upgrade pages are excluded to avoid redirect loops and to keep the
+// recovery and update process reachable (see System::isUpdateExemptRequest()).
 //
-$scriptName = (string) $request->getScriptName();
-$isUpdateContext = str_contains($scriptName, '/update/')
-    || str_contains($scriptName, '/setup/')
-    || str_contains($scriptName, '/api/');
+$isUpdateContext = System::isUpdateExemptRequest(
+    (string) $request->getScriptName(),
+    (string) $request->getPathInfo()
+);
 
 if (!$isUpdateContext && System::isUpdateNecessary((string) $faqConfig->get('main.currentVersion'))) {
     $response = new RedirectResponse((new System())->getSystemUri($faqConfig) . 'update/');
