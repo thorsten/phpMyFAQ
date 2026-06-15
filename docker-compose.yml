@@ -94,6 +94,8 @@ services:
       - PMF_DB_USER=phpmyfaq
       - PMF_DB_PASS=phpmyfaq
       - PMF_DISABLE_HTACCESS=""
+      - DEBUG=true # development only: enables phpMyFAQ debug mode
+      - DEBUG_LOG_QUERIES=false # set true to log DB queries
       - PMF_TIMEZONE="Europe/Berlin"
       - PMF_ENABLE_UPLOADS="On"
       - PMF_MEMORY_LIMIT="2048M" # only for development
