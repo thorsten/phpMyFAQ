@@ -134,8 +134,8 @@ devDependencies:
     specifier: 3.0.0
     version: 3.0.0(vite@8.0.16)
   vite-plugin-static-copy:
-    specifier: 4.1.0
-    version: 4.1.0(vite@8.0.16)
+    specifier: 4.1.1
+    version: 4.1.1(vite@8.0.16)
   vitest:
     specifier: 4.1.0
     version: 4.1.0(@types/node@25.9.2)(jsdom@29.1.1)(vite@8.0.16)
@@ -3794,8 +3794,8 @@ packages:
       - '@swc/core'
     dev: true
 
-  /vite-plugin-static-copy@4.1.0(vite@8.0.16):
-    resolution: {integrity: sha512-9XOarNV7LgP0KBB7AApxdgFikLXx3daZdqjC3AevYsL6MrUH62zphonLUs2a6LZc1HN1GY+vQdheZ8VVJb6dQQ==}
+  /vite-plugin-static-copy@4.1.1(vite@8.0.16):
+    resolution: {integrity: sha512-GrlA8YklrAfSyxJ4M3fdQLOo9oNkp56IM9FYgX/WtEgeIFkPwhu4wzpufBCIuNKCa6Fn77FkRdYxkHqV0FwjAw==}
     engines: {node: ^22.0.0 || >=24.0.0}
     peerDependencies:
       vite: ^6.0.0 || ^7.0.0 || ^8.0.0
