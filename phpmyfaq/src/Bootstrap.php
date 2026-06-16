@@ -169,20 +169,32 @@ $faqConfig->getAll();
 
 //
 // If the installed database is older than the current code base, the
-// installation must be updated first. Redirect any front-facing request to the
-// updater instead of running into fatal errors caused by an outdated schema
-// (e.g. tables or columns added by a later release are not yet present).
-// The updater itself, the installer, all REST endpoints and the admin login
-// and upgrade pages are excluded to avoid redirect loops and to keep the
-// recovery and update process reachable (see System::isUpdateExemptRequest()).
+// installation must be updated first, otherwise outdated schema (e.g. tables or
+// columns added by a later release) causes fatal errors. Front-facing requests
+// are redirected to the public updater; administration requests are redirected
+// to the in-admin updater so administrators stay inside /admin/ and can log in
+// and run the upgrade there. The updater itself, the installer, all REST
+// endpoints and the admin login and upgrade pages are excluded to avoid
+// redirect loops and to keep the recovery process reachable
+// (see System::isUpdateExemptRequest()).
 //
-$isUpdateContext = System::isUpdateExemptRequest(
-    (string) $request->getScriptName(),
-    (string) $request->getPathInfo()
-);
+$scriptName = (string) $request->getScriptName();
+$pathInfo = (string) $request->getPathInfo();
+
+$isUpdateContext = System::isUpdateExemptRequest($scriptName, $pathInfo);
 
 if (!$isUpdateContext && System::isUpdateNecessary((string) $faqConfig->get('main.currentVersion'))) {
-    $response = new RedirectResponse((new System())->getSystemUri($faqConfig) . 'update/');
+    $systemUri = (new System())->getSystemUri($faqConfig);
+
+    // Administration requests stay within the admin area: redirect them to the
+    // in-admin updater, which is update-exempt and enforces authentication
+    // itself (so unauthenticated admins still get the login form). Front-facing
+    // requests are sent to the public standalone updater instead.
+    $redirectTarget = str_contains($scriptName, '/admin/')
+        ? $systemUri . 'admin/update'
+        : $systemUri . 'update/';
+
+    $response = new RedirectResponse($redirectTarget);
     $response->send();
     exit();
 }
