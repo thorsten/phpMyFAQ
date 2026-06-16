@@ -99,7 +99,7 @@
     "husky": "9.1.7",
     "jsdom": "29.1.1",
     "oxfmt": "0.53.0",
-    "oxlint": "1.68.0",
+    "oxlint": "1.69.0",
     "postcss": "8.5.15",
     "prettier": "3.8.3",
     "pretty-quick": "4.2.2",
