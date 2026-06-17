@@ -38,10 +38,6 @@ final class UpdateController extends AbstractAdministrationController
     #[Route(path: '/update', name: 'admin.update', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        // Redirect unauthenticated admins to the login form (UnauthorizedHttpException)
-        // instead of returning a bare 403, so the updater stays reachable as a
-        // recovery target during a pending update.
-        $this->userIsAuthenticated();
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $session = $this->container->get(id: 'session');

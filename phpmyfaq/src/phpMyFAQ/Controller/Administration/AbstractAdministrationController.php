@@ -368,9 +368,15 @@ abstract class AbstractAdministrationController extends AbstractController
 
     /**
      * @throws ForbiddenException
+     * @throws \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException
      */
     protected function userHasPermission(PermissionType $permissionType): void
     {
+        // Administration pages require authentication first: a logged-out user
+        // must be redirected to the login page (UnauthorizedHttpException),
+        // whereas ForbiddenException (403) is reserved for authenticated users
+        // who lack the required permission.
+        $this->userIsAuthenticated();
         parent::userHasPermission($permissionType);
     }
 
