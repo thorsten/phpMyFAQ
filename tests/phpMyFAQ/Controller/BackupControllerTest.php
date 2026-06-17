@@ -64,7 +64,8 @@ class BackupControllerTest extends TestCase
             }
         };
 
-        // Berechtigung immer erlauben
+        // Authentifizierung und Berechtigung immer erlauben
+        $this->currentUserMock->method('isLoggedIn')->willReturn(true);
         $this->permissionMock->method('hasPermission')->willReturn(true);
 
         return $controller;

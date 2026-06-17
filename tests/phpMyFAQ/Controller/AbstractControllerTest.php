@@ -218,6 +218,7 @@ class AbstractControllerTest extends TestCase
 
     public function testUserHasGroupPermissionThrowsExceptionWhenMissingPermissions(): void
     {
+        $this->currentUserMock->method('isLoggedIn')->willReturn(true);
         $this->currentUserMock->expects($this->once())->method('getUserId')->willReturn(1); // Only called once since the exception is thrown on the first check
 
         // Mock that the user lacks the first required permission (USER_ADD)
@@ -234,6 +235,7 @@ class AbstractControllerTest extends TestCase
 
     public function testUserHasGroupPermissionSucceedsWhenAllPermissionsPresent(): void
     {
+        $this->currentUserMock->method('isLoggedIn')->willReturn(true);
         $this->currentUserMock->expects($this->exactly(4))->method('getUserId')->willReturn(1);
 
         // Mock that user has all required permissions
@@ -257,6 +259,7 @@ class AbstractControllerTest extends TestCase
 
     public function testUserHasUserPermissionThrowsExceptionWhenMissingPermissions(): void
     {
+        $this->currentUserMock->method('isLoggedIn')->willReturn(true);
         $this->currentUserMock->expects($this->once())->method('getUserId')->willReturn(1); // Only called once since exception is thrown on first check
 
         // Mock that user lacks the first required permission (USER_ADD)
@@ -273,6 +276,7 @@ class AbstractControllerTest extends TestCase
 
     public function testUserHasUserPermissionSucceedsWhenAllPermissionsPresent(): void
     {
+        $this->currentUserMock->method('isLoggedIn')->willReturn(true);
         $this->currentUserMock->expects($this->exactly(3))->method('getUserId')->willReturn(1);
 
         // Mock that user has all required permissions
