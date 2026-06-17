@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 #[AllowMockObjectsWithoutExpectations]
 class UserControllerTest extends TestCase
@@ -266,5 +267,23 @@ class UserControllerTest extends TestCase
         $response = $controller->addUser($request);
 
         $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    /**
+     * A logged-out caller must trigger UnauthorizedHttpException (translated to a
+     * login redirect / 401 by Application::run()), not a bare 403, because the
+     * user permission gate now authenticates first.
+     */
+    public function testListRejectsUnauthenticatedUser(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+
+        $user = $this->createMock(CurrentUser::class);
+        $user->method('isLoggedIn')->willReturn(false);
+
+        $controller = $this->buildController($session, $user);
+
+        $this->expectException(UnauthorizedHttpException::class);
+        $controller->list(new Request());
     }
 }

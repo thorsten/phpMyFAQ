@@ -186,9 +186,11 @@ abstract class AbstractController
 
     /**
      * @throws ForbiddenException
+     * @throws UnauthorizedHttpException
      */
     protected function userHasGroupPermission(): void
     {
+        $this->userIsAuthenticated();
         $currentUser = $this->currentUser;
         if (
             !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value)
@@ -202,9 +204,11 @@ abstract class AbstractController
 
     /**
      * @throws ForbiddenException
+     * @throws UnauthorizedHttpException
      */
     protected function userHasUserPermission(): void
     {
+        $this->userIsAuthenticated();
         $currentUser = $this->currentUser;
         if (
             !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value)
