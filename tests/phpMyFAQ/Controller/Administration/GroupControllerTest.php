@@ -87,6 +87,7 @@ class GroupControllerTest extends TestCase
 
         $actingUser = $this->createMock(CurrentUser::class);
         $actingUser->perm = $perm;
+        $actingUser->method('isLoggedIn')->willReturn(true);
         $actingUser->method('getUserId')->willReturn(5);
         $actingUser->method('isSuperAdmin')->willReturn(false);
 

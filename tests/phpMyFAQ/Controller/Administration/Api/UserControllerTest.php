@@ -62,6 +62,7 @@ class UserControllerTest extends TestCase
 
         $user = $this->createMock(CurrentUser::class);
         $user->perm = $perm;
+        $user->method('isLoggedIn')->willReturn(true);
         $user->method('getUserId')->willReturn($userId);
         $user->method('isSuperAdmin')->willReturn($isSuperAdmin);
 
@@ -228,6 +229,7 @@ class UserControllerTest extends TestCase
 
         $actingUser = $this->createMock(CurrentUser::class);
         $actingUser->perm = $perm;
+        $actingUser->method('isLoggedIn')->willReturn(true);
         $actingUser->method('getUserId')->willReturn(5);
         $actingUser->method('isSuperAdmin')->willReturn(false);
 
