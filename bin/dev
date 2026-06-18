@@ -103,19 +103,36 @@ CERT_KEY="$ROOT_DIR/.docker/cert-key.pem"
 # bind-mount location, which then cannot mount onto the container's cert file
 # ("not a directory" error). Detect that clobber, clean it up, and (re)generate.
 ensure_certs() {
+  # Fast path: a usable pair already exists — both are non-empty regular files.
+  # Never touch them, so a cert the user (or a previous run) created is reused.
+  if [ -f "$CERT_FILE" ] && [ -s "$CERT_FILE" ] \
+     && [ -f "$CERT_KEY" ] && [ -s "$CERT_KEY" ]; then
+    return 0
+  fi
+
+  # Something is off with the pair. Work out exactly what, so the regeneration
+  # is never a surprise. A missing source path makes Docker silently create a
+  # *directory* at the bind-mount location, which then cannot mount onto the
+  # container's cert file ("not a directory" error); clean that clobber up here.
+  reason=""
   for path in "$CERT_FILE" "$CERT_KEY"; do
     if [ -d "$path" ]; then
       rmdir "$path" 2>/dev/null \
         || die "$path is a directory (Docker clobbered the cert mount). Remove it and retry."
+      reason="$reason $path was a directory (Docker mount clobber);"
+    elif [ ! -e "$path" ]; then
+      reason="$reason $path missing;"
+    elif [ ! -f "$path" ]; then
+      reason="$reason $path is not a regular file;"
+    elif [ ! -s "$path" ]; then
+      reason="$reason $path is empty;"
     fi
   done
-
-  [ -f "$CERT_FILE" ] && [ -f "$CERT_KEY" ] && return 0
 
   command -v openssl >/dev/null 2>&1 \
     || die "Dev TLS certs are missing and 'openssl' was not found. Install openssl, or create $CERT_FILE and $CERT_KEY manually."
 
-  printf '%s\n' "==> Generating self-signed dev certificate for localhost..."
+  printf '%s\n' "==> Generating self-signed dev certificate for localhost (reason:${reason# }) ..."
   openssl req -x509 -newkey rsa:2048 -nodes \
     -keyout "$CERT_KEY" -out "$CERT_FILE" -days 825 \
     -subj "/CN=localhost" \
