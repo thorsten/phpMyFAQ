@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Functional\ControllerWebTestCase;
+use phpMyFAQ\Session\SessionWrapper;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
@@ -190,6 +191,11 @@ final class AuthenticationControllerWebTest extends ControllerWebTestCase
     {
         $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
 
+        // Simulate a prior successful password authentication that requires 2FA for user 1
+        $sessionWrapper = new SessionWrapper();
+        $sessionWrapper->set('2fa_pending_user_id', 1);
+        $sessionWrapper->set('2fa_failed_attempts', 0);
+
         $response = $this->requestPublic('POST', '/check', [
             'token' => '123456',
             'user-id' => '1',
@@ -197,6 +203,24 @@ final class AuthenticationControllerWebTest extends ControllerWebTestCase
 
         self::assertResponseStatusCodeSame(302, $response);
         self::assertSame('./token?user-id=1', $response->headers->get('Location'));
+    }
+
+    public function testTwoFactorCheckRedirectsToLoginWhenPasswordStepWasSkipped(): void
+    {
+        $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
+
+        // No prior password authentication: the 2FA step must not log the user in
+        $sessionWrapper = new SessionWrapper();
+        $sessionWrapper->remove('2fa_pending_user_id');
+        $sessionWrapper->remove('2fa_failed_attempts');
+
+        $response = $this->requestPublic('POST', '/check', [
+            'token' => '123456',
+            'user-id' => '1',
+        ]);
+
+        self::assertResponseStatusCodeSame(302, $response);
+        self::assertSame('./login', $response->headers->get('Location'));
     }
 
     public function testLogoutWithInvalidCsrfRedirectsHome(): void

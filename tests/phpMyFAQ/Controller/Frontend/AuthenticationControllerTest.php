@@ -316,7 +316,15 @@ final class AuthenticationControllerTest extends TestCase
     public function testAuthenticateRedirectsToTokenWhenTwoFactorIsEnabled(): void
     {
         $currentUser = $this->createAuthenticationCurrentUser(twoFactorEnabled: true, loginResult: true, userId: 42);
-        $controller = $this->createAuthenticationController($currentUser);
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+
+        $controller = new AuthenticationController(
+            $this->createStub(UserSession::class),
+            $currentUser,
+            $this->createStub(TwoFactor::class),
+        );
+        $controller->setContainer($this->createControllerContainer($session, $currentUser));
 
         $response = $controller->authenticate(
             new Request([], [
@@ -326,6 +334,9 @@ final class AuthenticationControllerTest extends TestCase
         );
 
         self::assertSame('./token?user-id=42', $response->getTargetUrl());
+        // The 2FA step must be bound to the user that just passed the password check
+        self::assertSame(42, $session->get('2fa_pending_user_id'));
+        self::assertSame(0, $session->get('2fa_failed_attempts'));
     }
 
     /**
@@ -419,6 +430,7 @@ final class AuthenticationControllerTest extends TestCase
     {
         $session = new Session(new MockArraySessionStorage());
         $session->start();
+        $session->set('2fa_pending_user_id', 42);
 
         $currentUserService = $this->createMock(CurrentUser::class);
         $currentUserService->expects(self::once())->method('getUserById')->with(42)->willReturn(true);
@@ -437,6 +449,124 @@ final class AuthenticationControllerTest extends TestCase
         $response = $controller->check(new Request([], ['token' => '123456', 'user-id' => '42']));
 
         self::assertSame('./', $response->getTargetUrl());
+        self::assertFalse($session->has('2fa_pending_user_id'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCheckRedirectsToLoginWhenNoPasswordStepPreceded(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+
+        // No 2fa_pending_user_id has been set, i.e. the password factor was never validated
+        $currentUserService = $this->createMock(CurrentUser::class);
+        $currentUserService->expects(self::never())->method('getUserById');
+        $currentUserService->expects(self::never())->method('twoFactorSuccess');
+
+        $twoFactor = $this->createMock(TwoFactor::class);
+        $twoFactor->expects(self::never())->method('validateToken');
+
+        $controller = new AuthenticationController(
+            $this->createStub(UserSession::class),
+            $currentUserService,
+            $twoFactor,
+        );
+        $controller->setContainer($this->createControllerContainer($session, $this->createLoggedOutCurrentUser()));
+
+        $response = $controller->check(new Request([], ['token' => '123456', 'user-id' => '42']));
+
+        self::assertSame('./login', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCheckRedirectsToLoginWhenPendingUserDiffersFromSubmittedUser(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        // Password was validated for user 7, but the attacker submits a different user-id
+        $session->set('2fa_pending_user_id', 7);
+
+        $currentUserService = $this->createMock(CurrentUser::class);
+        $currentUserService->expects(self::never())->method('getUserById');
+        $currentUserService->expects(self::never())->method('twoFactorSuccess');
+
+        $twoFactor = $this->createMock(TwoFactor::class);
+        $twoFactor->expects(self::never())->method('validateToken');
+
+        $controller = new AuthenticationController(
+            $this->createStub(UserSession::class),
+            $currentUserService,
+            $twoFactor,
+        );
+        $controller->setContainer($this->createControllerContainer($session, $this->createLoggedOutCurrentUser()));
+
+        $response = $controller->check(new Request([], ['token' => '123456', 'user-id' => '42']));
+
+        self::assertSame('./login', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCheckLocksOutAfterTooManyFailedAttempts(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        $session->set('2fa_pending_user_id', 42);
+        $session->set('2fa_failed_attempts', 5);
+
+        $currentUserService = $this->createMock(CurrentUser::class);
+        $currentUserService->expects(self::never())->method('getUserById');
+        $currentUserService->expects(self::never())->method('twoFactorSuccess');
+
+        $twoFactor = $this->createMock(TwoFactor::class);
+        $twoFactor->expects(self::never())->method('validateToken');
+
+        $controller = new AuthenticationController(
+            $this->createStub(UserSession::class),
+            $currentUserService,
+            $twoFactor,
+        );
+        $controller->setContainer($this->createControllerContainer($session, $this->createLoggedOutCurrentUser()));
+
+        $response = $controller->check(new Request([], ['token' => '123456', 'user-id' => '42']));
+
+        self::assertSame('./login', $response->getTargetUrl());
+        self::assertFalse($session->has('2fa_pending_user_id'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCheckIncrementsFailedAttemptsWhenTokenIsInvalid(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        $session->set('2fa_pending_user_id', 42);
+        $session->set('2fa_failed_attempts', 2);
+
+        $currentUserService = $this->createMock(CurrentUser::class);
+        $currentUserService->expects(self::once())->method('getUserById')->with(42);
+        $currentUserService->expects(self::never())->method('twoFactorSuccess');
+
+        $twoFactor = $this->createMock(TwoFactor::class);
+        $twoFactor->expects(self::once())->method('validateToken')->with('123456', 42)->willReturn(false);
+
+        $controller = new AuthenticationController(
+            $this->createStub(UserSession::class),
+            $currentUserService,
+            $twoFactor,
+        );
+        $controller->setContainer($this->createControllerContainer($session, $this->createLoggedOutCurrentUser()));
+
+        $response = $controller->check(new Request([], ['token' => '123456', 'user-id' => '42']));
+
+        self::assertSame('./token?user-id=42', $response->getTargetUrl());
+        self::assertSame(3, $session->get('2fa_failed_attempts'));
     }
 
     /**
