@@ -41,7 +41,7 @@
     "chart.js": "^4.5.1",
     "choices.js": "^11.2.3",
     "highlight.js": "^11.11.1",
-    "jodit": "^4.12.25",
+    "jodit": "^4.12.27",
     "masonry-layout": "^4.2.2",
     "sortablejs": "^1.15.7",
     "vanilla-cookieconsent": "^3.1.0"
