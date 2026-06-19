@@ -170,22 +170,41 @@ if ($csrfToken !== '' && Token::getInstance($container->get('session'))->verifyT
 //
 // Validating token from 2FA if given; else: returns an error message
 //
-if ($token !== '' && !is_null($userId)) {
-    if (strlen((string) $token) === 6 && is_numeric((string) $token)) {
+if ($token !== '' && $userId > 0) {
+    $session = $container->get('session');
+    $pendingUserId = $session->get('2fa_pending_user_id');
+
+    // The 2FA token step must follow a successful password authentication that
+    // is bound to this exact user-id. Without that pending state an attacker
+    // could log in using only a (brute-forceable) token, bypassing the password.
+    if ($pendingUserId === null || (int) $pendingUserId !== $userId) {
+        $error = Translation::get(key: 'msgTwofactorErrorToken');
+        $action = 'login';
+    } elseif ($session->get('2fa_failed_attempts', 0) >= 5) {
+        // Too many failed token attempts: drop the pending state and force a new login.
+        $session->remove('2fa_pending_user_id');
+        $session->remove('2fa_failed_attempts');
+        $error = Translation::get(key: 'msgTwofactorErrorToken');
+        $action = 'login';
+    } elseif (strlen((string) $token) === 6 && is_numeric((string) $token)) {
         $user = new CurrentUser($faqConfig);
         $user->getUserById($userId);
         $tfa = new TwoFactor($faqConfig, $user);
         $res = $tfa->validateToken($token, $userId);
         if (!$res) {
+            $session->set('2fa_failed_attempts', $session->get('2fa_failed_attempts', 0) + 1);
             $error = Translation::get(key: 'msgTwofactorErrorToken');
             $action = 'twofactor';
         } else {
+            $session->remove('2fa_pending_user_id');
+            $session->remove('2fa_failed_attempts');
             $user->twoFactorSuccess();
             $redirect = new RedirectResponse($faqConfig->getDefaultUrl());
             $redirect->send();
             exit();
         }
     } else {
+        $session->set('2fa_failed_attempts', $session->get('2fa_failed_attempts', 0) + 1);
         $error = Translation::get(key: 'msgTwofactorErrorToken');
         $action = 'twofactor';
     }
@@ -218,6 +237,11 @@ if ($faqusername !== '' && ($faqpassword !== '' || $faqConfig->get('security.sso
 }
 
 if (isset($userAuth) && $userAuth instanceof UserAuthentication && $userAuth->hasTwoFactorAuthentication()) {
+    // Password was verified: mark this user-id as pending 2FA so the token step
+    // (handled above on the subsequent request) can be bound to it.
+    $session = $container->get('session');
+    $session->set('2fa_pending_user_id', $user->getUserId());
+    $session->set('2fa_failed_attempts', 0);
     $action = 'twofactor';
 }
 
