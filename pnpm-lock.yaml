@@ -107,8 +107,8 @@ devDependencies:
     specifier: 4.2.2
     version: 4.2.2(prettier@3.8.4)
   sass:
-    specifier: 1.100.0
-    version: 1.100.0
+    specifier: 1.101.0
+    version: 1.101.0
   sigmund:
     specifier: 1.0.1
     version: 1.0.1
@@ -123,7 +123,7 @@ devDependencies:
     version: 6.0.3
   vite:
     specifier: 8.0.16
-    version: 8.0.16(@types/node@25.9.3)(sass@1.100.0)
+    version: 8.0.16(@types/node@25.9.3)(sass@1.101.0)
   vite-plugin-compression:
     specifier: 0.5.1
     version: 0.5.1(vite@8.0.16)
@@ -1563,7 +1563,7 @@ packages:
       '@vitest/spy': 4.1.0
       estree-walker: 3.0.3
       magic-string: 0.30.21
-      vite: 8.0.16(@types/node@25.9.3)(sass@1.100.0)
+      vite: 8.0.16(@types/node@25.9.3)(sass@1.101.0)
     dev: true
 
   /@vitest/pretty-format@4.1.0:
@@ -3328,8 +3328,8 @@ packages:
       queue-microtask: 1.2.3
     dev: true
 
-  /sass@1.100.0:
-    resolution: {integrity: sha512-B5j0rYMlinhhOo9tjQebMVVn0TfyXAF+wB3b2ggZUuJ/is/Y+7+JGjirAMxHZ9Z3hIP98NPfamlAkBHa1lAaXQ==}
+  /sass@1.101.0:
+    resolution: {integrity: sha512-OL3GoQyoUdDt843DpVmDO6y2k1sc5IhUDSpu8XucEI+35neq5QivZ1iuegnpraEVTJXlQGK1gl27zKcTLEPbQw==}
     engines: {node: '>=20.19.0'}
     hasBin: true
     dependencies:
@@ -3764,7 +3764,7 @@ packages:
       chalk: 4.1.2
       debug: 4.4.3
       fs-extra: 10.1.0
-      vite: 8.0.16(@types/node@25.9.3)(sass@1.100.0)
+      vite: 8.0.16(@types/node@25.9.3)(sass@1.101.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -3786,7 +3786,7 @@ packages:
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
       pathe: 0.2.0
-      vite: 8.0.16(@types/node@25.9.3)(sass@1.100.0)
+      vite: 8.0.16(@types/node@25.9.3)(sass@1.101.0)
     dev: true
 
   /vite-plugin-minify@3.0.0(vite@8.0.16):
@@ -3795,7 +3795,7 @@ packages:
       vite: '>=5'
     dependencies:
       html-minifier-next: 6.2.11
-      vite: 8.0.16(@types/node@25.9.3)(sass@1.100.0)
+      vite: 8.0.16(@types/node@25.9.3)(sass@1.101.0)
     transitivePeerDependencies:
       - '@swc/core'
     dev: true
@@ -3810,10 +3810,10 @@ packages:
       p-map: 7.0.4
       picocolors: 1.1.1
       tinyglobby: 0.2.17
-      vite: 8.0.16(@types/node@25.9.3)(sass@1.100.0)
+      vite: 8.0.16(@types/node@25.9.3)(sass@1.101.0)
     dev: true
 
-  /vite@8.0.16(@types/node@25.9.3)(sass@1.100.0):
+  /vite@8.0.16(@types/node@25.9.3)(sass@1.101.0):
     resolution: {integrity: sha512-h9bXPmJichP5fLmVQo3PyaGSDE2n3aPuomeAlVRm0JLmt4rY6zmPKd59HYI4LNW8oTK7tlTsuC7l/m7awx9Jcw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
@@ -3861,7 +3861,7 @@ packages:
       picomatch: 4.0.4
       postcss: 8.5.15
       rolldown: 1.0.3
-      sass: 1.100.0
+      sass: 1.101.0
       tinyglobby: 0.2.17
     optionalDependencies:
       fsevents: 2.3.3
@@ -3931,7 +3931,7 @@ packages:
       tinyexec: 1.2.4
       tinyglobby: 0.2.17
       tinyrainbow: 3.1.0
-      vite: 8.0.16(@types/node@25.9.3)(sass@1.100.0)
+      vite: 8.0.16(@types/node@25.9.3)(sass@1.101.0)
       why-is-node-running: 2.3.0
     transitivePeerDependencies:
       - msw
