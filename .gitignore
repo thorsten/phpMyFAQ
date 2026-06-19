@@ -29,6 +29,7 @@ phpmyfaq/content/core/config/opensearch.php
 phpmyfaq/content/core/config/opensearch.bak.php
 phpmyfaq/content/core/config/azure.php
 phpmyfaq/content/core/config/azure.bak.php
+phpmyfaq/content/core/config/phpmyfaq-config-backup.*.zip
 phpmyfaq/content/core/config/index.html
 # Config backup archives may contain secrets — never commit them
 phpmyfaq/content/core/config/*.zip

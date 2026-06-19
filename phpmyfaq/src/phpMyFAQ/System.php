@@ -187,6 +187,49 @@ class System
     }
 
     /**
+     * Admin page paths (by PATH_INFO) that must stay reachable while an update
+     * is pending, so the administrator can log in and start the update. The
+     * matching admin REST endpoints run through a separate /api/ front
+     * controller and are already exempt via the generic /api/ rule below.
+     *
+     * @var string[]
+     */
+    private const array UPDATE_RECOVERY_ADMIN_PATHS = [
+        '/login',
+        '/authenticate',
+        '/check',
+        '/token',
+        '/update',
+    ];
+
+    /**
+     * Returns true if the given request must NOT be redirected to the updater
+     * while an update is pending.
+     *
+     * Exempt are the standalone updater, the installer and all REST endpoints
+     * (to keep the update process functional and avoid redirect loops), plus a
+     * small allow-list of administration pages required to recover: the login
+     * flow and the upgrade UI. Content-facing admin pages stay blocked because
+     * they would hit the outdated database schema.
+     */
+    public static function isUpdateExemptRequest(string $scriptName, string $pathInfo): bool
+    {
+        if (
+            str_contains($scriptName, '/update/')
+            || str_contains($scriptName, '/setup/')
+            || str_contains($scriptName, '/api/')
+        ) {
+            return true;
+        }
+
+        if (str_contains($scriptName, '/admin/')) {
+            return in_array(needle: $pathInfo, haystack: self::UPDATE_RECOVERY_ADMIN_PATHS, strict: true);
+        }
+
+        return false;
+    }
+
+    /**
      * Returns the current major version of phpMyFAQ
      */
     public static function getMajorVersion(): string

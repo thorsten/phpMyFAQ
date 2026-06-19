@@ -18,6 +18,8 @@
 declare(strict_types=1);
 
 use phpMyFAQ\Bootstrapper;
+use phpMyFAQ\System;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 require __DIR__ . '/constants.php';
 require __DIR__ . '/autoload.php';
@@ -28,3 +30,25 @@ $bootstrapper->run();
 $faqConfig = $bootstrapper->getFaqConfig();
 $db = $bootstrapper->getDb();
 $request = $bootstrapper->getRequest();
+
+//
+// If the installed database is older than the current code base, the
+// installation must be updated first. Redirect any front-facing request to the
+// updater instead of running into fatal errors caused by an outdated schema
+// (e.g. tables or columns added by a later release are not yet present).
+// The updater itself, the installer, all REST endpoints and the admin login
+// and upgrade pages are excluded to avoid redirect loops and to keep the
+// recovery and update process reachable (see System::isUpdateExemptRequest()).
+//
+if ($faqConfig !== null) {
+    $isUpdateExemptRequest = System::isUpdateExemptRequest(
+        (string) $request->getScriptName(),
+        (string) $request->getPathInfo(),
+    );
+
+    if (!$isUpdateExemptRequest && System::isUpdateNecessary((string) $faqConfig->get('main.currentVersion'))) {
+        $response = new RedirectResponse((new System())->getSystemUri($faqConfig) . 'update/');
+        $response->send();
+        exit();
+    }
+}
