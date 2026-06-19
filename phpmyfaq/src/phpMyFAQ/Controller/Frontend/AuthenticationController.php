@@ -199,6 +199,9 @@ final class AuthenticationController extends AbstractFrontController
 
                 // Check if two-factor authentication is enabled
                 if ($userAuthentication->hasTwoFactorAuthentication()) {
+                    // Bind the pending 2FA step to this user, but only after the password was validated
+                    $this->session->set('2fa_pending_user_id', $this->currentUser->getUserId());
+                    $this->session->set('2fa_failed_attempts', 0);
                     return new RedirectResponse(url: './token?user-id=' . $this->currentUser->getUserId());
                 }
 
@@ -267,16 +270,33 @@ final class AuthenticationController extends AbstractFrontController
             return new RedirectResponse('./token?user-id=' . $userId);
         }
 
+        // The 2FA step is only reachable once the password was validated for exactly this user
+        $pendingUserId = $this->session->get('2fa_pending_user_id');
+        if ($pendingUserId === null || (int) $pendingUserId !== $userId) {
+            return new RedirectResponse('./login');
+        }
+
+        // Throttle brute-force guessing of the six-digit token
+        if ($this->session->get('2fa_failed_attempts', 0) >= 5) {
+            $this->session->remove('2fa_pending_user_id');
+            $this->session->remove('2fa_failed_attempts');
+            return new RedirectResponse('./login');
+        }
+
         $this->currentUserService->getUserById($userId);
 
         if (strlen((string) $token) === 6) {
             $result = $this->twoFactor->validateToken($token, $userId);
 
             if ($result) {
+                $this->session->remove('2fa_pending_user_id');
+                $this->session->remove('2fa_failed_attempts');
                 $this->currentUserService->twoFactorSuccess();
                 return new RedirectResponse(url: './');
             }
         }
+
+        $this->session->set('2fa_failed_attempts', $this->session->get('2fa_failed_attempts', 0) + 1);
 
         $this->session->getFlashBag()->add('error', Translation::get('msgTwofactorErrorToken'));
         return new RedirectResponse('./token?user-id=' . $userId);
