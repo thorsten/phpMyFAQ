@@ -13,7 +13,46 @@
  * @since     2026-06-20
  */
 
-import { PopularSearchResponse } from '../interfaces';
+import { PopularSearch, PopularSearchResponse } from '../interfaces';
+
+/**
+ * Validates the raw JSON payload and returns only well-formed entries.
+ * The backend is trusted but not guaranteed; malformed items are dropped so they
+ * never reach the autocomplete rendering. Numeric fields are coerced to numbers.
+ */
+const normalizePopularSearches = (data: unknown): PopularSearchResponse => {
+  if (!Array.isArray(data)) {
+    return [];
+  }
+
+  const result: PopularSearch[] = [];
+
+  for (const entry of data) {
+    if (typeof entry !== 'object' || entry === null) {
+      continue;
+    }
+
+    const record = entry as Record<string, unknown>;
+    const { searchterm, number } = record;
+
+    if (
+      typeof searchterm !== 'string' ||
+      searchterm.trim() === '' ||
+      (typeof number !== 'number' && typeof number !== 'string')
+    ) {
+      continue;
+    }
+
+    const count = Number(number);
+    if (!Number.isFinite(count)) {
+      continue;
+    }
+
+    result.push({ id: Number(record.id) || 0, searchterm, number: count });
+  }
+
+  return result;
+};
 
 export const fetchPopularSearches = async (): Promise<PopularSearchResponse> => {
   try {
@@ -31,7 +70,7 @@ export const fetchPopularSearches = async (): Promise<PopularSearchResponse> => 
       return [];
     }
 
-    return (await response.json()) as PopularSearchResponse;
+    return normalizePopularSearches(await response.json());
   } catch {
     return [];
   }
