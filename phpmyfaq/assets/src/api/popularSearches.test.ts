@@ -54,6 +54,14 @@ describe('fetchPopularSearches', (): void => {
     expect(data).toEqual([]);
   });
 
+  test('returns an empty array when a 200 response has an invalid JSON body', async (): Promise<void> => {
+    fetchMocker.mockResponseOnce('not valid json', { status: 200 });
+
+    const data = await fetchPopularSearches();
+
+    expect(data).toEqual([]);
+  });
+
   test('returns an empty array on a non-ok response', async (): Promise<void> => {
     fetchMocker.mockResponseOnce('[]', { status: 404 });
 

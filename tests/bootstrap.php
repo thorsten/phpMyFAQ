@@ -99,6 +99,10 @@ function canReusePreparedTestDatabase(string $databasePath, string $databaseConf
     // filesystem, or a moved/shared working copy. Reusing it would leave database.php
     // pointing at the wrong path string and break path-sensitive assertions. A mismatch
     // forces a rebuild below, which regenerates database.php with the current path.
+    if (!is_readable($databaseConfigPath)) {
+        return false;
+    }
+
     $DB = [];
     include $databaseConfigPath;
     if (!isset($DB['server']) || $DB['server'] !== $databasePath) {

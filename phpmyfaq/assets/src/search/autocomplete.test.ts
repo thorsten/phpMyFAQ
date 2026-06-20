@@ -107,6 +107,14 @@ describe('attachAutocomplete', () => {
     expect(update).toHaveBeenCalledWith([]);
   });
 
+  it('clears suggestions when fetchAutoCompleteData rejects', async () => {
+    vi.mocked(fetchAutoCompleteData).mockRejectedValueOnce(new Error('Network response was not ok.'));
+    attachAutocomplete(document.createElement('input'));
+    const update = vi.fn();
+    await getConfig().fetch('install', update);
+    expect(update).toHaveBeenCalledWith([]);
+  });
+
   it('records the term and navigates on select of a result', () => {
     const input = document.createElement('input');
     input.value = 'install';

@@ -108,15 +108,23 @@ export const attachAutocomplete = (input: HTMLInputElement): void => {
         return;
       }
 
-      const results: Suggestion[] = (await fetchAutoCompleteData(query)).map(
-        (result): Suggestion =>
-          ({
-            type: 'result',
-            url: result.url,
-            question: result.question,
-            category: result.category,
-          }) as Suggestion
-      );
+      let results: Suggestion[];
+      try {
+        results = (await fetchAutoCompleteData(query)).map(
+          (result): Suggestion =>
+            ({
+              type: 'result',
+              url: result.url,
+              question: result.question,
+              category: result.category,
+            }) as Suggestion
+        );
+      } catch {
+        // A transient network/backend failure must not leave the dropdown stuck:
+        // recover by clearing the suggestions so the UI stays responsive.
+        update([]);
+        return;
+      }
 
       if (results.length === 0) {
         update([{ type: 'empty', url: `search.html?search=${encodeURIComponent(query)}` } as Suggestion]);

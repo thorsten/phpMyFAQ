@@ -14,7 +14,7 @@
  */
 
 import { Modal } from 'bootstrap';
-import { addElement } from '../utils';
+import { addElement, TranslationService } from '../utils';
 import { attachAutocomplete } from './autocomplete';
 
 let modalInstance: Modal | null = null;
@@ -27,9 +27,16 @@ const buildModal = (): void => {
     name: 'search',
     autocomplete: 'off',
     maxLength: 255,
-    placeholder: 'Search …',
-    'aria-label': 'Search',
   }) as HTMLInputElement;
+
+  // Localize the placeholder / accessible label via the translation system.
+  // Loading is async; set the labels once translations are available.
+  const translator = new TranslationService();
+  void translator.loadTranslations(document.documentElement.lang).then((): void => {
+    const label = translator.translate('msgSearch');
+    input.placeholder = `${label} …`;
+    input.setAttribute('aria-label', label);
+  });
 
   const dialog = addElement('div', { classList: 'modal-dialog modal-lg modal-dialog-scrollable' }, [
     addElement('div', { classList: 'modal-content' }, [

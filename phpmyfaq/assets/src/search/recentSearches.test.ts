@@ -10,6 +10,14 @@ describe('recentSearches', () => {
     expect(getRecentSearches()).toEqual([]);
   });
 
+  it('trims, drops blank/non-string entries, and caps externally modified storage on read', () => {
+    localStorage.setItem(
+      'pmf-recent-searches',
+      JSON.stringify(['  mac  ', '', '   ', 42, 'linux', 'a', 'b', 'c', 'd'])
+    );
+    expect(getRecentSearches()).toEqual(['mac', 'linux', 'a', 'b', 'c']);
+  });
+
   it('stores and returns a term', () => {
     addRecentSearch('mac');
     expect(getRecentSearches()).toEqual(['mac']);

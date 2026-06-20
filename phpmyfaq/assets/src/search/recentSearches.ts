@@ -23,7 +23,16 @@ export const getRecentSearches = (): string[] => {
       return [];
     }
     const parsed: unknown = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed.filter((item): item is string => typeof item === 'string') : [];
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+    // Normalize defensively: externally modified localStorage could contain
+    // non-strings, blank entries, or an arbitrarily large array.
+    return parsed
+      .filter((item): item is string => typeof item === 'string')
+      .map((item) => item.trim())
+      .filter((item) => item !== '')
+      .slice(0, MAX_ENTRIES);
   } catch {
     return [];
   }
