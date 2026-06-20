@@ -1,0 +1,47 @@
+{% macro renderTree(nodes, level = 0) %}
+{% import _self as categoryTreeMacro %}
+<ul class="pmf-category-tree{{ level == 0 ? ' pmf-category-tree--root' : ' pmf-category-tree__children' }}">
+  {% for node in nodes %}
+  <li class="pmf-category-tree__item" data-category-id="{{ node.id }}">
+    <div class="pmf-category-tree__row">
+      {% if node.children is not empty %}
+      <button type="button" class="pmf-category-tree__toggle" aria-expanded="true"
+              aria-controls="pmf-cat-children-{{ node.id }}" aria-label="{{ node.name }}">
+        <i class="bi bi-chevron-right" aria-hidden="true"></i>
+      </button>
+      {% else %}
+      <span class="pmf-category-tree__toggle-spacer" aria-hidden="true"></span>
+      {% endif %}
+
+      {% if node.image %}
+      <img src="{{ node.image }}" alt="" aria-hidden="true" class="pmf-category-tree__avatar">
+      {% else %}
+      <span class="pmf-category-tree__avatar pmf-category-tree__avatar--letter" aria-hidden="true"
+            style="background-color: {{ node.avatarColor }}">{{ node.name|first|upper }}</span>
+      {% endif %}
+
+      <div class="pmf-category-tree__content">
+        {% if node.hasFaqs %}
+        <a class="pmf-category-tree__name" href="{{ node.url }}">{{ node.name }}</a>
+        {% else %}
+        <span class="pmf-category-tree__name">{{ node.name }}</span>
+        {% endif %}
+        {% if node.description %}
+        <div class="pmf-category-tree__desc">{{ node.description }}</div>
+        {% endif %}
+      </div>
+
+      {% if node.faqCount > 0 %}
+      <span class="badge text-bg-primary pmf-category-tree__count">{{ node.faqCountLabel }}</span>
+      {% endif %}
+    </div>
+
+    {% if node.children is not empty %}
+    <div id="pmf-cat-children-{{ node.id }}">
+      {{ categoryTreeMacro.renderTree(node.children, level + 1) }}
+    </div>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% endmacro %}

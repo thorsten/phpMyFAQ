@@ -77,6 +77,18 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
         ));
     }
 
+    private function seedCategoryPermissions(int $id): void
+    {
+        $configuration = $this->getConfiguration('public');
+        self::assertInstanceOf(Configuration::class, $configuration);
+
+        $db = $configuration->getDb();
+        $db->query(sprintf("DELETE FROM faqcategory_group WHERE category_id = %d", $id));
+        $db->query(sprintf("DELETE FROM faqcategory_user WHERE category_id = %d", $id));
+        $db->query(sprintf("INSERT INTO faqcategory_group (category_id, group_id) VALUES (%d, -1)", $id));
+        $db->query(sprintf("INSERT INTO faqcategory_user (category_id, user_id) VALUES (%d, -1)", $id));
+    }
+
     private function seedFaqForCategory(int $faqId, int $categoryId, string $question): void
     {
         $configuration = $this->getConfiguration('public');
@@ -108,11 +120,16 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
     public function testShowAllCategoriesPageIsReachable(): void
     {
         $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
+        $this->seedCategory(791, 'Overview Category');
+        $this->seedCategoryPermissions(791);
+        $this->seedFaqForCategory(9791, 791, 'Overview test question');
 
         $response = $this->requestPublic('GET', '/show-categories.html');
 
         self::assertResponseIsSuccessful($response);
         self::assertResponseContains('<h2 class="mb-4 border-bottom">All categories</h2>', $response);
+        self::assertResponseContains('class="pmf-category-tree', $response);
+        self::assertResponseContains('pmf-category-tree__item', $response);
     }
 
     public function testShowCategoryPageShowsNoFaqMessageForSeededRootCategory(): void
