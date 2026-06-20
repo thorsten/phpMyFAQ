@@ -42,13 +42,7 @@ class CategoryHelper extends AbstractHelper
      */
     public function renderCategoryTree(int $parentId = 0): string
     {
-        $categoryRelation = new Relation($this->getConfiguration(), $this->getCategory());
-        $categoryRelation->setGroups($this->getCategory()->getGroups());
-
-        $categoryTree = $this->getCategory()->getOrderedCategories();
-        $categoryNumbers = $categoryRelation->getCategoryWithFaqs();
-        $normalizedCategoryNumbers = $this->normalizeCategoryTree($categoryTree, $categoryNumbers);
-        $aggregatedNumbers = $categoryRelation->getAggregatedFaqNumbers($normalizedCategoryNumbers);
+        [$categoryTree, $normalizedCategoryNumbers, $aggregatedNumbers] = $this->gatherCategoryData();
 
         if ((is_countable($categoryTree) ? count($categoryTree) : 0) > 0) {
             return sprintf('<ul class="pmf-category-overview">%s</ul>', $this->buildCategoryList(
@@ -65,6 +59,98 @@ class CategoryHelper extends AbstractHelper
             Translation::get(key: 'msgCategoryMissingButTranslationAvailable'),
             $this->buildAvailableCategoryTranslationsList($languagesAvailable),
         );
+    }
+
+    /**
+     * Gathers the raw category tree and FAQ-count arrays shared by the HTML
+     * renderer and the structured-data builder.
+     *
+     * @return array{0: array<int, array>, 1: array<int, array>, 2: array<int, int>}
+     */
+    private function gatherCategoryData(): array
+    {
+        $categoryRelation = new Relation($this->getConfiguration(), $this->getCategory());
+        $categoryRelation->setGroups($this->getCategory()->getGroups());
+
+        $categoryTree = $this->getCategory()->getOrderedCategories();
+        $categoryNumbers = $categoryRelation->getCategoryWithFaqs();
+        $normalizedCategoryNumbers = $this->normalizeCategoryTree($categoryTree, $categoryNumbers);
+        $aggregatedNumbers = $categoryRelation->getAggregatedFaqNumbers($normalizedCategoryNumbers);
+
+        return [$categoryTree, $normalizedCategoryNumbers, $aggregatedNumbers];
+    }
+
+    /**
+     * Returns the category tree as a nested data structure for Twig rendering.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public function getCategoryTreeData(int $parentId = 0): array
+    {
+        [$categoryTree, $normalizedCategoryNumbers, $aggregatedNumbers] = $this->gatherCategoryData();
+
+        if ((is_countable($categoryTree) ? count($categoryTree) : 0) === 0) {
+            return [];
+        }
+
+        return $this->buildCategoryNodes($categoryTree, $parentId, $aggregatedNumbers, $normalizedCategoryNumbers);
+    }
+
+    /**
+     * Recursively builds the nested category node array.
+     *
+     * @param array<int, array> $categoryTree
+     * @param array<int, int>   $aggregatedNumbers
+     * @param array<int, array> $categoryNumbers
+     * @return array<int, array<string, mixed>>
+     */
+    public function buildCategoryNodes(
+        array $categoryTree,
+        int $parentId = 0,
+        array $aggregatedNumbers = [],
+        array $categoryNumbers = [],
+    ): array {
+        $nodes = [];
+
+        foreach ($categoryTree as $categoryId => $node) {
+            if ((int) $node['parent_id'] !== $parentId) {
+                continue;
+            }
+
+            $faqCount = (int) ($aggregatedNumbers[$node['id']] ?? 0);
+            $hasFaqs = (int) ($categoryNumbers[$categoryId]['faqs'] ?? 0) > 0;
+
+            $description = trim((string) ($node['description'] ?? ''));
+            $imageFile = trim((string) ($node['image'] ?? ''));
+            $image = $imageFile !== ''
+                ? sprintf('%scontent/user/images/%s', $this->configuration->getDefaultUrl(), $imageFile)
+                : null;
+
+            $nodes[] = [
+                'id' => (int) $node['id'],
+                'name' => $node['name'],
+                'description' => $description === '' ? null : $description,
+                'url' => sprintf(
+                    '%scategory/%d/%s.html',
+                    $this->configuration->getDefaultUrl(),
+                    $node['id'],
+                    TitleSlugifier::slug($node['name']),
+                ),
+                'image' => $image,
+                'faqCount' => $faqCount,
+                'faqCountLabel' => $this->plurals->get(key: 'plmsgEntries', number: $faqCount),
+                'hasFaqs' => $hasFaqs,
+                'avatarColor' => sprintf('hsl(%d, 55%%, 45%%)', crc32((string) $node['name']) % 360),
+                'children' => $this->buildCategoryNodes(
+                    $categoryTree,
+                    (int) $node['id'],
+                    $aggregatedNumbers,
+                    $categoryNumbers,
+                ),
+            ];
+        }
+
+        return $nodes;
     }
 
     /**

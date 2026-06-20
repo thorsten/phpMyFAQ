@@ -270,4 +270,56 @@ class CategoryHelperTest extends TestCase
 
         unlink($databaseFile);
     }
+
+    public function testBuildCategoryNodesReturnsNestedStructure(): void
+    {
+        $categoryHelper = new CategoryHelper();
+        $reflection = new ReflectionClass($categoryHelper);
+        $reflection->getProperty('configuration')->setValue($categoryHelper, $this->mockConfiguration);
+        $reflection->getProperty('plurals')->setValue($categoryHelper, new Plurals());
+        $this->mockConfiguration->method('getDefaultUrl')->willReturn('http://localhost/');
+
+        $categoryTree = [
+            1 => ['id' => 1, 'parent_id' => 0, 'name' => 'Root', 'description' => 'Root description', 'image' => ''],
+            2 => ['id' => 2, 'parent_id' => 1, 'name' => 'Child', 'description' => '', 'image' => 'pic.png'],
+        ];
+        $aggregatedNumbers = [1 => 5, 2 => 0];
+        $categoryNumbers = [
+            1 => ['faqs' => 3],
+            2 => ['faqs' => 0],
+        ];
+
+        $nodes = $categoryHelper->buildCategoryNodes($categoryTree, 0, $aggregatedNumbers, $categoryNumbers);
+
+        $this->assertCount(1, $nodes);
+        $root = $nodes[0];
+        $this->assertSame(1, $root['id']);
+        $this->assertSame('Root', $root['name']);
+        $this->assertSame('Root description', $root['description']);
+        $this->assertSame('http://localhost/category/1/root.html', $root['url']);
+        $this->assertNull($root['image']);
+        $this->assertSame(5, $root['faqCount']);
+        $this->assertTrue($root['hasFaqs']);
+        $this->assertStringContainsString('5', $root['faqCountLabel']);
+        $this->assertIsString($root['avatarColor']);
+        $this->assertCount(1, $root['children']);
+
+        $child = $root['children'][0];
+        $this->assertSame(2, $child['id']);
+        $this->assertNull($child['description']);
+        $this->assertSame('http://localhost/content/user/images/pic.png', $child['image']);
+        $this->assertSame(0, $child['faqCount']);
+        $this->assertFalse($child['hasFaqs']);
+        $this->assertSame([], $child['children']);
+    }
+
+    public function testGetCategoryTreeDataReturnsEmptyArrayWhenNoCategories(): void
+    {
+        $this->mockCategory->method('getOrderedCategories')->willReturn([]);
+        $this->mockCategory->method('getGroups')->willReturn([-1]);
+
+        $result = $this->categoryHelper->getCategoryTreeData();
+
+        $this->assertSame([], $result);
+    }
 }
