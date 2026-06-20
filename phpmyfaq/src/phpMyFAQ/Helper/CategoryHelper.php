@@ -140,7 +140,7 @@ class CategoryHelper extends AbstractHelper
                 'faqCount' => $faqCount,
                 'faqCountLabel' => $this->plurals->get(key: 'plmsgEntries', number: $faqCount),
                 'hasFaqs' => $hasFaqs,
-                'avatarColor' => sprintf('hsl(%d, 55%%, 45%%)', crc32((string) $node['name']) % 360),
+                'avatarColor' => sprintf('hsl(%d, 55%%, 45%%)', abs(crc32((string) $node['name'])) % 360),
                 'children' => $this->buildCategoryNodes(
                     $categoryTree,
                     (int) $node['id'],
