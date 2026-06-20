@@ -6,142 +6,180 @@ vi.mock('autocompleter', () => ({
 
 vi.mock('../api', () => ({
   fetchAutoCompleteData: vi.fn(),
+  fetchPopularSearches: vi.fn(),
+}));
+
+vi.mock('./recentSearches', () => ({
+  getRecentSearches: vi.fn(() => []),
+  addRecentSearch: vi.fn(),
 }));
 
 vi.mock('../utils', () => ({
-  addElement: vi.fn((tag: string, props: Record<string, string>, children: Node[] = []) => {
+  addElement: vi.fn((tag: string, props: Record<string, string> = {}, children: Node[] = []) => {
     const el = document.createElement(tag);
     if (props.classList) el.className = props.classList;
-    if (props.innerText) el.innerText = props.innerText;
+    // jsdom does not reflect innerText into textContent, so treat it as text content.
+    if (props.innerText) el.textContent = props.innerText;
     if (props.textContent) el.textContent = props.textContent;
     children.forEach((child) => el.appendChild(child));
     return el;
   }),
+  TranslationService: class {
+    async loadTranslations(): Promise<void> {}
+    translate(key: string): string {
+      return key;
+    }
+  },
 }));
 
-import { handleAutoComplete } from './autocomplete';
-import { fetchAutoCompleteData } from '../api';
+import { attachAutocomplete, handleAutoComplete } from './autocomplete';
+import { fetchAutoCompleteData, fetchPopularSearches } from '../api';
+import { getRecentSearches, addRecentSearch } from './recentSearches';
 import { AutocompleteSearchResponse, Suggestion } from '../interfaces';
 import autocomplete from 'autocompleter';
 
 const mockAutocomplete = vi.mocked(autocomplete);
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getConfig = (): any => mockAutocomplete.mock.calls[0][0];
 
-describe('handleAutoComplete', () => {
+describe('attachAutocomplete', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     document.body.innerHTML = '';
+    vi.mocked(getRecentSearches).mockReturnValue([]);
+    vi.mocked(fetchPopularSearches).mockResolvedValue([]);
+    vi.mocked(fetchAutoCompleteData).mockResolvedValue([]);
   });
 
-  it('should do nothing when autocomplete input is missing', () => {
-    document.body.innerHTML = '<div></div>';
-
-    handleAutoComplete();
-
-    expect(mockAutocomplete).not.toHaveBeenCalled();
-  });
-
-  it('should initialize autocomplete when input element exists', () => {
-    document.body.innerHTML = '<input id="pmf-search-autocomplete" type="text" />';
-
-    handleAutoComplete();
-
+  it('initialises autocomplete on the given input', () => {
+    const input = document.createElement('input');
+    attachAutocomplete(input);
     expect(mockAutocomplete).toHaveBeenCalledTimes(1);
-  });
-
-  it('should pass the input element to autocomplete', () => {
-    document.body.innerHTML = '<input id="pmf-search-autocomplete" type="text" />';
-
-    handleAutoComplete();
-
-    expect(getConfig().input).toBe(document.getElementById('pmf-search-autocomplete'));
-  });
-
-  it('should configure debounce wait time', () => {
-    document.body.innerHTML = '<input id="pmf-search-autocomplete" type="text" />';
-
-    handleAutoComplete();
-
+    expect(getConfig().input).toBe(input);
+    expect(getConfig().showOnFocus).toBe(true);
     expect(getConfig().debounceWaitMs).toBe(200);
   });
 
-  it('should fetch data and call update in the fetch callback', async () => {
-    document.body.innerHTML = '<input id="pmf-search-autocomplete" type="text" />';
-
-    const mockResults: Suggestion[] = [
-      { question: 'How to install?', category: 'Setup', url: '/faq/1' } as Suggestion,
-      { question: 'How to configure?', category: 'Config', url: '/faq/2' } as Suggestion,
-    ];
-    vi.mocked(fetchAutoCompleteData).mockResolvedValue(mockResults as AutocompleteSearchResponse);
-
-    handleAutoComplete();
+  it('fetches live results mapped to result items when typing', async () => {
+    vi.mocked(fetchAutoCompleteData).mockResolvedValue([
+      { question: 'How to install?', category: 'Setup', url: '/faq/1' },
+    ] as AutocompleteSearchResponse);
+    attachAutocomplete(document.createElement('input'));
 
     const update = vi.fn();
-    await getConfig().fetch('Test Query', update);
+    await getConfig().fetch('Install', update);
 
-    expect(fetchAutoCompleteData).toHaveBeenCalledWith('test query');
-    expect(update).toHaveBeenCalledWith(mockResults);
+    expect(fetchAutoCompleteData).toHaveBeenCalledWith('install');
+    const items = update.mock.calls[0][0] as Suggestion[];
+    expect(items[0].type).toBe('result');
   });
 
-  it('should convert search string to lowercase in fetch callback', async () => {
-    document.body.innerHTML = '<input id="pmf-search-autocomplete" type="text" />';
-
+  it('shows a no-results helper when a non-empty query returns nothing', async () => {
     vi.mocked(fetchAutoCompleteData).mockResolvedValue([]);
+    attachAutocomplete(document.createElement('input'));
 
-    handleAutoComplete();
+    const update = vi.fn();
+    await getConfig().fetch('zzz', update);
 
-    await getConfig().fetch('UPPERCASE Query', vi.fn());
-
-    expect(fetchAutoCompleteData).toHaveBeenCalledWith('uppercase query');
+    const items = update.mock.calls[0][0] as Suggestion[];
+    expect(items).toHaveLength(1);
+    expect(items[0].type).toBe('empty');
   });
 
-  it('should navigate to item URL on select', () => {
-    document.body.innerHTML = '<input id="pmf-search-autocomplete" type="text" />';
+  it('composes recent then popular items on empty input', async () => {
+    vi.mocked(getRecentSearches).mockReturnValue(['mac']);
+    vi.mocked(fetchPopularSearches).mockResolvedValue([{ id: 1, searchterm: 'linux', number: '9' }]);
+    attachAutocomplete(document.createElement('input'));
 
+    const update = vi.fn();
+    await getConfig().fetch('', update);
+
+    const items = update.mock.calls[0][0] as Suggestion[];
+    expect(items.map((i) => i.type)).toEqual(['recent', 'popular']);
+    expect(items[0].searchTerm).toBe('mac');
+    expect(items[1].searchTerm).toBe('linux');
+  });
+
+  it('returns no empty-state items when there are no recent or popular searches', async () => {
+    attachAutocomplete(document.createElement('input'));
+    const update = vi.fn();
+    await getConfig().fetch('', update);
+    expect(update).toHaveBeenCalledWith([]);
+  });
+
+  it('records the term and navigates on select of a result', () => {
+    const input = document.createElement('input');
+    input.value = 'install';
     const mockLocation = { href: '' };
     Object.defineProperty(window, 'location', { value: mockLocation, writable: true });
+    attachAutocomplete(input);
 
-    handleAutoComplete();
+    getConfig().onSelect({ type: 'result', url: '/faq/42' } as Suggestion);
 
-    const item: Suggestion = { question: 'FAQ', category: 'General', url: '/faq/42' } as Suggestion;
-    getConfig().onSelect(item);
-
+    expect(addRecentSearch).toHaveBeenCalledWith('install');
     expect(mockLocation.href).toBe('/faq/42');
   });
 
-  it('should render suggestion items with category and question', () => {
-    document.body.innerHTML = '<input id="pmf-search-autocomplete" type="text" />';
+  it('records the search term and navigates on select of a popular item', () => {
+    const mockLocation = { href: '' };
+    Object.defineProperty(window, 'location', { value: mockLocation, writable: true });
+    attachAutocomplete(document.createElement('input'));
 
-    handleAutoComplete();
+    getConfig().onSelect({ type: 'popular', searchTerm: 'linux', url: 'search.html?search=linux' } as Suggestion);
 
-    const item: Suggestion = {
-      question: 'How to install phpMyFAQ?',
-      category: 'Installation',
-      url: '/faq/1',
-    } as Suggestion;
-
-    const rendered = getConfig().render(item) as HTMLElement;
-
-    expect(rendered.tagName).toBe('LI');
-    expect(rendered.classList.contains('list-group-item')).toBe(true);
-
-    const categoryEl = rendered.querySelector('.fw-bold') as HTMLElement | null;
-    expect(categoryEl?.innerText).toBe('Installation');
-
-    const questionEl = rendered.querySelector('.pmf-searched-question');
-    expect(questionEl?.textContent).toBe('How to install phpMyFAQ?');
+    expect(addRecentSearch).toHaveBeenCalledWith('linux');
+    expect(mockLocation.href).toBe('search.html?search=linux');
   });
 
-  it('should create a list-group container', () => {
-    document.body.innerHTML = '<input id="pmf-search-autocomplete" type="text" />';
-
+  it('handleAutoComplete does nothing without the inline input', () => {
+    document.body.innerHTML = '<div></div>';
     handleAutoComplete();
+    expect(mockAutocomplete).not.toHaveBeenCalled();
+  });
 
-    const container = getConfig().container as HTMLElement;
-    expect(container).toBeDefined();
-    expect(container.tagName).toBe('UL');
-    expect(container.classList.contains('list-group')).toBe(true);
+  it('handleAutoComplete attaches to the inline input when present', () => {
+    document.body.innerHTML = '<input id="pmf-search-autocomplete" type="text" />';
+    handleAutoComplete();
+    expect(mockAutocomplete).toHaveBeenCalledTimes(1);
+    expect(getConfig().input).toBe(document.getElementById('pmf-search-autocomplete'));
+  });
+
+  it('renders a no-results helper for an empty item', () => {
+    attachAutocomplete(document.createElement('input'));
+    const el = getConfig().render({ type: 'empty', url: 'search.html?search=x' } as Suggestion, '') as HTMLElement;
+    expect(el.classList.contains('pmf-search-empty')).toBe(true);
+    expect(el.textContent).toContain('msgNoSearchResults');
+    expect(el.textContent).toContain('msgAskQuestionInstead');
+  });
+
+  it('renders a popular item with a count badge', () => {
+    attachAutocomplete(document.createElement('input'));
+    const el = getConfig().render(
+      { type: 'popular', searchTerm: 'linux', count: 9, url: 'search.html?search=linux' } as Suggestion,
+      ''
+    ) as HTMLElement;
+    expect(el.textContent).toContain('linux');
+    expect(el.textContent).toContain('9x');
+  });
+
+  it('does not render a badge when the popular count is NaN', () => {
+    attachAutocomplete(document.createElement('input'));
+    const el = getConfig().render(
+      { type: 'popular', searchTerm: 'linux', count: Number('abc'), url: 'search.html?search=linux' } as Suggestion,
+      ''
+    ) as HTMLElement;
+    expect(el.textContent).toContain('linux');
+    expect(el.textContent).not.toContain('NaN');
+  });
+
+  it('renders a result item and highlights the matched query', () => {
+    attachAutocomplete(document.createElement('input'));
+    const el = getConfig().render(
+      { type: 'result', question: 'Install phpMyFAQ', category: 'Setup', url: '/faq/1' } as Suggestion,
+      'install'
+    ) as HTMLElement;
+    expect(el.textContent).toContain('Setup');
+    const strong = el.querySelector('strong');
+    expect(strong?.textContent).toBe('Install');
   });
 });
