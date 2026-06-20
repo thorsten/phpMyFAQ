@@ -38,7 +38,10 @@ final class FormController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
         $data = json_decode($request->getContent());
-        $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_INT);
+        // The frontend sends "checked" as a JSON boolean. FILTER_VALIDATE_INT turns false
+        // into null (validation failure), which breaks deactivating an input, so validate
+        // it as a boolean and cast to the 0/1 integer the Forms layer expects.
+        $checked = (int) Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN, false);
         $formId = Filter::filterVar($data->formid, FILTER_VALIDATE_INT);
         $inputId = Filter::filterVar($data->inputid, FILTER_VALIDATE_INT);
 
@@ -60,7 +63,10 @@ final class FormController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
         $data = json_decode($request->getContent());
-        $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_INT);
+        // The frontend sends "checked" as a JSON boolean. FILTER_VALIDATE_INT turns false
+        // into null (validation failure), which breaks marking an input as not required, so
+        // validate it as a boolean and cast to the 0/1 integer the Forms layer expects.
+        $checked = (int) Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN, false);
         $formId = Filter::filterVar($data->formid, FILTER_VALIDATE_INT);
         $inputId = Filter::filterVar($data->inputid, FILTER_VALIDATE_INT);
 
