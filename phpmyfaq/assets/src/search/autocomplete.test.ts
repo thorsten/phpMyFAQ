@@ -21,7 +21,7 @@ vi.mock('../utils', () => ({
 
 import { handleAutoComplete } from './autocomplete';
 import { fetchAutoCompleteData } from '../api';
-import { Suggestion } from '../interfaces';
+import { AutocompleteSearchResponse, Suggestion } from '../interfaces';
 import autocomplete from 'autocompleter';
 
 const mockAutocomplete = vi.mocked(autocomplete);
@@ -74,7 +74,7 @@ describe('handleAutoComplete', () => {
       { question: 'How to install?', category: 'Setup', url: '/faq/1' } as Suggestion,
       { question: 'How to configure?', category: 'Config', url: '/faq/2' } as Suggestion,
     ];
-    vi.mocked(fetchAutoCompleteData).mockResolvedValue(mockResults);
+    vi.mocked(fetchAutoCompleteData).mockResolvedValue(mockResults as AutocompleteSearchResponse);
 
     handleAutoComplete();
 
