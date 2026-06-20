@@ -93,6 +93,22 @@ function canReusePreparedTestDatabase(string $databasePath, string $databaseConf
         return false;
     }
 
+    // The recorded server path in database.php must match the current environment's
+    // database path. A previously generated config may carry a different absolute path
+    // — e.g. the same checkout accessed under a different case on a case-insensitive
+    // filesystem, or a moved/shared working copy. Reusing it would leave database.php
+    // pointing at the wrong path string and break path-sensitive assertions. A mismatch
+    // forces a rebuild below, which regenerates database.php with the current path.
+    if (!is_readable($databaseConfigPath)) {
+        return false;
+    }
+
+    $DB = [];
+    include $databaseConfigPath;
+    if (!isset($DB['server']) || $DB['server'] !== $databasePath) {
+        return false;
+    }
+
     try {
         $pdo = new \PDO('sqlite:' . $databasePath);
         $statement = $pdo->query("SELECT name FROM sqlite_master WHERE type='table'");

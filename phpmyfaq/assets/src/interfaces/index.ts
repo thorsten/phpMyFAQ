@@ -4,3 +4,4 @@ export * from './Bookmark';
 export * from './authenticatorResponse';
 export * from './Chat';
 export * from './suggestionItem';
+export * from './PopularSearch';

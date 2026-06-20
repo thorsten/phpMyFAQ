@@ -45,11 +45,15 @@ vi.mock('./faq', () => ({
 const mockHandleAutoComplete = vi.fn();
 const mockHandleCategorySelection = vi.fn();
 const mockHandleQuestion = vi.fn();
+const mockInitSearchShortcut = vi.fn();
+const mockInitSearchShortcutBadge = vi.fn();
 
 vi.mock('./search', () => ({
   handleAutoComplete: () => mockHandleAutoComplete(),
   handleCategorySelection: () => mockHandleCategorySelection(),
   handleQuestion: () => mockHandleQuestion(),
+  initSearchShortcut: () => mockInitSearchShortcut(),
+  initSearchShortcutBadge: () => mockInitSearchShortcutBadge(),
 }));
 
 const mockHandleDeleteBookmarks = vi.fn();

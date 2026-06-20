@@ -25,7 +25,13 @@ import {
   handleUserVoting,
   renderFaqEditor,
 } from './faq';
-import { handleAutoComplete, handleCategorySelection, handleQuestion } from './search';
+import {
+  handleAutoComplete,
+  handleCategorySelection,
+  handleQuestion,
+  initSearchShortcut,
+  initSearchShortcutBadge,
+} from './search';
 import {
   handleDeleteBookmarks,
   handleRegister,
@@ -121,6 +127,8 @@ document.addEventListener('DOMContentLoaded', (): void => {
   // AutoComplete
   handleAutoComplete();
   handleCategorySelection();
+  initSearchShortcut();
+  initSearchShortcutBadge();
 
   // Handle Chat
   handleChat();

@@ -76,6 +76,26 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 - Use single quotes for strings.
 - Use arrow functions for callbacks.
 
+# Coding Patterns
+
+- Prefer guard clauses and early returns over deep conditional nesting
+- Name classes and methods after domain concepts, not technical mechanics (e.g. `Subscription.renew()`, not `DataRecord.update()`)
+- Isolate external dependencies behind an interface you own, so they can be swapped or mocked at the boundary
+- Make illegal states unrepresentable — encode invariants in types and constructors instead of re-validating them everywhere
+- Separate decisions (pure logic that computes *what* to do) from actions (side effects that carry it out)
+- Keep functions small and single-purpose
+- Fail loudly and specifically: errors state what went wrong, where, and what to do next — structured enough for machines to parse, readable enough for humans to act on
+
+## Making illegal states unrepresentable in PHP
+
+- Use `enum` for fixed sets instead of string/int constants or magic values (e.g. `enum FaqStatus { case Draft; case Published; case Archived; }`)
+- Push validation into the constructor and throw on bad input, so an object cannot exist in an invalid state — never construct first and validate later
+- Use named constructors (private `__construct` + static `fromString()`, `create()`) when there are several distinct, valid ways to build an object
+- Make value objects `readonly` so invariants checked at construction can't be mutated away afterward (`final readonly class EmailAddress`)
+- Prefer required, typed, non-nullable constructor arguments over nullable properties with setters; if a value is optional, model that explicitly rather than leaning on `null`
+- Replace pervasive `null` checks with a Null Object or a typed result/option where it removes branching
+- Mark classes `final` by default; open them for extension only when you mean to
+
 ## Agent Workflow
 
 When implementing changes:
