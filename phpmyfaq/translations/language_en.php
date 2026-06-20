@@ -804,6 +804,9 @@ $PMF_LANG['emailRegSubject'] = '[%sitename%] Registration: new user';
 
 // added 2.5.0-alpha2 - 2009-01-24 by Thorsten
 $PMF_LANG['msgMostPopularSearches'] = 'Most popular searches';
+$PMF_LANG['msgRecentSearches'] = 'Recent searches';
+$PMF_LANG['msgNoSearchResults'] = 'No results found';
+$PMF_LANG['msgAskQuestionInstead'] = 'Ask a question instead';
 $LANG_CONF['main.enableWysiwygEditor'] = ["checkbox", "Enable bundled WYSIWYG editor"];
 
 // added 2.5.0-beta - 2009-03-30 by Anatoliy
