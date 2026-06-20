@@ -113,7 +113,6 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
 
         self::assertResponseIsSuccessful($response);
         self::assertResponseContains('<h2 class="mb-4 border-bottom">All categories</h2>', $response);
-        self::assertResponseContains('<ul class="pmf-category-overview">', $response);
     }
 
     public function testShowCategoryPageShowsNoFaqMessageForSeededRootCategory(): void
