@@ -26,6 +26,8 @@ $PMF_LANG['nplurals'] = '2';
 // Navigation
 $PMF_LANG["msgCategory"] = "Categories";
 $PMF_LANG["msgShowAllCategories"] = "All categories";
+$PMF_LANG['msgExpandAll'] = 'Expand all';
+$PMF_LANG['msgCollapseAll'] = 'Collapse all';
 $PMF_LANG["msgSearch"] = "Search";
 $PMF_LANG["msgAddContent"] = "Add new FAQ";
 $PMF_LANG["msgQuestion"] = "Add question";

@@ -129,3 +129,117 @@
     box-shadow: inset 3px 0 0 var(--pmf-accent);
   }
 }
+
+// Collapsible category overview tree (show-categories.html).
+.pmf-category-tree-toolbar {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-bottom: 0.75rem;
+}
+
+.pmf-category-tree,
+.pmf-category-tree__children {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pmf-category-tree__children {
+  margin-left: 1.25rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--pmf-border);
+}
+
+.pmf-category-tree__item {
+  border-bottom: 1px solid var(--pmf-border);
+}
+
+.pmf-category-tree--root > .pmf-category-tree__item:last-child {
+  border-bottom: 0;
+}
+
+.pmf-category-tree__row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.6rem 0.25rem;
+  border-radius: 8px;
+
+  &:hover {
+    background: rgb(125, 125, 125, 0.08);
+  }
+}
+
+.pmf-category-tree__toggle,
+.pmf-category-tree__toggle-spacer {
+  flex: 0 0 auto;
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.pmf-category-tree__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: var(--pmf-text-muted);
+  border-radius: 6px;
+  cursor: pointer;
+
+  &:hover {
+    background: rgb(125, 125, 125, 0.16);
+  }
+
+  .bi {
+    transition: transform 0.18s ease;
+  }
+
+  &[aria-expanded='true'] .bi {
+    transform: rotate(90deg);
+  }
+}
+
+.pmf-category-tree__avatar {
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.pmf-category-tree__avatar--letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.pmf-category-tree__content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.pmf-category-tree__name {
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.pmf-category-tree__desc {
+  margin-top: 0.1rem;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  color: var(--pmf-text-muted);
+}
+
+.pmf-category-tree__count {
+  flex: 0 0 auto;
+}

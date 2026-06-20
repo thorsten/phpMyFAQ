@@ -27,6 +27,8 @@ $PMF_LANG['nplurals'] = '2';
 // Navigation
 $PMF_LANG['msgCategory'] = "Kategorien";
 $PMF_LANG['msgShowAllCategories'] = "Alle Kategorien";
+$PMF_LANG['msgExpandAll'] = 'Alle aufklappen';
+$PMF_LANG['msgCollapseAll'] = 'Alle zuklappen';
 $PMF_LANG['msgSearch'] = "Suche";
 $PMF_LANG['msgAddContent'] = "FAQ vorschlagen";
 $PMF_LANG['msgQuestion'] = "Frage stellen";

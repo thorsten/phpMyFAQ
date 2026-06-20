@@ -10,7 +10,20 @@
 
     <h2 class="mb-4 border-bottom">{{ categoryHeader }}</h2>
 
-    {{ categoryContent | raw }}
+    {% if isAllCategories %}
+      {% if categoryTree is not empty %}
+        {% import 'partials/category-tree.twig' as categoryTreeMacro %}
+        <div class="pmf-category-tree-toolbar">
+          <button type="button" class="btn btn-sm btn-outline-secondary" data-pmf-expand-all>{{ msgExpandAll }}</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" data-pmf-collapse-all>{{ msgCollapseAll }}</button>
+        </div>
+        {{ categoryTreeMacro.renderTree(categoryTree) }}
+      {% else %}
+        {{ categoryEmptyMessage | raw }}
+      {% endif %}
+    {% else %}
+      {{ categoryContent | raw }}
+    {% endif %}
 
     <p>{{ categoryLevelUp | raw }}</p>
   </div>
