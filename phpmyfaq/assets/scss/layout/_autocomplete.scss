@@ -60,6 +60,19 @@
   .pmf-searched-question strong {
     color: var(--bs-primary);
   }
+
+  // Section headers ("Recent searches" / "Popular searches") rendered by the
+  // autocompleter library as <div class="group">. Without explicit colors the
+  // text is invisible against the dropdown background, so theme it readably.
+  .group {
+    padding: 8px 12px 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--bs-secondary-color);
+    background-color: var(--bs-body-bg);
+  }
 }
 
 .autocomplete > div {
