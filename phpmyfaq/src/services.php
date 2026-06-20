@@ -137,6 +137,7 @@ use phpMyFAQ\Controller\Frontend\Api\CaptchaController as FrontendApiCaptchaCont
 use phpMyFAQ\Controller\Frontend\Api\CommentController as FrontendApiCommentController;
 use phpMyFAQ\Controller\Frontend\Api\ContactController as FrontendApiContactController;
 use phpMyFAQ\Controller\Frontend\Api\FaqController as FrontendApiFaqController;
+use phpMyFAQ\Controller\Frontend\Api\PopularSearchesController as FrontendApiPopularSearchesController;
 use phpMyFAQ\Controller\Frontend\Api\PushController as FrontendApiPushController;
 use phpMyFAQ\Controller\Frontend\Api\QuestionController as FrontendApiQuestionController;
 use phpMyFAQ\Controller\Frontend\Api\UserController as FrontendApiUserController;
@@ -808,6 +809,9 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.search'),
         service('phpmyfaq.helper.search'),
         service('phpmyfaq.language.plurals'),
+    ]);
+    $services->set(FrontendApiPopularSearchesController::class, FrontendApiPopularSearchesController::class)->args([
+        service('phpmyfaq.search'),
     ]);
     $services->set(FrontendApiCaptchaController::class, FrontendApiCaptchaController::class)->args([
         service('phpmyfaq.captcha'),
