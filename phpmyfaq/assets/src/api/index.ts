@@ -3,6 +3,7 @@ export * from './bookmarks';
 export * from './comment';
 export * from './contact';
 export * from './faq';
+export * from './popularSearches';
 export * from './question';
 export * from './register';
 export * from './share';
