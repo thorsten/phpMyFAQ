@@ -14,6 +14,7 @@
  */
 
 import Masonry from 'masonry-layout';
+import { handleCategoryTree } from './category';
 import { handleContactForm } from './contact';
 import {
   handleAddFaq,
@@ -129,6 +130,9 @@ document.addEventListener('DOMContentLoaded', (): void => {
   handleCategorySelection();
   initSearchShortcut();
   initSearchShortcutBadge();
+
+  // Collapsible category overview
+  handleCategoryTree();
 
   // Handle Chat
   handleChat();
