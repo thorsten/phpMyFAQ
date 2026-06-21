@@ -160,6 +160,37 @@ Then, install it, using referenced manifests on our project at
 
 Read the definitions and configure, according to your needs. If you have any doubt, do not hesitate to consult us.
 
+### 2.2.4 Installation via Composer
+
+phpMyFAQ is published on [Packagist](https://packagist.org/packages/thorsten/phpmyfaq) as the
+`thorsten/phpmyfaq` package, so you can bootstrap a fresh installation with `composer create-project`.
+This is essentially a from-source installation that automates the PHP dependency step. It is best
+suited for developers, or for servers where you already have a Node.js toolchain available.
+
+    $ composer create-project thorsten/phpmyfaq phpmyfaq
+    $ cd phpmyfaq
+
+This downloads the latest stable release and installs all required PHP dependencies into
+**phpmyfaq/src/libs**. To install a specific version, append a version constraint, e.g.
+`composer create-project thorsten/phpmyfaq:^4.2 phpmyfaq`.
+
+Composer only installs the PHP side of phpMyFAQ. The compiled CSS and JavaScript assets are not part
+of the package and have to be built once using [Node.js](https://nodejs.org) 24 or later and
+[PNPM](https://pnpm.io):
+
+    $ pnpm install
+    $ pnpm build
+
+Use `pnpm build:prod` instead of `pnpm build` for a production-optimized, minified build.
+
+**Important:** If you skip the asset build, the setup and admin pages are displayed without any
+styling and the JavaScript does not work. If you do not want to install a Node.js toolchain on your
+server, use one of the provided release packages (.zip or .tar.gz) described in section 2.2.1
+instead — these already ship with pre-built assets.
+
+After building the assets, set the file permissions as described in section 2.2.1, point your web
+server's document root to the **phpmyfaq/** directory, and continue with the setup in section 2.6.
+
 ## 2.3 PHP settings
 
 - We recommend using a PHP accelerator or OpCode cache
