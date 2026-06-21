@@ -119,3 +119,4 @@ nbproject/
 # Local development TLS certificates (generate with mkcert)
 /.docker/cert.pem
 /.docker/cert-key.pem
+.superpowers/
