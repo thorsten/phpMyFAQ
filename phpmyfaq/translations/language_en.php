@@ -379,6 +379,7 @@ $PMF_LANG["ad_att_addto"] = "Add an attachment to the issue";
 $PMF_LANG["ad_att_addto_2"] = "";
 $PMF_LANG["ad_att_att"] = "Select attachment";
 $PMF_LANG["ad_att_butt"] = "OK";
+$PMF_LANG["ad_att_custom_name"] = "Custom filename (optional)";
 $PMF_LANG["ad_att_suc"] = "The file has been attached successfully.";
 $PMF_LANG["ad_att_fail"] = "An error occurred while attaching the file.";
 $PMF_LANG["ad_att_close"] = "Close this window";
