@@ -28,10 +28,14 @@ final class Filename
      * is kept unchanged. Otherwise the custom name is reduced to a safe base name
      * and the original extension is always re-applied so the file ending never
      * changes.
+     *
+     * Following PHP's pathinfo() semantics, a leading dot in the original name is NOT
+     * treated as solely a name prefix: ".htaccess" yields extension "htaccess", so
+     * a custom name will be returned with that extension appended.
      */
     public static function compose(string $originalName, ?string $customName): string
     {
-        $customName = $customName === null ? '' : trim($customName);
+        $customName = trim($customName ?? '');
         if ($customName === '') {
             return $originalName;
         }
