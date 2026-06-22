@@ -65,7 +65,7 @@ class StopWords
                 $this->getTableName(),
                 $this->configuration->getDb()->nextId($this->tableName, 'id'),
                 $this->configuration->getDb()->escape($this->language),
-                $word,
+                $this->configuration->getDb()->escape($word),
             );
 
             return (bool) $this->configuration->getDb()->query($sql);
