@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Twig\Extensions;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
@@ -38,11 +39,13 @@ class CategoryNameTwigExtensionTest extends TestCase
 
     private function ensureConfiguration(): void
     {
-        $reflection = new ReflectionClass(Configuration::class);
-        $prop = $reflection->getProperty('configuration');
-        if ($prop->getValue() !== null) {
-            return;
-        }
+        // Always establish a fresh connection to the shared test database. A leaked
+        // Configuration singleton from an earlier test can hold a stale SQLite handle
+        // that fails with "disk I/O error" once another test reopens test.db, so reset
+        // the singleton and reconnect to keep these tests independent of execution order.
+        (new ReflectionClass(Configuration::class))->getProperty('configuration')->setValue(null, null);
+
+        Database::setTablePrefix('');
 
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
