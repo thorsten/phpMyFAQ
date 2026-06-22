@@ -58,7 +58,7 @@ jobs:
         run: phpmyfaq/src/libs/bin/phpunit --coverage-text --log-junit junit.xml
 
       - name: Publish PHPUnit test results
-        uses: mikepenz/action-junit-report@v6
+        uses: mikepenz/action-junit-report@v6.4.1
         if: always()
         with:
           report_paths: junit.xml
