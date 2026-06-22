@@ -424,6 +424,49 @@ final class AttachmentControllerTest extends TestCase
     }
 
     /**
+     * A crafted request can make a customFileNames entry an array instead of a string;
+     * the controller must ignore non-string entries rather than cast them to "Array".
+     *
+     * @throws \Exception
+     */
+    public function testUploadIgnoresNonStringCustomFileNameEntries(): void
+    {
+        if (!defined('phpMyFAQ\\Attachment\\PMF_ATTACHMENTS_DIR')) {
+            define('phpMyFAQ\\Attachment\\PMF_ATTACHMENTS_DIR', sys_get_temp_dir() . '/');
+        }
+
+        $missingFile = $this->createMock(UploadedFile::class);
+        $missingFile->method('isValid')->willReturn(true);
+        $missingFile->method('getSize')->willReturn(128);
+        $missingFile->method('getMimeType')->willReturn('image/png');
+        $missingFile->method('getPathname')->willReturn(sys_get_temp_dir() . '/pmf-missing-upload.png');
+        $missingFile->method('getClientOriginalName')->willReturn('upload.png');
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'upload-attachment');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        $request = new Request(
+            [],
+            ['pmf-csrf-token' => $token, 'customFileNames' => [['nested-array-entry']]],
+            ['record_id' => 1, 'record_lang' => 'en'],
+            [],
+            [
+                'filesToUpload' => [$missingFile],
+            ],
+        );
+        $response = $controller->upload($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        self::assertArrayHasKey('error', $payload);
+    }
+
+    /**
      * @throws \Exception
      */
     private function createValidCsrfToken(Session $session, string $page): string

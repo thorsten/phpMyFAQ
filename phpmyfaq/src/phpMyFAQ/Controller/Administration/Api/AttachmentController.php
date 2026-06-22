@@ -151,9 +151,10 @@ final class AttachmentController extends AbstractAdministrationApiController
                 FILTER_SANITIZE_SPECIAL_CHARS,
             ));
             try {
+                $customFileName = array_key_exists($index, $customFileNames) ? $customFileNames[$index] : null;
                 $filename = Filename::compose(
                     $file->getClientOriginalName(),
-                    array_key_exists($index, $customFileNames) ? (string) $customFileNames[$index] : null,
+                    is_string($customFileName) ? $customFileName : null,
                 );
                 if (!$attachment->save($file->getPathname(), $filename)) {
                     return $this->json([
