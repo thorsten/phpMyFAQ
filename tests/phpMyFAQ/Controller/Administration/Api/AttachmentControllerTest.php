@@ -384,6 +384,48 @@ final class AttachmentControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testUploadAcceptsCustomFileNamesWithoutError(): void
+    {
+        if (!defined('phpMyFAQ\\Attachment\\PMF_ATTACHMENTS_DIR')) {
+            define('phpMyFAQ\\Attachment\\PMF_ATTACHMENTS_DIR', sys_get_temp_dir() . '/');
+        }
+
+        $missingFile = $this->createMock(UploadedFile::class);
+        $missingFile->method('isValid')->willReturn(true);
+        $missingFile->method('getSize')->willReturn(128);
+        $missingFile->method('getMimeType')->willReturn('image/png');
+        $missingFile->method('getPathname')->willReturn(sys_get_temp_dir() . '/pmf-missing-upload.png');
+        $missingFile->method('getClientOriginalName')->willReturn('upload.png');
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'upload-attachment');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        $request = new Request(
+            [],
+            ['pmf-csrf-token' => $token, 'customFileNames' => ['my-custom-name']],
+            ['record_id' => 1, 'record_lang' => 'en'],
+            [],
+            [
+                'filesToUpload' => [$missingFile],
+            ],
+        );
+        $response = $controller->upload($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        // The save still fails because the file is missing, but the custom-name
+        // param must be read and processed without raising an error.
+        self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        self::assertArrayHasKey('error', $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
     private function createValidCsrfToken(Session $session, string $page): string
     {
         Token::resetInstanceForTests();

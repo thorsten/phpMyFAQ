@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
+use phpMyFAQ\Attachment\Filename;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AdminLogType;
@@ -132,8 +133,9 @@ final class AttachmentController extends AbstractAdministrationApiController
         }
 
         $uploadedFiles = [];
+        $customFileNames = $request->request->all('customFileNames');
 
-        foreach ($files as $file) {
+        foreach ($files as $index => $file) {
             if (
                 !$file->isValid()
                 || $file->getSize() > $this->configuration->get(item: 'records.maxAttachmentSize')
@@ -149,7 +151,11 @@ final class AttachmentController extends AbstractAdministrationApiController
                 FILTER_SANITIZE_SPECIAL_CHARS,
             ));
             try {
-                if (!$attachment->save($file->getPathname(), $file->getClientOriginalName())) {
+                $filename = Filename::compose(
+                    $file->getClientOriginalName(),
+                    array_key_exists($index, $customFileNames) ? (string) $customFileNames[$index] : null,
+                );
+                if (!$attachment->save($file->getPathname(), $filename)) {
                     return $this->json([
                         'error' => Translation::get('msgImageCouldNotBeUploaded'),
                     ], Response::HTTP_INTERNAL_SERVER_ERROR);
