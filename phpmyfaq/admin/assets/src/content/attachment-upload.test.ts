@@ -10,6 +10,24 @@ vi.mock('../../../../assets/src/utils');
 const mockUploadAttachments = api.uploadAttachments as Mock;
 const mockAddElement = utils.addElement as Mock;
 
+const applyRealAddElementMock = (): void => {
+  mockAddElement.mockImplementation((tag: string, props: Record<string, unknown> = {}, children: Node[] = []) => {
+    const element = document.createElement(tag);
+    Object.entries(props).forEach(([key, value]) => {
+      if (key.startsWith('data-') || key.startsWith('aria-')) {
+        element.setAttribute(key, value as string);
+      } else if (key === 'innerText') {
+        // jsdom does not reflect innerText into textContent, so map it here
+        element.textContent = value as string;
+      } else {
+        (element as unknown as Record<string, unknown>)[key] = value;
+      }
+    });
+    children.forEach((child) => element.appendChild(child));
+    return element;
+  });
+};
+
 describe('handleAttachmentUploads', () => {
   let mockFilesToUpload: HTMLInputElement;
   let mockFileUploadButton: HTMLButtonElement;
@@ -128,21 +146,7 @@ describe('handleAttachmentUploads', () => {
         writable: true,
       });
 
-      mockAddElement.mockImplementation((tag: string, props: Record<string, unknown> = {}, children: Node[] = []) => {
-        const element = document.createElement(tag);
-        Object.entries(props).forEach(([key, value]) => {
-          if (key.startsWith('data-') || key.startsWith('aria-')) {
-            element.setAttribute(key, value as string);
-          } else if (key === 'innerText') {
-            // jsdom does not reflect innerText into textContent, so map it here
-            element.textContent = value as string;
-          } else {
-            (element as unknown as Record<string, unknown>)[key] = value;
-          }
-        });
-        children.forEach((child) => element.appendChild(child));
-        return element;
-      });
+      applyRealAddElementMock();
 
       const changeEvent = new Event('change');
       mockFilesToUpload.dispatchEvent(changeEvent);
@@ -171,21 +175,7 @@ describe('handleAttachmentUploads', () => {
         writable: true,
       });
 
-      mockAddElement.mockImplementation((tag: string, props: Record<string, unknown> = {}, children: Node[] = []) => {
-        const element = document.createElement(tag);
-        Object.entries(props).forEach(([key, value]) => {
-          if (key.startsWith('data-') || key.startsWith('aria-')) {
-            element.setAttribute(key, value as string);
-          } else if (key === 'innerText') {
-            // jsdom does not reflect innerText into textContent, so map it here
-            element.textContent = value as string;
-          } else {
-            (element as unknown as Record<string, unknown>)[key] = value;
-          }
-        });
-        children.forEach((child) => element.appendChild(child));
-        return element;
-      });
+      applyRealAddElementMock();
 
       const changeEvent = new Event('change');
       mockFilesToUpload.dispatchEvent(changeEvent);
@@ -214,21 +204,7 @@ describe('handleAttachmentUploads', () => {
         writable: true,
       });
 
-      mockAddElement.mockImplementation((tag: string, props: Record<string, unknown> = {}, children: Node[] = []) => {
-        const element = document.createElement(tag);
-        Object.entries(props).forEach(([key, value]) => {
-          if (key.startsWith('data-') || key.startsWith('aria-')) {
-            element.setAttribute(key, value as string);
-          } else if (key === 'innerText') {
-            // jsdom does not reflect innerText into textContent, so map it here
-            element.textContent = value as string;
-          } else {
-            (element as unknown as Record<string, unknown>)[key] = value;
-          }
-        });
-        children.forEach((child) => element.appendChild(child));
-        return element;
-      });
+      applyRealAddElementMock();
 
       const changeEvent = new Event('change');
       mockFilesToUpload.dispatchEvent(changeEvent);
@@ -262,21 +238,7 @@ describe('handleAttachmentUploads', () => {
         writable: true,
       });
 
-      mockAddElement.mockImplementation((tag: string, props: Record<string, unknown> = {}, children: Node[] = []) => {
-        const element = document.createElement(tag);
-        Object.entries(props).forEach(([key, value]) => {
-          if (key.startsWith('data-') || key.startsWith('aria-')) {
-            element.setAttribute(key, value as string);
-          } else if (key === 'innerText') {
-            // jsdom does not reflect innerText into textContent, so map it here
-            element.textContent = value as string;
-          } else {
-            (element as unknown as Record<string, unknown>)[key] = value;
-          }
-        });
-        children.forEach((child) => element.appendChild(child));
-        return element;
-      });
+      applyRealAddElementMock();
 
       const changeEvent = new Event('change');
       mockFilesToUpload.dispatchEvent(changeEvent);
@@ -310,21 +272,7 @@ describe('handleAttachmentUploads', () => {
         writable: true,
       });
 
-      mockAddElement.mockImplementation((tag: string, props: Record<string, unknown> = {}, children: Node[] = []) => {
-        const element = document.createElement(tag);
-        Object.entries(props).forEach(([key, value]) => {
-          if (key.startsWith('data-') || key.startsWith('aria-')) {
-            element.setAttribute(key, value as string);
-          } else if (key === 'innerText') {
-            // jsdom does not reflect innerText into textContent, so map it here
-            element.textContent = value as string;
-          } else {
-            (element as unknown as Record<string, unknown>)[key] = value;
-          }
-        });
-        children.forEach((child) => element.appendChild(child));
-        return element;
-      });
+      applyRealAddElementMock();
 
       const changeEvent = new Event('change');
       mockFilesToUpload.dispatchEvent(changeEvent);
@@ -354,21 +302,7 @@ describe('handleAttachmentUploads', () => {
         writable: true,
       });
 
-      mockAddElement.mockImplementation((tag: string, props: Record<string, unknown> = {}, children: Node[] = []) => {
-        const element = document.createElement(tag);
-        Object.entries(props).forEach(([key, value]) => {
-          if (key.startsWith('data-') || key.startsWith('aria-')) {
-            element.setAttribute(key, value as string);
-          } else if (key === 'innerText') {
-            // jsdom does not reflect innerText into textContent, so map it here
-            element.textContent = value as string;
-          } else {
-            (element as unknown as Record<string, unknown>)[key] = value;
-          }
-        });
-        children.forEach((child) => element.appendChild(child));
-        return element;
-      });
+      applyRealAddElementMock();
 
       const appendSpy = vi.spyOn(mockFileList, 'append');
 
@@ -398,21 +332,7 @@ describe('handleAttachmentUploads', () => {
         writable: true,
       });
 
-      mockAddElement.mockImplementation((tag: string, props: Record<string, unknown> = {}, children: Node[] = []) => {
-        const element = document.createElement(tag);
-        Object.entries(props).forEach(([key, value]) => {
-          if (key.startsWith('data-') || key.startsWith('aria-')) {
-            element.setAttribute(key, value as string);
-          } else if (key === 'innerText') {
-            // jsdom does not reflect innerText into textContent, so map it here
-            element.textContent = value as string;
-          } else {
-            (element as unknown as Record<string, unknown>)[key] = value;
-          }
-        });
-        children.forEach((child) => element.appendChild(child));
-        return element;
-      });
+      applyRealAddElementMock();
 
       mockFilesToUpload.dispatchEvent(new Event('change'));
 
@@ -421,6 +341,60 @@ describe('handleAttachmentUploads', () => {
       expect(input.placeholder).toBe('document');
       expect(input.getAttribute('data-pmf-file-index')).toBe('0');
       expect(mockFileList.textContent).toContain('.pdf');
+    });
+
+    it('should render no extension suffix for a dotfile name', () => {
+      handleAttachmentUploads();
+
+      const mockFile = new File(['x'], '.gitignore', { type: 'text/plain' });
+      const fileList = {
+        0: mockFile,
+        length: 1,
+        item: (index: number) => (index === 0 ? mockFile : null),
+        [Symbol.iterator]: function* () {
+          yield mockFile;
+        },
+      } as unknown as FileList;
+
+      Object.defineProperty(mockFilesToUpload, 'files', {
+        value: fileList,
+        writable: true,
+      });
+
+      applyRealAddElementMock();
+
+      mockFilesToUpload.dispatchEvent(new Event('change'));
+
+      const input = mockFileList.querySelector('input.pmf-attachment-custom-name') as HTMLInputElement;
+      expect(input.placeholder).toBe('.gitignore');
+      expect(mockFileList.querySelector('.input-group-text')).toBeNull();
+    });
+
+    it('should split only the last extension for multi-dot names', () => {
+      handleAttachmentUploads();
+
+      const mockFile = new File(['x'], 'archive.tar.gz', { type: 'application/gzip' });
+      const fileList = {
+        0: mockFile,
+        length: 1,
+        item: (index: number) => (index === 0 ? mockFile : null),
+        [Symbol.iterator]: function* () {
+          yield mockFile;
+        },
+      } as unknown as FileList;
+
+      Object.defineProperty(mockFilesToUpload, 'files', {
+        value: fileList,
+        writable: true,
+      });
+
+      applyRealAddElementMock();
+
+      mockFilesToUpload.dispatchEvent(new Event('change'));
+
+      const input = mockFileList.querySelector('input.pmf-attachment-custom-name') as HTMLInputElement;
+      expect(input.placeholder).toBe('archive.tar');
+      expect((mockFileList.querySelector('.input-group-text') as HTMLElement).textContent).toBe('.gz');
     });
 
     it('should use textContent instead of innerHTML for file size (security)', () => {
@@ -904,21 +878,7 @@ describe('handleAttachmentUploads', () => {
         writable: true,
       });
 
-      mockAddElement.mockImplementation((tag: string, props: Record<string, unknown> = {}, children: Node[] = []) => {
-        const element = document.createElement(tag);
-        Object.entries(props).forEach(([key, value]) => {
-          if (key.startsWith('data-') || key.startsWith('aria-')) {
-            element.setAttribute(key, value as string);
-          } else if (key === 'innerText') {
-            // jsdom does not reflect innerText into textContent, so map it here
-            element.textContent = value as string;
-          } else {
-            (element as unknown as Record<string, unknown>)[key] = value;
-          }
-        });
-        children.forEach((child) => element.appendChild(child));
-        return element;
-      });
+      applyRealAddElementMock();
 
       mockFilesToUpload.dispatchEvent(new Event('change'));
       const inputs = mockFileList.querySelectorAll('input.pmf-attachment-custom-name');
@@ -954,21 +914,7 @@ describe('handleAttachmentUploads', () => {
         writable: true,
       });
 
-      mockAddElement.mockImplementation((tag: string, props: Record<string, unknown> = {}, children: Node[] = []) => {
-        const element = document.createElement(tag);
-        Object.entries(props).forEach(([key, value]) => {
-          if (key.startsWith('data-') || key.startsWith('aria-')) {
-            element.setAttribute(key, value as string);
-          } else if (key === 'innerText') {
-            // jsdom does not reflect innerText into textContent, so map it here
-            element.textContent = value as string;
-          } else {
-            (element as unknown as Record<string, unknown>)[key] = value;
-          }
-        });
-        children.forEach((child) => element.appendChild(child));
-        return element;
-      });
+      applyRealAddElementMock();
 
       const changeEvent = new Event('change');
       mockFilesToUpload.dispatchEvent(changeEvent);
@@ -995,21 +941,7 @@ describe('handleAttachmentUploads', () => {
         writable: true,
       });
 
-      mockAddElement.mockImplementation((tag: string, props: Record<string, unknown> = {}, children: Node[] = []) => {
-        const element = document.createElement(tag);
-        Object.entries(props).forEach(([key, value]) => {
-          if (key.startsWith('data-') || key.startsWith('aria-')) {
-            element.setAttribute(key, value as string);
-          } else if (key === 'innerText') {
-            // jsdom does not reflect innerText into textContent, so map it here
-            element.textContent = value as string;
-          } else {
-            (element as unknown as Record<string, unknown>)[key] = value;
-          }
-        });
-        children.forEach((child) => element.appendChild(child));
-        return element;
-      });
+      applyRealAddElementMock();
 
       const changeEvent = new Event('change');
       mockFilesToUpload.dispatchEvent(changeEvent);
@@ -1102,27 +1034,12 @@ describe('handleAttachmentUploads', () => {
         writable: true,
       });
 
-      mockAddElement.mockImplementation((tag: string, props: Record<string, unknown> = {}, children: Node[] = []) => {
-        const element = document.createElement(tag);
-        Object.entries(props).forEach(([key, value]) => {
-          if (key.startsWith('data-') || key.startsWith('aria-')) {
-            element.setAttribute(key, value as string);
-          } else if (key === 'innerText') {
-            // jsdom does not reflect innerText into textContent, so map it here
-            element.textContent = value as string;
-          } else {
-            (element as unknown as Record<string, unknown>)[key] = value;
-          }
-        });
-        children.forEach((child) => element.appendChild(child));
-        return element;
-      });
+      applyRealAddElementMock();
 
       const changeEvent = new Event('change');
       mockFilesToUpload.dispatchEvent(changeEvent);
 
-      // Each file renders: li > (div name + div input-group > (input + span ext)) = 5 elements; plus 1 ul wrapper
-      expect(mockAddElement).toHaveBeenCalledTimes(100 * 5 + 1);
+      expect(mockFileList.querySelectorAll('input.pmf-attachment-custom-name').length).toBe(100);
       expect(mockFileList.classList.contains('invisible')).toBe(false);
     });
 
@@ -1176,21 +1093,7 @@ describe('handleAttachmentUploads', () => {
         writable: true,
       });
 
-      mockAddElement.mockImplementation((tag: string, props: Record<string, unknown> = {}, children: Node[] = []) => {
-        const element = document.createElement(tag);
-        Object.entries(props).forEach(([key, value]) => {
-          if (key.startsWith('data-') || key.startsWith('aria-')) {
-            element.setAttribute(key, value as string);
-          } else if (key === 'innerText') {
-            // jsdom does not reflect innerText into textContent, so map it here
-            element.textContent = value as string;
-          } else {
-            (element as unknown as Record<string, unknown>)[key] = value;
-          }
-        });
-        children.forEach((child) => element.appendChild(child));
-        return element;
-      });
+      applyRealAddElementMock();
 
       const changeEvent = new Event('change');
       mockFilesToUpload.dispatchEvent(changeEvent);
@@ -1198,6 +1101,9 @@ describe('handleAttachmentUploads', () => {
       // The script must not become a live element; it is rendered as plain text only.
       expect(mockFileList.querySelector('script')).toBeNull();
       expect(mockFileList.textContent).toContain('<script>alert("XSS")</script>.txt');
+
+      const innerHTMLCalls = mockAddElement.mock.calls.filter(([, props]) => props != null && 'innerHTML' in props);
+      expect(innerHTMLCalls).toHaveLength(0);
     });
 
     it('should safely handle attachment IDs in data attributes', async () => {
