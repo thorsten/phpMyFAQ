@@ -32,12 +32,38 @@ export const handleAttachmentUploads = (): void => {
 
       fileList.classList.remove('invisible');
 
+      const customNameLabel: string = filesToUpload.getAttribute('data-pmf-custom-name-label') ?? '';
+
       let bytes: number = 0;
       const numFiles: number = files.length;
-      const fileItems: HTMLElement[] = [];
+      const rows: HTMLElement[] = [];
       for (let fileId: number = 0; fileId < numFiles; fileId++) {
         bytes += files[fileId].size;
-        fileItems.push(addElement('li', { innerText: files[fileId].name }));
+
+        const name: string = files[fileId].name;
+        const dotIndex: number = name.lastIndexOf('.');
+        const baseName: string = dotIndex > 0 ? name.slice(0, dotIndex) : name;
+        const extension: string = dotIndex > 0 ? name.slice(dotIndex) : '';
+
+        const input: HTMLElement = addElement('input', {
+          type: 'text',
+          className: 'form-control pmf-attachment-custom-name',
+          'data-pmf-file-index': String(fileId),
+          placeholder: baseName,
+          'aria-label': customNameLabel,
+        });
+
+        const inputGroupChildren: HTMLElement[] = [input];
+        if (extension !== '') {
+          inputGroupChildren.push(addElement('span', { className: 'input-group-text', innerText: extension }));
+        }
+
+        rows.push(
+          addElement('li', { className: 'mb-2' }, [
+            addElement('div', { className: 'small text-muted', innerText: name }),
+            addElement('div', { className: 'input-group input-group-sm' }, inputGroupChildren),
+          ])
+        );
       }
 
       let output: string = bytes + ' bytes';
@@ -50,7 +76,7 @@ export const handleAttachmentUploads = (): void => {
       }
 
       fileSize.textContent = output;
-      fileList.append(addElement('ul', { className: 'mt-2' }, fileItems));
+      fileList.append(addElement('ul', { className: 'list-unstyled mt-2' }, rows));
     });
 
     fileUploadButton?.addEventListener('click', async (event: Event): Promise<void> => {
@@ -66,6 +92,10 @@ export const handleAttachmentUploads = (): void => {
       const formData = new FormData();
       for (let i: number = 0; i < files.length; i++) {
         formData.append('filesToUpload[]', files[i]);
+        const customNameInput = document.querySelector(
+          `input.pmf-attachment-custom-name[data-pmf-file-index="${i}"]`
+        ) as HTMLInputElement | null;
+        formData.append('customFileNames[]', customNameInput ? customNameInput.value.trim() : '');
       }
       formData.append('record_id', (document.getElementById('attachment_record_id') as HTMLInputElement).value);
       formData.append('record_lang', (document.getElementById('attachment_record_lang') as HTMLInputElement).value);
