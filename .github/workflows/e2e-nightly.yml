@@ -63,7 +63,7 @@ jobs:
           node-version: 24.x
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v6.0.8
+        uses: pnpm/action-setup@v6.0.9
         with:
           version: 8.15.5
           run_install: false
