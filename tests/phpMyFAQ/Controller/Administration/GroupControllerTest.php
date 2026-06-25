@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\User\CurrentUser;
@@ -104,5 +105,41 @@ class GroupControllerTest extends TestCase
 
         $this->expectException(UnauthorizedHttpException::class);
         $controller->updatePermissions($request);
+    }
+
+    public function testUpdateMembersNonSuperAdminCannotManageGroupWithRightTheyDoNotHold(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+
+        // The target group holds right id 42, which the acting user does NOT hold. Managing its
+        // membership would let the acting user inherit that right via group membership, so it must
+        // be refused.
+        // hasPermission() returns true for the string-keyed permission gate ('editgroup') but false
+        // for the integer right id 42 the target group holds.
+        $perm = $this->createMock(MediumPermission::class);
+        $perm->method('getGroupRights')->willReturn([42]);
+        $perm->method('hasPermission')->willReturnCallback(
+            static fn(int $userId, mixed $right): bool => is_string($right),
+        );
+
+        $actingUser = $this->createMock(CurrentUser::class);
+        $actingUser->perm = $perm;
+        $actingUser->method('isLoggedIn')->willReturn(true);
+        $actingUser->method('getUserId')->willReturn(5);
+        $actingUser->method('isSuperAdmin')->willReturn(false);
+
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-group-members');
+
+        $request = new Request(
+            request: [
+                'pmf-csrf-token' => $csrf,
+                'group_id' => '1',
+                'group_members' => ['5'], // the acting user self-joining the privileged group
+            ],
+        );
+
+        $this->expectException(UnauthorizedHttpException::class);
+        $controller->updateMembers($request);
     }
 }

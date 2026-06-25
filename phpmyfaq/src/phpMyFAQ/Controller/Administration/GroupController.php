@@ -261,6 +261,19 @@ final class GroupController extends AbstractAdministrationController
             $groupMembers = [];
         }
 
+        // A non-SuperAdmin may only manage membership of a group whose rights they fully hold
+        // themselves. Otherwise an administrator with the delegable GROUP_EDIT right could join
+        // themselves (or anyone else) to a privileged group and inherit rights they do not possess
+        // (privilege escalation via group membership inheritance).
+        if (!$this->currentUser->isSuperAdmin()) {
+            $actingUserId = $this->currentUser->getUserId();
+            foreach ($this->currentUser->perm->getGroupRights($groupId) as $groupRight) {
+                if (!$this->currentUser->perm->hasPermission($actingUserId, (int) $groupRight)) {
+                    throw new UnauthorizedHttpException('Cannot manage a group whose rights you do not hold');
+                }
+            }
+        }
+
         $user = $this->container->get(id: 'phpmyfaq.user');
         if (!$user->perm->removeAllUsersFromGroup($groupId)) {
             $message = sprintf('<div class="alert alert-danger">%s</div>', Translation::get(key: 'ad_msg_mysqlerr'));
