@@ -367,8 +367,8 @@ final class AttachmentControllerTest extends TestCase
 
         $request = new Request(
             [],
-            ['pmf-csrf-token' => $token],
-            ['record_id' => 1, 'record_lang' => 'en'],
+            ['pmf-csrf-token' => $token, 'record_id' => 1, 'record_lang' => 'en'],
+            [],
             [],
             [
                 'filesToUpload' => [$missingFile],
@@ -407,8 +407,8 @@ final class AttachmentControllerTest extends TestCase
 
         $request = new Request(
             [],
-            ['pmf-csrf-token' => $token, 'customFileNames' => ['my-custom-name']],
-            ['record_id' => 1, 'record_lang' => 'en'],
+            ['pmf-csrf-token' => $token, 'customFileNames' => ['my-custom-name'], 'record_id' => 1, 'record_lang' => 'en'],
+            [],
             [],
             [
                 'filesToUpload' => [$missingFile],
@@ -452,8 +452,8 @@ final class AttachmentControllerTest extends TestCase
 
         $request = new Request(
             [],
-            ['pmf-csrf-token' => $token, 'customFileNames' => [['nested-array-entry']]],
-            ['record_id' => 1, 'record_lang' => 'en'],
+            ['pmf-csrf-token' => $token, 'customFileNames' => [['nested-array-entry']], 'record_id' => 1, 'record_lang' => 'en'],
+            [],
             [],
             [
                 'filesToUpload' => [$missingFile],

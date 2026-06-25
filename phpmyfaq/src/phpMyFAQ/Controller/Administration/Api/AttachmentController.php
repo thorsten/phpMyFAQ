@@ -145,9 +145,9 @@ final class AttachmentController extends AbstractAdministrationApiController
             }
 
             $attachment = AttachmentFactory::create();
-            $attachment->setRecordId(Filter::filterVar($request->attributes->get('record_id'), FILTER_VALIDATE_INT));
+            $attachment->setRecordId(Filter::filterVar($request->request->get('record_id'), FILTER_VALIDATE_INT));
             $attachment->setRecordLang(Filter::filterVar(
-                $request->attributes->get('record_lang'),
+                $request->request->get('record_lang'),
                 FILTER_SANITIZE_SPECIAL_CHARS,
             ));
             try {
@@ -168,8 +168,8 @@ final class AttachmentController extends AbstractAdministrationApiController
             $uploadedFiles[] = [
                 'attachmentId' => $attachment->getId(),
                 'fileName' => $attachment->getFilename(),
-                'faqId' => $request->attributes->get('record_id'),
-                'faqLanguage' => $request->attributes->get('record_lang'),
+                'faqId' => $request->request->get('record_id'),
+                'faqLanguage' => $request->request->get('record_lang'),
             ];
         }
 
