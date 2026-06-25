@@ -52,6 +52,7 @@ describe('handleAttachmentUploads', () => {
       <ul class="adminAttachments" data-pmf-csrf-token="test-csrf-token"></ul>
       <input id="attachment_record_id" value="123" />
       <input id="attachment_record_lang" value="en" />
+      <input id="pmf-csrf-token" value="upload-token-xyz" />
     `;
 
     mockFilesToUpload = document.getElementById('filesToUpload') as HTMLInputElement;
@@ -547,6 +548,7 @@ describe('handleAttachmentUploads', () => {
       const formDataCall = mockUploadAttachments.mock.calls[0][0] as FormData;
       expect(formDataCall.get('record_id')).toBe('123');
       expect(formDataCall.get('record_lang')).toBe('en');
+      expect(formDataCall.get('pmf-csrf-token')).toBe('upload-token-xyz');
     });
 
     it('should successfully upload files and update UI', async () => {
