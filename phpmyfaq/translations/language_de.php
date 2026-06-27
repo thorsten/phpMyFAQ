@@ -336,6 +336,9 @@ $PMF_LANG['ad_sess_ai_sb'] = "Suchbegriffe";
 $PMF_LANG['ad_sess_ai_sid'] = "Session-ID";
 $PMF_LANG['ad_sess_back'] = "Zurück";
 $PMF_LANG['ad_sess_noentry'] = "Kein Eintrag";
+$PMF_LANG['ad_sess_no_sessions'] = "Für diesen Tag wurden keine Sitzungen aufgezeichnet.";
+$PMF_LANG['ad_sess_view'] = "Anzeigen";
+$PMF_LANG['ad_sess_count'] = "Aufgezeichnete Sitzungen";
 
 // Statistik
 $PMF_LANG['ad_rs'] = "Bewertungsstatistik";
@@ -1137,6 +1140,7 @@ $PMF_LANG['ad_msgNoteAboutPasswords'] = "Achtung! Beim Ausfüllen der Passwortfe
 $PMF_LANG['ad_delete_all_votings'] = "Alle Bewertungen löschen";
 $PMF_LANG['categoryModeratorLabel'] = "Moderatoren";
 $PMF_LANG['ad_clear_all_visits'] = "Alle Besuche zurücksetzen";
+$PMF_LANG['ad_clear_all_visits_confirm'] = "Damit werden alle Tracking- und Sitzungsdaten unwiderruflich gelöscht. Dieser Vorgang kann nicht rückgängig gemacht werden. Möchten Sie fortfahren?";
 $PMF_LANG['ad_reset_visits_success'] = 'Die Besuche wurden erfolgreich zurückgesetzt';
 $LANG_CONF['main.enableMarkdownEditor'] = ['checkbox', 'Aktivierung des Markdown Editors'];
 

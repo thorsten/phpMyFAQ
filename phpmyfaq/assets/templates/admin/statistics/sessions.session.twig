@@ -1,47 +1,73 @@
 {% extends '@admin/index.twig' %}
 
 {% block content %}
+  {# Keep only the tracking lines that belong to this session #}
+  {% set rows = trackingData | filter(line => (line | split(';'))[0] == sessionId) %}
+  {% set meta = (rows | first) | default('') | split(';') %}
+
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mb-3 border-bottom">
     <h1 class="h2">
       <i aria-hidden="true" class="bi bi-clock-history"></i>
       {{ ad_sess_session }} #{{ sessionId }}
     </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <a class="btn btn-outline-secondary" href="./statistics/sessions/{{ thisDay }}">
+        <i aria-hidden="true" class="bi bi-arrow-left"></i> {{ ad_sess_back }}
+      </a>
+    </div>
   </div>
-  <table class="table table-striped align-middle border shadow">
-    <tbody>
-    {% set num = 0 %}
-    {% for line in trackingData %}
-      {% set data = line|split(';') %}
-      {% if data.0 == sessionId %}
-        {% set num = num + 1 %}
-        <tr>
-          <td>{{ data.7|date('Y-m-d H:i:s') }}</td>
-          <td>{{ data.1 }} ({{ data.2 }})</td>
-        </tr>
-        {% if num == 1 %}
-          <tr>
-            <td>{{ ad_sess_referer }}:</td>
-            <td>
-              {% set temp = data.5|replace({'?': '? '}) %}
-              {{ temp|escape }}
-            </td>
-          </tr>
-          <tr>
-            <td>{{ ad_sess_browser }}:</td>
-            <td>{{ data.6|escape }}</td>
-          </tr>
-          <tr>
-            <td>{{ ad_sess_ip }}:</td>
-            <td>{{ data.3|escape }}</td>
-          </tr>
-        {% endif %}
-      {% endif %}
-    {% endfor %}
-    </tbody>
-    <tfoot>
-      <tr>
-        <td colspan="2"><a href="./statistics/sessions/{{ thisDay }}">{{ ad_sess_back }}</a></td>
-      </tr>
-    </tfoot>
-  </table>
+
+  <div class="row">
+    <div class="col-lg-4 mb-4">
+      <div class="card shadow h-100">
+        <h5 class="card-header py-3">
+          <i aria-hidden="true" class="bi bi-info-circle"></i> {{ ad_sess_session }}
+        </h5>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-4">{{ ad_sess_ip }}</dt>
+            <dd class="col-8"><code>{{ meta.3 | default('') | escape }}</code></dd>
+
+            <dt class="col-4">{{ ad_sess_browser }}</dt>
+            <dd class="col-8">{{ meta.6 | default('') | escape }}</dd>
+
+            <dt class="col-4">{{ ad_sess_referer }}</dt>
+            <dd class="col-8 text-break">
+              {{ meta.5 | default('') | replace({'?': '? '}) | escape }}
+            </dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8 mb-4">
+      <div class="card shadow h-100">
+        <h5 class="card-header py-3">
+          <i aria-hidden="true" class="bi bi-eye"></i> {{ 'ad_sess_pageviews' | translate }}
+        </h5>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped align-middle mb-0">
+              <caption class="visually-hidden">{{ ad_sess_session }} #{{ sessionId }}</caption>
+              <thead>
+                <tr>
+                  <th scope="col">{{ 'ad_sess_time' | translate }}</th>
+                  <th scope="col">{{ 'ad_gen_page' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for line in rows %}
+                {% set data = line | split(';') %}
+                <tr>
+                  <td class="text-nowrap">{{ data.7 | date('Y-m-d H:i:s') }}</td>
+                  <td>{{ data.1 | escape }} <span class="badge bg-secondary">{{ data.2 | escape }}</span></td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
