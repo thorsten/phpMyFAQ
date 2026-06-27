@@ -1,1 +1,1 @@
-composer format && composer validate && composer test && pnpm pretty-quick --staged && pnpm run oxfmt && pnpm run oxlint && pnpm run stylelint && pnpm run tsc && pnpm test
+./phpmyfaq/src/libs/bin/mago format && composer validate && ./phpmyfaq/src/libs/bin/phpunit --no-coverage && pnpm pretty-quick --staged && pnpm run oxfmt && pnpm run oxlint && pnpm run stylelint && pnpm run tsc && pnpm test
