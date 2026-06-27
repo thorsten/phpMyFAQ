@@ -89,6 +89,26 @@ class TokenTest extends TestCase
         static::assertSame($instance1, $instance2);
     }
 
+    public function testStoredTokenSerializesWithoutSessionReference(): void
+    {
+        $tokenString = $this->token->getTokenString('upload-attachment');
+        $stored = $this->session->get('pmf-csrf-token.upload-attachment');
+        static::assertInstanceOf(Token::class, $stored);
+
+        // The serialised form must not drag in the SessionInterface/storage; that
+        // is what corrupts the token when PHP re-serialises $_SESSION during
+        // session_regenerate_id(), dropping the CSRF token.
+        $serialized = serialize($stored);
+        static::assertStringNotContainsString('MockArraySessionStorage', $serialized);
+        static::assertStringNotContainsString('AttributeBag', $serialized);
+
+        $restored = unserialize($serialized);
+        static::assertInstanceOf(Token::class, $restored);
+        static::assertSame($tokenString, $restored->getSessionToken());
+        static::assertSame($stored->getCookieToken(), $restored->getCookieToken());
+        static::assertSame($stored->getExpiry(), $restored->getExpiry());
+    }
+
     public function testResetInstanceForTestsClearsInstance(): void
     {
         $instance1 = Token::getInstance($this->session);

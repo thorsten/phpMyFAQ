@@ -47,6 +47,36 @@ class Token
     ) {
     }
 
+    /**
+     * Only the token data is persisted in the session. The SessionInterface
+     * reference is deliberately excluded: serialising it (e.g. when PHP
+     * re-serialises $_SESSION during session_regenerate_id()) would drag in the
+     * whole session object and could corrupt the stored token, dropping the
+     * CSRF token. A persisted token never needs its own session back-reference.
+     *
+     * @return array<string, mixed>
+     */
+    public function __serialize(): array
+    {
+        return [
+            'page' => $this->page ?? '',
+            'expiry' => $this->expiry,
+            'sessionToken' => $this->sessionToken,
+            'cookieToken' => $this->cookieToken,
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function __unserialize(array $data): void
+    {
+        $this->page = (string) ($data['page'] ?? '');
+        $this->expiry = (int) ($data['expiry'] ?? 0);
+        $this->sessionToken = $data['sessionToken'] ?? null;
+        $this->cookieToken = $data['cookieToken'] ?? null;
+    }
+
     public function getPage(): string
     {
         return $this->page;
@@ -174,9 +204,17 @@ class Token
     {
         $token = $this->session->get(sprintf('%s.%s', self::PMF_SESSION_NAME, $page));
 
+        // Treat a missing or corrupted (non-Token) value as absent so callers
+        // regenerate a fresh token. A stale value that fails to deserialize
+        // cleanly would otherwise be returned and never replaced, permanently
+        // breaking CSRF verification for that page.
+        if (!$token instanceof self) {
+            return null;
+        }
+
         // Treat an expired token as absent so callers regenerate a fresh one
         // instead of rendering a dead token that would fail verification.
-        if ($token instanceof self && time() > $token->getExpiry()) {
+        if (time() > $token->getExpiry()) {
             $this->removeToken($page);
 
             return null;
