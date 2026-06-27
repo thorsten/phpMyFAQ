@@ -15,6 +15,7 @@
 import { addElement, pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 import { uploadAttachments } from '../api';
 import { Attachment } from '../interfaces';
+import { bindAttachmentDeleteButton } from './faqs';
 
 export const handleAttachmentUploads = (): void => {
   const filesToUpload = document.getElementById('filesToUpload') as HTMLInputElement | null;
@@ -99,7 +100,10 @@ export const handleAttachmentUploads = (): void => {
       }
       formData.append('record_id', (document.getElementById('attachment_record_id') as HTMLInputElement).value);
       formData.append('record_lang', (document.getElementById('attachment_record_lang') as HTMLInputElement).value);
-      formData.append('pmf-csrf-token', (document.getElementById('pmf-csrf-token') as HTMLInputElement).value);
+      formData.append(
+        'pmf-csrf-token',
+        (document.getElementById('pmf-attachment-csrf-token') as HTMLInputElement).value
+      );
 
       try {
         const response = (await uploadAttachments(formData)) as unknown as Attachment[];
@@ -113,30 +117,32 @@ export const handleAttachmentUploads = (): void => {
         if (attachmentList) {
           response.forEach((attachment: Attachment): void => {
             const csrfToken = attachmentList.getAttribute('data-pmf-csrf-token') as string;
+            const deleteButton = addElement(
+              'button',
+              {
+                type: 'button',
+                className: 'btn btn-sm btn-danger pmf-delete-attachment-button',
+                'data-pmf-attachment-id': attachment.attachmentId,
+                'data-pmf-csrf-token': csrfToken,
+              },
+              [
+                addElement('i', {
+                  className: 'bi bi-trash',
+                  'data-pmf-attachment-id': attachment.attachmentId,
+                  'data-pmf-csrf-token': csrfToken,
+                }),
+              ]
+            );
+            bindAttachmentDeleteButton(deleteButton);
             attachmentList.insertAdjacentElement(
               'beforeend',
-              addElement('li', {}, [
+              addElement('li', { id: `attachment-id-${attachment.attachmentId}` }, [
                 addElement('a', {
                   className: 'me-2',
                   href: `../attachment/${attachment.attachmentId}`,
                   innerText: attachment.fileName,
                 }),
-                addElement(
-                  'button',
-                  {
-                    type: 'button',
-                    className: 'btn btn-sm btn-danger pmf-delete-attachment-button',
-                    'data-pmfAttachmentId': attachment.attachmentId,
-                    'data-pmfCsrfToken': csrfToken,
-                  },
-                  [
-                    addElement('i', {
-                      className: 'bi bi-trash',
-                      'data-pmfAttachmentId': attachment.attachmentId,
-                      'data-pmfCsrfToken': csrfToken,
-                    }),
-                  ]
-                ),
+                deleteButton,
               ])
             );
           });

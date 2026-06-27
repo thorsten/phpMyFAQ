@@ -25,6 +25,30 @@ const showHelp = (option: string): void => {
   optionHelp.addEventListener('transitionend', () => optionHelp.remove());
 };
 
+export const bindAttachmentDeleteButton = (button: Element): void => {
+  button.addEventListener('click', async (event: Event): Promise<void> => {
+    event.preventDefault();
+
+    const trigger = event.currentTarget as HTMLElement;
+    const attachmentId = trigger.getAttribute('data-pmf-attachment-id') as string;
+    const csrfToken = trigger.getAttribute('data-pmf-csrf-token') as string;
+
+    const response = (await deleteAttachments(attachmentId, csrfToken)) as unknown as Response;
+
+    if (response.success) {
+      const listItemToDelete = document.getElementById(`attachment-id-${attachmentId}`);
+      if (listItemToDelete) {
+        listItemToDelete.style.opacity = '0';
+        listItemToDelete.addEventListener('transitionend', () => listItemToDelete.remove());
+      }
+      pushNotification(response.success);
+    }
+    if (response.error) {
+      pushNotification(response.error);
+    }
+  });
+};
+
 export const handleFaqForm = (): void => {
   const deleteAttachmentButtons = document.querySelectorAll('.pmf-delete-attachment-button');
   const inputTags = document.getElementById('tags') as HTMLInputElement | null;
@@ -37,27 +61,7 @@ export const handleFaqForm = (): void => {
     inputSearchKeywords.addEventListener('focus', () => showHelp('keywords'));
   }
   if (deleteAttachmentButtons) {
-    deleteAttachmentButtons.forEach((button) => {
-      button.addEventListener('click', async (event: Event) => {
-        event.preventDefault();
-
-        const target = event.target as HTMLElement;
-        const attachmentId = target.getAttribute('data-pmf-attachment-id') as string;
-        const csrfToken = target.getAttribute('data-pmf-csrf-token') as string;
-
-        const response = (await deleteAttachments(attachmentId, csrfToken)) as unknown as Response;
-
-        if (response.success) {
-          const listItemToDelete = document.getElementById(`attachment-id-${attachmentId}`) as HTMLElement;
-          listItemToDelete.addEventListener('click', () => (listItemToDelete.style.opacity = '0'));
-          listItemToDelete.addEventListener('transitionend', () => listItemToDelete.remove());
-          pushNotification(response.success);
-        }
-        if (response.error) {
-          pushNotification(response.error);
-        }
-      });
-    });
+    deleteAttachmentButtons.forEach((button) => bindAttachmentDeleteButton(button));
   }
 
   const categoryOptions = document.querySelector('#phpmyfaq-categories') as HTMLSelectElement | null;

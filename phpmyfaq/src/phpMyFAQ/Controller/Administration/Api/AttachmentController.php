@@ -27,7 +27,6 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -40,14 +39,14 @@ final class AttachmentController extends AbstractAdministrationApiController
     /**
      * @throws \Exception
      */
-    #[Route(path: 'content/attachments', name: 'admin.api.content.attachments', methods: ['GET'])]
+    #[Route(path: 'content/attachments', name: 'admin.api.content.attachments', methods: ['DELETE'])]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::ATTACHMENT_DELETE);
 
         $deleteData = json_decode($request->getContent());
         try {
-            if (!Token::getInstance($this->session)->verifyToken('delete-attachment', $deleteData->csrf)) {
+            if (!$this->verifySessionCsrfToken('delete-attachment', (string) $deleteData->csrf)) {
                 return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
             }
 
@@ -84,7 +83,7 @@ final class AttachmentController extends AbstractAdministrationApiController
 
         $dataToCheck = json_decode($request->getContent());
         try {
-            if (!Token::getInstance($this->session)->verifyToken('refresh-attachment', $dataToCheck->csrf)) {
+            if (!$this->verifySessionCsrfToken('refresh-attachment', (string) $dataToCheck->csrf)) {
                 return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
             }
 
@@ -121,8 +120,11 @@ final class AttachmentController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::ATTACHMENT_ADD);
 
-        $csrfToken = Filter::filterVar($request->request->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!Token::getInstance($this->session)->verifyToken('upload-attachment', $csrfToken)) {
+        $csrfToken = (string) Filter::filterVar(
+            $request->request->get('pmf-csrf-token'),
+            FILTER_SANITIZE_SPECIAL_CHARS,
+        );
+        if (!$this->verifySessionCsrfToken('upload-attachment', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 

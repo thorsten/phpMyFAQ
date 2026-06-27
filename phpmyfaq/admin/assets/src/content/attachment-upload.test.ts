@@ -52,7 +52,7 @@ describe('handleAttachmentUploads', () => {
       <ul class="adminAttachments" data-pmf-csrf-token="test-csrf-token"></ul>
       <input id="attachment_record_id" value="123" />
       <input id="attachment_record_lang" value="en" />
-      <input id="pmf-csrf-token" value="upload-token-xyz" />
+      <input id="pmf-attachment-csrf-token" value="upload-token-xyz" />
     `;
 
     mockFilesToUpload = document.getElementById('filesToUpload') as HTMLInputElement;
@@ -628,8 +628,8 @@ describe('handleAttachmentUploads', () => {
         expect.objectContaining({
           type: 'button',
           className: 'btn btn-sm btn-danger pmf-delete-attachment-button',
-          'data-pmfAttachmentId': '999',
-          'data-pmfCsrfToken': 'test-csrf-token',
+          'data-pmf-attachment-id': '999',
+          'data-pmf-csrf-token': 'test-csrf-token',
         }),
         expect.any(Array)
       );
@@ -656,8 +656,8 @@ describe('handleAttachmentUploads', () => {
         'i',
         expect.objectContaining({
           className: 'bi bi-trash',
-          'data-pmfAttachmentId': '111',
-          'data-pmfCsrfToken': 'test-csrf-token',
+          'data-pmf-attachment-id': '111',
+          'data-pmf-csrf-token': 'test-csrf-token',
         })
       );
     });
@@ -853,7 +853,7 @@ describe('handleAttachmentUploads', () => {
       expect(mockAddElement).toHaveBeenCalledWith(
         'button',
         expect.objectContaining({
-          'data-pmfCsrfToken': 'custom-csrf-token-123',
+          'data-pmf-csrf-token': 'custom-csrf-token-123',
         }),
         expect.any(Array)
       );
@@ -1146,7 +1146,7 @@ describe('handleAttachmentUploads', () => {
       expect(mockAddElement).toHaveBeenCalledWith(
         'button',
         expect.objectContaining({
-          'data-pmfAttachmentId': xssAttachmentId,
+          'data-pmf-attachment-id': xssAttachmentId,
         }),
         expect.any(Array)
       );

@@ -216,7 +216,7 @@ abstract class AbstractAttachment
     {
         $attachmentTableName = sprintf('%sfaqattachment', Database::getTablePrefix());
 
-        if (null === $this->id) {
+        if (null === $this->id || 0 === $this->id) {
             $this->getTenantQuotaEnforcer()->assertCanStoreAttachment($this->filesize);
             $this->id = $this->databaseDriver->nextId($attachmentTableName, 'id');
 

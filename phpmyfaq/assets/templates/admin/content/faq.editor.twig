@@ -638,7 +638,7 @@
                      value="{{ faqData['id'] > 0 ? faqData['id'] : nextFaqId }}">
               <input type="hidden" name="record_lang" id="attachment_record_lang" value="{{ faqData['lang'] }}">
               <input type="hidden" name="save" value="true">
-              <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfTokenUploadAttachment }}">
+              <input type="hidden" id="pmf-attachment-csrf-token" name="pmf-csrf-token" value="{{ csrfTokenUploadAttachment }}">
 
               <div class="mb-2">
                 <label class="form-label" for="filesToUpload">
