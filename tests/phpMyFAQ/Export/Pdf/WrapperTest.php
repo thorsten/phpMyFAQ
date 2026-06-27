@@ -4,6 +4,7 @@ namespace phpMyFAQ\Export\Pdf;
 
 use Exception;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Export\Pdf\Engine\PdfEngineInterface;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -468,43 +469,61 @@ class WrapperTest extends TestCase
         $this->assertTrue($method->invoke($this->wrapper, $jpegData));
     }
 
-    public function testImageMethodWithValidPath(): void
+    /**
+     * Captures the image resolver callback the Wrapper registers on the engine,
+     * so the private resolveImage() decision logic can be exercised directly.
+     */
+    private function captureImageResolver(): callable
     {
-        $fixture = PMF_CONTENT_DIR . '/user/images/image with spaces.jpg';
-        $targetFile = PMF_ROOT_DIR . '/content/user/images/wrapper image test.jpg';
-        try {
-            self::assertTrue(copy($fixture, $targetFile));
-            $this->mockConfig
-                ->method('get')
-                ->willReturnCallback(static fn(string $key) => match ($key) {
-                    'main.customPdfHeader' => '',
-                    'main.customPdfFooter' => '',
-                    'main.metaPublisher' => 'Test',
-                    'main.dateFormat' => 'Y-m-d H:i',
-                    'spam.mailAddressInExport' => false,
-                    default => null,
-                });
-            $this->mockConfig->method('getAdminEmail')->willReturn('admin@test.com');
-            $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
+        $engine = $this->createMock(PdfEngineInterface::class);
+        $resolver = null;
+        $engine->method('onImageResolve')->willReturnCallback(function (callable $cb) use (&$resolver): void {
+            $resolver = $cb;
+        });
 
-            $this->wrapper->setConfig($this->mockConfig);
-            $this->wrapper->setCategories([]);
-            $this->wrapper->setCategory(0);
+        new Wrapper($engine);
 
-            $this->wrapper->Open();
-            $this->wrapper->AddPage();
-            $this->wrapper->Image('/content/user/images/wrapper%20image%20test.jpg', 10, 10, 10, 10);
+        self::assertIsCallable($resolver);
 
-            $output = $this->wrapper->Output('test-image.pdf', 'S');
-            $this->assertStringStartsWith('%PDF', $output);
-        } finally {
-            if (is_file($targetFile)) {
-                unlink($targetFile);
-            }
-        }
+        return $resolver;
     }
 
-    public function testImageMethodEmbedsBase64ConvertibleImageData(): void
+    public function testResolveImagePassesThroughRawAndLinkedSources(): void
+    {
+        $resolver = $this->captureImageResolver();
+
+        self::assertSame(['@rawdata', 'png'], $resolver('@rawdata', 'png'));
+        self::assertSame(['*https://example.com/a.jpg', 'jpg'], $resolver('*https://example.com/a.jpg', 'jpg'));
+    }
+
+    public function testResolveImageSkipsInvalidDataUri(): void
+    {
+        $resolver = $this->captureImageResolver();
+
+        self::assertNull($resolver('data:image/png;base64,not-valid-base64-image', 'png'));
+    }
+
+    public function testResolveImageEmbedsValidDataUri(): void
+    {
+        $jpegData = base64_decode(
+            '/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwDX4A=',
+        );
+        self::assertNotFalse($jpegData);
+
+        $resolver = $this->captureImageResolver();
+
+        $result = $resolver('data:image/jpeg;base64,' . base64_encode($jpegData), 'jpg');
+        self::assertSame(['@' . $jpegData, 'jpg'], $result);
+    }
+
+    public function testResolveImageSkipsMissingLocalFile(): void
+    {
+        $resolver = $this->captureImageResolver();
+
+        self::assertNull($resolver('/content/user/images/does-not-exist-xyz.jpg', 'jpg'));
+    }
+
+    public function testResolveImageEmbedsLocalFileAsBase64(): void
     {
         $jpegData = base64_decode(
             '/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwDX4A=',
@@ -515,34 +534,26 @@ class WrapperTest extends TestCase
 
         try {
             self::assertNotFalse(file_put_contents($targetFile, $jpegData));
-            $this->mockConfig
-                ->method('get')
-                ->willReturnCallback(static fn(string $key) => match ($key) {
-                    'main.customPdfHeader' => '',
-                    'main.customPdfFooter' => '',
-                    'main.metaPublisher' => 'Test',
-                    'main.dateFormat' => 'Y-m-d H:i',
-                    'spam.mailAddressInExport' => false,
-                    default => null,
-                });
-            $this->mockConfig->method('getAdminEmail')->willReturn('admin@test.com');
-            $this->mockConfig->method('getDefaultUrl')->willReturn('https://example.com/');
 
-            $this->wrapper->setConfig($this->mockConfig);
-            $this->wrapper->setCategories([]);
-            $this->wrapper->setCategory(0);
+            $resolver = $this->captureImageResolver();
+            $result = $resolver('/content/user/images/wrapper-inline-image.jpg', 'jpg');
 
-            $this->wrapper->Open();
-            $this->wrapper->AddPage();
-            $this->wrapper->Image('/content/user/images/wrapper-inline-image.jpg', 10, 10, 10, 10);
-
-            $output = $this->wrapper->Output('test-inline-image.pdf', 'S');
-            $this->assertStringStartsWith('%PDF', $output);
+            self::assertSame(['@' . $jpegData, 'jpg'], $result);
         } finally {
             if (is_file($targetFile)) {
                 unlink($targetFile);
             }
         }
+    }
+
+    public function testResolveImageRejectsPathTraversal(): void
+    {
+        $resolve = $this->captureImageResolver();
+
+        // Traversal attempts must be anchored at "content/" and stay within the
+        // web root; crafted escapes resolve to null (skipped).
+        self::assertNull($resolve('/content/../../../etc/passwd', 'jpg'));
+        self::assertNull($resolve('content/%2e%2e/%2e%2e/%2e%2e/etc/passwd', 'jpg'));
     }
 
     public function testConstructorWithRtlLanguage(): void
@@ -624,6 +635,60 @@ class WrapperTest extends TestCase
         $output = $this->wrapper->Output('test.pdf', 'S');
 
         $this->assertStringStartsWith('%PDF', $output);
+    }
+
+    public function testHeaderRendererDelegatesCustomHeaderToEngine(): void
+    {
+        $engine = $this->createMock(PdfEngineInterface::class);
+        $headerRenderer = null;
+        $engine->method('onHeader')->willReturnCallback(function (callable $cb) use (&$headerRenderer): void {
+            $headerRenderer = $cb;
+        });
+
+        $config = $this->createStub(Configuration::class);
+        $config->method('get')->willReturnCallback(static fn(string $key) => match ($key) {
+            'main.customPdfHeader' => '<b>Custom Header</b>',
+            default => '',
+        });
+
+        $wrapper = new Wrapper($engine);
+        $wrapper->setConfig($config);
+        $wrapper->setCategories([1 => ['id' => 1, 'name' => 'Cat']]);
+        $wrapper->setCategory(1);
+
+        self::assertIsCallable($headerRenderer);
+
+        // The custom-header path writes the header then the title via writeHtmlCell.
+        $engine->expects(self::atLeastOnce())->method('writeHtmlCell');
+        $engine->expects(self::once())->method('setFont');
+
+        $headerRenderer();
+    }
+
+    public function testHeaderRendererDelegatesDefaultTitleToEngine(): void
+    {
+        $engine = $this->createMock(PdfEngineInterface::class);
+        $headerRenderer = null;
+        $engine->method('onHeader')->willReturnCallback(function (callable $cb) use (&$headerRenderer): void {
+            $headerRenderer = $cb;
+        });
+        $engine->method('getLastH')->willReturn(10.0);
+
+        $config = $this->createStub(Configuration::class);
+        $config->method('get')->willReturn('');
+
+        $wrapper = new Wrapper($engine);
+        $wrapper->setConfig($config);
+        $wrapper->setCategories([1 => ['id' => 1, 'name' => 'Category']]);
+        $wrapper->setCategory(1);
+
+        self::assertIsCallable($headerRenderer);
+
+        // The default path renders the title via multiCell and resets the margins.
+        $engine->expects(self::once())->method('multiCell');
+        $engine->expects(self::once())->method('setMargins');
+
+        $headerRenderer();
     }
 
     public function testFooterWithBookmarksDisabled(): void
@@ -813,18 +878,6 @@ class WrapperTest extends TestCase
         $this->assertSame('image/webp', $method->invoke($this->wrapper, 'RIFF' . str_repeat("\x00", 20)));
         $this->assertSame('image/bmp', $method->invoke($this->wrapper, 'BM' . str_repeat("\x00", 20)));
         $this->assertFalse($method->invoke($this->wrapper, 'not-an-image'));
-    }
-
-    public function testDefineIfMissingDefinesUnknownConstant(): void
-    {
-        $constantName = 'PMF_WRAPPER_TEST_CONST_' . uniqid('', true);
-
-        $reflection = new ReflectionClass(Wrapper::class);
-        $method = $reflection->getMethod('defineIfMissing');
-        $method->invoke(null, $constantName, 'wrapper-test-value');
-
-        $this->assertTrue(defined($constantName));
-        $this->assertSame('wrapper-test-value', constant($constantName));
     }
 
     public function testValidateImageDataWithGifData(): void

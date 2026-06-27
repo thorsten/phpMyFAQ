@@ -24,18 +24,30 @@ namespace phpMyFAQ\Export\Pdf;
 use Exception;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
+use phpMyFAQ\Export\Pdf\Engine\PdfEngineInterface;
+use phpMyFAQ\Export\Pdf\Engine\TcpdfEngine;
 use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
-use TCPDF;
 
 /**
  * Class Wrapper
  *
  * @package phpMyFAQ\Export\Pdf
  */
-class Wrapper extends TCPDF
+/* @mago-ignore lint:too-many-methods */
+class Wrapper
 {
+    /**
+     * Default left page margin in mm, mirroring the engine's left-margin default.
+     */
+    private const float MARGIN_LEFT = 15;
+
+    /**
+     * Default right page margin in mm, mirroring the engine's right-margin default.
+     */
+    private const float MARGIN_RIGHT = 15;
+
     /**
      * With or without bookmarks.
      */
@@ -96,26 +108,18 @@ class Wrapper extends TCPDF
 
     private string $customFooter = '';
 
+    private readonly PdfEngineInterface $engine;
+
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct(?PdfEngineInterface $engine = null)
     {
-        self::defineTcpdfConstants();
-
-        parent::__construct(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT);
-
-        $this->setFontSubsetting(enable: false);
-
-        // set image scale factor
-        $this->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-        // set default monospaced font
-        $this->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+        $this->engine = $engine ?? new TcpdfEngine();
 
         // Check on RTL
         if ('rtl' === Translation::get(key: 'direction')) {
-            $this->setRTL(enable: true);
+            $this->engine->setRtl(true);
         }
 
         // Set font
@@ -123,53 +127,87 @@ class Wrapper extends TCPDF
         if ($metaLanguage !== '' && array_key_exists($metaLanguage, $this->fontFiles)) {
             $this->currentFont = (string) $this->fontFiles[$metaLanguage];
         }
+
+        // Register render-time callbacks so the engine's Header/Footer/Image hooks
+        // call back into this renderer's domain logic.
+        $this->engine->onHeader($this->renderHeader(...));
+        $this->engine->onFooter($this->renderFooter(...));
+        $this->engine->onImageResolve($this->resolveImage(...));
     }
 
-    private static function defineTcpdfConstants(): void
+    public function Open(): void
     {
-        $pmfRootDir = defined('PMF_ROOT_DIR') ? PMF_ROOT_DIR : __DIR__ . '/../../../';
-        $pmfSrcDir = defined('PMF_SRC_DIR') ? PMF_SRC_DIR : __DIR__ . '/../../';
-
-        self::defineIfMissing('K_TCPDF_EXTERNAL_CONFIG', true);
-        self::defineIfMissing('K_PATH_URL', '');
-        self::defineIfMissing('K_PATH_MAIN', $pmfSrcDir . '/libs/tecnickcom/tcpdf/');
-        self::defineIfMissing('K_PATH_FONTS', $pmfSrcDir . '/fonts/');
-        self::defineIfMissing('K_PATH_CACHE', $pmfRootDir . '/content/user/images/');
-        self::defineIfMissing('K_PATH_URL_CACHE', K_PATH_CACHE);
-        self::defineIfMissing('K_PATH_IMAGES', $pmfRootDir . '/content/user/images/');
-        self::defineIfMissing('K_BLANK_IMAGE', K_PATH_IMAGES . '_blank.png');
-        self::defineIfMissing('PDF_PAGE_FORMAT', 'A4');
-        self::defineIfMissing('PDF_PAGE_ORIENTATION', 'P');
-        self::defineIfMissing('PDF_CREATOR', 'TCPDF');
-        self::defineIfMissing('PDF_AUTHOR', 'TCPDF');
-        self::defineIfMissing('PDF_HEADER_TITLE', 'phpMyFAQ');
-        self::defineIfMissing('PDF_HEADER_STRING', 'by phpMyFAQ - www.phpmyfaq.de');
-        self::defineIfMissing('PDF_HEADER_LOGO', 'tcpdf_logo.jpg');
-        self::defineIfMissing('PDF_HEADER_LOGO_WIDTH', 30);
-        self::defineIfMissing('PDF_UNIT', 'mm');
-        self::defineIfMissing('PDF_MARGIN_HEADER', 5);
-        self::defineIfMissing('PDF_MARGIN_FOOTER', 10);
-        self::defineIfMissing('PDF_MARGIN_TOP', 27);
-        self::defineIfMissing('PDF_MARGIN_BOTTOM', 25);
-        self::defineIfMissing('PDF_MARGIN_LEFT', 15);
-        self::defineIfMissing('PDF_MARGIN_RIGHT', 15);
-        self::defineIfMissing('PDF_FONT_NAME_MAIN', 'arialunicid0');
-        self::defineIfMissing('PDF_FONT_SIZE_MAIN', 10);
-        self::defineIfMissing('PDF_FONT_NAME_DATA', 'arialunicid0');
-        self::defineIfMissing('PDF_FONT_SIZE_DATA', 8);
-        self::defineIfMissing('PDF_FONT_MONOSPACED', 'DejaVuSansMono');
-        self::defineIfMissing('PDF_IMAGE_SCALE_RATIO', 1);
-        self::defineIfMissing('HEAD_MAGNIFICATION', 1.1);
-        self::defineIfMissing('K_CELL_HEIGHT_RATIO', 1.25);
-        self::defineIfMissing('K_TITLE_MAGNIFICATION', 1.3);
-        self::defineIfMissing('K_SMALL_RATIO', 2 / 3);
+        $this->engine->open();
     }
 
-    private static function defineIfMissing(string $name, mixed $value): void
+    public function Output(string $name, string $dest): string
     {
-        if (!defined($name)) {
-            define($name, $value);
-        }
+        return $this->engine->output($name, $dest);
+    }
+
+    public function AddPage(): void
+    {
+        $this->engine->addPage();
+    }
+
+    public function setPrintHeader(bool $val = true): void
+    {
+        $this->engine->setPrintHeader($val);
+    }
+
+    public function SetDisplayMode(mixed $zoom): void
+    {
+        $this->engine->setDisplayMode($zoom);
+    }
+
+    public function SetMargins(float $left, float $top, float $right = -1): void
+    {
+        $this->engine->setMargins($left, $top, $right);
+    }
+
+    public function SetHeaderMargin(float $margin): void
+    {
+        $this->engine->setHeaderMargin($margin);
+    }
+
+    public function SetFooterMargin(float $margin): void
+    {
+        $this->engine->setFooterMargin($margin);
+    }
+
+    public function SetCreator(string $creator): void
+    {
+        $this->engine->setCreator($creator);
+    }
+
+    public function SetTitle(string $title): void
+    {
+        $this->engine->setTitle($title);
+    }
+
+    public function SetAuthor(string $author): void
+    {
+        $this->engine->setAuthor($author);
+    }
+
+    public function SetFont(string $family, string $style = '', float $size = 0): void
+    {
+        $this->engine->setFont($family, $style, $size);
+    }
+
+    public function Ln(?float $h = null): void
+    {
+        $this->engine->ln($h);
+    }
+
+    public function Write(float $h, string $txt): void
+    {
+        $this->engine->write($h, $txt);
+    }
+
+    public function Bookmark(string $txt, int $level = 0, float $y = -1): void
+    {
+        $this->engine->bookmark($txt, $level, $y);
     }
 
     /**
@@ -210,21 +248,20 @@ class Wrapper extends TCPDF
     /**
      * The header of the PDF file.
      */
-    #[\Override]
-    public function Header(): void
+    public function renderHeader(): void
     {
         // Set a custom header and footer
         $this->setCustomHeader();
 
         $title = array_key_exists($this->category, $this->categories) ? $this->categories[$this->category]['name'] : '';
 
-        $this->SetTextColor(col1: 0, col2: 0, col3: 0);
-        $this->SetFont($this->currentFont, style: 'B', size: 14);
+        $this->engine->setTextColor(0, 0, 0);
+        $this->engine->setFont($this->currentFont, 'B', 14);
 
         if (0 < Strings::strlen($this->customHeader)) {
-            $this->writeHTMLCell(w: 0, h: 0, x: 0, y: 0, html: $this->customHeader);
-            $this->Ln();
-            $this->writeHTMLCell(
+            $this->engine->writeHtmlCell(w: 0, h: 0, x: 0, y: 0, html: $this->customHeader);
+            $this->engine->ln();
+            $this->engine->writeHtmlCell(
                 w: 0,
                 h: 0,
                 x: 0,
@@ -239,14 +276,14 @@ class Wrapper extends TCPDF
             return;
         }
 
-        $this->MultiCell(
+        $this->engine->multiCell(
             w: 0,
             h: 10,
             txt: html_entity_decode((string) $title, ENT_QUOTES, encoding: 'utf-8'),
             border: 0,
             align: 'C',
         );
-        $this->SetMargins(PDF_MARGIN_LEFT, $this->getLastH() + 5, PDF_MARGIN_RIGHT);
+        $this->engine->setMargins(self::MARGIN_LEFT, $this->engine->getLastH() + 5, self::MARGIN_RIGHT);
     }
 
     /**
@@ -265,8 +302,7 @@ class Wrapper extends TCPDF
      * The footer of the PDF file.
      * @throws Exception
      */
-    #[\Override]
-    public function Footer(): void
+    public function renderFooter(): void
     {
         // Set a custom footer
         $this->setCustomFooter();
@@ -282,28 +318,28 @@ class Wrapper extends TCPDF
         );
 
         if (0 < Strings::strlen($this->customFooter)) {
-            $this->writeHTMLCell(w: 0, h: 0, x: null, y: null, html: $this->customFooter);
+            $this->engine->writeHtmlCell(w: 0, h: 0, x: null, y: null, html: $this->customFooter);
         }
 
-        $currentTextColor = $this->TextColor;
-        $this->SetTextColor(col1: 0, col2: 0, col3: 0);
-        $this->SetY(-25);
-        $this->SetFont($this->currentFont, style: '', size: 10);
-        $this->Cell(
+        $currentTextColor = $this->engine->getTextColor();
+        $this->engine->setTextColor(0, 0, 0);
+        $this->engine->setY(-25);
+        $this->engine->setFont($this->currentFont, '', 10);
+        $this->engine->cell(
             w: 0,
             h: 10,
-            txt: Translation::get(key: 'ad_gen_page') . ' ' . $this->getAliasNumPage() . ' / '
-                . $this->getAliasNbPages(),
+            txt: Translation::get(key: 'ad_gen_page') . ' ' . $this->engine->getAliasNumPage() . ' / '
+                . $this->engine->getAliasNbPages(),
             border: 0,
             ln: 0,
             align: 'C',
         );
-        $this->SetY(-20);
-        $this->SetFont($this->currentFont, style: 'B', size: 8);
-        $this->Cell(w: 0, h: 10, txt: $footer, border: 0, ln: 1, align: 'C');
+        $this->engine->setY(-20);
+        $this->engine->setFont($this->currentFont, 'B', 8);
+        $this->engine->cell(w: 0, h: 10, txt: $footer, border: 0, ln: 1, align: 'C');
         if (!$this->enableBookmarks) {
-            $this->SetY(-15);
-            $this->SetFont($this->currentFont, style: '', size: 8);
+            $this->engine->setY(-15);
+            $this->engine->setFont($this->currentFont, '', 8);
             $baseUrl = $this->config->getDefaultUrl() . 'content';
             if ($this->faq !== []) {
                 if (array_key_exists($this->category, $this->categories)) {
@@ -315,7 +351,7 @@ class Wrapper extends TCPDF
                 $baseUrl .= '/' . TitleSlugifier::slug($this->question) . '.html';
             }
 
-            $this->Cell(
+            $this->engine->cell(
                 w: 0,
                 h: 10,
                 txt: 'URL: ' . $baseUrl,
@@ -327,7 +363,7 @@ class Wrapper extends TCPDF
             );
         }
 
-        $this->TextColor = $currentTextColor;
+        $this->engine->setTextColorRaw($currentTextColor);
     }
 
     /**
@@ -343,29 +379,29 @@ class Wrapper extends TCPDF
      */
     public function addFaqToc(): void
     {
-        $this->addTOCPage();
+        $this->engine->addTocPage();
 
         // Title
-        $this->SetFont($this->currentFont, style: 'B', size: 24);
-        $this->MultiCell(w: 0, h: 0, txt: $this->config->getTitle(), border: 0, align: 'C');
-        $this->Ln();
+        $this->engine->setFont($this->currentFont, 'B', 24);
+        $this->engine->multiCell(w: 0, h: 0, txt: $this->config->getTitle(), border: 0, align: 'C');
+        $this->engine->ln();
 
         // TOC
-        $this->SetFont($this->currentFont, style: 'B', size: 16);
-        $this->MultiCell(w: 0, h: 0, txt: Translation::get(key: 'msgTableOfContent'), border: 0, align: 'C');
-        $this->Ln();
-        $this->SetFont($this->currentFont, style: '', size: 12);
+        $this->engine->setFont($this->currentFont, 'B', 16);
+        $this->engine->multiCell(w: 0, h: 0, txt: Translation::get(key: 'msgTableOfContent'), border: 0, align: 'C');
+        $this->engine->ln();
+        $this->engine->setFont($this->currentFont, '', 12);
 
         // Render TOC
-        $this->addTOC(
+        $this->engine->addToc(
             page: 1,
             numbersfont: $this->currentFont,
             filler: '.',
-            toc_name: Translation::get(key: 'msgTableOfContent'),
+            tocName: Translation::get(key: 'msgTableOfContent'),
             style: 'B',
             color: [128, 0, 0],
         );
-        $this->endTOCPage();
+        $this->engine->endTocPage();
     }
 
     /**
@@ -385,173 +421,66 @@ class Wrapper extends TCPDF
     }
 
     /**
-     * Extends the TCPDF::Image() method to convert all images to base64 encoded images.
-     * This is necessary as TCPDF does not support external images from self-signed certificates.
+     * Resolves an image source for the engine to draw, converting local and data-URI
+     * images to embedded base64 data where possible. This is necessary as the
+     * underlying PDF library does not support external images from self-signed
+     * certificates.
+     *
+     * Returns [resolvedFile, resolvedType] to draw, or null to skip the image.
      *
      * @param string $file Name of the file containing the image or a '@' character followed by the image data
-     *                          string. To link an image without embedding it on the document, set an asterisk
-     *                          character before the URL (i.e.: '*http://www.example.com/image.jpg').
-     * @param float|null $x Abscissa of the upper-left corner (LTR) or upper-right corner (RTL).
-     * @param float|null $y Ordinate of the upper-left corner (LTR) or upper-right corner (RTL).
-     * @param float    $w Width of the image in the page. If not specified or equal to zero, it is automatically
-     *                          calculated.
-     * @param float    $h Height of the image in the page. If not specified or equal to zero, it is automatically
-     *                          calculated.
-     * @param string $type Image format. Possible values are (case-insensitive): JPEG and PNG (without a GD library)
-     *                          and all images supported by GD: GD, GD2, GD2PART, GIF, JPEG, PNG, BMP, XBM, XPM;. If
-     *                          not specified, the type is inferred from the file extension.
-     * @param string $link URL or identifier returned by AddLink().
-     * @param string $align Indicates the alignment of the pointer next to image insertion relative to image height.
-     * @param bool   $resize If true resizes (reduce) the image to fit $w and $h (requires a GD or ImageMagick library);
-     *                          if false do not resize; if two force resize in all cases (upscaling and downscaling).
-     * @param int    $dpi dot-per-inch resolution used on resize
-     * @param string $palign Allows centering or aligning the image on the current line.
-     * @param bool   $ismask true if this image is a mask, false otherwise
-     * @param mixed  $imgmask Image object returned by this function or false
-     * @param int   $border Indicates if borders must be drawn around the cell.
-     * @param mixed $fitbox If not, false scale image dimensions proportionally to fit within the ($w, $h) box.
-     *                          $fitbox can be true or a 2-character string indicating the image alignment inside
-     *                          the box. The first character indicates the horizontal alignment (L = left, C =
-     *                          center, R = right) the second character indicates the vertical algnment (T = top, M
-     *                          = middle, B = bottom).
-     * @param bool  $hidden If true, do not display the image.
-     * @param bool  $fitonpage If true, the image is resized to not exceed page dimensions.
-     * @param bool  $alt If true, the image will be added as alternative and not directly printed (the ID of the
-     *                          image will be returned).
-     * @param array $alternateImages Array of alternate images IDs. Each alternative image must be an array with
-     *                               two values:
-     *                               an integer representing the image ID (the value returned by the Image method) and a
-     *                               boolean value to indicate if the image is the default for printing.
+     *                     string. To link an image without embedding it on the document, set an asterisk
+     *                     character before the URL (i.e.: '*http://www.example.com/image.jpg').
+     * @param string $type Image format inferred from the file extension if not specified.
+     * @return array{0: string, 1: string}|null
      */
-    #[\Override]
-    /* @mago-ignore lint:excessive-parameter-list */
-    public function Image(
-        $file,
-        $x = null,
-        $y = null,
-        $w = 0,
-        $h = 0,
-        $type = '',
-        $link = '',
-        $align = '',
-        $resize = false,
-        $dpi = 300,
-        $palign = '',
-        $ismask = false,
-        $imgmask = false,
-        $border = 0,
-        $fitbox = false,
-        $hidden = false,
-        $fitonpage = false,
-        $alt = false,
-        $alternateImages = [],
-    ): void {
-        // Pass through raw image data ('@' prefix), non-embedded links ('*' prefix),
-        // and data URIs without filesystem lookup.
-        if (is_string($file) && $file !== '' && ($file[0] === '@' || $file[0] === '*')) {
-            parent::Image(
-                $file,
-                $x,
-                $y,
-                $w,
-                $h,
-                $type,
-                $link,
-                $align,
-                $resize,
-                $dpi,
-                $palign,
-                $ismask,
-                $imgmask,
-                $border,
-                $fitbox,
-                $hidden,
-                $fitonpage,
-                $alt,
-                $alternateImages,
-            );
-            return;
+    private function resolveImage(string $file, string $type): ?array
+    {
+        // Pass through raw image data ('@' prefix) and non-embedded links ('*' prefix)
+        // without filesystem lookup.
+        if ($file !== '' && ($file[0] === '@' || $file[0] === '*')) {
+            return [$file, $type];
         }
 
-        if (is_string($file) && str_starts_with($file, 'data:')) {
+        if (str_starts_with($file, 'data:')) {
             if (preg_match('#^data:[^;]+;base64,(.+)$#', $file, $matches)) {
                 $decoded = base64_decode($matches[1], strict: true);
                 if ($decoded !== false && $this->checkBase64Image($decoded)) {
-                    parent::Image(
-                        '@' . $decoded,
-                        $x,
-                        $y,
-                        $w,
-                        $h,
-                        $type,
-                        $link,
-                        $align,
-                        $resize,
-                        $dpi,
-                        $palign,
-                        $ismask,
-                        $imgmask,
-                        $border,
-                        $fitbox,
-                        $hidden,
-                        $fitonpage,
-                        $alt,
-                        $alternateImages,
-                    );
-                    return;
+                    return ['@' . $decoded, $type];
                 }
             }
-            return;
+
+            return null;
         }
 
-        $file = parse_url((string) $file, PHP_URL_PATH);
-        if ($file === false || $file === null || $file === '') {
-            return;
+        $path = parse_url($file, PHP_URL_PATH);
+        if ($path === false || $path === null || $path === '') {
+            return null;
         }
 
         // URL-decode the file path to handle filenames with spaces and other special characters
-        $file = urldecode($file);
+        $path = urldecode($path);
 
-        $type = pathinfo($file, PATHINFO_EXTENSION);
-        $resolvedPath = $this->concatenatePaths(PMF_ROOT_DIR, $file);
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $resolvedPath = $this->concatenatePaths(PMF_ROOT_DIR, $path);
         if ($resolvedPath === '' || !$this->isWithinRoot($resolvedPath)) {
-            return;
+            return null;
         }
 
         if (!is_file($resolvedPath) || !is_readable($resolvedPath)) {
-            return;
+            return null;
         }
 
         $data = file_get_contents($resolvedPath);
         if ($data === false) {
-            return;
+            return null;
         }
 
         if ($this->checkBase64Image($data)) {
-            $file = '@' . $data;
+            return ['@' . $data, $type];
         }
 
-        parent::Image(
-            $file,
-            $x,
-            $y,
-            $w,
-            $h,
-            $type,
-            $link,
-            $align,
-            $resize,
-            $dpi,
-            $palign,
-            $ismask,
-            $imgmask,
-            $border,
-            $fitbox,
-            $hidden,
-            $fitonpage,
-            $alt,
-            $alternateImages,
-        );
+        return [$path, $type];
     }
 
     private function checkBase64Image(string $base64): bool
@@ -794,9 +723,9 @@ class Wrapper extends TCPDF
     }
 
     /**
-     * Override TCPDF's WriteHTML method to pre-process external images.
+     * Writes HTML content, pre-processing external images to base64 data URIs.
      * This method converts external images from allowed hosts to base64 data URIs
-     * before passing the content to TCPDF for rendering.
+     * before passing the content to the engine for rendering.
      *
      * @param string $html HTML content to write
      * @param bool $ln If true, the position after the call will be moved to the next line
@@ -805,20 +734,15 @@ class Wrapper extends TCPDF
      * @param bool $cell If true, add the current left/right/top/bottom cell margins to the coordinates
      * @param string $align Allows centering or align the image on the current line
      */
-    #[\Override]
     public function WriteHTML(
-        // phpcs:ignore
-        $html,
-        $ln = true,
-        $fill = false,
-        $reseth = false,
-        $cell = false,
-        $align = '',
+        string $html,
+        bool $ln = true,
+        bool $fill = false,
+        bool $reseth = false,
+        bool $cell = false,
+        string $align = '',
     ): void {
-        // Pre-process HTML content to convert external images to base64
-        $processedHtml = $this->convertExternalImagesToBase64($html);
-
-        // Call the parent WriteHTML method with processed content
-        parent::WriteHTML($processedHtml, $ln, $fill, $reseth, $cell, $align);
+        // Pre-process HTML content to convert external images to base64, then delegate.
+        $this->engine->writeHtml($this->convertExternalImagesToBase64($html), $ln, $fill, $reseth, $cell, $align);
     }
 }

@@ -21,6 +21,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Export\Pdf\Engine;
 
+use Override;
 use TCPDF;
 
 final class TcpdfDocument extends TCPDF
@@ -49,7 +50,21 @@ final class TcpdfDocument extends TCPDF
         $this->imageResolver = $resolver;
     }
 
-    #[\Override]
+    /**
+     * Exposes TCPDF's protected $TextColor (the raw PDF colour command) so the
+     * engine can save and restore it. Only this subclass may read/write it.
+     */
+    public function getTextColorRaw(): string
+    {
+        return $this->TextColor;
+    }
+
+    public function setTextColorRaw(string $color): void
+    {
+        $this->TextColor = $color;
+    }
+
+    #[Override]
     public function Header(): void
     {
         if ($this->headerRenderer !== null) {
@@ -57,7 +72,7 @@ final class TcpdfDocument extends TCPDF
         }
     }
 
-    #[\Override]
+    #[Override]
     public function Footer(): void
     {
         if ($this->footerRenderer !== null) {
@@ -65,7 +80,7 @@ final class TcpdfDocument extends TCPDF
         }
     }
 
-    #[\Override]
+    #[Override]
     /* @mago-ignore lint:excessive-parameter-list */
     public function Image(
         $file,

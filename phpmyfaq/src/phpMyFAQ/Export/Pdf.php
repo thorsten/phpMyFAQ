@@ -67,9 +67,6 @@ class Pdf extends Export
         // Set PDF options
         $this->wrapper->Open();
         $this->wrapper->SetDisplayMode(zoom: 'real');
-        $this->wrapper->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-        $this->wrapper->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $this->wrapper->SetFooterMargin(PDF_MARGIN_FOOTER);
 
         $this->commonMarkConverter = new CommonMarkConverter([
             'html_input' => 'strip',

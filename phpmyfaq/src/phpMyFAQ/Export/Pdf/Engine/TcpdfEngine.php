@@ -20,9 +20,9 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Export\Pdf\Engine;
 
-final class TcpdfEngine implements PdfEngineInterface
+final readonly class TcpdfEngine implements PdfEngineInterface
 {
-    private readonly TcpdfDocument $document;
+    private TcpdfDocument $document;
 
     public function __construct()
     {
@@ -193,12 +193,12 @@ final class TcpdfEngine implements PdfEngineInterface
 
     public function getTextColor(): string
     {
-        return $this->document->TextColor;
+        return $this->document->getTextColorRaw();
     }
 
     public function setTextColorRaw(string $color): void
     {
-        $this->document->TextColor = $color;
+        $this->document->setTextColorRaw($color);
     }
 
     public function getLastH(): float
@@ -254,8 +254,10 @@ final class TcpdfEngine implements PdfEngineInterface
 
     private static function defineTcpdfConstants(): void
     {
-        $pmfRootDir = defined('PMF_ROOT_DIR') ? PMF_ROOT_DIR : __DIR__ . '/../../../';
-        $pmfSrcDir = defined('PMF_SRC_DIR') ? PMF_SRC_DIR : __DIR__ . '/../../';
+        // Note: this file lives one directory deeper (Engine/) than the original
+        // Wrapper, so the fallback paths carry one extra "../" to resolve identically.
+        $pmfRootDir = defined('PMF_ROOT_DIR') ? PMF_ROOT_DIR : __DIR__ . '/../../../../';
+        $pmfSrcDir = defined('PMF_SRC_DIR') ? PMF_SRC_DIR : __DIR__ . '/../../../';
 
         self::defineIfMissing('K_TCPDF_EXTERNAL_CONFIG', true);
         self::defineIfMissing('K_PATH_URL', '');
