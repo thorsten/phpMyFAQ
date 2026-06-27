@@ -152,19 +152,36 @@ final class ExportController extends AbstractController
             $text[0][] = Translation::get(key: 'ad_stat_report_visits');
         }
 
-        $report = new Report($this->configuration);
+        try {
+            return $this->buildReportResponse(new Report($this->configuration), $data, $hasDataField, $text);
+        } catch (\Throwable $throwable) {
+            return $this->json(['error' => $throwable->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Builds the CSV report response from the requested fields.
+     *
+     * @param array<int, list<mixed>> $text
+     */
+    private function buildReportResponse(Report $report, object $data, callable $hasDataField, array $text): Response
+    {
         foreach ($report->getReportingData() as $reportData) {
             $i = $reportData['faq_id'];
+            // Top-level categories have no parent; normalise the absent/NULL
+            // value to 0 so it is treated as "no parent" instead of being
+            // passed on as NULL.
+            $categoryParent = (int) ($reportData['category_parent'] ?? 0);
             if ($hasDataField(payload: $data, field: 'category') && array_key_exists('category_name', $reportData)) {
                 $text[$i][] = Report::sanitize($report->convertEncoding((string) ($reportData['category_name'] ?? '')));
-                if (0 !== $reportData['category_parent']) {
-                    $text[$i][] = Report::sanitize($reportData['category_parent']);
+                if (0 !== $categoryParent) {
+                    $text[$i][] = Report::sanitize($categoryParent);
                 }
             }
 
             if ($hasDataField(payload: $data, field: 'sub_category')) {
                 $text[$i][] = 'n/a';
-                if (0 !== $reportData['category_parent']) {
+                if (0 !== $categoryParent) {
                     $text[$i][] = Report::sanitize($report->convertEncoding(
                         (string) ($reportData['category_name'] ?? ''),
                     ));
@@ -188,7 +205,7 @@ final class ExportController extends AbstractController
             }
 
             if ($hasDataField(payload: $data, field: 'title')) {
-                $text[$i][] = Report::sanitize($report->convertEncoding($reportData['faq_question']));
+                $text[$i][] = Report::sanitize($report->convertEncoding((string) ($reportData['faq_question'] ?? '')));
             }
 
             if ($hasDataField(payload: $data, field: 'creation_date')) {
@@ -196,7 +213,9 @@ final class ExportController extends AbstractController
             }
 
             if ($hasDataField(payload: $data, field: 'owner')) {
-                $text[$i][] = Report::sanitize($report->convertEncoding($reportData['faq_org_author']));
+                $text[$i][] = Report::sanitize($report->convertEncoding(
+                    (string) ($reportData['faq_org_author'] ?? ''),
+                ));
             }
 
             $text[$i][] = '';
@@ -204,7 +223,9 @@ final class ExportController extends AbstractController
                 $hasDataField(payload: $data, field: 'last_modified_person')
                 && array_key_exists('faq_last_author', $reportData)
             ) {
-                $text[$i][] = Report::sanitize($report->convertEncoding($reportData['faq_last_author']));
+                $text[$i][] = Report::sanitize($report->convertEncoding(
+                    (string) ($reportData['faq_last_author'] ?? ''),
+                ));
             }
 
             if ($hasDataField(payload: $data, field: 'url')) {
@@ -214,7 +235,7 @@ final class ExportController extends AbstractController
                     $reportData['category_id'],
                     $reportData['faq_id'],
                     $reportData['faq_language'],
-                    TitleSlugifier::slug($reportData['faq_question']),
+                    TitleSlugifier::slug((string) ($reportData['faq_question'] ?? '')),
                 )));
             }
 

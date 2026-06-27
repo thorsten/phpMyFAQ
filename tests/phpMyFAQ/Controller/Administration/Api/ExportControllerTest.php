@@ -253,6 +253,50 @@ final class ExportControllerTest extends TestCase
     }
 
     /**
+     * Regression test: an FAQ that has neither a category relation nor any
+     * change history resolves to a NULL parent category and a NULL last
+     * author. Passing those NULLs to Report::sanitize()/convertEncoding()
+     * raised a TypeError that bubbled out of the controller as an HTML 500,
+     * which the admin UI surfaced as the opaque "No response received" error.
+     *
+     * @throws \Exception
+     */
+    public function testExportReportHandlesFaqWithoutCategoryOrLastAuthor(): void
+    {
+        // Seed an FAQ with no faqcategoryrelations and no faqchanges rows, so
+        // the report join yields NULL for both parent category and last author.
+        $this->dbHandle->query(
+            'INSERT INTO faqdata '
+            . '(id, lang, solution_id, revision_id, active, sticky, thema, content, author, email, updated) '
+            . "VALUES (4242, 'en', 9999, 0, 'yes', 0, 'A question without a last author', "
+            . "'body', 'Admin', 'admin@example.org', '20240101120000')",
+        );
+
+        $session = new Session(new MockArraySessionStorage());
+        $token = Token::getInstance($session)->getTokenString('create-report');
+        $_COOKIE['pmf-csrf-token-' . substr(md5('create-report'), 0, 10)] = $token;
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $token,
+                'category' => true,
+                'sub_category' => true,
+                'title' => true,
+                'last_modified_person' => true,
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->exportReport($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('text/csv', $response->headers->get('Content-Type'));
+        self::assertStringContainsString('A question without a last author', (string) $response->getContent());
+    }
+
+    /**
      * @throws \Exception
      */
     public function testExportFileReturnsBadRequestForUnsupportedExportType(): void

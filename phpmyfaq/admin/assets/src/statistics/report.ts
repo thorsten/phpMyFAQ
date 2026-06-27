@@ -2,7 +2,34 @@ import { createReport } from '../api/export';
 import { pushErrorNotification, serialize } from '../../../../assets/src/utils';
 import { Response } from '../interfaces';
 
+const wireSelectAllReportFields = (): void => {
+  const selectAll = document.getElementById('pmf-admin-report-select-all') as HTMLInputElement | null;
+  const fields = Array.from(document.querySelectorAll<HTMLInputElement>('.pmf-report-field'));
+
+  if (!selectAll || fields.length === 0) {
+    return;
+  }
+
+  const syncSelectAllState = (): void => {
+    const checkedCount = fields.filter((field) => field.checked).length;
+    selectAll.checked = checkedCount === fields.length;
+    selectAll.indeterminate = checkedCount > 0 && checkedCount < fields.length;
+  };
+
+  selectAll.addEventListener('change', (): void => {
+    fields.forEach((field) => {
+      field.checked = selectAll.checked;
+    });
+  });
+
+  fields.forEach((field) => field.addEventListener('change', syncSelectAllState));
+
+  syncSelectAllState();
+};
+
 export const handleCreateReport = (): void => {
+  wireSelectAllReportFields();
+
   const createReportButton = document.getElementById('pmf-admin-create-report') as HTMLButtonElement | null;
 
   if (createReportButton) {

@@ -171,6 +171,52 @@ describe('handleCreateReport', () => {
     });
   });
 
+  it('should toggle all report fields when the select-all switch changes', () => {
+    document.body.innerHTML = `
+      <form id="pmf-admin-report-form">
+        <input id="pmf-admin-report-select-all" type="checkbox" checked />
+        <input class="pmf-report-field" type="checkbox" name="a" checked />
+        <input class="pmf-report-field" type="checkbox" name="b" checked />
+      </form>
+      <button id="pmf-admin-create-report">Create Report</button>
+    `;
+
+    handleCreateReport();
+
+    const selectAll = document.getElementById('pmf-admin-report-select-all') as HTMLInputElement;
+    const fields = Array.from(document.querySelectorAll<HTMLInputElement>('.pmf-report-field'));
+
+    selectAll.checked = false;
+    selectAll.dispatchEvent(new Event('change'));
+    expect(fields.every((field) => !field.checked)).toBe(true);
+
+    selectAll.checked = true;
+    selectAll.dispatchEvent(new Event('change'));
+    expect(fields.every((field) => field.checked)).toBe(true);
+  });
+
+  it('should set the select-all switch to indeterminate when some fields differ', () => {
+    document.body.innerHTML = `
+      <form id="pmf-admin-report-form">
+        <input id="pmf-admin-report-select-all" type="checkbox" checked />
+        <input class="pmf-report-field" type="checkbox" name="a" checked />
+        <input class="pmf-report-field" type="checkbox" name="b" checked />
+      </form>
+      <button id="pmf-admin-create-report">Create Report</button>
+    `;
+
+    handleCreateReport();
+
+    const selectAll = document.getElementById('pmf-admin-report-select-all') as HTMLInputElement;
+    const fieldA = document.querySelector<HTMLInputElement>('[name="a"]') as HTMLInputElement;
+
+    fieldA.checked = false;
+    fieldA.dispatchEvent(new Event('change'));
+
+    expect(selectAll.checked).toBe(false);
+    expect(selectAll.indeterminate).toBe(true);
+  });
+
   it('should show generic error message when error property is undefined', async () => {
     document.body.innerHTML = `
       <form id="pmf-admin-report-form">
