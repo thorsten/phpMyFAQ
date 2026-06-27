@@ -24,6 +24,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Helper\CategoryHelper;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\HeaderUtils;
@@ -81,6 +82,7 @@ final class ExportController extends AbstractAdministrationController
             'msgInline' => Translation::get(key: 'ad_export_view'),
             'buttonReset' => Translation::get(key: 'ad_config_reset'),
             'buttonExport' => Translation::get(key: 'ad_menu_export'),
+            'csrfToken' => Token::getInstance($this->session)->getTokenString('export'),
         ]);
     }
 }

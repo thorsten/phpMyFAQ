@@ -41,4 +41,16 @@ class FileDownloaderTest extends TestCase
         $this->assertContains('none', $headers['accept-ranges']);
         $this->assertContains('12', $headers['content-length']);
     }
+
+    public function testGetResponseReturnsConfiguredResponse(): void
+    {
+        $export = new FileDownloader('json', '{"faq":true}');
+
+        $response = $export->getResponse(HeaderUtils::DISPOSITION_ATTACHMENT);
+
+        $this->assertSame('{"faq":true}', $response->getContent());
+        $this->assertSame('application/json', $response->headers->get('Content-Type'));
+        $this->assertSame((string) strlen('{"faq":true}'), $response->headers->get('Content-Length'));
+        $this->assertStringContainsString('attachment', (string) $response->headers->get('Content-Disposition'));
+    }
 }

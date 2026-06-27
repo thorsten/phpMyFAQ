@@ -31,9 +31,7 @@ phpmyfaq/content/core/config/azure.php
 phpmyfaq/content/core/config/azure.bak.php
 phpmyfaq/content/core/config/phpmyfaq-config-backup.*.zip
 phpmyfaq/content/core/config/index.html
-# Config backup archives may contain secrets — never commit them
 phpmyfaq/content/core/config/*.zip
-phpmyfaq/content/core/config/phpmyfaq-config-backup.*.zip
 phpmyfaq/content/core/data/*
 !phpmyfaq/content/core/data/.gitkeep
 phpmyfaq/content/core/logs/*
@@ -119,4 +117,6 @@ nbproject/
 # Local development TLS certificates (generate with mkcert)
 /.docker/cert.pem
 /.docker/cert-key.pem
+
 .superpowers/
+/docs/superpowers

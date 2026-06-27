@@ -26,6 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(ExportController::class)]
@@ -103,6 +104,22 @@ final class ExportControllerTest extends TestCase
     private function createController(): ExportController
     {
         return new ExportController($this->createStub(Faq::class));
+    }
+
+    public function testExportFileRouteAcceptsPostRequests(): void
+    {
+        $reflectionMethod = new \ReflectionMethod(ExportController::class, 'exportFile');
+        $routeAttributes = $reflectionMethod->getAttributes(Route::class);
+
+        self::assertNotEmpty($routeAttributes, 'The exportFile() method must declare a #[Route] attribute.');
+
+        $route = $routeAttributes[0]->newInstance();
+
+        self::assertContains(
+            'POST',
+            $route->methods,
+            'The export/file route must accept POST requests because the export form submits via POST.',
+        );
     }
 
     /**
@@ -238,23 +255,47 @@ final class ExportControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testExportFileOutputsErrorMessageForUnsupportedExportType(): void
+    public function testExportFileReturnsBadRequestForUnsupportedExportType(): void
     {
+        $session = new Session(new MockArraySessionStorage());
+        $token = Token::getInstance($session)->getTokenString('export');
+        $_COOKIE['pmf-csrf-token-' . substr(md5('export'), 0, 10)] = $token;
+
         $controller = $this->createController();
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $controller->setContainer($this->createAuthenticatedContainer($session));
 
         $request = new Request([], [
+            'pmf-csrf-token' => $token,
             'categoryId' => 1,
             'downwards' => 'false',
             'disposition' => 'inline',
             'export-type' => 'unsupported-format',
         ]);
 
-        ob_start();
-        $controller->exportFile($request);
-        $output = (string) ob_get_clean();
+        $response = $controller->exportFile($request);
 
-        self::assertStringContainsString('Export not implemented!', $output);
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertStringContainsString('Export not implemented!', (string) $response->getContent());
+    }
+
+    public function testExportFileReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $request = new Request([], [
+            'pmf-csrf-token' => 'invalid-token',
+            'categoryId' => 1,
+            'downwards' => 'false',
+            'disposition' => 'inline',
+            'export-type' => 'json',
+        ]);
+
+        $response = $controller->exportFile($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
     }
 
     /**

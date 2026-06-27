@@ -4,95 +4,125 @@
 {% block content %}
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mb-3 border-bottom">
     <h1 class="h2">
-      <i aria-hidden="true" class="bi bi-book bi-fw"></i>
+      <i aria-hidden="true" class="bi bi-box-arrow-up bi-fw"></i>
       {{ adminHeaderExport }}
     </h1>
   </div>
 
-  <div class="row">
-    <div class="col-12">
-      <div class="card shadow">
-        <div class="card-body">
+  {% if hasNoFaqs %}
+    <div class="alert alert-warning d-flex align-items-center" role="alert">
+      <i aria-hidden="true" class="bi bi-exclamation-triangle-fill me-2"></i>
+      <div>{{ errorMessageNoFaqs }}</div>
+    </div>
+  {% endif %}
 
-          {% if hasNoFaqs %}
-            <div class="alert alert-warning" role="alert">
-              {{ errorMessageNoFaqs }}
+  {% if hasCategories and not hasNoFaqs %}
+    <div class="row">
+      <div class="col-12 col-xxl-10">
+        <form action="./api/export/file" method="post" accept-charset="utf-8" target="_blank">
+          <input type="hidden" name="pmf-csrf-token" value="{{ csrfToken }}">
+
+          <div class="card shadow-sm mb-4">
+            <div class="card-header d-flex align-items-center">
+              <i aria-hidden="true" class="bi bi-diagram-3 me-2"></i>
+              <h2 class="h5 mb-0">{{ headerCategories }}</h2>
             </div>
-          {% endif %}
-
-          {% if hasCategories %}
-            <form action="./api/export/file" method="post" accept-charset="utf-8">
-              <h5>{{ headerCategories }}</h5>
-              <div class="row mb-2">
-                <label class="col-lg-2 col-form-label" for="categoryId">
+            <div class="card-body">
+              <div class="row mb-3">
+                <label class="col-lg-3 col-form-label" for="categoryId">
                   {{ msgCategory }}
                 </label>
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                   <select name="categoryId" id="categoryId" class="form-select">
                     <option value="0">{{ msgAllCategories }}</option>
                     {{ categoryMacros.renderOptions(categoryTree, selectedCategories) | raw }}
                   </select>
                 </div>
               </div>
-              <div class="row mb-2">
-                <div class="offset-lg-2 col-lg-4">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="1" id="downwards" name="downwards" checked>
+              <div class="row">
+                <div class="offset-lg-3 col-lg-6">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" value="1" id="downwards"
+                           name="downwards" checked>
                     <label class="form-check-label" for="downwards">{{ msgWithSubCategories }}</label>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
 
-              <h5>{{ headerExportType }}</h5>
-              <div class="row mb-2">
-                <div class="offset-lg-2 col-lg-8">
-                  <p>{{ msgChooseExportType }}</p>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="export-type" id="json" value="json" checked>
-                    <label class="form-check-label" for="json">JSON</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="export-type" id="pdf" value="pdf">
-                    <label class="form-check-label" for="pdf">PDF</label>
-                  </div>
+          <div class="card shadow-sm mb-4">
+            <div class="card-header d-flex align-items-center">
+              <i aria-hidden="true" class="bi bi-filetype-json me-2"></i>
+              <h2 class="h5 mb-0">{{ headerExportType }}</h2>
+            </div>
+            <div class="card-body">
+              <p class="text-secondary">{{ msgChooseExportType }}</p>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="card h-100 export-option" for="json">
+                    <div class="card-body d-flex align-items-start">
+                      <input class="form-check-input mt-1 me-3" type="radio" name="export-type" id="json"
+                             value="json" checked>
+                      <span>
+                        <i aria-hidden="true" class="bi bi-filetype-json fs-4 d-block mb-1"></i>
+                        <span class="fw-semibold">JSON</span>
+                      </span>
+                    </div>
+                  </label>
+                </div>
+                <div class="col-md-6">
+                  <label class="card h-100 export-option" for="pdf">
+                    <div class="card-body d-flex align-items-start">
+                      <input class="form-check-input mt-1 me-3" type="radio" name="export-type" id="pdf" value="pdf">
+                      <span>
+                        <i aria-hidden="true" class="bi bi-filetype-pdf fs-4 d-block mb-1"></i>
+                        <span class="fw-semibold">PDF</span>
+                      </span>
+                    </div>
+                  </label>
                 </div>
               </div>
+            </div>
+          </div>
 
-              <div class="row mb-2">
-                <div class="offset-lg-2 col-lg-4">
-                  <p>{{ msgViewType }}</p>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="disposition" id="{{ msgDownloadType }}"
-                           value="{{ msgDownloadType }}" checked>
-                    <label class="form-check-label" for="{{ msgDownloadType }}">{{ msgDownload }}</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="disposition"
-                           id="{{ msgInlineType }}" value="{{ msgInlineType }}">
-                    <label class="form-check-label" for="{{ msgInlineType }}">
-                      {{ msgInline }}
-                    </label>
-                  </div>
-                </div>
+          <div class="card shadow-sm mb-4">
+            <div class="card-header d-flex align-items-center">
+              <i aria-hidden="true" class="bi bi-eye me-2"></i>
+              <h2 class="h5 mb-0">{{ msgViewType }}</h2>
+            </div>
+            <div class="card-body">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="disposition" id="{{ msgDownloadType }}"
+                       value="{{ msgDownloadType }}" checked>
+                <label class="form-check-label" for="{{ msgDownloadType }}">
+                  <i aria-hidden="true" class="bi bi-download me-1"></i>
+                  {{ msgDownload }}
+                </label>
               </div>
-
-              <div class="row mb-2">
-                <div class="offset-lg-2 col-lg-4">
-                  <button class="btn btn-secondary" type="reset" name="resetExport">
-                    {{ buttonReset }}
-                  </button>
-                  <button class="btn btn-primary" type="submit" name="submitExport" formtarget="_blank">
-                    {{ buttonExport }}
-                  </button>
-                </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="disposition"
+                       id="{{ msgInlineType }}" value="{{ msgInlineType }}">
+                <label class="form-check-label" for="{{ msgInlineType }}">
+                  <i aria-hidden="true" class="bi bi-window me-1"></i>
+                  {{ msgInline }}
+                </label>
               </div>
+            </div>
+          </div>
 
-            </form>
-          {% endif %}
-
-        </div>
+          <div class="d-flex justify-content-end gap-2 mb-4">
+            <button class="btn btn-outline-secondary" type="reset" name="resetExport">
+              <i aria-hidden="true" class="bi bi-arrow-counterclockwise me-1"></i>
+              {{ buttonReset }}
+            </button>
+            <button class="btn btn-primary" type="submit" name="submitExport">
+              <i aria-hidden="true" class="bi bi-box-arrow-up me-1"></i>
+              {{ buttonExport }}
+            </button>
+          </div>
+        </form>
       </div>
-
     </div>
-  </div>
+  {% endif %}
 {% endblock %}

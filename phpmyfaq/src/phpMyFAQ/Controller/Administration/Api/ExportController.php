@@ -50,10 +50,15 @@ final class ExportController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route(path: 'export/file', name: 'admin.api.export.file', methods: ['GET'])]
-    public function exportFile(Request $request): void
+    #[Route(path: 'export/file', name: 'admin.api.export.file', methods: ['POST'])]
+    public function exportFile(Request $request): Response
     {
         $this->userHasPermission(PermissionType::EXPORT);
+
+        $csrfToken = Filter::filterVar($request->request->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
+        if (!Token::getInstance($this->session)->verifyToken('export', $csrfToken)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
 
         $categoryId = (int) Filter::filterVar($request->request->get('categoryId'), FILTER_VALIDATE_INT);
         $downwards = Filter::filterVar($request->request->get('downwards'), FILTER_VALIDATE_BOOLEAN, false);
@@ -67,14 +72,15 @@ final class ExportController extends AbstractController
             $export = Export::create($this->faq, $category, $this->configuration, $type);
             $content = $export->generate($categoryId, $downwards, $this->configuration->getLanguage()->getLanguage());
 
-            // Stream the file content
+            // Build the streaming response so the HTTP kernel can send it
             $httpStreamer = new FileDownloader($type, $content);
             $disposition = 'inline' === $inlineDisposition
                 ? HeaderUtils::DISPOSITION_INLINE
                 : HeaderUtils::DISPOSITION_ATTACHMENT;
-            $httpStreamer->send($disposition);
-        } catch (Exception|JsonException|CommonMarkException $e) {
-            echo $e->getMessage();
+
+            return $httpStreamer->getResponse($disposition);
+        } catch (Exception|JsonException|CommonMarkException $exception) {
+            return new Response($exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 

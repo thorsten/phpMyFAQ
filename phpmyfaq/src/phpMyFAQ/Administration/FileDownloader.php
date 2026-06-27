@@ -69,8 +69,6 @@ class FileDownloader
      */
     public function send(string $disposition): void
     {
-        $this->disposition = $disposition;
-
         // Sanity checks
         if (headers_sent()) {
             throw new Exception(message: 'Error: unable to send my headers: someone already sent other headers!');
@@ -80,10 +78,24 @@ class FileDownloader
             throw new Exception(message: 'Error: unable to send my data: someone already sent other data!');
         }
 
+        $this->getResponse($disposition)->send();
+    }
+
+    /**
+     * Builds the streaming response so it can be returned by a controller and
+     * sent by the HTTP kernel, instead of being flushed directly to the client.
+     *
+     * @param string $disposition Disposition
+     */
+    public function getResponse(string $disposition): Response
+    {
+        $this->disposition = $disposition;
+
         $this->response = new Response();
         $this->setHttpHeaders();
         $this->response->setContent(content: $this->streamContent());
-        $this->response->send();
+
+        return $this->response;
     }
 
     /**
