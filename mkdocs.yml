@@ -9,6 +9,13 @@ extra_css:
   - css/custom.css
 plugins:
   - search
+  - mermaid2
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid_custom
 nav:
   - 1. Introduction: 'index.md'
   - 2. Installation: 'installation.md'
