@@ -67,15 +67,42 @@ interface PdfEngineInterface
 
     public function ln(?float $h = null): void;
 
-    public function writeHtml(string $html, bool $ln = true, bool $fill = false, bool $reseth = false, bool $cell = false, string $align = ''): void;
+    public function writeHtml(
+        string $html,
+        bool $ln = true,
+        bool $fill = false,
+        bool $reseth = false,
+        bool $cell = false,
+        string $align = '',
+    ): void;
 
-    public function writeHtmlCell(float $w, float $h, ?float $x, ?float $y, string $html, mixed $border = 0, int $ln = 0, bool $fill = false, bool $reseth = true, string $align = ''): void;
+    public function writeHtmlCell(
+        float $w,
+        float $h,
+        ?float $x,
+        ?float $y,
+        string $html,
+        mixed $border = 0,
+        int $ln = 0,
+        bool $fill = false,
+        bool $reseth = true,
+        string $align = '',
+    ): void;
 
     public function image(string $file, ?float $x, ?float $y, float $w, float $h, string $type, string $link): void;
 
     public function multiCell(float $w, float $h, string $txt, mixed $border = 0, string $align = 'J'): void;
 
-    public function cell(float $w, float $h, string $txt, mixed $border = 0, int $ln = 0, string $align = '', bool $fill = false, string $link = ''): void;
+    public function cell(
+        float $w,
+        float $h,
+        string $txt,
+        mixed $border = 0,
+        int $ln = 0,
+        string $align = '',
+        bool $fill = false,
+        string $link = '',
+    ): void;
 
     public function setY(float $y): void;
 
@@ -90,7 +117,14 @@ interface PdfEngineInterface
     // Table of contents
     public function addTocPage(): void;
 
-    public function addToc(int $page, string $numbersfont, string $filler, string $tocName, string $style, array $color): void;
+    public function addToc(
+        int $page,
+        string $numbersfont,
+        string $filler,
+        string $tocName,
+        string $style,
+        array $color,
+    ): void;
 
     public function endTocPage(): void;
 
