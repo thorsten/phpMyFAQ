@@ -7,6 +7,8 @@ not_in_nav: |
   /keys/**
 extra_css:
   - css/custom.css
+hooks:
+  - docs/hooks.py
 plugins:
   - search
   - mermaid2
@@ -15,7 +17,7 @@ markdown_extensions:
       custom_fences:
         - name: mermaid
           class: mermaid
-          format: !!python/name:mermaid2.fence_mermaid_custom
+          format: !!python/name:mermaid2.fence_mermaid
 nav:
   - 1. Introduction: 'index.md'
   - 2. Installation: 'installation.md'
