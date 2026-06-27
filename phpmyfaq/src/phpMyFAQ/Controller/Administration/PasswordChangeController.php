@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Auth;
+use phpMyFAQ\Auth\AuthException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -87,33 +88,34 @@ final class PasswordChangeController extends AbstractAdministrationController
             FILTER_SANITIZE_SPECIAL_CHARS,
         );
 
-        $successMessage = '';
-        $errorMessage = '';
-        if (strlen((string) $newPassword) <= 7 || strlen((string) $retypedPassword) <= 7) {
-            $errorMessage = Translation::get(key: 'ad_passwd_fail');
-        }
-
-        if (
+        $newPasswordIsValid =
             strlen((string) $newPassword) > 7
             && strlen((string) $retypedPassword) > 7
-            && $authSource->checkCredentials($this->currentUser->getLogin(), $oldPassword)
-            && hash_equals((string) $newPassword, (string) $retypedPassword)
-        ) {
-            if (!$this->currentUser->changePassword($newPassword)) {
-                $errorMessage = Translation::get(key: 'ad_passwd_fail');
-            }
+            && hash_equals((string) $newPassword, (string) $retypedPassword);
 
+        // checkCredentials() throws on an incorrect password instead of returning
+        // false, so treat any failure as "the current password is wrong". It must
+        // be verified exactly once, and never after the password has been changed.
+        $currentPasswordIsValid = false;
+        try {
+            $currentPasswordIsValid = $authSource->checkCredentials(
+                $this->currentUser->getLogin(),
+                (string) $oldPassword,
+            );
+        } catch (AuthException) {
+            $currentPasswordIsValid = false;
+        }
+
+        $passwordChanged =
+            $newPasswordIsValid && $currentPasswordIsValid && $this->currentUser->changePassword($newPassword);
+
+        $successMessage = '';
+        $errorMessage = '';
+        if ($passwordChanged) {
             $successMessage = Translation::get(key: 'ad_passwdsuc');
         }
 
-        if (
-            strlen((string) $newPassword) > 7
-            && strlen((string) $retypedPassword) > 7
-            && (
-                !$authSource->checkCredentials($this->currentUser->getLogin(), $oldPassword)
-                || !hash_equals((string) $newPassword, (string) $retypedPassword)
-            )
-        ) {
+        if (!$passwordChanged) {
             $errorMessage = Translation::get(key: 'ad_passwd_fail');
         }
 

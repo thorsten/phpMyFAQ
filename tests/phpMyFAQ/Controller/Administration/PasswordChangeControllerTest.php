@@ -8,6 +8,7 @@ use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Auth;
 use phpMyFAQ\Auth\AuthDatabase;
+use phpMyFAQ\Auth\AuthException;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -176,7 +177,9 @@ final class PasswordChangeControllerTest extends TestCase
         $authSource = $this->createMock(AuthDatabase::class);
         $authSource->method('getEncryptionContainer')->willReturn($this->createStub(Encryption::class));
         $authSource->method('disableReadOnly');
-        $authSource->method('checkCredentials')->willReturn(true);
+        // The current password must be verified exactly once, never again after
+        // the change — otherwise the now-invalid old password fails the re-check.
+        $authSource->expects($this->once())->method('checkCredentials')->willReturn(true);
 
         $auth = $this->createMock(Auth::class);
         $auth->method('selectAuth')->willReturn($authSource);
@@ -200,6 +203,46 @@ final class PasswordChangeControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringContainsString(Translation::get('ad_passwdsuc'), (string) $response->getContent());
+        // A successful change must NOT also render the failure message.
+        self::assertStringNotContainsString(Translation::get('ad_passwd_fail'), (string) $response->getContent());
+    }
+
+    /**
+     * An incorrect current password makes checkCredentials() throw; the form must
+     * render the failure message instead of bubbling up a 500 error.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateReturnsErrorWhenCurrentPasswordIncorrect(): void
+    {
+        $authSource = $this->createMock(AuthDatabase::class);
+        $authSource->method('getEncryptionContainer')->willReturn($this->createStub(Encryption::class));
+        $authSource->method('disableReadOnly');
+        $authSource->method('checkCredentials')->willThrowException(new AuthException('incorrect password'));
+
+        $auth = $this->createMock(Auth::class);
+        $auth->method('selectAuth')->willReturn($authSource);
+
+        $controller = $this->createController($auth);
+        $container = $this->createAuthenticatedContainer();
+        $controller->setContainer($container);
+
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'password');
+
+        $response = $controller->update(
+            new Request([], [
+                'pmf-csrf-token' => $token,
+                'faqpassword_old' => 'wrong-old-password',
+                'faqpassword' => 'new-password-123',
+                'faqpassword_confirm' => 'new-password-123',
+            ]),
+        );
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString(Translation::get('ad_passwd_fail'), (string) $response->getContent());
+        self::assertStringNotContainsString(Translation::get('ad_passwdsuc'), (string) $response->getContent());
     }
 
     /**
