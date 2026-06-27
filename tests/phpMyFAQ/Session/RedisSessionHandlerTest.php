@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace phpMyFAQ\Session;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 #[CoversClass(RedisSessionHandler::class)]
+#[UsesClass(Token::class)]
 class RedisSessionHandlerTest extends TestCase
 {
     public function testConfigureThrowsWhenRedisExtensionNotLoaded(): void

@@ -52,6 +52,8 @@ use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Pdf::class)]
 #[UsesClass(Pdf\Wrapper::class)]
+#[UsesClass(Pdf\Engine\TcpdfEngine::class)]
+#[UsesClass(Pdf\Engine\TcpdfDocument::class)]
 #[UsesClass(Translation::class)]
 #[UsesClass(Auth::class)]
 #[UsesClass(AuthDatabase::class)]
