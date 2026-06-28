@@ -42,14 +42,11 @@ jobs:
       - name: Install PHP dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
-      - name: Setup Mago CLI
-        uses: nhedger/setup-mago@v2
-
       - name: Run Mago
         run: |
-          mago format --dry-run
-      #    mago lint --reporting-format=github
-      #    mago analyze --reporting-format=github
+          ./phpmyfaq/src/libs/bin/mago format --dry-run
+          ./phpmyfaq/src/libs/bin/mago lint --baseline=mago-lint-baseline.toml --reporting-format=github
+          ./phpmyfaq/src/libs/bin/mago analyze --baseline=mago-analyze-baseline.toml --reporting-format=github
 
       - name: Check version consistency
         run: php scripts/check-version.php

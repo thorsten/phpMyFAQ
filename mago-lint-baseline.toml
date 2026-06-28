@@ -1,0 +1,343 @@
+variant = "loose"
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Api/ProblemDetails.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Attachment/Filesystem/File/EncryptedFile.php"
+code = "no-else-clause"
+message = "Avoid `else` clauses."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Bootstrap/PhpConfigurator.php"
+code = "no-ini-set"
+message = "ini_set should not be used."
+count = 9
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Category.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Category/Image.php"
+code = "no-error-control-operator"
+message = "Unsafe use of error control operator `@`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Category/Navigation/BreadcrumbsHtmlRenderer.php"
+code = "no-else-clause"
+message = "Avoid `elseif` clauses."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Command/SeedTestDataCommand.php"
+code = "kan-defect"
+message = "Class has a high kan defect score."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/ConfigurationMethodsTrait.php"
+code = "too-many-methods"
+message = "Trait has too many methods."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AbstractAdministrationApiController.php"
+code = "final-controller"
+message = "Controller classes should be declared as `final`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ConfigurationController.php"
+code = "no-redundant-use"
+message = "Unused import: `TransportExceptionInterface`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/DashboardController.php"
+code = "no-shorthand-ternary"
+message = "Use of the shorthand ternary operator."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
+code = "literal-named-argument"
+message = "Literal argument `true` should be passed as a named argument for clarity."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
+code = "no-shorthand-ternary"
+message = "Use of the shorthand ternary operator."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/LdapController.php"
+code = "no-literal-password"
+message = "Literal passwords or sensitive data should not be stored in code."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
+code = "no-else-clause"
+message = "Avoid `else` clauses."
+count = 11
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
+code = "no-else-clause"
+message = "Avoid `elseif` clauses."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/FaqController.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/ChatSseController.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/CommentController.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/CategoryController.php"
+code = "final-controller"
+message = "Controller classes should be declared as `final`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Database.php"
+code = "literal-named-argument"
+message = "Literal argument `503` should be passed as a named argument for clarity."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Database.php"
+code = "literal-named-argument"
+message = "Literal argument `true` should be passed as a named argument for clarity."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Database/Sqlite3.php"
+code = "no-error-control-operator"
+message = "Unsafe use of error control operator `@`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Entity/FaqEntity.php"
+code = "too-many-properties"
+message = "Class has too many properties."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Enums/AdminLogType.php"
+code = "too-many-enum-cases"
+message = "Enum has too many cases."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/PdfEngineInterface.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/PdfEngineInterface.php"
+code = "too-many-methods"
+message = "Interface has too many methods."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/TcpdfEngine.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/TcpdfEngine.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"
+code = "no-error-control-operator"
+message = "Unsafe use of error control operator `@`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Faq.php"
+code = "cyclomatic-complexity"
+message = "Class has high complexity."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Faq.php"
+code = "kan-defect"
+message = "Class has a high kan defect score."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Faq.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Helper/QuestionHelper.php"
+code = "halstead"
+message = "Method has a high halstead difficulty"
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Ldap.php"
+code = "no-error-control-operator"
+message = "Unsafe use of error control operator `@`."
+count = 5
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Mail.php"
+code = "kan-defect"
+message = "Class has a high kan defect score."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Mail.php"
+code = "too-many-properties"
+message = "Class has too many properties."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Pagination.php"
+code = "halstead"
+message = "Method has a high halstead difficulty"
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermission.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Session/RedisSessionHandler.php"
+code = "no-error-control-operator"
+message = "Unsafe use of error control operator `@`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Session/RedisSessionHandler.php"
+code = "no-ini-set"
+message = "ini_set should not be used."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/EnvironmentConfigurator.php"
+code = "no-error-control-operator"
+message = "Unsafe use of error control operator `@`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/Installation/DatabaseSchema.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationInput.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/AbstractMigration.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/Operations/UserCreateOperation.php"
+code = "excessive-parameter-list"
+message = "Parameter list is too long."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/Versions/Migration420Alpha.php"
+code = "halstead"
+message = "Method has a high halstead volume and effort"
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/Versions/Migration420Alpha.php"
+code = "no-else-clause"
+message = "Avoid `elseif` clauses."
+count = 9
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Storage/StorageFactory.php"
+code = "no-error-control-operator"
+message = "Unsafe use of error control operator `@`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/User.php"
+code = "kan-defect"
+message = "Class has a high kan defect score."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/User.php"
+code = "no-literal-password"
+message = "Literal passwords or sensitive data should not be stored in code."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/User.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1

@@ -76,7 +76,7 @@ final class LdapController extends AbstractController
 
         $servers = $this->configuration->getLdapServer();
 
-        if (empty($servers)) {
+        if ($servers === []) {
             return $this->json([
                 'available' => false,
                 'status' => 'unavailable',

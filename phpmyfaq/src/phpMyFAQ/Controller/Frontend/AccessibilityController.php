@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class AccessibilityController extends AbstractFrontController
+final class AccessibilityController extends AbstractFrontController
 {
     /**
      * Displays the information on the accessibility of services page - either a custom page or redirects to configured URL.
