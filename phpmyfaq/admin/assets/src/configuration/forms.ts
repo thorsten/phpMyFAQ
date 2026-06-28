@@ -22,7 +22,6 @@ import {
   fetchSetInputAsRequired,
 } from '../api';
 import { pushNotification } from '../../../../assets/src/utils';
-import { Response } from '../interfaces';
 
 export const handleFormEdit = (): void => {
   const forms = document.getElementById('forms') as HTMLElement;
@@ -34,7 +33,7 @@ export const handleFormEdit = (): void => {
         const csrf = element.getAttribute('data-pmf-csrf-token') as string;
         const inputId = element.getAttribute('data-pmf-inputid') as string;
         const formId = element.getAttribute('data-pmf-formid') as string;
-        const response = (await fetchActivateInput(csrf, formId, inputId, checked)) as unknown as Response;
+        const response = await fetchActivateInput(csrf, formId, inputId, checked);
         if (typeof response.success === 'string') {
           pushNotification(response.success);
         } else {
@@ -50,7 +49,7 @@ export const handleFormEdit = (): void => {
         const csrf = element.getAttribute('data-pmf-csrf-token') as string;
         const inputId = element.getAttribute('data-pmf-inputid') as string;
         const formId = element.getAttribute('data-pmf-formid') as string;
-        const response = (await fetchSetInputAsRequired(csrf, formId, inputId, checked)) as unknown as Response;
+        const response = await fetchSetInputAsRequired(csrf, formId, inputId, checked);
         if (typeof response.success === 'string') {
           pushNotification(response.success);
         } else {
@@ -115,13 +114,7 @@ export const handleFormTranslations = (): void => {
           const csrf = element.getAttribute('data-pmf-csrf') as string;
           const formId = element.getAttribute('data-pmf-formId') as string;
           const inputId = element.getAttribute('data-pmf-inputId') as string;
-          const response = (await fetchEditTranslation(
-            csrf,
-            formId,
-            inputId,
-            lang,
-            input.value
-          )) as unknown as Response;
+          const response = await fetchEditTranslation(csrf, formId, inputId, lang, input.value);
           if (typeof response.success === 'string') {
             pushNotification(response.success);
           } else {
@@ -138,7 +131,7 @@ export const handleFormTranslations = (): void => {
         const inputId = element.getAttribute('data-pmf-inputId') as string;
         const formId = element.getAttribute('data-pmf-formId') as string;
         const lang = element.getAttribute('data-pmf-lang') as string;
-        const response = (await fetchDeleteTranslation(csrf, formId, inputId, lang)) as unknown as Response;
+        const response = await fetchDeleteTranslation(csrf, formId, inputId, lang);
         if (typeof response.success === 'string') {
           pushNotification(response.success);
           document.getElementById('item_' + lang)?.remove();
@@ -164,13 +157,7 @@ export const handleFormTranslations = (): void => {
         const csrf = addTranslationButton.getAttribute('data-pmf-csrf') as string;
         const inputId = addTranslationButton.getAttribute('data-pmf-inputId') as string;
         const formId = addTranslationButton.getAttribute('data-pmf-formId') as string;
-        const response = (await fetchAddTranslation(
-          csrf,
-          formId,
-          inputId,
-          languageSelect.value,
-          translationInput.value
-        )) as unknown as Response;
+        const response = await fetchAddTranslation(csrf, formId, inputId, languageSelect.value, translationInput.value);
         if (typeof response.success === 'string') {
           pushNotification(response.success);
           setTimeout((): void => {

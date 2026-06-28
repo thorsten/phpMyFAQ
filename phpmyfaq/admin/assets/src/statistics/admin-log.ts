@@ -15,7 +15,6 @@
 
 import { deleteAdminLog } from '../api';
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
-import { Response } from '../interfaces';
 
 export const handleExportAdminLog = (): void => {
   const buttonExportAdminLog = document.getElementById('pmf-export-admin-log') as HTMLButtonElement | null;
@@ -145,7 +144,7 @@ export const handleDeleteAdminLog = (): void => {
         return;
       }
 
-      const response = (await deleteAdminLog(csrf)) as Response;
+      const response = await deleteAdminLog(csrf);
 
       if (response.success) {
         pushNotification(response.success);

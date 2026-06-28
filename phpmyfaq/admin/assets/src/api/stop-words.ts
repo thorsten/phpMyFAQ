@@ -14,9 +14,10 @@
  */
 
 import { fetchJson } from './fetch-wrapper';
+import { ApiResponse, StopWord } from '../interfaces';
 
-export const fetchByLanguage = async (language: string): Promise<unknown> => {
-  return await fetchJson(`./api/stopwords?language=${language}`, {
+export const fetchByLanguage = async (language: string): Promise<StopWord[]> => {
+  return await fetchJson<StopWord[]>(`./api/stopwords?language=${language}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -29,8 +30,8 @@ export const postStopWord = async (
   stopWord: string,
   stopWordId: number,
   stopWordLanguage: string
-): Promise<unknown> => {
-  return await fetchJson('./api/stopword/save', {
+): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('./api/stopword/save', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -44,8 +45,12 @@ export const postStopWord = async (
   });
 };
 
-export const removeStopWord = async (csrf: string, stopWordId: number, stopWordLanguage: string): Promise<unknown> => {
-  return await fetchJson('./api/stopword/delete', {
+export const removeStopWord = async (
+  csrf: string,
+  stopWordId: number,
+  stopWordLanguage: string
+): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('./api/stopword/delete', {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',

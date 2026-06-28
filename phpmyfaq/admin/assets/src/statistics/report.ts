@@ -1,6 +1,5 @@
 import { createReport } from '../api/export';
 import { pushErrorNotification, serialize } from '../../../../assets/src/utils';
-import { Response } from '../interfaces';
 
 const wireSelectAllReportFields = (): void => {
   const selectAll = document.getElementById('pmf-admin-report-select-all') as HTMLInputElement | null;
@@ -50,7 +49,7 @@ export const handleCreateReport = (): void => {
       }
 
       if ('error' in response) {
-        pushErrorNotification((response as Response).error ?? 'An error occurred');
+        pushErrorNotification(response.error ?? 'An error occurred');
       } else {
         // Create a download link
         const url = window.URL.createObjectURL(response as Blob);

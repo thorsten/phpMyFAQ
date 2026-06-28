@@ -15,7 +15,6 @@
 
 import { deleteAttachments, refreshAttachments } from '../api';
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
-import { Response } from '../interfaces';
 
 export const handleDeleteAttachments = (): void => {
   const deleteButtons = document.querySelectorAll<HTMLButtonElement>('.btn-delete-attachment');
@@ -32,7 +31,7 @@ export const handleDeleteAttachments = (): void => {
         const csrf = newButton.getAttribute('data-csrf');
 
         if (attachmentId && csrf) {
-          const response = (await deleteAttachments(attachmentId, csrf)) as unknown as Response;
+          const response = await deleteAttachments(attachmentId, csrf);
 
           if (response.success) {
             pushNotification(response.success);
@@ -66,7 +65,7 @@ export const handleRefreshAttachments = (): void => {
         const csrf = newButton.getAttribute('data-csrf') as string;
 
         if (attachmentId && csrf) {
-          const response = (await refreshAttachments(attachmentId, csrf)) as unknown as Response;
+          const response = await refreshAttachments(attachmentId, csrf);
 
           if (response.success) {
             pushNotification(response.success);

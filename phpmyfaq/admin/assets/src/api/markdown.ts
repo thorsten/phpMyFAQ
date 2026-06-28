@@ -13,13 +13,14 @@
  * @since     2025-03-03
  */
 import { fetchJson } from './fetch-wrapper';
+import { ApiResponse } from '../interfaces';
 
-export const fetchMarkdownContent = async (text: string): Promise<Response> => {
-  return (await fetchJson(`./api/content/markdown`, {
+export const fetchMarkdownContent = async (text: string): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>(`./api/content/markdown`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ text }),
-  })) as Response;
+  });
 };

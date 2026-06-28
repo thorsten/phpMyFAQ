@@ -17,7 +17,6 @@
 import { activateNews, addNews, deleteNews, updateNews } from '../api';
 import { Modal } from 'bootstrap';
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
-import { Response } from '../interfaces';
 
 interface NewsData {
   news: string;
@@ -59,7 +58,7 @@ export const handleAddNews = (): void => {
         target: target,
         csrfToken: (document.getElementById('pmf-csrf-token') as HTMLInputElement).value,
       };
-      const response = (await addNews(data as unknown as Record<string, unknown>)) as unknown as Response;
+      const response = await addNews(data as unknown as Record<string, unknown>);
       if (typeof response.success === 'string') {
         pushNotification(response.success);
         setTimeout(() => {
@@ -89,7 +88,7 @@ export const handleNews = (): void => {
         event.preventDefault();
         const csrfToken = (document.getElementById('pmf-csrf-token-delete') as HTMLInputElement).value;
         const id = (document.getElementById('newsId') as HTMLInputElement).value;
-        const response = (await deleteNews(csrfToken, id)) as unknown as Response;
+        const response = await deleteNews(csrfToken, id);
         if (typeof response.success === 'string') {
           pushNotification(response.success);
           setTimeout(() => {
@@ -102,11 +101,11 @@ export const handleNews = (): void => {
     );
     document.querySelectorAll<HTMLInputElement>('#activate').forEach((item) => {
       item.addEventListener('click', async () => {
-        const response = (await activateNews(
+        const response = await activateNews(
           item.getAttribute('data-pmf-id') as string,
           String(item.checked),
           item.getAttribute('data-pmf-csrf-token') as string
-        )) as unknown as Response;
+        );
 
         if (typeof response.success === 'string') {
           pushNotification(response.success);
@@ -145,14 +144,14 @@ export const handleEditNews = (): void => {
         target: target,
       };
 
-      const reponse = (await updateNews(data as unknown as Record<string, unknown>)) as unknown as Response;
-      if (typeof reponse.success === 'string') {
-        pushNotification(reponse.success);
+      const response = await updateNews(data as unknown as Record<string, unknown>);
+      if (typeof response.success === 'string') {
+        pushNotification(response.success);
         setTimeout(() => {
           window.location.href = './news';
         }, 3000);
       } else {
-        pushErrorNotification(reponse.error ?? 'An error occurred');
+        pushErrorNotification(response.error ?? 'An error occurred');
       }
     });
   }

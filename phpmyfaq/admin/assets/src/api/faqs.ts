@@ -14,13 +14,14 @@
  */
 
 import { fetchJson } from './fetch-wrapper';
+import { ApiResponse, FaqList } from '../interfaces';
 
 export const fetchAllFaqsByCategory = async (
   categoryId: string,
   language: string,
   onlyInactive?: boolean,
   onlyNew?: boolean
-): Promise<unknown> => {
+): Promise<FaqList> => {
   let currentUrl: string = window.location.protocol + '//' + window.location.host;
   let pathname: string = window.location.pathname;
 
@@ -36,7 +37,7 @@ export const fetchAllFaqsByCategory = async (
   if (onlyNew) {
     url.searchParams.set('only-new', onlyNew as unknown as string);
   }
-  return await fetchJson(url.toString(), {
+  return await fetchJson<FaqList>(url.toString(), {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -61,8 +62,8 @@ export const fetchFaqsByAutocomplete = async (searchTerm: string, csrfToken: str
   });
 };
 
-export const deleteFaq = async (faqId: string, faqLanguage: string, token: string): Promise<unknown> => {
-  return await fetchJson('./api/faq/delete', {
+export const deleteFaq = async (faqId: string, faqLanguage: string, token: string): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('./api/faq/delete', {
     method: 'DELETE',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -76,8 +77,8 @@ export const deleteFaq = async (faqId: string, faqLanguage: string, token: strin
   });
 };
 
-export const create = async (formData: unknown): Promise<unknown> => {
-  return await fetchJson('./api/faq/create', {
+export const create = async (formData: unknown): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('./api/faq/create', {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -89,8 +90,8 @@ export const create = async (formData: unknown): Promise<unknown> => {
   });
 };
 
-export const update = async (formData: unknown): Promise<unknown> => {
-  return await fetchJson('./api/faq/update', {
+export const update = async (formData: unknown): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('./api/faq/update', {
     method: 'PUT',
     headers: {
       Accept: 'application/json, text/plain, */*',

@@ -13,10 +13,10 @@
  * @since     2024-05-05
  */
 
-import { Response } from '../interfaces';
+import { ApiResponse } from '../interfaces';
 import { fetchWrapper } from './fetch-wrapper';
 
-export const createReport = async (data: unknown, csrfToken: string): Promise<Blob | Response | undefined> => {
+export const createReport = async (data: unknown, csrfToken: string): Promise<Blob | ApiResponse | undefined> => {
   try {
     const response = await fetchWrapper('./api/export/report', {
       method: 'POST',

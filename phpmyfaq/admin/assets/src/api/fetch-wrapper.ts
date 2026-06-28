@@ -38,13 +38,26 @@ export const fetchWrapper = async (url: string, options?: RequestInit): Promise<
 };
 
 /**
- * JSON wrapper that uses fetchWrapper and returns parsed JSON
+ * JSON wrapper that uses fetchWrapper and returns the parsed JSON body.
+ *
+ * The body is returned as the caller-supplied type `T` (defaulting to `unknown`),
+ * so call sites can declare the expected envelope shape instead of casting the
+ * result afterwards, e.g. `fetchJson<ApiResponse>(url, options)`.
+ *
+ * If the body is empty or not valid JSON — for example an HTML error page from
+ * the web server rather than the application — a typed `{ error }` envelope is
+ * returned instead of letting an unhandled `SyntaxError` escape to the caller.
  *
  * @param url The URL to fetch
  * @param options Fetch options
- * @returns Promise with parsed JSON
+ * @returns Promise resolving to the parsed JSON body typed as `T`
  */
-export const fetchJson = async (url: string, options?: RequestInit): Promise<unknown> => {
+export const fetchJson = async <T = unknown>(url: string, options?: RequestInit): Promise<T> => {
   const response = await fetchWrapper(url, options);
-  return await response.json();
+
+  try {
+    return (await response.json()) as T;
+  } catch {
+    return { error: response.statusText || 'Invalid server response' } as T;
+  }
 };

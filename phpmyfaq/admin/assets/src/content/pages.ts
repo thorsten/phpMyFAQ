@@ -16,7 +16,6 @@
 import { activatePage, addPage, checkSlug, deletePage, updatePage } from '../api';
 import { Modal } from 'bootstrap';
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
-import { Response } from '../interfaces';
 import { renderPageEditor } from './editor';
 import { Translator } from '../translation/translator';
 
@@ -91,7 +90,7 @@ const updateCharCounter = (inputId: string, counterId: string, maxLength: number
  * Validates slug availability
  */
 const validateSlug = async (slug: string, lang: string, csrfToken: string, excludeId?: string): Promise<boolean> => {
-  const response = (await checkSlug(slug, lang, csrfToken, excludeId)) as { available: boolean };
+  const response = await checkSlug(slug, lang, csrfToken, excludeId);
   return response.available;
 };
 
@@ -174,7 +173,7 @@ export const handleAddPage = (): void => {
         csrfToken: csrfToken,
       };
 
-      const response = (await addPage(data)) as unknown as Response;
+      const response = await addPage(data);
       if (typeof response.success === 'string') {
         pushNotification(response.success);
         setTimeout(() => {
@@ -315,8 +314,10 @@ export const handleTranslatePage = (): void => {
         csrfToken: csrfToken,
       };
 
-      const response = (await addPage(data)) as unknown as Response;
-      pushNotification(response.success);
+      const response = await addPage(data);
+      if (typeof response.success === 'string') {
+        pushNotification(response.success);
+      }
       setTimeout(() => {
         window.location.href = './pages';
       }, 2000);
@@ -390,8 +391,10 @@ export const handleEditPage = (): void => {
         csrfToken: csrfToken,
       };
 
-      const response = (await updatePage(data)) as unknown as Response;
-      pushNotification(response.success);
+      const response = await updatePage(data);
+      if (typeof response.success === 'string') {
+        pushNotification(response.success);
+      }
       setTimeout(() => {
         window.location.href = './pages';
       }, 2000);
@@ -427,8 +430,10 @@ export const handlePages = (): void => {
         const pageId = (document.getElementById('pageId') as HTMLInputElement).value;
         const pageLang = (document.getElementById('pageLang') as HTMLInputElement).value;
 
-        const response = (await deletePage(csrfToken, pageId, pageLang)) as unknown as Response;
-        pushNotification(response.success);
+        const response = await deletePage(csrfToken, pageId, pageLang);
+        if (typeof response.success === 'string') {
+          pushNotification(response.success);
+        }
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -444,9 +449,11 @@ export const handlePages = (): void => {
       const csrfToken = checkbox.getAttribute('data-pmf-csrf-token') as string;
       const status = checkbox.checked;
 
-      const response = (await activatePage(pageId, status, csrfToken)) as unknown as Response;
+      const response = await activatePage(pageId, status, csrfToken);
 
-      pushNotification(response.success);
+      if (typeof response.success === 'string') {
+        pushNotification(response.success);
+      }
     });
   });
 };

@@ -15,7 +15,6 @@
 
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 import { clearRatings } from '../api';
-import { Response } from '../interfaces';
 
 export const handleClearRatings = (): void => {
   const buttonClearRatings = document.getElementById('pmf-admin-clear-ratings') as HTMLButtonElement | null;
@@ -31,7 +30,7 @@ export const handleClearRatings = (): void => {
         return;
       }
 
-      const response = (await clearRatings(csrf)) as Response;
+      const response = await clearRatings(csrf);
 
       if (response.success) {
         pushNotification(response.success);

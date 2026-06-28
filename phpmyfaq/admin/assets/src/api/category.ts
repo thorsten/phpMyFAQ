@@ -13,9 +13,10 @@
  * @since     2023-12-28
  */
 import { fetchJson } from './fetch-wrapper';
+import { ApiResponse, CategoryTranslations } from '../interfaces';
 
-export const fetchCategoryTranslations = async (categoryId: string): Promise<unknown> => {
-  return await fetchJson(`./api/category/translations/${categoryId}`, {
+export const fetchCategoryTranslations = async (categoryId: string): Promise<CategoryTranslations> => {
+  return await fetchJson<CategoryTranslations>(`./api/category/translations/${categoryId}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -26,8 +27,8 @@ export const fetchCategoryTranslations = async (categoryId: string): Promise<unk
   });
 };
 
-export const deleteCategory = async (categoryId: string, language: string, csrfToken: string): Promise<unknown> => {
-  return await fetchJson(`./api/category/delete`, {
+export const deleteCategory = async (categoryId: string, language: string, csrfToken: string): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>(`./api/category/delete`, {
     method: 'DELETE',
     cache: 'no-cache',
     headers: {
@@ -47,8 +48,8 @@ export const setCategoryTree = async (
   categoryTree: unknown,
   categoryId: string,
   csrfToken: string
-): Promise<unknown> => {
-  return await fetchJson('./api/category/update-order', {
+): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('./api/category/update-order', {
     method: 'POST',
     cache: 'no-cache',
     headers: {

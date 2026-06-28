@@ -15,7 +15,6 @@
 
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 import { fetchElasticsearchAction, fetchElasticsearchHealthcheck, fetchElasticsearchStatistics } from '../api';
-import { ElasticsearchResponse, Response } from '../interfaces';
 import { formatBytes } from '../utils';
 
 export const handleElasticsearch = async (): Promise<void> => {
@@ -60,7 +59,7 @@ export const handleElasticsearch = async (): Promise<void> => {
       div.innerHTML = '';
 
       try {
-        const response = (await fetchElasticsearchStatistics()) as unknown as ElasticsearchResponse;
+        const response = await fetchElasticsearchStatistics();
 
         if (response.index) {
           const indexName = response.index as string;
@@ -94,7 +93,7 @@ export const handleElasticsearch = async (): Promise<void> => {
         const action = (event.target as HTMLButtonElement).getAttribute('data-action') as string;
 
         try {
-          const response = (await fetchElasticsearchAction(action)) as unknown as Response;
+          const response = await fetchElasticsearchAction(action);
 
           if (typeof response.success !== 'undefined') {
             pushNotification(response.success);

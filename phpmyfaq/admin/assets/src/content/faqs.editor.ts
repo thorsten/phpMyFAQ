@@ -15,7 +15,7 @@
 
 import { create, update, deleteFaq } from '../api';
 import { pushErrorNotification, pushNotification, serialize } from '../../../../assets/src/utils';
-import { Response } from '../interfaces';
+import { ApiResponse } from '../interfaces';
 import { getJoditEditor } from './editor';
 import { analyzeReadability, SupportedLanguage } from '../utils';
 
@@ -35,11 +35,11 @@ export const handleSaveFaqData = (): void => {
 
       const serializedData = serialize(formData) as SerializedData;
 
-      let response: Response | undefined;
+      let response: ApiResponse | undefined;
       if (serializedData.faqId === '0') {
-        response = (await create(serializedData)) as Response | undefined;
+        response = await create(serializedData);
       } else {
-        response = (await update(serializedData)) as Response | undefined;
+        response = await update(serializedData);
       }
 
       if (response?.success) {
@@ -81,7 +81,7 @@ export const handleDeleteFaqEditorModal = (): void => {
     }
 
     try {
-      const response = (await deleteFaq(faqId, faqLanguage, csrfToken)) as Response | undefined;
+      const response = await deleteFaq(faqId, faqLanguage, csrfToken);
 
       if (response?.success) {
         pushNotification(response.success);

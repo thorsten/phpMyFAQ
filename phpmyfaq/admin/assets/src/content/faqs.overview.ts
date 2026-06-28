@@ -17,7 +17,7 @@ import { Modal } from 'bootstrap';
 import { deleteFaq, fetchAllFaqsByCategory, fetchCategoryTranslations } from '../api';
 import { normalizeLanguageCode } from '../utils';
 import { addElement, pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
-import { CategoryTranslations, Faq, FaqList, Response } from '../interfaces';
+import { Faq } from '../interfaces';
 
 export const handleFaqOverview = async (): Promise<void> => {
   const collapsedCategories: NodeListOf<Element> = document.querySelectorAll('.accordion-collapse');
@@ -37,7 +37,7 @@ export const handleFaqOverview = async (): Promise<void> => {
         const onlyInactive: boolean = getInactiveCheckboxState();
         const onlyNew: boolean = getNewCheckboxState();
 
-        const faqs = (await fetchAllFaqsByCategory(categoryId, language, onlyInactive, onlyNew)) as FaqList;
+        const faqs = await fetchAllFaqsByCategory(categoryId, language, onlyInactive, onlyNew);
         await populateCategoryTable(categoryId, faqs.faqs, faqs.isAllowedToTranslate);
         const toggleStickyFaq: NodeListOf<HTMLInputElement> = document.querySelectorAll('.pmf-admin-sticky-faq');
         const toggleActiveFaq: NodeListOf<HTMLInputElement> = document.querySelectorAll('.pmf-admin-active-faq');
@@ -47,7 +47,7 @@ export const handleFaqOverview = async (): Promise<void> => {
           element.addEventListener('click', async (event: Event): Promise<void> => {
             event.preventDefault();
 
-            const translations = (await fetchCategoryTranslations(categoryId)) as CategoryTranslations;
+            const translations = await fetchCategoryTranslations(categoryId);
             const parentElement = element.parentElement;
             if (!parentElement) return;
 
@@ -143,7 +143,7 @@ export const handleDeleteFaqModal = (): void => {
       }
 
       try {
-        const result = (await deleteFaq(currentFaqId, currentFaqLanguage, currentToken)) as Response;
+        const result = await deleteFaq(currentFaqId, currentFaqLanguage, currentToken);
         if (result.success) {
           const faqTableRow = document.getElementById(`faq_${currentFaqId}_${currentFaqLanguage}`) as HTMLElement;
           if (faqTableRow) {

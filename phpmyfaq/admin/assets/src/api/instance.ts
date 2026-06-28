@@ -14,6 +14,7 @@
  */
 
 import { fetchJson } from './fetch-wrapper';
+import { InstanceResponse } from '../interfaces';
 
 export const addInstance = async (
   csrf: string,
@@ -23,8 +24,8 @@ export const addInstance = async (
   email: string,
   admin: string,
   password: string
-): Promise<unknown> => {
-  return await fetchJson(`./api/faq/search`, {
+): Promise<InstanceResponse> => {
+  return await fetchJson<InstanceResponse>(`./api/faq/search`, {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -42,8 +43,8 @@ export const addInstance = async (
   });
 };
 
-export const deleteInstance = async (csrf: string, instanceId: string): Promise<unknown> => {
-  return await fetchJson('./api/instance/delete', {
+export const deleteInstance = async (csrf: string, instanceId: string): Promise<InstanceResponse> => {
+  return await fetchJson<InstanceResponse>('./api/instance/delete', {
     method: 'DELETE',
     headers: {
       Accept: 'application/json, text/plain, */*',

@@ -36,7 +36,6 @@ import {
   saveConfiguration,
 } from '../api';
 import { handleWebPush } from './webpush';
-import { Response } from '../interfaces';
 
 const TAB_TARGETS = [
   '#main',
@@ -301,7 +300,7 @@ export const handleSaveConfiguration = async (): Promise<void> => {
       // Add the available fields list to the form data
       formData.append('availableFields', JSON.stringify(availableFields));
 
-      const response = (await saveConfiguration(formData)) as unknown as Response;
+      const response = await saveConfiguration(formData);
 
       if (typeof response.success === 'string') {
         pushNotification(response.success);
@@ -495,7 +494,7 @@ export const handleThemes = async (): Promise<void> => {
       formData.append('themeName', themeNameInput?.value ?? '');
       formData.append('themeArchive', archiveFile);
 
-      const response = (await uploadThemeArchive(formData)) as unknown as Response;
+      const response = await uploadThemeArchive(formData);
       if (typeof response.success === 'string') {
         pushNotification(response.success);
         await handleConfigurationTab('#layout');
@@ -569,7 +568,7 @@ export const handleSendTestMail = async (): Promise<void> => {
   }
 
   try {
-    const response = (await sendTestMail(csrfInput.value)) as unknown as Response;
+    const response = await sendTestMail(csrfInput.value);
     if (response.success) {
       pushNotification(response.message || 'Test email sent successfully.');
       return;
@@ -613,11 +612,7 @@ export const handleTestRedisConnection = async (): Promise<void> => {
   const timeoutValue = Number.isFinite(timeout) && timeout > 0 ? timeout : 1.0;
 
   try {
-    const response = (await testRedisConnection(
-      csrfInput.value,
-      redisDsnInput.value.trim(),
-      timeoutValue
-    )) as unknown as Response;
+    const response = await testRedisConnection(csrfInput.value, redisDsnInput.value.trim(), timeoutValue);
 
     if (response.success) {
       pushNotification(response.message || 'Redis connection successful.');

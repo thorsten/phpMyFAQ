@@ -25,15 +25,7 @@ import {
   startInstallation,
   startTemporaryBackup,
 } from '../api';
-
-interface ResponseData {
-  success?: string;
-  warning?: string;
-  error?: string;
-  dateLastChecked?: string;
-  version?: string;
-  message?: string;
-}
+import { ResponseData } from '../interfaces';
 
 interface ProgressData {
   progress?: string;
@@ -103,7 +95,7 @@ export const handleCheckForUpdates = (): void => {
     checkHealthButton.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
       try {
-        const response = (await fetchHealthCheck()) as ResponseData;
+        const response = await fetchHealthCheck();
         const result = document.getElementById('result-check-health') as HTMLElement;
         const card = document.getElementById('pmf-update-step-health-check') as HTMLElement;
 
@@ -132,7 +124,7 @@ export const handleCheckForUpdates = (): void => {
       event.preventDefault();
       try {
         const csrfToken = buttonActivate.getAttribute('data-pmf-csrf') as string;
-        const response = (await activateMaintenanceMode(csrfToken)) as ResponseData;
+        const response = await activateMaintenanceMode(csrfToken);
         const result = document.getElementById('result-check-health') as HTMLElement;
         const card = document.getElementById('pmf-update-step-health-check') as HTMLElement;
 
@@ -155,7 +147,7 @@ export const handleCheckForUpdates = (): void => {
       const spinner = document.getElementById('spinner-check-versions') as HTMLElement;
       spinner.classList.remove('d-none');
       try {
-        const response = (await checkForUpdates()) as ResponseData;
+        const response = await checkForUpdates();
         const dateLastChecked = document.getElementById('dateLastChecked') as HTMLElement;
         const versionCurrent = document.getElementById('versionCurrent') as HTMLElement;
         const versionLastChecked = document.getElementById('versionLastChecked') as HTMLElement;
@@ -228,7 +220,7 @@ export const handleCheckForUpdates = (): void => {
       }
 
       try {
-        const response = (await downloadPackage(version)) as ResponseData;
+        const response = await downloadPackage(version);
         const result = document.getElementById('result-download-new-version') as HTMLElement;
         const divExtractPackage = document.getElementById('pmf-update-step-extract-package') as HTMLElement;
         const card = document.getElementById('pmf-update-step-download') as HTMLElement;
@@ -265,7 +257,7 @@ export const handleCheckForUpdates = (): void => {
       spinner.classList.remove('d-none');
 
       try {
-        const response = (await extractPackage()) as ResponseData;
+        const response = await extractPackage();
         const result = document.getElementById('result-extract-package') as HTMLElement;
         const divInstallPackage = document.getElementById('pmf-update-step-install-package') as HTMLElement;
         const card = document.getElementById('pmf-update-step-extract-package') as HTMLElement;
@@ -301,7 +293,7 @@ export const handleCheckForUpdates = (): void => {
 
 const createTemporaryBackup = async (): Promise<void> => {
   try {
-    const response = (await startTemporaryBackup()) as unknown as Response;
+    const response = await startTemporaryBackup();
     await handleStreamingProgress(response, 'result-backup-package');
   } catch (error) {
     console.error('Error during temporary backup:', error);
@@ -318,7 +310,7 @@ const createTemporaryBackup = async (): Promise<void> => {
 
 const installPackage = async (): Promise<void> => {
   try {
-    const response = (await startInstallation()) as unknown as Response;
+    const response = await startInstallation();
     await handleStreamingProgress(response, 'result-install-package');
   } catch (error) {
     console.error('Error during package installation:', error);
@@ -337,7 +329,7 @@ const updateDatabase = async (): Promise<void> => {
   const card = document.getElementById('pmf-update-step-install-package') as HTMLElement | null;
 
   try {
-    const response = (await startDatabaseUpdate()) as unknown as Response;
+    const response = await startDatabaseUpdate();
     await handleStreamingProgress(response, 'result-update-database');
 
     if (card) {

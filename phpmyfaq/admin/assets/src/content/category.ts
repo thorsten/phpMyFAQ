@@ -17,7 +17,6 @@ import Sortable, { SortableEvent } from 'sortablejs';
 import { Modal } from 'bootstrap';
 import { deleteCategory, setCategoryTree } from '../api';
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
-import { Response } from '../interfaces';
 import { Translator } from '../translation/translator';
 
 const nestedQuery = '.nested-sortable';
@@ -56,7 +55,7 @@ export const handleCategories = (): void => {
         const categoryId = event.item.getAttribute('data-pmf-catid') as string;
         const csrf: string = (document.querySelector('input[name=pmf-csrf-token]') as HTMLInputElement).value;
         const data: SerializedTree[] = serializedTree(root);
-        const response = (await setCategoryTree(data, categoryId, csrf)) as unknown as Response;
+        const response = await setCategoryTree(data, categoryId, csrf);
         if (response.success) {
           pushNotification(response.success);
         } else {
@@ -107,7 +106,7 @@ export const handleCategoryDelete = async (): Promise<void> => {
     }
 
     const csrfToken: string = (document.querySelector('input[name=pmf-csrf-token]') as HTMLInputElement).value;
-    const response = (await deleteCategory(currentCategoryId, currentLanguage, csrfToken)) as unknown as Response;
+    const response = await deleteCategory(currentCategoryId, currentLanguage, csrfToken);
     if (response.success) {
       pushNotification(response.success);
     }

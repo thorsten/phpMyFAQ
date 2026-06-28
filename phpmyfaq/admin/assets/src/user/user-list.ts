@@ -16,7 +16,6 @@
 import { addElement, pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 import { activateUser, deleteUser } from '../api';
 import { Modal } from 'bootstrap';
-import { Response } from '../interfaces';
 
 export const handleUserList = (): void => {
   const activateButtons = document.querySelectorAll('.btn-activate-user');
@@ -36,7 +35,7 @@ export const handleUserList = (): void => {
           return;
         }
 
-        const response = (await activateUser(userId, csrfToken)) as unknown as Response;
+        const response = await activateUser(userId, csrfToken);
 
         if (typeof response.success === 'string') {
           const icon = document.querySelector(`.icon_user_id_${userId}`) as HTMLElement;
@@ -92,7 +91,7 @@ export const handleUserList = (): void => {
         if (source.value === 'user-list') {
           const userId = (document.getElementById('pmf-user-id-delete') as HTMLInputElement).value;
           const csrfToken = (document.getElementById('csrf-token-delete-user') as HTMLInputElement).value;
-          const response = (await deleteUser(userId, csrfToken)) as unknown as Response;
+          const response = await deleteUser(userId, csrfToken);
           if (response.success) {
             pushNotification(response.success);
             const row = document.getElementById('row_user_id_' + userId) as HTMLElement;

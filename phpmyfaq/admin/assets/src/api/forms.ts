@@ -15,14 +15,15 @@
  */
 
 import { fetchJson } from './fetch-wrapper';
+import { ApiResponse } from '../interfaces';
 
 export const fetchActivateInput = async (
   csrf: string,
   formId: string,
   inputId: string,
   checked: boolean
-): Promise<unknown> => {
-  return await fetchJson('api/forms/activate', {
+): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('api/forms/activate', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -41,8 +42,8 @@ export const fetchSetInputAsRequired = async (
   formId: string,
   inputId: string,
   checked: boolean
-): Promise<unknown> => {
-  return await fetchJson('api/forms/required', {
+): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('api/forms/required', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -62,8 +63,8 @@ export const fetchEditTranslation = async (
   inputId: string,
   label: string,
   lang: string
-): Promise<unknown> => {
-  return await fetchJson('api/forms/translation-edit', {
+): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('api/forms/translation-edit', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -83,8 +84,8 @@ export const fetchDeleteTranslation = async (
   formId: string,
   inputId: string,
   lang: string
-): Promise<unknown> => {
-  return await fetchJson('api/forms/translation-delete', {
+): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('api/forms/translation-delete', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -104,8 +105,8 @@ export const fetchAddTranslation = async (
   inputId: string,
   lang: string,
   translation: string
-): Promise<unknown> => {
-  return await fetchJson('api/forms/translation-add', {
+): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('api/forms/translation-add', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

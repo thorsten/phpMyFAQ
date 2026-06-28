@@ -13,19 +13,11 @@
  * @since     2024-05-30
  */
 
+import { ResponseData } from '../interfaces';
 import { fetchWrapper, fetchJson } from './fetch-wrapper';
 
-interface ResponseData {
-  success?: string;
-  warning?: string;
-  error?: string;
-  dateLastChecked?: string;
-  version?: string;
-  message?: string;
-}
-
 export const fetchHealthCheck = async (): Promise<ResponseData> => {
-  return (await fetchJson(`./api/health-check`, {
+  return await fetchJson<ResponseData>(`./api/health-check`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -33,44 +25,44 @@ export const fetchHealthCheck = async (): Promise<ResponseData> => {
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
-  })) as ResponseData;
+  });
 };
 
 export const activateMaintenanceMode = async (csrfToken: string): Promise<ResponseData> => {
-  return (await fetchJson('./api/configuration/activate-maintenance-mode', {
+  return await fetchJson<ResponseData>('./api/configuration/activate-maintenance-mode', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ csrf: csrfToken }),
-  })) as ResponseData;
+  });
 };
 
 export const checkForUpdates = async (): Promise<ResponseData> => {
-  return (await fetchJson('./api/update-check', {
+  return await fetchJson<ResponseData>('./api/update-check', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-  })) as ResponseData;
+  });
 };
 
 export const downloadPackage = async (version: string): Promise<ResponseData> => {
-  return (await fetchJson(`./api/download-package/${version}`, {
+  return await fetchJson<ResponseData>(`./api/download-package/${version}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-  })) as ResponseData;
+  });
 };
 
 export const extractPackage = async (): Promise<ResponseData> => {
-  return (await fetchJson('./api/extract-package', {
+  return await fetchJson<ResponseData>('./api/extract-package', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-  })) as ResponseData;
+  });
 };
 
 export const startTemporaryBackup = async (): Promise<Response> => {

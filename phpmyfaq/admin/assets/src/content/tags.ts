@@ -17,19 +17,10 @@ import autocomplete, { AutocompleteItem } from 'autocompleter';
 import { addElement, pushNotification } from '../../../../assets/src/utils';
 import { deleteTag, fetchTags } from '../api';
 import { fetchJson } from '../api/fetch-wrapper';
+import { TagResponse } from '../interfaces';
 
 interface Tag extends AutocompleteItem {
   tagName: string;
-}
-
-interface DeleteTagResponse {
-  success?: string;
-  error?: string;
-}
-
-interface TagResponse {
-  id: string;
-  name: string;
 }
 
 export const handleTags = (): void => {
@@ -75,7 +66,7 @@ export const handleTags = (): void => {
         const tagId = target.getAttribute('data-pmf-id') as string;
         const csrfToken = (document.querySelector('input[name=pmf-csrf-token]') as HTMLInputElement).value;
 
-        const response = (await deleteTag(tagId, csrfToken)) as DeleteTagResponse;
+        const response = await deleteTag(tagId, csrfToken);
         if (response.success) {
           pushNotification(response.success);
           const row = document.getElementById(`pmf-row-tag-id-${tagId}`) as HTMLElement;
@@ -161,7 +152,7 @@ export const handleTags = (): void => {
       },
       fetch: async (text, callback) => {
         let match = text.toLowerCase();
-        const tags = (await fetchTags(match)) as TagResponse[];
+        const tags = await fetchTags(match);
         const tagItems: Tag[] = tags
           .filter((tag: TagResponse) => {
             const lastCommaIndex = match.lastIndexOf(',');

@@ -13,7 +13,7 @@
  * @since     2025-01-21
  */
 
-import { Response } from '../interfaces';
+import { ApiResponse } from '../interfaces';
 import { fetchWrapper, fetchJson } from './fetch-wrapper';
 
 export const fetchConfiguration = async (target: string, language: string): Promise<string> => {
@@ -160,34 +160,34 @@ export const fetchTranslations = async (): Promise<string> => {
   return await response.text();
 };
 
-export const saveConfiguration = async (data: FormData): Promise<Response> => {
-  return (await fetchJson('api/configuration', {
+export const saveConfiguration = async (data: FormData): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('api/configuration', {
     method: 'POST',
     body: data,
-  })) as Response;
+  });
 };
 
-export const uploadThemeArchive = async (data: FormData): Promise<Response> => {
-  return (await fetchJson('api/configuration/themes/upload', {
+export const uploadThemeArchive = async (data: FormData): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('api/configuration/themes/upload', {
     method: 'POST',
     body: data,
-  })) as Response;
+  });
 };
 
-export const sendTestMail = async (csrf: string): Promise<Response> => {
-  return (await fetchJson('api/configuration/send-test-mail', {
+export const sendTestMail = async (csrf: string): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('api/configuration/send-test-mail', {
     method: 'POST',
     body: JSON.stringify({ csrf }),
-  })) as Response;
+  });
 };
 
-export const testRedisConnection = async (csrf: string, redisDsn: string, timeout: number): Promise<Response> => {
-  return (await fetchJson('api/configuration/test-redis-connection', {
+export const testRedisConnection = async (csrf: string, redisDsn: string, timeout: number): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('api/configuration/test-redis-connection', {
     method: 'POST',
     body: JSON.stringify({
       csrf,
       redisDsn,
       timeout,
     }),
-  })) as Response;
+  });
 };

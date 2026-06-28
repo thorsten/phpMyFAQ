@@ -15,7 +15,7 @@
 
 import { Modal } from 'bootstrap';
 import { fetchMarkdownContent, fetchMediaBrowserContent } from '../api';
-import { MediaBrowserApiResponse, Response } from '../interfaces';
+import { MediaBrowserApiResponse } from '../interfaces';
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 
 export const handleMarkdownForm = (): void => {
@@ -48,8 +48,8 @@ export const handleMarkdownForm = (): void => {
         if (preview && answer) {
           preview.style.height = answer.style.height;
           try {
-            const response = (await fetchMarkdownContent(answer.value)) as unknown as Response;
-            preview.innerHTML = response.success;
+            const response = await fetchMarkdownContent(answer.value);
+            preview.innerHTML = response.success ?? '';
           } catch (error) {
             if (error instanceof Error) {
               console.error(error);

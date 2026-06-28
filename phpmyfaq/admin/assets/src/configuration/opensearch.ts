@@ -15,7 +15,6 @@
 
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 import { fetchOpenSearchAction, fetchOpenSearchHealthcheck, fetchOpenSearchStatistics } from '../api';
-import { ElasticsearchResponse, Response } from '../interfaces';
 import { formatBytes } from '../utils';
 
 export const handleOpenSearch = async (): Promise<void> => {
@@ -60,7 +59,7 @@ export const handleOpenSearch = async (): Promise<void> => {
       div.innerHTML = '';
 
       try {
-        const response = (await fetchOpenSearchStatistics()) as unknown as ElasticsearchResponse;
+        const response = await fetchOpenSearchStatistics();
 
         if (response.index) {
           const indexName = response.index as string;
@@ -94,7 +93,7 @@ export const handleOpenSearch = async (): Promise<void> => {
         const action = (event.target as HTMLButtonElement).getAttribute('data-action') as string;
 
         try {
-          const response = (await fetchOpenSearchAction(action)) as unknown as Response;
+          const response = await fetchOpenSearchAction(action);
 
           if (typeof response.success !== 'undefined') {
             pushNotification(response.success);

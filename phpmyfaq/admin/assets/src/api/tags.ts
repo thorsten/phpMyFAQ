@@ -14,9 +14,10 @@
  */
 
 import { fetchJson } from './fetch-wrapper';
+import { ApiResponse, TagResponse } from '../interfaces';
 
-export const fetchTags = async (searchString: string): Promise<unknown> => {
-  return await fetchJson(`./api/content/tags?search=${searchString}`, {
+export const fetchTags = async (searchString: string): Promise<TagResponse[]> => {
+  return await fetchJson<TagResponse[]>(`./api/content/tags?search=${searchString}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -27,8 +28,8 @@ export const fetchTags = async (searchString: string): Promise<unknown> => {
   });
 };
 
-export const deleteTag = async (tagId: string, csrfToken: string): Promise<unknown> => {
-  return await fetchJson(`./api/content/tags/${tagId}`, {
+export const deleteTag = async (tagId: string, csrfToken: string): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>(`./api/content/tags/${tagId}`, {
     method: 'DELETE',
     cache: 'no-cache',
     headers: {

@@ -13,11 +13,11 @@
  * @since     2025-01-26
  */
 
-import { ElasticsearchResponse, Response } from '../interfaces';
+import { ApiResponse, ElasticsearchResponse } from '../interfaces';
 import { fetchWrapper, fetchJson } from './fetch-wrapper';
 
-export const fetchElasticsearchAction = async (action: string): Promise<Response> => {
-  return (await fetchJson(`./api/elasticsearch/${action}`, {
+export const fetchElasticsearchAction = async (action: string): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>(`./api/elasticsearch/${action}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -25,11 +25,11 @@ export const fetchElasticsearchAction = async (action: string): Promise<Response
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
-  })) as Response;
+  });
 };
 
 export const fetchElasticsearchStatistics = async (): Promise<ElasticsearchResponse> => {
-  return (await fetchJson('./api/elasticsearch/statistics', {
+  return await fetchJson<ElasticsearchResponse>('./api/elasticsearch/statistics', {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -37,10 +37,10 @@ export const fetchElasticsearchStatistics = async (): Promise<ElasticsearchRespo
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
-  })) as ElasticsearchResponse;
+  });
 };
 
-export const fetchElasticsearchHealthcheck = async (timeoutMs: number = 5000): Promise<Response> => {
+export const fetchElasticsearchHealthcheck = async (timeoutMs: number = 5000): Promise<ApiResponse> => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 

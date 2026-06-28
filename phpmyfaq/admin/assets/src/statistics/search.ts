@@ -15,7 +15,6 @@
 
 import { truncateSearchTerms } from '../api';
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
-import { Response } from '../interfaces';
 
 export const handleTruncateSearchTerms = (): void => {
   const buttonTruncateSearchTerms = document.getElementById(
@@ -35,7 +34,7 @@ export const handleTruncateSearchTerms = (): void => {
       }
 
       if (confirm('Are you sure?')) {
-        const response = (await truncateSearchTerms(csrf)) as Response;
+        const response = await truncateSearchTerms(csrf);
 
         if (response.success) {
           const tableToDelete = document.getElementById('pmf-table-search-terms') as HTMLElement;

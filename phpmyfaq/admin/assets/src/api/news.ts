@@ -15,9 +15,10 @@
  */
 
 import { fetchJson } from './fetch-wrapper';
+import { ApiResponse } from '../interfaces';
 
-export const addNews = async (data: Record<string, unknown> = {}): Promise<unknown> => {
-  return await fetchJson('api/news/create', {
+export const addNews = async (data: Record<string, unknown> = {}): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('api/news/create', {
     method: 'POST',
     cache: 'no-cache',
     headers: {
@@ -29,8 +30,8 @@ export const addNews = async (data: Record<string, unknown> = {}): Promise<unkno
   });
 };
 
-export const deleteNews = async (csrfToken: string, id: string): Promise<unknown> => {
-  return await fetchJson('api/news/delete', {
+export const deleteNews = async (csrfToken: string, id: string): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('api/news/delete', {
     method: 'DELETE',
     cache: 'no-cache',
     headers: {
@@ -45,8 +46,8 @@ export const deleteNews = async (csrfToken: string, id: string): Promise<unknown
   });
 };
 
-export const updateNews = async (data: Record<string, unknown> = {}): Promise<unknown> => {
-  return await fetchJson('api/news/update', {
+export const updateNews = async (data: Record<string, unknown> = {}): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('api/news/update', {
     method: 'PUT',
     cache: 'no-cache',
     headers: {
@@ -58,8 +59,8 @@ export const updateNews = async (data: Record<string, unknown> = {}): Promise<un
   });
 };
 
-export const activateNews = async (id: string, status: string, csrfToken: string): Promise<unknown> => {
-  return await fetchJson('api/news/activate', {
+export const activateNews = async (id: string, status: string, csrfToken: string): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('api/news/activate', {
     method: 'POST',
     cache: 'no-cache',
     headers: {

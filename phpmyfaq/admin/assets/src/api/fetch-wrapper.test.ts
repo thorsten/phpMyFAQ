@@ -329,4 +329,19 @@ describe('fetchJson', () => {
 
     expect(result).toEqual(mockError);
   });
+
+  it('should return an error envelope instead of throwing when the body is not valid JSON', async () => {
+    const mockResponse = new Response('<html><body>Internal Server Error</body></html>', {
+      status: 500,
+      statusText: 'Internal Server Error',
+      headers: { 'Content-Type': 'text/html' },
+    });
+
+    globalThis.fetch = vi.fn().mockResolvedValue(mockResponse);
+
+    const result = await fetchJson<{ error: string }>('/api/test');
+
+    expect(typeof result.error).toBe('string');
+    expect(result.error.length).toBeGreaterThan(0);
+  });
 });

@@ -106,7 +106,7 @@ export const handleAttachmentUploads = (): void => {
       );
 
       try {
-        const response = (await uploadAttachments(formData)) as unknown as Attachment[];
+        const response = await uploadAttachments(formData);
         pushNotification(`${response.length} file(s) uploaded.`);
         const modal = document.getElementById('attachmentModal') as HTMLElement | null;
         const modalBackdrop = document.querySelector('.modal-backdrop.fade.show') as HTMLElement | null;

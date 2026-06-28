@@ -14,14 +14,15 @@
  */
 
 import { fetchJson } from './fetch-wrapper';
+import { ApiResponse, GlossaryResponse } from '../interfaces';
 
 export const createGlossary = async (
   language: string,
   item: string,
   definition: string,
   csrfToken: string
-): Promise<unknown> => {
-  return await fetchJson('./api/glossary/create', {
+): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('./api/glossary/create', {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -36,8 +37,12 @@ export const createGlossary = async (
   });
 };
 
-export const deleteGlossary = async (glossaryId: string, glossaryLang: string, csrfToken: string): Promise<unknown> => {
-  return await fetchJson('./api/glossary/delete', {
+export const deleteGlossary = async (
+  glossaryId: string,
+  glossaryLang: string,
+  csrfToken: string
+): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('./api/glossary/delete', {
     method: 'DELETE',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -51,8 +56,8 @@ export const deleteGlossary = async (glossaryId: string, glossaryLang: string, c
   });
 };
 
-export const getGlossary = async (glossaryId: string, glossaryLanguage: string): Promise<unknown> => {
-  return await fetchJson(`./api/glossary/${glossaryId}/${glossaryLanguage}`, {
+export const getGlossary = async (glossaryId: string, glossaryLanguage: string): Promise<GlossaryResponse> => {
+  return await fetchJson<GlossaryResponse>(`./api/glossary/${glossaryId}/${glossaryLanguage}`, {
     method: 'GET',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -67,8 +72,8 @@ export const updateGlossary = async (
   item: string,
   definition: string,
   csrfToken: string
-): Promise<unknown> => {
-  return await fetchJson('./api/glossary/update', {
+): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('./api/glossary/update', {
     method: 'PUT',
     headers: {
       Accept: 'application/json, text/plain, */*',

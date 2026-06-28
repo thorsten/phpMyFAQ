@@ -14,6 +14,7 @@
  */
 
 import { fetchJson } from './fetch-wrapper';
+import { ApiResponse, UserData } from '../interfaces';
 
 export const fetchUsers = async (userName: string): Promise<unknown> => {
   return await fetchJson(`./api/user/users?filter=${userName}`, {
@@ -27,8 +28,8 @@ export const fetchUsers = async (userName: string): Promise<unknown> => {
   });
 };
 
-export const fetchUserData = async (userId: string): Promise<unknown> => {
-  return await fetchJson(`./api/user/data/${userId}`, {
+export const fetchUserData = async (userId: string): Promise<UserData> => {
+  return await fetchJson<UserData>(`./api/user/data/${userId}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -39,8 +40,8 @@ export const fetchUserData = async (userId: string): Promise<unknown> => {
   });
 };
 
-export const fetchUserRights = async (userId: string): Promise<unknown> => {
-  return await fetchJson(`./api/user/permissions/${userId}`, {
+export const fetchUserRights = async (userId: string): Promise<string[]> => {
+  return await fetchJson<string[]>(`./api/user/permissions/${userId}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -68,8 +69,8 @@ export const overwritePassword = async (
   userId: string,
   newPassword: string,
   passwordRepeat: string
-): Promise<unknown> => {
-  return await fetchJson('./api/user/overwrite-password', {
+): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('./api/user/overwrite-password', {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -97,8 +98,8 @@ export const postUserData = async (url: string = '', data: Record<string, unknow
   });
 };
 
-export const activateUser = async (userId: string, csrfToken: string): Promise<unknown> => {
-  return await fetchJson('./api/user/activate', {
+export const activateUser = async (userId: string, csrfToken: string): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('./api/user/activate', {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -111,8 +112,8 @@ export const activateUser = async (userId: string, csrfToken: string): Promise<u
   });
 };
 
-export const deleteUser = async (userId: string, csrfToken: string): Promise<unknown> => {
-  return await fetchJson('./api/user/delete', {
+export const deleteUser = async (userId: string, csrfToken: string): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('./api/user/delete', {
     method: 'DELETE',
     cache: 'no-cache',
     headers: {

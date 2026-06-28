@@ -42,7 +42,7 @@ export const handleStopWords = (): void => {
 
 const fetchStopWordsByLanguage = async (language: string): Promise<void> => {
   try {
-    const stopWordsList = (await fetchByLanguage(language)) as unknown as StopWord[];
+    const stopWordsList = await fetchByLanguage(language);
     setContentAndHandler(stopWordsList);
   } catch (error: unknown) {
     console.error('Error fetching stop words:', error instanceof Error ? error.message : String(error));

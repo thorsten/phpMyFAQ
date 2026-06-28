@@ -16,7 +16,7 @@
 import { Modal } from 'bootstrap';
 import { fetchUserData, fetchUserRights, deleteUser, postUserData, overwritePassword } from '../api';
 import { capitalize, pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
-import { Response, UserData } from '../interfaces';
+import { ApiResponse } from '../interfaces';
 
 /**
  * Updates the current loaded user
@@ -32,7 +32,7 @@ export const updateUser = async (userId: string): Promise<void> => {
  * @param {string} userId
  */
 const setUserData = async (userId: string): Promise<void> => {
-  const userData = (await fetchUserData(userId)) as unknown as UserData;
+  const userData = await fetchUserData(userId);
 
   updateInput('current_user_id', userData.userId);
   updateInput('pmf-user-list-autocomplete', userData.login);
@@ -79,7 +79,7 @@ const setUserData = async (userId: string): Promise<void> => {
 
 const setUserRights = async (userId: string): Promise<void> => {
   clearUserRights();
-  const userRights = (await fetchUserRights(userId)) as string[];
+  const userRights = await fetchUserRights(userId);
   userRights.forEach((right: string) => {
     const checkbox = document.getElementById(`user_right_${right}`) as HTMLInputElement;
     checkbox.setAttribute('checked', 'checked');
@@ -213,7 +213,7 @@ export const handleUsers = async (): Promise<void> => {
       };
 
       try {
-        const response = (await postUserData('./api/user/add', userData)) as unknown as Response;
+        const response = (await postUserData('./api/user/add', userData)) as unknown as ApiResponse;
         if (typeof response.success === 'string') {
           modal.style.display = 'none';
           modal.classList.remove('show');
@@ -256,7 +256,7 @@ export const handleUsers = async (): Promise<void> => {
       const newPassword = (document.getElementById('npass') as HTMLInputElement).value;
       const passwordRepeat = (document.getElementById('bpass') as HTMLInputElement).value;
 
-      const response = (await overwritePassword(csrf, userId, newPassword, passwordRepeat)) as unknown as Response;
+      const response = await overwritePassword(csrf, userId, newPassword, passwordRepeat);
       if (response.success) {
         pushNotification(response.success);
         modal.hide();
@@ -293,7 +293,7 @@ export const handleUsers = async (): Promise<void> => {
       if (source.value === 'users') {
         const userId = (document.getElementById('pmf-user-id-delete') as HTMLInputElement).value;
         const csrfToken = (document.getElementById('csrf-token-delete-user') as HTMLInputElement).value;
-        const response = (await deleteUser(userId, csrfToken)) as unknown as Response;
+        const response = await deleteUser(userId, csrfToken);
         if (response.success) {
           pushNotification(response.success);
           await clearUserForm();
@@ -323,7 +323,7 @@ export const handleUsers = async (): Promise<void> => {
         userId: userId,
       };
 
-      const response = (await postUserData('./api/user/edit', userData)) as unknown as Response;
+      const response = (await postUserData('./api/user/edit', userData)) as unknown as ApiResponse;
       if (response.success) {
         pushNotification(response.success);
       }
@@ -351,7 +351,7 @@ export const handleUsers = async (): Promise<void> => {
         userId: userId,
         userRights: rightData,
       };
-      const response = (await postUserData('./api/user/update-rights', data)) as unknown as Response;
+      const response = (await postUserData('./api/user/update-rights', data)) as unknown as ApiResponse;
       if (response.success) {
         pushNotification(response.success);
       }

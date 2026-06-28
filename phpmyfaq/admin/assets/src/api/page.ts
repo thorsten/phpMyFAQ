@@ -14,9 +14,14 @@
  */
 
 import { fetchJson } from './fetch-wrapper';
+import { ApiResponse } from '../interfaces';
 
-export const addPage = async (data: Record<string, unknown> = {}): Promise<unknown> => {
-  return await fetchJson('api/page/create', {
+export interface SlugCheckResponse {
+  available: boolean;
+}
+
+export const addPage = async (data: Record<string, unknown> = {}): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('api/page/create', {
     method: 'POST',
     cache: 'no-cache',
     headers: {
@@ -28,8 +33,8 @@ export const addPage = async (data: Record<string, unknown> = {}): Promise<unkno
   });
 };
 
-export const deletePage = async (csrfToken: string, id: string, lang: string): Promise<unknown> => {
-  return await fetchJson('api/page/delete', {
+export const deletePage = async (csrfToken: string, id: string, lang: string): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('api/page/delete', {
     method: 'DELETE',
     cache: 'no-cache',
     headers: {
@@ -45,8 +50,8 @@ export const deletePage = async (csrfToken: string, id: string, lang: string): P
   });
 };
 
-export const updatePage = async (data: Record<string, unknown> = {}): Promise<unknown> => {
-  return await fetchJson('api/page/update', {
+export const updatePage = async (data: Record<string, unknown> = {}): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('api/page/update', {
     method: 'PUT',
     cache: 'no-cache',
     headers: {
@@ -58,8 +63,8 @@ export const updatePage = async (data: Record<string, unknown> = {}): Promise<un
   });
 };
 
-export const activatePage = async (id: string, status: boolean, csrfToken: string): Promise<unknown> => {
-  return await fetchJson('api/page/activate', {
+export const activatePage = async (id: string, status: boolean, csrfToken: string): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('api/page/activate', {
     method: 'POST',
     cache: 'no-cache',
     headers: {
@@ -80,8 +85,8 @@ export const checkSlug = async (
   lang: string,
   csrfToken: string,
   excludeId?: string
-): Promise<unknown> => {
-  return await fetchJson('api/page/check-slug', {
+): Promise<SlugCheckResponse> => {
+  return await fetchJson<SlugCheckResponse>('api/page/check-slug', {
     method: 'POST',
     cache: 'no-cache',
     headers: {

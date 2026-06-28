@@ -15,7 +15,6 @@
 
 import { Modal } from 'bootstrap';
 import { addElement } from '../../../../assets/src/utils';
-import { InstanceResponse } from '../interfaces';
 import { addInstance, deleteInstance } from '../api';
 
 export const handleInstances = (): void => {
@@ -36,15 +35,7 @@ export const handleInstances = (): void => {
       const password = (document.querySelector('#password') as HTMLInputElement).value as string;
 
       try {
-        const response = (await addInstance(
-          csrf,
-          url,
-          instance,
-          comment,
-          email,
-          admin,
-          password
-        )) as unknown as InstanceResponse;
+        const response = await addInstance(csrf, url, instance, comment, email, admin, password);
 
         if (response.added) {
           const table = document.querySelector('.table tbody') as HTMLElement;
@@ -117,7 +108,7 @@ export const handleInstances = (): void => {
 
         if (confirm('Are you sure?')) {
           try {
-            const response = (await deleteInstance(csrf, instanceId)) as unknown as InstanceResponse;
+            const response = await deleteInstance(csrf, instanceId);
 
             if (response.deleted) {
               const row = document.getElementById(`row-instance-${response.deleted}`) as HTMLElement;

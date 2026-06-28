@@ -13,11 +13,11 @@
  * @since     2025-05-12
  */
 
-import { ElasticsearchResponse, Response } from '../interfaces';
+import { ApiResponse, ElasticsearchResponse } from '../interfaces';
 import { fetchWrapper, fetchJson } from './fetch-wrapper';
 
-export const fetchOpenSearchAction = async (action: string): Promise<Response> => {
-  return (await fetchJson(`./api/opensearch/${action}`, {
+export const fetchOpenSearchAction = async (action: string): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>(`./api/opensearch/${action}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -25,11 +25,11 @@ export const fetchOpenSearchAction = async (action: string): Promise<Response> =
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
-  })) as Response;
+  });
 };
 
 export const fetchOpenSearchStatistics = async (): Promise<ElasticsearchResponse> => {
-  return (await fetchJson('./api/opensearch/statistics', {
+  return await fetchJson<ElasticsearchResponse>('./api/opensearch/statistics', {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -37,10 +37,10 @@ export const fetchOpenSearchStatistics = async (): Promise<ElasticsearchResponse
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
-  })) as ElasticsearchResponse;
+  });
 };
 
-export const fetchOpenSearchHealthcheck = async (timeoutMs: number = 5000): Promise<Response> => {
+export const fetchOpenSearchHealthcheck = async (timeoutMs: number = 5000): Promise<ApiResponse> => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
