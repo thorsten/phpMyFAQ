@@ -65,4 +65,32 @@ class SearchFactoryTest extends TestCase
 
         $this->assertInstanceOf('phpMyFAQ\Search\Database\PdoSqlite', $search);
     }
+
+    public function testCreateBuildsPdoMysqlSearchForPdoMysqlHandler(): void
+    {
+        $search = SearchFactory::create($this->configuration, ['database' => 'pdo_mysql']);
+
+        $this->assertInstanceOf('phpMyFAQ\Search\Database\PdoMysql', $search);
+    }
+
+    public function testCreateBuildsPdoPgsqlSearchForPdoPgsqlHandler(): void
+    {
+        $search = SearchFactory::create($this->configuration, ['database' => 'pdo_pgsql']);
+
+        $this->assertInstanceOf('phpMyFAQ\Search\Database\PdoPgsql', $search);
+    }
+
+    public function testCreateBuildsPdoSqlsrvSearchForPdoSqlsrvHandler(): void
+    {
+        $search = SearchFactory::create($this->configuration, ['database' => 'pdo_sqlsrv']);
+
+        $this->assertInstanceOf('phpMyFAQ\Search\Database\PdoSqlsrv', $search);
+    }
+
+    public function testCreateBuildsNonPdoSearchForMysqliHandler(): void
+    {
+        $search = SearchFactory::create($this->configuration, ['database' => 'mysqli']);
+
+        $this->assertInstanceOf('phpMyFAQ\Search\Database\Mysqli', $search);
+    }
 }
