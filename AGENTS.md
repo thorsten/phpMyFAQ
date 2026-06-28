@@ -75,6 +75,7 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 - Use semicolons at the end of each statement.
 - Use single quotes for strings.
 - Use arrow functions for callbacks.
+- Always add the copyright header to new files, but not to test files.
 
 # Coding Patterns
 
