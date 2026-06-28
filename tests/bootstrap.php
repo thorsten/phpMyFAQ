@@ -18,12 +18,15 @@
 use Composer\Autoload\ClassLoader;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Language;
 use phpMyFAQ\Setup\Installation\DatabaseSchema;
 use phpMyFAQ\Setup\Installer;
 use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\SqliteDialect;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 date_default_timezone_set('Europe/Berlin');
 
@@ -208,4 +211,19 @@ require $databaseConfigFile;
 //
 $bootstrapDbHandle = new Sqlite3();
 $bootstrapDbHandle->connect($testDbAlias, '', '');
-new Configuration($bootstrapDbHandle);
+$bootstrapConfiguration = new Configuration($bootstrapDbHandle);
+
+//
+// Configuration::__construct does not load the stored configuration; it is read lazily
+// via getAll(). Load it now so the singleton's typed getters (getVersion(), getTitle(),
+// …) return their database values instead of a null that violates their non-nullable
+// return types. Also give the singleton a Language, which is a runtime object rather than
+// a stored value and so is not covered by getAll(). Without this full initialisation, any
+// test that uses the singleton (instead of building its own Configuration) only passes
+// when it happens to run after a test that set these — the execution-order dependency this
+// removes.
+//
+$bootstrapConfiguration->getAll();
+$bootstrapLanguage = new Language($bootstrapConfiguration, new Session(new MockArraySessionStorage()));
+$bootstrapLanguage->setLanguageFromConfiguration('en');
+$bootstrapConfiguration->setLanguage($bootstrapLanguage);
