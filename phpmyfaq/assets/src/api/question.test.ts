@@ -6,6 +6,7 @@ describe('createQuestion function', (): void => {
   test('creates a question successfully', async (): Promise<void> => {
     // Mocking fetch function
     global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
       status: 200,
       json: () => Promise.resolve({ success: 'Question created successfully' }),
     });
@@ -33,6 +34,7 @@ describe('createQuestion function', (): void => {
   test('throws an error if network response is not ok', async () => {
     // Mocking fetch function
     global.fetch = vi.fn().mockResolvedValue({
+      ok: false,
       status: 400,
       json: () => Promise.resolve({ error: 'Something went wrong' }),
     });
@@ -41,6 +43,6 @@ describe('createQuestion function', (): void => {
     const data = Object.keys({ comment: 'Test comment' }) as unknown as FormData;
 
     // Assertions
-    await expect(createQuestion(data)).resolves.toEqual({ error: 'Something went wrong' });
+    await expect(createQuestion(data)).rejects.toThrow('HTTP 400');
   });
 });

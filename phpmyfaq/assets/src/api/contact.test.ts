@@ -6,6 +6,7 @@ describe('send function', () => {
   test('sends a message successfully', async () => {
     // Mocking fetch function
     global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
       status: 200,
       json: () => Promise.resolve({ success: 'Contact message sent successfully' }),
     });
@@ -33,6 +34,7 @@ describe('send function', () => {
   test('throws an error if network response is not ok', async () => {
     // Mocking fetch function
     global.fetch = vi.fn().mockResolvedValue({
+      ok: false,
       status: 400,
       json: () => Promise.resolve({ error: 'Something went wrong' }),
     });
@@ -41,6 +43,6 @@ describe('send function', () => {
     const data = Object.keys({ comment: 'Test comment' }) as unknown as FormData;
 
     // Assertions
-    await expect(send(data)).resolves.toEqual({ error: 'Something went wrong' });
+    await expect(send(data)).rejects.toThrow('HTTP 400');
   });
 });

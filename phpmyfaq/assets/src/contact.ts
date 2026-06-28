@@ -15,7 +15,6 @@
 
 import { send } from './api';
 import { addElement } from './utils';
-import { ApiResponse } from './interfaces';
 
 export const handleContactForm = (): void => {
   const contactSubmit = document.getElementById('pmf-submit-contact') as HTMLElement;
@@ -33,24 +32,33 @@ export const handleContactForm = (): void => {
         const loader = document.getElementById('loader') as HTMLElement;
         const formData = new FormData(form);
 
-        const response = (await send(formData)) as ApiResponse;
+        try {
+          const response = await send(formData);
 
-        if (response.success) {
+          if (response.success) {
+            loader.classList.add('d-none');
+            const message = document.getElementById('pmf-contact-response') as HTMLElement;
+            message.insertAdjacentElement(
+              'afterend',
+              addElement('div', { classList: 'alert alert-success', innerText: response.success })
+            );
+            form.reset();
+          }
+
+          if (response.error) {
+            loader.classList.add('d-none');
+            const message = document.getElementById('pmf-contact-response') as HTMLElement;
+            message.insertAdjacentElement(
+              'afterend',
+              addElement('div', { classList: 'alert alert-danger', innerText: response.error })
+            );
+          }
+        } catch (error) {
           loader.classList.add('d-none');
           const message = document.getElementById('pmf-contact-response') as HTMLElement;
           message.insertAdjacentElement(
             'afterend',
-            addElement('div', { classList: 'alert alert-success', innerText: response.success })
-          );
-          form.reset();
-        }
-
-        if (response.error) {
-          loader.classList.add('d-none');
-          const message = document.getElementById('pmf-contact-response') as HTMLElement;
-          message.insertAdjacentElement(
-            'afterend',
-            addElement('div', { classList: 'alert alert-danger', innerText: response.error })
+            addElement('div', { classList: 'alert alert-danger', innerText: (error as Error).message })
           );
         }
       }

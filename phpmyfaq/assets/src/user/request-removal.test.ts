@@ -65,7 +65,6 @@ describe('handleRequestRemoval', () => {
       <div id="pmf-request-removal-response"></div>
     `;
 
-    vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.mocked(requestUserRemoval).mockResolvedValue({ success: 'Removal requested' });
 
     const form = document.getElementById('pmf-request-removal-form') as HTMLFormElement;
@@ -87,6 +86,35 @@ describe('handleRequestRemoval', () => {
     expect(successAlert).not.toBeNull();
     expect(successAlert?.innerText).toBe('Removal requested');
     expect(resetSpy).toHaveBeenCalled();
+  });
+
+  it('shows an error message when the request throws', async () => {
+    document.body.innerHTML = `
+      <form id="pmf-request-removal-form" class="needs-validation">
+        <input type="email" name="email" value="user@example.com" />
+      </form>
+      <button id="pmf-submit-request-removal">Submit</button>
+      <div id="loader"></div>
+      <div id="pmf-request-removal-response"></div>
+    `;
+
+    vi.mocked(requestUserRemoval).mockRejectedValue(new Error('HTTP 500'));
+
+    handleRequestRemoval();
+
+    const button = document.getElementById('pmf-submit-request-removal') as HTMLButtonElement;
+    button.click();
+
+    await vi.waitFor(() => {
+      expect(requestUserRemoval).toHaveBeenCalled();
+    });
+
+    const loader = document.getElementById('loader') as HTMLElement;
+    expect(loader.classList.contains('d-none')).toBe(true);
+
+    const errorAlert = document.querySelector('.alert-danger') as HTMLElement | null;
+    expect(errorAlert).not.toBeNull();
+    expect(errorAlert?.innerText).toBe('HTTP 500');
   });
 
   it('shows an error message on failed submission', async () => {

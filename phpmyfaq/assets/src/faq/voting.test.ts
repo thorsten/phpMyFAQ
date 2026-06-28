@@ -138,6 +138,34 @@ describe('handleUserVoting', () => {
     expect(pushErrorNotification).toHaveBeenCalledWith('You already voted');
   });
 
+  it('should show error notification when saveVoting rejects', async () => {
+    document.body.innerHTML = `
+      <form class="pmf-voting-form">
+        <button class="pmf-voting-star star" data-star="1" type="submit">★</button>
+        <button class="pmf-voting-star star" data-star="2" type="submit">★</button>
+        <input type="hidden" id="voting-id" value="42" />
+        <input type="hidden" id="voting-language" value="en" />
+        <input type="hidden" id="csrf-token-voting" value="test-csrf-token" />
+      </form>
+    `;
+
+    vi.mocked(saveVoting).mockRejectedValue(new Error('HTTP 500'));
+
+    handleUserVoting();
+
+    const star1 = document.querySelectorAll('.pmf-voting-star')[0] as HTMLButtonElement;
+    star1.focus();
+
+    const form = document.querySelector('.pmf-voting-form') as HTMLFormElement;
+    form.dispatchEvent(new Event('submit'));
+
+    await vi.waitFor(() => {
+      expect(saveVoting).toHaveBeenCalledWith('42', 'en', 1, 'test-csrf-token');
+    });
+
+    expect(pushErrorNotification).toHaveBeenCalledWith('An unexpected error occurred.');
+  });
+
   it('should update star selection on submit', async () => {
     document.body.innerHTML = `
       <form class="pmf-voting-form">

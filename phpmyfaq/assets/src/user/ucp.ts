@@ -15,7 +15,6 @@
 
 import { removeTwofactorConfig, updateUserControlPanelData } from '../api';
 import { addElement } from '../utils';
-import { ApiResponse } from '../interfaces';
 import { pushErrorNotification, pushNotification } from '../utils';
 
 export const handleUserControlPanel = (): void => {
@@ -28,24 +27,31 @@ export const handleUserControlPanel = (): void => {
       const form = document.querySelector('#pmf-user-control-panel-form') as HTMLFormElement;
       const loader = document.getElementById('loader') as HTMLElement;
       const formData = new FormData(form);
+      const message = document.getElementById('pmf-user-control-panel-response') as HTMLElement;
 
-      const response = (await updateUserControlPanelData(formData)) as ApiResponse;
+      try {
+        const response = await updateUserControlPanelData(formData);
 
-      if (response.success) {
+        if (response.success) {
+          loader.classList.add('d-none');
+          message.insertAdjacentElement(
+            'afterend',
+            addElement('div', { classList: 'alert alert-success', innerText: response.success })
+          );
+        }
+
+        if (response.error) {
+          loader.classList.add('d-none');
+          message.insertAdjacentElement(
+            'afterend',
+            addElement('div', { classList: 'alert alert-danger', innerText: response.error })
+          );
+        }
+      } catch (error) {
         loader.classList.add('d-none');
-        const message = document.getElementById('pmf-user-control-panel-response') as HTMLElement;
         message.insertAdjacentElement(
           'afterend',
-          addElement('div', { classList: 'alert alert-success', innerText: response.success })
-        );
-      }
-
-      if (response.error) {
-        loader.classList.add('d-none');
-        const message = document.getElementById('pmf-user-control-panel-response') as HTMLElement;
-        message.insertAdjacentElement(
-          'afterend',
-          addElement('div', { classList: 'alert alert-danger', innerText: response.error })
+          addElement('div', { classList: 'alert alert-danger', innerText: (error as Error).message })
         );
       }
     });
@@ -55,20 +61,25 @@ export const handleUserControlPanel = (): void => {
       confirmRemoveTwoFactor.addEventListener('click', async (event: Event): Promise<void> => {
         event.preventDefault();
         const csrfToken = document.getElementById('pmf-csrf-token-remove-twofactor') as HTMLInputElement;
-        const response = (await removeTwofactorConfig(csrfToken.value)) as ApiResponse;
-        if (response.success) {
-          pushNotification(response.success);
-          const twoFactorEnabled = document.getElementById('twofactor_enabled') as HTMLInputElement | null;
-          if (twoFactorEnabled) {
-            twoFactorEnabled.checked = false;
+
+        try {
+          const response = await removeTwofactorConfig(csrfToken.value);
+          if (response.success) {
+            pushNotification(response.success);
+            const twoFactorEnabled = document.getElementById('twofactor_enabled') as HTMLInputElement | null;
+            if (twoFactorEnabled) {
+              twoFactorEnabled.checked = false;
+            }
+            const removeCurrentConfig = document.getElementById('removeCurrentConfig') as HTMLElement | null;
+            if (removeCurrentConfig) {
+              removeCurrentConfig.style.display = 'none';
+            }
           }
-          const removeCurrentConfig = document.getElementById('removeCurrentConfig') as HTMLElement | null;
-          if (removeCurrentConfig) {
-            removeCurrentConfig.style.display = 'none';
+          if (response.error) {
+            pushErrorNotification(response.error);
           }
-        }
-        if (response.error) {
-          pushErrorNotification(response.error);
+        } catch (error) {
+          pushErrorNotification((error as Error).message);
         }
       });
     }

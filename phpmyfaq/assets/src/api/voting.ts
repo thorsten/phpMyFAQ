@@ -13,31 +13,33 @@
  * @since     2024-03-09
  */
 
+import { ApiResponse } from '../interfaces';
+
 export const saveVoting = async (
   votingId: string,
   votingLanguage: string,
   selectedIndex: number,
   csrfToken: string
-) => {
-  try {
-    const response: Response = await fetch('api/voting', {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id: votingId,
-        lang: votingLanguage,
-        value: selectedIndex,
-        csrfToken: csrfToken,
-      }),
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+): Promise<ApiResponse> => {
+  const response: Response = await fetch('api/voting', {
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id: votingId,
+      lang: votingLanguage,
+      value: selectedIndex,
+      csrfToken: csrfToken,
+    }),
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    return await response.json();
-  } catch (error) {
-    console.error(error);
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
   }
+
+  return await response.json();
 };

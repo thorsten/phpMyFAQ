@@ -16,7 +16,7 @@
 import { Modal } from 'bootstrap';
 import { pushErrorNotification, pushNotification } from '../utils';
 import { createComment } from '../api';
-import { ApiResponse, CommentData } from '../interfaces';
+import { CommentData } from '../interfaces';
 import { renderCommentEditor } from '../comment/editor';
 import type { Jodit } from 'jodit';
 
@@ -45,7 +45,7 @@ export const handleSaveComment = (): void => {
           }
 
           const comments = new FormData(form);
-          const response = (await createComment(comments)) as ApiResponse;
+          const response = await createComment(comments);
 
           if (response.success) {
             pushNotification(response.success);
@@ -70,6 +70,7 @@ export const handleSaveComment = (): void => {
           form.reset();
         } catch (error: unknown) {
           console.error('Error: ', error);
+          pushErrorNotification(String(error));
         }
       }
     });

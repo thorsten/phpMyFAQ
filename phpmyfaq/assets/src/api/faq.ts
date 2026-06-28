@@ -16,21 +16,21 @@
 import { serialize } from '../utils';
 import { ApiResponse } from '../interfaces';
 
-export const createFaq = async (data: FormData): Promise<ApiResponse | undefined> => {
-  try {
-    const response: Response = await fetch('api/faq/create', {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(serialize(data)),
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+export const createFaq = async (data: FormData): Promise<ApiResponse> => {
+  const response: Response = await fetch('api/faq/create', {
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(serialize(data)),
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    return await response.json();
-  } catch (error) {
-    console.error(error);
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
   }
+
+  return await response.json();
 };

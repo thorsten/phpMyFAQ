@@ -6,6 +6,7 @@ describe('createComment function', () => {
   test('creates a comment successfully', async () => {
     // Mocking fetch function
     global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
       status: 200,
       json: () => Promise.resolve({ message: 'Comment created successfully' }),
     });
@@ -33,6 +34,7 @@ describe('createComment function', () => {
   test('throws an error if network response is not ok', async () => {
     // Mocking fetch function
     global.fetch = vi.fn().mockResolvedValue({
+      ok: false,
       status: 400,
       json: () => Promise.resolve({ error: 'Something went wrong' }),
     });
@@ -41,6 +43,6 @@ describe('createComment function', () => {
     const data = Object.keys({ comment: 'Test comment' }) as unknown as FormData;
 
     // Assertions
-    await expect(createComment(data)).resolves.toEqual({ error: 'Something went wrong' });
+    await expect(createComment(data)).rejects.toThrow('HTTP 400');
   });
 });

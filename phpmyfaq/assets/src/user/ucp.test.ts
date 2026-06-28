@@ -93,6 +93,35 @@ describe('handleUserControlPanel', () => {
       expect(errorAlert?.innerText).toBe('Invalid email address');
     });
 
+    it('should show error message when the request throws', async () => {
+      document.body.innerHTML = `
+        <form id="pmf-user-control-panel-form">
+          <input name="email" value="invalid" />
+        </form>
+        <button id="pmf-submit-user-control-panel">Save</button>
+        <div id="loader"></div>
+        <div id="pmf-user-control-panel-response"></div>
+      `;
+
+      vi.mocked(updateUserControlPanelData).mockRejectedValue(new Error('HTTP 500'));
+
+      handleUserControlPanel();
+
+      const button = document.getElementById('pmf-submit-user-control-panel') as HTMLButtonElement;
+      button.click();
+
+      await vi.waitFor(() => {
+        expect(updateUserControlPanelData).toHaveBeenCalled();
+      });
+
+      const loader = document.getElementById('loader') as HTMLElement;
+      expect(loader.classList.contains('d-none')).toBe(true);
+
+      const errorAlert = document.querySelector('.alert-danger') as HTMLElement | null;
+      expect(errorAlert).not.toBeNull();
+      expect(errorAlert?.innerText).toBe('HTTP 500');
+    });
+
     it('should send form data to API', async () => {
       document.body.innerHTML = `
         <form id="pmf-user-control-panel-form">
@@ -190,6 +219,30 @@ describe('handleUserControlPanel', () => {
       });
 
       expect(pushErrorNotification).toHaveBeenCalledWith('Invalid CSRF token');
+    });
+
+    it('should show error notification when the request throws', async () => {
+      document.body.innerHTML = `
+        <form id="pmf-user-control-panel-form"></form>
+        <button id="pmf-submit-user-control-panel">Save</button>
+        <div id="loader"></div>
+        <div id="pmf-user-control-panel-response"></div>
+        <input id="pmf-csrf-token-remove-twofactor" value="csrf-token" />
+        <button id="pmf-remove-twofactor-confirm">Remove 2FA</button>
+      `;
+
+      vi.mocked(removeTwofactorConfig).mockRejectedValue(new Error('HTTP 500'));
+
+      handleUserControlPanel();
+
+      const confirmButton = document.getElementById('pmf-remove-twofactor-confirm') as HTMLButtonElement;
+      confirmButton.click();
+
+      await vi.waitFor(() => {
+        expect(removeTwofactorConfig).toHaveBeenCalled();
+      });
+
+      expect(pushErrorNotification).toHaveBeenCalledWith('HTTP 500');
     });
 
     it('should not uncheck checkbox or hide config section when they are missing', async () => {

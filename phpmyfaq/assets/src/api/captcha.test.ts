@@ -3,23 +3,16 @@ import { fetchCaptchaImage } from './captcha';
 
 describe('fetchCaptchaImage function', () => {
   let fetchMock: Mock;
-  let consoleErrorMock: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
     // Mocking fetch function
     fetchMock = vi.fn();
     global.fetch = fetchMock;
-
-    // Mocking console.error
-    consoleErrorMock = vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
     // Clear fetch mock
     fetchMock.mockClear();
-
-    // Restore console.error mock
-    consoleErrorMock.mockRestore();
   });
 
   test('should fetch captcha image successfully', async () => {
@@ -47,21 +40,17 @@ describe('fetchCaptchaImage function', () => {
     });
 
     expect(response).toEqual(mockResponse);
-
-    // Verify console.error was not called
-    expect(consoleErrorMock).not.toHaveBeenCalled();
   });
 
-  test('should handle fetch error', async () => {
+  test('should throw an error if network response is not ok', async () => {
     const action: string = 'someAction';
     const timestamp: number = Date.now();
-    const errorMessage = 'Network error';
 
-    // Mock fetch function to return a rejected Promise
-    fetchMock.mockRejectedValueOnce(new Error(errorMessage));
+    // Mock fetch function to return a non-ok response
+    fetchMock.mockResolvedValueOnce({ ok: false, status: 500 });
 
     // Call the function and expect it to reject with an error
-    await expect(fetchCaptchaImage(action, timestamp)).resolves.toEqual(undefined);
+    await expect(fetchCaptchaImage(action, timestamp)).rejects.toThrow('HTTP 500');
 
     // Assertions
     expect(fetchMock).toHaveBeenCalledWith(`api/captcha?action=${action}&timestamp=${timestamp}`, {
@@ -70,8 +59,5 @@ describe('fetchCaptchaImage function', () => {
       redirect: 'follow',
       referrerPolicy: 'no-referrer',
     });
-
-    // Verify console.error was called with the expected message
-    expect(consoleErrorMock).toHaveBeenCalledWith(new Error(errorMessage));
   });
 });

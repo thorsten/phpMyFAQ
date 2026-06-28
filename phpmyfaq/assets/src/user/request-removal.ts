@@ -14,7 +14,6 @@
  */
 
 import { requestUserRemoval } from '../api';
-import { ApiResponse } from '../interfaces';
 import { addElement } from '../utils';
 
 export const handleRequestRemoval = () => {
@@ -32,25 +31,32 @@ export const handleRequestRemoval = () => {
         const form = document.querySelector('#pmf-request-removal-form') as HTMLFormElement;
         const loader = document.getElementById('loader') as HTMLElement;
         const formData = new FormData(form);
-        const response = (await requestUserRemoval(formData)) as ApiResponse;
+        const message = document.getElementById('pmf-request-removal-response') as HTMLElement;
 
-        if (response.success) {
-          console.log(response.success);
+        try {
+          const response = await requestUserRemoval(formData);
+
+          if (response.success) {
+            loader.classList.add('d-none');
+            message.insertAdjacentElement(
+              'afterend',
+              addElement('div', { classList: 'alert alert-success', innerText: response.success })
+            );
+            form.reset();
+          }
+
+          if (response.error) {
+            loader.classList.add('d-none');
+            message.insertAdjacentElement(
+              'afterend',
+              addElement('div', { classList: 'alert alert-danger', innerText: response.error })
+            );
+          }
+        } catch (error) {
           loader.classList.add('d-none');
-          const message = document.getElementById('pmf-request-removal-response') as HTMLElement;
           message.insertAdjacentElement(
             'afterend',
-            addElement('div', { classList: 'alert alert-success', innerText: response.success })
-          );
-          form.reset();
-        }
-
-        if (response.error) {
-          loader.classList.add('d-none');
-          const message = document.getElementById('pmf-request-removal-response') as HTMLElement;
-          message.insertAdjacentElement(
-            'afterend',
-            addElement('div', { classList: 'alert alert-danger', innerText: response.error })
+            addElement('div', { classList: 'alert alert-danger', innerText: (error as Error).message })
           );
         }
       }

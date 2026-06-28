@@ -72,14 +72,18 @@ export const handleUserVoting = (): void => {
         const votingLanguage: string = (document.getElementById('voting-language') as HTMLInputElement).value;
         const csrfToken: string = (document.getElementById('csrf-token-voting') as HTMLInputElement).value;
 
-        const response = await saveVoting(votingId, votingLanguage, selectedIndex, csrfToken);
+        try {
+          const response = await saveVoting(votingId, votingLanguage, selectedIndex, csrfToken);
 
-        if (response.success) {
-          pushNotification(response.success);
-        }
+          if (response.success) {
+            pushNotification(response.success);
+          }
 
-        if (response.error) {
-          pushErrorNotification(response.error);
+          if (response.error) {
+            pushErrorNotification(response.error);
+          }
+        } catch {
+          pushErrorNotification('An unexpected error occurred.');
         }
       },
       false

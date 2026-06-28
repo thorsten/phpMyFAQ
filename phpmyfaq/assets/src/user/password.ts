@@ -15,7 +15,6 @@
 
 import { resetUserPassword, updateUserPassword } from '../api';
 import { addElement } from '../utils';
-import { ApiResponse } from '../interfaces';
 
 export const handleUserPassword = () => {
   const changePasswordSubmit = document.getElementById('pmf-submit-password') as HTMLButtonElement | null;
@@ -27,25 +26,32 @@ export const handleUserPassword = () => {
       const form = document.querySelector('#pmf-password-form') as HTMLFormElement;
       const loader = document.getElementById('loader') as HTMLElement;
       const formData = new FormData(form);
+      const message = document.getElementById('pmf-password-response') as HTMLElement;
 
-      const response = (await updateUserPassword(formData)) as ApiResponse;
+      try {
+        const response = await updateUserPassword(formData);
 
-      if (response.success) {
+        if (response.success) {
+          loader.classList.add('d-none');
+          message.insertAdjacentElement(
+            'afterend',
+            addElement('div', { classList: 'alert alert-success', innerText: response.success })
+          );
+          form.reset();
+        }
+
+        if (response.error) {
+          loader.classList.add('d-none');
+          message.insertAdjacentElement(
+            'afterend',
+            addElement('div', { classList: 'alert alert-danger', innerText: response.error })
+          );
+        }
+      } catch (error) {
         loader.classList.add('d-none');
-        const message = document.getElementById('pmf-password-response') as HTMLElement;
         message.insertAdjacentElement(
           'afterend',
-          addElement('div', { classList: 'alert alert-success', innerText: response.success })
-        );
-        form.reset();
-      }
-
-      if (response.error) {
-        loader.classList.add('d-none');
-        const message = document.getElementById('pmf-password-response') as HTMLElement;
-        message.insertAdjacentElement(
-          'afterend',
-          addElement('div', { classList: 'alert alert-danger', innerText: response.error })
+          addElement('div', { classList: 'alert alert-danger', innerText: (error as Error).message })
         );
       }
     });
@@ -62,24 +68,32 @@ export const handleResetUserPassword = () => {
       const form = document.querySelector('#pmf-resetpw-form') as HTMLFormElement;
       const loader = document.getElementById('loader') as HTMLElement;
       const formData = new FormData(form);
-
-      const response = (await resetUserPassword(formData)) as ApiResponse;
       const message = document.getElementById('pmf-resetpw-response') as HTMLElement;
 
-      if (response.success) {
-        loader.classList.add('d-none');
-        message.insertAdjacentElement(
-          'afterend',
-          addElement('div', { classList: 'alert alert-success', innerText: response.success })
-        );
-        form.reset();
-      }
+      try {
+        const response = await resetUserPassword(formData);
 
-      if (response.error) {
+        if (response.success) {
+          loader.classList.add('d-none');
+          message.insertAdjacentElement(
+            'afterend',
+            addElement('div', { classList: 'alert alert-success', innerText: response.success })
+          );
+          form.reset();
+        }
+
+        if (response.error) {
+          loader.classList.add('d-none');
+          message.insertAdjacentElement(
+            'afterend',
+            addElement('div', { classList: 'alert alert-danger', innerText: response.error })
+          );
+        }
+      } catch (error) {
         loader.classList.add('d-none');
         message.insertAdjacentElement(
           'afterend',
-          addElement('div', { classList: 'alert alert-danger', innerText: response.error })
+          addElement('div', { classList: 'alert alert-danger', innerText: (error as Error).message })
         );
       }
     });

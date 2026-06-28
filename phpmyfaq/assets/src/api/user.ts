@@ -16,99 +16,99 @@
 import { serialize } from '../utils';
 import { ApiResponse } from '../interfaces';
 
-export const updateUserControlPanelData = async (data: FormData): Promise<ApiResponse | undefined> => {
-  try {
-    const response: Response = await fetch('api/user/data/update', {
-      method: 'PUT',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(serialize(data)),
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+export const updateUserControlPanelData = async (data: FormData): Promise<ApiResponse> => {
+  const response: Response = await fetch('api/user/data/update', {
+    method: 'PUT',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(serialize(data)),
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    return await response.json();
-  } catch (error) {
-    console.error(error);
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
   }
+
+  return await response.json();
 };
 
-export const updateUserPassword = async (data: FormData): Promise<ApiResponse | undefined> => {
-  try {
-    const response: Response = await fetch('api/user/password/update', {
-      method: 'PUT',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(serialize(data)),
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+export const updateUserPassword = async (data: FormData): Promise<ApiResponse> => {
+  const response: Response = await fetch('api/user/password/update', {
+    method: 'PUT',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(serialize(data)),
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    return await response.json();
-  } catch (error) {
-    console.error(error);
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
   }
+
+  return await response.json();
 };
 
-export const resetUserPassword = async (data: FormData): Promise<ApiResponse | undefined> => {
-  try {
-    const response: Response = await fetch('api/user/password/reset', {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(serialize(data)),
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+export const resetUserPassword = async (data: FormData): Promise<ApiResponse> => {
+  const response: Response = await fetch('api/user/password/reset', {
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(serialize(data)),
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    return await response.json();
-  } catch (error) {
-    console.error(error);
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
   }
+
+  return await response.json();
 };
 
-export const requestUserRemoval = async (data: FormData): Promise<ApiResponse | undefined> => {
-  try {
-    const response: Response = await fetch('api/user/request-removal', {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(serialize(data)),
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+export const requestUserRemoval = async (data: FormData): Promise<ApiResponse> => {
+  const response: Response = await fetch('api/user/request-removal', {
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(serialize(data)),
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    return await response.json();
-  } catch (error) {
-    console.error(error);
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
   }
+
+  return await response.json();
 };
 
-export const removeTwofactorConfig = async (csrfToken: string): Promise<ApiResponse | undefined> => {
-  try {
-    const response: Response = await fetch('api/user/remove-twofactor', {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        csrfToken: csrfToken,
-      }),
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+export const removeTwofactorConfig = async (csrfToken: string): Promise<ApiResponse> => {
+  const response: Response = await fetch('api/user/remove-twofactor', {
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      csrfToken: csrfToken,
+    }),
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    return await response.json();
-  } catch (error) {
-    console.error(error);
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
   }
+
+  return await response.json();
 };

@@ -4,6 +4,7 @@ import { saveVoting } from './voting';
 describe('saveVoting', () => {
   test('saves a vote successfully', async () => {
     global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
       status: 200,
       json: () => Promise.resolve({ success: 'Vote saved successfully' }),
     });
@@ -23,24 +24,19 @@ describe('saveVoting', () => {
     });
   });
 
-  test('returns error response if request fails', async () => {
+  test('throws an error if request is not ok', async () => {
     global.fetch = vi.fn().mockResolvedValue({
+      ok: false,
       status: 400,
       json: () => Promise.resolve({ error: 'Something went wrong' }),
     });
 
-    await expect(saveVoting('42', 'en', 3, 'test-csrf-token')).resolves.toEqual({ error: 'Something went wrong' });
+    await expect(saveVoting('42', 'en', 3, 'test-csrf-token')).rejects.toThrow('HTTP 400');
   });
 
-  test('returns undefined and logs error on network failure', async () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  test('throws on network failure', async () => {
     global.fetch = vi.fn().mockRejectedValue(new Error('Network error'));
 
-    const result = await saveVoting('42', 'en', 5, 'test-csrf-token');
-
-    expect(result).toBeUndefined();
-    expect(consoleSpy).toHaveBeenCalled();
-
-    consoleSpy.mockRestore();
+    await expect(saveVoting('42', 'en', 5, 'test-csrf-token')).rejects.toThrow('Network error');
   });
 });

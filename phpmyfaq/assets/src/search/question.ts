@@ -15,7 +15,6 @@
 
 import { addElement } from '../utils';
 import { createQuestion } from '../api';
-import { ApiResponse } from '../interfaces';
 
 export const handleQuestion = () => {
   const questionSubmit = document.getElementById('pmf-submit-question') as HTMLElement | null;
@@ -32,46 +31,56 @@ export const handleQuestion = () => {
         const form = document.querySelector('#pmf-question-form') as HTMLFormElement;
         const loader = document.getElementById('loader') as HTMLElement;
         const formData = new FormData(form);
-        const response = (await createQuestion(formData)) as ApiResponse;
 
-        // Smart answers
-        if (response.result) {
-          const resultMessage = response.result;
-          const message = document.getElementById('pmf-question-response') as HTMLElement;
-          const hints = document.getElementsByClassName('hint-search-suggestion');
+        try {
+          const response = await createQuestion(formData);
 
-          Array.from(hints).forEach((hint) => {
-            hint.classList.remove('d-none');
-          });
+          // Smart answers
+          if (response.result) {
+            const resultMessage = response.result;
+            const message = document.getElementById('pmf-question-response') as HTMLElement;
+            const hints = document.getElementsByClassName('hint-search-suggestion');
 
-          // Add smart answers
-          message.insertAdjacentElement('afterend', addElement('div', { classList: '', innerHTML: resultMessage }));
-          // Add hidden input
-          form.insertAdjacentElement('afterbegin', addElement('input', { type: 'hidden', name: 'save', value: 1 }));
-          form.insertAdjacentElement(
-            'afterbegin',
-            addElement('input', { type: 'hidden', name: 'store', value: 'now' })
-          );
-        }
+            Array.from(hints).forEach((hint) => {
+              hint.classList.remove('d-none');
+            });
 
-        // Final result
-        if (response.success) {
-          loader.classList.add('d-none');
-          const message = document.getElementById('pmf-question-response') as HTMLElement;
+            // Add smart answers
+            message.insertAdjacentElement('afterend', addElement('div', { classList: '', innerHTML: resultMessage }));
+            // Add hidden input
+            form.insertAdjacentElement('afterbegin', addElement('input', { type: 'hidden', name: 'save', value: 1 }));
+            form.insertAdjacentElement(
+              'afterbegin',
+              addElement('input', { type: 'hidden', name: 'store', value: 'now' })
+            );
+          }
 
-          message.insertAdjacentElement(
-            'beforeend',
-            addElement('div', { classList: 'alert alert-success', innerText: response.success })
-          );
-          form.reset();
-        }
+          // Final result
+          if (response.success) {
+            loader.classList.add('d-none');
+            const message = document.getElementById('pmf-question-response') as HTMLElement;
 
-        if (response.error) {
+            message.insertAdjacentElement(
+              'beforeend',
+              addElement('div', { classList: 'alert alert-success', innerText: response.success })
+            );
+            form.reset();
+          }
+
+          if (response.error) {
+            loader.classList.add('d-none');
+            const message = document.getElementById('pmf-question-response') as HTMLElement;
+            message.insertAdjacentElement(
+              'afterend',
+              addElement('div', { classList: 'alert alert-danger', innerText: response.error })
+            );
+          }
+        } catch (error) {
           loader.classList.add('d-none');
           const message = document.getElementById('pmf-question-response') as HTMLElement;
           message.insertAdjacentElement(
             'afterend',
-            addElement('div', { classList: 'alert alert-danger', innerText: response.error })
+            addElement('div', { classList: 'alert alert-danger', innerText: (error as Error).message })
           );
         }
       }

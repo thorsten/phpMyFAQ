@@ -13,18 +13,18 @@
  * @since     2024-03-12
  */
 
-export const fetchCaptchaImage = async (action: string, timestamp: number): Promise<Response | undefined> => {
-  try {
-    const params = new URLSearchParams({ action, timestamp: String(timestamp) });
-    const response: Response = await fetch(`api/captcha?${params.toString()}`, {
-      method: 'GET',
-      cache: 'no-cache',
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+export const fetchCaptchaImage = async (action: string, timestamp: number): Promise<Response> => {
+  const params = new URLSearchParams({ action, timestamp: String(timestamp) });
+  const response: Response = await fetch(`api/captcha?${params.toString()}`, {
+    method: 'GET',
+    cache: 'no-cache',
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    return await response;
-  } catch (error) {
-    console.error(error);
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
   }
+
+  return response;
 };

@@ -15,7 +15,6 @@
 
 import { addElement } from '../utils';
 import { createBookmark, createFaq, deleteBookmark } from '../api';
-import { ApiResponse } from '../interfaces';
 import { pushErrorNotification, pushNotification } from '../utils';
 
 export const handleAddFaq = () => {
@@ -33,34 +32,34 @@ export const handleAddFaq = () => {
         const form = document.querySelector('#pmf-add-faq-form') as HTMLFormElement;
         const loader = document.getElementById('loader') as HTMLElement;
         const formData = new FormData(form);
-        const response = (await createFaq(formData)) as ApiResponse | undefined;
 
-        if (!response) {
+        try {
+          const response = await createFaq(formData);
+
+          if (response.success) {
+            loader.classList.add('d-none');
+            const message = document.getElementById('pmf-add-faq-response') as HTMLElement;
+            message.insertAdjacentElement(
+              'afterend',
+              addElement('div', { classList: 'alert alert-success', innerText: response.success })
+            );
+            form.reset();
+          }
+
+          if (response.error) {
+            loader.classList.add('d-none');
+            const message = document.getElementById('pmf-add-faq-response') as HTMLElement;
+            message.insertAdjacentElement(
+              'afterend',
+              addElement('div', { classList: 'alert alert-danger', innerText: response.error })
+            );
+          }
+        } catch {
           loader.classList.add('d-none');
           const message = document.getElementById('pmf-add-faq-response') as HTMLElement;
           message.insertAdjacentElement(
             'afterend',
             addElement('div', { classList: 'alert alert-danger', innerText: 'An unexpected error occurred.' })
-          );
-          return;
-        }
-
-        if (response.success) {
-          loader.classList.add('d-none');
-          const message = document.getElementById('pmf-add-faq-response') as HTMLElement;
-          message.insertAdjacentElement(
-            'afterend',
-            addElement('div', { classList: 'alert alert-success', innerText: response.success })
-          );
-          form.reset();
-        }
-
-        if (response.error) {
-          loader.classList.add('d-none');
-          const message = document.getElementById('pmf-add-faq-response') as HTMLElement;
-          message.insertAdjacentElement(
-            'afterend',
-            addElement('div', { classList: 'alert alert-danger', innerText: response.error })
           );
         }
       }

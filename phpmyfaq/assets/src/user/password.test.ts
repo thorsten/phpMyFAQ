@@ -93,6 +93,35 @@ describe('handleUserPassword', () => {
     expect(errorAlert?.innerText).toBe('Password too short');
   });
 
+  it('should show error message when the request throws', async () => {
+    document.body.innerHTML = `
+      <form id="pmf-password-form">
+        <input name="password" value="weak" />
+      </form>
+      <button id="pmf-submit-password">Change</button>
+      <div id="loader"></div>
+      <div id="pmf-password-response"></div>
+    `;
+
+    vi.mocked(updateUserPassword).mockRejectedValue(new Error('HTTP 500'));
+
+    handleUserPassword();
+
+    const button = document.getElementById('pmf-submit-password') as HTMLButtonElement;
+    button.click();
+
+    await vi.waitFor(() => {
+      expect(updateUserPassword).toHaveBeenCalled();
+    });
+
+    const loader = document.getElementById('loader') as HTMLElement;
+    expect(loader.classList.contains('d-none')).toBe(true);
+
+    const errorAlert = document.querySelector('.alert-danger') as HTMLElement | null;
+    expect(errorAlert).not.toBeNull();
+    expect(errorAlert?.innerText).toBe('HTTP 500');
+  });
+
   it('should not reset form on error', async () => {
     document.body.innerHTML = `
       <form id="pmf-password-form">

@@ -118,6 +118,35 @@ describe('handleAddFaq', () => {
     expect(errorAlert).not.toBeNull();
     expect(errorAlert?.innerText).toBe('Something went wrong');
   });
+
+  it('should show unexpected error message when createFaq rejects', async () => {
+    document.body.innerHTML = `
+      <form id="pmf-add-faq-form" class="needs-validation">
+        <textarea name="question">Test</textarea>
+      </form>
+      <button id="pmf-submit-faq">Submit</button>
+      <div id="loader"></div>
+      <div id="pmf-add-faq-response"></div>
+    `;
+
+    vi.mocked(createFaq).mockRejectedValue(new Error('HTTP 500'));
+
+    handleAddFaq();
+
+    const button = document.getElementById('pmf-submit-faq') as HTMLButtonElement;
+    button.click();
+
+    await vi.waitFor(() => {
+      expect(createFaq).toHaveBeenCalled();
+    });
+
+    const loader = document.getElementById('loader') as HTMLElement;
+    expect(loader.classList.contains('d-none')).toBe(true);
+
+    const errorAlert = document.querySelector('.alert-danger') as HTMLElement | null;
+    expect(errorAlert).not.toBeNull();
+    expect(errorAlert?.innerText).toBe('An unexpected error occurred.');
+  });
 });
 
 describe('handleShowFaq', () => {
