@@ -206,12 +206,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
-code = "cyclomatic-complexity"
-message = "Class has high complexity."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq.php"
 code = "kan-defect"
 message = "Class has a high kan defect score."
 count = 1

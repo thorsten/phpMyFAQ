@@ -186,4 +186,49 @@ class FaqRepositoryTest extends TestCase
     {
         $this->assertNull($this->faqRepository->fetchKeywords(999996, 'en'));
     }
+
+    public function testGetFaqResultReturnsMatchingRecord(): void
+    {
+        $this->seedFaqRecord(id: 5020, solutionId: 7100, question: 'Result Question');
+
+        $result = $this->faqRepository->getFaqResult(5020, 'en', null, false, -1, [-1], false);
+
+        $this->assertSame(1, $this->configuration->getDb()->numRows($result));
+        $row = $this->configuration->getDb()->fetchObject($result);
+        $this->assertSame(5020, (int) $row->id);
+        $this->assertSame('Result Question', $row->thema);
+    }
+
+    public function testFetchFaqByIdAndCategoryIdReturnsRow(): void
+    {
+        $this->seedFaqRecord(id: 5021, solutionId: 7110, question: 'Scoped Question', categoryId: 88);
+
+        $row = $this->faqRepository->fetchFaqByIdAndCategoryId(5021, 88, true, -1, [-1], false);
+
+        $this->assertIsObject($row);
+        $this->assertSame(5021, (int) $row->id);
+        $this->assertSame('Scoped Question', $row->question);
+        $this->assertSame(88, (int) $row->category_id);
+    }
+
+    public function testFetchFaqByIdAndCategoryIdReturnsNullWhenMissing(): void
+    {
+        $this->assertNull($this->faqRepository->fetchFaqByIdAndCategoryId(999995, 999994, true, -1, [-1], false));
+    }
+
+    public function testFetchRowBySolutionIdReturnsRow(): void
+    {
+        $this->seedFaqRecord(id: 5022, solutionId: 7120, question: 'By Solution');
+
+        $row = $this->faqRepository->fetchRowBySolutionId(7120, -1, [-1], false);
+
+        $this->assertIsObject($row);
+        $this->assertSame(5022, (int) $row->id);
+        $this->assertSame(7120, (int) $row->solution_id);
+    }
+
+    public function testFetchRowBySolutionIdReturnsNullWhenMissing(): void
+    {
+        $this->assertNull($this->faqRepository->fetchRowBySolutionId(999993, -1, [-1], false));
+    }
 }

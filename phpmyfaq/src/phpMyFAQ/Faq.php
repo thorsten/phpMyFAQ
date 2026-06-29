@@ -682,39 +682,15 @@ class Faq
         ?int $faqRevisionId = null,
         bool $isAdmin = false,
     ): mixed {
-        $queryHelper = new QueryHelper($this->user, $this->groups);
-        $query = sprintf(
-            "SELECT
-                 id, lang, solution_id, revision_id, active, sticky, keywords,
-                 thema, content, author, email, comment, updated, date_start, 
-                 date_end, created, notes
-            FROM
-                %s%s fd
-            LEFT JOIN
-                %sfaqdata_group fdg
-            ON
-                fd.id = fdg.record_id
-            LEFT JOIN
-                %sfaqdata_user fdu
-            ON
-                fd.id = fdu.record_id
-            WHERE
-                fd.id = %d
-            %s
-            AND
-                fd.lang = '%s'
-                %s",
-            Database::getTablePrefix(),
-            $faqRevisionId !== null ? 'faqdata_revisions' : 'faqdata',
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
+        return $this->faqRepository->getFaqResult(
             $faqId,
-            $faqRevisionId !== null ? 'AND revision_id = ' . $faqRevisionId : '',
-            $this->escapeSqlValue($faqLanguage),
-            $isAdmin ? 'AND 1=1' : $queryHelper->queryPermission($this->groupSupport),
+            $faqLanguage,
+            $faqRevisionId,
+            $isAdmin,
+            $this->user,
+            $this->groups,
+            $this->groupSupport,
         );
-
-        return $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -832,68 +808,15 @@ class Faq
      */
     public function getFaqByIdAndCategoryId(int $faqId, int $categoryId, bool $onlyActive = true): array
     {
-        $queryHelper = new QueryHelper($this->user, $this->groups);
-        $now = date(format: 'YmdHis');
-        $query = sprintf(
-            "
-            SELECT
-                fd.id AS id,
-                fd.lang AS lang,
-                fd.solution_id AS solution_id,
-                fd.revision_id AS revision_id,
-                fd.active AS active,
-                fd.sticky AS sticky,
-                fd.keywords AS keywords,
-                fd.thema AS question,
-                fd.content AS answer,
-                fd.author AS author,
-                fd.email AS email,
-                fd.comment AS comment,
-                fd.updated AS updated,
-                fd.date_start AS date_start,
-                fd.date_end AS date_end,
-                fd.created AS created,
-                fcr.category_id AS category_id
-            FROM
-                %sfaqdata AS fd
-            LEFT JOIN
-                %sfaqcategoryrelations AS fcr
-            ON
-                fd.id = fcr.record_id
-            AND
-                fd.lang = fcr.record_lang
-            LEFT JOIN
-                %sfaqdata_group AS fdg
-            ON
-                fd.id = fdg.record_id
-            LEFT JOIN
-                %sfaqdata_user AS fdu
-            ON
-                fd.id = fdu.record_id
-            WHERE
-                fd.id = %d
-            AND
-                fcr.category_id = %d
-            AND
-                fd.lang = '%s'
-                %s
-                %s",
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
+        $row = $this->faqRepository->fetchFaqByIdAndCategoryId(
             $faqId,
             $categoryId,
-            $this->getEscapedCurrentLanguage(),
-            $onlyActive
-                ? sprintf("AND fd.active = 'yes' AND fd.date_start <= '%s' AND fd.date_end >= '%s'", $now, $now)
-                : '',
-            $queryHelper->queryPermission($this->groupSupport),
+            $onlyActive,
+            $this->user,
+            $this->groups,
+            $this->groupSupport,
         );
 
-        $result = $this->configuration->getDb()->query($query);
-
-        $row = $this->configuration->getDb()->fetchObject($result);
         if ($row) {
             $url = sprintf(
                 '%scontent/%d/%d/%s/%s.html',
@@ -1152,60 +1075,7 @@ class Faq
      */
     public function getFaqBySolutionId(int $solutionId): void
     {
-        $queryHelper = new QueryHelper($this->user, $this->groups);
-        $query = sprintf(
-            'SELECT
-                fd.*, COALESCE(fdg.group_id, -1) AS group_id, fdu.user_id
-            FROM
-                %sfaqdata fd
-            LEFT JOIN (
-                SELECT record_id, group_id FROM %sfaqdata_group fdg WHERE fdg.group_id <> -1
-                UNION ALL
-                SELECT fd.id AS record_id, -1 AS group_id FROM %sfaqdata fd WHERE fd.solution_id = %d
-            ) AS fdg
-            ON
-                fd.id = fdg.record_id
-            LEFT JOIN
-                %sfaqdata_user fdu
-            ON
-                fd.id = fdu.record_id
-            WHERE
-                fd.solution_id = %d
-                %s',
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $solutionId,
-            Database::getTablePrefix(),
-            $solutionId,
-            $queryHelper->queryPermission($this->groupSupport),
-        );
-
-        $result = $this->configuration->getDb()->query($query);
-
-        $row = $this->configuration->getDb()->fetchObject($result);
-
-        if (false === $row || null === $row) {
-            $restrictionQuery = sprintf('SELECT 1
-                FROM %1$sfaqdata fd
-                LEFT JOIN %1$sfaqdata_user fdu ON fd.id = fdu.record_id
-                LEFT JOIN %1$sfaqdata_group fdg ON fd.id = fdg.record_id
-                WHERE fd.solution_id = %2$d
-                AND (fdu.user_id IS NOT NULL OR fdg.group_id IS NOT NULL)
-                LIMIT 1', Database::getTablePrefix(), $solutionId);
-            $restrictionResult = $this->configuration->getDb()->query($restrictionQuery);
-            $hasRestriction = $restrictionResult && $this->configuration->getDb()->fetchObject($restrictionResult);
-
-            if (!$hasRestriction) {
-                $fallbackQuery = sprintf(
-                    'SELECT * FROM %sfaqdata fd WHERE fd.solution_id = %d LIMIT 1',
-                    Database::getTablePrefix(),
-                    $solutionId,
-                );
-                $fallbackResult = $this->configuration->getDb()->query($fallbackQuery);
-                $row = $this->configuration->getDb()->fetchObject($fallbackResult);
-            }
-        }
+        $row = $this->faqRepository->fetchRowBySolutionId($solutionId, $this->user, $this->groups, $this->groupSupport);
 
         $this->faqRecord = [
             // Ensure faqRecord has at least the requested solution_id to keep API stable

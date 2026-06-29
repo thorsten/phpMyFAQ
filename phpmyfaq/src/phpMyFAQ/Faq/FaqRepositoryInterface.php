@@ -63,4 +63,44 @@ interface FaqRepositoryInterface
      * FAQ does not exist.
      */
     public function fetchKeywords(int $faqId, string $language): ?string;
+
+    /**
+     * Runs the permission-filtered query for a single FAQ (or FAQ revision) and returns the
+     * raw database result handle. Admin callers bypass the permission filter.
+     *
+     * @param int[] $groups
+     */
+    public function getFaqResult(
+        int $faqId,
+        string $faqLanguage,
+        ?int $faqRevisionId,
+        bool $isAdmin,
+        int $userId,
+        array $groups,
+        bool $groupSupport,
+    ): mixed;
+
+    /**
+     * Fetches a single FAQ scoped to a category, honouring user and group permissions, in the
+     * configuration's current language. Returns the raw row, or null when nothing matches.
+     *
+     * @param int[] $groups
+     */
+    public function fetchFaqByIdAndCategoryId(
+        int $faqId,
+        int $categoryId,
+        bool $onlyActive,
+        int $userId,
+        array $groups,
+        bool $groupSupport,
+    ): ?object;
+
+    /**
+     * Resolves a solution id to its FAQ row, honouring user and group permissions and falling
+     * back to an unrestricted record when the FAQ has no access restrictions. Returns the raw
+     * row, or null when nothing matches.
+     *
+     * @param int[] $groups
+     */
+    public function fetchRowBySolutionId(int $solutionId, int $userId, array $groups, bool $groupSupport): ?object;
 }
