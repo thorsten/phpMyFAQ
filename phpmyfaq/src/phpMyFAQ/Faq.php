@@ -29,6 +29,7 @@ use Exception;
 use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Faq\FaqRepository;
 use phpMyFAQ\Faq\QueryHelper;
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Instance\Search\Elasticsearch;
@@ -87,6 +88,8 @@ class Faq
     private bool $groupSupport = false;
     private ?TenantQuotaEnforcer $tenantQuotaEnforcer = null;
 
+    private readonly FaqRepository $faqRepository;
+
     /**
      * Constructor.
      */
@@ -94,6 +97,7 @@ class Faq
         private readonly Configuration $configuration,
     ) {
         $this->plurals = new Plurals();
+        $this->faqRepository = new FaqRepository($this->configuration);
 
         if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
             $this->groupSupport = true;
@@ -989,25 +993,7 @@ class Faq
      */
     public function getNextSolutionId(): int
     {
-        $latestId = 0;
-
-        $query = sprintf('SELECT MAX(solution_id) AS solution_id FROM %sfaqdata', Database::getTablePrefix());
-
-        $result = $this->configuration->getDb()->query($query);
-        $row = false;
-        if ($result) {
-            $row = $this->configuration->getDb()->fetchObject($result);
-        }
-
-        if ($row) {
-            $latestId = $row->solution_id;
-        }
-
-        if ($latestId < PMF_SOLUTION_ID_START_VALUE) {
-            return PMF_SOLUTION_ID_START_VALUE;
-        }
-
-        return $latestId + PMF_SOLUTION_ID_INCREMENT_VALUE;
+        return $this->faqRepository->getNextSolutionId();
     }
 
     public function update(FaqEntity $faqEntity): FaqEntity
@@ -1140,21 +1126,7 @@ class Faq
      */
     public function getSolutionIdFromId(int $faqId, string $faqLang): int
     {
-        $query = sprintf(
-            "SELECT solution_id FROM %sfaqdata WHERE id = %d AND lang = '%s'",
-            Database::getTablePrefix(),
-            $faqId,
-            $this->configuration->getDb()->escape($faqLang),
-        );
-
-        $result = $this->configuration->getDb()->query($query);
-
-        $row = $this->configuration->getDb()->fetchObject($result);
-        if ($row) {
-            return (int) $row->solution_id;
-        }
-
-        return $this->getNextSolutionId();
+        return $this->faqRepository->getSolutionIdFromId($faqId, $faqLang);
     }
 
     /**
@@ -1165,57 +1137,12 @@ class Faq
      */
     public function hasTranslation(int $faqId, string $faqLang): bool
     {
-        $query = sprintf(
-            "
-            SELECT
-                id, lang
-            FROM
-                %sfaqdata
-            WHERE
-                id = %d
-            AND
-                lang = '%s'",
-            Database::getTablePrefix(),
-            $faqId,
-            $this->configuration->getDb()->escape($faqLang),
-        );
-
-        $result = $this->configuration->getDb()->query($query);
-        return (bool) $this->configuration->getDb()->numRows($result);
+        return $this->faqRepository->hasTranslation($faqId, $faqLang);
     }
 
     public function isActive(int $faqId, string $faqLang, string $commentType = 'faq'): bool
     {
-        $table = 'news' === $commentType ? 'faqnews' : 'faqdata';
-
-        $query = sprintf(
-            "
-            SELECT
-                active
-            FROM
-                %s%s
-            WHERE
-                id = %d
-            AND
-                lang = '%s'",
-            Database::getTablePrefix(),
-            $table,
-            $faqId,
-            $this->configuration->getDb()->escape($faqLang),
-        );
-
-        $result = $this->configuration->getDb()->query($query);
-
-        $row = $this->configuration->getDb()->fetchObject($result);
-        if (!$row) {
-            return false;
-        }
-
-        if ($row->active === 'y' || $row->active === 'yes') {
-            return true;
-        }
-
-        return false;
+        return $this->faqRepository->isActive($faqId, $faqLang, $commentType);
     }
 
     /**
@@ -1328,56 +1255,7 @@ class Faq
      */
     public function getIdFromSolutionId(int $solutionId): array
     {
-        $queryHelper = new QueryHelper($this->user, $this->groups);
-        $query = sprintf(
-            '
-            SELECT
-                fd.id,
-                fd.lang,
-                fd.thema AS question,
-                fd.content,
-                fcr.category_id AS category_id
-            FROM
-                %sfaqdata fd
-            LEFT JOIN
-                %sfaqcategoryrelations fcr
-            ON
-                fd.id = fcr.record_id
-            AND
-                fd.lang = fcr.record_lang
-            LEFT JOIN
-                %sfaqdata_group fdg
-            ON
-                fd.id = fdg.record_id
-            LEFT JOIN
-                %sfaqdata_user fdu
-            ON
-                fd.id = fdu.record_id
-            WHERE
-                fd.solution_id = %d
-                %s',
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $solutionId,
-            $queryHelper->queryPermission($this->groupSupport),
-        );
-
-        $result = $this->configuration->getDb()->query($query);
-
-        $row = $this->configuration->getDb()->fetchObject($result);
-        if ($row) {
-            return [
-                'id' => $row->id,
-                'lang' => $row->lang,
-                'question' => $row->question,
-                'content' => $row->content,
-                'category_id' => $row->category_id,
-            ];
-        }
-
-        return [];
+        return $this->faqRepository->getIdFromSolutionId($solutionId, $this->user, $this->groups, $this->groupSupport);
     }
 
     /**
@@ -1552,28 +1430,9 @@ class Faq
             return $this->faqRecord['title'];
         }
 
-        $question = Translation::get(key: 'no_cats') ?? '';
+        $question = $this->faqRepository->fetchQuestion($faqId, $this->configuration->getLanguage()->getLanguage());
 
-        $query = sprintf(
-            "SELECT thema AS question FROM %sfaqdata WHERE id = %d AND lang = '%s'",
-            Database::getTablePrefix(),
-            $faqId,
-            $this->getEscapedCurrentLanguage(),
-        );
-        $result = $this->configuration->getDb()->query($query);
-
-        if ($this->configuration->getDb()->numRows($result) > 0) {
-            while (true) {
-                $row = $this->configuration->getDb()->fetchObject($result);
-                if ($row === false || $row === null || $row === []) {
-                    break;
-                }
-
-                $question = $row->question;
-            }
-        }
-
-        return $question;
+        return $question ?? Translation::get(key: 'no_cats') ?? '';
     }
 
     /**
@@ -1587,22 +1446,9 @@ class Faq
             return $this->faqRecord['keywords'];
         }
 
-        $query = sprintf(
-            "SELECT keywords FROM %sfaqdata WHERE id = %d AND lang = '%s'",
-            Database::getTablePrefix(),
-            $faqId,
-            $this->getEscapedCurrentLanguage(),
-        );
+        $keywords = $this->faqRepository->fetchKeywords($faqId, $this->configuration->getLanguage()->getLanguage());
 
-        $result = $this->configuration->getDb()->query($query);
-
-        if ($this->configuration->getDb()->numRows($result) > 0) {
-            $row = $this->configuration->getDb()->fetchObject($result);
-
-            return Strings::htmlspecialchars($row->keywords, ENT_QUOTES);
-        }
-
-        return '';
+        return $keywords === null ? '' : Strings::htmlspecialchars($keywords, ENT_QUOTES);
     }
 
     /**
