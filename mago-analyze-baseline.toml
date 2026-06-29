@@ -88,7 +88,7 @@ count = 3
 file = "phpmyfaq/src/phpMyFAQ/Administration/AdminMenuBuilder.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `count`: expected `Countable|array<array-key, mixed>`, but found `mixed`."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/AdminMenuBuilder.php"
@@ -124,7 +124,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Administration/AdminMenuBuilder.php"
 code = "non-existent-method"
 message = 'Method `getalluserrights` does not exist on type `phpMyFAQ\Permission\PermissionInterface`.'
-count = 5
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/AdminMenuBuilder.php"
@@ -214,7 +214,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Administration/Backup.php"
 code = "possibly-null-operand"
 message = "Possibly null left operand used in string concatenation (type `null|string`)."
-count = 6
+count = 5
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Backup.php"
@@ -250,7 +250,7 @@ count = 6
 file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
 code = "impossible-type-comparison"
 message = "Impossible type assertion: `$row` of type `string` can never be `array<array-key, mixed>`."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
@@ -268,7 +268,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
 code = "invalid-array-index"
 message = "Invalid index type `string('parent_id')` used for array access on `string`."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
@@ -314,8 +314,14 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Administration\Category::getOwner`. Saw type `nonnull`.'
+code = "mixed-property-type-coercion"
+message = "A value with a less specific type `array<int, mixed>` is being assigned to property `$$moderators` (array<int, int>)."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
+code = "mixed-property-type-coercion"
+message = "A value with a less specific type `array<int, mixed>` is being assigned to property `$$owner` (array<int, int>)."
 count = 1
 
 [[issues]]
@@ -328,7 +334,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
 code = "no-value"
 message = "Argument #2 passed to function `array_key_exists` has type `never`, meaning it cannot produce a value."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
@@ -358,7 +364,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
 code = "redundant-logical-operation"
 message = "Redundant `&&` operation: left operand is always falsy and right operand is not evaluated."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Changelog.php"
@@ -1174,7 +1180,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Attachment/Filesystem/AbstractFile.php"
 code = "invalid-method-access"
 message = "Attempting to access a method on a non-object type (`string`)."
-count = 8
+count = 7
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Attachment/Filesystem/AbstractFile.php"
@@ -1504,7 +1510,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Auth/AuthLdap.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `count`: expected `Countable|array<array-key, mixed>`, but found `mixed`."
-count = 3
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/AuthLdap.php"
@@ -1546,7 +1552,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Auth/AuthLdap.php"
 code = "mixed-array-access"
 message = "Unsafe array access on type `mixed`."
-count = 6
+count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/AuthLdap.php"
@@ -1654,7 +1660,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Auth/AuthSso.php"
 code = "redundant-type-comparison"
 message = "Redundant type assertion: `$remote` is already `non-empty-list<string>`."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
@@ -2176,7 +2182,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Auth/WebAuthn/PublicKeyConverter.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #2 of `array_key_exists`: expected `array<array-key, mixed>`, but found `mixed`."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/WebAuthn/PublicKeyConverter.php"
@@ -2314,7 +2320,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Bootstrap/SearchClientFactory.php"
 code = "mixed-operand"
 message = "Left operand in `>=` comparison has `mixed` type."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Bootstrapper.php"
@@ -2338,13 +2344,13 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Bootstrapper.php"
 code = "mixed-operand"
 message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 9
+count = 8
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Bootstrapper.php"
 code = "possible-method-access-on-null"
 message = "Attempting to call a method on `null`."
-count = 17
+count = 14
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Bootstrapper.php"
@@ -2452,6 +2458,24 @@ count = 3
 file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
 code = "possibly-null-argument"
 message = 'Argument #1 of method `phpMyFAQ\Captcha\BuiltinCaptcha::validateCaptchaCode` is possibly `null`, but parameter type `string` does not accept it.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
+code = "possibly-undefined-string-array-index"
+message = "Possibly undefined array key 'b' accessed on `array{'b'?: int<30, 199>, 'g': int<30, 199>, 'r': int<30, 199>}`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
+code = "possibly-undefined-string-array-index"
+message = "Possibly undefined array key 'g' accessed on `array{'g'?: int<30, 199>, 'r': int<30, 199>}`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
+code = "possibly-undefined-string-array-index"
+message = "Possibly undefined array key 'r' accessed on `array{'r'?: int<30, 199>}`."
 count = 1
 
 [[issues]]
@@ -3790,7 +3814,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/ConfigurationMethodsTrait.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #2 of `array_key_exists`: expected `array<array-key, mixed>`, but found `mixed`."
-count = 12
+count = 6
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/ConfigurationMethodsTrait.php"
@@ -3808,7 +3832,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/ConfigurationMethodsTrait.php"
 code = "mixed-array-access"
 message = "Unsafe array access on type `mixed`."
-count = 17
+count = 13
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/ConfigurationMethodsTrait.php"
@@ -4072,7 +4096,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/ConfigurationMethodsTrait.php"
 code = "non-existent-property"
 message = 'Property `$config` does not exist on trait `phpMyFAQ\ConfigurationMethodsTrait`.'
-count = 52
+count = 46
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/ConfigurationMethodsTrait.php"
@@ -4462,7 +4486,7 @@ count = 8
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AttachmentController.php"
 code = "mixed-method-access"
 message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 7
+count = 5
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AttachmentController.php"
@@ -4516,7 +4540,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #2 of `phpMyFAQ\Category::delete`: expected `string`, but found `mixed`.'
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
@@ -4552,7 +4576,7 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 8
+count = 6
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
@@ -4678,7 +4702,7 @@ count = 3
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ConfigurationTabController.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `array_key_exists`: expected `bool|float|int|string`, but found `mixed`."
-count = 3
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ConfigurationTabController.php"
@@ -5290,7 +5314,7 @@ count = 58
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
 code = "mixed-method-access"
 message = "Attempting to access a method on a non-object type (`nonnull`)."
-count = 3
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
@@ -5620,7 +5644,7 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
@@ -5644,12 +5668,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
 code = "non-existent-method"
 message = 'Method `getgrouprights` does not exist on type `phpMyFAQ\Permission\PermissionInterface`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
-code = "non-existent-method"
-message = 'Method `setcategoryrestrictions` does not exist on type `phpMyFAQ\Permission\PermissionInterface`.'
 count = 1
 
 [[issues]]
@@ -6352,7 +6370,7 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/SessionController.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 5
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/SessionController.php"
@@ -6634,7 +6652,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UpdateController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UpdateController.php"
@@ -6796,7 +6814,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
 code = "possible-method-access-on-null"
 message = "Attempting to call a method on `null`."
-count = 15
+count = 14
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
@@ -7522,7 +7540,7 @@ count = 3
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/InstanceController.php"
 code = "ambiguous-object-property-access"
 message = "Cannot statically verify property access on a generic `object` type."
-count = 4
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/InstanceController.php"
@@ -7732,7 +7750,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StatisticsSessionsController.php"
 code = "ambiguous-object-property-access"
 message = "Cannot statically verify property access on a generic `object` type."
-count = 4
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StatisticsSessionsController.php"
@@ -7930,7 +7948,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `property_exists`: expected `class-string|object`, but found `mixed`."
-count = 6
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
@@ -8044,7 +8062,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `property_exists`: expected `class-string|object`, but found `mixed`."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
@@ -8638,7 +8656,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/CommentController.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `phpMyFAQ\User::checkDisplayName`: expected `string`, but found `mixed`.'
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/CommentController.php"
@@ -9106,7 +9124,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/UserController.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `phpMyFAQ\User::getUserById`: expected `int`, but found `mixed`.'
-count = 4
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/UserController.php"
@@ -9130,7 +9148,7 @@ count = 7
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/UserController.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`truthy-mixed`)."
-count = 7
+count = 6
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/UserController.php"
@@ -9753,7 +9771,7 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
 code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `str_repeat`: expected `int`, but found `mixed`."
+message = "Invalid argument type for argument #2 of `str_repeat`: expected `non-negative-int`, but found `mixed`."
 count = 1
 
 [[issues]]
@@ -10053,7 +10071,7 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/QuestionsController.php"
 code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `str_repeat`: expected `int`, but found `mixed`."
+message = "Invalid argument type for argument #2 of `str_repeat`: expected `non-negative-int`, but found `mixed`."
 count = 1
 
 [[issues]]
@@ -10113,7 +10131,7 @@ count = 2
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/SearchController.php"
 code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `str_repeat`: expected `int`, but found `mixed`."
+message = "Invalid argument type for argument #2 of `str_repeat`: expected `non-negative-int`, but found `mixed`."
 count = 1
 
 [[issues]]
@@ -11188,7 +11206,7 @@ count = 7
 file = "phpmyfaq/src/phpMyFAQ/Database/Sqlite3.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `property_exists`: expected `class-string|object`, but found `mixed`."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/Sqlite3.php"
@@ -12148,7 +12166,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
 code = "ambiguous-object-property-access"
 message = "Cannot statically verify property access on a generic `object` type."
-count = 93
+count = 74
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
@@ -12262,7 +12280,7 @@ count = 3
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`nonnull`)."
-count = 32
+count = 29
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
@@ -12490,7 +12508,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`truthy-mixed`)."
-count = 8
+count = 7
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
@@ -12598,7 +12616,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
 code = "mixed-array-access"
 message = "Unsafe array access on type `mixed`."
-count = 4
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
@@ -12814,7 +12832,7 @@ count = 17
 file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`nonnull`)."
-count = 43
+count = 38
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
@@ -12904,7 +12922,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Form/FormsHelper.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 8
+count = 6
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Form/FormsRepository.php"
@@ -13623,7 +13641,7 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Helper/StatisticsHelper.php"
 code = "possibly-false-argument"
-message = "Argument #1 of function `readdir` is possibly `false`, but parameter type `resource` does not accept it."
+message = "Argument #1 of function `readdir` is possibly `false`, but parameter type `null|resource` does not accept it."
 count = 1
 
 [[issues]]
@@ -13658,36 +13676,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Helper/SvgSanitizer.php"
-code = "falsable-return-statement"
-message = "Function `{closure:phpmyfaq/src/phpMyFAQ/Helper/SvgSanitizer.php:234:17}` is declared to return `string` but possibly returns 'false' (inferred as `false|string`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SvgSanitizer.php"
-code = "falsable-return-statement"
-message = "Function `{closure:phpmyfaq/src/phpMyFAQ/Helper/SvgSanitizer.php:240:17}` is declared to return `string` but possibly returns 'false' (inferred as `false|string`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SvgSanitizer.php"
-code = "falsable-return-statement"
-message = "Function `{closure:phpmyfaq/src/phpMyFAQ/Helper/SvgSanitizer.php:251:13}` is declared to return `string` but possibly returns 'false' (inferred as `false|string`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SvgSanitizer.php"
-code = "falsable-return-statement"
-message = "Function `{closure:phpmyfaq/src/phpMyFAQ/Helper/SvgSanitizer.php:256:13}` is declared to return `string` but possibly returns 'false' (inferred as `false|string`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SvgSanitizer.php"
-code = "invalid-argument"
-message = "Invalid argument type for argument #2 of `preg_replace_callback`: expected `(callable(array<array-key, string>): string)`, but found `(closure(array<array-key, mixed>): false|string)`."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SvgSanitizer.php"
 code = "invalid-return-statement"
 message = 'Invalid return type for function `phpMyFAQ\Helper\SvgSanitizer::decodeAllEntities`: expected `string`, but found `array<array-key, string>|null|string`.'
 count = 1
@@ -13696,30 +13684,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Helper/SvgSanitizer.php"
 code = "invalid-return-statement"
 message = 'Invalid return type for function `phpMyFAQ\Helper\SvgSanitizer::removeDangerousContent`: expected `string`, but found `array<array-key, string>|null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SvgSanitizer.php"
-code = "invalid-return-statement"
-message = "Invalid return type for function `{closure:phpmyfaq/src/phpMyFAQ/Helper/SvgSanitizer.php:234:17}`: expected `string`, but found `false|string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SvgSanitizer.php"
-code = "invalid-return-statement"
-message = "Invalid return type for function `{closure:phpmyfaq/src/phpMyFAQ/Helper/SvgSanitizer.php:240:17}`: expected `string`, but found `false|string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SvgSanitizer.php"
-code = "invalid-return-statement"
-message = "Invalid return type for function `{closure:phpmyfaq/src/phpMyFAQ/Helper/SvgSanitizer.php:251:13}`: expected `string`, but found `false|string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SvgSanitizer.php"
-code = "invalid-return-statement"
-message = "Invalid return type for function `{closure:phpmyfaq/src/phpMyFAQ/Helper/SvgSanitizer.php:256:13}`: expected `string`, but found `false|string`."
 count = 1
 
 [[issues]]
@@ -14332,7 +14296,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Instance/Search/Elasticsearch.php"
 code = "redundant-comparison"
 message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance/Search/Elasticsearch.php"
@@ -14818,7 +14782,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Ldap.php"
 code = "mixed-operand"
 message = "Left operand in `>` comparison has `mixed` type."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Ldap.php"
@@ -14872,13 +14836,13 @@ count = 3
 file = "phpmyfaq/src/phpMyFAQ/Ldap.php"
 code = "possibly-false-argument"
 message = "Argument #2 of function `array_key_exists` is possibly `false`, but parameter type `array<array-key, mixed>` does not accept it."
-count = 5
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Ldap.php"
 code = "possibly-false-array-access"
 message = "Cannot perform array access on possibly `false` value."
-count = 4
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Ldap.php"
@@ -15046,7 +15010,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Link/Util/LinkQueryParser.php"
 code = "possibly-false-argument"
 message = "Argument #2 of function `array_key_exists` is possibly `false`, but parameter type `array<array-key, mixed>` does not accept it."
-count = 4
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Link/Util/LinkQueryParser.php"
@@ -16228,7 +16192,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 7
+count = 6
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
@@ -16330,7 +16294,7 @@ count = 3
 file = "phpmyfaq/src/phpMyFAQ/Queue/Handler/IndexFaqHandler.php"
 code = "mixed-array-access"
 message = "Unsafe array access on type `mixed`."
-count = 4
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Queue/Handler/IndexFaqHandler.php"
@@ -16348,7 +16312,7 @@ count = 3
 file = "phpmyfaq/src/phpMyFAQ/Queue/Handler/IndexFaqHandler.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Queue/Handler/SendMailHandler.php"
@@ -16732,7 +16696,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Search/Database/Mysqli.php"
 code = "redundant-comparison"
 message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Database/Mysqli.php"
@@ -16774,7 +16738,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Search/Database/PdoMysql.php"
 code = "redundant-comparison"
 message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Database/PdoMysql.php"
@@ -16960,7 +16924,7 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Search/Search/Elasticsearch.php"
 code = "mixed-array-access"
 message = "Unsafe array access on type `mixed`."
-count = 41
+count = 38
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Search/Elasticsearch.php"
@@ -16990,13 +16954,13 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Search/Search/OpenSearch.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #2 of `array_key_exists`: expected `array<array-key, mixed>`, but found `mixed`."
-count = 4
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Search/OpenSearch.php"
 code = "mixed-array-access"
 message = "Unsafe array access on type `mixed`."
-count = 39
+count = 35
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Search/OpenSearch.php"
@@ -17056,7 +17020,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Search/SearchDatabase.php"
 code = "redundant-type-comparison"
 message = "Redundant type assertion: `$column` is already `string`."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/SearchDatabase.php"
@@ -17111,6 +17075,12 @@ file = "phpmyfaq/src/phpMyFAQ/Search/SearchResultSet.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 4
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Search/SearchResultSet.php"
+code = "mixed-operand"
+message = "Cannot reliably increment a `mixed` operand."
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/SearchResultSet.php"
@@ -17206,7 +17176,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Search/SearchService.php"
 code = "mixed-operand"
 message = "Left operand in `>` comparison has `mixed` type."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/SearchService.php"
@@ -17506,7 +17476,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Setup/AbstractSetup.php"
 code = "mixed-operand"
 message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 3
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/EnvironmentConfigurator.php"
@@ -18229,12 +18199,6 @@ message = "Redundant `===` comparison: left-hand side is never identical to righ
 count = 2
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Update.php"
-code = "too-few-arguments"
-message = "Too few arguments provided for method `ZipArchive::addEmptyDir`."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/UpdateRunner.php"
 code = "array-to-string-conversion"
 message = "Potential array in left operand of string concatenation."
@@ -18424,7 +18388,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
 code = "non-existent-constant"
 message = 'Undefined constant: `phpMyFAQ\Setup\PMF_CONTENT_DIR`.'
-count = 10
+count = 9
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
@@ -18442,12 +18406,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
 code = "redundant-null-coalesce"
 message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
-code = "too-few-arguments"
-message = "Too few arguments provided for method `ZipArchive::addEmptyDir`."
 count = 1
 
 [[issues]]
@@ -18556,12 +18514,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/StopWords.php"
 code = "possibly-null-operand"
 message = "Possibly null left operand used in string concatenation (type `null|string`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Storage/FilesystemStorage.php"
-code = "too-few-arguments"
-message = "Too few arguments provided for function `stream_copy_to_stream`."
 count = 1
 
 [[issues]]
@@ -18766,7 +18718,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/System.php"
 code = "invalid-method-access"
 message = "Attempting to access a method on a non-object type (`string`)."
-count = 9
+count = 8
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/System.php"
@@ -18970,7 +18922,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Translation.php"
 code = "named-argument-not-allowed"
 message = "Named arguments are not allowed for `function_exists`."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Translation.php"
@@ -19030,13 +18982,13 @@ count = 4
 file = "phpmyfaq/src/phpMyFAQ/Translation.php"
 code = "possibly-null-argument"
 message = "Argument #2 of function `array_key_exists` is possibly `null`, but parameter type `array<array-key, mixed>` does not accept it."
-count = 6
+count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Translation.php"
 code = "possibly-null-array-access"
 message = "Cannot perform array access on possibly `null` value."
-count = 5
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Translation.php"
@@ -19540,7 +19492,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/User.php"
 code = "redundant-type-comparison"
 message = "Redundant type assertion: `$userData` is already `array<string, int>`."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User.php"
@@ -19678,7 +19630,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
 code = "possible-method-access-on-null"
 message = "Attempting to call a method on `null`."
-count = 26
+count = 22
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
@@ -20098,13 +20050,13 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
 code = "possibly-false-argument"
 message = "Argument #2 of function `array_key_exists` is possibly `false`, but parameter type `array<array-key, mixed>` does not accept it."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
 code = "possibly-null-argument"
 message = "Argument #2 of function `array_key_exists` is possibly `null`, but parameter type `array<array-key, mixed>` does not accept it."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
