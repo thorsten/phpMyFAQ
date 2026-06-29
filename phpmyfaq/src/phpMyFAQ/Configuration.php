@@ -437,11 +437,20 @@ class Configuration
             'core.pluginManager',
         ];
 
+        // Internal updater state that must never be writable through the bulk
+        // configuration API. The legitimate updater writes this via set() after
+        // verifying the downloaded package; allowing it here would let an admin
+        // point the updater at an arbitrary, unverified ZIP (RCE).
+        $protectedConfigs = [
+            'upgrade.lastDownloadedPackage',
+        ];
+
         foreach ($newConfigs as $name => $value) {
             if (
                 !(
                     !hash_equals((string) $name, user_string: 'main.phpMyFAQToken')
                     && !in_array($name, $runtimeConfigs, strict: true)
+                    && !in_array($name, $protectedConfigs, strict: true)
                 )
             ) {
                 continue;

@@ -213,7 +213,22 @@ class Upgrade extends AbstractSetup
             throw new Exception(message: 'Given path to download package is not valid.');
         }
 
-        $zipFile = $zipArchive->open($path);
+        // Defense in depth: the package must live inside the controlled upgrade
+        // directory (where downloadPackage() stores verified downloads). This
+        // prevents extraction of an arbitrary file path injected into the
+        // upgrade.lastDownloadedPackage configuration value.
+        $realPath = realpath($path);
+        $realUpgradeDirectory = realpath($this->upgradeDirectory);
+
+        if (
+            $realPath === false
+            || $realUpgradeDirectory === false
+            || !str_starts_with($realPath, $realUpgradeDirectory . DIRECTORY_SEPARATOR)
+        ) {
+            throw new Exception(message: 'Given path to download package is outside the upgrade directory.');
+        }
+
+        $zipFile = $zipArchive->open($realPath);
 
         $zipArchive->registerProgressCallback(rate: 0.05, callback: static function ($rate) use (
             $progressCallback,
@@ -223,6 +238,26 @@ class Upgrade extends AbstractSetup
         });
 
         if ($zipFile) {
+            // Reject Zip-Slip: no archive entry may be absolute or escape the
+            // extraction directory through ../ traversal.
+            for ($i = 0; $i < $zipArchive->numFiles; ++$i) {
+                $entryName = $zipArchive->getNameIndex($i);
+
+                if ($entryName === false) {
+                    continue;
+                }
+
+                $normalizedEntryName = str_replace('\\', '/', $entryName);
+
+                if (
+                    str_starts_with($normalizedEntryName, '/')
+                    || preg_match('#(^|/)\.\.(/|$)#', $normalizedEntryName) === 1
+                ) {
+                    $zipArchive->close();
+                    throw new Exception(message: 'Download package contains an invalid file path.');
+                }
+            }
+
             $zipArchive->extractTo($this->upgradeDirectory . '/new/');
             return $zipArchive->close();
         }

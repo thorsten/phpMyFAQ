@@ -25,6 +25,7 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpClient\HttpClient;
@@ -147,6 +148,10 @@ final class UpdateController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
+        if (!$this->isValidUpdatePackageToken($request)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
+
         $versionNumber = Filter::filterVar($request->attributes->get('versionNumber'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $upgrade = $this->container->get(id: 'phpmyfaq.setup.upgrade');
@@ -175,9 +180,13 @@ final class UpdateController extends AbstractController
     }
 
     #[Route(path: 'admin/api/extract-package')]
-    public function extractPackage(): StreamedResponse
+    public function extractPackage(Request $request): Response
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+
+        if (!$this->isValidUpdatePackageToken($request)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
 
         $upgrade = $this->container->get(id: 'phpmyfaq.setup.upgrade');
         $pathToPackage = urldecode((string) $this->configuration->get(item: 'upgrade.lastDownloadedPackage'));
@@ -197,9 +206,13 @@ final class UpdateController extends AbstractController
     }
 
     #[Route(path: 'admin/api/create-temporary-backup')]
-    public function createTemporaryBackup(): StreamedResponse
+    public function createTemporaryBackup(Request $request): Response
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+
+        if (!$this->isValidUpdatePackageToken($request)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
 
         $upgrade = $this->container->get(id: 'phpmyfaq.setup.upgrade');
         $backupHash = md5(uniqid());
@@ -219,9 +232,13 @@ final class UpdateController extends AbstractController
     }
 
     #[Route(path: 'admin/api/install-package')]
-    public function installPackage(): StreamedResponse
+    public function installPackage(Request $request): Response
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+
+        if (!$this->isValidUpdatePackageToken($request)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
 
         $upgrade = $this->container->get(id: 'phpmyfaq.setup.upgrade');
         $configurator = $this->container->get(id: 'phpmyfaq.setup.environment_configurator');
@@ -275,5 +292,16 @@ final class UpdateController extends AbstractController
         $upgrade->cleanUp();
 
         return $this->json(['message' => 'Cleanup successful.'], Response::HTTP_OK);
+    }
+
+    /**
+     * Verifies the CSRF token sent with the updater package actions.
+     */
+    private function isValidUpdatePackageToken(Request $request): bool
+    {
+        $data = json_decode((string) $request->getContent());
+        $csrfToken = is_object($data) ? (string) ($data->csrf ?? '') : '';
+
+        return Token::getInstance($this->container->get(id: 'session'))->verifyToken('update-package', $csrfToken);
     }
 }

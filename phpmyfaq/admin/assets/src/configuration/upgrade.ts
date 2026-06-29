@@ -228,7 +228,8 @@ export const handleCheckForUpdates = (): void => {
       }
 
       try {
-        const response = (await downloadPackage(version)) as ResponseData;
+        const csrfToken = downloadButton.getAttribute('data-pmf-csrf') as string;
+        const response = (await downloadPackage(version, csrfToken)) as ResponseData;
         const result = document.getElementById('result-download-new-version') as HTMLElement;
         const divExtractPackage = document.getElementById('pmf-update-step-extract-package') as HTMLElement;
         const card = document.getElementById('pmf-update-step-download') as HTMLElement;
@@ -265,7 +266,8 @@ export const handleCheckForUpdates = (): void => {
       spinner.classList.remove('d-none');
 
       try {
-        const response = (await extractPackage()) as ResponseData;
+        const csrfToken = extractButton.getAttribute('data-pmf-csrf') as string;
+        const response = (await extractPackage(csrfToken)) as ResponseData;
         const result = document.getElementById('result-extract-package') as HTMLElement;
         const divInstallPackage = document.getElementById('pmf-update-step-install-package') as HTMLElement;
         const card = document.getElementById('pmf-update-step-extract-package') as HTMLElement;
@@ -293,15 +295,16 @@ export const handleCheckForUpdates = (): void => {
       event.preventDefault();
       const spinner = document.getElementById('spinner-install-package') as HTMLElement;
       spinner.classList.remove('d-none');
-      await createTemporaryBackup();
+      const csrfToken = installButton.getAttribute('data-pmf-csrf') as string;
+      await createTemporaryBackup(csrfToken);
       spinner.classList.add('d-none');
     });
   }
 };
 
-const createTemporaryBackup = async (): Promise<void> => {
+const createTemporaryBackup = async (csrfToken: string): Promise<void> => {
   try {
-    const response = (await startTemporaryBackup()) as unknown as Response;
+    const response = (await startTemporaryBackup(csrfToken)) as unknown as Response;
     await handleStreamingProgress(response, 'result-backup-package');
   } catch (error) {
     console.error('Error during temporary backup:', error);
@@ -313,12 +316,12 @@ const createTemporaryBackup = async (): Promise<void> => {
     throw error;
   }
 
-  await installPackage();
+  await installPackage(csrfToken);
 };
 
-const installPackage = async (): Promise<void> => {
+const installPackage = async (csrfToken: string): Promise<void> => {
   try {
-    const response = (await startInstallation()) as unknown as Response;
+    const response = (await startInstallation(csrfToken)) as unknown as Response;
     await handleStreamingProgress(response, 'result-install-package');
   } catch (error) {
     console.error('Error during package installation:', error);

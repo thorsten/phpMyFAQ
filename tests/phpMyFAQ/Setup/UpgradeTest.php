@@ -122,4 +122,64 @@ class UpgradeTest extends TestCase
 
         $this->assertEquals('', $this->upgrade->getPath());
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testExtractPackageSucceedsForPackageInsideUpgradeDirectory(): void
+    {
+        $packagePath = PMF_CONTENT_DIR . '/upgrades/valid-package.zip';
+        $zip = new \ZipArchive();
+        $zip->open($packagePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        $zip->addFromString('phpmyfaq/test-extract.php', "<?php\n");
+        $zip->close();
+
+        $this->assertTrue($this->upgrade->extractPackage($packagePath, function (): void {
+        }));
+        $this->assertFileExists(PMF_CONTENT_DIR . '/upgrades/new/phpmyfaq/test-extract.php');
+
+        unlink($packagePath);
+        unlink(PMF_CONTENT_DIR . '/upgrades/new/phpmyfaq/test-extract.php');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testExtractPackageThrowsForPathOutsideUpgradeDirectory(): void
+    {
+        $outsidePath = PMF_TEST_DIR . '/outside-package.zip';
+        file_put_contents($outsidePath, 'not-a-real-package');
+
+        try {
+            $this->expectException(Exception::class);
+            $this->expectExceptionMessage('Given path to download package is outside the upgrade directory.');
+
+            $this->upgrade->extractPackage($outsidePath, function (): void {
+            });
+        } finally {
+            unlink($outsidePath);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testExtractPackageThrowsForZipSlipEntry(): void
+    {
+        $packagePath = PMF_CONTENT_DIR . '/upgrades/zip-slip-package.zip';
+        $zip = new \ZipArchive();
+        $zip->open($packagePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        $zip->addFromString('../evil.php', "<?php\n");
+        $zip->close();
+
+        try {
+            $this->expectException(Exception::class);
+            $this->expectExceptionMessage('Download package contains an invalid file path.');
+
+            $this->upgrade->extractPackage($packagePath, function (): void {
+            });
+        } finally {
+            unlink($packagePath);
+        }
+    }
 }

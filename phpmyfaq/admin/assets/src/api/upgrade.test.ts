@@ -81,7 +81,7 @@ describe('Upgrade API', (): void => {
       json: async () => mockResponse,
     });
 
-    const result = await downloadPackage('1.0.0');
+    const result = await downloadPackage('1.0.0', 'csrfToken');
     expect(result).toEqual(mockResponse);
     expect(fetch).toHaveBeenCalledWith('./api/download-package/1.0.0', {
       method: 'POST',
@@ -89,6 +89,7 @@ describe('Upgrade API', (): void => {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ csrf: 'csrfToken' }),
     });
   });
 
@@ -99,7 +100,7 @@ describe('Upgrade API', (): void => {
       json: async () => mockResponse,
     });
 
-    const result = await extractPackage();
+    const result = await extractPackage('csrfToken');
     expect(result).toEqual(mockResponse);
     expect(fetch).toHaveBeenCalledWith('./api/extract-package', {
       method: 'POST',
@@ -107,6 +108,7 @@ describe('Upgrade API', (): void => {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ csrf: 'csrfToken' }),
     });
   });
 
@@ -115,13 +117,14 @@ describe('Upgrade API', (): void => {
       headers: { 'Content-Type': 'application/json' },
     });
     (fetch as Mock).mockResolvedValue(mockResponse);
-    await startTemporaryBackup();
+    await startTemporaryBackup('csrfToken');
     expect(fetch).toHaveBeenCalledWith('./api/create-temporary-backup', {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ csrf: 'csrfToken' }),
     });
   });
 
@@ -130,13 +133,14 @@ describe('Upgrade API', (): void => {
       headers: { 'Content-Type': 'application/json' },
     });
     (fetch as Mock).mockResolvedValue(mockResponse);
-    await startInstallation();
+    await startInstallation('csrfToken');
     expect(fetch).toHaveBeenCalledWith('./api/install-package', {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ csrf: 'csrfToken' }),
     });
   });
 

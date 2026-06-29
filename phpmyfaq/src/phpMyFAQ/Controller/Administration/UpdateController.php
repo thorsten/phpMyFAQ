@@ -48,6 +48,7 @@ final class UpdateController extends AbstractAdministrationController
             ...$this->getHeader($request),
             ...$this->getFooter(),
             'csrfActivateMaintenanceMode' => Token::getInstance($session)->getTokenString('activate-maintenance-mode'),
+            'csrfUpdatePackage' => Token::getInstance($session)->getTokenString('update-package'),
             'isOnNightlies' => $isOnNightlies,
             'releaseEnvironment' => ucfirst((string) $this->configuration->get(item: 'upgrade.releaseEnvironment')),
             'dateLastChecked' => $this->configuration->get(item: 'upgrade.dateLastChecked'),

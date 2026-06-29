@@ -128,6 +128,30 @@ class ConfigurationTest extends TestCase
         $this->assertInstanceOf(DatabaseDriver::class, $db);
     }
 
+    public function testUpdateIgnoresProtectedUpgradePackageKey(): void
+    {
+        $key = 'upgrade.lastDownloadedPackage';
+        $this->configuration->delete($key);
+        $this->configuration->add($key, 'original-package.zip');
+
+        // An attempt to overwrite the internal updater state through the bulk
+        // update path must be ignored to prevent updater RCE.
+        $this->configuration->update([$key => '/evil/package.zip']);
+
+        $this->assertSame('original-package.zip', $this->configuration->get($key));
+    }
+
+    public function testUpdateWritesRegularConfigKey(): void
+    {
+        $key = 'records.numberOfRecordsPerPage';
+        $this->configuration->delete($key);
+        $this->configuration->add($key, '10');
+
+        $this->configuration->update([$key => '25']);
+
+        $this->assertSame('25', $this->configuration->get($key));
+    }
+
     public function testSetLdapConfigWithSingleServer(): void
     {
         // Demo data from /content/core/config/ldap.php

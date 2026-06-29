@@ -61,47 +61,51 @@ export const checkForUpdates = async (): Promise<ResponseData> => {
   return await response.json();
 };
 
-export const downloadPackage = async (version: string): Promise<ResponseData> => {
+export const downloadPackage = async (version: string, csrfToken: string): Promise<ResponseData> => {
   const response: Response = await fetch(`./api/download-package/${version}`, {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({ csrf: csrfToken }),
   });
 
   return await response.json();
 };
 
-export const extractPackage = async (): Promise<ResponseData> => {
+export const extractPackage = async (csrfToken: string): Promise<ResponseData> => {
   const response: Response = await fetch('./api/extract-package', {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({ csrf: csrfToken }),
   });
 
   return await response.json();
 };
 
-export const startTemporaryBackup = async (): Promise<Response> => {
+export const startTemporaryBackup = async (csrfToken: string): Promise<Response> => {
   return await fetch('./api/create-temporary-backup', {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({ csrf: csrfToken }),
   });
 };
 
-export const startInstallation = async (): Promise<Response> => {
+export const startInstallation = async (csrfToken: string): Promise<Response> => {
   return await fetch('./api/install-package', {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({ csrf: csrfToken }),
   });
 };
 
