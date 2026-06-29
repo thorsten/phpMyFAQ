@@ -179,4 +179,33 @@ interface FaqRepositoryInterface
      * tags, comments, votes, bookmarks, changelog) across all affected tables.
      */
     public function deleteByIdAndLanguage(int $faqId, string $faqLang): void;
+
+    /**
+     * Runs the category FAQ-list query used for HTML rendering and returns the raw database
+     * result handle (the caller paginates it).
+     *
+     * @param int[] $groups
+     */
+    public function queryRenderableFaqsByCategoryId(
+        int $categoryId,
+        string $order,
+        int $userId,
+        array $groups,
+        bool $groupSupport,
+    ): mixed;
+
+    /**
+     * Runs the id-list FAQ query used for HTML rendering and returns the raw database result
+     * handle (the caller paginates it).
+     *
+     * @param int[] $groups
+     */
+    public function queryRenderableFaqsByIds(
+        string $records,
+        string $orderExpression,
+        string $sortDirection,
+        int $userId,
+        array $groups,
+        bool $groupSupport,
+    ): mixed;
 }

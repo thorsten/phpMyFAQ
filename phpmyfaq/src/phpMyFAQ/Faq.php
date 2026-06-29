@@ -219,66 +219,13 @@ class Faq
         // If random FAQs are activated, we don't need an order
         $order = sprintf('ORDER BY fd.sticky DESC, %s.%s %s', $currentTable, $orderColumn, $sortDirection);
 
-        $now = date(format: 'YmdHis');
-        $queryHelper = new QueryHelper($this->user, $this->groups);
-        $query = sprintf(
-            "
-            SELECT
-                fd.id AS id,
-                fd.lang AS lang,
-                fd.sticky AS sticky,
-                fd.thema AS question,
-                fd.content as answer,
-                fcr.category_id AS category_id,
-                fv.visits AS visits
-            FROM
-                %sfaqdata AS fd
-            LEFT JOIN
-                %sfaqcategoryrelations AS fcr
-            ON
-                fd.id = fcr.record_id
-            AND
-                fd.lang = fcr.record_lang
-            LEFT JOIN
-                %sfaqvisits AS fv
-            ON
-                fd.id = fv.id
-            AND
-                fv.lang = fd.lang
-            LEFT JOIN
-                %sfaqdata_group AS fdg
-            ON
-                fd.id = fdg.record_id
-            LEFT JOIN
-                %sfaqdata_user AS fdu
-            ON
-                fd.id = fdu.record_id
-            WHERE
-                fd.date_start <= '%s'
-            AND
-                fd.date_end   >= '%s'
-            AND
-                fd.active = 'yes'
-            AND
-                fcr.category_id = %d
-            AND
-                fd.lang = '%s'
-            %s
-            %s",
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $now,
-            $now,
+        $result = $this->faqRepository->queryRenderableFaqsByCategoryId(
             $categoryId,
-            $this->getEscapedCurrentLanguage(),
-            $queryHelper->queryPermission($this->groupSupport),
             $order,
+            $this->user,
+            $this->groups,
+            $this->groupSupport,
         );
-
-        $result = $this->configuration->getDb()->query($query);
         $num = $this->configuration->getDb()->numRows($result);
         $pages = (int) ceil($num / $numPerPage);
 
@@ -413,67 +360,14 @@ class Faq
         $sortDirection = $this->normalizeSortDirection($sortBy);
         $page = Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
 
-        $now = date(format: 'YmdHis');
-        $queryHelper = new QueryHelper($this->user, $this->groups);
-        $query = sprintf(
-            "
-            SELECT
-                fd.id AS id,
-                fd.lang AS lang,
-                fd.thema AS question,
-                fd.content AS answer,
-                fcr.category_id AS category_id,
-                fv.visits AS visits
-            FROM
-                %sfaqdata AS fd
-            LEFT JOIN
-                %sfaqcategoryrelations AS fcr
-            ON
-                fd.id = fcr.record_id
-            AND
-                fd.lang = fcr.record_lang
-            LEFT JOIN
-                %sfaqvisits AS fv
-            ON
-                fd.id = fv.id
-            AND
-                fv.lang = fd.lang
-            LEFT JOIN
-                %sfaqdata_group AS fdg
-            ON
-                fd.id = fdg.record_id
-            LEFT JOIN
-                %sfaqdata_user AS fdu
-            ON
-                fd.id = fdu.record_id
-            WHERE
-                fd.date_start <= '%s'
-            AND
-                fd.date_end   >= '%s'
-            AND
-                fd.active = 'yes'
-            AND
-                fd.id IN (%s)
-            AND
-                fd.lang = '%s'
-                %s
-            ORDER BY
-                %s %s",
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $now,
-            $now,
+        $result = $this->faqRepository->queryRenderableFaqsByIds(
             $records,
-            $this->getEscapedCurrentLanguage(),
-            $queryHelper->queryPermission($this->groupSupport),
             $orderExpression,
             $sortDirection,
+            $this->user,
+            $this->groups,
+            $this->groupSupport,
         );
-
-        $result = $this->configuration->getDb()->query($query);
 
         $num = $this->configuration->getDb()->numRows($result);
         $numberPerPage = $this->configuration->get(item: 'records.numberOfRecordsPerPage');
@@ -1100,16 +994,6 @@ class Faq
     private function sortStickyArrayByOrder(array $first, array $second): int
     {
         return $first['order'] - $second['order'];
-    }
-
-    private function escapeSqlValue(string $value): string
-    {
-        return $this->configuration->getDb()->escape($value);
-    }
-
-    private function getEscapedCurrentLanguage(): string
-    {
-        return $this->escapeSqlValue($this->configuration->getLanguage()->getLanguage());
     }
 
     /**

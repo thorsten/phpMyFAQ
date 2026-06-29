@@ -337,6 +337,30 @@ class FaqRepositoryTest extends TestCase
         $this->assertFalse($this->faqRepository->hasTranslation(5052, 'en'));
     }
 
+    public function testQueryRenderableFaqsByCategoryIdReturnsResult(): void
+    {
+        $this->seedFaqRecord(id: 5060, solutionId: 7500, question: 'Render Cat', categoryId: 95);
+
+        $result = $this->faqRepository->queryRenderableFaqsByCategoryId(95, 'ORDER BY fd.id ASC', -1, [-1], false);
+
+        $this->assertGreaterThan(0, $this->configuration->getDb()->numRows($result));
+        $row = $this->configuration->getDb()->fetchObject($result);
+        $this->assertSame(5060, (int) $row->id);
+        $this->assertSame('Render Cat', $row->question);
+    }
+
+    public function testQueryRenderableFaqsByIdsReturnsResult(): void
+    {
+        $this->seedFaqRecord(id: 5061, solutionId: 7510, question: 'Render By Id');
+
+        $result = $this->faqRepository->queryRenderableFaqsByIds('5061', 'fd.id', 'ASC', -1, [-1], false);
+
+        $this->assertGreaterThan(0, $this->configuration->getDb()->numRows($result));
+        $row = $this->configuration->getDb()->fetchObject($result);
+        $this->assertSame(5061, (int) $row->id);
+        $this->assertSame('Render By Id', $row->question);
+    }
+
     private function makeFaqEntity(int $id, int $solutionId, string $question): FaqEntity
     {
         return new FaqEntity()

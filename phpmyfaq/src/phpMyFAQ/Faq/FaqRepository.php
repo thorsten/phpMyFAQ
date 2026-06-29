@@ -800,6 +800,146 @@ final class FaqRepository implements FaqRepositoryInterface
         }
     }
 
+    public function queryRenderableFaqsByCategoryId(
+        int $categoryId,
+        string $order,
+        int $userId,
+        array $groups,
+        bool $groupSupport,
+    ): mixed {
+        $now = date(format: 'YmdHis');
+        $queryHelper = new QueryHelper($userId, $groups);
+        $query = sprintf(
+            "
+            SELECT
+                fd.id AS id,
+                fd.lang AS lang,
+                fd.sticky AS sticky,
+                fd.thema AS question,
+                fd.content as answer,
+                fcr.category_id AS category_id,
+                fv.visits AS visits
+            FROM
+                %sfaqdata AS fd
+            LEFT JOIN
+                %sfaqcategoryrelations AS fcr
+            ON
+                fd.id = fcr.record_id
+            AND
+                fd.lang = fcr.record_lang
+            LEFT JOIN
+                %sfaqvisits AS fv
+            ON
+                fd.id = fv.id
+            AND
+                fv.lang = fd.lang
+            LEFT JOIN
+                %sfaqdata_group AS fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                %sfaqdata_user AS fdu
+            ON
+                fd.id = fdu.record_id
+            WHERE
+                fd.date_start <= '%s'
+            AND
+                fd.date_end   >= '%s'
+            AND
+                fd.active = 'yes'
+            AND
+                fcr.category_id = %d
+            AND
+                fd.lang = '%s'
+            %s
+            %s",
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            $now,
+            $now,
+            $categoryId,
+            $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
+            $queryHelper->queryPermission($groupSupport),
+            $order,
+        );
+
+        return $this->configuration->getDb()->query($query);
+    }
+
+    public function queryRenderableFaqsByIds(
+        string $records,
+        string $orderExpression,
+        string $sortDirection,
+        int $userId,
+        array $groups,
+        bool $groupSupport,
+    ): mixed {
+        $now = date(format: 'YmdHis');
+        $queryHelper = new QueryHelper($userId, $groups);
+        $query = sprintf(
+            "
+            SELECT
+                fd.id AS id,
+                fd.lang AS lang,
+                fd.thema AS question,
+                fd.content AS answer,
+                fcr.category_id AS category_id,
+                fv.visits AS visits
+            FROM
+                %sfaqdata AS fd
+            LEFT JOIN
+                %sfaqcategoryrelations AS fcr
+            ON
+                fd.id = fcr.record_id
+            AND
+                fd.lang = fcr.record_lang
+            LEFT JOIN
+                %sfaqvisits AS fv
+            ON
+                fd.id = fv.id
+            AND
+                fv.lang = fd.lang
+            LEFT JOIN
+                %sfaqdata_group AS fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                %sfaqdata_user AS fdu
+            ON
+                fd.id = fdu.record_id
+            WHERE
+                fd.date_start <= '%s'
+            AND
+                fd.date_end   >= '%s'
+            AND
+                fd.active = 'yes'
+            AND
+                fd.id IN (%s)
+            AND
+                fd.lang = '%s'
+                %s
+            ORDER BY
+                %s %s",
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            $now,
+            $now,
+            $records,
+            $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
+            $queryHelper->queryPermission($groupSupport),
+            $orderExpression,
+            $sortDirection,
+        );
+
+        return $this->configuration->getDb()->query($query);
+    }
+
     /**
      * Builds the WHERE clause for getAllFaqs() from a field => condition map, escaping values.
      *
