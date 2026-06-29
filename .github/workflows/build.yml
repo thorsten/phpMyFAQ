@@ -52,7 +52,7 @@ jobs:
         run: php scripts/check-version.php
 
       - name: Test with PHPUnit
-        run: phpmyfaq/src/libs/bin/phpunit --coverage-text --log-junit junit.xml
+        run: phpmyfaq/src/libs/bin/phpunit --coverage-text --coverage-clover coverage/clover.xml --log-junit junit.xml
 
       - name: Publish PHPUnit test results
         uses: mikepenz/action-junit-report@v6.4.2
@@ -62,6 +62,13 @@ jobs:
           check_name: PHPUnit Test Results (PHP ${{ matrix.php-versions }})
           detailed_summary: true
           include_passed: true
+
+      # Regression floor for line coverage. Raise MINIMUM_LINE_COVERAGE as coverage improves;
+      # the step prints the current percentage so the floor can be ratcheted toward it.
+      - name: Enforce code coverage threshold
+        env:
+          MINIMUM_LINE_COVERAGE: '50'
+        run: php scripts/check-coverage.php coverage/clover.xml "$MINIMUM_LINE_COVERAGE"
 
       - name: Setup Node.js with pnpm
         uses: actions/setup-node@v6
