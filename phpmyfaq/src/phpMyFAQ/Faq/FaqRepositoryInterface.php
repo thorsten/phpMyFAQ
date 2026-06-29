@@ -103,4 +103,37 @@ interface FaqRepositoryInterface
      * @param int[] $groups
      */
     public function fetchRowBySolutionId(int $solutionId, int $userId, array $groups, bool $groupSupport): ?object;
+
+    /**
+     * Fetches the active, non-expired FAQs of a category in the current language, ordered by
+     * the given (already validated) table/column/direction and filtered by permissions.
+     * Returns the raw rows.
+     *
+     * @param int[] $groups
+     * @return object[]
+     */
+    public function fetchAvailableFaqsByCategoryId(
+        int $categoryId,
+        string $orderTable,
+        string $orderColumn,
+        string $sortDirection,
+        int $userId,
+        array $groups,
+        bool $groupSupport,
+    ): array;
+
+    /**
+     * Fetches the FAQs whose ids are in the given comma-separated list, in the current language
+     * and filtered by permissions. Returns the raw rows.
+     *
+     * @param int[] $groups
+     * @return object[]
+     */
+    public function fetchFaqsByIds(
+        string $records,
+        bool $onlyActive,
+        int $userId,
+        array $groups,
+        bool $groupSupport,
+    ): array;
 }

@@ -137,83 +137,22 @@ class Faq
         [$currentTable, $orderColumn] = $this->normalizeCategoryOrder($orderBy);
         $sortDirection = $this->normalizeSortDirection($sortBy);
 
-        $now = date(format: 'YmdHis');
-        $queryHelper = new QueryHelper($this->user, $this->groups);
-        $query = sprintf(
-            "
-            SELECT
-                fd.id AS id,
-                fd.lang AS lang,
-                fd.thema AS thema,
-                fd.content AS record_content,
-                fd.updated AS updated,
-                fcr.category_id AS category_id,
-                fv.visits AS visits,
-                fd.created AS created
-            FROM
-                %sfaqdata AS fd
-            LEFT JOIN
-                %sfaqcategoryrelations AS fcr
-            ON
-                fd.id = fcr.record_id
-            AND
-                fd.lang = fcr.record_lang
-            LEFT JOIN
-                %sfaqvisits AS fv
-            ON
-                fd.id = fv.id
-            AND
-                fv.lang = fd.lang
-            LEFT JOIN
-                %sfaqdata_group AS fdg
-            ON
-                fd.id = fdg.record_id
-            LEFT JOIN
-                %sfaqdata_user AS fdu
-            ON
-                fd.id = fdu.record_id
-            WHERE
-                fd.date_start <= '%s'
-            AND
-                fd.date_end   >= '%s'
-            AND
-                fd.active = 'yes'
-            AND
-                fcr.category_id = %d
-            AND
-                fd.lang = '%s'
-                %s
-            ORDER BY
-                %s.%s %s",
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $now,
-            $now,
+        $rows = $this->faqRepository->fetchAvailableFaqsByCategoryId(
             $categoryId,
-            $this->getEscapedCurrentLanguage(),
-            $queryHelper->queryPermission($this->groupSupport),
             $currentTable,
             $orderColumn,
             $sortDirection,
+            $this->user,
+            $this->groups,
+            $this->groupSupport,
         );
 
-        $result = $this->configuration->getDb()->query($query);
-        $num = $this->configuration->getDb()->numRows($result);
-
-        if ($num <= 0) {
+        if ($rows === []) {
             return $faqData;
         }
 
         $faqHelper = new FaqHelper($this->configuration);
-        while (true) {
-            $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
-                break;
-            }
-
+        foreach ($rows as $row) {
             $visits = (int) ($row->visits ?? 0);
 
             $url = sprintf(
@@ -703,69 +642,17 @@ class Faq
     {
         $faqRecords = [];
         $records = $this->normalizeFaqIds($faqIds);
-        $now = date(format: 'YmdHis');
 
-        $queryHelper = new QueryHelper($this->user, $this->groups);
-        $query = sprintf(
-            "SELECT
-                 fd.id AS id,
-                 fd.lang AS lang,
-                 fd.thema AS question,
-                 fd.content AS answer,
-                 fd.updated AS updated,
-                 fd.created AS created,
-                 fcr.category_id AS category_id,
-                 fv.visits AS visits
-            FROM
-                %sfaqdata fd
-            LEFT JOIN
-                %sfaqcategoryrelations fcr
-            ON
-                fd.id = fcr.record_id
-            AND
-                fd.lang = fcr.record_lang
-            LEFT JOIN
-                %sfaqdata_group fdg
-            ON
-                fd.id = fdg.record_id
-            LEFT JOIN
-                %sfaqvisits AS fv
-            ON
-                fd.id = fv.id
-            AND
-                fv.lang = fd.lang
-            LEFT JOIN
-                %sfaqdata_user fdu
-            ON
-                fd.id = fdu.record_id
-            WHERE
-                fd.id IN (%s)
-            AND
-                fd.lang = '%s'
-                %s
-                %s",
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
+        $rows = $this->faqRepository->fetchFaqsByIds(
             $records,
-            $this->getEscapedCurrentLanguage(),
-            $onlyActive
-                ? sprintf("AND fd.active = 'yes' AND fd.date_start <= '%s' AND fd.date_end >= '%s'", $now, $now)
-                : '',
-            $queryHelper->queryPermission($this->groupSupport),
+            $onlyActive,
+            $this->user,
+            $this->groups,
+            $this->groupSupport,
         );
 
-        $result = $this->configuration->getDb()->query($query);
-
         $faqHelper = new FaqHelper($this->configuration);
-        while (true) {
-            $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
-                break;
-            }
-
+        foreach ($rows as $row) {
             $visits = (int) ($row->visits ?? 0);
 
             $url = sprintf(

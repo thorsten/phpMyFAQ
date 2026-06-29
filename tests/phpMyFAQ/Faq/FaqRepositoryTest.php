@@ -231,4 +231,36 @@ class FaqRepositoryTest extends TestCase
     {
         $this->assertNull($this->faqRepository->fetchRowBySolutionId(999993, -1, [-1], false));
     }
+
+    public function testFetchAvailableFaqsByCategoryIdReturnsActiveRows(): void
+    {
+        $this->seedFaqRecord(id: 5030, solutionId: 7200, question: 'Available FAQ', categoryId: 91);
+
+        $rows = $this->faqRepository->fetchAvailableFaqsByCategoryId(91, 'fd', 'id', 'ASC', -1, [-1], false);
+
+        $this->assertCount(1, $rows);
+        $this->assertSame(5030, (int) $rows[0]->id);
+        $this->assertSame('Available FAQ', $rows[0]->thema);
+    }
+
+    public function testFetchAvailableFaqsByCategoryIdReturnsEmptyArrayForUnknownCategory(): void
+    {
+        $this->assertSame([], $this->faqRepository->fetchAvailableFaqsByCategoryId(99999, 'fd', 'id', 'ASC', -1, [-1], false));
+    }
+
+    public function testFetchFaqsByIdsReturnsRows(): void
+    {
+        $this->seedFaqRecord(id: 5031, solutionId: 7210, question: 'Listed FAQ');
+
+        $rows = $this->faqRepository->fetchFaqsByIds('5031', true, -1, [-1], false);
+
+        $this->assertCount(1, $rows);
+        $this->assertSame(5031, (int) $rows[0]->id);
+        $this->assertSame('Listed FAQ', $rows[0]->question);
+    }
+
+    public function testFetchFaqsByIdsReturnsEmptyArrayWhenNoneMatch(): void
+    {
+        $this->assertSame([], $this->faqRepository->fetchFaqsByIds('999999', true, -1, [-1], false));
+    }
 }
