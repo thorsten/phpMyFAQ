@@ -52,7 +52,7 @@ abstract class AbstractAdministrationController extends AbstractController
      * Admin pages embed per-session CSRF tokens; a browser-cached copy would replay
      * a stale token and the next form submission would fail with HTTP 401.
      *
-     * @param string[] $context
+     * @param array<array-key, mixed> $context
      * @throws Exception
      */
     #[\Override]

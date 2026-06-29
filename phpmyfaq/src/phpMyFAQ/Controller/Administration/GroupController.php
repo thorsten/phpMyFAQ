@@ -23,6 +23,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\PermissionTranslationTwigExtension;
@@ -278,6 +279,12 @@ final class GroupController extends AbstractAdministrationController
         // themselves (or anyone else) to a privileged group and inherit rights they do not possess
         // (privilege escalation via group membership inheritance).
         if (!$this->currentUser->isSuperAdmin()) {
+            // Fail closed: if the permission backend cannot enumerate group rights, we cannot prove
+            // the acting user holds them, so the operation must be denied rather than allowed.
+            if (!$this->currentUser->perm instanceof MediumPermission) {
+                throw new UnauthorizedHttpException('Cannot manage group membership without group permission support');
+            }
+
             $actingUserId = $this->currentUser->getUserId();
             foreach ($this->currentUser->perm->getGroupRights($groupId) as $groupRight) {
                 if (!$this->currentUser->perm->hasPermission($actingUserId, (int) $groupRight)) {

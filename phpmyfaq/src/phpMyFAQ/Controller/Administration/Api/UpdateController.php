@@ -198,7 +198,6 @@ final class UpdateController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $upgrade = $this->container->get(id: 'phpmyfaq.setup.upgrade');
         $pathToPackage = urldecode((string) $this->configuration->get(item: 'upgrade.lastDownloadedPackage'));
 
         return new StreamedResponse(function () use ($pathToPackage): void {
@@ -223,7 +222,6 @@ final class UpdateController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $upgrade = $this->container->get(id: 'phpmyfaq.setup.upgrade');
         $backupHash = md5(uniqid());
 
         return new StreamedResponse(function () use ($backupHash): void {
@@ -248,9 +246,7 @@ final class UpdateController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $upgrade = $this->container->get(id: 'phpmyfaq.setup.upgrade');
-        $configurator = $this->container->get(id: 'phpmyfaq.setup.environment_configurator');
-        return new StreamedResponse(static function () use ($upgrade, $configurator): void {
+        return new StreamedResponse(function (): void {
             $progressCallback = static function ($progress): void {
                 echo json_encode(['progress' => $progress]) . "\n";
                 ob_flush();
@@ -305,9 +301,9 @@ final class UpdateController extends AbstractController
      */
     private function isValidUpdatePackageToken(Request $request): bool
     {
-        $data = json_decode((string) $request->getContent());
+        $data = json_decode($request->getContent());
         $csrfToken = is_object($data) ? (string) ($data->csrf ?? '') : '';
 
-        return Token::getInstance($this->container->get(id: 'session'))->verifyToken('update-package', $csrfToken);
+        return Token::getInstance($this->session)->verifyToken('update-package', $csrfToken);
     }
 }

@@ -132,7 +132,7 @@ abstract class AbstractController
     /**
      * Returns a Twig-rendered template as a response.
      *
-     * @param string[] $context
+     * @param array<array-key, mixed> $context
      * @throws Exception|LoaderError
      */
     public function render(string $file, array $context = [], ?Response $response = null): Response

@@ -4291,12 +4291,6 @@ message = "Attempting to call a method on `null`."
 count = 2
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/AdminLogController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'buttonDeleteAdminLog': array<array-key, string>|null|string, 'buttonExportAdminLog': array<array-key, string>|null|string, 'csrfDeleteAdminLogToken': string, 'csrfExportAdminLogToken': string, 'csrfVerifyAdminLogToken': string, 'currentLocale': string, 'headerAdminLog': array<array-key, string>|null|string, 'loggingData': array<array-key, mixed>|list<mixed>, 'msgDate': array<array-key, string>|null|string, 'msgId': array<array-key, string>|null|string, 'msgIp': array<array-key, string>|null|string, 'msgUser': array<array-key, string>|null|string, 'pagination': string}`.'''
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AbstractAdministrationApiController.php"
 code = "mixed-property-type-coercion"
 message = 'A value with a less specific type `mixed` is being assigned to property `$$adminLog` (null|phpMyFAQ\Administration\AdminLog).'
@@ -4804,12 +4798,6 @@ count = 7
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ConfigurationTabController.php"
 code = "possibly-invalid-argument"
 message = "Possible argument type mismatch for argument #1 of `json_decode`: expected `string`, but possibly received `scalar`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ConfigurationTabController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but possibly received `array{'activeTheme': string, 'configurationData': array<array-key, string>, 'configurationList': array<string, array<string, string>>, 'mode': mixed, 'specialCases': array{0: string('buttonTes'), 'ldapSupport': bool, 'ssoSupport': mixed, 'useSslForLogins': bool, 'useSslOnly': bool}, 'themeCsrfToken': string}`.'''
 count = 1
 
 [[issues]]
@@ -6871,18 +6859,6 @@ message = "Left operand in binary operation has type `mixed`."
 count = 2
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/AttachmentsController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'adminAttachmentPagination': string, 'adminHeaderAttachments': array<array-key, string>|null|string, 'adminMsgAttachmentsFilename': array<array-key, string>|null|string, 'adminMsgAttachmentsFilesize': array<array-key, string>|null|string, 'adminMsgAttachmentsMimeType': array<array-key, string>|null|string, 'adminMsgButtonDelete': array<array-key, string>|null|string, 'adminMsgFaqTitle': array<array-key, string>|null|string, 'adminMsgTransToolLanguage': array<array-key, string>|null|string, 'attachments': array<array-key, mixed>|list<mixed>, 'csrfTokenDeletion': string, 'csrfTokenRefresh': string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/AuthenticationController.php"
-code = "less-specific-nested-argument-type"
-message = '''Argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but provided type `array{'errorMessage': mixed, 'hasRegistrationEnabled': mixed, 'hasSignInWithKeycloakActive': bool, 'hasSignInWithMicrosoftActive': bool, 'isError': bool, 'isLogout': bool, 'isSecure': bool, 'isWebAuthnEnabled': mixed, 'loginMessage': array<array-key, string>|null|string, 'loginUrl': truthy-string, 'logoutMessage': array<array-key, string>|null|string, 'msgLoginUser': array<array-key, string>|null|string, 'msgLostPassword': array<array-key, string>|null|string, 'msgNotSecure': array<array-key, string>|null|string, 'msgPassword': array<array-key, string>|null|string, 'msgRegistration': array<array-key, string>|null|string, 'msgRememberMe': array<array-key, string>|null|string, 'msgSignInWithKeycloak': array<array-key, string>|null|string, 'msgSignInWithMicrosoft': array<array-key, string>|null|string, 'msgUsername': array<array-key, string>|null|string, 'secureUrl': null|string}` is less specific.'''
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/AuthenticationController.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `Symfony\Component\HttpFoundation\Response::isRedirect`: expected `null|string`, but found `mixed`.'
@@ -6991,12 +6967,6 @@ message = "Attempting to call a method on `null`."
 count = 8
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/AuthenticationController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'msgEnterTwofactorToken': array<array-key, string>|null|string, 'msgSecureSwitch': array<array-key, string>|null|string, 'msgTwofactorCheck': array<array-key, string>|null|string, 'msgTwofactorEnabled': array<array-key, string>|null|string, 'requestHost': string, 'requestIsSecure': bool, 'requestUri': string, 'security.useSslForLogins': mixed, 'systemUri': string, 'userId': int}`.'''
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/BackupController.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `file_get_contents`: expected `string`, but found `mixed`."
@@ -7036,54 +7006,6 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/BackupController.php"
 code = "possibly-false-argument"
 message = 'Argument #1 of method `phpMyFAQ\Administration\Backup::verifyBackup` is possibly `false`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/BackupController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'adminBackupCardBody': array<array-key, string>|null|string, 'adminBackupCardHeader': array<array-key, string>|null|string, 'adminBackupLinkData': array<array-key, string>|null|string, 'adminBackupLinkLogs': array<array-key, string>|null|string, 'adminHeaderBackup': array<array-key, string>|null|string, 'adminRestoreButton': array<array-key, string>|null|string, 'adminRestoreCardBody': array<array-key, string>|null|string, 'adminRestoreCardHeader': array<array-key, string>|null|string, 'adminRestoreLabel': array<array-key, string>|null|string, 'csrfToken': string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/BackupController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'adminHeaderRestore': array<array-key, string>|null|string, 'errorMessageImportNotPossible': array<array-key, string>|null|string, 'errorMessageQueryFailed': truthy-string, 'prepareMessage': array<array-key, string>|null|string, 'processMessage': array<array-key, string>|null|string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/BackupController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'adminHeaderRestore': array<array-key, string>|null|string, 'errorMessageImportNotPossible': string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/BackupController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'adminHeaderRestore': array<array-key, string>|null|string, 'errorMessageNoVerification': string('This file is not a verified backup file.')}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/BackupController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'adminHeaderRestore': array<array-key, string>|null|string, 'errorMessageUpload': array<array-key, string>|null|string, 'errorMessageUploadDetails': string('A PHP extension stopped the file upload.')|string('Failed to write file to disk.')|string('Missing a temporary folder.')|string('No file was uploaded.')|string('The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.')|string('The uploaded file exceeds the upload_max_filesize directive in php.ini.')|string('The uploaded file was only partially uploaded.')|string('Undefined error.')}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/BackupController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'adminHeaderRestore': array<array-key, string>|null|string, 'errorMessageUpload': array<array-key, string>|null|string, 'errorMessageUploadDetails': string('No file was uploaded. Please select a backup file to restore.')}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/BackupController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'adminHeaderRestore': array<array-key, string>|null|string, 'errorMessageVersionMisMatch': truthy-string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/BackupController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'adminHeaderRestore': array<array-key, string>|null|string, 'prepareMessage': array<array-key, string>|null|string, 'processMessage': array<array-key, string>|null|string, 'successMessage': truthy-string}`.'''
 count = 1
 
 [[issues]]
@@ -7137,12 +7059,6 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
 code = "less-specific-nested-argument-type"
-message = '''Argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but provided type `array{'allGroups': string('')|string('checked'), 'allGroupsOptions': mixed, 'allUsers': string('')|string('checked'), 'buttonCancel': array<array-key, string>|null|string, 'buttonUpdate': array<array-key, string>|null|string, 'categoryActive': string('')|string('checked'), 'categoryDescription': null|string, 'categoryId': int, 'categoryImage': null|string, 'categoryImageReset': array<array-key, string>|null|string, 'categoryLanguage': string, 'categoryName': string, 'categoryShowHome': string('')|string('checked'), 'csrfInputToken': string, 'header': truthy-string, 'isMediumPermission': bool, 'parentId': int, 'restrictedGroups': string('')|string('checked'), 'restrictedGroupsLabel': array<array-key, string>|null|string, 'restrictedGroupsOptions': mixed, 'restrictedUsers': string('')|string('checked'), 'restrictedUsersLabel': array<array-key, string>|null|string, 'serpDescription': null|string, 'serpTitle': null|string, 'userPermissionLabel': array<array-key, string>|null|string, 'userSelection': array<array-key, mixed>}` is less specific.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "less-specific-nested-argument-type"
 message = 'Argument type mismatch for argument #3 of `phpMyFAQ\Category\Permission::add`: expected `array<array-key, int>`, but provided type `array<array-key, mixed>|bool|list{int(-1)}|null` is less specific.'
 count = 3
 
@@ -7162,12 +7078,6 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\CategoryEntity::setGroupId`: expected `int`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\CategoryEntity::setImage`: expected `null|string`, but found `nonnull`.'
 count = 1
 
 [[issues]]
@@ -7234,7 +7144,7 @@ count = 9
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
 code = "mixed-assignment"
 message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
-count = 4
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
@@ -7259,42 +7169,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
 code = "possibly-invalid-argument"
 message = '''Possible argument type mismatch for argument #1 of `phpMyFAQ\Category\Order::getCategoryTree`: expected `array<array-key, array{'category_id': string, 'parent_id': string}>`, but possibly received `array<int, array{'category_id': int, 'parent_id': int, 'position': int}>`.'''
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'ad_categ_lang': array<array-key, string>|null|string, 'ad_categ_trans_1': array<array-key, string>|null|string, 'ad_categ_trans_2': array<array-key, string>|null|string, 'ad_categ_transalready': array<array-key, string>|null|string, 'ad_categ_translatecateg': array<array-key, string>|null|string, 'category': string, 'categoryDescriptionLabel': array<array-key, string>|null|string, 'categoryId': int, 'categoryName': string, 'categoryNameLabel': array<array-key, string>|null|string, 'categoryOwnerLabel': array<array-key, string>|null|string, 'csrfInputToken': string, 'groupPermission': int, 'langTranslated': array<array-key, mixed>, 'languagesToTranslate': array<string, string>, 'permLevel': mixed, 'selectedLanguage': nonnull, 'userPermission': int, 'userSelection': array<array-key, mixed>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'ad_categ_translate': array<array-key, string>|null|string, 'ad_categ_translated': array<array-key, string>|null|string, 'ad_menu_categ_structure': array<array-key, string>|null|string, 'allLangCodes': list{string, ...<string>}|list{string}, 'allLangs': array<string, string>, 'basePath': string, 'categoryNameLabel': array<array-key, string>|null|string, 'categoryTree': array<array-key, mixed>, 'currentLanguage': null|string, 'faqlangcode': string, 'msgAddCategory': array<array-key, string>|null|string, 'msgCategory': array<array-key, string>|null|string, 'msgCategoryRemark_overview': array<array-key, string>|null|string, 'msgHeaderCategoryOverview': array<array-key, string>|null|string, 'translations': array<array-key, list<string>>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'categoryInfo': array<int, array<array-key, mixed>>, 'categoryTree': array<array-key, mixed>, 'csrfTokenInput': string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'categoryName': string, 'categoryNameLangCode': null|string, 'faqLangCode': string, 'groupsAllowed': array<array-key, int>, 'msgMainCategory': array<array-key, string>|null|string, 'parentId': int, 'userAllowed': int}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'csrfTokenInput': string, 'faqLangCode': string, 'parentId': int(0)}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'msgHeaderCategoryMain': array<array-key, string>|null|string}`.'''
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
@@ -7357,18 +7231,6 @@ message = "Left operand in binary operation has type `mixed`."
 count = 4
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CommentsController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'csrfToken': string, 'currentLocale': string, 'faqComments': array<array-key, phpMyFAQ\Entity\Comment>|list<phpMyFAQ\Entity\Comment>, 'faqCommentsPagination': string, 'newsComments': array<array-key, phpMyFAQ\Entity\Comment>|list<phpMyFAQ\Entity\Comment>, 'newsCommentsPagination': string, 'newsHeader': array<array-key, mixed>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/ConfigurationController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'adminConfigurationButtonReset': array<array-key, string>|null|string, 'adminConfigurationButtonSave': array<array-key, string>|null|string, 'adminHeaderConfiguration': array<array-key, string>|null|string, 'csrfToken': string, 'language': string}`.'''
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/DashboardController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -7394,12 +7256,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/DashboardController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'adminDashboardHeaderInactiveFaqs': array<array-key, string>|null|string, 'adminDashboardHeaderUsersOnline': array<array-key, string>|null|string, 'adminDashboardHeaderVisits': array<array-key, string>|null|string, 'adminDashboardInactiveFaqs': array<array-key, mixed>, 'adminDashboardInfoNumComments': mixed, 'adminDashboardInfoNumFaqs': mixed, 'adminDashboardInfoNumQuestions': mixed, 'adminDashboardInfoNumUser': mixed, 'adminDashboardInfoNumUsersOnline': int, 'adminDashboardInfoNumVisits': int, 'adminDashboardInfoUser': array<array-key, string>|null|string, 'adminDashboardRecentUsers': array<int, array<string, mixed>>, 'currentVersionApp': string, 'dashboardCsrfToken': string, 'documentationUrl': string, 'hasPermissionEditConfig': bool, 'hasRecentNews': mixed, 'hasUserTracking': mixed, 'isBackupOlderThan30Days': bool, 'isDebugMode': bool, 'isDevelopmentVersion': bool, 'isMaintenanceMode': mixed, 'lastBackupDate': null|string, 'msgAdminWarningDevelopmentVersion': string, 'showVersion': mixed}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/DashboardController.php"
 code = "possibly-null-argument"
 message = "Argument #1 of function `sprintf` is possibly `null`, but parameter type `string` does not accept it."
 count = 1
@@ -7415,12 +7271,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/DashboardController.php"
 code = "possibly-null-operand"
 message = "Possibly null left operand used in string concatenation (type `null|string`)."
 count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/ExportController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'adminHeaderExport': array<array-key, string>|null|string, 'buttonExport': array<array-key, string>|null|string, 'buttonReset': array<array-key, string>|null|string, 'categoryTree': array<array-key, mixed>, 'csrfToken': string, 'errorMessageNoFaqs': array<array-key, string>|null|string, 'hasCategories': bool, 'hasNoFaqs': bool, 'headerCategories': array<array-key, string>|null|string, 'headerExportType': array<array-key, string>|null|string, 'msgAllCategories': array<array-key, string>|null|string, 'msgCategory': array<array-key, string>|null|string, 'msgChooseExportType': array<array-key, string>|null|string, 'msgDownload': array<array-key, string>|null|string, 'msgDownloadType': string('attachment'), 'msgInline': array<array-key, string>|null|string, 'msgInlineType': string('inline'), 'msgViewType': array<array-key, string>|null|string, 'msgWithSubCategories': array<array-key, string>|null|string, 'selectedCategories': int(0)}`.'''
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/FaqController.php"
@@ -7521,42 +7371,6 @@ count = 6
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/FaqController.php"
 code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'allGroups': bool, 'allUsers': bool, 'attachments': array<array-key, phpMyFAQ\Attachment\File>, 'categoryTree': array<array-key, mixed>, 'changelogs': array<array-key, mixed>, 'currentRevision': truthy-string, 'editExistingFaq': true, 'faqData': array{'serp-description': null|string, 'serp-title': null|string, 'tags': string, ...}, 'faqId': int, 'faqLang': mixed, 'faqRevisionId': mixed, 'faqUrl': truthy-string, 'groupPermissionOptions': mixed, 'hasPermissionForApprove': bool, 'header': string(' ')|string(' Array')|string('Array ')|string('Array Array')|truthy-string|truthy-string|truthy-string|truthy-string|truthy-string, 'isActive': null|string('checked'), 'isInActive': null|string('checked'), 'languageOptions': string, 'nextFaqId': int, 'nextSolutionId': int, 'notifyEmail': string(''), 'notifyUser': string(''), 'numberOfRevisions': non-negative-int, 'openQuestionId': int(0), 'restrictedGroups': bool, 'restrictedUsers': bool, 'revisions': array<array-key, array<array-key, string>>, 'selectedCategories': array<array-key, mixed>, 'selectedRevisionId': mixed, 'userSelection': array<array-key, mixed>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/FaqController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'allGroups': true, 'allUsers': true, 'attachments': array{}, 'categoryTree': array<array-key, mixed>, 'changelogs': array{}, 'editExistingFaq': false, 'faqData': array{'author': array<array-key, string>|int|null|string, 'comment': null|string('checked'), 'email': array<array-key, string>|int|null|string, 'id': int(0), 'lang': mixed, 'revision_id': int(0)}, 'faqRevisionId': int(0), 'groupPermissionOptions': mixed, 'hasPermissionForApprove': bool, 'header': array<array-key, string>|null|string, 'isActive': null, 'isInActive': string('checked'), 'languageOptions': string, 'nextFaqId': int, 'nextSolutionId': int, 'notifyEmail': string(''), 'notifyUser': string(''), 'openQuestionId': int(0), 'restrictedGroups': false, 'restrictedUsers': false, 'selectedCategories': int, 'userSelection': array<array-key, mixed>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/FaqController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'allGroups': true, 'allUsers': true, 'attachments': array{}, 'categoryTree': array<array-key, mixed>, 'changelogs': array{}, 'editExistingFaq': false, 'faqData': array{'author': array<array-key, string>|int|null|string, 'comment': null|string('checked'), 'email': array<array-key, string>|int|null|string, 'id': int(0), 'lang': string, 'revision_id': int(0), 'title': int|string}, 'faqId': int(0), 'faqLang': mixed, 'faqRevisionId': int(0), 'groupPermissionOptions': mixed, 'hasPermissionForApprove': bool, 'header': string(' ')|string(' Array')|string('Array ')|string('Array Array')|truthy-string|truthy-string|truthy-string|truthy-string|truthy-string, 'isActive': null, 'isInActive': null, 'languageOptions': string, 'nextFaqId': int, 'nextSolutionId': int, 'notifyEmail': array<array-key, string>|int|null|string, 'notifyUser': array<array-key, string>|int|null|string, 'openQuestionId': int(0), 'restrictedGroups': false, 'restrictedUsers': false, 'selectedCategories': array{'category_id': array{}|int|string, 'category_lang': mixed}, 'userSelection': array<array-key, mixed>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/FaqController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'allGroups': true, 'allUsers': true, 'attachments': array{}, 'categoryTree': array<array-key, mixed>, 'changelogs': array{}, 'editExistingFaq': false, 'faqData': array{'author': array<array-key, string>|int|null|string, 'comment': null|string('checked'), 'email': array<array-key, string>|int|null|string, 'id': int(0), 'lang': string, 'revision_id': int(0)}, 'faqRevisionId': int(0), 'groupPermissionOptions': mixed, 'hasPermissionForApprove': bool, 'header': array<array-key, string>|null|string, 'isActive': null, 'isInActive': string('checked'), 'languageOptions': string, 'nextFaqId': int, 'nextSolutionId': int, 'notifyEmail': string(''), 'notifyUser': string(''), 'openQuestionId': int(0), 'restrictedGroups': false, 'restrictedUsers': false, 'selectedCategories': array{}, 'userSelection': array<array-key, mixed>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/FaqController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'allGroups': true, 'allUsers': true, 'attachments': array{}, 'categoryTree': array<array-key, mixed>, 'changelogs': array{}, 'editExistingFaq': false, 'faqData': array{'title': truthy-string, ...}, 'faqId': int(0), 'faqLang': mixed, 'faqRevisionId': int(0), 'groupPermissionOptions': mixed, 'hasPermissionForApprove': bool, 'header': string(' ')|string(' Array')|string('Array ')|string('Array Array')|truthy-string|truthy-string|truthy-string|truthy-string|truthy-string, 'isActive': null, 'isInActive': null, 'languageOptions': string, 'nextFaqId': int, 'nextSolutionId': int, 'notifyEmail': string(''), 'notifyUser': string(''), 'openQuestionId': int(0), 'restrictedGroups': false, 'restrictedUsers': false, 'selectedCategories': array{}, 'userSelection': array<array-key, mixed>}`.'''
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/FaqController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'categories': array<array-key, mixed>, 'csrfTokenOverview': string, 'csrfTokenSearch': string, 'numberOfComments': array<array-key, int>, 'numberOfRecords': array<array-key, int>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/FaqController.php"
-code = "possibly-invalid-argument"
 message = "Possible argument type mismatch for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|null|string`."
 count = 1
 
@@ -7588,30 +7402,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/FormsController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/FormsController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'ad_categ_translate': array<array-key, string>|null|string, 'ad_entry_active': array<array-key, string>|null|string, 'ad_entry_id': array<array-key, string>|null|string, 'csrfActivate': string, 'csrfRequired': string, 'formDataAddContent': array<array-key, mixed>, 'formDataAskQuestion': array<array-key, mixed>, 'msgHintDeactivateForms': array<array-key, string>|null|string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/FormsController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'ad_sess_pageviews': array<array-key, string>|null|string, 'csrfTokenAddTranslation': string, 'csrfTokenDeleteTranslation': string, 'csrfTokenEditTranslation': string, 'formId': int, 'inputId': int, 'languages': array{}|list<mixed>, 'translations': array<array-key, mixed>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GlossaryController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'addGlossaryCsrfTokenInput': string, 'addGlossaryTitle': array<array-key, string>|null|string, 'adminHeaderGlossary': array<array-key, string>|null|string, 'buttonDelete': array<array-key, string>|null|string, 'closeModal': array<array-key, string>|null|string, 'csrfTokenDelete': string, 'currentLanguage': string, 'glossaryItems': array<int, array{'definition': string, 'id': int, 'item': string, 'language': string}>, 'msgAddGlossary': array<array-key, string>|null|string, 'msgGlossaryDefinition': array<array-key, string>|null|string, 'msgGlossaryItem': array<array-key, string>|null|string, 'saveModal': array<array-key, string>|null|string, 'updateGlossaryCsrfToken': string, 'updateGlossaryTitle': array<array-key, string>|null|string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but provided type `array<array-key, mixed>` is less specific.'
 count = 1
 
 [[issues]]
@@ -7719,12 +7509,6 @@ count = 5
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
 code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'csrfDeleteGroup': string, 'groupId': int, 'groupName': mixed}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
-code = "possibly-invalid-argument"
 message = "Possible argument type mismatch for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|null|string`."
 count = 10
 
@@ -7733,12 +7517,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
 code = "possibly-invalid-argument"
 message = "Possible argument type mismatch for argument #4 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|null|string`."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/ImportController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'adminBodyCSVImport': array<array-key, string>|null|string, 'adminCSVImport': array<array-key, string>|null|string, 'adminHeaderCSVImport': array<array-key, string>|null|string, 'adminHeaderCSVImportColumns': array<array-key, string>|null|string, 'adminHeaderImport': array<array-key, string>|null|string, 'adminImportLabel': array<array-key, string>|null|string, 'categoryId': array<array-key, string>|null|string, 'csrfToken': string, 'is_active': array<array-key, string>|null|string, 'languageCode': array<array-key, string>|null|string, 'msgImportRecordsColumnStructure': array<array-key, string>|null|string, 'question': array<array-key, string>|null|string, 'trueFalse': array<array-key, string>|null|string}`.'''
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/InstanceController.php"
@@ -7808,18 +7586,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/InstanceController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'ad_entry_back': array<array-key, string>|null|string, 'ad_instance_button': array<array-key, string>|null|string, 'ad_instance_config': array<array-key, string>|null|string, 'ad_instance_name': array<array-key, string>|null|string, 'ad_instance_path': array<array-key, string>|null|string, 'ad_instance_url': array<array-key, string>|null|string, 'ad_menu_instances': array<array-key, string>|null|string, 'csrfTokenUpdateInstance': string, 'instance': object, 'instanceConfig': array<array-key, string>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/InstanceController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'updateSuccess': array<array-key, string>|null|string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/InstanceController.php"
 code = "redundant-logical-operation"
 message = "Redundant `||` operation: left operand is always false and right operand is evaluated."
 count = 1
@@ -7838,38 +7604,8 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/NewsController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'commentTypeNews': string('news'), 'newsData': array<array-key, mixed>, 'newsDataContent': string, 'newsId': int}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/NewsController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'news': array<array-key, mixed>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/NewsController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'userEmail': array<array-key, string>|int|null|string, 'userName': array<array-key, string>|int|null|string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/NewsController.php"
 code = "unused-property"
 message = "Property `$comments` is never used."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/OpenQuestionsController.php"
-code = "less-specific-nested-argument-type"
-message = '''Argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but provided type `array{'csrfTokenDeleteQuestion': string, 'csrfTokenToggleVisibility': string, 'currentLocale': string, 'enableCloseQuestion': mixed, 'msg2answerFAQ': array<array-key, string>|null|string, 'msgAttention': array<array-key, string>|null|string, 'msgChangeLanguageHint': array<array-key, string>|null|string, 'msgDeleteAllOpenQuestions': array<array-key, string>|null|string, 'msgOpenQuestion': array<array-key, string>|null|string, 'msgOpenQuestions': array<array-key, string>|null|string, 'msgOtherQuestionDesc': array<array-key, string>|null|string, 'msgOtherQuestionsDesc': array<array-key, string>|null|string, 'msgQuestion': array<array-key, string>|null|string, 'msgTakeQuestion': array<array-key, string>|null|string, 'msgVisibility': array<array-key, string>|null|string, 'no': array<array-key, string>|null|string, 'otherCount': non-negative-int, 'otherLangsData': array<string, array{'count': non-negative-int, 'label': false|string}>, 'questions': array<array-key, phpMyFAQ\Entity\QuestionEntity>, 'yes': array<array-key, string>|null|string}` is less specific.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/OrphanedFaqsController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'orphanedFaqs': array<array-key, stdClass>}`.'''
 count = 1
 
 [[issues]]
@@ -7895,30 +7631,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/PageController.php"
 code = "mixed-operand"
 message = "Left operand in binary operation has type `mixed`."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/PageController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'availableLanguages': array<array-key, string>, 'pageData': array{'active': string('n')|string('y'), 'author_email': string, 'author_name': string, 'content': string, 'id': int, 'lang': string, 'page_title': string, 'seo_description': null|string, 'seo_robots': string, 'seo_title': null|string, 'slug': string}, 'pageDataContent': string, 'pageId': int}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/PageController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'availableLanguages': non-empty-array<array-key, string>, 'csrfTokenTranslate': string, 'existingLanguages': array<array-key, string>, 'originalLanguage': string, 'originalSlug': string, 'originalTitle': string, 'pageId': int, 'userEmail': array<array-key, string>|int|null|string, 'userName': array<array-key, string>|int|null|string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/PageController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'pages': array<array-key, mixed>, 'pagination': string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/PageController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'userEmail': array<array-key, string>|int|null|string, 'userName': array<array-key, string>|int|null|string}`.'''
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/PasswordChangeController.php"
@@ -7964,26 +7676,8 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/PasswordChangeController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'errorMessage': array<array-key, string>|null|string, 'successMessage': array<array-key, string>|null|string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/PasswordChangeController.php"
 code = "possibly-null-argument"
 message = 'Argument #1 of method `phpMyFAQ\Auth::selectAuth` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/PluginController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'incompatiblePlugins': array<string, array{'plugin': phpMyFAQ\Plugin\PluginInterface, 'reason': string}>, 'pluginList': array<array-key, mixed>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/RatingController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'adminHeaderRatings': array<array-key, string>|null|string, 'buttonDeleteAllVotings': array<array-key, string>|null|string, 'categoryNames': array<int, array<string, mixed>>, 'csrfToken': string, 'currentCategory': int(0), 'green': array<array-key, string>|null|string, 'greenNote': array<array-key, string>|null|string, 'msgNoRatings': array<array-key, string>|null|string, 'numberOfRatings': non-negative-int, 'ratingData': array<array-key, mixed>, 'red': array<array-key, string>|null|string, 'redNote': array<array-key, string>|null|string}`.'''
 count = 1
 
 [[issues]]
@@ -8030,20 +7724,8 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/SessionKeepAliveController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'csrfToken': string, 'currentYear': string, 'isUserLoggedIn': bool, 'metaLanguage': mixed, 'msgConfirm': string, 'phpMyFAQVersion': string, 'refreshTime': mixed, 'sessionTimeout': mixed}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/SessionKeepAliveController.php"
 code = "possibly-null-argument"
 message = "Argument #1 of function `sprintf` is possibly `null`, but parameter type `string` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StatisticsSearchController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'ad_news_delete': array<array-key, string>|null|string, 'ad_searchstats_search_term': array<array-key, string>|null|string, 'ad_searchstats_search_term_count': array<array-key, string>|null|string, 'ad_searchstats_search_term_lang': array<array-key, string>|null|string, 'ad_searchstats_search_term_percentage': array<array-key, string>|null|string, 'ad_searchterm_del': array<array-key, string>|null|string, 'csrfToken': string, 'csrfTokenDelete': string, 'msgAdminElasticsearchStats': array<array-key, string>|null|string, 'pagination': string, 'searchesCount': int, 'searchesList': array<array-key, array<array-key, string>>}`.'''
 count = 1
 
 [[issues]]
@@ -8119,39 +7801,9 @@ message = "Left operand in arithmetic operation might be `false` (type `false|in
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StatisticsSessionsController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'ad_sess_back': array<array-key, string>|null|string, 'ad_sess_browser': array<array-key, string>|null|string, 'ad_sess_ip': array<array-key, string>|null|string, 'ad_sess_referer': array<array-key, string>|null|string, 'ad_sess_session': array<array-key, string>|null|string, 'sessionId': int, 'thisDay': string, 'trackingData': non-empty-list<string>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StatisticsSessionsController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'adminHeaderSessions': array<array-key, string>|null|string, 'buttonDeleteMonth': array<array-key, string>|null|string, 'buttonOkay': array<array-key, string>|null|string, 'csrfTokenClearVisits': string, 'csrfTokenExport': string, 'csrfTokenSessions': string, 'datePickerMinDate': string, 'dateToday': string, 'firstDate': string, 'lastDate': string, 'msgChooseMonth': array<array-key, string>|null|string, 'msgClearVisits': array<array-key, string>|null|string, 'msgDays': array<array-key, string>|null|string, 'msgFirstDate': array<array-key, string>|null|string, 'msgLastDate': array<array-key, string>|null|string, 'msgSessionBrowse': array<array-key, string>|null|string, 'msgSessionManagement': array<array-key, string>|null|string, 'msgVisits': array<array-key, string>|null|string, 'msgVisitsPerDay': array<array-key, string>|null|string, 'numberOfDays': mixed, 'numberOfVisits': int, 'renderedDaySelector': string, 'renderedMonthSelector': string, 'visitsPerDay': float|int(0)}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StatisticsSessionsController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'adminHeaderSessionsPerDay': array<array-key, string>|null|string, 'currentDay': string, 'msgIpAddress': array<array-key, string>|null|string, 'msgSession': array<array-key, string>|null|string, 'msgSessionDate': array<array-key, string>|null|string, 'sessionData': array<int, array<array-key, string>>}`.'''
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StickyFaqsController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StickyFaqsController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'alertMessageNoStickyRecords': array<array-key, string>|null|string, 'alertMessageStickyFaqsDeactivated': array<array-key, string>|null|string, 'csrfToken': string, 'csrfTokenApi': string, 'msgCancel': array<array-key, string>|null|string, 'msgConfirm': array<array-key, string>|null|string, 'msgConfirmAction': array<array-key, string>|null|string, 'msgConfirmUnstick': array<array-key, string>|null|string, 'msgRemoveSticky': array<array-key, string>|null|string, 'msgSuccessUnstick': array<array-key, string>|null|string, 'orderingStickyFaqsActivated': mixed, 'sortableDisabled': string('')|string('sortable-disabled'), 'stickyData': array<array-key, mixed>, 'stickyFAQsHeader': array<array-key, string>|null|string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StopWordsController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'adminHeaderStopWords': array<array-key, string>|null|string, 'buttonAdd': array<array-key, string>|null|string, 'csrfToken': string, 'hasPermission': bool, 'msgDescription': array<array-key, string>|null|string, 'msgStopWordsLabel': array<array-key, string>|null|string, 'sortedLanguageCodes': array<array-key, mixed>}`.'''
 count = 1
 
 [[issues]]
@@ -8171,30 +7823,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/SystemInformationControl
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/SystemInformationController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'adminHeaderSystemInfo': array<array-key, string>|null|string, 'systemInformation': array{'Database Client Version': string, 'Database Driver': string, 'Database Server Version': string, 'Elasticsearch Version': nonnull, 'OpenSearch Version': nonnull, 'PHP Extensions': non-empty-string, 'PHP Version': non-empty-string, 'Redis Version': string, 'Web server Interface': uppercase-non-empty-string, 'Web server document root': mixed, 'Web server software': mixed, 'phpMyFAQ API Version': string, 'phpMyFAQ Installation Path': string, 'phpMyFAQ MCP Server Version': string, 'phpMyFAQ Plugin API Version': string, 'phpMyFAQ Version': string}, 'translationInformation': array<string, array<string, mixed>>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/TagController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'adminHeaderTags': array<array-key, string>|null|string, 'buttonDelete': array<array-key, string>|null|string, 'buttonEdit': array<array-key, string>|null|string, 'csrfToken': string, 'msgConfirm': array<array-key, string>|null|string, 'noTags': array<array-key, string>|null|string, 'tags': array<int, string>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/UpdateController.php"
-code = "less-specific-nested-argument-type"
-message = '''Argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but provided type `array{'csrfActivateMaintenanceMode': string, 'dateLastChecked': mixed, 'isOnNightlies': bool, 'releaseEnvironment': string, 'versionCurrent': mixed}` is less specific.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/UserController.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/UserController.php"
@@ -8224,18 +7852,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/UserController.php"
 code = "non-existent-method"
 message = 'Method `getallrightsdata` does not exist on type `phpMyFAQ\Permission\PermissionInterface`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/UserController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'numUsers': non-negative-int, 'pagination': string, 'perPage': int(10), 'userIsSuperAdmin': bool, 'users': array{}|list<array{'display_name': array<array-key, string>|int|null|string, 'email': array<array-key, string>|int|null|string, 'id': int, 'isSuperAdmin': bool, 'isVisible': array<array-key, string>|int|null|string, 'login': string, 'status': string}>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/UserController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\AbstractAdministrationController::render`: expected `array<array-key, string>`, but possibly received `array{'userId': int}`.'''
 count = 1
 
 [[issues]]
@@ -9721,24 +9337,6 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/AttachmentController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but possibly received `array{'attachmentErrors': list<string>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/AttachmentController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but possibly received `array{'attachmentErrors': non-empty-list<string>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/AuthenticationController.php"
-code = "less-specific-nested-argument-type"
-message = '''Argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but provided type `array{'enableRegistration': mixed, 'errorMessage': mixed, 'isWebAuthnEnabled': mixed, 'login': array<array-key, string>|null|string, 'loginHeader': array<array-key, string>|null|string, 'msgEnterTwofactorToken': array<array-key, string>|null|string, 'msgTwofactorCheck': array<array-key, string>|null|string, 'msgTwofactorEnabled': array<array-key, string>|null|string, 'msgTwofactorTokenModelTitle': array<array-key, string>|null|string, 'password': array<array-key, string>|null|string, 'registerUser': array<array-key, string>|null|string, 'rememberMe': array<array-key, string>|null|string, 'title': truthy-string, 'useSignInWithKeycloak': bool, 'useSignInWithMicrosoft': bool, 'userid': int, 'username': array<array-key, string>|null|string, 'writeLoginPath': string}` is less specific.'''
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/AuthenticationController.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `Symfony\Component\HttpFoundation\Response::isRedirect`: expected `null|string`, but found `mixed`.'
@@ -9835,18 +9433,6 @@ message = 'Method `getflashbag` does not exist on type `Symfony\Component\HttpFo
 count = 7
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/AuthenticationController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but possibly received `array{'lang': string, 'password': array<array-key, string>|null|string, 'username': array<array-key, string>|null|string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/AuthenticationController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but possibly received `array{'msgEnterTwofactorToken': array<array-key, string>|null|string, 'msgTwofactorCheck': array<array-key, string>|null|string, 'msgTwofactorEnabled': array<array-key, string>|null|string, 'title': truthy-string, 'userId': int}`.'''
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/AzureAuthenticationController.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `phpMyFAQ\Auth\EntraId\OAuth::getOAuthToken`: expected `string`, but found `mixed`.'
@@ -9917,12 +9503,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/CategoryController.php"
 code = "less-specific-nested-argument-type"
 message = 'Argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::renderView`: expected `array<string, array<non-negative-int, array<string, mixed>>>`, but provided type `array<string, mixed>` is less specific.'
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/CategoryController.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but provided type `array<string, mixed>` is less specific.'
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/CategoryController.php"
@@ -9997,18 +9577,6 @@ message = "Redundant condition: variable `$childNodes` (type `array<array-key, m
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/ChatController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but possibly received `array{'conversations': array<int, array{'displayName': string, 'lastMessage': string, 'lastMessageTime': string, 'unreadCount': int, 'userId': int}>, 'csrfTokenMarkRead': string, 'csrfTokenSendMessage': string, 'currentUserId': int, 'title': truthy-string, 'unreadCount': int}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/ContactController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but possibly received `array{'captchaFieldset': string, 'defaultContentMail': array<array-key, string>|int|null|string, 'defaultContentName': array<array-key, string>|int|null|string, 'lang': string, 'msgContactOwnText': string, 'privacyURL': mixed, 'title': truthy-string, 'version': string}`.'''
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/CustomPageController.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `phpMyFAQ\CustomPage::getBySlug`: expected `string`, but found `nonnull`.'
@@ -10021,22 +9589,10 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/CustomPageController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but possibly received `array{'authorEmail': string, 'authorName': string, 'metaDescription': non-empty-string|null|string(''), 'metaTitle': null|string, 'pageContent': string, 'pageCreated': non-empty-string, 'pageTitle': string, 'pageUpdated': non-empty-string|null}`.'''
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/ErrorController.php"
 code = "mixed-operand"
 message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/ErrorController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but possibly received `array{'errorMessage': null|string, 'title': truthy-string}`.'''
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
@@ -10048,12 +9604,6 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
 code = "invalid-iterator"
 message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "less-specific-nested-argument-type"
-message = '''Argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but provided type `array{'captchaFieldset': mixed, 'categories': mixed, 'currentTimestamp': mixed, 'defaultContentMail': mixed, 'defaultContentName': mixed, 'displayFullForm': mixed, 'enableWysiwygEditor': mixed, 'lang': mixed, 'metaDescription': mixed, 'msgFormDisabledDueToMissingCategories': mixed, 'msgNewContentAddon': mixed, 'msgNewContentArticle': mixed, 'msgNewContentCategory': mixed, 'msgNewContentHeader': mixed, 'msgNewContentKeywords': mixed, 'msgNewContentLink': mixed, 'msgNewContentMail': mixed, 'msgNewContentName': mixed, 'msgNewContentSubmit': mixed, 'msgNewContentTheme': mixed, 'msgSeparateKeywordsWithCommas': mixed, 'noCategories': mixed, 'openQuestionID': mixed, 'question': mixed, 'readonly': mixed, 'selectedCategory': mixed, 'title': mixed, ...<truthy-string, mixed>}|array{'captchaFieldset': string, 'categories': mixed, 'currentTimestamp': mixed, 'defaultContentMail': string, 'defaultContentName': string, 'displayFullForm': mixed, 'enableWysiwygEditor': mixed, 'lang': string, 'metaDescription': truthy-string, 'msgFormDisabledDueToMissingCategories': array<array-key, string>|null|string, 'msgNewContentAddon': array<array-key, string>|null|string, 'msgNewContentArticle': array<array-key, string>|null|string, 'msgNewContentCategory': array<array-key, string>|null|string, 'msgNewContentHeader': array<array-key, string>|null|string, 'msgNewContentKeywords': array<array-key, string>|null|string, 'msgNewContentLink': array<array-key, string>|null|string, 'msgNewContentMail': array<array-key, string>|null|string, 'msgNewContentName': array<array-key, string>|null|string, 'msgNewContentSubmit': array<array-key, string>|null|string, 'msgNewContentTheme': array<array-key, string>|null|string, 'msgSeparateKeywordsWithCommas': array<array-key, string>|null|string, 'noCategories': mixed, 'openQuestionID': mixed, 'question': mixed, 'readonly': mixed, 'selectedCategory': mixed, 'title': truthy-string}` is less specific.'''
 count = 1
 
 [[issues]]
@@ -10293,12 +9843,6 @@ count = 2
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
 code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but possibly received `array{'ad_entry_edit_1': array<array-key, string>|null|string, 'ad_entry_edit_2': array<array-key, string>|null|string, 'answer': string, 'attachmentList': array<int, array<string, mixed>>, 'bookmarkAction': nonnull, 'bookmarkIcon'?: string('bi bi-bookmark')|string('bi bi-bookmark-fill'), 'breadcrumb': string, 'captchaFieldset': string, 'comments': array<array-key, mixed>, 'csrfTokenAddBookmark': string, 'csrfTokenAddComment': string, 'csrfTokenRemoveBookmark': string, 'csrfTokenVoting': string, 'currentLanguage': mixed, 'defaultContentMail': string, 'defaultContentName': string, 'enableCommentEditor': bool, 'enableSendToFriend': bool, 'faqAuthor': mixed, 'faqDate': string, 'faqLastChangeDate': string, 'id': int, 'isFaqBookmark'?: bool, 'lang': mixed, 'languageUrls': array<string, string>, 'linkToPdf': string, 'metaDescription': null|string, 'msgAboutFAQ': array<array-key, string>|null|string, 'msgAddBookmark'?: array<array-key, string>|null|string, 'msgAverageVote': array<array-key, string>|null|string, 'msgBookmarkAdded': array<array-key, string>|null|string, 'msgBookmarkRemoved': array<array-key, string>|null|string, 'msgCancel': array<array-key, string>|null|string, 'msgChangeLanguage'?: array<array-key, string>|null|string, 'msgNewContentMail': array<array-key, string>|null|string, 'msgNewContentName': array<array-key, string>|null|string, 'msgNewContentSubmit': array<array-key, string>|null|string, 'msgPdf': array<array-key, string>|null|string, 'msgPrintFaq': array<array-key, string>|null|string, 'msgShareFAQ': array<array-key, string>|null|string, 'msgShareText': array<array-key, string>|null|string, 'msgShareViaWhatsapp': array<array-key, string>|null|string, 'msgShowMore': array<array-key, string>|null|string, 'msgVoteBad': array<array-key, string>|null|string, 'msgVoteGood': array<array-key, string>|null|string, 'msgVoteSubmit': array<array-key, string>|null|string, 'msgWriteComment': array<array-key, string>|null|string, 'msgYourComment': array<array-key, string>|null|string, 'notes'?: mixed, 'notesHeader'?: array<array-key, string>|null|string, 'numberOfComments': truthy-string, 'permissionEditFaq': bool, 'question': string, 'renderRelatedArticles'?: non-empty-string, 'renderRelatedArticlesHeader'?: array<array-key, string>|null|string, 'renderRelatedCategories'?: non-empty-string, 'renderRelatedCategoriesHeader'?: array<array-key, string>|null|string, 'renderTags'?: string, 'renderTagsHeader'?: array<array-key, string>|null|string, 'renderVotingResult': string, 'solutionId': mixed, 'solutionIdLink': truthy-string, 'title': truthy-string, 'userId': int, 'writeCommentMsg': array<array-key, string>|null|string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "possibly-invalid-argument"
 message = "Possible argument type mismatch for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|null|string`."
 count = 2
 
@@ -10331,12 +9875,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/GlossaryController.php"
 code = "mixed-operand"
 message = "Left operand in binary operation has type `mixed`."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/GlossaryController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but possibly received `array{'glossaryItems': array<int, array{'definition': string, 'id': int, 'item': string, 'language': string}>|list<array{'definition': string, 'id': int, 'item': string, 'language': string}>, 'metaDescription': string, 'pageHeader': array<array-key, string>|null|string, 'pagination': string, 'title': truthy-string}`.'''
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/KeycloakAuthenticationController.php"
@@ -10390,12 +9928,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/NewsController.php"
 code = "array-to-string-conversion"
 message = "Potential array in right operand of string concatenation."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/NewsController.php"
-code = "less-specific-nested-argument-type"
-message = '''Argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but provided type `array{'captchaFieldset': mixed, 'comments': array<array-key, mixed>, 'csrfInput': string, 'defaultContentMail': array<array-key, string>|int|null|string, 'defaultContentName': array<array-key, string>|int|null|string, 'editThisEntry': string, 'mainPageContent': mixed, 'msgAboutThisNews': array<array-key, string>|null|string, 'msgCancel': array<array-key, string>|null|string, 'msgCommentHeader': array<array-key, string>|null|string, 'msgNewContentMail': array<array-key, string>|null|string, 'msgNewContentName': array<array-key, string>|null|string, 'msgNewContentSubmit': array<array-key, string>|null|string, 'msgShowMore': array<array-key, string>|null|string, 'msgWriteComment': array<array-key, string>|null|string, 'msgYourComment': array<array-key, string>|null|string, 'newsHeader': mixed, 'newsId': nonnull, 'newsLang': mixed, 'writeAuthor': string, 'writeCommentMsg': string, 'writeDateMsg': string, 'writeNewsHeader': non-empty-string}` is less specific.'''
 count = 1
 
 [[issues]]
@@ -10477,12 +10009,6 @@ message = "Possibly null right operand used in string concatenation (type `array
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/OverviewController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but possibly received `array{'faqOverview': array<array-key, mixed>, 'metaDescription': string, 'msgAuthor': array<array-key, string>|null|string, 'msgLastUpdateArticle': array<array-key, string>|null|string, 'pageHeader': array<array-key, string>|null|string, 'title': truthy-string}`.'''
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/PdfController.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `phpMyFAQ\Faq::getFaq`: expected `int`, but found `nonnull`.'
@@ -10516,18 +10042,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/QuestionsController.php"
 code = "invalid-iterator"
 message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/QuestionsController.php"
-code = "less-specific-nested-argument-type"
-message = '''Argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but provided type `array{'captchaFieldset': mixed, 'categories': mixed, 'defaultContentMail': mixed, 'defaultContentName': mixed, 'lang': mixed, 'metaDescription': mixed, 'msgFinishSubmission': mixed, 'msgFormDisabledDueToMissingCategories': mixed, 'msgMatchingQuestions': mixed, 'msgNewContentSubmit': mixed, 'noCategories': mixed, 'selectedCategory': mixed, 'title': mixed, ...<truthy-string, mixed>}|array{'captchaFieldset': string, 'categories': mixed, 'defaultContentMail': string, 'defaultContentName': string, 'lang': string, 'metaDescription': string, 'msgFinishSubmission': array<array-key, string>|null|string, 'msgFormDisabledDueToMissingCategories': array<array-key, string>|null|string, 'msgMatchingQuestions': array<array-key, string>|null|string, 'msgNewContentSubmit': array<array-key, string>|null|string, 'noCategories': mixed, 'selectedCategory': mixed, 'title': truthy-string}` is less specific.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/QuestionsController.php"
-code = "less-specific-nested-argument-type"
-message = '''Argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but provided type `array{'isCloseQuestionEnabled': mixed, 'metaDescription': string, 'msg2answer': array<array-key, string>|null|string, 'msg2answerFAQ': array<array-key, string>|null|string, 'msgDate_User': array<array-key, string>|null|string, 'msgEmailTo': array<array-key, string>|null|string, 'msgNoQuestionsAvailable': array<array-key, string>|null|string, 'msgQuestion2': array<array-key, string>|null|string, 'msgQuestionText': array<array-key, string>|null|string, 'msgQuestionsWaiting': array<array-key, string>|null|string, 'openQuestions': stdClass, 'pageHeader': array<array-key, string>|null|string, 'title': truthy-string, 'userHasPermissionToAnswer': bool}` is less specific.'''
 count = 1
 
 [[issues]]
@@ -10641,12 +10155,6 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/SearchController.php"
 code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but possibly received `array{'allCategories': array<array-key, string>|null|string, 'categories': mixed, 'checkedAllLanguages': string(' checked')|string(''), 'currentPage': mixed, 'formActionUrl': string('./search.html'), 'from': array<array-key, string>|null|string, 'isTagSearch': mixed, 'mostPopularSearches': mixed, 'msgAdvancedSearch': array<array-key, string>|null|string, 'msgCurrentTags': array<array-key, string>|null|string, 'msgMostPopularSearches': array<array-key, string>|null|string, 'msgPage': array<array-key, string>|null|string, 'msgSearch': array<array-key, string>|null|string, 'msgSearchResults': string, 'msgSearchResultsPagination': string, 'msgSearchWord': array<array-key, string>|null|string, 'msgTags': array<array-key, string>|null|string, 'noSearchResults': array<array-key, string>|null|string, 'numberOfSearchResults': mixed, 'pageHeader': array<array-key, string>|null|string, 'pagination': mixed, 'relatedTags': mixed, 'relatedTagsHeader': array<array-key, string>|null|string, 'searchOnAllLanguages': array<array-key, string>|null|string, 'searchResults': mixed, 'searchString': string, 'searchTags': mixed, 'searchTerm': mixed, 'selectCategories': array<array-key, string>|null|string, 'selectedCategory': mixed, 'tagList': mixed, 'title': truthy-string, 'totalPages': mixed}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/SearchController.php"
-code = "possibly-invalid-argument"
 message = "Possible argument type mismatch for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|null|string`."
 count = 1
 
@@ -10705,51 +10213,9 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/SitemapController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but possibly received `array{'faqs': array<array-key, stdClass>, 'letters': array<array-key, stdClass>, 'metaDescription': string, 'pageHeader': array<array-key, string>|null|string, 'title': truthy-string, 'writeCurrentLetter': array<array-key, string>|null|string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/StartpageController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but possibly received `array{'baseHref': string, 'errorMsgLatest': array<array-key, string>|null|string, 'errorMsgTopTen': array<array-key, string>|null|string, 'errorMsgTrendingFaqs': array<array-key, string>|null|string, 'latestRecordsList': array<array-key, mixed>, 'msgNewsHeader': array<array-key, string>|null|string, 'msgTags': array<array-key, string>|null|string, 'msgTrendingFAQs': array<array-key, string>|null|string, 'newsList': array<array-key, stdClass>, 'pageHeader': string, 'startPageCategories': bool, 'startPageCategoryDecks': array<int, array<string, mixed>>, 'stickyRecordsHeader': array<array-key, string>|null|string, 'stickyRecordsList': array<array-key, mixed>, 'tagsList': array<int, int>, 'title': string, 'topRecordsList': array<array-key, mixed>, 'trendingRecordsList': array<array-key, stdClass>, 'writeNewestHeader': array<array-key, string>|null|string, 'writeNumberOfArticles': string, 'writeTopTenHeader': array<array-key, string>|null|string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/UserController.php"
-code = "less-specific-nested-argument-type"
-message = '''Argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but provided type `array{'captchaFieldset': string, 'csrfTokenWebAuthn': string, 'isWebAuthnEnabled': mixed, 'lang': string, 'title': truthy-string}` is less specific.'''
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/UserController.php"
 code = "possibly-invalid-argument"
 message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Service\Gravatar::getImage`: expected `string`, but possibly received `array<array-key, string>|int|null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/UserController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but possibly received `array{'ad_gen_no': array<array-key, string>|null|string, 'ad_gen_yes': array<array-key, string>|null|string, 'checked': string('')|string('checked'), 'csrf': string, 'csrfExportUserData': string, 'csrfTokenRemoveTwofactor': string, 'csrfTokenWebAuthn': string, 'email': array<array-key, string>|int|null|string, 'exportUserDataUrl': string('api/user/data/export'), 'headerUserControlPanel': array<array-key, string>|null|string, 'lang': string, 'loginName': string, 'msgCancel': array<array-key, string>|null|string, 'msgConfirm': array<array-key, string>|null|string, 'msgConfirmTwofactorConfig': array<array-key, string>|null|string, 'msgDataExportDescription': array<array-key, string>|null|string, 'msgDownload': array<array-key, string>|null|string, 'msgDownloadYourData': array<array-key, string>|null|string, 'msgEmail': array<array-key, string>|null|string, 'msgGravatarNotConnected': array<array-key, string>|null|string, 'msgHeaderUserData': array<array-key, string>|null|string, 'msgIsVisible': array<array-key, string>|null|string, 'msgPassword': array<array-key, string>|null|string, 'msgRealName': array<array-key, string>|null|string, 'msgSave': array<array-key, string>|null|string, 'msgTwofactorConfig': array<array-key, string>|null|string, 'msgTwofactorConfigModelTitle': array<array-key, string>|null|string, 'msgTwofactorEnabled': array<array-key, string>|null|string, 'msgTwofactorNewSecret': array<array-key, string>|null|string, 'msgWarning': array<array-key, string>|null|string, 'qr_code_secret': string, 'qr_code_secret_alt': array<array-key, string>|null|string, 'readonly': string('')|string('readonly disabled'), 'realname': array<array-key, string>|int|null|string, 'twofactor_enabled': bool, 'twofactor_secret': null|string, 'ucpGravatarImage': string, 'userid': int, 'webauthnSupportEnabled': mixed}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/UserController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but possibly received `array{'bookmarksList': array<int, array{'answer': string, 'id': int, 'title': string, 'url': string}>, 'csrfTokenDeleteAllBookmarks': string, 'csrfTokenDeleteBookmark': string, 'title': truthy-string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/UserController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but possibly received `array{'csrf': string, 'defaultContentMail': array<array-key, string>|int|null|string, 'defaultContentName': array<array-key, string>|int|null|string, 'defaultLoginName': string, 'lang': string, 'privacyURL': mixed, 'userId': int}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/UserController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but possibly received `array{'lang': string, 'resetExpires': int, 'resetSignature': string, 'resetTokenValid': bool, 'resetUserId': int}`.'''
 count = 1
 
 [[issues]]
