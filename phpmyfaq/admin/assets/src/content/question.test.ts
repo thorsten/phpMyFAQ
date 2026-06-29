@@ -69,7 +69,7 @@ describe('Question Functions', () => {
       await new Promise((resolve) => setTimeout(resolve, 10));
 
       expect(global.fetch).toHaveBeenCalledWith('./api/question/delete', {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
           Accept: 'application/json, text/plain, */*',
           'Content-Type': 'application/json',

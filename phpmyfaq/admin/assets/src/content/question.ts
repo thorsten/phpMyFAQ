@@ -29,7 +29,7 @@ export const handleOpenQuestions = (): void => {
 
       responseMessage.innerHTML = '';
       fetch('./api/question/delete', {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
           Accept: 'application/json, text/plain, */*',
           'Content-Type': 'application/json',

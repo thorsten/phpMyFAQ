@@ -519,7 +519,7 @@ describe('handleCheckForUpdates - Download Package', () => {
       <p id="result-check-health"></p>
       <div id="pmf-update-step-health-check"></div>
       <button id="pmf-button-check-updates">Check Updates</button>
-      <button id="pmf-button-download-now">Download</button>
+      <button id="pmf-button-download-now" data-pmf-csrf="csrf123">Download</button>
       <div id="versionLastChecked">4.2.0</div>
       <div id="releaseEnvironment">stable</div>
       <div id="spinner-download-new-version" class="d-none"></div>
@@ -543,7 +543,7 @@ describe('handleCheckForUpdates - Download Package', () => {
     button.click();
 
     await vi.waitFor(() => {
-      expect(downloadPackage).toHaveBeenCalledWith('4.2.0');
+      expect(downloadPackage).toHaveBeenCalledWith('4.2.0', 'csrf123');
     });
 
     const card = document.getElementById('pmf-update-step-download') as HTMLElement;
@@ -568,7 +568,7 @@ describe('handleCheckForUpdates - Download Package', () => {
     button.click();
 
     await vi.waitFor(() => {
-      expect(downloadPackage).toHaveBeenCalledWith('nightly');
+      expect(downloadPackage).toHaveBeenCalledWith('nightly', 'csrf123');
     });
   });
 

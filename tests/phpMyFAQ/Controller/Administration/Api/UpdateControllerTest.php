@@ -12,6 +12,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Setup\EnvironmentConfigurator;
 use phpMyFAQ\Setup\Update;
 use phpMyFAQ\Setup\Upgrade;
@@ -81,6 +82,9 @@ final class UpdateControllerTest extends TestCase
 
     protected function tearDown(): void
     {
+        Token::resetInstanceForTests();
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('update-package'), 0, 10)]);
+
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
         $configurationProperty->setValue(null, $this->previousConfiguration);
@@ -150,6 +154,21 @@ final class UpdateControllerTest extends TestCase
     }
 
     /**
+     * Primes a valid 'update-package' CSRF token in the given session (and the
+     * matching cookie) so the updater package endpoints accept the request.
+     *
+     * @throws \Exception
+     */
+    private function createValidUpdatePackageToken(Session $session): string
+    {
+        Token::resetInstanceForTests();
+        $token = Token::getInstance($session)->getTokenString('update-package');
+        $_COOKIE['pmf-csrf-token-' . substr(md5('update-package'), 0, 10)] = $token;
+
+        return $token;
+    }
+
+    /**
      * @throws \Exception
      */
     public function testHealthCheckRequiresAuthentication(): void
@@ -202,7 +221,7 @@ final class UpdateControllerTest extends TestCase
         $controller = $this->createController();
 
         $this->expectException(\Exception::class);
-        $controller->extractPackage();
+        $controller->extractPackage(new Request());
     }
 
     /**
@@ -213,7 +232,7 @@ final class UpdateControllerTest extends TestCase
         $controller = $this->createController();
 
         $this->expectException(\Exception::class);
-        $controller->createTemporaryBackup();
+        $controller->createTemporaryBackup(new Request());
     }
 
     /**
@@ -224,7 +243,7 @@ final class UpdateControllerTest extends TestCase
         $controller = $this->createController();
 
         $this->expectException(\Exception::class);
-        $controller->installPackage();
+        $controller->installPackage(new Request());
     }
 
     /**
@@ -445,9 +464,15 @@ final class UpdateControllerTest extends TestCase
             $this->createStub(Update::class),
             $this->createStub(EnvironmentConfigurator::class),
         );
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $container = $this->createAuthenticatedContainer();
+        $controller->setContainer($container);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $csrf = $this->createValidUpdatePackageToken($session);
 
-        $response = $controller->downloadPackage(new Request([], [], ['versionNumber' => '4.1.0']));
+        $response = $controller->downloadPackage(
+            new Request([], [], ['versionNumber' => '4.1.0'], [], [], [], json_encode(['csrf' => $csrf], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
@@ -470,9 +495,15 @@ final class UpdateControllerTest extends TestCase
             $this->createStub(Update::class),
             $this->createStub(EnvironmentConfigurator::class),
         );
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $container = $this->createAuthenticatedContainer();
+        $controller->setContainer($container);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $csrf = $this->createValidUpdatePackageToken($session);
 
-        $response = $controller->downloadPackage(new Request([], [], ['versionNumber' => '4.1.0']));
+        $response = $controller->downloadPackage(
+            new Request([], [], ['versionNumber' => '4.1.0'], [], [], [], json_encode(['csrf' => $csrf], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_GATEWAY, $response->getStatusCode());
@@ -495,9 +526,15 @@ final class UpdateControllerTest extends TestCase
             $this->createStub(Update::class),
             $this->createStub(EnvironmentConfigurator::class),
         );
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $container = $this->createAuthenticatedContainer();
+        $controller->setContainer($container);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $csrf = $this->createValidUpdatePackageToken($session);
 
-        $response = $controller->downloadPackage(new Request([], [], ['versionNumber' => 'nightly']));
+        $response = $controller->downloadPackage(
+            new Request([], [], ['versionNumber' => 'nightly'], [], [], [], json_encode(['csrf' => $csrf], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());

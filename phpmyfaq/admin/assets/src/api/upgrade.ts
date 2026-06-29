@@ -47,39 +47,43 @@ export const checkForUpdates = async (): Promise<ResponseData> => {
   });
 };
 
-export const downloadPackage = async (version: string): Promise<ResponseData> => {
+export const downloadPackage = async (version: string, csrfToken: string): Promise<ResponseData> => {
   return await fetchJson<ResponseData>(`./api/download-package/${version}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({ csrf: csrfToken }),
   });
 };
 
-export const extractPackage = async (): Promise<ResponseData> => {
+export const extractPackage = async (csrfToken: string): Promise<ResponseData> => {
   return await fetchJson<ResponseData>('./api/extract-package', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({ csrf: csrfToken }),
   });
 };
 
-export const startTemporaryBackup = async (): Promise<Response> => {
+export const startTemporaryBackup = async (csrfToken: string): Promise<Response> => {
   return await fetchWrapper('./api/create-temporary-backup', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({ csrf: csrfToken }),
   });
 };
 
-export const startInstallation = async (): Promise<Response> => {
+export const startInstallation = async (csrfToken: string): Promise<Response> => {
   return await fetchWrapper('./api/install-package', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({ csrf: csrfToken }),
   });
 };
 

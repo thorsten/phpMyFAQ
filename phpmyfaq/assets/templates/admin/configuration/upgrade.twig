@@ -75,7 +75,8 @@
               </span>
             </p>
             <div class="d-grid gap-2 d-md-flex justify-content-between">
-              <button type="button" class="btn btn-primary mb-2" id="pmf-button-download-now">
+              <button type="button" class="btn btn-primary mb-2" id="pmf-button-download-now"
+                      data-pmf-csrf="{{ csrfUpdatePackage }}">
                 {{ 'buttonDownloadPackage' | translate }}
                 <div class="spinner-border spinner-border-sm ms-2 d-none" id="spinner-download-new-version"
                      role="status">
@@ -86,7 +87,8 @@
             </div>
           {% else %}
             <div class="d-grid gap-2 d-md-flex justify-content-between">
-              <button type="button" class="btn btn-primary mb-2" id="pmf-button-download-now">
+              <button type="button" class="btn btn-primary mb-2" id="pmf-button-download-now"
+                      data-pmf-csrf="{{ csrfUpdatePackage }}">
                 {{ 'buttonDownloadPackage' | translate }}
                 <div class="spinner-border spinner-border-sm ms-2 d-none" id="spinner-download-new-version"
                      role="status">
@@ -110,7 +112,8 @@
           <!-- Step 4: Extract the downloaded package -->
           <div>
             <div class="d-grid gap-2 d-md-flex justify-content-between">
-              <button type="button" class="btn btn-primary mb-2" id="pmf-button-extract-package">
+              <button type="button" class="btn btn-primary mb-2" id="pmf-button-extract-package"
+                      data-pmf-csrf="{{ csrfUpdatePackage }}">
                 {{ 'buttonExtractPackage' | translate }}
                 <div class="spinner-border spinner-border-sm ms-2 d-none" id="spinner-extract-package" role="status">
                   <span class="visually-hidden">Loading...</span>
@@ -134,7 +137,8 @@
           <div>
             <div class="d-grid gap-2 d-md-flex justify-content-between">
               <div>
-                <button type="button" class="btn btn-primary mb-2" id="pmf-button-install-package">
+                <button type="button" class="btn btn-primary mb-2" id="pmf-button-install-package"
+                        data-pmf-csrf="{{ csrfUpdatePackage }}">
                   {{ 'msgInstallDownloadedPackage' | translate }}
                   <div class="spinner-border spinner-border-sm ms-2 d-none" id="spinner-install-package" role="status">
                     <span class="visually-hidden">Loading...</span>

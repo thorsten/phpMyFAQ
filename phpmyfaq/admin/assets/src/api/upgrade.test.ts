@@ -71,13 +71,14 @@ describe('Upgrade API', (): void => {
     const mockResponse = { success: 'true' };
     vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
-    const result = await downloadPackage('1.0.0');
+    const result = await downloadPackage('1.0.0', 'csrfToken');
     expect(result).toEqual(mockResponse);
     expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('./api/download-package/1.0.0', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ csrf: 'csrfToken' }),
     });
   });
 
@@ -85,13 +86,14 @@ describe('Upgrade API', (): void => {
     const mockResponse = { success: 'true' };
     vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
 
-    const result = await extractPackage();
+    const result = await extractPackage('csrfToken');
     expect(result).toEqual(mockResponse);
     expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('./api/extract-package', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ csrf: 'csrfToken' }),
     });
   });
 
@@ -101,12 +103,13 @@ describe('Upgrade API', (): void => {
     });
     vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponse);
 
-    await startTemporaryBackup();
+    await startTemporaryBackup('csrfToken');
     expect(fetchWrapperModule.fetchWrapper).toHaveBeenCalledWith('./api/create-temporary-backup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ csrf: 'csrfToken' }),
     });
   });
 
@@ -116,12 +119,13 @@ describe('Upgrade API', (): void => {
     });
     vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponse);
 
-    await startInstallation();
+    await startInstallation('csrfToken');
     expect(fetchWrapperModule.fetchWrapper).toHaveBeenCalledWith('./api/install-package', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ csrf: 'csrfToken' }),
     });
   });
 

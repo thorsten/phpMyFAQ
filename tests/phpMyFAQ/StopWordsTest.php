@@ -56,6 +56,22 @@ class StopWordsTest extends TestCase
         $this->assertFalse($this->stopWords->add('test'));
     }
 
+    public function testAddEscapesSqlInjectionPayload(): void
+    {
+        $this->stopWords->setLanguage('test');
+
+        $payload = "test', 'en'); DROP TABLE faqstopwords; --";
+
+        // The payload must be stored verbatim as a single stop word, not
+        // interpreted as additional SQL. A successful insert and a matching
+        // round-trip proves the value was escaped rather than executed.
+        $this->assertTrue($this->stopWords->add($payload));
+        $this->assertTrue($this->stopWords->match($payload));
+
+        // The table must still exist and remain usable after the insert.
+        $this->assertTrue($this->stopWords->add('canary'));
+    }
+
     public function testGetTableName(): void
     {
         $this->assertEquals('faqstopwords', $this->stopWords->getTableName());
