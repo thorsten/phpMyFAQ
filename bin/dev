@@ -35,11 +35,11 @@ ALL_PROFILES="$WEB_PROFILES $DB_PROFILES $SEARCH_PROFILES $OTHER_PROFILES"
 # Named presets: <name>="<space separated profiles>".
 preset_profiles() {
   case "$1" in
-    default)    echo "nginx mariadb opensearch redis" ;;
-    mysql-es)   echo "nginx mariadb elasticsearch redis" ;;
-    postgres)   echo "nginx postgres opensearch redis" ;;
-    apache)     echo "apache mariadb opensearch redis" ;;
-    frankenphp) echo "frankenphp mariadb opensearch redis" ;;
+    default)    echo "nginx mariadb opensearch redis phpmyadmin " ;;
+    mysql-es)   echo "nginx mariadb elasticsearch redis phpmyadmin " ;;
+    postgres)   echo "nginx postgres opensearch redis pgadmin" ;;
+    apache)     echo "apache mariadb opensearch redis phpmyadmin " ;;
+    frankenphp) echo "frankenphp mariadb opensearch redis phpmyadmin " ;;
     full)       echo "nginx mariadb postgres mssql elasticsearch opensearch redis phpmyadmin pgadmin" ;;
     *)          echo "" ;;
   esac
