@@ -69,7 +69,7 @@
     "symfony/rate-limiter": "~8.1.0",
     "symfony/routing": "~8.1.0",
     "symfony/uid": "~8.1.0",
-    "tecnickcom/tcpdf": "~6.11.2",
+    "tecnickcom/tcpdf": "~7.0.1",
     "tivie/htaccess-parser": "~0.4.0",
     "twig/intl-extra": "~3.26.0",
     "twig/twig": "~3.27.0"
