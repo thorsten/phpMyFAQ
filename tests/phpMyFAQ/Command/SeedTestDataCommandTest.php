@@ -44,6 +44,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 #[UsesClass(\phpMyFAQ\Entity\NewsMessage::class)]
 #[UsesClass(\phpMyFAQ\Environment::class)]
 #[UsesClass(\phpMyFAQ\Faq::class)]
+#[UsesClass(\phpMyFAQ\Faq\FaqRepository::class)]
 #[UsesClass(\phpMyFAQ\Faq\Permission::class)]
 #[UsesClass(\phpMyFAQ\Filter::class)]
 #[UsesClass(\phpMyFAQ\Glossary::class)]
