@@ -583,7 +583,10 @@ final class CategoryController extends AbstractAdministrationController
             $categoryImage->setUploadedFile($uploadedFile);
         }
 
-        $existingImage = is_null($existingImage) ? '' : $existingImage;
+        // Strip any path components: the category image is always a bare file
+        // name inside the upload directory. This prevents traversal sequences
+        // (e.g. "../") from being stored and later passed to Image::delete().
+        $existingImage = is_null($existingImage) ? '' : basename((string) $existingImage);
         $hasUploadedImage = $uploadedFile instanceof UploadedFile;
         $image = $hasUploadedImage ? $categoryImage->getFileName($categoryId, $categoryLang) : $existingImage;
 

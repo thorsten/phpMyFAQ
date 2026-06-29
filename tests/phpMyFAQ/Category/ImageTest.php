@@ -300,4 +300,41 @@ class ImageTest extends TestCase
 
         $this->assertTrue($result);
     }
+
+    public function testDeleteWithEmptyFileNameReturnsTrue(): void
+    {
+        $this->image->setFileName('');
+
+        $this->assertTrue($this->image->delete());
+    }
+
+    public function testDeleteRejectsPathTraversal(): void
+    {
+        // Create a file outside the upload directory that a traversal payload
+        // would target, then ensure delete() refuses to remove it.
+        $targetFile = PMF_CONTENT_DIR . '/category-traversal-target.txt';
+        file_put_contents($targetFile, 'do not delete');
+
+        $this->image->setFileName('../category-traversal-target.txt');
+        $result = $this->image->delete();
+
+        $this->assertFalse($result);
+        $this->assertTrue(file_exists($targetFile));
+
+        unlink($targetFile);
+    }
+
+    public function testDeleteRejectsNestedPathTraversal(): void
+    {
+        $this->image->setFileName('../../core/config/database.php');
+
+        $this->assertFalse($this->image->delete());
+    }
+
+    public function testDeleteRejectsFileNameWithDirectorySeparator(): void
+    {
+        $this->image->setFileName('subdir/category-test.jpg');
+
+        $this->assertFalse($this->image->delete());
+    }
 }

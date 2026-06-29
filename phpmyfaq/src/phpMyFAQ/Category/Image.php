@@ -160,9 +160,23 @@ class Image
 
     /**
      * Deletes the current file, returns true if no file is available.
+     *
+     * The stored file name is treated as untrusted: only a plain file name
+     * located directly inside the upload directory may be removed. Any value
+     * containing path separators or traversal sequences (e.g. "../") is
+     * rejected to prevent deleting arbitrary files outside UPLOAD_DIR.
      */
     public function delete(): bool
     {
+        if ($this->fileName === '') {
+            return true;
+        }
+
+        // Reject anything that is not a bare file name (no directories, no "..").
+        if (basename($this->fileName) !== $this->fileName) {
+            return false;
+        }
+
         if (is_file(self::UPLOAD_DIR . $this->fileName)) {
             return unlink(self::UPLOAD_DIR . $this->fileName);
         }
