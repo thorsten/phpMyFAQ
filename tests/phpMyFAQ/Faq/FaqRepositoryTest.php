@@ -2,9 +2,11 @@
 
 namespace phpMyFAQ\Faq;
 
+use DateTime;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Language;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
@@ -121,7 +123,10 @@ class FaqRepositoryTest extends TestCase
 
     public function testGetSolutionIdFromIdFallsBackToNextSolutionIdWhenMissing(): void
     {
-        $this->assertSame($this->faqRepository->getNextSolutionId(), $this->faqRepository->getSolutionIdFromId(999998, 'en'));
+        $this->assertSame(
+            $this->faqRepository->getNextSolutionId(),
+            $this->faqRepository->getSolutionIdFromId(999998, 'en'),
+        );
     }
 
     public function testHasTranslation(): void
@@ -247,7 +252,10 @@ class FaqRepositoryTest extends TestCase
 
     public function testFetchAvailableFaqsByCategoryIdReturnsEmptyArrayForUnknownCategory(): void
     {
-        $this->assertSame([], $this->faqRepository->fetchAvailableFaqsByCategoryId(99999, 'fd', 'id', 'ASC', -1, [-1], false));
+        $this->assertSame(
+            [],
+            $this->faqRepository->fetchAvailableFaqsByCategoryId(99999, 'fd', 'id', 'ASC', -1, [-1], false),
+        );
     }
 
     public function testFetchFaqsByIdsReturnsRows(): void
@@ -298,5 +306,53 @@ class FaqRepositoryTest extends TestCase
         $ids = array_map(static fn(object $row): int => (int) $row->id, $rows);
         $this->assertContains(5043, $ids);
         $this->assertNotContains(5044, $ids);
+    }
+
+    public function testInsertCreatesFaqRow(): void
+    {
+        $this->faqRepository->insert($this->makeFaqEntity(5050, 7400, 'Inserted Question'));
+
+        $this->assertSame('Inserted Question', $this->faqRepository->fetchQuestion(5050, 'en'));
+        $this->assertSame(7400, $this->faqRepository->getSolutionIdFromId(5050, 'en'));
+    }
+
+    public function testUpdateModifiesFaqRow(): void
+    {
+        $faqEntity = $this->makeFaqEntity(5051, 7410, 'Before');
+        $this->faqRepository->insert($faqEntity);
+
+        $faqEntity->setQuestion('After')->setRevisionId(1);
+        $this->faqRepository->update($faqEntity);
+
+        $this->assertSame('After', $this->faqRepository->fetchQuestion(5051, 'en'));
+    }
+
+    public function testDeleteByIdAndLanguageRemovesFaqRow(): void
+    {
+        $this->faqRepository->insert($this->makeFaqEntity(5052, 7420, 'To Delete'));
+        $this->assertTrue($this->faqRepository->hasTranslation(5052, 'en'));
+
+        $this->faqRepository->deleteByIdAndLanguage(5052, 'en');
+
+        $this->assertFalse($this->faqRepository->hasTranslation(5052, 'en'));
+    }
+
+    private function makeFaqEntity(int $id, int $solutionId, string $question): FaqEntity
+    {
+        return new FaqEntity()
+            ->setId($id)
+            ->setLanguage('en')
+            ->setSolutionId($solutionId)
+            ->setRevisionId(0)
+            ->setActive(true)
+            ->setSticky(false)
+            ->setKeywords('Keywords')
+            ->setQuestion($question)
+            ->setAnswer('Answer')
+            ->setAuthor('Author')
+            ->setEmail('foo@bar.baz')
+            ->setComment(false)
+            ->setNotes('')
+            ->setUpdatedDate(new DateTime());
     }
 }

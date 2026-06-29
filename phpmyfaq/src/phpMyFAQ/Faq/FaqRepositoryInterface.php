@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Faq;
 
+use phpMyFAQ\Entity\FaqEntity;
+
 interface FaqRepositoryInterface
 {
     /**
@@ -161,4 +163,20 @@ interface FaqRepositoryInterface
         array $groups,
         bool $groupSupport,
     ): array;
+
+    /**
+     * Inserts a new FAQ row. The entity must already carry its id, solution id and revision id.
+     */
+    public function insert(FaqEntity $faqEntity): void;
+
+    /**
+     * Updates an existing FAQ row identified by the entity's id and language.
+     */
+    public function update(FaqEntity $faqEntity): void;
+
+    /**
+     * Deletes a FAQ and its related rows (category relations, revisions, visits, permissions,
+     * tags, comments, votes, bookmarks, changelog) across all affected tables.
+     */
+    public function deleteByIdAndLanguage(int $faqId, string $faqLang): void;
 }

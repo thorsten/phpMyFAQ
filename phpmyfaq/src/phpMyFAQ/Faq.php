@@ -24,7 +24,6 @@ declare(strict_types=1);
 
 namespace phpMyFAQ;
 
-use DateTime;
 use Exception;
 use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Attachment\AttachmentFactory;
@@ -760,33 +759,7 @@ class Faq
 
         $faqEntity->setRevisionId(0);
 
-        $query = sprintf(
-            "INSERT INTO %sfaqdata 
-            (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, 
-            updated, date_start, date_end, created, notes)
-            VALUES
-            (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
-            Database::getTablePrefix(),
-            $faqEntity->getId(),
-            $this->configuration->getDb()->escape($faqEntity->getLanguage()),
-            $faqEntity->getSolutionId(),
-            $faqEntity->getRevisionId(),
-            $faqEntity->isActive() ? 'yes' : 'no',
-            $faqEntity->isSticky() ? 1 : 0,
-            $this->configuration->getDb()->escape($faqEntity->getKeywords()),
-            $this->configuration->getDb()->escape($faqEntity->getQuestion()),
-            $this->configuration->getDb()->escape($faqEntity->getAnswer()),
-            $this->configuration->getDb()->escape($faqEntity->getAuthor()),
-            $this->configuration->getDb()->escape($faqEntity->getEmail()),
-            $faqEntity->isComment() ? 'y' : 'n',
-            date(format: 'YmdHis'),
-            '00000000000000',
-            '99991231235959',
-            date(format: 'Y-m-d H:i:s'),
-            $this->configuration->getDb()->escape($faqEntity->getNotes()),
-        );
-
-        $this->configuration->getDb()->query($query);
+        $this->faqRepository->insert($faqEntity);
 
         return $faqEntity;
     }
@@ -808,47 +781,7 @@ class Faq
 
     public function update(FaqEntity $faqEntity): FaqEntity
     {
-        $query = sprintf(
-            "UPDATE %sfaqdata SET
-            revision_id = %d,
-            active = '%s',
-            sticky = %d,
-            keywords = '%s',
-            thema = '%s',
-            content = '%s',
-            author = '%s',
-            email = '%s',
-            comment = '%s',
-            date_start = '%s',
-            date_end = '%s',
-            notes = '%s'",
-            Database::getTablePrefix(),
-            $faqEntity->getRevisionId(),
-            $faqEntity->isActive() ? 'yes' : 'no',
-            $faqEntity->isSticky() ? 1 : 0,
-            $this->configuration->getDb()->escape($faqEntity->getKeywords()),
-            $this->configuration->getDb()->escape($faqEntity->getQuestion()),
-            $this->configuration->getDb()->escape($faqEntity->getAnswer()),
-            $this->configuration->getDb()->escape($faqEntity->getAuthor()),
-            $this->configuration->getDb()->escape($faqEntity->getEmail()),
-            $faqEntity->isComment() ? 'y' : 'n',
-            $faqEntity->getValidFrom()->format('YmdHis'),
-            $faqEntity->getValidTo()->format('YmdHis'),
-            $this->configuration->getDb()->escape($faqEntity->getNotes()),
-        );
-
-        // Conditionally add the updated field
-        if ($faqEntity->getUpdatedDate() instanceof DateTime) {
-            $query .= sprintf(", updated = '%s'", $faqEntity->getUpdatedDate()->format('YmdHis'));
-        }
-
-        $query .= sprintf(
-            " WHERE id = %d AND lang = '%s'",
-            $faqEntity->getId(),
-            $this->configuration->getDb()->escape($faqEntity->getLanguage()),
-        );
-
-        $this->configuration->getDb()->query($query);
+        $this->faqRepository->update($faqEntity);
 
         return $faqEntity;
     }
@@ -865,55 +798,7 @@ class Faq
     {
         $solutionId = $this->getSolutionIdFromId($faqId, $faqLang);
 
-        $queries = [
-            sprintf('DELETE FROM %sfaqbookmarks WHERE faqid = %d', Database::getTablePrefix(), $faqId),
-            sprintf(
-                "DELETE FROM %sfaqchanges WHERE beitrag = %d AND lang = '%s'",
-                Database::getTablePrefix(),
-                $faqId,
-                $this->configuration->getDb()->escape($faqLang),
-            ),
-            sprintf(
-                "DELETE FROM %sfaqcategoryrelations WHERE record_id = %d AND record_lang = '%s'",
-                Database::getTablePrefix(),
-                $faqId,
-                $this->configuration->getDb()->escape($faqLang),
-            ),
-            sprintf(
-                "DELETE FROM %sfaqdata WHERE id = %d AND lang = '%s'",
-                Database::getTablePrefix(),
-                $faqId,
-                $this->configuration->getDb()->escape($faqLang),
-            ),
-            sprintf(
-                "DELETE FROM %sfaqdata_revisions WHERE id = %d AND lang = '%s'",
-                Database::getTablePrefix(),
-                $faqId,
-                $this->configuration->getDb()->escape($faqLang),
-            ),
-            sprintf(
-                "DELETE FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
-                Database::getTablePrefix(),
-                $faqId,
-                $this->configuration->getDb()->escape($faqLang),
-            ),
-            sprintf('DELETE FROM %sfaqdata_user WHERE record_id = %d', Database::getTablePrefix(), $faqId),
-            sprintf('DELETE FROM %sfaqdata_group WHERE record_id = %d', Database::getTablePrefix(), $faqId),
-            sprintf('DELETE FROM %sfaqdata_tags WHERE record_id = %d', Database::getTablePrefix(), $faqId),
-            sprintf(
-                'DELETE FROM %sfaqdata_tags WHERE %sfaqdata_tags.record_id NOT IN (SELECT %sfaqdata.id FROM %sfaqdata)',
-                Database::getTablePrefix(),
-                Database::getTablePrefix(),
-                Database::getTablePrefix(),
-                Database::getTablePrefix(),
-            ),
-            sprintf('DELETE FROM %sfaqcomments WHERE id = %d', Database::getTablePrefix(), $faqId),
-            sprintf('DELETE FROM %sfaqvoting WHERE artikel = %d', Database::getTablePrefix(), $faqId),
-        ];
-
-        foreach ($queries as $query) {
-            $this->configuration->getDb()->query($query);
-        }
+        $this->faqRepository->deleteByIdAndLanguage($faqId, $faqLang);
 
         // Delete possible attachments
         $attachments = AttachmentFactory::fetchByRecordId($this->configuration, $faqId);
