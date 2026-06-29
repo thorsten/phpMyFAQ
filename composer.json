@@ -123,7 +123,9 @@
   },
   "minimum-stability": "stable",
   "scripts": {
-    "analyze": "./phpmyfaq/src/libs/bin/mago analyze",
+    "analyze": "./phpmyfaq/src/libs/bin/mago analyze --baseline=mago-analyze-baseline.toml",
+    "analyze:all": "./phpmyfaq/src/libs/bin/mago analyze",
+    "analyze:baseline": "./phpmyfaq/src/libs/bin/mago analyze --baseline=mago-analyze-baseline.toml --remove-outdated-baseline-entries --backup-baseline",
     "format": "./phpmyfaq/src/libs/bin/mago format",
     "format:dry-run": "./phpmyfaq/src/libs/bin/mago format --dry-run",
     "format:fix": "./phpmyfaq/src/libs/bin/mago format --fix",

@@ -33,7 +33,7 @@ class ConfigurationRepository
 
     public function __construct(
         private CoreConfiguration $coreConfiguration,
-        private string $tableName = 'faqconfig',
+        string $tableName = 'faqconfig',
     ) {
         $this->databaseConfigurationStore = new DatabaseConfigurationStore(
             $this->coreConfiguration->getDb(),

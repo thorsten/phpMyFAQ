@@ -4,7 +4,13 @@ php-version = "8.4.0"
 
 [source]
 paths = ["./phpmyfaq/src/phpMyFAQ"]
-includes = ["./phpmyfaq/src/libs"]
+includes = [
+  "./phpmyfaq/src/libs",
+  "./phpmyfaq/src/stubs",
+  "./phpmyfaq/src/constants.php",
+  "./phpmyfaq/content/core/config/constants.php",
+  "./phpmyfaq/content/core/config/constants_opensearch.php",
+]
 excludes = []
 
 [formatter]

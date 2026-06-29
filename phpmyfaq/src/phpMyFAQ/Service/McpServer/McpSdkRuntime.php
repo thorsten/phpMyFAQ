@@ -21,7 +21,6 @@ namespace phpMyFAQ\Service\McpServer;
 
 use Mcp\Server;
 use Mcp\Server\Transport\StdioTransport;
-use phpMyFAQ\Configuration;
 use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -32,7 +31,6 @@ final readonly class McpSdkRuntime implements McpServerRuntimeInterface
      * @param array<string, mixed> $serverInfo
      */
     public function __construct(
-        private Configuration $configuration,
         private FaqSearchTool $faqSearchTool,
         private array $serverInfo,
     ) {

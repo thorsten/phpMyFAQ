@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
-use phpMyFAQ\Comments;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Enums\PermissionType;
@@ -40,7 +39,6 @@ final class NewsController extends AbstractAdministrationController
 {
     public function __construct(
         private readonly News $news,
-        private readonly Comments $comments,
     ) {
         parent::__construct();
     }

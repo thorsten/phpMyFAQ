@@ -27,12 +27,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class LdapController extends AbstractController
 {
-    public function __construct(
-        private readonly Ldap $ldap,
-    ) {
-        parent::__construct();
-    }
-
     #[Route(path: 'ldap/configuration', name: 'admin.api.ldap.configuration', methods: ['GET'])]
     public function configuration(): JsonResponse
     {

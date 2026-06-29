@@ -18,7 +18,6 @@ class McpSdkRuntimeTest extends TestCase
     public function testGetServerInfoReturnsInjectedPayload(): void
     {
         $runtime = new McpSdkRuntime(
-            $this->createConfigurationMock(),
             new FaqSearchTool(
                 $this->createConfigurationMock(),
                 $this->createMock(Search::class),
@@ -47,7 +46,7 @@ class McpSdkRuntimeTest extends TestCase
         $search->method('setCategory');
         $search->method('search')->willReturn([]);
 
-        $runtime = new McpSdkRuntime($configuration, new FaqSearchTool($configuration, $search, $faq), [
+        $runtime = new McpSdkRuntime(new FaqSearchTool($configuration, $search, $faq), [
             'name' => 'phpMyFAQ MCP Server',
             'version' => '0.1.0-dev',
             'description' => 'Model Context Protocol server for phpMyFAQ installations',
@@ -65,7 +64,6 @@ class McpSdkRuntimeTest extends TestCase
     public function testBuildServerReturnsMcpSdkServerInstance(): void
     {
         $runtime = new McpSdkRuntime(
-            $this->createConfigurationMock(),
             new FaqSearchTool(
                 $this->createConfigurationMock(),
                 $this->createMock(Search::class),
@@ -89,7 +87,6 @@ class McpSdkRuntimeTest extends TestCase
     public function testRunConsoleMethodAcceptsConsoleInterfaces(): void
     {
         $runtime = new McpSdkRuntime(
-            $this->createConfigurationMock(),
             new FaqSearchTool(
                 $this->createConfigurationMock(),
                 $this->createMock(Search::class),
@@ -112,7 +109,6 @@ class McpSdkRuntimeTest extends TestCase
     public function testImplementsMcpServerRuntimeInterface(): void
     {
         $runtime = new McpSdkRuntime(
-            $this->createConfigurationMock(),
             new FaqSearchTool(
                 $this->createConfigurationMock(),
                 $this->createMock(Search::class),
@@ -135,7 +131,6 @@ class McpSdkRuntimeTest extends TestCase
         ];
 
         $runtime = new McpSdkRuntime(
-            $this->createConfigurationMock(),
             new FaqSearchTool(
                 $this->createConfigurationMock(),
                 $this->createMock(Search::class),
@@ -155,7 +150,7 @@ class McpSdkRuntimeTest extends TestCase
 
         $search->method('search')->willThrowException(new \Exception('DB error'));
 
-        $runtime = new McpSdkRuntime($configuration, new FaqSearchTool($configuration, $search, $faq), [
+        $runtime = new McpSdkRuntime(new FaqSearchTool($configuration, $search, $faq), [
             'name' => 'phpMyFAQ MCP Server',
             'version' => '0.1.0-dev',
         ]);
@@ -175,7 +170,7 @@ class McpSdkRuntimeTest extends TestCase
         $search->expects($this->once())->method('setCategoryId')->with(3);
         $search->expects($this->once())->method('search')->with('install', true)->willReturn([]);
 
-        $runtime = new McpSdkRuntime($configuration, new FaqSearchTool($configuration, $search, $faq), [
+        $runtime = new McpSdkRuntime(new FaqSearchTool($configuration, $search, $faq), [
             'name' => 'phpMyFAQ MCP Server',
             'version' => '0.1.0-dev',
         ]);

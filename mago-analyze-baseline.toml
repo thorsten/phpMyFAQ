@@ -153,12 +153,6 @@ count = 2
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Backup.php"
 code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `RecursiveDirectoryIterator::__construct`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Backup.php"
-code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `ZipArchive::addFile`: expected `string`, but found `mixed`."
 count = 1
 
@@ -166,12 +160,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Administration/Backup.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `phpMyFAQ\Database\DatabaseHelper::alignTablePrefix`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Backup.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `strlen`: expected `string`, but found `mixed`."
 count = 1
 
 [[issues]]
@@ -190,12 +178,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Administration/Backup.php"
 code = "mixed-operand"
 message = "Invalid middle operand: type `mixed` cannot be reliably used in string concatenation."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Backup.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Administration\PMF_CONTENT_DIR`.'
 count = 2
 
 [[issues]]
@@ -646,30 +628,6 @@ count = 3
 file = "phpmyfaq/src/phpMyFAQ/Administration/Session.php"
 code = "less-specific-return-statement"
 message = '''Returned type `array<array-key, array{'ip': mixed, 'time': mixed}>` is less specific than the declared return type `array<int, array<array-key, string>>` for function `phpMyFAQ\Administration\Session::getSessionsByDate`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Session.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Administration\SessionRepository::countOnlineUsersFromSessions`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Session.php"
-code = "mixed-operand"
-message = "Left operand in binary operation has type `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Session.php"
-code = "mixed-operand"
-message = "Right operand in binary operation has type `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Session.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Administration\PMF_AUTH_TIMEOUT`.'
 count = 1
 
 [[issues]]
@@ -1346,44 +1304,8 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/AuthEntraId.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthEntraId.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthEntraId.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #5 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthEntraId.php"
 code = "mixed-method-access"
 message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthEntraId.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Auth\AAD_OAUTH_CLIENTID`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthEntraId.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Auth\AAD_OAUTH_SCOPE`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthEntraId.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Auth\AAD_OAUTH_TENANTID`.'
 count = 1
 
 [[issues]]
@@ -1887,12 +1809,6 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
 code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Auth\EntraId\JwksProvider::getKeys`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
-code = "mixed-argument"
 message = "Invalid argument type for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but found `nonnull`."
 count = 1
 
@@ -1931,30 +1847,6 @@ file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `phpMyFAQ\Auth\EntraId\OAuth::getOAuthToken`. Saw type `mixed`.'
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Auth\EntraId\AAD_OAUTH_CLIENTID`.'
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Auth\EntraId\AAD_OAUTH_SCOPE`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Auth\EntraId\AAD_OAUTH_SECRET`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Auth\EntraId\AAD_OAUTH_TENANTID`.'
-count = 5
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
@@ -2894,12 +2786,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/Image.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Category\PMF_CONTENT_DIR`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Image.php"
 code = "possibly-false-operand"
 message = "Left operand in `<` comparison might be `false` (type `false|int`)."
 count = 1
@@ -3643,12 +3529,6 @@ message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Configuration/ConfigurationRepository.php"
-code = "unused-property"
-message = "Property `$tableName` is never used."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Configuration/DatabaseConfiguration.php"
 code = "redundant-comparison"
 message = "Redundant `===` comparison: left-hand side is always identical to right-hand side."
@@ -3803,12 +3683,6 @@ file = "phpmyfaq/src/phpMyFAQ/ConfigurationMethodsTrait.php"
 code = "invalid-iterator"
 message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/ConfigurationMethodsTrait.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `Monolog\Handler\StreamHandler::__construct`: expected `resource|string`, but found `mixed`.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/ConfigurationMethodsTrait.php"
@@ -4088,12 +3962,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/ConfigurationMethodsTrait.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\PMF_LOG_DIR`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/ConfigurationMethodsTrait.php"
 code = "non-existent-property"
 message = 'Property `$config` does not exist on trait `phpMyFAQ\ConfigurationMethodsTrait`.'
 count = 46
@@ -4214,12 +4082,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/AbstractAdministrationController.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/AbstractAdministrationController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
@@ -4240,12 +4102,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/AbstractAdministrationController.php"
 code = "mixed-property-type-coercion"
 message = 'A value with a less specific type `mixed` is being assigned to property `$$adminLog` (null|phpMyFAQ\Administration\AdminLog).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/AbstractAdministrationController.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Controller\Administration\PMF_AUTH_TIMEOUT_WARNING`.'
 count = 1
 
 [[issues]]
@@ -4785,12 +4641,6 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ConfigurationTabController.php"
 code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Translation::setTranslationsDir`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ConfigurationTabController.php"
-code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `realpath`: expected `string`, but found `mixed`."
 count = 1
 
@@ -4805,12 +4655,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ConfigurationTabCont
 code = "mixed-operand"
 message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ConfigurationTabController.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Controller\Administration\Api\PMF_LANGUAGE_DIR`.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ConfigurationTabController.php"
@@ -5713,12 +5557,6 @@ message = "Invalid right operand: type `mixed` cannot be reliably used in string
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ImageController.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Controller\Administration\Api\PMF_CONTENT_DIR`.'
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
 code = "ambiguous-object-property-access"
 message = "Cannot statically verify property access on a generic `object` type."
@@ -5899,12 +5737,6 @@ message = "Casting `mixed` to `bool`."
 count = 5
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/LdapController.php"
-code = "unused-property"
-message = "Property `$ldap` is never used."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/MarkdownController.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `League\CommonMark\MarkdownConverter::convert`: expected `string`, but found `mixed`.'
@@ -5963,12 +5795,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/MediaBrowserControll
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`mixed`)."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/MediaBrowserController.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Controller\Administration\Api\PMF_CONTENT_DIR`.'
-count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/MediaBrowserController.php"
@@ -6512,39 +6338,15 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TagController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Tags::getAllTags`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TagController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 5
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TagController.php"
-code = "mixed-operand"
-message = "Right operand in `<=` comparison has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TagController.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`mixed`)."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TagController.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Controller\Administration\Api\PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TagController.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Controller\Administration\Api\PMF_TAGS_CLOUD_RESULT_SET_SIZE`.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TranslationController.php"
@@ -7621,12 +7423,6 @@ message = '''Invalid return type for function `phpMyFAQ\Controller\Administratio
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/NewsController.php"
-code = "unused-property"
-message = "Property `$comments` is never used."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/PageController.php"
 code = "invalid-return-statement"
 message = '''Invalid return type for function `phpMyFAQ\Controller\Administration\PageController::getBaseTemplateVars`: expected `array<string, string>`, but found `array{'ad_entry_active': array<array-key, string>|null|string, 'ad_menu_pages': array<array-key, string>|null|string, 'ad_page_add': array<array-key, string>|null|string, 'ad_page_add_translation': array<array-key, string>|null|string, 'ad_page_author_email': array<array-key, string>|null|string, 'ad_page_author_name': array<array-key, string>|null|string, 'ad_page_content': array<array-key, string>|null|string, 'ad_page_created': array<array-key, string>|null|string, 'ad_page_del': array<array-key, string>|null|string, 'ad_page_delete': array<array-key, string>|null|string, 'ad_page_delsuc': array<array-key, string>|null|string, 'ad_page_edit': array<array-key, string>|null|string, 'ad_page_existing_translations': array<array-key, string>|null|string, 'ad_page_insertfail': array<array-key, string>|null|string, 'ad_page_lang_cannot_change': array<array-key, string>|null|string, 'ad_page_no_available_languages': array<array-key, string>|null|string, 'ad_page_nodata': array<array-key, string>|null|string, 'ad_page_nodelete': array<array-key, string>|null|string, 'ad_page_original_language': array<array-key, string>|null|string, 'ad_page_select_translation_language': array<array-key, string>|null|string, 'ad_page_seo_description': array<array-key, string>|null|string, 'ad_page_seo_robots': array<array-key, string>|null|string, 'ad_page_seo_title': array<array-key, string>|null|string, 'ad_page_set_active': array<array-key, string>|null|string, 'ad_page_slug': array<array-key, string>|null|string, 'ad_page_slug_help': array<array-key, string>|null|string, 'ad_page_tab_content': array<array-key, string>|null|string, 'ad_page_tab_seo': array<array-key, string>|null|string, 'ad_page_tab_settings': array<array-key, string>|null|string, 'ad_page_title': array<array-key, string>|null|string, 'ad_page_translate': array<array-key, string>|null|string, 'ad_page_update': array<array-key, string>|null|string, 'ad_page_updated': array<array-key, string>|null|string, 'ad_page_updatesuc': array<array-key, string>|null|string, 'ad_page_yesdelete': array<array-key, string>|null|string, 'csrfToken_activatePage': string, 'csrfToken_deletePage': string, 'csrfToken_savePage': string, 'csrfToken_updatePage': string, 'defaultUrl': string, 'enableWysiwyg': mixed, 'msgCancel': array<array-key, string>|null|string, 'msgDeletePage': array<array-key, string>|null|string, 'msgLanguage': array<array-key, string>|null|string, 'msgPages': array<array-key, string>|null|string, 'permissionAddPage': bool, 'permissionDeletePage': bool, 'permissionEditPage': bool, 'selectLanguage': string}`.'''
@@ -7700,39 +7496,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/SessionKeepAliveController.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/SessionKeepAliveController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/SessionKeepAliveController.php"
-code = "mixed-operand"
-message = "Left operand in binary operation has type `mixed`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/SessionKeepAliveController.php"
-code = "mixed-operand"
-message = "Right operand in binary operation has type `mixed`."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/SessionKeepAliveController.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Controller\Administration\PMF_AUTH_TIMEOUT_WARNING`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/SessionKeepAliveController.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Controller\Administration\PMF_AUTH_TIMEOUT`.'
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/SessionKeepAliveController.php"
@@ -7780,12 +7546,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StatisticsSessionsController.php"
 code = "mixed-operand"
 message = "Right operand in binary operation has type `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StatisticsSessionsController.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Controller\Administration\PMF_CONTENT_DIR`.'
 count = 1
 
 [[issues]]
@@ -12022,19 +11782,13 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/TcpdfEngine.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/TcpdfEngine.php"
 code = "mixed-operand"
 message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/TcpdfEngine.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Export\Pdf\Engine\PMF_SRC_DIR`.'
-count = 1
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"
@@ -12482,18 +12236,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
-code = "mixed-operand"
-message = "Right operand in `<` comparison has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
-code = "mixed-operand"
-message = "Right operand in binary operation has type `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`mixed`)."
 count = 1
@@ -12526,19 +12268,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `phpMyFAQ\Faq\FaqRepository::getNextSolutionId`. Saw type `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Faq\PMF_SOLUTION_ID_INCREMENT_VALUE`.'
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Faq\PMF_SOLUTION_ID_START_VALUE`.'
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
@@ -12747,30 +12477,6 @@ count = 2
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
 code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Faq\Statistics::getLatestData`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Faq\Statistics::getTopTenData`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Faq\Statistics::getTopVotedData`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Faq\Statistics::getTrendingData`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `phpMyFAQ\Link::setTitle`: expected `string`, but found `mixed`.'
 count = 4
 
@@ -12845,24 +12551,6 @@ file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `phpMyFAQ\Faq\Statistics::getTopTenData`. Saw type `mixed`.'
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Faq\PMF_NUMBER_RECORDS_LATEST`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Faq\PMF_NUMBER_RECORDS_TOPTEN`.'
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Faq\PMF_NUMBER_RECORDS_TRENDING`.'
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
@@ -13613,12 +13301,6 @@ file = "phpmyfaq/src/phpMyFAQ/Helper/StatisticsHelper.php"
 code = "mixed-operand"
 message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
 count = 7
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/StatisticsHelper.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Helper\PMF_CONTENT_DIR`.'
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Helper/StatisticsHelper.php"
@@ -14378,30 +14060,6 @@ count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance/Search/OpenSearch.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Instance\Search\PMF_OPENSEARCH_NUMBER_REPLICAS`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Search/OpenSearch.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Instance\Search\PMF_OPENSEARCH_NUMBER_SHARDS`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Search/OpenSearch.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Instance\Search\PMF_OPENSEARCH_STEMMING_LANGUAGE`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Search/OpenSearch.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Instance\Search\PMF_OPENSEARCH_TOKENIZER`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Search/OpenSearch.php"
 code = "possibly-invalid-argument"
 message = '''Possible argument type mismatch for argument #1 of `OpenSearch\Client::delete`: expected `array{'error_trace'?: bool, 'filter_path'?: mixed, 'human'?: bool, 'id'?: string, 'if_primary_term'?: int, 'if_seq_no'?: int, 'index'?: string, 'pretty'?: bool, 'refresh'?: mixed, 'routing'?: mixed, 'source'?: string, 'timeout'?: string, 'version'?: int, 'version_type'?: mixed, 'wait_for_active_shards'?: mixed}`, but possibly received `array{'id': int, 'index': string}`.'''
 count = 1
@@ -14437,18 +14095,6 @@ message = "Invalid argument type for argument #2 of `implode`: expected `array<a
 count = 2
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Setup.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Instance\Setup::setRootDir`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Setup.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Instance\PMF_SRC_DIR`.'
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Kernel.php"
 code = "invalid-return-statement"
 message = 'Invalid return type for function `phpMyFAQ\Kernel::getContainer`: expected `Symfony\Component\DependencyInjection\ContainerInterface`, but found `Symfony\Component\DependencyInjection\ContainerBuilder|null`.'
@@ -14459,12 +14105,6 @@ file = "phpmyfaq/src/phpMyFAQ/Kernel.php"
 code = "less-specific-argument"
 message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Routing\RouteCollectionBuilder::__construct`: expected `null|phpMyFAQ\Configuration`, but provided type `null|object` is less specific.'
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Kernel.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `Symfony\Component\Config\FileLocator::__construct`: expected `array<array-key, string>|string`, but found `mixed`.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Kernel.php"
@@ -14506,12 +14146,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Kernel.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `phpMyFAQ\Kernel::handle`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Kernel.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\PMF_SRC_DIR`.'
 count = 1
 
 [[issues]]
@@ -16490,12 +16124,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Routing/RouteCollectionBuilder.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Routing\PMF_SRC_DIR`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Routing/RouteCollectionBuilder.php"
 code = "unused-property"
 message = "Property `$configuration` is never used."
 count = 1
@@ -16592,21 +16220,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "mixed-operand"
-message = "Right operand in `>=` comparison has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`mixed`)."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\PMF_SOLUTION_ID_START_VALUE`.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
@@ -17169,12 +16785,6 @@ count = 10
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/SearchService.php"
 code = "mixed-operand"
-message = "Left operand in `<=` comparison has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/SearchService.php"
-code = "mixed-operand"
 message = "Left operand in `>` comparison has `mixed` type."
 count = 1
 
@@ -17195,12 +16805,6 @@ file = "phpmyfaq/src/phpMyFAQ/Search/SearchService.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`mixed`)."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/SearchService.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Search\PMF_SOLUTION_ID_START_VALUE`.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Seo.php"
@@ -17377,12 +16981,6 @@ message = 'Could not infer a precise return type for function `phpMyFAQ\Service\
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Service/McpServer/McpSdkRuntime.php"
-code = "unused-property"
-message = "Property `$configuration` is never used."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Service/McpServer/PhpMyFaqMcpServer.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
@@ -17392,12 +16990,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Service/McpServer/PhpMyFaqMcpServer.php"
 code = "uninitialized-property"
 message = 'Property `$runtime` may not be initialized when returning from constructor of class `phpMyFAQ\Service\McpServer\PhpMyFaqMcpServer`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Session/Token.php"
-code = "invalid-constant-value"
-message = 'Value for constant `phpMyFAQ\Session\Token::PMF_SESSION_EXPIRY` is not assignable to its declared type.'
 count = 1
 
 [[issues]]
@@ -17420,12 +17012,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Session/Token.php"
-code = "mixed-operand"
-message = "Left operand in binary operation has type `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Session/Token.php"
 code = "mixed-property-type-coercion"
 message = "A value with a less specific type `mixed` is being assigned to property `$$cookieToken` (null|string)."
 count = 1
@@ -17434,12 +17020,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Session/Token.php"
 code = "mixed-property-type-coercion"
 message = "A value with a less specific type `mixed` is being assigned to property `$$sessionToken` (null|string)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Session/Token.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Session\PMF_AUTH_TIMEOUT`.'
 count = 1
 
 [[issues]]
@@ -17558,12 +17138,6 @@ count = 9
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationInputValidator.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Setup\PMF_SRC_DIR`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationInputValidator.php"
 code = "possibly-invalid-array-access"
 message = "Cannot perform array access on value of type `bool`."
 count = 2
@@ -17585,12 +17159,6 @@ file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationRunner.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationRunner.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Setup\PMF_SRC_DIR`.'
-count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationRunner.php"
@@ -18386,12 +17954,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Setup\PMF_CONTENT_DIR`.'
-count = 9
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
 code = "possibly-false-operand"
 message = "Possibly false left operand used in string concatenation (type `false|string`)."
 count = 1
@@ -18485,12 +18047,6 @@ file = "phpmyfaq/src/phpMyFAQ/StopWords.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/StopWords.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\PMF_SRC_DIR`.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/StopWords.php"
@@ -18814,12 +18370,6 @@ count = 9
 file = "phpmyfaq/src/phpMyFAQ/Tags.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `phpMyFAQ\Tags::getTagNameById`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Tags.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\PMF_TAGS_CLOUD_RESULT_SET_SIZE`.'
 count = 1
 
 [[issues]]
@@ -19606,12 +19156,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `phpMyFAQ\User\CurrentUser::sessionAge`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\User\PMF_AUTH_TIMEOUT`.'
 count = 1
 
 [[issues]]

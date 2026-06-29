@@ -65,7 +65,6 @@ class PhpMyFaqMcpServer implements McpServerRuntimeInterface
     private function initializeServer(?McpServerRuntimeInterface $runtime = null): void
     {
         $this->runtime = $runtime ?? new McpSdkRuntime(
-            $this->configuration,
             new FaqSearchTool($this->configuration, $this->search, $this->faq),
             $this->createServerInfo(),
         );
