@@ -12676,7 +12676,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
 code = "ambiguous-object-property-access"
 message = "Cannot statically verify property access on a generic `object` type."
-count = 66
+count = 93
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
@@ -12686,15 +12686,15 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `ceil`: expected `float|int`, but found `mixed`."
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Faq\FaqRepository::fetchAllFaqs`: expected `array<string, mixed>|null`, but provided type `array<array-key, mixed>|null` is less specific.'
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
 code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Database\DatabaseDriver::escape`: expected `string`, but found `mixed`.'
-count = 2
+message = "Invalid argument type for argument #1 of `ceil`: expected `float|int`, but found `mixed`."
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
@@ -12754,7 +12754,7 @@ count = 7
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 28
+count = 22
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
@@ -12796,7 +12796,7 @@ count = 6
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`nonnull`)."
-count = 59
+count = 32
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
@@ -12980,9 +12980,15 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `phpMyFAQ\Database\DatabaseDriver::escape`: expected `string`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 23
+count = 25
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"

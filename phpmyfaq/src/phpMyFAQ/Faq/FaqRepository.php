@@ -542,6 +542,182 @@ final class FaqRepository implements FaqRepositoryInterface
         return $this->fetchAllRows($this->configuration->getDb()->query($query));
     }
 
+    public function fetchStickyFaqs(int $userId, array $groups, bool $groupSupport): array
+    {
+        $queryHelper = new QueryHelper($userId, $groups);
+        $query = sprintf(
+            "
+            SELECT
+                fd.id AS id,
+                fd.lang AS lang,
+                fd.thema AS thema,
+                fd.sticky_order AS sticky_order,
+                fcr.category_id AS category_id,
+                fv.visits AS visits
+            FROM
+                %sfaqdata fd
+            LEFT JOIN
+                %sfaqvisits fv
+            ON
+                fd.id = fv.id
+            AND
+                fd.lang = fv.lang
+            LEFT JOIN
+                %sfaqcategoryrelations fcr
+            ON
+                fd.id = fcr.record_id
+            AND
+                fd.lang = fcr.record_lang
+            LEFT JOIN
+                %sfaqdata_group AS fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                %sfaqdata_user AS fdu
+            ON
+                fd.id = fdu.record_id
+            WHERE
+                fd.lang = '%s'
+            AND
+                fd.active = 'yes'
+            AND
+                fd.sticky = 1
+            %s
+            GROUP BY
+                fd.id, fd.lang, fd.thema, fcr.category_id, fv.visits
+            ORDER BY
+                fv.visits DESC",
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
+            $queryHelper->queryPermission($groupSupport),
+        );
+
+        return $this->fetchAllRows($this->configuration->getDb()->query($query));
+    }
+
+    public function fetchAllFaqs(
+        ?array $condition,
+        string $orderBy,
+        int $userId,
+        array $groups,
+        bool $groupSupport,
+    ): array {
+        $where = $this->buildConditionWhereClause($condition);
+
+        // prevents multiple display of FAQ in case it is tagged under multiple groups.
+        $groupBy =
+            ' group by fd.id, fcr.category_id,fd.solution_id,fd.revision_id,fd.active,fd.sticky,fd.keywords,'
+            . 'fd.thema,fd.content,fd.author,fd.email,fd.comment,fd.updated,'
+            . 'fd.date_start,fd.date_end,fd.sticky,fd.created,fd.notes,fd.lang ';
+        $queryHelper = new QueryHelper($userId, $groups);
+        $query = sprintf(
+            '
+            SELECT
+                fd.id AS id,
+                fd.lang AS lang,
+                fcr.category_id AS category_id,
+                fd.solution_id AS solution_id,
+                fd.revision_id AS revision_id,
+                fd.active AS active,
+                fd.sticky AS sticky,
+                fd.keywords AS keywords,
+                fd.thema AS thema,
+                fd.content AS content,
+                fd.author AS author,
+                fd.email AS email,
+                fd.comment AS comment,
+                fd.updated AS updated,
+                fd.date_start AS date_start,
+                fd.date_end AS date_end,
+                fd.sticky AS sticky,
+                fd.created AS created,
+                fd.notes AS notes
+            FROM
+                %sfaqdata fd
+            LEFT JOIN
+                %sfaqcategoryrelations fcr
+            ON
+                fd.id = fcr.record_id
+            AND
+                fd.lang = fcr.record_lang
+            LEFT JOIN
+                %sfaqdata_group AS fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                %sfaqdata_user AS fdu
+            ON
+                fd.id = fdu.record_id
+            %s
+            %s
+            %s
+            %s',
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            $where,
+            $queryHelper->queryPermission($groupSupport),
+            $groupBy,
+            $orderBy,
+        );
+
+        return $this->fetchAllRows($this->configuration->getDb()->query($query));
+    }
+
+    /**
+     * Builds the WHERE clause for getAllFaqs() from a field => condition map, escaping values.
+     *
+     * @param array<string, mixed>|null $condition
+     */
+    private function buildConditionWhereClause(?array $condition): string
+    {
+        if ($condition === null) {
+            return '';
+        }
+
+        $condition = array_filter($condition, static fn($value): bool => $value !== null);
+
+        $num = count($condition);
+        $where = 'WHERE ';
+        foreach ($condition as $field => $data) {
+            --$num;
+            $where .= $field;
+            if (is_array($data)) {
+                $where .= ' IN (';
+                $separator = '';
+                foreach ($data as $value) {
+                    $where .= $separator . "'" . $this->configuration->getDb()->escape($value) . "'";
+                    $separator = ', ';
+                }
+
+                $where .= ')';
+            }
+
+            if (!is_array($data) && $data === 'IS NOT NULL') {
+                $where .= ' IS NOT NULL';
+            }
+
+            if (!is_array($data) && $data === 'IS NULL') {
+                $where .= ' IS NULL';
+            }
+
+            if (!is_array($data) && $data !== 'IS NOT NULL' && $data !== 'IS NULL') {
+                $where .= " = '" . $this->configuration->getDb()->escape($data) . "'";
+            }
+
+            if ($num > 0) {
+                $where .= ' AND ';
+            }
+        }
+
+        return $where;
+    }
+
     /**
      * Collects every row of a database result into an array of objects.
      *

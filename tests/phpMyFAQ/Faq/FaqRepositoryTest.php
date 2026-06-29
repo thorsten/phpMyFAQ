@@ -69,18 +69,20 @@ class FaqRepositoryTest extends TestCase
         int $categoryId = 1,
         string $lang = 'en',
         int $userId = -1,
+        int $sticky = 0,
     ): void {
         $database = $this->configuration->getDb();
         $prefix = Database::getTablePrefix();
 
         $database->query(sprintf(
             "INSERT INTO %sfaqdata (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end, created, notes, sticky_order)
-             VALUES (%d, '%s', %d, 0, '%s', 0, '%s', '%s', 'Answer', 'Author', 'author@example.com', 'y', '20260301010101', '00000000000000', '99991231235959', '2026-03-01 01:01:01', '', 0)",
+             VALUES (%d, '%s', %d, 0, '%s', %d, '%s', '%s', 'Answer', 'Author', 'author@example.com', 'y', '20260301010101', '00000000000000', '99991231235959', '2026-03-01 01:01:01', '', 0)",
             $prefix,
             $id,
             $lang,
             $solutionId,
             $active,
+            $sticky,
             $database->escape($keywords),
             $database->escape($question),
         ));
@@ -262,5 +264,39 @@ class FaqRepositoryTest extends TestCase
     public function testFetchFaqsByIdsReturnsEmptyArrayWhenNoneMatch(): void
     {
         $this->assertSame([], $this->faqRepository->fetchFaqsByIds('999999', true, -1, [-1], false));
+    }
+
+    public function testFetchStickyFaqsReturnsActiveStickyRows(): void
+    {
+        $this->seedFaqRecord(id: 5040, solutionId: 7300, question: 'Sticky FAQ', sticky: 1);
+        $this->seedFaqRecord(id: 5041, solutionId: 7310, question: 'Non-sticky FAQ', sticky: 0);
+
+        $rows = $this->faqRepository->fetchStickyFaqs(-1, [-1], false);
+
+        $ids = array_map(static fn(object $row): int => (int) $row->id, $rows);
+        $this->assertContains(5040, $ids);
+        $this->assertNotContains(5041, $ids);
+    }
+
+    public function testFetchAllFaqsReturnsRows(): void
+    {
+        $this->seedFaqRecord(id: 5042, solutionId: 7320, question: 'All FAQ');
+
+        $rows = $this->faqRepository->fetchAllFaqs(null, '', -1, [-1], false);
+
+        $ids = array_map(static fn(object $row): int => (int) $row->id, $rows);
+        $this->assertContains(5042, $ids);
+    }
+
+    public function testFetchAllFaqsAppliesConditionFilter(): void
+    {
+        $this->seedFaqRecord(id: 5043, solutionId: 7330, question: 'Wanted');
+        $this->seedFaqRecord(id: 5044, solutionId: 7340, question: 'Unwanted');
+
+        $rows = $this->faqRepository->fetchAllFaqs(['fd.id' => '5043'], '', -1, [-1], false);
+
+        $ids = array_map(static fn(object $row): int => (int) $row->id, $rows);
+        $this->assertContains(5043, $ids);
+        $this->assertNotContains(5044, $ids);
     }
 }

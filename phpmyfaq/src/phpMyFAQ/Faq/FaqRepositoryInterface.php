@@ -136,4 +136,29 @@ interface FaqRepositoryInterface
         array $groups,
         bool $groupSupport,
     ): array;
+
+    /**
+     * Fetches the active sticky FAQs of the current language ordered by visits, filtered by
+     * permissions. Returns the raw rows.
+     *
+     * @param int[] $groups
+     * @return object[]
+     */
+    public function fetchStickyFaqs(int $userId, array $groups, bool $groupSupport): array;
+
+    /**
+     * Fetches all FAQs matching an optional field => condition map, with the given (already
+     * validated) ORDER BY clause and filtered by permissions. Returns the raw rows.
+     *
+     * @param array<string, mixed>|null $condition
+     * @param int[]                     $groups
+     * @return object[]
+     */
+    public function fetchAllFaqs(
+        ?array $condition,
+        string $orderBy,
+        int $userId,
+        array $groups,
+        bool $groupSupport,
+    ): array;
 }
