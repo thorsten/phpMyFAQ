@@ -55,7 +55,9 @@ class FaqTwigExtensionTest extends TestCase
         // Configuration singleton from an earlier test can hold a stale SQLite handle
         // that fails with "disk I/O error" once another test reopens test.db, so reset
         // the singleton and reconnect to keep these tests independent of execution order.
-        (new ReflectionClass(Configuration::class))->getProperty('configuration')->setValue(null, null);
+        new ReflectionClass(Configuration::class)
+            ->getProperty('configuration')
+            ->setValue(null, null);
 
         Database::setTablePrefix('');
 

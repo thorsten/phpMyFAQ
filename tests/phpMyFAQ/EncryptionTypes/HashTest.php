@@ -67,18 +67,12 @@ class HashTest extends TestCase
     {
         $password = 'repeatablePassword';
 
-        $this->assertSame(
-            $this->hash->encrypt($password),
-            $this->hash->encrypt($password)
-        );
+        $this->assertSame($this->hash->encrypt($password), $this->hash->encrypt($password));
     }
 
     public function testDifferentPasswordsProduceDifferentHashes(): void
     {
-        $this->assertNotSame(
-            $this->hash->encrypt('password123'),
-            $this->hash->encrypt('password456')
-        );
+        $this->assertNotSame($this->hash->encrypt('password123'), $this->hash->encrypt('password456'));
     }
 
     public function testEncryptUsesSalt(): void
@@ -90,10 +84,7 @@ class HashTest extends TestCase
         $this->hash->setSalt($login);
 
         // The salt is "security.salt" value concatenated with the login.
-        $this->assertSame(
-            hash('sha256', $password . 's3cr3tSalt' . $login),
-            $this->hash->encrypt($password)
-        );
+        $this->assertSame(hash('sha256', $password . 's3cr3tSalt' . $login), $this->hash->encrypt($password));
     }
 
     public function testSaltChangesTheResultingHash(): void

@@ -471,7 +471,9 @@ final class UpdateControllerTest extends TestCase
         $csrf = $this->createValidUpdatePackageToken($session);
 
         $response = $controller->downloadPackage(
-            new Request([], [], ['versionNumber' => '4.1.0'], [], [], [], json_encode(['csrf' => $csrf], JSON_THROW_ON_ERROR)),
+            new Request([], [], ['versionNumber' => '4.1.0'], [], [], [], json_encode([
+                'csrf' => $csrf,
+            ], JSON_THROW_ON_ERROR)),
         );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
@@ -502,7 +504,9 @@ final class UpdateControllerTest extends TestCase
         $csrf = $this->createValidUpdatePackageToken($session);
 
         $response = $controller->downloadPackage(
-            new Request([], [], ['versionNumber' => '4.1.0'], [], [], [], json_encode(['csrf' => $csrf], JSON_THROW_ON_ERROR)),
+            new Request([], [], ['versionNumber' => '4.1.0'], [], [], [], json_encode([
+                'csrf' => $csrf,
+            ], JSON_THROW_ON_ERROR)),
         );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
@@ -533,7 +537,9 @@ final class UpdateControllerTest extends TestCase
         $csrf = $this->createValidUpdatePackageToken($session);
 
         $response = $controller->downloadPackage(
-            new Request([], [], ['versionNumber' => 'nightly'], [], [], [], json_encode(['csrf' => $csrf], JSON_THROW_ON_ERROR)),
+            new Request([], [], ['versionNumber' => 'nightly'], [], [], [], json_encode([
+                'csrf' => $csrf,
+            ], JSON_THROW_ON_ERROR)),
         );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 

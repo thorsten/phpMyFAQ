@@ -83,10 +83,10 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
         self::assertInstanceOf(Configuration::class, $configuration);
 
         $db = $configuration->getDb();
-        $db->query(sprintf("DELETE FROM faqcategory_group WHERE category_id = %d", $id));
-        $db->query(sprintf("DELETE FROM faqcategory_user WHERE category_id = %d", $id));
-        $db->query(sprintf("INSERT INTO faqcategory_group (category_id, group_id) VALUES (%d, -1)", $id));
-        $db->query(sprintf("INSERT INTO faqcategory_user (category_id, user_id) VALUES (%d, -1)", $id));
+        $db->query(sprintf('DELETE FROM faqcategory_group WHERE category_id = %d', $id));
+        $db->query(sprintf('DELETE FROM faqcategory_user WHERE category_id = %d', $id));
+        $db->query(sprintf('INSERT INTO faqcategory_group (category_id, group_id) VALUES (%d, -1)', $id));
+        $db->query(sprintf('INSERT INTO faqcategory_user (category_id, user_id) VALUES (%d, -1)', $id));
     }
 
     private function seedFaqForCategory(int $faqId, int $categoryId, string $question): void

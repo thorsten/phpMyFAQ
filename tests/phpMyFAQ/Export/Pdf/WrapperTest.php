@@ -477,9 +477,11 @@ class WrapperTest extends TestCase
     {
         $engine = $this->createMock(PdfEngineInterface::class);
         $resolver = null;
-        $engine->method('onImageResolve')->willReturnCallback(function (callable $cb) use (&$resolver): void {
-            $resolver = $cb;
-        });
+        $engine
+            ->method('onImageResolve')
+            ->willReturnCallback(function (callable $cb) use (&$resolver): void {
+                $resolver = $cb;
+            });
 
         new Wrapper($engine);
 
@@ -641,15 +643,19 @@ class WrapperTest extends TestCase
     {
         $engine = $this->createMock(PdfEngineInterface::class);
         $headerRenderer = null;
-        $engine->method('onHeader')->willReturnCallback(function (callable $cb) use (&$headerRenderer): void {
-            $headerRenderer = $cb;
-        });
+        $engine
+            ->method('onHeader')
+            ->willReturnCallback(function (callable $cb) use (&$headerRenderer): void {
+                $headerRenderer = $cb;
+            });
 
         $config = $this->createStub(Configuration::class);
-        $config->method('get')->willReturnCallback(static fn(string $key) => match ($key) {
-            'main.customPdfHeader' => '<b>Custom Header</b>',
-            default => '',
-        });
+        $config
+            ->method('get')
+            ->willReturnCallback(static fn(string $key) => match ($key) {
+                'main.customPdfHeader' => '<b>Custom Header</b>',
+                default => '',
+            });
 
         $wrapper = new Wrapper($engine);
         $wrapper->setConfig($config);
@@ -669,9 +675,11 @@ class WrapperTest extends TestCase
     {
         $engine = $this->createMock(PdfEngineInterface::class);
         $headerRenderer = null;
-        $engine->method('onHeader')->willReturnCallback(function (callable $cb) use (&$headerRenderer): void {
-            $headerRenderer = $cb;
-        });
+        $engine
+            ->method('onHeader')
+            ->willReturnCallback(function (callable $cb) use (&$headerRenderer): void {
+                $headerRenderer = $cb;
+            });
         $engine->method('getLastH')->willReturn(10.0);
 
         $config = $this->createStub(Configuration::class);

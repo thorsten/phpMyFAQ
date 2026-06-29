@@ -121,7 +121,7 @@ function canReusePreparedTestDatabase(string $databasePath, string $databaseConf
         }
 
         $existingTables = $statement->fetchAll(\PDO::FETCH_COLUMN);
-        $expectedTables = (new DatabaseSchema(new SqliteDialect()))->getTableNames();
+        $expectedTables = new DatabaseSchema(new SqliteDialect())->getTableNames();
 
         // The prepared database is reusable only when every table the current schema
         // defines is present. Any missing table means the schema has advanced since the
@@ -193,7 +193,7 @@ if (!canReusePreparedTestDatabase($testDbAlias, $databaseConfigFile)) {
     // closed and its lock released before any test runs.
     //
     unset($installer);
-    (new ReflectionProperty(Configuration::class, 'configuration'))->setValue(null, null);
+    new ReflectionProperty(Configuration::class, 'configuration')->setValue(null, null);
     gc_collect_cycles();
 }
 
