@@ -332,16 +332,18 @@ class Faq
     }
 
     /**
-     * This function returns all not expired records from the given record ids.
+     * Returns the search-result view model for the given, not-expired record ids: a list of
+     * objects carrying the FAQ link, the (chopped) question and an answer preview. The markup
+     * is rendered by search.twig, so this method only builds data.
      *
      * @param int[]  $faqIds Array of record ids
      * @param string $orderBy Order by
      * @param string $sortBy Sort by
      * @param bool   $usePagination Whether to use internal pagination
+     * @return stdClass[]
      * @throws CommonMarkException
-     * @todo this method needs to be refactored, parts of it should be moved to a Twig template
      */
-    public function renderFaqsByFaqIds(
+    public function getFaqsDataByIds(
         array $faqIds,
         string $orderBy = 'fd.id',
         string $sortBy = 'ASC',

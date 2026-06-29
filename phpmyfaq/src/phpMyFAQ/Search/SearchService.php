@@ -224,7 +224,7 @@ final class SearchService
             $first = ($page - 1) * $confPerPage;
             $paginatedRecordIds = array_slice($recordIds, $first, $confPerPage);
 
-            $searchResults = $this->faq->renderFaqsByFaqIds($paginatedRecordIds, 'fd.id', 'ASC', false);
+            $searchResults = $this->faq->getFaqsDataByIds($paginatedRecordIds, 'fd.id', 'ASC', false);
         }
 
         // Set base URL scheme for tag search

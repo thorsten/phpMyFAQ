@@ -416,7 +416,7 @@ class FaqTest extends TestCase
                 "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES (92, 'en', 5009, 'en')",
             );
 
-        $results = $this->faq->renderFaqsByFaqIds([5009], usePagination: false);
+        $results = $this->faq->getFaqsDataByIds([5009], usePagination: false);
 
         $this->assertCount(1, $results);
         $this->assertSame('Duplicate FAQ', trim($results[0]->question));

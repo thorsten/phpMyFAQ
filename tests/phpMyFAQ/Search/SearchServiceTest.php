@@ -428,7 +428,7 @@ class SearchServiceTest extends TestCase
         $tags->method('getPopularTags')->willReturn([]);
 
         $faq = $this->createMock(Faq::class);
-        $faq->expects($this->once())->method('renderFaqsByFaqIds')->with([1], 'fd.id', 'ASC', false)->willReturn([]);
+        $faq->expects($this->once())->method('getFaqsDataByIds')->with([1], 'fd.id', 'ASC', false)->willReturn([]);
 
         $reflection = new \ReflectionClass($searchService);
         $tagsProperty = $reflection->getProperty('tags');
