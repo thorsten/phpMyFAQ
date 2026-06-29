@@ -1,0 +1,9 @@
+{% if pages > 1 %}
+<p>{{ msgPage }} <strong>{{ page }}</strong> {{ msgVoteFrom }} <strong>{{ pages }}</strong> {{ msgPages }}</p>
+{% endif %}
+<ul class="list-group list-group-flush mb-4 pmf-category-faq-list">
+{%- for item in items %}
+<li class="list-group-item d-flex justify-content-between align-items-start {{ item.sticky ? 'list-group-item-primary rounded mb-3' : '' }}"><div class="ms-2 me-auto"><div class="fw-bold">{{ item.anchor | raw }}</div><div class="small">{{ item.preview }}</div></div><span id="viewsPerRecord" class="badge text-bg-primary rounded-pill">{{ item.views }}</span></li>
+{%- endfor %}
+</ul>
+{{ pagination | raw }}

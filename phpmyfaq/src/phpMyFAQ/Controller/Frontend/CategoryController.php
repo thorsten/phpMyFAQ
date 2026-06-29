@@ -213,11 +213,17 @@ class CategoryController extends AbstractFrontController
      */
     private function getFaqRecords(Faq $faq, int $categoryId): string
     {
-        return $faq->renderFaqsByCategoryId(
+        $faqListData = $faq->getFaqsDataByCategoryId(
             $categoryId,
             $this->configuration->get('records.orderby'),
             $this->configuration->get('records.sortby'),
         );
+
+        if ($faqListData['items'] === []) {
+            return '';
+        }
+
+        return $this->renderView('category-faq-list.twig', $faqListData);
     }
 
     /**

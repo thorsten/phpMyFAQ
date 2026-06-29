@@ -218,7 +218,7 @@ class FaqTest extends TestCase
         $this->assertEquals(42, (int) $this->faq->faqRecord['solution_id']);
     }
 
-    public function testRenderFaqsByCategoryIdRendersFaqListAndPagination(): void
+    public function testGetFaqsDataByCategoryIdReturnsPaginatedItemsAndMetadata(): void
     {
         $this->configuration->set('records.numberOfRecordsPerPage', 1);
         $this->setConfigurationValue('records.numberOfRecordsPerPage', 1);
@@ -243,19 +243,19 @@ class FaqTest extends TestCase
         $_GET['seite'] = '1';
 
         try {
-            $output = $this->faq->renderFaqsByCategoryId(1);
+            $data = $this->faq->getFaqsDataByCategoryId(1);
         } finally {
             unset($_GET['seite']);
         }
 
-        $this->assertStringContainsString(
-            '<ul class="list-group list-group-flush mb-4 pmf-category-faq-list">',
-            $output,
-        );
-        $this->assertStringContainsString('Rendered FAQ One', $output);
-        $this->assertStringContainsString('/content/1/5020/en/rendered-faq-one.html', $output);
-        $this->assertStringContainsString('list-group-item', $output);
-        $this->assertStringContainsString((string) Translation::get(key: 'msgPage'), $output);
+        // One FAQ per page, two FAQs in the category -> two pages, first page shows one item.
+        $this->assertSame(1, $data['page']);
+        $this->assertSame(2, $data['pages']);
+        $this->assertCount(1, $data['items']);
+        $this->assertStringContainsString('Rendered FAQ One', $data['items'][0]['anchor']);
+        $this->assertStringContainsString('/content/1/5020/en/rendered-faq-one.html', $data['items'][0]['anchor']);
+        $this->assertNotSame('', $data['pagination']);
+        $this->assertSame(Translation::get(key: 'msgPage'), $data['msgPage']);
     }
 
     public function testGetFaqReturnsInactiveMessageForFrontendAndRawContentForAdmin(): void

@@ -9915,6 +9915,12 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/CategoryController.php"
 code = "less-specific-nested-argument-type"
+message = 'Argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::renderView`: expected `array<string, array<non-negative-int, array<string, mixed>>>`, but provided type `array<string, mixed>` is less specific.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/CategoryController.php"
+code = "less-specific-nested-argument-type"
 message = 'Argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::render`: expected `array<array-key, string>`, but provided type `array<string, mixed>` is less specific.'
 count = 2
 
@@ -9939,7 +9945,7 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/CategoryController.php"
 code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Faq::renderFaqsByCategoryId`: expected `string`, but found `mixed`.'
+message = 'Invalid argument type for argument #2 of `phpMyFAQ\Faq::getFaqsDataByCategoryId`: expected `string`, but found `mixed`.'
 count = 1
 
 [[issues]]
@@ -9951,7 +9957,7 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/CategoryController.php"
 code = "mixed-argument"
-message = 'Invalid argument type for argument #3 of `phpMyFAQ\Faq::renderFaqsByCategoryId`: expected `string`, but found `mixed`.'
+message = 'Invalid argument type for argument #3 of `phpMyFAQ\Faq::getFaqsDataByCategoryId`: expected `string`, but found `mixed`.'
 count = 1
 
 [[issues]]
@@ -12693,12 +12699,6 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
 code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `ceil`: expected `float|int`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq.php"
-code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `phpMyFAQ\Date::createIsoDate`: expected `string`, but found `mixed`.'
 count = 4
 
@@ -12730,7 +12730,7 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 7
+count = 6
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
@@ -12748,7 +12748,13 @@ count = 7
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 22
+count = 21
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Faq.php"
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
@@ -12772,7 +12778,7 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
 code = "mixed-operand"
 message = "Right operand in `<` comparison has `mixed` type."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
@@ -12784,7 +12790,7 @@ count = 3
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
 code = "mixed-operand"
 message = "Right operand in binary operation has type `mixed`."
-count = 6
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
@@ -12826,24 +12832,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `phpMyFAQ\Faq::sortStickyArrayByOrder`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|null|string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #4 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|null|string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #6 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|null|string`."
 count = 1
 
 [[issues]]

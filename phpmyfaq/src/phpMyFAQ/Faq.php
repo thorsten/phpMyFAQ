@@ -200,18 +200,21 @@ class Faq
     }
 
     /**
-     * This function returns all not expired records from one category.
+     * Returns the data needed to render the FAQ list of a category: pagination metadata, the
+     * paginated items (each with its rendered link anchor, answer preview, views label and
+     * sticky flag) and the pre-rendered pagination control. The markup itself lives in the
+     * category-faq-list.twig template.
      *
      * @param int    $categoryId Entity ID
      * @param string $orderBy    Order by
      * @param string $sortBy     Sort by
-     * @todo this method needs to be refactored, parts of it should be moved to a Twig template
+     * @return array<string, mixed>
+     * @throws Exception|CommonMarkException
      */
-    public function renderFaqsByCategoryId(int $categoryId, string $orderBy = 'id', string $sortBy = 'ASC'): string
+    public function getFaqsDataByCategoryId(int $categoryId, string $orderBy = 'id', string $sortBy = 'ASC'): array
     {
-        $numPerPage = $this->configuration->get(item: 'records.numberOfRecordsPerPage');
+        $numPerPage = (int) $this->configuration->get(item: 'records.numberOfRecordsPerPage');
         $page = Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
-        $output = '';
         $title = '';
         [$currentTable, $orderColumn] = $this->normalizeCategoryOrder($orderBy);
         $sortDirection = $this->normalizeSortDirection($sortBy);
@@ -231,20 +234,8 @@ class Faq
 
         $first = $page === 1 ? 0 : ($page * $numPerPage) - $numPerPage;
 
+        $items = [];
         if ($num > 0) {
-            if ($pages > 1) {
-                $output .= sprintf(
-                    '<p>%s <strong>%d</strong> %s <strong>%d</strong> %s</p>',
-                    Translation::get(key: 'msgPage'),
-                    $page,
-                    Translation::get(key: 'msgVoteFrom'),
-                    $pages,
-                    Translation::get(key: 'msgPages'),
-                );
-            }
-
-            $output .= '<ul class="list-group list-group-flush mb-4 pmf-category-faq-list">';
-
             $counter = 0;
             $displayedCounter = 0;
             $renderedItems = [];
@@ -284,19 +275,12 @@ class Faq
                     $row->sticky = 0;
                 }
 
-                $renderedItems[$row->id] = sprintf(
-                    '<li class="list-group-item d-flex justify-content-between align-items-start %s">',
-                    $row->sticky ? 'list-group-item-primary rounded mb-3' : '',
-                );
-                $renderedItems[$row->id] .= sprintf(
-                    '<div class="ms-2 me-auto"><div class="fw-bold">%s</div><div class="small">%s</div></div>',
-                    $oLink->toHtmlAnchor(),
-                    Utils::chopString(strip_tags((string) $row->answer), 20),
-                );
-                $renderedItems[$row->id] .= sprintf('<span id="viewsPerRecord" class="badge text-bg-primary rounded-pill">%s</span></li>', $this->plurals->get(
-                    key: 'plmsgViews',
-                    number: (int) $visits,
-                ));
+                $renderedItems[$row->id] = [
+                    'anchor' => $oLink->toHtmlAnchor(),
+                    'preview' => Utils::chopString(strip_tags((string) $row->answer), 20),
+                    'views' => $this->plurals->get(key: 'plmsgViews', number: $visits),
+                    'sticky' => (bool) $row->sticky,
+                ];
             }
 
             // If random FAQs are activated, shuffle the FAQs :-)
@@ -304,10 +288,10 @@ class Faq
                 shuffle($renderedItems);
             }
 
-            $output .= implode("\n", $renderedItems);
-            $output .= '</ul>';
+            $items = array_values($renderedItems);
         }
 
+        $pagination = '';
         if ($pages > 1) {
             $link = new Link($this->configuration->getDefaultUrl(), $this->configuration);
             $rewriteUrl = sprintf(
@@ -327,16 +311,24 @@ class Faq
                 $page,
             );
 
-            $pagination = new Pagination(
+            $paginationControl = new Pagination(
                 baseUrl: $baseUrl,
                 total: $num,
                 perPage: (int) $this->configuration->get(item: 'records.numberOfRecordsPerPage'),
                 urlConfig: new UrlConfig(pageParamName: 'seite', rewriteUrl: $rewriteUrl),
             );
-            $output .= $pagination->render();
+            $pagination = $paginationControl->render();
         }
 
-        return $output;
+        return [
+            'page' => $page,
+            'pages' => $pages,
+            'msgPage' => Translation::get(key: 'msgPage'),
+            'msgVoteFrom' => Translation::get(key: 'msgVoteFrom'),
+            'msgPages' => Translation::get(key: 'msgPages'),
+            'items' => $items,
+            'pagination' => $pagination,
+        ];
     }
 
     /**
