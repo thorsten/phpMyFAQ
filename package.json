@@ -86,7 +86,7 @@
     "@axe-core/playwright": "4.11.3",
     "@commitlint/cli": "21.1.0",
     "@commitlint/config-conventional": "21.1.0",
-    "@playwright/test": "1.61.0",
+    "@playwright/test": "1.61.1",
     "@types/bootstrap": "5.2.11",
     "@types/highlightjs": "9.12.6",
     "@types/jsdom": "28.0.3",
