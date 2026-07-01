@@ -108,7 +108,7 @@
     "stylelint": "^17.13.0",
     "stylelint-config-standard-scss": "^17.0.0",
     "typescript": "6.0.3",
-    "vite": "8.0.16",
+    "vite": "8.1.0",
     "vite-plugin-compression": "0.5.1",
     "vite-plugin-html": "3.2.2",
     "vite-plugin-minify": "3.0.0",
