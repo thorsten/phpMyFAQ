@@ -51,6 +51,7 @@ final class GlossaryController extends AbstractController
         $glossaryLanguage = Filter::filterVar(
             $request->attributes->get('glossaryLanguage'),
             FILTER_SANITIZE_SPECIAL_CHARS,
+            '',
         );
 
         $this->glossary->setLanguage($glossaryLanguage);
@@ -66,13 +67,20 @@ final class GlossaryController extends AbstractController
     {
         $this->userHasPermission(PermissionType::GLOSSARY_DELETE);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        $glossaryId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
-        $glossaryLanguage = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
+        $glossaryId = Filter::filterVar($data->id ?? null, FILTER_VALIDATE_INT);
+        $glossaryLanguage = Filter::filterVar($data->lang ?? null, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $csrfToken = Filter::filterVar($data->csrf ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->session)->verifyToken('delete-glossary', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('delete-glossary', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if ($glossaryId === null) {
+            return $this->json([
+                'error' => Translation::get(key: 'ad_glossary_delete_error'),
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         $this->glossary->setLanguage($glossaryLanguage);
@@ -92,13 +100,14 @@ final class GlossaryController extends AbstractController
     {
         $this->userHasPermission(PermissionType::GLOSSARY_ADD);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        $glossaryLanguage = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS);
-        $glossaryItem = Filter::filterVar($data->item, FILTER_SANITIZE_SPECIAL_CHARS);
-        $glossaryDefinition = Filter::filterVar($data->definition, FILTER_SANITIZE_SPECIAL_CHARS);
+        $glossaryLanguage = Filter::filterVar($data->language ?? null, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $glossaryItem = Filter::filterVar($data->item ?? null, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $glossaryDefinition = Filter::filterVar($data->definition ?? null, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $csrfToken = Filter::filterVar($data->csrf ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->session)->verifyToken('add-glossary', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('add-glossary', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -119,15 +128,22 @@ final class GlossaryController extends AbstractController
     {
         $this->userHasPermission(PermissionType::GLOSSARY_EDIT);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        $glossaryId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
-        $glossaryLanguage = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
-        $glossaryItem = Filter::filterVar($data->item, FILTER_SANITIZE_SPECIAL_CHARS);
-        $glossaryDefinition = Filter::filterVar($data->definition, FILTER_SANITIZE_SPECIAL_CHARS);
+        $glossaryId = Filter::filterVar($data->id ?? null, FILTER_VALIDATE_INT);
+        $glossaryLanguage = Filter::filterVar($data->lang ?? null, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $glossaryItem = Filter::filterVar($data->item ?? null, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $glossaryDefinition = Filter::filterVar($data->definition ?? null, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $csrfToken = Filter::filterVar($data->csrf ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->session)->verifyToken('update-glossary', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('update-glossary', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if ($glossaryId === null) {
+            return $this->json([
+                'error' => Translation::get(key: 'ad_glossary_update_error'),
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         $this->glossary->setLanguage($glossaryLanguage);

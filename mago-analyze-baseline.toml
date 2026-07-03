@@ -5191,66 +5191,6 @@ message = 'Argument #4 of method `phpMyFAQ\Forms::editTranslation` is possibly `
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GlossaryController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Session\Token::verifyToken`: expected `null|string`, but found `mixed`.'
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GlossaryController.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GlossaryController.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 12
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GlossaryController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Glossary::create` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GlossaryController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Glossary::delete` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GlossaryController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Glossary::setLanguage` is possibly `null`, but parameter type `string` does not accept it.'
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GlossaryController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Glossary::update` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GlossaryController.php"
-code = "possibly-null-argument"
-message = 'Argument #2 of method `phpMyFAQ\Glossary::create` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GlossaryController.php"
-code = "possibly-null-argument"
-message = 'Argument #2 of method `phpMyFAQ\Glossary::update` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GlossaryController.php"
-code = "possibly-null-argument"
-message = 'Argument #3 of method `phpMyFAQ\Glossary::update` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #2 of `phpMyFAQ\Session\Token::verifyToken`: expected `null|string`, but found `nonnull`.'
