@@ -9985,66 +9985,6 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 3
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Category::setLanguage` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Entity\FaqEntity::setAnswer` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Entity\FaqEntity::setAuthor` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Entity\FaqEntity::setKeywords` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Entity\FaqEntity::setLanguage` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Entity\FaqEntity::setQuestion` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Faq::hasTitleAHash` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Faq\MetaData::setFaqId` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Faq\MetaData::setFaqLanguage` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
-code = "possibly-null-operand"
-message = "Possibly null middle operand used in string concatenation (type `null|string`)."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/MetaData.php"
 code = "mixed-property-type-coercion"
 message = "A value with a less specific type `array<array-key, mixed>` is being assigned to property `$$categories` (array<array-key, int>|null)."
@@ -12758,24 +12698,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Notification.php"
-code = "array-to-string-conversion"
-message = "Potential array in middle operand of string concatenation."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Notification.php"
-code = "array-to-string-conversion"
-message = "Potential array in right operand of string concatenation."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Notification.php"
-code = "array-to-string-conversion"
-message = "Potentially casting `array` to `string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Notification.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `phpMyFAQ\Category::getOwner`: expected `int|null`, but found `mixed`.'
 count = 1
@@ -12861,12 +12783,6 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Notification.php"
 code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #1 of `sprintf`: expected `string`, but possibly received `array<array-key, string>|null|string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Notification.php"
-code = "possibly-invalid-argument"
 message = "Possible argument type mismatch for argument #10 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|null|string`."
 count = 1
 
@@ -12921,24 +12837,6 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Notification.php"
 code = "possibly-null-argument"
-message = "Argument #1 of function `sprintf` is possibly `null`, but parameter type `string` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Notification.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Faq::getFaq` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Notification.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Faq::getQuestion` is possibly `null`, but parameter type `int` does not accept it.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Notification.php"
-code = "possibly-null-argument"
 message = 'Argument #1 of method `phpMyFAQ\Mail::addCc` is possibly `null`, but parameter type `string` does not accept it.'
 count = 1
 
@@ -12952,18 +12850,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Notification.php"
 code = "possibly-null-array-index"
 message = "Possibly using `null` as an array index to access element."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Notification.php"
-code = "possibly-null-operand"
-message = "Possibly null middle operand used in string concatenation (type `array<array-key, string>|null|string`)."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Notification.php"
-code = "possibly-null-operand"
-message = "Possibly null right operand used in string concatenation (type `array<array-key, string>|null|string`)."
 count = 1
 
 [[issues]]

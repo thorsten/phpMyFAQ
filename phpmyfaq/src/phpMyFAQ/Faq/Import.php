@@ -53,11 +53,11 @@ readonly class Import
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($user);
 
         $categoryId = Filter::filterVar($record[0], FILTER_VALIDATE_INT);
-        $question = Filter::filterVar($record[1], FILTER_SANITIZE_SPECIAL_CHARS);
-        $answer = Filter::filterVar($record[2], FILTER_SANITIZE_SPECIAL_CHARS);
-        $keywords = Filter::filterVar($record[3], FILTER_SANITIZE_SPECIAL_CHARS);
-        $languageCode = Filter::filterVar($record[4], FILTER_SANITIZE_SPECIAL_CHARS);
-        $author = Filter::filterVar($record[5], FILTER_SANITIZE_SPECIAL_CHARS);
+        $question = Filter::filterVar($record[1], FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $answer = Filter::filterVar($record[2], FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $keywords = Filter::filterVar($record[3], FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $languageCode = Filter::filterVar($record[4], FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $author = Filter::filterVar($record[5], FILTER_SANITIZE_SPECIAL_CHARS, '');
         $email = Filter::filterEmail($record[6]);
         $isActive = Filter::filterVar($record[7], FILTER_VALIDATE_BOOLEAN);
         $isSticky = Filter::filterVar($record[8], FILTER_VALIDATE_BOOLEAN);
@@ -94,8 +94,13 @@ readonly class Import
 
         $faqEntity = $faq->create($faqEntity);
 
+        $faqId = $faqEntity->getId();
+        if ($faqId === null) {
+            return false;
+        }
+
         $faqMetaData = new MetaData($this->configuration);
-        $faqMetaData->setFaqId($faqEntity->getId())->setFaqLanguage($languageCode)->setCategories($categories)->save();
+        $faqMetaData->setFaqId($faqId)->setFaqLanguage($languageCode)->setCategories($categories)->save();
 
         return true;
     }

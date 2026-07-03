@@ -70,10 +70,10 @@ readonly class Notification
         if ($this->configuration->get(item: 'main.enableNotifications')) {
             $this->mail->addTo($email, $userName);
             $this->mail->subject =
-                $this->configuration->getTitle() . ' - ' . Translation::get(key: 'msgQuestionAnswered');
+                $this->configuration->getTitle() . ' - ' . Translation::getString(key: 'msgQuestionAnswered');
             $this->mail->message = sprintf(
                 '%s' . "\n\r" . '%s',
-                sprintf(Translation::get(key: 'msgMessageQuestionAnswered'), $this->configuration->getTitle()),
+                sprintf(Translation::getString(key: 'msgMessageQuestionAnswered'), $this->configuration->getTitle()),
                 $url,
             );
             $this->mail->send();
@@ -89,6 +89,11 @@ readonly class Notification
     public function sendNewFaqAdded(array $emails, FaqEntity $faqEntity): void
     {
         if ($this->configuration->get(item: 'main.enableNotifications')) {
+            $faqId = $faqEntity->getId();
+            if ($faqId === null) {
+                return;
+            }
+
             $this->mail->addTo($this->configuration->getAdminEmail());
             foreach ($emails as $email) {
                 if ($email === $this->configuration->getAdminEmail()) {
@@ -99,27 +104,22 @@ readonly class Notification
             }
 
             $this->mail->subject = $this->configuration->getTitle() . ': New FAQ was added.';
-            $this->faq->getFaq(faqId: $faqEntity->getId(), faqRevisionId: null, isAdmin: true);
+            $this->faq->getFaq(faqId: $faqId, faqRevisionId: null, isAdmin: true);
 
             $linkToAdmin = '%sadmin/faq/edit/%d/%s';
-            $url = sprintf(
-                $linkToAdmin,
-                $this->configuration->getDefaultUrl(),
-                $faqEntity->getId(),
-                $faqEntity->getLanguage(),
-            );
+            $url = sprintf($linkToAdmin, $this->configuration->getDefaultUrl(), $faqId, $faqEntity->getLanguage());
             $link = new Link($url, $this->configuration);
-            $link->setTitle($this->faq->getQuestion($faqEntity->getId()));
+            $link->setTitle($this->faq->getQuestion($faqId));
 
             $this->mail->message =
-                html_entity_decode((string) Translation::get(key: 'msgMailCheck'))
+                html_entity_decode(Translation::getString(key: 'msgMailCheck'))
                 . '<p><strong>'
-                . Translation::get(key: 'msgAskYourQuestion')
+                . Translation::getString(key: 'msgAskYourQuestion')
                 . ':</strong> '
-                . $this->faq->getQuestion($faqEntity->getId())
+                . $this->faq->getQuestion($faqId)
                 . '</p>'
                 . '<p><strong>'
-                . Translation::get(key: 'msgNewContentArticle')
+                . Translation::getString(key: 'msgNewContentArticle')
                 . ':</strong> '
                 . $this->faq->faqRecord['content']
                 . '</p>'
