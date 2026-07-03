@@ -100,7 +100,7 @@ class FileTest extends TestCase
 
         // Should create path with 3 subdirectories of 5 characters each
         $expectedPattern =
-            '/tmp/attachments'
+            PMF_ATTACHMENTS_DIR
             . DIRECTORY_SEPARATOR
             . 'abcde'
             . DIRECTORY_SEPARATOR
@@ -195,7 +195,7 @@ class FileTest extends TestCase
 
         // Should create proper subdirectories even with long hash
         $expectedPattern =
-            '/tmp/attachments'
+            PMF_ATTACHMENTS_DIR
             . DIRECTORY_SEPARATOR
             . 'veryl'
             . DIRECTORY_SEPARATOR

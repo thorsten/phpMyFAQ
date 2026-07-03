@@ -118,7 +118,7 @@ final class AuthenticationController extends AbstractFrontController
     #[Route(path: '/logout', name: 'public.auth.logout', methods: ['GET'])]
     public function logout(Request $request): RedirectResponse
     {
-        $csrfToken = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $csrfToken = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $redirectResponse = new RedirectResponse(url: $this->configuration->getDefaultUrl());
 
@@ -173,7 +173,7 @@ final class AuthenticationController extends AbstractFrontController
             return new RedirectResponse(url: './');
         }
 
-        $username = Filter::filterVar($request->request->get('faqusername'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $username = Filter::filterVar($request->request->get('faqusername'), FILTER_SANITIZE_SPECIAL_CHARS, '');
         $password = Filter::filterVar(
             $request->request->get('faqpassword'),
             FILTER_SANITIZE_SPECIAL_CHARS,
@@ -262,7 +262,7 @@ final class AuthenticationController extends AbstractFrontController
             return new RedirectResponse(url: './');
         }
 
-        $token = Filter::filterVar($request->request->get(key: 'token'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $token = Filter::filterVar($request->request->get(key: 'token'), FILTER_SANITIZE_SPECIAL_CHARS, '');
         $userId = (int) Filter::filterVar($request->request->get(key: 'user-id'), FILTER_VALIDATE_INT);
 
         if ($userId <= 0) {

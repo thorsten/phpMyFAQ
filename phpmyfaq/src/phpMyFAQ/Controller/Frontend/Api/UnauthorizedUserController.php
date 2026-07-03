@@ -226,13 +226,13 @@ final class UnauthorizedUserController
         );
 
         $message =
-            Translation::get('lostpwd_text_1')
+            Translation::getString('lostpwd_text_1')
             . "\r\n\r\n"
-            . Translation::get('resetpwd_text_link')
+            . Translation::getString('resetpwd_text_link')
             . "\r\n"
             . $link
             . "\r\n\r\n"
-            . Translation::get('resetpwd_text_expiry')
+            . Translation::getString('resetpwd_text_expiry')
             . "\r\n\r\nUsername: "
             . $username;
 

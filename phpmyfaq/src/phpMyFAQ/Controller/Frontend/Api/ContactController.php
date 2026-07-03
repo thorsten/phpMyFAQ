@@ -72,7 +72,7 @@ final class ContactController extends AbstractController
             throw new Exception('Invalid email address');
         }
 
-        $email = Filter::filterVar($email, FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = Filter::filterVar($email, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if ($question === '' || $question === '0') {
             throw new Exception('Empty question');
@@ -85,9 +85,9 @@ final class ContactController extends AbstractController
         if ($author !== '' && $author !== '0' && $email !== '' && $this->stopWords->checkBannedWord($question)) {
             $question = sprintf(
                 '%s: %s<br>%s: %s<br><br>%s',
-                Translation::get(key: 'msgNewContentName'),
+                Translation::getString(key: 'msgNewContentName'),
                 $author,
-                Translation::get(key: 'msgNewContentMail'),
+                Translation::getString(key: 'msgNewContentMail'),
                 $email,
                 $question,
             );

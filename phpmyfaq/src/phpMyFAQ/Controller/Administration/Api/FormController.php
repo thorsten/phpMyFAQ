@@ -88,10 +88,10 @@ final class FormController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
         $data = json_decode($request->getContent());
-        $label = Filter::filterVar($data->label, FILTER_SANITIZE_SPECIAL_CHARS);
+        $label = Filter::filterVar($data->label, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $formId = (int) Filter::filterVar($data->formId, FILTER_VALIDATE_INT);
         $inputId = (int) Filter::filterVar($data->inputId, FILTER_VALIDATE_INT);
-        $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
+        $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $forms = new Forms($this->configuration);
         if (!Token::getInstance($this->session)->verifyToken('edit-translation', $data->csrf)) {
@@ -122,7 +122,7 @@ final class FormController extends AbstractController
         $data = json_decode($request->getContent());
         $formId = (int) Filter::filterVar($data->formId, FILTER_VALIDATE_INT);
         $inputId = (int) Filter::filterVar($data->inputId, FILTER_VALIDATE_INT);
-        $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
+        $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $forms = new Forms($this->configuration);
         if (!Token::getInstance($this->session)->verifyToken('delete-translation', $data->csrf)) {
@@ -148,8 +148,8 @@ final class FormController extends AbstractController
 
         $formId = (int) Filter::filterVar($data->formId, FILTER_VALIDATE_INT);
         $inputId = (int) Filter::filterVar($data->inputId, FILTER_VALIDATE_INT);
-        $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
-        $translation = Filter::filterVar($data->translation, FILTER_SANITIZE_SPECIAL_CHARS);
+        $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $translation = Filter::filterVar($data->translation, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $forms = new Forms($this->configuration);
         if (!Token::getInstance($this->session)->verifyToken('add-translation', $data->csrf)) {

@@ -59,7 +59,7 @@ final class StatisticsController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $month = Filter::filterVar($request->getPayload()->get('month'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $month = Filter::filterVar($request->getPayload()->get('month'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if ($this->statisticsHelper->deleteTrackingFiles($month)) {
             return $this->json(['success' => Translation::get(key: 'ad_adminlog_delete_success')], Response::HTTP_OK);

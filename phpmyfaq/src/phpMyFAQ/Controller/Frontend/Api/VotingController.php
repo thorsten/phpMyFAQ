@@ -54,7 +54,7 @@ final class VotingController extends AbstractController
             throw new Exception('Invalid JSON data');
         }
 
-        $csrfToken = Filter::filterVar($data->csrfToken ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $csrfToken = Filter::filterVar($data->csrfToken ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if (!$this->verifySessionCsrfToken('voting', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);

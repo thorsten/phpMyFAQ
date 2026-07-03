@@ -52,7 +52,7 @@ final class SetupController extends AbstractController
             return $this->json(['message' => 'No version given.'], Response::HTTP_BAD_REQUEST);
         }
 
-        $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);
+        $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $update = $this->createUpdate($installedVersion);
 
@@ -91,7 +91,7 @@ final class SetupController extends AbstractController
 
         $update = $this->createUpdate($this->configuration->getVersion());
 
-        $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);
+        $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $configPath = PMF_ROOT_DIR . '/content/core/config';
         if (version_compare(version1: $installedVersion, version2: '4.0.0-alpha', operator: '<')) {
@@ -116,7 +116,7 @@ final class SetupController extends AbstractController
             return $this->json(['message' => 'No version given.'], Response::HTTP_BAD_REQUEST);
         }
 
-        $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);
+        $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $update = $this->createUpdate($installedVersion);
 

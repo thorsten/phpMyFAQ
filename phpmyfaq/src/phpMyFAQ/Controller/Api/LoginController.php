@@ -83,8 +83,8 @@ final class LoginController extends AbstractController
     {
         $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
-        $faqUsername = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
-        $faqPassword = Filter::filterVar($data->password, FILTER_SANITIZE_SPECIAL_CHARS);
+        $faqUsername = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $faqPassword = Filter::filterVar($data->password, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $user = new CurrentUser($this->configuration);
         $userAuthentication = new UserAuthentication($this->configuration, $user);

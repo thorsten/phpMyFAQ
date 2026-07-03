@@ -52,7 +52,7 @@ final class AttachmentsController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::ATTACHMENT_DELETE);
 
-        $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT);
+        $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT, 1);
         $page = max(1, $page);
 
         $collection = $this->attachmentCollection;

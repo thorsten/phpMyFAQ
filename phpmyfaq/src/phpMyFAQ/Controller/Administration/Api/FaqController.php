@@ -114,20 +114,20 @@ final class FaqController extends AbstractAdministrationApiController
             ? Filter::filterArray($data->{'categories[]'})
             : [Filter::filterVar($data->{'categories[]'}, FILTER_VALIDATE_INT)];
 
-        $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
+        $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $tags = Filter::filterVar($data->tags, FILTER_SANITIZE_SPECIAL_CHARS);
         $active = Filter::filterVar($data->active ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
         $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
         $content = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
-        $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
-        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
+        $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $email = Filter::filterEmail($data->email, default: '');
         $comment = Filter::filterVar($data->comment ?? 'n', FILTER_SANITIZE_SPECIAL_CHARS);
         $changed = Filter::filterVar($data->changed, FILTER_SANITIZE_SPECIAL_CHARS);
-        $notes = Filter::filterVar($data->notes, FILTER_SANITIZE_SPECIAL_CHARS);
+        $notes = Filter::filterVar($data->notes, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
-        $serpTitle = Filter::filterVar($data->serpTitle, FILTER_SANITIZE_SPECIAL_CHARS);
-        $serpDescription = Filter::filterVar($data->serpDescription, FILTER_SANITIZE_SPECIAL_CHARS);
+        $serpTitle = Filter::filterVar($data->serpTitle, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $serpDescription = Filter::filterVar($data->serpDescription, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         // Permissions
         $permissions = $faqPermission->createPermissionArray();
@@ -228,7 +228,7 @@ final class FaqController extends AbstractAdministrationApiController
                 // notify the user who added the question
                 try {
                     $notifyEmail = Filter::filterVar($data->notifyEmail, FILTER_SANITIZE_EMAIL);
-                    $notifyUser = Filter::filterVar($data->notifyUser, FILTER_SANITIZE_SPECIAL_CHARS);
+                    $notifyUser = Filter::filterVar($data->notifyUser, FILTER_SANITIZE_SPECIAL_CHARS, '');
                     $this->notification->sendOpenQuestionAnswered($notifyEmail, $notifyUser, $oLink->toString());
                 } catch (Exception|TransportExceptionInterface $e) {
                     $this->configuration
@@ -289,7 +289,7 @@ final class FaqController extends AbstractAdministrationApiController
                         TitleSlugifier::slug($faqData->getQuestion()),
                     );
                     $this->webPushService->sendToAll(
-                        Translation::get('msgPushNewFaq'),
+                        Translation::getString('msgPushNewFaq'),
                         $faqData->getQuestion(),
                         $faqUrl,
                         'new-faq-' . $faqData->getId(),
@@ -344,23 +344,23 @@ final class FaqController extends AbstractAdministrationApiController
             ? Filter::filterArray($data->{'categories[]'})
             : [Filter::filterVar($data->{'categories[]'}, FILTER_VALIDATE_INT)];
 
-        $faqLang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
+        $faqLang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $tags = Filter::filterVar($data->tags, FILTER_SANITIZE_SPECIAL_CHARS);
         $active = Filter::filterVar($data->active ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
         $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
         $content = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
-        $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
-        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
+        $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $email = Filter::filterEmail($data->email, default: '');
         $comment = Filter::filterVar($data->comment ?? 'n', FILTER_SANITIZE_SPECIAL_CHARS);
         $changed = Filter::filterVar($data->changed, FILTER_SANITIZE_SPECIAL_CHARS);
-        $date = Filter::filterVar($data->date, FILTER_SANITIZE_SPECIAL_CHARS);
-        $notes = Filter::filterVar($data->notes, FILTER_SANITIZE_SPECIAL_CHARS);
+        $date = Filter::filterVar($data->date, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $notes = Filter::filterVar($data->notes, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $revision = Filter::filterVar($data->revision ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
         $recordDateHandling = Filter::filterVar($data->recordDateHandling, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $serpTitle = Filter::filterVar($data->serpTitle, FILTER_SANITIZE_SPECIAL_CHARS);
-        $serpDescription = Filter::filterVar($data->serpDescription, FILTER_SANITIZE_SPECIAL_CHARS);
+        $serpTitle = Filter::filterVar($data->serpTitle, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $serpDescription = Filter::filterVar($data->serpDescription, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if ($question === '' && $content === '') {
             return $this->json(['error' => Translation::get(key: 'msgNoQuestionAndAnswer')], Response::HTTP_CONFLICT);
@@ -546,7 +546,7 @@ final class FaqController extends AbstractAdministrationApiController
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
         $categoryId = (int) Filter::filterVar($request->attributes->get(key: 'categoryId'), FILTER_VALIDATE_INT);
-        $language = Filter::filterVar($request->attributes->get(key: 'language'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $language = Filter::filterVar($request->attributes->get(key: 'language'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $onlyInactive = Filter::filterVar(
             $request->query->get(key: 'only-inactive'),
@@ -578,7 +578,7 @@ final class FaqController extends AbstractAdministrationApiController
         $data = json_decode($request->getContent());
 
         $faqIds = Filter::filterArray($data->faqIds);
-        $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
+        $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN);
 
         if (!Token::getInstance($this->session)->verifyToken(page: 'pmf-csrf-token', requestToken: $data->csrf)) {
@@ -619,7 +619,7 @@ final class FaqController extends AbstractAdministrationApiController
         $data = json_decode($request->getContent());
 
         $faqIds = Filter::filterArray($data->faqIds);
-        $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
+        $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN);
 
         if (!Token::getInstance($this->session)->verifyToken(page: 'pmf-csrf-token', requestToken: $data->csrf)) {
@@ -661,11 +661,11 @@ final class FaqController extends AbstractAdministrationApiController
         $data = json_decode($request->getContent());
 
         $faqId = Filter::filterVar($data->faqId, FILTER_VALIDATE_INT);
-        $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
+        $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if (!Token::getInstance($this->session)->verifyToken(page: 'pmf-csrf-token', requestToken: $data->csrf)) {
             return $this->json([
-                'error' => 'CSRF Token - ' . Translation::get(key: 'msgNoPermission'),
+                'error' => 'CSRF Token - ' . Translation::getString(key: 'msgNoPermission'),
             ], Response::HTTP_UNAUTHORIZED);
         }
 

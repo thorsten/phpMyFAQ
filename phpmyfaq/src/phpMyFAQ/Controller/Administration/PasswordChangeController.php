@@ -82,7 +82,7 @@ final class PasswordChangeController extends AbstractAdministrationController
         }
 
         $oldPassword = Filter::filterVar($request->request->get('faqpassword_old'), FILTER_SANITIZE_SPECIAL_CHARS);
-        $newPassword = Filter::filterVar($request->request->get('faqpassword'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $newPassword = Filter::filterVar($request->request->get('faqpassword'), FILTER_SANITIZE_SPECIAL_CHARS, '');
         $retypedPassword = Filter::filterVar(
             $request->request->get('faqpassword_confirm'),
             FILTER_SANITIZE_SPECIAL_CHARS,

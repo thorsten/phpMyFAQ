@@ -49,7 +49,7 @@ final class MarkdownController extends AbstractAdministrationApiController
             throw new Exception('Invalid JSON data');
         }
 
-        $answer = Filter::filterVar($data->text, FILTER_SANITIZE_SPECIAL_CHARS);
+        $answer = Filter::filterVar($data->text, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $config = [
             'html_input' => 'strip',

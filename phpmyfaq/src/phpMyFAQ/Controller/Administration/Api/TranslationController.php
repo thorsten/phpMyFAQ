@@ -54,7 +54,7 @@ final class TranslationController extends AbstractAdministrationApiController
         if (!Token::getInstance($this->session)->verifyToken('translate', $data['pmf-csrf-token'] ?? '')) {
             return $this->json([
                 'success' => false,
-                'error' => 'CSRF - ' . Translation::get(key: 'msgNoPermission'),
+                'error' => 'CSRF - ' . Translation::getString(key: 'msgNoPermission'),
             ], Response::HTTP_UNAUTHORIZED);
         }
 

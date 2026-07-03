@@ -122,10 +122,12 @@ final class InstanceController extends AbstractAdministrationController
         $instanceEntity->setInstance(Filter::filterVar(
             $request->attributes->get('instance'),
             FILTER_SANITIZE_SPECIAL_CHARS,
+            '',
         ));
         $instanceEntity->setComment(Filter::filterVar(
             $request->attributes->get('comment'),
             FILTER_SANITIZE_SPECIAL_CHARS,
+            '',
         ));
 
         if (is_null($instanceEntity->getUrl()) || !$updatedClient->isValidClientUrl($instanceEntity->getUrl())) {

@@ -170,16 +170,16 @@ final class PageController extends AbstractAdministrationApiController
             return $this->json(['error' => "Missing required field: {$field}"], Response::HTTP_BAD_REQUEST);
         }
 
-        $pageTitle = Filter::filterVar($data->pageTitle, FILTER_SANITIZE_SPECIAL_CHARS);
-        $slug = Filter::filterVar($data->slug, FILTER_SANITIZE_SPECIAL_CHARS);
+        $pageTitle = Filter::filterVar($data->pageTitle, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $slug = Filter::filterVar($data->slug, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $content = Filter::filterVar($data->content ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
-        $authorName = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS);
+        $authorName = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $authorEmail = Filter::filterEmail($data->authorEmail);
         $active = Filter::filterVar($data->active ?? false, FILTER_SANITIZE_SPECIAL_CHARS);
-        $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
+        $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $seoTitle = Filter::filterVar($data->seoTitle ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
         $seoDescription = Filter::filterVar($data->seoDescription ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
-        $seoRobots = Filter::filterVar($data->seoRobots ?? 'index,follow', FILTER_SANITIZE_SPECIAL_CHARS);
+        $seoRobots = Filter::filterVar($data->seoRobots ?? 'index,follow', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         // Check if this is a translation (pageId provided)
         $isTranslation = ($data->pageId ?? null) !== null && $data->pageId > 0;
@@ -282,7 +282,7 @@ final class PageController extends AbstractAdministrationApiController
         }
 
         $deleteId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
-        $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
+        $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if ($customPage->delete((int) $deleteId, $language)) {
             $this->adminLog->log($this->currentUser, AdminLogType::PAGE_DELETE->value . ':' . $deleteId);
@@ -330,16 +330,16 @@ final class PageController extends AbstractAdministrationApiController
         }
 
         $pageId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
-        $pageTitle = Filter::filterVar($data->pageTitle, FILTER_SANITIZE_SPECIAL_CHARS);
-        $slug = Filter::filterVar($data->slug, FILTER_SANITIZE_SPECIAL_CHARS);
+        $pageTitle = Filter::filterVar($data->pageTitle, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $slug = Filter::filterVar($data->slug, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $content = Filter::filterVar($data->content ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
-        $authorName = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS);
+        $authorName = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $authorEmail = Filter::filterEmail($data->authorEmail);
         $active = Filter::filterVar($data->active ?? false, FILTER_SANITIZE_SPECIAL_CHARS);
-        $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
+        $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $seoTitle = Filter::filterVar($data->seoTitle ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
         $seoDescription = Filter::filterVar($data->seoDescription ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
-        $seoRobots = Filter::filterVar($data->seoRobots ?? 'index,follow', FILTER_SANITIZE_SPECIAL_CHARS);
+        $seoRobots = Filter::filterVar($data->seoRobots ?? 'index,follow', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         // Check if slug exists (excluding current page)
         if ($customPage->slugExists($slug, $language, $pageId)) {
@@ -465,8 +465,8 @@ final class PageController extends AbstractAdministrationApiController
             return $this->json(['error' => 'Missing required fields: slug, lang'], Response::HTTP_BAD_REQUEST);
         }
 
-        $slug = Filter::filterVar($data->slug, FILTER_SANITIZE_SPECIAL_CHARS);
-        $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
+        $slug = Filter::filterVar($data->slug, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $excludeId = ($data->excludeId ?? null) !== null
             ? Filter::filterVar($data->excludeId, FILTER_VALIDATE_INT)
             : null;

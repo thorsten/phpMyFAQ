@@ -58,7 +58,7 @@ final class StopWordController extends AbstractController
         $data = json_decode($request->getContent());
 
         $stopWordId = Filter::filterVar($data->stopWordId, FILTER_VALIDATE_INT);
-        $stopWordsLang = Filter::filterVar($data->stopWordsLang, FILTER_SANITIZE_SPECIAL_CHARS);
+        $stopWordsLang = Filter::filterVar($data->stopWordsLang, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $stopWords = new StopWords($this->configuration);
         if (!Token::getInstance($this->session)->verifyToken('stopwords', $data->csrf)) {
@@ -84,7 +84,7 @@ final class StopWordController extends AbstractController
         $data = json_decode($request->getContent());
 
         $stopWordId = Filter::filterVar($data->stopWordId, FILTER_VALIDATE_INT);
-        $stopWordsLang = Filter::filterVar($data->stopWordsLang, FILTER_SANITIZE_SPECIAL_CHARS);
+        $stopWordsLang = Filter::filterVar($data->stopWordsLang, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $stopWord = Filter::filterVar($data->stopWord, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $stopWords = new StopWords($this->configuration);

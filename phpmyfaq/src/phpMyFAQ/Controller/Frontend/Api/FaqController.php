@@ -106,7 +106,7 @@ final class FaqController extends AbstractController
         $questionText = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
         $questionText = trim(strip_tags((string) $questionText));
 
-        $answer = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
+        $answer = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS, '');
         if ($this->configuration->get(item: 'main.enableWysiwygEditorFrontend')) {
             // html_entity_decode() turns surviving HTML entities back into executable
             // markup, so the decoded result must be passed through the HTML sanitizer
@@ -120,7 +120,7 @@ final class FaqController extends AbstractController
         }
 
         $category = new Category($this->configuration);
-        $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
+        $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $categories = [];
 
         if (property_exists($data, 'rubrik')) {

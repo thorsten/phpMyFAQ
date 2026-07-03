@@ -65,8 +65,8 @@ final class PushController extends AbstractController
         }
 
         $endpoint = Filter::filterVar($data->endpoint ?? '', FILTER_SANITIZE_URL);
-        $publicKey = Filter::filterVar($data->publicKey ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
-        $authToken = Filter::filterVar($data->authToken ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $publicKey = Filter::filterVar($data->publicKey ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $authToken = Filter::filterVar($data->authToken ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $contentEncoding = Filter::filterVar($data->contentEncoding ?? 'aesgcm', FILTER_SANITIZE_SPECIAL_CHARS);
 
         if ($endpoint === '' || $publicKey === '' || $authToken === '') {

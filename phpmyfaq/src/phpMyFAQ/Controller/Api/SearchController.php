@@ -141,7 +141,7 @@ final class SearchController extends AbstractApiController
         $faqPermission = new Permission($this->configuration);
         $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
 
-        $searchString = Filter::filterVar($request->query->get(key: 'q'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $searchString = Filter::filterVar($request->query->get(key: 'q'), FILTER_SANITIZE_SPECIAL_CHARS, '');
         $searchResults = $this->search->search(searchTerm: $searchString, allLanguages: false);
         $searchResultSet->reviewResultSet($searchResults);
 

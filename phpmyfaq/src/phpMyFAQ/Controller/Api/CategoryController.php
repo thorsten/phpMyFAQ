@@ -294,7 +294,7 @@ final class CategoryController extends AbstractApiController
 
         $categoryPermission = $this->createCategoryPermission();
 
-        $languageCode = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS);
+        $languageCode = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $parentId = Filter::filterVar($data->{'parent-id'}, FILTER_VALIDATE_INT);
         $parentCategoryName = null;
 
@@ -302,7 +302,7 @@ final class CategoryController extends AbstractApiController
             $parentCategoryName = Filter::filterVar($data->{'parent-category-name'}, FILTER_SANITIZE_SPECIAL_CHARS);
         }
 
-        $name = Filter::filterVar($data->{'category-name'}, FILTER_SANITIZE_SPECIAL_CHARS);
+        $name = Filter::filterVar($data->{'category-name'}, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $description = Filter::filterVar($data->{'description'}, FILTER_SANITIZE_SPECIAL_CHARS);
         $userId = property_exists($data, 'user-id') && $data->{'user-id'} !== null
             ? Filter::filterVar($data->{'user-id'}, FILTER_VALIDATE_INT)

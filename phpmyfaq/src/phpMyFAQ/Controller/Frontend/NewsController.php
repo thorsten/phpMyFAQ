@@ -98,7 +98,7 @@ final class NewsController extends AbstractFrontController
 
         return $this->render('news.twig', [
             ...$this->getHeader($request),
-            'writeNewsHeader' => $this->configuration->getTitle() . Translation::get(key: 'msgNews'),
+            'writeNewsHeader' => $this->configuration->getTitle() . Translation::getString(key: 'msgNews'),
             'newsHeader' => $news['processedHeader'],
             'mainPageContent' => $news['processedContent'],
             'writeDateMsg' => $newsService->formatNewsDate($news),

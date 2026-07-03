@@ -50,7 +50,7 @@ final class MediaBrowserController extends AbstractController
 
         if (!is_dir(PMF_CONTENT_DIR . '/user/images')) {
             return $this->json(['error' => sprintf(
-                Translation::get(key: 'ad_dir_missing'),
+                Translation::getString(key: 'ad_dir_missing'),
                 '/images',
             )], Response::HTTP_BAD_REQUEST);
         }
@@ -66,7 +66,7 @@ final class MediaBrowserController extends AbstractController
                 return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
             }
 
-            $file = basename(Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS));
+            $file = basename(Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS, ''));
             $allowedDir = realpath(PMF_CONTENT_DIR . '/user/images');
             $targetPath = realpath(PMF_CONTENT_DIR . '/user/images/' . $file);
 

@@ -50,15 +50,15 @@ final class NewsController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $header = Filter::filterVar($data->newsHeader, FILTER_SANITIZE_SPECIAL_CHARS);
+        $header = Filter::filterVar($data->newsHeader, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $content = Filter::filterVar($data->news, FILTER_SANITIZE_SPECIAL_CHARS);
-        $author = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS);
+        $author = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $email = Filter::filterEmail($data->authorEmail);
         $active = Filter::filterVar($data->active, FILTER_SANITIZE_SPECIAL_CHARS);
         $comment = Filter::filterVar($data->comment, FILTER_SANITIZE_SPECIAL_CHARS);
         $link = Filter::filterVar($data->link, FILTER_SANITIZE_SPECIAL_CHARS);
         $linkTitle = Filter::filterVar($data->linkTitle, FILTER_SANITIZE_SPECIAL_CHARS);
-        $newsLang = Filter::filterVar($data->langTo, FILTER_SANITIZE_SPECIAL_CHARS);
+        $newsLang = Filter::filterVar($data->langTo, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $target = Filter::filterVar($data->target, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $newsMessage = new NewsMessage();
@@ -128,15 +128,15 @@ final class NewsController extends AbstractAdministrationApiController
         }
 
         $newsId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
-        $header = Filter::filterVar($data->newsHeader, FILTER_SANITIZE_SPECIAL_CHARS);
+        $header = Filter::filterVar($data->newsHeader, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $content = Filter::filterVar($data->news, FILTER_SANITIZE_SPECIAL_CHARS);
-        $author = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS);
+        $author = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $email = Filter::filterEmail($data->authorEmail);
         $active = Filter::filterVar($data->active, FILTER_SANITIZE_SPECIAL_CHARS);
         $comment = Filter::filterVar($data->comment, FILTER_SANITIZE_SPECIAL_CHARS);
         $link = Filter::filterVar($data->link, FILTER_SANITIZE_SPECIAL_CHARS);
         $linkTitle = Filter::filterVar($data->linkTitle, FILTER_SANITIZE_SPECIAL_CHARS);
-        $newsLang = Filter::filterVar($data->langTo, FILTER_SANITIZE_SPECIAL_CHARS);
+        $newsLang = Filter::filterVar($data->langTo, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $target = Filter::filterVar($data->target, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $newsMessage = new NewsMessage();

@@ -69,7 +69,7 @@ final class UserController extends AbstractController
         $password = trim((string) Filter::filterVar($data->faqpassword, FILTER_SANITIZE_SPECIAL_CHARS));
         $confirm = trim((string) Filter::filterVar($data->faqpassword_confirm, FILTER_SANITIZE_SPECIAL_CHARS));
         $twoFactorEnabled = Filter::filterVar($data->twofactor_enabled ?? 'off', FILTER_SANITIZE_SPECIAL_CHARS);
-        $secret = Filter::filterVar($data->secret ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $secret = Filter::filterVar($data->secret ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $isAzureAdUser = $this->currentUser->getUserAuthSource() === 'azure';
         $isWebAuthnUser = $this->currentUser->getUserAuthSource() === 'webauthn';
@@ -233,6 +233,12 @@ final class UserController extends AbstractController
         $question = trim((string) Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS));
 
         // Validate User ID, Username and email
+        if ($userId === null) {
+            return $this->json([
+                'error' => Translation::get(key: 'ad_user_error_loginInvalid'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         if (
             !$this->currentUser->getUserById($userId)
             || $userId !== $this->currentUser->getUserId()
@@ -255,11 +261,11 @@ final class UserController extends AbstractController
         ) {
             $question = sprintf(
                 '%s %s<br>%s %s<br>%s %s<br><br>%s',
-                Translation::get(key: 'msgUsername'),
+                Translation::getString(key: 'msgUsername'),
                 $loginName,
-                Translation::get(key: 'msgNewContentName'),
+                Translation::getString(key: 'msgNewContentName'),
                 $author,
-                Translation::get(key: 'msgNewContentMail'),
+                Translation::getString(key: 'msgNewContentMail'),
                 $email,
                 $question,
             );

@@ -171,7 +171,7 @@ final class FaqController extends AbstractAdministrationController
             'isActive' => null,
             'isInActive' => 'checked',
             'nextSolutionId' => $this->faq->getNextSolutionId(),
-            'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
+            'nextFaqId' => $this->configuration->getDb()->nextId((Database::getTablePrefix() ?? '') . 'faqdata', 'id'),
         ]);
     }
 
@@ -191,6 +191,7 @@ final class FaqController extends AbstractAdministrationController
         $categoryLanguage = Filter::filterVar(
             $request->attributes->get('categoryLanguage'),
             FILTER_SANITIZE_SPECIAL_CHARS,
+            '',
         );
 
         $this->categoryHelper->setCategory($category);
@@ -240,7 +241,7 @@ final class FaqController extends AbstractAdministrationController
             'isActive' => null,
             'isInActive' => 'checked',
             'nextSolutionId' => $this->faq->getNextSolutionId(),
-            'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
+            'nextFaqId' => $this->configuration->getDb()->nextId((Database::getTablePrefix() ?? '') . 'faqdata', 'id'),
         ]);
     }
 
@@ -258,7 +259,7 @@ final class FaqController extends AbstractAdministrationController
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $faqId = (int) Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
-        $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS, '');
         $selectedRevisionId = Filter::filterVar($request->request->get('selectedRevisionId'), FILTER_VALIDATE_INT);
 
         $category = new Category($this->configuration, $currentAdminGroups, true, $faqLanguage);
@@ -329,11 +330,12 @@ final class FaqController extends AbstractAdministrationController
             ...$this->getHeader($request),
             ...$this->getFooter(),
             ...$this->getBaseTemplateVars(),
-            'header' => Translation::get(key: 'ad_entry_edit_1') . ' ' . Translation::get(key: 'ad_entry_edit_2'),
+            'header' =>
+                Translation::getString(key: 'ad_entry_edit_1') . ' ' . Translation::getString(key: 'ad_entry_edit_2'),
             'editExistingFaq' => true,
             'currentRevision' => sprintf(
                 '%s 1.%d',
-                Translation::get(key: 'msgRevision'),
+                Translation::getString(key: 'msgRevision'),
                 $selectedRevisionId ?? $faqData['revision_id'],
             ),
             'numberOfRevisions' => count($revisions),
@@ -367,7 +369,7 @@ final class FaqController extends AbstractAdministrationController
             'isActive' => $faqData['active'] === 'yes' ? 'checked' : null,
             'isInActive' => $faqData['active'] !== 'yes' ? 'checked' : null,
             'nextSolutionId' => $this->faq->getNextSolutionId(),
-            'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
+            'nextFaqId' => $this->configuration->getDb()->nextId((Database::getTablePrefix() ?? '') . 'faqdata', 'id'),
         ]);
     }
 
@@ -392,7 +394,7 @@ final class FaqController extends AbstractAdministrationController
         $this->categoryHelper->setCategory($category);
 
         $faqId = (int) Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
-        $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_COPY->value . ':' . $faqId);
 
@@ -409,7 +411,8 @@ final class FaqController extends AbstractAdministrationController
             ...$this->getHeader($request),
             ...$this->getFooter(),
             ...$this->getBaseTemplateVars(),
-            'header' => Translation::get(key: 'ad_entry_edit_1') . ' ' . Translation::get(key: 'ad_entry_edit_2'),
+            'header' =>
+                Translation::getString(key: 'ad_entry_edit_1') . ' ' . Translation::getString(key: 'ad_entry_edit_2'),
             'editExistingFaq' => false,
             'faqId' => 0,
             'faqLang' => $faqLanguage,
@@ -438,7 +441,7 @@ final class FaqController extends AbstractAdministrationController
             'isActive' => null,
             'isInActive' => null,
             'nextSolutionId' => $this->faq->getNextSolutionId(),
-            'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
+            'nextFaqId' => $this->configuration->getDb()->nextId((Database::getTablePrefix() ?? '') . 'faqdata', 'id'),
         ]);
     }
 
@@ -463,7 +466,7 @@ final class FaqController extends AbstractAdministrationController
         $this->categoryHelper->setCategory($category);
 
         $faqId = (int) Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
-        $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_TRANSLATE->value . ':' . $faqId);
 
@@ -480,7 +483,8 @@ final class FaqController extends AbstractAdministrationController
             ...$this->getHeader($request),
             ...$this->getFooter(),
             ...$this->getBaseTemplateVars(),
-            'header' => Translation::get(key: 'ad_entry_edit_1') . ' ' . Translation::get(key: 'ad_entry_edit_2'),
+            'header' =>
+                Translation::getString(key: 'ad_entry_edit_1') . ' ' . Translation::getString(key: 'ad_entry_edit_2'),
             'editExistingFaq' => false,
             'faqId' => 0,
             'faqLang' => $faqLanguage,
@@ -509,7 +513,7 @@ final class FaqController extends AbstractAdministrationController
             'isActive' => null,
             'isInActive' => null,
             'nextSolutionId' => $this->faq->getNextSolutionId(),
-            'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
+            'nextFaqId' => $this->configuration->getDb()->nextId((Database::getTablePrefix() ?? '') . 'faqdata', 'id'),
         ]);
     }
 
@@ -534,7 +538,7 @@ final class FaqController extends AbstractAdministrationController
         $this->categoryHelper->setCategory($category);
 
         $questionId = (int) Filter::filterVar($request->attributes->get('questionId'), FILTER_VALIDATE_INT);
-        $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_ANSWER_ADD->value . ':' . $questionId);
 
@@ -562,7 +566,8 @@ final class FaqController extends AbstractAdministrationController
             ...$this->getHeader($request),
             ...$this->getFooter(),
             ...$this->getBaseTemplateVars(),
-            'header' => Translation::get(key: 'ad_entry_edit_1') . ' ' . Translation::get(key: 'ad_entry_edit_2'),
+            'header' =>
+                Translation::getString(key: 'ad_entry_edit_1') . ' ' . Translation::getString(key: 'ad_entry_edit_2'),
             'editExistingFaq' => false,
             'faqId' => 0,
             'faqLang' => $faqLanguage,
@@ -591,7 +596,7 @@ final class FaqController extends AbstractAdministrationController
             'isActive' => null,
             'isInActive' => null,
             'nextSolutionId' => $this->faq->getNextSolutionId(),
-            'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
+            'nextFaqId' => $this->configuration->getDb()->nextId((Database::getTablePrefix() ?? '') . 'faqdata', 'id'),
         ]);
     }
 

@@ -58,7 +58,7 @@ final class UserController extends AbstractAdministrationApiController
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
-        $filtered = Filter::filterVar($request->query->get(key: 'filter'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $filtered = Filter::filterVar($request->query->get(key: 'filter'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if ('' === $filtered) {
             $allUsers = $currentUser->getAllUsers(withoutAnonymous: false);
@@ -361,11 +361,11 @@ final class UserController extends AbstractAdministrationApiController
 
         $errorMessage = [];
 
-        $userName = Filter::filterVar($data->userName, FILTER_SANITIZE_SPECIAL_CHARS);
+        $userName = Filter::filterVar($data->userName, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $userRealName = trim(strip_tags((string) $data->realName));
         $userEmail = Filter::filterEmail($data->email);
         $automaticPassword = Filter::filterVar($data->automaticPassword, FILTER_VALIDATE_BOOLEAN);
-        $userPassword = Filter::filterVar($data->password, FILTER_SANITIZE_SPECIAL_CHARS);
+        $userPassword = Filter::filterVar($data->password, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $userPasswordConfirm = Filter::filterVar($data->passwordConfirm, FILTER_SANITIZE_SPECIAL_CHARS);
         $userIsSuperAdmin = Filter::filterVar($data->isSuperAdmin, FILTER_VALIDATE_BOOLEAN);
 
@@ -525,11 +525,11 @@ final class UserController extends AbstractAdministrationApiController
         $this->adminLog->log($this->currentUser, AdminLogType::USER_EDIT->value . ':' . $userId);
 
         $success =
-            Translation::get(key: 'ad_msg_savedsuc_1')
+            Translation::getString(key: 'ad_msg_savedsuc_1')
             . ' "'
             . Strings::htmlentities($user->getLogin(), ENT_QUOTES)
             . '" '
-            . Translation::get(key: 'ad_msg_savedsuc_2');
+            . Translation::getString(key: 'ad_msg_savedsuc_2');
         return $this->json(['success' => $success], Response::HTTP_OK);
     }
 
@@ -597,11 +597,11 @@ final class UserController extends AbstractAdministrationApiController
 
         $user->terminateSessionId();
         $success =
-            Translation::get(key: 'ad_msg_savedsuc_1')
+            Translation::getString(key: 'ad_msg_savedsuc_1')
             . ' "'
             . Strings::htmlentities($user->getLogin(), ENT_QUOTES)
             . '" '
-            . Translation::get(key: 'ad_msg_savedsuc_2');
+            . Translation::getString(key: 'ad_msg_savedsuc_2');
 
         return $this->json(['success' => $success], Response::HTTP_OK);
     }

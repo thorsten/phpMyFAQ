@@ -115,7 +115,7 @@ final class FaqController extends AbstractFrontController
             ),
             'metaDescription' => sprintf(
                 '%s | %s',
-                Translation::get(key: 'msgNewContentHeader'),
+                Translation::getString(key: 'msgNewContentHeader'),
                 $this->configuration->getTitle(),
             ),
             'msgNewContentHeader' => Translation::get(key: 'msgNewContentHeader'),
@@ -201,7 +201,7 @@ final class FaqController extends AbstractFrontController
     public function contentRedirect(Request $request): Response
     {
         $faqId = Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT, 0);
-        $faqLang = Filter::filterVar($request->attributes->get('faqLang'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $faqLang = Filter::filterVar($request->attributes->get('faqLang'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if ($faqId === 0 || $faqLang === '') {
             return new Response('', Response::HTTP_NOT_FOUND);
@@ -247,7 +247,7 @@ final class FaqController extends AbstractFrontController
         $categoryId = Filter::filterVar($request->attributes->get('categoryId'), FILTER_VALIDATE_INT, 0);
 
         // Get faqId from route attributes (new routes) or query parameters (legacy/backward compatibility)
-        $faqId = Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
+        $faqId = Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT, 0);
 
         // Get language from route parameter (for /content/ URLs)
         $requestedLanguage =
@@ -341,8 +341,8 @@ final class FaqController extends AbstractFrontController
 
         $commentMessage = sprintf(
             '%s<a href="#" data-bs-toggle="modal" data-bs-target="#pmf-modal-add-comment">%s</a>',
-            Translation::get(key: 'msgYouCan'),
-            Translation::get(key: 'msgWriteComment'),
+            Translation::getString(key: 'msgYouCan'),
+            Translation::getString(key: 'msgWriteComment'),
         );
         if (
             -1 === $this->currentUser->getUserId() && !$this->configuration->get('records.allowCommentsForGuests')
@@ -443,7 +443,11 @@ final class FaqController extends AbstractFrontController
             'msgBookmarkRemoved' => Translation::get(key: 'msgBookmarkRemoved'),
             'csrfTokenRemoveBookmark' => Token::getInstance($this->session)->getTokenString('delete-bookmark'),
             'csrfTokenAddBookmark' => Token::getInstance($this->session)->getTokenString('add-bookmark'),
-            'numberOfComments' => sprintf('%d %s', $numComments[$faqId] ?? 0, Translation::get(key: 'msgComments')),
+            'numberOfComments' => sprintf(
+                '%d %s',
+                $numComments[$faqId] ?? 0,
+                Translation::getString(key: 'msgComments'),
+            ),
             'writeCommentMsg' => $commentMessage,
         ];
 

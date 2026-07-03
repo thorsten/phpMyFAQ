@@ -57,7 +57,7 @@ final class TagController extends AbstractController
         }
 
         $id = Filter::filterVar($postData->id, FILTER_VALIDATE_INT);
-        $newTag = Filter::filterVar($postData->tag, FILTER_SANITIZE_SPECIAL_CHARS);
+        $newTag = Filter::filterVar($postData->tag, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $tag = new Tag();
         $tag->setId($id);

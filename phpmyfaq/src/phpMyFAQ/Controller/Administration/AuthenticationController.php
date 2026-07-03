@@ -49,7 +49,7 @@ final class AuthenticationController extends AbstractAdministrationController im
             return new RedirectResponse(url: './');
         }
 
-        $username = Filter::filterVar($request->request->get(key: 'faqusername'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $username = Filter::filterVar($request->request->get(key: 'faqusername'), FILTER_SANITIZE_SPECIAL_CHARS, '');
         $password = Filter::filterVar(
             $request->request->get(key: 'faqpassword'),
             FILTER_SANITIZE_SPECIAL_CHARS,
@@ -222,7 +222,7 @@ final class AuthenticationController extends AbstractAdministrationController im
             return new RedirectResponse(url: './');
         }
 
-        $token = Filter::filterVar($request->request->get(key: 'token'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $token = Filter::filterVar($request->request->get(key: 'token'), FILTER_SANITIZE_SPECIAL_CHARS, '');
         $userId = (int) Filter::filterVar($request->request->get(key: 'user-id'), FILTER_VALIDATE_INT);
 
         $session = $this->container->get(id: 'session');

@@ -56,7 +56,7 @@ class CategoryController extends AbstractFrontController
     {
         $this->userSession->setCurrentUser($this->currentUser);
 
-        $categoryId = Filter::filterVar($request->attributes->get('categoryId'), FILTER_VALIDATE_INT);
+        $categoryId = Filter::filterVar($request->attributes->get('categoryId'), FILTER_VALIDATE_INT, 0);
         $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
 
         $category = $this->initializeCategory($currentGroups);
@@ -184,7 +184,7 @@ class CategoryController extends AbstractFrontController
 
         $this->categoryHelper->setConfiguration($this->configuration)->setCategory($category);
 
-        $categoryHeader = Translation::get(key: 'msgShowAllCategories');
+        $categoryHeader = Translation::getString(key: 'msgShowAllCategories');
 
         return [
             ...$this->getHeader($request),
@@ -252,7 +252,7 @@ class CategoryController extends AbstractFrontController
         if ($records === '') {
             $records = sprintf(
                 '<div class="mb-5 alert alert-info">%s</div>',
-                Translation::get(key: 'msgErrorNoRecords'),
+                Translation::getString(key: 'msgErrorNoRecords'),
             );
         }
 
@@ -291,7 +291,7 @@ class CategoryController extends AbstractFrontController
             $url = sprintf('%scategory/%d/%s.html', $this->configuration->getDefaultUrl(), $parentId, $slug);
         }
 
-        $text = $parentName === '' ? Translation::get(key: 'msgCategoryUp') : $parentName;
+        $text = $parentName === '' ? Translation::getString(key: 'msgCategoryUp') : $parentName;
 
         $link = new Link($url, $this->configuration);
         $link->setTitle($text);

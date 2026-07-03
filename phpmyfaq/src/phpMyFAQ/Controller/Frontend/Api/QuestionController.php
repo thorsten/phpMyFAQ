@@ -93,7 +93,7 @@ final class QuestionController extends AbstractController
             throw new Exception('Invalid email address');
         }
 
-        $email = Filter::filterVar($email, FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = Filter::filterVar($email, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $selectedCategory = ($data->category ?? null) !== null
             ? Filter::filterVar($data->category, FILTER_VALIDATE_INT)

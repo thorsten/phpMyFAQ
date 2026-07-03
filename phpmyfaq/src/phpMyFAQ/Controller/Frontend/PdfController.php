@@ -66,7 +66,7 @@ final class PdfController extends AbstractFrontController
     {
         $categoryId = Filter::filterVar($request->attributes->get('categoryId'), FILTER_VALIDATE_INT);
         $faqId = Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
-        $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if ($categoryId === null || $faqId === null) {
             return new RedirectResponse($this->configuration->getDefaultUrl());

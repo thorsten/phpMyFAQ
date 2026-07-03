@@ -61,7 +61,7 @@ final class DashboardController extends AbstractAdministrationController
     {
         $this->userIsAuthenticated();
 
-        $faqTableInfo = $this->configuration->getDb()->getTableStatus(Database::getTablePrefix());
+        $faqTableInfo = $this->configuration->getDb()->getTableStatus(Database::getTablePrefix() ?? '');
         $userId = $this->currentUser->getUserId();
 
         $backupInfo = $this->backup->getLastBackupInfo();
@@ -72,16 +72,16 @@ final class DashboardController extends AbstractAdministrationController
             'isDevelopmentVersion' => System::isDevelopmentVersion(),
             'currentVersionApp' => System::getVersion(),
             'msgAdminWarningDevelopmentVersion' => sprintf(
-                Translation::get(key: 'msgAdminWarningDevelopmentVersion'),
+                Translation::getString(key: 'msgAdminWarningDevelopmentVersion'),
                 System::getVersion(),
                 System::getGitHubIssuesUrl(),
             ),
             'adminDashboardInfoNumVisits' => $this->adminSession->getNumberOfSessions(),
-            'adminDashboardInfoNumFaqs' => $faqTableInfo[Database::getTablePrefix() . 'faqdata'],
-            'adminDashboardInfoNumComments' => $faqTableInfo[Database::getTablePrefix() . 'faqcomments'],
-            'adminDashboardInfoNumQuestions' => $faqTableInfo[Database::getTablePrefix() . 'faqquestions'],
+            'adminDashboardInfoNumFaqs' => $faqTableInfo[(Database::getTablePrefix() ?? '') . 'faqdata'],
+            'adminDashboardInfoNumComments' => $faqTableInfo[(Database::getTablePrefix() ?? '') . 'faqcomments'],
+            'adminDashboardInfoNumQuestions' => $faqTableInfo[(Database::getTablePrefix() ?? '') . 'faqquestions'],
             'adminDashboardInfoUser' => Translation::get(key: 'msgNews'),
-            'adminDashboardInfoNumUser' => $faqTableInfo[Database::getTablePrefix() . 'faquser'] - 1,
+            'adminDashboardInfoNumUser' => $faqTableInfo[(Database::getTablePrefix() ?? '') . 'faquser'] - 1,
             'adminDashboardHeaderUsersOnline' => Translation::get(key: 'msgUserOnline'),
             'adminDashboardInfoNumUsersOnline' => $this->adminSession->getNumberOfOnlineUsers(windowSeconds: 600),
             'adminDashboardHeaderVisits' => Translation::get(key: 'ad_stat_report_visits'),

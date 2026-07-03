@@ -82,7 +82,7 @@ final class SearchController extends AbstractFrontController
         // Get user input
         $inputLanguage = Filter::filterVar($request->query->get('pmf-all-languages'), FILTER_SANITIZE_SPECIAL_CHARS);
         $inputCategory = Filter::filterVar($request->query->get('pmf-search-category'), FILTER_VALIDATE_INT, '%');
-        $inputSearchTerm = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $inputSearchTerm = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS, '');
         $inputSearchTerm = Strings::substr($inputSearchTerm, 0, 255);
 
         $inputTag = Filter::filterVar($request->query->get('tagging_id'), FILTER_SANITIZE_SPECIAL_CHARS);
@@ -92,7 +92,7 @@ final class SearchController extends AbstractFrontController
             $inputTag = str_replace(search: ',,', replace: ',', subject: $inputTag);
         }
 
-        $searchTerm = Filter::filterVar($request->attributes->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $searchTerm = Filter::filterVar($request->attributes->get('search'), FILTER_SANITIZE_SPECIAL_CHARS, '');
         $searchTerm = Strings::substr($searchTerm, 0, 255);
 
         $page = Filter::filterVar($request->query->get('seite'), FILTER_VALIDATE_INT, 1);
@@ -141,8 +141,8 @@ final class SearchController extends AbstractFrontController
 
         // Determine page header
         $pageHeader = $searchData['tagSearch']
-            ? Translation::get(key: 'msgTagSearch')
-            : Translation::get(key: 'msgAdvancedSearch');
+            ? Translation::getString(key: 'msgTagSearch')
+            : Translation::getString(key: 'msgAdvancedSearch');
 
         // Render template
         return $this->render('search.twig', [

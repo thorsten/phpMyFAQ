@@ -50,7 +50,7 @@ final class SessionKeepAliveController extends AbstractAdministrationController
             'currentYear' => date(format: 'Y'),
             'isUserLoggedIn' => $this->currentUser->isLoggedIn(),
             'csrfToken' => Token::getInstance($this->session)->getTokenString('admin-logout'),
-            'msgConfirm' => sprintf(Translation::get(key: 'ad_session_expiring'), PMF_AUTH_TIMEOUT_WARNING),
+            'msgConfirm' => sprintf(Translation::getString(key: 'ad_session_expiring'), PMF_AUTH_TIMEOUT_WARNING),
             'sessionTimeout' => PMF_AUTH_TIMEOUT,
             'refreshTime' => $refreshTime,
         ]);

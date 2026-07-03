@@ -72,7 +72,7 @@ final class WebAuthnController extends AbstractController
             throw new Exception('Missing username');
         }
 
-        $username = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
+        $username = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $userExists = (bool) $this->user->getUserByLogin($username, raiseError: false);
 
@@ -148,7 +148,7 @@ final class WebAuthnController extends AbstractController
             throw new Exception('Missing register data');
         }
 
-        $register = Filter::filterVar($data->register, FILTER_SANITIZE_SPECIAL_CHARS);
+        $register = Filter::filterVar($data->register, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $webAuthnUser = $this->authWebAuthn->getUserFromSession();
 
@@ -191,7 +191,7 @@ final class WebAuthnController extends AbstractController
             throw new Exception('Missing username');
         }
 
-        $login = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
+        $login = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         try {
             $this->user->getUserByLogin($login);
@@ -226,7 +226,7 @@ final class WebAuthnController extends AbstractController
             throw new Exception('Missing login data');
         }
 
-        $login = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
+        $login = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $loginData = $data->login;
 
         $this->user->getUserByLogin($login);

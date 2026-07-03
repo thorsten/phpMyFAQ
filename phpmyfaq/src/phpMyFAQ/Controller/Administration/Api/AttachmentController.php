@@ -151,6 +151,7 @@ final class AttachmentController extends AbstractAdministrationApiController
             $attachment->setRecordLang(Filter::filterVar(
                 $request->request->get('record_lang'),
                 FILTER_SANITIZE_SPECIAL_CHARS,
+                '',
             ));
             try {
                 $customFileName = array_key_exists($index, $customFileNames) ? $customFileNames[$index] : null;

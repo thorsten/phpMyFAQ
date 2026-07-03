@@ -718,7 +718,7 @@ final class FaqController extends AbstractApiController
         $this->faq->setUser($currentUser);
         $this->faq->setGroups($currentGroups);
 
-        $languageCode = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS);
+        $languageCode = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $categoryId = Filter::filterVar($data->{'category-id'}, FILTER_VALIDATE_INT);
         $categoryName = null;
 
@@ -726,10 +726,10 @@ final class FaqController extends AbstractApiController
             $categoryName = Filter::filterVar($data->{'category-name'}, FILTER_SANITIZE_SPECIAL_CHARS);
         }
 
-        $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
-        $answer = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
-        $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
-        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
+        $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $answer = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $email = Filter::filterVar($data->email, FILTER_SANITIZE_EMAIL);
         $isActive = Filter::filterVar($data->{'is-active'}, FILTER_VALIDATE_BOOLEAN);
         $isSticky = Filter::filterVar($data->{'is-sticky'}, FILTER_VALIDATE_BOOLEAN);
@@ -876,11 +876,11 @@ final class FaqController extends AbstractApiController
         $this->faq->setGroups($currentGroups);
 
         $faqId = Filter::filterVar($data->{'faq-id'}, FILTER_VALIDATE_INT);
-        $languageCode = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS);
-        $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
-        $answer = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
-        $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
-        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
+        $languageCode = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $answer = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $email = Filter::filterVar($data->email, FILTER_SANITIZE_EMAIL);
         $isActive = Filter::filterVar($data->{'is-active'}, FILTER_VALIDATE_BOOLEAN);
         $isSticky = Filter::filterVar($data->{'is-sticky'}, FILTER_VALIDATE_BOOLEAN);

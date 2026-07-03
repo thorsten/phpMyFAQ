@@ -186,8 +186,8 @@ final class CategoryController extends AbstractAdministrationController
         $category->setGroups($currentAdminGroups);
 
         $parentId = (int) Filter::filterVar($request->request->get(key: 'parent_id'), FILTER_VALIDATE_INT);
-        $categoryId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
-        $categoryLang = Filter::filterVar($request->request->get(key: 'lang'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $categoryId = $this->configuration->getDb()->nextId((Database::getTablePrefix() ?? '') . 'faqcategories', 'id');
+        $categoryLang = Filter::filterVar($request->request->get(key: 'lang'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $uploadedFile = $request->files->get('image') ?? [];
         if ($uploadedFile instanceof UploadedFile) {
@@ -200,7 +200,7 @@ final class CategoryController extends AbstractAdministrationController
         $categoryEntity
             ->setParentId($parentId)
             ->setLang($categoryLang)
-            ->setName(Filter::filterVar($request->request->get(key: 'name'), FILTER_SANITIZE_SPECIAL_CHARS))
+            ->setName(Filter::filterVar($request->request->get(key: 'name'), FILTER_SANITIZE_SPECIAL_CHARS, ''))
             ->setDescription(Filter::filterVar(
                 $request->request->get(key: 'description'),
                 FILTER_SANITIZE_SPECIAL_CHARS,
@@ -283,10 +283,15 @@ final class CategoryController extends AbstractAdministrationController
                 ->setSeoType(SeoType::CATEGORY)
                 ->setReferenceId($categoryId)
                 ->setReferenceLanguage($categoryLang)
-                ->setTitle(Filter::filterVar($request->request->get(key: 'serpTitle'), FILTER_SANITIZE_SPECIAL_CHARS))
+                ->setTitle(Filter::filterVar(
+                    $request->request->get(key: 'serpTitle'),
+                    FILTER_SANITIZE_SPECIAL_CHARS,
+                    '',
+                ))
                 ->setDescription(Filter::filterVar(
                     $request->request->get(key: 'serpDescription'),
                     FILTER_SANITIZE_SPECIAL_CHARS,
+                    '',
                 ));
             $seo->create($seoEntity);
 
@@ -564,7 +569,7 @@ final class CategoryController extends AbstractAdministrationController
 
         $parentId = (int) Filter::filterVar($request->request->get(key: 'parent_id'), FILTER_VALIDATE_INT);
         $categoryId = (int) Filter::filterVar($request->request->get(key: 'id'), FILTER_VALIDATE_INT);
-        $categoryLang = Filter::filterVar($request->request->get(key: 'catlang'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $categoryLang = Filter::filterVar($request->request->get(key: 'catlang'), FILTER_SANITIZE_SPECIAL_CHARS, '');
         $existingImage = Filter::filterVar(
             $request->request->get(key: 'existing_image'),
             FILTER_SANITIZE_SPECIAL_CHARS,
@@ -587,7 +592,7 @@ final class CategoryController extends AbstractAdministrationController
             ->setId($categoryId)
             ->setLang($categoryLang)
             ->setParentId($parentId)
-            ->setName(Filter::filterVar($request->request->get(key: 'name'), FILTER_SANITIZE_SPECIAL_CHARS))
+            ->setName(Filter::filterVar($request->request->get(key: 'name'), FILTER_SANITIZE_SPECIAL_CHARS, ''))
             ->setDescription(Filter::filterVar(
                 $request->request->get(key: 'description'),
                 FILTER_SANITIZE_SPECIAL_CHARS,
@@ -654,10 +659,15 @@ final class CategoryController extends AbstractAdministrationController
                     ->setSeoType(SeoType::CATEGORY)
                     ->setReferenceId($categoryEntity->getId())
                     ->setReferenceLanguage($categoryEntity->getLang())
-                    ->setTitle(Filter::filterVar($request->request->get('serpTitle'), FILTER_SANITIZE_SPECIAL_CHARS))
+                    ->setTitle(Filter::filterVar(
+                        $request->request->get('serpTitle'),
+                        FILTER_SANITIZE_SPECIAL_CHARS,
+                        '',
+                    ))
                     ->setDescription(Filter::filterVar(
                         $request->request->get('serpDescription'),
                         FILTER_SANITIZE_SPECIAL_CHARS,
+                        '',
                     ));
 
                 if ($this->seo->get($seoEntity)->getId() === null) {
@@ -715,10 +725,11 @@ final class CategoryController extends AbstractAdministrationController
                 ->setSeoType(SeoType::CATEGORY)
                 ->setReferenceId($categoryId)
                 ->setReferenceLanguage($categoryLang)
-                ->setTitle(Filter::filterVar($request->request->get('serpTitle'), FILTER_SANITIZE_SPECIAL_CHARS))
+                ->setTitle(Filter::filterVar($request->request->get('serpTitle'), FILTER_SANITIZE_SPECIAL_CHARS, ''))
                 ->setDescription(Filter::filterVar(
                     $request->request->get('serpDescription'),
                     FILTER_SANITIZE_SPECIAL_CHARS,
+                    '',
                 ));
 
             if ($this->seo->get($seoEntity)->getId() === null) {

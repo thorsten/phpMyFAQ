@@ -56,7 +56,7 @@ final class CommentsController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::COMMENT_DELETE);
 
-        $page = Filter::filterVar($request->query->get(key: 'page'), FILTER_VALIDATE_INT);
+        $page = Filter::filterVar($request->query->get(key: 'page'), FILTER_VALIDATE_INT, 1);
         $page = max(1, $page);
 
         $itemsPerPage = 10;

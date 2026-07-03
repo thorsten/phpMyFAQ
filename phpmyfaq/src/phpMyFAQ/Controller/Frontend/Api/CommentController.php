@@ -101,7 +101,7 @@ final class CommentController extends AbstractController
             throw new Exception('Missing or empty comment text');
         }
 
-        $type = Filter::filterVar($data->type, FILTER_SANITIZE_SPECIAL_CHARS);
+        $type = Filter::filterVar($data->type, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if ($type === 'news') {
             throw new Exception('News comments not supported');
@@ -109,14 +109,14 @@ final class CommentController extends AbstractController
 
         $faqId = Filter::filterVar($data->id ?? null, FILTER_VALIDATE_INT, default: 0);
         $newsId = Filter::filterVar($data->newsId ?? null, FILTER_VALIDATE_INT);
-        $username = Filter::filterVar($data->user, FILTER_SANITIZE_SPECIAL_CHARS);
+        $username = Filter::filterVar($data->user, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $email = Filter::filterEmail($data->mail);
 
         if (!$email) {
             throw new Exception('Invalid email address');
         }
 
-        $email = Filter::filterVar($email, FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = Filter::filterVar($email, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if (!$this->captchaCodeIsValid($request)) {
             return $this->json(['error' => Translation::get(key: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
@@ -127,7 +127,7 @@ final class CommentController extends AbstractController
         $isLoggedIn = $this->currentUser->isLoggedIn();
 
         // Sanitize comment text based on user status and configuration
-        $commentText = Filter::filterVar($data->comment_text, FILTER_SANITIZE_SPECIAL_CHARS);
+        $commentText = Filter::filterVar($data->comment_text, FILTER_SANITIZE_SPECIAL_CHARS, '');
         if ($enableCommentEditor && $isLoggedIn) {
             // Allow HTML for logged-in users when editor is enabled, using Symfony HtmlSanitizer
             $commentText = Filter::removeAttributes($data->comment_text);

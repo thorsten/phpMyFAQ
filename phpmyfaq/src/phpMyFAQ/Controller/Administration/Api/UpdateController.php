@@ -123,7 +123,7 @@ final class UpdateController extends AbstractController
             if (version_compare($installed, $available, operator: '<')) {
                 return $this->json([
                     'version' => $available,
-                    'message' => Translation::get(key: 'msgCurrentVersion') . $available,
+                    'message' => Translation::getString(key: 'msgCurrentVersion') . $available,
                     'dateLastChecked' => $dateLastChecked,
                 ], Response::HTTP_OK);
             }
@@ -163,7 +163,11 @@ final class UpdateController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $versionNumber = Filter::filterVar($request->attributes->get('versionNumber'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $versionNumber = Filter::filterVar(
+            $request->attributes->get('versionNumber'),
+            FILTER_SANITIZE_SPECIAL_CHARS,
+            '',
+        );
 
         try {
             $pathToPackage = $this->upgrade->downloadPackage($versionNumber);

@@ -180,7 +180,7 @@ final class DashboardController extends AbstractController
             if (version_compare($versions['installed'], $versions[$releaseEnvironment]) >= 0) {
                 $info = [
                     'success' =>
-                        Translation::get(key: 'ad_xmlrpc_latest') . ': phpMyFAQ ' . ($versions['stable'] ?? ''),
+                        Translation::getString(key: 'ad_xmlrpc_latest') . ': phpMyFAQ ' . ($versions['stable'] ?? ''),
                 ];
             }
 

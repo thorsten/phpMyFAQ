@@ -94,9 +94,9 @@ final class QuestionController extends AbstractApiController
 
         $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
         $categoryId = Filter::filterVar($data->{'category-id'}, FILTER_VALIDATE_INT);
-        $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
-        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterVar($data->email, FILTER_SANITIZE_SPECIAL_CHARS);
+        $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $email = Filter::filterVar($data->email, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $visibility = $this->configuration->get(item: 'records.enableVisibilityQuestions') ? 'Y' : 'N';
 

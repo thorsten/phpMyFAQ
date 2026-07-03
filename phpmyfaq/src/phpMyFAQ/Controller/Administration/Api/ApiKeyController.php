@@ -72,19 +72,19 @@ final class ApiKeyController extends AbstractAdministrationApiController
         $this->userHasPermission(PermissionType::USER_EDIT);
 
         $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
-        $csrf = Filter::filterVar($data->csrf ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $csrf = Filter::filterVar($data->csrf ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         if (!$this->verifySessionCsrfToken('api-key-create', $csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $name = Filter::filterVar($data->name ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $name = Filter::filterVar($data->name ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         if ($name === '') {
             return $this->json(['error' => 'API key name is required.'], Response::HTTP_BAD_REQUEST);
         }
 
         $scopes = is_array($data->scopes ?? null) ? array_values($data->scopes) : [];
         $scopes = array_values(array_filter($scopes, is_string(...)));
-        $expiresAt = Filter::filterVar($data->expiresAt ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $expiresAt = Filter::filterVar($data->expiresAt ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if ($expiresAt !== '' && strtotime($expiresAt) === false) {
             return $this->json(['error' => 'Invalid expiresAt value.'], Response::HTTP_BAD_REQUEST);
@@ -133,7 +133,7 @@ final class ApiKeyController extends AbstractAdministrationApiController
         $this->userHasPermission(PermissionType::USER_EDIT);
 
         $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
-        $csrf = Filter::filterVar($data->csrf ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $csrf = Filter::filterVar($data->csrf ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         if (!$this->verifySessionCsrfToken('api-key-update', $csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
@@ -143,14 +143,14 @@ final class ApiKeyController extends AbstractAdministrationApiController
         }
 
         $id = (int) $request->attributes->get('id');
-        $name = Filter::filterVar($data->name ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $name = Filter::filterVar($data->name ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         if ($name === '') {
             return $this->json(['error' => 'API key name is required.'], Response::HTTP_BAD_REQUEST);
         }
 
         $scopes = is_array($data->scopes ?? null) ? array_values($data->scopes) : [];
         $scopes = array_values(array_filter($scopes, is_string(...)));
-        $expiresAt = Filter::filterVar($data->expiresAt ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $expiresAt = Filter::filterVar($data->expiresAt ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if ($expiresAt !== '' && strtotime($expiresAt) === false) {
             return $this->json(['error' => 'Invalid expiresAt value.'], Response::HTTP_BAD_REQUEST);
@@ -208,7 +208,7 @@ final class ApiKeyController extends AbstractAdministrationApiController
             $csrf = $body->csrf ?? null;
         }
 
-        $csrf = Filter::filterVar((string) ($csrf ?? ''), FILTER_SANITIZE_SPECIAL_CHARS);
+        $csrf = Filter::filterVar((string) ($csrf ?? ''), FILTER_SANITIZE_SPECIAL_CHARS, '');
         if (!$this->verifySessionCsrfToken('api-key-delete', $csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }

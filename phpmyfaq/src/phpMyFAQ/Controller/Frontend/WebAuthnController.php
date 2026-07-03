@@ -71,7 +71,7 @@ final class WebAuthnController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $username = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
+        $username = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if (!$this->user->getUserByLogin($username, raiseError: false)) {
             try {
@@ -124,7 +124,7 @@ final class WebAuthnController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $register = Filter::filterVar($data->register, FILTER_SANITIZE_SPECIAL_CHARS);
+        $register = Filter::filterVar($data->register, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $webAuthnUser = $this->authWebAuthn->getUserFromSession();
         $webAuthnUser->setWebAuthnKeys($this->authWebAuthn->register($register, $webAuthnUser->getWebAuthnKeys()));
@@ -157,7 +157,7 @@ final class WebAuthnController extends AbstractController
         }
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
-        $login = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
+        $login = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         try {
             $this->user->getUserByLogin($login);
@@ -183,7 +183,7 @@ final class WebAuthnController extends AbstractController
         }
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
-        $login = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
+        $login = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $loginData = $data->login;
 
         $this->user->getUserByLogin($login);

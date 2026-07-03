@@ -47,7 +47,7 @@ final class TranslationController extends AbstractController
     #[Route(path: 'translations/{language}', name: 'api.private.translations', methods: ['GET'])]
     public function translations(Request $request): JsonResponse
     {
-        $language = Filter::filterVar($request->attributes->get('language'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $language = Filter::filterVar($request->attributes->get('language'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if (!Language::isASupportedLanguage($language)) {
             return $this->json(['error' => 'Language not supported'], Response::HTTP_BAD_REQUEST);

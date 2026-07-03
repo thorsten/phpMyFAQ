@@ -70,7 +70,7 @@ final class RegistrationController extends AbstractController
             throw new Exception('Invalid email address');
         }
 
-        $email = Filter::filterVar($email, FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = Filter::filterVar($email, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $isVisible = (bool) Filter::filterVar($data->isVisible ?? false, FILTER_SANITIZE_SPECIAL_CHARS) ?? false;
 
