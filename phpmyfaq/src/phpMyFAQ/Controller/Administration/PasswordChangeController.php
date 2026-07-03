@@ -73,7 +73,7 @@ final class PasswordChangeController extends AbstractAdministrationController
         }
 
         $auth = $this->auth;
-        $authSource = $auth->selectAuth($this->currentUser->getAuthSource('name'));
+        $authSource = $auth->selectAuth($this->currentUser->getAuthSource('name') ?? '');
         $authSource->getEncryptionContainer($this->currentUser->getAuthData('encType'));
 
         $authSource->disableReadOnly();

@@ -57,6 +57,11 @@ final class TagController extends AbstractController
         }
 
         $id = Filter::filterVar($postData->id, FILTER_VALIDATE_INT);
+
+        if ($id === null) {
+            return $this->json(['error' => Translation::get(key: 'msgErrorOccurred')], Response::HTTP_BAD_REQUEST);
+        }
+
         $newTag = Filter::filterVar($postData->tag, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $tag = new Tag();

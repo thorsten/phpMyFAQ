@@ -327,6 +327,14 @@ final class CategoryController extends AbstractApiController
             $parentId = $parentCategoryIdFound;
         }
 
+        if ($parentId === null || $userId === null || $groupId === null) {
+            $result = [
+                'stored' => false,
+                'error' => 'Cannot add category',
+            ];
+            return $this->json($result, Response::HTTP_BAD_REQUEST);
+        }
+
         $categoryEntity = new CategoryEntity();
         $categoryEntity
             ->setLang($languageCode)
@@ -340,6 +348,14 @@ final class CategoryController extends AbstractApiController
             ->setShowHome($showOnHome);
 
         $categoryId = $category->create($categoryEntity);
+
+        if ($categoryId === null) {
+            $result = [
+                'stored' => false,
+                'error' => 'Cannot add category',
+            ];
+            return $this->json($result, Response::HTTP_BAD_REQUEST);
+        }
 
         // Category Order entry
         $categoryOrder = $this->createOrder();

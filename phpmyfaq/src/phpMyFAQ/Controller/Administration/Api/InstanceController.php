@@ -107,7 +107,7 @@ final class InstanceController extends AbstractController
         $faqInstanceClient->setFileSystem(new Filesystem(PMF_ROOT_DIR));
 
         $urlParts = parse_url($data->getUrl());
-        $hostname = $urlParts['host'];
+        $hostname = $urlParts['host'] ?? '';
 
         if ($faqInstanceClient->createClientFolder($hostname)) {
             $clientDir = PMF_ROOT_DIR . '/multisite/' . $hostname;

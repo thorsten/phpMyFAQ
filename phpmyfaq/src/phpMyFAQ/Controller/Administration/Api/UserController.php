@@ -283,7 +283,7 @@ final class UserController extends AbstractAdministrationApiController
         }
 
         $auth = new Auth($this->configuration);
-        $authSource = $auth->selectAuth($targetUser->getAuthSource(key: 'name'));
+        $authSource = $auth->selectAuth($targetUser->getAuthSource(key: 'name') ?? '');
         $authSource->getEncryptionContainer($targetUser->getAuthData(key: 'encType'));
 
         if (hash_equals($newPassword, $retypedPassword)) {
@@ -317,6 +317,10 @@ final class UserController extends AbstractAdministrationApiController
         }
 
         $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT);
+
+        if ($userId === null) {
+            return $this->json(['error' => Translation::get(key: 'ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
+        }
 
         $currentUser->getUserById($userId, allowBlockedUsers: true);
         $superAdminIds = User::getSuperAdminIds($this->configuration);

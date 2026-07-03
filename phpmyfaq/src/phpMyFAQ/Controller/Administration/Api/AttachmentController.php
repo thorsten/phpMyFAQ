@@ -146,8 +146,16 @@ final class AttachmentController extends AbstractAdministrationApiController
                 return $this->json(['error' => Translation::get(key: 'msgImageTooLarge')], Response::HTTP_BAD_REQUEST);
             }
 
+            $recordId = Filter::filterVar($request->request->get('record_id'), FILTER_VALIDATE_INT);
+
+            if ($recordId === null) {
+                return $this->json([
+                    'error' => Translation::get(key: 'msgNoImagesForUpload'),
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
             $attachment = AttachmentFactory::create();
-            $attachment->setRecordId(Filter::filterVar($request->request->get('record_id'), FILTER_VALIDATE_INT));
+            $attachment->setRecordId($recordId);
             $attachment->setRecordLang(Filter::filterVar(
                 $request->request->get('record_lang'),
                 FILTER_SANITIZE_SPECIAL_CHARS,

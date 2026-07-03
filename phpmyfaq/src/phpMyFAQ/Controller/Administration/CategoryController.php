@@ -205,7 +205,7 @@ final class CategoryController extends AbstractAdministrationController
                 $request->request->get(key: 'description'),
                 FILTER_SANITIZE_SPECIAL_CHARS,
             ))
-            ->setUserId(Filter::filterVar($request->request->get(key: 'user_id'), FILTER_VALIDATE_INT))
+            ->setUserId(Filter::filterVar($request->request->get(key: 'user_id'), FILTER_VALIDATE_INT) ?? -1)
             ->setGroupId(Filter::filterVar($request->request->get(key: 'group_id'), FILTER_VALIDATE_INT) ?? -1)
             ->setActive((bool) Filter::filterVar($request->request->get(key: 'active'), FILTER_VALIDATE_INT))
             ->setImage($hasUploadedImage ? $this->categoryImage->getFileName($categoryId, $categoryLang) : '')
@@ -220,10 +220,9 @@ final class CategoryController extends AbstractAdministrationController
                 ],
             ];
         } else {
+            $restrictedUser = Filter::filterVar($request->request->get(key: 'restricted_users'), FILTER_VALIDATE_INT);
             $permissions += [
-                'restricted_user' => [
-                    Filter::filterVar($request->request->get(key: 'restricted_users'), FILTER_VALIDATE_INT),
-                ],
+                'restricted_user' => $restrictedUser === null ? [] : [$restrictedUser],
             ];
         }
 
@@ -239,7 +238,13 @@ final class CategoryController extends AbstractAdministrationController
             $restrictedGroups = $request->request->all(key: 'restricted_groups');
             $permissions += [
                 'restricted_groups' => is_array($restrictedGroups)
-                    ? Filter::filterArray($restrictedGroups, FILTER_VALIDATE_INT)
+                    ? array_values(array_filter(
+                        array_map(static fn($value): ?int => Filter::filterVar(
+                            $value,
+                            FILTER_VALIDATE_INT,
+                        ), $restrictedGroups),
+                        static fn($value): bool => $value !== null,
+                    ))
                     : [],
             ];
         }
@@ -611,10 +616,9 @@ final class CategoryController extends AbstractAdministrationController
                 ],
             ];
         } else {
+            $restrictedUser = Filter::filterVar($request->request->get(key: 'restricted_users'), FILTER_VALIDATE_INT);
             $permissions += [
-                'restricted_user' => [
-                    Filter::filterVar($request->request->get(key: 'restricted_users'), FILTER_VALIDATE_INT),
-                ],
+                'restricted_user' => $restrictedUser === null ? [] : [$restrictedUser],
             ];
         }
 
@@ -630,7 +634,13 @@ final class CategoryController extends AbstractAdministrationController
             $restrictedGroups = $request->request->all(key: 'restricted_groups');
             $permissions += [
                 'restricted_groups' => is_array($restrictedGroups)
-                    ? Filter::filterArray($restrictedGroups, FILTER_VALIDATE_INT)
+                    ? array_values(array_filter(
+                        array_map(static fn($value): ?int => Filter::filterVar(
+                            $value,
+                            FILTER_VALIDATE_INT,
+                        ), $restrictedGroups),
+                        static fn($value): bool => $value !== null,
+                    ))
                     : [],
             ];
         }

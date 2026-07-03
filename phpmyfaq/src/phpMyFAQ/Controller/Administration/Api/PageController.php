@@ -187,6 +187,12 @@ final class PageController extends AbstractAdministrationApiController
 
         // For translations, check if language already exists for this page ID
         if ($isTranslation) {
+            if ($translationPageId === null) {
+                return $this->json([
+                    'error' => Translation::get(key: 'ad_page_insertfail'),
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
             $existingLanguages = $customPage->getExistingLanguages($translationPageId);
             if (in_array($language, $existingLanguages, strict: true)) {
                 return $this->json([
@@ -221,7 +227,7 @@ final class PageController extends AbstractAdministrationApiController
         // Create a translation or new page
         $success = false;
         $pageId = 0;
-        if ($isTranslation) {
+        if ($isTranslation && $translationPageId !== null) {
             $success = $customPage->createTranslation($pageEntity, $translationPageId);
             $pageId = $success ? $translationPageId : 0;
         }
@@ -330,6 +336,11 @@ final class PageController extends AbstractAdministrationApiController
         }
 
         $pageId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
+
+        if ($pageId === null) {
+            return $this->json(['error' => Translation::get(key: 'ad_page_updatefail')], Response::HTTP_BAD_REQUEST);
+        }
+
         $pageTitle = Filter::filterVar($data->pageTitle, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $slug = Filter::filterVar($data->slug, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $content = Filter::filterVar($data->content ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -414,6 +425,10 @@ final class PageController extends AbstractAdministrationApiController
 
         $pageId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
         $status = (bool) Filter::filterVar($data->status, FILTER_SANITIZE_SPECIAL_CHARS);
+
+        if ($pageId === null) {
+            return $this->json(['error' => Translation::get(key: 'ad_page_updatefail')], Response::HTTP_BAD_REQUEST);
+        }
 
         if ($customPage->activate($pageId, $status)) {
             $this->adminLog->log($this->currentUser, AdminLogType::PAGE_EDIT->value . ':' . $pageId);

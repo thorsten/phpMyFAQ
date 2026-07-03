@@ -128,6 +128,11 @@ final class NewsController extends AbstractAdministrationApiController
         }
 
         $newsId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
+
+        if ($newsId === null) {
+            return $this->json(['error' => Translation::get(key: 'ad_news_updatefail')], Response::HTTP_BAD_REQUEST);
+        }
+
         $header = Filter::filterVar($data->newsHeader, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $content = Filter::filterVar($data->news, FILTER_SANITIZE_SPECIAL_CHARS);
         $author = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS, '');
@@ -179,6 +184,11 @@ final class NewsController extends AbstractAdministrationApiController
         }
 
         $newsId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
+
+        if ($newsId === null) {
+            return $this->json(['error' => Translation::get(key: 'ad_news_updatefail')], Response::HTTP_BAD_REQUEST);
+        }
+
         $status = (bool) Filter::filterVar($data->status, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if ($status) {

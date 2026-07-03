@@ -193,7 +193,7 @@ final class ExportController extends AbstractController
             }
 
             if ($hasDataField(payload: $data, field: 'language') && LanguageCodes::get($reportData['faq_language'])) {
-                $text[$i][] = $report->convertEncoding(LanguageCodes::get($reportData['faq_language']));
+                $text[$i][] = $report->convertEncoding(LanguageCodes::get($reportData['faq_language']) ?? '');
             }
 
             if ($hasDataField(payload: $data, field: 'id')) {

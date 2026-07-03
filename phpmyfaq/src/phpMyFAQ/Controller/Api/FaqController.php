@@ -776,6 +776,14 @@ final class FaqController extends AbstractApiController
 
         $faqEntity = $this->faq->create($faqData);
 
+        if ($faqEntity->getId() === null) {
+            $result = [
+                'stored' => false,
+                'error' => 'Cannot add FAQ',
+            ];
+            return $this->json($result, Response::HTTP_BAD_REQUEST);
+        }
+
         $this->faqMetaData
             ->setFaqId($faqEntity->getId())
             ->setFaqLanguage($languageCode)
@@ -884,6 +892,14 @@ final class FaqController extends AbstractApiController
         $email = Filter::filterVar($data->email, FILTER_SANITIZE_EMAIL);
         $isActive = Filter::filterVar($data->{'is-active'}, FILTER_VALIDATE_BOOLEAN);
         $isSticky = Filter::filterVar($data->{'is-sticky'}, FILTER_VALIDATE_BOOLEAN);
+
+        if ($faqId === null) {
+            $result = [
+                'stored' => false,
+                'error' => 'Cannot update FAQ',
+            ];
+            return $this->json($result, Response::HTTP_BAD_REQUEST);
+        }
 
         if ($this->faq->hasTitleAHash($question)) {
             $result = [

@@ -140,6 +140,11 @@ final class FaqController extends AbstractController
             $categories = [$allCategoryIds[0]];
         }
 
+        $categories = array_values(array_filter(
+            array_map(static fn($v): ?int => Filter::filterVar($v, FILTER_VALIDATE_INT), (array) ($categories ?? [])),
+            static fn($v): bool => $v !== null,
+        ));
+
         if (!$this->captchaCodeIsValid($request)) {
             return $this->json(['error' => Translation::get(key: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
         }
@@ -180,6 +185,10 @@ final class FaqController extends AbstractController
 
             $this->faq->create($faqEntity);
             $recordId = $faqEntity->getId();
+
+            if ($recordId === null) {
+                return $this->json(['error' => Translation::get(key: 'errSaveEntries')], Response::HTTP_BAD_REQUEST);
+            }
 
             $openQuestionId = property_exists($data, 'openQuestionID')
                 ? Filter::filterVar($data->openQuestionID, FILTER_VALIDATE_INT)

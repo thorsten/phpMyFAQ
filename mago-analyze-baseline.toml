@@ -4237,12 +4237,6 @@ message = "Attempting to call a method on `null`."
 count = 2
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AttachmentController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Attachment\AbstractAttachment::setRecordId` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `filter_var_array`: expected `array<array-key, mixed>`, but found `mixed`."
@@ -4317,19 +4311,7 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
 code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Category\Image::setFileName` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
-code = "possibly-null-argument"
 message = "Argument #2 of function `in_array` is possibly `null`, but parameter type `array<array-key, mixed>` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
-code = "possibly-null-argument"
-message = 'Argument #2 of method `phpMyFAQ\Category::updateParentCategory` is possibly `null`, but parameter type `int` does not accept it.'
 count = 1
 
 [[issues]]
@@ -4666,12 +4648,6 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ExportController.php"
 code = "possibly-false-argument"
 message = 'Argument #1 of method `Symfony\Component\HttpFoundation\Response::__construct` is possibly `false`, but parameter type `null|string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ExportController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Administration\Report::convertEncoding` is possibly `null`, but parameter type `string` does not accept it.'
 count = 1
 
 [[issues]]
@@ -5168,44 +5144,8 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
-code = "possibly-false-array-access"
-message = "Cannot perform array access on possibly `false` value."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
 code = "possibly-invalid-argument"
 message = '''Possible argument type mismatch for argument #1 of `phpMyFAQ\Instance\Setup::createDatabaseFile`: expected `array<array-key, int>|array<array-key, string>`, but possibly received `array{'dbDatabaseName': string, 'dbPassword': string, 'dbPort': int|null, 'dbPrefix': string, 'dbServer': string, 'dbType': string, 'dbUser': string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
-code = "possibly-null-argument"
-message = "Argument #1 of function `strpos` is possibly `null`, but parameter type `string` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
-code = "possibly-null-argument"
-message = "Argument #1 of function `substr` is possibly `null`, but parameter type `string` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Instance\Client::createClientFolder` is possibly `null`, but parameter type `string` does not accept it.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
-code = "possibly-null-operand"
-message = "Possibly null right operand used in string concatenation (type `non-empty-string|null`)."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
-code = "possibly-undefined-string-array-index"
-message = "Possibly undefined array key 'host' accessed on `array{'fragment'?: non-empty-string, 'host'?: non-empty-string, 'pass'?: non-empty-string, 'path'?: non-empty-string, 'port'?: int<0, 65535>, 'query'?: non-empty-string, 'scheme'?: non-empty-string, 'user'?: non-empty-string}`."
 count = 1
 
 [[issues]]
@@ -5354,27 +5294,9 @@ count = 5
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/NewsController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Entity\NewsMessage::setId` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/NewsController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\News::activate` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/NewsController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\News::deactivate` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/NewsController.php"
 code = "possibly-null-operand"
 message = "Possibly null right operand used in string concatenation (type `int|null`)."
-count = 4
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/OpenSearchController.php"
@@ -5432,39 +5354,9 @@ count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/PageController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\CustomPage::activate` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/PageController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\CustomPage::getById` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/PageController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\CustomPage::getExistingLanguages` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/PageController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Entity\CustomPageEntity::setId` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/PageController.php"
-code = "possibly-null-argument"
-message = 'Argument #2 of method `phpMyFAQ\CustomPage::createTranslation` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/PageController.php"
 code = "possibly-null-operand"
 message = "Possibly null right operand used in string concatenation (type `int|null`)."
-count = 3
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/PageController.php"
@@ -5645,12 +5537,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TagController.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`mixed`)."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TagController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Entity\Tag::setId` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TagController.php"
@@ -5840,21 +5726,9 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Auth::selectAuth` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\User::getUserById` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
 code = "possibly-null-operand"
 message = "Possibly null right operand used in string concatenation (type `int|null`)."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
@@ -6032,12 +5906,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #3 of `phpMyFAQ\Category\Permission::add`: expected `array<array-key, int>`, but provided type `array<array-key, mixed>|bool|list{int(-1)}|null` is less specific.'
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
 code = "mixed-array-access"
 message = "Unsafe array access on type `mixed`."
 count = 2
@@ -6071,24 +5939,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
 code = "possibly-invalid-argument"
 message = '''Possible argument type mismatch for argument #1 of `phpMyFAQ\Category\Order::getCategoryTree`: expected `array<array-key, array{'category_id': string, 'parent_id': string}>`, but possibly received `array<int, array{'category_id': int, 'parent_id': int, 'position': int}>`.'''
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #3 of `phpMyFAQ\Category\Permission::add`: expected `array<array-key, int>`, but possibly received `list{int(-1)}|list{int|null}`.'
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Entity\CategoryEntity::setUserId` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "possibly-null-argument"
-message = 'Argument #3 of method `phpMyFAQ\Category\Permission::add` is possibly `null`, but parameter type `array<array-key, int>` does not accept it.'
-count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
@@ -6404,12 +6254,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/PasswordChangeController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Auth::selectAuth` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/PasswordChangeController.php"
 code = "redundant-cast"
 message = "Redundant cast to `(string)`: the expression already has this type."
 count = 2
@@ -6567,49 +6411,19 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
 code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Entity\CategoryEntity::setParentId`: expected `int`, but possibly received `int|null|true`.'
+message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Entity\CategoryEntity::setParentId`: expected `int`, but possibly received `int|true`.'
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
 code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #2 of `phpMyFAQ\Category\Order::add`: expected `int`, but possibly received `int|null|true`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Category\Order::add` is possibly `null`, but parameter type `int` does not accept it.'
+message = 'Possible argument type mismatch for argument #2 of `phpMyFAQ\Category\Order::add`: expected `int`, but possibly received `int|true`.'
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
 code = "possibly-null-argument"
 message = 'Argument #1 of method `phpMyFAQ\Entity\CategoryEntity::setActive` is possibly `null`, but parameter type `bool` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Entity\CategoryEntity::setGroupId` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Entity\CategoryEntity::setParentId` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Entity\CategoryEntity::setUserId` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
-code = "possibly-null-argument"
-message = 'Argument #2 of method `phpMyFAQ\Category\Order::add` is possibly `null`, but parameter type `int` does not accept it.'
 count = 1
 
 [[issues]]
@@ -6659,12 +6473,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`mixed`)."
 count = 18
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Entity\FaqEntity::setId` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
@@ -7148,18 +6956,6 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Category\Permission::getAll`: expected `array<array-key, int>`, but provided type `bool|list{mixed}|non-empty-array<array-key, mixed>|null` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Helper\CategoryHelper::getModerators`: expected `array<array-key, int>`, but provided type `bool|list{mixed}|non-empty-array<array-key, mixed>|null` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\FaqEntity::setActive`: expected `bool`, but found `mixed`.'
 count = 1
@@ -7198,67 +6994,7 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Faq\MetaData::setCategories`: expected `array<array-key, mixed>`, but possibly received `bool|list{mixed}|non-empty-array<array-key, mixed>|null`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
-code = "possibly-invalid-array-access"
-message = "Cannot perform array access on value of type `bool`."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
-code = "possibly-invalid-iterator"
-message = "The expression provided to `foreach` (type `bool|list{mixed}|non-empty-array<array-key, mixed>|null`) might not be iterable at runtime."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Category\Permission::getAll` is possibly `null`, but parameter type `array<array-key, int>` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Faq\MetaData::setCategories` is possibly `null`, but parameter type `array<array-key, mixed>` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Faq\MetaData::setFaqId` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Helper\CategoryHelper::getModerators` is possibly `null`, but parameter type `array<array-key, int>` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #2 of method `phpMyFAQ\Faq\Permission::add` is possibly `null`, but parameter type `int` does not accept it.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
-code = "possibly-null-array-access"
-message = "Cannot perform array access on possibly `null` value."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
-code = "possibly-null-iterator"
-message = "Expression being iterated (type `bool|list{mixed}|non-empty-array<array-key, mixed>|null`) might be `null` at runtime."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"

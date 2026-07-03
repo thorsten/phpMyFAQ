@@ -69,7 +69,7 @@ final class CategoryController extends AbstractAdministrationApiController
 
         $categoryRelation = new Relation($this->configuration, $category);
 
-        $this->categoryImage->setFileName($category->getCategoryData((int) $data->categoryId)->getImage());
+        $this->categoryImage->setFileName($category->getCategoryData((int) $data->categoryId)->getImage() ?? '');
 
         $this->categoryOrder->remove((int) $data->categoryId);
 
@@ -166,7 +166,7 @@ final class CategoryController extends AbstractAdministrationApiController
         $category = new Category($this->configuration, [], false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
-        $category->updateParentCategory((int) $data->categoryId, $parentId);
+        $category->updateParentCategory((int) $data->categoryId, $parentId ?? 0);
 
         $this->adminLog->log($this->currentUser, AdminLogType::CATEGORY_REORDER->value . ':' . $data->categoryId);
 
