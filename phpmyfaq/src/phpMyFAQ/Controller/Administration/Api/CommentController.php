@@ -47,39 +47,38 @@ final class CommentController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::COMMENT_DELETE);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
+        $payload = $data->data instanceof \stdClass ? $data->data : null;
 
-        if (!Token::getInstance($this->session)->verifyToken('delete-comment', $data->data->{'pmf-csrf-token'})) {
+        $csrfToken = $payload !== null && isset($payload->{'pmf-csrf-token'})
+            ? (string) $payload->{'pmf-csrf-token'}
+            : null;
+        if (!Token::getInstance($this->session)->verifyToken('delete-comment', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $commentIds = $data->data->{'comments[]'} ?? [];
+        $rawIds = $payload !== null && isset($payload->{'comments[]'}) ? $payload->{'comments[]'} : [];
+        $commentIds = is_array($rawIds) ? $rawIds : [$rawIds];
 
+        $type = (string) ($data->type ?? '');
         $result = false;
-        if (!is_null($commentIds)) {
-            if (!is_array($commentIds)) {
-                $commentIds = [$commentIds];
+        foreach ($commentIds as $commentId) {
+            $commentId = filter_var($commentId, FILTER_VALIDATE_INT);
+            if ($commentId === false || $commentId === 0) {
+                continue;
             }
 
-            foreach ($commentIds as $commentId) {
-                $commentId = Filter::filterVar($commentId, FILTER_VALIDATE_INT);
-                if (!$commentId) {
-                    continue;
-                }
-
-                $result = $this->comments->delete($data->type, $commentId);
-            }
-
-            if ($result) {
-                $this->adminLog->log(
-                    $this->currentUser,
-                    AdminLogType::COMMENT_DELETE->value . ':' . implode(',', $commentIds),
-                );
-            }
-
-            return $this->json(['success' => $result], Response::HTTP_OK);
+            $result = $this->comments->delete($type, $commentId);
         }
 
-        return $this->json(['error' => false], Response::HTTP_BAD_REQUEST);
+        if ($result) {
+            $this->adminLog?->log(
+                $this->currentUser,
+                AdminLogType::COMMENT_DELETE->value . ':'
+                    . implode(',', array_map(static fn(mixed $id): string => (string) $id, $commentIds)),
+            );
+        }
+
+        return $this->json(['success' => $result], Response::HTTP_OK);
     }
 }

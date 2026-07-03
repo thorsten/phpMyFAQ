@@ -145,18 +145,39 @@ baselined by request. CI green throughout.
 > flagged `unused-property` only because `ConfigurationMethodsTrait` (which reads
 > `$this->config`) is analyzed in isolation — the property is very much used.
 
-**Deferred: trait & interface typing (180 findings).** This is the real remaining
-work and needs care, not a stub:
-- **Traits** (`ConfigurationMethodsTrait`, `CurrentUserSessionLookupTrait`,
-  `CurrentUserAccountStateTrait`, …): tell the analyzer what the host provides —
-  e.g. a `@phpstan-require-extends`/`@phpstan-require-implements` bound or
-  `@property`/`@method` docblocks on the trait. Verify mago honors the chosen
-  mechanism on a single trait before rolling out.
-- **Base-vs-interface typing**: e.g. `CurrentUser::$authContainer` is typed
-  `Auth` but the code calls `isValidLogin()`/`checkCredentials()` which live on
-  `AuthDriverInterface`. Tighten the property/return type to the interface (or a
-  union). A genuine type-precision improvement, but touches auth-critical code —
-  do it deliberately with the full suite as the gate.
+**Trait & interface typing (180 findings) — spiked; recommend leaving baselined.**
+A spike (2026-07-01) evaluated every remediation and found none is worth the
+risk/effort. Details:
+
+- **mago has no trait-context docblock mechanism.** Tested on
+  `ConfigurationMethodsTrait` (72 findings): `@mixin Configuration` and
+  `@property` are both ignored — mago analyzes traits standalone. The only tool
+  is the inline `@mago-ignore analysis:<rule>` pragma.
+- **A blanket pragma is *worse* than the baseline.** The baseline suppresses each
+  finding *by count*, so a genuinely new `non-existent-*` (a real typo) in the
+  trait still surfaces. A trait-level `@mago-ignore` suppresses the rule for the
+  whole trait forever, hiding future real bugs. Net regression in bug-detection.
+- **The only true fix for traits is a structural move** (relocate host property
+  declarations into the 1:1 trait) — touches central classes (`Configuration`,
+  `CurrentUser`) for zero runtime benefit.
+- **"Missing interface methods" can't just be added to the interface.**
+  `PermissionInterface` (50 findings) declares only `hasPermission()`, but the
+  called group methods (`addGroup`, `getGroupName`, `getAllGroupsOptions`,
+  `grantGroupRight`, `deleteGroup`, …) exist **only** on `MediumPermission`, not
+  `BasicPermission`. Adding them to the interface would force `BasicPermission`
+  to implement group methods it deliberately lacks. The correct fix is a new
+  `GroupPermissionInterface` + retyped call sites — a design change to the
+  **security-sensitive** permission subsystem. Same shape for
+  `AuthDriverInterface` and the `Auth` container.
+- **External-lib interfaces** (`SessionInterface`, `Http\Promise\Promise`) can't
+  be fixed from here at all.
+
+**Conclusion:** the baseline already suppresses these false positives precisely
+and safely (CI green, no real bugs). Clearing them means either risky refactors
+of central/security code or a net loss in bug-detection. **Leave baselined** and
+spend effort on Phase 3, where fixes are additive and genuinely improve safety.
+Revisit the permission/auth interface design only if it's being reworked for
+other reasons.
 
 ### Phase 3 — Type the request boundary (the big lever, multi-week, file-by-file)
 - Order: `Controller/Administration/Api` → other `Controller/*` → `Database` → `Faq`.
@@ -164,6 +185,35 @@ work and needs care, not a stub:
   collapses at the source rather than fixing 4,700 symptoms individually.
 - One PR per file / small group; regenerate baseline per PR for measurable progress.
 - This phase accounts for the bulk (~4,700) of the ledger.
+
+**Proof-of-pattern slice (2026-07-01): `CommentController::delete`.** Established
+`AbstractController::getJsonObject(Request): \stdClass` — decodes the JSON body
+with `JSON_THROW_ON_ERROR` and validates it is an object, so callers stop leaking
+`mixed` from `json_decode()` (also a real robustness fix: the old code would fatal
+on malformed input at `$data->data->…`). Result: the method's error-level findings
+(`mixed-property-access`, `mixed-argument`, `possible-method-access-on-null`,
+`less-specific-nested-argument-type`) were eliminated; ~10 findings cleared,
+baseline 3301 → 3294, all 43 CommentController tests green.
+
+**What the slice taught about Phase 3 economics — read before scaling:**
+- `getJsonObject()` fixes property-*access* errors, but `mixed` *values* still flow
+  from JSON leaves. Getting a method to literal zero needs per-field casting, and
+  some casts (`(array) $mixed`) mago itself rejects (`invalid-type-cast`). Chasing
+  the last `mixed-assignment` *warnings* is low-value; target the *errors*.
+- Use native `filter_var($x, FILTER_VALIDATE_INT)` (returns `int|false`) over
+  `Filter::filterVar()` when you need a typed scalar — mago narrows it cleanly.
+- The single inherent `mixed` boundary (the `json_decode` call) is documented with
+  `/* @mago-expect analysis:mixed-assignment - … */` rather than baselined.
+- **Highest-leverage next move:** `Filter::filterVar()` is declared `: mixed`, and
+  it is called *everywhere* — it is a primary multiplier of `mixed-assignment` /
+  `mixed-argument`. Giving it a precise (conditional) return type, or migrating
+  hot call sites to native `filter_var`, would cascade across hundreds of findings
+  for far less effort than hand-typing controllers one method at a time. Evaluate
+  whether mago honors a `@return ($filter is FILTER_VALIDATE_INT ? int|false : …)`
+  conditional-return annotation before committing to either path.
+- At ~10 findings per method by hand, the ~4,700 `mixed-*` cluster is genuinely
+  multi-month unless the `Filter::filterVar` leverage (or a similar boundary-typing
+  multiplier) is applied first.
 
 ### Phase 4 — Null-safety & specificity (ongoing)
 - Add guard clauses / nullsafe operators and accurate nullable return types (~900).

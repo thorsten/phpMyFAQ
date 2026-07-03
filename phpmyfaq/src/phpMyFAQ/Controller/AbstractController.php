@@ -171,6 +171,28 @@ abstract class AbstractController
     }
 
     /**
+     * Decodes the JSON request body into an object.
+     *
+     * Guarantees the body is a JSON object (not a scalar, array, or malformed
+     * input), so callers can read properties without `mixed` leaking out of
+     * `json_decode()`. Leaf property values are still `mixed` and must be
+     * validated or cast at the point of use.
+     *
+     * @throws JsonException if the body is missing or is not a JSON object
+     */
+    protected function getJsonObject(Request $request): \stdClass
+    {
+        /* @mago-expect analysis:mixed-assignment - json_decode() is mixed by nature; validated to stdClass below */
+        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+
+        if (!$data instanceof \stdClass) {
+            throw new JsonException('The request body must be a JSON object.');
+        }
+
+        return $data;
+    }
+
+    /**
      * @throws LoaderError
      */
     public function getTwigWrapper(): TwigWrapper
