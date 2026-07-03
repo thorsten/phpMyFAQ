@@ -734,7 +734,6 @@ return static function (ContainerConfigurator $container): void {
     ]);
 
     $services->set('phpmyfaq.service.mcp-server.runtime', McpSdkRuntime::class)->args([
-        service('phpmyfaq.configuration'),
         service('phpmyfaq.service.mcp-server.faq-search-tool'),
         [
             'name' => 'phpMyFAQ MCP Server',
@@ -908,9 +907,7 @@ return static function (ContainerConfigurator $container): void {
     $services->set(AdminApiInstanceController::class, AdminApiInstanceController::class)->args([
         service('phpmyfaq.instance'),
     ]);
-    $services->set(AdminApiLdapController::class, AdminApiLdapController::class)->args([
-        service('phpmyfaq.ldap'),
-    ]);
+    $services->set(AdminApiLdapController::class, AdminApiLdapController::class);
     $services->set(AdminApiOpenSearchController::class, AdminApiOpenSearchController::class)->args([
         service('phpmyfaq.instance.opensearch'),
         service('phpmyfaq.faq'),
@@ -1099,7 +1096,6 @@ return static function (ContainerConfigurator $container): void {
     ]);
     $services->set(AdminNewsController::class, AdminNewsController::class)->args([
         service('phpmyfaq.news'),
-        service('phpmyfaq.comments'),
     ]);
     $services->set(AdminOpenQuestionsController::class, AdminOpenQuestionsController::class)->args([
         service('phpmyfaq.question'),
