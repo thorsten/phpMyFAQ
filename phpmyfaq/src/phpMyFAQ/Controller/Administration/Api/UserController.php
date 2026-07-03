@@ -253,7 +253,7 @@ final class UserController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if ($userId === false || (int) $userId <= 0) {
+        if ($userId === null || $userId <= 0) {
             return $this->json(['error' => Translation::get(key: 'ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
         }
 

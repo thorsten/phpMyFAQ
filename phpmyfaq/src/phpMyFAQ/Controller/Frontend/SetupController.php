@@ -122,7 +122,7 @@ final class SetupController
     public function update(Request $request): Response
     {
         $currentStep = Filter::filterVar($request->query->get('step') ?? 1, FILTER_VALIDATE_INT);
-        if ($currentStep === false || $currentStep < 1 || $currentStep > 3) {
+        if ($currentStep === null || $currentStep < 1 || $currentStep > 3) {
             $currentStep = 1;
         }
 

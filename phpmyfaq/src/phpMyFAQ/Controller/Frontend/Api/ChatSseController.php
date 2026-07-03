@@ -67,7 +67,7 @@ final class ChatSseController extends AbstractController
 
         $userId = $this->currentUser->getUserId();
         $lastIdValue = Filter::filterVar($request->query->get('lastId', 0), FILTER_VALIDATE_INT);
-        $lastId = $lastIdValue === false ? 0 : (int) $lastIdValue;
+        $lastId = $lastIdValue ?? 0;
         $chat = ($this->chatFactory ?? fn(): Chat => new Chat($this->configuration))();
 
         $this->session->save();

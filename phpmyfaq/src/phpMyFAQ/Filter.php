@@ -61,9 +61,28 @@ class Filter
     /**
      * Static wrapper method for filter_var().
      *
-     * @param mixed      $variable Variable
-     * @param int        $filter Filter
-     * @param mixed|null $default Default value
+     * The conditional return type narrows the result by filter so callers stop
+     * receiving `mixed`. Literal filter values are used because mago currently
+     * resolves named constants in conditional types as class names; the values
+     * map to:
+     *   515 = FILTER_SANITIZE_SPECIAL_CHARS, 257 = FILTER_VALIDATE_INT,
+     *   258 = FILTER_VALIDATE_BOOLEAN.
+     * On failure the method returns `$default`, so each branch is unioned with
+     * the `TDefault` template (which resolves to `null` when no default is given,
+     * or e.g. `string`/`array` when a typed default is passed).
+     *
+     * Interim workaround: mago already infers native `filter_var()` return types
+     * from validation flags, but not through this wrapper (the `$filter` argument
+     * is a runtime variable here). Migrate hot call sites to native `filter_var()`
+     * once that inference is richer. See https://github.com/carthage-software/mago/issues/1117
+     *
+     * @template TDefault
+     *
+     * @param mixed    $variable Variable
+     * @param int      $filter Filter
+     * @param TDefault $default Default value
+     *
+     * @return ($filter is 515 ? string|TDefault : ($filter is 257 ? int|TDefault : ($filter is 258 ? bool|TDefault : mixed)))
      */
     public static function filterVar(mixed $variable, int $filter, mixed $default = null): mixed
     {

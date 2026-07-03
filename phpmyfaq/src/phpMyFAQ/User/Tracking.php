@@ -103,7 +103,7 @@ class Tracking
             FILTER_VALIDATE_INT,
         );
 
-        if ($sessionId !== false) {
+        if ($sessionId !== null) {
             $this->currentSessionId = $sessionId;
         }
     }

@@ -204,16 +204,61 @@ baseline 3301 → 3294, all 43 CommentController tests green.
   `Filter::filterVar()` when you need a typed scalar — mago narrows it cleanly.
 - The single inherent `mixed` boundary (the `json_decode` call) is documented with
   `/* @mago-expect analysis:mixed-assignment - … */` rather than baselined.
-- **Highest-leverage next move:** `Filter::filterVar()` is declared `: mixed`, and
-  it is called *everywhere* — it is a primary multiplier of `mixed-assignment` /
-  `mixed-argument`. Giving it a precise (conditional) return type, or migrating
-  hot call sites to native `filter_var`, would cascade across hundreds of findings
-  for far less effort than hand-typing controllers one method at a time. Evaluate
-  whether mago honors a `@return ($filter is FILTER_VALIDATE_INT ? int|false : …)`
-  conditional-return annotation before committing to either path.
 - At ~10 findings per method by hand, the ~4,700 `mixed-*` cluster is genuinely
-  multi-month unless the `Filter::filterVar` leverage (or a similar boundary-typing
-  multiplier) is applied first.
+  multi-month unless a boundary-typing multiplier is applied first — see below.
+
+**`Filter::filterVar()` conditional-return spike (2026-07-03) — CONFIRMED viable,
+high value.** `Filter::filterVar(): mixed` is called ~470× with a constant filter
+(161× `FILTER_VALIDATE_INT`, 281× `FILTER_SANITIZE_SPECIAL_CHARS`, 19× `BOOLEAN`),
+so its `mixed` return is a primary multiplier of `mixed-*`. Findings:
+- **mago does NOT honor named-constant conditional types** — `@return ($filter is
+  FILTER_VALIDATE_INT ? …)` makes mago parse `FILTER_VALIDATE_INT` as a *class
+  name* (`non-existent-class-like`).
+- **mago DOES honor literal-int conditional types.** With
+  `@return ($filter is 515 ? string|null : ($filter is 257 ? int|null : ($filter
+  is 258 ? bool|null : mixed)))` (515/257/258 = the SANITIZE_SPECIAL_CHARS /
+  VALIDATE_INT / VALIDATE_BOOLEAN values), a single 1-line annotation moved the
+  totals: `mixed-argument` 1224→842, `mixed-assignment` 1436→1064,
+  **total 7076→6591 (−485)**.
+- The trade-off is a **feature, not a cost**: it surfaces ~377 findings the `mixed`
+  type was masking, and they are *higher-signal* than what they replace — 261
+  `possibly-null-argument` (real: `filterVar` returns `null` on invalid input, so
+  passing it to an `int` param unguarded is a latent bug) and 14
+  `impossible-type-comparison` that expose **dead/wrong guards** (e.g.
+  `VotingController.php:79` checks `$vote === false`, but the value is `int|null`
+  and can never be `false`).
+
+**Rollout — DONE (2026-07-03).**
+1. Added the conditional return type to `Filter::filterVar()`, refined to
+   `@template TDefault` + `@return ($filter is 515 ? string|TDefault : ($filter is
+   257 ? int|TDefault : ($filter is 258 ? bool|TDefault : mixed)))`. The `TDefault`
+   template models the `$default` argument, so default-providing call sites
+   (e.g. `Filter::filterVar($x, …, [])`) type correctly instead of over-reporting
+   null — this alone removed ~92 false positives vs. the naive `|null` form.
+   Documented as an interim measure linking mago #1117; migrate to native
+   `filter_var()` when that inference matures.
+2. Fixed the real dead/incorrect guards the new type exposed (~18): all
+   `impossible-type-comparison` (`=== false` on `int|null` → `=== null`) across
+   Bookmark/Voting/Attachment/News/Pdf/Setup/User controllers, plus a redundant
+   ternary (`ChatSseController`), an always-true guard (`Tracking`), and an
+   `array_filter` predicate returning `int|null` instead of `bool` (`TagsHelper`).
+3. Regenerated the baseline for the remainder.
+
+**Net: total findings 7076 → 6494 (−582); baseline 3294 → 3128 entries (−166).**
+The ~270 findings the change surfaced (225 `possibly-null-argument`, 24
+`possibly-null-operand`, 15 `possibly-invalid-argument`, misc) are **baselined as
+Phase 4 work** — they are the *precise* form of the null-safety debt that was
+previously hidden inside `mixed-*`, not new risk. None are guaranteed-null; the
+null path is generally reachable only via malformed requests (route `\d+`
+requirements guard the happy path). Fixing them (guards / non-null defaults) is
+Phase 4.
+
+**Discovered pre-existing bug (out of scope, flagged for follow-up):**
+`UserController::updateUserRights` does `Filter::filterVar($data->userRights,
+FILTER_SANITIZE_SPECIAL_CHARS, [])` — `filter_var()` on an array returns `false`,
+so this always yields `[]`; the subsequent `is_array()` normalisation then keeps
+`[]`, meaning submitted rights may never be applied. Needs its own investigation
+with tests (security-sensitive); not touched here.
 
 ### Phase 4 — Null-safety & specificity (ongoing)
 - Add guard clauses / nullsafe operators and accurate nullable return types (~900).

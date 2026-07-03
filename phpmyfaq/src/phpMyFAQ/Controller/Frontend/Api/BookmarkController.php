@@ -50,7 +50,7 @@ final class BookmarkController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if ($bookmarkId === false || $bookmarkId < 1) {
+        if ($bookmarkId === null || $bookmarkId < 1) {
             return $this->json(['error' => Translation::get(key: 'msgError')], Response::HTTP_BAD_REQUEST);
         }
 
@@ -84,7 +84,7 @@ final class BookmarkController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if ($bookmarkId === false || $bookmarkId < 1) {
+        if ($bookmarkId === null || $bookmarkId < 1) {
             return $this->json(['error' => Translation::get(key: 'msgError')], Response::HTTP_BAD_REQUEST);
         }
 

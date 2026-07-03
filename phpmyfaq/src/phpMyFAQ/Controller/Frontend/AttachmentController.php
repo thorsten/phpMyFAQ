@@ -57,10 +57,10 @@ final class AttachmentController extends AbstractFrontController
 
         $attachmentService = new AttachmentService($this->configuration, $this->currentUser, $this->faqPermission);
 
-        if ($id === false || $id === null) {
+        if ($id === null) {
             $attachmentErrors[] = $attachmentService->getGenericErrorMessage();
         }
-        if ($id !== false && $id !== null) {
+        if ($id !== null) {
             try {
                 $attachment = $attachmentService->getAttachment($id);
             } catch (AttachmentException $attachmentException) {

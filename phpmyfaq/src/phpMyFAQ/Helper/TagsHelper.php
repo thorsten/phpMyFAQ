@@ -91,10 +91,10 @@ class TagsHelper extends AbstractHelper
      */
     public function setTaggingIds(array $taggingIds): void
     {
-        $this->taggingIds = array_filter($taggingIds, static fn($tagId): mixed => Filter::filterVar(
-            $tagId,
-            FILTER_VALIDATE_INT,
-        ));
+        $this->taggingIds = array_filter(
+            $taggingIds,
+            static fn($tagId): bool => (bool) Filter::filterVar($tagId, FILTER_VALIDATE_INT),
+        );
     }
 
     /**

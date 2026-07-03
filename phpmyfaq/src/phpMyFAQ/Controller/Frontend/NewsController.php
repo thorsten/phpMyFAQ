@@ -70,7 +70,7 @@ final class NewsController extends AbstractFrontController
     {
         $newsId = Filter::filterVar($request->attributes->get('newsId'), FILTER_VALIDATE_INT);
 
-        if ($newsId === false || $newsId === null) {
+        if ($newsId === null) {
             return $this->render('404.twig', [
                 ...$this->getHeader($request),
             ]);
