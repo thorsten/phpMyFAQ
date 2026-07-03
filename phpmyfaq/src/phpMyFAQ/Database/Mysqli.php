@@ -162,11 +162,16 @@ class Mysqli implements DatabaseDriver
      * Fetch a result row as an object.
      * This function fetches a result row as an object.
      *
+     * @return \stdClass|false|null
+     *
      * @throws Exception
      */
     public function fetchObject(mixed $result): mixed
     {
-        return $result->fetch_object();
+        /** @var \stdClass|false|null $row */
+        $row = $result->fetch_object();
+
+        return $row;
     }
 
     /**

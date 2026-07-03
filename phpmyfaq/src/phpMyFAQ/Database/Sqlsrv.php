@@ -153,10 +153,15 @@ class Sqlsrv implements DatabaseDriver
      * Fetch a result row as an object.
      *
      * @param mixed $result Results
+     *
+     * @return \stdClass|false|null
      */
     public function fetchObject(mixed $result): mixed
     {
-        return sqlsrv_fetch_object($result);
+        /** @var \stdClass|false|null $row */
+        $row = sqlsrv_fetch_object($result);
+
+        return $row;
     }
 
     /**

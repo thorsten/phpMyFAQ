@@ -274,3 +274,81 @@ Phases 1–2 are low-risk, high-signal, and surface real bugs quickly. Phase 3 i
 where most of the volume actually lives, because it is a small number of `mixed`
 *sources*, not 4,700 independent fixes — typing each boundary pays down many
 downstream findings at once.
+
+---
+
+## Current state & forward plan (updated 2026-07-03)
+
+`composer analyze:all` now reports **6,132 issues** (was 7,198), baseline **2,889
+entries**. Done so far: `Filter::filterVar` conditional return type (−485), the
+full controller null-safety sweep (~50 files), and two core classes. CI is green
+via the baseline; every step kept the full test suite passing.
+
+### What the remaining 6,132 are
+
+| Cluster | ~Count | Root cause |
+|---|---:|---|
+| `mixed-*` (assignment 1060, argument 839, property-access 512, operand 464, array-access 272, method-access 253, return 192, coercion 59) | **~3,650** | **Untyped database rows.** `DatabaseDriver::fetchObject(): mixed`, `query(): mixed`, `fetchRow(): mixed`, `fetchArray(): array\|false\|null` — every row object/array is untyped, so all downstream access is `mixed`. Plus `$faq->faqRecord[...]`, config values, and residual request input. |
+| `ambiguous-object-property-access` | 180 | 177 are "generic `object`" — the objects returned by `fetchObject()`. |
+| null-safety (`possible-method-access-on-null` 347, `possibly-null-argument` 244, `possibly-null-operand` 124, `nullable-return` 56) | **~770** | Missing guards; nullable returns not declared. |
+| `non-existent-method`/`-property` | 180 | Traits analyzed standalone + base-vs-interface typing. **Established false positives — leave baselined.** |
+| return-type accuracy (`invalid-return` 96, `less-specific-return`/`-argument` 123, `mixed-property-type-coercion` 59) | ~280 | Return/param annotations wider or narrower than reality. |
+| `possibly-false-argument` 75, `possibly-invalid-argument` 173, `invalid-iterator` 51, misc | ~300 | Assorted. |
+
+### The lever: type the database-row boundary (Phase 5)
+
+`mixed-*` is ~60% of the debt and, like the `filterVar` cluster, comes from a
+**small number of untyped sources**, not thousands of independent fixes. The
+highest-ROI move is to type the `DatabaseDriver` fetch API:
+
+1. `fetchObject(mixed $result): ?\stdClass` (instead of `: mixed`) — resolves the
+   180 `ambiguous-object-property-access` and a large share of the 512
+   `mixed-property-access` at once (row property reads become `stdClass` access;
+   leaf values stay `mixed` but the *access* is valid).
+2. `fetchArray(): ?array<string, scalar|null>` and `fetchRow()`/`fetchAll()`
+   shapes — collapses `mixed-array-access` / `mixed-assignment` on row arrays.
+3. For hot tables (faqdata, faquser, faqcategories, faqconfig) consider a typed
+   row value-object / `@return` array shape so leaf values are typed too.
+
+Expect this to surface **more precise** null-safety findings (as the `filterVar`
+change did) — that is a feature. Do it **incrementally, one driver/consumer at a
+time**, regenerating the baseline per PR.
+
+### Forward phases
+
+- **Phase 5 — DB-row typing (the big lever).** Tighten `DatabaseDriver` fetch
+  return types; migrate hot consumers (`Faq`, `User`, `Search`, `Category`,
+  `Setup`). Biggest single reduction; do it carefully — the DB layer is core.
+- **Phase 6 — null-safety.** Work the `possible-method-access-on-null` (347) and
+  remaining `possibly-null-*` with guards / `?->` / accurate `?T` returns
+  (partly surfaced by Phase 5).
+- **Phase 7 — return-type accuracy.** `invalid-return`, `nullable-return`,
+  `less-specific-*`, `mixed-property-type-coercion`.
+- **Leave baselined:** trait-standalone + base-vs-interface `non-existent-*`
+  (~180) and the `sqlsrv` extension findings — analyzer-modeling gaps, not bugs.
+
+### Guardrails (learned this session)
+
+- **The unit suite does NOT build the DI container or run the app.** Phase 1's
+  "remove unused dependency" edits passed all 6,586 unit tests and mago, yet
+  broke `services.php` DI wiring — which only surfaced in the nightly **e2e**
+  (empty seed) and was fixed in `fix(di): correct stale service arguments`. Any
+  change that alters a constructor signature or control flow (null→default,
+  guards) MUST be validated against: the full unit suite **+** a DI
+  container-instantiation smoke test **+** the e2e seed/browse flow
+  (`bin/e2e local`).
+- **Add a container smoke test** that iterates `services.php` definitions and
+  `->get()`s each service — it would have caught the DI regression in CI.
+- Keep using the baseline shrink workflow (`composer analyze:baseline`); one
+  file / small group per PR so each step is reviewable and revertible.
+- Watch behavior, not just types: a `null → '' / 0` default can change a control
+  branch that keyed on `=== null`. Prefer guards that mirror the method's
+  existing invalid-input handling over blanket defaults on public page
+  controllers.
+
+### Sizing
+
+`mixed-*` (~3,650) is genuinely a multi-week effort even with the DB-layer lever,
+because each typed source cascades but also surfaces follow-on findings to
+triage. Realistic target: Phase 5 first (largest, highest-leverage), then 6 and 7.
+Trait/interface and extension findings stay baselined indefinitely.

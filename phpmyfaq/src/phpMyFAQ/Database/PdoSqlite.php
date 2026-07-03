@@ -134,11 +134,15 @@ class PdoSqlite implements DatabaseDriver
      * Fetch a result row as an object.
      * This function fetches a result row as an object.
      *
+     * @return \stdClass|null
+     *
      * @throws Exception
      */
     public function fetchObject(mixed $result): mixed
     {
+        /** @var \stdClass|false $obj */
         $obj = $result->fetch(PDO::FETCH_OBJ);
+
         return $obj === false ? null : $obj;
     }
 

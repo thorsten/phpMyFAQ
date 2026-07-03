@@ -78,7 +78,7 @@ class Sqlite3 implements DatabaseDriver
     /**
      * Fetch a result row as an object.
      *
-     * @return object|null or NULL if there are no more results
+     * @return \stdClass|null NULL if there are no more results
      */
     public function fetchObject(mixed $result): ?object
     {

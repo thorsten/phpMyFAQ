@@ -57,6 +57,11 @@ interface DatabaseDriver
 
     /**
      * Fetch a result row as an object.
+     *
+     * Returns a row as a `stdClass` whose properties are the selected columns,
+     * or a falsy value (`false`/`null`) once the result set is exhausted.
+     *
+     * @return \stdClass|false|null
      */
     public function fetchObject(mixed $result): mixed;
 

@@ -187,11 +187,14 @@ class Pgsql implements DatabaseDriver
     /**
      * Fetch a result row as an object.
      *
-     * @return false|object
+     * @return \stdClass|false|null
      */
     public function fetchObject(mixed $result): mixed
     {
-        return pg_fetch_object($result);
+        /** @var \stdClass|false|null $row */
+        $row = pg_fetch_object($result);
+
+        return $row;
     }
 
     /**

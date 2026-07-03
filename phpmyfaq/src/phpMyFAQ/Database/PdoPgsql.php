@@ -137,11 +137,16 @@ class PdoPgsql implements DatabaseDriver
      * Fetch a result row as an object.
      * This function fetches a result row as an object.
      *
+     * @return \stdClass|false|null
+     *
      * @throws Exception
      */
     public function fetchObject(mixed $result): mixed
     {
-        return $result->fetch(PDO::FETCH_OBJ);
+        /** @var \stdClass|false|null $row */
+        $row = $result->fetch(PDO::FETCH_OBJ);
+
+        return $row;
     }
 
     /**

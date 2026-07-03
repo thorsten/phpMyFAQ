@@ -2,12 +2,6 @@ variant = "loose"
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/AdminLogRepository.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/AdminLogRepository.php"
 code = "less-specific-return-statement"
 message = 'Returned type `array<array-key, phpMyFAQ\Entity\AdminLog>` is less specific than the declared return type `array<int, phpMyFAQ\Entity\AdminLog>` for function `phpMyFAQ\Administration\AdminLogRepository::getAll`.'
 count = 1
@@ -40,7 +34,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Administration/AdminLogRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/AdminLogRepository.php"
@@ -52,18 +46,6 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Administration/AdminLogRepository.php"
 code = "mixed-operand"
 message = "Left operand in `&&` operation has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/AdminLogRepository.php"
-code = "mixed-operand"
-message = "Right operand in `&&` operation has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/AdminLogRepository.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`truthy-mixed`)."
 count = 1
 
 [[issues]]
@@ -214,7 +196,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Administration/Backup/BackupRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Backup/BackupRepository.php"
@@ -358,19 +340,13 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Administration/Changelog.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Changelog.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Changelog.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`truthy-mixed`)."
-count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Changelog.php"
@@ -388,13 +364,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Administration/DashboardLayout.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Faq.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 1
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Faq.php"
@@ -424,7 +394,7 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Administration/Faq.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 11
+count = 6
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Faq.php"
@@ -446,12 +416,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Faq.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`nonnull`)."
-count = 15
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Faq.php"
 code = "possibly-false-argument"
 message = "Argument #2 of function `date` is possibly `false`, but parameter type `int|null` does not accept it."
 count = 2
@@ -461,6 +425,24 @@ file = "phpmyfaq/src/phpMyFAQ/Administration/Faq.php"
 code = "possibly-null-argument"
 message = 'Argument #1 of method `phpMyFAQ\Database\DatabaseDriver::escape` is possibly `null`, but parameter type `string` does not accept it.'
 count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Administration/Faq.php"
+code = "redundant-comparison"
+message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Administration/Faq.php"
+code = "redundant-logical-operation"
+message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Administration/Faq.php"
+code = "redundant-type-comparison"
+message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/RatingStatistics.php"
@@ -490,7 +472,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Administration/RatingStatistics.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/RecentUsers.php"
@@ -584,15 +566,27 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/ReportRepository.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `list<nonnull>` is less specific than the declared return type `array<int, object>` for function `phpMyFAQ\Administration\ReportRepository::fetchAllReportData` due to nested 'mixed'.'''
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/ReportRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+code = "redundant-comparison"
+message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Administration/ReportRepository.php"
+code = "redundant-logical-operation"
+message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Administration/ReportRepository.php"
+code = "redundant-type-comparison"
+message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Revision.php"
@@ -604,7 +598,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Administration/Revision.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Revision.php"
@@ -614,9 +608,21 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Revision.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`nonnull`)."
-count = 3
+code = "redundant-comparison"
+message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Administration/Revision.php"
+code = "redundant-logical-operation"
+message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Administration/Revision.php"
+code = "redundant-type-comparison"
+message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Session.php"
@@ -632,21 +638,15 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/SessionRepository.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `list<nonnull>` is less specific than the declared return type `array<int, object>` for function `phpMyFAQ\Administration\SessionRepository::getSessionsByDateRange` due to nested 'mixed'.'''
+code = "invalid-property-access"
+message = "Attempting to access a property on a non-object type (`false`)."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/SessionRepository.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `property_exists`: expected `class-string|object`, but found `nonnull`."
-count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/SessionRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 12
+count = 6
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/SessionRepository.php"
@@ -656,14 +656,14 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/SessionRepository.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 1
+code = "possibly-false-argument"
+message = "Argument #1 of function `property_exists` is possibly `false`, but parameter type `class-string|object` does not accept it."
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/SessionRepository.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`nonnull`)."
+code = "possibly-null-property-access"
+message = "Attempting to access a property on a possibly `null` value."
 count = 1
 
 [[issues]]
@@ -914,9 +914,15 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Attachment/AttachmentFactory.php"
+code = "invalid-property-access"
+message = "Attempting to access a property on a non-object type (`false`)."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Attachment/AttachmentFactory.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Attachment/AttachmentFactory.php"
@@ -1148,15 +1154,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/ApiKeyAuthenticator.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/ApiKeyAuthenticator.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/ApiKeyAuthenticator.php"
@@ -1822,7 +1822,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/AccessTokenRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/AccessTokenRepository.php"
@@ -1840,7 +1840,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/AuthCodeRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/AuthCodeRepository.php"
@@ -1850,15 +1850,9 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/ClientRepository.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/ClientRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/ClientRepository.php"
@@ -1876,19 +1870,13 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/RefreshTokenRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/ScopeRepository.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/ScopeRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/ScopeRepository.php"
@@ -1900,7 +1888,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/UserRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/UserRepository.php"
@@ -2564,6 +2552,12 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
+code = "invalid-property-access"
+message = "Attempting to access a property on a non-object type (`false`)."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
 code = "less-specific-argument"
 message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Category\CategoryRepository::mapRow`: expected `array<string, mixed>`, but provided type `non-empty-array<array-key, mixed>` is less specific.'
 count = 3
@@ -2620,7 +2614,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 15
+count = 13
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
@@ -2642,12 +2636,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`nonnull`)."
-count = 10
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
 code = "possibly-null-argument"
 message = 'Argument #1 of method `phpMyFAQ\Database\DatabaseDriver::escape` is possibly `null`, but parameter type `string` does not accept it.'
 count = 4
@@ -2656,6 +2644,18 @@ count = 4
 file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
 code = "possibly-null-operand"
 message = "Possibly null left operand used in string concatenation (type `null|string`)."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
+code = "redundant-comparison"
+message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
+code = "redundant-logical-operation"
+message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
 count = 1
 
 [[issues]]
@@ -2878,13 +2878,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Category/Permission.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Permission.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`nonnull`)."
-count = 5
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/Presentation/AdminCategoryTreePresenter.php"
@@ -2932,7 +2926,7 @@ count = 4
 file = "phpmyfaq/src/phpMyFAQ/Category/Relation.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 18
+count = 14
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/Relation.php"
@@ -2960,12 +2954,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/Relation.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`nonnull`)."
-count = 11
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Relation.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `phpMyFAQ\Category\Relation::aggregateRecursively`. Saw type `mixed`.'
 count = 2
@@ -2975,6 +2963,30 @@ file = "phpmyfaq/src/phpMyFAQ/Category/Relation.php"
 code = "possibly-undefined-variable"
 message = "Variable `$query` might not have been defined on all execution paths leading to this point."
 count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Category/Relation.php"
+code = "redundant-comparison"
+message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
+count = 4
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Category/Relation.php"
+code = "redundant-logical-operation"
+message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
+count = 4
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Category/Relation.php"
+code = "redundant-type-comparison"
+message = "Redundant condition: variable `$category` (type `stdClass`) is already known to be `empty-countable`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Category/Relation.php"
+code = "redundant-type-comparison"
+message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/Startpage.php"
@@ -3080,6 +3092,12 @@ count = 6
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Chat.php"
+code = "invalid-property-access"
+message = "Attempting to access a property on a non-object type (`false`)."
+count = 6
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Chat.php"
 code = "less-specific-nested-return-statement"
 message = '''Returned type `array<int, nonnull>` is less specific than the declared return type `array<int, string>` for function `phpMyFAQ\Chat::getBatchUserInfo` due to nested 'mixed'.'''
 count = 1
@@ -3117,12 +3135,6 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Chat.php"
 code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Chat::mapRowToEntity`: expected `object`, but found `nonnull`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Chat.php"
-code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\ChatMessage::setMessage`: expected `string`, but found `mixed`.'
 count = 1
 
@@ -3142,7 +3154,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Chat.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 21
+count = 11
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Chat.php"
@@ -3152,15 +3164,27 @@ count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Chat.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`nonnull`)."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Chat.php"
 code = "possibly-null-operand"
 message = "Possibly null left operand used in string concatenation (type `null|string`)."
 count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Chat.php"
+code = "redundant-comparison"
+message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
+count = 6
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Chat.php"
+code = "redundant-logical-operation"
+message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
+count = 6
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Chat.php"
+code = "redundant-type-comparison"
+message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
+count = 6
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Command/CreateHashesCommand.php"
@@ -3292,18 +3316,12 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Comment/CommentsRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 9
+count = 7
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Comment/CommentsRepository.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Comment/CommentsRepository.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`nonnull`)."
 count = 2
 
 [[issues]]
@@ -3317,6 +3335,18 @@ file = "phpmyfaq/src/phpMyFAQ/Comment/CommentsRepository.php"
 code = "possibly-undefined-variable"
 message = "Variable `$query` might not have been defined on all execution paths leading to this point."
 count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Comment/CommentsRepository.php"
+code = "redundant-comparison"
+message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Comment/CommentsRepository.php"
+code = "redundant-logical-operation"
+message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Comments.php"
@@ -3556,7 +3586,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/DatabaseConfigurationStore.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 5
+count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/DatabaseConfigurationStore.php"
@@ -7486,7 +7516,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 9
+count = 8
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
@@ -7511,12 +7541,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`mixed`)."
 count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`truthy-mixed`)."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
@@ -7934,8 +7958,8 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
-code = "invalid-yield-value-type"
-message = "Invalid value type yielded; expected `stdClass`, but found `nonnull`."
+code = "invalid-property-access"
+message = "Attempting to access a property on a non-object type (`false`)."
 count = 3
 
 [[issues]]
@@ -7948,31 +7972,13 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 19
+count = 10
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`nonnull`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\CustomPage\CustomPageRepository::getById`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\CustomPage\CustomPageRepository::getBySlug`. Saw type `mixed`.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
@@ -7985,6 +7991,24 @@ file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
 code = "possibly-null-operand"
 message = "Possibly null left operand used in string concatenation (type `null|string`)."
 count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
+code = "redundant-comparison"
+message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
+count = 4
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
+code = "redundant-logical-operation"
+message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
+count = 4
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
+code = "redundant-type-comparison"
+message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
+count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database.php"
@@ -8092,7 +8116,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Database/Mysqli.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/Mysqli.php"
@@ -8174,8 +8198,26 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/Mysqli.php"
+code = "redundant-comparison"
+message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Database/Mysqli.php"
 code = "redundant-condition"
 message = "Redundant ternary operator: condition is always truthy."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Database/Mysqli.php"
+code = "redundant-logical-operation"
+message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Database/Mysqli.php"
+code = "redundant-type-comparison"
+message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
 count = 1
 
 [[issues]]
@@ -8362,7 +8404,7 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Database/PdoSqlite.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 9
+count = 8
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/PdoSqlite.php"
@@ -8746,7 +8788,7 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 12
+count = 10
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
@@ -8765,12 +8807,6 @@ file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
 code = "mixed-operand"
 message = "Left operand in binary operation has type `mixed`."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
@@ -8903,6 +8939,12 @@ file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
 code = "possibly-null-operand"
 message = "Possibly null right operand used in string concatenation (type `int|null`)."
 count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
+code = "possibly-null-property-access"
+message = "Attempting to access a property on a possibly `null` value."
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Date.php"
@@ -9664,7 +9706,7 @@ count = 7
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 21
+count = 17
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
@@ -9710,18 +9752,6 @@ count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`nonnull`)."
-count = 29
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`truthy-mixed`)."
-count = 17
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq.php"
 code = "mixed-property-type-coercion"
 message = "A value with a less specific type `mixed` is being assigned to property `$$text` (string)."
 count = 3
@@ -9761,6 +9791,24 @@ file = "phpmyfaq/src/phpMyFAQ/Faq.php"
 code = "possibly-null-operand"
 message = "Possibly null left operand used in string concatenation (type `null|string`)."
 count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Faq.php"
+code = "redundant-comparison"
+message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Faq.php"
+code = "redundant-logical-operation"
+message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Faq.php"
+code = "redundant-type-comparison"
+message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqCreationService.php"
@@ -9866,8 +9914,8 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `list<nonnull>` is less specific than the declared return type `array<array-key, object>` for function `phpMyFAQ\Faq\FaqRepository::fetchAllRows` due to nested 'mixed'.'''
+code = "invalid-property-access"
+message = "Attempting to access a property on a non-object type (`false`)."
 count = 1
 
 [[issues]]
@@ -9886,7 +9934,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 25
+count = 15
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
@@ -9905,30 +9953,6 @@ file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
 code = "mixed-operand"
 message = "Left operand in binary operation has type `mixed`."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
-code = "mixed-operand"
-message = "Right operand in `&&` operation has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`nonnull`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`truthy-mixed`)."
-count = 7
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
@@ -9953,6 +9977,30 @@ file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
 code = "possible-method-access-on-null"
 message = "Attempting to call a method on `null`."
 count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
+code = "possibly-null-property-access"
+message = "Attempting to access a property on a possibly `null` value."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
+code = "redundant-comparison"
+message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
+code = "redundant-logical-operation"
+message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
+code = "redundant-type-comparison"
+message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
@@ -10028,12 +10076,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/Permission.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Permission.php"
 code = "less-specific-nested-return-statement"
 message = '''Returned type `array{'restricted_groups': array<array-key, mixed>|bool|list{0?: int|null}|null, 'restricted_user': array<array-key, mixed>|bool|list{0?: int|null}|null}` is less specific than the declared return type `array<string, array<array-key, int>>` for function `phpMyFAQ\Faq\Permission::createPermissionArray` due to nested 'mixed'.'''
 count = 1
@@ -10042,7 +10084,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Faq/Permission.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 5
+count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/Permission.php"
@@ -10150,13 +10192,7 @@ count = 15
 file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 17
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`nonnull`)."
-count = 38
+count = 13
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
@@ -10181,6 +10217,24 @@ file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
 code = "possibly-null-operand"
 message = "Possibly null middle operand used in string concatenation (type `null|string`)."
 count = 15
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
+code = "redundant-comparison"
+message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
+code = "redundant-logical-operation"
+message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
+code = "redundant-type-comparison"
+message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Filesystem/Filesystem.php"
@@ -10252,7 +10306,7 @@ count = 3
 file = "phpmyfaq/src/phpMyFAQ/Form/FormsRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Form/FormsRepository.php"
@@ -10384,19 +10438,13 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Glossary/GlossaryRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 6
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Glossary/GlossaryRepository.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Glossary/GlossaryRepository.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`truthy-mixed`)."
-count = 8
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Glossary/GlossaryRepository.php"
@@ -10640,6 +10688,12 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Helper/QuestionHelper.php"
+code = "invalid-property-access"
+message = "Attempting to access a property on a non-object type (`false`)."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Helper/QuestionHelper.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `phpMyFAQ\Date::createIsoDate`: expected `string`, but found `mixed`.'
 count = 1
@@ -10702,7 +10756,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Helper/QuestionHelper.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Helper/QuestionHelper.php"
@@ -10712,15 +10766,27 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Helper/QuestionHelper.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
+code = "possibly-null-property-access"
+message = "Attempting to access a property on a possibly `null` value."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Helper/QuestionHelper.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`nonnull`)."
-count = 8
+code = "redundant-comparison"
+message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Helper/QuestionHelper.php"
+code = "redundant-logical-operation"
+message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Helper/QuestionHelper.php"
+code = "redundant-type-comparison"
+message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Helper/RegistrationHelper.php"
@@ -11090,6 +11156,18 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance.php"
+code = "falsable-return-statement"
+message = '''Function `phpMyFAQ\Instance::getById` is declared to return `object` but possibly returns 'false' (inferred as `false|null|stdClass`).'''
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Instance.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `phpMyFAQ\Instance::getById`: expected `object`, but found `false|null|stdClass`.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Instance.php"
 code = "less-specific-nested-return-statement"
 message = '''Returned type `array<array-key, mixed>` is less specific than the declared return type `array<array-key, string>` for function `phpMyFAQ\Instance::getInstanceConfig` due to nested 'mixed'.'''
 count = 1
@@ -11126,14 +11204,14 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Instance::getById`. Saw type `mixed`.'
+code = "nullable-return-statement"
+message = 'Function `phpMyFAQ\Instance::getAll` is declared to return `array<array-key, stdClass>` but possibly returns a nullable value (inferred as `array<array-key, mixed>|null`).'
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance.php"
 code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Instance::getAll` is declared to return `array<array-key, stdClass>` but possibly returns a nullable value (inferred as `array<array-key, mixed>|null`).'
+message = 'Function `phpMyFAQ\Instance::getById` is declared to return `object` but possibly returns a nullable value (inferred as `false|null|stdClass`).'
 count = 1
 
 [[issues]]
@@ -11812,13 +11890,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Language.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Language.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`truthy-mixed`)."
-count = 1
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Language.php"
@@ -12584,15 +12656,15 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
-code = "invalid-yield-value-type"
-message = "Invalid value type yielded; expected `stdClass`, but found `nonnull`."
-count = 3
+code = "invalid-property-access"
+message = "Attempting to access a property on a non-object type (`false`)."
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 10
+count = 5
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
@@ -12602,21 +12674,45 @@ count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\News\NewsRepository::getById`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
 code = "possibly-null-operand"
 message = "Possibly null left operand used in string concatenation (type `null|string`)."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
+code = "redundant-comparison"
+message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
+code = "redundant-comparison"
+message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
+code = "redundant-logical-operation"
+message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
+code = "redundant-logical-operation"
+message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
 code = "redundant-null-coalesce"
 message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
 count = 6
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
+code = "redundant-type-comparison"
+message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/News/NewsService.php"
@@ -13262,21 +13358,15 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Push/PushSubscriptionRepository.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Push\PushSubscriptionRepository::mapRowToEntity`: expected `object`, but found `truthy-mixed`.'
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Push/PushSubscriptionRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 11
+count = 5
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Push/PushSubscriptionRepository.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
-count = 5
+count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Push/PushSubscriptionRepository.php"
@@ -13364,9 +13454,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 9
+code = "invalid-property-access"
+message = "Attempting to access a property on a non-object type (`false`)."
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
@@ -13384,7 +13474,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 6
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
@@ -13400,24 +13490,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
-code = "mixed-operand"
-message = "Right operand in `&&` operation has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`truthy-mixed`)."
-count = 8
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `phpMyFAQ\Question\QuestionRepository::getVisibility`. Saw type `mixed`.'
 count = 1
@@ -13426,6 +13498,12 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
 code = "possibly-null-operand"
 message = "Possibly null left operand used in string concatenation (type `null|string`)."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
+code = "possibly-null-property-access"
+message = "Attempting to access a property on a possibly `null` value."
 count = 1
 
 [[issues]]
@@ -13700,6 +13778,12 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
+code = "invalid-property-access"
+message = "Attempting to access a property on a non-object type (`false`)."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Search.php"
 code = "invalid-return-statement"
 message = 'Invalid return type for function `phpMyFAQ\Search::getCategory`: expected `phpMyFAQ\Category`, but found `null|phpMyFAQ\Category`.'
 count = 1
@@ -13714,12 +13798,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
 code = "invalid-type-cast"
 message = "Casting type `null` to `array` will produce an empty array."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "invalid-type-cast"
-message = "Object of type `object` cast to `array`. Property visibility (public, protected, private) affects the resulting array."
 count = 1
 
 [[issues]]
@@ -13762,7 +13840,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 6
+count = 5
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
@@ -13780,7 +13858,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
@@ -13823,6 +13901,12 @@ file = "phpmyfaq/src/phpMyFAQ/Search.php"
 code = "possibly-null-operand"
 message = "Right operand in `<` comparison might be `null` (type `int|null`)."
 count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Search.php"
+code = "possibly-null-property-access"
+message = "Attempting to access a property on a possibly `null` value."
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
@@ -14030,6 +14114,18 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
+code = "falsable-return-statement"
+message = '''Function `phpMyFAQ\Search\Rating\RatingRepository::fetchByRecordId` is declared to return `null|object` but possibly returns 'false' (inferred as `false|null|stdClass`).'''
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `phpMyFAQ\Search\Rating\RatingRepository::fetchByRecordId`: expected `null|object`, but found `false|null|stdClass`.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #4 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
 count = 1
@@ -14050,7 +14146,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 5
+count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
@@ -14066,20 +14162,20 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`nonnull`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Search\Rating\RatingRepository::fetchByRecordId`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
 code = "possibly-null-operand"
 message = "Possibly null left operand used in string concatenation (type `null|string`)."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
+code = "redundant-comparison"
+message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
+code = "redundant-logical-operation"
+message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
 count = 1
 
 [[issues]]
@@ -14392,19 +14488,13 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Seo/SeoRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Seo/SeoRepository.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Seo/SeoRepository.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`nonnull`)."
-count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Seo/SeoRepository.php"
@@ -14416,6 +14506,24 @@ count = 4
 file = "phpmyfaq/src/phpMyFAQ/Seo/SeoRepository.php"
 code = "possibly-null-operand"
 message = "Possibly null left operand used in string concatenation (type `null|string`)."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Seo/SeoRepository.php"
+code = "redundant-comparison"
+message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Seo/SeoRepository.php"
+code = "redundant-logical-operation"
+message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Seo/SeoRepository.php"
+code = "redundant-type-comparison"
+message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
 count = 1
 
 [[issues]]
@@ -15080,6 +15188,12 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationTracker.php"
+code = "invalid-property-access"
+message = "Attempting to access a property on a non-object type (`false`)."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationTracker.php"
 code = "less-specific-nested-return-statement"
 message = '''Returned type `list<array{'applied_at': mixed, 'checksum': mixed, 'description': mixed, 'execution_time_ms': int, 'version': mixed}>` is less specific than the declared return type `array<int, array{'applied_at': string, 'checksum': null|string, 'description': null|string, 'execution_time_ms': int, 'version': string}>` for function `phpMyFAQ\Setup\Migration\MigrationTracker::getAppliedMigrations` due to nested 'mixed'.'''
 count = 1
@@ -15088,19 +15202,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationTracker.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 7
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationTracker.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationTracker.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`nonnull`)."
-count = 5
+count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationTracker.php"
@@ -15113,6 +15215,30 @@ file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationTracker.php"
 code = "possibly-null-operand"
 message = "Possibly null left operand used in string concatenation (type `null|string`)."
 count = 7
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationTracker.php"
+code = "possibly-null-property-access"
+message = "Attempting to access a property on a possibly `null` value."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationTracker.php"
+code = "redundant-comparison"
+message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationTracker.php"
+code = "redundant-logical-operation"
+message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationTracker.php"
+code = "redundant-type-comparison"
+message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/Operations/ConfigUpdateOperation.php"
@@ -15568,19 +15694,25 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Sitemap.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 5
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Sitemap.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`nonnull`)."
-count = 6
+code = "redundant-comparison"
+message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
+count = 2
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/StopWords.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 1
+file = "phpmyfaq/src/phpMyFAQ/Sitemap.php"
+code = "redundant-logical-operation"
+message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Sitemap.php"
+code = "redundant-type-comparison"
+message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/StopWords.php"
@@ -15598,7 +15730,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/StopWords.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/StopWords.php"
@@ -15910,19 +16042,13 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Tags.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 12
+count = 6
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Tags.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Tags.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`nonnull`)."
-count = 9
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Tags.php"
@@ -15941,6 +16067,36 @@ file = "phpmyfaq/src/phpMyFAQ/Tags.php"
 code = "possibly-undefined-variable"
 message = "Variable `$query` might not have been defined on all execution paths leading to this point."
 count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Tags.php"
+code = "redundant-comparison"
+message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Tags.php"
+code = "redundant-comparison"
+message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
+count = 5
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Tags.php"
+code = "redundant-logical-operation"
+message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Tags.php"
+code = "redundant-logical-operation"
+message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
+count = 5
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Tags.php"
+code = "redundant-type-comparison"
+message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
+count = 5
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Tenant/TenantContextResolver.php"
@@ -16450,7 +16606,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/User.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 19
+count = 18
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User.php"
@@ -16469,12 +16625,6 @@ file = "phpmyfaq/src/phpMyFAQ/User.php"
 code = "mixed-operand"
 message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`nonnull`)."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User.php"
@@ -16586,8 +16736,26 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User.php"
+code = "redundant-comparison"
+message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/User.php"
 code = "redundant-logical-operation"
 message = "Redundant `||` operation: left operand is always false and right operand is evaluated."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/User.php"
+code = "redundant-logical-operation"
+message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/User.php"
+code = "redundant-type-comparison"
+message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
 count = 1
 
 [[issues]]
@@ -17072,6 +17240,12 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
+code = "invalid-property-access"
+message = "Attempting to access a property on a non-object type (`false`)."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
 code = "invalid-return-statement"
 message = '''Invalid return type for function `phpMyFAQ\User\UserData::fetchAll`: expected `array<string, int>`, but found `array{'keycloak_sub': string, ...<array-key, string>}`.'''
 count = 1
@@ -17108,12 +17282,6 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
 code = "mixed-property-type-coercion"
 message = "A value with a less specific type `array<array-key, mixed>` is being assigned to property `$$data` (array<array-key, string>)."
 count = 1
@@ -17140,6 +17308,12 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
 code = "possibly-null-argument"
 message = "Argument #2 of function `array_key_exists` is possibly `null`, but parameter type `array<array-key, mixed>` does not accept it."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
+code = "possibly-null-property-access"
+message = "Attempting to access a property on a possibly `null` value."
 count = 1
 
 [[issues]]
@@ -17312,15 +17486,15 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Visits/VisitsRepository.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 4
+code = "invalid-property-access"
+message = "Attempting to access a property on a non-object type (`false`)."
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Visits/VisitsRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 6
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Visits/VisitsRepository.php"
@@ -17330,6 +17504,6 @@ count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Visits/VisitsRepository.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
+code = "possibly-null-property-access"
+message = "Attempting to access a property on a possibly `null` value."
 count = 1
