@@ -23,7 +23,6 @@ use Exception;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
-use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -50,14 +49,13 @@ final class CommentController extends AbstractAdministrationApiController
         $data = $this->getJsonObject($request);
         $payload = $data->data instanceof \stdClass ? $data->data : null;
 
-        $csrfToken = $payload !== null && isset($payload->{'pmf-csrf-token'})
-            ? (string) $payload->{'pmf-csrf-token'}
-            : null;
+        $rawCsrfToken = $payload->{'pmf-csrf-token'} ?? null;
+        $csrfToken = $rawCsrfToken !== null ? (string) $rawCsrfToken : null;
         if (!Token::getInstance($this->session)->verifyToken('delete-comment', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $rawIds = $payload !== null && isset($payload->{'comments[]'}) ? $payload->{'comments[]'} : [];
+        $rawIds = $payload->{'comments[]'} ?? [];
         $commentIds = is_array($rawIds) ? $rawIds : [$rawIds];
 
         $type = (string) ($data->type ?? '');

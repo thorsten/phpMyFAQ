@@ -168,6 +168,7 @@ class Mysqli implements DatabaseDriver
      */
     public function fetchObject(mixed $result): mixed
     {
+        /* @mago-expect lint:inline-variable-return - the variable carries the @var type for mago analyze */
         /** @var \stdClass|false|null $row */
         $row = $result->fetch_object();
 

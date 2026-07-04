@@ -179,6 +179,65 @@ readonly class Order
     }
 
     /**
+     * Returns the given categories as a flat list in depth-first tree order:
+     * every subcategory directly follows its parent and carries its nesting
+     * depth in a `level` entry. Sibling order follows the stored category
+     * order; categories missing from it keep their relative position at the
+     * end, and categories whose parent is not part of the list are appended
+     * as roots.
+     *
+     * @param array<int, array<array-key, mixed>> $categories flat category list, each entry with `id` and `parent_id`
+     * @return array<int, array<array-key, mixed>> the same entries, depth-first, each with a `level` entry
+     */
+    public function getOrderedFlatList(array $categories): array
+    {
+        $sequence = [];
+        foreach ($this->getAllCategories() as $index => $orderRow) {
+            $sequence[(int) $orderRow['category_id']] = $index;
+        }
+
+        $categories = array_values($categories);
+        if ($sequence !== []) {
+            usort(
+                $categories,
+                static fn(array $a, array $b): int => (
+                    ($sequence[(int) $a['id']] ?? PHP_INT_MAX) <=> ($sequence[(int) $b['id']] ?? PHP_INT_MAX)
+                ),
+            );
+        }
+
+        $ordered = [];
+        $listed = [];
+        $appendChildren = static function (int $parentId, int $level) use (
+            &$appendChildren,
+            $categories,
+            &$ordered,
+            &$listed,
+        ): void {
+            foreach ($categories as $category) {
+                if ((int) $category['parent_id'] !== $parentId || array_key_exists((int) $category['id'], $listed)) {
+                    continue;
+                }
+
+                $listed[(int) $category['id']] = true;
+                $ordered[] = [...$category, 'level' => $level];
+                $appendChildren((int) $category['id'], $level + 1);
+            }
+        };
+        $appendChildren(parentId: 0, level: 0);
+
+        foreach ($categories as $category) {
+            if (array_key_exists((int) $category['id'], $listed)) {
+                continue;
+            }
+
+            $ordered[] = [...$category, 'level' => 0];
+        }
+
+        return $ordered;
+    }
+
+    /**
      * Returns all categories.
      *
      * @return array<int, array{category_id: int, parent_id: int, position: int}>

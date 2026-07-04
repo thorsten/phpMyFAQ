@@ -238,7 +238,7 @@ final class GroupController extends AbstractAdministrationApiController
         }
 
         $name = Filter::filterVar($data['name'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
-        if (trim((string) $name) === '') {
+        if (trim($name) === '') {
             return $this->json(['error' => Translation::get('ad_group_error_noName')], Response::HTTP_BAD_REQUEST);
         }
 
@@ -357,9 +357,11 @@ final class GroupController extends AbstractAdministrationApiController
 
         $failed = false;
         foreach ($memberIds as $memberId) {
-            if (!$currentUser->perm->addToGroup($memberId, $groupId)) {
-                $failed = true;
+            if ($currentUser->perm->addToGroup($memberId, $groupId)) {
+                continue;
             }
+
+            $failed = true;
         }
 
         if ($failed) {
@@ -430,9 +432,11 @@ final class GroupController extends AbstractAdministrationApiController
 
         $failed = false;
         foreach ($rightIds as $rightId) {
-            if (!$currentUser->perm->grantGroupRight($groupId, $rightId)) {
-                $failed = true;
+            if ($currentUser->perm->grantGroupRight($groupId, $rightId)) {
+                continue;
             }
+
+            $failed = true;
         }
 
         if ($failed) {
@@ -502,66 +506,17 @@ final class GroupController extends AbstractAdministrationApiController
         // otherwise return every translation of each category, with an
         // arbitrary one winning the per-id overwrite.
         $category->setLanguage($this->configuration->getLanguage()->getLanguage());
-        $allCategories = $category->loadCategories();
 
-        // Order siblings the way the category overview page does: by the
-        // stored category order. Categories missing from the order table keep
-        // their relative position at the end.
-        $sequence = [];
-        foreach (new Order($this->configuration)->getAllCategories() as $index => $orderRow) {
-            $sequence[(int) $orderRow['category_id']] = $index;
-        }
+        // Depth-first tree order with nesting levels, sibling order taken
+        // from the stored category order (same as the category overview page).
+        $orderedCategories = new Order($this->configuration)->getOrderedFlatList($category->loadCategories());
 
-        if ($sequence !== []) {
-            usort(
-                $allCategories,
-                static fn(array $a, array $b): int => (
-                    ($sequence[(int) $a['id']] ?? PHP_INT_MAX) <=> ($sequence[(int) $b['id']] ?? PHP_INT_MAX)
-                ),
-            );
-        }
-
-        // loadCategories() returns a flat list ordered by position only, which
-        // interleaves subcategories with unrelated parents. Re-order depth-first
-        // so every subcategory directly follows its parent, and expose the
-        // nesting level so the UI can indent accordingly.
-        $categories = [];
-        $listed = [];
-        $appendChildren = static function (int $parentId, int $level) use (
-            &$appendChildren,
-            $allCategories,
-            &$categories,
-            &$listed,
-        ): void {
-            foreach ($allCategories as $cat) {
-                if ((int) $cat['parent_id'] !== $parentId || array_key_exists((int) $cat['id'], $listed)) {
-                    continue;
-                }
-
-                $listed[(int) $cat['id']] = true;
-                $categories[] = [
-                    'id' => $cat['id'],
-                    'name' => $cat['name'],
-                    'parent_id' => $cat['parent_id'],
-                    'level' => $level,
-                ];
-                $appendChildren((int) $cat['id'], $level + 1);
-            }
-        };
-        $appendChildren(0, 0);
-
-        // Categories whose parent is inaccessible (deleted or filtered out by
-        // permissions) would otherwise vanish — append them as roots.
-        foreach ($allCategories as $cat) {
-            if (!array_key_exists((int) $cat['id'], $listed)) {
-                $categories[] = [
-                    'id' => $cat['id'],
-                    'name' => $cat['name'],
-                    'parent_id' => $cat['parent_id'],
-                    'level' => 0,
-                ];
-            }
-        }
+        $categories = array_map(static fn(array $cat): array => [
+            'id' => $cat['id'],
+            'name' => $cat['name'],
+            'parent_id' => $cat['parent_id'],
+            'level' => $cat['level'],
+        ], $orderedCategories);
 
         return $this->json($categories, Response::HTTP_OK);
     }

@@ -70,6 +70,6 @@ class Builtin implements MailUserAgentInterface
      */
     private static function stripNewlines(string $value): string
     {
-        return str_replace(["\r", "\n"], '', $value);
+        return str_replace(["\r", "\n"], replace: '', subject: $value);
     }
 }

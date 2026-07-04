@@ -158,6 +158,7 @@ class Sqlsrv implements DatabaseDriver
      */
     public function fetchObject(mixed $result): mixed
     {
+        /* @mago-expect lint:inline-variable-return - the variable carries the @var type for mago analyze */
         /** @var \stdClass|false|null $row */
         $row = sqlsrv_fetch_object($result);
 

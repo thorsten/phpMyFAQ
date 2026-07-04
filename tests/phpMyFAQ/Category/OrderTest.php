@@ -317,6 +317,53 @@ class OrderTest extends TestCase
         $this->assertEquals(2, $result);
     }
 
+    public function testGetOrderedFlatListReturnsDepthFirstOrderWithLevels(): void
+    {
+        // Stored order: Guides (pos 1), Setup (child of Guides, pos 1), News (pos 2)
+        $this->databaseMock->expects($this->once())->method('query')->willReturn('mock_result');
+        $this->databaseMock
+            ->expects($this->exactly(4))
+            ->method('fetchArray')
+            ->with('mock_result')
+            ->willReturnOnConsecutiveCalls(
+                ['category_id' => '2', 'parent_id' => '0', 'position' => '1'],
+                ['category_id' => '3', 'parent_id' => '2', 'position' => '1'],
+                ['category_id' => '1', 'parent_id' => '0', 'position' => '2'],
+                false,
+            );
+
+        $categories = [
+            ['id' => 1, 'parent_id' => 0, 'name' => 'News'],
+            ['id' => 2, 'parent_id' => 0, 'name' => 'Guides'],
+            ['id' => 3, 'parent_id' => 2, 'name' => 'Setup'],
+            ['id' => 4, 'parent_id' => 99, 'name' => 'Orphan'],
+        ];
+
+        $result = $this->order->getOrderedFlatList($categories);
+
+        // Sibling order follows the stored order, subcategories directly follow
+        // their parent, and the orphaned category is appended as a root.
+        $this->assertEquals(['Guides', 'Setup', 'News', 'Orphan'], array_column($result, 'name'));
+        $this->assertEquals([0, 1, 0, 0], array_column($result, 'level'));
+    }
+
+    public function testGetOrderedFlatListWithoutStoredOrderKeepsGivenSiblingOrder(): void
+    {
+        $this->databaseMock->expects($this->once())->method('query')->willReturn('mock_result');
+        $this->databaseMock->expects($this->once())->method('fetchArray')->with('mock_result')->willReturn(false);
+
+        $categories = [
+            ['id' => 1, 'parent_id' => 0, 'name' => 'News'],
+            ['id' => 2, 'parent_id' => 0, 'name' => 'Guides'],
+            ['id' => 3, 'parent_id' => 1, 'name' => 'Archive'],
+        ];
+
+        $result = $this->order->getOrderedFlatList($categories);
+
+        $this->assertEquals(['News', 'Archive', 'Guides'], array_column($result, 'name'));
+        $this->assertEquals([0, 1, 0], array_column($result, 'level'));
+    }
+
     public function testGetAllCategoriesEmpty(): void
     {
         $this->databaseMock

@@ -237,13 +237,13 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
 code = "invalid-property-assignment-value"
-message = "Invalid type for property `$categories`: expected `array<array-key, int>`, but got `array<array-key, array<array-key, mixed>|int>`."
+message = "Invalid type for property `$categories`: expected `array<array-key, int>`, but got `array<array-key, int|non-empty-array<array-key, mixed>>`."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
 code = "invalid-property-assignment-value"
-message = "Invalid type for property `$categoryName`: expected `array<array-key, string>`, but got `array<array-key, array<array-key, mixed>|string>`."
+message = "Invalid type for property `$categoryName`: expected `array<array-key, string>`, but got `array<array-key, non-empty-array<array-key, mixed>|string>`."
 count = 1
 
 [[issues]]
@@ -4327,6 +4327,12 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 2
 
 [[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CommentController.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ConfigurationController.php"
 code = "invalid-type-cast"
 message = "Casting `mixed` to `float`."
@@ -5008,7 +5014,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #2 of `phpMyFAQ\Session\Token::verifyToken`: expected `null|string`, but found `nonnull`.'
-count = 1
+count = 5
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
@@ -5020,12 +5026,18 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
+count = 7
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
 code = "mixed-assignment"
 message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
@@ -5045,6 +5057,24 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
 code = "non-existent-method"
 message = 'Method `getgrouprights` does not exist on type `phpMyFAQ\Permission\PermissionInterface`.'
 count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
+code = "possibly-invalid-argument"
+message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Permission\MediumPermission::changeGroup`: expected `array<array-key, string>`, but possibly received `array{'auto_join': bool, 'description': string, 'name': string}`.'''
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
+code = "possibly-invalid-argument"
+message = "Possible argument type mismatch for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|null|string`."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
+code = "possibly-invalid-argument"
+message = "Possible argument type mismatch for argument #4 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|null|string`."
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
@@ -5662,13 +5692,13 @@ count = 5
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 11
+count = 10
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 23
+count = 22
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
@@ -6050,27 +6080,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 9
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
-code = "mixed-assignment"
-message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
@@ -6087,74 +6099,20 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
 code = "non-existent-method"
-message = 'Method `addtogroup` does not exist on type `phpMyFAQ\Permission\PermissionInterface`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
-code = "non-existent-method"
-message = 'Method `changegroup` does not exist on type `phpMyFAQ\Permission\PermissionInterface`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
-code = "non-existent-method"
-message = 'Method `deletegroup` does not exist on type `phpMyFAQ\Permission\PermissionInterface`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
-code = "non-existent-method"
 message = 'Method `getallrightsdata` does not exist on type `phpMyFAQ\Permission\PermissionInterface`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
-code = "non-existent-method"
-message = 'Method `getgroupdata` does not exist on type `phpMyFAQ\Permission\PermissionInterface`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
-code = "non-existent-method"
-message = 'Method `getgroupname` does not exist on type `phpMyFAQ\Permission\PermissionInterface`.'
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
-code = "non-existent-method"
-message = 'Method `grantgroupright` does not exist on type `phpMyFAQ\Permission\PermissionInterface`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
-code = "non-existent-method"
-message = 'Method `refuseallgrouprights` does not exist on type `phpMyFAQ\Permission\PermissionInterface`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
-code = "non-existent-method"
-message = 'Method `removeallusersfromgroup` does not exist on type `phpMyFAQ\Permission\PermissionInterface`.'
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
 code = "possible-method-access-on-null"
 message = "Attempting to call a method on `null`."
-count = 5
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
 code = "possibly-invalid-argument"
 message = "Possible argument type mismatch for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|null|string`."
-count = 10
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #4 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|null|string`."
-count = 3
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/InstanceController.php"
@@ -12535,6 +12493,12 @@ message = "Cannot determine the concrete class for instantiation."
 count = 1
 
 [[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Mail/Builtin.php"
+code = "redundant-cast"
+message = "Redundant cast to `(string)`: the expression already has this type."
+count = 2
+
+[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Mail/Provider/MailgunProvider.php"
 code = "reference-to-undefined-variable"
 message = "Reference created from a previously undefined variable `$matches`."
@@ -16793,12 +16757,6 @@ file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
 code = "possible-method-access-on-null"
 message = "Attempting to call a method on `null`."
 count = 22
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "possibly-false-argument"
-message = "Argument #1 of function `sha1` is possibly `false`, but parameter type `string` does not accept it."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
