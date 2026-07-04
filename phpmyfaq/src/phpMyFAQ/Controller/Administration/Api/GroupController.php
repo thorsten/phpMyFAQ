@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Administration\Category;
+use phpMyFAQ\Category\Order;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
@@ -497,7 +498,28 @@ final class GroupController extends AbstractAdministrationApiController
         $this->userHasGroupPermission();
 
         $category = new Category($this->configuration);
+        // Restrict to the current UI language — loadCategories() would
+        // otherwise return every translation of each category, with an
+        // arbitrary one winning the per-id overwrite.
+        $category->setLanguage($this->configuration->getLanguage()->getLanguage());
         $allCategories = $category->loadCategories();
+
+        // Order siblings the way the category overview page does: by the
+        // stored category order. Categories missing from the order table keep
+        // their relative position at the end.
+        $sequence = [];
+        foreach (new Order($this->configuration)->getAllCategories() as $index => $orderRow) {
+            $sequence[(int) $orderRow['category_id']] = $index;
+        }
+
+        if ($sequence !== []) {
+            usort(
+                $allCategories,
+                static fn(array $a, array $b): int => (
+                    ($sequence[(int) $a['id']] ?? PHP_INT_MAX) <=> ($sequence[(int) $b['id']] ?? PHP_INT_MAX)
+                ),
+            );
+        }
 
         // loadCategories() returns a flat list ordered by position only, which
         // interleaves subcategories with unrelated parents. Re-order depth-first
@@ -512,7 +534,7 @@ final class GroupController extends AbstractAdministrationApiController
             &$listed,
         ): void {
             foreach ($allCategories as $cat) {
-                if ((int) $cat['parent_id'] !== $parentId || isset($listed[(int) $cat['id']])) {
+                if ((int) $cat['parent_id'] !== $parentId || array_key_exists((int) $cat['id'], $listed)) {
                     continue;
                 }
 
@@ -531,7 +553,7 @@ final class GroupController extends AbstractAdministrationApiController
         // Categories whose parent is inaccessible (deleted or filtered out by
         // permissions) would otherwise vanish — append them as roots.
         foreach ($allCategories as $cat) {
-            if (!isset($listed[(int) $cat['id']])) {
+            if (!array_key_exists((int) $cat['id'], $listed)) {
                 $categories[] = [
                     'id' => $cat['id'],
                     'name' => $cat['name'],

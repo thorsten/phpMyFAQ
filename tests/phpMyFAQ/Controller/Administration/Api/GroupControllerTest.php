@@ -198,9 +198,10 @@ final class GroupControllerTest extends TestCase
 
     private function seedCategoryFixtures(): void
     {
-        // The flat position order deliberately interleaves the subcategory
-        // 'Setup' (position 2) between the two root categories, mirroring the
-        // ordering produced by loadCategories() that the endpoint must fix.
+        // Each category exists in English and French; only the language of the
+        // current UI ('en' in this test setup) may be returned. 'fr' sorts
+        // after 'en', so without a language filter the French rows would win
+        // the per-id overwrite in loadCategories().
         $this->dbHandle->query(
             "INSERT INTO faqcategories
                 (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
@@ -208,11 +209,16 @@ final class GroupControllerTest extends TestCase
                 (1, 'en', 0, 'News', '', -1, -1, 1, '', 1),
                 (2, 'en', 0, 'Guides', '', -1, -1, 1, '', 1),
                 (3, 'en', 2, 'Setup', '', -1, -1, 1, '', 1),
-                (4, 'en', 99, 'Orphan', '', -1, -1, 1, '', 1)",
+                (4, 'en', 99, 'Orphan', '', -1, -1, 1, '', 1),
+                (1, 'fr', 0, 'Nouvelles', '', -1, -1, 1, '', 1),
+                (2, 'fr', 0, 'Tutoriels', '', -1, -1, 1, '', 1),
+                (3, 'fr', 2, 'Installation', '', -1, -1, 1, '', 1)",
         );
+        // The category order (same source the category overview page uses)
+        // puts 'Guides' before 'News'; positions restart per parent level.
         $this->dbHandle->query(
             'INSERT INTO faqcategory_order (category_id, parent_id, position)
-             VALUES (1, 0, 1), (3, 2, 2), (2, 0, 3), (4, 99, 4)',
+             VALUES (2, 0, 1), (3, 2, 1), (1, 0, 2), (4, 99, 3)',
         );
         // group_id -1 marks a category as visible to everyone.
         $this->dbHandle->query(
@@ -848,9 +854,11 @@ final class GroupControllerTest extends TestCase
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        // Subcategories follow their parent regardless of flat position order;
-        // categories with an unreachable parent are appended as roots.
-        self::assertSame(['News', 'Guides', 'Setup', 'Orphan'], array_column($payload, 'name'));
-        self::assertSame([0, 0, 1, 0], array_column($payload, 'level'));
+        // Sibling order follows faqcategory_order (same as the category
+        // overview page), subcategories directly follow their parent, only the
+        // current UI language is returned, and categories with an unreachable
+        // parent are appended as roots.
+        self::assertSame(['Guides', 'Setup', 'News', 'Orphan'], array_column($payload, 'name'));
+        self::assertSame([0, 1, 0, 0], array_column($payload, 'level'));
     }
 }
