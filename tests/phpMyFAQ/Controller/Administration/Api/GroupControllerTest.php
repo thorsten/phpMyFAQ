@@ -196,6 +196,31 @@ final class GroupControllerTest extends TestCase
         ));
     }
 
+    private function seedCategoryFixtures(): void
+    {
+        // The flat position order deliberately interleaves the subcategory
+        // 'Setup' (position 2) between the two root categories, mirroring the
+        // ordering produced by loadCategories() that the endpoint must fix.
+        $this->dbHandle->query(
+            "INSERT INTO faqcategories
+                (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
+             VALUES
+                (1, 'en', 0, 'News', '', -1, -1, 1, '', 1),
+                (2, 'en', 0, 'Guides', '', -1, -1, 1, '', 1),
+                (3, 'en', 2, 'Setup', '', -1, -1, 1, '', 1),
+                (4, 'en', 99, 'Orphan', '', -1, -1, 1, '', 1)",
+        );
+        $this->dbHandle->query(
+            'INSERT INTO faqcategory_order (category_id, parent_id, position)
+             VALUES (1, 0, 1), (3, 2, 2), (2, 0, 3), (4, 99, 4)',
+        );
+        // group_id -1 marks a category as visible to everyone.
+        $this->dbHandle->query(
+            'INSERT INTO faqcategory_group (category_id, group_id)
+             VALUES (1, -1), (2, -1), (3, -1), (4, -1)',
+        );
+    }
+
     private function setCsrfCookie(string $page, string $token): void
     {
         $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;
@@ -806,5 +831,26 @@ final class GroupControllerTest extends TestCase
         $listPayload = json_decode((string) $listResponse->getContent(), true, 512, JSON_THROW_ON_ERROR);
         self::assertNotContains(self::TEST_GROUP_ID, array_column($listPayload, 'group_id'));
         $this->removeCsrfCookie('delete-group');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testListCategoriesReturnsDepthFirstOrderWithLevels(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->seedCategoryFixtures();
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createSuperAdminContainer());
+
+        $response = $controller->listCategories();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        // Subcategories follow their parent regardless of flat position order;
+        // categories with an unreachable parent are appended as roots.
+        self::assertSame(['News', 'Guides', 'Setup', 'Orphan'], array_column($payload, 'name'));
+        self::assertSame([0, 0, 1, 0], array_column($payload, 'level'));
     }
 }

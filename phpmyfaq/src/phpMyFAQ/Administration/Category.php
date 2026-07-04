@@ -111,7 +111,9 @@ class Category
         if ($result !== false) {
             while (true) {
                 $row = $this->configuration->getDb()->fetchArray($result);
-                if (!is_array($row)) {
+                // The SQLite and PostgreSQL drivers signal end-of-result with
+                // an empty array instead of null, so both must end the loop.
+                if (!is_array($row) || $row === []) {
                     break;
                 }
 

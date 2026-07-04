@@ -9,6 +9,7 @@ export interface CategoryItem {
   id: number;
   name: string;
   parent_id: number;
+  level?: number;
 }
 
 export interface CategoryRestrictions {

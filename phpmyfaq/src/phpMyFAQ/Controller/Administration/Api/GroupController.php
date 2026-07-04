@@ -499,13 +499,46 @@ final class GroupController extends AbstractAdministrationApiController
         $category = new Category($this->configuration);
         $allCategories = $category->loadCategories();
 
+        // loadCategories() returns a flat list ordered by position only, which
+        // interleaves subcategories with unrelated parents. Re-order depth-first
+        // so every subcategory directly follows its parent, and expose the
+        // nesting level so the UI can indent accordingly.
         $categories = [];
+        $listed = [];
+        $appendChildren = static function (int $parentId, int $level) use (
+            &$appendChildren,
+            $allCategories,
+            &$categories,
+            &$listed,
+        ): void {
+            foreach ($allCategories as $cat) {
+                if ((int) $cat['parent_id'] !== $parentId || isset($listed[(int) $cat['id']])) {
+                    continue;
+                }
+
+                $listed[(int) $cat['id']] = true;
+                $categories[] = [
+                    'id' => $cat['id'],
+                    'name' => $cat['name'],
+                    'parent_id' => $cat['parent_id'],
+                    'level' => $level,
+                ];
+                $appendChildren((int) $cat['id'], $level + 1);
+            }
+        };
+        $appendChildren(0, 0);
+
+        // Categories whose parent is inaccessible (deleted or filtered out by
+        // permissions) would otherwise vanish — append them as roots.
         foreach ($allCategories as $cat) {
-            $categories[] = [
-                'id' => $cat['id'],
-                'name' => $cat['name'],
-                'parent_id' => $cat['parent_id'],
-            ];
+            if (!isset($listed[(int) $cat['id']])) {
+                $categories[] = [
+                    'id' => $cat['id'],
+                    'name' => $cat['name'],
+                    'parent_id' => $cat['parent_id'],
+                    'level' => 0,
+                ];
+            }
         }
 
         return $this->json($categories, Response::HTTP_OK);

@@ -344,4 +344,26 @@ describe('handleGroups', () => {
     expect(document.getElementById('pmf-group-detail')?.classList.contains('d-none')).toBe(true);
     expect(document.getElementById('pmf-group-empty-state')?.classList.contains('d-none')).toBe(false);
   });
+
+  // Keep this test last: cachedCategories is module-level and, once populated
+  // with a non-empty list, is reused by any test that runs after it.
+  it('should indent subcategories in the category restrictions options', async () => {
+    setupFullDom();
+    mockDefaultApis();
+    (fetchCategoriesForRestrictions as Mock).mockResolvedValue([
+      { id: 1, name: 'Guides', parent_id: 0, level: 0 },
+      { id: 2, name: 'Setup', parent_id: 1, level: 1 },
+    ]);
+
+    await handleGroups();
+    await selectFirstGroup();
+
+    // fetchGroupRights checks rights 1 and 3, so restriction selects render.
+    const options = document.querySelectorAll<HTMLOptionElement>(
+      '#categoryRestrictionsBody select[data-right-id="1"] option'
+    );
+    expect(options.length).toBe(2);
+    expect(options[0].textContent).toBe('Guides');
+    expect(options[1].textContent).toBe('\u00A0\u00A0\u00A0Setup');
+  });
 });

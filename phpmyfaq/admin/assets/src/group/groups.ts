@@ -505,7 +505,9 @@ const renderCategoryRestrictions = (container: HTMLElement): void => {
     cachedCategories.forEach((cat: CategoryItem): void => {
       const option = document.createElement('option');
       option.value = String(cat.id);
-      option.textContent = cat.name;
+      // Indent subcategories according to their nesting level, mirroring the
+      // depth-first order delivered by the API.
+      option.textContent = '\u00A0\u00A0\u00A0'.repeat(cat.level ?? 0) + cat.name;
       option.selected = restrictedCategoryIds.includes(cat.id);
       select.appendChild(option);
     });
