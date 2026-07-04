@@ -118,6 +118,9 @@ const selectGroup = async (groupId: string): Promise<void> => {
   try {
     await loadCategoryRestrictions(groupId);
   } catch (error) {
+    if (requestToken !== selectRequestToken) {
+      return;
+    }
     console.error('Failed to load category restrictions:', error);
     currentRestrictions = {};
     const container = document.getElementById('categoryRestrictionsBody');
