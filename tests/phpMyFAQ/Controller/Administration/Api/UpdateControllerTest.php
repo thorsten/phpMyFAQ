@@ -254,7 +254,7 @@ final class UpdateControllerTest extends TestCase
         $controller = $this->createController();
 
         $this->expectException(\Exception::class);
-        $controller->updateDatabase();
+        $controller->updateDatabase(new Request());
     }
 
     /**
@@ -265,7 +265,7 @@ final class UpdateControllerTest extends TestCase
         $controller = $this->createController();
 
         $this->expectException(\Exception::class);
-        $controller->cleanUp();
+        $controller->cleanUp(new Request());
     }
 
     /**
@@ -358,9 +358,15 @@ final class UpdateControllerTest extends TestCase
             $update,
             $this->createStub(EnvironmentConfigurator::class),
         );
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $container = $this->createAuthenticatedContainer();
+        $controller->setContainer($container);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $csrf = $this->createValidUpdatePackageToken($session);
 
-        $response = $controller->updateDatabase();
+        $response = $controller->updateDatabase(
+            new Request([], [], [], [], [], [], json_encode(['csrf' => $csrf], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_GATEWAY, $response->getStatusCode());
@@ -381,13 +387,65 @@ final class UpdateControllerTest extends TestCase
             $this->createStub(Update::class),
             $this->createStub(EnvironmentConfigurator::class),
         );
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $container = $this->createAuthenticatedContainer();
+        $controller->setContainer($container);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $csrf = $this->createValidUpdatePackageToken($session);
 
-        $response = $controller->cleanUp();
+        $response = $controller->cleanUp(
+            new Request([], [], [], [], [], [], json_encode(['csrf' => $csrf], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame('Cleanup successful.', $payload['message']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateDatabaseRejectsInvalidCsrfToken(): void
+    {
+        $update = $this->createMock(Update::class);
+        $update->expects(self::never())->method('applyUpdates');
+
+        $controller = $this->createControllerWithDependencies(
+            $this->createStub(Upgrade::class),
+            $this->createStub(RemoteApiClient::class),
+            $update,
+            $this->createStub(EnvironmentConfigurator::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->updateDatabase(
+            new Request([], [], [], [], [], [], json_encode(['csrf' => 'invalid-token'], JSON_THROW_ON_ERROR)),
+        );
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCleanUpRejectsInvalidCsrfToken(): void
+    {
+        $upgrade = $this->createMock(Upgrade::class);
+        $upgrade->expects(self::never())->method('cleanUp');
+
+        $controller = $this->createControllerWithDependencies(
+            $upgrade,
+            $this->createStub(RemoteApiClient::class),
+            $this->createStub(Update::class),
+            $this->createStub(EnvironmentConfigurator::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->cleanUp(
+            new Request([], [], [], [], [], [], json_encode(['csrf' => 'invalid-token'], JSON_THROW_ON_ERROR)),
+        );
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 
     /**
@@ -561,9 +619,15 @@ final class UpdateControllerTest extends TestCase
             $update,
             $this->createStub(EnvironmentConfigurator::class),
         );
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $container = $this->createAuthenticatedContainer();
+        $controller->setContainer($container);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $csrf = $this->createValidUpdatePackageToken($session);
 
-        $response = $controller->updateDatabase();
+        $response = $controller->updateDatabase(
+            new Request([], [], [], [], [], [], json_encode(['csrf' => $csrf], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -584,9 +648,15 @@ final class UpdateControllerTest extends TestCase
             $update,
             $this->createStub(EnvironmentConfigurator::class),
         );
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $container = $this->createAuthenticatedContainer();
+        $controller->setContainer($container);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $csrf = $this->createValidUpdatePackageToken($session);
 
-        $response = $controller->updateDatabase();
+        $response = $controller->updateDatabase(
+            new Request([], [], [], [], [], [], json_encode(['csrf' => $csrf], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_GATEWAY, $response->getStatusCode());

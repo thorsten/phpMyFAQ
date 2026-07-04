@@ -147,4 +147,26 @@ class BuiltinTest extends TestCase
         $this->assertSame("Return-Path: <bounce@example.com>\n", BuiltinTestState::$mailCalls[0]['headers']);
         $this->assertNull(BuiltinTestState::$mailCalls[0]['params']);
     }
+
+    public function testSendStripsNewlinesToPreventHeaderInjection(): void
+    {
+        $result = $this->builtin->send(
+            'user@example.com',
+            [
+                'Subject' => "Legit subject\r\nBcc: attacker@evil.example",
+                'From' => "sender@example.com\r\nBcc: attacker@evil.example",
+            ],
+            'Mail body',
+        );
+
+        $this->assertSame(1, $result);
+        $call = BuiltinTestState::$mailCalls[0];
+
+        // CR/LF must be removed so a crafted value cannot smuggle in additional headers.
+        $this->assertSame('Legit subjectBcc: attacker@evil.example', $call['subject']);
+        $this->assertStringNotContainsString("\r", $call['subject']);
+        $this->assertStringNotContainsString("\n", $call['subject']);
+        $this->assertSame("From: sender@example.comBcc: attacker@evil.example\n", $call['headers']);
+        $this->assertStringNotContainsString("\r", $call['headers']);
+    }
 }

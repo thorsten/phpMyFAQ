@@ -252,7 +252,9 @@ class User
             WHERE
                 remember_me = '%s' AND account_status != 'blocked'",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($cookie),
+            // The cookie holds the raw token; only its SHA-256 hash is stored, so hash the
+            // incoming value before comparing.
+            $this->configuration->getDb()->escape(hash('sha256', $cookie)),
         );
 
         $res = $this->configuration->getDb()->query($select);

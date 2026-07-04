@@ -367,6 +367,48 @@ final class AuthenticationControllerTest extends TestCase
     }
 
     /**
+     * A specific authentication error (e.g. "login name not found" vs. "wrong password") must
+     * never leak to the user — the flashed message is always the generic one, to prevent
+     * account enumeration.
+     *
+     * @throws \Exception
+     */
+    public function testAuthenticateShowsGenericErrorAndDoesNotLeakSpecificReason(): void
+    {
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(false);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(false);
+        $currentUser->method('enableRememberMe');
+        // login() reveals the specific reason via an exception; the controller must swallow it.
+        $currentUser->method('login')->willThrowException(new UserException(CurrentUser::ERROR_USER_INCORRECT_LOGIN));
+
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+
+        $controller = new AuthenticationController(
+            $this->createStub(UserSession::class),
+            $currentUser,
+            $this->createStub(TwoFactor::class),
+        );
+        $controller->setContainer($this->createControllerContainer($session, $currentUser));
+
+        $response = $controller->authenticate(
+            new Request([], [
+                'faqusername' => 'admin',
+                'faqpassword' => 'wrong',
+            ]),
+        );
+
+        self::assertSame('./login', $response->getTargetUrl());
+        $errors = $session->getFlashBag()->get('error');
+        self::assertContains(Translation::get('ad_auth_fail'), $errors);
+        self::assertNotContains(CurrentUser::ERROR_USER_INCORRECT_LOGIN, $errors);
+    }
+
+    /**
      * @throws \Exception
      */
     public function testAuthenticateUsesRemoteUserWhenSsoSupportIsEnabled(): void

@@ -185,11 +185,14 @@ class CurrentUser extends User
             }
 
             if ($this->rememberMe) {
-                $rememberMe = sha1(session_id());
-                $this->setRememberMe($rememberMe);
+                // The remember-me cookie is a password-bypassing credential, so it must be an
+                // unpredictable CSPRNG value (not derived from the session id) and stored hashed
+                // at rest so a database read cannot yield a usable cookie.
+                $rememberMeToken = bin2hex(random_bytes(32));
+                $this->setRememberMe(hash('sha256', $rememberMeToken));
                 $this->userSession->setCookie(
                     UserSession::COOKIE_NAME_REMEMBER_ME,
-                    $rememberMe,
+                    $rememberMeToken,
                     $request->server->get('REQUEST_TIME') + self::PMF_REMEMBER_ME_EXPIRED_TIME,
                 );
             }

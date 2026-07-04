@@ -265,9 +265,13 @@ final class UpdateController extends AbstractController
     }
 
     #[Route(path: 'update-database', name: 'admin.api.update-database', methods: ['POST'])]
-    public function updateDatabase(): JsonResponse
+    public function updateDatabase(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+
+        if (!$this->isValidUpdatePackageToken($request)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
 
         $this->update->version = $this->configuration->get('main.currentVersion');
 
@@ -291,9 +295,13 @@ final class UpdateController extends AbstractController
      * @throws Exception|\Exception
      */
     #[Route(path: 'cleanup', name: 'admin.api.cleanup', methods: ['POST'])]
-    public function cleanUp(): JsonResponse
+    public function cleanUp(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+
+        if (!$this->isValidUpdatePackageToken($request)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
 
         $this->upgrade->cleanUp();
 

@@ -89,6 +89,10 @@ final readonly class NewsRepository implements NewsRepositoryInterface
             $sortField = 'datum';
         }
 
+        // Both sort field and direction are interpolated as SQL identifiers, so the direction
+        // must be allowlisted too — never trust a caller-supplied value here.
+        $sortOrder = strtoupper($sortOrder) === 'ASC' ? 'ASC' : 'DESC';
+
         $whereActive = $active ? "AND active = 'y'" : '';
         $query = sprintf(
             "SELECT * FROM %sfaqnews WHERE lang = '%s' %s ORDER BY %s %s LIMIT %d OFFSET %d",

@@ -207,8 +207,10 @@ final class AuthenticationController extends AbstractFrontController
 
                 return new RedirectResponse('./');
             } catch (UserException $e) {
+                // Log the specific reason server-side, but never disclose whether the login
+                // name exists: always show the same generic message to prevent user enumeration.
                 $this->configuration->getLogger()->error('Login-error: ' . $e->getMessage());
-                $this->session->getFlashBag()->add('error', $e->getMessage());
+                $this->session->getFlashBag()->add('error', Translation::get('ad_auth_fail'));
                 return new RedirectResponse('./login');
             }
         }

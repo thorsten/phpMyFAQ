@@ -58,21 +58,34 @@ class RegistrationHelper extends AbstractHelper
     {
         $user = new User($this->configuration);
 
-        // Check if email already exists in the userdata table (even if the username is different)
+        // Account enumeration guard: a duplicate e-mail address or login name must be
+        // indistinguishable from a fresh registration. In those cases no account is created and
+        // the same generic "thank you" response is returned, so an attacker cannot probe which
+        // e-mails/logins already exist.
         if ($email !== '' && $email !== '0') {
             if (!$user->userdata instanceof UserData) {
                 $user->userdata = new UserData($this->configuration);
             }
 
             if ($user->userdata->emailExists($email)) {
-                return [
-                    'registered' => false,
-                    'error' => User::ERROR_USER_EMAIL_NOT_UNIQUE,
-                ];
+                return $this->buildRegistrationResponse();
             }
         }
 
-        if (!$user->createUser($userName, '')) {
+        try {
+            $created = $user->createUser($userName, '');
+        } catch (\Exception $exception) {
+            if (
+                $exception->getMessage() === User::ERROR_USER_LOGIN_NOT_UNIQUE
+                || $exception->getMessage() === User::ERROR_USER_EMAIL_NOT_UNIQUE
+            ) {
+                return $this->buildRegistrationResponse();
+            }
+
+            throw $exception;
+        }
+
+        if (!$created) {
             return [
                 'registered' => false,
                 'error' => $user->error(),
@@ -107,6 +120,17 @@ class RegistrationHelper extends AbstractHelper
         $mail->send();
         unset($mail);
 
+        return $this->buildRegistrationResponse();
+    }
+
+    /**
+     * Builds the generic registration response. The same payload is returned for a real
+     * registration and for a suppressed duplicate, so the two cannot be told apart.
+     *
+     * @return array{registered: bool, success: string}
+     */
+    private function buildRegistrationResponse(): array
+    {
         return [
             'registered' => true,
             'success' =>

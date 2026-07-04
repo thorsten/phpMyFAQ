@@ -135,12 +135,13 @@ describe('Upgrade API', (): void => {
     });
     vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponse);
 
-    await startDatabaseUpdate();
+    await startDatabaseUpdate('csrfToken');
     expect(fetchWrapperModule.fetchWrapper).toHaveBeenCalledWith('./api/update-database', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ csrf: 'csrfToken' }),
     });
   });
 });

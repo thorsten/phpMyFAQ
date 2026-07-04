@@ -131,7 +131,8 @@ class CurrentUserTraitsTest extends TestCase
     {
         $currentUser = new CurrentUser($this->configuration);
         $currentUser->login('admin', 'password');
-        $currentUser->setRememberMe('cookie-token');
+        // The remember-me token is stored hashed at rest; the cookie carries the raw token.
+        $currentUser->setRememberMe(hash('sha256', 'cookie-token'));
         $currentUser->deleteFromSession();
 
         $_COOKIE[UserSession::COOKIE_NAME_REMEMBER_ME] = 'cookie-token';

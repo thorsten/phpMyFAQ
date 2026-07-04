@@ -87,11 +87,12 @@ export const startInstallation = async (csrfToken: string): Promise<Response> =>
   });
 };
 
-export const startDatabaseUpdate = async (): Promise<Response> => {
+export const startDatabaseUpdate = async (csrfToken: string): Promise<Response> => {
   return await fetchWrapper('./api/update-database', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({ csrf: csrfToken }),
   });
 };

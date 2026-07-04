@@ -325,14 +325,14 @@ const installPackage = async (csrfToken: string): Promise<void> => {
     throw error;
   }
 
-  await updateDatabase();
+  await updateDatabase(csrfToken);
 };
 
-const updateDatabase = async (): Promise<void> => {
+const updateDatabase = async (csrfToken: string): Promise<void> => {
   const card = document.getElementById('pmf-update-step-install-package') as HTMLElement | null;
 
   try {
-    const response = await startDatabaseUpdate();
+    const response = await startDatabaseUpdate(csrfToken);
     await handleStreamingProgress(response, 'result-update-database');
 
     if (card) {

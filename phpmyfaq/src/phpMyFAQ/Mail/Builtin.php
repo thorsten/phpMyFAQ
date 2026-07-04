@@ -35,8 +35,9 @@ class Builtin implements MailUserAgentInterface
      */
     public function send(string $recipients, array $headers, string $body): int
     {
-        // Get the subject of the e-mail, RFC 2047 compliant
-        $subject = $headers['Subject'];
+        // Get the subject of the e-mail, RFC 2047 compliant. Strip CR/LF defensively so an
+        // untrusted value can never inject additional headers, independent of upstream validation.
+        $subject = self::stripNewlines((string) $headers['Subject']);
         $headers['Subject'] = null;
         unset($headers['Subject']);
 
@@ -53,7 +54,7 @@ class Builtin implements MailUserAgentInterface
         // Prepare the headers for the email
         $mailHeaders = '';
         foreach ($headers as $key => $value) {
-            $mailHeaders .= $key . ': ' . $value . PHP_EOL;
+            $mailHeaders .= self::stripNewlines((string) $key) . ': ' . self::stripNewlines((string) $value) . PHP_EOL;
         }
 
         // Send the email
@@ -62,5 +63,13 @@ class Builtin implements MailUserAgentInterface
         }
 
         return (int) mail($recipients, $subject, $body, $mailHeaders, '-f' . $sender);
+    }
+
+    /**
+     * Removes CR and LF characters to prevent e-mail header (CRLF) injection.
+     */
+    private static function stripNewlines(string $value): string
+    {
+        return str_replace(["\r", "\n"], '', $value);
     }
 }

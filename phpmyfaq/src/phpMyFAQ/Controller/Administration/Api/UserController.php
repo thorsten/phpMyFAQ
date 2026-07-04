@@ -561,9 +561,16 @@ final class UserController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
         }
 
-        $userRights = Filter::filterVar($data->userRights, FILTER_SANITIZE_SPECIAL_CHARS, []);
-        if (!is_array($userRights)) {
-            $userRights = [];
+        // userRights arrives as a JSON array of permission ids. Validate each element as a
+        // positive integer and drop anything malformed, so only real right ids can reach the
+        // escalation guard and grantUserRight() (a bad value must never become right id 0).
+        $submittedRights = is_array($data->userRights ?? null) ? $data->userRights : [];
+        $userRights = [];
+        foreach ($submittedRights as $submittedRight) {
+            $rightId = Filter::filterVar($submittedRight, FILTER_VALIDATE_INT, default: 0);
+            if ($rightId > 0) {
+                $userRights[] = $rightId;
+            }
         }
 
         $actingIsSuperAdmin = $this->currentUser->isSuperAdmin();
