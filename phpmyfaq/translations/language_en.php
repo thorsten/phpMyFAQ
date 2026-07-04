@@ -1813,4 +1813,11 @@ $PMF_LANG['msgCustomizeDashboard'] = 'Customize';
 $PMF_LANG['msgDashboardDone'] = 'Done';
 $PMF_LANG['msgResetDashboard'] = 'Reset layout';
 
+$PMF_LANG['ad_group_filter'] = 'Filter groups…';
+$PMF_LANG['ad_group_search_users'] = 'Search users to add…';
+$PMF_LANG['ad_group_select_group'] = 'Select a group from the list to view and edit its settings.';
+$PMF_LANG['ad_group_remove_member'] = 'Remove member';
+$PMF_LANG['ad_group_permission_filter'] = 'Filter permissions…';
+$PMF_LANG['ad_group_restrictions_saved'] = 'Category restrictions saved.';
+
 return $PMF_LANG;
