@@ -13,7 +13,7 @@
  * @since     2023-01-02
  */
 
-import { CategoryItem, CategoryRestrictions, Group, Member, User } from '../interfaces';
+import { ApiResponse, CategoryItem, CategoryRestrictions, Group, Member, User } from '../interfaces';
 import { fetchJson, fetchWrapper } from './fetch-wrapper';
 
 export const fetchAllGroups = async (): Promise<Group[]> => {
@@ -116,4 +116,70 @@ export const fetchCategoriesForRestrictions = async (): Promise<CategoryItem[]> 
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   })) as CategoryItem[];
+};
+
+export const updateGroup = async (
+  groupId: string,
+  name: string,
+  description: string,
+  autoJoin: boolean,
+  csrfToken: string
+): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('./api/group/update', {
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ groupId: parseInt(groupId), name, description, autoJoin, csrfToken }),
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
+};
+
+export const updateGroupMembers = async (
+  groupId: string,
+  memberIds: number[],
+  csrfToken: string
+): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('./api/group/members', {
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ groupId: parseInt(groupId), memberIds, csrfToken }),
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
+};
+
+export const updateGroupPermissions = async (
+  groupId: string,
+  rightIds: number[],
+  csrfToken: string
+): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('./api/group/permissions', {
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ groupId: parseInt(groupId), rightIds, csrfToken }),
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
+};
+
+export const deleteGroup = async (groupId: string, csrfToken: string): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('./api/group/delete', {
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ groupId: parseInt(groupId), csrfToken }),
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 };

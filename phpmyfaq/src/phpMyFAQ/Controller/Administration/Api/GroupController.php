@@ -248,19 +248,17 @@ final class GroupController extends AbstractAdministrationApiController
         // (same escalation rule as membership management, fail closed).
         if ($autoJoin && !$this->currentUser->isSuperAdmin()) {
             if (!$this->currentUser->perm instanceof MediumPermission) {
-                return $this->json(
-                    ['error' => 'Cannot enable auto-join without group permission support.'],
-                    Response::HTTP_FORBIDDEN,
-                );
+                return $this->json([
+                    'error' => 'Cannot enable auto-join without group permission support.',
+                ], Response::HTTP_FORBIDDEN);
             }
 
             $actingUserId = $this->currentUser->getUserId();
             foreach ($this->currentUser->perm->getGroupRights($groupId) as $groupRight) {
                 if (!$this->currentUser->perm->hasPermission($actingUserId, (int) $groupRight)) {
-                    return $this->json(
-                        ['error' => 'Cannot enable auto-join on a group whose rights you do not hold.'],
-                        Response::HTTP_FORBIDDEN,
-                    );
+                    return $this->json([
+                        'error' => 'Cannot enable auto-join on a group whose rights you do not hold.',
+                    ], Response::HTTP_FORBIDDEN);
                 }
             }
         }

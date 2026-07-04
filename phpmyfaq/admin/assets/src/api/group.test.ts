@@ -8,6 +8,10 @@ import {
   fetchGroupCategoryRestrictions,
   saveGroupCategoryRestrictions,
   fetchCategoriesForRestrictions,
+  updateGroup,
+  updateGroupMembers,
+  updateGroupPermissions,
+  deleteGroup,
 } from './group';
 import * as fetchWrapperModule from './fetch-wrapper';
 
@@ -261,5 +265,111 @@ describe('fetchCategoriesForRestrictions', () => {
     vi.spyOn(fetchWrapperModule, 'fetchJson').mockRejectedValue(new Error('Network response was not ok.'));
 
     await expect(fetchCategoriesForRestrictions()).rejects.toThrow('Network response was not ok.');
+  });
+});
+
+describe('updateGroup', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should post the group details payload and return the response envelope', async () => {
+    const mockResponse = { success: 'saved' };
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
+
+    const result = await updateGroup('42', 'Editors', 'Editorial team', true, 'csrf-token');
+
+    expect(result).toEqual(mockResponse);
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('./api/group/update', {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        groupId: 42,
+        name: 'Editors',
+        description: 'Editorial team',
+        autoJoin: true,
+        csrfToken: 'csrf-token',
+      }),
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+  });
+});
+
+describe('updateGroupMembers', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should post the member IDs payload and return the response envelope', async () => {
+    const mockResponse = { success: 'saved' };
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
+
+    const result = await updateGroupMembers('42', [1, 2], 'csrf-token');
+
+    expect(result).toEqual(mockResponse);
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('./api/group/members', {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ groupId: 42, memberIds: [1, 2], csrfToken: 'csrf-token' }),
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+  });
+});
+
+describe('updateGroupPermissions', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should post the right IDs payload and return the response envelope', async () => {
+    const mockResponse = { success: 'saved' };
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
+
+    const result = await updateGroupPermissions('42', [3, 4], 'csrf-token');
+
+    expect(result).toEqual(mockResponse);
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('./api/group/permissions', {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ groupId: 42, rightIds: [3, 4], csrfToken: 'csrf-token' }),
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+  });
+});
+
+describe('deleteGroup', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should post the group ID payload and return the response envelope', async () => {
+    const mockResponse = { success: 'deleted' };
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
+
+    const result = await deleteGroup('42', 'csrf-token');
+
+    expect(result).toEqual(mockResponse);
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('./api/group/delete', {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ groupId: 42, csrfToken: 'csrf-token' }),
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
   });
 });
