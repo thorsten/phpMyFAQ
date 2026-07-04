@@ -156,23 +156,6 @@ final class GroupControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testDeleteThrowsForInvalidCsrfWhenAuthenticated(): void
-    {
-        $controller = $this->createController();
-        $controller->setContainer($this->createAuthenticatedContainer());
-
-        $request = new Request([], [
-            'group_id' => 1,
-            'pmf-csrf-token' => 'invalid-token',
-        ]);
-
-        $this->expectException(UnauthorizedHttpException::class);
-        $controller->delete($request);
-    }
-
-    /**
-     * @throws \Exception
-     */
     public function testCreateWithValidCsrfReturnsResponse(): void
     {
         $container = $this->createAuthenticatedContainer();
@@ -189,103 +172,6 @@ final class GroupControllerTest extends TestCase
                 ['group_name' => 'Unit Test Group', 'group_description' => 'Test', 'group_auto_join' => 'n'],
                 ['csrf' => $token],
             ),
-        );
-
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testDeleteWithValidCsrfReturnsResponse(): void
-    {
-        $container = $this->createAuthenticatedContainer();
-        $session = $container->get('session');
-        self::assertInstanceOf(Session::class, $session);
-        $token = $this->createValidCsrfToken($session, 'delete-group');
-
-        $controller = $this->createController();
-        $controller->setContainer($container);
-
-        $response = $controller->delete(
-            new Request([], [
-                'group_id' => 1,
-                'pmf-csrf-token' => $token,
-            ]),
-        );
-
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testUpdateReturnsResponse(): void
-    {
-        $container = $this->createAuthenticatedContainer();
-        $session = $container->get('session');
-        self::assertInstanceOf(Session::class, $session);
-        $token = $this->createValidCsrfToken($session, 'update-group');
-
-        $controller = $this->createController();
-        $controller->setContainer($container);
-
-        $response = $controller->update(
-            new Request([], [
-                'group_id' => 1,
-                'name' => 'Updated Group',
-                'description' => 'Updated Description',
-                'auto_join' => 'n',
-                'pmf-csrf-token' => $token,
-            ]),
-        );
-
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testUpdateMembersReturnsResponse(): void
-    {
-        $container = $this->createAuthenticatedContainer();
-        $session = $container->get('session');
-        self::assertInstanceOf(Session::class, $session);
-        $token = $this->createValidCsrfToken($session, 'update-group-members');
-
-        $controller = $this->createController();
-        $controller->setContainer($container);
-
-        $response = $controller->updateMembers(
-            new Request([], [
-                'group_id' => 1,
-                'group_members' => [1, 2],
-                'pmf-csrf-token' => $token,
-            ]),
-        );
-
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testUpdatePermissionsReturnsResponse(): void
-    {
-        $container = $this->createAuthenticatedContainer();
-        $session = $container->get('session');
-        self::assertInstanceOf(Session::class, $session);
-        $token = $this->createValidCsrfToken($session, 'update-group-permissions');
-
-        $controller = $this->createController();
-        $controller->setContainer($container);
-
-        $response = $controller->updatePermissions(
-            new Request([], [
-                'group_id' => 1,
-                'group_rights' => [1, 2],
-                'pmf-csrf-token' => $token,
-            ]),
         );
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -351,41 +237,4 @@ final class GroupControllerTest extends TestCase
         return $container;
     }
 
-    public function testUpdateMembersNonSuperAdminCannotManageGroupWithRightTheyDoNotHold(): void
-    {
-        // The target group holds right id 42, which the acting user does NOT hold. Managing its
-        // membership would let the acting user inherit that right via group membership, so it must
-        // be refused.
-        // hasPermission() returns true for the string-keyed permission gate ('editgroup') but false
-        // for the integer right id 42 the target group holds.
-        /** @var MediumPermission&PermissionInterface $perm */
-        $perm = $this->getMockBuilder(MediumPermission::class)->disableOriginalConstructor()->getMock();
-        $perm->method('getGroupRights')->willReturn([42]);
-        $perm->method('hasPermission')->willReturnCallback(
-            static fn(int $userId, mixed $right): bool => is_string($right),
-        );
-
-        $actingUser = $this->createStub(CurrentUser::class);
-        $actingUser->perm = $perm;
-        $actingUser->method('isLoggedIn')->willReturn(true);
-        $actingUser->method('getUserId')->willReturn(5);
-        $actingUser->method('isSuperAdmin')->willReturn(false);
-
-        $container = $this->createAuthenticatedContainer($actingUser);
-        $session = $container->get('session');
-        self::assertInstanceOf(Session::class, $session);
-        $token = $this->createValidCsrfToken($session, 'update-group-members');
-
-        $controller = $this->createController();
-        $controller->setContainer($container);
-
-        $this->expectException(UnauthorizedHttpException::class);
-        $controller->updateMembers(
-            new Request([], [
-                'group_id' => 1,
-                'group_members' => [5], // the acting user self-joining the privileged group
-                'pmf-csrf-token' => $token,
-            ]),
-        );
-    }
 }

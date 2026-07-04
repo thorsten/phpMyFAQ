@@ -311,11 +311,6 @@ abstract class AbstractAdministrationController extends AbstractController
             case 'admin.group':
             case 'admin.group.add':
             case 'admin.group.create':
-            case 'admin.group.confirm':
-            case 'admin.group.delete':
-            case 'admin.group.update':
-            case 'admin.group.update.members':
-            case 'admin.group.update.permissions':
             case 'admin.password.change':
             case 'admin.password.update':
             case 'admin.user':

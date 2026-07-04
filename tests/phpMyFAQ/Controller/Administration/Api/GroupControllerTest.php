@@ -12,11 +12,13 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
@@ -26,6 +28,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
+#[AllowMockObjectsWithoutExpectations]
 #[CoversClass(GroupController::class)]
 #[UsesNamespace('phpMyFAQ')]
 final class GroupControllerTest extends TestCase
@@ -527,6 +530,60 @@ final class GroupControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
         self::assertSame('Cannot manage group membership without group permission support.', $payload['error']);
+        $this->removeCsrfCookie('update-group-members');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateMembersRejectsNonSuperAdminLackingGroupRight(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('update-group-members');
+        $this->setCsrfCookie('update-group-members', $csrfToken);
+
+        // The target group holds right id 42, which the acting user does NOT hold. Managing its
+        // membership would let the acting user inherit that right via group membership, so it must
+        // be refused. hasPermission() returns true for the string-keyed permission gate but false
+        // for the integer right id 42 the target group holds.
+        $perm = $this->getMockBuilder(MediumPermission::class)->disableOriginalConstructor()->getMock();
+        $perm->method('getGroupRights')->willReturn([42]);
+        $perm->method('hasPermission')->willReturnCallback(
+            static fn(int $userId, mixed $right): bool => is_string($right),
+        );
+
+        $actingUser = $this->createStub(CurrentUser::class);
+        $actingUser->perm = $perm;
+        $actingUser->method('isLoggedIn')->willReturn(true);
+        $actingUser->method('getUserId')->willReturn(5);
+        $actingUser->method('isSuperAdmin')->willReturn(false);
+
+        $adminLog = $this->createStub(AdminLog::class);
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($actingUser, $session, $adminLog) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $actingUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    default => null,
+                };
+            });
+
+        $controller = new GroupController();
+        $controller->setContainer($container);
+
+        $response = $controller->updateMembers(new Request(content: json_encode([
+            'groupId' => 1,
+            'memberIds' => [5],
+            'csrfToken' => $csrfToken,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame('Cannot manage a group whose rights you do not hold.', $payload['error']);
         $this->removeCsrfCookie('update-group-members');
     }
 
