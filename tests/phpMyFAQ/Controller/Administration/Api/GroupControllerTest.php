@@ -28,7 +28,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
-#[AllowMockObjectsWithoutExpectations]
 #[CoversClass(GroupController::class)]
 #[UsesNamespace('phpMyFAQ')]
 final class GroupControllerTest extends TestCase
@@ -536,6 +535,7 @@ final class GroupControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testUpdateMembersRejectsNonSuperAdminLackingGroupRight(): void
     {
         $session = new Session(new MockArraySessionStorage());

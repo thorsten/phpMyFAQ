@@ -27,6 +27,7 @@ vi.mock('bootstrap', () => ({
     show = modalShow;
     hide = modalHide;
     static getInstance = (): { hide: () => void } => ({ hide: modalHide });
+    static getOrCreateInstance = (): { show: () => void } => ({ show: modalShow });
   },
 }));
 
@@ -41,7 +42,8 @@ const setupFullDom = (): void => {
     <div id="pmf-group-empty-state"></div>
     <div id="pmf-group-detail" class="d-none"
          data-csrf-update="csrf-update" data-csrf-members="csrf-members"
-         data-csrf-permissions="csrf-permissions" data-csrf-delete="csrf-delete">
+         data-csrf-permissions="csrf-permissions" data-csrf-delete="csrf-delete"
+         data-msg-error="An error occurred.">
       <span id="pmf-selected-group-name"></span>
       <button id="pmf-delete-group-button" type="button"></button>
       <span id="pmf-member-count">0</span>
@@ -255,6 +257,20 @@ describe('handleGroups', () => {
     await flushPromises();
 
     expect(pushErrorNotification).toHaveBeenCalledWith('nope');
+  });
+
+  it('should push an error notification when saving details rejects with a network failure', async () => {
+    setupFullDom();
+    mockDefaultApis();
+    (updateGroup as Mock).mockRejectedValue(new Error('network down'));
+
+    await handleGroups();
+    await selectFirstGroup();
+
+    (document.getElementById('saveGroupDetails') as HTMLButtonElement).click();
+    await flushPromises();
+
+    expect(pushErrorNotification).toHaveBeenCalledWith('An error occurred.');
   });
 
   it('should save the member list as member IDs', async () => {

@@ -33,6 +33,11 @@ import { ApiResponse, CategoryItem, CategoryRestrictions, Group, User } from '..
 
 let allUsers: User[] = [];
 let selectedGroupId: string = '';
+let selectRequestToken = 0;
+
+const getGenericErrorMessage = (): string => {
+  return (document.getElementById('pmf-group-detail') as HTMLElement | null)?.dataset.msgError || 'An error occurred.';
+};
 
 export const handleGroups = async (): Promise<void> => {
   const groupList = document.getElementById('pmf-group-list');
@@ -51,6 +56,12 @@ export const handleGroups = async (): Promise<void> => {
   wireDeleteModal();
 };
 
+const applyGroupFilter = (query: string): void => {
+  document.querySelectorAll<HTMLButtonElement>('.pmf-group-item').forEach((item: HTMLButtonElement): void => {
+    item.classList.toggle('d-none', !(item.textContent || '').toLowerCase().includes(query));
+  });
+};
+
 const refreshGroupList = async (): Promise<void> => {
   const groupList = document.getElementById('pmf-group-list') as HTMLElement;
   const groups: Group[] = await fetchAllGroups();
@@ -63,13 +74,23 @@ const refreshGroupList = async (): Promise<void> => {
     item.dataset.groupId = group.group_id;
     item.textContent = group.name;
     item.addEventListener('click', async (): Promise<void> => {
-      await selectGroup(group.group_id);
+      try {
+        await selectGroup(group.group_id);
+      } catch {
+        pushErrorNotification(getGenericErrorMessage());
+      }
     });
     groupList.appendChild(item);
   });
+
+  const filter = document.getElementById('pmf-group-filter') as HTMLInputElement | null;
+  if (filter) {
+    applyGroupFilter(filter.value.toLowerCase().trim());
+  }
 };
 
 const selectGroup = async (groupId: string): Promise<void> => {
+  const requestToken = ++selectRequestToken;
   selectedGroupId = groupId;
 
   document.querySelectorAll<HTMLButtonElement>('.pmf-group-item').forEach((item: HTMLButtonElement): void => {
@@ -77,6 +98,9 @@ const selectGroup = async (groupId: string): Promise<void> => {
   });
 
   const group: Group = await fetchGroup(groupId);
+  if (requestToken !== selectRequestToken) {
+    return;
+  }
   (document.getElementById('update_group_name') as HTMLInputElement).value = group.name;
   (document.getElementById('update_group_description') as HTMLTextAreaElement).value = group.description || '';
   (document.getElementById('update_group_auto_join') as HTMLInputElement).checked =
@@ -84,11 +108,29 @@ const selectGroup = async (groupId: string): Promise<void> => {
   (document.getElementById('pmf-selected-group-name') as HTMLElement).textContent = group.name;
 
   await loadGroupRights(groupId);
+  if (requestToken !== selectRequestToken) {
+    return;
+  }
   await loadMembers(groupId);
+  if (requestToken !== selectRequestToken) {
+    return;
+  }
   try {
     await loadCategoryRestrictions(groupId);
   } catch (error) {
     console.error('Failed to load category restrictions:', error);
+    currentRestrictions = {};
+    const container = document.getElementById('categoryRestrictionsBody');
+    if (container) {
+      container.innerHTML = '';
+      const errorParagraph = document.createElement('p');
+      errorParagraph.className = 'text-body-secondary';
+      errorParagraph.textContent = container.dataset.msgEmpty || 'No permissions assigned to this group.';
+      container.appendChild(errorParagraph);
+    }
+  }
+  if (requestToken !== selectRequestToken) {
+    return;
   }
 
   (document.getElementById('pmf-group-empty-state') as HTMLElement).classList.add('d-none');
@@ -120,6 +162,16 @@ const loadMembers = async (groupId: string): Promise<void> => {
     memberList.appendChild(createMemberRow(member));
   });
   updateMemberCount();
+
+  const search = document.getElementById('pmf-user-search') as HTMLInputElement | null;
+  if (search) {
+    search.value = '';
+  }
+  const results = document.getElementById('pmf-user-search-results') as HTMLElement | null;
+  if (results) {
+    results.textContent = '';
+    results.classList.add('d-none');
+  }
 };
 
 const createMemberRow = (user: User): HTMLLIElement => {
@@ -154,10 +206,7 @@ const updateMemberCount = (): void => {
 const wireGroupFilter = (): void => {
   const filter = document.getElementById('pmf-group-filter') as HTMLInputElement;
   filter.addEventListener('input', (): void => {
-    const query = filter.value.toLowerCase().trim();
-    document.querySelectorAll<HTMLButtonElement>('.pmf-group-item').forEach((item: HTMLButtonElement): void => {
-      item.classList.toggle('d-none', !(item.textContent || '').toLowerCase().includes(query));
-    });
+    applyGroupFilter(filter.value.toLowerCase().trim());
   });
 };
 
@@ -252,7 +301,7 @@ const notifyResult = (response: ApiResponse): void => {
   if (response.success) {
     pushNotification(response.success);
   } else {
-    pushErrorNotification(response.error as string);
+    pushErrorNotification(response.error ?? getGenericErrorMessage());
   }
 };
 
@@ -269,17 +318,27 @@ const wireSaveButtons = (): void => {
       const description = (document.getElementById('update_group_description') as HTMLTextAreaElement).value;
       const autoJoin = (document.getElementById('update_group_auto_join') as HTMLInputElement).checked;
 
-      const response = await updateGroup(selectedGroupId, name, description, autoJoin, detail.dataset.csrfUpdate || '');
-      if (response.success) {
-        (document.getElementById('pmf-selected-group-name') as HTMLElement).textContent = name;
-        const activeItem = document.querySelector<HTMLButtonElement>(
-          `.pmf-group-item[data-group-id="${selectedGroupId}"]`
+      try {
+        const response = await updateGroup(
+          selectedGroupId,
+          name,
+          description,
+          autoJoin,
+          detail.dataset.csrfUpdate || ''
         );
-        if (activeItem) {
-          activeItem.textContent = name;
+        if (response.success) {
+          (document.getElementById('pmf-selected-group-name') as HTMLElement).textContent = name;
+          const activeItem = document.querySelector<HTMLButtonElement>(
+            `.pmf-group-item[data-group-id="${selectedGroupId}"]`
+          );
+          if (activeItem) {
+            activeItem.textContent = name;
+          }
         }
+        notifyResult(response);
+      } catch {
+        pushErrorNotification(getGenericErrorMessage());
       }
-      notifyResult(response);
     }
   );
 
@@ -292,8 +351,12 @@ const wireSaveButtons = (): void => {
       const memberIds = [...document.querySelectorAll<HTMLElement>('#pmf-member-list li')].map((row: HTMLElement) =>
         parseInt(row.dataset.userId || '0')
       );
-      const response = await updateGroupMembers(selectedGroupId, memberIds, detail.dataset.csrfMembers || '');
-      notifyResult(response);
+      try {
+        const response = await updateGroupMembers(selectedGroupId, memberIds, detail.dataset.csrfMembers || '');
+        notifyResult(response);
+      } catch {
+        pushErrorNotification(getGenericErrorMessage());
+      }
     }
   );
 
@@ -306,8 +369,12 @@ const wireSaveButtons = (): void => {
       const rightIds = [
         ...document.querySelectorAll<HTMLInputElement>('#pmf-permission-list input.permission:checked'),
       ].map((checkbox: HTMLInputElement) => parseInt(checkbox.value));
-      const response = await updateGroupPermissions(selectedGroupId, rightIds, detail.dataset.csrfPermissions || '');
-      notifyResult(response);
+      try {
+        const response = await updateGroupPermissions(selectedGroupId, rightIds, detail.dataset.csrfPermissions || '');
+        notifyResult(response);
+      } catch {
+        pushErrorNotification(getGenericErrorMessage());
+      }
     }
   );
 
@@ -315,7 +382,11 @@ const wireSaveButtons = (): void => {
     'click',
     async (event: Event): Promise<void> => {
       event.preventDefault();
-      await handleCategoryRestrictionsSave();
+      try {
+        await handleCategoryRestrictionsSave();
+      } catch {
+        pushErrorNotification(getGenericErrorMessage());
+      }
     }
   );
 };
@@ -328,7 +399,7 @@ const wireDeleteModal = (): void => {
     (document.getElementById('pmf-group-delete-name') as HTMLElement).textContent = (
       document.getElementById('pmf-selected-group-name') as HTMLElement
     ).textContent;
-    new Modal(modalElement).show();
+    Modal.getOrCreateInstance(modalElement).show();
   });
 
   (document.getElementById('pmf-confirm-group-delete') as HTMLButtonElement).addEventListener(
@@ -338,17 +409,21 @@ const wireDeleteModal = (): void => {
         return;
       }
 
-      const response = await deleteGroup(selectedGroupId, detail.dataset.csrfDelete || '');
-      Modal.getInstance(modalElement)?.hide();
+      try {
+        const response = await deleteGroup(selectedGroupId, detail.dataset.csrfDelete || '');
+        Modal.getInstance(modalElement)?.hide();
 
-      if (response.success) {
-        pushNotification(response.success);
-        selectedGroupId = '';
-        detail.classList.add('d-none');
-        (document.getElementById('pmf-group-empty-state') as HTMLElement).classList.remove('d-none');
-        await refreshGroupList();
-      } else {
-        pushErrorNotification(response.error as string);
+        if (response.success) {
+          pushNotification(response.success);
+          selectedGroupId = '';
+          detail.classList.add('d-none');
+          (document.getElementById('pmf-group-empty-state') as HTMLElement).classList.remove('d-none');
+          await refreshGroupList();
+        } else {
+          pushErrorNotification(response.error ?? getGenericErrorMessage());
+        }
+      } catch {
+        pushErrorNotification(getGenericErrorMessage());
       }
     }
   );
@@ -480,7 +555,7 @@ export const handleCategoryRestrictionsSave = async (): Promise<void> => {
   }
 
   if (failed) {
-    pushErrorNotification('Failed to save category restrictions.');
+    pushErrorNotification(container.dataset.msgSaveFailed || 'Failed to save category restrictions.');
   } else {
     pushNotification(container.dataset.msgSaved || 'Category restrictions saved.');
   }

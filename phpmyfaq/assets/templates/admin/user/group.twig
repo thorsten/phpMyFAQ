@@ -45,7 +45,8 @@
            data-csrf-update="{{ csrfTokenUpdateGroup }}"
            data-csrf-members="{{ csrfTokenUpdateGroupMembers }}"
            data-csrf-permissions="{{ csrfTokenUpdateGroupPermissions }}"
-           data-csrf-delete="{{ csrfTokenDeleteGroup }}">
+           data-csrf-delete="{{ csrfTokenDeleteGroup }}"
+           data-msg-error="{{ 'msgErrorOccurred' | translate }}">
         <div class="card-header d-flex justify-content-between align-items-center py-3">
           <h5 class="mb-0">
             <i aria-hidden="true" class="bi bi-people-fill"></i>
@@ -181,6 +182,7 @@
                    data-msg-empty="{{ 'ad_group_no_permissions' | translate }}"
                    data-msg-help="{{ 'ad_group_category_restrictions_select' | translate }}"
                    data-msg-saved="{{ 'ad_group_restrictions_saved' | translate }}"
+                   data-msg-save-failed="{{ 'ad_group_restrictions_error' | translate }}"
                    data-csrf-token="{{ csrfTokenCategoryRestrictions }}">
                 <p class="text-body-secondary">{{ 'ad_group_category_restrictions_help' | translate }}</p>
               </div>
