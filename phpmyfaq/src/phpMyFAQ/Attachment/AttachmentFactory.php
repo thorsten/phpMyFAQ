@@ -179,7 +179,7 @@ class AttachmentFactory
         $result = $configuration->getDb()->query($sql);
         $row = $configuration->getDb()->fetchObject($result);
 
-        return (int) ($row->total ?? 0);
+        return $row instanceof \stdClass ? (int) ($row->total ?? 0) : 0;
     }
 
     /**

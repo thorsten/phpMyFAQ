@@ -187,7 +187,7 @@ readonly class QuestionRepository
         if ($db->numRows($result) > 0) {
             $row = $db->fetchObject($result);
 
-            return $row->is_visible;
+            return $row instanceof \stdClass ? $row->is_visible : '';
         }
 
         return '';

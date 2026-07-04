@@ -638,12 +638,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/SessionRepository.php"
-code = "invalid-property-access"
-message = "Attempting to access a property on a non-object type (`false`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/SessionRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 6
@@ -659,12 +653,6 @@ file = "phpmyfaq/src/phpMyFAQ/Administration/SessionRepository.php"
 code = "possibly-false-argument"
 message = "Argument #1 of function `property_exists` is possibly `false`, but parameter type `class-string|object` does not accept it."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/SessionRepository.php"
-code = "possibly-null-property-access"
-message = "Attempting to access a property on a possibly `null` value."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/TranslationStatistics.php"
@@ -911,12 +899,6 @@ file = "phpmyfaq/src/phpMyFAQ/Attachment/AttachmentCollection.php"
 code = "possibly-null-operand"
 message = "Possibly null left operand used in string concatenation (type `null|string`)."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/AttachmentFactory.php"
-code = "invalid-property-access"
-message = "Attempting to access a property on a non-object type (`false`)."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Attachment/AttachmentFactory.php"
@@ -2552,12 +2534,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
-code = "invalid-property-access"
-message = "Attempting to access a property on a non-object type (`false`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
 code = "less-specific-argument"
 message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Category\CategoryRepository::mapRow`: expected `array<string, mixed>`, but provided type `non-empty-array<array-key, mixed>` is less specific.'
 count = 3
@@ -3088,12 +3064,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Chat.php"
 code = "ambiguous-object-property-access"
 message = "Cannot statically verify property access on a generic `object` type."
-count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Chat.php"
-code = "invalid-property-access"
-message = "Attempting to access a property on a non-object type (`false`)."
 count = 6
 
 [[issues]]
@@ -7958,12 +7928,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
-code = "invalid-property-access"
-message = "Attempting to access a property on a non-object type (`false`)."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
 code = "less-specific-nested-return-statement"
 message = '''Returned type `list<mixed>` is less specific than the declared return type `array<array-key, string>` for function `phpMyFAQ\CustomPage\CustomPageRepository::getExistingLanguages` due to nested 'mixed'.'''
 count = 1
@@ -8941,12 +8905,6 @@ message = "Possibly null right operand used in string concatenation (type `int|n
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "possibly-null-property-access"
-message = "Attempting to access a property on a possibly `null` value."
-count = 2
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Date.php"
 code = "falsable-return-statement"
 message = '''Function `phpMyFAQ\Date::getTrackingFileDateEnd` is declared to return `int` but possibly returns 'false' (inferred as `false|int`).'''
@@ -9914,12 +9872,6 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
-code = "invalid-property-access"
-message = "Attempting to access a property on a non-object type (`false`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `phpMyFAQ\Database\DatabaseDriver::escape`: expected `string`, but found `mixed`.'
 count = 2
@@ -9976,12 +9928,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
 code = "possible-method-access-on-null"
 message = "Attempting to call a method on `null`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
-code = "possibly-null-property-access"
-message = "Attempting to access a property on a possibly `null` value."
 count = 1
 
 [[issues]]
@@ -10688,12 +10634,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Helper/QuestionHelper.php"
-code = "invalid-property-access"
-message = "Attempting to access a property on a non-object type (`false`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/QuestionHelper.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `phpMyFAQ\Date::createIsoDate`: expected `string`, but found `mixed`.'
 count = 1
@@ -10762,12 +10702,6 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Helper/QuestionHelper.php"
 code = "mixed-operand"
 message = "Left operand in `&&` operation has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/QuestionHelper.php"
-code = "possibly-null-property-access"
-message = "Attempting to access a property on a possibly `null` value."
 count = 1
 
 [[issues]]
@@ -12656,12 +12590,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
-code = "invalid-property-access"
-message = "Attempting to access a property on a non-object type (`false`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 5
@@ -13454,12 +13382,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
-code = "invalid-property-access"
-message = "Attempting to access a property on a non-object type (`false`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
 code = "less-specific-nested-return-statement"
 message = '''Returned type `array{'category_id': mixed, 'created': mixed, 'email': mixed, 'id': mixed, 'is_visible': mixed, 'lang': mixed, 'question': mixed, 'username': mixed}` is less specific than the declared return type `array<string, int|string>` for function `phpMyFAQ\Question\QuestionRepository::getById` due to nested 'mixed'.'''
 count = 1
@@ -13498,12 +13420,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
 code = "possibly-null-operand"
 message = "Possibly null left operand used in string concatenation (type `null|string`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
-code = "possibly-null-property-access"
-message = "Attempting to access a property on a possibly `null` value."
 count = 1
 
 [[issues]]
@@ -13778,12 +13694,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "invalid-property-access"
-message = "Attempting to access a property on a non-object type (`false`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
 code = "invalid-return-statement"
 message = 'Invalid return type for function `phpMyFAQ\Search::getCategory`: expected `phpMyFAQ\Category`, but found `null|phpMyFAQ\Category`.'
 count = 1
@@ -13901,12 +13811,6 @@ file = "phpmyfaq/src/phpMyFAQ/Search.php"
 code = "possibly-null-operand"
 message = "Right operand in `<` comparison might be `null` (type `int|null`)."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "possibly-null-property-access"
-message = "Attempting to access a property on a possibly `null` value."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
@@ -15188,12 +15092,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationTracker.php"
-code = "invalid-property-access"
-message = "Attempting to access a property on a non-object type (`false`)."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationTracker.php"
 code = "less-specific-nested-return-statement"
 message = '''Returned type `list<array{'applied_at': mixed, 'checksum': mixed, 'description': mixed, 'execution_time_ms': int, 'version': mixed}>` is less specific than the declared return type `array<int, array{'applied_at': string, 'checksum': null|string, 'description': null|string, 'execution_time_ms': int, 'version': string}>` for function `phpMyFAQ\Setup\Migration\MigrationTracker::getAppliedMigrations` due to nested 'mixed'.'''
 count = 1
@@ -15215,12 +15113,6 @@ file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationTracker.php"
 code = "possibly-null-operand"
 message = "Possibly null left operand used in string concatenation (type `null|string`)."
 count = 7
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationTracker.php"
-code = "possibly-null-property-access"
-message = "Attempting to access a property on a possibly `null` value."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationTracker.php"
@@ -17240,12 +17132,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
-code = "invalid-property-access"
-message = "Attempting to access a property on a non-object type (`false`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
 code = "invalid-return-statement"
 message = '''Invalid return type for function `phpMyFAQ\User\UserData::fetchAll`: expected `array<string, int>`, but found `array{'keycloak_sub': string, ...<array-key, string>}`.'''
 count = 1
@@ -17308,12 +17194,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
 code = "possibly-null-argument"
 message = "Argument #2 of function `array_key_exists` is possibly `null`, but parameter type `array<array-key, mixed>` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
-code = "possibly-null-property-access"
-message = "Attempting to access a property on a possibly `null` value."
 count = 1
 
 [[issues]]
@@ -17486,12 +17366,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Visits/VisitsRepository.php"
-code = "invalid-property-access"
-message = "Attempting to access a property on a non-object type (`false`)."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Visits/VisitsRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 3
@@ -17501,9 +17375,3 @@ file = "phpmyfaq/src/phpMyFAQ/Visits/VisitsRepository.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Visits/VisitsRepository.php"
-code = "possibly-null-property-access"
-message = "Attempting to access a property on a possibly `null` value."
-count = 1

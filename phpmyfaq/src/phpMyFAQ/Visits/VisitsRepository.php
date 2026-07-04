@@ -44,7 +44,7 @@ final readonly class VisitsRepository implements VisitsRepositoryInterface
         $result = $this->configuration->getDb()->query($query);
         if ($this->configuration->getDb()->numRows($result) !== 0) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            return (int) $row->visits;
+            return $row instanceof \stdClass ? (int) $row->visits : 0;
         }
 
         return 0;
@@ -62,7 +62,7 @@ final readonly class VisitsRepository implements VisitsRepositoryInterface
         $result = $this->configuration->getDb()->query($query);
         if ($result) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            return (int) ($row->cnt ?? 0) > 0;
+            return $row instanceof \stdClass && (int) ($row->cnt ?? 0) > 0;
         }
 
         return false;

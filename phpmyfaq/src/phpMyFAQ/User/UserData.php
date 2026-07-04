@@ -135,7 +135,9 @@ class UserData
             return null;
         }
 
-        return $this->configuration->getDb()->fetchObject($res)->$key;
+        $row = $this->configuration->getDb()->fetchObject($res);
+
+        return $row instanceof \stdClass ? $row->$key : null;
     }
 
     /**

@@ -99,7 +99,7 @@ class MigrationTracker
         $result = $this->configuration->getDb()->query($query);
         $row = $this->configuration->getDb()->fetchObject($result);
 
-        return (int) $row->cnt > 0;
+        return $row instanceof \stdClass && (int) $row->cnt > 0;
     }
 
     /**
@@ -202,7 +202,7 @@ class MigrationTracker
         $result = $this->configuration->getDb()->query($query);
         $row = $this->configuration->getDb()->fetchObject($result);
 
-        return $row?->version;
+        return $row instanceof \stdClass ? $row->version : null;
     }
 
     /**

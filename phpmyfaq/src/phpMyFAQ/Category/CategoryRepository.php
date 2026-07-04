@@ -300,7 +300,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         $result = $this->configuration->getDb()->query($query);
         $row = $this->configuration->getDb()->fetchObject($result);
 
-        return (int) ($row->total ?? 0);
+        return $row instanceof \stdClass ? (int) ($row->total ?? 0) : 0;
     }
 
     public function findByIdAndLanguage(int $categoryId, string $language): ?CategoryEntity

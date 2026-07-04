@@ -468,8 +468,9 @@ class Search
         $sql = sprintf('SELECT COUNT(*) AS count FROM %s', $this->table);
 
         $result = $this->configuration->getDb()->query($sql);
+        $row = $this->configuration->getDb()->fetchObject($result);
 
-        return (int) $this->configuration->getDb()->fetchObject($result)->count;
+        return $row instanceof \stdClass ? (int) ($row->count ?? 0) : 0;
     }
 
     public function setCategory(Category $category): void

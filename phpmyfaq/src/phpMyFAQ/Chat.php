@@ -203,9 +203,9 @@ readonly class Chat
             $conversations[] = [
                 'userId' => $partnerId,
                 'displayName' => $userInfo[$partnerId] ?? 'Unknown User',
-                'lastMessage' => $lastMsg->message ?? '',
-                'lastMessageTime' => $lastMsg->created_at ?? '',
-                'unreadCount' => (int) ($unreadRow->cnt ?? 0),
+                'lastMessage' => $lastMsg instanceof \stdClass ? $lastMsg->message ?? '' : '',
+                'lastMessageTime' => $lastMsg instanceof \stdClass ? $lastMsg->created_at ?? '' : '',
+                'unreadCount' => $unreadRow instanceof \stdClass ? (int) ($unreadRow->cnt ?? 0) : 0,
             ];
         }
 
@@ -259,7 +259,7 @@ readonly class Chat
         $result = $this->configuration->getDb()->query($query);
         $row = $this->configuration->getDb()->fetchObject($result);
 
-        return (int) ($row->count ?? 0);
+        return $row instanceof \stdClass ? (int) ($row->count ?? 0) : 0;
     }
 
     /**
@@ -436,8 +436,8 @@ readonly class Chat
         $row = $this->configuration->getDb()->fetchObject($result);
 
         return [
-            'display_name' => $row->display_name ?? null,
-            'email' => $row->email ?? null,
+            'display_name' => $row instanceof \stdClass ? $row->display_name ?? null : null,
+            'email' => $row instanceof \stdClass ? $row->email ?? null : null,
         ];
     }
 

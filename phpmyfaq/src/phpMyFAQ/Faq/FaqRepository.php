@@ -226,7 +226,7 @@ final class FaqRepository implements FaqRepositoryInterface
 
         $row = $this->configuration->getDb()->fetchObject($result);
 
-        return $row->keywords;
+        return $row instanceof \stdClass ? $row->keywords : null;
     }
 
     public function getFaqResult(

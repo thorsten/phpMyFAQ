@@ -132,7 +132,7 @@ final readonly class NewsRepository implements NewsRepositoryInterface
         $result = $this->configuration->getDb()->query($query);
         $row = $this->configuration->getDb()->fetchObject($result);
 
-        return (int) ($row->total ?? 0);
+        return $row instanceof \stdClass ? (int) ($row->total ?? 0) : 0;
     }
 
     /**

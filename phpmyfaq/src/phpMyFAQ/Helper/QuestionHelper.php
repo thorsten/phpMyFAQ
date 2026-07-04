@@ -89,7 +89,7 @@ class QuestionHelper extends AbstractHelper
         $row = $db->fetchObject($result);
 
         $openQuestions = new stdClass();
-        $openQuestions->numberInvisibleQuestions = $row->num;
+        $openQuestions->numberInvisibleQuestions = $row instanceof \stdClass ? $row->num : 0;
 
         $query = sprintf(
             "SELECT * FROM %sfaqquestions WHERE lang = '%s' AND is_visible = 'Y' ORDER BY created ASC",

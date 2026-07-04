@@ -185,7 +185,7 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
         $result = $this->configuration->getDb()->query($query);
         $row = $this->configuration->getDb()->fetchObject($result);
 
-        return (int) ($row->total ?? 0);
+        return $row instanceof \stdClass ? (int) ($row->total ?? 0) : 0;
     }
 
     /**
@@ -202,7 +202,7 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
         $result = $this->configuration->getDb()->query($query);
         $row = $this->configuration->getDb()->fetchObject($result);
 
-        return (int) ($row->total ?? 0);
+        return $row instanceof \stdClass ? (int) ($row->total ?? 0) : 0;
     }
 
     /**
@@ -447,6 +447,6 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
         $result = $this->configuration->getDb()->query($query);
         $row = $this->configuration->getDb()->fetchObject($result);
 
-        return (int) ($row->total ?? 0) > 0;
+        return $row instanceof \stdClass && (int) ($row->total ?? 0) > 0;
     }
 }

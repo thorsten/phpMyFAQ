@@ -131,7 +131,7 @@ readonly class SessionRepository
         $result = $this->configuration->getDb()->query($query);
         if ($result) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            return (int) $row->num_sessions;
+            return $row instanceof \stdClass ? (int) $row->num_sessions : 0;
         }
 
         return 0;

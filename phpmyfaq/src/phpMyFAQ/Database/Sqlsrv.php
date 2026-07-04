@@ -205,7 +205,7 @@ class Sqlsrv implements DatabaseDriver
 
         while (true) {
             $row = $this->fetchObject($result);
-            if ($row === false) {
+            if (!$row instanceof \stdClass) {
                 break;
             }
 
