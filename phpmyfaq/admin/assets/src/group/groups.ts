@@ -97,6 +97,10 @@ const selectGroup = async (groupId: string): Promise<void> => {
     item.classList.toggle('active', item.dataset.groupId === groupId);
   });
 
+  // Hide the detail card while another group's data streams in, so a save
+  // cannot submit the previous group's still-displayed values.
+  (document.getElementById('pmf-group-detail') as HTMLElement).classList.add('d-none');
+
   const group: Group = await fetchGroup(groupId);
   if (requestToken !== selectRequestToken) {
     return;
