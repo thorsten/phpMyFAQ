@@ -7,9 +7,9 @@
       {{ 'ad_menu_group_administration' | translate }}
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
-      <div class="btn-group mr-2">
+      <div class="btn-group me-2">
         <a class="btn btn-outline-success" href="./group/add">
-          <i aria-hidden="true" class="bi bi-people-fill"></i>
+          <i aria-hidden="true" class="bi bi-plus-circle"></i>
           {{ 'ad_group_add_link' | translate }}
         </a>
       </div>
@@ -19,211 +19,205 @@
   <div id="user_message">{{ message|raw }}</div>
 
   <div class="row">
-
-    <div class="col-lg-4" id="group_list">
+    <div class="col-lg-3">
       <div class="card shadow mb-4">
-        <form id="group_select" name="group_select" action="./group/confirm"
-              method="post">
-          <h5 class="card-header py-3">
-            <i aria-hidden="true" class="bi bi-people-fill"></i> {{ 'ad_groups' | translate }}
-          </h5>
-          <div class="card-body">
-            <select name="group_list_select" id="group_list_select" class="form-select" size="10" tabindex="1">
-            </select>
-          </div>
-          <div class="card-footer">
-            <div class="card-button text-end">
-              <button id="deleteGroup" class="btn btn-danger" type="submit" disabled>
-                {{ 'ad_gen_delete' | translate }}
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-
-      <div id="group_data" class="card shadow mb-4">
         <h5 class="card-header py-3">
-          <i class="bi bi-info-circle" aria-hidden="true"></i> {{ 'ad_group_details' | translate }}
+          <i aria-hidden="true" class="bi bi-people-fill"></i> {{ 'ad_groups' | translate }}
         </h5>
-        <form action="./group/update" method="post">
-          <input type="hidden" name="pmf-csrf-token" value="{{ csrfTokenUpdateGroup }}">
-          <input id="update_group_id" type="hidden" name="group_id" value="0">
-          <div class="card-body">
-            <div class="row mb-2">
-              <label class="col-4 col-form-label" for="update_group_name">
-                {{ 'ad_group_name' | translate }}
-              </label>
-              <div class="col-8">
-                <input id="update_group_name" type="text" name="name" class="form-control" autocomplete="off"
-                       tabindex="1" value="{{ groupName }}" maxlength="25" required>
-              </div>
-            </div>
-            <div class="row mb-2">
-              <label class="col-4 col-form-label" for="update_group_description">
-                {{ 'ad_group_description' | translate }}
-              </label>
-              <div class="col-8">
-                <textarea id="update_group_description" name="description" class="form-control" rows="3" tabindex="2"
-                >{{ groupDescription }}</textarea>
-              </div>
-            </div>
-            <div class="row mb-2">
-              <div class="offset-4">
-                <div class="form-check">
-                  <input id="update_group_auto_join" type="checkbox" name="auto_join" value="1"
-                         class="form-check-input" tabindex="3" {{ autoJoinCheckbox }}>
-                  <label class="form-check-label" for="update_group_auto_join">
-                    {{ 'ad_group_autoJoin' | translate }}
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card-footer">
-            <div class="card-button text-end">
-              <button id="saveGroupDetails" class="btn btn-primary" type="submit" disabled>
-                {{ 'ad_gen_save' | translate }}
-              </button>
-            </div>
-          </div>
-        </form>
+        <div class="card-body">
+          <input type="search" id="pmf-group-filter" class="form-control mb-2" autocomplete="off"
+                 placeholder="{{ 'ad_group_filter' | translate }}"
+                 aria-label="{{ 'ad_group_filter' | translate }}">
+          <div id="pmf-group-list" class="list-group" aria-label="{{ 'ad_groups' | translate }}"></div>
+        </div>
       </div>
     </div>
 
-    <div class="col-lg-4" id="groupMemberships">
-      <form id="group_membership" name="group_membership" method="post" action="./group/update/members">
-        <input type="hidden" name="pmf-csrf-token" value="{{ csrfTokenUpdateGroupMembers }}">
-        <input id="update_member_group_id" type="hidden" name="group_id" value="0">
-        <div class="card shadow mb-4">
-          <h5 class="card-header py-3">
-            <i aria-hidden="true" class="bi bi-person-vcard"></i> {{ 'ad_group_membership' | translate }}
+    <div class="col-lg-9">
+      <div id="pmf-group-empty-state" class="card shadow mb-4">
+        <div class="card-body text-center text-body-secondary py-5">
+          <i aria-hidden="true" class="bi bi-people display-4 d-block mb-3"></i>
+          <p class="mb-0">{{ 'ad_group_select_group' | translate }}</p>
+        </div>
+      </div>
+
+      <div id="pmf-group-detail" class="card shadow mb-4 d-none"
+           data-csrf-update="{{ csrfTokenUpdateGroup }}"
+           data-csrf-members="{{ csrfTokenUpdateGroupMembers }}"
+           data-csrf-permissions="{{ csrfTokenUpdateGroupPermissions }}"
+           data-csrf-delete="{{ csrfTokenDeleteGroup }}">
+        <div class="card-header d-flex justify-content-between align-items-center py-3">
+          <h5 class="mb-0">
+            <i aria-hidden="true" class="bi bi-people-fill"></i>
+            <span id="pmf-selected-group-name"></span>
           </h5>
-          <div class="card-body">
-            <div class="row">
-              <div class="text-center">
-                <span class="select_all">
-                  <button type="button" class="btn btn-primary btn-sm" id="select_all_group_user_list">
-                      <i aria-hidden="true" class="bi bi-person-fill-add"></i>
-                  </button>
-                </span>
-                <span class="unselect_all">
-                  <button type="button" class="btn btn-primary btn-sm" id="unselect_all_group_user_list">
-                      <i aria-hidden="true" class="bi bi-person-fill-slash"></i>
-                  </button>
-                </span>
-              </div>
-            </div>
-
-            <div class="row">
-              <select id="group_user_list" class="form-control" size="7" multiple>
-                <option value="0">...user list...</option>
-              </select>
-            </div>
-
-            <div class="row">
-              <div class="text-center mt-2">
-                <input class="btn btn-success pmf-add-member" type="button"
-                       value="{{ 'ad_group_addMember' | translate }}" id="groupAddMember" disabled>
-                <input class="btn btn-danger pmf-remove-member" type="button"
-                       value="{{ 'ad_group_removeMember' | translate }}" id="groupRemoveMember" disabled>
-              </div>
-            </div>
-          </div>
-
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              <i aria-hidden="true" class="bi bi-user-circle"></i> {{ 'ad_group_members' | translate }}</li>
+          <button type="button" class="btn btn-outline-danger btn-sm" id="pmf-delete-group-button">
+            <i aria-hidden="true" class="bi bi-trash"></i> {{ 'ad_group_deleteGroup' | translate }}
+          </button>
+        </div>
+        <div class="card-body">
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="pmf-tab-details-tab" data-bs-toggle="tab"
+                      data-bs-target="#pmf-tab-details" type="button" role="tab"
+                      aria-controls="pmf-tab-details" aria-selected="true">
+                {{ 'ad_group_details' | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="pmf-tab-members-tab" data-bs-toggle="tab"
+                      data-bs-target="#pmf-tab-members" type="button" role="tab"
+                      aria-controls="pmf-tab-members" aria-selected="false">
+                {{ 'ad_group_members' | translate }}
+                <span class="badge text-bg-secondary" id="pmf-member-count">0</span>
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="pmf-tab-permissions-tab" data-bs-toggle="tab"
+                      data-bs-target="#pmf-tab-permissions" type="button" role="tab"
+                      aria-controls="pmf-tab-permissions" aria-selected="false">
+                {{ 'ad_group_rights' | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="pmf-tab-restrictions-tab" data-bs-toggle="tab"
+                      data-bs-target="#pmf-tab-restrictions" type="button" role="tab"
+                      aria-controls="pmf-tab-restrictions" aria-selected="false">
+                {{ 'ad_group_category_restrictions' | translate }}
+              </button>
+            </li>
           </ul>
 
-          <div class="card-body">
-            <div class="row">
-              <div class="text-center">
-                <span class="select_all">
-                    <button type="button" class="btn btn-primary btn-sm" id="select_all_members">
-                        <i aria-hidden="true" class="bi bi-person-fill-add"></i>
-                    </button>
-                </span>
-                <span class="unselect_all">
-                  <button type="button" class="btn btn-primary btn-sm" id="unselect_all_members">
-                      <i aria-hidden="true" class="bi bi-person-fill-slash"></i>
-                  </button>
-                </span>
-              </div>
-            </div>
-
-            <div class="row">
-              <select id="group_member_list" name="group_members[]" class="form-control" multiple size="7">
-                <option value="0">...member list...</option>
-              </select>
-            </div>
-          </div>
-          <div class="card-footer">
-            <div class="card-button text-end">
-              <button id="saveMembersList" class="btn btn-primary" type="submit" disabled>
-                {{ 'ad_gen_save' | translate }}
-              </button>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
-
-    <div class="col-lg-4" id="groupDetails">
-
-      <div id="groupRights" class="card shadow mb-4">
-        <form id="rightsForm" action="./group/update/permissions" method="post">
-          <input type="hidden" name="pmf-csrf-token" value="{{ csrfTokenUpdateGroupPermissions }}">
-          <input id="rights_group_id" type="hidden" name="group_id" value="0">
-          <h5 class="card-header py-3" id="user_rights_legend">
-            <i aria-hidden="true" class="bi bi-lock"></i> {{ 'ad_group_rights' | translate }}
-          </h5>
-
-          <div class="card-body">
-            <div class="text-center mb-3">
-              <button type="button" class="btn btn-primary btn-sm" id="checkAll">
-                {{ 'ad_user_checkall' | translate }}
-              </button>
-              <button type="button" class="btn btn-primary btn-sm" id="uncheckAll">
-                {{ 'ad_user_uncheckall' | translate }}
-              </button>
-            </div>
-            {% for right in rightData %}
-              <div class="form-check">
-                <input id="group_right_{{ right.right_id }}" type="checkbox"
-                       name="group_rights[]" value="{{ right.right_id }}"
-                       class="form-check-input permission" disabled>
-                <label class="form-check-label" for="group_right_{{ right.right_id }}">
-                  {{ right.name | default('') | permission }}
+          <div class="tab-content pt-4">
+            <div class="tab-pane fade show active" id="pmf-tab-details" role="tabpanel"
+                 aria-labelledby="pmf-tab-details-tab">
+              <div class="row mb-3">
+                <label class="col-sm-3 col-form-label" for="update_group_name">
+                  {{ 'ad_group_name' | translate }}
                 </label>
+                <div class="col-sm-9">
+                  <input id="update_group_name" type="text" name="name" class="form-control"
+                         autocomplete="off" maxlength="25" required>
+                </div>
               </div>
-            {% endfor %}
-          </div>
-          <div class="card-footer">
-            <div class="card-button text-end">
-              <button id="saveGroupRights" class="btn btn-primary" type="submit" disabled>
-                {{ 'ad_gen_save' | translate }}
-              </button>
+              <div class="row mb-3">
+                <label class="col-sm-3 col-form-label" for="update_group_description">
+                  {{ 'ad_group_description' | translate }}
+                </label>
+                <div class="col-sm-9">
+                  <textarea id="update_group_description" name="description" class="form-control" rows="3"></textarea>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="offset-sm-3 col-sm-9">
+                  <div class="form-check">
+                    <input id="update_group_auto_join" type="checkbox" name="auto_join" value="1"
+                           class="form-check-input">
+                    <label class="form-check-label" for="update_group_auto_join">
+                      {{ 'ad_group_autoJoin' | translate }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="text-end">
+                <button id="saveGroupDetails" class="btn btn-primary" type="button">
+                  {{ 'ad_gen_save' | translate }}
+                </button>
+              </div>
+            </div>
+
+            <div class="tab-pane fade" id="pmf-tab-members" role="tabpanel"
+                 aria-labelledby="pmf-tab-members-tab">
+              <div class="position-relative mb-3">
+                <input type="search" id="pmf-user-search" class="form-control" autocomplete="off"
+                       placeholder="{{ 'ad_group_search_users' | translate }}"
+                       aria-label="{{ 'ad_group_search_users' | translate }}">
+                <div id="pmf-user-search-results" class="list-group position-absolute w-100 shadow z-3 d-none"></div>
+              </div>
+              <ul id="pmf-member-list" class="list-group mb-3"
+                  data-label-remove="{{ 'ad_group_remove_member' | translate }}"></ul>
+              <div class="text-end">
+                <button id="saveMembersList" class="btn btn-primary" type="button">
+                  {{ 'ad_gen_save' | translate }}
+                </button>
+              </div>
+            </div>
+
+            <div class="tab-pane fade" id="pmf-tab-permissions" role="tabpanel"
+                 aria-labelledby="pmf-tab-permissions-tab">
+              <div class="d-flex gap-2 mb-3">
+                <input type="search" id="pmf-permission-filter" class="form-control" autocomplete="off"
+                       placeholder="{{ 'ad_group_permission_filter' | translate }}"
+                       aria-label="{{ 'ad_group_permission_filter' | translate }}">
+                <button type="button" class="btn btn-outline-primary btn-sm text-nowrap" id="pmf-group-check-all">
+                  {{ 'ad_user_checkall' | translate }}
+                </button>
+                <button type="button" class="btn btn-outline-primary btn-sm text-nowrap" id="pmf-group-uncheck-all">
+                  {{ 'ad_user_uncheckall' | translate }}
+                </button>
+              </div>
+              <div id="pmf-permission-list" class="overflow-auto border rounded p-3 mb-3" style="max-height: 24rem;">
+                {% for right in rightData %}
+                  <div class="form-check">
+                    <input id="group_right_{{ right.right_id }}" type="checkbox"
+                           name="group_rights[]" value="{{ right.right_id }}"
+                           class="form-check-input permission">
+                    <label class="form-check-label" for="group_right_{{ right.right_id }}">
+                      {{ right.name | default('') | permission }}
+                    </label>
+                  </div>
+                {% endfor %}
+              </div>
+              <div class="text-end">
+                <button id="saveGroupRights" class="btn btn-primary" type="button">
+                  {{ 'ad_gen_save' | translate }}
+                </button>
+              </div>
+            </div>
+
+            <div class="tab-pane fade" id="pmf-tab-restrictions" role="tabpanel"
+                 aria-labelledby="pmf-tab-restrictions-tab">
+              <div id="categoryRestrictionsBody"
+                   data-msg-empty="{{ 'ad_group_no_permissions' | translate }}"
+                   data-msg-help="{{ 'ad_group_category_restrictions_select' | translate }}"
+                   data-msg-saved="{{ 'ad_group_restrictions_saved' | translate }}"
+                   data-csrf-token="{{ csrfTokenCategoryRestrictions }}">
+                <p class="text-body-secondary">{{ 'ad_group_category_restrictions_help' | translate }}</p>
+              </div>
+              <div class="text-end">
+                <button id="saveCategoryRestrictions" class="btn btn-primary" type="button">
+                  {{ 'ad_gen_save' | translate }}
+                </button>
+              </div>
             </div>
           </div>
-        </form>
-      </div>
-
-      <div id="groupCategoryRestrictions" class="card shadow mb-4">
-        <h5 class="card-header py-3">
-          <i aria-hidden="true" class="bi bi-folder-check"></i> {{ 'ad_group_category_restrictions' | translate }}
-        </h5>
-        <div class="card-body" id="categoryRestrictionsBody"
-             data-msg-empty="{{ 'ad_group_no_permissions' | translate }}"
-             data-msg-help="{{ 'ad_group_category_restrictions_select' | translate }}"
-             data-csrf-token="{{ csrfTokenCategoryRestrictions }}">
-          <p class="text-muted">{{ 'ad_group_category_restrictions_help' | translate }}</p>
         </div>
-        <div class="card-footer">
-          <div class="card-button text-end">
-            <button id="saveCategoryRestrictions" class="btn btn-primary" type="button" disabled>
-              {{ 'ad_gen_save' | translate }}
-            </button>
-          </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="pmf-group-delete-modal" tabindex="-1"
+       aria-labelledby="pmf-group-delete-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="pmf-group-delete-modal-label">
+            {{ 'ad_group_deleteGroup' | translate }}
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"
+                  aria-label="{{ 'ad_gen_cancel' | translate }}"></button>
+        </div>
+        <div class="modal-body">
+          {{ 'ad_group_deleteQuestion' | translate }}
+          <strong id="pmf-group-delete-name"></strong>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            {{ 'ad_gen_cancel' | translate }}
+          </button>
+          <button type="button" class="btn btn-danger" id="pmf-confirm-group-delete">
+            {{ 'ad_gen_delete' | translate }}
+          </button>
         </div>
       </div>
     </div>

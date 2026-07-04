@@ -19,6 +19,6 @@ final class GroupControllerWebTest extends ControllerWebTestCase
         $response = $this->requestAdmin('GET', '/group');
 
         self::assertResponseIsSuccessful($response);
-        self::assertResponseContains('id="group_select"', $response);
+        self::assertResponseContains('id="pmf-group-list"', $response);
     }
 }

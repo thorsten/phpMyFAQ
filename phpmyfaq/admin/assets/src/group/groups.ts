@@ -1,8 +1,6 @@
 /**
  * Functions for handling group management
  *
- * @todo move fetch() functionality to api functions
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -15,7 +13,9 @@
  * @since     2023-01-04
  */
 
+import { Modal } from 'bootstrap';
 import {
+  deleteGroup,
   fetchAllGroups,
   fetchAllMembers,
   fetchAllUsersForGroups,
@@ -24,299 +24,334 @@ import {
   fetchGroupCategoryRestrictions,
   fetchGroupRights,
   saveGroupCategoryRestrictions,
+  updateGroup,
+  updateGroupMembers,
+  updateGroupPermissions,
 } from '../api';
-import { selectAll, unSelectAll } from '../utils';
-import { CategoryItem, CategoryRestrictions, Group, Member, User } from '../interfaces';
+import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
+import { ApiResponse, CategoryItem, CategoryRestrictions, Group, User } from '../interfaces';
+
+let allUsers: User[] = [];
+let selectedGroupId: string = '';
 
 export const handleGroups = async (): Promise<void> => {
-  clearGroupList();
-
-  const groupListSelect = document.querySelector<HTMLSelectElement>('#group_list_select') as HTMLSelectElement;
-  if (!groupListSelect) {
+  const groupList = document.getElementById('pmf-group-list');
+  if (!groupList) {
     return;
   }
 
-  const addMember = document.querySelector<HTMLButtonElement>('.pmf-add-member') as HTMLButtonElement;
-  const removeMember = document.querySelector<HTMLButtonElement>('.pmf-remove-member') as HTMLButtonElement;
-  const selectAllUsers = document.getElementById('select_all_group_user_list') as HTMLButtonElement;
-  const unSelectAllUsers = document.getElementById('unselect_all_group_user_list') as HTMLButtonElement;
-  const selectAllMembers = document.getElementById('select_all_members') as HTMLButtonElement;
-  const unSelectAllMembers = document.getElementById('unselect_all_members') as HTMLButtonElement;
+  allUsers = await fetchAllUsersForGroups();
+  await refreshGroupList();
+
+  wireGroupFilter();
+  wireMemberSearch();
+  wirePermissionFilter();
+  wirePermissionToggles();
+  wireSaveButtons();
+  wireDeleteModal();
+};
+
+const refreshGroupList = async (): Promise<void> => {
+  const groupList = document.getElementById('pmf-group-list') as HTMLElement;
   const groups: Group[] = await fetchAllGroups();
 
+  groupList.textContent = '';
   groups.forEach((group: Group): void => {
-    const option: HTMLOptionElement = document.createElement('option');
-    option.value = group.group_id;
-    option.textContent = group.name;
-    groupListSelect.appendChild(option);
-  });
-
-  await processGroupList();
-
-  // Events
-  groupListSelect.addEventListener('change', (event: Event): void => {
-    handleGroupSelect(event);
-  });
-
-  selectAllUsers.addEventListener('click', (): void => {
-    selectAll('group_user_list');
-  });
-
-  unSelectAllUsers.addEventListener('click', (): void => {
-    unSelectAll('group_user_list');
-  });
-
-  addMember.addEventListener('click', (): void => {
-    addGroupMembers();
-    selectAll('group_member_list');
-  });
-
-  removeMember.addEventListener('click', (): void => {
-    removeGroupMembers();
-    selectAll('group_member_list');
-  });
-
-  selectAllMembers.addEventListener('click', (): void => {
-    selectAll('group_member_list');
-  });
-
-  unSelectAllMembers.addEventListener('click', (): void => {
-    unSelectAll('group_member_list');
-  });
-
-  // Category restrictions save button
-  const saveCategoryRestrictions = document.getElementById('saveCategoryRestrictions') as HTMLButtonElement;
-  if (saveCategoryRestrictions) {
-    saveCategoryRestrictions.addEventListener('click', async (event: Event): Promise<void> => {
-      event.preventDefault();
-      await handleCategoryRestrictionsSave();
+    const item = document.createElement('button');
+    item.type = 'button';
+    item.className = 'list-group-item list-group-item-action pmf-group-item';
+    item.dataset.groupId = group.group_id;
+    item.textContent = group.name;
+    item.addEventListener('click', async (): Promise<void> => {
+      await selectGroup(group.group_id);
     });
-  }
-
-  // Update category restrictions panel when rights checkboxes change
-  document.getElementById('groupRights')?.addEventListener('change', (event: Event): void => {
-    const target = event.target as HTMLInputElement;
-    if (target.type === 'checkbox' && target.classList.contains('permission')) {
-      const container = document.getElementById('categoryRestrictionsBody');
-      if (container) {
-        captureCurrentRestrictions(container);
-        renderCategoryRestrictions(container);
-      }
-    }
+    groupList.appendChild(item);
   });
 };
 
-const handleGroupSelect = async (event: Event): Promise<void> => {
-  const groupId: string = (event.target as HTMLSelectElement)?.value;
+const selectGroup = async (groupId: string): Promise<void> => {
+  selectedGroupId = groupId;
 
-  if (groupId) {
-    clearGroupData();
-    await getGroupData(groupId);
-    clearGroupRights();
-    await getGroupRights(groupId);
-    clearUserList();
-    await getUserList();
-    clearMemberList();
-    await getMemberList(groupId);
-    try {
-      await loadCategoryRestrictions(groupId);
-    } catch (error) {
-      console.error('Failed to load category restrictions:', error);
-    }
+  document.querySelectorAll<HTMLButtonElement>('.pmf-group-item').forEach((item: HTMLButtonElement): void => {
+    item.classList.toggle('active', item.dataset.groupId === groupId);
+  });
 
-    // Activate user inputs
-    const saveGroupDetails = document.getElementById('saveGroupDetails') as HTMLButtonElement;
-    const saveMembersList = document.getElementById('saveMembersList') as HTMLButtonElement;
-    const saveGroupRights = document.getElementById('saveGroupRights') as HTMLButtonElement;
-    const deleteGroup = document.getElementById('deleteGroup') as HTMLButtonElement;
-    const groupAddMember = document.getElementById('groupAddMember') as HTMLButtonElement;
-    const groupRemoveMember = document.getElementById('groupRemoveMember') as HTMLButtonElement;
-    const saveCategoryRestrictions = document.getElementById('saveCategoryRestrictions') as HTMLButtonElement;
+  const group: Group = await fetchGroup(groupId);
+  (document.getElementById('update_group_name') as HTMLInputElement).value = group.name;
+  (document.getElementById('update_group_description') as HTMLTextAreaElement).value = group.description || '';
+  (document.getElementById('update_group_auto_join') as HTMLInputElement).checked =
+    1 === parseInt(group.auto_join || '0');
+  (document.getElementById('pmf-selected-group-name') as HTMLElement).textContent = group.name;
 
-    saveGroupDetails.disabled = false;
-    saveMembersList.disabled = false;
-    saveGroupRights.disabled = false;
-    deleteGroup.disabled = false;
-    groupAddMember.disabled = false;
-    groupRemoveMember.disabled = false;
-    if (saveCategoryRestrictions) {
-      saveCategoryRestrictions.disabled = false;
-    }
-
-    document.querySelectorAll<HTMLInputElement>('.permission').forEach((item: HTMLInputElement): void => {
-      item.disabled = false;
-    });
+  await loadGroupRights(groupId);
+  await loadMembers(groupId);
+  try {
+    await loadCategoryRestrictions(groupId);
+  } catch (error) {
+    console.error('Failed to load category restrictions:', error);
   }
+
+  (document.getElementById('pmf-group-empty-state') as HTMLElement).classList.add('d-none');
+  (document.getElementById('pmf-group-detail') as HTMLElement).classList.remove('d-none');
 };
 
-const getGroupData = async (groupId: string): Promise<void> => {
-  const groupData: Group = await fetchGroup(groupId);
-
-  (document.getElementById('update_group_id') as HTMLInputElement).value = groupData.group_id;
-  (document.getElementById('update_group_name') as HTMLInputElement).value = groupData.name;
-  (document.getElementById('update_group_description') as HTMLInputElement).value = groupData.description || '';
-
-  const autoJoinCheckbox = document.getElementById('update_group_auto_join') as HTMLInputElement;
-  autoJoinCheckbox.checked = 1 === parseInt(groupData.auto_join || '0');
-};
-
-const clearGroupList = (): void => {
-  const groupList = document.getElementById('group_list_select') as HTMLSelectElement;
-  if (groupList) {
-    groupList.textContent = '';
-  }
-};
-
-const processGroupList = async (): Promise<void> => {
-  clearGroupData();
-  clearGroupRights();
-  clearUserList();
-  await getUserList();
-  clearMemberList();
-};
-
-const clearGroupData = (): void => {
-  const updateGroupAutoJoin = document.getElementById('update_group_auto_join') as HTMLInputElement;
-  const updateGroupId = document.getElementById('update_group_id') as HTMLInputElement;
-  if (updateGroupId) {
-    updateGroupId.value = '';
-  }
-  const updateGroupName = document.getElementById('update_group_name') as HTMLInputElement;
-  if (updateGroupName) {
-    updateGroupName.value = '';
-  }
-  const updateGroupDescription = document.getElementById('update_group_description') as HTMLInputElement;
-  if (updateGroupDescription) {
-    updateGroupDescription.value = '';
-  }
-  if (updateGroupAutoJoin.checked) {
-    updateGroupAutoJoin.checked = false;
-  }
-};
-
-const clearGroupRights = (): void => {
-  const groupRightsCheckboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll<HTMLInputElement>(
-    '#groupRights input[type=checkbox]'
-  );
-  if (groupRightsCheckboxes) {
-    groupRightsCheckboxes.forEach((checkbox: HTMLInputElement): void => {
+const loadGroupRights = async (groupId: string): Promise<void> => {
+  document
+    .querySelectorAll<HTMLInputElement>('#pmf-permission-list input.permission')
+    .forEach((checkbox: HTMLInputElement): void => {
       checkbox.checked = false;
     });
-  }
-};
 
-const getGroupRights = async (groupId: string): Promise<void> => {
   const groupRights: string[] = await fetchGroupRights(groupId);
-
-  if (groupRights) {
-    (document.getElementById('rights_group_id') as HTMLInputElement).value = groupId;
-    groupRights.forEach((right) => {
-      (document.getElementById(`group_right_${right}`) as HTMLInputElement).checked = true;
-    });
-  }
-};
-
-const clearUserList = (): void => {
-  const groupUserListOptions: NodeListOf<HTMLSelectElement> =
-    document.querySelectorAll<HTMLSelectElement>('#group_user_list option');
-  if (groupUserListOptions) {
-    groupUserListOptions.forEach((option: HTMLSelectElement): void => {
-      option.value = '';
-    });
-  }
-};
-
-const getUserList = async (): Promise<void> => {
-  const groupUserList = document.querySelector<HTMLSelectElement>('#group_user_list') as HTMLSelectElement;
-  const allUsers: User[] = await fetchAllUsersForGroups();
-
-  groupUserList.textContent = '';
-  allUsers.forEach((user: User): void => {
-    const option: HTMLOptionElement = document.createElement('option');
-    option.value = user.user_id;
-    option.textContent = user.login;
-    groupUserList.appendChild(option);
-  });
-};
-
-const clearMemberList = (): void => {
-  const groupMemberList = document.querySelector<HTMLSelectElement>('#group_member_list') as HTMLSelectElement;
-  groupMemberList.textContent = '';
-};
-
-const getMemberList = async (groupId: string): Promise<void> => {
-  const groupMemberList = document.querySelector<HTMLSelectElement>('#group_member_list') as HTMLSelectElement;
-  const members: Member[] = await fetchAllMembers(groupId);
-
-  groupMemberList.textContent = '';
-  members.forEach((member: Member) => {
-    const option: HTMLOptionElement = document.createElement('option');
-    option.value = member.user_id;
-    option.textContent = member.login;
-    option.selected = true;
-    groupMemberList.appendChild(option);
-  });
-  (document.getElementById('update_member_group_id') as HTMLInputElement).value = groupId;
-};
-
-const addGroupMembers = (): void => {
-  const selectedGroup = document.querySelector<HTMLSelectElement>(
-    '#group_list_select option:checked'
-  ) as HTMLSelectElement;
-  if (selectedGroup === null) {
-    // @todo refactor alert() to something more beautiful.
-    alert('Please choose a group.');
-    return;
-  }
-
-  const allUsers = document.getElementById('group_user_list') as HTMLSelectElement;
-  const selectedUsers = [...allUsers.options]
-    .filter((option: HTMLOptionElement): boolean => option.selected)
-    .map((option: HTMLOptionElement) => {
-      return { value: option.value, login: option.innerText };
-    });
-  const allMembers = document.getElementById('group_member_list') as HTMLSelectElement;
-  const members = [...allMembers.options].map((option: HTMLOptionElement) => {
-    return { value: option.value, login: option.innerText };
-  });
-
-  if (selectedUsers) {
-    selectedUsers.forEach((user) => {
-      let isMember: boolean = false;
-
-      members.forEach((member) => {
-        isMember = user.value === member.value;
-      });
-
-      if (isMember === false) {
-        const groupMemberList = document.getElementById('group_member_list') as HTMLSelectElement;
-        const option: HTMLOptionElement = document.createElement('option');
-        option.value = user.value;
-        option.textContent = user.login;
-        option.selected = true;
-        groupMemberList.appendChild(option);
-      }
-    });
-  }
-};
-
-const removeGroupMembers = (): void => {
-  const memberList = document.getElementById('group_member_list') as HTMLSelectElement;
-  const selectedMembers: string[] = [...memberList.options]
-    .filter((option: HTMLOptionElement): boolean => option.selected)
-    .map((option: HTMLOptionElement): string => option.value);
-
-  if (selectedMembers.length === 0) {
-    // @todo refactor alert() to something more beautiful.
-    alert('Please choose a member.');
-    return;
-  }
-
-  for (const member of document.querySelectorAll<HTMLSelectElement>('#group_member_list option')) {
-    if (selectedMembers.includes(member.value)) {
-      member.remove();
+  groupRights.forEach((right: string): void => {
+    const checkbox = document.getElementById(`group_right_${right}`) as HTMLInputElement | null;
+    if (checkbox) {
+      checkbox.checked = true;
     }
+  });
+};
+
+const loadMembers = async (groupId: string): Promise<void> => {
+  const memberList = document.getElementById('pmf-member-list') as HTMLElement;
+  memberList.textContent = '';
+
+  const members = await fetchAllMembers(groupId);
+  members.forEach((member: User): void => {
+    memberList.appendChild(createMemberRow(member));
+  });
+  updateMemberCount();
+};
+
+const createMemberRow = (user: User): HTMLLIElement => {
+  const memberList = document.getElementById('pmf-member-list') as HTMLElement;
+  const row = document.createElement('li');
+  row.className = 'list-group-item d-flex justify-content-between align-items-center';
+  row.dataset.userId = user.user_id;
+
+  const login = document.createElement('span');
+  login.textContent = user.login;
+  row.appendChild(login);
+
+  const removeButton = document.createElement('button');
+  removeButton.type = 'button';
+  removeButton.className = 'btn btn-outline-danger btn-sm';
+  removeButton.setAttribute('aria-label', memberList.dataset.labelRemove || 'Remove member');
+  removeButton.innerHTML = '<i aria-hidden="true" class="bi bi-person-dash"></i>';
+  removeButton.addEventListener('click', (): void => {
+    row.remove();
+    updateMemberCount();
+  });
+  row.appendChild(removeButton);
+
+  return row;
+};
+
+const updateMemberCount = (): void => {
+  const count = document.querySelectorAll('#pmf-member-list li').length;
+  (document.getElementById('pmf-member-count') as HTMLElement).textContent = count.toString();
+};
+
+const wireGroupFilter = (): void => {
+  const filter = document.getElementById('pmf-group-filter') as HTMLInputElement;
+  filter.addEventListener('input', (): void => {
+    const query = filter.value.toLowerCase().trim();
+    document.querySelectorAll<HTMLButtonElement>('.pmf-group-item').forEach((item: HTMLButtonElement): void => {
+      item.classList.toggle('d-none', !(item.textContent || '').toLowerCase().includes(query));
+    });
+  });
+};
+
+const wireMemberSearch = (): void => {
+  const search = document.getElementById('pmf-user-search') as HTMLInputElement;
+  const results = document.getElementById('pmf-user-search-results') as HTMLElement;
+
+  search.addEventListener('input', (): void => {
+    const query = search.value.toLowerCase().trim();
+    results.textContent = '';
+
+    if (query === '') {
+      results.classList.add('d-none');
+      return;
+    }
+
+    const memberIds = new Set(
+      [...document.querySelectorAll<HTMLElement>('#pmf-member-list li')].map((row: HTMLElement) => row.dataset.userId)
+    );
+    const candidates = allUsers
+      .filter((user: User): boolean => user.login.toLowerCase().includes(query) && !memberIds.has(user.user_id))
+      .slice(0, 10);
+
+    if (candidates.length === 0) {
+      results.classList.add('d-none');
+      return;
+    }
+
+    candidates.forEach((user: User): void => {
+      const suggestion = document.createElement('button');
+      suggestion.type = 'button';
+      suggestion.className = 'list-group-item list-group-item-action';
+      suggestion.textContent = user.login;
+      suggestion.addEventListener('click', (): void => {
+        (document.getElementById('pmf-member-list') as HTMLElement).appendChild(createMemberRow(user));
+        updateMemberCount();
+        search.value = '';
+        results.textContent = '';
+        results.classList.add('d-none');
+      });
+      results.appendChild(suggestion);
+    });
+    results.classList.remove('d-none');
+  });
+};
+
+const wirePermissionFilter = (): void => {
+  const filter = document.getElementById('pmf-permission-filter') as HTMLInputElement;
+  filter.addEventListener('input', (): void => {
+    const query = filter.value.toLowerCase().trim();
+    document.querySelectorAll<HTMLElement>('#pmf-permission-list .form-check').forEach((item: HTMLElement): void => {
+      const label = item.querySelector('label')?.textContent?.toLowerCase() || '';
+      item.classList.toggle('d-none', !label.includes(query));
+    });
+  });
+};
+
+const wirePermissionToggles = (): void => {
+  const setAll = (checked: boolean): void => {
+    document
+      .querySelectorAll<HTMLInputElement>('#pmf-permission-list input.permission')
+      .forEach((checkbox: HTMLInputElement): void => {
+        checkbox.checked = checked;
+      });
+    refreshRestrictionsPanel();
+  };
+
+  (document.getElementById('pmf-group-check-all') as HTMLButtonElement).addEventListener('click', (): void => {
+    setAll(true);
+  });
+  (document.getElementById('pmf-group-uncheck-all') as HTMLButtonElement).addEventListener('click', (): void => {
+    setAll(false);
+  });
+
+  document.getElementById('pmf-permission-list')?.addEventListener('change', (event: Event): void => {
+    const target = event.target as HTMLInputElement;
+    if (target.type === 'checkbox' && target.classList.contains('permission')) {
+      refreshRestrictionsPanel();
+    }
+  });
+};
+
+const refreshRestrictionsPanel = (): void => {
+  const container = document.getElementById('categoryRestrictionsBody');
+  if (container) {
+    captureCurrentRestrictions(container);
+    renderCategoryRestrictions(container);
   }
+};
+
+const notifyResult = (response: ApiResponse): void => {
+  if (response.success) {
+    pushNotification(response.success);
+  } else {
+    pushErrorNotification(response.error as string);
+  }
+};
+
+const wireSaveButtons = (): void => {
+  const detail = document.getElementById('pmf-group-detail') as HTMLElement;
+
+  (document.getElementById('saveGroupDetails') as HTMLButtonElement).addEventListener(
+    'click',
+    async (): Promise<void> => {
+      if (selectedGroupId === '') {
+        return;
+      }
+      const name = (document.getElementById('update_group_name') as HTMLInputElement).value.trim();
+      const description = (document.getElementById('update_group_description') as HTMLTextAreaElement).value;
+      const autoJoin = (document.getElementById('update_group_auto_join') as HTMLInputElement).checked;
+
+      const response = await updateGroup(selectedGroupId, name, description, autoJoin, detail.dataset.csrfUpdate || '');
+      if (response.success) {
+        (document.getElementById('pmf-selected-group-name') as HTMLElement).textContent = name;
+        const activeItem = document.querySelector<HTMLButtonElement>(
+          `.pmf-group-item[data-group-id="${selectedGroupId}"]`
+        );
+        if (activeItem) {
+          activeItem.textContent = name;
+        }
+      }
+      notifyResult(response);
+    }
+  );
+
+  (document.getElementById('saveMembersList') as HTMLButtonElement).addEventListener(
+    'click',
+    async (): Promise<void> => {
+      if (selectedGroupId === '') {
+        return;
+      }
+      const memberIds = [...document.querySelectorAll<HTMLElement>('#pmf-member-list li')].map((row: HTMLElement) =>
+        parseInt(row.dataset.userId || '0')
+      );
+      const response = await updateGroupMembers(selectedGroupId, memberIds, detail.dataset.csrfMembers || '');
+      notifyResult(response);
+    }
+  );
+
+  (document.getElementById('saveGroupRights') as HTMLButtonElement).addEventListener(
+    'click',
+    async (): Promise<void> => {
+      if (selectedGroupId === '') {
+        return;
+      }
+      const rightIds = [
+        ...document.querySelectorAll<HTMLInputElement>('#pmf-permission-list input.permission:checked'),
+      ].map((checkbox: HTMLInputElement) => parseInt(checkbox.value));
+      const response = await updateGroupPermissions(selectedGroupId, rightIds, detail.dataset.csrfPermissions || '');
+      notifyResult(response);
+    }
+  );
+
+  (document.getElementById('saveCategoryRestrictions') as HTMLButtonElement).addEventListener(
+    'click',
+    async (event: Event): Promise<void> => {
+      event.preventDefault();
+      await handleCategoryRestrictionsSave();
+    }
+  );
+};
+
+const wireDeleteModal = (): void => {
+  const modalElement = document.getElementById('pmf-group-delete-modal') as HTMLElement;
+  const detail = document.getElementById('pmf-group-detail') as HTMLElement;
+
+  (document.getElementById('pmf-delete-group-button') as HTMLButtonElement).addEventListener('click', (): void => {
+    (document.getElementById('pmf-group-delete-name') as HTMLElement).textContent = (
+      document.getElementById('pmf-selected-group-name') as HTMLElement
+    ).textContent;
+    new Modal(modalElement).show();
+  });
+
+  (document.getElementById('pmf-confirm-group-delete') as HTMLButtonElement).addEventListener(
+    'click',
+    async (): Promise<void> => {
+      if (selectedGroupId === '') {
+        return;
+      }
+
+      const response = await deleteGroup(selectedGroupId, detail.dataset.csrfDelete || '');
+      Modal.getInstance(modalElement)?.hide();
+
+      if (response.success) {
+        pushNotification(response.success);
+        selectedGroupId = '';
+        detail.classList.add('d-none');
+        (document.getElementById('pmf-group-empty-state') as HTMLElement).classList.remove('d-none');
+        await refreshGroupList();
+      } else {
+        pushErrorNotification(response.error as string);
+      }
+    }
+  );
 };
 
 let cachedCategories: CategoryItem[] = [];
@@ -351,14 +386,16 @@ const captureCurrentRestrictions = (container: HTMLElement): void => {
 };
 
 const renderCategoryRestrictions = (container: HTMLElement): void => {
-  const checkedRights = document.querySelectorAll<HTMLInputElement>('#groupRights input[type=checkbox]:checked');
+  const checkedRights = document.querySelectorAll<HTMLInputElement>(
+    '#pmf-permission-list input[type=checkbox]:checked'
+  );
 
   container.innerHTML = '';
 
   if (checkedRights.length === 0) {
     const emptyMsg = container.dataset.msgEmpty || 'No permissions assigned to this group.';
     const emptyParagraph = document.createElement('p');
-    emptyParagraph.className = 'text-muted';
+    emptyParagraph.className = 'text-body-secondary';
     emptyParagraph.textContent = emptyMsg;
     container.appendChild(emptyParagraph);
     return;
@@ -405,13 +442,7 @@ const renderCategoryRestrictions = (container: HTMLElement): void => {
 };
 
 export const handleCategoryRestrictionsSave = async (): Promise<void> => {
-  const groupListSelect = document.getElementById('group_list_select') as HTMLSelectElement;
-  if (!groupListSelect) {
-    return;
-  }
-
-  const groupId = groupListSelect.value;
-  if (!groupId) {
+  if (selectedGroupId === '') {
     return;
   }
 
@@ -426,13 +457,14 @@ export const handleCategoryRestrictionsSave = async (): Promise<void> => {
   // permissions also get their stored restrictions cleared.
   const rightIds = new Set<string>();
   document
-    .querySelectorAll<HTMLInputElement>('#groupRights input[type=checkbox].permission')
+    .querySelectorAll<HTMLInputElement>('#pmf-permission-list input[type=checkbox].permission')
     .forEach((checkbox: HTMLInputElement): void => {
       if (checkbox.value) {
         rightIds.add(checkbox.value);
       }
     });
 
+  let failed = false;
   for (const rightId of rightIds) {
     const select = container.querySelector<HTMLSelectElement>(`select[data-right-id="${rightId}"]`);
     const selectedCategoryIds = select
@@ -441,6 +473,15 @@ export const handleCategoryRestrictionsSave = async (): Promise<void> => {
           .map((option: HTMLOptionElement): number => parseInt(option.value))
       : [];
 
-    await saveGroupCategoryRestrictions(groupId, rightId, selectedCategoryIds, csrfToken);
+    const response = await saveGroupCategoryRestrictions(selectedGroupId, rightId, selectedCategoryIds, csrfToken);
+    if (!response.ok) {
+      failed = true;
+    }
+  }
+
+  if (failed) {
+    pushErrorNotification('Failed to save category restrictions.');
+  } else {
+    pushNotification(container.dataset.msgSaved || 'Category restrictions saved.');
   }
 };
