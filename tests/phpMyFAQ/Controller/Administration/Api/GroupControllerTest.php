@@ -6,6 +6,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
@@ -92,6 +93,7 @@ final class GroupControllerTest extends TestCase
 
     protected function tearDown(): void
     {
+        $_COOKIE = [];
         Token::resetInstanceForTests();
         $_SESSION = [];
         if (session_status() === PHP_SESSION_ACTIVE) {
@@ -677,6 +679,46 @@ final class GroupControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
         self::assertSame('Invalid CSRF token.', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteGroupRejectsUserWithoutGroupDeletePermission(): void
+    {
+        $controller = new GroupController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $this->expectException(ForbiddenException::class);
+        $controller->deleteGroup(new Request(content: json_encode([
+            'groupId' => self::TEST_GROUP_ID,
+            'csrfToken' => 'irrelevant',
+        ], JSON_THROW_ON_ERROR)));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateGroupRejectsAutoJoinForNonSuperAdminWithoutMediumPermission(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('update-group');
+        $this->setCsrfCookie('update-group', $csrfToken);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->updateGroup(new Request(content: json_encode([
+            'groupId' => self::TEST_GROUP_ID,
+            'name' => 'Editors',
+            'autoJoin' => true,
+            'csrfToken' => $csrfToken,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame('Cannot enable auto-join without group permission support.', $payload['error']);
+        $this->removeCsrfCookie('update-group');
     }
 
     /**

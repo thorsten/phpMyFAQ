@@ -241,6 +241,30 @@ final class GroupController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get('ad_group_error_noName')], Response::HTTP_BAD_REQUEST);
         }
 
+        $autoJoin = (bool) ($data['autoJoin'] ?? false);
+
+        // Enabling auto-join makes every newly registered user inherit this group's rights,
+        // so a non-SuperAdmin may only enable it on a group whose rights they fully hold
+        // (same escalation rule as membership management, fail closed).
+        if ($autoJoin && !$this->currentUser->isSuperAdmin()) {
+            if (!$this->currentUser->perm instanceof MediumPermission) {
+                return $this->json(
+                    ['error' => 'Cannot enable auto-join without group permission support.'],
+                    Response::HTTP_FORBIDDEN,
+                );
+            }
+
+            $actingUserId = $this->currentUser->getUserId();
+            foreach ($this->currentUser->perm->getGroupRights($groupId) as $groupRight) {
+                if (!$this->currentUser->perm->hasPermission($actingUserId, (int) $groupRight)) {
+                    return $this->json(
+                        ['error' => 'Cannot enable auto-join on a group whose rights you do not hold.'],
+                        Response::HTTP_FORBIDDEN,
+                    );
+                }
+            }
+        }
+
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
         if (!$currentUser->perm instanceof MediumPermission) {
             return $this->json(['error' => 'Group permissions are not enabled.'], Response::HTTP_BAD_REQUEST);
@@ -249,7 +273,7 @@ final class GroupController extends AbstractAdministrationApiController
         $groupData = [
             'name' => $name,
             'description' => Filter::filterVar($data['description'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS, ''),
-            'auto_join' => (bool) ($data['autoJoin'] ?? false),
+            'auto_join' => $autoJoin,
         ];
 
         if (!$currentUser->perm->changeGroup($groupId, $groupData)) {
@@ -332,8 +356,15 @@ final class GroupController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get('ad_msg_mysqlerr')], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
+        $failed = false;
         foreach ($memberIds as $memberId) {
-            $currentUser->perm->addToGroup($memberId, $groupId);
+            if (!$currentUser->perm->addToGroup($memberId, $groupId)) {
+                $failed = true;
+            }
+        }
+
+        if ($failed) {
+            return $this->json(['error' => Translation::get('ad_msg_mysqlerr')], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         $this->adminLog?->log($this->currentUser, AdminLogType::GROUP_EDIT->value . ' (members):' . $groupId);
@@ -398,8 +429,15 @@ final class GroupController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get('ad_msg_mysqlerr')], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
+        $failed = false;
         foreach ($rightIds as $rightId) {
-            $currentUser->perm->grantGroupRight($groupId, $rightId);
+            if (!$currentUser->perm->grantGroupRight($groupId, $rightId)) {
+                $failed = true;
+            }
+        }
+
+        if ($failed) {
+            return $this->json(['error' => Translation::get('ad_msg_mysqlerr')], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         $this->adminLog?->log($this->currentUser, AdminLogType::GROUP_CHANGE_PERMISSIONS->value . ':' . $groupId);
