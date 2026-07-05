@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import { handleCategories, handleCategoryDelete, handleResetCategoryImage, handleCategoryTranslate } from './category';
 import { deleteCategory } from '../api';
-import { pushNotification } from '../../../../assets/src/utils';
+import { pushNotification, pushErrorNotification } from '../../../../assets/src/utils';
 
 vi.mock('sortablejs', () => ({
-  default: vi.fn().mockImplementation(() => ({})),
+  default: vi.fn().mockImplementation(() => ({ option: vi.fn() })),
 }));
 vi.mock('bootstrap', () => ({
   Modal: class {
@@ -116,6 +116,28 @@ describe('Category Functions', () => {
       await new Promise((resolve) => setTimeout(resolve, 10));
 
       expect(deleteCategory).not.toHaveBeenCalled();
+    });
+
+    it('should keep the row and push an error notification when the API reports an error', async () => {
+      document.body.innerHTML = `
+        <div id="deleteConfirmModal"></div>
+        <button id="confirmDeleteButton">Confirm</button>
+        <button name="pmf-category-delete-button" data-pmf-category-id="5" data-pmf-language="en">Delete</button>
+        <div id="pmf-category-5">Category row</div>
+        <input name="pmf-csrf-token" value="csrf-token-abc" />
+      `;
+
+      (deleteCategory as Mock).mockResolvedValue({ error: 'nope' });
+
+      await handleCategoryDelete();
+
+      (document.querySelector('[name="pmf-category-delete-button"]') as HTMLButtonElement).click();
+      await new Promise((resolve) => setTimeout(resolve, 10));
+      (document.getElementById('confirmDeleteButton') as HTMLButtonElement).click();
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      expect(pushErrorNotification).toHaveBeenCalledWith('nope');
+      expect(document.getElementById('pmf-category-5')).not.toBeNull();
     });
   });
 

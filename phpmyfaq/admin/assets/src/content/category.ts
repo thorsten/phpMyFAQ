@@ -22,47 +22,53 @@ import { Translator } from '../translation/translator';
 const nestedQuery = '.nested-sortable';
 const identifier = 'pmfCatid';
 
+// Instances created by handleCategories; the overview module disables them while filtering.
+export const categorySortables: Sortable[] = [];
+
 interface SerializedTree {
   id: string;
   children: SerializedTree[];
 }
 
 export const handleCategories = (): void => {
+  categorySortables.length = 0;
   const root = document.getElementById('pmf-category-tree') as HTMLElement;
   const nestedSortables: NodeListOf<HTMLElement> = document.querySelectorAll<HTMLElement>(nestedQuery);
   for (let i: number = 0; i < nestedSortables.length; i++) {
-    new Sortable(nestedSortables[i], {
-      group: 'Categories',
-      animation: 150,
-      fallbackOnBody: true,
-      swapThreshold: 0.65,
-      dataIdAttr: identifier,
-      emptyInsertThreshold: 10,
-      onStart: (): void => {
-        // Add class to all empty drop zones when drag starts
-        const emptySortables = document.querySelectorAll<HTMLElement>(`${nestedQuery}:empty`);
-        emptySortables.forEach((sortable: HTMLElement): void => {
-          sortable.classList.add('sortable-drag-active');
-        });
-      },
-      onEnd: async (event: SortableEvent): Promise<void> => {
-        // Remove the class from all drop zones when drag ends
-        const allSortables = document.querySelectorAll<HTMLElement>(nestedQuery);
-        allSortables.forEach((sortable: HTMLElement): void => {
-          sortable.classList.remove('sortable-drag-active');
-        });
+    categorySortables.push(
+      new Sortable(nestedSortables[i], {
+        group: 'Categories',
+        animation: 150,
+        fallbackOnBody: true,
+        swapThreshold: 0.65,
+        dataIdAttr: identifier,
+        emptyInsertThreshold: 10,
+        onStart: (): void => {
+          // Add class to all empty drop zones when drag starts
+          const emptySortables = document.querySelectorAll<HTMLElement>(`${nestedQuery}:empty`);
+          emptySortables.forEach((sortable: HTMLElement): void => {
+            sortable.classList.add('sortable-drag-active');
+          });
+        },
+        onEnd: async (event: SortableEvent): Promise<void> => {
+          // Remove the class from all drop zones when drag ends
+          const allSortables = document.querySelectorAll<HTMLElement>(nestedQuery);
+          allSortables.forEach((sortable: HTMLElement): void => {
+            sortable.classList.remove('sortable-drag-active');
+          });
 
-        const categoryId = event.item.getAttribute('data-pmf-catid') as string;
-        const csrf: string = (document.querySelector('input[name=pmf-csrf-token]') as HTMLInputElement).value;
-        const data: SerializedTree[] = serializedTree(root);
-        const response = await setCategoryTree(data, categoryId, csrf);
-        if (response.success) {
-          pushNotification(response.success);
-        } else {
-          pushErrorNotification(response.error as string);
-        }
-      },
-    });
+          const categoryId = event.item.getAttribute('data-pmf-catid') as string;
+          const csrf: string = (document.querySelector('input[name=pmf-csrf-token]') as HTMLInputElement).value;
+          const data: SerializedTree[] = serializedTree(root);
+          const response = await setCategoryTree(data, categoryId, csrf);
+          if (response.success) {
+            pushNotification(response.success);
+          } else {
+            pushErrorNotification(response.error as string);
+          }
+        },
+      })
+    );
   }
 
   const serializedTree = (sortable: HTMLElement): SerializedTree[] => {
@@ -109,9 +115,11 @@ export const handleCategoryDelete = async (): Promise<void> => {
     const response = await deleteCategory(currentCategoryId, currentLanguage, csrfToken);
     if (response.success) {
       pushNotification(response.success);
+      document.getElementById(`pmf-category-${currentCategoryId}`)?.remove();
+    } else {
+      pushErrorNotification(response.error as string);
     }
 
-    document.getElementById(`pmf-category-${currentCategoryId}`)?.remove();
     deleteModal.hide();
 
     currentCategoryId = '';
