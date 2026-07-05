@@ -6,10 +6,12 @@
     <i aria-hidden="true" class="bi bi-folder"></i> {{ 'msgHeaderCategoryOverview' | translate }}
   </h1>
   <div class="btn-toolbar mb-2 mb-md-0">
-    <div class="btn-group mr-2">
-      <a class="btn btn-outline-success" href="./category/add" id="addCategoryModal">
-        <i aria-hidden="true" class="bi bi-plus"></i> {{ 'msgAddCategory' | translate }}
-      </a>
+    <div class="btn-group me-2">
+      {% if permissionAddCategory == true %}
+        <a class="btn btn-outline-success" href="./category/add" id="addCategoryModal">
+          <i aria-hidden="true" class="bi bi-plus"></i> {{ 'msgAddCategory' | translate }}
+        </a>
+      {% endif %}
       <a class="btn btn-outline-info" href="./category/hierarchy">
         <i aria-hidden="true" class="bi bi-list"></i> {{ 'msgCategoryMatrix' | translate }}
       </a>
@@ -17,25 +19,51 @@
   </div>
 </div>
 
-<div class="row mb-2">
-  <div class="col">
-    <form method="post">
-      {{ csrfTokenInput | raw }}
-      <div id="pmf-category-tree" class="list-group nested-sortable shadow">
-        {{ _self.renderCategories(categoryTree, categoryInfo) }}
-      </div>
-    </form>
-  </div>
-</div>
-
-<div class="row mt-4">
-  <div class="col">
-    <div class="alert alert-info">
-      {{ 'msgCategoryRemark' | translate }}
+{% if categoryTree is empty %}
+  <div class="card shadow mb-4" id="pmf-category-empty-state">
+    <div class="card-body text-center text-body-secondary py-5">
+      <i aria-hidden="true" class="bi bi-folder-plus display-4 d-block mb-3"></i>
+      <p>{{ 'ad_category_empty' | translate }}</p>
+      {% if permissionAddCategory == true %}
+        <a class="btn btn-primary" href="./category/add">
+          <i aria-hidden="true" class="bi bi-plus"></i> {{ 'msgAddCategory' | translate }}
+        </a>
+      {% endif %}
     </div>
   </div>
-</div>
+{% else %}
+  <div class="d-flex gap-2 mb-3">
+    <input type="search" id="pmf-category-filter" class="form-control" autocomplete="off"
+           placeholder="{{ 'ad_category_filter' | translate }}"
+           aria-label="{{ 'ad_category_filter' | translate }}">
+    <button type="button" class="btn btn-outline-primary btn-sm text-nowrap" id="pmf-category-expand-all">
+      {{ 'ad_category_expand_all' | translate }}
+    </button>
+    <button type="button" class="btn btn-outline-primary btn-sm text-nowrap" id="pmf-category-collapse-all">
+      {{ 'ad_category_collapse_all' | translate }}
+    </button>
+  </div>
 
+  <div class="row mb-2">
+    <div class="col">
+      <form method="post">
+        {{ csrfTokenInput | raw }}
+        <div id="pmf-category-tree" class="list-group nested-sortable shadow">
+          {{ _self.renderCategories(categoryTree, categoryInfo, categoryTranslations, allLanguages,
+                                    permissionAddCategory, permissionDeleteCategory, permissionAddFaq) }}
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col">
+      <div class="alert alert-info">
+        {{ 'msgCategoryRemark' | translate }}
+      </div>
+    </div>
+  </div>
+{% endif %}
 
 <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel"
      aria-hidden="true">
@@ -43,7 +71,8 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="deleteConfirmModalLabel">{{ 'ad_categ_delete' | translate }}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schließen"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                aria-label="{{ 'msgCancel' | translate }}"></button>
       </div>
       <div class="modal-body">
         {{ 'ad_categ_deletesure' | translate }}
@@ -56,91 +85,125 @@
   </div>
 </div>
 
-{% macro renderCategories(categories, categoryInfo, depth = 1) %}
+{% macro renderCategories(categories, categoryInfo, categoryTranslations, allLanguages,
+                          permissionAddCategory, permissionDeleteCategory, permissionAddFaq, depth = 1) %}
   {% for key, children in categories %}
-    <div class="list-group-item nested-{{ depth }}" id="pmf-category-{{ categoryInfo[key]['id'] }}"
-         data-pmf-catid="{{ categoryInfo[key]['id'] }}">
+    {% set info = categoryInfo[key] %}
+    <div class="list-group-item nested-{{ depth }}" id="pmf-category-{{ info['id'] }}"
+         data-pmf-catid="{{ info['id'] }}"
+         data-pmf-category-name="{{ info['name'] | lower }}">
       <div class="border-left-0 border-right-0 d-flex justify-content-between align-items-center">
-        {% if categoryInfo[key]['name'] != '' %}
-          <h6 class="m-2">
-            {{ categoryInfo[key]['name'] | raw }}
+        <h6 class="m-2 d-flex align-items-center gap-1">
+          {% if children is not empty %}
+            <button type="button" class="btn btn-sm btn-link p-0 text-body pmf-category-toggle"
+                    data-pmf-collapse-id="{{ info['id'] }}"
+                    aria-expanded="true" aria-label="{{ 'ad_category_collapse_all' | translate }}">
+              <i aria-hidden="true" class="bi bi-chevron-down"></i>
+            </button>
+          {% endif %}
 
-            {% if categoryInfo[key]['show_home'] == 1 %}
+          {% if info['name'] != '' %}
+            {{ info['name'] | raw }}
+
+            {% if info['show_home'] == 1 %}
               <span class="badge bg-warning ms-1">
                 <i class="bi bi-star" aria-hidden="true"></i>
               </span>
-
             {% endif %}
 
-            {% if categoryInfo[key]['image'] is not empty %}
+            {% if info['image'] is not empty %}
               <span class="badge bg-warning ms-1">
                 <i class="bi bi-image" aria-hidden="true"></i>
               </span>
             {% endif %}
 
-          </h6>
+            {% if info['active'] is defined and info['active'] != 1 %}
+              <span class="badge text-bg-secondary ms-1">{{ 'ad_category_inactive' | translate }}</span>
+            {% endif %}
+
+            {% set translated = categoryTranslations[info['id']] | default([]) %}
+            {% set popoverContent %}
+              <ul class="list-unstyled mb-0">
+                {% for code, langName in allLanguages %}
+                  <li>
+                    {% if code in translated %}
+                      <i class="bi bi-check-circle text-success" aria-hidden="true"></i> {{ langName }}
+                    {% else %}
+                      <a href="./category/translate/{{ info['id'] }}?translateTo={{ code }}">
+                        <i class="bi bi-globe" aria-hidden="true"></i> {{ langName }}</a>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endset %}
+            <button type="button" class="badge text-bg-info border-0 ms-1 pmf-category-translations"
+                    data-bs-toggle="popover" data-bs-html="true"
+                    data-bs-title="{{ 'ad_category_translations' | translate }}"
+                    data-bs-content="{{ popoverContent }}">
+              {{ translated | length }}/{{ allLanguages | length }}
+            </button>
           {% else %}
             <a href="./category">{{ 'msgNewTranslationHeader' | translate }}</a>
           {% endif %}
+        </h6>
 
         <div class="pmf-category-actions">
-          <!-- Add FAQ to the category -->
-          {% if categoryInfo[key]['id'] is not empty %}
+          {% if info['id'] is not empty and permissionAddFaq == true %}
           <a class="btn btn-info mb-1 mt-1"
-             href="./faq/add/{{ categoryInfo[key]['id'] }}/{{ categoryInfo[key]['lang'] }}"
+             href="./faq/add/{{ info['id'] }}/{{ info['lang'] }}"
              title="{{ 'ad_quick_entry'|translate }}" data-bs-toggle="tooltip" data-bs-placement="top">
             <i aria-hidden="true" class="bi bi-indent"></i>
           </a>
           {% endif %}
 
-          <!-- Add subcategory (if current language) -->
-          {% if categoryInfo[key]['id'] is not empty %}
+          {% if info['id'] is not empty and permissionAddCategory == true %}
           <a class="btn btn-info"
-             href="./category/add/{{ categoryInfo[key]['id'] }}/{{ categoryInfo[key]['lang'] }}"
+             href="./category/add/{{ info['id'] }}/{{ info['lang'] }}"
              title="{{ 'ad_quick_sub_category' | translate }}" data-bs-toggle="tooltip" data-bs-placement="top">
             <i aria-hidden="true" class="bi bi-plus-square"></i>
           </a>
           {% endif %}
 
-          <!-- Edit category (if current language) -->
-          {% if categoryInfo[key]['id'] is not empty %}
+          {% if info['id'] is not empty %}
           <a class="btn btn-info"
-             href="./category/edit/{{ categoryInfo[key]['id'] }}" title="{{ 'ad_kateg_rename'|translate }}"
+             href="./category/edit/{{ info['id'] }}" title="{{ 'ad_kateg_rename'|translate }}"
              data-bs-toggle="tooltip" data-bs-placement="top">
             <i aria-hidden="true" class="bi bi-pencil"></i>
           </a>
           {% endif %}
 
-          <!-- Translate category -->
-          {% if categoryInfo[key]['id'] is not empty %}
+          {% if info['id'] is not empty %}
           <a class="btn btn-info"
-             href="./category/translate/{{ categoryInfo[key]['id'] }}"
+             href="./category/translate/{{ info['id'] }}"
              title="{{ 'ad_categ_translate'|translate }}" data-bs-toggle="tooltip" data-bs-placement="top">
             <i aria-hidden="true" class="bi bi-globe"></i>
           </a>
           {% endif %}
 
-          <!-- Delete category (if no subcategories) -->
-          {% if children is empty %}
-            <button type="button" class="btn btn-danger" name="pmf-category-delete-button"
-                    data-pmf-category-id="{{ categoryInfo[key]['id'] }}"
-                    data-pmf-language="{{ categoryInfo[key]['lang'] }}"
-                    title="{{ 'msgDelete'|translate }}" data-bs-toggle="tooltip" data-bs-placement="top"
-            >
-              <i aria-hidden="true" class="bi bi-trash"
-                 data-pmf-category-id="{{ categoryInfo[key]['id'] }}"
-                 data-pmf-language="{{ categoryInfo[key]['lang'] }}"></i>
-            </button>
-          {% else %}
-            <div class="btn btn-inverse border" style="cursor: not-allowed;">
-              <i aria-hidden="true" class="bi bi-trash"></i>
-            </div>
+          {% if permissionDeleteCategory == true %}
+            {% if children is empty %}
+              <button type="button" class="btn btn-danger" name="pmf-category-delete-button"
+                      data-pmf-category-id="{{ info['id'] }}"
+                      data-pmf-language="{{ info['lang'] }}"
+                      title="{{ 'msgDelete'|translate }}" data-bs-toggle="tooltip" data-bs-placement="top">
+                <i aria-hidden="true" class="bi bi-trash"
+                   data-pmf-category-id="{{ info['id'] }}"
+                   data-pmf-language="{{ info['lang'] }}"></i>
+              </button>
+            {% else %}
+              <button type="button" class="btn btn-outline-danger" disabled
+                      title="{{ 'ad_category_delete_has_children' | translate }}"
+                      aria-label="{{ 'ad_category_delete_has_children' | translate }}">
+                <i aria-hidden="true" class="bi bi-trash"></i>
+              </button>
+            {% endif %}
           {% endif %}
         </div>
       </div>
-      <div class="list-group nested-sortable">
+      <div class="list-group nested-sortable" data-pmf-children-of="{{ info['id'] }}">
         {% if children is not empty %}
-          {{ _self.renderCategories(children, categoryInfo, depth + 1) }}
+          {{ _self.renderCategories(children, categoryInfo, categoryTranslations, allLanguages,
+                                    permissionAddCategory, permissionDeleteCategory, permissionAddFaq, depth + 1) }}
         {% endif %}
       </div>
     </div>

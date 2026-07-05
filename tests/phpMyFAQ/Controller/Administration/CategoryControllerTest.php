@@ -243,6 +243,37 @@ final class CategoryControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testIndexRendersOverviewWithPermissionFlagsAndTranslationData(): void
+    {
+        $this->insertTestCategory();
+
+        $order = $this->createMock(Order::class);
+        $order->method('getAllCategories')->willReturn([]);
+        $order->expects($this->once())->method('getCategoryTree')->with([])->willReturn([]);
+
+        $controller = new CategoryController(
+            $this->createStub(AdminCategory::class),
+            $order,
+            $this->createStub(CategoryPermission::class),
+            $this->createStub(Image::class),
+            $this->createStub(Seo::class),
+            $this->createStub(UserHelper::class),
+        );
+        $request = Request::create('/admin/category');
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->index($request);
+
+        self::assertSame(200, $response->getStatusCode());
+        $content = (string) $response->getContent();
+        self::assertStringContainsString('id="pmf-category-filter"', $content);
+        self::assertStringContainsString('id="pmf-category-expand-all"', $content);
+        self::assertStringContainsString('id="pmf-category-collapse-all"', $content);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testHierarchyRendersInCurrentAnonymousAdminContext(): void
     {
         $request = new Request();

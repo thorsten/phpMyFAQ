@@ -67,9 +67,9 @@ final class CategoryController extends AbstractAdministrationController
     #[Route(path: '/category', name: 'admin.category', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        $this->userHasPermission(PermissionType::CATEGORY_ADD);
-        $this->userHasPermission(PermissionType::CATEGORY_DELETE);
         $this->userHasPermission(PermissionType::CATEGORY_EDIT);
+
+        $currentUserId = $this->currentUser->getUserId();
 
         $category = new Category($this->configuration, [], withPermission: false);
         $category->buildCategoryTree();
@@ -84,12 +84,36 @@ final class CategoryController extends AbstractAdministrationController
             $categoryTree = $category->buildAdminCategoryTree($categoryInfo);
         }
 
+        // Per-category translation state for the badge + popover (same source as hierarchy())
+        $categoryLanguageService = new CategoryLanguageService();
+        $allLanguages = $categoryLanguageService->getLanguagesInUse($this->configuration);
+        $categoryTranslations = [];
+        foreach (array_keys($categoryInfo) as $categoryId) {
+            $categoryTranslations[$categoryId] = array_keys(
+                $categoryLanguageService->getExistingTranslations($this->configuration, (int) $categoryId),
+            );
+        }
+
         return $this->render(file: '@admin/content/category.overview.twig', context: [
             ...$this->getHeader($request),
             ...$this->getFooter(),
             'csrfTokenInput' => Token::getInstance($this->session)->getTokenInput(page: 'category'),
             'categoryTree' => $categoryTree,
             'categoryInfo' => $categoryInfo,
+            'categoryTranslations' => $categoryTranslations,
+            'allLanguages' => $allLanguages,
+            'permissionAddCategory' => $this->currentUser->perm->hasPermission(
+                $currentUserId,
+                PermissionType::CATEGORY_ADD->value,
+            ),
+            'permissionDeleteCategory' => $this->currentUser->perm->hasPermission(
+                $currentUserId,
+                PermissionType::CATEGORY_DELETE->value,
+            ),
+            'permissionAddFaq' => $this->currentUser->perm->hasPermission(
+                $currentUserId,
+                PermissionType::FAQ_ADD->value,
+            ),
         ]);
     }
 
