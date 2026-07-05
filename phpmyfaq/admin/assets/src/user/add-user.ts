@@ -43,8 +43,8 @@ export const wireAddUserModal = (onUserAdded: (userName: string) => Promise<void
       realName: (document.getElementById('add_user_realname') as HTMLInputElement).value,
       email: (document.getElementById('add_user_email') as HTMLInputElement).value,
       automaticPassword: (document.getElementById('add_user_automatic_password') as HTMLInputElement).checked,
-      password: (document.getElementById('add_user_password') as HTMLInputElement).value,
-      passwordConfirm: (document.getElementById('add_user_password_confirm') as HTMLInputElement).value,
+      password: (document.getElementById('add_user_password') as HTMLInputElement | null)?.value ?? '',
+      passwordConfirm: (document.getElementById('add_user_password_confirm') as HTMLInputElement | null)?.value ?? '',
       isSuperAdmin: (document.getElementById('add_user_is_superadmin') as HTMLInputElement | null)?.checked ?? false,
     };
 

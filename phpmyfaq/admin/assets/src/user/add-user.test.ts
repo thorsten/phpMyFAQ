@@ -100,6 +100,17 @@ describe('wireAddUserModal', () => {
     expect(pushErrorNotification).toHaveBeenCalledWith('An error occurred.');
   });
 
+  it('should show the server error message when the API returns an error field', async () => {
+    setupDom();
+    (addUser as Mock).mockResolvedValue({ error: 'Username already taken' });
+
+    wireAddUserModal(vi.fn());
+    (document.getElementById('pmf-add-user-action') as HTMLButtonElement).click();
+    await flushPromises();
+
+    expect(pushErrorNotification).toHaveBeenCalledWith('Username already taken');
+  });
+
   it('should toggle the password inputs with the automatic-password checkbox', () => {
     setupDom();
 
