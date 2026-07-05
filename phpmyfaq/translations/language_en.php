@@ -1827,5 +1827,6 @@ $PMF_LANG['ad_user_filter'] = 'Filter users…';
 $PMF_LANG['ad_user_select_user'] = 'Select a user from the list to view and edit the profile.';
 $PMF_LANG['ad_user_permission_filter'] = 'Filter permissions…';
 $PMF_LANG['ad_user_security'] = 'Security';
+$PMF_LANG['ad_user_own_password'] = 'Change your own password';
 
 return $PMF_LANG;

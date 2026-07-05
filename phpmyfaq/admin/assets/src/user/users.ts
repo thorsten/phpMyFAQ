@@ -236,6 +236,13 @@ const fillProfile = (userData: UserData): void => {
   // Protected accounts (e.g. the main admin) cannot be deleted.
   const deleteButton = document.getElementById('pmf-delete-user-button') as HTMLButtonElement | null;
   deleteButton?.classList.toggle('d-none', userData.status === 'protected');
+
+  // Admins change their own password through the self-service form (which
+  // verifies the current password) instead of the overwrite modal.
+  const detail = document.getElementById('pmf-user-detail') as HTMLElement;
+  const isOwnAccount = String(userData.userId) === (detail.dataset.currentUserId || '');
+  document.getElementById('pmf-password-overwrite-row')?.classList.toggle('d-none', isOwnAccount);
+  document.getElementById('pmf-password-self-row')?.classList.toggle('d-none', !isOwnAccount);
 };
 
 const loadUserRights = async (userId: string): Promise<void> => {

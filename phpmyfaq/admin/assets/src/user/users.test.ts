@@ -46,7 +46,10 @@ const setupFullDom = (userId = ''): void => {
     <div id="pmf-user-empty-state"></div>
     <div id="pmf-user-detail" class="d-none"
          data-csrf-update="csrf-update" data-csrf-rights="csrf-rights"
-         data-csrf-delete="csrf-delete" data-msg-error="An error occurred.">
+         data-csrf-delete="csrf-delete" data-msg-error="An error occurred."
+         data-current-user-id="42">
+      <div id="pmf-password-overwrite-row"></div>
+      <div id="pmf-password-self-row" class="d-none"></div>
       <span id="pmf-selected-user-name"></span>
       <small id="pmf-selected-user-login"></small>
       <button id="pmf-delete-user-button" type="button"></button>
@@ -463,6 +466,29 @@ describe('handleUsers', () => {
     expect(overwritePassword).toHaveBeenCalledWith('csrf-password', '10', 'secret-password', 'secret-password');
     expect(pushNotification).toHaveBeenCalledWith('password saved');
     expect(modalHide).toHaveBeenCalled();
+  });
+
+  it('should show the overwrite action when selecting another user', async () => {
+    setupFullDom();
+    mockDefaultApis();
+
+    await handleUsers();
+    await selectFirstUser();
+
+    expect(document.getElementById('pmf-password-overwrite-row')?.classList.contains('d-none')).toBe(false);
+    expect(document.getElementById('pmf-password-self-row')?.classList.contains('d-none')).toBe(true);
+  });
+
+  it('should point admins to the self-service password form for their own account', async () => {
+    setupFullDom();
+    mockDefaultApis();
+    (fetchUserData as Mock).mockResolvedValue({ ...aliceData, userId: '42' });
+
+    await handleUsers();
+    await selectFirstUser();
+
+    expect(document.getElementById('pmf-password-overwrite-row')?.classList.contains('d-none')).toBe(true);
+    expect(document.getElementById('pmf-password-self-row')?.classList.contains('d-none')).toBe(false);
   });
 
   it('should fall back to server search when the new user is not in the initial list', async () => {

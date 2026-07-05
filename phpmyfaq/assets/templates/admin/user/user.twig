@@ -53,7 +53,8 @@
            data-csrf-update="{{ csrfToken_updateUserData }}"
            data-csrf-rights="{{ csrfToken_updateUserRights }}"
            data-csrf-delete="{{ csrfToken_deleteUser }}"
-           data-msg-error="{{ 'msgErrorOccurred' | translate }}">
+           data-msg-error="{{ 'msgErrorOccurred' | translate }}"
+           data-current-user-id="{{ currentUserId }}">
         <div class="card-header d-flex justify-content-between align-items-center py-3">
           <h5 class="mb-0">
             <i aria-hidden="true" class="bi bi-person"></i>
@@ -191,12 +192,20 @@
 
             <div class="tab-pane fade" id="pmf-tab-security" role="tabpanel"
                  aria-labelledby="pmf-tab-security-tab">
-              <div class="d-flex justify-content-between align-items-center border rounded p-3">
+              <div id="pmf-password-overwrite-row"
+                   class="d-flex justify-content-between align-items-center border rounded p-3">
                 <div class="fw-semibold">{{ 'ad_menu_passwd' | translate }}</div>
                 <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
                         data-bs-target="#pmf-modal-user-password-overwrite">
                   {{ 'ad_user_overwrite_passwd' | translate }}
                 </button>
+              </div>
+              <div id="pmf-password-self-row"
+                   class="d-flex justify-content-between align-items-center border rounded p-3 d-none">
+                <div class="fw-semibold">{{ 'ad_menu_passwd' | translate }}</div>
+                <a class="btn btn-outline-primary" href="./password/change">
+                  {{ 'ad_user_own_password' | translate }}
+                </a>
               </div>
             </div>
           </div>
