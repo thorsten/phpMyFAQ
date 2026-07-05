@@ -55,6 +55,7 @@ vi.mock('./configuration', () => ({
 vi.mock('./content', () => ({
   handleAttachmentUploads: vi.fn(() => trackCall('handleAttachmentUploads')),
   handleCategories: vi.fn(() => trackCall('handleCategories')),
+  handleCategoryOverview: vi.fn(() => trackCall('handleCategoryOverview')),
   handleDeleteAttachments: vi.fn(() => trackCall('handleDeleteAttachments')),
   handleDeleteComments: vi.fn(() => trackCall('handleDeleteComments')),
   handleFaqForm: vi.fn(() => trackCall('handleFaqForm')),

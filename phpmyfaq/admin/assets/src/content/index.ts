@@ -1,6 +1,7 @@
 export * from './attachment-upload';
 export * from './attachments';
 export * from './category';
+export * from './category-overview';
 export * from './comment';
 export * from './csvimport';
 export * from './editor';

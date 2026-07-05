@@ -51,6 +51,7 @@ import {
 import {
   handleAttachmentUploads,
   handleCategories,
+  handleCategoryOverview,
   handleDeleteAttachments,
   handleDeleteComments,
   handleFaqForm,
@@ -143,6 +144,7 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
 
   // Content → Categories
   handleCategories();
+  handleCategoryOverview();
   handleResetCategoryImage();
   handleCategoryTranslate();
   await handleCategoryDelete();
