@@ -6,6 +6,6 @@ export interface UserData {
   status: string;
   lastModified: string;
   authSource: string;
-  twoFactorEnabled: string;
-  isSuperadmin: string;
+  twoFactorEnabled: string | number | boolean;
+  isSuperadmin: string | number | boolean;
 }

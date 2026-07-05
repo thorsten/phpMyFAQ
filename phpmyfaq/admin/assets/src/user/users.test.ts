@@ -11,6 +11,7 @@ import {
   updateUserRights,
 } from '../api';
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
+import { wireAddUserModal } from './add-user';
 
 vi.mock('../api');
 vi.mock('../../../../assets/src/utils', () => ({
@@ -18,6 +19,7 @@ vi.mock('../../../../assets/src/utils', () => ({
   pushNotification: vi.fn(),
   pushErrorNotification: vi.fn(),
 }));
+vi.mock('./add-user');
 
 const { modalShow, modalHide } = vi.hoisted(() => ({ modalShow: vi.fn(), modalHide: vi.fn() }));
 vi.mock('bootstrap', () => ({
@@ -194,6 +196,9 @@ describe('handleUsers', () => {
     setupFullDom();
     mockDefaultApis();
 
+    // Initial load must run on real timers before switching to fake timers for
+    // the debounce window — mixing them here would make the async initial
+    // refreshUserList hang inside the fake-timer scheduler.
     await handleUsers();
     vi.useFakeTimers();
 
@@ -210,6 +215,36 @@ describe('handleUsers', () => {
     const items = document.querySelectorAll<HTMLElement>('.pmf-user-item');
     expect(items.length).toBe(1);
     expect(items[0].dataset.userId).toBe('10');
+  });
+
+  it('should restore the full list when the filter is cleared after a server-side search', async () => {
+    setupFullDom();
+    mockDefaultApis();
+
+    // Initial load runs on real timers.
+    await handleUsers();
+    vi.useFakeTimers();
+
+    const filter = document.getElementById('pmf-user-filter') as HTMLInputElement;
+
+    // Type a filter term and wait for the debounce — server returns 1 result.
+    filter.value = 'ali';
+    filter.dispatchEvent(new Event('input'));
+    await vi.advanceTimersByTimeAsync(300);
+    vi.useRealTimers();
+    await flushPromises();
+    expect(document.querySelectorAll('.pmf-user-item').length).toBe(1);
+
+    // Clearing the input should trigger fetchAllUsers and restore 2 items.
+    vi.useFakeTimers();
+    filter.value = '';
+    filter.dispatchEvent(new Event('input'));
+    await vi.advanceTimersByTimeAsync(300);
+    vi.useRealTimers();
+    await flushPromises();
+
+    expect(fetchAllUsers).toHaveBeenCalledTimes(2);
+    expect(document.querySelectorAll('.pmf-user-item').length).toBe(2);
   });
 
   it('should load user data and rights and show the detail card on selection', async () => {
@@ -266,6 +301,28 @@ describe('handleUsers', () => {
     await selectFirstUser();
 
     expect((document.getElementById('overwrite_twofactor') as HTMLInputElement).disabled).toBe(false);
+  });
+
+  it('should keep the two-factor checkbox disabled when the API sends a "0" string', async () => {
+    setupFullDom();
+    mockDefaultApis();
+    (fetchUserData as Mock).mockResolvedValue({ ...aliceData, twoFactorEnabled: '0' });
+
+    await handleUsers();
+    await selectFirstUser();
+
+    expect((document.getElementById('overwrite_twofactor') as HTMLInputElement).disabled).toBe(true);
+  });
+
+  it('should leave is_superadmin unchecked when isSuperadmin is the "0" string', async () => {
+    setupFullDom();
+    mockDefaultApis();
+    (fetchUserData as Mock).mockResolvedValue({ ...aliceData, isSuperadmin: '0' });
+
+    await handleUsers();
+    await selectFirstUser();
+
+    expect((document.getElementById('is_superadmin') as HTMLInputElement).checked).toBe(false);
   });
 
   it('should save the profile with a PUT payload and notify on success', async () => {
@@ -401,5 +458,39 @@ describe('handleUsers', () => {
     expect(overwritePassword).toHaveBeenCalledWith('csrf-password', '10', 'secret-password', 'secret-password');
     expect(pushNotification).toHaveBeenCalledWith('password saved');
     expect(modalHide).toHaveBeenCalled();
+  });
+
+  it('should fall back to server search when the new user is not in the initial list', async () => {
+    setupFullDom();
+    mockDefaultApis();
+
+    // 75 users — none is 'jdoe', so the initial refreshUserList won't find them.
+    (fetchAllUsers as Mock).mockResolvedValue(
+      Array.from({ length: 75 }, (_, index) => ({
+        id: index + 1,
+        status: 'active',
+        isSuperAdmin: false,
+        isVisible: 1,
+        displayName: `User ${index + 1}`,
+        userName: `user${index + 1}`,
+        email: `user${index + 1}@example.org`,
+        authSource: 'local',
+      }))
+    );
+    // Server-side search returns the freshly-created account.
+    (fetchUsers as Mock).mockResolvedValue([{ label: 'jdoe', value: 99 }]);
+
+    await handleUsers();
+
+    // Retrieve and invoke the callback registered with wireAddUserModal.
+    const onUserAdded = (wireAddUserModal as Mock).mock.calls[0][0] as (name: string) => Promise<void>;
+    await onUserAdded('jdoe');
+
+    // The item for the new user must exist in the DOM.
+    const newItem = document.querySelector<HTMLElement>('[data-user-id="99"]');
+    expect(newItem).not.toBeNull();
+
+    // fetchUserData must have been called (item was auto-clicked).
+    expect(fetchUserData).toHaveBeenCalledWith('99');
   });
 });

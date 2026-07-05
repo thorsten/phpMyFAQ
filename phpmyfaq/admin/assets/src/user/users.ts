@@ -38,8 +38,15 @@ interface UserListEntry {
 const INITIAL_LIST_SIZE = 50;
 const FILTER_DEBOUNCE_MS = 300;
 
+// DB-backed flags arrive as '0'/'1' strings, 0/1 numbers, or booleans
+// depending on the driver — treat anything but an explicit truthy flag as false.
+const isFlagSet = (value: string | number | boolean): boolean => {
+  return value === true || value === 1 || value === '1';
+};
+
 let selectedUserId = '';
 let selectRequestToken = 0;
+let listRequestToken = 0;
 let filterDebounce: ReturnType<typeof setTimeout> | undefined;
 
 const getGenericErrorMessage = (): string => {
@@ -62,9 +69,14 @@ export const handleUsers = async (): Promise<void> => {
   wirePasswordOverwrite();
   wireAddUserModal(async (userName: string): Promise<void> => {
     await refreshUserList('');
-    const newItem = [...document.querySelectorAll<HTMLButtonElement>('.pmf-user-item')].find(
-      (item: HTMLButtonElement): boolean => item.dataset.login === userName
-    );
+    let newItem = findUserItemByLogin(userName);
+    if (!newItem) {
+      // More users than the initial list shows — locate the new account
+      // via the server-side search and leave that filter visible.
+      (document.getElementById('pmf-user-filter') as HTMLInputElement).value = userName;
+      await refreshUserList(userName);
+      newItem = findUserItemByLogin(userName);
+    }
     newItem?.click();
   });
 
@@ -89,6 +101,14 @@ const toListEntries = (users: UserOverview[]): UserListEntry[] => {
   );
 };
 
+const findUserItemByLogin = (login: string): HTMLButtonElement | undefined => {
+  return [...document.querySelectorAll<HTMLButtonElement>('.pmf-user-item')].find(
+    (item: HTMLButtonElement): boolean => item.dataset.login === login
+  );
+};
+
+// Note: for server-side filtered searches the API sets `label` to the user's LOGIN,
+// so `name === login` here is intentional — there is no separate display name in that response.
 const searchResultsToEntries = (results: UserAutocomplete[]): UserListEntry[] => {
   return results.map(
     (result: UserAutocomplete): UserListEntry => ({
@@ -100,10 +120,14 @@ const searchResultsToEntries = (results: UserAutocomplete[]): UserListEntry[] =>
 };
 
 const refreshUserList = async (filter: string): Promise<void> => {
+  const requestToken = ++listRequestToken;
   const entries =
     filter === ''
       ? toListEntries(await fetchAllUsers()).slice(0, INITIAL_LIST_SIZE)
       : searchResultsToEntries(await fetchUsers(filter));
+  if (requestToken !== listRequestToken) {
+    return;
+  }
   renderUserList(entries);
 };
 
@@ -202,12 +226,12 @@ const fillProfile = (userData: UserData): void => {
   (document.getElementById('display_name') as HTMLInputElement).value = userData.displayName;
   (document.getElementById('email') as HTMLInputElement).value = userData.email;
   (document.getElementById('last_modified') as HTMLInputElement).value = userData.lastModified;
-  (document.getElementById('is_superadmin') as HTMLInputElement).checked = Boolean(userData.isSuperadmin);
+  (document.getElementById('is_superadmin') as HTMLInputElement).checked = isFlagSet(userData.isSuperadmin);
 
   // The reset checkbox is only actionable when the user actually has 2FA enabled.
   const twoFactor = document.getElementById('overwrite_twofactor') as HTMLInputElement;
   twoFactor.checked = false;
-  twoFactor.disabled = !userData.twoFactorEnabled;
+  twoFactor.disabled = !isFlagSet(userData.twoFactorEnabled);
 
   // Protected accounts (e.g. the main admin) cannot be deleted.
   const deleteButton = document.getElementById('pmf-delete-user-button') as HTMLButtonElement | null;
