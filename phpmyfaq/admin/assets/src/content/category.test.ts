@@ -1,15 +1,25 @@
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
-import { handleCategories, handleCategoryDelete, handleResetCategoryImage, handleCategoryTranslate } from './category';
+import {
+  categorySortables,
+  handleCategories,
+  handleCategoryDelete,
+  handleCategoryTranslate,
+  handleResetCategoryImage,
+} from './category';
 import { deleteCategory } from '../api';
 import { pushNotification, pushErrorNotification } from '../../../../assets/src/utils';
 
 vi.mock('sortablejs', () => ({
-  default: vi.fn().mockImplementation(() => ({ option: vi.fn() })),
+  // Regular function so `new Sortable(...)` works — arrow functions are not constructible
+  default: vi.fn().mockImplementation(function () {
+    return { option: vi.fn() };
+  }),
 }));
+const { modalShow, modalHide } = vi.hoisted(() => ({ modalShow: vi.fn(), modalHide: vi.fn() }));
 vi.mock('bootstrap', () => ({
   Modal: class {
-    show = vi.fn();
-    hide = vi.fn();
+    show = modalShow;
+    hide = modalHide;
   },
 }));
 vi.mock('../api');
@@ -38,6 +48,28 @@ describe('Category Functions', () => {
       document.body.innerHTML = '<div></div>';
 
       expect(() => handleCategories()).not.toThrow();
+    });
+
+    it('should populate categorySortables with one entry per .nested-sortable element', () => {
+      document.body.innerHTML = `
+        <div id="pmf-category-tree">
+          <div class="nested-sortable"></div>
+          <div class="nested-sortable"></div>
+        </div>
+      `;
+
+      handleCategories();
+
+      expect(categorySortables).toHaveLength(2);
+    });
+
+    it('should reset categorySortables on each call instead of accumulating', () => {
+      document.body.innerHTML = '<div class="nested-sortable"></div>';
+
+      handleCategories();
+      handleCategories();
+
+      expect(categorySortables).toHaveLength(1);
     });
   });
 
@@ -91,6 +123,7 @@ describe('Category Functions', () => {
       expect(deleteCategory).toHaveBeenCalledWith('5', 'en', 'csrf-token-abc');
       expect(pushNotification).toHaveBeenCalledWith('Category deleted successfully');
       expect(document.getElementById('pmf-category-5')).toBeNull();
+      expect(modalHide).toHaveBeenCalled();
     });
 
     it('should not call deleteCategory when categoryId and language are empty', async () => {
@@ -138,6 +171,7 @@ describe('Category Functions', () => {
 
       expect(pushErrorNotification).toHaveBeenCalledWith('nope');
       expect(document.getElementById('pmf-category-5')).not.toBeNull();
+      expect(modalHide).toHaveBeenCalled();
     });
   });
 
