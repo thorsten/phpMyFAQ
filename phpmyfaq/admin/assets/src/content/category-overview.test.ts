@@ -155,7 +155,7 @@ describe('handleCategoryOverview', () => {
   it('should disable sorting while a filter query is active and re-enable it after', () => {
     setupTree();
     const optionSpy = vi.fn();
-    categorySortables.push({ option: optionSpy } as unknown as Sortable);
+    categorySortables.push({ option: optionSpy, el: document.createElement('div') } as unknown as Sortable);
     handleCategoryOverview();
 
     const filter = document.getElementById('pmf-category-filter') as HTMLInputElement;
@@ -191,5 +191,19 @@ describe('handleCategoryOverview', () => {
     handleCategoryOverview();
 
     expect(JSON.parse(localStorage.getItem('pmf-admin-category-collapsed') || '[]')).toEqual(['1']);
+  });
+
+  it('should disable the sortable of a collapsed container and re-enable it on expand', () => {
+    setupTree();
+    const optionSpy = vi.fn();
+    const hiddenEl = document.querySelector('[data-pmf-children-of="1"]') as HTMLElement;
+    categorySortables.push({ option: optionSpy, el: hiddenEl } as unknown as Sortable);
+    handleCategoryOverview();
+
+    (document.querySelector('.pmf-category-toggle') as HTMLButtonElement).click();
+    expect(optionSpy).toHaveBeenLastCalledWith('disabled', true);
+
+    (document.querySelector('.pmf-category-toggle') as HTMLButtonElement).click();
+    expect(optionSpy).toHaveBeenLastCalledWith('disabled', false);
   });
 });

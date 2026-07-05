@@ -192,11 +192,13 @@
                    data-pmf-language="{{ info['lang'] }}"></i>
               </button>
             {% else %}
-              <button type="button" class="btn btn-outline-danger" disabled
-                      title="{{ 'ad_category_delete_has_children' | translate }}"
-                      aria-label="{{ 'ad_category_delete_has_children' | translate }}">
-                <i aria-hidden="true" class="bi bi-trash"></i>
-              </button>
+              <span data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="{{ 'ad_category_delete_has_children' | translate }}">
+                <button type="button" class="btn btn-outline-danger" disabled
+                        aria-label="{{ 'ad_category_delete_has_children' | translate }}">
+                  <i aria-hidden="true" class="bi bi-trash"></i>
+                </button>
+              </span>
             {% endif %}
           {% endif %}
         </div>

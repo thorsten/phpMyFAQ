@@ -14,9 +14,12 @@
  */
 
 import { Popover } from 'bootstrap';
+import type Sortable from 'sortablejs';
 import { categorySortables } from './category';
 
 const STORAGE_KEY = 'pmf-admin-category-collapsed';
+
+let filterActive = false;
 
 export const handleCategoryOverview = (): void => {
   const tree = document.getElementById('pmf-category-tree');
@@ -25,8 +28,10 @@ export const handleCategoryOverview = (): void => {
     return;
   }
 
+  filterActive = false;
   wirePopovers(tree);
   applyPersistedCollapsedState(tree);
+  refreshSortablesDisabled();
   wireCollapseToggles(tree);
   wireExpandCollapseAll(tree, filter);
   wireFilter(filter, tree);
@@ -63,6 +68,7 @@ const setCollapsed = (tree: HTMLElement, categoryId: string, collapsed: boolean)
     icon?.classList.toggle('bi-chevron-down', !collapsed);
     icon?.classList.toggle('bi-chevron-right', collapsed);
   }
+  refreshSortablesDisabled();
 
   const ids = new Set(readCollapsedIds());
   if (collapsed) {
@@ -119,9 +125,13 @@ const wireExpandCollapseAll = (tree: HTMLElement, filter: HTMLInputElement): voi
   });
 };
 
-const setSortingDisabled = (disabled: boolean): void => {
+// A Sortable must not accept drops while filtering (partial tree) or while its
+// container is hidden by a collapsed ancestor (zero-size drop target).
+const refreshSortablesDisabled = (): void => {
   categorySortables.forEach((sortable): void => {
-    sortable.option('disabled', disabled);
+    const element = (sortable as Sortable & { el?: HTMLElement }).el;
+    const hidden = element ? element.classList.contains('d-none') || element.closest('.d-none') !== null : false;
+    sortable.option('disabled', filterActive || hidden);
   });
 };
 
@@ -129,7 +139,8 @@ const wireFilter = (filter: HTMLInputElement, tree: HTMLElement): void => {
   filter.addEventListener('input', (): void => {
     const query = filter.value.toLowerCase().trim();
     // Reordering a partially hidden tree would corrupt sibling order.
-    setSortingDisabled(query !== '');
+    filterActive = query !== '';
+    refreshSortablesDisabled();
 
     const rows = [...tree.querySelectorAll<HTMLElement>('.list-group-item')];
     const containers = [...tree.querySelectorAll<HTMLElement>('[data-pmf-children-of]')];
@@ -142,6 +153,7 @@ const wireFilter = (filter: HTMLInputElement, tree: HTMLElement): void => {
         container.classList.remove('d-none');
       });
       applyPersistedCollapsedState(tree);
+      refreshSortablesDisabled();
       return;
     }
 
