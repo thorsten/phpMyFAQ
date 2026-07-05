@@ -14,10 +14,10 @@
  */
 
 import { fetchJson } from './fetch-wrapper';
-import { ApiResponse, UserData } from '../interfaces';
+import { AddUserPayload, ApiResponse, UserAutocomplete, UserData, UserEditPayload, UserOverview } from '../interfaces';
 
-export const fetchUsers = async (userName: string): Promise<unknown> => {
-  return await fetchJson(`./api/user/users?filter=${userName}`, {
+export const fetchUsers = async (filter: string): Promise<UserAutocomplete[]> => {
+  return await fetchJson<UserAutocomplete[]>(`./api/user/users?filter=${encodeURIComponent(filter)}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -52,8 +52,8 @@ export const fetchUserRights = async (userId: string): Promise<string[]> => {
   });
 };
 
-export const fetchAllUsers = async (): Promise<unknown> => {
-  return await fetchJson('./api/user/users', {
+export const fetchAllUsers = async (): Promise<UserOverview[]> => {
+  return await fetchJson<UserOverview[]>('./api/user/users', {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -71,7 +71,7 @@ export const overwritePassword = async (
   passwordRepeat: string
 ): Promise<ApiResponse> => {
   return await fetchJson<ApiResponse>('./api/user/overwrite-password', {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
@@ -98,9 +98,52 @@ export const postUserData = async (url: string = '', data: Record<string, unknow
   });
 };
 
+export const updateUserData = async (payload: UserEditPayload): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('./api/user/edit', {
+    method: 'PUT',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify(payload),
+  });
+};
+
+export const updateUserRights = async (
+  userId: string,
+  userRights: string[],
+  csrfToken: string
+): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('./api/user/update-rights', {
+    method: 'PUT',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify({ csrfToken, userId, userRights }),
+  });
+};
+
+export const addUser = async (payload: AddUserPayload): Promise<ApiResponse | string[]> => {
+  return await fetchJson<ApiResponse | string[]>('./api/user/add', {
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify(payload),
+  });
+};
+
 export const activateUser = async (userId: string, csrfToken: string): Promise<ApiResponse> => {
   return await fetchJson<ApiResponse>('./api/user/activate', {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',

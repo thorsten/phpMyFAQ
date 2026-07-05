@@ -14,3 +14,5 @@ export * from './tagResponse';
 export * from './User';
 export * from './userAutocomplete';
 export * from './userData';
+export * from './userOverview';
+export * from './userPayloads';

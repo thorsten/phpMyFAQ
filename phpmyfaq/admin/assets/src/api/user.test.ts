@@ -1,11 +1,14 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import {
+  addUser,
   fetchUsers,
   fetchUserData,
   fetchUserRights,
   fetchAllUsers,
   overwritePassword,
   postUserData,
+  updateUserData,
+  updateUserRights,
   deleteUser,
 } from './user';
 
@@ -37,6 +40,17 @@ describe('User API', () => {
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
       });
+    });
+
+    it('should URL-encode the filter value', async () => {
+      global.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve([]) } as Response));
+
+      await fetchUsers('a&b c');
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        './api/user/users?filter=a%26b%20c',
+        expect.objectContaining({ method: 'GET' })
+      );
     });
 
     it('should throw an error if fetch fails', async () => {
@@ -169,7 +183,7 @@ describe('User API', () => {
 
       expect(result).toEqual(mockResponse);
       expect(global.fetch).toHaveBeenCalledWith('./api/user/overwrite-password', {
-        method: 'POST',
+        method: 'PUT',
         headers: {
           Accept: 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
@@ -231,6 +245,74 @@ describe('User API', () => {
       const data = { name: 'User1' };
 
       await expect(postUserData(url, data)).rejects.toThrow(mockError);
+    });
+  });
+
+  describe('updateUserData', () => {
+    it('should PUT the profile payload to user/edit', async () => {
+      const mockResponse = { success: 'saved' };
+      global.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(mockResponse) } as Response));
+
+      const payload = {
+        csrfToken: 'token',
+        userId: '42',
+        display_name: 'Jane Doe',
+        email: 'jane@example.org',
+        last_modified: '20260705123000',
+        user_status: 'active',
+        is_superadmin: false,
+        overwrite_twofactor: false,
+      };
+      const result = await updateUserData(payload);
+
+      expect(result).toEqual(mockResponse);
+      expect(global.fetch).toHaveBeenCalledWith(
+        './api/user/edit',
+        expect.objectContaining({ method: 'PUT', body: JSON.stringify(payload) })
+      );
+    });
+  });
+
+  describe('updateUserRights', () => {
+    it('should PUT the rights payload to user/update-rights', async () => {
+      const mockResponse = { success: 'saved' };
+      global.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(mockResponse) } as Response));
+
+      const result = await updateUserRights('42', ['1', '3'], 'token');
+
+      expect(result).toEqual(mockResponse);
+      expect(global.fetch).toHaveBeenCalledWith(
+        './api/user/update-rights',
+        expect.objectContaining({
+          method: 'PUT',
+          body: JSON.stringify({ csrfToken: 'token', userId: '42', userRights: ['1', '3'] }),
+        })
+      );
+    });
+  });
+
+  describe('addUser', () => {
+    it('should POST the new user payload to user/add', async () => {
+      const mockResponse = { success: 'added' };
+      global.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(mockResponse) } as Response));
+
+      const payload = {
+        csrf: 'token',
+        userName: 'jdoe',
+        realName: 'Jane Doe',
+        email: 'jane@example.org',
+        automaticPassword: true,
+        password: '',
+        passwordConfirm: '',
+        isSuperAdmin: false,
+      };
+      const result = await addUser(payload);
+
+      expect(result).toEqual(mockResponse);
+      expect(global.fetch).toHaveBeenCalledWith(
+        './api/user/add',
+        expect.objectContaining({ method: 'POST', body: JSON.stringify(payload) })
+      );
     });
   });
 
