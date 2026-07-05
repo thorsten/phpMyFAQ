@@ -150,6 +150,17 @@ describe('handleSessions', () => {
       blob: () => Promise.resolve(fakeBlob),
     });
 
+    // Stub anchor clicks so jsdom does not attempt a real navigation to the blob URL
+    const clickSpy = vi.fn();
+    const createElementOriginal = document.createElement.bind(document);
+    vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
+      const el = createElementOriginal(tag);
+      if (tag === 'a') {
+        el.click = clickSpy;
+      }
+      return el;
+    });
+
     handleSessions();
 
     const exportButton = document.getElementById('exportSessions') as HTMLButtonElement;
@@ -176,6 +187,7 @@ describe('handleSessions', () => {
     });
 
     expect(URL.createObjectURL).toHaveBeenCalledWith(fakeBlob);
+    expect(clickSpy).toHaveBeenCalled();
     expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:http://localhost/fake-url');
   });
 

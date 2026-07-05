@@ -26,6 +26,20 @@ vi.mock('../../../../assets/src/utils', async (importOriginal) => {
 URL.createObjectURL = vi.fn(() => 'blob:http://localhost/fake-url');
 URL.revokeObjectURL = vi.fn();
 
+// Stub anchor clicks so jsdom does not attempt a real navigation to the blob URL
+const stubAnchorClick = (): ReturnType<typeof vi.fn> => {
+  const clickSpy = vi.fn();
+  const createElementOriginal = document.createElement.bind(document);
+  vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
+    const el = createElementOriginal(tag);
+    if (tag === 'a') {
+      el.click = clickSpy;
+    }
+    return el;
+  });
+  return clickSpy;
+};
+
 describe('handleCreateReport', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -37,6 +51,7 @@ describe('handleCreateReport', () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it('should do nothing when button is missing', () => {
@@ -103,6 +118,8 @@ describe('handleCreateReport', () => {
     const fakeBlob = new Blob(['csv,data'], { type: 'text/csv' });
     (createReport as ReturnType<typeof vi.fn>).mockResolvedValue(fakeBlob);
 
+    const clickSpy = stubAnchorClick();
+
     handleCreateReport();
 
     const button = document.getElementById('pmf-admin-create-report') as HTMLButtonElement;
@@ -111,6 +128,7 @@ describe('handleCreateReport', () => {
     await vi.waitFor(() => {
       expect(createReport).toHaveBeenCalledWith({ testField: 'testValue' }, 'csrf-token');
       expect(URL.createObjectURL).toHaveBeenCalledWith(fakeBlob);
+      expect(clickSpy).toHaveBeenCalled();
       expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:http://localhost/fake-url');
       expect(pushErrorNotification).not.toHaveBeenCalled();
     });
@@ -131,6 +149,8 @@ describe('handleCreateReport', () => {
 
     const fakeBlob = new Blob(['csv,data'], { type: 'text/csv' });
     (createReport as ReturnType<typeof vi.fn>).mockResolvedValue(fakeBlob);
+
+    stubAnchorClick();
 
     handleCreateReport();
 
@@ -160,6 +180,8 @@ describe('handleCreateReport', () => {
 
     const fakeBlob = new Blob(['csv,data'], { type: 'text/csv' });
     (createReport as ReturnType<typeof vi.fn>).mockResolvedValue(fakeBlob);
+
+    stubAnchorClick();
 
     handleCreateReport();
 
