@@ -1,9 +1,10 @@
 <!-- Modal to overwrite password -->
-<div class="modal fade" id="pmf-modal-user-password-overwrite">
+<div class="modal fade" id="pmf-modal-user-password-overwrite" tabindex="-1"
+     aria-labelledby="pmf-modal-password-overwrite-label" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4>{{ 'ad_menu_passwd' | translate }}</h4>
+        <h4 id="pmf-modal-password-overwrite-label">{{ 'ad_menu_passwd' | translate }}</h4>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -177,11 +178,12 @@
 
 {% if permissionDeleteUser == true %}
 <!-- Modal to confirm deleting a user -->
-<div class="modal fade" id="pmf-modal-user-confirm-delete">
+<div class="modal fade" id="pmf-modal-user-confirm-delete" tabindex="-1"
+     aria-labelledby="pmf-modal-confirm-delete-label" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4><i class="bi bi-exclamation-triangle"></i> {{ 'msgWarning' | translate }}</h4>
+        <h4 id="pmf-modal-confirm-delete-label"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> {{ 'msgWarning' | translate }}</h4>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">

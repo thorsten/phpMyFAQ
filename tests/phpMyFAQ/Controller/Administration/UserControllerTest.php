@@ -111,6 +111,8 @@ final class UserControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringContainsString('pmf-user-filter', (string) $response->getContent());
         self::assertStringContainsString('pmf-user-detail', (string) $response->getContent());
+        self::assertStringContainsString('id="pmf-user-empty-state"', (string) $response->getContent());
+        self::assertStringContainsString('data-csrf-update=', (string) $response->getContent());
     }
 
     /**
