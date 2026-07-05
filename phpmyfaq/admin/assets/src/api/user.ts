@@ -16,6 +16,9 @@
 import { fetchJson } from './fetch-wrapper';
 import { AddUserPayload, ApiResponse, UserAutocomplete, UserData, UserEditPayload, UserOverview } from '../interfaces';
 
+// Dual-path endpoint: when a non-empty `filter` query param is sent (as here),
+// the server returns autocomplete pairs ({ label, value }); when no filter is
+// sent (see fetchAllUsers), it returns full UserOverview objects instead.
 export const fetchUsers = async (filter: string): Promise<UserAutocomplete[]> => {
   return await fetchJson<UserAutocomplete[]>(`./api/user/users?filter=${encodeURIComponent(filter)}`, {
     method: 'GET',

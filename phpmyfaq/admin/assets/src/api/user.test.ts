@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import {
+  activateUser,
   addUser,
   fetchUsers,
   fetchUserData,
@@ -47,10 +48,15 @@ describe('User API', () => {
 
       await fetchUsers('a&b c');
 
-      expect(global.fetch).toHaveBeenCalledWith(
-        './api/user/users?filter=a%26b%20c',
-        expect.objectContaining({ method: 'GET' })
-      );
+      expect(global.fetch).toHaveBeenCalledWith('./api/user/users?filter=a%26b%20c', {
+        method: 'GET',
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+      });
     });
 
     it('should throw an error if fetch fails', async () => {
@@ -266,10 +272,16 @@ describe('User API', () => {
       const result = await updateUserData(payload);
 
       expect(result).toEqual(mockResponse);
-      expect(global.fetch).toHaveBeenCalledWith(
-        './api/user/edit',
-        expect.objectContaining({ method: 'PUT', body: JSON.stringify(payload) })
-      );
+      expect(global.fetch).toHaveBeenCalledWith('./api/user/edit', {
+        method: 'PUT',
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+        body: JSON.stringify(payload),
+      });
     });
   });
 
@@ -281,13 +293,16 @@ describe('User API', () => {
       const result = await updateUserRights('42', ['1', '3'], 'token');
 
       expect(result).toEqual(mockResponse);
-      expect(global.fetch).toHaveBeenCalledWith(
-        './api/user/update-rights',
-        expect.objectContaining({
-          method: 'PUT',
-          body: JSON.stringify({ csrfToken: 'token', userId: '42', userRights: ['1', '3'] }),
-        })
-      );
+      expect(global.fetch).toHaveBeenCalledWith('./api/user/update-rights', {
+        method: 'PUT',
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+        body: JSON.stringify({ csrfToken: 'token', userId: '42', userRights: ['1', '3'] }),
+      });
     });
   });
 
@@ -309,10 +324,52 @@ describe('User API', () => {
       const result = await addUser(payload);
 
       expect(result).toEqual(mockResponse);
-      expect(global.fetch).toHaveBeenCalledWith(
-        './api/user/add',
-        expect.objectContaining({ method: 'POST', body: JSON.stringify(payload) })
+      expect(global.fetch).toHaveBeenCalledWith('./api/user/add', {
+        method: 'POST',
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+        body: JSON.stringify(payload),
+      });
+    });
+  });
+
+  describe('activateUser', () => {
+    it('should activate user and return JSON response if successful', async () => {
+      const mockResponse = { success: true, message: 'User activated' };
+      global.fetch = vi.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(mockResponse),
+        } as Response)
       );
+
+      const userId = '42';
+      const csrfToken = 'token';
+      const result = await activateUser(userId, csrfToken);
+
+      expect(result).toEqual(mockResponse);
+      expect(global.fetch).toHaveBeenCalledWith('./api/user/activate', {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          csrfToken: csrfToken,
+          userId: userId,
+        }),
+      });
+    });
+
+    it('should throw an error if fetch fails', async () => {
+      const mockError = new Error('Fetch failed');
+      global.fetch = vi.fn(() => Promise.reject(mockError));
+
+      await expect(activateUser('42', 'token')).rejects.toThrow(mockError);
     });
   });
 

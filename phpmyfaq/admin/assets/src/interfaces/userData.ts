@@ -8,5 +8,4 @@ export interface UserData {
   authSource: string;
   twoFactorEnabled: string;
   isSuperadmin: string;
-  json(): Promise<UserData>;
 }
