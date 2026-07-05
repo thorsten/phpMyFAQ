@@ -1,309 +1,405 @@
-/**
- * Test for user management functions
- *
- * This Source Code Form is subject to the terms of the Mozilla Public License,
- * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at https://mozilla.org/MPL/2.0/.
- *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2026 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2010-05-02
- */
+import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
+import { handleUsers } from './users';
+import {
+  deleteUser,
+  fetchAllUsers,
+  fetchUserData,
+  fetchUserRights,
+  fetchUsers,
+  overwritePassword,
+  updateUserData,
+  updateUserRights,
+} from '../api';
+import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 
-import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
-import { JSDOM } from 'jsdom';
-
-// Setup DOM environment
-const dom = new JSDOM('<!DOCTYPE html><html lang="en"><body></body></html>', {
-  url: 'http://localhost',
-  pretendToBeVisual: true,
-  resources: 'usable',
-});
-
-// Setup global DOM environment for tests
-Object.defineProperty(globalThis, 'document', {
-  value: dom.window.document,
-  writable: true,
-});
-
-Object.defineProperty(globalThis, 'window', {
-  value: dom.window,
-  writable: true,
-});
-
-Object.defineProperty(globalThis, 'navigator', {
-  value: dom.window.navigator,
-  writable: true,
-});
-
-// Mock the required modules
-vi.mock('bootstrap', () => ({
-  Modal: vi.fn(() => ({
-    show: vi.fn(),
-    hide: vi.fn(),
-  })),
-}));
-
-vi.mock('../api', () => ({
-  fetchAllUsers: vi.fn(),
-  fetchUserData: vi.fn(),
-  fetchUserRights: vi.fn(),
-  deleteUser: vi.fn(),
-  postUserData: vi.fn(),
-  overwritePassword: vi.fn(),
-}));
-
-vi.mock('../../../../assets/src/utils', async (importOriginal) => {
-  const actual = (await importOriginal()) as Record<string, unknown>;
-  return {
-    ...actual,
-    addElement: vi.fn(),
-    capitalize: vi.fn((str: string) => str.charAt(0).toUpperCase() + str.slice(1)),
-    pushErrorNotification: vi.fn(),
-    pushNotification: vi.fn(),
-  };
-});
-
-vi.mock('../utils', () => ({
-  pushErrorNotification: vi.fn(),
+vi.mock('../api');
+vi.mock('../../../../assets/src/utils', () => ({
+  capitalize: (value: string): string => value.charAt(0).toUpperCase() + value.slice(1),
   pushNotification: vi.fn(),
+  pushErrorNotification: vi.fn(),
 }));
 
-describe('User Management Functions', () => {
-  beforeEach(() => {
-    // Setup DOM elements that are expected by the functions
-    document.body.innerHTML = `
-      <input id="pmf-user-password-overwrite-action" />
-      <div id="pmf-modal-user-password-overwrite"></div>
-      <input id="modal_csrf" value="test-csrf" />
-      <input id="modal_user_id" value="123" />
-      <input id="npass" value="newpass" />
-      <input id="bpass" value="newpass" />
-    `;
-  });
+const { modalShow, modalHide } = vi.hoisted(() => ({ modalShow: vi.fn(), modalHide: vi.fn() }));
+vi.mock('bootstrap', () => ({
+  Modal: class {
+    show = modalShow;
+    hide = modalHide;
+    static getInstance = (): { hide: () => void } => ({ hide: modalHide });
+    static getOrCreateInstance = (): { show: () => void; hide: () => void } => ({
+      show: modalShow,
+      hide: modalHide,
+    });
+  },
+}));
 
-  afterEach(() => {
-    vi.clearAllMocks();
-    document.body.innerHTML = '';
-  });
+const flushPromises = async (): Promise<void> => {
+  await new Promise((resolve) => setTimeout(resolve, 10));
+};
 
-  test('overwritePassword function should be available for import', async () => {
-    // Import the overwritePassword function from the API
-    const { overwritePassword } = await import('../api');
-
-    // Verify the function is available and can be called
-    expect(overwritePassword).toBeDefined();
-    expect(typeof overwritePassword).toBe('function');
-  });
-
-  test('users module should be able to import overwritePassword without errors', async () => {
-    // This test verifies that the import statement works without errors
-    expect(async () => {
-      await import('./users');
-    }).not.toThrow();
-  });
-});
-
-describe('updateUser', () => {
-  let updateUser: (userId: string) => Promise<void>;
-  let fetchUserData: ReturnType<typeof vi.fn>;
-  let fetchUserRights: ReturnType<typeof vi.fn>;
-
-  beforeEach(async () => {
-    const usersModule = await import('./users');
-    updateUser = usersModule.updateUser;
-    const apiModule = await import('../api');
-    fetchUserData = apiModule.fetchUserData as ReturnType<typeof vi.fn>;
-    fetchUserRights = apiModule.fetchUserRights as ReturnType<typeof vi.fn>;
-
-    document.body.innerHTML = `
-      <input id="current_user_id" />
-      <input id="pmf-user-list-autocomplete" />
-      <input id="last_modified" />
-      <input id="update_user_id" />
-      <input id="modal_user_id" />
-      <input id="auth_source" />
-      <input id="user_status" />
-      <input id="display_name" />
-      <input id="email" />
-      <input id="overwrite_twofactor" />
+const setupFullDom = (userId = ''): void => {
+  document.body.innerHTML = `
+    <input type="hidden" id="current_user_id" value="${userId}">
+    <input id="pmf-user-filter" type="search" />
+    <div id="pmf-user-list" data-label-blocked="blocked"></div>
+    <div id="pmf-user-empty-state"></div>
+    <div id="pmf-user-detail" class="d-none"
+         data-csrf-update="csrf-update" data-csrf-rights="csrf-rights"
+         data-csrf-delete="csrf-delete" data-msg-error="An error occurred.">
+      <span id="pmf-selected-user-name"></span>
+      <small id="pmf-selected-user-login"></small>
+      <button id="pmf-delete-user-button" type="button"></button>
+      <input type="hidden" id="last_modified" value="" />
+      <input id="auth_source" type="text" />
+      <select id="user_status">
+        <option value="active">active</option>
+        <option value="blocked">blocked</option>
+        <option value="protected">protected</option>
+      </select>
+      <input id="display_name" type="text" />
+      <input id="email" type="email" />
       <input id="is_superadmin" type="checkbox" />
-      <input id="checkAll" />
-      <input id="uncheckAll" />
-      <input id="rights_user_id" />
-      <button id="pmf-delete-user" class="disabled"></button>
-      <button id="pmf-user-save" class="disabled"></button>
-      <button id="pmf-user-rights-save"></button>
-      <input id="user_right_right1" class="permission" type="checkbox" />
-      <input id="user_right_right2" class="permission" type="checkbox" />
-    `;
+      <input id="overwrite_twofactor" type="checkbox" disabled />
+      <button id="pmf-user-save" type="button"></button>
+      <input id="pmf-user-permission-filter" type="search" />
+      <button id="pmf-user-check-all" type="button"></button>
+      <button id="pmf-user-uncheck-all" type="button"></button>
+      <div id="pmf-user-permission-list">
+        <div class="form-check">
+          <input id="user_right_1" type="checkbox" value="1" class="form-check-input permission" />
+          <label for="user_right_1">Add FAQ</label>
+        </div>
+        <div class="form-check">
+          <input id="user_right_3" type="checkbox" value="3" class="form-check-input permission" />
+          <label for="user_right_3">Edit FAQ</label>
+        </div>
+      </div>
+      <button id="pmf-user-rights-save" type="button"></button>
+    </div>
+    <div id="pmf-modal-user-confirm-delete">
+      <input type="hidden" id="csrf-token-delete-user" value="csrf-delete" />
+      <input type="hidden" id="pmf-user-id-delete" value="" />
+      <input type="hidden" id="source_page" value="" />
+      <span id="pmf-username-delete"></span>
+      <button id="pmf-delete-user-yes" type="button"></button>
+    </div>
+    <div id="pmf-modal-user-password-overwrite">
+      <input type="hidden" id="modal_csrf" value="csrf-password" />
+      <input id="npass" type="password" value="secret-password" />
+      <input id="bpass" type="password" value="secret-password" />
+      <button id="pmf-user-password-overwrite-action" type="button"></button>
+    </div>
+  `;
+};
 
-    vi.clearAllMocks();
-  });
+const aliceData = {
+  userId: '10',
+  login: 'alice',
+  displayName: 'Alice Doe',
+  email: 'alice@example.org',
+  status: 'active',
+  lastModified: '20260705120000',
+  authSource: 'local',
+  twoFactorEnabled: 0,
+  isSuperadmin: false,
+};
 
-  afterEach(() => {
-    document.body.innerHTML = '';
-  });
-
-  test('should update user data and rights', async () => {
-    const mockUserData = {
-      userId: '123',
-      login: 'testuser',
-      lastModified: '2024-01-01',
-      authSource: 'local',
+const mockDefaultApis = (): void => {
+  (fetchAllUsers as Mock).mockResolvedValue([
+    {
+      id: 10,
       status: 'active',
-      displayName: 'Test User',
-      email: 'test@example.com',
-      twoFactorEnabled: false,
-      isSuperadmin: false,
-    };
-
-    fetchUserData.mockResolvedValue(mockUserData);
-    fetchUserRights.mockResolvedValue(['right1', 'right2']);
-
-    await updateUser('123');
-
-    expect(fetchUserData).toHaveBeenCalledWith('123');
-    expect(fetchUserRights).toHaveBeenCalledWith('123');
-  });
-
-  test('should handle superadmin user correctly', async () => {
-    const mockUserData = {
-      userId: '123',
-      login: 'adminuser',
-      lastModified: '2024-01-01',
+      isSuperAdmin: false,
+      isVisible: 1,
+      displayName: 'Alice Doe',
+      userName: 'alice',
+      email: 'alice@example.org',
       authSource: 'local',
-      status: 'active',
-      displayName: 'Admin User',
-      email: 'admin@example.com',
-      twoFactorEnabled: false,
-      isSuperadmin: true,
-    };
-
-    fetchUserData.mockResolvedValue(mockUserData);
-    fetchUserRights.mockResolvedValue([]);
-
-    await updateUser('123');
-
-    const superAdminCheckbox = document.getElementById('is_superadmin') as HTMLInputElement;
-    expect(superAdminCheckbox.hasAttribute('checked')).toBe(true);
-  });
-
-  test('should handle two-factor enabled user correctly', async () => {
-    const mockUserData = {
-      userId: '123',
-      login: 'testuser',
-      lastModified: '2024-01-01',
+    },
+    {
+      id: 20,
+      status: 'blocked',
+      isSuperAdmin: false,
+      isVisible: 1,
+      displayName: 'Bob Roe',
+      userName: 'bob',
+      email: 'bob@example.org',
       authSource: 'local',
-      status: 'active',
-      displayName: 'Test User',
-      email: 'test@example.com',
-      twoFactorEnabled: true,
-      isSuperadmin: false,
-    };
+    },
+  ]);
+  (fetchUsers as Mock).mockResolvedValue([{ label: 'alice', value: 10 }]);
+  (fetchUserData as Mock).mockResolvedValue(aliceData);
+  (fetchUserRights as Mock).mockResolvedValue(['1']);
+  (updateUserData as Mock).mockResolvedValue({ success: 'saved' });
+  (updateUserRights as Mock).mockResolvedValue({ success: 'saved' });
+  (deleteUser as Mock).mockResolvedValue({ success: 'deleted' });
+  (overwritePassword as Mock).mockResolvedValue({ success: 'password saved' });
+};
 
-    fetchUserData.mockResolvedValue(mockUserData);
-    fetchUserRights.mockResolvedValue([]);
-
-    await updateUser('123');
-
-    const twoFactorCheckbox = document.getElementById('overwrite_twofactor') as HTMLInputElement;
-    expect(twoFactorCheckbox.hasAttribute('checked')).toBe(true);
-  });
-});
+const selectFirstUser = async (): Promise<void> => {
+  (document.querySelector('.pmf-user-item') as HTMLButtonElement).click();
+  await flushPromises();
+};
 
 describe('handleUsers', () => {
-  let handleUsers: () => Promise<void>;
-
-  beforeEach(async () => {
-    const usersModule = await import('./users');
-    handleUsers = usersModule.handleUsers;
-
-    document.body.innerHTML = `
-      <input id="current_user_id" value="" />
-      <input id="checkAll" />
-      <input id="uncheckAll" />
-      <input id="is_superadmin" type="checkbox" />
-      <input id="add_user_automatic_password" type="checkbox" />
-      <div id="add_user_show_password_inputs"></div>
-      <button id="pmf-button-export-users"></button>
-      <button id="pmf-user-save"></button>
-      <button id="pmf-delete-user"></button>
-      <button id="pmf-delete-user-yes"></button>
-      <input id="pmf-csrf-token" value="csrf-token" />
-      <input id="update_user_id" value="123" />
-      <input id="display_name" value="Test User" />
-      <input id="email" value="test@test.com" />
-      <input id="last_modified" value="2024-01-01" />
-      <input id="user_status" value="active" />
-      <input id="overwrite_twofactor" type="checkbox" />
-      <input id="pmf-user-id-delete" />
-      <input id="csrf-token-delete-user" value="csrf-delete" />
-      <input id="source_page" />
-      <div id="pmf-username-delete"></div>
-      <div id="pmf-modal-user-confirm-delete"></div>
-      <button id="pmf-user-rights-save"></button>
-      <input id="rights_user_id" value="123" />
-      <input id="pmf-csrf-token-rights" value="csrf-rights" />
-      <div class="permission" data-value="right1"></div>
-    `;
-
+  beforeEach(() => {
     vi.clearAllMocks();
-  });
-
-  afterEach(() => {
     document.body.innerHTML = '';
+    window.history.pushState({}, '', '/');
   });
 
-  test('should handle check all and uncheck all buttons', async () => {
-    document.body.innerHTML += `
-      <input class="permission" type="checkbox" />
-      <input class="permission" type="checkbox" />
-    `;
+  it('should return early when #pmf-user-list is missing', async () => {
+    document.body.innerHTML = '<div></div>';
 
     await handleUsers();
 
-    const checkAllButton = document.getElementById('checkAll') as HTMLInputElement;
-    const uncheckAllButton = document.getElementById('uncheckAll') as HTMLInputElement;
+    expect(fetchAllUsers).not.toHaveBeenCalled();
+  });
 
-    checkAllButton.click();
-    document.querySelectorAll('.permission').forEach((checkbox) => {
-      expect((checkbox as HTMLInputElement).checked).toBe(true);
+  it('should render the initial user list with display name, login, and blocked badge', async () => {
+    setupFullDom();
+    mockDefaultApis();
+
+    await handleUsers();
+
+    const items = document.querySelectorAll<HTMLElement>('.pmf-user-item');
+    expect(items.length).toBe(2);
+    expect(items[0].dataset.userId).toBe('10');
+    expect(items[0].textContent).toContain('Alice Doe');
+    expect(items[0].textContent).toContain('alice');
+    expect(items[1].querySelector('.badge')?.textContent).toBe('blocked');
+  });
+
+  it('should cap the initial list at 50 users', async () => {
+    setupFullDom();
+    mockDefaultApis();
+    (fetchAllUsers as Mock).mockResolvedValue(
+      Array.from({ length: 75 }, (_, index) => ({
+        id: index + 1,
+        status: 'active',
+        isSuperAdmin: false,
+        isVisible: 1,
+        displayName: `User ${index + 1}`,
+        userName: `user${index + 1}`,
+        email: `user${index + 1}@example.org`,
+        authSource: 'local',
+      }))
+    );
+
+    await handleUsers();
+
+    expect(document.querySelectorAll('.pmf-user-item').length).toBe(50);
+  });
+
+  it('should query the server for matches after the filter debounce', async () => {
+    setupFullDom();
+    mockDefaultApis();
+
+    await handleUsers();
+    vi.useFakeTimers();
+
+    const filter = document.getElementById('pmf-user-filter') as HTMLInputElement;
+    filter.value = 'ali';
+    filter.dispatchEvent(new Event('input'));
+
+    expect(fetchUsers).not.toHaveBeenCalled();
+    await vi.advanceTimersByTimeAsync(300);
+    vi.useRealTimers();
+    await flushPromises();
+
+    expect(fetchUsers).toHaveBeenCalledWith('ali');
+    const items = document.querySelectorAll<HTMLElement>('.pmf-user-item');
+    expect(items.length).toBe(1);
+    expect(items[0].dataset.userId).toBe('10');
+  });
+
+  it('should load user data and rights and show the detail card on selection', async () => {
+    setupFullDom();
+    mockDefaultApis();
+
+    await handleUsers();
+    await selectFirstUser();
+
+    expect(fetchUserData).toHaveBeenCalledWith('10');
+    expect(fetchUserRights).toHaveBeenCalledWith('10');
+    expect((document.getElementById('display_name') as HTMLInputElement).value).toBe('Alice Doe');
+    expect((document.getElementById('email') as HTMLInputElement).value).toBe('alice@example.org');
+    expect((document.getElementById('user_status') as HTMLSelectElement).value).toBe('active');
+    expect((document.getElementById('auth_source') as HTMLInputElement).value).toBe('Local');
+    expect((document.getElementById('last_modified') as HTMLInputElement).value).toBe('20260705120000');
+    expect(document.getElementById('pmf-selected-user-name')?.textContent).toBe('Alice Doe');
+    expect(document.getElementById('pmf-selected-user-login')?.textContent).toBe('alice');
+    expect((document.getElementById('user_right_1') as HTMLInputElement).checked).toBe(true);
+    expect((document.getElementById('user_right_3') as HTMLInputElement).checked).toBe(false);
+    expect(document.getElementById('pmf-user-empty-state')?.classList.contains('d-none')).toBe(true);
+    expect(document.getElementById('pmf-user-detail')?.classList.contains('d-none')).toBe(false);
+    expect((document.querySelector('.pmf-user-item') as HTMLElement).classList.contains('active')).toBe(true);
+  });
+
+  it('should auto-select the deep-linked user from #current_user_id', async () => {
+    setupFullDom('10');
+    mockDefaultApis();
+
+    await handleUsers();
+    await flushPromises();
+
+    expect(fetchUserData).toHaveBeenCalledWith('10');
+    expect(document.getElementById('pmf-user-detail')?.classList.contains('d-none')).toBe(false);
+  });
+
+  it('should hide the delete button for protected users', async () => {
+    setupFullDom();
+    mockDefaultApis();
+    (fetchUserData as Mock).mockResolvedValue({ ...aliceData, status: 'protected' });
+
+    await handleUsers();
+    await selectFirstUser();
+
+    expect(document.getElementById('pmf-delete-user-button')?.classList.contains('d-none')).toBe(true);
+  });
+
+  it('should enable the two-factor reset checkbox only when the user has 2FA', async () => {
+    setupFullDom();
+    mockDefaultApis();
+    (fetchUserData as Mock).mockResolvedValue({ ...aliceData, twoFactorEnabled: 1 });
+
+    await handleUsers();
+    await selectFirstUser();
+
+    expect((document.getElementById('overwrite_twofactor') as HTMLInputElement).disabled).toBe(false);
+  });
+
+  it('should save the profile with a PUT payload and notify on success', async () => {
+    setupFullDom();
+    mockDefaultApis();
+
+    await handleUsers();
+    await selectFirstUser();
+
+    (document.getElementById('display_name') as HTMLInputElement).value = 'Alice Renamed';
+    (document.getElementById('pmf-user-save') as HTMLButtonElement).click();
+    await flushPromises();
+
+    expect(updateUserData).toHaveBeenCalledWith({
+      csrfToken: 'csrf-update',
+      userId: '10',
+      display_name: 'Alice Renamed',
+      email: 'alice@example.org',
+      last_modified: '20260705120000',
+      user_status: 'active',
+      is_superadmin: false,
+      overwrite_twofactor: false,
+    });
+    expect(pushNotification).toHaveBeenCalledWith('saved');
+  });
+
+  it('should push an error notification when the profile save fails', async () => {
+    setupFullDom();
+    mockDefaultApis();
+    (updateUserData as Mock).mockResolvedValue({ error: 'nope' });
+
+    await handleUsers();
+    await selectFirstUser();
+
+    (document.getElementById('pmf-user-save') as HTMLButtonElement).click();
+    await flushPromises();
+
+    expect(pushErrorNotification).toHaveBeenCalledWith('nope');
+  });
+
+  it('should push the generic error message when the profile save rejects', async () => {
+    setupFullDom();
+    mockDefaultApis();
+    (updateUserData as Mock).mockRejectedValue(new Error('network down'));
+
+    await handleUsers();
+    await selectFirstUser();
+
+    (document.getElementById('pmf-user-save') as HTMLButtonElement).click();
+    await flushPromises();
+
+    expect(pushErrorNotification).toHaveBeenCalledWith('An error occurred.');
+  });
+
+  it('should save checked permissions as right values', async () => {
+    setupFullDom();
+    mockDefaultApis();
+
+    await handleUsers();
+    await selectFirstUser();
+
+    (document.getElementById('user_right_3') as HTMLInputElement).checked = true;
+    (document.getElementById('pmf-user-rights-save') as HTMLButtonElement).click();
+    await flushPromises();
+
+    expect(updateUserRights).toHaveBeenCalledWith('10', ['1', '3'], 'csrf-rights');
+    expect(pushNotification).toHaveBeenCalledWith('saved');
+  });
+
+  it('should filter the permission list by label', async () => {
+    setupFullDom();
+    mockDefaultApis();
+
+    await handleUsers();
+
+    const filter = document.getElementById('pmf-user-permission-filter') as HTMLInputElement;
+    filter.value = 'edit';
+    filter.dispatchEvent(new Event('input'));
+
+    const rows = document.querySelectorAll<HTMLElement>('#pmf-user-permission-list .form-check');
+    expect(rows[0].classList.contains('d-none')).toBe(true);
+    expect(rows[1].classList.contains('d-none')).toBe(false);
+  });
+
+  it('should check and uncheck all permissions via the toggle buttons', async () => {
+    setupFullDom();
+    mockDefaultApis();
+
+    await handleUsers();
+
+    (document.getElementById('pmf-user-check-all') as HTMLButtonElement).click();
+    document.querySelectorAll<HTMLInputElement>('#pmf-user-permission-list input.permission').forEach((checkbox) => {
+      expect(checkbox.checked).toBe(true);
     });
 
-    uncheckAllButton.click();
-    document.querySelectorAll('.permission').forEach((checkbox) => {
-      expect((checkbox as HTMLInputElement).checked).toBe(false);
+    (document.getElementById('pmf-user-uncheck-all') as HTMLButtonElement).click();
+    document.querySelectorAll<HTMLInputElement>('#pmf-user-permission-list input.permission').forEach((checkbox) => {
+      expect(checkbox.checked).toBe(false);
     });
   });
 
-  test('should toggle password inputs when automatic password is clicked', async () => {
+  it('should delete the user after confirmation and return to the empty state', async () => {
+    setupFullDom();
+    mockDefaultApis();
+
     await handleUsers();
+    await selectFirstUser();
 
-    const passwordToggle = document.getElementById('add_user_automatic_password') as HTMLInputElement;
-    const passwordInputs = document.getElementById('add_user_show_password_inputs') as HTMLElement;
+    (document.getElementById('pmf-delete-user-button') as HTMLButtonElement).click();
+    expect(document.getElementById('pmf-username-delete')?.textContent).toBe('Alice Doe');
+    expect((document.getElementById('source_page') as HTMLInputElement).value).toBe('users');
+    expect(modalShow).toHaveBeenCalled();
 
-    expect(passwordInputs.classList.contains('d-none')).toBe(false);
+    (document.getElementById('pmf-delete-user-yes') as HTMLButtonElement).click();
+    await flushPromises();
 
-    passwordToggle.click();
-    expect(passwordInputs.classList.contains('d-none')).toBe(true);
-
-    passwordToggle.click();
-    expect(passwordInputs.classList.contains('d-none')).toBe(false);
+    expect(deleteUser).toHaveBeenCalledWith('10', 'csrf-delete');
+    expect(pushNotification).toHaveBeenCalledWith('deleted');
+    expect(document.getElementById('pmf-user-detail')?.classList.contains('d-none')).toBe(true);
+    expect(document.getElementById('pmf-user-empty-state')?.classList.contains('d-none')).toBe(false);
   });
 
-  test('should handle export users button click', async () => {
+  it('should overwrite the password via the modal action', async () => {
+    setupFullDom();
+    mockDefaultApis();
+
     await handleUsers();
+    await selectFirstUser();
 
-    const exportButton = document.getElementById('pmf-button-export-users') as HTMLButtonElement;
+    (document.getElementById('pmf-user-password-overwrite-action') as HTMLButtonElement).click();
+    await flushPromises();
 
-    // Verify the button exists
-    expect(exportButton).toBeTruthy();
-
-    // We cannot test the actual navigation in JSDOM without triggering stderr warnings
-    // The button click would set window.location.href which is not fully supported in JSDOM
+    expect(overwritePassword).toHaveBeenCalledWith('csrf-password', '10', 'secret-password', 'secret-password');
+    expect(pushNotification).toHaveBeenCalledWith('password saved');
+    expect(modalHide).toHaveBeenCalled();
   });
 });

@@ -7,7 +7,6 @@ import {
   fetchUserRights,
   fetchAllUsers,
   overwritePassword,
-  postUserData,
   updateUserData,
   updateUserRights,
   deleteUser,
@@ -213,44 +212,6 @@ describe('User API', () => {
       const passwordRepeat = 'newPassword';
 
       await expect(overwritePassword(csrf, userId, newPassword, passwordRepeat)).rejects.toThrow(mockError);
-    });
-  });
-
-  describe('postUserData', () => {
-    it('should post user data and return JSON response if successful', async () => {
-      const mockResponse = { success: true, message: 'User data posted' };
-      global.fetch = vi.fn(() =>
-        Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve(mockResponse),
-        } as Response)
-      );
-
-      const url = './api/user/data';
-      const data = { name: 'User1' };
-      const result = await postUserData(url, data);
-
-      expect(result).toEqual(mockResponse);
-      expect(global.fetch).toHaveBeenCalledWith(url, {
-        method: 'POST',
-        cache: 'no-cache',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        redirect: 'follow',
-        referrerPolicy: 'no-referrer',
-        body: JSON.stringify(data),
-      });
-    });
-
-    it('should throw an error if fetch fails', async () => {
-      const mockError = new Error('Fetch failed');
-      global.fetch = vi.fn(() => Promise.reject(mockError));
-
-      const url = './api/user/data';
-      const data = { name: 'User1' };
-
-      await expect(postUserData(url, data)).rejects.toThrow(mockError);
     });
   });
 

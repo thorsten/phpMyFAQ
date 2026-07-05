@@ -88,19 +88,6 @@ export const overwritePassword = async (
   });
 };
 
-export const postUserData = async (url: string = '', data: Record<string, unknown> = {}): Promise<unknown> => {
-  return await fetchJson(url, {
-    method: 'POST',
-    cache: 'no-cache',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow',
-    referrerPolicy: 'no-referrer',
-    body: JSON.stringify(data),
-  });
-};
-
 export const updateUserData = async (payload: UserEditPayload): Promise<ApiResponse> => {
   return await fetchJson<ApiResponse>('./api/user/edit', {
     method: 'PUT',

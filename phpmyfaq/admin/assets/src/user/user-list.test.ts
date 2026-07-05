@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
-import { activateUser, deleteUser, overwritePassword, postUserData } from '../api';
+import { activateUser, deleteUser, overwritePassword } from '../api';
 
 global.fetch = vi.fn();
 
@@ -16,17 +16,6 @@ describe('User API', () => {
 
     const response = await overwritePassword('csrfToken', 'userId', 'newPassword', 'passwordRepeat');
     expect(fetch).toHaveBeenCalledWith('./api/user/overwrite-password', expect.any(Object));
-    expect(response).toEqual(mockResponse);
-  });
-
-  it('should post user data', async () => {
-    const mockResponse = { success: true };
-    (fetch as Mock).mockResolvedValue({
-      json: vi.fn().mockResolvedValue(mockResponse),
-    });
-
-    const response = await postUserData('url', { key: 'value' });
-    expect(fetch).toHaveBeenCalledWith('url', expect.any(Object));
     expect(response).toEqual(mockResponse);
   });
 
