@@ -1822,4 +1822,10 @@ $PMF_LANG['ad_group_permission_filter'] = 'Filter permissions…';
 $PMF_LANG['ad_group_restrictions_saved'] = 'Category restrictions saved.';
 $PMF_LANG['ad_group_restrictions_error'] = 'Failed to save category restrictions.';
 
+// added v4.2.0-alpha - 2026-07-05 by Thorsten
+$PMF_LANG['ad_user_filter'] = 'Filter users…';
+$PMF_LANG['ad_user_select_user'] = 'Select a user from the list to view and edit the profile.';
+$PMF_LANG['ad_user_permission_filter'] = 'Filter permissions…';
+$PMF_LANG['ad_user_security'] = 'Security';
+
 return $PMF_LANG;

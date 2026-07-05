@@ -1804,4 +1804,10 @@ $PMF_LANG['msgPasswordLeaveBlank'] = 'Lass die Passwortfelder leer, um dein aktu
 $PMF_LANG['msgShowPassword'] = 'Passwort anzeigen oder verbergen';
 $PMF_LANG['msgPasswordStrength'] = 'Passwortstärke';
 
+// added v4.2.0-alpha - 2026-07-05 by Thorsten
+$PMF_LANG['ad_user_filter'] = 'Benutzer filtern…';
+$PMF_LANG['ad_user_select_user'] = 'Wähle einen Benutzer aus der Liste, um das Profil anzusehen und zu bearbeiten.';
+$PMF_LANG['ad_user_permission_filter'] = 'Berechtigungen filtern…';
+$PMF_LANG['ad_user_security'] = 'Sicherheit';
+
 return $PMF_LANG;
