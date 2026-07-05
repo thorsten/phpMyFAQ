@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import { activateUser, deleteUser, overwritePassword } from '../api';
 
+vi.mock('../api');
+
 global.fetch = vi.fn();
 
 describe('User API', () => {
@@ -10,34 +12,28 @@ describe('User API', () => {
 
   it('should overwrite password', async () => {
     const mockResponse = { success: true };
-    (fetch as Mock).mockResolvedValue({
-      json: vi.fn().mockResolvedValue(mockResponse),
-    });
+    (overwritePassword as Mock).mockResolvedValue(mockResponse);
 
     const response = await overwritePassword('csrfToken', 'userId', 'newPassword', 'passwordRepeat');
-    expect(fetch).toHaveBeenCalledWith('./api/user/overwrite-password', expect.any(Object));
+    expect(overwritePassword).toHaveBeenCalledWith('csrfToken', 'userId', 'newPassword', 'passwordRepeat');
     expect(response).toEqual(mockResponse);
   });
 
   it('should activate user', async () => {
     const mockResponse = { success: true };
-    (fetch as Mock).mockResolvedValue({
-      json: vi.fn().mockResolvedValue(mockResponse),
-    });
+    (activateUser as Mock).mockResolvedValue(mockResponse);
 
     const response = await activateUser('userId', 'csrfToken');
-    expect(fetch).toHaveBeenCalledWith('./api/user/activate', expect.any(Object));
+    expect(activateUser).toHaveBeenCalledWith('userId', 'csrfToken');
     expect(response).toEqual(mockResponse);
   });
 
   it('should delete user', async () => {
     const mockResponse = { success: true };
-    (fetch as Mock).mockResolvedValue({
-      json: vi.fn().mockResolvedValue(mockResponse),
-    });
+    (deleteUser as Mock).mockResolvedValue(mockResponse);
 
     const response = await deleteUser('userId', 'csrfToken');
-    expect(fetch).toHaveBeenCalledWith('./api/user/delete', expect.any(Object));
+    expect(deleteUser).toHaveBeenCalledWith('userId', 'csrfToken');
     expect(response).toEqual(mockResponse);
   });
 });
@@ -71,16 +67,9 @@ vi.mock('../../../../assets/src/utils', async (importOriginal) => {
 });
 
 import { handleUserList } from './user-list';
+import { addUser } from '../api';
 import { addElement, pushNotification, pushErrorNotification } from '../../../../assets/src/utils';
 import { Modal } from 'bootstrap';
-
-const mockFetchResponse = (data: unknown) => {
-  (fetch as Mock).mockResolvedValue({
-    ok: true,
-    status: 200,
-    json: vi.fn().mockResolvedValue(data),
-  });
-};
 
 const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0));
 
@@ -98,7 +87,7 @@ describe('handleUserList', () => {
   });
 
   it('should activate user, update icon, and remove button on success', async () => {
-    mockFetchResponse({ success: 'User activated' });
+    (activateUser as Mock).mockResolvedValue({ success: 'User activated' });
 
     document.body.innerHTML = `
       <button class="btn-activate-user" id="btn_activate_user_id_42" data-csrf-token="csrf123" data-user-id="42">Activate</button>
@@ -113,7 +102,7 @@ describe('handleUserList', () => {
 
     await flushPromises();
 
-    expect(fetch).toHaveBeenCalledWith('./api/user/activate', expect.any(Object));
+    expect(activateUser).toHaveBeenCalledWith('42', 'csrf123');
     const icon = document.querySelector('.icon_user_id_42') as HTMLElement;
     expect(icon.classList.contains('bi-ban')).toBe(false);
     expect(icon.classList.contains('bi-check-circle-o')).toBe(true);
@@ -121,7 +110,7 @@ describe('handleUserList', () => {
   });
 
   it('should show error alert when activateUser returns error', async () => {
-    mockFetchResponse({ error: 'Activation failed' });
+    (activateUser as Mock).mockResolvedValue({ error: 'Activation failed' });
 
     document.body.innerHTML = `
       <button class="btn-activate-user" data-csrf-token="csrf123" data-user-id="42">Activate</button>
@@ -153,7 +142,7 @@ describe('handleUserList', () => {
 
     await flushPromises();
 
-    expect(fetch).not.toHaveBeenCalled();
+    expect(activateUser).not.toHaveBeenCalled();
     expect(console.error).toHaveBeenCalledWith('Missing data-csrf-token or data-user-id attribute');
   });
 
@@ -183,7 +172,7 @@ describe('handleUserList', () => {
   });
 
   it('should delete user, remove row, and show notification on confirm delete', async () => {
-    mockFetchResponse({ success: 'User deleted' });
+    (deleteUser as Mock).mockResolvedValue({ success: 'User deleted' });
 
     document.body.innerHTML = `
       <button class="btn-delete-user" data-username="testuser" data-user-id="42">Delete</button>
@@ -203,13 +192,13 @@ describe('handleUserList', () => {
 
     await flushPromises();
 
-    expect(fetch).toHaveBeenCalledWith('./api/user/delete', expect.any(Object));
+    expect(deleteUser).toHaveBeenCalledWith('42', 'csrf-del');
     expect(pushNotification).toHaveBeenCalledWith('User deleted');
     expect(document.getElementById('row_user_id_42')).toBeNull();
   });
 
   it('should show error notification on delete user error', async () => {
-    mockFetchResponse({ error: 'Delete failed' });
+    (deleteUser as Mock).mockResolvedValue({ error: 'Delete failed' });
 
     document.body.innerHTML = `
       <button class="btn-delete-user" data-username="testuser" data-user-id="42">Delete</button>
@@ -242,5 +231,70 @@ describe('handleUserList', () => {
     deleteBtn.click();
 
     expect(pushErrorNotification).toHaveBeenCalledWith('Fehler: Löschdialog nicht gefunden.');
+  });
+
+  it('should navigate to the CSV export endpoint when the export button is clicked', () => {
+    document.body.innerHTML = `
+      <table id="pmf-admin-user-table"></table>
+      <button id="pmf-button-export-users" type="button"></button>
+    `;
+    // jsdom cannot navigate; swap window.location for a writable stub
+    const originalLocation = window.location;
+    Object.defineProperty(window, 'location', { value: { href: '' }, writable: true });
+
+    handleUserList();
+    (document.getElementById('pmf-button-export-users') as HTMLButtonElement).click();
+
+    expect(window.location.href).toBe('./api/user/users.csv');
+    Object.defineProperty(window, 'location', { value: originalLocation, writable: true });
+  });
+
+  it('should wire the add-user modal on the user-list page', async () => {
+    document.body.innerHTML = `
+      <table id="pmf-admin-user-table"></table>
+      <div id="addUserModal">
+        <form id="pmf-add-user-form" data-msg-error="An error occurred.">
+          <input id="add_user_csrf" value="csrf-add" />
+          <input id="add_user_name" value="jdoe" />
+          <input id="add_user_realname" value="Jane Doe" />
+          <input id="add_user_email" value="jane@example.org" />
+          <input id="add_user_automatic_password" type="checkbox" checked />
+          <div id="add_user_show_password_inputs" class="d-none">
+            <input id="add_user_password" value="" />
+            <input id="add_user_password_confirm" value="" />
+          </div>
+        </form>
+        <button id="pmf-add-user-action" type="button"></button>
+      </div>
+    `;
+    (addUser as Mock).mockResolvedValue({ success: 'added' });
+    // success path calls location.reload(); stub it for jsdom
+    const originalLocation = window.location;
+    Object.defineProperty(window, 'location', {
+      value: { href: '', reload: vi.fn() },
+      writable: true,
+    });
+
+    handleUserList();
+    (document.getElementById('pmf-add-user-action') as HTMLButtonElement).click();
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
+    expect(addUser).toHaveBeenCalled();
+    expect((window.location as unknown as { reload: Mock }).reload).toHaveBeenCalled();
+    Object.defineProperty(window, 'location', { value: originalLocation, writable: true });
+  });
+
+  it('should not wire the add-user modal when the user-list table is absent', () => {
+    document.body.innerHTML = `
+      <div id="addUserModal">
+        <form id="pmf-add-user-form"></form>
+        <button id="pmf-add-user-action" type="button"></button>
+      </div>
+    `;
+
+    handleUserList();
+    (document.getElementById('pmf-add-user-action') as HTMLButtonElement).click();
+
+    expect(addUser).not.toHaveBeenCalled();
   });
 });

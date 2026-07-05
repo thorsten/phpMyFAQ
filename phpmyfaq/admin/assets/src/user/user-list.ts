@@ -16,8 +16,23 @@
 import { addElement, pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 import { activateUser, deleteUser } from '../api';
 import { Modal } from 'bootstrap';
+import { wireAddUserModal } from './add-user';
 
 export const handleUserList = (): void => {
+  // The user-list page hosts the same add-user modal and the CSV export
+  // button; wire both only when this page's table is present.
+  if (document.getElementById('pmf-admin-user-table')) {
+    wireAddUserModal(async (): Promise<void> => {
+      location.reload();
+    });
+
+    const exportButton = document.getElementById('pmf-button-export-users') as HTMLButtonElement | null;
+    exportButton?.addEventListener('click', (event: Event): void => {
+      event.preventDefault();
+      window.location.href = './api/user/users.csv';
+    });
+  }
+
   const activateButtons = document.querySelectorAll('.btn-activate-user');
   const deleteButtons = document.querySelectorAll('.btn-delete-user');
 
