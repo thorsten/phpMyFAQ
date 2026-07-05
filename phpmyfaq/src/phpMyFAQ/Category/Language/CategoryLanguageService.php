@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Category\Language;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Language\LanguageCodes;
 
@@ -66,6 +67,30 @@ final class CategoryLanguageService
 
         ksort($result);
         return $result;
+    }
+
+    /**
+     * Returns the translated language codes for every category in one query.
+     *
+     * @return array<int, string[]> category id => language codes
+     */
+    public function getAllExistingTranslations(Configuration $configuration): array
+    {
+        $query = sprintf('SELECT id, lang FROM %sfaqcategories', Database::getTablePrefix());
+        $result = $configuration->getDb()->query($query);
+
+        $map = [];
+        while (true) {
+            $row = $configuration->getDb()->fetchObject($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
+            $id = (int) $row->id;
+            $map[$id][] = strtolower((string) $row->lang);
+        }
+
+        return $map;
     }
 
     /**

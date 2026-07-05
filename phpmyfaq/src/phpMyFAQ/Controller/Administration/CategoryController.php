@@ -87,11 +87,10 @@ final class CategoryController extends AbstractAdministrationController
         // Per-category translation state for the badge + popover (same source as hierarchy())
         $categoryLanguageService = new CategoryLanguageService();
         $allLanguages = $categoryLanguageService->getLanguagesInUse($this->configuration);
+        $allTranslations = $categoryLanguageService->getAllExistingTranslations($this->configuration);
         $categoryTranslations = [];
         foreach (array_keys($categoryInfo) as $categoryId) {
-            $categoryTranslations[$categoryId] = array_keys(
-                $categoryLanguageService->getExistingTranslations($this->configuration, (int) $categoryId),
-            );
+            $categoryTranslations[$categoryId] = $allTranslations[(int) $categoryId] ?? [];
         }
 
         return $this->render(file: '@admin/content/category.overview.twig', context: [

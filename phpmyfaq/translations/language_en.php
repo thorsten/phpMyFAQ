@@ -1837,5 +1837,6 @@ $PMF_LANG['ad_category_collapse_all'] = 'Collapse all';
 $PMF_LANG['ad_category_translations'] = 'Translations';
 $PMF_LANG['ad_category_delete_has_children'] = 'Cannot delete: this category has subcategories.';
 $PMF_LANG['ad_category_inactive'] = 'inactive';
+$PMF_LANG['ad_category_toggle'] = 'Show or hide subcategories of';
 
 return $PMF_LANG;

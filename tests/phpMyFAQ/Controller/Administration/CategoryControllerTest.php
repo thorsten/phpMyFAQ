@@ -269,6 +269,9 @@ final class CategoryControllerTest extends TestCase
         self::assertStringContainsString('id="pmf-category-filter"', $content);
         self::assertStringContainsString('id="pmf-category-expand-all"', $content);
         self::assertStringContainsString('id="pmf-category-collapse-all"', $content);
+        self::assertStringContainsString('pmf-category-translations', $content);
+        self::assertStringContainsString('data-bs-content=', $content);
+        self::assertStringNotContainsString('data-bs-content="<ul', $content);
     }
 
     /**

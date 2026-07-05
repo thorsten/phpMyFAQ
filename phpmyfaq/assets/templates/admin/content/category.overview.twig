@@ -97,7 +97,8 @@
           {% if children is not empty %}
             <button type="button" class="btn btn-sm btn-link p-0 text-body pmf-category-toggle"
                     data-pmf-collapse-id="{{ info['id'] }}"
-                    aria-expanded="true" aria-label="{{ 'ad_category_collapse_all' | translate }}">
+                    aria-expanded="true"
+                    aria-label="{{ 'ad_category_toggle' | translate }} {{ info['name'] | striptags }}">
               <i aria-hidden="true" class="bi bi-chevron-down"></i>
             </button>
           {% endif %}
@@ -139,7 +140,7 @@
             <button type="button" class="badge text-bg-info border-0 ms-1 pmf-category-translations"
                     data-bs-toggle="popover" data-bs-html="true"
                     data-bs-title="{{ 'ad_category_translations' | translate }}"
-                    data-bs-content="{{ popoverContent }}">
+                    data-bs-content="{{ (popoverContent ~ '') | e('html_attr') }}">
               {{ translated | length }}/{{ allLanguages | length }}
             </button>
           {% else %}

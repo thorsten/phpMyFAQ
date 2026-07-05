@@ -1819,5 +1819,6 @@ $PMF_LANG['ad_category_collapse_all'] = 'Alle einklappen';
 $PMF_LANG['ad_category_translations'] = 'Übersetzungen';
 $PMF_LANG['ad_category_delete_has_children'] = 'Löschen nicht möglich: Diese Kategorie hat Unterkategorien.';
 $PMF_LANG['ad_category_inactive'] = 'inaktiv';
+$PMF_LANG['ad_category_toggle'] = 'Unterkategorien ein-/ausblenden von';
 
 return $PMF_LANG;
