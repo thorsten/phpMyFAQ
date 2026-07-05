@@ -109,8 +109,8 @@ final class UserControllerTest extends TestCase
         $response = $controller->index(new Request());
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertStringContainsString('pmf-user-list-autocomplete', (string) $response->getContent());
-        self::assertStringContainsString('pmf-csrf-token', (string) $response->getContent());
+        self::assertStringContainsString('pmf-user-filter', (string) $response->getContent());
+        self::assertStringContainsString('pmf-user-detail', (string) $response->getContent());
     }
 
     /**

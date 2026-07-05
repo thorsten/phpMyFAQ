@@ -19,7 +19,7 @@ final class UserControllerWebTest extends ControllerWebTestCase
         $response = $this->requestAdmin('GET', '/user');
 
         self::assertResponseIsSuccessful($response);
-        self::assertResponseContains('id="user_select"', $response);
+        self::assertResponseContains('id="pmf-user-list"', $response);
     }
 
     public function testUserListPageRenders(): void
