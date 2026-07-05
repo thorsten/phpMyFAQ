@@ -1829,4 +1829,13 @@ $PMF_LANG['ad_user_permission_filter'] = 'Filter permissions…';
 $PMF_LANG['ad_user_security'] = 'Security';
 $PMF_LANG['ad_user_own_password'] = 'Change your own password';
 
+// added v4.2.0-alpha - 2026-07-05 by Thorsten
+$PMF_LANG['ad_category_filter'] = 'Filter categories…';
+$PMF_LANG['ad_category_empty'] = 'No categories yet. Create your first category to organize your FAQs.';
+$PMF_LANG['ad_category_expand_all'] = 'Expand all';
+$PMF_LANG['ad_category_collapse_all'] = 'Collapse all';
+$PMF_LANG['ad_category_translations'] = 'Translations';
+$PMF_LANG['ad_category_delete_has_children'] = 'Cannot delete: this category has subcategories.';
+$PMF_LANG['ad_category_inactive'] = 'inactive';
+
 return $PMF_LANG;
