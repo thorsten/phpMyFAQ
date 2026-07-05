@@ -242,11 +242,14 @@ describe('handleUserList', () => {
     const originalLocation = window.location;
     Object.defineProperty(window, 'location', { value: { href: '' }, writable: true });
 
-    handleUserList();
-    (document.getElementById('pmf-button-export-users') as HTMLButtonElement).click();
+    try {
+      handleUserList();
+      (document.getElementById('pmf-button-export-users') as HTMLButtonElement).click();
 
-    expect(window.location.href).toBe('./api/user/users.csv');
-    Object.defineProperty(window, 'location', { value: originalLocation, writable: true });
+      expect(window.location.href).toBe('./api/user/users.csv');
+    } finally {
+      Object.defineProperty(window, 'location', { value: originalLocation, writable: true });
+    }
   });
 
   it('should wire the add-user modal on the user-list page', async () => {
@@ -275,13 +278,16 @@ describe('handleUserList', () => {
       writable: true,
     });
 
-    handleUserList();
-    (document.getElementById('pmf-add-user-action') as HTMLButtonElement).click();
-    await new Promise((resolve) => setTimeout(resolve, 10));
+    try {
+      handleUserList();
+      (document.getElementById('pmf-add-user-action') as HTMLButtonElement).click();
+      await new Promise((resolve) => setTimeout(resolve, 10));
 
-    expect(addUser).toHaveBeenCalled();
-    expect((window.location as unknown as { reload: Mock }).reload).toHaveBeenCalled();
-    Object.defineProperty(window, 'location', { value: originalLocation, writable: true });
+      expect(addUser).toHaveBeenCalled();
+      expect((window.location as unknown as { reload: Mock }).reload).toHaveBeenCalled();
+    } finally {
+      Object.defineProperty(window, 'location', { value: originalLocation, writable: true });
+    }
   });
 
   it('should not wire the add-user modal when the user-list table is absent', () => {
