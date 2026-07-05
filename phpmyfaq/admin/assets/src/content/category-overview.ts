@@ -26,9 +26,9 @@ export const handleCategoryOverview = (): void => {
   }
 
   wirePopovers(tree);
-  applyPersistedCollapsedState();
+  applyPersistedCollapsedState(tree);
   wireCollapseToggles(tree);
-  wireExpandCollapseAll(tree);
+  wireExpandCollapseAll(tree, filter);
   wireFilter(filter, tree);
 };
 
@@ -50,9 +50,9 @@ const storeCollapsedIds = (ids: string[]): void => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
 };
 
-const setCollapsed = (categoryId: string, collapsed: boolean): void => {
-  const container = document.querySelector<HTMLElement>(`[data-pmf-children-of="${categoryId}"]`);
-  const toggle = document.querySelector<HTMLElement>(`[data-pmf-collapse-id="${categoryId}"]`);
+const setCollapsed = (tree: HTMLElement, categoryId: string, collapsed: boolean): void => {
+  const container = tree.querySelector<HTMLElement>(`[data-pmf-children-of="${categoryId}"]`);
+  const toggle = tree.querySelector<HTMLElement>(`[data-pmf-collapse-id="${categoryId}"]`);
   if (!container) {
     return;
   }
@@ -73,9 +73,13 @@ const setCollapsed = (categoryId: string, collapsed: boolean): void => {
   storeCollapsedIds([...ids]);
 };
 
-const applyPersistedCollapsedState = (): void => {
-  readCollapsedIds().forEach((categoryId: string): void => {
-    setCollapsed(categoryId, true);
+const applyPersistedCollapsedState = (tree: HTMLElement): void => {
+  const activeIds = readCollapsedIds().filter(
+    (categoryId: string): boolean => tree.querySelector(`[data-pmf-children-of="${categoryId}"]`) !== null
+  );
+  storeCollapsedIds(activeIds);
+  activeIds.forEach((categoryId: string): void => {
+    setCollapsed(tree, categoryId, true);
   });
 };
 
@@ -86,25 +90,31 @@ const wireCollapseToggles = (tree: HTMLElement): void => {
       return;
     }
     const categoryId = toggle.dataset.pmfCollapseId || '';
-    const container = document.querySelector<HTMLElement>(`[data-pmf-children-of="${categoryId}"]`);
-    setCollapsed(categoryId, !container?.classList.contains('d-none'));
+    const container = tree.querySelector<HTMLElement>(`[data-pmf-children-of="${categoryId}"]`);
+    setCollapsed(tree, categoryId, !container?.classList.contains('d-none'));
   });
 };
 
-const wireExpandCollapseAll = (tree: HTMLElement): void => {
+const wireExpandCollapseAll = (tree: HTMLElement, filter: HTMLInputElement): void => {
   const allToggleIds = (): string[] =>
     [...tree.querySelectorAll<HTMLElement>('[data-pmf-collapse-id]')].map(
       (toggle: HTMLElement): string => toggle.dataset.pmfCollapseId || ''
     );
 
   document.getElementById('pmf-category-expand-all')?.addEventListener('click', (): void => {
+    if (filter.value.trim() !== '') {
+      return;
+    }
     allToggleIds().forEach((categoryId: string): void => {
-      setCollapsed(categoryId, false);
+      setCollapsed(tree, categoryId, false);
     });
   });
   document.getElementById('pmf-category-collapse-all')?.addEventListener('click', (): void => {
+    if (filter.value.trim() !== '') {
+      return;
+    }
     allToggleIds().forEach((categoryId: string): void => {
-      setCollapsed(categoryId, true);
+      setCollapsed(tree, categoryId, true);
     });
   });
 };
@@ -131,7 +141,7 @@ const wireFilter = (filter: HTMLInputElement, tree: HTMLElement): void => {
       containers.forEach((container: HTMLElement): void => {
         container.classList.remove('d-none');
       });
-      applyPersistedCollapsedState();
+      applyPersistedCollapsedState(tree);
       return;
     }
 

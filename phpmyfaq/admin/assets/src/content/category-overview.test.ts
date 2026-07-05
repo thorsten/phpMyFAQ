@@ -95,6 +95,10 @@ describe('handleCategoryOverview', () => {
     expect((document.querySelector('[data-pmf-children-of="1"]') as HTMLElement).classList.contains('d-none')).toBe(
       true
     );
+
+    const toggle = document.querySelector('[data-pmf-collapse-id="1"]') as HTMLElement;
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
+    expect(toggle.querySelector('i')?.classList.contains('bi-chevron-right')).toBe(true);
   });
 
   it('should expand and collapse all nodes via the toolbar buttons', () => {
@@ -162,5 +166,30 @@ describe('handleCategoryOverview', () => {
     filter.value = '';
     filter.dispatchEvent(new Event('input'));
     expect(optionSpy).toHaveBeenCalledWith('disabled', false);
+  });
+
+  it('should ignore collapse-all while a filter query is active', () => {
+    setupTree();
+    handleCategoryOverview();
+
+    const filter = document.getElementById('pmf-category-filter') as HTMLInputElement;
+    filter.value = 'printers';
+    filter.dispatchEvent(new Event('input'));
+
+    (document.getElementById('pmf-category-collapse-all') as HTMLButtonElement).click();
+
+    expect((document.querySelector('[data-pmf-children-of="1"]') as HTMLElement).classList.contains('d-none')).toBe(
+      false
+    );
+    expect(JSON.parse(localStorage.getItem('pmf-admin-category-collapsed') || '[]')).toEqual([]);
+  });
+
+  it('should prune persisted ids of categories that no longer exist', () => {
+    localStorage.setItem('pmf-admin-category-collapsed', JSON.stringify(['1', '999']));
+    setupTree();
+
+    handleCategoryOverview();
+
+    expect(JSON.parse(localStorage.getItem('pmf-admin-category-collapsed') || '[]')).toEqual(['1']);
   });
 });
