@@ -1083,6 +1083,114 @@ final class UserControllerTest extends TestCase
         $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
+    /**
+     * editUser must clear the 2FA secret and disable the flag when the TS client
+     * sends a JSON boolean true (not the legacy 'on' string).
+     *
+     * @throws \Exception
+     */
+    public function testEditUserResetsTwoFactorWhenJsonBooleanTrueIsSent(): void
+    {
+        $this->seedCurrentUserSession();
+        $managedUserId = $this->seedManagedUser(
+            login: 'twofactor-user',
+            status: 'active',
+            isSuperAdmin: 0,
+            twoFactorEnabled: 1,
+            lastModified: '20260101010101',
+        );
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-user-data');
+
+        // TS client sends a JSON boolean — not the legacy 'on' string.
+        $request = $this->jsonRequest([
+            'csrfToken' => $token,
+            'userId' => $managedUserId,
+            'display_name' => 'TwoFactor User',
+            'email' => 'twofactor-user@example.com',
+            'last_modified' => '20260101010101',
+            'user_status' => 'active',
+            'is_superadmin' => false,
+            'overwrite_twofactor' => true,
+        ]);
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->editUser($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+
+        // Assert that the secret was cleared and 2FA disabled in the database.
+        $result = $this->dbHandle->query(
+            sprintf(
+                "SELECT secret, twofactor_enabled FROM faquserdata WHERE user_id = %d",
+                $managedUserId,
+            )
+        );
+        self::assertNotFalse($result);
+        $row = $this->dbHandle->fetchObject($result);
+        self::assertNotFalse($row);
+        self::assertSame('', $row->secret);
+        self::assertSame('0', (string) $row->twofactor_enabled);
+    }
+
+    /**
+     * editUser must NOT clear 2FA when the TS client sends a JSON boolean false.
+     *
+     * @throws \Exception
+     */
+    public function testEditUserDoesNotResetTwoFactorWhenJsonBooleanFalseIsSent(): void
+    {
+        $this->seedCurrentUserSession();
+        $managedUserId = $this->seedManagedUser(
+            login: 'twofactor-user-keep',
+            status: 'active',
+            isSuperAdmin: 0,
+            twoFactorEnabled: 1,
+            lastModified: '20260101010101',
+        );
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-user-data');
+
+        $request = $this->jsonRequest([
+            'csrfToken' => $token,
+            'userId' => $managedUserId,
+            'display_name' => 'TwoFactor User Keep',
+            'email' => 'twofactor-user-keep@example.com',
+            'last_modified' => '20260101010101',
+            'user_status' => 'active',
+            'is_superadmin' => false,
+            'overwrite_twofactor' => false,
+        ]);
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->editUser($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+
+        // 2FA secret and flag must be untouched.
+        $result = $this->dbHandle->query(
+            sprintf(
+                "SELECT secret, twofactor_enabled FROM faquserdata WHERE user_id = %d",
+                $managedUserId,
+            )
+        );
+        self::assertNotFalse($result);
+        $row = $this->dbHandle->fetchObject($result);
+        self::assertNotFalse($row);
+        self::assertSame('test-secret', $row->secret);
+        self::assertSame('1', (string) $row->twofactor_enabled);
+    }
+
     public function testUpdateRightsNonSuperAdminCannotGrantRightTheyDoNotHold(): void
     {
         $session = new Session(new MockArraySessionStorage());

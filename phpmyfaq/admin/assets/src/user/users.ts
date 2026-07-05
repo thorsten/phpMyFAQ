@@ -373,6 +373,7 @@ const wireDeleteModal = (): void => {
         detail.classList.add('d-none');
         (document.getElementById('pmf-user-empty-state') as HTMLElement).classList.remove('d-none');
         (document.getElementById('pmf-user-filter') as HTMLInputElement).value = '';
+        window.history.pushState({}, '', './user');
         await refreshUserList('');
       } else {
         pushErrorNotification(response.error ?? getGenericErrorMessage());

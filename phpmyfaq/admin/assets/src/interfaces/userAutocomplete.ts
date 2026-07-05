@@ -1,4 +1,4 @@
 export interface UserAutocomplete {
   label: string;
-  value: string;
+  value: string | number;
 }

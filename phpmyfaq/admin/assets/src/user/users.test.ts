@@ -431,6 +431,10 @@ describe('handleUsers', () => {
     await handleUsers();
     await selectFirstUser();
 
+    // Simulate being on the edit URL before deletion.
+    window.history.pushState({}, '', './user/edit/10');
+    expect(window.location.pathname.endsWith('/user/edit/10')).toBe(true);
+
     (document.getElementById('pmf-delete-user-button') as HTMLButtonElement).click();
     expect(document.getElementById('pmf-username-delete')?.textContent).toBe('Alice Doe');
     expect((document.getElementById('source_page') as HTMLInputElement).value).toBe('users');
@@ -443,6 +447,7 @@ describe('handleUsers', () => {
     expect(pushNotification).toHaveBeenCalledWith('deleted');
     expect(document.getElementById('pmf-user-detail')?.classList.contains('d-none')).toBe(true);
     expect(document.getElementById('pmf-user-empty-state')?.classList.contains('d-none')).toBe(false);
+    expect(window.location.pathname.endsWith('/user')).toBe(true);
   });
 
   it('should overwrite the password via the modal action', async () => {

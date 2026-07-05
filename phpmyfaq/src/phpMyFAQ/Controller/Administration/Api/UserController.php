@@ -462,8 +462,7 @@ final class UserController extends AbstractAdministrationApiController
         $userData['last_modified'] = Filter::filterVar($data->last_modified, FILTER_SANITIZE_SPECIAL_CHARS);
         $userStatus = Filter::filterVar($data->user_status, FILTER_SANITIZE_SPECIAL_CHARS, default: 'active');
         $isSuperAdmin = Filter::filterVar($data->is_superadmin, FILTER_SANITIZE_SPECIAL_CHARS);
-        $deleteTwoFactor = Filter::filterVar($data->overwrite_twofactor, FILTER_SANITIZE_SPECIAL_CHARS);
-        $deleteTwoFactor = $deleteTwoFactor === 'on';
+        $deleteTwoFactor = (bool) Filter::filterVar($data->overwrite_twofactor, FILTER_VALIDATE_BOOLEAN);
 
         $actingIsSuperAdmin = $this->currentUser->isSuperAdmin();
 
@@ -512,8 +511,7 @@ final class UserController extends AbstractAdministrationApiController
             );
         }
 
-        // Set the super-admin flag and log changes
-        $user->setSuperAdmin((bool) $isSuperAdmin);
+        // Log super-admin flag changes
         if (!$wasSuperAdmin && (bool) $isSuperAdmin) {
             $this->adminLog->log($this->currentUser, AdminLogType::USER_SUPERADMIN_GRANTED->value . ':' . $userId);
         }
