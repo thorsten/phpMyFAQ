@@ -50,8 +50,8 @@ devDependencies:
     specifier: 4.12.1
     version: 4.12.1(playwright-core@1.61.1)
   '@commitlint/cli':
-    specifier: 21.1.0
-    version: 21.1.0(@types/node@26.0.1)(typescript@6.0.3)
+    specifier: 21.2.0
+    version: 21.2.0(@types/node@26.0.1)(typescript@6.0.3)
   '@commitlint/config-conventional':
     specifier: 21.1.0
     version: 21.1.0
@@ -364,12 +364,12 @@ packages:
       keyv: 5.6.0
     dev: true
 
-  /@commitlint/cli@21.1.0(@types/node@26.0.1)(typescript@6.0.3):
-    resolution: {integrity: sha512-CVwY6TxGv5naEaWxBdgNHko1xgL95Mb4WcIqp9iik33H0ctVqRv6YtekCntayhEP0T/apuiGvHu5HcCwFuVxEA==}
+  /@commitlint/cli@21.2.0(@types/node@26.0.1)(typescript@6.0.3):
+    resolution: {integrity: sha512-4GLVIhUaT3c3GBlQ0GB80/5H3xXdn/Tgw4lrsuoOQVDu2wl4Xw0GuzSar8xZKSMv4H3xaKaQXmvH91GmdyYBZA==}
     engines: {node: '>=22.12.0'}
     hasBin: true
     dependencies:
-      '@commitlint/config-conventional': 21.1.0
+      '@commitlint/config-conventional': 21.2.0
       '@commitlint/format': 21.2.0
       '@commitlint/lint': 21.2.0
       '@commitlint/load': 21.2.0(@types/node@26.0.1)(typescript@6.0.3)
@@ -390,6 +390,14 @@ packages:
     dependencies:
       '@commitlint/types': 21.2.0
       conventional-changelog-conventionalcommits: 9.3.1
+    dev: true
+
+  /@commitlint/config-conventional@21.2.0:
+    resolution: {integrity: sha512-Qf8WRDVcyVd14if6VTWenebxFbKnVnbzPUJjlzjkyJGeHK2xCGd63Dr1XZzj0plXKQb9P0BfOxoc1HVeCo2BWQ==}
+    engines: {node: '>=22.12.0'}
+    dependencies:
+      '@commitlint/types': 21.2.0
+      conventional-changelog-conventionalcommits: 10.2.1
     dev: true
 
   /@commitlint/config-validator@21.2.0:
@@ -467,8 +475,8 @@ packages:
     engines: {node: '>=22.12.0'}
     dependencies:
       '@commitlint/types': 21.2.0
-      conventional-changelog-angular: 9.2.0
-      conventional-commits-parser: 7.0.0
+      conventional-changelog-angular: 9.2.1
+      conventional-commits-parser: 7.0.1
     dev: true
 
   /@commitlint/read@21.2.0:
@@ -542,8 +550,8 @@ packages:
       semver: 7.8.5
     dev: true
 
-  /@conventional-changelog/template@1.2.0:
-    resolution: {integrity: sha512-12qHxvlKjHmP0PQ+17EREgC7lWyLwbph1RKcZQZ7k7ZWGmrxfxC9gadHGfvzr0g0u8BhiBGg3tks93txodlyRQ==}
+  /@conventional-changelog/template@1.2.1:
+    resolution: {integrity: sha512-TzlTVpKPjaqW6qOYjQcYUDuGsLCNsvFHVBXkYGTAnf5V37jCWrE5haKNXzz0WZUtVHjrpV76L1buANjwXMfT8w==}
     engines: {node: '>=22'}
     dev: true
 
@@ -1942,11 +1950,18 @@ packages:
     resolution: {integrity: sha512-9vAdYbHj6x2fLKC4+oPH0kFzY/orMZyG2Aj+kNylHxKGJ/Ed4dpNyAQYwJOdqO4zdM7XpVHmyejQDcQHrnuXbw==}
     dev: true
 
-  /conventional-changelog-angular@9.2.0:
-    resolution: {integrity: sha512-2EihZvM1KmbBGwuUow8lNXLe+ECRFsyOcV8X0197/WI7Rvvgfi55Oicfw0wxJTXGGIVXSfj+xBoNj+cxLlIiVw==}
+  /conventional-changelog-angular@9.2.1:
+    resolution: {integrity: sha512-oWSL6ZhnXbYraOFTK3PgRAQJ8fADDAEv5K6AdeyQPLvjFmhG8+ejL0jZZp/R7vTmGJaBvZEE+sE7dB4bCv7sAw==}
     engines: {node: '>=22'}
     dependencies:
-      '@conventional-changelog/template': 1.2.0
+      '@conventional-changelog/template': 1.2.1
+    dev: true
+
+  /conventional-changelog-conventionalcommits@10.2.1:
+    resolution: {integrity: sha512-n4Kr1HFMTf3iMbES0TMxKIcYtUUv4rKqyQQp2JwfOEfFCOfGT3Tq4mCyJ8S9/YPyWhydjfKrrvnyl+gCjA+mJQ==}
+    engines: {node: '>=22'}
+    dependencies:
+      '@conventional-changelog/template': 1.2.1
     dev: true
 
   /conventional-changelog-conventionalcommits@9.3.1:
@@ -1958,6 +1973,15 @@ packages:
 
   /conventional-commits-parser@7.0.0:
     resolution: {integrity: sha512-dZe/p+FgGQLNJFqaCgNdl8j6a7gI8xuaN30Wy5g7nvyK3jqOpNUEUZ3pGJ5D68h89uRh038FtkeOk/bnGmYkmg==}
+    engines: {node: '>=22'}
+    hasBin: true
+    dependencies:
+      '@simple-libs/stream-utils': 2.0.0
+      meow: 14.1.0
+    dev: true
+
+  /conventional-commits-parser@7.0.1:
+    resolution: {integrity: sha512-6VtskFpPsNkGVk/TY2RnV/MEdKfvCPBtQZN9x8jh9+k5RWBQ+tiaWn5UFCzTr0Dd88iKx7xghxbjBRp5uIzp3g==}
     engines: {node: '>=22'}
     hasBin: true
     dependencies:
