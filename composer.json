@@ -72,7 +72,7 @@
     "tecnickcom/tcpdf": "~6.11.2",
     "tivie/htaccess-parser": "~0.4.0",
     "twig/intl-extra": "~3.26.0",
-    "twig/twig": "~3.27.0"
+    "twig/twig": "~3.28.0"
   },
   "require-dev": {
     "carthage-software/mago": "~1.42.0",
