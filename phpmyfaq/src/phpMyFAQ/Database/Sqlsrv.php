@@ -46,6 +46,8 @@ class Sqlsrv implements DatabaseDriver
 
     /**
      * Connection options array.
+     *
+     * @var array<string, mixed>
      */
     private array $connectionOptions = [];
 
@@ -73,7 +75,7 @@ class Sqlsrv implements DatabaseDriver
 
         $this->conn = sqlsrv_connect($host . ', ' . $port, $this->connectionOptions);
         if (!$this->conn) {
-            Database::errorPage($this->formatErrors(sqlsrv_errors()));
+            Database::errorPage($this->formatErrors(sqlsrv_errors() ?? []));
             die();
         }
 
@@ -97,6 +99,10 @@ class Sqlsrv implements DatabaseDriver
      */
     public function fetchArray(mixed $result): ?array
     {
+        if (!is_resource($result)) {
+            return [];
+        }
+
         $fetchedData = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
 
         return is_array($fetchedData) ? $fetchedData : [];
@@ -158,6 +164,10 @@ class Sqlsrv implements DatabaseDriver
      */
     public function fetchObject(mixed $result): mixed
     {
+        if (!is_resource($result)) {
+            return false;
+        }
+
         /* @mago-expect lint:inline-variable-return - the variable carries the @var type for mago analyze */
         /** @var \stdClass|false|null $row */
         $row = sqlsrv_fetch_object($result);
@@ -172,7 +182,13 @@ class Sqlsrv implements DatabaseDriver
      */
     public function numRows(mixed $result): int
     {
-        return sqlsrv_num_rows($result);
+        if (!is_resource($result)) {
+            return 0;
+        }
+
+        $numRows = sqlsrv_num_rows($result);
+
+        return is_int($numRows) ? $numRows : 0;
     }
 
     /**
@@ -226,6 +242,10 @@ class Sqlsrv implements DatabaseDriver
     {
         $this->sqlLog .= $query;
 
+        if (!is_resource($this->conn)) {
+            return false;
+        }
+
         $options = ['Scrollable' => SQLSRV_CURSOR_KEYSET];
 
         if (0 < $rowcount) {
@@ -271,6 +291,10 @@ class Sqlsrv implements DatabaseDriver
                %s', $column, $table);
 
         $result = $this->query($select);
+        if (!is_resource($result)) {
+            return 1;
+        }
+
         sqlsrv_fetch($result);
 
         $fieldIndex = 0;
@@ -282,7 +306,15 @@ class Sqlsrv implements DatabaseDriver
      */
     public function clientVersion(): string
     {
+        if (!is_resource($this->conn)) {
+            return '';
+        }
+
         $clientInfo = sqlsrv_client_info($this->conn);
+        if (!is_array($clientInfo)) {
+            return '';
+        }
+
         return $clientInfo['DriverODBCVer'] . ' ' . $clientInfo['DriverVer'];
     }
 
@@ -291,6 +323,10 @@ class Sqlsrv implements DatabaseDriver
      */
     public function serverVersion(): string
     {
+        if (!is_resource($this->conn)) {
+            return '';
+        }
+
         $serverInfo = sqlsrv_server_info($this->conn);
         return $serverInfo['SQLServerVersion'];
     }
@@ -356,7 +392,9 @@ class Sqlsrv implements DatabaseDriver
      */
     public function close(): void
     {
-        sqlsrv_close($this->conn);
+        if (is_resource($this->conn)) {
+            sqlsrv_close($this->conn);
+        }
     }
 
     /**
@@ -364,8 +402,16 @@ class Sqlsrv implements DatabaseDriver
      */
     public function lastInsertId(): int|string
     {
+        if (!is_resource($this->conn)) {
+            return 0;
+        }
+
         $query = 'SELECT SCOPE_IDENTITY() AS id';
         $result = sqlsrv_query($this->conn, $query);
+        if ($result === false) {
+            return 0;
+        }
+
         sqlsrv_fetch($result);
 
         $fieldIndex = 0;

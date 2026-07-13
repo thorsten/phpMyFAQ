@@ -77,12 +77,13 @@ final class CategoryLanguageService
     public function getAllExistingTranslations(Configuration $configuration): array
     {
         $query = sprintf('SELECT id, lang FROM %sfaqcategories', Database::getTablePrefix());
+        /* @mago-expect analysis:mixed-assignment - DatabaseDriver::query() is typed mixed by nature */
         $result = $configuration->getDb()->query($query);
 
         $map = [];
         while (true) {
             $row = $configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
+            if (!$row instanceof \stdClass) {
                 break;
             }
 

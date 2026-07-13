@@ -532,7 +532,7 @@ class SqlsrvTest extends TestCase
 
     public function testQueryAffectedRowsAndErrorUseSqlsrvShims(): void
     {
-        $this->setConnectionProperty('sqlsrv-connection');
+        $this->setConnectionProperty($this->createFakeResource());
         $GLOBALS['pmfSqlsrvTestState']['query_result'] = 'sqlsrv-result';
         $GLOBALS['pmfSqlsrvTestState']['rows_affected'] = 4;
         $GLOBALS['pmfSqlsrvTestState']['errors'] = [['SQLSTATE' => '42000', 'message' => 'broken']];
@@ -554,24 +554,26 @@ class SqlsrvTest extends TestCase
         $GLOBALS['pmfSqlsrvTestState']['fetch_object_rows'] = [(object) ['id' => 2], false];
         $GLOBALS['pmfSqlsrvTestState']['num_rows'] = 6;
 
-        $this->assertSame(['id' => 1], $this->sqlsrv->fetchArray('result'));
-        $this->assertSame([], $this->sqlsrv->fetchArray('result'));
-        $this->assertEquals((object) ['id' => 2], $this->sqlsrv->fetchObject('result'));
-        $this->assertFalse($this->sqlsrv->fetchObject('result'));
-        $this->assertSame(6, $this->sqlsrv->numRows('result'));
+        $result = $this->createFakeResource();
+
+        $this->assertSame(['id' => 1], $this->sqlsrv->fetchArray($result));
+        $this->assertSame([], $this->sqlsrv->fetchArray($result));
+        $this->assertEquals((object) ['id' => 2], $this->sqlsrv->fetchObject($result));
+        $this->assertFalse($this->sqlsrv->fetchObject($result));
+        $this->assertSame(6, $this->sqlsrv->numRows($result));
     }
 
     public function testFetchRowReturnsFirstColumnFromArrayShim(): void
     {
         $GLOBALS['pmfSqlsrvTestState']['fetch_array_rows'] = [[0 => 'first-column', 'name' => 'faqdata']];
 
-        $this->assertSame('first-column', $this->sqlsrv->fetchRow('result'));
+        $this->assertSame('first-column', $this->sqlsrv->fetchRow($this->createFakeResource()));
     }
 
     public function testGetTableStatusBuildsRowsByTableName(): void
     {
-        $this->setConnectionProperty('sqlsrv-connection');
-        $GLOBALS['pmfSqlsrvTestState']['query_result'] = 'sqlsrv-result';
+        $this->setConnectionProperty($this->createFakeResource());
+        $GLOBALS['pmfSqlsrvTestState']['query_result'] = $this->createFakeResource();
         $GLOBALS['pmfSqlsrvTestState']['fetch_object_rows'] = [
             (object) ['table_name' => 'faqdata', 'table_rows' => 11],
             (object) ['table_name' => 'faqcategories', 'table_rows' => 4],
@@ -586,8 +588,8 @@ class SqlsrvTest extends TestCase
 
     public function testNextIdVersionsLastInsertIdAndCloseUseSqlsrvShims(): void
     {
-        $this->setConnectionProperty('sqlsrv-connection');
-        $GLOBALS['pmfSqlsrvTestState']['query_result'] = 'sqlsrv-result';
+        $this->setConnectionProperty($this->createFakeResource());
+        $GLOBALS['pmfSqlsrvTestState']['query_result'] = $this->createFakeResource();
         $GLOBALS['pmfSqlsrvTestState']['field_value'] = 8;
 
         $this->assertSame(9, $this->sqlsrv->nextId('faqdata', 'id'));
@@ -629,5 +631,13 @@ class SqlsrvTest extends TestCase
     {
         $reflection = new ReflectionProperty($this->sqlsrv, 'conn');
         $reflection->setValue($this->sqlsrv, $connection);
+    }
+
+    /**
+     * @return resource
+     */
+    private function createFakeResource()
+    {
+        return fopen('php://memory', 'r');
     }
 }
