@@ -37,7 +37,7 @@ const deleteComments = (type: 'faq' | 'news'): void => {
   const form = document.getElementById(`pmf-comments-selected-${type}`) as HTMLFormElement;
   const comments = new FormData(form);
 
-  fetch(`${window.location.pathname}api/content/comments`, {
+  fetch('./api/content/comments', {
     method: 'DELETE',
     headers: {
       Accept: 'application/json, text/plain, */*',

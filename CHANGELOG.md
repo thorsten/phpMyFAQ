@@ -43,6 +43,15 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated from ESLint to oxlint for TypeScript linting (Thorsten)
 - migrated from Prettier to oxfmt for JavaScript/TypeScript formatting (Thorsten)
 - migrated experimental MCP Server to mcp/sdk (Thorsten)
+- fixed security vulnerabilities (Thorsten)
+- updated third party dependencies (Thorsten)
+- fixed bugs (Thorsten)
+
+### phpMyFAQ v4.1.6 - 2026-07-13
+
+- fixed security vulnerabilities (Thorsten)
+- updated third party dependencies (Thorsten)
+- fixed bugs (Thorsten)
 
 ### phpMyFAQ v4.1.5 - 2026-06-14
 
