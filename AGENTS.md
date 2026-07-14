@@ -109,7 +109,7 @@ When implementing changes:
 
 ## Dependency Injection
 
-Services are registered in `phpmyfaq/src/phpMyFAQ/services.php`.
+Services are registered in `phpmyfaq/src/services.php`.
 Add new services there when creating classes that need constructor injection.
 
 ## Templates
