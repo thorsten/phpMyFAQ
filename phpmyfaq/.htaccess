@@ -116,6 +116,9 @@ DirectoryIndex index.php
     RewriteBase /
     # Block zip files in content directory
     RewriteRule ^content/.*\.zip$ - [F,L]
+    # Block direct access to attachments: downloads must go through the
+    # permission-checked /attachment/{id} controller
+    RewriteRule ^content/user/attachments/ - [F,L]
     # Exclude assets from being handled by Symfony Router
     RewriteRule ^admin/assets($|/) - [L]
     # Error pages

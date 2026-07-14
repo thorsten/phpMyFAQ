@@ -43,6 +43,7 @@ phpmyfaq/content/user/images/*
 !phpmyfaq/content/user/images/.gitkeep
 phpmyfaq/content/user/attachments/*
 !phpmyfaq/content/user/attachments/.gitkeep
+!phpmyfaq/content/user/attachments/.htaccess
 
 # Legacy config folders
 phpmyfaq/config/database.php
