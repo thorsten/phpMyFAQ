@@ -230,6 +230,28 @@ final class AttachmentControllerTest extends TestCase
         );
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function testDownloadResponseSetsNosniffHeader(): void
+    {
+        $attachmentId = $this->seedAttachment(900003, 'policy.txt', 'text/plain', 'plain-text attachment');
+        $this->enableGuestDownloads();
+        $attachmentService = new AttachmentService(
+            $this->configuration,
+            new CurrentUser($this->configuration),
+            new Permission($this->configuration),
+        );
+        $attachment = $attachmentService->getAttachment($attachmentId);
+
+        $controller = $this->createController();
+        $response = $controller->createDownloadResponse($attachment);
+
+        self::assertSame('nosniff', $response->headers->get('X-Content-Type-Options'));
+        self::assertSame('text/plain', $response->headers->get('Content-Type'));
+        self::assertStringStartsWith('attachment;', (string) $response->headers->get('Content-Disposition'));
+    }
+
     private function createController(): AttachmentController
     {
         $this->enableGuestDownloads();

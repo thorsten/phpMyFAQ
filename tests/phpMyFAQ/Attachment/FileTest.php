@@ -123,6 +123,18 @@ class FileTest extends TestCase
         $this->assertTrue($this->vfsRoot->hasChild('test/deep/directory'));
     }
 
+    public function testCreateSubDirsCreatesDirectoriesWithRestrictivePermissions(): void
+    {
+        $testPath = vfsStream::url('attachments/secure/subdir/file.txt');
+
+        $result = $this->file->createSubDirs($testPath);
+
+        $this->assertTrue($result);
+        $created = $this->vfsRoot->getChild('secure/subdir');
+        $this->assertNotNull($created);
+        $this->assertSame(0o750, $created->getPermissions());
+    }
+
     public function testCreateSubDirsAlreadyExists(): void
     {
         // Create directory structure first

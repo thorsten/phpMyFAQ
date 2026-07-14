@@ -73,28 +73,7 @@ final class AttachmentController extends AbstractFrontController
             && $attachment->getRecordId() > 0
             && $attachmentService->canDownloadAttachment($attachment)
         ) {
-            $streamedResponse = new StreamedResponse(static function () use ($attachment): void {
-                $attachment->rawOut();
-            });
-
-            $streamedResponse->headers->set('Content-Type', $attachment->getMimeType());
-            $streamedResponse->headers->set('Content-Length', (string) $attachment->getFilesize());
-
-            if ($attachment->getMimeType() === 'application/pdf') {
-                $streamedResponse->headers->set(
-                    'Content-Disposition',
-                    'inline; filename="' . rawurlencode($attachment->getFilename()) . '"',
-                );
-            }
-            if ($attachment->getMimeType() !== 'application/pdf') {
-                $streamedResponse->headers->set(
-                    'Content-Disposition',
-                    'attachment; filename="' . rawurlencode($attachment->getFilename()) . '"',
-                );
-            }
-
-            $streamedResponse->headers->set('Content-MD5', $attachment->getRealHash());
-            $streamedResponse->send();
+            $this->createDownloadResponse($attachment)->send();
             return $this->render('attachment.twig', [
                 ...$this->getHeader($request),
                 'attachmentErrors' => $attachmentErrors,
@@ -106,5 +85,26 @@ final class AttachmentController extends AbstractFrontController
             ...$this->getHeader($request),
             'attachmentErrors' => $attachmentErrors,
         ]);
+    }
+
+    public function createDownloadResponse(AbstractAttachment $attachment): StreamedResponse
+    {
+        $streamedResponse = new StreamedResponse(static function () use ($attachment): void {
+            $attachment->rawOut();
+        });
+
+        $streamedResponse->headers->set('Content-Type', $attachment->getMimeType());
+        $streamedResponse->headers->set('Content-Length', (string) $attachment->getFilesize());
+        $streamedResponse->headers->set('X-Content-Type-Options', 'nosniff');
+
+        $disposition = $attachment->getMimeType() === 'application/pdf' ? 'inline' : 'attachment';
+        $streamedResponse->headers->set(
+            'Content-Disposition',
+            $disposition . '; filename="' . rawurlencode($attachment->getFilename()) . '"',
+        );
+
+        $streamedResponse->headers->set('Content-MD5', $attachment->getRealHash());
+
+        return $streamedResponse;
     }
 }

@@ -28,7 +28,7 @@ use phpMyFAQ\Tenant\TenantQuotaEnforcer;
  *
  * @package phpMyFAQ\Attachment
  */
-abstract class AbstractAttachment
+abstract class AbstractAttachment implements AttachmentInterface
 {
     /** @var mixed Attachment id. */
     protected mixed $id = 0;

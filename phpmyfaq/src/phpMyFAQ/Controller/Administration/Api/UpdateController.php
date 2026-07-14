@@ -226,7 +226,7 @@ final class UpdateController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $backupHash = md5(uniqid());
+        $backupHash = bin2hex(random_bytes(16));
 
         return new StreamedResponse(function () use ($backupHash): void {
             $progressCallback = static function ($progress): void {

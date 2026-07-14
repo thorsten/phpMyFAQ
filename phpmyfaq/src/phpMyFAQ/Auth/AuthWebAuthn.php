@@ -90,7 +90,7 @@ class AuthWebAuthn extends Auth
         // Prepare authenticator selection criteria
         $authSelection = [
             'requireResidentKey' => false,
-            'userVerification' => 'discouraged',
+            'userVerification' => 'preferred',
         ];
 
         // Prepare extensions
@@ -317,7 +317,7 @@ class AuthWebAuthn extends Auth
         $publicKey->challenge = $this->stringToArray($challengeBytes);
         $publicKey->timeout = 60_000;
         $publicKey->allowCredentials = $allows;
-        $publicKey->userVerification = 'discouraged';
+        $publicKey->userVerification = 'preferred';
         $publicKey->rpId = str_replace(search: 'https://', replace: '', subject: $this->appId);
 
         return $publicKey;

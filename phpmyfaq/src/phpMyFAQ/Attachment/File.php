@@ -82,7 +82,7 @@ class File extends AbstractAttachment implements AttachmentInterface
         clearstatcache();
         $attDir = dirname($filepath);
 
-        return file_exists($attDir) && is_dir($attDir) || mkdir($attDir, permissions: 0o777, recursive: true);
+        return file_exists($attDir) && is_dir($attDir) || mkdir($attDir, permissions: 0o750, recursive: true);
     }
 
     /**

@@ -380,7 +380,7 @@ final class UpdateRunner
     private function taskCreateTemporaryBackup(SymfonyStyle $symfonyStyle): int
     {
         $upgrade = new Upgrade($this->system, $this->configuration);
-        $backupHash = md5(uniqid());
+        $backupHash = bin2hex(random_bytes(16));
         $backupFile = $backupHash . '.zip';
 
         $result = $this->withProgress($symfonyStyle, static function (callable $setProgress) use (

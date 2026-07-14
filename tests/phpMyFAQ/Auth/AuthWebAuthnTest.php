@@ -62,7 +62,7 @@ class AuthWebAuthnTest extends TestCase
 
         // Assert authenticatorSelection
         $this->assertFalse($result['publicKey']['authenticatorSelection']['requireResidentKey']);
-        $this->assertEquals('discouraged', $result['publicKey']['authenticatorSelection']['userVerification']);
+        $this->assertEquals('preferred', $result['publicKey']['authenticatorSelection']['userVerification']);
 
         // Assert extensions
         $this->assertTrue($result['publicKey']['extensions']['exts']);
@@ -228,7 +228,7 @@ class AuthWebAuthnTest extends TestCase
         $this->assertInstanceOf(\stdClass::class, $result);
         $this->assertObjectHasProperty('challenge', $result);
         $this->assertObjectHasProperty('allowCredentials', $result);
-        $this->assertObjectHasProperty('userVerification', $result);
+        $this->assertEquals('preferred', $result->userVerification);
         $this->assertObjectHasProperty('timeout', $result);
     }
 

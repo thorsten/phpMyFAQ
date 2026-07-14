@@ -17,7 +17,7 @@ use stdClass;
 #[AllowMockObjectsWithoutExpectations]
 class AbstractAttachmentTest extends TestCase
 {
-    private AbstractAttachment $attachment;
+    private AttachmentTestDouble $attachment;
     private DatabaseDriver $mockDb;
 
     protected function setUp(): void
@@ -25,43 +25,7 @@ class AbstractAttachmentTest extends TestCase
         // Mock the DatabaseDriver
         $this->mockDb = $this->createMock(DatabaseDriver::class);
 
-        // Create an anonymous class extending AbstractAttachment for testing
-        $this->attachment = new class($this->mockDb) extends AbstractAttachment {
-            public function __construct(DatabaseDriver $mockDb, mixed $attachmentId = null)
-            {
-                $this->databaseDriver = $mockDb;
-                if (null !== $attachmentId) {
-                    $this->id = $attachmentId;
-                    $this->getMeta();
-                }
-            }
-
-            // Make protected methods public for testing
-            public function testGetMeta(): bool
-            {
-                return $this->getMeta();
-            }
-
-            public function testReadMimeType(): string
-            {
-                return $this->readMimeType();
-            }
-
-            public function testMkVirtualHash(): ?string
-            {
-                return $this->mkVirtualHash();
-            }
-
-            public function testLinkedRecords(): bool
-            {
-                return $this->linkedRecords();
-            }
-
-            public function testPostUpdateMeta(): void
-            {
-                $this->postUpdateMeta();
-            }
-        };
+        $this->attachment = new AttachmentTestDouble($this->mockDb);
     }
 
     protected function tearDown(): void
@@ -72,12 +36,7 @@ class AbstractAttachmentTest extends TestCase
 
     public function testConstructorWithoutAttachmentId(): void
     {
-        $attachment = new class($this->mockDb) extends AbstractAttachment {
-            public function __construct(DatabaseDriver $mockDb)
-            {
-                $this->databaseDriver = $mockDb;
-            }
-        };
+        $attachment = new AttachmentTestDouble($this->mockDb);
 
         $this->assertEquals(0, $attachment->getId());
     }
@@ -100,16 +59,7 @@ class AbstractAttachmentTest extends TestCase
         $this->mockDb->method('query')->willReturn(true);
         $this->mockDb->method('fetchArray')->willReturn($mockResult);
 
-        $attachment = new class($this->mockDb, 5) extends AbstractAttachment {
-            public function __construct(DatabaseDriver $mockDb, mixed $attachmentId = null)
-            {
-                $this->databaseDriver = $mockDb;
-                if (null !== $attachmentId) {
-                    $this->id = $attachmentId;
-                    $this->getMeta();
-                }
-            }
-        };
+        $attachment = new AttachmentTestDouble($this->mockDb, 5);
 
         $this->assertEquals(5, $attachment->getId());
         $this->assertEquals(123, $attachment->getRecordId());
@@ -473,5 +423,65 @@ class AbstractAttachmentTest extends TestCase
         $this->assertEquals('', $this->attachment->getMimeType());
         $this->assertEquals(0, $this->attachment->getFilesize());
         $this->assertEquals('', $this->attachment->getRealHash());
+    }
+}
+
+/**
+ * Minimal concrete AbstractAttachment for testing the shared base behavior.
+ */
+class AttachmentTestDouble extends AbstractAttachment
+{
+    public function __construct(DatabaseDriver $mockDb, mixed $attachmentId = null)
+    {
+        $this->databaseDriver = $mockDb;
+        if (null !== $attachmentId) {
+            $this->id = $attachmentId;
+            $this->getMeta();
+        }
+    }
+
+    public function save(string $filePath): bool
+    {
+        return true;
+    }
+
+    public function delete(): bool
+    {
+        return true;
+    }
+
+    public function get(): string
+    {
+        return '';
+    }
+
+    public function rawOut(): void
+    {
+    }
+
+    // Make protected methods public for testing
+    public function testGetMeta(): bool
+    {
+        return $this->getMeta();
+    }
+
+    public function testReadMimeType(): string
+    {
+        return $this->readMimeType();
+    }
+
+    public function testMkVirtualHash(): ?string
+    {
+        return $this->mkVirtualHash();
+    }
+
+    public function testLinkedRecords(): bool
+    {
+        return $this->linkedRecords();
+    }
+
+    public function testPostUpdateMeta(): void
+    {
+        $this->postUpdateMeta();
     }
 }
