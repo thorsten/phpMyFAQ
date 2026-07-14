@@ -1,0 +1,47 @@
+# Semgrep security analysis for the PHP backend.
+#
+# CodeQL (see codeql-analysis.yml) does not support PHP, so this workflow
+# covers the PHP attack surface with Semgrep's PHP security rules. Findings
+# are uploaded as SARIF to GitHub code scanning — new findings annotate pull
+# requests via the Security tab instead of failing the build.
+name: "Semgrep"
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '33 13 * * 2'
+
+permissions:
+  contents: read
+
+jobs:
+  semgrep:
+    name: Scan PHP
+    permissions:
+      contents: read
+      security-events: write  # for github/codeql-action/upload-sarif
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7.0.0
+
+      - name: Run Semgrep
+        run: >
+          semgrep scan
+          --config p/php
+          --sarif
+          --output semgrep.sarif
+          --metrics=off
+          phpmyfaq/src/phpMyFAQ
+
+      - name: Upload SARIF to code scanning
+        uses: github/codeql-action/upload-sarif@v4.36.3
+        with:
+          sarif_file: semgrep.sarif
+          category: semgrep-php
