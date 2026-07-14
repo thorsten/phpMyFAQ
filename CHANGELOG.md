@@ -40,6 +40,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated codebase using PHP 8.4 language features (Thorsten)
 - migrated routes using PHP 8+ #[Route] attributes (Thorsten)
 - migrated to Vite v8 (Thorsten)
+- migrated to TypeScript v7 (Thorsten)
 - migrated from ESLint to oxlint for TypeScript linting (Thorsten)
 - migrated from Prettier to oxfmt for JavaScript/TypeScript formatting (Thorsten)
 - migrated experimental MCP Server to mcp/sdk (Thorsten)
