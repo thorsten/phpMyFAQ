@@ -3,6 +3,7 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Container\ContainerRegistry;
 use phpMyFAQ\Controller\ContainerControllerResolver;
 use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\EventListener\ApiExceptionListener;
@@ -54,6 +55,13 @@ use Symfony\Component\Routing\RouteCollection;
 #[AllowMockObjectsWithoutExpectations]
 class KernelTest extends TestCase
 {
+    protected function tearDown(): void
+    {
+        ContainerRegistry::reset();
+
+        parent::tearDown();
+    }
+
     public function testKernelImplementsHttpKernelInterface(): void
     {
         $kernel = new Kernel(routingContext: 'public', debug: true);

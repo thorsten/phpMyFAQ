@@ -24,6 +24,7 @@ use LogicException;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Container\ContainerRegistry;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
@@ -71,15 +72,16 @@ abstract class AbstractController
     private array $twigFilters = [];
 
     /**
-     * Creates a fallback container for controllers instantiated outside the Kernel.
-     * When using the Kernel, setContainer() is called by the ControllerContainerListener
-     * before the controller method runs, overriding this container.
+     * Reuses the Kernel's shared DI container when one is registered; only when no
+     * Kernel booted (CLI scripts, tests) a private fallback container is built.
+     * Parsing services.php into a fallback per controller instantiation used to
+     * happen unconditionally, even though the Kernel overwrote it right away.
      *
      * @throws \Exception
      */
     public function __construct()
     {
-        $this->container = $this->createContainer();
+        $this->container = ContainerRegistry::get() ?? $this->createFallbackContainer();
         $this->initializeFromContainer();
     }
 
@@ -418,7 +420,7 @@ abstract class AbstractController
         $this->twigFilters[] = $twigFilter;
     }
 
-    protected function createContainer(): ContainerBuilder
+    private function createFallbackContainer(): ContainerBuilder
     {
         $containerBuilder = new ContainerBuilder();
         $phpFileLoader = new PhpFileLoader($containerBuilder, new FileLocator(__DIR__));

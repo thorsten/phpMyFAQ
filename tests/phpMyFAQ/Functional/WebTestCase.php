@@ -25,6 +25,7 @@ namespace phpMyFAQ\Functional;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Container\ContainerRegistry;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Kernel;
 use PHPUnit\Framework\TestCase;
@@ -114,6 +115,7 @@ abstract class WebTestCase extends TestCase
     {
         static::$kernel = null;
         static::$client = null;
+        ContainerRegistry::reset();
     }
 
     public static function tearDownAfterClass(): void

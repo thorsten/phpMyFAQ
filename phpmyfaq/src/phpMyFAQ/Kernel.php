@@ -22,6 +22,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Container\ContainerCacheManager;
+use phpMyFAQ\Container\ContainerRegistry;
 use phpMyFAQ\Controller\ContainerControllerResolver;
 use phpMyFAQ\EventListener\ApiExceptionListener;
 use phpMyFAQ\EventListener\ApiRateLimiterListener;
@@ -48,7 +50,7 @@ use Symfony\Component\Routing\RouteCollection;
 
 class Kernel implements HttpKernelInterface
 {
-    private ?ContainerBuilder $container = null;
+    private ?ContainerInterface $container = null;
 
     private ?HttpKernel $httpKernel = null;
 
@@ -72,6 +74,7 @@ class Kernel implements HttpKernelInterface
         }
 
         $this->container = $this->buildContainer();
+        ContainerRegistry::set($this->container);
         $this->routes = $this->loadRoutes();
         $this->httpKernel = $this->createHttpKernel();
         $this->booted = true;
@@ -97,6 +100,10 @@ class Kernel implements HttpKernelInterface
             $this->boot();
         }
 
+        if ($this->container === null) {
+            throw new \LogicException('The Kernel booted without building a container.');
+        }
+
         return $this->container;
     }
 
@@ -110,7 +117,35 @@ class Kernel implements HttpKernelInterface
         return $this->debug;
     }
 
-    private function buildContainer(): ContainerBuilder
+    private function buildContainer(): ContainerInterface
+    {
+        $container = $this->resolveContainer();
+
+        // Register kernel-level services ('kernel' is declared synthetic in the builder)
+        $container->set('kernel', $this);
+
+        return $container;
+    }
+
+    private function resolveContainer(): ContainerInterface
+    {
+        $cacheEnabled = filter_var(Environment::get('CONTAINER_CACHE_ENABLED', 'true'), FILTER_VALIDATE_BOOLEAN);
+        $cacheDisabled = $this->debug || Environment::isDebugMode() || System::isDevelopmentVersion();
+
+        if (!$cacheEnabled || $cacheDisabled) {
+            return $this->createContainerBuilder();
+        }
+
+        /** @var mixed $configuredCacheDir */
+        $configuredCacheDir = Environment::get('CONTAINER_CACHE_DIR');
+        $cacheDir = is_string($configuredCacheDir) && trim($configuredCacheDir) !== ''
+            ? $configuredCacheDir
+            : (string) PMF_ROOT_DIR . '/cache/container';
+
+        return new ContainerCacheManager($cacheDir)->getContainer($this->createContainerBuilder(...));
+    }
+
+    private function createContainerBuilder(): ContainerBuilder
     {
         $containerBuilder = new ContainerBuilder();
         $phpFileLoader = new PhpFileLoader($containerBuilder, new FileLocator(PMF_SRC_DIR));
@@ -128,8 +163,9 @@ class Kernel implements HttpKernelInterface
         // Register Forms services
         FormsServiceProvider::register($containerBuilder);
 
-        // Register kernel-level services
-        $containerBuilder->set('kernel', $this);
+        // The Kernel instance itself is injected after the container is built or loaded
+        // from the compiled cache, so it must survive compilation as a synthetic service.
+        $containerBuilder->register('kernel')->setSynthetic(true)->setPublic(true);
 
         return $containerBuilder;
     }

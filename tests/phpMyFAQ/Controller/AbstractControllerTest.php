@@ -56,11 +56,6 @@ class AbstractControllerTest extends TestCase
                 $this->testCurrentUser = $user;
             }
 
-            protected function createContainer(): ContainerBuilder
-            {
-                return new ContainerBuilder();
-            }
-
             // Make protected methods public for testing
             public function hasValidTokenPublic(): void
             {
@@ -102,10 +97,6 @@ class AbstractControllerTest extends TestCase
                 return $this->captchaCodeIsValid($request);
             }
 
-            public function createContainerPublic(): ContainerBuilder
-            {
-                return $this->createContainer();
-            }
         };
     }
 
@@ -516,11 +507,32 @@ class AbstractControllerTest extends TestCase
         $controller->setContainer($secondContainer);
     }
 
-    public function testCreateContainerReturnsContainerBuilder(): void
+    public function testConstructionReusesTheSharedKernelContainer(): void
     {
-        $container = $this->abstractController->createContainerPublic();
+        $sharedContainer = $this->createMock(ContainerInterface::class);
+        $session = $this->createMock(SessionInterface::class);
+        $sharedContainer
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($session) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configurationMock,
+                    'phpmyfaq.user.current_user' => $this->currentUserMock,
+                    'session' => $session,
+                    default => throw new \InvalidArgumentException(sprintf('Unexpected service id "%s".', $id)),
+                };
+            });
 
-        $this->assertInstanceOf(ContainerBuilder::class, $container);
+        \phpMyFAQ\Container\ContainerRegistry::set($sharedContainer);
+
+        try {
+            $controller = new class extends AbstractController {
+            };
+
+            $reflectionProperty = new \ReflectionProperty(AbstractController::class, 'container');
+            $this->assertSame($sharedContainer, $reflectionProperty->getValue($controller));
+        } finally {
+            \phpMyFAQ\Container\ContainerRegistry::reset();
+        }
     }
 
     public function testHasValidTokenThrowsExceptionWithInvalidToken(): void
