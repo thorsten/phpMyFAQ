@@ -53,6 +53,20 @@ class PdoSqlite implements DatabaseDriver
     private ?PDOStatement $lastStatement = null;
 
     /**
+     * Bound parameters per prepared statement, so numRows() can re-execute the
+     * COUNT(*) wrapper with the same bindings. SQLite's PDO driver does not
+     * report row counts for SELECT statements.
+     *
+     * @var \WeakMap<PDOStatement, array<int, string|int|float|null>>
+     */
+    private \WeakMap $preparedParams;
+
+    public function __construct()
+    {
+        $this->preparedParams = new \WeakMap();
+    }
+
+    /**
      * Connects to the database.
      *
      * @return null|bool true, if connected, otherwise false
@@ -156,9 +170,20 @@ class PdoSqlite implements DatabaseDriver
             if (is_string($sql) && $sql !== '' && preg_match('/^\s*SELECT\b/i', $sql) === 1) {
                 $inner = rtrim($sql, characters: " \t\n\r\0\x0B;");
                 $countSql = 'SELECT COUNT(*) AS c FROM (' . $inner . ') AS _pmf_cnt';
-                $stmt = $this->pdo->query($countSql);
-                if ($stmt === false) {
-                    return 0;
+
+                if ($result instanceof PDOStatement && isset($this->preparedParams[$result])) {
+                    // Re-bind the original parameters for prepared statements
+                    $stmt = $this->pdo->prepare($countSql);
+                    if ($stmt === false) {
+                        return 0;
+                    }
+
+                    $stmt->execute($this->preparedParams[$result]);
+                } else {
+                    $stmt = $this->pdo->query($countSql);
+                    if ($stmt === false) {
+                        return 0;
+                    }
                 }
 
                 $row = $stmt->fetch(PDO::FETCH_NUM);
@@ -285,7 +310,11 @@ class PdoSqlite implements DatabaseDriver
     {
         $query = sprintf('SELECT MAX(%s) AS current_id FROM %s', $column, $table);
 
-        $statement = $this->pdo->prepare($query);
+        $statement = $this->pdo?->prepare($query);
+        if (!$statement instanceof PDOStatement) {
+            throw new Exception('Cannot prepare query: ' . $query);
+        }
+
         $statement->execute();
 
         $current = $statement->fetch(PDO::FETCH_NUM);
@@ -308,7 +337,8 @@ class PdoSqlite implements DatabaseDriver
         }
 
         try {
-            $result = $this->pdo->query($query);
+            /** @var PDOStatement|false $result */
+            $result = $this->pdo?->query($query) ?? false;
         } catch (PDOException $pdoException) {
             throw new Exception($pdoException->getMessage());
         }
@@ -320,6 +350,37 @@ class PdoSqlite implements DatabaseDriver
         $this->lastStatement = $result instanceof PDOStatement ? $result : null;
 
         return $result;
+    }
+
+    /**
+     * Sends a parameterized query; `?` placeholders are bound by PDO.
+     *
+     * @param array<int, string|int|float|null> $params
+     * @throws Exception
+     */
+    public function queryPrepared(string $query, array $params): PDOStatement
+    {
+        $this->sqlLog .= $query;
+
+        if (!$this->pdo instanceof PDO) {
+            throw new Exception('No database connection available for query: ' . $query);
+        }
+
+        try {
+            $statement = $this->pdo->prepare($query);
+            if ($statement === false) {
+                throw new Exception('Cannot prepare query: ' . $query);
+            }
+
+            $statement->execute($params);
+        } catch (PDOException $pdoException) {
+            throw new Exception($pdoException->getMessage() . ' in query: ' . $query);
+        }
+
+        $this->preparedParams[$statement] = array_values($params);
+        $this->lastStatement = $statement;
+
+        return $statement;
     }
 
     /**
@@ -386,7 +447,7 @@ class PdoSqlite implements DatabaseDriver
      */
     public function lastInsertId(): int|string
     {
-        return (int) $this->pdo->lastInsertId();
+        return (int) ($this->pdo?->lastInsertId() ?? 0);
     }
 
     public function now(): string

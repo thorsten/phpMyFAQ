@@ -147,31 +147,23 @@ class UserData
      */
     public function fetchAll(string $key, string $value): array
     {
-        $select = sprintf(
-            "SELECT 
-                user_id, last_modified, display_name, email, keycloak_sub, is_visible, twofactor_enabled, secret 
-            FROM %sfaquserdata WHERE %s = '%s'",
-            Database::getTablePrefix(),
-            $key,
-            $this->configuration->getDb()->escape($value),
-        );
+        // $key is a column name chosen by internal callers, never user input; only
+        // the value is bound as a parameter.
+        $select = sprintf('SELECT
+                user_id, last_modified, display_name, email, keycloak_sub, is_visible, twofactor_enabled, secret
+            FROM %sfaquserdata WHERE %s = ?', Database::getTablePrefix(), $key);
 
         try {
-            $res = $this->configuration->getDb()->query($select);
+            $res = $this->configuration->getDb()->queryPrepared($select, [$value]);
         } catch (\Throwable) {
             $res = false;
         }
 
         if ($res === false) {
-            $select = sprintf(
-                "SELECT 
-                    user_id, last_modified, display_name, email, is_visible, twofactor_enabled, secret 
-                FROM %sfaquserdata WHERE %s = '%s'",
-                Database::getTablePrefix(),
-                $key,
-                $this->configuration->getDb()->escape($value),
-            );
-            $res = $this->configuration->getDb()->query($select);
+            $select = sprintf('SELECT
+                    user_id, last_modified, display_name, email, is_visible, twofactor_enabled, secret
+                FROM %sfaquserdata WHERE %s = ?', Database::getTablePrefix(), $key);
+            $res = $this->configuration->getDb()->queryPrepared($select, [$value]);
         }
 
         if ($this->configuration->getDb()->numRows($res) !== 1) {

@@ -628,4 +628,20 @@ class PgsqlTest extends TestCase
         $GLOBALS['pmfPgsqlTestState']['query_result'] = false;
         $this->assertSame(0, $this->pgsql->lastInsertId());
     }
+
+    public function testNumberPlaceholdersConvertsPositionalMarkers(): void
+    {
+        $this->assertSame(
+            'SELECT id FROM faquser WHERE login = $1 AND account_status = $2',
+            Pgsql::numberPlaceholders('SELECT id FROM faquser WHERE login = ? AND account_status = ?'),
+        );
+    }
+
+    public function testNumberPlaceholdersIgnoresQuestionMarksInsideLiterals(): void
+    {
+        $this->assertSame(
+            "SELECT id FROM faqdata WHERE thema = 'why?' AND lang = $1",
+            Pgsql::numberPlaceholders("SELECT id FROM faqdata WHERE thema = 'why?' AND lang = ?"),
+        );
+    }
 }

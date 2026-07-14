@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Setup\Migration;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -139,6 +140,10 @@ class AbstractMigrationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        // AbstractMigration reads the global table prefix and database type in
+        // its constructor; do not depend on an earlier test having set them.
+        Database::setTablePrefix('');
+        Database::factory('sqlite3');
         $this->configuration = $this->createMock(Configuration::class);
     }
 

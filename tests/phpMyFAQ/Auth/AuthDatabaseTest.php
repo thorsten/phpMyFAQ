@@ -158,6 +158,24 @@ class AuthDatabaseTest extends TestCase
         $this->assertEquals(0, $this->authDatabase->isValidLogin('nonExistingUser'));
     }
 
+    /**
+     * @throws Exception
+     */
+    public function testIsValidLoginIsNotInjectable(): void
+    {
+        $this->authDatabase->create('testUser', 'testPassword');
+
+        $this->assertEquals(0, $this->authDatabase->isValidLogin("' OR '1'='1"));
+    }
+
+    public function testCheckCredentialsIsNotInjectable(): void
+    {
+        $this->authDatabase->create('testUser', 'testPassword');
+
+        $this->expectException(AuthException::class);
+        $this->authDatabase->checkCredentials("' OR '1'='1", 'testPassword');
+    }
+
     public function testCreateStoresBcryptHash(): void
     {
         $this->authDatabase->create('testUser', 'testPassword');

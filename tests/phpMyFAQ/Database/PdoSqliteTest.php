@@ -46,6 +46,35 @@ class PdoSqliteTest extends TestCase
         }
     }
 
+    public function testQueryPreparedBindsParametersSafely(): void
+    {
+        $this->pdoSqlite->connect(':memory:', '', '', '');
+        $this->pdoSqlite->query('CREATE TABLE users (id INTEGER PRIMARY KEY, login TEXT)');
+        $this->pdoSqlite->query("INSERT INTO users (id, login) VALUES (1, 'admin')");
+        $this->pdoSqlite->query("INSERT INTO users (id, login) VALUES (2, \"o'brien\")");
+
+        $result = $this->pdoSqlite->queryPrepared('SELECT id, login FROM users WHERE login = ?', ["o'brien"]);
+        $row = $this->pdoSqlite->fetchObject($result);
+        $this->assertSame(2, (int) $row->id);
+
+        $injection = $this->pdoSqlite->queryPrepared('SELECT id FROM users WHERE login = ?', ["' OR '1'='1"]);
+        $this->assertEmpty($this->pdoSqlite->fetchObject($injection));
+    }
+
+    public function testNumRowsCountsPreparedSelectResults(): void
+    {
+        $this->pdoSqlite->connect(':memory:', '', '', '');
+        $this->pdoSqlite->query('CREATE TABLE users (id INTEGER PRIMARY KEY, login TEXT)');
+        $this->pdoSqlite->query("INSERT INTO users (id, login) VALUES (1, 'admin')");
+        $this->pdoSqlite->query("INSERT INTO users (id, login) VALUES (2, 'admin')");
+
+        $result = $this->pdoSqlite->queryPrepared('SELECT id FROM users WHERE login = ?', ['admin']);
+
+        $this->assertSame(2, $this->pdoSqlite->numRows($result));
+        // Counting must not consume the result set.
+        $this->assertSame(1, (int) $this->pdoSqlite->fetchObject($result)->id);
+    }
+
     public function testConnectExceptionHandling(): void
     {
         // Test that connect method exists and handles PDOException

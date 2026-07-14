@@ -132,6 +132,59 @@ class Pgsql implements DatabaseDriver
     }
 
     /**
+     * Sends a parameterized query; `?` placeholders are converted to the
+     * PostgreSQL `$n` form and bound via pg_query_params().
+     *
+     * @param array<int, string|int|float|null> $params
+     */
+    public function queryPrepared(string $query, array $params): bool|Result
+    {
+        $this->sqlLog .= $query;
+
+        if (!$this->conn instanceof Connection) {
+            return false;
+        }
+
+        $result = pg_query_params($this->conn, self::numberPlaceholders($query), $params);
+
+        if (!$result) {
+            $this->sqlLog .= $this->error();
+            return false;
+        }
+
+        $this->lastResult = $result;
+
+        return $result;
+    }
+
+    /**
+     * Rewrites positional `?` placeholders to PostgreSQL's `$1..$n`,
+     * leaving question marks inside single-quoted literals untouched.
+     */
+    public static function numberPlaceholders(string $query): string
+    {
+        $converted = '';
+        $position = 0;
+        $inLiteral = false;
+
+        foreach (str_split($query) as $character) {
+            if ($character === "'") {
+                $inLiteral = !$inLiteral;
+            }
+
+            if ($character === '?' && !$inLiteral) {
+                ++$position;
+                $converted .= '$' . $position;
+                continue;
+            }
+
+            $converted .= $character;
+        }
+
+        return $converted;
+    }
+
+    /**
      * Returns the number of rows affected by the last INSERT, UPDATE, or DELETE query.
      */
     public function affectedRows(): int

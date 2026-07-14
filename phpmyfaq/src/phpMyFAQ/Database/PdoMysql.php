@@ -303,6 +303,36 @@ class PdoMysql implements DatabaseDriver
     }
 
     /**
+     * Sends a parameterized query; `?` placeholders are bound by PDO.
+     *
+     * @param array<int, string|int|float|null> $params
+     * @throws Exception
+     */
+    public function queryPrepared(string $query, array $params): PDOStatement
+    {
+        $this->sqlLog .= $query;
+
+        if (!$this->pdo instanceof PDO) {
+            throw new Exception('No database connection available for query: ' . $query);
+        }
+
+        try {
+            $statement = $this->pdo->prepare($query);
+            if ($statement === false) {
+                throw new Exception('Cannot prepare query: ' . $query);
+            }
+
+            $statement->execute($params);
+        } catch (PDOException $pdoException) {
+            throw new Exception($pdoException->getMessage() . ' in query: ' . $query);
+        }
+
+        $this->lastStatement = $statement;
+
+        return $statement;
+    }
+
+    /**
      * Returns the number of rows affected by the last INSERT, UPDATE, or DELETE query.
      */
     public function affectedRows(): int

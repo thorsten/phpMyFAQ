@@ -330,6 +330,27 @@ class Mysqli implements DatabaseDriver
     }
 
     /**
+     * Sends a parameterized query; `?` placeholders are bound by mysqli.
+     *
+     * @param array<int, string|int|float|null> $params
+     * @throws Exception
+     */
+    public function queryPrepared(string $query, array $params): mixed
+    {
+        $this->sqlLog .= $query;
+
+        if (!$this->conn instanceof \mysqli) {
+            throw new Exception('No database connection available for query: ' . $query);
+        }
+
+        try {
+            return $this->conn->execute_query($query, $params);
+        } catch (mysqli_sql_exception $mysqlisqlexception) {
+            throw new Exception($mysqlisqlexception->getMessage());
+        }
+    }
+
+    /**
      * Returns the number of rows affected by the last INSERT, UPDATE, or DELETE query.
      */
     public function affectedRows(): int

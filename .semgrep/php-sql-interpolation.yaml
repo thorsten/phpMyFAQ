@@ -1,0 +1,18 @@
+rules:
+  - id: pmf-sql-string-built-with-interpolation
+    languages: [php]
+    severity: ERROR
+    message: >-
+      SQL passed to query() must not be built with string interpolation or
+      concatenation — one forgotten escape() is an SQL injection. Use
+      queryPrepared() with `?` placeholders for values, or sprintf() with
+      escaped/cast arguments (the codebase convention) for identifiers.
+    pattern-either:
+      - pattern: $DB->query("..." . $X . "...", ...)
+      - pattern: $DB->query("..." . $X, ...)
+      - pattern: $DB->query($X . "...", ...)
+      - pattern: $DB->query("...$X...", ...)
+      - pattern: $DB->query("...{$X}...", ...)
+    paths:
+      include:
+        - phpmyfaq/src/phpMyFAQ

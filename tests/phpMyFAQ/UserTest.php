@@ -73,6 +73,7 @@ class UserTest extends TestCase
 
         // Mock that getUserByLogin returns false (login doesn't exist as login)
         $this->database->method('query')->willReturn(true);
+        $this->database->method('queryPrepared')->willReturn(true);
         $this->database->method('numRows')->willReturn(0);
 
         // Mock that email exists in userdata
@@ -86,6 +87,7 @@ class UserTest extends TestCase
         // Mock database operations to simulate login not existing
         $this->database->method('escape')->willReturn('username');
         $this->database->method('query')->willReturn(true);
+        $this->database->method('queryPrepared')->willReturn(true);
         $this->database->method('numRows')->willReturn(0);
 
         // emailExists should never be called for non-email logins
@@ -108,6 +110,7 @@ class UserTest extends TestCase
         // Mock that login exists
         $this->database->method('escape')->willReturn('existinguser');
         $this->database->method('query')->willReturn(true);
+        $this->database->method('queryPrepared')->willReturn(true);
         $this->database->method('numRows')->willReturn(1);
         $this->database
             ->method('fetchArray')
@@ -126,7 +129,8 @@ class UserTest extends TestCase
     {
         putenv('PMF_TENANT_QUOTA_MAX_USERS=0');
 
-        $this->database->expects($this->exactly(2))->method('query')->willReturnOnConsecutiveCalls(true, true);
+        $this->database->expects($this->once())->method('query')->willReturn(true);
+        $this->database->expects($this->once())->method('queryPrepared')->willReturn(true);
         $this->database->method('escape')->willReturnArgument(0);
         $this->database->method('numRows')->willReturn(0);
         $this->database->expects($this->once())->method('fetchArray')->with(true)->willReturn(['amount' => 0]);
@@ -147,6 +151,7 @@ class UserTest extends TestCase
     {
         $this->database->method('escape')->willReturn('cookie-token');
         $this->database->method('query')->willReturn(true);
+        $this->database->method('queryPrepared')->willReturn(true);
         $this->database->method('numRows')->willReturn(0);
 
         $this->assertFalse($this->user->getUserByCookie('cookie-token'));
@@ -157,6 +162,7 @@ class UserTest extends TestCase
     {
         $this->database->method('escape')->willReturn('cookie-token');
         $this->database->method('query')->willReturn(true);
+        $this->database->method('queryPrepared')->willReturn(true);
         $this->database->method('numRows')->willReturn(1);
         $this->database
             ->method('fetchArray')
@@ -173,6 +179,7 @@ class UserTest extends TestCase
     {
         $this->database->method('escape')->willReturn('cookie-token');
         $this->database->method('query')->willReturn(true);
+        $this->database->method('queryPrepared')->willReturn(true);
         $this->database->method('numRows')->willReturn(1);
         $this->database
             ->method('fetchArray')
@@ -227,7 +234,8 @@ class UserTest extends TestCase
     {
         $this->user->userdata = null;
         $this->database->method('escape')->willReturnCallback(static fn(string $value): string => $value);
-        $this->database->expects($this->exactly(2))->method('query')->willReturn(true);
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('queryPrepared')->willReturn(true);
         $this->database->expects($this->exactly(2))->method('numRows')->with(true)->willReturn(1);
         $this->database
             ->expects($this->exactly(2))
@@ -252,6 +260,7 @@ class UserTest extends TestCase
     {
         $this->database->method('escape')->willReturn('thor%');
         $this->database->method('query')->willReturn(true);
+        $this->database->method('queryPrepared')->willReturn(true);
         $this->database->method('fetchArray')->willReturnOnConsecutiveCalls(
             ['login' => 'thorsten', 'user_id' => 1, 'account_status' => 'active'],
             ['login' => 'thorben', 'user_id' => 2, 'account_status' => 'blocked'],
@@ -275,6 +284,7 @@ class UserTest extends TestCase
     {
         $this->database->method('escape')->willReturn('missing');
         $this->database->method('query')->willReturn(true);
+        $this->database->method('queryPrepared')->willReturn(true);
         $this->database->method('numRows')->willReturn(0);
 
         $this->assertFalse($this->user->getUserByLogin('missing', false));
@@ -285,6 +295,7 @@ class UserTest extends TestCase
     {
         $this->database->method('escape')->willReturn('missing');
         $this->database->method('query')->willReturn(true);
+        $this->database->method('queryPrepared')->willReturn(true);
         $this->database->method('numRows')->willReturn(0);
 
         $this->assertFalse($this->user->getUserByLogin('missing'));
@@ -295,6 +306,7 @@ class UserTest extends TestCase
     {
         $this->database->method('escape')->willReturn('existing');
         $this->database->method('query')->willReturn(true);
+        $this->database->method('queryPrepared')->willReturn(true);
         $this->database->method('numRows')->willReturn(1);
         $this->database
             ->method('fetchArray')
@@ -316,7 +328,8 @@ class UserTest extends TestCase
     {
         $this->user->userdata = null;
         $this->database->method('escape')->willReturn('existing');
-        $this->database->expects($this->exactly(2))->method('query')->willReturn(true);
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('queryPrepared')->willReturn(true);
         $this->database->expects($this->exactly(2))->method('numRows')->with(true)->willReturn(1);
         $this->database
             ->expects($this->exactly(2))
@@ -429,6 +442,7 @@ class UserTest extends TestCase
         $this->user->perm = $permission;
 
         $this->database->method('query')->willReturn(true);
+        $this->database->method('queryPrepared')->willReturn(true);
         $this->userData->method('delete')->willReturn(true);
 
         $auth = $this->createMock(AuthDatabase::class);
@@ -451,6 +465,7 @@ class UserTest extends TestCase
         $this->user->perm = $permission;
 
         $this->database->method('query')->willReturn(true);
+        $this->database->method('queryPrepared')->willReturn(true);
         $this->userData->expects($this->once())->method('delete')->with(6)->willReturn(true);
 
         $auth = $this->createMock(AuthDatabase::class);
@@ -553,7 +568,8 @@ class UserTest extends TestCase
     {
         $this->user->userdata = null;
         $this->database->method('escape')->willReturn('cookie-token');
-        $this->database->expects($this->exactly(2))->method('query')->willReturn(true);
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('queryPrepared')->willReturn(true);
         $this->database->expects($this->exactly(2))->method('numRows')->with(true)->willReturn(1);
         $this->database
             ->expects($this->exactly(2))
@@ -621,7 +637,8 @@ class UserTest extends TestCase
         $this->user->userdata = null;
         $this->setPrivateProperty('userId', 13);
 
-        $this->database->expects($this->exactly(2))->method('query')->willReturn(true);
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('queryPrepared')->willReturn(true);
         $this->database->expects($this->once())->method('numRows')->with(true)->willReturn(1);
         $this->database
             ->expects($this->once())
@@ -644,7 +661,7 @@ class UserTest extends TestCase
     {
         $this->user->userdata = null;
         $this->database->method('escape')->willReturnCallback(static fn(string $value): string => $value);
-        $this->database->expects($this->once())->method('query')->willReturn(true);
+        $this->database->expects($this->once())->method('queryPrepared')->willReturn(true);
         $this->database->expects($this->once())->method('numRows')->with(true)->willReturn(1);
         $this->database
             ->expects($this->once())
@@ -674,7 +691,7 @@ class UserTest extends TestCase
     {
         $this->user->userdata = null;
         $this->database->method('escape')->willReturnCallback(static fn(string $value): string => $value);
-        $this->database->expects($this->once())->method('query')->willReturn(true);
+        $this->database->expects($this->once())->method('queryPrepared')->willReturn(true);
         $this->database->expects($this->once())->method('numRows')->with(true)->willReturn(1);
         $this->database
             ->expects($this->once())
@@ -770,6 +787,7 @@ class UserTest extends TestCase
         $this->setPrivateProperty('userId', 13);
         $this->database->method('escape')->willReturnArgument(0);
         $this->database->method('query')->willReturn(true);
+        $this->database->method('queryPrepared')->willReturn(true);
 
         $this->assertFalse($this->user->setStatus('unknown'));
         $this->assertContains(User::ERROR_USER_INVALID_STATUS, $this->user->errors);
@@ -784,6 +802,7 @@ class UserTest extends TestCase
         $this->setProtectedProperty('authContainer', []);
         $this->database->method('escape')->willReturnArgument(0);
         $this->database->method('query')->willReturn(true);
+        $this->database->method('queryPrepared')->willReturn(true);
 
         $readonly = $this->createMock(AuthDatabase::class);
         $readonly->expects($this->once())->method('disableReadOnly')->willReturn(true);
@@ -821,6 +840,7 @@ class UserTest extends TestCase
         $this->setPrivateProperty('userId', 15);
         $this->database->method('escape')->willReturnArgument(0);
         $this->database->method('query')->willReturn(true);
+        $this->database->method('queryPrepared')->willReturn(true);
         $this->database->method('numRows')->willReturn(1);
         $this->database->method('fetchArray')->willReturn(['webauthnkeys' => '{"id":"key-1"}']);
 
@@ -835,6 +855,7 @@ class UserTest extends TestCase
     {
         $this->setPrivateProperty('userId', 16);
         $this->database->method('query')->willReturn(true);
+        $this->database->method('queryPrepared')->willReturn(true);
         $this->database->method('numRows')->willReturn(0);
 
         $this->assertSame('', $this->user->getWebAuthnKeys());

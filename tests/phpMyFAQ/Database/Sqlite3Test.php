@@ -427,6 +427,28 @@ class Sqlite3Test extends TestCase
         $this->assertEquals(0, $reflection->getParameters()[2]->getDefaultValue());
     }
 
+    public function testQueryPreparedBindsParametersSafely(): void
+    {
+        $databaseFile = tempnam(sys_get_temp_dir(), 'pmf-sqlite3-test-');
+        $this->sqlite3->connect($databaseFile, '', '');
+        $this->sqlite3->query('CREATE TABLE users (id INTEGER PRIMARY KEY, login TEXT)');
+        $this->sqlite3->query("INSERT INTO users (id, login) VALUES (1, 'admin')");
+        $this->sqlite3->query("INSERT INTO users (id, login) VALUES (2, \"o'brien\")");
+
+        $result = $this->sqlite3->queryPrepared('SELECT id, login FROM users WHERE login = ?', ["o'brien"]);
+        $row = $this->sqlite3->fetchObject($result);
+        $this->assertSame(2, (int) $row->id);
+
+        $injection = $this->sqlite3->queryPrepared('SELECT id FROM users WHERE login = ?', ["' OR '1'='1"]);
+        $this->assertEmpty($this->sqlite3->fetchObject($injection));
+
+        $byId = $this->sqlite3->queryPrepared('SELECT login FROM users WHERE id = ?', [1]);
+        $this->assertSame('admin', $this->sqlite3->fetchObject($byId)->login);
+
+        $this->sqlite3->close();
+        @unlink($databaseFile);
+    }
+
     public function testGetTableStatusReturnsRowCountsForRealSqliteTables(): void
     {
         $databaseFile = tempnam(sys_get_temp_dir(), 'pmf-sqlite3-test-');

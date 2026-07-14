@@ -264,6 +264,30 @@ class Sqlsrv implements DatabaseDriver
     }
 
     /**
+     * Sends a parameterized query; `?` placeholders are bound natively by sqlsrv.
+     *
+     * @param array<int, string|int|float|null> $params
+     */
+    public function queryPrepared(string $query, array $params): mixed
+    {
+        $this->sqlLog .= $query;
+
+        if (!is_resource($this->conn)) {
+            return false;
+        }
+
+        $result = sqlsrv_query($this->conn, $query, $params, ['Scrollable' => SQLSRV_CURSOR_KEYSET]);
+
+        if (!$result) {
+            $this->sqlLog .= $this->error();
+        }
+
+        $this->lastResult = $result;
+
+        return $result;
+    }
+
+    /**
      * Returns the number of rows affected by the last INSERT, UPDATE, or DELETE query.
      */
     public function affectedRows(): int

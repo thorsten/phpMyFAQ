@@ -480,12 +480,11 @@ class User
     public function getUserByLogin(string $login, bool $raiseError = true): bool
     {
         $select = sprintf(
-            "SELECT user_id, login, account_status, is_superadmin, auth_source FROM %sfaquser WHERE login = '%s'",
+            'SELECT user_id, login, account_status, is_superadmin, auth_source FROM %sfaquser WHERE login = ?',
             Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($login),
         );
 
-        $result = $this->configuration->getDb()->query($select);
+        $result = $this->configuration->getDb()->queryPrepared($select, [$login]);
         if ($this->configuration->getDb()->numRows($result) !== 1) {
             if ($raiseError) {
                 $this->errors[] = self::ERROR_USER_INCORRECT_LOGIN;

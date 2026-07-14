@@ -89,9 +89,11 @@ class Database
     public static function checkOnEmptyTable(string $tableName): bool
     {
         return (
-            self::$databaseDriver->numRows(self::$databaseDriver->query(
-                'SELECT * FROM ' . self::getTablePrefix() . $tableName,
-            )) < 1
+            self::$databaseDriver->numRows(self::$databaseDriver->query(sprintf(
+                'SELECT * FROM %s%s',
+                self::getTablePrefix(),
+                $tableName,
+            ))) < 1
         );
     }
 

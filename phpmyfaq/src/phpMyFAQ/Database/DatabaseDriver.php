@@ -20,6 +20,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Database;
 
+use SensitiveParameter;
+
 /**
  * Interface DatabaseDriver
  *
@@ -39,7 +41,7 @@ interface DatabaseDriver
     public function connect(
         string $host,
         string $user,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $password,
         string $database = '',
         ?int $port = null,
@@ -49,6 +51,16 @@ interface DatabaseDriver
      * This function sends a query to the database.
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0): mixed;
+
+    /**
+     * Sends a parameterized query to the database. Use `?` as the positional
+     * placeholder; values are bound by the driver and never interpolated into
+     * the SQL string. Prefer this over query() + escape() for any query that
+     * carries user input.
+     *
+     * @param array<int, string|int|float|null> $params
+     */
+    public function queryPrepared(string $query, array $params): mixed;
 
     /**
      * Escapes a string for use in a query.
@@ -68,6 +80,7 @@ interface DatabaseDriver
     /**
      * Fetch a result row as an array.
      *
+     * @param mixed $result
      * @return array|false|null
      */
     public function fetchArray(mixed $result): array|false|null;

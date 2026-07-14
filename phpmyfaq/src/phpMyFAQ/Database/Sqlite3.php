@@ -169,8 +169,9 @@ class Sqlite3 implements DatabaseDriver
                 break;
             }
 
-            $numResult = $this->query('SELECT * FROM ' . $row['name']);
-            $arr[$row['name']] = $this->numRows($numResult);
+            $tableName = (string) $row['name'];
+            $numResult = $this->query(sprintf('SELECT * FROM %s', $tableName));
+            $arr[$tableName] = $this->numRows($numResult);
         }
 
         return $arr;
@@ -192,6 +193,40 @@ class Sqlite3 implements DatabaseDriver
         $result = @$this->conn->query($query);
 
         if (!$result) {
+            $this->sqlLog .= $this->error();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Sends a parameterized query; `?` placeholders are bound by SQLite3.
+     *
+     * @param array<int, string|int|float|null> $params
+     */
+    public function queryPrepared(string $query, array $params): \SQLite3Result|bool
+    {
+        $this->sqlLog .= $query;
+
+        if (!$this->conn instanceof \SQLite3) {
+            return false;
+        }
+
+        $statement = @$this->conn->prepare($query);
+        if (!$statement instanceof \SQLite3Stmt) {
+            $this->sqlLog .= $this->error();
+
+            return false;
+        }
+
+        $position = 1;
+        foreach ($params as $param) {
+            $statement->bindValue($position, $param);
+            ++$position;
+        }
+
+        $result = @$statement->execute();
+        if ($result === false) {
             $this->sqlLog .= $this->error();
         }
 

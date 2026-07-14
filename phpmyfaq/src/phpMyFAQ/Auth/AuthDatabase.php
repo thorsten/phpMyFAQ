@@ -155,13 +155,10 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         string $password,
         ?array $optionalData = null,
     ): bool {
-        $check = sprintf(
-            "SELECT login, pass FROM %sfaquserlogin WHERE login = '%s'",
-            Database::getTablePrefix(),
-            $this->databaseDriver->escape($login),
+        $check = $this->databaseDriver->queryPrepared(
+            sprintf('SELECT login, pass FROM %sfaquserlogin WHERE login = ?', Database::getTablePrefix()),
+            [$login],
         );
-
-        $check = $this->databaseDriver->query($check);
 
         $error = $this->databaseDriver->error();
 
@@ -207,12 +204,10 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      */
     private function rehash(string $login, #[\SensitiveParameter] string $password): void
     {
-        $this->databaseDriver->query(sprintf(
-            "UPDATE %sfaquserlogin SET pass = '%s' WHERE login = '%s'",
-            Database::getTablePrefix(),
-            $this->databaseDriver->escape($this->passwordHasher->hash($password)),
-            $this->databaseDriver->escape($login),
-        ));
+        $this->databaseDriver->queryPrepared(
+            sprintf('UPDATE %sfaquserlogin SET pass = ? WHERE login = ?', Database::getTablePrefix()),
+            [$this->passwordHasher->hash($password), $login],
+        );
     }
 
     /**
@@ -221,13 +216,10 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      */
     public function isValidLogin(string $login, ?array $optionalData = null): int
     {
-        $check = sprintf(
-            "SELECT login FROM %sfaquserlogin WHERE login = '%s'",
-            Database::getTablePrefix(),
-            $this->databaseDriver->escape($login),
+        $check = $this->databaseDriver->queryPrepared(
+            sprintf('SELECT login FROM %sfaquserlogin WHERE login = ?', Database::getTablePrefix()),
+            [$login],
         );
-
-        $check = $this->databaseDriver->query($check);
 
         $error = $this->databaseDriver->error();
 
