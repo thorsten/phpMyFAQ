@@ -211,10 +211,15 @@ class Faq
      * @return array<string, mixed>
      * @throws Exception|CommonMarkException
      */
-    public function getFaqsDataByCategoryId(int $categoryId, string $orderBy = 'id', string $sortBy = 'ASC'): array
-    {
+    public function getFaqsDataByCategoryId(
+        int $categoryId,
+        string $orderBy = 'id',
+        string $sortBy = 'ASC',
+        ?int $page = null,
+    ): array {
         $numPerPage = (int) $this->configuration->get(item: 'records.numberOfRecordsPerPage');
-        $page = Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
+        $page ??= Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
+        $page = max(1, (int) $page);
         $title = '';
         [$currentTable, $orderColumn] = $this->normalizeCategoryOrder($orderBy);
         $sortDirection = $this->normalizeSortDirection($sortBy);
@@ -222,35 +227,33 @@ class Faq
         // If random FAQs are activated, we don't need an order
         $order = sprintf('ORDER BY fd.sticky DESC, %s.%s %s', $currentTable, $orderColumn, $sortDirection);
 
-        $result = $this->faqRepository->queryRenderableFaqsByCategoryId(
+        $num = $this->faqRepository->countRenderableFaqsByCategoryId(
             $categoryId,
-            $order,
             $this->user,
             $this->groups,
             $this->groupSupport,
         );
-        $num = $this->configuration->getDb()->numRows($result);
         $pages = (int) ceil($num / $numPerPage);
 
-        $first = $page === 1 ? 0 : ($page * $numPerPage) - $numPerPage;
+        $first = ($page - 1) * $numPerPage;
 
         $items = [];
         if ($num > 0) {
-            $counter = 0;
-            $displayedCounter = 0;
+            $result = $this->faqRepository->queryRenderableFaqsByCategoryId(
+                $categoryId,
+                $order,
+                $this->user,
+                $this->groups,
+                $this->groupSupport,
+                $first,
+                $numPerPage,
+            );
             $renderedItems = [];
-            while ($displayedCounter < $numPerPage) {
+            while (true) {
                 $row = $this->configuration->getDb()->fetchObject($result);
                 if ($row === false || $row === null || $row === []) {
                     break;
                 }
-
-                ++$counter;
-                if ($counter <= $first) {
-                    continue;
-                }
-
-                ++$displayedCounter;
 
                 $visits = (int) ($row->visits ?? 0);
 

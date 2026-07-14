@@ -442,14 +442,6 @@ final class FaqRepository implements FaqRepositoryInterface
                 fd.id = fv.id
             AND
                 fv.lang = fd.lang
-            LEFT JOIN
-                %sfaqdata_group AS fdg
-            ON
-                fd.id = fdg.record_id
-            LEFT JOIN
-                %sfaqdata_user AS fdu
-            ON
-                fd.id = fdu.record_id
             WHERE
                 fd.date_start <= '%s'
             AND
@@ -466,13 +458,11 @@ final class FaqRepository implements FaqRepositoryInterface
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
             $now,
             $now,
             $categoryId,
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
-            $queryHelper->queryPermission($groupSupport),
+            $queryHelper->queryPermissionExistsAny($groupSupport),
             $orderTable,
             $orderColumn,
             $sortDirection,
@@ -806,6 +796,8 @@ final class FaqRepository implements FaqRepositoryInterface
         int $userId,
         array $groups,
         bool $groupSupport,
+        int $offset = 0,
+        int $rowcount = 0,
     ): mixed {
         $now = date(format: 'YmdHis');
         $queryHelper = new QueryHelper($userId, $groups);
@@ -833,14 +825,6 @@ final class FaqRepository implements FaqRepositoryInterface
                 fd.id = fv.id
             AND
                 fv.lang = fd.lang
-            LEFT JOIN
-                %sfaqdata_group AS fdg
-            ON
-                fd.id = fdg.record_id
-            LEFT JOIN
-                %sfaqdata_user AS fdu
-            ON
-                fd.id = fdu.record_id
             WHERE
                 fd.date_start <= '%s'
             AND
@@ -856,17 +840,47 @@ final class FaqRepository implements FaqRepositoryInterface
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
             $now,
             $now,
             $categoryId,
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
-            $queryHelper->queryPermission($groupSupport),
+            $queryHelper->queryPermissionExistsAny($groupSupport),
             $order,
         );
 
-        return $this->configuration->getDb()->query($query);
+        return $this->configuration->getDb()->query($query, $offset, $rowcount);
+    }
+
+    /**
+     * Counts the renderable FAQs of one category for the given permission context,
+     * matching the filters of queryRenderableFaqsByCategoryId().
+     */
+    public function countRenderableFaqsByCategoryId(
+        int $categoryId,
+        int $userId,
+        array $groups,
+        bool $groupSupport,
+    ): int {
+        $now = date(format: 'YmdHis');
+        $queryHelper = new QueryHelper($userId, $groups);
+        $query = sprintf(
+            'SELECT COUNT(*) AS total FROM %sfaqdata fd '
+            . "WHERE fd.date_start <= '%s' AND fd.date_end >= '%s' AND fd.active = 'yes' AND fd.lang = '%s' "
+            . 'AND EXISTS (SELECT 1 FROM %sfaqcategoryrelations fcr '
+            . 'WHERE fcr.record_id = fd.id AND fcr.record_lang = fd.lang AND fcr.category_id = %d) %s',
+            Database::getTablePrefix(),
+            $now,
+            $now,
+            $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
+            Database::getTablePrefix(),
+            $categoryId,
+            $queryHelper->queryPermissionExistsAny($groupSupport),
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+        $row = $result !== false ? $this->configuration->getDb()->fetchObject($result) : null;
+
+        return is_object($row) ? (int) $row->total : 0;
     }
 
     public function queryRenderableFaqsByIds(
@@ -902,14 +916,6 @@ final class FaqRepository implements FaqRepositoryInterface
                 fd.id = fv.id
             AND
                 fv.lang = fd.lang
-            LEFT JOIN
-                %sfaqdata_group AS fdg
-            ON
-                fd.id = fdg.record_id
-            LEFT JOIN
-                %sfaqdata_user AS fdu
-            ON
-                fd.id = fdu.record_id
             WHERE
                 fd.date_start <= '%s'
             AND
@@ -926,13 +932,11 @@ final class FaqRepository implements FaqRepositoryInterface
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
             $now,
             $now,
             $records,
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
-            $queryHelper->queryPermission($groupSupport),
+            $queryHelper->queryPermissionExistsAny($groupSupport),
             $orderExpression,
             $sortDirection,
         );
@@ -961,6 +965,7 @@ final class FaqRepository implements FaqRepositoryInterface
             if (is_array($data)) {
                 $where .= ' IN (';
                 $separator = '';
+                /** @var mixed $value */
                 foreach ($data as $value) {
                     $where .= $separator . "'" . $this->configuration->getDb()->escape($value) . "'";
                     $separator = ', ';

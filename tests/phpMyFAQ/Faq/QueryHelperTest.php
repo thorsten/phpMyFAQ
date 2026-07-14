@@ -190,4 +190,105 @@ ORDER BY fcr.category_id, fd.id";
 
         $this->assertSame('AND fdg.group_id IN (1, 2)', $queryHelper->queryPermission(true));
     }
+
+    public function testQueryPermissionExistsAllWithoutGroupSupport(): void
+    {
+        $queryHelper = new QueryHelper(42, [1, 2, 3]);
+
+        $this->assertSame(
+            'AND EXISTS (SELECT 1 FROM faqdata_user pfdu '
+            . 'WHERE pfdu.record_id = fd.id AND pfdu.user_id IN (-1, 42))',
+            $queryHelper->queryPermissionExistsAll(),
+        );
+    }
+
+    public function testQueryPermissionExistsAllForGuestWithoutGroupSupport(): void
+    {
+        $queryHelper = new QueryHelper(-1, [1, 2, 3]);
+
+        $this->assertSame(
+            'AND EXISTS (SELECT 1 FROM faqdata_user pfdu '
+            . 'WHERE pfdu.record_id = fd.id AND pfdu.user_id IN (-1))',
+            $queryHelper->queryPermissionExistsAll(),
+        );
+    }
+
+    public function testQueryPermissionExistsAllWithGroupSupport(): void
+    {
+        $queryHelper = new QueryHelper(42, [1, 2, 3]);
+
+        $this->assertSame(
+            'AND EXISTS (SELECT 1 FROM faqdata_user pfdu '
+            . 'WHERE pfdu.record_id = fd.id AND pfdu.user_id IN (-1, 42)) '
+            . 'AND EXISTS (SELECT 1 FROM faqdata_group pfdg '
+            . 'WHERE pfdg.record_id = fd.id AND pfdg.group_id IN (1, 2, 3))',
+            $queryHelper->queryPermissionExistsAll(true),
+        );
+    }
+
+    public function testQueryPermissionExistsAllForGuestWithGroupSupport(): void
+    {
+        $queryHelper = new QueryHelper(-1, [7]);
+
+        $this->assertSame(
+            'AND EXISTS (SELECT 1 FROM faqdata_user pfdu '
+            . 'WHERE pfdu.record_id = fd.id AND pfdu.user_id IN (-1)) '
+            . 'AND EXISTS (SELECT 1 FROM faqdata_group pfdg '
+            . 'WHERE pfdg.record_id = fd.id AND pfdg.group_id IN (7))',
+            $queryHelper->queryPermissionExistsAll(true),
+        );
+    }
+
+    public function testQueryPermissionExistsAnyWithoutGroupSupport(): void
+    {
+        $queryHelper = new QueryHelper(42, [1, 2, 3]);
+
+        $this->assertSame(
+            'AND EXISTS (SELECT 1 FROM faqdata_user pfdu '
+            . 'WHERE pfdu.record_id = fd.id AND pfdu.user_id IN (-1, 42))',
+            $queryHelper->queryPermissionExistsAny(),
+        );
+    }
+
+    public function testQueryPermissionExistsAnyForGuestWithoutGroupSupport(): void
+    {
+        $queryHelper = new QueryHelper(-1, [1, 2, 3]);
+
+        $this->assertSame(
+            'AND EXISTS (SELECT 1 FROM faqdata_user pfdu '
+            . 'WHERE pfdu.record_id = fd.id AND pfdu.user_id IN (-1))',
+            $queryHelper->queryPermissionExistsAny(),
+        );
+    }
+
+    public function testQueryPermissionExistsAnyWithGroupSupportAllowsUserOrGroupMatch(): void
+    {
+        $queryHelper = new QueryHelper(42, [1, 2, 3]);
+
+        $this->assertSame(
+            'AND (EXISTS (SELECT 1 FROM faqdata_user pfdu '
+            . 'WHERE pfdu.record_id = fd.id AND pfdu.user_id = 42) '
+            . 'OR EXISTS (SELECT 1 FROM faqdata_group pfdg '
+            . 'WHERE pfdg.record_id = fd.id AND pfdg.group_id IN (1, 2, 3)))',
+            $queryHelper->queryPermissionExistsAny(true),
+        );
+    }
+
+    public function testQueryPermissionExistsAnyForGuestWithGroupSupportRequiresGroupMatch(): void
+    {
+        $queryHelper = new QueryHelper(-1, [7]);
+
+        $this->assertSame(
+            'AND EXISTS (SELECT 1 FROM faqdata_group pfdg '
+            . 'WHERE pfdg.record_id = fd.id AND pfdg.group_id IN (7))',
+            $queryHelper->queryPermissionExistsAny(true),
+        );
+    }
+
+    public function testQueryPermissionExistsAllNormalizesGroupIds(): void
+    {
+        $queryHelper = new QueryHelper(-1, ['1) OR 1=1 -- ', '2']);
+
+        $this->assertStringContainsString('pfdg.group_id IN (1, 2)', $queryHelper->queryPermissionExistsAll(true));
+    }
 }

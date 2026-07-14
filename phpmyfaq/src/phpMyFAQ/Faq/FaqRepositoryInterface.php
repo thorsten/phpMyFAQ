@@ -182,7 +182,7 @@ interface FaqRepositoryInterface
 
     /**
      * Runs the category FAQ-list query used for HTML rendering and returns the raw database
-     * result handle (the caller paginates it).
+     * result handle. Pass offset/rowcount to fetch a single page; a rowcount of 0 fetches all.
      *
      * @param int[] $groups
      */
@@ -192,7 +192,22 @@ interface FaqRepositoryInterface
         int $userId,
         array $groups,
         bool $groupSupport,
+        int $offset = 0,
+        int $rowcount = 0,
     ): mixed;
+
+    /**
+     * Counts the renderable FAQs of one category for the given permission context,
+     * matching the filters of queryRenderableFaqsByCategoryId().
+     *
+     * @param int[] $groups
+     */
+    public function countRenderableFaqsByCategoryId(
+        int $categoryId,
+        int $userId,
+        array $groups,
+        bool $groupSupport,
+    ): int;
 
     /**
      * Runs the id-list FAQ query used for HTML rendering and returns the raw database result

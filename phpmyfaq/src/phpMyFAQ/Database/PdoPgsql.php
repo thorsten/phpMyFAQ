@@ -284,7 +284,7 @@ class PdoPgsql implements DatabaseDriver
         $this->sqlLog .= $query;
 
         if (0 < $rowcount) {
-            $query .= sprintf(' LIMIT %d,%d', $offset, $rowcount);
+            $query .= sprintf(' LIMIT %d OFFSET %d', $rowcount, $offset);
         }
 
         try {

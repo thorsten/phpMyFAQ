@@ -181,73 +181,16 @@ class Statistics
      */
     public function getLatestData(int $count = PMF_NUMBER_RECORDS_LATEST, ?string $language = null): array
     {
-        $now = date(format: 'YmdHis');
-        $queryHelper = new QueryHelper($this->user, $this->groups);
-        $query =
-            '
-            SELECT
-                fd.id AS id,
-                fd.lang AS lang,
-                fcr.category_id AS category_id,
-                fd.thema AS question,
-                fd.content AS content,
-                fd.updated AS updated,
-                fv.visits AS visits,
-                fdg.group_id AS group_id,
-                fdu.user_id AS user_id
-            FROM
-                '
-            . Database::getTablePrefix()
-            . 'faqvisits fv,
-                '
-            . Database::getTablePrefix()
-            . 'faqdata fd
-            LEFT JOIN
-                '
-            . Database::getTablePrefix()
-            . 'faqcategoryrelations fcr
-            ON
-                fd.id = fcr.record_id
-            AND
-                fd.lang = fcr.record_lang
-            LEFT JOIN
-                '
-            . Database::getTablePrefix()
-            . 'faqdata_group AS fdg
-            ON
-                fd.id = fdg.record_id
-            LEFT JOIN
-                '
-            . Database::getTablePrefix()
-            . 'faqdata_user AS fdu
-            ON
-                fd.id = fdu.record_id
-            WHERE
-                    fd.date_start <= \''
-            . $now
-            . '\'
-                AND fd.date_end   >= \''
-            . $now
-            . '\'
-                AND fd.id = fv.id
-                AND fd.lang = fv.lang
-                AND fd.active = \'yes\'';
+        $query = $this->buildStatisticsQuery(
+            selectList: 'fd.id AS id, fd.lang AS lang, fd.thema AS question, fd.content AS content, '
+            . 'fd.updated AS updated, fv.visits AS visits',
+            sourceTable: 'faqvisits',
+            joinCondition: 'fd.id = fv.id AND fd.lang = fv.lang',
+            language: $language,
+            orderBy: 'fd.updated DESC',
+        );
 
-        if ($language !== null && Language::isASupportedLanguage($language)) {
-            $query .= '
-            AND
-                fd.lang = \'' . $this->configuration->getDb()->escape($language) . "'";
-        }
-
-        $query .=
-            '
-                ' . $queryHelper->queryPermission($this->groupSupport) . '
-            GROUP BY
-                fd.id,fd.lang,fcr.category_id,fv.visits,fdg.group_id,fdu.user_id
-            ORDER BY
-                fd.updated DESC';
-
-        $result = $this->configuration->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query, 0, $count);
         $latest = [];
         $data = [];
 
@@ -256,20 +199,6 @@ class Statistics
                 $row = $this->configuration->getDb()->fetchObject($result);
                 if ($row === false || $row === null || $row === []) {
                     break;
-                }
-
-                if ($this->groupSupport) {
-                    if (!in_array((int) $row->user_id, [-1, $this->user], strict: true)) {
-                        continue;
-                    }
-
-                    if (!in_array((int) $row->group_id, $this->groups, strict: true)) {
-                        continue;
-                    }
-                }
-
-                if (!$this->groupSupport && !in_array((int) $row->user_id, [-1, $this->user], strict: true)) {
-                    continue;
                 }
 
                 $data['date'] = Date::createIsoDate($row->updated, DATE_ATOM);
@@ -292,10 +221,6 @@ class Statistics
                 $data['url'] = $oLink->toString();
 
                 $latest[$row->id] = $data;
-
-                if (count($latest) === $count) {
-                    break;
-                }
             }
         }
 
@@ -310,75 +235,16 @@ class Statistics
      */
     public function getTrendingData(int $count = PMF_NUMBER_RECORDS_TRENDING, ?string $language = null): array
     {
-        $now = date(format: 'YmdHis');
-        $queryHelper = new QueryHelper($this->user, $this->groups);
-        $query =
-            '
-            SELECT
-                fd.id AS id,
-                fd.lang AS language,
-                fcr.category_id AS category_id,
-                fd.thema AS question,
-                fd.content AS content,
-                fd.created AS created,
-                fv.visits AS visits,
-                fdg.group_id AS group_id,
-                fdu.user_id AS user_id
-            FROM
-                '
-            . Database::getTablePrefix()
-            . 'faqvisits fv,
-                '
-            . Database::getTablePrefix()
-            . 'faqdata fd
-            LEFT JOIN
-                '
-            . Database::getTablePrefix()
-            . 'faqcategoryrelations fcr
-            ON
-                fd.id = fcr.record_id
-            AND
-                fd.lang = fcr.record_lang
-            LEFT JOIN
-                '
-            . Database::getTablePrefix()
-            . 'faqdata_group AS fdg
-            ON
-                fd.id = fdg.record_id
-            LEFT JOIN
-                '
-            . Database::getTablePrefix()
-            . 'faqdata_user AS fdu
-            ON
-                fd.id = fdu.record_id
-            WHERE
-                    fd.date_start <= \''
-            . $now
-            . '\'
-                AND fd.date_end   >= \''
-            . $now
-            . '\'
-                AND fd.id = fv.id
-                AND fd.lang = fv.lang
-                AND fd.active = \'yes\'';
+        $query = $this->buildStatisticsQuery(
+            selectList: 'fd.id AS id, fd.lang AS language, fd.thema AS question, fd.content AS content, '
+            . 'fd.created AS created, fv.visits AS visits',
+            sourceTable: 'faqvisits',
+            joinCondition: 'fd.id = fv.id AND fd.lang = fv.lang',
+            language: $language,
+            orderBy: 'fd.created DESC, fv.visits DESC',
+        );
 
-        if ($language !== null && Language::isASupportedLanguage($language)) {
-            $query .= '
-            AND
-                fd.lang = \'' . $this->configuration->getDb()->escape($language) . "'";
-        }
-
-        $query .=
-            '
-                '
-            . $queryHelper->queryPermission($this->groupSupport)
-            . '
-            GROUP BY
-                fd.id, fd.lang, fd.created, fcr.category_id, fv.visits, fdg.group_id, fdu.user_id
-            ORDER BY
-                fd.created DESC, fv.visits DESC';
-
-        $result = $this->configuration->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query, 0, $count);
         $trending = [];
         $data = [];
 
@@ -387,20 +253,6 @@ class Statistics
                 $row = $this->configuration->getDb()->fetchObject($result);
                 if ($row === false || $row === null || $row === []) {
                     break;
-                }
-
-                if ($this->groupSupport) {
-                    if (!in_array((int) $row->user_id, [-1, $this->user], strict: true)) {
-                        continue;
-                    }
-
-                    if (!in_array((int) $row->group_id, $this->groups, strict: true)) {
-                        continue;
-                    }
-                }
-
-                if (!$this->groupSupport && !in_array((int) $row->user_id, [-1, $this->user], strict: true)) {
-                    continue;
                 }
 
                 $data['date'] = Filter::filterVar($row->created, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -423,10 +275,6 @@ class Statistics
                 $data['url'] = $oLink->toString();
 
                 $trending[$row->id] = $data;
-
-                if (count($trending) === $count) {
-                    break;
-                }
             }
         }
 
@@ -445,78 +293,17 @@ class Statistics
         int $categoryId = 0,
         ?string $language = null,
     ): array {
-        $now = date(format: 'YmdHis');
-        $queryHelper = new QueryHelper($this->user, $this->groups);
-        $query =
-            'SELECT
-                fd.id AS id,
-                fd.lang AS lang,
-                fd.thema AS question,
-                fd.content AS answer,
-                fd.updated AS updated,
-                fcr.category_id AS category_id,
-                fv.visits AS visits,
-                fv.last_visit AS last_visit,
-                fdg.group_id AS group_id,
-                fdu.user_id AS user_id
-            FROM
-                '
-            . Database::getTablePrefix()
-            . 'faqvisits fv,
-                '
-            . Database::getTablePrefix()
-            . 'faqdata fd
-            LEFT JOIN
-                '
-            . Database::getTablePrefix()
-            . 'faqcategoryrelations fcr
-            ON
-                fd.id = fcr.record_id
-            AND
-                fd.lang = fcr.record_lang
-            LEFT JOIN
-                '
-            . Database::getTablePrefix()
-            . 'faqdata_group AS fdg
-            ON
-                fd.id = fdg.record_id
-            LEFT JOIN
-                '
-            . Database::getTablePrefix()
-            . 'faqdata_user AS fdu
-            ON
-                fd.id = fdu.record_id
-            WHERE
-                    fd.date_start <= \''
-            . $now
-            . '\'
-                AND fd.date_end   >= \''
-            . $now
-            . '\'
-                AND fd.id = fv.id
-                AND fd.lang = fv.lang
-                AND fd.active = \'yes\'';
+        $query = $this->buildStatisticsQuery(
+            selectList: 'fd.id AS id, fd.lang AS lang, fd.thema AS question, fd.content AS answer, '
+            . 'fd.updated AS updated, fv.visits AS visits, fv.last_visit AS last_visit',
+            sourceTable: 'faqvisits',
+            joinCondition: 'fd.id = fv.id AND fd.lang = fv.lang',
+            language: $language,
+            orderBy: 'fv.visits DESC',
+            categoryId: $categoryId,
+        );
 
-        if ($categoryId !== 0) {
-            $query .= sprintf(' AND fcr.category_id = %d', $categoryId);
-        }
-
-        if ($language !== null && Language::isASupportedLanguage($language)) {
-            $query .= '
-            AND
-                fd.lang = \'' . $this->configuration->getDb()->escape($language) . "'";
-        }
-
-        $query .=
-            '
-                ' . $queryHelper->queryPermission($this->groupSupport) . '
-
-            GROUP BY
-                fd.id,fd.lang,fcr.category_id,fv.visits,fv.last_visit,fdg.group_id,fdu.user_id
-            ORDER BY
-                fv.visits DESC';
-
-        $result = $this->configuration->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query, 0, $count);
         $topTen = [];
         $data = [];
 
@@ -526,20 +313,6 @@ class Statistics
 
                 if ($row === false || $row === null || $row === []) {
                     break;
-                }
-
-                if ($this->groupSupport) {
-                    if (!in_array((int) $row->user_id, [-1, $this->user], strict: true)) {
-                        continue;
-                    }
-
-                    if (!in_array((int) $row->group_id, $this->groups, strict: true)) {
-                        continue;
-                    }
-                }
-
-                if (!$this->groupSupport && !in_array((int) $row->user_id, [-1, $this->user], strict: true)) {
-                    continue;
                 }
 
                 $data['visits'] = (int) $row->visits;
@@ -563,10 +336,6 @@ class Statistics
                 $data['url'] = $oLink->toString();
 
                 $topTen[$row->id] = $data;
-
-                if (count($topTen) === $count) {
-                    break;
-                }
             }
 
             array_multisort($topTen, SORT_DESC);
@@ -586,60 +355,16 @@ class Statistics
         $topten = [];
         $data = [];
 
-        $now = date(format: 'YmdHis');
-        $queryHelper = new QueryHelper($this->user, $this->groups);
-        $query = sprintf(
-            "SELECT
-                fd.id AS id,
-                fd.lang AS lang,
-                fd.thema AS thema,
-                fd.updated AS updated,
-                fcr.category_id AS category_id,
-                (fv.vote/fv.usr) AS avg,
-                fv.usr AS user
-            FROM
-                %sfaqvoting fv,
-                %sfaqdata fd
-            LEFT JOIN
-                %sfaqcategoryrelations fcr
-            ON
-                fd.id = fcr.record_id
-            AND
-                fd.lang = fcr.record_lang
-            LEFT JOIN
-                %sfaqdata_group AS fdg
-            ON
-                fd.id = fdg.record_id
-            LEFT JOIN
-                %sfaqdata_user AS fdu
-            ON
-                fd.id = fdu.record_id
-            WHERE
-                fd.date_start <= '%s'
-            AND fd.date_end   >= '%s'
-            AND fd.id = fv.artikel
-            AND fd.active = 'yes'",
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $now,
-            $now,
+        $query = $this->buildStatisticsQuery(
+            selectList: 'fd.id AS id, fd.lang AS lang, fd.thema AS thema, fd.updated AS updated, '
+            . '(fv.vote/fv.usr) AS avg, fv.usr AS user',
+            sourceTable: 'faqvoting',
+            joinCondition: 'fd.id = fv.artikel',
+            language: $language,
+            orderBy: 'avg DESC',
         );
 
-        if ($language !== null && Language::isASupportedLanguage($language)) {
-            $query .= '
-            AND
-                fd.lang = \'' . $this->configuration->getDb()->escape($language) . "'";
-        }
-
-        $query .= '
-                ' . $queryHelper->queryPermission($this->groupSupport) . '
-            ORDER BY
-                avg DESC';
-
-        $result = $this->configuration->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query, 0, $count);
 
         $i = 1;
         $oldId = 0;
@@ -677,6 +402,58 @@ class Statistics
         }
 
         return $topten;
+    }
+
+    /**
+     * Builds the shared statistics query: active FAQs within their publication window,
+     * joined against a per-FAQ source table (visits or votes), permission-filtered via
+     * EXISTS subqueries and enriched with a deterministic category id. Every FAQ maps
+     * to exactly one result row, so callers can rely on the driver-level LIMIT.
+     */
+    private function buildStatisticsQuery(
+        string $selectList,
+        string $sourceTable,
+        string $joinCondition,
+        ?string $language,
+        string $orderBy,
+        int $categoryId = 0,
+    ): string {
+        $now = date(format: 'YmdHis');
+        $queryHelper = new QueryHelper($this->user, $this->groups);
+        $prefix = Database::getTablePrefix();
+
+        $categoryFilter = $categoryId !== 0 ? sprintf(' AND fcr.category_id = %d', $categoryId) : '';
+
+        $query = sprintf(
+            'SELECT %s, (SELECT MIN(fcr.category_id) FROM %sfaqcategoryrelations fcr '
+            . 'WHERE fcr.record_id = fd.id AND fcr.record_lang = fd.lang%s) AS category_id '
+            . 'FROM %sfaqdata fd, %s%s fv '
+            . "WHERE %s AND fd.active = 'yes' AND fd.date_start <= '%s' AND fd.date_end >= '%s'",
+            $selectList,
+            $prefix,
+            $categoryFilter,
+            $prefix,
+            $prefix,
+            $sourceTable,
+            $joinCondition,
+            $now,
+            $now,
+        );
+
+        if ($categoryId !== 0) {
+            $query .= sprintf(
+                ' AND EXISTS (SELECT 1 FROM %sfaqcategoryrelations fcr '
+                . 'WHERE fcr.record_id = fd.id AND fcr.record_lang = fd.lang AND fcr.category_id = %d)',
+                $prefix,
+                $categoryId,
+            );
+        }
+
+        if ($language !== null && Language::isASupportedLanguage($language)) {
+            $query .= sprintf(" AND fd.lang = '%s'", $this->configuration->getDb()->escape($language));
+        }
+
+        return $query . ' ' . $queryHelper->queryPermissionExistsAll($this->groupSupport) . ' ORDER BY ' . $orderBy;
     }
 
     public function setUser(int $userId = -1): Statistics

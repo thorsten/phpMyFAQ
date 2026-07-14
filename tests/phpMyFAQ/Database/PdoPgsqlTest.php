@@ -216,6 +216,24 @@ class PdoPgsqlTest extends TestCase
         $this->assertEquals(0, $result);
     }
 
+    public function testQueryUsesPostgresLimitOffsetSyntax(): void
+    {
+        $statementMock = $this->createMock(PDOStatement::class);
+        $pdoMock = $this->createMock(PDO::class);
+        $pdoMock
+            ->expects($this->once())
+            ->method('query')
+            ->with('SELECT id FROM faqdata ORDER BY id LIMIT 10 OFFSET 5')
+            ->willReturn($statementMock);
+
+        $reflectionProperty = new ReflectionProperty(PdoPgsql::class, 'pdo');
+        $reflectionProperty->setValue($this->pdoPgsql, $pdoMock);
+
+        $result = $this->pdoPgsql->query('SELECT id FROM faqdata ORDER BY id', 5, 10);
+
+        $this->assertSame($statementMock, $result);
+    }
+
     public function testGetTableNames(): void
     {
         $prefix = 'test_';

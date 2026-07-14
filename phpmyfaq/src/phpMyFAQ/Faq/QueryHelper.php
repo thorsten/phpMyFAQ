@@ -67,6 +67,67 @@ readonly class QueryHelper
     }
 
     /**
+     * Permission filter as EXISTS subqueries requiring BOTH a user grant and a group
+     * grant (the effective statistics semantics). Unlike queryPermission(), this does
+     * not depend on LEFT JOINs against faqdata_user/faqdata_group in the outer query,
+     * so it never fans one FAQ out into multiple result rows — a prerequisite for SQL LIMIT.
+     */
+    public function queryPermissionExistsAll(bool $hasGroupSupport = false): string
+    {
+        $clause = 'AND ' . $this->userGrantExists();
+
+        if ($hasGroupSupport) {
+            $clause .= ' AND ' . $this->groupGrantExists();
+        }
+
+        return $clause;
+    }
+
+    /**
+     * Permission filter as EXISTS subqueries with the same semantics as queryPermission()
+     * (a user grant OR a group grant suffices), but without the LEFT JOIN fanout, so
+     * result rows stay one-per-FAQ and SQL LIMIT/COUNT are reliable.
+     */
+    public function queryPermissionExistsAny(bool $hasGroupSupport = false): string
+    {
+        if (!$hasGroupSupport) {
+            return 'AND ' . $this->userGrantExists();
+        }
+
+        if (-1 === $this->user) {
+            return 'AND ' . $this->groupGrantExists();
+        }
+
+        return sprintf(
+            'AND (EXISTS (SELECT 1 FROM %sfaqdata_user pfdu '
+            . 'WHERE pfdu.record_id = fd.id AND pfdu.user_id = %d) OR %s)',
+            Database::getTablePrefix(),
+            $this->user,
+            $this->groupGrantExists(),
+        );
+    }
+
+    private function userGrantExists(): string
+    {
+        $userIds = -1 === $this->user ? '-1' : sprintf('-1, %d', $this->user);
+
+        return sprintf(
+            'EXISTS (SELECT 1 FROM %sfaqdata_user pfdu WHERE pfdu.record_id = fd.id AND pfdu.user_id IN (%s))',
+            Database::getTablePrefix(),
+            $userIds,
+        );
+    }
+
+    private function groupGrantExists(): string
+    {
+        return sprintf(
+            'EXISTS (SELECT 1 FROM %sfaqdata_group pfdg WHERE pfdg.record_id = fd.id AND pfdg.group_id IN (%s))',
+            Database::getTablePrefix(),
+            $this->normalizeIdList($this->groups),
+        );
+    }
+
+    /**
      * Build the SQL query for retrieving FAQ records according to the constraints provided.
      */
     public function getQuery(

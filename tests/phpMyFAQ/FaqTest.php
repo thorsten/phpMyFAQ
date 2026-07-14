@@ -258,6 +258,36 @@ class FaqTest extends TestCase
         $this->assertSame(Translation::get(key: 'msgPage'), $data['msgPage']);
     }
 
+    public function testGetFaqsDataByCategoryIdReturnsRequestedPage(): void
+    {
+        $this->configuration->set('records.numberOfRecordsPerPage', 1);
+        $this->setConfigurationValue('records.numberOfRecordsPerPage', 1);
+
+        $this->seedFaqRecord(
+            id: 5022,
+            solutionId: 7022,
+            categoryId: 1,
+            question: 'Rendered FAQ One',
+            answer: 'Rendered answer one',
+            visits: 11,
+        );
+        $this->seedFaqRecord(
+            id: 5023,
+            solutionId: 7023,
+            categoryId: 1,
+            question: 'Rendered FAQ Two',
+            answer: 'Rendered answer two',
+            visits: 12,
+        );
+
+        $data = $this->faq->getFaqsDataByCategoryId(1, page: 2);
+
+        $this->assertSame(2, $data['page']);
+        $this->assertSame(2, $data['pages']);
+        $this->assertCount(1, $data['items']);
+        $this->assertStringContainsString('Rendered FAQ Two', $data['items'][0]['anchor']);
+    }
+
     public function testGetFaqReturnsInactiveMessageForFrontendAndRawContentForAdmin(): void
     {
         $this->seedFaqRecord(id: 5001, solutionId: 7001, active: 'no', answer: 'Inactive answer');

@@ -361,6 +361,89 @@ class FaqRepositoryTest extends TestCase
         $this->assertSame('Render By Id', $row->question);
     }
 
+    /**
+     * @param int[] $groupIds
+     */
+    private function seedGroupPermissions(int $recordId, array $groupIds): void
+    {
+        foreach ($groupIds as $groupId) {
+            $this->configuration->getDb()->query(sprintf(
+                'INSERT INTO %sfaqdata_group (record_id, group_id) VALUES (%d, %d)',
+                Database::getTablePrefix(),
+                $recordId,
+                $groupId,
+            ));
+        }
+    }
+
+    public function testCountRenderableFaqsByCategoryIdCountsPermittedFaqs(): void
+    {
+        $this->seedFaqRecord(id: 5070, solutionId: 7600, question: 'Public one', categoryId: 96);
+        $this->seedFaqRecord(id: 5071, solutionId: 7601, question: 'Public two', categoryId: 96);
+        $this->seedFaqRecord(id: 5072, solutionId: 7602, question: 'Restricted', categoryId: 96, userId: 42);
+
+        $this->assertSame(2, $this->faqRepository->countRenderableFaqsByCategoryId(96, -1, [-1], false));
+        $this->assertSame(3, $this->faqRepository->countRenderableFaqsByCategoryId(96, 42, [-1], false));
+    }
+
+    public function testCountRenderableFaqsByCategoryIdCountsMultiGroupFaqOnce(): void
+    {
+        $this->seedFaqRecord(id: 5073, solutionId: 7603, question: 'Multi group', categoryId: 97);
+        $this->seedGroupPermissions(5073, [10, 20]);
+
+        $this->assertSame(1, $this->faqRepository->countRenderableFaqsByCategoryId(97, -1, [10, 20], true));
+    }
+
+    public function testQueryRenderableFaqsByCategoryIdReturnsMultiGroupFaqOnce(): void
+    {
+        $this->seedFaqRecord(id: 5074, solutionId: 7604, question: 'Multi group render', categoryId: 98);
+        $this->seedGroupPermissions(5074, [10, 20]);
+
+        $result = $this->faqRepository->queryRenderableFaqsByCategoryId(98, 'ORDER BY fd.id ASC', -1, [10, 20], true);
+
+        $this->assertSame(1, $this->configuration->getDb()->numRows($result));
+    }
+
+    public function testQueryRenderableFaqsByCategoryIdAppliesOffsetAndRowcount(): void
+    {
+        $this->seedFaqRecord(id: 5075, solutionId: 7605, question: 'Page item one', categoryId: 99);
+        $this->seedFaqRecord(id: 5076, solutionId: 7606, question: 'Page item two', categoryId: 99);
+        $this->seedFaqRecord(id: 5077, solutionId: 7607, question: 'Page item three', categoryId: 99);
+
+        $result = $this->faqRepository->queryRenderableFaqsByCategoryId(
+            99,
+            'ORDER BY fd.id ASC',
+            -1,
+            [-1],
+            false,
+            offset: 1,
+            rowcount: 1,
+        );
+
+        $this->assertSame(1, $this->configuration->getDb()->numRows($result));
+        $this->assertSame(5076, (int) $this->configuration->getDb()->fetchObject($result)->id);
+    }
+
+    public function testFetchAvailableFaqsByCategoryIdReturnsMultiGroupFaqOnce(): void
+    {
+        $this->seedFaqRecord(id: 5078, solutionId: 7608, question: 'Multi group fetch', categoryId: 100);
+        $this->seedGroupPermissions(5078, [10, 20]);
+
+        $rows = $this->faqRepository->fetchAvailableFaqsByCategoryId(100, 'fd', 'id', 'ASC', -1, [10, 20], true);
+
+        $this->assertCount(1, $rows);
+    }
+
+    public function testQueryRenderableFaqsByIdsReturnsMultiGroupFaqOnce(): void
+    {
+        $this->seedFaqRecord(id: 5079, solutionId: 7609, question: 'Multi group by id', categoryId: 101);
+        $this->seedGroupPermissions(5079, [10, 20]);
+
+        $result = $this->faqRepository->queryRenderableFaqsByIds('5079', 'fd.id', 'ASC', -1, [10, 20], true);
+
+        $this->assertSame(1, $this->configuration->getDb()->numRows($result));
+    }
+
     private function makeFaqEntity(int $id, int $solutionId, string $question): FaqEntity
     {
         return new FaqEntity()

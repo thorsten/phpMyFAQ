@@ -433,19 +433,22 @@ class StatisticsTest extends TestCase
         self::assertEquals(42, $result[1]['visits']);
     }
 
-    public function testGetLatestDataRespectsCountLimit(): void
+    public function testGetLatestDataDelegatesCountToDriverLimit(): void
     {
         $configMock = $this->createConfigWithLanguage();
         $statistics = new Statistics($configMock);
 
         $resultMock = $this->createStub(\SQLite3Result::class);
-        $this->dbMock->method('query')->willReturn($resultMock);
+        $this->dbMock
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->anything(), 0, 2)
+            ->willReturn($resultMock);
         $this->dbMock->method('escape')->willReturn('en');
 
         $row1 = $this->createFaqRow(1, 'en', 1, 'Q1', 'A1', '20260101', 10);
         $row2 = $this->createFaqRow(2, 'en', 1, 'Q2', 'A2', '20260102', 20);
-        $row3 = $this->createFaqRow(3, 'en', 1, 'Q3', 'A3', '20260103', 30);
-        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row1, $row2, $row3, null);
+        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row1, $row2, null);
 
         $result = $statistics->getLatestData(2, 'en');
 
@@ -479,25 +482,22 @@ class StatisticsTest extends TestCase
         self::assertEmpty($result);
     }
 
-    public function testGetLatestDataSkipsUnauthorizedUserWithBasicPerm(): void
+    public function testGetLatestDataAppliesUserPermissionFilterInSql(): void
     {
         $configMock = $this->createConfigWithLanguage();
         $statistics = new Statistics($configMock);
         $statistics->setUser(5);
 
-        $resultMock = $this->createStub(\SQLite3Result::class);
-        $this->dbMock->method('query')->willReturn($resultMock);
+        $this->dbMock
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->stringContains('pfdu.user_id IN (-1, 5)'))
+            ->willReturn(false);
 
-        // Row with user_id=99 should be skipped (user is 5, not -1 or 5)
-        $row = $this->createFaqRow(1, 'en', 1, 'Q', 'A', '20260101', 1, -1, 99);
-        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row, null);
-
-        $result = $statistics->getLatestData(10);
-
-        self::assertEmpty($result);
+        self::assertEmpty($statistics->getLatestData(10));
     }
 
-    public function testGetLatestDataWithGroupSupport(): void
+    public function testGetLatestDataAppliesGroupPermissionFilterInSql(): void
     {
         $configMock = $this->createMock(Configuration::class);
         $configMock->method('getDb')->willReturn($this->dbMock);
@@ -511,47 +511,17 @@ class StatisticsTest extends TestCase
         $statistics = new Statistics($configMock);
         $statistics->setUser(5)->setGroups([10, 20]);
 
-        $resultMock = $this->createStub(\SQLite3Result::class);
-        $this->dbMock->method('query')->willReturn($resultMock);
         $this->dbMock->method('escape')->willReturn('en');
+        $this->dbMock
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->logicalAnd(
+                $this->stringContains('pfdu.user_id IN (-1, 5)'),
+                $this->stringContains('pfdg.group_id IN (10, 20)'),
+            ))
+            ->willReturn(false);
 
-        // Row with matching user but wrong group
-        $rowBadGroup = $this->createFaqRow(1, 'en', 1, 'Q1', 'A1', '20260101', 1, 99, 5);
-        // Row with matching user and group
-        $rowGood = $this->createFaqRow(2, 'en', 1, 'Q2', 'A2', '20260102', 2, 10, 5);
-        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($rowBadGroup, $rowGood, null);
-
-        $result = $statistics->getLatestData(10, 'en');
-
-        // Only the row with matching group should be included
-        self::assertCount(1, $result);
-        self::assertArrayHasKey(2, $result);
-    }
-
-    public function testGetLatestDataWithGroupSupportSkipsBadUser(): void
-    {
-        $configMock = $this->createMock(Configuration::class);
-        $configMock->method('getDb')->willReturn($this->dbMock);
-        $configMock->method('get')->willReturn('medium');
-        $configMock->method('getDefaultUrl')->willReturn('https://example.com/');
-        $langMock = $this->createMock(Language::class);
-        $langMock->method('getLanguage')->willReturn('en');
-        $configMock->method('getLanguage')->willReturn($langMock);
-
-        Strings::init();
-        $statistics = new Statistics($configMock);
-        $statistics->setUser(5)->setGroups([10]);
-
-        $resultMock = $this->createStub(\SQLite3Result::class);
-        $this->dbMock->method('query')->willReturn($resultMock);
-
-        // Row with wrong user_id (not -1 and not 5)
-        $row = $this->createFaqRow(1, 'en', 1, 'Q', 'A', '20260101', 1, 10, 99);
-        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row, null);
-
-        $result = $statistics->getLatestData(10);
-
-        self::assertEmpty($result);
+        self::assertEmpty($statistics->getLatestData(10, 'en'));
     }
 
     // =============================================
@@ -599,18 +569,21 @@ class StatisticsTest extends TestCase
         self::assertEmpty($result);
     }
 
-    public function testGetTopTenDataRespectsCountLimit(): void
+    public function testGetTopTenDataDelegatesCountToDriverLimit(): void
     {
         $configMock = $this->createConfigWithLanguage();
         $statistics = new Statistics($configMock);
 
         $resultMock = $this->createStub(\SQLite3Result::class);
-        $this->dbMock->method('query')->willReturn($resultMock);
+        $this->dbMock
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->anything(), 0, 2)
+            ->willReturn($resultMock);
 
         $row1 = $this->createFaqRow(1, 'en', 1, 'Q1', 'A1', '20260101', 100);
         $row2 = $this->createFaqRow(2, 'en', 1, 'Q2', 'A2', '20260102', 90);
-        $row3 = $this->createFaqRow(3, 'en', 1, 'Q3', 'A3', '20260103', 80);
-        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row1, $row2, $row3, null);
+        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row1, $row2, null);
 
         $result = $statistics->getTopTenData(2);
 
@@ -736,18 +709,21 @@ class StatisticsTest extends TestCase
         self::assertCount(2, $result);
     }
 
-    public function testGetTopVotedDataRespectsCountLimit(): void
+    public function testGetTopVotedDataDelegatesCountToDriverLimit(): void
     {
         $configMock = $this->createConfigWithLanguage();
         $statistics = new Statistics($configMock);
 
         $resultMock = $this->createStub(\SQLite3Result::class);
-        $this->dbMock->method('query')->willReturn($resultMock);
+        $this->dbMock
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->anything(), 0, 2)
+            ->willReturn($resultMock);
 
         $row1 = $this->createFaqRow(1, 'en', 1, 'Q1', 'A1', '20260101', 0);
         $row2 = $this->createFaqRow(2, 'en', 1, 'Q2', 'A2', '20260102', 0);
-        $row3 = $this->createFaqRow(3, 'en', 1, 'Q3', 'A3', '20260103', 0);
-        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row1, $row2, $row3, null);
+        $this->dbMock->method('fetchObject')->willReturnOnConsecutiveCalls($row1, $row2, null);
 
         $result = $statistics->getTopVotedData(2);
 
