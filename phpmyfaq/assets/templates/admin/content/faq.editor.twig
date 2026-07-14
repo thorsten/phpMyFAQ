@@ -42,11 +42,19 @@
             <li class="nav-item">
               <a class="nav-link active" data-bs-toggle="tab" href="#tab-question-answer" role="tab">
                 <i class="bi bi-pencil"></i> {{ 'msgQuestionAnswer' | translate }}
+                <span class="badge rounded-pill text-bg-danger ms-1 d-none"
+                      data-pmf-tab-error-badge="#tab-question-answer"></span>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="tab" href="#tab-meta-data" role="tab">
                 <i class="bi bi-database"></i> {{ 'msgFAQMetaData' | translate }}
+                {% if hasPermissionForAddAttachments %}
+                  <span class="badge rounded-pill text-bg-secondary ms-1{{ attachments is empty ? ' d-none' }}"
+                        id="pmf-attachment-count-badge">{{ attachments | length }}</span>
+                {% endif %}
+                <span class="badge rounded-pill text-bg-danger ms-1 d-none"
+                      data-pmf-tab-error-badge="#tab-meta-data"></span>
               </a>
             </li>
             <li class="nav-item">
@@ -112,6 +120,10 @@
                 <div class="form-group mb-2">
                   <input type="text" name="question" id="question" class="form-control form-control-lg"
                          placeholder="{{ 'msgQuestion' | translate }}" value="{{ faqData['title'] }}">
+                  <div class="invalid-feedback d-none" id="question-required-feedback" tabindex="-1"
+                       data-pmf-validation-feedback>{{ 'msgQuestionRequired' | translate }}</div>
+                  <div class="invalid-feedback d-none" id="question-hash-feedback" tabindex="-1"
+                       data-pmf-validation-feedback>{{ 'msgNoHashAllowed' | translate }}</div>
                   <small id="questionHelp" class="form-text visually-hidden">
                     {{ 'msgNoHashAllowed' | translate }}
                   </small>
@@ -182,6 +194,11 @@
                   </div>
                 {% endif %}
 
+                <div class="invalid-feedback d-none" id="answer-invalid-feedback" tabindex="-1"
+                     data-pmf-validation-feedback>
+                  {{ 'msgAnswerRequired' | translate }}
+                </div>
+
                 {% if not editExistingFaq %}
                   {# Translation button for FAQ translation mode #}
                   <div class="row mt-3">
@@ -198,13 +215,19 @@
             <div class="tab-pane" id="tab-meta-data">
               <!-- Categories -->
               <div class="row mb-2">
-                <label class="col-2 col-form-label" for="phpmyfaq-categories">
+                <label class="col-2 col-form-label" for="pmf-faq-category-filter">
                   {{ 'msgCategory' | translate }}
                 </label>
-                <div class="col-6">
-                  <select class="form-control" name="categories[]" id="phpmyfaq-categories" size="5" multiple>
-                    {{ categoryMacros.renderOptions(categoryTree, selectedCategories) | raw }}
-                  </select>
+                <div class="col-10">
+                  <input type="search" id="pmf-faq-category-filter" class="form-control mb-2" autocomplete="off"
+                         placeholder="{{ 'ad_category_filter' | translate }}">
+                  <div id="pmf-faq-category-tree" class="pmf-category-checkbox-tree border rounded p-2">
+                    {{ categoryMacros.renderCheckboxTree(categoryTree, selectedCategories) | raw }}
+                  </div>
+                  <div class="invalid-feedback d-none" id="categories-invalid-feedback" tabindex="-1"
+                       data-pmf-validation-feedback>
+                    {{ 'msgCategoryRequired' | translate }}
+                  </div>
                 </div>
               </div>
 
@@ -247,6 +270,18 @@
                       {% endfor %}
                     </ul>
 
+                    <div id="pmf-attachment-dropzone" class="pmf-attachment-dropzone rounded p-4 text-center text-muted mb-2"
+                         data-pmf-max-size="{{ maxAttachmentSize }}"
+                         data-pmf-msg-too-big="{{ 'msgAttachmentTooBig' | translate }}">
+                      <i class="bi bi-cloud-arrow-up fs-3 d-block" aria-hidden="true"></i>
+                      {{ 'msgDropFilesHere' | translate }}
+                      <button type="button" class="btn btn-link p-0 align-baseline" id="pmf-attachment-dropzone-browse">
+                        {{ 'msgOrBrowseFiles' | translate }}
+                      </button>
+                      <input type="file" id="pmf-attachment-dropzone-input" class="d-none" multiple>
+                    </div>
+                    <ul id="pmf-attachment-dropzone-progress" class="list-unstyled mb-2 text-start"></ul>
+
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                             data-bs-target="#attachmentModal">
                       {{ 'msgAddAttachment' | translate }}
@@ -262,7 +297,8 @@
                 </label>
                 <div class="col-lg-10">
                   <input type="text" name="tags" id="tags" value="{{ faqData['tags'] }}" autocomplete="off"
-                         class="form-control pmf-tags-autocomplete">
+                         maxlength="255" class="form-control pmf-tags-autocomplete">
+                  <small class="form-text" data-pmf-counter-for="tags" data-pmf-counter-max="255"></small>
                   <small id="tagsHelp" class="form-text visually-hidden">{{ 'msgShowHelp' | translate }}</small>
                 </div>
               </div>
@@ -275,6 +311,7 @@
                 <div class="col-lg-10">
                   <input type="text" name="keywords" id="keywords" maxlength="255" class="form-control"
                          autocomplete="off" value="{{ faqData['keywords'] }}">
+                  <small class="form-text" data-pmf-counter-for="keywords" data-pmf-counter-max="255"></small>
                   <small id="keywordsHelp" class="form-text visually-hidden">{{ 'msgShowHelp' | translate }}</small>
                 </div>
               </div>
@@ -294,6 +331,8 @@
                 <label class="col-lg-2 col-form-label" for="email">{{ 'msgEmail' | translate }}</label>
                 <div class="col-lg-10">
                   <input type="email" name="email" id="email" value="{{ faqData['email'] | e('html_attr') }}" class="form-control">
+                  <div class="invalid-feedback d-none" id="email-invalid-feedback" tabindex="-1"
+                       data-pmf-validation-feedback>{{ 'msgErrorEnterValidMail' | translate }}</div>
                 </div>
               </div>
 
@@ -311,6 +350,8 @@
                 <div class="col-lg-9">
                   <input type="text" name="serpTitle" id="serpTitle" value="{{ faqData['serp-title'] }}"
                          class="form-control">
+                  <small class="form-text" data-pmf-counter-for="serpTitle" data-pmf-counter-max="60"></small>
+                  <small class="form-text text-muted d-block">{{ 'msgSerpTitleHint' | translate }}</small>
                 </div>
               </div>
 
@@ -322,6 +363,8 @@
                 <div class="col-lg-9">
                 <textarea type="text" name="serpDescription" id="serpDescription" rows="5" class="form-control"
                 >{{ faqData['serp-description'] }}</textarea>
+                  <small class="form-text" data-pmf-counter-for="serpDescription" data-pmf-counter-max="160"></small>
+                  <small class="form-text text-muted d-block">{{ 'msgSerpDescriptionHint' | translate }}</small>
                 </div>
               </div>
 
@@ -489,16 +532,20 @@
 
     <!-- Sidebar -->
     <div class="col-3">
-      <div class="card shadow mb-4">
+      <div class="card shadow mb-4 sticky-top pmf-faq-editor-sidebar">
         <div class="card-header text-end" role="tab" id="pmf-heading-date">
           {% if selectedRevisionId == faqData['revision_id'] %}
             <button class="btn btn-info" type="reset">
               <i class="bi bi-x-circle" aria-hidden="true"></i> {{ ad_gen_reset }}
             </button>
 
-            <button class="btn btn-primary" type="submit" id="faqEditorSubmit">
+            <button class="btn btn-primary" type="submit" id="faqEditorSubmit"
+                    data-pmf-label-saving="{{ 'msgSaving3Dots' | translate }}"
+                    data-pmf-label-saved="{{ 'msgSaved' | translate }}"
+                    data-pmf-msg-save-error="{{ 'msgErrorSavingFaq' | translate }}">
               <i class="bi bi-save" aria-hidden="true"></i> {{ ad_entry_save }}
             </button>
+            <small id="pmf-faq-saved-indicator" class="d-block text-end text-success mt-1" aria-live="polite"></small>
           {% endif %}
         </div>
         <div class="card-body">
@@ -607,7 +654,8 @@
             <button class="btn btn-danger mt-2 w-100" type="button" id="faqEditorDelete" data-bs-toggle="modal"
                     data-bs-target="#deleteFaqModal" data-faq-id="{{ faqData['id'] }}"
                     data-faq-language="{{ faqData['lang'] }}"
-                    data-pmf-csrf-token="{{ csrfToken }}">
+                    data-pmf-csrf-token="{{ csrfToken }}"
+                    data-pmf-msg-delete-error="{{ 'msgErrorDeletingFaq' | translate }}">
               <i class="bi bi-trash" aria-hidden="true"></i> {{ 'msgDelete' | translate }}
             </button>
           </div>
@@ -659,7 +707,8 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" id="pmf-attachment-modal-upload">
+          <button type="button" class="btn btn-primary" id="pmf-attachment-modal-upload"
+                  data-pmf-msg-uploaded="{{ 'msgAttachmentsUploaded' | translate }}">
             {{ ad_att_butt }}
           </button>
         </div>

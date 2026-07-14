@@ -50,11 +50,13 @@ import {
 } from './configuration';
 import {
   handleAttachmentUploads,
+  handleAttachmentDragAndDrop,
   handleCategories,
   handleCategoryOverview,
   handleDeleteAttachments,
   handleDeleteComments,
   handleFaqForm,
+  handleFaqCategoryTree,
   handleFaqOverview,
   handleMarkdownForm,
   handleFileFilter,
@@ -76,6 +78,9 @@ import {
   handleEditPage,
   handleTranslatePage,
   handleSaveFaqData,
+  handleSaveShortcut,
+  handleDirtyState,
+  handleCharacterCounters,
   handleUpdateQuestion,
   handleRefreshAttachments,
   handleToggleVisibility,
@@ -152,11 +157,16 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   // Content → add/edit FAQs
   renderEditor();
   handleFaqForm();
+  handleFaqCategoryTree();
   handleFaqTranslate();
   handleMarkdownForm();
   handleAttachmentUploads();
+  handleAttachmentDragAndDrop();
   handleFileFilter();
   handleSaveFaqData();
+  handleSaveShortcut();
+  handleDirtyState();
+  handleCharacterCounters();
   handleUpdateQuestion();
   handleDeleteFaqEditorModal();
   handleResetButton();

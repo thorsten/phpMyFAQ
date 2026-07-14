@@ -72,11 +72,7 @@ final class AttachmentController extends AbstractAdministrationApiController
     /**
      * @throws \Exception
      */
-    #[Route(
-        './admin/api/content/attachments/refresh',
-        name: 'admin.api.content.attachments.refresh',
-        methods: ['POST'],
-    )]
+    #[Route(path: 'content/attachments/refresh', name: 'admin.api.content.attachments.refresh', methods: ['POST'])]
     public function refresh(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::ATTACHMENT_DELETE);

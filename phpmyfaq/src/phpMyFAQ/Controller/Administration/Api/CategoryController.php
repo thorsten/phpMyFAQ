@@ -104,7 +104,12 @@ final class CategoryController extends AbstractAdministrationApiController
         ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
-    #[Route(path: 'category/permissions', name: 'admin.api.category.permissions', methods: ['GET'])]
+    #[Route(
+        path: 'category/permissions/{categories}',
+        name: 'admin.api.category.permissions',
+        methods: ['GET'],
+        defaults: ['categories' => null],
+    )]
     public function permissions(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CATEGORY_EDIT);
@@ -129,7 +134,7 @@ final class CategoryController extends AbstractAdministrationApiController
         ], Response::HTTP_OK);
     }
 
-    #[Route(path: 'category/translations', name: 'admin.api.category.translations', methods: ['GET'])]
+    #[Route(path: 'category/translations/{categoryId}', name: 'admin.api.category.translations', methods: ['GET'])]
     public function translations(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CATEGORY_EDIT);

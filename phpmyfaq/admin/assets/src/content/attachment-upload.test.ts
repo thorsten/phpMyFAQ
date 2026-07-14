@@ -1,11 +1,14 @@
 import { describe, it, expect, beforeEach, vi, afterEach, type Mock } from 'vitest';
-import { handleAttachmentUploads } from './attachment-upload';
+import { appendAttachmentToList, handleAttachmentDragAndDrop, handleAttachmentUploads } from './attachment-upload';
 import * as api from '../api';
 import * as utils from '../../../../assets/src/utils';
 
 // Mock the dependencies
 vi.mock('../api');
 vi.mock('../../../../assets/src/utils');
+vi.mock('./editor', () => ({
+  getJoditEditor: vi.fn(() => null),
+}));
 
 const mockUploadAttachments = api.uploadAttachments as Mock;
 const mockAddElement = utils.addElement as Mock;
@@ -1179,5 +1182,162 @@ describe('handleAttachmentUploads', () => {
       expect(mockFileSize.textContent).toBeTruthy();
       expect(mockFileSize.innerHTML).toBe(mockFileSize.textContent);
     });
+  });
+});
+
+describe('appendAttachmentToList', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    applyRealAddElementMock();
+  });
+
+  it('should do nothing without an attachment list', () => {
+    document.body.innerHTML = '';
+
+    expect(() => appendAttachmentToList({ attachmentId: '1', fileName: 'test.txt' })).not.toThrow();
+  });
+
+  it('should append a list item with link and delete button', () => {
+    document.body.innerHTML = '<ul class="adminAttachments" data-pmf-csrf-token="csrf-abc"></ul>';
+
+    appendAttachmentToList({ attachmentId: '7', fileName: 'manual.pdf' });
+
+    const item = document.getElementById('attachment-id-7') as HTMLElement;
+    expect(item).not.toBeNull();
+    expect((item.querySelector('a') as HTMLAnchorElement).textContent).toBe('manual.pdf');
+    expect(
+      (item.querySelector('button.pmf-delete-attachment-button') as HTMLElement).getAttribute('data-pmf-csrf-token')
+    ).toBe('csrf-abc');
+  });
+});
+
+describe('handleAttachmentDragAndDrop', () => {
+  const mockUpload = api.uploadAttachments as Mock;
+
+  const dropzoneMarkup = `
+    <span id="pmf-attachment-count-badge" class="badge d-none">0</span>
+    <div id="pmf-attachment-dropzone" data-pmf-max-size="1024" data-pmf-msg-too-big="Too big!">
+      <button type="button" id="pmf-attachment-dropzone-browse">browse</button>
+      <input type="file" id="pmf-attachment-dropzone-input" class="d-none" multiple>
+    </div>
+    <ul id="pmf-attachment-dropzone-progress"></ul>
+    <ul class="adminAttachments" data-pmf-csrf-token="csrf-abc"></ul>
+    <input id="attachment_record_id" value="123" />
+    <input id="attachment_record_lang" value="en" />
+    <input id="pmf-attachment-csrf-token" value="upload-token" />
+  `;
+
+  const dispatchDrop = (files: File[]): void => {
+    const dropzone = document.getElementById('pmf-attachment-dropzone') as HTMLElement;
+    const dropEvent = new Event('drop', { cancelable: true });
+    Object.defineProperty(dropEvent, 'dataTransfer', { value: { files } });
+    dropzone.dispatchEvent(dropEvent);
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    document.body.innerHTML = dropzoneMarkup;
+    applyRealAddElementMock();
+  });
+
+  it('should do nothing when the dropzone is missing', () => {
+    document.body.innerHTML = '';
+
+    expect(() => handleAttachmentDragAndDrop()).not.toThrow();
+  });
+
+  it('should toggle the dragover style on drag events', () => {
+    handleAttachmentDragAndDrop();
+
+    const dropzone = document.getElementById('pmf-attachment-dropzone') as HTMLElement;
+    dropzone.dispatchEvent(new Event('dragover', { cancelable: true }));
+    expect(dropzone.classList.contains('pmf-dragover')).toBe(true);
+
+    dropzone.dispatchEvent(new Event('dragleave'));
+    expect(dropzone.classList.contains('pmf-dragover')).toBe(false);
+  });
+
+  it('should upload dropped files, append them to the list, and update the badge', async () => {
+    handleAttachmentDragAndDrop();
+
+    mockUpload.mockResolvedValue([{ attachmentId: '11', fileName: 'dropped.txt' }]);
+
+    dispatchDrop([new File(['content'], 'dropped.txt', { type: 'text/plain' })]);
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(mockUpload).toHaveBeenCalledTimes(1);
+    const formData = mockUpload.mock.calls[0][0] as FormData;
+    expect(formData.get('record_id')).toBe('123');
+    expect(formData.get('record_lang')).toBe('en');
+    expect(formData.get('pmf-csrf-token')).toBe('upload-token');
+
+    expect(document.getElementById('attachment-id-11')).not.toBeNull();
+
+    const badge = document.getElementById('pmf-attachment-count-badge') as HTMLElement;
+    expect(badge.textContent).toBe('1');
+    expect(badge.classList.contains('d-none')).toBe(false);
+
+    const progressRow = document.querySelector('#pmf-attachment-dropzone-progress li') as HTMLElement;
+    expect(progressRow.classList.contains('text-success')).toBe(true);
+  });
+
+  it('should skip files exceeding the maximum size', async () => {
+    handleAttachmentDragAndDrop();
+
+    dispatchDrop([new File(['a'.repeat(2048)], 'huge.bin', { type: 'application/octet-stream' })]);
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(mockUpload).not.toHaveBeenCalled();
+
+    const progressRow = document.querySelector('#pmf-attachment-dropzone-progress li') as HTMLElement;
+    expect(progressRow.classList.contains('text-danger')).toBe(true);
+    expect(progressRow.textContent).toContain('Too big!');
+  });
+
+  it('should mark a failed upload and keep uploading remaining files', async () => {
+    handleAttachmentDragAndDrop();
+
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    mockUpload
+      .mockRejectedValueOnce(new Error('Upload failed'))
+      .mockResolvedValueOnce([{ attachmentId: '12', fileName: 'second.txt' }]);
+
+    dispatchDrop([
+      new File(['first'], 'first.txt', { type: 'text/plain' }),
+      new File(['second'], 'second.txt', { type: 'text/plain' }),
+    ]);
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(mockUpload).toHaveBeenCalledTimes(2);
+
+    const progressRows = document.querySelectorAll<HTMLElement>('#pmf-attachment-dropzone-progress li');
+    expect(progressRows[0].classList.contains('text-danger')).toBe(true);
+    expect(progressRows[1].classList.contains('text-success')).toBe(true);
+    expect(document.getElementById('attachment-id-12')).not.toBeNull();
+
+    consoleErrorSpy.mockRestore();
+  });
+
+  it('should upload files chosen via the browse button', async () => {
+    handleAttachmentDragAndDrop();
+
+    mockUpload.mockResolvedValue([{ attachmentId: '13', fileName: 'browsed.txt' }]);
+
+    const browseInput = document.getElementById('pmf-attachment-dropzone-input') as HTMLInputElement;
+    const file = new File(['content'], 'browsed.txt', { type: 'text/plain' });
+    Object.defineProperty(browseInput, 'files', {
+      value: [file],
+      configurable: true,
+    });
+
+    browseInput.dispatchEvent(new Event('change'));
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(mockUpload).toHaveBeenCalledTimes(1);
+    expect(document.getElementById('attachment-id-13')).not.toBeNull();
   });
 });

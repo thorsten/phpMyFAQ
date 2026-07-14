@@ -15,7 +15,44 @@
 import { addElement, pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 import { uploadAttachments } from '../api';
 import { Attachment } from '../interfaces';
-import { bindAttachmentDeleteButton } from './faqs';
+import { bindAttachmentDeleteButton, updateAttachmentCountBadge } from './faqs';
+
+export const appendAttachmentToList = (attachment: Attachment): void => {
+  const attachmentList = document.querySelector('.adminAttachments') as HTMLElement | null;
+  if (!attachmentList) {
+    return;
+  }
+
+  const csrfToken = attachmentList.getAttribute('data-pmf-csrf-token') as string;
+  const deleteButton = addElement(
+    'button',
+    {
+      type: 'button',
+      className: 'btn btn-sm btn-danger pmf-delete-attachment-button',
+      'data-pmf-attachment-id': attachment.attachmentId,
+      'data-pmf-csrf-token': csrfToken,
+    },
+    [
+      addElement('i', {
+        className: 'bi bi-trash',
+        'data-pmf-attachment-id': attachment.attachmentId,
+        'data-pmf-csrf-token': csrfToken,
+      }),
+    ]
+  );
+  bindAttachmentDeleteButton(deleteButton);
+  attachmentList.insertAdjacentElement(
+    'beforeend',
+    addElement('li', { id: `attachment-id-${attachment.attachmentId}` }, [
+      addElement('a', {
+        className: 'me-2',
+        href: `../attachment/${attachment.attachmentId}`,
+        innerText: attachment.fileName,
+      }),
+      deleteButton,
+    ])
+  );
+};
 
 export const handleAttachmentUploads = (): void => {
   const filesToUpload = document.getElementById('filesToUpload') as HTMLInputElement | null;
@@ -107,46 +144,15 @@ export const handleAttachmentUploads = (): void => {
 
       try {
         const response = await uploadAttachments(formData);
-        pushNotification(`${response.length} file(s) uploaded.`);
+        const uploadedMessage = fileUploadButton?.getAttribute('data-pmf-msg-uploaded') ?? 'Attachments uploaded.';
+        pushNotification(uploadedMessage);
         const modal = document.getElementById('attachmentModal') as HTMLElement | null;
         const modalBackdrop = document.querySelector('.modal-backdrop.fade.show') as HTMLElement | null;
-        const attachmentList = document.querySelector('.adminAttachments') as HTMLElement | null;
         const fileSize = document.getElementById('filesize') as HTMLElement | null;
         const fileList: NodeListOf<Element> = document.querySelectorAll('.pmf-attachment-upload-files li');
 
-        if (attachmentList) {
-          response.forEach((attachment: Attachment): void => {
-            const csrfToken = attachmentList.getAttribute('data-pmf-csrf-token') as string;
-            const deleteButton = addElement(
-              'button',
-              {
-                type: 'button',
-                className: 'btn btn-sm btn-danger pmf-delete-attachment-button',
-                'data-pmf-attachment-id': attachment.attachmentId,
-                'data-pmf-csrf-token': csrfToken,
-              },
-              [
-                addElement('i', {
-                  className: 'bi bi-trash',
-                  'data-pmf-attachment-id': attachment.attachmentId,
-                  'data-pmf-csrf-token': csrfToken,
-                }),
-              ]
-            );
-            bindAttachmentDeleteButton(deleteButton);
-            attachmentList.insertAdjacentElement(
-              'beforeend',
-              addElement('li', { id: `attachment-id-${attachment.attachmentId}` }, [
-                addElement('a', {
-                  className: 'me-2',
-                  href: `../attachment/${attachment.attachmentId}`,
-                  innerText: attachment.fileName,
-                }),
-                deleteButton,
-              ])
-            );
-          });
-        }
+        response.forEach((attachment: Attachment): void => appendAttachmentToList(attachment));
+        updateAttachmentCountBadge(response.length);
 
         if (fileSize) {
           fileSize.textContent = '';
@@ -170,4 +176,106 @@ export const handleAttachmentUploads = (): void => {
       }
     });
   }
+};
+
+const uploadDroppedFiles = async (files: File[], dropzone: HTMLElement): Promise<void> => {
+  const progressList = document.getElementById('pmf-attachment-dropzone-progress') as HTMLElement | null;
+  const recordId = (document.getElementById('attachment_record_id') as HTMLInputElement | null)?.value ?? '';
+  const recordLang = (document.getElementById('attachment_record_lang') as HTMLInputElement | null)?.value ?? '';
+  const csrfToken = (document.getElementById('pmf-attachment-csrf-token') as HTMLInputElement | null)?.value ?? '';
+  const maxSize = Number(dropzone.getAttribute('data-pmf-max-size'));
+  const tooBigMessage = dropzone.getAttribute('data-pmf-msg-too-big') ?? 'File is too big.';
+  const completedRows: HTMLElement[] = [];
+
+  // fetch() exposes no upload progress, so files are uploaded one at a time and
+  // each row flips from spinner to a result icon as its request completes.
+  for (const file of files) {
+    const progressIcon = addElement('span', {
+      className: 'spinner-border spinner-border-sm me-2',
+      role: 'status',
+      'aria-hidden': 'true',
+    });
+    const progressRow = addElement('li', { className: 'small' }, [
+      progressIcon,
+      addElement('span', { innerText: file.name }),
+    ]);
+    progressList?.append(progressRow);
+
+    if (Number.isFinite(maxSize) && maxSize > 0 && file.size > maxSize) {
+      progressRow.classList.add('text-danger');
+      progressIcon.replaceWith(addElement('i', { className: 'bi bi-x-circle me-2', 'aria-hidden': 'true' }));
+      progressRow.append(addElement('span', { className: 'ms-2', innerText: tooBigMessage }));
+      continue;
+    }
+
+    const formData = new FormData();
+    formData.append('filesToUpload[]', file);
+    formData.append('customFileNames[]', '');
+    formData.append('record_id', recordId);
+    formData.append('record_lang', recordLang);
+    formData.append('pmf-csrf-token', csrfToken);
+
+    try {
+      const response = await uploadAttachments(formData);
+      response.forEach((attachment: Attachment): void => appendAttachmentToList(attachment));
+      updateAttachmentCountBadge(response.length);
+      progressRow.classList.add('text-success');
+      progressIcon.replaceWith(addElement('i', { className: 'bi bi-check-circle me-2', 'aria-hidden': 'true' }));
+      completedRows.push(progressRow);
+    } catch (error) {
+      console.error('An error occurred:', error);
+      progressRow.classList.add('text-danger');
+      progressIcon.replaceWith(addElement('i', { className: 'bi bi-x-circle me-2', 'aria-hidden': 'true' }));
+      pushErrorNotification(error instanceof Error ? error.message : 'Attachment upload failed.');
+    }
+  }
+
+  // Clear only this batch's successful rows — a concurrent batch keeps its
+  // live spinners, and failure rows stay visible so the user can read why a
+  // file is missing from the attachment list.
+  window.setTimeout((): void => {
+    completedRows.forEach((row: HTMLElement): void => row.remove());
+  }, 5000);
+};
+
+export const handleAttachmentDragAndDrop = (): void => {
+  const dropzone = document.getElementById('pmf-attachment-dropzone') as HTMLElement | null;
+  const browseButton = document.getElementById('pmf-attachment-dropzone-browse') as HTMLButtonElement | null;
+  const browseInput = document.getElementById('pmf-attachment-dropzone-input') as HTMLInputElement | null;
+
+  if (!dropzone) {
+    return;
+  }
+
+  ['dragover', 'dragenter'].forEach((type: string): void => {
+    dropzone.addEventListener(type, (event: Event): void => {
+      event.preventDefault();
+      dropzone.classList.add('pmf-dragover');
+    });
+  });
+
+  ['dragleave', 'drop'].forEach((type: string): void => {
+    dropzone.addEventListener(type, (): void => {
+      dropzone.classList.remove('pmf-dragover');
+    });
+  });
+
+  dropzone.addEventListener('drop', (event: Event): void => {
+    event.preventDefault();
+    const files = (event as DragEvent).dataTransfer?.files;
+    if (files && files.length > 0) {
+      void uploadDroppedFiles(Array.from(files), dropzone);
+    }
+  });
+
+  browseButton?.addEventListener('click', (): void => {
+    browseInput?.click();
+  });
+
+  browseInput?.addEventListener('change', (): void => {
+    if (browseInput.files && browseInput.files.length > 0) {
+      void uploadDroppedFiles(Array.from(browseInput.files), dropzone);
+      browseInput.value = '';
+    }
+  });
 };

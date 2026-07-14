@@ -18,46 +18,119 @@ import { pushErrorNotification, pushNotification, serialize } from '../../../../
 import { ApiResponse } from '../interfaces';
 import { getJoditEditor } from './editor';
 import { analyzeReadability, SupportedLanguage } from '../utils';
+import { markClean } from './faqs.editor.state';
+import {
+  applyValidationFeedback,
+  getAnswerContent,
+  showFirstValidationError,
+  validateFaqEditor,
+} from './faqs.editor.validation';
 
 interface SerializedData {
   faqId: string;
   [key: string]: FormDataEntryValue | FormDataEntryValue[];
 }
 
+const setSaveButtonLoading = (button: HTMLButtonElement, loading: boolean): void => {
+  if (loading) {
+    // Only cache when not already loading, so a re-entrant call cannot
+    // capture the spinner markup as the "original" label.
+    button.dataset.pmfOriginalMarkup ??= button.innerHTML;
+    button.disabled = true;
+    const savingLabel = button.getAttribute('data-pmf-label-saving') ?? '';
+    button.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> ${savingLabel}`;
+  } else {
+    button.innerHTML = button.dataset.pmfOriginalMarkup ?? button.innerHTML;
+    delete button.dataset.pmfOriginalMarkup;
+    button.disabled = false;
+  }
+};
+
+const showSavedIndicator = (button: HTMLButtonElement): void => {
+  const indicator = document.getElementById('pmf-faq-saved-indicator');
+  if (!indicator) {
+    return;
+  }
+  const savedLabel = button.getAttribute('data-pmf-label-saved') ?? '';
+  indicator.textContent = `${savedLabel} ${new Date().toLocaleTimeString()}`;
+};
+
+export const saveFaq = async (): Promise<void> => {
+  const submitButton = document.getElementById('faqEditorSubmit') as HTMLButtonElement | null;
+  const form = document.getElementById('faqEditor') as HTMLFormElement | null;
+
+  if (!submitButton || submitButton.disabled || !form) {
+    return;
+  }
+
+  const validationErrors = validateFaqEditor();
+  applyValidationFeedback(validationErrors);
+  if (validationErrors.length > 0) {
+    showFirstValidationError(validationErrors);
+    return;
+  }
+
+  const serializedData = serialize(new FormData(form)) as SerializedData;
+
+  setSaveButtonLoading(submitButton, true);
+  try {
+    let response: ApiResponse | undefined;
+    if (serializedData.faqId === '0') {
+      response = await create(serializedData);
+    } else {
+      response = await update(serializedData);
+    }
+
+    if (response?.success) {
+      const data = response.data ? JSON.parse(response.data) : {};
+      const faqId = document.getElementById('faqId') as HTMLInputElement;
+      const revisionId = document.getElementById('revisionId') as HTMLInputElement;
+
+      faqId.value = data.id;
+      revisionId.value = data.revisionId;
+
+      markClean();
+      showSavedIndicator(submitButton);
+      pushNotification(response.success);
+    } else {
+      if (response && response.error) {
+        pushErrorNotification(response.error);
+      }
+    }
+  } catch (error) {
+    console.error(error);
+    const saveErrorMessage = submitButton.getAttribute('data-pmf-msg-save-error') ?? '';
+    pushErrorNotification(error instanceof Error && error.message !== '' ? error.message : saveErrorMessage);
+  } finally {
+    setSaveButtonLoading(submitButton, false);
+  }
+};
+
 export const handleSaveFaqData = (): void => {
   const submitButton = document.getElementById('faqEditorSubmit') as HTMLButtonElement | null;
 
   if (submitButton) {
-    submitButton.addEventListener('click', async (event: Event) => {
+    submitButton.addEventListener('click', (event: Event) => {
       event.preventDefault();
-      const form = document.getElementById('faqEditor') as HTMLFormElement;
-      const formData = new FormData(form);
-
-      const serializedData = serialize(formData) as SerializedData;
-
-      let response: ApiResponse | undefined;
-      if (serializedData.faqId === '0') {
-        response = await create(serializedData);
-      } else {
-        response = await update(serializedData);
-      }
-
-      if (response?.success) {
-        const data = response.data ? JSON.parse(response.data) : {};
-        const faqId = document.getElementById('faqId') as HTMLInputElement;
-        const revisionId = document.getElementById('revisionId') as HTMLInputElement;
-
-        faqId.value = data.id;
-        revisionId.value = data.revisionId;
-
-        pushNotification(response.success);
-      } else {
-        if (response && response.error) {
-          pushErrorNotification(response.error);
-        }
-      }
+      void saveFaq();
     });
   }
+};
+
+export const handleSaveShortcut = (): void => {
+  document.addEventListener('keydown', (event: KeyboardEvent): void => {
+    if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== 's') {
+      return;
+    }
+
+    const form = document.getElementById('faqEditor') as HTMLFormElement | null;
+    if (!form) {
+      return;
+    }
+
+    event.preventDefault();
+    void saveFaq();
+  });
 };
 
 export const handleDeleteFaqEditorModal = (): void => {
@@ -74,9 +147,10 @@ export const handleDeleteFaqEditorModal = (): void => {
     const faqId = deleteButton.getAttribute('data-faq-id') as string;
     const faqLanguage = deleteButton.getAttribute('data-faq-language') as string;
     const csrfToken = deleteButton.getAttribute('data-pmf-csrf-token') as string;
+    const deleteErrorMessage = deleteButton.getAttribute('data-pmf-msg-delete-error') ?? 'Could not delete the FAQ.';
 
     if (!faqId || !faqLanguage || !csrfToken) {
-      pushErrorNotification('Fehlende Parameter zum Löschen der FAQ.');
+      pushErrorNotification(deleteErrorMessage);
       return;
     }
 
@@ -84,6 +158,7 @@ export const handleDeleteFaqEditorModal = (): void => {
       const response = await deleteFaq(faqId, faqLanguage, csrfToken);
 
       if (response?.success) {
+        markClean();
         pushNotification(response.success);
         window.setTimeout(() => {
           window.location.href = './faqs';
@@ -91,11 +166,11 @@ export const handleDeleteFaqEditorModal = (): void => {
       } else if (response?.error) {
         pushErrorNotification(response.error);
       } else {
-        pushErrorNotification('Beim Löschen der FAQ ist ein unbekannter Fehler aufgetreten.');
+        pushErrorNotification(deleteErrorMessage);
       }
     } catch (error) {
       console.error(error);
-      pushErrorNotification('Beim Löschen der FAQ ist ein Fehler aufgetreten.');
+      pushErrorNotification(deleteErrorMessage);
     }
   });
 };
@@ -154,6 +229,8 @@ export const handleResetButton = (): void => {
         revisionSelect.value = lastOption.value;
         revisionSelect.dispatchEvent(new Event('change'));
       }
+
+      markClean();
     });
   }
 };
@@ -232,30 +309,8 @@ export const handleFleschReadingEase = (): void => {
 
   const debouncedUpdate = debounce(updateFleschDisplay, 300);
 
-  /**
-   * Gets content from available editor
-   */
-  const getEditorContent = (): string => {
-    const joditEditor = getJoditEditor();
-    if (joditEditor) {
-      return joditEditor.value;
-    }
-
-    const markdownEditor = document.getElementById('answer-markdown') as HTMLTextAreaElement | null;
-    if (markdownEditor) {
-      return markdownEditor.value;
-    }
-
-    const plainEditor = document.getElementById('editor') as HTMLTextAreaElement | null;
-    if (plainEditor) {
-      return plainEditor.value;
-    }
-
-    return '';
-  };
-
   // Initial calculation
-  const initialContent = getEditorContent();
+  const initialContent = getAnswerContent();
   if (initialContent) {
     updateFleschDisplay(initialContent);
   }
@@ -288,7 +343,7 @@ export const handleFleschReadingEase = (): void => {
   const langSelect = document.getElementById('lang') as HTMLSelectElement | null;
   if (langSelect) {
     langSelect.addEventListener('change', (): void => {
-      const content = getEditorContent();
+      const content = getAnswerContent();
       updateFleschDisplay(content);
     });
   }

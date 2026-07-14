@@ -78,7 +78,7 @@ final class TagController extends AbstractController
     /**
      * @throws Exception|\Exception
      */
-    #[Route(path: 'content/tags', name: 'admin.api.content.tags', methods: ['POST'])]
+    #[Route(path: 'content/tags', name: 'admin.api.content.tags', methods: ['GET'])]
     public function search(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();

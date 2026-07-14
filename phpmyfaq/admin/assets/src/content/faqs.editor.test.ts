@@ -1,14 +1,17 @@
 import { describe, it, expect, vi, beforeEach, afterEach, Mock } from 'vitest';
 import {
   handleSaveFaqData,
+  handleSaveShortcut,
   handleDeleteFaqEditorModal,
   handleUpdateQuestion,
   handleResetButton,
   handleFleschReadingEase,
+  saveFaq,
 } from './faqs.editor';
 import { create, update, deleteFaq } from '../api';
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 import { analyzeReadability } from '../utils';
+import { applyValidationFeedback, showFirstValidationError, validateFaqEditor } from './faqs.editor.validation';
 
 vi.mock('../api');
 vi.mock('../../../../assets/src/utils', async (importOriginal) => {
@@ -24,6 +27,12 @@ vi.mock('./editor', () => ({
 }));
 vi.mock('../utils', () => ({
   analyzeReadability: vi.fn(() => ({ score: 65, label: 'Standard', colorClass: 'primary' })),
+}));
+vi.mock('./faqs.editor.validation', () => ({
+  validateFaqEditor: vi.fn(() => []),
+  applyValidationFeedback: vi.fn(),
+  showFirstValidationError: vi.fn(),
+  getAnswerContent: vi.fn(() => ''),
 }));
 
 describe('faqs.editor', () => {
@@ -128,6 +137,171 @@ describe('faqs.editor', () => {
       expect(pushErrorNotification).toHaveBeenCalledWith('Validation failed');
       expect(pushNotification).not.toHaveBeenCalled();
     });
+
+    it('should disable the button and show a spinner while saving', async () => {
+      document.body.innerHTML = `
+        <form id="faqEditor">
+          <input name="faqId" value="0" />
+        </form>
+        <input id="faqId" value="0" />
+        <input id="revisionId" value="0" />
+        <button id="faqEditorSubmit" data-pmf-label-saving="Saving…">Save</button>
+      `;
+
+      let resolveCreate: (value: unknown) => void = () => undefined;
+      (create as Mock).mockReturnValue(new Promise((resolve) => (resolveCreate = resolve)));
+
+      const button = document.getElementById('faqEditorSubmit') as HTMLButtonElement;
+      const pendingSave = saveFaq();
+
+      expect(button.disabled).toBe(true);
+      expect(button.innerHTML).toContain('spinner-border');
+      expect(button.innerHTML).toContain('Saving…');
+
+      resolveCreate({ success: 'FAQ created', data: JSON.stringify({ id: '1', revisionId: '1' }) });
+      await pendingSave;
+
+      expect(button.disabled).toBe(false);
+      expect(button.innerHTML).toBe('Save');
+    });
+
+    it('should restore the button and notify the user when saving fails', async () => {
+      document.body.innerHTML = `
+        <form id="faqEditor">
+          <input name="faqId" value="0" />
+        </form>
+        <input id="faqId" value="0" />
+        <input id="revisionId" value="0" />
+        <button id="faqEditorSubmit" data-pmf-msg-save-error="Could not save the FAQ.">Save</button>
+      `;
+
+      (create as Mock).mockRejectedValue(new Error('Network error'));
+
+      const button = document.getElementById('faqEditorSubmit') as HTMLButtonElement;
+
+      await saveFaq();
+
+      expect(pushErrorNotification).toHaveBeenCalledWith('Network error');
+      expect(button.disabled).toBe(false);
+      expect(button.innerHTML).toBe('Save');
+    });
+
+    it('should fall back to the translated save-error message for non-Error rejections', async () => {
+      document.body.innerHTML = `
+        <form id="faqEditor">
+          <input name="faqId" value="0" />
+        </form>
+        <input id="faqId" value="0" />
+        <input id="revisionId" value="0" />
+        <button id="faqEditorSubmit" data-pmf-msg-save-error="Could not save the FAQ.">Save</button>
+      `;
+
+      (create as Mock).mockRejectedValue('boom');
+
+      await saveFaq();
+
+      expect(pushErrorNotification).toHaveBeenCalledWith('Could not save the FAQ.');
+    });
+
+    it('should update the saved indicator on success', async () => {
+      document.body.innerHTML = `
+        <form id="faqEditor">
+          <input name="faqId" value="0" />
+        </form>
+        <input id="faqId" value="0" />
+        <input id="revisionId" value="0" />
+        <button id="faqEditorSubmit" data-pmf-label-saved="Saved">Save</button>
+        <small id="pmf-faq-saved-indicator"></small>
+      `;
+
+      (create as Mock).mockResolvedValue({
+        success: 'FAQ created',
+        data: JSON.stringify({ id: '1', revisionId: '1' }),
+      });
+
+      await saveFaq();
+
+      const indicator = document.getElementById('pmf-faq-saved-indicator') as HTMLElement;
+      expect(indicator.textContent).toContain('Saved');
+    });
+
+    it('should block saving and surface errors when validation fails', async () => {
+      document.body.innerHTML = `
+        <form id="faqEditor">
+          <input name="faqId" value="0" />
+        </form>
+        <button id="faqEditorSubmit">Save</button>
+      `;
+
+      const errors = [{ fieldId: 'question', tabHref: '#tab-question-answer' }];
+      (validateFaqEditor as Mock).mockReturnValueOnce(errors);
+
+      await saveFaq();
+
+      expect(applyValidationFeedback).toHaveBeenCalledWith(errors);
+      expect(showFirstValidationError).toHaveBeenCalledWith(errors);
+      expect(create).not.toHaveBeenCalled();
+      expect(update).not.toHaveBeenCalled();
+    });
+
+    it('should not save when the button is disabled', async () => {
+      document.body.innerHTML = `
+        <form id="faqEditor">
+          <input name="faqId" value="0" />
+        </form>
+        <button id="faqEditorSubmit" disabled>Save</button>
+      `;
+
+      await saveFaq();
+
+      expect(create).not.toHaveBeenCalled();
+      expect(update).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('handleSaveShortcut', () => {
+    it('should save on Ctrl+S when the editor is present', async () => {
+      document.body.innerHTML = `
+        <form id="faqEditor">
+          <input name="faqId" value="0" />
+        </form>
+        <input id="faqId" value="0" />
+        <input id="revisionId" value="0" />
+        <button id="faqEditorSubmit">Save</button>
+      `;
+
+      (create as Mock).mockResolvedValue({
+        success: 'FAQ created',
+        data: JSON.stringify({ id: '1', revisionId: '1' }),
+      });
+
+      handleSaveShortcut();
+
+      const event = new KeyboardEvent('keydown', { key: 's', ctrlKey: true, cancelable: true });
+      document.dispatchEvent(event);
+
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(create).toHaveBeenCalled();
+    });
+
+    it('should ignore a plain "s" key press', async () => {
+      document.body.innerHTML = `
+        <form id="faqEditor">
+          <input name="faqId" value="0" />
+        </form>
+        <button id="faqEditorSubmit">Save</button>
+      `;
+
+      handleSaveShortcut();
+
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 's', cancelable: true }));
+
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      expect(create).not.toHaveBeenCalled();
+    });
   });
 
   describe('handleDeleteFaqEditorModal', () => {
@@ -175,7 +349,7 @@ describe('faqs.editor', () => {
       await new Promise((resolve) => setTimeout(resolve, 10));
 
       expect(deleteFaq).not.toHaveBeenCalled();
-      expect(pushErrorNotification).toHaveBeenCalledWith('Fehlende Parameter zum L\u00f6schen der FAQ.');
+      expect(pushErrorNotification).toHaveBeenCalledWith('Could not delete the FAQ.');
     });
   });
 

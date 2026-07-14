@@ -20,3 +20,23 @@
     padding: 10px;
   }
 }
+
+.pmf-faq-editor-sidebar {
+  top: 1rem;
+  z-index: 1010;
+}
+
+.pmf-category-checkbox-tree {
+  max-height: 16rem;
+  overflow-y: auto;
+}
+
+.pmf-attachment-dropzone {
+  border: 2px dashed var(--bs-border-color);
+  cursor: pointer;
+
+  &.pmf-dragover {
+    background: var(--bs-primary-bg-subtle);
+    border-color: var(--bs-primary);
+  }
+}

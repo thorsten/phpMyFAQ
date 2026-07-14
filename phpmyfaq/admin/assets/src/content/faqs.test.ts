@@ -6,6 +6,9 @@ import { Translator } from '../translation/translator';
 
 vi.mock('../api');
 vi.mock('../translation/translator');
+vi.mock('./editor', () => ({
+  getJoditEditor: vi.fn(() => null),
+}));
 vi.mock('../../../../assets/src/utils', async (importOriginal) => {
   const actual = (await importOriginal()) as Record<string, unknown>;
   return {
@@ -102,7 +105,7 @@ describe('handleFaqForm', () => {
     expect(pushNotification).toHaveBeenCalledWith('Delete failed');
   });
 
-  it('should show warning and disable submit when question contains #', () => {
+  it('should show warning when question contains # without touching the submit button', () => {
     document.body.innerHTML = `
       <input id="question" value="" />
       <div id="questionHelp" class="visually-hidden">Hash warning</div>
@@ -119,10 +122,28 @@ describe('handleFaqForm', () => {
     const submitButton = document.getElementById('faqEditorSubmit') as HTMLButtonElement;
 
     expect(questionHelp.classList.contains('visually-hidden')).toBe(false);
-    expect(submitButton.getAttribute('disabled')).toBe('true');
+    expect(submitButton.hasAttribute('disabled')).toBe(false);
   });
 
-  it('should hide warning and enable submit when # is removed from question', () => {
+  it('should not re-enable a disabled submit button while typing (in-flight save guard)', () => {
+    document.body.innerHTML = `
+      <input id="question" value="" />
+      <div id="questionHelp" class="visually-hidden">Hash warning</div>
+      <button id="faqEditorSubmit" disabled>Submit</button>
+    `;
+
+    handleFaqForm();
+
+    const questionInput = document.getElementById('question') as HTMLInputElement;
+    const submitButton = document.getElementById('faqEditorSubmit') as HTMLButtonElement;
+
+    questionInput.value = 'What is something?';
+    questionInput.dispatchEvent(new Event('input'));
+
+    expect(submitButton.disabled).toBe(true);
+  });
+
+  it('should hide warning when # is removed from question', () => {
     document.body.innerHTML = `
       <input id="question" value="" />
       <div id="questionHelp" class="visually-hidden">Hash warning</div>
@@ -133,21 +154,18 @@ describe('handleFaqForm', () => {
 
     const questionInput = document.getElementById('question') as HTMLInputElement;
     const questionHelp = document.getElementById('questionHelp') as HTMLElement;
-    const submitButton = document.getElementById('faqEditorSubmit') as HTMLButtonElement;
 
     // First type a hash
     questionInput.value = 'What is #something?';
     questionInput.dispatchEvent(new Event('input'));
 
     expect(questionHelp.classList.contains('visually-hidden')).toBe(false);
-    expect(submitButton.getAttribute('disabled')).toBe('true');
 
     // Now remove the hash
     questionInput.value = 'What is something?';
     questionInput.dispatchEvent(new Event('input'));
 
     expect(questionHelp.classList.contains('visually-hidden')).toBe(true);
-    expect(submitButton.hasAttribute('disabled')).toBe(false);
   });
 });
 

@@ -1839,4 +1839,18 @@ $PMF_LANG['ad_category_delete_has_children'] = 'Cannot delete: this category has
 $PMF_LANG['ad_category_inactive'] = 'inactive';
 $PMF_LANG['ad_category_toggle'] = 'Show or hide subcategories of';
 
+// added v4.2.0-alpha - 2026-07-13 by Thorsten
+$PMF_LANG['msgSaved'] = 'Saved';
+$PMF_LANG['msgErrorDeletingFaq'] = 'Could not delete the FAQ.';
+$PMF_LANG['msgErrorSavingFaq'] = 'Could not save the FAQ. Please check your connection and try again.';
+$PMF_LANG['msgQuestionRequired'] = 'Please enter a question.';
+$PMF_LANG['msgAnswerRequired'] = 'Please enter an answer.';
+$PMF_LANG['msgCategoryRequired'] = 'Please select at least one category.';
+$PMF_LANG['msgSerpTitleHint'] = 'Recommended: up to 60 characters.';
+$PMF_LANG['msgSerpDescriptionHint'] = 'Recommended: up to 160 characters.';
+$PMF_LANG['msgDropFilesHere'] = 'Drag and drop files here or';
+$PMF_LANG['msgOrBrowseFiles'] = 'browse your files';
+$PMF_LANG['msgAttachmentTooBig'] = 'This file exceeds the maximum attachment size.';
+$PMF_LANG['msgAttachmentsUploaded'] = 'Attachments uploaded successfully.';
+
 return $PMF_LANG;

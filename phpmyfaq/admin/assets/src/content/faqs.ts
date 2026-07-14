@@ -16,12 +16,23 @@
 import { deleteAttachments } from '../api';
 import { pushNotification, pushErrorNotification } from '../../../../assets/src/utils';
 import { Translator } from '../translation/translator';
+import { getJoditEditor } from './editor';
 
 const showHelp = (option: string): void => {
   const optionHelp = document.getElementById(`${option}Help`) as HTMLElement;
   optionHelp.classList.remove('visually-hidden');
   optionHelp.addEventListener('click', () => (optionHelp.style.opacity = '0'));
   optionHelp.addEventListener('transitionend', () => optionHelp.remove());
+};
+
+export const updateAttachmentCountBadge = (delta: number): void => {
+  const badge = document.getElementById('pmf-attachment-count-badge');
+  if (!badge) {
+    return;
+  }
+  const count = Math.max(0, Number(badge.textContent?.trim() ?? '0') + delta);
+  badge.textContent = count.toString();
+  badge.classList.toggle('d-none', count === 0);
 };
 
 export const bindAttachmentDeleteButton = (button: Element): void => {
@@ -40,6 +51,7 @@ export const bindAttachmentDeleteButton = (button: Element): void => {
         listItemToDelete.style.opacity = '0';
         listItemToDelete.addEventListener('transitionend', () => listItemToDelete.remove());
       }
+      updateAttachmentCountBadge(-1);
       pushNotification(response.success);
     }
     if (response.error) {
@@ -63,29 +75,25 @@ export const handleFaqForm = (): void => {
     deleteAttachmentButtons.forEach((button) => bindAttachmentDeleteButton(button));
   }
 
-  const categoryOptions = document.querySelector('#phpmyfaq-categories') as HTMLSelectElement | null;
-
-  if (categoryOptions) {
-    Array.from(categoryOptions.selectedOptions).map(({ value }) => value);
-    // Override FAQ permissions with Category permission to avoid confused users
-    categoryOptions.addEventListener('click', (event) => {
-      event.preventDefault();
-      const categories = Array.from(categoryOptions.selectedOptions).map(({ value }) => value);
-      getCategoryPermissions(categories);
-    });
-  }
-
   const questionInput = document.getElementById('question') as HTMLInputElement | null;
   if (questionInput) {
     questionInput.addEventListener('input', checkForHash);
   }
 };
 
-const getCategoryPermissions = (categories: string[]): void => {
-  fetch(`./api/category/permissions/${categories}`)
-    .then((response) => response.json())
+export const getCategoryPermissions = (categories: string[]): void => {
+  fetch(`./api/category/permissions/${categories.join(',')}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Failed to fetch category permissions: HTTP ${response.status}`);
+      }
+      return response.json();
+    })
     .then((permissions) => {
       setPermissions(permissions);
+    })
+    .catch((error) => {
+      console.error(error);
     });
 };
 
@@ -136,16 +144,16 @@ const setPermissions = (permissions: { user: string[]; group: string[] }): void 
   }
 };
 
+// The '#' rule is enforced on save by validateFaqEditor(); this listener only
+// shows the live hint while typing. It must not touch the submit button's
+// disabled state — that is owned by the in-flight save guard in saveFaq().
 const checkForHash = (): void => {
   const questionInputValue = (document.getElementById('question') as HTMLInputElement).value;
   const questionHelp = document.getElementById('questionHelp') as HTMLElement;
-  const submitButton = document.getElementById('faqEditorSubmit') as HTMLButtonElement;
   if (questionInputValue.includes('#')) {
     questionHelp.classList.remove('visually-hidden');
-    submitButton.setAttribute('disabled', 'true');
   } else {
     questionHelp.classList.add('visually-hidden');
-    submitButton.removeAttribute('disabled');
   }
 };
 
@@ -180,6 +188,14 @@ export const handleFaqTranslate = (): void => {
             keywords: '#keywords',
           },
           onTranslationSuccess: () => {
+            // The translator writes into the raw #editor textarea; sync the
+            // Jodit instance so its value (used by validation and further
+            // edits) matches what the form will actually submit.
+            const joditEditor = getJoditEditor();
+            const editorTextarea = document.getElementById('editor') as HTMLTextAreaElement | null;
+            if (joditEditor && editorTextarea) {
+              joditEditor.value = editorTextarea.value;
+            }
             pushNotification('Translation completed successfully');
           },
           onTranslationError: (error) => {

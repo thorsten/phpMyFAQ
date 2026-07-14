@@ -53,3 +53,44 @@
         <option value="{{ cat.id }}"{% if isSelected %} selected{% endif %}>{{ indent }} {{ cat.name }}</option>
     {% endfor %}
 {% endmacro %}
+
+{#
+ # Renders the category tree as filterable checkboxes
+ #
+ # @param categoryTree array The category tree from Category::getCategoryTree()
+ # @param selectedCategoryIds int|array Single category ID or array of category data
+ #}
+{% macro renderCheckboxTree(categoryTree, selectedCategoryIds) %}
+    {% set selectedIds = [] %}
+
+    {# Normalize selectedCategoryIds to an array of IDs #}
+    {% if selectedCategoryIds is iterable %}
+        {% if selectedCategoryIds.category_id is defined %}
+            {# Single category object #}
+            {% set selectedIds = [selectedCategoryIds.category_id] %}
+        {% else %}
+            {# Array of category objects or empty array #}
+            {% for cat in selectedCategoryIds %}
+                {% if cat.category_id is defined %}
+                    {% set selectedIds = selectedIds|merge([cat.category_id]) %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% else %}
+        {# Single category ID as integer #}
+        {% set selectedIds = [selectedCategoryIds] %}
+    {% endif %}
+
+    {# Render checkboxes. Unlike the select-based renderOptions, nothing is
+       pre-checked when no category is selected: checkboxes are additive, so a
+       silently pre-checked first category would end up on every new FAQ. #}
+    {% for cat in categoryTree %}
+        {% set isSelected = cat.id in selectedIds %}
+        <div class="form-check pmf-category-tree-item" style="margin-left: {{ cat.indent }}rem"
+             data-pmf-category-name="{{ cat.name | lower }}">
+            <input class="form-check-input" type="checkbox" name="categories[]" value="{{ cat.id }}"
+                   id="faq-category-{{ cat.id }}"{% if isSelected %} checked{% endif %}>
+            <label class="form-check-label" for="faq-category-{{ cat.id }}">{{ cat.name }}</label>
+        </div>
+    {% endfor %}
+{% endmacro %}

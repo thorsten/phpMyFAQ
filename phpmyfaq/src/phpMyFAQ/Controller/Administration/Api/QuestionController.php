@@ -76,7 +76,7 @@ final class QuestionController extends AbstractController
         return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
     }
 
-    #[Route(path: 'question/toggle', name: 'admin.api.question.toggle', methods: ['PUT'])]
+    #[Route(path: 'question/visibility/toggle', name: 'admin.api.question.toggle', methods: ['PUT'])]
     public function toggle(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::QUESTION_ADD);

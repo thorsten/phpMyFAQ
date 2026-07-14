@@ -35,7 +35,7 @@ final class SearchController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route(path: 'search/term', name: 'admin.api.search.term', methods: ['GET'])]
+    #[Route(path: 'search/term', name: 'admin.api.search.term', methods: ['DELETE'])]
     public function deleteTerm(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
