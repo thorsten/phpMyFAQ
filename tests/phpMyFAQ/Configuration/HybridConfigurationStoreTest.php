@@ -6,6 +6,7 @@ namespace phpMyFAQ\Configuration;
 
 use phpMyFAQ\Configuration\Storage\ConfigurationStorageSettingsResolver;
 use phpMyFAQ\Configuration\Storage\DatabaseConfigurationStore;
+use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
 use phpMyFAQ\Configuration\Storage\HybridConfigurationStore;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
@@ -19,6 +20,9 @@ class HybridConfigurationStoreTest extends TestCase
     private Sqlite3 $databaseDriver;
 
     private DatabaseConfigurationStore $databaseConfigurationStore;
+
+    /** @var string[] */
+    private array $cacheDirs = [];
 
     protected function setUp(): void
     {
@@ -39,6 +43,25 @@ class HybridConfigurationStoreTest extends TestCase
     protected function tearDown(): void
     {
         @unlink($this->databaseFile);
+
+        foreach ($this->cacheDirs as $cacheDir) {
+            if (!is_dir($cacheDir)) {
+                continue;
+            }
+
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($cacheDir, \FilesystemIterator::SKIP_DOTS),
+                \RecursiveIteratorIterator::CHILD_FIRST,
+            );
+            foreach ($iterator as $file) {
+                $file->isDir() ? rmdir($file->getPathname()) : unlink($file->getPathname());
+            }
+
+            rmdir($cacheDir);
+        }
+
+        $this->cacheDirs = [];
+
         parent::tearDown();
     }
 
@@ -83,5 +106,76 @@ class HybridConfigurationStoreTest extends TestCase
 
         $this->assertTrue($store->updateConfigValue('main.language', 'de'));
         $this->assertSame('de', $this->databaseConfigurationStore->fetchValue('main.language'));
+    }
+
+    private function createStoreWithFilesystemCache(FilesystemConfigurationCache $cache): HybridConfigurationStore
+    {
+        return new HybridConfigurationStore(
+            $this->databaseConfigurationStore,
+            new ConfigurationStorageSettingsResolver($this->databaseConfigurationStore),
+            new NullLogger(),
+            $cache,
+        );
+    }
+
+    private function createFilesystemCache(): FilesystemConfigurationCache
+    {
+        $cacheDir = PMF_TEST_DIR . '/hybrid-config-cache-' . uniqid('', true);
+        $this->cacheDirs[] = $cacheDir;
+
+        return new FilesystemConfigurationCache($cacheDir, 'test-tenant');
+    }
+
+    public function testFetchAllServesFromFilesystemCacheWithoutRedis(): void
+    {
+        $this->databaseConfigurationStore->insert('main.language', 'en');
+
+        $store = $this->createStoreWithFilesystemCache($this->createFilesystemCache());
+
+        $firstRows = $store->fetchAll();
+        $this->assertNotEmpty($firstRows);
+
+        // Bypass the store: a direct database change must not be visible while cached.
+        $this->databaseDriver->query("UPDATE faqconfig SET config_value = 'de' WHERE config_name = 'main.language'");
+
+        $configMap = [];
+        foreach ($store->fetchAll() as $row) {
+            $configMap[$row->config_name] = $row->config_value;
+        }
+
+        $this->assertSame('en', $configMap['main.language']);
+    }
+
+    public function testWritesThroughTheStoreInvalidateTheFilesystemCache(): void
+    {
+        $this->databaseConfigurationStore->insert('main.language', 'en');
+
+        $store = $this->createStoreWithFilesystemCache($this->createFilesystemCache());
+        $store->fetchAll();
+
+        $this->assertTrue($store->updateConfigValue('main.language', 'de'));
+
+        $configMap = [];
+        foreach ($store->fetchAll() as $row) {
+            $configMap[$row->config_name] = $row->config_value;
+        }
+
+        $this->assertSame('de', $configMap['main.language']);
+    }
+
+    public function testInsertAndDeleteInvalidateTheFilesystemCache(): void
+    {
+        $this->databaseConfigurationStore->insert('main.language', 'en');
+
+        $store = $this->createStoreWithFilesystemCache($this->createFilesystemCache());
+        $store->fetchAll();
+
+        $this->assertTrue($store->insert('main.titleFAQ', 'phpMyFAQ'));
+        $names = array_map(static fn(object $row): string => $row->config_name, $store->fetchAll());
+        $this->assertContains('main.titleFAQ', $names);
+
+        $this->assertTrue($store->delete('main.titleFAQ'));
+        $names = array_map(static fn(object $row): string => $row->config_name, $store->fetchAll());
+        $this->assertNotContains('main.titleFAQ', $names);
     }
 }

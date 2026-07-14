@@ -22,8 +22,11 @@ namespace phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration as CoreConfiguration;
 use phpMyFAQ\Configuration\Storage\ConfigurationStorageSettingsResolver;
 use phpMyFAQ\Configuration\Storage\DatabaseConfigurationStore;
+use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
 use phpMyFAQ\Configuration\Storage\HybridConfigurationStore;
 use phpMyFAQ\Database;
+use phpMyFAQ\Environment;
+use phpMyFAQ\System;
 
 class ConfigurationRepository
 {
@@ -44,6 +47,17 @@ class ConfigurationRepository
             $this->databaseConfigurationStore,
             $settingsResolver,
             $this->coreConfiguration->getLogger(),
+            FilesystemConfigurationCache::createIfEnabled(
+                debug: Environment::isDebugMode() || System::isDevelopmentVersion(),
+                enabled: Environment::get('CONFIG_CACHE_ENABLED'),
+                cacheDir: (string) PMF_ROOT_DIR . '/content/core/cache',
+                identity: sprintf(
+                    '%s|%s|%s',
+                    defined('PMF_CONFIG_DIR') ? (string) PMF_CONFIG_DIR : '',
+                    Database::getTablePrefix(),
+                    $tableName,
+                ),
+            ),
         );
     }
 

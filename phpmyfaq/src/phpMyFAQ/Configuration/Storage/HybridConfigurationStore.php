@@ -28,6 +28,7 @@ readonly class HybridConfigurationStore implements ConfigurationStoreInterface
         private DatabaseConfigurationStore $databaseConfigurationStore,
         private ConfigurationStorageSettingsResolver $settingsResolver,
         private LoggerInterface $logger,
+        private ?FilesystemConfigurationCache $filesystemConfigurationCache = null,
     ) {
     }
 
@@ -50,6 +51,8 @@ readonly class HybridConfigurationStore implements ConfigurationStoreInterface
             }
         }
 
+        $this->filesystemConfigurationCache?->clear();
+
         return true;
     }
 
@@ -58,11 +61,17 @@ readonly class HybridConfigurationStore implements ConfigurationStoreInterface
      */
     public function fetchAll(): array
     {
+        $cachedRows = $this->filesystemConfigurationCache?->read();
+        if ($cachedRows !== null) {
+            return $cachedRows;
+        }
+
         $redisStore = $this->resolveRedisStore();
         if ($redisStore !== null) {
             try {
                 $rows = $redisStore->fetchAll();
                 if ($rows !== []) {
+                    $this->filesystemConfigurationCache?->warm($rows);
                     return $rows;
                 }
             } catch (RuntimeException $exception) {
@@ -83,6 +92,8 @@ readonly class HybridConfigurationStore implements ConfigurationStoreInterface
                 ]);
             }
         }
+
+        $this->filesystemConfigurationCache?->warm($rows);
 
         return $rows;
     }
@@ -106,6 +117,8 @@ readonly class HybridConfigurationStore implements ConfigurationStoreInterface
             }
         }
 
+        $this->filesystemConfigurationCache?->clear();
+
         return true;
     }
 
@@ -127,6 +140,8 @@ readonly class HybridConfigurationStore implements ConfigurationStoreInterface
                 ]);
             }
         }
+
+        $this->filesystemConfigurationCache?->clear();
 
         return true;
     }
@@ -150,6 +165,8 @@ readonly class HybridConfigurationStore implements ConfigurationStoreInterface
                 ]);
             }
         }
+
+        $this->filesystemConfigurationCache?->clear();
 
         return true;
     }
