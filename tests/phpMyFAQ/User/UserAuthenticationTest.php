@@ -4,6 +4,7 @@ namespace phpMyFAQ\User;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
@@ -73,6 +74,60 @@ class UserAuthenticationTest extends TestCase
     /**
      * @throws \phpMyFAQ\Core\Exception
      */
+    public function testAuthenticateStopsWhenIpFailureBudgetIsExhausted(): void
+    {
+        $_SERVER['REMOTE_ADDR'] = '203.0.113.99';
+        $rateLimiter = new RateLimiter(
+            storage: new \Symfony\Component\RateLimiter\Storage\InMemoryStorage(),
+        );
+
+        $failingUser = $this->createMock(CurrentUser::class);
+        $failingUser->method('login')->willReturn(false);
+        $userAuth = new UserAuthentication($this->configuration, $failingUser, $rateLimiter);
+
+        for ($i = 0; $i < UserAuthentication::MAX_FAILED_LOGINS_PER_IP; ++$i) {
+            try {
+                $userAuth->authenticate('victim-' . $i, 'guess');
+            } catch (UserException) {
+                // expected: wrong password
+            }
+        }
+
+        // The next attempt from this client must be rejected before any password check runs.
+        $untouchedUser = $this->createMock(CurrentUser::class);
+        $untouchedUser->expects($this->never())->method('login');
+        $userAuth = new UserAuthentication($this->configuration, $untouchedUser, $rateLimiter);
+
+        try {
+            $this->expectException(UserException::class);
+            $userAuth->authenticate('victim-final', 'guess');
+        } finally {
+            unset($_SERVER['REMOTE_ADDR']);
+        }
+    }
+
+    public function testSuccessfulLoginsDoNotConsumeTheIpFailureBudget(): void
+    {
+        $_SERVER['REMOTE_ADDR'] = '203.0.113.99';
+        $rateLimiter = new RateLimiter(
+            storage: new \Symfony\Component\RateLimiter\Storage\InMemoryStorage(),
+        );
+
+        $validUser = $this->createMock(CurrentUser::class);
+        $validUser->method('login')->willReturn(true);
+        $validUser->method('getUserData')->willReturn(0);
+        $validUser->method('getStatus')->willReturn('active');
+        $userAuth = new UserAuthentication($this->configuration, $validUser, $rateLimiter);
+
+        try {
+            for ($i = 0; $i < UserAuthentication::MAX_FAILED_LOGINS_PER_IP + 5; ++$i) {
+                $this->assertSame($validUser, $userAuth->authenticate('user', 'correct-password'));
+            }
+        } finally {
+            unset($_SERVER['REMOTE_ADDR']);
+        }
+    }
+
     public function testAuthenticateFails(): void
     {
         $this->currentUser->method('login')->willReturn(false);

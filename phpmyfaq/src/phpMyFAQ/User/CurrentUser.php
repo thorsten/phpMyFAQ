@@ -89,6 +89,11 @@ class CurrentUser extends User
     private bool $rememberMe = false;
 
     /**
+     * Failed attempts above this number lock the account for the lockout time.
+     */
+    private const int MAX_FAILED_LOGIN_ATTEMPTS = 5;
+
+    /**
      * Number of failed login attempts
      */
     private int $loginAttempts = 0;
@@ -172,7 +177,15 @@ class CurrentUser extends User
                 continue; // Login does not exist, try the next auth method
             }
 
-            if (!$auth->checkCredentials($login, $password, $optData ?? [])) {
+            try {
+                $credentialsAreValid = $auth->checkCredentials($login, $password, $optData ?? []);
+            } catch (AuthException) {
+                // Drivers signal a wrong password by throwing; treat it as a failed
+                // attempt so the fall-through failure handling counts it for lockout.
+                $credentialsAreValid = false;
+            }
+
+            if (!$credentialsAreValid) {
                 continue; // Incorrect password, try the next auth method
             }
 
@@ -209,10 +222,8 @@ class CurrentUser extends User
             return true; // Login successful
         }
 
-        // No successful login, handle errors
-        if ($this->configuration->get(item: 'security.loginWithEmailAddress')) {
-            $this->setLoginAttempt(); // Only set a login attempt if email addresses are allowed
-        }
+        // No successful login: count the failed attempt so the account lockout engages
+        $this->setLoginAttempt();
 
         if (
             $this->configuration->get(item: 'security.loginWithEmailAddress')
@@ -225,7 +236,7 @@ class CurrentUser extends User
             throw new UserException(parent::ERROR_USER_INCORRECT_PASSWORD);
         }
 
-        return false;
+        throw new UserException(parent::ERROR_USER_TOO_MANY_FAILED_LOGINS);
     }
 
     /**
@@ -327,9 +338,9 @@ class CurrentUser extends User
      */
     public function updateSessionId(bool $updateLastLogin = false): bool
     {
-        // renew the session-ID
+        // renew the session-ID; API and CLI logins run without an active PHP session
         $oldSessionId = session_id();
-        if (session_regenerate_id(true)) {
+        if (session_status() === PHP_SESSION_ACTIVE && session_regenerate_id(true)) {
             $sessionPath = session_save_path();
             if (str_contains($sessionPath, ';')) {
                 $sessionPath = substr($sessionPath, strpos($sessionPath, needle: ';') + 1);
@@ -567,7 +578,9 @@ class CurrentUser extends User
     }
 
     /**
-     * Checks if the last login attempt from the current user failed.
+     * Checks whether the account is locked out after too many recent failed logins.
+     * Deliberately independent of the client IP: an attacker rotating IPs must not
+     * be able to keep guessing a single account's password.
      */
     protected function isFailedLastLoginAttempt(): bool
     {
@@ -575,7 +588,6 @@ class CurrentUser extends User
             "
             SELECT
                 session_timestamp,
-                ip,
                 success,
                 login_attempts
             FROM
@@ -585,18 +597,17 @@ class CurrentUser extends User
             AND
                 ('%d' - session_timestamp) <= %d
             AND
-                ip = '%s'
-            AND
                 success = 0
             AND
-                login_attempts > 5",
+                login_attempts > %d",
             Database::getTablePrefix(),
             $this->getUserId(),
             Request::createFromGlobals()->server->get('REQUEST_TIME'),
             $this->lockoutTime,
-            Request::createFromGlobals()->getClientIp(),
+            self::MAX_FAILED_LOGIN_ATTEMPTS,
         );
 
+        /** @var mixed $result */
         $result = $this->configuration->getDb()->query($select);
         return $this->configuration->getDb()->numRows($result) !== 0;
     }

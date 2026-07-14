@@ -83,6 +83,22 @@ final class RateLimiter
     }
 
     /**
+     * Reports whether the given key still has budget left, without consuming a token.
+     */
+    public function peek(string $key, int $limit, int $intervalSeconds): bool
+    {
+        $factory = new RateLimiterFactory(config: [
+            'id' => 'api',
+            'policy' => 'fixed_window',
+            'limit' => max(1, $limit),
+            'interval' => max(1, $intervalSeconds) . ' seconds',
+        ], storage: $this->storage);
+
+        // consume(0) never rejects, so exhaustion shows up as zero remaining tokens
+        return $factory->create($key)->consume(0)->getRemainingTokens() > 0;
+    }
+
+    /**
      * @return array<string, int|string>
      */
     public function getHeaders(): array

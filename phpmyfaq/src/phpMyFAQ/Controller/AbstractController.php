@@ -30,6 +30,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Form\FormsServiceProvider;
+use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
@@ -418,6 +419,17 @@ abstract class AbstractController
     public function addFilter(TwigFilter $twigFilter): void
     {
         $this->twigFilters[] = $twigFilter;
+    }
+
+    protected function getRateLimiter(): ?RateLimiter
+    {
+        if ($this->container === null || !$this->container->has('phpmyfaq.http.rate-limiter')) {
+            return null;
+        }
+
+        $rateLimiter = $this->container->get('phpmyfaq.http.rate-limiter');
+
+        return $rateLimiter instanceof RateLimiter ? $rateLimiter : null;
     }
 
     private function createFallbackContainer(): ContainerBuilder

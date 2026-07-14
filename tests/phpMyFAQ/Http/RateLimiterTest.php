@@ -32,6 +32,19 @@ class RateLimiterTest extends TestCase
         $this->assertArrayNotHasKey('Retry-After', $headers);
     }
 
+    public function testPeekDoesNotConsumeTokens(): void
+    {
+        $limiter = new RateLimiter(storage: $this->storage);
+
+        for ($i = 0; $i < 10; $i++) {
+            $this->assertTrue($limiter->peek('peek-key', 2, 60));
+        }
+
+        $this->assertTrue($limiter->check('peek-key', 2, 60));
+        $this->assertTrue($limiter->check('peek-key', 2, 60));
+        $this->assertFalse($limiter->peek('peek-key', 2, 60));
+    }
+
     public function testCheckDeniesRequestWhenLimitIsExceeded(): void
     {
         $limiter = new RateLimiter(storage: $this->storage);

@@ -16540,7 +16540,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
 code = "possible-method-access-on-null"
 message = "Attempting to call a method on `null`."
-count = 22
+count = 21
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"

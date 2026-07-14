@@ -192,7 +192,11 @@ final class AuthenticationController extends AbstractFrontController
 
         // Login via local DB or LDAP or SSO
         if ($username !== '' && ($password !== '' || $this->configuration->get('security.ssoSupport'))) {
-            $userAuthentication = new UserAuthentication($this->configuration, $this->currentUser);
+            $userAuthentication = new UserAuthentication(
+                $this->configuration,
+                $this->currentUser,
+                $this->getRateLimiter(),
+            );
             $userAuthentication->setRememberMe($rememberMe ?? false);
             try {
                 $this->currentUser = $userAuthentication->authenticate($username, $password);

@@ -87,7 +87,7 @@ final class LoginController extends AbstractController
         $faqPassword = Filter::filterVar($data->password, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $user = new CurrentUser($this->configuration);
-        $userAuthentication = new UserAuthentication($this->configuration, $user);
+        $userAuthentication = new UserAuthentication($this->configuration, $user, $this->getRateLimiter());
         try {
             $user = $userAuthentication->authenticate($faqUsername, $faqPassword);
             $result = [

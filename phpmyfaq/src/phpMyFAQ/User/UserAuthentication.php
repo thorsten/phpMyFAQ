@@ -28,11 +28,25 @@ use phpMyFAQ\Auth\AuthException;
 use phpMyFAQ\Auth\AuthLdap;
 use phpMyFAQ\Auth\AuthSso;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User;
 use SensitiveParameter;
+use Symfony\Component\HttpFoundation\Request;
 
 class UserAuthentication
 {
+    /**
+     * Failed login attempts one client IP may make within the failure window
+     * before further attempts are rejected, across all accounts.
+     */
+    public const int MAX_FAILED_LOGINS_PER_IP = 15;
+
+    /**
+     * Sliding window for the per-IP failed login budget, in seconds.
+     */
+    public const int FAILED_LOGIN_WINDOW = 300;
+
     private bool $rememberMe = false;
 
     private bool $twoFactorAuth = false;
@@ -40,6 +54,7 @@ class UserAuthentication
     public function __construct(
         private readonly Configuration $configuration,
         private readonly CurrentUser $currentUser,
+        private readonly ?RateLimiter $rateLimiter = null,
     ) {
     }
 
@@ -71,6 +86,12 @@ class UserAuthentication
      */
     public function authenticate(string $username, #[SensitiveParameter] string $password): CurrentUser
     {
+        if ($this->hasExhaustedFailedLoginBudget()) {
+            // Reject before any password check runs: this client IP produced too
+            // many failed logins recently, across all accounts.
+            throw new UserException(User::ERROR_USER_TOO_MANY_FAILED_LOGINS);
+        }
+
         if ($this->isRememberMe()) {
             $this->currentUser->enableRememberMe();
         }
@@ -80,6 +101,7 @@ class UserAuthentication
 
         try {
             if (!$this->currentUser->login($username, $password)) {
+                $this->recordFailedLogin();
                 throw new UserException(Translation::get(key: 'ad_auth_fail') ?? 'Authentication failed');
             }
 
@@ -99,10 +121,49 @@ class UserAuthentication
                 (Translation::get(key: 'ad_auth_fail') ?? 'Authentication failed') . ' (' . $username . ')',
             );
         } catch (AuthException $authException) {
+            $this->recordFailedLogin();
             throw new UserException($authException->getMessage());
+        } catch (UserException $userException) {
+            $this->recordFailedLogin();
+            throw $userException;
         }
 
         return $this->currentUser;
+    }
+
+    /**
+     * The per-IP failure budget stops password spraying from a single client
+     * across many accounts, which the per-account lockout cannot see.
+     */
+    private function hasExhaustedFailedLoginBudget(): bool
+    {
+        $failedLoginKey = $this->failedLoginKey();
+        if (!$this->rateLimiter instanceof RateLimiter || $failedLoginKey === null) {
+            return false;
+        }
+
+        return !$this->rateLimiter->peek($failedLoginKey, self::MAX_FAILED_LOGINS_PER_IP, self::FAILED_LOGIN_WINDOW);
+    }
+
+    private function recordFailedLogin(): void
+    {
+        $failedLoginKey = $this->failedLoginKey();
+        if ($failedLoginKey === null) {
+            return;
+        }
+
+        $this->rateLimiter?->check($failedLoginKey, self::MAX_FAILED_LOGINS_PER_IP, self::FAILED_LOGIN_WINDOW);
+    }
+
+    /**
+     * Null when no client IP is available (CLI scripts, test runs): a per-IP
+     * budget without an IP would lump unrelated clients together.
+     */
+    private function failedLoginKey(): ?string
+    {
+        $clientIp = Request::createFromGlobals()->getClientIp();
+
+        return $clientIp === null ? null : 'login-failures-' . $clientIp;
     }
 
     private function authenticateLdap(): void
