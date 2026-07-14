@@ -63,6 +63,7 @@ class Sqlite3 implements DatabaseDriver
         ?int $port = null,
     ): ?bool {
         $this->conn = new \Sqlite3($host);
+        $this->conn->enableExceptions(true);
 
         return true;
     }
@@ -190,7 +191,11 @@ class Sqlite3 implements DatabaseDriver
             $query .= sprintf(' LIMIT %d,%d', $offset, $rowcount);
         }
 
-        $result = @$this->conn->query($query);
+        try {
+            $result = $this->conn->query($query);
+        } catch (\SQLite3Exception) {
+            $result = false;
+        }
 
         if (!$result) {
             $this->sqlLog .= $this->error();
@@ -212,7 +217,12 @@ class Sqlite3 implements DatabaseDriver
             return false;
         }
 
-        $statement = @$this->conn->prepare($query);
+        try {
+            $statement = $this->conn->prepare($query);
+        } catch (\SQLite3Exception) {
+            $statement = false;
+        }
+
         if (!$statement instanceof \SQLite3Stmt) {
             $this->sqlLog .= $this->error();
 
@@ -225,7 +235,12 @@ class Sqlite3 implements DatabaseDriver
             ++$position;
         }
 
-        $result = @$statement->execute();
+        try {
+            $result = $statement->execute();
+        } catch (\SQLite3Exception) {
+            $result = false;
+        }
+
         if ($result === false) {
             $this->sqlLog .= $this->error();
         }

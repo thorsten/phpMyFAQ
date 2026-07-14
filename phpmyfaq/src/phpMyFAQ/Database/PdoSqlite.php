@@ -171,20 +171,16 @@ class PdoSqlite implements DatabaseDriver
                 $inner = rtrim($sql, characters: " \t\n\r\0\x0B;");
                 $countSql = 'SELECT COUNT(*) AS c FROM (' . $inner . ') AS _pmf_cnt';
 
-                if ($result instanceof PDOStatement && isset($this->preparedParams[$result])) {
-                    // Re-bind the original parameters for prepared statements
-                    $stmt = $this->pdo->prepare($countSql);
-                    if ($stmt === false) {
-                        return 0;
-                    }
-
-                    $stmt->execute($this->preparedParams[$result]);
-                } else {
-                    $stmt = $this->pdo->query($countSql);
-                    if ($stmt === false) {
-                        return 0;
-                    }
+                $stmt = $this->pdo->prepare($countSql);
+                if ($stmt === false) {
+                    return 0;
                 }
+
+                // Re-bind the original parameters for prepared statements
+                $params = $result instanceof PDOStatement && $this->preparedParams->offsetExists($result)
+                    ? $this->preparedParams[$result]
+                    : [];
+                $stmt->execute($params);
 
                 $row = $stmt->fetch(PDO::FETCH_NUM);
                 return is_array($row) && array_key_exists(0, $row) ? (int) $row[0] : 0;
@@ -337,7 +333,6 @@ class PdoSqlite implements DatabaseDriver
         }
 
         try {
-            /** @var PDOStatement|false $result */
             $result = $this->pdo?->query($query) ?? false;
         } catch (PDOException $pdoException) {
             throw new Exception($pdoException->getMessage());

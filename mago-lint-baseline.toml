@@ -157,12 +157,6 @@ message = "Literal argument `true` should be passed as a named argument for clar
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlite3.php"
-code = "no-error-control-operator"
-message = "Unsafe use of error control operator `@`."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Entity/FaqEntity.php"
 code = "too-many-properties"
 message = "Class has too many properties."
@@ -202,12 +196,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"
 code = "no-error-control-operator"
 message = "Unsafe use of error control operator `@`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq.php"
-code = "kan-defect"
-message = "Class has a high kan defect score."
 count = 1
 
 [[issues]]
