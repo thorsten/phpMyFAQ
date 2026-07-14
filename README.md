@@ -191,9 +191,9 @@ for example `./bin/e2e local -- tests/e2e/search.spec.ts`. The specs live in
 `tests/e2e/` and cover bilingual content, search, admin login, and basic
 accessibility.
 
-The suite also runs nightly in CI (`.github/workflows/e2e-nightly.yml`) using the
-SQLite path, uploading the Playwright HTML report and failure traces as build
-artifacts.
+The suite also runs on every pull request and nightly in CI
+(`.github/workflows/e2e.yml`) using the SQLite path, uploading the Playwright
+HTML report and failure traces as build artifacts.
 
 ## Versioning
 

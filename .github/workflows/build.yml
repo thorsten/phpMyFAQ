@@ -108,5 +108,8 @@ jobs:
       - name: Run Stylelint check
         run: pnpm run stylelint
 
+      - name: Run TypeScript type check
+        run: pnpm run tsc
+
       - name: Run Vitest tests
         run: pnpm test

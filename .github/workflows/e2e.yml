@@ -1,14 +1,20 @@
-name: "phpMyFAQ Nightly E2E Tests"
+name: "phpMyFAQ E2E Tests"
 
 # Runs the Playwright end-to-end suite against a freshly installed and seeded
 # instance (bilingual DE + EN test data). Uses the lightweight php -S + SQLite
 # path for speed; the same suite can be run locally against Docker/MariaDB via
-# `bin/e2e docker`.
+# `bin/e2e docker`. Runs on every pull request and nightly.
 
 on:
   workflow_dispatch:
+  pull_request:
   schedule:
     - cron: '0 3 * * *'
+
+# Cancel superseded runs when a PR is updated.
+concurrency:
+  group: e2e-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   e2e:
