@@ -14,7 +14,7 @@
  */
 
 import { Modal } from 'bootstrap';
-import { pushErrorNotification, pushNotification } from '../utils';
+import { escape, pushErrorNotification, pushNotification } from '../utils';
 import { createComment } from '../api';
 import { CommentData } from '../interfaces';
 import { renderCommentEditor } from '../comment/editor';
@@ -133,15 +133,8 @@ const addCommentToDOM = (commentData: CommentData): void => {
   const date = new Date(parseInt(commentData.date) * 1000);
   const formattedDate = date.toLocaleString();
 
-  // Escape HTML to prevent XSS
-  const escapeHtml = (text: string): string => {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  };
-
-  const escapedUsername = escapeHtml(commentData.username);
-  const escapedGravatarUrl = escapeHtml(commentData.gravatarUrl);
+  const escapedUsername = escape(commentData.username);
+  const escapedGravatarUrl = escape(commentData.gravatarUrl);
 
   const commentHtml = `
     <div class="row mt-2 mb-2">

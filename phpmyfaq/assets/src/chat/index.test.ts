@@ -386,6 +386,42 @@ describe('Chat UI', () => {
       expect(resultsContainer?.innerHTML).toBe('');
     });
 
+    test('should not allow attribute breakout via a malicious display name', async () => {
+      const maliciousName = 'Eve" onmouseover="alert(1)';
+      const mockResponse: ChatUsersResponse = {
+        success: true,
+        users: [{ userId: 7, displayName: maliciousName }],
+      };
+      vi.mocked(searchUsers).mockResolvedValue(mockResponse);
+
+      window.pmfChatConfig = mockConfig;
+      document.body.innerHTML = `
+        <form id="pmf-chat-form"></form>
+        <input id="pmf-chat-user-search" type="text" />
+        <div id="pmf-chat-user-search-results"></div>
+        <div id="pmf-chat-messages"></div>
+      `;
+
+      handleChat();
+
+      const searchInput = document.getElementById('pmf-chat-user-search') as HTMLInputElement;
+      searchInput.value = 'eve';
+      searchInput.dispatchEvent(new Event('input'));
+
+      vi.advanceTimersByTime(300);
+
+      await vi.waitFor(() => {
+        expect(searchUsers).toHaveBeenCalledWith('eve');
+      });
+
+      const resultsContainer = document.getElementById('pmf-chat-user-search-results');
+      // The quote must not close the attribute and smuggle in an event handler
+      expect(resultsContainer?.querySelector('[onmouseover]')).toBeNull();
+      // The full name must survive the round-trip through the data attribute
+      const anchor = resultsContainer?.querySelector('.pmf-chat-start-conversation');
+      expect(anchor?.getAttribute('data-display-name')).toBe(maliciousName);
+    });
+
     test('should show no users found message', async () => {
       const mockResponse: ChatUsersResponse = {
         success: true,

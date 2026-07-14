@@ -7,7 +7,8 @@ vi.mock('bootstrap', () => ({
   },
 }));
 
-vi.mock('../utils', () => ({
+vi.mock('../utils', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('../utils')>()),
   pushNotification: vi.fn(),
   pushErrorNotification: vi.fn(),
 }));
@@ -100,6 +101,46 @@ describe('handleSaveComment', () => {
     });
 
     expect(pushNotification).toHaveBeenCalledWith('Comment saved successfully');
+  });
+
+  it('should not allow attribute breakout via a malicious username in a new comment', async () => {
+    const maliciousUsername = 'Eve" onerror="alert(1)';
+    document.body.innerHTML = `
+      <div id="pmf-modal-add-comment">
+        <form id="pmf-add-comment-form">
+          <textarea id="comment_text" name="comment">Test comment</textarea>
+        </form>
+      </div>
+      <button id="pmf-button-save-comment">Save</button>
+      <div id="comments"></div>
+    `;
+
+    vi.mocked(Modal.getInstance).mockReturnValue({ hide: vi.fn() } as unknown as Modal);
+    vi.mocked(createComment).mockResolvedValue({
+      success: 'Comment saved successfully',
+      commentData: {
+        username: maliciousUsername,
+        gravatarUrl: 'https://example.org/avatar.png',
+        date: '1767225600',
+        comment: 'Hello!',
+      },
+    });
+
+    handleSaveComment();
+
+    const button = document.getElementById('pmf-button-save-comment') as HTMLButtonElement;
+    button.click();
+
+    await vi.waitFor(() => {
+      expect(createComment).toHaveBeenCalled();
+    });
+
+    const commentsContainer = document.getElementById('comments');
+    // The quote must not close the alt attribute and smuggle in an event handler
+    expect(commentsContainer?.querySelector('[onerror]')).toBeNull();
+    // The full username must survive the round-trip through the alt attribute
+    expect(commentsContainer?.querySelector('img')?.getAttribute('alt')).toBe(maliciousUsername);
+    expect(commentsContainer?.textContent).toContain(maliciousUsername);
   });
 
   it('should show error notification on error response', async () => {

@@ -15,6 +15,7 @@
 
 import { getMessages, sendMessage, searchUsers, getConversations } from '../api/chat';
 import { ChatConfig, ChatMessage, ChatUser } from '../interfaces';
+import { escape } from '../utils';
 
 declare global {
   interface Window {
@@ -26,12 +27,6 @@ let eventSource: EventSource | null = null;
 let lastMessageId = 0;
 let currentPartnerId: number | null = null;
 let csrfToken: string;
-
-const escapeHtml = (text: string): string => {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
-};
 
 const formatTime = (isoString: string): string => {
   const date = new Date(isoString);
@@ -46,7 +41,7 @@ const renderMessage = (message: ChatMessage, currentUserId: number): string => {
   return `
     <div class="d-flex ${alignClass} mb-2" data-message-id="${message.id}">
       <div class="p-2 rounded ${bgClass}" style="max-width: 75%;">
-        <div>${escapeHtml(message.message)}</div>
+        <div>${escape(message.message)}</div>
         <small class="d-block text-end ${isOwn ? 'text-white-50' : 'text-body-tertiary'}">${formatTime(message.createdAt)}</small>
       </div>
     </div>
@@ -233,14 +228,14 @@ const handleUserSearch = async (query: string): Promise<void> => {
           .map(
             (user: ChatUser) => `
           <a href="#" class="list-group-item list-group-item-action pmf-chat-start-conversation"
-             data-user-id="${user.userId}" data-display-name="${escapeHtml(user.displayName)}">
+             data-user-id="${user.userId}" data-display-name="${escape(user.displayName)}">
             <div class="d-flex align-items-center">
               <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2"
                    style="width: 32px; height: 32px;">
-                ${user.displayName.charAt(0).toUpperCase()}
+                ${escape(user.displayName.charAt(0).toUpperCase())}
               </div>
               <div>
-                <strong>${escapeHtml(user.displayName)}</strong>
+                <strong>${escape(user.displayName)}</strong>
               </div>
             </div>
           </a>
@@ -296,15 +291,15 @@ const updateConversationList = async (): Promise<void> => {
           <div class="flex-shrink-0">
             <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
                  style="width: 40px; height: 40px;">
-              ${conv.displayName.charAt(0).toUpperCase()}
+              ${escape(conv.displayName.charAt(0).toUpperCase())}
             </div>
           </div>
           <div class="flex-grow-1 ms-3 overflow-hidden">
             <div class="d-flex justify-content-between align-items-center">
-              <strong class="text-truncate">${escapeHtml(conv.displayName)}</strong>
+              <strong class="text-truncate">${escape(conv.displayName)}</strong>
               ${conv.unreadCount > 0 ? `<span class="badge bg-primary rounded-pill">${conv.unreadCount}</span>` : ''}
             </div>
-            <small class="text-muted text-truncate d-block">${escapeHtml(conv.lastMessage.slice(0, 30))}${conv.lastMessage.length > 30 ? '...' : ''}</small>
+            <small class="text-muted text-truncate d-block">${escape(conv.lastMessage.slice(0, 30))}${conv.lastMessage.length > 30 ? '...' : ''}</small>
           </div>
         </a>
       `
