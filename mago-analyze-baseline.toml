@@ -3981,12 +3981,6 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/AbstractAdministrationController.php"
 code = "invalid-return-statement"
-message = '''Invalid return type for function `phpMyFAQ\Controller\Administration\AbstractAdministrationController::getFooter`: expected `array<array-key, string>`, but found `array{'currentLanguage': string, 'currentTimeStamp': int, 'currentYear': string, 'documentationUrl': string, 'isUserLoggedIn': bool, 'msgModalSessionWarning': string, 'msgPoweredBy': string, 'phpMyFaqUrl': string('https://www.phpmyfaq.de/')}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/AbstractAdministrationController.php"
-code = "invalid-return-statement"
 message = '''Invalid return type for function `phpMyFAQ\Controller\Administration\AbstractAdministrationController::getHeader`: expected `array<array-key, string>`, but found `array{'allowUserLayoutMode': bool, 'baseHref': truthy-string, 'csrfTokenLogout': string, 'currentYear': string, 'defaultLayoutMode': string, 'gravatarImage': string, 'hasGravatarSupport': mixed, 'isSessionTimeoutCounterEnabled': mixed, 'layoutMode': string('light'), 'menuBackup': array<array-key, string>|null|string, 'menuConfiguration': array<array-key, string>|null|string, 'menuContent': array<array-key, string>|null|string, 'menuImportsExports': array<array-key, string>|null|string, 'menuStatistics': array<array-key, string>|null|string, 'menuUsers': array<array-key, string>|null|string, 'metaLanguage': array<array-key, string>|null|string, 'metaRobots': mixed, 'msgChangePassword': array<array-key, string>|null|string, 'msgLogout': array<array-key, string>|null|string, 'msgSessionExpiration': array<array-key, string>|null|string, 'pageDirection': array<array-key, string>|null|string, 'pageTitle': truthy-string, 'pluginScripts': array<array-key, string>, 'pluginStylesheets': array<array-key, string>, 'renderedLanguageSelection': string, 'secondLevelEntries': array<array-key, mixed>, 'templateSetName': string, 'userHasAccessPermission': mixed, 'userName': array<array-key, string>|int|null|string, 'version': string, ...}`.'''
 count = 1
 
@@ -5668,12 +5662,6 @@ count = 3
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UpdateController.php"
 code = "redundant-comparison"
 message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
-code = "impossible-condition"
-message = "This condition (type `false`) will always evaluate to false."
 count = 1
 
 [[issues]]
@@ -8673,12 +8661,6 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
 code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Database\Sqlsrv::formatErrors`: expected `array<array-key, mixed>`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "mixed-argument"
 message = "Invalid argument type for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
 count = 1
 
@@ -8698,19 +8680,13 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
 code = "mixed-array-access"
 message = "Unsafe array access on type `mixed`."
-count = 8
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `nonnull`."
-count = 2
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 10
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
@@ -8732,24 +8708,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `mixed` is being assigned to property `$$conn` (bool|resource)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `mixed` is being assigned to property `$$lastResult` (false|null|resource)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\Sqlsrv::affectedRows`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `phpMyFAQ\Database\Sqlsrv::nextId`. Saw type `mixed`.'
 count = 1
@@ -8757,97 +8715,7 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
 code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\Sqlsrv::numRows`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `phpMyFAQ\Database\Sqlsrv::serverVersion`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Database\SQLSRV_CURSOR_KEYSET`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Database\SQLSRV_FETCH_ASSOC`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "non-existent-function"
-message = 'Could not find definition for function `phpMyFAQ\Database\sqlsrv_client_info` (also tried as `sqlsrv_client_info` in a broader scope).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "non-existent-function"
-message = 'Could not find definition for function `phpMyFAQ\Database\sqlsrv_close` (also tried as `sqlsrv_close` in a broader scope).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "non-existent-function"
-message = 'Could not find definition for function `phpMyFAQ\Database\sqlsrv_connect` (also tried as `sqlsrv_connect` in a broader scope).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "non-existent-function"
-message = 'Could not find definition for function `phpMyFAQ\Database\sqlsrv_errors` (also tried as `sqlsrv_errors` in a broader scope).'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "non-existent-function"
-message = 'Could not find definition for function `phpMyFAQ\Database\sqlsrv_fetch_array` (also tried as `sqlsrv_fetch_array` in a broader scope).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "non-existent-function"
-message = 'Could not find definition for function `phpMyFAQ\Database\sqlsrv_fetch_object` (also tried as `sqlsrv_fetch_object` in a broader scope).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "non-existent-function"
-message = 'Could not find definition for function `phpMyFAQ\Database\sqlsrv_fetch` (also tried as `sqlsrv_fetch` in a broader scope).'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "non-existent-function"
-message = 'Could not find definition for function `phpMyFAQ\Database\sqlsrv_get_field` (also tried as `sqlsrv_get_field` in a broader scope).'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "non-existent-function"
-message = 'Could not find definition for function `phpMyFAQ\Database\sqlsrv_num_rows` (also tried as `sqlsrv_num_rows` in a broader scope).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "non-existent-function"
-message = 'Could not find definition for function `phpMyFAQ\Database\sqlsrv_query` (also tried as `sqlsrv_query` in a broader scope).'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "non-existent-function"
-message = 'Could not find definition for function `phpMyFAQ\Database\sqlsrv_rows_affected` (also tried as `sqlsrv_rows_affected` in a broader scope).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "non-existent-function"
-message = 'Could not find definition for function `phpMyFAQ\Database\sqlsrv_server_info` (also tried as `sqlsrv_server_info` in a broader scope).'
 count = 1
 
 [[issues]]
@@ -12146,12 +12014,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Link.php"
-code = "named-argument-not-allowed"
-message = "Named arguments are not allowed for `str_contains`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Link.php"
 code = "possibly-false-operand"
 message = "Left operand in arithmetic operation might be `false` (type `false|non-negative-int`)."
 count = 1
@@ -12425,18 +12287,6 @@ file = "phpmyfaq/src/phpMyFAQ/Mail.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `phpMyFAQ\Mail::getTime`. Saw type `nonnull`.'
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "named-argument-not-allowed"
-message = "Named arguments are not allowed for `method_exists`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "named-argument-not-allowed"
-message = "Named arguments are not allowed for `str_contains`."
-count = 5
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Mail.php"
@@ -12860,12 +12710,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Pagination.php"
-code = "named-argument-not-allowed"
-message = "Named arguments are not allowed for `str_contains`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Pagination.php"
 code = "possibly-invalid-argument"
 message = "Possible argument type mismatch for argument #1 of `str_contains`: expected `string`, but possibly received `array<array-key, string>|null|string`."
 count = 1
@@ -13166,24 +13010,6 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Plugin/PluginManager.php"
-code = "possibly-false-argument"
-message = "Argument #2 of function `preg_match` is possibly `false`, but parameter type `string` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Plugin/PluginManager.php"
-code = "possibly-false-iterator"
-message = "Expression being iterated (type `false|list<non-empty-string>`) might be `false` at runtime."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Plugin/PluginManager.php"
-code = "possibly-null-operand"
-message = "Possibly null left operand used in string concatenation (type `null|string`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Plugin/PluginManager.php"
 code = "property-type-coercion"
 message = '''A value of a less specific type `array<array-key, array{'plugin': object, 'reason': string}>` is being assigned to property `$$incompatiblePlugins` (array<string, array{'plugin': phpMyFAQ\Plugin\PluginInterface, 'reason': string}>).'''
 count = 1
@@ -13192,12 +13018,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Plugin/PluginManager.php"
 code = "property-type-coercion"
 message = 'A value of a less specific type `array<array-key, object>` is being assigned to property `$$plugins` (array<array-key, phpMyFAQ\Plugin\PluginInterface>).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Plugin/PluginManager.php"
-code = "reference-to-undefined-variable"
-message = "Reference created from a previously undefined variable `$matches`."
 count = 1
 
 [[issues]]
@@ -15848,18 +15668,6 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/System.php"
-code = "named-argument-not-allowed"
-message = "Named arguments are not allowed for `str_contains`."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/System.php"
-code = "named-argument-not-allowed"
-message = "Named arguments are not allowed for `str_ends_with`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/System.php"
 code = "possibly-invalid-argument"
 message = "Possible argument type mismatch for argument #1 of `extension_loaded`: expected `non-empty-string`, but possibly received `string`."
 count = 3
@@ -16036,12 +15844,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Translation.php"
 code = "mixed-property-type-coercion"
 message = "A value with a less specific type `mixed` is being assigned to property `$$currentLanguage` (string)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Translation.php"
-code = "named-argument-not-allowed"
-message = "Named arguments are not allowed for `function_exists`."
 count = 1
 
 [[issues]]
@@ -17278,12 +17080,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Utils.php"
 code = "invalid-return-statement"
 message = 'Invalid return type for function `phpMyFAQ\Utils::setHighlightedString`: expected `string`, but found `array<array-key, mixed>|null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Utils.php"
-code = "named-argument-not-allowed"
-message = "Named arguments are not allowed for `str_ends_with`."
 count = 1
 
 [[issues]]

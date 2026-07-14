@@ -30,21 +30,6 @@ class PluginManagerTest extends TestCase
     /**
      * @throws ReflectionException
      */
-    public function testLoadPlugins(): void
-    {
-        $mockPluginPath = __DIR__ . '/MockPlugin.php';
-        file_put_contents($mockPluginPath, file_get_contents(__DIR__ . '/MockPlugin.php'));
-
-        $reflection = new ReflectionClass($this->pluginManager);
-        $method = $reflection->getMethod('getNamespaceFromFile');
-        $namespace = $method->invokeArgs($this->pluginManager, [$mockPluginPath]);
-
-        $this->assertEquals('phpMyFAQ\Plugin', $namespace);
-    }
-
-    /**
-     * @throws ReflectionException
-     */
     public function testAreDependenciesMet(): void
     {
         $mockPlugin = new MockPlugin();
@@ -375,23 +360,6 @@ class PluginManagerTest extends TestCase
         $plugins = $this->pluginManager->getPlugins();
         $this->assertIsArray($plugins);
         $this->assertEmpty($plugins);
-    }
-
-    /**
-     * @throws ReflectionException
-     */
-    public function testGetNamespaceFromFileReturnsNullForNoNamespace(): void
-    {
-        $tempFile = tempnam(sys_get_temp_dir(), 'plugin_test_');
-        file_put_contents($tempFile, '<?php class NoNamespaceClass {}');
-
-        $reflection = new ReflectionClass($this->pluginManager);
-        $method = $reflection->getMethod('getNamespaceFromFile');
-        $result = $method->invokeArgs($this->pluginManager, [$tempFile]);
-
-        $this->assertNull($result);
-
-        unlink($tempFile);
     }
 
     /**

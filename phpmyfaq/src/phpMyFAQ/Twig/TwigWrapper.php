@@ -22,6 +22,7 @@ namespace phpMyFAQ\Twig;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Environment as phpMyFAQEnvironment;
 use phpMyFAQ\System;
+use phpMyFAQ\Twig\Extensions\AssetVersionTwigExtension;
 use phpMyFAQ\Twig\Extensions\PluginTwigExtension;
 use phpMyFAQ\Twig\Extensions\TranslateTwigExtension;
 use Twig\Environment;
@@ -59,12 +60,24 @@ class TwigWrapper
         $filesystemLoader->addPath($templatePath . '/admin', namespace: 'admin');
         $filesystemLoader->addPath($templatePath . '/setup', namespace: 'setup');
 
+        /** @var mixed $configuredCacheDir */
+        $configuredCacheDir = phpMyFAQEnvironment::get('TWIG_CACHE_DIR');
         $this->twigEnvironment = new Environment($filesystemLoader, [
             'debug' => System::isDevelopmentVersion(),
+            'cache' => TwigCacheResolver::resolve(
+                debug: System::isDevelopmentVersion() || phpMyFAQEnvironment::isDebugMode(),
+                enabled: phpMyFAQEnvironment::get('TWIG_CACHE_ENABLED'),
+                configuredDir: is_string($configuredCacheDir) ? $configuredCacheDir : null,
+                defaultDir: (string) PMF_ROOT_DIR . '/cache/twig',
+            ),
+            // Recompile when a template file changes, so self-hosted template
+            // edits are picked up without a manual cache clear.
+            'auto_reload' => true,
         ]);
 
-        // Always add the translation extension
+        // Always add the translation and asset-versioning extensions
         $this->twigEnvironment->addExtension(new AttributeExtension(TranslateTwigExtension::class));
+        $this->twigEnvironment->addExtension(new AttributeExtension(AssetVersionTwigExtension::class));
 
         // Add the plugin extension if it's not in the setup phase
         if (!$this->isSetup) {

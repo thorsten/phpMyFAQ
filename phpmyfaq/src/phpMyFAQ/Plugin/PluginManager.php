@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Plugin;
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Environment;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -87,13 +88,16 @@ class PluginManager
     public function loadPlugins(): void
     {
         $pluginDir = PMF_ROOT_DIR . '/content/plugins/';
-        $pluginFiles = glob($pluginDir . '*/*Plugin.php');
+        // The manifest cache is skipped in debug mode and on development
+        // versions, where plugin namespaces may change without a directory
+        // mtime bump.
+        $manifestFile = Environment::isDebugMode() || System::isDevelopmentVersion()
+            ? null
+            : PMF_ROOT_DIR . '/cache/plugins/manifest.php';
+        $pluginDiscovery = new PluginDiscovery($pluginDir, $manifestFile);
 
-        foreach ($pluginFiles as $pluginFile) {
+        foreach ($pluginDiscovery->getClassMap() as $pluginFile => $fullClassName) {
             require_once $pluginFile;
-            $className = basename(path: $pluginFile, suffix: '.php');
-            $namespace = $this->getNamespaceFromFile($pluginFile);
-            $fullClassName = $namespace . '\\' . $className;
             $this->registerPlugin($fullClassName);
         }
 
@@ -179,19 +183,6 @@ class PluginManager
     }
 
     /**
-     * Returns the namespace from a file
-     */
-    private function getNamespaceFromFile(string $file): ?string
-    {
-        $src = file_get_contents($file);
-        if (preg_match('/^namespace\s+(.+?);/m', $src, $matches)) {
-            return $matches[1];
-        }
-
-        return null;
-    }
-
-    /**
      * Checks if a plugin is compatible with the current version
      */
     private function isCompatible(PluginInterface $plugin): bool
@@ -224,7 +215,7 @@ class PluginManager
      */
     private function getPluginDirectory(string $pluginName): string
     {
-        return PMF_ROOT_DIR . '/content/plugins/' . $pluginName;
+        return (string) PMF_ROOT_DIR . '/content/plugins/' . $pluginName;
     }
 
     /**

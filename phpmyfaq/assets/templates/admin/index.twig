@@ -16,8 +16,8 @@
   <meta name="publisher" content="phpMyFAQ Team">
   <meta name="robots" content="{{ metaRobots }}">
 
-  <link rel="stylesheet" href="../assets/public/admin.css">
-  <link rel="stylesheet" href="../assets/templates/default/theme.css">
+  <link rel="stylesheet" href="../{{ asset('assets/public/admin.css') }}">
+  <link rel="stylesheet" href="../{{ asset('assets/templates/default/theme.css') }}">
   {% if pluginStylesheets is defined and pluginStylesheets is not empty %}
     {% for stylesheet in pluginStylesheets %}
   <link href="../{{ stylesheet }}" rel="stylesheet" media="screen">
@@ -319,6 +319,6 @@
 <script src="../{{ script }}"></script>
   {% endfor %}
 {% endif %}
-<script type="module" src="../assets/public/backend.js?{{ currentTimeStamp}}"></script>
+<script type="module" src="../{{ asset('assets/public/backend.js') }}"></script>
 </body>
 </html>

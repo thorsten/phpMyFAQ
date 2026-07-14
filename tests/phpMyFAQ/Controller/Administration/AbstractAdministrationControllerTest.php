@@ -235,7 +235,6 @@ final class AbstractAdministrationControllerTest extends TestCase
 
         self::assertSame('en', $footer['currentLanguage']);
         self::assertTrue($footer['isUserLoggedIn']);
-        self::assertIsInt($footer['currentTimeStamp']);
         self::assertMatchesRegularExpression('/^\d{4}$/', $footer['currentYear']);
         self::assertNotSame('', $footer['msgPoweredBy']);
         self::assertNotSame('', $footer['documentationUrl']);

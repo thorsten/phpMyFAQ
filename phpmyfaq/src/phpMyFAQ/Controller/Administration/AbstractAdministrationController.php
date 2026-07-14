@@ -420,7 +420,7 @@ abstract class AbstractAdministrationController extends AbstractController
     }
 
     /**
-     * @return string[]
+     * @return array<string, string|bool>
      */
     protected function getFooter(): array
     {
@@ -431,7 +431,6 @@ abstract class AbstractAdministrationController extends AbstractController
             'phpMyFaqUrl' => System::PHPMYFAQ_URL,
             'isUserLoggedIn' => $this->currentUser->isLoggedIn(),
             'currentLanguage' => $this->configuration->getLanguage()->getLanguage(),
-            'currentTimeStamp' => time(),
             'currentYear' => date(format: 'Y'),
         ];
     }

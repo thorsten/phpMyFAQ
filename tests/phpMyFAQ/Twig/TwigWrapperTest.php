@@ -96,6 +96,15 @@ class TwigWrapperTest extends TestCase
         $this->assertInstanceOf(TwigFilter::class, $twigEnvironment->getFilter('testFilter'));
     }
 
+    public function testRegistersAssetTwigFunction(): void
+    {
+        $reflection = new ReflectionClass($this->twigWrapper);
+        $property = $reflection->getProperty('twigEnvironment');
+        $twigEnvironment = $property->getValue($this->twigWrapper);
+
+        $this->assertNotNull($twigEnvironment->getFunction('asset'));
+    }
+
     public function testGetTemplateSetName(): void
     {
         $this->assertEquals('default', TwigWrapper::getTemplateSetName());
