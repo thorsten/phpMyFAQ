@@ -11,6 +11,9 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
+use phpMyFAQ\Environment;
+use phpMyFAQ\System;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(ConfigurationRepository::class)]
@@ -20,6 +23,9 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(\phpMyFAQ\Configuration\Storage\HybridConfigurationStore::class)]
 #[UsesClass(Database::class)]
 #[UsesClass(Sqlite3::class)]
+#[UsesClass(FilesystemConfigurationCache::class)]
+#[UsesClass(Environment::class)]
+#[UsesClass(System::class)]
 class ConfigurationRepositoryTest extends TestCase
 {
     private string $databaseFile;

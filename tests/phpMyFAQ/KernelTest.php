@@ -52,6 +52,7 @@ use Symfony\Component\Routing\RouteCollection;
 #[UsesClass(PdoSqlite::class)]
 #[UsesClass(RateLimiter::class)]
 #[UsesClass(System::class)]
+#[UsesClass(ContainerRegistry::class)]
 #[AllowMockObjectsWithoutExpectations]
 class KernelTest extends TestCase
 {

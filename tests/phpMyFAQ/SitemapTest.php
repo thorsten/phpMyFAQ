@@ -32,6 +32,8 @@ use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Symfony\Component\HttpFoundation\Session\Session;
+use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
+use phpMyFAQ\Plugin\PluginDiscovery;
 
 #[CoversClass(Sitemap::class)]
 #[UsesClass(Configuration::class)]
@@ -68,6 +70,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[UsesClass(TitleSlugifier::class)]
 #[UsesClass(Utils::class)]
 #[UsesClass(Translation::class)]
+#[UsesClass(FilesystemConfigurationCache::class)]
+#[UsesClass(PluginDiscovery::class)]
 class SitemapTest extends TestCase
 {
     private const int FAQ_ID = 9990;

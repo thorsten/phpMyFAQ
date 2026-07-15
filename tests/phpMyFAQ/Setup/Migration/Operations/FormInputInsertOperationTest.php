@@ -26,6 +26,8 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
+use phpMyFAQ\Plugin\PluginDiscovery;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(FormInputInsertOperation::class)]
@@ -48,6 +50,8 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(PluginManager::class)]
 #[UsesClass(System::class)]
 #[UsesClass(Translation::class)]
+#[UsesClass(FilesystemConfigurationCache::class)]
+#[UsesClass(PluginDiscovery::class)]
 final class FormInputInsertOperationTest extends TestCase
 {
     private string $databaseFile;

@@ -40,6 +40,9 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
+use phpMyFAQ\Permission\GroupCategoryPermissionRepository;
+use phpMyFAQ\Plugin\PluginDiscovery;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(UserCreateOperation::class)]
@@ -76,6 +79,9 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(TenantQuotas::class)]
 #[UsesClass(Translation::class)]
 #[UsesClass(UserData::class)]
+#[UsesClass(FilesystemConfigurationCache::class)]
+#[UsesClass(GroupCategoryPermissionRepository::class)]
+#[UsesClass(PluginDiscovery::class)]
 final class UserCreateOperationTest extends TestCase
 {
     private string $databaseFile;

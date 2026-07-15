@@ -28,6 +28,9 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
+use phpMyFAQ\Database;
+use phpMyFAQ\Plugin\PluginDiscovery;
 
 #[CoversClass(SearchClientFactory::class)]
 #[AllowMockObjectsWithoutExpectations]
@@ -49,6 +52,9 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 #[UsesClass(ConfigurationStorageSettingsResolver::class)]
 #[UsesClass(DatabaseConfigurationStore::class)]
 #[UsesClass(HybridConfigurationStore::class)]
+#[UsesClass(FilesystemConfigurationCache::class)]
+#[UsesClass(Database::class)]
+#[UsesClass(PluginDiscovery::class)]
 class SearchClientFactoryTest extends TestCase
 {
     private array $envBackup = [];

@@ -17,6 +17,9 @@ use ReflectionClass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
+use phpMyFAQ\Database\PdoSqlite;
+use phpMyFAQ\Plugin\PluginDiscovery;
 
 #[CoversClass(SeedTestDataCommand::class)]
 #[UsesClass(\phpMyFAQ\Category::class)]
@@ -65,6 +68,9 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 #[UsesClass(\phpMyFAQ\Tenant\TenantQuotaEnforcer::class)]
 #[UsesClass(\phpMyFAQ\Tenant\TenantQuotas::class)]
 #[UsesClass(\phpMyFAQ\Translation::class)]
+#[UsesClass(FilesystemConfigurationCache::class)]
+#[UsesClass(PdoSqlite::class)]
+#[UsesClass(PluginDiscovery::class)]
 #[AllowMockObjectsWithoutExpectations]
 class SeedTestDataCommandTest extends TestCase
 {

@@ -49,6 +49,9 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
+use phpMyFAQ\Permission\GroupCategoryPermissionRepository;
+use phpMyFAQ\Plugin\PluginDiscovery;
 
 #[CoversClass(Pdf::class)]
 #[UsesClass(Pdf\Wrapper::class)]
@@ -93,6 +96,9 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(CurrentUser::class)]
 #[UsesClass(UserData::class)]
 #[UsesClass(UserSession::class)]
+#[UsesClass(FilesystemConfigurationCache::class)]
+#[UsesClass(GroupCategoryPermissionRepository::class)]
+#[UsesClass(PluginDiscovery::class)]
 #[AllowMockObjectsWithoutExpectations]
 final class PdfTest extends TestCase
 {

@@ -25,6 +25,8 @@ use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
+use phpMyFAQ\Plugin\PluginDiscovery;
 
 #[CoversClass(PasswordHasher::class)]
 #[UsesClass(Configuration::class)]
@@ -45,6 +47,8 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(PluginManager::class)]
 #[UsesClass(System::class)]
 #[UsesClass(Translation::class)]
+#[UsesClass(FilesystemConfigurationCache::class)]
+#[UsesClass(PluginDiscovery::class)]
 class PasswordHasherTest extends TestCase
 {
     private PasswordHasher $passwordHasher;

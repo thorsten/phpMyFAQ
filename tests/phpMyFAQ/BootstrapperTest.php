@@ -27,6 +27,8 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
+use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
+use phpMyFAQ\Plugin\PluginDiscovery;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(Bootstrapper::class)]
@@ -52,6 +54,8 @@ use Symfony\Component\HttpFoundation\Request;
 #[UsesClass(Translation::class)]
 #[UsesClass(PhpConfigurator::class)]
 #[UsesClass(ConfigDirectoryResolver::class)]
+#[UsesClass(FilesystemConfigurationCache::class)]
+#[UsesClass(PluginDiscovery::class)]
 class BootstrapperTest extends TestCase
 {
     public function testGettersReturnNullBeforeRun(): void
