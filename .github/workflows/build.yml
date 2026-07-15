@@ -61,7 +61,6 @@ jobs:
           report_paths: junit.xml
           check_name: PHPUnit Test Results (PHP ${{ matrix.php-versions }})
           detailed_summary: true
-          include_passed: true
 
       # Regression floor for line coverage. Raise MINIMUM_LINE_COVERAGE as coverage improves;
       # the step prints the current percentage so the floor can be ratcheted toward it.
