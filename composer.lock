@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bfd0b093ede6c40bb1a355454a3ace78",
+    "content-hash": "849cd9d27ca1cda29231c4695bb3098f",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -1066,16 +1066,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "7.13.3",
+            "version": "7.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "caa5491e1030fd120247f42fb3331ecf38da3b26"
+                "reference": "aef242412e13128b5049864867bb49fc37dd39de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/caa5491e1030fd120247f42fb3331ecf38da3b26",
-                "reference": "caa5491e1030fd120247f42fb3331ecf38da3b26",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/aef242412e13128b5049864867bb49fc37dd39de",
+                "reference": "aef242412e13128b5049864867bb49fc37dd39de",
                 "shasum": ""
             },
             "require": {
@@ -1174,7 +1174,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/7.13.3"
+                "source": "https://github.com/guzzle/guzzle/tree/7.14.0"
             },
             "funding": [
                 {
@@ -1190,7 +1190,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-07-08T16:10:19+00:00"
+            "time": "2026-07-08T22:54:09+00:00"
         },
         {
             "name": "guzzlehttp/promises",
