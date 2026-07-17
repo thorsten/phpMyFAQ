@@ -49,7 +49,6 @@ class Mbstring extends AbstractString
             self::$mbstring = new self();
             self::$mbstring->encoding = self::DEFAULT_ENCODING;
             self::$mbstring->language = Language::isASupportedLanguage($language) ? $language : self::DEFAULT_LANGUAGE;
-            mb_regex_encoding(self::$mbstring->encoding);
         }
 
         return self::$mbstring;
