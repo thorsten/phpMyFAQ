@@ -138,6 +138,25 @@ class Filter
     }
 
     /**
+     * Filters a variable containing HTML: sanitizes it with FILTER_SANITIZE_SPECIAL_CHARS,
+     * decodes the HTML entities back and removes unsafe elements and attributes via
+     * Symfony's HtmlSanitizer, so safe HTML markup is kept intact.
+     *
+     * @param mixed      $variable Variable
+     * @param mixed|null $default Default value
+     */
+    public static function filterHtml(mixed $variable, mixed $default = null): mixed
+    {
+        $sanitized = self::filterVar($variable, FILTER_SANITIZE_SPECIAL_CHARS, $default);
+
+        if (!is_string($sanitized)) {
+            return $sanitized;
+        }
+
+        return self::removeAttributes(html_entity_decode($sanitized, ENT_QUOTES | ENT_HTML5, encoding: 'UTF-8'));
+    }
+
+    /**
      * Sanitizes HTML by allowing safe elements and attributes via Symfony's HtmlSanitizer.
      */
     public static function removeAttributes(string $html = ''): string

@@ -150,6 +150,59 @@ class FilterTest extends TestCase
         $this->assertStringContainsString('HelloWorld', $result);
     }
 
+    public function testFilterHtmlKeepsSafeHtml(): void
+    {
+        $html = '<p>Hello <strong>World</strong></p><ul><li>Item</li></ul>';
+        $result = Filter::filterHtml($html);
+
+        $this->assertEquals($html, $result);
+    }
+
+    public function testFilterHtmlDoesNotDoubleEncodeEntities(): void
+    {
+        $result = Filter::filterHtml('<p>Tom &amp; Jerry</p>');
+
+        $this->assertStringNotContainsString('&amp;amp;', $result);
+        $this->assertStringContainsString('Tom &amp; Jerry', $result);
+    }
+
+    public function testFilterHtmlKeepsQuotesAndUmlauts(): void
+    {
+        $result = Filter::filterHtml('<p>It\'s a "Grüße" test</p>');
+
+        // quotes are stored as single-encoded entities which render correctly in the browser
+        $this->assertStringContainsString('It&#039;s a', $result);
+        $this->assertStringNotContainsString('&amp;#039;', $result);
+        $this->assertStringContainsString('Grüße', $result);
+    }
+
+    public function testFilterHtmlRemovesDangerousMarkup(): void
+    {
+        $html = '<p onclick="alert(1)">Hello</p><script>alert("xss")</script>';
+        $result = Filter::filterHtml($html);
+
+        $this->assertStringNotContainsString('onclick', $result);
+        $this->assertStringNotContainsString('<script>', $result);
+        $this->assertStringContainsString('<p>Hello</p>', $result);
+    }
+
+    public function testFilterHtmlKeepsAllowedAttributes(): void
+    {
+        $html = '<p class="lead" style="color: red;">Hello <a href="https://example.org" target="_blank">Link</a></p>';
+        $result = Filter::filterHtml($html);
+
+        $this->assertStringContainsString('class="lead"', $result);
+        $this->assertStringContainsString('style="color: red;"', $result);
+        $this->assertStringContainsString('href="https://example.org"', $result);
+        $this->assertStringContainsString('target="_blank"', $result);
+    }
+
+    public function testFilterHtmlWithNonStringInput(): void
+    {
+        $this->assertEquals('', Filter::filterHtml(false));
+        $this->assertEquals('', Filter::filterHtml(null));
+    }
+
     public function testRemoveAttributes(): void
     {
         $html = '<div class="test" onclick="alert(\'xss\')" style="color: red;">Content</div>';
