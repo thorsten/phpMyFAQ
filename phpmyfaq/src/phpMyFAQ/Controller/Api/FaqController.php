@@ -598,10 +598,10 @@ final class FaqController extends AbstractApiController
             $total = is_countable($allFaqs) ? count($allFaqs) : 0;
 
             if ($sort->getField() && $sort->getField() !== 'id') {
-                usort($allFaqs, static function ($a, $b) use ($sort) {
+                usort($allFaqs, static function (array $a, array $b) use ($sort): int {
                     $field = $sort->getField();
-                    $aVal = $a[$field] ?? '';
-                    $bVal = $b[$field] ?? '';
+                    $aVal = (string) ($a[$field] ?? '');
+                    $bVal = (string) ($b[$field] ?? '');
                     $result = $aVal <=> $bVal;
                     return $sort->getOrderSql() === 'DESC' ? -$result : $result;
                 });
@@ -706,7 +706,7 @@ final class FaqController extends AbstractApiController
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        $data = $this->getJsonObject($request);
 
         $currentLanguage = $this->configuration->getLanguage()->getLanguage();
 
@@ -718,21 +718,21 @@ final class FaqController extends AbstractApiController
         $this->faq->setUser($currentUser);
         $this->faq->setGroups($currentGroups);
 
-        $languageCode = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $categoryId = Filter::filterVar($data->{'category-id'}, FILTER_VALIDATE_INT);
+        $languageCode = Filter::filterVar($data->language ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $categoryId = Filter::filterVar($data->{'category-id'} ?? null, FILTER_VALIDATE_INT);
         $categoryName = null;
 
         if (property_exists($data, 'category-name') && $data->{'category-name'} !== null) {
             $categoryName = Filter::filterVar($data->{'category-name'}, FILTER_SANITIZE_SPECIAL_CHARS);
         }
 
-        $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $answer = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $email = Filter::filterVar($data->email, FILTER_SANITIZE_EMAIL);
-        $isActive = Filter::filterVar($data->{'is-active'}, FILTER_VALIDATE_BOOLEAN);
-        $isSticky = Filter::filterVar($data->{'is-sticky'}, FILTER_VALIDATE_BOOLEAN);
+        $question = Filter::filterVar($data->question ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $answer = Filter::filterVar($data->answer ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $keywords = Filter::filterVar($data->keywords ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $author = Filter::filterVar($data->author ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $email = (string) Filter::filterVar($data->email ?? '', FILTER_SANITIZE_EMAIL, '');
+        $isActive = Filter::filterVar($data->{'is-active'} ?? null, FILTER_VALIDATE_BOOLEAN);
+        $isSticky = Filter::filterVar($data->{'is-sticky'} ?? null, FILTER_VALIDATE_BOOLEAN);
 
         // Check if the category name can be mapped
         if (!is_null($categoryName)) {
@@ -785,7 +785,7 @@ final class FaqController extends AbstractApiController
         }
 
         $this->faqMetaData
-            ->setFaqId($faqEntity->getId())
+            ->setFaqId((int) $faqEntity->getId())
             ->setFaqLanguage($languageCode)
             ->setCategories($categories)
             ->save();
@@ -871,7 +871,7 @@ final class FaqController extends AbstractApiController
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        $data = $this->getJsonObject($request);
 
         $currentLanguage = $this->configuration->getLanguage()->getLanguage();
 
@@ -883,15 +883,15 @@ final class FaqController extends AbstractApiController
         $this->faq->setUser($currentUser);
         $this->faq->setGroups($currentGroups);
 
-        $faqId = Filter::filterVar($data->{'faq-id'}, FILTER_VALIDATE_INT);
-        $languageCode = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $answer = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $email = Filter::filterVar($data->email, FILTER_SANITIZE_EMAIL);
-        $isActive = Filter::filterVar($data->{'is-active'}, FILTER_VALIDATE_BOOLEAN);
-        $isSticky = Filter::filterVar($data->{'is-sticky'}, FILTER_VALIDATE_BOOLEAN);
+        $faqId = Filter::filterVar($data->{'faq-id'} ?? null, FILTER_VALIDATE_INT);
+        $languageCode = Filter::filterVar($data->language ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $question = Filter::filterVar($data->question ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $answer = Filter::filterVar($data->answer ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $keywords = Filter::filterVar($data->keywords ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $author = Filter::filterVar($data->author ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $email = (string) Filter::filterVar($data->email ?? '', FILTER_SANITIZE_EMAIL, '');
+        $isActive = Filter::filterVar($data->{'is-active'} ?? null, FILTER_VALIDATE_BOOLEAN);
+        $isSticky = Filter::filterVar($data->{'is-sticky'} ?? null, FILTER_VALIDATE_BOOLEAN);
 
         if ($faqId === null) {
             $result = [

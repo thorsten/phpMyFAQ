@@ -87,7 +87,7 @@ class Upgrade extends AbstractSetup
             throw new Exception(message: 'The folder /content/core/data is missing.');
         }
 
-        if (!is_dir(PMF_ROOT_DIR . '/assets/templates')) {
+        if (!is_dir((string) PMF_ROOT_DIR . '/assets/templates')) {
             throw new Exception(message: 'The folder /phpmyfaq/assets/templates is missing.');
         }
 
@@ -189,7 +189,9 @@ class Upgrade extends AbstractSetup
                 flags: JSON_THROW_ON_ERROR,
             );
 
-            return md5_file($path) === $responseContent['zip']['md5'];
+            $expectedMd5 = is_array($responseContent) ? $responseContent['zip']['md5'] ?? null : null;
+
+            return is_string($expectedMd5) && md5_file($path) === $expectedMd5;
         } catch (
             TransportExceptionInterface|ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $e
         ) {
@@ -230,7 +232,7 @@ class Upgrade extends AbstractSetup
 
         $zipFile = $zipArchive->open($realPath);
 
-        $zipArchive->registerProgressCallback(rate: 0.05, callback: static function ($rate) use (
+        $zipArchive->registerProgressCallback(rate: 0.05, callback: static function (float $rate) use (
             $progressCallback,
         ): void {
             $progress = (int) ($rate * 100) . '%';
@@ -354,13 +356,13 @@ class Upgrade extends AbstractSetup
             throw new Exception(message: 'Cannot create backup file.');
         }
 
-        $sourceDir = PMF_ROOT_DIR;
+        $sourceDir = (string) PMF_ROOT_DIR;
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($sourceDir),
             RecursiveIteratorIterator::SELF_FIRST,
         );
 
-        $zipArchive->registerProgressCallback(rate: 0.05, callback: static function ($rate) use (
+        $zipArchive->registerProgressCallback(rate: 0.05, callback: static function (float $rate) use (
             $progressCallback,
         ): void {
             $progress = (int) ($rate * 100) . '%';
@@ -368,25 +370,37 @@ class Upgrade extends AbstractSetup
         });
 
         foreach ($files as $file) {
-            $file = $file->getRealPath();
-            if (str_contains((string) $file, $this->upgradeDirectory . DIRECTORY_SEPARATOR)) {
+            if (!$file instanceof \SplFileInfo) {
                 continue;
             }
 
-            if (is_dir($file)) {
+            $filePath = $file->getRealPath();
+            if ($filePath === false) {
+                continue;
+            }
+
+            if (str_contains($filePath, $this->upgradeDirectory . DIRECTORY_SEPARATOR)) {
+                continue;
+            }
+
+            if (is_dir($filePath)) {
                 $zipArchive->addEmptyDir(str_replace(
                     $sourceDir . DIRECTORY_SEPARATOR,
                     replace: '',
-                    subject: $file . DIRECTORY_SEPARATOR,
+                    subject: $filePath . DIRECTORY_SEPARATOR,
                 ));
                 continue;
             }
 
-            if (!is_file($file)) {
+            if (!is_file($filePath)) {
                 continue;
             }
 
-            $zipArchive->addFile($file, str_replace($sourceDir . DIRECTORY_SEPARATOR, replace: '', subject: $file));
+            $zipArchive->addFile($filePath, str_replace(
+                $sourceDir . DIRECTORY_SEPARATOR,
+                replace: '',
+                subject: $filePath,
+            ));
         }
 
         $zipArchive->close();
@@ -400,7 +414,7 @@ class Upgrade extends AbstractSetup
     public function installPackage(callable $progressCallback): bool
     {
         $sourceDir = $this->upgradeDirectory . '/new/phpmyfaq/';
-        $destinationDir = PMF_ROOT_DIR;
+        $destinationDir = (string) PMF_ROOT_DIR;
 
         $sourceDirIterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($sourceDir, FilesystemIterator::SKIP_DOTS),
@@ -411,7 +425,15 @@ class Upgrade extends AbstractSetup
         $currentFile = 0;
 
         foreach ($sourceDirIterator as $item) {
+            if (!$item instanceof \SplFileInfo) {
+                continue;
+            }
+
             $source = $item->getRealPath();
+            if ($source === false) {
+                continue;
+            }
+
             $relativePath = str_replace($sourceDir, replace: '', subject: $source);
             $destination = $destinationDir . DIRECTORY_SEPARATOR . $relativePath;
 
@@ -464,12 +486,21 @@ class Upgrade extends AbstractSetup
         );
 
         foreach ($files as $file) {
-            if ($file->isDir()) {
-                rmdir($file->getRealPath());
+            if (!$file instanceof \SplFileInfo) {
                 continue;
             }
 
-            unlink($file->getRealPath());
+            $filePath = $file->getRealPath();
+            if ($filePath === false) {
+                continue;
+            }
+
+            if ($file->isDir()) {
+                rmdir($filePath);
+                continue;
+            }
+
+            unlink($filePath);
         }
 
         return rmdir($directoryToDelete);
@@ -528,6 +559,6 @@ class Upgrade extends AbstractSetup
 
     public function isMaintenanceEnabled(): bool
     {
-        return $this->configuration->get(item: 'main.maintenanceMode');
+        return true === $this->configuration->get(item: 'main.maintenanceMode');
     }
 }

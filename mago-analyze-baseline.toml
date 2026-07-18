@@ -3890,57 +3890,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\FaqEntity::setEmail`: expected `string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `property_exists`: expected `class-string|object`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
-code = "mixed-assignment"
-message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
-code = "mixed-operand"
-message = "Left operand in spaceship comparison (`<=>`) has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
-code = "mixed-operand"
-message = "Right operand in spaceship comparison (`<=>`) has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 18
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Faq\MetaData::setFaqId` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
@@ -10166,104 +10118,14 @@ count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
-code = "array-to-string-conversion"
-message = "Potential array in right operand of string concatenation."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
-code = "invalid-method-access"
-message = "Attempting to access a method on a non-object type (`string`)."
-count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `RecursiveDirectoryIterator::__construct`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `ZipArchive::addFile`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `copy`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `is_dir`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `is_file`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `rmdir`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `unlink`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `str_replace`: expected `array<array-key, string>|string`, but found `mixed`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
-code = "mixed-operand"
-message = "Left operand in binary operation has type `mixed`."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Setup\Upgrade::isMaintenanceEnabled`. Saw type `mixed`.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
 code = "possibly-false-operand"
 message = "Possibly false left operand used in string concatenation (type `false|string`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #2 of `ZipArchive::addFile`: expected `string`, but possibly received `array<array-key, string>|string`."
 count = 1
 
 [[issues]]
