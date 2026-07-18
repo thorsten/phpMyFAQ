@@ -36,6 +36,7 @@ use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Throwable;
 
+/* @mago-expect lint:kan-defect - the dry-run report renders every operation type inline; split planned with the update rework */
 final class UpdateRunner
 {
     public function __construct(
@@ -109,20 +110,33 @@ final class UpdateRunner
      */
     private function displayDryRunReport(SymfonyStyle $symfonyStyle, array $report): void
     {
-        if (($report['migrations'] ?? []) === []) {
+        $migrations = $report['migrations'] ?? [];
+        if (!is_array($migrations) || $migrations === []) {
             $symfonyStyle->success('No migrations to apply. Database is up to date.');
             return;
         }
 
-        foreach ($report['migrations'] as $version => $migrationData) {
-            $symfonyStyle->section(sprintf('Migration: %s', $version));
-            $symfonyStyle->text($migrationData['description']);
+        foreach ($migrations as $version => $migrationData) {
+            if (!is_array($migrationData)) {
+                continue;
+            }
+
+            $symfonyStyle->section(sprintf('Migration: %s', (string) $version));
+            $symfonyStyle->text((string) ($migrationData['description'] ?? ''));
             $symfonyStyle->newLine();
 
             // Group operations by type
+            /** @var array<string, list<array<array-key, mixed>>> $byType */
             $byType = [];
-            foreach ($migrationData['operations'] as $op) {
-                $byType[$op['type']][] = $op;
+            $operations = $migrationData['operations'] ?? [];
+            if (is_array($operations)) {
+                foreach ($operations as $op) {
+                    if (!is_array($op)) {
+                        continue;
+                    }
+
+                    $byType[(string) ($op['type'] ?? '')][] = $op;
+                }
             }
 
             // SQL Operations
@@ -130,8 +144,8 @@ final class UpdateRunner
                 $symfonyStyle->text(sprintf('<fg=cyan>SQL Operations (%d):</>', count($byType['sql'])));
                 $rows = [];
                 foreach ($byType['sql'] as $i => $op) {
-                    $query = $this->truncateString($op['query'], 80);
-                    $rows[] = [$i + 1, $op['description'], $query];
+                    $query = $this->truncateString((string) ($op['query'] ?? ''), 80);
+                    $rows[] = [$i + 1, (string) ($op['description'] ?? ''), $query];
                 }
                 $symfonyStyle->table(['#', 'Description', 'Query'], $rows);
             }
@@ -144,7 +158,7 @@ final class UpdateRunner
                 ));
                 $rows = [];
                 foreach ($byType['config_add'] as $i => $op) {
-                    $rows[] = [$i + 1, $op['key'], $this->formatValue($op['value'])];
+                    $rows[] = [$i + 1, (string) ($op['key'] ?? ''), $this->formatValue($op['value'] ?? null)];
                 }
                 $symfonyStyle->table(['#', 'Key', 'Value'], $rows);
             }
@@ -157,7 +171,7 @@ final class UpdateRunner
                 ));
                 $rows = [];
                 foreach ($byType['config_delete'] as $i => $op) {
-                    $rows[] = [$i + 1, $op['key']];
+                    $rows[] = [$i + 1, (string) ($op['key'] ?? '')];
                 }
                 $symfonyStyle->table(['#', 'Key'], $rows);
             }
@@ -170,7 +184,7 @@ final class UpdateRunner
                 ));
                 $rows = [];
                 foreach ($byType['config_rename'] as $i => $op) {
-                    $rows[] = [$i + 1, $op['oldKey'], $op['newKey']];
+                    $rows[] = [$i + 1, (string) ($op['oldKey'] ?? ''), (string) ($op['newKey'] ?? '')];
                 }
                 $symfonyStyle->table(['#', 'Old Key', 'New Key'], $rows);
             }
@@ -183,7 +197,7 @@ final class UpdateRunner
                 ));
                 $rows = [];
                 foreach ($byType['config_update'] as $i => $op) {
-                    $rows[] = [$i + 1, $op['key'], $this->formatValue($op['value'])];
+                    $rows[] = [$i + 1, (string) ($op['key'] ?? ''), $this->formatValue($op['value'] ?? null)];
                 }
                 $symfonyStyle->table(['#', 'Key', 'New Value'], $rows);
             }
@@ -194,9 +208,9 @@ final class UpdateRunner
                 $symfonyStyle->text(sprintf('<fg=magenta>File Operations (%d):</>', count($fileOps)));
                 $rows = [];
                 foreach ($fileOps as $i => $op) {
-                    $source = $this->shortenPath($op['source']);
-                    $dest = $this->shortenPath($op['destination']);
-                    $rows[] = [$i + 1, $op['type'], $source, $dest];
+                    $source = $this->shortenPath((string) ($op['source'] ?? ''));
+                    $dest = $this->shortenPath((string) ($op['destination'] ?? ''));
+                    $rows[] = [$i + 1, (string) ($op['type'] ?? ''), $source, $dest];
                 }
                 $symfonyStyle->table(['#', 'Type', 'Source', 'Destination'], $rows);
             }
@@ -209,22 +223,29 @@ final class UpdateRunner
                 ));
                 $rows = [];
                 foreach ($byType['permission_grant'] as $i => $op) {
-                    $rows[] = [$i + 1, $op['permissionName'], $op['permissionDescription']];
+                    $rows[] = [
+                        $i + 1,
+                        (string) ($op['permissionName'] ?? ''),
+                        (string) ($op['permissionDescription'] ?? ''),
+                    ];
                 }
                 $symfonyStyle->table(['#', 'Permission', 'Description'], $rows);
             }
         }
 
         // Summary
+        $summary = $report['summary'] ?? [];
+        $summary = is_array($summary) ? $summary : [];
         $symfonyStyle->section('Summary');
-        $symfonyStyle->text(sprintf('Total Migrations: %d', $report['summary']['migrationCount']));
-        $symfonyStyle->text(sprintf('Total Operations: %d', $report['summary']['totalOperations']));
+        $symfonyStyle->text(sprintf('Total Migrations: %d', (int) ($summary['migrationCount'] ?? 0)));
+        $symfonyStyle->text(sprintf('Total Operations: %d', (int) ($summary['totalOperations'] ?? 0)));
 
-        if (($report['summary']['operationsByType'] ?? []) !== []) {
+        $operationsByType = $summary['operationsByType'] ?? [];
+        if (is_array($operationsByType) && $operationsByType !== []) {
             $symfonyStyle->newLine();
             $symfonyStyle->text('Operations by Type:');
-            foreach ($report['summary']['operationsByType'] as $type => $count) {
-                $symfonyStyle->text(sprintf('  - %s: %d', $type, $count));
+            foreach ($operationsByType as $type => $count) {
+                $symfonyStyle->text(sprintf('  - %s: %d', (string) $type, (int) $count));
             }
         }
 
@@ -263,7 +284,7 @@ final class UpdateRunner
     private function shortenPath(string $path): string
     {
         if (defined('PMF_ROOT_DIR')) {
-            $path = str_replace(search: PMF_ROOT_DIR, replace: '', subject: $path);
+            $path = str_replace(search: (string) PMF_ROOT_DIR, replace: '', subject: $path);
         }
 
         if (strlen($path) > 50) {
@@ -280,7 +301,7 @@ final class UpdateRunner
     {
         $upgrade = new Upgrade($this->system, $this->configuration);
         if (!$upgrade->isMaintenanceEnabled()) {
-            $symfonyStyle->warning(Translation::get(key: 'msgNotInMaintenanceMode'));
+            $symfonyStyle->warning(Translation::getString(key: 'msgNotInMaintenanceMode'));
         }
 
         try {
@@ -297,7 +318,7 @@ final class UpdateRunner
     private function taskUpdateCheck(SymfonyStyle $symfonyStyle): int
     {
         $dateLastChecked = new DateTime()->format(DateTimeInterface::ATOM);
-        $branch = $this->configuration->get(item: 'upgrade.releaseEnvironment');
+        $branch = (string) $this->configuration->get(item: 'upgrade.releaseEnvironment');
 
         try {
             $api = new RemoteApiClient($this->configuration, $this->system);
@@ -311,12 +332,14 @@ final class UpdateRunner
 
             if ($available) {
                 $this->version = $versions[$branch];
-                $symfonyStyle->success(message: Translation::get(key: 'msgCurrentVersion') . $versions[$branch]);
+                $symfonyStyle->success(message: Translation::getString(key: 'msgCurrentVersion') . $versions[$branch]);
                 return Command::SUCCESS;
             }
 
             $this->version = $versions['installed'];
-            $symfonyStyle->success(message: Translation::get(key: 'versionIsUpToDate') . ' (' . $this->version . ')');
+            $symfonyStyle->success(
+                message: Translation::getString(key: 'versionIsUpToDate') . ' (' . $this->version . ')',
+            );
         } catch (Exception|TransportExceptionInterface|DecodingExceptionInterface $exception) {
             $symfonyStyle->error(message: 'Error during update check: ' . $exception->getMessage());
             return Command::FAILURE;
@@ -341,14 +364,14 @@ final class UpdateRunner
         if (!$upgrade->isNightly()) {
             $result = $upgrade->verifyPackage($pathToPackage, $this->version);
             if (!$result) {
-                $symfonyStyle->error(message: Translation::get(key: 'verificationFailure'));
+                $symfonyStyle->error(message: Translation::getString(key: 'verificationFailure'));
                 return Command::FAILURE;
             }
         }
 
         $this->configuration->set(key: 'upgrade.lastDownloadedPackage', value: urlencode($pathToPackage));
 
-        $symfonyStyle->success(message: Translation::get(key: 'downloadSuccessful'));
+        $symfonyStyle->success(message: Translation::getString(key: 'downloadSuccessful'));
         return Command::SUCCESS;
     }
 
@@ -369,11 +392,11 @@ final class UpdateRunner
         });
 
         if ($result) {
-            $symfonyStyle->success(message: Translation::get(key: 'extractSuccessful'));
+            $symfonyStyle->success(message: Translation::getString(key: 'extractSuccessful'));
             return Command::SUCCESS;
         }
 
-        $symfonyStyle->error(message: Translation::get(key: 'extractFailure'));
+        $symfonyStyle->error(message: Translation::getString(key: 'extractFailure'));
         return Command::FAILURE;
     }
 
@@ -454,7 +477,7 @@ final class UpdateRunner
             $this->displayMigrationResults($symfonyStyle, $update->migrationResults);
             $symfonyStyle->error(message: 'Update database failed.');
             return Command::FAILURE;
-        } catch (Exception|\Exception $exception) {
+        } catch (Exception $exception) {
             $progressBar->finish();
             $symfonyStyle->newLine(count: 2);
             $this->configuration->set(key: 'main.maintenanceMode', value: 'false');
@@ -509,7 +532,7 @@ final class UpdateRunner
         };
 
         try {
-            $result = (bool) $fn($setProgress);
+            $result = $fn($setProgress) === true;
         } finally {
             $progressBar->finish();
             $symfonyStyle->newLine(count: 2);

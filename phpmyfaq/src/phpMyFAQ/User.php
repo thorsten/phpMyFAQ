@@ -168,27 +168,25 @@ class User
         protected Configuration $configuration,
     ) {
         $basicPermission = Permission::create(
-            $this->configuration->get(item: 'security.permLevel'),
+            (string) $this->configuration->get(item: 'security.permLevel'),
             $this->configuration,
         );
-        if (!$this->addPerm($basicPermission)) {
-            return;
-        }
+        $this->addPerm($basicPermission);
 
         // Always create a 'local' authentication object (see: $authData)
         $this->authContainer = [];
         $auth = new Auth($this->configuration);
 
-        $selectedAuth = $auth->selectAuth($this->getAuthSource('name'));
-        $selectedAuth->getEncryptionContainer($this->getAuthData('encType'));
+        $selectedAuth = $auth->selectAuth($this->getAuthSource('name') ?? 'database');
+        $selectedAuth->getEncryptionContainer(
+            (string) ($this->getAuthData('encType') ?? self::DEFAULT_ENCRYPTION_TYPE),
+        );
         $selectedAuth->disableReadOnly();
         if ($this->getAuthData(key: 'readOnly')) {
             $selectedAuth->enableReadOnly();
         }
 
-        if (!$this->addAuth($selectedAuth, $this->getAuthSource('type'))) {
-            return;
-        }
+        $this->addAuth($selectedAuth, $this->getAuthSource('type') ?? 'local');
 
         // additionally, set given $auth objects
         foreach ($this->authContainer as $name => $authObject) {
@@ -277,9 +275,12 @@ class User
         }
 
         $user = $this->configuration->getDb()->fetchArray($res);
+        if (!is_array($user)) {
+            return false;
+        }
 
         // Don't ever log in via an anonymous user
-        if (-1 === $user['user_id']) {
+        if (-1 === (int) $user['user_id']) {
             return false;
         }
 
@@ -358,11 +359,11 @@ class User
         $result = [];
         while (true) {
             $row = $this->configuration->getDb()->fetchArray($res);
-            if ($row === false || $row === null || $row === []) {
+            if (!is_array($row) || $row === []) {
                 break;
             }
 
-            $result[] = $row;
+            $result[] = array_map(static fn(mixed $value): string => (string) $value, $row);
         }
 
         return $result;
@@ -411,8 +412,8 @@ class User
             Database::getTablePrefix(),
             $this->getUserId(),
             $this->configuration->getDb()->escape($login),
-            Request::createFromGlobals()->server->get('REQUEST_TIME'),
-            date(format: 'YmdHis', timestamp: Request::createFromGlobals()->server->get('REQUEST_TIME')),
+            (int) Request::createFromGlobals()->server->get('REQUEST_TIME'),
+            date(format: 'YmdHis', timestamp: (int) Request::createFromGlobals()->server->get('REQUEST_TIME')),
         );
 
         $this->configuration->getDb()->query($insert);
@@ -544,22 +545,17 @@ class User
                 $randomMax = 5;
             }
 
-            switch (random_int(min: 0, max: $randomMax)) {
-                case 0:
-                case 1:
-                    $nextChar = $caseFunc($consonants[random_int(min: 0, max: 18)]);
-                    break;
-                case 2:
-                case 3:
-                    $nextChar = $caseFunc($vowels[random_int(min: 0, max: 3)]);
-                    break;
-                case 4:
-                    $nextChar = (string) random_int(min: 2, max: 9);
-                    break;
-                case 5:
-                    $newPassword .= '_';
-                    continue 2;
+            $roll = random_int(min: 0, max: $randomMax);
+            if ($roll === 5) {
+                $newPassword .= '_';
+                continue;
             }
+
+            $nextChar = match (true) {
+                $roll <= 1 => $caseFunc($consonants[random_int(min: 0, max: 18)]),
+                $roll <= 3 => $caseFunc($vowels[random_int(min: 0, max: 3)]),
+                default => (string) random_int(min: 2, max: 9),
+            };
 
             $skipped = false;
 
@@ -778,11 +774,8 @@ class User
      */
     public function getUserData(string $field = '*'): mixed
     {
-        if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->configuration);
-        }
-
-        return $this->userdata->get($field);
+        /* @mago-expect analysis:mixed-return-statement - user data fields are heterogeneous by design */
+        return $this->userData()->get($field);
     }
 
     /**
@@ -868,9 +861,10 @@ class User
             $this->changePassword($newPassword);
             // Send activation email.
             $subject = '[%sitename%] Login name / activation';
+            $displayName = $this->getUserData('display_name');
             $message = sprintf(
                 'Name: %s<br>Login name: %s<br>New password: %s',
-                $this->getUserData('display_name'),
+                is_string($displayName) ? $displayName : '',
                 $this->getLogin(),
                 $newPassword,
             );
@@ -1019,7 +1013,8 @@ class User
     public function mailUser(string $subject, string $message): int
     {
         $mail = new Mail($this->configuration);
-        $mail->addTo($this->getUserData('email'));
+        $email = $this->getUserData('email');
+        $mail->addTo(is_string($email) ? $email : '');
 
         $mail->subject = $subject;
         $mail->message = $message;

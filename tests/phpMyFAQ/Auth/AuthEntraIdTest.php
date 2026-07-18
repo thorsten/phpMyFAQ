@@ -12,7 +12,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use TypeError;
+use InvalidArgumentException;
 
 const AAD_OAUTH_TENANTID = 'test-tenant-id';
 
@@ -58,8 +58,8 @@ class AuthEntraIdTest extends TestCase
         $this->oAuthMock->method('getMail')->willReturn('john.doe@example.com');
 
         // In test environment, User creation will fail due to missing database/permissions
-        // We expect a TypeError to be thrown
-        $this->expectException(TypeError::class);
+        // The unconfigured permission level now fails loudly with a typed exception
+        $this->expectException(InvalidArgumentException::class);
         $this->authEntraId->create($login, $password, $domain);
     }
 
@@ -71,10 +71,9 @@ class AuthEntraIdTest extends TestCase
         $this->oAuthMock->method('getName')->willReturn('John Doe');
         $this->oAuthMock->method('getMail')->willReturn('john.doe@example.com');
 
-        // In test environment, this will throw TypeError before reaching logger
-        // We expect this specific exception
-        $this->expectException(TypeError::class);
-        $this->expectExceptionMessage('Permission');
+        // In the test environment, the unconfigured permission level fails before reaching the logger
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid permission level');
         $this->authEntraId->create($login, $password);
     }
 
@@ -101,9 +100,8 @@ class AuthEntraIdTest extends TestCase
         $this->oAuthMock->method('getName')->willReturn('John Doe');
         $this->oAuthMock->method('getMail')->willReturn('john.doe@example.com');
 
-        // checkCredentials calls create() internally which will throw TypeError in test environment
-        // but the method should handle this gracefully and still return true
-        $this->expectException(TypeError::class);
+        // checkCredentials calls create() internally, which fails on the unconfigured permission level
+        $this->expectException(InvalidArgumentException::class);
         $this->authEntraId->checkCredentials($login, $password);
     }
 

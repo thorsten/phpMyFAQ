@@ -12098,99 +12098,15 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/UpdateRunner.php"
-code = "array-to-string-conversion"
-message = "Potential array in left operand of string concatenation."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/UpdateRunner.php"
-code = "duplicate-caught-type"
-message = "Type `Exception` is caught multiple times in the same `catch` clause."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/UpdateRunner.php"
-code = "invalid-iterator"
-message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/UpdateRunner.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `Symfony\Component\Console\Style\SymfonyStyle::text`: expected `array<array-key, mixed>|string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/UpdateRunner.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Setup\UpdateRunner::shortenPath`: expected `string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/UpdateRunner.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Setup\UpdateRunner::truncateString`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/UpdateRunner.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `str_replace`: expected `array<array-key, string>|string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/UpdateRunner.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/UpdateRunner.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/UpdateRunner.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 20
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/UpdateRunner.php"
 code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 13
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/UpdateRunner.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/UpdateRunner.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `Symfony\Component\Console\Style\SymfonyStyle::error` is possibly `null`, but parameter type `array<array-key, mixed>|string` does not accept it.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/UpdateRunner.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `Symfony\Component\Console\Style\SymfonyStyle::success` is possibly `null`, but parameter type `array<array-key, mixed>|string` does not accept it.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/UpdateRunner.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `Symfony\Component\Console\Style\SymfonyStyle::warning` is possibly `null`, but parameter type `array<array-key, mixed>|string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/UpdateRunner.php"
-code = "possibly-null-operand"
-message = "Possibly null left operand used in string concatenation (type `array<array-key, string>|null|string`)."
-count = 2
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
@@ -12956,42 +12872,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "invalid-continue"
-message = "Cannot continue 2 levels - only 1 enclosing loop available."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `list<non-empty-array<array-key, mixed>>` is less specific than the declared return type `array<array-key, array<array-key, string>>` for function `phpMyFAQ\User::searchUsers` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Auth::getEncryptionContainer`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Permission::create`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `date`: expected `int|null`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #5 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 12
@@ -13004,51 +12884,15 @@ count = 6
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\User::getUserData`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
 code = "possibly-false-array-access"
 message = "Cannot perform array access on possibly `false` value."
-count = 9
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Mail::addTo`: expected `string`, but possibly received `array<array-key, string>|int|null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|int|null|string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Auth::selectAuth` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Mail::addTo` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "possibly-null-argument"
-message = 'Argument #2 of method `phpMyFAQ\User::addAuth` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
+count = 6
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User.php"
 code = "possibly-null-array-access"
 message = "Cannot perform array access on possibly `null` value."
-count = 9
+count = 6
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User.php"
@@ -13085,12 +12929,6 @@ file = "phpmyfaq/src/phpMyFAQ/User.php"
 code = "redundant-type-comparison"
 message = "Redundant type assertion: `$userData` is already `array<string, int>`."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "uninitialized-property"
-message = 'Property `$perm` may not be initialized when returning from constructor of class `phpMyFAQ\User`.'
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
