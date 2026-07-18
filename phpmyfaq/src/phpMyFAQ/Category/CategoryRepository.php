@@ -36,7 +36,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     /**
      * Small mapper to cast DB row to a normalized category array.
-     * @param array<string, mixed> $row
+     * @param array<array-key, mixed> $row
      * @return array<string, mixed>
      */
     private function mapRow(array $row): array
@@ -119,7 +119,7 @@ class CategoryRepository implements CategoryRepositoryInterface
                 }
 
                 $mapped = $this->mapRow($row);
-                $categories[$mapped['id']] = $mapped;
+                $categories[(int) $mapped['id']] = $mapped;
             }
         }
 
@@ -151,7 +151,7 @@ class CategoryRepository implements CategoryRepositoryInterface
                 }
 
                 $mapped = $this->mapRow($row);
-                $categories[$mapped['id']] = $mapped;
+                $categories[(int) $mapped['id']] = $mapped;
             }
         }
 
@@ -259,7 +259,7 @@ class CategoryRepository implements CategoryRepositoryInterface
                 }
 
                 $mapped = $this->mapRow($row);
-                $categories[$mapped['id']] = $mapped;
+                $categories[(int) $mapped['id']] = $mapped;
             }
         }
 
@@ -318,18 +318,18 @@ class CategoryRepository implements CategoryRepositoryInterface
         $result = $this->configuration->getDb()->query($query);
 
         $row = $result ? $this->configuration->getDb()->fetchObject($result) : false;
-        if ($row !== false && $row !== null && $row !== []) {
+        if ($row instanceof \stdClass) {
             return new CategoryEntity()
                 ->setId((int) $row->id)
-                ->setLang($row->lang)
+                ->setLang((string) $row->lang)
                 ->setParentId((int) $row->parent_id)
-                ->setName($row->name)
-                ->setDescription($row->description)
+                ->setName((string) $row->name)
+                ->setDescription((string) ($row->description ?? ''))
                 ->setUserId((int) $row->user_id)
                 ->setGroupId((int) $row->group_id)
-                ->setActive((bool) $row->active)
-                ->setShowHome((bool) $row->show_home)
-                ->setImage($row->image);
+                ->setActive((int) $row->active !== 0)
+                ->setShowHome((int) $row->show_home !== 0)
+                ->setImage((string) ($row->image ?? ''));
         }
 
         return $categoryEntity;
@@ -422,11 +422,11 @@ class CategoryRepository implements CategoryRepositoryInterface
             $this->configuration->getDb()->escape($categoryEntity->getLang()),
             $categoryEntity->getParentId(),
             $this->configuration->getDb()->escape($categoryEntity->getName()),
-            $this->configuration->getDb()->escape($categoryEntity->getDescription()),
+            $this->configuration->getDb()->escape($categoryEntity->getDescription() ?? ''),
             $categoryEntity->getUserId(),
             $categoryEntity->getGroupId(),
             $categoryEntity->getActive(),
-            $this->configuration->getDb()->escape($categoryEntity->getImage()),
+            $this->configuration->getDb()->escape($categoryEntity->getImage() ?? ''),
             $categoryEntity->getShowHome(),
         );
 
@@ -448,12 +448,12 @@ class CategoryRepository implements CategoryRepositoryInterface
             "UPDATE %sfaqcategories SET name = '%s', description = '%s', user_id = %d, group_id = %d, active = %d, show_home = %d, image = '%s' WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($categoryEntity->getName()),
-            $this->configuration->getDb()->escape($categoryEntity->getDescription()),
+            $this->configuration->getDb()->escape($categoryEntity->getDescription() ?? ''),
             $categoryEntity->getUserId(),
             $categoryEntity->getGroupId(),
             $categoryEntity->getActive(),
             $categoryEntity->getShowHome(),
-            $this->configuration->getDb()->escape($categoryEntity->getImage()),
+            $this->configuration->getDb()->escape($categoryEntity->getImage() ?? ''),
             $categoryEntity->getId(),
             $this->configuration->getDb()->escape($categoryEntity->getLang()),
         );
@@ -534,9 +534,10 @@ class CategoryRepository implements CategoryRepositoryInterface
 
             $result = $this->configuration->getDb()->query($query);
             $row = $result ? $this->configuration->getDb()->fetchArray($result) : false;
-            if ($row !== false && $row !== null && $row !== []) {
-                $translated[$existingLanguage] =
-                    $row['name'] . ($row['description'] === '' ? '' : '  (' . $row['description'] . ')');
+            if (is_array($row) && $row !== []) {
+                $name = (string) ($row['name'] ?? '');
+                $description = (string) ($row['description'] ?? '');
+                $translated[$existingLanguage] = $name . ($description === '' ? '' : '  (' . $description . ')');
             }
         }
 

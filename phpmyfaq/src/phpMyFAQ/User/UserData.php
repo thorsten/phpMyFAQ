@@ -38,7 +38,7 @@ class UserData
     /**
      * associative array containing user data.
      *
-     * @var string[]
+     * @var array<array-key, mixed>
      */
     private array $data = [];
 
@@ -64,7 +64,9 @@ class UserData
     public function get(mixed $field): mixed
     {
         $singleReturn = !is_array($field);
-        $fields = $singleReturn ? $field : implode(', ', $field);
+        $fields = is_array($field)
+            ? implode(', ', array_map(static fn(mixed $column): string => (string) $column, $field))
+            : (string) $field;
 
         $select = sprintf(
             'SELECT %s FROM %sfaquserdata WHERE user_id = %d',
@@ -96,6 +98,9 @@ class UserData
         }
 
         $array = $this->configuration->getDb()->fetchArray($res);
+        if (!is_array($array)) {
+            return false;
+        }
 
         // Decode HTML entities in display_name for backward compatibility
         if (array_key_exists('display_name', $array) && is_string($array['display_name'])) {
@@ -137,13 +142,14 @@ class UserData
 
         $row = $this->configuration->getDb()->fetchObject($res);
 
+        /* @mago-expect analysis:mixed-return-statement - user data fields are heterogeneous by design */
         return $row instanceof \stdClass ? $row->$key : null;
     }
 
     /**
      * Returns the data of the given key.
      *
-     * @return array<string, int>
+     * @return array<array-key, mixed>
      */
     public function fetchAll(string $key, string $value): array
     {
@@ -170,7 +176,8 @@ class UserData
             return ['user_id' => -1];
         }
 
-        $this->data = $this->configuration->getDb()->fetchArray($res);
+        $row = $this->configuration->getDb()->fetchArray($res);
+        $this->data = is_array($row) ? $row : [];
         $this->data['keycloak_sub'] ??= '';
 
         return $this->data;
@@ -261,7 +268,8 @@ class UserData
             return false;
         }
 
-        $this->data = $this->configuration->getDb()->fetchArray($res);
+        $row = $this->configuration->getDb()->fetchArray($res);
+        $this->data = is_array($row) ? $row : [];
         $this->data['keycloak_sub'] ??= '';
 
         return true;
@@ -293,13 +301,13 @@ class UserData
             WHERE
                 user_id = %d",
             Database::getTablePrefix(),
-            date(format: 'YmdHis', timestamp: Request::createFromGlobals()->server->get('REQUEST_TIME')),
+            date(format: 'YmdHis', timestamp: (int) Request::createFromGlobals()->server->get('REQUEST_TIME')),
             $this->configuration->getDb()->escape((string) ($this->data['display_name'] ?? '')),
             $this->configuration->getDb()->escape((string) ($this->data['email'] ?? '')),
             $keycloakSubValue,
-            $this->data['is_visible'] ?? 0,
-            $this->data['twofactor_enabled'] ?? 0,
-            $this->data['secret'] ?? '',
+            (int) ($this->data['is_visible'] ?? 0),
+            (int) ($this->data['twofactor_enabled'] ?? 0),
+            $this->configuration->getDb()->escape((string) ($this->data['secret'] ?? '')),
             $this->userId,
         );
 
@@ -331,12 +339,12 @@ class UserData
             WHERE
                 user_id = %d",
                 Database::getTablePrefix(),
-                date(format: 'YmdHis', timestamp: Request::createFromGlobals()->server->get('REQUEST_TIME')),
+                date(format: 'YmdHis', timestamp: (int) Request::createFromGlobals()->server->get('REQUEST_TIME')),
                 $this->configuration->getDb()->escape((string) ($this->data['display_name'] ?? '')),
                 $this->configuration->getDb()->escape((string) ($this->data['email'] ?? '')),
-                $this->data['is_visible'] ?? 0,
-                $this->data['twofactor_enabled'] ?? 0,
-                $this->data['secret'] ?? '',
+                (int) ($this->data['is_visible'] ?? 0),
+                (int) ($this->data['twofactor_enabled'] ?? 0),
+                $this->configuration->getDb()->escape((string) ($this->data['secret'] ?? '')),
                 $this->userId,
             );
 
@@ -368,7 +376,7 @@ class UserData
             (%d, '%s', 1, 0, '')",
             Database::getTablePrefix(),
             $this->userId,
-            date(format: 'YmdHis', timestamp: Request::createFromGlobals()->server->get('REQUEST_TIME')),
+            date(format: 'YmdHis', timestamp: (int) Request::createFromGlobals()->server->get('REQUEST_TIME')),
         );
 
         $res = $this->configuration->getDb()->query($insert);

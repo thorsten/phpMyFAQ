@@ -544,7 +544,7 @@ readonly class MediumPermissionRepository
      * Returns an associative array with the group-data of the group $groupId.
      *
      * @param int $groupId Group ID
-     * @return array<string, mixed>
+     * @return array<array-key, mixed>
      */
     public function getGroupData(int $groupId): array
     {
@@ -563,7 +563,9 @@ readonly class MediumPermissionRepository
             return [];
         }
 
-        return $this->configuration->getDb()->fetchArray($res);
+        $row = $this->configuration->getDb()->fetchArray($res);
+
+        return is_array($row) ? $row : [];
     }
 
     /**

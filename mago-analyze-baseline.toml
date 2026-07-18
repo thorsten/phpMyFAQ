@@ -2120,48 +2120,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Category\CategoryRepository::mapRow`: expected `array<string, mixed>`, but provided type `non-empty-array<array-key, mixed>` is less specific.'
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, array<string, mixed>>` is less specific than the declared return type `array<int, array<string, mixed>>` for function `phpMyFAQ\Category\CategoryRepository::findAllCategories`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, array<string, mixed>>` is less specific than the declared return type `array<int, array<string, mixed>>` for function `phpMyFAQ\Category\CategoryRepository::findOrderedCategories`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\CategoryEntity::setDescription`: expected `null|string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\CategoryEntity::setImage`: expected `null|string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\CategoryEntity::setLang`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\CategoryEntity::setName`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 13
@@ -2170,37 +2128,7 @@ count = 13
 file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
-count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
-code = "mixed-operand"
-message = "Invalid middle operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Database\DatabaseDriver::escape` is possibly `null`, but parameter type `string` does not accept it.'
 count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
-code = "redundant-comparison"
-message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
-code = "redundant-logical-operation"
-message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/Image.php"
@@ -8786,12 +8714,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermission.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Permission\MediumPermission::getGroupData`: expected `array<int, string>`, but found `array<string, mixed>`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermission.php"
 code = "less-specific-argument"
 message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Permission\MediumPermissionRepository::addGroup`: expected `array<string, int|string>`, but provided type `array<array-key, int|string>` is less specific.'
 count = 1
@@ -8800,6 +8722,12 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermission.php"
 code = "less-specific-argument"
 message = 'Argument type mismatch for argument #2 of `phpMyFAQ\Permission\MediumPermissionRepository::changeGroup`: expected `array<string, int|string>`, but provided type `array<array-key, int|string>` is less specific.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermission.php"
+code = "less-specific-return-statement"
+message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<int, string>` for function `phpMyFAQ\Permission\MediumPermission::getGroupData`.'
 count = 1
 
 [[issues]]
@@ -8846,18 +8774,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermissionRepository.php"
-code = "falsable-return-statement"
-message = '''Function `phpMyFAQ\Permission\MediumPermissionRepository::getGroupData` is declared to return `array<string, mixed>` but possibly returns 'false' (inferred as `array<array-key, mixed>|false|null`).'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermissionRepository.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>|false|null` is less specific than the declared return type `array<string, mixed>` for function `phpMyFAQ\Permission\MediumPermissionRepository::getGroupData`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermissionRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 10
@@ -8867,12 +8783,6 @@ file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermissionRepository.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 11
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermissionRepository.php"
-code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Permission\MediumPermissionRepository::getGroupData` is declared to return `array<string, mixed>` but possibly returns a nullable value (inferred as `array<array-key, mixed>|false|null`).'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermissionRepository.php"
@@ -11360,6 +11270,18 @@ count = 6
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User.php"
+code = "mixed-operand"
+message = "Right operand in `||` operation has `mixed` type."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/User.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `phpMyFAQ\User::getUserIdByEmail`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/User.php"
 code = "possibly-false-array-access"
 message = "Cannot perform array access on possibly `false` value."
 count = 6
@@ -11397,13 +11319,13 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User.php"
 code = "redundant-type-comparison"
-message = "Redundant condition: variable `$userData` (type `array<string, int>`) is already known to be `array<array-key, mixed>`."
+message = "Redundant condition: variable `$userData` (type `array<array-key, mixed>`) is already known to be `array<array-key, mixed>`."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User.php"
 code = "redundant-type-comparison"
-message = "Redundant type assertion: `$userData` is already `array<string, int>`."
+message = "Redundant type assertion: `$userData` is already `array<array-key, mixed>`."
 count = 1
 
 [[issues]]
@@ -11588,30 +11510,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
-code = "invalid-return-statement"
-message = '''Invalid return type for function `phpMyFAQ\User\UserData::fetchAll`: expected `array<string, int>`, but found `array{'keycloak_sub': string, ...<array-key, string>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `date`: expected `int|null`, but found `mixed`."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `implode`: expected `array<array-key, Stringable|null|scalar>|null`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 12
@@ -11621,42 +11519,6 @@ file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `array<array-key, mixed>` is being assigned to property `$$data` (array<array-key, string>)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `array<array-key, mixed>|false|null` is being assigned to property `$$data` (array<array-key, string>)."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\User\UserData::fetch`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
-code = "possibly-false-argument"
-message = "Argument #2 of function `array_key_exists` is possibly `false`, but parameter type `array<array-key, mixed>` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
-code = "possibly-null-argument"
-message = "Argument #2 of function `array_key_exists` is possibly `null`, but parameter type `array<array-key, mixed>` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
