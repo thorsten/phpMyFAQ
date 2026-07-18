@@ -110,35 +110,38 @@ class Statistics
      */
     public function getTopTen(string $type = 'visits'): array
     {
-        $result = $this->getTopVotedData(PMF_NUMBER_RECORDS_TOPTEN, $this->configuration->getLanguage()->getLanguage());
+        $output = [];
+
         if ('visits' === $type) {
             $result = $this->getTopTenData(
                 PMF_NUMBER_RECORDS_TOPTEN,
                 0,
                 $this->configuration->getLanguage()->getLanguage(),
             );
+            foreach ($result as $row) {
+                $entry = new stdClass();
+                $entry->title = Utils::makeShorterText($row['question'], 8);
+                $entry->preview = $row['question'];
+                $entry->url = $row['url'];
+                $entry->visits = $this->plurals->get(key: 'plmsgViews', number: $row['visits']);
+                $output[] = $entry;
+            }
+
+            return $output;
         }
 
-        $output = [];
-
+        $result = $this->getTopVotedData(PMF_NUMBER_RECORDS_TOPTEN, $this->configuration->getLanguage()->getLanguage());
         foreach ($result as $row) {
             $entry = new stdClass();
             $entry->title = Utils::makeShorterText($row['question'], 8);
             $entry->preview = $row['question'];
             $entry->url = $row['url'];
-            if ('visits' === $type) {
-                $entry->visits = $this->plurals->get(key: 'plmsgViews', number: $row['visits']);
-            }
-
-            if ('visits' !== $type) {
-                $entry->voted = sprintf(
-                    '%s %s 5 - %s',
-                    round(num: $row['avg'], precision: 2),
-                    Translation::get(key: 'msgVoteFrom'),
-                    $this->plurals->get(key: 'plmsgVotes', number: $row['user']),
-                );
-            }
-
+            $entry->voted = sprintf(
+                '%s %s 5 - %s',
+                round(num: $row['avg'], precision: 2),
+                Translation::getString(key: 'msgVoteFrom'),
+                $this->plurals->get(key: 'plmsgVotes', number: $row['user']),
+            );
             $output[] = $entry;
         }
 
@@ -178,6 +181,7 @@ class Statistics
      *
      * @param int         $count Number of records
      * @param string|null $language Language
+     * @return array<int, array{date: string, question: string, answer: string, visits: int, url: string}>
      */
     public function getLatestData(int $count = PMF_NUMBER_RECORDS_LATEST, ?string $language = null): array
     {
@@ -197,22 +201,23 @@ class Statistics
         if ($result) {
             while (true) {
                 $row = $this->configuration->getDb()->fetchObject($result);
-                if ($row === false || $row === null || $row === []) {
+                if (!$row instanceof stdClass) {
                     break;
                 }
 
-                $data['date'] = Date::createIsoDate($row->updated, DATE_ATOM);
-                $data['question'] = Filter::filterVar($row->question, FILTER_SANITIZE_SPECIAL_CHARS);
-                $data['answer'] = $row->content;
+                $title = (string) $row->question;
+
+                $data['date'] = Date::createIsoDate((string) $row->updated, DATE_ATOM);
+                $data['question'] = Filter::filterVar($title, FILTER_SANITIZE_SPECIAL_CHARS, '');
+                $data['answer'] = (string) $row->content;
                 $data['visits'] = (int) $row->visits;
 
-                $title = $row->question;
                 $url = sprintf(
                     '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
-                    $row->category_id,
-                    $row->id,
-                    $row->lang,
+                    (int) $row->category_id,
+                    (int) $row->id,
+                    (string) $row->lang,
                     TitleSlugifier::slug($title),
                 );
                 $oLink = new Link($url, $this->configuration);
@@ -220,7 +225,7 @@ class Statistics
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();
 
-                $latest[$row->id] = $data;
+                $latest[(int) $row->id] = $data;
             }
         }
 
@@ -232,6 +237,7 @@ class Statistics
      *
      * @param int         $count Number of records
      * @param string|null $language Language
+     * @return array<int, array{date: string, question: string, answer: string, visits: int, url: string}>
      */
     public function getTrendingData(int $count = PMF_NUMBER_RECORDS_TRENDING, ?string $language = null): array
     {
@@ -251,30 +257,31 @@ class Statistics
         if ($result) {
             while (true) {
                 $row = $this->configuration->getDb()->fetchObject($result);
-                if ($row === false || $row === null || $row === []) {
+                if (!$row instanceof stdClass) {
                     break;
                 }
 
-                $data['date'] = Filter::filterVar($row->created, FILTER_SANITIZE_SPECIAL_CHARS);
-                $data['question'] = Filter::filterVar($row->question, FILTER_SANITIZE_SPECIAL_CHARS);
-                $data['answer'] = $row->content;
+                $title = (string) $row->question;
+
+                $data['date'] = Filter::filterVar($row->created, FILTER_SANITIZE_SPECIAL_CHARS, '');
+                $data['question'] = Filter::filterVar($title, FILTER_SANITIZE_SPECIAL_CHARS, '');
+                $data['answer'] = (string) $row->content;
                 $data['visits'] = (int) $row->visits;
 
-                $title = $row->question;
                 $url = sprintf(
                     '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
-                    $row->category_id,
-                    $row->id,
-                    $row->language,
-                    TitleSlugifier::slug($row->question),
+                    (int) $row->category_id,
+                    (int) $row->id,
+                    (string) $row->language,
+                    TitleSlugifier::slug($title),
                 );
                 $oLink = new Link($url, $this->configuration);
                 $oLink->setTitle($title);
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();
 
-                $trending[$row->id] = $data;
+                $trending[(int) $row->id] = $data;
             }
         }
 
@@ -287,6 +294,7 @@ class Statistics
      * @param int  $count Number of records
      * @param int  $categoryId Entity ID
      * @param string|null $language Language
+     * @return array<int, array{visits: int, question: string, answer: string, date: string, last_visit: string, url: string}>
      */
     public function getTopTenData(
         int $count = PMF_NUMBER_RECORDS_TOPTEN,
@@ -311,34 +319,35 @@ class Statistics
             while (true) {
                 $row = $this->configuration->getDb()->fetchObject($result);
 
-                if ($row === false || $row === null || $row === []) {
+                if (!$row instanceof stdClass) {
                     break;
                 }
 
+                $title = (string) $row->question;
+
                 $data['visits'] = (int) $row->visits;
-                $data['question'] = Filter::filterVar($row->question, FILTER_SANITIZE_SPECIAL_CHARS);
-                $data['answer'] = $row->answer;
-                $data['date'] = Date::createIsoDate($row->updated, DATE_ATOM);
+                $data['question'] = Filter::filterVar($title, FILTER_SANITIZE_SPECIAL_CHARS, '');
+                $data['answer'] = (string) $row->answer;
+                $data['date'] = Date::createIsoDate((string) $row->updated, DATE_ATOM);
                 $data['last_visit'] = date(format: 'c', timestamp: (int) $row->last_visit);
 
-                $title = $row->question;
                 $url = sprintf(
                     '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
-                    $row->category_id,
-                    $row->id,
-                    $row->lang,
-                    TitleSlugifier::slug($row->question),
+                    (int) $row->category_id,
+                    (int) $row->id,
+                    (string) $row->lang,
+                    TitleSlugifier::slug($title),
                 );
                 $oLink = new Link($url, $this->configuration);
-                $oLink->setTitle($row->question);
+                $oLink->setTitle($title);
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();
 
-                $topTen[$row->id] = $data;
+                $topTen[(int) $row->id] = $data;
             }
 
-            array_multisort($topTen, SORT_DESC);
+            usort($topTen, static fn(array $first, array $second): int => $second['visits'] <=> $first['visits']);
         }
 
         return $topTen;
@@ -349,6 +358,7 @@ class Statistics
      *
      * @param int         $count    Number of records
      * @param string|null $language Language
+     * @return array<int, array{avg: float, question: string, date: string, user: int, url: string}>
      */
     public function getTopVotedData(int $count = PMF_NUMBER_RECORDS_TOPTEN, ?string $language = null): array
     {
@@ -370,27 +380,29 @@ class Statistics
         $oldId = 0;
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $i > $count) {
+            if (!$row instanceof stdClass || $i > $count) {
                 break;
             }
 
-            if ($oldId !== $row->id) {
-                $data['avg'] = $row->avg;
-                $data['question'] = $row->thema;
-                $data['date'] = $row->updated;
-                $data['user'] = $row->user;
+            $faqId = (int) $row->id;
+            if ($oldId !== $faqId) {
+                $title = (string) $row->thema;
 
-                $title = $row->thema;
+                $data['avg'] = is_numeric($row->avg) ? (float) $row->avg : 0.0;
+                $data['question'] = $title;
+                $data['date'] = (string) $row->updated;
+                $data['user'] = (int) $row->user;
+
                 $url = sprintf(
                     '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
-                    $row->category_id,
-                    $row->id,
-                    $row->lang,
-                    TitleSlugifier::slug($row->thema),
+                    (int) $row->category_id,
+                    $faqId,
+                    (string) $row->lang,
+                    TitleSlugifier::slug($title),
                 );
                 $oLink = new Link($url, $this->configuration);
-                $oLink->setTitle($row->thema);
+                $oLink->setTitle($title);
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();
 
@@ -398,7 +410,7 @@ class Statistics
                 ++$i;
             }
 
-            $oldId = $row->id;
+            $oldId = $faqId;
         }
 
         return $topten;

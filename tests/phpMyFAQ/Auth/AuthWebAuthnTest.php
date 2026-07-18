@@ -260,8 +260,9 @@ class AuthWebAuthnTest extends TestCase
             ],
         ]);
 
-        // Expect TypeError from invalid JSON processing
-        $this->expectException(\TypeError::class);
+        // Malformed info now fails loudly with a typed exception instead of a TypeError
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('No client data in info');
         $this->authWebAuthn->authenticate($invalidInfo, $userWebAuthn);
     }
 

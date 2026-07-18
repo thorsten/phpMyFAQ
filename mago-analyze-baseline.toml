@@ -1268,128 +1268,14 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "falsable-return-statement"
-message = '''Function `phpMyFAQ\Auth\AuthWebAuthn::register` is declared to return `string` but possibly returns 'false' (inferred as `false|string`).'''
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "invalid-iterator"
-message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Auth\AuthWebAuthn::register`: expected `string`, but found `false|string`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `array_unshift`: expected `array<('K.array_unshift() extends array-key), ('V.array_unshift() extends mixed)>`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `count`: expected `Countable|array<array-key, mixed>`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `ord`: expected `string`, but found `mixed`."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Auth\AuthWebAuthn::arrayToString`: expected `array<array-key, mixed>`, but found `mixed`.'
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Auth\AuthWebAuthn::arrayToString`: expected `array<array-key, mixed>`, but found `nonnull`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `implode`: expected `array<array-key, Stringable|null|scalar>|null`, but found `mixed`."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `implode`: expected `array<array-key, Stringable|null|scalar>|null`, but found `nonnull`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `openssl_verify`: expected `OpenSSLAsymmetricKey|OpenSSLCertificate|array<array-key, mixed>|string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "mixed-array-assignment"
-message = "Unsafe array assignment on type `mixed`."
-count = 2
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 14
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
 code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 15
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`nonnull`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 13
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`nonnull`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Auth\AuthWebAuthn::getUserFromSession`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "possibly-false-operand"
-message = "Possibly false right operand used in string concatenation (type `false|string`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Auth\AuthWebAuthn::setAppId` is possibly `null`, but parameter type `string` does not accept it.'
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
 count = 1
 
 [[issues]]
@@ -1408,12 +1294,6 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
 code = "redundant-type-comparison"
 message = "Redundant condition: variable `$info` (type `has-property<'response'>`) is already known to be `has-property<'rawId'>`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "reference-constraint-violation"
-message = "Invalid assignment to by-reference parameter `$userWebAuthn`."
 count = 2
 
 [[issues]]
@@ -7856,111 +7736,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Date::createIsoDate`: expected `string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Date::format`: expected `string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Link::setTitle`: expected `string`, but found `mixed`.'
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Link\Util\TitleSlugifier::slug`: expected `string`, but found `mixed`.'
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Utils::makeShorterText`: expected `string`, but found `mixed`.'
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `round`: expected `float|int`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Language\Plurals::get`: expected `int`, but found `mixed`.'
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #4 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #5 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 15
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 13
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `mixed` is being assigned to property `$$tooltip` (null|string)."
 count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Faq\Statistics::getTopTenData`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|null|string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "redundant-comparison"
-message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "redundant-logical-operation"
-message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
-count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Filesystem/Filesystem.php"
@@ -11577,19 +11355,7 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Seo/SitemapXmlService.php"
 code = "less-specific-nested-return-statement"
-message = '''Returned type `list<array{'lastmod': mixed, 'loc': mixed, 'priority': string('0.80')|string('1.00')}>` is less specific than the declared return type `array<int, array{'lastmod': string, 'loc': string, 'priority': string}>` for function `phpMyFAQ\Seo\SitemapXmlService::collectUrls` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Seo/SitemapXmlService.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Seo/SitemapXmlService.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+message = '''Returned type `list<array{'lastmod': mixed, 'loc': string, 'priority': string('0.80')|string('1.00')}>` is less specific than the declared return type `array<int, array{'lastmod': string, 'loc': string, 'priority': string}>` for function `phpMyFAQ\Seo\SitemapXmlService::collectUrls` due to nested 'mixed'.'''
 count = 1
 
 [[issues]]

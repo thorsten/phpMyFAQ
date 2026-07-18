@@ -42,7 +42,7 @@ class AuthWebAuthn extends Auth
     {
         parent::__construct($configuration);
 
-        $this->setAppId(Utils::getHostFromUrl($configuration->getDefaultUrl()));
+        $this->setAppId(Utils::getHostFromUrl($configuration->getDefaultUrl()) ?? '');
     }
 
     /**
@@ -139,7 +139,9 @@ class AuthWebAuthn extends Auth
     public function getUserFromSession(): ?WebAuthnUser
     {
         $session = new Session();
-        return $session->get('webauthn');
+        $webAuthnUser = $session->get('webauthn');
+
+        return $webAuthnUser instanceof WebAuthnUser ? $webAuthnUser : null;
     }
 
     /**
@@ -173,7 +175,7 @@ class AuthWebAuthn extends Auth
             throw new Exception('no rawId in info');
         }
 
-        $attestationString = $this->arrayToString($info->response->attestationObject);
+        $attestationString = $this->byteString($info->response->attestationObject);
         $attestationObject = (object) CBOREncoder::decode($attestationString);
 
         if (
@@ -188,7 +190,12 @@ class AuthWebAuthn extends Auth
             throw new Exception('Cannot decode key for authentication data');
         }
 
-        $byteString = $attestationObject->authData->get_byte_string();
+        $authData = $attestationObject->authData;
+        if (!is_object($authData) || !method_exists($authData, 'get_byte_string')) {
+            throw new Exception('Cannot decode key for authentication data');
+        }
+
+        $byteString = (string) $authData->get_byte_string();
 
         if ($attestationObject->fmt === 'fido-u2f') {
             throw new Exception('Cannot decode FIDO format responses');
@@ -198,64 +205,60 @@ class AuthWebAuthn extends Auth
             throw new Exception('Cannot decode key for format if not none or packed');
         }
 
-        $attestationObject->rpIdHash = substr(string: (string) $byteString, offset: 0, length: 32);
-        $attestationObject->flags = ord(substr(string: (string) $byteString, offset: 32, length: 1));
-        $attestationObject->counter = substr(string: (string) $byteString, offset: 33, length: 4);
+        $rpIdHash = substr(string: $byteString, offset: 0, length: 32);
+        $flags = ord(substr(string: $byteString, offset: 32, length: 1));
 
         $hashId = hash(algo: 'sha256', data: $this->appId, binary: true);
-        if ($hashId !== $attestationObject->rpIdHash) {
+        if ($hashId !== $rpIdHash) {
             throw new Exception('Cannot decode key as RP ID hash does not match');
         }
 
-        if (($attestationObject->flags & 0x41) === 0) {
+        if (($flags & 0x41) === 0) {
             throw new Exception('Cannot decode key as flags are not correct');
         }
 
-        $attestationObject->attData = new stdClass();
-        $attestationObject->attData->aaguid = substr(string: (string) $byteString, offset: 37, length: 16);
-        $attestationObject->attData->credIdLen = (ord($byteString[53]) << 8) + ord($byteString[54]);
-        $attestationObject->attData->credId = substr(
-            string: (string) $byteString,
-            offset: 55,
-            length: $attestationObject->attData->credIdLen,
-        );
+        $credIdLen = (ord($byteString[53]) << 8) + ord($byteString[54]);
+        $credId = substr(string: $byteString, offset: 55, length: $credIdLen);
 
-        $cborPubKey = substr(string: (string) $byteString, offset: 55 + $attestationObject->attData->credIdLen);
+        $cborPubKey = substr(string: $byteString, offset: 55 + $credIdLen);
 
-        $attestationObject->attData->keyBytes = PublicKeyConverter::fromCoseToPkcs($cborPubKey);
+        $keyBytes = PublicKeyConverter::fromCoseToPkcs($cborPubKey);
 
-        if (is_null($attestationObject->attData->keyBytes)) {
-            $attestationObject->attData->aaguid = substr(string: (string) $byteString, offset: 37, length: 1);
-            $attestationObject->attData->credIdLen = (ord($byteString[38]) << 8) + ord($byteString[39]);
-            $attestationObject->attData->credId = substr(
-                string: (string) $byteString,
-                offset: 40,
-                length: $attestationObject->attData->credIdLen,
-            );
-            $cborPubKey = substr(string: (string) $byteString, offset: 40 + $attestationObject->attData->credIdLen);
-            $attestationObject->attData->keyBytes = PublicKeyConverter::fromCoseToPkcs($cborPubKey);
-            if (is_null($attestationObject->attData->keyBytes)) {
+        if (is_null($keyBytes)) {
+            $credIdLen = (ord($byteString[38]) << 8) + ord($byteString[39]);
+            $credId = substr(string: $byteString, offset: 40, length: $credIdLen);
+            $cborPubKey = substr(string: $byteString, offset: 40 + $credIdLen);
+            $keyBytes = PublicKeyConverter::fromCoseToPkcs($cborPubKey);
+            if (is_null($keyBytes)) {
                 throw new Exception('Cannot decode key for key bytes');
             }
         }
 
-        $rawId = $this->arrayToString($info->rawId);
-        if ($attestationObject->attData->credId !== $rawId) {
+        $rawId = $this->byteString($info->rawId);
+        if ($credId !== $rawId) {
             throw new Exception('Cannot decode key for credId');
         }
 
         $publicKey = new stdClass();
-        $publicKey->key = $attestationObject->attData->keyBytes;
+        $publicKey->key = $keyBytes;
         $publicKey->id = $info->rawId;
 
         if ($userWebAuthn === '' || $userWebAuthn === '0') {
-            return json_encode([$publicKey]);
+            return (string) json_encode([$publicKey]);
         }
 
-        $userWebAuthn = json_decode($userWebAuthn);
+        $existingKeys = json_decode($userWebAuthn);
+        if (!is_array($existingKeys)) {
+            $existingKeys = [];
+        }
+
         $found = false;
-        foreach ($userWebAuthn as $key) {
-            if (implode(separator: ',', array: $key->id) !== implode(separator: ',', array: $publicKey->id)) {
+        foreach ($existingKeys as $key) {
+            if (!$key instanceof stdClass) {
+                continue;
+            }
+
+            if ($this->idList($key->id) !== $this->idList($publicKey->id)) {
                 continue;
             }
 
@@ -265,10 +268,10 @@ class AuthWebAuthn extends Auth
         }
 
         if (!$found) {
-            array_unshift($userWebAuthn, $publicKey);
+            array_unshift($existingKeys, $publicKey);
         }
 
-        return json_encode($userWebAuthn);
+        return (string) json_encode($existingKeys);
     }
 
     /**
@@ -295,14 +298,20 @@ class AuthWebAuthn extends Auth
         );
 
         if ($userWebAuthn !== '' && $userWebAuthn !== '0') {
-            $webauthn = json_decode($userWebAuthn);
-            foreach ($webauthn as $idx => $key) {
-                $allow->id = $key->id;
-                $allows[] = clone $allow;
-                $webauthn[$idx]->challenge = $challengeB64;
-            }
+            $storedKeys = json_decode($userWebAuthn);
+            if (is_array($storedKeys)) {
+                foreach ($storedKeys as $key) {
+                    if (!$key instanceof stdClass) {
+                        continue;
+                    }
 
-            $userWebAuthn = json_encode($webauthn);
+                    $allow->id = $key->id;
+                    $allows[] = clone $allow;
+                    $key->challenge = $challengeB64;
+                }
+
+                $userWebAuthn = (string) json_encode($storedKeys);
+            }
         }
 
         if ($userWebAuthn === '' || $userWebAuthn === '0') {
@@ -331,11 +340,30 @@ class AuthWebAuthn extends Auth
      */
     public function authenticate(stdClass $info, string &$userWebAuthn): bool
     {
-        $webauthn = $userWebAuthn === '' || $userWebAuthn === '0' ? [] : json_decode($userWebAuthn);
+        $storedKeys = $userWebAuthn === '' || $userWebAuthn === '0' ? [] : json_decode($userWebAuthn);
+        if (!is_array($storedKeys)) {
+            $storedKeys = [];
+        }
+
+        $response = $info->response ?? null;
+        if (!$response instanceof stdClass) {
+            throw new Exception('No response in info');
+        }
+
+        $clientDataObject = $response->clientData ?? null;
+        if (!$clientDataObject instanceof stdClass) {
+            throw new Exception('No client data in info');
+        }
+
+        $rawIdList = $this->idList($info->rawId ?? null);
 
         $key = null;
-        foreach ($webauthn as $webAuthnKey) {
-            if (implode(separator: ',', array: $webAuthnKey->id) !== implode(separator: ',', array: $info->rawId)) {
+        foreach ($storedKeys as $webAuthnKey) {
+            if (!$webAuthnKey instanceof stdClass) {
+                continue;
+            }
+
+            if ($this->idList($webAuthnKey->id) !== $rawIdList) {
                 continue;
             }
 
@@ -344,72 +372,85 @@ class AuthWebAuthn extends Auth
         }
 
         if ($key === null) {
-            throw new Exception('No key with ID ' . implode(separator: ',', array: $info->rawId));
+            throw new Exception('No key with ID ' . $rawIdList);
         }
 
         $originalChallenge = rtrim(
-            strtr(string: base64_encode(string: $this->arrayToString($info->originalChallenge)), from: '+/', to: '-_'),
+            strtr(
+                string: base64_encode(string: $this->byteString($info->originalChallenge ?? null)),
+                from: '+/',
+                to: '-_',
+            ),
             characters: '=',
         );
-        if ($originalChallenge !== $info->response->clientData->challenge) {
+        if ($originalChallenge !== $clientDataObject->challenge) {
             throw new Exception('Challenge mismatch');
         }
 
         $keyChallenge = $key->challenge ?? null;
-        if ($keyChallenge !== null && $keyChallenge !== $info->response->clientData->challenge) {
+        if ($keyChallenge !== null && $keyChallenge !== $clientDataObject->challenge) {
             throw new Exception('You cannot use the same login more than once');
         }
 
-        foreach ($webauthn as $idx => $webAuthnKey) {
-            $webauthn[$idx]->challenge = '';
+        foreach ($storedKeys as $webAuthnKey) {
+            if (!$webAuthnKey instanceof stdClass) {
+                continue;
+            }
+
+            $webAuthnKey->challenge = '';
         }
 
-        $userWebAuthn = json_encode($webauthn);
+        $userWebAuthn = (string) json_encode($storedKeys);
 
-        $origin = parse_url((string) $info->response->clientData->origin);
-        if (($origin['host'] ?? null) !== $this->appId) {
-            throw new Exception(sprintf("Origin mismatch for '%s'", $info->response->clientData->origin));
+        $origin = parse_url((string) $clientDataObject->origin);
+        $originHost = is_array($origin) ? $origin['host'] ?? null : null;
+        if ($originHost !== $this->appId) {
+            throw new Exception(sprintf("Origin mismatch for '%s'", (string) $clientDataObject->origin));
         }
 
-        if ($info->response->clientData->type !== 'webauthn.get') {
-            throw new Exception(sprintf("Type mismatch for '%s'", $info->response->clientData->type));
+        if ($clientDataObject->type !== 'webauthn.get') {
+            throw new Exception(sprintf("Type mismatch for '%s'", (string) $clientDataObject->type));
         }
 
-        $authDataString = $this->arrayToString($info->response->authenticatorData);
+        $authDataString = $this->byteString($response->authenticatorData ?? null);
 
-        $authenticatorData = new stdClass();
-        $authenticatorData->rpIdHash = substr(string: $authDataString, offset: 0, length: 32);
-        $authenticatorData->flags = ord(substr(string: $authDataString, offset: 32, length: 1));
-        $authenticatorData->counter = substr(string: $authDataString, offset: 33, length: 4);
+        $rpIdHash = substr(string: $authDataString, offset: 0, length: 32);
+        $flags = ord(substr(string: $authDataString, offset: 32, length: 1));
+        $counter = substr(string: $authDataString, offset: 33, length: 4);
 
         $hashId = hash(algo: 'sha256', data: $this->appId, binary: true);
-        if ($hashId !== $authenticatorData->rpIdHash) {
+        if ($hashId !== $rpIdHash) {
             throw new Exception('Cannot decode key response for RP ID hash');
         }
 
-        if (($authenticatorData->flags & 0x1) !== 0x1) {
+        if (($flags & 0x1) !== 0x1) {
             throw new Exception('Cannot decode key response (2c)');
         }
 
-        $clientData = $this->arrayToString($info->response->clientDataJSONarray);
-        $signedData =
-            $hashId
-            . chr($authenticatorData->flags)
-            . $authenticatorData->counter
-            . hash(algo: 'sha256', data: $clientData, binary: true);
+        $clientData = $this->byteString($response->clientDataJSONarray ?? null);
+        $signedData = $hashId . chr($flags) . $counter . hash(algo: 'sha256', data: $clientData, binary: true);
 
-        if (count($info->response->signature) < 70) {
+        $signatureBytes = $response->signature ?? null;
+        if (!is_array($signatureBytes) || count($signatureBytes) < 70) {
             throw new Exception('Cannot decode key response (3)');
         }
 
-        $signature = $this->arrayToString($info->response->signature);
+        $signature = $this->arrayToString($signatureBytes);
 
-        $key = $key->key;
-        return match (openssl_verify($signedData, $signature, $key, OPENSSL_ALGO_SHA256)) {
-            1 => true,
-            0 => false,
-            default => throw new Exception('Cannot decode key response because of ' . openssl_error_string()),
-        };
+        $publicKeyPem = (string) $key->key;
+        $verificationResult = openssl_verify($signedData, $signature, $publicKeyPem, OPENSSL_ALGO_SHA256);
+        if ($verificationResult === 1) {
+            return true;
+        }
+
+        if ($verificationResult === 0) {
+            return false;
+        }
+
+        $opensslError = openssl_error_string();
+        throw new Exception(
+            'Cannot decode key response because of ' . ($opensslError === false ? 'unknown error' : $opensslError),
+        );
     }
 
     public function setAppId(string $appId): void
@@ -418,7 +459,30 @@ class AuthWebAuthn extends Auth
     }
 
     /**
+     * Normalizes a JSON-decoded byte list to a binary string; non-arrays
+     * yield an empty string so the callers' validation fails loudly.
+     */
+    private function byteString(mixed $bytes): string
+    {
+        return is_array($bytes) ? $this->arrayToString($bytes) : '';
+    }
+
+    /**
+     * Renders a JSON-decoded credential ID byte list as a comparable string.
+     */
+    private function idList(mixed $id): string
+    {
+        if (!is_array($id)) {
+            return '';
+        }
+
+        return implode(',', array_map(static fn(mixed $byte): string => is_scalar($byte) ? (string) $byte : '', $id));
+    }
+
+    /**
      * Convert an array of uint8's to a binary string
+     *
+     * @param array<array-key, mixed> $array
      */
     private function arrayToString(array $array): string
     {
