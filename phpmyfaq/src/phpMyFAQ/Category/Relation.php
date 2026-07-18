@@ -81,11 +81,11 @@ class Relation
         if ($this->configuration->getDb()->numRows($result) > 0) {
             while (true) {
                 $row = $this->configuration->getDb()->fetchObject($result);
-                if ($row === false || $row === null || $row === []) {
+                if (!$row instanceof \stdClass) {
                     break;
                 }
 
-                $matrix[$row->id_cat][$row->id] = true;
+                $matrix[(int) $row->id_cat][(int) $row->id] = true;
             }
         }
 
@@ -153,15 +153,15 @@ class Relation
         if ($this->configuration->getDb()->numRows($result) > 0) {
             while (true) {
                 $category = $this->configuration->getDb()->fetchObject($result);
-                if ($category === false || $category === null || $category === []) {
+                if (!$category instanceof \stdClass) {
                     break;
                 }
 
                 $categoryTree[(int) $category->id] = [
                     'category_id' => (int) $category->id,
                     'parent_id' => (int) $category->parent_id,
-                    'name' => $category->category_name,
-                    'description' => $category->description,
+                    'name' => (string) $category->category_name,
+                    'description' => (string) $category->description,
                     'faqs' => (int) $category->number,
                 ];
             }
@@ -178,6 +178,7 @@ class Relation
     {
         $numRecordsByCat = [];
         $language = $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage());
+        $query = '';
         if ($categoryRestriction) {
             $query = sprintf(
                 '
@@ -206,6 +207,7 @@ class Relation
                 $onlyActive ? " AND fd.active = 'yes'" : '',
             );
         }
+
         if (!$categoryRestriction) {
             $query = sprintf(
                 '
@@ -241,11 +243,11 @@ class Relation
         if ($this->configuration->getDb()->numRows($result) > 0) {
             while (true) {
                 $row = $this->configuration->getDb()->fetchObject($result);
-                if ($row === false || $row === null || $row === []) {
+                if (!$row instanceof \stdClass) {
                     break;
                 }
 
-                $numRecordsByCat[$row->category_id] = (int) $row->number;
+                $numRecordsByCat[(int) $row->category_id] = (int) $row->number;
             }
         }
 
@@ -257,16 +259,21 @@ class Relation
      */
     public function getAggregatedFaqNumbers(array $categories): array
     {
+        /** @var array<int, int> $aggregatedFaqs */
         $aggregatedFaqs = [];
+        /** @var array<int, list<int>> $childrenMap */
         $childrenMap = [];
 
         // Build children map and initialize aggregated counts
         foreach ($categories as $category) {
-            $categoryId = $category['category_id'];
-            $parentId = $category['parent_id'];
-            $numFaqs = $category['faqs'];
+            if (!is_array($category)) {
+                continue;
+            }
 
-            $aggregatedFaqs[$categoryId] = $numFaqs;
+            $categoryId = (int) ($category['category_id'] ?? 0);
+            $parentId = (int) ($category['parent_id'] ?? 0);
+
+            $aggregatedFaqs[$categoryId] = (int) ($category['faqs'] ?? 0);
 
             if ($parentId !== 0) {
                 if (!array_key_exists($parentId, $childrenMap)) {
@@ -278,10 +285,15 @@ class Relation
         }
 
         // Recursively aggregate FAQs from children to parents
+        /** @var array<int, true> $processedCategories */
         $processedCategories = [];
 
         foreach ($categories as $category) {
-            $categoryId = $category['category_id'];
+            if (!is_array($category)) {
+                continue;
+            }
+
+            $categoryId = (int) ($category['category_id'] ?? 0);
 
             if (!array_key_exists($categoryId, $processedCategories)) {
                 $this->aggregateRecursively($categoryId, $childrenMap, $aggregatedFaqs, $processedCategories);
@@ -293,6 +305,10 @@ class Relation
 
     /**
      * Helper method for recursive aggregation
+     *
+     * @param array<int, list<int>> $childrenMap
+     * @param array<int, int> $aggregatedFaqs
+     * @param array<int, true> $processedCategories
      */
     private function aggregateRecursively(
         int $categoryId,
@@ -343,13 +359,13 @@ class Relation
         if ($result) {
             while (true) {
                 $row = $this->configuration->getDb()->fetchObject($result);
-                if ($row === false || $row === null || $row === []) {
+                if (!$row instanceof \stdClass) {
                     break;
                 }
 
-                $categories[$row->category_id] = [
-                    'category_id' => $row->category_id,
-                    'category_lang' => $row->category_lang,
+                $categories[(int) $row->category_id] = [
+                    'category_id' => (int) $row->category_id,
+                    'category_lang' => (string) $row->category_lang,
                 ];
             }
         }
@@ -417,15 +433,17 @@ class Relation
             $query .= sprintf(" AND category_lang = '%s'", $this->configuration->getDb()->escape($categoryLang));
         }
 
-        return (bool) $this->configuration->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
+
+        return $result !== false && $result !== null;
     }
 
     /**
-     * @param array<int|string> $ids
+     * @param array<array-key, mixed> $ids
      */
     private function normalizeIdList(array $ids): string
     {
-        $normalizedIds = array_map(static fn($id): int => (int) $id, $ids);
+        $normalizedIds = array_map(static fn(mixed $id): int => (int) $id, $ids);
 
         return $normalizedIds === [] ? '-1' : implode(', ', $normalizedIds);
     }
@@ -445,6 +463,8 @@ class Relation
             $this->configuration->getDb()->escape($faqLanguage),
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
+
+        return $result !== false && $result !== null;
     }
 }
