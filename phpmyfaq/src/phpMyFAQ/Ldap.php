@@ -45,11 +45,9 @@ class Ldap
     private readonly array $ldapConfig;
 
     /**
-     * An LDAP link identifier, returned by ldap_connect()
-     *
-     * @var resource|false
+     * The LDAP connection, present after a successful connect().
      */
-    private Connection|bool|null $ds = null;
+    private ?Connection $ds = null;
 
     /**
      * The LDAP base.
@@ -82,44 +80,47 @@ class Ldap
         }
 
         $this->base = $ldapBase;
-        $this->ds = ldap_connect($ldapServer . ':' . $ldapPort);
+        $connection = ldap_connect($ldapServer . ':' . $ldapPort);
 
-        if (!$this->ds) {
+        if (!$connection instanceof Connection) {
             $this->error = 'Unable to connect to LDAP server';
+            $this->ds = null;
 
             return false;
         }
 
+        $this->ds = $connection;
+
         // Set LDAP options
         foreach ($this->configuration->getLdapOptions() as $key => $ldapOption) {
-            if (ldap_set_option($this->ds, constant($key), $ldapOption)) {
+            if (ldap_set_option($connection, (int) constant($key), $ldapOption)) {
                 continue;
             }
 
-            $this->errno = ldap_errno($this->ds);
+            $this->errno = ldap_errno($connection);
             $errorMessage = 'Unable to set LDAP option "%s" to "%s" (Error: %s).';
-            $this->error = sprintf($errorMessage, $key, $ldapOption, ldap_error($this->ds));
+            $this->error = sprintf($errorMessage, $key, print_r($ldapOption, return: true), ldap_error($connection));
 
             return false;
         }
 
         $ldapBind = match (true) {
-            (bool) $this->configuration->get(item: 'ldap.ldap_use_dynamic_login') => $this->bind(
-                $this->configuration->get(item: 'ldap.ldap_dynamic_login_attribute')
+            true === $this->configuration->get(item: 'ldap.ldap_use_dynamic_login') => $this->bind(
+                (string) $this->configuration->get(item: 'ldap.ldap_dynamic_login_attribute')
                 . '='
                 . $ldapUser
                 . ','
                 . $ldapBase,
                 $ldapPassword,
             ),
-            (bool) $this->configuration->get(item: 'ldap.ldap_use_anonymous_login') => $this->bind(),
+            true === $this->configuration->get(item: 'ldap.ldap_use_anonymous_login') => $this->bind(),
             default => $this->bind($ldapUser, $ldapPassword),
         };
 
         if (false === $ldapBind) {
-            $this->errno = ldap_errno($this->ds);
-            $this->error = sprintf('Unable to bind to LDAP server (Error: %s).', ldap_error($this->ds));
-            $this->ds = false;
+            $this->errno = ldap_errno($connection);
+            $this->error = sprintf('Unable to bind to LDAP server (Error: %s).', ldap_error($connection));
+            $this->ds = null;
 
             return false;
         }
@@ -132,14 +133,14 @@ class Ldap
      */
     public function bind(string $rdn = '', #[SensitiveParameter] string $password = ''): bool
     {
-        if ($this->ds === false) {
+        if (!$this->ds instanceof Connection) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
 
             return false;
         }
 
         if ('' === $rdn && '' === $password) {
-            return @ldap_bind($this->ds);
+            return @ldap_bind($this->ds, dn: null, password: null);
         }
 
         return @ldap_bind($this->ds, $rdn, $password);
@@ -163,19 +164,22 @@ class Ldap
      */
     private function getLdapData(string $username, string $data): bool|string
     {
-        if ($this->ds === false || $this->ds === null) {
+        $connection = $this->ds;
+        if (!$connection instanceof Connection) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
 
             return false;
         }
 
-        if ($this->base === null || $this->base === '') {
+        $base = $this->base;
+        if ($base === null || $base === '') {
             $this->error = 'LDAP base DN is not configured.';
 
             return false;
         }
 
-        if (!array_key_exists($data, $this->ldapConfig['ldap_mapping'])) {
+        $mapping = $this->ldapConfig['ldap_mapping'] ?? null;
+        if (!is_array($mapping) || !array_key_exists($data, $mapping)) {
             $errorMessage = 'The requested data field "%s" does not exist in LDAP mapping configuration.';
             $this->error = sprintf($errorMessage, $data);
 
@@ -185,48 +189,56 @@ class Ldap
         $comparison = '(%s=%s)';
         $filter = sprintf(
             $comparison,
-            $this->configuration->get(item: 'ldap.ldap_mapping.username'),
+            (string) $this->configuration->get(item: 'ldap.ldap_mapping.username'),
             $this->quote($username),
         );
 
         if ($this->configuration->get(item: 'ldap.ldap_use_memberOf')) {
             $comparison = '(&%s(memberOf:1.2.840.113556.1.4.1941:=%s))';
-            $filter = sprintf($comparison, $filter, $this->configuration->get(item: 'ldap.ldap_mapping.memberOf'));
+            $filter = sprintf(
+                $comparison,
+                $filter,
+                (string) $this->configuration->get(item: 'ldap.ldap_mapping.memberOf'),
+            );
         }
 
-        $fields = [$this->ldapConfig['ldap_mapping'][$data]];
+        $field = (string) $mapping[$data];
 
-        $searchResult = @ldap_search($this->ds, $this->base, $filter, $fields);
+        $searchResult = @ldap_search($connection, $base, $filter, [$field]);
 
-        if (!$searchResult) {
+        if (!$searchResult || is_array($searchResult)) {
             $errorMessage = 'Unable to search for "%s" (Error: %s)';
-            $this->error = sprintf($errorMessage, $username, ldap_error($this->ds));
+            $this->error = sprintf($errorMessage, $username, ldap_error($connection));
 
             return false;
         }
 
-        $entryId = ldap_first_entry($this->ds, $searchResult);
+        $entryId = ldap_first_entry($connection, $searchResult);
 
         if (!$entryId) {
-            $this->errno = ldap_errno($this->ds);
-            $this->error = sprintf('Cannot get the value(s). Error: %s', ldap_error($this->ds));
+            $this->errno = ldap_errno($connection);
+            $this->error = sprintf('Cannot get the value(s). Error: %s', ldap_error($connection));
 
             return false;
         }
 
-        $entries = ldap_get_entries($this->ds, $searchResult);
-        for ($i = 0; $i < $entries['count']; ++$i) {
+        $entries = ldap_get_entries($connection, $searchResult);
+        if ($entries === false) {
+            return false;
+        }
+
+        for ($i = 0; $i < (int) $entries['count']; ++$i) {
             if (
                 !array_key_exists($i, $entries)
                 || !is_array($entries[$i])
-                || !array_key_exists($fields[0], $entries[$i])
-                || !is_array($entries[$i][$fields[0]])
-                || !array_key_exists(0, $entries[$i][$fields[0]])
+                || !array_key_exists($field, $entries[$i])
+                || !is_array($entries[$i][$field])
+                || !array_key_exists(0, $entries[$i][$field])
             ) {
                 continue;
             }
 
-            return $entries[$i][$fields[0]][0];
+            return (string) $entries[$i][$field][0];
         }
 
         return false;
@@ -257,13 +269,15 @@ class Ldap
      */
     private function getLdapDn(string $username): string|false
     {
-        if ($this->ds === false || $this->ds === null) {
+        $connection = $this->ds;
+        if (!$connection instanceof Connection) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
 
             return false;
         }
 
-        if ($this->base === null || $this->base === '') {
+        $base = $this->base;
+        if ($base === null || $base === '') {
             $this->error = 'LDAP base DN is not configured.';
 
             return false;
@@ -272,27 +286,27 @@ class Ldap
         $comparison = '(%s=%s)';
         $filter = sprintf(
             $comparison,
-            $this->configuration->get(item: 'ldap.ldap_mapping.username'),
+            (string) $this->configuration->get(item: 'ldap.ldap_mapping.username'),
             $this->quote($username),
         );
-        $sr = @ldap_search($this->ds, $this->base, $filter);
+        $sr = @ldap_search($connection, $base, $filter);
 
-        if (false === $sr) {
+        if (false === $sr || is_array($sr)) {
             $errorMessage = 'Unable to search for "%s" (Error: %s)';
-            $this->error = sprintf($errorMessage, $username, ldap_error($this->ds));
+            $this->error = sprintf($errorMessage, $username, ldap_error($connection));
 
             return false;
         }
 
-        $entryId = ldap_first_entry($this->ds, $sr);
+        $entryId = ldap_first_entry($connection, $sr);
 
         if (false === $entryId) {
-            $this->error = sprintf('Cannot get the value(s). Error: %s', ldap_error($this->ds));
+            $this->error = sprintf('Cannot get the value(s). Error: %s', ldap_error($connection));
 
             return false;
         }
 
-        return ldap_get_dn($this->ds, $entryId);
+        return ldap_get_dn($connection, $entryId);
     }
 
     /**
@@ -313,12 +327,14 @@ class Ldap
      */
     public function getGroupMemberships(string $username): array|false
     {
-        if ($this->ds === false || $this->ds === null) {
+        $connection = $this->ds;
+        if (!$connection instanceof Connection) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
             return false;
         }
 
-        if ($this->base === null || $this->base === '') {
+        $base = $this->base;
+        if ($base === null || $base === '') {
             $this->error = 'LDAP base DN is not configured.';
             return false;
         }
@@ -326,36 +342,41 @@ class Ldap
         $comparison = '(%s=%s)';
         $filter = sprintf(
             $comparison,
-            $this->configuration->get(item: 'ldap.ldap_mapping.username'),
+            (string) $this->configuration->get(item: 'ldap.ldap_mapping.username'),
             $this->quote($username),
         );
 
         $fields = ['memberOf'];
 
-        $searchResult = @ldap_search($this->ds, $this->base, $filter, $fields);
+        $searchResult = @ldap_search($connection, $base, $filter, $fields);
 
-        if (!$searchResult) {
+        if (!$searchResult || is_array($searchResult)) {
             $errorMessage = 'Unable to search for "%s" (Error: %s)';
-            $this->error = sprintf($errorMessage, $username, ldap_error($this->ds));
+            $this->error = sprintf($errorMessage, $username, ldap_error($connection));
 
             return false;
         }
 
-        $entryId = ldap_first_entry($this->ds, $searchResult);
+        $entryId = ldap_first_entry($connection, $searchResult);
 
         if (!$entryId) {
-            $this->errno = ldap_errno($this->ds);
-            $this->error = sprintf('Cannot get the value(s). Error: %s', ldap_error($this->ds));
+            $this->errno = ldap_errno($connection);
+            $this->error = sprintf('Cannot get the value(s). Error: %s', ldap_error($connection));
 
             return false;
         }
 
-        $entries = ldap_get_entries($this->ds, $searchResult);
+        $entries = ldap_get_entries($connection, $searchResult);
         $groups = [];
+        if ($entries === false) {
+            return $groups;
+        }
 
-        if ($entries['count'] > 0 && array_key_exists(0, $entries) && array_key_exists('memberof', $entries[0])) {
-            for ($i = 0; $i < $entries[0]['memberof']['count']; $i++) {
-                $groups[] = $entries[0]['memberof'][$i];
+        $memberOf = $entries[0]['memberof'] ?? null;
+        if ((int) $entries['count'] > 0 && is_array($memberOf)) {
+            $memberOfCount = (int) ($memberOf['count'] ?? 0);
+            for ($i = 0; $i < $memberOfCount; $i++) {
+                $groups[] = (string) $memberOf[$i];
             }
         }
 
@@ -364,15 +385,14 @@ class Ldap
 
     /**
      * Returns the LDAP error message of the last LDAP command.
-     *
-     * @param resource $ds LDAP resource
      */
-    public function error($ds = null): string
+    public function error(?Connection $ds = null): string
     {
-        if ($ds === null) {
-            $ds = $this->ds;
+        $connection = $ds ?? $this->ds;
+        if (!$connection instanceof Connection) {
+            return 'The LDAP connection handler is not a valid resource.';
         }
 
-        return ldap_error($ds);
+        return ldap_error($connection);
     }
 }

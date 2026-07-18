@@ -179,17 +179,17 @@ class LdapTest extends TestCase
         $this->assertNotNull($this->ldap->errno);
         $this->assertNotNull($this->ldap->error);
 
-        // After bind failure, ds is set to false
+        // After bind failure, the connection is reset
         $reflection = new ReflectionClass(Ldap::class);
         $ds = $reflection->getProperty('ds')->getValue($this->ldap);
-        $this->assertFalse($ds);
+        $this->assertNull($ds);
     }
 
     // ── bind() ───────────────────────────────────────────────────────────
 
     public function testBindWithFalseConnectionReturnsFalse(): void
     {
-        $this->setPrivateProperty($this->ldap, 'ds', false);
+        $this->setPrivateProperty($this->ldap, 'ds', null);
 
         $result = $this->ldap->bind('cn=admin', 'pass');
 
