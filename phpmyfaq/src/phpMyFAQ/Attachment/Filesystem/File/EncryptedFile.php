@@ -64,9 +64,13 @@ class EncryptedFile extends AbstractFile
 
         if (is_string($target)) {
             $target = new VanillaFile($target, AbstractFile::MODE_WRITE);
-        } else {
-            $target->setMode(AbstractFile::MODE_WRITE);
         }
+
+        if (!$target instanceof AbstractFile) {
+            throw new FileException('copyTo() expects a file path or an AbstractFile instance.');
+        }
+
+        $target->setMode(AbstractFile::MODE_WRITE);
 
         if ($target->isOk()) {
             while (!$this->eof()) {

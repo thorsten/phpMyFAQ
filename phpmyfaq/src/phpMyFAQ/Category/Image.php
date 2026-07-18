@@ -134,6 +134,7 @@ class Image
             }
 
             // Ensure destination directory exists
+            /* @mago-expect lint:no-error-control-operator - mkdir may race a concurrent request; the re-check handles it */
             if (
                 !is_dir(self::UPLOAD_DIR)
                 && (!@mkdir(self::UPLOAD_DIR, permissions: 0o775, recursive: true) && !is_dir(self::UPLOAD_DIR))

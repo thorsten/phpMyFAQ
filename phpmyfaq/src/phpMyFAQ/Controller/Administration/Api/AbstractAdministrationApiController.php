@@ -23,7 +23,7 @@ use Override;
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Controller\AbstractController;
 
-class AbstractAdministrationApiController extends AbstractController
+abstract class AbstractAdministrationApiController extends AbstractController
 {
     protected AdminLog $adminLog;
 

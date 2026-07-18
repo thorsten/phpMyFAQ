@@ -21,6 +21,7 @@ namespace phpMyFAQ\Api;
 
 final readonly class ProblemDetails
 {
+    /* @mago-expect lint:excessive-parameter-list - mirrors the RFC 7807 problem-details fields */
     public function __construct(
         public string $type,
         public string $title,

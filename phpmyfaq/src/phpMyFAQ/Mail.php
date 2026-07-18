@@ -38,6 +38,8 @@ use Throwable;
  *
  * @package phpMyFAQ
  */
+/* @mago-expect lint:too-many-properties - carries the full MIME envelope state */
+/* @mago-expect lint:kan-defect - legacy mail composer; split planned with the mailer rework */
 class Mail
 {
     /**

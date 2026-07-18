@@ -46,6 +46,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class FaqController extends AbstractController
 {
+    /* @mago-expect lint:excessive-parameter-list - the controller dependencies are injected explicitly */
     public function __construct(
         private readonly Faq $faq,
         private readonly FaqHelper $faqHelper,

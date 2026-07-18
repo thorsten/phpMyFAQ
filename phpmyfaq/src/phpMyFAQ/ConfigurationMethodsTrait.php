@@ -43,6 +43,7 @@ use phpMyFAQ\Translation\TranslationProviderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+/* @mago-expect lint:too-many-methods - legacy configuration facade; split into settings services is in progress */
 trait ConfigurationMethodsTrait
 {
     /**

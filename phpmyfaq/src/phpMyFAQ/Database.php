@@ -106,7 +106,7 @@ class Database
     public static function errorPage(string $method): void
     {
         if (!headers_sent()) {
-            header('HTTP/1.1 503 Service Unavailable', true, 503);
+            header('HTTP/1.1 503 Service Unavailable', replace: true, response_code: 503);
             header('Retry-After: 60');
         }
         echo

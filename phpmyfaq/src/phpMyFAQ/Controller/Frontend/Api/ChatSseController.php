@@ -40,6 +40,7 @@ final class ChatSseController extends AbstractController
      * @param ?Closure(): void $flusher
      * @param ?Closure(string): void $outputEmitter
      */
+    /* @mago-expect lint:excessive-parameter-list - the controller dependencies are injected explicitly */
     public function __construct(
         private readonly ?Closure $chatFactory = null,
         private readonly ?Closure $sleep = null,
@@ -127,7 +128,7 @@ final class ChatSseController extends AbstractController
                         flush();
                     })();
 
-                    if (($this->connectionAborted ?? static fn(): bool => connection_aborted())()) {
+                    if (($this->connectionAborted ?? static fn(): bool => connection_aborted() !== 0)()) {
                         break;
                     }
 

@@ -206,7 +206,8 @@ final class DashboardController extends AbstractController
         $this->userIsAuthenticated();
 
         if ($this->configuration->get(item: 'main.enableUserTracking')) {
-            $endDate = (int) ($request->server->get('REQUEST_TIME') ?: time());
+            $requestTime = (int) $request->server->get('REQUEST_TIME');
+            $endDate = $requestTime !== 0 ? $requestTime : time();
             $days = (int) $request->query->get('days', 30);
             $days = max(7, min($days, 365));
             return $this->json($this->adminSession->getVisitsForDays($endDate, $days));

@@ -67,6 +67,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /* @mago-expect lint:cyclomatic-complexity - the create/update endpoints validate every field inline; split planned with the admin API rework */
 final class FaqController extends AbstractAdministrationApiController
 {
+    /* @mago-expect lint:excessive-parameter-list - the endpoint dependencies are injected explicitly; a service split is planned with the admin API rework */
     public function __construct(
         private readonly Faq $faq,
         private readonly FaqAdministration $adminFaq,

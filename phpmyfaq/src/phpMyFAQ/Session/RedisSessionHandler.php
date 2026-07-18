@@ -25,6 +25,7 @@ class RedisSessionHandler
 {
     public const string DEFAULT_DSN = 'tcp://redis:6379?database=0';
 
+    /* @mago-expect lint:no-ini-set - registering the Redis session handler requires runtime session settings */
     public static function configure(string $dsn = '', bool $validate = false): void
     {
         if (!extension_loaded('redis')) {
@@ -51,6 +52,7 @@ class RedisSessionHandler
 
         $errno = 0;
         $errorString = '';
+        /* @mago-expect lint:no-error-control-operator - connection failure is reported via $errno/$errorString below */
         $connection = @stream_socket_client(
             $socketTarget,
             $errno,

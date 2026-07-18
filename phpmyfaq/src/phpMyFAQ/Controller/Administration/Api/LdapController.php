@@ -33,10 +33,14 @@ final class LdapController extends AbstractController
         $this->userIsAuthenticated();
 
         $servers = $this->configuration->getLdapServer();
-        $strippedServers = array_map(static function (array $server): array {
-            $server['ldap_password'] = '********';
-            return $server;
-        }, $servers);
+        $strippedServers = array_map(
+            static function (array $server): array {
+                /* @mago-expect lint:no-literal-password - masking placeholder, not a credential */
+                $server['ldap_password'] = '********';
+                return $server;
+            },
+            $servers,
+        );
 
         return $this->json([
             'servers' => $strippedServers,

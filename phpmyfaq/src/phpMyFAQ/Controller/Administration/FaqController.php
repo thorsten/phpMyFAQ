@@ -58,6 +58,7 @@ use Twig\Extension\AttributeExtension;
 
 final class FaqController extends AbstractAdministrationController
 {
+    /* @mago-expect lint:excessive-parameter-list - the controller dependencies are injected explicitly; a service split is planned with the admin rework */
     public function __construct(
         private readonly Comments $comments,
         private readonly Faq $faq,

@@ -132,6 +132,7 @@ class Pagination
         return $this->renderLink($template, $link, $page);
     }
 
+    /* @mago-expect lint:halstead - renders the full pagination control in one method */
     protected function addNavigationButtons(array $content, int $pages): array
     {
         if (1 < $this->currentPage) {

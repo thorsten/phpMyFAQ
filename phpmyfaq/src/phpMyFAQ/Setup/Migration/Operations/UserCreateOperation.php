@@ -25,6 +25,7 @@ use SensitiveParameter;
 
 readonly class UserCreateOperation implements OperationInterface
 {
+    /* @mago-expect lint:excessive-parameter-list - mirrors the user-creation fields of the migration format */
     public function __construct(
         private Configuration $configuration,
         private string $loginName,

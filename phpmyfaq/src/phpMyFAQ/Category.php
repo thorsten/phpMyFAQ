@@ -34,6 +34,7 @@ use phpMyFAQ\Category\Presentation\AdminCategoryTreePresenter;
 use phpMyFAQ\Category\Tree\TreeBuilder;
 use phpMyFAQ\Entity\CategoryEntity;
 
+/* @mago-expect lint:too-many-methods - legacy category facade; split into repository/services is in progress */
 class Category
 {
     /**

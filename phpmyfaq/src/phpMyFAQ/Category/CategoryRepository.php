@@ -197,6 +197,7 @@ class CategoryRepository implements CategoryRepositoryInterface
      * @param string $sortOrder Sort direction (ASC, DESC)
      * @return array
      */
+    /* @mago-expect lint:excessive-parameter-list - pagination, sorting, and permission filters are all query inputs; a criteria object is planned */
     public function findCategoriesPaginated(
         ?string $language = null,
         int $limit = 25,

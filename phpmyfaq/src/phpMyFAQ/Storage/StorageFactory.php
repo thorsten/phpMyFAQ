@@ -101,6 +101,7 @@ final readonly class StorageFactory
                 : PMF_ROOT_DIR . '/content/user/attachments';
         }
 
+        /* @mago-expect lint:no-error-control-operator - mkdir may race a concurrent request; the re-check handles it */
         if (!is_dir($root) && !@mkdir($root, permissions: 0o775, recursive: true) && !is_dir($root)) {
             throw new StorageException('Storage root directory could not be created: ' . $root);
         }

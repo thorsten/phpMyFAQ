@@ -25,6 +25,7 @@ namespace phpMyFAQ\Setup\Installation;
 use phpMyFAQ\Setup\Migration\QueryBuilder\DialectInterface;
 use phpMyFAQ\Setup\Migration\QueryBuilder\TableBuilder;
 
+/* @mago-expect lint:too-many-methods - one builder per table in the installation schema */
 class DatabaseSchema
 {
     public function __construct(

@@ -96,6 +96,7 @@ readonly class EnvironmentConfigurator
     /**
      * @throws Exception
      */
+    /* @mago-expect lint:no-error-control-operator - the read failure is handled explicitly on the next line */
     private function readHtaccess(): string
     {
         $content = @file_get_contents($this->htaccessPath);

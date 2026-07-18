@@ -29,6 +29,7 @@ use phpMyFAQ\User\CurrentUser;
  *
  * @package phpMyFAQ\Permission
  */
+/* @mago-expect lint:too-many-methods - implements the full group-permission contract */
 class MediumPermission extends BasicPermission implements PermissionInterface
 {
     protected MediumPermissionRepository $mediumRepository;

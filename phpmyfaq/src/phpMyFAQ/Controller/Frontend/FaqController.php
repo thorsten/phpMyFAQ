@@ -57,6 +57,7 @@ use Twig\TwigFilter;
 
 final class FaqController extends AbstractFrontController
 {
+    /* @mago-expect lint:excessive-parameter-list - the controller dependencies are injected explicitly */
     public function __construct(
         private readonly UserSession $faqSession,
         private readonly CaptchaInterface $captcha,

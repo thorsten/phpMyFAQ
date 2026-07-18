@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Export\Pdf\Engine;
 
+/* @mago-expect lint:too-many-methods - adapts the TCPDF surface the export needs */
 final readonly class TcpdfEngine implements PdfEngineInterface
 {
     private TcpdfDocument $document;
@@ -143,6 +144,7 @@ final readonly class TcpdfEngine implements PdfEngineInterface
         $this->document->writeHTML($html, $ln, $fill, $reseth, $cell, $align);
     }
 
+    /* @mago-expect lint:excessive-parameter-list - mirrors the TCPDF method signature */
     public function writeHtmlCell(
         float $w,
         float $h,
@@ -168,6 +170,7 @@ final readonly class TcpdfEngine implements PdfEngineInterface
         $this->document->MultiCell($w, $h, $txt, $border, $align);
     }
 
+    /* @mago-expect lint:excessive-parameter-list - mirrors the TCPDF method signature */
     public function cell(
         float $w,
         float $h,

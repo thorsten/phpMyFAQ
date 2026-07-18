@@ -45,6 +45,7 @@ use stdClass;
  *
  * @package phpMyFAQ
  */
+/* @mago-expect lint:too-many-methods - legacy facade over FAQ retrieval; split into repository/services is in progress */
 class Faq
 {
     public const string QUERY_TYPE_DEFAULT = 'faq_default';

@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Enums;
 
+/* @mago-expect lint:too-many-enum-cases - one case per auditable admin action by design */
 enum AdminLogType: string
 {
     // Backup operations

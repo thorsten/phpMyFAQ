@@ -35,6 +35,8 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
  *
  * @package phpMyFAQ
  */
+/* @mago-expect lint:too-many-methods - legacy user aggregate; split into services is in progress */
+/* @mago-expect lint:kan-defect - legacy user aggregate; split into services is in progress */
 class User
 {
     final public const string DEFAULT_ENCRYPTION_TYPE = 'hash';
@@ -55,6 +57,7 @@ class User
 
     final public const string ERROR_USER_INCORRECT_LOGIN = 'The login name could not be found. ';
 
+    /* @mago-expect lint:no-literal-password - user-facing error message, not a credential */
     final public const string ERROR_USER_INCORRECT_PASSWORD = 'The password is not correct.';
 
     final public const string ERROR_USER_INVALID_STATUS = 'Undefined user status.';
@@ -547,6 +550,7 @@ class User
 
             $roll = random_int(min: 0, max: $randomMax);
             if ($roll === 5) {
+                /* @mago-expect lint:no-literal-password - appends a literal underscore in the password generator */
                 $newPassword .= '_';
                 continue;
             }

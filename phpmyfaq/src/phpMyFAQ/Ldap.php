@@ -131,6 +131,7 @@ class Ldap
     /**
      * Binds to the LDAP directory with specified RDN and password.
      */
+    /* @mago-expect lint:no-error-control-operator - ldap_bind raises warnings instead of exceptions; the boolean result is the error signal */
     public function bind(string $rdn = '', #[SensitiveParameter] string $password = ''): bool
     {
         if (!$this->ds instanceof Connection) {
@@ -162,6 +163,7 @@ class Ldap
      * @param string $username Username
      * @param string $data     MapKey
      */
+    /* @mago-expect lint:no-error-control-operator - ldap_search raises warnings instead of exceptions; failures are reported via $this->error */
     private function getLdapData(string $username, string $data): bool|string
     {
         $connection = $this->ds;
@@ -267,6 +269,7 @@ class Ldap
      *
      * @param string $username Username
      */
+    /* @mago-expect lint:no-error-control-operator - ldap_search raises warnings instead of exceptions; failures are reported via $this->error */
     private function getLdapDn(string $username): string|false
     {
         $connection = $this->ds;
@@ -325,6 +328,7 @@ class Ldap
      * @param string $username Username
      * @return array<string>|false Array of group DNs or false on error
      */
+    /* @mago-expect lint:no-error-control-operator - ldap_search raises warnings instead of exceptions; failures are reported via $this->error */
     public function getGroupMemberships(string $username): array|false
     {
         $connection = $this->ds;

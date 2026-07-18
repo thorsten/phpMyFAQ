@@ -29,6 +29,7 @@ readonly class InstallationInput
      * @param array<string, string|array<string>>     $esSetup
      * @param array<string, string|array<string>>     $osSetup
      */
+    /* @mago-expect lint:excessive-parameter-list - mirrors the installation form fields as one immutable input */
     public function __construct(
         public array $dbSetup,
         public array $ldapSetup,

@@ -49,6 +49,7 @@ use Throwable;
     name: 'phpmyfaq:seed-testdata',
     description: 'Seeds phpMyFAQ with bilingual (DE + EN) test data about phpMyFAQ itself',
 )]
+/* @mago-expect lint:kan-defect - seeds every entity type inline; acceptable for a dev-only command */
 class SeedTestDataCommand extends Command
 {
     public const string AUTHOR = 'phpMyFAQ Test Seeder';

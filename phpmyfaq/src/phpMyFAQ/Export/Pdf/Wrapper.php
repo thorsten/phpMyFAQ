@@ -494,6 +494,7 @@ class Wrapper
         return [$path, $type];
     }
 
+    /* @mago-expect lint:no-error-control-operator - probing whether bytes decode as an image; failure is the negative answer */
     private function checkBase64Image(string $base64): bool
     {
         $img = @imagecreatefromstring($base64);

@@ -40,6 +40,7 @@ readonly class Migration420Alpha extends AbstractMigration
         return 'Admin log hash columns, custom pages, chat messages, translation config, API rate limiting, queue jobs, mail provider config, API keys, OAuth2 tables, Keycloak subject storage, granular group-based category permissions, per-admin dashboard layouts';
     }
 
+    /* @mago-expect lint:halstead - one migration step per schema change across four SQL dialects */
     public function up(OperationRecorder $recorder): void
     {
         // Add hash columns to faqadminlog
@@ -597,7 +598,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB",
                 $this->tablePrefix,
             ), 'Create queue jobs table (MySQL)');
-        } elseif ($this->isPostgreSql()) {
+        }
+
+        if ($this->isPostgreSql()) {
             $recorder->addSql(sprintf('CREATE TABLE IF NOT EXISTS %sfaqjobs (
                     id SERIAL NOT NULL,
                     queue VARCHAR(100) NOT NULL DEFAULT \'default\',
@@ -624,7 +627,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 ),
                 'Create delivered_at index on queue jobs (PostgreSQL)',
             );
-        } elseif ($this->isSqlite()) {
+        }
+
+        if ($this->isSqlite()) {
             $recorder->addSql(sprintf('CREATE TABLE IF NOT EXISTS %sfaqjobs (
                     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                     queue VARCHAR(100) NOT NULL DEFAULT \'default\',
@@ -650,7 +655,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 ),
                 'Create delivered_at index on queue jobs (SQLite)',
             );
-        } elseif ($this->isSqlServer()) {
+        }
+
+        if ($this->isSqlServer()) {
             $recorder->addSql(
                 sprintf(
                     "IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'%sfaqjobs') AND type = 'U') "
@@ -711,7 +718,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
                 $this->tablePrefix,
             ), 'Create API keys table (MySQL)');
-        } elseif ($this->isPostgreSql()) {
+        }
+
+        if ($this->isPostgreSql()) {
             $recorder->addSql(sprintf('CREATE TABLE IF NOT EXISTS %sfaqapi_keys (
                     id INTEGER NOT NULL,
                     user_id INTEGER NOT NULL,
@@ -736,7 +745,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 sprintf('CREATE INDEX IF NOT EXISTS idx_api_key_user ON %sfaqapi_keys (user_id)', $this->tablePrefix),
                 'Create user_id index on API keys (PostgreSQL)',
             );
-        } elseif ($this->isSqlite()) {
+        }
+
+        if ($this->isSqlite()) {
             $recorder->addSql(sprintf('CREATE TABLE IF NOT EXISTS %sfaqapi_keys (
                     id INTEGER NOT NULL,
                     user_id INTEGER NOT NULL,
@@ -761,7 +772,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 sprintf('CREATE INDEX IF NOT EXISTS idx_api_key_user ON %sfaqapi_keys (user_id)', $this->tablePrefix),
                 'Create user_id index on API keys (SQLite)',
             );
-        } elseif ($this->isSqlServer()) {
+        }
+
+        if ($this->isSqlServer()) {
             $recorder->addSql(
                 sprintf(
                     "IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'%sfaqapi_keys') AND type = 'U') "
@@ -906,7 +919,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
                 $this->tablePrefix,
             ), 'Create OAuth2 auth codes table (MySQL)');
-        } elseif ($this->isPostgreSql()) {
+        }
+
+        if ($this->isPostgreSql()) {
             $recorder->addSql(sprintf(
                 'CREATE TABLE IF NOT EXISTS %sfaqoauth_clients (
                     client_id VARCHAR(80) NOT NULL,
@@ -1007,7 +1022,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 ),
                 'Create OAuth2 auth code user index (PostgreSQL)',
             );
-        } elseif ($this->isSqlite()) {
+        }
+
+        if ($this->isSqlite()) {
             $recorder->addSql(sprintf('CREATE TABLE IF NOT EXISTS %sfaqoauth_clients (
                     client_id VARCHAR(80) NOT NULL,
                     client_secret VARCHAR(255) NULL,
@@ -1101,7 +1118,9 @@ readonly class Migration420Alpha extends AbstractMigration
                 ),
                 'Create OAuth2 auth code user index (SQLite)',
             );
-        } elseif ($this->isSqlServer()) {
+        }
+
+        if ($this->isSqlServer()) {
             $recorder->addSql(
                 sprintf(
                     "IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'%sfaqoauth_clients') AND type = 'U') "

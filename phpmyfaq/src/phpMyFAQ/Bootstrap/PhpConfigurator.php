@@ -42,6 +42,7 @@ class PhpConfigurator
     /**
      * Increases PCRE limits to handle large content.
      */
+    /* @mago-expect lint:no-ini-set - this bootstrap class is the single place that configures PHP runtime settings */
     public static function configurePcre(): void
     {
         ini_set('pcre.backtrack_limit', value: '100000000');
@@ -60,6 +61,7 @@ class PhpConfigurator
     /**
      * Configures secure session settings if no session is active yet.
      */
+    /* @mago-expect lint:no-ini-set - this bootstrap class is the single place that configures PHP runtime settings */
     public static function configureSession(?Configuration $configuration = null): void
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {

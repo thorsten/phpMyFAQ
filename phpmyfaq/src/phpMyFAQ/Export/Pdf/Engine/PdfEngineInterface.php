@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Export\Pdf\Engine;
 
+/* @mago-expect lint:too-many-methods - mirrors the TCPDF surface the export needs */
 interface PdfEngineInterface
 {
     // Lifecycle
@@ -76,6 +77,7 @@ interface PdfEngineInterface
         string $align = '',
     ): void;
 
+    /* @mago-expect lint:excessive-parameter-list - mirrors the TCPDF method signature */
     public function writeHtmlCell(
         float $w,
         float $h,
@@ -93,6 +95,7 @@ interface PdfEngineInterface
 
     public function multiCell(float $w, float $h, string $txt, mixed $border = 0, string $align = 'J'): void;
 
+    /* @mago-expect lint:excessive-parameter-list - mirrors the TCPDF method signature */
     public function cell(
         float $w,
         float $h,

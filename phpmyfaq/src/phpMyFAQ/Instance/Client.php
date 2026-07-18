@@ -32,6 +32,7 @@ use phpMyFAQ\Instance\Database as InstanceDatabase;
  *
  * @package phpMyFAQ\Instance
  */
+/* @mago-expect lint:too-many-methods - covers the full tenant-provisioning lifecycle; split planned with the multi-tenancy rework */
 class Client extends Instance
 {
     private ?Filesystem $filesystem = null;

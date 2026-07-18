@@ -23,6 +23,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
 
+/* @mago-expect lint:too-many-methods - provides the full migration-recording toolkit to subclasses */
 abstract readonly class AbstractMigration implements MigrationInterface
 {
     protected string $tablePrefix;

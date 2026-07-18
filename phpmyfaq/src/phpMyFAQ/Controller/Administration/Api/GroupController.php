@@ -170,10 +170,9 @@ final class GroupController extends AbstractAdministrationApiController
             return $this->json(new \stdClass(), Response::HTTP_OK);
         }
 
-        return $this->json(
-            $currentUser->perm->getAllCategoryRestrictions($groupId) ?: new \stdClass(),
-            Response::HTTP_OK,
-        );
+        $restrictions = $currentUser->perm->getAllCategoryRestrictions($groupId);
+
+        return $this->json($restrictions === [] ? new \stdClass() : $restrictions, Response::HTTP_OK);
     }
 
     /**
@@ -190,7 +189,7 @@ final class GroupController extends AbstractAdministrationApiController
             return $this->json(['error' => 'Group permissions are not enabled.'], Response::HTTP_BAD_REQUEST);
         }
 
-        $data = json_decode($request->getContent(), true);
+        $data = json_decode($request->getContent(), associative: true);
         if (!is_array($data)) {
             return $this->json(['error' => 'Invalid JSON payload.'], Response::HTTP_BAD_REQUEST);
         }

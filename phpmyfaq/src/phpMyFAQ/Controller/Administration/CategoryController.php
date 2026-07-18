@@ -236,41 +236,37 @@ final class CategoryController extends AbstractAdministrationController
             ->setParentId($parentId)
             ->setShowHome((bool) Filter::filterVar($request->request->get(key: 'show_home'), FILTER_VALIDATE_INT));
 
-        $permissions = [];
-        if ('all' === Filter::filterVar($request->request->get(key: 'userpermission'), FILTER_SANITIZE_SPECIAL_CHARS)) {
-            $permissions += [
-                'restricted_user' => [
-                    -1,
-                ],
-            ];
-        } else {
-            $restrictedUser = Filter::filterVar($request->request->get(key: 'restricted_users'), FILTER_VALIDATE_INT);
-            $permissions += [
-                'restricted_user' => $restrictedUser === null ? [] : [$restrictedUser],
-            ];
+        $permissions = [
+            'restricted_user' => [],
+            'restricted_groups' => [],
+        ];
+        $userPermissionMode = Filter::filterVar(
+            $request->request->get(key: 'userpermission'),
+            FILTER_SANITIZE_SPECIAL_CHARS,
+        );
+        if ('all' === $userPermissionMode) {
+            $permissions['restricted_user'] = [-1];
         }
 
-        if (
-            'all' === Filter::filterVar($request->request->get(key: 'grouppermission'), FILTER_SANITIZE_SPECIAL_CHARS)
-        ) {
-            $permissions += [
-                'restricted_groups' => [
-                    -1,
-                ],
-            ];
-        } else {
+        if ('all' !== $userPermissionMode) {
+            $restrictedUser = Filter::filterVar($request->request->get(key: 'restricted_users'), FILTER_VALIDATE_INT);
+            $permissions['restricted_user'] = $restrictedUser === null ? [] : [$restrictedUser];
+        }
+
+        $groupPermissionMode = Filter::filterVar(
+            $request->request->get(key: 'grouppermission'),
+            FILTER_SANITIZE_SPECIAL_CHARS,
+        );
+        if ('all' === $groupPermissionMode) {
+            $permissions['restricted_groups'] = [-1];
+        }
+
+        if ('all' !== $groupPermissionMode) {
             $restrictedGroups = $request->request->all(key: 'restricted_groups');
-            $permissions += [
-                'restricted_groups' => is_array($restrictedGroups)
-                    ? array_values(array_filter(
-                        array_map(static fn($value): ?int => Filter::filterVar(
-                            $value,
-                            FILTER_VALIDATE_INT,
-                        ), $restrictedGroups),
-                        static fn($value): bool => $value !== null,
-                    ))
-                    : [],
-            ];
+            $permissions['restricted_groups'] = array_values(array_filter(
+                array_map(static fn($value): ?int => Filter::filterVar($value, FILTER_VALIDATE_INT), $restrictedGroups),
+                static fn($value): bool => $value !== null,
+            ));
         }
 
         $templateVars = [
@@ -332,7 +328,9 @@ final class CategoryController extends AbstractAdministrationController
                 'isSuccess' => true,
                 'successMessage' => Translation::get(key: 'ad_categ_added'),
             ];
-        } else {
+        }
+
+        if (!$categoryId) {
             $this->configuration->getLogger()->error('Failed to add category', [
                 'sqlError' => $this->configuration->getDb()->error(),
             ]);
@@ -386,22 +384,12 @@ final class CategoryController extends AbstractAdministrationController
         $seoData = $this->seo->get($seoEntity);
 
         $userPermission = $this->categoryPermission->get(CategoryPermission::USER, [$categoryId]);
-        if ($userPermission[0] === -1) {
-            $allUsers = true;
-            $restrictedUsers = false;
-        } else {
-            $allUsers = false;
-            $restrictedUsers = true;
-        }
+        $allUsers = $userPermission[0] === -1;
+        $restrictedUsers = !$allUsers;
 
         $groupPermission = $this->categoryPermission->get(CategoryPermission::GROUP, [$categoryId]);
-        if ($groupPermission[0] === -1) {
-            $allGroups = true;
-            $restrictedGroups = false;
-        } else {
-            $allGroups = false;
-            $restrictedGroups = true;
-        }
+        $allGroups = $groupPermission[0] === -1;
+        $restrictedGroups = !$allGroups;
 
         $header =
             Translation::get(key: 'ad_categ_edit_1')
@@ -627,49 +615,46 @@ final class CategoryController extends AbstractAdministrationController
             ->setImage($image)
             ->setShowHome((bool) Filter::filterVar($request->request->get(key: 'show_home'), FILTER_VALIDATE_INT));
 
-        $permissions = [];
-        if ('all' === Filter::filterVar($request->request->get(key: 'userpermission'), FILTER_SANITIZE_SPECIAL_CHARS)) {
-            $permissions += [
-                'restricted_user' => [
-                    -1,
-                ],
-            ];
-        } else {
-            $restrictedUser = Filter::filterVar($request->request->get(key: 'restricted_users'), FILTER_VALIDATE_INT);
-            $permissions += [
-                'restricted_user' => $restrictedUser === null ? [] : [$restrictedUser],
-            ];
+        $permissions = [
+            'restricted_user' => [],
+            'restricted_groups' => [],
+        ];
+        $userPermissionMode = Filter::filterVar(
+            $request->request->get(key: 'userpermission'),
+            FILTER_SANITIZE_SPECIAL_CHARS,
+        );
+        if ('all' === $userPermissionMode) {
+            $permissions['restricted_user'] = [-1];
         }
 
-        if (
-            'all' === Filter::filterVar($request->request->get(key: 'grouppermission'), FILTER_SANITIZE_SPECIAL_CHARS)
-        ) {
-            $permissions += [
-                'restricted_groups' => [
-                    -1,
-                ],
-            ];
-        } else {
+        if ('all' !== $userPermissionMode) {
+            $restrictedUser = Filter::filterVar($request->request->get(key: 'restricted_users'), FILTER_VALIDATE_INT);
+            $permissions['restricted_user'] = $restrictedUser === null ? [] : [$restrictedUser];
+        }
+
+        $groupPermissionMode = Filter::filterVar(
+            $request->request->get(key: 'grouppermission'),
+            FILTER_SANITIZE_SPECIAL_CHARS,
+        );
+        if ('all' === $groupPermissionMode) {
+            $permissions['restricted_groups'] = [-1];
+        }
+
+        if ('all' !== $groupPermissionMode) {
             $restrictedGroups = $request->request->all(key: 'restricted_groups');
-            $permissions += [
-                'restricted_groups' => is_array($restrictedGroups)
-                    ? array_values(array_filter(
-                        array_map(static fn($value): ?int => Filter::filterVar(
-                            $value,
-                            FILTER_VALIDATE_INT,
-                        ), $restrictedGroups),
-                        static fn($value): bool => $value !== null,
-                    ))
-                    : [],
-            ];
+            $permissions['restricted_groups'] = array_values(array_filter(
+                array_map(static fn($value): ?int => Filter::filterVar($value, FILTER_VALIDATE_INT), $restrictedGroups),
+                static fn($value): bool => $value !== null,
+            ));
         }
 
         $templateVars = [
             'msgHeaderCategoryMain' => Translation::get(key: 'msgHeaderCategoryOverview'),
         ];
 
-        if (!$category->hasLanguage($categoryEntity->getId(), $categoryEntity->getLang())) {
-            if (
+        $needsTranslation = !$category->hasLanguage($categoryEntity->getId(), $categoryEntity->getLang());
+        if ($needsTranslation) {
+            $translated =
                 $category->create($categoryEntity)
                 && $categoryPermission->add(
                     CategoryPermission::USER,
@@ -680,8 +665,8 @@ final class CategoryController extends AbstractAdministrationController
                     CategoryPermission::GROUP,
                     [$categoryEntity->getId()],
                     $permissions['restricted_groups'],
-                )
-            ) {
+                );
+            if ($translated) {
                 // Add SERP-Title and Description to the translated category
                 $seoEntity = new SeoEntity();
                 $seoEntity
@@ -699,9 +684,12 @@ final class CategoryController extends AbstractAdministrationController
                         '',
                     ));
 
-                if ($this->seo->get($seoEntity)->getId() === null) {
+                $existingSeoId = $this->seo->get($seoEntity)->getId();
+                if ($existingSeoId === null) {
                     $this->seo->create($seoEntity);
-                } else {
+                }
+
+                if ($existingSeoId !== null) {
                     $this->seo->update($seoEntity);
                 }
 
@@ -710,7 +698,9 @@ final class CategoryController extends AbstractAdministrationController
                     'isSuccess' => true,
                     'successMessage' => Translation::get(key: 'ad_categ_translated'),
                 ];
-            } else {
+            }
+
+            if (!$translated) {
                 $templateVars = [
                     ...$templateVars,
                     'isError' => true,
@@ -722,70 +712,84 @@ final class CategoryController extends AbstractAdministrationController
                     'sqlError' => $this->configuration->getDb()->error(),
                 ]);
             }
-        } elseif ($category->update($categoryEntity)) {
-            $categoryPermission->delete(CategoryPermission::USER, [$categoryEntity->getId()]);
-            $categoryPermission->delete(CategoryPermission::GROUP, [$categoryEntity->getId()]);
-            $categoryPermission->add(
-                CategoryPermission::USER,
-                [$categoryEntity->getId()],
-                $permissions['restricted_user'],
-            );
-            $categoryPermission->add(
-                CategoryPermission::GROUP,
-                [$categoryEntity->getId()],
-                $permissions['restricted_groups'],
-            );
+        }
 
-            if ($hasUploadedImage) {
-                try {
-                    $this->categoryImage->upload();
-                } catch (Throwable $exception) {
-                    $templateVars = [
-                        ...$templateVars,
-                        'isWarning' => true,
-                        'warningMessage' => $exception->getMessage(),
-                    ];
+        if (!$needsTranslation) {
+            $updated = $category->update($categoryEntity);
+            if ($updated) {
+                $categoryPermission->delete(CategoryPermission::USER, [$categoryEntity->getId()]);
+                $categoryPermission->delete(CategoryPermission::GROUP, [$categoryEntity->getId()]);
+                $categoryPermission->add(
+                    CategoryPermission::USER,
+                    [$categoryEntity->getId()],
+                    $permissions['restricted_user'],
+                );
+                $categoryPermission->add(
+                    CategoryPermission::GROUP,
+                    [$categoryEntity->getId()],
+                    $permissions['restricted_groups'],
+                );
+
+                if ($hasUploadedImage) {
+                    try {
+                        $this->categoryImage->upload();
+                    } catch (Throwable $exception) {
+                        $templateVars = [
+                            ...$templateVars,
+                            'isWarning' => true,
+                            'warningMessage' => $exception->getMessage(),
+                        ];
+                    }
                 }
+
+                // SEO data
+                $seoEntity = new SeoEntity();
+                $seoEntity
+                    ->setSeoType(SeoType::CATEGORY)
+                    ->setReferenceId($categoryId)
+                    ->setReferenceLanguage($categoryLang)
+                    ->setTitle(Filter::filterVar(
+                        $request->request->get('serpTitle'),
+                        FILTER_SANITIZE_SPECIAL_CHARS,
+                        '',
+                    ))
+                    ->setDescription(Filter::filterVar(
+                        $request->request->get('serpDescription'),
+                        FILTER_SANITIZE_SPECIAL_CHARS,
+                        '',
+                    ));
+
+                $existingSeoId = $this->seo->get($seoEntity)->getId();
+                if ($existingSeoId === null) {
+                    $this->seo->create($seoEntity);
+                }
+
+                if ($existingSeoId !== null) {
+                    $this->seo->update($seoEntity);
+                }
+
+                // Admin Log
+                $this->adminLog->log($this->currentUser, AdminLogType::CATEGORY_EDIT->value . ':' . $categoryId);
+
+                $templateVars = [
+                    ...$templateVars,
+                    'isSuccess' => true,
+                    'successMessage' => Translation::get(key: 'ad_categ_updated'),
+                ];
             }
 
-            // SEO data
-            $seoEntity = new SeoEntity();
-            $seoEntity
-                ->setSeoType(SeoType::CATEGORY)
-                ->setReferenceId($categoryId)
-                ->setReferenceLanguage($categoryLang)
-                ->setTitle(Filter::filterVar($request->request->get('serpTitle'), FILTER_SANITIZE_SPECIAL_CHARS, ''))
-                ->setDescription(Filter::filterVar(
-                    $request->request->get('serpDescription'),
-                    FILTER_SANITIZE_SPECIAL_CHARS,
-                    '',
-                ));
+            if (!$updated) {
+                $this->configuration->getLogger()->error('Failed to update category', [
+                    'categoryId' => $categoryId,
+                    'sqlError' => $this->configuration->getDb()->error(),
+                ]);
 
-            if ($this->seo->get($seoEntity)->getId() === null) {
-                $this->seo->create($seoEntity);
-            } else {
-                $this->seo->update($seoEntity);
+                $templateVars = [
+                    ...$templateVars,
+                    'isError' => true,
+                    'errorMessage' => Translation::get(key: 'ad_msg_mysqlerr'),
+                ];
             }
-
-            // Admin Log
-            $this->adminLog->log($this->currentUser, AdminLogType::CATEGORY_EDIT->value . ':' . $categoryId);
-
-            $templateVars = [
-                ...$templateVars,
-                'isSuccess' => true,
-                'successMessage' => Translation::get(key: 'ad_categ_updated'),
-            ];
-        } else {
-            $this->configuration->getLogger()->error('Failed to update category', [
-                'categoryId' => $categoryId,
-                'sqlError' => $this->configuration->getDb()->error(),
-            ]);
-
-            $templateVars = [
-                ...$templateVars,
-                'isError' => true,
-                'errorMessage' => Translation::get(key: 'ad_msg_mysqlerr'),
-            ];
         }
 
         return $this->render(file: '@admin/content/category.main.twig', context: [

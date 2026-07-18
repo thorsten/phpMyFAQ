@@ -25,6 +25,7 @@ use DateTime;
  *
  * @package phpMyFAQ\Entity
  */
+/* @mago-expect lint:too-many-properties - mirrors the faqdata table columns */
 class FaqEntity
 {
     private ?int $id = null;

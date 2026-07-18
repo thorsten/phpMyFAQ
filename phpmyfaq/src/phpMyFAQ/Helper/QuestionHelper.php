@@ -72,6 +72,7 @@ class QuestionHelper extends AbstractHelper
         return $smartAnswer . '</ul>';
     }
 
+    /* @mago-expect lint:halstead - renders the full question form in one method; split planned with the forms rework */
     public function getOpenQuestions(): stdClass
     {
         $date = new Date($this->configuration);
