@@ -33,7 +33,7 @@ interface TreeBuilderInterface
      * Builds the admin category tree structure.
      *
      * @param array<int, array<string, mixed>> $categories
-     * @return array<int, array<string, mixed>>
+     * @return array<int, array<array-key, mixed>>
      */
     public function buildAdminCategoryTree(array $categories, int $parentId = 0): array;
 
@@ -42,7 +42,7 @@ interface TreeBuilderInterface
      *
      * @param array<int, array<string, mixed>> $categoryNames
      * @param array<int, array<int, array<string, mixed>>> $children
-     * @return array<string, mixed>
+     * @return array<int, string>
      */
     public function buildTree(array $categoryNames, array $children, int $categoryId): array;
 

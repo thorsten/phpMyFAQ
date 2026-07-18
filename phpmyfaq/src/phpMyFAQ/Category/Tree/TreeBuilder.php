@@ -40,7 +40,7 @@ class TreeBuilder implements TreeBuilderInterface
      *
      * @param array<int, array<string, mixed>> $categories Flat list keyed or not by id, each with id,parent_id
      * @param int $parentId Parent id to expand from
-     * @return array<int, array> Map of categoryId => subtree
+     * @return array<int, array<array-key, mixed>> Map of categoryId => recursive subtree
      */
     public function buildAdminCategoryTree(array $categories, int $parentId = 0): array
     {
@@ -84,7 +84,7 @@ class TreeBuilder implements TreeBuilderInterface
             $row = $categories[$childId];
             $row['indent'] = $indent;
             $catTree[] = $row;
-            $catTree = array_merge($catTree, $this->buildLinearTree($categories, $row['id'], $indent + 1));
+            $catTree = array_merge($catTree, $this->buildLinearTree($categories, (int) $row['id'], $indent + 1));
         }
 
         return $catTree;

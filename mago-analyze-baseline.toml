@@ -1886,230 +1886,20 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Category::getLevelOf`: expected `int`, but provided type `array-key` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Category\CategoryTreeFacade::buildAdminCategoryTree`: expected `array<int, array<string, mixed>>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Category\CategoryTreeFacade::buildLinearTree`: expected `array<int, array<string, mixed>>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Category\CategoryTreeFacade::getLevelOf`: expected `array<int, array<string, mixed>>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Category\Navigation\BreadcrumbsBuilder::buildFromIdsWithStartPage`: expected `array<int, array<string, mixed>>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Category\Navigation\BreadcrumbsBuilder::buildFromIds`: expected `array<int, array<string, mixed>>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Category\Tree\TreeBuilder::getChildNodes`: expected `array<int, array<int, array<string, mixed>>>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Category\Tree\TreeBuilder::getChildren`: expected `array<int, array<int, array<string, mixed>>>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Category\Tree\TreeBuilder::getNodes`: expected `array<int, array<string, mixed>>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #2 of `phpMyFAQ\Category\Presentation\AdminCategoryTreePresenter::transform`: expected `array<int, array<string, mixed>>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #3 of `phpMyFAQ\Category\Presentation\AdminCategoryTreePresenter::transform`: expected `array<int, array<int, array<string, mixed>>>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #2 of `phpMyFAQ\Category\Navigation\BreadcrumbsBuilder::buildFromIdsWithStartPage`: expected `array<array-key, int>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #2 of `phpMyFAQ\Category\Navigation\BreadcrumbsBuilder::buildFromIds`: expected `array<array-key, int>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #3 of `phpMyFAQ\Category\CategoryRepositoryInterface::countCategories`: expected `array<array-key, int>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #7 of `phpMyFAQ\Category\CategoryRepositoryInterface::findCategoriesPaginated`: expected `array<array-key, int>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<int, array<string, mixed>>` for function `phpMyFAQ\Category::getCategoryNames`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Category::expand`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Category::getLineCategory`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `array_key_exists`: expected `array<array-key, mixed>`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #3 of `phpMyFAQ\Category\CategoryCache::addChild`: expected `array<array-key, mixed>`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "mixed-operand"
-message = "Left operand in `>` comparison has `mixed` type."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "mixed-operand"
-message = "Left operand in binary operation has type `mixed`."
+code = "redundant-logical-operation"
+message = "Redundant `&&` operation: left operand is always truthy and right operand is evaluated."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Category::getCategoryDescription`. Saw type `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Category::getCategoryIdFromFaq`. Saw type `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Category::getCategoryName`. Saw type `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category.php"
-code = "possibly-null-argument"
-message = 'Argument #2 of method `phpMyFAQ\Category\CategoryService::getCategoryData` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryCache.php"
-code = "property-type-coercion"
-message = "A value of a less specific type `array<array-key, mixed>` is being assigned to property `$$catTree` (array<int, array<string, mixed>>)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryCache.php"
-code = "property-type-coercion"
-message = "A value of a less specific type `array<array-key, mixed>` is being assigned to property `$$categories` (array<int, array<string, mixed>>)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryCache.php"
-code = "property-type-coercion"
-message = "A value of a less specific type `array<array-key, mixed>` is being assigned to property `$$categoryNames` (array<int, array<string, mixed>>)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryCache.php"
-code = "property-type-coercion"
-message = "A value of a less specific type `array<array-key, mixed>` is being assigned to property `$$children` (array<int, array<int, array<string, mixed>>>)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryCache.php"
-code = "property-type-coercion"
-message = "A value of a less specific type `array<array-key, mixed>` is being assigned to property `$$treeTab` (array<int, array<string, mixed>>)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryCache.php"
-code = "property-type-coercion"
-message = "A value of a less specific type `array<int, array<array-key, mixed>>` is being assigned to property `$$categories` (array<int, array<string, mixed>>)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryCache.php"
-code = "property-type-coercion"
-message = "A value of a less specific type `array<int, array<array-key, mixed>>` is being assigned to property `$$categoryNames` (array<int, array<string, mixed>>)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryCache.php"
-code = "property-type-coercion"
-message = "A value of a less specific type `array<int, array<array-key, mixed>>` is being assigned to property `$$treeTab` (array<int, array<string, mixed>>)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryCache.php"
-code = "property-type-coercion"
-message = "A value of a less specific type `array<int, array<int, array<array-key, mixed>>>` is being assigned to property `$$children` (array<int, array<int, array<string, mixed>>>)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryCache.php"
-code = "property-type-coercion"
-message = "A value of a less specific type `non-empty-array<int, array<string, mixed>>|non-empty-list<array<array-key, mixed>>` is being assigned to property `$$treeTab` (array<int, array<string, mixed>>)."
+code = "redundant-type-comparison"
+message = "Redundant type assertion: `$categoryName` is already `array<string, mixed>`."
 count = 1
 
 [[issues]]
@@ -2174,30 +1964,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/Navigation/CategoryTreeNavigator.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Category\Tree\TreeBuilder::buildTree`: expected `array<int, array<string, mixed>>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Navigation/CategoryTreeNavigator.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Category\Tree\TreeBuilder::getNodes`: expected `array<int, array<string, mixed>>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Navigation/CategoryTreeNavigator.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #2 of `phpMyFAQ\Category\Tree\TreeBuilder::buildTree`: expected `array<int, array<int, array<string, mixed>>>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Navigation/CategoryTreeNavigator.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `array_keys`: expected `array<('K.array_keys() extends array-key), ('V.array_keys() extends mixed)>`, but found `nonnull`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Navigation/CategoryTreeNavigator.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `count`: expected `Countable|array<array-key, mixed>`, but found `nonnull`."
 count = 1
@@ -2218,7 +1984,7 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Category/Navigation/CategoryTreeNavigator.php"
 code = "mixed-assignment"
 message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/Navigation/CategoryTreeNavigator.php"
@@ -2356,24 +2122,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Category/Tree/TreeBuilder.php"
 code = "incompatible-parameter-name"
 message = 'Parameter #2 of `phpMyFAQ\Category\Tree\TreeBuilder::getbrothers()` is named `$childrenMap` but parent `phpMyFAQ\Category\Tree\TreeBuilderInterface::getbrothers()` names it `$children`'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Tree/TreeBuilder.php"
-code = "incompatible-return-type"
-message = 'Return type `array<int, array<array-key, mixed>>` of `phpMyFAQ\Category\Tree\TreeBuilder::buildadmincategorytree()` is incompatible with parent return type `array<int, array<string, mixed>>` of `phpMyFAQ\Category\Tree\TreeBuilderInterface::buildadmincategorytree()`'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Tree/TreeBuilder.php"
-code = "incompatible-return-type"
-message = 'Return type `array<int, string>` of `phpMyFAQ\Category\Tree\TreeBuilder::buildtree()` is incompatible with parent return type `array<string, mixed>` of `phpMyFAQ\Category\Tree\TreeBuilderInterface::buildtree()`'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Tree/TreeBuilder.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Category\Tree\TreeBuilder::buildLinearTree`: expected `int`, but found `mixed`.'
 count = 1
 
 [[issues]]
@@ -3952,6 +3700,12 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
 code = "invalid-return-statement"
 message = '''Invalid return type for function `phpMyFAQ\Controller\Administration\CategoryController::getBaseTemplateVars`: expected `array<string, string>`, but found `array{'ad_categ_add': array<array-key, string>|null|string, 'ad_entry_restricted_groups': array<array-key, string>|null|string, 'ad_entry_restricted_users': array<array-key, string>|null|string, 'ad_entry_userpermission': array<array-key, string>|null|string, 'buttonCancel': array<array-key, string>|null|string, 'csrfTokenInput': string, 'msgAccessAllUsers': array<array-key, string>|null|string, 'permLevel': mixed, 'restricted_groups': string, 'userSelection': array<array-key, mixed>}`.'''
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Category::buildAdminCategoryTree`: expected `array<int, array<string, mixed>>`, but provided type `array<int, array<array-key, mixed>>` is less specific.'
 count = 1
 
 [[issues]]
@@ -6656,15 +6410,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqDisplayService.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqDisplayService.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqDisplayService.php"
@@ -7036,12 +6784,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Helper/CategoryHelper.php"
 code = "less-specific-argument"
 message = 'Argument type mismatch for argument #2 of `phpMyFAQ\Helper\CategoryHelper::normalizeCategoryTree`: expected `array<int, array<array-key, mixed>>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/CategoryHelper.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Category\Relation::setGroups`: expected `array<array-key, int>`, but provided type `array<array-key, mixed>` is less specific.'
 count = 1
 
 [[issues]]

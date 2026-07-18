@@ -47,7 +47,7 @@ final class CategoryTreeFacade
      * Builds the admin category tree.
      *
      * @param array<int, array<string, mixed>> $categories
-     * @return array<int, array>
+     * @return array<int, array<array-key, mixed>>
      */
     public function buildAdminCategoryTree(array $categories, int $parentId = 0): array
     {

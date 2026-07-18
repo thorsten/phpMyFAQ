@@ -55,56 +55,67 @@ final class CategoryCache
      */
     private array $children = [];
 
+    /** @return array<int, array<string, mixed>> */
     public function getCategories(): array
     {
         return $this->categories;
     }
 
+    /** @param array<int, array<string, mixed>> $categories */
     public function setCategories(array $categories): void
     {
         $this->categories = $categories;
     }
 
+    /** @param array<string, mixed> $category */
     public function addCategory(int $id, array $category): void
     {
         $this->categories[$id] = $category;
     }
 
+    /** @return array<int, array<string, mixed>> */
     public function getCategoryNames(): array
     {
         return $this->categoryNames;
     }
 
+    /** @param array<int, array<string, mixed>> $categoryNames */
     public function setCategoryNames(array $categoryNames): void
     {
         $this->categoryNames = $categoryNames;
     }
 
+    /** @param array<string, mixed> $categoryName */
     public function addCategoryName(int $id, array $categoryName): void
     {
         $this->categoryNames[$id] = $categoryName;
     }
 
+    /** @return array<string, mixed> */
     public function getCategoryName(int $id): array
     {
         return $this->categoryNames[$id] ?? [];
     }
 
+    /** @return array<int, array<string, mixed>> */
     public function getTreeTab(): array
     {
         return $this->treeTab;
     }
 
+    /** @param array<int, array<string, mixed>> $treeTab */
     public function setTreeTab(array $treeTab): void
     {
         $this->treeTab = $treeTab;
     }
 
+    /** @param array<string, mixed> $entry */
     public function addTreeTabEntry(array $entry): void
     {
         $this->treeTab[] = $entry;
     }
 
+    /** @param array<string, mixed> $entry */
     public function updateTreeTabEntry(int $index, array $entry): void
     {
         if (array_key_exists($index, $this->treeTab)) {
@@ -112,6 +123,7 @@ final class CategoryCache
         }
     }
 
+    /** @return array<string, mixed>|null */
     public function getTreeTabEntry(int $index): ?array
     {
         return $this->treeTab[$index] ?? null;
@@ -122,31 +134,37 @@ final class CategoryCache
         return count($this->treeTab);
     }
 
+    /** @return array<int, array<string, mixed>> */
     public function getCatTree(): array
     {
         return $this->catTree;
     }
 
+    /** @param array<int, array<string, mixed>> $catTree */
     public function setCatTree(array $catTree): void
     {
         $this->catTree = $catTree;
     }
 
+    /** @return array<int, array<int, array<string, mixed>>> */
     public function getChildren(): array
     {
         return $this->children;
     }
 
+    /** @param array<int, array<int, array<string, mixed>>> $children */
     public function setChildren(array $children): void
     {
         $this->children = $children;
     }
 
+    /** @param array<string, mixed> $categoryRef */
     public function addChild(int $parentId, int $childId, array &$categoryRef): void
     {
         $this->children[$parentId][$childId] = &$categoryRef;
     }
 
+    /** @return array<int, array<string, mixed>> */
     public function getChildrenOfParent(int $parentId): array
     {
         return $this->children[$parentId] ?? [];

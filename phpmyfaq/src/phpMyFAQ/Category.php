@@ -221,6 +221,9 @@ class Category
         return $this->categoryPermissionContext->getUser();
     }
 
+    /**
+     * @return int[]
+     */
     public function getGroups(): array
     {
         return $this->categoryPermissionContext->getGroups();
@@ -333,9 +336,13 @@ class Category
             $this->getUser(),
         );
         foreach ($rows as $id => $row) {
-            $categories[$id] = $row
+            if (!is_array($row)) {
+                continue;
+            }
+
+            $categories[(int) $id] = $row
             + [
-                'level' => $this->getLevelOf($id),
+                'level' => $this->getLevelOf((int) $id),
             ];
         }
 
@@ -373,6 +380,10 @@ class Category
     /**
      * Creates the category tree for the admin category overview.
      */
+    /**
+     * @param array<int, array<string, mixed>> $categories
+     * @return array<int, array<array-key, mixed>>
+     */
     public function buildAdminCategoryTree(array $categories, int $parentId = 0): array
     {
         return $this->getTreeFacade()->buildAdminCategoryTree($categories, $parentId);
@@ -398,6 +409,8 @@ class Category
 
     /**
      * List in an array the root, super-root, ... of the $id.
+     *
+     * @return int[]
      */
     private function getNodes(int $categoryId): array
     {
@@ -432,12 +445,13 @@ class Category
         $ascendants[] = $categoryId;
         $numAscendants = count($ascendants);
         for ($i = 0; $i < $numAscendants; ++$i) {
-            $lineIndex = $this->getLineCategory($ascendants[$i]);
+            $ascendantId = (int) $ascendants[$i];
+            $lineIndex = $this->getLineCategory($ascendantId);
             $entry = $this->categoryCache->getTreeTabEntry($lineIndex);
             if ($entry !== null && array_key_exists('numChildren', $entry)) {
-                $numChildren = $entry['numChildren'];
+                $numChildren = (int) $entry['numChildren'];
                 if ($numChildren > 0) {
-                    $this->expand($ascendants[$i]);
+                    $this->expand($ascendantId);
                     continue;
                 }
 
@@ -487,8 +501,10 @@ class Category
 
     public function getCategoryData(int $categoryId): CategoryEntity
     {
-        return $this->language !== null
-            ? $this->getCategoryService()->getCategoryData($categoryId, $this->language)
+        $language = $this->language;
+
+        return $language !== null
+            ? $this->getCategoryService()->getCategoryData($categoryId, $language)
             : new CategoryEntity();
     }
 
@@ -557,6 +573,9 @@ class Category
         return $cats[0] ?? 0;
     }
 
+    /**
+     * @return int[]
+     */
     public function getCategoryIdsFromFaq(int $faqId): array
     {
         $categories = $this->getCategoriesFromFaq($faqId);
@@ -578,11 +597,14 @@ class Category
         return $id ?? false;
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     public function getCategoriesFromFaq(int $faqId): array
     {
         $rows = $this->getCategoryRepository()->findCategoriesFromFaq($faqId, (string) $this->language);
         foreach ($rows as $id => $row) {
-            $this->categoryCache->addCategory($id, $row);
+            $this->categoryCache->addCategory((int) $id, $row);
         }
 
         return $rows;
@@ -681,13 +703,13 @@ class Category
     public function getCategoryName(int $categoryId): string
     {
         $categoryName = $this->categoryCache->getCategoryName($categoryId);
-        return $categoryName['name'] ?? '';
+        return (string) ($categoryName['name'] ?? '');
     }
 
     public function getCategoryDescription(int $categoryId): string
     {
         $categoryName = $this->categoryCache->getCategoryName($categoryId);
-        return $categoryName['description'] ?? '';
+        return (string) ($categoryName['description'] ?? '');
     }
 
     /**
