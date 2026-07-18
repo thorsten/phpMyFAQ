@@ -412,9 +412,8 @@ class SeedTestDataCommand extends Command
         ));
         $rows = $db->fetchAll($faqResult) ?? [];
         foreach ($rows as $row) {
-            // Drivers return either array rows or stdClass rows — normalize both shapes.
-            $id = is_array($row) ? $row['id'] ?? null : $row->id ?? null;
-            $lang = is_array($row) ? $row['lang'] ?? null : $row->lang ?? null;
+            $id = $row->id ?? null;
+            $lang = $row->lang ?? null;
             if ($id === null || $lang === null) {
                 continue;
             }
@@ -452,14 +451,19 @@ class SeedTestDataCommand extends Command
 
         foreach ($deletes as $query) {
             $result = $db->query($query);
-            $removed += (int) $db->affectedRows($result);
+            $removed += $db->affectedRows();
         }
 
         // Categories and glossary entries have no author field; detect them via the fixture definitions.
         $categoryDefs = $this->loadFixture('categories.json');
         foreach ($categoryDefs as $definition) {
-            foreach ($definition['translations'] ?? [] as $lang => $translation) {
-                $name = $db->escape((string) $translation['name']);
+            $translations = is_array($definition['translations'] ?? null) ? $definition['translations'] : [];
+            foreach ($translations as $lang => $translation) {
+                if (!is_array($translation)) {
+                    continue;
+                }
+
+                $name = $db->escape((string) ($translation['name'] ?? ''));
 
                 // Remove the public access rows for these categories first.
                 $idResult = $db->query(sprintf(
@@ -469,7 +473,7 @@ class SeedTestDataCommand extends Command
                     $db->escape((string) $lang),
                 ));
                 foreach ($db->fetchAll($idResult) ?? [] as $idRow) {
-                    $categoryId = (int) (is_array($idRow) ? $idRow['id'] ?? 0 : $idRow->id ?? 0);
+                    $categoryId = (int) ($idRow->id ?? 0);
                     if ($categoryId === 0) {
                         continue;
                     }
@@ -483,21 +487,26 @@ class SeedTestDataCommand extends Command
                     $name,
                     $db->escape((string) $lang),
                 ));
-                $removed += (int) $db->affectedRows($result);
+                $removed += $db->affectedRows();
             }
         }
 
         $glossaryDefs = $this->loadFixture('glossary.json');
         foreach ($glossaryDefs as $entry) {
-            foreach ($entry['translations'] ?? [] as $lang => $translation) {
-                $item = $db->escape((string) $translation['item']);
+            $glossaryTranslations = is_array($entry['translations'] ?? null) ? $entry['translations'] : [];
+            foreach ($glossaryTranslations as $lang => $translation) {
+                if (!is_array($translation)) {
+                    continue;
+                }
+
+                $item = $db->escape((string) ($translation['item'] ?? ''));
                 $result = $db->query(sprintf(
                     "DELETE FROM %sfaqglossary WHERE item = '%s' AND lang = '%s'",
                     $prefix,
                     $item,
                     $db->escape((string) $lang),
                 ));
-                $removed += (int) $db->affectedRows($result);
+                $removed += $db->affectedRows();
             }
         }
 
