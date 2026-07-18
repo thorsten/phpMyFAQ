@@ -37,16 +37,16 @@ final class FormController extends AbstractController
     public function activateInput(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
         // The frontend sends "checked" as a JSON boolean. FILTER_VALIDATE_INT turns false
         // into null (validation failure), which breaks deactivating an input, so validate
         // it as a boolean and cast to the 0/1 integer the Forms layer expects.
-        $checked = (int) Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN, false);
-        $formId = Filter::filterVar($data->formid, FILTER_VALIDATE_INT);
-        $inputId = Filter::filterVar($data->inputid, FILTER_VALIDATE_INT);
+        $checked = (int) Filter::filterVar($data->checked ?? false, FILTER_VALIDATE_BOOLEAN, false);
+        $formId = (int) Filter::filterVar($data->formid ?? null, FILTER_VALIDATE_INT);
+        $inputId = (int) Filter::filterVar($data->inputid ?? null, FILTER_VALIDATE_INT);
 
         $forms = new Forms($this->configuration);
-        if (!Token::getInstance($this->session)->verifyToken('activate-input', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('activate-input', (string) ($data->csrf ?? ''))) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -62,16 +62,16 @@ final class FormController extends AbstractController
     public function setInputAsRequired(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
         // The frontend sends "checked" as a JSON boolean. FILTER_VALIDATE_INT turns false
         // into null (validation failure), which breaks marking an input as not required, so
         // validate it as a boolean and cast to the 0/1 integer the Forms layer expects.
-        $checked = (int) Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN, false);
-        $formId = Filter::filterVar($data->formid, FILTER_VALIDATE_INT);
-        $inputId = Filter::filterVar($data->inputid, FILTER_VALIDATE_INT);
+        $checked = (int) Filter::filterVar($data->checked ?? false, FILTER_VALIDATE_BOOLEAN, false);
+        $formId = (int) Filter::filterVar($data->formid ?? null, FILTER_VALIDATE_INT);
+        $inputId = (int) Filter::filterVar($data->inputid ?? null, FILTER_VALIDATE_INT);
 
         $forms = new Forms($this->configuration);
-        if (!Token::getInstance($this->session)->verifyToken('require-input', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('require-input', (string) ($data->csrf ?? ''))) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -87,14 +87,14 @@ final class FormController extends AbstractController
     public function editTranslation(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
-        $data = json_decode($request->getContent());
-        $label = Filter::filterVar($data->label, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $formId = (int) Filter::filterVar($data->formId, FILTER_VALIDATE_INT);
-        $inputId = (int) Filter::filterVar($data->inputId, FILTER_VALIDATE_INT);
-        $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $data = $this->getJsonObject($request);
+        $label = Filter::filterVar($data->label ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $formId = (int) Filter::filterVar($data->formId ?? null, FILTER_VALIDATE_INT);
+        $inputId = (int) Filter::filterVar($data->inputId ?? null, FILTER_VALIDATE_INT);
+        $lang = Filter::filterVar($data->lang ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $forms = new Forms($this->configuration);
-        if (!Token::getInstance($this->session)->verifyToken('edit-translation', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('edit-translation', (string) ($data->csrf ?? ''))) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -119,13 +119,13 @@ final class FormController extends AbstractController
     public function deleteTranslation(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
-        $data = json_decode($request->getContent());
-        $formId = (int) Filter::filterVar($data->formId, FILTER_VALIDATE_INT);
-        $inputId = (int) Filter::filterVar($data->inputId, FILTER_VALIDATE_INT);
-        $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $data = $this->getJsonObject($request);
+        $formId = (int) Filter::filterVar($data->formId ?? null, FILTER_VALIDATE_INT);
+        $inputId = (int) Filter::filterVar($data->inputId ?? null, FILTER_VALIDATE_INT);
+        $lang = Filter::filterVar($data->lang ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $forms = new Forms($this->configuration);
-        if (!Token::getInstance($this->session)->verifyToken('delete-translation', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('delete-translation', (string) ($data->csrf ?? ''))) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -144,15 +144,15 @@ final class FormController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        $formId = (int) Filter::filterVar($data->formId, FILTER_VALIDATE_INT);
-        $inputId = (int) Filter::filterVar($data->inputId, FILTER_VALIDATE_INT);
-        $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $translation = Filter::filterVar($data->translation, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $formId = (int) Filter::filterVar($data->formId ?? null, FILTER_VALIDATE_INT);
+        $inputId = (int) Filter::filterVar($data->inputId ?? null, FILTER_VALIDATE_INT);
+        $lang = Filter::filterVar($data->lang ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $translation = Filter::filterVar($data->translation ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $forms = new Forms($this->configuration);
-        if (!Token::getInstance($this->session)->verifyToken('add-translation', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('add-translation', (string) ($data->csrf ?? ''))) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 

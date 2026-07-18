@@ -43,7 +43,18 @@ class Mysqli implements DatabaseDriver
     /**
      * The connection object.
      */
-    private \mysqli|bool $conn = false;
+    private ?\mysqli $conn = null;
+
+    /**
+     * Returns the active connection or fails loudly when connect() has not
+     * been called yet or the connection was already closed.
+     *
+     * @throws Exception
+     */
+    private function connection(): \mysqli
+    {
+        return $this->conn ?? throw new Exception(message: 'There is no open database connection.');
+    }
 
     /**
      * The query log string.
@@ -71,28 +82,30 @@ class Mysqli implements DatabaseDriver
     ): ?bool {
         try {
             // Connect to MySQL via network by default.
-            $this->conn = new \mysqli($host, $user, $password, null, $port);
+            $connection = new \mysqli($host, $user, $password, null, $port);
             if (str_starts_with($host, '/')) {
                 // Connect to MySQL via socket
-                $this->conn = new \mysqli(null, $user, $password, null, $port, $host);
+                $connection = new \mysqli(null, $user, $password, null, $port, $host);
             }
         } catch (mysqli_sql_exception $mysqlisqlexception) {
             throw new Exception($mysqlisqlexception->getMessage());
         }
 
-        if ($this->conn->connect_error) {
-            Database::errorPage($this->conn->connect_errno . ': ' . $this->conn->connect_error);
+        $this->conn = $connection;
+
+        if ($connection->connect_error) {
+            Database::errorPage($connection->connect_errno . ': ' . $connection->connect_error);
             die();
         }
 
         // change character set to UTF-8
-        if (!$this->conn->set_charset('utf8mb4')) {
+        if (!$connection->set_charset('utf8mb4')) {
             Database::errorPage($this->error());
         }
 
         if ('' !== $database) {
             try {
-                $this->conn->select_db($database);
+                $connection->select_db($database);
             } catch (mysqli_sql_exception) {
                 throw new Exception('Cannot connect to database ' . $database);
             }
@@ -106,7 +119,7 @@ class Mysqli implements DatabaseDriver
      */
     public function error(): string
     {
-        return $this->conn->error;
+        return $this->conn instanceof \mysqli ? $this->conn->error : '';
     }
 
     /**
@@ -114,15 +127,15 @@ class Mysqli implements DatabaseDriver
      */
     public function escape(string $string): string
     {
-        return $this->conn->real_escape_string($string);
+        return $this->connection()->real_escape_string($string);
     }
 
     /**
      * Fetch a result row as an associative array.
      */
-    public function fetchArray(mixed $result): ?array
+    public function fetchArray(mixed $result): array|false|null
     {
-        return $result->fetch_assoc();
+        return $result instanceof mysqli_result ? $result->fetch_assoc() : null;
     }
 
     /**
@@ -130,7 +143,7 @@ class Mysqli implements DatabaseDriver
      */
     public function fetchRow(mixed $result): mixed
     {
-        return $result->fetch_row()[0] ?? false;
+        return $result instanceof mysqli_result ? $result->fetch_row()[0] ?? false : false;
     }
 
     /**
@@ -148,7 +161,7 @@ class Mysqli implements DatabaseDriver
 
         while (true) {
             $row = $this->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
+            if (!$row instanceof \stdClass) {
                 break;
             }
 
@@ -170,7 +183,7 @@ class Mysqli implements DatabaseDriver
     {
         /* @mago-expect lint:inline-variable-return - the variable carries the @var type for mago analyze */
         /** @var \stdClass|false|null $row */
-        $row = $result->fetch_object();
+        $row = $result instanceof mysqli_result ? $result->fetch_object() : null;
 
         return $row;
     }
@@ -181,7 +194,7 @@ class Mysqli implements DatabaseDriver
     public function numRows(mixed $result): int
     {
         if ($result instanceof mysqli_result) {
-            return $result->num_rows;
+            return (int) $result->num_rows;
         }
 
         return 0;
@@ -274,9 +287,10 @@ class Mysqli implements DatabaseDriver
      */
     private function getOne(string $query): string
     {
-        $row = $this->conn->query($query)->fetch_row();
+        $result = $this->connection()->query($query);
+        $row = $result instanceof mysqli_result ? $result->fetch_row() : null;
 
-        return $row[0];
+        return (string) ($row[0] ?? '');
     }
 
     /**
@@ -299,13 +313,13 @@ class Mysqli implements DatabaseDriver
 
         $current = $mysqliresult instanceof mysqli_result ? $mysqliresult->fetch_row() : [0];
 
-        return $current[0] + 1;
+        return (int) ($current[0] ?? 0) + 1;
     }
 
     /**
      * This function sends a query to the database.
      *
-     * @return mysqli_result $result
+     * @return mysqli_result|bool
      * @throws Exception
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0): mixed
@@ -317,13 +331,13 @@ class Mysqli implements DatabaseDriver
         }
 
         try {
-            $result = $this->conn->query($query);
+            $result = $this->connection()->query($query);
         } catch (mysqli_sql_exception $mysqlisqlexception) {
             throw new Exception($mysqlisqlexception->getMessage());
         }
 
         if (false === $result) {
-            $this->sqlLog .= $this->conn->errno . ': ' . $this->error();
+            $this->sqlLog .= $this->connection()->errno . ': ' . $this->error();
         }
 
         return $result;
@@ -355,7 +369,7 @@ class Mysqli implements DatabaseDriver
      */
     public function affectedRows(): int
     {
-        $rows = $this->conn->affected_rows;
+        $rows = $this->connection()->affected_rows;
 
         return $rows < 0 ? 0 : (int) $rows;
     }
@@ -373,7 +387,7 @@ class Mysqli implements DatabaseDriver
      */
     public function serverVersion(): string
     {
-        return $this->conn->server_info;
+        return $this->connection()->server_info;
     }
 
     /**
@@ -381,16 +395,15 @@ class Mysqli implements DatabaseDriver
      */
     public function close(): void
     {
-        if ($this->conn) {
+        if ($this->conn instanceof \mysqli) {
             $this->conn->close();
+            $this->conn = null;
         }
     }
 
     public function __destruct()
     {
-        if ($this->conn) {
-            $this->conn->close();
-        }
+        $this->close();
     }
 
     /**
@@ -398,7 +411,7 @@ class Mysqli implements DatabaseDriver
      */
     public function lastInsertId(): int|string
     {
-        return (int) $this->conn->insert_id;
+        return (int) $this->connection()->insert_id;
     }
 
     public function now(): string
