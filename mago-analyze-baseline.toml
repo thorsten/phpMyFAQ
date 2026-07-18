@@ -5006,15 +5006,15 @@ count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/QuestionController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\QuestionEntity::setCategoryId`: expected `int`, but found `mixed`.'
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/QuestionController.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+code = "possibly-null-argument"
+message = 'Argument #1 of method `phpMyFAQ\Entity\QuestionEntity::setCategoryId` is possibly `null`, but parameter type `int` does not accept it.'
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/RegistrationController.php"
@@ -5247,7 +5247,7 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/CategoryController.php"
 code = "redundant-type-comparison"
-message = "Redundant condition: variable `$childNodes` (type `array<array-key, mixed>`) is already known to be `countable`."
+message = "Redundant condition: variable `$childNodes` (type `array<array-key, int>`) is already known to be `countable`."
 count = 1
 
 [[issues]]
@@ -9404,84 +9404,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "impossible-condition"
-message = "This condition (type `false`) will always evaluate to false."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "invalid-array-element"
-message = "Cannot use spread operator on non-iterable type `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Search::getCategory`: expected `phpMyFAQ\Category`, but found `null|phpMyFAQ\Category`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Search::searchCustomPages`: expected `array<array-key, mixed>`, but found `list<stdClass>|null`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "invalid-type-cast"
-message = "Casting type `null` to `array` will produce an empty array."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "less-specific-nested-argument-type"
-message = '''Argument type mismatch for argument #1 of `phpMyFAQ\Search\SearchDatabase::setConditions`: expected `array<string, array<array-key, int>|string>`, but provided type `array{'fd.active': mixed, 'fd.lang': mixed}|array{'fd.active': string('yes'), ...}|array{'fd.active': string('yes')}` is less specific.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Search\Search\Elasticsearch::setCategoryIds`: expected `array<array-key, int>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Search\Search\Elasticsearch::setCategoryIds`: expected `array<array-key, int>`, but provided type `non-empty-array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Search\Search\OpenSearch::setCategoryIds`: expected `array<array-key, int>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Search\Search\OpenSearch::setCategoryIds`: expected `array<array-key, int>`, but provided type `non-empty-array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `array{}|list<array<string, mixed>>` is less specific than the declared return type `array<array-key, array<array-key, string>>` for function `phpMyFAQ\Search::getMostPopularSearches` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<int, stdClass>` for function `phpMyFAQ\Search::search`.'
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, stdClass>` is less specific than the declared return type `array<int, stdClass>` for function `phpMyFAQ\Search::search`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 4
@@ -9494,56 +9416,8 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "mixed-operand"
-message = "Right operand in `&&` operation has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Search::getCategory` is declared to return `phpMyFAQ\Category` but possibly returns a nullable value (inferred as `null|phpMyFAQ\Category`).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Search::searchCustomPages` is declared to return `array<array-key, mixed>` but possibly returns a nullable value (inferred as `list<stdClass>|null`).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "possibly-null-argument"
-message = "Argument #1 of function `array_merge` is possibly `null`, but parameter type `array<array-key, mixed>` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Category::getChildNodes` is possibly `null`, but parameter type `int` does not accept it.'
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "possibly-null-iterator"
-message = "Expression being iterated (type `list<stdClass>|null`) might be `null` at runtime."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "possibly-null-operand"
-message = "Right operand in `<` comparison might be `null` (type `int|null`)."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "possibly-undefined-variable"
-message = "Variable `$selectedCategory` might not have been defined on all execution paths leading to this point."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
 code = "redundant-condition"
-message = "This condition (type `true`) will always evaluate to true."
+message = "Redundant ternary operator: condition is always truthy."
 count = 1
 
 [[issues]]

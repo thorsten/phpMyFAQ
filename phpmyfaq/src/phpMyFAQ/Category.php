@@ -296,6 +296,8 @@ class Category
 
     /**
      * Gets all category IDs
+     *
+     * @return int[]
      */
     public function getAllCategoryIds(): array
     {
@@ -411,6 +413,8 @@ class Category
 
     /**
      * List in an array of the $id of the child.
+     *
+     * @return int[]
      */
     public function getChildNodes(int $categoryId): array
     {

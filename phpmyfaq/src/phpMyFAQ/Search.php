@@ -74,7 +74,7 @@ class Search
      *
      * @param string $searchTerm Text/Number (solution id)
      * @param bool   $allLanguages true to search over all languages
-     * @return array<int, \stdClass>
+     * @return array<array-key, \stdClass>
      * @throws Exception
      */
     public function search(string $searchTerm, bool $allLanguages = true): array
@@ -82,16 +82,16 @@ class Search
         if (
             is_numeric($searchTerm)
             && (int) $searchTerm >= PMF_SOLUTION_ID_START_VALUE
-            && $this->configuration->get(item: 'search.searchForSolutionId')
+            && true === $this->configuration->get(item: 'search.searchForSolutionId')
         ) {
             return $this->searchDatabase($searchTerm, $allLanguages);
         }
 
-        if ($this->configuration->get(item: 'search.enableElasticsearch')) {
+        if (true === $this->configuration->get(item: 'search.enableElasticsearch')) {
             return $this->searchElasticsearch($searchTerm, $allLanguages);
         }
 
-        if ($this->configuration->get(item: 'search.enableOpenSearch')) {
+        if (true === $this->configuration->get(item: 'search.enableOpenSearch')) {
             return $this->searchOpenSearch($searchTerm, $allLanguages);
         }
 
@@ -136,6 +136,7 @@ class Search
      *
      * @param string $searchTerm Text/Number (solution id)
      * @param bool   $allLanguages true to search over all languages
+     * @return array<array-key, \stdClass>
      * @throws Exception
      */
     public function searchDatabase(string $searchTerm, bool $allLanguages = true): array
@@ -147,19 +148,14 @@ class Search
             'database' => $this->resolveSearchDatabaseType(),
         ]);
 
-        if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {
-            if ($this->getCategory() instanceof Category) {
-                $children = $this->getCategory()->getChildNodes($this->getCategoryId());
-                $selectedCategory = [
-                    $fcrTable . '.category_id' => array_merge((array) $this->getCategoryId(), $children),
-                ];
-            }
-
-            if (!$this->getCategory() instanceof Category) {
-                $selectedCategory = [
-                    $fcrTable . '.category_id' => $this->getCategoryId(),
-                ];
-            }
+        $categoryId = $this->getCategoryId();
+        if ($categoryId !== null && 0 < $categoryId) {
+            $category = $this->getCategory();
+            $selectedCategory = [
+                $fcrTable . '.category_id' => $category instanceof Category
+                    ? array_merge([$categoryId], $category->getChildNodes($categoryId))
+                    : [$categoryId],
+            ];
 
             $condition = [...$selectedCategory, ...$condition];
         }
@@ -198,7 +194,7 @@ class Search
 
         $faqResults = [];
         if ($this->configuration->getDb()->numRows($result) > 0) {
-            $faqResults = $this->configuration->getDb()->fetchAll($result);
+            $faqResults = $this->configuration->getDb()->fetchAll($result) ?? [];
         }
 
         // Search custom pages (skip if searching by solution ID)
@@ -236,7 +232,7 @@ class Search
      *
      * @param string $searchTerm Search term
      * @param bool $allLanguages Search all languages or current only
-     * @return array Custom page search results
+     * @return list<\stdClass> Custom page search results
      */
     private function searchCustomPages(string $searchTerm, bool $allLanguages = true): array
     {
@@ -298,10 +294,10 @@ class Search
             return [];
         }
 
-        $pages = $this->configuration->getDb()->fetchAll($result);
+        $pages = $this->configuration->getDb()->fetchAll($result) ?? [];
 
         // Mark results as custom pages for later identification
-        foreach ($pages as &$page) {
+        foreach ($pages as $page) {
             $page->content_type = 'page';
         }
 
@@ -322,9 +318,10 @@ class Search
         $allCategories = $this->getCategory()->getAllCategoryIds();
         $elasticsearch->setCategoryIds($allCategories);
 
-        if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {
-            $children = $this->getCategory()->getChildNodes($this->getCategoryId());
-            $elasticsearch->setCategoryIds(array_merge([$this->getCategoryId()], $children));
+        $categoryId = $this->getCategoryId();
+        if ($categoryId !== null && 0 < $categoryId) {
+            $children = $this->getCategory()->getChildNodes($categoryId);
+            $elasticsearch->setCategoryIds(array_merge([$categoryId], $children));
         }
 
         if (!$allLanguages) {
@@ -335,6 +332,9 @@ class Search
         return $elasticsearch->search($searchTerm);
     }
 
+    /**
+     * @return stdClass[]
+     */
     public function searchOpenSearch(string $searchTerm, bool $allLanguages = true): array
     {
         $opensearch = new OpenSearch($this->configuration);
@@ -342,9 +342,10 @@ class Search
         $allCategories = $this->getCategory()->getAllCategoryIds();
         $opensearch->setCategoryIds($allCategories);
 
-        if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {
-            $children = $this->getCategory()->getChildNodes($this->getCategoryId());
-            $opensearch->setCategoryIds(array_merge([$this->getCategoryId()], $children));
+        $categoryId = $this->getCategoryId();
+        if ($categoryId !== null && 0 < $categoryId) {
+            $children = $this->getCategory()->getChildNodes($categoryId);
+            $opensearch->setCategoryIds(array_merge([$categoryId], $children));
         }
 
         if (!$allLanguages) {
@@ -450,11 +451,11 @@ class Search
         if (false !== $result) {
             while (true) {
                 $row = $this->configuration->getDb()->fetchObject($result);
-                if (!is_object($row)) {
+                if (!$row instanceof \stdClass) {
                     break;
                 }
 
-                $searchResult[] = (array) $row;
+                $searchResult[] = array_map(static fn(mixed $value): string => (string) $value, (array) $row);
             }
         }
 
@@ -481,6 +482,6 @@ class Search
 
     public function getCategory(): Category
     {
-        return $this->category;
+        return $this->category ?? throw new \LogicException('setCategory() must be called before use.');
     }
 }
