@@ -2570,93 +2570,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Chat.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Chat.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `array<int, nonnull>` is less specific than the declared return type `array<int, string>` for function `phpMyFAQ\Chat::getBatchUserInfo` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Chat.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `array{'display_name': mixed, 'email': mixed}` is less specific than the declared return type `array{'display_name': null|string, 'email': null|string}` for function `phpMyFAQ\Chat::getUserInfo` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Chat.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `list<array{'displayName': nonnull, 'userId': int}>` is less specific than the declared return type `array<int, array{'displayName': string, 'email': string, 'userId': int}>` for function `phpMyFAQ\Chat::searchUsers` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Chat.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `non-empty-list<array{'displayName': nonnull, 'lastMessage': nonnull, 'lastMessageTime': nonnull, 'unreadCount': int, 'userId': int}>` is less specific than the declared return type `array<int, array{'displayName': string, 'lastMessage': string, 'lastMessageTime': string, 'unreadCount': int, 'userId': int}>` for function `phpMyFAQ\Chat::getConversationList` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Chat.php"
-code = "less-specific-return-statement"
-message = '''Returned type `list<array{'createdAt': non-empty-string, 'id': int, 'isRead': bool, 'message': string, 'recipientId': int, 'senderId': int, 'senderName': string}>|non-empty-array<array-key, array{'createdAt': non-empty-string, 'id': int, 'isRead': bool, 'message': string, 'recipientId': int, 'senderId': int, 'senderName': string}>` is less specific than the declared return type `array<int, array<string, mixed>>` for function `phpMyFAQ\Chat::messagesToArray`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Chat.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `DateTimeImmutable::__construct`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Chat.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\ChatMessage::setMessage`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Chat.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `strcmp`: expected `string`, but found `nonnull`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Chat.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `strcmp`: expected `string`, but found `nonnull`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Chat.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 11
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Chat.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Chat.php"
-code = "redundant-comparison"
-message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
-count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Chat.php"
-code = "redundant-logical-operation"
-message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
-count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Chat.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
-count = 6
+count = 13
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Command/CreateHashesCommand.php"
@@ -10810,66 +10726,30 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Search/Search/Elasticsearch.php"
 code = "ambiguous-object-method-access"
 message = "Cannot statically verify method call on a generic `object` type."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Search/Elasticsearch.php"
-code = "invalid-iterator"
-message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Search/Elasticsearch.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 38
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Search/Elasticsearch.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
+count = 5
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Search/Elasticsearch.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Search/Elasticsearch.php"
-code = "mixed-operand"
-message = "Left operand in `>` comparison has `mixed` type."
+file = "phpmyfaq/src/phpMyFAQ/Search/Search/OpenSearch.php"
+code = "impossible-condition"
+message = "This condition (type `false`) will always evaluate to false."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Search/OpenSearch.php"
-code = "invalid-iterator"
-message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Search/OpenSearch.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `array_key_exists`: expected `array<array-key, mixed>`, but found `mixed`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Search/OpenSearch.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 35
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Search/OpenSearch.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Search/OpenSearch.php"
-code = "mixed-operand"
-message = "Left operand in `>` comparison has `mixed` type."
+code = "redundant-type-comparison"
+message = "Redundant type assertion: `$result` is already `array<array-key, mixed>`."
 count = 1
 
 [[issues]]

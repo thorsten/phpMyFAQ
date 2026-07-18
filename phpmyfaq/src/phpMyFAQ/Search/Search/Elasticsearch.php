@@ -59,6 +59,62 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
     }
 
     /**
+     * Executes the search request and maps the hits to result objects.
+     *
+     * @param array<string, mixed> $searchParams
+     * @return stdClass[]
+     */
+    private function mapHits(array $searchParams): array
+    {
+        try {
+            $response = $this->client->search($searchParams);
+            $result = is_object($response) && method_exists($response, 'asArray') ? $response->asArray() : null;
+        } catch (ClientResponseException|ServerResponseException) {
+            return [];
+        }
+
+        if (!is_array($result)) {
+            return [];
+        }
+
+        $hits = $result['hits']['hits'] ?? null;
+        if (!is_array($hits)) {
+            return [];
+        }
+
+        $mapped = [];
+        foreach ($hits as $hit) {
+            if (!is_array($hit)) {
+                continue;
+            }
+
+            $source = $hit['_source'] ?? null;
+            if (!is_array($source)) {
+                continue;
+            }
+
+            $resultSet = new stdClass();
+            $resultSet->id = (int) ($source['id'] ?? 0);
+            $resultSet->lang = (string) ($source['lang'] ?? '');
+            $resultSet->question = (string) ($source['question'] ?? '');
+            $resultSet->answer = (string) ($source['answer'] ?? '');
+            $resultSet->keywords = (string) ($source['keywords'] ?? '');
+            $resultSet->category_id = (int) ($source['category_id'] ?? 0);
+            $resultSet->score = is_numeric($hit['_score'] ?? null) ? (float) $hit['_score'] : 0.0;
+
+            // Add custom page specific fields if present
+            if (($source['content_type'] ?? null) === 'page') {
+                $resultSet->content_type = 'page';
+                $resultSet->slug = (string) ($source['slug'] ?? '');
+            }
+
+            $mapped[] = $resultSet;
+        }
+
+        return $mapped;
+    }
+
+    /**
      * Prepares the search and executes it.
      *
      * @param string $searchTerm Search term
@@ -66,7 +122,6 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
      */
     public function search(string $searchTerm): array
     {
-        $result = [];
         $this->resultSet = [];
 
         // Build search query that includes both FAQs and custom pages
@@ -110,33 +165,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
             ],
         ];
 
-        try {
-            $result = $this->client->search($searchParams)->asArray();
-        } catch (ClientResponseException|ServerResponseException) {
-            $this->resultSet = [];
-            return $this->resultSet;
-        }
-
-        if ($result['hits']['total']['value'] > 0) {
-            foreach ($result['hits']['hits'] as $hit) {
-                $resultSet = new stdClass();
-                $resultSet->id = $hit['_source']['id'];
-                $resultSet->lang = $hit['_source']['lang'];
-                $resultSet->question = $hit['_source']['question'];
-                $resultSet->answer = $hit['_source']['answer'];
-                $resultSet->keywords = $hit['_source']['keywords'] ?? '';
-                $resultSet->category_id = $hit['_source']['category_id'];
-                $resultSet->score = $hit['_score'];
-
-                // Add custom page specific fields if present
-                if (($hit['_source']['content_type'] ?? null) === 'page') {
-                    $resultSet->content_type = 'page';
-                    $resultSet->slug = $hit['_source']['slug'];
-                }
-
-                $this->resultSet[] = $resultSet;
-            }
-        }
+        $this->resultSet = $this->mapHits($searchParams);
 
         return $this->resultSet;
     }
@@ -199,32 +228,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
             ],
         ];
 
-        try {
-            $result = $this->client->search($searchParams)->asArray();
-        } catch (ClientResponseException|ServerResponseException) {
-            return [];
-        }
-
-        if (0 !== $result['hits']['total']['value'] || 0 !== $result['hits']['total']) {
-            foreach ($result['hits']['hits'] as $hit) {
-                $resultSet = new stdClass();
-                $resultSet->id = $hit['_source']['id'];
-                $resultSet->lang = $hit['_source']['lang'];
-                $resultSet->question = $hit['_source']['question'];
-                $resultSet->answer = $hit['_source']['answer'];
-                $resultSet->keywords = $hit['_source']['keywords'] ?? '';
-                $resultSet->category_id = $hit['_source']['category_id'];
-                $resultSet->score = $hit['_score'];
-
-                // Add custom page specific fields if present
-                if (($hit['_source']['content_type'] ?? null) === 'page') {
-                    $resultSet->content_type = 'page';
-                    $resultSet->slug = $hit['_source']['slug'];
-                }
-
-                $this->resultSet[] = $resultSet;
-            }
-        }
+        $this->resultSet = $this->mapHits($searchParams);
 
         return $this->resultSet;
     }

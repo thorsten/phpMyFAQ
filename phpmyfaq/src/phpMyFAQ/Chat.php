@@ -102,7 +102,7 @@ readonly class Chat
 
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
+            if (!$row instanceof \stdClass) {
                 break;
             }
 
@@ -142,7 +142,7 @@ readonly class Chat
         $partnerIds = [];
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($partnersResult);
-            if ($row === false || $row === null || $row === []) {
+            if (!$row instanceof \stdClass) {
                 break;
             }
 
@@ -164,11 +164,11 @@ readonly class Chat
         $userInfo = [];
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($userInfoResult);
-            if ($row === false || $row === null || $row === []) {
+            if (!$row instanceof \stdClass) {
                 break;
             }
 
-            $userInfo[(int) $row->user_id] = $row->display_name ?? 'Unknown User';
+            $userInfo[(int) $row->user_id] = (string) ($row->display_name ?? 'Unknown User');
         }
 
         // Build conversations array with optimized queries per partner
@@ -203,8 +203,8 @@ readonly class Chat
             $conversations[] = [
                 'userId' => $partnerId,
                 'displayName' => $userInfo[$partnerId] ?? 'Unknown User',
-                'lastMessage' => $lastMsg instanceof \stdClass ? $lastMsg->message ?? '' : '',
-                'lastMessageTime' => $lastMsg instanceof \stdClass ? $lastMsg->created_at ?? '' : '',
+                'lastMessage' => $lastMsg instanceof \stdClass ? (string) ($lastMsg->message ?? '') : '',
+                'lastMessageTime' => $lastMsg instanceof \stdClass ? (string) ($lastMsg->created_at ?? '') : '',
                 'unreadCount' => $unreadRow instanceof \stdClass ? (int) ($unreadRow->cnt ?? 0) : 0,
             ];
         }
@@ -227,7 +227,9 @@ readonly class Chat
             $userId,
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
+
+        return $result !== false && $result !== null;
     }
 
     /**
@@ -242,7 +244,9 @@ readonly class Chat
             $userId,
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
+
+        return $result !== false && $result !== null;
     }
 
     /**
@@ -279,7 +283,7 @@ readonly class Chat
 
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
+            if (!$row instanceof \stdClass) {
                 break;
             }
 
@@ -292,7 +296,7 @@ readonly class Chat
     /**
      * Searches for users by display name (for starting new conversations).
      *
-     * @return array<int, array{userId: int, displayName: string, email: string}>
+     * @return array<int, array{userId: int, displayName: string}>
      */
     public function searchUsers(string $searchTerm, int $excludeUserId, int $limit = 10): array
     {
@@ -322,13 +326,13 @@ readonly class Chat
 
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
+            if (!$row instanceof \stdClass) {
                 break;
             }
 
             $users[] = [
                 'userId' => (int) $row->user_id,
-                'displayName' => $row->display_name ?? 'Unknown',
+                'displayName' => (string) ($row->display_name ?? 'Unknown'),
             ];
         }
 
@@ -360,7 +364,7 @@ readonly class Chat
      * Optimized to batch fetch user info for all senders in a single query.
      *
      * @param ChatMessage[] $messages
-     * @return array<int, array<string, mixed>>
+     * @return list<array<string, mixed>>
      */
     public function messagesToArray(array $messages): array
     {
@@ -374,7 +378,7 @@ readonly class Chat
         // Batch fetch user info
         $userInfo = $this->getBatchUserInfo($senderIds);
 
-        return array_map(static fn(ChatMessage $message) => [
+        return array_values(array_map(static fn(ChatMessage $message) => [
             'id' => $message->getId(),
             'senderId' => $message->getSenderId(),
             'senderName' => $userInfo[$message->getSenderId()] ?? 'Unknown User',
@@ -382,7 +386,7 @@ readonly class Chat
             'message' => $message->getMessage(),
             'isRead' => $message->isRead(),
             'createdAt' => $message->getCreatedAt()->format('c'),
-        ], $messages);
+        ], $messages));
     }
 
     /**
@@ -409,11 +413,11 @@ readonly class Chat
 
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
+            if (!$row instanceof \stdClass) {
                 break;
             }
 
-            $userInfo[(int) $row->user_id] = $row->display_name ?? 'Unknown User';
+            $userInfo[(int) $row->user_id] = (string) ($row->display_name ?? 'Unknown User');
         }
 
         return $userInfo;
@@ -436,8 +440,8 @@ readonly class Chat
         $row = $this->configuration->getDb()->fetchObject($result);
 
         return [
-            'display_name' => $row instanceof \stdClass ? $row->display_name ?? null : null,
-            'email' => $row instanceof \stdClass ? $row->email ?? null : null,
+            'display_name' => $row instanceof \stdClass ? (string) ($row->display_name ?? '') : null,
+            'email' => $row instanceof \stdClass ? (string) ($row->email ?? '') : null,
         ];
     }
 
@@ -445,16 +449,16 @@ readonly class Chat
      * Maps a database row to a ChatMessage entity.
      * @throws DateMalformedStringException
      */
-    private function mapRowToEntity(object $row): ChatMessage
+    private function mapRowToEntity(\stdClass $row): ChatMessage
     {
         $chatMessage = new ChatMessage();
         $chatMessage
             ->setId((int) $row->id)
             ->setSenderId((int) $row->sender_id)
             ->setRecipientId((int) $row->recipient_id)
-            ->setMessage($row->message)
-            ->setIsRead((bool) $row->is_read)
-            ->setCreatedAt(new DateTimeImmutable($row->created_at));
+            ->setMessage((string) $row->message)
+            ->setIsRead((int) $row->is_read !== 0)
+            ->setCreatedAt(new DateTimeImmutable((string) $row->created_at));
 
         return $chatMessage;
     }
