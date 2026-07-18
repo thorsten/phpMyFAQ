@@ -92,68 +92,70 @@ final class ExportController extends AbstractController
     {
         $this->userHasPermission(PermissionType::REPORTS);
 
-        $data = json_decode($request->getContent())->data;
-        if (!Token::getInstance($this->session)->verifyToken('create-report', $data->{'pmf-csrf-token'})) {
+        $data = $this->getJsonObject($request)->data ?? null;
+        if (!$data instanceof \stdClass) {
+            return $this->json(['error' => 'The request body must contain a data object.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (!Token::getInstance($this->session)->verifyToken(
+            'create-report',
+            (string) ($data->{'pmf-csrf-token'} ?? ''),
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $hasDataField = static fn(object $payload, string $field): bool => (
-            property_exists($payload, $field)
-            && $payload->{$field} !== null
-        );
-
         $text = [];
         $text[0] = [];
-        if ($hasDataField(payload: $data, field: 'category')) {
+        if ($this->hasDataField(payload: $data, field: 'category')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_category');
         }
 
-        if ($hasDataField(payload: $data, field: 'sub_category')) {
+        if ($this->hasDataField(payload: $data, field: 'sub_category')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_sub_category');
         }
 
-        if ($hasDataField(payload: $data, field: 'translations')) {
+        if ($this->hasDataField(payload: $data, field: 'translations')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_translations');
         }
 
-        if ($hasDataField(payload: $data, field: 'language')) {
+        if ($this->hasDataField(payload: $data, field: 'language')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_language');
         }
 
-        if ($hasDataField(payload: $data, field: 'id')) {
+        if ($this->hasDataField(payload: $data, field: 'id')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_id');
         }
 
-        if ($hasDataField(payload: $data, field: 'sticky')) {
+        if ($this->hasDataField(payload: $data, field: 'sticky')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_sticky');
         }
 
-        if ($hasDataField(payload: $data, field: 'title')) {
+        if ($this->hasDataField(payload: $data, field: 'title')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_title');
         }
 
-        if ($hasDataField(payload: $data, field: 'creation_date')) {
+        if ($this->hasDataField(payload: $data, field: 'creation_date')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_creation_date');
         }
 
-        if ($hasDataField(payload: $data, field: 'owner')) {
+        if ($this->hasDataField(payload: $data, field: 'owner')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_owner');
         }
 
-        if ($hasDataField(payload: $data, field: 'last_modified_person')) {
+        if ($this->hasDataField(payload: $data, field: 'last_modified_person')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_last_modified_person');
         }
 
-        if ($hasDataField(payload: $data, field: 'url')) {
+        if ($this->hasDataField(payload: $data, field: 'url')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_url');
         }
 
-        if ($hasDataField(payload: $data, field: 'visits')) {
+        if ($this->hasDataField(payload: $data, field: 'visits')) {
             $text[0][] = Translation::get(key: 'ad_stat_report_visits');
         }
 
         try {
-            return $this->buildReportResponse(new Report($this->configuration), $data, $hasDataField, $text);
+            return $this->buildReportResponse(new Report($this->configuration), $data, $text);
         } catch (\Throwable $throwable) {
             return $this->json(['error' => $throwable->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -164,22 +166,24 @@ final class ExportController extends AbstractController
      *
      * @param array<int, list<mixed>> $text
      */
-    private function buildReportResponse(Report $report, object $data, callable $hasDataField, array $text): Response
+    private function buildReportResponse(Report $report, object $data, array $text): Response
     {
         foreach ($report->getReportingData() as $reportData) {
-            $i = $reportData['faq_id'];
+            $i = (int) $reportData['faq_id'];
             // Top-level categories have no parent; normalise the absent/NULL
             // value to 0 so it is treated as "no parent" instead of being
             // passed on as NULL.
             $categoryParent = (int) ($reportData['category_parent'] ?? 0);
-            if ($hasDataField(payload: $data, field: 'category') && array_key_exists('category_name', $reportData)) {
+            if (
+                $this->hasDataField(payload: $data, field: 'category') && array_key_exists('category_name', $reportData)
+            ) {
                 $text[$i][] = Report::sanitize($report->convertEncoding((string) ($reportData['category_name'] ?? '')));
                 if (0 !== $categoryParent) {
                     $text[$i][] = Report::sanitize($categoryParent);
                 }
             }
 
-            if ($hasDataField(payload: $data, field: 'sub_category')) {
+            if ($this->hasDataField(payload: $data, field: 'sub_category')) {
                 $text[$i][] = 'n/a';
                 if (0 !== $categoryParent) {
                     $text[$i][] = Report::sanitize($report->convertEncoding(
@@ -188,31 +192,32 @@ final class ExportController extends AbstractController
                 }
             }
 
-            if ($hasDataField(payload: $data, field: 'translations')) {
+            if ($this->hasDataField(payload: $data, field: 'translations')) {
                 $text[$i][] = $reportData['faq_translations'];
             }
 
-            if ($hasDataField(payload: $data, field: 'language') && LanguageCodes::get($reportData['faq_language'])) {
-                $text[$i][] = $report->convertEncoding(LanguageCodes::get($reportData['faq_language']) ?? '');
+            $faqLanguage = (string) ($reportData['faq_language'] ?? '');
+            if ($this->hasDataField(payload: $data, field: 'language') && LanguageCodes::get($faqLanguage) !== null) {
+                $text[$i][] = $report->convertEncoding(LanguageCodes::get($faqLanguage) ?? '');
             }
 
-            if ($hasDataField(payload: $data, field: 'id')) {
+            if ($this->hasDataField(payload: $data, field: 'id')) {
                 $text[$i][] = $reportData['faq_id'];
             }
 
-            if ($hasDataField(payload: $data, field: 'sticky')) {
+            if ($this->hasDataField(payload: $data, field: 'sticky')) {
                 $text[$i][] = $reportData['faq_sticky'];
             }
 
-            if ($hasDataField(payload: $data, field: 'title')) {
+            if ($this->hasDataField(payload: $data, field: 'title')) {
                 $text[$i][] = Report::sanitize($report->convertEncoding((string) ($reportData['faq_question'] ?? '')));
             }
 
-            if ($hasDataField(payload: $data, field: 'creation_date')) {
+            if ($this->hasDataField(payload: $data, field: 'creation_date')) {
                 $text[$i][] = $reportData['faq_updated'];
             }
 
-            if ($hasDataField(payload: $data, field: 'owner')) {
+            if ($this->hasDataField(payload: $data, field: 'owner')) {
                 $text[$i][] = Report::sanitize($report->convertEncoding(
                     (string) ($reportData['faq_org_author'] ?? ''),
                 ));
@@ -220,7 +225,7 @@ final class ExportController extends AbstractController
 
             $text[$i][] = '';
             if (
-                $hasDataField(payload: $data, field: 'last_modified_person')
+                $this->hasDataField(payload: $data, field: 'last_modified_person')
                 && array_key_exists('faq_last_author', $reportData)
             ) {
                 $text[$i][] = Report::sanitize($report->convertEncoding(
@@ -228,18 +233,18 @@ final class ExportController extends AbstractController
                 ));
             }
 
-            if ($hasDataField(payload: $data, field: 'url')) {
+            if ($this->hasDataField(payload: $data, field: 'url')) {
                 $text[$i][] = Report::sanitize($report->convertEncoding(sprintf(
                     '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
-                    $reportData['category_id'],
-                    $reportData['faq_id'],
-                    $reportData['faq_language'],
+                    (int) ($reportData['category_id'] ?? 0),
+                    (int) $reportData['faq_id'],
+                    $faqLanguage,
                     TitleSlugifier::slug((string) ($reportData['faq_question'] ?? '')),
                 )));
             }
 
-            if ($hasDataField(payload: $data, field: 'visits')) {
+            if ($this->hasDataField(payload: $data, field: 'visits')) {
                 $text[$i][] = $reportData['faq_visits'];
             }
         }
@@ -251,7 +256,7 @@ final class ExportController extends AbstractController
 
         rewind($handle);
 
-        $content = stream_get_contents($handle);
+        $content = (string) stream_get_contents($handle);
 
         fclose($handle);
 
@@ -260,5 +265,13 @@ final class ExportController extends AbstractController
         $response->headers->set('Content-Disposition', 'attachment; filename="report.csv"');
 
         return $response;
+    }
+
+    /**
+     * Returns true when the report payload requests the given field.
+     */
+    private function hasDataField(object $payload, string $field): bool
+    {
+        return property_exists($payload, $field) && $payload->{$field} !== null;
     }
 }

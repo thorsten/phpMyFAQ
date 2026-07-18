@@ -74,7 +74,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
             throw new BadRequestException($exception->getMessage());
         }
 
-        $mode = $request->attributes->get(key: 'mode');
+        $mode = (string) $request->attributes->get(key: 'mode');
         $configurationList = Translation::getConfigurationItems($mode);
 
         return $this->render(file: '@admin/configuration/tab-list.twig', context: [
@@ -134,9 +134,9 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $csrfToken = $request->request->get(key: 'pmf-csrf-token');
+        $csrfToken = (string) $request->request->get(key: 'pmf-csrf-token');
         $configurationData = $request->getPayload()->all(key: 'edit');
-        $availableFieldsJson = $request->request->get(key: 'availableFields');
+        $availableFieldsJson = (string) $request->request->get(key: 'availableFields');
 
         $oldConfigurationData = $this->configuration->getAll();
 
@@ -146,10 +146,13 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
 
         // Parse the list of available fields from the form
         $availableFields = [];
-        if ($availableFieldsJson) {
-            $availableFields = json_decode($availableFieldsJson, associative: true);
-            if (!is_array($availableFields)) {
-                $availableFields = [];
+        if ($availableFieldsJson !== '') {
+            $decodedFields = json_decode($availableFieldsJson, associative: true);
+            if (is_array($decodedFields)) {
+                $availableFields = array_map(
+                    static fn(mixed $fieldName): string => (string) $fieldName,
+                    $decodedFields,
+                );
             }
         }
 
@@ -172,7 +175,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         }
 
         if (array_key_exists('records.attachmentsPath', $configurationData)) {
-            $realPath = realpath($configurationData['records.attachmentsPath']);
+            $realPath = realpath((string) $configurationData['records.attachmentsPath']);
 
             if (false === $realPath) {
                 unset($configurationData['records.attachmentsPath']);
@@ -180,7 +183,8 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
 
             if (false !== $realPath) {
                 $configurationData['records.attachmentsPath'] = str_replace(
-                    search: Request::createFromGlobals()->server->get(key: 'DOCUMENT_ROOT') . DIRECTORY_SEPARATOR,
+                    search: (string) Request::createFromGlobals()->server->get(key: 'DOCUMENT_ROOT')
+                    . DIRECTORY_SEPARATOR,
                     replace: '',
                     subject: $realPath,
                 );
@@ -195,10 +199,11 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         }
 
         foreach ($configurationData as $key => $value) {
-            $newConfigValues[$key] = (string) $value;
+            $stringValue = is_scalar($value) || $value === null ? (string) $value : '';
+            $newConfigValues[(string) $key] = $stringValue;
             // Escape some values
             if (in_array($key, $escapeValues, strict: true)) {
-                $newConfigValues[$key] = Strings::htmlspecialchars($value, ENT_QUOTES);
+                $newConfigValues[(string) $key] = Strings::htmlspecialchars($stringValue, ENT_QUOTES);
             }
         }
 
@@ -220,21 +225,23 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
             }
         }
 
-        // Keep all values that were not in the available fields (from other tabs)
+        // Keep all values that were not in the available fields (from other tabs);
+        // runtime objects under core.* keys are never part of the form payload.
         foreach ($oldConfigurationData as $key => $value) {
             if (array_key_exists($key, $newConfigValues)) {
                 continue;
             }
 
-            $newConfigValues[$key] = $value;
+            if (is_scalar($value) || $value === null) {
+                $newConfigValues[(string) $key] = $value === null ? null : (string) $value;
+            }
         }
 
         // Replace "main.referenceUrl" in FAQs
-        if ($oldConfigurationData['main.referenceURL'] !== $newConfigValues['main.referenceURL']) {
-            $this->configuration->replaceMainReferenceUrl(
-                $oldConfigurationData['main.referenceURL'],
-                $newConfigValues['main.referenceURL'],
-            );
+        $oldReferenceUrl = (string) ($oldConfigurationData['main.referenceURL'] ?? '');
+        $newReferenceUrl = (string) ($newConfigValues['main.referenceURL'] ?? '');
+        if ($oldReferenceUrl !== $newReferenceUrl) {
+            $this->configuration->replaceMainReferenceUrl($oldReferenceUrl, $newReferenceUrl);
         }
 
         $this->configuration->update($newConfigValues);
@@ -258,6 +265,11 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
 
     /**
      * Log specific security-related configuration changes
+     */
+    /**
+     * @param list<string> $changedKeys
+     * @param array<array-key, mixed> $oldConfig
+     * @param array<array-key, mixed> $newConfig
      */
     private function logSecurityConfigChanges(array $changedKeys, array $oldConfig, array $newConfig): void
     {
@@ -293,7 +305,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
             foreach ($securityChanges as $key) {
                 $oldValue = $this->convertToString($oldConfig[$key] ?? null);
                 $newValue = $this->convertToString($newConfig[$key] ?? null);
-                $details[] = $key . ':' . $oldValue . '->' . $newValue;
+                $details[] = (string) $key . ':' . $oldValue . '->' . $newValue;
             }
             $this->adminLog->log(
                 $this->currentUser,
@@ -413,7 +425,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        return new Response(AdminMenuBuilder::sortingKeyOptions($request->attributes->get(key: 'current')));
+        return new Response(AdminMenuBuilder::sortingKeyOptions((string) $request->attributes->get(key: 'current')));
     }
 
     #[Route(
@@ -425,7 +437,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        return new Response(AdminMenuBuilder::sortingOrderOptions($request->attributes->get(key: 'current')));
+        return new Response(AdminMenuBuilder::sortingOrderOptions((string) $request->attributes->get(key: 'current')));
     }
 
     #[Route(
@@ -437,7 +449,9 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        return new Response(AdminMenuBuilder::sortingPopularFaqsOptions($request->attributes->get(key: 'current')));
+        return new Response(AdminMenuBuilder::sortingPopularFaqsOptions((string) $request->attributes->get(
+            key: 'current',
+        )));
     }
 
     #[Route(path: 'configuration/perm-level/{current}', name: 'admin.api.configuration.permLevel', methods: ['GET'])]
@@ -445,7 +459,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        return new Response(PermissionHelper::permOptions($request->attributes->get(key: 'current')));
+        return new Response(PermissionHelper::permOptions((string) $request->attributes->get(key: 'current')));
     }
 
     #[Route(
@@ -457,7 +471,9 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        return new Response(AdminMenuBuilder::renderReleaseTypeOptions($request->attributes->get(key: 'current')));
+        return new Response(AdminMenuBuilder::renderReleaseTypeOptions((string) $request->attributes->get(
+            key: 'current',
+        )));
     }
 
     #[Route(
@@ -469,7 +485,9 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        return new Response(AdminMenuBuilder::searchRelevanceOptions($request->attributes->get(key: 'current')));
+        return new Response(AdminMenuBuilder::searchRelevanceOptions((string) $request->attributes->get(
+            key: 'current',
+        )));
     }
 
     #[Route(
@@ -481,7 +499,9 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        return new Response(AdminMenuBuilder::renderMetaRobotsDropdown($request->attributes->get(key: 'current')));
+        return new Response(AdminMenuBuilder::renderMetaRobotsDropdown((string) $request->attributes->get(
+            key: 'current',
+        )));
     }
 
     #[Route(
@@ -493,7 +513,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        return new Response(AdminMenuBuilder::renderTranslationProviderOptions($request->attributes->get(
+        return new Response(AdminMenuBuilder::renderTranslationProviderOptions((string) $request->attributes->get(
             key: 'current',
         )));
     }
@@ -507,7 +527,9 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        return new Response(AdminMenuBuilder::renderMailProviderOptions($request->attributes->get(key: 'current')));
+        return new Response(AdminMenuBuilder::renderMailProviderOptions((string) $request->attributes->get(
+            key: 'current',
+        )));
     }
 
     #[Route(
@@ -519,7 +541,9 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        return new Response(AdminMenuBuilder::renderCacheAdapterOptions($request->attributes->get(key: 'current')));
+        return new Response(AdminMenuBuilder::renderCacheAdapterOptions((string) $request->attributes->get(
+            key: 'current',
+        )));
     }
 
     #[Route(path: 'configuration/layout-mode/{current}', name: 'admin.api.configuration.layout-mode', methods: ['GET'])]
@@ -527,7 +551,9 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        return new Response(AdminMenuBuilder::renderLayoutModeOptions($request->attributes->get(key: 'current')));
+        return new Response(AdminMenuBuilder::renderLayoutModeOptions((string) $request->attributes->get(
+            key: 'current',
+        )));
     }
 
     /**
