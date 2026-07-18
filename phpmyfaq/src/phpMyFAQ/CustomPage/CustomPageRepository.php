@@ -52,7 +52,7 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
         $result = $this->configuration->getDb()->query($query);
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
+            if (!$row instanceof \stdClass) {
                 break;
             }
 
@@ -106,7 +106,7 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
         $result = $this->configuration->getDb()->query($query);
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
+            if (!$row instanceof \stdClass) {
                 break;
             }
 
@@ -157,7 +157,7 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
         $result = $this->configuration->getDb()->query($query);
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
+            if (!$row instanceof \stdClass) {
                 break;
             }
 
@@ -262,11 +262,11 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
         $languages = [];
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
+            if (!$row instanceof \stdClass) {
                 break;
             }
 
-            $languages[] = $row->lang;
+            $languages[] = (string) $row->lang;
         }
         return $languages;
     }
@@ -297,9 +297,11 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
             $page->isActive() ? 'y' : 'n',
             $page->getCreated()->format(format: 'Y-m-d H:i:s'),
             'NULL',
-            $page->getSeoTitle() ? "'" . $this->configuration->getDb()->escape($page->getSeoTitle()) . "'" : 'NULL',
-            $page->getSeoDescription()
-                ? "'" . $this->configuration->getDb()->escape($page->getSeoDescription()) . "'"
+            ($seoTitle = $page->getSeoTitle()) !== null && $seoTitle !== ''
+                ? "'" . $this->configuration->getDb()->escape($seoTitle) . "'"
+                : 'NULL',
+            ($seoDescription = $page->getSeoDescription()) !== null && $seoDescription !== ''
+                ? "'" . $this->configuration->getDb()->escape($seoDescription) . "'"
                 : 'NULL',
             $this->configuration->getDb()->escape($page->getSeoRobots()),
         );
@@ -334,9 +336,11 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
             $page->isActive() ? 'y' : 'n',
             $page->getCreated()->format(format: 'Y-m-d H:i:s'),
             'NULL',
-            $page->getSeoTitle() ? "'" . $this->configuration->getDb()->escape($page->getSeoTitle()) . "'" : 'NULL',
-            $page->getSeoDescription()
-                ? "'" . $this->configuration->getDb()->escape($page->getSeoDescription()) . "'"
+            ($seoTitle = $page->getSeoTitle()) !== null && $seoTitle !== ''
+                ? "'" . $this->configuration->getDb()->escape($seoTitle) . "'"
+                : 'NULL',
+            ($seoDescription = $page->getSeoDescription()) !== null && $seoDescription !== ''
+                ? "'" . $this->configuration->getDb()->escape($seoDescription) . "'"
                 : 'NULL',
             $this->configuration->getDb()->escape($page->getSeoRobots()),
         );
@@ -378,9 +382,11 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
             $this->configuration->getDb()->escape($page->getAuthorEmail()),
             $page->isActive() ? 'y' : 'n',
             $page->getUpdated()?->format(format: 'Y-m-d H:i:s') ?? date('Y-m-d H:i:s'),
-            $page->getSeoTitle() ? "'" . $this->configuration->getDb()->escape($page->getSeoTitle()) . "'" : 'NULL',
-            $page->getSeoDescription()
-                ? "'" . $this->configuration->getDb()->escape($page->getSeoDescription()) . "'"
+            ($seoTitle = $page->getSeoTitle()) !== null && $seoTitle !== ''
+                ? "'" . $this->configuration->getDb()->escape($seoTitle) . "'"
+                : 'NULL',
+            ($seoDescription = $page->getSeoDescription()) !== null && $seoDescription !== ''
+                ? "'" . $this->configuration->getDb()->escape($seoDescription) . "'"
                 : 'NULL',
             $this->configuration->getDb()->escape($page->getSeoRobots()),
             $page->getId(),

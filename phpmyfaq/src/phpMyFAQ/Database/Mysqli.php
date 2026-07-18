@@ -151,6 +151,7 @@ class Mysqli implements DatabaseDriver
      *
      * @param mixed $result Result set
      * @throws Exception
+     * @return list<\stdClass>|null
      */
     public function fetchAll(mixed $result): ?array
     {

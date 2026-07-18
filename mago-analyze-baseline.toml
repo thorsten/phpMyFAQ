@@ -116,12 +116,6 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Backup/BackupRepository.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<int, object>` for function `phpMyFAQ\Administration\Backup\BackupRepository::getAll`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Backup/BackupRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
@@ -789,7 +783,7 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Attachment/AttachmentCollection.php"
 code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Attachment\AttachmentCollection::getBreadcrumbs`: expected `array<array-key, mixed>`, but found `array<array-key, mixed>|null`.'
+message = 'Invalid return type for function `phpMyFAQ\Attachment\AttachmentCollection::getBreadcrumbs`: expected `array<array-key, mixed>`, but found `list<stdClass>|null`.'
 count = 1
 
 [[issues]]
@@ -801,20 +795,14 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Attachment/AttachmentCollection.php"
 code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Attachment\AttachmentCollection::getBreadcrumbs` is declared to return `array<array-key, mixed>` but possibly returns a nullable value (inferred as `array<array-key, mixed>|null`).'
+message = 'Function `phpMyFAQ\Attachment\AttachmentCollection::getBreadcrumbs` is declared to return `array<array-key, mixed>` but possibly returns a nullable value (inferred as `list<stdClass>|null`).'
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Attachment/AttachmentFactory.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/AttachmentFactory.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Attachment/AttachmentService.php"
@@ -1660,12 +1648,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Bookmark/BookmarkFormatter.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #5 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Bookmark/BookmarkRepository.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<int, object>` for function `phpMyFAQ\Bookmark\BookmarkRepository::getAll`.'
 count = 1
 
 [[issues]]
@@ -2534,6 +2516,24 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Command/SeedTestDataCommand.php"
+code = "impossible-condition"
+message = "Redundant ternary operator: condition is always falsy."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Command/SeedTestDataCommand.php"
+code = "impossible-type-comparison"
+message = "Impossible type assertion: `$idRow` of type `stdClass` can never be `array<array-key, mixed>`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Command/SeedTestDataCommand.php"
+code = "impossible-type-comparison"
+message = "Impossible type assertion: `$row` of type `stdClass` can never be `array<array-key, mixed>`."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Command/SeedTestDataCommand.php"
 code = "invalid-iterator"
 message = "The expression provided to `foreach` is not iterable. It resolved to type `nonnull`, which is not iterable."
 count = 2
@@ -2548,7 +2548,13 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Command/SeedTestDataCommand.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 19
+count = 17
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Command/SeedTestDataCommand.php"
+code = "redundant-null-coalesce"
+message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Command/SeedTestDataCommand.php"
@@ -2560,42 +2566,6 @@ count = 3
 file = "phpmyfaq/src/phpMyFAQ/Command/UpdateCommand.php"
 code = "invalid-named-argument"
 message = "Invalid named argument `$replace_pairs` for function `strtr`"
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Comment/CommentsRepository.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<int, object>` for function `phpMyFAQ\Comment\CommentsRepository::countByCategoryForFaq`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Comment/CommentsRepository.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<int, object>` for function `phpMyFAQ\Comment\CommentsRepository::countByTypeGroupedByRecordId`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Comment/CommentsRepository.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<int, object>` for function `phpMyFAQ\Comment\CommentsRepository::fetchAllWithCategories`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Comment/CommentsRepository.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<int, object>` for function `phpMyFAQ\Comment\CommentsRepository::fetchByReferenceIdAndType`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Comment/CommentsRepository.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<int, object>` for function `phpMyFAQ\Comment\CommentsRepository::fetchPaginated`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Comment/CommentsRepository.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Database\DatabaseDriver::query`: expected `string`, but found `mixed`.'
 count = 1
 
 [[issues]]
@@ -2612,68 +2582,14 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Comment/CommentsRepository.php"
-code = "possibly-undefined-variable"
-message = "Variable `$query` might not have been defined on all execution paths leading to this point."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Comment/CommentsRepository.php"
 code = "redundant-comparison"
 message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Comment/CommentsRepository.php"
 code = "redundant-logical-operation"
 message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Comments.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 22
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Comments.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `array<array-key, mixed>` is less specific than the declared return type `array<array-key, string>` for function `phpMyFAQ\Comments::getNumberOfComments` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Comments.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Date::createIsoDateFromUnixTimestamp`: expected `int|string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Comments.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\Comment::setComment`: expected `string`, but found `mixed`.'
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Comments.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\Comment::setDate`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Comments.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\Comment::setEmail`: expected `string`, but found `mixed`.'
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Comments.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\Comment::setUsername`: expected `string`, but found `mixed`.'
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Configuration/ConfigurationRepository.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<int, stdClass>` for function `phpMyFAQ\Configuration\ConfigurationRepository::getFaqDataContents`.'
 count = 1
 
 [[issues]]
@@ -2786,21 +2702,27 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/DatabaseConfigurationStore.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<int, stdClass>` for function `phpMyFAQ\Configuration\Storage\DatabaseConfigurationStore::fetchAll`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/DatabaseConfigurationStore.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/DatabaseConfigurationStore.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 4
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/DatabaseConfigurationStore.php"
+code = "redundant-logical-operation"
+message = "Redundant `&&` operation: left operand is always truthy and right operand is evaluated."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/DatabaseConfigurationStore.php"
+code = "redundant-type-comparison"
+message = "Redundant type assertion: `$row` is already `stdClass`."
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/RedisConfigurationStore.php"
@@ -2930,15 +2852,21 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ApiKeyController.php"
-code = "invalid-type-cast"
-message = "Object of type `object` cast to `array`. Property visibility (public, protected, private) affects the resulting array."
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 7
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ApiKeyController.php"
+code = "redundant-condition"
+message = "This condition (type `true`) will always evaluate to true."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ApiKeyController.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 8
+code = "redundant-type-comparison"
+message = "Redundant type assertion: `$row` is already `stdClass`."
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AttachmentController.php"
@@ -5702,12 +5630,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `list<mixed>` is less specific than the declared return type `array<array-key, string>` for function `phpMyFAQ\CustomPage\CustomPageRepository::getExistingLanguages` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 10
@@ -5716,30 +5638,6 @@ count = 10
 file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Database\DatabaseDriver::escape` is possibly `null`, but parameter type `string` does not accept it.'
-count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
-code = "redundant-comparison"
-message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
-code = "redundant-logical-operation"
-message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
 count = 4
 
 [[issues]]
@@ -6262,6 +6160,12 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Database/Sqlite3.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `phpMyFAQ\Database\Sqlite3::query`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `phpMyFAQ\Database\Sqlsrv::fetchAll`: expected `list<stdClass>|null`, but found `list<null|stdClass>`.'
 count = 1
 
 [[issues]]
@@ -6879,12 +6783,6 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqDisplayService.php"
 code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, string>` is less specific than the declared return type `array<int, int>` for function `phpMyFAQ\Faq\FaqDisplayService::getNumberOfComments`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqDisplayService.php"
-code = "less-specific-return-statement"
 message = 'Returned type `array<array-key, string>` is less specific than the declared return type `array<int, string>` for function `phpMyFAQ\Faq\FaqDisplayService::getAvailableLanguages`.'
 count = 1
 
@@ -7121,18 +7019,6 @@ file = "phpmyfaq/src/phpMyFAQ/Form/FormsHelper.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`mixed`)."
 count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Form/FormsRepository.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<int, object>` for function `phpMyFAQ\Form\FormsRepository::fetchFormDataByFormId`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Form/FormsRepository.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<int, object>` for function `phpMyFAQ\Form\FormsRepository::fetchTranslationsByFormAndInput`.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Form/FormsRepository.php"
@@ -7803,6 +7689,12 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance.php"
 code = "invalid-return-statement"
+message = 'Invalid return type for function `phpMyFAQ\Instance::getAll`: expected `array<array-key, stdClass>`, but found `list<stdClass>|null`.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Instance.php"
+code = "invalid-return-statement"
 message = 'Invalid return type for function `phpMyFAQ\Instance::getById`: expected `object`, but found `false|null|stdClass`.'
 count = 1
 
@@ -7814,26 +7706,14 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `array<array-key, mixed>|null` is less specific than the declared return type `array<array-key, stdClass>` for function `phpMyFAQ\Instance::getAll` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 5
+count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
 count = 2
 
 [[issues]]
@@ -7845,7 +7725,7 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance.php"
 code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Instance::getAll` is declared to return `array<array-key, stdClass>` but possibly returns a nullable value (inferred as `array<array-key, mixed>|null`).'
+message = 'Function `phpMyFAQ\Instance::getAll` is declared to return `array<array-key, stdClass>` but possibly returns a nullable value (inferred as `list<stdClass>|null`).'
 count = 1
 
 [[issues]]
@@ -7857,7 +7737,7 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance.php"
 code = "possibly-null-iterator"
-message = "Expression being iterated (type `array<array-key, mixed>|null`) might be `null` at runtime."
+message = "Expression being iterated (type `list<stdClass>|null`) might be `null` at runtime."
 count = 1
 
 [[issues]]
@@ -9489,7 +9369,7 @@ count = 2
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Relation.php"
 code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Relation::getAllRelatedByQuestion`: expected `array<array-key, mixed>`, but found `array<array-key, mixed>|null`.'
+message = 'Invalid return type for function `phpMyFAQ\Relation::getAllRelatedByQuestion`: expected `array<array-key, mixed>`, but found `list<stdClass>|null`.'
 count = 1
 
 [[issues]]
@@ -9501,7 +9381,7 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Relation.php"
 code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Relation::getAllRelatedByQuestion` is declared to return `array<array-key, mixed>` but possibly returns a nullable value (inferred as `array<array-key, mixed>|null`).'
+message = 'Function `phpMyFAQ\Relation::getAllRelatedByQuestion` is declared to return `array<array-key, mixed>` but possibly returns a nullable value (inferred as `list<stdClass>|null`).'
 count = 1
 
 [[issues]]
@@ -9603,7 +9483,7 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
 code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Search::searchCustomPages`: expected `array<array-key, mixed>`, but found `array<array-key, mixed>|null`.'
+message = 'Invalid return type for function `phpMyFAQ\Search::searchCustomPages`: expected `array<array-key, mixed>`, but found `list<stdClass>|null`.'
 count = 1
 
 [[issues]]
@@ -9664,7 +9544,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 5
+count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
@@ -9680,12 +9560,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
 code = "nullable-return-statement"
 message = 'Function `phpMyFAQ\Search::getCategory` is declared to return `phpMyFAQ\Category` but possibly returns a nullable value (inferred as `null|phpMyFAQ\Category`).'
 count = 1
@@ -9693,7 +9567,7 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
 code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Search::searchCustomPages` is declared to return `array<array-key, mixed>` but possibly returns a nullable value (inferred as `array<array-key, mixed>|null`).'
+message = 'Function `phpMyFAQ\Search::searchCustomPages` is declared to return `array<array-key, mixed>` but possibly returns a nullable value (inferred as `list<stdClass>|null`).'
 count = 1
 
 [[issues]]
@@ -9711,7 +9585,7 @@ count = 3
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
 code = "possibly-null-iterator"
-message = "Expression being iterated (type `array<array-key, mixed>|null`) might be `null` at runtime."
+message = "Expression being iterated (type `list<stdClass>|null`) might be `null` at runtime."
 count = 1
 
 [[issues]]
@@ -11204,8 +11078,8 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/StopWords.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `array<array-key, mixed>|null` is less specific than the declared return type `array<array-key, string>` for function `phpMyFAQ\StopWords::getByLang` due to nested 'mixed'.'''
+code = "invalid-return-statement"
+message = 'Invalid return type for function `phpMyFAQ\StopWords::getByLang`: expected `array<array-key, string>`, but found `list<stdClass>|null`.'
 count = 1
 
 [[issues]]
@@ -11229,7 +11103,7 @@ count = 3
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/StopWords.php"
 code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\StopWords::getByLang` is declared to return `array<array-key, string>` but possibly returns a nullable value (inferred as `array<array-key, mixed>|null`).'
+message = 'Function `phpMyFAQ\StopWords::getByLang` is declared to return `array<array-key, string>` but possibly returns a nullable value (inferred as `list<stdClass>|null`).'
 count = 1
 
 [[issues]]

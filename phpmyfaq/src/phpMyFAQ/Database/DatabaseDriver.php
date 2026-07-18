@@ -91,7 +91,9 @@ interface DatabaseDriver
     public function fetchRow(mixed $result): mixed;
 
     /**
-     * Fetches a complete result as an object.
+     * Fetches a complete result as a list of row objects.
+     *
+     * @return list<\stdClass>|null
      */
     public function fetchAll(mixed $result): ?array;
 

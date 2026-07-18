@@ -20,20 +20,20 @@ use phpMyFAQ\Entity\Comment;
 
 interface CommentsRepositoryInterface
 {
-    /** @return array<int, object> */
+    /** @return array<int, \stdClass> */
     public function fetchByReferenceIdAndType(int $referenceId, string $type): array;
 
     public function insert(Comment $comment): bool;
 
     public function deleteByTypeAndId(string $type, int $commentId): bool;
 
-    /** @return array<int, object> */
+    /** @return array<int, \stdClass> */
     public function countByTypeGroupedByRecordId(string $type = \phpMyFAQ\Entity\CommentType::FAQ): array;
 
-    /** @return array<int, object> */
+    /** @return array<int, \stdClass> */
     public function countByCategoryForFaq(): array;
 
-    /** @return array<int, object> */
+    /** @return array<int, \stdClass> */
     public function fetchAllWithCategories(string $type = \phpMyFAQ\Entity\CommentType::FAQ): array;
 
     public function isCommentAllowed(int $recordId, string $recordLang, string $commentType = 'faq'): bool;

@@ -32,7 +32,7 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
     }
 
     /**
-     * @return array<int, object>
+     * @return array<int, \stdClass>
      */
     public function fetchByReferenceIdAndType(int $referenceId, string $type): array
     {
@@ -68,7 +68,7 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
      * @param int $offset Offset for pagination
      * @param string $sortField Field to sort by
      * @param string $sortOrder Sort order (ASC or DESC)
-     * @return array<int, object>
+     * @return array<int, \stdClass>
      */
     public function fetchPaginated(
         int $referenceId,
@@ -198,7 +198,7 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
     }
 
     /**
-     * @return array<int, object>
+     * @return array<int, \stdClass>
      */
     public function countByTypeGroupedByRecordId(string $type = CommentType::FAQ): array
     {
@@ -222,7 +222,7 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
     }
 
     /**
-     * @return array<int, object>
+     * @return array<int, \stdClass>
      */
     public function countByCategoryForFaq(): array
     {
@@ -250,13 +250,14 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
     }
 
     /**
-     * @return array<int, object>
+     * @return array<int, \stdClass>
      */
     public function fetchAllWithCategories(string $type = CommentType::FAQ): array
     {
         $prefix = Database::getTablePrefix();
         $escapedType = $this->coreConfiguration->getDb()->escape($type);
 
+        $query = '';
         if ($type === CommentType::FAQ) {
             $query = sprintf(
                 'SELECT fc.id_comment AS comment_id, fc.id AS record_id, fcg.category_id, fc.usr AS username, '
@@ -306,7 +307,7 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
 
         $result = $this->coreConfiguration->getDb()->query($query);
         $row = $this->coreConfiguration->getDb()->fetchObject($result);
-        if ($row !== false && $row !== null && $row !== []) {
+        if ($row instanceof \stdClass) {
             return $row->comment === 'y';
         }
 

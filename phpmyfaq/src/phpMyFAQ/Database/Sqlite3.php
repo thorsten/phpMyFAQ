@@ -110,7 +110,7 @@ class Sqlite3 implements DatabaseDriver
      * Fetches a complete result as an object.
      *
      * @param mixed $result Resultset
-     * @return array|null of stdClass
+     * @return list<\stdClass>|null
      * @throws Exception
      */
     public function fetchAll(mixed $result): ?array

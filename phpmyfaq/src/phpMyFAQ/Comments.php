@@ -58,10 +58,10 @@ class Comments
             $comment
                 ->setId((int) $row->id_comment)
                 ->setRecordId((int) $row->id)
-                ->setComment($row->comment)
-                ->setDate(Date::createIsoDateFromUnixTimestamp($row->datum, DateTimeInterface::ATOM))
-                ->setUsername($row->usr)
-                ->setEmail($row->email)
+                ->setComment((string) $row->comment)
+                ->setDate(Date::createIsoDateFromUnixTimestamp((int) $row->datum, DateTimeInterface::ATOM))
+                ->setUsername((string) $row->usr)
+                ->setEmail((string) $row->email)
                 ->setType($type);
             $comments[] = $comment;
         }
@@ -98,10 +98,10 @@ class Comments
             $comment
                 ->setId((int) $row->id_comment)
                 ->setRecordId((int) $row->id)
-                ->setComment($row->comment)
-                ->setDate(Date::createIsoDateFromUnixTimestamp($row->datum, DateTimeInterface::ATOM))
-                ->setUsername($row->usr)
-                ->setEmail($row->email)
+                ->setComment((string) $row->comment)
+                ->setDate(Date::createIsoDateFromUnixTimestamp((int) $row->datum, DateTimeInterface::ATOM))
+                ->setUsername((string) $row->usr)
+                ->setEmail((string) $row->email)
                 ->setType($type);
             $comments[] = $comment;
         }
@@ -143,7 +143,7 @@ class Comments
      * Returns the number of comments of each FAQ record as an array.
      *
      * @param string $type Type of comment: faq or news
-     * @return string[]
+     * @return array<int, int>
      */
     public function getNumberOfComments(string $type = CommentType::FAQ): array
     {
@@ -151,7 +151,7 @@ class Comments
 
         $rows = $this->commentsRepository->countByTypeGroupedByRecordId($type);
         foreach ($rows as $row) {
-            $num[$row->id] = $row->anz;
+            $num[(int) $row->id] = (int) $row->anz;
         }
 
         return $num;
@@ -167,7 +167,7 @@ class Comments
 
         $rows = $this->commentsRepository->countByCategoryForFaq();
         foreach ($rows as $row) {
-            $numbers[$row->category_id] = (int) $row->number;
+            $numbers[(int) $row->category_id] = (int) $row->number;
         }
 
         return $numbers;
@@ -190,10 +190,10 @@ class Comments
                 ->setId((int) $row->comment_id)
                 ->setRecordId((int) $row->record_id)
                 ->setType($type)
-                ->setComment($row->comment)
-                ->setDate($row->comment_date)
-                ->setUsername($row->username)
-                ->setEmail($row->email);
+                ->setComment((string) $row->comment)
+                ->setDate((string) $row->comment_date)
+                ->setUsername((string) $row->username)
+                ->setEmail((string) $row->email);
 
             if (($row->category_id ?? null) !== null) {
                 $comment->setCategoryId((int) $row->category_id);

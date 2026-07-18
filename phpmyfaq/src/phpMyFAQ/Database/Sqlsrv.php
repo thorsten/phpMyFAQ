@@ -121,6 +121,7 @@ class Sqlsrv implements DatabaseDriver
      *
      * @param mixed $result Resultset
      * @throws Exception
+     * @return list<\stdClass>|null
      */
     public function fetchAll(mixed $result): ?array
     {
