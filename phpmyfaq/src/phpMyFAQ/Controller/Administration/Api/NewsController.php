@@ -42,38 +42,18 @@ final class NewsController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::NEWS_ADD);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
         $news = new News($this->configuration);
 
-        if (!Token::getInstance($this->session)->verifyToken(page: 'save-news', requestToken: $data->csrfToken)) {
+        if (!Token::getInstance($this->session)->verifyToken(
+            page: 'save-news',
+            requestToken: (string) ($data->csrfToken ?? ''),
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $header = Filter::filterVar($data->newsHeader, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $content = Filter::filterVar($data->news, FILTER_SANITIZE_SPECIAL_CHARS);
-        $author = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $email = Filter::filterEmail($data->authorEmail);
-        $active = Filter::filterVar($data->active, FILTER_SANITIZE_SPECIAL_CHARS);
-        $comment = Filter::filterVar($data->comment, FILTER_SANITIZE_SPECIAL_CHARS);
-        $link = Filter::filterVar($data->link, FILTER_SANITIZE_SPECIAL_CHARS);
-        $linkTitle = Filter::filterVar($data->linkTitle, FILTER_SANITIZE_SPECIAL_CHARS);
-        $newsLang = Filter::filterVar($data->langTo, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $target = Filter::filterVar($data->target, FILTER_SANITIZE_SPECIAL_CHARS);
-
-        $newsMessage = new NewsMessage();
-        $newsMessage
-            ->setLanguage($newsLang)
-            ->setHeader($header)
-            ->setMessage(html_entity_decode((string) $content))
-            ->setAuthor($author)
-            ->setEmail($email)
-            ->setActive((bool) $active)
-            ->setComment((bool) $comment)
-            ->setLink($link ?? '')
-            ->setLinkTitle($linkTitle ?? '')
-            ->setLinkTarget($target ?? '')
-            ->setCreated(new DateTime());
+        $newsMessage = $this->newsMessageFromPayload($data);
 
         if ($news->create($newsMessage)) {
             $this->adminLog->log($this->currentUser, AdminLogType::NEWS_ADD->value);
@@ -92,17 +72,20 @@ final class NewsController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::NEWS_DELETE);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
         $news = new News($this->configuration);
 
-        if (!Token::getInstance($this->session)->verifyToken(page: 'delete-news', requestToken: $data->csrfToken)) {
+        if (!Token::getInstance($this->session)->verifyToken(
+            page: 'delete-news',
+            requestToken: (string) ($data->csrfToken ?? ''),
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $deleteId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
+        $deleteId = (int) Filter::filterVar($data->id ?? null, FILTER_VALIDATE_INT);
 
-        if ($news->delete((int) $deleteId)) {
+        if ($news->delete($deleteId)) {
             $this->adminLog->log($this->currentUser, AdminLogType::NEWS_DELETE->value . ':' . $deleteId);
 
             return $this->json(['success' => Translation::get(key: 'ad_news_delsuc')], Response::HTTP_OK);
@@ -119,45 +102,24 @@ final class NewsController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::NEWS_EDIT);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
         $news = new News($this->configuration);
 
-        if (!Token::getInstance($this->session)->verifyToken(page: 'update-news', requestToken: $data->csrfToken)) {
+        if (!Token::getInstance($this->session)->verifyToken(
+            page: 'update-news',
+            requestToken: (string) ($data->csrfToken ?? ''),
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $newsId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
+        $newsId = Filter::filterVar($data->id ?? null, FILTER_VALIDATE_INT);
 
-        if ($newsId === null) {
+        if (!is_int($newsId)) {
             return $this->json(['error' => Translation::get(key: 'ad_news_updatefail')], Response::HTTP_BAD_REQUEST);
         }
 
-        $header = Filter::filterVar($data->newsHeader, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $content = Filter::filterVar($data->news, FILTER_SANITIZE_SPECIAL_CHARS);
-        $author = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $email = Filter::filterEmail($data->authorEmail);
-        $active = Filter::filterVar($data->active, FILTER_SANITIZE_SPECIAL_CHARS);
-        $comment = Filter::filterVar($data->comment, FILTER_SANITIZE_SPECIAL_CHARS);
-        $link = Filter::filterVar($data->link, FILTER_SANITIZE_SPECIAL_CHARS);
-        $linkTitle = Filter::filterVar($data->linkTitle, FILTER_SANITIZE_SPECIAL_CHARS);
-        $newsLang = Filter::filterVar($data->langTo, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $target = Filter::filterVar($data->target, FILTER_SANITIZE_SPECIAL_CHARS);
-
-        $newsMessage = new NewsMessage();
-        $newsMessage
-            ->setId($newsId)
-            ->setLanguage($newsLang)
-            ->setHeader($header)
-            ->setMessage(html_entity_decode((string) $content))
-            ->setAuthor($author)
-            ->setEmail($email)
-            ->setActive((bool) $active)
-            ->setComment((bool) $comment)
-            ->setLink($link ?? '')
-            ->setLinkTitle($linkTitle ?? '')
-            ->setLinkTarget($target ?? '')
-            ->setCreated(new DateTime());
+        $newsMessage = $this->newsMessageFromPayload($data)->setId($newsId);
 
         if ($news->update($newsMessage)) {
             $this->adminLog->log($this->currentUser, AdminLogType::NEWS_EDIT->value . ':' . $newsId);
@@ -175,21 +137,24 @@ final class NewsController extends AbstractAdministrationApiController
     public function activate(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::NEWS_EDIT);
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
         $news = new News($this->configuration);
 
-        if (!Token::getInstance($this->session)->verifyToken(page: 'activate-news', requestToken: $data->csrfToken)) {
+        if (!Token::getInstance($this->session)->verifyToken(
+            page: 'activate-news',
+            requestToken: (string) ($data->csrfToken ?? ''),
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $newsId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
+        $newsId = Filter::filterVar($data->id ?? null, FILTER_VALIDATE_INT);
 
-        if ($newsId === null) {
+        if (!is_int($newsId)) {
             return $this->json(['error' => Translation::get(key: 'ad_news_updatefail')], Response::HTTP_BAD_REQUEST);
         }
 
-        $status = (bool) Filter::filterVar($data->status, FILTER_SANITIZE_SPECIAL_CHARS);
+        $status = (bool) Filter::filterVar($data->status ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if ($status) {
             $news->activate($newsId);
@@ -202,5 +167,38 @@ final class NewsController extends AbstractAdministrationApiController
         $this->adminLog->log($this->currentUser, AdminLogType::NEWS_EDIT->value . ':' . $newsId);
 
         return $this->json(['success' => Translation::get(key: 'ad_news_updatesuc')], Response::HTTP_OK);
+    }
+
+    /**
+     * Builds a news message entity from the validated request payload.
+     */
+    private function newsMessageFromPayload(\stdClass $data): NewsMessage
+    {
+        $header = Filter::filterVar($data->newsHeader ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $content = Filter::filterVar($data->news ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $author = Filter::filterVar($data->authorName ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $email = (string) Filter::filterEmail($data->authorEmail ?? '', default: '');
+        $active = Filter::filterVar($data->active ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $comment = Filter::filterVar($data->comment ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $link = Filter::filterVar($data->link ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $linkTitle = Filter::filterVar($data->linkTitle ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $newsLang = Filter::filterVar($data->langTo ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $target = Filter::filterVar($data->target ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+
+        $newsMessage = new NewsMessage();
+        $newsMessage
+            ->setLanguage($newsLang)
+            ->setHeader($header)
+            ->setMessage(html_entity_decode($content))
+            ->setAuthor($author)
+            ->setEmail($email)
+            ->setActive((bool) $active)
+            ->setComment((bool) $comment)
+            ->setLink($link)
+            ->setLinkTitle($linkTitle)
+            ->setLinkTarget($target)
+            ->setCreated(new DateTime());
+
+        return $newsMessage;
     }
 }

@@ -121,7 +121,7 @@ readonly class Notification
                 . '<p><strong>'
                 . Translation::getString(key: 'msgNewContentArticle')
                 . ':</strong> '
-                . $this->faq->faqRecord['content']
+                . (string) ($this->faq->faqRecord['content'] ?? '')
                 . '</p>'
                 . '<hr>'
                 . $this->configuration->getTitle()
@@ -151,18 +151,20 @@ readonly class Notification
         $category = $this->createCategory();
         $emailTo = $this->configuration->getAdminEmail();
 
-        if ($faq->faqRecord['email'] !== '') {
-            $emailTo = $faq->faqRecord['email'];
+        $recordEmail = (string) ($faq->faqRecord['email'] ?? '');
+        if ($recordEmail !== '') {
+            $emailTo = $recordEmail;
         }
 
-        $title = $faq->faqRecord['title'];
+        $title = (string) ($faq->faqRecord['title'] ?? '');
+        $faqId = (int) ($faq->faqRecord['id'] ?? 0);
 
         $faqUrl = sprintf(
             '%scontent/%d/%d/%s/%s.html',
             $this->configuration->getDefaultUrl(),
-            $category->getCategoryIdFromFaq((int) $faq->faqRecord['id']),
-            $faq->faqRecord['id'],
-            $faq->faqRecord['lang'],
+            $category->getCategoryIdFromFaq($faqId),
+            $faqId,
+            (string) ($faq->faqRecord['lang'] ?? ''),
             TitleSlugifier::slug($title),
         );
         $link = new Link($faqUrl, $this->configuration);
@@ -173,15 +175,15 @@ readonly class Notification
         $format = '%s: %s, <a href="mailto:%s">%s</a><br>%s: %s<br>%s: %s<br><br>%s:<br>%s';
         $commentMail = sprintf(
             $format,
-            Translation::get(key: 'ad_stat_report_owner'),
+            Translation::getString(key: 'ad_stat_report_owner'),
             $comment->getUsername(),
             $comment->getEmail(),
             $comment->getEmail(),
-            Translation::get(key: 'msgQuestion'),
+            Translation::getString(key: 'msgQuestion'),
             $title,
-            Translation::get(key: 'ad_news_link_url'),
+            Translation::getString(key: 'ad_news_link_url'),
             $urlToContent,
-            Translation::get(key: 'msgYourComment'),
+            Translation::getString(key: 'msgYourComment'),
             strip_tags(wordwrap($comment->getComment(), width: 72)),
         );
 
@@ -195,12 +197,15 @@ readonly class Notification
 
         // Let the category owner of a FAQ get a copy of the message
         $category = $this->createCategory();
-        $categories = $category->getCategoryIdsFromFaq((int) $faq->faqRecord['id']);
+        $categories = $category->getCategoryIdsFromFaq($faqId);
         foreach ($categories as $_category) {
-            $userId = $category->getOwner($_category);
+            $userId = $category->getOwner((int) $_category);
             $catUser = $this->createUser();
             $catUser->getUserById($userId);
             $catOwnerEmail = $catUser->getUserData(field: 'email');
+            if (!is_string($catOwnerEmail)) {
+                continue;
+            }
 
             if ($catOwnerEmail !== '' && (!array_key_exists($catOwnerEmail, $send) && $catOwnerEmail !== $emailTo)) {
                 $this->mail->addCc($catOwnerEmail);
@@ -220,34 +225,35 @@ readonly class Notification
      */
     public function sendNewsCommentNotification(array $newsData, Comment $comment): void
     {
-        if ($newsData['authorEmail'] !== '') {
-            $this->mail->addTo($newsData['authorEmail']);
+        $authorEmail = (string) ($newsData['authorEmail'] ?? '');
+        if ($authorEmail !== '') {
+            $this->mail->addTo($authorEmail);
         }
 
-        $title = $newsData['header'];
+        $title = (string) ($newsData['header'] ?? '');
 
         $newsUrl = sprintf(
             '%snews/%d/%s/%s.html',
             $this->configuration->getDefaultUrl(),
-            $newsData['id'],
-            $newsData['lang'],
+            (int) ($newsData['id'] ?? 0),
+            (string) ($newsData['lang'] ?? ''),
             TitleSlugifier::slug($title),
         );
         $link = new Link($newsUrl, $this->configuration);
-        $link->setTitle($newsData['header']);
+        $link->setTitle($title);
 
         $urlToContent = $link->toString();
 
         $format = '%s: %s, <a href="mailto:%s">%s</a><br>%s: %s<br>%s: %s<br><br>%s';
         $commentMail = sprintf(
             $format,
-            Translation::get(key: 'ad_stat_report_owner'),
+            Translation::getString(key: 'ad_stat_report_owner'),
             $comment->getUsername(),
             $comment->getEmail(),
             $comment->getEmail(),
-            Translation::get(key: 'msgYourComment'),
+            Translation::getString(key: 'msgYourComment'),
             $title,
-            Translation::get(key: 'ad_news_link_url'),
+            Translation::getString(key: 'ad_news_link_url'),
             $urlToContent,
             strip_tags(wordwrap($comment->getComment(), width: 72)),
         );
@@ -268,12 +274,12 @@ readonly class Notification
         $mailText = '%s<br><br>User: %s, %s<br>%s: %s<br><br>%s: %s<br><br>%s';
         $questionMail = sprintf(
             $mailText,
-            Translation::get(key: 'msgNewQuestionAdded'),
+            Translation::getString(key: 'msgNewQuestionAdded'),
             $questionEntity->getUsername(),
             $questionEntity->getEmail(),
-            Translation::get(key: 'msgCategory'),
-            $categories[$questionEntity->getCategoryId()]['name'],
-            Translation::get(key: 'msgAskYourQuestion'),
+            Translation::getString(key: 'msgCategory'),
+            (string) ($categories[$questionEntity->getCategoryId()]['name'] ?? ''),
+            Translation::getString(key: 'msgAskYourQuestion'),
             wordwrap($questionEntity->getQuestion(), width: 72),
             $this->configuration->getDefaultUrl() . 'admin/',
         );
@@ -321,7 +327,7 @@ readonly class Notification
 
         $this->sendWebPushToUsers(
             $adminUserIds,
-            Translation::get(key: 'msgPushNewQuestion'),
+            Translation::getString(key: 'msgPushNewQuestion'),
             mb_substr($questionEntity->getQuestion(), start: 0, length: 200),
             $this->configuration->getDefaultUrl() . 'admin/',
             'new-question',
