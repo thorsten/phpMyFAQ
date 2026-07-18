@@ -54,16 +54,16 @@ class LanguageDetector
     }
 
     /**
-     * Wählt die erste gültige Sprache aus der ermittelten Liste in definierter Priorität
-     * und fällt auf 'en' zurück, falls keine gefunden wurde.
+     * Selects the first valid language from the detected list in a defined priority
+     * and falls back to 'en' if none was found.
      *
-     * Priorität: POST > GET(lang) > GET(artlang) > Session > Config > Browser-Erkennung
+     * Priority: POST > GET(lang) > GET(artlang) > Session > Browser detection > Config
      *
      * @param array<string, string|null> $detected
      */
     public function selectLanguage(array $detected): string
     {
-        $order = ['post', 'get', 'artget', 'session', 'config', 'detection'];
+        $order = ['post', 'get', 'artget', 'session', 'detection', 'config'];
         foreach ($order as $key) {
             $lang = $detected[$key] ?? null;
             if ($lang !== null && Language::isASupportedLanguage($lang)) {

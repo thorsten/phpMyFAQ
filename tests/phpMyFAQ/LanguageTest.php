@@ -112,4 +112,30 @@ class LanguageTest extends TestCase
         $language = $this->language->setLanguageWithDetection('invalid_language.php');
         $this->assertEquals('en', $language);
     }
+
+    public function testSetLanguageWithDetectionHonoursAcceptLanguageHeader(): void
+    {
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'de-DE,de;q=0.9,en;q=0.8';
+
+        try {
+            $language = $this->language->setLanguageWithDetection('language_en.php');
+        } finally {
+            unset($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+        }
+
+        $this->assertEquals('de', $language);
+    }
+
+    public function testSetLanguageFromConfigurationIgnoresAcceptLanguageHeader(): void
+    {
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'de-DE,de;q=0.9,en;q=0.8';
+
+        try {
+            $language = $this->language->setLanguageFromConfiguration('language_en.php');
+        } finally {
+            unset($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+        }
+
+        $this->assertEquals('en', $language);
+    }
 }
