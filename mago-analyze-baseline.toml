@@ -6098,68 +6098,8 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/Sqlite3.php"
-code = "invalid-method-access"
-message = "Attempting to access a method on a non-object type (`bool`)."
-count = 7
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlite3.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `property_exists`: expected `class-string|object`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlite3.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlite3.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 7
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlite3.php"
 code = "mixed-operand"
-message = "Right operand in `&&` operation has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlite3.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\Sqlite3::affectedRows`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlite3.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\Sqlite3::clientVersion`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlite3.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\Sqlite3::close`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlite3.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\Sqlite3::error`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlite3.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\Sqlite3::lastInsertId`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlite3.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\Sqlite3::query`. Saw type `mixed`.'
+message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
@@ -11018,62 +10958,8 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Sitemap.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `League\CommonMark\MarkdownConverter::convert`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Sitemap.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Link\Util\TitleSlugifier::slug`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Sitemap.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Strings::strtoupper`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Sitemap.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Sitemap.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #4 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Sitemap.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #5 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Sitemap.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Sitemap.php"
-code = "redundant-comparison"
-message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Sitemap.php"
-code = "redundant-logical-operation"
-message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Sitemap.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
 count = 2
 
 [[issues]]
@@ -11318,30 +11204,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Tags.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<int, int>` for function `phpMyFAQ\Tags::getPopularTags`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Tags.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<int, string>` for function `phpMyFAQ\Tags::getAllTagsById`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Tags.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<int, string>` for function `phpMyFAQ\Tags::getAllTags`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Tags.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Database\DatabaseDriver::query`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Tags.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 6
@@ -11354,45 +11216,9 @@ count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Tags.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Tags::getTagNameById`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Tags.php"
 code = "possibly-undefined-variable"
 message = "Variable `$query` might not have been defined on all execution paths leading to this point."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Tags.php"
-code = "redundant-comparison"
-message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Tags.php"
-code = "redundant-comparison"
-message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
-count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Tags.php"
-code = "redundant-logical-operation"
-message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Tags.php"
-code = "redundant-logical-operation"
-message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
-count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Tags.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
-count = 5
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Tenant/TenantContextResolver.php"

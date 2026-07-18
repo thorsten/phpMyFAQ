@@ -337,8 +337,8 @@ class Sqlite3Test extends TestCase
         $reflection = new ReflectionProperty($this->sqlite3, 'conn');
         $this->assertTrue($reflection->isPrivate());
 
-        // The initial state should be false
-        $this->assertFalse($reflection->getValue($this->sqlite3));
+        // The initial state is an absent connection
+        $this->assertNull($reflection->getValue($this->sqlite3));
     }
 
     public function testDatabaseDriverInterfaceCompliance(): void

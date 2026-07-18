@@ -129,12 +129,12 @@ class Sitemap
         $result = $this->configuration->getDb()->query($query);
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
+            if (!$row instanceof stdClass) {
                 break;
             }
 
             $letter = new stdClass();
-            $letter->letter = Strings::strtoupper($row->letters);
+            $letter->letter = Strings::strtoupper((string) $row->letters);
 
             if (Strings::preg_match("/^\w+/iu", $letter->letter) !== 0) {
                 $letter->url = sprintf(
@@ -226,25 +226,27 @@ class Sitemap
 
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
+            if (!$row instanceof stdClass) {
                 break;
             }
 
-            if ($oldId !== $row->id) {
+            $faqId = (int) $row->id;
+            if ($oldId !== $faqId) {
+                $question = (string) $row->thema;
                 $faq = new stdClass();
-                $faq->question = $row->thema;
+                $faq->question = $question;
                 $faq->url = sprintf(
                     '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
-                    $row->category_id,
-                    $row->id,
-                    $row->lang,
-                    TitleSlugifier::slug($row->thema),
+                    (int) $row->category_id,
+                    $faqId,
+                    (string) $row->lang,
+                    TitleSlugifier::slug($question),
                 );
 
                 $answer = strip_tags((string) $row->snap);
                 if ($this->configuration->get(item: 'main.enableMarkdownEditor')) {
-                    $answer = strip_tags($commonMarkConverter->convert($row->snap)->getContent());
+                    $answer = strip_tags($commonMarkConverter->convert((string) $row->snap)->getContent());
                 }
 
                 $faq->answer = Utils::chopString($answer, 25);
@@ -252,7 +254,7 @@ class Sitemap
                 $faqs[] = $faq;
             }
 
-            $oldId = $row->id;
+            $oldId = $faqId;
         }
 
         return $faqs;

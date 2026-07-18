@@ -135,11 +135,11 @@ class Tags
         if ($result) {
             while (true) {
                 $row = $this->configuration->getDb()->fetchObject($result);
-                if ($row === false || $row === null || $row === []) {
+                if (!$row instanceof \stdClass) {
                     break;
                 }
 
-                $tags[$row->tagging_id] = $row->tagging_name;
+                $tags[(int) $row->tagging_id] = (string) $row->tagging_name;
             }
         }
 
@@ -205,7 +205,7 @@ class Tags
                     );
                 }
 
-                $this->configuration->getDb()->query($query);
+                $this->configuration->getDb()->query((string) $query);
                 $registeredTags[] = $tag;
             }
         }
@@ -285,7 +285,7 @@ class Tags
             $i = 0;
             while (true) {
                 $row = $this->configuration->getDb()->fetchObject($result);
-                if ($row === false || $row === null || $row === []) {
+                if (!$row instanceof \stdClass) {
                     break;
                 }
 
@@ -293,7 +293,7 @@ class Tags
                     break;
                 }
 
-                $allTags[$row->tagging_id] = $row->tagging_name;
+                $allTags[(int) $row->tagging_id] = (string) $row->tagging_name;
                 ++$i;
             }
         }
@@ -384,7 +384,7 @@ class Tags
         if ($result) {
             while (true) {
                 $row = $this->configuration->getDb()->fetchObject($result);
-                if ($row === false || $row === null || $row === []) {
+                if (!$row instanceof \stdClass) {
                     break;
                 }
 
@@ -420,7 +420,7 @@ class Tags
         if ($result) {
             while (true) {
                 $row = $this->configuration->getDb()->fetchObject($result);
-                if ($row === false || $row === null || $row === []) {
+                if (!$row instanceof \stdClass) {
                     break;
                 }
 
@@ -473,11 +473,11 @@ class Tags
         if ($result) {
             while (true) {
                 $row = $this->configuration->getDb()->fetchObject($result);
-                if ($row === false || $row === null || $row === []) {
+                if (!$row instanceof \stdClass) {
                     break;
                 }
 
-                $tags[$row->tagging_id] = $row->freq;
+                $tags[(int) $row->tagging_id] = (int) $row->freq;
                 if (--$limit === 0) {
                     break;
                 }
@@ -502,8 +502,8 @@ class Tags
 
         $result = $this->configuration->getDb()->query($query);
         $row = $result ? $this->configuration->getDb()->fetchObject($result) : false;
-        if ($row !== false && $row !== null && $row !== []) {
-            return $row->tagging_name;
+        if ($row instanceof \stdClass) {
+            return (string) $row->tagging_name;
         }
 
         return '';

@@ -38,7 +38,16 @@ class Sqlite3 implements DatabaseDriver
     /**
      * The connection object.
      */
-    private \Sqlite3|bool $conn = false;
+    private ?\SQLite3 $conn = null;
+
+    /**
+     * Returns the active connection or fails loudly when connect() has not
+     * been called yet or the connection was already closed.
+     */
+    private function connection(): \SQLite3
+    {
+        return $this->conn ?? throw new \RuntimeException('There is no open database connection.');
+    }
 
     /**
      * The query log string.
@@ -62,8 +71,9 @@ class Sqlite3 implements DatabaseDriver
         string $database = '',
         ?int $port = null,
     ): ?bool {
-        $this->conn = new \Sqlite3($host);
-        $this->conn->enableExceptions(true);
+        $connection = new \SQLite3($host);
+        $connection->enableExceptions(true);
+        $this->conn = $connection;
 
         return true;
     }
@@ -83,9 +93,13 @@ class Sqlite3 implements DatabaseDriver
      */
     public function fetchObject(mixed $result): ?object
     {
+        if (!$result instanceof \SQLite3Result) {
+            return null;
+        }
+
         $return = $result->fetchArray(SQLITE3_ASSOC);
 
-        return $return ? (object) $return : null;
+        return is_array($return) ? (object) $return : null;
     }
 
     /**
@@ -93,6 +107,10 @@ class Sqlite3 implements DatabaseDriver
      */
     public function fetchArray(mixed $result): ?array
     {
+        if (!$result instanceof \SQLite3Result) {
+            return [];
+        }
+
         $fetchedData = $result->fetchArray(SQLITE3_ASSOC);
 
         return is_array($fetchedData) ? $fetchedData : [];
@@ -103,7 +121,7 @@ class Sqlite3 implements DatabaseDriver
      */
     public function fetchRow(mixed $result): mixed
     {
-        return $result->fetchArray(SQLITE3_ASSOC);
+        return $result instanceof \SQLite3Result ? $result->fetchArray(SQLITE3_ASSOC) : false;
     }
 
     /**
@@ -116,7 +134,7 @@ class Sqlite3 implements DatabaseDriver
     public function fetchAll(mixed $result): ?array
     {
         $ret = [];
-        if (false === $result) {
+        if (!$result instanceof \SQLite3Result) {
             throw new Exception('Error while fetching result: ' . $this->error());
         }
 
@@ -137,7 +155,7 @@ class Sqlite3 implements DatabaseDriver
      */
     public function error(): string
     {
-        if (0 === $this->conn->lastErrorCode()) {
+        if (!$this->conn instanceof \SQLite3 || 0 === $this->conn->lastErrorCode()) {
             return '';
         }
 
@@ -192,7 +210,7 @@ class Sqlite3 implements DatabaseDriver
         }
 
         try {
-            $result = $this->conn->query($query);
+            $result = $this->connection()->query($query);
         } catch (\SQLite3Exception) {
             $result = false;
         }
@@ -253,6 +271,10 @@ class Sqlite3 implements DatabaseDriver
      */
     public function fetchAssoc(mixed $result): array
     {
+        if (!$result instanceof \SQLite3Result) {
+            return [];
+        }
+
         $fetchedData = $result->fetchArray(SQLITE3_ASSOC);
 
         return is_array($fetchedData) ? $fetchedData : [];
@@ -264,7 +286,11 @@ class Sqlite3 implements DatabaseDriver
      */
     public function numRows(mixed $result): int
     {
-        if (property_exists($result, 'fetchedByPMF') && $result->fetchedByPMF) {
+        if (!$result instanceof \SQLite3Result) {
+            return 0;
+        }
+
+        if (property_exists($result, 'fetchedByPMF') && (bool) $result->fetchedByPMF) {
             throw new Exception(self::ERROR_MESSAGE);
         }
 
@@ -344,7 +370,11 @@ class Sqlite3 implements DatabaseDriver
      */
     public function nextId(string $table, string $column): int
     {
-        $result = (int) $this->conn->querySingle(sprintf('SELECT max(%s) AS current_id FROM %s', $column, $table));
+        $result = (int) $this->connection()->querySingle(sprintf(
+            'SELECT max(%s) AS current_id FROM %s',
+            $column,
+            $table,
+        ));
 
         return $result + 1;
     }
@@ -354,7 +384,7 @@ class Sqlite3 implements DatabaseDriver
      */
     public function affectedRows(): int
     {
-        return $this->conn->changes();
+        return $this->connection()->changes();
     }
 
     /**
@@ -370,8 +400,7 @@ class Sqlite3 implements DatabaseDriver
      */
     public function clientVersion(): string
     {
-        $version = \Sqlite3::version();
-        return $version['versionString'];
+        return (string) \SQLite3::version()['versionString'];
     }
 
     /**
@@ -379,7 +408,14 @@ class Sqlite3 implements DatabaseDriver
      */
     public function close(): bool
     {
-        return $this->conn->close();
+        if (!$this->conn instanceof \SQLite3) {
+            return true;
+        }
+
+        $closed = $this->conn->close();
+        $this->conn = null;
+
+        return $closed;
     }
 
     /**
@@ -387,7 +423,7 @@ class Sqlite3 implements DatabaseDriver
      */
     public function lastInsertId(): int|string
     {
-        return $this->conn->lastInsertRowID();
+        return $this->connection()->lastInsertRowID();
     }
 
     public function now(): string
